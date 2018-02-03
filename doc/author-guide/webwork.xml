@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- This file is part of the documentation of MathBook XML   -->
+<!--   This file is part of the documentation of PreTeXt      -->
 <!--                                                          -->
-<!--    MathBook XML Author's Guide                           -->
+<!--      PreTeXt Author's Guide                              -->
 <!--                                                          -->
 <!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
 <!-- See the file COPYING for copying conditions.             -->
@@ -12,7 +12,7 @@
     <author>Alex Jordan</author>
 
     <introduction>
-        <p>With a <webwork /> server (version 2.12 or higher, limited support with 2.11) and a little setup work, you can embed <webwork /> exercises in your MBX project. HTML output will have interactive problem cells. PDF output will contain static versions of exercises. And all such exercises can be archived by the <c>mbx</c> script into a file tree to be uploaded onto the <webwork /> server for use in the <q>traditional</q> way.</p>
+        <p>With a <webwork /> server (version 2.12 or higher, limited support with 2.11) and a little setup work, you can embed <webwork /> exercises<idx><h><webwork /></h><h><webwork /> exercise</h></idx> in your MBX project. HTML output will have interactive problem cells. PDF output will contain static versions of exercises. And all such exercises can be archived by the <c>mbx</c> script into a file tree to be uploaded onto the <webwork /> server for use in the <q>traditional</q> way.</p>
     </introduction>
 
     <section>
@@ -59,7 +59,7 @@
         <title><webwork /> Problems in Source</title>
 
         <introduction>
-            <p>A <tag>webwork</tag> tag must be inside an <tag>exercise</tag>, optionally preceded by an <tag>introduction</tag>, and optionally followed by a <tag>conclusion</tag>.</p>
+            <p>A <tag>webwork</tag><idx><webwork /></idx> tag must be inside an <tag>exercise</tag>, optionally preceded by an <tag>introduction</tag>, and optionally followed by a <tag>conclusion</tag>.</p>
             <pre>
             <![CDATA[
             <exercise>
@@ -199,6 +199,7 @@
 
                 <statement>
                     <p>Compute <m><var name="$a" />+<var name="$b" /></m>.</p>
+                    <instruction>Type your answer without using the <c>+</c> sign.</instruction>
                     <p>The sum is <var name="$c" width="2" />.</p>
                 </statement>
 
@@ -223,6 +224,8 @@
 
             <p>If you are familiar with PG, then in your <tag>pg-code</tag> you might write a custom evaluator (a combination of a custom answer checker, post filters, pre filters, <etc />). If you store this similar to</p><pre>$my_evaluator = $answer -> cmp(...);</pre><p>then the <tag>var</tag> can have <attribute>evaluator="$my_evaluator"</attribute>.</p>
 
+            <p>An <tag>instruction</tag> is specific instructions for how the reader might type or otherwise electronically submit their answer. Contents of an <tag>instruction</tag> will be omitted from print and other static output forms. The <tag>instruction</tag> is a peer to <tag>p</tag>, but may only contain <q>short text</q> children.</p>
+
         </subsection>
 
         <subsection>
@@ -237,11 +240,13 @@
 
         <subsection>
             <title><c>xsltproc</c></title>
-            <p>If your project has <tag>webwork</tag> tags, then when you execute <c>xsltproc</c>, pass a <c>webwork.server</c> string parameter to it specifying where the server is that will do your processing. Example:</p>
-            <console>
-                <prompt>$ </prompt>
-                <input>xsltproc --stringparam webwork.server https://webwork.myschool.edu &lt;xsl&gt; &lt;xml&gt;</input>
-            </console>
+            <p>If your project has <tag>webwork</tag><idx><webwork /></idx> tags, then when you execute <c>xsltproc</c><idx><c>xsltproc</c></idx>, pass a <c>webwork.server</c> string parameter to it specifying where the server is that will do your processing. Example:</p>
+            <sidebyside>
+                <console>
+                    <prompt>$ </prompt>
+                    <input>xsltproc --stringparam webwork.server https://webwork.myschool.edu &lt;xsl&gt; &lt;xml&gt;</input>
+                </console>
+            </sidebyside>
             <p>If your <c>webwork.server</c> is running version 2.11 (the first version which can be used with MBX), then you should additionally pass <c>--stringparam webwork.version 2.11</c>.</p>
             <p>For HTML output, this is all that is needed. For <latex />, you may need to do more first. See <xref ref="subsection-webwork-latex"/>.</p>
         </subsection>
@@ -249,25 +254,31 @@
         <subsection xml:id="subsection-webwork-latex">
             <title><latex /> output</title>
             <p>If your project uses PG files that live on the <webwork /> server, or if you have <tag>webwork</tag> tags that have image creation code in their <tag>pg-code</tag> tag, then you will need to retrieve <latex /> chunks from the server before you use <c>xsltproc</c>. The <c>mbx</c> script handles this, but only for <webwork /> 2.12 and later:</p>
-            <console>
-                <prompt>$ </prompt>
-                <input>mbx -c webwork-tex -s https://webwork.myschool.edu -d &lt;storage location&gt; &lt;xml&gt;</input> 
-            </console>
-            <p>The storage location would typically be a folder called <c>webwork-tex/</c> located inside wherever you are having <c>xsltproc</c> put your output. Then when you run <c>xsltproc</c>, tell it where to access this content:</p> 
-            <console>
-                <prompt>$ </prompt>
-                <input>xsltproc --stringparam webwork.server.latex &lt;storage location&gt; &lt;xsl&gt; &lt;xml&gt;</input>
-            </console>
+            <sidebyside>
+                <console>
+                    <prompt>$ </prompt>
+                    <input>mbx -c webwork-tex -s https://webwork.myschool.edu -d &lt;storage location&gt; &lt;xml&gt;</input>
+                </console>
+            </sidebyside>
+            <p>The storage location would typically be a folder called <c>webwork-tex/</c> located inside wherever you are having <c>xsltproc</c> put your output. Then when you run <c>xsltproc</c>, tell it where to access this content:</p>
+            <sidebyside>
+                <console>
+                    <prompt>$ </prompt>
+                    <input>xsltproc --stringparam webwork.server.latex &lt;storage location&gt; &lt;xsl&gt; &lt;xml&gt;</input>
+                </console>
+            </sidebyside>
         </subsection>
 
         <subsection>
             <title>Creating Files for Uploading to <webwork /></title>
 
             <p>All of the <tag>webwork</tag> that you have written into your project can be <q>harvested</q> and put into their own <c>.pg</c> files by the <c>mbx</c> script (this excludes <tag>webwork</tag> tags where you gave a <attribute>source</attribute> attribute.) These files are created with a folder structure that follows the chunking scheme you specify. This process also creates set definition files (<c>.def</c>) for each chunk. For example, you might specify to chunk by section, and then you will have a <c>.def</c> file for each section, listing all of the <c>.pg</c> files associated with that section. For <tag>webwork</tag> tags that used a <attribute>source</attribute> attribute, the <c>.def</c> file will include them as well. Lastly, this archiving process creates <c>.pg</c> files to be used as set header files to go along with each set definition.</p>
-            <console>
-                <prompt>$ </prompt>
-                <input>xsltproc --stringparam chunk.level 2 &lt;path to mathbook-webwork-archive.xsl&gt; &lt;xml&gt;</input>
-            </console>
+            <sidebyside>
+                <console>
+                    <prompt>$ </prompt>
+                    <input>xsltproc --stringparam chunk.level 2 &lt;path to mathbook-webwork-archive.xsl&gt; &lt;xml&gt;</input>
+                </console>
+            </sidebyside>
             <p>This creates a folder called <c>local/</c> that will have a subfolder corresponding to your project, which in turn has a folder tree with all of the <c>.pg</c> and <c>.def</c> files laid out according to your chunk level. You can tarball this <c>local/</c> folder (compress it into a <c>.tgz</c> file and upload it into an active <webwork /> course where you may then assign the sets to your students (and modify, as you like).</p>
         </subsection>
     </section>

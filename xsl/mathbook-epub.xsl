@@ -218,7 +218,7 @@
         <!-- Required in EPUB 3.0.1 spec       -->
         <!-- TODO: title-types can refine this -->
         <xsl:element name="dc:title">
-            <xsl:apply-templates select="/mathbook/book" mode="title-full" />
+            <xsl:apply-templates select="$document-root" mode="title-full" />
         </xsl:element>
         <!-- Required in EPUB 3.0.1 spec                -->
         <!-- Repeatable and more complicated, see spec  -->
@@ -264,7 +264,7 @@
         <item id="table-contents" href="{$xhtml-dir}/table-contents.xhtml" properties="nav" media-type="application/xhtml+xml"/>
         <item id="cover-image" href="{$xhtml-dir}/images/cover.png" properties="cover-image" media-type="image/png"/>
         <!-- <item id="cover-image" href="{$xhtml-dir}/images/cover.jpg" properties="cover-image" media-type="image/jpeg"/> -->
-        <xsl:apply-templates select="/mathbook/book" mode="manifest" />
+        <xsl:apply-templates select="$document-root" mode="manifest" />
     </manifest>
 </xsl:template>
 
@@ -320,7 +320,7 @@
         <itemref idref="cover" linear="yes" />
         <itemref idref="title-page" linear="yes"/>
         <itemref idref="table-contents" linear="yes"/>
-        <xsl:apply-templates select="/mathbook/book" mode="spine" />
+        <xsl:apply-templates select="$document-root" mode="spine" />
     </spine>
 </xsl:template>
 
@@ -360,10 +360,10 @@
             <head></head>
             <body>
                 <h1>
-                    <xsl:apply-templates select="/mathbook/book" mode="title-full" />
-                    <xsl:if test="/mathbook/book/subtitle">
+                    <xsl:apply-templates select="$document-root" mode="title-full" />
+                    <xsl:if test="$document-root/subtitle">
                         <br />
-                        <xsl:apply-templates select="/mathbook/book" mode="subtitle" />
+                        <xsl:apply-templates select="$document-root" mode="subtitle" />
                     </xsl:if>
                 </h1>
                 <h3>
@@ -383,7 +383,7 @@
                 <nav epub:type="toc" id="toc">
                     <h1>Table of Contents</h1>
                     <ol>
-                        <xsl:for-each select="/mathbook/book/chapter">
+                        <xsl:for-each select="$document-root/chapter">
                             <li>
                                 <xsl:element name="a">
                                     <xsl:attribute name="href">
@@ -481,7 +481,7 @@
 </xsl:template>
 
 <!-- Manifest entry first -->
-<xsl:template match="image/latex-image-code|image/sageplot|image/asymptote" mode="manifest">
+<xsl:template match="image/latex-image|image/latex-image-code|image/sageplot|image/asymptote" mode="manifest">
     <!-- condition on file extension -->
     <xsl:variable name="extension">
         <xsl:call-template name="file-extension">
@@ -539,7 +539,7 @@
 
 <!-- Now the image inclusion   -->
 <!-- With source specification -->
-<xsl:template match="image/latex-image-code|image/sageplot|image/asymptote">
+<xsl:template match="image/latex-image|image/latex-image-code|image/sageplot|image/asymptote">
     <!-- assumes SVG exists from  mbx  script creation -->
     <xsl:element name="img">
         <xsl:attribute name="src">
@@ -617,14 +617,6 @@
 <!-- Has knowls by default, so we kill it -->
 <xsl:template match="index-list">
     <p>Index intentionally blank, knowls inactive in EPUB</p>
-</xsl:template>
-
-<!-- Code, inline -->
-<!-- Validator does not like <tt> element -->
-<xsl:template match="c">
-    <xsl:element name="code">
-        <xsl:apply-templates select="text()" />
-    </xsl:element>
 </xsl:template>
 
 </xsl:stylesheet>

@@ -19,10 +19,10 @@ You should have received a copy of the GNU General Public License
 along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************-->
 
-<!-- This stylesheet locates <latex-image-code> elements   -->
-<!-- and wraps them for LaTeX processing                   -->
-<!-- This includes the LaTeX macros present in docinfo     -->
-<!-- and the document's docinfo/latex-image-preamble       -->
+<!-- This stylesheet locates <latex-image> elements    -->
+<!-- and wraps them for LaTeX processing               -->
+<!-- This includes the LaTeX macros present in docinfo -->
+<!-- and the document's docinfo/latex-image-preamble   -->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
@@ -43,14 +43,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:output method="text" />
 
 <!-- latex graphics to standalone file        -->
-<xsl:template match="image/latex-image-code">
+<xsl:template match="image/latex-image-code|image/latex-image">
     <xsl:variable name="filebase">
         <xsl:apply-templates select=".." mode="internal-id" />
     </xsl:variable>
     <exsl:document href="{$scratch}/{$filebase}.tex" method="text">
         <xsl:text>\documentclass[12pt]{article}&#xa;</xsl:text>
         <xsl:text>\usepackage{amsmath,amssymb}&#xa;</xsl:text>
-        <xsl:value-of select="/mathbook/docinfo/latex-image-preamble"/>
+        <xsl:value-of select="$docinfo/latex-image-preamble"/>
         <xsl:text>\ifdefined\tikzset&#xa;</xsl:text>
         <xsl:text>    \tikzset{ampersand replacement = \amp}&#xa;</xsl:text>
         <xsl:text>\fi&#xa;</xsl:text>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- This file is part of the documentation of MathBook XML   -->
+<!--   This file is part of the documentation of PreTeXt      -->
 <!--                                                          -->
-<!--    MathBook XML Author's Guide                           -->
+<!--      PreTeXt Author's Guide                              -->
 <!--                                                          -->
 <!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
 <!-- See the file COPYING for copying conditions.             -->
@@ -11,7 +11,7 @@
     <title>(*) Add-Ons</title>
 
     <introduction>
-        <p>Some features of the <init>HTML</init> version of a document rely on third-party services.  Once an author configures them, then MathBook XML will do the rest for you.  This chapter provides guidance on the configuration processes. </p>
+        <p>Some features of the <init>HTML</init> version of a document rely on third-party services.  Once an author configures them, then <pretext /> will do the rest for you.  This chapter provides guidance on the configuration processes. </p>
     </introduction>
 
     <section xml:id="add-on-analytics">
@@ -22,12 +22,12 @@
     <section xml:id="add-on-search">
         <title>Search</title>
 
-        <p>Search facilities are enabled through <url href="https://cse.google.com/cse">Google Custom Search Engine</url>.  Please, please report any discrepancies in the following instructions as the setup interface at Google changes out from underneath us.  These instructions are accurate as of 2016-12-12.</p>
+        <p>Search facilities are enabled through <url href="https://cse.google.com/cse">Google Custom Search Engine</url><idx>Google Custom Search Engine</idx>.  Please, please report any discrepancies in the following instructions as the setup interface at Google changes out from underneath us.  These instructions are accurate as of 2016-12-12.</p>
 
         <p>Besides being useful for search facilities, setting up a search engine might be a good way to alert Google of something newly available, and initiate your book's rise up the search results rankings.</p>
 
         <list>
-            <title>Configuring Google Custom Search</title>
+            <caption>Configuring Google Custom Search</caption>
 
             <ol>
                 <li><p>Create an account with Google (GMail, YouTube, <etc />) and make sure you are signed in.</p></li>
@@ -51,12 +51,12 @@
         </list>
 
         <list>
-            <title>Configuring MathBook XML for Google Search</title>
+            <caption>Configuring <pretext /> for Google Search</caption>
 
             <ol>
                 <li><p>The <c>Search engine ID</c> you saved from above is referenced in Google's code as a <c>cx</c> number.  Add an element in your MBX source as <c>docinfo/search/google/cx</c> with the value of your book's ID as the content.  See the sample article for a working example to mimic.</p></li>
 
-                <li><p>The <c>cx</c> element will alert the MathBook XML conversion and fully enable and implement search.  You're done, and everything should just work.  You should see a Google-branded search box to the top right of each of your pages.  (We have no control over the branding.)</p></li>
+                <li><p>The <c>cx</c> element will alert the <pretext /> conversion and fully enable and implement search.  You're done, and everything should just work.  You should see a Google-branded search box to the top right of each of your pages.  (We have no control over the branding.)</p></li>
 
                 <li><p>Time to rebuild your official <init>HTML</init> output and make the improved version available.</p></li>
             </ol>

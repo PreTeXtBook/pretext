@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<!-- This file is part of the documentation of MathBook XML   -->
+<!--   This file is part of the documentation of PreTeXt      -->
 <!--                                                          -->
-<!--    MathBook XML Author's Guide                           -->
+<!--      PreTeXt Author's Guide                              -->
 <!--                                                          -->
 <!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
 <!-- See the file COPYING for copying conditions.             -->
@@ -28,4 +28,7 @@
         </copyright>
     </colophon>
 
+    <preface>
+        <p>This guide will help you <em>author</em> a <pretext /> document.  So it serves as a description of the <pretext /> <init>XML</init> vocabulary, along with the mechanics of creating the source and common output formats.  Note that this is different than <em>publishing</em> your document, which is described in the <booktitle><pretext /> Publisher's Guide</booktitle>.  Even if you intend to distribute your document with an open license, and you are both author <em>and</em> publisher, it is still helpful and instructive to understand, and separate, the two different steps and roles.</p>
+    </preface>
 </frontmatter>

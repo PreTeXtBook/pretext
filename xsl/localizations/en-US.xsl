@@ -79,7 +79,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='backmatter'><xsl:text>Back Matter</xsl:text></localization>
     <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
     <localization string-id='paragraphs'><xsl:text>Paragraphs</xsl:text></localization>
-    <localization string-id='paragraph'><xsl:text>Paragraph</xsl:text></localization>
     <localization string-id='subparagraph'><xsl:text>Subparagraph</xsl:text></localization>
     <!-- Components of the narrative -->
     <!-- REMARK-LIKE blocks -->
@@ -123,8 +122,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='li'><xsl:text>Item</xsl:text></localization>
     <!-- A regular paragraph, not the old sectioning structure -->
     <localization string-id='p'><xsl:text>Paragraph</xsl:text></localization>
+    <localization string-id='blockquote'><xsl:text>Quotation</xsl:text></localization>
     <!-- Parts of an exercise and it's solution -->
     <localization string-id='exercise'><xsl:text>Exercise</xsl:text></localization>
+    <localization string-id='webwork'><xsl:text>WeBWorK</xsl:text></localization>
     <localization string-id='hint'><xsl:text>Hint</xsl:text></localization>
     <localization string-id='answer'><xsl:text>Answer</xsl:text></localization>
     <localization string-id='solution'><xsl:text>Solution</xsl:text></localization>
@@ -145,12 +146,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='dedication'><xsl:text>Dedication</xsl:text></localization>
     <localization string-id='colophon'><xsl:text>Colophon</xsl:text></localization>
     <!-- Back matter components -->
-    <!-- Following is temporary, "index-part" to be deprecated -->
-    <!-- NB: repurpose translations, replace "indexsection below", maybe move appendix here -->
+    <!-- index-part is deprecated, but not abandoned          -->
+    <!-- NB: repurpose translations, maybe move appendix here -->
     <localization string-id='index-part'><xsl:text>Index</xsl:text></localization>
     <localization string-id='jump-to'><xsl:text>Jump to:</xsl:text></localization>
     <!-- Parts of the Index -->
-    <localization string-id='indexsection'><xsl:text>Index</xsl:text></localization>
+    <localization string-id='index'><xsl:text>Index</xsl:text></localization>
     <localization string-id='see'><xsl:text>see</xsl:text></localization>
     <localization string-id='also'><xsl:text>see also</xsl:text></localization>
     <!-- Notation List headings/foot -->
@@ -189,10 +190,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- HTML clickables (lowercase strings to click on) -->
     <localization string-id='permalink'><xsl:text>permalink</xsl:text></localization>
     <localization string-id='incontext'><xsl:text>in-context</xsl:text></localization>
-    <!-- Sage Cell evaluate button  -->
-    <!-- eg, "Evaluate Maxima Code" -->
+    <!-- Sage Cell evaluate button      -->
+    <!-- eg, "Evaluate (Maxima)"        -->
+    <!-- 2017-05-14: 'code' is obsolete -->
+    <!-- This needs to be defined to *something* (always)       -->
+    <!-- else whatever crud ends up on the button kills the cell -->
     <localization string-id='evaluate'><xsl:text>Evaluate</xsl:text></localization>
-    <localization string-id='code'><xsl:text>Code</xsl:text></localization>
+    <localization string-id='evaluate'><xsl:text>Evaluate</xsl:text></localization>
+    <!-- <localization string-id='code'><xsl:text>Code</xsl:text></localization> -->
 </xsl:variable>
 
 </xsl:stylesheet>

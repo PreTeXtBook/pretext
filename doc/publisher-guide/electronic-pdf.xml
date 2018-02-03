@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--   This file is part of the documentation of PreTeXt      -->
+<!--                                                          -->
+<!--      PreTeXt Publisher's Guide                           -->
+<!--                                                          -->
+<!-- Copyright (C) 2013-2017  Robert A. Beezer, David Farmer  -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<chapter xml:id="electronic-pdf">
+    <title>(*)  Conversion to Electronic PDFs</title>
+
+        <p>Similar to the case for <init>HTML</init> conversion (<xref ref="online-html" />) there is a variety of command-line processing parameters available (<xref ref="processing-parameters" />).  Until we are ready to document these carefully, open <c>xsl/mathbook-latex.xsl</c> and poke around to see what is available.</p>
+</chapter>

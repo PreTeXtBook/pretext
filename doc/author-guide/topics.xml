@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- This file is part of the documentation of MathBook XML   -->
+<!--   This file is part of the documentation of PreTeXt      -->
 <!--                                                          -->
-<!--    MathBook XML Author's Guide                           -->
+<!--      PreTeXt Author's Guide                              -->
 <!--                                                          -->
 <!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
 <!-- See the file COPYING for copying conditions.             -->
@@ -11,11 +11,16 @@
     <title>(*) Topics</title>
 
     <introduction>
-        <p>Careful descriptions arranged into topics.  List here is a temporary outline.</p>
+        <p>Careful descriptions arranged into topics.  Unwritten sections provide a temporary outline.</p>
     </introduction>
 
     <section xml:id="topic-exercises">
         <title>(*) Exercises, Inline and Sectional</title>
+
+    </section>
+
+    <section xml:id="topic-references">
+        <title>(*) Lists of Works Cited (References)</title>
 
     </section>
 
@@ -26,7 +31,7 @@
 
             <p>This section expands on parts of <xref ref="overview-verbatim-literal" />.  For descriptions of more involved uses, such as program listings and console sessions, see <xref ref="topic-program-listings" />.</p>
 
-            <p>The tags described here contain <em>only raw characters</em>.  By that we typically mean the first 128 characters of the <acro>ASCII</acro> code.  Unicode characters are likely to migrate to HTML output just fine, but results for <latex /> output will be variable.  The restriction to character data has two consequences.  First, any markup will be silently ignored.  Second, you need to observe the rules on special characters and escaped characters for <init>XML</init>, which are mercifully simple.</p>
+            <p>The tags described here contain <em>only raw characters</em>.  By that we typically mean the first 128 characters of the <acro>ASCII</acro> code.  Unicode characters are likely to migrate to HTML output just fine, but results for <latex /> output will be variable.  The restriction to character data has two consequences.  First, any markup mistakenly included will have its content silently ignored and dropped.  Second, you need to observe the rules on special characters and escaped characters for <init>XML</init> for literal text, which are mercifully simple.</p>
 
             <blockquote>
                 <p>In your source, use <c>&amp;amp;</c> for an <ampersand />, and use <c>&amp;lt;</c> and <c>&amp;gt;</c> for <less /> and <greater />.  Otherwise, every other <acro>ASCII</acro> character will render faithfully across all possible formats.</p>
@@ -35,14 +40,10 @@
 
         <subsection xml:id="short-verbatim-text">
             <title>Short, Inline, Verbatim Text</title>
+            <idx>verbatim text</idx>
+            <idx>literal text</idx>
 
-            <p>The <tag>c</tag> is a mnemonic for <q>code</q>, but is really meant to be any chunk of literal characters that you want to emphasise that way.  It is meant for use within a sentence or caption (<q>inline</q>) so its use is limited to those situations, and others that are similar, such as a title or a cell of a table.  Typically these pieces of text do not break across lines, so can bleed into right margins, or cause very short lines.  So keep the content short, and/or use early in the first sentence of a paragraph where you know it will not affect a line break.  For longer chunks, see options following.</p>
-
-            <p>Typical presentation is a monospace font, perhaps of a slightly heavier weight.</p>
-
-            <p>There is two caveats for use when creating <latex /> output.  We have chosen to use the <c>?</c> character as a delimiter for the start and end of a run of verbatim text.  Unfortunately, such a choice is necessary.  But if your run of characters includes a question mark, then the run will end prematurely.  So we have an attribute, <attribute>latexsep</attribute> that can be set to some other character, such as <c>!</c> or <c>|</c>, that does not appear in your content.  This choice has no effect on other output formats.</p>
-
-            <p>The other caveat for <latex /> output is that you may use the <tag>c</tag> tag within a <tag>title</tag>, but you should avoid <latex />'s special characters (such as <c>\</c>, <c>#</c>, etc.).  Regular characters should migrate to titles as verbatim text just fine, but we do not guarantee all possibilities.</p>
+            <p>The <tag>c</tag> tag is a mnemonic for <q>code</q>, but is really meant to be any chunk of literal characters that you want to emphasise that way.  So a <q>typewriter</q> font of fixed-width characters would be a typical presentation.  It is meant for use within a sentence or caption (<q>inline</q>) so its use is limited to those situations, and others that are similar, such as a title or a cell of a table.  Typically these pieces of text do not hyphenate words, and so can lead to spillover into a right margin.  In these situations, consider options below for longer pieces of text.</p>
         </subsection>
 
         <subsection xml:id="long-verbatim-text">
@@ -52,13 +53,13 @@
 
             <p>You have two options in use.  You may author inline with the rest of a sentence, with no extra newlines or whitespace before, after, or within the content.  The result will be a single displayed line.</p>
 
-            <p>Or you may structure the content using one, or more, of the <tag>cline</tag> tag, which is meant to be similar to the <tag>line</tag> tag used elsewhere.  You should still take care to not place any extra whitespace before or after the <tag>cd</tag> element, but inbetween the <tag>cline</tag> you may use as much visual formatting of your source as you wish, especially if you like your source to mirror your output.  For <latex /> output there is less danger that your content will inadvertenly end the verbatim text prematurely.</p>
+            <p>Or you may structure the content using one, or more, of the <tag>cline</tag> tag, which is meant to be similar to the <tag>line</tag> tag used elsewhere.  You should still take care to not place any extra whitespace before or after the <tag>cd</tag> element, but inbetween the <tag>cline</tag> you may use as much visual formatting of your source as you wish, especially if you like your source to mirror your output.</p>
         </subsection>
 
         <subsection xml:id="block-verbatim-text">
             <title>Blocks of Verbatim Text</title>
 
-            <p>If you want to isolate large chunks of verbatim text outside of paragraphs, the <tag>pre</tag> tag is the one to use.  It can be used as a peer of paragraphs (and other structures) as a child of a subdivision, or it can be placed into a <tag>listing</tag> to receive a caption, title and number.</p>
+            <p>If you want to isolate large chunks of verbatim text outside of paragraphs, the <tag>pre</tag> tag is the one to use.  It can be used as a peer of paragraphs (and other structures) as a child of a division, or it can be placed into a <tag>listing</tag> to receive a caption, title and number.</p>
 
             <p>You can structure the contents with <tag>cline</tag> in exactly the same manner as for <tag>cd</tag>.  But you may find this tedious.  Instead, you can make the content of <tag>pre</tag> a sequence of lines separated by newlines.  So that you can preserve the indentation of your source, the line closest to the left margin is taken to actually be the left margin, and a corresponding amount of leading whitespace will be removed from every line.  This will work well if you recognize two caveats.  First, results will be unpredictable if you mix spaces and tabs for indentation.  Sticking with spaces is best.  Second, if your first characters of content immediately follow the <tag>pre</tag> tag then there is no leading whitespace and it is as if that line is already at the left margin.  Then subsequent indentation may seem too severe to you.</p>
 
@@ -66,27 +67,281 @@
         </subsection>
     </section>
 
-    <section xml:id="topic-references">
-        <title>(*) References and Citations</title>
+    <section xml:id="topic-cross-referencing">
+        <title>Cross-References and Citations</title>
+        <idx>cross-reference</idx>
+        <idx>citation</idx>
+
+        <p>When you read a novel, you would likely read it cover-to-cover (in one sitting?) and then put it away and never read it again.  But for a textbook, you may read cover-to-cover, but you may also frequently skip around, especially at exam time.  And once read, it might become a reference work for you, since you know it so well.  So years later you might come back looking for something.  Cross-references help with all this, so use them liberally.  Recognize that an index is really just a specialized way to provide an abundance of cross-references.</p>
+
+        <p>It is a two-step process to make a cross-reference.<ol>
+            <li>Put an <attribute>xml:id</attribute> attribute on any element you think you might want to reference later.  Be organized about the values of these attributes, and in particular do not number them, as this has no place in your source, and you do not want to maintain the changing numbers over the life of your project.  See the advice in <xref ref="overview-cross-references" /> about banned characters.  Some elements do not accept this attribute because the element has nothing to identify it (no number, no title).  Typically these are <term>containers</term><idx>container</idx> like <tag>sidebyside</tag> or <tag>statement</tag>.  In these cases, put the attribute on the closest enclosing element.</li>
+
+            <li>To make a cross reference, you create an <tage>xref</tage> element with a <attribute>ref</attribute> attribute with the same value as <attribute>xml:id</attribute> attribute on the element you want to reference.</li>
+        </ol>Simple.  It is meant to be, so you can use it liberally.  But we also know authors want some flexibility.</p>
+
+        <p>By default, a cross-reference will visually be text like Theorem 5.2.  Depending on your output format, it may have various devices to help you locate that theorem.  Maybe a page number, or it is a hyperlink, or the whole theorem is the content of a knowl.  You can change the default look of cross-references by setting the <attribute>text</attribute> attribute in <c>docinfo/cross-references</c>.  But you can also change the visual appearance of a cross-reference on a case-by-case basis.  Add a <attribute>text</attribute> attribute to your <tage>xref</tage> element to override the document-wide setting.  The first column of this table lists the possible attribute values, either document-wide, or on a per-cross-reference basis.  The second column has live cross-references to a section of an earlier chapter (that is far away).  The third column has live cross-references to another section of this chapter (which is close by).  For the fourth column, we have placed content (<q>Extra</q>) into the <tag>xref</tag> element as an override of, or addition to, some of the text for the cross-references of the preceding column.  Study the table and then read some more explanation following.  Note that <c>type-global</c> is the default.</p>
+
+        <table>
+            <caption>Cross-reference visual text styles</caption>
+            <tabular>
+                <row bottom="major">
+                    <cell><attribute>text</attribute></cell>
+                    <cell>Far Away</cell>
+                    <cell>Close By</cell>
+                    <cell>With Content</cell>
+                </row>
+
+                <row>
+                    <cell><c>type-local</c></cell>
+                    <cell><xref ref="overview-title"     text="type-local" /></cell>
+                    <cell><xref ref="topic-divisions" text="type-local" /></cell>
+                    <cell><xref ref="topic-divisions" text="type-local">Extra</xref></cell>
+                </row>
+
+                <row>
+                    <cell><c>type-global</c></cell>
+                    <cell><xref ref="overview-title"     text="type-global" /></cell>
+                    <cell><xref ref="topic-divisions" text="type-global" /></cell>
+                    <cell><xref ref="topic-divisions" text="type-global">Extra</xref></cell>
+                </row>
+
+                <row>
+                    <cell><c>type-hybrid</c></cell>
+                    <cell><xref ref="overview-title"     text="type-hybrid" /></cell>
+                    <cell><xref ref="topic-divisions" text="type-hybrid" /></cell>
+                    <cell><xref ref="topic-divisions" text="type-hybrid">Extra</xref></cell>
+                </row>
+
+                <row>
+                    <cell><c>local</c></cell>
+                    <cell><xref ref="overview-title"     text="local" /></cell>
+                    <cell><xref ref="topic-divisions" text="local" /></cell>
+                    <cell><xref ref="topic-divisions" text="local">Extra</xref></cell>
+                </row>
+
+                <row>
+                    <cell><c>global</c></cell>
+                    <cell><xref ref="overview-title"     text="global" /></cell>
+                    <cell><xref ref="topic-divisions" text="global" /></cell>
+                    <cell><xref ref="topic-divisions" text="global">Extra</xref></cell>
+                </row>
+
+                <row>
+                    <cell><c>hybrid</c></cell>
+                    <cell><xref ref="overview-title"     text="hybrid" /></cell>
+                    <cell><xref ref="topic-divisions" text="hybrid" /></cell>
+                    <cell><xref ref="topic-divisions" text="hybrid">Extra</xref></cell>
+                </row>
+
+                <row>
+                    <cell><c>phrase-global</c></cell>
+                    <cell><xref ref="overview-title"     text="phrase-global" /></cell>
+                    <cell><xref ref="topic-divisions" text="phrase-global" /></cell>
+                    <cell>Warning</cell>
+                </row>
+
+                <row>
+                    <cell><c>phrase-hybrid</c></cell>
+                    <cell><xref ref="overview-title"     text="phrase-hybrid" /></cell>
+                    <cell><xref ref="topic-divisions" text="phrase-hybrid" /></cell>
+                    <cell>Warning</cell>
+                </row>
+
+                <row>
+                    <cell><c>title</c></cell>
+                    <cell><xref ref="overview-title"     text="title" /></cell>
+                    <cell><xref ref="topic-divisions" text="title" /></cell>
+                    <cell><xref ref="topic-divisions" text="title">Extra</xref></cell>
+                </row>
+            </tabular>
+        </table>
+
+        <p>Note that <c>local/global</c> describes the uniqueness of the number (and is affected by your choice of numbering schemes), while <c>type</c> refers to an automatic prefix of the number.  The text of the type will vary according to the document's language. If a cross-reference and its target are close to each other, a number like 5.8.2.4 might be overkill, when just a 4 would suffice.  A <c>hybrid</c> scheme will use the shorter number whenever it makes sense.  Finally, there are two <c>phrase</c> schemes, and it should be clear what text <c>title</c> will produce (though realize there must be a title for the object, possibly a default provided by <pretext />).</p>
+
+        <p>You can also override the text used in a cross-reference link.  You do this by providing content to the <tag>xref</tag> element.  In other words, do not use an empty tag, but put some (simple) text in the element.  Generally, this additional text becomes a prefix of a number, a replacement of a type, or a replacement of a title.  It is better to use these overrides, since in electronic formats, the text of the override will be incorporated into the <q>clickable</q> portion of the resulting link, making a larger item to hit.</p>
+
+        <p>Here are careful examples, where we have provided the content <q>Division</q> in the live examples.  The list is not exhaustive.  Note that overriding a title provides a way to provide any text you would like.</p>
+
+        <!-- expand and add links to the Preface to demo default titles -->
+        <table xml:id="txo">
+            <caption>Cross-reference text overrides</caption>
+            <tabular>
+                <row bottom="major">
+                    <cell><attribute>text</attribute></cell>
+                    <cell>Example</cell>
+                </row>
+                <row>
+                    <cell><c>'global'</c></cell>
+                    <cell><xref ref="topic-cross-referencing" text="global">Division</xref></cell>
+                </row>
+                <row>
+                    <cell><c>'type-global'</c></cell>
+                    <cell><xref ref="topic-cross-referencing" text="type-global">Division</xref></cell>
+                </row>
+                <row>
+                    <cell><c>'title'</c></cell>
+                    <cell><xref ref="topic-cross-referencing" text="title">Division</xref></cell>
+                </row>
+            </tabular>
+        </table>
+
+        <p>Citations, which are cross-references to <tag>biblio</tag> elements behave the same way, but will always visually look like [23].  References to equations (<tag>men</tag> and <tag>mrow</tag> elements) will visually look like (4.2), where the type is implied by the parentheses.  Notice that you cannot cross-reference an <tag>me</tag> (no number) or <tag>md</tag> (just a container).</p>
+
+        <p>Further, there are some variant formats.<ul>
+            <li>Replace <attribute>ref</attribute> by <attribute>provisional</attribute> and give it a value with some simple text like <c>subsection on eagle habitat</c> and you will get reminders that once you write this future subsection you need to link it in right here.  This is just a convenience for authors during the early stages of a writing project.</li>
+
+            <li>Replace <attribute>ref</attribute> by the pair <attribute>first</attribute> and <attribute>last</attribute>.  Provide attribute values just as you would for <attribute>ref</attribute>.  The code will check that the targets have the exact same tag, and that the order is correct.  You will get a link that looks like a range, separated by an en-dash.  As a link, only <attribute>first</attribute> will be used for the linking mechanism (<ie />, one link is generated, not two).  Experiment with <attribute>text</attribute> and content overrides.</li>
+
+            <li>The <attribute>ref</attribute> attribute may be a list of <attribute>xml:id</attribute>, separated by commas or by spaces.  Then you will get back a list of cross-references.  This is meant for a list of citations, producing a look like [5, 9, 22], but it makes no restriction to this case.  Use it generally, but it is unlikely to get any more capable.  If you want a different list, just use multiple <tag>xref</tag> and format as you desire.</li>
+        </ul></p>
+
+        <p>You can create many different combinations with the text options and the variants.  Here is one example.  You want to say <xref first="start-here" last="schema" text="global">Chapters</xref>.  As a range you use the variant with two references. You would get <q>Chapter</q> out front automatically with the <c>type-global</c> scheme, but a plural form makes more sense.  So you use that text as an override.  We could use either <c>type-global</c> or <c>global</c> to get the same text, and possibly <c>type-hybrid</c> depending on teh place where you built the cross-reference.  So possibly, one of these schemes might be your document-wide setting and you do not need to specify it now.  Here is what we just used:<cd>
+            <cline>&lt;xref first="start-here" last="schema" text="global"&gt;Chapters&lt;/xref&gt;</cline>
+        </cd></p>
+
+        <p>You can place a cross-reference into a <tag>title</tag> element, but a particular conversion is free to simply render it as text, and not as an active link.</p>
+
+        <p>Finally, there is fairly robust error-checking to protect against typographical errors in the attribute values that need to match up for all this to work.  Also, there is a check that the <attribute>xml:id</attribute> are unique.  But all this checking happens at processing-time, not at the validation step.  Any suggestions for improvements that make these checks even more robust are welcome.</p>
+
+        <note>
+            <title>Best Practices</title>
+
+            <p>With numbering schemes for divisions, theorems, figures, equations, and citations, along with nine different text styles, plus variants, per-cross-reference settings, and text overrides, there are a lot of combinations.  Likely you can create some fairly ugly cross-references.  Use the flexibility sensibly.</p>
+        </note>
 
     </section>
 
-    <section xml:id="topic-cross-referencing">
-        <title>(*) Cross-Referencing Information</title>
 
+    <section xml:id="topic-divisions">
+        <title>Divisions</title>
+
+        <p>A <term>division</term><idx>division</idx> is a structured component of a book or article that would be recognized by most any reader.  They are essential to the organization of a <pretext /> project.  Notice that we use the generic term division, since a <tag>section</tag> is just one example of a division.</p>
+
+        <p>divisions are <tag>book</tag>, <tag>article</tag>, <tag>part</tag>, <tag>chapter</tag>, <tag>section</tag>, <tag>subsection</tag>, <tag>subsubsection</tag>, and <tag>paragraphs</tag>.  Their use is fairly intuitive, though there are some restrictions, so please read on.</p>
+
+        <p>A <tag>book</tag> must contain at least one <tag>chapter</tag>, which may contain <tag>section</tag>, <tag>subsection</tag>, and <tag>subsubsection</tag>.  The tag <tag>part</tag> is planned for books, between <tag>book</tag> and <tag>chapter</tag>.  It will function in two user-selectable ways: structural (<eg /> numbering will reset), or decorative (merely inserting a decorative page between two chapters and sectioning the Table of Contents).</p>
+
+        <p>An <tag>article</tag> is simpler and shorter than a book.  It might be really simple and have no divisions at all, or it may have <tag>section</tag>s.  It cannot have <tag>chapter</tag>s, as that would be a <tag>book</tag>.  Within a <tag>section</tag>, <tag>subsection</tag>s and <tag>subsubsection</tag>s may follow.</p>
+
+        <p>Divisions must nest properly and may not be skipped.  So a <tag>section</tag> cannot contain a <tag>chapter</tag> and a <tag>subsection</tag> may not be contained in a <tag>chapter</tag> without an intervening <tag>section</tag>.</p>
+
+        <p>A division <em>must</em> contain a <tag>title</tag>, and may contain one or more index entries (see <xref provisional="topic-index" />), which should appear before anything else.  Any division may be unstructured, with just a sequence of <term>top-level content</term><idx>top-level content</idx> such as paragraphs, figures, lists, theorems, <etc />  Or a division may be structured, and in this case it must follow a prescribed pattern.  There may be a single, optional <tag>introduction</tag>, filled with top-level content, followed by a sequence of at least one of the appropriate divisions, ending with a single, optional <tag>conclusion</tag>, filled with top-level content.  It is an error to begin with a run of top-level content inside a division and then begin to use divisions.  (The solution is to make the initial content an <tag>introduction</tag> and/or one or several divisions.)</p>
+
+        <p>There are exceptions to the above.  For one, <tag>paragraphs</tag> is an anomalous division, as a sort of lightweight sectioning command.  It may appear in any division, at any location within a division, it may not be divided further (it is a leaf of the document tree), it never gets a number, and its title is formatted in a subsidiary way.  I especially like to use this in a two- or three-page <tag>article</tag> that has no other divisions at all.  Typical presentation has the title in bold, without much change in font size (if at all), inline with the first paragraph, and perhaps a bit of vertical space as it begins and ends.  Despite the name, it may contain more than just paragaphs, so may contain any top-level-content that would go in any other division.</p>
+
+        <p>Two other anomalous divisions are <tag>exercises</tag> and <tag>references</tag>.  These can function as a further division of any other division.  So for example, an <tag>exercises</tag> could be a peer of several <tag>section</tag>s, contained within a structured <tag>chapter</tag>, and in this case would behave like the other <tag>section</tag>s with regard to numbering and presentation.  Detail on allowed content and its behavior are in <xref ref="topic-exercises" /> and <xref ref="topic-references" />, respectively.</p>
     </section>
 
     <section xml:id="topic-mathematics">
-        <title>(*) Mathematics</title>
+        <title>Mathematics</title>
+        <idx>mathematics</idx>
 
-        <p>This section is incomplete, newer features are being discussed as they are introduced.</p>
+        <introduction>
+            <p>As mentioned in the overview, <xref ref="overview-math" />, we use <latex /> syntax for mathematics.  In order to allow for quality display in <init>HTML</init>, and other electronic formats, this limits us to the subsset of <latex /> supported by the very capable <url href="https://www.mathjax.org/">MathJax</url> Javascript library.  Generally this looks like the <c>amsmath</c><idx><c>amsmath</c></idx> package maintained by the American Mathematical Society at their <url href="http://www.ams.org/publications/authors/tex/amslatex">AMS-LaTeX page</url>.  For a complete and precise list of what MathJax supports, see the <url href="http://docs.mathjax.org/en/latest/tex.html#supported-latex-commands">MathJax Supported LaTeX commands</url> page.</p>
+        </introduction>
 
-        <paragraphs>
+        <subsection>
+            <title>Inline Mathematics</title>
+
+            <p>Use the <tag>m</tag> to place variables or very short expressions within a sentence of a paragraph, the content of a <tag>title</tag>, a <tag>cell</tag> of a table, a footnote, or other similar locations of sentence-like text.  You can't cross-reference this text, nor make a knowl with it.  Though you can typically cross-reference a containing element.</p>
+
+            <p>Do not use <latex />-isms like <c>\displaystyle</c> to try to end-run the inline nature.  It will just lead to poor results.</p>
+        </subsection>
+
+        <subsection>
+            <title>One-Line Display Mathematics</title>
+
+            <p>The <tag>me</tag> element can be used for longer expressions or a single equation.  Typically you will get vertical separation above and below, and the contents will be centered.  See below about concluding periods (and other punctuation), and alignment.  The <tag>men</tag> variant will produce a numbered equation, and therefore with a provided <attribute>xml:id</attribute> attribute, can be the target of a cross-reference (<tag>xref</tag>).</p>
+        </subsection>
+
+        <subsection>
+            <title>Multi-line Display Mathematics</title>
+
+            <p>We begin with a pure container, either <tag>md</tag> or <tag>mdn</tag>.  The former numbers no lines, the latter numbers every line.  Within the container, content, on a per-line basis, goes into a <tag>mrow</tag> element.  You can think of <tag>mrow</tag> as being very similar to <tag>me</tag>.  If you are tempted to put a <latex /> <c>\\</c> into an <tag>mrow</tag>, think twice.</p>
+
+            <p>On any given <tag>mrow</tag> you can place the <attribute>number</attribute> attribute, with allowable values of <c>yes</c> and <c>no</c>.  These will typically be used to override the behavior inherited by the container, but there is no harm if they are redundant.  A given line of the display may be the target of a cross-reference, though the numbering flexibility means you can try (and fail) to target an unnumbered equation.</p>
+
+            <p>An <tag>mrow</tag> may have a <attribute>tag</attribute> attribute in place of a <attribute>number</attribute> attribute.  This will create a <q>number</q> on the equation which is just a symbol.  This is meant for situations where you do not want to use numbers, and the resulting cross-reference is <q>local.</q>  In other words, the <tag>xref</tag> and its target are not far apart, such as maybe within the same <tag>example</tag> or the same <tag>proof</tag>.  Allowable values for the attribute are: <c>star, dstar, tstar, dagger, ddagger, tdagger, hash, dhash, thash, maltese, dmaltese, tmaltese</c>.  These are the names of symbols, with prefixes where the prefix <c>d</c> means <q>double</q>, and the prefix <c>t</c> means <q>triple</q>.  Cross-references to these tagged equations happens in the usual way and should behave as expected.  See <xref ref="overview-cross-references" /> and <xref ref="topic-cross-referencing" /> for more on cross-references.</p>
+        </subsection>
+
+        <subsection>
+            <title>Special Characters</title>
+
+            <p>The <latex /> macros, <c>\amp</c>, <c>\lt</c>, and <c>\gt</c> are always available within these mathematics elements, so that you can avoid the special XML characters <c>&amp;</c>, <c>&lt;</c> and <c>&gt;</c>.  See <xref ref="overview-special-characters" /> for this same information, but in the broader context of your entire document.</p>
+        </subsection>
+
+        <subsection>
+            <title>Text in Mathematics</title>
+
+            <p>Once in a while, you need a little bit of <q>regular</q> text within an expression and you do not want it to look like a product of a bunch of one-letter variables.  Use the <c>\text{}</c> macro for these.<ul>
+                <li>Do place surrounding spaces inside the <c>\text{}</c> macro.</li>
+                <li>Do not place any mathematics inside the  <c>\text{}</c> macro.</li>
+                <li>Do not use the <c>\mbox{}</c> macro as a substitute.</li>
+            </ul></p>
+
+            <p>For example,<cd>
+                <cline>&lt;me&gt;f(x) = \begin{cases} x^2 \amp \text{if } x\gt 0\\</cline>
+                <cline>           -7 \amp \text{otherwise} \end{cases}&lt;/me&gt;</cline>
+            </cd>produces
+            <me>f(x) = \begin{cases}x^2\amp\text{if }x\gt 0\\-7\amp\text{otherwise}\end{cases}</me>.  This example amply illustrates the use of macros for XML special characters (twice), appropriate use of the <c>\text{}</c> macro (twice), spaces in the <c>\text{}</c> macro (once), sentence-ending punctuation (see the source, the period is <em>not</em> inside the <tag>me</tag> element) and yes, we did think twice about the <c>\\</c> (an exception to the rule).</p>
+        </subsection>
+
+        <subsection>
+            <title>Cross-References in Display Mathematics</title>
+
+            <p>A cross-reference is achieved with the <tag>xref</tag> element, see <xref ref="overview-cross-references" />.  You can place an <tag>xref</tag> inside a <tag>mrow</tag>, and remarkably, it will do the right thing.  This is one of only two <init>XML</init> elements you can mix-in with <latex /> syntax.  A typical use is to provide a justification or explanation for a step in a proof, derivation, or simplification.  And it works best with alignment, see below.</p>
+        </subsection>
+
+        <subsection>
+            <title>Alignment in Display Mathematics</title>
+
+            <p>Displayed mathematics is implemented with the AMS-<latex /> <c>align</c> environment.  Ampersands are used to control this, so use the <c>\amp</c> macro for these.  The first ampersand in a line or row is an alignment point, typically a symbol, like an equality.  The next ampersand is a column separator, then the next is an alignment point, then a column separator, then<ellipsis />  The moral of the story is you should have <m>n</m> alignment points, with <m>n-1</m> column separators, for a total of <m>2n-1</m> ampersands<mdash />always an odd number.</p>
+
+            <p>For example,<cd>
+                <cline>&lt;md&gt;</cline>
+                <cline>  &lt;mrow&gt;A \amp = B \amp D \amp = E \amp \amp \text{Because}&lt;/mrow&gt;</cline>
+                <cline>  &lt;mrow&gt;  \amp = C \amp   \amp = F \amp \amp &lt;xref ref="txo" /&gt;&lt;/mrow&gt;</cline>
+                <cline>&lt;/md&gt;</cline>
+            </cd>produces
+            <md>
+                <mrow>A \amp = B \amp D \amp = E \amp \amp\text{Because}</mrow>
+                <mrow>  \amp = C \amp   \amp = F \amp \amp<xref ref="txo" /></mrow>
+            </md>.</p>
+
+            <p>Sometimes you want several short equations on one line.  Do not use <tag>me</tag>.  Instead use a single <tag>mrow</tag> inside an <tag>md</tag>, and use alignment to spread them out evenly.</p>
+
+            <p>For multi-line display mathematics with no ampersands present, each line will be centered.  This is implemented with the AMS-<latex /> <c>gather</c> environment.</p>
+
+            <p>You can fool the alignment behavior by hiding all your ampersands in macro definitions, so there is the optional <attribute>alignment</attribute> attribute for the <tag>md</tag> or <tag>mdn</tag> element, in order to force the right kind of alignment.  Allowable values are <c>gather</c>, <c>align</c>, and <c>alignat</c>.  The latter is similar to <c>align</c>, but no space is automatically provided between columns.  You can leave it that way, or explicitly add your own.  For example, this allows you to precisely arrange individual terms of a system of linear equations, especially when terms with zero coefficients are omitted.  When using the <c>alignat</c> option <pretext /> tries to count ampersands to see how many columns you intend, since <latex /> needs this number (we are not sure why).  This detection can be fooled too, especially if you have something like a matrix with lots of ampersands for other purposes.  So set the <attribute>alignat-columns</attribute> attribute to the <em>number of intended columns</em>, if necessary.</p>
+        </subsection>
+
+        <subsection>
+            <title>Fill-In Blanks in Mathematics</title>
+
+            <p>The other mix-in <init>XML</init> element is <tag>fillin</tag> with an optional <attribute>characters</attribute> attribute that takes an integer value.  You will get a thin horizontal line, on the baseline, which can suggest to a reader that they should supply something within the surrounding mathematics.  The attribute suggests the length of the line<mdash />experiment a bit, since it is not super-precise.</p>
+        </subsection>
+
+        <subsection>
+            <title>Page Breaks for Tall Display Mathematics</title>
+
+            <p>For print output, do nothing additional and <latex /> will do its best to break your display between lines.  You can turn this behavior off by setting the <attribute>break</attribute> attribute on the <tag>md</tag> or <tag>mdn</tag> to the value <c>no</c>.  Once you do this, you can then selectively allow a page break after a given <tag>mrow</tag> by setting the <attribute>break</attribute> attribute on the <tag>mrow</tag> to the value <c>yes</c>.</p>
+        </subsection>
+
+        <subsection>
+            <title>Your Macros</title>
+
+            <p>These go in the <tag>docinfo</tag> section, wrapped in a <tag>macros</tag><idx>macro</idx> element.  Keep them simple<mdash />one or two arguments, and one-line definitions.  This is not the place to be fancy, and not the place to try to end-run the structural aspects of <pretext />.  The idea is to define something like <c>\adjoint{A}</c> for the matrix <c>A</c> to be a superscript asterisk, and later you can change your mind and use a superscript dagger instead.  Keep in the spirit of <pretext /> and use readable, semantic macros.  For example, do not use <c>\a{A}</c> for the adjoint of <c>A</c>.</p>
+
+            <p><pretext /> will use your macros correctly for print and for <init>HTML</init>, after erasing whitespace from the left margin, and stripping <latex /> comments.</p>
+        </subsection>
+
+        <subsection>
             <title>Punctuation After Display Math</title>
 
             <p>If a chunk of displayed math concludes a sentence, then the sentence-ending punctuation should appear at the conclusion of the display.  (And certainly not at the start of the first line after the display!)  But do not author the punctuation within the mathematics element, put it afterwards, where it logically belongs.</p>
 
-            <p>More specifically, place a sentence-ending period (say) <em>immediately</em> after the closing of an <tag>me</tag>, <tag>men</tag>, <tag>md</tag>, or <tag>mdn</tag> element. MathBook XML will place the period in your output in the right place and in the right way.  (By using <latex />'s <c>\text{}</c> macro, if you are curious to know the details.)  Here is an example.  The <init>XML</init> source<cd>
+            <p>More specifically, place a sentence-ending period (say) <em>immediately</em> after the closing of an <tag>me</tag>, <tag>men</tag>, <tag>md</tag>, or <tag>mdn</tag> element. <pretext /> will place the period in your output in the right place and in the right way.  (By using <latex />'s <c>\text{}</c> macro, if you are curious to know the details.)  Here is an example.  The <init>XML</init> source<cd>
                 <cline>&lt;md&gt;</cline>
                 <cline>    &lt;mrow&gt;(a+b)^2&lt;/mrow&gt;</cline>
                 <cline>&lt;/md&gt;.  Now...</cline>
@@ -94,9 +349,24 @@
                 <mrow>(a+b)^2</mrow>
             </md>.  Now<ellipsis /></p>
 
-            <p>Take notice of the requirement that the punctuation must be <em>immediately</em> after the closing tag of the math element, otherwise it will not migrate properly.</p>
-        </paragraphs>
+            <p>This all applies more generally to clause-ending punctuation, such as a comma.  Take notice of the requirement that the punctuation must be <em>immediately</em> after the closing tag of the math element, otherwise it will not migrate properly.  For example, do not interrupt the flow with whitespace, or an <init>XML</init> comment, or anything else.</p>
 
+            <p>Here is a technical subtlety that will demonstrate some of the inner machinery of <pretext /> and our conversions.  In your work, locate a theorem that has some numbered display mathematics (<c>mdn</c>) which is at the end of a sentence, and which you have authored as described above.  In <init>HTML</init> output, test a cross-reference (<c>xref</c>) to the theorem and you will see the period for the end of the sentence at the end of the display, where it should be.  Now test a cross-reference (<c>xref</c>) to one of the numbered equations.  First, the knowl will contain the entire display, to provide context, but it also will not contain the period, since the rest of the sentence is not in the knowl and so the period is not necessary.</p>
+        </subsection>
+
+        <subsection>
+            <title>Additional Packages</title>
+
+            <p>Generally, you cannot add additional packages for use within mathematics.  The exception is a package with support available optionally within MathJax.  And it must have the same name as its normal <latex /> version.  Then set a <c>docinfo/latex-preamble/package</c> element to be the common name of the package.   (The <c>cancel</c> package is one such example.)</p>
+
+            <p>Then the supported macros of the package will be available with your mathematics elements, and you can use them within other macro definitions.  We do not guarantee the absence of conflicts with other packages in use, even if employed by <pretext />.  Nor do we support debugging such conflicts.</p>
+        </subsection>
+
+        <subsection>
+            <title>Extras</title>
+
+            <p>There are two existing additional options, which we might want to remove some day for technical reasons.  Macros from the <c>extpfeil</c> extensible arrows package are availble by default, and an <c>\sfrac{}{}</c> macro is available for appealing inline <q>slanted fractions.</q></p>
+        </subsection>
     </section>
 
     <section xml:id="topic-lists-and-labels">
@@ -111,11 +381,12 @@
 
     <section xml:id="topic-images">
         <title>Images</title>
+        <idx>image</idx>
 
         <subsection xml:id="topic-images-raster">
             <title>Raster Images</title>
 
-            <p>A <term>raster image</term> is an image described pixel-by-pixel, with different colors and intensities.  Photographs are good examples.  Common formats are Portable Network Graphics (PNG) and Joint Photographic Experts Group (JPEG, JPG), which will both work with <c>pdflatex</c> and modern browsers.  JPEG are a good choice for photographics since they are compressed on the assumption they will be viewed by a human, while PNG is a lossless format and good for line art, diagrams and similar images (if you do not have vector graphics versions, see below).</p>
+            <p>A <term>raster image</term><idx>raster image</idx><idx><h>image</h><h>raster image</h></idx> is an image described pixel-by-pixel, with different colors and intensities.  Photographs are good examples.  Common formats are Portable Network Graphics (PNG) and Joint Photographic Experts Group (JPEG, JPG), which will both work with <c>pdflatex</c> and modern browsers.  JPEG are a good choice for photographics since they are compressed on the assumption they will be viewed by a human, while PNG is a lossless format and good for line art, diagrams and similar images (if you do not have vector graphics versions, see below).</p>
 
             <p>To use these images, you simply provide the filename, with a relative path.  A subdirectory such as <c>images</c> is a good choice for a place to put them.  It is your responsibility to place these images where the <latex /> output will find them or where the HTML output will find them.  The XML would look like:</p>
 
@@ -123,7 +394,7 @@
             <![CDATA[<image source="images/crocodiles.png" width="50%" />]]>
             </pre>
 
-            <p>Typically you would wrap this in a <tag>figure</tag> that might have an <attribute>xml:id</attribute> attribute for cross-references, with or without a caption.  There is no <attribute>height</attribute> attribute, so the aspect ratio of your image is your responsibility outside of MathBook XML.  The <attribute>width</attribute> attribute is a percentage of the available width of the text (outside of a <tag>sidebyside</tag> panel).  Default width is typically 90<percent />.</p>
+            <p>Typically you would wrap this in a <tag>figure</tag> that might have an <attribute>xml:id</attribute> attribute for cross-references, with or without a caption.  There is no <attribute>height</attribute> attribute, so the aspect ratio of your image is your responsibility outside of <pretext />.  The <attribute>width</attribute> attribute is a percentage of the available width of the text (outside of a <tag>sidebyside</tag> panel).  Default width is typically 90<percent />.</p>
 
             <p>You may also provide a <tag>description</tag> which will aid accessibility for electronic formats.  Keep such readers in mind and provide as much description as possible.  Keep the markup simple, since this will typically migrate to an HTML attribute that cannot contain any structure.  Be careful to avoid double-quotes.  For example,</p>
 
@@ -139,7 +410,7 @@
         <subsection xml:id="topic-images-vector">
             <title>Vector Graphics</title>
 
-            <p>An image is a <term>vector graphic</term> if the file describes the geometric shapes that constitute the image.  So a simple diagram would be a good candidate, but a photograph would not.  Popular formats are Portable Document Format (PDF) and Scalable Vector Graphics (SVG).  You will get the best results with PDF images in <latex /> output and SVG images for HTML.  The principal advantage of these formats is that they scale (big or small) smoothly, along with fonts.  This is critical when you cannot predict the screen size for a reader of an electronic version.</p>
+            <p>An image is a <term>vector graphic</term><idx>vector graphic</idx><idx><h>image</h><h>vector graphic</h></idx> if the file describes the geometric shapes that constitute the image.  So a simple diagram would be a good candidate, but a photograph would not.  Popular formats are Portable Document Format (PDF) and Scalable Vector Graphics (SVG).  You will get the best results with PDF images in <latex /> output and SVG images for HTML.  The principal advantage of these formats is that they scale (big or small) smoothly, along with fonts.  This is critical when you cannot predict the screen size for a reader of an electronic version.</p>
 
             <p>Unless you describe these images with a language (see next subsection), you are responsible for providing the PDF and SVG versions.  The <c>pdf2svg</c> utility is very useful if you have PDF images only.  To use these images, you simply follow the instructions above, but do not include a file extension.  This alerts the conversion to use the best possible choice.  So presuming we had files <c>images/toad-life-cycle.pdf</c> and <c>images/toad-life-cycle.svg</c>, an example would be:</p>
 
@@ -158,6 +429,35 @@
             <p>To be written once elements and tags solidfy, see sample article for examples.</p>
         </subsection>
 
+        <subsection xml:id="topic-images-archive">
+            <title>Image Archives</title>
+
+            <p>As an instructor, you might want to recycle images from a text for a classroom presentation, a project handout, or an examination question.  As an author, you can elect to make images files available through links in the HTML version, and it is easy and flexible to produce those links automatically.</p>
+
+            <p>First, it is your responsibility to manufacture the files.  For making different formats, the <c>mbx</c> script can sometimes help (<xref ref="mbx-script" />).  The Image Magick <c>convert</c> command is a quick way to make raster images in different formats, while the <c>pdf2svg</c> executable is good for converting vector graphics <init>PDF</init>s into <init>SVG</init>s.  Also, to make this easy to specify, different versions of the same image must have identical paths and names, other than the suffixes.  Finally, the case and spelling of the suffix in your <init>MBX</init> source must match the filename (<eg /> <c>jpg</c> versus <c>JPEG</c>).  OK, those are the ground rules.</p>
+
+            <p>For links for a single image, add the <attribute>archive</attribute> attribute to the <tag>image</tag> element, such as<cd>
+                <cline>&lt;image  ...  archive="pdf svg"&gt;</cline>
+            </cd>to get two links for a single image.</p>
+
+            <p>To have every single image receive an identical collection of links, in <c>docinfo/images</c> place an <tag>archive</tag> element whose content is the space-separated list of suffixes/formats.<cd>
+                <cline>&lt;archive&gt;png JPEG tex ods&lt;/archive&gt;</cline>
+            </cd>will provide four links on every image, including a link to an OpenDocument spreadsheet.</p>
+
+            <p>For a collection of images that is contained within some portion of your document, you can place an <attribute>@xml:id</attribute> on the enclosing element and then in <c>docinfo/images</c> place<cd>
+                <cline>&lt;archive from="the-xml-id-on-the-portion"&gt;svg png&lt;/archive&gt;</cline>
+            </cd>to get two links on every image <em>only</em> in that portion (chapter, subsection, side-by-side, <etc />).  The <attribute>from</attribute> attribute is meant to suggest the root of a subtree of your hierarchical document.  If you use this, then <em>do not</em> use the global form that does not have <attribute>from</attribute>.</p>
+
+            <p>You may accumulate several of the above semi-global semi-local forms in succession.  An image will receive links according to the last <tag>archive</tag> whose <attribute>from</attribute> subtree contains the image.  So the strategy is to place general, large subtree, specifications early, and use refined, smaller subtree specifications later.  For example,<cd>
+                <cline>&lt;archive from="the-xml:id-on-a-chapter"&gt;svg png&lt;/archive&gt;</cline>
+                <cline>&lt;archive from="the-xml:id-on-the-introduction"&gt;jpeg&lt;/archive&gt;</cline>
+                <cline>&lt;archive from="the-xml:id-on-a-section-within" /&gt;</cline>
+            </cd>will put two links on every image of a chapter, but just one link on images in the introduction, and no links at all on every image image within one specific section.  Again, do not mix with the global form.  You can use the root document node (<eg /> <tag>book</tag>) for <attribute>from</attribute> to obtain a global treatment, but it is unnecessary (and inefficient) to provide empty content for the root node as first in the list<mdash />the same effect is the default behavior.</p>
+
+            <p>Notice that this facility does not restrict you to providing files of the same image, or even images at all.  You could choose to make data files available for each data plot you provide, as spreadsheets, or text files, or whatever you have, or whatever you think your readers need.</p>
+
+            <p>Finally, <q>archive</q> may be a bit of a misnomer, since there is no historical aspect to any of this.  Maybe <q>repository</q> would be more accurate.  Though for a history textbook, it might be a perfect name.</p>
+        </subsection>
     </section>
 
     <section xml:id="topic-tabular">
@@ -171,8 +471,36 @@
     </section>
 
     <section xml:id="topic-sidebyside">
-        <title>(*) Side-by-Side Panels</title>
+        <title>Side-by-Side Panels</title>
+        <idx>side-by-side panel</idx>
 
+        <p>Documents, pages, and screens tend to run vertically from top to bottom.  But sometimes you want to control elements laid out horizontally.  A <tag>sidebyside</tag> is designed to play this role.  It is best thought of as a container, enclosing <term>panels</term><idx><h>panel</h><see>side-by-side panel</see></idx><idx><h>side-by-side panel</h><h>panel</h></idx>, and specifying their layout.  Examples include three images, all the same size and equally spaced.  Or a poem occupying two-thirds of the available width, with commentary adjacent in the remaining third.  Or an image next to a table.  But the most common use may be a single image (with no caption, and hence no number), whose width and horizontal placement are controlled by the layout.</p>
+
+        <p>See the schema for the exact items that are allowed in a <tag>sidebyside</tag>.  To author, just place these items within <tag>sidebyside</tag> in the order they should appear, left to right.  Then you add attributes to the <tag>sidebyside</tag> element to affect placement.</p>
+
+        <p>Instead of placing a <attribute>width</attribute> attribute on each item, instead place this on the <tag>sidebyside</tag> element.  A single <attribute>width</attribute> will use the same value for each panel.  For different widths, use the plural form <attribute>widths</attribute> and provide a space-separated list of percentages.  The default is to give each panel the same width, and as large as possible, which will result in no gap between panels.</p>
+
+        <p>The margins can be specified with the <attribute>margins</attribute> attribute, which if given as a single percentage will be used for both the left and right sides.  You may also specify asymmetric left and right margins with two percentages, separated by a space, in the same attribute.  An additional option is to use the value <c>auto</c> which will set each margin to half of the (common) space between panels.  This is also the default.  In the case of a single panel, the left margin, right margin, and panel width should all add up to 100<percent />.</p>
+
+        <p>Once the widths and margins are known, any additional available width is used to create a common distance separating panels.  (Which is not possible when there is just a single panel.)</p>
+
+        <p>Independent of horizontal positioning, individual panels may be aligned vertically.  The attribute is <attribute>valigns</attribute> and its value is a space-separated list of <c>top</c>, <c>middle</c>, and <c>bottom</c>.  The singular version, <attribute>valign</attribute>, is used to give every panel the same alignment, using the same keywords.  The default is to have every panel at the <c>top</c>.</p>
+
+        <p>We could give lots of examples, but instead it might be best to just experiment.  Error-checking is very robust, so it is hard to get it too wrong.  OK, we will do just one to help explain.  Suppose a <tag>sidebyside</tag> contains three panels and has layout parameters given by<cd>
+            <cline>&lt;sidebyside widths="20% 40% 25%" margins="auto" valign="middle"&gt;</cline>
+        </cd>Then there will be 15<percent /> of the width left to space out the panels.  The two gaps are each 5<percent /> of the width, and the remaining 5<percent /> is split between the margins at 2.5<percent /> each.  And the vertical midlines of each panel are all aligned.</p>
+
+        <p>For a single panel with no attributes, the panel will occupy 100<percent /> of the width.  A single panel with a specified width will get equal (auto) margins, resulting in a centered panel.</p>
+
+        <p>Captioned items<idx><h>side-by-side panel</h><h>panel</h><h>captioned item</h></idx> as panels deserve special mention.  These will continue to be numbered consecutively, with one exception.  If you place a <tag>sidebyside</tag> inside of a <tag>figure</tag>, then the <tag>figure</tag> will be numbered, and the captioned items inside the <tag>sidebyside</tag> will be <term>sub-captioned</term><idx><h>side-by-side panel</h><h>panel</h><h>sub-captioned item</h></idx>.  In other words, the second captioned panel of a <tag>sidebyside</tag> inside Figure 5.2 would be referenced as Figure 5.2.b.</p>
+
+        <p>An <tag>sbsgroup</tag> (<q>side-by-side group</q>) contains only <tag>sidebyside</tag>, which are displayed in order.  However, all of the layout parameters allowed on a <tag>sidebyside</tag> may be used on an <tag>sbsgroup</tag>.  This might allow a collection of fifteen images to be laid out in three rows of five images each, with widths and spacing identical for each row because the parameters are specified on the <tag>sbsgroup</tag> element.  In this way, simple grids can be constructed.  Note that any layout parameters given on an enclosed <tag>sidebyside</tag> will take priority over those given on the <tag>sbsgroup</tag>.  Captioning behavior extends to an entire <tag>sbsgroup</tag>.</p>
+
+        <p>Since <tag>sidebyside</tag> and <tag>sbsgroup</tag> are containers they cannot be referenced and so do not have an <attribute>xml:id</attribute>.  However, you can reference their individual contents if they are captioned, and you can reference an enclosing <tag>figure</tag>.</p>
+
+        <p>Generally, a <tag>sidebyside</tag> or <tag>sbsgroup</tag> can be placed as a child of a division, or within various blocks, such as <tag>proof</tag> for example.  See the schema for (evolving) specifics.</p>
+
+        <p>It should be clear now that a <tag>sidebyside</tag> is more about presentation than most <pretext /> elements, though there is some semantic information being conveyed by grouping the panels with one another.</p>
     </section>
 
     <section xml:id="topic-front-back-matter">
@@ -187,17 +515,21 @@
 
     <section xml:id="topic-url">
         <title><init>URL</init>s and External References</title>
+        <idx>URL</idx>
+        <idx>external reference</idx>
 
         <subsection>
             <title><init>URL</init>s to External Web Pages</title>
 
-            <p>The <tag>url</tag> tag can be used to point to external items (as distinct from other portions of your current document, which is accomplished with the <tag>xref</tag> element, <xref ref="overview-cross-references" />).  It always needs a value for the <attribute>href</attribute> attribute, most likely a <init>URL</init>.  Most of this time, this will point to some resource available on the Internet but it could be a file on the system hosting your document, perhaps using a relative address (but see the rest of this section for some cautions).  Here are three scenarios:<ul>
-                <li><p>The <tag>url</tag> element is empty.  Then the value of the <attribute>href</attribute> is also used for the visible text of the link, verbatim, and usually in a monospace font.  Use <term>percent-encoding</term> (aka <term>URL encoding</term>) for the <attribute>href</attribute> attribute to include special characters, such as spaces.</p></li>
+            <p>The <tag>url</tag><idx>URL</idx> tag can be used to point to external items (as distinct from other portions of your current document, which is accomplished with the <tage>xref</tage> element, <xref ref="overview-cross-references" />).  It always needs a value for the <attribute>href</attribute> attribute, most likely a <init>URL</init>.  Most of this time, this will point to some resource available on the Internet but it could be a file on the system hosting your document, perhaps using a relative address (but see the rest of this section for some cautions).  Here are three scenarios:<ul>
+                <li><p>The <tag>url</tag> element is empty.  Then the value of the <attribute>href</attribute> is also used for the visible text of the link, verbatim, and usually in a monospace font.  Use <term>percent-encoding</term><idx>percent encoding</idx><idx><h>percent encoding</h><seealso>URL encoding</seealso></idx> (aka <term>URL encoding</term><idx><h>URL</h><h>URL encoding</h></idx>) for the <attribute>href</attribute> attribute to include special characters, such as spaces.</p></li>
 
                 <li><p>The <tag>url</tag> element has content.  Now the content should be authored as you would any other text in a sentence.  Potentially problematic characters, such as a tilde should be authored with provided empty elements, but authored literally in the <attribute>href</attribute> attribute.</p></li>
 
                 <li><p>The <tag>url</tag> element has content, but you want this content to look like a <init>URL</init>.  Use the <tag>c</tag> element around the content, and follow the rules for verbatim text.  I do this often for simple <init>URL</init>s that point to the top level of a website.  The <attribute>href</attribute> is a complete <init>URL</init> like <c>http://mathbook.pugetsound.edu/</c> but for content I use a less-imposing reader-friendly version like <c>mathbook.pugetsound.edu</c>.</p></li>
             </ul></p>
+
+            <p>You can place an external reference into a <tag>title</tag> element, but a particular conversion is free to simply render it as text, and not as an active link.</p>
 
             <p>For <latex /> output it gets quite tricky to handle all the various meanings of certain escape characters in <init>URL</init>s in more complicated contexts (such as tables, footnotes, and titles), so there may be some special cases where the formatting is off or you get an error when compiling your <latex />.  We handle most of these situations, but we always appreciate reports of missed cases.</p>
         </subsection>
@@ -217,6 +549,53 @@
         </subsection>
     </section>
 
+    <section xml:id="topic-video">
+        <title>Video</title>
+        <idx>video</idx>
+
+        <p>The <tag>video</tag><idx>video</idx> element is used to embed a video in output formed from <init>HTML</init>.  It may be placed inside a <tag>figure</tag> or can be a panel of a <tag>sidebyside</tag>.  The former will have a caption, be numbered, and hence can be the target of a cross-reference (<tag>xref</tag>).  The latter is anonymous, but allows for horizontal layout, and combinations with other panels.</p>
+
+        <p>Size is controlled by a <attribute>width</attribute> attribute expressed as a percentage (on the <tag>video</tag> element when used in a figure, or as part of the <tag>sidebyside</tag> layout parameters).  Height is controlled by giving the <term>aspect ratio</term><idx>aspect ratio</idx><idx><h>aspect ratio</h><seealso>video</seealso></idx><idx><h>video</h><h>aspect ratio</h></idx> with the <attribute>aspect</attribute> attribute on the <tag>video</tag> element.  The value can be a ratio expressed like <c>4:3</c> or a decimal number computed from the width divided by the height, such as <c>1.333</c>.  The default for videos is a 16:9 aspect ratio, which is very common.</p>
+
+        <p>If you host the video content as part of your output, then the <attribute>source</attribute> should be a relative file name that points to the file containing the video, but <em>without an extension</em>.  The supported formats are MP4, Ogg, and WebM.  Browser capabilities and provided files are searched preferentially in that order.  In other words, you can provide files in more than one format and increase the likelihood that a reader's browser will find a format it can playback.</p>
+
+        <p>For a video hosted at YouTube, find the 11-character identification string in the address of a video you are viewing.  It will look something like <c>hAzdgU_kpGo</c>.  Then simply provide this with the <attribute>youtube</attribute> attribute, such as<cd>
+            <cline>youtube="hAzdgU_kpGo"</cline>
+        </cd></p>
+
+        <p>Options include specifying a <attribute>start</attribute> and an <attribute>end</attribute> in seconds as integers (no units) if you only want to highlight a key portion of a video.  The <attribute>play-at</attribute> attribute can take the following values<dl width="narrow">
+            <li>
+                <title><c>embed</c></title>
+                <p>Play in place (the default action).</p>
+            </li>
+            <li>
+                <title><c>popout</c></title>
+                <p>Play in new window or tab, at 150<percent /> width.</p>
+            </li>
+            <li>
+                <title><c>select</c></title>
+                <p>Provide the reader the choice of the other two options.</p>
+            </li>
+        </dl>In an educational setting, sometimes the preview images provided by YouTube can be distracting, or for an author-hosted video you may wish to provide your own preview image.  The <attribute>preview</attribute> attribute can take on the following values<dl width="narrow">
+            <li>
+                <title><c>default</c></title>
+                <p>Whatever the video playback provides (also the default action).</p>
+            </li>
+            <li>
+                <title><c>generic</c></title>
+                <p><pretext /> supplies a Play-button image.</p>
+            </li>
+            <li>
+                <title><c>custom</c></title>
+                <p>Not implemented yet (2017-08-28).  Send a request.</p>
+            </li>
+        </dl></p>
+
+        <p>The <c>mbx</c> script (<xref ref="mbx-script" />) may be used to download the provided preview images for YouTube videos.  Filenames will be formed from the <attribute>xml:id</attribute> of the <tag>video</tag> element.  These will be used in static versions of output, such as print.  Once custom preview images are implemented for author-hosted video, their static representation will improve.</p>
+
+        <p>Contemplated extensions, as of 2017-08-28, would be specifying content from Vimeo, and/or Google Drive.  Send requests if these are of use.</p>
+    </section>
+
     <section xml:id="topic-units-measure">
         <title>(*) Units of Measure</title>
 
@@ -224,10 +603,11 @@
 
     <section xml:id="topic-unicode">
         <title>Unicode Characters</title>
+        <idx>Unicode characters</idx>
 
         <introduction>
 
-            <p>MathBook XML supports (and encourages) the use of Unicode characters.  Here are some relevant comments.<ul>
+            <p><pretext /> supports (and encourages) the use of Unicode characters.  Here are some relevant comments.<ul>
                 <li><p>Unicode characters will migrate well to any output format based on <init>HTML</init>.  Most browsers will have a variety of fonts with glyphs to realize these characters.</p></li>
 
                 <li><p><latex /> will not always behave as smoothly.  For openers, you definitely will want to use the <c>xelatex</c> engine to build a <init>PDF</init>.  Then you need to be sure your system has a font with the necessary characters and you make the font known to <c>xelatex</c>.  We are working out the details of the best way to accomplish this.</p></li>
@@ -274,22 +654,92 @@
 
     </section>
 
-    <section xml:id="topic-build-in-smc">
-        <title>Building Output in SageMathCloud</title>
+    <section xml:id="topic-xinclude">
+        <title>Xinclude Modularization</title>
 
-        <p>SageMathCloud has <em>all</em> the tools you need to author with MathBook XML.  You will need an upgrade from a subscription to allow Internet connectivity, but at a minimum a colleague with a paid plan can spare you one, they are plentiful and meant to be shared.</p>
+        <p>The <c>xinclude</c><idx><c>xinclude</c></idx> mechanism is not part of <pretext />, <foreign>per se</foreign>.  It is of some use for organizing your authoring, so you do not have mammoth files open in your text editor.  As discussed in <xref ref="processing-modular" /> there is very little value in modularizing so much that you have many very small files, and also almost no benefit whatsoever to using directory structure to duplicate the inherent tree-like structure of <init>XML</init>.  Many small files, or deeply-nested directories, seem to be of little help and can cause more headaches than they are worth.</p>
 
-        <ul>
-            <li><p>Text editor: reasonably good, partially XML syntax-aware.</p></li>
-            <li><p><c>git</c>: installed (so clone MathBook XML).</p></li>
-            <li><p><latex />: installed with many additional packages.</p></li>
-            <li><p>Python: installed, necessary for <c>mbx</c> script.</p></li>
-            <li><p>PDF viewer: handed off to your browser.</p></li>
-            <li><p>HTML viewer: convert to the <q>raw</q> URL and you can preview.</p></li>
-            <li><p>HTML server: nope.  Zip up output and host elsewhere.</p></li>
-        </ul>
+        <p>The <c>xinclude</c> mechanism automatically introduces a <attribute>xml:base</attribute> attribute, which we need to account for in the RELAX-NG schema (<xref ref="schema" />).  So we limit which <pretext /> elements may be the root element of an included file.  The rough, general rule is that if an element <em>can</em> have a title, then it can be the root element of an included file.  So in particular each of the divisions (<tag>chapter</tag>, <tag>section</tag>, <etc />) is a candidate.</p>
+
+        <p>One special exception to this restriction is the use of text files, containing absolutely no markup at all.  Two good examples are the <tag>input</tag> child of a <tag>program</tag> or the <tag>latex-image-code</tag> element used to describe an <tag>image</tag> by source code that <latex /> understands.</p>
+
+        <p>In both cases you can put the text content of these elements in a separate file, use the <attribute>href</attribute> attribute of <tag>xi:include</tag> to point to the file, and then the twist is to set the <attribute>parse</attribute> attribute to the value <c>text</c>.  This has two general benefits.  First, you now <em>cannot</em> have any <init>XML</init> in the file, so you do not have to have a single root element for the file (and so the schema imposes no restrictions).  Second, you do not need to escape any problematic characters like ampersands and angle brackets (<xref ref="topic-verbatim-literal" />), nor use the misunderstood <c>CDATA</c> mechanism.</p>
+
+        <p>Additionally, in the case of <tag>latex-image-code</tag> you can park unsightly code away in files so you do not have to look at it, or you can create a small driver <latex /> program to test each one, or even better, you may want to use the same image more than once (maybe in different figures?) and can just include it repeatedly, while only ever editing the single copy.</p>
+
+        <p>Finally, the <tag>input</tag> and <tag>output</tag> children of <tag>program</tag>, <tag>sage</tag>, and <tag>console</tag> are also candidates for this device.  In particular, you may want to have the code for a program in its own file where you can test it easily with an interpreter or compiler.  There is one gotcha.  If you were to put a newline between <tag>input</tag> and <tag>xi:include</tag> there is the very real potential of unwanted whitespace bleeding into your <pretext /> output.  Our suggested remedy uses an example from Bob Plantz.  Convert</p>
+
+        <pre>
+        &lt;program language="c">
+            &lt;input>
+                &lt;xi:include parse="text" href="intAndFloat.c"/>
+            &lt;/input>
+        &lt;/program>
+        </pre>
+
+        <p>to</p>
+
+        <pre>
+        &lt;program language="c">
+            &lt;input>&lt;xi:include parse="text" href="intAndFloat.c"/>&lt;/input>
+        &lt;/program>
+        </pre>
+
+        <p>There are some fancy <init>XSLT</init> tricks you can employ to use more complicated content repeatedly.  Your source will be less portable, and we do not support or recommend these techniques.  But if you want a go anyway, see hints at <url href="http://www.sagehill.net/docbookxsl/DuplicateIDs.html"><c>www.sagehill.net/docbookxsl/DuplicateIDs.html</c></url>.  Note the reliance on <c>xpointer()</c>, and that the final technique is restricted to DocBook, a different <init>XML</init> vocabulary.</p>
     </section>
 
+    <section xml:id="topic-accessibility">
+        <title>Accessibility</title>
+        <idx>accessibilty</idx>
+        <idx>web accessibilty</idx>
+
+        <p>Continuing our discussion from <xref ref="overview-accessibility" /> we begin by listing features of our conversion to <init>HTML</init> which happen automatically.<dl width="narrow">
+            <li>
+                <title>CSS</title>
+                <p>Wherever possible we supply <init>HTML</init> elements and class names that will be interpreted sensibly by a screen reader in the absence of styling provided by <init>CSS</init>.</p>
+            </li>
+
+            <li>
+                <title>Mathematics</title>
+                <p>MathJax (<url href="https://www.mathjax.org/"><c>mathjax.org</c></url>) is the JavaScript library we use to render mathematics.  It provides extensive capabilities for screen readers to render the mathematics audibly, and by default your document is configured to take advantage of these features.  We refer the reader to the MathJax documentation of <url href="http://docs.mathjax.org/en/latest/misc/accessibility-features.html">Accessibility Features</url> at <c>docs.mathjax.org</c>.</p>
+            </li>
+
+            <li>
+                <title>Skip to Main Content</title>
+                <p>Repeatedly pressing the <c>Tab</c> key will move a reader from one location to the next in a web document.  Since your Table of Contents in the left sidebar is a series of many links, a reader will need to tab through <em>all</em> of these to eventually reach the interesting content on a page.</p>
+
+                <p>However, we support a common device.  The first link on every page is hidden from all readers, but an initial <c>Tab</c> will present a link labeled <c>Skip to Main Content</c> which when executed will take the reader past the Table of Contents and to the start of the content at the top of the page.</p>
+            </li>
+
+            <li>
+                <title>Colors</title>
+                <p>We are sensitive to the fact that some readers have difficulty distinguishing between certain colors.  So we do our best to distinguish text, or other elements, without relying exclusively on color.  For example, the <tag>delete</tag> and <tag>insert</tag> elements may render text with strike-through and underlining (respectively) to show the distinction.</p>
+            </li>
+        </dl></p>
+
+        <p>Here are features which are provided, but require your participation as the author.<dl width="narrow">
+            <li>
+                <title>Image Description</title>
+                <p>Images you author or supply will be invisible to some readers.  Within every <tag>image</tag> element you can use a <tag>description</tag> element.  The content here will migrate to places like the <init>HTML</init> <attribute>alt</attribute> attribute to be picked up by screen readers.</p>
+
+                <p>Make the content very expressive and detailed, but also do not use any markup whatsoever, just simple characters, and avoid quotation marks.</p>
+            </li>
+
+            <li>
+                <title>Image Formats</title>
+                <p>University offices that provide services for students with disabilities are often interested in the images themselves from a text, as standalone files.  You could use the <c>mbx</c> script to produce a variety of different formats and bundle these up in a single archive file for distribution at your book's website.  Or you can make each image available through adjacent links placed automatically.  We call these <q>image archives.</q>  See <xref ref="topic-images-archive" />.</p>
+            </li>
+
+            <li>
+                <title>Cross-References</title>
+                <p><xref ref="topic-cross-referencing" /> describes a variety of ways to customize the look and content of a cross-reference.  You can create a larger target for clickable items by making the text as long as possible.  So for example an <tag>xref</tag> authored as<cd>
+                    <cline>&lt;xref ref="theorem-FTC" text="type-global" /&gt;</cline>
+                </cd>would cause the clickable portion to be something like <q>Theorem 5.16</q>, whereas<cd>
+                    <cline>&lt;xref ref="theorem-FTC" text="global" /&gt;</cline>
+                </cd>would then cause the clickable portion to be simply the much shorter <q>5.16</q>.  Of course, you can set a default style for your entire document, so it is not necessary to continually provide the <attribute>text</attribute> attribute.</p>
+            </li>
+        </dl></p>
+    </section>
 
     <!--
     <section xml:id="topic-">

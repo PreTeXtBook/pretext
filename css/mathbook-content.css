@@ -11,7 +11,277 @@
  *
  *******************************************************************************
  */
+@import url("https://fonts.googleapis.com/css?family=PT+Serif:400,700,400italic,700italic|Open+Sans:400italic,700italic,400,700");
+/**
+ * Reset HTML to iron out browser inconsistencies
+ */
+/* line 116, ../../../../../../../usr/local/rvm/gems/ruby-2.1.2/gems/compass-0.12.7/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary {
+  display: block;
+}
 
+/* line 30, ../../../../../MathBook/mathbook-assets/scss/mathbook.scss */
+body {
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+/* line 61, ../../../../../../../usr/local/rvm/gems/ruby-2.1.2/gems/compass-0.12.7/frameworks/compass/stylesheets/compass/typography/_vertical_rhythm.scss */
+body * html {
+  font-size: 100%;
+}
+/* line 64, ../../../../../../../usr/local/rvm/gems/ruby-2.1.2/gems/compass-0.12.7/frameworks/compass/stylesheets/compass/typography/_vertical_rhythm.scss */
+body html {
+  font-size: 16px;
+  line-height: 1.25em;
+}
+
+/*******************************************************************************
+ * BEGIN MATHBOOK UI MODULE
+ *
+ * Here we define the layout and style for the user interface that houses the
+ * mathbook content.
+ ******************************************************************************/
+
+/* DELETED SIGNIFICANT AMOUNT HERE FOR JUPYTER NOTEBOOK  RAB 2017-10-27 */
+
+/* line 24, ../../../../../MathBook/mathbook-assets/scss/ui/_ui.scss */
+.mathbook-content {
+  /*@import "../ui-config";*/
+  /*
+   * Table-of-contents for chapter/section/etc summary pages
+   */
+}
+/* line 404, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
+.mathbook-content .summary-links a {
+  position: relative;
+  display: block;
+  font-size: 1.5em;
+  line-height: 1.25em;
+  padding: 0.41667em 0.83333em;
+  margin-bottom: 0.20833em;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
+  padding-right: 2.06667em;
+}
+/* line 417, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
+.mathbook-content .summary-links a:after {
+  right: 0.83333em;
+}
+/* line 423, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
+.mathbook-content .summary-links a:after {
+  content: "";
+  position: absolute;
+  /* center vertically */
+  top: 50%;
+  margin-top: -0.4em;
+  width: 0;
+  height: 0;
+  border-top: 0.4em solid transparent;
+  border-bottom: 0.4em solid transparent;
+  border-left: 0.4em solid #c9c9c9;
+}
+/* line 438, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
+.mathbook-content .summary-links a, .mathbook-content .summary-links a:link, .mathbook-content .summary-links a:visited {
+  color: #671d12;
+  background: #f0f0f0;
+  text-decoration: none;
+  cursor: pointer;
+}
+/* line 445, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
+.mathbook-content .summary-links a:hover, .mathbook-content .summary-links a:focus {
+  color: white;
+  background: #671d12;
+  text-decoration: none;
+}
+/* line 450, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
+.mathbook-content .summary-links a:hover:after, .mathbook-content .summary-links a:focus:after {
+  width: 0;
+  height: 0;
+  border-top: 0.4em solid transparent;
+  border-bottom: 0.4em solid transparent;
+  border-left: 0.4em solid white;
+}
+/* line 458, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
+.mathbook-content .summary-links a:active {
+  position: relative;
+  color: white;
+  background: #932919;
+  text-decoration: none;
+  -webkit-box-shadow: rgba(0, 0, 0, 0.2) 0 2px 5px 5px inset;
+  -moz-box-shadow: rgba(0, 0, 0, 0.2) 0 2px 5px 5px inset;
+  box-shadow: rgba(0, 0, 0, 0.2) 0 2px 5px 5px inset;
+}
+/* line 465, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
+.mathbook-content .summary-links a:active:after {
+  width: 0;
+  height: 0;
+  border-top: 0.4em solid transparent;
+  border-bottom: 0.4em solid transparent;
+  border-left: 0.4em solid white;
+}
+/* line 473, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
+.mathbook-content .summary-links a:focus {
+  outline: thin dotted #333;
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+  /**
+   * Remove stupid inner dotted border applied by Firefox on focus
+   * See http://stackoverflow.com/a/199319/1599617
+   */
+}
+/* line 36, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
+.mathbook-content .summary-links a:focus::-moz-focus-inner {
+  border: 0;
+}
+/* line 42, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_content-ui.scss */
+.mathbook-content .summary-links a {
+  font-family: "PT Serif", "Times New Roman", Times, serif;
+}
+@media screen and (max-width: 480px) {
+  /* line 42, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_content-ui.scss */
+  .mathbook-content .summary-links a {
+    font-size: 1em;
+    line-height: 1.25em;
+  }
+}
+/* line 56, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_content-ui.scss */
+.mathbook-content .summary-links a .codenumber {
+  color: #707070;
+  margin-right: 0.41667em;
+}
+/* line 62, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_content-ui.scss */
+.mathbook-content .summary-links a:hover .codenumber, .mathbook-content .summary-links a:focus .codenumber {
+  color: rgba(255, 255, 255, 0.8);
+}
+/* line 68, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_content-ui.scss */
+.mathbook-content .summary-links a:active .codenumber {
+  color: rgba(255, 255, 255, 0.8);
+}
+/* line 76, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_content-ui.scss */
+.mathbook-content .sagecell {
+  /*.sagecell_options {*/
+  /*float:none;*/
+  /*text-align:left;*/
+  /*}*/
+}
+/* line 83, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_content-ui.scss */
+.mathbook-content .sagecell .ui-button {
+  /*float:right;*/
+}
+/* line 85, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_content-ui.scss */
+.mathbook-content .sagecell .ui-button.ui-state-default, .mathbook-content .sagecell .ui-button.ui-state-hover, .mathbook-content .sagecell .ui-button.ui-state-active, .mathbook-content .sagecell .ui-button.ui-state-focus, .mathbook-content .sagecell .ui-button.ui-corner-all {
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  padding: 0 0.65em;
+}
+/* line 136, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
+.mathbook-content .sagecell .ui-button.ui-state-default, .mathbook-content .sagecell .ui-button.ui-state-hover, .mathbook-content .sagecell .ui-button.ui-state-active, .mathbook-content .sagecell .ui-button.ui-state-focus, .mathbook-content .sagecell .ui-button.ui-corner-all {
+  cursor: pointer;
+  display: -moz-inline-stack;
+  display: inline-block;
+  vertical-align: middle;
+  *vertical-align: auto;
+  zoom: 1;
+  *display: inline;
+  /* Disable accidental text-selection */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  /* Truncate overflowing text with ellipsis */
+  white-space: nowrap;
+  overflow: hidden;
+  -ms-text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  border-width: 1px;
+  border-style: solid;
+  font-weight: bold;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
+  color: #383838;
+  border-color: #c4c4c4;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ebebeb), color-stop(100%, #c4c4c4));
+  background-image: -webkit-linear-gradient(#ebebeb, #c4c4c4);
+  background-image: -moz-linear-gradient(#ebebeb, #c4c4c4);
+  background-image: -o-linear-gradient(#ebebeb, #c4c4c4);
+  background-image: linear-gradient(#ebebeb, #c4c4c4);
+}
+/* line 51, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
+.mathbook-content .sagecell .ui-button.ui-state-default:focus, .mathbook-content .sagecell .ui-button.ui-state-hover:focus, .mathbook-content .sagecell .ui-button.ui-state-active:focus, .mathbook-content .sagecell .ui-button.ui-state-focus:focus, .mathbook-content .sagecell .ui-button.ui-corner-all:focus {
+  outline: thin dotted #333;
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+  /**
+   * Remove stupid inner dotted border applied by Firefox on focus
+   * See http://stackoverflow.com/a/199319/1599617
+   */
+}
+/* line 36, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
+.mathbook-content .sagecell .ui-button.ui-state-default:focus::-moz-focus-inner, .mathbook-content .sagecell .ui-button.ui-state-hover:focus::-moz-focus-inner, .mathbook-content .sagecell .ui-button.ui-state-active:focus::-moz-focus-inner, .mathbook-content .sagecell .ui-button.ui-state-focus:focus::-moz-focus-inner, .mathbook-content .sagecell .ui-button.ui-corner-all:focus::-moz-focus-inner {
+  border: 0;
+}
+/* line 141, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
+.mathbook-content .sagecell .ui-button.ui-state-default:hover, .mathbook-content .sagecell .ui-button.ui-state-default:focus, .mathbook-content .sagecell .ui-button.ui-state-default.hover, .mathbook-content .sagecell .ui-button.ui-state-default.focus, .mathbook-content .sagecell .ui-button.ui-state-hover:hover, .mathbook-content .sagecell .ui-button.ui-state-hover:focus, .mathbook-content .sagecell .ui-button.ui-state-hover.hover, .mathbook-content .sagecell .ui-button.ui-state-hover.focus, .mathbook-content .sagecell .ui-button.ui-state-active:hover, .mathbook-content .sagecell .ui-button.ui-state-active:focus, .mathbook-content .sagecell .ui-button.ui-state-active.hover, .mathbook-content .sagecell .ui-button.ui-state-active.focus, .mathbook-content .sagecell .ui-button.ui-state-focus:hover, .mathbook-content .sagecell .ui-button.ui-state-focus:focus, .mathbook-content .sagecell .ui-button.ui-state-focus.hover, .mathbook-content .sagecell .ui-button.ui-state-focus.focus, .mathbook-content .sagecell .ui-button.ui-corner-all:hover, .mathbook-content .sagecell .ui-button.ui-corner-all:focus, .mathbook-content .sagecell .ui-button.ui-corner-all.hover, .mathbook-content .sagecell .ui-button.ui-corner-all.focus {
+  color: #383838;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f7f7f7), color-stop(100%, #ababab));
+  background-image: -webkit-linear-gradient(#f7f7f7, #ababab);
+  background-image: -moz-linear-gradient(#f7f7f7, #ababab);
+  background-image: -o-linear-gradient(#f7f7f7, #ababab);
+  background-image: linear-gradient(#f7f7f7, #ababab);
+  border-color: #c4c4c4;
+}
+/* line 145, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
+.mathbook-content .sagecell .ui-button.ui-state-default:active, .mathbook-content .sagecell .ui-button.ui-state-default.active, .mathbook-content .sagecell .ui-button.ui-state-hover:active, .mathbook-content .sagecell .ui-button.ui-state-hover.active, .mathbook-content .sagecell .ui-button.ui-state-active:active, .mathbook-content .sagecell .ui-button.ui-state-active.active, .mathbook-content .sagecell .ui-button.ui-state-focus:active, .mathbook-content .sagecell .ui-button.ui-state-focus.active, .mathbook-content .sagecell .ui-button.ui-corner-all:active, .mathbook-content .sagecell .ui-button.ui-corner-all.active {
+  color: #60160b;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ff6852), color-stop(100%, #ffd7d1));
+  background-image: -webkit-linear-gradient(#ff6852, #ffd7d1);
+  background-image: -moz-linear-gradient(#ff6852, #ffd7d1);
+  background-image: -o-linear-gradient(#ff6852, #ffd7d1);
+  background-image: linear-gradient(#ff6852, #ffd7d1);
+  border-color: #ff6852;
+}
+/* line 215, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
+.mathbook-content .sagecell .ui-button.ui-state-default:active:active, .mathbook-content .sagecell .ui-button.ui-state-default:active.active, .mathbook-content .sagecell .ui-button.ui-state-default.active:active, .mathbook-content .sagecell .ui-button.ui-state-default.active.active, .mathbook-content .sagecell .ui-button.ui-state-hover:active:active, .mathbook-content .sagecell .ui-button.ui-state-hover:active.active, .mathbook-content .sagecell .ui-button.ui-state-hover.active:active, .mathbook-content .sagecell .ui-button.ui-state-hover.active.active, .mathbook-content .sagecell .ui-button.ui-state-active:active:active, .mathbook-content .sagecell .ui-button.ui-state-active:active.active, .mathbook-content .sagecell .ui-button.ui-state-active.active:active, .mathbook-content .sagecell .ui-button.ui-state-active.active.active, .mathbook-content .sagecell .ui-button.ui-state-focus:active:active, .mathbook-content .sagecell .ui-button.ui-state-focus:active.active, .mathbook-content .sagecell .ui-button.ui-state-focus.active:active, .mathbook-content .sagecell .ui-button.ui-state-focus.active.active, .mathbook-content .sagecell .ui-button.ui-corner-all:active:active, .mathbook-content .sagecell .ui-button.ui-corner-all:active.active, .mathbook-content .sagecell .ui-button.ui-corner-all.active:active, .mathbook-content .sagecell .ui-button.ui-corner-all.active.active {
+  -webkit-box-shadow: rgba(0, 0, 0, 0.5) 0 2px 5px inset;
+  -moz-box-shadow: rgba(0, 0, 0, 0.5) 0 2px 5px inset;
+  box-shadow: rgba(0, 0, 0, 0.5) 0 2px 5px inset;
+}
+/* line 150, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
+.mathbook-content .sagecell .ui-button.ui-state-default.disabled, .mathbook-content .sagecell .ui-button.ui-state-default.disabled:hover, .mathbook-content .sagecell .ui-button.ui-state-default.disabled.hover, .mathbook-content .sagecell .ui-button.ui-state-default.disabled:focus, .mathbook-content .sagecell .ui-button.ui-state-default.disabled.focus, .mathbook-content .sagecell .ui-button.ui-state-default.disabled:active, .mathbook-content .sagecell .ui-button.ui-state-default.disabled.active, .mathbook-content .sagecell .ui-button.ui-state-default[disabled], .mathbook-content .sagecell .ui-button.ui-state-default[disabled]:hover, .mathbook-content .sagecell .ui-button.ui-state-default[disabled].hover, .mathbook-content .sagecell .ui-button.ui-state-default[disabled]:focus, .mathbook-content .sagecell .ui-button.ui-state-default[disabled].focus, .mathbook-content .sagecell .ui-button.ui-state-default[disabled]:active, .mathbook-content .sagecell .ui-button.ui-state-default[disabled].active, .mathbook-content .sagecell .ui-button.ui-state-hover.disabled, .mathbook-content .sagecell .ui-button.ui-state-hover.disabled:hover, .mathbook-content .sagecell .ui-button.ui-state-hover.disabled.hover, .mathbook-content .sagecell .ui-button.ui-state-hover.disabled:focus, .mathbook-content .sagecell .ui-button.ui-state-hover.disabled.focus, .mathbook-content .sagecell .ui-button.ui-state-hover.disabled:active, .mathbook-content .sagecell .ui-button.ui-state-hover.disabled.active, .mathbook-content .sagecell .ui-button.ui-state-hover[disabled], .mathbook-content .sagecell .ui-button.ui-state-hover[disabled]:hover, .mathbook-content .sagecell .ui-button.ui-state-hover[disabled].hover, .mathbook-content .sagecell .ui-button.ui-state-hover[disabled]:focus, .mathbook-content .sagecell .ui-button.ui-state-hover[disabled].focus, .mathbook-content .sagecell .ui-button.ui-state-hover[disabled]:active, .mathbook-content .sagecell .ui-button.ui-state-hover[disabled].active, .mathbook-content .sagecell .ui-button.ui-state-active.disabled, .mathbook-content .sagecell .ui-button.ui-state-active.disabled:hover, .mathbook-content .sagecell .ui-button.ui-state-active.disabled.hover, .mathbook-content .sagecell .ui-button.ui-state-active.disabled:focus, .mathbook-content .sagecell .ui-button.ui-state-active.disabled.focus, .mathbook-content .sagecell .ui-button.ui-state-active.disabled:active, .mathbook-content .sagecell .ui-button.ui-state-active.disabled.active, .mathbook-content .sagecell .ui-button.ui-state-active[disabled], .mathbook-content .sagecell .ui-button.ui-state-active[disabled]:hover, .mathbook-content .sagecell .ui-button.ui-state-active[disabled].hover, .mathbook-content .sagecell .ui-button.ui-state-active[disabled]:focus, .mathbook-content .sagecell .ui-button.ui-state-active[disabled].focus, .mathbook-content .sagecell .ui-button.ui-state-active[disabled]:active, .mathbook-content .sagecell .ui-button.ui-state-active[disabled].active, .mathbook-content .sagecell .ui-button.ui-state-focus.disabled, .mathbook-content .sagecell .ui-button.ui-state-focus.disabled:hover, .mathbook-content .sagecell .ui-button.ui-state-focus.disabled.hover, .mathbook-content .sagecell .ui-button.ui-state-focus.disabled:focus, .mathbook-content .sagecell .ui-button.ui-state-focus.disabled.focus, .mathbook-content .sagecell .ui-button.ui-state-focus.disabled:active, .mathbook-content .sagecell .ui-button.ui-state-focus.disabled.active, .mathbook-content .sagecell .ui-button.ui-state-focus[disabled], .mathbook-content .sagecell .ui-button.ui-state-focus[disabled]:hover, .mathbook-content .sagecell .ui-button.ui-state-focus[disabled].hover, .mathbook-content .sagecell .ui-button.ui-state-focus[disabled]:focus, .mathbook-content .sagecell .ui-button.ui-state-focus[disabled].focus, .mathbook-content .sagecell .ui-button.ui-state-focus[disabled]:active, .mathbook-content .sagecell .ui-button.ui-state-focus[disabled].active, .mathbook-content .sagecell .ui-button.ui-corner-all.disabled, .mathbook-content .sagecell .ui-button.ui-corner-all.disabled:hover, .mathbook-content .sagecell .ui-button.ui-corner-all.disabled.hover, .mathbook-content .sagecell .ui-button.ui-corner-all.disabled:focus, .mathbook-content .sagecell .ui-button.ui-corner-all.disabled.focus, .mathbook-content .sagecell .ui-button.ui-corner-all.disabled:active, .mathbook-content .sagecell .ui-button.ui-corner-all.disabled.active, .mathbook-content .sagecell .ui-button.ui-corner-all[disabled], .mathbook-content .sagecell .ui-button.ui-corner-all[disabled]:hover, .mathbook-content .sagecell .ui-button.ui-corner-all[disabled].hover, .mathbook-content .sagecell .ui-button.ui-corner-all[disabled]:focus, .mathbook-content .sagecell .ui-button.ui-corner-all[disabled].focus, .mathbook-content .sagecell .ui-button.ui-corner-all[disabled]:active, .mathbook-content .sagecell .ui-button.ui-corner-all[disabled].active {
+  color: #383838;
+  border-color: #c4c4c4;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #ebebeb), color-stop(100%, #c4c4c4));
+  background-image: -webkit-linear-gradient(#ebebeb, #c4c4c4);
+  background-image: -moz-linear-gradient(#ebebeb, #c4c4c4);
+  background-image: -o-linear-gradient(#ebebeb, #c4c4c4);
+  background-image: linear-gradient(#ebebeb, #c4c4c4);
+  opacity: .5;
+  cursor: default;
+}
+/* line 215, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
+.mathbook-content .sagecell .ui-button.ui-state-default:active, .mathbook-content .sagecell .ui-button.ui-state-default.active, .mathbook-content .sagecell .ui-button.ui-state-hover:active, .mathbook-content .sagecell .ui-button.ui-state-hover.active, .mathbook-content .sagecell .ui-button.ui-state-active:active, .mathbook-content .sagecell .ui-button.ui-state-active.active, .mathbook-content .sagecell .ui-button.ui-state-focus:active, .mathbook-content .sagecell .ui-button.ui-state-focus.active, .mathbook-content .sagecell .ui-button.ui-corner-all:active, .mathbook-content .sagecell .ui-button.ui-corner-all.active {
+  -webkit-box-shadow: rgba(0, 0, 0, 0.5) 0 2px 5px inset;
+  -moz-box-shadow: rgba(0, 0, 0, 0.5) 0 2px 5px inset;
+  box-shadow: rgba(0, 0, 0, 0.5) 0 2px 5px inset;
+}
+/* line 94, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_content-ui.scss */
+.mathbook-content .sagecell .ui-button.ui-button-text-only .ui-button-text {
+  padding: 0;
+  line-height: 1.69;
+}
+/* line 100, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_content-ui.scss */
+.mathbook-content .sagecell .sagecell_editor {
+  margin-bottom: 8px;
+}
+
+/*******************************************************************************
+ * END MATHBOOK UI MODULE
+ ******************************************************************************/
 /*******************************************************************************
  * MATHBOOK CONTENT PREFIXED
  *******************************************************************************
@@ -52,55 +322,55 @@
   line-height: 1.25em;
 }
 /* line 5, ../../../../../MathBook/mathbook-assets/scss/content/partials/_typographic-elements.scss */
-.mathbook-content h1, .mathbook-content .h1, .mathbook-content h2, .mathbook-content .h2, .mathbook-content h3, .mathbook-content .h3, .mathbook-content h4, .mathbook-content .h4, .mathbook-content h5, .mathbook-content .h5, .mathbook-content h6, .mathbook-content .h6 {
+.mathbook-content h1, .mathbook-content h2, .mathbook-content h3, .mathbook-content h4, .mathbook-content h5, .mathbook-content h6 {
   font-family: "PT Serif", "Times New Roman", Times, serif;
   font-weight: 700;
   color: inherit;
 }
 /* line 9, ../../../../../MathBook/mathbook-assets/scss/content/partials/_typographic-elements.scss */
-.mathbook-content h1, .mathbook-content .h1 {
+.mathbook-content h1 {
   font-size: 2em;
   line-height: 1.25em;
   margin-top: 0.625em;
   margin-bottom: 0.3125em;
 }
 /* line 14, ../../../../../MathBook/mathbook-assets/scss/content/partials/_typographic-elements.scss */
-.mathbook-content h2, .mathbook-content .h2 {
+.mathbook-content h2 {
   font-size: 1.75em;
   line-height: 1.42857em;
   margin-top: 0.71429em;
   margin-bottom: 0.35714em;
 }
 /* line 19, ../../../../../MathBook/mathbook-assets/scss/content/partials/_typographic-elements.scss */
-.mathbook-content h3, .mathbook-content .h3 {
+.mathbook-content h3 {
   font-size: 1.5em;
   line-height: 1.25em;
   margin-top: 0.83333em;
   margin-bottom: 0.41667em;
 }
 /* line 24, ../../../../../MathBook/mathbook-assets/scss/content/partials/_typographic-elements.scss */
-.mathbook-content h4, .mathbook-content .h4 {
+.mathbook-content h4 {
   font-size: 1.3125em;
   line-height: 1.42857em;
   margin-top: 0.95238em;
   margin-bottom: 0.47619em;
 }
 /* line 29, ../../../../../MathBook/mathbook-assets/scss/content/partials/_typographic-elements.scss */
-.mathbook-content h5, .mathbook-content .h5 {
+.mathbook-content h5 {
   font-size: 1.125em;
   line-height: 1.66667em;
   margin-top: 1.11111em;
   margin-bottom: 0.55556em;
 }
 /* line 34, ../../../../../MathBook/mathbook-assets/scss/content/partials/_typographic-elements.scss */
-.mathbook-content h6, .mathbook-content .h6 {
+.mathbook-content h6 {
   font-size: 1em;
   line-height: 1.25em;
   margin-top: 1.25em;
   margin-bottom: 0.625em;
 }
 /* line 44, ../../../../../MathBook/mathbook-assets/scss/content/partials/_typographic-elements.scss */
-.mathbook-content section h2 > a:link, .mathbook-content section h2 > a:visited, .mathbook-content li > a:link, .mathbook-content li > a:visited, .mathbook-content p > a:link, .mathbook-content p > a:visited {
+.mathbook-content section h2 > a:link, .mathbook-content section h2 > a:visited, .mathbook-content li > a:link, .mathbook-content li > a:visited, .mathbook-content p > a:link, .mathbook-content p > a:visited, .mathbook-content .image-links > a:link, .mathbook-content .image-links > a:visited {
   color: #bf3520;
   color: #bf3520;
   /**
@@ -111,7 +381,7 @@
      because of various headaches  */
 }
 /* line 48, ../../../../../MathBook/mathbook-assets/scss/content/partials/_typographic-elements.scss */
-.mathbook-content section h2 > a:hover, .mathbook-content section h2 > a:focus, .mathbook-content li > a:hover, .mathbook-content li > a:focus, .mathbook-content p > a:hover, .mathbook-content p > a:focus {
+.mathbook-content section h2 > a:hover, .mathbook-content section h2 > a:focus, .mathbook-content li > a:hover, .mathbook-content li > a:focus, .mathbook-content p > a:hover, .mathbook-content p > a:focus, .mathbook-content .image-links > a:hover, .mathbook-content .image-links > a:focus {
   color: #932919;
   /**
    * Better underlines using background gradients
@@ -121,7 +391,7 @@
      because of various headaches  */
 }
 /* line 52, ../../../../../MathBook/mathbook-assets/scss/content/partials/_typographic-elements.scss */
-.mathbook-content section h2 > a:active, .mathbook-content li > a:active, .mathbook-content p > a:active {
+.mathbook-content section h2 > a:active, .mathbook-content li > a:active, .mathbook-content p > a:active, .mathbook-content .image-links > a:active {
   color: #3572a0;
   /**
    * Better underlines using background gradients
@@ -523,11 +793,11 @@
   color: #333333;
 }
 /* line 14, ../../../../../MathBook/mathbook-assets/scss/content/partials/_environments.scss */
-.mathbook-content .definition-like, .mathbook-content .theorem-like, .mathbook-content .remark-like, .mathbook-content .example-like, .mathbook-content .exercise-like, .mathbook-content .aside-like {
+.mathbook-content .definition-like, .mathbook-content .theorem-like, .mathbook-content .remark-like, .mathbook-content .listitem, .mathbook-content .example-like, .mathbook-content .exercise-like, .mathbook-content .aside-like {
   margin-bottom: 1.25em;
 }
 /* line 18, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
-.mathbook-content .definition-like > .heading, .mathbook-content .theorem-like > .heading, .mathbook-content .remark-like > .heading, .mathbook-content .example-like > .heading, .mathbook-content .exercise-like > .heading, .mathbook-content .aside-like > .heading, .mathbook-content .definition-like > header > .heading, .mathbook-content .theorem-like > header > .heading, .mathbook-content .remark-like > header > .heading, .mathbook-content .example-like > header > .heading, .mathbook-content .exercise-like > header > .heading, .mathbook-content .aside-like > header > .heading {
+.mathbook-content .definition-like > .heading, .mathbook-content .theorem-like > .heading, .mathbook-content .remark-like > .heading, .mathbook-content .listitem > .heading, .mathbook-content .example-like > .heading, .mathbook-content .exercise-like > .heading, .mathbook-content .aside-like > .heading, .mathbook-content .definition-like > header > .heading, .mathbook-content .theorem-like > header > .heading, .mathbook-content .remark-like > header > .heading, .mathbook-content .listitem > header > .heading, .mathbook-content .example-like > header > .heading, .mathbook-content .exercise-like > header > .heading, .mathbook-content .aside-like > header > .heading {
   font-size: 1.125em;
   line-height: 1.66667em;
   margin-top: 1.11111em;
@@ -536,64 +806,64 @@
   /* Support knowl links in headings */
 }
 /* line 104, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
-.mathbook-content .definition-like > .heading, .mathbook-content .theorem-like > .heading, .mathbook-content .remark-like > .heading, .mathbook-content .example-like > .heading, .mathbook-content .exercise-like > .heading, .mathbook-content .aside-like > .heading, .mathbook-content .definition-like > header > .heading, .mathbook-content .theorem-like > header > .heading, .mathbook-content .remark-like > header > .heading, .mathbook-content .example-like > header > .heading, .mathbook-content .exercise-like > header > .heading, .mathbook-content .aside-like > header > .heading {
+.mathbook-content .definition-like > .heading, .mathbook-content .theorem-like > .heading, .mathbook-content .remark-like > .heading, .mathbook-content .listitem > .heading, .mathbook-content .example-like > .heading, .mathbook-content .exercise-like > .heading, .mathbook-content .aside-like > .heading, .mathbook-content .definition-like > header > .heading, .mathbook-content .theorem-like > header > .heading, .mathbook-content .remark-like > header > .heading, .mathbook-content .listitem > header > .heading, .mathbook-content .example-like > header > .heading, .mathbook-content .exercise-like > header > .heading, .mathbook-content .aside-like > header > .heading {
   font-family: "PT Serif", "Times New Roman", Times, serif;
   font-weight: 700;
   color: inherit;
 }
 /* line 51, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
-.mathbook-content .definition-like > .heading:before, .mathbook-content .theorem-like > .heading:before, .mathbook-content .remark-like > .heading:before, .mathbook-content .example-like > .heading:before, .mathbook-content .exercise-like > .heading:before, .mathbook-content .aside-like > .heading:before, .mathbook-content .definition-like > header > .heading:before, .mathbook-content .theorem-like > header > .heading:before, .mathbook-content .remark-like > header > .heading:before, .mathbook-content .example-like > header > .heading:before, .mathbook-content .exercise-like > header > .heading:before, .mathbook-content .aside-like > header > .heading:before {
+.mathbook-content .definition-like > .heading:before, .mathbook-content .theorem-like > .heading:before, .mathbook-content .remark-like > .heading:before, .mathbook-content .listitem > .heading:before, .mathbook-content .example-like > .heading:before, .mathbook-content .exercise-like > .heading:before, .mathbook-content .aside-like > .heading:before, .mathbook-content .definition-like > header > .heading:before, .mathbook-content .theorem-like > header > .heading:before, .mathbook-content .remark-like > header > .heading:before, .mathbook-content .listitem > header > .heading:before, .mathbook-content .example-like > header > .heading:before, .mathbook-content .exercise-like > header > .heading:before, .mathbook-content .aside-like > header > .heading:before {
   display: none;
 }
 /* line 58, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
-.mathbook-content .definition-like > .heading:after, .mathbook-content .theorem-like > .heading:after, .mathbook-content .remark-like > .heading:after, .mathbook-content .example-like > .heading:after, .mathbook-content .exercise-like > .heading:after, .mathbook-content .aside-like > .heading:after, .mathbook-content .definition-like > header > .heading:after, .mathbook-content .theorem-like > header > .heading:after, .mathbook-content .remark-like > header > .heading:after, .mathbook-content .example-like > header > .heading:after, .mathbook-content .exercise-like > header > .heading:after, .mathbook-content .aside-like > header > .heading:after {
+.mathbook-content .definition-like > .heading:after, .mathbook-content .theorem-like > .heading:after, .mathbook-content .remark-like > .heading:after, .mathbook-content .listitem > .heading:after, .mathbook-content .example-like > .heading:after, .mathbook-content .exercise-like > .heading:after, .mathbook-content .aside-like > .heading:after, .mathbook-content .definition-like > header > .heading:after, .mathbook-content .theorem-like > header > .heading:after, .mathbook-content .remark-like > header > .heading:after, .mathbook-content .listitem > header > .heading:after, .mathbook-content .example-like > header > .heading:after, .mathbook-content .exercise-like > header > .heading:after, .mathbook-content .aside-like > header > .heading:after {
   content: "";
 }
 /* line 51, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
-.mathbook-content .definition-like > .heading .type:before, .mathbook-content .theorem-like > .heading .type:before, .mathbook-content .remark-like > .heading .type:before, .mathbook-content .example-like > .heading .type:before, .mathbook-content .exercise-like > .heading .type:before, .mathbook-content .aside-like > .heading .type:before, .mathbook-content .definition-like > header > .heading .type:before, .mathbook-content .theorem-like > header > .heading .type:before, .mathbook-content .remark-like > header > .heading .type:before, .mathbook-content .example-like > header > .heading .type:before, .mathbook-content .exercise-like > header > .heading .type:before, .mathbook-content .aside-like > header > .heading .type:before {
+.mathbook-content .definition-like > .heading .type:before, .mathbook-content .theorem-like > .heading .type:before, .mathbook-content .remark-like > .heading .type:before, .mathbook-content .listitem > .heading .type:before, .mathbook-content .example-like > .heading .type:before, .mathbook-content .exercise-like > .heading .type:before, .mathbook-content .aside-like > .heading .type:before, .mathbook-content .definition-like > header > .heading .type:before, .mathbook-content .theorem-like > header > .heading .type:before, .mathbook-content .remark-like > header > .heading .type:before, .mathbook-content .listitem > header > .heading .type:before, .mathbook-content .example-like > header > .heading .type:before, .mathbook-content .exercise-like > header > .heading .type:before, .mathbook-content .aside-like > header > .heading .type:before {
   display: none;
 }
 /* line 58, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
-.mathbook-content .definition-like > .heading .type:after, .mathbook-content .theorem-like > .heading .type:after, .mathbook-content .remark-like > .heading .type:after, .mathbook-content .example-like > .heading .type:after, .mathbook-content .exercise-like > .heading .type:after, .mathbook-content .aside-like > .heading .type:after, .mathbook-content .definition-like > header > .heading .type:after, .mathbook-content .theorem-like > header > .heading .type:after, .mathbook-content .remark-like > header > .heading .type:after, .mathbook-content .example-like > header > .heading .type:after, .mathbook-content .exercise-like > header > .heading .type:after, .mathbook-content .aside-like > header > .heading .type:after {
+.mathbook-content .definition-like > .heading .type:after, .mathbook-content .theorem-like > .heading .type:after, .mathbook-content .remark-like > .heading .type:after, .mathbook-content .listitem > .heading .type:after, .mathbook-content .example-like > .heading .type:after, .mathbook-content .exercise-like > .heading .type:after, .mathbook-content .aside-like > .heading .type:after, .mathbook-content .definition-like > header > .heading .type:after, .mathbook-content .theorem-like > header > .heading .type:after, .mathbook-content .remark-like > header > .heading .type:after, .mathbook-content .listitem > header > .heading .type:after, .mathbook-content .example-like > header > .heading .type:after, .mathbook-content .exercise-like > header > .heading .type:after, .mathbook-content .aside-like > header > .heading .type:after {
   content: " ";
 }
 /* line 51, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
-.mathbook-content .definition-like > .heading .codenumber:not(:empty):before, .mathbook-content .theorem-like > .heading .codenumber:not(:empty):before, .mathbook-content .remark-like > .heading .codenumber:not(:empty):before, .mathbook-content .example-like > .heading .codenumber:not(:empty):before, .mathbook-content .exercise-like > .heading .codenumber:not(:empty):before, .mathbook-content .aside-like > .heading .codenumber:not(:empty):before, .mathbook-content .definition-like > header > .heading .codenumber:not(:empty):before, .mathbook-content .theorem-like > header > .heading .codenumber:not(:empty):before, .mathbook-content .remark-like > header > .heading .codenumber:not(:empty):before, .mathbook-content .example-like > header > .heading .codenumber:not(:empty):before, .mathbook-content .exercise-like > header > .heading .codenumber:not(:empty):before, .mathbook-content .aside-like > header > .heading .codenumber:not(:empty):before {
+.mathbook-content .definition-like > .heading .codenumber:not(:empty):before, .mathbook-content .theorem-like > .heading .codenumber:not(:empty):before, .mathbook-content .remark-like > .heading .codenumber:not(:empty):before, .mathbook-content .listitem > .heading .codenumber:not(:empty):before, .mathbook-content .example-like > .heading .codenumber:not(:empty):before, .mathbook-content .exercise-like > .heading .codenumber:not(:empty):before, .mathbook-content .aside-like > .heading .codenumber:not(:empty):before, .mathbook-content .definition-like > header > .heading .codenumber:not(:empty):before, .mathbook-content .theorem-like > header > .heading .codenumber:not(:empty):before, .mathbook-content .remark-like > header > .heading .codenumber:not(:empty):before, .mathbook-content .listitem > header > .heading .codenumber:not(:empty):before, .mathbook-content .example-like > header > .heading .codenumber:not(:empty):before, .mathbook-content .exercise-like > header > .heading .codenumber:not(:empty):before, .mathbook-content .aside-like > header > .heading .codenumber:not(:empty):before {
   display: none;
 }
 /* line 58, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
-.mathbook-content .definition-like > .heading .codenumber:not(:empty):after, .mathbook-content .theorem-like > .heading .codenumber:not(:empty):after, .mathbook-content .remark-like > .heading .codenumber:not(:empty):after, .mathbook-content .example-like > .heading .codenumber:not(:empty):after, .mathbook-content .exercise-like > .heading .codenumber:not(:empty):after, .mathbook-content .aside-like > .heading .codenumber:not(:empty):after, .mathbook-content .definition-like > header > .heading .codenumber:not(:empty):after, .mathbook-content .theorem-like > header > .heading .codenumber:not(:empty):after, .mathbook-content .remark-like > header > .heading .codenumber:not(:empty):after, .mathbook-content .example-like > header > .heading .codenumber:not(:empty):after, .mathbook-content .exercise-like > header > .heading .codenumber:not(:empty):after, .mathbook-content .aside-like > header > .heading .codenumber:not(:empty):after {
+.mathbook-content .definition-like > .heading .codenumber:not(:empty):after, .mathbook-content .theorem-like > .heading .codenumber:not(:empty):after, .mathbook-content .remark-like > .heading .codenumber:not(:empty):after, .mathbook-content .listitem > .heading .codenumber:not(:empty):after, .mathbook-content .example-like > .heading .codenumber:not(:empty):after, .mathbook-content .exercise-like > .heading .codenumber:not(:empty):after, .mathbook-content .aside-like > .heading .codenumber:not(:empty):after, .mathbook-content .definition-like > header > .heading .codenumber:not(:empty):after, .mathbook-content .theorem-like > header > .heading .codenumber:not(:empty):after, .mathbook-content .remark-like > header > .heading .codenumber:not(:empty):after, .mathbook-content .listitem > header > .heading .codenumber:not(:empty):after, .mathbook-content .example-like > header > .heading .codenumber:not(:empty):after, .mathbook-content .exercise-like > header > .heading .codenumber:not(:empty):after, .mathbook-content .aside-like > header > .heading .codenumber:not(:empty):after {
   content: "\2002";
 }
 /* line 51, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
-.mathbook-content .definition-like > .heading .title:before, .mathbook-content .theorem-like > .heading .title:before, .mathbook-content .remark-like > .heading .title:before, .mathbook-content .example-like > .heading .title:before, .mathbook-content .exercise-like > .heading .title:before, .mathbook-content .aside-like > .heading .title:before, .mathbook-content .definition-like > header > .heading .title:before, .mathbook-content .theorem-like > header > .heading .title:before, .mathbook-content .remark-like > header > .heading .title:before, .mathbook-content .example-like > header > .heading .title:before, .mathbook-content .exercise-like > header > .heading .title:before, .mathbook-content .aside-like > header > .heading .title:before {
+.mathbook-content .definition-like > .heading .title:before, .mathbook-content .theorem-like > .heading .title:before, .mathbook-content .remark-like > .heading .title:before, .mathbook-content .listitem > .heading .title:before, .mathbook-content .example-like > .heading .title:before, .mathbook-content .exercise-like > .heading .title:before, .mathbook-content .aside-like > .heading .title:before, .mathbook-content .definition-like > header > .heading .title:before, .mathbook-content .theorem-like > header > .heading .title:before, .mathbook-content .remark-like > header > .heading .title:before, .mathbook-content .listitem > header > .heading .title:before, .mathbook-content .example-like > header > .heading .title:before, .mathbook-content .exercise-like > header > .heading .title:before, .mathbook-content .aside-like > header > .heading .title:before {
   display: none;
 }
 /* line 58, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
-.mathbook-content .definition-like > .heading .title:after, .mathbook-content .theorem-like > .heading .title:after, .mathbook-content .remark-like > .heading .title:after, .mathbook-content .example-like > .heading .title:after, .mathbook-content .exercise-like > .heading .title:after, .mathbook-content .aside-like > .heading .title:after, .mathbook-content .definition-like > header > .heading .title:after, .mathbook-content .theorem-like > header > .heading .title:after, .mathbook-content .remark-like > header > .heading .title:after, .mathbook-content .example-like > header > .heading .title:after, .mathbook-content .exercise-like > header > .heading .title:after, .mathbook-content .aside-like > header > .heading .title:after {
+.mathbook-content .definition-like > .heading .title:after, .mathbook-content .theorem-like > .heading .title:after, .mathbook-content .remark-like > .heading .title:after, .mathbook-content .listitem > .heading .title:after, .mathbook-content .example-like > .heading .title:after, .mathbook-content .exercise-like > .heading .title:after, .mathbook-content .aside-like > .heading .title:after, .mathbook-content .definition-like > header > .heading .title:after, .mathbook-content .theorem-like > header > .heading .title:after, .mathbook-content .remark-like > header > .heading .title:after, .mathbook-content .listitem > header > .heading .title:after, .mathbook-content .example-like > header > .heading .title:after, .mathbook-content .exercise-like > header > .heading .title:after, .mathbook-content .aside-like > header > .heading .title:after {
   content: " ";
 }
 /* line 124, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
-.mathbook-content .definition-like > .heading .type, .mathbook-content .theorem-like > .heading .type, .mathbook-content .remark-like > .heading .type, .mathbook-content .example-like > .heading .type, .mathbook-content .exercise-like > .heading .type, .mathbook-content .aside-like > .heading .type, .mathbook-content .definition-like > .heading .codenumber, .mathbook-content .theorem-like > .heading .codenumber, .mathbook-content .remark-like > .heading .codenumber, .mathbook-content .example-like > .heading .codenumber, .mathbook-content .exercise-like > .heading .codenumber, .mathbook-content .aside-like > .heading .codenumber, .mathbook-content .definition-like > .heading .title, .mathbook-content .theorem-like > .heading .title, .mathbook-content .remark-like > .heading .title, .mathbook-content .example-like > .heading .title, .mathbook-content .exercise-like > .heading .title, .mathbook-content .aside-like > .heading .title, .mathbook-content .definition-like > header > .heading .type, .mathbook-content .theorem-like > header > .heading .type, .mathbook-content .remark-like > header > .heading .type, .mathbook-content .example-like > header > .heading .type, .mathbook-content .exercise-like > header > .heading .type, .mathbook-content .aside-like > header > .heading .type, .mathbook-content .definition-like > header > .heading .codenumber, .mathbook-content .theorem-like > header > .heading .codenumber, .mathbook-content .remark-like > header > .heading .codenumber, .mathbook-content .example-like > header > .heading .codenumber, .mathbook-content .exercise-like > header > .heading .codenumber, .mathbook-content .aside-like > header > .heading .codenumber, .mathbook-content .definition-like > header > .heading .title, .mathbook-content .theorem-like > header > .heading .title, .mathbook-content .remark-like > header > .heading .title, .mathbook-content .example-like > header > .heading .title, .mathbook-content .exercise-like > header > .heading .title, .mathbook-content .aside-like > header > .heading .title {
+.mathbook-content .definition-like > .heading .type, .mathbook-content .theorem-like > .heading .type, .mathbook-content .remark-like > .heading .type, .mathbook-content .listitem > .heading .type, .mathbook-content .example-like > .heading .type, .mathbook-content .exercise-like > .heading .type, .mathbook-content .aside-like > .heading .type, .mathbook-content .definition-like > .heading .codenumber, .mathbook-content .theorem-like > .heading .codenumber, .mathbook-content .remark-like > .heading .codenumber, .mathbook-content .listitem > .heading .codenumber, .mathbook-content .example-like > .heading .codenumber, .mathbook-content .exercise-like > .heading .codenumber, .mathbook-content .aside-like > .heading .codenumber, .mathbook-content .definition-like > .heading .title, .mathbook-content .theorem-like > .heading .title, .mathbook-content .remark-like > .heading .title, .mathbook-content .listitem > .heading .title, .mathbook-content .example-like > .heading .title, .mathbook-content .exercise-like > .heading .title, .mathbook-content .aside-like > .heading .title, .mathbook-content .definition-like > header > .heading .type, .mathbook-content .theorem-like > header > .heading .type, .mathbook-content .remark-like > header > .heading .type, .mathbook-content .listitem > header > .heading .type, .mathbook-content .example-like > header > .heading .type, .mathbook-content .exercise-like > header > .heading .type, .mathbook-content .aside-like > header > .heading .type, .mathbook-content .definition-like > header > .heading .codenumber, .mathbook-content .theorem-like > header > .heading .codenumber, .mathbook-content .remark-like > header > .heading .codenumber, .mathbook-content .listitem > header > .heading .codenumber, .mathbook-content .example-like > header > .heading .codenumber, .mathbook-content .exercise-like > header > .heading .codenumber, .mathbook-content .aside-like > header > .heading .codenumber, .mathbook-content .definition-like > header > .heading .title, .mathbook-content .theorem-like > header > .heading .title, .mathbook-content .remark-like > header > .heading .title, .mathbook-content .listitem > header > .heading .title, .mathbook-content .example-like > header > .heading .title, .mathbook-content .exercise-like > header > .heading .title, .mathbook-content .aside-like > header > .heading .title {
   /**
    *  Hide the space after the last element,
    * defer to .heading:after instead  XX obsolete comment
    */
 }
 /* line 69, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
-.mathbook-content .definition-like > .heading.hide-type .type, .mathbook-content .theorem-like > .heading.hide-type .type, .mathbook-content .remark-like > .heading.hide-type .type, .mathbook-content .example-like > .heading.hide-type .type, .mathbook-content .exercise-like > .heading.hide-type .type, .mathbook-content .aside-like > .heading.hide-type .type, .mathbook-content .definition-like > header > .heading.hide-type .type, .mathbook-content .theorem-like > header > .heading.hide-type .type, .mathbook-content .remark-like > header > .heading.hide-type .type, .mathbook-content .example-like > header > .heading.hide-type .type, .mathbook-content .exercise-like > header > .heading.hide-type .type, .mathbook-content .aside-like > header > .heading.hide-type .type {
+.mathbook-content .definition-like > .heading.hide-type .type, .mathbook-content .theorem-like > .heading.hide-type .type, .mathbook-content .remark-like > .heading.hide-type .type, .mathbook-content .listitem > .heading.hide-type .type, .mathbook-content .example-like > .heading.hide-type .type, .mathbook-content .exercise-like > .heading.hide-type .type, .mathbook-content .aside-like > .heading.hide-type .type, .mathbook-content .definition-like > header > .heading.hide-type .type, .mathbook-content .theorem-like > header > .heading.hide-type .type, .mathbook-content .remark-like > header > .heading.hide-type .type, .mathbook-content .listitem > header > .heading.hide-type .type, .mathbook-content .example-like > header > .heading.hide-type .type, .mathbook-content .exercise-like > header > .heading.hide-type .type, .mathbook-content .aside-like > header > .heading.hide-type .type {
   display: none;
 }
 /* line 76, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
-.mathbook-content .definition-like > .heading.hide-codenumber .codenumber, .mathbook-content .theorem-like > .heading.hide-codenumber .codenumber, .mathbook-content .remark-like > .heading.hide-codenumber .codenumber, .mathbook-content .example-like > .heading.hide-codenumber .codenumber, .mathbook-content .exercise-like > .heading.hide-codenumber .codenumber, .mathbook-content .aside-like > .heading.hide-codenumber .codenumber, .mathbook-content .definition-like > header > .heading.hide-codenumber .codenumber, .mathbook-content .theorem-like > header > .heading.hide-codenumber .codenumber, .mathbook-content .remark-like > header > .heading.hide-codenumber .codenumber, .mathbook-content .example-like > header > .heading.hide-codenumber .codenumber, .mathbook-content .exercise-like > header > .heading.hide-codenumber .codenumber, .mathbook-content .aside-like > header > .heading.hide-codenumber .codenumber {
+.mathbook-content .definition-like > .heading.hide-codenumber .codenumber, .mathbook-content .theorem-like > .heading.hide-codenumber .codenumber, .mathbook-content .remark-like > .heading.hide-codenumber .codenumber, .mathbook-content .listitem > .heading.hide-codenumber .codenumber, .mathbook-content .example-like > .heading.hide-codenumber .codenumber, .mathbook-content .exercise-like > .heading.hide-codenumber .codenumber, .mathbook-content .aside-like > .heading.hide-codenumber .codenumber, .mathbook-content .definition-like > header > .heading.hide-codenumber .codenumber, .mathbook-content .theorem-like > header > .heading.hide-codenumber .codenumber, .mathbook-content .remark-like > header > .heading.hide-codenumber .codenumber, .mathbook-content .listitem > header > .heading.hide-codenumber .codenumber, .mathbook-content .example-like > header > .heading.hide-codenumber .codenumber, .mathbook-content .exercise-like > header > .heading.hide-codenumber .codenumber, .mathbook-content .aside-like > header > .heading.hide-codenumber .codenumber {
   display: none;
 }
 /* line 83, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
-.mathbook-content .definition-like > .heading.hide-title .title, .mathbook-content .theorem-like > .heading.hide-title .title, .mathbook-content .remark-like > .heading.hide-title .title, .mathbook-content .example-like > .heading.hide-title .title, .mathbook-content .exercise-like > .heading.hide-title .title, .mathbook-content .aside-like > .heading.hide-title .title, .mathbook-content .definition-like > header > .heading.hide-title .title, .mathbook-content .theorem-like > header > .heading.hide-title .title, .mathbook-content .remark-like > header > .heading.hide-title .title, .mathbook-content .example-like > header > .heading.hide-title .title, .mathbook-content .exercise-like > header > .heading.hide-title .title, .mathbook-content .aside-like > header > .heading.hide-title .title {
+.mathbook-content .definition-like > .heading.hide-title .title, .mathbook-content .theorem-like > .heading.hide-title .title, .mathbook-content .remark-like > .heading.hide-title .title, .mathbook-content .listitem > .heading.hide-title .title, .mathbook-content .example-like > .heading.hide-title .title, .mathbook-content .exercise-like > .heading.hide-title .title, .mathbook-content .aside-like > .heading.hide-title .title, .mathbook-content .definition-like > header > .heading.hide-title .title, .mathbook-content .theorem-like > header > .heading.hide-title .title, .mathbook-content .remark-like > header > .heading.hide-title .title, .mathbook-content .listitem > header > .heading.hide-title .title, .mathbook-content .example-like > header > .heading.hide-title .title, .mathbook-content .exercise-like > header > .heading.hide-title .title, .mathbook-content .aside-like > header > .heading.hide-title .title {
   display: none;
 }
 /* line 26, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
-.mathbook-content .definition-like > .heading a:link, .mathbook-content .theorem-like > .heading a:link, .mathbook-content .remark-like > .heading a:link, .mathbook-content .example-like > .heading a:link, .mathbook-content .exercise-like > .heading a:link, .mathbook-content .aside-like > .heading a:link, .mathbook-content .definition-like > .heading a:visited, .mathbook-content .theorem-like > .heading a:visited, .mathbook-content .remark-like > .heading a:visited, .mathbook-content .example-like > .heading a:visited, .mathbook-content .exercise-like > .heading a:visited, .mathbook-content .aside-like > .heading a:visited, .mathbook-content .definition-like > header > .heading a:link, .mathbook-content .theorem-like > header > .heading a:link, .mathbook-content .remark-like > header > .heading a:link, .mathbook-content .example-like > header > .heading a:link, .mathbook-content .exercise-like > header > .heading a:link, .mathbook-content .aside-like > header > .heading a:link, .mathbook-content .definition-like > header > .heading a:visited, .mathbook-content .theorem-like > header > .heading a:visited, .mathbook-content .remark-like > header > .heading a:visited, .mathbook-content .example-like > header > .heading a:visited, .mathbook-content .exercise-like > header > .heading a:visited, .mathbook-content .aside-like > header > .heading a:visited {
+.mathbook-content .definition-like > .heading a:link, .mathbook-content .theorem-like > .heading a:link, .mathbook-content .remark-like > .heading a:link, .mathbook-content .listitem > .heading a:link, .mathbook-content .example-like > .heading a:link, .mathbook-content .exercise-like > .heading a:link, .mathbook-content .aside-like > .heading a:link, .mathbook-content .definition-like > .heading a:visited, .mathbook-content .theorem-like > .heading a:visited, .mathbook-content .remark-like > .heading a:visited, .mathbook-content .listitem > .heading a:visited, .mathbook-content .example-like > .heading a:visited, .mathbook-content .exercise-like > .heading a:visited, .mathbook-content .aside-like > .heading a:visited, .mathbook-content .definition-like > header > .heading a:link, .mathbook-content .theorem-like > header > .heading a:link, .mathbook-content .remark-like > header > .heading a:link, .mathbook-content .listitem > header > .heading a:link, .mathbook-content .example-like > header > .heading a:link, .mathbook-content .exercise-like > header > .heading a:link, .mathbook-content .aside-like > header > .heading a:link, .mathbook-content .definition-like > header > .heading a:visited, .mathbook-content .theorem-like > header > .heading a:visited, .mathbook-content .remark-like > header > .heading a:visited, .mathbook-content .listitem > header > .heading a:visited, .mathbook-content .example-like > header > .heading a:visited, .mathbook-content .exercise-like > header > .heading a:visited, .mathbook-content .aside-like > header > .heading a:visited {
   color: #bf3520;
   color: #bf3520;
   /**
@@ -604,7 +874,7 @@
      because of various headaches  */
 }
 /* line 33, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
-.mathbook-content .definition-like > .heading a:hover, .mathbook-content .theorem-like > .heading a:hover, .mathbook-content .remark-like > .heading a:hover, .mathbook-content .example-like > .heading a:hover, .mathbook-content .exercise-like > .heading a:hover, .mathbook-content .aside-like > .heading a:hover, .mathbook-content .definition-like > .heading a:focus, .mathbook-content .theorem-like > .heading a:focus, .mathbook-content .remark-like > .heading a:focus, .mathbook-content .example-like > .heading a:focus, .mathbook-content .exercise-like > .heading a:focus, .mathbook-content .aside-like > .heading a:focus, .mathbook-content .definition-like > header > .heading a:hover, .mathbook-content .theorem-like > header > .heading a:hover, .mathbook-content .remark-like > header > .heading a:hover, .mathbook-content .example-like > header > .heading a:hover, .mathbook-content .exercise-like > header > .heading a:hover, .mathbook-content .aside-like > header > .heading a:hover, .mathbook-content .definition-like > header > .heading a:focus, .mathbook-content .theorem-like > header > .heading a:focus, .mathbook-content .remark-like > header > .heading a:focus, .mathbook-content .example-like > header > .heading a:focus, .mathbook-content .exercise-like > header > .heading a:focus, .mathbook-content .aside-like > header > .heading a:focus {
+.mathbook-content .definition-like > .heading a:hover, .mathbook-content .theorem-like > .heading a:hover, .mathbook-content .remark-like > .heading a:hover, .mathbook-content .listitem > .heading a:hover, .mathbook-content .example-like > .heading a:hover, .mathbook-content .exercise-like > .heading a:hover, .mathbook-content .aside-like > .heading a:hover, .mathbook-content .definition-like > .heading a:focus, .mathbook-content .theorem-like > .heading a:focus, .mathbook-content .remark-like > .heading a:focus, .mathbook-content .listitem > .heading a:focus, .mathbook-content .example-like > .heading a:focus, .mathbook-content .exercise-like > .heading a:focus, .mathbook-content .aside-like > .heading a:focus, .mathbook-content .definition-like > header > .heading a:hover, .mathbook-content .theorem-like > header > .heading a:hover, .mathbook-content .remark-like > header > .heading a:hover, .mathbook-content .listitem > header > .heading a:hover, .mathbook-content .example-like > header > .heading a:hover, .mathbook-content .exercise-like > header > .heading a:hover, .mathbook-content .aside-like > header > .heading a:hover, .mathbook-content .definition-like > header > .heading a:focus, .mathbook-content .theorem-like > header > .heading a:focus, .mathbook-content .remark-like > header > .heading a:focus, .mathbook-content .listitem > header > .heading a:focus, .mathbook-content .example-like > header > .heading a:focus, .mathbook-content .exercise-like > header > .heading a:focus, .mathbook-content .aside-like > header > .heading a:focus {
   color: #932919;
   /**
    * Better underlines using background gradients
@@ -614,7 +884,7 @@
      because of various headaches  */
 }
 /* line 40, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
-.mathbook-content .definition-like > .heading a:active, .mathbook-content .theorem-like > .heading a:active, .mathbook-content .remark-like > .heading a:active, .mathbook-content .example-like > .heading a:active, .mathbook-content .exercise-like > .heading a:active, .mathbook-content .aside-like > .heading a:active, .mathbook-content .definition-like > header > .heading a:active, .mathbook-content .theorem-like > header > .heading a:active, .mathbook-content .remark-like > header > .heading a:active, .mathbook-content .example-like > header > .heading a:active, .mathbook-content .exercise-like > header > .heading a:active, .mathbook-content .aside-like > header > .heading a:active {
+.mathbook-content .definition-like > .heading a:active, .mathbook-content .theorem-like > .heading a:active, .mathbook-content .remark-like > .heading a:active, .mathbook-content .listitem > .heading a:active, .mathbook-content .example-like > .heading a:active, .mathbook-content .exercise-like > .heading a:active, .mathbook-content .aside-like > .heading a:active, .mathbook-content .definition-like > header > .heading a:active, .mathbook-content .theorem-like > header > .heading a:active, .mathbook-content .remark-like > header > .heading a:active, .mathbook-content .listitem > header > .heading a:active, .mathbook-content .example-like > header > .heading a:active, .mathbook-content .exercise-like > header > .heading a:active, .mathbook-content .aside-like > header > .heading a:active {
   color: #3572a0;
   /**
    * Better underlines using background gradients
@@ -624,12 +894,12 @@
      because of various headaches  */
 }
 /* line 28, ../../../../../MathBook/mathbook-assets/scss/content/mixins/_environment.scss */
-.mathbook-content .definition-like > .heading *[knowl], .mathbook-content .theorem-like > .heading *[knowl], .mathbook-content .remark-like > .heading *[knowl], .mathbook-content .example-like > .heading *[knowl], .mathbook-content .exercise-like > .heading *[knowl], .mathbook-content .aside-like > .heading *[knowl], .mathbook-content .definition-like > header > .heading *[knowl], .mathbook-content .theorem-like > header > .heading *[knowl], .mathbook-content .remark-like > header > .heading *[knowl], .mathbook-content .example-like > header > .heading *[knowl], .mathbook-content .exercise-like > header > .heading *[knowl], .mathbook-content .aside-like > header > .heading *[knowl] {
+.mathbook-content .definition-like > .heading *[knowl], .mathbook-content .theorem-like > .heading *[knowl], .mathbook-content .remark-like > .heading *[knowl], .mathbook-content .listitem > .heading *[knowl], .mathbook-content .example-like > .heading *[knowl], .mathbook-content .exercise-like > .heading *[knowl], .mathbook-content .aside-like > .heading *[knowl], .mathbook-content .definition-like > header > .heading *[knowl], .mathbook-content .theorem-like > header > .heading *[knowl], .mathbook-content .remark-like > header > .heading *[knowl], .mathbook-content .listitem > header > .heading *[knowl], .mathbook-content .example-like > header > .heading *[knowl], .mathbook-content .exercise-like > header > .heading *[knowl], .mathbook-content .aside-like > header > .heading *[knowl] {
   /* not used? */
   margin-left: -3px;
 }
 /* line 57, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
-.mathbook-content .definition-like > .heading *[knowl], .mathbook-content .theorem-like > .heading *[knowl], .mathbook-content .remark-like > .heading *[knowl], .mathbook-content .example-like > .heading *[knowl], .mathbook-content .exercise-like > .heading *[knowl], .mathbook-content .aside-like > .heading *[knowl], .mathbook-content .definition-like > .heading *[knowl]:hover, .mathbook-content .theorem-like > .heading *[knowl]:hover, .mathbook-content .remark-like > .heading *[knowl]:hover, .mathbook-content .example-like > .heading *[knowl]:hover, .mathbook-content .exercise-like > .heading *[knowl]:hover, .mathbook-content .aside-like > .heading *[knowl]:hover, .mathbook-content .definition-like > .heading *[knowl].active, .mathbook-content .theorem-like > .heading *[knowl].active, .mathbook-content .remark-like > .heading *[knowl].active, .mathbook-content .example-like > .heading *[knowl].active, .mathbook-content .exercise-like > .heading *[knowl].active, .mathbook-content .aside-like > .heading *[knowl].active, .mathbook-content .definition-like > header > .heading *[knowl], .mathbook-content .theorem-like > header > .heading *[knowl], .mathbook-content .remark-like > header > .heading *[knowl], .mathbook-content .example-like > header > .heading *[knowl], .mathbook-content .exercise-like > header > .heading *[knowl], .mathbook-content .aside-like > header > .heading *[knowl], .mathbook-content .definition-like > header > .heading *[knowl]:hover, .mathbook-content .theorem-like > header > .heading *[knowl]:hover, .mathbook-content .remark-like > header > .heading *[knowl]:hover, .mathbook-content .example-like > header > .heading *[knowl]:hover, .mathbook-content .exercise-like > header > .heading *[knowl]:hover, .mathbook-content .aside-like > header > .heading *[knowl]:hover, .mathbook-content .definition-like > header > .heading *[knowl].active, .mathbook-content .theorem-like > header > .heading *[knowl].active, .mathbook-content .remark-like > header > .heading *[knowl].active, .mathbook-content .example-like > header > .heading *[knowl].active, .mathbook-content .exercise-like > header > .heading *[knowl].active, .mathbook-content .aside-like > header > .heading *[knowl].active {
+.mathbook-content .definition-like > .heading *[knowl], .mathbook-content .theorem-like > .heading *[knowl], .mathbook-content .remark-like > .heading *[knowl], .mathbook-content .listitem > .heading *[knowl], .mathbook-content .example-like > .heading *[knowl], .mathbook-content .exercise-like > .heading *[knowl], .mathbook-content .aside-like > .heading *[knowl], .mathbook-content .definition-like > .heading *[knowl]:hover, .mathbook-content .theorem-like > .heading *[knowl]:hover, .mathbook-content .remark-like > .heading *[knowl]:hover, .mathbook-content .listitem > .heading *[knowl]:hover, .mathbook-content .example-like > .heading *[knowl]:hover, .mathbook-content .exercise-like > .heading *[knowl]:hover, .mathbook-content .aside-like > .heading *[knowl]:hover, .mathbook-content .definition-like > .heading *[knowl].active, .mathbook-content .theorem-like > .heading *[knowl].active, .mathbook-content .remark-like > .heading *[knowl].active, .mathbook-content .listitem > .heading *[knowl].active, .mathbook-content .example-like > .heading *[knowl].active, .mathbook-content .exercise-like > .heading *[knowl].active, .mathbook-content .aside-like > .heading *[knowl].active, .mathbook-content .definition-like > header > .heading *[knowl], .mathbook-content .theorem-like > header > .heading *[knowl], .mathbook-content .remark-like > header > .heading *[knowl], .mathbook-content .listitem > header > .heading *[knowl], .mathbook-content .example-like > header > .heading *[knowl], .mathbook-content .exercise-like > header > .heading *[knowl], .mathbook-content .aside-like > header > .heading *[knowl], .mathbook-content .definition-like > header > .heading *[knowl]:hover, .mathbook-content .theorem-like > header > .heading *[knowl]:hover, .mathbook-content .remark-like > header > .heading *[knowl]:hover, .mathbook-content .listitem > header > .heading *[knowl]:hover, .mathbook-content .example-like > header > .heading *[knowl]:hover, .mathbook-content .exercise-like > header > .heading *[knowl]:hover, .mathbook-content .aside-like > header > .heading *[knowl]:hover, .mathbook-content .definition-like > header > .heading *[knowl].active, .mathbook-content .theorem-like > header > .heading *[knowl].active, .mathbook-content .remark-like > header > .heading *[knowl].active, .mathbook-content .listitem > header > .heading *[knowl].active, .mathbook-content .example-like > header > .heading *[knowl].active, .mathbook-content .exercise-like > header > .heading *[knowl].active, .mathbook-content .aside-like > header > .heading *[knowl].active {
   position: relative;
   color: #9c2310;
   background: transparent;
@@ -669,7 +939,7 @@
    */
 }
 /* line 89, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
-.mathbook-content .definition-like > .heading *[knowl]:after, .mathbook-content .theorem-like > .heading *[knowl]:after, .mathbook-content .remark-like > .heading *[knowl]:after, .mathbook-content .example-like > .heading *[knowl]:after, .mathbook-content .exercise-like > .heading *[knowl]:after, .mathbook-content .aside-like > .heading *[knowl]:after, .mathbook-content .definition-like > .heading *[knowl]:hover:after, .mathbook-content .theorem-like > .heading *[knowl]:hover:after, .mathbook-content .remark-like > .heading *[knowl]:hover:after, .mathbook-content .example-like > .heading *[knowl]:hover:after, .mathbook-content .exercise-like > .heading *[knowl]:hover:after, .mathbook-content .aside-like > .heading *[knowl]:hover:after, .mathbook-content .definition-like > .heading *[knowl].active:after, .mathbook-content .theorem-like > .heading *[knowl].active:after, .mathbook-content .remark-like > .heading *[knowl].active:after, .mathbook-content .example-like > .heading *[knowl].active:after, .mathbook-content .exercise-like > .heading *[knowl].active:after, .mathbook-content .aside-like > .heading *[knowl].active:after, .mathbook-content .definition-like > header > .heading *[knowl]:after, .mathbook-content .theorem-like > header > .heading *[knowl]:after, .mathbook-content .remark-like > header > .heading *[knowl]:after, .mathbook-content .example-like > header > .heading *[knowl]:after, .mathbook-content .exercise-like > header > .heading *[knowl]:after, .mathbook-content .aside-like > header > .heading *[knowl]:after, .mathbook-content .definition-like > header > .heading *[knowl]:hover:after, .mathbook-content .theorem-like > header > .heading *[knowl]:hover:after, .mathbook-content .remark-like > header > .heading *[knowl]:hover:after, .mathbook-content .example-like > header > .heading *[knowl]:hover:after, .mathbook-content .exercise-like > header > .heading *[knowl]:hover:after, .mathbook-content .aside-like > header > .heading *[knowl]:hover:after, .mathbook-content .definition-like > header > .heading *[knowl].active:after, .mathbook-content .theorem-like > header > .heading *[knowl].active:after, .mathbook-content .remark-like > header > .heading *[knowl].active:after, .mathbook-content .example-like > header > .heading *[knowl].active:after, .mathbook-content .exercise-like > header > .heading *[knowl].active:after, .mathbook-content .aside-like > header > .heading *[knowl].active:after {
+.mathbook-content .definition-like > .heading *[knowl]:after, .mathbook-content .theorem-like > .heading *[knowl]:after, .mathbook-content .remark-like > .heading *[knowl]:after, .mathbook-content .listitem > .heading *[knowl]:after, .mathbook-content .example-like > .heading *[knowl]:after, .mathbook-content .exercise-like > .heading *[knowl]:after, .mathbook-content .aside-like > .heading *[knowl]:after, .mathbook-content .definition-like > .heading *[knowl]:hover:after, .mathbook-content .theorem-like > .heading *[knowl]:hover:after, .mathbook-content .remark-like > .heading *[knowl]:hover:after, .mathbook-content .listitem > .heading *[knowl]:hover:after, .mathbook-content .example-like > .heading *[knowl]:hover:after, .mathbook-content .exercise-like > .heading *[knowl]:hover:after, .mathbook-content .aside-like > .heading *[knowl]:hover:after, .mathbook-content .definition-like > .heading *[knowl].active:after, .mathbook-content .theorem-like > .heading *[knowl].active:after, .mathbook-content .remark-like > .heading *[knowl].active:after, .mathbook-content .listitem > .heading *[knowl].active:after, .mathbook-content .example-like > .heading *[knowl].active:after, .mathbook-content .exercise-like > .heading *[knowl].active:after, .mathbook-content .aside-like > .heading *[knowl].active:after, .mathbook-content .definition-like > header > .heading *[knowl]:after, .mathbook-content .theorem-like > header > .heading *[knowl]:after, .mathbook-content .remark-like > header > .heading *[knowl]:after, .mathbook-content .listitem > header > .heading *[knowl]:after, .mathbook-content .example-like > header > .heading *[knowl]:after, .mathbook-content .exercise-like > header > .heading *[knowl]:after, .mathbook-content .aside-like > header > .heading *[knowl]:after, .mathbook-content .definition-like > header > .heading *[knowl]:hover:after, .mathbook-content .theorem-like > header > .heading *[knowl]:hover:after, .mathbook-content .remark-like > header > .heading *[knowl]:hover:after, .mathbook-content .listitem > header > .heading *[knowl]:hover:after, .mathbook-content .example-like > header > .heading *[knowl]:hover:after, .mathbook-content .exercise-like > header > .heading *[knowl]:hover:after, .mathbook-content .aside-like > header > .heading *[knowl]:hover:after, .mathbook-content .definition-like > header > .heading *[knowl].active:after, .mathbook-content .theorem-like > header > .heading *[knowl].active:after, .mathbook-content .remark-like > header > .heading *[knowl].active:after, .mathbook-content .listitem > header > .heading *[knowl].active:after, .mathbook-content .example-like > header > .heading *[knowl].active:after, .mathbook-content .exercise-like > header > .heading *[knowl].active:after, .mathbook-content .aside-like > header > .heading *[knowl].active:after {
   content: "";
   position: absolute;
   top: 0;
@@ -695,7 +965,7 @@
   z-index: 0;
 }
 /* line 112, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
-.mathbook-content .definition-like > .heading *[knowl]:hover, .mathbook-content .theorem-like > .heading *[knowl]:hover, .mathbook-content .remark-like > .heading *[knowl]:hover, .mathbook-content .example-like > .heading *[knowl]:hover, .mathbook-content .exercise-like > .heading *[knowl]:hover, .mathbook-content .aside-like > .heading *[knowl]:hover, .mathbook-content .definition-like > .heading *[knowl]:active, .mathbook-content .theorem-like > .heading *[knowl]:active, .mathbook-content .remark-like > .heading *[knowl]:active, .mathbook-content .example-like > .heading *[knowl]:active, .mathbook-content .exercise-like > .heading *[knowl]:active, .mathbook-content .aside-like > .heading *[knowl]:active, .mathbook-content .definition-like > .heading *[knowl].active, .mathbook-content .theorem-like > .heading *[knowl].active, .mathbook-content .remark-like > .heading *[knowl].active, .mathbook-content .example-like > .heading *[knowl].active, .mathbook-content .exercise-like > .heading *[knowl].active, .mathbook-content .aside-like > .heading *[knowl].active, .mathbook-content .definition-like > header > .heading *[knowl]:hover, .mathbook-content .theorem-like > header > .heading *[knowl]:hover, .mathbook-content .remark-like > header > .heading *[knowl]:hover, .mathbook-content .example-like > header > .heading *[knowl]:hover, .mathbook-content .exercise-like > header > .heading *[knowl]:hover, .mathbook-content .aside-like > header > .heading *[knowl]:hover, .mathbook-content .definition-like > header > .heading *[knowl]:active, .mathbook-content .theorem-like > header > .heading *[knowl]:active, .mathbook-content .remark-like > header > .heading *[knowl]:active, .mathbook-content .example-like > header > .heading *[knowl]:active, .mathbook-content .exercise-like > header > .heading *[knowl]:active, .mathbook-content .aside-like > header > .heading *[knowl]:active, .mathbook-content .definition-like > header > .heading *[knowl].active, .mathbook-content .theorem-like > header > .heading *[knowl].active, .mathbook-content .remark-like > header > .heading *[knowl].active, .mathbook-content .example-like > header > .heading *[knowl].active, .mathbook-content .exercise-like > header > .heading *[knowl].active, .mathbook-content .aside-like > header > .heading *[knowl].active {
+.mathbook-content .definition-like > .heading *[knowl]:hover, .mathbook-content .theorem-like > .heading *[knowl]:hover, .mathbook-content .remark-like > .heading *[knowl]:hover, .mathbook-content .listitem > .heading *[knowl]:hover, .mathbook-content .example-like > .heading *[knowl]:hover, .mathbook-content .exercise-like > .heading *[knowl]:hover, .mathbook-content .aside-like > .heading *[knowl]:hover, .mathbook-content .definition-like > .heading *[knowl]:active, .mathbook-content .theorem-like > .heading *[knowl]:active, .mathbook-content .remark-like > .heading *[knowl]:active, .mathbook-content .listitem > .heading *[knowl]:active, .mathbook-content .example-like > .heading *[knowl]:active, .mathbook-content .exercise-like > .heading *[knowl]:active, .mathbook-content .aside-like > .heading *[knowl]:active, .mathbook-content .definition-like > .heading *[knowl].active, .mathbook-content .theorem-like > .heading *[knowl].active, .mathbook-content .remark-like > .heading *[knowl].active, .mathbook-content .listitem > .heading *[knowl].active, .mathbook-content .example-like > .heading *[knowl].active, .mathbook-content .exercise-like > .heading *[knowl].active, .mathbook-content .aside-like > .heading *[knowl].active, .mathbook-content .definition-like > header > .heading *[knowl]:hover, .mathbook-content .theorem-like > header > .heading *[knowl]:hover, .mathbook-content .remark-like > header > .heading *[knowl]:hover, .mathbook-content .listitem > header > .heading *[knowl]:hover, .mathbook-content .example-like > header > .heading *[knowl]:hover, .mathbook-content .exercise-like > header > .heading *[knowl]:hover, .mathbook-content .aside-like > header > .heading *[knowl]:hover, .mathbook-content .definition-like > header > .heading *[knowl]:active, .mathbook-content .theorem-like > header > .heading *[knowl]:active, .mathbook-content .remark-like > header > .heading *[knowl]:active, .mathbook-content .listitem > header > .heading *[knowl]:active, .mathbook-content .example-like > header > .heading *[knowl]:active, .mathbook-content .exercise-like > header > .heading *[knowl]:active, .mathbook-content .aside-like > header > .heading *[knowl]:active, .mathbook-content .definition-like > header > .heading *[knowl].active, .mathbook-content .theorem-like > header > .heading *[knowl].active, .mathbook-content .remark-like > header > .heading *[knowl].active, .mathbook-content .listitem > header > .heading *[knowl].active, .mathbook-content .example-like > header > .heading *[knowl].active, .mathbook-content .exercise-like > header > .heading *[knowl].active, .mathbook-content .aside-like > header > .heading *[knowl].active {
   color: #8a1200;
   background: #ffedeb;
   text-decoration: none;
@@ -705,7 +975,7 @@
   /*border-bottom: none;*/
 }
 /* line 122, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
-.mathbook-content .definition-like > .heading *[knowl]:hover:after, .mathbook-content .theorem-like > .heading *[knowl]:hover:after, .mathbook-content .remark-like > .heading *[knowl]:hover:after, .mathbook-content .example-like > .heading *[knowl]:hover:after, .mathbook-content .exercise-like > .heading *[knowl]:hover:after, .mathbook-content .aside-like > .heading *[knowl]:hover:after, .mathbook-content .definition-like > .heading *[knowl]:active:after, .mathbook-content .theorem-like > .heading *[knowl]:active:after, .mathbook-content .remark-like > .heading *[knowl]:active:after, .mathbook-content .example-like > .heading *[knowl]:active:after, .mathbook-content .exercise-like > .heading *[knowl]:active:after, .mathbook-content .aside-like > .heading *[knowl]:active:after, .mathbook-content .definition-like > .heading *[knowl].active:after, .mathbook-content .theorem-like > .heading *[knowl].active:after, .mathbook-content .remark-like > .heading *[knowl].active:after, .mathbook-content .example-like > .heading *[knowl].active:after, .mathbook-content .exercise-like > .heading *[knowl].active:after, .mathbook-content .aside-like > .heading *[knowl].active:after, .mathbook-content .definition-like > header > .heading *[knowl]:hover:after, .mathbook-content .theorem-like > header > .heading *[knowl]:hover:after, .mathbook-content .remark-like > header > .heading *[knowl]:hover:after, .mathbook-content .example-like > header > .heading *[knowl]:hover:after, .mathbook-content .exercise-like > header > .heading *[knowl]:hover:after, .mathbook-content .aside-like > header > .heading *[knowl]:hover:after, .mathbook-content .definition-like > header > .heading *[knowl]:active:after, .mathbook-content .theorem-like > header > .heading *[knowl]:active:after, .mathbook-content .remark-like > header > .heading *[knowl]:active:after, .mathbook-content .example-like > header > .heading *[knowl]:active:after, .mathbook-content .exercise-like > header > .heading *[knowl]:active:after, .mathbook-content .aside-like > header > .heading *[knowl]:active:after, .mathbook-content .definition-like > header > .heading *[knowl].active:after, .mathbook-content .theorem-like > header > .heading *[knowl].active:after, .mathbook-content .remark-like > header > .heading *[knowl].active:after, .mathbook-content .example-like > header > .heading *[knowl].active:after, .mathbook-content .exercise-like > header > .heading *[knowl].active:after, .mathbook-content .aside-like > header > .heading *[knowl].active:after {
+.mathbook-content .definition-like > .heading *[knowl]:hover:after, .mathbook-content .theorem-like > .heading *[knowl]:hover:after, .mathbook-content .remark-like > .heading *[knowl]:hover:after, .mathbook-content .listitem > .heading *[knowl]:hover:after, .mathbook-content .example-like > .heading *[knowl]:hover:after, .mathbook-content .exercise-like > .heading *[knowl]:hover:after, .mathbook-content .aside-like > .heading *[knowl]:hover:after, .mathbook-content .definition-like > .heading *[knowl]:active:after, .mathbook-content .theorem-like > .heading *[knowl]:active:after, .mathbook-content .remark-like > .heading *[knowl]:active:after, .mathbook-content .listitem > .heading *[knowl]:active:after, .mathbook-content .example-like > .heading *[knowl]:active:after, .mathbook-content .exercise-like > .heading *[knowl]:active:after, .mathbook-content .aside-like > .heading *[knowl]:active:after, .mathbook-content .definition-like > .heading *[knowl].active:after, .mathbook-content .theorem-like > .heading *[knowl].active:after, .mathbook-content .remark-like > .heading *[knowl].active:after, .mathbook-content .listitem > .heading *[knowl].active:after, .mathbook-content .example-like > .heading *[knowl].active:after, .mathbook-content .exercise-like > .heading *[knowl].active:after, .mathbook-content .aside-like > .heading *[knowl].active:after, .mathbook-content .definition-like > header > .heading *[knowl]:hover:after, .mathbook-content .theorem-like > header > .heading *[knowl]:hover:after, .mathbook-content .remark-like > header > .heading *[knowl]:hover:after, .mathbook-content .listitem > header > .heading *[knowl]:hover:after, .mathbook-content .example-like > header > .heading *[knowl]:hover:after, .mathbook-content .exercise-like > header > .heading *[knowl]:hover:after, .mathbook-content .aside-like > header > .heading *[knowl]:hover:after, .mathbook-content .definition-like > header > .heading *[knowl]:active:after, .mathbook-content .theorem-like > header > .heading *[knowl]:active:after, .mathbook-content .remark-like > header > .heading *[knowl]:active:after, .mathbook-content .listitem > header > .heading *[knowl]:active:after, .mathbook-content .example-like > header > .heading *[knowl]:active:after, .mathbook-content .exercise-like > header > .heading *[knowl]:active:after, .mathbook-content .aside-like > header > .heading *[knowl]:active:after, .mathbook-content .definition-like > header > .heading *[knowl].active:after, .mathbook-content .theorem-like > header > .heading *[knowl].active:after, .mathbook-content .remark-like > header > .heading *[knowl].active:after, .mathbook-content .listitem > header > .heading *[knowl].active:after, .mathbook-content .example-like > header > .heading *[knowl].active:after, .mathbook-content .exercise-like > header > .heading *[knowl].active:after, .mathbook-content .aside-like > header > .heading *[knowl].active:after {
   border-bottom: 2px solid #ff998a;
   left: 0;
   right: 0;
@@ -716,32 +986,37 @@
   /*$underline-offset: $underline-offset);*/
 }
 /* line 134, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
-.mathbook-content .definition-like > .heading *[knowl]:active, .mathbook-content .theorem-like > .heading *[knowl]:active, .mathbook-content .remark-like > .heading *[knowl]:active, .mathbook-content .example-like > .heading *[knowl]:active, .mathbook-content .exercise-like > .heading *[knowl]:active, .mathbook-content .aside-like > .heading *[knowl]:active, .mathbook-content .definition-like > header > .heading *[knowl]:active, .mathbook-content .theorem-like > header > .heading *[knowl]:active, .mathbook-content .remark-like > header > .heading *[knowl]:active, .mathbook-content .example-like > header > .heading *[knowl]:active, .mathbook-content .exercise-like > header > .heading *[knowl]:active, .mathbook-content .aside-like > header > .heading *[knowl]:active {
+.mathbook-content .definition-like > .heading *[knowl]:active, .mathbook-content .theorem-like > .heading *[knowl]:active, .mathbook-content .remark-like > .heading *[knowl]:active, .mathbook-content .listitem > .heading *[knowl]:active, .mathbook-content .example-like > .heading *[knowl]:active, .mathbook-content .exercise-like > .heading *[knowl]:active, .mathbook-content .aside-like > .heading *[knowl]:active, .mathbook-content .definition-like > header > .heading *[knowl]:active, .mathbook-content .theorem-like > header > .heading *[knowl]:active, .mathbook-content .remark-like > header > .heading *[knowl]:active, .mathbook-content .listitem > header > .heading *[knowl]:active, .mathbook-content .example-like > header > .heading *[knowl]:active, .mathbook-content .exercise-like > header > .heading *[knowl]:active, .mathbook-content .aside-like > header > .heading *[knowl]:active {
   color: #3572a0;
   background: #d6edff;
 }
 /* line 138, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
-.mathbook-content .definition-like > .heading *[knowl]:active:after, .mathbook-content .theorem-like > .heading *[knowl]:active:after, .mathbook-content .remark-like > .heading *[knowl]:active:after, .mathbook-content .example-like > .heading *[knowl]:active:after, .mathbook-content .exercise-like > .heading *[knowl]:active:after, .mathbook-content .aside-like > .heading *[knowl]:active:after, .mathbook-content .definition-like > header > .heading *[knowl]:active:after, .mathbook-content .theorem-like > header > .heading *[knowl]:active:after, .mathbook-content .remark-like > header > .heading *[knowl]:active:after, .mathbook-content .example-like > header > .heading *[knowl]:active:after, .mathbook-content .exercise-like > header > .heading *[knowl]:active:after, .mathbook-content .aside-like > header > .heading *[knowl]:active:after {
+.mathbook-content .definition-like > .heading *[knowl]:active:after, .mathbook-content .theorem-like > .heading *[knowl]:active:after, .mathbook-content .remark-like > .heading *[knowl]:active:after, .mathbook-content .listitem > .heading *[knowl]:active:after, .mathbook-content .example-like > .heading *[knowl]:active:after, .mathbook-content .exercise-like > .heading *[knowl]:active:after, .mathbook-content .aside-like > .heading *[knowl]:active:after, .mathbook-content .definition-like > header > .heading *[knowl]:active:after, .mathbook-content .theorem-like > header > .heading *[knowl]:active:after, .mathbook-content .remark-like > header > .heading *[knowl]:active:after, .mathbook-content .listitem > header > .heading *[knowl]:active:after, .mathbook-content .example-like > header > .heading *[knowl]:active:after, .mathbook-content .exercise-like > header > .heading *[knowl]:active:after, .mathbook-content .aside-like > header > .heading *[knowl]:active:after {
   border-color: #3572a0;
 }
 /* line 143, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
-.mathbook-content .definition-like > .heading *[knowl].active, .mathbook-content .theorem-like > .heading *[knowl].active, .mathbook-content .remark-like > .heading *[knowl].active, .mathbook-content .example-like > .heading *[knowl].active, .mathbook-content .exercise-like > .heading *[knowl].active, .mathbook-content .aside-like > .heading *[knowl].active, .mathbook-content .definition-like > header > .heading *[knowl].active, .mathbook-content .theorem-like > header > .heading *[knowl].active, .mathbook-content .remark-like > header > .heading *[knowl].active, .mathbook-content .example-like > header > .heading *[knowl].active, .mathbook-content .exercise-like > header > .heading *[knowl].active, .mathbook-content .aside-like > header > .heading *[knowl].active {
+.mathbook-content .definition-like > .heading *[knowl].active, .mathbook-content .theorem-like > .heading *[knowl].active, .mathbook-content .remark-like > .heading *[knowl].active, .mathbook-content .listitem > .heading *[knowl].active, .mathbook-content .example-like > .heading *[knowl].active, .mathbook-content .exercise-like > .heading *[knowl].active, .mathbook-content .aside-like > .heading *[knowl].active, .mathbook-content .definition-like > header > .heading *[knowl].active, .mathbook-content .theorem-like > header > .heading *[knowl].active, .mathbook-content .remark-like > header > .heading *[knowl].active, .mathbook-content .listitem > header > .heading *[knowl].active, .mathbook-content .example-like > header > .heading *[knowl].active, .mathbook-content .exercise-like > header > .heading *[knowl].active, .mathbook-content .aside-like > header > .heading *[knowl].active {
   background: #ffdcd6;
 }
 /* line 18, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
-.mathbook-content .definition-like > .heading, .mathbook-content .theorem-like > .heading, .mathbook-content .remark-like > .heading, .mathbook-content .example-like > .heading, .mathbook-content .exercise-like > .heading, .mathbook-content .aside-like > .heading, .mathbook-content .definition-like > header > .heading, .mathbook-content .theorem-like > header > .heading, .mathbook-content .remark-like > header > .heading, .mathbook-content .example-like > header > .heading, .mathbook-content .exercise-like > header > .heading, .mathbook-content .aside-like > header > .heading {
+.mathbook-content .definition-like > .heading, .mathbook-content .theorem-like > .heading, .mathbook-content .remark-like > .heading, .mathbook-content .listitem > .heading, .mathbook-content .example-like > .heading, .mathbook-content .exercise-like > .heading, .mathbook-content .aside-like > .heading, .mathbook-content .definition-like > header > .heading, .mathbook-content .theorem-like > header > .heading, .mathbook-content .remark-like > header > .heading, .mathbook-content .listitem > header > .heading, .mathbook-content .example-like > header > .heading, .mathbook-content .exercise-like > header > .heading, .mathbook-content .aside-like > header > .heading {
   display: inline;
 }
 /* line 153, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
-.mathbook-content .definition-like > .heading + p, .mathbook-content .theorem-like > .heading + p, .mathbook-content .remark-like > .heading + p, .mathbook-content .example-like > .heading + p, .mathbook-content .exercise-like > .heading + p, .mathbook-content .aside-like > .heading + p, .mathbook-content .definition-like > header > .heading + p, .mathbook-content .theorem-like > header > .heading + p, .mathbook-content .remark-like > header > .heading + p, .mathbook-content .example-like > header > .heading + p, .mathbook-content .exercise-like > header > .heading + p, .mathbook-content .aside-like > header > .heading + p {
+.mathbook-content .definition-like > .heading + p, .mathbook-content .theorem-like > .heading + p, .mathbook-content .remark-like > .heading + p, .mathbook-content .listitem > .heading + p, .mathbook-content .example-like > .heading + p, .mathbook-content .exercise-like > .heading + p, .mathbook-content .aside-like > .heading + p, .mathbook-content .definition-like > header > .heading + p, .mathbook-content .theorem-like > header > .heading + p, .mathbook-content .remark-like > header > .heading + p, .mathbook-content .listitem > header > .heading + p, .mathbook-content .example-like > header > .heading + p, .mathbook-content .exercise-like > header > .heading + p, .mathbook-content .aside-like > header > .heading + p {
   display: inline;
 }
 /* line 156, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
-.mathbook-content .definition-like > .heading + p:after, .mathbook-content .theorem-like > .heading + p:after, .mathbook-content .remark-like > .heading + p:after, .mathbook-content .example-like > .heading + p:after, .mathbook-content .exercise-like > .heading + p:after, .mathbook-content .aside-like > .heading + p:after, .mathbook-content .definition-like > header > .heading + p:after, .mathbook-content .theorem-like > header > .heading + p:after, .mathbook-content .remark-like > header > .heading + p:after, .mathbook-content .example-like > header > .heading + p:after, .mathbook-content .exercise-like > header > .heading + p:after, .mathbook-content .aside-like > header > .heading + p:after {
+.mathbook-content .definition-like > .heading + p:after, .mathbook-content .theorem-like > .heading + p:after, .mathbook-content .remark-like > .heading + p:after, .mathbook-content .listitem > .heading + p:after, .mathbook-content .example-like > .heading + p:after, .mathbook-content .exercise-like > .heading + p:after, .mathbook-content .aside-like > .heading + p:after, .mathbook-content .definition-like > header > .heading + p:after, .mathbook-content .theorem-like > header > .heading + p:after, .mathbook-content .remark-like > header > .heading + p:after, .mathbook-content .listitem > header > .heading + p:after, .mathbook-content .example-like > header > .heading + p:after, .mathbook-content .exercise-like > header > .heading + p:after, .mathbook-content .aside-like > header > .heading + p:after {
   /* Restore the inline paragraph's margin */
   content: "";
   display: block;
   margin-bottom: 1.25em;
+}
+/* line 163, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.mathbook-content .definition-like > .heading + p:last-child:after, .mathbook-content .theorem-like > .heading + p:last-child:after, .mathbook-content .remark-like > .heading + p:last-child:after, .mathbook-content .listitem > .heading + p:last-child:after, .mathbook-content .example-like > .heading + p:last-child:after, .mathbook-content .exercise-like > .heading + p:last-child:after, .mathbook-content .aside-like > .heading + p:last-child:after, .mathbook-content .definition-like > header > .heading + p:last-child:after, .mathbook-content .theorem-like > header > .heading + p:last-child:after, .mathbook-content .remark-like > header > .heading + p:last-child:after, .mathbook-content .listitem > header > .heading + p:last-child:after, .mathbook-content .example-like > header > .heading + p:last-child:after, .mathbook-content .exercise-like > header > .heading + p:last-child:after, .mathbook-content .aside-like > header > .heading + p:last-child:after {
+  /* Restore the inline paragraph's margin */
+  margin-bottom: 0;
 }
 /* line 25, ../../../../../MathBook/mathbook-assets/scss/content/partials/_environments.scss */
 .mathbook-content .theorem-like p, .mathbook-content .theorem-like ol, .mathbook-content .theorem-like ul {
@@ -979,6 +1254,11 @@
   content: "";
   display: block;
   margin-bottom: 1.25em;
+}
+/* line 163, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.mathbook-content .proof > .heading + p:last-child:after, .mathbook-content .proof > header > .heading + p:last-child:after {
+  /* Restore the inline paragraph's margin */
+  margin-bottom: 0;
 }
 /* line 55, ../../../../../MathBook/mathbook-assets/scss/content/partials/_environments.scss */
 .mathbook-content .proof {
@@ -1250,11 +1530,16 @@
   display: block;
   margin-bottom: 1.25em;
 }
+/* line 163, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.mathbook-content .hiddenproof > .heading + p:last-child:after, .mathbook-content .hiddenproof > header > .heading + p:last-child:after {
+  /* Restore the inline paragraph's margin */
+  margin-bottom: 0;
+}
 /* line 139, ../../../../../MathBook/mathbook-assets/scss/content/partials/_environments.scss */
 .mathbook-content .hiddenproof {
   position: relative;
   /* Cut the border up into the top margin */
-  margin-top: -rhythm(0.5);
+  margin-top: -0.5em;
   padding-top: 0;
   margin-bottom: 1.25em;
 }
@@ -1286,18 +1571,6 @@
 .mathbook-content .hiddenproof a > .heading {
   margin-top: 0px;
   margin-bottom: 0px;
-}
-/* line 194, ../../../../../MathBook/mathbook-assets/scss/content/partials/_environments.scss */
-.mathbook-content .aside-like {
-  padding: 8px 15px 10px 15px;
-  margin: 5px 0px 5px 10px;
-  background-color: #f5faff;
-  border: 2px solid #dcebfa;
-}
-/* line 204, ../../../../../MathBook/mathbook-assets/scss/content/partials/_environments.scss */
-.mathbook-content .aside-like .aside-like {
-  background-color: #fafff5;
-  border: 1px dotted #aaa;
 }
 /* line 8, ../../../../../MathBook/mathbook-assets/scss/content/partials/_knowl.scss */
 .mathbook-content *[knowl] {
@@ -1409,7 +1682,7 @@
 }
 /* line 157, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
 .mathbook-content .knowl-output {
-  border: 12px solid #ffdcd6;
+  border-color: #ffdcd6;
   background: #fffbfa;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
@@ -1418,15 +1691,13 @@
   border-radius: 4px;
   margin-bottom: 1.25em;
 }
-/* line 190, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
+/* line 191, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
 .mathbook-content .knowl-output .knowl-footer {
   font-size: x-small;
   color: #a31500;
   background: #ffdcd6;
-  bottom: -12px;
-  padding: 1px 0px 1px 12px;
 }
-/* line 198, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
+/* line 200, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
 .mathbook-content .knowl-output .knowl-content {
   /* Better to apply a margin, so that heading margins collapse */
   padding: 0;
@@ -1517,7 +1788,7 @@
 }
 /* line 157, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
 .mathbook-content .knowl-output .knowl-output {
-  border: 6px solid #ffc5bd;
+  border-color: #ffc5bd;
   background: white;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
@@ -1526,15 +1797,13 @@
   border-radius: 4px;
   margin-bottom: 1.25em;
 }
-/* line 190, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
+/* line 191, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
 .mathbook-content .knowl-output .knowl-output .knowl-footer {
   font-size: x-small;
   color: #8a1200;
   background: #ffc5bd;
-  bottom: -6px;
-  padding: 1px 0px 1px 6px;
 }
-/* line 198, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
+/* line 200, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
 .mathbook-content .knowl-output .knowl-output .knowl-content {
   /* Better to apply a margin, so that heading margins collapse */
   padding: 0;
@@ -1625,7 +1894,7 @@
 }
 /* line 157, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
 .mathbook-content .knowl-output .knowl-output .knowl-output {
-  border: 6px solid #ffafa3;
+  border-color: #ffafa3;
   background: #fffbfa;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
@@ -1634,15 +1903,13 @@
   border-radius: 4px;
   margin-bottom: 1.25em;
 }
-/* line 190, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
+/* line 191, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
 .mathbook-content .knowl-output .knowl-output .knowl-output .knowl-footer {
   font-size: x-small;
   color: #700f00;
   background: #ffafa3;
-  bottom: -6px;
-  padding: 1px 0px 1px 6px;
 }
-/* line 198, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
+/* line 200, ../../../../../MathBook/mathbook-assets/scss/shared/_knowl.scss */
 .mathbook-content .knowl-output .knowl-output .knowl-output .knowl-content {
   /* Better to apply a margin, so that heading margins collapse */
   padding: 0;
@@ -1834,6 +2101,11 @@
   content: "";
   display: block;
   margin-bottom: 1.25em;
+}
+/* line 163, ../../../../../MathBook/mathbook-assets/scss/shared/_heading.scss */
+.mathbook-content figcaption > .heading > .heading + p:last-child:after, .mathbook-content figcaption > .heading > header > .heading + p:last-child:after, .mathbook-content figcaption > header > .heading > .heading + p:last-child:after, .mathbook-content figcaption > header > .heading > header > .heading + p:last-child:after {
+  /* Restore the inline paragraph's margin */
+  margin-bottom: 0;
 }
 /* line 50, ../../../../../MathBook/mathbook-assets/scss/content/partials/_figure.scss */
 .mathbook-content figcaption {

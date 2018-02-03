@@ -80,7 +80,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='backmatter'><xsl:text>Pós Texto</xsl:text></localization>
     <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
     <localization string-id='paragraphs'><xsl:text>Parágrafos</xsl:text></localization>
-    <localization string-id='paragraph'><xsl:text>Parágrafo</xsl:text></localization>
     <localization string-id='subparagraph'><xsl:text>Subparágrafo</xsl:text></localization>
     <!-- Components of the narrative -->
     <!-- REMARK-LIKE blocks -->
@@ -128,8 +127,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <localization string-id='li'><xsl:text>Item</xsl:text></localization> -->
     <!-- A regular paragraph, not the old sectioning structure -->
     <localization string-id='p'><xsl:text>Parágrafo</xsl:text></localization>
+    <!-- <localization string-id='blockquote'><xsl:text>Quotation</xsl:text></localization> -->
     <!-- Parts of an exercise and it's solution -->
     <localization string-id='exercise'><xsl:text>Exercício</xsl:text></localization>
+    <localization string-id='webwork'><xsl:text>WeBWorK</xsl:text></localization>
     <localization string-id='hint'><xsl:text>Dica</xsl:text></localization>
     <localization string-id='answer'><xsl:text>Resposta</xsl:text></localization>
     <localization string-id='solution'><xsl:text>Solução</xsl:text></localization>
@@ -154,12 +155,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='dedication'><xsl:text>Dedicatória</xsl:text></localization>
     <localization string-id='colophon'><xsl:text>Ficha técnica</xsl:text></localization>
     <!-- Back matter components -->
-    <!-- Following is temporary, "index-part" to be deprecated -->
-    <!-- NB: repurpose translations, replace "indexsection below", maybe move appendix here -->
-    <!-- <localization string-id='index-part'><xsl:text>Index</xsl:text></localization> -->
+    <!-- index-part is deprecated, but not abandoned          -->
+    <!-- NB: repurpose translations, maybe move appendix here -->
+    <localization string-id='index-part'><xsl:text>Índice Remissivo</xsl:text></localization>
     <!-- <localization string-id='jump-to'><xsl:text>Jump to:</xsl:text></localization> -->
     <!-- Parts of the Index -->
-    <localization string-id='indexsection'><xsl:text>Índice Remissivo</xsl:text></localization>
+    <localization string-id='index'><xsl:text>Índice Remissivo</xsl:text></localization>
     <localization string-id='see'><xsl:text>veja</xsl:text></localization>
     <localization string-id='also'><xsl:text>veja também</xsl:text></localization>
     <!-- Notation List headings/foot -->
@@ -201,6 +202,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Translation needed for Portugal Portugese -->
     <!-- <localization string-id='permalink'><xsl:text>permalink</xsl:text></localization> -->
     <!-- <localization string-id='incontext'><xsl:text>in-context</xsl:text></localization> -->
+    <!-- Sage Cell evaluate button      -->
+    <!-- eg, "Evaluate (Maxima)"        -->
+    <!-- 2017-05-14: 'code' is obsolete -->
+    <!-- This needs to be defined to *something* (English)       -->
+    <!-- else whatever crud ends up on the button kills the cell -->
+    <!-- Translate at first opportunity, please                  -->
+    <localization string-id='evaluate'><xsl:text>Evaluate</xsl:text></localization>
+    <!-- <localization string-id='code'><xsl:text>Code</xsl:text></localization> -->
 </xsl:variable>
 
 </xsl:stylesheet>

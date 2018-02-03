@@ -23,6 +23,19 @@
 <!-- Doctest files are Python (docstring) -->
 <xsl:variable name="file-extension" select="'.py'" />
 
+<!-- Set the chunking level variable for the routines in mathbook-common.xsl. -->
+<!-- Default to zero, else use whatever an author specifies                   -->
+<xsl:variable name="chunk-level">
+    <xsl:choose>
+        <xsl:when test="$chunk.level != ''">
+            <xsl:value-of select="$chunk.level" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>0</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
 <!-- ############## -->
 <!-- Entry Template -->
 <!-- ############## -->
@@ -70,6 +83,7 @@
     <xsl:text>&#xA;</xsl:text>
 </xsl:template>
 
+<!-- @copy deprecated  2017-12-21 -->
 <!-- Just handle "copy" Sage blocks the same way as others  -->
 <!-- since results may be needed for subsequent tests       -->
 <!-- This needs to come second, since it will fail previous -->

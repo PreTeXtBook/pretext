@@ -30,14 +30,27 @@
 <!ENTITY SIMPLECHAR "'0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'">
 
 <!-- for match/select -->
-<!ENTITY STRUCTURAL "book|article|letter|memo|frontmatter|part|chapter|appendix|index-part|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|exercises|references|backmatter">
+<!ENTITY STRUCTURAL "book|article|letter|memo|frontmatter|part|chapter|appendix|index[index-list]|index-part|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|exercises|references|backmatter">
 
 <!-- for filtering nodes, eg *[&STRUCTURAL-FILTER;], *[not(&STRUCTURAL-FILTER;)] -->
-<!ENTITY STRUCTURAL-FILTER "self::book or self::article or self::letter or self::memo or self::frontmatter or self::part or self::chapter or self::appendix or self::index-part or self::preface or self::acknowledgement or self::biography or self::foreword or self::dedication or self::colophon or self::section or self::subsection or self::subsubsection or self::exercises or self::references or self::backmatter">
+<!ENTITY STRUCTURAL-FILTER "self::book or self::article or self::letter or self::memo or self::frontmatter or self::part or self::chapter or self::appendix or self::index[index-list] or self::index-part or self::preface or self::acknowledgement or self::biography or self::foreword or self::dedication or self::colophon or self::section or self::subsection or self::subsubsection or self::exercises or self::references or self::backmatter">
 
 <!-- typical items in blocks that get special treatment -->
 <!ENTITY METADATA "title|subtitle|caption|index">
 <!ENTITY METADATA-FILTER "self::title or self::subtitle or self::caption or self::index">
+
+<!-- Subdivisions and runs of paragraphs (like in a proof)  -->
+<!-- contain "invisible" items that get killed  and then    -->
+<!-- used/accessed other ways.  To see if something  is     -->
+<!--first, last, preceded, or followed by other significant -->
+<!-- items requires filtering out these items in forming a  -->
+<!-- node-set (so as to not be confused by their presence)  -->
+<!-- A super-lightweight "article" might have "frontmatter" -->
+<!-- and "backmatter" as peers of content elements, and in  -->
+<!-- other cases it should not be a problem                 -->
+<!-- Typical use:  *[not(&SUBDIVISION-METADATA-FILTER;)]    -->
+<!ENTITY SUBDIVISION-METADATA "title|subtitle|index|notation|todo|frontmatter|backmatter">
+<!ENTITY SUBDIVISION-METADATA-FILTER "self::title or self::subtitle or self::idx or self::index[not(index-list)] or self::notation or self::todo or self::frontmatter or self::backmatter">
 
 <!-- To implement a new category of blocks, search on    -->
 <!-- "PROJECT-" (case-sensitive) since we will mark      -->
@@ -61,6 +74,10 @@
 <!ENTITY REMARK-LIKE "remark|convention|note|observation|warning|insight|computation|technology">
 <!ENTITY REMARK-FILTER "self::remark or self::convention or self::note or self::observation or self::warning or self::insight or self::computation or self::technology">
 
+<!-- about computations or technology -->
+<!ENTITY COMPUTATION-LIKE "computation|technology">
+<!ENTITY COMPUTATION-FILTER "self::computation or self::technology">
+
 <!-- incidental, skippable, lightweight -->
 <!ENTITY ASIDE-LIKE "aside|biographical|historical">
 <!ENTITY ASIDE-FILTER "self::aside or self::biographical or self::historical">
@@ -71,9 +88,13 @@
 
 <!-- blocks, or statement + solution -->
 <!-- save off lab, laboratory, experiment for science -->
-<!ENTITY PROJECT-LIKE "project|activity|exploration|task|investigation">
-<!ENTITY PROJECT-FILTER "self::project or self::activity or self::exploration or self::task or self::investigation">
+<!ENTITY PROJECT-LIKE "project|activity|exploration|investigation">
+<!ENTITY PROJECT-FILTER "self::project or self::activity or self::exploration or self::investigation">
 
 <!-- displays with captions -->
-<!ENTITY FIGURE-LIKE "figure|table|listing|sidebyside">
-<!ENTITY FIGURE-FILTER "self::figure or self::table or self::listing or self::sidebyside">
+<!ENTITY FIGURE-LIKE "figure|table|listing|list">
+<!ENTITY FIGURE-FILTER "self::figure or self::table or self::listing or self::list">
+
+<!-- appendages of examples, exercises, tasks -->
+<!ENTITY SOLUTION-LIKE "hint|answer|solution">
+<!ENTITY SOLUTION-FILTER "self::hint or self::answer or self::solution">

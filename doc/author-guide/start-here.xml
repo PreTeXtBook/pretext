@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- This file is part of the documentation of MathBook XML   -->
+<!--   This file is part of the documentation of PreTeXt      -->
 <!--                                                          -->
-<!--    MathBook XML Author's Guide                           -->
+<!--      PreTeXt Author's Guide                              -->
 <!--                                                          -->
 <!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
 <!-- See the file COPYING for copying conditions.             -->
@@ -11,27 +11,27 @@
     <title>Start Here</title>
 
     <introduction>
-        <p>Welcome to the Author's Guide for MathBook XML.  You are likely eager to get started, but familiarizing yourself with this chapter should save you a lot of time in the long run.  We will try to keep it short and at the end of early chapters we will guide you on where to go next.  Not everything we say here will make sense on your first reading, so come back after your first few trial runs.</p>
+        <p>Welcome to the Author's Guide for <pretext />.  You are likely eager to get started, but familiarizing yourself with this chapter should save you a lot of time in the long run.  We will try to keep it short and at the end of early chapters we will guide you on where to go next.  Not everything we say here will make sense on your first reading, so come back after your first few trial runs.</p>
     </introduction>
 
     <section xml:id="philosophy">
         <title>Philosophy</title>
 
-        <p>MathBook XML is a <term index="yes">markup language</term>, which means that you explicitly specify the logical parts of your document and not how these parts should be displayed.  This is very liberating for an author, since it frees you to concentrate on capturing your ideas to share with others, leaving the construction of the visual presentation to the software.  As an example, you might specify the content of the title of a chapter to be <c>Further Experiments</c>, but you will not be concerned if a 36 point sans-serif font in black will be used for this title in the print version of your book, or a CSS class specifying 18 pixel height in blue is used for a title in an online web version of your book.  You can just trust that a reasonable choice has been made for displaying a title of a chapter in a way that a reader will recognize it as a name for a chapter.  (And if all that talk of fonts was unfamiliar, all the more reason to trust the design to software.)</p>
+        <p><pretext /> is a <term index="yes">markup language</term><idx>markup language</idx>, which means that you explicitly specify the logical parts of your document and not how these parts should be displayed.  This is very liberating for an author, since it frees you to concentrate on capturing your ideas to share with others, leaving the construction of the visual presentation to the software.  As an example, you might specify the content of the title of a chapter to be <c>Further Experiments</c>, but you will not be concerned if a 36 point sans-serif font in black will be used for this title in the print version of your book, or a CSS class specifying 18 pixel height in blue is used for a title in an online web version of your book.  You can just trust that a reasonable choice has been made for displaying a title of a chapter in a way that a reader will recognize it as a name for a chapter.  (And if all that talk of fonts was unfamiliar, all the more reason to trust the design to software.)</p>
 
         <p>You are also freed from the technical details of presenting your ideas in the plethora of new formats available as a consequence of the advances in computers (including tablets and smartphones) and networks (global and wireless).  Your output <q>just works</q> and the software keeps up with technical advances and the introduction of new formats, while you concentrate on the content of your book (or article, or report, or proposal, or<nbsp /><ellipsis />).</p>
 
         <p>If you have never used a markup language, it can be unfamiliar at first.  Even if you have used a markup language before (such as HTML or basic <latex />) you will need to make a few adjustments.  Most word-processors are WYSIWYG (<q>what you see is what you get</q>).  That approach is likely very helpful if you are designing the front page of a newspaper, but not if you are writing about the life-cycle of a salamander.  In the old days, programs like <url href="https://en.wikipedia.org/wiki/Troff"><c>troff</c></url> and its predecessor, <url href="https://en.wikipedia.org/wiki/TYPSET_and_RUNOFF"><c>RUNOFF</c></url> (1964), implemented simple markup languages to allow early computers to do limited text-formatting.  Sometimes the old ways are the best ways.</p>
 
-        <p>MathBook XML is what is called an <term>XML application</term> or an <term>XML vocabulary</term> (I prefer the latter). Authoring in XML might seem cumbersome at first, but you will eventually appreciate the long-run economies, so keep an open mind.  And if you are already familiar with XML, realize we have been very careful to design this vocabulary with human authors foremost in our mind.</p>
+        <p><pretext /> is what is called an <term>XML application</term><idx>XML application</idx><idx><h>XML application</h><seealso>XML vocabulary</seealso></idx> or an <term>XML vocabulary</term><idx>XML vocabulary</idx><idx><h>XML vocabulary</h><seealso>XML application</seealso></idx> (I prefer the latter). Authoring in XML might seem cumbersome at first, but you will eventually appreciate the long-run economies, so keep an open mind.  And if you are already familiar with XML, realize we have been very careful to design this vocabulary with human authors foremost in our mind.</p>
 
         <paragraphs>
             <title>Principles</title>
 
-            <p>The creation, design, development and maintenance of MathBook XML (<init>MBX</init> here) is guided by the following list of principles.  They may not be fully understood on a first reading, but should be useful as you become more familiar with authoring texts with MathBook XML and should amplify some of the previous discussion.</p>
+            <p>The creation, design, development and maintenance of <pretext /> (<init>MBX</init> here) is guided by the following list of principles.  They may not be fully understood on a first reading, but should be useful as you become more familiar with authoring texts with <pretext /> and should amplify some of the previous discussion.</p>
 
             <list xml:id="list-principles">
-                <title>MathBook XML Principles</title>
+                <caption><pretext /> Principles</caption>
                 <!-- sync edits with main README.md -->
 
                 <ol>
@@ -47,9 +47,9 @@
 
                     <li><p><init>MBX</init> supports online documents which make use of the full capabilities of the Web.</p></li>
 
-                    <li><p><init>MBX</init> output is styled by selecting from a list of available templates, relieving the author of the burden involved in micromanaging the output format.</p></li>
+                    <li xml:id="principle-output-styles"><p><init>MBX</init> output is styled by selecting from a list of available templates, relieving the author of the burden involved in micromanaging the output format.</p></li>
 
-                    <li><p><init>MBX</init> is free: the software is available at no cost, with an open license. The use of <init>MBX</init> does not impose any constraints on documents prepared with the system.</p></li>
+                    <li xml:id="principle-open-software"><p><init>MBX</init> is free: the software is available at no cost, with an open license. The use of <init>MBX</init> does not impose any constraints on documents prepared with the system.</p></li>
 
                     <li><p><init>MBX</init> is not a closed system: documents can be converted to <latex /> and then developed using standard <latex /> tools.</p></li>
                 </ol>
@@ -60,14 +60,14 @@
     <section xml:id="introduction-to-source-formatting">
         <title>Formatting Your Source</title>
 
-        <p>There are a lot of details related to how you prepare your <term index="yes">source</term>: the actual files that you, and you alone, will create.  At least skim through the following, come back here often, and also consult <xref provisional="exhaustive-chapter-on-source-files" />.</p>
+        <p>There are a lot of details related to how you prepare your <term index="yes">source</term><idx>source</idx>: the actual files that you, and you alone, will create.  At least skim through the following, come back here often, and also consult <xref provisional="exhaustive-chapter-on-source-files" />.</p>
 
         <paragraphs>
             <title>File Format</title>
 
-            <p>Your source should be plain <term index="yes">ASCII files</term> which you will create with a text editor.  In other words, do not create your source with Word, LibreOffice, WordPerfect, AbiWord, Pages or similar programs.  Popular text editors include vi, emacs, Notepad, Notepad++, Atom, TextWrangler, and BBEdit.  I have had a very good experience with Sublime Text, which is cross-platform (Windows, OS X, Linux), and can be used for free, though it has a very liberal license and is well worth the cost.  Sometimes these editors are known as a <term>programmer's editor</term> (though we will be doing no programming).  Support for writing HTML sometimes translates directly to good support for XML.</p>
+            <p>Your source should be plain <term index="yes">ASCII files</term><idx>ASCII file</idx> which you will create with a text editor.  In other words, do not create your source with Word, LibreOffice, WordPerfect, AbiWord, Pages or similar programs.  Popular text editors include vi, emacs, Notepad, Notepad++, Atom, TextWrangler, and BBEdit.  I have had a very good experience with Sublime Text, which is cross-platform (Windows, OS X, Linux), and can be used for free, though it has a very liberal license and is well worth the cost.  Sometimes these editors are known as a <term>programmer's editor</term><idx>programmer's editor</idx> (though we will be doing no programming).  Support for writing HTML sometimes translates directly to good support for XML.</p>
 
-            <p>There are <term>XML editors</term>, which I have generally found too complex for authoring in MathBook XML.  They do have some advantages and XML Copy Editor is one that I have found that is possibly useful.</p>
+            <p>There are <term>XML editors</term><idx>XML editor</idx>, which I have generally found too complex for authoring in <pretext />.  They do have some advantages and XML Copy Editor is one that I have found that is possibly useful.</p>
         </paragraphs>
 
         <paragraphs>
@@ -83,21 +83,19 @@
         <paragraphs>
             <title>Revision Control</title>
 
-            <p>If you are writing a book, or if you are collaborating with co-authors, then you owe it to yourself and your co-authors to learn how to use revision control, which works well with MathBook XML.  The hands-down favorite is <c>git</c> which has a steep learning curve, and so is beyond the scope of this guide.  But see <xref provisional="topic-git-coexistence" /> which has hints on how to best use <c>git</c> together with a MathBook XML project and look for Beezer and Farmer's <booktitle>Git For Authors</booktitle>.</p>
+            <p>If you are writing a book, or if you are collaborating with co-authors, then you owe it to yourself and your co-authors to learn how to use revision control<idx>revision control</idx>, which works well with <pretext />.  The hands-down favorite is <c>git</c> which has a steep learning curve, and so is beyond the scope of this guide.  But see <xref provisional="topic-git-coexistence" /> which has hints on how to best use <c>git</c> together with a <pretext /> project and look for Beezer and Farmer's <booktitle>Git For Authors</booktitle>.</p>
         </paragraphs>
 
         <paragraphs>
             <title>Whitespace</title>
 
-            <p>The term <term>whitespace</term> refers to characters you type but typically do not see.  For us they are <term>space</term>, <term>non-breaking space</term>, <term>tab</term> and <term>newline</term> (also known as a <q>carriage return</q> and/or <q>line feed</q>).  Unlike some other markup languages, MathBook XML <em>does not ever use whitespace</em> to convey formatting information.</p>
+            <p>The term <term>whitespace</term><idx>whitespace</idx> refers to characters you type but typically do not see.  For us they are <term>space</term>, <term>non-breaking space</term>, <term>tab</term> and <term>newline</term> (also known as a <q>carriage return</q> and/or <q>line feed</q>).  Unlike some other markup languages, <pretext /> <em>does not ever use whitespace</em> to convey formatting information.</p>
 
-            <p>In some parts of a MathBook XML document, every single whitespace character is important and will affect your output, often in significant ways and often in ways that are unpleasant.  For starters, a paragraph is the place where this is important, so inside of a <tag>p</tag> element do not include a newline when you start, or when you end, or anywhere in the middle.  If a sequence of sentences runs off the right side of your screen, learn how to use the settings in your editor to <q>wrap</q> (<q>soft line wrapping</q>) your text visually, without introducing newlines into the saved version of your source file (<q>hard line wrapping</q>).</p>
+            <p>In some parts of a <pretext /> document, every single whitespace character is important and will be transmitted to your output, such as in the <tag>input</tag> and <tag>output</tag> portions of a <tag>sage</tag> element.  Since Sage code mostly follows Python syntax, indentation is important and leading spaces must be preserved.  But you can indent all of your code to match your <init>XML</init> indentation and the entire <tag>input</tag> (or <tag>output</tag>) content will be uniformly shifted left to the margin in your final output.</p>
 
-            <p>In other parts of a MathBook XML document, every single whitespace character is ignored, and you have the freedom to use indentation and blank lines to help you understand the logical structure of your document.  An example is that you can add as much whitespace as you like between the paragraphs of a section, such as a preceding blank line and indentation, and none of it will affect your output in any way.</p>
+            <p>In other parts of a <pretext /> document, every single whitespace character is ignored, and you have the freedom to use indentation and blank lines to help you understand the logical structure of your document.  An example is that you can add as much whitespace as you like between the paragraphs of a section, such as a preceding blank line and indentation, and none of it will affect your output in any way.</p>
 
-            <p>If you do come from a programming background, recognize that you are not writing line-oriented code and you should adapt the tools you know to a slightly different situation.</p>
-
-            <p>Never use tabs, they can only cause problems.  You may be able to set your editor to translate the tab key to a certain number of spaces, or to translate tabs to spaces when you save a file (and these behaviors are useful).  I have Sublime Text configured to show me every single space as a small faint dot, since I like to be certain I have no stray whitespace <em>anywhere</em>.  Whitespace is evil.</p>
+            <p>Never use tabs, they can only cause problems.  You may be able to set your editor to translate the tab key to a certain number of spaces, or to translate tabs to spaces when you save a file (and these behaviors are useful).  I have Sublime Text configured to show me every single space as a small faint dot, since I like to be certain I have no stray whitespace <em>anywhere</em>.</p>
         </paragraphs>
 
         <paragraphs>

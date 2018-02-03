@@ -1,7 +1,7 @@
 MathBook XML
 ============
 
-A lightweight XML application for authors of scientific articles, textbooks and monographs.
+A lightweight XML application for authors of research articles, textbooks, and monographs.
 
 GPL License.
 
@@ -9,14 +9,16 @@ GPL License.
 
 Quickstart instructions at project website:  [mathbook.pugetsound.edu](http://mathbook.pugetsound.edu)
 
-Help and development discussions: Google Group [mathboook-xml-support](https://groups.google.com/forum/?fromgroups#!forum/mathbook-xml-support)
+Help and development discussions:
+* Support forum/mailing-list: [pretext-support](https://groups.google.com/forum/#!forum/pretext-support)
+* Announcements only, low-volume: [pretext-announce](https://groups.google.com/forum/#!forum/pretext-announce)
 
 
 MathBook XML (MBX) is guided by the following principles:
 ---------------------------------------------------------
 
 1. MBX is a markup language that captures the structure of
-textbooks and research papers in the mathematical sciences.
+textbooks and research papers.
 2. MBX is human-readable and human-writable.
 3. MBX documents serve as a single source which can be
 easily converted to multiple other formats, current and future.

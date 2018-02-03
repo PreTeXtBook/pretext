@@ -14,7 +14,8 @@
 <xsl:import href="../xsl/mathbook-html.xsl" />
 <xsl:import href="./author-guide-common.xsl" />
 
-<!-- Just go one-level deep in sidebar -->
-<xsl:param name="toc.level" select="'1'" />
+<!-- Go two levels deep in sidebar                  -->
+<!-- But will open to list-of-chapters summary page -->
+<xsl:param name="toc.level" select="'2'" />
 
 </xsl:stylesheet>

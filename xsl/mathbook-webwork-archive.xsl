@@ -65,7 +65,7 @@
 <!-- First, create the problem files in directories                           -->
 <!-- Organized in directories as in the document tree, cut off at chunk level -->
 <!-- Then chunk the document to write reasonable problem definition files     -->
-<xsl:template match="/mathbook">
+<xsl:template match="/mathbook|/pretext">
     <xsl:apply-templates select="." mode="generic-warnings" />
     <xsl:message>C: <xsl:value-of select="$chunk-level" /></xsl:message>
     <xsl:apply-templates mode="problems" />
@@ -92,13 +92,10 @@
 <!-- ################## -->
 
 <!-- String for document root, but not docinfo -->
+<!-- TODO: could just be a variable            -->
 <xsl:template name="root-directory">
-    <xsl:for-each select="/mathbook/*">
-        <xsl:if test="not(self::docinfo)">
-            <xsl:apply-templates select="." mode="numbered-title-filesafe" />
-            <xsl:text>/</xsl:text>
-        </xsl:if>
-    </xsl:for-each>
+    <xsl:apply-templates select="$document-root" mode="numbered-title-filesafe" />
+    <xsl:text>/</xsl:text>
 </xsl:template>
 
 <!-- Directory path, recursively climb structural nodes,  -->
@@ -119,7 +116,7 @@
         </xsl:choose>
     </xsl:variable>
     <xsl:choose>
-        <xsl:when test="self::mathbook" /> <!-- done -->
+        <xsl:when test="self::mathbook or self::pretext" /> <!-- done -->
         <xsl:when test="$structural='false'">  <!-- skip up -->
             <xsl:apply-templates select="parent::*" mode="directory-path" />
         </xsl:when>

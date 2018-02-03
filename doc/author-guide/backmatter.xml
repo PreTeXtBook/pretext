@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<!-- This file is part of the documentation of MathBook XML   -->
+<!--   This file is part of the documentation of PreTeXt      -->
 <!--                                                          -->
-<!--    MathBook XML Author's Guide                           -->
+<!--      PreTeXt Author's Guide                              -->
 <!--                                                          -->
 <!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
 <!-- See the file COPYING for copying conditions.             -->
@@ -10,12 +10,17 @@
 <backmatter xml:id="backmatter" xmlns:xi="http://www.w3.org/2001/XInclude">
     <title>Appendices</title>
 
-    <!-- Provide an appendix about co-existing with git -->
-
     <xi:include href="faq.xml" />
     <xi:include href="editors.xml" />
+    <xi:include href="schema-install.xml" />
+    <xi:include href="git.xml" />
     <xi:include href="windows.xml" />
     <xi:include href="windows-wsl.xml" />
+    <xi:include href="vagrant.xml" />
     <xi:include href="gfdl-mathbook.xml" />
+    <index>
+    <title>Index</title>
+        <index-list />
+    </index>
 
 </backmatter>

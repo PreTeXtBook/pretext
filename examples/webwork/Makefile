@@ -1,21 +1,21 @@
 ## ********************************************************************* ##
-## Copyright 2015                                                        ##
+## Copyright 2015-7                                                      ##
 ## Robert A. Beezer, Michael Gage, Geoff Goehle, Alex Jordan             ##
 ##                                                                       ##
-## This file is part of MathBook XML.                                    ##
+## This file is part of PreTeXt.                                         ##
 ##                                                                       ##
-## MathBook XML is free software: you can redistribute it and/or modify  ##
+## PreTeXt is free software: you can redistribute it and/or modify       ##
 ## it under the terms of the GNU General Public License as published by  ##
 ## the Free Software Foundation, either version 2 or version 3 of the    ##
 ## License (at your option).                                             ##
 ##                                                                       ##
-## MathBook XML is distributed in the hope that it will be useful,       ##
+## PreTeXt is distributed in the hope that it will be useful,            ##
 ## but WITHOUT ANY WARRANTY; without even the implied warranty of        ##
 ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         ##
 ## GNU General Public License for more details.                          ##
 ##                                                                       ##
 ## You should have received a copy of the GNU General Public License     ##
-## along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>. ##
+## along with PreTeXt. If not, see <http://www.gnu.org/licenses/>.       ##
 ## ********************************************************************* ##
 
 #######################
@@ -68,18 +68,57 @@ MBUSR = $(MB)/user
 WWEXAMPLE = $(MB)/examples/webwork
 DTD = $(MB)/schema/dtd
 
+# XML to apply templates to
+SMPCHP = $(WWEXAMPLE)/sample-chapter/sample-chapter.xml
+MINI = $(WWEXAMPLE)/minimal/mini.xml
+
 # These paths are subdirectories of
 # the scratch directory
 PGOUT      = $(SCRATCH)/pg
 HTMLOUT    = $(SCRATCH)/html
 PDFOUT     = $(SCRATCH)/pdf
 EPUBOUT    = $(SCRATCH)/epub
+WWOUT      = $(SCRATCH)/webwork-extraction
 
 # Some aspects of producing these examples require a WeBWorK server.
 # For all but trivial testing or examples, please look into setting
 # up your own WeBWorK server, or consult Alex Jordan about the use
 # of PCC's server in a nontrivial capacity.    <alex.jordan@pcc.edu>
-SERVER = https://webwork.pcc.edu
+# Either specify only the protocol and domain (like https://webwork.yourschool.edu)
+# or specify a 5-tuple with quotes exactly as in this example
+# SERVER = "(https://webwork.pcc.edu,courseID,userID,password,course_password)"
+SERVER = http://localhost
+
+
+################
+#Targets for make
+################
+
+#  Extract webwork problems into a single XML file called
+#  webwork-extraction.xml which holds multiple versions of each problem.
+#  Also locally store images from the WeBWorK server.
+
+sample-chapter-extraction:
+	install -d $(WWOUT)
+	-rm $(WWOUT)/webwork-extraction.xml
+	$(MB)/script/mbx -v -c webwork -d $(WWOUT) -s $(SERVER) $(SMPCHP)
+
+mini-extraction:
+	install -d $(WWOUT)
+	-rm $(WWOUT)/webwork-extraction.xml
+	$(MB)/script/mbx -v -c webwork -d $(WWOUT) -s $(SERVER) $(MINI)
+
+#  Make a new PTX file from the source tree, with webwork elements replaced
+#  by the webwork-reps from webwork-extraction.xml. (So run the above at
+#  least once first.) Subsequent templates are applied to the result here.
+
+sample-chapter-merge:
+	cd $(SCRATCH); \
+	xsltproc --stringparam webwork.extraction $(WWOUT)/webwork-extraction.xml $(MBXSL)/pretext-merge.xsl $(SMPCHP) > sample-chapter-merge.ptx
+
+mini-merge:
+	cd $(SCRATCH); \
+	xsltproc --stringparam webwork.extraction $(WWOUT)/webwork-extraction.xml $(MBXSL)/pretext-merge.xsl $(MINI) > mini-merge.ptx
 
 #  Write out each WW problem of the "sample-chapter" as a
 #  standalone problem in PGML ready for use on a WW server.
@@ -106,6 +145,7 @@ sample-chapter-html:
 	cp -a $(WWEXAMPLE)/sample-chapter/images $(HTMLOUT)
 	cd $(HTMLOUT); \
 	xsltproc --stringparam webwork.server $(SERVER) --stringparam html.knowl.exercise.inline no $(MBXSL)/mathbook-html.xsl $(WWEXAMPLE)/sample-chapter/sample-chapter.xml
+
 
 # a one-time prerequisite for LaTeX conversion
 # problems living on a server, and image construction at server
@@ -142,21 +182,16 @@ webwork-mini-html:
 ###########
 
 # Verify Source integrity
-#   Leaves "dtderrors.txt" in SCRATCH
-#   can then grep on, e.g.
-#     "element XXX:"
-#     "does not follow"
-#     "Element XXXX content does not follow"
-#     "No declaration for"
+#   Leaves "jingreport.txt" in SCRATCH
 #   Automatically invokes the "less" pager, could configure as $(PAGER)
 sample-chapter-check:
 	install -d $(SCRATCH)
-	-rm $(SCRATCH)/dtderrors.*
-	-xmllint --xinclude --postvalid --noout --dtdvalid $(DTD)/mathbook.dtd $(WWEXAMPLE)/sample-chapter/sample-chapter.xml 2> $(SCRATCH)/dtderrors.txt
-	less $(SCRATCH)/dtderrors.txt
+	-rm $(SCRATCH)/jingreport.txt
+	-java -classpath $(JINGTRANG) -Dorg.apache.xerces.xni.parser.XMLParserConfiguration=org.apache.xerces.parsers.XIncludeParserConfiguration -jar $(JINGTRANG)/jing.jar $(MB)/schema/pretext.rng $(SMPCHP) > $(SCRATCH)/jingreport.txt
+	less $(SCRATCH)/jingreport.txt
 
 webwork-mini-check:
 	install -d $(SCRATCH)
-	-rm $(SCRATCH)/dtderrors.*
-	-xmllint --xinclude --postvalid --noout --dtdvalid $(DTD)/mathbook.dtd $(WWEXAMPLE)/minimal/mini.xml 2> $(SCRATCH)/dtderrors.txt
-	less $(SCRATCH)/dtderrors.txt
+	-rm $(SCRATCH)/jingreport.txt
+	-java -classpath $(JINGTRANG) -Dorg.apache.xerces.xni.parser.XMLParserConfiguration=org.apache.xerces.parsers.XIncludeParserConfiguration -jar $(JINGTRANG)/jing.jar $(MB)/schema/pretext.rng $(MINI) > $(SCRATCH)/jingreport.txt
+	less $(SCRATCH)/jingreport.txt

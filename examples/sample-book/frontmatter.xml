@@ -50,7 +50,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     </titlepage>
 
-    <colophon>
+    <colophon xml:id="front-colophon">
+
+        <credit>
+            <role>Cover Design</role>
+            <entity>Covers 4 U</entity>
+        </credit>
+        <credit>
+            <role>Production Editor</role>
+            <entity>Vilma Mesa</entity>
+        </credit>
 
         <edition>Annual Edition 2015</edition>
 
@@ -71,13 +80,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- A section of its own in HTML, migrates to copyright-page in LaTeX -->
     <!-- Titles are optional, presumably none for single author,           -->
     <!-- or for every author, even if we test a mix here                   -->
-    <biography>
+    <biography xml:id="author-bio-TWJ">
         <p>Thomas W. Judson did his undergraduate work in Illinois, his graduate work in Oregon and presently teaches in Texas.</p>
 
          <p>He likes to ride his bicycle in France, especially in the high Alps and Pyrenees on the roads of the Tour de France.</p>
     </biography>
 
-    <biography>
+    <biography xml:id="author-bio-RAB">
         <title>About Robert A. Beezer</title>
         <p>Rob Beezer designed, wrote, and tested the Sage exercises as a contribution to this open source project.</p>
 
@@ -90,7 +99,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     <!-- Each paragraph gets centered and has some vertical separatation -->
     <!-- A line element may be used here with a single paragraph   -->
-    <dedication>
+    <dedication xml:id="dedication">
         <p>
             <line>To students of algebra everywhere</line>
             <line>they are the reason</line>
@@ -98,11 +107,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <p>And to those who teach them</p>
     </dedication>
 
-    <acknowledgement>
+    <acknowledgement xml:id="acknowledgement">
 
-        <p>I would like to acknowledge the following reviewers for their helpful comments and suggestions. </p>
-
-        <ul>
+        <p>I would like to acknowledge the following reviewers for their helpful comments and suggestions.<ul>
             <li><p>David Anderson, University of Tennessee, Knoxville</p></li>
             <li><p>Robert Beezer, University of Puget Sound</p></li>
             <li><p>Myron Hood, California Polytechnic State University</p></li>
@@ -113,7 +120,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <li><p>Bruce Mericle, Mankato State University</p></li>
             <li><p>Kimmo Rosenthal, Union College</p></li>
             <li><p>Mark Teply, University of Wisconsin</p></li>
-        </ul>
+        </ul></p>
 
         <p>I would also like to thank Steve Quigley, Marnie Pommett, Cathie Griffin, Kelle Karshick, and the rest of the staff at PWS Publishing for their guidance throughout this project. It has been a pleasure to work with them.</p>
 
@@ -122,20 +129,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     </acknowledgement>
 
-    <preface>
+    <preface xml:id="preface">
 
         <p>This text is intended for a one or two-semester undergraduate course in  abstract algebra. Traditionally, these courses have covered the theoretical aspects of groups, rings, and fields.  However, with the development of computing in the last several decades, applications that involve abstract algebra and discrete mathematics have become increasingly important, and many science, engineering, and computer science students are now electing to minor in mathematics. Though theory still occupies a central role in the subject of abstract algebra and no student should go through such a course without a good notion of what a proof is, the importance of applications such as coding theory and cryptography has grown significantly.</p>
 
         <p>Until recently most abstract algebra texts included few if any applications. However, one of the major problems in teaching an abstract algebra course is that for many students it is their first encounter with an environment that requires them to do rigorous proofs. Such students often find it hard to see the use of learning to prove theorems and propositions; applied examples help the instructor provide motivation.</p>
 
-        <p>This text contains more material than can possibly be covered in a single semester.  Certainly there is adequate material for a two-semester course, and perhaps more; however, for a one-semester course it would be quite easy to omit selected chapters and still have a useful text.  The order of presentation of topics is standard: groups, then rings, and finally fields. Emphasis can be placed either on theory or on applications. A typical one-semester course might cover groups and rings while briefly touching on field theory, using Chapters<nbsp />1 through 6, 9, 10, 11, 13 (the first part), 16, 17, 18 (the first part), 20, and 21. Parts of these chapters could be deleted and applications substituted according to the interests of the students and the instructor. A two-semester course emphasizing theory might cover Chapters<nbsp />1 through 6, 9, 10, 11, 13 through 18, 20, 21, 22 (the first part), and 23. On the other hand, if applications are to be emphasized, the course might cover Chapters 1 through 14, and 16 through 22. In an applied course, some of the more theoretical results could be assumed or omitted. A chapter dependency chart appears below. (A broken line indicates a partial dependency.)  See the <xref ref="sample-book" autoname="title" >Table of Contents</xref> for more.</p>
+        <p>This text contains more material than can possibly be covered in a single semester.  Certainly there is adequate material for a two-semester course, and perhaps more; however, for a one-semester course it would be quite easy to omit selected chapters and still have a useful text.  The order of presentation of topics is standard: groups, then rings, and finally fields. Emphasis can be placed either on theory or on applications. A typical one-semester course might cover groups and rings while briefly touching on field theory, using Chapters<nbsp />1 through 6, 9, 10, 11, 13 (the first part), 16, 17, 18 (the first part), 20, and 21. Parts of these chapters could be deleted and applications substituted according to the interests of the students and the instructor. A two-semester course emphasizing theory might cover Chapters<nbsp />1 through 6, 9, 10, 11, 13 through 18, 20, 21, 22 (the first part), and 23. On the other hand, if applications are to be emphasized, the course might cover Chapters 1 through 14, and 16 through 22. In an applied course, some of the more theoretical results could be assumed or omitted. A chapter dependency chart appears below. (A broken line indicates a partial dependency.)  See the <xref ref="sample-book" text="title" >Table of Contents</xref> for more.</p>
+
+        <p>This real text has been used as the basis of a sample book for testing <pretext />.  So it is slowly migrating away from what the real book looks like and should not be construed as representative.  For example, we have reduced the book to four chapters, broken into two parts, <xref ref="part-basics" /> and <xref ref="part-algebra" />.  Indeed, that previous sentence was more an excuse to test some cross-references with parts in the structural case, such as this one to DeMoivre's Theorem, <xref ref="theorem-demoivre" />.</p>
 
 
-        <figure xml:id="figure-dependencies">
+        <sidebyside>
         <!-- Replaced figure with tikz figure - TWJ 6/14/2010 -->
 
             <image xml:id="preface-dependencies">
-                <latex-image-code>
+                <latex-image>
                     <![CDATA[
                     \begin{tikzpicture}[scale=0.8]
 
@@ -214,9 +223,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     \draw (1.5,13) -- (1.5,14) -- (3.5,14);
 
                     \end{tikzpicture}]]>
-                </latex-image-code>
+                </latex-image>
             </image>
-        </figure>
+        </sidebyside>
 
         <p>Though there are no specific prerequisites for a course in abstract algebra, students who have had other higher-level courses in mathematics will generally be more prepared than those who have not, because they will possess a bit more mathematical sophistication. Occasionally, we shall assume some basic linear algebra; that is, we shall take for granted an elementary knowledge of matrices and determinants. This should present no great problem, since most students taking a course in abstract algebra have been introduced to matrices and determinants elsewhere in their career, if they have not already taken a sophomore or junior-level course in linear algebra.</p>
 
@@ -237,8 +246,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     </preface>
 
-    <preface>
+    <preface xml:id="contributors">
         <title>Contributors to the 4<m>^\mathrm{th}</m> Edition</title>
+
+        <p>Many individuals have made this book possible.  We will try to thank a few of them here, and hope we have not forgotten anybody really important.</p>
 
         <contributors>
             <contributor xml:id="tjudson">
@@ -254,10 +265,40 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <email>farmer@aimath.org</email>
             </contributor>
 
-            <contributor xml:id="rbeezer">
+            <contributor>
                 <personname>Robert Beezer</personname>
                 <department>Department of Mathematics and Computer Science</department>
                 <institution>University of Puget Sound</institution>
+                <location>Tacoma, Washington, USA</location>
+                <email>beezer@pugetsound.edu</email>
+            </contributor>
+
+            <contributor>
+                <personname>Alex Jordan</personname>
+                <department>Department of Mathematics</department>
+                <institution>Portland Community College</institution>
+                <location>Portland, OR</location>
+                <email>alex.jordan@pcc.edu</email>
+            </contributor>
+
+            <contributor>
+                <personname>Thomas Judson</personname>
+                <department>Department of Mathematics and Statistics</department>
+                <institution>Stephen F. Austin State University</institution>
+                <email>judsontw@sfasu.edu</email>
+            </contributor>
+
+            <contributor>
+                <personname>David Farmer</personname>
+                <institution>American Institute of Mathematics</institution>
+                <email>farmer@aimath.org</email>
+            </contributor>
+
+            <contributor>
+                <personname>Robert Beezer</personname>
+                <department>Department of Mathematics and Computer Science</department>
+                <institution>University of Puget Sound</institution>
+                <location>Tacoma, Washington, USA</location>
                 <email>beezer@pugetsound.edu</email>
             </contributor>
 
@@ -265,9 +306,99 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <personname>Alex Jordan</personname>
                 <department>Department of Mathematics</department>
                 <institution>Portland Community College</institution>
+                <location>Portland, OR</location>
+                <email>alex.jordan@pcc.edu</email>
+            </contributor>
+
+            <contributor>
+                <personname>Thomas Judson</personname>
+                <department>Department of Mathematics and Statistics</department>
+                <institution>Stephen F. Austin State University</institution>
+                <email>judsontw@sfasu.edu</email>
+            </contributor>
+
+            <contributor>
+                <personname>David Farmer</personname>
+                <institution>American Institute of Mathematics</institution>
+                <email>farmer@aimath.org</email>
+            </contributor>
+
+            <contributor>
+                <personname>Robert Beezer</personname>
+                <department>Department of Mathematics and Computer Science</department>
+                <institution>University of Puget Sound</institution>
+                <location>Tacoma, Washington, USA</location>
+                <email>beezer@pugetsound.edu</email>
+            </contributor>
+
+            <contributor>
+                <personname>Alex Jordan</personname>
+                <department>Department of Mathematics</department>
+                <institution>Portland Community College</institution>
+                <location>Portland, OR</location>
+                <email>alex.jordan@pcc.edu</email>
+            </contributor>
+
+            <contributor>
+                <personname>Thomas Judson</personname>
+                <department>Department of Mathematics and Statistics</department>
+                <institution>Stephen F. Austin State University</institution>
+                <email>judsontw@sfasu.edu</email>
+            </contributor>
+
+            <contributor>
+                <personname>David Farmer</personname>
+                <institution>American Institute of Mathematics</institution>
+                <email>farmer@aimath.org</email>
+            </contributor>
+
+            <contributor xml:id="rbeezer">
+                <personname>Robert Beezer</personname>
+                <department>Department of Mathematics and Computer Science</department>
+                <institution>University of Puget Sound</institution>
+                <location>Tacoma, Washington, USA</location>
+                <email>beezer@pugetsound.edu</email>
+            </contributor>
+
+            <contributor>
+                <personname>Alex Jordan</personname>
+                <department>Department of Mathematics</department>
+                <institution>Portland Community College</institution>
+                <location>Portland, OR</location>
+                <email>alex.jordan@pcc.edu</email>
+            </contributor>
+
+            <contributor>
+                <personname>Thomas Judson</personname>
+                <department>Department of Mathematics and Statistics</department>
+                <institution>Stephen F. Austin State University</institution>
+                <email>judsontw@sfasu.edu</email>
+            </contributor>
+
+            <contributor>
+                <personname>David Farmer</personname>
+                <institution>American Institute of Mathematics</institution>
+                <email>farmer@aimath.org</email>
+            </contributor>
+
+            <contributor>
+                <personname>Robert Beezer</personname>
+                <department>Department of Mathematics and Computer Science</department>
+                <institution>University of Puget Sound</institution>
+                <location>Tacoma, Washington, USA</location>
+                <email>beezer@pugetsound.edu</email>
+            </contributor>
+
+            <contributor>
+                <personname>Alex Jordan</personname>
+                <department>Department of Mathematics</department>
+                <institution>Portland Community College</institution>
+                <location>Portland, OR</location>
                 <email>alex.jordan@pcc.edu</email>
             </contributor>
         </contributors>
+
+        <p>That's it.  Thanks everybody.</p>
 
     </preface>
 

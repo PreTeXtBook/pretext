@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- This file is part of the documentation of MathBook XML   -->
+<!--   This file is part of the documentation of PreTeXt      -->
 <!--                                                          -->
-<!--    MathBook XML Author's Guide                           -->
+<!--      PreTeXt Author's Guide                              -->
 <!--                                                          -->
 <!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
 <!-- See the file COPYING for copying conditions.             -->
@@ -11,7 +11,7 @@
     <title>(*) Text Editors</title>
 
     <introduction>
-        <p>This appendix has information about using various text editors efficiently with MathBook <init>XML</init> source.  The choice of an editor that suits you is a big part of being a productive author.  Despite not being open source, we are partial to Sublime Text, due to its unlimited trial period, reasonable licensing (cost and terms), range of features, and cross-platform support.  So we lead with Sublime Text, but also include Emacs and XML Copy Editor.</p>
+        <p>This appendix has information about using various text editors efficiently with MathBook <init>XML</init> source.  The choice of an editor that suits you is a big part of being a productive author.  Despite not being open source, we are partial to Sublime Text, due to its unlimited trial period, reasonable licensing (cost and terms), range of features, and cross-platform support.  So we lead with Sublime Text, but also include Emacs and XML Copy Editor.  A summary table of schema-aware editors can be found at <xref ref="editors-supporting-schema" />.</p>
     </introduction>
 
     <section xml:id="section-sublime-text">
@@ -209,13 +209,13 @@
                 <p>There are only a few features implemented so far.</p>
                 <ol>
                     <li>
-                        <p>If you have some sectioning in your MBX file, hit <c>Ctrl+R</c> (<c>Cmd+R</c> on <init>OS X</init>) to run the Go To Symbol command. You should see a panel showing all the subdivisions' <c>@xml:id</c> names.</p>
+                        <p>If you have some sectioning in your MBX file, hit <c>Ctrl+R</c> (<c>Cmd+R</c> on <init>OS X</init>) to run the Go To Symbol command. You should see a panel showing all the divisions' <c>@xml:id</c> names.</p>
                     </li>
                     <li>
                         <p>If you have been using <c>@xml:id</c> to label your stuff, try typing <c>&lt;xref ref="</c> (the beginning of a cross-reference). Sublime Text should show you a panel containing all <c>@xml:id</c> values along with the elements they go with. Choose one to insert it at the caret and close the <c>xref</c> tag. Alternatively, type <c>ref</c> and hit <c>Tab</c> to activate the <c>xref</c> snippet. Then hit <c>Ctrl+l</c> followed by <c>x</c> or <c>Ctrl+l</c> followed by <c>Ctrl+Space</c> to bring up the completions menu. There are several variants of the <c>ref</c> snippet, namely <c>refa</c>, <c>refp</c>, and <c>refpa</c>.</p>
                     </li>
                     <li>
-                        <p>Type <c>chp</c>, <c>sec</c>, <c>ssec</c>, or <c>sssec</c> and hit <c>Tab</c> to activate the subdivision snippets. A blank <c>title</c> element is provided and the cursor positioned within it. As you type, the <c>@xml:id</c> field for the subdivision is filled with similar text mirroring the title you are entering.</p>
+                        <p>Type <c>chp</c>, <c>sec</c>, <c>ssec</c>, or <c>sssec</c> and hit <c>Tab</c> to activate the division snippets. A blank <c>title</c> element is provided and the cursor positioned within it. As you type, the <c>@xml:id</c> field for the division is filled with similar text mirroring the title you are entering.</p>
                     </li>
                 </ol>
             </subsubsection>
@@ -261,7 +261,7 @@
     <section xml:id="emacs">
         <title>emacs</title>
 
-        <p>Jason Underdown reports on 2016-05-12 that emacs' <url href="https://www.gnu.org/software/emacs/manual/html_mono/nxml-mode.html">nXML mode</url> (<c>www.gnu.org/software/emacs/manual/html_mono/nxml-mode.html</c>) works well with a <acro>RELAX-NG</acro> schema.  While we work on building a hand-crafted <acro>RELAX-NG</acro> schema, you can use the <url href="http://www.thaiopensource.com/relaxng/trang.html">trang</url> (<c>www.thaiopensource.com/relaxng/trang.html</c>) tool to convert the MathBook XML <init>DTD</init> to a <acro>RELAX-NG</acro> schema.</p>
+        <p>Jason Underdown reports on 2016-05-12 that emacs' <url href="https://www.gnu.org/software/emacs/manual/html_mono/nxml-mode.html">nXML mode</url> (<c>www.gnu.org/software/emacs/manual/html_mono/nxml-mode.html</c>) works well with a <acro>RELAX-NG</acro> schema.  While we work on building a hand-crafted <acro>RELAX-NG</acro> schema, you can use the <url href="http://www.thaiopensource.com/relaxng/trang.html">trang</url> (<c>www.thaiopensource.com/relaxng/trang.html</c>) tool to convert the <pretext /> <init>DTD</init> to a <acro>RELAX-NG</acro> schema.</p>
 
         <blockquote>
             <p>You simply put your cursor at any point in the document, start a new tag with <c>&lt;</c> and then call the <c>completion-at-point</c> function (I bound it to the key-chord: <c>C-&lt;return&gt;</c>) to get a list of possible completions. Or you can start typing a few characters to narrow the list of possibilities. It will also let you know if the element you are trying to insert is invalid.</p>
