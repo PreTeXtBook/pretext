@@ -4214,7 +4214,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- enumeration style to HTML list-style-type       -->
 <!-- NB: this is currently inferior to latex version -->
 <!-- NB: all pre-, post-formatting is lost           -->
-<xsl:template match="ol" mode="html-list-label">
+<xsl:template match="ol" mode="html-list-class">
     <xsl:variable name="mbx-format-code">
         <xsl:apply-templates select="." mode="format-code" />
     </xsl:variable>
@@ -4230,7 +4230,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<xsl:template match="ul" mode="html-list-label">
+<xsl:template match="ul" mode="html-list-class">
     <xsl:variable name="mbx-format-code">
         <xsl:apply-templates select="." mode="format-code" />
     </xsl:variable>
@@ -4238,7 +4238,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$mbx-format-code = 'disc'">disc</xsl:when>
         <xsl:when test="$mbx-format-code = 'circle'">circle</xsl:when>
         <xsl:when test="$mbx-format-code = 'square'">square</xsl:when>
-        <xsl:when test="$mbx-format-code = 'none'">none</xsl:when>
+        <xsl:when test="$mbx-format-code = 'none'">no-marker</xsl:when>
         <xsl:otherwise>
             <xsl:message>MBX:BUG: bad MBX unordered list label format code in HTML conversion</xsl:message>
         </xsl:otherwise>
@@ -4255,16 +4255,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="insert-paragraph-id" >
             <xsl:with-param name="b-original" select="$b-original" />
         </xsl:apply-templates>
-        <xsl:if test="@cols">
-            <xsl:attribute name="class">
+        <xsl:attribute name="class">
+            <xsl:apply-templates select="." mode="html-list-class" />
+            <xsl:if test="@cols">
+                <xsl:text> </xsl:text>
                 <!-- HTML-specific, but in mathbook-common.xsl -->
                 <xsl:apply-templates select="." mode="number-cols-CSS-class" />
-            </xsl:attribute>
-        </xsl:if>
-        <xsl:attribute name="style">
-            <xsl:text>list-style-type: </xsl:text>
-                <xsl:apply-templates select="." mode="html-list-label" />
-            <xsl:text>;</xsl:text>
+            </xsl:if>
         </xsl:attribute>
         <xsl:apply-templates select="li">
             <xsl:with-param name="b-original" select="$b-original" />
@@ -4277,7 +4274,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- tunnel duplication flag to list items -->
 <xsl:template match="dl">
     <xsl:param name="b-original" select="true()" />
-    <xsl:element name="dl">
+    <dl>
         <xsl:apply-templates select="." mode="insert-paragraph-id" >
             <xsl:with-param name="b-original" select="$b-original" />
         </xsl:apply-templates>
@@ -4295,7 +4292,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="li">
             <xsl:with-param name="b-original" select="$b-original" />
         </xsl:apply-templates>
-    </xsl:element>
+    </dl>
 </xsl:template>
 
 <!-- ############################# -->
