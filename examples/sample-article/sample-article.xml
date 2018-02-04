@@ -3579,12 +3579,36 @@ the xsltproc executable.
         </section>
 
 
-        <section>
+        <section xml:id="section-interactive">
             <title>Embedded Interactive Elements</title>
+            <idx>interactive elements</idx>
+            <idx>embedded interactive elements</idx>
 
             <introduction>
-                <p>When outputting Web page versions, it is possible to embed a variety of dynamic interactive elements.  In a <latex />/PDF version, these will necessarily need to be replaced by some static substitute, such as a screenshot.  See Section<nbsp /><xref ref="section-sage-cells" /> for the specifics of embedding instances of the Sage Cell Server.</p>
+                <p>When outputting Web page versions, it is possible to embed a variety of dynamic interactive elements.  In a <latex />/PDF version, these will necessarily need to be replaced by some static substitute, such as a screenshot.  See Section<nbsp /><xref ref="section-sage-cells" /> for the specifics of embedding instances of the Sage Cell Server, which is more elaborate, and not entirely similar.</p>
+
+                <p>(2018-02-04) Almost everything in this section is under active development and not stable yet.  Feel free to experiment and make suggestions and requests.</p>
             </introduction>
+
+            <subsection>
+                <title>Geogebra Materials</title>
+                <idx>Geogebra materials</idx>
+
+                <p>A Geogebra <term>material</term> is something you might use in a class.  It could also be called an interactive demonstration.  Go browsing at <url href="https://www.geogebra.org/materials/">www.geogebra.org/materials</url> and find something appropriate for your project.  Or make an account and create your own.</p>
+
+                <p>Once you find a material that looks instructive, it will be at a <init>URL</init> such as<cd>https://www.geogebra.org/m/KGn2d4Qd</cd> and you want to pick off the identifier on the end, in this case <c>KGn2d4Qd</c>.  Then author<cd>&lt;interactive geogebra="KGn2d4Qd" /&gt;</cd>  At this writing (2018-02-04) you will want to place this inside a <c>figure</c>, with a caption, as we do right now with material <c>KGn2d4Qd</c>.</p>
+
+                <figure>
+                    <caption>Right Triangle Paradox</caption>
+                    <interactive geogebra="KGn2d4Qd">
+                        <static>
+                            <image source="images/right-triangle-paradox.png" />
+                        </static>
+                    </interactive>
+                </figure>
+
+                <p>Note that materials hosted at <c>geogebra.org</c> have a non-standard, non-commercial license you must agree to before you can download them as source code.  Perhaps you must forfeit your copyright when you upload a material?  We have not investigated this thoroughly.</p>
+            </subsection>
 
             <subsection>
                 <title>JSXGraph</title>

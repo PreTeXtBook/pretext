@@ -5428,6 +5428,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- ############ -->
+<!-- Interactives -->
+<!-- ############ -->
+
+<!-- Geogebra -->
+<xsl:template match="interactive[@geogebra]" mode="info-text">
+    <xsl:text>Geogebra: \href{https://www.geogebra.org/m/</xsl:text>
+    <xsl:value-of select="@geogebra" />
+    <xsl:text>}{\mono{www.geogebra.org/m/</xsl:text>
+    <xsl:value-of select="@geogebra" />
+    <xsl:text>}}</xsl:text>
+</xsl:template>
+
+<!-- Static interactives -->
+<!-- Contents of "static" element, plus    -->
+<!-- a line of information below, per type -->
+<xsl:template match="interactive[@geogebra]">
+    <xsl:apply-templates select="static/*" />
+    <xsl:text>\centerline{</xsl:text>
+    <xsl:apply-templates select="." mode="info-text" />
+    <xsl:text>}&#xa;</xsl:text>
+</xsl:template>
+
 <!-- JSXGraph -->
 <xsl:template match="jsxgraph">
     <xsl:text>\par\smallskip\centerline{A JSXGraph interactive demonstration goes here in interactive output.}\smallskip&#xa;</xsl:text>

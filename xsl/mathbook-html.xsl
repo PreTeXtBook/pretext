@@ -7019,6 +7019,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:call-template>
 </xsl:template>
 
+<!-- ############ -->
+<!-- Interactives -->
+<!-- ############ -->
+
+<!-- Interactive goodies to embed, with a general -->
+<!-- interface but specific implementations       -->
+
+<!-- TODO: -->
+<!-- sizing:  width x aspect-ratio -->
+<!-- internal-id:  migrate to iframes -->
+<!-- titles:  migrate to iframes -->
+
+<!-- PTX source will include a "static" -->
+<!-- element, which we routinely ignore -->
+
+<!-- Geogebra -->
+<xsl:template match="interactive[@geogebra]">
+    <iframe scrolling="no" src="https://www.geogebra.org/material/iframe/id/{@geogebra}/width/800/height/450/border/888888/smb/false/stb/false/stbh/false/ai/false/asb/false/sri/false/rc/false/ld/false/sdz/false/ctl/false" width="800px" height="450px" />
+</xsl:template>
 
 <!-- JSXGraph -->
 <xsl:template match="jsxgraph">
