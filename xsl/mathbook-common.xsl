@@ -7350,6 +7350,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="date-string" select="'2017-08-25'" />
         <xsl:with-param name="message" select="'the &quot;latex-image-code&quot; element has been replaced by the functionally equivalent &quot;latex-image&quot;'" />
     </xsl:call-template>
+    <!--  -->
+    <!-- 2018-02-04  geogebra-applet gone -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurences" select="$document-root//geogebra-applet" />
+        <xsl:with-param name="date-string" select="'2018-02-04'" />
+        <xsl:with-param name="message" select="'the &quot;geogebra-applet&quot; element has been removed, investigate newer &quot;interactive&quot; element'" />
+    </xsl:call-template>
 </xsl:template>
 
 <!-- Miscellaneous -->
