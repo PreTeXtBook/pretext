@@ -5441,10 +5441,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}}</xsl:text>
 </xsl:template>
 
+<!-- Desmos -->
+<xsl:template match="interactive[@desmos]" mode="info-text">
+    <xsl:text>Desmos: \href{https://www.desmos.com/calculator/</xsl:text>
+    <xsl:value-of select="@desmos" />
+    <xsl:text>}{\mono{www.desmos.com/calculator/</xsl:text>
+    <xsl:value-of select="@desmos" />
+    <xsl:text>}}&#xa;</xsl:text>
+</xsl:template>
+
 <!-- Static interactives -->
 <!-- Contents of "static" element, plus    -->
 <!-- a line of information below, per type -->
-<xsl:template match="interactive[@geogebra]">
+<xsl:template match="interactive[@geogebra]|interactive[@geogebra]">
     <xsl:apply-templates select="static/*" />
     <xsl:text>\centerline{</xsl:text>
     <xsl:apply-templates select="." mode="info-text" />

@@ -3611,6 +3611,26 @@ the xsltproc executable.
             </subsection>
 
             <subsection>
+                <title>Desmos Graphs</title>
+                <idx>Desmos graphs</idx>
+
+                <p><term>Desmos</term> provides interactive graphing applications.  The following example was created by Ann Cary and made available via the <q>Share</q> function of Desmos.  You can make your own Desmos graph, choose the <q>Share</q> icon, and the <q>Embed</q> option, to get a <init>URL</init> such as <cd>https://www.desmos.com/calculator/ttox1bvxku</cd>  You want to pick off the identifier on the end, in this case <c>ttox1bvxku</c>, then author<cd>&lt;interactive desmos="ttox1bvxku" /&gt;</cd> as we have done here.</p>
+
+                <p>The static image employed in the <latex /> version of this article was obtained by viewing the graph at the Desmos site (<ie />, not the embedded version in the <pretext /> HTML version), and using the Share button to export a <init>PNG</init> image.  In this case, we used a <q>Medium Rectangle</q> and <q>Thick</q> lines.</p>
+
+                <figure>
+                    <caption>Graph of <m>ln(x^2+5)-3</m></caption>
+                    <interactive desmos="ttox1bvxku">
+                        <static>
+                            <image source="images/desmos-graph.png" width="60%"/>
+                        </static>
+                    </interactive>
+                </figure>
+
+                <p>Note that Desmos has extensive <booktitle>Terms of Service</booktitle> which include restrictions on commercial uses.</p>
+            </subsection>
+
+            <subsection>
                 <title>JSXGraph</title>
                 <idx>JSXGraph</idx>
 

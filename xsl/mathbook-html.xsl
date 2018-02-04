@@ -7039,6 +7039,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <iframe scrolling="no" src="https://www.geogebra.org/material/iframe/id/{@geogebra}/width/800/height/450/border/888888/smb/false/stb/false/stbh/false/ai/false/asb/false/sri/false/rc/false/ld/false/sdz/false/ctl/false" width="800px" height="450px" />
 </xsl:template>
 
+<!-- Desmos -->
+<xsl:template match="interactive[@desmos]">
+    <iframe src="https://www.desmos.com/calculator/{@desmos}" width="400" height="600" />
+</xsl:template>
+
 <!-- JSXGraph -->
 <xsl:template match="jsxgraph">
     <!-- interpret @width percentage and @aspect ratio -->
