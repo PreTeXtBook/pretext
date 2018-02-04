@@ -616,7 +616,6 @@
       <xs:element ref="poem"/>
       <xs:element ref="assemblage"/>
       <xs:element ref="list-of"/>
-      <xs:element ref="geogebra-applet"/>
       <xs:element ref="demonstration"/>
     </xs:choice>
   </xs:group>
@@ -3252,15 +3251,6 @@
   <xs:element name="solution-list">
     <xs:complexType/>
   </xs:element>
-  <xs:element name="geogebra-applet">
-    <xs:complexType>
-      <xs:sequence minOccurs="0">
-        <xs:element ref="ggbBase64"/>
-        <xs:group ref="Figure"/>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="ggbBase64" type="xs:string"/>
   <xs:element name="demonstration">
     <xs:complexType>
       <xs:sequence>

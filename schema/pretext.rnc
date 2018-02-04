@@ -289,7 +289,7 @@
             Remark | Computation | Theorem | Proof | Definition |
             Axiom | Example | Exercise | Project |
             Poem | Assemblage | ListGenerator |
-            GGB | Demonstration
+            Demonstration
         
         
         Prelude =
@@ -1451,12 +1451,6 @@
             element solution-list {empty}
         
         
-        GGB = 
-            element geogebra-applet {
-                empty |
-                (element ggbBase64 {text},
-                Figure)
-            }
         Demonstration = element demonstration {
             Title,
             Paragraph,

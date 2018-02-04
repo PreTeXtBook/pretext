@@ -635,7 +635,6 @@
       <ref name="Poem"/>
       <ref name="Assemblage"/>
       <ref name="ListGenerator"/>
-      <ref name="GGB"/>
       <ref name="Demonstration"/>
     </choice>
   </define>
@@ -3303,19 +3302,6 @@
   <define name="SolutionList">
     <element name="solution-list">
       <empty/>
-    </element>
-  </define>
-  <define name="GGB">
-    <element name="geogebra-applet">
-      <choice>
-        <empty/>
-        <group>
-          <element name="ggbBase64">
-            <text/>
-          </element>
-          <ref name="Figure"/>
-        </group>
-      </choice>
     </element>
   </define>
   <define name="Demonstration">
