@@ -3778,15 +3778,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:apply-templates select="." mode="internal-id" />
                     </xsl:attribute>
                 </xsl:if>
-                <xsl:if test="parent::*[@cols]">
-                    <xsl:attribute name="style">
-                        <xsl:text>width:</xsl:text>
-                        <xsl:value-of select="98 div parent::*/@cols" />
-                        <xsl:text>%;</xsl:text>
-                        <xsl:text> </xsl:text>
-                        <xsl:text>float:left;</xsl:text>
-                    </xsl:attribute>
-                </xsl:if>
                 <xsl:apply-templates>
                     <xsl:with-param name="b-original" select="$b-original" />
                 </xsl:apply-templates>
