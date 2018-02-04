@@ -7020,69 +7020,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<!-- Geogebra                               -->
-<!-- Empty cell for scribbling if empty tag -->
-<!-- From Bruce Cohen's Sage iFrame demo    -->
-<xsl:template match="geogebra-applet[not(ggbBase64)]">
-<table border="0" width="750">
-<tr><td>
-<applet name="ggbApplet" code="geogebra.GeoGebraApplet" archive="geogebra.jar"
-        codebase="https://www.geogebra.org/webstart/3.2/"
-        width="750" height="550" mayscript="true">
-        <param name="ggbBase64" value="UEsDBBQACAAIAMeAzj4AAAAAAAAAAAAAAAAMAAAAZ2VvZ2VicmEueG1srVQ9b9swEJ2bX0Fwb6yPuEgAyUGbLgGCdnCboRslnaWrKVIgKcfKr++RlGzHcyfq3j3evfugisdjL9kBjEWtSp7eJpyBqnWDqi356Haf7/nj5qZoQbdQGcF22vTClTy/zbjHR9zcfCpsp9+YkIHyivBW8p2QFjizgwHR2A7AfcDFeESJwkw/q79QO3t2xCDPahgpizMjYXXfvKBdzFVIOEh03/GADRgmdV3yL2uSTl+vYBzWQpb8LolIVvLsyklQ7r2dNviulfP0c3ApKpDUgK2bJDB28N48unZEZsziO1CzMo8Vq9CDAsZaYoNC+TqDRCIx9oaN60r+ELIBth2Vsb5LY7Raa9NsJ+ugZ8c/YDSJTnM/gyla2X2YiCXJlHCdBNelFcLAYQvOkWDLxBHOvWwNNh+MZ/tNyzM0aFTuSQxuNGHc+QyFuktOuYwX/FW1EmYspWl0UO8rfdzGJuQx9K9pCFeCoKp90lIbZnzn10SYzyqegeOVnlhJ4CSBMcfwQU/+9CELjHBW8YyjQhWlzZWnS9VpsqRByzzg20hbeio+DLnknI0K3cti0Hbsz6X6Cz/GvqLncbkfp5jp/4pZrK7Wp9iDUSDjkiia7ahHGzcx5gpCGqixJzM65pYIP67fJCCiDbQGFuHxccWGBW9yuYhXcLFaRHgNlrTWjv4SVI/ztUA/uIktPwb/pB09p5JXWHPWCEcU/4dYXd4Nz2W+sfkHUEsHCLTMTSIiAgAAfAQAAFBLAQIUABQACAAIAMeAzj60zE0iIgIAAHwEAAAMAAAAAAAAAAAAAAAAAAAAAABnZW9nZWJyYS54bWxQSwUGAAAAAAEAAQA6AAAAXAIAAAAA"/>
-        <param name="image" value="https://www.geogebra.org/webstart/loading.gif"  />
-        <param name="boxborder" value="false"  />
-        <param name="centerimage" value="true"  />
-        <param name="java_arguments" value="-Xmx512m -Djnlp.packEnabled=true" />
-        <param name="cache_archive" value="geogebra.jar, geogebra_main.jar, geogebra_gui.jar, geogebra_cas.jar, geogebra_export.jar, geogebra_properties.jar" />
-        <param name="cache_version" value="3.2.47.0, 3.2.47.0, 3.2.47.0, 3.2.47.0, 3.2.47.0, 3.2.47.0" />
-        <param name="framePossible" value="true" />
-        <param name="showResetIcon" value="true" />
-        <param name="showAnimationButton" value="true" />
-        <param name="enableRightClick" value="true" />
-        <param name="errorDialogsActive" value="true" />
-        <param name="enableLabelDrags" value="true" />
-        <param name="showMenuBar" value="true" />
-        <param name="showToolBar" value="true" />
-        <param name="showToolBarHelp" value="true" />
-        <param name="showAlgebraInput" value="true" />
-        <param name="allowRescaling" value="true" />
-This is a Java Applet created using GeoGebra from www.geogebra.org - it looks like you don't have Java installed, please go to www.java.com
-</applet>
-</td></tr></table>
-</xsl:template>
-
-<!-- Pre-built Geogebra demonstrations based on ggbBase64 strings -->
-<xsl:template match="geogebra-applet[ggbBase64]">
-<xsl:variable name="ggbBase64"><xsl:value-of select="ggbBase64" /></xsl:variable>
-<table border="0" width="750">
-<tr><td>
-<applet name="ggbApplet" code="geogebra.GeoGebraApplet" archive="geogebra.jar"
-        codebase="https://www.geogebra.org/webstart/3.2/unsigned/"
-        width="750" height="441" mayscript="true">
-        <param name="ggbBase64" value="{$ggbBase64}"/>
-        <param name="image" value="https://www.geogebra.org/webstart/loading.gif"  />
-        <param name="boxborder" value="false"  />
-        <param name="centerimage" value="true"  />
-        <param name="java_arguments" value="-Xmx512m -Djnlp.packEnabled=true" />
-        <param name="cache_archive" value="geogebra.jar, geogebra_main.jar, geogebra_gui.jar, geogebra_cas.jar, geogebra_export.jar, geogebra_properties.jar" />
-        <param name="cache_version" value="3.2.47.0, 3.2.47.0, 3.2.47.0, 3.2.47.0, 3.2.47.0, 3.2.47.0" />
-        <param name="framePossible" value="false" />
-        <param name="showResetIcon" value="false" />
-        <param name="showAnimationButton" value="true" />
-        <param name="enableRightClick" value="false" />
-        <param name="errorDialogsActive" value="true" />
-        <param name="enableLabelDrags" value="false" />
-        <param name="showMenuBar" value="false" />
-        <param name="showToolBar" value="false" />
-        <param name="showToolBarHelp" value="false" />
-        <param name="showAlgebraInput" value="false" />
-        <param name="allowRescaling" value="true" />
-This is a Java Applet created using GeoGebra from www.geogebra.org - it looks like you don't have Java installed, please go to www.java.com
-</applet>
-</td></tr></table>
-</xsl:template>
-
 <!-- JSXGraph -->
 <xsl:template match="jsxgraph">
     <!-- interpret @width percentage and @aspect ratio -->
