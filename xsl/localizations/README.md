@@ -30,6 +30,8 @@ There is a [general overview of language tags](http://www.w3.org/International/a
 
 Contibutions of new languages are always welcome and especially encouraged! Search on "Translation needed" to see where you can help. Use the  en-US  file as a template for a new language file, since it is always most complete.
 
+Additions to incomplete files, or new files for additional languages, are very welcome and are a huge help in making PreTeXt useable for more authors.  A GitHub pull request is preferable.  If you do not know GitHub well, then emailing the entire language file (as an attachment) is very welcome and just as easy to deal with on our end.
+
 To test, or use: place  `xml:lang="es-ES"`, or similar, as an attribute on your `<mathbook>` element.  `en-US` is the default if no `@xml:lang` attribute is given on the `mathbook` element.
 
 Current (partially) implemented language codes and contributors
