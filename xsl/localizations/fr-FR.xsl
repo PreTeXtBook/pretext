@@ -32,26 +32,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id="theorem">Théorème</localization>
     <localization string-id="corollary">Corollaire</localization>
     <localization string-id="lemma">Lemme</localization>
-    <!-- <localization string-id='algorithm'><xsl:text>XX</xsl:text></localization> -->
+    <localization string-id='algorithm'><xsl:text>Algorithme</xsl:text></localization>
     <localization string-id='proposition'><xsl:text>Proposition</xsl:text></localization>
     <localization string-id='claim'><xsl:text>Affirmation</xsl:text></localization>
     <localization string-id='fact'><xsl:text>Fait</xsl:text></localization>
-    <!-- <localization string-id='identity'><xsl:text>Identity</xsl:text></localization> -->
+    <localization string-id='identity'><xsl:text>Identité</xsl:text></localization>
     <localization string-id='proof'><xsl:text>Démonstration</xsl:text></localization>
-    <!-- <localization string-id='case'><xsl:text>Case</xsl:text></localization> -->
+    <localization string-id='case'><xsl:text>Cas</xsl:text></localization>
     <!-- Mathematical statements without proofs -->
     <!-- AXIOM-LIKE blocks -->
     <localization string-id='axiom'><xsl:text>Axiome</xsl:text></localization>
     <localization string-id='conjecture'><xsl:text>Conjecture</xsl:text></localization>
     <localization string-id='principle'><xsl:text>Principe</xsl:text></localization>
     <!-- <localization string-id='heuristic'><xsl:text>Heuristic</xsl:text></localization> -->
-    <!-- <localization string-id='hypothesis'><xsl:text>Hypothesis</xsl:text></localization> -->
+    <localization string-id='hypothesis'><xsl:text>Hypothèse</xsl:text></localization>
     <!-- <localization string-id='assumption'><xsl:text>Assumption</xsl:text></localization> -->
     <!-- Definitions -->
     <localization string-id='definition'><xsl:text>Définition</xsl:text></localization>
     <!-- Equations, when referenced by number -->
-    <!-- <localization string-id='men'><xsl:text>Equation</xsl:text></localization> -->
-    <!-- <localization string-id='mrow'><xsl:text>Equation</xsl:text></localization> -->
+    <localization string-id='men'><xsl:text>Équation</xsl:text></localization>
+    <localization string-id='mrow'><xsl:text>Équation</xsl:text></localization>
     <!-- Types of documents, mostly for informational messages -->
     <localization string-id='volume'><xsl:text>Volume</xsl:text></localization>
     <localization string-id='book'><xsl:text>Livre</xsl:text></localization>
@@ -69,7 +69,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='subsubsection'><xsl:text>Sous-sous-section</xsl:text></localization>
     <localization string-id='exercises'><xsl:text>Exercices</xsl:text></localization>
     <localization string-id='references'><xsl:text>Références</xsl:text></localization>
-    <!-- <localization string-id='backmatter'><xsl:text>Back Matter</xsl:text></localization> -->
+    <localization string-id='backmatter'><xsl:text>Appendices</xsl:text></localization>
     <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
     <localization string-id='paragraphs'><xsl:text>Paragraphes</xsl:text></localization>  <!--checked-->
     <localization string-id='subparagraph'><xsl:text>Sous-paragraphe</xsl:text></localization> <!--checked-->
@@ -77,45 +77,45 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- REMARK-LIKE blocks -->
     <!-- "note" is used within "biblio", likely to change -->
     <localization string-id='remark'><xsl:text>Remarque</xsl:text></localization>
-    <!-- <localization string-id='convention'><xsl:text>Convention</xsl:text></localization> -->
-    <!-- <localization string-id='note'><xsl:text>Note</xsl:text></localization> -->
-    <!-- <localization string-id='observation'><xsl:text>Observation</xsl:text></localization> -->
-    <!-- <localization string-id='warning'><xsl:text>Warning</xsl:text></localization> -->
+    <localization string-id='convention'><xsl:text>Convention</xsl:text></localization>
+    <localization string-id='note'><xsl:text>Note</xsl:text></localization>
+    <localization string-id='observation'><xsl:text>Observation</xsl:text></localization>
+    <localization string-id='warning'><xsl:text>Mise en garde</xsl:text></localization>
     <!-- <localization string-id='insight'><xsl:text>Insight</xsl:text></localization> -->
-    <!-- <localization string-id='computation'><xsl:text>Computation</xsl:text></localization> -->
+    <localization string-id='computation'><xsl:text>Calcul</xsl:text></localization>
     <!-- <localization string-id='technology'><xsl:text>Technology</xsl:text></localization> -->
     <!-- ASIDE-LIKE blocks -->
-    <!-- <localization string-id='aside'><xsl:text>Aside</xsl:text></localization> -->
-    <!-- <localization string-id='biographical'><xsl:text>Biographical Aside</xsl:text></localization> -->
-    <!-- <localization string-id='historical'><xsl:text>Historical Aside</xsl:text></localization> -->
+    <localization string-id='aside'><xsl:text>Digression</xsl:text></localization>
+    <localization string-id='biographical'><xsl:text>Digression biographique</xsl:text></localization>
+    <localization string-id='historical'><xsl:text>Digression historique</xsl:text></localization>
     <!-- EXAMPLE-LIKE blocks -->
     <localization string-id='example'><xsl:text>Exemple</xsl:text></localization> <!--checked-->
-    <!-- <localization string-id='question'><xsl:text>Question</xsl:text></localization> -->
-    <!-- <localization string-id='problem'><xsl:text>Problem</xsl:text></localization> -->
+    <localization string-id='question'><xsl:text>Question</xsl:text></localization>
+    <localization string-id='problem'><xsl:text>Problème</xsl:text></localization>
     <!-- PROJECT-LIKE blocks -->
-    <!-- <localization string-id='project'><xsl:text>Project</xsl:text></localization> -->
-    <!-- <localization string-id='activity'><xsl:text>Activity</xsl:text></localization> -->
-    <!-- <localization string-id='exploration'><xsl:text>Exploration</xsl:text></localization> -->
-    <!-- <localization string-id='task'><xsl:text>Task</xsl:text></localization> -->
+    <localization string-id='project'><xsl:text>Projet</xsl:text></localization>
+    <localization string-id='activity'><xsl:text>Activité</xsl:text></localization>
+    <localization string-id='exploration'><xsl:text>Exploration</xsl:text></localization>
+    <localization string-id='task'><xsl:text>Tâche</xsl:text></localization>
     <!-- <localization string-id='investigation'><xsl:text>Investigation</xsl:text></localization> -->
     <!--  -->
     <!-- assemblages are collections of minimally structured material -->
-    <!-- <localization string-id='assemblage'><xsl:text>Assemblage</xsl:text></localization> -->
-    <!-- <localization string-id='poem'><xsl:text>Poem</xsl:text></localization> -->
+    <localization string-id='assemblage'><xsl:text>Assemblage</xsl:text></localization>
+    <localization string-id='poem'><xsl:text>Poème</xsl:text></localization>
     <!-- Objectives is the block, objective is a list item within -->
-    <!-- <localization string-id='objectives'><xsl:text>Objectives</xsl:text></localization> -->
-    <!-- <localization string-id='objective'><xsl:text>Objective</xsl:text></localization> -->
+    <localization string-id='objectives'><xsl:text>Objectifs</xsl:text></localization>
+    <localization string-id='objective'><xsl:text>Objectif</xsl:text></localization>
     <!--  -->
     <localization string-id='figure'><xsl:text>Figure</xsl:text></localization>
     <localization string-id='table'><xsl:text>Table</xsl:text></localization>
     <localization string-id='fn'><xsl:text>Note de bas de page</xsl:text></localization> <!--checked-->
     <!-- Lists and their items -->
     <!-- Translations needed for France French -->
-    <!-- <localization string-id='list'><xsl:text>List</xsl:text></localization> -->
-    <!-- <localization string-id='li'><xsl:text>Item</xsl:text></localization> -->
+    <localization string-id='list'><xsl:text>Liste</xsl:text></localization>
+    <localization string-id='li'><xsl:text>Point</xsl:text></localization>
     <!-- A regular paragraph, not the old sectioning structure -->
     <localization string-id='p'><xsl:text>Paragraph</xsl:text></localization>
-    <!-- <localization string-id='blockquote'><xsl:text>Quotation</xsl:text></localization> -->
+    <localization string-id='blockquote'><xsl:text>Citation</xsl:text></localization>
     <!-- Parts of an exercise and it's solution -->
     <localization string-id='exercise'><xsl:text>Exercice</xsl:text></localization>
     <localization string-id='webwork'><xsl:text>WeBWorK</xsl:text></localization>
@@ -124,13 +124,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='solution'><xsl:text>Solution</xsl:text></localization>
      <!-- Front matter components -->
     <localization string-id='toc'><xsl:text>Sommaire</xsl:text></localization>
-    <localization string-id='abstract'><xsl:text>Abstract</xsl:text></localization>
+    <localization string-id='abstract'><xsl:text>Résumé</xsl:text></localization>
     <localization string-id='preface'><xsl:text>Préface</xsl:text></localization>
-    <localization string-id='acknowledgement'><xsl:text>Remerciement</xsl:text></localization>
+    <localization string-id='acknowledgement'><xsl:text>Remerciements</xsl:text></localization>
     <localization string-id='biography'><xsl:text>Biographie</xsl:text></localization>
     <!-- singular and plural titles for biography subdivision -->
-    <!-- <localization string-id='about-author'><xsl:text>About the Author</xsl:text></localization> -->
-    <!-- <localization string-id='about-authors'><xsl:text>About the Authors</xsl:text></localization> -->
+    <localization string-id='about-author'><xsl:text>À propos de l'auteur</xsl:text></localization>
+    <localization string-id='about-authors'><xsl:text>À propos des auteurs</xsl:text></localization>
     <localization string-id='foreword'><xsl:text>Avant-propos</xsl:text></localization>
     <localization string-id='dedication'><xsl:text>Dédicace</xsl:text></localization>
     <localization string-id='colophon'><xsl:text>Colophon</xsl:text></localization>
@@ -138,14 +138,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- index-part is deprecated, but not abandoned          -->
     <!-- NB: repurpose translations, maybe move appendix here -->
     <localization string-id='index-part'><xsl:text>Index</xsl:text></localization>
-    <!-- <localization string-id='jump-to'><xsl:text>Jump to:</xsl:text></localization> -->
+    <localization string-id='jump-to'><xsl:text>Aller à :</xsl:text></localization>
     <!-- Parts of the Index -->
     <localization string-id='index'><xsl:text>Index</xsl:text></localization> <!--see latex mechanism-->
     <localization string-id='see'><xsl:text>Visiter</xsl:text></localization> <!--see latex mechanism-->
     <localization string-id='also'><xsl:text>Voir Aussi</xsl:text></localization> <!--see latex mechanism-->
     <!-- Navigation Interface elements -->
     <!-- Assistive "skip to content" link -->
-    <!-- <localization string-id='skip-to-content'><xsl:text>Skip to main content</xsl:text></localization> -->
+    <localization string-id='skip-to-content'><xsl:text>Sauter</xsl:text></localization>
     <localization string-id='previous'><xsl:text>Précédent</xsl:text></localization> <!--buttons for HTML navigation-->
     <localization string-id='up'><xsl:text>Haut</xsl:text></localization>
     <localization string-id='next'><xsl:text>Suivant</xsl:text></localization>
@@ -166,19 +166,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='copy'><xsl:text>Copie</xsl:text></localization>
     <localization string-id='enclosure'><xsl:text>Pièce Jointe</xsl:text></localization>
     <!-- Various -->
-    <localization string-id='todo'><xsl:text>À Faire</xsl:text></localization>  
-    <localization string-id='editor'><xsl:text>Éditeur</xsl:text></localization>  
-    <!-- <localization string-id='edition'><xsl:text>Edition</xsl:text></localization> -->
-    <!-- <localization string-id='website'><xsl:text>Website</xsl:text></localization> -->
+    <localization string-id='todo'><xsl:text>À Faire</xsl:text></localization>
+    <localization string-id='editor'><xsl:text>Éditeur</xsl:text></localization>
+    <localization string-id='edition'><xsl:text>Édition</xsl:text></localization>
+    <localization string-id='website'><xsl:text>Site web</xsl:text></localization>
     <localization string-id='copyright'><xsl:text>Copyright</xsl:text></localization>
+    <localization string-id='incontext'><xsl:text>Contexte</xsl:text></localization>
     <!-- Sage Cell evaluate button      -->
     <!-- eg, "Evaluate (Maxima)"        -->
     <!-- 2017-05-14: 'code' is obsolete -->
     <!-- This needs to be defined to *something* (English)       -->
     <!-- else whatever crud ends up on the button kills the cell -->
     <!-- Translate at first opportunity, please                  -->
-    <localization string-id='evaluate'><xsl:text>Evaluate</xsl:text></localization>
-    <!-- <localization string-id='code'><xsl:text>Code</xsl:text></localization> -->
+    <localization string-id='evaluate'><xsl:text>Évaluer</xsl:text></localization>
+    <localization string-id='code'><xsl:text>Code</xsl:text></localization>
 </xsl:variable>
 
 </xsl:stylesheet>
