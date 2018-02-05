@@ -5458,10 +5458,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}}&#xa;</xsl:text>
 </xsl:template>
 
+<!-- CalcPlot3D -->
+<xsl:template match="interactive[@calcplot3d]" mode="info-text">
+    <xsl:text>CalcPlot3D: \href{https://www.monroecc.edu/faculty/paulseeburger/calcnsf/CalcPlot3D/?</xsl:text>
+    <xsl:value-of select="code" />
+    <xsl:text>}{\mono{www.monroecc.edu/faculty/paulseeburger/calcnsf/CalcPlot3D}}&#xa;</xsl:text>
+</xsl:template>
+
+
 <!-- Static interactives -->
 <!-- Contents of "static" element, plus    -->
 <!-- a line of information below, per type -->
-<xsl:template match="interactive[@geogebra]|interactive[@geogebra]">
+<xsl:template match="interactive[@geogebra]|interactive[@geogebra]|interactive[@calcplot3d]">
     <xsl:apply-templates select="static/*" />
     <xsl:text>\centerline{</xsl:text>
     <xsl:apply-templates select="." mode="info-text" />

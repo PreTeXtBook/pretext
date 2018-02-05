@@ -7044,6 +7044,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <iframe src="https://www.desmos.com/calculator/{@desmos}" width="400" height="600" />
 </xsl:template>
 
+<!-- CalcPlot3D -->
+<xsl:template match="interactive[@calcplot3d]">
+    <xsl:variable name="query-url" select="code" />
+    <iframe src="http://www.monroecc.edu/faculty/paulseeburger/calcnsf/CalcPlot3D/?{$query-url}" width="600" height="800" />
+</xsl:template>
+
 <!-- JSXGraph -->
 <xsl:template match="jsxgraph">
     <!-- interpret @width percentage and @aspect ratio -->

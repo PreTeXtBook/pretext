@@ -3634,6 +3634,26 @@ the xsltproc executable.
             </subsection>
 
             <subsection>
+                <title>CalcPlot3D</title>
+                <idx>CalcPlot3D</idx>
+
+                <p>CalcPlot3D is a Javascript application for creating, visualizing, and understanding plots of 3D surfaces.  So it would be an ideal companion to a book on multivariate calculus, but should be useful in other course of study.</p>
+
+                <p>To use it, find find the <a href="http://www.monroecc.edu/faculty/paulseeburger/calcnsf/CalcPlot3D/">online app version</a> at<cd>http://www.monroecc.edu/faculty/paulseeburger/calcnsf/CalcPlot3D/</cd>Create a plot and adjust the image to a viewpoint and scale you like.  Then, click the menu icon in the upper-left and choose <c>File</c>.  From here you can save a <init>PNG</init> iamge for the static version, but you also want to select <c>Encode View in URL</c>.  Now your browser address bar with a query string that has all the information about your plot so it can reproduced.  Copy everything after the first question-mark to <c>interactive/code</c> element.  Be sure to replace any ampersands by <c>&amp;amp;</c>.  Examine the source to see how this example was authored.</p>
+
+                <figure>
+                    <caption>Plot of <m>f(x,y)=\dfrac{1}{y-x^2}</m> on <m>[-2,2]\times[-2,2]</m></caption>
+                    <interactive calcplot3d="url">
+                        <code language="url">type=z;z=1/(y-x^2);visible=true;umin=-2;umax=2;vmin=-2;vmax=2;grid=30;format=normal;alpha=-1;constcol=rgb(255,0,0);contourcolor=red&amp;type=window;hsrmode=3;anaglyph=-1;center=5.529712854135209,7.349875454071844,3.9244880634856956,1;focus=0,0,0,1;up=-0.26875302682986874,-0.2884991397174344,0.9189886054528014,1;transparent=true;alpha=140;edgeson=true;faceson=true;showbox=true;showaxes=true;showticks=true;perspective=true;centerxpercent=0.5;centerypercent=0.5;rotationsteps=30;autospin=true;xygrid=false;yzgrid=false;xzgrid=false;gridsonbox=true;gridplanes=false;gridcolor=rgb(128,128,128);xmin=-2;xmax=2;ymin=-2;ymax=2;zmin=-4;zmax=4;xscale=1;yscale=1;zscale=1;zcmin=-4;zcmax=4;zoom=0.468667;xscalefactor=1;yscalefactor=1;zscalefactor=1</code>
+                        <static>
+                            <image source="images/calcplot3d.png" width="45%"/>
+                        </static>
+                    </interactive>
+                </figure>
+            </subsection>
+
+
+            <subsection>
                 <title>JSXGraph</title>
                 <idx>JSXGraph</idx>
 
