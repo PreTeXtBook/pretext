@@ -2906,7 +2906,7 @@
       <element name="foreign">
         <ref name="TextLong"/>
       </element>
-      <element name="booktitle">
+      <element name="pubtitle">
         <ref name="TextLong"/>
       </element>
     </choice>

@@ -1303,7 +1303,7 @@
             element term {TextLong} |
             element alert {TextLong} |
             element foreign {TextLong} |
-            element booktitle {TextLong}
+            element pubtitle {TextLong}
         
             
         Group |= 
