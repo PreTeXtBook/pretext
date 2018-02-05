@@ -34,13 +34,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Deprecations that can be fixed with a transformation -->
 <!-- In reverse chronological order, with dates           -->
 
+<!-- 2018-02-05  booktitle to simply pubtitle -->
+<xsl:template match="booktitle">
+    <pubtitle>
+        <xsl:apply-templates select="@* | node()" />
+    </pubtitle>
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2018-02-05</xsl:with-param>
+        <xsl:with-param name="message">Replacing &lt;booktitle&gt; by &lt;pubtitle&gt;</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
 <!-- 2017-12-22  latex-image-code to simply latex-image -->
 <xsl:template match="latex-image-code">
     <latex-image>
         <xsl:apply-templates select="@* | node()" />
     </latex-image>
     <xsl:call-template name="deprecation-fix-report">
-        <xsl:with-param name="date">2017-08-25</xsl:with-param>
+        <xsl:with-param name="date">2017-12-22</xsl:with-param>
         <xsl:with-param name="message">Replacing &lt;latex-image-code&gt; by &lt;latex-image&gt;</xsl:with-param>
     </xsl:call-template>
 </xsl:template>

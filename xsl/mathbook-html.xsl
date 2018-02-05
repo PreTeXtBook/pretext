@@ -6707,12 +6707,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </span>
 </xsl:template>
 
-<!-- Titles of Books and Articles -->
-<xsl:template match="booktitle">
-    <span class="booktitle"><xsl:apply-templates /></span>
+<!-- Titles of Publications -->
+<!-- 2018-02-05: Deprecate "booktitle" in favor of       -->
+<!-- "pubtitle".  Will still maintain all for a while.   -->
+<!-- CMOS:  When quoted in text or listed in a           -->
+<!-- bibliography, titles of books, journals, plays,     -->
+<!-- and other freestanding works are italicized; titles -->
+<!-- of articles, chapters, and other shorter works      -->
+<!-- are set in roman and enclosed in quotation marks.   -->
+<xsl:template match="pubtitle|booktitle">
+    <span class="booktitle">
+        <xsl:apply-templates />
+    </span>
 </xsl:template>
+
 <xsl:template match="articletitle">
-    <span class="articletitle"><xsl:apply-templates /></span>
+    <span class="articletitle">
+        <xsl:apply-templates />
+    </span>
 </xsl:template>
 
 
