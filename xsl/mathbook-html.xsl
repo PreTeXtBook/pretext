@@ -7047,7 +7047,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- CalcPlot3D -->
 <xsl:template match="interactive[@calcplot3d]">
     <xsl:variable name="query-url" select="code" />
-    <iframe src="http://www.monroecc.edu/faculty/paulseeburger/calcnsf/CalcPlot3D/?{$query-url}" width="600" height="800" />
+    <iframe src="https://www.monroecc.edu/faculty/paulseeburger/calcnsf/CalcPlot3D/?{$query-url}" width="600" height="800" />
 </xsl:template>
 
 <!-- JSXGraph -->
