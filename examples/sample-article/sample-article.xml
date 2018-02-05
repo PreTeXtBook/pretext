@@ -1908,7 +1908,7 @@ the xsltproc executable.
                     </image>
                 </figure>
 
-        <p>The pgfplots package was included in <c>docinfo/latex-image-preamble</c>. Here, it is used. Also, here we demonstrate using <c>\amp</c> where you would normally use an ampersand in <latex />. There are known issues with <c>xelatex</c> processing any gradient shading in <c>tikz</c>. To (successfully) create the gradient shading in the 3D image here, you may need to use <c>pdflatex</c> until <latex /> developers resolve this issue.</p>
+                <p>The pgfplots package was included in <c>docinfo/latex-image-preamble</c>. Here, it is used. Also, here we demonstrate using <c>\amp</c> where you would normally use an ampersand in <latex />. There are known issues with <c>xelatex</c> processing any gradient shading in <c>tikz</c>. To (successfully) create the gradient shading in the 3D image here, you may need to use <c>pdflatex</c> until <latex /> developers resolve this issue.</p>
 
                 <figure xml:id="figure-pgfplots-demo">
                     <caption>Sample pgfplots plot</caption>
@@ -1982,6 +1982,9 @@ the xsltproc executable.
                     </image>
                 </figure>
 
+                <p>PSTricks is a <latex /> package for drawing diagrams and pictures, dating back to the days before <init>PDF</init>, when PostScript (<init>PS</init>) was king.  Given its history, it does not seem to work easily with the <c>pdflatex</c> engine.  But it will work easily with the <c>xelatex</c> engine.  We try to keep this present sample document workable with both engines, so we have presented an example of the use of PSTricks in the xelatex-exclusive sample document where we test obscure fonts and characters.  So your best bet is to look there.<idx>PSTricks</idx></p>
+
+                <p>There are suggestions online that <cd>\usepackage[pdf]{pstricks}</cd>along with <cd>pdflatex --shell-escape *.tex</cd> is workable.  We could not make it happen, and a <q>shell escape</q> can be a dangerous security hole.  That said, updates to this approach are welcome.</p>
             </subsection>
 
             <subsection>

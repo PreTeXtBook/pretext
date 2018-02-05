@@ -35,6 +35,15 @@ and apply  xelatex  to  "fonts-and-characters.tex"  in the current working direc
 
 <mathbook>
 
+    <docinfo>
+        <!-- Graphics requiring a  xelatex  engine are included        -->
+        <!-- here.  In particular, we load PSTricks, with extensions,  -->
+        <!-- because our first ever test example seemed to require it. -->
+        <latex-image-preamble>
+        \usepackage{pstricks-add}
+        </latex-image-preamble>
+    </docinfo>
+
     <article xml:id="fonts-and-characters">
         <title>Characters, Fonts, and Languages in MathBook XML</title>
 
@@ -573,5 +582,40 @@ and apply  xelatex  to  "fonts-and-characters.tex"  in the current working direc
             </table>
         </section>
 
+        <section>
+            <title>Graphics</title>
+
+            <introduction>
+                <p>Some graphics languages require the <c>xelatex</c> engine, which this document presumes.</p>
+            </introduction>
+
+            <subsection>
+                <title>PSTricks</title>
+                <idx>PSTricks</idx>
+
+               <p>PSTricks is a <latex /> package for drawing diagrams and pictures, dating back to the days before <init>PDF</init> when PostScript (<init>PS</init>) was king.  Given its history, it does not seem to work easily with the <c>pdflatex</c> engine.  But it will work easily with the <c>xelatex</c> engine.  So we test and document this approach here.</p>
+
+                <p>For the following we add<cd>\usepackage{pstricks-add}</cd> to the <c>latex-image-preamble</c> portion of <c>docinfo</c>.  Your diagrams might be fine with simply the <c>pstricks</c> package.  Following comes from<cd>https://www.tug.org/PSTricks/main.cgi?file=Examples/polar#lemniscate</cd>accessed on 2018-02-05.</p>
+
+                <p>Note that the <c>width</c> attribute is respected for <init>HTML</init> output, but ignored for the <latex /> output.  This situation could change.</p>
+
+                <!-- 2018-02-05:  https://www.tug.org/PSTricks/main.cgi?file=Examples/polar#lemniscate-->
+                <!-- ~/mathbook/mathbook/script/mbx -v -f svg -c latex-image -d /tmp/f ~/mathbook/mathbook/examples/fonts/fonts-and-characters.xml -->
+                <figure>
+                    <caption>A Lemniscate</caption>
+                    <image xml:id="lemniscate-pstricks" width="50%">
+                        <latex-image>
+                        \psset{unit=3cm,opacity=0.4}
+                        \begin{pspicture}(-2,-1)(2,1)
+                          \psgrid[gridcolor=lightgray,subgriddiv=0]
+                          \psset{polarplot,plotpoints=500,linecolor=red,fillcolor=blue!30,fillstyle=solid,linewidth=2pt}
+                          \psplot{-45}{45}{x dup add cos 3 mul sqrt}
+                          \psplot[fillcolor=red!30,fillstyle=solid,linecolor=blue]{135}{225}{x dup add cos 3 mul sqrt}
+                        \end{pspicture}
+                        </latex-image>
+                    </image>
+                </figure>
+            </subsection>
+        </section>
     </article>
 </mathbook>
