@@ -766,7 +766,7 @@ the xsltproc executable.
                         </statement>
 
                         <solution>
-                            <p>This is a <q>solution</q> to the exploration.  In practice, you might choose to not make this visible for students, but instead include it as part of some guidance you might provide to instructors (<eg /> an <booktitle>Instructor's Manual</booktitle>).</p>
+                            <p>This is a <q>solution</q> to the exploration.  In practice, you might choose to not make this visible for students, but instead include it as part of some guidance you might provide to instructors (<eg /> an <pubtitle>Instructor's Manual</pubtitle>).</p>
                         </solution>
                     </exploration>
 
@@ -1477,7 +1477,7 @@ the xsltproc executable.
                     <mrow>\alpha\neq\beta</mrow>
                 </md>.  We are not suggesting here that using words in place of symbols, as in the first line, is a good practice.  (It is not.)</p>
 
-                <p>The following example is a good stress-test of using the <c>\text{}</c> macro to achieve certain effects.  Note the Unicode left and right smart quotes.  This a contribution from Alex Jordan as part of his work on <booktitle>APEX Calculus</booktitle>.<md>
+                <p>The following example is a good stress-test of using the <c>\text{}</c> macro to achieve certain effects.  Note the Unicode left and right smart quotes.  This a contribution from Alex Jordan as part of his work on <pubtitle>APEX Calculus</pubtitle>.<md>
                     <mrow>y \rightarrow \frac{\sin(0) }{0} \rightarrow {{\text{“}}\atop{}}\frac{0}{0}{{\text{”}}\atop{}}\text{.}</mrow>
                 </md>And another one from Alex.  Note the use of the <c>\mathord{}</c> and <c>\mathrel{}</c> macros to control spacing around the mathematical symbols.  Examine the source to see how the quotation marks have been authored with <init>XML</init> syntax for Unicode characters.<md>
                     <mrow>\zeta(1)=\sum_{n=1}^{\infty}\frac{1}{n}\mathrel{\text{ &#x201c;}\mathord{=}{\text{&#x201d; }}}\prod_{p}\left(\frac{1}{1-1/p}\right)=\prod_{p}\left(\frac{1}{1-p^{-1}}\right)</mrow>
@@ -1698,7 +1698,7 @@ the xsltproc executable.
             <subsection>
                 <title>Groupings</title>
 
-                <p>It is possible to make some other groupings like quotations, such as <braces>some <em>emphasized text</em> grouped within braces</braces>, or <brackets>a <booktitle>Book Title</booktitle> inside brackets</brackets>, <angles>some <foreign>foreign words</foreign> inside angle brackets</angles>, or <dblbrackets>just a bit of text within double brackets</dblbrackets>.  Some of these are used extensively by scholars who study texts to note various restorations or deletions.</p>
+                <p>It is possible to make some other groupings like quotations, such as <braces>some <em>emphasized text</em> grouped within braces</braces>, or <brackets>a <pubtitle>Book Title</pubtitle> inside brackets</brackets>, <angles>some <foreign>foreign words</foreign> inside angle brackets</angles>, or <dblbrackets>just a bit of text within double brackets</dblbrackets>.  Some of these are used extensively by scholars who study texts to note various restorations or deletions.</p>
             </subsection>
 
             <subsection>
@@ -3627,7 +3627,7 @@ the xsltproc executable.
                     </interactive>
                 </figure>
 
-                <p>Note that Desmos has extensive <booktitle>Terms of Service</booktitle> which include restrictions on commercial uses.</p>
+                <p>Note that Desmos has extensive <pubtitle>Terms of Service</pubtitle> which include restrictions on commercial uses.</p>
             </subsection>
 
             <subsection>
@@ -4858,7 +4858,7 @@ the xsltproc executable.
             <algorithm xml:id="algorithm-sieve-eratosthenes">
                 <title>Sieve of Eratosthenes</title>
                 <statement>
-                    <p>On input of a positive integer <c>n</c> this algorithm will compute all the prime numbers up to, and including, <c>n</c>.  It was named for Eratosthenes of Cyrene (<circa /> 276 BC<ndash /><circa /> 195/194 BC) by Nicomachus (<circa /> 60<ndash /><circa /> 120 CE) in <booktitle>Introduction to Arithmetic</booktitle>. (<url href="http://en.wikipedia.org/wiki/Sieve_of_Eratosthenes">Wikipedia</url>, 2015)<ol>
+                    <p>On input of a positive integer <c>n</c> this algorithm will compute all the prime numbers up to, and including, <c>n</c>.  It was named for Eratosthenes of Cyrene (<circa /> 276 BC<ndash /><circa /> 195/194 BC) by Nicomachus (<circa /> 60<ndash /><circa /> 120 CE) in <pubtitle>Introduction to Arithmetic</pubtitle>. (<url href="http://en.wikipedia.org/wiki/Sieve_of_Eratosthenes">Wikipedia</url>, 2015)<ol>
                         <li>Input: <c>n</c></li>
                         <li>Form the list of all integers from <c>2</c> to <c>n</c></li>
                         <li>Set <c>p = 2</c></li>
@@ -5091,7 +5091,7 @@ the xsltproc executable.
             <p>In <init>HTML</init> output, a program can be interactive.  This is an example program provided by <url href="http://www.pythontutor.com/">Python Tutor</url>.</p>
 
             <listing xml:id="program-interactive">
-                <caption>An interactive Python program, using <booktitle>Python Tutor</booktitle></caption>
+                <caption>An interactive Python program, using <pubtitle>Python Tutor</pubtitle></caption>
                 <program xml:id="happy" language="python" interactive="pythontutor">
                     <input>
                     # From "Teaching with Python" by John Zelle
@@ -5929,7 +5929,7 @@ the xsltproc executable.
                 </figure>
 
                 <figure>
-                    <caption>A graph defined by data (from Keller and Trotter's <booktitle>Applied Combinatorics</booktitle>)</caption>
+                    <caption>A graph defined by data (from Keller and Trotter's <pubtitle>Applied Combinatorics</pubtitle>)</caption>
                     <sidebyside widths="20% 40%" valign="middle" margins="15%">
                         <pre>
                             graph1.txt
@@ -6568,7 +6568,7 @@ the xsltproc executable.
                 <sidebyside margins="10%">
                     <figure>
                         <title>Sometime Around Midnight</title>
-                        <caption><booktitle>Sometime Around Midnight</booktitle>, Airborne Toxic Event, 2009</caption>
+                        <caption><pubtitle>Sometime Around Midnight</pubtitle>, Airborne Toxic Event, 2009</caption>
                         <video xml:id="airborne-midnight-2" youtube="UYPoMjR6-Ao" start="48" end="100" />
                     </figure>
                 </sidebyside>
