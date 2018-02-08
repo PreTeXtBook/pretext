@@ -24,7 +24,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- See  xsl/localizations/README.md  for an explanation of this file -->
 
 <!-- cs-CZ, Czech (Czechia) -->
-<!-- Jiri Lebl, lebl@okstate.edu, 2016-04-26   -->
+<!-- Jiri Lebl, lebl@okstate.edu, 2018-02-07   -->
 
 <xsl:variable name="cs-CZ">
     <!-- THEOREM-LIKE blocks -->
@@ -37,15 +37,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='claim'><xsl:text>Tvrzení</xsl:text></localization>
     <localization string-id='fact'><xsl:text>Fakt</xsl:text></localization>
     <localization string-id='proof'><xsl:text>Důkaz</xsl:text></localization>
-    <!-- <localization string-id='identity'><xsl:text>Identity</xsl:text></localization> -->
+    <localization string-id='identity'><xsl:text>Rovnost</xsl:text></localization>
     <!-- Mathematical statements without proofs -->
     <!-- AXIOM-LIKE blocks -->
     <localization string-id='axiom'><xsl:text>Axiom</xsl:text></localization>
     <localization string-id='conjecture'><xsl:text>Domněnka</xsl:text></localization>
     <localization string-id='principle'><xsl:text>Princip</xsl:text></localization>
-    <!-- <localization string-id='heuristic'><xsl:text>Heuristic</xsl:text></localization> -->
-    <!-- <localization string-id='hypothesis'><xsl:text>Hypothesis</xsl:text></localization> -->
-    <!-- <localization string-id='assumption'><xsl:text>Assumption</xsl:text></localization> -->
+    <localization string-id='heuristic'><xsl:text>Heurestika</xsl:text></localization>
+    <localization string-id='hypothesis'><xsl:text>Hypotéza</xsl:text></localization>
+    <localization string-id='assumption'><xsl:text>Předpoklad</xsl:text></localization>
     <!-- Definitions -->
     <localization string-id='definition'><xsl:text>Definice</xsl:text></localization>
     <!-- Single Line Mathematics -->
@@ -78,39 +78,39 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
     <localization string-id='paragraphs'><xsl:text>Odstavce</xsl:text></localization>
     <localization string-id='subparagraph'><xsl:text>Pododstavec</xsl:text></localization>
-    <!-- <localization string-id='case'><xsl:text>Case</xsl:text></localization> -->
+    <localization string-id='case'><xsl:text>Případ</xsl:text></localization>
     <!-- Components of the narrative -->
     <!-- REMARK-LIKE blocks -->
     <!-- "note" is used within "biblio", likely to change -->
-    <localization string-id='remark'><xsl:text>Remark</xsl:text></localization>
-    <!-- <localization string-id='convention'><xsl:text>Convention</xsl:text></localization> -->
+    <localization string-id='remark'><xsl:text>Poznámka</xsl:text></localization>
+    <localization string-id='convention'><xsl:text>Konvence</xsl:text></localization>
     <localization string-id='note'><xsl:text>Poznámka</xsl:text></localization>
-    <!-- <localization string-id='observation'><xsl:text>Observation</xsl:text></localization> -->
-    <!-- <localization string-id='warning'><xsl:text>Warning</xsl:text></localization> -->
-    <!-- <localization string-id='insight'><xsl:text>Insight</xsl:text></localization> -->
-    <!-- <localization string-id='computation'><xsl:text>Computation</xsl:text></localization> -->
-    <!-- <localization string-id='technology'><xsl:text>Technology</xsl:text></localization> -->
+    <localization string-id='observation'><xsl:text>Postřeh</xsl:text></localization>
+    <localization string-id='warning'><xsl:text>Varování</xsl:text></localization>
+    <localization string-id='insight'><xsl:text>Nahléd</xsl:text></localization>
+    <localization string-id='computation'><xsl:text>Výpočet</xsl:text></localization>
+    <localization string-id='technology'><xsl:text>Technologie</xsl:text></localization>
     <!-- ASIDE-LIKE blocks -->
-    <!-- <localization string-id='aside'><xsl:text>Aside</xsl:text></localization> -->
-    <!-- <localization string-id='biographical'><xsl:text>Biographical Aside</xsl:text></localization> -->
-    <!-- <localization string-id='historical'><xsl:text>Historical Aside</xsl:text></localization> -->
+    <localization string-id='aside'><xsl:text>Poznámka stranou</xsl:text></localization>
+    <localization string-id='biographical'><xsl:text>Biografická poznámka</xsl:text></localization>
+    <localization string-id='historical'><xsl:text>Historická poznámka</xsl:text></localization>
     <!-- EXAMPLE-LIKE blocks -->
     <localization string-id='example'><xsl:text>Příklad</xsl:text></localization>
-    <!-- <localization string-id='question'><xsl:text>Question</xsl:text></localization> -->
-    <!-- <localization string-id='problem'><xsl:text>Problem</xsl:text></localization> -->
+    <localization string-id='question'><xsl:text>Otázka</xsl:text></localization>
+    <localization string-id='problem'><xsl:text>Problém</xsl:text></localization>
     <!-- PROJECT-LIKE blocks -->
-    <!-- <localization string-id='project'><xsl:text>Project</xsl:text></localization> -->
-    <!-- <localization string-id='activity'><xsl:text>Activity</xsl:text></localization> -->
-    <!-- <localization string-id='exploration'><xsl:text>Exploration</xsl:text></localization> -->
-    <!-- <localization string-id='task'><xsl:text>Task</xsl:text></localization> -->
-    <!-- <localization string-id='investigation'><xsl:text>Investigation</xsl:text></localization> -->
+    <localization string-id='project'><xsl:text>Projekt</xsl:text></localization>
+    <localization string-id='activity'><xsl:text>Aktivita</xsl:text></localization>
+    <localization string-id='exploration'><xsl:text>Průzkum</xsl:text></localization>
+    <localization string-id='task'><xsl:text>Úkol</xsl:text></localization>
+    <localization string-id='investigation'><xsl:text>Výzkum</xsl:text></localization>
     <!--  -->
     <!-- assemblages are collections of minimally structured material -->
-    <!-- <localization string-id='assemblage'><xsl:text>Assemblage</xsl:text></localization> -->
-    <!-- <localization string-id='poem'><xsl:text>Poem</xsl:text></localization> -->
+    <localization string-id='assemblage'><xsl:text>Soustava</xsl:text></localization>
+    <localization string-id='poem'><xsl:text>Báseň</xsl:text></localization>
     <!-- Objectives is the block, objective is a list item within -->
-    <!-- <localization string-id='objectives'><xsl:text>Objectives</xsl:text></localization> -->
-    <!-- <localization string-id='objective'><xsl:text>Objective</xsl:text></localization> -->
+    <localization string-id='objectives'><xsl:text>Cíle</xsl:text></localization>
+    <localization string-id='objective'><xsl:text>Cíl</xsl:text></localization>
     <!--  -->
     <localization string-id='figure'><xsl:text>Obrázek</xsl:text></localization>
     <localization string-id='table'><xsl:text>Tabulka</xsl:text></localization>
@@ -118,11 +118,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='fn'><xsl:text>Vysvětlivka</xsl:text></localization>
     <localization string-id='contributor'><xsl:text>Přispěvatel</xsl:text></localization>
     <!-- Lists and their items -->
-    <!-- TODO: <localization string-id='list'><xsl:text>List</xsl:text></localization> -->
+    <localization string-id='list'><xsl:text>Seznam</xsl:text></localization>
     <localization string-id='li'><xsl:text>Bod</xsl:text></localization>
     <!-- A regular paragraph, not the old sectioning structure -->
     <localization string-id='p'><xsl:text>Odstavec</xsl:text></localization>
-    <!-- <localization string-id='blockquote'><xsl:text>Quotation</xsl:text></localization> -->
+    <localization string-id='blockquote'><xsl:text>Citát</xsl:text></localization>
     <!-- Parts of an exercise and it's solution -->
     <localization string-id='exercise'><xsl:text>Cvičení</xsl:text></localization>
     <localization string-id='webwork'><xsl:text>WeBWorK</xsl:text></localization>
@@ -140,8 +140,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='acknowledgement'><xsl:text>Poděkování</xsl:text></localization>
     <localization string-id='biography'><xsl:text>Životopis autora</xsl:text></localization>
     <!-- singular and plural titles for biography subdivision -->
-    <!-- <localization string-id='about-author'><xsl:text>About the Author</xsl:text></localization> -->
-    <!-- <localization string-id='about-authors'><xsl:text>About the Authors</xsl:text></localization> -->
+    <localization string-id='about-author'><xsl:text>O autoru</xsl:text></localization>
+    <localization string-id='about-authors'><xsl:text>O autorech</xsl:text></localization>
     <localization string-id='foreword'><xsl:text>Předmluva</xsl:text></localization>
     <localization string-id='dedication'><xsl:text>Věnování</xsl:text></localization>
     <localization string-id='colophon'><xsl:text>Kolofon</xsl:text></localization>
@@ -149,7 +149,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- index-part is deprecated, but not abandoned          -->
     <!-- NB: repurpose translations, maybe move appendix here -->
     <localization string-id='index-part'><xsl:text>Rejstřík</xsl:text></localization>
-    <!-- <localization string-id='jump-to'><xsl:text>Jump to:</xsl:text></localization> -->
+    <localization string-id='jump-to'><xsl:text>Skoč na:</xsl:text></localization>
     <!-- Parts of the Index -->
     <localization string-id='index'><xsl:text>Rejstřík</xsl:text></localization>
     <localization string-id='see'><xsl:text>viz</xsl:text></localization>
@@ -162,15 +162,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='continued'><xsl:text>Pokračuje na další straně</xsl:text></localization>
     <!-- Navigation Interface elements -->
     <!-- Assistive "skip to content" link -->
-    <!-- <localization string-id='skip-to-content'><xsl:text>Skip to main content</xsl:text></localization> -->
+    <localization string-id='skip-to-content'><xsl:text>Přeskočit na hlavní obsah</xsl:text></localization>
     <localization string-id='previous'><xsl:text>Předchozí</xsl:text></localization>
     <localization string-id='up'><xsl:text>Nahoru</xsl:text></localization>
     <localization string-id='next'><xsl:text>Další</xsl:text></localization>
     <!-- Keep these short, so buttons are not overly wide, 4 characters maximum -->
-    <!-- TODO: SHORTEN THESE -->
-    <localization string-id='previous-short'><xsl:text>Předchozí</xsl:text></localization>
-    <localization string-id='up-short'><xsl:text>Nahoru</xsl:text></localization>
-    <localization string-id='next-short'><xsl:text>Další</xsl:text></localization>
+    <localization string-id='previous-short'><xsl:text>Zpět</xsl:text></localization>
+    <localization string-id='up-short'><xsl:text>Výš</xsl:text></localization>
+    <localization string-id='next-short'><xsl:text>Dál</xsl:text></localization>
     <!-- NB: Use toc from above for both headings and navigation sidebar-->
     <localization string-id='annotations'><xsl:text>Anotace</xsl:text></localization>
     <localization string-id='feedback'><xsl:text>Odezva</xsl:text></localization>
@@ -185,8 +184,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Various -->
     <localization string-id='todo'><xsl:text>To Do</xsl:text></localization>
     <localization string-id='editor'><xsl:text>Editor</xsl:text></localization>
-    <!-- <localization string-id='edition'><xsl:text>Edition</xsl:text></localization> -->
-    <!-- <localization string-id='website'><xsl:text>Website</xsl:text></localization> -->
+    <localization string-id='edition'><xsl:text>Edice</xsl:text></localization>
+    <localization string-id='website'><xsl:text>Webová stránka</xsl:text></localization>
     <localization string-id='copyright'><xsl:text>Copyright</xsl:text></localization>
     <!-- HTML clickables (lowercase strings to click on) -->
     <localization string-id='permalink'><xsl:text>permalink</xsl:text></localization>
@@ -198,7 +197,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- else whatever crud ends up on the button kills the cell -->
     <!-- Translate at first opportunity, please                  -->
     <localization string-id='evaluate'><xsl:text>Evaluate</xsl:text></localization>
-    <!-- <localization string-id='code'><xsl:text>Code</xsl:text></localization> -->
+    <localization string-id='code'><xsl:text>Kód</xsl:text></localization>
 </xsl:variable>
 
 </xsl:stylesheet>
