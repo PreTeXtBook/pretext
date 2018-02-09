@@ -6863,6 +6863,27 @@ the xsltproc executable.
 
         </section>
 
+        <section xml:id="section-myopenmath">
+            <title>MyOpenMath Interactive Problems</title>
+
+            <p>This is a <em>test</em> with two inline exercises containing MyOpenMath (MOM) problems.  None of this is in the schema, and all of it is subject to change.</p>
+
+            <exercise>
+                <title>Negative Numbers and Exponents</title>
+                <introduction>
+                    <p>This is an introduction, providing articulation between the MOM problem and the contents of the text.  For example, you might cross-reference a result or example given previosly.  (HTML Note: The resizer for the knowl is not functioning yet.)</p>
+                </introduction>
+                <myopenmath problem="2572" />
+            </exercise>
+
+            <exercise>
+                <title>A Statistical Test</title>
+                <introduction>
+                    <p>This is an introduction, providing articulation between the MOM problem and the contents of the text.  For example, you might cross-reference a result or example given previosly.  (HTML Note: The resizer for the knowl is not functioning yet.)</p>
+                </introduction>
+                <myopenmath problem="7492" />
+            </exercise>
+        </section>
 
 
         <backmatter xml:id="backmatter">

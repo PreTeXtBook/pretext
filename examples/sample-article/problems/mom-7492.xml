@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<myopenmath id="7492">
+<statement>
+<p>You wish to determine if there is a positive linear correlation between the two variables at a significance level of <m>\displaystyle\alpha={0.001}</m>.
+You have the following bivariate data set.</p><table><tabular> <row><cell>x</cell><cell>y</cell></row><row><cell>54</cell><cell>60.5</cell></row><row><cell>58.5</cell><cell>137.1</cell></row><row><cell>55.1</cell><cell>109.7</cell></row><row><cell>57.4</cell><cell>59.1</cell></row><row><cell>70.6</cell><cell>122.2</cell></row><row><cell>38.3</cell><cell>21.8</cell></row><row><cell>69</cell><cell>-79.7</cell></row><row><cell>25.1</cell><cell>-56.1</cell></row><row><cell>65.3</cell><cell>140.9</cell></row><row><cell>63.3</cell><cell>86</cell></row><row><cell>26.2</cell><cell>93.3</cell></row><row><cell>52.7</cell><cell>85.1</cell></row><row><cell>70.2</cell><cell>137.1</cell></row><row><cell>55.5</cell><cell>5.9</cell></row><row><cell>56.6</cell><cell>117.6</cell></row><row><cell>56</cell><cell>44.9</cell></row><row><cell>55.7</cell><cell>57.1</cell></row><row><cell>38.4</cell><cell>-5.8</cell></row><row><cell>40.4</cell><cell>99</cell></row><row><cell>56.4</cell><cell>73.1</cell></row><row><cell>63.4</cell><cell>-3.5</cell></row><row><cell>34.4</cell><cell>99</cell></row><row><cell>34.7</cell><cell>-37.7</cell></row><row><cell>30.7</cell><cell>51.6</cell></row><row><cell>54.5</cell><cell>109.6</cell></row><row><cell>34.4</cell><cell>61.4</cell></row><row><cell>49.9</cell><cell>26.2</cell></row><row><cell>48.5</cell><cell>103</cell></row><row><cell>26.2</cell><cell>-66.6</cell></row><row><cell>60.9</cell><cell>172.1</cell></row><row><cell>25.5</cell><cell>32.3</cell></row><row><cell>57.4</cell><cell>87.6</cell></row><row><cell>51.2</cell><cell>89.1</cell></row><row><cell>58.3</cell><cell>51.2</cell></row><row><cell>47.9</cell><cell>107.2</cell></row><row><cell>49.2</cell><cell>194.5</cell></row><row><cell>23.7</cell><cell>18.7</cell></row><row><cell>45.5</cell><cell>100.9</cell></row><row><cell>51.8</cell><cell>5.3</cell></row><row><cell>71.1</cell><cell>78.7</cell></row></tabular></table><p>
+What is the correlation coefficient for this data set? </p>
+<p>
+<em>r</em> = <var name="qn1" width="20" /></p>
+<p>
+To find the p-value for a correlation coefficient, you need to convert to a <em>t</em>-score:
+<m>\displaystyle{t}=\sqrt{{\frac{{{r}^{{2}}{\left({n}-{2}\right)}}}{{{1}-{r}^{{2}}}}}}</m>
+This <em>t</em>-score is from a <em>t</em>-distribution with <em>n</em><ndash/>2 degrees of freedom.</p>
+<p>
+What is the p-value for this correlation coefficient? </p>
+<p>
+p-value = <var name="qn2" width="20" /></p>
+<p>
+Your final conclusion is that... </p>
+<p><ul label="circle"><li><p>There is insufficient sample evidence to support the claim the there is a positive correlation between the two variables.</p></li> 
+<li><p>There is sufficient sample evidence to support the claim that there is a statistically significant positive correlation between the two variables.</p></li> 
+</ul></p>
+<p>
+Note:  In your calculations, round both r and t to 3 decimal places in ALL calculations.</p>
+</statement>
+<solution>
+<p><ul><li><p>0.365</p></li><li><p>0.0103</p></li><li><p>There is insufficient sample evidence to support the claim the there is a positive correlation between the two variables.</p></li></ul></p>
+</solution>
+</myopenmath>
+
