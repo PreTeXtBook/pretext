@@ -3153,6 +3153,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{exercise}&#xa;</xsl:text>
 </xsl:template>
 
+<xsl:template match="exercise[myopenmath]">
+    <xsl:text>\begin{exercise}</xsl:text>
+    <xsl:apply-templates select="title" mode="environment-option" />
+    <xsl:apply-templates select="." mode="label"/>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates select="introduction"/>
+    <xsl:apply-templates select="myopenmath" />
+    <xsl:apply-templates select="conclusion"/>
+    <xsl:text>\end{exercise}&#xa;</xsl:text>
+</xsl:template>
+
 <!-- Exercise Group -->
 <!-- We interrupt a description list with short commentary, -->
 <!-- typically instructions for a list of similar exercises -->
@@ -3210,9 +3221,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <!-- condition on webwork wrapper or not -->
     <xsl:choose>
-        <xsl:when test="webwork">
+        <xsl:when test="webwork|myopenmath">
             <xsl:apply-templates select="introduction" />
-            <xsl:apply-templates select="webwork" />
+            <xsl:apply-templates select="webwork|myopenmath" />
             <xsl:apply-templates select="conclusion" />
         </xsl:when>
         <xsl:otherwise>
@@ -3586,6 +3597,31 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:number count="image[@pg-name]" from="webwork" level="any" />
     <xsl:text>.png</xsl:text>
     <xsl:text>}&#xa;</xsl:text>
+</xsl:template>
+
+<!-- ################### -->
+<!-- MyOpenMath Problems -->
+<!-- ################### -->
+
+
+<!-- Static MyOpenMath Exercises -->
+<!-- We only try to open an external file when the source -->
+<!-- has a MOM problem (with an id number).  The second   -->
+<!-- argument of the "document()" function is a node and  -->
+<!-- causes the relative file name to resolve according   -->
+<!-- to the location of the XML.   Experiments with the   -->
+<!-- empty node "/.." are interesting.                    -->
+<!-- https://ajwelch.blogspot.co.za/2008/04/relative-paths-and-document-function.html -->
+<!-- http://www.dpawson.co.uk/xsl/sect2/N2602.html#d3862e73 (Point 4) -->
+
+<xsl:template match="myopenmath">
+    <xsl:variable name="filename" select="concat(concat('problems/mom-', @problem), '.xml')" />
+    <xsl:apply-templates select="document($filename, .)/myopenmath/*" />
+</xsl:template>
+
+<xsl:template match="myopenmath/solution">
+    <xsl:apply-templates select="." mode="solution-heading" />
+    <xsl:apply-templates />
 </xsl:template>
 
 
