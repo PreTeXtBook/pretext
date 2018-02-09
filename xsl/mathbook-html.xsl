@@ -2845,7 +2845,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-original" select="true()" />
     <xsl:choose>
         <!-- just an unstructured statement, no solutions -->
-        <xsl:when test="not(statement or webwork)">
+        <xsl:when test="not(statement or webwork or myopenmath)">
             <xsl:apply-templates select="*|text()">
                 <xsl:with-param name="b-original" select="$b-original" />
             </xsl:apply-templates>
@@ -2881,6 +2881,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- webwork case -->
         <xsl:when test="webwork">
             <xsl:apply-templates select="introduction|webwork|conclusion">
+                <xsl:with-param name="b-original" select="$b-original" />
+            </xsl:apply-templates>
+        </xsl:when>
+        <!-- MyOpenMath case -->
+        <xsl:when test="myopenmath">
+            <xsl:apply-templates select="introduction|myopenmath|conclusion">
                 <xsl:with-param name="b-original" select="$b-original" />
             </xsl:apply-templates>
         </xsl:when>
@@ -7019,6 +7025,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:call-template>
 </xsl:template>
 
+
 <!-- ############ -->
 <!-- Interactives -->
 <!-- ############ -->
@@ -7106,6 +7113,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="webwork">
     <link href="{$webwork-server}/webwork2_files/js/apps/MathView/mathview.css" rel="stylesheet" />
     <script type="text/javascript" src="{$webwork-server}/webwork2_files/js/vendor/iframe-resizer/js/iframeResizer.min.js"></script>
+</xsl:template>
+
+<!-- ############################# -->
+<!-- MyOpenMath Embedded Exercises -->
+<!-- ############################# -->
+
+<xsl:template match="myopenmath">
+    <xsl:element name="iframe">
+        <xsl:attribute name="width">
+            <xsl:text>100%</xsl:text>
+        </xsl:attribute>
+        <xsl:attribute name="src">
+            <xsl:text>https://www.myopenmath.com/embedq.php?id=</xsl:text>
+            <xsl:value-of select="@problem" />
+            <!-- can't disable escaping text of an attribute -->
+            <xsl:text>&amp;resizer=true</xsl:text>
+        </xsl:attribute>
+    </xsl:element>
+    <!-- not so great -->
+    <!-- <script type="text/javascript">iFrameResize({log:true,inPageLinks:true,resizeFrom:'child'})</script> -->
 </xsl:template>
 
 <!--                         -->
