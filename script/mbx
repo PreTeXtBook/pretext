@@ -863,6 +863,65 @@ def youtube_thumbnail(xml_source, xmlid_root, dest_dir):
     _verbose('YouTube thumbnail download complete')
 
 
+#####################################
+#
+#  MyOpenMath static problem scraping
+#
+#####################################
+
+def mom_static_problems(xml_source, xmlid_root, dest_dir):
+    global config
+    import tempfile, os, os.path, subprocess, shutil
+    import requests
+
+    _verbose('downloading MyOpenMath static problems from {} for placement in {}'.format(xml_source, dest_dir))
+    dest_dir = sanitize_directory(dest_dir)
+    plat = get_platform()
+    if plat == "Windows":
+        dest_dir = break_windows_path(dest_dir)
+    xslt_executable = get_executable(config,  'xslt')
+    _debug("xslt executable: {}".format(xslt_executable))
+    if plat == "Windows":
+        extraction_xslt = '/'.join(mbx_xsl_dir, 'extract-mom.xsl')
+    else:
+        extraction_xslt = os.path.join(mbx_xsl_dir, 'extract-mom.xsl')
+    cmd = [xslt_executable,
+            '--xinclude',
+            '--stringparam',
+            'subtree',
+            xmlid_root,
+            extraction_xslt,
+            xml_source]
+    try:
+        problem_list = subprocess.check_output(cmd)
+    except subprocess.CalledProcessError as e:
+        root_cause = str(e)
+        msg = 'xsltproc command failed, tried: "{}"\n'.format(' '.join(cmd))
+        raise ValueError(msg + root_cause)
+    # "run" an assignment for the list of problem numbers
+    problems = eval(problem_list.decode('ascii'))
+    mom_url = 'https://www.myopenmath.com/util/mbx.php?id={}'
+    xml_header = '<?xml version="1.0" encoding="UTF-8" ?>\n'
+    path_string = dest_dir + '/mom-{}.xml'
+    session = requests.Session()
+    for problem in problems:
+        url = mom_url.format(problem)
+        path = path_string.format(problem)
+        _verbose('downloading MOM #{} to {}...'.format(problem, path))
+        # http://stackoverflow.com/questions/13137817/how-to-download-image-using-requests/13137873
+        # removed some settings wrapper from around the URL, otherwise verbatim
+        r = requests.get(url, stream=True)
+        with open(path, 'wb') as f:
+            f.write(xml_header)
+            if r.status_code == 200:
+                r.raw.decode_content = True
+                shutil.copyfileobj(r.raw, f)
+            else:
+                msg = 'Download returned a bad status code ({}), perhaps try {} manually?'
+                raise OSError(msg.format(r.status_code, url))
+    _verbose('MyOpenMath static problem download complete')
+
+
 #######################################
 #
 # Sage Worksheet Creation and Packaging
@@ -1186,6 +1245,7 @@ def get_cli_arguments():
         ('webwork-tex', 'WeBWorK server problems as LaTeX'),
         ('webwork', 'WeBWorK problems in authored, PG, url, and static representations'),
         ('youtube', 'Thumbnails for YouTube videos (JPEG only)'),
+        ('mom', 'MyOpenMath problem files, static versions'),
         ('all', 'Complete document (only SageNB format)'),
         ('tikz', 'tikz pictures (obsolete)'),
     ]
@@ -1394,6 +1454,8 @@ elif args.component == 'webwork':
     webwork_to_xml(xslt_executable, mbx_xsl_dir, args.xml_file, args.server, output_dir)
 elif args.component == 'youtube':
     youtube_thumbnail(args.xml_file, args.xmlid, output_dir)
+elif args.component == 'mom':
+    mom_static_problems(args.xml_file, args.xmlid, output_dir)
 elif args.component == 'all':
     if args.format == 'sagenb':
         # initialize  the converter
