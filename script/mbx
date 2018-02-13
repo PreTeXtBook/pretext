@@ -106,7 +106,7 @@ def asymptote_conversion(xml_source, xmlid_root, dest_dir, outformat):
             filebase, _ = os.path.splitext(asydiagram)
             asyout = "{}.{}".format(filebase, outformat)
             asypng = "{}_*.png".format(filebase)
-            asy_cmd = [asy_executable, '-batchMask', '-outformat', outformat, asydiagram]
+            asy_cmd = [asy_executable, '-offscreen', '-batchMask', '-outformat', outformat, asydiagram]
             _verbose("converting {} to {}".format(asydiagram, asyout))
             _debug("asymptote conversion {}".format(asy_cmd))
             subprocess.call(asy_cmd, stdout=devnull, stderr=subprocess.STDOUT)
