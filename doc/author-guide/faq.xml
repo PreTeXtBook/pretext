@@ -10,7 +10,7 @@
 <appendix xml:id="faq">
     <title>FAQ: Frequently Asked Questions</title>
 
-     <p>This is a list of answers to frequent questions, in no particular order.</p>
+     <p>Technical questions first, followed by questions about markup.</p>
 
     <dl>
         <li>
@@ -54,6 +54,52 @@
             </p>
         </li>
 
+
+
+        <li>
+            <title>How do I install <c>xsltproc</c> on Ubuntu or Debian Linux?</title>
+            <p>
+              <c>sudo apt-get install xsltproc</c>
+            </p>
+        </li>
+
+        <li>
+            <title>How do I install <c>pdf2svg</c>?</title>
+            <p>
+              <c>pdf2svg</c> is necessary for TikZ diagrams in HTML.
+            </p>
+
+            <p>
+              On Debian or Ubuntu Linux:
+              <code>
+                sudo apt-get install pdf2svg
+              </code>
+            </p>
+
+            <p>
+              To install <c>pdf2svg</c> on a Mac, you will need to install MacPorts.
+              Read the directions carefully, since you will need to install Xcode
+              (available from the Mac App Store) first.
+              Make sure that the command line tools are installed by running Xcode.
+              After Xcode is installed read the directions to install Macports.
+              Once MacPorts is installed run the following command to install <c>pdf2svg</c>: 
+              <code>
+                sudo port install pdf2svg
+              </code>
+              Be patient as this will take a few minutes.
+              To get rid of any intermediate build files, run the command
+              <code>
+                sudo port clean --all all
+              </code>
+              Again be patient.
+            </p>
+
+            <p>
+              If you have trouble with MacPorts, try HomeBrew.
+            </p>
+        </li>
+
+
         <li>
             <title>Why is there no tag for bold?</title>
             <p>
@@ -93,6 +139,24 @@
             <p>First, realize that the way <latex /> uses the term <term>label</term> in the context of lists is different from how much of the rest of the world uses the term in this context.  In our case the <attribute>label</attribute> attribute describes the style of the grouping markers.  For example, bullets versus squares on items of an unordered list, or Roman numerals versus Arabic numerals on an ordered list.  So this attribute conveys information <em>about</em> the list, not content <em>of</em> the list.  And even if you tried putting an <tag>m</tag> tag into the value of the attribute, you would not have any luck since <init>XML</init> does not even allow that construction.  Finally, there is no real good way to accomplish this in <init>HTML</init>, so conversion to that format would be difficult.</p>
 
             <p>The alternative is to use a description list, with tag <tag>dl</tag>.  You are reading one right now.  Put your mathematics in the <tag>title</tag> and the associated content into the remainder of the <tag>li</tag>.</p>
+        </li>
+
+        <li>
+            <title>I have errors when I try to validate my markup, but everything looks okay when I make the HTML and the PDF.  Should I be worried?</title>
+
+            <p>
+              Occasionally the schema lags behind the code, so your first step is to
+              post to <c>pretext-support@googlegroups.com</c> to find out if it is
+              a problem with the schema.
+            </p>
+
+            <p>
+              Possibly there is another way to accomplish what you want, and that
+              markup will fit the schema.
+              Or maybe what you are doing meets the <q>common and reasonable</q>
+              test and can become a feature request.  The discussion on
+              <c>pretext-support</c> should provide an answer.
+            </p>
         </li>
 
         <li>

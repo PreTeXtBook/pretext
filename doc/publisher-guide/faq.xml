@@ -58,8 +58,30 @@
 
 
         <li>
-            <title>I'd like to make one small adjustment in my output.</title>
-            <p>There are no plans to make it easy to change one thing in the layout (such as changing the title of all sub-sub-sections from flush-left to centered).  If you know enough, then you can hack such things yourself.  But doing so is inadvisable, except in the case where you are the rare person who has done a lot of studying and put a lot of effort into learning book design.  If that is the case, then it would be better to make a completely new layout and then share it so it is an option for other people to use.  See <xref ref="principle-output-styles" text="type-local">Principle</xref>.</p>
+            <title>Something looks wrong in the HTML output. How can I customize the layout of the HTML version?</title>
+            <p>
+                If there are some anomalies in the HTML version of your book,
+                probably that was just an oversight and can be fixed easily.
+                Send a message to <c>pretext-support@googlegroups.com</c>
+                describing the problem and
+                <em>including a live link to the page showing the error</em>.
+                Do not make a minimal example. (<c>CSS</c> issues are handled in a
+                completely different way than other software issues.)
+              </p>
+
+              <p>
+                The long-term plan is to have a variety of different layout options,
+                which can be chosen as easily as choosing a color scheme.
+                See <xref ref="principle-output-styles" text="type-local">Principle</xref>.
+                The first step is to rewrite the current <c>CSS</c>
+                so that it is easy to develop alternate layouts.
+                That should be done by the end of Spring, 2018.
+                Then people can develop new styles!  Until that happens, either suffer
+                with the current style, or hack away at your own peril.  (Note that
+                the <pretext/> support groups will not provide any help with hacking
+                the layout, but a lot of help will be available when it is time to
+                develop alternate layouts.)
+              </p>
         </li>
 
         <li>
