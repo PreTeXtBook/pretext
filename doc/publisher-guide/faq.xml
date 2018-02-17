@@ -29,6 +29,35 @@
         </li>
 
         <li>
+            <title>How can I change the colors in the HTML version?</title>
+
+            <p>
+              There are several colors schemes available.
+              They (currently) have a name in the form <c>mathbook-X.css</c>,
+              where <m>X \in \{0,1,2,3,4,5,6,7,ups,manitoba,bucknell\}</m>.
+            </p>
+
+            <p>
+              The options for colors are currently being revised,
+              and soon it will be easier to create your own color scheme.
+            </p>
+
+            <p>
+              To use one of the above color schemes,
+              you can use a <c>stringparam</c> on the command line, like this:
+                <code>
+                  --stringparam html.css.file "mathbook-X.css"
+                </code>
+              where <m>X</m> is chosen from the list above.
+              Or in your thin XSL stylesheet you can add the line
+              <code>
+                &amp;lt;xsl:param name="html.css.file" select="'mathbook-X.css'" /&amp;gt;
+              </code>
+            </p>
+        </li>
+
+
+        <li>
             <title>I'd like to make one small adjustment in my output.</title>
             <p>There are no plans to make it easy to change one thing in the layout (such as changing the title of all sub-sub-sections from flush-left to centered).  If you know enough, then you can hack such things yourself.  But doing so is inadvisable, except in the case where you are the rare person who has done a lot of studying and put a lot of effort into learning book design.  If that is the case, then it would be better to make a completely new layout and then share it so it is an option for other people to use.  See <xref ref="principle-output-styles" text="type-local">Principle</xref>.</p>
         </li>
