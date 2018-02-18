@@ -13,3 +13,9 @@ If you wish to build from source, possibly as part of contributing improvements,
         cd /path/to/mathbook
         xsltproc --xinclude user/publisher-guide-html.xsl doc/publisher-guide/publisher-guide.xml
 1.  You might prefer to set your default directory to someplace outside the MathBook XML distribution and include full paths to the XSL and XML files in the `xsltproc` command, so the output is not mixed in with the source.
+
+If you are contributing new material, note that there are three non-standard elements in use:
+* `tag` - for element names
+* `tage` - for names of empty elements
+* `attribute` - for names of attributes
+Please make use of them in your contribution.  Use should be obvious to deduce by looking at examples in existing source.  The instructions above are meant to insure that templates for these tags are available and used.
