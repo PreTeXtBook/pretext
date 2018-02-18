@@ -71,9 +71,7 @@
 
             <p>
               On Debian or Ubuntu Linux:
-              <code>
-                sudo apt-get install pdf2svg
-              </code>
+              <c>sudo apt-get install pdf2svg</c>.
             </p>
 
             <p>
@@ -88,9 +86,7 @@
               </code>
               Be patient as this will take a few minutes.
               To get rid of any intermediate build files, run the command
-              <code>
-                sudo port clean --all all
-              </code>
+              <c>sudo port clean --all all</c>.
               Again be patient.
             </p>
 

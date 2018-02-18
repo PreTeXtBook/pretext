@@ -14,8 +14,14 @@
 
     <dl>
         <li>
-            <title>Why does your conversion to HTML use a fixed width for the text?</title>
-            <p>There is an optimal number of characters per line for human readers, based on research and centuries of book design.  So we set a fixed width such that that the default font comes close to achieving this optimal value.  We also use responsive design to accomodate the constraints of a small screen as best as possible.  A reader will not want to have to carefully resize a browser window to achieve the optimal width, nor should a line of text spread to many, many characters across a very expansive screen.  See <xref ref="principle-good-design" /> in the <xref ref="list-principles" text="title" />.</p>
+            <title>Why does the conversion to HTML use a fixed width for the text?</title>
+            <p>There is an optimal number of characters per line for human readers,
+               based on research and centuries of book design.
+               So we set a fixed width such that the default font comes close to achieving this optimal value.
+               We also use responsive design to accomodate the constraints of a small screen as best as possible.
+               A reader will not want to have to carefully resize a browser window to achieve the optimal width,
+               nor should a line of text spread to many, many characters across a very expansive screen.
+               See <xref ref="principle-good-design" /> in the <xref ref="list-principles" text="title" />.</p>
         </li>
 
         <li>
@@ -65,7 +71,7 @@
                 Send a message to <c>pretext-support@googlegroups.com</c>
                 describing the problem and
                 <em>including a live link to the page showing the error</em>.
-                Do not make a minimal example. (<c>CSS</c> issues are handled in a
+                Do not make a minimal example. (CSS issues are handled in a
                 completely different way than other software issues.)
               </p>
 
@@ -73,7 +79,7 @@
                 The long-term plan is to have a variety of different layout options,
                 which can be chosen as easily as choosing a color scheme.
                 See <xref ref="principle-output-styles" text="type-local">Principle</xref>.
-                The first step is to rewrite the current <c>CSS</c>
+                The first step is to rewrite the current CSS
                 so that it is easy to develop alternate layouts.
                 That should be done by the end of Spring, 2018.
                 Then people can develop new styles!  Until that happens, either suffer
