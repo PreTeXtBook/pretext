@@ -1517,7 +1517,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Multiple column, column-major lists&#xa;</xsl:text>
         <xsl:text>\usepackage{multicol}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="//ol or //ul or //dl or //exercises or //references">
+    <xsl:if test="//ol or //ul or //dl or //exercises or //references or //task">
         <xsl:text>%% More flexible list management, esp. for references and exercises&#xa;</xsl:text>
         <xsl:text>%% But also for specifying labels (i.e. custom order) on nested lists&#xa;</xsl:text>
         <xsl:text>\usepackage{enumitem}&#xa;</xsl:text>
@@ -2830,7 +2830,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>,</xsl:text>
     <xsl:value-of select="@lly" />
     <xsl:text>){\includegraphics</xsl:text>
-    <xsl:if test="@width"> 
+    <xsl:if test="@width">
         <xsl:text>[width=</xsl:text>
             <xsl:value-of select="@width" />
         <xsl:text>]</xsl:text>
