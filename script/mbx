@@ -1415,6 +1415,8 @@ elif args.component == 'asy':
         asymptote_conversion(args.xml_file, args.xmlid, output_dir, 'pdf')
     elif args.format == 'svg':
         asymptote_conversion(args.xml_file, args.xmlid, output_dir, 'svg')
+    elif args.format == 'eps':
+        asymptote_conversion(args.xml_file, args.xmlid, output_dir, 'eps')
     elif args.format == 'source':
         asymptote_conversion(args.xml_file, args.xmlid, output_dir, 'source')
     else:
