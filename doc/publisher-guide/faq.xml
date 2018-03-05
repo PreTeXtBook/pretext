@@ -21,17 +21,17 @@
                We also use responsive design to accomodate the constraints of a small screen as best as possible.
                A reader will not want to have to carefully resize a browser window to achieve the optimal width,
                nor should a line of text spread to many, many characters across a very expansive screen.
-               See <xref ref="principle-good-design" /> in the <xref ref="list-principles" text="title" />.</p>
+               See <xref ref="principle-good-design" text="type-local">Principle</xref>.</p>
         </li>
 
         <li>
             <title>I do not want my examples in knowls.</title>
-            <p>You can change that!  See the section on conversions in the Publisher's Guide.</p>
+            <p>You can change that!  See <xref ref="knowled-content" />.</p>
         </li>
 
         <li>
             <title>Why are my knowls empty?</title>
-            <p>When viewing the HTML version on your laptop or local computer as files, do not expect knowls to render properly.  This is a known bug/feature, and there is nothing to be done about it, unless you run a web server on your own machine, which fortunately is a very easy thing to do (see <xref ref="processing-testing-html" />). Think of it this way: the knowl content comes from a server, but on your laptop there is no web server.  You are just looking at files.</p>
+            <p>When viewing the HTML version on your laptop or local computer as files, do not expect knowls to render properly.  This is a known bug/feature, and there is nothing to be done about it, unless you run a web server on your own machine, which fortunately is a very easy thing to do (see the section of the Author's Guide about testing <init>HTML</init> output locally). Think of it this way: the knowl content comes from a server, but on your laptop there is no web server.  You are just looking at files.</p>
         </li>
 
         <li>
@@ -40,7 +40,7 @@
             <p>
               There are several colors schemes available.
               They (currently) have a name in the form <c>mathbook-X.css</c>,
-              where <m>X \in \{0,1,2,3,4,5,6,7,ups,manitoba,bucknell\}</m>.
+              where <m>X \in \{0,1,2,3,4,5,6,7,\text{ups},\text{manitoba},\text{bucknell}\}</m>.
             </p>
 
             <p>
@@ -51,14 +51,10 @@
             <p>
               To use one of the above color schemes,
               you can use a <c>stringparam</c> on the command line, like this:
-                <code>
-                  --stringparam html.css.file "mathbook-X.css"
-                </code>
+                <cd>--stringparam html.css.file "mathbook-X.css"</cd>
               where <m>X</m> is chosen from the list above.
               Or in your thin XSL stylesheet you can add the line
-              <code>
-                &amp;lt;xsl:param name="html.css.file" select="'mathbook-X.css'" /&amp;gt;
-              </code>
+              <cd>&lt;xsl:param name="html.css.file" select="'mathbook-X.css'" /&gt;</cd>
             </p>
         </li>
 

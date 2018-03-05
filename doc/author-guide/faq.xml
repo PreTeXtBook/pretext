@@ -16,16 +16,16 @@
         <li>
           <title>On my local machine, the knowls/Sage cells are empty</title>
             <p>
-    Viewing a file on your computer is not the same as visiting a
-    web page.  There is no web server, so you should assume that
-    things will be different.
+              Viewing a file on your computer is not the same as visiting a
+              web page.  There is no web server, so you should assume that
+              things will be different.
             </p>
 
             <p>
               The cause of the difficulty is that some browsers
               (Chrome and Safari, for example)
               will not fetch the content of knowls when viewing a file on
-              your local computer. 
+              your local computer.
               Those browsers consider opening a local knowl to be a security risk.
               As of the time of this writing, Firefox will open those knowls.
             </p>
@@ -80,10 +80,8 @@
               (available from the Mac App Store) first.
               Make sure that the command line tools are installed by running Xcode.
               After Xcode is installed read the directions to install Macports.
-              Once MacPorts is installed run the following command to install <c>pdf2svg</c>: 
-              <code>
-                sudo port install pdf2svg
-              </code>
+              Once MacPorts is installed run the following command to install <c>pdf2svg</c>:
+              <c>sudo port install pdf2svg</c>.
               Be patient as this will take a few minutes.
               To get rid of any intermediate build files, run the command
               <c>sudo port clean --all all</c>.
@@ -100,7 +98,7 @@
             <title>Why is there no tag for bold?</title>
             <p>
               Because the first principle of <pretext/>
-              is that the markup captures the markup captures the structure of the document,
+              is that the markup captures the structure of the document,
               not the appearance.
             </p>
 
@@ -108,7 +106,7 @@
               A better question is: <em>why</em> do you want to print something in bold?
               Is it emphasis? (See <tag>em</tag>.)
               Is it the volume number of a journal? (See <tag>journal</tag>.)
-              Do you want to SHOUT?  Try <tag>alert</tag>.  And so on. There are lots of good answers, some of which are not yet implemented.  We would love to hear about elements you need that are about expressing content, and not about altering presentation.  See <xref ref="principle-markup" /> in the <xref ref="list-principles" text="title" />.
+              Do you want to SHOUT?  Try <tag>alert</tag>.  And so on. There are lots of good answers, some of which are not yet implemented.  We would love to hear about elements you need that are about expressing content, and not about altering presentation.  See <xref ref="principle-markup" text="type-local">Principle</xref>.
             </p>
         </li>
 
