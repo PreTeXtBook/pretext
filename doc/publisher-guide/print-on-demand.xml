@@ -15,7 +15,7 @@
 
     <p>A print-on-demand service is a manufacturer and distributor of printed books, which are typically only printed once ordered, or in extremely small quantities.  They can provide many of the manufacturing and fulfillment services a traditional supplies.  Some provide services you pay for that will produce a cover, provide editorial services, or assist with marketing.</p>
 
-    <p>We list three such services below, but first describe some commonalities, pro and con.<dl>
+    <p>We list three such services below, but first describe some commonalities, pro and con.<dl width="narrow">
         <li>
             <title>Updates</title>
             <p>Generally, you provide a <init>PDF</init> of your text, and we have tried, with the <c>latex.print</c> option, to make output that is amenable to this situation.  A real advantage of print-on-demand is that you can usually update this <init>PDF</init> at any time, without much trouble.  You will need to decide how to indicate versions (or printings?) of your work.  Perhaps we will have tools and advice about this soon.</p>
@@ -40,7 +40,7 @@
         </li>
     </dl></p>
 
-    <p>In order of increasing professionalism and decreasing convenience, we describe three print-on-demand manufacturers we are familiar with. Additions, corrections, updates, and alternatives are all welcome.<dl>
+    <p>In order of increasing professionalism and decreasing convenience, we describe three print-on-demand manufacturers we are familiar with, plus two others. Additions, corrections, updates, and alternatives are all welcome.<dl width="narrow">
 
         <li>
             <title>Lulu.com</title>
@@ -49,18 +49,34 @@
         </li>
 
         <li>
-            <title>CreateSpace</title>
+            <title>Create Space</title>
             <idx>CreateSpace</idx>
             <idx>Amazon.com</idx>
-            <p>This company is owned by Amazon.com.  They manufacture and distribute serious books, in addition to music and film.  Distribution through Amazon is nearly automatic.  There is also <q>Expanded Distribution</q>, which starts to look more like Lightning Source (next).  (2017-11-25)</p>
+            <p>This company is owned by Amazon.com.  They manufacture and distribute serious books, in addition to music and film.  Distribution through Amazon is nearly automatic.  There is also <q>Expanded Distribution</q>, which starts to look more like Ingram (next).  (2017-11-25)</p>
+
+            <p>CreateSpace attempts to make sure you have the rights to your content.  So if they find your book freely available on the Internet, their <q>Content Validation Request Team</q> becomes suspicious and investigates.  This has caused a few authors a few headaches and delays in making their book available for sale, though all have been successful eventually.  (2018-03-06)</p>
         </li>
 
         <li>
-            <title>Lightning Source</title>
+            <title>Ingram Spark</title>
             <idx>Lightning Source</idx>
+            <idx>IngramSpark</idx>
             <idx>Ingram</idx>
-            <p>This is a division of Ingram, which is a very large printer, also providing services to major publishers.  Creating an account is not trivial, and you need to provide your own <init>ISBN</init> number.  In return, your book is available at Amazon.com and many other online bookstores automatically, and is in many ways indistinguishable from offerings of large commercial publishers.  There are also options for international distribution.(2017-11-25)</p>
+            <p>IngramSpark (formerly Lightning Source) is a division of Ingram, which is a very large printer, also providing services to major publishers.  Creating an account is not trivial, and you need to provide your own <init>ISBN</init> number.  In return, your book is available at Amazon.com and many other online bookstores automatically, and is in many ways indistinguishable from offerings of large commercial publishers.  There are also options for international distribution.  You can also control settings for discounts and returns.  (2018-03-06)</p>
         </li>
+
+        <li>
+            <title>Blurb</title>
+            <idx>Blurb</idx>
+            <p>Blurb specializes in photo books, and uses Ingram for printing.  Sizes are limited, and costs are more that the other services.  Direct experiences would be a welcome addition.  (2018-03-06)</p>
+        </li>
+
+        <li>
+            <title>Nook Press</title>
+            <idx>Nook Press</idx>
+            <p>Nook Press is a service of Barnes <ampersand /> Noble, and books appear only through their online store.  We have no additional information, so direct experiences would be a welcome addition.  (2018-03-06)</p>
+        </li>
+
     </dl></p>
 
     <p>We currently have no good information about distributing <init>EPUB</init> or Kindle electronic versions for profit.  (2017-11-25).</p>
