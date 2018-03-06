@@ -7,7 +7,7 @@
 <!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
 <!-- See the file COPYING for copying conditions.             -->
 
-<chapter xml:id="start-here">
+<chapter xml:id="start-here" xmlns:xi="http://www.w3.org/2001/XInclude">
     <title>Start Here</title>
 
     <introduction>
@@ -30,30 +30,7 @@
 
             <p>The creation, design, development and maintenance of <pretext /> (<init>MBX</init> here) is guided by the following list of principles.  They may not be fully understood on a first reading, but should be useful as you become more familiar with authoring texts with <pretext /> and should amplify some of the previous discussion.</p>
 
-            <list xml:id="list-principles">
-                <caption><pretext /> Principles</caption>
-                <!-- sync edits with main README.md -->
-
-                <ol>
-                    <li xml:id="principle-markup"><p><init>MBX</init> is a markup language that captures the structure of textbooks and research papers in the mathematical sciences.</p></li>
-
-                    <li><p><init>MBX</init> is human-readable and human-writable.</p></li>
-
-                    <li><p><init>MBX</init> documents serve as a single source which can be easily converted to multiple other formats, current and future.</p></li>
-
-                    <li xml:id="principle-good-design"><p><init>MBX</init> respects the good design practices which have been developed over the past centuries.</p></li>
-
-                    <li><p><init>MBX</init> makes it easy for authors to implement features which are both common and reasonable.</p></li>
-
-                    <li><p><init>MBX</init> supports online documents which make use of the full capabilities of the Web.</p></li>
-
-                    <li xml:id="principle-output-styles"><p><init>MBX</init> output is styled by selecting from a list of available templates, relieving the author of the burden involved in micromanaging the output format.</p></li>
-
-                    <li xml:id="principle-open-software"><p><init>MBX</init> is free: the software is available at no cost, with an open license. The use of <init>MBX</init> does not impose any constraints on documents prepared with the system.</p></li>
-
-                    <li><p><init>MBX</init> is not a closed system: documents can be converted to <latex /> and then developed using standard <latex /> tools.</p></li>
-                </ol>
-            </list>
+            <xi:include href="principles.xml" />
         </paragraphs>
     </section>
 
