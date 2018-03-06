@@ -7232,6 +7232,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <div class="page">
                 <xsl:apply-templates select="." mode="sidebars" />
                 <main class="main">
+                    <xsl:attribute name="id">
+                        <xsl:apply-templates select="$document-root" mode="internal-id" />
+                        <xsl:text>-</xsl:text>
+                        <xsl:apply-templates select="." mode="internal-id" />
+                    </xsl:attribute>
                     <div id="content" class="mathbook-content">
                         <xsl:copy-of select="$content" />
                     </div>
