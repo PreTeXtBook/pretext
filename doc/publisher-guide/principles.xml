@@ -18,7 +18,7 @@
     <caption><pretext /> Principles</caption>
 
     <ol>
-        <li xml:id="principle-markup"><pretext /> is a markup language that captures the structure of textbooks and research papers in the mathematical sciences.</li>
+        <li xml:id="principle-markup"><pretext /> is a markup language that captures the structure of textbooks and research papers.</li>
 
         <li><pretext /> is human-readable and human-writable.</li>
 
