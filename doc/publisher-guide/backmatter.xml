@@ -10,6 +10,8 @@
 <backmatter xml:id="backmatter" xmlns:xi="http://www.w3.org/2001/XInclude">
     <title>Appendices</title>
 
+    <xi:include href="faq.xml" />
+    <xi:include href="pretext-principles.xml" />
     <xi:include href="gfdl-mathbook.xml" />
 
 </backmatter>

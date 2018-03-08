@@ -10,22 +10,111 @@
 <appendix xml:id="faq">
     <title>FAQ: Frequently Asked Questions</title>
 
-     <p>This is a list of answers to frequent questions, in no particular order.</p>
+     <p>Technical questions first, followed by questions about markup.</p>
 
     <dl>
         <li>
+          <title>On my local machine, the knowls/Sage cells are empty</title>
+            <p>
+              Viewing a file on your computer is not the same as visiting a
+              web page.  There is no web server, so you should assume that
+              things will be different.
+            </p>
+
+            <p>
+              The cause of the difficulty is that some browsers
+              (Chrome and Safari, for example)
+              will not fetch the content of knowls when viewing a file on
+              your local computer.
+              Those browsers consider opening a local knowl to be a security risk.
+              As of the time of this writing, Firefox will open those knowls.
+            </p>
+
+            <p>
+              Your options are to use Firefox,
+              to transfer the files to an online server,
+              or to set up a local web server so that local files operate in the usual way.
+            </p>
+
+            <p>
+              To set up a local server:
+              <ol>
+                <li>In a terminal, go to the directory containing the HTML files.</li>
+                <li>Do:  <c>python -m SimpleHTTPServer</c></li>
+                <li>Note the port indicated in the output (let's assume it is <c>8000</c>)</li>
+                <li>Go to <c>http://127.0.0.1:8000/</c> to see a listing of the files.
+                  Click on a file and you will be viewing it exactly as if it was on the Web.</li>
+              </ol>
+            </p>
+
+            <p>
+              The instructions above are for Python<nbsp/>2.  For Python<nbsp />3,
+              as well as further discussion, see the
+              <url href="http://mathbook.pugetsound.edu/doc/author-guide/html/processing-testing-html.html">Author's Guide</url>.
+            </p>
+        </li>
+
+
+
+        <li>
+            <title>How do I install <c>xsltproc</c> on Ubuntu or Debian Linux?</title>
+            <p>
+              <c>sudo apt-get install xsltproc</c>
+            </p>
+        </li>
+
+        <li>
+            <title>How do I install <c>pdf2svg</c>?</title>
+            <p>
+              <c>pdf2svg</c> is necessary for TikZ diagrams in HTML.
+            </p>
+
+            <p>
+              On Debian or Ubuntu Linux:
+              <c>sudo apt-get install pdf2svg</c>.
+            </p>
+
+            <p>
+              To install <c>pdf2svg</c> on a Mac, you will need to install MacPorts.
+              Read the directions carefully, since you will need to install Xcode
+              (available from the Mac App Store) first.
+              Make sure that the command line tools are installed by running Xcode.
+              After Xcode is installed read the directions to install Macports.
+              Once MacPorts is installed run the following command to install <c>pdf2svg</c>:
+              <c>sudo port install pdf2svg</c>.
+              Be patient as this will take a few minutes.
+              To get rid of any intermediate build files, run the command
+              <c>sudo port clean --all all</c>.
+              Again be patient.
+            </p>
+
+            <p>
+              If you have trouble with MacPorts, try HomeBrew.
+            </p>
+        </li>
+
+
+        <li>
             <title>Why is there no tag for bold?</title>
-            <p>That would be presentation, not content.  I will answer that question with a question: <em>why</em> do you want to print something in bold?  Is it emphasis? (See <tag>em</tag>.)  Is it the volume number of a journal? (See <tag>journal</tag>.)  Do you want to SHOUT?  Try <tag>alert</tag>.  And so on. There are lots of good answers, some of which are not yet implemented.  We would love to hear about elements you need that are about expressing content, and not about altering presentation.  See <xref ref="principle-markup" /> in the <xref ref="list-principles" text="title" />.</p>
+            <p>
+              Because the first principle of <pretext/>
+              is that the markup captures the structure of the document,
+              not the appearance.
+            </p>
+
+            <p>
+              A better question is: <em>why</em> do you want to print something in bold?
+              Is it emphasis? (See <tag>em</tag>.)
+              Is it the volume number of a journal? (See <tag>journal</tag>.)
+              Do you want to SHOUT?  Try <tag>alert</tag>.  And so on. There are lots of good answers, some of which are not yet implemented.  We would love to hear about elements you need that are about expressing content, and not about altering presentation.  See <xref ref="principle-markup" text="type-local">Principle</xref>.
+            </p>
         </li>
 
         <li>
-            <title>Why does your conversion to HTML use a fixed width for the text?</title>
-            <p>There is an optimal number of characters per line for human readers, based on research and centuries of book design.  So we set a fixed width such that that the default font comes close to achieving this optimal value.  We also use responsive design to accomodate the constraints of a small screen as best as possible.  A reader will not want to have to carefully resize a browser window to achieve the optimal width, nor should a line of text spread to many, many characters across a very expansive screen.  See <xref ref="principle-good-design" /> in the <xref ref="list-principles" text="title" />.</p>
-        </li>
-
-        <li>
-            <title>Everything looks right, but why do I get empty output and some warnings about bugs?</title>
-            <p>There is a good chance you have <q>modularized</q> your source files and have not included the <c>--xinclude</c> switch on the command-line when you ran <c>xsltproc</c>.  (See <xref ref="processing-modular" />.)  We can often recognize this mistake<mdash />did you not get a warning?  (If not, we can improve the warning if you tell us how your source was organized.  So please do, since we would love to hear about it.)</p>
+            <title>Why do I get no output and some warnings about bugs?</title>
+            <p>There is a good chance you have <q>modularized</q> your source files and have not included the <c>--xinclude</c> switch on the command-line when you ran <c>xsltproc</c>.  (See <xref ref="processing-modular" />.)
+               If that was your mistake, then you should have seen a warning.
+               Please check to see if there was a warning you missed.  (If not, we can improve the warning if you tell us how your source was organized.  So please do, since we would love to hear about it.)</p>
         </li>
 
         <li xml:id="faq-pull-regularly">
@@ -44,6 +133,24 @@
             <p>First, realize that the way <latex /> uses the term <term>label</term> in the context of lists is different from how much of the rest of the world uses the term in this context.  In our case the <attribute>label</attribute> attribute describes the style of the grouping markers.  For example, bullets versus squares on items of an unordered list, or Roman numerals versus Arabic numerals on an ordered list.  So this attribute conveys information <em>about</em> the list, not content <em>of</em> the list.  And even if you tried putting an <tag>m</tag> tag into the value of the attribute, you would not have any luck since <init>XML</init> does not even allow that construction.  Finally, there is no real good way to accomplish this in <init>HTML</init>, so conversion to that format would be difficult.</p>
 
             <p>The alternative is to use a description list, with tag <tag>dl</tag>.  You are reading one right now.  Put your mathematics in the <tag>title</tag> and the associated content into the remainder of the <tag>li</tag>.</p>
+        </li>
+
+        <li>
+            <title>I have errors when I try to validate my markup, but everything looks okay when I make the HTML and the PDF.  Should I be worried?</title>
+
+            <p>
+              Occasionally the schema lags behind the code, so your first step is to
+              post to <c>pretext-support@googlegroups.com</c> to find out if it is
+              a problem with the schema.
+            </p>
+
+            <p>
+              Possibly there is another way to accomplish what you want, and that
+              markup will fit the schema.
+              Or maybe what you are doing meets the <q>common and reasonable</q>
+              test and can become a feature request.  The discussion on
+              <c>pretext-support</c> should provide an answer.
+            </p>
         </li>
 
         <li>
@@ -68,16 +175,6 @@
         </li>
 
         <li>
-            <title>I do not want my examples in knowls.</title>
-            <p>You can change that!  See the section on conversions in the Publisher's Guide.</p>
-        </li>
-
-        <li>
-            <title>Why are my knowls empty?</title>
-            <p>When viewing the HTML version on your laptop or local computer as files, do not expect knowls to render properly.  This is a known bug/feature, and there is nothing to be done about it, unless you run a web server on your own machine, which fortunately is a very easy thing to do (see <xref ref="processing-testing-html" />). Think of it this way: the knowl content comes from a server, but on your laptop there is no web server.  You are just looking at files.</p>
-        </li>
-
-        <li>
             <title>My <latex /> output has errors.</title>
             <p>Almost certainly your <pretext /> is not correct.  Or your <latex /> syntax within a math element (<tag>m</tag>, <tag>me</tag>, and friends) is not correct.  You have to be very deliberate to make legitimate <pretext /> that produces <latex /> that fails to compile.  The converse is that <latex /> compilation is a good check on the quality of your <pretext />, even if you do not care about print output for your project.</p>
 
@@ -91,32 +188,6 @@
             <p>We do raise some errors during processing with <c>xsltproc</c>, but error-checking your input is a job for a validator, so in theory we should not ever produce any errors during a conversion.  So strive for having 100<percent /> valid <pretext /> source, not simply great-looking results.  See <xref ref="schema" /> and <xref ref="schema-install" />.</p>
         </li>
 
-        <li>
-            <title>I'd like to make one small adjustment in my output.</title>
-            <p>There are no plans to make it easy to change one thing in the layout (such as changing the title of all sub-sub-sections from flush-left to centered).  If you know enough, then you can hack such things yourself.  But doing so is inadvisable, except in the case where you are the rare person who has done a lot of studying and put a lot of effort into learning book design.  If that is the case, then it would be better to make a completely new layout and then share it so it is an option for other people to use.  See <xref ref="principle-output-styles" text="type-local">Principle</xref>.</p>
-        </li>
-
-        <li>
-            <title>Why does the HTML output load so many external resources?</title>
-            <p>The subtext perhaps being, <q>Why shouldn't I host these on my own server?</q>  A main goal for <pretext /> is to spare authors the headaches of learning new technologies just so they can get their content in front of readers.  That knowledge should be built into software, so an author can work at a higher level, explaining the intricacies of their discipline.  So we only assume an author can place locally-built HTML output onto some public server they have permission to use.  Any extra enabling techology we do not want to create ourselves gets pulled from other public servers.  MathJax, both code and fonts, is a good example, as one of the enabling projects.  Perhaps it is <em>the</em> enabling project.</p>
-
-            <p>This way,<ul>
-                <li>Authors can concentrate on their writing, not updating services on their server.</li>
-                <li>Servers that are hostile to ad-hoc configurations (think <q>learning management systems</q>) are not an impediment to hosting projects.</li>
-                <li>For the most part, updates to external resources happen automatically.  This allows authors and <pretext /> developers to concentrate on other aspects of their work.</li>
-            </ul></p>
-
-            <p>We get MathJax from a <term>content delivery network</term> (CDN).  Once we have that dependency, then fonts and search from Google, CSS and Javascript from the American Institute of Mathematics, and other components, all have the same dependency: a decent internet connection.  Our experience over several years is that these resources have good uptimes and good bandwidth, and so are not a source of problems.  A good offline version, with resources packaged via a script, would be a good long-term project.</p>
-
-            <p>Finally, we do not load minor resources indiscriminately.  Something in your source should suggest they are necessary and we perform those checks, document-wide.  However, since a cross-reference is usually implemented as a knowl, and we cannot be sure what a knowl might contain, we do tend to load resources on <em>every</em> page, even if only needed once.  We hope to improve this situation.  And you are enouraged to help if you have technical skills in these areas.</p>
-        </li>
-
-        <li>
-            <title>Searching my <init>PDF</init> output is broken.</title>
-            <p><pretext /> goes to great lengths to make a high-quality <init>PDF</init>, but if you manipulate it by adding in new pages, or adjust the intermediate <latex /> to use other fonts, you run the risk of breaking some of the features.</p>
-
-            <p>A ligature is a combination of two characters into one, like a lower-case <q>f</q> followed closely by a lower-case <f>i</f> without a dot.  These can confuse a search.  Verbatim text sometimes ends up with <q>smart</q> quotes, where left and right versions are inverted.  This frustrates copying source code into an actual program.  And so on.  If you see problems like this with un-customized <init>PDF</init> output, we would like to hear about it.</p>
-        </li>
     </dl>
 
 </appendix>

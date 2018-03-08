@@ -15,13 +15,11 @@
     </introduction>
 
     <section xml:id="knowled-content">
-        <paragraphs>
-            <title>Knowled Content</title>
+        <title>Knowled Content</title>
 
-            <p>We knowl examples, proofs, and inline exercises by default, mostly so a new author knows that presentation is an option.  The knowlization of items can be controlled by a variety of command-line processing parameters (<xref ref="processing-parameters" />).  While these are in flux, we do not list them here, but instead suggest you open <c>xsl/mathbook-html.xsl</c> and search on <c>html.knowl</c> to see what is available.</p>
+        <p>We knowl examples, proofs, and inline exercises by default, mostly so a new author knows that presentation is an option.  The knowlization of items can be controlled by a variety of command-line processing parameters (<xref ref="processing-parameters" />).  While these are in flux, we do not list them here, but instead suggest you open <c>xsl/mathbook-html.xsl</c> and search on <c>html.knowl</c> to see what is available.</p>
 
-            <p>Note that some of these switches are for broad categories of items, for example, <c>html.knowl.theorem</c> will also knowl <tag>lemma</tag>s, <tag>corollary</tag>s, <tag>fact</tag>s, and more.  This choice applies document-wide, there is no plan to support electing this on a case-by-case basis.</p>
-        </paragraphs>
+        <p>Note that some of these switches are for broad categories of items, for example, <c>html.knowl.theorem</c> will also knowl <tag>lemma</tag>s, <tag>corollary</tag>s, <tag>fact</tag>s, and more.  This choice applies document-wide, there is no plan to support electing this on a case-by-case basis.</p>
     </section>
 
 </chapter>
