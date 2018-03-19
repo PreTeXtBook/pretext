@@ -2689,8 +2689,10 @@ the xsltproc executable.
                 <p>This is a short list that ends a subsection, so can be used to address the necessary spacing.  We also test two XML elements separated by a space (which should not go missing).<ol cols="2" label="(a)">
                     <li>One item.</li>
                     <li><em>Two</em> <alert>ducks</alert>.</li>
-                    <li>Three items.</li>
+                    <li>Three items.  Plus a few more words to check that long entries in a two column list look good.</li>
                     <li>Four items.</li>
+                    <li>Another long entry that simultaneously tests that long entries look good in a list,
+                        and also tests an odd number of entries in a two column list.</li>
                 </ol></p>
             </subsection>
 
