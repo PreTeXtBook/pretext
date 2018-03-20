@@ -463,6 +463,9 @@
     <section xml:id="topic-tabular">
         <title>(*) Tables and Tabulars</title>
 
+        <p>This section needs much more work.</p>
+
+        <p>Note that tables may be constructed using the <url href="http://www.latex-tables.com/"><latex /> Complex Table Editor</url> tool online at <c>latex-tables.com</c>and then exported in <pretext /> syntax.</p>
     </section>
 
     <section xml:id="topic-program-listings">

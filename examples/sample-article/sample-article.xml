@@ -2689,8 +2689,10 @@ the xsltproc executable.
                 <p>This is a short list that ends a subsection, so can be used to address the necessary spacing.  We also test two XML elements separated by a space (which should not go missing).<ol cols="2" label="(a)">
                     <li>One item.</li>
                     <li><em>Two</em> <alert>ducks</alert>.</li>
-                    <li>Three items.</li>
+                    <li>Three items.  Plus a few more words to check that long entries in a two column list look good.</li>
                     <li>Four items.</li>
+                    <li>Another long entry that simultaneously tests that long entries look good in a list,
+                        and also tests an odd number of entries in a two column list.</li>
                 </ol></p>
             </subsection>
 
@@ -2902,6 +2904,8 @@ the xsltproc executable.
                     </row>
                 </tabular>
             </table>
+
+            <p>Note that tables may be constructed using the <url href="http://www.latex-tables.com/"><latex /> Complex Table Editor</url> tool online at <c>latex-tables.com</c>and then exported in <pretext /> syntax.</p>
 
             <p>Tables can be used many ways.  We describe long division of polynomials by using vertical and horizontal borders on individual entries of a table.  The division lines are slightly thicker than the subtraction lines.  This is a good example of the typical abuse of tables for horizontal and vertical layout.  Also indicative of this abuse is that it might make more sense to call this a <q>Figure,</q> not a <q>Table</q>.</p>
 
