@@ -6644,10 +6644,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#x60;</xsl:text>
 </xsl:template>
 
-<!-- Foreign words/idioms        -->
-<!-- Matches HTML5 specification -->
+<!-- Foreign words/idioms -->
+<!-- Rutter, Web Typography, p.50 advocates a "span" with      -->
+<!-- a "lang" attribute for foreign words so screen readers    -->
+<!-- and hyphenation react properly.  Elsewhere, italics is    -->
+<!-- suggested only for transliterated wods, to avoid          -->
+<!-- confusion. However, for now, we are using "i" by default, -->
+<!-- with a class that can be used in CSS for distinctions.    -->
+<!-- But see also (2018-03-23):                                -->
+<!-- https://www.w3.org/TR/html5/text-level-semantics.html#the-i-element -->
 <xsl:template match="foreign">
-    <i class="foreign"><xsl:apply-templates /></i>
+    <i class="foreign">
+        <xsl:if test="@xml:lang">
+            <xsl:attribute name="lang">
+                <xsl:value-of select="@xml:lang" />
+            </xsl:attribute>
+        </xsl:if>
+        <xsl:apply-templates />
+    </i>
 </xsl:template>
 
 <!-- Non-breaking space, which "joins" two words as a unit            -->

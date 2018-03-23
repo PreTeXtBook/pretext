@@ -5125,8 +5125,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\TeX{}</xsl:text>
 </xsl:template>
 
-<!-- Foreign words/idioms        -->
-<!-- Matches HTML5 specification -->
+<!-- Foreign words/idioms -->
 <xsl:template match="foreign">
     <xsl:apply-templates select="." mode="begin-language" />
     <xsl:text>\textit{</xsl:text>
