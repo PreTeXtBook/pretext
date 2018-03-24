@@ -35,6 +35,7 @@ Additions to incomplete files, or new files for additional languages, are very w
 To test, or use: place  `xml:lang="es-ES"`, or similar, as an attribute on your `<mathbook>` element.  `en-US` is the default if no `@xml:lang` attribute is given on the `mathbook` element.
 
 Current (partially) implemented language codes and contributors
+* af-ZA, Afrikaans (South Africa), Dirk Basson
 * cs-CZ, Czech (Czechia), Jiří Lebl
 * es-ES, Spanish (Spain), Juan José Torrens
 * en-US, English (United States), Robert A. Beezer

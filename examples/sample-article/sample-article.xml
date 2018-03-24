@@ -47,6 +47,7 @@ the xsltproc executable.
 <!-- <mathbook xml:lang="pt-BR"> -->
 <!-- <mathbook xml:lang="fr-FR"> -->
 <!-- <mathbook xml:lang="cs-CZ"> -->
+<!-- <mathbook xml:lang="af-ZA"> -->
 
     <!--
     "docinfo" is like metadata, it is necessary technical
