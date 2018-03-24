@@ -1302,8 +1302,11 @@
             element em {TextLong} |
             element term {TextLong} |
             element alert {TextLong} |
-            element foreign {TextLong} |
-            element pubtitle {TextLong}
+            element pubtitle {TextLong} |
+            element foreign {
+              XMLLang?,
+              TextLong
+            }
         
             
         Group |= 

@@ -2756,8 +2756,8 @@
         <xs:element ref="em"/>
         <xs:element ref="term"/>
         <xs:element ref="alert"/>
-        <xs:element ref="foreign"/>
         <xs:element ref="pubtitle"/>
+        <xs:element ref="foreign"/>
       </xs:choice>
       <xs:choice>
         <xs:element ref="delete"/>
@@ -2827,14 +2827,15 @@
       <xs:group ref="TextLong"/>
     </xs:complexType>
   </xs:element>
-  <xs:element name="foreign">
+  <xs:element name="pubtitle">
     <xs:complexType mixed="true">
       <xs:group ref="TextLong"/>
     </xs:complexType>
   </xs:element>
-  <xs:element name="pubtitle">
+  <xs:element name="foreign">
     <xs:complexType mixed="true">
       <xs:group ref="TextLong"/>
+      <xs:attribute ref="xml:lang"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="delete">

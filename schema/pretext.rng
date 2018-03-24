@@ -2903,10 +2903,13 @@
       <element name="alert">
         <ref name="TextLong"/>
       </element>
-      <element name="foreign">
+      <element name="pubtitle">
         <ref name="TextLong"/>
       </element>
-      <element name="pubtitle">
+      <element name="foreign">
+        <optional>
+          <ref name="XMLLang"/>
+        </optional>
         <ref name="TextLong"/>
       </element>
     </choice>
