@@ -25,6 +25,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- fr-FR, French (France) -->
 <!-- Thomas W. Judson, judsontw@sfasu.edu, 2016-03-23 -->
+<!-- Julien Giol, julien.giol@gmail.com, 2018-02-05   -->
 
 <xsl:variable name="fr-FR">
     <!-- THEOREM-LIKE blocks -->
