@@ -6274,25 +6274,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- exempli gratia, for example -->
-<xsl:template match="eg">
-    <xsl:text>e.g.</xsl:text>
-</xsl:template>
-
-<!-- id est, in other words -->
-<xsl:template match="ie">
-    <xsl:text>i.e.</xsl:text>
-</xsl:template>
-
-<!-- et cetera -->
-<xsl:template match="etc">
-    <xsl:text>etc.</xsl:text>
-</xsl:template>
-
-<!-- circa -->
-<xsl:template match="circa">
-    <xsl:text>c.</xsl:text>
-</xsl:template>
 
 <!-- Implication Symbols -->
 <!-- TODO: better names! -->
