@@ -70,7 +70,7 @@
     <section xml:id="restrict-mbx-scope">
         <title>Restricting the Scope</title>
 
-        <p>The <c>-r</c><idx><c>-r</c></idx> (<c>--restrict</c><idx><c>--restrict</c></idx>) switch deserves special mention.  It is followed by the value of an <attribute>xml:id</attribute> attribute present in your source XML file.  Then whatever action the script is asked to perform, it will only act on a subtree of the hierarchy, rooted at the element with the given <attribute>xml:id</attribute> value.</p>
+        <p>The <c>-r</c><idx><c>-r</c></idx> (<c>--restrict</c><idx><c>--restrict</c></idx>) switch deserves special mention.  It is followed by the value of an <attr>xml:id</attr> attribute present in your source XML file.  Then whatever action the script is asked to perform, it will only act on a subtree of the hierarchy, rooted at the element with the given <attr>xml:id</attr> value.</p>
 
         <p>So if your images are complex or numerous (or both!) and take a long time to process, you can restrict attention to whatever part of the document you are actively editing, and you can even restrict to a single <tag>image</tag> and so produce just a single graphics file.</p>
     </section>
