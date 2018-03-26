@@ -634,7 +634,7 @@
         <p>Further, there are some variant formats.<ul>
             <li>Replace <attribute>ref</attribute> by <attribute>provisional</attribute> and give it a value with some simple text like <c>subsection on eagle habitat</c> and you will get reminders that once you write this future subsection you need to link it in right here.  This is just a convenience for authors during the early stages of a writing project.</li>
 
-            <li>Replace <attribute>ref</attribute> by the pair <attribute>first</attribute> and <attribute>last</attribute>.  Provide attribute values just as you would for <attribute>ref</attribute>.  The code will check that the targets have the exact same tag, and that the order is correct.  You will get a link that looks like a range, separated by an en-dash.  As a link, only <attribute>first</attribute> will be used for the linking mechanism (<ie />, one link is generated, not two).  Experiment with <attribute>text</attribute> and content overrides.</li>
+            <li>Replace <attribute>ref</attribute> by the pair <attribute>first</attribute> and <attribute>last</attribute>.  Provide attribute values just as you would for <attribute>ref</attribute>.  The code will check that the targets have the exact same tag, and that the order is correct.  You will get a link that looks like a range, separated by an en dash.  As a link, only <attribute>first</attribute> will be used for the linking mechanism (<ie />, one link is generated, not two).  Experiment with <attribute>text</attribute> and content overrides.</li>
 
             <li>The <attribute>ref</attribute> attribute may be a list of <attribute>xml:id</attribute>, separated by commas or by spaces.  Then you will get back a list of cross-references.  This is meant for a list of citations, producing a look like [5, 9, 22], but it makes no restriction to this case.  Use it generally, but it is unlikely to get any more capable.  If you want a different list, just use multiple <tag>xref</tag> and format as you desire.</li>
         </ul></p>
@@ -669,7 +669,7 @@
 
         <p>Divisions must nest properly and may not be skipped.  So a <tag>section</tag> cannot contain a <tag>chapter</tag> and a <tag>subsection</tag> may not be contained in a <tag>chapter</tag> without an intervening <tag>section</tag>.</p>
 
-        <p>A division <em>must</em> contain a <tag>title</tag>, and may contain one or more index entries (see <xref provisional="topic-index" />), which should appear before anything else.  Any division may be unstructured, with just a sequence of <term>top-level content</term><idx>top-level content</idx> such as paragraphs, figures, lists, theorems, <etc />  Or a division may be structured, and in this case it must follow a prescribed pattern.  There may be a single, optional <tag>introduction</tag>, filled with top-level content, followed by a sequence of at least one of the appropriate divisions, ending with a single, optional <tag>conclusion</tag>, filled with top-level content.  It is an error to begin with a run of top-level content inside a division and then begin to use divisions.  (The solution is to make the initial content an <tag>introduction</tag> and/or one or several divisions.)</p>
+        <p>A division <em>must</em> contain a <tag>title</tag>, and may contain one or more index entries (see <xref ref="topic-index" />), which should appear before anything else.  Any division may be unstructured, with just a sequence of <term>top-level content</term><idx>top-level content</idx> such as paragraphs, figures, lists, theorems, <etc />  Or a division may be structured, and in this case it must follow a prescribed pattern.  There may be a single, optional <tag>introduction</tag>, filled with top-level content, followed by a sequence of at least one of the appropriate divisions, ending with a single, optional <tag>conclusion</tag>, filled with top-level content.  It is an error to begin with a run of top-level content inside a division and then begin to use divisions.  (The solution is to make the initial content an <tag>introduction</tag> and/or one or several divisions.)</p>
 
         <p>There are exceptions to the above.  For one, <tag>paragraphs</tag> is an anomalous division, as a sort of lightweight sectioning command.  It may appear in any division, at any location within a division, it may not be divided further (it is a leaf of the document tree), it never gets a number, and its title is formatted in a subsidiary way.  I especially like to use this in a two- or three-page <tag>article</tag> that has no other divisions at all.  Typical presentation has the title in bold, without much change in font size (if at all), inline with the first paragraph, and perhaps a bit of vertical space as it begins and ends.  Despite the name, it may contain more than just paragaphs, so may contain any top-level-content that would go in any other division.</p>
 
@@ -708,7 +708,7 @@
             <p>An <tag>mrow</tag> may have a <attribute>tag</attribute> attribute in place of a <attribute>number</attribute> attribute.  This will create a <q>number</q> on the equation which is just a symbol.  This is meant for situations where you do not want to use numbers, and the resulting cross-reference is <q>local.</q>  In other words, the <tag>xref</tag> and its target are not far apart, such as maybe within the same <tag>example</tag> or the same <tag>proof</tag>.  Allowable values for the attribute are: <c>star, dstar, tstar, dagger, ddagger, tdagger, hash, dhash, thash, maltese, dmaltese, tmaltese</c>.  These are the names of symbols, with prefixes where the prefix <c>d</c> means <q>double</q>, and the prefix <c>t</c> means <q>triple</q>.  Cross-references to these tagged equations happens in the usual way and should behave as expected.  See <xref ref="overview-cross-references" /> and <xref ref="topic-cross-referencing" /> for more on cross-references.</p>
         </subsection>
 
-        <subsection>
+        <subsection xml:id="mathematics-xml-characters">
             <title>Special Characters</title>
 
             <p>The <latex /> macros, <c>\amp</c>, <c>\lt</c>, and <c>\gt</c> are always available within these mathematics elements, so that you can avoid the special XML characters <c>&amp;</c>, <c>&lt;</c> and <c>&gt;</c>.  See <xref ref="overview-special-characters" /> for this same information, but in the broader context of your entire document.</p>
@@ -954,6 +954,20 @@
 
     </section>
 
+    <section xml:id="topic-index">
+        <title>(*) Index</title>
+
+        <p>TODO</p>
+
+    </section>
+
+    <section xml:id="topic-notation">
+        <title>(*) Notation</title>
+
+        <p>TODO</p>
+
+    </section>
+
     <section xml:id="topic-automatic-lists">
         <title>(*) Automatic Lists</title>
 
@@ -1040,6 +1054,13 @@
         <p>The <c>mbx</c> script (<xref ref="mbx-script" />) may be used to download the provided preview images for YouTube videos.  Filenames will be formed from the <attribute>xml:id</attribute> of the <tag>video</tag> element.  These will be used in static versions of output, such as print.  Once custom preview images are implemented for author-hosted video, their static representation will improve.</p>
 
         <p>Contemplated extensions, as of 2017-08-28, would be specifying content from Vimeo, and/or Google Drive.  Send requests if these are of use.</p>
+    </section>
+
+    <section xml:id="topic-music">
+        <title>(*) Music</title>
+
+        <p>TODO: Scholarly works discussing music may use notes and chords in text, and displays of sheet music are easily supported. (TODO: add some discussion to <xref ref="overview" />.)</p>
+
     </section>
 
     <section xml:id="topic-units-measure">
