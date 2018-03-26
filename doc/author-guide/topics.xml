@@ -276,6 +276,7 @@
             highlight-group: em, term, alert, pubtitle, foreign 
             abbreviation-group: abbr, acro, init
             editing-group: delete, insert, stale
+            xml-group: tag, tage, attr
             scientific-name-group: taxon
             footnotes: fn
             mathematics: m
@@ -361,6 +362,13 @@
                 <p>These denote portions of a text that is being changed in some way, presumably as part of an editing process.  Conceivably, they could be managed by some other tool acting on your source.  Stale text is that which is slated for removal eventually, but is left in place so that it may be consulted.  There is no support presently for actually deleting or incorporating text, though that would be a reasonable feature request.</p>
 
                 <p>Red and green, for leaving and entering, are natural choices for presentation.  But in consideration of those readers who cannot always distinguish different colors, other devices, such as strikethrough or underlining, should also be employed.</p>
+            </paragraphs>
+
+            <!-- XML syntax group -->
+
+            <paragraphs>
+                <title><tag>tag</tag>, <tag>tage</tag>, <tag>attr</tag>, tag, empty tag, attribute, <tag>section</tag>, <tage>hash</tage>, <attr>width</attr></title>
+                <p>These are <pretext /> tags for when we write about <pretext /> and need to discuss tags, empty tags, and attributes.  Given how we design <pretext /> tags the content of these elements should only be the 26 lower-case letters and a dash/hyphen.  These should render in ways that make the three types of language elements obvious without much further discussion.  Just a bit self-serving, but not unjustified.</p>
             </paragraphs>
 
             <!-- Scientific names -->
