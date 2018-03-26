@@ -889,7 +889,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\newtcolorbox{assemblage}[1][]&#xa;</xsl:text>
         <xsl:text>  {breakable, skin=enhanced, arc=2ex, colback=blue!5, colframe=blue!75!black,&#xa;</xsl:text>
         <xsl:text>   colbacktitle=blue!20, coltitle=black, boxed title style={sharp corners, frame hidden},&#xa;</xsl:text>
-        <xsl:text>   fonttitle=\bfseries, attach boxed title to top left={xshift=4mm,yshift=-3mm}, top=3mm, title=#1}&#xa;</xsl:text>
+        <xsl:text>   fonttitle=\bfseries, attach boxed title to top left={xshift=4mm,yshift=-3mm}, top=3mm, title={#1}}&#xa;</xsl:text>
         <xsl:text>%% end: assemblage&#xa;</xsl:text>
     </xsl:if>
     <!-- Following chould be duplicated as three environments, perhaps with  \tcbset{}   -->
@@ -900,7 +900,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\newtcolorbox{aside}[1]&#xa;</xsl:text>
         <xsl:text>  {breakable, skin=enhanced, sharp corners, colback=blue!3, colframe=blue!50!black,&#xa;</xsl:text>
         <xsl:text>   add to width=-1ex, shadow={1ex}{-1ex}{0ex}{black!50!white},&#xa;</xsl:text>
-        <xsl:text>   coltitle=black, fonttitle=\bfseries, title=#1, detach title, before upper={\tcbtitle\ \ }}&#xa;</xsl:text>
+        <xsl:text>   coltitle=black, fonttitle=\bfseries, title={#1}, detach title, before upper={\tcbtitle\ \ }}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="//objectives">
         <xsl:text>%% objectives: early in a subdivision, introduction/list/conclusion&#xa;</xsl:text>
