@@ -1592,13 +1592,27 @@ the xsltproc executable.
             <subsection>
                 <title>Pseudo-Characters and Constructions</title>
 
-                <p>There are a few other very common abbreviations of Latin phrases that can be achieved in HTML one way, and in <latex /> with a slightly different mechanism.  These are due to <latex />'s treatment of a period (full stop), depending on its surroundings.  So not reserved characters, but just divergent treatment.  Again, outputs here, see the source for inputs.  Using these will lead to the best quality in all your outputs.  See Will Robertson's informative and arcane <url href="http://latex-alive.tumblr.com/post/827168808/correct-punctuation-spaces">blog post</url> on the topic if you want the full story for the treatment of a full stop in <latex />.</p>
+                <p>There are a few  common abbreviations of Latin phrases that can be achieved in HTML one way, and in <latex /> with a slightly different mechanism.  These are due to <latex />'s treatment of a period (full stop), depending on its surroundings.  So not reserved characters, but just divergent treatment.  Using these will lead to the best quality in all your outputs.  See Will Robertson's informative and arcane <url href="http://latex-alive.tumblr.com/post/827168808/correct-punctuation-spaces">blog post</url> on the topic if you want the full story for the treatment of a full stop in <latex />.</p>
 
-                <p><eg /><nbsp /><nbsp />
-                <ie /><nbsp /><nbsp />
-                <etc /><nbsp /><nbsp />
-                <circa /></p>
-
+                <sidebyside>
+                    <tabular>
+                        <row><cell>Tag</cell><cell>Realization</cell><cell>Meaning</cell></row>
+                        <!--  -->
+                        <row><cell><c>ad</c></cell>    <cell><ad/>    </cell><cell><foreign>anno Domini</foreign>, in the year of the Lord</cell>      </row>
+                        <row><cell><c>am</c></cell>    <cell><am/>    </cell><cell><foreign>ante meridiem</foreign>, before midday</cell>              </row>
+                        <row><cell><c>bc</c></cell>    <cell><bc/>    </cell><cell>English, before Christ</cell>                                       </row>
+                        <row><cell><c>circa</c></cell> <cell><circa/> </cell><cell><foreign>circa</foreign>, about</cell>                              </row>
+                        <row><cell><c>eg</c></cell>    <cell><eg/>    </cell><cell><foreign>exempli gratia</foreign>, for example</cell>               </row>
+                        <row><cell><c>etal</c></cell>  <cell><etal/>  </cell><cell><foreign>et alia</foreign>, and others</cell>                       </row>
+                        <row><cell><c>etc</c></cell>   <cell><etc/>   </cell><cell><foreign>et caetera</foreign>, and the rest</cell>                  </row>
+                        <row><cell><c>ie</c></cell>    <cell><ie/>    </cell><cell><foreign>id est</foreign>, in other words</cell>                    </row>
+                        <row><cell><c>nb</c></cell>    <cell><nb/>    </cell><cell><foreign>nota bene</foreign>, note well</cell>                      </row>
+                        <row><cell><c>pm</c></cell>    <cell><pm/>    </cell><cell><foreign>post meridiem</foreign>, after midday</cell>               </row>
+                        <row><cell><c>ps</c></cell>    <cell><ps/>    </cell><cell><foreign>post scriptum</foreign>, after what has been written</cell></row>
+                        <row><cell><c>vs</c></cell>    <cell><vs/>    </cell><cell><foreign>versus</foreign>, against</cell>                           </row>
+                        <row><cell><c>viz</c></cell>   <cell><viz/>   </cell><cell><foreign>videlicet</foreign>, namely</cell>                         </row>
+                    </tabular>
+                </sidebyside>
 
                 <p>There are a few other characters and marks that get special treatment.  Some do not appear on your keyboard, such as the symbol for copright (and similar business or legal marks in common use).  Then there are some characters that do not appear on your keyboard but frequently a keyboard character is used as a substitute.  For example, a fraction bar and a forward slash (<c>solidus</c> and <c>slash</c>, respectively) have slightly different slopes.  Also, compare a <c>tilde</c> and a <c>swungdash</c>.  You can fake a <c>midpoint</c> in <latex /> by going to math mode, but the midpoint is really a text character.  A <c>backtick</c> is a keyboard character that is really a modifier of other characters, grave accent.  But it might be needed in a text situation, and is a special character for Markdown syntax, used in Jupyter notebooks, for example.  Again, outputs here, see the source for inputs.  Using these uniformly will lead to the best quality in all your outputs, though some of these are very infrequent, or the distinctions are not always that important.</p>
 
