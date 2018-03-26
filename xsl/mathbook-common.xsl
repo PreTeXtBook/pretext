@@ -6758,6 +6758,50 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:apply-templates select="exsl:node-set($rangle-rtf)" />
 </xsl:template>
 
+<!-- ########## -->
+<!-- XML Syntax -->
+<!-- ########## -->
+
+<!-- So we can write knowledgeably about XML in documentation -->
+<!-- NB: we can use RTFs to keep this in -common since the    -->
+<!-- content of each element is so simple                     -->
+
+<!-- A tag, with angle brackets and monospace font -->
+<xsl:template match="tag">
+    <xsl:variable name="the-element">
+        <c>
+            <xsl:text>&lt;</xsl:text>
+            <xsl:apply-templates />
+            <xsl:text>&gt;</xsl:text>
+        </c>
+    </xsl:variable>
+    <xsl:apply-templates select="exsl:node-set($the-element)" />
+</xsl:template>
+
+<!-- An empty tag, with angle brackets and monospace font -->
+<xsl:template match="tage">
+    <xsl:variable name="the-element">
+        <c>
+            <xsl:text>&lt;</xsl:text>
+            <xsl:apply-templates />
+            <xsl:text> /&gt;</xsl:text>
+        </c>
+    </xsl:variable>
+    <xsl:apply-templates select="exsl:node-set($the-element)" />
+</xsl:template>
+
+<!-- An attribute, with @ and monospace font -->
+<xsl:template match="attr">
+    <xsl:variable name="the-attribute">
+        <c>
+            <xsl:text>@</xsl:text>
+            <xsl:apply-templates />
+        </c>
+    </xsl:variable>
+    <xsl:apply-templates select="exsl:node-set($the-attribute)" />
+</xsl:template>
+
+
 <!-- ############ -->
 <!-- Conveniences -->
 <!-- ############ -->
