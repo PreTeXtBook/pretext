@@ -1248,7 +1248,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\newcommand{\poemlineright}[1]{{\raggedleft{#1}\par}\vspace{-\parskip}}&#xa;</xsl:text>
     </xsl:if>
     <!-- Music -->
-    <xsl:if test="//n or //scaledeg or //chord">
+    <xsl:if test="$document-root//flat | $document-root//doubleflat | $document-root//sharp | $document-root//doublesharp | $document-root//natural | $document-root//n | $document-root//scaledeg | $document-root//chord">
         <xsl:text>%% Musical Symbol Support&#xa;</xsl:text>
         <xsl:text>\ifthenelse{\boolean{xetex}}{&#xa;</xsl:text>
         <xsl:text>%% begin: xelatex-specific configuration&#xa;</xsl:text>
