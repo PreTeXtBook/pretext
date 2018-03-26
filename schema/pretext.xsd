@@ -2886,10 +2886,19 @@
         <xs:element name="webwork">
           <xs:complexType/>
         </xs:element>
-        <xs:element ref="eg"/>
-        <xs:element ref="ie"/>
+        <xs:element ref="ad"/>
+        <xs:element ref="am"/>
+        <xs:element ref="bc"/>
         <xs:element ref="circa"/>
+        <xs:element ref="eg"/>
+        <xs:element ref="etal"/>
         <xs:element ref="etc"/>
+        <xs:element ref="ie"/>
+        <xs:element ref="nb"/>
+        <xs:element ref="pm"/>
+        <xs:element ref="ps"/>
+        <xs:element ref="vs"/>
+        <xs:element ref="viz"/>
       </xs:choice>
       <xs:element ref="quantity"/>
     </xs:choice>
@@ -2909,16 +2918,43 @@
   <xs:element name="pretext">
     <xs:complexType/>
   </xs:element>
-  <xs:element name="eg">
+  <xs:element name="ad">
     <xs:complexType/>
   </xs:element>
-  <xs:element name="ie">
+  <xs:element name="am">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="bc">
     <xs:complexType/>
   </xs:element>
   <xs:element name="circa">
     <xs:complexType/>
   </xs:element>
+  <xs:element name="eg">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="etal">
+    <xs:complexType/>
+  </xs:element>
   <xs:element name="etc">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="ie">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="nb">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="pm">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="ps">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="vs">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="viz">
     <xs:complexType/>
   </xs:element>
   <xs:element name="quantity">

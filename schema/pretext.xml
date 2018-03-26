@@ -447,10 +447,19 @@
             element latex {empty} |
             element pretext {empty} |
             element webwork {empty} |
-            element eg {empty} |
-            element ie {empty} |
+            element ad {empty} |
+            element am {empty} |
+            element bc {empty} |
             element circa {empty} |
-            element etc {empty}
+            element eg {empty} |
+            element etal {empty} |
+            element etc {empty} |
+            element ie {empty} |
+            element nb {empty} |
+            element pm {empty} |
+            element ps {empty} |
+            element vs {empty} |
+            element viz {empty}
         </fragment>
 
         <p>A large class of similary indivisible items are units on physical quantities.</p>
