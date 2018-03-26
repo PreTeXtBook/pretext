@@ -4638,6 +4638,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates />
     <xsl:text>}</xsl:text>
 </xsl:template>
+<!-- Protect the version of the macro appearing in titles -->
+<xsl:template match="title//insert">
+    <xsl:text>\protect\inserted{</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>}</xsl:text>
+</xsl:template>
 
 <!-- Delete (an edit) -->
 <!-- \deleted{} defined in preamble as semantic macro -->
@@ -4646,11 +4652,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates />
     <xsl:text>}</xsl:text>
 </xsl:template>
+<!-- Protect the version of the macro appearing in titles -->
+<xsl:template match="title//delete">
+    <xsl:text>\protect\deleted{</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>}</xsl:text>
+</xsl:template>
 
 <!-- Stale (no longer relevant) -->
 <!-- \stale{} defined in preamble as semantic macro -->
 <xsl:template match="stale">
     <xsl:text>\stale{</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>}</xsl:text>
+</xsl:template>
+<!-- Protect the version of the macro appearing in titles -->
+<xsl:template match="title//stale">
+    <xsl:text>\protect\stale{</xsl:text>
     <xsl:apply-templates />
     <xsl:text>}</xsl:text>
 </xsl:template>
@@ -4990,6 +5008,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/  -->
 <xsl:template match="swungdash">
     <xsl:text>\swungdash{}</xsl:text>
+</xsl:template>
+<!-- Protect the version of the macro appearing in titles -->
+<xsl:template match="title//swungdash">
+    <xsl:text>\protect\swungdash{}</xsl:text>
 </xsl:template>
 
 <!-- Per Mille -->
@@ -7360,29 +7382,71 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- TODO: If requested, add semi- and sesqui- versions of sharp and flat -->
 
+<!-- These "choose" should really be separate match -->
+<!-- templates on title//*, but the use of named    -->
+<!-- templates would require a big re-write, so we  -->
+<!-- have some technical debt here                  -->
+
+<!-- Our macros need protection in titles and typeout commands -->
+
 <!-- Double Sharp -->
 <xsl:template name="doublesharp">
-    <xsl:text>{\doublesharp}</xsl:text>
+    <xsl:choose>
+        <xsl:when test="ancestor::title">
+            <xsl:text>\protect\doublesharp</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>{\doublesharp}</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Sharp -->
 <xsl:template name="sharp">
-    <xsl:text>{\sharp}</xsl:text>
+    <xsl:choose>
+        <xsl:when test="ancestor::title">
+            <xsl:text>\protect\sharp</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>{\sharp}</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Natural -->
 <xsl:template name="natural">
-    <xsl:text>{\natural}</xsl:text>
+    <xsl:choose>
+        <xsl:when test="ancestor::title">
+            <xsl:text>\protect\natural</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>{\natural}</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Flat -->
 <xsl:template name="flat">
-    <xsl:text>{\flat}</xsl:text>
+    <xsl:choose>
+        <xsl:when test="ancestor::title">
+            <xsl:text>\protect\flat</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>{\flat}</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Double Flat -->
 <xsl:template name="doubleflat">
-    <xsl:text>{\doubleflat}</xsl:text>
+    <xsl:choose>
+        <xsl:when test="ancestor::title">
+            <xsl:text>\protect\doubleflat</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>{\doubleflat}</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Footnotes               -->
