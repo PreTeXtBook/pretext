@@ -2764,6 +2764,11 @@
         <xs:element ref="insert"/>
         <xs:element ref="stale"/>
       </xs:choice>
+      <xs:choice>
+        <xs:element ref="tag"/>
+        <xs:element ref="tage"/>
+        <xs:element ref="attr"/>
+      </xs:choice>
       <xs:element ref="taxon"/>
     </xs:choice>
   </xs:group>
@@ -2853,6 +2858,9 @@
       <xs:group ref="TextLong"/>
     </xs:complexType>
   </xs:element>
+  <xs:element name="tag" type="xs:string"/>
+  <xs:element name="tage" type="xs:string"/>
+  <xs:element name="attr" type="xs:string"/>
   <xs:element name="taxon">
     <xs:complexType mixed="true">
       <xs:choice>

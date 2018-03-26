@@ -1316,6 +1316,12 @@
         
             
         Group |=
+            element tag {text} |
+            element tage {text} |
+            element attr {text}
+        
+            
+        Group |=
             element taxon {
                 attribute ncbi {xsd:integer}?,
                 (

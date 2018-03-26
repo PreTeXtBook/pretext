@@ -527,6 +527,15 @@
             element stale {TextLong}
         </fragment>
 
+        <p>We use elements to get consistent typography when discussing <pretext /> itself.  We could probably limit the content of these elements to lowercase letters and a hyphen.  The definitions here will preclude any contained markup.</p>
+
+        <fragment xml:id="xml-syntax-group">
+        Group |=
+            element tag {text} |
+            element tage {text} |
+            element attr {text}
+        </fragment>
+
         <p>An empty <c>taxon</c> will match either version.</p>
 
         <fragment xml:id="scientific-name-group">
@@ -548,6 +557,7 @@
             <fragment ref="delimiter-group" />
             <fragment ref="highlight-group" />
             <fragment ref="editing-group" />
+            <fragment ref="xml-syntax-group" />
             <fragment ref="scientific-name-group" />
         </fragment>
     </section>

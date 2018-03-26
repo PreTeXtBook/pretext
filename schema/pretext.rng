@@ -2928,6 +2928,19 @@
     </choice>
   </define>
   <define name="Group" combine="choice">
+    <choice>
+      <element name="tag">
+        <text/>
+      </element>
+      <element name="tage">
+        <text/>
+      </element>
+      <element name="attr">
+        <text/>
+      </element>
+    </choice>
+  </define>
+  <define name="Group" combine="choice">
     <element name="taxon">
       <optional>
         <attribute name="ncbi">
