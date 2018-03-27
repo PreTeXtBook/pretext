@@ -62,7 +62,7 @@
                 <cell>Define <tag>foo</tag> and children</cell></row>
                 <!--  -->
                 <row><cell>attribute bar <lbrace /> <rbrace /></cell>
-                <cell>Define <attribute>bar</attribute> and values</cell></row>
+                <cell>Define <attr>bar</attr> and values</cell></row>
                 <!--  -->
                 <row><cell>text</cell>
                 <cell>Sequence of characters (any length)</cell></row>

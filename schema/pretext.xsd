@@ -2756,13 +2756,19 @@
         <xs:element ref="em"/>
         <xs:element ref="term"/>
         <xs:element ref="alert"/>
-        <xs:element ref="foreign"/>
         <xs:element ref="pubtitle"/>
+        <xs:element ref="articletitle"/>
+        <xs:element ref="foreign"/>
       </xs:choice>
       <xs:choice>
         <xs:element ref="delete"/>
         <xs:element ref="insert"/>
         <xs:element ref="stale"/>
+      </xs:choice>
+      <xs:choice>
+        <xs:element ref="tag"/>
+        <xs:element ref="tage"/>
+        <xs:element ref="attr"/>
       </xs:choice>
       <xs:element ref="taxon"/>
     </xs:choice>
@@ -2827,14 +2833,20 @@
       <xs:group ref="TextLong"/>
     </xs:complexType>
   </xs:element>
-  <xs:element name="foreign">
+  <xs:element name="pubtitle">
     <xs:complexType mixed="true">
       <xs:group ref="TextLong"/>
     </xs:complexType>
   </xs:element>
-  <xs:element name="pubtitle">
+  <xs:element name="articletitle">
     <xs:complexType mixed="true">
       <xs:group ref="TextLong"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="foreign">
+    <xs:complexType mixed="true">
+      <xs:group ref="TextLong"/>
+      <xs:attribute ref="xml:lang"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="delete">
@@ -2852,6 +2864,9 @@
       <xs:group ref="TextLong"/>
     </xs:complexType>
   </xs:element>
+  <xs:element name="tag" type="xs:string"/>
+  <xs:element name="tage" type="xs:string"/>
+  <xs:element name="attr" type="xs:string"/>
   <xs:element name="taxon">
     <xs:complexType mixed="true">
       <xs:choice>
@@ -2885,10 +2900,19 @@
         <xs:element name="webwork">
           <xs:complexType/>
         </xs:element>
-        <xs:element ref="eg"/>
-        <xs:element ref="ie"/>
+        <xs:element ref="ad"/>
+        <xs:element ref="am"/>
+        <xs:element ref="bc"/>
         <xs:element ref="circa"/>
+        <xs:element ref="eg"/>
+        <xs:element ref="etal"/>
         <xs:element ref="etc"/>
+        <xs:element ref="ie"/>
+        <xs:element ref="nb"/>
+        <xs:element ref="pm"/>
+        <xs:element ref="ps"/>
+        <xs:element ref="vs"/>
+        <xs:element ref="viz"/>
       </xs:choice>
       <xs:element ref="quantity"/>
     </xs:choice>
@@ -2908,16 +2932,43 @@
   <xs:element name="pretext">
     <xs:complexType/>
   </xs:element>
-  <xs:element name="eg">
+  <xs:element name="ad">
     <xs:complexType/>
   </xs:element>
-  <xs:element name="ie">
+  <xs:element name="am">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="bc">
     <xs:complexType/>
   </xs:element>
   <xs:element name="circa">
     <xs:complexType/>
   </xs:element>
+  <xs:element name="eg">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="etal">
+    <xs:complexType/>
+  </xs:element>
   <xs:element name="etc">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="ie">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="nb">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="pm">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="ps">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="vs">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="viz">
     <xs:complexType/>
   </xs:element>
   <xs:element name="quantity">
@@ -2982,6 +3033,7 @@
       <xs:choice>
         <xs:element ref="ellipsis"/>
         <xs:element ref="asterisk"/>
+        <xs:element ref="backtick"/>
         <xs:element ref="slash"/>
         <xs:element ref="midpoint"/>
         <xs:element ref="swungdash"/>
@@ -3061,6 +3113,9 @@
     <xs:complexType/>
   </xs:element>
   <xs:element name="asterisk">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="backtick">
     <xs:complexType/>
   </xs:element>
   <xs:element name="slash">

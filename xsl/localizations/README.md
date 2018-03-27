@@ -32,9 +32,12 @@ Contibutions of new languages are always welcome and especially encouraged! Sear
 
 Additions to incomplete files, or new files for additional languages, are very welcome and are a huge help in making PreTeXt useable for more authors.  A GitHub pull request is preferable.  If you do not know GitHub well, then emailing the entire language file (as an attachment) is very welcome and just as easy to deal with on our end.
 
+You will not always be able to determine exact analogues of the original English terms, so just do your best to concoct a close approximation.  Comments about these decisions within the file can be helpful.
+
 To test, or use: place  `xml:lang="es-ES"`, or similar, as an attribute on your `<mathbook>` element.  `en-US` is the default if no `@xml:lang` attribute is given on the `mathbook` element.
 
 Current (partially) implemented language codes and contributors
+* af-ZA, Afrikaans (South Africa), Dirk Basson
 * cs-CZ, Czech (Czechia), Jiří Lebl
 * es-ES, Spanish (Spain), Juan José Torrens
 * en-US, English (United States), Robert A. Beezer

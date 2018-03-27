@@ -889,7 +889,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\newtcolorbox{assemblage}[1][]&#xa;</xsl:text>
         <xsl:text>  {breakable, skin=enhanced, arc=2ex, colback=blue!5, colframe=blue!75!black,&#xa;</xsl:text>
         <xsl:text>   colbacktitle=blue!20, coltitle=black, boxed title style={sharp corners, frame hidden},&#xa;</xsl:text>
-        <xsl:text>   fonttitle=\bfseries, attach boxed title to top left={xshift=4mm,yshift=-3mm}, top=3mm, title=#1}&#xa;</xsl:text>
+        <xsl:text>   fonttitle=\bfseries, attach boxed title to top left={xshift=4mm,yshift=-3mm}, top=3mm, title={#1}}&#xa;</xsl:text>
         <xsl:text>%% end: assemblage&#xa;</xsl:text>
     </xsl:if>
     <!-- Following chould be duplicated as three environments, perhaps with  \tcbset{}   -->
@@ -900,7 +900,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\newtcolorbox{aside}[1]&#xa;</xsl:text>
         <xsl:text>  {breakable, skin=enhanced, sharp corners, colback=blue!3, colframe=blue!50!black,&#xa;</xsl:text>
         <xsl:text>   add to width=-1ex, shadow={1ex}{-1ex}{0ex}{black!50!white},&#xa;</xsl:text>
-        <xsl:text>   coltitle=black, fonttitle=\bfseries, title=#1, detach title, before upper={\tcbtitle\ \ }}&#xa;</xsl:text>
+        <xsl:text>   coltitle=black, fonttitle=\bfseries, title={#1}, detach title, before upper={\tcbtitle\ \ }}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="//objectives">
         <xsl:text>%% objectives: early in a subdivision, introduction/list/conclusion&#xa;</xsl:text>
@@ -1248,7 +1248,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\newcommand{\poemlineright}[1]{{\raggedleft{#1}\par}\vspace{-\parskip}}&#xa;</xsl:text>
     </xsl:if>
     <!-- Music -->
-    <xsl:if test="//n or //scaledeg or //chord">
+    <xsl:if test="$document-root//flat | $document-root//doubleflat | $document-root//sharp | $document-root//doublesharp | $document-root//natural | $document-root//n | $document-root//scaledeg | $document-root//chord">
         <xsl:text>%% Musical Symbol Support&#xa;</xsl:text>
         <xsl:text>\ifthenelse{\boolean{xetex}}{&#xa;</xsl:text>
         <xsl:text>%% begin: xelatex-specific configuration&#xa;</xsl:text>
@@ -4638,6 +4638,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates />
     <xsl:text>}</xsl:text>
 </xsl:template>
+<!-- Protect the version of the macro appearing in titles -->
+<xsl:template match="title//insert">
+    <xsl:text>\protect\inserted{</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>}</xsl:text>
+</xsl:template>
 
 <!-- Delete (an edit) -->
 <!-- \deleted{} defined in preamble as semantic macro -->
@@ -4646,11 +4652,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates />
     <xsl:text>}</xsl:text>
 </xsl:template>
+<!-- Protect the version of the macro appearing in titles -->
+<xsl:template match="title//delete">
+    <xsl:text>\protect\deleted{</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>}</xsl:text>
+</xsl:template>
 
 <!-- Stale (no longer relevant) -->
 <!-- \stale{} defined in preamble as semantic macro -->
 <xsl:template match="stale">
     <xsl:text>\stale{</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>}</xsl:text>
+</xsl:template>
+<!-- Protect the version of the macro appearing in titles -->
+<xsl:template match="title//stale">
+    <xsl:text>\protect\stale{</xsl:text>
     <xsl:apply-templates />
     <xsl:text>}</xsl:text>
 </xsl:template>
@@ -4991,6 +5009,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="swungdash">
     <xsl:text>\swungdash{}</xsl:text>
 </xsl:template>
+<!-- Protect the version of the macro appearing in titles -->
+<xsl:template match="title//swungdash">
+    <xsl:text>\protect\swungdash{}</xsl:text>
+</xsl:template>
 
 <!-- Per Mille -->
 <!-- Or, per thousand, like a percent sign -->
@@ -5042,33 +5064,45 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- this is a character Markdown uses, so we want to      -->
 <!-- provide this safety valve.                            -->
 <xsl:template match="backtick">
-    <xsl:text>\textasciigrave</xsl:text>
+    <xsl:text>\textasciigrave{}</xsl:text>
 </xsl:template>
+
+<!-- We override all 13 Latin abbreviations, in order -->
+<!-- to handle the periods correctly, as necessary    -->
 
 <!-- \@ following a period makes it an abbreviation, not the end of a sentence -->
 <!-- So use it for abbreviations which will not end a sentence                 -->
 <!-- Best: \makeatletter\newcommand\etc{etc\@ifnextchar.{}{.\@}}\makeatother   -->
 <!-- http://latex-alive.tumblr.com/post/827168808/correct-punctuation-spaces   -->
 
+<!-- anno Domini, in the year of the Lord -->
+<xsl:template match="ad">    <xsl:text>AD</xsl:text></xsl:template>
+<!-- ante meridiem, before midday -->
+<xsl:template match="am">    <xsl:text>A.M.\@</xsl:text></xsl:template>
+<!-- before Christ? -->
+<xsl:template match="bc">    <xsl:text>BC</xsl:text></xsl:template>
+<!-- circa, about -->
+<xsl:template match="circa"> <xsl:text>c.\@</xsl:text></xsl:template>
 <!-- exempli gratia, for example -->
-<xsl:template match="eg">
-    <xsl:text>e.g.\@</xsl:text>
-</xsl:template>
-
+<xsl:template match="eg">    <xsl:text>e.g.\@</xsl:text></xsl:template>
+<!-- et alia, and others -->
+<xsl:template match="etal">  <xsl:text>et al.\@</xsl:text></xsl:template>
+<!-- et caetera, and the rest -->
+<xsl:template match="etc">   <xsl:text>etc.\@</xsl:text></xsl:template>
 <!-- id est, in other words -->
-<xsl:template match="ie">
-    <xsl:text>i.e.\@</xsl:text>
-</xsl:template>
+<xsl:template match="ie">    <xsl:text>i.e.\@</xsl:text></xsl:template>
+<!-- nota bene, note well -->
+<xsl:template match="nb">    <xsl:text>N.B.\@</xsl:text></xsl:template>
+<!-- post meridiem, after midday -->
+<xsl:template match="pm">    <xsl:text>P.M.\@</xsl:text></xsl:template>
+<!-- post scriptum, after what has been written -->
+<xsl:template match="ps">    <xsl:text>P.S.\@</xsl:text></xsl:template>
+<!-- versus, against -->
+<xsl:template match="vs">    <xsl:text>vs.\@</xsl:text></xsl:template>
+<!-- videlicet, namely -->
+<xsl:template match="viz">   <xsl:text>viz.\@</xsl:text></xsl:template>
 
-<!-- et cetera -->
-<xsl:template match="etc">
-    <xsl:text>etc.\@</xsl:text>
-</xsl:template>
 
-<!-- circa -->
-<xsl:template match="circa">
-    <xsl:text>c.\@</xsl:text>
-</xsl:template>
 
 <!-- Copyright symbol -->
 <!-- http://tex.stackexchange.com/questions/1676/how-to-get-good-looking-copyright-and-registered-symbols -->
@@ -5125,8 +5159,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\TeX{}</xsl:text>
 </xsl:template>
 
-<!-- Foreign words/idioms        -->
-<!-- Matches HTML5 specification -->
+<!-- Foreign words/idioms -->
 <xsl:template match="foreign">
     <xsl:apply-templates select="." mode="begin-language" />
     <xsl:text>\textit{</xsl:text>
@@ -7361,29 +7394,71 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- TODO: If requested, add semi- and sesqui- versions of sharp and flat -->
 
+<!-- These "choose" should really be separate match -->
+<!-- templates on title//*, but the use of named    -->
+<!-- templates would require a big re-write, so we  -->
+<!-- have some technical debt here                  -->
+
+<!-- Our macros need protection in titles and typeout commands -->
+
 <!-- Double Sharp -->
 <xsl:template name="doublesharp">
-    <xsl:text>{\doublesharp}</xsl:text>
+    <xsl:choose>
+        <xsl:when test="ancestor::title">
+            <xsl:text>\protect\doublesharp</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>{\doublesharp}</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Sharp -->
 <xsl:template name="sharp">
-    <xsl:text>{\sharp}</xsl:text>
+    <xsl:choose>
+        <xsl:when test="ancestor::title">
+            <xsl:text>\protect\sharp</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>{\sharp}</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Natural -->
 <xsl:template name="natural">
-    <xsl:text>{\natural}</xsl:text>
+    <xsl:choose>
+        <xsl:when test="ancestor::title">
+            <xsl:text>\protect\natural</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>{\natural}</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Flat -->
 <xsl:template name="flat">
-    <xsl:text>{\flat}</xsl:text>
+    <xsl:choose>
+        <xsl:when test="ancestor::title">
+            <xsl:text>\protect\flat</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>{\flat}</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Double Flat -->
 <xsl:template name="doubleflat">
-    <xsl:text>{\doubleflat}</xsl:text>
+    <xsl:choose>
+        <xsl:when test="ancestor::title">
+            <xsl:text>\protect\doubleflat</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>{\doubleflat}</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Footnotes               -->

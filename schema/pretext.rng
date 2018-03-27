@@ -2903,10 +2903,16 @@
       <element name="alert">
         <ref name="TextLong"/>
       </element>
-      <element name="foreign">
+      <element name="pubtitle">
         <ref name="TextLong"/>
       </element>
-      <element name="pubtitle">
+      <element name="articletitle">
+        <ref name="TextLong"/>
+      </element>
+      <element name="foreign">
+        <optional>
+          <ref name="XMLLang"/>
+        </optional>
         <ref name="TextLong"/>
       </element>
     </choice>
@@ -2921,6 +2927,19 @@
       </element>
       <element name="stale">
         <ref name="TextLong"/>
+      </element>
+    </choice>
+  </define>
+  <define name="Group" combine="choice">
+    <choice>
+      <element name="tag">
+        <text/>
+      </element>
+      <element name="tage">
+        <text/>
+      </element>
+      <element name="attr">
+        <text/>
       </element>
     </choice>
   </define>
@@ -2968,16 +2987,43 @@
       <element name="webwork">
         <empty/>
       </element>
-      <element name="eg">
+      <element name="ad">
         <empty/>
       </element>
-      <element name="ie">
+      <element name="am">
+        <empty/>
+      </element>
+      <element name="bc">
         <empty/>
       </element>
       <element name="circa">
         <empty/>
       </element>
+      <element name="eg">
+        <empty/>
+      </element>
+      <element name="etal">
+        <empty/>
+      </element>
       <element name="etc">
+        <empty/>
+      </element>
+      <element name="ie">
+        <empty/>
+      </element>
+      <element name="nb">
+        <empty/>
+      </element>
+      <element name="pm">
+        <empty/>
+      </element>
+      <element name="ps">
+        <empty/>
+      </element>
+      <element name="vs">
+        <empty/>
+      </element>
+      <element name="viz">
         <empty/>
       </element>
     </choice>
@@ -3114,6 +3160,9 @@
         <empty/>
       </element>
       <element name="asterisk">
+        <empty/>
+      </element>
+      <element name="backtick">
         <empty/>
       </element>
       <element name="slash">

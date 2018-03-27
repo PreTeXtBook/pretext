@@ -23,7 +23,7 @@
 
         <p>A division may be unstructured, in which case you fill it with paragraphs and lists and figures and theorems and so on.  But if you choose to structure a division it must look like an optional <tag>introduction</tag>, followed by multiple divisions of the next finer granularity, with an optional <tag>conclusion</tag>.</p>
 
-        <p>Every division tag can carry an <attribute>xml:id</attribute> attribute, and it is a good practice to (a) provide one, (b) use a very short list of words describing the content, and (c) adopt a consistent pattern of your choosing.  Do not use numbers, you may later regret it.  These are optional, and with practice you will learn how best to use them. See <xref ref="overview-cross-references" /> just below for more on this.</p>
+        <p>Every division tag can carry an <attr>xml:id</attr> attribute, and it is a good practice to (a) provide one, (b) use a very short list of words describing the content, and (c) adopt a consistent pattern of your choosing.  Do not use numbers, you may later regret it.  These are optional, and with practice you will learn how best to use them. See <xref ref="overview-cross-references" /> just below for more on this.</p>
 
         <p>The <tag>exercises</tag> and <tag>references</tag> tags are special divisions, see <xref ref="topic-exercises" /> and <xref ref="topic-references" />.</p>
 
@@ -39,6 +39,8 @@
         <p>Lots of things can happen in paragraphs, some things can <em>only</em> happen in a paragraph, and some things are <em>banned</em> in paragraphs.  Inside a paragraph, you can emphasize some text (<tag>em</tag>), you can quote some text (<tag>q</tag>), you can mark a phrase as being from another language (<tag>foreign</tag>), and much more.  You can use special characters like an ampersand (<ampersand />, <tage>ampersand</tage>) or an octothorpe, aka <q>hash tag</q> (<hash />, <tage>hash</tage>).  You must put a list inside a paragraph, and all mathematics (<xref ref="overview-math" />) will occur inside a paragraph.  You cannot put a <tag>table</tag> or a <tag>figure</tag> in a paragraph, and many other structured components are prohibited in paragraphs.</p>
 
         <p>Paragraphs are also used as part of the structure of other parts of your document.  For example, a <tag>remark</tag> could be composed of several <tag>p</tag>.  As you get started with <pretext />, remember that much of your actual writing will occur inside of a <tag>p</tag> and you will have a collection of tags you can use there to express your meaning to your readers.</p>
+
+        <p>So early in your writing project, familiarize yourself with the components of a paragraph detailed in <xref ref="topic-paragraphs" />.</p>
     </section>
 
     <section xml:id="overview-cross-references">
@@ -47,9 +49,9 @@
 
         <p>Cross-references in a <pretext /> document are easy, powerful and flexible.  So it is worth familiarizing yourselves with them early, here and then ahead in <xref ref="topic-cross-referencing" />.</p>
 
-        <p>Any element that you place a <attribute>xml:id</attribute> on can become the target of a cross-reference<idx>cross-reference</idx>.  This could be a division, a remark, a bibliographic entry, or a figure.  So for example, suppose your source had <c>&lt;subsection xml:id="subsection-flowers"&gt;</c> and someplace else you wrote <c>&lt;xref ref="subsection-flowers" /&gt;</c>.  Then at the latter location you would get a reference to the Subsection that discusses flowers.  In print this might just be the number for the subsection, but in various electronic output formats, these cross-references can be very powerful interactive ways to explore the content.  And the mechanism is always the same, pair up an <attribute>xml:id</attribute> on a target with a <attribute>ref</attribute> on an <tag>xref</tag> cross-reference.</p>
+        <p>Any element that you place a <attr>xml:id</attr> on can become the target of a cross-reference<idx>cross-reference</idx>.  This could be a division, a remark, a bibliographic entry, or a figure.  So for example, suppose your source had <c>&lt;subsection xml:id="subsection-flowers"&gt;</c> and someplace else you wrote <c>&lt;xref ref="subsection-flowers" /&gt;</c>.  Then at the latter location you would get a reference to the Subsection that discusses flowers.  In print this might just be the number for the subsection, but in various electronic output formats, these cross-references can be very powerful interactive ways to explore the content.  And the mechanism is always the same, pair up an <attr>xml:id</attr> on a target with a <attr>ref</attr> on an <tag>xref</tag> cross-reference.</p>
 
-        <p>Since the value of an <attribute>xml:id</attribute> is also used in a variety of ways, such as to construct some file names, some care should be taken in how you author them.  We limit the possible characters to letters and numbers (<c>a-z</c>, <c>A-Z</c>, <c>0-9</c>), with hyphens and underscores (<c>-_</c>) available as word-separators.  Our advice is to stick to lowercase letters, though we are not yet aware of any problems with case-insensitivity.  So in short, use <term>kebab-case</term> or <term>snake-case</term> for your <attribute>xml:id</attribute> values.</p>
+        <p>Since the value of an <attr>xml:id</attr> is also used in a variety of ways, such as to construct some file names, some care should be taken in how you author them.  We limit the possible characters to letters and numbers (<c>a-z</c>, <c>A-Z</c>, <c>0-9</c>), with hyphens and underscores (<c>-_</c>) available as word-separators.  Our advice is to stick to lowercase letters, though we are not yet aware of any problems with case-insensitivity.  So in short, use <term>kebab-case</term> or <term>snake-case</term> for your <attr>xml:id</attr> values.</p>
 
         <p>For more, see <xref ref="topic-cross-referencing" /> because cross-references have many features. But first, here are two features you do not want to miss.  In the early stages of writing, you can author <c>&lt;xref provisional="subsection-flowers" /&gt;</c> to point to a subsection you are contemplating (but have not written yet) and you will get various polite reminders to get that straightened out eventually.  Also the default behavior is to automatically provide the generic name of the target, so you will get something like <q>Subsection 4.3.2</q> without ever typing the <q>Subsection</q> part.  If you move the target, the generic name will adjust if necessary, and if you switch to one of the supported languages, the generic name will switch language (see <xref provisional="topic-on-languages" />.</p>
     </section>
@@ -80,7 +82,7 @@
         <title>Images</title>
         <idx>image</idx>
 
-        <p>You can include an image via the <tag>image</tag><idx>image</idx> tag.  You can use the <attribute>source</attribute> attribute to provide a filename, likely prefixed by a relative path, that points at an image file.  It is your responsibility to locate that file properly relative to your output, and that the file format is compatible.  So, for example, suppose your source contained <c>&lt;image source="images/butterflies.jpg" /&gt;</c>.  Then you would want to have a directory named <c>images</c> below wherever you process your <latex /> output, or wherever you place your HTML output on a web server.  The <attribute>width</attribute> attribute can be used to control the size of the image.   Widths are expressed as a percentage of the available width, such as <c>width="60%"</c>.</p>
+        <p>You can include an image via the <tag>image</tag><idx>image</idx> tag.  You can use the <attr>source</attr> attribute to provide a filename, likely prefixed by a relative path, that points at an image file.  It is your responsibility to locate that file properly relative to your output, and that the file format is compatible.  So, for example, suppose your source contained <c>&lt;image source="images/butterflies.jpg" /&gt;</c>.  Then you would want to have a directory named <c>images</c> below wherever you process your <latex /> output, or wherever you place your HTML output on a web server.  The <attr>width</attr> attribute can be used to control the size of the image.   Widths are expressed as a percentage of the available width, such as <c>width="60%"</c>.</p>
 
         <p>You may want to wrap your image in a <tag>figure</tag> to have it centered, and to have some vertical separation above and below.  A <tag>figure</tag> must also have a <tag>caption</tag>, and the figure will be numbered.</p>
 
@@ -110,7 +112,7 @@
 
         <p>You need (and want) to have the hints, answers and solutions grouped with the statement, but there is a lot of flexibility on making these available at the location of the exercise, or in the back matter.  See <xref ref="topic-exercises-solutions" /> for more.</p>
 
-        <p>An inline exercise typically gets a fully qualified unique number and is rendered similar to an <tag>example</tag> or a <tag>remark</tag>.  A sectional exercise only gets a sequential number, though this can be overridden with the <attribute>number</attribute> attribute if you want to maintain stable numbering in response to edits.  (Be careful, once you override the sequential numbering, you probably need to manually specify every subsequent number, so save overrides for when your project matures.)</p>
+        <p>An inline exercise typically gets a fully qualified unique number and is rendered similar to an <tag>example</tag> or a <tag>remark</tag>.  A sectional exercise only gets a sequential number, though this can be overridden with the <attr>number</attr> attribute if you want to maintain stable numbering in response to edits.  (Be careful, once you override the sequential numbering, you probably need to manually specify every subsequent number, so save overrides for when your project matures.)</p>
 
         <p>Within a run of sectional exercises a subgroup can be delimited as an <tag>exercisegroup</tag>, which allows an <tag>introduction</tag> and/or <tag>conclusion</tag> to explain some commonality.  An <tag>exercisegroup</tag> should be rendered in some way that makes it clear to the reader that they are a group.</p>
     </section>
@@ -143,7 +145,7 @@
 
         <p>A <tag>program</tag> will be treated as verbatim text (see <xref ref="overview-verbatim-literal" />), subject to all the exceptions for exceptional characters.  Indentation will be preserved, though an equal amount of leading whitespace will be stripped from every line, so as to keep the code shifted left as far as possible.  So you can indent your code consistently along with your XML indentation.  For this reason it is best to indent with spaces, and not tabs.  A mix will almost surely end badly, and in some programming languages tabs are discouraged (<eg /> Python).</p>
 
-        <p>The <attribute>language</attribute> attribute may be used to get some degree of language-specific syntax highlighting.  See <xref ref="topic-program-listings" /> for details.</p>
+        <p>The <attr>language</attr> attribute may be used to get some degree of language-specific syntax highlighting.  See <xref ref="topic-program-listings" /> for details.</p>
 
         <p>A <tag>console</tag> is a transcript of an interactive session in a terminal at a command-line.  It is a sequence of the following elements, in this order, possibly repeated many times as a group: <tag>prompt</tag>, <tag>input</tag>, and <tag>output</tag>.  The <tag>output</tag> is optional, and a <tag>prompt</tag> is only displayed when there is an immediately subsequent <tag>input</tag> (which could be empty).  The content is treated as verbatim text (see <xref ref="overview-verbatim-literal" />), subject to all the exceptions for exceptional characters.</p>
 
@@ -166,8 +168,8 @@
 
         <table>
             <!-- <title><latex />'s Reserved Characters</title> -->
-            <idx>reserved characters (<latex />)</idx>
             <caption><latex />'s reserved characters and their elements</caption>
+            <idx>reserved characters (<latex />)</idx>
 
             <tabular>
                 <row><cell><hash /></cell><cell><tage>hash</tage></cell></row>
@@ -207,7 +209,7 @@
 
         <p>The content of the <tag>output</tag> element is included in PDF output, but not in dynamic instances, since it can be re-computed.  Notably, there is a conversion which pairs input and output into a single file in the format used by Sage's <c>doctest</c> framework.  So if expected output is provided, it becomes automatic to identify when Sage has diverged from your expectations, and you can adjust your examples accordingly.</p>
 
-        <p>The Sage Cell Server can also be configured to interpret different languages, because Sage by default contains everything needed to evaluate code in these languages.  This is done by providing a <attribute>language</attribute> attribute, where possible values are <c>sage</c>, <c>gap</c>, <c>gp</c>, <c>html</c>, <c>maxima</c>, <c>octave</c>, <c>python</c>, <c>r</c>, and <c>singular</c>. The default is <c>sage</c>.</p>
+        <p>The Sage Cell Server can also be configured to interpret different languages, because Sage by default contains everything needed to evaluate code in these languages.  This is done by providing a <attr>language</attr> attribute, where possible values are <c>sage</c>, <c>gap</c>, <c>gp</c>, <c>html</c>, <c>maxima</c>, <c>octave</c>, <c>python</c>, <c>r</c>, and <c>singular</c>. The default is <c>sage</c>.</p>
 
         <p>Note that the dynamic formats (including the Sage Cell) may run Sage <q>interacts,</q> so that is possible to embed interactive demonstrations into your dynamic output formats.</p>
     </section>
@@ -270,7 +272,7 @@
         <idx>URL</idx>
         <idx>external reference</idx><idx><h>external reference</h><seealso>URL</seealso></idx>
 
-        <p>The <tag>url</tag><idx>URL</idx> tag always requires an <attribute>href</attribute> attribute.  Usually this will be some external web page, or other resource.  If the <tag>url</tag> is empty, then the value of the <attribute>href</attribute> attribute will be the link text, typically in a monospace font.  You can also provide your own content, using elements much like any other piece of text that would occur in a paragraph.  Of course, there is no need to anticipate any problems with <latex /> output and special characters like a tilde.  Use the character itself in the <attribute>href</attribute>, and use the <tag>tilde</tag> element in the content (or wrap the content in the <tag>c</tag> element and use the literal character).</p>
+        <p>The <tag>url</tag><idx>URL</idx> tag always requires an <attr>href</attr> attribute.  Usually this will be some external web page, or other resource.  If the <tag>url</tag> is empty, then the value of the <attr>href</attr> attribute will be the link text, typically in a monospace font.  You can also provide your own content, using elements much like any other piece of text that would occur in a paragraph.  Of course, there is no need to anticipate any problems with <latex /> output and special characters like a tilde.  Use the character itself in the <attr>href</attr>, and use the <tag>tilde</tag> element in the content (or wrap the content in the <tag>c</tag> element and use the literal character).</p>
 
         <p>This element may also be used to link to external data files.  See <xref ref="topic-url" /> for details.</p>
 

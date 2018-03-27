@@ -79,7 +79,7 @@
 
         <subsection>
             <title>Using an Existing <webwork /> Problem</title>
-            <p>If a problem already exists and is accessible from the <c>anonymous</c> course's <c>templates/</c> folder, then you can simply include it as a <attribute>source</attribute> attribute. For example, if it is a problem in the Open Problem Library (OPL) then relative to the <c>templates/</c> folder, its path is <c>Library/...</c> and you may use:</p>
+            <p>If a problem already exists and is accessible from the <c>anonymous</c> course's <c>templates/</c> folder, then you can simply include it as a <attr>source</attr> attribute. For example, if it is a problem in the Open Problem Library (OPL) then relative to the <c>templates/</c> folder, its path is <c>Library/...</c> and you may use:</p>
             <pre>
             <![CDATA[
             <webwork source="Library/PCC/BasicAlgebra/Exponents/exponentsMultiplication0.pg" />
@@ -110,7 +110,7 @@
 
             <p>The above example could be given an optional title, introduction, conclusion, hint, and solution. These are discussed in <xref ref="subsection-pg-code">Subsection</xref>.</p>
 
-            <p>In the above example, <c>"3"</c> is the <attribute>name</attribute> attribute to a <tag>var</tag> element. This is how to create an answer blank that is expecting <m>3</m> as the answer. What you give as a <attribute>name</attribute> attribute will be passed as a string to PG's <c>Compute()</c> command, so it needs to be valid input for <c>Compute()</c>. It should <em>not</em> begin with a <c>$</c>.</p>
+            <p>In the above example, <c>"3"</c> is the <attr>name</attr> attribute to a <tag>var</tag> element. This is how to create an answer blank that is expecting <m>3</m> as the answer. What you give as a <attr>name</attr> attribute will be passed as a string to PG's <c>Compute()</c> command, so it needs to be valid input for <c>Compute()</c>. It should <em>not</em> begin with a <c>$</c>.</p>
 
             <p>The default context is <c>Numeric</c>, which understands numerical expressions and formulaic expressions in the variable <m>x</m>. You can activate some other context as in this example:</p>
             <pre>
@@ -133,7 +133,7 @@
 
             <p>Many special contexts are automatically detected by MBX, and it loads the appropriate macro file into the PG problem. However you may need to explicitly load a macro file as described in <xref ref="subsection-pg-code">Subsection</xref>.</p>
 
-            <p>You should only use this (nearly) Perl-free shortcut if the <attribute>name</attribute> attribute could be put in math mode and simultaneously serve as a printed answer in something like a solutions manual. In the above two examples, this is the case. But in a question with, say, <attribute>name="cos(x)/2"</attribute>, if you'd like the solutions manual to print using <c>\frac{\cos(x)}{2}</c>, then you should write the problem as described in <xref ref="subsection-pg-code">Subsection</xref>.</p>
+            <p>You should only use this (nearly) Perl-free shortcut if the <attr>name</attr> attribute could be put in math mode and simultaneously serve as a printed answer in something like a solutions manual. In the above two examples, this is the case. But in a question with, say, <attr>name="cos(x)/2"</attr>, if you'd like the solutions manual to print using <c>\frac{\cos(x)}{2}</c>, then you should write the problem as described in <xref ref="subsection-pg-code">Subsection</xref>.</p>
 
             <p>Additionally, in shortcutting around the structure described in <xref ref="subsection-pg-code">Subsection</xref>, you will not have access to certain other features, such as answer format help links.</p>
 
@@ -169,9 +169,9 @@
 
             <p>For each perl variable (scalar, array, or hash) that is used in the <tag>pg-code</tag> and which will <em>also</em> be used in the <tag>statement</tag>, <tag>solution</tag>, or as an answer to an answer blank, there should be a <tag>var</tag>. These <tag>var</tag> tags are primarily to help MBX handle static output, but they also allow for some optimal leveraging of <webwork /> features.</p>
 
-            <p>A <tag>var</tag> in the <tag>setup</tag> always has a <attribute>name</attribute> attribute, which should match the variable's name in your <tag>pg-code</tag> (<eg /> <c>$x</c>, <c>@a</c>, <etc />). Each <tag>var</tag> should usually have a <tag>static</tag> tag with <latex /> code for the static version of the answer (possibly inside a <c>\text{}</c>). For PDF and other static output modes, this <latex /> code will be used to print <tag>var</tag> values, since the <webwork /> server will play no role.</p>
+            <p>A <tag>var</tag> in the <tag>setup</tag> always has a <attr>name</attr> attribute, which should match the variable's name in your <tag>pg-code</tag> (<eg /> <c>$x</c>, <c>@a</c>, <etc />). Each <tag>var</tag> should usually have a <tag>static</tag> tag with <latex /> code for the static version of the answer (possibly inside a <c>\text{}</c>). For PDF and other static output modes, this <latex /> code will be used to print <tag>var</tag> values, since the <webwork /> server will play no role.</p>
 
-            <p>Lastly, a <tag>var</tag> in the <tag>setup</tag> can have a <attribute>category</attribute> attribute. This is intended for variables which will be used as answers. Based on a <attribute>category</attribute>, an automatic help syntax link will be provided adjacent to an answer blank. For instance <attribute>category="point"</attribute> will provide a link explaining the syntax for typing a point.</p>
+            <p>Lastly, a <tag>var</tag> in the <tag>setup</tag> can have a <attr>category</attr> attribute. This is intended for variables which will be used as answers. Based on a <attr>category</attr>, an automatic help syntax link will be provided adjacent to an answer blank. For instance <attr>category="point"</attr> will provide a link explaining the syntax for typing a point.</p>
 
             <p>Here is a small example. Following the example, we'll continue discussing <tag>statement</tag> and <tag>solution</tag>.</p>
             <pre>
@@ -210,26 +210,26 @@
             ]]>
             </pre>
 
-            <p>Within a <tag>statement</tag>, <tag>hint</tag>, or <tag>solution</tag>, reference <tag>var</tag> tags by <attribute>name</attribute>. For HTML and PG output, the Perl variable will be used. For static output, the <tag>var</tag> tag's <var>static</var> child will be used.</p>
+            <p>Within a <tag>statement</tag>, <tag>hint</tag>, or <tag>solution</tag>, reference <tag>var</tag> tags by <attr>name</attr>. For HTML and PG output, the Perl variable will be used. For static output, the <tag>var</tag> tag's <tag>static</tag> child will be used.</p>
 
-            <p>Within the <tag>statement</tag>, a <tag>var</tag> tag with either a <attribute>width</attribute> or <attribute>form</attribute> attribute creates an input field. The <attribute>name</attribute> attribute declares what the answer will be.</p> 
+            <p>Within the <tag>statement</tag>, a <tag>var</tag> tag with either a <attr>width</attr> or <attr>form</attr> attribute creates an input field. The <attr>name</attr> attribute declares what the answer will be.</p> 
 
-            <p>An <tag>var</tag> can have <attribute>form="essay"</attribute>, in which case it need not have a <attribute>name</attribute> attribute. This is for open-ended questions that must be graded by a human. The form field will be an expandable input block if the question is served to an authenticated user within <webwork />. But for the <webwork /> cells in MBX HTML output, there will just be a message explaining that there is no place to enter an answer.</p>
+            <p>An <tag>var</tag> can have <attr>form="essay"</attr>, in which case it need not have a <attr>name</attr> attribute. This is for open-ended questions that must be graded by a human. The form field will be an expandable input block if the question is served to an authenticated user within <webwork />. But for the <webwork /> cells in MBX HTML output, there will just be a message explaining that there is no place to enter an answer.</p>
 
-            <p>An <tag>var</tag> can have <attribute>form="array"</attribute>. You would use this when the answer is a Matrix or Vector MathObject (a <webwork /> classification) to cause the input form to be an array of smaller fields instead of one big field.</p> 
+            <p>An <tag>var</tag> can have <attr>form="array"</attr>. You would use this when the answer is a Matrix or Vector MathObject (a <webwork /> classification) to cause the input form to be an array of smaller fields instead of one big field.</p> 
 
-            <p>An <tag>var</tag> can have <attribute>form="popup"</attribute> or <attribute>form="buttons"</attribute>. These are not necessary for HTML and PG output to behave, but are needed if you intend for PDF output to emulate these answer entry field types.</p>
+            <p>An <tag>var</tag> can have <attr>form="popup"</attr> or <attr>form="buttons"</attr>. These are not necessary for HTML and PG output to behave, but are needed if you intend for PDF output to emulate these answer entry field types.</p>
 
-            <p>If you are writing a multiple choice question and using <attribute>form="popup"</attribute> or <attribute>form="buttons"</attribute> in your <tag>var</tag>, instead of a <tag>static</tag> in the corresponding <tag>var</tag> from the <tag>setup</tag>, use a <tag>set</tag> tag, with <tag>member</tag> children. The <tag>member</tag> tags would be the multiple choice options, and each can have a <attribute>correct="yes"</attribute> attribute to identify the correct choice(s). There is some unavoidable redundancy between listing these <tag>member</tag> tags in the <tag>setup</tag> and listing them again in the actual <tag>pg-code</tag>.</p> 
+            <p>If you are writing a multiple choice question and using <attr>form="popup"</attr> or <attr>form="buttons"</attr> in your <tag>var</tag>, instead of a <tag>static</tag> in the corresponding <tag>var</tag> from the <tag>setup</tag>, use a <tag>set</tag> tag, with <tag>member</tag> children. The <tag>member</tag> tags would be the multiple choice options, and each can have a <attr>correct="yes"</attr> attribute to identify the correct choice(s). There is some unavoidable redundancy between listing these <tag>member</tag> tags in the <tag>setup</tag> and listing them again in the actual <tag>pg-code</tag>.</p> 
 
-            <p>If you are familiar with PG, then in your <tag>pg-code</tag> you might write a custom evaluator (a combination of a custom answer checker, post filters, pre filters, <etc />). If you store this similar to</p><pre>$my_evaluator = $answer -> cmp(...);</pre><p>then the <tag>var</tag> can have <attribute>evaluator="$my_evaluator"</attribute>.</p>
+            <p>If you are familiar with PG, then in your <tag>pg-code</tag> you might write a custom evaluator (a combination of a custom answer checker, post filters, pre filters, <etc />). If you store this similar to</p><pre>$my_evaluator = $answer -> cmp(...);</pre><p>then the <tag>var</tag> can have <attr>evaluator="$my_evaluator"</attr>.</p>
 
             <p>An <tag>instruction</tag> is specific instructions for how the reader might type or otherwise electronically submit their answer. Contents of an <tag>instruction</tag> will be omitted from print and other static output forms. The <tag>instruction</tag> is a peer to <tag>p</tag>, but may only contain <q>short text</q> children.</p>
 
         </subsection>
 
         <subsection>
-            <title>Reusing a <tag>webwork</tag> by <attribute>xml:id</attribute></title>
+            <title>Reusing a <tag>webwork</tag> by <attr>xml:id</attr></title>
             <p>Planned.</p>
         </subsection>
 
@@ -272,7 +272,7 @@
         <subsection>
             <title>Creating Files for Uploading to <webwork /></title>
 
-            <p>All of the <tag>webwork</tag> that you have written into your project can be <q>harvested</q> and put into their own <c>.pg</c> files by the <c>mbx</c> script (this excludes <tag>webwork</tag> tags where you gave a <attribute>source</attribute> attribute.) These files are created with a folder structure that follows the chunking scheme you specify. This process also creates set definition files (<c>.def</c>) for each chunk. For example, you might specify to chunk by section, and then you will have a <c>.def</c> file for each section, listing all of the <c>.pg</c> files associated with that section. For <tag>webwork</tag> tags that used a <attribute>source</attribute> attribute, the <c>.def</c> file will include them as well. Lastly, this archiving process creates <c>.pg</c> files to be used as set header files to go along with each set definition.</p>
+            <p>All of the <tag>webwork</tag> that you have written into your project can be <q>harvested</q> and put into their own <c>.pg</c> files by the <c>mbx</c> script (this excludes <tag>webwork</tag> tags where you gave a <attr>source</attr> attribute.) These files are created with a folder structure that follows the chunking scheme you specify. This process also creates set definition files (<c>.def</c>) for each chunk. For example, you might specify to chunk by section, and then you will have a <c>.def</c> file for each section, listing all of the <c>.pg</c> files associated with that section. For <tag>webwork</tag> tags that used a <attr>source</attr> attribute, the <c>.def</c> file will include them as well. Lastly, this archiving process creates <c>.pg</c> files to be used as set header files to go along with each set definition.</p>
             <sidebyside>
                 <console>
                     <prompt>$ </prompt>
