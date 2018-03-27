@@ -12,7 +12,7 @@
 
      <p>This is a list of answers to frequent questions, in no particular order.</p>
 
-    <dl>
+    <p><dl>
         <li>
             <title>Why does the conversion to HTML use a fixed width for the text?</title>
             <p>There is an optimal number of characters per line for human readers,
@@ -105,9 +105,9 @@
             <title>Searching my <init>PDF</init> output is broken.</title>
             <p><pretext /> goes to great lengths to make a high-quality <init>PDF</init>, but if you manipulate it by adding in new pages, or adjust the intermediate <latex /> to use other fonts, you run the risk of breaking some of the features.</p>
 
-            <p>A ligature is a combination of two characters into one, like a lower-case <q>f</q> followed closely by a lower-case <f>i</f> without a dot.  These can confuse a search.  Verbatim text sometimes ends up with <q>smart</q> quotes, where left and right versions are inverted.  This frustrates copying source code into an actual program.  And so on.  If you see problems like this with un-customized <init>PDF</init> output, we would like to hear about it.</p>
+            <p>A ligature is a combination of two characters into one, like a lower-case <q>f</q> followed closely by a lower-case <q>i</q> without a dot.  These can confuse a search.  Verbatim text sometimes ends up with <q>smart</q> quotes, where left and right versions are inverted.  This frustrates copying source code into an actual program.  And so on.  If you see problems like this with un-customized <init>PDF</init> output, we would like to hear about it.</p>
         </li>
-    </dl>
+    </dl></p>
 
 </appendix>
 
