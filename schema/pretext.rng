@@ -3162,6 +3162,9 @@
       <element name="asterisk">
         <empty/>
       </element>
+      <element name="backtick">
+        <empty/>
+      </element>
       <element name="slash">
         <empty/>
       </element>

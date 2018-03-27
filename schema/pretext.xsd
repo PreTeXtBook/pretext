@@ -3033,6 +3033,7 @@
       <xs:choice>
         <xs:element ref="ellipsis"/>
         <xs:element ref="asterisk"/>
+        <xs:element ref="backtick"/>
         <xs:element ref="slash"/>
         <xs:element ref="midpoint"/>
         <xs:element ref="swungdash"/>
@@ -3112,6 +3113,9 @@
     <xs:complexType/>
   </xs:element>
   <xs:element name="asterisk">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="backtick">
     <xs:complexType/>
   </xs:element>
   <xs:element name="slash">

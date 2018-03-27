@@ -1415,6 +1415,7 @@
         Character |= 
             element ellipsis {empty} |
             element asterisk {empty} |
+            element backtick {empty} |
             element slash {empty} |
             element midpoint {empty} |
             element swungdash {empty} |
