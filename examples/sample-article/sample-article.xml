@@ -1018,6 +1018,12 @@ the xsltproc executable.
                 <assemblage>
                     <p>This is a small <c>assemblage</c> with no title, simply to make sure the surrounding box behaves properly, especially for <latex /> output.</p>
                 </assemblage>
+                
+                <assemblage>
+                  <title>Assemblages containing <m>\mu \forall \tau \mathbb{H} = \emptyset \kappa</m></title>
+
+                  <p>It is acceptable for an assmblage to contain mathematical content, even in its title.</p>
+                </assemblage>
             </subsection>
 
             <subsection xml:id="subsection-intro-conclude">
