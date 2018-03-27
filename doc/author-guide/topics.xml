@@ -61,7 +61,7 @@
 
             <paragraphs>
                 <title><tage>ndash</tage>, <ndash />, en dash</title>
-                <p>A dash, the width of a lowercase <sq>n</sq>, or exactly half the width of the em dash.  This is typically used to express a range, such as <c>1955&lt;ndash /&gt;1975</c>, with no intervening spaces.  It is often expressed as two hyphens when typed.  Bringhurst suggests an ndash surrounded by spaces <endash /> thusly <endash /> when setting off phrases.</p>
+                <p>A dash, the width of a lowercase <sq>n</sq>, or exactly half the width of the em dash.  This is typically used to express a range, such as <c>1955&lt;ndash /&gt;1975</c>, with no intervening spaces.  It is often expressed as two hyphens when typed.  Bringhurst suggests an ndash surrounded by spaces <ndash /> thusly <ndash /> when setting off phrases.</p>
             </paragraphs>
 
             <paragraphs>
@@ -486,12 +486,12 @@
 
     <section xml:id="topic-exercises">
         <title>(*) Exercises, Inline and Sectional</title>
-
+        <p></p>
     </section>
 
     <section xml:id="topic-references">
         <title>(*) Lists of Works Cited (References)</title>
-
+        <p></p>
     </section>
 
     <section xml:id="topic-verbatim-literal">
@@ -841,12 +841,12 @@
 
     <section xml:id="topic-lists-and-labels">
         <title>(*) Lists and their Labels</title>
-
+        <p></p>
     </section>
 
     <section xml:id="topic-exercises-solutions">
         <title>(*) Exercises and their Answers</title>
-
+        <p></p>
     </section>
 
     <section xml:id="topic-images">
@@ -940,7 +940,7 @@
 
     <section xml:id="topic-program-listings">
         <title>(*) Program Listings</title>
-
+        <p></p>
     </section>
 
     <section xml:id="topic-sidebyside">
@@ -978,26 +978,22 @@
 
     <section xml:id="topic-front-back-matter">
         <title>(*) Front and Back Matter</title>
-
+        <p></p>
     </section>
 
     <section xml:id="topic-index">
         <title>(*) Index</title>
-
         <p>TODO</p>
-
     </section>
 
     <section xml:id="topic-notation">
         <title>(*) Notation</title>
-
         <p>TODO</p>
-
     </section>
 
     <section xml:id="topic-automatic-lists">
         <title>(*) Automatic Lists</title>
-
+        <p></p>
     </section>
 
     <section xml:id="topic-url">
@@ -1092,7 +1088,7 @@
 
     <section xml:id="topic-units-measure">
         <title>(*) Units of Measure</title>
-
+        <p></p>
     </section>
 
     <section xml:id="topic-unicode">
@@ -1132,20 +1128,18 @@
 
         <subsection>
             <title>(*) Unicode Support in Linux</title>
-
             <p></p>
         </subsection>
 
         <subsection>
             <title>(*) Unicode Support in Windows</title>
-
             <p></p>
         </subsection>
     </section>
 
     <section xml:id="topic-doctest-sage">
         <title>(*) Testing Sage Examples</title>
-
+        <p></p>
     </section>
 
     <section xml:id="topic-xinclude">

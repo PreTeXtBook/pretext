@@ -19,44 +19,42 @@
     </paragraphs>
     <paragraphs>
         <title>Installation</title>
-        <p>
-            <list>
-                <caption>Steps to install</caption>
-                <ol>
-                    <li><url href="https://www.virtualbox.org/wiki/Downloads">Download</url> and install Virtualbox</li>
-                    <li><url href="https://www.vagrantup.com/downloads.html">Download</url> and install Vagrant</li>
-                    <li>Open a console (Windows: press Windows key, type <c>cmd</c>)</li>
-                    <li>
-                        <p>Create a new directory <c>vagrant_demo</c> and change into it, using the command</p>
-                        <sidebyside>
-                            <console>
-                                <prompt>$ </prompt>
-                                <input>mkdir vagrant_demo</input>
-                                <prompt>$ </prompt>
-                                <input>cd vagrant_demo</input>
-                            </console>
-                        </sidebyside>
-                    </li>
-                    <li>
-                        <p>Type the commands</p>
-                        <sidebyside>
-                            <console>
-                                <prompt>$ </prompt>
-                                <input>vagrant init daverosoff/pretext</input>
-                                <prompt>$ </prompt>
-                                <input>vagrant up</input>
-                            </console>
-                        </sidebyside>
-                        <p>This step takes between 30 and 60 minutes to complete. There is a lot of downloading. There will be some interesting messages, but once it gets going you don't have to watch.</p>
-                    </li>
-                    <li>Open PuTTY and connect to address 127.0.0.1, port 2222.</li>
-                    <li>Answer <q>Yes</q> to the authentication message</li>
-                    <li>Login user/pass: <c>vagrant</c>/<c>vagrant</c></li>
-                    <li>If you see the prompt <c>[vagrant@archlinux ~] $</c>, congratulations! You have successfully installed the <pretext/> Vagrant box.</li>
-                    <li>Keep the PuTTY window open for use in the next section.</li>
-                </ol>
-            </list>
-        </p>
+        <list>
+            <caption>Steps to install</caption>
+            <ol>
+                <li><url href="https://www.virtualbox.org/wiki/Downloads">Download</url> and install Virtualbox</li>
+                <li><url href="https://www.vagrantup.com/downloads.html">Download</url> and install Vagrant</li>
+                <li>Open a console (Windows: press Windows key, type <c>cmd</c>)</li>
+                <li>
+                    <p>Create a new directory <c>vagrant_demo</c> and change into it, using the command</p>
+                    <sidebyside>
+                        <console>
+                            <prompt>$ </prompt>
+                            <input>mkdir vagrant_demo</input>
+                            <prompt>$ </prompt>
+                            <input>cd vagrant_demo</input>
+                        </console>
+                    </sidebyside>
+                </li>
+                <li>
+                    <p>Type the commands</p>
+                    <sidebyside>
+                        <console>
+                            <prompt>$ </prompt>
+                            <input>vagrant init daverosoff/pretext</input>
+                            <prompt>$ </prompt>
+                            <input>vagrant up</input>
+                        </console>
+                    </sidebyside>
+                    <p>This step takes between 30 and 60 minutes to complete. There is a lot of downloading. There will be some interesting messages, but once it gets going you don't have to watch.</p>
+                </li>
+                <li>Open PuTTY and connect to address 127.0.0.1, port 2222.</li>
+                <li>Answer <q>Yes</q> to the authentication message</li>
+                <li>Login user/pass: <c>vagrant</c>/<c>vagrant</c></li>
+                <li>If you see the prompt <c>[vagrant@archlinux ~] $</c>, congratulations! You have successfully installed the <pretext/> Vagrant box.</li>
+                <li>Keep the PuTTY window open for use in the next section.</li>
+            </ol>
+        </list>
     </paragraphs>
     <paragraphs>
         <title>A first example</title>

@@ -210,7 +210,7 @@
             ]]>
             </pre>
 
-            <p>Within a <tag>statement</tag>, <tag>hint</tag>, or <tag>solution</tag>, reference <tag>var</tag> tags by <attr>name</attr>. For HTML and PG output, the Perl variable will be used. For static output, the <tag>var</tag> tag's <var>static</var> child will be used.</p>
+            <p>Within a <tag>statement</tag>, <tag>hint</tag>, or <tag>solution</tag>, reference <tag>var</tag> tags by <attr>name</attr>. For HTML and PG output, the Perl variable will be used. For static output, the <tag>var</tag> tag's <tag>static</tag> child will be used.</p>
 
             <p>Within the <tag>statement</tag>, a <tag>var</tag> tag with either a <attr>width</attr> or <attr>form</attr> attribute creates an input field. The <attr>name</attr> attribute declares what the answer will be.</p> 
 

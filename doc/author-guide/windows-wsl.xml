@@ -134,7 +134,7 @@
         <li><p>
             Use one of the editors to create a file called <c>hw.xml</c>
             (you could use the command <c>nano hw.xml</c>), and add
-            the following text:</p>
+            the following text:
             <cd>
             &lt;?xml version="1.0" encoding="UTF-8" ?&gt;
             &lt;mathbook&gt;
@@ -142,7 +142,7 @@
                 &lt;p&gt;Hello, World!&lt;/p&gt;
                 &lt;/article&gt;
             &lt;/mathbook&gt;
-            </cd>
+            </cd></p>
         </li>
         <li><p>
             Run the command

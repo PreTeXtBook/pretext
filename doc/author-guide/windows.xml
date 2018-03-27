@@ -35,24 +35,23 @@
       <title>Initial Windows setup</title>
       <p>It is easier to see what is happening if your Windows file browser is not set up to hide file extensions from you. Disable the <q>hide file extensions</q> behavior before proceeding. In Windows 7/8, this can be done through the Control Panel. In Windows 10, there is a checkbox somewhere in the ribbon for it.</p>
       <list xml:id="initial-windows-setup-steps">
+        <caption>Initial Windows Setup</caption>
         <ul>
           <li>
-            <p>On Windows 7 or 8:</p>
-            <ol>
+            <p>On Windows 7 or 8:<ol>
               <li><p>Open the Start Menu and type <q>Control Panel</q>. Select the <c>Control Panel</c> entry from the popup list.</p></li>
               <li><p>Type <q>Folder Options</q> into the search box in the Control Panel window. Select <c>Folder Options</c> when it appears.</p></li>
               <li><p>Select the View tab.</p></li>
               <li><p>Uncheck the box for <q>Hide extensions for known file types</q>.</p></li>
               <li><p>Click OK until there are no more OKs to click.</p></li>
-            </ol>
+            </ol></p>
           </li>
           <li>
-            <p>On Windows 10:</p>
-            <ol>
+            <p>On Windows 10:<ol>
               <li><p>Open the Start Menu (icon shaped like a Window at the bottom left, typically).  Select the <c>File Explorer</c> option, right above <c>Settings</c>, from the popup list.</p></li>
               <li><p>Click on this, and then select <c>View</c> from the <q>ribbon lists</q> of options along the top.</p></li>
               <li><p>After clicking this, on the right there should be a check box for <q>File Name Extensions</q>.  Click this box; that should do it.</p></li>
-            </ol>
+            </ol></p>
           </li>
         </ul>
       </list>
@@ -65,13 +64,12 @@
       <p>The trailing backslash is often unnecessary, but it is an easy way to see immediately whether a path name refers to a file or to a directory. Windows path names are not case-sensitive.</p>
       <p>Linux/Mac OS X path names are quite similar, but lack drive letters, start with an explicit reference to the root, use forward slashes, and are case-sensitive (more or less so, in Mac's case). A path to a typical Linux user's download folder might be</p>
       <pre>/home/typical.username/Downloads</pre>
-      <p>Again, Linux pathnames are case-sensitive and Mac OS X pathnames are typically <sq>case-preserving</sq>. The Git Bash shell for Windows is an emulation of a Linux environment, and the utilities within it expect path names that follow Linux conventions. So we conform to this expectation as follows.</p>
-      <!-- http://apple.stackexchange.com/questions/22297/is-bash-in-osx-case-insensitive -->
-      <ol>
+      <p>Again, Linux pathnames are case-sensitive and Mac OS X pathnames are typically <sq>case-preserving</sq>. The Git Bash shell for Windows is an emulation of a Linux environment, and the utilities within it expect path names that follow Linux conventions. So we conform to this expectation as follows.<ol>
+        <!-- http://apple.stackexchange.com/questions/22297/is-bash-in-osx-case-insensitive -->
         <li><p>Remove the colon, but keep the drive letter.</p></li>
         <li><p>All backslashes <c>\</c> become slashes <c>/</c>.</p></li>
         <li><p>Add an initial slash preceding the drive letter.</p></li>
-      </ol>
+      </ol></p>
       <p>The path name to my Windows download folder becomes</p>
       <pre>/c/users/drosoff/Downloads</pre>
       <p>Even though Git Bash is pretending to be a Linux shell, path names are still the underlying Windows path names, and therefore are not case sensitive. You can verify this using tab-completion.</p>
@@ -84,13 +82,12 @@
 
     <subsection xml:id="do-i-have-64-bit-windows">
       <title>Do I have 64-bit Windows?</title>
-      <p>Find out on Windows 7:</p>
-      <ol>
+      <p>Find out on Windows 7:<ol>
         <li><p>Open the start menu and type <q>Computer</q>. Right-click the <c>Computer</c> item in the popup menu.</p></li>
         <li><p>Select <c>Properties</c> from the drop-down menu.</p></li>
         <li><p>Read in the right-hand side of the pane to find the <q>System</q> heading.</p></li>
         <li><p>From the <q>System type</q> entry, read whether you have a 32- or a 64-bit OS.</p></li>
-      </ol>
+      </ol></p>
     </subsection>
 
     <conclusion>
@@ -106,6 +103,7 @@
 
       <p>This is the most annoying part of the installation. Obtain four zip archives from <url href="ftp://ftp.zlatkovic.com/libxml/"> Igor Zlatkovic's FTP site</url> that hosts the most recent Libxml binaries for Windows. At the time of this writing, the 64-bit binaries were considered experimental. I have had no trouble using the 32-bit binaries on my 64-bit Windows 7 system, so I suggest that all MBX users download the most recent 32-bit version of the following libraries:</p>
       <list xml:id="list-zip-files-xsltproc">
+        <caption><c>xsltproc</c> Zip Files</caption>
         <ol>
           <li><p><c>iconv</c> (filename something like <c>iconv-1.9.2.win32.zip</c>)</p></li>
           <li><p><c>libxml2</c> (filename something like <c>libxml2-2.7.8.win32.zip</c>)</p></li>
@@ -116,33 +114,30 @@
       <p>We only need a handful of files from these archives. So the simplest thing is to leave them in your Downloads folder and grab what we need. Create a new folder <c>C:\xsltproc</c> (it can be anywhere, as long as it's a new location). We'll call this location <c>&lt;xsltproc&gt;</c> in case you named your folder something different.</p>
       <p>Extract the following files from the four zip archives you downloaded above into <c>&lt;xsltproc&gt;</c>:</p>
       <list xml:id="list-extracted-files-from-zips-xsltproc">
+        <caption><c>xsltproc</c> Extracted Zip Files</caption>
         <ol>
           <li>
-            <p>From <c>iconv-*.win32.zip</c>:</p>
-            <ol>
+            <p>From <c>iconv-*.win32.zip</c>:<ol>
               <li><p><c>iconv-*.win32\bin\iconv.dll</c></p></li>
-            </ol>
+            </ol></p>
           </li>
           <li>
-            <p>From <c>libxml2-*.win32.zip</c>:</p>
-            <ol>
+            <p>From <c>libxml2-*.win32.zip</c>:<ol>
               <li><p><c>libxml2-*.win32\bin\libxml2.dll</c></p></li>
               <li><p><c>libxml2-*.win32\bin\xmllint.exe</c></p></li>
-            </ol>
+            </ol></p>
           </li>
           <li>
-            <p>From <c>libxslt-*.win32.zip</c>:</p>
-            <ol>
+            <p>From <c>libxslt-*.win32.zip</c>:<ol>
               <li><p><c>libxslt-*.win32\bin\libexslt.dll</c></p></li>
               <li><p><c>libxslt-*.win32\bin\libxslt.dll</c></p></li>
               <li><p><c>libxslt-*.win32\bin\xsltproc.exe</c></p></li>
-            </ol>
+            </ol></p>
           </li>
           <li>
-            <p>From <c>zlib-*.win32.zip</c>:</p>
-            <ol>
+            <p>From <c>zlib-*.win32.zip</c>:<ol>
               <li><p><c>zlib-*.win32\bin\zlib1.dll</c></p></li>
-            </ol>
+            </ol></p>
           </li>
         </ol>
       </list>
@@ -152,6 +147,7 @@
       <title>Change PATH environment variable</title>
       <p><em>Note: if you prefer not to meddle with this, it can be avoided</em>.  Now, we need to make sure your system can find these files when we need them.</p>
       <list xml:id="steps-change-path-environment-variable-xsltproc">
+        <caption>Path Environment Variable for <c>xsltproc</c></caption>
         <ol>
           <li>
             <p>Open the Start menu and start typing <q>Edit the system environment variables</q>. Select this option when it becomes visible.</p>
@@ -160,15 +156,14 @@
             <p>Click the Environment Variables button near the bottom of the dialog.</p>
           </li>
           <li>
-            <p>In the bottom part of the dialog labeled <q>System environment variables</q>, look for a variable named <c>PATH</c>. You may need to scroll.</p>
-            <ol>
+            <p>In the bottom part of the dialog labeled <q>System environment variables</q>, look for a variable named <c>PATH</c>. You may need to scroll.<ol>
               <li>
                 <p>If you do not find one, create it using the New... button. Make sure to use all capital letters. (This really shouldn't happen. Make sure you are editing the <em>system</em> environment variables, not the <em>user</em> environment variables.)</p>
               </li>
               <li>
                 <p>If you do find the <c>PATH</c> variable, select it and click the Edit... button.</p>
               </li>
-            </ol>
+            </ol></p>
           </li>
           <li>
             <p>Regardless of which of steps 1 and 2 you followed, now you should see a dialog with two text fields. Your variable name should be <c>PATH</c>.</p>
@@ -200,6 +195,7 @@
     <subsection xml:id="install-git">
       <title>Steps to install git</title>
       <list xml:id="steps-install-git">
+        <caption>git Installation</caption>
         <ol>
           <li>
             <p>Visit the official <c>git</c> <url href="https://git-scm.com/download/win">download page</url> (download starts automatically) and obtain the latest binary for your system.</p>
@@ -233,11 +229,10 @@
     <title>Installing Anaconda</title>
     <p>Anaconda is a well-regulated development environment for Python under Windows, and I recommend it for users who do not already have Python installed. The essential <c>mbx</c> script has <url href="https://github.com/rbeezer/mathbook/pull/252">recently been updated</url> to support both Python 2 and Python 3. Therefore we make no recommendation about which Python version to choose.</p>
     <p>If you already have a working Python installation, skip to <xref ref="installing-imagemagick" />.</p>
-    <p>You have some choice with your Anaconda installation. It actually supports the installation of several independent Pythons side-by-side (since both 2.7 and 3.x are in active use, this is more reasonable than it seems). If you do not need Python for anything else or are simply a minimalist, Miniconda is also an option. Miniconda installs no packages, but these can be installed via the <c>conda</c> utility at the command line later.</p>
-    <ol>
+    <p>You have some choice with your Anaconda installation. It actually supports the installation of several independent Pythons side-by-side (since both 2.7 and 3.x are in active use, this is more reasonable than it seems). If you do not need Python for anything else or are simply a minimalist, Miniconda is also an option. Miniconda installs no packages, but these can be installed via the <c>conda</c> utility at the command line later.<ol>
       <li><p>Download either Miniconda, Python 2.7, or Python 3.5 from the <url href="https://www.continuum.io/downloads">Anaconda download page</url>.</p></li>
       <li><p>Run the installer and accept all the default suggestions.</p></li>
-    </ol>
+    </ol></p>
 
     <p>Congratulations, you have successfully installed Python.</p>
     <p>If you do not care about images, you can stop here. Much of the MBX functionality is already present. However, to use the <c>mbx</c> script to create SVG images from sources like PDF/PNG images, Sage, Asymptote, or TikZ, you need to install ImageMagick and Ghostscript using the directions in <xref ref ="installing-imagemagick" /> and <xref ref ="installing-ghostscript" />.</p>
@@ -250,6 +245,7 @@
     <p>then a good choice for a 32-bit Windows would be</p>
     <pre>ImageMagick-7.0.1-6-Q16-x86-dll.exe</pre>
     <list xml:id="installing-imagemagick-steps">
+      <caption>imagemagick Installation</caption>
       <ol>
         <li>
           <p>Run the installer from your download location.</p>
@@ -280,6 +276,7 @@
       <title>Change PATH environment variable</title>
       <p>The <c>pdfcrop</c> utility needs to be told which Ghostscript command to use. We need to add the file <c>gswin64c.exe</c> to the Windows PATH. This is similar to what is done above, in <xref ref="change-path-environment-variable-xsltproc" />.</p>
       <list xml:id="steps-change-path-environment-variable-ghostscript">
+        <caption>Path Environment Variable for <c>ghostscript</c></caption>
         <ol>
           <li>
             <p>Open the Start menu and start typing <q>Edit the system environment variables</q>. Select this option when it becomes visible.</p>
@@ -319,6 +316,7 @@
       <title>Change PATH environment variable</title>
       <p>We need to add the <c>pdf2svg</c> program to the Windows PATH. This is similar to what is done above, in <xref ref="change-path-environment-variable-xsltproc" /> and <xref ref="change-path-environment-variable-ghostscript" />.</p>
       <list xml:id="steps-change-path-environment-variable-pdf2svg">
+        <caption>Path Environment Variable for <c>pdf2svg</c></caption>
         <ol>
           <li>
             <p>Open the Start menu and start typing <q>Edit the system environment variables</q>. Select this option when it becomes visible.</p>

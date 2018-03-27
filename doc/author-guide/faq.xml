@@ -12,7 +12,7 @@
 
      <p>Technical questions first, followed by questions about markup.</p>
 
-    <dl>
+    <p><dl>
         <li>
           <title>On my local machine, the knowls/Sage cells are empty</title>
             <p>
@@ -188,7 +188,7 @@
             <p>We do raise some errors during processing with <c>xsltproc</c>, but error-checking your input is a job for a validator, so in theory we should not ever produce any errors during a conversion.  So strive for having 100<percent /> valid <pretext /> source, not simply great-looking results.  See <xref ref="schema" /> and <xref ref="schema-install" />.</p>
         </li>
 
-    </dl>
+    </dl></p>
 
 </appendix>
 

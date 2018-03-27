@@ -168,8 +168,8 @@
 
         <table>
             <!-- <title><latex />'s Reserved Characters</title> -->
-            <idx>reserved characters (<latex />)</idx>
             <caption><latex />'s reserved characters and their elements</caption>
+            <idx>reserved characters (<latex />)</idx>
 
             <tabular>
                 <row><cell><hash /></cell><cell><tage>hash</tage></cell></row>
