@@ -5064,7 +5064,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- this is a character Markdown uses, so we want to      -->
 <!-- provide this safety valve.                            -->
 <xsl:template match="backtick">
-    <xsl:text>\textasciigrave</xsl:text>
+    <xsl:text>\textasciigrave{}</xsl:text>
 </xsl:template>
 
 <!-- We override all 13 Latin abbreviations, in order -->
