@@ -42,7 +42,7 @@
             latex-character:      hash, dollar, percent, tilde, underscore, 
                                   circumflex, backslash, lbrace, rbrace
             delimiter-character:  lsq, rsq, rq, lq
-            exotic-character:     ellipsis, asterisk, slash, midpoint, 
+            exotic-character:     ellipsis, asterisk, backtick, slash, midpoint,
                                   swungdash, permille, pilcrow, section-mark, 
                                   copyright, registered, trademark
             generator:            today, timeofday, tex, latex, pretext, webwork, 
@@ -149,6 +149,11 @@
             <paragraphs>
                 <title><tage>asterisk</tage>, <asterisk />, asterisk, star</title>
                 <p>This is the character, and not the raised mark used to indicate a footnote or endnote. It has a special meaning in Markdown.</p>
+            </paragraphs>
+
+            <paragraphs>
+                <title><tage>backtick</tage>, <backtick />, backtick, accent grave</title>
+                <p>This is the keyboard character that looks like a left single quote.  It is not a quote mark (use <tag>lsq</tag> for that character).  It is often used to modify other characters, as an accent.  But that is not the use of this empty element either.  This is the keyboard character, which is sometimes used in other markup languages.  So, again, you could do fine pressing the key, but <latex /> might turn it into a left quote mark, and it might cause confusion when Markdown is employed.</p>
             </paragraphs>
 
             <paragraphs>

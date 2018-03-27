@@ -1623,6 +1623,7 @@ the xsltproc executable.
                 <registered /><nbsp /><nbsp />
                 <trademark /><nbsp /><nbsp />
                 <ellipsis /><nbsp /><nbsp />
+                <backtick /><nbsp /><nbsp />
                 <midpoint /><nbsp /><nbsp />
                 <swungdash /><nbsp /><nbsp />
                 <permille /><nbsp /><nbsp />
@@ -1630,8 +1631,7 @@ the xsltproc executable.
                 <section-mark /><nbsp /><nbsp />
                 <times /><nbsp /><nbsp />
                 <slash /><nbsp /><nbsp />
-                <solidus /><nbsp /><nbsp />
-                <backtick /></p>
+                <solidus /></p>
 
                 <p>We also distinguish between abbreviations (<abbr>vs.</abbr>), acronyms (<acro>SCUBA</acro>) and initialisms (<init>XML</init>).  This is a test of the text version of a multiplication symbol: 2<nbsp /><times /><nbsp />4.</p>
 
