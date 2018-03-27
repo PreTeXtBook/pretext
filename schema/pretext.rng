@@ -2906,6 +2906,9 @@
       <element name="pubtitle">
         <ref name="TextLong"/>
       </element>
+      <element name="articletitle">
+        <ref name="TextLong"/>
+      </element>
       <element name="foreign">
         <optional>
           <ref name="XMLLang"/>

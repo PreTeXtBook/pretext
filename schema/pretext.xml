@@ -514,6 +514,7 @@
             element term {TextLong} |
             element alert {TextLong} |
             element pubtitle {TextLong} |
+            element articletitle {TextLong} |
             element foreign {
               XMLLang?,
               TextLong

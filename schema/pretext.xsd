@@ -2757,6 +2757,7 @@
         <xs:element ref="term"/>
         <xs:element ref="alert"/>
         <xs:element ref="pubtitle"/>
+        <xs:element ref="articletitle"/>
         <xs:element ref="foreign"/>
       </xs:choice>
       <xs:choice>
@@ -2833,6 +2834,11 @@
     </xs:complexType>
   </xs:element>
   <xs:element name="pubtitle">
+    <xs:complexType mixed="true">
+      <xs:group ref="TextLong"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="articletitle">
     <xs:complexType mixed="true">
       <xs:group ref="TextLong"/>
     </xs:complexType>
