@@ -3669,8 +3669,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 
 <!-- Serial Numbers: List Items -->
 
-<!-- First, the number of a list item within its own list -->
-<!-- This trades on the MBX format codes being identical to the XSLT codes -->
+<!-- First, the number of a list item within its own ordered list.  This -->
+<!-- trades on the MBX format codes being identical to the XSLT codes.   -->
 <xsl:template match="ol/li" mode="item-number">
     <xsl:variable name="code">
         <xsl:apply-templates select=".." mode="format-code" />
@@ -3678,20 +3678,21 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:number format="{$code}" />
 </xsl:template>
 
-<!-- Second, the serial number computed recursively             -->
-<!-- We first check if the list is inside a named list and      -->
-<!-- prefix with that number, using a colon to help distinguish -->
-<xsl:template match="li" mode="serial-number">
-    <xsl:if test="not(ancestor::li) and ancestor::list">
-        <xsl:apply-templates select="ancestor::list" mode="number" />
-        <xsl:text>:</xsl:text>
-    </xsl:if>
+<!-- Second, the serial number computed recursively.  The       -->
+<!-- entire hierarchy should be ordered lists, since otherwise, -->
+<!-- the template just below will apply instead.                -->
+<xsl:template match="ol/li" mode="serial-number">
     <xsl:if test="ancestor::li">
         <xsl:apply-templates select="ancestor::li[1]" mode="serial-number" />
         <xsl:text>.</xsl:text>
     </xsl:if>
     <xsl:apply-templates select="." mode="item-number" />
 </xsl:template>
+
+<!-- If any ancestor of a list item is not ordered, this     -->
+<!-- template should match first, and the serial number      -->
+<!-- will be empty, the signal that an object has no number. -->
+<xsl:template match="ul//li|dl//li" mode="serial-number" />
 
 
 <!-- Serial Numbers: Exercise Groups -->
@@ -3751,9 +3752,11 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Poems go by their titles, not numbers -->
 <xsl:template match="poem" mode="serial-number" />
 
-<!-- If a list item has any ancestor that is not  -->
-<!-- an ordered list, then it gets no number      -->
-<xsl:template match="ul//li|dl//li" mode="serial-number" />
+<!-- List items, subordinate to an unordered list, or a description  -->
+<!-- list, will have numbers that are especically ambiguous, perhaps -->
+<!-- even very clsoe within a multi-level list. They are unnumbered  -->
+<!-- in the vicinity of computing serial numbers of list items in    -->
+<!-- ordered lists.                                                  -->
 
 <!-- References in the backmatter are the "master" version -->
 <!-- The subdivision gets no number and the references     -->
@@ -4054,21 +4057,22 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 </xsl:template>
 
 <!-- Structure Numbers: Lists -->
-<!-- Lists themselves are not numbered, though     -->
-<!-- some individual list items are, so we just    -->
-<!-- provide an empty string to prefix list items. -->
-<!-- In effect, references are "local"             -->
-<xsl:template match="ol/li" mode="structure-number">
-    <xsl:text />
+<!-- Lists occur in paragraphs (anonymously), in "list"      -->
+<!-- blocks (numbered), and within exercises (numbered).     -->
+<!-- Typically we are interested in list items (only),       -->
+<!-- since that is where there is content.  And then we      -->
+<!-- are only interested in the list items within an ordered -->
+<!-- list.  We control for items under unordered lists or    -->
+<!-- description lists elsewhere by providing empty numbers. -->
+<!-- NB: the order of these templates may matter             -->
+<xsl:template match="li" mode="structure-number" />
+
+<xsl:template match="list//li" mode="structure-number">
+    <xsl:apply-templates select="ancestor::list" mode="number" />
 </xsl:template>
-<!-- An exception is lists inside of exercises, so we     -->
-<!-- use the number of the exercise itself as a prefix    -->
-<!-- to the number within the list.  We provide the       -->
-<!-- separator here since the list item number is allowed -->
-<!-- to be local and has no leading symbol                -->
-<!-- NB: these templates have equal priority, so order matters -->
-<xsl:template match="exercise//ol/li" mode="structure-number">
-    <xsl:apply-templates select="ancestor::exercise[1]" mode="number" />
+
+<xsl:template match="exercise//li" mode="structure-number">
+    <xsl:apply-templates select="ancestor::exercise" mode="number" />
 </xsl:template>
 
 <!-- Structure Numbers: Tasks (in projects) -->
@@ -4096,10 +4100,11 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Full Numbers -->
 <!--              -->
 
-<!-- Now trivial, container structure plus serial -->
-<!-- We condition on empty serial number in       -->
-<!-- order to create empty full numbers           -->
-<!-- This is where we add separator, a period     -->
+<!-- Now trivial, the container structure plus the serial.  -->
+<!-- We condition on empty serial number in order to create -->
+<!-- empty full numbers.  This is where we add separator,   -->
+<!-- normally a period, but for a list item within a named  -->
+<!-- list, we use a colon (a double period?).               -->
 <xsl:template match="*" mode="number">
     <xsl:variable name="serial">
         <xsl:apply-templates select="." mode="serial-number" />
@@ -4112,7 +4117,14 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             </xsl:variable>
             <xsl:if test="not($structure='')">
                 <xsl:value-of select="$structure" />
-                <xsl:text>.</xsl:text>
+                <xsl:choose>
+                    <xsl:when test="self::li and ancestor::list">
+                        <xsl:text>:</xsl:text>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:text>.</xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:if>
             <xsl:value-of select="$serial" />
         </xsl:otherwise>
