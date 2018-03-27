@@ -273,7 +273,7 @@
 
             <!-- fragment names, and their elements, from schema source
             delimiter-group: q, sq, braces, angles, brackets, dblbrackets
-            highlight-group: em, term, alert, pubtitle, foreign 
+            highlight-group: em, term, alert, pubtitle, articletitle, foreign
             abbreviation-group: abbr, acro, init
             editing-group: delete, insert, stale
             xml-group: tag, tage, attr
