@@ -6298,6 +6298,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             </xsl:variable>
             <!-- now know local/global, write trailing portion of text -->
             <!-- here based on the style and the global requirement    -->
+            <!-- NB: the "choose" is mirrored in the more specific template, next -->
+            <!-- Question:  why does "phrase-global" come through here?           -->
             <xsl:choose>
                 <!-- phrase styles may need remainder of phrase -->
                 <xsl:when test="(($text-style='phrase-global') or ($text-style='phrase-hybrid')) and ($requires-global = 'true')">
@@ -6351,6 +6353,55 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <!-- impossible to get here -->
     </xsl:choose>
 </xsl:template>
+
+<!-- A hybrid scheme for a list item is only for list items         -->
+<!-- of an ordered list, we drop the list number (structure number) -->
+<!-- when xref and target are both inside the same list.            -->
+<!-- No need to recurse.  $target is context, allowing a match.     -->
+
+<xsl:template match="list//li" mode="smart-xref-text">
+    <xsl:param name="text-style" />
+    <xsl:param name="xref" />
+    <xsl:param name="target" />
+
+    <xsl:variable name="targets-list" select="$target/ancestor::list" />
+    <xsl:variable name="xrefs-list"   select="$xref/ancestor::list" />
+
+    <!-- To be a local xref, the "xref" must live in some "list", and -->
+    <!-- it must be the same "list" as the "li" (which is in a list   -->
+    <!-- due to the match).  We use the negation to keep the logic    -->
+    <!-- the same as in the more general template, above              -->
+    <xsl:variable name="requires-global" select="not((count($xrefs-list) = 1) and (count($targets-list|$xrefs-list) = 1))" />
+
+    <!-- This "choose" largely matches above, and so maybe  -->
+    <!-- could be consolidated into a parameterized template -->
+    <xsl:choose>
+        <!-- phrase styles may need remainder of phrase -->
+        <xsl:when test="(($text-style='phrase-global') or ($text-style='phrase-hybrid')) and ($requires-global = 'true')">
+            <!-- connector, internationalize -->
+            <xsl:text> of </xsl:text>
+            <xsl:apply-templates select="$targets-list" mode="type-name" />
+            <xsl:apply-templates select="." mode="nbsp" />
+            <xsl:apply-templates select="$targets-list" mode="xref-number">
+                <xsl:with-param name="xref" select="." />
+            </xsl:apply-templates>
+        </xsl:when>
+        <!-- hybrid styles need number for remainder -->
+        <xsl:when test="($text-style='hybrid') or ($text-style='type-hybrid')">
+            <xsl:choose>
+                <xsl:when test="$requires-global = 'true'">
+                    <xsl:apply-templates select="$target" mode="xref-number">
+                        <xsl:with-param name="xref" select="." />
+                    </xsl:apply-templates>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates select="$target" mode="serial-number" />
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+    </xsl:choose>
+</xsl:template>
+
 
 <!-- This is an abstract template, to accomodate -->
 <!-- hard-coded HTML numbers and for LaTeX the   -->
