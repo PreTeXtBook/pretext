@@ -1305,7 +1305,7 @@
                 <cline>&lt;archive&gt;png JPEG tex ods&lt;/archive&gt;</cline>
             </cd>will provide four links on every image, including a link to an OpenDocument spreadsheet.</p>
 
-            <p>For a collection of images that is contained within some portion of your document, you can place an <attr>@xml:id</attr> on the enclosing element and then in <c>docinfo/images</c> place<cd>
+            <p>For a collection of images that is contained within some portion of your document, you can place an <attr>xml:id</attr> on the enclosing element and then in <c>docinfo/images</c> place<cd>
                 <cline>&lt;archive from="the-xml-id-on-the-portion"&gt;svg png&lt;/archive&gt;</cline>
             </cd>to get two links on every image <em>only</em> in that portion (chapter, subsection, side-by-side, <etc />).  The <attr>from</attr> attribute is meant to suggest the root of a subtree of your hierarchical document.  If you use this, then <em>do not</em> use the global form that does not have <attr>from</attr>.</p>
 
