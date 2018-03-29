@@ -10,5 +10,9 @@
 <chapter xml:id="print-pdf">
     <title>(*) Conversion to Print</title>
 
-        <p>TODO</p>
+        <p>TODO, just some notes right now</p>
+
+        <p><latex /> can fail if lists are nested too deeply.  Maximums may be up to four nested ordered lists, and up to six overall (mixing in unordered lists).  If you hit these limits, ask yourself if your situation is really that complicated, or ask us to consider a feature request adding a technical fix.</p>
+
+        <p>Lists with several columns are rendered in column-major order, as of 2018-02-28.  In other words, the first list items (<tag>li</tag>) in your source will populate the first column.</p>
 </chapter>
