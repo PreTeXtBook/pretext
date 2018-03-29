@@ -2553,7 +2553,7 @@ the xsltproc executable.
                 </p>
 
 
-                <p>This section contains nested lists, to demonstrate how they get assigned labels (numbering, symbols).  But we begin with two simple lists, demonstrating an ordered list and an unordered list.  See the end of section for an example of a description list.  Since Jupyter notebooks use markdown syntax, their lists are less flexible.  So some assertions here may be wrong when viewed as a Jupyter notebook.  Note in the source the optional use of a paragraph (<c>p</c>) for the list items.</p>
+                <p>This section contains nested lists, to demonstrate how they get assigned labels (numbering, symbols).  But we begin with two simple lists, demonstrating an ordered list and an unordered list.  See the end of section for an example of a description list.Note in the source the optional use of a paragraph (<c>p</c>) for the list items of the list of colors.</p>
 
                 <p><ol>
                     <li>First.</li>
@@ -2566,7 +2566,7 @@ the xsltproc executable.
                     <li><p>Purple</p></li>
                 </ul></p>
 
-                <p>Next, we have a list with no customization and multiple levels to test the defaults.  <latex /> allows a maximum of four levels of ordered/numbered lists, and a total of six levels if some unordered lists are mixed in.  The second-level defaults (lower-case Latin) are formatted slightly different in <latex /> versus HTML.  The HTML style is not easy to adjust, but you can  specify the <latex /> version to match if it is important.  The default order of the labels in Markdown/Jupyter (Arabic, Latin, latin, roman) is different than for <latex /> and HTML (Arabic, latin, roman, Latin), so cross-references are not correct.  Note that to have nested lists you <em>must</em> structure your list items as paragraphs, since a list may only appear within a <c>p</c> element.<ol>
+                <p>Next, we have a list with no customization and multiple levels to test the defaults.  <latex /> allows a maximum of four levels of ordered/numbered lists, and a total of six levels if some unordered lists are mixed in.  The second-level defaults (lower-case Latin) are formatted slightly different in <latex /> versus HTML.  The HTML style is not easy to adjust, but you can specify the <latex /> version to match if it is important.Note that to have nested lists you <em>must</em> structure your list items as paragraphs, since a list may only appear within a <tag>p</tag> element.<ol>
                     <li><p>Level 1, first.</p></li>
                     <li xml:id="list-two">
                         <p>Level 1, second.<ol>
@@ -2588,7 +2588,7 @@ the xsltproc executable.
                     <li><p>Level 1, third.</p></li>
                 </ol></p>
 
-                <p>Items in ordered lists may be be give an <c>xml:id</c> and then may be the target of an <c>xref</c>.  We test three here, referencing down into the hierarchy above.  Level 1, second: <xref ref="list-two" />.  Level 3, second: <xref ref="list-two-two-two" />.  Level 4, third: <xref ref="list-two-two-two-three" />.</p>
+                <p>Items in ordered lists (only) may be be give an <c>xml:id</c> and then may be the target of an <c>xref</c>.  We test three here, referencing down into the hierarchy above.  Level 1, second: <xref ref="list-two" />.  Level 3, second: <xref ref="list-two-two-two" />.  Level 4, third: <xref ref="list-two-two-two-three" />.  Note that if a list item of an ordered list is contained within a list item of an unordered list, then its number will not be defined.</p>
 
                 <p>And now a four-level deep unordered list with the default labels supplied by MBX (disc, circle, square, disc).  Again, the defalt order for Markdown/Jupyter (disc, square, circle, circle) is different than for <latex /> and HTML (disc, circle, square, disc)<ul>
                     <li><p>Level 1, first.</p></li>
@@ -2645,7 +2645,7 @@ the xsltproc executable.
                     <li><p>Level 1, third.</p></li>
                 </ol></p>
 
-                <p>Now, nested lists with the defaults replaced by custom choices.  First, an ordered list, three deep, upper Roman numerals, then upper-case Latin, then more traditional Arabic numerals on the three elements of the third level.  Note the adornments of the labels will be rendered in LaTeX, but not in HTML, and the label specifications have no effect in a Jupyter notebook.<ol label="*I*">
+                <p>Now, nested lists with the defaults replaced by custom choices.  First, an ordered list, three deep, upper Roman numerals, then upper-case Latin, then more traditional Arabic numerals on the three elements of the third level.  Note the adornments of the labels will be rendered in LaTeX, but not in HTML.<ol label="*I*">
                     <li><p>Level 1, first.</p></li>
                     <li><p>Level 1, second.<ol label="++A">
                             <li><p>Level 2, first.</p></li>
@@ -2679,7 +2679,7 @@ the xsltproc executable.
                         </ul></p>
                     </li>
                     <li><p>Level 1, third.  With a cross-reference to second list item, <xref ref="list-item-second" />.</p></li>
-                    <li><p>Level 1, fourth.  Whose number should not change when knowl just prior is opened.</p></li>
+                    <li><p>Level 1, fourth.  Whose number should not change when the knowl just prior is opened.</p></li>
                 </ol></p>
 
                 <p>The next definition is very poorly worded.  It is meant to test leading off with a list (bad form), for which <latex /> normally begins right after the heading.</p>
@@ -2786,7 +2786,10 @@ the xsltproc executable.
                 <title>Description Lists</title>
 
                 <p>Use <c>dl</c> to make a description list<idx><h>description list</h></idx><idx><h>list</h><h>description</h></idx>. Inside of those tags, use <c>li</c> for each entry. Then, use <c>title</c> to specify the term being described and <c>p</c> to specify the description.</p>
-                <p>A <q>description</q><idx><h>description list</h></idx><idx><h>list</h><h>description</h></idx> list has a short term or phrase that is prominent, followed by a short description.  It is modeled on the lists of similar structure in both <latex /> and HTML.  It makes for a nice medium-weight way to define terms, somewhere in-between the <c>term</c> tag which just makes a term prominent in a sentence, and a <c>definition</c>, which is set off, has a heading, a number, and a title.  This example is from Bob Plantz.<dl>
+                <p>A <q>description</q> list
+                <idx><h>description list</h></idx><idx><h>list</h><h>description</h></idx>
+                has a short term or phrase that is prominent, followed by a short description.  It is modeled on the lists of similar structure in both <latex /> and HTML.  It makes for a nice medium-weight way to define terms, somewhere in-between the <c>term</c> tag which just makes a term prominent in a sentence, and a <c>definition</c>, which is set off, has a heading, a number, and a title.  This example is from Bob Plantz.
+                <dl>
                     <li>
                         <title>Central Processing Unit (CPU)</title>
                         <p>Controls most of the activities of the computer, performs the arithmetic and logical operations, and contains a small amount of very fast memory.</p>
@@ -2832,7 +2835,7 @@ the xsltproc executable.
                 <title>Named Lists</title>
                 <idx>named list</idx><idx><h>list</h><h>named</h></idx>
 
-                <p>A list can be wrapped with a <c>&lt;list&gt;</c> element, so that it earns a number, can be given a title and have an introduction and conclusion.  Cross-references to individual list items get a bit absurd as they are prefixed with the number of the list and then the number of the item, so conceivably you could get a number like <c>4.5.3:2.a.ii</c>.</p>
+                <p>A list can be wrapped with a <tag>list</tag> element, so that it earns a number, can be given a title and have an introduction and conclusion.  Cross-references to individual list items get a bit involved as they are prefixed with the number of the list and then the number of the item, so conceivably you could get a number like <c>4.5.3:2.a.ii</c>.  The colon is used to indicate the transition from the number of the list within divisions and the numbers coming from the list hierarchy, since it has two small dots.</p>
 
                 <list xml:id="list-colors-rainbow">
                     <caption>Colors of the Rainbow</caption>
@@ -2909,8 +2912,6 @@ the xsltproc executable.
 
                 <p>This is a paragraph just outside the preceding named list, which references an item within, via the hybrid <attr>text</attr> attribute:  <xref ref="target-item" text="type-hybrid" />.</p>
 
-
-
                 <p><idx><h>list</h></idx>This is a paragraph with three lists contained within it.  For HTML output we have to <q>inside-out</q> the lists.<ol>
                     <li>A one item ordered list.</li>
                 </ol>In other words, the text before, after, and between, needs to each be encapsulated as an HTML <c>p</c> element of its own.<ul>
@@ -2959,7 +2960,6 @@ the xsltproc executable.
                     </note>
                 </biblio>
             </references>
-
         </section>
 
         <section>
