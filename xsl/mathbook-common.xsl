@@ -6136,6 +6136,12 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:when>
+        <!-- special case for phrase options and list items of anonymous lists        -->
+        <!-- catch this first and provide no text at all (could provide busted text?) -->
+        <!-- anonymous lists live in "p", but this is an unreliable indication        -->
+        <xsl:when test="($text-style = 'phrase-global' or $text-style = 'phrase-hybrid') and ($target/self::li and not($target/ancestor::list or $target/ancestor::objectives or $target/ancestor::exercise))">
+            <xsl:message>MBX:WARNING: a cross-reference to a list item of an anonymous list ("<xsl:apply-templates select="$target" mode="serial-number" />") with 'phrase-global' and 'phrase-hybrid' styles for the xref text will yield no text at all, and possibly create unpredictable results in output</xsl:message>
+        </xsl:when>
         <xsl:when test="$text-style = 'phrase-global' or $text-style = 'phrase-hybrid'">
             <!-- no content override in this case -->
             <!-- maybe we can relax this somehow? -->
