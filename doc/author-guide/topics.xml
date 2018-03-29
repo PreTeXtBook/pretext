@@ -555,10 +555,16 @@
             <title>Creating a Cross-Reference</title>
 
             <p>It is a two-step process to make a cross-reference.<ol>
-                <li>Put an <attr>xml:id</attr> attribute on any element you think you might want to reference later.  Be organized about the values of these attributes, and in particular do not number them, as this has no place in your source, and you do not want to maintain the changing numbers over the life of your project.  See the advice in <xref ref="overview-cross-references" /> about banned characters.  Some elements do not accept this attribute because the element has nothing to identify it (no number, no title).  Typically these are <term>containers</term><idx>container</idx> like <tag>sidebyside</tag> or <tag>statement</tag>.  In these cases, put the attribute on the closest enclosing element.</li>
+                <li>Put an <attr>xml:id</attr> attribute on any element you think you might want to reference later.  Be organized about the values of these attributes, and in particular do not number them, as this has no place in your source, and you do not want to maintain the changing numbers over the life of your project.  See the advice in <xref ref="overview-cross-references" /> about banned characters.  Some elements do not accept this attribute because the element has nothing to identify it (no number, no title).  Typically these are <term>containers</term><idx>container</idx> such as <tag>sidebyside</tag>, <tag>statement</tag>, or <tag>ol</tag>.  In these cases, put the attribute on the closest enclosing element.</li>
 
                 <li>To make a cross reference, you create an <tage>xref</tage> element with a <attr>ref</attr> attribute with the same value as <attr>xml:id</attr> attribute on the element you want to reference.</li>
             </ol>Simple.  It is meant to be, so you can use it liberally.  But we also know authors want some flexibility.</p>
+
+            <note>
+                <title>Best Practice</title>
+
+                <p>Use the <attr>xml:id</attr> attribute liberally, on any object you might want to reference later, and on every division.  It is easier to do as you author and will be very valuable later.  (Trust us on this one.)  Develop a system so you can recall them predictably, but keep them readable.  Don't use numbers, they will change.  Then make frequent cross-references.  They are relatively easy for you and will be incredibly useful for each and every one of your many readers, over and over and over again.</p>
+            </note>
         </subsection>
 
         <subsection>
@@ -671,19 +677,61 @@
             </table>
         </subsection>
 
+        <subsection>
+            <title>Variations</title>
+
+            <p>There are some variant uses for the <tag>xref</tag> tag.<ul>
+                <li>Replace <attr>ref</attr> by <attr>provisional</attr> and give it a value with some simple text like <c>subsection on eagle habitat</c> and you will get reminders that once you write this future subsection you need to link it in right here.  This is just a convenience for authors during the early stages of a writing project.</li>
+
+                <li>Replace <attr>ref</attr> by the pair <attr>first</attr> and <attr>last</attr>.  Provide attribute values just as you would for <attr>ref</attr>.  The code will check that the targets have the exact same tag, and that the order is correct.  You will get a link that looks like a range, separated by an en dash.  As a link, only <attr>first</attr> will be used for the linking mechanism (<ie />, one link is generated, not two).  Experiment with <attr>text</attr> and content overrides.</li>
+
+                <li>The <attr>ref</attr> attribute may be a list of <attr>xml:id</attr>, separated by commas or by spaces.  Then you will get back a list of cross-references.  This is meant for a list of citations, producing a look like [5, 9, 22], but it makes no restriction to this case.  Use it generally, but it is unlikely to get any more capable.  If you want a different list, just use multiple <tag>xref</tag> and format as you desire.</li>
+            </ul></p>
+
+            <p>You can create many different combinations with the text options and the variants.  Here is one example.  You want to say <xref first="start-here" last="schema" text="global">Chapters</xref>.  As a range you use the variant with two references. You would get <q>Chapter</q> out front automatically with the <c>type-global</c> scheme, but a plural form makes more sense.  So you use that text as an override.  We could use either <c>type-global</c> or <c>global</c> to get the same text, and possibly <c>type-hybrid</c> depending on teh place where you built the cross-reference.  So possibly, one of these schemes might be your document-wide setting and you do not need to specify it now.  Here is what we just used:<cd>
+                <cline>&lt;xref first="start-here" last="schema" text="global"&gt;Chapters&lt;/xref&gt;</cline>
+            </cd></p>
+
+            <p>You can place a cross-reference into a <tag>title</tag> element, but a particular conversion is free to simply render it as text, and not as an active link.</p>
+
+            <p>Finally, there is fairly robust error-checking to protect against typographical errors in the attribute values that need to match up for all this to work.  Also, there is a check that the <attr>xml:id</attr> are unique.  But all this checking happens at processing-time, not at the validation step.  Any suggestions for improvements that make these checks even more robust are welcome.</p>
+        </subsection>
+
+        <subsection>
+            <title>Citations</title>
+            <idx>citation</idx>
+
+            <p>Citations are just specialized cross-references to <tag>biblio</tag> elements, and so behave the same way as other cross-references.  However they will always visually look like [23], and there is no notion of <q>type name.</q></p>
+        </subsection>
+
+        <subsection>
+            <title>Equations</title>
+
+            <p>Similar to citations, references to equations (<tag>men</tag> and <tag>mrow</tag> elements) will visually look like (4.2), where the type name is implied by the parentheses.  Notice that you cannot cross-reference an <tag>me</tag> element (it has no number) or an <tag>md</tag> element (it is just a container, filled with <tag>mrow</tag> that you can target if you give them numbers).  Consult <xref ref="topic-display-math" /> for details about controlling the numbering of equations within an <tag>md</tag> or <tag>mdn</tag> element.</p>
+        </subsection>
+
+
+
         <subsection xml:id="topic-cross-reference-list-item">
-            <title>Cross-References to Lists</title>
+            <title>Lists</title>
 
+            <p>Roughly, you can target a list item for a cross-reference, but not the list itself, since it is a container.  See <xref ref="topic-list-item-target" /> for precise details about using list content as the target of a cross-reference.  Note also, that an entire named list may be the target of a cross-reference, see <xref ref="topic-named-list" />.  Here we concentrate on the text of the cross-reference itself.</p>
 
+            <p>First, note that if you cross-reference a list item of an anonymous list, there is a very real possibility that the number will be ambiguous, and there is no option for <attr>text</attr> will save you, and never can be.  See the middle column of <xref ref="table-xref-list-item" /> for the demonstration.  We assiduously try to make it <em>impossible</em> to ever create ambiguous text for cross-references, especially in consideration of print output.  Use the feature carefully.</p>
 
+            <note xml:id="practice-ambiguous-list-items">
+                <title>Best Practice</title>
 
+                <p>Cross-references to list items of anonymous lists can easily be ambiguous and then useless for readers of print.  Keep such a cross-reference close to its target, ideally within the same list, and/or perhaps using additional, unambiguous clues about location (which you  expect will survive later editing):
+                <ol>
+                    <li xml:id="ambiguous-list-item-one">See <xref ref="ambiguous-list-item-two" /> of this list.</li>
+                    <li xml:id="ambiguous-list-item-two">See <xref ref="ambiguous-list-item-one" /> in the list appearing in <xref ref="practice-ambiguous-list-items" />.</li>
+                </ol></p>
+            </note>
 
+            <p>The <c>local</c> option, discussed generally above, behaves differently for a cross-reference to a list item of an ordered list that is contained in a named list.  As seen in the table just below, the local portion of the number is the part that comes from the list item, without the part that comes from the location of the <tag>list</tag> block.</p>
 
-
-
-
-
-            <table>
+            <table xml:id="table-xref-list-item">
                 <caption>Cross-references to list items, visual text styles</caption>
                 <tabular>
                     <row bottom="major">
@@ -758,45 +806,26 @@
                 </tabular>
             </table>
 
+            <p>The <c>hybrid</c> options employ a different definition of when the distance between a cross-reference and its target is close enough that the number can be shortend, without becoming ambiguous.  When an <tag>xref</tag> and its target are part of the same <tag>list</tag>, then the common part of the number derived from the <tag>list</tag> is not needed.  To illustrate we need to make a small <tag>list</tag> with cross-references contained within.</p>
+
             <list>
                 <caption>Small test</caption>
                 <ol>
-                    <li>Fish are not <xref ref="nearby-item" text="type-hybrid" /></li>
-                    <li>Bacteria are not <xref ref="nearby-item" text="hybrid" /></li>
-                    <li>Fungi are not <xref ref="nearby-item" text="phrase-global" /></li>
-                    <li>Trees are not <xref ref="nearby-item" text="phrase-hybrid" /></li>
-                    <li xml:id="nearby-item">Mammals</li>
+                    <li>(<c>type-global</c>)  Flowers are not <xref ref="nearby-item" text="type-global" />.</li>
+                    <li>(<c>type-hybrid</c>)  Fish are not <xref ref="nearby-item" text="type-hybrid" />.</li>
+                    <li>(<c>hybrid</c>)  Bacteria are not <xref ref="nearby-item" text="hybrid" />.</li>
+                    <li>(<c>phrase-global</c>)  Fungi are not <xref ref="nearby-item" text="phrase-global" />.</li>
+                    <li>(<c>phrase-hybrid</c>)  Trees are not <xref ref="nearby-item" text="phrase-hybrid" />.</li>
+                    <li xml:id="nearby-item">Mammals.</li>
                 </ol>
             </list>
-        </subsection>
-
-        <subsection>
-            <title>Citations</title>
-
-            <p>Citations, which are specialized cross-references to <tag>biblio</tag> elements, behave the same way, but will always visually look like [23].  References to equations (<tag>men</tag> and <tag>mrow</tag> elements) will visually look like (4.2), where the type is implied by the parentheses.  Notice that you cannot cross-reference an <tag>me</tag> (no number) or <tag>md</tag> (just a container).</p>
-
-            <p>Further, there are some variant formats.<ul>
-                <li>Replace <attr>ref</attr> by <attr>provisional</attr> and give it a value with some simple text like <c>subsection on eagle habitat</c> and you will get reminders that once you write this future subsection you need to link it in right here.  This is just a convenience for authors during the early stages of a writing project.</li>
-
-                <li>Replace <attr>ref</attr> by the pair <attr>first</attr> and <attr>last</attr>.  Provide attribute values just as you would for <attr>ref</attr>.  The code will check that the targets have the exact same tag, and that the order is correct.  You will get a link that looks like a range, separated by an en dash.  As a link, only <attr>first</attr> will be used for the linking mechanism (<ie />, one link is generated, not two).  Experiment with <attr>text</attr> and content overrides.</li>
-
-                <li>The <attr>ref</attr> attribute may be a list of <attr>xml:id</attr>, separated by commas or by spaces.  Then you will get back a list of cross-references.  This is meant for a list of citations, producing a look like [5, 9, 22], but it makes no restriction to this case.  Use it generally, but it is unlikely to get any more capable.  If you want a different list, just use multiple <tag>xref</tag> and format as you desire.</li>
-            </ul></p>
-
-            <p>You can create many different combinations with the text options and the variants.  Here is one example.  You want to say <xref first="start-here" last="schema" text="global">Chapters</xref>.  As a range you use the variant with two references. You would get <q>Chapter</q> out front automatically with the <c>type-global</c> scheme, but a plural form makes more sense.  So you use that text as an override.  We could use either <c>type-global</c> or <c>global</c> to get the same text, and possibly <c>type-hybrid</c> depending on teh place where you built the cross-reference.  So possibly, one of these schemes might be your document-wide setting and you do not need to specify it now.  Here is what we just used:<cd>
-                <cline>&lt;xref first="start-here" last="schema" text="global"&gt;Chapters&lt;/xref&gt;</cline>
-            </cd></p>
-
-            <p>You can place a cross-reference into a <tag>title</tag> element, but a particular conversion is free to simply render it as text, and not as an active link.</p>
-
-            <p>Finally, there is fairly robust error-checking to protect against typographical errors in the attribute values that need to match up for all this to work.  Also, there is a check that the <attr>xml:id</attr> are unique.  But all this checking happens at processing-time, not at the validation step.  Any suggestions for improvements that make these checks even more robust are welcome.</p>
         </subsection>
 
         <conclusion>
             <note>
                 <title>Best Practice</title>
 
-                <p>With numbering schemes for divisions, theorems, figures, equations, and citations, along with nine different text styles, plus variants, per-cross-reference settings, and text overrides, there are a lot of combinations.  Likely you can create some fairly ugly cross-references.  Use the flexibility sensibly.</p>
+                <p>With distinct numbering schemes for divisions, theorems, figures, equations, and citations, along with nine different text styles for a cross-reference, plus variants, per-cross-reference settings, and text overrides, there is a huge supply of combinations.  Likely you can create some really ugly cross-references.  Use the flexibility sensibly.</p>
             </note>
         </conclusion>
     </section>
@@ -844,7 +873,7 @@
             <p>The <tag>me</tag> element can be used for longer expressions or a single equation.  Typically you will get vertical separation above and below, and the contents will be centered.  See below about concluding periods (and other punctuation), and alignment.  The <tag>men</tag> variant will produce a numbered equation, and therefore with a provided <attr>xml:id</attr> attribute, can be the target of a cross-reference (<tag>xref</tag>).</p>
         </subsection>
 
-        <subsection>
+        <subsection xml:id="topic-display-math">
             <title>Multi-line Display Mathematics</title>
 
             <p>We begin with a pure container, either <tag>md</tag> or <tag>mdn</tag>.  The former numbers no lines, the latter numbers every line.  Within the container, content, on a per-line basis, goes into a <tag>mrow</tag> element.  You can think of <tag>mrow</tag> as being very similar to <tag>me</tag>.  If you are tempted to put a <latex /> <c>\\</c> into an <tag>mrow</tag>, think twice.</p>
@@ -1038,7 +1067,7 @@
             <p>A list item of a description list must have a <tag>title</tag> element, to provide the text of the label.  Now that the list item has some structure, the remainder must also be structured, typically with some paragraphs, as discussed above.  In other words, the earlier option of employing an <tag>li</tag> element just like a <tag>p</tag> element is not available in a description list.  Further, given the complexity of presenting a description list, it can <em>only be a top-level list</em>.  It can contain the two other types nested within its list items.</p>
         </subsection>
 
-        <subsection>
+        <subsection xml:id="topic-list-item-target">
             <title>Cross-References to List Content</title>
 
             <p>Note that a list is a container, so it cannot be the target of a cross-reference, and so the three types of lists cannot have an <attr>xml:id</attr> attribute.  But you may well be able to point at some other structure (<eg />, a <tag>remark</tag>) with a paragraph containing a list of interest.  If this seems overly restrictive, read below about named lists.</p>
