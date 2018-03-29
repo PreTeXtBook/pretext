@@ -2856,6 +2856,61 @@ the xsltproc executable.
                     </conclusion>
                 </list>
 
+
+                 <p>This next list is used for testing cross-references to it.  See <xref ref="section-cross-referencing" text="type-global" />.</p>
+
+                <list xml:id="list-to-reference">
+                    <caption>A named list of targets</caption>
+                    <introduction>
+                        <p>This is the introduction to this named list, which references an item within, via the hybrid <attr>text</attr> attribute:  <xref ref="target-item" text="type-hybrid" />.</p>
+                    </introduction>
+                    <ol label="A">
+                        <li>
+                            <p>
+                                <ol label="i">
+                                    <li>A and i</li>
+                                    <li>A and ii</li>
+                                    <li>A and iii</li>
+                                </ol>
+                            </p>
+                        </li>
+                        <li>
+                            <p>
+                                <ol label="a">
+                                    <li>B and a</li>
+                                    <li>B and b</li>
+                                    <li xml:id="target-item">B and c (target of some cross-references)</li>
+                                </ol>
+                            </p>
+                        </li>
+                        <li>
+                            <p>
+                                <ul label="disc">
+                                    <li>The next three cross-references point to a list item, just above.  It is interesting because the list is named, hence numbered.  The global reference uses the full number, while the local reference uses the number from within the list.  The hybrid reference recognizes that the target is within the same named list, so the number can be shorter.  An identical hybrid cross-reference appears within the <tag>introduction</tag> to this list, an immediately following, but outside the <tag>list</tag>.</li>
+                                    <li>Cross-reference within named list (<c>global</c>): <xref ref="target-item" text="type-global" /></li>
+                                    <li>Cross-reference within named list (<c>hybrid</c>): <xref ref="target-item" text="type-hybrid" /></li>
+                                    <li>Cross-reference within named list (<c>local</c>): <xref ref="target-item" text="type-local" /></li>
+                                    <li>
+                                        <p>
+                                            <ol label="1">
+                                                <li>C and bullet and 1</li>
+                                                <li xml:id="target-no-number">C and bullet and 2</li>
+                                                <li>C and bullet and 3</li>
+                                            </ol>
+                                    </p>
+                                    </li>
+                                    <li>C and bullet</li>
+                                    <li>C and bullet</li>
+                                </ul>
+                            </p>
+                        </li>
+                    </ol>
+                </list>
+
+                <p>This is a paragraph just outside the preceding named list, which references an item within, via the hybrid <attr>text</attr> attribute:  <xref ref="target-item" text="type-hybrid" />.</p>
+
+
+
                 <p><idx><h>list</h></idx>This is a paragraph with three lists contained within it.  For HTML output we have to <q>inside-out</q> the lists.<ol>
                     <li>A one item ordered list.</li>
                 </ol>In other words, the text before, after, and between, needs to each be encapsulated as an HTML <c>p</c> element of its own.<ul>
@@ -4427,11 +4482,16 @@ the xsltproc executable.
                 <li><p>A group of two exercises, with introduction, conclusion: <xref ref="exercisegroup-two-problems" text="type-global" /></p></li>
                 <li><p>Solution: An autonamed portion of an exercise: <xref ref="solution-antiderivative" text="type-global" /></p></li>
                 <li><p>Parts of a complicated exercise: <xref ref="exercise-complicated-second-hint" text="type-global" /> <xref ref="exercise-complicated-first-answer" text="type-global" /></p></li>
-                <li><p>An item buried in nested ordered lists (local reference): <xref ref="list-two-two-two-three" text="type-global"/></p></li>
-                <li><p>A subsidary part of an exercise (fully-qualified reference): <xref ref="exercise-one-two-one" /></p></li>
+                <li><p>A subsidary part of an exercise: <xref ref="exercise-one-two-one" /></p></li>
+                <li><p>An item buried in nested ordered lists: <xref ref="list-two-two-two-three" text="type-global"/></p></li>
                 <li><p>List item as knowls in HTML, including nested lists: <xref ref="list-two" />, <xref ref="list-two-two-two" text="type-global" /></p></li>
                 <li><p>A titled list: <xref ref="list-colors-rainbow" /></p></li>
                 <li><p>List item inside a named list, second color in rainbow list: <xref ref="rainbow-orange" text="type-global" /></p></li>
+                <li><p>Second color in rainbow list, but now as a local reference: <xref ref="rainbow-orange" text="type-local" /></p></li>
+
+                <li><p>An item in ordered list, but contained in an unordered list, hence without a number, so ambiguous: <xref ref="target-no-number" text="type-global"/></p></li>
+                <li><p>Same item in ordered list, but contained in an unordered list, now with a cross-reference by <c>title</c> with a content override: <xref ref="target-no-number" text="title">No Number List Item</xref></p></li>
+                <li><p>Several examples of hybrid cross-references to list items within a named list can be found in, and adjacent to, <xref ref="list-to-reference" text="type-global" />.</p></li>
                 <li><p>An assemblage, which never has a number.  A cross-reference now requires content in the <c>xref</c> element, with <c>text='title'</c>: <xref ref="assemblage-basics" text="title">text to xref an assemblage</xref></p></li>
                 <li><p>A cross-reference to a list item in a description list, which has a title, but never a number: <xref ref="reserved-characters-mathematics" text="title" />.  Note that you need to include the attribute <c>autoname="number"</c> even if that is obvious from the situation.  This requirement may be relaxed in a future refactoring of the cross-reference system.</p></li>
                 <li><p>A cross-reference to a <q>paragraphs</q> subdivision, which never has a number (so comments above about description list items and titles applies here too): <xref ref="hierarchy-structure" text="title" /></p></li>
@@ -4477,6 +4537,9 @@ the xsltproc executable.
                 <li><p>A range of bibliographic items: <xref first="biblio-judson-AATA" last="biblio-lay-article" /></p></li>
                 <!-- <li><p>: <xref ref="" /></p></li> -->
             </ul></p>
+
+
+
 
             <p>The <c>url</c><idx>url</idx> element may be used to link to a data file, either externally, or internally, if you want to make such an object available to a reader.  A good example use case is a spreadsheet that might be part of an exercise, or contain data relevant to some discussion.  First let us suppose the data resides somewhere on the Internet, then just use the complete address.  Here is one from Microsoft: <url href="http://go.microsoft.com/fwlink/?LinkID=521962">Sample Excel Spreadsheet</url>.</p>
 
