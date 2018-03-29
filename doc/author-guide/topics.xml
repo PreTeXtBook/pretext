@@ -462,7 +462,7 @@
             </paragraphs>
         </subsection>
 
-        <subsection>
+        <subsection xml:id="topic-structure-in-paragraph">
             <title>Structured Markup in Paragraphs</title>
 
             <!-- Schema, reference groups:      -->
@@ -472,7 +472,7 @@
 
             <paragraphs>
                 <title>Lists</title>
-                <p>With one exception, a list <em>must</em> appear within a paragraph.  See <xref ref="overview-lists" /> for an introduction and <xref ref="topic-lists-and-labels" /> for precise details.</p>
+                <p>With one exception, a list <em>must</em> appear within a paragraph.  See <xref ref="overview-lists" /> for an introduction and <xref ref="topic-lists" /> for precise details.</p>
             </paragraphs>
 
             <paragraphs>
@@ -661,6 +661,94 @@
             </tabular>
         </table>
 
+<!-- topic-cross-reference-list-item -->
+
+        <table>
+            <caption>Cross-references to list items, visual text styles</caption>
+            <tabular>
+                <row bottom="major">
+                    <cell><attr>text</attr></cell>
+                    <cell>Named List</cell>
+                    <cell>Anonymous List</cell>
+                    <cell>With Content</cell>
+                </row>
+
+                <row>
+                    <cell><c>type-local</c></cell>
+                    <cell><xref ref="named-list-target"  text="type-local" /></cell>
+                    <cell><xref ref="anon-list-target" text="type-local" /></cell>
+                    <cell><xref ref="named-list-target" text="type-local">Extra</xref></cell>
+                </row>
+
+                <row>
+                    <cell><c>type-global</c></cell>
+                    <cell><xref ref="named-list-target"  text="type-global" /></cell>
+                    <cell><xref ref="anon-list-target" text="type-global" /></cell>
+                    <cell><xref ref="named-list-target" text="type-global">Extra</xref></cell>
+                </row>
+
+                <row>
+                    <cell><c>type-hybrid</c></cell>
+                    <cell><xref ref="named-list-target"  text="type-hybrid" /></cell>
+                    <cell><xref ref="anon-list-target" text="type-hybrid" /></cell>
+                    <cell><xref ref="named-list-target" text="type-hybrid">Extra</xref></cell>
+                </row>
+
+                <row>
+                    <cell><c>local</c></cell>
+                    <cell><xref ref="named-list-target"  text="local" /></cell>
+                    <cell><xref ref="anon-list-target" text="local" /></cell>
+                    <cell><xref ref="named-list-target" text="local">Extra</xref></cell>
+                </row>
+
+                <row>
+                    <cell><c>global</c></cell>
+                    <cell><xref ref="named-list-target"  text="global" /></cell>
+                    <cell><xref ref="anon-list-target" text="global" /></cell>
+                    <cell><xref ref="named-list-target" text="global">Extra</xref></cell>
+                </row>
+
+                <row>
+                    <cell><c>hybrid</c></cell>
+                    <cell><xref ref="named-list-target"  text="hybrid" /></cell>
+                    <cell><xref ref="anon-list-target" text="hybrid" /></cell>
+                    <cell><xref ref="named-list-target" text="hybrid">Extra</xref></cell>
+                </row>
+
+                <row>
+                    <cell><c>phrase-global</c></cell>
+                    <cell><xref ref="named-list-target"  text="phrase-global" /></cell>
+                    <cell>Warning</cell>
+                    <cell>Warning</cell>
+                </row>
+
+                <row>
+                    <cell><c>phrase-hybrid</c></cell>
+                    <cell><xref ref="named-list-target"  text="phrase-hybrid" /></cell>
+                    <cell>Warning</cell>
+                    <cell>Warning</cell>
+                </row>
+
+                <row>
+                    <cell><c>title</c></cell>
+                    <cell><xref ref="named-list-target"  text="title" /></cell>
+                    <cell><xref ref="anon-list-target" text="title" /></cell>
+                    <cell><xref ref="named-list-target" text="title">Extra</xref></cell>
+                </row>
+            </tabular>
+        </table>
+
+        <list>
+            <caption>Small test</caption>
+            <ol>
+                <li>Fish are not <xref ref="nearby-item" text="type-hybrid" /></li>
+                <li>Bacteria are not <xref ref="nearby-item" text="hybrid" /></li>
+                <li>Fungi are not <xref ref="nearby-item" text="phrase-global" /></li>
+                <li>Trees are not <xref ref="nearby-item" text="phrase-hybrid" /></li>
+                <li xml:id="nearby-item">Mammals</li>
+            </ol>
+        </list>
+
         <p>Citations, which are cross-references to <tag>biblio</tag> elements behave the same way, but will always visually look like [23].  References to equations (<tag>men</tag> and <tag>mrow</tag> elements) will visually look like (4.2), where the type is implied by the parentheses.  Notice that you cannot cross-reference an <tag>me</tag> (no number) or <tag>md</tag> (just a container).</p>
 
         <p>Further, there are some variant formats.<ul>
@@ -680,7 +768,7 @@
         <p>Finally, there is fairly robust error-checking to protect against typographical errors in the attribute values that need to match up for all this to work.  Also, there is a check that the <attr>xml:id</attr> are unique.  But all this checking happens at processing-time, not at the validation step.  Any suggestions for improvements that make these checks even more robust are welcome.</p>
 
         <note>
-            <title>Best Practices</title>
+            <title>Best Practice</title>
 
             <p>With numbering schemes for divisions, theorems, figures, equations, and citations, along with nine different text styles, plus variants, per-cross-reference settings, and text overrides, there are a lot of combinations.  Likely you can create some fairly ugly cross-references.  Use the flexibility sensibly.</p>
         </note>
@@ -844,9 +932,252 @@
         </subsection>
     </section>
 
-    <section xml:id="topic-lists-and-labels">
-        <title>(*) Lists and their Labels</title>
-        <p></p>
+    <section xml:id="topic-lists">
+        <title>Lists</title>
+        <idx>list</idx>
+        <idx><h>list</h><h>label</h></idx>
+
+        <introduction>
+            <p>A <term>list</term> is an unusual construction, even if everybody knows exactly what one is.  We view the list itself as a containier of various chunks of text, while those chunks of text are the <term>list items</term>.  Each item has a <term>label</term> to identify it (which is quite different from how <latex /> uses the term <q>label</q>).</p>
+
+            <p>Markup and processing is complicated by the possibility of a list item containing a list, resulting in <term>nested lists</term>.  We simplify this problem by <em>requiring</em> that a list appear within a paragraph (<tag>p</tag>), see <xref ref="topic-structure-in-paragraph" />.  One of the three exceptions is the possibility to put a list into a block that earns a caption and a number, using the <tag>list</tag> element, see <xref ref="topic-named-list" />.</p>
+
+            <p>The final subsection contains some examples that you may wish to consult as you read this section.</p>
+        </introduction>
+
+        <subsection>
+            <title>Ordered, Unordered, Description Lists</title>
+
+            <p>An <term>ordered list</term> has items with labels that are naturally ordered (usually numerically or alphabetically).  We borrow from <init>HTML</init>, and use the <tag>ol</tag> tag to construct an ordered list.  Some commentators suggest an ordered list should only be used when the order of the content is important.  So the steps in a recipe would belong in an ordered list, but the shopping list when you go to the store need not be an ordered list.</p>
+
+            <p>An <term>unordered list</term> has items with labels that have no inherent order and so are usually symbols like circles, disks, squared, <etc />  We borrow from <init>HTML</init>, and use the <tag>ul</tag> tag to construct an unordered list.</p>
+
+            <p>A <term>description</term> list has items that have short pieces of text as their labels.  We borrow from <init>HTML</init>, and use the <tag>dl</tag> tag to construct a description list.</p>
+
+            <p>Ordered lists are used as part of <tag>objectives</tag> (<xref provisional="topic-objectives" />) and exercises (<xref ref="topic-exercises-solutions" />).  Any of the three lists may occur inside the <tag>list</tag> element (below, <xref ref="topic-named-list" />).  Otherwise, a list must occur within a paragraph, <tag>p</tag>.  This means that to place a list within a list item of another list, the list item must contain a paragraph.</p>
+        </subsection>
+
+        <subsection>
+            <title>List Labels</title>
+
+            <p>Do nothing, and your ordered and unordered lists will get sensible default labels.  They are consistent in the following sense.  If your list has two items, and each of the two items contains a list, then these two lists will use the same type of label.</p>
+
+            <p>For a description list, you author each label as part of each list item, as discussed below in the discussion of list items.</p>
+
+            <p>If you want to change how an ordered list is labeled, then you use the <attr>label</attr> attribute on the <tag>ol</tag>, whose value is a <term>format code</term>.  This string contains one of five codes (a single character), which may be surrounded by other characters, excluding the five codes.  For example <c>label="(A)"</c> will produce uppercase letters wrapped in parentheses:  (A), (B), (C), <ellipsis />.  The extra formatting works well in a conversion to <latex />, but is not possible technically in a conversion to <init>HTML</init>, so it should be considered decorative, and not relied upon for meaning.  The formating does not carry through to the numbers of list items in cross-references.</p>
+
+            <p>If you want to change how an unordered list is labeled, then you use the <attr>label</attr> attribute on the <tag>ul</tag>, whose value is a <term>format code</term>.  This string contains one of three codes in the table below.  Then every item of the list will have that symbol as its label.</p>
+
+            <sidebyside>
+                <table>
+                    <caption>Ordered List Labels</caption>
+                    <tabular>
+                        <row><cell>Code</cell><cell>Realization</cell></row>
+                        <row><cell>1</cell><cell>Arabic numerals</cell></row>
+                        <row><cell>a</cell><cell>Lowercase letters</cell></row>
+                        <row><cell>i</cell><cell>Lowercase Roman numerals</cell></row>
+                        <row><cell>A</cell><cell>Uppercase letters</cell></row>
+                        <row><cell>I</cell><cell>Uppercase Roman numerals</cell></row>
+                    </tabular>
+                </table>
+                <table>
+                    <caption>Unordered List Labels</caption>
+                    <tabular>
+                        <row><cell>Code</cell><cell>Realization</cell></row>
+                        <row><cell>disc</cell><cell>Filled small circle, aka a bullet</cell></row>
+                        <row><cell>circle</cell><cell>Small circle</cell></row>
+                        <row><cell>square</cell><cell>A square</cell></row>
+                    </tabular>
+                </table>
+            </sidebyside>
+
+            <p>Default label types are assigned to each level of nested lists in the order shown in the table, and cycle back to the top of the table if necessary.</p>
+
+            <p>Start with the defaults, and experiment as needed.  See the examples below for some extreme (and unwise) customizations of labels.</p>
+
+            <p>For a description list, possible labels are more varied than what you can express with an <init>XML</init> attribute.  So the list item must have a <tag>title</tag> element (see below).  This should be short text, and may contain inline mathematics.  It is often rendered in bold, so be aware that some markup may get lost.  Perhaps for obvious reasons, do not include footnotes, cross-references, or display mathematics.  The <tag>dl</tag> element has a <attr>width</attr> attribute, with possible values <c>narrow</c>, <c>medium</c>, and <c>wide</c>.  The default is <c>narrow</c>.  This is a <em>hint</em> about how much text you have in these labels, and in certain presentations may make better use of horizontal space on a page.</p>
+        </subsection>
+
+        <subsection>
+            <title>List Items</title>
+
+            <p>So now you have a list all organized as a container.  What do you put in it?  List items, using the <tag>li</tag> tag, again borrowed from <init>HTML</init>, and independent of the type of list.</p>
+
+            <p>A list item could be really simple, maybe just one or two words.  Then you can use, and conceptualize, an <tag>li</tag> element as not much different from a <tag>p</tag> element, and the rules about content are not much different.  Even several full sentences, with some intermediate displayed mathematics, is fine.</p>
+
+            <p>But once you want two paragraphs in a list item, then you need to structure the contents of the item.  So a list item might have five paragraphs in it, requiring five <tag>p</tag> elements.  Notice that this is how you nest lists.  Make a list item, include a paragraph, then put the subsidiary list into the paragraph.  Indeed, this is the only way to nest lists.  A consequence of this is that the only way to have an unstructured list item is if it is a terminal item, like the leaf of a tree.</p>
+
+            <p>Other items may be interspersed among the paragraphs of a list item, such as a chunk of verbatim text delimited by a <tag>pre</tag> tag.  But anything with a number, such as a <tag>figure</tag> or <tag>remark</tag> is banned, in part because the consequences for numbering and organization become too complicated.  Imagine a remark, and a paragraph of the remark has a list.  Fine so far.  But if the items of that list can again contain remarks, the possibilities become endless.  You can use a <tag>sidebyside</tag> in a structured list item, which can in turn hold an <tag>image</tag>, <tag>tabular</tag>, or similar.  But you cannot place items in a such a <tag>sidebyside</tag> that are numbered, so a <tag>figure</tag> or <tag>table</tag> is not possible.  A general rule is no numbered components in a list item.  Computational components, such as <tag>sage</tag> are also banned from list items due to the difficulty of converting them into electronic computational notebooks with a relatively flat structure.</p>
+
+            <p>A list item of a description list must have a <tag>title</tag> element, to provide the text of the label.  Now that the list item has some structure, the remainder must also be structured, typically with some paragraphs, as discussed above.  In other words, the earlier option of employing an <tag>li</tag> element just like a <tag>p</tag> element is not available in a description list.  Further, given the complexity of presenting a description list, it can <em>only be a top-level list</em>.  It can contain the two other types nested within its list items.</p>
+        </subsection>
+
+        <subsection>
+            <title>Cross-References to List Content</title>
+
+            <p>Note that a list is a container, so it cannot be the target of a cross-reference, and so the three types of lists cannot have an <attr>xml:id</attr> attribute.  But you may well be able to point at some other structure (<eg />, a <tag>remark</tag>) with a paragraph containing a list of interest.  If this seems overly restrictive, read below about named lists.</p>
+
+            <p>By contrast, a list item, <tag>li</tag>, is not a container, and does contain content.  Further, a list item of an ordered list has a label that is natural text for a cross-reference.  So in this situation, the list item can have an <attr>xml:id</attr> attribute.  But note that the <q>number</q> of a list item of an ordered list, which is nested inside a list item of an unordered list, is not defined, so a cross-reference by number can fail.</p>
+
+            <p>The <q>number</q> of a list item, mostly for the purposes of a cross-reference, is the concatenation of all of the individual labels in the containing lists, outermost first.  For example, from the example lists below, the list item with content <q>Walleye</q> has number <xref ref="walleye" text="local" />.  These are indivisible, there is no way to get a component, excepting leading subsequences obtained by using an <attr>xml:id</attr> on a containing list item.  Note that the format codes never become part of the number.</p>
+        </subsection>
+
+        <subsection>
+            <title>Lists in Columns</title>
+            <idx><h>list</h><h>columns</h></idx>
+
+            <p>You can control the number of columns used to layout an ordered or unordered list (but not a description list).  On the <tag>ol</tag> or <tag>ul</tag> use a <attr>cols</attr> attribute with values <c>2</c> through <c>6</c>.  (<c>1</c> is the default.)</p>
+
+            <p>We do not yet (2018-03-28) have enough technical confidence to allow an author to specify a row-major order versus a column-major order for the layout.  So understand that this is can be an implementation choice for a particular conversion, and can vary across implementations.  If this is critical to conveying <em>meaning</em>, and not an aesthetic preference, then maybe consider using a <tag>table</tag> or <tag>tabular</tag> (<xref ref="topic-tabular" />).</p>
+
+            <note>
+                <title>Best Practice</title>
+
+                <p>Anything more than three columns tends to get very crowded horizontally.  Think twice about using more than that, and realize that six columns should be a ridiculously generous upper limit, and not a promise of good behavior in final output.</p>
+            </note>
+        </subsection>
+
+        <subsection xml:id="topic-named-list">
+            <title>Named Lists</title>
+            <idx><h>list</h><h>named</h></idx>
+            <idx><h>named list</h></idx>
+            <idx><h>list</h><h>anonymous</h></idx>
+            <idx><h>anonymous list</h></idx>
+
+            <p>As mentioned above, it is not possible to have a list be the target of a cross-reference.  Should an entire list be <em>so important</em> that you need to point to it from elsewhere, then make it a <term>named list</term> by wrapping it in the <tag>list</tag> tag.</p>
+
+            <p>This element can begin with an optional <tag>introduction</tag>, then has a single, required list, which may be any of the three types.  It concludes with an optional <tag>conclusion</tag>.  It can have an <attr>xml:id</attr> attribute, which in a way is the whole <foreign xml:lang="fr-FR">raison d'être</foreign> for this construction.  It will be numbered when rendered, and so also requires a <tag>caption</tag>.  You may give it an optional <tag>title</tag>, even if implementation is spotty presently (2018-03-28).  (You did say it was important, no?)  You might think of it as a specialized <tag>figure</tag>, it is entirely similar.</p>
+
+            <p>Since this element associates a number, caption, and title, to an entire list, we call it a <q>named list</q>.  What should we call a list that is authored within a paragraph and cannot be the target of a cross-reference?  We call it an <term>anonymous list</term> when we want to make the distinction.</p>
+        </subsection>
+
+        <subsection>
+            <title>Exceptional Lists</title>
+
+            <p>We use the tags for lists in a few situations outside of anonymous lists inside paragraphs and named lists.  These include the items within an objectives, subparts of an exercise, and within panels of a side-by-side.  See those topics to learn about subtle differences in use.</p>
+        </subsection>
+
+        <subsection>
+            <title>Examples of Lists</title>
+
+                <p>To illustrate this section, we offer three too-elaborate examples.  Take these as compact examples of what is possible, and not best practice in your writing.  We also use these to illustrate cross-references to list items, see <xref ref="topic-cross-reference-list-item" />.</p>
+
+                <p>We have a paragraph that begins with anonymous list of species that live in water (maybe partially), which necessarily is placed inside a paragraph.  The roman numerals purposely do not have any extra adornment in the <latex /> version (but may for <init>HTML</init> output).
+                <ol label="1)">
+                    <li>
+                        <p>Amphibians
+                            <ol label="a.">
+                                <li>Frog</li>
+                                <li>Salamander</li>
+                                <li>Newt</li>
+                                <li>Toad</li>
+                            </ol>
+                        </p>
+                    </li>
+                    <li>
+                        <p>Freshwater Sport Fish
+                            <ol label="I">
+                                <li xml:id="walleye">Walleye</li>
+                                <li>Bass</li>
+                                <li xml:id="anon-list-target">Trout</li>
+                            </ol>
+                        </p>
+                    </li>
+                    <li>
+                        <p>Saltwater Sport Fish
+                            <ol label="(A)">
+                                <li>Salmon</li>
+                                <li>Halibut</li>
+                                <li>Marlin</li>
+                            </ol>
+                        </p>
+                    </li>
+                </ol>
+                Within the same paragraph, we transition to an unordered, two-column, list of some germs: 
+                <ul cols="2">
+                    <li>
+                        <p>Bacteria
+                            <ul>
+                                <li><taxon>Staphylococci</taxon></li>
+                                <li><taxon>Streptococci</taxon></li>
+                                <li><taxon>Salmonella</taxon></li>
+                            </ul>
+                        </p>
+                    </li>
+                    <li>
+                        <p>Viruses
+                            <ul>
+                                <li><taxon>Varicellovirus</taxon></li>
+                                <li><taxon>Orthopoxvirus</taxon></li>
+                            </ul>
+                        </p>
+                    </li>
+                </ul>
+                This sentence concludes our (small) paragraph on small and large organisms.</p>
+
+                <p>A named list, only to test cross-references.</p>
+
+                <list xml:id="named-list">
+                    <caption>A two-deep ordered list</caption>
+                    <ol label="A:">
+                        <li>
+                            <p>
+                                <ol label="i.">
+                                    <li>A and i</li>
+                                    <li>A and ii</li>
+                                </ol>
+                            </p>
+                        </li>
+                        <li>
+                            <p>
+                                <ol label="(a)">
+                                    <li>B and a</li>
+                                    <li>B and b</li>
+                                    <li xml:id="named-list-target">B and c</li>
+                                </ol>
+                            </p>
+                        </li>
+                        <li>
+                            <p>
+                                <ol label="&lt;I&gt;">
+                                    <li>C and I</li>
+                                    <li>C and II</li>
+                                    <li>C and III</li>
+                                </ol>
+                            </p>
+                        </li>
+                    </ol>
+                </list>
+
+                <p>An example of a description list, anonymously in a paragraph.
+                <dl width="narrow">
+                    <li>
+                        <title>Red</title>
+                        <p>The color of the sun at sunset.</p>
+                    </li>
+                    <li>
+                        <title>Blue</title>
+                        <p>The color of a clear sky.</p>
+                    </li>
+                    <li>
+                        <title>Aqua</title>
+                        <p>The color of shallow tropical waters.</p>
+                    </li>
+                    <li xml:id="description-list-math-title">
+                        <title><m>x^2 + y^2</m></title>
+                        <p>Definitely not a color</p>
+                    </li>
+                </dl></p>
+        </subsection>
+
+        <conclusion>
+            <remark>
+                <title>Best Practice</title>
+
+                <p>Lists are a very attractive device.  Hopefully the discussion above has convinced you that they are more complicated than they first appear.  Think carefully before using one, and consider if some other structure (<tag>paragraphs</tag>, <tag>sidebyside</tag>, a subdivision) might do a better job of organizing and communicating your meaning.  And if a list is really necessary, consider if it should be named or anonymous, heavily-nested or nearly-flat, with columns, or with long or short content in the items.  Cross-references <em>from</em> the items of a list <em>to</em> more complicated structures is another device that works well.</p>
+            </remark>
+        </conclusion>
+
     </section>
 
     <section xml:id="topic-exercises-solutions">
