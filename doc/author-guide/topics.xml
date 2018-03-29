@@ -547,232 +547,258 @@
         <idx>cross-reference</idx>
         <idx>citation</idx>
 
-        <p>When you read a novel, you would likely read it cover-to-cover (in one sitting?) and then put it away and never read it again.  But for a textbook, you may read cover-to-cover, but you may also frequently skip around, especially at exam time.  And once read, it might become a reference work for you, since you know it so well.  So years later you might come back looking for something.  Cross-references help with all this, so use them liberally.  Recognize that an index is really just a specialized way to provide an abundance of cross-references.</p>
+        <introduction>
+            <p>When you read a novel, you would likely read it cover-to-cover (in one sitting?) and then put it away and never read it again.  But for a textbook, you may read cover-to-cover, but you may also frequently skip around, especially at exam time.  And once read, it might become a reference work for you, since you know it so well.  So years later you might come back looking for something.  Cross-references help with all this, so use them liberally.  Recognize that an index is really just a specialized way to provide an abundance of cross-references.</p>
+        </introduction>
 
-        <p>It is a two-step process to make a cross-reference.<ol>
-            <li>Put an <attr>xml:id</attr> attribute on any element you think you might want to reference later.  Be organized about the values of these attributes, and in particular do not number them, as this has no place in your source, and you do not want to maintain the changing numbers over the life of your project.  See the advice in <xref ref="overview-cross-references" /> about banned characters.  Some elements do not accept this attribute because the element has nothing to identify it (no number, no title).  Typically these are <term>containers</term><idx>container</idx> like <tag>sidebyside</tag> or <tag>statement</tag>.  In these cases, put the attribute on the closest enclosing element.</li>
+        <subsection>
+            <title>Creating a Cross-Reference</title>
 
-            <li>To make a cross reference, you create an <tage>xref</tage> element with a <attr>ref</attr> attribute with the same value as <attr>xml:id</attr> attribute on the element you want to reference.</li>
-        </ol>Simple.  It is meant to be, so you can use it liberally.  But we also know authors want some flexibility.</p>
+            <p>It is a two-step process to make a cross-reference.<ol>
+                <li>Put an <attr>xml:id</attr> attribute on any element you think you might want to reference later.  Be organized about the values of these attributes, and in particular do not number them, as this has no place in your source, and you do not want to maintain the changing numbers over the life of your project.  See the advice in <xref ref="overview-cross-references" /> about banned characters.  Some elements do not accept this attribute because the element has nothing to identify it (no number, no title).  Typically these are <term>containers</term><idx>container</idx> like <tag>sidebyside</tag> or <tag>statement</tag>.  In these cases, put the attribute on the closest enclosing element.</li>
 
-        <p>By default, a cross-reference will visually be text like Theorem 5.2.  Depending on your output format, it may have various devices to help you locate that theorem.  Maybe a page number, or it is a hyperlink, or the whole theorem is the content of a knowl.  You can change the default look of cross-references by setting the <attr>text</attr> attribute in <c>docinfo/cross-references</c>.  But you can also change the visual appearance of a cross-reference on a case-by-case basis.  Add a <attr>text</attr> attribute to your <tage>xref</tage> element to override the document-wide setting.  The first column of this table lists the possible attribute values, either document-wide, or on a per-cross-reference basis.  The second column has live cross-references to a section of an earlier chapter (that is far away).  The third column has live cross-references to another section of this chapter (which is close by).  For the fourth column, we have placed content (<q>Extra</q>) into the <tag>xref</tag> element as an override of, or addition to, some of the text for the cross-references of the preceding column.  Study the table and then read some more explanation following.  Note that <c>type-global</c> is the default.</p>
+                <li>To make a cross reference, you create an <tage>xref</tage> element with a <attr>ref</attr> attribute with the same value as <attr>xml:id</attr> attribute on the element you want to reference.</li>
+            </ol>Simple.  It is meant to be, so you can use it liberally.  But we also know authors want some flexibility.</p>
+        </subsection>
 
-        <table>
-            <caption>Cross-reference visual text styles</caption>
-            <tabular>
-                <row bottom="major">
-                    <cell><attr>text</attr></cell>
-                    <cell>Far Away</cell>
-                    <cell>Close By</cell>
-                    <cell>With Content</cell>
-                </row>
+        <subsection>
+            <title>Text of a Cross-Reference</title>
 
-                <row>
-                    <cell><c>type-local</c></cell>
-                    <cell><xref ref="overview-title"     text="type-local" /></cell>
-                    <cell><xref ref="topic-divisions" text="type-local" /></cell>
-                    <cell><xref ref="topic-divisions" text="type-local">Extra</xref></cell>
-                </row>
+            <p>By default, a cross-reference will visually be text like Theorem 5.2.  Depending on your output format, it may have various devices to help you locate that theorem.  Maybe a page number, or it is a hyperlink, or the whole theorem is the content of a knowl.  You can change the default look of cross-references by setting the <attr>text</attr> attribute in <c>docinfo/cross-references</c>.  But you can also change the visual appearance of a cross-reference on a case-by-case basis.  Add a <attr>text</attr> attribute to your <tage>xref</tage> element to override the document-wide setting.  The first column of this table lists the possible attribute values, either document-wide, or on a per-cross-reference basis.  The second column has live cross-references to a section of an earlier chapter (that is far away).  The third column has live cross-references to another section of this chapter (which is close by).  For the fourth column, we have placed content (<q>Extra</q>) into the <tag>xref</tag> element as an override of, or addition to, some of the text for the cross-references of the preceding column.  Study the table and then read some more explanation following.  Note that <c>type-global</c> is the default.</p>
 
-                <row>
-                    <cell><c>type-global</c></cell>
-                    <cell><xref ref="overview-title"     text="type-global" /></cell>
-                    <cell><xref ref="topic-divisions" text="type-global" /></cell>
-                    <cell><xref ref="topic-divisions" text="type-global">Extra</xref></cell>
-                </row>
+            <table>
+                <caption>Cross-reference visual text styles</caption>
+                <tabular>
+                    <row bottom="major">
+                        <cell><attr>text</attr></cell>
+                        <cell>Far Away</cell>
+                        <cell>Close By</cell>
+                        <cell>With Content</cell>
+                    </row>
 
-                <row>
-                    <cell><c>type-hybrid</c></cell>
-                    <cell><xref ref="overview-title"     text="type-hybrid" /></cell>
-                    <cell><xref ref="topic-divisions" text="type-hybrid" /></cell>
-                    <cell><xref ref="topic-divisions" text="type-hybrid">Extra</xref></cell>
-                </row>
+                    <row>
+                        <cell><c>type-local</c></cell>
+                        <cell><xref ref="overview-title"     text="type-local" /></cell>
+                        <cell><xref ref="topic-divisions" text="type-local" /></cell>
+                        <cell><xref ref="topic-divisions" text="type-local">Extra</xref></cell>
+                    </row>
 
-                <row>
-                    <cell><c>local</c></cell>
-                    <cell><xref ref="overview-title"     text="local" /></cell>
-                    <cell><xref ref="topic-divisions" text="local" /></cell>
-                    <cell><xref ref="topic-divisions" text="local">Extra</xref></cell>
-                </row>
+                    <row>
+                        <cell><c>type-global</c></cell>
+                        <cell><xref ref="overview-title"     text="type-global" /></cell>
+                        <cell><xref ref="topic-divisions" text="type-global" /></cell>
+                        <cell><xref ref="topic-divisions" text="type-global">Extra</xref></cell>
+                    </row>
 
-                <row>
-                    <cell><c>global</c></cell>
-                    <cell><xref ref="overview-title"     text="global" /></cell>
-                    <cell><xref ref="topic-divisions" text="global" /></cell>
-                    <cell><xref ref="topic-divisions" text="global">Extra</xref></cell>
-                </row>
+                    <row>
+                        <cell><c>type-hybrid</c></cell>
+                        <cell><xref ref="overview-title"     text="type-hybrid" /></cell>
+                        <cell><xref ref="topic-divisions" text="type-hybrid" /></cell>
+                        <cell><xref ref="topic-divisions" text="type-hybrid">Extra</xref></cell>
+                    </row>
 
-                <row>
-                    <cell><c>hybrid</c></cell>
-                    <cell><xref ref="overview-title"     text="hybrid" /></cell>
-                    <cell><xref ref="topic-divisions" text="hybrid" /></cell>
-                    <cell><xref ref="topic-divisions" text="hybrid">Extra</xref></cell>
-                </row>
+                    <row>
+                        <cell><c>local</c></cell>
+                        <cell><xref ref="overview-title"     text="local" /></cell>
+                        <cell><xref ref="topic-divisions" text="local" /></cell>
+                        <cell><xref ref="topic-divisions" text="local">Extra</xref></cell>
+                    </row>
 
-                <row>
-                    <cell><c>phrase-global</c></cell>
-                    <cell><xref ref="overview-title"     text="phrase-global" /></cell>
-                    <cell><xref ref="topic-divisions" text="phrase-global" /></cell>
-                    <cell>Warning</cell>
-                </row>
+                    <row>
+                        <cell><c>global</c></cell>
+                        <cell><xref ref="overview-title"     text="global" /></cell>
+                        <cell><xref ref="topic-divisions" text="global" /></cell>
+                        <cell><xref ref="topic-divisions" text="global">Extra</xref></cell>
+                    </row>
 
-                <row>
-                    <cell><c>phrase-hybrid</c></cell>
-                    <cell><xref ref="overview-title"     text="phrase-hybrid" /></cell>
-                    <cell><xref ref="topic-divisions" text="phrase-hybrid" /></cell>
-                    <cell>Warning</cell>
-                </row>
+                    <row>
+                        <cell><c>hybrid</c></cell>
+                        <cell><xref ref="overview-title"     text="hybrid" /></cell>
+                        <cell><xref ref="topic-divisions" text="hybrid" /></cell>
+                        <cell><xref ref="topic-divisions" text="hybrid">Extra</xref></cell>
+                    </row>
 
-                <row>
-                    <cell><c>title</c></cell>
-                    <cell><xref ref="overview-title"     text="title" /></cell>
-                    <cell><xref ref="topic-divisions" text="title" /></cell>
-                    <cell><xref ref="topic-divisions" text="title">Extra</xref></cell>
-                </row>
-            </tabular>
-        </table>
+                    <row>
+                        <cell><c>phrase-global</c></cell>
+                        <cell><xref ref="overview-title"     text="phrase-global" /></cell>
+                        <cell><xref ref="topic-divisions" text="phrase-global" /></cell>
+                        <cell>Warning</cell>
+                    </row>
 
-        <p>Note that <c>local/global</c> describes the uniqueness of the number (and is affected by your choice of numbering schemes), while <c>type</c> refers to an automatic prefix of the number.  The text of the type will vary according to the document's language. If a cross-reference and its target are close to each other, a number like 5.8.2.4 might be overkill, when just a 4 would suffice.  A <c>hybrid</c> scheme will use the shorter number whenever it makes sense.  Finally, there are two <c>phrase</c> schemes, and it should be clear what text <c>title</c> will produce (though realize there must be a title for the object, possibly a default provided by <pretext />).</p>
+                    <row>
+                        <cell><c>phrase-hybrid</c></cell>
+                        <cell><xref ref="overview-title"     text="phrase-hybrid" /></cell>
+                        <cell><xref ref="topic-divisions" text="phrase-hybrid" /></cell>
+                        <cell>Warning</cell>
+                    </row>
 
-        <p>You can also override the text used in a cross-reference link.  You do this by providing content to the <tag>xref</tag> element.  In other words, do not use an empty tag, but put some (simple) text in the element.  Generally, this additional text becomes a prefix of a number, a replacement of a type, or a replacement of a title.  It is better to use these overrides, since in electronic formats, the text of the override will be incorporated into the <q>clickable</q> portion of the resulting link, making a larger item to hit.</p>
+                    <row>
+                        <cell><c>title</c></cell>
+                        <cell><xref ref="overview-title"     text="title" /></cell>
+                        <cell><xref ref="topic-divisions" text="title" /></cell>
+                        <cell><xref ref="topic-divisions" text="title">Extra</xref></cell>
+                    </row>
+                </tabular>
+            </table>
 
-        <p>Here are careful examples, where we have provided the content <q>Division</q> in the live examples.  The list is not exhaustive.  Note that overriding a title provides a way to provide any text you would like.</p>
+            <p>Note that <c>local/global</c> describes the uniqueness of the number (and is affected by your choice of numbering schemes), while <c>type</c> refers to an automatic prefix of the number.  The text of the type will vary according to the document's language. If a cross-reference and its target are close to each other, a number like 5.8.2.4 might be overkill, when just a 4 would suffice.  A <c>hybrid</c> scheme will use the shorter number whenever it makes sense.  Finally, there are two <c>phrase</c> schemes, and it should be clear what text <c>title</c> will produce (though realize there must be a title for the object, possibly a default provided by <pretext />).</p>
 
-        <!-- expand and add links to the Preface to demo default titles -->
-        <table xml:id="txo">
-            <caption>Cross-reference text overrides</caption>
-            <tabular>
-                <row bottom="major">
-                    <cell><attr>text</attr></cell>
-                    <cell>Example</cell>
-                </row>
-                <row>
-                    <cell><c>'global'</c></cell>
-                    <cell><xref ref="topic-cross-referencing" text="global">Division</xref></cell>
-                </row>
-                <row>
-                    <cell><c>'type-global'</c></cell>
-                    <cell><xref ref="topic-cross-referencing" text="type-global">Division</xref></cell>
-                </row>
-                <row>
-                    <cell><c>'title'</c></cell>
-                    <cell><xref ref="topic-cross-referencing" text="title">Division</xref></cell>
-                </row>
-            </tabular>
-        </table>
+            <p>You can also override the text used in a cross-reference link.  You do this by providing content to the <tag>xref</tag> element.  In other words, do not use an empty tag, but put some (simple) text in the element.  Generally, this additional text becomes a prefix of a number, a replacement of a type, or a replacement of a title.  It is better to use these overrides, since in electronic formats, the text of the override will be incorporated into the <q>clickable</q> portion of the resulting link, making a larger item to hit.</p>
 
-<!-- topic-cross-reference-list-item -->
+            <p>Here are careful examples, where we have provided the content <q>Division</q> in the live examples.  The list is not exhaustive.  Note that overriding a title provides a way to provide any text you would like.</p>
 
-        <table>
-            <caption>Cross-references to list items, visual text styles</caption>
-            <tabular>
-                <row bottom="major">
-                    <cell><attr>text</attr></cell>
-                    <cell>Named List</cell>
-                    <cell>Anonymous List</cell>
-                    <cell>With Content</cell>
-                </row>
+            <!-- expand and add links to the Preface to demo default titles -->
+            <table xml:id="txo">
+                <caption>Cross-reference text overrides</caption>
+                <tabular>
+                    <row bottom="major">
+                        <cell><attr>text</attr></cell>
+                        <cell>Example</cell>
+                    </row>
+                    <row>
+                        <cell><c>'global'</c></cell>
+                        <cell><xref ref="topic-cross-referencing" text="global">Division</xref></cell>
+                    </row>
+                    <row>
+                        <cell><c>'type-global'</c></cell>
+                        <cell><xref ref="topic-cross-referencing" text="type-global">Division</xref></cell>
+                    </row>
+                    <row>
+                        <cell><c>'title'</c></cell>
+                        <cell><xref ref="topic-cross-referencing" text="title">Division</xref></cell>
+                    </row>
+                </tabular>
+            </table>
+        </subsection>
 
-                <row>
-                    <cell><c>type-local</c></cell>
-                    <cell><xref ref="named-list-target"  text="type-local" /></cell>
-                    <cell><xref ref="anon-list-target" text="type-local" /></cell>
-                    <cell><xref ref="named-list-target" text="type-local">Extra</xref></cell>
-                </row>
+        <subsection xml:id="topic-cross-reference-list-item">
+            <title>Cross-References to Lists</title>
 
-                <row>
-                    <cell><c>type-global</c></cell>
-                    <cell><xref ref="named-list-target"  text="type-global" /></cell>
-                    <cell><xref ref="anon-list-target" text="type-global" /></cell>
-                    <cell><xref ref="named-list-target" text="type-global">Extra</xref></cell>
-                </row>
 
-                <row>
-                    <cell><c>type-hybrid</c></cell>
-                    <cell><xref ref="named-list-target"  text="type-hybrid" /></cell>
-                    <cell><xref ref="anon-list-target" text="type-hybrid" /></cell>
-                    <cell><xref ref="named-list-target" text="type-hybrid">Extra</xref></cell>
-                </row>
 
-                <row>
-                    <cell><c>local</c></cell>
-                    <cell><xref ref="named-list-target"  text="local" /></cell>
-                    <cell><xref ref="anon-list-target" text="local" /></cell>
-                    <cell><xref ref="named-list-target" text="local">Extra</xref></cell>
-                </row>
 
-                <row>
-                    <cell><c>global</c></cell>
-                    <cell><xref ref="named-list-target"  text="global" /></cell>
-                    <cell><xref ref="anon-list-target" text="global" /></cell>
-                    <cell><xref ref="named-list-target" text="global">Extra</xref></cell>
-                </row>
 
-                <row>
-                    <cell><c>hybrid</c></cell>
-                    <cell><xref ref="named-list-target"  text="hybrid" /></cell>
-                    <cell><xref ref="anon-list-target" text="hybrid" /></cell>
-                    <cell><xref ref="named-list-target" text="hybrid">Extra</xref></cell>
-                </row>
 
-                <row>
-                    <cell><c>phrase-global</c></cell>
-                    <cell><xref ref="named-list-target"  text="phrase-global" /></cell>
-                    <cell>Warning</cell>
-                    <cell>Warning</cell>
-                </row>
 
-                <row>
-                    <cell><c>phrase-hybrid</c></cell>
-                    <cell><xref ref="named-list-target"  text="phrase-hybrid" /></cell>
-                    <cell>Warning</cell>
-                    <cell>Warning</cell>
-                </row>
 
-                <row>
-                    <cell><c>title</c></cell>
-                    <cell><xref ref="named-list-target"  text="title" /></cell>
-                    <cell><xref ref="anon-list-target" text="title" /></cell>
-                    <cell><xref ref="named-list-target" text="title">Extra</xref></cell>
-                </row>
-            </tabular>
-        </table>
 
-        <list>
-            <caption>Small test</caption>
-            <ol>
-                <li>Fish are not <xref ref="nearby-item" text="type-hybrid" /></li>
-                <li>Bacteria are not <xref ref="nearby-item" text="hybrid" /></li>
-                <li>Fungi are not <xref ref="nearby-item" text="phrase-global" /></li>
-                <li>Trees are not <xref ref="nearby-item" text="phrase-hybrid" /></li>
-                <li xml:id="nearby-item">Mammals</li>
-            </ol>
-        </list>
 
-        <p>Citations, which are cross-references to <tag>biblio</tag> elements behave the same way, but will always visually look like [23].  References to equations (<tag>men</tag> and <tag>mrow</tag> elements) will visually look like (4.2), where the type is implied by the parentheses.  Notice that you cannot cross-reference an <tag>me</tag> (no number) or <tag>md</tag> (just a container).</p>
+            <table>
+                <caption>Cross-references to list items, visual text styles</caption>
+                <tabular>
+                    <row bottom="major">
+                        <cell><attr>text</attr></cell>
+                        <cell>Named List</cell>
+                        <cell>Anonymous List</cell>
+                        <cell>With Content</cell>
+                    </row>
 
-        <p>Further, there are some variant formats.<ul>
-            <li>Replace <attr>ref</attr> by <attr>provisional</attr> and give it a value with some simple text like <c>subsection on eagle habitat</c> and you will get reminders that once you write this future subsection you need to link it in right here.  This is just a convenience for authors during the early stages of a writing project.</li>
+                    <row>
+                        <cell><c>type-local</c></cell>
+                        <cell><xref ref="named-list-target"  text="type-local" /></cell>
+                        <cell><xref ref="anon-list-target" text="type-local" /></cell>
+                        <cell><xref ref="named-list-target" text="type-local">Extra</xref></cell>
+                    </row>
 
-            <li>Replace <attr>ref</attr> by the pair <attr>first</attr> and <attr>last</attr>.  Provide attribute values just as you would for <attr>ref</attr>.  The code will check that the targets have the exact same tag, and that the order is correct.  You will get a link that looks like a range, separated by an en dash.  As a link, only <attr>first</attr> will be used for the linking mechanism (<ie />, one link is generated, not two).  Experiment with <attr>text</attr> and content overrides.</li>
+                    <row>
+                        <cell><c>type-global</c></cell>
+                        <cell><xref ref="named-list-target"  text="type-global" /></cell>
+                        <cell><xref ref="anon-list-target" text="type-global" /></cell>
+                        <cell><xref ref="named-list-target" text="type-global">Extra</xref></cell>
+                    </row>
 
-            <li>The <attr>ref</attr> attribute may be a list of <attr>xml:id</attr>, separated by commas or by spaces.  Then you will get back a list of cross-references.  This is meant for a list of citations, producing a look like [5, 9, 22], but it makes no restriction to this case.  Use it generally, but it is unlikely to get any more capable.  If you want a different list, just use multiple <tag>xref</tag> and format as you desire.</li>
-        </ul></p>
+                    <row>
+                        <cell><c>type-hybrid</c></cell>
+                        <cell><xref ref="named-list-target"  text="type-hybrid" /></cell>
+                        <cell><xref ref="anon-list-target" text="type-hybrid" /></cell>
+                        <cell><xref ref="named-list-target" text="type-hybrid">Extra</xref></cell>
+                    </row>
 
-        <p>You can create many different combinations with the text options and the variants.  Here is one example.  You want to say <xref first="start-here" last="schema" text="global">Chapters</xref>.  As a range you use the variant with two references. You would get <q>Chapter</q> out front automatically with the <c>type-global</c> scheme, but a plural form makes more sense.  So you use that text as an override.  We could use either <c>type-global</c> or <c>global</c> to get the same text, and possibly <c>type-hybrid</c> depending on teh place where you built the cross-reference.  So possibly, one of these schemes might be your document-wide setting and you do not need to specify it now.  Here is what we just used:<cd>
-            <cline>&lt;xref first="start-here" last="schema" text="global"&gt;Chapters&lt;/xref&gt;</cline>
-        </cd></p>
+                    <row>
+                        <cell><c>local</c></cell>
+                        <cell><xref ref="named-list-target"  text="local" /></cell>
+                        <cell><xref ref="anon-list-target" text="local" /></cell>
+                        <cell><xref ref="named-list-target" text="local">Extra</xref></cell>
+                    </row>
 
-        <p>You can place a cross-reference into a <tag>title</tag> element, but a particular conversion is free to simply render it as text, and not as an active link.</p>
+                    <row>
+                        <cell><c>global</c></cell>
+                        <cell><xref ref="named-list-target"  text="global" /></cell>
+                        <cell><xref ref="anon-list-target" text="global" /></cell>
+                        <cell><xref ref="named-list-target" text="global">Extra</xref></cell>
+                    </row>
 
-        <p>Finally, there is fairly robust error-checking to protect against typographical errors in the attribute values that need to match up for all this to work.  Also, there is a check that the <attr>xml:id</attr> are unique.  But all this checking happens at processing-time, not at the validation step.  Any suggestions for improvements that make these checks even more robust are welcome.</p>
+                    <row>
+                        <cell><c>hybrid</c></cell>
+                        <cell><xref ref="named-list-target"  text="hybrid" /></cell>
+                        <cell><xref ref="anon-list-target" text="hybrid" /></cell>
+                        <cell><xref ref="named-list-target" text="hybrid">Extra</xref></cell>
+                    </row>
 
-        <note>
-            <title>Best Practice</title>
+                    <row>
+                        <cell><c>phrase-global</c></cell>
+                        <cell><xref ref="named-list-target"  text="phrase-global" /></cell>
+                        <cell>Warning</cell>
+                        <cell>Warning</cell>
+                    </row>
 
-            <p>With numbering schemes for divisions, theorems, figures, equations, and citations, along with nine different text styles, plus variants, per-cross-reference settings, and text overrides, there are a lot of combinations.  Likely you can create some fairly ugly cross-references.  Use the flexibility sensibly.</p>
-        </note>
+                    <row>
+                        <cell><c>phrase-hybrid</c></cell>
+                        <cell><xref ref="named-list-target"  text="phrase-hybrid" /></cell>
+                        <cell>Warning</cell>
+                        <cell>Warning</cell>
+                    </row>
 
+                    <row>
+                        <cell><c>title</c></cell>
+                        <cell><xref ref="named-list-target"  text="title" /></cell>
+                        <cell><xref ref="anon-list-target" text="title" /></cell>
+                        <cell><xref ref="named-list-target" text="title">Extra</xref></cell>
+                    </row>
+                </tabular>
+            </table>
+
+            <list>
+                <caption>Small test</caption>
+                <ol>
+                    <li>Fish are not <xref ref="nearby-item" text="type-hybrid" /></li>
+                    <li>Bacteria are not <xref ref="nearby-item" text="hybrid" /></li>
+                    <li>Fungi are not <xref ref="nearby-item" text="phrase-global" /></li>
+                    <li>Trees are not <xref ref="nearby-item" text="phrase-hybrid" /></li>
+                    <li xml:id="nearby-item">Mammals</li>
+                </ol>
+            </list>
+        </subsection>
+
+        <subsection>
+            <title>Citations</title>
+
+            <p>Citations, which are specialized cross-references to <tag>biblio</tag> elements, behave the same way, but will always visually look like [23].  References to equations (<tag>men</tag> and <tag>mrow</tag> elements) will visually look like (4.2), where the type is implied by the parentheses.  Notice that you cannot cross-reference an <tag>me</tag> (no number) or <tag>md</tag> (just a container).</p>
+
+            <p>Further, there are some variant formats.<ul>
+                <li>Replace <attr>ref</attr> by <attr>provisional</attr> and give it a value with some simple text like <c>subsection on eagle habitat</c> and you will get reminders that once you write this future subsection you need to link it in right here.  This is just a convenience for authors during the early stages of a writing project.</li>
+
+                <li>Replace <attr>ref</attr> by the pair <attr>first</attr> and <attr>last</attr>.  Provide attribute values just as you would for <attr>ref</attr>.  The code will check that the targets have the exact same tag, and that the order is correct.  You will get a link that looks like a range, separated by an en dash.  As a link, only <attr>first</attr> will be used for the linking mechanism (<ie />, one link is generated, not two).  Experiment with <attr>text</attr> and content overrides.</li>
+
+                <li>The <attr>ref</attr> attribute may be a list of <attr>xml:id</attr>, separated by commas or by spaces.  Then you will get back a list of cross-references.  This is meant for a list of citations, producing a look like [5, 9, 22], but it makes no restriction to this case.  Use it generally, but it is unlikely to get any more capable.  If you want a different list, just use multiple <tag>xref</tag> and format as you desire.</li>
+            </ul></p>
+
+            <p>You can create many different combinations with the text options and the variants.  Here is one example.  You want to say <xref first="start-here" last="schema" text="global">Chapters</xref>.  As a range you use the variant with two references. You would get <q>Chapter</q> out front automatically with the <c>type-global</c> scheme, but a plural form makes more sense.  So you use that text as an override.  We could use either <c>type-global</c> or <c>global</c> to get the same text, and possibly <c>type-hybrid</c> depending on teh place where you built the cross-reference.  So possibly, one of these schemes might be your document-wide setting and you do not need to specify it now.  Here is what we just used:<cd>
+                <cline>&lt;xref first="start-here" last="schema" text="global"&gt;Chapters&lt;/xref&gt;</cline>
+            </cd></p>
+
+            <p>You can place a cross-reference into a <tag>title</tag> element, but a particular conversion is free to simply render it as text, and not as an active link.</p>
+
+            <p>Finally, there is fairly robust error-checking to protect against typographical errors in the attribute values that need to match up for all this to work.  Also, there is a check that the <attr>xml:id</attr> are unique.  But all this checking happens at processing-time, not at the validation step.  Any suggestions for improvements that make these checks even more robust are welcome.</p>
+        </subsection>
+
+        <conclusion>
+            <note>
+                <title>Best Practice</title>
+
+                <p>With numbering schemes for divisions, theorems, figures, equations, and citations, along with nine different text styles, plus variants, per-cross-reference settings, and text overrides, there are a lot of combinations.  Likely you can create some fairly ugly cross-references.  Use the flexibility sensibly.</p>
+            </note>
+        </conclusion>
     </section>
 
 
