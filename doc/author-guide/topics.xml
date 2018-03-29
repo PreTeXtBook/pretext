@@ -561,7 +561,7 @@
             </ol>Simple.  It is meant to be, so you can use it liberally.  But we also know authors want some flexibility.</p>
 
             <note>
-                <title>Best Practice</title>
+                <title>Use <attr>xml:id</attr> Frequently</title>
 
                 <p>Use the <attr>xml:id</attr> attribute liberally, on any object you might want to reference later, and on every division.  It is easier to do as you author and will be very valuable later.  (Trust us on this one.)  Develop a system so you can recall them predictably, but keep them readable.  Don't use numbers, they will change.  Then make frequent cross-references.  They are relatively easy for you and will be incredibly useful for each and every one of your many readers, over and over and over again.</p>
             </note>
@@ -720,7 +720,7 @@
             <p>First, note that if you cross-reference a list item of an anonymous list, there is a very real possibility that the number will be ambiguous, and there is no option for <attr>text</attr> will save you, and never can be.  See the middle column of <xref ref="table-xref-list-item" /> for the demonstration.  We assiduously try to make it <em>impossible</em> to ever create ambiguous text for cross-references, especially in consideration of print output.  Use the feature carefully.</p>
 
             <note xml:id="practice-ambiguous-list-items">
-                <title>Best Practice</title>
+                <title>Take Care Referencing Anonymous Lists</title>
 
                 <p>Cross-references to list items of anonymous lists can easily be ambiguous and then useless for readers of print.  Keep such a cross-reference close to its target, ideally within the same list, and/or perhaps using additional, unambiguous clues about location (which you  expect will survive later editing):
                 <ol>
@@ -823,7 +823,7 @@
 
         <conclusion>
             <note>
-                <title>Best Practice</title>
+                <title>Be Rational About Numbering Variations</title>
 
                 <p>With distinct numbering schemes for divisions, theorems, figures, equations, and citations, along with nine different text styles for a cross-reference, plus variants, per-cross-reference settings, and text overrides, there is a huge supply of combinations.  Likely you can create some really ugly cross-references.  Use the flexibility sensibly.</p>
             </note>
@@ -1086,7 +1086,7 @@
             <p>We do not yet (2018-03-28) have enough technical confidence to allow an author to specify a row-major order versus a column-major order for the layout.  So understand that this is can be an implementation choice for a particular conversion, and can vary across implementations.  If this is critical to conveying <em>meaning</em>, and not an aesthetic preference, then maybe consider using a <tag>table</tag> or <tag>tabular</tag> (<xref ref="topic-tabular" />).</p>
 
             <note>
-                <title>Best Practice</title>
+                <title>Use Only a Few Columns for Lists</title>
 
                 <p>Anything more than three columns tends to get very crowded horizontally.  Think twice about using more than that, and realize that six columns should be a ridiculously generous upper limit, and not a promise of good behavior in final output.</p>
             </note>
@@ -1324,6 +1324,8 @@
     <section xml:id="topic-tabular">
         <title>(*) Tables and Tabulars</title>
 
+        <!-- Reprise:  <title>Bully Pulpit: Vertical Rules in Tables</title> -->
+
         <p>This section needs much more work.</p>
 
         <p>Note that tables may be constructed using the <url href="http://www.latex-tables.com/"><latex /> Complex Table Editor</url> tool online at <c>latex-tables.com</c>and then exported in <pretext /> syntax.</p>
@@ -1374,6 +1376,9 @@
 
     <section xml:id="topic-index">
         <title>(*) Index</title>
+
+        <!-- Reprise: <title>Bully Pulpit: Index Headings</title> -->
+
         <p>TODO</p>
     </section>
 
