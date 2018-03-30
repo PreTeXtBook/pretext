@@ -18,7 +18,6 @@
         <title>Paragraphs</title>
 
         <introduction>
-
             <p>Much of your writing will happen in paragraphs, delimited by the simple tag, <tag>p</tag>.  You are reading one right now.  They are a basic building block of divisions, and also a basic building block of other structures.  For example, an ordered list, <tag>ol</tag>, contains a sequence of list items, <tag>li</tag>, and a typical list item might be a sequence of paragraphs.  (Do not confuse this element with the anomalous <tag>paragraphs</tag> subdivision, <xref ref="topic-divisions" />).</p>
 
             <p>Paragraphs are a choke-point of sorts.  Many tags can <em>only</em> be used within paragraphs, and many others <em>cannot</em> be used within paragraphs.  Notice too, that we do a certain amount of manipulation of whitespace in a paragraph, in ways that you may not even notice.</p>
@@ -31,9 +30,230 @@
 
             <!-- Rutter, "Web Typography", "em dash", "en dash" (no hyphen) -->
             <p>One more comment: typewriters, computer keyboards, and the <acro>ASCII</acro> character set limit the full range of characters that typographers and printers have used historically.  A case in point is the hyphen, which is a single key on a keyboard.  However, there are at least three common dashes of differing lengths (hyphen, en dash, and em dash), and in the context of mathematics or a computer program, the hyphen might be the binary operation of subtraction or the unary operation of negation.  <pretext /> will help you navigate this complexity, but you will want to use keyboard characters or markup appropriately.  So if you care about communicating clearly, and making your writing easy for a reader to use, absorb the details that follow and the philosophy they implement.</p>
+
+            <p>We begin with some simple <q>grouping</q> elements which contain several excellent examples of the importance and utility of careful markup.  There is a plethora of empty tags for individual characters, and these are very important (see <xref ref="topic-character-elements" />).  We defer them to the end of this section, since they are not as instructive, but do not think this means they are an afterthought.  They can be extremely critical for successful conversions.  Also do not miss <xref ref="practice-careful-markup" /> in the conclusion of this section.</p>
         </introduction>
 
         <subsection>
+            <title>Simple Markup in Paragraphs</title>
+
+            <p>Beyond empty tags that translate to various characters, there are relatively simple tags that can call attention to various <em>portions</em> of a sentence, or generate more complicated constructions than described above.</p>
+
+            <p>Most, if not all, of the markup in this subsection may also be used within titles and captions, though they might lose some of their features when used in a title, especially when the title is duplicated in other contexts, such as a Table of Contents.</p>
+
+            <!-- fragment names, and their elements, from schema source
+            delimiter-group: q, sq, braces, angles, brackets, dblbrackets
+            highlight-group: em, term, alert, pubtitle, articletitle, foreign
+            abbreviation-group: abbr, acro, init
+            editing-group: delete, insert, stale
+            xml-group: tag, tage, attr
+            scientific-name-group: taxon
+            footnotes: fn
+            mathematics: m
+            verbatim: c, email
+            -->
+
+            <!-- Groupings via symbols or characters -->
+
+            <paragraphs>
+                <title><tag>q</tag>, quotes, <q>group</q></title>
+                <p>This is the first of several grouping tags, using characters with left and right variants (see the individual characters in isolation above), and some of the most common markup in your writing.  Presentation uses double quote marks that are <term>smart quotes</term>, meaning that they look different in their opening and closing variants.  With output based on HTML, you may use your keyboard's double quote mark instead and get acceptable output, but your <latex /> will look wrong (plus you will look like you are a beginner with <latex />) and outputs based on JSON will be <em>totally broken</em>.  Futhermore, if you use the <tag>q</tag> your HTML output will look better (typographically) than if you do not use it.  (See <tag>blockquote</tag> for extensive runs of quoted text that can stand alone, and which can carry an attribution.)</p>
+            </paragraphs>
+
+            <paragraphs>
+                <title><tag>sq</tag>, single quotes, <sq>group</sq></title>
+                <p>Perhaps less-often used than <tag>q</tag>, so a couple more characters to type.  Presentation is paired single-quotes, opening and closing.  Read the discussion above about double-quotes if you have not already, this tag is entirely similar.</p>
+            </paragraphs>
+
+            <paragraphs>
+                <title><tag>braces</tag>, braces, <abbr>aka</abbr> curly brackets, <braces>group</braces></title>
+                <p>Left and right braces to enclose a phrase.  This is not for creating a set in mathematics, use the appropriate mathematics tag and syntax for that.</p>
+            </paragraphs>
+
+            <paragraphs>
+                <title><tag>angles</tag>, angle brackets, <angles>group</angles></title>
+                <p>Left and right angle brackets to enclose a phrase.  This is not for creating a set of generators in mathematics, use the appropriate mathematics tag and syntax for that.  Note also that the characters used here are distinct from the inequalities, <tag>less</tag> and <tag>greater</tag> (<less /> and <greater />).</p>
+            </paragraphs>
+
+            <paragraphs>
+                <title><tag>brackets</tag>, square brackets, <brackets>group</brackets></title>
+                <p>Left and right square brackets to enclose a phrase.  This is not for grouping expressions in mathematics, use the appropriate mathematics tag and syntax for that.</p>
+            </paragraphs>
+
+            <paragraphs>
+                <title><tag>dblbrackets</tag>, double square brackets, <dblbrackets>group</dblbrackets></title>
+                <p>Double left and right square brackets to enclose a phrase.  This is not for grouping expressions in mathematics, use the appropriate mathematics tag and syntax for that.  These are used in the analysis of texts to note various restorations or deletions.  Inquire if you feel there should be more semantic markup for this purpose.</p>
+            </paragraphs>
+
+            <!-- Font-face-changing markup -->
+
+            <paragraphs>
+                <title><tag>em</tag>, emphasis, <em>important</em></title>
+                <p>Use this element to surround characters in a phrase that is to be emhasized.  This will typically be rendered in italics, though this choice is left to the implementation of a particular conversion.  See also, <tag>alert</tag>.</p>
+
+                <p>If you are new to using a markup language, this is a place to stop and think.  As a <pretext /> author you are never able to say, <q>I want this text to appear in italics.</q>  Rather, you specify that certain text has a certain purpose or meaning.  Emphasis is a way of <em>calling attention</em> to a portion of a sentence or paragraph.  A font change (to italic) is a common and effective device.  But a particular format might have a better, or different, way to achive this.  Perhaps in an electronic format, the letters are animated and dance up and down.  (Just kidding.  But you may be reminded of frequent blinking text in the early days of web design, supported by a non-standard <tag>blink</tag> element.)  Seriously, now would be a good time to review <xref ref="philosophy" />.</p>
+            </paragraphs>
+
+            <paragraphs>
+                <title><tag>alert</tag>, alert, <alert>critical</alert></title>
+                <p>Use this to heavily emphasize something to a greater degree than just emphasis.  Maybe think of it as <alert>SHOUTING</alert>.  Bold italic font, or a bright color, or both, would be normal choices for presentation.  Overuse of this tag will dilute its effectiveness.</p>
+            </paragraphs>
+
+            <paragraphs>
+                <title><tag>term</tag>, terminology, <term>larvae</term></title>
+                <p>Use this to identify a word or phrase that is being defined, in contrast to actually using a structured <tag>definition</tag>.  Typical presentation is a bold font.  Caution: the use of this tag is to communicate a defined term and converters may make use of this interpretation, given the importance of definitions in scholarly work.  It would be considered <term>tag abuse</term> to use this tag to simply bold a word or phrase for some other reason, perhaps as an alternative to <tag>em</tag> or <tag>alert</tag>.</p>
+            </paragraphs>
+
+            <paragraphs>
+                <title><tag>foreign</tag>, foreign words, idioms, phrases, <foreign>Hola</foreign></title>
+                <p>This tag is used to identify words or phrases from a language other than the main one used for the overall document.  It is best practice to use a <attr>xml:lang</attr> attribute to identify the language, since this will assist screen readers and hyphenation algorithms.  We may also recognize the need for a different script (font).  Usual presentation is italics for languages using a Latin script.  This should not be used for entire paragraphs as a way of assisting with a translation of an entire document.</p>
+
+                <p>Note that when we use italics for emphasis <em>and</em> to point out foreign words or phrases, there is a loss of information in our output.  In other words, we can no longer reliably (in an automated way) convert our output back to equivalent PreTeXt source from its visual representations.  <foreign xml:lang="fr-FR">C'est la vie</foreign>.  See <xref ref="philosophy" /> again.</p>
+            </paragraphs>
+
+            <paragraphs>
+                <title><tag>pubtitle</tag>, <tag>articletitle</tag>, titles of books and articles</title>
+                <p>These provide the ability to typographically distinguish the title of another work, and are not a replacement for careful bibliographies and citations.  Use <tag>pubtitle</tag> for longer, complete works, such as books, plays, or entire websites.  Use <tag>articletitle</tag> for shorter, component works, such as a chapter of a book, a research article, or a single webpage.</p>
+
+                <p>Presentation for a longer work will be italics or an oblique (slanted) font, and for a shorter work, the title will simply be quoted.</p>
+            </paragraphs>
+
+            <!-- Font-size changing group -->
+
+            <paragraphs>
+                <title><tag>abbr</tag>, <tag>init</tag>, <tag>acro</tag>, abbreviation, initialism, acronym, <abbr>Mr.</abbr>, <init>XML</init>, <acro>SCUBA</acro></title>
+                <p>An abbreviation is a condensed or shortened version of some word or phrase, such as <abbr>Mr.</abbr> for <q>Mister.</q>  Converters should take care with periods (full stop) inside an <tag>abbr</tag> as distinguished from the end of a sentence (which may not always be clear given the absence of a tag delimiting sentences).  An initialism is an abbreviation read as a sequence of letters, often the first letter of words in a phrase, such as <init>HTML</init> for <q>HyperText Markup Language.</q>  An acronym is much like an initialism, but the letters are read as a pronouncable word (which sometimes actually enters the language as a word, such as <q>radar</q> which began as RAdio Detection And Ranging).  An example is <acro>SCUBA</acro> which stands for <q>Self-Contained Underwater Breathing Apparatus.</q>  Initialisms and acronyms may be presented in a small-capitals font or as regular capitals reduced in size.</p>
+            </paragraphs>
+
+            <!-- Editing group -->
+
+            <paragraphs>
+                <title><tag>delete</tag>, <tag>insert</tag>, <tag>stale</tag>, editing assistance, <delete>gone</delete>, <insert>new</insert>, <stale>old</stale></title>
+                <p>These denote portions of a text that is being changed in some way, presumably as part of an editing process.  Conceivably, they could be managed by some other tool acting on your source.  Stale text is that which is slated for removal eventually, but is left in place so that it may be consulted.  There is no support presently for actually deleting or incorporating text, though that would be a reasonable feature request.</p>
+
+                <p>Red and green, for leaving and entering, are natural choices for presentation.  But in consideration of those readers who cannot always distinguish different colors, other devices, such as strikethrough or underlining, should also be employed.</p>
+            </paragraphs>
+
+            <!-- XML syntax group -->
+
+            <paragraphs>
+                <title><tag>tag</tag>, <tag>tage</tag>, <tag>attr</tag>, tag, empty tag, attribute, <tag>section</tag>, <tage>hash</tage>, <attr>width</attr></title>
+                <p>These are <pretext /> tags for when we write about <pretext /> and need to discuss tags, empty tags, and attributes.  Given how we design <pretext /> tags the content of these elements should only be the 26 lower-case letters and a dash/hyphen.  These should render in ways that make the three types of language elements obvious without much further discussion.  Just a bit self-serving, but not unjustified.</p>
+            </paragraphs>
+
+            <!-- Scientific names -->
+
+            <paragraphs>
+                <title><tag>taxon</tag>, scientific names, <taxon>Escherichia coli</taxon></title>
+                <p>This element may surround a full scientific name, resulting in presentation in italics.  There are subelements <tag>genus</tag> and <tag>species</tag> which may be used to delineate those components.</p>
+
+                <p>A <attr>ncbi</attr> attribute on <tag>taxon</tag> accepts an identiier from the <url href="https://www.ncbi.nlm.nih.gov/">National Center for Biotechnology Information</url>.  Feature requests for ways to make this more useful are welcome.</p>
+            </paragraphs>
+
+            <!-- Footnotes -->
+
+            <paragraphs>
+                <title><tag>fn</tag>, footnotes</title>
+                <p>A footnote can be inserted in a paragraph and a mark will be left behind.  Where the content of the footnote goes depends on the capabilities of the output format.  Because a footnote allows you to begin a new piece of text <em>anywhere</em>, it can be difficult to handle technically.  For this reason it is banned from places like titles and its possible content is limited (for openers, no paragraphs).</p>
+
+                <p>A footnote is the farthest thing from structured writing that we can think of.  It can go anywhere.  Resist the temptation to use it, and your writing will improve.  We frequently entertain the thought of making footnotes impossible in <pretext />.  See the <tag>aside</tag> for a possible alternative.</p>
+            </paragraphs>
+
+            <!-- Inline mathematics -->
+
+            <paragraphs>
+                <title><tag>m</tag>, mathematics, <m>x^2+y^2</m></title>
+                <p>Simple, inline expressions using mathematical notation may be used in paragraphs, and in titles and captions.  The syntax is <latex />.  See <xref ref="topic-mathematics" /> for full details.</p>
+            </paragraphs>
+
+            <!-- Inline verbatim -->
+
+            <paragraphs>
+                <title><tag>c</tag>, code, verbatim text, literal text, <c>import</c></title>
+                <p>Short bursts of raw, or verbatim, text can be wrapped in the <tag>c</tag> element.  Strictly speaking, <q>code</q> is a misnomer, as the text may be anything you need to communicate exactly as one would type it at a keyboard or as input to a computer program.  Anything longer than a handful of characters, or needing accurate line breaks should consider the <tag>cd</tag>, <tag>pre</tag>, <tag>program</tag> or <tag>console</tag> tags.  Presentation is normally a monospaced sans serif font, perhaps of a slightly heavier weight, and designed for the job with features such as unambiguous zeros (versus the letter <sq>oh</sq>).  See <xref ref="topic-verbatim-literal" /> for details.</p>
+            </paragraphs>
+
+            <paragraphs>
+                <title><tag>email</tag>, email address, <email>nobody@example.com</email></title>
+                <p>Very similar to the <tag>c</tag> tag, this may be used to get a monospace presentation of an email address, possibly as an active link in some formats.</p>
+            </paragraphs>
+
+        </subsection>
+
+        <subsection>
+            <title>Cross-References and Paragraphs</title>
+
+            <!-- fragment names, and their elements, from schema source
+            reference: url, xref, notation
+            index: idx
+            -->
+
+            <p>There are several devices for creating cross-references.  Generally, these are unwise (or banned) in titles, and if allowed may be inactive in certain portions of an electronic output format (such as when migrating to a Table of Contents).</p>
+
+            <paragraphs>
+                <title><tag>url</tag>, linking external resources</title>
+                <p>This is a cross-reference <em>to</em> some item separate and distinct for your document.</p>
+
+                <p>A Uniform Resource Locator (<init>URL</init>) is, loosely speaking, an Internet address for some item.  Presentation depends on the capabilites of the output format to serve the resource.  There is a mandatory atrribute, <attr>href</attr>, that contains the full <init>URL</init>, including a protocol (such as <c>http://</c>).  Used as an empty tag, the visual text will be the exact contents of the <attr>href</attr> attribute.  So, <url href="http://www.example.com" /> can be achieved with
+                    <cd>&lt;url href="http://www.example.com"/&gt;</cd>
+                </p>
+
+                <p>You may also wish to provide some text other than the actual <init>URL</init>, which you can specify as the content of the <tag>url</tag> element.  For example, <url href="http://www.example.com">IANA Test Site</url> can be achieved with
+                    <cd>&lt;url href="http://www.example.com"&gt;IANA Test Site&lt;/url&gt;</cd>
+                In order to have a URL occur in print output in a useful way, and in electronic output in an active way, I often shorten the full <init>URL</init> in the visual portion and mark it up as verbatim text.  So illustrating again, we get <url href="http://www.example.com"><c>example.com</c></url> from
+                    <cd>&lt;url href="http://www.example.com"&gt;&lt;c&gt;www.example.com&lt;/c&gt;&lt;/url&gt;</cd>
+                Notice the necessity and/or desirability of marking the text in a way that distinguishes it as literal text.</p>
+
+                <p>Note also that this tag is meant for <em>external</em> resources, so see the <tag>xref</tag> element (below) or <xref ref="topic-cross-referencing" /> for ways to link internally (<ie /> within your document).</p>
+            </paragraphs>
+
+            <paragraphs>
+                <title><tag>xref</tag>, cross-references</title>
+                <p>This is a cross-reference <em>to</em> some item contained within your document.</p>
+
+                <p>Extensive and intuitive capabilities for cross-referencing are a primary feature of <pretext />.  Typical use is an empty tag with the <attr>ref</attr> attribute specifying the value of an <attr>xml:id</attr> on the <term>target</term> of the cross-reference.  This should work easily without much more instruction, but familiarize yourself with the details in <xref ref="topic-cross-referencing" /> to get the most out of some the available options. </p>
+            </paragraphs>
+
+            <paragraphs>
+                <title><tag>idx</tag>, index target</title>
+
+                <p>This indicates that the containing structure (theorem, example, etc.), or top-level paragraph, should be the <em>target</em> of an entry of the index (a special sort of cross-reference).  See <xref ref="overview-index-notation" /> and <xref ref="topic-index" /> for general details.</p>
+            </paragraphs>
+
+            <paragraphs>
+                <title><tag>notation</tag>, index target</title>
+
+                <p>This indicates that the containing definition, or top-level paragraph, should be the <em>target</em> of an entry of the list of notation (a special sort of cross-reference).  See <xref ref="overview-index-notation" /> and <xref ref="topic-index" /> for general details.</p>
+            </paragraphs>
+        </subsection>
+
+        <subsection xml:id="topic-structure-in-paragraph">
+            <title>Structured Markup in Paragraphs</title>
+
+            <!-- Schema, reference groups:      -->
+            <!-- List, MathDisplay, CodeDisplay -->
+
+            <p>There are three categories of items which typically are structured further, and which are almost entirely restricted to appearing in a paragraph.  Given their complexity, details are covered in other sections of this guide.</p>
+
+            <paragraphs>
+                <title>Lists</title>
+                <p>With only one major exception (and three minor ones), a list <em>must</em> appear within a paragraph.  See <xref ref="overview-lists" /> for an introduction and <xref ref="topic-lists" /> for precise details.</p>
+            </paragraphs>
+
+            <paragraphs>
+                <title>Display Mathematics</title>
+                <p>Displayed mathematics, which is a single equation or a sequence of (aligned) equations, can only be placed within a paragraph.  The relevant tags are <tag>me</tag>, <tag>men</tag>, <tag>md</tag>, and <tag>mdn</tag>, with the latter two necessarily structured with <tag>mrow</tag> elements.  See <xref ref="overview-math" /> for an introduction and <xref ref="topic-mathematics" /> for precise details.</p>
+            </paragraphs>
+
+            <paragraphs>
+                <title>Display Verbatim</title>
+                <p>The <tag>cd</tag> tag, by analogy with the <tag>md</tag> tag for displayed mathematics, may be used to display one or more lines of verbatim text (such as a series of commands), possibly structured with the <tag>cline</tag> tag.  See <xref ref="overview-verbatim-literal" /> for an introduction and <xref ref="topic-verbatim-literal" /> for precise details.</p>
+
+                <p>This should not be confused with the <tag>pre</tag>, <tag>console</tag>, or <tag>program</tag> tags, which have slightly different uses, and all of which must be used <em>outside</em> of a paragraph.</p>
+            </paragraphs>
+        </subsection>
+
+        <subsection xml:id="topic-character-elements">
             <title>Characters in Paragraphs</title>
 
             <!-- fragment names, and their elements, from schema source
@@ -268,225 +488,15 @@
             </paragraphs>
         </subsection>
 
+        <conclusion>
+            <note xml:id="practice-careful-markup">
+                <title>Understand the Importance of Careful Markup</title>
 
-        <subsection>
-            <title>Simple Markup in Paragraphs</title>
+                <p>There is a lot of detailed information in this section.  Much of it is critically important, some is superfluous.  If you are new to thinking in terms of markup (rather than <acro>WYSIWYG</acro> tools), it might be overwhelming, a lot to digest, and hard to separate the wheat from the chaff.  Careful here means using the necessary markup, not using it for other purposes different than its intent (<term>tag abuse</term>), planning ahead for different output formats, but not becoming a slave to over-doing it.</p>
 
-            <p>Beyond empty tags that translate to various characters, there are relatively simple tags that can call attention to various <em>portions</em> of a sentence, or generate more complicated constructions than described above.</p>
-
-            <p>Most, if not all, of the markup in this subsection may also be used within titles and captions, though they might lose some of their features when used in a title, especially when the title is duplicated in other contexts, such as a Table of Contents.</p>
-
-            <!-- fragment names, and their elements, from schema source
-            delimiter-group: q, sq, braces, angles, brackets, dblbrackets
-            highlight-group: em, term, alert, pubtitle, articletitle, foreign
-            abbreviation-group: abbr, acro, init
-            editing-group: delete, insert, stale
-            xml-group: tag, tage, attr
-            scientific-name-group: taxon
-            footnotes: fn
-            mathematics: m
-            verbatim: c, email
-            -->
-
-            <!-- Groupings via symbols or characters -->
-
-            <paragraphs>
-                <title><tag>q</tag>, quotes, <q>group</q></title>
-                <p>This is the first of several grouping tags, using characters with left and right variants (see the individual characters in isolation above), and some of the most common markup in your writing.  Presentation uses double quote marks that are <term>smart quotes</term>, meaning that they look different in their opening and closing variants.  With output based on HTML, you may use your keyboard's double quote mark instead and get acceptable output, but your <latex /> will look wrong (plus you will look like you are a beginner with <latex />) and outputs based on JSON will be <em>totally broken</em>.  Futhermore, if you use the <tag>q</tag> your HTML output will look better (typographically) than if you do not use it.  (See <tag>blockquote</tag> for extensive runs of quoted text that can stand alone, and which can carry an attribution.)</p>
-            </paragraphs>
-
-            <paragraphs>
-                <title><tag>sq</tag>, single quotes, <sq>group</sq></title>
-                <p>Perhaps less-often used than <tag>q</tag>, so a couple more characters to type.  Presentation is paired single-quotes, opening and closing.  Read the discussion above about double-quotes if you have not already, this tag is entirely similar.</p>
-            </paragraphs>
-
-            <paragraphs>
-                <title><tag>braces</tag>, braces, <abbr>aka</abbr> curly brackets, <braces>group</braces></title>
-                <p>Left and right braces to enclose a phrase.  This is not for creating a set in mathematics, use the appropriate mathematics tag and syntax for that.</p>
-            </paragraphs>
-
-            <paragraphs>
-                <title><tag>angles</tag>, angle brackets, <angles>group</angles></title>
-                <p>Left and right angle brackets to enclose a phrase.  This is not for creating a set of generators in mathematics, use the appropriate mathematics tag and syntax for that.  Note also that the characters used here are distinct from the inequalities, <tag>less</tag> and <tag>greater</tag> (<less /> and <greater />).</p>
-            </paragraphs>
-
-            <paragraphs>
-                <title><tag>brackets</tag>, square brackets, <brackets>group</brackets></title>
-                <p>Left and right square brackets to enclose a phrase.  This is not for grouping expressions in mathematics, use the appropriate mathematics tag and syntax for that.</p>
-            </paragraphs>
-
-            <paragraphs>
-                <title><tag>dblbrackets</tag>, double square brackets, <dblbrackets>group</dblbrackets></title>
-                <p>Double left and right square brackets to enclose a phrase.  This is not for grouping expressions in mathematics, use the appropriate mathematics tag and syntax for that.  These are used in the analysis of texts to note various restorations or deletions.  Inquire if you feel there should be more semantic markup for this purpose.</p>
-            </paragraphs>
-
-            <!-- Font-face-changing markup -->
-
-            <paragraphs>
-                <title><tag>em</tag>, emphasis, <em>important</em></title>
-                <p>Use this element to surround characters in a phrase that is to be emhasized.  This will typically be rendered in italics, though this choice is left to the implementation of a particular conversion.  See also, <tag>alert</tag>.</p>
-
-                <p>If you are new to using a markup language, this is a place to stop and think.  As a <pretext /> author you are never able to say, <q>I want this text to appear in italics.</q>  Rather, you specify that certain text has a certain purpose or meaning.  Emphasis is a way of <em>calling attention</em> to a portion of a sentence or paragraph.  A font change (to italic) is a common and effective device.  But a particular format might have a better, or different, way to achive this.  Perhaps in an electronic format, the letters are animated and dance up and down.  (Just kidding.  But you may be reminded of frequent blinking text in the early days of web design, supported by a non-standard <tag>blink</tag> element.)  Seriously, now would be a good time to review <xref ref="philosophy" />.</p>
-            </paragraphs>
-
-            <paragraphs>
-                <title><tag>alert</tag>, alert, <alert>critical</alert></title>
-                <p>Use this to heavily emphasize something to a greater degree than just emphasis.  Maybe think of it as <alert>SHOUTING</alert>.  Bold italic font, or a bright color, or both, would be normal choices for presentation.  Overuse of this tag will dilute its effectiveness.</p>
-            </paragraphs>
-
-            <paragraphs>
-                <title><tag>term</tag>, terminology, <term>larvae</term></title>
-                <p>Use this to identify a word or phrase that is being defined, in contrast to actually using a structured <tag>definition</tag>.  Typical presentation is a bold font.  Caution: the use of this tag is to communicate a defined term and converters may make use of this interpretation, given the importance of definitions in scholarly work.  It would be considered <term>tag abuse</term> to use this tag to simply bold a word or phrase for some other reason, perhaps as an alternative to <tag>em</tag> or <tag>alert</tag>.</p>
-            </paragraphs>
-
-            <paragraphs>
-                <title><tag>foreign</tag>, foreign words, idioms, phrases, <foreign>Hola</foreign></title>
-                <p>This tag is used to identify words or phrases from a language other than the main one used for the overall document.  It is best practice to use a <attr>xml:lang</attr> attribute to identify the language, since this will assist screen readers and hyphenation algorithms.  We may also recognize the need for a different script (font).  Usual presentation is italics for languages using a Latin script.  This should not be used for entire paragraphs as a way of assisting with a translation of an entire document.</p>
-
-                <p>Note that when we use italics for emphasis <em>and</em> to point out foreign words or phrases, there is a loss of information in our output.  In other words, we can no longer reliably (in an automated way) convert our output back to equivalent PreTeXt source from its visual representations.  <foreign xml:lang="fr-FR">C'est la vie</foreign>.  See <xref ref="philosophy" /> again.</p>
-            </paragraphs>
-
-            <paragraphs>
-                <title><tag>pubtitle</tag>, <tag>articletitle</tag>, titles of books and articles</title>
-                <p>These provide the ability to typographically distinguish the title of another work, and are not a replacement for careful bibliographies and citations.  Use <tag>pubtitle</tag> for longer, complete works, such as books, plays, or entire websites.  Use <tag>articletitle</tag> for shorter, component works, such as a chapter of a book, a research article, or a single webpage.</p>
-
-                <p>Presentation for a longer work will be italics or an oblique (slanted) font, and for a shorter work, the title will simply be quoted.</p>
-            </paragraphs>
-
-            <!-- Font-size changing group -->
-
-            <paragraphs>
-                <title><tag>abbr</tag>, <tag>init</tag>, <tag>acro</tag>, abbreviation, initialism, acronym, <abbr>Mr.</abbr>, <init>XML</init>, <acro>SCUBA</acro></title>
-                <p>An abbreviation is a condensed or shortened version of some word or phrase, such as <abbr>Mr.</abbr> for <q>Mister.</q>  Converters should take care with periods (full stop) inside an <tag>abbr</tag> as distinguished from the end of a sentence (which may not always be clear given the absence of a tag delimiting sentences).  An initialism is an abbreviation read as a sequence of letters, often the first letter of words in a phrase, such as <init>HTML</init> for <q>HyperText Markup Language.</q>  An acronym is much like an initialism, but the letters are read as a pronouncable word (which sometimes actually enters the language as a word, such as <q>radar</q> which began as RAdio Detection And Ranging).  An example is <acro>SCUBA</acro> which stands for <q>Self-Contained Underwater Breathing Apparatus.</q>  Initialisms and acronyms may be presented in a small-capitals font or as regular capitals reduced in size.</p>
-            </paragraphs>
-
-            <!-- Editing group -->
-
-            <paragraphs>
-                <title><tag>delete</tag>, <tag>insert</tag>, <tag>stale</tag>, editing assistance, <delete>gone</delete>, <insert>new</insert>, <stale>old</stale></title>
-                <p>These denote portions of a text that is being changed in some way, presumably as part of an editing process.  Conceivably, they could be managed by some other tool acting on your source.  Stale text is that which is slated for removal eventually, but is left in place so that it may be consulted.  There is no support presently for actually deleting or incorporating text, though that would be a reasonable feature request.</p>
-
-                <p>Red and green, for leaving and entering, are natural choices for presentation.  But in consideration of those readers who cannot always distinguish different colors, other devices, such as strikethrough or underlining, should also be employed.</p>
-            </paragraphs>
-
-            <!-- XML syntax group -->
-
-            <paragraphs>
-                <title><tag>tag</tag>, <tag>tage</tag>, <tag>attr</tag>, tag, empty tag, attribute, <tag>section</tag>, <tage>hash</tage>, <attr>width</attr></title>
-                <p>These are <pretext /> tags for when we write about <pretext /> and need to discuss tags, empty tags, and attributes.  Given how we design <pretext /> tags the content of these elements should only be the 26 lower-case letters and a dash/hyphen.  These should render in ways that make the three types of language elements obvious without much further discussion.  Just a bit self-serving, but not unjustified.</p>
-            </paragraphs>
-
-            <!-- Scientific names -->
-
-            <paragraphs>
-                <title><tag>taxon</tag>, scientific names, <taxon>Escherichia coli</taxon></title>
-                <p>This element may surround a full scientific name, resulting in presentation in italics.  There are subelements <tag>genus</tag> and <tag>species</tag> which may be used to delineate those components.</p>
-
-                <p>A <attr>ncbi</attr> attribute on <tag>taxon</tag> accepts an identiier from the <url href="https://www.ncbi.nlm.nih.gov/">National Center for Biotechnology Information</url>.  Feature requests for ways to make this more useful are welcome.</p>
-            </paragraphs>
-
-            <!-- Footnotes -->
-
-            <paragraphs>
-                <title><tag>fn</tag>, footnotes</title>
-                <p>A footnote can be inserted in a paragraph and a mark will be left behind.  Where the content of the footnote goes depends on the capabilities of the output format.  Because a footnote allows you to begin a new piece of text <em>anywhere</em>, it can be difficult to handle technically.  For this reason it is banned from places like titles and its possible content is limited (for openers, no paragraphs).</p>
-
-                <p>A footnote is the farthest thing from structured writing that we can think of.  It can go anywhere.  Resist the temptation to use it, and your writing will improve.  We frequently entertain the thought of making footnotes impossible in <pretext />.  See the <tag>aside</tag> for a possible alternative.</p>
-            </paragraphs>
-
-            <!-- Inline mathematics -->
-
-            <paragraphs>
-                <title><tag>m</tag>, mathematics, <m>x^2+y^2</m></title>
-                <p>Simple, inline expressions using mathematical notation may be used in paragraphs, and in titles and captions.  The syntax is <latex />.  See <xref ref="topic-mathematics" /> for full details.</p>
-            </paragraphs>
-
-            <!-- Inline verbatim -->
-
-            <paragraphs>
-                <title><tag>c</tag>, code, verbatim text, literal text, <c>import</c></title>
-                <p>Short bursts of raw, or verbatim, text can be wrapped in the <tag>c</tag> element.  Strictly speaking, <q>code</q> is a misnomer, as the text may be anything you need to communicate exactly as one would type it at a keyboard or as input to a computer program.  Anything longer than a handful of characters, or needing accurate line breaks should consider the <tag>cd</tag>, <tag>pre</tag>, <tag>program</tag> or <tag>console</tag> tags.  Presentation is normally a monospaced sans serif font, perhaps of a slightly heavier weight, and designed for the job with features such as unambiguous zeros (versus the letter <sq>oh</sq>).  See <xref ref="topic-verbatim-literal" /> for details.</p>
-            </paragraphs>
-
-            <paragraphs>
-                <title><tag>email</tag>, email address, <email>nobody@example.com</email></title>
-                <p>Very similar to the <tag>c</tag> tag, this may be used to get a monospace presentation of an email address, possibly as an active link in some formats.</p>
-            </paragraphs>
-
-        </subsection>
-
-        <subsection>
-            <title>Cross-References and Paragraphs</title>
-
-            <!-- fragment names, and their elements, from schema source
-            reference: url, xref, notation
-            index: idx
-            -->
-
-            <p>There are several devices for creating cross-references.  Generally, these are unwise (or banned) in titles, and if allowed may be inactive in certain portions of an electronic output format (such as when migrating to a Table of Contents).</p>
-
-            <paragraphs>
-                <title><tag>url</tag>, linking external resources</title>
-                <p>This is a cross-reference <em>to</em> some item separate and distinct for your document.</p>
-
-                <p>A Uniform Resource Locator (<init>URL</init>) is, loosely speaking, an Internet address for some item.  Presentation depends on the capabilites of the output format to serve the resource.  There is a mandatory atrribute, <attr>href</attr>, that contains the full <init>URL</init>, including a protocol (such as <c>http://</c>).  Used as an empty tag, the visual text will be the exact contents of the <attr>href</attr> attribute.  So, <url href="http://www.example.com" /> can be achieved with
-                    <cd>&lt;url href="http://www.example.com"/&gt;</cd>
-                </p>
-
-                <p>You may also wish to provide some text other than the actual <init>URL</init>, which you can specify as the content of the <tag>url</tag> element.  For example, <url href="http://www.example.com">IANA Test Site</url> can be achieved with
-                    <cd>&lt;url href="http://www.example.com"&gt;IANA Test Site&lt;/url&gt;</cd>
-                In order to have a URL occur in print output in a useful way, and in electronic output in an active way, I often shorten the full <init>URL</init> in the visual portion and mark it up as verbatim text.  So illustrating again, we get <url href="http://www.example.com"><c>example.com</c></url> from
-                    <cd>&lt;url href="http://www.example.com"&gt;&lt;c&gt;www.example.com&lt;/c&gt;&lt;/url&gt;</cd>
-                Notice the necessity and/or desirability of marking the text in a way that distinguishes it as literal text.</p>
-
-                <p>Note also that this tag is meant for <em>external</em> resources, so see the <tag>xref</tag> element (below) or <xref ref="topic-cross-referencing" /> for ways to link internally (<ie /> within your document).</p>
-            </paragraphs>
-
-            <paragraphs>
-                <title><tag>xref</tag>, cross-references</title>
-                <p>This is a cross-reference <em>to</em> some item contained within your document.</p>
-
-                <p>Extensive and intuitive capabilities for cross-referencing are a primary feature of <pretext />.  Typical use is an empty tag with the <attr>ref</attr> attribute specifying the value of an <attr>xml:id</attr> on the <term>target</term> of the cross-reference.  This should work easily without much more instruction, but familiarize yourself with the details in <xref ref="topic-cross-referencing" /> to get the most out of some the available options. </p>
-            </paragraphs>
-
-            <paragraphs>
-                <title><tag>idx</tag>, index target</title>
-
-                <p>This indicates that the containing structure (theorem, example, etc.), or top-level paragraph, should be the <em>target</em> of an entry of the index (a special sort of cross-reference).  See <xref ref="overview-index-notation" /> and <xref ref="topic-index" /> for general details.</p>
-            </paragraphs>
-
-            <paragraphs>
-                <title><tag>notation</tag>, index target</title>
-
-                <p>This indicates that the containing definition, or top-level paragraph, should be the <em>target</em> of an entry of the list of notation (a special sort of cross-reference).  See <xref ref="overview-index-notation" /> and <xref ref="topic-index" /> for general details.</p>
-            </paragraphs>
-        </subsection>
-
-        <subsection xml:id="topic-structure-in-paragraph">
-            <title>Structured Markup in Paragraphs</title>
-
-            <!-- Schema, reference groups:      -->
-            <!-- List, MathDisplay, CodeDisplay -->
-
-            <p>There are three categories of items which typically are structured further, and which are almost entirely restricted to appearing in a paragraph.  Given their complexity, details are covered in other sections of this guide.</p>
-
-            <paragraphs>
-                <title>Lists</title>
-                <p>With one exception, a list <em>must</em> appear within a paragraph.  See <xref ref="overview-lists" /> for an introduction and <xref ref="topic-lists" /> for precise details.</p>
-            </paragraphs>
-
-            <paragraphs>
-                <title>Display Mathematics</title>
-                <p>Displayed mathematics, which is a single equation or a sequence of (aligned) equations, can only be placed within a paragraph.  The relevant tags are <tag>me</tag>, <tag>men</tag>, <tag>md</tag>, and <tag>mdn</tag>, with the latter two necessarily structured with <tag>mrow</tag> elements.  See <xref ref="overview-math" /> for an introduction and <xref ref="topic-mathematics" /> for precise details.</p>
-            </paragraphs>
-
-            <paragraphs>
-                <title>Display Verbatim</title>
-                <p>The <tag>cd</tag> tag, by analogy with the <tag>md</tag> tag for displayed mathematics, may be used to display one or more lines of verbatim text (such as a series of commands), possibly structured with the <tag>cline</tag> tag.  See <xref ref="overview-verbatim-literal" /> for an introduction and <xref ref="topic-verbatim-literal" /> for precise details.</p>
-
-                <p>This should not be confused with the <tag>pre</tag>, <tag>console</tag>, or <tag>program</tag> tags, which have slightly different uses, and all of which must be used <em>outside</em> of a paragraph.</p>
-            </paragraphs>
-        </subsection>
+                <p>So come back here often for a re-read.  And keep in mind that <pretext /> is designed around principles (<xref ref="list-principles" />), and that it is markup (<xref ref="principle-markup" />) which enables multiple outputs (<xref ref="principle-multiple-outputs" />) and effective and beautiful online versions (<xref ref="principle-web-versions"/>).</p>
+            </note>
+        </conclusion>
     </section>
 
     <section xml:id="topic-exercises">
