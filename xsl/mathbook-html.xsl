@@ -7070,6 +7070,59 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <iframe scrolling="no" src="https://www.geogebra.org/material/iframe/id/{@geogebra}/width/800/height/450/border/888888/smb/false/stb/false/stbh/false/ai/false/asb/false/sri/false/rc/false/ld/false/sdz/false/ctl/false" width="800px" height="450px" />
 </xsl:template>
 
+<!-- Local source -->
+<xsl:template match="interactive[@platform='geogebra']">
+    <!-- We need a Javascript identifier to name the applet -->
+    <xsl:variable name="applet-name">
+        <xsl:apply-templates select="." mode="internal-id-no-dash" />
+    </xsl:variable>
+    <!-- And a Javascript identifier for the parameters -->
+    <xsl:variable name="applet-parameters">
+        <xsl:apply-templates select="." mode="internal-id-no-dash" />
+        <xsl:text>_params</xsl:text>
+    </xsl:variable>
+    <!-- And an HTML unique identifier -->
+    <xsl:variable name="applet-container">
+        <xsl:apply-templates select="." mode="internal-id" />
+        <xsl:text>-container</xsl:text>
+    </xsl:variable>
+    <!-- Javascript API for loading from a base64 string                   -->
+    <!-- Crib from page source at second link, with modifications          -->
+    <!-- Multiple instances:  https://stackoverflow.com/questions/9434     -->
+    <!-- https://learn.jquery.com/using-jquery-core/document-ready/        -->
+    <!-- We assume JQuery is loaded, so go that route                      -->
+    <!-- https://wiki.geogebra.org/en/Reference:GeoGebra_Apps_API          -->
+    <!-- http://dev.geogebra.org/examples/html/example-api-save-state.html -->
+    <script type="text/javascript">
+<xsl:text>
+var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
+        "width":550,
+        "height":245,
+        "showToolBar":true,
+        "borderColor":null,
+        "showMenuBar":false,
+        "showAlgebraInput":false,
+        "customToolbar":"0 || 1",
+        "showResetIcon":true,
+        "enableLabelDrags":false,
+        "enableShiftDragZoom":true,
+        "enableRightClick":false,
+        "capturingThreshold":null,
+        "showToolBarHelp":true,
+        "errorDialogsActive":true,
+        "useBrowserForJS":false,
+        "ggbBase64":"</xsl:text>
+<xsl:value-of select="normalize-space(code[@language='base64']/text())" />
+<xsl:text>"};&#xa;</xsl:text>
+
+<xsl:text>var </xsl:text><xsl:value-of select="$applet-name" /><xsl:text> = new GGBApplet(</xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text>, '5.0');
+$( document ).ready(
+function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject('</xsl:text><xsl:value-of select="$applet-container" /><xsl:text>'); }
+);&#xa;</xsl:text>
+    </script>
+    <div class="geogebra-applet" id="{$applet-container}"></div>
+</xsl:template>
+
 <!-- Desmos -->
 <xsl:template match="interactive[@desmos]">
     <iframe src="https://www.desmos.com/calculator/{@desmos}" width="400" height="600" />
@@ -7202,6 +7255,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="mathbook-js" />
             <xsl:call-template name="fonts" />
             <xsl:call-template name="hypothesis-annotation" />
+            <xsl:call-template name="geogebra" />
             <xsl:call-template name="jsxgraph" />
             <xsl:call-template name="css" />
             <xsl:call-template name="pytutor-header" />
@@ -7296,6 +7350,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="knowl" />
             <xsl:call-template name="fonts" />
             <xsl:call-template name="hypothesis-annotation" />
+            <xsl:call-template name="geogebra" />
             <xsl:call-template name="jsxgraph" />
             <xsl:call-template name="css" />
         </head>
@@ -8448,6 +8503,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>}</xsl:text>
         </script>
         <script src="https://hypothes.is/embed.js" async=""></script>
+    </xsl:if>
+</xsl:template>
+
+<!-- GeoGebra -->
+<!-- The JS necessary to load the "App", which can -->
+<!-- then be loaded with base64 or XML versions    -->
+<xsl:template name="geogebra">
+    <xsl:if test="$b-has-geogebra">
+        <script type="text/javascript" src="https://cdn.geogebra.org/apps/deployggb.js"></script>
     </xsl:if>
 </xsl:template>
 
