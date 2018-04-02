@@ -1423,6 +1423,13 @@
             <p>For <latex /> output it gets quite tricky to handle all the various meanings of certain escape characters in <init>URL</init>s in more complicated contexts (such as tables, footnotes, and titles), so there may be some special cases where the formatting is off or you get an error when compiling your <latex />.  We handle most of these situations, but we always appreciate reports of missed cases.</p>
         </subsection>
 
+        <subsection xml:id="topic-url-characters">
+            <title>Characters in <init>URL</init>s</title>
+            <idx><h>URL</h><h>query string</h></idx>
+
+            <p>A <init>URL</init> can have a <term>query string</term>, which has a list of parameters following a question-mark.  The parameters are separated by ampersands (<ampersand />) will need to be escaped, so as to not confuse the <init>XML</init> processor.  So use <c>&amp;amp</c> anywhere teh ampersand <em>character</em> is necessary, such as a <attr>source</attr> attribute, or a monospace version of a <init>URL</init> achieved with a <tag>c</tag> element.  Also, the question-mark character should <em>not</em> be <init>URL</init>-encoded (<c>%3F</c>), despite earlier advice, so presumably edit it to be the actual character.</p>
+        </subsection>
+
         <subsection xml:id="topic-external-data-file">
             <title><init>URL</init>s to External Data Files</title>
 
