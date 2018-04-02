@@ -4105,6 +4105,29 @@ the xsltproc executable.
 
                 <p>Be careful about the Javascript code when there are several on the same page, as duplicate variables may affect one another's performance adversely.</p>
             </subsection>
+
+            <subsection>
+                <title>Wolfram Computable Document Format</title>
+                <idx>Wolfram CDF</idx>
+
+                <p>You can embed interactive demonstrations created in Wolfram's <term>Computable Document Format</term> so that they will be played with the Wolfram CDF Player<trademark />.  Once you create and save a demonstration, you want to determine the UUID that is the identifier of your demonstration.  For example, <xref ref="wolfram-cdf-cellular-automata" text="type-global" /> is identified by <c>9fa2acff-c809-4b7f-a73b-c59ace36affc</c>.  This identifier is enough to create the <pretext /> to embed the demonstration.  See <url href="https://reference.wolfram.com/language/howto/DeployInteractiveContentInTheWolframCloud.html" /> for information about creating your demonstration.</p>
+
+                <p><url href="http://www.wolfram.com/cdf/adopting-cdf/deploying-cdf/web-delivery-cloud.html" /> explains hosting CDF files at the Wolfram Cloud, and is the source of <xref ref="wolfram-cdf-cellular-automata" text="type-global" />.  You can learn about powering your CDF with Wolfram Cloud Credits at <url href="https://www.wolfram.com/cloud-credits/" />.  CDF is a public format, and the FreeCDF<trademark /> license is a variant of a Creative Commons BY-SA license, see <url href="http://www.wolfram.com/cdf/adopting-cdf/licensing-options.html" />.</p>
+
+                <p>The first example here (<xref ref="wolfram-cdf-sine-curve" text="type-global" />) was developed by Itai Seggev, a Senior Kernel Developer at Wolfram.</p>
+
+                <p>(2018-04-02) These behave as expected in Chrome, but perhaps not in Firefox.  Testing welcome.</p>
+
+                <figure xml:id="wolfram-cdf-sine-curve">
+                    <caption>Variable Sine Curve</caption>
+                    <interactive wolfram-cdf="fe1be5c3-d105-43d0-bf4b-9f2eb1028b84" />
+                </figure>
+
+                <figure xml:id="wolfram-cdf-cellular-automata">
+                    <caption>Cellular Automata</caption>
+                    <interactive wolfram-cdf="9fa2acff-c809-4b7f-a73b-c59ace36affc" />
+                </figure>
+            </subsection>
         </section>
 
         <section xml:id="section-video">
