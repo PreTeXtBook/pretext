@@ -5057,6 +5057,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- An abstract modal method "video-embed" constructs -->
 <!-- an HTML object of the correct size and with the   -->
 <!-- right autoplay characteristic.                    -->
+<!-- Note: autoplay option is internal, not author-set -->
 
 <xsl:template match="video">
     <xsl:variable name="width-percent">
@@ -5314,6 +5315,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Media Fragment URI: https://www.w3.org/TR/media-frags/   -->
     <!-- Javascript: https://stackoverflow.com/questions/11212715 -->
     <!-- variable is possibly empty, so no harm using that later  -->
+    <!-- This portion of URL should follow any query string       -->
     <xsl:variable name="temporal-fragment">
         <xsl:if test="@start or @end">
             <xsl:text>#t=</xsl:text>
@@ -5348,37 +5350,64 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$autoplay = 'true'">
             <xsl:attribute name="autoplay" />
         </xsl:if>
-        <!-- children "source" elements -->
-        <xsl:element name="source">
-            <xsl:attribute name="src">
-                <xsl:value-of select="@source"/>
-                <xsl:text>.mp4</xsl:text>
-                <xsl:value-of select="$temporal-fragment" />
-            </xsl:attribute>
-            <xsl:attribute name="type">
-                <xsl:text>video/mp4</xsl:text>
-            </xsl:attribute>
-        </xsl:element>
-        <xsl:element name="source">
-            <xsl:attribute name="src">
-                <xsl:value-of select="@source"/>
-                <xsl:text>.ogg</xsl:text>
-                <xsl:value-of select="$temporal-fragment" />
-            </xsl:attribute>
-            <xsl:attribute name="type">
-                <xsl:text>video/ogg</xsl:text>
-            </xsl:attribute>
-        </xsl:element>
-        <xsl:element name="source">
-            <xsl:attribute name="src">
-                <xsl:value-of select="@source"/>
-                <xsl:text>.webm</xsl:text>
-                <xsl:value-of select="$temporal-fragment" />
-            </xsl:attribute>
-            <xsl:attribute name="type">
-                <xsl:text>video/webm</xsl:text>
-            </xsl:attribute>
-        </xsl:element>
+        <!-- Construct the HTML5 source URL(s)                  -->
+        <!-- If this gets refactored, it could be best to form  -->
+        <!-- base, extension, query, fragment strings/variables -->
+        <!-- First, grab extension of source URL in PTX @source -->
+        <xsl:variable name="extension">
+            <xsl:call-template name="file-extension">
+                <xsl:with-param name="filename" select="@source" />
+            </xsl:call-template>
+        </xsl:variable>
+        <!-- "source" elements, children of HTML5 video -->
+        <!-- no extension suggests hosting has multiple -->
+        <!-- versions for browser to sort through       -->
+        <!-- More open formats first!  ;-)              -->
+        <xsl:if test="$extension = '' or $extension = 'oog'">
+            <xsl:element name="source">
+                <xsl:attribute name="src">
+                    <xsl:value-of select="@source"/>
+                    <!-- augment no-extension form -->
+                    <xsl:if test="$extension = ''">
+                        <xsl:text>.ogg</xsl:text>
+                    </xsl:if>
+                    <xsl:value-of select="$temporal-fragment" />
+                </xsl:attribute>
+                <xsl:attribute name="type">
+                    <xsl:text>video/ogg</xsl:text>
+                </xsl:attribute>
+            </xsl:element>
+        </xsl:if>
+        <xsl:if test="$extension = '' or $extension = 'webm'">
+            <xsl:element name="source">
+                <xsl:attribute name="src">
+                    <xsl:value-of select="@source"/>
+                    <!-- augment no-extension form -->
+                    <xsl:if test="$extension = ''">
+                        <xsl:text>.webm</xsl:text>
+                    </xsl:if>
+                    <xsl:value-of select="$temporal-fragment" />
+                </xsl:attribute>
+                <xsl:attribute name="type">
+                    <xsl:text>video/webm</xsl:text>
+                </xsl:attribute>
+            </xsl:element>
+        </xsl:if>
+        <xsl:if test="$extension = '' or $extension = 'mp4'">
+            <xsl:element name="source">
+                <xsl:attribute name="src">
+                    <xsl:value-of select="@source"/>
+                    <!-- augment no-extension form -->
+                    <xsl:if test="$extension = ''">
+                        <xsl:text>.mp4</xsl:text>
+                    </xsl:if>
+                    <xsl:value-of select="$temporal-fragment" />
+                </xsl:attribute>
+                <xsl:attribute name="type">
+                    <xsl:text>video/mp4</xsl:text>
+                </xsl:attribute>
+            </xsl:element>
+        </xsl:if>
         <!-- failure to perform -->
         <xsl:text>Your browser does not support the &lt;video&gt; tag.</xsl:text>
     </xsl:element>
