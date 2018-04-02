@@ -4076,12 +4076,33 @@ the xsltproc executable.
 
             <p>First, a gratuitous reference to Exercise<nbsp /><xref ref="exercises-cosine-derivative" /> about the derivative of a cosine.</p>
 
-            <p>Embedded videos can make sense for a web version of your document. This is a video promoting the University of Puget Sound to potential new students.  Support is limited to HTML5-capable browsers.  The file format can be MP4, Ogg, or WebM, though this may vary depending upon the browser.  The example below is an old promotional video from the University of Puget Sound, in WebM format.  The <c>source</c> attribute should <em>not</em> include an extension, since the three possibilities above will be searched for preferentially (you need only provide one, but more will increase the chances every browser will find a compatible format).</p>
+            <p>You can specify a video by a filename if you host it as part of your document, or a <init>URL</init> giving a location on the Internet.  There are a few extra features for YouTube videos, which are near the bottom of this page, so look there first if that meets your needs.</p>
+
+            <p>Embedded videos can make sense for a web version of your document. This is a video promoting the University of Puget Sound to potential new students, in WebM format.  Support is limited to HTML5-capable browsers.  The file format can be MP4, Ogg, or WebM, though this may vary depending upon the browser.  Use a <tag>video</tag> element, within either a <tag>figure</tag> (numbered, captioned) or a <tag>sidebyside</tag> for more precise control.   The <attr>source</attr> attribute in this first example <em>does not</em> include an extension, and so three possibilities above will be searched for preferentially (you need only provide the video in one format, but providing additional versions will increase the chances every browser will find a compatible format).</p>
 
             <figure>
                 <caption>University of Puget Sound Promotional Video</caption>
                 <video source="images/ups-visitor-guide-360" width="80%"/>
             </figure>
+
+            <p>You can use a very similar construction to point to a video hosted somewhere on the Internet, just use a complete <init>URL</init> for the <tag>source</tag> attribute.  Note that if the URL has a query string (parameters following a question-mark), then any ampersands (<ampersand />) will need to be escaped, so as to not confuse the <init>XML</init> processor (<ie /> use <c>&amp;amp</c>).  Also, the question-mark character needs to <em>not</em> be <init>URL</init>-encoded (<c>%3F</c>), so presumably ed it to be the character.  Here are two examples, the second one uses the <attr>start</attr> and <attr>stop</attr> attributes to limit the video to just the time between the 16-second and 30-second locations.</p>
+
+            <figure>
+                <caption>Business 4 Landscapes (from Coursera)</caption>
+                <video source="https://d18ky98rnyall9.cloudfront.net/38COuBVDEee9zwpiIySM9A.processed/full/360p/index.webm?Expires=1522713600&amp;Signature=icqoTan49pzYYgjJzBoQ8NNOghe0inw~NkmXFWsCS1Rq95VgSSokFCetQRDpx7GVz4Zi7MKw0qAQ4B2eo1~cr9H-e35VEuXEliCoL~s4ixechpDHl2Gny1REyfTsiJbofUvIpNE3u-3PyjEDPM1Oxj-mAG757Wa9H6ht1ecoDFE_&amp;Key-Pair-Id=APKAJLTNE6QMUY6HBC5A" width="100%"/>
+            </figure>
+
+            <p>(The previous video is likely to <em>expire</em>, but I can't tell when.  Let me know when it goes missing?)</p>
+
+            <!-- http://camendesign.com/code/video_for_everybody/test.html -->
+
+            <figure>
+                <caption>Big Buck Bunny from <q>Video for Everybody</q> Test Page at <url href="http://camendesign.com/code/video_for_everybody/test.htm"><c>camendesign.com/code/video_for_everybody/test.htm</c></url></caption>
+                <video source="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" start="16" end="30" width="70%"/>
+            </figure>
+
+            <!-- A Coursera URL that expires via digital signature scheme:
+            https://d18ky98rnyall9.cloudfront.net/u5_p4_1_%20chisq_gof.77c96ac0ad8211e498e5e34296ce5455/full/360p/index.webm?Expires=1522800000&Signature=DJKrmAOfuGF4HMmWmQ2nCHnOdoeFzZd7qJzp1cfwOjQa-J~1kGNzwllMxFmGi8UXxt3wTXrhdhTQVcFQNk5nPzAi64mjJkMVu0m~QyKISqzjkFBZJm1NCnkNcbSyOk6WRDj6mjlrxEDaUSD6hHmD04ehumORG3G55Sp5OGEhYnU_&Key-Pair-Id=APKAJLTNE6QMUY6HBC5A -->
 
             <p>YouTube<idx><h>YouTube videos</h></idx><idx><h>videos</h><h>YouTube</h></idx> videos may be embedded with only knowledge of the <q>ID</q>.  This a string of eleven seemingly random characters that show up in the URL when you watch a video.  For the Led Zeppelin performance below, the ID is <c>hAzdgU_kpGo</c>, which you might normally watch directly from the URL <url href="https://www.youtube.com/watch?v=hAzdgU_kpGo" />.  Screen real estate is determined by specifying an optional <c>@width</c> attribute as a percentage, and aspect ratio is preserved on the assumption of HD video (16:9).</p>
 
