@@ -4115,7 +4115,7 @@ the xsltproc executable.
                 <caption>Kashmir (Live), Led Zeppelin. O2 Arena, London. December 10, 2007. (8:55)</caption>
                 <idx><h>Led Zeppelin video</h></idx>
 
-                <video youtube="hAzdgU_kpGo" width="70%" xml:id="led-zeppelin-kashmir" />
+                <video xml:id="led-zeppelin-kashmir" youtube="hAzdgU_kpGo" width="70%" />
             </figure>
 
             <p>If you have ever owned a drone, you sympathize with this guy.  Way funnier than a cat video.</p>
@@ -4123,7 +4123,7 @@ the xsltproc executable.
             <figure>
                 <title>My first day with my drone</title>
                 <caption>First Drone Flight (1:28)</caption>
-                <video youtube="VsHMjWORFvI" />
+                <video xml:id="drone-flight-full" youtube="VsHMjWORFvI" />
             </figure>
 
             <p>If you are only interested in a piece of the action, you can limit the video with <c>start</c> and <c>end</c> attributes in seconds.  You might make those times clear in the caption for readers getting the link out of a PDF.  Some videos may not respect these parameters.</p>
@@ -4131,7 +4131,7 @@ the xsltproc executable.
             <figure>
                 <title>My first day with my drone (Splashdown)</title>
                 <caption>First Drone Flight (Splashdown, 0:54 to 1:12)</caption>
-                <video youtube="VsHMjWORFvI" start="54" end="72" />
+                <video xml:id="drone-flight-clip" youtube="VsHMjWORFvI" start="54" end="72" />
             </figure>
 
             <p>We can pack two videos side-by-side, with a lot of horizontal control, using two panels in the <c>sidebyside</c> element.  We have simply chose not to provide a caption (overall, or separately) as an illustration.  The sizes are purposely a bit odd.  See <xref ref="section-side-by-side" text="type-global" /> for much more on side-by-side panels.  These videos come from the <q>Topic</q> and <q>VEVO</q> areas of YouTube (respectively) and both have start/end times.</p>
