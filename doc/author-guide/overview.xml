@@ -282,7 +282,7 @@
         <title>Video</title>
         <idx>video</idx>
 
-        <p>Videos<idx>video</idx>, either author-hosted or hosted on YouTube, may be embedded in a <pretext /> document using <init>HTML</init>, or may be <q>popped-out</q> to view on another page.  For a YouTube video, an author need only supply the identification string, and all the details of the embedding are handled by <pretext />.  See <xref ref="topic-video" /> for details.</p>
+        <p>Videos<idx>video</idx>, either author-hosted, via a <init>URL</init>, or hosted on YouTube, may be embedded in a <pretext /> document that is converted to <init>HTML</init>, and may be optionally <q>popped-out</q> to view on another page.  For a YouTube video, it is simplicity itself, as an author need only supply the identification string, and all the details of the embedding are handled by <pretext />.  See <xref ref="topic-video" /> for details.</p>
     </section>
 
     <section xml:id="overview-si-units">

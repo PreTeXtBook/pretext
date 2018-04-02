@@ -1442,47 +1442,119 @@
         <title>Video</title>
         <idx>video</idx>
 
-        <p>The <tag>video</tag><idx>video</idx> element is used to embed a video in output formed from <init>HTML</init>.  It may be placed inside a <tag>figure</tag> or can be a panel of a <tag>sidebyside</tag>.  The former will have a caption, be numbered, and hence can be the target of a cross-reference (<tag>xref</tag>).  The latter is anonymous, but allows for horizontal layout, and combinations with other panels.</p>
+        <introduction>
+            <p>A video is a natural way to enhance a document when rendered in an electronic format, such as <init>HTML</init> web pages.  It might be additional information that is hard to communicate with text (marine invertebrates swimming), a lecture or presentation that augments your text, or even some artistic work, such as a symphony legally hosted on YouTube, when you could never hope to get copyright clearance yourself.</p>
 
-        <p>Size is controlled by a <attr>width</attr> attribute expressed as a percentage (on the <tag>video</tag> element when used in a figure, or as part of the <tag>sidebyside</tag> layout parameters).  Height is controlled by giving the <term>aspect ratio</term><idx>aspect ratio</idx><idx><h>aspect ratio</h><seealso>video</seealso></idx><idx><h>video</h><h>aspect ratio</h></idx> with the <attr>aspect</attr> attribute on the <tag>video</tag> element.  The value can be a ratio expressed like <c>4:3</c> or a decimal number computed from the width divided by the height, such as <c>1.333</c>.  The default for videos is a 16:9 aspect ratio, which is very common.</p>
+            <p><pretext /> supports videos you own and distribute with your source, videos shared openly on the Internet via stable <init>URL</init>s, and videos available on YouTube.  Go straight to to the end of this section to see how easy it is to incorporate a YouTube video.</p>
 
-        <p>If you host the video content as part of your output, then the <attr>source</attr> should be a relative file name that points to the file containing the video, but <em>without an extension</em>.  The supported formats are MP4, Ogg, and WebM.  Browser capabilities and provided files are searched preferentially in that order.  In other words, you can provide files in more than one format and increase the likelihood that a reader's browser will find a format it can playback.</p>
+            <p>HTML5 web browsers are able to play video files in threee formats, summarized in the following table.</p>
 
-        <p>For a video hosted at YouTube, find the 11-character identification string in the address of a video you are viewing.  It will look something like <c>hAzdgU_kpGo</c>.  Then simply provide this with the <attr>youtube</attr> attribute, such as<cd>
-            <cline>youtube="hAzdgU_kpGo"</cline>
-        </cd></p>
+            <table xml:id="table-video-formats">
+                <caption>HTML5 video formats</caption>
 
-        <p>Options include specifying a <attr>start</attr> and an <attr>end</attr> in seconds as integers (no units) if you only want to highlight a key portion of a video.  The <attr>play-at</attr> attribute can take the following values<dl width="narrow">
-            <li>
-                <title><c>embed</c></title>
-                <p>Play in place (the default action).</p>
-            </li>
-            <li>
-                <title><c>popout</c></title>
-                <p>Play in new window or tab, at 150<percent /> width.</p>
-            </li>
-            <li>
-                <title><c>select</c></title>
-                <p>Provide the reader the choice of the other two options.</p>
-            </li>
-        </dl>In an educational setting, sometimes the preview images provided by YouTube can be distracting, or for an author-hosted video you may wish to provide your own preview image.  The <attr>preview</attr> attribute can take on the following values<dl width="narrow">
-            <li>
-                <title><c>default</c></title>
-                <p>Whatever the video playback provides (also the default action).</p>
-            </li>
-            <li>
-                <title><c>generic</c></title>
-                <p><pretext /> supplies a Play-button image.</p>
-            </li>
-            <li>
-                <title><c>custom</c></title>
-                <p>Not implemented yet (2017-08-28).  Send a request.</p>
-            </li>
-        </dl></p>
+                <tabular>
+                    <row>
+                        <cell>Format</cell>
+                        <cell>Extension</cell>
+                        <cell>Reference</cell>
+                    </row>
+                    <row>
+                        <cell>Ogg, Theora</cell>
+                        <cell><c>.ogg</c></cell>
+                        <cell>Free and open, <url href="https://en.wikipedia.org/wiki/Ogg">Wikipedia</url></cell>
+                    </row>
+                    <row>
+                        <cell>WebM</cell>
+                        <cell><c>.webm</c></cell>
+                        <cell>Royalty-free, <url href="https://en.wikipedia.org/wiki/WebM">Wikipedia</url></cell>
+                    </row>
+                    <row>
+                        <cell>MPEG-4</cell>
+                        <cell><c>.mp4</c></cell>
+                        <cell>Patent encumbered, <url href="https://en.wikipedia.org/wiki/MPEG-4_Part_14">Wikipedia</url></cell>
+                    </row>
+                </tabular>
+            </table>
+        </introduction>
 
-        <p>The <c>mbx</c> script (<xref ref="mbx-script" />) may be used to download the provided preview images for YouTube videos.  Filenames will be formed from the <attr>xml:id</attr> of the <tag>video</tag> element.  These will be used in static versions of output, such as print.  Once custom preview images are implemented for author-hosted video, their static representation will improve.</p>
+        <subsection>
+            <title>Video Element</title>
 
-        <p>Contemplated extensions, as of 2017-08-28, would be specifying content from Vimeo, and/or Google Drive.  Send requests if these are of use.</p>
+            <p>The <tag>video</tag><idx>video</idx> element is used to embed a video in output formed from <init>HTML</init>.  Subsections below describe the different ways to indicate the source of the video.  The video may be placed inside a <tag>figure</tag> or can be a panel of a <tag>sidebyside</tag>.  The former will have a caption, be numbered, and hence can be the target of a cross-reference (<tag>xref</tag>).  The latter is anonymous, but allows for horizontal layout, and combinations with other panels.</p>
+
+            <p>Size is controlled by a <attr>width</attr> attribute expressed as a percentage (on the <tag>video</tag> element when used in a figure, or as part of the <tag>sidebyside</tag> layout parameters).  Height is controlled by giving the <term>aspect ratio</term><idx>aspect ratio</idx><idx><h>aspect ratio</h><seealso>video</seealso></idx><idx><h>video</h><h>aspect ratio</h></idx> with the <attr>aspect</attr> attribute on the <tag>video</tag> element.  The value can be a ratio expressed like <c>4:3</c> or a decimal number computed from the width divided by the height, such as <c>1.333</c>.  The default for videos is a 16:9 aspect ratio, which is very common, so you may not need to specify this attribute.</p>
+
+            <p>Options include specifying a <attr>start</attr> and an <attr>end</attr> in seconds as integers (no units) if you only want to highlight a key portion of a video.  The <attr>play-at</attr> attribute can take the following values<dl width="narrow">
+                <li>
+                    <title><c>embed</c></title>
+                    <p>Play in place (the default action).</p>
+                </li>
+                <li>
+                    <title><c>popout</c></title>
+                    <p>Play in new window or tab, at 150<percent /> width.</p>
+                </li>
+                <li>
+                    <title><c>select</c></title>
+                    <p>Provide the reader the choice of the other two options.</p>
+                </li>
+            </dl>In an educational setting, sometimes the preview images provided by YouTube can be distracting, or for an author-provided video you may wish to provide your own preview image.  The <attr>preview</attr> attribute can take on the following values<dl width="narrow">
+                <li>
+                    <title><c>default</c></title>
+                    <p>Whatever the video playback provides (also the default action).</p>
+                </li>
+                <li>
+                    <title><c>generic</c></title>
+                    <p><pretext /> supplies a Play-button image.</p>
+                </li>
+                <li>
+                    <title><c>custom</c></title>
+                    <p>Not implemented yet (2017-08-28).  Send a request.</p>
+                </li>
+            </dl></p>
+        </subsection>
+
+        <subsection>
+            <title>Author-Provided Videos</title>
+
+            <p>If you own and possess your video content, then you can distribute it with your <pretext /> source, and it can be hosted as part of your <init>HTML</init> output.  Then the <attr>source</attr> should be a relative file name that points to the file containing the video.  If you are able to provide more than one of the three formats in <xref ref="table-video-formats" />, then you can provide the filename <em>without an extension</em>.  If a browser cannot play one format, it may be able to play another.  <pretext /> will write the code to make that happen, preferentially in the order of the table (more open formats first!).  In other words, you can provide files in more than one format and increase the likelihood that a reader's browser will find a format it can playback.</p>
+        </subsection>
+
+        <subsection>
+            <title>Network-Hosted Videos</title>
+
+            <p>If a video is shared openly on the Internet, you can simply provide the full <init>URL</init> for the <attr>source</attr> attribute.  All the other attributes are the same as for the author-provided case, above.  Read <xref ref="topic-url-characters" />for some considerations when authoring a <init>URL</init>, since there are a few gotchas.</p>
+
+            <p>You can frequently discover the <init>URL</init> of a video by first playing it, and then using a context menu (<eg /> via a right-click) to reveal an option to copy the video's location.  However, note that there are various techniques sites use to make such a <init>URL</init> temporary, or otherwise unusable.  So do some research about potential uses and test carefully.  Our example below is provided from a United States government site.</p>
+
+            <figure>
+                <caption>Sea Hares, Flower Garden Banks National Marine Sanctuary</caption>
+                <video xml:id="video-sea-hares" source="https://flowergarden.noaa.gov/image_library/video/seaharew.mp4" width="80%"/>
+            </figure>
+        </subsection>
+
+        <subsection>
+            <title>YouTube Videos</title>
+
+            <p>For a video hosted at YouTube, find the 11-character identification string in the address of a video you are viewing.  It will look something like <c>hAzdgU_kpGo</c>.  Then, instead of the <attr>source</attr> attribute, simply provide this identification string as the <attr>youtube</attr> attribute, such as<cd>
+                <cline>youtube="hAzdgU_kpGo"</cline>
+            </cd>That's it.  All of the options above are then implemented and realized with YouTube's embedded player.</p>
+
+            <p>This can be a great way to incorporate popular or artistic content, legally, which might be difficult or costly to acquire through copyright clearance.</p>
+
+            <figure>
+                <caption>The Eagles, <articletitle>Hotel California</articletitle></caption>
+                <video youtube="YW4dzWE1SUs" width="60%" start="12" />
+            </figure>
+
+            <figure>
+                <caption>Mozart, Piano Sonata in C Major, K. 545, II</caption>
+                <video youtube="1Yv_AINhVn4" width="80%" />
+            </figure>
+
+            <p>The <c>mbx</c> script (<xref ref="mbx-script" />) may be used to download the provided preview images for YouTube videos (only).  Filenames will be formed from the <attr>xml:id</attr> of the <tag>video</tag> element.  These will be used in static versions of output, such as print.  Once custom preview images are implemented for author-hosted video, their static representation will improve.</p>
+
+            <p>Make a feature-request if a scheme similar to the one for YouTube, but for some other video-hosting service, would be useful for your project.</p>
+        </subsection>
     </section>
 
     <section xml:id="topic-music">
