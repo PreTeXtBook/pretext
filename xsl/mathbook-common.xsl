@@ -3061,6 +3061,18 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:choose>
 </xsl:template>
 
+<!-- We manufacture Javascript variables sometimes using            -->
+<!-- this id to keep them unique, but a dash (encouraged in PTX)    -->
+<!-- is banned in Javascript, so we make a "no-only" version,     -->
+<!-- by replacing a hyphen by a double-underscore.                  -->
+<!-- NB: This runs some non-zero probability of breaking uniqueness -->
+<xsl:template match="*" mode="internal-id-no-dash">
+    <xsl:variable name="the-id">
+        <xsl:apply-templates select="." mode="internal-id" />
+    </xsl:variable>
+    <xsl:value-of select="str:replace($the-id, '-', '__')" />
+</xsl:template>
+
 <!--            -->
 <!-- Long Names -->
 <!--            -->
