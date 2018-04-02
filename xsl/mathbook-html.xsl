@@ -7180,6 +7180,16 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
     <xsl:copy-of select="controls" />
 </xsl:template>
 
+<!-- Wolfram Computable Document Format -->
+<!-- https://www.wolfram.com/cdf/adopting-cdf/deploying-cdf/web-delivery-cloud.html              -->
+<!-- More for MMA origination, but discusses "cloud credits"                                     -->
+<!-- https://reference.wolfram.com/language/howto/DeployInteractiveContentInTheWolframCloud.html -->
+<!-- https://www.wolfram.com/cloud-credits/                                                      -->
+<xsl:template match="interactive[@wolfram-cdf]">
+    <!-- Query string option: _embed=iframe will provide Wolfram footer -->
+    <iframe width="500" height="520" src="https://www.wolframcloud.com/objects/{@wolfram-cdf}?_view=frameless" />
+</xsl:template>
+
 <!-- ########################## -->
 <!-- WeBWorK Embedded Exercises -->
 <!-- ########################## -->
