@@ -1792,6 +1792,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<!-- If the substring is not contained, the first substring-after()   -->
+<!-- will return empty and entire template will return empty.  To     -->
+<!-- get the whole string, prepend $input with $substr prior to using -->
 <xsl:template name="substring-after-last">
     <xsl:param name="input"/>
     <xsl:param name="substr"/>
@@ -2158,14 +2161,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- File Extension -->
 <!-- Input: full filename                       -->
 <!-- Output: extension (no period), lowercase'd -->
+<!-- Note: appended query string is stripped    -->
 <xsl:template name="file-extension">
     <xsl:param name="filename" />
+    <!-- Add a question mark, then grab leading substring -->
+    <!-- This will fail if "?" is encoded                 -->
+    <xsl:variable name="no-query-string" select="substring-before(concat($filename, '?'), '?')" />
+    <!-- get extension after last period   -->
+    <!-- will return empty if no extension -->
     <xsl:variable name="extension">
         <xsl:call-template name="substring-after-last">
-            <xsl:with-param name="input" select="$filename" />
+            <xsl:with-param name="input" select="$no-query-string" />
             <xsl:with-param name="substr" select="'.'" />
         </xsl:call-template>
     </xsl:variable>
+    <!-- to lowercase -->
     <xsl:value-of select="translate($extension, &UPPERCASE;, &LOWERCASE;)" />
 </xsl:template>
 
