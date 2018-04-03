@@ -7129,9 +7129,32 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
 </xsl:template>
 
 <!-- CalcPlot3D -->
-<xsl:template match="interactive[@calcplot3d]">
+<xsl:template match="interactive[@platform='calcplot3d']">
+    <!-- code/@url is the query string -->
     <xsl:variable name="query-url" select="code" />
-    <iframe src="https://www.monroecc.edu/faculty/paulseeburger/calcnsf/CalcPlot3D/?{$query-url}" width="600" height="800" />
+    <!-- Use @variant to pick an endpoint/view/infrastructure -->
+    <xsl:variable name="cp3d-endpoint">
+        <xsl:choose>
+            <xsl:when test="@variant='application'">
+                <xsl:text>https://www.monroecc.edu/faculty/paulseeburger/calcnsf/CalcPlot3D</xsl:text>
+            </xsl:when>
+            <xsl:when test="@variant='controls'">
+                <xsl:text>https://www.monroecc.edu/faculty/paulseeburger/CalcPlot3D/dynamicFigureWCP</xsl:text>
+            </xsl:when>
+            <xsl:when test="@variant='minimal'">
+                <xsl:text>https://www.monroecc.edu/faculty/paulseeburger/CalcPlot3D/dynamicFigure</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <!-- just a silly domain so something none-too-crazy happens -->
+                <xsl:text>http://www.example.com/</xsl:text>
+                <xsl:message>MBX:ERROR:  @variant="<xsl:value-of select="@variant" />" is not recognized for a CalcPlot3D &lt;interactive&gt;</xsl:message>
+                <xsl:apply-templates select="." mode="location-report" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- load 'em up and go -->
+    <xsl:variable name="full-url" select="concat($cp3d-endpoint, '/?', $query-url)" />
+    <iframe src="{$full-url}" width="600" height="800" />
 </xsl:template>
 
 <!-- JSXGraph -->
