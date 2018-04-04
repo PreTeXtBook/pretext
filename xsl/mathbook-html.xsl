@@ -5132,16 +5132,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:with-param name="autoplay" select="'true'" />
                     </xsl:apply-templates>
                 </xsl:when>
-                <!-- not implemented -->
-                <!-- will require hiding device (make it a template?) -->
-                <xsl:when test="@preview = 'custom'" />
-                <xsl:when test="(@preview = 'default') or not(@preview)">
+                <xsl:otherwise>
                     <xsl:apply-templates select="." mode="video-embed">
                         <xsl:with-param name="width"  select="$width" />
                         <xsl:with-param name="height" select="$height" />
                         <xsl:with-param name="autoplay" select="'false'" />
                     </xsl:apply-templates>
-                </xsl:when>
+                </xsl:otherwise>
             </xsl:choose>
             <!-- for the reader-select case, we need a link as a "button" -->
             <xsl:if test="@play-at = 'select'">
@@ -5261,9 +5258,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </exsl:document>
 </xsl:template>
 
+<!-- PASSTHROUGH -->
+<xsl:template match="video[@source]" mode="video-embed-generic">
+    <xsl:param name="width" select="''" />
+    <xsl:param name="height" select="''" />
+    <xsl:param name="autoplay" select="'false'" />
+    <xsl:apply-templates select="." mode="video-embed">
+        <xsl:with-param name="width"  select="$width" />
+        <xsl:with-param name="height" select="$height" />
+        <xsl:with-param name="autoplay" select="'false'" />
+    </xsl:apply-templates>
+</xsl:template>
+
 <!-- Cover up an embedded version with a generic preview -->
 <!-- Click to reveal, so do not autoplay the video       -->
-<xsl:template match="video" mode="video-embed-generic">
+<xsl:template match="video[@youtube]" mode="video-embed-generic">
     <xsl:param name="width" select="''" />
     <xsl:param name="height" select="''" />
     <xsl:param name="autoplay" select="'false'" />
@@ -5303,6 +5312,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <path fill="#e62117" d="M94.98,28.84c0,0-0.94-6.6-3.81-9.5c-3.64-3.81-7.72-3.83-9.59-4.05c-13.4-0.97-33.52-0.85-33.52-0.85s-20.12-0.12-33.52,0.85c-1.87,0.22-5.95,0.24-9.59,4.05c-2.87,2.9-3.81,9.5-3.81,9.5S0.18,36.58,0,44.33v7.26c0.18,7.75,1.14,15.49,1.14,15.49s0.93,6.6,3.81,9.5c3.64,3.81,8.43,3.69,10.56,4.09c7.53,0.72,31.7,0.89,32.54,0.9c0.01,0,20.14,0.03,33.54-0.94c1.87-0.22,5.95-0.24,9.59-4.05c2.87-2.9,3.81-9.5,3.81-9.5s0.96-7.75,1.02-15.49v-7.26C95.94,36.58,94.98,28.84,94.98,28.84z M38.28,61.41v-27l25.74,13.5L38.28,61.41z"/>
     </svg>
 </xsl:template>
+
+<!-- Take <svg> element above, remove width and height attributes  -->
+<!-- (not ever needed???), compact to one long string.             -->
+<!-- URL encode via: https://meyerweb.com/eric/tools/dencoder/     -->
+<!-- Then add a bit of voodoo, and this may be used as the value   -->
+<!-- of the HTML5 video/@poster attribute (and other places?)      -->
+<xsl:variable name="generic-preview-svg-data-uri">
+    <xsl:text>data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%2014%2096%2068%22%20style%3D%22cursor%3Apointer%3B%22%20preserveAspectRatio%3D%22none%22%3E%3Cpath%20fill%3D%22%23e62117%22%20d%3D%22M94.98%2C28.84c0%2C0-0.94-6.6-3.81-9.5c-3.64-3.81-7.72-3.83-9.59-4.05c-13.4-0.97-33.52-0.85-33.52-0.85s-20.12-0.12-33.52%2C0.85c-1.87%2C0.22-5.95%2C0.24-9.59%2C4.05c-2.87%2C2.9-3.81%2C9.5-3.81%2C9.5S0.18%2C36.58%2C0%2C44.33v7.26c0.18%2C7.75%2C1.14%2C15.49%2C1.14%2C15.49s0.93%2C6.6%2C3.81%2C9.5c3.64%2C3.81%2C8.43%2C3.69%2C10.56%2C4.09c7.53%2C0.72%2C31.7%2C0.89%2C32.54%2C0.9c0.01%2C0%2C20.14%2C0.03%2C33.54-0.94c1.87-0.22%2C5.95-0.24%2C9.59-4.05c2.87-2.9%2C3.81-9.5%2C3.81-9.5s0.96-7.75%2C1.02-15.49v-7.26C95.94%2C36.58%2C94.98%2C28.84%2C94.98%2C28.84z%20M38.28%2C61.41v-27l25.74%2C13.5L38.28%2C61.41z%22%2F%3E%3C%2Fsvg%3E</xsl:text>
+</xsl:variable>
 
 <!-- create a "video" element for author-hosted -->
 <!-- dimensions and autoplay as parameters      -->
@@ -5349,6 +5367,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="controls" />
         <xsl:if test="$autoplay = 'true'">
             <xsl:attribute name="autoplay" />
+        </xsl:if>
+        <!-- Optionally cover up with HTML5 @poster via PTX @preview -->
+        <xsl:if test="@preview and not(@preview = 'default')">
+            <xsl:attribute name="poster">
+                <xsl:choose>
+                    <xsl:when test="@preview = 'generic'">
+                        <xsl:value-of select="$generic-preview-svg-data-uri" />
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="@preview" />
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:attribute>
         </xsl:if>
         <!-- Construct the HTML5 source URL(s)                  -->
         <!-- If this gets refactored, it could be best to form  -->

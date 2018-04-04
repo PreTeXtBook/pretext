@@ -4159,6 +4159,18 @@ the xsltproc executable.
                 <video source="images/ups-visitor-guide-360" width="80%"/>
             </figure>
 
+            <p>You can replace the <q>preview</q> image of a video with one of your own making.  <init>HTML</init> refers to this as the <term>poster</term>, presumably because it advertises the video.  The image you make should be of the same quality as the video, and with the same aspect-ratio, and is presumably one of the frames of the video.  So a screenshot is the likely avenue.  (Maybe we will have advice on how to do this easily, or see <url href="https://github.com/rbeezer/mathbook/issues/853" />.)  On the <tag>video</tag> tag, include a <attr>preview</attr> attribute which is the name of an image file, including a relative path.  (JPEG or PNG formats are best.  JPEG may be smaller for video screenshots, while PNG is lossless and so may work better for diagrams.)</p>
+
+            <figure>
+                <caption>University of Puget Sound Promotional Video</caption>
+                <video source="images/ups-visitor-guide-360" width="80%" preview="images/ups-promo-preview.jpg" />
+            </figure>
+
+            <figure>
+                <caption>University of Puget Sound Promotional Video</caption>
+                <video source="images/ups-visitor-guide-360" width="80%" preview="generic" />
+            </figure>
+
             <p>You can use a very similar construction to point to a video hosted somewhere on the Internet, just use a complete <init>URL</init> for the <tag>source</tag> attribute.  Note that if the URL has a query string (parameters following a question-mark), then any ampersands (<ampersand />) will need to be escaped, so as to not confuse the <init>XML</init> processor (<ie /> use <c>&amp;amp</c>).  Also, the question-mark character needs to <em>not</em> be <init>URL</init>-encoded (<c>%3F</c>), so presumably ed it to be the character.  Here are two examples, the second one uses the <attr>start</attr> and <attr>stop</attr> attributes to limit the video to just the time between the 16-second and 30-second locations.</p>
 
             <figure>
