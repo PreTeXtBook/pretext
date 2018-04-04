@@ -5059,7 +5059,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- right autoplay characteristic.                    -->
 <!-- Note: autoplay option is internal, not author-set -->
 
+<!-- Two types of video: HTML5, YouTube                   -->
+<!-- Three previews: default, generic, author-constructed -->
+<!-- Three embeddings: embed, popout, select              -->
+
 <xsl:template match="video">
+    <!-- collect and process size information from author -->
     <xsl:variable name="width-percent">
         <xsl:apply-templates select="." mode="get-width-percentage" />
     </xsl:variable>
@@ -5073,41 +5078,32 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <xsl:variable name="width"  select="$design-width * $width-fraction" />
     <xsl:variable name="height" select="$design-width * $width-fraction div $aspect-ratio" />
+
+    <!-- Always build a standalone page, PDF links to these -->
+    <xsl:apply-templates select="." mode="video-standalone-page" />
+
+    <!-- standalone page uses internal-id of the video -->
     <xsl:variable name="int-id">
         <xsl:apply-templates select="." mode="internal-id" />
     </xsl:variable>
-    <!-- construct a pop-out page when mandatory or electable -->
-    <!-- as a pop-out set YouTube autoplay parameter to true  -->
-    <xsl:if test="(@play-at = 'popout') or (@play-at = 'select')">
-    <!-- apparent width of content region of HTML page  -->
-    <!-- with no sidebar, subtract margins = 900 - 2*30 -->
-    <xsl:variable name="ptx-content-width" select="'840'" />
-    <xsl:variable name="ptx-content-height" select="$ptx-content-width div $aspect-ratio" />
-        <xsl:apply-templates select="." mode="masthead-only-page">
-            <xsl:with-param name="content">
-                <xsl:apply-templates select="." mode="video-embed">
-                    <xsl:with-param name="width"  select="$ptx-content-width" />
-                    <xsl:with-param name="height" select="$ptx-content-height" />
-                    <xsl:with-param name="autoplay" select="'true'" />
-                </xsl:apply-templates>
-                <div style="text-align: center;">Reloading this page will reset a start location</div>
-            </xsl:with-param>
-        </xsl:apply-templates>
-    </xsl:if>
-    <!-- nine combinations: {embed|popout|select} x {default|generic|custom} -->
     <xsl:choose>
         <xsl:when test="@play-at = 'popout'">
             <a href="{$int-id}.html" target="_blank">
             <!-- place a thumbnail as clickable for page already extant -->
                 <xsl:choose>
+                    <!-- generic requested -->
                     <xsl:when test="@preview = 'generic'">
                         <xsl:call-template name="generic-preview-svg">
                             <xsl:with-param name="width" select="$width" />
                             <xsl:with-param name="height" select="$height" />
                         </xsl:call-template>
                     </xsl:when>
-                    <!-- not implemented -->
-                    <xsl:when test="@preview = 'custom'" />
+                    <!-- author-provided -->
+                    <xsl:when test="@preview and not(@preview = 'default')">
+                        <img src="{@preview}" width="{$width}" height="{$height}"/>
+                    </xsl:when>
+                    <!-- this id-device should be replaced by graceful failure  -->
+                    <!-- to the generic preview with a console warning          -->
                     <xsl:when test="(@preview = 'default') or not(@preview)">
                         <xsl:variable name="thumbnail-image">
                             <xsl:text>images/</xsl:text>
@@ -5124,23 +5120,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </div>
         </xsl:when>
         <xsl:when test="(@play-at = 'select') or (@play-at = 'embed') or not(@play-at)">
-            <xsl:choose>
-                <xsl:when test="@preview = 'generic'">
-                    <xsl:apply-templates select="." mode="video-embed-generic">
-                        <xsl:with-param name="width"  select="$width" />
-                        <xsl:with-param name="height" select="$height" />
-                        <xsl:with-param name="autoplay" select="'true'" />
-                    </xsl:apply-templates>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:apply-templates select="." mode="video-embed">
-                        <xsl:with-param name="width"  select="$width" />
-                        <xsl:with-param name="height" select="$height" />
-                        <xsl:with-param name="autoplay" select="'false'" />
-                    </xsl:apply-templates>
-                </xsl:otherwise>
-            </xsl:choose>
+            <xsl:apply-templates select="." mode="video-embed">
+                <xsl:with-param name="width"  select="$width" />
+                <xsl:with-param name="height" select="$height" />
+            </xsl:apply-templates>
             <!-- for the reader-select case, we need a link as a "button" -->
+            <!-- if this case is deprecated, we can drop this thing -->
             <xsl:if test="@play-at = 'select'">
                 <div style="text-align: center;">
                     <a href="{$int-id}.html" target="_blank">
@@ -5152,6 +5137,35 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:otherwise />
     </xsl:choose>
 </xsl:template>
+
+<!-- Formerly a "pop-out" page, now a "standalone" page     -->
+<!-- Has autoplay on since a reader ahs elected to go there -->
+<!-- TODO: override preview, since it just plays, pass 'default -->
+<xsl:template match="video" mode="video-standalone-page">
+    <xsl:variable name="aspect-ratio">
+        <xsl:apply-templates select="." mode="get-aspect-ratio">
+            <xsl:with-param name="default-aspect" select="'16:9'" />
+        </xsl:apply-templates>
+    </xsl:variable>
+    <!-- apparent width of content region of HTML page  -->
+    <!-- with no sidebar, subtract margins = 900 - 2*30 -->
+    <xsl:variable name="ptx-content-width" select="'840'" />
+    <xsl:variable name="ptx-content-height" select="$ptx-content-width div $aspect-ratio" />
+    <xsl:apply-templates select="." mode="masthead-only-page">
+        <xsl:with-param name="content">
+            <!-- display preview, and enable autoplay  -->
+            <!-- since reader has elected this page    -->
+            <xsl:apply-templates select="." mode="video-embed">
+                <xsl:with-param name="width"  select="$ptx-content-width" />
+                <xsl:with-param name="height" select="$ptx-content-height" />
+                <xsl:with-param name="preview" select="'false'" />
+                <xsl:with-param name="autoplay" select="'true'" />
+            </xsl:apply-templates>
+            <div style="text-align: center;">Reloading this page will reset a start location</div>
+        </xsl:with-param>
+    </xsl:apply-templates>
+</xsl:template>
+
 
 <!-- "Pop-Out Page" -->
 <!-- (A bit rough)                  -->
@@ -5258,44 +5272,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </exsl:document>
 </xsl:template>
 
-<!-- PASSTHROUGH -->
-<xsl:template match="video[@source]" mode="video-embed-generic">
-    <xsl:param name="width" select="''" />
-    <xsl:param name="height" select="''" />
-    <xsl:param name="autoplay" select="'false'" />
-    <xsl:apply-templates select="." mode="video-embed">
-        <xsl:with-param name="width"  select="$width" />
-        <xsl:with-param name="height" select="$height" />
-        <xsl:with-param name="autoplay" select="'false'" />
-    </xsl:apply-templates>
-</xsl:template>
-
-<!-- Cover up an embedded version with a generic preview -->
-<!-- Click to reveal, so do not autoplay the video       -->
-<xsl:template match="video[@youtube]" mode="video-embed-generic">
-    <xsl:param name="width" select="''" />
-    <xsl:param name="height" select="''" />
-    <xsl:param name="autoplay" select="'false'" />
-
-    <!-- hide behind generic image, code from post at -->
-    <!-- https://stackoverflow.com/questions/7199624  -->
-    <!-- TODO: maybe event handlers can start playing via onclick? -->
-    <div onclick="this.nextElementSibling.style.display='block'; this.style.display='none'">
-        <xsl:call-template name="generic-preview-svg">
-            <xsl:with-param name="width" select="$width" />
-            <xsl:with-param name="height" select="$height" />
-        </xsl:call-template>
-    </div>
-    <div class="hidden-content">
-        <!-- Hidden content in here -->
-        <xsl:apply-templates select="." mode="video-embed">
-            <xsl:with-param name="width"  select="$width" />
-            <xsl:with-param name="height" select="$height" />
-            <xsl:with-param name="autoplay" select="'false'" />
-        </xsl:apply-templates>
-    </div>
-</xsl:template>
-
 <xsl:template name="generic-preview-svg">
     <xsl:param name="width" select="''" />
     <xsl:param name="height" select="''" />
@@ -5322,11 +5298,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%2014%2096%2068%22%20style%3D%22cursor%3Apointer%3B%22%20preserveAspectRatio%3D%22none%22%3E%3Cpath%20fill%3D%22%23e62117%22%20d%3D%22M94.98%2C28.84c0%2C0-0.94-6.6-3.81-9.5c-3.64-3.81-7.72-3.83-9.59-4.05c-13.4-0.97-33.52-0.85-33.52-0.85s-20.12-0.12-33.52%2C0.85c-1.87%2C0.22-5.95%2C0.24-9.59%2C4.05c-2.87%2C2.9-3.81%2C9.5-3.81%2C9.5S0.18%2C36.58%2C0%2C44.33v7.26c0.18%2C7.75%2C1.14%2C15.49%2C1.14%2C15.49s0.93%2C6.6%2C3.81%2C9.5c3.64%2C3.81%2C8.43%2C3.69%2C10.56%2C4.09c7.53%2C0.72%2C31.7%2C0.89%2C32.54%2C0.9c0.01%2C0%2C20.14%2C0.03%2C33.54-0.94c1.87-0.22%2C5.95-0.24%2C9.59-4.05c2.87-2.9%2C3.81-9.5%2C3.81-9.5s0.96-7.75%2C1.02-15.49v-7.26C95.94%2C36.58%2C94.98%2C28.84%2C94.98%2C28.84z%20M38.28%2C61.41v-27l25.74%2C13.5L38.28%2C61.41z%22%2F%3E%3C%2Fsvg%3E</xsl:text>
 </xsl:variable>
 
-<!-- create a "video" element for author-hosted -->
-<!-- dimensions and autoplay as parameters      -->
+<!-- create a "video" element for author-hosted   -->
+<!-- dimensions and autoplay as parameters        -->
+<!-- Normally $preview is true, and not passed in -->
+<!-- 'false' is an override for standalone pages  -->
 <xsl:template match="video[@source]" mode="video-embed">
     <xsl:param name="width" select="''" />
     <xsl:param name="height" select="''" />
+    <xsl:param name="preview" select="'true'" />
     <xsl:param name="autoplay" select="'false'" />
 
     <!-- start/end times (read both, see 4.1, 4.2.1 at w3.org)    -->
@@ -5369,7 +5348,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:attribute name="autoplay" />
         </xsl:if>
         <!-- Optionally cover up with HTML5 @poster via PTX @preview -->
-        <xsl:if test="@preview and not(@preview = 'default')">
+        <xsl:if test="($preview = 'true') and @preview and not(@preview = 'default')">
             <xsl:attribute name="poster">
                 <xsl:choose>
                     <xsl:when test="@preview = 'generic'">
@@ -5455,11 +5434,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- <xsl:text>&amp;origin=http://example.com</xsl:text>   -->
 <!-- start/end time parameters -->
 
-<!-- create iframe home for YouTube video -->
-<!-- dimensions and autoplay as parameters -->
+<!-- create iframe home for YouTube video         -->
+<!-- dimensions and autoplay as parameters        -->
+<!-- Normally $preview is true, and not passed in -->
+<!-- 'false' is an override for standalone pages  -->
 <xsl:template match="video[@youtube]" mode="video-embed">
     <xsl:param name="width" select="''" />
     <xsl:param name="height" select="''" />
+    <xsl:param name="preview" select="'true'" />
     <xsl:param name="autoplay" select="'false'" />
 
     <xsl:variable name="int-id">
@@ -5470,17 +5452,59 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="autoplay" select="$autoplay" />
         </xsl:apply-templates>
     </xsl:variable>
+    <!-- Following is inaccurate, the @select should be 'true' -->
+    <!-- But the YouTube autoplay won't wait for the poster    -->
+    <!-- to be withdrawn, so two clicks are needed             -->
+    <!-- We have two (equal) URLs to preserve logic, should    -->
+    <!-- there be a better way to fake the HTML5 @poster       -->
+    <xsl:variable name="source-url-autoplay-on">
+        <xsl:apply-templates select="." mode="youtube-embed-url">
+            <xsl:with-param name="autoplay" select="'false'" />
+        </xsl:apply-templates>
+    </xsl:variable>
     <!-- allowfullscreen is an iframe parameter, -->
     <!-- not a YouTube embed parameter, but it's -->
     <!-- use enables the "full screen" button    -->
     <!-- http://w3c.github.io/test-results/html51/implementation-report.html -->
-    <iframe id="{$int-id}"
-            type="text/html"
-            width="{$width}"
-            height="{$height}"
-            frameborder="0"
-            allowfullscreen=""
-            src="{$source-url}" />
+    <xsl:choose>
+        <xsl:when test="($preview = 'true') and @preview and not(@preview = 'default')">
+            <!-- hide behind a preview image, code from post at -->
+            <!-- https://stackoverflow.com/questions/7199624    -->
+            <div onclick="this.nextElementSibling.style.display='block'; this.style.display='none'">
+                <xsl:choose>
+                    <xsl:when test="@preview = 'generic'">
+                        <xsl:call-template name="generic-preview-svg">
+                            <xsl:with-param name="width" select="$width" />
+                            <xsl:with-param name="height" select="$height" />
+                        </xsl:call-template>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <img width="{$width}" height="{$height}" src="{@preview}" />
+                    </xsl:otherwise>
+                </xsl:choose>
+            </div>
+            <div class="hidden-content">
+                <!-- Hidden content in here                   -->
+                <!-- Turn autoplay on, else two clicks needed -->
+                <iframe id="{$int-id}"
+                        type="text/html"
+                        width="{$width}"
+                        height="{$height}"
+                        frameborder="0"
+                        allowfullscreen=""
+                        src="{$source-url-autoplay-on}" />
+            </div>
+        </xsl:when>
+        <xsl:otherwise>
+            <iframe id="{$int-id}"
+                    type="text/html"
+                    width="{$width}"
+                    height="{$height}"
+                    frameborder="0"
+                    allowfullscreen=""
+                    src="{$source-url}" />
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Creates a YouTube URL for embedding, typically in an iframe -->
