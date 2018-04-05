@@ -159,6 +159,8 @@ the xsltproc executable.
             </google>
         </search>
 
+        <baseurl href="http://mathbook.pugetsound.edu/examples/sample-article/html/" />
+
         <!-- Images in HTML output may carry a discreet list of links    -->
         <!-- to "archival" versions of images in a variety of formats.   -->
         <!-- Authors have complete freedom to do this as they choose,    -->
