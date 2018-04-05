@@ -3665,92 +3665,19 @@ the xsltproc executable.
         </section>
 
 
-        <section xml:id="section-interactive">
-            <title>Embedded Interactive Elements</title>
-            <idx>interactive elements</idx>
-            <idx>embedded interactive elements</idx>
+        <section xml:id="section-interactive-open">
+            <title>Open Interactive Elements</title>
+            <idx><h>interactive elements</h><h>open</h></idx>
+            <idx><h>embedded interactive elements</h><h>open</h></idx>
 
             <introduction>
+                <!-- First paragraph duplicated in next section -->
                 <p>When outputting Web page versions, it is possible to embed a variety of dynamic interactive elements.  In a <latex />/PDF version, these will necessarily need to be replaced by some static substitute, such as a screenshot.  See Section<nbsp /><xref ref="section-sage-cells" /> for the specifics of embedding instances of the Sage Cell Server, which is more elaborate, and not entirely similar.</p>
 
-                <p>(2018-02-04) Almost everything in this section is under active development and not stable yet.  Feel free to experiment and make suggestions and requests.</p>
+                <p>Interactives in this section are generally unencumbered from copyright or licensing restrictions.  See <xref ref="section-interactive-free" /> for more interactives that are not as open.</p>
+
+                <p>(2018-03-05) Almost everything in this section is under active development and not stable yet.  Feel free to experiment and make suggestions and requests.</p>
             </introduction>
-
-            <subsection>
-                <title>Geogebra Materials</title>
-                <idx>Geogebra materials</idx>
-
-                <p>A Geogebra <term>material</term> is something you might use in a class.  It could also be called an interactive demonstration.  Go browsing at <url href="https://www.geogebra.org/materials/">www.geogebra.org/materials</url> and find something appropriate for your project.  Or make an account and create your own.</p>
-
-                <p>Once you find a material that looks instructive, it will be at a <init>URL</init> such as<cd>https://www.geogebra.org/m/KGn2d4Qd</cd> and you want to pick off the identifier on the end, in this case <c>KGn2d4Qd</c>.  Then author<cd>&lt;interactive geogebra="KGn2d4Qd" /&gt;</cd>  At this writing (2018-02-04) you will want to place this inside a <c>figure</c>, with a caption, as we do right now with material <c>KGn2d4Qd</c>.</p>
-
-                <figure>
-                    <caption>Right Triangle Paradox</caption>
-                    <interactive geogebra="KGn2d4Qd">
-                        <static>
-                            <image source="images/right-triangle-paradox.png" />
-                        </static>
-                    </interactive>
-                </figure>
-
-                <p>Note that materials hosted at <c>geogebra.org</c> have a non-standard, non-commercial license you must agree to before you can download them as source code.  Perhaps you must forfeit your copyright when you upload a material?  We have not investigated this thoroughly.</p>
-
-                <paragraphs>
-                    <title>Geogebra from your Source (Preliminary: 2018-04-02)</title>
-
-                <!-- out-dented to be a subsection some day -->
-                <p>Better might be designing your own material, retaining your copyright, and using one of Geogebra's <q>Apps</q> to embed the material in your document.  (But note, use of the App comes with licensing restrictions.)  <pretext /> will handle the technical details for you.<ol>
-                    <li>Use Geogebra to make a material.  Maybe you need to install a desktop program that allows you to do this.  Then export, or otherwise discover the <q>base64-encoded</q> version which may be identified by <c>ggb</c>.  See the source of this page for examples of what this looks like.</li>
-                    <li>Mimic the source of the examples below.</li>
-                    <li>Long-run it will be better to park these strings in files (in a <c>code</c> subdirectory?) and <tag>xi:include</tag> them with the <attr>parse</attr> attribute set to <c>text</c>.  But we do not want to impede newcomer's quickstart with that problematic switch.</li>
-                    <li>This is preliminary and subject to change.  Do not get carried away yet.  Please report problems or request features.</li>
-                </ol></p>
-
-                <!-- Better to use something like following with -xinclude switch at command line -->
-                <!--     <xi:include href="code/geogebra-triangle.ggb" parse="text" />            -->
-
-                <figure>
-                    <caption>Geogebra: a nearly-isoceles triangle</caption>
-                    <interactive xml:id="geogebra-triangle" platform="geogebra">
-                        <code language="base64">
-                        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
-                        </code>
-                    </interactive>
-                </figure>
-
-                <p>And another, to test that we can put two onto the same page.</p>
-
-                <figure>
-                    <caption>Geogebra: a nearly-right triangle, with a point within</caption>
-                    <interactive xml:id="geogebra-triangle-with-point" platform="geogebra">
-                        <code language="base64">
-                        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
-                        </code>
-                    </interactive>
-                </figure>
-                <!-- out-dented for future move -->
-                </paragraphs>
-            </subsection>
-
-            <subsection>
-                <title>Desmos Graphs</title>
-                <idx>Desmos graphs</idx>
-
-                <p><term>Desmos</term> provides interactive graphing applications.  The following example was created by Ann Cary and made available via the <q>Share</q> function of Desmos.  You can make your own Desmos graph, choose the <q>Share</q> icon, and the <q>Embed</q> option, to get a <init>URL</init> such as <cd>https://www.desmos.com/calculator/ttox1bvxku</cd>  You want to pick off the identifier on the end, in this case <c>ttox1bvxku</c>, then author<cd>&lt;interactive desmos="ttox1bvxku" /&gt;</cd> as we have done here.</p>
-
-                <p>The static image employed in the <latex /> version of this article was obtained by viewing the graph at the Desmos site (<ie />, not the embedded version in the <pretext /> HTML version), and using the Share button to export a <init>PNG</init> image.  In this case, we used a <q>Medium Rectangle</q> and <q>Thick</q> lines.</p>
-
-                <figure>
-                    <caption>Graph of <m>ln(x^2+5)-3</m></caption>
-                    <interactive desmos="ttox1bvxku">
-                        <static>
-                            <image source="images/desmos-graph.png" width="60%"/>
-                        </static>
-                    </interactive>
-                </figure>
-
-                <p>Note that Desmos has extensive <pubtitle>Terms of Service</pubtitle> which include restrictions on commercial uses.</p>
-            </subsection>
 
             <subsection>
                 <title>CalcPlot3D</title>
@@ -4119,6 +4046,97 @@ the xsltproc executable.
                 </sidebyside>
 
                 <p>Be careful about the Javascript code when there are several on the same page, as duplicate variables may affect one another's performance adversely.</p>
+            </subsection>
+        </section>
+
+        <section xml:id="section-interactive-free">
+            <title>Free Interactive Elements</title>
+            <idx><h>interactive elements</h><h>free</h></idx>
+            <idx><h>embedded interactive elements</h><h>free</h></idx>
+
+            <introduction>
+                <!-- First paragraph duplicated in previous section -->
+                <p>When outputting Web page versions, it is possible to embed a variety of dynamic interactive elements.  In a <latex />/PDF version, these will necessarily need to be replaced by some static substitute, such as a screenshot.  See Section<nbsp /><xref ref="section-sage-cells" /> for the specifics of embedding instances of the Sage Cell Server, which is more elaborate, and not entirely similar.</p>
+
+                <p>Interactives in this section can be used without paying any fees.  However, their use is generally encumbered by copyright and/or licensing restrictions, and may limit the license you can use on your own work.  So carefully study copyrights, licenses, and terms of use.  See <xref ref="section-interactive-open" /> for more interactives that are free as in <q>freedom</q> or <foreign xml:lang="fr-FR">liberté</foreign>.</p>
+
+                <p>(2018-03-05) Almost everything in this section is under active development and not stable yet.  Feel free to experiment and make suggestions and requests.</p>
+            </introduction>
+
+            <subsection>
+                <title>Geogebra Materials</title>
+                <idx>Geogebra materials</idx>
+
+                <p>A Geogebra <term>material</term> is something you might use in a class.  It could also be called an interactive demonstration.  Go browsing at <url href="https://www.geogebra.org/materials/">www.geogebra.org/materials</url> and find something appropriate for your project.  Or make an account and create your own.</p>
+
+                <p>Once you find a material that looks instructive, it will be at a <init>URL</init> such as<cd>https://www.geogebra.org/m/KGn2d4Qd</cd> and you want to pick off the identifier on the end, in this case <c>KGn2d4Qd</c>.  Then author<cd>&lt;interactive geogebra="KGn2d4Qd" /&gt;</cd>  At this writing (2018-02-04) you will want to place this inside a <c>figure</c>, with a caption, as we do right now with material <c>KGn2d4Qd</c>.</p>
+
+                <figure>
+                    <caption>Right Triangle Paradox</caption>
+                    <interactive geogebra="KGn2d4Qd">
+                        <static>
+                            <image source="images/right-triangle-paradox.png" />
+                        </static>
+                    </interactive>
+                </figure>
+
+                <p>Note that materials hosted at <c>geogebra.org</c> have a non-standard, non-commercial license you must agree to before you can download them as source code.  Perhaps you must forfeit your copyright when you upload a material?  We have not investigated this thoroughly.</p>
+
+                <paragraphs>
+                    <title>Geogebra from your Source (Preliminary: 2018-04-02)</title>
+
+                <!-- out-dented to be a subsection some day -->
+                <p>Better might be designing your own material, retaining your copyright, and using one of Geogebra's <q>Apps</q> to embed the material in your document.  (But note, use of the App comes with licensing restrictions.)  <pretext /> will handle the technical details for you.<ol>
+                    <li>Use Geogebra to make a material.  Maybe you need to install a desktop program that allows you to do this.  Then export, or otherwise discover the <q>base64-encoded</q> version which may be identified by <c>ggb</c>.  See the source of this page for examples of what this looks like.</li>
+                    <li>Mimic the source of the examples below.</li>
+                    <li>Long-run it will be better to park these strings in files (in a <c>code</c> subdirectory?) and <tag>xi:include</tag> them with the <attr>parse</attr> attribute set to <c>text</c>.  But we do not want to impede newcomer's quickstart with that problematic switch.</li>
+                    <li>This is preliminary and subject to change.  Do not get carried away yet.  Please report problems or request features.</li>
+                </ol></p>
+
+                <!-- Better to use something like following with -xinclude switch at command line -->
+                <!--     <xi:include href="code/geogebra-triangle.ggb" parse="text" />            -->
+
+                <figure>
+                    <caption>Geogebra: a nearly-isoceles triangle</caption>
+                    <interactive xml:id="geogebra-triangle" platform="geogebra">
+                        <code language="base64">
+                        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
+                        </code>
+                    </interactive>
+                </figure>
+
+                <p>And another, to test that we can put two onto the same page.</p>
+
+                <figure>
+                    <caption>Geogebra: a nearly-right triangle, with a point within</caption>
+                    <interactive xml:id="geogebra-triangle-with-point" platform="geogebra">
+                        <code language="base64">
+                        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
+                        </code>
+                    </interactive>
+                </figure>
+                <!-- out-dented for future move -->
+                </paragraphs>
+            </subsection>
+
+            <subsection>
+                <title>Desmos Graphs</title>
+                <idx>Desmos graphs</idx>
+
+                <p><term>Desmos</term> provides interactive graphing applications.  The following example was created by Ann Cary and made available via the <q>Share</q> function of Desmos.  You can make your own Desmos graph, choose the <q>Share</q> icon, and the <q>Embed</q> option, to get a <init>URL</init> such as <cd>https://www.desmos.com/calculator/ttox1bvxku</cd>  You want to pick off the identifier on the end, in this case <c>ttox1bvxku</c>, then author<cd>&lt;interactive desmos="ttox1bvxku" /&gt;</cd> as we have done here.</p>
+
+                <p>The static image employed in the <latex /> version of this article was obtained by viewing the graph at the Desmos site (<ie />, not the embedded version in the <pretext /> HTML version), and using the Share button to export a <init>PNG</init> image.  In this case, we used a <q>Medium Rectangle</q> and <q>Thick</q> lines.</p>
+
+                <figure>
+                    <caption>Graph of <m>ln(x^2+5)-3</m></caption>
+                    <interactive desmos="ttox1bvxku">
+                        <static>
+                            <image source="images/desmos-graph.png" width="60%"/>
+                        </static>
+                    </interactive>
+                </figure>
+
+                <p>Note that Desmos has extensive <pubtitle>Terms of Service</pubtitle> which include restrictions on commercial uses.</p>
             </subsection>
 
             <subsection>
