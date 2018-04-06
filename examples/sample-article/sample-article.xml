@@ -3718,334 +3718,87 @@ the xsltproc executable.
                 <title>JSXGraph</title>
                 <idx>JSXGraph</idx>
 
-                <p>The plot below is the curve <m>r=a+b\theta</m> in polar coordinates, for <m>0\leq\theta\leq 8\pi</m>.  It may be manipulated with the sliders to control the shape of the curve.  Point <m>A</m> is contrained to the curve, but may be dragged to a new location. At <m>A</m> the tangent line and normal line are plotted as dashed red lines.  Use the controls in the lower left to adjust the viewing window.  This <url href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Archimedean_spiral">example</url> is taken from the JSXGraph <url href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Category:Examples">example wiki</url>.  Width is 75<percent /> and aspect ratio is 4:3.</p>
+                <p>The plot below is the curve <m>r=a+b\theta</m> in polar coordinates, for <m>0\leq\theta\leq 8\pi</m>.  It may be manipulated with the sliders to control the shape of the curve.  Point <m>A</m> is contrained to the curve, but may be dragged to a new location. At <m>A</m> the tangent line and normal line are plotted as dashed red lines.  Use the controls in the lower left to adjust the viewing window.  This <url href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Archimedean_spiral">example</url> is taken from the JSXGraph <url href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Category:Examples">example wiki</url>.  The code could be written in 7 lines.  Width is 75<percent /> and aspect ratio is 4:3.</p>
 
                 <figure>
                     <caption>The Archimedian Spiral <m>r = a + b\theta</m>, <m>0\leq\theta\leq 8\pi</m></caption>
                     <idx>Archimedian Spiral</idx>
-                    <jsxgraph xml:id="jsxgraph-archimedian-spiral" width="75%" aspect="4:3">
-                        <!-- http://jsxgraph.uni-bayreuth.de/wiki/index.php/Archimedean_spiral -->
-                        <input>
-                        var board = JXG.JSXGraph.initBoard('jsxgraph-archimedian-spiral', {boundingbox: [-10, 10, 10, -10]});
-                        var a = board.create('slider', [[1,8],[5,8],[0,1,4]],{name:'a'});
-                        var b = board.create('slider', [[1,9],[5,9],[0,0.25,4]],{name:'b'});
 
-                        var c = board.create('curve', [function(phi){return a.Value()+b.Value()*phi; }, [0, 0],0, 8*Math.PI],
-                                     {curveType:'polar', strokewidth:4});
-
-                        var g = board.create('glider', [c]);
-                        var t = board.create('tangent', [g], {dash:2,strokeColor:'#a612a9'});
-                        var n = board.create('normal', [g], {dash:2,strokeColor:'#a612a9'});
-                        </input>
-                    </jsxgraph>
+                    <interactive xml:id="interactive-archimedian-spiral" platform="jsxgraph" width="75%" source="code/archimedian.js">
+                        <canvas xml:id="jsxgraph-archimedian-spiral" language="jsxgraph" aspect="4:3" />
+                        <instructions>
+                            <p>Drag the sliders to change the parameters <m>a</m> and <m>b</m>.  Controls in the lower-right will adjust the viewing window.</p>
+                        </instructions>
+                    </interactive>
                 </figure>
 
-                <p><url href="http://jsxgraph.uni-bayreuth.de/wp/index.html">JSXGraph</url> is a <q>cross-browser JavaScript library for interactive geometry, function plotting, charting, and data visualization in the web browser.</q>  Place Javascript inside an <c>input</c> element inside a <c>jsxgraph</c> element.  You will want an <c>xml:id</c> on the <c>jsxgraph</c> element, since it is what will be used as the HTML <c>id</c> on the <c>div</c> that will hold the demonstration, and will typically be used in an early call to the <c>initBoard()</c> method.</p>
+                <p><url href="http://jsxgraph.uni-bayreuth.de/wp/index.html">JSXGraph</url> is a <q>cross-browser JavaScript library for interactive geometry, function plotting, charting, and data visualization in the web browser.</q>  Place Javascript inside a file that is specified with the <attr>source</attr> attribute of the <tag>interactive</tag> element.  Then just be certain that <attr>xml:id</attr> of the <tag>interactive</tag> element is passed as the <init>HTML</init> <c>id</c> in an (early) call to the <c>initBoard()</c> method.</p>
 
-                <p>Here is a more elaborate example, from the <url href="http://jsxgraph.uni-bayreuth.de/showcase/">JSXGraph Showcase</url>, titled <url href="http://jsxgraph.uni-bayreuth.de/showcase/infinity.html">Infinity</url>.  Notice that the code here contains a problematic less-than character for a comparison in a loop.  We could replace it by the <c>&amp;lt;</c> XML escape sequence, but we have instead chosen the expedient of using a <c>CDATA</c> construction to wrap the entire hunk of code (see the source for exact syntax).  This might be the best solution if the code contains many HTML strings that need to be protected from the XML parser.</p>
+                <p>Here is a more elaborate example, from the <url href="http://jsxgraph.uni-bayreuth.de/showcase/">JSXGraph Showcase</url>, titled <url href="http://jsxgraph.uni-bayreuth.de/showcase/infinity.html">Infinity</url>.</p>
 
-                <p>There are two active sliders to control the shape and shading of the graphic, and hovering the mouse near one of the edges will highlight the entirety of one of the 30 quadrangles.  Finally, each of the four red corners may be dragged to a new location.  Width is 60<percent /> and aspect ratio is the default, 1:1, <ie /> a square.</p>
+                <p>There are two active sliders to control the shape and shading of the graphic, and hovering the mouse near one of the edges will highlight the entirety of one of the 30 quadrangles.  Finally, each of the four red corners may be dragged to a new location.  Code is 47 lines.  Width is 60<percent /> and aspect ratio is the default, 1:1, <ie /> a square.</p>
 
                 <figure>
                     <caption>Infinity, from the JSXGraph Showcase</caption>
-                    <jsxgraph xml:id="jsxgraph-infinity" width="60%">
-                        <!-- http://jsxgraph.uni-bayreuth.de/showcase/infinity.html -->
-                        <input><![CDATA[
-                        JXG.Options.renderer = 'canvas';
-                        var board = JXG.JSXGraph.initBoard('jsxgraph-infinity', {
-                                boundingbox: [-9, 8, 9, -10],
-                                keepaspectreatio: true,
-                                axis: false,
-                                grid: false,
-                                shownavigation: false
-                            });
 
-                        // construction
-                        board.suspendUpdate();
-                        var S = board.create('slider', [[-5,-6],[5,-6],[0,0.85,1]], {
-                            name:'Whirl'
-                        });
-                        var hue = board.create('slider', [[-5,-7],[5,-7],[0,20.5,36]], {
-                            name:'Colors'
-                        });
-
-                        var points = new Array();
-                        points[0] = board.create('point',[5, 5], {name:' '});
-                        points[1] = board.create('point',[-5, 5], {name:' '});
-                        points[2] = board.create('point',[-5, -5], {name:' '});
-                        points[3] = board.create('point',[5, -5], {name:' '});
-
-                        function quadrangle(pt, n) {
-                            var col;
-                            var arr = new Array();
-                            for(var i = 0; i < 4; i++) {
-                                arr[i] = board.create('point',
-                                    [function(t) {
-                                        return function () {var x = pt[t].X();
-                                                var x1 = pt[(t+1)%4].X();
-                                                var s = S.Value();
-                                                return x+(x1-x)*s;
-                                         }}(i),
-                                    function(t) {
-                                        return function () {var y = pt[t].Y();
-                                                var y1 = pt[(t+1)%4].Y();
-                                                var s = S.Value();
-                                                return y+(y1-y)*s;
-                                         }}(i)
-                                    ],
-                                {size:1, name: "", withLabel: false, visible: false});
-                            }
-                            col =  function(){return JXG.hsv2rgb(hue.Value()*n,0.7,0.9);};
-                            board.create('polygon',pt, {fillColor:col});
-                            if(n>0)
-                                quadrangle(arr, --n);
-                        }
-                        quadrangle(points,30);
-
-                        board.unsuspendUpdate();
-                        ]]>
-                        </input>
-                    </jsxgraph>
+                    <interactive xml:id="interactive-infinity" platform="jsxgraph" width="60%" source="code/infinity.js">
+                        <canvas xml:id="jsxgraph-infinity" language="jsxgraph"/>
+                        <instructions>
+                            <p>Drag the sliders to change the pattern, and drag any of the four red corners to change the overall shape.</p>
+                        </instructions>
+                    </interactive>
                 </figure>
 
 
-                <p>Here are the two new examples, but the first has been given an extreme aspect ratio, and both are smaller overall.  They have been included in a <c>sidebyside</c> layout element (see <xref ref="section-side-by-side" text="type-global" />) so they can be placed horizontally across the page.  (Note: placement in a <c>sidebyside</c> is not yet reflected in the <pretext /> schema.)  These are again from the <url href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Category:Examples">example wiki</url>, the left being Fermat's Spiral and the right being a demonstration of B-splines.</p>
+                <p>Here are the two new examples.  They have been included in a <c>sidebyside</c> layout element with equal widths (see <xref ref="section-side-by-side" text="type-global" />) so they can be placed horizontally across the page.  They are not wrapped as figures, so cannot be cross-referenced.  These are again from the <url href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Category:Examples">example wiki</url>, the left being Fermat's Spiral and the right being a demonstration of B-splines.</p>
 
-                <sidebyside widths="35% 55%">
-                    <jsxgraph xml:id="jsxgraph-fermats-spiral" aspect="5:8">
-                        <!-- https://jsxgraph.uni-bayreuth.de/wiki/index.php/Fermat%27s_spiral -->
-                        <input>
-                        var board = JXG.JSXGraph.initBoard('jsxgraph-fermats-spiral', {boundingbox: [-10, 10, 10, -10]});
-                        var aa = board.create('slider', [[1,9],[5,9],[0,1,4]],{name:'a'});
-                        var c1 = board.create('curve', [function(phi){return aa.Value()*Math.sqrt(phi); }, [0, 0],0, 8*Math.PI],
-                                     {curveType:'polar', strokewidth:4});        
-                        var c2 = board.create('curve', [function(phi){return -aa.Value()*Math.sqrt(phi); }, [0, 0],0, 8*Math.PI],
-                                     {curveType:'polar', strokewidth:4});
-                        </input>
-                    </jsxgraph>
-                    <jsxgraph xml:id="jsxgraph-bspline">
-                        <!-- https://jsxgraph.uni-bayreuth.de/wiki/index.php/B-splines -->
-                        <input><![CDATA[
-                        var brd = JXG.JSXGraph.initBoard('jsxgraph-bspline',
-                        {boundingbox:[-4,4,4,-4],keepaspectratio:true,axis:true});
+                <sidebyside widths="40% 40%">
+                    <interactive xml:id="interactive-fermats-spiral" platform="jsxgraph" source="code/fermats-spiral.js">
+                        <canvas xml:id="jsxgraph-fermats-spiral" language="jsxgraph" />
+                        <instructions>
+                            <p>Drag the slider to change the curve.</p>
+                        </instructions>
+                    </interactive>
 
-                        var p = [], col = 'red'; 
-                        p.push(brd.create('point',[2,1],{strokeColor:col,fillColor:col})); 
-                        p.push(brd.create('point',[0.75,2.5],{strokeColor:col,fillColor:col})); 
-                        p.push(brd.create('point',[-0.3,0.3],{strokeColor:col,fillColor:col})); 
-                        p.push(brd.create('point',[-3,1],{strokeColor:col,fillColor:col}));      
-                        p.push(brd.create('point',[-0.75,-2.5],{strokeColor:col,fillColor:col}));
-                        p.push(brd.create('point',[1.5,-2.8],{strokeColor:col,fillColor:col}));  
-                        p.push(brd.create('point',[2,-0.5],{strokeColor:col,fillColor:col})); 
-
-                        var c = brd.create('curve', JXG.Math.Numerics.bspline(p,4), 
-                                       {strokecolor:'blue', strokeOpacity:0.6, strokeWidth:5}); 
-
-                        var addSegment = function() {
-                           brd.suspendUpdate();
-                           p.push(brd.create('point',[Math.random()*8-4,Math.random()*8-4],
-                                   {strokeColor:col,fillColor:col})); 
-                           brd.unsuspendUpdate();
-                        };
-
-                        var removeSegment = function() {
-                           brd.suspendUpdate();
-
-                           if (p.length>2) {
-                               brd.removeObject(p[p.length-1]);  // remove the last point from the list of objects
-                               p.splice(p.length-1,1);           // remove the last point from the point array.
-                           }
-                           brd.unsuspendUpdate();
-                        };
-                        ]]>
-                        </input>
-                    </jsxgraph>
+                    <interactive xml:id="interactive-bspline" platform="jsxgraph" source="code/bspline.js">
+                        <canvas xml:id="jsxgraph-bspline" language="jsxgraph" />
+                        <instructions>
+                            <p>Any of the 8 red control points may be moved anywhere.</p>
+                        </instructions>
+                    </interactive>
                 </sidebyside>
 
 
-                <p>Now, a piecewise function you can control, with traces of the domain values and range values in two separate JSXGraph boards, laid out using the <c>sidebyside</c> layout element.</p>
+                <p>Finally, a piecewise function you can control, with traces of the domain values and range values in two other JSXGraph boards.  Boards and <init>HTML</init> buttons have been laid out using the <c>sidebyside</c> layout element.</p>
 
                 <figure>
                     <caption>Piecewise Function</caption>
-                    <jsxgraph xml:id="box_p3" width="40%">
 
-                        <controls>
-                            <input type="button" value="Animate On/Off" onkeypress="animate_p3(s_p3,75,100);" onclick="animate_p3(s_p3,75,100);" style="font-size:16px;"/>
-                            <input type="button" value="Clear Traces" onkeypress="clearTraces_p3();" onclick="clearTraces_p3();" style="font-size:16px;"/>
-                        </controls>
-                    </jsxgraph>
+                    <interactive xml:id="interactive-piecewise" platform="jsxgraph" source="code/piecewise.js">
+                        <sbsgroup>
+                            <sidebyside width="30%" margins="0%">
+                                <canvas xml:id="box_p3"  language="jsxgraph"/>
+                                <canvas xml:id="box2_p3" language="jsxgraph"/>
+                                <canvas xml:id="box3_p3" language="jsxgraph"/>
+                            </sidebyside>
+                            <sidebyside widths="30% 30%" margins="20%">
+                                <canvas language="html">
+                                    <input type="button" value="Animate" onkeypress="animate_p3(s_p3,75,100);" onclick="animate_p3(s_p3,75,100);" style="font-size:16px; width:100%"/>
+                                </canvas>
+                                <canvas language="html">
+                                    <input type="button" value="Clear Traces" onkeypress="clearTraces_p3();" onclick="clearTraces_p3();" style="font-size:16px; width:100%"/>
+                                </canvas>
+                            </sidebyside>
+                        </sbsgroup>
+                        <instructions>
+                            <p>The slider of the left panel will trace out the piecewise function.  Simultaneously, the domain will be traced in the middle panel, and the range in the right panel.</p>
+                        </instructions>
+                    </interactive>
                 </figure>
 
-                <sidebyside widths="40% 40%" margins="auto">
-                    <figure>
-                        <caption>Domain</caption>
-                        <jsxgraph xml:id="box2_p3" />
-                    </figure>
+                <p>Be careful about your Javascript code when there are several on the same page, as duplicate variables may affect one another's performance adversely, with actions in the latter controlling the former.  You will be lucky if it is only that bad.  You could enjoy reading <url href="http://mikecavaliere.com/your-js-is-a-mess-javascript-namespacing/">Your JS is a Mess</url> at <c>mikecavaliere.com/your-js-is-a-mess-javascript-namespacing/</c>.</p>
 
-                    <figure>
-                        <caption>Range</caption>
-                        <jsxgraph xml:id="box3_p3">
-                            <input><![CDATA[
-                            var board_p3 = JXG.JSXGraph.initBoard('box_p3', {boundingbox: [-6, 8, 4, -8], axis: true,grid:true,showCopyright:false,showNavigation:false});
-                            var board2_p3 = JXG.JSXGraph.initBoard('box2_p3', {boundingbox: [-6, 8, 4, -8],axis:true,grid:true,showCopyright:false,showNavigation:false});
-                            var board3_p3 = JXG.JSXGraph.initBoard('box3_p3', {boundingbox: [-6, 8, 4, -8],axis:true,grid:true,showCopyright:false,showNavigation:false});
-                            board_p3.renderer.container.style.backgroundColor = '#ffcc99';          // background color board
-                            board2_p3.renderer.container.style.backgroundColor = '#ffcc99';
-                            board3_p3.renderer.container.style.backgroundColor = '#ffcc99';
-                            var xax1_p3 = board_p3.create('axis', [[0,0], [0,1]]);
-                            var yax1_p3 = board_p3.create('axis', [[0,0], [1,0]]);
-                            var xax2_p3 = board2_p3.create('axis', [[0,0], [0,1]]);
-                            var yax2_p3 = board2_p3.create('axis',[[0,0],[1,0]]);
-                            var xax3_p3 = board3_p3.create('axis',[[0,0], [0,1]]);
-                            var yax3_p3 = board3_p3.create('axis',[[0,0],[1,0]]);
-                            board_p3.create('ticks',[xax1_p3,[-6,-5,-4,-3,-2,-1,0,1,2,3,4]]);
-                            board_p3.create('ticks',[yax1_p3,[-8,-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8]]);
-                            board2_p3.create('axis', [[0,0], [0,1]]);
-                            board2_p3.create('ticks',[xax2_p3,[-6,-5,-4,-3,-2,-1,0,1,2,3,4]]);
-                            board2_p3.create('ticks',[yax2_p3,[-8,-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8]]);
-                            board3_p3.create('axis',[[0,0],[0,1]]);
-                            board3_p3.create('ticks',[xax3_p3,[-6,-5,-4,-3,-2,-1,0,1,2,3,4]]);
-                            board3_p3.create('ticks',[yax3_p3,[-8,-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8]]);
-
-                            var f_p3 = function(x) {
-                                if (x >=-4 && x < 1) {
-                                    return -(x+2)*(x+2) + 2;
-                                }
-                                else if (x >= 1 && x <= 3) {
-                                    return x*x-x;
-                                }
-                                else {return -1000;
-                                }
-                            };
-
-                            var dfun_p3 = function(x) {
-                                if (x>=-4 && x<0.7) {
-                                    return x;
-                                }
-                                else if (x> 1.3 && x <= 3) {
-                                    return x;
-                                }
-                                else {return -1000;
-                                }
-                            };
-
-                            graph_p3=board_p3.create('functiongraph',[f_p3,-4,3],{strokeColor:'#000000'});
-                            var ep1_p3=board_p3.create('point',[-4,-2],{strokeColor:'#000000',fillColor:'#000000',name:''});
-                            var ep2_p3=board_p3.create('point',[1,-7],{strokeColor:'#000000',fillColor:'#FFFFFF',name:''});
-                            var ep3_p3=board_p3.create('point',[1,0],{strokeColor:'#000000',fillColor:'#FFFFFF',name:''});
-                            var ep4_p3=board_p3.create('point',[3,6],{strokeColor:'#000000',fillColor:'#000000',name:''});
-                            ep1_p3.setAttribute({fixed:true});
-                            ep2_p3.setAttribute({fixed:true});
-                            ep3_p3.setAttribute({fixed:true});
-                            ep4_p3.setAttribute({fixed:true});
-
-                            var s_p3 = board_p3.create('slider',[[-4.5,-7],[-1,-7],[-4,-4,3]]);
-                            var tracepoint_p3=board_p3.create('point',[function() {return dfun_p3(s_p3.Value());},function() {return f_p3(s_p3.Value());}],{name:''});
-                            // domain:
-                            var b2p1_p3 = board2_p3.create('point', [function(){return tracepoint_p3.X()},0], 
-                                        {fixed: true, trace: true, strokeColor: '#ff0000', name: 'D'});
-                            // cosine:
-                            var b2p2_p3 = board3_p3.create('point', [
-                                        0, function(){return tracepoint_p3.Y();}], 
-                                        {fixed: true, trace: true, strokeColor: '#0000ff', fillColor:'#0000ff',name: 'R'});
-                            // Dependencies (only necessary if b2p1 or b2p2 is deleted)
-
-                            board_p3.addChild(board2_p3);
-                            board_p3.addChild(board3_p3);
-
-                            function clearTraces_p3() {
-                            JXG.JSXGraph.freeBoard(board_p3);
-                            JXG.JSXGraph.freeBoard(board2_p3);
-                            JXG.JSXGraph.freeBoard(board3_p3);
-                            board_p3 = JXG.JSXGraph.initBoard('box_p3', {boundingbox: [-6, 8, 4, -8],axis: true,grid:true,showCopyright:false,showNavigation:false});
-                            board2_p3 = JXG.JSXGraph.initBoard('box2_p3', {boundingbox: [-6, 8, 4, -8],axis:true,grid:true,showCopyright:false,showNavigation:false});
-                            board3_p3 = JXG.JSXGraph.initBoard('box3_p3', {boundingbox: [-6, 8, 4, -8],axis:true,grid:true,showCopyright:false,showNavigation:false});
-                            xax1_p3 = board_p3.create('axis', [[0,0], [0,1]]);
-                            yax1_p3 = board_p3.create('axis', [[0,0], [1,0]]);
-                            xax2_p3 = board2_p3.create('axis', [[0,0], [0,1]]);
-                            yax2_p3 = board2_p3.create('axis',[[0,0],[1,0]]);
-                            xax3_p3 = board3_p3.create('axis',[[0,0], [0,1]]);
-                            yax3_p3 = board3_p3.create('axis',[[0,0],[1,0]]);
-                            board_p3.create('ticks',[xax1_p3,[-6,-5,-4,-3,-2,-1,0,1,2,3,4]]);
-                            board_p3.create('ticks',[yax1_p3,[-8,-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8]]);
-                            board2_p3.create('axis', [[0,0], [0,1]]);
-                            board2_p3.create('ticks',[xax2_p3,[-6,-5,-4,-3,-2,-1,0,1,2,3,4]]);
-                            board2_p3.create('ticks',[yax2_p3,[-8,-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8]]);
-                            board3_p3.create('axis',[[0,0],[0,1]]);
-                            board3_p3.create('ticks',[xax3_p3,[-6,-5,-4,-3,-2,-1,0,1,2,3,4]]);
-                            board3_p3.create('ticks',[yax3_p3,[-8,-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8]]);
-
-                            f_p3 = function(x) {
-                                if (x >=-4 && x < 1) {
-                                    return -(x+2)*(x+2) + 2;
-                                }
-                                else if (x >= 1 && x <= 3) {
-                                    return x*x-x;
-                                }
-                                else {return -1000;
-                                }
-                            };
-
-                            dfun_p3 = function(x) {
-                                if (x>=-4 && x<0.7) {
-                                    return x;
-                                }
-                                else if (x> 1.3 && x <= 3) {
-                                    return x;
-                                }
-                                else {return -1000;
-                                }
-                            };
-
-                            graph_p3=board_p3.create('functiongraph',[f_p3,-4,3],{strokeColor:'#000000'});
-                            ep1_p3=board_p3.create('point',[-4,-2],{strokeColor:'#000000',fillColor:'#000000',name:''});
-                            ep2_p3=board_p3.create('point',[1,-7],{strokeColor:'#000000',fillColor:'#FFFFFF',name:''});
-                            ep3_p3=board_p3.create('point',[1,0],{strokeColor:'#000000',fillColor:'#FFFFFF',name:''});
-                            ep4_p3=board_p3.create('point',[3,6],{strokeColor:'#000000',fillColor:'#000000',name:''});
-                            ep1_p3.setAttribute({fixed:true});
-                            ep2_p3.setAttribute({fixed:true});
-                            ep3_p3.setAttribute({fixed:true});
-                            ep4_p3.setAttribute({fixed:true});
-                            s_p3 = board_p3.create('slider',[[-4.5,-7],[-1,-7],[-4,-4,3]]);
-                            tracepoint_p3=board_p3.create('point',[function() {return dfun_p3(s_p3.Value());},function() {return f_p3(s_p3.Value());}],{name:''});// domain:
-                            b2p1_p3 = board2_p3.create('point', [function(){return tracepoint_p3.X()},0], 
-                                         {fixed: true, trace: true, strokeColor: '#ff0000', name: 'D'});
-                            // cosine:
-                            b2p2_p3 = board3_p3.create('point', [
-                                         0, function(){return tracepoint_p3.Y();}], 
-                                         {fixed: true, trace: true, strokeColor: '#0000ff', fillColor:'#0000ff',name: 'R'});
-                            // Dependencies (only necessary if b2p1 or b2p2 is deleted)
-
-                            board_p3.addChild(board2_p3);
-                            board_p3.addChild(board3_p3);
-                            }
-                            // Animation
-                            var animated = false;
-                            function animate_p3(point, direction, count) {
-                               if(animated) {
-                                  point.stopAnimation();
-                                  animated = false;
-                               } else {
-                                  point.startAnimation(direction, count);
-                                  animated = true;
-                               }
-                            }
-                            // Generic Hide/Show
-                            function toggle(id) {
-                                    var state = document.getElementById(id).style.display;
-                                        if (state == 'block') {
-                                            document.getElementById(id).style.display = 'none';
-                                        } else {
-                                            document.getElementById(id).style.display = 'block';
-                                        }
-                                    }
-                            ]]>
-                            </input>
-                        </jsxgraph>
-                    </figure>
-                </sidebyside>
-
-                <p>Be careful about the Javascript code when there are several on the same page, as duplicate variables may affect one another's performance adversely.</p>
+                <p>Also, do not <q>talk</q> between two different interactives since there is no guarantee they will always be on the same page.  If two <tag>canvas</tag> need to communicate, then they are related, and should be placed into a single <tag>interactive</tag>, grouped with a <tag>sidebyside</tag>.</p>
             </subsection>
         </section>
 
