@@ -2841,32 +2841,40 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Entirely similar for jsxgraph and video but we do                    -->
 <!-- not consult default *image* width in docinfo                         -->
 
-<xsl:template match="image[not(ancestor::sidebyside)]|video[not(ancestor::sidebyside)]|jsxgraph[not(ancestor::sidebyside)]" mode="get-width-percentage">
+<xsl:template match="image[not(ancestor::sidebyside)]|video[not(ancestor::sidebyside)]|jsxgraph[not(ancestor::sidebyside)]|interactive[not(ancestor::sidebyside)]|canvas[not(ancestor::sidebyside)]" mode="get-width-percentage">
+    <!-- find it first -->
+    <xsl:variable name="raw-width">
+        <xsl:choose>
+            <!-- right on the element! -->
+            <xsl:when test="@width">
+                <xsl:value-of select="@width" />
+            </xsl:when>
+            <!-- not on an image, but doc-wide default exists -->
+            <xsl:when test="self::image and $docinfo/defaults/image-width">
+                <xsl:value-of select="$docinfo/defaults/image-width" />
+            </xsl:when>
+            <!-- naked canvas, look to enclosing interactive -->
+            <xsl:when test="self::canvas">
+                <xsl:apply-templates select="parent::interactive" mode="get-width-percentage" />
+            </xsl:when>
+            <!-- what to do? Author will figure it out if too extreme -->
+            <xsl:otherwise>
+                <xsl:text>100%</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- now sanitize it -->
+    <xsl:variable name="normalized-width" select="normalize-space($raw-width)" />
     <xsl:choose>
-         <!-- check for @width on the image itself -->
-         <!-- a good place to check author input   -->
-        <xsl:when test="@width">
-            <xsl:variable name="normalized-width" select="normalize-space(@width)" />
-            <xsl:choose>
-                <xsl:when test="not(substring($normalized-width, string-length($normalized-width)) = '%')">
-                    <xsl:message>MBX:ERROR:   a "width" attribute should be given as a percentage (such as "40%", not as "<xsl:value-of select="$normalized-width" />"</xsl:message>
-                    <xsl:apply-templates select="." mode="location-report" />
-                    <!-- replace by 100% -->
-                    <xsl:text>100%</xsl:text>
-                </xsl:when>
-                <!-- test for stray spaces? -->
-                <xsl:otherwise>
-                    <xsl:value-of select="$normalized-width" />
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:when>
-        <!-- perhaps an author-specific default width for images -->
-        <xsl:when test="self::image and $docinfo/defaults/image-width">
-            <xsl:value-of select="normalize-space($docinfo/defaults/image-width)" />
-        </xsl:when>
-        <!-- what else to do? Author will figure it out if too extreme -->
-        <xsl:otherwise>
+        <xsl:when test="not(substring($normalized-width, string-length($normalized-width)) = '%')">
+            <xsl:message>MBX:ERROR:   a "width" attribute should be given as a percentage (such as "40%", not as "<xsl:value-of select="$normalized-width" />, using 100% instead"</xsl:message>
+            <xsl:apply-templates select="." mode="location-report" />
+            <!-- replace by 100% -->
             <xsl:text>100%</xsl:text>
+        </xsl:when>
+        <!-- test for stray interior spaces here? -->
+        <xsl:otherwise>
+            <xsl:value-of select="$normalized-width" />
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -2877,7 +2885,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Widths from sidebyside layouts have been error-checked as input    -->
 
 <!-- occurs in a figure, not contained in a sidebyside -->
-<xsl:template match="image[ancestor::sidebyside]|video[ancestor::sidebyside]|jsxgraph[ancestor::sidebyside]" mode="get-width-percentage">
+<xsl:template match="image[ancestor::sidebyside]|video[ancestor::sidebyside]|jsxgraph[ancestor::sidebyside]|interactive[ancestor::sidebyside]|canvas[ancestor::sidebyside]" mode="get-width-percentage">
     <!-- in a side-by-side, get layout, locate in layout -->
     <!-- and get width.  The layout-parameters template  -->
     <!-- will analyze an enclosing sbsgroup              -->
@@ -2903,7 +2911,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Input:  "width:height", or decimal width/height -->
 <!-- Return: real number as fraction width/height    -->
 <!-- Totally blank means nothing could be determined -->
-<xsl:template match="jsxgraph|video" mode="get-aspect-ratio">
+<xsl:template match="canvas|interactive|jsxgraph|video" mode="get-aspect-ratio">
     <xsl:param name="default-aspect" select="''" />
 
     <!-- look to element first, then to supplied default          -->
@@ -2940,6 +2948,45 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
+
+<!-- This is cribbed from the CSS "max-width"-->
+<!-- Design width, measured in pixels        -->
+<!-- NB: the exact same value, for similar,  -->
+<!-- but not identical, reasons is used in   -->
+<!-- the formation of WeBWorK problems       -->
+<xsl:variable name="design-width-pixels" select="'600'" />
+
+
+<!-- Pixels are an HTML thing, but we may need these numbers -->
+<!-- elsewhere, and these are are pure text templates        -->
+<xsl:template match="canvas|video|interactive" mode="get-width-pixels">
+    <xsl:variable name="width-percent">
+        <xsl:apply-templates select="." mode="get-width-percentage" />
+    </xsl:variable>
+    <xsl:variable name="width-fraction">
+        <xsl:value-of select="substring-before($width-percent,'%') div 100" />
+    </xsl:variable>
+    <xsl:value-of select="$design-width-pixels * $width-fraction" />
+</xsl:template>
+
+<!-- Square by default, when asked.  Can override -->
+<xsl:template match="canvas|video|interactive" mode="get-height-pixels">
+    <xsl:param name="default-aspect" select="'1:1'" />
+
+    <xsl:variable name="width-percent">
+        <xsl:apply-templates select="." mode="get-width-percentage" />
+    </xsl:variable>
+    <xsl:variable name="width-fraction">
+        <xsl:value-of select="substring-before($width-percent,'%') div 100" />
+    </xsl:variable>
+    <xsl:variable name="aspect-ratio">
+        <xsl:apply-templates select="." mode="get-aspect-ratio">
+            <xsl:with-param name="default-aspect" select="$default-aspect" />
+        </xsl:apply-templates>
+    </xsl:variable>
+    <xsl:value-of select="$design-width-pixels * $width-fraction div $aspect-ratio" />
+</xsl:template>
+
 
 <!-- ################ -->
 <!-- Names of Objects -->
