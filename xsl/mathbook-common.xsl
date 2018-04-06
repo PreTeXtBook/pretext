@@ -7579,6 +7579,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="date-string" select="'2018-02-05'" />
         <xsl:with-param name="message" select="'the &quot;booktitle&quot; element has been replaced by the functionally equivalent &quot;pubtitle&quot;'" />
     </xsl:call-template>
+    <!--  -->
+    <!-- 2018-04-06  jsxgraph absorbed into interactive -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurences" select="$document-root//jsxgraph" />
+        <xsl:with-param name="date-string" select="'2018-04-06'" />
+        <xsl:with-param name="message" select="'the &quot;jsxgraph&quot; element has been deprecated, but remains functional, rework with the &quot;interactive&quot; element'" />
+    </xsl:call-template>
 </xsl:template>
 
 <!-- Miscellaneous -->
