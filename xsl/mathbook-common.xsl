@@ -441,7 +441,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Some boolean variables ("b-*") for -->
 <!-- the presence of certain elements -->
 <xsl:variable name="b-has-geogebra" select="boolean($document-root//interactive[@platform='geogebra'])" />
-<xsl:variable name="b-has-jsxgraph" select="boolean($document-root//jsxgraph)" />
+<xsl:variable name="b-has-jsxgraph" select="boolean($document-root//interactive[@platform='jsxgraph'])" />
 
 <!-- Some groups of elements are counted distinct -->
 <!-- from other blocks.  A configuration element  -->

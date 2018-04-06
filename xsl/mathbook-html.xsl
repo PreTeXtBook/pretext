@@ -4894,6 +4894,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:apply-templates>
 </xsl:template>
 
+<xsl:template match="interactive|canvas" mode="panel-html-box">
+    <xsl:param name="b-original" select="true()" />
+    <xsl:apply-templates select=".">
+        <xsl:with-param name="b-original" select="$b-original" />
+    </xsl:apply-templates>
+</xsl:template>
+
 <!-- Process intro, the list, conclusion     -->
 <!-- title is killed -->
 <xsl:template match="list" mode="panel-html-box">
@@ -7210,6 +7217,108 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
     <!-- load 'em up and go -->
     <xsl:variable name="full-url" select="concat($cp3d-endpoint, '/?', $query-url)" />
     <iframe src="{$full-url}" width="600" height="800" />
+</xsl:template>
+
+<!-- JSXGraph Interactive -->
+<xsl:template match="interactive[@platform ='jsxgraph']">
+    <!-- an interactive always has a width, default is 100% -->
+    <xsl:variable name="width">
+        <xsl:apply-templates select="." mode="get-width-pixels" />
+    </xsl:variable>
+    <!-- height is option, if not give just stacks up -->
+    <xsl:variable name="height">
+        <xsl:if test="@aspect-ratio">
+            <xsl:apply-templates select="." mode="get-height-pixels" />
+        </xsl:if>
+    </xsl:variable>
+    <div>
+        <xsl:attribute name="id">
+            <xsl:value-of select="@xml:id" />
+        </xsl:attribute>
+        <xsl:attribute name="style">
+            <!-- always -->
+            <xsl:text>width:</xsl:text>
+            <xsl:value-of select="$width" />
+            <xsl:text>px;</xsl:text>
+            <!-- maybe -->
+            <xsl:if test="not($height = '')">
+                <xsl:text> height:</xsl:text>
+                <xsl:value-of select="$height" />
+                <xsl:text>px;</xsl:text>
+            </xsl:if>
+        </xsl:attribute>
+        <!-- stack, centered, else use a layout -->
+        <center>
+            <xsl:apply-templates select="canvas|code|sidebyside|sbsgroup" />
+        </center>
+        <xsl:apply-templates select="instructions" />
+        <!-- accumulate script tags *after* HTML elements -->
+        <xsl:apply-templates select="@source" />
+    </div>
+</xsl:template>
+
+<!-- Form a "div"                  -->
+<!--   (a) with predictable id     -->
+<!--   (b) stock class information -->
+<!--   (c) size, now in pixels     -->
+<xsl:template match="canvas[@language = 'jsxgraph']">
+    <div>
+        <xsl:attribute name="id">
+            <xsl:value-of select="@xml:id" />
+        </xsl:attribute>
+        <xsl:attribute name="class">
+            <xsl:text>jxgbox</xsl:text>
+        </xsl:attribute>
+        <!-- modal template will compute or inherit from enclosing interactive -->
+        <xsl:variable name="width">
+            <xsl:apply-templates select="." mode="get-width-pixels" />
+        </xsl:variable>
+        <xsl:variable name="height">
+            <xsl:apply-templates select="." mode="get-height-pixels" />
+        </xsl:variable>
+        <xsl:attribute name="style">
+            <!-- always -->
+            <xsl:text>width:</xsl:text>
+            <xsl:value-of select="$width" />
+            <xsl:text>px;</xsl:text>
+            <!-- always -->
+            <xsl:text> height:</xsl:text>
+            <xsl:value-of select="$height" />
+            <xsl:text>px;</xsl:text>
+        </xsl:attribute>
+    </div>
+</xsl:template>
+
+<!-- HTML Code -->
+<!-- Simply create deep-copy of HTML elements -->
+<xsl:template match="canvas[@language='html']">
+    <xsl:copy-of select="*" />
+</xsl:template>
+
+<!-- @source attribute to script tags -->
+<xsl:template match="code[@language = 'javascript']/@source|interactive[@platform = 'jsxgraph']/@source">
+    <!-- <xsl:variable name="stuff" select=" -->
+    <xsl:call-template name="one-script">
+        <xsl:with-param name="text" select="concat(normalize-space(str:replace(., ',', ' ')), ' ')" />
+    </xsl:call-template>
+</xsl:template>
+
+<!-- A recursive template to create a script tag for each JS file -->
+<xsl:template name="one-script">
+    <xsl:param name="text" />
+    <xsl:choose>
+        <xsl:when test="$text = ''" />
+        <xsl:otherwise>
+            <script type="text/javascript">
+                <xsl:attribute name="src">
+                    <xsl:value-of select="substring-before($text, ' ')" />
+                </xsl:attribute>
+            </script>
+            <xsl:call-template name="one-script">
+                <xsl:with-param name="text" select="substring-after($text, ' ')" />
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- JSXGraph -->
