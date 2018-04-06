@@ -590,7 +590,6 @@
                     SideBySide |
                     SideBySideGroup |
                     Video |
-                    JSXGraph |
                     MuseScore
                 )
             }
@@ -799,13 +798,6 @@
         }
         
         
-        JSXGraph = 
-            element jsxgraph {
-                UniqueID,
-                attribute width {text}?,
-                attribute aspect {text}?,
-                element input {text}
-            }
         MuseScore = 
             element score {
                 attribute musescoreuser {text},

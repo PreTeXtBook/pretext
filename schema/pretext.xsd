@@ -1275,7 +1275,6 @@
             <xs:group ref="SideBySide"/>
             <xs:group ref="SideBySideGroup"/>
             <xs:element ref="video"/>
-            <xs:element ref="jsxgraph"/>
             <xs:element ref="score"/>
           </xs:choice>
         </xs:extension>
@@ -1732,16 +1731,6 @@
       <xs:attribute name="tolerance"/>
       <xs:attribute name="language"/>
       <xs:attribute name="type"/>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="jsxgraph">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="input"/>
-      </xs:sequence>
-      <xs:attributeGroup ref="UniqueID"/>
-      <xs:attribute name="width"/>
-      <xs:attribute name="aspect"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="score">

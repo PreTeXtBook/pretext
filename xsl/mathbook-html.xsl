@@ -7322,6 +7322,9 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
 </xsl:template>
 
 <!-- JSXGraph -->
+<!-- DEPRECATED (2018-04-06)                             -->
+<!-- Restrict edits to cosmetic, no functional change    -->
+<!-- Remove when continued maintenance becomes untenable -->
 <xsl:template match="jsxgraph">
     <!-- interpret @width percentage and @aspect ratio -->
     <xsl:variable name="width-percent">

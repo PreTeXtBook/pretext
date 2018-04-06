@@ -1325,7 +1325,6 @@
           <ref name="SideBySide"/>
           <ref name="SideBySideGroup"/>
           <ref name="Video"/>
-          <ref name="JSXGraph"/>
           <ref name="MuseScore"/>
         </choice>
       </element>
@@ -1742,20 +1741,6 @@
           </element>
         </optional>
       </optional>
-    </element>
-  </define>
-  <define name="JSXGraph">
-    <element name="jsxgraph">
-      <ref name="UniqueID"/>
-      <optional>
-        <attribute name="width"/>
-      </optional>
-      <optional>
-        <attribute name="aspect"/>
-      </optional>
-      <element name="input">
-        <text/>
-      </element>
     </element>
   </define>
   <define name="MuseScore">
