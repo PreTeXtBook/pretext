@@ -7216,7 +7216,16 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
     </xsl:variable>
     <!-- load 'em up and go -->
     <xsl:variable name="full-url" select="concat($cp3d-endpoint, '/?', $query-url)" />
-    <iframe src="{$full-url}" width="600" height="800" />
+    <iframe src="{$full-url}" style="display:block;">
+        <xsl:attribute name="width">
+            <xsl:apply-templates select="." mode="get-width-pixels" />
+            <xsl:text>px;</xsl:text>
+        </xsl:attribute>
+        <xsl:attribute name="height">
+            <xsl:apply-templates select="." mode="get-height-pixels" />
+            <xsl:text>px;</xsl:text>
+        </xsl:attribute>
+    </iframe>
 </xsl:template>
 
 
