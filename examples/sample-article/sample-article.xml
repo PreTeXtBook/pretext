@@ -3664,7 +3664,6 @@ the xsltproc executable.
 
         </section>
 
-
         <section xml:id="section-interactive-open">
             <title>Open Interactive Elements</title>
             <idx><h>interactive elements</h><h>open</h></idx>
@@ -3672,12 +3671,177 @@ the xsltproc executable.
 
             <introduction>
                 <!-- First paragraph duplicated in next section -->
-                <p>When outputting Web page versions, it is possible to embed a variety of dynamic interactive elements.  In a <latex />/PDF version, these will necessarily need to be replaced by some static substitute, such as a screenshot.  See Section<nbsp /><xref ref="section-sage-cells" /> for the specifics of embedding instances of the Sage Cell Server, which is more elaborate, and not entirely similar.</p>
+                <p>When outputting Web page versions, it is possible to embed a variety of dynamic interactive elements.  In a <latex />/PDF version, these will necessarily need to be replaced by some static substitute, such as a screenshot.  See <xref ref="section-sage-cells" text="type-global" /> for the specifics of embedding instances of the Sage Cell Server, which is more elaborate, and not entirely similar.</p>
 
-                <p>Interactives in this section are generally unencumbered from copyright or licensing restrictions.  See <xref ref="section-interactive-free" /> for more interactives that are not as open.</p>
+                <p>Interactives in this section are generally unencumbered from copyright or licensing restrictions.  See <xref ref="section-interactive-free" text="type-global" /> for more interactives that are not as open.</p>
 
-                <p>(2018-03-05) Almost everything in this section is under active development and not stable yet.  Feel free to experiment and make suggestions and requests.</p>
+                <p>(2018-03-05) Almost everything in this section is under active development and not stable yet.  Feel free to experiment and make suggestions and requests.  This page takes a while to completely load, so be patient.</p>
             </introduction>
+
+            <subsection>
+                <title>HTML5 Canvas</title>
+
+                <p><init>HTML5</init> introduced the <tag>canvas</tag> element, which can be thought of a blank slate, a place to draw or write on.  So <pretext /> has the <tag>slate</tag> element for a similar purpose.  Generally, but not exclusively, <init>HTML5</init> writes on a <tag>canvas</tag> using the Javascript language.  We demonstrate this approach to interactive diagrams in this subsection.</p>
+
+                <p>The following examples are from David Austin's excellent <url href="http://merganser.math.gvsu.edu/david/linear.algebra/ula/index.html"><pubtitle>Understanding Linear Algebra</pubtitle></url> textbook, which can be found at <cd>
+                    <cline>merganser.math.gvsu.edu/david/linear.algebra/ula/index.html</cline>
+                </cd>David's contribution of examples, and assistance designing the <pretext /> elements is greatly appreciated.  Alright, let's learn some linear algebra.  Yes, there are some learning opportunities in this subsection.</p>
+
+                <figure xml:id="figure-simple-eigenvector">
+                    <caption>A simple eigenvector demonstration</caption>
+
+                    <interactive xml:id="interactive-simple-eigenvector" platform="html5" width="60%" source="code/austin/figures.js code/austin/simple-ev.js">
+                        <slate xml:id="eigenvector" language="javascript" />
+                        <instructions>
+                            <p>Let <m>\vec{x}</m> be represented by the red arrow, and <m>A\vec{x}</m> by the grey arrow, for some particular <m>2\times 2</m> matrix <m>A</m>.  Drag the <em>tip</em> of the red arrow to see the grey arrow change.</p>
+                        </instructions>
+                    </interactive>
+                </figure>
+
+                <exercise>
+                    <statement>
+                        <p>The interactive in <xref ref="figure-simple-eigenvector" text="type-global" /> shows a vector <m>\vec{x}</m> in red, and the matrix-vector product <m>A\vec{x}</m> in grey, for a particular <m>2\times 2</m> matrix <m>A</m>.  The four entries of the matrix <m>A</m> are coded into the interactive.  Can you deduce <m>A</m> simply by using the interactive?  Which theorem is the key?</p>
+                    </statement>
+                </exercise>
+
+                <figure xml:id="figure-eigenvectors">
+                    <caption>Eigenvector demonstration</caption>
+
+                    <interactive xml:id="interactive-eigenvectors" platform="html5" width="90%" aspect="4:5" source="code/austin/figures.js code/austin/eigenvectors.js">
+                        <slate xml:id="sliders"      aspect="4:1" language="javascript" />
+                        <slate xml:id="eigenvectors" aspect="4:4" language="javascript" />
+                        <instructions>
+                            <p>Let <m>\vec{x}</m> be represented by the red arrow, and <m>A\vec{x}</m> by the grey arrow, for a <m>2\times 2</m> matrix <m>A</m>.  Drag the <em>tip</em> of the red arrow to see the grey arrow change.  Or drag the blue sliders to change the numerical values of the four entries of the <m>2\times 2</m> matrix <m>A</m>.  You will not see the grey vector until you change the matrix using one of the two sliders on the left.  Why is that?  What are the eigenvectors of the initial matrix?</p>
+                        </instructions>
+                    </interactive>
+                </figure>
+
+                <p>The next example has ten <tag>slate</tag> elements communicating with each other, and arranged with the layout features of a <tag>sidebyside</tag> (see <xref ref="section-side-by-side" text="type-global" />).</p>
+
+                <figure xml:id="figure-animation">
+                    <caption>Affine Transformations</caption>
+
+                    <!-- The "10" in the "12:10" should really be a "9".  I suspect -->
+                    <!-- there is some inline element that induces scroll bars      -->
+                    <interactive xml:id="interactive-animation" platform="html5" width="100%" aspect="12:10" source="code/austin/animation.js">
+                        <sbsgroup>
+                            <sidebyside>
+                                <slate xml:id="a" language="javascript" aspect="4:1" />
+                                <slate xml:id="b" language="javascript" aspect="4:1" />
+                                <slate xml:id="c" language="javascript" aspect="4:1" />
+                            </sidebyside>
+                            <sidebyside>
+                                <slate xml:id="d" language="javascript" aspect="4:1" />
+                                <slate xml:id="e" language="javascript" aspect="4:1" />
+                                <slate xml:id="f" language="javascript" aspect="4:1" />
+                            </sidebyside>
+                            <sidebyside>
+                                <slate xml:id="left"  language="javascript" aspect="6:6" />
+                                <slate xml:id="right" language="javascript" aspect="6:6" />
+                            </sidebyside>
+                            <sidebyside width="25%" margins="25% 25%">
+                                <slate language="html" aspect="3:1">
+                                    <button type="button" id="compose">Compose</button>
+                                </slate>
+                                <slate language="html" aspect="3:1">
+                                    <button type="button" id="reset">Reset</button>
+                                </slate>
+                            </sidebyside>
+                        </sbsgroup>
+                        <instructions>
+                            <p>Parameters <m>a</m>, <m>b</m>, <m>d</m>, and <m>e</m>, form a <m>2\times 2</m> matrix <m>A</m>, while <m>c</m> and <m>f</m> form a vector <m>\vec{b}</m>.  The two views of Woody shows the effect of the mapping <me>\vec{x}\mapsto A\vec{x} + \vec{b}</me>.</p>
+                        </instructions>
+                    </interactive>
+                </figure>
+
+            </subsection>
+
+            <subsection>
+                <title>JSXGraph</title>
+                <idx>JSXGraph</idx>
+
+                <p><url href="http://jsxgraph.uni-bayreuth.de/wp/index.html">JSXGraph</url> is a <q>cross-browser JavaScript library for interactive geometry, function plotting, charting, and data visualization in the web browser.</q>  Now a <tag>slate</tag> will be what JSXGraph calls a <term>board</term>.  Again, you use Javascript to write onto a <tag>slate</tag>, but have some powerful shortcuts available from the JSXGraph library.  For this reason, <pretext /> calls JSXGraph a <q>language</q>, similar in may respects to how Sage is a language, but is really a Python library.  So realize that the syntax for using JSXGraph is that of Javascript.</p>
+
+                <p>Place Javascript inside a file that is specified with the <attr>source</attr> attribute of the <tag>interactive</tag> element.  Then just be certain that <attr>xml:id</attr> of the <tag>interactive</tag> element is passed as the <init>HTML</init> <c>id</c> in an (early) call to JSXGraph's <c>initBoard()</c> method.</p>
+
+                <p>The plot below is the curve <m>r=a+b\theta</m> in polar coordinates, for <m>0\leq\theta\leq 8\pi</m>.  It may be manipulated with the sliders to control the shape of the curve.  Point <m>A</m> is contrained to the curve, but may be dragged to a new location. At <m>A</m> the tangent line and normal line are plotted as dashed red lines.  Use the controls in the lower left to adjust the viewing window.  This <url href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Archimedean_spiral">example</url> is taken from the JSXGraph <url href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Category:Examples">example wiki</url>.  The code could be written in 7 lines.  Width is 80<percent /> and aspect ratio is 4:3.</p>
+
+                <figure>
+                    <caption>The Archimedian Spiral <m>r = a + b\theta</m>, <m>0\leq\theta\leq 8\pi</m></caption>
+                    <idx>Archimedian Spiral</idx>
+
+                    <interactive xml:id="interactive-archimedian-spiral" platform="jsxgraph" width="80%" aspect="4:3" source="code/archimedian.js">
+                        <slate xml:id="jsxgraph-archimedian-spiral" language="jsxgraph" aspect="4:3"/>
+                        <instructions>
+                            <p>Drag the sliders to change the parameters <m>a</m> and <m>b</m>.  Controls in the lower-right will adjust the viewing window.</p>
+                        </instructions>
+                    </interactive>
+                </figure>
+
+                <p>Here is a more elaborate example, from the <url href="http://jsxgraph.uni-bayreuth.de/showcase/">JSXGraph Showcase</url>, titled <url href="http://jsxgraph.uni-bayreuth.de/showcase/infinity.html">Infinity</url>.</p>
+
+                <p>There are two active sliders to control the shape and shading of the graphic, and hovering the mouse near one of the edges will highlight the entirety of one of the 30 quadrangles.  Finally, each of the four red corners may be dragged to a new location.  Code is 47 lines.  Width is 60<percent /> and aspect ratio is the default, 1:1, <ie /> a square.</p>
+
+                <figure>
+                    <caption>Infinity, from the JSXGraph Showcase</caption>
+
+                    <interactive xml:id="interactive-infinity" platform="jsxgraph" width="60%" source="code/infinity.js">
+                        <slate xml:id="jsxgraph-infinity" language="jsxgraph"/>
+                        <instructions>
+                            <p>Drag the sliders to change the pattern, and drag any of the four red corners to change the overall shape.</p>
+                        </instructions>
+                    </interactive>
+                </figure>
+
+                <p>Here are the two new examples.  They have been included in a <c>sidebyside</c> layout element with equal widths (see <xref ref="section-side-by-side" text="type-global" />) so they can be placed horizontally across the page.  They are not wrapped as figures, so cannot be cross-referenced.  These are again from the <url href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Category:Examples">example wiki</url>, the left being Fermat's Spiral and the right being a demonstration of B-splines.</p>
+
+                <sidebyside widths="40% 40%">
+                    <interactive xml:id="interactive-fermats-spiral" platform="jsxgraph" source="code/fermats-spiral.js">
+                        <slate xml:id="jsxgraph-fermats-spiral" language="jsxgraph" />
+                        <instructions>
+                            <p>Drag the slider to change the curve.</p>
+                        </instructions>
+                    </interactive>
+
+                    <interactive xml:id="interactive-bspline" platform="jsxgraph" source="code/bspline.js">
+                        <slate xml:id="jsxgraph-bspline" language="jsxgraph" />
+                        <instructions>
+                            <p>Any of the 8 red control points may be moved anywhere.</p>
+                        </instructions>
+                    </interactive>
+                </sidebyside>
+
+                <p>Finally, a piecewise function you can control, with traces of the domain values and range values in two other JSXGraph boards.  Boards and <init>HTML</init> buttons have been laid out using the <c>sidebyside</c> layout element.</p>
+
+                <figure>
+                    <caption>Piecewise Function</caption>
+
+                    <!-- Aspect ratio should be 20:7, the ":8" is to avoid extra scroll bars -->
+                    <interactive xml:id="interactive-piecewise" platform="jsxgraph" aspect="20:8" source="code/piecewise.js">
+                        <sbsgroup>
+                            <sidebyside width="30%" margins="0%">
+                                <slate xml:id="box_p3"  language="jsxgraph" aspect="6:6" />
+                                <slate xml:id="box2_p3" language="jsxgraph" aspect="6:6" />
+                                <slate xml:id="box3_p3" language="jsxgraph" aspect="6:6" />
+                            </sidebyside>
+                            <!-- buttons should have aspect 6:1, if we could set it -->
+                            <sidebyside widths="30% 30%" margins="20%">
+                                <slate language="html">
+                                    <input type="button" value="Animate" onkeypress="animate_p3(s_p3,75,100);" onclick="animate_p3(s_p3,75,100);" style="font-size:16px; width:100%"/>
+                                </slate>
+                                <slate language="html">
+                                    <input type="button" value="Clear Traces" onkeypress="clearTraces_p3();" onclick="clearTraces_p3();" style="font-size:16px; width:100%"/>
+                                </slate>
+                            </sidebyside>
+                        </sbsgroup>
+                        <instructions>
+                            <p>The slider of the left panel will trace out the piecewise function.  Simultaneously, the domain will be traced in the middle panel, and the range in the right panel.</p>
+                        </instructions>
+                    </interactive>
+                </figure>
+
+                <p>Generally, we load an interactive into an HTML <c>iframe</c> to sandbox (isolate) it from other interactives.  We does this for your own protection.  So, for example, one interactive cannot talk to another.  If two <tag>slate</tag> need to communicate, then they are related, and should be placed into a single <tag>interactive</tag>, allowed to layout themselves, or grouped within a <tag>sidebyside</tag> allowing finer control.  Even if we have this under control, you might still enjoy reading <url href="http://mikecavaliere.com/your-js-is-a-mess-javascript-namespacing/">Your JS is a Mess</url> at <c>mikecavaliere.com/your-js-is-a-mess-javascript-namespacing/</c>.</p>
+            </subsection>
 
             <subsection>
                 <title>CalcPlot3D</title>
@@ -3711,94 +3875,7 @@ the xsltproc executable.
                         </static>
                     </interactive>
                 </figure>
-            </subsection>
 
-
-            <subsection>
-                <title>JSXGraph</title>
-                <idx>JSXGraph</idx>
-
-                <p>The plot below is the curve <m>r=a+b\theta</m> in polar coordinates, for <m>0\leq\theta\leq 8\pi</m>.  It may be manipulated with the sliders to control the shape of the curve.  Point <m>A</m> is contrained to the curve, but may be dragged to a new location. At <m>A</m> the tangent line and normal line are plotted as dashed red lines.  Use the controls in the lower left to adjust the viewing window.  This <url href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Archimedean_spiral">example</url> is taken from the JSXGraph <url href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Category:Examples">example wiki</url>.  The code could be written in 7 lines.  Width is 75<percent /> and aspect ratio is 4:3.</p>
-
-                <figure>
-                    <caption>The Archimedian Spiral <m>r = a + b\theta</m>, <m>0\leq\theta\leq 8\pi</m></caption>
-                    <idx>Archimedian Spiral</idx>
-
-                    <interactive xml:id="interactive-archimedian-spiral" platform="jsxgraph" width="75%" source="code/archimedian.js">
-                        <canvas xml:id="jsxgraph-archimedian-spiral" language="jsxgraph" aspect="4:3" />
-                        <instructions>
-                            <p>Drag the sliders to change the parameters <m>a</m> and <m>b</m>.  Controls in the lower-right will adjust the viewing window.</p>
-                        </instructions>
-                    </interactive>
-                </figure>
-
-                <p><url href="http://jsxgraph.uni-bayreuth.de/wp/index.html">JSXGraph</url> is a <q>cross-browser JavaScript library for interactive geometry, function plotting, charting, and data visualization in the web browser.</q>  Place Javascript inside a file that is specified with the <attr>source</attr> attribute of the <tag>interactive</tag> element.  Then just be certain that <attr>xml:id</attr> of the <tag>interactive</tag> element is passed as the <init>HTML</init> <c>id</c> in an (early) call to the <c>initBoard()</c> method.</p>
-
-                <p>Here is a more elaborate example, from the <url href="http://jsxgraph.uni-bayreuth.de/showcase/">JSXGraph Showcase</url>, titled <url href="http://jsxgraph.uni-bayreuth.de/showcase/infinity.html">Infinity</url>.</p>
-
-                <p>There are two active sliders to control the shape and shading of the graphic, and hovering the mouse near one of the edges will highlight the entirety of one of the 30 quadrangles.  Finally, each of the four red corners may be dragged to a new location.  Code is 47 lines.  Width is 60<percent /> and aspect ratio is the default, 1:1, <ie /> a square.</p>
-
-                <figure>
-                    <caption>Infinity, from the JSXGraph Showcase</caption>
-
-                    <interactive xml:id="interactive-infinity" platform="jsxgraph" width="60%" source="code/infinity.js">
-                        <canvas xml:id="jsxgraph-infinity" language="jsxgraph"/>
-                        <instructions>
-                            <p>Drag the sliders to change the pattern, and drag any of the four red corners to change the overall shape.</p>
-                        </instructions>
-                    </interactive>
-                </figure>
-
-
-                <p>Here are the two new examples.  They have been included in a <c>sidebyside</c> layout element with equal widths (see <xref ref="section-side-by-side" text="type-global" />) so they can be placed horizontally across the page.  They are not wrapped as figures, so cannot be cross-referenced.  These are again from the <url href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Category:Examples">example wiki</url>, the left being Fermat's Spiral and the right being a demonstration of B-splines.</p>
-
-                <sidebyside widths="40% 40%">
-                    <interactive xml:id="interactive-fermats-spiral" platform="jsxgraph" source="code/fermats-spiral.js">
-                        <canvas xml:id="jsxgraph-fermats-spiral" language="jsxgraph" />
-                        <instructions>
-                            <p>Drag the slider to change the curve.</p>
-                        </instructions>
-                    </interactive>
-
-                    <interactive xml:id="interactive-bspline" platform="jsxgraph" source="code/bspline.js">
-                        <canvas xml:id="jsxgraph-bspline" language="jsxgraph" />
-                        <instructions>
-                            <p>Any of the 8 red control points may be moved anywhere.</p>
-                        </instructions>
-                    </interactive>
-                </sidebyside>
-
-
-                <p>Finally, a piecewise function you can control, with traces of the domain values and range values in two other JSXGraph boards.  Boards and <init>HTML</init> buttons have been laid out using the <c>sidebyside</c> layout element.</p>
-
-                <figure>
-                    <caption>Piecewise Function</caption>
-
-                    <interactive xml:id="interactive-piecewise" platform="jsxgraph" source="code/piecewise.js">
-                        <sbsgroup>
-                            <sidebyside width="30%" margins="0%">
-                                <canvas xml:id="box_p3"  language="jsxgraph"/>
-                                <canvas xml:id="box2_p3" language="jsxgraph"/>
-                                <canvas xml:id="box3_p3" language="jsxgraph"/>
-                            </sidebyside>
-                            <sidebyside widths="30% 30%" margins="20%">
-                                <canvas language="html">
-                                    <input type="button" value="Animate" onkeypress="animate_p3(s_p3,75,100);" onclick="animate_p3(s_p3,75,100);" style="font-size:16px; width:100%"/>
-                                </canvas>
-                                <canvas language="html">
-                                    <input type="button" value="Clear Traces" onkeypress="clearTraces_p3();" onclick="clearTraces_p3();" style="font-size:16px; width:100%"/>
-                                </canvas>
-                            </sidebyside>
-                        </sbsgroup>
-                        <instructions>
-                            <p>The slider of the left panel will trace out the piecewise function.  Simultaneously, the domain will be traced in the middle panel, and the range in the right panel.</p>
-                        </instructions>
-                    </interactive>
-                </figure>
-
-                <p>Be careful about your Javascript code when there are several on the same page, as duplicate variables may affect one another's performance adversely, with actions in the latter controlling the former.  You will be lucky if it is only that bad.  You could enjoy reading <url href="http://mikecavaliere.com/your-js-is-a-mess-javascript-namespacing/">Your JS is a Mess</url> at <c>mikecavaliere.com/your-js-is-a-mess-javascript-namespacing/</c>.</p>
-
-                <p>Also, do not <q>talk</q> between two different interactives since there is no guarantee they will always be on the same page.  If two <tag>canvas</tag> need to communicate, then they are related, and should be placed into a single <tag>interactive</tag>, grouped with a <tag>sidebyside</tag>.</p>
             </subsection>
         </section>
 
@@ -3809,11 +3886,11 @@ the xsltproc executable.
 
             <introduction>
                 <!-- First paragraph duplicated in previous section -->
-                <p>When outputting Web page versions, it is possible to embed a variety of dynamic interactive elements.  In a <latex />/PDF version, these will necessarily need to be replaced by some static substitute, such as a screenshot.  See Section<nbsp /><xref ref="section-sage-cells" /> for the specifics of embedding instances of the Sage Cell Server, which is more elaborate, and not entirely similar.</p>
+                <p>When outputting Web page versions, it is possible to embed a variety of dynamic interactive elements.  In a <latex />/PDF version, these will necessarily need to be replaced by some static substitute, such as a screenshot.  See <xref ref="section-sage-cells" text="type-global" /> for the specifics of embedding instances of the Sage Cell Server, which is more elaborate, and not entirely similar.</p>
 
-                <p>Interactives in this section can be used without paying any fees.  However, their use is generally encumbered by copyright and/or licensing restrictions, and may limit the license you can use on your own work.  So carefully study copyrights, licenses, and terms of use.  See <xref ref="section-interactive-open" /> for more interactives that are free as in <q>freedom</q> or <foreign xml:lang="fr-FR">liberté</foreign>.</p>
+                <p>Interactives in this section can be used without paying any fees.  However, their use is generally encumbered by copyright and/or licensing restrictions, and may limit the license you can use on your own work.  So carefully study copyrights, licenses, and terms of use.  See <xref ref="section-interactive-open" text="type-global" /> for more interactives that are free as in <q>freedom</q> or <foreign xml:lang="fr-FR">liberté</foreign>.</p>
 
-                <p>(2018-03-05) Almost everything in this section is under active development and not stable yet.  Feel free to experiment and make suggestions and requests.</p>
+                <p>(2018-03-05) Almost everything in this section is under active development and not stable yet.  Feel free to experiment and make suggestions and requests.  This page takes a while to completely load, so be patient.</p>
             </introduction>
 
             <subsection>
