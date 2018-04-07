@@ -2841,7 +2841,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Entirely similar for jsxgraph and video but we do                    -->
 <!-- not consult default *image* width in docinfo                         -->
 
-<xsl:template match="image[not(ancestor::sidebyside)]|video[not(ancestor::sidebyside)]|jsxgraph[not(ancestor::sidebyside)]|interactive[not(ancestor::sidebyside)]|canvas[not(ancestor::sidebyside)]" mode="get-width-percentage">
+<xsl:template match="image[not(ancestor::sidebyside)]|video[not(ancestor::sidebyside)]|jsxgraph[not(ancestor::sidebyside)]|interactive[not(ancestor::sidebyside)]|slate[not(ancestor::sidebyside)]" mode="get-width-percentage">
     <!-- find it first -->
     <xsl:variable name="raw-width">
         <xsl:choose>
@@ -2853,8 +2853,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <xsl:when test="self::image and $docinfo/defaults/image-width">
                 <xsl:value-of select="$docinfo/defaults/image-width" />
             </xsl:when>
-            <!-- naked canvas, look to enclosing interactive -->
-            <xsl:when test="self::canvas">
+            <!-- naked slate, look to enclosing interactive -->
+            <xsl:when test="self::slate">
                 <xsl:apply-templates select="parent::interactive" mode="get-width-percentage" />
             </xsl:when>
             <!-- what to do? Author will figure it out if too extreme -->
@@ -2885,7 +2885,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Widths from sidebyside layouts have been error-checked as input    -->
 
 <!-- occurs in a figure, not contained in a sidebyside -->
-<xsl:template match="image[ancestor::sidebyside]|video[ancestor::sidebyside]|jsxgraph[ancestor::sidebyside]|interactive[ancestor::sidebyside]|canvas[ancestor::sidebyside]" mode="get-width-percentage">
+<xsl:template match="image[ancestor::sidebyside]|video[ancestor::sidebyside]|jsxgraph[ancestor::sidebyside]|interactive[ancestor::sidebyside]|slate[ancestor::sidebyside]" mode="get-width-percentage">
     <!-- in a side-by-side, get layout, locate in layout -->
     <!-- and get width.  The layout-parameters template  -->
     <!-- will analyze an enclosing sbsgroup              -->
@@ -2911,7 +2911,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Input:  "width:height", or decimal width/height -->
 <!-- Return: real number as fraction width/height    -->
 <!-- Totally blank means nothing could be determined -->
-<xsl:template match="canvas|interactive|jsxgraph|video" mode="get-aspect-ratio">
+<xsl:template match="slate|interactive|jsxgraph|video" mode="get-aspect-ratio">
     <xsl:param name="default-aspect" select="''" />
 
     <!-- look to element first, then to supplied default          -->
@@ -2959,7 +2959,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 
 <!-- Pixels are an HTML thing, but we may need these numbers -->
 <!-- elsewhere, and these are are pure text templates        -->
-<xsl:template match="canvas|video|interactive" mode="get-width-pixels">
+<xsl:template match="slate|video|interactive" mode="get-width-pixels">
     <xsl:variable name="width-percent">
         <xsl:apply-templates select="." mode="get-width-percentage" />
     </xsl:variable>
@@ -2970,7 +2970,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 </xsl:template>
 
 <!-- Square by default, when asked.  Can override -->
-<xsl:template match="canvas|video|interactive" mode="get-height-pixels">
+<xsl:template match="slate|video|interactive" mode="get-height-pixels">
     <xsl:param name="default-aspect" select="'1:1'" />
 
     <xsl:variable name="width-percent">

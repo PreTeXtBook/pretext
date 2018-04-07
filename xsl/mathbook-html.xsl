@@ -4894,7 +4894,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:apply-templates>
 </xsl:template>
 
-<xsl:template match="interactive|canvas" mode="panel-html-box">
+<xsl:template match="interactive|slate" mode="panel-html-box">
     <xsl:param name="b-original" select="true()" />
     <xsl:apply-templates select=".">
         <xsl:with-param name="b-original" select="$b-original" />
@@ -7219,49 +7219,98 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
     <iframe src="{$full-url}" width="600" height="800" />
 </xsl:template>
 
-<!-- JSXGraph Interactive -->
-<xsl:template match="interactive[@platform ='jsxgraph']">
+
+
+
+
+
+<!-- JSXGraph, HTML5 Interactives -->
+<xsl:template match="interactive[(@platform = 'jsxgraph') or (@platform = 'html5')]">
     <!-- an interactive always has a width, default is 100% -->
-    <xsl:variable name="width">
-        <xsl:apply-templates select="." mode="get-width-pixels" />
+    <xsl:variable name="int-id">
+        <xsl:apply-templates select="." mode="internal-id" />
     </xsl:variable>
-    <!-- height is option, if not give just stacks up -->
-    <xsl:variable name="height">
-        <xsl:if test="@aspect-ratio">
-            <xsl:apply-templates select="." mode="get-height-pixels" />
-        </xsl:if>
-    </xsl:variable>
+
+    <!-- "instructions" in identical-width div -->
     <div>
-        <xsl:attribute name="id">
-            <xsl:value-of select="@xml:id" />
-        </xsl:attribute>
+        <!-- make and use a variable below -->
+        <xsl:variable name="width">
+            <xsl:apply-templates select="." mode="get-width-pixels" />
+        </xsl:variable>
         <xsl:attribute name="style">
-            <!-- always -->
             <xsl:text>width:</xsl:text>
             <xsl:value-of select="$width" />
             <xsl:text>px;</xsl:text>
-            <!-- maybe -->
-            <xsl:if test="not($height = '')">
-                <xsl:text> height:</xsl:text>
-                <xsl:value-of select="$height" />
-                <xsl:text>px;</xsl:text>
-            </xsl:if>
         </xsl:attribute>
-        <!-- stack, centered, else use a layout -->
-        <center>
-            <xsl:apply-templates select="canvas|code|sidebyside|sbsgroup" />
-        </center>
         <xsl:apply-templates select="instructions" />
-        <!-- accumulate script tags *after* HTML elements -->
-        <xsl:apply-templates select="@source" />
     </div>
+    <!-- Drop an iframe, with predictable "src" attribute -->
+    <!-- Requires a height, so we need to get this sorted -->
+    <!-- Or use some JS device to adjust height post-load -->
+    <!-- https://stackoverflow.com/questions/9162933/     -->
+    <!-- This provides some sandboxing, if we choose      -->
+    <!-- https://www.html5rocks.com/en/tutorials/security/sandboxed-iframes/ -->
+    <iframe id="{$int-id}">
+        <xsl:attribute name="width">
+            <xsl:apply-templates select="." mode="get-width-pixels" />
+            <xsl:text>px;</xsl:text>
+        </xsl:attribute>
+        <xsl:attribute name="height">
+            <xsl:apply-templates select="." mode="get-height-pixels" />
+            <xsl:text>px;</xsl:text>
+        </xsl:attribute>
+        <xsl:attribute name="src">
+            <xsl:value-of select="$int-id" />
+            <xsl:text>.html</xsl:text>
+        </xsl:attribute>
+    </iframe>
+    <!-- Build a minimal page -->
+    <!--   Platform specific libraries into head -->
+    <!--   Author-libraries after slate exist -->
+    <!--   Instructions outside, but ... -->
+    <exsl:document href="{$int-id}.html" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
+        <xsl:call-template name="converter-blurb-html" />
+        <html lang="{$document-language}">
+            <head>
+                <!-- need CSS for sidebyside -->
+                <xsl:call-template name="css" />
+                <!-- For jsxgraph case, bring in CSS and basic library -->
+                <xsl:if test="@platform = 'jsxgraph'">
+                    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jsxgraph/0.99.6/jsxgraph.css" />
+                    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsxgraph/0.99.6/jsxgraphcore.js"></script>
+                </xsl:if>
+            </head>
+            <body class="mathbook-content">
+                <div>
+
+
+                    <xsl:attribute name="width">
+                        <xsl:apply-templates select="." mode="get-width-pixels" />
+                        <xsl:text>px;</xsl:text>
+                    </xsl:attribute>
+                    <xsl:attribute name="height">
+                        <xsl:apply-templates select="." mode="get-height-pixels" />
+                        <xsl:text>px;</xsl:text>
+                    </xsl:attribute>
+
+
+                    <!-- stack, else use a layout -->
+                    <xsl:apply-templates select="slate|sidebyside|sbsgroup" />
+                    <!-- accumulate script tags *after* HTML elements -->
+                    <xsl:apply-templates select="@source" />
+                </div>
+            </body>
+        </html>
+    </exsl:document>
 </xsl:template>
+
+
 
 <!-- Form a "div"                  -->
 <!--   (a) with predictable id     -->
 <!--   (b) stock class information -->
 <!--   (c) size, now in pixels     -->
-<xsl:template match="canvas[@language = 'jsxgraph']">
+<xsl:template match="slate[@language = 'jsxgraph']">
     <div>
         <xsl:attribute name="id">
             <xsl:value-of select="@xml:id" />
@@ -7285,18 +7334,43 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
             <xsl:text> height:</xsl:text>
             <xsl:value-of select="$height" />
             <xsl:text>px;</xsl:text>
+            <xsl:text> display: block;</xsl:text>
+            <xsl:text> box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;</xsl:text>
         </xsl:attribute>
     </div>
 </xsl:template>
 
+<!-- *must* use size attributes on "canvas" -->
+<xsl:template match="slate[ancestor::interactive[@platform = 'html5']]">
+    <!-- display:block allows precise sizes, without   -->
+    <!-- having inline content with extra line height, -->
+    <!-- or whatever, inducing scroll bars             -->
+    <canvas style="display:block">
+        <xsl:attribute name="id">
+            <xsl:value-of select="@xml:id" />
+        </xsl:attribute>
+        <!-- modal template will compute or inherit from enclosing interactive -->
+        <xsl:attribute name="width">
+            <xsl:apply-templates select="." mode="get-width-pixels" />
+            <xsl:text>px;</xsl:text>
+        </xsl:attribute>
+        <xsl:attribute name="height">
+            <xsl:apply-templates select="." mode="get-height-pixels" />
+            <xsl:text>px;</xsl:text>
+        </xsl:attribute>
+    </canvas>
+</xsl:template>
+
 <!-- HTML Code -->
 <!-- Simply create deep-copy of HTML elements -->
-<xsl:template match="canvas[@language='html']">
+<!-- TODO: should this be a div, with width and height? -->
+<xsl:template match="slate[@language='html']">
     <xsl:copy-of select="*" />
 </xsl:template>
 
 <!-- @source attribute to script tags -->
-<xsl:template match="code[@language = 'javascript']/@source|interactive[@platform = 'jsxgraph']/@source">
+<!-- <xsl:template match="@source"> -->
+<xsl:template match="interactive[(@platform = 'jsxgraph') or (@platform = 'html5')]/@source">
     <!-- <xsl:variable name="stuff" select=" -->
     <xsl:call-template name="one-script">
         <xsl:with-param name="text" select="concat(normalize-space(str:replace(., ',', ' ')), ' ')" />
@@ -7379,6 +7453,7 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
     <!-- Query string option: _embed=iframe will provide Wolfram footer -->
     <iframe width="500" height="520" src="https://www.wolframcloud.com/objects/{@wolfram-cdf}?_view=frameless" />
 </xsl:template>
+
 
 <!-- ########################## -->
 <!-- WeBWorK Embedded Exercises -->
