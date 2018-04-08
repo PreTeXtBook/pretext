@@ -167,7 +167,7 @@
 
             <p>The <tag>setup</tag> contains a section of <tag>var</tag> tags followed by a <tag>pg-code</tag>. If you are familiar with code for <webwork /> PG problems, the <tag>pg-code</tag> contains lines of PG code that would appear in the <q>setup</q> portion of the problem. Typically, this is the code that follows <c>TEXT(beginproblem());</c> and precedes the first <c>BEGIN_TEXT</c> or <c>BEGIN_PGML</c>. If your code needs any special <webwork /> macro libraries, you may load them in a <tag>pg-macros</tag> tag prior to <tag>setup</tag>, with each such <c>.pl</c> file's name inside a <tag>macro-file</tag> tag. However many of the most common macro libraries will be loaded automatically based on the content and attributes you use in the rest of your problem.</p>
 
-            <p>For each perl variable (scalar, array, or hash) that is used in the <tag>pg-code</tag> and which will <em>also</em> be used in the <tag>statement</tag>, <tag>solution</tag>, or as an answer to an answer blank, there should be a <tag>var</tag>. These <tag>var</tag> tags are primarily to help MBX handle static output, but they also allow for some optimal leveraging of <webwork /> features.</p>
+            <p>For each Perl variable (scalar, array, or hash) that is used in the <tag>pg-code</tag> and which will <em>also</em> be used in the <tag>statement</tag>, <tag>solution</tag>, or as an answer to an answer blank, there should be a <tag>var</tag>. These <tag>var</tag> tags are primarily to help MBX handle static output, but they also allow for some optimal leveraging of <webwork /> features.</p>
 
             <p>A <tag>var</tag> in the <tag>setup</tag> always has a <attr>name</attr> attribute, which should match the variable's name in your <tag>pg-code</tag> (<eg /> <c>$x</c>, <c>@a</c>, <etc />). Each <tag>var</tag> should usually have a <tag>static</tag> tag with <latex /> code for the static version of the answer (possibly inside a <c>\text{}</c>). For PDF and other static output modes, this <latex /> code will be used to print <tag>var</tag> values, since the <webwork /> server will play no role.</p>
 
@@ -225,6 +225,9 @@
             <p>If you are familiar with PG, then in your <tag>pg-code</tag> you might write a custom evaluator (a combination of a custom answer checker, post filters, pre filters, <etc />). If you store this similar to</p><pre>$my_evaluator = $answer -> cmp(...);</pre><p>then the <tag>var</tag> can have <attr>evaluator="$my_evaluator"</attr>.</p>
 
             <p>An <tag>instruction</tag> is specific instructions for how the reader might type or otherwise electronically submit their answer. Contents of an <tag>instruction</tag> will be omitted from print and other static output forms. The <tag>instruction</tag> is a peer to <tag>p</tag>, but may only contain <q>short text</q> children.</p>
+
+            <p>Some general information on authoring <webwork /> problems can be found in a <url href="http://webwork.maa.org/wiki/Problem_Authoring_Videos">set of videos</url> at<cd>webwork.maa.org/wiki/Problem_Authoring_Videos</cd>
+            Not all of this is relevant to authoring within <pretext /> but there are parts that will be helpful for constructing the Perl code necessary for randomized problems.</p>
 
         </subsection>
 
