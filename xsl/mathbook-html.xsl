@@ -5146,7 +5146,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Formerly a "pop-out" page, now a "standalone" page     -->
-<!-- Has autoplay on since a reader ahs elected to go there -->
+<!-- Has autoplay on since a reader has elected to go there -->
 <!-- TODO: override preview, since it just plays, pass 'default -->
 <xsl:template match="video" mode="video-standalone-page">
     <xsl:variable name="aspect-ratio">
@@ -5158,7 +5158,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- with no sidebar, subtract margins = 900 - 2*30 -->
     <xsl:variable name="ptx-content-width" select="'840'" />
     <xsl:variable name="ptx-content-height" select="$ptx-content-width div $aspect-ratio" />
-    <xsl:apply-templates select="." mode="masthead-only-page">
+    <xsl:apply-templates select="." mode="standalone-page">
         <xsl:with-param name="content">
             <!-- display preview, and enable autoplay  -->
             <!-- since reader has elected this page    -->
@@ -5173,21 +5173,33 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:apply-templates>
 </xsl:template>
 
+<!-- Use this to ensure consistency -->
+<!-- first maybe moves to -common -->
+<xsl:template match="*" mode="standalone-page-name">
+    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:text>.html</xsl:text>
+</xsl:template>
 
-<!-- "Pop-Out Page" -->
-<!-- (A bit rough)                  -->
-<!-- no extra libraries, no sidebar -->
-<!-- 840px available (~900 - 2*30)  -->
-<!-- Page name comes from context node -->
+<xsl:template match="*" mode="iframe-filename">
+    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:text>-if.html</xsl:text>
+</xsl:template>
+
+<!-- A "Standalone" Page -->
+<!-- Formerly a "pop-out" page, now a "standalone" page    -->
+<!-- (A bit rough - this could be improved, consolidated)  -->
+<!-- no extra libraries, no sidebar                        -->
+<!-- 840px available (~900 - 2*30)                         -->
+<!-- Page's  filename comes from modal template on context -->
 <!-- TODO:  one page template, super-parameterized      -->
 <!-- TODO:  trash navigation further in masthead        -->
 <!-- TODO:  replace libraries by hooks to add some back -->
-<xsl:template match="*" mode="masthead-only-page">
+<xsl:template match="*" mode="standalone-page">
     <xsl:param name="content" select="''" />
-    <xsl:variable name="int-id">
-        <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:variable name="filename">
+        <xsl:apply-templates select="." mode="standalone-page-name" />
     </xsl:variable>
-    <exsl:document href="{$int-id}.html" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
+    <exsl:document href="{$filename}" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
         <xsl:call-template name="converter-blurb-html" />
         <html lang="{$document-language}"> <!-- dir="rtl" here -->
             <head>
@@ -7263,18 +7275,68 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
     </iframe>
 </xsl:template>
 
-
-
-
-
-
 <!-- JSXGraph, HTML5 Interactives -->
 <xsl:template match="interactive[(@platform = 'jsxgraph') or (@platform = 'html5')]">
     <!-- an interactive always has a width, default is 100% -->
     <xsl:variable name="int-id">
         <xsl:apply-templates select="." mode="internal-id" />
     </xsl:variable>
+    <!-- (1) Build, display full content on the page, where born -->
+    <xsl:apply-templates select="." mode="interactive-core" />
+    <!-- (2) Identical content, but now isolated on a reader-friendly page -->
+    <xsl:apply-templates select="." mode="standalone-page" >
+        <xsl:with-param name="content">
+            <xsl:apply-templates select="." mode="interactive-core" />
+        </xsl:with-param>
+    </xsl:apply-templates>
+    <!-- Build a minimal page for iframe contents -->
+    <!--   Platform specific libraries into head  -->
+    <!--   Author-libraries after slate exist     -->
+    <!--   Instructions outside, but ...          -->
+    <xsl:variable name="if-filename">
+        <xsl:apply-templates select="." mode="iframe-filename" />
+    </xsl:variable>
+    <exsl:document href="{$if-filename}" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
+        <xsl:call-template name="converter-blurb-html" />
+        <html lang="{$document-language}">
+            <head>
+                <!-- need CSS for sidebyside -->
+                <xsl:call-template name="css" />
+                <!-- For jsxgraph case, bring in CSS and basic library -->
+                <xsl:if test="@platform = 'jsxgraph'">
+                    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jsxgraph/0.99.6/jsxgraph.css" />
+                    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsxgraph/0.99.6/jsxgraphcore.js"></script>
+                </xsl:if>
+            </head>
+            <body class="mathbook-content">
+                <div>
+                    <!-- the actual interactive bit          -->
+                    <!-- this should generaize to a template -->
+                    <xsl:attribute name="width">
+                        <xsl:apply-templates select="." mode="get-width-pixels" />
+                        <xsl:text>px;</xsl:text>
+                    </xsl:attribute>
+                    <xsl:attribute name="height">
+                        <xsl:apply-templates select="." mode="get-height-pixels" />
+                        <xsl:text>px;</xsl:text>
+                    </xsl:attribute>
+                    <!-- stack, else use a layout -->
+                    <xsl:apply-templates select="slate|sidebyside|sbsgroup" />
+                    <!-- accumulate script tags *after* HTML elements -->
+                    <xsl:apply-templates select="@source" />
+                </div>
+            </body>
+        </html>
+    </exsl:document>
+</xsl:template>
 
+<!-- The full content of an interactive that displays:  -->
+<!-- both where born, and in standalone page -->
+<xsl:template match="interactive[(@platform = 'jsxgraph') or (@platform = 'html5')]" mode="interactive-core">
+    <!-- an interactive always has a width, default is 100% -->
+    <xsl:variable name="int-id">
+        <xsl:apply-templates select="." mode="internal-id" />
+    </xsl:variable>
     <!-- "instructions" in identical-width div -->
     <div>
         <!-- make and use a variable below -->
@@ -7304,51 +7366,10 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
             <xsl:text>px;</xsl:text>
         </xsl:attribute>
         <xsl:attribute name="src">
-            <xsl:value-of select="$int-id" />
-            <xsl:text>.html</xsl:text>
+            <xsl:apply-templates select="." mode="iframe-filename" />
         </xsl:attribute>
     </iframe>
-    <!-- Build a minimal page -->
-    <!--   Platform specific libraries into head -->
-    <!--   Author-libraries after slate exist -->
-    <!--   Instructions outside, but ... -->
-    <exsl:document href="{$int-id}.html" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
-        <xsl:call-template name="converter-blurb-html" />
-        <html lang="{$document-language}">
-            <head>
-                <!-- need CSS for sidebyside -->
-                <xsl:call-template name="css" />
-                <!-- For jsxgraph case, bring in CSS and basic library -->
-                <xsl:if test="@platform = 'jsxgraph'">
-                    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jsxgraph/0.99.6/jsxgraph.css" />
-                    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsxgraph/0.99.6/jsxgraphcore.js"></script>
-                </xsl:if>
-            </head>
-            <body class="mathbook-content">
-                <div>
-
-
-                    <xsl:attribute name="width">
-                        <xsl:apply-templates select="." mode="get-width-pixels" />
-                        <xsl:text>px;</xsl:text>
-                    </xsl:attribute>
-                    <xsl:attribute name="height">
-                        <xsl:apply-templates select="." mode="get-height-pixels" />
-                        <xsl:text>px;</xsl:text>
-                    </xsl:attribute>
-
-
-                    <!-- stack, else use a layout -->
-                    <xsl:apply-templates select="slate|sidebyside|sbsgroup" />
-                    <!-- accumulate script tags *after* HTML elements -->
-                    <xsl:apply-templates select="@source" />
-                </div>
-            </body>
-        </html>
-    </exsl:document>
 </xsl:template>
-
-
 
 <!-- Form a "div"                  -->
 <!--   (a) with predictable id     -->
