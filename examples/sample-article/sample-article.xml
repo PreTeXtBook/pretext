@@ -4001,7 +4001,7 @@ the xsltproc executable.
 
             <figure>
                 <caption>University of Puget Sound Promotional Video</caption>
-                <video source="images/ups-visitor-guide-360" width="80%"/>
+                <video source="images/ups-visitor-guide-360" width="80%" preview="images/ups-promo-frame-one.jpg" />
             </figure>
 
             <p>You can replace the <q>preview</q> image of a video with one of your own making.  <init>HTML</init> refers to this as the <term>poster</term>, presumably because it advertises the video.  The image you make should be of the same quality as the video, and with the same aspect-ratio, and is presumably one of the frames of the video.  So a screenshot is the likely avenue.  (Maybe we will have advice on how to do this easily, or see <url href="https://github.com/rbeezer/mathbook/issues/853" />.)  On the <tag>video</tag> tag, include a <attr>preview</attr> attribute which is the name of an image file, including a relative path.  (JPEG or PNG formats are best.  JPEG may be smaller for video screenshots, while PNG is lossless and so may work better for diagrams.)</p>
@@ -4029,7 +4029,7 @@ the xsltproc executable.
 
             <figure>
                 <caption>Big Buck Bunny from <q>Video for Everybody</q> Test Page at <url href="http://camendesign.com/code/video_for_everybody/test.htm"><c>camendesign.com/code/video_for_everybody/test.htm</c></url></caption>
-                <video source="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" start="16" end="30" width="70%"/>
+                <video source="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" start="16" end="30" width="70%" preview="images/big-buck-bunny-frame-one.jpg" />
             </figure>
 
             <!-- A Coursera URL that expires via digital signature scheme:
@@ -4093,7 +4093,7 @@ the xsltproc executable.
                 <!-- UPS promo -->
                 <figure>
                     <caption>UPS Promo</caption>
-                    <video xml:id="ups-promo-sbs" source="images/ups-visitor-guide-360" />
+                    <video xml:id="ups-promo-sbs" source="images/ups-visitor-guide-360" preview="images/ups-promo-frame-one.jpg"/>
                 </figure>
             </sidebyside>
 
@@ -4144,7 +4144,7 @@ the xsltproc executable.
                 <sidebyside margins="0%" width="30%">
                     <figure>
                         <caption>Embedded Only</caption>
-                        <video xml:id="ups-promo-1" source="images/ups-visitor-guide-360" play-at="embed" />
+                        <video xml:id="ups-promo-1" source="images/ups-visitor-guide-360" play-at="embed" preview="images/ups-promo-frame-one.jpg"/>
                     </figure>
                     <!-- A @preview is effective on next, and might become       -->
                     <!-- necessary as part of a deprecation of the popout option -->
@@ -4154,7 +4154,7 @@ the xsltproc executable.
                     </figure>
                     <figure>
                         <caption>User Selection</caption>
-                        <video xml:id="ups-promo-3" source="images/ups-visitor-guide-360" play-at="select" />
+                        <video xml:id="ups-promo-3" source="images/ups-visitor-guide-360" play-at="select" preview="images/ups-promo-frame-one.jpg"/>
                     </figure>
                 </sidebyside>
             </figure>
@@ -6632,7 +6632,7 @@ the xsltproc executable.
 
             <sidebyside  margins="5%" widths="40% 45%">
                 <!-- Hosted -->
-                <video source="images/ups-visitor-guide-360" width="80%"/>
+                <video source="images/ups-visitor-guide-360" width="80%" preview="images/ups-promo-frame-one.jpg"/>
                 <!-- Airborne Toxic Event -->
                 <video xml:id="airborne-midnight-1" youtube="UYPoMjR6-Ao" />
             </sidebyside>
