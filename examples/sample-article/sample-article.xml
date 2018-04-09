@@ -3770,7 +3770,7 @@ the xsltproc executable.
                     <caption>The Archimedian Spiral <m>r = a + b\theta</m>, <m>0\leq\theta\leq 8\pi</m></caption>
                     <idx>Archimedian Spiral</idx>
 
-                    <interactive xml:id="interactive-archimedian-spiral" platform="jsxgraph" width="80%" aspect="4:3" source="code/archimedian.js">
+                    <interactive xml:id="interactive-archimedian-spiral" platform="jsxgraph" width="80%" aspect="4:3" source="code/jsxgraph/archimedian.js">
                         <slate xml:id="jsxgraph-archimedian-spiral" language="jsxgraph" aspect="4:3"/>
                         <instructions>
                             <p>Drag the sliders to change the parameters <m>a</m> and <m>b</m>.  Controls in the lower-right will adjust the viewing window.</p>
@@ -3785,7 +3785,7 @@ the xsltproc executable.
                 <figure>
                     <caption>Infinity, from the JSXGraph Showcase</caption>
 
-                    <interactive xml:id="interactive-infinity" platform="jsxgraph" width="60%" source="code/infinity.js">
+                    <interactive xml:id="interactive-infinity" platform="jsxgraph" width="60%" source="code/jsxgraph/infinity.js">
                         <slate xml:id="jsxgraph-infinity" language="jsxgraph"/>
                         <instructions>
                             <p>Drag the sliders to change the pattern, and drag any of the four red corners to change the overall shape.</p>
@@ -3796,14 +3796,14 @@ the xsltproc executable.
                 <p>Here are the two new examples.  They have been included in a <c>sidebyside</c> layout element with equal widths (see <xref ref="section-side-by-side" text="type-global" />) so they can be placed horizontally across the page.  They are not wrapped as figures, so cannot be cross-referenced.  These are again from the <url href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Category:Examples">example wiki</url>, the left being Fermat's Spiral and the right being a demonstration of B-splines.</p>
 
                 <sidebyside widths="40% 40%">
-                    <interactive xml:id="interactive-fermats-spiral" platform="jsxgraph" source="code/fermats-spiral.js">
+                    <interactive xml:id="interactive-fermats-spiral" platform="jsxgraph" source="code/jsxgraph/fermats-spiral.js">
                         <slate xml:id="jsxgraph-fermats-spiral" language="jsxgraph" />
                         <instructions>
                             <p>Drag the slider to change the curve.</p>
                         </instructions>
                     </interactive>
 
-                    <interactive xml:id="interactive-bspline" platform="jsxgraph" source="code/bspline.js">
+                    <interactive xml:id="interactive-bspline" platform="jsxgraph" source="code/jsxgraph/bspline.js">
                         <slate xml:id="jsxgraph-bspline" language="jsxgraph" />
                         <instructions>
                             <p>Any of the 8 red control points may be moved anywhere.</p>
@@ -3817,7 +3817,7 @@ the xsltproc executable.
                     <caption>Piecewise Function</caption>
 
                     <!-- Aspect ratio should be 20:7, the ":8" is to avoid extra scroll bars -->
-                    <interactive xml:id="interactive-piecewise" platform="jsxgraph" aspect="20:8" source="code/piecewise.js">
+                    <interactive xml:id="interactive-piecewise" platform="jsxgraph" aspect="20:8" source="code/jsxgraph/piecewise.js">
                         <sbsgroup>
                             <sidebyside width="30%" margins="0%">
                                 <slate xml:id="box_p3"  language="jsxgraph" aspect="6:6" />
