@@ -7129,11 +7129,34 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Geogebra -->
 <xsl:template match="interactive[@geogebra]">
-    <iframe scrolling="no" src="https://www.geogebra.org/material/iframe/id/{@geogebra}/width/800/height/450/border/888888/smb/false/stb/false/stbh/false/ai/false/asb/false/sri/false/rc/false/ld/false/sdz/false/ctl/false" width="800px" height="450px" />
+    <xsl:variable name="width">
+        <xsl:apply-templates select="." mode="get-width-pixels" />
+    </xsl:variable>
+    <xsl:variable name="height">
+        <xsl:apply-templates select="." mode="get-height-pixels" />
+    </xsl:variable>
+    <iframe scrolling="no" src="https://www.geogebra.org/material/iframe/id/{@geogebra}/width/800/height/450/border/888888/smb/false/stb/false/stbh/false/ai/false/asb/false/sri/false/rc/false/ld/false/sdz/false/ctl/false">
+        <xsl:attribute name="width">
+            <xsl:value-of select="$width" />
+            <xsl:text>px</xsl:text>
+        </xsl:attribute>
+        <xsl:attribute name="height">
+            <xsl:value-of select="$height" />
+            <xsl:text>px</xsl:text>
+        </xsl:attribute>
+    </iframe>
 </xsl:template>
 
 <!-- Local source -->
 <xsl:template match="interactive[@platform='geogebra']">
+    <!-- size of the window -->
+    <xsl:variable name="width">
+        <xsl:apply-templates select="." mode="get-width-pixels" />
+    </xsl:variable>
+    <xsl:variable name="height">
+        <xsl:apply-templates select="." mode="get-height-pixels" />
+    </xsl:variable>
+
     <!-- We need a Javascript identifier to name the applet -->
     <xsl:variable name="applet-name">
         <xsl:apply-templates select="." mode="internal-id-no-dash" />
@@ -7155,11 +7178,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- We assume JQuery is loaded, so go that route                      -->
     <!-- https://wiki.geogebra.org/en/Reference:GeoGebra_Apps_API          -->
     <!-- http://dev.geogebra.org/examples/html/example-api-save-state.html -->
+    <!-- Parameter reference:                                              -->
+    <!-- https://wiki.geogebra.org/en/Reference:GeoGebra_App_Parameters    -->
     <script type="text/javascript">
 <xsl:text>
 var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
-        "width":550,
-        "height":245,
+        "width":</xsl:text><xsl:value-of select="$width" /><xsl:text>,
+        "height":</xsl:text><xsl:value-of select="$height" /><xsl:text>,
         "showToolBar":true,
         "borderColor":null,
         "showMenuBar":false,
@@ -7173,16 +7198,26 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
         "showToolBarHelp":true,
         "errorDialogsActive":true,
         "useBrowserForJS":false,
-        "ggbBase64":"</xsl:text>
-<xsl:value-of select="normalize-space(code[@language='base64']/text())" />
-<xsl:text>"};&#xa;</xsl:text>
+        "playButton":false,
+        "filename":"</xsl:text><xsl:value-of select="@source" /><xsl:text>"};&#xa;</xsl:text>
+        <!-- "ggbBase64":"</xsl:text><xsl:value-of select="normalize-space(code[@language='base64'])" /><xsl:text>"};&#xa;</xsl:text> -->
 
 <xsl:text>var </xsl:text><xsl:value-of select="$applet-name" /><xsl:text> = new GGBApplet(</xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text>, '5.0');
 $( document ).ready(
 function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject('</xsl:text><xsl:value-of select="$applet-container" /><xsl:text>'); }
 );&#xa;</xsl:text>
     </script>
-    <div class="geogebra-applet" id="{$applet-container}"></div>
+    <!-- build a container div with the right shape -->
+    <div class="geogebra-applet" id="{$applet-container}">
+        <xsl:attribute name="style">
+            <xsl:text>width:</xsl:text>
+            <xsl:value-of select="$width" />
+            <xsl:text>px;</xsl:text>
+            <xsl:text> height:</xsl:text>
+            <xsl:value-of select="$height" />
+            <xsl:text>px;</xsl:text>
+        </xsl:attribute>
+    </div>
 </xsl:template>
 
 <!-- Desmos -->
