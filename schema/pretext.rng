@@ -1784,6 +1784,7 @@
           <choice>
             <value>default</value>
             <value>generic</value>
+            <text/>
           </choice>
         </attribute>
       </optional>

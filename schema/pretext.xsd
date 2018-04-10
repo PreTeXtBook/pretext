@@ -1755,14 +1755,7 @@
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
-      <xs:attribute name="preview">
-        <xs:simpleType>
-          <xs:restriction base="xs:token">
-            <xs:enumeration value="default"/>
-            <xs:enumeration value="generic"/>
-          </xs:restriction>
-        </xs:simpleType>
-      </xs:attribute>
+      <xs:attribute name="preview"/>
       <xs:attribute name="source"/>
       <xs:attribute name="youtube"/>
     </xs:complexType>
