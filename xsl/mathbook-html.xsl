@@ -7311,13 +7311,19 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
             <body class="mathbook-content">
                 <div>
                     <!-- the actual interactive bit          -->
-                    <!-- this should generaize to a template -->
-                    <xsl:attribute name="width">
+                    <!-- this should generalize to a template -->
+                    <xsl:variable name="width">
                         <xsl:apply-templates select="." mode="get-width-pixels" />
-                        <xsl:text>px;</xsl:text>
-                    </xsl:attribute>
-                    <xsl:attribute name="height">
+                    </xsl:variable>
+                    <xsl:variable name="height">
                         <xsl:apply-templates select="." mode="get-height-pixels" />
+                    </xsl:variable>
+                    <xsl:attribute name="style">
+                        <xsl:text>width:</xsl:text>
+                        <xsl:value-of select="$width" />
+                        <xsl:text>px;</xsl:text>
+                        <xsl:text> height:</xsl:text>
+                        <xsl:value-of select="$height" />
                         <xsl:text>px;</xsl:text>
                     </xsl:attribute>
                     <!-- stack, else use a layout -->
