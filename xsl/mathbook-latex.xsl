@@ -4525,8 +4525,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- point to HTML-produced, and canonically-hosted, standalone page -->
 <!-- Eventually match on all interactives                            -->
+<!-- NB baseurl is likely to change, it should be a publisher option -->
+
 <xsl:template match="video[@source]|interactive[@platform = 'html5']" mode="static-url">
-    <xsl:value-of select="$docinfo/baseurl/@href" />
+    <xsl:value-of select="$docinfo/html/baseurl/@href" />
     <xsl:text>/</xsl:text>
     <xsl:apply-templates select="." mode="standalone-filename" />
 </xsl:template>

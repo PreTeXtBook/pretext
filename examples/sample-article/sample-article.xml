@@ -159,7 +159,11 @@ the xsltproc executable.
             </google>
         </search>
 
-        <baseurl href="http://mathbook.pugetsound.edu/examples/sample-article/html/" />
+        <!-- There does not need to be a trailing / on the URL -->
+        <!-- NB This is likely to change, it should be a publisher option -->
+        <html>
+            <baseurl href="http://mathbook.pugetsound.edu/examples/sample-article/html" />
+        </html>
 
         <!-- Images in HTML output may carry a discreet list of links    -->
         <!-- to "archival" versions of images in a variety of formats.   -->
