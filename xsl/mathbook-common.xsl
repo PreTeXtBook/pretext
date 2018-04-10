@@ -2987,6 +2987,20 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:value-of select="$design-width-pixels * $width-fraction div $aspect-ratio" />
 </xsl:template>
 
+<!-- The HTML conversion generates "standalone" pages for videos   -->
+<!-- and other interactives.  Then the LaTeX conversion will make  -->
+<!-- links to these pages (eg, via QR codes).  And we might use    -->
+<!-- these pages as the basis for scraping preview images.  So we  -->
+<!-- place a template here to achieve consistency across uses.     -->
+<xsl:template match="video|interactive" mode="standalone-filename">
+    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:text>.html</xsl:text>
+</xsl:template>
+<xsl:template match="*" mode="standalone-filename">
+    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:text>-ERROR-no-standalone-filename.html</xsl:text>
+</xsl:template>
+
 
 <!-- ################ -->
 <!-- Names of Objects -->

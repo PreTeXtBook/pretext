@@ -5174,12 +5174,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Use this to ensure consistency -->
-<!-- first maybe moves to -common -->
-<xsl:template match="*" mode="standalone-page-name">
-    <xsl:apply-templates select="." mode="internal-id" />
-    <xsl:text>.html</xsl:text>
-</xsl:template>
-
 <xsl:template match="*" mode="iframe-filename">
     <xsl:apply-templates select="." mode="internal-id" />
     <xsl:text>-if.html</xsl:text>
@@ -5197,7 +5191,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="*" mode="standalone-page">
     <xsl:param name="content" select="''" />
     <xsl:variable name="filename">
-        <xsl:apply-templates select="." mode="standalone-page-name" />
+        <xsl:apply-templates select="." mode="standalone-filename" />
     </xsl:variable>
     <exsl:document href="{$filename}" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
         <xsl:call-template name="converter-blurb-html" />
