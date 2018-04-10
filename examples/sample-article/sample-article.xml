@@ -3692,7 +3692,7 @@ the xsltproc executable.
                 <figure xml:id="figure-simple-eigenvector">
                     <caption>A simple eigenvector demonstration</caption>
 
-                    <interactive xml:id="interactive-simple-eigenvector" platform="html5" width="60%" source="code/austin/figures.js code/austin/simple-ev.js">
+                    <interactive xml:id="interactive-simple-eigenvector" platform="html5" width="60%" source="code/austin/figures.js code/austin/simple-ev.js" preview="images/simple-eigenvector-preview.jpg">
                         <slate xml:id="eigenvector" language="javascript" />
                         <instructions>
                             <p>Let <m>\vec{x}</m> be represented by the red arrow, and <m>A\vec{x}</m> by the grey arrow, for some particular <m>2\times 2</m> matrix <m>A</m>.  Drag the <em>tip</em> of the red arrow to see the grey arrow change.</p>
@@ -3709,7 +3709,7 @@ the xsltproc executable.
                 <figure xml:id="figure-eigenvectors">
                     <caption>Eigenvector demonstration</caption>
 
-                    <interactive xml:id="interactive-eigenvectors" platform="html5" width="90%" aspect="4:5" source="code/austin/figures.js code/austin/eigenvectors.js">
+                    <interactive xml:id="interactive-eigenvectors" platform="html5" width="90%" aspect="4:5" source="code/austin/figures.js code/austin/eigenvectors.js" preview="images/eigenvectors-preview.jpg">
                         <slate xml:id="sliders"      aspect="4:1" language="javascript" />
                         <slate xml:id="eigenvectors" aspect="4:4" language="javascript" />
                         <instructions>
@@ -3725,7 +3725,7 @@ the xsltproc executable.
 
                     <!-- The "10" in the "12:10" should really be a "9".  I suspect -->
                     <!-- there is some inline element that induces scroll bars      -->
-                    <interactive xml:id="interactive-animation" platform="html5" width="100%" aspect="12:10" source="code/austin/animation.js">
+                    <interactive xml:id="interactive-animation" platform="html5" width="100%" aspect="12:10" source="code/austin/animation.js" preview="images/animation-preview.jpg">
                         <sbsgroup>
                             <sidebyside>
                                 <slate xml:id="a" language="javascript" aspect="4:1" />
