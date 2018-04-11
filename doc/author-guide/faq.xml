@@ -14,7 +14,7 @@
 
     <p><dl>
         <li>
-          <title>On my local machine, the knowls/Sage cells are empty</title>
+          <title>On my local machine, why are the knowls/Sage cells empty?</title>
             <p>
               Viewing a file on your computer is not the same as visiting a
               web page.  There is no web server, so you should assume that
@@ -118,7 +118,7 @@
         </li>
 
         <li xml:id="faq-pull-regularly">
-            <title>I don't like surprises and have not updated in months.  Now I have a problem.</title>
+            <title>I don't like surprises and have not updated in months.  Why do I now have a problem?</title>
             <p>We almost never release mistaken code that breaks output produced from valid source (<xref ref="schema" />).  And when we have, the cause is usually a small typo, or something that gets fixed easily and quickly.  We do sometimes make backwards-incompatible changes, but you always get warnings, often the changes can wait, there are announcements on the mailing lists, and whenever possible, we update tools that automate the changes.</p>
 
             <p>As volunteers, we cannot support problems from old versions, and sometimes we have to implement changes in reaction to third-party software (like MathJax), which is beyond our control.  So while development is rapid, we implore you to remain on the <c>dev</c> branch of the repository and <c>git pull</c> regularly.  Such as <em>daily</em>, with your morning coffee as you sit down to write, or with your last compilation of the evening.  You will have <em>far fewer unpleasant surprises</em> this way, and we can help you better.</p>
@@ -175,7 +175,7 @@
         </li>
 
         <li>
-            <title>I have <latex /> errors</title>
+            <title>Why do I have <latex /> errors?</title>
             <p>
               If you have errors when you run <c>pdflatex</c> or <c>xelatex</c>,
               that is more likely to be caused by a problem with your <latex /> installation
@@ -204,7 +204,7 @@
         </li>
 
         <li>
-            <title>I have great output, but validation produces hundreds of errors.</title>
+            <title>I have great output, so why does validation produce hundreds of errors?</title>
             <p>Success with a tool like <c>xsltproc</c>, in terms of no errors and great-looking output, does not mean your source is correct.  <init>XSLT</init> processing can be forgiving, and many invalid constructions just work, and look great.  But that is no guaranteee this situation will continue, or the same happy accidents occur for a conversion to a different output format.</p>
 
             <p>We do raise some errors during processing with <c>xsltproc</c>, but error-checking your input is a job for a validator, so in theory we should not ever produce any errors during a conversion.  So strive for having 100<percent /> valid <pretext /> source, not simply great-looking results.  See <xref ref="schema" /> and <xref ref="schema-install" />.</p>
