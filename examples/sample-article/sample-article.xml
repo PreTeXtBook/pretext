@@ -3945,7 +3945,17 @@ the xsltproc executable.
                 <figure>
                     <caption>GeoGebra: cycloids (from Dave Rosoff)</caption>
                     <interactive xml:id="geogebra-cycloid" platform="geogebra" width="75%" aspect="3:4" source="code/rosoff/epi-hypocycloids-default.ggb">
+                    </interactive>
+                </figure>
 
+                <p>You will need to zoom out a bit, and then pan over some, to see all the pieces of the next GeoGebra material.</p>
+
+                <figure>
+                    <caption>GeoGebra: a constructive <q>proof</q> that SAS congruence holds in Euclidean geometry (from Tevian Dray)</caption>
+                    <interactive xml:id="geogebra-SAS" platform="geogebra" width="100%" aspect="1:1" source="code/dray/SAS.ggb">
+                        <instructions>
+                            <p>Drag some of the points and some of the circles to change them, and watch the remainder react.</p>
+                        </instructions>
                     </interactive>
                 </figure>
             </subsection>
