@@ -1239,9 +1239,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Videos and other interactives&#xa;</xsl:text>
         <xsl:text>\usepackage{qrcode}&#xa;</xsl:text>
         <xsl:text>\newlength{\qrsize}&#xa;</xsl:text>
+        <xsl:text>\newlength{\previewwidth}&#xa;</xsl:text>
         <xsl:text>%% tcolorbox styles for interactive previews&#xa;</xsl:text>
         <xsl:text>%% changing size= and/or colback can aid in debugging&#xa;</xsl:text>
-        <xsl:text>\tcbset{ previewstyle/.style={hbox, size=minimal, colback=white} }&#xa;</xsl:text>
+        <xsl:text>\tcbset{ previewstyle/.style={size=minimal, halign=center, colback=white} }&#xa;</xsl:text>
+        <xsl:text>\tcbset{ qrstyle/.style={hbox, size=minimal, colback=white} }&#xa;</xsl:text>
         <xsl:text>\tcbset{ captionstyle/.style={width=\linewidth, size=minimal, left=1em, colback=white} }&#xa;</xsl:text>
         <!-- Page: https://commons.wikimedia.org/wiki/File:YouTube_Play_Button.svg             -->
         <!-- File: https://upload.wikimedia.org/wikipedia/commons/d/d1/YouTube_Play_Button.svg -->
@@ -4444,7 +4446,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Static Versions of Interactive Content -->
 <!-- ###################################### -->
 
+
 <xsl:template match="video|interactive[(@platform = 'html5')]">
+    <!-- scale to fit into a side-by-side -->
     <xsl:variable name="width-percentage">
         <xsl:choose>
             <xsl:when test="ancestor::sidebyside">
@@ -4456,21 +4460,31 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
+
+    <!-- Adjust lengths for just this interactive -->
+    <!-- i.e., these values are local             -->
+    <!-- maybe get this scale factor via general % sanitization -->
+    <!-- 11em at 10pt is about 1.5 inches, we go a bit smaller  -->
+    <!--  9em at 10pt is closer to 1.25 inches                  -->
     <xsl:variable name="width-scale" select="substring-before($width-percentage,'%') div 100" />
     <xsl:text>\setlength{\qrsize}{</xsl:text>
-    <xsl:value-of select="1.5 * $width-scale" />
-    <xsl:text>in}&#xa;</xsl:text>
+    <xsl:value-of select="9 * $width-scale" />
+    <xsl:text>em}&#xa;</xsl:text>
+    <!-- give over all additional space to preview image -->
+    <!-- this forces QR code to left margin              -->
+    <xsl:text>\setlength{\previewwidth}{\linewidth}&#xa;</xsl:text>
+    <xsl:text>\addtolength{\previewwidth}{-\qrsize}&#xa;</xsl:text>
 
-    <xsl:text>\begin{tcbraster}[raster columns=2, raster halign=center, raster force size=false]%&#xa;</xsl:text>
+    <xsl:text>\begin{tcbraster}[raster columns=2, raster column skip=1pt, raster halign=center, raster force size=false]%&#xa;</xsl:text>
 
     <!-- preview image (supplied or scraped) -->
-    <xsl:text>\begin{tcolorbox}[previewstyle]%&#xa;</xsl:text>
+    <xsl:text>\begin{tcolorbox}[previewstyle, width=\previewwidth]%&#xa;</xsl:text>
     <xsl:apply-templates select="." mode="static-image" />
     <xsl:text>%&#xa;</xsl:text>
     <xsl:text>\end{tcolorbox}%&#xa;</xsl:text>
 
     <!-- QR code to the right, or default [LINK] -->
-    <xsl:text>\begin{tcolorbox}[previewstyle]%&#xa;</xsl:text>
+    <xsl:text>\begin{tcolorbox}[qrstyle]%&#xa;</xsl:text>
     <xsl:apply-templates select="." mode="static-qr" />
     <xsl:text>\end{tcolorbox}%&#xa;</xsl:text>
 
