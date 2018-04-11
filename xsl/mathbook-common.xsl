@@ -2796,11 +2796,13 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Text generators (eg <today />) may fool this, but applying       -->
 <!-- templates first will introduce LaTeX macros that will fool this  -->
 <!-- To debug: add messages here, then call via this default template -->
+<!-- TODO: maybe warn about "bad" ending-punctuation, like a colon? -->
 <xsl:template match="title|subtitle" mode="has-punctuation">
+    <xsl:variable name="title-ending-punctuation" select="'?!'" />
     <xsl:variable name="all-text" select="normalize-space(string(.))" />
     <xsl:variable name="last-char" select="substring($all-text, string-length($all-text))" />
     <!-- title should not be empty, but if so, the contains() alone is true -->
-    <xsl:value-of select="$last-char and contains('?!', $last-char)" />
+    <xsl:value-of select="$last-char and contains($title-ending-punctuation, $last-char)" />
 </xsl:template>
 
 

@@ -1568,7 +1568,7 @@ the xsltproc executable.
                     <mrow>c^2\amp\gt a^2 + b^2</mrow>
                 </md></p>
 
-                <p>So as a summary of how to avoid conflicts with XML's reserved characters:<dl>
+                <p>So as a summary of how to avoid conflicts with XML's reserved characters, we have the following.  (The exclamation on the third entry is just a test and does not mean anything special here.)<dl>
                     <li>
                         <title><q>Normal</q> Text</title>
                         <p>Use <c>&lt;ampersand /&gt;</c>, <c>&lt;less /&gt;</c>, <c>&lt;greater /&gt;</c>.</p>
@@ -1577,8 +1577,8 @@ the xsltproc executable.
                         <title>Mathematics</title>
                         <p>Within <c>m</c>, <c>me</c>, <c>men</c>, and <c>mrow</c> elements, use <c>\amp</c>, <c>\lt</c>, <c>\gt</c>.  Or use <c>CDATA</c> to enclose a large chunk of <latex /> with many of these characters.</p>
                     </li>
-                    <li>
-                        <title>Verbatim, Code</title>
+                    <li xml:id="reserved-characters-verbatim">
+                        <title>Verbatim, Code!</title>
                         <p>Within verbatim text (<c>c</c>, <c>cd</c>, and <c>pre</c> elements), Sage code, program listings, and console sessions, use the XML entitites <c>&amp;amp;</c>, <c>&amp;lt;</c>, <c>&amp;gt;</c> to get exactly the characters desired.</p>
                     </li>
                 </dl></p>
@@ -2794,7 +2794,7 @@ the xsltproc executable.
                 <p>Use <c>dl</c> to make a description list<idx><h>description list</h></idx><idx><h>list</h><h>description</h></idx>. Inside of those tags, use <c>li</c> for each entry. Then, use <c>title</c> to specify the term being described and <c>p</c> to specify the description.</p>
                 <p>A <q>description</q> list
                 <idx><h>description list</h></idx><idx><h>list</h><h>description</h></idx>
-                has a short term or phrase that is prominent, followed by a short description.  It is modeled on the lists of similar structure in both <latex /> and HTML.  It makes for a nice medium-weight way to define terms, somewhere in-between the <c>term</c> tag which just makes a term prominent in a sentence, and a <c>definition</c>, which is set off, has a heading, a number, and a title.  This example is from Bob Plantz.
+                has a short term or phrase that is prominent, followed by a short description.  It is modeled on the lists of similar structure in both <latex /> and HTML.  It makes for a nice medium-weight way to define terms, somewhere in-between the <c>term</c> tag which just makes a term prominent in a sentence, and a <c>definition</c>, which is set off, has a heading, a number, and a title.  Do not try to manage the separation between the title and the description by employing punctuation (but you can include a question-mark or exclamation-point if necessary).  For example, do not include a colon to the end of the title.  This example is from Bob Plantz.
                 <dl>
                     <li>
                         <title>Central Processing Unit (CPU)</title>
@@ -4469,7 +4469,8 @@ the xsltproc executable.
                 <li><p>Same item in ordered list, but contained in an unordered list, now with a cross-reference by <c>title</c> with a content override: <xref ref="target-no-number" text="title">No Number List Item</xref></p></li>
                 <li><p>Several examples of hybrid cross-references to list items within a named list can be found in, and adjacent to, <xref ref="list-to-reference" text="type-global" />.</p></li>
                 <li><p>An assemblage, which never has a number.  A cross-reference now requires content in the <c>xref</c> element, with <c>text='title'</c>: <xref ref="assemblage-basics" text="title">text to xref an assemblage</xref></p></li>
-                <li><p>A cross-reference to a list item in a description list, which has a title, but never a number: <xref ref="reserved-characters-mathematics" text="title" />.  Note that you need to include the attribute <c>autoname="number"</c> even if that is obvious from the situation.  This requirement may be relaxed in a future refactoring of the cross-reference system.</p></li>
+                <li><p>A cross-reference to a list item in a description list, which has a title, but never a number: <xref ref="reserved-characters-mathematics" text="title" />.  Note that you need to include the attribute <c>text="title"</c> even if that is obvious from the situation.  This requirement may be relaxed in a future refactoring of the cross-reference system.</p></li>
+                <li><p>A very similar cross-reference to the previous one, but testing how final punctuation of titles is handled: <xref ref="reserved-characters-verbatim" text="title" />.</p></li>
                 <li><p>A cross-reference to a <q>paragraphs</q> subdivision, which never has a number (so comments above about description list items and titles applies here too): <xref ref="hierarchy-structure" text="title" /></p></li>
                 <li><p>A case within the proof of <xref ref="claim-with-cases" text="type-global" />: <xref ref="inductive-step" text="title" /></p></li>
                 <li><p>A cross-reference to a description list item with a title containing math: <xref ref="description-list-math-title" text="title" /></p></li>
