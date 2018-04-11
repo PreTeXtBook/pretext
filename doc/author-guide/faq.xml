@@ -210,6 +210,13 @@
             <p>We do raise some errors during processing with <c>xsltproc</c>, but error-checking your input is a job for a validator, so in theory we should not ever produce any errors during a conversion.  So strive for having 100<percent /> valid <pretext /> source, not simply great-looking results.  See <xref ref="schema" /> and <xref ref="schema-install" />.</p>
         </li>
 
+        <li>
+            <title>Why do I have an <q>extra</q> period at the end of a title?</title>
+            <p>Author your titles <em>without</em> punctuation at the end meant for spacing or separation (period, colon, semi-colon, hyphen).  Do include punctuation which imparts meaning (question-mark, exclamation-point).  <pretext /> will then add separation (a period, or spacing), as needed, in all the places where it is required.  But <pretext /> will respect your question-marks and exclamation-points.</p>
+
+            <p>If you think you have an additional punctuation character that conveys meaning at the end of a title, please bring it to our attention.</p>
+        </li>
+
     </dl></p>
 
 </appendix>
