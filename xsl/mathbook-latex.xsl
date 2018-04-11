@@ -6374,6 +6374,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
+<!-- EXPERIMENTAL -->
+<!-- use only for testing uses of QR codes          -->
+<!-- this WILL change and/or disappear              -->
+<!-- For LaTeX output only, place within an "image" -->
+<!-- @size - a length LaTeX understands             -->
+<!-- @href - realtive path or URL                   -->
+<xsl:template match="image[qrcode-trial]">
+    <xsl:apply-templates select="qrcode-trial" />
+</xsl:template>
+
+<xsl:template match="qrcode-trial">
+    <xsl:text>{\hypersetup{urlcolor=black}</xsl:text>
+    <xsl:text>\qrcode[height=</xsl:text>
+    <xsl:value-of select="@size" />
+    <xsl:text>]{</xsl:text>
+        <xsl:value-of select="@href" />
+    <xsl:text>}}%&#xa;</xsl:text>
+</xsl:template>
+
 <!-- was once direct-descendant of subdivision, this catches that -->
 <xsl:template match="latex-image-code[not(parent::image)]">
     <xsl:message>MBX:WARNING: latex-image-code element should be enclosed by an image element</xsl:message>
