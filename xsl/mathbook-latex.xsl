@@ -2911,44 +2911,75 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Construct the header of the subdivision -->
     <xsl:text>\</xsl:text>
     <xsl:apply-templates select="." mode="division-name" />
-    <!-- Handle section titles carefully.  Sanitized versions    -->
-    <!-- as optional argument to table of contents, headers.     -->
-    <!-- http://www.tex.ac.uk/cgi-bin/texfaq2html?label=ftnsect  -->
-    <!-- TODO: get non-footnote title from "simple" title routines -->
-    <!-- TODO: let author specify short versions (ToC, header) -->
+    <!-- Handle section titles carefully.  Sanitized versions              -->
+    <!-- as optional argument to table of contents, headers.               -->
+    <!-- http://www.tex.ac.uk/cgi-bin/texfaq2html?label=ftnsect            -->
+    <!-- TODO: get non-footnote title from "simple" title routines         -->
+    <!-- TODO: let author specify short versions (ToC, header)             -->
     <!--                                                                   -->
-    <!-- There is no \backmatter macro for the article class               -->
-    <!-- A final references section and a back colophon need to have their -->
-    <!-- number suppressed and a table of contents entry manufactured      -->
-    <!-- This ad-hoc treatment seems preferable to a more general scheme,  -->
-    <!-- but maybe someday numbering will be on/off and this will be easy  -->
-    <!--                                                              -->
-    <!-- LaTeX's *optional* arguments are counter to TeX's arguments  -->
-    <!-- So text in an optional argument should always be in a group, -->
-    <!-- especially if it contains a closing bracket                  -->
-    <!-- We have such protection below, and elsewhere without comment -->
-    <!-- See http://tex.stackexchange.com/questions/99495             -->
-    <!-- LaTeX3e with the xparse package might make this unnecessary  -->
+    <!-- There is no \backmatter macro for the article class A final       -->
+    <!-- references section and a back colophon need to have their number  -->
+    <!-- suppressed and a table of contents entry manufactured This ad-hoc -->
+    <!-- treatment seems preferable to a more general scheme, but maybe    -->
+    <!-- someday numbering will be on/off and this will be easy            -->
+    <!--                                                                   -->
+    <!-- LaTeX's *optional* arguments are counter to TeX's arguments       -->
+    <!-- So text in an optional argument should always be in a group,      -->
+    <!-- especially if it contains a closing bracket                       -->
+    <!-- We have such protection below, and elsewhere without comment      -->
+    <!-- See http://tex.stackexchange.com/questions/99495                  -->
+    <!-- LaTeX3e with the xparse package might make this unnecessary       -->
+    <xsl:variable name="b-unnumbered">
+        <xsl:choose>
+            <!-- references are never numbered -->
+            <xsl:when test="self::references">
+                <xsl:value-of select="true()" />
+            </xsl:when>
+            <!-- exercises are numbered if not unique within division -->
+            <xsl:when test="self::exercises">
+                <xsl:variable name="nexercises" select="count(preceding-sibling::exercises|following-sibling::exercises) + 1" />
+                <xsl:choose>
+                    <xsl:when test="$nexercises = 1">
+                        <xsl:value-of select="true()" />
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="false()" />
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:when>
+            <!-- no other divisions are exceptional -->
+            <xsl:otherwise>
+                <xsl:value-of select="false()" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- Either this is an unnumbered, no ToC version -->
+    <!-- or it is a numbered, ToC short title version -->
     <xsl:choose>
-        <!-- No numbering of article/backmatter/references-->
-        <xsl:when test="ancestor::article and parent::backmatter and self::references">
+        <!-- Use starred form in these unnumbered cases -->
+        <xsl:when test="$b-unnumbered = 'true'">
             <xsl:text>*</xsl:text>
         </xsl:when>
+        <!-- otherwise provide the short version as optional argument -->
+        <xsl:otherwise>
+            <xsl:text>[{</xsl:text>
+            <xsl:apply-templates select="." mode="title-simple"/>
+            <xsl:text>}]</xsl:text>
+        </xsl:otherwise>
     </xsl:choose>
-    <!-- Short versions of titles get used in ToC (unless starred just above) -->
-    <xsl:text>[{</xsl:text>
-    <xsl:apply-templates select="." mode="title-simple"/>
-    <xsl:text>}]</xsl:text>
     <!-- The real title and a label -->
     <xsl:text>{</xsl:text>
     <xsl:apply-templates select="." mode="title-full"/>
     <xsl:text>}</xsl:text>
     <xsl:apply-templates select="." mode="label" />
     <xsl:text>&#xa;</xsl:text>
-    <!-- references need a ToC entry, maybe if a real Bibliography, this won't be needed -->
-    <!-- We choose not to send the Colophon to the ToC of an article                     -->
-    <!-- TODO: maybe colophon should not be in ToC for book either (need to star it?)    -->
-    <xsl:if test="ancestor::article and parent::backmatter and self::references">
+    <!-- We add a ToC entry for the starred versions that lacked them -->
+    <!-- These may be created for divisions below the ToC display     -->
+    <!-- level, but they do not render as the ToC level prevails      -->
+    <!-- NB: an optional short title on a starred form caused a LaTeX -->
+    <!-- compilation that rendered poorly, which we never figured     -->
+    <!-- out, so we just avoid that combination (2018-04-12)          -->
+    <xsl:if test="$b-unnumbered = 'true'">
         <xsl:text>\addcontentsline{toc}{</xsl:text>
         <xsl:apply-templates select="." mode="division-name" />
         <xsl:text>}{</xsl:text>
