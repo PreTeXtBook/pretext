@@ -3190,38 +3190,42 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- These count the occurence of the item, within it's  -->
 <!-- scheme and within a natural, or configured, subtree -->
 
-<!-- Serial Numbers: Subdivisions -->
-<!-- To respect the maximum level for numbering, we               -->
-<!-- return an empty serial number at an excessive level,         -->
-<!-- otherwise we call for a serial number relative to peers      -->
-<!-- via particular modal templates.  These may include Exercises -->
-<!-- and References sections, which can occur at multiple levels  -->
-<!-- NB: newexercises: hack to kill "exercises" division numbering, later move to "the unnumbered" -->
-<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|exercises|references" mode="serial-number">
+<!-- Serial Numbers: Divisions -->
+<!-- To respect the maximum level for numbering, we              -->
+<!-- return an empty serial number at an excessive level,        -->
+<!-- otherwise we call for a serial number relative to peers     -->
+<!-- Exercises can be multiple (numbered) or single (unnumbered, -->
+<!-- with contents getting their structure number from parent)   -->
+<!-- (so sometimes the "subdivision-serial-number" is empty)     -->
+<!-- References are "one-off" always, hence never numbered,      -->
+<!-- and so have a blank serial number                           -->
+<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|exercises" mode="serial-number">
     <xsl:variable name="relative-level">
         <xsl:apply-templates select="." mode="level" />
     </xsl:variable>
     <xsl:choose>
-        <xsl:when test="$relative-level > $numbering-maxlevel">
-            <xsl:text></xsl:text>
-        </xsl:when>
+        <xsl:when test="$relative-level > $numbering-maxlevel" />
         <xsl:otherwise>
             <xsl:apply-templates select="." mode="division-serial-number" />
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 
-<!-- Each division has different formats or quirks -->
-
+<!-- Division number relative to parent (super-division, or book/article)  -->
+<!--   1. One-Off always (eg references), must appear at end of parent:    -->
+ <!--     Not numbered, so structure number of contents comes from parent  -->
+<!--   2. "Real" divisions (eg subsection)                                 -->
+<!--       Count from parent but avoid un-numbered (specialized) divisions -->
+<!--   3. "exercises" - numbered if multiple, un-numbered if exactly one,  -->
+<!--      we require these to appear *after* real divisions, making        -->
+<!--      counts simpler since for the divisions we just need number       -->
+<!--      preceding, with nothing intermediate to count                    -->
 <xsl:template match="part" mode="division-serial-number">
     <xsl:number format="I" />
 </xsl:template>
 <!-- TODO: ban references and exercises as peers of chapters (overall references can go in backmatter) -->
 <xsl:template match="chapter" mode="division-serial-number">
-    <!-- chapters, in parts or not, do not have "references" -->
-    <!-- or "exercises" divisions as peers, so we just count -->
-    <!-- chapters, varying the subtree considered depending  -->
-    <!-- on the style elected for how parts are numbered     -->
+    <!-- chapters, in parts or not -->
     <xsl:choose>
         <xsl:when test="($parts = 'absent') or ($parts = 'decorative')">
             <xsl:number from="book" level="any" count="chapter" format="1" />
@@ -3235,41 +3239,23 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:number format="A" />
 </xsl:template>
 <xsl:template match="section" mode="division-serial-number">
-    <xsl:choose>
-        <xsl:when test="$b-newexercises">
-            <xsl:number count="section" format="1" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:number count="section|references|exercises" format="1" />
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:number count="section" format="1" />
 </xsl:template>
 <xsl:template match="subsection" mode="division-serial-number">
-    <xsl:choose>
-        <xsl:when test="$b-newexercises">
-            <xsl:number count="subsection" format="1" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:number count="subsection|references|exercises" format="1" />
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:number count="subsection" format="1" />
 </xsl:template>
 <xsl:template match="subsubsection" mode="division-serial-number">
-    <xsl:choose>
-        <xsl:when test="$b-newexercises">
-            <xsl:number count="subsubsection" format="1" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:number count="subsubsection|references|exercises" format="1" />
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:number count="subsubsection" format="1" />
 </xsl:template>
-<!-- Convert references and exercises to the unnumbered once cutover -->
-<xsl:template match="exercises|references" mode="division-serial-number">
+<!-- "exercises": single or multiple -->
+<xsl:template match="exercises" mode="division-serial-number">
+    <xsl:variable name="nexercises" select="count(preceding-sibling::exercises|following-sibling::exercises) + 1" />
     <xsl:choose>
-        <xsl:when test="$b-newexercises" />
+        <!-- if singleton, then empty, will signal empty "serial-number" -->
+        <xsl:when test="$nexercises = 1" />
         <xsl:otherwise>
-            <xsl:number count="part|chapter|appendix|section|subsection|subsubsection|references|exercises" format="1" />
+            <!-- else count preceding peers that are numbered divisions -->
+            <xsl:number count="part|chapter|appendix|section|subsection|subsubsection|exercises" format="1" />
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -3614,49 +3600,14 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 </xsl:template>
 
 <!-- Serial Numbers: Exercises in Exercises Sections -->
-<!-- We determine the appropriate subtree to count within         -->
-<!-- given the document root and the configured depth             -->
-<!-- Note: numbers may be hard-coded for longevity                -->
-<!-- exercisegroups might be intermediate, but do not hinder      -->
-<!-- N.B. Same priority as above, so needs to come in this order, -->
-<!-- as we wish hard-coded to have higher priority                -->
-<xsl:template match="exercises/exercise|exercises/exercisegroup/exercise" mode="serial-number">
-    <!-- A sectional exercise is numbered from where the previous "exercises" section leaves off -->
-    <xsl:variable name="base">
-        <xsl:choose>
-            <!-- status quo from old days -->
-            <xsl:when test="not($b-newexercises)">
-                <xsl:text>0</xsl:text>
-            </xsl:when>
-            <!-- now in  $b-newexercises  true scenario -->
-            <!-- first, respect explicit numbering request -->
-            <!-- do a NaN test?, or restrict in schema? -->
-            <xsl:when test="ancestor::exercises/@first-number">
-                <xsl:value-of select="ancestor::exercises/@first-number - 1" />
-            </xsl:when>
-            <!-- now automatic -->
-            <!-- if first, start at 1 -->
-            <xsl:when test="not(ancestor::exercises/preceding-sibling::exercises)">
-                <xsl:text>0</xsl:text>
-            </xsl:when>
-            <!-- this should be the "otherwise" clause, but presently debugging -->
-            <!-- compute serial number of previous "exercises" last exercise -->
-            <xsl:when test="ancestor::exercises/preceding-sibling::exercises">
-                <xsl:apply-templates select="ancestor::exercises/preceding-sibling::exercises[1]/descendant::exercise[last()]" mode="serial-number"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:message>MBX:DEBUG:   base number for sectional exercises not determined</xsl:message>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <!-- NB: newexercises:  offset is the original definition here -->
-    <xsl:variable name="offset">
-        <xsl:number from="exercises" level="any" count="exercise" />
-    </xsl:variable>
-    <xsl:value-of select="$base + $offset" />
+<!-- Note: numbers may be hard-coded for longevity        -->
+<!-- exercisegroups  and future lightweight divisions may -->
+<!-- be intermediate, but should not hinder the count     -->
+<xsl:template match="exercises//exercise" mode="serial-number">
+    <xsl:number from="exercises" level="any" count="exercise" />
 </xsl:template>
 
-<xsl:template match="exercises/exercise[@number]|exercisegroup/exercise[@number]" mode="serial-number">
+<xsl:template match="exercises//exercise[@number]" mode="serial-number">
     <xsl:apply-templates select="@number" />
 </xsl:template>
 
@@ -3827,6 +3778,10 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- a title for identification and cross-referencing.   -->
 <xsl:template match="book|article|letter|memo|paragraphs|blockquote|preface|abstract|acknowledgement|biography|foreword|dedication|index-part|index[index-list]|colophon|webwork|p|assemblage|aside|biographical|historical|case|contributor" mode="serial-number" />
 
+<!-- There are one-off divisions, such as references, we do not ever number -->
+<!-- They get their structure numbers from their parents                    -->
+<xsl:template match="references" mode="serial-number" />
+
 <!-- Some items are "containers".  They are not numbered, you  -->
 <!-- cannot point to them, they are invisible to the reader    -->
 <!-- in a way.  We kill their serial nuumbers explicitly here. -->
@@ -3979,11 +3934,29 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- NB: this is number of the *container* of the division,   -->
 <!-- a serial number for the division itself will be appended -->
 <!-- NB:  newexercises: removed "exercises" here, duplicated below -->
-<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|references" mode="structure-number">
+<xsl:template match="part|chapter|appendix|section|subsection|subsubsection" mode="structure-number">
     <xsl:apply-templates select="." mode="multi-number">
         <xsl:with-param name="levels" select="$numbering-maxlevel - 1" />
         <xsl:with-param name="pad" select="'no'" />
     </xsl:apply-templates>
+</xsl:template>
+
+<!-- Structure Numbers: Exercises Division -->
+<!-- A singleton "exercises" has an empty "divisional-serial-number"  -->
+<!-- and hence an empty "serial-number".  In this case we should      -->
+<!-- always be getting the structure number of a contained "exercise" -->
+<!-- by looking up to the enclosing division                          -->
+<xsl:template match="exercises" mode="structure-number">
+    <xsl:apply-templates select="." mode="multi-number">
+        <xsl:with-param name="levels" select="$numbering-maxlevel - 1" />
+        <xsl:with-param name="pad" select="'no'" />
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- "references" are not numbered, and get their structure  -->
+<!-- number from their parent, due to being always one-off   -->
+<xsl:template match="references" mode="structure-number">
+    <xsl:apply-templates select="parent::*" mode="number" />
 </xsl:template>
 
 <!-- Structure Numbers: Theorems, Examples, Projects, Figures -->
@@ -4039,20 +4012,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:apply-templates>
 </xsl:template>
 
-<!-- NB: newexercises: consolidated "exercises/exercise" structure numbering here -->
-
-<!-- Structure Numbers: Exercises Division -->
-<!-- NB:  newexercises = true : then no effect here, should not ever called -->
-<xsl:template match="exercises" mode="structure-number">
-    <xsl:apply-templates select="." mode="multi-number">
-        <xsl:with-param name="levels" select="$numbering-maxlevel - 1" />
-        <xsl:with-param name="pad" select="'no'" />
-    </xsl:apply-templates>
-</xsl:template>
-
 <!-- Structure Numbers: Inline Exercises -->
-<!-- NB: newexercises: preserve behavior, copied out of above -->
-<!-- Eventually breakout (optionally) into its own scheme     -->
+<!-- Follows the theorem/figure/etc scheme (can't poll parent) -->
 <xsl:template match="exercise[not(ancestor::exercises)]" mode="structure-number">
     <xsl:apply-templates select="." mode="multi-number">
         <xsl:with-param name="levels" select="$numbering-theorems" />
@@ -4061,36 +4022,16 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 </xsl:template>
 
 <!-- Structure Numbers: Sectional Exercises -->
-<!-- If we set a level for sectional exercises, and pad,        -->
-<!-- then we could mimic the AMSMath scheme.  But we control    -->
-<!-- these numbers universally, so we do not copy this behavior -->
-<!-- NB: newexercises: simplified match from before -->
-<xsl:template match="exercises/exercise" mode="structure-number">
+<!-- Within a singleton (unnumbered) "exercises", look up to enclosing      -->
+<!-- division, otherwise use number of the enclosing (numbered) "exercises" -->
+<xsl:template match="exercises//exercise" mode="structure-number">
+    <xsl:variable name="nexercises" select="count(ancestor::exercises/preceding-sibling::exercises|ancestor::exercises/following-sibling::exercises) + 1" />
     <xsl:choose>
-        <xsl:when test="$b-newexercises">
-            <!-- hop exercisegroup (perhaps explicitly?) -->
-            <xsl:apply-templates select="parent::exercises/parent::*" mode="number" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:apply-templates select="." mode="multi-number">
-                <xsl:with-param name="levels" select="$numbering-maxlevel" />
-                <xsl:with-param name="pad" select="'no'" />
-            </xsl:apply-templates>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-<xsl:template match="exercises/exercisegroup/exercise" mode="structure-number">
-    <xsl:choose>
-        <xsl:when test="$b-newexercises">
-            <!-- hop exercisegroup (perhaps explicitly?) -->
+        <xsl:when test="$nexercises = 1">
             <xsl:apply-templates select="ancestor::exercises/parent::*" mode="number" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:apply-templates select="parent::exercisegroup" mode="multi-number">
-                <xsl:with-param name="levels" select="$numbering-maxlevel" />
-                <xsl:with-param name="pad" select="'no'" />
-            </xsl:apply-templates>
+            <xsl:apply-templates select="ancestor::exercises" mode="number" />
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -4116,19 +4057,13 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 </xsl:template>
 
 <!-- Structure Numbers: Bibliographic Items -->
-<!-- If we set a level for bibliographic items, and pad,        -->
-<!-- then we could mimic the AMSMath scheme.  But we control    -->
-<!-- these numbers universally, so we do not copy this behavior -->
+<!-- With just one "references" per division, we can use the      -->
+<!-- number of the parent division.  This means that a global,    -->
+<!-- once-per-document "references" will get un-qualified numbers -->
 <xsl:template match="biblio" mode="structure-number">
-    <xsl:apply-templates select="." mode="multi-number">
-        <xsl:with-param name="levels" select="$numbering-maxlevel" />
-        <xsl:with-param name="pad" select="'no'" />
-    </xsl:apply-templates>
+    <xsl:apply-templates select="parent::references/parent::*" mode="number" />
 </xsl:template>
-<!-- "main" bibliography gets unqualified numbers -->
-<xsl:template match="backmatter/references/biblio" mode="structure-number">
-    <xsl:text />
-</xsl:template>
+
 <!-- Notes get structure number from parent biblio's number -->
 <xsl:template match="biblio/note" mode="structure-number">
     <xsl:apply-templates select="parent::*" mode="number" />
