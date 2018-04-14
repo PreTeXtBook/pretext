@@ -2397,15 +2397,16 @@ the xsltproc executable.
 
                 <exercise xml:id="exercises-null-problem">
                     <statement>
-                        <p>No problem here, but the next two are in an <q>exercise group</q> with an introduction and a conclusion.  The two problems of the exercise group should be indented some to indicate the grouping.</p>
+                        <p>No problem here, but the next two are in an <q>exercise group</q> with an introduction and a conclusion, along with an optional title.  The two problems of the exercise group should be indented some to indicate the grouping.</p>
                     </statement>
                 </exercise>
 
                 <exercisegroup xml:id="exercisegroup-two-problems">
+                    <title>Two Derivative Problems</title>
 
                     <introduction>
                         <p>In the next two problems compute the indicated derivative.</p>
-                        <p>Use a <c>sidebyside</c> element to insert a relevant <c>image</c>, or <c>tabular</c>, or other un-numbered item tht does not fit in a sentence.</p>
+                        <p>Use a <c>sidebyside</c> element to insert a relevant <c>image</c>, or <c>tabular</c>, or other un-numbered item that does not fit in a sentence.</p>
                         <sidebyside width="30%">
                             <image source="images/cubic-function.png" />
                         </sidebyside>
