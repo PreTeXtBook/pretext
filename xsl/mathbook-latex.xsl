@@ -3251,7 +3251,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Commentary goes in an introduction and/or conclusion   -->
 <!-- When we point to these, we use custom hypertarget, etc -->
 <xsl:template match="exercisegroup">
-    <xsl:apply-templates select="." mode="label" />
+    <xsl:choose>
+        <xsl:when test="title">
+            <xsl:text>\subparagraph</xsl:text>
+            <!-- keep optional title if LaTeX source is re-purposed -->
+            <xsl:text>[{</xsl:text>
+            <xsl:apply-templates select="." mode="title-simple" />
+            <xsl:text>}]</xsl:text>
+            <xsl:text>{</xsl:text>
+            <xsl:apply-templates select="." mode="title-full" />
+            <xsl:text>}</xsl:text>
+            <xsl:apply-templates select="." mode="label" />
+            <xsl:text>&#xa;</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="." mode="label" />
+        </xsl:otherwise>
+    </xsl:choose>
     <xsl:apply-templates select="introduction" />
     <xsl:apply-templates select="exercise"/>
     <xsl:apply-templates select="conclusion" />

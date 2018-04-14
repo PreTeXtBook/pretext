@@ -1706,8 +1706,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Title only -->
-<!-- ASIDE-LIKE, paragraphs -->
-<!-- No title, then nothing happens     -->
+<!-- ASIDE-LIKE, exercisegroup      -->
+<!-- Subsidiary to paragraphs,      -->
+<!-- and divisions of "exercises"   -->
+<!-- No title, then nothing happens -->
 <xsl:template match="*" mode="heading-title">
     <xsl:if test="title/*|title/text()">
         <h6 class="heading">
@@ -2759,11 +2761,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- When born use this heading         -->
 <!-- Never hidden, never gets a heading -->
-<xsl:template match="exercisegroup" mode="heading-birth" />
+<xsl:template match="exercisegroup" mode="heading-birth">
+    <xsl:apply-templates select="." mode="heading-title" />
+</xsl:template>
 
 <!-- Heading for interior of xref-knowl content -->
 <xsl:template match="exercisegroup" mode="heading-xref-knowl">
-    <xsl:apply-templates select="." mode="heading-type" />
+    <xsl:apply-templates select="." mode="heading-full" />
 </xsl:template>
 
 <!-- Primary content of generic "body" template   -->
