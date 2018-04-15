@@ -8363,7 +8363,7 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
             </xsl:choose>
         </xsl:variable>
         <!-- Subtree for page this sidebar will adorn -->
-        <xsl:variable name="this-page-node" select="descendant-or-self::*" />
+        <xsl:variable name="this-page-node" select="self::*" />
         <!-- If a book has parts, we include them as top level -->
         <!-- Note: these include front matter, back matter     -->
         <xsl:for-each select="$root/book/*|$root/book/part/*|$root/article/*">
@@ -8373,7 +8373,7 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
             <!-- Bypass chapters for compact ToC for book with parts -->
             <xsl:if test="$structural='true' and not(($adjusted-toc-level = 0) and self::chapter)">
                 <!-- Subtree represented by this ToC item -->
-                <xsl:variable name="outer-node" select="descendant-or-self::*" />
+                <xsl:variable name="outer-node" select="self::*" />
                 <xsl:variable name="outer-url">
                     <xsl:apply-templates select="." mode="url"/>
                </xsl:variable>
@@ -8381,7 +8381,7 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
                <!-- Based on node-set union size                               -->
                <xsl:variable name="class">
                     <xsl:choose>
-                        <xsl:when test="count($this-page-node|$outer-node) = count($outer-node)" >
+                        <xsl:when test="count($this-page-node|$outer-node) = 1" >
                             <xsl:text>link active</xsl:text>
                         </xsl:when>
                         <xsl:otherwise>
@@ -8424,7 +8424,7 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
                             </xsl:variable>
                             <xsl:if test="$inner-structural='true'">
                                 <!-- Subtree represented by this ToC item -->
-                                <xsl:variable name="inner-node" select="descendant-or-self::*" />
+                                <xsl:variable name="inner-node" select="self::*" />
                                 <xsl:variable name="inner-url">
                                     <xsl:apply-templates select="." mode="url" />
                                 </xsl:variable>
@@ -8440,7 +8440,7 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
                                             <xsl:value-of select="$inner-internal" />
                                         </xsl:attribute>
                                         <!-- Add if an "active" class if this is where we are -->
-                                        <xsl:if test="count($this-page-node|$inner-node) = count($inner-node)">
+                                        <xsl:if test="count($this-page-node|$inner-node) = 1">
                                             <xsl:attribute name="class">active</xsl:attribute>
                                         </xsl:if>
                                         <xsl:apply-templates select="." mode="title-simple" />
