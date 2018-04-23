@@ -909,11 +909,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\newenvironment{objectives}[1]{\noindent\rule{\linewidth}{0.1ex}\newline{\textbf{{\large#1}}\par\smallskip}}{\par\noindent\rule{\linewidth}{0.1ex}\par\smallskip}&#xa;</xsl:text>
     </xsl:if>
     <!-- miscellaneous, not categorized yet -->
-    <xsl:if test="$document-root//exercise">
+    <xsl:if test="$document-root//exercise[not(parent::exercises)]">
         <xsl:text>%% Numbering for inline exercises is in sync with theorems, normal text&#xa;</xsl:text>
+        <xsl:text>%% Sectional exercises are rendered into lists, not environments&#xa;</xsl:text>
+        <!-- Additional exercise divisions will need new environments here,    -->
+        <!-- and will need some sort of "ancestor-dependent" template to       -->
+        <!-- supply the correct environment.  Cross-references are hard-coded  -->
+        <!-- names and happen elsewhere without incident                       -->
         <xsl:text>\theoremstyle{definition}&#xa;</xsl:text>
-        <xsl:text>\newtheorem{exercise}[theorem]{</xsl:text>
-        <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'exercise'" /></xsl:call-template>
+        <xsl:text>\newtheorem{inlineexercise}[theorem]{</xsl:text>
+        <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'division/exercise'" /></xsl:call-template>
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$document-root//list">
@@ -3203,7 +3208,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Free-range exercises go into environments -->
 <!-- TODO: Be more careful about notation, todo -->
 <xsl:template match="exercise">
-    <xsl:text>\begin{exercise}</xsl:text>
+    <xsl:text>\begin{inlineexercise}</xsl:text>
     <xsl:apply-templates select="title" mode="environment-option" />
     <xsl:apply-templates select="." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
@@ -3211,13 +3216,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="hint"/>
     <xsl:apply-templates select="answer"/>
     <xsl:apply-templates select="solution"/>
-    <xsl:text>\end{exercise}&#xa;</xsl:text>
+    <xsl:text>\end{inlineexercise}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Variant for free-range enclosing a WeBWorK problem -->
 <!-- TODO: Be more careful about notation, todo -->
 <xsl:template match="exercise[webwork]">
-    <xsl:text>\begin{exercise}</xsl:text>
+    <xsl:text>\begin{inlineexercise}</xsl:text>
     <xsl:apply-templates select="title" mode="environment-option" />
     <xsl:apply-templates select="." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
@@ -3226,18 +3231,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="introduction"/>
     <xsl:apply-templates select="webwork" />
     <xsl:apply-templates select="conclusion"/>
-    <xsl:text>\end{exercise}&#xa;</xsl:text>
+    <xsl:text>\end{inlineexercise}&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="exercise[myopenmath]">
-    <xsl:text>\begin{exercise}</xsl:text>
+    <xsl:text>\begin{inlineexercise}</xsl:text>
     <xsl:apply-templates select="title" mode="environment-option" />
     <xsl:apply-templates select="." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="introduction"/>
     <xsl:apply-templates select="myopenmath" />
     <xsl:apply-templates select="conclusion"/>
-    <xsl:text>\end{exercise}&#xa;</xsl:text>
+    <xsl:text>\end{inlineexercise}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Exercise Group -->

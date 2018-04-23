@@ -131,7 +131,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='p'><xsl:text>Parágrafo</xsl:text></localization>
     <!-- <localization string-id='blockquote'><xsl:text>Quotation</xsl:text></localization> -->
     <!-- Parts of an exercise and it's solution -->
-    <localization string-id='exercise'><xsl:text>Exercício</xsl:text></localization>
+    <localization string-id='exercises//exercise'><xsl:text>Exercício</xsl:text></localization>
+    <!-- Translation needed for Brazilian Portugese -->
+    <!-- See en-US file for distinctions here, do not repeat previous translation -->
+    <!-- <localization string-id='division/exercise'><xsl:text>Checkpoint</xsl:text></localization> -->
     <localization string-id='webwork'><xsl:text>WeBWorK</xsl:text></localization>
     <localization string-id='hint'><xsl:text>Dica</xsl:text></localization>
     <localization string-id='answer'><xsl:text>Resposta</xsl:text></localization>

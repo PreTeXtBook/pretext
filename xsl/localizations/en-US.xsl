@@ -124,7 +124,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='p'><xsl:text>Paragraph</xsl:text></localization>
     <localization string-id='blockquote'><xsl:text>Quotation</xsl:text></localization>
     <!-- Parts of an exercise and it's solution -->
-    <localization string-id='exercise'><xsl:text>Exercise</xsl:text></localization>
+    <!-- An "exercise", at any level, within an "exercises" division is a          -->
+    <!-- "sectional" exercise and the string employed is 'exercises//exercise'.    -->
+    <!-- An "exercise" whose parent is a division (chapter, section, etc) we       -->
+    <!-- call an "inline exercise" and the string employed is 'division/exercise'. -->
+    <!-- (A single or double slash has different meanings in this context.)        -->
+    <!-- It is important to use different translations so that a text with         -->
+    <!-- both types of exercises does not have ambiguous cross-references          -->
+    <!-- (there is an example of this at the start of one of the later             -->
+    <!-- sections of the sample article).                                          -->
+    <!--                                                                           -->
+    <!-- In English, an "Exercise" is something you do that has a beneficial       -->
+    <!-- outcome, such as "I am going to the gym to exercise."  A "Checkpoint"     -->
+    <!-- is something you must do before you do something else.  Another use of    -->
+    <!-- the term is a location on a on a roadway where you must stop for the      -->
+    <!-- police to do an inspection.                                               -->
+    <localization string-id='exercises//exercise'><xsl:text>Exercise</xsl:text></localization>
+    <localization string-id='division/exercise'><xsl:text>Checkpoint</xsl:text></localization>
     <localization string-id='webwork'><xsl:text>WeBWorK</xsl:text></localization>
     <localization string-id='hint'><xsl:text>Hint</xsl:text></localization>
     <localization string-id='answer'><xsl:text>Answer</xsl:text></localization>

@@ -3021,10 +3021,34 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:call-template>
 </xsl:template>
 
-<!-- a single objective is authored as a list item -->
+<!-- We override a few elements using their XSLT locations      -->
+<!-- There are corresponing strings in the localizations files, -->
+<!-- and the "en-US" file will be the best documented           -->
+
+<!-- A single objective is authored as a list item -->
 <xsl:template match="objectives/ol/li|objectives/ul/li|objectives/dl/li" mode="type-name">
     <xsl:call-template name="type-name">
         <xsl:with-param name="string-id" select="'objective'" />
+    </xsl:call-template>
+</xsl:template>
+
+<!-- There are lots of exercises, but differentiated by their parents,  -->
+<!-- so we use identifiers that remind us of their location in the tree -->
+
+<!-- First, a "sectional" "exercise" in an "exercises",  -->
+<!-- with perhaps intervening groups, like an "exercisegroup" -->
+<xsl:template match="exercises//exercise" mode="type-name">
+    <xsl:call-template name="type-name">
+        <xsl:with-param name="string-id" select="'exercises//exercise'" />
+    </xsl:call-template>
+</xsl:template>
+
+<!-- Finally, an inline exercise has a division (several possible)         -->
+<!-- as a parent. We just drop in here last if other matches do not       -->
+<!-- succeed, but could improve with a filter or list of specific matches -->
+<xsl:template match="exercise" mode="type-name">
+    <xsl:call-template name="type-name">
+        <xsl:with-param name="string-id" select="'division/exercise'" />
     </xsl:call-template>
 </xsl:template>
 
