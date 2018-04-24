@@ -46,8 +46,8 @@
             element article {
                 MetaDataSubtitle,
                 ArticleFrontMatter?,
-                Section,
-                (Section | Exercises | References)*,
+                Section+,
+                Exercises*,
                 BackMatter?
             }
         Book =
@@ -55,10 +55,7 @@
             element book {
                 MetaDataSubtitle,
                 BookFrontMatter?,
-                (
-                    (Chapter, (Chapter | Exercises | References)*) |
-                    Part+
-                ),
+                (Part+ | Chapter+ ),
                 BackMatter?
             }
         Letter =
@@ -87,16 +84,19 @@
                 MetaDataTitle,
                 Objectives?,
                 (
-                    (BlockDivision | Paragraphs)+ |
+                    (
+                        (BlockDivision | Paragraphs)+,
+                        Exercises?,
+                        References?
+                    )
+                |
                     (
                         IntroductionDivision?,
-                        Section,
-                        (
-                            Section |
-                            Exercises |
-                            References
-                        )*,
-                        ConclusionDivision?)
+                        Section+,
+                        Exercises*,
+                        References?,
+                        ConclusionDivision?
+                    )
                 )
             }
         Section =
@@ -104,16 +104,19 @@
                 MetaDataTitle,
                 Objectives?,
                 (
-                    (BlockDivision | Paragraphs)+ |
+                    (
+                        (BlockDivision | Paragraphs)+,
+                        Exercises?,
+                        References?
+                    )
+                |
                     (
                         IntroductionDivision?,
-                        Subsection,
-                        (
-                            Subsection |
-                            Exercises |
-                            References
-                        )*,
-                        ConclusionDivision?)
+                        Subsection+,
+                        Exercises*,
+                        References?,
+                        ConclusionDivision?
+                    )
                 )
             }
         Subsection =
@@ -121,23 +124,28 @@
                 MetaDataTitle,
                 Objectives?,
                 (
-                    (BlockDivision | Paragraphs)+ |
+                    (
+                        (BlockDivision | Paragraphs)+,
+                        Exercises?,
+                        References?
+                    )
+                |
                     (
                         IntroductionDivision?,
-                        Subsubsection,
-                        (
-                            Subsubsection |
-                            Exercises |
-                            References
-                        )*,
-                        ConclusionDivision?)
+                        Subsubsection+,
+                        Exercises*,
+                        References?,
+                        ConclusionDivision?
+                    )
                 )
             }
         Subsubsection =
             element subsubsection {
                 MetaDataTitle,
                 Objectives?,
-                (BlockDivision | Paragraphs)+
+                (BlockDivision | Paragraphs)+,
+                Exercises?,
+                References?
             }
         Appendix =
             element appendix {

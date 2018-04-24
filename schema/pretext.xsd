@@ -21,12 +21,8 @@
         <xs:extension base="MetaDataSubtitle">
           <xs:sequence>
             <xs:group minOccurs="0" ref="ArticleFrontMatter"/>
-            <xs:element ref="section"/>
-            <xs:choice minOccurs="0" maxOccurs="unbounded">
-              <xs:element ref="section"/>
-              <xs:element ref="exercises"/>
-              <xs:element ref="references"/>
-            </xs:choice>
+            <xs:element maxOccurs="unbounded" ref="section"/>
+            <xs:element minOccurs="0" maxOccurs="unbounded" ref="exercises"/>
             <xs:element minOccurs="0" ref="backmatter"/>
           </xs:sequence>
         </xs:extension>
@@ -43,15 +39,8 @@
           <xs:sequence>
             <xs:group minOccurs="0" ref="BookFrontMatter"/>
             <xs:choice>
-              <xs:sequence>
-                <xs:element ref="chapter"/>
-                <xs:choice minOccurs="0" maxOccurs="unbounded">
-                  <xs:element ref="chapter"/>
-                  <xs:element ref="exercises"/>
-                  <xs:element ref="references"/>
-                </xs:choice>
-              </xs:sequence>
               <xs:element maxOccurs="unbounded" ref="part"/>
+              <xs:element maxOccurs="unbounded" ref="chapter"/>
             </xs:choice>
             <xs:element minOccurs="0" ref="backmatter"/>
           </xs:sequence>
@@ -83,18 +72,19 @@
           <xs:sequence>
             <xs:element minOccurs="0" ref="objectives"/>
             <xs:choice>
-              <xs:choice maxOccurs="unbounded">
-                <xs:group ref="BlockDivision"/>
-                <xs:group ref="Paragraphs"/>
-              </xs:choice>
+              <xs:sequence>
+                <xs:choice maxOccurs="unbounded">
+                  <xs:group ref="BlockDivision"/>
+                  <xs:group ref="Paragraphs"/>
+                </xs:choice>
+                <xs:element minOccurs="0" ref="exercises"/>
+                <xs:element minOccurs="0" ref="references"/>
+              </xs:sequence>
               <xs:sequence>
                 <xs:group minOccurs="0" ref="IntroductionDivision"/>
-                <xs:element ref="section"/>
-                <xs:choice minOccurs="0" maxOccurs="unbounded">
-                  <xs:element ref="section"/>
-                  <xs:element ref="exercises"/>
-                  <xs:element ref="references"/>
-                </xs:choice>
+                <xs:element maxOccurs="unbounded" ref="section"/>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="exercises"/>
+                <xs:element minOccurs="0" ref="references"/>
                 <xs:group minOccurs="0" ref="ConclusionDivision"/>
               </xs:sequence>
             </xs:choice>
@@ -110,18 +100,19 @@
           <xs:sequence>
             <xs:element minOccurs="0" ref="objectives"/>
             <xs:choice>
-              <xs:choice maxOccurs="unbounded">
-                <xs:group ref="BlockDivision"/>
-                <xs:group ref="Paragraphs"/>
-              </xs:choice>
+              <xs:sequence>
+                <xs:choice maxOccurs="unbounded">
+                  <xs:group ref="BlockDivision"/>
+                  <xs:group ref="Paragraphs"/>
+                </xs:choice>
+                <xs:element minOccurs="0" ref="exercises"/>
+                <xs:element minOccurs="0" ref="references"/>
+              </xs:sequence>
               <xs:sequence>
                 <xs:group minOccurs="0" ref="IntroductionDivision"/>
-                <xs:element ref="subsection"/>
-                <xs:choice minOccurs="0" maxOccurs="unbounded">
-                  <xs:element ref="subsection"/>
-                  <xs:element ref="exercises"/>
-                  <xs:element ref="references"/>
-                </xs:choice>
+                <xs:element maxOccurs="unbounded" ref="subsection"/>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="exercises"/>
+                <xs:element minOccurs="0" ref="references"/>
                 <xs:group minOccurs="0" ref="ConclusionDivision"/>
               </xs:sequence>
             </xs:choice>
@@ -137,18 +128,19 @@
           <xs:sequence>
             <xs:element minOccurs="0" ref="objectives"/>
             <xs:choice>
-              <xs:choice maxOccurs="unbounded">
-                <xs:group ref="BlockDivision"/>
-                <xs:group ref="Paragraphs"/>
-              </xs:choice>
+              <xs:sequence>
+                <xs:choice maxOccurs="unbounded">
+                  <xs:group ref="BlockDivision"/>
+                  <xs:group ref="Paragraphs"/>
+                </xs:choice>
+                <xs:element minOccurs="0" ref="exercises"/>
+                <xs:element minOccurs="0" ref="references"/>
+              </xs:sequence>
               <xs:sequence>
                 <xs:group minOccurs="0" ref="IntroductionDivision"/>
-                <xs:element ref="subsubsection"/>
-                <xs:choice minOccurs="0" maxOccurs="unbounded">
-                  <xs:element ref="subsubsection"/>
-                  <xs:element ref="exercises"/>
-                  <xs:element ref="references"/>
-                </xs:choice>
+                <xs:element maxOccurs="unbounded" ref="subsubsection"/>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="exercises"/>
+                <xs:element minOccurs="0" ref="references"/>
                 <xs:group minOccurs="0" ref="ConclusionDivision"/>
               </xs:sequence>
             </xs:choice>
@@ -167,6 +159,8 @@
               <xs:group ref="BlockDivision"/>
               <xs:group ref="Paragraphs"/>
             </xs:choice>
+            <xs:element minOccurs="0" ref="exercises"/>
+            <xs:element minOccurs="0" ref="references"/>
           </xs:sequence>
         </xs:extension>
       </xs:complexContent>

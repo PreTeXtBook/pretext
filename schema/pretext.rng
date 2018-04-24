@@ -22,13 +22,11 @@
       <optional>
         <ref name="ArticleFrontMatter"/>
       </optional>
-      <ref name="Section"/>
+      <oneOrMore>
+        <ref name="Section"/>
+      </oneOrMore>
       <zeroOrMore>
-        <choice>
-          <ref name="Section"/>
-          <ref name="Exercises"/>
-          <ref name="References"/>
-        </choice>
+        <ref name="Exercises"/>
       </zeroOrMore>
       <optional>
         <ref name="BackMatter"/>
@@ -43,18 +41,11 @@
         <ref name="BookFrontMatter"/>
       </optional>
       <choice>
-        <group>
-          <ref name="Chapter"/>
-          <zeroOrMore>
-            <choice>
-              <ref name="Chapter"/>
-              <ref name="Exercises"/>
-              <ref name="References"/>
-            </choice>
-          </zeroOrMore>
-        </group>
         <oneOrMore>
           <ref name="Part"/>
+        </oneOrMore>
+        <oneOrMore>
+          <ref name="Chapter"/>
         </oneOrMore>
       </choice>
       <optional>
@@ -87,24 +78,33 @@
         <ref name="Objectives"/>
       </optional>
       <choice>
-        <oneOrMore>
-          <choice>
-            <ref name="BlockDivision"/>
-            <ref name="Paragraphs"/>
-          </choice>
-        </oneOrMore>
+        <group>
+          <oneOrMore>
+            <choice>
+              <ref name="BlockDivision"/>
+              <ref name="Paragraphs"/>
+            </choice>
+          </oneOrMore>
+          <optional>
+            <ref name="Exercises"/>
+          </optional>
+          <optional>
+            <ref name="References"/>
+          </optional>
+        </group>
         <group>
           <optional>
             <ref name="IntroductionDivision"/>
           </optional>
-          <ref name="Section"/>
+          <oneOrMore>
+            <ref name="Section"/>
+          </oneOrMore>
           <zeroOrMore>
-            <choice>
-              <ref name="Section"/>
-              <ref name="Exercises"/>
-              <ref name="References"/>
-            </choice>
+            <ref name="Exercises"/>
           </zeroOrMore>
+          <optional>
+            <ref name="References"/>
+          </optional>
           <optional>
             <ref name="ConclusionDivision"/>
           </optional>
@@ -119,24 +119,33 @@
         <ref name="Objectives"/>
       </optional>
       <choice>
-        <oneOrMore>
-          <choice>
-            <ref name="BlockDivision"/>
-            <ref name="Paragraphs"/>
-          </choice>
-        </oneOrMore>
+        <group>
+          <oneOrMore>
+            <choice>
+              <ref name="BlockDivision"/>
+              <ref name="Paragraphs"/>
+            </choice>
+          </oneOrMore>
+          <optional>
+            <ref name="Exercises"/>
+          </optional>
+          <optional>
+            <ref name="References"/>
+          </optional>
+        </group>
         <group>
           <optional>
             <ref name="IntroductionDivision"/>
           </optional>
-          <ref name="Subsection"/>
+          <oneOrMore>
+            <ref name="Subsection"/>
+          </oneOrMore>
           <zeroOrMore>
-            <choice>
-              <ref name="Subsection"/>
-              <ref name="Exercises"/>
-              <ref name="References"/>
-            </choice>
+            <ref name="Exercises"/>
           </zeroOrMore>
+          <optional>
+            <ref name="References"/>
+          </optional>
           <optional>
             <ref name="ConclusionDivision"/>
           </optional>
@@ -151,24 +160,33 @@
         <ref name="Objectives"/>
       </optional>
       <choice>
-        <oneOrMore>
-          <choice>
-            <ref name="BlockDivision"/>
-            <ref name="Paragraphs"/>
-          </choice>
-        </oneOrMore>
+        <group>
+          <oneOrMore>
+            <choice>
+              <ref name="BlockDivision"/>
+              <ref name="Paragraphs"/>
+            </choice>
+          </oneOrMore>
+          <optional>
+            <ref name="Exercises"/>
+          </optional>
+          <optional>
+            <ref name="References"/>
+          </optional>
+        </group>
         <group>
           <optional>
             <ref name="IntroductionDivision"/>
           </optional>
-          <ref name="Subsubsection"/>
+          <oneOrMore>
+            <ref name="Subsubsection"/>
+          </oneOrMore>
           <zeroOrMore>
-            <choice>
-              <ref name="Subsubsection"/>
-              <ref name="Exercises"/>
-              <ref name="References"/>
-            </choice>
+            <ref name="Exercises"/>
           </zeroOrMore>
+          <optional>
+            <ref name="References"/>
+          </optional>
           <optional>
             <ref name="ConclusionDivision"/>
           </optional>
@@ -188,6 +206,12 @@
           <ref name="Paragraphs"/>
         </choice>
       </oneOrMore>
+      <optional>
+        <ref name="Exercises"/>
+      </optional>
+      <optional>
+        <ref name="References"/>
+      </optional>
     </element>
   </define>
   <define name="Appendix">
