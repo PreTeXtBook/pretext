@@ -1816,12 +1816,12 @@
   <xs:element name="exercisegroup">
     <xs:complexType>
       <xs:sequence>
-        <xs:group ref="MetaDataTarget"/>
+        <xs:group ref="MetaDataTitleOptional"/>
         <xs:group minOccurs="0" ref="IntroductionStatementNoCaption"/>
         <xs:element maxOccurs="unbounded" ref="exercise"/>
         <xs:group minOccurs="0" ref="ConclusionStatementNoCaption"/>
       </xs:sequence>
-      <xs:attributeGroup ref="MetaDataTarget"/>
+      <xs:attributeGroup ref="MetaDataTitleOptional"/>
       <xs:attribute name="cols">
         <xs:simpleType>
           <xs:restriction base="xs:token">

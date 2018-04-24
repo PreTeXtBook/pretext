@@ -1885,7 +1885,7 @@
   </define>
   <define name="ExerciseGroup">
     <element name="exercisegroup">
-      <ref name="MetaDataTarget"/>
+      <ref name="MetaDataTitleOptional"/>
       <optional>
         <attribute name="cols">
           <choice>
