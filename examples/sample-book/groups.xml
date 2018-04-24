@@ -709,6 +709,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </subsection>
     </section>
 
+    <xi:include href="./sage/groups-sage.xml" />
+
     <xi:include href="./exercises/groups.xml" />
 
     <exercises>
@@ -787,6 +789,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     </exercises>
 
+    <xi:include href="./sage/groups-sage-exercises.xml" />
+
     <references>
     <!--  references checked and updated - TWJ 6/22/2010 -->
         <title>References and Suggested Readings</title>
@@ -822,9 +826,5 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- was [6] -->
         <biblio type="raw">Rotman, J. J. <title>An Introduction to the Theory of Groups</title>. 4th ed. Springer, New York, 1995.</biblio>
     </references>
-
-
-    <xi:include href="./sage/groups-sage.xml" />
-    <xi:include href="./sage/groups-sage-exercises.xml" />
 
 </chapter>

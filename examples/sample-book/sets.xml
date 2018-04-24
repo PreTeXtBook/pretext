@@ -658,7 +658,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </subsection>
     </section>
 
-<xi:include href="./exercises/sets.xml" />
+    <xi:include href="./sage/sets-sage.xml" />
+
+    <xi:include href="./exercises/sets.xml" />
+
+    <xi:include href="./sage/sets-sage-exercises.xml" />
 
     <references>
         <title>References and Suggested Readings</title>
@@ -747,8 +751,5 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </biblio>
 
     </references> <!-- References need to be updated -->
-
-    <xi:include href="./sage/sets-sage.xml" />
-    <xi:include href="./sage/sets-sage-exercises.xml" />
 
 </chapter>
