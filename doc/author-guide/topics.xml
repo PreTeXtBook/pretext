@@ -844,11 +844,11 @@
     <section xml:id="topic-divisions">
         <title>Divisions</title>
 
-        <p>A <term>division</term><idx>division</idx> is a structured component of a book or article that would be recognized by most any reader.  They are essential to the organization of a <pretext /> project.  Notice that we use the generic term division, since a <tag>section</tag> is just one example of a division.</p>
+        <p>A <term>division</term><idx>division</idx> (or more carefully, a <term>structural division</term><idx>structural division</idx>) is a structured component of a book or article that would be recognized by most any reader.  They are essential to the organization of a <pretext /> project.  Notice that we use the generic term division, since a <tag>section</tag> is just one example of a division.</p>
 
-        <p>divisions are <tag>book</tag>, <tag>article</tag>, <tag>part</tag>, <tag>chapter</tag>, <tag>section</tag>, <tag>subsection</tag>, <tag>subsubsection</tag>, and <tag>paragraphs</tag>.  Their use is fairly intuitive, though there are some restrictions, so please read on.</p>
+        <p>Divisions are <tag>book</tag>, <tag>article</tag>, <tag>part</tag>, <tag>chapter</tag>, <tag>section</tag>, <tag>subsection</tag>, <tag>subsubsection</tag>, and <tag>paragraphs</tag>.  Their use is fairly intuitive, though there are some restrictions, so please read on.</p>
 
-        <p>A <tag>book</tag> must contain at least one <tag>chapter</tag>, which may contain <tag>section</tag>, <tag>subsection</tag>, and <tag>subsubsection</tag>.  The tag <tag>part</tag> is planned for books, between <tag>book</tag> and <tag>chapter</tag>.  It will function in two user-selectable ways: structural (<eg /> numbering will reset), or decorative (merely inserting a decorative page between two chapters and sectioning the Table of Contents).</p>
+        <p>A <tag>book</tag> must contain at least one <tag>part</tag> or at least one <tag>chapter</tag>, which may contain <tag>section</tag>, <tag>subsection</tag>, and <tag>subsubsection</tag>.  A <tag>part</tag> simply contains a sequence of <tag>chapter</tag> and functions in two user-selectable ways: structural (<eg /> numbering will reset), or decorative (merely inserting a decorative page between two chapters and sectioning the Table of Contents).</p>
 
         <p>An <tag>article</tag> is simpler and shorter than a book.  It might be really simple and have no divisions at all, or it may have <tag>section</tag>s.  It cannot have <tag>chapter</tag>s, as that would be a <tag>book</tag>.  Within a <tag>section</tag>, <tag>subsection</tag>s and <tag>subsubsection</tag>s may follow.</p>
 
@@ -858,7 +858,7 @@
 
         <p>There are exceptions to the above.  For one, <tag>paragraphs</tag> is an anomalous division, as a sort of lightweight sectioning command.  It may appear in any division, at any location within a division, it may not be divided further (it is a leaf of the document tree), it never gets a number, and its title is formatted in a subsidiary way.  I especially like to use this in a two- or three-page <tag>article</tag> that has no other divisions at all.  Typical presentation has the title in bold, without much change in font size (if at all), inline with the first paragraph, and perhaps a bit of vertical space as it begins and ends.  Despite the name, it may contain more than just paragaphs, so may contain any top-level-content that would go in any other division.</p>
 
-        <p>Two other anomalous divisions are <tag>exercises</tag> and <tag>references</tag>.  These can function as a further division of any other division.  So for example, an <tag>exercises</tag> could be a peer of several <tag>section</tag>s, contained within a structured <tag>chapter</tag>, and in this case would behave like the other <tag>section</tag>s with regard to numbering and presentation.  Detail on allowed content and its behavior are in <xref ref="topic-exercises" /> and <xref ref="topic-references" />, respectively.</p>
+        <p>Two other anomalous divisions are <tag>exercises</tag> and <tag>references</tag>.  These can be placed as a final component of any division from <tag>chapter</tag> on down.  So for example, an <tag>exercises</tag> could be a peer of several <tag>section</tag>s, contained within a structured <tag>chapter</tag>, and in this case would behave similar to the other <tag>section</tag>s.  Or an unstructured <tag>chapter</tag> may have a sequence of paragraphs, figures, examples, and the like, and conclude with a single <tag>exercises</tag>.  Detail on allowed content and behavior are in <xref ref="topic-exercises" /> and <xref ref="topic-references" />, respectively.</p>
     </section>
 
     <section xml:id="topic-mathematics">
