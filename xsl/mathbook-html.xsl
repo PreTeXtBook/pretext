@@ -7273,6 +7273,16 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
     </iframe>
 </xsl:template>
 
+<!-- JSXGraph header libraries -->
+<xsl:template match="interactive[@platform = 'jsxgraph']" mode="header-libraries">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jsxgraph/0.99.6/jsxgraph.css" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsxgraph/0.99.6/jsxgraphcore.js"></script>
+</xsl:template>
+
+<!-- HTML5 header libraries -->
+<xsl:template match="interactive[@platform = 'html5']" mode="header-libraries" />
+
+
 <!-- JSXGraph, HTML5 Interactives -->
 <xsl:template match="interactive[(@platform = 'jsxgraph') or (@platform = 'html5')]">
     <!-- an interactive always has a width, default is 100% -->
@@ -7298,13 +7308,11 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
         <xsl:call-template name="converter-blurb-html" />
         <html lang="{$document-language}">
             <head>
-                <!-- need CSS for sidebyside -->
+                <!-- need CSS for sidebyside         -->
+                <!-- perhaps this can be specialized -->
                 <xsl:call-template name="css" />
-                <!-- For jsxgraph case, bring in CSS and basic library -->
-                <xsl:if test="@platform = 'jsxgraph'">
-                    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jsxgraph/0.99.6/jsxgraph.css" />
-                    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsxgraph/0.99.6/jsxgraphcore.js"></script>
-                </xsl:if>
+                <!-- load header libraries (for all "slate") -->
+                <xsl:apply-templates select="." mode="header-libraries" />
             </head>
             <body class="mathbook-content">
                 <div>
@@ -7334,8 +7342,12 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
     </exsl:document>
 </xsl:template>
 
-<!-- The full content of an interactive that displays:  -->
-<!-- both where born, and in standalone page -->
+
+<!-- Following will generate:                               -->
+<!-- 1.  Instructions (paragraphs, etc)                     -->
+<!-- 2.  An iframe, for sandboxing, especially              -->
+<!-- 3.  Assumes super-minimal HTML page as @src of iframe, -->
+<!--     living at file given by "iframe-filename" template -->
 <xsl:template match="interactive[(@platform = 'jsxgraph') or (@platform = 'html5')]" mode="interactive-core">
     <!-- an interactive always has a width, default is 100% -->
     <xsl:variable name="int-id">
