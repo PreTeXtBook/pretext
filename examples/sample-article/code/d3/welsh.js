@@ -1,16 +1,19 @@
+/* Michael Chorley, MIT License, 2018-04-25                      */
+/* https://bl.ocks.org/martinjc/7aa53c7bf3e411238ac8aef280bd6581 */
+
 // dimensions
-var width = 1000;
-var height = 1000;
+var width = 600;
+var height = 1200;
 
 var margin = {
-    top: 50,
-    bottom: 50,
-    left: 50,
-    right: 50,
+    top: 20,
+    bottom: 10,
+    left: 5,
+    right: 120,
 }
 
 // create an svg to draw in
-var svg = d3.select("body")
+var svg = d3.select("#d3-welsh")
     .append("svg")
     .attr("width", width)
     .attr("height", height)
@@ -27,14 +30,14 @@ var simulation = d3.forceSimulation()
     })
     .strength(0.025))
     // push nodes apart to space them out
-    .force("charge", d3.forceManyBody().strength(-200))
+    .force("charge", d3.forceManyBody().strength(-300))
     // add some collision detection so they don't overlap
-    .force("collide", d3.forceCollide().radius(12))
+    .force("collide", d3.forceCollide().radius(16))
     // and draw them around the centre of the space
     .force("center", d3.forceCenter(width / 2, height / 2));
 
 // load the graph
-d3.json("mention_network.json", function(error, graph) {
+d3.json("code/d3/mention_network.json", function(error, graph) {
     // set the nodes
     var nodes = graph.nodes;
     // links between nodes
