@@ -1,0 +1,18 @@
+text {
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+}
+
+svg {
+  width: 100%;
+}
+
+.link {
+  fill: none;
+  stroke: #ddd;
+  stroke-width: 1px;
+}
+
+.node {
+  stroke: #000;
+  stroke-width: 1px;
+}
