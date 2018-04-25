@@ -1,5 +1,8 @@
-var width = 960,
-    height = 500;
+/* Mike Bostock, GPL license, 2018-04-25 */
+/* https://bl.ocks.org/mbostock/3231298  */
+
+var width = 480,
+    height = 480;
 
 var nodes = d3.range(200).map(function() { return {radius: Math.random() * 12 + 4}; }),
     root = nodes[0],
@@ -16,7 +19,7 @@ var force = d3.layout.force()
 
 force.start();
 
-var svg = d3.select("body").append("svg")
+var svg = d3.select("#d3-collision").append("svg")
     .attr("width", width)
     .attr("height", height);
 
