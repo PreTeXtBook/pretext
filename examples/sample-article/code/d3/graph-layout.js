@@ -1,18 +1,22 @@
+
+/* shimizu, GPL License, 2018-04-25                                  */
+/* https://bl.ocks.org/shimizu/raw/e6209de87cdddde38dadbb746feaf3a3/ */
+
 !(function(){
     "use strict"
 
     var width,height
     var chartWidth, chartHeight
     var margin
-    var svg = d3.select("#graph").append("svg")
+    var svg = d3.select("#d3-graph-layout").append("svg")
     var chartLayer = svg.append("g").classed("chartLayer", true)
 
     main()
 
     function main() {
-        var range = 100
+        var range = 50
         var data = {
-            nodes:d3.range(0, range).map(function(d){ return {label: "l"+d ,r:~~d3.randomUniform(8, 28)()}}),
+            nodes:d3.range(0, range).map(function(d){ return {label: "l"+d ,r:~~d3.randomUniform(4, 16)()}}),
             links:d3.range(0, range).map(function(){ return {source:~~d3.randomUniform(range)(), target:~~d3.randomUniform(range)()} })        
         }
 
@@ -21,9 +25,9 @@
     }
 
     function setSize(data) {
-        width = document.querySelector("#graph").clientWidth
-        height = document.querySelector("#graph").clientHeight
-    
+        width = document.querySelector("#d3-graph-layout").clientWidth
+        height = document.querySelector("#d3-graph-layout").clientHeight
+
         margin = {top:0, left:0, bottom:0, right:0 }
 
 
