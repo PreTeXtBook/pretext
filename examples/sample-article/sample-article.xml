@@ -3764,6 +3764,81 @@ the xsltproc executable.
             </subsection>
 
             <subsection>
+                <title>D3.js</title>
+                <idx>D3.js</idx>
+
+                <p><term>D3</term> is a Javascript library for <q>Data-Driven Documents</q>, which might greatly enhance some data you wish to display.  In short, it uses the animation capabilities of <init>SVG</init>.  Available examples seem sensitive to the version of the library, so we have examples using different versions.  Use the <attr>version</attr> attribute on <tag>interactive</tag> to specify the version number.  The default is <c>5</c>.</p>
+
+                <p>The first example uses the force layout and collision detection from Version 3.  (The necessary commands are very different in Version 4.)  Pretend you are a working shepherding dog.  Can you separate, and catch, one of the herd?</p>
+
+                <p>This is adapted from a <url href="https://bl.ocks.org/mbostock/3231298">block</url> by <url href="https://bl.ocks.org/mbostock">Mike Bostock</url> at <c>3231298</c> with a <init>GPL</init> license.  A similar demonstration, only using an <init>HTML5</init> canvas is at <url href="https://bl.ocks.org/mbostock/3231307"><c>bl.ocks.org/mbostock/3231307</c></url>.</p>
+
+                <figure>
+                    <caption>Force layout and collision detection</caption>
+                    <interactive xml:id="interactive-d3-collision" platform="d3" version="3" width="80%" aspect="1:1" source="code/d3/collision.js" preview="images/collision-preview.png">
+                        <slate xml:id="d3-collision" language="d3" aspect="1:1"/>
+                        <instructions>
+                            <p>Place your mouse/pointer at the center of the interactive to repel the 200 circles.</p>
+                        </instructions>
+                    </interactive>
+                </figure>
+
+                <p>Similar, but different, this demonstration of a graph layout uses Version 4 of the library.  Technical notes:<ul>
+                    <li>We have changed the size of the nodes, and their number, to fit in a smaller space.</li>
+                    <li>The Javascript script uses introspection to size itself, which would be a good general practice.</li>
+                </ul></p>
+
+                <p>This is adapted from a <url href="https://bl.ocks.org/shimizu/e6209de87cdddde38dadbb746feaf3a3">block</url> by <url href="https://bl.ocks.org/shimizu">shimizu</url> at <c>e6209de87cdddde38dadbb746feaf3a3</c> with a <init>GPL</init> license.</p>
+
+                <figure>
+                    <caption>Graph Layout</caption>
+                    <interactive xml:id="interactive-d3-graph-layout" platform="d3" version="4" width="60%" aspect="1:1" source="code/d3/graph-layout.js" preview="images/graph-layout-preview.png">
+                        <slate xml:id="d3-graph-layout" language="d3" aspect="1:1"/>
+                        <instructions>
+                            <p>Drag a vertex to a new location to see the graph adjust its layout.</p>
+                        </instructions>
+                    </interactive>
+                </figure>
+
+                <exercise>
+                    <title>Graph Planarity</title>
+                    <statement>
+                        <p>Can you move the vertices to new locations such that the resulting graph is planar?  (In other words, no edges cross?)</p>
+                    </statement>
+                </exercise>
+
+                <p>Finally an example that actually uses some data.  Here is the description from the <url href="https://bl.ocks.org/martinjc/7aa53c7bf3e411238ac8aef280bd6581">original block</url> by <url href="https://bl.ocks.org/martinjc">Martin Chorley</url> at <c>7aa53c7bf3e411238ac8aef280bd6581</c>, provided with an MIT License.</p>
+
+                <blockquote>
+                    <p>This visualisation uses a D3 force simulation to show the Twitter relationships between the Assembly Members in the Welsh Assembly in terms of the number of times each assembly member has mentioned another assembly member in a tweet.</p>
+
+                    <p>Twitter relationships were mined on 22/03/2017, and are representative of the conversational relationships on that date. Links between AMs represent a conversational relationship: one AM has mentioned the other. Party colour indicates the direction of the mention.</p>
+
+                    <p>Hover over the nodes to fade out non-connected nodes.</p>
+
+                    <p>Rather than using intermediate nodes to create curved links (as in Mike Bostock's block), this adds curves by adding a calculated control point for each edge.</p>
+                </blockquote>
+
+                <p>Technical notes:<ul>
+                    <li>Once the nodes organize themselves (automatically in the beginning), they cannot be moved.</li>
+                    <li>We have adjusted the margins in an attempt to keep names visible on the right side, but without giving up too much space.</li>
+                    <li>We have adjust the repelling force, and the collision buffer, to better fit the available space.</li>
+                    <li>This example required its own <init>CSS</init>, which we have included as part of the <tag>interactive</tag>.</li>
+                    <li>The data collected from the Twitter analysis is contained in a <init>JSON</init> file, <c>mention_network.json</c>, and where the script loads that file, it needs a path relative to the <init>HTML</init> file where the interactive is viewed.</li>
+                </ul></p>
+
+                <figure>
+                    <caption>Tweet mentions within the Welsh Assembly</caption>
+                    <interactive xml:id="interactive-d3-welsh" platform="d3" version="4" width="100%" aspect="1:2" source="code/d3/welsh.js" css="code/d3/welsh.css" preview="images/welsh-assembly-preview.png">
+                        <slate xml:id="d3-welsh" language="d3" aspect="1:2"/>
+                        <instructions>
+                            <p>Hover on the name of an Assembly Member to concentrate on their tweet mentions.</p>
+                        </instructions>
+                    </interactive>
+                </figure>
+            </subsection>
+
+            <subsection>
                 <title>JSXGraph</title>
                 <idx>JSXGraph</idx>
 
