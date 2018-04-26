@@ -7279,12 +7279,30 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsxgraph/0.99.6/jsxgraphcore.js"></script>
 </xsl:template>
 
+<!-- D3.js header libraries -->
+<xsl:template match="interactive[@platform = 'd3']" mode="header-libraries">
+    <xsl:variable name="d3-library-url">
+        <xsl:text>https://d3js.org/d3.v</xsl:text>
+        <!-- versions could be 3, 4, 5 -->
+        <xsl:choose>
+            <xsl:when test="@version">
+                <xsl:value-of select="@version" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>5</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+        <xsl:text>.min.js</xsl:text>
+    </xsl:variable>
+    <script src="{$d3-library-url}"></script>
+</xsl:template>
+
 <!-- HTML5 header libraries -->
 <xsl:template match="interactive[@platform = 'html5']" mode="header-libraries" />
 
 
-<!-- JSXGraph, HTML5 Interactives -->
-<xsl:template match="interactive[(@platform = 'jsxgraph') or (@platform = 'html5')]">
+<!-- JSXGraph, HTML5, D3 Interactives -->
+<xsl:template match="interactive[(@platform = 'jsxgraph') or (@platform = 'html5') or (@platform = 'd3')]">
     <!-- an interactive always has a width, default is 100% -->
     <xsl:variable name="int-id">
         <xsl:apply-templates select="." mode="internal-id" />
@@ -7350,7 +7368,7 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
 <!-- 2.  An iframe, for sandboxing, especially              -->
 <!-- 3.  Assumes super-minimal HTML page as @src of iframe, -->
 <!--     living at file given by "iframe-filename" template -->
-<xsl:template match="interactive[(@platform = 'jsxgraph') or (@platform = 'html5')]" mode="interactive-core">
+<xsl:template match="interactive[(@platform = 'jsxgraph') or (@platform = 'html5') or (@platform = 'd3')]" mode="interactive-core">
     <!-- an interactive always has a width, default is 100% -->
     <xsl:variable name="int-id">
         <xsl:apply-templates select="." mode="internal-id" />
@@ -7451,9 +7469,38 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
     <xsl:copy-of select="*" />
 </xsl:template>
 
+<!-- D3 Code -->
+<!-- Create a "div" with predictable id,         -->
+<!-- so D3 code can inject "svg" element into it -->
+<xsl:template match="slate[@language='d3']">
+    <div>
+        <xsl:attribute name="id">
+            <xsl:value-of select="@xml:id" />
+        </xsl:attribute>
+        <xsl:variable name="width">
+            <xsl:apply-templates select="." mode="get-width-pixels" />
+        </xsl:variable>
+        <xsl:variable name="height">
+            <xsl:apply-templates select="." mode="get-height-pixels" />
+        </xsl:variable>
+        <xsl:attribute name="style">
+            <!-- always -->
+            <xsl:text>width:</xsl:text>
+            <xsl:value-of select="$width" />
+            <xsl:text>px;</xsl:text>
+            <!-- always -->
+            <xsl:text> height:</xsl:text>
+            <xsl:value-of select="$height" />
+            <xsl:text>px;</xsl:text>
+            <xsl:text> display: block;</xsl:text>
+            <xsl:text> box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;</xsl:text>
+        </xsl:attribute>
+    </div>
+</xsl:template>
+
 <!-- @source attribute to script tags -->
 <!-- <xsl:template match="@source"> -->
-<xsl:template match="interactive[(@platform = 'jsxgraph') or (@platform = 'html5')]/@source">
+<xsl:template match="interactive[(@platform = 'jsxgraph') or (@platform = 'html5') or (@platform = 'd3')]/@source">
     <!-- <xsl:variable name="stuff" select=" -->
     <xsl:call-template name="one-script">
         <xsl:with-param name="text" select="concat(normalize-space(str:replace(., ',', ' ')), ' ')" />
