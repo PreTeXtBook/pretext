@@ -4499,7 +4499,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ###################################### -->
 
 
-<xsl:template match="video|interactive[(@platform = 'html5')]">
+<xsl:template match="video|interactive[(@platform = 'html5') or (@platform = 'd3')]">
     <!-- scale to fit into a side-by-side -->
     <xsl:variable name="width-percentage">
         <xsl:choose>
@@ -4593,7 +4593,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Eventually match on all interactives                            -->
 <!-- NB baseurl is likely to change, it should be a publisher option -->
 
-<xsl:template match="video[@source]|interactive[@platform = 'html5']" mode="static-url">
+<xsl:template match="video[@source]|interactive[(@platform = 'html5') or (@platform = 'd3')]" mode="static-url">
     <xsl:value-of select="$docinfo/html/baseurl/@href" />
     <xsl:text>/</xsl:text>
     <xsl:apply-templates select="." mode="standalone-filename" />
@@ -4651,7 +4651,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<xsl:template match="interactive[@platform = 'html5']" mode="static-image">
+<xsl:template match="interactive[(@platform = 'html5') or (@platform = 'd3')]" mode="static-image">
     <xsl:choose>
         <!-- has @preview -->
         <xsl:when test="@preview">
@@ -4725,7 +4725,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>[NO PREVIEW]</xsl:text>
 </xsl:template>
 
-<xsl:template match="interactive[(@platform = 'jsxgraph') or (@platform = 'html5')]" mode="static-caption">
+<xsl:template match="interactive[(@platform = 'jsxgraph') or (@platform = 'html5') or (@platform = 'd3')]" mode="static-caption">
     <xsl:text>[CAPTION]</xsl:text>
 </xsl:template>
 
