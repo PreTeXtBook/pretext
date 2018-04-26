@@ -7311,6 +7311,8 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
                 <!-- need CSS for sidebyside         -->
                 <!-- perhaps this can be specialized -->
                 <xsl:call-template name="css" />
+                <!-- and CSS for the entire interactive, into the head -->
+                <xsl:apply-templates select="@css" />
                 <!-- load header libraries (for all "slate") -->
                 <xsl:apply-templates select="." mode="header-libraries" />
             </head>
@@ -7474,6 +7476,11 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
             </xsl:call-template>
         </xsl:otherwise>
     </xsl:choose>
+</xsl:template>
+
+<!-- Wrap a CSS file in a "link" element -->
+<xsl:template match="interactive[(@platform = 'jsxgraph') or (@platform = 'html5') or (@platform = 'd3')]/@css">
+    <link rel="stylesheet" href="{.}" />
 </xsl:template>
 
 <!-- JSXGraph -->
