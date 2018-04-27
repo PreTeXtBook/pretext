@@ -7498,36 +7498,63 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
     </div>
 </xsl:template>
 
-<!-- @source attribute to script tags -->
-<!-- <xsl:template match="@source"> -->
+<!-- @source attribute to multiple script tags -->
 <xsl:template match="interactive[(@platform = 'jsxgraph') or (@platform = 'html5') or (@platform = 'd3')]/@source">
-    <!-- <xsl:variable name="stuff" select=" -->
     <xsl:call-template name="one-script">
-        <xsl:with-param name="text" select="concat(normalize-space(str:replace(., ',', ' ')), ' ')" />
+        <xsl:with-param name="token-list">
+            <xsl:call-template name="prepare-token-list">
+                <xsl:with-param name="token-list" select="." />
+            </xsl:call-template>
+        </xsl:with-param>
     </xsl:call-template>
 </xsl:template>
 
 <!-- A recursive template to create a script tag for each JS file -->
 <xsl:template name="one-script">
-    <xsl:param name="text" />
+    <xsl:param name="token-list" />
     <xsl:choose>
-        <xsl:when test="$text = ''" />
+        <xsl:when test="$token-list = ''" />
         <xsl:otherwise>
             <script type="text/javascript">
                 <xsl:attribute name="src">
-                    <xsl:value-of select="substring-before($text, ' ')" />
+                    <xsl:value-of select="substring-before($token-list, ' ')" />
                 </xsl:attribute>
             </script>
             <xsl:call-template name="one-script">
-                <xsl:with-param name="text" select="substring-after($text, ' ')" />
+                <xsl:with-param name="token-list" select="substring-after($token-list, ' ')" />
             </xsl:call-template>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 
-<!-- Wrap a CSS file in a "link" element -->
+<!-- @css attribute to multiple "link" element -->
 <xsl:template match="interactive[(@platform = 'jsxgraph') or (@platform = 'html5') or (@platform = 'd3')]/@css">
-    <link rel="stylesheet" href="{.}" />
+    <xsl:call-template name="one-css">
+        <xsl:with-param name="token-list">
+            <xsl:call-template name="prepare-token-list">
+                <xsl:with-param name="token-list" select="." />
+            </xsl:call-template>
+        </xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
+<!-- A recursive template to create a link element for each CSS file -->
+<!-- This is used to process  $html.css.extra  as well               -->
+<xsl:template name="one-css">
+    <xsl:param name="token-list" />
+    <xsl:choose>
+        <xsl:when test="$token-list = ''" />
+        <xsl:otherwise>
+            <link rel="stylesheet" type="text/css">
+                <xsl:attribute name="href">
+                    <xsl:value-of select="substring-before($token-list, ' ')" />
+                </xsl:attribute>
+            </link>
+            <xsl:call-template name="one-css">
+                <xsl:with-param name="token-list" select="substring-after($token-list, ' ')" />
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- JSXGraph -->
@@ -8934,58 +8961,22 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
 </xsl:template>
 
 <!-- CSS header -->
+<!-- The "one-css" template is defined elsewhere -->
 <xsl:template name="css">
     <link href="{$html.css.server}/mathbook/stylesheets/{$html.css.file}" rel="stylesheet" type="text/css" />
     <link href="https://aimath.org/mathbook/mathbook-add-on.css" rel="stylesheet" type="text/css" />
-    <xsl:call-template name="external-css">
-        <xsl:with-param name="css-list" select="normalize-space($html.css.extra)" />
-    </xsl:call-template>
-</xsl:template>
-
-<!-- Recursively unpack the list of URLs for extra CSS                       -->
-<!-- Presumes normalized, so no leading/trailing space and single separators -->
-<!-- If unspecified, default is empty string and nothing at all happens      -->
-<xsl:template name="external-css">
-    <xsl:param name="css-list" />
-    <xsl:variable name="delimiter" select="' '" />
-    <xsl:choose>
-        <xsl:when test="$css-list = ''">
-            <!-- bail out: done, halt recursion, take no action -->
-        </xsl:when>
-        <!--
-        Unnormalized:
-        strip leading space, or leftover from multiple spaces, or trailing
-        <xsl:when test="substring($css-list, 1, 1) = ' '">
-            <xsl:call-template name="external-css">
-                <xsl:with-param name="css-list" select="substring($css-list, 2)" />
-            </xsl:call-template>
-        </xsl:when>
-        -->
-        <xsl:when test="contains($css-list, $delimiter)">
-            <!-- Form the css inclusion element from front, recurse -->
-            <!-- Presumes a single space as separator               -->
-            <xsl:element name="link">
-                <xsl:attribute name="href">
-                    <xsl:value-of select="substring-before($css-list, $delimiter)" />
-                </xsl:attribute>
-                <xsl:attribute name="rel">stylesheet</xsl:attribute>
-                <xsl:attribute name="type">text/css</xsl:attribute>
-            </xsl:element>
-            <xsl:call-template name="external-css">
-                <xsl:with-param name="css-list" select="substring-after($css-list, $delimiter)" />
-            </xsl:call-template>
-        </xsl:when>
-        <xsl:otherwise>
-            <!-- form the css inclusion element from last/only URL -->
-            <xsl:element name="link">
-                <xsl:attribute name="href">
-                    <xsl:value-of select="$css-list" />
-                </xsl:attribute>
-                <xsl:attribute name="rel">stylesheet</xsl:attribute>
-                <xsl:attribute name="type">text/css</xsl:attribute>
-            </xsl:element>
-        </xsl:otherwise>
-    </xsl:choose>
+    <!-- If extra CSS is specified, then unpack multiple CSS files -->
+    <!-- The prepared list (extra blank space) will cause failure  -->
+    <!-- if $html.css.extra is empty (i.e. not specified)          -->
+    <xsl:if test="not($html.css.extra = '')">
+        <xsl:call-template name="one-css">
+            <xsl:with-param name="token-list">
+                <xsl:call-template name="prepare-token-list">
+                    <xsl:with-param name="token-list" select="$html.css.extra" />
+                </xsl:call-template>
+            </xsl:with-param>
+        </xsl:call-template>
+    </xsl:if>
 </xsl:template>
 
 <!-- ############## -->
