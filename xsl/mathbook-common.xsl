@@ -2180,6 +2180,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="translate($extension, &UPPERCASE;, &LOWERCASE;)" />
 </xsl:template>
 
+<!-- ############### -->
+<!-- Token Utilities -->
+<!-- ############### -->
+
+<!-- Routines that can be employed in a recursive      -->
+<!-- formulation to process a string (attribute value, -->
+<!-- usually) that is separated by spaces or by commas -->
+
+<!-- Replace commas by blanks, constrict blanks to singletons, -->
+<!-- add trailing blank for last step of iteration             -->
+<xsl:template name="prepare-token-list">
+    <xsl:param name="token-list" />
+    <xsl:value-of select="concat(normalize-space(str:replace($token-list, ',', ' ')), ' ')" />
+</xsl:template>
+
+<!-- Now, to work through the $token-list                          -->
+<!--   1. If $token-list = '', end recursion                       -->
+<!--   2. Process substring-before($token-list, ' ') as next token -->
+<!--   3. Pass substring-after($token-list, ' ') recursively       -->
+
 <!-- ################## -->
 <!-- LaTeX Shortcomings -->
 <!-- ################## -->
