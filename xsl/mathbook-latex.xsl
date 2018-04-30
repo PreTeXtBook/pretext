@@ -362,10 +362,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% Colored boxes, and much more, though mostly styling&#xa;</xsl:text>
     <xsl:text>%% skins library provides "enhanced" skin, employing tikzpicture&#xa;</xsl:text>
     <xsl:text>%% boxes may be configured as "breakable" or "unbreakable"&#xa;</xsl:text>
+    <xsl:text>%% "raster" controls grids of boxes, aka side-by-side&#xa;</xsl:text>
     <xsl:text>\usepackage{tcolorbox}&#xa;</xsl:text>
     <xsl:text>\tcbuselibrary{skins}&#xa;</xsl:text>
     <xsl:text>\tcbuselibrary{breakable}&#xa;</xsl:text>
     <xsl:text>\tcbuselibrary{raster}&#xa;</xsl:text>
+    <xsl:text>%% xparse allows the construction of more robust commands,&#xa;</xsl:text>
+    <xsl:text>%% this is a necessity for isolating styling and behavior&#xa;</xsl:text>
+    <xsl:text>%% The tcolorbox library of the same name loads the base library&#xa;</xsl:text>
+    <xsl:text>\tcbuselibrary{xparse}&#xa;</xsl:text>
     <xsl:text>%% Hyperref should be here, but likes to be loaded late&#xa;</xsl:text>
     <xsl:text>%%&#xa;</xsl:text>
     <xsl:text>%% Inline math delimiters, \(, \), need to be robust&#xa;</xsl:text>
@@ -1524,9 +1529,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="//pre">
             <xsl:text>%% Pre-formatted text, a peer of paragraphs&#xa;</xsl:text>
             <xsl:text>\DefineVerbatimEnvironment{preformatted}{Verbatim}{}&#xa;</xsl:text>
-            <xsl:text>%% Pre-formatted text, as panel of a sidebyside&#xa;</xsl:text>
-            <xsl:text>%% Default alignment is the bottom of the box on the baseline&#xa;</xsl:text>
-            <xsl:text>\DefineVerbatimEnvironment{preformattedbox}{BVerbatim}{}&#xa;</xsl:text>
         </xsl:if>
         <xsl:if test="$document-root//cd">
             <xsl:text>%% code display (cd), by analogy with math display (md)&#xa;</xsl:text>
@@ -1542,7 +1544,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>%% Console session with prompt, input, output&#xa;</xsl:text>
             <xsl:text>%% Make a console environment from fancyvrb BVerbatim environment&#xa;</xsl:text>
             <xsl:text>%% Specify usual escape, begin group, end group characters&#xa;</xsl:text>
-            <xsl:text>%% (boxed variant is useful for constructing sidebyside panels)&#xa;</xsl:text>
+            <xsl:text>%% (boxed variant accepts optional boxwidth key, not used)&#xa;</xsl:text>
             <xsl:text>%% (BVerbatim environment allows for line numbers, make feature request?)&#xa;</xsl:text>
             <!-- "box verbatim" since could be used in a sidebyside panel, additional options are        -->
             <!-- trivial: numbers=left, stepnumber=5 (can mimic in HTML with counting recursive routine) -->
@@ -1707,11 +1709,45 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>    \tikzset{ampersand replacement = \amp}&#xa;</xsl:text>
         <xsl:text>\fi&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="//sidebyside">
-        <xsl:text>%% NB: calc redefines \setlength&#xa;</xsl:text>
-        <xsl:text>\usepackage{calc}&#xa;</xsl:text>
-        <xsl:text>%% used repeatedly for vertical dimensions of sidebyside panels&#xa;</xsl:text>
-        <xsl:text>\newlength{\panelmax}&#xa;</xsl:text>
+    <xsl:if test="$document-root//sidebyside">
+        <!-- "minimal" is no border or spacing at all -->
+        <!-- set on $sbsdebug to "tight" with some background    -->
+        <!-- From the tcolorbox manual, "center" vs. "flush center":      -->
+        <!-- "The differences between the flush and non-flush version     -->
+        <!-- are explained in detail in the TikZ manual. The short story  -->
+        <!-- is that the non-flush versions will often look more balanced -->
+        <!-- but with more hyphenations."                                 -->
+        <xsl:choose>
+            <xsl:when test="$sbsdebug">
+                <xsl:text>%% tcolorbox styles for *DEBUGGING* sidebyside layout&#xa;</xsl:text>
+                <xsl:text>%% "tight" -> 0.4pt border, pink background&#xa;</xsl:text>
+                <xsl:text>\tcbset{ sbsstyle/.style={raster equal height=rows,raster force size=false} }&#xa;</xsl:text>
+                <xsl:text>\tcbset{ sbsheadingstyle/.style={size=tight,halign=center,fontupper=\bfseries,colback=pink} }&#xa;</xsl:text>
+                <xsl:text>\tcbset{ sbspanelstyle/.style={size=tight,colback=pink} }&#xa;</xsl:text>
+                <xsl:text>\tcbset{ sbscaptionstyle/.style={size=tight,halign=center,colback=pink} }&#xa;</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>%% tcolorbox styles for sidebyside layout&#xa;</xsl:text>
+                <xsl:text>\tcbset{ sbsstyle/.style={raster equal height=rows,raster force size=false} }&#xa;</xsl:text>
+                <xsl:text>\tcbset{ sbsheadingstyle/.style={size=minimal,halign=center,fontupper=\bfseries,colback=white} }&#xa;</xsl:text>
+                <xsl:text>\tcbset{ sbspanelstyle/.style={size=minimal,colback=white} }&#xa;</xsl:text>
+                <xsl:text>\tcbset{ sbscaptionstyle/.style={size=minimal,halign=center,colback=white} }&#xa;</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+        <xsl:text>%% Enviroments for side-by-side and components&#xa;</xsl:text>
+        <xsl:text>%% Necessary to use \NewTColorBox for boxes of the panels&#xa;</xsl:text>
+        <!-- Main side-by-side environment, given by xparse            -->
+        <!-- raster equal height: boxes of same *row* have same height -->
+        <!-- raster force size: false lets us control width            -->
+        <!-- An uncaptioned "figure" is used to prevent page breaks    -->
+        <xsl:text>\NewDocumentEnvironment{sidebyside}{mmmm}&#xa;</xsl:text>
+        <xsl:text>  {\begin{figure}\begin{tcbraster}&#xa;</xsl:text>
+        <xsl:text>    [sbsstyle,raster columns=#1,&#xa;</xsl:text>
+        <xsl:text>    raster left skip=#2\linewidth,raster right skip=#3\linewidth,raster column skip=#4\linewidth]}&#xa;</xsl:text>
+        <xsl:text>  {\end{tcbraster}\end{figure}}&#xa;</xsl:text>
+        <xsl:text>\NewTColorBox{sbsheading}{m}{sbsheadingstyle,width=#1\linewidth}&#xa;</xsl:text>
+        <xsl:text>\NewTColorBox{sbspanel}{mO{top}}{sbspanelstyle,width=#1\linewidth,valign=#2}&#xa;</xsl:text>
+        <xsl:text>\NewTColorBox{sbscaption}{m}{sbscaptionstyle,width=#1\linewidth}&#xa;</xsl:text>
     </xsl:if>
     <!-- We could use contains() on the 5 types of arrows  -->
     <!-- to really defend against this problematic package -->
@@ -1743,12 +1779,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% Plus three from MBX for XML characters&#xa;</xsl:text>
     <xsl:value-of select="$latex-macros" />
     <xsl:text>%% End: Author-provided macros&#xa;</xsl:text>
-
-    <!-- Easter Egg -->
-    <xsl:if test="$sbsdebug">
-        <xsl:text>\setlength{\fboxrule}{1pt}&#xa;</xsl:text>
-        <xsl:text>\setlength{\fboxsep}{-1pt}&#xa;</xsl:text>
-    </xsl:if>
 
     <!-- PGML definitions. What follows is the PGML problem preamble in its entirety, taken from  -->
     <!-- https://github.com/openwebwork/pg/blob/master/macros/PGML.pl. However some lines are     -->
@@ -4527,7 +4557,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\setlength{\previewwidth}{\linewidth}&#xa;</xsl:text>
     <xsl:text>\addtolength{\previewwidth}{-\qrsize}&#xa;</xsl:text>
 
-    <xsl:text>\begin{tcbraster}[raster columns=2, raster column skip=1pt, raster halign=center, raster force size=false]%&#xa;</xsl:text>
+    <!-- left skip, right skip are necessary for embedding in a sidebyside -->
+    <xsl:text>\begin{tcbraster}[raster columns=2, raster column skip=1pt, raster halign=center, raster force size=false, raster left skip=0pt, raster right skip=0pt]%&#xa;</xsl:text>
 
     <!-- preview image (supplied or scraped) -->
     <xsl:text>\begin{tcolorbox}[previewstyle, width=\previewwidth]%&#xa;</xsl:text>
@@ -5673,16 +5704,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- An interactive command-line session with a prompt, input and output -->
 <!-- The width parameter supports use in a sidebyside panel              -->
 <xsl:template match="console">
-    <xsl:param name="width" select="''" />
     <!-- ignore prompt, and pick it up in trailing input  -->
     <!-- optional width override is supported by fancyvrb -->
-    <xsl:text>\begin{console}</xsl:text>
-    <xsl:if test="not($width='')">
-        <xsl:text>[boxwidth=</xsl:text>
-        <xsl:value-of select="$width" />
-        <xsl:text>]</xsl:text>
-    </xsl:if>
-    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>\begin{console}&#xa;</xsl:text>
     <xsl:apply-templates select="input|output" />
     <xsl:text>\end{console}&#xa;</xsl:text>
 </xsl:template>
@@ -5899,82 +5923,50 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- If an object carries a title, we add it to the -->
 <!-- row of titles across the top of the table      -->
-<!-- Bold, but not with a font-size increase, given -->
+<!-- Bold, but not with a font-size increase, since -->
 <!-- width is constrained for panels                -->
 <xsl:template match="*" mode="panel-heading">
     <xsl:param name="width" />
+    <xsl:text>\begin{sbsheading}{</xsl:text>
+    <xsl:value-of select="substring-before($width,'%') div 100" />
+    <xsl:text>}</xsl:text>
     <xsl:if test="title">
-        <xsl:if test="$sbsdebug">
-            <xsl:text>\fbox{</xsl:text>
-            <xsl:text>\hspace*{-0.5ex}x\hspace*{-0.5ex}</xsl:text>
-        </xsl:if>
-        <xsl:text>\parbox[t]{</xsl:text>
-        <xsl:value-of select="substring-before($width,'%') div 100" />
-        <xsl:text>\linewidth}{\centering{}\textbf{</xsl:text>
         <xsl:apply-templates select="." mode="title-full" />
-        <xsl:text>}}</xsl:text>
-        <xsl:if test="$sbsdebug">
-            <xsl:text>\hspace*{-0.5ex}x\hspace*{-0.5ex}</xsl:text>
-            <xsl:text>}</xsl:text>
-        </xsl:if>
     </xsl:if>
-    <xsl:if test="following-sibling::*">
-        <xsl:text>&amp;&#xa;</xsl:text>
-    </xsl:if>
+    <xsl:text>\end{sbsheading}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- generic "panel-panel" template          -->
-<!-- simply references the box made in setup -->
+
 <xsl:template match="*" mode="panel-panel">
     <xsl:param name="width" />
     <xsl:param name="valign" />
-    <xsl:if test="$sbsdebug">
-        <xsl:text>\fbox{</xsl:text>
-        <xsl:text>\hspace*{-0.5ex}x\hspace*{-0.5ex}</xsl:text>
-    </xsl:if>
-    <xsl:text>\begin{minipage}[c][\panelmax]</xsl:text>
-    <!-- vertical alignment within minipage -->
-    <xsl:text>[</xsl:text>
+
+    <xsl:text>\begin{sbspanel}{</xsl:text>
+    <xsl:value-of select="substring-before($width,'%') div 100" />
+    <xsl:text>}</xsl:text>
+    <!-- 'top' is the sbspanel environment default -->
+    <!-- could generate brackets of optional       -->
+    <!-- argument outside of the choose            -->
     <xsl:choose>
-        <xsl:when test="$valign = 'bottom'">
-            <xsl:text>b</xsl:text>
-        </xsl:when>
-        <!-- minipage anomalous, halfway is "c" -->
+        <xsl:when test="$valign = 'top'" />
         <xsl:when test="$valign = 'middle'">
-            <xsl:text>c</xsl:text>
+            <xsl:text>[center]</xsl:text>
         </xsl:when>
-        <xsl:when test="$valign = 'top'">
-            <xsl:text>t</xsl:text>
+        <xsl:when test="$valign = 'bottom'">
+            <xsl:text>[bottom]</xsl:text>
         </xsl:when>
     </xsl:choose>
-    <xsl:text>]</xsl:text>
-    <xsl:text>{</xsl:text>
-    <xsl:value-of select="substring-before($width,'%') div 100" />
-    <xsl:text>\linewidth}</xsl:text>
-    <xsl:text>\usebox{\panelbox</xsl:text>
-    <xsl:apply-templates select="." mode="panel-id" />
-    <xsl:text>}</xsl:text>
-    <xsl:text>\end{minipage}</xsl:text>
-    <xsl:if test="$sbsdebug">
-        <xsl:text>\hspace*{-0.5ex}x\hspace*{-0.5ex}</xsl:text>
-        <xsl:text>}</xsl:text>
-    </xsl:if>
-    <xsl:if test="following-sibling::*">
-        <xsl:text>&amp;&#xa;</xsl:text>
-    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates select="." mode="panel-latex-box" />
+    <xsl:text>\end{sbspanel}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- a figure or table must have a caption,         -->
-<!-- and is a subcaption if sbs parent is captioned -->
-<xsl:template match="figure|table|listing|list" mode="panel-caption">
+
+<xsl:template match="*" mode="panel-caption">
     <xsl:param name="width" />
-    <xsl:if test="$sbsdebug">
-        <xsl:text>\fbox{</xsl:text>
-        <xsl:text>\hspace*{-0.5ex}x\hspace*{-0.5ex}</xsl:text>
-    </xsl:if>
-    <xsl:text>\parbox[t]{</xsl:text>
+    <xsl:text>\begin{sbscaption}{</xsl:text>
     <xsl:value-of select="substring-before($width,'%') div 100" />
-    <xsl:text>\linewidth}{</xsl:text>
+    <xsl:text>}&#xa;</xsl:text>
     <xsl:choose>
         <!-- Exceptional situation for backward-compatibility -->
         <!-- Titled/environment version deprecated 2017-08-25 -->
@@ -5994,29 +5986,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:when>
+        <!-- subcaptioned -->
         <xsl:when test="parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure">
             <xsl:apply-templates select="caption" mode="subcaption" />
         </xsl:when>
-        <xsl:otherwise>
+        <!-- not subcaptioned, so regular caption -->
+        <xsl:when test="self::figure or self::table or self::listing or self::list">
             <xsl:apply-templates select="caption" />
-        </xsl:otherwise>
+        </xsl:when>
+        <!-- fill space -->
+        <xsl:otherwise />
     </xsl:choose>
-    <xsl:text>}</xsl:text>
-    <xsl:if test="$sbsdebug">
-        <xsl:text>\hspace*{-0.5ex}x\hspace*{-0.5ex}</xsl:text>
-        <xsl:text>}</xsl:text>
-    </xsl:if>
-    <xsl:if test="following-sibling::*">
-        <xsl:text>&amp;&#xa;</xsl:text>
-    </xsl:if>
-</xsl:template>
-
-<!-- no caption if not figure or table -->
-<!-- but do include a column separator -->
-<xsl:template match="*" mode="panel-caption">
-    <xsl:if test="following-sibling::*">
-        <xsl:text>&amp;&#xa;</xsl:text>
-    </xsl:if>
+    <xsl:text>\end{sbscaption}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- We take in all three rows of a LaTeX    -->
@@ -6032,55 +6013,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     <xsl:variable name="number-panels" select="$layout/number-panels" />
     <xsl:variable name="left-margin" select="$layout/left-margin" />
+    <xsl:variable name="right-margin" select="$layout/right-margin" />
     <xsl:variable name="space-width" select="$layout/space-width" />
 
-    <!-- protect a single side-by-side -->
-    <!-- Local/global newsavebox: http://tex.stackexchange.com/questions/18170 -->
-    <xsl:text>% group protects changes to lengths, releases boxes (?)&#xa;</xsl:text>
-    <xsl:text>{% begin: group for a single side-by-side&#xa;</xsl:text>
-    <xsl:text>% set panel max height to practical minimum, created in preamble&#xa;</xsl:text>
-    <xsl:text>\setlength{\panelmax}{0pt}&#xa;</xsl:text>
-    <xsl:value-of select="$setup" />
-
-    <xsl:call-template name="leave-vertical-mode" />
-    <xsl:text>% begin: side-by-side as tabular&#xa;</xsl:text>
-    <xsl:text>% \tabcolsep change local to group&#xa;</xsl:text>
-    <xsl:text>\setlength{\tabcolsep}{</xsl:text>
-    <xsl:value-of select="0.5 * substring-before($space-width, '%') div 100" />
-    <xsl:text>\linewidth}&#xa;</xsl:text>
-    <xsl:text>% @{} suppress \tabcolsep at extremes, so margins behave as intended&#xa;</xsl:text>
-    <!-- set spacing, centering provide half at each end -->
-    <!-- LaTeX parameter is half of the column space     -->
-    <xsl:if test="not(parent::figure) or not(parent::sbsgroup and preceding-sibling::sidebyside)">
-        <xsl:text>\par\medskip\noindent&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:if test="not($left-margin = '0%')">
-        <xsl:text>\hspace*{</xsl:text>
-        <xsl:value-of select="substring-before($left-margin, '%') div 100" />
-        <xsl:text>\linewidth}%&#xa;</xsl:text>
-    </xsl:if>
-    <!-- @{} strips extreme left, right colsep and -->
-    <!-- allows us to get flush left (zero margin) -->
-    <xsl:text>\begin{tabular}{@{}*{</xsl:text>
+    <xsl:text>\begin{sidebyside}{</xsl:text>
     <xsl:value-of select="$number-panels" />
-    <xsl:text>}{c}@{}}&#xa;</xsl:text>
-    <!-- Headings as a table row, if extant -->
+    <xsl:text>}{</xsl:text>
+    <xsl:value-of select="substring-before($left-margin, '%') div 100" />
+    <xsl:text>}{</xsl:text>
+    <xsl:value-of select="substring-before($right-margin, '%') div 100" />
+    <xsl:text>}{</xsl:text>
+    <xsl:value-of select="substring-before($space-width, '%') div 100" />
+    <xsl:text>}&#xa;</xsl:text>
+
+    <!-- Headings (titles) are "all or nothing" -->
     <xsl:if test="$has-headings">
         <xsl:value-of select="$headings" />
-        <xsl:text>\tabularnewline&#xa;</xsl:text>
     </xsl:if>
-    <!-- actual panels in second row, always -->
+    <!-- The main event -->
     <xsl:value-of select="$panels" />
-    <!-- Captions as a table row, if extant -->
+    <!-- Captions are "all or nothing" -->
     <xsl:if test="$has-captions">
-        <xsl:text>\tabularnewline&#xa;</xsl:text>
         <xsl:value-of select="$captions" />
     </xsl:if>
-    <!-- end on a newline, ready for resumption of text  -->
-    <!-- or perhaps a follow-on sidebyside in a sbsgroup -->
-    <xsl:text>\end{tabular}\\&#xa;</xsl:text>
-    <xsl:text>% end: side-by-side as tabular&#xa;</xsl:text>
-    <xsl:text>}% end: group for a single side-by-side&#xa;</xsl:text>
+    <xsl:text>\end{sidebyside}&#xa;</xsl:text>
 </xsl:template>
 
 
@@ -6088,158 +6044,86 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Object by Object LaTeX Boxes -->
 <!-- ############################ -->
 
-<!-- Implement modal "panel-latex-box" for various MBX elements -->
-<!-- Baseline is consistently at bottom, so vertical alignment  -->
-<!-- behaves in minipages.                                      -->
-<!-- Called in -setup and saved results recycled in -panel      -->
+<!-- Implement modal "panel-latex-box" for allowed elements -->
 
-<xsl:template match="p|paragraphs|tabular|video|ol|ul|dl|list|poem" mode="panel-latex-box">
-    <xsl:param name="width" />
-    <xsl:variable name="percent" select="substring-before($width,'%') div 100" />
-    <xsl:if test="$sbsdebug">
-        <xsl:text>\fbox{\hspace*{-0.5ex}x\hspace*{-0.5ex}</xsl:text>
-    </xsl:if>
-    <xsl:text>\raisebox{\depth}{\parbox{</xsl:text>
-    <xsl:value-of select="substring-before($width,'%') div 100" />
-    <xsl:text>\linewidth}{</xsl:text>
-    <!-- center tables here or below -->
-    <xsl:choose>
-        <xsl:when test="self::p">
-            <xsl:apply-templates select="*|text()" />
-        </xsl:when>
-        <xsl:when test="self::paragraphs">
-            <xsl:apply-templates select="p|blockquote" />
-        </xsl:when>
-        <xsl:when test="self::tabular or self::video">
-            <xsl:text>\centering</xsl:text>
-            <xsl:apply-templates select="." />
-        </xsl:when>
-        <xsl:when test="self::ol or self::ul or self::dl">
-            <xsl:apply-templates select="." />
-        </xsl:when>
-        <xsl:when test="self::list">
-            <!-- For a named list we just process the contents, -->
-            <!-- while ignoring the title (implicitly) and the  -->
-            <!-- caption (explicitly).  As a panel, we do not   -->
-            <!-- provide any visual style/separation            -->
-            <xsl:apply-templates select="*[not(self::caption)]" />
-        </xsl:when>
-        <!-- like main "poem" template, but sans title -->
-        <xsl:when test="self::poem">
-            <xsl:text>\begin{poem}</xsl:text>
-            <xsl:apply-templates select="." mode="label" />
-            <xsl:text>&#xa;</xsl:text>
-            <xsl:apply-templates select="stanza"/>
-            <xsl:apply-templates select="author" />
-            <xsl:text>\end{poem}&#xa;</xsl:text>
-        </xsl:when>
-    </xsl:choose>
-    <xsl:text>}}</xsl:text>
-    <xsl:if test="$sbsdebug">
-        <xsl:text>\hspace*{-0.5ex}x\hspace*{-0.5ex}</xsl:text>
-        <xsl:text>}</xsl:text>
-    </xsl:if>
+<xsl:template match="p|pre" mode="panel-latex-box">
+    <xsl:apply-templates select="." />
 </xsl:template>
 
-<!-- Verbatim text from the content of a "pre" element       -->
-<!-- is made into a LaTeX box with the  fancyvrb "BVerbatim" -->
-<!-- environment, which is then saved in an LR box above     -->
-<!-- We cannot see an easy way to get the debugging wrapper  -->
-<!-- Default alignment places bottom ont the baseline        -->
-<!-- NOTE: adjust panel-setup to produce an LR box           -->
-<xsl:template match="pre" mode="panel-latex-box">
-    <xsl:param name="width" />
-    <xsl:variable name="percent" select="substring-before($width,'%') div 100" />
-    <xsl:text>\begin{preformattedbox}</xsl:text>
-    <xsl:text>[boxwidth=</xsl:text>
-    <xsl:value-of select="$percent" />
-    <xsl:text>\linewidth]</xsl:text>
+<!-- Will be obsolete, instead stack "p" with no title -->
+<!-- "title" should be killed anyway -->
+<xsl:template match="paragraphs" mode="panel-latex-box">
+    <xsl:apply-templates select="*[not(self::title)]" />
+</xsl:template>
+
+<!-- TODO: trash left, top margins (accomodated already) -->
+<xsl:template match="ol|ul|dl" mode="panel-latex-box">
+    <xsl:apply-templates select="." />
+</xsl:template>
+
+<xsl:template match="program|console" mode="panel-latex-box">
+    <xsl:apply-templates select="." />
+</xsl:template>
+
+<!-- Much like main "poem" template, but sans title -->
+<xsl:template match="poem" mode="panel-latex-box">
+    <xsl:text>\begin{poem}</xsl:text>
+    <xsl:apply-templates select="." mode="label" />
     <xsl:text>&#xa;</xsl:text>
-    <xsl:apply-templates select="." mode="interior"/>
-    <xsl:text>\end{preformattedbox}&#xa;</xsl:text>
+    <xsl:apply-templates select="stanza"/>
+    <xsl:apply-templates select="author" />
+    <xsl:text>\end{poem}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- A "console" is handled differently than a "pre"     -->
-<!-- (and it may be a superior approach).  The fancyvrb  -->
-<!-- "BVerbatim" environment produces a TeX box that may -->
-<!-- be digested by an lrbox where panels get measured,  -->
-<!-- then the PTX "console" enviroment is defined via a  -->
-<!-- fancyvrb mechanism, which allows an override of the -->
-<!-- width of the box.                                   -->
-<!-- width parameter enters as a percentage              -->
-<!-- TODO: make enviroments for "pre" and consolidate    -->
-<xsl:template match="console" mode="panel-latex-box">
-    <xsl:param name="width" />
-    <xsl:apply-templates select=".">
-        <xsl:with-param name="width">
-            <xsl:value-of select="substring-before($width,'%') div 100" />
-            <xsl:text>\linewidth</xsl:text>
-        </xsl:with-param>
-    </xsl:apply-templates>
+<!-- TODO: tighten up gaps, margins? -->
+<xsl:template match="tabular" mode="panel-latex-box">
+    <!-- \centering needs a closing \par within a      -->
+    <!-- defensive group if it is to be effective      -->
+    <!-- https://tex.stackexchange.com/questions/23650 -->
+    <xsl:text>{\centering%&#xa;</xsl:text>
+    <xsl:apply-templates select="." />
+    <xsl:text>\par}&#xa;</xsl:text>
 </xsl:template>
 
-<xsl:template match="program" mode="panel-latex-box">
-    <xsl:param name="width" />
-    <xsl:apply-templates select=".">
-        <xsl:with-param name="width">
-            <xsl:value-of select="substring-before($width,'%') div 100" />
-            <xsl:text>\linewidth</xsl:text>
-        </xsl:with-param>
-    </xsl:apply-templates>
+<!-- figure, table, listing will contain one item    -->
+<xsl:template match="figure|table|listing" mode="panel-latex-box">
+    <xsl:apply-templates select="*[not(&METADATA-FILTER;)][1]" mode="panel-latex-box" />
+</xsl:template>
+
+<!-- list will have introduction, <list>, conclusion -->
+<xsl:template match="list" mode="panel-latex-box">
+    <xsl:apply-templates select="introduction" />
+    <xsl:apply-templates select="ol|ul|dl" mode="panel-latex-box" />
+    <xsl:apply-templates select="conclusion" />
 </xsl:template>
 
 <!-- The image "knows" how to size itself for a panel   -->
 <!-- Baseline is automatically at the bottom of the box -->
 <xsl:template match="image" mode="panel-latex-box">
-    <xsl:param name="width" />
-    <xsl:if test="$sbsdebug">
-        <xsl:text>\fbox{</xsl:text>
-        <xsl:text>\hspace*{-0.5ex}x\hspace*{-0.5ex}</xsl:text>
-    </xsl:if>
     <xsl:apply-templates select="." />
-    <xsl:if test="$sbsdebug">
-        <xsl:text>\hspace*{-0.5ex}x\hspace*{-0.5ex}</xsl:text>
-        <xsl:text>}</xsl:text>
-    </xsl:if>
 </xsl:template>
 
-<!-- With raw LaTeX code, we use a \resizebox from the graphicx -->
-<!-- package to scale the image to the panel width, and then    -->
-<!-- we do not pass the width to the image template             -->
+<!-- !!!! OVERRIDE !!!! -->
+<xsl:template match="image[ancestor::sidebyside]" mode="get-width-percentage">
+    <xsl:text>100%</xsl:text>
+</xsl:template>
+
+<!-- With raw LaTeX code, we use a \resizebox from the      -->
+<!-- graphicx package to scale the image to the panel width -->
 <xsl:template match="image[latex-image-code]|image[latex-image]" mode="panel-latex-box">
-    <xsl:param name="width" />
-    <xsl:variable name="percent" select="substring-before($width,'%') div 100" />
-    <xsl:if test="$sbsdebug">
-        <xsl:text>\fbox{</xsl:text>
-        <xsl:text>\hspace*{-0.5ex}x\hspace*{-0.5ex}</xsl:text>
-    </xsl:if>
-    <xsl:text>\resizebox{</xsl:text>
-    <xsl:value-of select="$percent" />
-    <xsl:text>\linewidth}{!}{</xsl:text>
+    <xsl:text>\resizebox{\linewidth}{!}{</xsl:text>
     <xsl:apply-templates select="." />
-    <xsl:text>}</xsl:text>
-    <xsl:if test="$sbsdebug">
-        <xsl:text>\hspace*{-0.5ex}x\hspace*{-0.5ex}</xsl:text>
-        <xsl:text>}</xsl:text>
-    </xsl:if>
+    <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- A figure, table, or listing is just a container -->
-<!-- to hold a title and/or caption, plus perhaps an -->
-<!-- xml:id, so we just pawn off the contents        -->
-<!-- (one only!) to the other routines               -->
-<!-- NB: sync with "panel-id" hack below             -->
-<!-- NB: "list" is handled with \parbox above        -->
-<xsl:template match="figure|table|listing" mode="panel-latex-box">
-    <xsl:param name="width" />
-    <xsl:apply-templates select="*[not(&METADATA-FILTER;)][1]" mode="panel-latex-box">
-        <xsl:with-param name="width" select="$width" />
-    </xsl:apply-templates>
-</xsl:template>
-
-<!-- We need to do identically for the panel-id -->
-<xsl:template match="figure|table|listing" mode="panel-id">
-    <xsl:apply-templates select="*[not(&METADATA-FILTER;)][1]" mode="panel-id" />
+<!-- Default print representation is a tcbraster,       -->
+<!-- which must be stuffed in an intervening tcolorbox, -->
+<!-- which we make invisible with the "blankest" option -->
+<!-- TODO: condition on no "static" -->
+<xsl:template match="video|interactive" mode="panel-latex-box">
+    <xsl:text>\begin{tcolorbox}[blankest]&#xa;</xsl:text>
+        <xsl:apply-templates select="." />
+    <xsl:text>\end{tcolorbox}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Just temporary markers of unimplemented stuff -->
