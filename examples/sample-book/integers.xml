@@ -346,7 +346,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     </section>
 
-<xi:include href="./exercises/integers.xml" />
+    <xi:include href="./sage/integers-sage.xml" />
+
+    <xi:include href="./exercises/integers.xml" />
 
     <exercises>
         <title>Programming Exercises</title>
@@ -381,6 +383,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     </exercises>
 
+    <xi:include href="./sage/integers-sage-exercises.xml" />
+
     <references>
         <title>References and Suggested Readings</title>
         <!-- References updated - TWJ 5/4/2010 -->
@@ -403,8 +407,5 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         Vanden Eynden, C. <title>Elementary Number Theory</title>. 2nd ed.  Waveland Press, Long Grove IL, 2001.</biblio>
 
     </references>
-
-    <xi:include href="./sage/integers-sage.xml" />
-    <xi:include href="./sage/integers-sage-exercises.xml" />
 
 </chapter>

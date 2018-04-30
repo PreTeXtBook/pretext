@@ -1706,8 +1706,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Title only -->
-<!-- ASIDE-LIKE, paragraphs -->
-<!-- No title, then nothing happens     -->
+<!-- ASIDE-LIKE, exercisegroup      -->
+<!-- Subsidiary to paragraphs,      -->
+<!-- and divisions of "exercises"   -->
+<!-- No title, then nothing happens -->
 <xsl:template match="*" mode="heading-title">
     <xsl:if test="title/*|title/text()">
         <h6 class="heading">
@@ -2759,11 +2761,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- When born use this heading         -->
 <!-- Never hidden, never gets a heading -->
-<xsl:template match="exercisegroup" mode="heading-birth" />
+<xsl:template match="exercisegroup" mode="heading-birth">
+    <xsl:apply-templates select="." mode="heading-title" />
+</xsl:template>
 
 <!-- Heading for interior of xref-knowl content -->
 <xsl:template match="exercisegroup" mode="heading-xref-knowl">
-    <xsl:apply-templates select="." mode="heading-type" />
+    <xsl:apply-templates select="." mode="heading-full" />
 </xsl:template>
 
 <!-- Primary content of generic "body" template   -->
@@ -4894,6 +4898,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:apply-templates>
 </xsl:template>
 
+<xsl:template match="interactive|slate" mode="panel-html-box">
+    <xsl:param name="b-original" select="true()" />
+    <xsl:apply-templates select=".">
+        <xsl:with-param name="b-original" select="$b-original" />
+    </xsl:apply-templates>
+</xsl:template>
+
 <!-- Process intro, the list, conclusion     -->
 <!-- title is killed -->
 <xsl:template match="list" mode="panel-html-box">
@@ -5057,8 +5068,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- An abstract modal method "video-embed" constructs -->
 <!-- an HTML object of the correct size and with the   -->
 <!-- right autoplay characteristic.                    -->
+<!-- Note: autoplay option is internal, not author-set -->
+
+<!-- Two types of video: HTML5, YouTube                   -->
+<!-- Three previews: default, generic, author-constructed -->
+<!-- Three embeddings: embed, popout, select              -->
 
 <xsl:template match="video">
+    <!-- collect and process size information from author -->
     <xsl:variable name="width-percent">
         <xsl:apply-templates select="." mode="get-width-percentage" />
     </xsl:variable>
@@ -5072,41 +5089,32 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <xsl:variable name="width"  select="$design-width * $width-fraction" />
     <xsl:variable name="height" select="$design-width * $width-fraction div $aspect-ratio" />
+
+    <!-- Always build a standalone page, PDF links to these -->
+    <xsl:apply-templates select="." mode="video-standalone-page" />
+
+    <!-- standalone page uses internal-id of the video -->
     <xsl:variable name="int-id">
         <xsl:apply-templates select="." mode="internal-id" />
     </xsl:variable>
-    <!-- construct a pop-out page when mandatory or electable -->
-    <!-- as a pop-out set YouTube autoplay parameter to true  -->
-    <xsl:if test="(@play-at = 'popout') or (@play-at = 'select')">
-    <!-- apparent width of content region of HTML page  -->
-    <!-- with no sidebar, subtract margins = 900 - 2*30 -->
-    <xsl:variable name="ptx-content-width" select="'840'" />
-    <xsl:variable name="ptx-content-height" select="$ptx-content-width div $aspect-ratio" />
-        <xsl:apply-templates select="." mode="masthead-only-page">
-            <xsl:with-param name="content">
-                <xsl:apply-templates select="." mode="video-embed">
-                    <xsl:with-param name="width"  select="$ptx-content-width" />
-                    <xsl:with-param name="height" select="$ptx-content-height" />
-                    <xsl:with-param name="autoplay" select="'true'" />
-                </xsl:apply-templates>
-                <div style="text-align: center;">Reloading this page will reset a start location</div>
-            </xsl:with-param>
-        </xsl:apply-templates>
-    </xsl:if>
-    <!-- nine combinations: {embed|popout|select} x {default|generic|custom} -->
     <xsl:choose>
         <xsl:when test="@play-at = 'popout'">
             <a href="{$int-id}.html" target="_blank">
             <!-- place a thumbnail as clickable for page already extant -->
                 <xsl:choose>
+                    <!-- generic requested -->
                     <xsl:when test="@preview = 'generic'">
                         <xsl:call-template name="generic-preview-svg">
                             <xsl:with-param name="width" select="$width" />
                             <xsl:with-param name="height" select="$height" />
                         </xsl:call-template>
                     </xsl:when>
-                    <!-- not implemented -->
-                    <xsl:when test="@preview = 'custom'" />
+                    <!-- author-provided -->
+                    <xsl:when test="@preview and not(@preview = 'default')">
+                        <img src="{@preview}" width="{$width}" height="{$height}"/>
+                    </xsl:when>
+                    <!-- this id-device should be replaced by graceful failure  -->
+                    <!-- to the generic preview with a console warning          -->
                     <xsl:when test="(@preview = 'default') or not(@preview)">
                         <xsl:variable name="thumbnail-image">
                             <xsl:text>images/</xsl:text>
@@ -5123,26 +5131,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </div>
         </xsl:when>
         <xsl:when test="(@play-at = 'select') or (@play-at = 'embed') or not(@play-at)">
-            <xsl:choose>
-                <xsl:when test="@preview = 'generic'">
-                    <xsl:apply-templates select="." mode="video-embed-generic">
-                        <xsl:with-param name="width"  select="$width" />
-                        <xsl:with-param name="height" select="$height" />
-                        <xsl:with-param name="autoplay" select="'true'" />
-                    </xsl:apply-templates>
-                </xsl:when>
-                <!-- not implemented -->
-                <!-- will require hiding device (make it a template?) -->
-                <xsl:when test="@preview = 'custom'" />
-                <xsl:when test="(@preview = 'default') or not(@preview)">
-                    <xsl:apply-templates select="." mode="video-embed">
-                        <xsl:with-param name="width"  select="$width" />
-                        <xsl:with-param name="height" select="$height" />
-                        <xsl:with-param name="autoplay" select="'false'" />
-                    </xsl:apply-templates>
-                </xsl:when>
-            </xsl:choose>
+            <xsl:apply-templates select="." mode="video-embed">
+                <xsl:with-param name="width"  select="$width" />
+                <xsl:with-param name="height" select="$height" />
+            </xsl:apply-templates>
             <!-- for the reader-select case, we need a link as a "button" -->
+            <!-- if this case is deprecated, we can drop this thing -->
             <xsl:if test="@play-at = 'select'">
                 <div style="text-align: center;">
                     <a href="{$int-id}.html" target="_blank">
@@ -5155,20 +5149,55 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- "Pop-Out Page" -->
-<!-- (A bit rough)                  -->
-<!-- no extra libraries, no sidebar -->
-<!-- 840px available (~900 - 2*30)  -->
-<!-- Page name comes from context node -->
+<!-- Formerly a "pop-out" page, now a "standalone" page     -->
+<!-- Has autoplay on since a reader has elected to go there -->
+<!-- TODO: override preview, since it just plays, pass 'default -->
+<xsl:template match="video" mode="video-standalone-page">
+    <xsl:variable name="aspect-ratio">
+        <xsl:apply-templates select="." mode="get-aspect-ratio">
+            <xsl:with-param name="default-aspect" select="'16:9'" />
+        </xsl:apply-templates>
+    </xsl:variable>
+    <!-- apparent width of content region of HTML page  -->
+    <!-- with no sidebar, subtract margins = 900 - 2*30 -->
+    <xsl:variable name="ptx-content-width" select="'840'" />
+    <xsl:variable name="ptx-content-height" select="$ptx-content-width div $aspect-ratio" />
+    <xsl:apply-templates select="." mode="standalone-page">
+        <xsl:with-param name="content">
+            <!-- display preview, and enable autoplay  -->
+            <!-- since reader has elected this page    -->
+            <xsl:apply-templates select="." mode="video-embed">
+                <xsl:with-param name="width"  select="$ptx-content-width" />
+                <xsl:with-param name="height" select="$ptx-content-height" />
+                <xsl:with-param name="preview" select="'false'" />
+                <xsl:with-param name="autoplay" select="'true'" />
+            </xsl:apply-templates>
+            <div style="text-align: center;">Reloading this page will reset a start location</div>
+        </xsl:with-param>
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- Use this to ensure consistency -->
+<xsl:template match="*" mode="iframe-filename">
+    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:text>-if.html</xsl:text>
+</xsl:template>
+
+<!-- A "Standalone" Page -->
+<!-- Formerly a "pop-out" page, now a "standalone" page    -->
+<!-- (A bit rough - this could be improved, consolidated)  -->
+<!-- no extra libraries, no sidebar                        -->
+<!-- 840px available (~900 - 2*30)                         -->
+<!-- Page's  filename comes from modal template on context -->
 <!-- TODO:  one page template, super-parameterized      -->
 <!-- TODO:  trash navigation further in masthead        -->
 <!-- TODO:  replace libraries by hooks to add some back -->
-<xsl:template match="*" mode="masthead-only-page">
+<xsl:template match="*" mode="standalone-page">
     <xsl:param name="content" select="''" />
-    <xsl:variable name="int-id">
-        <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:variable name="filename">
+        <xsl:apply-templates select="." mode="standalone-filename" />
     </xsl:variable>
-    <exsl:document href="{$int-id}.html" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
+    <exsl:document href="{$filename}" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
         <xsl:call-template name="converter-blurb-html" />
         <html lang="{$document-language}"> <!-- dir="rtl" here -->
             <head>
@@ -5260,32 +5289,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </exsl:document>
 </xsl:template>
 
-<!-- Cover up an embedded version with a generic preview -->
-<!-- Click to reveal, so do not autoplay the video       -->
-<xsl:template match="video" mode="video-embed-generic">
-    <xsl:param name="width" select="''" />
-    <xsl:param name="height" select="''" />
-    <xsl:param name="autoplay" select="'false'" />
-
-    <!-- hide behind generic image, code from post at -->
-    <!-- https://stackoverflow.com/questions/7199624  -->
-    <!-- TODO: maybe event handlers can start playing via onclick? -->
-    <div onclick="this.nextElementSibling.style.display='block'; this.style.display='none'">
-        <xsl:call-template name="generic-preview-svg">
-            <xsl:with-param name="width" select="$width" />
-            <xsl:with-param name="height" select="$height" />
-        </xsl:call-template>
-    </div>
-    <div class="hidden-content">
-        <!-- Hidden content in here -->
-        <xsl:apply-templates select="." mode="video-embed">
-            <xsl:with-param name="width"  select="$width" />
-            <xsl:with-param name="height" select="$height" />
-            <xsl:with-param name="autoplay" select="'false'" />
-        </xsl:apply-templates>
-    </div>
-</xsl:template>
-
 <xsl:template name="generic-preview-svg">
     <xsl:param name="width" select="''" />
     <xsl:param name="height" select="''" />
@@ -5303,17 +5306,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </svg>
 </xsl:template>
 
-<!-- create a "video" element for author-hosted -->
-<!-- dimensions and autoplay as parameters      -->
+<!-- Take <svg> element above, remove width and height attributes  -->
+<!-- (not ever needed???), compact to one long string.             -->
+<!-- URL encode via: https://meyerweb.com/eric/tools/dencoder/     -->
+<!-- Then add a bit of voodoo, and this may be used as the value   -->
+<!-- of the HTML5 video/@poster attribute (and other places?)      -->
+<xsl:variable name="generic-preview-svg-data-uri">
+    <xsl:text>data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%2014%2096%2068%22%20style%3D%22cursor%3Apointer%3B%22%20preserveAspectRatio%3D%22none%22%3E%3Cpath%20fill%3D%22%23e62117%22%20d%3D%22M94.98%2C28.84c0%2C0-0.94-6.6-3.81-9.5c-3.64-3.81-7.72-3.83-9.59-4.05c-13.4-0.97-33.52-0.85-33.52-0.85s-20.12-0.12-33.52%2C0.85c-1.87%2C0.22-5.95%2C0.24-9.59%2C4.05c-2.87%2C2.9-3.81%2C9.5-3.81%2C9.5S0.18%2C36.58%2C0%2C44.33v7.26c0.18%2C7.75%2C1.14%2C15.49%2C1.14%2C15.49s0.93%2C6.6%2C3.81%2C9.5c3.64%2C3.81%2C8.43%2C3.69%2C10.56%2C4.09c7.53%2C0.72%2C31.7%2C0.89%2C32.54%2C0.9c0.01%2C0%2C20.14%2C0.03%2C33.54-0.94c1.87-0.22%2C5.95-0.24%2C9.59-4.05c2.87-2.9%2C3.81-9.5%2C3.81-9.5s0.96-7.75%2C1.02-15.49v-7.26C95.94%2C36.58%2C94.98%2C28.84%2C94.98%2C28.84z%20M38.28%2C61.41v-27l25.74%2C13.5L38.28%2C61.41z%22%2F%3E%3C%2Fsvg%3E</xsl:text>
+</xsl:variable>
+
+<!-- create a "video" element for author-hosted   -->
+<!-- dimensions and autoplay as parameters        -->
+<!-- Normally $preview is true, and not passed in -->
+<!-- 'false' is an override for standalone pages  -->
 <xsl:template match="video[@source]" mode="video-embed">
     <xsl:param name="width" select="''" />
     <xsl:param name="height" select="''" />
+    <xsl:param name="preview" select="'true'" />
     <xsl:param name="autoplay" select="'false'" />
 
     <!-- start/end times (read both, see 4.1, 4.2.1 at w3.org)    -->
     <!-- Media Fragment URI: https://www.w3.org/TR/media-frags/   -->
     <!-- Javascript: https://stackoverflow.com/questions/11212715 -->
     <!-- variable is possibly empty, so no harm using that later  -->
+    <!-- This portion of URL should follow any query string       -->
     <xsl:variable name="temporal-fragment">
         <xsl:if test="@start or @end">
             <xsl:text>#t=</xsl:text>
@@ -5348,37 +5364,77 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$autoplay = 'true'">
             <xsl:attribute name="autoplay" />
         </xsl:if>
-        <!-- children "source" elements -->
-        <xsl:element name="source">
-            <xsl:attribute name="src">
-                <xsl:value-of select="@source"/>
-                <xsl:text>.mp4</xsl:text>
-                <xsl:value-of select="$temporal-fragment" />
+        <!-- Optionally cover up with HTML5 @poster via PTX @preview -->
+        <xsl:if test="($preview = 'true') and @preview and not(@preview = 'default')">
+            <xsl:attribute name="poster">
+                <xsl:choose>
+                    <xsl:when test="@preview = 'generic'">
+                        <xsl:value-of select="$generic-preview-svg-data-uri" />
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="@preview" />
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:attribute>
-            <xsl:attribute name="type">
-                <xsl:text>video/mp4</xsl:text>
-            </xsl:attribute>
-        </xsl:element>
-        <xsl:element name="source">
-            <xsl:attribute name="src">
-                <xsl:value-of select="@source"/>
-                <xsl:text>.ogg</xsl:text>
-                <xsl:value-of select="$temporal-fragment" />
-            </xsl:attribute>
-            <xsl:attribute name="type">
-                <xsl:text>video/ogg</xsl:text>
-            </xsl:attribute>
-        </xsl:element>
-        <xsl:element name="source">
-            <xsl:attribute name="src">
-                <xsl:value-of select="@source"/>
-                <xsl:text>.webm</xsl:text>
-                <xsl:value-of select="$temporal-fragment" />
-            </xsl:attribute>
-            <xsl:attribute name="type">
-                <xsl:text>video/webm</xsl:text>
-            </xsl:attribute>
-        </xsl:element>
+        </xsl:if>
+        <!-- Construct the HTML5 source URL(s)                  -->
+        <!-- If this gets refactored, it could be best to form  -->
+        <!-- base, extension, query, fragment strings/variables -->
+        <!-- First, grab extension of source URL in PTX @source -->
+        <xsl:variable name="extension">
+            <xsl:call-template name="file-extension">
+                <xsl:with-param name="filename" select="@source" />
+            </xsl:call-template>
+        </xsl:variable>
+        <!-- "source" elements, children of HTML5 video -->
+        <!-- no extension suggests hosting has multiple -->
+        <!-- versions for browser to sort through       -->
+        <!-- More open formats first!  ;-)              -->
+        <xsl:if test="$extension = '' or $extension = 'oog'">
+            <xsl:element name="source">
+                <xsl:attribute name="src">
+                    <xsl:value-of select="@source"/>
+                    <!-- augment no-extension form -->
+                    <xsl:if test="$extension = ''">
+                        <xsl:text>.ogg</xsl:text>
+                    </xsl:if>
+                    <xsl:value-of select="$temporal-fragment" />
+                </xsl:attribute>
+                <xsl:attribute name="type">
+                    <xsl:text>video/ogg</xsl:text>
+                </xsl:attribute>
+            </xsl:element>
+        </xsl:if>
+        <xsl:if test="$extension = '' or $extension = 'webm'">
+            <xsl:element name="source">
+                <xsl:attribute name="src">
+                    <xsl:value-of select="@source"/>
+                    <!-- augment no-extension form -->
+                    <xsl:if test="$extension = ''">
+                        <xsl:text>.webm</xsl:text>
+                    </xsl:if>
+                    <xsl:value-of select="$temporal-fragment" />
+                </xsl:attribute>
+                <xsl:attribute name="type">
+                    <xsl:text>video/webm</xsl:text>
+                </xsl:attribute>
+            </xsl:element>
+        </xsl:if>
+        <xsl:if test="$extension = '' or $extension = 'mp4'">
+            <xsl:element name="source">
+                <xsl:attribute name="src">
+                    <xsl:value-of select="@source"/>
+                    <!-- augment no-extension form -->
+                    <xsl:if test="$extension = ''">
+                        <xsl:text>.mp4</xsl:text>
+                    </xsl:if>
+                    <xsl:value-of select="$temporal-fragment" />
+                </xsl:attribute>
+                <xsl:attribute name="type">
+                    <xsl:text>video/mp4</xsl:text>
+                </xsl:attribute>
+            </xsl:element>
+        </xsl:if>
         <!-- failure to perform -->
         <xsl:text>Your browser does not support the &lt;video&gt; tag.</xsl:text>
     </xsl:element>
@@ -5395,11 +5451,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- <xsl:text>&amp;origin=http://example.com</xsl:text>   -->
 <!-- start/end time parameters -->
 
-<!-- create iframe home for YouTube video -->
-<!-- dimensions and autoplay as parameters -->
+<!-- create iframe home for YouTube video         -->
+<!-- dimensions and autoplay as parameters        -->
+<!-- Normally $preview is true, and not passed in -->
+<!-- 'false' is an override for standalone pages  -->
 <xsl:template match="video[@youtube]" mode="video-embed">
     <xsl:param name="width" select="''" />
     <xsl:param name="height" select="''" />
+    <xsl:param name="preview" select="'true'" />
     <xsl:param name="autoplay" select="'false'" />
 
     <xsl:variable name="int-id">
@@ -5410,17 +5469,59 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="autoplay" select="$autoplay" />
         </xsl:apply-templates>
     </xsl:variable>
+    <!-- Following is inaccurate, the @select should be 'true' -->
+    <!-- But the YouTube autoplay won't wait for the poster    -->
+    <!-- to be withdrawn, so two clicks are needed             -->
+    <!-- We have two (equal) URLs to preserve logic, should    -->
+    <!-- there be a better way to fake the HTML5 @poster       -->
+    <xsl:variable name="source-url-autoplay-on">
+        <xsl:apply-templates select="." mode="youtube-embed-url">
+            <xsl:with-param name="autoplay" select="'false'" />
+        </xsl:apply-templates>
+    </xsl:variable>
     <!-- allowfullscreen is an iframe parameter, -->
     <!-- not a YouTube embed parameter, but it's -->
     <!-- use enables the "full screen" button    -->
     <!-- http://w3c.github.io/test-results/html51/implementation-report.html -->
-    <iframe id="{$int-id}"
-            type="text/html"
-            width="{$width}"
-            height="{$height}"
-            frameborder="0"
-            allowfullscreen=""
-            src="{$source-url}" />
+    <xsl:choose>
+        <xsl:when test="($preview = 'true') and @preview and not(@preview = 'default')">
+            <!-- hide behind a preview image, code from post at -->
+            <!-- https://stackoverflow.com/questions/7199624    -->
+            <div onclick="this.nextElementSibling.style.display='block'; this.style.display='none'">
+                <xsl:choose>
+                    <xsl:when test="@preview = 'generic'">
+                        <xsl:call-template name="generic-preview-svg">
+                            <xsl:with-param name="width" select="$width" />
+                            <xsl:with-param name="height" select="$height" />
+                        </xsl:call-template>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <img width="{$width}" height="{$height}" src="{@preview}" />
+                    </xsl:otherwise>
+                </xsl:choose>
+            </div>
+            <div class="hidden-content">
+                <!-- Hidden content in here                   -->
+                <!-- Turn autoplay on, else two clicks needed -->
+                <iframe id="{$int-id}"
+                        type="text/html"
+                        width="{$width}"
+                        height="{$height}"
+                        frameborder="0"
+                        allowfullscreen=""
+                        src="{$source-url-autoplay-on}" />
+            </div>
+        </xsl:when>
+        <xsl:otherwise>
+            <iframe id="{$int-id}"
+                    type="text/html"
+                    width="{$width}"
+                    height="{$height}"
+                    frameborder="0"
+                    allowfullscreen=""
+                    src="{$source-url}" />
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Creates a YouTube URL for embedding, typically in an iframe -->
@@ -7038,7 +7139,95 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Geogebra -->
 <xsl:template match="interactive[@geogebra]">
-    <iframe scrolling="no" src="https://www.geogebra.org/material/iframe/id/{@geogebra}/width/800/height/450/border/888888/smb/false/stb/false/stbh/false/ai/false/asb/false/sri/false/rc/false/ld/false/sdz/false/ctl/false" width="800px" height="450px" />
+    <xsl:variable name="width">
+        <xsl:apply-templates select="." mode="get-width-pixels" />
+    </xsl:variable>
+    <xsl:variable name="height">
+        <xsl:apply-templates select="." mode="get-height-pixels" />
+    </xsl:variable>
+    <iframe scrolling="no" src="https://www.geogebra.org/material/iframe/id/{@geogebra}/width/800/height/450/border/888888/smb/false/stb/false/stbh/false/ai/false/asb/false/sri/false/rc/false/ld/false/sdz/false/ctl/false">
+        <xsl:attribute name="width">
+            <xsl:value-of select="$width" />
+            <xsl:text>px</xsl:text>
+        </xsl:attribute>
+        <xsl:attribute name="height">
+            <xsl:value-of select="$height" />
+            <xsl:text>px</xsl:text>
+        </xsl:attribute>
+    </iframe>
+</xsl:template>
+
+<!-- Local source -->
+<xsl:template match="interactive[@platform='geogebra']">
+    <!-- size of the window -->
+    <xsl:variable name="width">
+        <xsl:apply-templates select="." mode="get-width-pixels" />
+    </xsl:variable>
+    <xsl:variable name="height">
+        <xsl:apply-templates select="." mode="get-height-pixels" />
+    </xsl:variable>
+
+    <!-- We need a Javascript identifier to name the applet -->
+    <xsl:variable name="applet-name">
+        <xsl:apply-templates select="." mode="internal-id-no-dash" />
+    </xsl:variable>
+    <!-- And a Javascript identifier for the parameters -->
+    <xsl:variable name="applet-parameters">
+        <xsl:apply-templates select="." mode="internal-id-no-dash" />
+        <xsl:text>_params</xsl:text>
+    </xsl:variable>
+    <!-- And an HTML unique identifier -->
+    <xsl:variable name="applet-container">
+        <xsl:apply-templates select="." mode="internal-id" />
+        <xsl:text>-container</xsl:text>
+    </xsl:variable>
+    <!-- Javascript API for loading from a base64 string                   -->
+    <!-- Crib from page source at second link, with modifications          -->
+    <!-- Multiple instances:  https://stackoverflow.com/questions/9434     -->
+    <!-- https://learn.jquery.com/using-jquery-core/document-ready/        -->
+    <!-- We assume JQuery is loaded, so go that route                      -->
+    <!-- https://wiki.geogebra.org/en/Reference:GeoGebra_Apps_API          -->
+    <!-- http://dev.geogebra.org/examples/html/example-api-save-state.html -->
+    <!-- Parameter reference:                                              -->
+    <!-- https://wiki.geogebra.org/en/Reference:GeoGebra_App_Parameters    -->
+    <script type="text/javascript">
+<xsl:text>
+var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
+        "width":</xsl:text><xsl:value-of select="$width" /><xsl:text>,
+        "height":</xsl:text><xsl:value-of select="$height" /><xsl:text>,
+        "showToolBar":true,
+        "borderColor":null,
+        "showMenuBar":false,
+        "showAlgebraInput":false,
+        "customToolbar":"0 || 1",
+        "showResetIcon":true,
+        "enableLabelDrags":false,
+        "enableShiftDragZoom":true,
+        "enableRightClick":false,
+        "capturingThreshold":null,
+        "showToolBarHelp":true,
+        "errorDialogsActive":true,
+        "useBrowserForJS":false,
+        "playButton":false,
+        "filename":"</xsl:text><xsl:value-of select="@source" /><xsl:text>"};&#xa;</xsl:text>
+        <!-- "ggbBase64":"</xsl:text><xsl:value-of select="normalize-space(code[@language='base64'])" /><xsl:text>"};&#xa;</xsl:text> -->
+
+<xsl:text>var </xsl:text><xsl:value-of select="$applet-name" /><xsl:text> = new GGBApplet(</xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text>, '5.0');
+$( document ).ready(
+function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject('</xsl:text><xsl:value-of select="$applet-container" /><xsl:text>'); }
+);&#xa;</xsl:text>
+    </script>
+    <!-- build a container div with the right shape -->
+    <div class="geogebra-applet" id="{$applet-container}">
+        <xsl:attribute name="style">
+            <xsl:text>width:</xsl:text>
+            <xsl:value-of select="$width" />
+            <xsl:text>px;</xsl:text>
+            <xsl:text> height:</xsl:text>
+            <xsl:value-of select="$height" />
+            <xsl:text>px;</xsl:text>
+        </xsl:attribute>
+    </div>
 </xsl:template>
 
 <!-- Desmos -->
@@ -7047,12 +7236,304 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- CalcPlot3D -->
-<xsl:template match="interactive[@calcplot3d]">
+<xsl:template match="interactive[@platform='calcplot3d']">
+    <!-- code/@url is the query string -->
     <xsl:variable name="query-url" select="code" />
-    <iframe src="https://www.monroecc.edu/faculty/paulseeburger/calcnsf/CalcPlot3D/?{$query-url}" width="600" height="800" />
+    <!-- Use @variant to pick an endpoint/view/infrastructure -->
+    <xsl:variable name="cp3d-endpoint">
+        <xsl:choose>
+            <xsl:when test="@variant='application'">
+                <xsl:text>https://www.monroecc.edu/faculty/paulseeburger/calcnsf/CalcPlot3D</xsl:text>
+            </xsl:when>
+            <xsl:when test="@variant='controls'">
+                <xsl:text>https://www.monroecc.edu/faculty/paulseeburger/CalcPlot3D/dynamicFigureWCP</xsl:text>
+            </xsl:when>
+            <xsl:when test="@variant='minimal'">
+                <xsl:text>https://www.monroecc.edu/faculty/paulseeburger/CalcPlot3D/dynamicFigure</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <!-- just a silly domain so something none-too-crazy happens -->
+                <xsl:text>http://www.example.com/</xsl:text>
+                <xsl:message>MBX:ERROR:  @variant="<xsl:value-of select="@variant" />" is not recognized for a CalcPlot3D &lt;interactive&gt;</xsl:message>
+                <xsl:apply-templates select="." mode="location-report" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- load 'em up and go -->
+    <xsl:variable name="full-url" select="concat($cp3d-endpoint, '/?', $query-url)" />
+    <iframe src="{$full-url}" style="display:block;">
+        <xsl:attribute name="width">
+            <xsl:apply-templates select="." mode="get-width-pixels" />
+            <xsl:text>px;</xsl:text>
+        </xsl:attribute>
+        <xsl:attribute name="height">
+            <xsl:apply-templates select="." mode="get-height-pixels" />
+            <xsl:text>px;</xsl:text>
+        </xsl:attribute>
+    </iframe>
+</xsl:template>
+
+<!-- JSXGraph header libraries -->
+<xsl:template match="interactive[@platform = 'jsxgraph']" mode="header-libraries">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jsxgraph/0.99.6/jsxgraph.css" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsxgraph/0.99.6/jsxgraphcore.js"></script>
+</xsl:template>
+
+<!-- D3.js header libraries -->
+<xsl:template match="interactive[@platform = 'd3']" mode="header-libraries">
+    <xsl:variable name="d3-library-url">
+        <xsl:text>https://d3js.org/d3.v</xsl:text>
+        <!-- versions could be 3, 4, 5 -->
+        <xsl:choose>
+            <xsl:when test="@version">
+                <xsl:value-of select="@version" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>5</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+        <xsl:text>.min.js</xsl:text>
+    </xsl:variable>
+    <script src="{$d3-library-url}"></script>
+</xsl:template>
+
+<!-- HTML5 header libraries -->
+<xsl:template match="interactive[@platform = 'html5']" mode="header-libraries" />
+
+
+<!-- JSXGraph, HTML5, D3 Interactives -->
+<xsl:template match="interactive[(@platform = 'jsxgraph') or (@platform = 'html5') or (@platform = 'd3')]">
+    <!-- an interactive always has a width, default is 100% -->
+    <xsl:variable name="int-id">
+        <xsl:apply-templates select="." mode="internal-id" />
+    </xsl:variable>
+    <!-- (1) Build, display full content on the page, where born -->
+    <xsl:apply-templates select="." mode="interactive-core" />
+    <!-- (2) Identical content, but now isolated on a reader-friendly page -->
+    <xsl:apply-templates select="." mode="standalone-page" >
+        <xsl:with-param name="content">
+            <xsl:apply-templates select="." mode="interactive-core" />
+        </xsl:with-param>
+    </xsl:apply-templates>
+    <!-- Build a minimal page for iframe contents -->
+    <!--   Platform specific libraries into head  -->
+    <!--   Author-libraries after slate exist     -->
+    <!--   Instructions outside, but ...          -->
+    <xsl:variable name="if-filename">
+        <xsl:apply-templates select="." mode="iframe-filename" />
+    </xsl:variable>
+    <exsl:document href="{$if-filename}" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
+        <xsl:call-template name="converter-blurb-html" />
+        <html lang="{$document-language}">
+            <head>
+                <!-- need CSS for sidebyside         -->
+                <!-- perhaps this can be specialized -->
+                <xsl:call-template name="css" />
+                <!-- and CSS for the entire interactive, into the head -->
+                <xsl:apply-templates select="@css" />
+                <!-- load header libraries (for all "slate") -->
+                <xsl:apply-templates select="." mode="header-libraries" />
+            </head>
+            <body class="mathbook-content">
+                <div>
+                    <!-- the actual interactive bit          -->
+                    <!-- this should generalize to a template -->
+                    <xsl:variable name="width">
+                        <xsl:apply-templates select="." mode="get-width-pixels" />
+                    </xsl:variable>
+                    <xsl:variable name="height">
+                        <xsl:apply-templates select="." mode="get-height-pixels" />
+                    </xsl:variable>
+                    <xsl:attribute name="style">
+                        <xsl:text>width:</xsl:text>
+                        <xsl:value-of select="$width" />
+                        <xsl:text>px;</xsl:text>
+                        <xsl:text> height:</xsl:text>
+                        <xsl:value-of select="$height" />
+                        <xsl:text>px;</xsl:text>
+                    </xsl:attribute>
+                    <!-- stack, else use a layout -->
+                    <xsl:apply-templates select="slate|sidebyside|sbsgroup" />
+                    <!-- accumulate script tags *after* HTML elements -->
+                    <xsl:apply-templates select="@source" />
+                </div>
+            </body>
+        </html>
+    </exsl:document>
+</xsl:template>
+
+
+<!-- Following will generate:                               -->
+<!-- 1.  Instructions (paragraphs, etc)                     -->
+<!-- 2.  An iframe, for sandboxing, especially              -->
+<!-- 3.  Assumes super-minimal HTML page as @src of iframe, -->
+<!--     living at file given by "iframe-filename" template -->
+<xsl:template match="interactive[(@platform = 'jsxgraph') or (@platform = 'html5') or (@platform = 'd3')]" mode="interactive-core">
+    <!-- an interactive always has a width, default is 100% -->
+    <xsl:variable name="int-id">
+        <xsl:apply-templates select="." mode="internal-id" />
+    </xsl:variable>
+    <!-- "instructions" in identical-width div -->
+    <div>
+        <!-- make and use a variable below -->
+        <xsl:variable name="width">
+            <xsl:apply-templates select="." mode="get-width-pixels" />
+        </xsl:variable>
+        <xsl:attribute name="style">
+            <xsl:text>width:</xsl:text>
+            <xsl:value-of select="$width" />
+            <xsl:text>px;</xsl:text>
+        </xsl:attribute>
+        <xsl:apply-templates select="instructions" />
+    </div>
+    <!-- Drop an iframe, with predictable "src" attribute -->
+    <!-- Requires a height, so we need to get this sorted -->
+    <!-- Or use some JS device to adjust height post-load -->
+    <!-- https://stackoverflow.com/questions/9162933/     -->
+    <!-- This provides some sandboxing, if we choose      -->
+    <!-- https://www.html5rocks.com/en/tutorials/security/sandboxed-iframes/ -->
+    <iframe id="{$int-id}">
+        <xsl:attribute name="width">
+            <xsl:apply-templates select="." mode="get-width-pixels" />
+            <xsl:text>px;</xsl:text>
+        </xsl:attribute>
+        <xsl:attribute name="height">
+            <xsl:apply-templates select="." mode="get-height-pixels" />
+            <xsl:text>px;</xsl:text>
+        </xsl:attribute>
+        <xsl:attribute name="src">
+            <xsl:apply-templates select="." mode="iframe-filename" />
+        </xsl:attribute>
+    </iframe>
+</xsl:template>
+
+<!-- Form a "div"                  -->
+<!--   (a) with predictable id     -->
+<!--   (b) stock class information -->
+<!--   (c) size, now in pixels     -->
+<xsl:template match="slate[@language = 'jsxgraph']">
+    <div>
+        <xsl:attribute name="id">
+            <xsl:value-of select="@xml:id" />
+        </xsl:attribute>
+        <xsl:attribute name="class">
+            <xsl:text>jxgbox</xsl:text>
+        </xsl:attribute>
+        <!-- modal template will compute or inherit from enclosing interactive -->
+        <xsl:variable name="width">
+            <xsl:apply-templates select="." mode="get-width-pixels" />
+        </xsl:variable>
+        <xsl:variable name="height">
+            <xsl:apply-templates select="." mode="get-height-pixels" />
+        </xsl:variable>
+        <xsl:attribute name="style">
+            <!-- always -->
+            <xsl:text>width:</xsl:text>
+            <xsl:value-of select="$width" />
+            <xsl:text>px;</xsl:text>
+            <!-- always -->
+            <xsl:text> height:</xsl:text>
+            <xsl:value-of select="$height" />
+            <xsl:text>px;</xsl:text>
+            <xsl:text> display: block;</xsl:text>
+            <xsl:text> box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;</xsl:text>
+        </xsl:attribute>
+    </div>
+</xsl:template>
+
+<!-- *must* use size attributes on "canvas" -->
+<xsl:template match="slate[ancestor::interactive[@platform = 'html5']]">
+    <!-- display:block allows precise sizes, without   -->
+    <!-- having inline content with extra line height, -->
+    <!-- or whatever, inducing scroll bars             -->
+    <canvas style="display:block">
+        <xsl:attribute name="id">
+            <xsl:value-of select="@xml:id" />
+        </xsl:attribute>
+        <!-- modal template will compute or inherit from enclosing interactive -->
+        <xsl:attribute name="width">
+            <xsl:apply-templates select="." mode="get-width-pixels" />
+            <xsl:text>px;</xsl:text>
+        </xsl:attribute>
+        <xsl:attribute name="height">
+            <xsl:apply-templates select="." mode="get-height-pixels" />
+            <xsl:text>px;</xsl:text>
+        </xsl:attribute>
+    </canvas>
+</xsl:template>
+
+<!-- HTML Code -->
+<!-- Simply create deep-copy of HTML elements -->
+<!-- TODO: should this be a div, with width and height? -->
+<xsl:template match="slate[@language='html']">
+    <xsl:copy-of select="*" />
+</xsl:template>
+
+<!-- D3 Code -->
+<!-- Create a "div" with predictable id,         -->
+<!-- so D3 code can inject "svg" element into it -->
+<xsl:template match="slate[@language='d3']">
+    <div>
+        <xsl:attribute name="id">
+            <xsl:value-of select="@xml:id" />
+        </xsl:attribute>
+        <xsl:variable name="width">
+            <xsl:apply-templates select="." mode="get-width-pixels" />
+        </xsl:variable>
+        <xsl:variable name="height">
+            <xsl:apply-templates select="." mode="get-height-pixels" />
+        </xsl:variable>
+        <xsl:attribute name="style">
+            <!-- always -->
+            <xsl:text>width:</xsl:text>
+            <xsl:value-of select="$width" />
+            <xsl:text>px;</xsl:text>
+            <!-- always -->
+            <xsl:text> height:</xsl:text>
+            <xsl:value-of select="$height" />
+            <xsl:text>px;</xsl:text>
+            <xsl:text> display: block;</xsl:text>
+            <xsl:text> box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;</xsl:text>
+        </xsl:attribute>
+    </div>
+</xsl:template>
+
+<!-- @source attribute to script tags -->
+<!-- <xsl:template match="@source"> -->
+<xsl:template match="interactive[(@platform = 'jsxgraph') or (@platform = 'html5') or (@platform = 'd3')]/@source">
+    <!-- <xsl:variable name="stuff" select=" -->
+    <xsl:call-template name="one-script">
+        <xsl:with-param name="text" select="concat(normalize-space(str:replace(., ',', ' ')), ' ')" />
+    </xsl:call-template>
+</xsl:template>
+
+<!-- A recursive template to create a script tag for each JS file -->
+<xsl:template name="one-script">
+    <xsl:param name="text" />
+    <xsl:choose>
+        <xsl:when test="$text = ''" />
+        <xsl:otherwise>
+            <script type="text/javascript">
+                <xsl:attribute name="src">
+                    <xsl:value-of select="substring-before($text, ' ')" />
+                </xsl:attribute>
+            </script>
+            <xsl:call-template name="one-script">
+                <xsl:with-param name="text" select="substring-after($text, ' ')" />
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Wrap a CSS file in a "link" element -->
+<xsl:template match="interactive[(@platform = 'jsxgraph') or (@platform = 'html5') or (@platform = 'd3')]/@css">
+    <link rel="stylesheet" href="{.}" />
 </xsl:template>
 
 <!-- JSXGraph -->
+<!-- DEPRECATED (2018-04-06)                             -->
+<!-- Restrict edits to cosmetic, no functional change    -->
+<!-- Remove when continued maintenance becomes untenable -->
 <xsl:template match="jsxgraph">
     <!-- interpret @width percentage and @aspect ratio -->
     <xsl:variable name="width-percent">
@@ -7097,6 +7578,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
     <xsl:copy-of select="controls" />
 </xsl:template>
+
+<!-- Wolfram Computable Document Format -->
+<!-- https://www.wolfram.com/cdf/adopting-cdf/deploying-cdf/web-delivery-cloud.html              -->
+<!-- More for MMA origination, but discusses "cloud credits"                                     -->
+<!-- https://reference.wolfram.com/language/howto/DeployInteractiveContentInTheWolframCloud.html -->
+<!-- https://www.wolfram.com/cloud-credits/                                                      -->
+<xsl:template match="interactive[@wolfram-cdf]">
+    <!-- Query string option: _embed=iframe will provide Wolfram footer -->
+    <iframe width="500" height="520" src="https://www.wolframcloud.com/objects/{@wolfram-cdf}?_view=frameless" />
+</xsl:template>
+
 
 <!-- ########################## -->
 <!-- WeBWorK Embedded Exercises -->
@@ -7173,6 +7665,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="mathbook-js" />
             <xsl:call-template name="fonts" />
             <xsl:call-template name="hypothesis-annotation" />
+            <xsl:call-template name="geogebra" />
             <xsl:call-template name="jsxgraph" />
             <xsl:call-template name="css" />
             <xsl:call-template name="pytutor-header" />
@@ -7267,6 +7760,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="knowl" />
             <xsl:call-template name="fonts" />
             <xsl:call-template name="hypothesis-annotation" />
+            <xsl:call-template name="geogebra" />
             <xsl:call-template name="jsxgraph" />
             <xsl:call-template name="css" />
         </head>
@@ -7939,7 +8433,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:choose>
         </xsl:variable>
         <!-- Subtree for page this sidebar will adorn -->
-        <xsl:variable name="this-page-node" select="descendant-or-self::*" />
+        <xsl:variable name="this-page-node" select="self::*" />
         <!-- If a book has parts, we include them as top level -->
         <!-- Note: these include front matter, back matter     -->
         <xsl:for-each select="$root/book/*|$root/book/part/*|$root/article/*">
@@ -7949,7 +8443,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- Bypass chapters for compact ToC for book with parts -->
             <xsl:if test="$structural='true' and not(($adjusted-toc-level = 0) and self::chapter)">
                 <!-- Subtree represented by this ToC item -->
-                <xsl:variable name="outer-node" select="descendant-or-self::*" />
+                <xsl:variable name="outer-node" select="self::*" />
                 <xsl:variable name="outer-url">
                     <xsl:apply-templates select="." mode="url"/>
                </xsl:variable>
@@ -7957,7 +8451,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                <!-- Based on node-set union size                               -->
                <xsl:variable name="class">
                     <xsl:choose>
-                        <xsl:when test="count($this-page-node|$outer-node) = count($outer-node)" >
+                        <xsl:when test="count($this-page-node|$outer-node) = 1" >
                             <xsl:text>link active</xsl:text>
                         </xsl:when>
                         <xsl:otherwise>
@@ -8000,7 +8494,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             </xsl:variable>
                             <xsl:if test="$inner-structural='true'">
                                 <!-- Subtree represented by this ToC item -->
-                                <xsl:variable name="inner-node" select="descendant-or-self::*" />
+                                <xsl:variable name="inner-node" select="self::*" />
                                 <xsl:variable name="inner-url">
                                     <xsl:apply-templates select="." mode="url" />
                                 </xsl:variable>
@@ -8016,7 +8510,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                             <xsl:value-of select="$inner-internal" />
                                         </xsl:attribute>
                                         <!-- Add if an "active" class if this is where we are -->
-                                        <xsl:if test="count($this-page-node|$inner-node) = count($inner-node)">
+                                        <xsl:if test="count($this-page-node|$inner-node) = 1">
                                             <xsl:attribute name="class">active</xsl:attribute>
                                         </xsl:if>
                                         <xsl:apply-templates select="." mode="title-simple" />
@@ -8419,6 +8913,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>}</xsl:text>
         </script>
         <script src="https://hypothes.is/embed.js" async=""></script>
+    </xsl:if>
+</xsl:template>
+
+<!-- GeoGebra -->
+<!-- The JS necessary to load the "App", which can -->
+<!-- then be loaded with base64 or XML versions    -->
+<xsl:template name="geogebra">
+    <xsl:if test="$b-has-geogebra">
+        <script type="text/javascript" src="https://cdn.geogebra.org/apps/deployggb.js"></script>
     </xsl:if>
 </xsl:template>
 

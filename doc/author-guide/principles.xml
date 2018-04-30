@@ -21,20 +21,20 @@
     <ol>
         <li xml:id="principle-markup"><pretext /> is a markup language that captures the structure of textbooks and research papers.</li>
 
-        <li><pretext /> is human-readable and human-writable.</li>
+        <li xml:id="principle-readable"><pretext /> is human-readable and human-writable.</li>
 
-        <li><pretext /> documents serve as a single source which can be easily converted to multiple other formats, current and future.</li>
+        <li xml:id="principle-multiple-outputs"><pretext /> documents serve as a single source which can be easily converted to multiple other formats, current and future.</li>
 
         <li xml:id="principle-good-design"><pretext /> respects the good design practices which have been developed over the past centuries.</li>
 
-        <li><pretext /> makes it easy for authors to implement features which are both common and reasonable.</li>
+        <li xml:id="principle-common-and-reasonable"><pretext /> makes it easy for authors to implement features which are both common and reasonable.</li>
 
-        <li><pretext /> supports online documents which make use of the full capabilities of the Web.</li>
+        <li xml:id="principle-web-versions"><pretext /> supports online documents which make use of the full capabilities of the Web.</li>
 
         <li xml:id="principle-output-styles"><pretext /> output is styled by selecting from a list of available templates, relieving the author of the burden involved in micromanaging the output format.</li>
 
         <li xml:id="principle-open-software"><pretext /> is free: the software is available at no cost, with an open license. The use of <pretext /> does not impose any constraints on documents prepared with the system.</li>
 
-        <li><pretext /> is not a closed system: documents can be converted to <latex /> and then developed using standard <latex /> tools.</li>
+        <li xml:id="principle-open"><pretext /> is not a closed system: documents can be converted to <latex /> and then developed using standard <latex /> tools.</li>
     </ol>
 </list>

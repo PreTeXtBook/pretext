@@ -53,7 +53,7 @@
         <p>That's it.  You now have a complete, properly-formed <pretext /> document.  You are ready to organize the two tools necessary to process your source into different formats.</p>
     </section>
 
-    <section>
+    <section xml:id="quickstart-setup">
         <title>Setup</title>
 
         <p>There are two components to processing your document, the <pretext /> stylesheets and the <c>xsltproc</c> program.  We work at the <term>command-line</term><idx>command-line</idx> inside of a <term>terminal</term><idx>terminal</idx> or <term>console</term><idx>console</idx>.  If you do not know what this is, it will seem very primitive at first.  Sometimes the old ways are the best ways.  This will be called a <q>Command Prompt</q> in Windows or a <q>Terminal</q> on a Mac.  In Linux it may be known as a <q>console</q> or a <q>shell</q>.  A tutorial, which is Linux-specific, can be found at <url href="http://ryanstutorials.net/linuxtutorial/">Ryan's Tutorials</url> and certainly others exist.</p>
@@ -80,7 +80,7 @@
 
     </section>
 
-    <section>
+    <section xml:id="quickstart-processing">
         <title>Processing</title>
 
         <p>At a command prompt in your terminal or console adjust the pathnames for the two files and execute:<cd>
@@ -98,7 +98,7 @@
         <p>That's it.  You now know all the basics of authoring with <pretext />, since you have produced two radically different output formats with identical content from the exact same structured input, via two different command lines.  Everything you need to author a complete article or textbook, and produce it in many different formats, is just an extension or variation on what you just did.  Let us look at a few simple extensions right away before being more methodical.</p>
     </section>
 
-    <section>
+    <section xml:id="quickstart-extend-minimal-example">
         <title>Extending the Minimal Example</title>
 
         <p>We will not keep reproducing the entire example but instead suggest a series of modifications.  After each edit, process the file again to make sure your syntax is correct (before you get too far along) and to see the changes.</p>
@@ -189,7 +189,7 @@
         </pre>
     </section>
 
-    <section>
+    <section xml:id="quickstart-next">
         <title>Where Next?</title>
 
         <p>Next chapter has more detail.</p>

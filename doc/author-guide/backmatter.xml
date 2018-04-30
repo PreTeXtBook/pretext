@@ -11,6 +11,11 @@
     <title>Appendices</title>
 
     <xi:include href="faq.xml" />
+    <!-- collect references to each Best Practice note -->
+    <appendix xml:id="best-practices">
+        <title>Best Practices</title>
+        <list-of elements="note" />
+    </appendix>
     <xi:include href="editors.xml" />
     <xi:include href="schema-install.xml" />
     <xi:include href="git.xml" />
@@ -18,8 +23,8 @@
     <xi:include href="windows-wsl.xml" />
     <xi:include href="vagrant.xml" />
     <xi:include href="gfdl-mathbook.xml" />
-    <index>
-    <title>Index</title>
+    <index xml:id="the-index">
+        <title>Index</title>
         <index-list />
     </index>
 

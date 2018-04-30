@@ -17,6 +17,14 @@
                 <cx>008832104071767086392:woji51c1uko</cx>
             </google>
         </search>
+        <rename element="note" lang="en-US">Best Practice</rename>
+        <!-- There does not need to be a trailing / on the URL -->
+        <!-- NB This is likely to change, it should be a publisher option -->
+        <html>
+            <baseurl href="http://mathbook.pugetsound.edu/doc/author-guide/html" />
+        </html>
+
+
     </docinfo>
 
     <book xml:id="pretext-author-guide">

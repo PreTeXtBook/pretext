@@ -15,9 +15,9 @@
         <p>With a <webwork /> server (version 2.12 or higher, limited support with 2.11) and a little setup work, you can embed <webwork /> exercises<idx><h><webwork /></h><h><webwork /> exercise</h></idx> in your MBX project. HTML output will have interactive problem cells. PDF output will contain static versions of exercises. And all such exercises can be archived by the <c>mbx</c> script into a file tree to be uploaded onto the <webwork /> server for use in the <q>traditional</q> way.</p>
     </introduction>
 
-    <section>
+    <section xml:id="webwork-configuration">
         <title>Configuring a <webwork /> Course for MBX</title>
-        <p>We assume a mild familiarity with administrating a <webwork /> server. The version of <webwork /> needs to be 2.12 or later for use with MBX, although with version 2.11 all features should function except for latex output with server-based problems (see <xref ref="subsection-webwork-latex">Subsection</xref>. Using the <c>admin</c> course, create a course named <c>anonymous</c>. In the course's Course Configuration menu, set all permissions to <c>admin</c> (or perhaps set some to the even more restrictive <c>nobody</c>). Except set <q>Allowed to login to the course</q> to <c>login_proctor</c>.</p>
+        <p>We assume a mild familiarity with administrating a <webwork /> server. The version of <webwork /> needs to be 2.12 or later for use with MBX, although with version 2.11 all features should function except for latex output with server-based problems (see <xref ref="webwork-latex-output">Subsection</xref>. Using the <c>admin</c> course, create a course named <c>anonymous</c>. In the course's Course Configuration menu, set all permissions to <c>admin</c> (or perhaps set some to the even more restrictive <c>nobody</c>). Except set <q>Allowed to login to the course</q> to <c>login_proctor</c>.</p>
         <p>In the Classlist Editor, add a user named <c>anonymous</c>, and set that user's permission level to <c>login_proctor</c>, the permission level one higher than <c>student</c>. Set that user's password to <c>anonymous</c>. Note that because this is public information, anyone will be able to log into this course as user <c>anonymous</c>. This is why setting the permissions earlier is very important. (Especially preventing this user from changing its own password.)</p>
         <p>Add the following lines to the <c>course.conf</c> file (which lives in the parent folder of the <c>templates/</c> folder.)</p>
         <pre>
@@ -55,7 +55,7 @@
         <p>Now both <c>xsltproc</c> with <c>mathbook-html.xsl</c> and the <c>mbx</c> script will be able to communicate with this course to retrieve what is needed.</p>
     </section>
 
-    <section>
+    <section xml:id="webwork-source">
         <title><webwork /> Problems in Source</title>
 
         <introduction>
@@ -108,7 +108,7 @@
             ]]>
             </pre>
 
-            <p>The above example could be given an optional title, introduction, conclusion, hint, and solution. These are discussed in <xref ref="subsection-pg-code">Subsection</xref>.</p>
+            <p>The above example could be given an optional title, introduction, conclusion, hint, and solution. These are discussed in <xref ref="webwork-pg-code">Subsection</xref>.</p>
 
             <p>In the above example, <c>"3"</c> is the <attr>name</attr> attribute to a <tag>var</tag> element. This is how to create an answer blank that is expecting <m>3</m> as the answer. What you give as a <attr>name</attr> attribute will be passed as a string to PG's <c>Compute()</c> command, so it needs to be valid input for <c>Compute()</c>. It should <em>not</em> begin with a <c>$</c>.</p>
 
@@ -131,15 +131,15 @@
             ]]>
             </pre>
 
-            <p>Many special contexts are automatically detected by MBX, and it loads the appropriate macro file into the PG problem. However you may need to explicitly load a macro file as described in <xref ref="subsection-pg-code">Subsection</xref>.</p>
+            <p>Many special contexts are automatically detected by MBX, and it loads the appropriate macro file into the PG problem. However you may need to explicitly load a macro file as described in <xref ref="webwork-pg-code">Subsection</xref>.</p>
 
-            <p>You should only use this (nearly) Perl-free shortcut if the <attr>name</attr> attribute could be put in math mode and simultaneously serve as a printed answer in something like a solutions manual. In the above two examples, this is the case. But in a question with, say, <attr>name="cos(x)/2"</attr>, if you'd like the solutions manual to print using <c>\frac{\cos(x)}{2}</c>, then you should write the problem as described in <xref ref="subsection-pg-code">Subsection</xref>.</p>
+            <p>You should only use this (nearly) Perl-free shortcut if the <attr>name</attr> attribute could be put in math mode and simultaneously serve as a printed answer in something like a solutions manual. In the above two examples, this is the case. But in a question with, say, <attr>name="cos(x)/2"</attr>, if you'd like the solutions manual to print using <c>\frac{\cos(x)}{2}</c>, then you should write the problem as described in <xref ref="webwork-pg-code">Subsection</xref>.</p>
 
-            <p>Additionally, in shortcutting around the structure described in <xref ref="subsection-pg-code">Subsection</xref>, you will not have access to certain other features, such as answer format help links.</p>
+            <p>Additionally, in shortcutting around the structure described in <xref ref="webwork-pg-code">Subsection</xref>, you will not have access to certain other features, such as answer format help links.</p>
 
         </subsection>
 
-        <subsection xml:id="subsection-pg-code">
+        <subsection xml:id="webwork-pg-code">
             <title>PG code in Problems</title>
             <p>To have randomization in problems or otherwise take advantage of the algorithmic programming capabilities of Perl and <webwork />'s PG language requires using a <tag>setup</tag> tag. Having at least a little familiarity with coding problems in <webwork /> is necessary, although for simpler problems you could get away with mimicking the sample article in <c>mathbook/examples/webwork/</c>. A <tag>statement</tag>, (optional) <tag>hint</tag>, and (optional) <tag>solution</tag> follow. The whole thing can have an optional <tag>title</tag>.</p> 
             <pre>
@@ -167,7 +167,7 @@
 
             <p>The <tag>setup</tag> contains a section of <tag>var</tag> tags followed by a <tag>pg-code</tag>. If you are familiar with code for <webwork /> PG problems, the <tag>pg-code</tag> contains lines of PG code that would appear in the <q>setup</q> portion of the problem. Typically, this is the code that follows <c>TEXT(beginproblem());</c> and precedes the first <c>BEGIN_TEXT</c> or <c>BEGIN_PGML</c>. If your code needs any special <webwork /> macro libraries, you may load them in a <tag>pg-macros</tag> tag prior to <tag>setup</tag>, with each such <c>.pl</c> file's name inside a <tag>macro-file</tag> tag. However many of the most common macro libraries will be loaded automatically based on the content and attributes you use in the rest of your problem.</p>
 
-            <p>For each perl variable (scalar, array, or hash) that is used in the <tag>pg-code</tag> and which will <em>also</em> be used in the <tag>statement</tag>, <tag>solution</tag>, or as an answer to an answer blank, there should be a <tag>var</tag>. These <tag>var</tag> tags are primarily to help MBX handle static output, but they also allow for some optimal leveraging of <webwork /> features.</p>
+            <p>For each Perl variable (scalar, array, or hash) that is used in the <tag>pg-code</tag> and which will <em>also</em> be used in the <tag>statement</tag>, <tag>solution</tag>, or as an answer to an answer blank, there should be a <tag>var</tag>. These <tag>var</tag> tags are primarily to help MBX handle static output, but they also allow for some optimal leveraging of <webwork /> features.</p>
 
             <p>A <tag>var</tag> in the <tag>setup</tag> always has a <attr>name</attr> attribute, which should match the variable's name in your <tag>pg-code</tag> (<eg /> <c>$x</c>, <c>@a</c>, <etc />). Each <tag>var</tag> should usually have a <tag>static</tag> tag with <latex /> code for the static version of the answer (possibly inside a <c>\text{}</c>). For PDF and other static output modes, this <latex /> code will be used to print <tag>var</tag> values, since the <webwork /> server will play no role.</p>
 
@@ -226,6 +226,9 @@
 
             <p>An <tag>instruction</tag> is specific instructions for how the reader might type or otherwise electronically submit their answer. Contents of an <tag>instruction</tag> will be omitted from print and other static output forms. The <tag>instruction</tag> is a peer to <tag>p</tag>, but may only contain <q>short text</q> children.</p>
 
+            <p>Some general information on authoring <webwork /> problems can be found in a <url href="http://webwork.maa.org/wiki/Problem_Authoring_Videos">set of videos</url> at<cd>webwork.maa.org/wiki/Problem_Authoring_Videos</cd>
+            Not all of this is relevant to authoring within <pretext /> but there are parts that will be helpful for constructing the Perl code necessary for randomized problems.</p>
+
         </subsection>
 
         <subsection>
@@ -235,7 +238,7 @@
 
     </section>
 
-    <section>
+    <section xml:id="webwork-processing">
         <title>Processing</title>
 
         <subsection>
@@ -248,10 +251,10 @@
                 </console>
             </sidebyside>
             <p>If your <c>webwork.server</c> is running version 2.11 (the first version which can be used with MBX), then you should additionally pass <c>--stringparam webwork.version 2.11</c>.</p>
-            <p>For HTML output, this is all that is needed. For <latex />, you may need to do more first. See <xref ref="subsection-webwork-latex"/>.</p>
+            <p>For HTML output, this is all that is needed. For <latex />, you may need to do more first. See <xref ref="webwork-latex-output"/>.</p>
         </subsection>
 
-        <subsection xml:id="subsection-webwork-latex">
+        <subsection xml:id="webwork-latex-output">
             <title><latex /> output</title>
             <p>If your project uses PG files that live on the <webwork /> server, or if you have <tag>webwork</tag> tags that have image creation code in their <tag>pg-code</tag> tag, then you will need to retrieve <latex /> chunks from the server before you use <c>xsltproc</c>. The <c>mbx</c> script handles this, but only for <webwork /> 2.12 and later:</p>
             <sidebyside>

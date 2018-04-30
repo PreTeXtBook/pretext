@@ -46,8 +46,8 @@
             element article {
                 MetaDataSubtitle,
                 ArticleFrontMatter?,
-                Section,
-                (Section | Exercises | References)*,
+                Section+,
+                Exercises*,
                 BackMatter?
             }
         Book =
@@ -55,10 +55,7 @@
             element book {
                 MetaDataSubtitle,
                 BookFrontMatter?,
-                (
-                    (Chapter, (Chapter | Exercises | References)*) |
-                    Part+
-                ),
+                (Part+ | Chapter+ ),
                 BackMatter?
             }
         Letter =
@@ -87,16 +84,19 @@
                 MetaDataTitle,
                 Objectives?,
                 (
-                    (BlockDivision | Paragraphs)+ |
+                    (
+                        (BlockDivision | Paragraphs)+,
+                        Exercises?,
+                        References?
+                    )
+                |
                     (
                         IntroductionDivision?,
-                        Section,
-                        (
-                            Section |
-                            Exercises |
-                            References
-                        )*,
-                        ConclusionDivision?)
+                        Section+,
+                        Exercises*,
+                        References?,
+                        ConclusionDivision?
+                    )
                 )
             }
         Section =
@@ -104,16 +104,19 @@
                 MetaDataTitle,
                 Objectives?,
                 (
-                    (BlockDivision | Paragraphs)+ |
+                    (
+                        (BlockDivision | Paragraphs)+,
+                        Exercises?,
+                        References?
+                    )
+                |
                     (
                         IntroductionDivision?,
-                        Subsection,
-                        (
-                            Subsection |
-                            Exercises |
-                            References
-                        )*,
-                        ConclusionDivision?)
+                        Subsection+,
+                        Exercises*,
+                        References?,
+                        ConclusionDivision?
+                    )
                 )
             }
         Subsection =
@@ -121,23 +124,28 @@
                 MetaDataTitle,
                 Objectives?,
                 (
-                    (BlockDivision | Paragraphs)+ |
+                    (
+                        (BlockDivision | Paragraphs)+,
+                        Exercises?,
+                        References?
+                    )
+                |
                     (
                         IntroductionDivision?,
-                        Subsubsection,
-                        (
-                            Subsubsection |
-                            Exercises |
-                            References
-                        )*,
-                        ConclusionDivision?)
+                        Subsubsection+,
+                        Exercises*,
+                        References?,
+                        ConclusionDivision?
+                    )
                 )
             }
         Subsubsection =
             element subsubsection {
                 MetaDataTitle,
                 Objectives?,
-                (BlockDivision | Paragraphs)+
+                (BlockDivision | Paragraphs)+,
+                Exercises?,
+                References?
             }
         Appendix =
             element appendix {
@@ -1160,7 +1168,6 @@
                     SideBySide |
                     SideBySideGroup |
                     Video |
-                    JSXGraph |
                     MuseScore
                 )
             }
@@ -1407,16 +1414,9 @@
     <section>
         <title>Interactive Elements</title>
 
-        <p>Some specific interactive goodies.  <c>jsxgraph</c> <em>requires</em> an <c>xml:id</c> for its mechanism to associate code with <q>boards.</q>  The GeoGebra element will be totally reworked.</p>
+        <p>Some specific interactive goodies.  These are being phased-out in favor of a more general <tag>interactive</tag> element.</p>
 
         <fragment xml:id="interactive">
-        JSXGraph = 
-            element jsxgraph {
-                UniqueID,
-                attribute width {text}?,
-                attribute aspect {text}?,
-                element input {text}
-            }
         MuseScore = 
             element score {
                 attribute musescoreuser {text},
@@ -1428,7 +1428,7 @@
     <section>
         <title>Audio and Video</title>
 
-        <p>Well, just video right now.  The <c>xml:id</c> is not used as a target, but rather as a name for an associated thumbnail file, hence optional.  <c>preview="custom"</c> is a possible future addition.  Vimeo video could be a third source of embedded content.</p>
+        <p>Well, just video right now.  The <c>xml:id</c> is not used as a target, but rather as a name for a static preview image that is auto-generated by the <c>mbx</c> script thumbnail file, hence optional.  <c>preview</c> maybe be one of two reserved switches, or the filename of a static preview image.</p>
 
         <fragment xml:id="audiovideo">
         Video = 
@@ -1439,7 +1439,7 @@
                 attribute start {xsd:integer}?,
                 attribute end {xsd:integer}?,
                 attribute play-at {"embed" | "popout" | "select"}?,
-                attribute preview {"default" | "generic" }?,
+                attribute preview {"default" | "generic" | text}?,
                 (AttributesSourceFile | AttributesYouTube)
             }
         AttributesSourceFile =
@@ -1512,7 +1512,7 @@
             }
         ExerciseGroup =
             element exercisegroup {
-                MetaDataTarget,
+                MetaDataTitleOptional,
                 attribute cols {"2"|"3"|"4"|"5"|"6"}?,
                 IntroductionStatementNoCaption?,
                 Exercise+,

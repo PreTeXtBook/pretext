@@ -159,6 +159,12 @@ the xsltproc executable.
             </google>
         </search>
 
+        <!-- There does not need to be a trailing / on the URL -->
+        <!-- NB This is likely to change, it should be a publisher option -->
+        <html>
+            <baseurl href="http://mathbook.pugetsound.edu/examples/sample-article/html" />
+        </html>
+
         <!-- Images in HTML output may carry a discreet list of links    -->
         <!-- to "archival" versions of images in a variety of formats.   -->
         <!-- Authors have complete freedom to do this as they choose,    -->
@@ -1562,7 +1568,7 @@ the xsltproc executable.
                     <mrow>c^2\amp\gt a^2 + b^2</mrow>
                 </md></p>
 
-                <p>So as a summary of how to avoid conflicts with XML's reserved characters:<dl>
+                <p>So as a summary of how to avoid conflicts with XML's reserved characters, we have the following.  (The exclamation on the third entry is just a test and does not mean anything special here.)<dl>
                     <li>
                         <title><q>Normal</q> Text</title>
                         <p>Use <c>&lt;ampersand /&gt;</c>, <c>&lt;less /&gt;</c>, <c>&lt;greater /&gt;</c>.</p>
@@ -1571,8 +1577,8 @@ the xsltproc executable.
                         <title>Mathematics</title>
                         <p>Within <c>m</c>, <c>me</c>, <c>men</c>, and <c>mrow</c> elements, use <c>\amp</c>, <c>\lt</c>, <c>\gt</c>.  Or use <c>CDATA</c> to enclose a large chunk of <latex /> with many of these characters.</p>
                     </li>
-                    <li>
-                        <title>Verbatim, Code</title>
+                    <li xml:id="reserved-characters-verbatim">
+                        <title>Verbatim, Code!</title>
                         <p>Within verbatim text (<c>c</c>, <c>cd</c>, and <c>pre</c> elements), Sage code, program listings, and console sessions, use the XML entitites <c>&amp;amp;</c>, <c>&amp;lt;</c>, <c>&amp;gt;</c> to get exactly the characters desired.</p>
                     </li>
                 </dl></p>
@@ -2386,43 +2392,21 @@ the xsltproc executable.
                 <p>In a longer work you might wish to have some references on a per-chapter basis, or similar.  You can make a <q>references</q> subdivision anywhere to hold bibliographic items, and you can reference the items like any other item.  For example, we can cite the article below <xref ref="biblio-beezer-fcla" detail="Chapter R" />, included an indication that a specific chapter may be relevant.</p>
             </subsection>
 
-            <references>
-                <title>References</title>
-                <idx><h>references</h><h>within a section</h></idx>
-
-                <introduction>
-                    <p>These items are here to test basic formatting of references.</p>
-                </introduction>
-
-                <biblio type="raw" xml:id="biblio-strang-article">Gilbert Strang, <title>The Fundamental Theorem of Linear Algebra</title>, <journal>The American Mathematical Monthly</journal> November 1993, <volume>100</volume> <number>9</number>, 848<ndash />855.</biblio>
-
-                <biblio type="raw" xml:id="biblio-beezer-fcla">Robert A. Beezer, <title>A First Course in Linear Algebra</title>, 3rd Edition, Congruent Press, 2012.
-                <note><p>An online, open-source offering.</p></note>
-                </biblio>
-
-                <biblio type="raw" xml:id="biblio-rosswell-fictional">Alexander Rosswell, <title>Diffeomorphisms of Penciled Fiber Bundles</title>, <journal>Mathematicians of America</journal> <year>2020</year>, <volume>2</volume> <number>6</number>, 884<ndash />888.</biblio>
-
-                <biblio type="raw" xml:id="biblio-rosswell-fictional-two"><ibid />, <title>Diffeomorphisms of Penciled Fiber Bundles, Part 2</title>, <journal>Mathematicians of America</journal> <year>2021</year>, <volume>3</volume> <number>4</number>, 102<ndash />103.</biblio>
-
-                <conclusion>
-                    <p>This is a conclusion, which has not been used very much in this sample.  Did you see the the second reference above has a short annotation?  So you can make annotated bibliographies easily.</p>
-                </conclusion>
-            </references>
-
             <exercises>
                 <title>Exercises</title>
 
                 <exercise xml:id="exercises-null-problem">
                     <statement>
-                        <p>No problem here, but the next two are in an <q>exercise group</q> with an introduction and a conclusion.  The two problems of the exercise group should be indented some to indicate the grouping.</p>
+                        <p>No problem here, but the next two are in an <q>exercise group</q> with an introduction and a conclusion, along with an optional title.  The two problems of the exercise group should be indented some to indicate the grouping.</p>
                     </statement>
                 </exercise>
 
                 <exercisegroup xml:id="exercisegroup-two-problems">
+                    <title>Two Derivative Problems</title>
 
                     <introduction>
                         <p>In the next two problems compute the indicated derivative.</p>
-                        <p>Use a <c>sidebyside</c> element to insert a relevant <c>image</c>, or <c>tabular</c>, or other un-numbered item tht does not fit in a sentence.</p>
+                        <p>Use a <c>sidebyside</c> element to insert a relevant <c>image</c>, or <c>tabular</c>, or other un-numbered item that does not fit in a sentence.</p>
                         <sidebyside width="30%">
                             <image source="images/cubic-function.png" />
                         </sidebyside>
@@ -2530,6 +2514,29 @@ the xsltproc executable.
 
             </exercises>
 
+            <references>
+                <title>References</title>
+                <idx><h>references</h><h>within a section</h></idx>
+
+                <introduction>
+                    <p>These items are here to test basic formatting of references.</p>
+                </introduction>
+
+                <biblio type="raw" xml:id="biblio-strang-article">Gilbert Strang, <title>The Fundamental Theorem of Linear Algebra</title>, <journal>The American Mathematical Monthly</journal> November 1993, <volume>100</volume> <number>9</number>, 848<ndash />855.</biblio>
+
+                <biblio type="raw" xml:id="biblio-beezer-fcla">Robert A. Beezer, <title>A First Course in Linear Algebra</title>, 3rd Edition, Congruent Press, 2012.
+                <note><p>An online, open-source offering.</p></note>
+                </biblio>
+
+                <biblio type="raw" xml:id="biblio-rosswell-fictional">Alexander Rosswell, <title>Diffeomorphisms of Penciled Fiber Bundles</title>, <journal>Mathematicians of America</journal> <year>2020</year>, <volume>2</volume> <number>6</number>, 884<ndash />888.</biblio>
+
+                <biblio type="raw" xml:id="biblio-rosswell-fictional-two"><ibid />, <title>Diffeomorphisms of Penciled Fiber Bundles, Part 2</title>, <journal>Mathematicians of America</journal> <year>2021</year>, <volume>3</volume> <number>4</number>, 102<ndash />103.</biblio>
+
+                <conclusion>
+                    <p>This is a conclusion, which has not been used very much in this sample.  Did you see the the second reference above has a short annotation?  So you can make annotated bibliographies easily.</p>
+                </conclusion>
+            </references>
+
         </section>
 
         <section xml:id="lists">
@@ -2553,7 +2560,7 @@ the xsltproc executable.
                 </p>
 
 
-                <p>This section contains nested lists, to demonstrate how they get assigned labels (numbering, symbols).  But we begin with two simple lists, demonstrating an ordered list and an unordered list.  See the end of section for an example of a description list.  Since Jupyter notebooks use markdown syntax, their lists are less flexible.  So some assertions here may be wrong when viewed as a Jupyter notebook.  Note in the source the optional use of a paragraph (<c>p</c>) for the list items.</p>
+                <p>This section contains nested lists, to demonstrate how they get assigned labels (numbering, symbols).  But we begin with two simple lists, demonstrating an ordered list and an unordered list.  See the end of section for an example of a description list.Note in the source the optional use of a paragraph (<c>p</c>) for the list items of the list of colors.</p>
 
                 <p><ol>
                     <li>First.</li>
@@ -2566,7 +2573,7 @@ the xsltproc executable.
                     <li><p>Purple</p></li>
                 </ul></p>
 
-                <p>Next, we have a list with no customization and multiple levels to test the defaults.  <latex /> allows a maximum of four levels of ordered/numbered lists, and a total of six levels if some unordered lists are mixed in.  The second-level defaults (lower-case Latin) are formatted slightly different in <latex /> versus HTML.  The HTML style is not easy to adjust, but you can  specify the <latex /> version to match if it is important.  The default order of the labels in Markdown/Jupyter (Arabic, Latin, latin, roman) is different than for <latex /> and HTML (Arabic, latin, roman, Latin), so cross-references are not correct.  Note that to have nested lists you <em>must</em> structure your list items as paragraphs, since a list may only appear within a <c>p</c> element.<ol>
+                <p>Next, we have a list with no customization and multiple levels to test the defaults.  <latex /> allows a maximum of four levels of ordered/numbered lists, and a total of six levels if some unordered lists are mixed in.  The second-level defaults (lower-case Latin) are formatted slightly different in <latex /> versus HTML.  The HTML style is not easy to adjust, but you can specify the <latex /> version to match if it is important.Note that to have nested lists you <em>must</em> structure your list items as paragraphs, since a list may only appear within a <tag>p</tag> element.<ol>
                     <li><p>Level 1, first.</p></li>
                     <li xml:id="list-two">
                         <p>Level 1, second.<ol>
@@ -2588,7 +2595,7 @@ the xsltproc executable.
                     <li><p>Level 1, third.</p></li>
                 </ol></p>
 
-                <p>Items in ordered lists may be be give an <c>xml:id</c> and then may be the target of an <c>xref</c>.  We test three here, referencing down into the hierarchy above.  Level 1, second: <xref ref="list-two" />.  Level 3, second: <xref ref="list-two-two-two" />.  Level 4, third: <xref ref="list-two-two-two-three" />.</p>
+                <p>Items in ordered lists (only) may be be give an <c>xml:id</c> and then may be the target of an <c>xref</c>.  We test three here, referencing down into the hierarchy above.  Level 1, second: <xref ref="list-two" />.  Level 3, second: <xref ref="list-two-two-two" />.  Level 4, third: <xref ref="list-two-two-two-three" />.  Note that if a list item of an ordered list is contained within a list item of an unordered list, then its number will not be defined.</p>
 
                 <p>And now a four-level deep unordered list with the default labels supplied by MBX (disc, circle, square, disc).  Again, the defalt order for Markdown/Jupyter (disc, square, circle, circle) is different than for <latex /> and HTML (disc, circle, square, disc)<ul>
                     <li><p>Level 1, first.</p></li>
@@ -2645,7 +2652,7 @@ the xsltproc executable.
                     <li><p>Level 1, third.</p></li>
                 </ol></p>
 
-                <p>Now, nested lists with the defaults replaced by custom choices.  First, an ordered list, three deep, upper Roman numerals, then upper-case Latin, then more traditional Arabic numerals on the three elements of the third level.  Note the adornments of the labels will be rendered in LaTeX, but not in HTML, and the label specifications have no effect in a Jupyter notebook.<ol label="*I*">
+                <p>Now, nested lists with the defaults replaced by custom choices.  First, an ordered list, three deep, upper Roman numerals, then upper-case Latin, then more traditional Arabic numerals on the three elements of the third level.  Note the adornments of the labels will be rendered in LaTeX, but not in HTML.<ol label="*I*">
                     <li><p>Level 1, first.</p></li>
                     <li><p>Level 1, second.<ol label="++A">
                             <li><p>Level 2, first.</p></li>
@@ -2679,7 +2686,7 @@ the xsltproc executable.
                         </ul></p>
                     </li>
                     <li><p>Level 1, third.  With a cross-reference to second list item, <xref ref="list-item-second" />.</p></li>
-                    <li><p>Level 1, fourth.  Whose number should not change when knowl just prior is opened.</p></li>
+                    <li><p>Level 1, fourth.  Whose number should not change when the knowl just prior is opened.</p></li>
                 </ol></p>
 
                 <p>The next definition is very poorly worded.  It is meant to test leading off with a list (bad form), for which <latex /> normally begins right after the heading.</p>
@@ -2729,6 +2736,170 @@ the xsltproc executable.
                     <li>Quattro items.</li>
                 </ul></p>
             </subsection>
+
+            <subsection>
+                <title>Description Lists</title>
+
+                <p>Use <c>dl</c> to make a description list<idx><h>description list</h></idx><idx><h>list</h><h>description</h></idx>. Inside of those tags, use <c>li</c> for each entry. Then, use <c>title</c> to specify the term being described and <c>p</c> to specify the description.</p>
+                <p>A <q>description</q> list
+                <idx><h>description list</h></idx><idx><h>list</h><h>description</h></idx>
+                has a short term or phrase that is prominent, followed by a short description.  It is modeled on the lists of similar structure in both <latex /> and HTML.  It makes for a nice medium-weight way to define terms, somewhere in-between the <c>term</c> tag which just makes a term prominent in a sentence, and a <c>definition</c>, which is set off, has a heading, a number, and a title.  Do not try to manage the separation between the title and the description by employing punctuation (but you can include a question-mark or exclamation-point if necessary).  For example, do not include a colon to the end of the title.  This example is from Bob Plantz.
+                <dl>
+                    <li>
+                        <title>Central Processing Unit (CPU)</title>
+                        <p>Controls most of the activities of the computer, performs the arithmetic and logical operations, and contains a small amount of very fast memory.</p>
+                    </li>
+
+                    <li>
+                        <title>Memory</title>
+                        <p>Provides storage for the instructions for the CPU and the data they manipulate.</p>
+                    </li>
+
+                    <li>
+                        <title>Input/Output (I/O)</title>
+                        <p>Communicates with the outside world and with mass storage devices (<eg />, disks).</p>
+                    </li>
+
+                    <li>
+                        <title>Bus</title>
+                        <p>A communication pathway with a protocol specifying exactly how the pathway is used.</p>
+                    </li>
+                </dl></p>
+
+                <p>Some presentations can be assisted by a hint from the author about the lengths of the titles.  You can choose to provide a <c>width</c> attribute on a <c>dl</c> element with possible values <c>narrow</c>, <c>medium</c>, and <c>wide</c>.  Conversion to <latex /> ignores this attribute, and conversion to <init>HTML</init> only reacts to <c>narrow</c> (<c>medium</c> is the default, and <c>wide</c> behaves identically).<dl width="narrow">
+                    <li>
+                        <title>Red</title>
+                        <p>The color of the sun at sunset.</p>
+                    </li>
+                    <li>
+                        <title>Blue</title>
+                        <p>The color of a clear sky.</p>
+                    </li>
+                    <li>
+                        <title>Aqua</title>
+                        <p>The color of shallow tropical waters.</p>
+                    </li>
+                    <li xml:id="description-list-math-title">
+                        <title>Math <m>x^2</m></title>
+                        <p>Sorry, not a color but testing titles with math in them.</p>
+                    </li>
+                </dl></p>
+            </subsection>
+
+            <subsection>
+                <title>Named Lists</title>
+                <idx>named list</idx><idx><h>list</h><h>named</h></idx>
+
+                <p>A list can be wrapped with a <tag>list</tag> element, so that it earns a number, can be given a title and have an introduction and conclusion.  Cross-references to individual list items get a bit involved as they are prefixed with the number of the list and then the number of the item, so conceivably you could get a number like <c>4.5.3:2.a.ii</c>.  The colon is used to indicate the transition from the number of the list within divisions and the numbers coming from the list hierarchy, since it has two small dots.</p>
+
+                <list xml:id="list-colors-rainbow">
+                    <caption>Colors of the Rainbow</caption>
+
+                    <introduction>
+                        <p>Because the colors are always in the same order, an ordered list is natural here.  The colors change continuously, but are often divided up into large ranges that human perception can easily distinguish.</p>
+                    </introduction>
+
+                    <ol>
+                        <li><p>Red</p></li>
+                        <li xml:id="rainbow-orange"><p>Orange</p></li>
+                        <li><p>Yellow</p></li>
+                        <li><p>Green</p></li>
+                        <li><p>Blue</p></li>
+                        <li><p>Indigo</p></li>
+                        <li><p>Violet</p></li>
+                    </ol>
+
+                    <conclusion>
+                        <p>So some people use the acronym <acro>ROY-G-BIV</acro> to remember this sequence.</p>
+                    </conclusion>
+                </list>
+
+
+                 <p>This next list is used for testing cross-references to it.  See <xref ref="section-cross-referencing" text="type-global" />.</p>
+
+                <list xml:id="list-to-reference">
+                    <caption>A named list of targets</caption>
+                    <introduction>
+                        <p>This is the introduction to this named list, which references an item within, via the hybrid <attr>text</attr> attribute:  <xref ref="target-item" text="type-hybrid" />.</p>
+                    </introduction>
+                    <ol label="A">
+                        <li>
+                            <p>
+                                <ol label="i">
+                                    <li>A and i</li>
+                                    <li>A and ii</li>
+                                    <li>A and iii</li>
+                                </ol>
+                            </p>
+                        </li>
+                        <li>
+                            <p>
+                                <ol label="a">
+                                    <li>B and a</li>
+                                    <li>B and b</li>
+                                    <li xml:id="target-item">B and c (target of some cross-references)</li>
+                                </ol>
+                            </p>
+                        </li>
+                        <li>
+                            <p>
+                                <ul label="disc">
+                                    <li>The next three cross-references point to a list item, just above.  It is interesting because the list is named, hence numbered.  The global reference uses the full number, while the local reference uses the number from within the list.  The hybrid reference recognizes that the target is within the same named list, so the number can be shorter.  An identical hybrid cross-reference appears within the <tag>introduction</tag> to this list, an immediately following, but outside the <tag>list</tag>.</li>
+                                    <li>Cross-reference within named list (<c>global</c>): <xref ref="target-item" text="type-global" /></li>
+                                    <li>Cross-reference within named list (<c>hybrid</c>): <xref ref="target-item" text="type-hybrid" /></li>
+                                    <li>Cross-reference within named list (<c>local</c>): <xref ref="target-item" text="type-local" /></li>
+                                    <li>
+                                        <p>
+                                            <ol label="1">
+                                                <li>C and bullet and 1</li>
+                                                <li xml:id="target-no-number">C and bullet and 2</li>
+                                                <li>C and bullet and 3</li>
+                                            </ol>
+                                    </p>
+                                    </li>
+                                    <li>C and bullet</li>
+                                    <li>C and bullet</li>
+                                </ul>
+                            </p>
+                        </li>
+                    </ol>
+                </list>
+
+                <p>This is a paragraph just outside the preceding named list, which references an item within, via the hybrid <attr>text</attr> attribute:  <xref ref="target-item" text="type-hybrid" />.</p>
+
+                <p><idx><h>list</h></idx>This is a paragraph with three lists contained within it.  For HTML output we have to <q>inside-out</q> the lists.<ol>
+                    <li>A one item ordered list.</li>
+                </ol>In other words, the text before, after, and between, needs to each be encapsulated as an HTML <c>p</c> element of its own.<ul>
+                    <li>A one item unordered list.</li>
+                </ul>Including definition lists.<dl>
+                    <li>
+                        <title>Define Me</title>
+                        <p>A one item definition list.</p>
+                    </li>
+                </dl>That's all!</p>
+
+                <p>A one item list, whose item is a paragraph with two contained ordered lists, separated by text.<ul label="square">
+                    <li><p>Introductory text.<ol label="A">
+                        <li>First item, first list.</li>
+                    </ol>Intermediate text.<ol label="a">
+                        <li>First item, second list.</li>
+                    </ol>Concluding text.</p></li>
+                </ul></p>
+
+            </subsection>
+
+            <subsection>
+                <title>Testing List Decompositions</title>
+
+                <p>A list in a paragraph is a construction in HTML that browsers try to correct, which leads to unpredictable results, so we have to decompose an author's paragraph with lists into a sequence of HTML paragraphs, interrupted by lists.  This subsection is only relevant to HTML output, and only for testing.<idx><h>paragraph</h><h>normal</h></idx></p>
+
+                <p><ol>
+                    <li>This paragraph opens with an ordered list.</li>
+                    <li>Testing the id, and other info that should be at the top of the paragraph.</li>
+                </ol>Now the paragraph continues, and we have an index item here, so we can test cross-references back here.<idx><h>paragraph</h><h>opens with list</h></idx></p>
+
+            </subsection>
+
 
             <exercises>
                 <title>Exercises (with lists)</title>
@@ -2782,114 +2953,6 @@ the xsltproc executable.
 
             </exercises>
 
-            <subsection>
-                <title>Description Lists</title>
-
-                <p>Use <c>dl</c> to make a description list<idx><h>description list</h></idx><idx><h>list</h><h>description</h></idx>. Inside of those tags, use <c>li</c> for each entry. Then, use <c>title</c> to specify the term being described and <c>p</c> to specify the description.</p>
-                <p>A <q>description</q><idx><h>description list</h></idx><idx><h>list</h><h>description</h></idx> list has a short term or phrase that is prominent, followed by a short description.  It is modeled on the lists of similar structure in both <latex /> and HTML.  It makes for a nice medium-weight way to define terms, somewhere in-between the <c>term</c> tag which just makes a term prominent in a sentence, and a <c>definition</c>, which is set off, has a heading, a number, and a title.  This example is from Bob Plantz.<dl>
-                    <li>
-                        <title>Central Processing Unit (CPU)</title>
-                        <p>Controls most of the activities of the computer, performs the arithmetic and logical operations, and contains a small amount of very fast memory.</p>
-                    </li>
-
-                    <li>
-                        <title>Memory</title>
-                        <p>Provides storage for the instructions for the CPU and the data they manipulate.</p>
-                    </li>
-
-                    <li>
-                        <title>Input/Output (I/O)</title>
-                        <p>Communicates with the outside world and with mass storage devices (<eg />, disks).</p>
-                    </li>
-
-                    <li>
-                        <title>Bus</title>
-                        <p>A communication pathway with a protocol specifying exactly how the pathway is used.</p>
-                    </li>
-                </dl></p>
-
-                <p>Some presentations can be assisted by a hint from the author about the lengths of the titles.  You can choose to provide a <c>width</c> attribute on a <c>dl</c> element with possible values <c>narrow</c>, <c>medium</c>, and <c>wide</c>.  Conversion to <latex /> ignores this attribute, and conversion to <init>HTML</init> only reacts to <c>narrow</c> (<c>medium</c> is the default, and <c>wide</c> behaves identically).<dl width="narrow">
-                    <li>
-                        <title>Red</title>
-                        <p>The color of the sun at sunset.</p>
-                    </li>
-                    <li>
-                        <title>Blue</title>
-                        <p>The color of a clear sky.</p>
-                    </li>
-                    <li>
-                        <title>Aqua</title>
-                        <p>The color of shallow tropical waters.</p>
-                    </li>
-                    <li xml:id="description-list-math-title">
-                        <title>Math <m>x^2</m></title>
-                        <p>Sorry, not a color but testing titles with math in them.</p>
-                    </li>
-                </dl></p>
-            </subsection>
-
-            <subsection>
-                <title>Named Lists</title>
-                <idx>named list</idx><idx><h>list</h><h>named</h></idx>
-
-                <p>A list can be wrapped with a <c>&lt;list&gt;</c> element, so that it earns a number, can be given a title and have an introduction and conclusion.  Cross-references to individual list items get a bit absurd as they are prefixed with the number of the list and then the number of the item, so conceivably you could get a number like <c>4.5.3:2.a.ii</c>.</p>
-
-                <list xml:id="list-colors-rainbow">
-                    <caption>Colors of the Rainbow</caption>
-
-                    <introduction>
-                        <p>Because the colors are always in the same order, an ordered list is natural here.  The colors change continuously, but are often divided up into large ranges that human perception can easily distinguish.</p>
-                    </introduction>
-
-                    <ol>
-                        <li><p>Red</p></li>
-                        <li xml:id="rainbow-orange"><p>Orange</p></li>
-                        <li><p>Yellow</p></li>
-                        <li><p>Green</p></li>
-                        <li><p>Blue</p></li>
-                        <li><p>Indigo</p></li>
-                        <li><p>Violet</p></li>
-                    </ol>
-
-                    <conclusion>
-                        <p>So some people use the acronym <acro>ROY-G-BIV</acro> to remember this sequence.</p>
-                    </conclusion>
-                </list>
-
-                <p><idx><h>list</h></idx>This is a paragraph with three lists contained within it.  For HTML output we have to <q>inside-out</q> the lists.<ol>
-                    <li>A one item ordered list.</li>
-                </ol>In other words, the text before, after, and between, needs to each be encapsulated as an HTML <c>p</c> element of its own.<ul>
-                    <li>A one item unordered list.</li>
-                </ul>Including definition lists.<dl>
-                    <li>
-                        <title>Define Me</title>
-                        <p>A one item definition list.</p>
-                    </li>
-                </dl>That's all!</p>
-
-                <p>A one item list, whose item is a paragraph with two contained ordered lists, separated by text.<ul label="square">
-                    <li><p>Introductory text.<ol label="A">
-                        <li>First item, first list.</li>
-                    </ol>Intermediate text.<ol label="a">
-                        <li>First item, second list.</li>
-                    </ol>Concluding text.</p></li>
-                </ul></p>
-
-            </subsection>
-
-            <subsection>
-                <title>Testing List Decompositions</title>
-
-                <p>A list in a paragraph is a construction in HTML that browsers try to correct, which leads to unpredictable results, so we have to decompose an author's paragraph with lists into a sequence of HTML paragraphs, interrupted by lists.  This subsection is only relevant to HTML output, and only for testing.<idx><h>paragraph</h><h>normal</h></idx></p>
-
-                <p><ol>
-                    <li>This paragraph opens with an ordered list.</li>
-                    <li>Testing the id, and other info that should be at the top of the paragraph.</li>
-                </ol>Now the paragraph continues, and we have an index item here, so we can test cross-references back here.<idx><h>paragraph</h><h>opens with list</h></idx></p>
-
-            </subsection>
-
-
             <references>
                 <title>References (with lists in Annotations)</title>
 
@@ -2904,7 +2967,6 @@ the xsltproc executable.
                     </note>
                 </biblio>
             </references>
-
         </section>
 
         <section>
@@ -3609,29 +3671,324 @@ the xsltproc executable.
 
         </section>
 
-
-        <section xml:id="section-interactive">
-            <title>Embedded Interactive Elements</title>
-            <idx>interactive elements</idx>
-            <idx>embedded interactive elements</idx>
+        <section xml:id="section-interactive-open">
+            <title>Open Interactive Elements</title>
+            <idx><h>interactive elements</h><h>open</h></idx>
+            <idx><h>embedded interactive elements</h><h>open</h></idx>
 
             <introduction>
-                <p>When outputting Web page versions, it is possible to embed a variety of dynamic interactive elements.  In a <latex />/PDF version, these will necessarily need to be replaced by some static substitute, such as a screenshot.  See Section<nbsp /><xref ref="section-sage-cells" /> for the specifics of embedding instances of the Sage Cell Server, which is more elaborate, and not entirely similar.</p>
+                <!-- First paragraph duplicated in next section -->
+                <p>When outputting Web page versions, it is possible to embed a variety of dynamic interactive elements.  In a <latex />/PDF version, these will necessarily need to be replaced by some static substitute, such as a screenshot.  See <xref ref="section-sage-cells" text="type-global" /> for the specifics of embedding instances of the Sage Cell Server, which is more elaborate, and not entirely similar.</p>
 
-                <p>(2018-02-04) Almost everything in this section is under active development and not stable yet.  Feel free to experiment and make suggestions and requests.</p>
+                <p>Interactives in this section are generally unencumbered from copyright or licensing restrictions.  See <xref ref="section-interactive-free" text="type-global" /> for more interactives that are not as open.</p>
+
+                <p>(2018-03-05) Almost everything in this section is under active development and not stable yet.  Feel free to experiment and make suggestions and requests.  This page takes a while to completely load, so be patient.</p>
             </introduction>
 
             <subsection>
-                <title>Geogebra Materials</title>
-                <idx>Geogebra materials</idx>
+                <title>HTML5 Canvas</title>
+
+                <p><init>HTML5</init> introduced the <tag>canvas</tag> element, which can be thought of a blank slate, a place to draw or write on.  So <pretext /> has the <tag>slate</tag> element for a similar purpose.  Generally, but not exclusively, <init>HTML5</init> writes on a <tag>canvas</tag> using the Javascript language.  We demonstrate this approach to interactive diagrams in this subsection.</p>
+
+                <p>The following examples are from David Austin's excellent <url href="http://merganser.math.gvsu.edu/david/linear.algebra/ula/index.html"><pubtitle>Understanding Linear Algebra</pubtitle></url> textbook, which can be found at <cd>
+                    <cline>merganser.math.gvsu.edu/david/linear.algebra/ula/index.html</cline>
+                </cd>David's contribution of examples, and assistance designing the <pretext /> elements is greatly appreciated.  Alright, let's learn some linear algebra.  Yes, there are some learning opportunities in this subsection.</p>
+
+                <figure xml:id="figure-simple-eigenvector">
+                    <caption>A simple eigenvector demonstration</caption>
+
+                    <interactive xml:id="interactive-simple-eigenvector" platform="html5" width="60%" source="code/austin/figures.js code/austin/simple-ev.js" preview="images/simple-eigenvector-preview.jpg">
+                        <slate xml:id="eigenvector" language="javascript" />
+                        <instructions>
+                            <p>Let <m>\vec{x}</m> be represented by the red arrow, and <m>A\vec{x}</m> by the grey arrow, for some particular <m>2\times 2</m> matrix <m>A</m>.  Drag the <em>tip</em> of the red arrow to see the grey arrow change.</p>
+                        </instructions>
+                    </interactive>
+                </figure>
+
+                <exercise>
+                    <statement>
+                        <p>The interactive in <xref ref="figure-simple-eigenvector" text="type-global" /> shows a vector <m>\vec{x}</m> in red, and the matrix-vector product <m>A\vec{x}</m> in grey, for a particular <m>2\times 2</m> matrix <m>A</m>.  The four entries of the matrix <m>A</m> are coded into the interactive.  Can you deduce <m>A</m> simply by using the interactive?  Which theorem is the key?</p>
+                    </statement>
+                </exercise>
+
+                <figure xml:id="figure-eigenvectors">
+                    <caption>Eigenvector demonstration</caption>
+
+                    <interactive xml:id="interactive-eigenvectors" platform="html5" width="90%" aspect="4:5" source="code/austin/figures.js code/austin/eigenvectors.js" preview="images/eigenvectors-preview.jpg">
+                        <slate xml:id="sliders"      aspect="4:1" language="javascript" />
+                        <slate xml:id="eigenvectors" aspect="4:4" language="javascript" />
+                        <instructions>
+                            <p>Let <m>\vec{x}</m> be represented by the red arrow, and <m>A\vec{x}</m> by the grey arrow, for a <m>2\times 2</m> matrix <m>A</m>.  Drag the <em>tip</em> of the red arrow to see the grey arrow change.  Or drag the blue sliders to change the numerical values of the four entries of the <m>2\times 2</m> matrix <m>A</m>.  You will not see the grey vector until you change the matrix using one of the two sliders on the left.  Why is that?  What are the eigenvectors of the initial matrix?</p>
+                        </instructions>
+                    </interactive>
+                </figure>
+
+                <p>The next example has ten <tag>slate</tag> elements communicating with each other, and arranged with the layout features of a <tag>sidebyside</tag> (see <xref ref="section-side-by-side" text="type-global" />).</p>
+
+                <figure xml:id="figure-animation">
+                    <caption>Affine Transformations</caption>
+
+                    <!-- The "10" in the "12:10" should really be a "9".  I suspect -->
+                    <!-- there is some inline element that induces scroll bars      -->
+                    <interactive xml:id="interactive-animation" platform="html5" width="100%" aspect="12:10" source="code/austin/animation.js" preview="images/animation-preview.jpg">
+                        <sbsgroup>
+                            <sidebyside>
+                                <slate xml:id="a" language="javascript" aspect="4:1" />
+                                <slate xml:id="b" language="javascript" aspect="4:1" />
+                                <slate xml:id="c" language="javascript" aspect="4:1" />
+                            </sidebyside>
+                            <sidebyside>
+                                <slate xml:id="d" language="javascript" aspect="4:1" />
+                                <slate xml:id="e" language="javascript" aspect="4:1" />
+                                <slate xml:id="f" language="javascript" aspect="4:1" />
+                            </sidebyside>
+                            <sidebyside>
+                                <slate xml:id="left"  language="javascript" aspect="6:6" />
+                                <slate xml:id="right" language="javascript" aspect="6:6" />
+                            </sidebyside>
+                            <sidebyside width="25%" margins="25% 25%">
+                                <slate language="html" aspect="3:1">
+                                    <button type="button" id="compose">Compose</button>
+                                </slate>
+                                <slate language="html" aspect="3:1">
+                                    <button type="button" id="reset">Reset</button>
+                                </slate>
+                            </sidebyside>
+                        </sbsgroup>
+                        <instructions>
+                            <p>Parameters <m>a</m>, <m>b</m>, <m>d</m>, and <m>e</m>, form a <m>2\times 2</m> matrix <m>A</m>, while <m>c</m> and <m>f</m> form a vector <m>\vec{b}</m>.  The two views of Woody shows the effect of the mapping <me>\vec{x}\mapsto A\vec{x} + \vec{b}</me>.</p>
+                        </instructions>
+                    </interactive>
+                </figure>
+
+            </subsection>
+
+            <subsection>
+                <title>D3.js</title>
+                <idx>D3.js</idx>
+
+                <p><term>D3</term> is a Javascript library for <q>Data-Driven Documents</q>, which might greatly enhance some data you wish to display.  In short, it uses the animation capabilities of <init>SVG</init>.  Available examples seem sensitive to the version of the library, so we have examples using different versions.  Use the <attr>version</attr> attribute on <tag>interactive</tag> to specify the version number.  The default is <c>5</c>.</p>
+
+                <p>The first example uses the force layout and collision detection from Version 3.  (The necessary commands are very different in Version 4.)  Pretend you are a working shepherding dog.  Can you separate, and catch, one of the herd?</p>
+
+                <p>This is adapted from a <url href="https://bl.ocks.org/mbostock/3231298">block</url> by <url href="https://bl.ocks.org/mbostock">Mike Bostock</url> at <c>3231298</c> with a <init>GPL</init> license.  A similar demonstration, only using an <init>HTML5</init> canvas is at <url href="https://bl.ocks.org/mbostock/3231307"><c>bl.ocks.org/mbostock/3231307</c></url>.</p>
+
+                <figure>
+                    <caption>Force layout and collision detection</caption>
+                    <interactive xml:id="interactive-d3-collision" platform="d3" version="3" width="80%" aspect="1:1" source="code/d3/collision.js" preview="images/collision-preview.png">
+                        <slate xml:id="d3-collision" language="d3" aspect="1:1"/>
+                        <instructions>
+                            <p>Place your mouse/pointer at the center of the interactive to repel the 200 circles.</p>
+                        </instructions>
+                    </interactive>
+                </figure>
+
+                <p>Similar, but different, this demonstration of a graph layout uses Version 4 of the library.  Technical notes:<ul>
+                    <li>We have changed the size of the nodes, and their number, to fit in a smaller space.</li>
+                    <li>The Javascript script uses introspection to size itself, which would be a good general practice.</li>
+                </ul></p>
+
+                <p>This is adapted from a <url href="https://bl.ocks.org/shimizu/e6209de87cdddde38dadbb746feaf3a3">block</url> by <url href="https://bl.ocks.org/shimizu">shimizu</url> at <c>e6209de87cdddde38dadbb746feaf3a3</c> with a <init>GPL</init> license.</p>
+
+                <figure>
+                    <caption>Graph Layout</caption>
+                    <interactive xml:id="interactive-d3-graph-layout" platform="d3" version="4" width="60%" aspect="1:1" source="code/d3/graph-layout.js" preview="images/graph-layout-preview.png">
+                        <slate xml:id="d3-graph-layout" language="d3" aspect="1:1"/>
+                        <instructions>
+                            <p>Drag a vertex to a new location to see the graph adjust its layout.</p>
+                        </instructions>
+                    </interactive>
+                </figure>
+
+                <exercise>
+                    <title>Graph Planarity</title>
+                    <statement>
+                        <p>Can you move the vertices to new locations such that the resulting graph is planar?  (In other words, no edges cross?)</p>
+                    </statement>
+                </exercise>
+
+                <p>Finally an example that actually uses some data.  Here is the description from the <url href="https://bl.ocks.org/martinjc/7aa53c7bf3e411238ac8aef280bd6581">original block</url> by <url href="https://bl.ocks.org/martinjc">Martin Chorley</url> at <c>7aa53c7bf3e411238ac8aef280bd6581</c>, provided with an MIT License.</p>
+
+                <blockquote>
+                    <p>This visualisation uses a D3 force simulation to show the Twitter relationships between the Assembly Members in the Welsh Assembly in terms of the number of times each assembly member has mentioned another assembly member in a tweet.</p>
+
+                    <p>Twitter relationships were mined on 22/03/2017, and are representative of the conversational relationships on that date. Links between AMs represent a conversational relationship: one AM has mentioned the other. Party colour indicates the direction of the mention.</p>
+
+                    <p>Hover over the nodes to fade out non-connected nodes.</p>
+
+                    <p>Rather than using intermediate nodes to create curved links (as in Mike Bostock's block), this adds curves by adding a calculated control point for each edge.</p>
+                </blockquote>
+
+                <p>Technical notes:<ul>
+                    <li>Once the nodes organize themselves (automatically in the beginning), they cannot be moved.</li>
+                    <li>We have adjusted the margins in an attempt to keep names visible on the right side, but without giving up too much space.</li>
+                    <li>We have adjust the repelling force, and the collision buffer, to better fit the available space.</li>
+                    <li>This example required its own <init>CSS</init>, which we have included as part of the <tag>interactive</tag>.</li>
+                    <li>The data collected from the Twitter analysis is contained in a <init>JSON</init> file, <c>mention_network.json</c>, and where the script loads that file, it needs a path relative to the <init>HTML</init> file where the interactive is viewed.</li>
+                </ul></p>
+
+                <figure>
+                    <caption>Tweet mentions within the Welsh Assembly</caption>
+                    <interactive xml:id="interactive-d3-welsh" platform="d3" version="4" width="100%" aspect="1:2" source="code/d3/welsh.js" css="code/d3/welsh.css" preview="images/welsh-assembly-preview.png">
+                        <slate xml:id="d3-welsh" language="d3" aspect="1:2"/>
+                        <instructions>
+                            <p>Hover on the name of an Assembly Member to concentrate on their tweet mentions.</p>
+                        </instructions>
+                    </interactive>
+                </figure>
+            </subsection>
+
+            <subsection>
+                <title>JSXGraph</title>
+                <idx>JSXGraph</idx>
+
+                <p><url href="http://jsxgraph.uni-bayreuth.de/wp/index.html">JSXGraph</url> is a <q>cross-browser JavaScript library for interactive geometry, function plotting, charting, and data visualization in the web browser.</q>  Now a <tag>slate</tag> will be what JSXGraph calls a <term>board</term>.  Again, you use Javascript to write onto a <tag>slate</tag>, but have some powerful shortcuts available from the JSXGraph library.  For this reason, <pretext /> calls JSXGraph a <q>language</q>, similar in may respects to how Sage is a language, but is really a Python library.  So realize that the syntax for using JSXGraph is that of Javascript.</p>
+
+                <p>Place Javascript inside a file that is specified with the <attr>source</attr> attribute of the <tag>interactive</tag> element.  Then just be certain that <attr>xml:id</attr> of the <tag>interactive</tag> element is passed as the <init>HTML</init> <c>id</c> in an (early) call to JSXGraph's <c>initBoard()</c> method.</p>
+
+                <p>The plot below is the curve <m>r=a+b\theta</m> in polar coordinates, for <m>0\leq\theta\leq 8\pi</m>.  It may be manipulated with the sliders to control the shape of the curve.  Point <m>A</m> is contrained to the curve, but may be dragged to a new location. At <m>A</m> the tangent line and normal line are plotted as dashed red lines.  Use the controls in the lower left to adjust the viewing window.  This <url href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Archimedean_spiral">example</url> is taken from the JSXGraph <url href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Category:Examples">example wiki</url>.  The code could be written in 7 lines.  Width is 80<percent /> and aspect ratio is 4:3.</p>
+
+                <figure>
+                    <caption>The Archimedian Spiral <m>r = a + b\theta</m>, <m>0\leq\theta\leq 8\pi</m></caption>
+                    <idx>Archimedian Spiral</idx>
+
+                    <interactive xml:id="interactive-archimedian-spiral" platform="jsxgraph" width="80%" aspect="4:3" source="code/jsxgraph/archimedian.js">
+                        <slate xml:id="jsxgraph-archimedian-spiral" language="jsxgraph" aspect="4:3"/>
+                        <instructions>
+                            <p>Drag the sliders to change the parameters <m>a</m> and <m>b</m>.  Controls in the lower-right will adjust the viewing window.</p>
+                        </instructions>
+                    </interactive>
+                </figure>
+
+                <p>Here is a more elaborate example, from the <url href="http://jsxgraph.uni-bayreuth.de/showcase/">JSXGraph Showcase</url>, titled <url href="http://jsxgraph.uni-bayreuth.de/showcase/infinity.html">Infinity</url>.</p>
+
+                <p>There are two active sliders to control the shape and shading of the graphic, and hovering the mouse near one of the edges will highlight the entirety of one of the 30 quadrangles.  Finally, each of the four red corners may be dragged to a new location.  Code is 47 lines.  Width is 60<percent /> and aspect ratio is the default, 1:1, <ie /> a square.</p>
+
+                <figure>
+                    <caption>Infinity, from the JSXGraph Showcase</caption>
+
+                    <interactive xml:id="interactive-infinity" platform="jsxgraph" width="60%" source="code/jsxgraph/infinity.js">
+                        <slate xml:id="jsxgraph-infinity" language="jsxgraph"/>
+                        <instructions>
+                            <p>Drag the sliders to change the pattern, and drag any of the four red corners to change the overall shape.</p>
+                        </instructions>
+                    </interactive>
+                </figure>
+
+                <p>Here are the two new examples.  They have been included in a <c>sidebyside</c> layout element with equal widths (see <xref ref="section-side-by-side" text="type-global" />) so they can be placed horizontally across the page.  They are not wrapped as figures, so cannot be cross-referenced.  These are again from the <url href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Category:Examples">example wiki</url>, the left being Fermat's Spiral and the right being a demonstration of B-splines.</p>
+
+                <sidebyside widths="40% 40%">
+                    <interactive xml:id="interactive-fermats-spiral" platform="jsxgraph" source="code/jsxgraph/fermats-spiral.js">
+                        <slate xml:id="jsxgraph-fermats-spiral" language="jsxgraph" />
+                        <instructions>
+                            <p>Drag the slider to change the curve.</p>
+                        </instructions>
+                    </interactive>
+
+                    <interactive xml:id="interactive-bspline" platform="jsxgraph" source="code/jsxgraph/bspline.js">
+                        <slate xml:id="jsxgraph-bspline" language="jsxgraph" />
+                        <instructions>
+                            <p>Any of the 8 red control points may be moved anywhere.</p>
+                        </instructions>
+                    </interactive>
+                </sidebyside>
+
+                <p>Finally, a piecewise function you can control, with traces of the domain values and range values in two other JSXGraph boards.  Boards and <init>HTML</init> buttons have been laid out using the <c>sidebyside</c> layout element.</p>
+
+                <figure>
+                    <caption>Piecewise Function</caption>
+
+                    <!-- Aspect ratio should be 20:7, the ":8" is to avoid extra scroll bars -->
+                    <interactive xml:id="interactive-piecewise" platform="jsxgraph" aspect="20:8" source="code/jsxgraph/piecewise.js">
+                        <sbsgroup>
+                            <sidebyside width="30%" margins="0%">
+                                <slate xml:id="box_p3"  language="jsxgraph" aspect="6:6" />
+                                <slate xml:id="box2_p3" language="jsxgraph" aspect="6:6" />
+                                <slate xml:id="box3_p3" language="jsxgraph" aspect="6:6" />
+                            </sidebyside>
+                            <!-- buttons should have aspect 6:1, if we could set it -->
+                            <sidebyside widths="30% 30%" margins="20%">
+                                <slate language="html">
+                                    <input type="button" value="Animate" onkeypress="animate_p3(s_p3,75,100);" onclick="animate_p3(s_p3,75,100);" style="font-size:16px; width:100%"/>
+                                </slate>
+                                <slate language="html">
+                                    <input type="button" value="Clear Traces" onkeypress="clearTraces_p3();" onclick="clearTraces_p3();" style="font-size:16px; width:100%"/>
+                                </slate>
+                            </sidebyside>
+                        </sbsgroup>
+                        <instructions>
+                            <p>The slider of the left panel will trace out the piecewise function.  Simultaneously, the domain will be traced in the middle panel, and the range in the right panel.</p>
+                        </instructions>
+                    </interactive>
+                </figure>
+
+                <p>Generally, we load an interactive into an HTML <c>iframe</c> to sandbox (isolate) it from other interactives.  We does this for your own protection.  So, for example, one interactive cannot talk to another.  If two <tag>slate</tag> need to communicate, then they are related, and should be placed into a single <tag>interactive</tag>, allowed to layout themselves, or grouped within a <tag>sidebyside</tag> allowing finer control.  Even if we have this under control, you might still enjoy reading <url href="http://mikecavaliere.com/your-js-is-a-mess-javascript-namespacing/">Your JS is a Mess</url> at <c>mikecavaliere.com/your-js-is-a-mess-javascript-namespacing/</c>.</p>
+            </subsection>
+
+            <subsection>
+                <title>CalcPlot3D</title>
+                <idx>CalcPlot3D</idx>
+
+                <p>CalcPlot3D is a Javascript application for creating, visualizing, and understanding plots of 3D surfaces.  So it would be an ideal companion to a book on multivariate calculus, but should be useful in other courses of study.</p>
+
+                <p>To use it, find find the <url href="http://www.monroecc.edu/faculty/paulseeburger/calcnsf/CalcPlot3D/">online app version</url> at<cd>http://www.monroecc.edu/faculty/paulseeburger/calcnsf/CalcPlot3D/</cd>Create a plot and adjust the image to a viewpoint and scale you like.  Then, click the menu icon in the upper-left and choose <c>File</c>.  From here you can save a <init>PNG</init> image for the static version, but you also want to select <c>Encode View in URL</c>.  Now your browser address bar is filled with a query string (<em>all</em> the stuff <em>after</em> the question-mark) that has all the information necessary to reproduce your plot (and view).  Copy everything after the first question-mark to the <c>interactive/code</c> element.  Be sure to replace any ampersands by <c>&amp;amp;</c> (see the Author's Guide for more about certain characters in <init>URL</init>s).  Examine the source for the examples below to see how they are authored.</p>
+
+                <figure>
+                    <caption>Intersection of two planes (minimal embedding)</caption>
+                    <interactive platform="calcplot3d" variant="minimal" width="80%">
+                        <code language="url">type=implicit;equation=2x-y+z~0;cubes=16;visible=true;xmin=-2;xmax=2;ymin=-2;ymax=2;zmin=-2;zmax=2;alpha=-1;format=constant;constcol=rgb(61,133,198)&amp;type=parametric;parametric=2;x=-(u+v)/2;y=(u-v)/2;z=v;visible=true;umin=-3;umax=3;usteps=30;vmin=-2;vmax=2;vsteps=15;alpha=193;format=constant;constcol=rgb(255,161,114)&amp;type=text;text=x%20%2B%20y%20%2B%20z%20~%200;visible=true;point=(.5,-2.5,2.1);color=rgb(0,0,0);font=Times%20New%20Roman;fontsize=14pt;bold=false;italic=false;fontmath=true;align=Upper-right&amp;type=text;text=2x%20-%20y%20%2B%20z%20~%200;visible=true;point=(2,2.2,-1.25);color=rgb(0,0,0);font=Times%20New%20Roman;fontsize=14pt;bold=false;italic=false;fontmath=true;align=Upper-right&amp;type=window;hsrmode=0;anaglyph=-1;center=7.006292692220367,5.09036960455127,4.999999999999999,1;focus=0,0,0,1;up=-0.3290568564833397,-0.23907380036690282,0.9135454576426009,1;transparent=true;alpha=140;edgeson=false;faceson=true;showbox=false;showaxes=true;showticks=true;perspective=true;centerxpercent=0.5;centerypercent=0.5;rotationsteps=30;autospin=true;xygrid=false;yzgrid=false;xzgrid=false;gridsonbox=true;gridplanes=false;gridcolor=rgb(128,128,128);xmin=-2;xmax=2;ymin=-2;ymax=2;zmin=-2;zmax=2;xscale=1;yscale=1;zscale=1;zcmin=-4;zcmax=4;zoom=0.655294;xscalefactor=1;yscalefactor=1;zscalefactor=1</code>
+                    </interactive>
+                </figure>
+
+                <figure>
+                    <caption>Probability wavefunction with contours (includes controls)</caption>
+                    <interactive platform="calcplot3d" variant="controls" width="95%" aspect="1:2">
+                        <code language="url">type=jaxlabel;position=middle;math=%255Cpsi_%257Bn_x%252Cn_y%257D(x%252Cy);textonly=false&amp;type=z;z=sin(api*x)sin(bpi*y);visible=true;umin=0;umax=1;vmin=0;vmax=1;grid=50;format=normal;alpha=200;constcol=rgb(255,0,0);view=0;contourcolor=rgb(255,0,0);contourplot=true;showcontourplot=true;firstvalue=-1;stepsize=0.2;numlevels=11;xnum=75;ynum=75;show2d=false;hidesurface=false;hidelabels=false;showprojections=false;surfacecontours=true;projectioncolor=rgba(51,153,0,1);showxygrid=false;showxygridonbox=false&amp;type=slider;slider=a;value=1;steps=2;pmin=1;pmax=3;repeat=true;bounce=true;waittime=40;careful=true;noanimate=true;name=n_x&amp;type=slider;slider=b;value=1;steps=2;pmin=1;pmax=3;repeat=true;bounce=true;waittime=40;careful=true;noanimate=true;name=n_y&amp;type=text;text=0;visible=true;point=(0,0,0);color=rgb(0,0,0);font=Times%20New%20Roman;fontsize=15pt;bold=true;italic=false;fontmath=true;align=Center-left&amp;type=text;text=L;visible=true;point=(1,-0.025,0);color=rgb(0,0,0);font=Times%20New%20Roman;fontsize=14pt;bold=true;italic=false;fontmath=true;align=Center&amp;type=text;text=L;visible=true;point=(-0.05,1,0);color=rgb(0,0,0);font=Times%20New%20Roman;fontsize=14pt;bold=true;italic=false;fontmath=true;align=Center&amp;type=text;text=x;visible=true;point=(0.5,-0.07,0);color=rgb(0,0,0);font=Times%20New%20Roman;fontsize=14pt;bold=true;italic=false;fontmath=true;align=Center&amp;type=text;text=y;visible=true;point=(-0.08,0.5,0);color=rgb(0,0,0);font=Times%20New%20Roman;fontsize=14pt;bold=true;italic=false;fontmath=true;align=Center&amp;type=window;hsrmode=3;anaglyph=-1;center=-7.447051206708178,-2.790794355991455,3.71998429905919,1;focus=0.5,0.5,0.5,1;up=0.39804763218685024,0.14521777837291014,0.9057979241281567,1;transparent=true;alpha=140;twoviews=false;unlinkviews=false;axisextension=0;xaxislabel=%20;yaxislabel=%20;zaxislabel=%20;edgeson=false;faceson=true;showbox=false;showaxes=false;showticks=false;perspective=true;centerxpercent=0.5;centerypercent=0.4;rotationsteps=30;autospin=true;xygrid=false;yzgrid=false;xzgrid=false;gridsonbox=false;gridplanes=true;gridcolor=rgb(128,128,128);xmin=0;xmax=1;ymin=0;ymax=1;zmin=0;zmax=1;xscale=1;yscale=1;zscale=1;zcmin=-4;zcmax=4;zoom=3.543529;xscalefactor=1;yscalefactor=1;zscalefactor=0.5;hidexysliders=true;hidetracevalue=true
+                        </code>
+                    </interactive>
+                </figure>
+
+                <figure>
+                    <caption>Plot of <m>f(x,y)=\dfrac{1}{y-x^2}</m> on <m>[-2,2]\times[-2,2] (full application)</m></caption>
+                    <interactive platform="calcplot3d" variant="application" width="95%" aspect="10:13">
+                        <code language="url">type=z;z=1/(y-x^2);visible=true;umin=-2;umax=2;vmin=-2;vmax=2;grid=30;format=normal;alpha=-1;constcol=rgb(255,0,0);contourcolor=red&amp;type=window;hsrmode=3;anaglyph=-1;center=5.529712854135209,7.349875454071844,3.9244880634856956,1;focus=0,0,0,1;up=-0.26875302682986874,-0.2884991397174344,0.9189886054528014,1;transparent=true;alpha=140;edgeson=true;faceson=true;showbox=true;showaxes=true;showticks=true;perspective=true;centerxpercent=0.5;centerypercent=0.5;rotationsteps=30;autospin=true;xygrid=false;yzgrid=false;xzgrid=false;gridsonbox=true;gridplanes=false;gridcolor=rgb(128,128,128);xmin=-2;xmax=2;ymin=-2;ymax=2;zmin=-4;zmax=4;xscale=1;yscale=1;zscale=1;zcmin=-4;zcmax=4;zoom=0.468667;xscalefactor=1;yscalefactor=1;zscalefactor=1</code>
+                        <static>
+                            <image source="images/calcplot3d.png" width="45%"/>
+                        </static>
+                    </interactive>
+                </figure>
+
+            </subsection>
+        </section>
+
+        <section xml:id="section-interactive-free">
+            <title>Free Interactive Elements</title>
+            <idx><h>interactive elements</h><h>free</h></idx>
+            <idx><h>embedded interactive elements</h><h>free</h></idx>
+
+            <introduction>
+                <!-- First paragraph duplicated in previous section -->
+                <p>When outputting Web page versions, it is possible to embed a variety of dynamic interactive elements.  In a <latex />/PDF version, these will necessarily need to be replaced by some static substitute, such as a screenshot.  See <xref ref="section-sage-cells" text="type-global" /> for the specifics of embedding instances of the Sage Cell Server, which is more elaborate, and not entirely similar.</p>
+
+                <p>Interactives in this section can be used without paying any fees.  However, their use is generally encumbered by copyright and/or licensing restrictions, and may limit the license you can use on your own work.  So carefully study copyrights, licenses, and terms of use.  See <xref ref="section-interactive-open" text="type-global" /> for more interactives that are free as in <q>freedom</q> or <foreign xml:lang="fr-FR">liberté</foreign>.</p>
+
+                <p>(2018-03-05) Almost everything in this section is under active development and not stable yet.  Feel free to experiment and make suggestions and requests.  This page takes a while to completely load, so be patient.</p>
+            </introduction>
+
+            <subsection>
+                <title>GeoGebra (Cloud)</title>
+                <idx><h>Geogebra</h><h>cloud</h></idx>
+                <idx><h>Geogebra</h><h>material</h></idx>
 
                 <p>A Geogebra <term>material</term> is something you might use in a class.  It could also be called an interactive demonstration.  Go browsing at <url href="https://www.geogebra.org/materials/">www.geogebra.org/materials</url> and find something appropriate for your project.  Or make an account and create your own.</p>
 
                 <p>Once you find a material that looks instructive, it will be at a <init>URL</init> such as<cd>https://www.geogebra.org/m/KGn2d4Qd</cd> and you want to pick off the identifier on the end, in this case <c>KGn2d4Qd</c>.  Then author<cd>&lt;interactive geogebra="KGn2d4Qd" /&gt;</cd>  At this writing (2018-02-04) you will want to place this inside a <c>figure</c>, with a caption, as we do right now with material <c>KGn2d4Qd</c>.</p>
 
+                <p>The shape of the material will be fixed, so guess (or measure with an on-screen ruler), the aspect ratio and use that in the <tag>interactive</tag> element.</p>
+
                 <figure>
                     <caption>Right Triangle Paradox</caption>
-                    <interactive geogebra="KGn2d4Qd">
+                    <interactive geogebra="KGn2d4Qd" width="70%" aspect="9:5">
                         <static>
                             <image source="images/right-triangle-paradox.png" />
                         </static>
@@ -3642,7 +3999,45 @@ the xsltproc executable.
             </subsection>
 
             <subsection>
-                <title>Desmos Graphs</title>
+                <title>Geogebra (Source)</title>
+
+                <p>Better might be designing your own material, retaining your copyright, and using one of Geogebra's <q>Apps</q> to embed the material in your document.  (But note, use of the App comes with licensing restrictions.)  <pretext /> will handle the technical details for you.<ol>
+                    <li>Use Geogebra to make a material.  Maybe you need to install a desktop program that allows you to do this.  Then export, or otherwise discover the <q>base64-encoded</q> version which may be identified by <c>ggb</c>.  See the source of this page for examples of what this looks like.</li>
+                    <li>Mimic the source of the examples below.</li>
+                    <li>Long-run it will be better to park these strings in files (in a <c>code</c> subdirectory?) and <tag>xi:include</tag> them with the <attr>parse</attr> attribute set to <c>text</c>.  But we do not want to impede newcomer's quickstart with that problematic switch.</li>
+                    <li>This is preliminary and subject to change.  Do not get carried away yet.  Please report problems or request features.</li>
+                </ol></p>
+
+                <p>The sliders on the next applet seem to be at fixed locations.  Make it too skinny and you will never see them, rendering the material useless.  However the window will pan (drag with a mouse) and zoom (scroll wheel of a mouse), so you can adjust that way.</p>
+
+                <figure>
+                    <caption>GeoGebra: astroids (from Dave Rosoff)</caption>
+                    <interactive xml:id="geogebra-astroid" platform="geogebra" width="100%" aspect="4:3" source="code/rosoff/astroid.ggb">
+                    </interactive>
+                </figure>
+
+                <p>Now the controls are in the upper-left corner, so we can more easily make the window a little smaller.  Pan and zoom to put the action where you can see it better.</p>
+
+                <figure>
+                    <caption>GeoGebra: cycloids (from Dave Rosoff)</caption>
+                    <interactive xml:id="geogebra-cycloid" platform="geogebra" width="75%" aspect="3:4" source="code/rosoff/epi-hypocycloids-default.ggb">
+                    </interactive>
+                </figure>
+
+                <p>You will need to zoom out a bit, and then pan over some, to see all the pieces of the next GeoGebra material.</p>
+
+                <figure>
+                    <caption>GeoGebra: a constructive <q>proof</q> that SAS congruence holds in Euclidean geometry (from Tevian Dray)</caption>
+                    <interactive xml:id="geogebra-SAS" platform="geogebra" width="100%" aspect="1:1" source="code/dray/SAS.ggb">
+                        <instructions>
+                            <p>Drag some of the points and some of the circles to change them, and watch the remainder react.</p>
+                        </instructions>
+                    </interactive>
+                </figure>
+            </subsection>
+
+            <subsection>
+                <title>Desmos Graphs (Cloud)</title>
                 <idx>Desmos graphs</idx>
 
                 <p><term>Desmos</term> provides interactive graphing applications.  The following example was created by Ann Cary and made available via the <q>Share</q> function of Desmos.  You can make your own Desmos graph, choose the <q>Share</q> icon, and the <q>Embed</q> option, to get a <init>URL</init> such as <cd>https://www.desmos.com/calculator/ttox1bvxku</cd>  You want to pick off the identifier on the end, in this case <c>ttox1bvxku</c>, then author<cd>&lt;interactive desmos="ttox1bvxku" /&gt;</cd> as we have done here.</p>
@@ -3662,357 +4057,26 @@ the xsltproc executable.
             </subsection>
 
             <subsection>
-                <title>CalcPlot3D</title>
-                <idx>CalcPlot3D</idx>
+                <title>Wolfram CDF (Cloud)</title>
+                <idx>Wolfram CDF</idx>
 
-                <p>CalcPlot3D is a Javascript application for creating, visualizing, and understanding plots of 3D surfaces.  So it would be an ideal companion to a book on multivariate calculus, but should be useful in other course of study.</p>
+                <p>You can embed interactive demonstrations created in Wolfram's <term>Computable Document Format</term> so that they will be played with the Wolfram CDF Player<trademark />.  Once you create and save a demonstration, you want to determine the UUID that is the identifier of your demonstration.  For example, <xref ref="wolfram-cdf-cellular-automata" text="type-global" /> is identified by <c>9fa2acff-c809-4b7f-a73b-c59ace36affc</c>.  This identifier is enough to create the <pretext /> to embed the demonstration.  See <url href="https://reference.wolfram.com/language/howto/DeployInteractiveContentInTheWolframCloud.html" /> for information about creating your demonstration.</p>
 
-                <p>To use it, find find the <url href="http://www.monroecc.edu/faculty/paulseeburger/calcnsf/CalcPlot3D/">online app version</url> at<cd>http://www.monroecc.edu/faculty/paulseeburger/calcnsf/CalcPlot3D/</cd>Create a plot and adjust the image to a viewpoint and scale you like.  Then, click the menu icon in the upper-left and choose <c>File</c>.  From here you can save a <init>PNG</init> iamge for the static version, but you also want to select <c>Encode View in URL</c>.  Now your browser address bar with a query string that has all the information about your plot so it can reproduced.  Copy everything after the first question-mark to <c>interactive/code</c> element.  Be sure to replace any ampersands by <c>&amp;amp;</c>.  Examine the source to see how this example was authored.</p>
+                <p><url href="http://www.wolfram.com/cdf/adopting-cdf/deploying-cdf/web-delivery-cloud.html" /> explains hosting CDF files at the Wolfram Cloud, and is the source of <xref ref="wolfram-cdf-cellular-automata" text="type-global" />.  You can learn about powering your CDF with Wolfram Cloud Credits at <url href="https://www.wolfram.com/cloud-credits/" />.  CDF is a public format, and the FreeCDF<trademark /> license is a variant of a Creative Commons BY-SA license, see <url href="http://www.wolfram.com/cdf/adopting-cdf/licensing-options.html" />.</p>
 
-                <figure>
-                    <caption>Plot of <m>f(x,y)=\dfrac{1}{y-x^2}</m> on <m>[-2,2]\times[-2,2]</m></caption>
-                    <interactive calcplot3d="url">
-                        <code language="url">type=z;z=1/(y-x^2);visible=true;umin=-2;umax=2;vmin=-2;vmax=2;grid=30;format=normal;alpha=-1;constcol=rgb(255,0,0);contourcolor=red&amp;type=window;hsrmode=3;anaglyph=-1;center=5.529712854135209,7.349875454071844,3.9244880634856956,1;focus=0,0,0,1;up=-0.26875302682986874,-0.2884991397174344,0.9189886054528014,1;transparent=true;alpha=140;edgeson=true;faceson=true;showbox=true;showaxes=true;showticks=true;perspective=true;centerxpercent=0.5;centerypercent=0.5;rotationsteps=30;autospin=true;xygrid=false;yzgrid=false;xzgrid=false;gridsonbox=true;gridplanes=false;gridcolor=rgb(128,128,128);xmin=-2;xmax=2;ymin=-2;ymax=2;zmin=-4;zmax=4;xscale=1;yscale=1;zscale=1;zcmin=-4;zcmax=4;zoom=0.468667;xscalefactor=1;yscalefactor=1;zscalefactor=1</code>
-                        <static>
-                            <image source="images/calcplot3d.png" width="45%"/>
-                        </static>
-                    </interactive>
-                </figure>
-            </subsection>
+                <p>The first example here (<xref ref="wolfram-cdf-sine-curve" text="type-global" />) was developed by Itai Seggev, a Senior Kernel Developer at Wolfram.</p>
 
+                <p>(2018-04-02) These behave as expected in Chrome, but perhaps not in Firefox.  Testing welcome.</p>
 
-            <subsection>
-                <title>JSXGraph</title>
-                <idx>JSXGraph</idx>
-
-                <p>The plot below is the curve <m>r=a+b\theta</m> in polar coordinates, for <m>0\leq\theta\leq 8\pi</m>.  It may be manipulated with the sliders to control the shape of the curve.  Point <m>A</m> is contrained to the curve, but may be dragged to a new location. At <m>A</m> the tangent line and normal line are plotted as dashed red lines.  Use the controls in the lower left to adjust the viewing window.  This <url href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Archimedean_spiral">example</url> is taken from the JSXGraph <url href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Category:Examples">example wiki</url>.  Width is 75<percent /> and aspect ratio is 4:3.</p>
-
-                <figure>
-                    <caption>The Archimedian Spiral <m>r = a + b\theta</m>, <m>0\leq\theta\leq 8\pi</m></caption>
-                    <idx>Archimedian Spiral</idx>
-                    <jsxgraph xml:id="jsxgraph-archimedian-spiral" width="75%" aspect="4:3">
-                        <!-- http://jsxgraph.uni-bayreuth.de/wiki/index.php/Archimedean_spiral -->
-                        <input>
-                        var board = JXG.JSXGraph.initBoard('jsxgraph-archimedian-spiral', {boundingbox: [-10, 10, 10, -10]});
-                        var a = board.create('slider', [[1,8],[5,8],[0,1,4]],{name:'a'});
-                        var b = board.create('slider', [[1,9],[5,9],[0,0.25,4]],{name:'b'});
-
-                        var c = board.create('curve', [function(phi){return a.Value()+b.Value()*phi; }, [0, 0],0, 8*Math.PI],
-                                     {curveType:'polar', strokewidth:4});
-
-                        var g = board.create('glider', [c]);
-                        var t = board.create('tangent', [g], {dash:2,strokeColor:'#a612a9'});
-                        var n = board.create('normal', [g], {dash:2,strokeColor:'#a612a9'});
-                        </input>
-                    </jsxgraph>
+                <figure xml:id="wolfram-cdf-sine-curve">
+                    <caption>Variable Sine Curve</caption>
+                    <interactive wolfram-cdf="fe1be5c3-d105-43d0-bf4b-9f2eb1028b84" />
                 </figure>
 
-                <p><url href="http://jsxgraph.uni-bayreuth.de/wp/index.html">JSXGraph</url> is a <q>cross-browser JavaScript library for interactive geometry, function plotting, charting, and data visualization in the web browser.</q>  Place Javascript inside an <c>input</c> element inside a <c>jsxgraph</c> element.  You will want an <c>xml:id</c> on the <c>jsxgraph</c> element, since it is what will be used as the HTML <c>id</c> on the <c>div</c> that will hold the demonstration, and will typically be used in an early call to the <c>initBoard()</c> method.</p>
-
-                <p>Here is a more elaborate example, from the <url href="http://jsxgraph.uni-bayreuth.de/showcase/">JSXGraph Showcase</url>, titled <url href="http://jsxgraph.uni-bayreuth.de/showcase/infinity.html">Infinity</url>.  Notice that the code here contains a problematic less-than character for a comparison in a loop.  We could replace it by the <c>&amp;lt;</c> XML escape sequence, but we have instead chosen the expedient of using a <c>CDATA</c> construction to wrap the entire hunk of code (see the source for exact syntax).  This might be the best solution if the code contains many HTML strings that need to be protected from the XML parser.</p>
-
-                <p>There are two active sliders to control the shape and shading of the graphic, and hovering the mouse near one of the edges will highlight the entirety of one of the 30 quadrangles.  Finally, each of the four red corners may be dragged to a new location.  Width is 60<percent /> and aspect ratio is the default, 1:1, <ie /> a square.</p>
-
-                <figure>
-                    <caption>Infinity, from the JSXGraph Showcase</caption>
-                    <jsxgraph xml:id="jsxgraph-infinity" width="60%">
-                        <!-- http://jsxgraph.uni-bayreuth.de/showcase/infinity.html -->
-                        <input><![CDATA[
-                        JXG.Options.renderer = 'canvas';
-                        var board = JXG.JSXGraph.initBoard('jsxgraph-infinity', {
-                                boundingbox: [-9, 8, 9, -10],
-                                keepaspectreatio: true,
-                                axis: false,
-                                grid: false,
-                                shownavigation: false
-                            });
-
-                        // construction
-                        board.suspendUpdate();
-                        var S = board.create('slider', [[-5,-6],[5,-6],[0,0.85,1]], {
-                            name:'Whirl'
-                        });
-                        var hue = board.create('slider', [[-5,-7],[5,-7],[0,20.5,36]], {
-                            name:'Colors'
-                        });
-
-                        var points = new Array();
-                        points[0] = board.create('point',[5, 5], {name:' '});
-                        points[1] = board.create('point',[-5, 5], {name:' '});
-                        points[2] = board.create('point',[-5, -5], {name:' '});
-                        points[3] = board.create('point',[5, -5], {name:' '});
-
-                        function quadrangle(pt, n) {
-                            var col;
-                            var arr = new Array();
-                            for(var i = 0; i < 4; i++) {
-                                arr[i] = board.create('point',
-                                    [function(t) {
-                                        return function () {var x = pt[t].X();
-                                                var x1 = pt[(t+1)%4].X();
-                                                var s = S.Value();
-                                                return x+(x1-x)*s;
-                                         }}(i),
-                                    function(t) {
-                                        return function () {var y = pt[t].Y();
-                                                var y1 = pt[(t+1)%4].Y();
-                                                var s = S.Value();
-                                                return y+(y1-y)*s;
-                                         }}(i)
-                                    ],
-                                {size:1, name: "", withLabel: false, visible: false});
-                            }
-                            col =  function(){return JXG.hsv2rgb(hue.Value()*n,0.7,0.9);};
-                            board.create('polygon',pt, {fillColor:col});
-                            if(n>0)
-                                quadrangle(arr, --n);
-                        }
-                        quadrangle(points,30);
-
-                        board.unsuspendUpdate();
-                        ]]>
-                        </input>
-                    </jsxgraph>
+                <figure xml:id="wolfram-cdf-cellular-automata">
+                    <caption>Cellular Automata</caption>
+                    <interactive wolfram-cdf="9fa2acff-c809-4b7f-a73b-c59ace36affc" />
                 </figure>
-
-
-                <p>Here are the two new examples, but the first has been given an extreme aspect ratio, and both are smaller overall.  They have been included in a <c>sidebyside</c> layout element (see <xref ref="section-side-by-side" text="type-global" />) so they can be placed horizontally across the page.  (Note: placement in a <c>sidebyside</c> is not yet reflected in the <pretext /> schema.)  These are again from the <url href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Category:Examples">example wiki</url>, the left being Fermat's Spiral and the right being a demonstration of B-splines.</p>
-
-                <sidebyside widths="35% 55%">
-                    <jsxgraph xml:id="jsxgraph-fermats-spiral" aspect="5:8">
-                        <!-- https://jsxgraph.uni-bayreuth.de/wiki/index.php/Fermat%27s_spiral -->
-                        <input>
-                        var board = JXG.JSXGraph.initBoard('jsxgraph-fermats-spiral', {boundingbox: [-10, 10, 10, -10]});
-                        var aa = board.create('slider', [[1,9],[5,9],[0,1,4]],{name:'a'});
-                        var c1 = board.create('curve', [function(phi){return aa.Value()*Math.sqrt(phi); }, [0, 0],0, 8*Math.PI],
-                                     {curveType:'polar', strokewidth:4});        
-                        var c2 = board.create('curve', [function(phi){return -aa.Value()*Math.sqrt(phi); }, [0, 0],0, 8*Math.PI],
-                                     {curveType:'polar', strokewidth:4});
-                        </input>
-                    </jsxgraph>
-                    <jsxgraph xml:id="jsxgraph-bspline">
-                        <!-- https://jsxgraph.uni-bayreuth.de/wiki/index.php/B-splines -->
-                        <input><![CDATA[
-                        var brd = JXG.JSXGraph.initBoard('jsxgraph-bspline',
-                        {boundingbox:[-4,4,4,-4],keepaspectratio:true,axis:true});
-
-                        var p = [], col = 'red'; 
-                        p.push(brd.create('point',[2,1],{strokeColor:col,fillColor:col})); 
-                        p.push(brd.create('point',[0.75,2.5],{strokeColor:col,fillColor:col})); 
-                        p.push(brd.create('point',[-0.3,0.3],{strokeColor:col,fillColor:col})); 
-                        p.push(brd.create('point',[-3,1],{strokeColor:col,fillColor:col}));      
-                        p.push(brd.create('point',[-0.75,-2.5],{strokeColor:col,fillColor:col}));
-                        p.push(brd.create('point',[1.5,-2.8],{strokeColor:col,fillColor:col}));  
-                        p.push(brd.create('point',[2,-0.5],{strokeColor:col,fillColor:col})); 
-
-                        var c = brd.create('curve', JXG.Math.Numerics.bspline(p,4), 
-                                       {strokecolor:'blue', strokeOpacity:0.6, strokeWidth:5}); 
-
-                        var addSegment = function() {
-                           brd.suspendUpdate();
-                           p.push(brd.create('point',[Math.random()*8-4,Math.random()*8-4],
-                                   {strokeColor:col,fillColor:col})); 
-                           brd.unsuspendUpdate();
-                        };
-
-                        var removeSegment = function() {
-                           brd.suspendUpdate();
-
-                           if (p.length>2) {
-                               brd.removeObject(p[p.length-1]);  // remove the last point from the list of objects
-                               p.splice(p.length-1,1);           // remove the last point from the point array.
-                           }
-                           brd.unsuspendUpdate();
-                        };
-                        ]]>
-                        </input>
-                    </jsxgraph>
-                </sidebyside>
-
-
-                <p>Now, a piecewise function you can control, with traces of the domain values and range values in two separate JSXGraph boards, laid out using the <c>sidebyside</c> layout element.</p>
-
-                <figure>
-                    <caption>Piecewise Function</caption>
-                    <jsxgraph xml:id="box_p3" width="40%">
-
-                        <controls>
-                            <input type="button" value="Animate On/Off" onkeypress="animate_p3(s_p3,75,100);" onclick="animate_p3(s_p3,75,100);" style="font-size:16px;"/>
-                            <input type="button" value="Clear Traces" onkeypress="clearTraces_p3();" onclick="clearTraces_p3();" style="font-size:16px;"/>
-                        </controls>
-                    </jsxgraph>
-                </figure>
-
-                <sidebyside widths="40% 40%" margins="auto">
-                    <figure>
-                        <caption>Domain</caption>
-                        <jsxgraph xml:id="box2_p3" />
-                    </figure>
-
-                    <figure>
-                        <caption>Range</caption>
-                        <jsxgraph xml:id="box3_p3">
-                            <input><![CDATA[
-                            var board_p3 = JXG.JSXGraph.initBoard('box_p3', {boundingbox: [-6, 8, 4, -8], axis: true,grid:true,showCopyright:false,showNavigation:false});
-                            var board2_p3 = JXG.JSXGraph.initBoard('box2_p3', {boundingbox: [-6, 8, 4, -8],axis:true,grid:true,showCopyright:false,showNavigation:false});
-                            var board3_p3 = JXG.JSXGraph.initBoard('box3_p3', {boundingbox: [-6, 8, 4, -8],axis:true,grid:true,showCopyright:false,showNavigation:false});
-                            board_p3.renderer.container.style.backgroundColor = '#ffcc99';          // background color board
-                            board2_p3.renderer.container.style.backgroundColor = '#ffcc99';
-                            board3_p3.renderer.container.style.backgroundColor = '#ffcc99';
-                            var xax1_p3 = board_p3.create('axis', [[0,0], [0,1]]);
-                            var yax1_p3 = board_p3.create('axis', [[0,0], [1,0]]);
-                            var xax2_p3 = board2_p3.create('axis', [[0,0], [0,1]]);
-                            var yax2_p3 = board2_p3.create('axis',[[0,0],[1,0]]);
-                            var xax3_p3 = board3_p3.create('axis',[[0,0], [0,1]]);
-                            var yax3_p3 = board3_p3.create('axis',[[0,0],[1,0]]);
-                            board_p3.create('ticks',[xax1_p3,[-6,-5,-4,-3,-2,-1,0,1,2,3,4]]);
-                            board_p3.create('ticks',[yax1_p3,[-8,-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8]]);
-                            board2_p3.create('axis', [[0,0], [0,1]]);
-                            board2_p3.create('ticks',[xax2_p3,[-6,-5,-4,-3,-2,-1,0,1,2,3,4]]);
-                            board2_p3.create('ticks',[yax2_p3,[-8,-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8]]);
-                            board3_p3.create('axis',[[0,0],[0,1]]);
-                            board3_p3.create('ticks',[xax3_p3,[-6,-5,-4,-3,-2,-1,0,1,2,3,4]]);
-                            board3_p3.create('ticks',[yax3_p3,[-8,-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8]]);
-
-                            var f_p3 = function(x) {
-                                if (x >=-4 && x < 1) {
-                                    return -(x+2)*(x+2) + 2;
-                                }
-                                else if (x >= 1 && x <= 3) {
-                                    return x*x-x;
-                                }
-                                else {return -1000;
-                                }
-                            };
-
-                            var dfun_p3 = function(x) {
-                                if (x>=-4 && x<0.7) {
-                                    return x;
-                                }
-                                else if (x> 1.3 && x <= 3) {
-                                    return x;
-                                }
-                                else {return -1000;
-                                }
-                            };
-
-                            graph_p3=board_p3.create('functiongraph',[f_p3,-4,3],{strokeColor:'#000000'});
-                            var ep1_p3=board_p3.create('point',[-4,-2],{strokeColor:'#000000',fillColor:'#000000',name:''});
-                            var ep2_p3=board_p3.create('point',[1,-7],{strokeColor:'#000000',fillColor:'#FFFFFF',name:''});
-                            var ep3_p3=board_p3.create('point',[1,0],{strokeColor:'#000000',fillColor:'#FFFFFF',name:''});
-                            var ep4_p3=board_p3.create('point',[3,6],{strokeColor:'#000000',fillColor:'#000000',name:''});
-                            ep1_p3.setAttribute({fixed:true});
-                            ep2_p3.setAttribute({fixed:true});
-                            ep3_p3.setAttribute({fixed:true});
-                            ep4_p3.setAttribute({fixed:true});
-
-                            var s_p3 = board_p3.create('slider',[[-4.5,-7],[-1,-7],[-4,-4,3]]);
-                            var tracepoint_p3=board_p3.create('point',[function() {return dfun_p3(s_p3.Value());},function() {return f_p3(s_p3.Value());}],{name:''});
-                            // domain:
-                            var b2p1_p3 = board2_p3.create('point', [function(){return tracepoint_p3.X()},0], 
-                                        {fixed: true, trace: true, strokeColor: '#ff0000', name: 'D'});
-                            // cosine:
-                            var b2p2_p3 = board3_p3.create('point', [
-                                        0, function(){return tracepoint_p3.Y();}], 
-                                        {fixed: true, trace: true, strokeColor: '#0000ff', fillColor:'#0000ff',name: 'R'});
-                            // Dependencies (only necessary if b2p1 or b2p2 is deleted)
-
-                            board_p3.addChild(board2_p3);
-                            board_p3.addChild(board3_p3);
-
-                            function clearTraces_p3() {
-                            JXG.JSXGraph.freeBoard(board_p3);
-                            JXG.JSXGraph.freeBoard(board2_p3);
-                            JXG.JSXGraph.freeBoard(board3_p3);
-                            board_p3 = JXG.JSXGraph.initBoard('box_p3', {boundingbox: [-6, 8, 4, -8],axis: true,grid:true,showCopyright:false,showNavigation:false});
-                            board2_p3 = JXG.JSXGraph.initBoard('box2_p3', {boundingbox: [-6, 8, 4, -8],axis:true,grid:true,showCopyright:false,showNavigation:false});
-                            board3_p3 = JXG.JSXGraph.initBoard('box3_p3', {boundingbox: [-6, 8, 4, -8],axis:true,grid:true,showCopyright:false,showNavigation:false});
-                            xax1_p3 = board_p3.create('axis', [[0,0], [0,1]]);
-                            yax1_p3 = board_p3.create('axis', [[0,0], [1,0]]);
-                            xax2_p3 = board2_p3.create('axis', [[0,0], [0,1]]);
-                            yax2_p3 = board2_p3.create('axis',[[0,0],[1,0]]);
-                            xax3_p3 = board3_p3.create('axis',[[0,0], [0,1]]);
-                            yax3_p3 = board3_p3.create('axis',[[0,0],[1,0]]);
-                            board_p3.create('ticks',[xax1_p3,[-6,-5,-4,-3,-2,-1,0,1,2,3,4]]);
-                            board_p3.create('ticks',[yax1_p3,[-8,-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8]]);
-                            board2_p3.create('axis', [[0,0], [0,1]]);
-                            board2_p3.create('ticks',[xax2_p3,[-6,-5,-4,-3,-2,-1,0,1,2,3,4]]);
-                            board2_p3.create('ticks',[yax2_p3,[-8,-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8]]);
-                            board3_p3.create('axis',[[0,0],[0,1]]);
-                            board3_p3.create('ticks',[xax3_p3,[-6,-5,-4,-3,-2,-1,0,1,2,3,4]]);
-                            board3_p3.create('ticks',[yax3_p3,[-8,-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8]]);
-
-                            f_p3 = function(x) {
-                                if (x >=-4 && x < 1) {
-                                    return -(x+2)*(x+2) + 2;
-                                }
-                                else if (x >= 1 && x <= 3) {
-                                    return x*x-x;
-                                }
-                                else {return -1000;
-                                }
-                            };
-
-                            dfun_p3 = function(x) {
-                                if (x>=-4 && x<0.7) {
-                                    return x;
-                                }
-                                else if (x> 1.3 && x <= 3) {
-                                    return x;
-                                }
-                                else {return -1000;
-                                }
-                            };
-
-                            graph_p3=board_p3.create('functiongraph',[f_p3,-4,3],{strokeColor:'#000000'});
-                            ep1_p3=board_p3.create('point',[-4,-2],{strokeColor:'#000000',fillColor:'#000000',name:''});
-                            ep2_p3=board_p3.create('point',[1,-7],{strokeColor:'#000000',fillColor:'#FFFFFF',name:''});
-                            ep3_p3=board_p3.create('point',[1,0],{strokeColor:'#000000',fillColor:'#FFFFFF',name:''});
-                            ep4_p3=board_p3.create('point',[3,6],{strokeColor:'#000000',fillColor:'#000000',name:''});
-                            ep1_p3.setAttribute({fixed:true});
-                            ep2_p3.setAttribute({fixed:true});
-                            ep3_p3.setAttribute({fixed:true});
-                            ep4_p3.setAttribute({fixed:true});
-                            s_p3 = board_p3.create('slider',[[-4.5,-7],[-1,-7],[-4,-4,3]]);
-                            tracepoint_p3=board_p3.create('point',[function() {return dfun_p3(s_p3.Value());},function() {return f_p3(s_p3.Value());}],{name:''});// domain:
-                            b2p1_p3 = board2_p3.create('point', [function(){return tracepoint_p3.X()},0], 
-                                         {fixed: true, trace: true, strokeColor: '#ff0000', name: 'D'});
-                            // cosine:
-                            b2p2_p3 = board3_p3.create('point', [
-                                         0, function(){return tracepoint_p3.Y();}], 
-                                         {fixed: true, trace: true, strokeColor: '#0000ff', fillColor:'#0000ff',name: 'R'});
-                            // Dependencies (only necessary if b2p1 or b2p2 is deleted)
-
-                            board_p3.addChild(board2_p3);
-                            board_p3.addChild(board3_p3);
-                            }
-                            // Animation
-                            var animated = false;
-                            function animate_p3(point, direction, count) {
-                               if(animated) {
-                                  point.stopAnimation();
-                                  animated = false;
-                               } else {
-                                  point.startAnimation(direction, count);
-                                  animated = true;
-                               }
-                            }
-                            // Generic Hide/Show
-                            function toggle(id) {
-                                    var state = document.getElementById(id).style.display;
-                                        if (state == 'block') {
-                                            document.getElementById(id).style.display = 'none';
-                                        } else {
-                                            document.getElementById(id).style.display = 'block';
-                                        }
-                                    }
-                            ]]>
-                            </input>
-                        </jsxgraph>
-                    </figure>
-                </sidebyside>
-
-                <p>Be careful about the Javascript code when there are several on the same page, as duplicate variables may affect one another's performance adversely.</p>
             </subsection>
         </section>
 
@@ -4021,33 +4085,54 @@ the xsltproc executable.
 
             <p>First, a gratuitous reference to Exercise<nbsp /><xref ref="exercises-cosine-derivative" /> about the derivative of a cosine.</p>
 
-            <p>Embedded videos can make sense for a web version of your document. This is a video promoting the University of Puget Sound to potential new students.  Support is limited to HTML5-capable browsers.  The file format can be MP4, Ogg, or WebM, though this may vary depending upon the browser.  The example below is an old promotional video from the University of Puget Sound, in WebM format.  The <c>source</c> attribute should <em>not</em> include an extension, since the three possibilities above will be searched for preferentially (you need only provide one, but more will increase the chances every browser will find a compatible format).</p>
+            <p>You can specify a video by a filename if you host it as part of your document, or a <init>URL</init> giving a location on the Internet.  There are a few extra features for YouTube videos, which are near the bottom of this page, so look there first if that meets your needs.</p>
+
+            <p>Embedded videos can make sense for a web version of your document. This is a video promoting the University of Puget Sound to potential new students, in WebM format.  Support is limited to HTML5-capable browsers.  The file format can be MP4, Ogg, or WebM, though this may vary depending upon the browser.  Use a <tag>video</tag> element, within either a <tag>figure</tag> (numbered, captioned) or a <tag>sidebyside</tag> for more precise control.   The <attr>source</attr> attribute in this first example <em>does not</em> include an extension, and so three possibilities above will be searched for preferentially (you need only provide the video in one format, but providing additional versions will increase the chances every browser will find a compatible format).</p>
 
             <figure>
                 <caption>University of Puget Sound Promotional Video</caption>
-                <video source="images/ups-visitor-guide-360" width="80%"/>
+                <video source="images/ups-visitor-guide-360" width="80%" preview="images/ups-promo-frame-one.jpg" />
             </figure>
 
-            <p>YouTube<idx><h>YouTube videos</h></idx><idx><h>videos</h><h>YouTube</h></idx> videos may be embedded with only knowledge of the <q>ID</q>.  This a string of eleven seemingly random characters that show up in the URL when you watch a video.  For the Led Zeppelin performance below, the ID is <c>hAzdgU_kpGo</c>, which you might normally watch directly from the URL <url href="https://www.youtube.com/watch?v=hAzdgU_kpGo" />.  Screen real estate is determined by specifying an optional <c>@width</c> attribute as a percentage, and aspect ratio is preserved on the assumption of HD video (16:9).</p>
-
-            <p>Enhancements will include other aspect ratios.</p>
-
-            <p>These may be placed <q>standalone</q> in a <c>&lt;sidebyside&gt;</c>, but are designed mostly on the assumption that they are wrapped in a <c>figure</c> with a <c>title</c> (which is distinct from a <c>caption</c>).</p>
+            <p>You can replace the <q>preview</q> image of a video with one of your own making.  <init>HTML</init> refers to this as the <term>poster</term>, presumably because it advertises the video.  The image you make should be of the same quality as the video, and with the same aspect-ratio, and is presumably one of the frames of the video.  So a screenshot is the likely avenue.  (Maybe we will have advice on how to do this easily, or see <url href="https://github.com/rbeezer/mathbook/issues/853" />.)  On the <tag>video</tag> tag, include a <attr>preview</attr> attribute which is the name of an image file, including a relative path.  (JPEG or PNG formats are best.  JPEG may be smaller for video screenshots, while PNG is lossless and so may work better for diagrams.)</p>
 
             <figure>
-                <title>Kashmir (Live), Led Zeppelin</title>
-                <caption>Kashmir (Live), Led Zeppelin. O2 Arena, London. December 10, 2007. (8:55)</caption>
-                <idx><h>Led Zeppelin video</h></idx>
-
-                <video youtube="hAzdgU_kpGo" width="70%" xml:id="led-zeppelin-kashmir" />
+                <caption>University of Puget Sound Promotional Video</caption>
+                <video source="images/ups-visitor-guide-360" width="80%" preview="images/ups-promo-preview.jpg" />
             </figure>
+
+            <p>If you find the posters distracting or objectionable, you can cover them up by requesting a generic poster with the attribute-value pair: <c>preview = "generic"</c>.</p>
+
+            <figure>
+                <caption>University of Puget Sound Promotional Video</caption>
+                <video source="images/ups-visitor-guide-360" width="80%" preview="generic" />
+            </figure>
+
+            <p>You can use a very similar construction to point to a video hosted somewhere on the Internet, just use a complete <init>URL</init> for the <tag>source</tag> attribute.  Note that if the URL has a query string (parameters following a question-mark), then any ampersands (<ampersand />) will need to be escaped, so as to not confuse the <init>XML</init> processor (<ie /> use <c>&amp;amp</c>).  Also, the question-mark character needs to <em>not</em> be <init>URL</init>-encoded (<c>%3F</c>), so presumably ed it to be the character.  Here are two examples, the second one uses the <attr>start</attr> and <attr>stop</attr> attributes to limit the video to just the time between the 16-second and 30-second locations.</p>
+
+            <figure>
+                <caption>Sintel (Trailer @480p), <url href="https://durian.blender.org/" /></caption>
+                <video xml:id="video-sintel" source="https://download.blender.org/durian/trailer/sintel_trailer-480p.mp4" width="100%" preview="images/sintel-trailer.jpg" />
+            </figure>
+
+            <!-- http://camendesign.com/code/video_for_everybody/test.html -->
+
+            <figure>
+                <caption>Big Buck Bunny from <q>Video for Everybody</q> Test Page at <url href="http://camendesign.com/code/video_for_everybody/test.htm"><c>camendesign.com/code/video_for_everybody/test.htm</c></url></caption>
+                <video source="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" start="16" end="30" width="70%" preview="images/big-buck-bunny-frame-one.jpg" />
+            </figure>
+
+            <!-- A Coursera URL that expires via digital signature scheme:
+            https://d18ky98rnyall9.cloudfront.net/u5_p4_1_%20chisq_gof.77c96ac0ad8211e498e5e34296ce5455/full/360p/index.webm?Expires=1522800000&Signature=DJKrmAOfuGF4HMmWmQ2nCHnOdoeFzZd7qJzp1cfwOjQa-J~1kGNzwllMxFmGi8UXxt3wTXrhdhTQVcFQNk5nPzAi64mjJkMVu0m~QyKISqzjkFBZJm1NCnkNcbSyOk6WRDj6mjlrxEDaUSD6hHmD04ehumORG3G55Sp5OGEhYnU_&Key-Pair-Id=APKAJLTNE6QMUY6HBC5A -->
+
+            <p>YouTube<idx><h>YouTube videos</h></idx><idx><h>videos</h><h>YouTube</h></idx> videos may be embedded with only knowledge of the <q>ID</q>.  This a string of eleven seemingly random characters that show up in the URL when you watch a video.  For the Led Zeppelin performance below, the ID is <c>hAzdgU_kpGo</c>, which you might normally watch directly from the URL <url href="https://www.youtube.com/watch?v=hAzdgU_kpGo" />.  Screen real estate is determined by specifying an optional <c>@width</c> attribute as a percentage, and aspect ratio is preserved on the assumption of HD video (16:9).  (Enhancements will include other aspect ratios.)</p>
 
             <p>If you have ever owned a drone, you sympathize with this guy.  Way funnier than a cat video.</p>
 
             <figure>
                 <title>My first day with my drone</title>
                 <caption>First Drone Flight (1:28)</caption>
-                <video youtube="VsHMjWORFvI" />
+                <video xml:id="drone-flight-full" youtube="VsHMjWORFvI" />
             </figure>
 
             <p>If you are only interested in a piece of the action, you can limit the video with <c>start</c> and <c>end</c> attributes in seconds.  You might make those times clear in the caption for readers getting the link out of a PDF.  Some videos may not respect these parameters.</p>
@@ -4055,7 +4140,27 @@ the xsltproc executable.
             <figure>
                 <title>My first day with my drone (Splashdown)</title>
                 <caption>First Drone Flight (Splashdown, 0:54 to 1:12)</caption>
-                <video youtube="VsHMjWORFvI" start="54" end="72" />
+                <video xml:id="drone-flight-clip" youtube="VsHMjWORFvI" start="54" end="72" />
+            </figure>
+
+            <p>Videos may be placed <q>standalone</q> in a <c>&lt;sidebyside&gt;</c>, but are designed mostly on the assumption that they are wrapped in a <c>figure</c> with a <c>title</c> (which is distinct from a <c>caption</c>).  This video comes with a deafult poster featuring Robert Plant.  We've replaced it with Jimmy Page.</p>
+
+            <figure>
+                <title>Kashmir (Live), Led Zeppelin</title>
+                <caption>Kashmir (Live), Led Zeppelin. O2 Arena, London. December 10, 2007. (8:55)</caption>
+                <idx><h>Led Zeppelin video</h></idx>
+
+                <video xml:id="led-zeppelin-kashmir" youtube="hAzdgU_kpGo" width="70%" preview="images/jimmy-page.jpg" />
+            </figure>
+
+            <p>And if you don't want to be reminded of Plant, Page, Bonham, or Jones, you can cover them up.</p>
+
+            <figure>
+                <title>Kashmir (Live), Led Zeppelin</title>
+                <caption>Kashmir (Live), Led Zeppelin. O2 Arena, London. December 10, 2007. (8:55)</caption>
+                <idx><h>Led Zeppelin video</h></idx>
+
+                <video xml:id="led-zeppelin-kashmir-generic" youtube="hAzdgU_kpGo" width="50%" preview="generic" />
             </figure>
 
             <p>We can pack two videos side-by-side, with a lot of horizontal control, using two panels in the <c>sidebyside</c> element.  We have simply chose not to provide a caption (overall, or separately) as an illustration.  The sizes are purposely a bit odd.  See <xref ref="section-side-by-side" text="type-global" /> for much more on side-by-side panels.  These videos come from the <q>Topic</q> and <q>VEVO</q> areas of YouTube (respectively) and both have start/end times.</p>
@@ -4067,7 +4172,7 @@ the xsltproc executable.
                 <video xml:id="bareilles-love-song" youtube="qi7Yh16dA0w" start="60" end="120" />
             </sidebyside>
 
-            <p>These next two videos are evenly spaced, one from YouTube, one from a source file hosted by the author.  Now with separate captions, but identical margins (through very different choices of layout parameters).</p>
+            <p>These next two videos are evenly spaced, one from YouTube, one from a source file hosted by the author.  Now with separate captions, but identical margins (through very different choices of layout parameters than in the preceding pair of videos).</p>
 
             <sidebyside margins="10%" widths="35% 35%">
                 <!-- drone flight again-->
@@ -4078,7 +4183,7 @@ the xsltproc executable.
                 <!-- UPS promo -->
                 <figure>
                     <caption>UPS Promo</caption>
-                    <video xml:id="ups-promo-sbs" source="images/ups-visitor-guide-360" />
+                    <video xml:id="ups-promo-sbs" source="images/ups-visitor-guide-360" preview="images/ups-promo-frame-one.jpg"/>
                 </figure>
             </sidebyside>
 
@@ -4129,15 +4234,17 @@ the xsltproc executable.
                 <sidebyside margins="0%" width="30%">
                     <figure>
                         <caption>Embedded Only</caption>
-                        <video xml:id="ups-promo-1" source="images/ups-visitor-guide-360" play-at="embed" />
+                        <video xml:id="ups-promo-1" source="images/ups-visitor-guide-360" play-at="embed" preview="images/ups-promo-frame-one.jpg"/>
                     </figure>
+                    <!-- A @preview is effective on next, and might become       -->
+                    <!-- necessary as part of a deprecation of the popout option -->
                     <figure>
                         <caption>Pop-Out Only, w/ Start/End</caption>
                         <video xml:id="ups-promo-2" source="images/ups-visitor-guide-360" start="15" end="21" play-at="popout" />
                     </figure>
                     <figure>
                         <caption>User Selection</caption>
-                        <video xml:id="ups-promo-3" source="images/ups-visitor-guide-360" play-at="select" />
+                        <video xml:id="ups-promo-3" source="images/ups-visitor-guide-360" play-at="select" preview="images/ups-promo-frame-one.jpg"/>
                     </figure>
                 </sidebyside>
             </figure>
@@ -4161,68 +4268,6 @@ the xsltproc executable.
             </figure>
         </section>
 
-        <exercises xml:id="exercises">
-            <title>Exercises</title>
-
-            <introduction>
-                <p>Exercises in an <q>exercises</q><idx>exercise</idx> section are numbered automatically.  However, what if you have a busted problem and remove it?  Then a bunch of problem numbers change and your list of homework for your students changes as well.  What a mess.  Use auto-numbering while writing and refining.  Once stable, go ahead and hard-code problem numbers as you delete/add.  Notice the oddly numbered problem below.  Once you go down this road, you can't stop.  But instructors will thank you for it.</p>
-
-                <p>More precisely, once you hard-code a number for a problem, you will likely need to hard-code every subsequent problem number in that section of exercises.  This is because the automatic numbering is unlikely to be what you really want, or what you had before.</p>
-            </introduction>
-
-            <exercise>
-                <title>An Exercise in a Section</title>
-                <statement>
-                    <p>Exercises can appear in a <q>section</q> of their own.  You need to give the section a title, even if it seems obvious what to call it.  Individual exercises may have titles, as you choose.  Problem: How should we hide solutions?</p>
-                </statement>
-                <solution>
-                    <p>Maybe a global switch should be used to suppress solutions, while a separate processing regime could use them as part of a solutions manual.</p>
-                </solution>
-            </exercise>
-
-            <exercise number="42a" xml:id="exercise-with-hardcoded-number">
-                <title>An Exercise with a Hard-Coded Problem Number</title>
-                <statement>
-                    <p>Compute the definite integral <m>\definiteintegral{2}{4}{x^2}{x}</m>, not as an approximate value from a Riemann sum, but as an exact value based of the limit by using the Fundamental Theorem.</p>
-                </statement>
-                <solution xml:id="solution-antiderivative">
-                    <p>An antiderivative of <m>x^2</m> is <m>F(x)=x^3/3</m>, so by the FTC,<me>\definiteintegral{2}{4}{x^2}{x}=F(4)-F(2)=\frac{1}{3}\left(4^3-2^3\right)=\frac{56}{3}</me>!?!      This is indeed an exciting result, but we are mostly interested in seeing that the sentence-ending punctuation is absorbed properly into the displayed equation.</p>
-                </solution>
-            </exercise>
-
-            <exercise>
-                <statement>
-                    <p>Can you prove Corollary<nbsp /><xref ref="corollary-FTC-derivative" /> directly?  If not consider that a problem could have several parts, which should be formatted as a second-level list, since the problems normally get numbered at the top level.<ol>
-                        <li><p>Why is this result a Corollary?</p></li>
-                        <li><p>Could you interchange the Theorem and Corollary?</p></li>
-                    </ol></p>
-                </statement>
-                <!-- A hint is a push in the right direction -->
-                <hint>
-                    <title>MVT</title>
-                    <p>Consider the definite integral as an area function and employ the Mean Value Theorem.</p>
-                </hint>
-                <!-- You can provide several -->
-                <hint xml:id="exercise-complicated-second-hint">
-                    <title>Motivator</title>
-                    <p>Think harder!</p>
-                </hint>
-                <!-- The answer is just the end product -->
-                <answer xml:id="exercise-complicated-first-answer">
-                    <title>Helpful</title>
-                    <p><ol>
-                        <li><p>It follows easily.</p></li>
-                        <li><p>Yes.</p></li>
-                    </ol></p>
-                </answer>
-                <!-- A solution is everything that should be said -->
-                <solution>
-                    <p>We could prove either result first, then obtain the other as an easy consequence.</p>
-                </solution>
-            </exercise>
-
-         </exercises>
-
         <!--
         Various author tools are planned.  Note the embedded "todo"
         elements above.  An XSL transform in-testing will extract them
@@ -4233,150 +4278,6 @@ the xsltproc executable.
         included in the author report also.
         A "preview" XSL transform to HTML could be especially useful.
         -->
-
-        <section>
-            <title>Exercises, Redone</title>
-
-            <p>This <c>section</c> of the sample article is provisional, and will eventually replace, or merge with, the previous section, which is actually an <c>exercises</c>.  To view this test section properly, include on the <c>xsltproc</c> command line:<cd>
-                <cline>-stringparam new.exercises yes</cline>
-            </cd>and set the value to <c>no</c> to view the previous section properly.</p>
-
-            <p>Our purpose here is to illustrate an un-structured division, containing inline exercises, plus three subdivisions that are <c>exercises</c> and one subdivision that is a <c>references</c>.  The change is that these divisions are not numbered.  So contained exercises get their structure number from the overall division, and we need to be careful about uniqueness and ambiguity.</p>
-
-            <p>Notice that we have engineered this division (under default settings) to have an <xref ref="exercise-duplicate-inline" text="type-global" />  and an <xref ref="exercise-duplicate-sectional" text="type-global" />.  In print, you will be completely confused by this (that is a problem), while in electronic versions, following these cross-references will take you different places, which may also be confusing.</p>
-
-            <p>How did we end up with the same exercise number?  Inline exercises are mixed in with examples and theorems, so the inline exercises are numbered in concert with those items.  Two inline exercises and one theorem precede <xref ref="exercise-duplicate-inline" text="title" />, so the serial number of this exercises is 4.  Then for the division titled <xref ref="exercises-drill" text="title" /> we purposely set the <c>@first-number</c> attribute to <c>4</c>, causing the numbering to begin with 4 for the sectional exercise <xref ref="exercise-duplicate-sectional" text="title" />.  If we had not set this attribute, the problem would have been worse, as there would be an inline and sectional exercise numbered 1 and an inline and sectional exercise numbered 2 (but not for numbers 3 and 4).  There are various work-arounds to this problem:<ul>
-                <li>Set the <c>@first-number</c> attribute on the first <c>exercises</c> division after an inline exercise to a large enough number to remove any duplication.</li>
-                <li>Use fewer levels for the numbering on inline exercises (and theorems, etc), and place all <c>exercises</c> sections deep enough in the hierarchy to avoid duplication.</li>
-                <li>Never cross-reference an exercise.  Or when you do, cross-reference by title (as in the first part of this paragraph).  The duplicate numbers might still cause confusion for your readers (such as students receiving an assignment).</li>
-            </ul></p>
-
-            <p>Notice that if you only ever use inline exercises, or only ever use sectional exercises, then there is no potential for duplicate numbers (so long as you use the <c>@first-number</c> attribute responsibly).</p>
-
-            <p>Following text is mostly nonsense, just for testing purposes.</p>
-
-            <exercise>
-                <title>Inline One</title>
-                <statement>
-                    <p>Aliquam vitae risus placerat, pellentesque leo vitae, iaculis ante. Praesent ac odio eget mi bibendum eleifend ac eget metus. Morbi in dolor et diam accumsan mattis. Aenean elementum pulvinar efficitur. Etiam viverra ut tellus quis consequat. Phasellus sit amet nisl a ligula pharetra tempus id in elit. Maecenas congue quam eu purus fermentum pretium. Fusce pellentesque ultricies arcu, egestas sollicitudin erat condimentum non. Integer non velit at dolor dictum aliquam et rhoncus mauris. Sed nec nibh id nunc convallis tincidunt ut at ligula. Etiam elementum nisl eu erat dapibus rhoncus.</p>
-                </statement>
-            </exercise>
-
-            <p>Pellentesque nec condimentum ligula, quis interdum mauris. Ut sed urna lacinia, aliquam arcu id, faucibus nisi. Suspendisse potenti. Curabitur in erat ultricies, condimentum mi nec, vehicula mauris. Duis faucibus risus fermentum velit hendrerit, non laoreet massa maximus. Donec bibendum elit ac lectus lobortis luctus. Ut finibus, dolor ut euismod tristique, ligula tortor tempus arcu, finibus semper purus erat ut ligula. Aenean accumsan ut ante vel euismod.</p>
-
-            <exercise>
-                <title>Inline Two</title>
-                <statement>
-                    <p>Ut porttitor neque a pharetra euismod. Vivamus ut metus pretium, placerat massa tempor, condimentum metus. Phasellus vestibulum iaculis turpis non posuere. Vestibulum quis aliquet neque. Donec nec metus iaculis, laoreet massa vitae, suscipit tellus. Etiam et ultrices quam, quis pretium ligula. In ut cursus metus. Aenean volutpat quam odio, quis tempus dolor egestas eget. Nunc fringilla lobortis nunc, ut interdum lorem posuere sed. Sed sodales risus a laoreet venenatis. Nunc sodales tempor mollis. Nam sollicitudin velit sed ex viverra feugiat. Nunc consectetur mi vitae urna sollicitudin malesuada. Fusce eget risus lectus. Mauris augue velit, vestibulum vitae tempus sit amet, porttitor eget turpis.</p>
-                </statement>
-            </exercise>
-
-            <theorem>
-                <title>Major Result</title>
-                <p>Vivamus tortor tortor, lobortis et sem vel, accumsan placerat libero. Sed eget metus non magna accumsan efficitur a non turpis. Curabitur maximus arcu ipsum, eget vestibulum nulla mollis ac. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Duis vel eleifend risus. Morbi hendrerit tellus eget nibh imperdiet, ac mollis nisl sagittis. Ut commodo pharetra leo. Suspendisse consequat velit eget velit condimentum feugiat.</p>
-            </theorem>
-
-            <exercise xml:id="exercise-duplicate-inline">
-                <title>Inline Three</title>
-                <statement>
-                    <p>Suspendisse lacinia mattis risus, eget viverra urna dictum eu. Maecenas ut sem in turpis egestas varius nec at ipsum. Praesent bibendum nisi et turpis congue, a pellentesque felis tempor. Vivamus non dolor in risus interdum mattis. In tempus iaculis velit, sit amet rhoncus tellus aliquam convallis. Sed ut tellus id ipsum blandit convallis sed eget tortor. Nunc leo felis, scelerisque vel ante porta, volutpat rhoncus neque. Mauris convallis, felis at aliquam aliquet, felis ipsum semper mi, vitae auctor purus ante non erat. Ut nec felis mi.</p>
-                </statement>
-            </exercise>
-
-            <exercises first-number="4" xml:id="exercises-drill">
-                <title>Drill Exercises</title>
-
-                <exercise xml:id="exercise-duplicate-sectional">
-                    <title>Drill One</title>
-                    <statement>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras congue urna nulla. Aliquam eget euismod tellus. Maecenas nibh libero, venenatis a laoreet in, tempor sit amet sem. Morbi sit amet justo tempor velit auctor placerat. Maecenas nec lobortis orci. Aenean dictum enim lacus, ac blandit lacus elementum nec. Mauris porttitor neque volutpat tincidunt sollicitudin. Cras porta lectus ac facilisis tempor. Suspendisse in velit nisl. Sed convallis leo at nunc aliquet fermentum. Pellentesque feugiat at ex sed elementum. In porta vulputate ipsum sit amet consectetur.</p>
-                    </statement>
-                </exercise>
-
-                <exercise>
-                    <title>Drill Two</title>
-                    <statement>
-                        <p>Aliquam sagittis ex at magna porttitor, quis scelerisque ligula malesuada. Vestibulum vitae mauris id nisi pretium ornare a id lectus. Nam suscipit magna id sem ultricies vestibulum. Nulla facilisi. Duis venenatis lectus massa, ac mollis nisi suscipit non. Sed et sapien vulputate, imperdiet nibh vel, lobortis nisl. Curabitur sagittis justo nibh. Nulla vulputate sodales justo at efficitur. Cras justo augue, mollis vitae nulla sed, vestibulum tincidunt ante. Vestibulum et lorem lectus. Maecenas accumsan lacus a nisi euismod rutrum eu dapibus justo. Etiam scelerisque a odio a euismod. Pellentesque vestibulum pellentesque nisi, a tempus erat cursus ac. Morbi ut auctor lectus.</p>
-                    </statement>
-                </exercise>
-
-                <exercise>
-                    <title>Drill Three</title>
-                    <statement>
-                        <p>Nam congue ex nec justo iaculis maximus. Vestibulum lobortis magna sed urna auctor, vel dignissim massa posuere. In sed venenatis elit. Vivamus congue gravida tempus. Nunc quis fermentum nisi. Nullam hendrerit lorem et tellus semper, sit amet scelerisque purus lobortis. Quisque sollicitudin quis neque eu suscipit. Praesent volutpat justo quis magna vehicula molestie.</p>
-                    </statement>
-                </exercise>
-            </exercises>
-
-
-            <exercises first-number="101">
-                <title>Challenging Exercises</title>
-
-                <exercise>
-                    <title>Challenging One</title>
-                    <statement>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras congue urna nulla. Aliquam eget euismod tellus. Maecenas nibh libero, venenatis a laoreet in, tempor sit amet sem. Morbi sit amet justo tempor velit auctor placerat. Maecenas nec lobortis orci. Aenean dictum enim lacus, ac blandit lacus elementum nec. Mauris porttitor neque volutpat tincidunt sollicitudin. Cras porta lectus ac facilisis tempor. Suspendisse in velit nisl. Sed convallis leo at nunc aliquet fermentum. Pellentesque feugiat at ex sed elementum. In porta vulputate ipsum sit amet consectetur.</p>
-                    </statement>
-                </exercise>
-
-                <exercisegroup>
-                    <introduction>
-                        <p>An introduction to an <c>exercisegroup</c>.  This is here to attempt to interrupt the flow of the counting from this division to the next.</p>
-                    </introduction>
-
-                    <exercise>
-                        <title>Challenging Two</title>
-                        <statement>
-                            <p>Aliquam sagittis ex at magna porttitor, quis scelerisque ligula malesuada. Vestibulum vitae mauris id nisi pretium ornare a id lectus. Nam suscipit magna id sem ultricies vestibulum. Nulla facilisi. Duis venenatis lectus massa, ac mollis nisi suscipit non. Sed et sapien vulputate, imperdiet nibh vel, lobortis nisl. Curabitur sagittis justo nibh. Nulla vulputate sodales justo at efficitur. Cras justo augue, mollis vitae nulla sed, vestibulum tincidunt ante. Vestibulum et lorem lectus. Maecenas accumsan lacus a nisi euismod rutrum eu dapibus justo. Etiam scelerisque a odio a euismod. Pellentesque vestibulum pellentesque nisi, a tempus erat cursus ac. Morbi ut auctor lectus.</p>
-                        </statement>
-                    </exercise>
-
-                    <exercise>
-                        <title>Challenging Three</title>
-                        <statement>
-                            <p>Nam congue ex nec justo iaculis maximus. Vestibulum lobortis magna sed urna auctor, vel dignissim massa posuere. In sed venenatis elit. Vivamus congue gravida tempus. Nunc quis fermentum nisi. Nullam hendrerit lorem et tellus semper, sit amet scelerisque purus lobortis. Quisque sollicitudin quis neque eu suscipit. Praesent volutpat justo quis magna vehicula molestie.</p>
-                        </statement>
-                    </exercise>
-                </exercisegroup>
-            </exercises>
-
-
-            <exercises>
-                <title>Impossible Exercises</title>
-
-                <exercise>
-                    <title>Impossible One</title>
-                    <statement>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras congue urna nulla. Aliquam eget euismod tellus. Maecenas nibh libero, venenatis a laoreet in, tempor sit amet sem. Morbi sit amet justo tempor velit auctor placerat. Maecenas nec lobortis orci. Aenean dictum enim lacus, ac blandit lacus elementum nec. Mauris porttitor neque volutpat tincidunt sollicitudin. Cras porta lectus ac facilisis tempor. Suspendisse in velit nisl. Sed convallis leo at nunc aliquet fermentum. Pellentesque feugiat at ex sed elementum. In porta vulputate ipsum sit amet consectetur.</p>
-                    </statement>
-                </exercise>
-
-                <exercise>
-                    <title>Impossible Two</title>
-                    <statement>
-                        <p>Aliquam sagittis ex at magna porttitor, quis scelerisque ligula malesuada. Vestibulum vitae mauris id nisi pretium ornare a id lectus. Nam suscipit magna id sem ultricies vestibulum. Nulla facilisi. Duis venenatis lectus massa, ac mollis nisi suscipit non. Sed et sapien vulputate, imperdiet nibh vel, lobortis nisl. Curabitur sagittis justo nibh. Nulla vulputate sodales justo at efficitur. Cras justo augue, mollis vitae nulla sed, vestibulum tincidunt ante. Vestibulum et lorem lectus. Maecenas accumsan lacus a nisi euismod rutrum eu dapibus justo. Etiam scelerisque a odio a euismod. Pellentesque vestibulum pellentesque nisi, a tempus erat cursus ac. Morbi ut auctor lectus.</p>
-                    </statement>
-                </exercise>
-
-                <exercise>
-                    <title>Impossible Three</title>
-                    <statement>
-                        <p>Nam congue ex nec justo iaculis maximus. Vestibulum lobortis magna sed urna auctor, vel dignissim massa posuere. In sed venenatis elit. Vivamus congue gravida tempus. Nunc quis fermentum nisi. Nullam hendrerit lorem et tellus semper, sit amet scelerisque purus lobortis. Quisque sollicitudin quis neque eu suscipit. Praesent volutpat justo quis magna vehicula molestie.</p>
-                    </statement>
-                </exercise>
-            </exercises>
-
-
-            <references>
-                <title>More Reading</title>
-
-                <introduction>
-                    <p>Left intentionally blank.</p>
-                </introduction>
-
-            </references>
-        </section>
-
 
         <section xml:id="section-cross-referencing">
             <title>Cross-Referencing</title>
@@ -4427,13 +4328,19 @@ the xsltproc executable.
                 <li><p>A group of two exercises, with introduction, conclusion: <xref ref="exercisegroup-two-problems" text="type-global" /></p></li>
                 <li><p>Solution: An autonamed portion of an exercise: <xref ref="solution-antiderivative" text="type-global" /></p></li>
                 <li><p>Parts of a complicated exercise: <xref ref="exercise-complicated-second-hint" text="type-global" /> <xref ref="exercise-complicated-first-answer" text="type-global" /></p></li>
-                <li><p>An item buried in nested ordered lists (local reference): <xref ref="list-two-two-two-three" text="type-global"/></p></li>
-                <li><p>A subsidary part of an exercise (fully-qualified reference): <xref ref="exercise-one-two-one" /></p></li>
+                <li><p>A subsidary part of an exercise: <xref ref="exercise-one-two-one" /></p></li>
+                <li><p>An item buried in nested ordered lists: <xref ref="list-two-two-two-three" text="type-global"/></p></li>
                 <li><p>List item as knowls in HTML, including nested lists: <xref ref="list-two" />, <xref ref="list-two-two-two" text="type-global" /></p></li>
                 <li><p>A titled list: <xref ref="list-colors-rainbow" /></p></li>
                 <li><p>List item inside a named list, second color in rainbow list: <xref ref="rainbow-orange" text="type-global" /></p></li>
+                <li><p>Second color in rainbow list, but now as a local reference: <xref ref="rainbow-orange" text="type-local" /></p></li>
+
+                <li><p>An item in ordered list, but contained in an unordered list, hence without a number, so ambiguous: <xref ref="target-no-number" text="type-global"/></p></li>
+                <li><p>Same item in ordered list, but contained in an unordered list, now with a cross-reference by <c>title</c> with a content override: <xref ref="target-no-number" text="title">No Number List Item</xref></p></li>
+                <li><p>Several examples of hybrid cross-references to list items within a named list can be found in, and adjacent to, <xref ref="list-to-reference" text="type-global" />.</p></li>
                 <li><p>An assemblage, which never has a number.  A cross-reference now requires content in the <c>xref</c> element, with <c>text='title'</c>: <xref ref="assemblage-basics" text="title">text to xref an assemblage</xref></p></li>
-                <li><p>A cross-reference to a list item in a description list, which has a title, but never a number: <xref ref="reserved-characters-mathematics" text="title" />.  Note that you need to include the attribute <c>autoname="number"</c> even if that is obvious from the situation.  This requirement may be relaxed in a future refactoring of the cross-reference system.</p></li>
+                <li><p>A cross-reference to a list item in a description list, which has a title, but never a number: <xref ref="reserved-characters-mathematics" text="title" />.  Note that you need to include the attribute <c>text="title"</c> even if that is obvious from the situation.  This requirement may be relaxed in a future refactoring of the cross-reference system.</p></li>
+                <li><p>A very similar cross-reference to the previous one, but testing how final punctuation of titles is handled: <xref ref="reserved-characters-verbatim" text="title" />.</p></li>
                 <li><p>A cross-reference to a <q>paragraphs</q> subdivision, which never has a number (so comments above about description list items and titles applies here too): <xref ref="hierarchy-structure" text="title" /></p></li>
                 <li><p>A case within the proof of <xref ref="claim-with-cases" text="type-global" />: <xref ref="inductive-step" text="title" /></p></li>
                 <li><p>A cross-reference to a description list item with a title containing math: <xref ref="description-list-math-title" text="title" /></p></li>
@@ -4477,6 +4384,9 @@ the xsltproc executable.
                 <li><p>A range of bibliographic items: <xref first="biblio-judson-AATA" last="biblio-lay-article" /></p></li>
                 <!-- <li><p>: <xref ref="" /></p></li> -->
             </ul></p>
+
+
+
 
             <p>The <c>url</c><idx>url</idx> element may be used to link to a data file, either externally, or internally, if you want to make such an object available to a reader.  A good example use case is a spreadsheet that might be part of an exercise, or contain data relevant to some discussion.  First let us suppose the data resides somewhere on the Internet, then just use the complete address.  Here is one from Microsoft: <url href="http://go.microsoft.com/fwlink/?LinkID=521962">Sample Excel Spreadsheet</url>.</p>
 
@@ -6607,7 +6517,7 @@ the xsltproc executable.
 
             <sidebyside  margins="5%" widths="40% 45%">
                 <!-- Hosted -->
-                <video source="images/ups-visitor-guide-360" width="80%"/>
+                <video source="images/ups-visitor-guide-360" width="80%" preview="images/ups-promo-frame-one.jpg"/>
                 <!-- Airborne Toxic Event -->
                 <video xml:id="airborne-midnight-1" youtube="UYPoMjR6-Ao" />
             </sidebyside>
@@ -6870,7 +6780,7 @@ the xsltproc executable.
 
                 <p><q>Names</q><idx>name</idx> for various parts of a document are determined exactly once for each language, ensuring consistency and saving you the bother of always typing them in.</p>
 
-                <p>However, you may want to have <q>Conundrum</q>s<idx><h>conundrum</h><h>repurposed from proposition</h></idx> in your document and you have no use for any <q>Proposition</q>s.  So you can repurpose the <c>proposition</c> tag to render a different name.  Or you might have a Lab Manual and want to rename <c>subsection</c> as <q>Activity</q>.  See the <c>docinfo</c> portion of this sample article to see how this is done, in concert with the example below.</p>
+                <p>However, you may want to have <q>Conundrum</q>s<idx><h>conundrum</h><h>repurposed from proposition</h></idx> in your document and you have no use for any <q>Proposition</q>s.  So you can repurpose the <c>proposition</c> tag to render a different name.  Or you might have a Lab Manual and want to rename <c>subsection</c> as <q>Activity</q>.  See the <c>docinfo</c> portion of this sample article to see how this is done, in concert with the example below.  Note that you may provide versions for different languages, and that the <attr>lang</attr> attribute here is just slightly different than the general <attr>@xml:lang</attr> attribute.</p>
 
                 <proposition xml:id="proposition-as-conundrum">
                     <statement>
@@ -6911,6 +6821,397 @@ the xsltproc executable.
                 <myopenmath problem="7492" />
             </exercise>
         </section>
+
+
+        <section xml:id="exercises-single">
+            <title>Exercises, One Subsection</title>
+
+            <p>This <tag>section</tag> of the sample article demonstrates an <q>unstructured division.</q>  There are no <tag>subsection</tag>, you are just reading the first two paragraphs, followed by some nonsense text.  Then there is a <em>single</em> <tag>exercises</tag> division.  Note that this division is not numbered (since it is unique within the <tag>section</tag>).  And a cross-reference to one of the contained <tag>exercise</tag> will be numbered as a member of the <tag>section</tag>, <xref ref="exercise-challenging-one-unstructured" text="type-global" />.</p>
+
+            <p>If you use the unstructured form of a division, <em>and</em> have both inline and sectional exercises, there is a potential to form ambiguous cross-references.  To wit, check that <xref ref="duplicate-inline" text="global" /> and <xref ref="duplicate-sectional" text="global" /> are really different exercises (which you are <em>unable to do</em> if you are reading this in print!).  The solution is to include the type of exercise in the reference, which will assist everybody, but especially your print readers:  <xref ref="duplicate-inline" text="type-global" /> and <xref ref="duplicate-sectional" text="type-global" />.</p>
+
+            <p>Compare this section with the similar <xref ref="exercises-multiple" text="type-global" />, next.  The following text is mostly nonsense, just for testing purposes.</p>
+
+            <exercise>
+                <title>Inline One</title>
+                <statement>
+                    <p>Aliquam vitae risus placerat, pellentesque leo vitae, iaculis ante. Praesent ac odio eget mi bibendum eleifend ac eget metus. Morbi in dolor et diam accumsan mattis. Aenean elementum pulvinar efficitur. Etiam viverra ut tellus quis consequat. Phasellus sit amet nisl a ligula pharetra tempus id in elit. Maecenas congue quam eu purus fermentum pretium. Fusce pellentesque ultricies arcu, egestas sollicitudin erat condimentum non. Integer non velit at dolor dictum aliquam et rhoncus mauris. Sed nec nibh id nunc convallis tincidunt ut at ligula. Etiam elementum nisl eu erat dapibus rhoncus.</p>
+                </statement>
+            </exercise>
+
+            <p>Pellentesque nec condimentum ligula, quis interdum mauris. Ut sed urna lacinia, aliquam arcu id, faucibus nisi. Suspendisse potenti. Curabitur in erat ultricies, condimentum mi nec, vehicula mauris. Duis faucibus risus fermentum velit hendrerit, non laoreet massa maximus. Donec bibendum elit ac lectus lobortis luctus. Ut finibus, dolor ut euismod tristique, ligula tortor tempus arcu, finibus semper purus erat ut ligula. Aenean accumsan ut ante vel euismod.</p>
+
+            <exercise xml:id="duplicate-inline">
+                <title>Inline Two</title>
+                <statement>
+                    <p>Ut porttitor neque a pharetra euismod. Vivamus ut metus pretium, placerat massa tempor, condimentum metus. Phasellus vestibulum iaculis turpis non posuere. Vestibulum quis aliquet neque. Donec nec metus iaculis, laoreet massa vitae, suscipit tellus. Etiam et ultrices quam, quis pretium ligula. In ut cursus metus. Aenean volutpat quam odio, quis tempus dolor egestas eget. Nunc fringilla lobortis nunc, ut interdum lorem posuere sed. Sed sodales risus a laoreet venenatis. Nunc sodales tempor mollis. Nam sollicitudin velit sed ex viverra feugiat. Nunc consectetur mi vitae urna sollicitudin malesuada. Fusce eget risus lectus. Mauris augue velit, vestibulum vitae tempus sit amet, porttitor eget turpis.</p>
+                </statement>
+            </exercise>
+
+            <theorem>
+                <title>Major Result</title>
+                <p>Vivamus tortor tortor, lobortis et sem vel, accumsan placerat libero. Sed eget metus non magna accumsan efficitur a non turpis. Curabitur maximus arcu ipsum, eget vestibulum nulla mollis ac. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Duis vel eleifend risus. Morbi hendrerit tellus eget nibh imperdiet, ac mollis nisl sagittis. Ut commodo pharetra leo. Suspendisse consequat velit eget velit condimentum feugiat.</p>
+            </theorem>
+
+            <exercise>
+                <title>Inline Three</title>
+                <statement>
+                    <p>Suspendisse lacinia mattis risus, eget viverra urna dictum eu. Maecenas ut sem in turpis egestas varius nec at ipsum. Praesent bibendum nisi et turpis congue, a pellentesque felis tempor. Vivamus non dolor in risus interdum mattis. In tempus iaculis velit, sit amet rhoncus tellus aliquam convallis. Sed ut tellus id ipsum blandit convallis sed eget tortor. Nunc leo felis, scelerisque vel ante porta, volutpat rhoncus neque. Mauris convallis, felis at aliquam aliquet, felis ipsum semper mi, vitae auctor purus ante non erat. Ut nec felis mi.</p>
+                </statement>
+            </exercise>
+
+            <exercises>
+                <title>Exercise Collection</title>
+
+                <exercise>
+                    <title>Drill One</title>
+                    <statement>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras congue urna nulla. Aliquam eget euismod tellus. Maecenas nibh libero, venenatis a laoreet in, tempor sit amet sem. Morbi sit amet justo tempor velit auctor placerat. Maecenas nec lobortis orci. Aenean dictum enim lacus, ac blandit lacus elementum nec. Mauris porttitor neque volutpat tincidunt sollicitudin. Cras porta lectus ac facilisis tempor. Suspendisse in velit nisl. Sed convallis leo at nunc aliquet fermentum. Pellentesque feugiat at ex sed elementum. In porta vulputate ipsum sit amet consectetur.</p>
+                    </statement>
+                </exercise>
+
+                <exercise xml:id="duplicate-sectional">
+                    <title>Drill Two</title>
+                    <statement>
+                        <p>Aliquam sagittis ex at magna porttitor, quis scelerisque ligula malesuada. Vestibulum vitae mauris id nisi pretium ornare a id lectus. Nam suscipit magna id sem ultricies vestibulum. Nulla facilisi. Duis venenatis lectus massa, ac mollis nisi suscipit non. Sed et sapien vulputate, imperdiet nibh vel, lobortis nisl. Curabitur sagittis justo nibh. Nulla vulputate sodales justo at efficitur. Cras justo augue, mollis vitae nulla sed, vestibulum tincidunt ante. Vestibulum et lorem lectus. Maecenas accumsan lacus a nisi euismod rutrum eu dapibus justo. Etiam scelerisque a odio a euismod. Pellentesque vestibulum pellentesque nisi, a tempus erat cursus ac. Morbi ut auctor lectus.</p>
+                    </statement>
+                </exercise>
+
+                <exercise>
+                    <title>Drill Three</title>
+                    <statement>
+                        <p>Nam congue ex nec justo iaculis maximus. Vestibulum lobortis magna sed urna auctor, vel dignissim massa posuere. In sed venenatis elit. Vivamus congue gravida tempus. Nunc quis fermentum nisi. Nullam hendrerit lorem et tellus semper, sit amet scelerisque purus lobortis. Quisque sollicitudin quis neque eu suscipit. Praesent volutpat justo quis magna vehicula molestie.</p>
+                    </statement>
+                </exercise>
+
+                <exercise xml:id="exercise-challenging-one-unstructured">
+                    <title>Challenging One</title>
+                    <statement>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras congue urna nulla. Aliquam eget euismod tellus. Maecenas nibh libero, venenatis a laoreet in, tempor sit amet sem. Morbi sit amet justo tempor velit auctor placerat. Maecenas nec lobortis orci. Aenean dictum enim lacus, ac blandit lacus elementum nec. Mauris porttitor neque volutpat tincidunt sollicitudin. Cras porta lectus ac facilisis tempor. Suspendisse in velit nisl. Sed convallis leo at nunc aliquet fermentum. Pellentesque feugiat at ex sed elementum. In porta vulputate ipsum sit amet consectetur.</p>
+                    </statement>
+                </exercise>
+
+                <exercisegroup>
+                    <introduction>
+                        <p>An introduction to an <c>exercisegroup</c>.  This is here to attempt to interrupt the flow of the counting from this division to the next.</p>
+                    </introduction>
+
+                    <exercise>
+                        <title>Challenging Two</title>
+                        <statement>
+                            <p>Aliquam sagittis ex at magna porttitor, quis scelerisque ligula malesuada. Vestibulum vitae mauris id nisi pretium ornare a id lectus. Nam suscipit magna id sem ultricies vestibulum. Nulla facilisi. Duis venenatis lectus massa, ac mollis nisi suscipit non. Sed et sapien vulputate, imperdiet nibh vel, lobortis nisl. Curabitur sagittis justo nibh. Nulla vulputate sodales justo at efficitur. Cras justo augue, mollis vitae nulla sed, vestibulum tincidunt ante. Vestibulum et lorem lectus. Maecenas accumsan lacus a nisi euismod rutrum eu dapibus justo. Etiam scelerisque a odio a euismod. Pellentesque vestibulum pellentesque nisi, a tempus erat cursus ac. Morbi ut auctor lectus.</p>
+                        </statement>
+                    </exercise>
+
+                    <exercise>
+                        <title>Challenging Three</title>
+                        <statement>
+                            <p>Nam congue ex nec justo iaculis maximus. Vestibulum lobortis magna sed urna auctor, vel dignissim massa posuere. In sed venenatis elit. Vivamus congue gravida tempus. Nunc quis fermentum nisi. Nullam hendrerit lorem et tellus semper, sit amet scelerisque purus lobortis. Quisque sollicitudin quis neque eu suscipit. Praesent volutpat justo quis magna vehicula molestie.</p>
+                        </statement>
+                    </exercise>
+                </exercisegroup>
+
+                <exercise>
+                    <title>Impossible One</title>
+                    <statement>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras congue urna nulla. Aliquam eget euismod tellus. Maecenas nibh libero, venenatis a laoreet in, tempor sit amet sem. Morbi sit amet justo tempor velit auctor placerat. Maecenas nec lobortis orci. Aenean dictum enim lacus, ac blandit lacus elementum nec. Mauris porttitor neque volutpat tincidunt sollicitudin. Cras porta lectus ac facilisis tempor. Suspendisse in velit nisl. Sed convallis leo at nunc aliquet fermentum. Pellentesque feugiat at ex sed elementum. In porta vulputate ipsum sit amet consectetur.</p>
+                    </statement>
+                </exercise>
+
+                <exercise>
+                    <title>Impossible Two</title>
+                    <statement>
+                        <p>Aliquam sagittis ex at magna porttitor, quis scelerisque ligula malesuada. Vestibulum vitae mauris id nisi pretium ornare a id lectus. Nam suscipit magna id sem ultricies vestibulum. Nulla facilisi. Duis venenatis lectus massa, ac mollis nisi suscipit non. Sed et sapien vulputate, imperdiet nibh vel, lobortis nisl. Curabitur sagittis justo nibh. Nulla vulputate sodales justo at efficitur. Cras justo augue, mollis vitae nulla sed, vestibulum tincidunt ante. Vestibulum et lorem lectus. Maecenas accumsan lacus a nisi euismod rutrum eu dapibus justo. Etiam scelerisque a odio a euismod. Pellentesque vestibulum pellentesque nisi, a tempus erat cursus ac. Morbi ut auctor lectus.</p>
+                    </statement>
+                </exercise>
+
+                <exercise>
+                    <title>Impossible Three</title>
+                    <statement>
+                        <p>Nam congue ex nec justo iaculis maximus. Vestibulum lobortis magna sed urna auctor, vel dignissim massa posuere. In sed venenatis elit. Vivamus congue gravida tempus. Nunc quis fermentum nisi. Nullam hendrerit lorem et tellus semper, sit amet scelerisque purus lobortis. Quisque sollicitudin quis neque eu suscipit. Praesent volutpat justo quis magna vehicula molestie.</p>
+                    </statement>
+                </exercise>
+            </exercises>
+
+
+            <references>
+                <title>More Reading</title>
+
+                <introduction>
+                    <p>Left intentionally blank, just checking sectioning.</p>
+                </introduction>
+
+                <biblio type="raw" xml:id="biblio-lay-article-repeat2">David C. Lay, <title>Subspaces and Echelon Forms</title>. <journal>The College Mathematics Journal</journal>, January 1993, <volume>24</volume> <number>1</number>, 57<ndash />62.</biblio>
+
+            </references>
+        </section>
+
+
+        <section xml:id="exercises-multiple">
+            <title>Exercises, Multiple Subsections</title>
+
+            <introduction>
+                <p>This <tag>section</tag> of the sample article demonstrates a <q>structured division.</q>  You are reading the introduction to the division, then there is a faux <tag>subsection</tag>, followed by three <tag>exercises</tag> divisions.  Note that the three are numbered as if they are also fellow<tag>subsection</tag>.  And a cross-reference to one of the contained <tag>exercise</tag> will be numbered use the number of the <tag>subsection</tag>, <xref ref="exercise-challenging-one-structured" text="type-global" />.</p>
+
+                <p>Compare this section with the similar <xref ref="exercises-single" text="type-global" />, previous.  The following text is mostly nonsense, just for testing purposes.</p>
+            </introduction>
+
+            <subsection>
+                <title>Faux Subsection</title>
+
+                <exercise>
+                    <title>Inline One</title>
+                    <statement>
+                        <p>Aliquam vitae risus placerat, pellentesque leo vitae, iaculis ante. Praesent ac odio eget mi bibendum eleifend ac eget metus. Morbi in dolor et diam accumsan mattis. Aenean elementum pulvinar efficitur. Etiam viverra ut tellus quis consequat. Phasellus sit amet nisl a ligula pharetra tempus id in elit. Maecenas congue quam eu purus fermentum pretium. Fusce pellentesque ultricies arcu, egestas sollicitudin erat condimentum non. Integer non velit at dolor dictum aliquam et rhoncus mauris. Sed nec nibh id nunc convallis tincidunt ut at ligula. Etiam elementum nisl eu erat dapibus rhoncus.</p>
+                    </statement>
+                </exercise>
+
+                <p>Pellentesque nec condimentum ligula, quis interdum mauris. Ut sed urna lacinia, aliquam arcu id, faucibus nisi. Suspendisse potenti. Curabitur in erat ultricies, condimentum mi nec, vehicula mauris. Duis faucibus risus fermentum velit hendrerit, non laoreet massa maximus. Donec bibendum elit ac lectus lobortis luctus. Ut finibus, dolor ut euismod tristique, ligula tortor tempus arcu, finibus semper purus erat ut ligula. Aenean accumsan ut ante vel euismod.</p>
+
+                <exercise>
+                    <title>Inline Two</title>
+                    <statement>
+                        <p>Ut porttitor neque a pharetra euismod. Vivamus ut metus pretium, placerat massa tempor, condimentum metus. Phasellus vestibulum iaculis turpis non posuere. Vestibulum quis aliquet neque. Donec nec metus iaculis, laoreet massa vitae, suscipit tellus. Etiam et ultrices quam, quis pretium ligula. In ut cursus metus. Aenean volutpat quam odio, quis tempus dolor egestas eget. Nunc fringilla lobortis nunc, ut interdum lorem posuere sed. Sed sodales risus a laoreet venenatis. Nunc sodales tempor mollis. Nam sollicitudin velit sed ex viverra feugiat. Nunc consectetur mi vitae urna sollicitudin malesuada. Fusce eget risus lectus. Mauris augue velit, vestibulum vitae tempus sit amet, porttitor eget turpis.</p>
+                    </statement>
+                </exercise>
+
+                <theorem>
+                    <title>Major Result</title>
+                    <p>Vivamus tortor tortor, lobortis et sem vel, accumsan placerat libero. Sed eget metus non magna accumsan efficitur a non turpis. Curabitur maximus arcu ipsum, eget vestibulum nulla mollis ac. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Duis vel eleifend risus. Morbi hendrerit tellus eget nibh imperdiet, ac mollis nisl sagittis. Ut commodo pharetra leo. Suspendisse consequat velit eget velit condimentum feugiat.</p>
+                </theorem>
+
+                <exercise xml:id="exercise-duplicate-inline">
+                    <title>Inline Three</title>
+                    <statement>
+                        <p>Suspendisse lacinia mattis risus, eget viverra urna dictum eu. Maecenas ut sem in turpis egestas varius nec at ipsum. Praesent bibendum nisi et turpis congue, a pellentesque felis tempor. Vivamus non dolor in risus interdum mattis. In tempus iaculis velit, sit amet rhoncus tellus aliquam convallis. Sed ut tellus id ipsum blandit convallis sed eget tortor. Nunc leo felis, scelerisque vel ante porta, volutpat rhoncus neque. Mauris convallis, felis at aliquam aliquet, felis ipsum semper mi, vitae auctor purus ante non erat. Ut nec felis mi.</p>
+                    </statement>
+                </exercise>
+            </subsection>
+
+            <exercises xml:id="exercises-drill">
+                <title>Drill Exercises</title>
+
+                <exercise>
+                    <title>Drill One</title>
+                    <statement>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras congue urna nulla. Aliquam eget euismod tellus. Maecenas nibh libero, venenatis a laoreet in, tempor sit amet sem. Morbi sit amet justo tempor velit auctor placerat. Maecenas nec lobortis orci. Aenean dictum enim lacus, ac blandit lacus elementum nec. Mauris porttitor neque volutpat tincidunt sollicitudin. Cras porta lectus ac facilisis tempor. Suspendisse in velit nisl. Sed convallis leo at nunc aliquet fermentum. Pellentesque feugiat at ex sed elementum. In porta vulputate ipsum sit amet consectetur.</p>
+                    </statement>
+                </exercise>
+
+                <exercise>
+                    <title>Drill Two</title>
+                    <statement>
+                        <p>Aliquam sagittis ex at magna porttitor, quis scelerisque ligula malesuada. Vestibulum vitae mauris id nisi pretium ornare a id lectus. Nam suscipit magna id sem ultricies vestibulum. Nulla facilisi. Duis venenatis lectus massa, ac mollis nisi suscipit non. Sed et sapien vulputate, imperdiet nibh vel, lobortis nisl. Curabitur sagittis justo nibh. Nulla vulputate sodales justo at efficitur. Cras justo augue, mollis vitae nulla sed, vestibulum tincidunt ante. Vestibulum et lorem lectus. Maecenas accumsan lacus a nisi euismod rutrum eu dapibus justo. Etiam scelerisque a odio a euismod. Pellentesque vestibulum pellentesque nisi, a tempus erat cursus ac. Morbi ut auctor lectus.</p>
+                    </statement>
+                </exercise>
+
+                <exercise>
+                    <title>Drill Three</title>
+                    <statement>
+                        <p>Nam congue ex nec justo iaculis maximus. Vestibulum lobortis magna sed urna auctor, vel dignissim massa posuere. In sed venenatis elit. Vivamus congue gravida tempus. Nunc quis fermentum nisi. Nullam hendrerit lorem et tellus semper, sit amet scelerisque purus lobortis. Quisque sollicitudin quis neque eu suscipit. Praesent volutpat justo quis magna vehicula molestie.</p>
+                    </statement>
+                </exercise>
+            </exercises>
+
+
+            <exercises>
+                <title>Challenging Exercises</title>
+
+                <exercise xml:id="exercise-challenging-one-structured">
+                    <title>Challenging One</title>
+                    <statement>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras congue urna nulla. Aliquam eget euismod tellus. Maecenas nibh libero, venenatis a laoreet in, tempor sit amet sem. Morbi sit amet justo tempor velit auctor placerat. Maecenas nec lobortis orci. Aenean dictum enim lacus, ac blandit lacus elementum nec. Mauris porttitor neque volutpat tincidunt sollicitudin. Cras porta lectus ac facilisis tempor. Suspendisse in velit nisl. Sed convallis leo at nunc aliquet fermentum. Pellentesque feugiat at ex sed elementum. In porta vulputate ipsum sit amet consectetur.</p>
+                    </statement>
+                </exercise>
+
+                <exercisegroup>
+                    <introduction>
+                        <p>An introduction to an <c>exercisegroup</c>.  This is here to attempt to interrupt the flow of the counting from this division to the next.</p>
+                    </introduction>
+
+                    <exercise>
+                        <title>Challenging Two</title>
+                        <statement>
+                            <p>Aliquam sagittis ex at magna porttitor, quis scelerisque ligula malesuada. Vestibulum vitae mauris id nisi pretium ornare a id lectus. Nam suscipit magna id sem ultricies vestibulum. Nulla facilisi. Duis venenatis lectus massa, ac mollis nisi suscipit non. Sed et sapien vulputate, imperdiet nibh vel, lobortis nisl. Curabitur sagittis justo nibh. Nulla vulputate sodales justo at efficitur. Cras justo augue, mollis vitae nulla sed, vestibulum tincidunt ante. Vestibulum et lorem lectus. Maecenas accumsan lacus a nisi euismod rutrum eu dapibus justo. Etiam scelerisque a odio a euismod. Pellentesque vestibulum pellentesque nisi, a tempus erat cursus ac. Morbi ut auctor lectus.</p>
+                        </statement>
+                    </exercise>
+
+                    <exercise>
+                        <title>Challenging Three</title>
+                        <statement>
+                            <p>Nam congue ex nec justo iaculis maximus. Vestibulum lobortis magna sed urna auctor, vel dignissim massa posuere. In sed venenatis elit. Vivamus congue gravida tempus. Nunc quis fermentum nisi. Nullam hendrerit lorem et tellus semper, sit amet scelerisque purus lobortis. Quisque sollicitudin quis neque eu suscipit. Praesent volutpat justo quis magna vehicula molestie.</p>
+                        </statement>
+                    </exercise>
+                </exercisegroup>
+            </exercises>
+
+
+            <exercises>
+                <title>Impossible Exercises</title>
+
+                <exercise>
+                    <title>Impossible One</title>
+                    <statement>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras congue urna nulla. Aliquam eget euismod tellus. Maecenas nibh libero, venenatis a laoreet in, tempor sit amet sem. Morbi sit amet justo tempor velit auctor placerat. Maecenas nec lobortis orci. Aenean dictum enim lacus, ac blandit lacus elementum nec. Mauris porttitor neque volutpat tincidunt sollicitudin. Cras porta lectus ac facilisis tempor. Suspendisse in velit nisl. Sed convallis leo at nunc aliquet fermentum. Pellentesque feugiat at ex sed elementum. In porta vulputate ipsum sit amet consectetur.</p>
+                    </statement>
+                </exercise>
+
+                <exercise>
+                    <title>Impossible Two</title>
+                    <statement>
+                        <p>Aliquam sagittis ex at magna porttitor, quis scelerisque ligula malesuada. Vestibulum vitae mauris id nisi pretium ornare a id lectus. Nam suscipit magna id sem ultricies vestibulum. Nulla facilisi. Duis venenatis lectus massa, ac mollis nisi suscipit non. Sed et sapien vulputate, imperdiet nibh vel, lobortis nisl. Curabitur sagittis justo nibh. Nulla vulputate sodales justo at efficitur. Cras justo augue, mollis vitae nulla sed, vestibulum tincidunt ante. Vestibulum et lorem lectus. Maecenas accumsan lacus a nisi euismod rutrum eu dapibus justo. Etiam scelerisque a odio a euismod. Pellentesque vestibulum pellentesque nisi, a tempus erat cursus ac. Morbi ut auctor lectus.</p>
+                    </statement>
+                </exercise>
+
+                <exercise>
+                    <title>Impossible Three</title>
+                    <statement>
+                        <p>Nam congue ex nec justo iaculis maximus. Vestibulum lobortis magna sed urna auctor, vel dignissim massa posuere. In sed venenatis elit. Vivamus congue gravida tempus. Nunc quis fermentum nisi. Nullam hendrerit lorem et tellus semper, sit amet scelerisque purus lobortis. Quisque sollicitudin quis neque eu suscipit. Praesent volutpat justo quis magna vehicula molestie.</p>
+                    </statement>
+                </exercise>
+            </exercises>
+
+
+            <references>
+                <title>More Reading</title>
+
+                <introduction>
+                    <p>Left intentionally blank, just checking sectioning.</p>
+                </introduction>
+
+                <biblio type="raw" xml:id="biblio-lay-article-repeat1">David C. Lay, <title>Subspaces and Echelon Forms</title>. <journal>The College Mathematics Journal</journal>, January 1993, <volume>24</volume> <number>1</number>, 57<ndash />62.</biblio>
+
+            </references>
+        </section>
+
+        <exercises xml:id="exercises">
+            <title>Exercises, Top-Level</title>
+
+            <introduction>
+                <p></p>
+                <p>This <tag>exercises</tag> of the sample article is a peer of all the preceding <tag>section</tag> and is the only such <tag>exercises</tag>.  As such, it is not numbered, and contains only <tag>exercise</tag>, but for this <tag>introduction</tag> you are reading.  The <tag>exercises</tag> contained within will be numbered in cross-references according to the enclosing division, in this case the entire article and so without any qualification, to wit, <xref ref="exercise-challenging-one-top" text="type-global"/>.</p>
+            </introduction>
+
+            <exercise>
+                <title>Drill One</title>
+                <statement>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras congue urna nulla. Aliquam eget euismod tellus. Maecenas nibh libero, venenatis a laoreet in, tempor sit amet sem. Morbi sit amet justo tempor velit auctor placerat. Maecenas nec lobortis orci. Aenean dictum enim lacus, ac blandit lacus elementum nec. Mauris porttitor neque volutpat tincidunt sollicitudin. Cras porta lectus ac facilisis tempor. Suspendisse in velit nisl. Sed convallis leo at nunc aliquet fermentum. Pellentesque feugiat at ex sed elementum. In porta vulputate ipsum sit amet consectetur.</p>
+                </statement>
+            </exercise>
+
+            <exercise>
+                <title>Drill Two</title>
+                <statement>
+                    <p>Aliquam sagittis ex at magna porttitor, quis scelerisque ligula malesuada. Vestibulum vitae mauris id nisi pretium ornare a id lectus. Nam suscipit magna id sem ultricies vestibulum. Nulla facilisi. Duis venenatis lectus massa, ac mollis nisi suscipit non. Sed et sapien vulputate, imperdiet nibh vel, lobortis nisl. Curabitur sagittis justo nibh. Nulla vulputate sodales justo at efficitur. Cras justo augue, mollis vitae nulla sed, vestibulum tincidunt ante. Vestibulum et lorem lectus. Maecenas accumsan lacus a nisi euismod rutrum eu dapibus justo. Etiam scelerisque a odio a euismod. Pellentesque vestibulum pellentesque nisi, a tempus erat cursus ac. Morbi ut auctor lectus.</p>
+                </statement>
+            </exercise>
+
+            <exercise>
+                <title>Drill Three</title>
+                <statement>
+                    <p>Nam congue ex nec justo iaculis maximus. Vestibulum lobortis magna sed urna auctor, vel dignissim massa posuere. In sed venenatis elit. Vivamus congue gravida tempus. Nunc quis fermentum nisi. Nullam hendrerit lorem et tellus semper, sit amet scelerisque purus lobortis. Quisque sollicitudin quis neque eu suscipit. Praesent volutpat justo quis magna vehicula molestie.</p>
+                </statement>
+            </exercise>
+
+            <exercise xml:id="exercise-challenging-one-top">
+                <title>Challenging One</title>
+                <statement>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras congue urna nulla. Aliquam eget euismod tellus. Maecenas nibh libero, venenatis a laoreet in, tempor sit amet sem. Morbi sit amet justo tempor velit auctor placerat. Maecenas nec lobortis orci. Aenean dictum enim lacus, ac blandit lacus elementum nec. Mauris porttitor neque volutpat tincidunt sollicitudin. Cras porta lectus ac facilisis tempor. Suspendisse in velit nisl. Sed convallis leo at nunc aliquet fermentum. Pellentesque feugiat at ex sed elementum. In porta vulputate ipsum sit amet consectetur.</p>
+                </statement>
+            </exercise>
+
+            <exercisegroup>
+                <introduction>
+                    <p>An introduction to an <c>exercisegroup</c>.  This is here to attempt to interrupt the flow of the counting from this division to the next.</p>
+                </introduction>
+
+                <exercise>
+                    <title>Challenging Two</title>
+                    <statement>
+                        <p>Aliquam sagittis ex at magna porttitor, quis scelerisque ligula malesuada. Vestibulum vitae mauris id nisi pretium ornare a id lectus. Nam suscipit magna id sem ultricies vestibulum. Nulla facilisi. Duis venenatis lectus massa, ac mollis nisi suscipit non. Sed et sapien vulputate, imperdiet nibh vel, lobortis nisl. Curabitur sagittis justo nibh. Nulla vulputate sodales justo at efficitur. Cras justo augue, mollis vitae nulla sed, vestibulum tincidunt ante. Vestibulum et lorem lectus. Maecenas accumsan lacus a nisi euismod rutrum eu dapibus justo. Etiam scelerisque a odio a euismod. Pellentesque vestibulum pellentesque nisi, a tempus erat cursus ac. Morbi ut auctor lectus.</p>
+                    </statement>
+                </exercise>
+
+                <exercise>
+                    <title>Challenging Three</title>
+                    <statement>
+                        <p>Nam congue ex nec justo iaculis maximus. Vestibulum lobortis magna sed urna auctor, vel dignissim massa posuere. In sed venenatis elit. Vivamus congue gravida tempus. Nunc quis fermentum nisi. Nullam hendrerit lorem et tellus semper, sit amet scelerisque purus lobortis. Quisque sollicitudin quis neque eu suscipit. Praesent volutpat justo quis magna vehicula molestie.</p>
+                    </statement>
+                </exercise>
+            </exercisegroup>
+
+            <exercise>
+                <title>Impossible One</title>
+                <statement>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras congue urna nulla. Aliquam eget euismod tellus. Maecenas nibh libero, venenatis a laoreet in, tempor sit amet sem. Morbi sit amet justo tempor velit auctor placerat. Maecenas nec lobortis orci. Aenean dictum enim lacus, ac blandit lacus elementum nec. Mauris porttitor neque volutpat tincidunt sollicitudin. Cras porta lectus ac facilisis tempor. Suspendisse in velit nisl. Sed convallis leo at nunc aliquet fermentum. Pellentesque feugiat at ex sed elementum. In porta vulputate ipsum sit amet consectetur.</p>
+                </statement>
+            </exercise>
+
+            <exercise>
+                <title>Impossible Two</title>
+                <statement>
+                    <p>Aliquam sagittis ex at magna porttitor, quis scelerisque ligula malesuada. Vestibulum vitae mauris id nisi pretium ornare a id lectus. Nam suscipit magna id sem ultricies vestibulum. Nulla facilisi. Duis venenatis lectus massa, ac mollis nisi suscipit non. Sed et sapien vulputate, imperdiet nibh vel, lobortis nisl. Curabitur sagittis justo nibh. Nulla vulputate sodales justo at efficitur. Cras justo augue, mollis vitae nulla sed, vestibulum tincidunt ante. Vestibulum et lorem lectus. Maecenas accumsan lacus a nisi euismod rutrum eu dapibus justo. Etiam scelerisque a odio a euismod. Pellentesque vestibulum pellentesque nisi, a tempus erat cursus ac. Morbi ut auctor lectus.</p>
+                </statement>
+            </exercise>
+
+            <exercise>
+                <title>Impossible Three</title>
+                <statement>
+                    <p>Nam congue ex nec justo iaculis maximus. Vestibulum lobortis magna sed urna auctor, vel dignissim massa posuere. In sed venenatis elit. Vivamus congue gravida tempus. Nunc quis fermentum nisi. Nullam hendrerit lorem et tellus semper, sit amet scelerisque purus lobortis. Quisque sollicitudin quis neque eu suscipit. Praesent volutpat justo quis magna vehicula molestie.</p>
+                </statement>
+            </exercise>
+
+            <exercise>
+                <title>An Exercise in a Section</title>
+                <statement>
+                    <p>Exercises can appear in a <q>section</q> of their own.  You need to give the section a title, even if it seems obvious what to call it.  Individual exercises may have titles, as you choose.  Problem: How should we hide solutions?</p>
+                </statement>
+                <solution>
+                    <p>Maybe a global switch should be used to suppress solutions, while a separate processing regime could use them as part of a solutions manual.</p>
+                </solution>
+            </exercise>
+
+            <exercise number="42a" xml:id="exercise-with-hardcoded-number">
+                <title>An Exercise with a Hard-Coded Problem Number</title>
+                <statement>
+                    <p>Compute the definite integral <m>\definiteintegral{2}{4}{x^2}{x}</m>, not as an approximate value from a Riemann sum, but as an exact value based of the limit by using the Fundamental Theorem.</p>
+                </statement>
+                <solution xml:id="solution-antiderivative">
+                    <p>An antiderivative of <m>x^2</m> is <m>F(x)=x^3/3</m>, so by the FTC,<me>\definiteintegral{2}{4}{x^2}{x}=F(4)-F(2)=\frac{1}{3}\left(4^3-2^3\right)=\frac{56}{3}</me>!?!      This is indeed an exciting result, but we are mostly interested in seeing that the sentence-ending punctuation is absorbed properly into the displayed equation.</p>
+                </solution>
+            </exercise>
+
+            <exercise>
+                <statement>
+                    <p>Can you prove Corollary<nbsp /><xref ref="corollary-FTC-derivative" /> directly?  If not consider that a problem could have several parts, which should be formatted as a second-level list, since the problems normally get numbered at the top level.<ol>
+                        <li><p>Why is this result a Corollary?</p></li>
+                        <li><p>Could you interchange the Theorem and Corollary?</p></li>
+                    </ol></p>
+                </statement>
+                <!-- A hint is a push in the right direction -->
+                <hint>
+                    <title>MVT</title>
+                    <p>Consider the definite integral as an area function and employ the Mean Value Theorem.</p>
+                </hint>
+                <!-- You can provide several -->
+                <hint xml:id="exercise-complicated-second-hint">
+                    <title>Motivator</title>
+                    <p>Think harder!</p>
+                </hint>
+                <!-- The answer is just the end product -->
+                <answer xml:id="exercise-complicated-first-answer">
+                    <title>Helpful</title>
+                    <p><ol>
+                        <li><p>It follows easily.</p></li>
+                        <li><p>Yes.</p></li>
+                    </ol></p>
+                </answer>
+                <!-- A solution is everything that should be said -->
+                <solution>
+                    <p>We could prove either result first, then obtain the other as an easy consequence.</p>
+                </solution>
+            </exercise>
+        </exercises>
 
 
         <backmatter xml:id="backmatter">
