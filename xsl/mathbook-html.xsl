@@ -4564,7 +4564,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ################## -->
 
 <!-- See xsl/mathbook-common.xsl for descriptions of the  -->
-<!-- five modal templates which must be implemented here  -->
+<!-- four modal templates which must be implemented here  -->
 <!-- The main templates for "sidebyside" and "sbsgroup"   -->
 <!-- are in xsl/mathbook-common.xsl, as befits containers -->
 
@@ -4580,9 +4580,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="(100 * substring-before($width, '%')) div (100 - substring-before($left-margin, '%') - substring-before($right-margin, '%'))" />
     <xsl:text>%</xsl:text>
 </xsl:template>
-
-<!-- We do no particular setup for the panels -->
-<xsl:template match="*" mode="panel-setup" />
 
 <!-- If an object carries a title, we add it to the -->
 <!-- row of titles across the top of the table      -->

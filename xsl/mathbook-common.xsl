@@ -4702,8 +4702,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <!-- It has setup (LaTeX), headings (titles), panels,   -->
     <!-- and captions.  These then go to "compose-panels".  -->
     <!-- Implementations need to define modal templates     -->
-    <!--   panel-setup, panel-heading,                      -->
-    <!--   panel-panel, panel-caption                       -->
+    <!--   panel-heading, panel-panel, panel-caption        -->
     <!-- The parameters passed to each is the union of what -->
     <!-- is needed for LaTeX and HTML implementations.      -->
     <!-- Final results are collectively sent to modal       -->
@@ -4711,16 +4710,6 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <!-- template to be arranged                            -->
     <!-- TODO: Instead we could pass the $layout to the four,    -->
     <!-- and infer the $panel-number in the receiving templates. -->
-
-    <xsl:variable name="setup">
-        <xsl:for-each select="$panels">
-            <!-- context is now a particular panel -->
-            <xsl:variable name="panel-number" select="count(preceding-sibling::*) + 1" />
-            <xsl:apply-templates select="." mode="panel-setup">
-                <xsl:with-param name="width" select="$layout/width[$panel-number]" />
-            </xsl:apply-templates>
-        </xsl:for-each>
-    </xsl:variable>
 
     <xsl:variable name="headings">
         <xsl:for-each select="$panels">
@@ -4767,7 +4756,6 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:with-param name="layout" select="$layout" />
         <xsl:with-param name="has-headings" select="$has-headings" />
         <xsl:with-param name="has-captions" select="$has-captions" />
-        <xsl:with-param name="setup" select="$setup" />
         <xsl:with-param name="headings" select="$headings" />
         <xsl:with-param name="panels" select="$panel-panels" />
         <xsl:with-param name="captions" select="$captions" />
