@@ -252,14 +252,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>"language_info": {</xsl:text>
         <xsl:text>"codemirror_mode": {</xsl:text>
         <xsl:text>"name": "ipython", </xsl:text>
-        <xsl:text>"version": 2</xsl:text>
+        <xsl:text>"version": 3</xsl:text>
         <xsl:text>}, </xsl:text>
         <xsl:text>"file_extension": ".py", </xsl:text>
         <xsl:text>"mimetype": "text/x-python", </xsl:text>
         <xsl:text>"name": "python", </xsl:text>
         <xsl:text>"nbconvert_exporter": "python", </xsl:text>
-        <xsl:text>"pygments_lexer": "ipython2", </xsl:text>
-        <xsl:text>"version": "2.7.8"</xsl:text>
+        <xsl:text>"pygments_lexer": "ipython3", </xsl:text>
+        <xsl:text>"version": "3.6.4"</xsl:text>
         <xsl:text>}, </xsl:text>
         <xsl:text>"name": "</xsl:text>
         <xsl:value-of select="$filename" />
