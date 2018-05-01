@@ -82,7 +82,7 @@
 
 <!-- We hard-code the chunking level, need to pass this  -->
 <!-- through the mbx script or use a compatibility layer -->
-<xsl:param name="chunk.level" select="1" />
+<xsl:param name="chunk.level" select="2" />
 <!-- We disable the ToC level to avoid any conflicts with chunk level -->
 <xsl:param name="toc.level" select="0" />
 
@@ -122,7 +122,6 @@
 
 <!-- Read the code and documentation for "chunking" in xsl/mathbook-common.xsl -->
 
-<!-- At level 1, we can just kill book's summary page -->
 
 <xsl:template match="&STRUCTURAL;" mode="file-wrap">
     <xsl:param name="content" />
@@ -153,11 +152,40 @@
     </exsl:document>
 </xsl:template>
 
+<!-- At level 1, we can just kill book's summary page -->
+
 <!-- The book element gets mined in various ways,            -->
 <!-- but the "usual" HTML treatment can/should be thrown out -->
 <!-- At fixed level 1, this is a summary page                -->
 <!-- Later gives precedence?  So overrides above             -->
 <xsl:template match="book" mode="file-wrap" />
+
+<!-- At level 2 we need to capture chapter and appendix -->
+<!-- introductions from summary page that is at level 1 -->
+<!-- NB: we are missing conclusions here                -->
+<!-- NB: copied from mathbook-html.xsl, sans            -->
+<!-- the summary links and the conclusion               -->
+<xsl:template match="frontmatter|chapter|appendix" mode="summary">
+    <!-- location info for debugging efforts -->
+    <xsl:apply-templates select="." mode="debug-location" />
+    <!-- Heading, div for this structural subdivision -->
+    <xsl:variable name="ident">
+        <xsl:apply-templates select="." mode="internal-id" />
+    </xsl:variable>
+    <section class="{local-name(.)}" id="{$ident}">
+        <xsl:apply-templates select="." mode="section-header" />
+        <xsl:apply-templates select="author|objectives|introduction|titlepage|abstract" />
+        <!-- deleted "nav" and summary links here -->
+        <!-- "conclusion" is being missed here    -->
+     </section>
+</xsl:template>
+
+<!-- At level 2, the backmatter summary is useless, -->
+<!-- since it is all links, so just kill the file,  -->
+<!-- and do not include in the manifest or spine    -->
+<xsl:template match="backmatter" mode="file-wrap" />
+
+
 
 <!-- ##################### -->
 <!-- Setup, Infrastructure -->
@@ -276,10 +304,11 @@
 
 <!-- Build an empty item element for each CHAPTER, -->
 <!-- FRONTMATTER, BACKMATTER, -->
+<!-- Don't include "backmatter", all summary       -->
 <!-- recurse into contents for image files, etc    -->
 <!-- See "Core Media Type Resources"               -->
-<!-- Add to spine as appropriate                   -->
-<xsl:template match="frontmatter|chapter|backmatter" mode="manifest">
+<!-- Add to spine identically                      -->
+<xsl:template match="frontmatter|colophon|acknowledgements|preface|chapter|appendix|index|section|exercises|references" mode="manifest">
     <!-- Annotate manifest entries -->
     <xsl:comment>
         <xsl:apply-templates select="." mode="long-name" />
@@ -329,7 +358,8 @@
     <xsl:apply-templates select="*" mode="spine" />
 </xsl:template>
 
-<xsl:template match="frontmatter|chapter|backmatter" mode="spine">
+<!-- Simplest scenario is spine matches manifest, all with @linear="yes" -->
+<xsl:template match="frontmatter|colophon|acknowledgements|preface|chapter|appendix|index|section|exercises|references" mode="spine">
     <xsl:element name="itemref" xmlns="http://www.idpf.org/2007/opf">
         <xsl:attribute name="idref">
             <xsl:apply-templates select="." mode="internal-id" />
@@ -383,7 +413,7 @@
                 <nav epub:type="toc" id="toc">
                     <h1>Table of Contents</h1>
                     <ol>
-                        <xsl:for-each select="$document-root/chapter">
+                        <xsl:for-each select="$document-root/chapter|$document-root/backmatter/appendix|$document-root/backmatter/index">
                             <li>
                                 <xsl:element name="a">
                                     <xsl:attribute name="href">
