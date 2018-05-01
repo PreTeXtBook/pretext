@@ -134,8 +134,8 @@
     </xsl:variable>
     <!-- do not use "doctype-system" here        -->
     <!-- do not create faux <!DOCTYPE html> here -->
-    <!-- NB:  Add  xmlns="http://www.w3.org/1999/xhtml"  to <html>,          -->
-    <!-- and we get plenty of top-level-ish  xmlns="" which do not validate -->
+    <!-- NB:  If we add  xmlns="http://www.w3.org/1999/xhtml"  to <html> here, -->
+    <!-- then we get plenty of top-level-ish  xmlns="" which do not validate   -->
     <exsl:document href="{$file}" method="xml" encoding="UTF-8" indent="yes">
         <html>
             <head>
@@ -238,11 +238,11 @@
 <xsl:template name="package-metadata">
     <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns="http://www.idpf.org/2007/opf">
         <!-- Optional in EPUB 3.0.1 spec -->
-        <!-- Don't write this if both of these are empty -->
-        <xsl:element name="dc:creator">
-            <xsl:apply-templates select="//frontmatter/titlepage/author" mode="name-list"/>
-            <xsl:apply-templates select="//frontmatter/titlepage/editor" mode="name-list"/>
-        </xsl:element>
+        <xsl:for-each select="$document-root//frontmatter/titlepage/author|$document-root//frontmatter/titlepage/editor">
+            <xsl:element name="dc:creator">
+                <xsl:apply-templates select="personname"/>
+            </xsl:element>
+        </xsl:for-each>
         <!-- Required in EPUB 3.0.1 spec       -->
         <!-- TODO: title-types can refine this -->
         <xsl:element name="dc:title">
@@ -541,8 +541,7 @@
     <xsl:apply-templates select="*" mode="manifest" />
 </xsl:template>
 
-<!-- Now the image inclusion   -->
-<!-- With source specification -->
+<!-- Now the image inclusion, with source specification -->
 <xsl:template match="image[@source]">
     <!-- condition on file extension -->
     <xsl:variable name="extension">
@@ -559,30 +558,30 @@
         </xsl:attribute>
         <xsl:if test="@width">
             <xsl:attribute name="style">
-                <xsl:text>width:</xsl:text>
+                <xsl:text>width: </xsl:text>
                 <xsl:value-of select="@width" />
-                <xsl:text>;</xsl:text>
+                <xsl:text>; margin: 0 auto;</xsl:text>
             </xsl:attribute>
         </xsl:if>
     </xsl:element>
 </xsl:template>
 
-<!-- Now the image inclusion   -->
-<!-- With source specification -->
-<xsl:template match="image/latex-image|image/latex-image-code|image/sageplot|image/asymptote">
+<!-- Now the image inclusion, with source specification -->
+<!-- Match style is duplicated from mathbook-html.xsl   -->
+<xsl:template match="image[asymptote]|image[latex-image-code]|image[latex-image]|image[sageplot]">
     <!-- assumes SVG exists from  mbx  script creation -->
     <xsl:element name="img">
         <xsl:attribute name="src">
             <xsl:value-of select="$directory.images" />
             <xsl:text>/</xsl:text>
-            <xsl:apply-templates select=".." mode="internal-id" />
+            <xsl:apply-templates select="." mode="internal-id" />
             <xsl:text>.svg</xsl:text>
         </xsl:attribute>
-        <xsl:if test="../@width">
+        <xsl:if test="@width">
             <xsl:attribute name="style">
-                <xsl:text>width:</xsl:text>
-                <xsl:value-of select="../@width" />
-                <xsl:text>;</xsl:text>
+                <xsl:text>width: </xsl:text>
+                <xsl:value-of select="@width" />
+                <xsl:text>; margin: 0 auto;</xsl:text>
             </xsl:attribute>
         </xsl:if>
     </xsl:element>

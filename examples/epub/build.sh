@@ -21,13 +21,14 @@ declare MJNODE=/opt/node_modules/mathjax-node
 
 # Working areas
 # DEBUG saves post-xsltproc, pre-mathjax-node
+# and also post-mathjax-node, pre-sed
 declare SCRATCH=/tmp/scratch
 declare EPUBOUT=${SCRATCH}/epub
 declare DEBUG=${SCRATCH}/debug
 
 # Sources
-# Assumes cover image is a PNG
-# And cover image is in "images" subdirectory
+# 1.  Assumes an "images" directory below source directory
+# 2.  Cover image must be a PNG, and in "images" directory
 
 # EPUB Sampler, test file
 declare SRC=${MB}/examples/epub
@@ -42,12 +43,18 @@ declare OUTFILE=sampler.epub
 # declare OUTFILE=sample-book.epub
 
 # Judson's AATA, an entire book
-#declare SRC=${HOME}/books/aata/aata/src
-#declare SRCMASTER=${SRC}/aata.xml
-#declare COVERIMAGE=cover_aata_2014.png
-#declare OUTFILE=aata.epub
+# declare SRC=${HOME}/books/aata/aata/src
+# declare SRCMASTER=${SRC}/aata.xml
+# declare COVERIMAGE=cover_aata_2014.png
+# declare OUTFILE=aata.epub
 
-# removal of detritus
+# Keller/Trotter, Applied Combinatorics, an entire book
+# declare SRC=${HOME}/books/app-comb/applied-combinatorics/mbx
+# declare SRCMASTER=${SRC}/index.mbx
+# declare COVERIMAGE=../front-cover.png
+# declare OUTFILE=applied-combinatorics.epub
+
+# removal of detritus (clear $SCRATCH by hand before execution)
 
 # create directory structure
 install -d ${EPUBOUT} ${EPUBOUT}/EPUB/xhtml ${EPUBOUT}/EPUB/xhtml/images
@@ -87,6 +94,7 @@ for f in ${EPUBOUT}/EPUB/xhtml/*.xhtml; do
     # ${MJNODE}/bin/page2mml < $f.temp > $f;
     # rm $f.temp;
     mv $f.temp ${DEBUG};
+    cp -a $f ${DEBUG};
     sed -i -f ${EPUBSCRIPT}/mbx-epub.sed $f;
 done
 unset GLOBIGNORE

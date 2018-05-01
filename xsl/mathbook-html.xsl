@@ -4360,10 +4360,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- SVG's produced by mbx script                  -->
-<!--   Asymptote graphics language                 -->
-<!--   LaTeX source code images                    -->
-<!--   Sage graphics plots, w/ PNG fallback for 3D -->
+<!-- SVG's produced by mbx script                     -->
+<!--   Asymptote graphics language                    -->
+<!--   LaTeX source code images                       -->
+<!--   Sage graphics plots, w/ PNG fallback for 3D    -->
+<!--   Match style is duplicated in mathbook-epub.xsl -->
 <xsl:template match="image[asymptote]|image[latex-image-code]|image[latex-image]|image[sageplot]">
     <xsl:variable name="base-pathname">
         <xsl:value-of select="$directory.images" />
