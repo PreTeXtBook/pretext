@@ -358,22 +358,24 @@ def webwork_to_tex(origin, xslt_exec, mbx_xsl_dir, xml_source, server_url, dest_
         #
         #   \includegraphics[<width-spec>]{(base-graphic-filename).(file-extension)}
         #
-        graphics_pattern = re.compile(r'\\includegraphics\[[^\]]*\]{([^\.]*)\.([^}]*)}')
+        graphics_pattern = re.compile(r'\\includegraphics\[[^\]]*\]{(.*)(\/wwtmp.*)\.(.*)}')
 
         # replace filenames, download images with new filenames
         count = 0
         for match in re.finditer(graphics_pattern, tex_only):
             count += 1
-            ww_basename = match.group(1)
-            file_extension = '.' + match.group(2)
+            wwtmp_parent = match.group(1)
+            ww_basename = match.group(2)
+            file_extension = '.' + match.group(3)
             ww_filename = ww_basename + file_extension
+            ww_full_filename = wwtmp_parent + ww_filename
             # rename, eg, webwork-tex/webwork-5-image-3.png
             mbx_basename =  internal_id + '-image-' + str(count)
             mbx_filename = mbx_basename + file_extension
-            # URL of image on server starts two steps down
-            image_url = server_url + ww_filename.replace('/var/www/', '')
+            # URL of image on server
+            image_url = server_url + ww_filename
             # modify LaTeX problem source to include local versions
-            tex_only = tex_only.replace(ww_filename, 'webwork-tex/' + mbx_filename)
+            tex_only = tex_only.replace(ww_full_filename, 'webwork-tex/' + mbx_filename)
             # download actual image files
             # http://stackoverflow.com/questions/13137817/how-to-download-image-using-requests
             try:
