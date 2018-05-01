@@ -2901,13 +2901,21 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:choose>
 </xsl:template>
 
+<!-- Anyway that an image gets placed in a sidebyside  -->
+<!-- panel it should have a relative size filling that -->
+<!-- panel, so this is easy, just 100% all the time    -->
+<xsl:template match="image[ancestor::sidebyside]" mode="get-width-percentage">
+    <xsl:text>100%</xsl:text>
+</xsl:template>
+
+
 <!-- We need to get the right entry from the sidebyside layout.         -->
 <!-- This is complicated slightly by two possibilities for the element  -->
 <!-- of the sidebyside, a naked object, or a figure holding the object  -->
 <!-- Widths from sidebyside layouts have been error-checked as input    -->
 
 <!-- occurs in a figure, not contained in a sidebyside -->
-<xsl:template match="image[ancestor::sidebyside]|video[ancestor::sidebyside]|jsxgraph[ancestor::sidebyside]|interactive[ancestor::sidebyside]|slate[ancestor::sidebyside]" mode="get-width-percentage">
+<xsl:template match="video[ancestor::sidebyside]|jsxgraph[ancestor::sidebyside]|interactive[ancestor::sidebyside]|slate[ancestor::sidebyside]" mode="get-width-percentage">
     <!-- in a side-by-side, get layout, locate in layout -->
     <!-- and get width.  The layout-parameters template  -->
     <!-- will analyze an enclosing sbsgroup              -->

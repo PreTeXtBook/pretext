@@ -4296,18 +4296,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </dl>
 </xsl:template>
 
-<!-- ############################# -->
-<!-- Widths of Images, Videos, Etc -->
-<!-- ############################# -->
-
-<!-- Anyway that an image gets placed in a sidebyside  -->
-<!-- panel it should have a relative size filling that -->
-<!-- panel, so this is easy, just 100% all the time    -->
-<xsl:template match="image[ancestor::sidebyside]" mode="get-width-percentage">
-    <xsl:text>100%</xsl:text>
-</xsl:template>
-
-
 <!-- ###### -->
 <!-- Images -->
 <!-- ###### -->

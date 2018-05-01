@@ -6103,11 +6103,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." />
 </xsl:template>
 
-<!-- !!!! OVERRIDE !!!! -->
-<xsl:template match="image[ancestor::sidebyside]" mode="get-width-percentage">
-    <xsl:text>100%</xsl:text>
-</xsl:template>
-
 <!-- With raw LaTeX code, we use a \resizebox from the      -->
 <!-- graphicx package to scale the image to the panel width -->
 <xsl:template match="image[latex-image-code]|image[latex-image]" mode="panel-latex-box">
