@@ -100,7 +100,7 @@
 <!-- Note that "docinfo" is at the same level and not structural, so killed -->
 <xsl:template match="/">
     <xsl:call-template name="banner-warning">
-        <xsl:with-param name="warning">EPUB conversion is experimental and not supported.  In particular,&#xa;the XSL conversion alone is not sufficient to create an EPUB.</xsl:with-param>
+        <xsl:with-param name="warning">EPUB conversion is experimental and not supported.  In particular,&#xa;the XSL conversion alone is not sufficient to create an EPUB. See mathbook/examples/epub/build.sh for more information.</xsl:with-param>
     </xsl:call-template>
     <xsl:apply-templates select="mathbook" mode="deprecation-warnings" />
     <xsl:call-template name="setup" />
