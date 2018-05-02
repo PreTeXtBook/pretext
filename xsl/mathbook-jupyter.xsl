@@ -51,6 +51,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:param name="html.knowl.proof" select="'no'" />
 <xsl:param name="html.knowl.example" select="'no'" />
+<xsl:param name="kernel" />
 
 <!-- ############## -->
 <!-- Entry Template -->
@@ -237,20 +238,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- <xsl:text>"name": "python2"</xsl:text> -->
         <!-- "sagemath" as  "name" will be latest kernel -->
         <!-- in Sage distribution Jupyter, and in CoCalc -->
-        <xsl:text>"name": "sagemath"</xsl:text>
+        <xsl:choose>
+            <xsl:when test="contains('|python3|Python3|python 3|Python 3|py|Py|python|Python|'
+                , concat('|', $kernel, '|'))">
+                <xsl:text>"name": "python3"</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>"name": "sagemath"</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
         <!-- TODO: how much of the following is necessary before loading? -->
         <xsl:text>}, </xsl:text>
         <xsl:text>"language_info": {</xsl:text>
         <xsl:text>"codemirror_mode": {</xsl:text>
         <xsl:text>"name": "ipython", </xsl:text>
-        <xsl:text>"version": 2</xsl:text>
+        <xsl:text>"version": 3</xsl:text>
         <xsl:text>}, </xsl:text>
         <xsl:text>"file_extension": ".py", </xsl:text>
         <xsl:text>"mimetype": "text/x-python", </xsl:text>
         <xsl:text>"name": "python", </xsl:text>
         <xsl:text>"nbconvert_exporter": "python", </xsl:text>
-        <xsl:text>"pygments_lexer": "ipython2", </xsl:text>
-        <xsl:text>"version": "2.7.8"</xsl:text>
+        <xsl:text>"pygments_lexer": "ipython3", </xsl:text>
+        <xsl:text>"version": "3.6.4"</xsl:text>
         <xsl:text>}, </xsl:text>
         <xsl:text>"name": "</xsl:text>
         <xsl:value-of select="$filename" />
