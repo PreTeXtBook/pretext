@@ -9,9 +9,10 @@
 # Careful, the single whitespace below is character "&xa0;" in XML notation
 s/&nbsp;/ /g
 
-# Close image tags, br tags
+# Close image tags, br tags, link tags
 s/<img \([^>]*\)>/<img \1\/>/g
 s/<br>/<br \/>/g
+s/<link \([^>]*\)>/<link \1\/>/g
 
 # SVG Per-file, remove from  .MathJax_SVG  style
 s/direction: ltr;//g
