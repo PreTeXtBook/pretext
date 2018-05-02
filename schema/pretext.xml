@@ -1294,11 +1294,29 @@
 
         <p>Note that widths give on a <c>sidebyside</c> override any width given to the components of the panels.</p>
 
+        <p>A <tag>stack</tag> allows non-captioned, non-titled elements to accumulate vertically in a single panel.  It is a basic container.</p>
+
         <p>A group of side-by-sides is designed to stack vertically with common controls on widths, etc.  Its implementation is entirely experimental right now, even if we are relatively confident of the markup.</p>
 
         <p>The <webwork /> variant allows only a single tabular or image.  The <q>NoCaption</q> variants prohibits captioned or numbered items as panels.  The <c>ParagraphsTitleOptional</c> will be removed once <c>p</c> can stack in a panel.</p>
 
         <fragment xml:id="sidebyside">
+        Stack =
+            element stack {
+                (
+                    Poem |
+                    Tabular |
+                    Image |
+                    Video |
+                    Program |
+                    Console |
+                    Paragraph |
+                    Preformatted |
+                    Paragraphs |
+                    ParagraphsTitleOptional |
+                    List
+                )+
+            }
         SidebySideAttributes =
             attribute margins {text}?,
             (attribute width {text} | attribute widths {text})?,
@@ -1318,7 +1336,8 @@
                     Preformatted |
                     Paragraphs |
                     ParagraphsTitleOptional |
-                    List
+                    List |
+                    Stack
                 )+
             }
         SideBySideNoCaption =
@@ -1335,7 +1354,8 @@
                     Preformatted |
                     Paragraphs |
                     ParagraphsTitleOptional |
-                    List
+                    List |
+                    Stack
                 )+
             }
         SideBySideGroup =

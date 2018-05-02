@@ -623,6 +623,22 @@
             }
         
         
+        Stack =
+            element stack {
+                (
+                    Poem |
+                    Tabular |
+                    Image |
+                    Video |
+                    Program |
+                    Console |
+                    Paragraph |
+                    Preformatted |
+                    Paragraphs |
+                    ParagraphsTitleOptional |
+                    List
+                )+
+            }
         SidebySideAttributes =
             attribute margins {text}?,
             (attribute width {text} | attribute widths {text})?,
@@ -642,7 +658,8 @@
                     Preformatted |
                     Paragraphs |
                     ParagraphsTitleOptional |
-                    List
+                    List |
+                    Stack
                 )+
             }
         SideBySideNoCaption =
@@ -659,7 +676,8 @@
                     Preformatted |
                     Paragraphs |
                     ParagraphsTitleOptional |
-                    List
+                    List |
+                    Stack
                 )+
             }
         SideBySideGroup =

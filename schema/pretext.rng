@@ -1375,6 +1375,25 @@
       </element>
     </choice>
   </define>
+  <define name="Stack">
+    <element name="stack">
+      <oneOrMore>
+        <choice>
+          <ref name="Poem"/>
+          <ref name="Tabular"/>
+          <ref name="Image"/>
+          <ref name="Video"/>
+          <ref name="Program"/>
+          <ref name="Console"/>
+          <ref name="Paragraph"/>
+          <ref name="Preformatted"/>
+          <ref name="Paragraphs"/>
+          <ref name="ParagraphsTitleOptional"/>
+          <ref name="List"/>
+        </choice>
+      </oneOrMore>
+    </element>
+  </define>
   <define name="SidebySideAttributes">
     <optional>
       <attribute name="margins"/>
@@ -1409,6 +1428,7 @@
           <ref name="Paragraphs"/>
           <ref name="ParagraphsTitleOptional"/>
           <ref name="List"/>
+          <ref name="Stack"/>
         </choice>
       </oneOrMore>
     </element>
@@ -1429,6 +1449,7 @@
           <ref name="Paragraphs"/>
           <ref name="ParagraphsTitleOptional"/>
           <ref name="List"/>
+          <ref name="Stack"/>
         </choice>
       </oneOrMore>
     </element>
