@@ -14,10 +14,10 @@ declare MB=${HOME}/mathbook/mathbook
 declare MBXSL=${MB}/xsl
 declare EPUBSCRIPT=${MB}/examples/epub
 
-# mathjax-node paths
+# mathjax-node-page paths
 # requires installation, see
-# https://github.com/mathjax/MathJax-node
-declare MJNODE=/opt/node_modules/mathjax-node
+# https://github.com/pkra/mathjax-node-page
+declare MJNODE=/opt/node_modules/mathjax-node-page
 
 # Working areas
 # DEBUG saves post-xsltproc, pre-mathjax-node
@@ -67,7 +67,7 @@ install -d ${DEBUG}
 cp -a ${SRC}/images ${EPUBOUT}/EPUB/xhtml
 mv ${EPUBOUT}/EPUB/xhtml/images/${COVERIMAGE} ${EPUBOUT}/EPUB/xhtml/images/cover.png
 for f in ${EPUBOUT}/EPUB/xhtml/images/*.svg; do 
-    sed -i -f ${EPUBSCRIPT}/mbx-epub-images.sed $f
+    sed -i "" -f ${EPUBSCRIPT}/mbx-epub-images.sed $f
 done
 
 # make files via xsltproc, into existing directory structure
@@ -77,7 +77,7 @@ xsltproc --xinclude  ${MBXSL}/mathbook-epub.xsl ${SRCMASTER}
 # fixup file header to make obviously XHTML
 declare GLOBIGNORE="${EPUBOUT}/EPUB/xhtml/cover.xhtml:${EPUBOUT}/EPUB/xhtml/title-page.xhtml:${EPUBOUT}/EPUB/xhtml/table-contents.xhtml"
 for f in ${EPUBOUT}/EPUB/xhtml/*.xhtml; do
-    sed -i -f ${EPUBSCRIPT}/mbx-epub-xhtml-header.sed $f
+    sed -i "" -f ${EPUBSCRIPT}/mbx-epub-xhtml-header.sed $f
 done
 unset GLOBIGNORE
 
@@ -90,12 +90,12 @@ declare GLOBIGNORE="${EPUBOUT}/EPUB/xhtml/cover.xhtml:${EPUBOUT}/EPUB/xhtml/titl
 for f in ${EPUBOUT}/EPUB/xhtml/*.xhtml; do
     echo "Working on" $f
     mv $f $f.temp;
-    ${MJNODE}/bin/page2svg < $f.temp > $f;
+    ${MJNODE}/bin/mjpage < $f.temp > $f;
     # ${MJNODE}/bin/page2mml < $f.temp > $f;
     # rm $f.temp;
     mv $f.temp ${DEBUG};
     cp -a $f ${DEBUG};
-    sed -i -f ${EPUBSCRIPT}/mbx-epub.sed $f;
+    sed -i "" -f ${EPUBSCRIPT}/mbx-epub.sed $f;
 done
 unset GLOBIGNORE
 #
