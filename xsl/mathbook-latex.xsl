@@ -6121,6 +6121,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{tcolorbox}&#xa;</xsl:text>
 </xsl:template>
 
+<!-- Since stackable items do not carry titles or captions, -->
+<!-- their "panel-latex-box" templates do the right thing   -->
+<!-- Items that normally could go inline within a paragraph -->
+<!-- without any spacing will be preceded by a \par         -->
+<xsl:template match="stack" mode="panel-latex-box">
+    <xsl:for-each select="tabular|image|p|pre|ol|ul|dl|video|interactive|program|console">
+        <xsl:if test="preceding-sibling::* and (self::image or self::tabular)">
+            <xsl:text>\par&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:apply-templates select="." mode="panel-latex-box" />
+    </xsl:for-each>
+</xsl:template>
+
 <!-- Just temporary markers of unimplemented stuff -->
 <xsl:template match="*" mode="panel-latex-box">
     <xsl:text>\parbox{70pt}{[</xsl:text>

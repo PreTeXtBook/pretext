@@ -4973,6 +4973,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." />
 </xsl:template>
 
+<!-- Since stackable items do not carry titles or captions, -->
+<!-- their "panel-html-box" templates normally do not do    -->
+<!-- anything special at all.  But we pass through those    -->
+<!-- routines all the same.                                 -->
+<xsl:template match="stack" mode="panel-html-box">
+    <xsl:param name="b-original" select="true()" />
+    <xsl:apply-templates select="tabular|image|p|pre|ol|ul|dl|video|interactive|program|console" mode="panel-html-box">
+        <xsl:with-param name="b-original" select="$b-original" />
+    </xsl:apply-templates>
+</xsl:template>
+
 <!-- Just temporary markers of unimplemented stuff -->
 <xsl:template match="*" mode="panel-html-box">
     <xsl:text>[</xsl:text>
