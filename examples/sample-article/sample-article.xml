@@ -5824,6 +5824,111 @@ the xsltproc executable.
                 </ol></p>
             </subsection>
 
+            <subsection xml:id="stacking-side-by-side">
+                <title>Stacking: Back to Vertical Flow</title>
+
+                <p>You might wish to mix disparate items within a panel, returning to a vertical flow within a panel.  For example, you might want a diagram to the left and some paragraphs of commentary to the right.  Or perhaps a photograph on one side and a list of bullet points to the other side.  A <tag>stack</tag> is a container that can only be used to collect several items into a single panel of a <tag>sidebyside</tag>.  You cannot point to it, but you can point to its contents as usual.  Contents may be anything you could otherwise put into a <c>sidebyside</c> panel that does not have a <tag>caption</tag> or a <tag>title</tag>.  In particular, these panels cannot be sub-numbered since the panel cannot be made into a <tag>figure</tag>.</p>
+
+                <p>Similar items can also be stacked, of course.  Most importantly, a normal panel will accept a single paragraph.  If you want several paragraphs, simply collect them in a <c>stack</c>.</p>
+
+                <sidebyside widths="55% 35%" valigns="middle top">
+                    <stack>
+                        <p>A simple sentence inside a single <tag>p</tag> as the first item in a stack.</p>
+                        <image source="images/cross-rectangle.png" />
+                    </stack>
+                    <stack>
+                        <image source="images/cross-rectangle.png" />
+                        <p>A less simple sentence that will wrap inside the panel to make the right panel taller and allow us to experiment with sliding the left panel contents up and down, here it is placed in the <c>middle</c>.</p>
+                    </stack>
+                </sidebyside>
+
+                <p>We have an image to the left, as a regular panel (not a stack).  In the right panel we stack a list of properties, followed by a descriptive paragraph.  We middle-align the stack at the <c>bottom</c>, just as a demonstration (it would likely look better with <c>top</c> alignment).</p>
+
+                <sidebyside widths="60% 30%" valigns="top bottom">
+                    <image source="images/cross-square.png" />
+                    <stack>
+                        <ul>
+                            <li>Blue</li>
+                            <li>Square</li>
+                            <li>Geometric</li>
+                        </ul>
+                        <p>The blue-ness of the border contrasts with the stark emptieness of the white interior, evoking images of blue skies and vast sandy deserts.  The harsh black cross draws the viewer's attention to the exact center.</p>
+                    </stack>
+                </sidebyside>
+
+                <p>In <latex /> an image or a tabular can be used <em>within</em> a paragraph.  Here we test a mixture of the three items to make sure they are properly separated in a conversion to <latex />.</p>
+
+                 <sidebyside widths="30% 25%">
+                    <stack>
+                        <p>Paragraph one.</p>
+                        <image source="images/cross-square.png"/>
+                        <p>Paragraph two.</p>
+                        <tabular top="minor" left="minor" halign="center">
+                            <col right="medium"/>
+                            <col right="major"/>
+                            <col />
+                            <!--  -->
+                            <row bottom="medium">
+                                <cell>1111</cell>
+                                <cell right="minor">2222</cell>
+                            </row>
+                            <row bottom="major">
+                                <cell>aaaa</cell>
+                                <cell right="medium">bbbb</cell>
+                            </row>
+                            <row>
+                                <cell bottom="minor">AAAA</cell>
+                                <cell bottom="major" right="major">BBBB</cell>
+                            </row>
+                        </tabular>
+                    </stack>
+                    <image source="images/cross-square.png"/>
+                </sidebyside>
+
+                <p>We imagine a <tag>sidebyside</tag> using a <tag>stack</tag> to enable constructions like a table of data in one panel, and maybe a plot with some text next to it.</p>
+
+                <p>In the toy example next, the list of data is rigid, so we have set the first panel width to <c>40%</c>, a value obtained experimentally to just contain the list.  This allow us to set the second panel to a width of <c>58%</c>, and we use no margins.  If you try to balance the heights of the two panels, this can become a bit of a zero-sum game.  A wider second column means the text occupies fewer lines, but the wider image also creates a taller image, consuming more vertical space.</p>
+
+                <figure>
+                    <caption>Experimental results collected in a figure</caption>
+                    <sidebyside widths="40% 58%">
+                        <tabular top="major" halign="center">
+                            <row bottom="minor">
+                                <cell><m>i</m></cell>
+                                <cell><m>t_i</m></cell>
+                                <cell><m>x_i</m></cell>
+                                <cell><m>y_i</m></cell>
+                            </row>
+                            <row> <cell>0</cell><cell>0.00</cell><cell>0.0000</cell><cell>0.5000</cell></row>
+                            <row> <cell>1</cell><cell>0.20</cell><cell>0.1000</cell><cell>0.4800</cell></row>
+                            <row> <cell>2</cell><cell>0.40</cell><cell>0.1960</cell><cell>0.4560</cell></row>
+                            <row> <cell>3</cell><cell>0.60</cell><cell>0.2872</cell><cell>0.4295</cell></row>
+                            <row> <cell>4</cell><cell>0.80</cell><cell>0.3731</cell><cell>0.4027</cell></row>
+                            <row> <cell>5</cell><cell>1.00</cell><cell>0.4536</cell><cell>0.3783</cell></row>
+                            <row> <cell>6</cell><cell>1.20</cell><cell>0.5293</cell><cell>0.3591</cell></row>
+                            <row> <cell>7</cell><cell>1.40</cell><cell>0.6011</cell><cell>0.3480</cell></row>
+                            <row> <cell>8</cell><cell>1.60</cell><cell>0.6707</cell><cell>0.3474</cell></row>
+                            <row> <cell>9</cell><cell>1.80</cell><cell>0.7402</cell><cell>0.3603</cell></row>
+                            <row bottom="medium">
+                                  <cell>10</cell><cell>2.00</cell><cell>0.8123</cell><cell>0.3900</cell></row>
+                        </tabular>
+                        <stack>
+                            <image source="images/cubic-function.png" />
+                            <p>This set of values and this plot have nothing to do with each other.  You'll recognize that they've been liberated from earlier in this work.</p>
+                            <p>Step back and simply examine how the pieces all fit together within a <tag>figure</tag>.</p>
+                        </stack>
+                    </sidebyside>
+                </figure>
+
+                <paragraphs>
+                    <title>Bully Pulpit</title>
+
+                    <p>Remember that <tag>sidebyside</tag> has attributes that strongly influence layout.  That is intentional.  But to support a variety of output formats, it does not allow overly-precise control, and they be viewed as providing <em>hints</em> to an implementer of a conversion.  So for example, do not expect <tag>sidebyside</tag> to function like a <latex /> <c>tabular</c> or an <init>HTML</init> <c>table</c>.</p>
+
+                    <p>In particular, elements of two consecutive <tag>stack</tag> will not line up, unless perhaps you construct them identically.  Consider a <tag>sbsgroup</tag> for something closer to putting items into rows.</p>
+                </paragraphs>
+            </subsection>
+
             <subsection xml:id="subsection-sbs-other-panels">
                 <title>Other Panels</title>
 
