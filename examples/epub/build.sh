@@ -58,6 +58,7 @@ declare OUTFILE=sampler.epub
 
 # create directory structure
 install -d ${EPUBOUT} ${EPUBOUT}/EPUB/xhtml ${EPUBOUT}/EPUB/xhtml/images
+install -d ${EPUBOUT}/EPUB/css
 # debugging directory
 install -d ${DEBUG}
 
@@ -81,8 +82,10 @@ for f in ${EPUBOUT}/EPUB/xhtml/*.xhtml; do
 done
 unset GLOBIGNORE
 
+# Add CSS file. Temporarily stored alongside the ePub script
+cp -a ${EPUBSCRIPT}/pretext-epub.css ${EPUBOUT}/EPUB/css
 
-# need working directory right for mathjax-node
+# need working directory right for mathjax-node-page
 # copy to temp, replace math, fixup with sed
 # TODO: place content files someplace for processing, deletion
 cd ${MJNODE}
@@ -98,7 +101,15 @@ for f in ${EPUBOUT}/EPUB/xhtml/*.xhtml; do
     sed -i "" -f ${EPUBSCRIPT}/mbx-epub.sed $f;
 done
 unset GLOBIGNORE
+
+# Remove any PDFs from the images directory, since
+# those images are meant for PDF output and are never
+# embedded into the XHTML files that we create
 #
+# TODO: We really should only include the images we put
+# in the manifest
+rm ${EPUBOUT}/EPUB/xhtml/images/*.pdf
+
 # Back to usual default directory
 # zip with  mimetype  first
 cd ${EPUBOUT}
