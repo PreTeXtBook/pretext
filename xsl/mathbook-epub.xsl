@@ -624,10 +624,4 @@
     </xsl:element>
 </xsl:template>
 
-<!-- Index -->
-<!-- Has knowls by default, so we kill it -->
-<xsl:template match="index-list">
-    <p>Index intentionally blank, knowls inactive in EPUB</p>
-</xsl:template>
-
 </xsl:stylesheet>
