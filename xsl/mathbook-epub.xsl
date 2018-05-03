@@ -46,7 +46,8 @@
 <xsl:param name="exercise.backmatter.answer" select="'no'" />
 <xsl:param name="exercise.backmatter.solution" select="'no'" />
 
-
+<!-- We turn off permalinks on divisions, etc. -->
+<xsl:param name="html.permalink"  select="'none'" />
 
 <!-- Output as well-formed xhtml -->
 <!-- This may have no practical effect -->
@@ -591,26 +592,6 @@
 <!-- ######### -->
 <!-- OverRides -->
 <!-- ######### -->
-
-<!-- Section Headers -->
-<!-- Primitive for openers, and universal   -->
-<!-- Incorporates "header-content" template -->
-<!-- TODO: Hide type-name sometimes, vary h1, h2,... -->
-<xsl:template match="*" mode="section-header">
-    <header>
-        <xsl:element name="h1">
-            <!-- <xsl:apply-templates select="." mode="header-content" /> -->
-            <xsl:apply-templates select="." mode="type-name" />
-            <xsl:text> </xsl:text>
-            <xsl:apply-templates select="." mode="number" />
-            <xsl:text> </xsl:text>
-            <xsl:apply-templates select="." mode="title-full" />
-        </xsl:element>
-        <xsl:if test="author">
-            <p><xsl:apply-templates select="author" mode="name-list"/></p>
-        </xsl:if>
-    </header>
-</xsl:template>
 
 <!-- Knowls -->
 <!-- No cross-reference should be a knowl -->
