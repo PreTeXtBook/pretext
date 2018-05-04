@@ -1252,9 +1252,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\newlength{\previewwidth}&#xa;</xsl:text>
         <xsl:text>%% tcolorbox styles for interactive previews&#xa;</xsl:text>
         <xsl:text>%% changing size= and/or colback can aid in debugging&#xa;</xsl:text>
-        <xsl:text>\tcbset{ previewstyle/.style={size=minimal, halign=center, colback=white} }&#xa;</xsl:text>
-        <xsl:text>\tcbset{ qrstyle/.style={hbox, size=minimal, colback=white} }&#xa;</xsl:text>
-        <xsl:text>\tcbset{ captionstyle/.style={width=\linewidth, size=minimal, left=1em, colback=white} }&#xa;</xsl:text>
+        <!-- Frames need to be white to counteract very faint outlines in some PDF viewers -->
+        <xsl:text>\tcbset{ previewstyle/.style={size=minimal,halign=center,colback=white,colframe=white} }&#xa;</xsl:text>
+        <xsl:text>\tcbset{ qrstyle/.style={hbox,size=minimal,colback=white,colframe=white} }&#xa;</xsl:text>
+        <xsl:text>\tcbset{ captionstyle/.style={width=\linewidth,size=minimal,left=1em,colback=white,colframe=white} }&#xa;</xsl:text>
         <!-- Page: https://commons.wikimedia.org/wiki/File:YouTube_Play_Button.svg             -->
         <!-- File: https://upload.wikimedia.org/wikipedia/commons/d/d1/YouTube_Play_Button.svg -->
         <!-- License text:  This image only consists of simple geometric shapes or text.       -->
@@ -1728,10 +1729,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:when>
             <xsl:otherwise>
                 <xsl:text>%% tcolorbox styles for sidebyside layout&#xa;</xsl:text>
+                <!-- Frames need to be white to counteract very faint outlines in some PDF viewers -->
                 <xsl:text>\tcbset{ sbsstyle/.style={raster equal height=rows,raster force size=false} }&#xa;</xsl:text>
-                <xsl:text>\tcbset{ sbsheadingstyle/.style={size=minimal,halign=center,fontupper=\bfseries,colback=white} }&#xa;</xsl:text>
-                <xsl:text>\tcbset{ sbspanelstyle/.style={size=minimal,colback=white} }&#xa;</xsl:text>
-                <xsl:text>\tcbset{ sbscaptionstyle/.style={size=minimal,halign=center,colback=white} }&#xa;</xsl:text>
+                <xsl:text>\tcbset{ sbsheadingstyle/.style={size=minimal,halign=center,fontupper=\bfseries,colback=white,colframe=white} }&#xa;</xsl:text>
+                <xsl:text>\tcbset{ sbspanelstyle/.style={size=minimal,colback=white,colframe=white} }&#xa;</xsl:text>
+                <xsl:text>\tcbset{ sbscaptionstyle/.style={size=minimal,halign=center,colback=white,colframe=white} }&#xa;</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
         <xsl:text>%% Enviroments for side-by-side and components&#xa;</xsl:text>
