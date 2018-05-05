@@ -82,9 +82,9 @@
 </xsl:variable>
 <xsl:variable name="mock-UUID">mock-123456789-0-987654321</xsl:variable>
 
-<!-- We hard-code the chunking level, need to pass this  -->
-<!-- through the mbx script or use a compatibility layer -->
-<xsl:param name="chunk.level" select="2" />
+<!-- We hard-code the chunking level.  Level 2 is       -->
+<!-- the default for books, which we presume throughout -->
+<xsl:param name="chunk-level" select="2" />
 <!-- We disable the ToC level to avoid any conflicts with chunk level -->
 <xsl:param name="toc.level" select="0" />
 
@@ -598,31 +598,6 @@
 <!-- No cross-reference should be a knowl -->
 <xsl:template match="*" mode="xref-as-knowl">
     <xsl:value-of select="false()" />
-</xsl:template>
-
-<!-- Cross-Reference Links -->
-<!-- Stripped down only to remove "alt" tags               -->
-<!-- Knowl links removed as template above is always false -->
-<!-- The second abstract template, we condition   -->
-<!-- on if the link is rendered as a knowl or not -->
-<xsl:template match="*" mode="xref-link">
-    <xsl:param name="content" />
-    <xsl:element name="a">
-        <!-- build traditional hyperlink -->
-        <xsl:attribute name="href">
-            <xsl:apply-templates select="." mode="url" />
-        </xsl:attribute>
-        <!-- link content from common template -->
-        <!-- For a contributor we bypass autonaming, etc -->
-        <xsl:choose>
-            <xsl:when test="self::contributor">
-                <xsl:apply-templates select="personname" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:value-of select="$content" />
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:element>
 </xsl:template>
 
 <!-- Footnotes -->
