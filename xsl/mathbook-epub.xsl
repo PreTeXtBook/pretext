@@ -625,4 +625,25 @@
     </xsl:element>
 </xsl:template>
 
+<!-- Footnotes -->
+<!-- Use "EPUB 3 Structural Semantics Vocabulary" -->
+<!-- to get desired behavior from e-reader system -->
+<!-- http://www.pigsgourdsandwikis.com/2012/05/creating-pop-up-footnotes-in-epub-3-and.html -->
+<xsl:template match="fn">
+    <xsl:variable name="int-id">
+        <xsl:apply-templates select="." mode="internal-id" />
+    </xsl:variable>
+    <!-- drop cross-reference, super-scripted, spaced -->
+    <xsl:element name="sup">
+        <a epub:type="noteref" href="#{$int-id}">
+            <xsl:apply-templates select="." mode="serial-number" />
+        </a>
+    </xsl:element>
+    <!-- content to an "aside", should automatically be hidden -->
+    <aside epub:type="footnote" id="{$int-id}">
+        <!-- process as mixed-content, don't yet allow paragraphs -->
+        <xsl:apply-templates select="*|text()" />
+    </aside>
+</xsl:template>
+
 </xsl:stylesheet>
