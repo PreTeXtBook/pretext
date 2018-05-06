@@ -84,7 +84,13 @@
 
 <!-- We hard-code the chunking level.  Level 2 is       -->
 <!-- the default for books, which we presume throughout -->
-<xsl:param name="chunk-level" select="2" />
+<xsl:variable name="chunk-level">
+    <xsl:choose>
+        <xsl:when test="$root/book/part">3</xsl:when>
+        <xsl:when test="$root/book">2</xsl:when>
+    </xsl:choose>
+</xsl:variable>
+
 <!-- We disable the ToC level to avoid any conflicts with chunk level -->
 <xsl:param name="toc.level" select="0" />
 
