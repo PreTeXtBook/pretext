@@ -112,6 +112,7 @@
     </xsl:call-template>
     <xsl:apply-templates select="mathbook" mode="deprecation-warnings" />
     <xsl:call-template name="setup" />
+    <xsl:call-template name="build-image-list" />
     <xsl:call-template name="package-document" />
     <xsl:apply-templates />
 </xsl:template>
@@ -478,9 +479,54 @@
 <!-- Need to add to manifest accurately,              -->
 <!-- and also include into source                     -->
 
-<!-- Manifest entry first -->
-<xsl:template match="image[@source]" mode="manifest">
-    <!-- condition on file extension -->
+<!-- Base filename for an image,  -->
+<!-- mostly handling the @source case -->
+<xsl:template match="image" mode="epub-base-filename">
+    <xsl:choose>
+        <xsl:when test="@source">
+            <xsl:variable name="extension">
+                <xsl:call-template name="file-extension">
+                    <xsl:with-param name="filename" select="@source" />
+                </xsl:call-template>
+            </xsl:variable>
+            <!-- PDF LaTeX, SVG HTML, if not indicated -->
+            <xsl:apply-templates select="@source" />
+            <xsl:if test="$extension=''">
+                <xsl:text>.svg</xsl:text>
+            </xsl:if>
+        </xsl:when>
+        <xsl:when test="latex-image|latex-image-code|sageplot|asymptote">
+            <xsl:value-of select="$directory.images" />
+            <xsl:text>/</xsl:text>
+            <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:text>.svg</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>MBX:BUG:     image filename not determined in EPUB conversion</xsl:message>
+            <xsl:apply-templates select="." mode="location-report" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Output a list of filenames, for a production script  -->
+<!-- to use to ensure that the image files made available -->
+<!-- in the final zip file actually match the files       -->
+<!-- described in the manifest section                    -->
+<xsl:template name="build-image-list">
+    <xsl:variable name="image-list-filename">
+        <xsl:value-of select="$xhtml-dir" />
+        <xsl:text>/image-list.txt</xsl:text>
+    </xsl:variable>
+    <exsl:document href="{$image-list-filename}" method="text" encoding="UTF-8">
+        <xsl:for-each select="$document-root//image">
+            <xsl:apply-templates select="." mode="epub-base-filename" />
+            <xsl:text>&#xa;</xsl:text>
+        </xsl:for-each>
+    </exsl:document>
+</xsl:template>
+
+<!-- Manifest entry with image file information -->
+<xsl:template match="image" mode="manifest">
     <xsl:variable name="extension">
         <xsl:call-template name="file-extension">
             <xsl:with-param name="filename" select="@source" />
@@ -496,22 +542,26 @@
         <xsl:attribute name="href">
             <xsl:value-of select="$xhtml-dir" />
             <xsl:text>/</xsl:text>
-            <xsl:apply-templates select="@source" />
-            <xsl:if test="$extension=''">
-                <xsl:text>.svg</xsl:text>
-            </xsl:if>
+            <xsl:apply-templates select="." mode="epub-base-filename" />
         </xsl:attribute>
         <xsl:attribute name="media-type">
             <xsl:choose>
-                <xsl:when test="$extension='png'">
+                <xsl:when test="@source and $extension='png'">
                     <xsl:text>image/png</xsl:text>
                 </xsl:when>
-                <xsl:when test="$extension='jpeg' or $extension='jpg'">
+                <xsl:when test="@source and $extension='jpeg' or $extension='jpg'">
                     <xsl:text>image/jpeg</xsl:text>
                 </xsl:when>
-                <xsl:when test="$extension='svg' or $extension=''">
+                <xsl:when test="@source and ($extension='svg' or $extension='')">
                     <xsl:text>image/svg+xml</xsl:text>
                 </xsl:when>
+                <xsl:when test="latex-image|latex-image-code|sageplot|asymptote">
+                    <xsl:text>image/svg+xml</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>MBX:BUG:     EPUB image media-type not determined</xsl:message>
+                    <xsl:apply-templates select="." mode="location-report" />
+                </xsl:otherwise>
             </xsl:choose>
         </xsl:attribute>
     </xsl:element>
@@ -519,72 +569,11 @@
     <xsl:apply-templates select="*" mode="manifest" />
 </xsl:template>
 
-<!-- Manifest entry first -->
-<xsl:template match="image/latex-image|image/latex-image-code|image/sageplot|image/asymptote" mode="manifest">
-    <!-- condition on file extension -->
-    <xsl:variable name="extension">
-        <xsl:call-template name="file-extension">
-            <xsl:with-param name="filename" select="@source" />
-        </xsl:call-template>
-    </xsl:variable>
-    <!-- item  element for manifest -->
-    <xsl:element name="item" xmlns="http://www.idpf.org/2007/opf">
-        <!-- internal id of the image -->
-        <xsl:attribute name="id">
-            <xsl:apply-templates select="." mode="internal-id" />
-        </xsl:attribute>
-        <!-- filename, or tack on .svg for vector graphics -->
-        <xsl:attribute name="href">
-            <xsl:value-of select="$xhtml-dir" />
-            <xsl:text>/</xsl:text>
-            <xsl:value-of select="$directory.images" />
-            <xsl:text>/</xsl:text>
-            <xsl:apply-templates select=".." mode="internal-id" />
-            <xsl:text>.svg</xsl:text>
-        </xsl:attribute>
-        <xsl:attribute name="media-type">
-            <xsl:text>image/svg+xml</xsl:text>
-         </xsl:attribute>
-    </xsl:element>
-    <!-- dead-end on  mode="manifest"  descent, most likely -->
-    <xsl:apply-templates select="*" mode="manifest" />
-</xsl:template>
-
-<!-- Now the image inclusion, with source specification -->
-<xsl:template match="image[@source]">
-    <!-- condition on file extension -->
-    <xsl:variable name="extension">
-        <xsl:call-template name="file-extension">
-            <xsl:with-param name="filename" select="@source" />
-        </xsl:call-template>
-    </xsl:variable>
+<!-- Now the actual image inclusion where born -->
+<xsl:template match="image">
     <xsl:element name="img">
         <xsl:attribute name="src">
-            <xsl:value-of select="@source" />
-            <xsl:if test="$extension=''">
-                <xsl:text>.svg</xsl:text>
-            </xsl:if>
-        </xsl:attribute>
-        <xsl:if test="@width">
-            <xsl:attribute name="style">
-                <xsl:text>width: </xsl:text>
-                <xsl:value-of select="@width" />
-                <xsl:text>; margin: 0 auto;</xsl:text>
-            </xsl:attribute>
-        </xsl:if>
-    </xsl:element>
-</xsl:template>
-
-<!-- Now the image inclusion, with source specification -->
-<!-- Match style is duplicated from mathbook-html.xsl   -->
-<xsl:template match="image[asymptote]|image[latex-image-code]|image[latex-image]|image[sageplot]">
-    <!-- assumes SVG exists from  mbx  script creation -->
-    <xsl:element name="img">
-        <xsl:attribute name="src">
-            <xsl:value-of select="$directory.images" />
-            <xsl:text>/</xsl:text>
-            <xsl:apply-templates select="." mode="internal-id" />
-            <xsl:text>.svg</xsl:text>
+            <xsl:apply-templates select="." mode="epub-base-filename" />
         </xsl:attribute>
         <xsl:if test="@width">
             <xsl:attribute name="style">
