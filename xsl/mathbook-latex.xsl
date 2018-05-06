@@ -6060,6 +6060,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Will be obsolete, instead stack "p" with no title -->
+<!-- Deprecated within sidebyside, 2018-05-02 -->
 <!-- "title" should be killed anyway -->
 <xsl:template match="paragraphs" mode="panel-latex-box">
     <xsl:apply-templates select="*[not(self::title)]" />

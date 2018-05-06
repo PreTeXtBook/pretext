@@ -4863,6 +4863,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:apply-templates>
 </xsl:template>
 
+<!-- Deprecated within sidebyside, 2018-05-02 -->
 <xsl:template match="paragraphs" mode="panel-html-box">
     <xsl:param name="b-original" select="true()" />
     <xsl:apply-templates select="p|blockquote">

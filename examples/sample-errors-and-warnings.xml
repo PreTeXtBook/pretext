@@ -225,6 +225,21 @@ systems.
         </section>
 
         <section>
+            <title>Side-by-Side Paragraphs</title>
+
+            <sidebyside>
+                <p>First panel.</p>
+                <paragraphs>
+                    <title>Mock Title</title>
+                    <p>Paragraph one.</p>
+                    <image source="images/foobar.png"/>
+                    <p>Paragraph two.</p>
+                </paragraphs>
+            </sidebyside>
+
+        </section>
+
+        <section>
             <title>WeBWorK</title>
 
             <p>A WeBWorK problem will need a server.  You will get a warning if you do not specify one.  But you should not be warned just because you use the empty element to get the stylized version, like this: <webwork/>.  So you can test warnings by commenting out one or the other instance.</p>
