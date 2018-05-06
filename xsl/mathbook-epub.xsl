@@ -549,7 +549,7 @@
                 <xsl:when test="@source and $extension='png'">
                     <xsl:text>image/png</xsl:text>
                 </xsl:when>
-                <xsl:when test="@source and $extension='jpeg' or $extension='jpg'">
+                <xsl:when test="@source and ($extension='jpeg' or $extension='jpg')">
                     <xsl:text>image/jpeg</xsl:text>
                 </xsl:when>
                 <xsl:when test="@source and ($extension='svg' or $extension='')">
