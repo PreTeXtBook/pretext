@@ -5088,7 +5088,7 @@ the xsltproc executable.
             <introduction>
                 <title>Introduction</title>
 
-                <p>The flow of a page is almost universally top-to-bottom.  But at times you would like to go <em>across</em> a page, perhaps to compare items (identical content in two different languages), or to make good use of a page real estate by grouping several small items together (<eg /> images).  So the <c>&lt;sidebyside&gt;</c> tag is strictly a layout device, though it does convey some meaning by grouping certain objects together. A variety of different objects can be put side-by-side using the <c>sidebyside</c> element.  Specifically, <c>figure</c>, <c>table</c>, <c>listing</c>, <c>paragraphs</c>, <c>image</c>, <c>tabular</c>, <c>p</c>, <c>ol</c>, <c>ul</c>, <c>dl</c>, <c>pre</c>, <c>poem</c>, and more.  The individual components of a <c>&lt;sidebyside&gt;</c> are generically called <term>panels</term><idx>panels</idx>.</p>
+                <p>The flow of a page is almost universally top-to-bottom.  But at times you would like to go <em>across</em> a page, perhaps to compare items (identical content in two different languages), or to make good use of a page real estate by grouping several small items together (<eg /> images).  So the <c>&lt;sidebyside&gt;</c> tag is strictly a layout device, though it does convey some meaning by grouping certain objects together. A variety of different objects can be put side-by-side using the <c>sidebyside</c> element.  Specifically, <c>figure</c>, <c>image</c>, <c>tabular</c>, <c>p</c>, <c>ol</c>, <c>ul</c>, <c>dl</c>, <c>pre</c>, <c>poem</c>, and more.  The individual components of a <c>&lt;sidebyside&gt;</c> are generically called <term>panels</term><idx>panels</idx>.</p>
 
                 <p>As a layout device, the <c>&lt;sidebyside&gt;</c> does not allow a <c>&lt;caption&gt;</c>, is never numbered, and therefore cannot be cross-referenced.  You may cross-reference whatever element holds the <c>&lt;sidebyside&gt;</c>, and many of the panels may be cross-referenced individually.</p>
 
@@ -5303,23 +5303,17 @@ the xsltproc executable.
             <subsection>
                 <title>Text Next to Text and Images</title>
 
-                <p>Text can be put next to other blocks of text using either the <c>paragraphs</c> element, which can contain multiple paragraphs using the <c>p</c> element.</p>
-
-                <p>If only one paragraph is required, simply use the <c>p</c> element on its own.  In addtion to captions, elements which allow titles will have those displayed above the panel.  So <c>paragraphs</c> can carry a <c>title</c>, but a single paragraph, <c>p</c>, will not.</p>
-
-                <p>Note: The <c>paragraphs</c> element, used as a container for several <c>p</c> in a panel, and without a <c>title</c>, will be replaced by some sort of stacking mechanism.  A single <c>p</c> may be used now as the contents of a panel, without a title.</p>
+                <p>Text can be put next to other blocks of text using the <c>stack</c> element, which can contain multiple paragraphs using the <c>p</c> element (see <xref ref="stacking-side-by-side" text="type-global" />).  If only one paragraph is required, simply use the <c>p</c> element on its own.</p>
 
                 <sidebyside widths="20% 20% 20% 20%" valigns="middle top middle top">
-                    <paragraphs>
-                        <title>Sample Title</title>
+                    <stack>
                         <p>here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text</p>
-                    </paragraphs>
-                    <paragraphs>
-                        <title>A Really Long Title on a Fairly Skinny Paragraphs Element</title>
+                    </stack>
+                    <stack>
                         <p>here is some text here is some text here is some text here is some text here</p>
                         <p>here is some text here is some text here is some text here is some text here</p>
                         <p>here is some text here is some text here is some text here is some text here</p>
-                    </paragraphs>
+                    </stack>
                     <p>here is some text here is some text here is some text here is some text here</p>
                     <p>here is some text here is some text here is some text here is some text here</p>
                 </sidebyside>
@@ -5334,9 +5328,7 @@ the xsltproc executable.
                 <p>You can place text next to numbered figures, as shown below in <xref ref="text-next-to-figure" text="type-global"/>.</p>
 
                 <sidebyside widths="50% 20%" valigns="middle top">
-                    <paragraphs>
-                        <p>here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text; cross reference: <xref ref="text-next-to-figure" text="type-global"/> and math: <m>x^2</m></p>
-                    </paragraphs>
+                    <p>here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text; cross reference: <xref ref="text-next-to-figure" text="type-global"/> and math: <m>x^2</m></p>
                     <figure xml:id="text-next-to-figure">
                         <caption>Text next to a figure</caption>
                         <image source="images/cross-square.png" />
@@ -5645,7 +5637,7 @@ the xsltproc executable.
             <subsection>
                 <title>Tables Next to Text</title>
 
-                <p>Tables can go next to blocks of text using the <c>&lt;paragraphs&gt;</c> element.</p>
+                <p>Tables can go next to blocks of text using the <tag>stack</tag> element (see <xref ref="stacking-side-by-side" text="type-global" />).</p>
 
                 <sidebyside widths="50% 20% 20%" valigns="top top middle">
                     <table>
@@ -5669,15 +5661,15 @@ the xsltproc executable.
                             </row>
                         </tabular>
                     </table>
-                    <paragraphs>
+                    <stack>
                         <p>here is some text here is some text here is some text here is some text here</p>
                         <p>here is some text here is some text here is some text here is some text here</p>
                         <p>here is some text here is some text here is some text here is some text here</p>
-                    </paragraphs>
-                    <paragraphs>
+                    </stack>
+                    <stack>
                         <p>here is some text here is some text here is some text here is some text here</p>
                         <p>here is some text here is some text here is some text here is some text here</p>
-                    </paragraphs>
+                    </stack>
                 </sidebyside>
             </subsection>
 
@@ -5952,22 +5944,20 @@ the xsltproc executable.
                 <p>You can place <em>aligned</em> equations in paragraphs within a <c>sidebyside</c> element.</p>
 
                 <sidebyside valigns="middle top">
-                    <paragraphs>
+                    <p>here is some text, and here is an equation that contains alignment.<md>
+                        <mrow>f(x)&amp;= x^2+3x+2</mrow>
+                        <mrow>&amp;=(x+2)(x+1)</mrow>
+                    </md></p>
+                    <stack>
                         <p>here is some text, and here is an equation that contains alignment.<md>
                             <mrow>f(x)&amp;= x^2+3x+2</mrow>
                             <mrow>&amp;=(x+2)(x+1)</mrow>
                         </md></p>
-                    </paragraphs>
-                    <paragraphs>
                         <p>here is some text, and here is an equation that contains alignment.<md>
                             <mrow>f(x)&amp;= x^2+3x+2</mrow>
                             <mrow>&amp;=(x+2)(x+1)</mrow>
                         </md></p>
-                        <p>here is some text, and here is an equation that contains alignment.<md>
-                            <mrow>f(x)&amp;= x^2+3x+2</mrow>
-                            <mrow>&amp;=(x+2)(x+1)</mrow>
-                        </md></p>
-                    </paragraphs>
+                    </stack>
                 </sidebyside>
 
                 <p>Pre-formatted text may be included by using the <c>pre</c> element.  This content is horizontally-rigid, so as the author, you need to be sure to provide enough width for the panel to contain the content.  It is easy to see the boundary of the panels when rendered in HTML since there is a background that fills the panel.</p>
@@ -6039,11 +6029,10 @@ the xsltproc executable.
                             <line>And would suffice.</line>
                         </stanza>
                     </poem>
-                    <paragraphs>
-                        <title>Commentary</title>
+                    <stack>
                         <p>You might have several things to say about a poem and you could use a sequence of paragraphs immediately adjacent.</p>
                         <p>This is a second paragraph of commentary.</p>
-                    </paragraphs>
+                    </stack>
                 </sidebyside>
 
                 <p>Poems are not horizontally-rigid, but they are not perfectly horizontally-flexible either.  The left copy of this next poem is in a panel roughly 2/3 the width of the page and fits there.  The right copy has the first five lines and is in space about half the previous width, and you can see the lines being wrapped with obvious indentation.  So you <em>can</em> constrain the width of a poem if you do not mind the additional indentation.  (Recognize that this example is a bit extreme.)</p>
@@ -6129,10 +6118,9 @@ the xsltproc executable.
                                 <line>can understand.</line>
                             </stanza>
                         </poem>
-                        <paragraphs>
-                            <title>Stanza One</title>
-                            <p>Some commentary</p>
-                        </paragraphs>
+                        <stack>
+                            <p>Some commentary on Stanza One.</p>
+                        </stack>
                     </sidebyside>
                     <!--  -->
                     <sidebyside>
@@ -6156,10 +6144,9 @@ the xsltproc executable.
                                 <line>can understand.</line>
                             </stanza>
                         </poem>
-                        <paragraphs>
-                            <title>Stanza Two</title>
-                            <p>Some commentary</p>
-                        </paragraphs>
+                        <stack>
+                            <p>Some commentary on Stanza Two.</p>
+                        </stack>
                     </sidebyside>
                     <!--  -->
                     <sidebyside>
@@ -6182,10 +6169,9 @@ the xsltproc executable.
                                 <line>can understand.</line>
                             </stanza>
                         </poem>
-                        <paragraphs>
-                            <title>Stanza Three</title>
-                            <p>Some commentary</p>
-                        </paragraphs>
+                        <stack>
+                            <p>Some commentary on Stanza Three.</p>
+                        </stack>
                     </sidebyside>
                     <!--  -->
                     <sidebyside>
@@ -6207,10 +6193,9 @@ the xsltproc executable.
                                 <line>can understand.</line>
                             </stanza>
                         </poem>
-                        <paragraphs>
-                            <title>Stanza Four</title>
-                            <p>Some commentary</p>
-                        </paragraphs>
+                        <stack>
+                            <p>Some commentary on Stanza Four.</p>
+                        </stack>
                     </sidebyside>
                     <!--  -->
                 </sbsgroup>
@@ -6421,19 +6406,18 @@ the xsltproc executable.
             <p>We begin with <q>simpler</q> atomic items.  If necessary, comments follow each.</p>
 
             <figure>
-                <caption>Single <c>p</c> (left), <c>paragraphs</c> (right)</caption>
+                <caption>Single <tag>p</tag> (left), <tag>stack</tag> (right)</caption>
                 <sidebyside margins="5%" widths="40% 45%">
                     <p>Vestibulum sit amet est non lacus accumsan iaculis aliquam nec leo. Maecenas placerat consequat quam, a lobortis odio convallis vitae. Curabitur sagittis, risus non suscipit pulvinar, enim tortor posuere purus, id dignissim sapien sapien non dui. Vestibulum ultrices, enim a ornare consectetur, nisl est iaculis arcu, eget scelerisque nunc magna a nisl. Vestibulum vestibulum ante sit amet ex vulputate, eu facilisis sapien tempor.</p>
-                    <paragraphs>
-                        <title>Lorem Ipsum</title>
+                    <stack>
                         <p>Aliquam dui nisi, pharetra id enim vel, imperdiet laoreet risus. Nunc convallis elit eu erat imperdiet tincidunt. Sed eget augue et nunc mollis tempor. Suspendisse luctus elit non lorem scelerisque, nec lacinia lectus dictum.</p>
                         <p>Vivamus ut orci nisl. Donec eleifend ultricies tortor, a pellentesque neque dignissim in. Praesent maximus, augue eu pretium auctor, dolor quam feugiat augue, ut vulputate nunc eros vitae massa. Phasellus quis ante quis est venenatis dapibus eget luctus ipsum.</p>
-                    </paragraphs>
+                    </stack>
                 </sidebyside>
             </figure>
 
             <figure>
-                <caption>An <c>ol</c> with simple items, a <c>ul</c> with items with paragraphs</caption>
+                <caption>An <tag>ol</tag> with simple items, a <tag>ul</tag> with items with paragraphs</caption>
                 <sidebyside margins="5%" widths="40% 45%">
                     <ol>
                         <li>Blue</li>
@@ -6453,7 +6437,7 @@ the xsltproc executable.
             </figure>
 
             <figure>
-                <caption>A <c>program</c> and a <c>console</c></caption>
+                <caption>A <tag>program</tag> and a <tag>console</tag></caption>
                 <sidebyside margins="5%" widths="40% 45%">
                     <program language="r">
                         <input>
@@ -6483,7 +6467,7 @@ the xsltproc executable.
             <p>Note that these two chunks of verbatim text will very likely exceed the right side of a too-skinny panel.  We have severly edited these two examples from previous appearances just to fit here.</p>
 
             <figure>
-                <caption>An <c>poem</c> and a <c>tabular</c></caption>
+                <caption>An <tag>poem</tag> and a <tag>tabular</tag></caption>
                 <sidebyside margins="5%" widths="40% 45%">
                     <poem>
                         <title>To A Friend Whose Work Has Come To Nothing</title>
@@ -6523,7 +6507,7 @@ the xsltproc executable.
             <p>A <c>tabular</c> can exceed the width of its panel in print, while in <c>HTML</c> it may reflow individual cells to stay within a panel, depending on their contents.</p>
 
             <figure>
-                <caption>A <c>pre</c>, and a <c>pre</c> employing <c>cline</c></caption>
+                <caption>A <tag>pre</tag>, and a <tag>pre</tag> employing <tag>cline</tag></caption>
                 <sidebyside margins="5%" widths="40% 45%">
                     <pre>
                     Vestibulum sit amet est non
@@ -6547,7 +6531,7 @@ the xsltproc executable.
             <p>Be aware that the lines of <c>pre</c> can spill outside of its panel without any word-wrapping.  So you may need to vary panel widths or rearrange line breaks manually.  Page width is a scarce resource.</p>
 
             <figure>
-                <caption>An identical <c>image</c>, twice</caption>
+                <caption>An identical <tag>image</tag>, twice</caption>
                 <sidebyside margins="5%" widths="40% 45%">
                     <image source="images/cross-rectangle.png" />
                     <image source="images/cross-rectangle.png" />
@@ -6559,7 +6543,7 @@ the xsltproc executable.
             <p>Now we turn to <q>captioned</q> items: <c>figure</c>, <c>table</c>, <c>listing</c>, and the anomalous <q>named list</q>, <c>list</c>, whose future is uncertain.  We test subcaptions here.  Note that many different atomic items can go in a figure, and largely they will behave in a <c>sidebyside</c> much as they do when placed in a panel all by themselves (<ie /> captionless).</p>
 
             <figure>
-                <caption>A <c>figure</c> and a <c>table</c></caption>
+                <caption>A <tag>figure</tag> and a <tag>table</tag></caption>
                 <sidebyside margins="5%" widths="40% 45%">
                     <figure>
                         <caption>A Rectangular Test Image</caption>
@@ -6582,7 +6566,7 @@ the xsltproc executable.
             </figure>
 
             <figure>
-                <caption>A <c>listing</c> and a <c>list</c></caption>
+                <caption>A <tag>listing</tag> and a <tag>list</tag></caption>
                 <sidebyside margins="5%" widths="40% 45%">
                     <listing>
                         <caption>A statistical computation</caption>
@@ -6630,7 +6614,7 @@ the xsltproc executable.
             <p>Videos can be placed quite compactly for HTML output, but we display a fair amount of information for a YouTube video in print, and therefore two videos side-by-side gets pretty crowded.  The examples above have the bare minimum amount of information attached (not in an overarching <c>figure</c>), and the bare amount which which is displayed in print.  We could relax our common spacing to make it a bit better.  For other examples see <xref ref="section-video" text="type-global" />.</p>
 
             <figure>
-                <caption>A <c>sidebyside</c> with one large panel</caption>
+                <caption>A <tag>sidebyside</tag> with one large panel</caption>
                 <sidebyside margins="10%">
                     <figure>
                         <title>Sometime Around Midnight</title>
