@@ -529,20 +529,6 @@
       </xs:element>
     </xs:sequence>
   </xs:group>
-  <xs:group name="ParagraphsTitleOptional">
-    <xs:sequence>
-      <xs:element name="paragraphs">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:group ref="MetaDataTitleOptional"/>
-            <xs:element minOccurs="0" maxOccurs="unbounded" ref="idx"/>
-            <xs:group maxOccurs="unbounded" ref="BlockDivision"/>
-          </xs:sequence>
-          <xs:attributeGroup ref="MetaDataTitleOptional"/>
-        </xs:complexType>
-      </xs:element>
-    </xs:sequence>
-  </xs:group>
   <xs:element name="exercises">
     <xs:complexType>
       <xs:sequence>
@@ -1312,7 +1298,6 @@
   <xs:element name="stack">
     <xs:complexType>
       <xs:choice maxOccurs="unbounded">
-        <xs:element ref="poem"/>
         <xs:group ref="Tabular"/>
         <xs:group ref="Image"/>
         <xs:element ref="video"/>
@@ -1320,8 +1305,6 @@
         <xs:element ref="console"/>
         <xs:group ref="Paragraph"/>
         <xs:element ref="pre"/>
-        <xs:group ref="Paragraphs"/>
-        <xs:group ref="ParagraphsTitleOptional"/>
         <xs:group ref="List"/>
       </xs:choice>
     </xs:complexType>
@@ -1355,8 +1338,6 @@
             <xs:element ref="console"/>
             <xs:group ref="Paragraph"/>
             <xs:element ref="pre"/>
-            <xs:group ref="Paragraphs"/>
-            <xs:group ref="ParagraphsTitleOptional"/>
             <xs:group ref="List"/>
             <xs:element ref="stack"/>
           </xs:choice>
@@ -1378,8 +1359,6 @@
             <xs:element ref="console"/>
             <xs:group ref="Paragraph"/>
             <xs:element ref="pre"/>
-            <xs:group ref="Paragraphs"/>
-            <xs:group ref="ParagraphsTitleOptional"/>
             <xs:group ref="List"/>
             <xs:element ref="stack"/>
           </xs:choice>

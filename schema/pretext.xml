@@ -180,7 +180,7 @@
 
         <p>It is especially useful in a short document (like a class handout, letter, memorandum, or short proposal) where numbered divisions might feel like overkill.</p>
 
-        <p>The <c>TitleOptional</c> variant is only for use in <c>sidebyside</c> and will be removed once <c>p</c> can be stacked in a panel of a <c>sidebyside</c>.</p>
+        <p>The <c>NoNumber</c> variant allows for light-weight sectioning of un-numbered divisions, such as a Preface.</p>
 
         <fragment xml:id="paragraphs">
         Paragraphs =
@@ -194,12 +194,6 @@
                 MetaDataTitle,
                 Index*,
                 BlockStatementNoCaption+
-            }
-        ParagraphsTitleOptional =
-            element paragraphs {
-                MetaDataTitleOptional,
-                Index*,
-                BlockDivision+
             }
         </fragment>
     </section>
@@ -1298,13 +1292,12 @@
 
         <p>A group of side-by-sides is designed to stack vertically with common controls on widths, etc.  Its implementation is entirely experimental right now, even if we are relatively confident of the markup.</p>
 
-        <p>The <webwork /> variant allows only a single tabular or image.  The <q>NoCaption</q> variants prohibits captioned or numbered items as panels.  The <c>ParagraphsTitleOptional</c> will be removed once <c>p</c> can stack in a panel.</p>
+        <p>The <webwork /> variant allows only a single tabular or image.  The <q>NoCaption</q> variants prohibits captioned or numbered items as panels.</p>
 
         <fragment xml:id="sidebyside">
         Stack =
             element stack {
                 (
-                    Poem |
                     Tabular |
                     Image |
                     Video |
@@ -1312,8 +1305,6 @@
                     Console |
                     Paragraph |
                     Preformatted |
-                    Paragraphs |
-                    ParagraphsTitleOptional |
                     List
                 )+
             }
@@ -1334,8 +1325,6 @@
                     Console |
                     Paragraph |
                     Preformatted |
-                    Paragraphs |
-                    ParagraphsTitleOptional |
                     List |
                     Stack
                 )+
@@ -1352,8 +1341,6 @@
                     Console |
                     Paragraph |
                     Preformatted |
-                    Paragraphs |
-                    ParagraphsTitleOptional |
                     List |
                     Stack
                 )+

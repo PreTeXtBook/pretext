@@ -575,17 +575,6 @@
       </oneOrMore>
     </element>
   </define>
-  <define name="ParagraphsTitleOptional">
-    <element name="paragraphs">
-      <ref name="MetaDataTitleOptional"/>
-      <zeroOrMore>
-        <ref name="Index"/>
-      </zeroOrMore>
-      <oneOrMore>
-        <ref name="BlockDivision"/>
-      </oneOrMore>
-    </element>
-  </define>
   <define name="Exercises">
     <element name="exercises">
       <ref name="MetaDataTitleOptional"/>
@@ -1379,7 +1368,6 @@
     <element name="stack">
       <oneOrMore>
         <choice>
-          <ref name="Poem"/>
           <ref name="Tabular"/>
           <ref name="Image"/>
           <ref name="Video"/>
@@ -1387,8 +1375,6 @@
           <ref name="Console"/>
           <ref name="Paragraph"/>
           <ref name="Preformatted"/>
-          <ref name="Paragraphs"/>
-          <ref name="ParagraphsTitleOptional"/>
           <ref name="List"/>
         </choice>
       </oneOrMore>
@@ -1425,8 +1411,6 @@
           <ref name="Console"/>
           <ref name="Paragraph"/>
           <ref name="Preformatted"/>
-          <ref name="Paragraphs"/>
-          <ref name="ParagraphsTitleOptional"/>
           <ref name="List"/>
           <ref name="Stack"/>
         </choice>
@@ -1446,8 +1430,6 @@
           <ref name="Console"/>
           <ref name="Paragraph"/>
           <ref name="Preformatted"/>
-          <ref name="Paragraphs"/>
-          <ref name="ParagraphsTitleOptional"/>
           <ref name="List"/>
           <ref name="Stack"/>
         </choice>

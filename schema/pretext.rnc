@@ -259,12 +259,6 @@
                 Index*,
                 BlockStatementNoCaption+
             }
-        ParagraphsTitleOptional =
-            element paragraphs {
-                MetaDataTitleOptional,
-                Index*,
-                BlockDivision+
-            }
         
         
         Exercises =
@@ -626,7 +620,6 @@
         Stack =
             element stack {
                 (
-                    Poem |
                     Tabular |
                     Image |
                     Video |
@@ -634,8 +627,6 @@
                     Console |
                     Paragraph |
                     Preformatted |
-                    Paragraphs |
-                    ParagraphsTitleOptional |
                     List
                 )+
             }
@@ -656,8 +647,6 @@
                     Console |
                     Paragraph |
                     Preformatted |
-                    Paragraphs |
-                    ParagraphsTitleOptional |
                     List |
                     Stack
                 )+
@@ -674,8 +663,6 @@
                     Console |
                     Paragraph |
                     Preformatted |
-                    Paragraphs |
-                    ParagraphsTitleOptional |
                     List |
                     Stack
                 )+
