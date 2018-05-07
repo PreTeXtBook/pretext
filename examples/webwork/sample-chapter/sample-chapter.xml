@@ -548,7 +548,7 @@
                     <p>This problem is one that Portland Community College has donated to the Open Problem Library.</p>
                 </introduction>
 
-                <webwork source="BasicAlgebra/Geometry/CylinderVolume10.pg" seed="8435"/>
+                <webwork source="Library/PCC/BasicAlgebra/Geometry/CylinderVolume10.pg" seed="8435"/>
             </exercise>
 
             <warning>
