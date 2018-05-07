@@ -81,13 +81,10 @@ EPUBOUT    = $(SCRATCH)/epub
 WWOUT      = $(SCRATCH)/webwork-extraction
 
 # Some aspects of producing these examples require a WeBWorK server.
-# For all but trivial testing or examples, please look into setting
-# up your own WeBWorK server, or consult Alex Jordan about the use
-# of PCC's server in a nontrivial capacity.    <alex.jordan@pcc.edu>
 # Either specify only the protocol and domain (like https://webwork.yourschool.edu)
 # or specify a 5-tuple with quotes exactly as in this example
-# SERVER = "(https://webwork.pcc.edu,courseID,userID,password,course_password)"
-SERVER = http://localhost
+# SERVER = "(https://webwork-ptx.aimath.org,courseID,userID,password,course_password)"
+SERVER = https://webwork-ptx.aimath.org
 
 
 ################
