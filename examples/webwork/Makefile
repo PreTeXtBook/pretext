@@ -83,8 +83,8 @@ WWOUT      = $(SCRATCH)/webwork-extraction
 # Some aspects of producing these examples require a WeBWorK server.
 # Either specify only the protocol and domain (like https://webwork.yourschool.edu)
 # or specify a 5-tuple with quotes exactly as in this example
-# SERVER = "(https://webwork-dev.aimath.org,courseID,userID,password,course_password)"
-SERVER = https://webwork-dev.aimath.org
+# SERVER = "(https://webwork-ptx.aimath.org,courseID,userID,password,course_password)"
+SERVER = https://webwork-ptx.aimath.org
 
 
 ################
