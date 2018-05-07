@@ -681,7 +681,7 @@ def webwork_to_xml(xslt_exec, ptx_xsl_dir, xml_source, server_params, dest_dir):
 
         # Ready, go out on the wire
         try:
-            response = session.get(wwurl, params=server_params, verify=True)
+            response = session.get(wwurl, params=server_params, verify=False)
         except requests.exceptions.RequestException as e:
             root_cause = str(e)
             msg = "There was a problem collecting a problem,\n Server: {}\nRequest Parameters: {}\n"
