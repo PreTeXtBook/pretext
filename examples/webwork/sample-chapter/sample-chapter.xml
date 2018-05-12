@@ -250,8 +250,7 @@
                 <title>Special Answer Checking</title>
 
                 <introduction>
-                    <p>One of the strengths of <webwork /> is its ability to give intelligent feedback for incorrect answers.</p>
-                    <p><ul>
+                    <p>One of the strengths of <webwork /> is its ability to give intelligent feedback for incorrect answers.<ul>
                         <li><p>There is general feedback for when the student's answer is in an entirely different ballpark from the correct answer. Try entering something like <q><c>y</c></q>.</p></li>
                         <li><p>There is general feedback for when the student's answer is not in the right form. Try entering <q><c>x^2*x^3</c></q>, which, right or wrong, is unsimplified.</p></li>
                         <li><p>And problems can be written to detect and respond to common mistakes. Try entering an answer where you multiply the two exponents (instead of adding them, which would be correct.)</p></li>
@@ -611,7 +610,7 @@
                 <title><webwork /> Exercises</title>
 
                 <introduction>
-                    <p>The first problem in this list is coming from the <webwork /> Open Problem Library. One implication of this is that we might want to provide some commentary that connects the problem to the text.  The other two ask for essay answers, which would be graded by an instructor, so there is no opportunity to provide answer.</p>
+                    <p>The first problem in this list is coming from the <webwork /> Open Problem Library. One implication of this is that we might want to provide some commentary that connects the problem to the text.  The other two ask for essay answers, which would be graded by an instructor, so in the HTML output there is no opportunity to provide an answer.</p>
                 </introduction>
 
                 <exercise xml:id="ww-graphical-antiderivatives">
@@ -622,6 +621,10 @@
                     </introduction>
 
                     <webwork source="Library/ma122DB/set12/s5_4_26.pg" />
+
+                    <conclusion>
+                        <p>Unless the OPL has changed this problem out from under us, note the <q>SOLUTION</q> appearing in the solution. That is hard-coded into the OPL version of the problem. This is an example of something undesirable that may happen when using OPL problems that were not originally written with <pretext /> in mind.</p>
+                    </conclusion>
                 </exercise>
 
                 <exercise xml:id="ww-discuss-always-antiderivative">

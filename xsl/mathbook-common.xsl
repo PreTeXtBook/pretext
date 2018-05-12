@@ -819,7 +819,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- text nodes within "m" with no changes  -->
     <xsl:variable name="raw-latex">
         <xsl:choose>
-            <xsl:when test="ancestor::webwork">
+            <xsl:when test="ancestor::webwork|ancestor::webwork-reps">
                 <xsl:apply-templates select="text()|var" />
             </xsl:when>
             <xsl:otherwise>
@@ -2901,13 +2901,18 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:choose>
 </xsl:template>
 
-<!-- Anyway that an image gets placed in a sidebyside  -->
+<!-- Any way that an image gets placed in a sidebyside  -->
 <!-- panel it should have a relative size filling that -->
 <!-- panel, so this is easy, just 100% all the time    -->
 <xsl:template match="image[ancestor::sidebyside]" mode="get-width-percentage">
     <xsl:text>100%</xsl:text>
 </xsl:template>
 
+<!-- The exception is an image inside a sidebyside in a webwork  -->
+<!-- where the parent sidebyside should only have a single percentage in its @widths -->
+<xsl:template match="image[ancestor::sidebyside][ancestor::webwork]" mode="get-width-percentage">
+    <xsl:value-of select="parent::sidebyside/@widths" />
+</xsl:template>
 
 <!-- We need to get the right entry from the sidebyside layout.         -->
 <!-- This is complicated slightly by two possibilities for the element  -->

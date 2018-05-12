@@ -88,6 +88,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Any color options go to black and white, as possible -->
 <xsl:param name="latex.print" select="'no'"/>
 <!--  -->
+<!-- Fillin Style Option                                  -->
+<!-- Can be 'underline' or 'box                         ' -->
+<xsl:param name="latex.fillin.style" select="'underline'"/>
+<!--  -->
 <!-- Preamble insertions                    -->
 <!-- Insert packages, options into preamble -->
 <!-- early or late                          -->
@@ -99,16 +103,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="latex.console.macro-char" select="''" />
 <xsl:param name="latex.console.begin-char" select="''" />
 <xsl:param name="latex.console.end-char" select="''" />
-
-<!-- We have to identify snippets of LaTeX from the server,   -->
-<!-- which we have stored in a directory, because XSLT 1.0    -->
-<!-- is unable/unwilling to figure out where the source file  -->
-<!-- lives (paths are relative to the stylesheet).  When this -->
-<!-- is needed a fatal message will warn if it is not set.    -->
-<!-- Path ends with a slash, anticipating appended filename   -->
-<!-- This could be overridden in a compatibility layer        -->
-<xsl:param name="webwork.server.latex" select="''" />
-
 
 <!-- ######### -->
 <!-- Variables -->
@@ -600,10 +594,31 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\newcommand{\stale}[1]{\renewcommand{\ULthickness}{\stalethick}\sout{#1}}&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
+    <xsl:if test="$document-root//webwork-reps/static//var[@form='buttons']">
+        <!-- radio button \ocircle -->
+        <xsl:text>\usepackage{wasysym}&#xa;</xsl:text>
+    </xsl:if>
     <xsl:if test="$document-root//fillin">
         <xsl:text>%% Used for fillin answer blank&#xa;</xsl:text>
         <xsl:text>%% Argument is length in em&#xa;</xsl:text>
-        <xsl:text>\newcommand{\fillin}[1]{\underline{\hspace{#1em}}}&#xa;</xsl:text>
+        <xsl:text>%% Length may compress for output to fit in one line&#xa;</xsl:text>
+        <xsl:choose>
+            <xsl:when test="$latex.fillin.style='underline'">
+                <xsl:text>\newcommand{\fillin}[1]{\leavevmode\leaders\vrule height -1.2pt depth 1.5pt \hskip #1em minus #1em \null}&#xa;</xsl:text>
+            </xsl:when>
+            <xsl:when test="$latex.fillin.style='box'">
+                <xsl:text>% Do not indent lines of this macro definition&#xa;</xsl:text>
+                <xsl:text>\newcommand{\fillin}[1]{%&#xa;</xsl:text>
+                <xsl:text>\leavevmode\rule[-0.3\baselineskip]{0.4pt}{\dimexpr 0.8pt+1.3\baselineskip\relax}% Left edge&#xa;</xsl:text>
+                <xsl:text>\nobreak\leaders\vbox{\hrule \vskip 1.3\baselineskip \hrule width .4pt \vskip -0.3\baselineskip}% Top and bottom edges&#xa;</xsl:text>
+                <xsl:text>\hskip #1em minus #1em% Maximum box width and shrinkage&#xa;</xsl:text>
+                <xsl:text>\nobreak\hbox{\rule[-0.3\baselineskip]{0.4pt}{\dimexpr 0.8pt+1.3\baselineskip\relax}}% Right edge&#xa;</xsl:text>
+                <xsl:text>}&#xa;</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:message terminate="yes">MBX:ERROR: invalid value <xsl:value-of select="$latex.fillin.style" /> for latex.fillin.style stringparam. Should be 'underline' or 'box'.</xsl:message>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:if>
     <!-- lower-casing macro from: http://tex.stackexchange.com/questions/114592/force-all-small-caps -->
     <!-- Letter-spacing LaTeX: http://tex.stackexchange.com/questions/114578/tufte-running-headers-not-using-full-width-of-page -->
@@ -996,14 +1011,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\newcommand{\hrulethin}  {\noalign{\hrule height 0.04em}}&#xa;</xsl:text>
         <xsl:text>\newcommand{\hrulemedium}{\noalign{\hrule height 0.07em}}&#xa;</xsl:text>
         <xsl:text>\newcommand{\hrulethick} {\noalign{\hrule height 0.11em}}&#xa;</xsl:text>
-        <!-- TeX produced by a WeBWorK server may contain these booktabs table rule commands  -->
-        <xsl:if test="//webwork[@source]">
-            <xsl:text>% TeX imported from a WeBWorK server might use booktabs rule commands&#xa;</xsl:text>
-            <xsl:text>% Replace/delete these three approximations if booktabs is loaded&#xa;</xsl:text>
-            <xsl:text>\newcommand{\toprule}{\hrulethick}&#xa;</xsl:text>
-            <xsl:text>\newcommand{\midrule}{\hrulemedium}&#xa;</xsl:text>
-            <xsl:text>\newcommand{\bottomrule}{\hrulethick}&#xa;</xsl:text>
-        </xsl:if>
         <!-- http://tex.stackexchange.com/questions/24549/horizontal-rule-with-adjustable-height-behaving-like-clinen-m -->
         <!-- Could preserve/restore \arrayrulewidth on entry/exit to tabular -->
         <!-- But we'll get cleaner source with this built into macros        -->
@@ -1575,7 +1582,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="//ol or //ul or //dl or //exercises or //references or //task">
         <xsl:text>%% More flexible list management, esp. for references and exercises&#xa;</xsl:text>
         <xsl:text>%% But also for specifying labels (i.e. custom order) on nested lists&#xa;</xsl:text>
-        <xsl:text>\usepackage{enumitem}&#xa;</xsl:text>
+        <xsl:text>\usepackage</xsl:text>
+        <xsl:if test="//webwork-reps/static//statement//var[@form='checkboxes' or @form='popup']">
+            <xsl:text>[inline]</xsl:text>
+        </xsl:if>
+        <xsl:text>{enumitem}&#xa;</xsl:text>
         <xsl:if test="//exercises or //references">
             <xsl:if test="//references">
                 <xsl:text>%% Lists of references in their own section, maximum depth 1&#xa;</xsl:text>
@@ -1625,12 +1636,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>%% and supresses the actual creation of the index itself&#xa;</xsl:text>
             <xsl:text>\usepackage{showidx}&#xa;</xsl:text>
         </xsl:if>
-    </xsl:if>
-    <xsl:if test="//webwork[@source]">
-        <xsl:text>%% Package for breakable boxes on WeBWorK problems from server LaTeX&#xa;</xsl:text>
-        <xsl:text>\usepackage{mdframed}&#xa;</xsl:text>
-        <xsl:text>%% WeBWorK problem style&#xa;</xsl:text>
-        <xsl:text>\mdfdefinestyle{webwork-server}{framemethod=default, linewidth=2pt}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="//docinfo/logo">
         <xsl:text>%% Package for precise image placement (for logos on pages)&#xa;</xsl:text>
@@ -1789,103 +1794,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="$latex-macros" />
     <xsl:text>%% End: Author-provided macros&#xa;</xsl:text>
 
-    <!-- PGML definitions. What follows is the PGML problem preamble in its entirety, taken from  -->
-    <!-- https://github.com/openwebwork/pg/blob/master/macros/PGML.pl. However some lines are     -->
-    <!-- commented out, as they clash with MBX LaTeX.                                             -->
-    <xsl:if test="//webwork[@source]">
-        <xsl:text>%% PGML macros&#xa;</xsl:text>
-        <xsl:text>%% formatted to exactly match output from PGML.pl as of 11/22/2016&#xa;</xsl:text>
-        <xsl:text>%% but with some lines commented out&#xa;</xsl:text>
-        <xsl:text>%\ifx\pgmlMarker\undefined&#xa;</xsl:text>
-        <xsl:text>%  \newdimen\pgmlMarker \pgmlMarker=0.00314159pt  % hack to tell if \newline was used&#xa;</xsl:text>
-        <xsl:text>%\fi&#xa;</xsl:text>
-        <xsl:text>%\ifx\oldnewline\undefined \let\oldnewline=\newline \fi&#xa;</xsl:text>
-        <xsl:text>%\def\newline{\oldnewline\hskip-\pgmlMarker\hskip\pgmlMarker\relax}%&#xa;</xsl:text>
-        <xsl:text>%\parindent=0pt&#xa;</xsl:text>
-        <xsl:text>%\catcode`\^^M=\active&#xa;</xsl:text>
-        <xsl:text>%\def^^M{\ifmmode\else\fi\ignorespaces}%  skip paragraph breaks in the preamble&#xa;</xsl:text>
-        <xsl:text>%\def\par{\ifmmode\else\endgraf\fi\ignorespaces}%&#xa;</xsl:text>
-        <xsl:text>%\ifdim\lastskip=\pgmlMarker&#xa;</xsl:text>
-        <xsl:text>%  \let\pgmlPar=\relax&#xa;</xsl:text>
-        <xsl:text>% \else&#xa;</xsl:text>
-        <xsl:text>  \let\pgmlPar=\par&#xa;</xsl:text>
-        <xsl:text>%  \vadjust{\kern3pt}%&#xa;</xsl:text>
-        <xsl:text>%\fi&#xa;</xsl:text>
-        <xsl:text>%&#xa;</xsl:text>
-        <xsl:text>%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%&#xa;</xsl:text>
-        <xsl:text>%%&#xa;</xsl:text>
-        <xsl:text>%%    definitions for PGML&#xa;</xsl:text>
-        <xsl:text>%%&#xa;</xsl:text>
-        <xsl:text>%&#xa;</xsl:text>
-        <xsl:text>%\ifx\pgmlCount\undefined  % do not redefine if multiple files load PGML.pl&#xa;</xsl:text>
-        <xsl:text>  \newcount\pgmlCount&#xa;</xsl:text>
-        <xsl:text>  \newdimen\pgmlPercent&#xa;</xsl:text>
-        <xsl:text>  \newdimen\pgmlPixels  \pgmlPixels=.5pt&#xa;</xsl:text>
-        <xsl:text>%\fi&#xa;</xsl:text>
-        <xsl:text>%\pgmlPercent=.01\hsize&#xa;</xsl:text>
-        <xsl:text>%&#xa;</xsl:text>
-        <xsl:text>\def\pgmlSetup{%&#xa;</xsl:text>
-        <xsl:text>  \parskip=0pt \parindent=0pt&#xa;</xsl:text>
-        <xsl:text>%  \ifdim\lastskip=\pgmlMarker\else\par\fi&#xa;</xsl:text>
-        <xsl:text>  \pgmlPar&#xa;</xsl:text>
-        <xsl:text>}%&#xa;</xsl:text>
-        <xsl:text>&#xa;</xsl:text>
-        <xsl:text>\def\pgmlIndent{\par\advance\leftskip by 2em \advance\pgmlPercent by .02em \pgmlCount=0}%&#xa;</xsl:text>
-        <xsl:text>\def\pgmlbulletItem{\par\indent\llap{$\bullet$ }\ignorespaces}%&#xa;</xsl:text>
-        <xsl:text>\def\pgmlcircleItem{\par\indent\llap{$\circ$ }\ignorespaces}%&#xa;</xsl:text>
-        <xsl:text>\def\pgmlsquareItem{\par\indent\llap{\vrule height 1ex width .75ex depth -.25ex\ }\ignorespaces}%&#xa;</xsl:text>
-        <xsl:text>\def\pgmlnumericItem{\par\indent\advance\pgmlCount by 1 \llap{\the\pgmlCount. }\ignorespaces}%&#xa;</xsl:text>
-        <xsl:text>\def\pgmlalphaItem{\par\indent{\advance\pgmlCount by `\a \llap{\char\pgmlCount. }}\advance\pgmlCount by 1\ignorespaces}%&#xa;</xsl:text>
-        <xsl:text>\def\pgmlAlphaItem{\par\indent{\advance\pgmlCount by `\A \llap{\char\pgmlCount. }}\advance\pgmlCount by 1\ignorespaces}%&#xa;</xsl:text>
-        <xsl:text>\def\pgmlromanItem{\par\indent\advance\pgmlCount by 1 \llap{\romannumeral\pgmlCount. }\ignorespaces}%&#xa;</xsl:text>
-        <xsl:text>\def\pgmlRomanItem{\par\indent\advance\pgmlCount by 1 \llap{\uppercase\expandafter{\romannumeral\pgmlCount}. }\ignorespaces}%&#xa;</xsl:text>
-        <xsl:text>&#xa;</xsl:text>
-        <xsl:text>\def\pgmlCenter{%&#xa;</xsl:text>
-        <xsl:text>  \par \parfillskip=0pt&#xa;</xsl:text>
-        <xsl:text>  \advance\leftskip by 0pt plus .5\hsize&#xa;</xsl:text>
-        <xsl:text>  \advance\rightskip by 0pt plus .5\hsize&#xa;</xsl:text>
-        <xsl:text>  \def\pgmlBreak{\break}%&#xa;</xsl:text>
-        <xsl:text>}%&#xa;</xsl:text>
-        <xsl:text>\def\pgmlRight{%&#xa;</xsl:text>
-        <xsl:text>  \par \parfillskip=0pt&#xa;</xsl:text>
-        <xsl:text>  \advance\leftskip by 0pt plus \hsize&#xa;</xsl:text>
-        <xsl:text>  \def\pgmlBreak{\break}%&#xa;</xsl:text>
-        <xsl:text>}%&#xa;</xsl:text>
-        <xsl:text>&#xa;</xsl:text>
-        <xsl:text>\def\pgmlBreak{\\}%&#xa;</xsl:text>
-        <xsl:text>&#xa;</xsl:text>
-        <xsl:text>\def\pgmlHeading#1{%&#xa;</xsl:text>
-        <xsl:text>  \par\bfseries&#xa;</xsl:text>
-        <xsl:text>  \ifcase#1 \or\huge \or\LARGE \or\large \or\normalsize \or\footnotesize \or\scriptsize \fi&#xa;</xsl:text>
-        <xsl:text>}%&#xa;</xsl:text>
-        <xsl:text>&#xa;</xsl:text>
-        <xsl:text>\def\pgmlRule#1#2{%&#xa;</xsl:text>
-        <xsl:text>  \par\noindent&#xa;</xsl:text>
-        <xsl:text>  \hbox{%&#xa;</xsl:text>
-        <xsl:text>    \strut%&#xa;</xsl:text>
-        <xsl:text>    \dimen1=\ht\strutbox%&#xa;</xsl:text>
-        <xsl:text>    \advance\dimen1 by -#2%&#xa;</xsl:text>
-        <xsl:text>    \divide\dimen1 by 2%&#xa;</xsl:text>
-        <xsl:text>    \advance\dimen2 by -\dp\strutbox%&#xa;</xsl:text>
-        <xsl:text>    \raise\dimen1\hbox{\vrule width #1 height #2 depth 0pt}%&#xa;</xsl:text>
-        <xsl:text>  }%&#xa;</xsl:text>
-        <xsl:text>  \par&#xa;</xsl:text>
-        <xsl:text>}%&#xa;</xsl:text>
-        <xsl:text>&#xa;</xsl:text>
-        <xsl:text>\def\pgmlIC#1{\futurelet\pgmlNext\pgmlCheckIC}%&#xa;</xsl:text>
-        <xsl:text>\def\pgmlCheckIC{\ifx\pgmlNext\pgmlSpace \/\fi}%&#xa;</xsl:text>
-        <xsl:text>{\def\getSpace#1{\global\let\pgmlSpace= }\getSpace{} }%&#xa;</xsl:text>
-        <xsl:text>%&#xa;</xsl:text>
-        <xsl:text>%{\catcode`\ =12\global\let\pgmlSpaceChar= }%&#xa;</xsl:text>
-        <xsl:text>%{\obeylines\gdef\pgmlPreformatted{\par\small\ttfamily\hsize=10\hsize\obeyspaces\obeylines\let^^M=\pgmlNL\pgmlNL}}%&#xa;</xsl:text>
-        <xsl:text>%\def\pgmlNL{\par\bgroup\catcode`\ =12\pgmlTestSpace}%&#xa;</xsl:text>
-        <xsl:text>%\def\pgmlTestSpace{\futurelet\next\pgmlTestChar}%&#xa;</xsl:text>
-        <xsl:text>%\def\pgmlTestChar{\ifx\next\pgmlSpaceChar\ \pgmlTestNext\fi\egroup}%&#xa;</xsl:text>
-        <xsl:text>%\def\pgmlTestNext\fi\egroup#1{\fi\pgmlTestSpace}%&#xa;</xsl:text>
-        <xsl:text>%&#xa;</xsl:text>
-        <xsl:text>%\def^^M{\ifmmode\else\space\fi\ignorespaces}%&#xa;</xsl:text>
-        <xsl:text>%% END PGML macros&#xa;</xsl:text>
-    </xsl:if>
     <xsl:if test="$document-root//contributors">
         <xsl:text>%% Semantic macros for contributor list&#xa;</xsl:text>
         <xsl:text>\newcommand{\contributor}[1]{\parbox{\linewidth}{#1}\par\bigskip}&#xa;</xsl:text>
@@ -3085,7 +2993,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Most introductions are followed by other sectioning blocks (e.g. subsection) -->
 <!-- And then there is a resetting of the carriage. An introduction preceding a   -->
 <!-- webwork needs an additional \par at the end (if there even was an intro)     -->
-<xsl:template match="introduction[following-sibling::webwork]">
+<xsl:template match="introduction[following-sibling::webwork-reps]">
     <xsl:apply-templates select="*" />
     <xsl:text>\par\medskip&#xa;</xsl:text>
 </xsl:template>
@@ -3109,8 +3017,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- webwork conclusions forego the \bigbreak  -->
 <!-- To stand apart, a medskip and noindent    -->
-<xsl:template match="conclusion[preceding-sibling::webwork]">
-    <xsl:text>\medskip\noindent </xsl:text>
+<xsl:template match="conclusion[preceding-sibling::webwork-reps]">
+    <xsl:text>\par\medskip\noindent </xsl:text>
     <xsl:apply-templates select="*" />
     <xsl:text>\par&#xa;</xsl:text>
 </xsl:template>
@@ -3258,9 +3166,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{inlineexercise}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Variant for free-range enclosing a WeBWorK problem -->
+<!-- Variant for free-range exercise enclosing a WeBWorK problem -->
 <!-- TODO: Be more careful about notation, todo -->
-<xsl:template match="exercise[webwork]">
+<xsl:template match="exercise[webwork-reps]">
     <xsl:text>\begin{inlineexercise}</xsl:text>
     <xsl:apply-templates select="title" mode="environment-option" />
     <xsl:apply-templates select="." mode="label"/>
@@ -3268,7 +3176,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Allow an exercise to introduce/connect a problem     -->
     <!-- (especially from server) to the text in various ways -->
     <xsl:apply-templates select="introduction"/>
-    <xsl:apply-templates select="webwork" />
+    <xsl:apply-templates select="webwork-reps/static" />
     <xsl:apply-templates select="conclusion"/>
     <xsl:text>\end{inlineexercise}&#xa;</xsl:text>
 </xsl:template>
@@ -3356,14 +3264,36 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>)\space\space{}</xsl:text>
     </xsl:if>
     <!-- condition on webwork wrapper or not -->
+    <!-- Order enforced: statement, hint, answer, solution -->
     <xsl:choose>
-        <xsl:when test="webwork|myopenmath">
+        <xsl:when test="myopenmath">
             <xsl:apply-templates select="introduction" />
-            <xsl:apply-templates select="webwork|myopenmath" />
+            <xsl:apply-templates select="myopenmath" />
+            <xsl:apply-templates select="conclusion" />
+        </xsl:when>
+        <xsl:when test="webwork-reps/static/stage">
+            <xsl:apply-templates select="introduction" />
+            <!-- Within each stage enforce order -->
+            <xsl:apply-templates select="webwork-reps/static/stage" mode="exercises"/>
+            <xsl:apply-templates select="conclusion" />
+        </xsl:when>
+        <xsl:when test="webwork-reps/static">
+            <xsl:apply-templates select="introduction" />
+            <xsl:if test="$exercise.text.statement='yes'">
+                <xsl:apply-templates select="webwork-reps/static/statement" />
+                <xsl:if test="not(parent::exercisegroup)">
+                    <xsl:text>\par\smallskip&#xa;</xsl:text>
+                </xsl:if>
+            </xsl:if>
+            <xsl:if test="webwork-reps/static/hint and $exercise.text.hint='yes'">
+                <xsl:apply-templates select="webwork-reps/static/hint" />
+            </xsl:if>
+            <xsl:if test="webwork-reps/static/solution and $exercise.text.solution='yes'">
+                <xsl:apply-templates select="webwork-reps/static/solution" />
+            </xsl:if>
             <xsl:apply-templates select="conclusion" />
         </xsl:when>
         <xsl:otherwise>
-        <!-- Order enforced: statement, hint, answer, solution -->
             <xsl:if test="$exercise.text.statement='yes'">
                 <xsl:apply-templates select="statement" />
                 <xsl:if test="not(parent::exercisegroup)">
@@ -3394,7 +3324,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Assume various solution-types with non-blank line and newline -->
 <!-- Heading template is elsewhere and should come closer on a reorganization -->
-<xsl:template match="exercise/hint|exercise/answer|exercise/solution">
+<xsl:template match="exercise/hint|exercise/answer|exercise/solution|webwork-reps/static/hint|webwork-reps/static/stage/hint|webwork-reps/static/solution|webwork-reps/static/stage/solution">
     <xsl:apply-templates select="." mode="solution-heading" />
     <xsl:apply-templates />
 </xsl:template>
@@ -3431,87 +3361,130 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Print exercises with some solution component -->
 <!-- Respect switches about visibility ("knowl" is assumed to be 'no') -->
 <xsl:template match="exercise" mode="backmatter">
-    <xsl:if test="hint or answer or solution">
-        <!-- Lead with the problem number and some space -->
-        <xsl:text>\noindent\textbf{</xsl:text>
-        <xsl:apply-templates select="." mode="serial-number" />
-        <xsl:text>.}\quad{}</xsl:text>
-        <xsl:if test="$exercise.backmatter.statement='yes'">
-            <!-- TODO: not a "backmatter" template - make one possibly? Or not necessary -->
-            <xsl:apply-templates select="statement" />
-            <xsl:text>\par\smallskip&#xa;</xsl:text>
-        </xsl:if>
-        <xsl:if test="hint and $exercise.backmatter.hint='yes'">
-            <xsl:apply-templates select="hint" mode="backmatter" />
-        </xsl:if>
-        <xsl:if test="answer and $exercise.backmatter.answer='yes'">
-            <xsl:apply-templates select="answer" mode="backmatter" />
-        </xsl:if>
-        <xsl:if test="solution and $exercise.backmatter.solution='yes'">
-            <xsl:apply-templates select="solution" mode="backmatter" />
-        </xsl:if>
+    <xsl:choose>
+        <xsl:when test="webwork-reps/static/stage and (webwork-reps/static/stage/hint or webwork-reps/static/stage/solution)">
+            <!-- Lead with the problem number and some space -->
+            <xsl:text>\noindent\textbf{</xsl:text>
+            <xsl:apply-templates select="." mode="serial-number" />
+            <xsl:text>.}\quad{}</xsl:text>
+            <!-- Within each stage enforce order -->
+            <xsl:apply-templates select="webwork-reps/static/stage" mode="backmatter"/>
+        </xsl:when>
+        <xsl:when test="webwork-reps/static and (webwork-reps/static/hint or webwork-reps/static/solution)">
+            <!-- Lead with the problem number and some space -->
+            <xsl:text>\noindent\textbf{</xsl:text>
+            <xsl:apply-templates select="." mode="serial-number" />
+            <xsl:text>.}\quad{}</xsl:text>
+            <xsl:if test="$exercise.backmatter.statement='yes'">
+                <xsl:apply-templates select="webwork-reps/static/statement" />
+                <xsl:text>\par\smallskip&#xa;</xsl:text>
+            </xsl:if>
+            <xsl:if test="webwork-reps/static/hint and $exercise.backmatter.hint='yes'">
+                <xsl:apply-templates select="webwork-reps/static/hint" mode="backmatter"/>
+            </xsl:if>
+            <xsl:if test="webwork-reps/static/solution and $exercise.backmatter.solution='yes'">
+                <xsl:apply-templates select="webwork-reps/static/solution" mode="backmatter"/>
+            </xsl:if>
+        </xsl:when>
+        <xsl:when test="hint or answer or solution">
+            <!-- Lead with the problem number and some space -->
+            <xsl:text>\noindent\textbf{</xsl:text>
+            <xsl:apply-templates select="." mode="serial-number" />
+            <xsl:text>.}\quad{}</xsl:text>
+            <xsl:if test="$exercise.backmatter.statement='yes'">
+                <!-- TODO: not a "backmatter" template - make one possibly? Or not necessary -->
+                <xsl:apply-templates select="statement" />
+                <xsl:text>\par\smallskip&#xa;</xsl:text>
+            </xsl:if>
+            <xsl:if test="//hint and $exercise.backmatter.hint='yes'">
+                <xsl:apply-templates select="hint" mode="backmatter" />
+            </xsl:if>
+            <xsl:if test="answer and $exercise.backmatter.answer='yes'">
+                <xsl:apply-templates select="answer" mode="backmatter" />
+            </xsl:if>
+            <xsl:if test="solution and $exercise.backmatter.solution='yes'">
+                <xsl:apply-templates select="solution" mode="backmatter" />
+            </xsl:if>
+        </xsl:when>
+    </xsl:choose>
+</xsl:template>
+
+<!-- For stages of a webwork exercise inside an exercises, we must respect  -->
+<!-- string parameters controlling whether to display parts.                -->
+<xsl:template match="webwork-reps/static/stage" mode="backmatter">
+    <xsl:if test="$exercise.backmatter.statement='yes'">
+        <xsl:apply-templates select="statement" />
+        <xsl:text>\par\smallskip&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="hint and $exercise.backmatter.hint='yes'">
+        <xsl:apply-templates select="hint" mode="backmatter"/>
+    </xsl:if>
+    <xsl:if test="solution and $exercise.backmatter.solution='yes'">
+        <xsl:apply-templates select="solution" mode="backmatter"/>
     </xsl:if>
 </xsl:template>
 
 <!-- We print hints, answers, solutions with no heading. -->
 <!-- TODO: make heading on solution components configurable -->
-<xsl:template match="exercise/hint|exercise/answer|exercise/solution" mode="backmatter">
+<xsl:template match="exercise/hint|exercise/answer|exercise/solution|webwork-reps/static/hint|webwork-reps/static/stage/hint|webwork-reps/static/solution|webwork-reps/static/stage/solution" mode="backmatter">
     <xsl:apply-templates />
     <xsl:text>\par\smallskip&#xa;</xsl:text>
 </xsl:template>
 
+<!-- ################ -->
+<!-- WeBWorK Problems -->
+<!-- ################ -->
 
-<!-- WeBWorK exercises, LaTeX representation -->
-<!-- Conversion of MBX-authored parts of a   -->
-<!-- WW problem, with usual MBX elements     -->
-<!-- mixed in, to LaTeX representations      -->
+<!-- A (nonemepty) <webwork> should be replaced with <webwork-reps> using the   -->
+<!-- pretext-merge style sheet. Then exercise templates use webwork-reps/static -->
 
-<!-- Top-down structure -->
-<!-- Basic outline of a simple problem -->
-<xsl:template match="webwork[child::statement]">
-    <xsl:apply-templates select="statement" />
-    <xsl:apply-templates select="hint" />
-    <xsl:apply-templates select="solution" />
+<xsl:template match="webwork-reps/static">
+    <xsl:apply-templates select="statement"/>
+    <xsl:apply-templates select="hint"/>
+    <xsl:apply-templates select="solution"/>
 </xsl:template>
 
-<!-- Basic outline of a multistage problem    -->
-<!-- Known in WeBWorK as a "scaffold" problem -->
-<xsl:template match="webwork[child::stage]">
-    <xsl:apply-templates select="stage" />
+<xsl:template match="webwork-reps/static[stage]">
+    <xsl:apply-templates select="stage"/>
 </xsl:template>
 
-<!-- A stage is a subproblem in a multistage problem -->
-<!-- Implemented as as "section" in WeBWorK          -->
-<xsl:template match="webwork/stage">
-    <!-- employ title here to identify different stages -->
-    <xsl:apply-templates select="statement" />
-    <xsl:apply-templates select="hint" />
-    <xsl:apply-templates select="solution" />
+<xsl:template match="webwork-reps/static/stage">
+    <xsl:apply-templates select="statement"/>
+    <xsl:apply-templates select="hint"/>
+    <xsl:apply-templates select="solution"/>
 </xsl:template>
 
-<!-- WW macros and setup do not need processing,  -->
-<!-- though we do examine static values of "var"s -->
-<xsl:template match="webwork/macros" />
-<xsl:template match="webwork/setup" />
-
-<!-- default template for problem statement -->
-<xsl:template match="webwork//statement">
-    <xsl:text>\noindent%&#xa;</xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>\par&#xa;</xsl:text>
+<!-- For stages of a webwork exercise inside an exercises, we must respect  -->
+<!-- string parameters controlling whether to display parts.                -->
+<xsl:template match="webwork-reps/static/stage" mode="exercises">
+    <xsl:if test="$exercise.text.statement='yes'">
+        <xsl:apply-templates select="statement" />
+        <xsl:if test="not(parent::exercisegroup)">
+            <xsl:text>\par\smallskip&#xa;</xsl:text>
+        </xsl:if>
+    </xsl:if>
+    <xsl:if test="hint and $exercise.text.hint='yes'">
+        <xsl:apply-templates select="hint" />
+    </xsl:if>
+    <xsl:if test="solution and $exercise.text.solution='yes'">
+        <xsl:apply-templates select="solution" />
+    </xsl:if>
 </xsl:template>
 
-<!-- For statements inside a "stage" of a problem -->
-<!-- TODO: internationalize Part                  -->
-<xsl:template match="webwork//statement[parent::stage]">
-    <xsl:choose>
-        <xsl:when test="not(parent::stage/preceding-sibling::stage)">
-            <xsl:text>\par</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>\medskip</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+<!-- Since webwork-reps has replaced webwork, we need to redefine serial-number -->
+<xsl:template match="stage" mode="serial-number">
+        <xsl:number count="stage" from="static" />
+</xsl:template>
+
+<xsl:template match="webwork-reps/static/stage/statement">
+    <!-- TODO: internationalize Part                  -->
+    <xsl:variable name="part">
+        <xsl:apply-templates select=".." mode="serial-number" />
+    </xsl:variable>
+    <xsl:text>\leavevmode\par</xsl:text>
+    <xsl:if test="$part != '1'">
+        <xsl:text>\medskip</xsl:text>
+    </xsl:if>
     <xsl:text>\noindent%&#xa;</xsl:text>
     <xsl:text>\textbf{Part </xsl:text>
     <xsl:apply-templates select="parent::stage" mode="serial-number" />
@@ -3520,80 +3493,56 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\par&#xa;</xsl:text>
 </xsl:template>
 
-<!-- default template, for solution -->
-<xsl:template match="webwork//solution">
-    <xsl:text>\medskip\noindent%&#xa;</xsl:text>
-    <xsl:text>\textbf{Solution.}\quad </xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>\par&#xa;</xsl:text>
-</xsl:template>
-
-<!-- default template, for hint -->
-<xsl:template match="webwork//hint">
-    <xsl:text>\medskip\noindent%&#xa;</xsl:text>
-    <xsl:text>\textbf{Hint.}\quad </xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>\par&#xa;</xsl:text>
-</xsl:template>
-
-<!-- A "var" in setup will never be processed,  -->
-<!-- since we kill "setup" and do not descend  -->
-<!-- into it, so this match should be sufficient -->
-<xsl:template match="webwork//var">
-    <xsl:variable name="problem" select="ancestor::webwork" />
-    <xsl:variable name="varname" select="@name" />
+<!-- answer blank for quantitative answers              -->
+<xsl:template match="webwork-reps/static//statement//fillin">
+    <xsl:text> \fillin{</xsl:text>
     <xsl:choose>
-        <xsl:when test="$problem/setup/var[@name=$varname]/set">
-        <xsl:for-each select="$problem/setup/var[@name=$varname]/set/member[@correct='yes']">
-            <xsl:apply-templates select='.' />
-            <xsl:choose>
-                <xsl:when test="count(following-sibling::member[@correct='yes']) &gt; 1">
-                    <xsl:text>, </xsl:text>
-                </xsl:when>
-                <xsl:when test="(count(following-sibling::member[@correct='yes']) = 1) and preceding-sibling::member[@correct='yes']">
-                    <xsl:text>, and </xsl:text>
-                </xsl:when>
-                <xsl:when test="(count(following-sibling::member[@correct='yes']) = 1) and not(preceding-sibling::member[@correct='yes'])">
-                    <xsl:text> and </xsl:text>
-                </xsl:when>
-            </xsl:choose>
-        </xsl:for-each>
+        <xsl:when test="@characters">
+            <xsl:value-of select="@characters" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:value-of select="$problem/setup/var[@name=$varname]/static" />
+            <xsl:text>5</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
+    <xsl:text>}</xsl:text>
 </xsl:template>
 
-<!-- PGML answer blank               -->
-<!-- Example: [_____]{$ans}          -->
-<xsl:template match="webwork//statement//var[@width|@form]">
-    <xsl:variable name="problem" select="ancestor::webwork" />
-    <xsl:variable name="varname" select="@name" />
+<!-- answer blank for other kinds of answers                 -->
+<!-- TODO: gradually eliminate "var"'s presence from static  -->
+<!-- coming from a WeBWorK server, similar to how the above  -->
+<!-- replaced var with fillin for quantitative answers.      -->
+<xsl:template match="webwork-reps/static//statement//var[@form]">
     <xsl:choose>
-        <xsl:when test="@form='popup'" >
-            <xsl:text>(Choose one: </xsl:text>
-            <xsl:for-each select="$problem/setup/var[@name=$varname]/set/member">
-                <xsl:apply-templates select='.' />
-                <xsl:choose>
-                    <xsl:when test="count(following-sibling::member) &gt; 1">
-                        <xsl:text>, </xsl:text>
-                    </xsl:when>
-                    <xsl:when test="(count(following-sibling::member) = 1) and preceding-sibling::member">
-                        <xsl:text>, or </xsl:text>
-                    </xsl:when>
-                    <xsl:when test="(count(following-sibling::member) = 1) and not(preceding-sibling::member)">
-                        <xsl:text> / </xsl:text>
-                    </xsl:when>
-                </xsl:choose>
+        <!-- <xsl:when test="@form='popup'" >
+            <xsl:text>[Choose: </xsl:text>
+            <xsl:for-each select="li"> -->
+                <!-- It is common for PG authors to use '?' as the first "answer" in a popup list -->
+                <!-- <xsl:if test="not(p[.='?'])">
+                    <xsl:apply-templates select='.' />
+                    <xsl:if test="count(following-sibling::li) &gt; 0">
+                        <xsl:text> |~</xsl:text>
+                    </xsl:if>
+                </xsl:if>
             </xsl:for-each>
-            <xsl:text>)</xsl:text>
-        </xsl:when>
+            <xsl:text>]</xsl:text>
+        </xsl:when> -->
         <!-- TODO: make semantic list style in preamble -->
+        <xsl:when test="@form='popup'" >
+            <!-- <xsl:text>\par&#xa;</xsl:text> -->
+            <xsl:text>\quad(\begin{itemize*}[label=$\square$,leftmargin=3em,itemjoin=\hspace{1em}]&#xa;</xsl:text>
+            <xsl:for-each select="li">
+                <xsl:if test="not(p[.='?']) and not(normalize-space(.)='?')">
+                    <xsl:text>\item{}</xsl:text>
+                    <xsl:apply-templates select='.' />
+                    <xsl:text>&#xa;</xsl:text>
+                </xsl:if>
+            </xsl:for-each>
+            <xsl:text>\end{itemize*})\quad&#xa;</xsl:text>
+        </xsl:when>
         <xsl:when test="@form='buttons'" >
             <xsl:text>\par&#xa;</xsl:text>
-            <xsl:text>\begin{itemize}[label=$\odot$,leftmargin=3em,]&#xa;</xsl:text>
-            <xsl:for-each select="$problem/setup/var[@name=$varname]/set/member">
+            <xsl:text>\begin{itemize}[label=$\ocircle$,leftmargin=3em,]&#xa;</xsl:text>
+            <xsl:for-each select="li">
                 <xsl:text>\item{}</xsl:text>
                 <xsl:apply-templates select='.' />
                 <xsl:text>&#xa;</xsl:text>
@@ -3602,138 +3551,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:when test="@form='checkboxes'" >
             <xsl:text>\par&#xa;</xsl:text>
-            <xsl:text>\begin{itemize}[label=$\square$,leftmargin=3em,]&#xa;</xsl:text>
-            <xsl:for-each select="$problem/setup/var[@name=$varname]/set/member">
-                <xsl:text>\item{}</xsl:text>
-                <xsl:apply-templates select='.' />
-                <xsl:text>&#xa;</xsl:text>
+            <xsl:text>\begin{itemize*}[label=$\square$,leftmargin=3em,itemjoin=\hspace{4em plus 1em minus 3em}]&#xa;</xsl:text>
+            <xsl:for-each select="li">
+                <xsl:if test="not(p[.='?']) and not(normalize-space(.)='?')">
+                    <xsl:text>\item{}</xsl:text>
+                    <xsl:apply-templates select='.' />
+                    <xsl:text>&#xa;</xsl:text>
+                </xsl:if>
             </xsl:for-each>
-            <xsl:text>\end{itemize}&#xa;</xsl:text>
+            <xsl:text>\end{itemize*}&#xa;</xsl:text>
         </xsl:when>
-        <xsl:otherwise>
-            <xsl:text> \framebox[</xsl:text>
-            <xsl:choose>
-                <xsl:when test="@width">
-                    <xsl:value-of select="@width" />
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:text>5</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-            <xsl:text>em]</xsl:text>
-            <!-- on baseline, height proportional to font -->
-            <xsl:text>{\raisebox{1ex}{}}</xsl:text>
-        </xsl:otherwise>
+        <xsl:when test="@form='essay'" >
+            <xsl:text>\quad\lbrack Essay Answer\rbrack</xsl:text>
+        </xsl:when>
     </xsl:choose>
 </xsl:template>
 
-<!-- An essay answer has no variable associated with the textbox,  -->
-<!-- so we simply indicate that this problem has an essay answer   -->
-<xsl:template match="webwork//var[@form='essay']">
-    <xsl:text>\quad\lbrack Essay Answer\rbrack</xsl:text>
-</xsl:template>
-
-<!-- ############################# -->
-<!-- WeBWorK Problems from Servers -->
-<!-- ############################# -->
-
-<!-- @source, in an otherwise empty "webwork" element,     -->
-<!-- indicates the problem lives on a server.  HTML        -->
-<!-- output has no problem with that (it is easier than    -->
-<!-- locally authored).  For LaTeX, the  mbx  script       -->
-<!-- fetches a LaTeX rendering and associated image files. -->
-<!-- Here, we just provide a light wrapper, and drop an    -->
-<!-- include, since the basename for the filenames has     -->
-<!-- been managed by the  mbx  script to be predictable.   -->
-<xsl:template match="webwork[@source]">
-    <!-- directory of server LaTeX must be specified -->
-    <xsl:if test="$webwork.server.latex = ''">
-        <xsl:message terminate="yes">MBX:ERROR   For LaTeX versions of WeBWorK problems on a server, the mbx script will collect the LaTeX source and then this conversion must specify the location through the "webwork.server.latex" command line stringparam.  Quitting...</xsl:message>
-    </xsl:if>
-    <xsl:variable name="xml-filename">
-        <!-- assumes path has trailing slash -->
-        <xsl:value-of select="$webwork.server.latex" />
-        <xsl:apply-templates select="." mode="internal-id" />
-        <xsl:text>.xml</xsl:text>
-    </xsl:variable>
-    <xsl:variable name="server-tex" select="document($xml-filename)/webwork-tex" />
-    <!-- An enclosing exercise may introduce/connect the server-version problem. -->
-    <!-- Then formatting is OK.  Otherwise we need a faux sentence instead.      -->
-    <xsl:text>\mbox{}\\ % hack to move box after heading&#xa;</xsl:text>
-    <xsl:apply-templates select="introduction" /> <!-- before boxed problem -->
-    <xsl:text>\begin{mdframed}&#xa;</xsl:text>
-    <xsl:text>{</xsl:text> <!-- prophylactic wrapper -->
-    <!-- mbx script collects problem preamble, but we do not use it here -->
-    <!-- process in the order server produces them, may be several -->
-    <xsl:apply-templates select="$server-tex/statement|$server-tex/solution|$server-tex/hint" />
-    <xsl:text>}</xsl:text>
-    <xsl:text>\par\vspace*{2ex}%&#xa;</xsl:text>
-    <xsl:text>{\tiny\ttfamily\noindent\url{</xsl:text>
-    <xsl:value-of select="@source" />
-    <xsl:text>}\\</xsl:text>
-    <!-- seed will round-trip through mbx script, default -->
-    <!-- is hard-coded there.  It comes back as an        -->
-    <!-- attribute of the overall "webwork-tex" element   -->
-    <xsl:text>Seed: </xsl:text>
-    <xsl:value-of select="$server-tex/@seed" />
-    <xsl:text>\hfill</xsl:text>
-    <xsl:text>}</xsl:text>  <!-- end: \tiny\ttfamily -->
-    <xsl:text>\end{mdframed}&#xa;</xsl:text>
-    <xsl:apply-templates select="conclusion" /> <!-- after boxed problem -->
-</xsl:template>
-
-<!-- We respect switches by implementing templates     -->
-<!-- for each part of the problem that use the switch. -->
-<!-- This allows processing above in document order    -->
-<xsl:template match="webwork-tex/statement">
-    <xsl:if test="$exercise.text.statement = 'yes'">
-        <xsl:apply-templates />
-    </xsl:if>
-</xsl:template>
-<xsl:template match="webwork-tex/solution">
-    <xsl:if test="$exercise.text.solution = 'yes'">
-        <xsl:apply-templates />
-    </xsl:if>
-</xsl:template>
-<xsl:template match="webwork-tex/hint">
-    <xsl:if test="$exercise.text.hint = 'yes'">
-        <xsl:apply-templates />
-    </xsl:if>
-</xsl:template>
-
-<!-- ############################# -->
-<!-- WeBWorK Images   from Servers -->
-<!-- ############################# -->
-
-<!-- When a webwork exercise is written in MBX source, but -->
-<!-- uses an image with an @pg-name, we make the exercise  -->
-<!-- in the usual way but include an image which has been  -->
-<!-- created by the mbx script with a predictable name     -->
-<!-- For such images, width and height are pixel counts    -->
-<!-- sent to the PG image creator, intended to define the  -->
-<!-- width of HTML output. A separate tex-size is intended -->
-<!-- to define width of LaTeX output. tex-size of say 800  -->
-<!-- means 0.800\linewidth. We use 400px for the default   -->
-<!-- width in mathbook-webwork-pg. Since 600px is the      -->
-<!-- default design width in html, we use 667 as the       -->
-<!-- default for tex-size                                  -->
-
-<xsl:template match="webwork//image[@pg-name]">
-    <xsl:variable name="width">
-        <xsl:apply-templates select="." mode="get-width-percentage" />
-    </xsl:variable>
-    <xsl:text>\includegraphics[width=</xsl:text>
-    <xsl:value-of select="substring-before($width,'%') div 100" />
-    <xsl:text>\linewidth]</xsl:text>
-    <xsl:text>{</xsl:text>
-    <!-- assumes path has trailing slash -->
-    <xsl:value-of select="$webwork.server.latex" />
-    <xsl:apply-templates select="ancestor::webwork" mode="internal-id" />
-    <xsl:text>-image-</xsl:text>
-    <xsl:number count="image[@pg-name]" from="webwork" level="any" />
-    <xsl:text>.png</xsl:text>
-    <xsl:text>}&#xa;</xsl:text>
-</xsl:template>
 
 <!-- ################### -->
 <!-- MyOpenMath Problems -->
@@ -4048,6 +3881,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates />
     <xsl:text>%&#xa;</xsl:text>
 </xsl:template>
+
+<!-- In WeBWorK problems, a p whose only child is a fillin blank     -->
+<!-- almost certainly means a question has been asked, and below it  -->
+<!-- there is an entry field. In print, there is no need to print    -->
+<!-- that entry field and removing it can save a lot of vertical     -->
+<!-- space. This is in constrast with fillins in the middle of a p,  -->
+<!-- where answer blanks need to be printed because of the fill      -->
+<!-- in the blank nature of the quesiton.                            -->
+<xsl:template match="p[not(normalize-space(text()))][count(fillin)=1 and count(*)=1][not(parent::li)]|p[not(normalize-space(text()))][count(fillin)=1 and count(*)=1][parent::li][preceding-sibling::*]" />
+
+
+
 
 <!-- For a memo, not indenting the first paragraph helps -->
 <!-- with alignment and the to/from/subject/date block   -->
