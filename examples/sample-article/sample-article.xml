@@ -3716,8 +3716,8 @@ the xsltproc executable.
                 <figure xml:id="figure-simple-eigenvector">
                     <caption>A simple eigenvector demonstration</caption>
 
-                    <interactive xml:id="interactive-simple-eigenvector" platform="html5" width="60%" source="code/austin/figures.js code/austin/simple-ev.js" preview="images/simple-eigenvector-preview.jpg">
-                        <slate xml:id="eigenvector" language="javascript" />
+                    <interactive xml:id="interactive-simple-eigenvector" platform="javascript" width="60%" source="code/austin/figures.js code/austin/simple-ev.js" preview="images/simple-eigenvector-preview.jpg">
+                        <slate xml:id="eigenvector" surface="canvas" />
                         <instructions>
                             <p>Let <m>\vec{x}</m> be represented by the red arrow, and <m>A\vec{x}</m> by the grey arrow, for some particular <m>2\times 2</m> matrix <m>A</m>.  Drag the <em>tip</em> of the red arrow to see the grey arrow change.</p>
                         </instructions>
@@ -3733,9 +3733,9 @@ the xsltproc executable.
                 <figure xml:id="figure-eigenvectors">
                     <caption>Eigenvector demonstration</caption>
 
-                    <interactive xml:id="interactive-eigenvectors" platform="html5" width="90%" aspect="4:5" source="code/austin/figures.js code/austin/eigenvectors.js" preview="images/eigenvectors-preview.jpg">
-                        <slate xml:id="sliders"      aspect="4:1" language="javascript" />
-                        <slate xml:id="eigenvectors" aspect="4:4" language="javascript" />
+                    <interactive xml:id="interactive-eigenvectors" platform="javascript" width="90%" aspect="4:5" source="code/austin/figures.js code/austin/eigenvectors.js" preview="images/eigenvectors-preview.jpg">
+                        <slate xml:id="sliders"      aspect="4:1" surface="canvas" />
+                        <slate xml:id="eigenvectors" aspect="4:4" surface="canvas" />
                         <instructions>
                             <p>Let <m>\vec{x}</m> be represented by the red arrow, and <m>A\vec{x}</m> by the grey arrow, for a <m>2\times 2</m> matrix <m>A</m>.  Drag the <em>tip</em> of the red arrow to see the grey arrow change.  Or drag the blue sliders to change the numerical values of the four entries of the <m>2\times 2</m> matrix <m>A</m>.  You will not see the grey vector until you change the matrix using one of the two sliders on the left.  Why is that?  What are the eigenvectors of the initial matrix?</p>
                         </instructions>
@@ -3749,27 +3749,27 @@ the xsltproc executable.
 
                     <!-- The "10" in the "12:10" should really be a "9".  I suspect -->
                     <!-- there is some inline element that induces scroll bars      -->
-                    <interactive xml:id="interactive-animation" platform="html5" width="100%" aspect="12:10" source="code/austin/animation.js" preview="images/animation-preview.jpg">
+                    <interactive xml:id="interactive-animation" platform="javascript" width="100%" aspect="12:10" source="code/austin/animation.js" preview="images/animation-preview.jpg">
                         <sbsgroup>
                             <sidebyside>
-                                <slate xml:id="a" language="javascript" aspect="4:1" />
-                                <slate xml:id="b" language="javascript" aspect="4:1" />
-                                <slate xml:id="c" language="javascript" aspect="4:1" />
+                                <slate xml:id="a" surface="canvas" aspect="4:1" />
+                                <slate xml:id="b" surface="canvas" aspect="4:1" />
+                                <slate xml:id="c" surface="canvas" aspect="4:1" />
                             </sidebyside>
                             <sidebyside>
-                                <slate xml:id="d" language="javascript" aspect="4:1" />
-                                <slate xml:id="e" language="javascript" aspect="4:1" />
-                                <slate xml:id="f" language="javascript" aspect="4:1" />
+                                <slate xml:id="d" surface="canvas" aspect="4:1" />
+                                <slate xml:id="e" surface="canvas" aspect="4:1" />
+                                <slate xml:id="f" surface="canvas" aspect="4:1" />
                             </sidebyside>
                             <sidebyside>
-                                <slate xml:id="left"  language="javascript" aspect="6:6" />
-                                <slate xml:id="right" language="javascript" aspect="6:6" />
+                                <slate xml:id="left"  surface="canvas" aspect="6:6" />
+                                <slate xml:id="right" surface="canvas" aspect="6:6" />
                             </sidebyside>
                             <sidebyside width="25%" margins="25% 25%">
-                                <slate language="html" aspect="3:1">
+                                <slate surface="html" aspect="3:1">
                                     <button type="button" id="compose">Compose</button>
                                 </slate>
-                                <slate language="html" aspect="3:1">
+                                <slate surface="html" aspect="3:1">
                                     <button type="button" id="reset">Reset</button>
                                 </slate>
                             </sidebyside>
@@ -3795,7 +3795,7 @@ the xsltproc executable.
                 <figure>
                     <caption>Force layout and collision detection</caption>
                     <interactive xml:id="interactive-d3-collision" platform="d3" version="3" width="80%" aspect="1:1" source="code/d3/collision.js" preview="images/collision-preview.png">
-                        <slate xml:id="d3-collision" language="d3" aspect="1:1"/>
+                        <slate xml:id="d3-collision" surface="div" aspect="1:1"/>
                         <instructions>
                             <p>Place your mouse/pointer at the center of the interactive to repel the 200 circles.</p>
                         </instructions>
@@ -3812,7 +3812,7 @@ the xsltproc executable.
                 <figure>
                     <caption>Graph Layout</caption>
                     <interactive xml:id="interactive-d3-graph-layout" platform="d3" version="4" width="60%" aspect="1:1" source="code/d3/graph-layout.js" preview="images/graph-layout-preview.png">
-                        <slate xml:id="d3-graph-layout" language="d3" aspect="1:1"/>
+                        <slate xml:id="d3-graph-layout" surface="div" aspect="1:1"/>
                         <instructions>
                             <p>Drag a vertex to a new location to see the graph adjust its layout.</p>
                         </instructions>
@@ -3849,7 +3849,7 @@ the xsltproc executable.
                 <figure>
                     <caption>Tweet mentions within the Welsh Assembly</caption>
                     <interactive xml:id="interactive-d3-welsh" platform="d3" version="4" width="100%" aspect="1:2" source="code/d3/welsh.js" css="code/d3/welsh.css" preview="images/welsh-assembly-preview.png">
-                        <slate xml:id="d3-welsh" language="d3" aspect="1:2"/>
+                        <slate xml:id="d3-welsh" surface="div" aspect="1:2"/>
                         <instructions>
                             <p>Hover on the name of an Assembly Member to concentrate on their tweet mentions.</p>
                         </instructions>
@@ -3872,7 +3872,7 @@ the xsltproc executable.
                     <idx>Archimedian Spiral</idx>
 
                     <interactive xml:id="interactive-archimedian-spiral" platform="jsxgraph" width="80%" aspect="4:3" source="code/jsxgraph/archimedian.js">
-                        <slate xml:id="jsxgraph-archimedian-spiral" language="jsxgraph" aspect="4:3"/>
+                        <slate xml:id="jsxgraph-archimedian-spiral" surface="jsxboard" aspect="4:3"/>
                         <instructions>
                             <p>Drag the sliders to change the parameters <m>a</m> and <m>b</m>.  Controls in the lower-right will adjust the viewing window.</p>
                         </instructions>
@@ -3887,7 +3887,7 @@ the xsltproc executable.
                     <caption>Infinity, from the JSXGraph Showcase</caption>
 
                     <interactive xml:id="interactive-infinity" platform="jsxgraph" width="60%" source="code/jsxgraph/infinity.js">
-                        <slate xml:id="jsxgraph-infinity" language="jsxgraph"/>
+                        <slate xml:id="jsxgraph-infinity" surface="jsxboard"/>
                         <instructions>
                             <p>Drag the sliders to change the pattern, and drag any of the four red corners to change the overall shape.</p>
                         </instructions>
@@ -3898,14 +3898,14 @@ the xsltproc executable.
 
                 <sidebyside widths="40% 40%">
                     <interactive xml:id="interactive-fermats-spiral" platform="jsxgraph" source="code/jsxgraph/fermats-spiral.js">
-                        <slate xml:id="jsxgraph-fermats-spiral" language="jsxgraph" />
+                        <slate xml:id="jsxgraph-fermats-spiral" surface="jsxboard" />
                         <instructions>
                             <p>Drag the slider to change the curve.</p>
                         </instructions>
                     </interactive>
 
                     <interactive xml:id="interactive-bspline" platform="jsxgraph" source="code/jsxgraph/bspline.js">
-                        <slate xml:id="jsxgraph-bspline" language="jsxgraph" />
+                        <slate xml:id="jsxgraph-bspline" surface="jsxboard" />
                         <instructions>
                             <p>Any of the 8 red control points may be moved anywhere.</p>
                         </instructions>
@@ -3921,16 +3921,16 @@ the xsltproc executable.
                     <interactive xml:id="interactive-piecewise" platform="jsxgraph" aspect="20:8" source="code/jsxgraph/piecewise.js">
                         <sbsgroup>
                             <sidebyside width="30%" margins="0%">
-                                <slate xml:id="box_p3"  language="jsxgraph" aspect="6:6" />
-                                <slate xml:id="box2_p3" language="jsxgraph" aspect="6:6" />
-                                <slate xml:id="box3_p3" language="jsxgraph" aspect="6:6" />
+                                <slate xml:id="box_p3"  surface="jsxboard" aspect="6:6" />
+                                <slate xml:id="box2_p3" surface="jsxboard" aspect="6:6" />
+                                <slate xml:id="box3_p3" surface="jsxboard" aspect="6:6" />
                             </sidebyside>
                             <!-- buttons should have aspect 6:1, if we could set it -->
                             <sidebyside widths="30% 30%" margins="20%">
-                                <slate language="html">
+                                <slate surface="html">
                                     <input type="button" value="Animate" onkeypress="animate_p3(s_p3,75,100);" onclick="animate_p3(s_p3,75,100);" style="font-size:16px; width:100%"/>
                                 </slate>
-                                <slate language="html">
+                                <slate surface="html">
                                     <input type="button" value="Clear Traces" onkeypress="clearTraces_p3();" onclick="clearTraces_p3();" style="font-size:16px; width:100%"/>
                                 </slate>
                             </sidebyside>
@@ -3954,23 +3954,17 @@ the xsltproc executable.
 
                 <figure>
                     <caption>Intersection of two planes (minimal embedding)</caption>
-                    <interactive platform="calcplot3d" variant="minimal" width="80%">
-                        <code language="url">type=implicit;equation=2x-y+z~0;cubes=16;visible=true;xmin=-2;xmax=2;ymin=-2;ymax=2;zmin=-2;zmax=2;alpha=-1;format=constant;constcol=rgb(61,133,198)&amp;type=parametric;parametric=2;x=-(u+v)/2;y=(u-v)/2;z=v;visible=true;umin=-3;umax=3;usteps=30;vmin=-2;vmax=2;vsteps=15;alpha=193;format=constant;constcol=rgb(255,161,114)&amp;type=text;text=x%20%2B%20y%20%2B%20z%20~%200;visible=true;point=(.5,-2.5,2.1);color=rgb(0,0,0);font=Times%20New%20Roman;fontsize=14pt;bold=false;italic=false;fontmath=true;align=Upper-right&amp;type=text;text=2x%20-%20y%20%2B%20z%20~%200;visible=true;point=(2,2.2,-1.25);color=rgb(0,0,0);font=Times%20New%20Roman;fontsize=14pt;bold=false;italic=false;fontmath=true;align=Upper-right&amp;type=window;hsrmode=0;anaglyph=-1;center=7.006292692220367,5.09036960455127,4.999999999999999,1;focus=0,0,0,1;up=-0.3290568564833397,-0.23907380036690282,0.9135454576426009,1;transparent=true;alpha=140;edgeson=false;faceson=true;showbox=false;showaxes=true;showticks=true;perspective=true;centerxpercent=0.5;centerypercent=0.5;rotationsteps=30;autospin=true;xygrid=false;yzgrid=false;xzgrid=false;gridsonbox=true;gridplanes=false;gridcolor=rgb(128,128,128);xmin=-2;xmax=2;ymin=-2;ymax=2;zmin=-2;zmax=2;xscale=1;yscale=1;zscale=1;zcmin=-4;zcmax=4;zoom=0.655294;xscalefactor=1;yscalefactor=1;zscalefactor=1</code>
-                    </interactive>
+                    <interactive calcplot3d="type=implicit;equation=2x-y+z~0;cubes=16;visible=true;xmin=-2;xmax=2;ymin=-2;ymax=2;zmin=-2;zmax=2;alpha=-1;format=constant;constcol=rgb(61,133,198)&amp;type=parametric;parametric=2;x=-(u+v)/2;y=(u-v)/2;z=v;visible=true;umin=-3;umax=3;usteps=30;vmin=-2;vmax=2;vsteps=15;alpha=193;format=constant;constcol=rgb(255,161,114)&amp;type=text;text=x%20%2B%20y%20%2B%20z%20~%200;visible=true;point=(.5,-2.5,2.1);color=rgb(0,0,0);font=Times%20New%20Roman;fontsize=14pt;bold=false;italic=false;fontmath=true;align=Upper-right&amp;type=text;text=2x%20-%20y%20%2B%20z%20~%200;visible=true;point=(2,2.2,-1.25);color=rgb(0,0,0);font=Times%20New%20Roman;fontsize=14pt;bold=false;italic=false;fontmath=true;align=Upper-right&amp;type=window;hsrmode=0;anaglyph=-1;center=7.006292692220367,5.09036960455127,4.999999999999999,1;focus=0,0,0,1;up=-0.3290568564833397,-0.23907380036690282,0.9135454576426009,1;transparent=true;alpha=140;edgeson=false;faceson=true;showbox=false;showaxes=true;showticks=true;perspective=true;centerxpercent=0.5;centerypercent=0.5;rotationsteps=30;autospin=true;xygrid=false;yzgrid=false;xzgrid=false;gridsonbox=true;gridplanes=false;gridcolor=rgb(128,128,128);xmin=-2;xmax=2;ymin=-2;ymax=2;zmin=-2;zmax=2;xscale=1;yscale=1;zscale=1;zcmin=-4;zcmax=4;zoom=0.655294;xscalefactor=1;yscalefactor=1;zscalefactor=1" variant="minimal" width="80%"/>
                 </figure>
 
                 <figure>
                     <caption>Probability wavefunction with contours (includes controls)</caption>
-                    <interactive platform="calcplot3d" variant="controls" width="95%" aspect="1:2">
-                        <code language="url">type=jaxlabel;position=middle;math=%255Cpsi_%257Bn_x%252Cn_y%257D(x%252Cy);textonly=false&amp;type=z;z=sin(api*x)sin(bpi*y);visible=true;umin=0;umax=1;vmin=0;vmax=1;grid=50;format=normal;alpha=200;constcol=rgb(255,0,0);view=0;contourcolor=rgb(255,0,0);contourplot=true;showcontourplot=true;firstvalue=-1;stepsize=0.2;numlevels=11;xnum=75;ynum=75;show2d=false;hidesurface=false;hidelabels=false;showprojections=false;surfacecontours=true;projectioncolor=rgba(51,153,0,1);showxygrid=false;showxygridonbox=false&amp;type=slider;slider=a;value=1;steps=2;pmin=1;pmax=3;repeat=true;bounce=true;waittime=40;careful=true;noanimate=true;name=n_x&amp;type=slider;slider=b;value=1;steps=2;pmin=1;pmax=3;repeat=true;bounce=true;waittime=40;careful=true;noanimate=true;name=n_y&amp;type=text;text=0;visible=true;point=(0,0,0);color=rgb(0,0,0);font=Times%20New%20Roman;fontsize=15pt;bold=true;italic=false;fontmath=true;align=Center-left&amp;type=text;text=L;visible=true;point=(1,-0.025,0);color=rgb(0,0,0);font=Times%20New%20Roman;fontsize=14pt;bold=true;italic=false;fontmath=true;align=Center&amp;type=text;text=L;visible=true;point=(-0.05,1,0);color=rgb(0,0,0);font=Times%20New%20Roman;fontsize=14pt;bold=true;italic=false;fontmath=true;align=Center&amp;type=text;text=x;visible=true;point=(0.5,-0.07,0);color=rgb(0,0,0);font=Times%20New%20Roman;fontsize=14pt;bold=true;italic=false;fontmath=true;align=Center&amp;type=text;text=y;visible=true;point=(-0.08,0.5,0);color=rgb(0,0,0);font=Times%20New%20Roman;fontsize=14pt;bold=true;italic=false;fontmath=true;align=Center&amp;type=window;hsrmode=3;anaglyph=-1;center=-7.447051206708178,-2.790794355991455,3.71998429905919,1;focus=0.5,0.5,0.5,1;up=0.39804763218685024,0.14521777837291014,0.9057979241281567,1;transparent=true;alpha=140;twoviews=false;unlinkviews=false;axisextension=0;xaxislabel=%20;yaxislabel=%20;zaxislabel=%20;edgeson=false;faceson=true;showbox=false;showaxes=false;showticks=false;perspective=true;centerxpercent=0.5;centerypercent=0.4;rotationsteps=30;autospin=true;xygrid=false;yzgrid=false;xzgrid=false;gridsonbox=false;gridplanes=true;gridcolor=rgb(128,128,128);xmin=0;xmax=1;ymin=0;ymax=1;zmin=0;zmax=1;xscale=1;yscale=1;zscale=1;zcmin=-4;zcmax=4;zoom=3.543529;xscalefactor=1;yscalefactor=1;zscalefactor=0.5;hidexysliders=true;hidetracevalue=true
-                        </code>
-                    </interactive>
+                    <interactive calcplot3d="type=jaxlabel;position=middle;math=%255Cpsi_%257Bn_x%252Cn_y%257D(x%252Cy);textonly=false&amp;type=z;z=sin(api*x)sin(bpi*y);visible=true;umin=0;umax=1;vmin=0;vmax=1;grid=50;format=normal;alpha=200;constcol=rgb(255,0,0);view=0;contourcolor=rgb(255,0,0);contourplot=true;showcontourplot=true;firstvalue=-1;stepsize=0.2;numlevels=11;xnum=75;ynum=75;show2d=false;hidesurface=false;hidelabels=false;showprojections=false;surfacecontours=true;projectioncolor=rgba(51,153,0,1);showxygrid=false;showxygridonbox=false&amp;type=slider;slider=a;value=1;steps=2;pmin=1;pmax=3;repeat=true;bounce=true;waittime=40;careful=true;noanimate=true;name=n_x&amp;type=slider;slider=b;value=1;steps=2;pmin=1;pmax=3;repeat=true;bounce=true;waittime=40;careful=true;noanimate=true;name=n_y&amp;type=text;text=0;visible=true;point=(0,0,0);color=rgb(0,0,0);font=Times%20New%20Roman;fontsize=15pt;bold=true;italic=false;fontmath=true;align=Center-left&amp;type=text;text=L;visible=true;point=(1,-0.025,0);color=rgb(0,0,0);font=Times%20New%20Roman;fontsize=14pt;bold=true;italic=false;fontmath=true;align=Center&amp;type=text;text=L;visible=true;point=(-0.05,1,0);color=rgb(0,0,0);font=Times%20New%20Roman;fontsize=14pt;bold=true;italic=false;fontmath=true;align=Center&amp;type=text;text=x;visible=true;point=(0.5,-0.07,0);color=rgb(0,0,0);font=Times%20New%20Roman;fontsize=14pt;bold=true;italic=false;fontmath=true;align=Center&amp;type=text;text=y;visible=true;point=(-0.08,0.5,0);color=rgb(0,0,0);font=Times%20New%20Roman;fontsize=14pt;bold=true;italic=false;fontmath=true;align=Center&amp;type=window;hsrmode=3;anaglyph=-1;center=-7.447051206708178,-2.790794355991455,3.71998429905919,1;focus=0.5,0.5,0.5,1;up=0.39804763218685024,0.14521777837291014,0.9057979241281567,1;transparent=true;alpha=140;twoviews=false;unlinkviews=false;axisextension=0;xaxislabel=%20;yaxislabel=%20;zaxislabel=%20;edgeson=false;faceson=true;showbox=false;showaxes=false;showticks=false;perspective=true;centerxpercent=0.5;centerypercent=0.4;rotationsteps=30;autospin=true;xygrid=false;yzgrid=false;xzgrid=false;gridsonbox=false;gridplanes=true;gridcolor=rgb(128,128,128);xmin=0;xmax=1;ymin=0;ymax=1;zmin=0;zmax=1;xscale=1;yscale=1;zscale=1;zcmin=-4;zcmax=4;zoom=3.543529;xscalefactor=1;yscalefactor=1;zscalefactor=0.5;hidexysliders=true;hidetracevalue=true" variant="controls" width="95%" aspect="1:2" />
                 </figure>
 
                 <figure>
                     <caption>Plot of <m>f(x,y)=\dfrac{1}{y-x^2}</m> on <m>[-2,2]\times[-2,2] (full application)</m></caption>
-                    <interactive platform="calcplot3d" variant="application" width="95%" aspect="10:13">
-                        <code language="url">type=z;z=1/(y-x^2);visible=true;umin=-2;umax=2;vmin=-2;vmax=2;grid=30;format=normal;alpha=-1;constcol=rgb(255,0,0);contourcolor=red&amp;type=window;hsrmode=3;anaglyph=-1;center=5.529712854135209,7.349875454071844,3.9244880634856956,1;focus=0,0,0,1;up=-0.26875302682986874,-0.2884991397174344,0.9189886054528014,1;transparent=true;alpha=140;edgeson=true;faceson=true;showbox=true;showaxes=true;showticks=true;perspective=true;centerxpercent=0.5;centerypercent=0.5;rotationsteps=30;autospin=true;xygrid=false;yzgrid=false;xzgrid=false;gridsonbox=true;gridplanes=false;gridcolor=rgb(128,128,128);xmin=-2;xmax=2;ymin=-2;ymax=2;zmin=-4;zmax=4;xscale=1;yscale=1;zscale=1;zcmin=-4;zcmax=4;zoom=0.468667;xscalefactor=1;yscalefactor=1;zscalefactor=1</code>
+                    <interactive calcplot3d="type=z;z=1/(y-x^2);visible=true;umin=-2;umax=2;vmin=-2;vmax=2;grid=30;format=normal;alpha=-1;constcol=rgb(255,0,0);contourcolor=red&amp;type=window;hsrmode=3;anaglyph=-1;center=5.529712854135209,7.349875454071844,3.9244880634856956,1;focus=0,0,0,1;up=-0.26875302682986874,-0.2884991397174344,0.9189886054528014,1;transparent=true;alpha=140;edgeson=true;faceson=true;showbox=true;showaxes=true;showticks=true;perspective=true;centerxpercent=0.5;centerypercent=0.5;rotationsteps=30;autospin=true;xygrid=false;yzgrid=false;xzgrid=false;gridsonbox=true;gridplanes=false;gridcolor=rgb(128,128,128);xmin=-2;xmax=2;ymin=-2;ymax=2;zmin=-4;zmax=4;xscale=1;yscale=1;zscale=1;zcmin=-4;zcmax=4;zoom=0.468667;xscalefactor=1;yscalefactor=1;zscalefactor=1" variant="application" width="95%" aspect="10:13">
                         <static>
                             <image source="images/calcplot3d.png" width="45%"/>
                         </static>
@@ -4031,7 +4025,8 @@ the xsltproc executable.
 
                 <figure>
                     <caption>GeoGebra: astroids (from Dave Rosoff)</caption>
-                    <interactive xml:id="geogebra-astroid" platform="geogebra" width="100%" aspect="4:3" source="code/rosoff/astroid.ggb">
+                    <interactive xml:id="geogebra-astroid" platform="geogebra" width="100%" aspect="4:3">
+                        <slate xml:id="astroid" surface="geogebra" source="code/rosoff/astroid.ggb" aspect="4:3" />
                     </interactive>
                 </figure>
 
@@ -4039,7 +4034,8 @@ the xsltproc executable.
 
                 <figure>
                     <caption>GeoGebra: cycloids (from Dave Rosoff)</caption>
-                    <interactive xml:id="geogebra-cycloid" platform="geogebra" width="75%" aspect="3:4" source="code/rosoff/epi-hypocycloids-default.ggb">
+                    <interactive xml:id="geogebra-cycloid" platform="geogebra" width="75%" aspect="3:4">
+                        <slate xml:id="cycloid" surface="geogebra" source="code/rosoff/epi-hypocycloids-default.ggb" aspect="3:4"/>
                     </interactive>
                 </figure>
 
@@ -4047,7 +4043,8 @@ the xsltproc executable.
 
                 <figure>
                     <caption>GeoGebra: a constructive <q>proof</q> that SAS congruence holds in Euclidean geometry (from Tevian Dray)</caption>
-                    <interactive xml:id="geogebra-SAS" platform="geogebra" width="100%" aspect="1:1" source="code/dray/SAS.ggb">
+                    <interactive xml:id="geogebra-SAS" platform="geogebra" width="100%" aspect="1:1">
+                        <slate xml:id="SAS" surface="geogebra" source="code/dray/SAS.ggb" />
                         <instructions>
                             <p>Drag some of the points and some of the circles to change them, and watch the remainder react.</p>
                         </instructions>
@@ -4059,13 +4056,13 @@ the xsltproc executable.
                 <title>Desmos Graphs (Cloud)</title>
                 <idx>Desmos graphs</idx>
 
-                <p><term>Desmos</term> provides interactive graphing applications.  The following example was created by Ann Cary and made available via the <q>Share</q> function of Desmos.  You can make your own Desmos graph, choose the <q>Share</q> icon, and the <q>Embed</q> option, to get a <init>URL</init> such as <cd>https://www.desmos.com/calculator/ttox1bvxku</cd>  You want to pick off the identifier on the end, in this case <c>ttox1bvxku</c>, then author<cd>&lt;interactive desmos="ttox1bvxku" /&gt;</cd> as we have done here.</p>
+                <p><term>Desmos</term> provides interactive graphing applications.  The following example was created by Ann Cary and made available via the <q>Share</q> function of Desmos.  You can make your own Desmos graph, choose the <q>Share</q> icon, and the <q>Embed</q> option, to get a <init>URL</init> such as <cd>https://www.desmos.com/calculator/ttox1bvxku</cd>  You want to pick off the identifier on the end, in this case <c>ttox1bvxku</c>, then author<cd>&lt;interactive desmos="ttox1bvxku" width="60%" aspect="2:3" /&gt;</cd> as we have done here.</p>
 
                 <p>The static image employed in the <latex /> version of this article was obtained by viewing the graph at the Desmos site (<ie />, not the embedded version in the <pretext /> HTML version), and using the Share button to export a <init>PNG</init> image.  In this case, we used a <q>Medium Rectangle</q> and <q>Thick</q> lines.</p>
 
                 <figure>
                     <caption>Graph of <m>ln(x^2+5)-3</m></caption>
-                    <interactive desmos="ttox1bvxku">
+                    <interactive desmos="ttox1bvxku" width="60%" aspect="2:3">
                         <static>
                             <image source="images/desmos-graph.png" width="60%"/>
                         </static>
@@ -4089,12 +4086,12 @@ the xsltproc executable.
 
                 <figure xml:id="wolfram-cdf-sine-curve">
                     <caption>Variable Sine Curve</caption>
-                    <interactive wolfram-cdf="fe1be5c3-d105-43d0-bf4b-9f2eb1028b84" />
+                    <interactive wolfram-cdf="fe1be5c3-d105-43d0-bf4b-9f2eb1028b84" width="80%" aspect="1:1" />
                 </figure>
 
                 <figure xml:id="wolfram-cdf-cellular-automata">
                     <caption>Cellular Automata</caption>
-                    <interactive wolfram-cdf="9fa2acff-c809-4b7f-a73b-c59ace36affc" />
+                    <interactive wolfram-cdf="9fa2acff-c809-4b7f-a73b-c59ace36affc" width="80%" aspect="1:1" />
                 </figure>
             </subsection>
         </section>

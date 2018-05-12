@@ -7077,47 +7077,273 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Interactives -->
 <!-- ############ -->
 
-<!-- Interactive goodies to embed, with a general -->
-<!-- interface but specific implementations       -->
+<!-- Every interactive is an "iframe" - this allows us to confine      -->
+<!-- libraries, variables, and scripts to just where they are needed.  -->
+<!-- And we can "sandbox" an iframe.  Some simple interactives, coming -->
+<!-- from servers, are built to be iframes.  In other cases, we build  -->
+<!-- a super-minimal page to serve as the @src of an iframe.  For each -->
+<!-- "interactive", we also build a stand-alone page to serve as the   -->
+<!-- target of a live link in a static format (such as a QR code in a  -->
+<!-- LaTeX/PDF document).                                              -->
+<!--                                                                   -->
+<!-- PTX source may include a "static" element - we routinely ignore   -->
+<!-- for HTML output, as it is only employed in static output formats  -->
+<!-- https://www.html5rocks.com/en/tutorials/security/sandboxed-iframes/ -->
 
-<!-- TODO: -->
-<!-- sizing:  width x aspect-ratio -->
-<!-- internal-id:  migrate to iframes -->
-<!-- titles:  migrate to iframes -->
+<!-- Three actions, all based on "interactive-core" template -->
+<xsl:template match="interactive">
+    <!-- (1) Build, display full content on the page, where born -->
+    <xsl:apply-templates select="." mode="interactive-core" />
+    <!-- (2) Identical content, but now isolated on a reader-friendly page -->
+    <xsl:apply-templates select="." mode="standalone-page" >
+        <xsl:with-param name="content">
+            <xsl:apply-templates select="." mode="interactive-core" />
+        </xsl:with-param>
+    </xsl:apply-templates>
+    <!-- (3) A simple page that can be used in an iframe construction -->
+    <xsl:apply-templates select="." mode="create-iframe-page" />
+</xsl:template>
 
-<!-- PTX source will include a "static" -->
-<!-- element, which we routinely ignore -->
+<!-- Following will generate:              -->
+<!--   1.  Instructions (paragraphs, etc)  -->
+<!--   2.  An iframe, via modal-template   -->
+<xsl:template match="interactive" mode="interactive-core">
+    <!-- "instructions" first in identical-width div -->
+    <xsl:if test="instructions">
+        <div>
+            <xsl:variable name="width">
+                <xsl:apply-templates select="." mode="get-width-pixels" />
+            </xsl:variable>
+            <xsl:attribute name="style">
+                <xsl:text>width:</xsl:text>
+                <xsl:value-of select="$width" />
+                <xsl:text>px;</xsl:text>
+            </xsl:attribute>
+            <xsl:apply-templates select="instructions" />
+        </div>
+    </xsl:if>
+    <!-- An iframe follows next -->
+    <xsl:apply-templates select="." mode="iframe-interactive" />
+</xsl:template>
+
+<!-- ################### -->
+<!-- iframe Interactives -->
+<!-- ################### -->
+
+<!-- Given by a small piece of information used -->
+<!-- to form the @src attribute of an "iframe"  -->
+<!-- An iframe has @width, @height attributes,  -->
+<!-- specified in pixels                        -->
+
+<!-- Desmos -->
+<!-- The simplest possible example of this type -->
+<xsl:template match="interactive[@desmos]" mode="iframe-interactive">
+    <iframe src="https://www.desmos.com/calculator/{@desmos}">
+        <xsl:apply-templates select="." mode="size-pixels-attributes" />
+    </iframe>
+</xsl:template>
+
+<!-- Wolfram Computable Document Format -->
+<!-- Just mildly more involved than the Desmos case                                              -->
+<!-- https://www.wolfram.com/cdf/adopting-cdf/deploying-cdf/web-delivery-cloud.html              -->
+<!-- More for MMA origination, but discusses "cloud credits"                                     -->
+<!-- https://reference.wolfram.com/language/howto/DeployInteractiveContentInTheWolframCloud.html -->
+<!-- https://www.wolfram.com/cloud-credits/                                                      -->
+<xsl:template match="interactive[@wolfram-cdf]" mode="iframe-interactive">
+    <!-- Query string option: _embed=iframe will provide Wolfram footer -->
+    <iframe src="https://www.wolframcloud.com/objects/{@wolfram-cdf}?_view=frameless">
+        <xsl:apply-templates select="." mode="size-pixels-attributes" />
+    </iframe>
+</xsl:template>
 
 <!-- Geogebra -->
-<xsl:template match="interactive[@geogebra]">
-    <xsl:variable name="width">
-        <xsl:apply-templates select="." mode="get-width-pixels" />
+<!-- Similar again, but with options fixed -->
+<xsl:template match="interactive[@geogebra]" mode="iframe-interactive">
+    <iframe src="https://www.geogebra.org/material/iframe/id/{@geogebra}/width/800/height/450/border/888888/smb/false/stb/false/stbh/false/ai/false/asb/false/sri/false/rc/false/ld/false/sdz/false/ctl/false">
+        <xsl:apply-templates select="." mode="size-pixels-attributes" />
+    </iframe>
+</xsl:template>
+
+<!-- CalcPlot3D -->
+<!-- A bit more complicated, as the configuration   -->
+<!-- is a query string of a URL, and we can specify -->
+<!-- the style of the interface through @variant    -->
+<xsl:template match="interactive[@calcplot3d]" mode="iframe-interactive">
+    <!-- Use @variant to pick an endpoint/view/infrastructure -->
+    <xsl:variable name="cp3d-endpoint">
+        <xsl:choose>
+            <xsl:when test="@variant='application'">
+                <xsl:text>https://www.monroecc.edu/faculty/paulseeburger/calcnsf/CalcPlot3D</xsl:text>
+            </xsl:when>
+            <xsl:when test="@variant='controls'">
+                <xsl:text>https://www.monroecc.edu/faculty/paulseeburger/CalcPlot3D/dynamicFigureWCP</xsl:text>
+            </xsl:when>
+            <xsl:when test="@variant='minimal'">
+                <xsl:text>https://www.monroecc.edu/faculty/paulseeburger/CalcPlot3D/dynamicFigure</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <!-- just a silly domain so something none-too-crazy happens -->
+                <xsl:text>http://www.example.com/</xsl:text>
+                <xsl:message>MBX:ERROR:  @variant="<xsl:value-of select="@variant" />" is not recognized for a CalcPlot3D &lt;interactive&gt;</xsl:message>
+                <xsl:apply-templates select="." mode="location-report" />
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:variable>
-    <xsl:variable name="height">
-        <xsl:apply-templates select="." mode="get-height-pixels" />
+    <!-- load 'em up and go -->
+    <!-- TODO: box-sizing, etc does not seem to help with vertical scroll bars -->
+    <xsl:variable name="full-url" select="concat($cp3d-endpoint, '/?', @calcplot3d)" />
+    <iframe src="{$full-url}">
+        <xsl:apply-templates select="." mode="size-pixels-attributes" />
+    </iframe>
+</xsl:template>
+
+<!-- For more complicated interactives, we just point to the page we generate -->
+<xsl:template match="interactive[@platform]" mode="iframe-interactive">
+    <xsl:variable name="int-id">
+        <xsl:apply-templates select="." mode="internal-id" />
     </xsl:variable>
-    <iframe scrolling="no" src="https://www.geogebra.org/material/iframe/id/{@geogebra}/width/800/height/450/border/888888/smb/false/stb/false/stbh/false/ai/false/asb/false/sri/false/rc/false/ld/false/sdz/false/ctl/false">
-        <xsl:attribute name="width">
-            <xsl:value-of select="$width" />
-            <xsl:text>px</xsl:text>
-        </xsl:attribute>
-        <xsl:attribute name="height">
-            <xsl:value-of select="$height" />
-            <xsl:text>px</xsl:text>
+    <iframe id="{$int-id}">
+        <xsl:apply-templates select="." mode="size-pixels-attributes" />
+        <xsl:attribute name="src">
+            <xsl:apply-templates select="." mode="iframe-filename" />
         </xsl:attribute>
     </iframe>
 </xsl:template>
 
-<!-- Local source -->
-<xsl:template match="interactive[@platform='geogebra']">
-    <!-- size of the window -->
+<!-- ######################### -->
+<!-- Source File Interactives  -->
+<!-- ######################### -->
+
+<!-- Build a minimal page for iframe contents -->
+<!-- This version for @platform variant        -->
+<!--   Platform specific libraries into head  -->
+<!--   Author-libraries after slate exist     -->
+<xsl:template match="interactive[@platform]" mode="create-iframe-page">
+    <xsl:variable name="if-filename">
+        <xsl:apply-templates select="." mode="iframe-filename" />
+    </xsl:variable>
+    <exsl:document href="{$if-filename}" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
+        <xsl:call-template name="converter-blurb-html" />
+        <html lang="{$document-language}">
+            <head>
+                <!-- need CSS for sidebyside         -->
+                <!-- perhaps this can be specialized -->
+                <xsl:call-template name="css" />
+                <!-- and CSS for the entire interactive, into the head -->
+                <xsl:apply-templates select="@css" />
+                <!-- load header libraries (for all "slate") -->
+                <xsl:apply-templates select="." mode="header-libraries" />
+            </head>
+            <body class="mathbook-content">
+                <div>
+                    <!-- the actual interactive bit          -->
+                    <xsl:apply-templates select="." mode="size-pixels-style-attribute" />
+                    <!-- stack, else use a layout -->
+                    <xsl:apply-templates select="slate|sidebyside|sbsgroup" />
+                    <!-- accumulate script tags *after* HTML elements -->
+                    <xsl:apply-templates select="@source" />
+                </div>
+            </body>
+        </html>
+    </exsl:document>
+</xsl:template>
+
+<!-- These forms *are* iframes, so we don't need to build their content -->
+<xsl:template match="interactive[@desmos|@geogebra|@calcplot3d|@wolfram-cdf]" mode="create-iframe-page" />
+
+
+<!-- Specified by libraries through @platform attribute  -->
+<!-- or explicitly with @library, and with per-slate     -->
+<!-- @source files stored locally, these draw on "slate" -->
+<!-- elements having different @surface characteristics  -->
+
+<!-- Geogebra header libraries -->
+<xsl:template match="interactive[@platform = 'geogebra']" mode="header-libraries">
+    <script type="text/javascript" src="https://cdn.geogebra.org/apps/deployggb.js"></script>
+</xsl:template>
+
+<!-- JSXGraph header libraries -->
+<xsl:template match="interactive[@platform = 'jsxgraph']" mode="header-libraries">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jsxgraph/0.99.6/jsxgraph.css" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsxgraph/0.99.6/jsxgraphcore.js"></script>
+</xsl:template>
+
+<!-- D3.js header libraries -->
+<xsl:template match="interactive[@platform = 'd3']" mode="header-libraries">
+    <xsl:variable name="d3-library-url">
+        <xsl:text>https://d3js.org/d3.v</xsl:text>
+        <!-- versions could be 3, 4, 5 -->
+        <xsl:choose>
+            <xsl:when test="@version">
+                <xsl:value-of select="@version" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>5</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+        <xsl:text>.min.js</xsl:text>
+    </xsl:variable>
+    <script src="{$d3-library-url}"></script>
+</xsl:template>
+
+<!-- Javascript header libraries (none) -->
+<xsl:template match="interactive[@platform = 'javascript']" mode="header-libraries" />
+
+<!-- ########################### -->
+<!-- Slates (objects to draw on) -->
+<!-- ########################### -->
+
+<!-- Slates are where we draw, with different surfaces -->
+
+<xsl:template match="slate[@surface='div']">
+    <div>
+        <xsl:attribute name="id">
+            <xsl:value-of select="@xml:id" />
+        </xsl:attribute>
+        <xsl:apply-templates select="." mode="size-pixels-style-attribute" />
+    </div>
+</xsl:template>
+
+<xsl:template match="slate[@surface = 'canvas']">
+    <!-- display:block allows precise sizes, without   -->
+    <!-- having inline content with extra line height, -->
+    <!-- or whatever, inducing scroll bars             -->
+    <canvas style="display:block">
+        <xsl:attribute name="id">
+            <xsl:value-of select="@xml:id" />
+        </xsl:attribute>
+        <xsl:apply-templates select="." mode="size-pixels-attributes" />
+    </canvas>
+</xsl:template>
+
+<!-- HTML Code -->
+<!-- Simply create deep-copy of HTML elements -->
+<!-- TODO: should this be a div, with width and height? -->
+<xsl:template match="slate[@surface = 'html']">
+    <xsl:copy-of select="*" />
+</xsl:template>
+
+<!-- Similar to the "div" surface, but with class information -->
+<xsl:template match="slate[@surface = 'jsxboard']">
+    <div>
+        <xsl:attribute name="id">
+            <xsl:value-of select="@xml:id" />
+        </xsl:attribute>
+        <xsl:attribute name="class">
+            <xsl:text>jxgbox</xsl:text>
+        </xsl:attribute>
+        <xsl:apply-templates select="." mode="size-pixels-style-attribute" />
+    </div>
+</xsl:template>
+
+<xsl:template match="slate[@surface='geogebra']">
+    <!-- size of the window, to be passed as a parameter -->
     <xsl:variable name="width">
         <xsl:apply-templates select="." mode="get-width-pixels" />
     </xsl:variable>
     <xsl:variable name="height">
         <xsl:apply-templates select="." mode="get-height-pixels" />
     </xsl:variable>
-
     <!-- We need a Javascript identifier to name the applet -->
     <xsl:variable name="applet-name">
         <xsl:apply-templates select="." mode="internal-id-no-dash" />
@@ -7135,8 +7361,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Javascript API for loading from a base64 string                   -->
     <!-- Crib from page source at second link, with modifications          -->
     <!-- Multiple instances:  https://stackoverflow.com/questions/9434     -->
-    <!-- https://learn.jquery.com/using-jquery-core/document-ready/        -->
-    <!-- We assume JQuery is loaded, so go that route                      -->
     <!-- https://wiki.geogebra.org/en/Reference:GeoGebra_Apps_API          -->
     <!-- http://dev.geogebra.org/examples/html/example-api-save-state.html -->
     <!-- Parameter reference:                                              -->
@@ -7161,67 +7385,21 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
         "useBrowserForJS":false,
         "playButton":false,
         "filename":"</xsl:text><xsl:value-of select="@source" /><xsl:text>"};&#xa;</xsl:text>
-        <!-- "ggbBase64":"</xsl:text><xsl:value-of select="normalize-space(code[@language='base64'])" /><xsl:text>"};&#xa;</xsl:text> -->
+        <!-- "ggbBase64":"</xsl:text><xsl:value-of select="....." /><xsl:text>"};&#xa;</xsl:text> -->
 
-<xsl:text>var </xsl:text><xsl:value-of select="$applet-name" /><xsl:text> = new GGBApplet(</xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text>, '5.0');
-$( document ).ready(
-function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject('</xsl:text><xsl:value-of select="$applet-container" /><xsl:text>'); }
-);&#xa;</xsl:text>
+    <xsl:text>var </xsl:text><xsl:value-of select="$applet-name" /><xsl:text> = new GGBApplet(</xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text>, '5.0');&#xa;</xsl:text>
+
+    <xsl:text>window.onload = function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject('</xsl:text><xsl:value-of select="$applet-container" /><xsl:text>'); }&#xa;</xsl:text>
     </script>
     <!-- build a container div with the right shape -->
     <div class="geogebra-applet" id="{$applet-container}">
-        <xsl:attribute name="style">
-            <xsl:text>width:</xsl:text>
-            <xsl:value-of select="$width" />
-            <xsl:text>px;</xsl:text>
-            <xsl:text> height:</xsl:text>
-            <xsl:value-of select="$height" />
-            <xsl:text>px;</xsl:text>
-        </xsl:attribute>
+        <xsl:apply-templates select="." mode="size-pixels-style-attribute" />
     </div>
 </xsl:template>
 
-<!-- Desmos -->
-<xsl:template match="interactive[@desmos]">
-    <iframe src="https://www.desmos.com/calculator/{@desmos}" width="400" height="600" />
-</xsl:template>
-
-<!-- CalcPlot3D -->
-<xsl:template match="interactive[@platform='calcplot3d']">
-    <!-- code/@url is the query string -->
-    <xsl:variable name="query-url" select="code" />
-    <!-- Use @variant to pick an endpoint/view/infrastructure -->
-    <xsl:variable name="cp3d-endpoint">
-        <xsl:choose>
-            <xsl:when test="@variant='application'">
-                <xsl:text>https://www.monroecc.edu/faculty/paulseeburger/calcnsf/CalcPlot3D</xsl:text>
-            </xsl:when>
-            <xsl:when test="@variant='controls'">
-                <xsl:text>https://www.monroecc.edu/faculty/paulseeburger/CalcPlot3D/dynamicFigureWCP</xsl:text>
-            </xsl:when>
-            <xsl:when test="@variant='minimal'">
-                <xsl:text>https://www.monroecc.edu/faculty/paulseeburger/CalcPlot3D/dynamicFigure</xsl:text>
-            </xsl:when>
-            <xsl:otherwise>
-                <!-- just a silly domain so something none-too-crazy happens -->
-                <xsl:text>http://www.example.com/</xsl:text>
-                <xsl:message>MBX:ERROR:  @variant="<xsl:value-of select="@variant" />" is not recognized for a CalcPlot3D &lt;interactive&gt;</xsl:message>
-                <xsl:apply-templates select="." mode="location-report" />
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <!-- load 'em up and go -->
-    <xsl:variable name="full-url" select="concat($cp3d-endpoint, '/?', $query-url)" />
-    <iframe src="{$full-url}" style="display:block;">
-        <xsl:attribute name="width">
-            <xsl:apply-templates select="." mode="get-width-pixels" />
-            <xsl:text>px;</xsl:text>
-        </xsl:attribute>
-        <xsl:attribute name="height">
-            <xsl:apply-templates select="." mode="get-height-pixels" />
-            <xsl:text>px;</xsl:text>
-        </xsl:attribute>
-    </iframe>
+<!-- Geogebra header libraries -->
+<xsl:template match="interactive[@platform = 'geogebra']" mode="header-libraries">
+    <script type="text/javascript" src="https://cdn.geogebra.org/apps/deployggb.js"></script>
 </xsl:template>
 
 <!-- JSXGraph header libraries -->
@@ -7248,16 +7426,11 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
     <script src="{$d3-library-url}"></script>
 </xsl:template>
 
-<!-- HTML5 header libraries -->
-<xsl:template match="interactive[@platform = 'html5']" mode="header-libraries" />
+<!-- Javascript header libraries -->
+<xsl:template match="interactive[@platform = 'javascript']" mode="header-libraries" />
 
-
-<!-- JSXGraph, HTML5, D3 Interactives -->
-<xsl:template match="interactive[(@platform = 'jsxgraph') or (@platform = 'html5') or (@platform = 'd3')]">
-    <!-- an interactive always has a width, default is 100% -->
-    <xsl:variable name="int-id">
-        <xsl:apply-templates select="." mode="internal-id" />
-    </xsl:variable>
+<!-- JSXGraph, Javascript, D3 Interactives -->
+<xsl:template match="interactive[@platform]">
     <!-- (1) Build, display full content on the page, where born -->
     <xsl:apply-templates select="." mode="interactive-core" />
     <!-- (2) Identical content, but now isolated on a reader-friendly page -->
@@ -7266,10 +7439,15 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
             <xsl:apply-templates select="." mode="interactive-core" />
         </xsl:with-param>
     </xsl:apply-templates>
-    <!-- Build a minimal page for iframe contents -->
-    <!--   Platform specific libraries into head  -->
-    <!--   Author-libraries after slate exist     -->
-    <!--   Instructions outside, but ...          -->
+    <!-- (3) A simple page that can be used in an iframe construction -->
+    <xsl:apply-templates select="." mode="create-iframe-page" />
+</xsl:template>
+
+<!-- Build a minimal page for iframe contents -->
+<!-- This version for @platform variant        -->
+<!--   Platform specific libraries into head  -->
+<!--   Author-libraries after slate exist     -->
+<xsl:template match="interactive[@platform]" mode="create-iframe-page">
     <xsl:variable name="if-filename">
         <xsl:apply-templates select="." mode="iframe-filename" />
     </xsl:variable>
@@ -7288,21 +7466,7 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
             <body class="mathbook-content">
                 <div>
                     <!-- the actual interactive bit          -->
-                    <!-- this should generalize to a template -->
-                    <xsl:variable name="width">
-                        <xsl:apply-templates select="." mode="get-width-pixels" />
-                    </xsl:variable>
-                    <xsl:variable name="height">
-                        <xsl:apply-templates select="." mode="get-height-pixels" />
-                    </xsl:variable>
-                    <xsl:attribute name="style">
-                        <xsl:text>width:</xsl:text>
-                        <xsl:value-of select="$width" />
-                        <xsl:text>px;</xsl:text>
-                        <xsl:text> height:</xsl:text>
-                        <xsl:value-of select="$height" />
-                        <xsl:text>px;</xsl:text>
-                    </xsl:attribute>
+                    <xsl:apply-templates select="." mode="size-pixels-style-attribute" />
                     <!-- stack, else use a layout -->
                     <xsl:apply-templates select="slate|sidebyside|sbsgroup" />
                     <!-- accumulate script tags *after* HTML elements -->
@@ -7313,144 +7477,55 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
     </exsl:document>
 </xsl:template>
 
+<!-- These forms *are* iframes, so we don't need to build their content -->
+<xsl:template match="interactive[@desmos|@geogebra|@calcplot3d|@wolfram-cdf]" mode="create-iframe-page" />
+
 
 <!-- Following will generate:                               -->
 <!-- 1.  Instructions (paragraphs, etc)                     -->
 <!-- 2.  An iframe, for sandboxing, especially              -->
 <!-- 3.  Assumes super-minimal HTML page as @src of iframe, -->
 <!--     living at file given by "iframe-filename" template -->
-<xsl:template match="interactive[(@platform = 'jsxgraph') or (@platform = 'html5') or (@platform = 'd3')]" mode="interactive-core">
-    <!-- an interactive always has a width, default is 100% -->
-    <xsl:variable name="int-id">
-        <xsl:apply-templates select="." mode="internal-id" />
-    </xsl:variable>
-    <!-- "instructions" in identical-width div -->
-    <div>
-        <!-- make and use a variable below -->
-        <xsl:variable name="width">
-            <xsl:apply-templates select="." mode="get-width-pixels" />
-        </xsl:variable>
-        <xsl:attribute name="style">
-            <xsl:text>width:</xsl:text>
-            <xsl:value-of select="$width" />
-            <xsl:text>px;</xsl:text>
-        </xsl:attribute>
-        <xsl:apply-templates select="instructions" />
-    </div>
+<xsl:template match="interactive[@platform]" mode="interactive-core">
+    <!-- "instructions" first in identical-width div -->
+    <xsl:if test="instructions">
+        <div>
+            <xsl:variable name="width">
+                <xsl:apply-templates select="." mode="get-width-pixels" />
+            </xsl:variable>
+            <xsl:attribute name="style">
+                <xsl:text>width:</xsl:text>
+                <xsl:value-of select="$width" />
+                <xsl:text>px;</xsl:text>
+            </xsl:attribute>
+            <xsl:apply-templates select="instructions" />
+        </div>
+    </xsl:if>
     <!-- Drop an iframe, with predictable "src" attribute -->
     <!-- Requires a height, so we need to get this sorted -->
     <!-- Or use some JS device to adjust height post-load -->
     <!-- https://stackoverflow.com/questions/9162933/     -->
     <!-- This provides some sandboxing, if we choose      -->
     <!-- https://www.html5rocks.com/en/tutorials/security/sandboxed-iframes/ -->
+    <xsl:apply-templates select="." mode="iframe-interactive" />
+</xsl:template>
+
+<xsl:template match="interactive[@platform]" mode="iframe-interactive">
+    <xsl:variable name="int-id">
+        <xsl:apply-templates select="." mode="internal-id" />
+    </xsl:variable>
     <iframe id="{$int-id}">
-        <xsl:attribute name="width">
-            <xsl:apply-templates select="." mode="get-width-pixels" />
-            <xsl:text>px;</xsl:text>
-        </xsl:attribute>
-        <xsl:attribute name="height">
-            <xsl:apply-templates select="." mode="get-height-pixels" />
-            <xsl:text>px;</xsl:text>
-        </xsl:attribute>
+        <xsl:apply-templates select="." mode="size-pixels-attributes" />
         <xsl:attribute name="src">
             <xsl:apply-templates select="." mode="iframe-filename" />
         </xsl:attribute>
     </iframe>
 </xsl:template>
 
-<!-- Form a "div"                  -->
-<!--   (a) with predictable id     -->
-<!--   (b) stock class information -->
-<!--   (c) size, now in pixels     -->
-<xsl:template match="slate[@language = 'jsxgraph']">
-    <div>
-        <xsl:attribute name="id">
-            <xsl:value-of select="@xml:id" />
-        </xsl:attribute>
-        <xsl:attribute name="class">
-            <xsl:text>jxgbox</xsl:text>
-        </xsl:attribute>
-        <!-- modal template will compute or inherit from enclosing interactive -->
-        <xsl:variable name="width">
-            <xsl:apply-templates select="." mode="get-width-pixels" />
-        </xsl:variable>
-        <xsl:variable name="height">
-            <xsl:apply-templates select="." mode="get-height-pixels" />
-        </xsl:variable>
-        <xsl:attribute name="style">
-            <!-- always -->
-            <xsl:text>width:</xsl:text>
-            <xsl:value-of select="$width" />
-            <xsl:text>px;</xsl:text>
-            <!-- always -->
-            <xsl:text> height:</xsl:text>
-            <xsl:value-of select="$height" />
-            <xsl:text>px;</xsl:text>
-            <xsl:text> display: block;</xsl:text>
-            <xsl:text> box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;</xsl:text>
-        </xsl:attribute>
-    </div>
-</xsl:template>
-
-<!-- *must* use size attributes on "canvas" -->
-<xsl:template match="slate[ancestor::interactive[@platform = 'html5']]">
-    <!-- display:block allows precise sizes, without   -->
-    <!-- having inline content with extra line height, -->
-    <!-- or whatever, inducing scroll bars             -->
-    <canvas style="display:block">
-        <xsl:attribute name="id">
-            <xsl:value-of select="@xml:id" />
-        </xsl:attribute>
-        <!-- modal template will compute or inherit from enclosing interactive -->
-        <xsl:attribute name="width">
-            <xsl:apply-templates select="." mode="get-width-pixels" />
-            <xsl:text>px;</xsl:text>
-        </xsl:attribute>
-        <xsl:attribute name="height">
-            <xsl:apply-templates select="." mode="get-height-pixels" />
-            <xsl:text>px;</xsl:text>
-        </xsl:attribute>
-    </canvas>
-</xsl:template>
-
-<!-- HTML Code -->
-<!-- Simply create deep-copy of HTML elements -->
-<!-- TODO: should this be a div, with width and height? -->
-<xsl:template match="slate[@language='html']">
-    <xsl:copy-of select="*" />
-</xsl:template>
-
-<!-- D3 Code -->
-<!-- Create a "div" with predictable id,         -->
-<!-- so D3 code can inject "svg" element into it -->
-<xsl:template match="slate[@language='d3']">
-    <div>
-        <xsl:attribute name="id">
-            <xsl:value-of select="@xml:id" />
-        </xsl:attribute>
-        <xsl:variable name="width">
-            <xsl:apply-templates select="." mode="get-width-pixels" />
-        </xsl:variable>
-        <xsl:variable name="height">
-            <xsl:apply-templates select="." mode="get-height-pixels" />
-        </xsl:variable>
-        <xsl:attribute name="style">
-            <!-- always -->
-            <xsl:text>width:</xsl:text>
-            <xsl:value-of select="$width" />
-            <xsl:text>px;</xsl:text>
-            <!-- always -->
-            <xsl:text> height:</xsl:text>
-            <xsl:value-of select="$height" />
-            <xsl:text>px;</xsl:text>
-            <xsl:text> display: block;</xsl:text>
-            <xsl:text> box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;</xsl:text>
-        </xsl:attribute>
-    </div>
-</xsl:template>
+<!-- Utilities -->
 
 <!-- @source attribute to multiple script tags -->
-<xsl:template match="interactive[(@platform = 'jsxgraph') or (@platform = 'html5') or (@platform = 'd3')]/@source">
+<xsl:template match="interactive[@platform]/@source">
     <xsl:call-template name="one-script">
         <xsl:with-param name="token-list">
             <xsl:call-template name="prepare-token-list">
@@ -7479,7 +7554,7 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
 </xsl:template>
 
 <!-- @css attribute to multiple "link" element -->
-<xsl:template match="interactive[(@platform = 'jsxgraph') or (@platform = 'html5') or (@platform = 'd3')]/@css">
+<xsl:template match="interactive[@platform]/@css">
     <xsl:call-template name="one-css">
         <xsl:with-param name="token-list">
             <xsl:call-template name="prepare-token-list">
@@ -7506,6 +7581,38 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
             </xsl:call-template>
         </xsl:otherwise>
     </xsl:choose>
+</xsl:template>
+
+<!-- Next two utilities write attributes, so cannot go in -common -->
+
+<!-- iframes, etc, need size as a pair of attributes in pixels -->
+<xsl:template match="*" mode="size-pixels-attributes">
+    <xsl:attribute name="width">
+        <xsl:apply-templates select="." mode="get-width-pixels" />
+    </xsl:attribute>
+    <xsl:attribute name="height">
+        <xsl:apply-templates select="." mode="get-height-pixels" />
+    </xsl:attribute>
+</xsl:template>
+
+<!-- div's need size in a style attribute -->
+<xsl:template match="*" mode="size-pixels-style-attribute">
+    <xsl:variable name="width">
+        <xsl:apply-templates select="." mode="get-width-pixels" />
+    </xsl:variable>
+    <xsl:variable name="height">
+        <xsl:apply-templates select="." mode="get-height-pixels" />
+    </xsl:variable>
+    <xsl:attribute name="style">
+        <xsl:text>width:</xsl:text>
+        <xsl:value-of select="$width" />
+        <xsl:text>px; </xsl:text>
+        <xsl:text>height:</xsl:text>
+        <xsl:value-of select="$height" />
+        <xsl:text>px; </xsl:text>
+        <xsl:text>display: block; </xsl:text>
+        <xsl:text>box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;</xsl:text>
+    </xsl:attribute>
 </xsl:template>
 
 <!-- JSXGraph -->
@@ -7554,17 +7661,6 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
     </xsl:element>
     <xsl:copy-of select="controls" />
 </xsl:template>
-
-<!-- Wolfram Computable Document Format -->
-<!-- https://www.wolfram.com/cdf/adopting-cdf/deploying-cdf/web-delivery-cloud.html              -->
-<!-- More for MMA origination, but discusses "cloud credits"                                     -->
-<!-- https://reference.wolfram.com/language/howto/DeployInteractiveContentInTheWolframCloud.html -->
-<!-- https://www.wolfram.com/cloud-credits/                                                      -->
-<xsl:template match="interactive[@wolfram-cdf]">
-    <!-- Query string option: _embed=iframe will provide Wolfram footer -->
-    <iframe width="500" height="520" src="https://www.wolframcloud.com/objects/{@wolfram-cdf}?_view=frameless" />
-</xsl:template>
-
 
 <!-- ########################## -->
 <!-- WeBWorK Embedded Exercises -->
