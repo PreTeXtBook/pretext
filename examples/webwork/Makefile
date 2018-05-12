@@ -107,7 +107,7 @@ mini-extraction:
 
 #  Make a new PTX file from the source tree, with webwork elements replaced
 #  by the webwork-reps from webwork-extraction.xml. (So run the above at
-#  least once first.) Subsequent templates are applied to the result here.
+#  least once first.) Subsequent templates are applied to the result.
 
 sample-chapter-merge:
 	cd $(SCRATCH); \
@@ -116,6 +116,32 @@ sample-chapter-merge:
 mini-merge:
 	cd $(SCRATCH); \
 	xsltproc --stringparam webwork.extraction $(WWOUT)/webwork-extraction.xml $(MBXSL)/pretext-merge.xsl $(MINI) > mini-merge.ptx
+
+# LaTeX and PDF versions,
+# see prerequisite just above about merge files.
+# xsltproc may be passed --stringparam latex.fillin.style box for box answer blanks
+
+sample-chapter-pdf:
+	install -d $(PDFOUT)
+	install -d $(PDFOUT)/images
+	-rm $(PDFOUT)/*.*
+	-rm $(PDFOUT)/images/*
+	cp -a $(WWOUT)/*.png $(PDFOUT)/images
+	cd $(PDFOUT); \
+	xsltproc $(MBXSL)/mathbook-latex.xsl $(SCRATCH)/sample-chapter-merge.ptx; \
+	xelatex sample-ww-chapter.tex; \
+	xelatex sample-ww-chapter.tex; \
+
+mini-pdf:
+	install -d $(PDFOUT)
+	install -d $(PDFOUT)/images
+	-rm $(PDFOUT)/*.*
+	-rm $(PDFOUT)/images/*
+	cp -a $(WWOUT)/*.png $(PDFOUT)/images
+	cd $(PDFOUT); \
+	xsltproc $(MBXSL)/mathbook-latex.xsl $(SCRATCH)/mini-merge.ptx; \
+	xelatex webwork-mini.tex; \
+	xelatex webwork-mini.tex; \
 
 #  Write out each WW problem of the "sample-chapter" as a
 #  standalone problem in PGML ready for use on a WW server.
@@ -143,26 +169,6 @@ sample-chapter-html:
 	cd $(HTMLOUT); \
 	xsltproc --stringparam webwork.server $(SERVER) --stringparam html.knowl.exercise.inline no $(MBXSL)/mathbook-html.xsl $(WWEXAMPLE)/sample-chapter/sample-chapter.xml
 
-
-# a one-time prerequisite for LaTeX conversion
-# problems living on a server, and image construction at server
-# our "webwork-tex" is a subdirectory of where the PDF is compiled
-# -s specifies an existing WW server to use (ignore security warnings)
-sample-chapter-server-tex:
-	install -d $(PDFOUT)/webwork-tex
-	$(MB)/script/mbx -v -c webwork-tex -s $(SERVER) -d $(PDFOUT)/webwork-tex $(WWEXAMPLE)/sample-chapter/sample-chapter.xml
-
-# LaTeX version of the sample chapter
-# see prerequisite just above
-# the "webwork-tex" directory must be given here
-# [note trailing slash (subject to change)]
-sample-chapter-latex:
-	install -d $(PDFOUT)
-	-rm $(PDFOUT)/*.tex
-	cd $(PDFOUT); \
-	xsltproc --stringparam webwork.server.latex $(PDFOUT)/webwork-tex/ $(MBXSL)/mathbook-latex.xsl $(WWEXAMPLE)/sample-chapter/sample-chapter.xml; \
-	xelatex sample-ww-chapter.tex; \
-	xelatex sample-ww-chapter.tex
 
 # HTML for a minimal WeBWorK cell
 # Useful for debugging

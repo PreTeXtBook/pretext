@@ -454,7 +454,8 @@
             <xsl:text>  "PGgraphmacros.pl",&#xa;</xsl:text>
         </xsl:if>
         <!-- instructions for entering answers into HTML forms -->
-        <xsl:if test=".//instruction">
+        <!-- utility for randomly generating variable letters -->
+        <xsl:if test=".//instruction or contains(./setup/pg-code,'RandomVariableName')">
             <xsl:text>  "PCCmacros.pl",&#xa;</xsl:text>
         </xsl:if>
         <!-- ################### -->
@@ -520,6 +521,9 @@
         </xsl:if>
         <xsl:if test="contains(./setup/pg-code,'LimitedRadical')">
             <xsl:text>  "contextLimitedRadical.pl",&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:if test="contains(./setup/pg-code,'FiniteSolutionSets')">
+            <xsl:text>  "contextFiniteSolutionSets.pl",&#xa;</xsl:text>
         </xsl:if>
     </xsl:variable>
     <!-- capture problem root to use inside upcoming for-each -->
@@ -636,8 +640,9 @@
             <xsl:text>"PGgraphmacros.pl",</xsl:text>
         </xsl:if>
         <!-- instructions for entering answers into HTML forms -->
-        <xsl:if test=".//instruction">
-            <xsl:text>"PCCmacros.pl",</xsl:text>
+        <!-- utility for randomly generating variable letters -->
+        <xsl:if test=".//instruction or contains(./setup/pg-code,'RandomVariableName')">
+            <xsl:text>  "PCCmacros.pl",&#xa;</xsl:text>
         </xsl:if>
         <!-- ################### -->
         <!-- Parser Enhancements -->
@@ -702,6 +707,9 @@
         </xsl:if>
         <xsl:if test="contains(./setup/pg-code,'LimitedRadical')">
             <xsl:text>"contextLimitedRadical.pl",</xsl:text>
+        </xsl:if>
+        <xsl:if test="contains(./setup/pg-code,'FiniteSolutionSets')">
+            <xsl:text>  "contextFiniteSolutionSets.pl",&#xa;</xsl:text>
         </xsl:if>
     </xsl:variable>
     <!-- capture problem root to use inside upcoming for-each -->
@@ -1446,9 +1454,9 @@
 
 <!-- Alert: asterik-underscore produces bold-italic -->
 <xsl:template match="webwork//alert">
-    <xsl:text>*_</xsl:text>
+    <xsl:text>*</xsl:text>
     <xsl:apply-templates />
-    <xsl:text>_*</xsl:text>
+    <xsl:text>*</xsl:text>
 </xsl:template>
 
 <!-- LaTeX logo  -->

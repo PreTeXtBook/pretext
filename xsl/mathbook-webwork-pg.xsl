@@ -315,7 +315,8 @@
             <xsl:text>  "PGgraphmacros.pl",&#xa;</xsl:text>
         </xsl:if>
         <!-- instructions for entering answers into HTML forms -->
-        <xsl:if test=".//instruction">
+        <!-- utility for randomly generating variable letters -->
+        <xsl:if test=".//instruction or contains(./setup/pg-code,'RandomVariableName')">
             <xsl:text>  "PCCmacros.pl",&#xa;</xsl:text>
         </xsl:if>
         <!-- ################### -->
@@ -381,6 +382,9 @@
         </xsl:if>
         <xsl:if test="contains(./setup/pg-code,'LimitedRadical')">
             <xsl:text>  "contextLimitedRadical.pl",&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:if test="contains(./setup/pg-code,'FiniteSolutionSets')">
+            <xsl:text>  "contextFiniteSolutionSets.pl",&#xa;</xsl:text>
         </xsl:if>
     </xsl:variable>
     <!-- capture problem root to use inside upcoming for-each -->
@@ -1124,6 +1128,12 @@
 <!-- Centered as a character, not an exponent -->
 <xsl:template match="webwork//asterisk">
     <xsl:text>\*</xsl:text>
+</xsl:template>
+
+<!-- Ellipsis -->
+<!-- Just three periods -->
+<xsl:template match="webwork//ellipsis">
+    <xsl:text>...</xsl:text>
 </xsl:template>
 
 <!-- Braces -->
