@@ -22,6 +22,8 @@
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+    xmlns:str="http://exslt.org/strings"
+    extension-element-prefixes="str"
 >
 
 <!-- This style sheet is intended to be used by the ptx script. It makes   -->
