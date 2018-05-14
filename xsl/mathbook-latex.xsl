@@ -594,10 +594,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\newcommand{\stale}[1]{\renewcommand{\ULthickness}{\stalethick}\sout{#1}}&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
-    <xsl:if test="$document-root//webwork-reps/static//var[@form='buttons']">
-        <!-- radio button \ocircle -->
-        <xsl:text>\usepackage{wasysym}&#xa;</xsl:text>
-    </xsl:if>
     <xsl:if test="$document-root//fillin">
         <xsl:text>%% Used for fillin answer blank&#xa;</xsl:text>
         <xsl:text>%% Argument is length in em&#xa;</xsl:text>
@@ -3520,9 +3516,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:for-each>
             <xsl:text>\end{itemize*})\quad&#xa;</xsl:text>
         </xsl:when>
+        <!-- Radio button alternatives:                                -->
+        <!--     \ocircle (wasysym), \circledcirc (amssymb),           -->
+        <!--     \textopenbullet, \textbigcircle (textcomp)            -->
+        <!-- To adjust in preamble, test on:                           -->
+        <!-- $document-root//webwork-reps/static//var[@form='buttons'] -->
         <xsl:when test="@form='buttons'" >
             <xsl:text>\par&#xa;</xsl:text>
-            <xsl:text>\begin{itemize}[label=$\ocircle$,leftmargin=3em,]&#xa;</xsl:text>
+            <xsl:text>\begin{itemize}[label=$\odot$,leftmargin=3em,]&#xa;</xsl:text>
             <xsl:for-each select="li">
                 <xsl:text>\item{}</xsl:text>
                 <xsl:apply-templates select='.' />
