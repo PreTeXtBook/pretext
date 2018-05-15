@@ -271,7 +271,7 @@
                 </console>
             </sidebyside>
             <p>You may want to specify a path to <c>webwork-extraction.xml</c>. Alongside this file will be stored any image files that the <webwork /> server generates.</p>
-            <p>Next, use <c>xsltproc</c> with <c>pretext-merge.xsl</c> to merge your entire source tree with the extracted <webwork /> content. The string parameter <c>webwork.extraction</c> must identify the auxiliary XML file created in the previous step. Store the output in some file, for example <c>merge.ptx</p> in this example:</p>
+            <p>Next, use <c>xsltproc</c> with <c>pretext-merge.xsl</c> to merge your entire source tree with the extracted <webwork /> content. The string parameter <c>webwork.extraction</c> must identify the auxiliary XML file created in the previous step. Store the output in some file, for example <c>merge.ptx</c> in this example:</p>
             <sidebyside>
                 <console>
                     <prompt>$ </prompt>
