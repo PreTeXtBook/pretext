@@ -687,7 +687,7 @@ def mom_static_problems(xml_source, xmlid_root, dest_dir):
         # removed some settings wrapper from around the URL, otherwise verbatim
         r = requests.get(url, stream=True)
         with open(path, 'wb') as f:
-            f.write(xml_header)
+            f.write(xml_header.encode('utf-8'))
             if r.status_code == 200:
                 r.raw.decode_content = True
                 shutil.copyfileobj(r.raw, f)
