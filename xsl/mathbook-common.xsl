@@ -2910,7 +2910,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 
 <!-- The exception is an image inside a sidebyside in a webwork  -->
 <!-- where the parent sidebyside should only have a single percentage in its @widths -->
-<xsl:template match="image[ancestor::sidebyside][ancestor::webwork]" mode="get-width-percentage">
+<!-- N.B. This should be reworked/removed when there is a one-item sbs equivalent -->
+<xsl:template match="webwork//image[parent::sidebyside/@widths]" mode="get-width-percentage">
     <xsl:value-of select="parent::sidebyside/@widths" />
 </xsl:template>
 
