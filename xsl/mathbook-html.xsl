@@ -114,6 +114,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="html.knowl.exercise.sectional" select="'no'" />
 <!-- html.knowl.example.solution: always "yes", could be implemented -->
 
+<!-- (2018-05-16) These are 100% temporary, to recover from -common edits to support changes in LaTeX for exercises, etc.  Once we mirror that work for HTML, these will be surplus and will go way.  So avert your eyes -->
+<xsl:param name="exercise.text.hint" select="'yes'" />
+<xsl:param name="exercise.text.answer" select="'yes'" />
+<xsl:param name="exercise.text.solution" select="'yes'" />
+<xsl:param name="project.text.statement" select="'yes'" /> <!-- not implemented -->
+<xsl:param name="project.text.hint" select="'yes'" />
+<xsl:param name="project.text.answer" select="'yes'" />
+<xsl:param name="project.text.solution" select="'yes'" />
+<xsl:param name="task.text.statement" select="'yes'" /> <!-- not implemented -->
+
 <!-- CSS and Javascript Servers -->
 <!-- We allow processing paramteers to specify new servers   -->
 <!-- or to specify the particular CSS file, which may have   -->
