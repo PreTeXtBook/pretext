@@ -254,7 +254,7 @@
             <sidebyside>
                 <console>
                     <prompt>$ </prompt>
-                    <input>xsltproc --stringparam webwork.server webwork-ptx.aimath.org mathbook-html.xsl &lt;xml&gt;</input>
+                    <input>xsltproc --stringparam webwork.server https://webwork-ptx.aimath.org mathbook-html.xsl &lt;xml&gt;</input>
                 </console>
             </sidebyside>
             <p>Note: Make sure not to use a trailing slash (/) in the string parameter for <c>webwork.server</c>.</p>
