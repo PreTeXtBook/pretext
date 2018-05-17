@@ -998,15 +998,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$root/book">
-        <xsl:if test="//part">
+        <xsl:if test="$document-root//part">
             <xsl:text>\renewcommand*{\partname}{</xsl:text>
             <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'part'" /></xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
         </xsl:if>
-        <xsl:if test="//chapter">
+        <xsl:if test="$document-root//chapter">
             <xsl:text>\renewcommand*{\chaptername}{</xsl:text>
             <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'chapter'" /></xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
+            <!-- This code is correct, interface is temporary and will be redone with no notice -->
+            <xsl:if test="not($debug.chapter.start = '')">
+                <xsl:text>\setcounter{chapter}{</xsl:text>
+                <xsl:value-of select="$debug.chapter.start - 1" />
+                <xsl:text>}&#xa;</xsl:text>
+            </xsl:if>
         </xsl:if>
     </xsl:if>
     <xsl:if test="$root/article">
