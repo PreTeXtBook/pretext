@@ -2231,7 +2231,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Overall enclosing element -->
 <xsl:template match="&ASIDE-LIKE;" mode="body-element">
-    <xsl:text>article</xsl:text>
+    <xsl:text>aside</xsl:text>
 </xsl:template>
 
 <!-- And its CSS class -->
