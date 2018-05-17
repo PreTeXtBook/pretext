@@ -33,9 +33,9 @@
             my $out = MODES(
                 TeX => '',
                 Latex2HTML => '',
-                HTML => qq!<P>If you were logged into a WeBWorK course 
-                and this problem were assigned to you, 
-                you would be able to submit an essay answer 
+                HTML => qq!<P>If you were logged into a WeBWorK course
+                and this problem were assigned to you,
+                you would be able to submit an essay answer
                 that would be graded later by a human being.</P>!,
                 PTX => '',
             );
@@ -198,8 +198,8 @@
                     </var>
 
                     <pg-code>
-                        $a = Compute(random(1, 9, 1)); 
-                        $b = Compute(random(1, 9, 1)); 
+                        $a = Compute(random(1, 9, 1));
+                        $b = Compute(random(1, 9, 1));
                         $c = $a + $b;
                     </pg-code>
                 </setup>
@@ -219,15 +219,15 @@
 
             <p>Within a <tag>statement</tag>, <tag>hint</tag>, or <tag>solution</tag>, reference <tag>var</tag> tags by <attr>name</attr>. For HTML and PG output, the Perl variable will be used. For static output, the <tag>var</tag> tag's <tag>static</tag> child will be used.</p>
 
-            <p>Within the <tag>statement</tag>, a <tag>var</tag> tag with either a <attr>width</attr> or <attr>form</attr> attribute creates an input field. The <attr>name</attr> attribute declares what the answer will be.</p> 
+            <p>Within the <tag>statement</tag>, a <tag>var</tag> tag with either a <attr>width</attr> or <attr>form</attr> attribute creates an input field. The <attr>name</attr> attribute declares what the answer will be.</p>
 
             <p>An <tag>var</tag> can have <attr>form="essay"</attr>, in which case it need not have a <attr>name</attr> attribute. This is for open-ended questions that must be graded by a human. The form field will be an expandable input block if the question is served to an authenticated user within <webwork />. But for the <webwork /> cells in MBX HTML output, there will just be a message explaining that there is no place to enter an answer.</p>
 
-            <p>An <tag>var</tag> can have <attr>form="array"</attr>. You would use this when the answer is a Matrix or Vector MathObject (a <webwork /> classification) to cause the input form to be an array of smaller fields instead of one big field.</p> 
+            <p>An <tag>var</tag> can have <attr>form="array"</attr>. You would use this when the answer is a Matrix or Vector MathObject (a <webwork /> classification) to cause the input form to be an array of smaller fields instead of one big field.</p>
 
             <p>An <tag>var</tag> can have <attr>form="popup"</attr> or <attr>form="buttons"</attr>. These are not necessary for HTML and PG output to behave, but are needed if you intend for PDF output to emulate these answer entry field types.</p>
 
-            <p>If you are writing a multiple choice question and using <attr>form="popup"</attr> or <attr>form="buttons"</attr> in your <tag>var</tag>, instead of a <tag>static</tag> in the corresponding <tag>var</tag> from the <tag>setup</tag>, use a <tag>set</tag> tag, with <tag>member</tag> children. The <tag>member</tag> tags would be the multiple choice options, and each can have a <attr>correct="yes"</attr> attribute to identify the correct choice(s). There is some unavoidable redundancy between listing these <tag>member</tag> tags in the <tag>setup</tag> and listing them again in the actual <tag>pg-code</tag>.</p> 
+            <p>If you are writing a multiple choice question and using <attr>form="popup"</attr> or <attr>form="buttons"</attr> in your <tag>var</tag>, instead of a <tag>static</tag> in the corresponding <tag>var</tag> from the <tag>setup</tag>, use a <tag>set</tag> tag, with <tag>member</tag> children. The <tag>member</tag> tags would be the multiple choice options, and each can have a <attr>correct="yes"</attr> attribute to identify the correct choice(s). There is some unavoidable redundancy between listing these <tag>member</tag> tags in the <tag>setup</tag> and listing them again in the actual <tag>pg-code</tag>.</p>
 
             <p>If you are familiar with PG, then in your <tag>pg-code</tag> you might write a custom evaluator (a combination of a custom answer checker, post filters, pre filters, <etc />). If you store this similar to</p><pre>$my_evaluator = $answer -> cmp(...);</pre><p>then the <tag>var</tag> can have <attr>evaluator="$my_evaluator"</attr>.</p>
 
@@ -254,7 +254,7 @@
             <sidebyside>
                 <console>
                     <prompt>$ </prompt>
-                    <input>xsltproc --stringparam webwork.server webwork-ptx.aimath.org mathbook-html.xsl &lt;xml&gt;</input>
+                    <input>xsltproc --stringparam webwork.server https://webwork-ptx.aimath.org mathbook-html.xsl &lt;xml&gt;</input>
                 </console>
             </sidebyside>
             <p>Note: Make sure not to use a trailing slash (/) in the string parameter for <c>webwork.server</c>.</p>
