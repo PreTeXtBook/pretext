@@ -92,7 +92,7 @@ systems.
         <section xml:id="section-images">
             <title>Images</title>
 
-            <p>TikZ code no longer goes in a <c>tikz</c> element, but <c>latex-image-code</c> instead.  And similar graphics languages need to go into an <c>image</c>c&gt; element.  We globally trap occurence inside <c>figure</c>c&gt; without an intervening <c>image</c>, which may not be the only way this could occur.</p>
+            <p>TikZ code no longer goes in a <c>tikz</c> element, but <c>latex-image-code</c> instead.  And similar graphics languages need to go into an <c>image</c>c&gt; element.  We globally trap occurrence inside <c>figure</c>c&gt; without an intervening <c>image</c>, which may not be the only way this could occur.</p>
 
             <tikz/>
 

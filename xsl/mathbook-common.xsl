@@ -3463,7 +3463,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Serial Numbers -->
 <!-- ############## -->
 
-<!-- These count the occurence of the item, within it's  -->
+<!-- These count the occurrence of the item, within it's  -->
 <!-- scheme and within a natural, or configured, subtree -->
 
 <!-- Serial Numbers: Divisions -->
@@ -7479,28 +7479,28 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- ############ -->
 
 <!-- Generic deprecation message for uniformity   -->
-<!-- occurences is a node-list of "problem" nodes -->
+<!-- occurrences is a node-list of "problem" nodes -->
 <xsl:template name="deprecation-message">
-    <xsl:param name="occurences" />
+    <xsl:param name="occurrences" />
     <xsl:param name="date-string" />
     <xsl:param name="message" />
-    <xsl:if test="$occurences">
+    <xsl:if test="$occurrences">
         <xsl:message>
             <xsl:text>MBX:DEPRECATE: (</xsl:text>
             <xsl:value-of select="$date-string" />
             <xsl:text>) </xsl:text>
             <xsl:value-of select="$message" />
             <xsl:text> (</xsl:text>
-            <xsl:value-of select="count($occurences)" />
+            <xsl:value-of select="count($occurrences)" />
             <xsl:text> time</xsl:text>
-            <xsl:if test="count($occurences) > 1">
+            <xsl:if test="count($occurrences) > 1">
                 <xsl:text>s</xsl:text>
             </xsl:if>
             <xsl:text>)</xsl:text>
             <!-- once verbosity is implemented -->
             <!-- <xsl:text>, set log.level to see more details</xsl:text> -->
         </xsl:message>
-        <xsl:for-each select="$occurences">
+        <xsl:for-each select="$occurrences">
             <xsl:apply-templates select="." mode="location-report" />
         </xsl:for-each>
         <xsl:message>
@@ -7535,21 +7535,21 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <!--  -->
     <!-- 2014-05-04  @filebase has been replaced in function by @xml:id -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//@filebase" />
+        <xsl:with-param name="occurrences" select="$document-root//@filebase" />
         <xsl:with-param name="date-string" select="'2014-05-04'" />
         <xsl:with-param name="message" select="'the &quot;filebase&quot; attribute is deprecated, convert to &quot;xml:id&quot;'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2014-06-25  xref once had cite as a variant -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//cite" />
+        <xsl:with-param name="occurrences" select="$document-root//cite" />
         <xsl:with-param name="date-string" select="'2014-06-25'" />
         <xsl:with-param name="message" select="'the &quot;cite&quot; element is deprecated, convert to &quot;xref&quot;'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2015-01-28  once both circum and circumflex existed, circumflex won -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//circum" />
+        <xsl:with-param name="occurrences" select="$document-root//circum" />
         <xsl:with-param name="date-string" select="'2015-01-28'" />
         <xsl:with-param name="message" select="'the &quot;circum&quot; element has been replaced by the &quot;circumflex&quot; element'" />
     </xsl:call-template>
@@ -7557,14 +7557,14 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <!-- 2015-02-08  naked tikz, asymptote, sageplot are banned    -->
     <!-- typically these would be in a figure, but not necessarily -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//tikz[not(parent::image)]|$document-root//asymptote[not(parent::image)]|$document-root//sageplot[not(parent::image)]" />
+        <xsl:with-param name="occurrences" select="$document-root//tikz[not(parent::image)]|$document-root//asymptote[not(parent::image)]|$document-root//sageplot[not(parent::image)]" />
         <xsl:with-param name="date-string" select="'2015-02-08'" />
         <xsl:with-param name="message" select="'&quot;tikz&quot;, &quot;asymptote&quot;, &quot;sageplot&quot;, elements must always be contained directly within an &quot;image&quot; element, rather than directly within a &quot;figure&quot; element'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2015-02-20  tikz is generalized to latex-image-code -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//tikz" />
+        <xsl:with-param name="occurrences" select="$document-root//tikz" />
         <xsl:with-param name="date-string" select="'2015-02-20'" />
         <xsl:with-param name="message" select="'the &quot;tikz&quot; element is deprecated, convert to &quot;latex-image-code&quot; inside &quot;image&quot;'" />
     </xsl:call-template>
@@ -7572,19 +7572,19 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <!-- 2015-03-13  paragraph is renamed more accurately to paragraphs           -->
     <!-- 2017-07-16  removed all backwards compatibility and added empty template -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//paragraph" />
+        <xsl:with-param name="occurrences" select="$document-root//paragraph" />
         <xsl:with-param name="date-string" select="'2015-03-13'" />
         <xsl:with-param name="message" select="'the &quot;paragraph&quot; element is deprecated and any contained content will silently not appear, replaced by functional equivalent &quot;paragraphs&quot;'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2015-03-17  various indicators of table rearrangement -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//tgroup" />
+        <xsl:with-param name="occurrences" select="$document-root//tgroup" />
         <xsl:with-param name="date-string" select="'2015-03-17'" />
         <xsl:with-param name="message" select="'tables are done quite differently, the &quot;tgroup&quot; element is indicative'" />
     </xsl:call-template>
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//tgroup/thead/row/entry|$document-root//tgroup/tbody/row/entry" />
+        <xsl:with-param name="occurrences" select="$document-root//tgroup/thead/row/entry|$document-root//tgroup/tbody/row/entry" />
         <xsl:with-param name="date-string" select="'2015-03-17'" />
             <xsl:with-param name="message" select="'tables are done quite differently, the &quot;entry&quot; element should be replaced by the &quot;cell&quot; element'" />
     </xsl:call-template>
@@ -7600,70 +7600,70 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <!--  -->
     <!-- 2015-12-12  empty labels on an ordered list was a bad idea -->
      <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//ol[@label='']" />
+        <xsl:with-param name="occurrences" select="$document-root//ol[@label='']" />
         <xsl:with-param name="date-string" select="'2015-12-12'" />
         <xsl:with-param name="message" select="'an ordered list (&lt;ol&gt;) may not have empty labels, and numbering will be unpredictable.  Switch to an unordered list  (&lt;ul&gt;)'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2016-04-07  'plural' option for @autoname discarded -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//xref[@autoname='plural']" />
+        <xsl:with-param name="occurrences" select="$document-root//xref[@autoname='plural']" />
         <xsl:with-param name="date-string" select="'2016-04-07'" />
         <xsl:with-param name="message" select="'a &lt;xref&gt; element may not have an @autoname attribute set to plural.  There is no replacement, perhaps use content in the &lt;xref&gt;.'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2016-05-23  Require parts of a letter to be structured (could be relaxed) -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//letter/frontmatter/from[not(line)] | $document-root//letter/frontmatter/to[not(line)] | $document-root//letter/backmatter/signature[not(line)]" />
+        <xsl:with-param name="occurrences" select="$document-root//letter/frontmatter/from[not(line)] | $document-root//letter/frontmatter/to[not(line)] | $document-root//letter/backmatter/signature[not(line)]" />
         <xsl:with-param name="date-string" select="'2016-05-23'" />
         <xsl:with-param name="message" select="'&lt;to&gt;, &lt;from&gt;, and &lt;signature&gt; of a letter must be structured as a sequence of &lt;line&gt;'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2016-05-23  line breaks are not XML-ish, some places allow "line" -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//br" />
+        <xsl:with-param name="occurrences" select="$document-root//br" />
         <xsl:with-param name="date-string" select="'2016-05-23'" />
         <xsl:with-param name="message" select="'&lt;br&gt; can no longer be used to create multiline output; you may use &lt;line&gt; elements in select situations'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2016-07-31  ban @height attribute, except within webwork problems -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//image[@height and not(ancestor::*[self::webwork])]" />
+        <xsl:with-param name="occurrences" select="$document-root//image[@height and not(ancestor::*[self::webwork])]" />
         <xsl:with-param name="date-string" select="'2016-07-31'" />
         <xsl:with-param name="message" select="'@height attribute on &lt;image&gt; is no longer effective and will be ignored, except within a WeBWorK exercise'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2016-07-31  widths of images must be expressed as percentages -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//image[@width and not(contains(@width, '%'))]" />
+        <xsl:with-param name="occurrences" select="$document-root//image[@width and not(contains(@width, '%'))]" />
         <xsl:with-param name="date-string" select="'2016-07-31'" />
         <xsl:with-param name="message" select="'@width attribute on &lt;image&gt; must be expressed as a percentage'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2017-02-05  hyphen-minus replaces hyphen -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//hyphen" />
+        <xsl:with-param name="occurrences" select="$document-root//hyphen" />
         <xsl:with-param name="date-string" select="'2017-02-05'" />
         <xsl:with-param name="message" select="'use the &lt;hyphen-minus/&gt; element as a direct replacement for &lt;hyphen/&gt;'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2017-07-05  top-level items that should have captions, but don't -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//figure[not(caption) and not(parent::sidebyside)] | $document-root//table[not(caption) and not(parent::sidebyside)] | $document-root//listing[not(caption) and not(parent::sidebyside)]" />
+        <xsl:with-param name="occurrences" select="$document-root//figure[not(caption) and not(parent::sidebyside)] | $document-root//table[not(caption) and not(parent::sidebyside)] | $document-root//listing[not(caption) and not(parent::sidebyside)]" />
         <xsl:with-param name="date-string" select="'2017-07-05'" />
         <xsl:with-param name="message" select="'a &lt;figure&gt;, &lt;table&gt;, or &lt;listing&gt; as a child of a division must contain a &lt;caption&gt; element.  A &lt;sidebyside&gt; can be used as a functional equivalent, or add a caption element (possibly with empty content) to replace with a numbered version.'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2017-07-05  sidebyside items that do not have captions, so ineffective -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//figure[not(caption) and parent::sidebyside] | $document-root//table[not(caption) and parent::sidebyside] | $document-root//listing[not(caption) and parent::sidebyside]" />
+        <xsl:with-param name="occurrences" select="$document-root//figure[not(caption) and parent::sidebyside] | $document-root//table[not(caption) and parent::sidebyside] | $document-root//listing[not(caption) and parent::sidebyside]" />
         <xsl:with-param name="date-string" select="'2017-07-05'" />
         <xsl:with-param name="message" select="'a &lt;figure&gt;, &lt;table&gt;, or &lt;listing&gt; as a child of a &lt;sidebyside&gt;, and without a &lt;caption&gt; element, is ineffective, redundant, and deprecated.  Remove the enclosing element, perhaps migrating an xml:id attribute to the contents.'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2017-07-05  a sidebyside cannot have a caption -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//sidebyside[caption]" />
+        <xsl:with-param name="occurrences" select="$document-root//sidebyside[caption]" />
         <xsl:with-param name="date-string" select="'2017-07-05'" />
         <xsl:with-param name="message" select="'a &lt;sidebyside&gt; cannot have a &lt;caption&gt;.  Place the &lt;sidebyside&gt; inside a &lt;figure&gt;, employing the &lt;caption&gt;, which will be the functional equivalent.'" />
     </xsl:call-template>
@@ -7677,43 +7677,43 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <!--  -->
     <!-- 2017-07-14  index specification and production reworked -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//index-part" />
+        <xsl:with-param name="occurrences" select="$document-root//index-part" />
         <xsl:with-param name="date-string" select="'2017-07-14'" />
         <xsl:with-param name="message" select="'the &quot;index-part&quot; element is deprecated, replaced by functional equivalent &quot;index&quot;'" />
     </xsl:call-template>
     <!--  -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//index[not(main) and not(index-list)]" />
+        <xsl:with-param name="occurrences" select="$document-root//index[not(main) and not(index-list)]" />
         <xsl:with-param name="date-string" select="'2017-07-14'" />
         <xsl:with-param name="message" select="'a &quot;index&quot; element is deprecated, replaced by functional equivalent &quot;idx&quot;'" />
     </xsl:call-template>
     <!--  -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//index[main]" />
+        <xsl:with-param name="occurrences" select="$document-root//index[main]" />
         <xsl:with-param name="date-string" select="'2017-07-14'" />
         <xsl:with-param name="message" select="'a &quot;index&quot; element with &quot;main&quot; and &quot;sub&quot; headings is deprecated, replaced by functional equivalent &quot;idx&quot; with &quot;h&quot; headings'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2017-07-14  cosmetic replacement of WW image/@tex_size by image/@tex-size -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//@tex_size" />
+        <xsl:with-param name="occurrences" select="$document-root//@tex_size" />
         <xsl:with-param name="date-string" select="'2017-07-18'" />
         <xsl:with-param name="message" select="'the &quot;tex_size&quot; attribute is deprecated, replaced by functional equivalent &quot;tex-size&quot;'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2017-07-25  replacement of three xref/@autoname attributes by @text -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//xref[@autoname='no']" />
+        <xsl:with-param name="occurrences" select="$document-root//xref[@autoname='no']" />
         <xsl:with-param name="date-string" select="'2017-07-25'" />
         <xsl:with-param name="message" select="'the &quot;xref/autoname&quot; attribute is deprecated, replace  autoname=&quot;no&quot;  by functional equivalent  text=&quot;global&quot;'" />
     </xsl:call-template>
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//xref[@autoname='yes']" />
+        <xsl:with-param name="occurrences" select="$document-root//xref[@autoname='yes']" />
         <xsl:with-param name="date-string" select="'2017-07-25'" />
         <xsl:with-param name="message" select="'the &quot;xref/autoname&quot; attribute is deprecated, replace  autoname=&quot;yes&quot;  by functional equivalent  text=&quot;type-global&quot;'" />
     </xsl:call-template>
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//xref[@autoname='title']" />
+        <xsl:with-param name="occurrences" select="$document-root//xref[@autoname='title']" />
         <xsl:with-param name="date-string" select="'2017-07-25'" />
         <xsl:with-param name="message" select="'the &quot;xref/autoname&quot; attribute is deprecated, replace  autoname=&quot;title&quot;  by functional equivalent  text=&quot;title&quot;'" />
     </xsl:call-template>
@@ -7738,103 +7738,103 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <!--  -->
     <!-- 2017-08-04  repurpose task block for division of project-like -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//task[parent::chapter or parent::appendix or parent::section or parent::subsection or parent::subsubsection or parent::paragraphs or parent::introduction or parent::conclusion]" />
+        <xsl:with-param name="occurrences" select="$document-root//task[parent::chapter or parent::appendix or parent::section or parent::subsection or parent::subsubsection or parent::paragraphs or parent::introduction or parent::conclusion]" />
         <xsl:with-param name="date-string" select="'2017-08-04'" />
         <xsl:with-param name="message" select="'the &quot;task&quot; element is no longer used as a child of a top-level division, but is instead being used to divide the other &quot;project-like&quot; elements.  It can be replaced by a functional equivalent: &quot;project&quot;, &quot;activity&quot;, &quot;exploration&quot;, or &quot;investigation&quot;'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2017-08-06  remove "program" and "console" as top-level blocks -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//program[not(parent::sidebyside or parent::listing)]" />
+        <xsl:with-param name="occurrences" select="$document-root//program[not(parent::sidebyside or parent::listing)]" />
         <xsl:with-param name="date-string" select="'2017-08-06'" />
         <xsl:with-param name="message" select="'the &quot;program&quot; element is no longer used as a child of a top-level division, but instead should be enclosed by a &quot;listing&quot; or &quot;sidebyside&quot;'" />
     </xsl:call-template>
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//console[not(parent::sidebyside or parent::listing)]" />
+        <xsl:with-param name="occurrences" select="$document-root//console[not(parent::sidebyside or parent::listing)]" />
         <xsl:with-param name="date-string" select="'2017-08-06'" />
         <xsl:with-param name="message" select="'the &quot;console&quot; element is no longer used as a child of a top-level division, but instead should be enclosed by a &quot;listing&quot; or &quot;sidebyside&quot;'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2017-08-25  deprecate named lists to be captioned lists -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//list[title and not(caption)]" />
+        <xsl:with-param name="occurrences" select="$document-root//list[title and not(caption)]" />
         <xsl:with-param name="date-string" select="'2017-08-25'" />
         <xsl:with-param name="message" select="'the &quot;list&quot; element now requires a &quot;caption&quot; and the &quot;title&quot; is optional'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2017-09-10  deprecate title-less paragraphs, outside of sidebyside -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//paragraphs[not(title) and not(parent::sidebyside)]" />
+        <xsl:with-param name="occurrences" select="$document-root//paragraphs[not(title) and not(parent::sidebyside)]" />
         <xsl:with-param name="date-string" select="'2017-09-10'" />
         <xsl:with-param name="message" select="'the &quot;paragraphs&quot; element (outside of a &quot;sidebyside&quot;) now requires a &quot;title&quot; (but you can xref individual &quot;p&quot; now, if that is your purpose)'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2017-11-09  WeBWorK images now with widths as percentages, only on an enclosing sidebyside -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//webwork//image[@width or @height or @tex-size]" />
+        <xsl:with-param name="occurrences" select="$document-root//webwork//image[@width or @height or @tex-size]" />
         <xsl:with-param name="date-string" select="'2017-11-09'" />
         <xsl:with-param name="message" select="'an &quot;image&quot; within a &quot;webwork&quot; now has its size given by just a &quot;width&quot; attribute expressed as a percentage, including the percent sign (so in particular do not use &quot;height&quot; or &quot;tex-size&quot;).  Within &quot;webwork&quot;, the &quot;width&quot; needs to be given on an enclosing &quot;sidebyside&quot;'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2017-11-09  Assemblages have been rationalized, warn about captioned items -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//assemblage//*[caption]" />
+        <xsl:with-param name="occurrences" select="$document-root//assemblage//*[caption]" />
         <xsl:with-param name="date-string" select="'2017-11-09'" />
         <xsl:with-param name="message" select="'an &quot;assemblage&quot; should not contain any items with a &quot;caption&quot;.  You can instead place the content in a bare &quot;sidebyside&quot;'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2017-12-07  "c" content totally escaped for LaTeX -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//c/@latexsep|$document-root//cd/@latexsep" />
+        <xsl:with-param name="occurrences" select="$document-root//c/@latexsep|$document-root//cd/@latexsep" />
         <xsl:with-param name="date-string" select="'2017-12-07'" />
         <xsl:with-param name="message" select="'the &quot;@latexsep&quot; attribute on the &quot;c&quot; and &quot;cd&quot; elements is no longer necessary.  It is being ignored, and can be removed'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2017-12-21  remove sage/@copy -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//sage/@copy" />
+        <xsl:with-param name="occurrences" select="$document-root//sage/@copy" />
         <xsl:with-param name="date-string" select="'2017-12-21'" />
         <xsl:with-param name="message" select="'@copy on a &quot;sage&quot; element is deprecated, use the xinclude mechanism with common code in an external file'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2017-12-21  remove image/@copy -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//image/@copy" />
+        <xsl:with-param name="occurrences" select="$document-root//image/@copy" />
         <xsl:with-param name="date-string" select="'2017-12-21'" />
         <xsl:with-param name="message" select="'@copy on an &quot;image&quot; element is deprecated, possibly use the xinclude mechanism with common source code in an external file'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2017-12-22  latex-image-code to simply latex-image -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//latex-image-code" />
+        <xsl:with-param name="occurrences" select="$document-root//latex-image-code" />
         <xsl:with-param name="date-string" select="'2017-08-25'" />
         <xsl:with-param name="message" select="'the &quot;latex-image-code&quot; element has been replaced by the functionally equivalent &quot;latex-image&quot;'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2018-02-04  geogebra-applet gone -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//geogebra-applet" />
+        <xsl:with-param name="occurrences" select="$document-root//geogebra-applet" />
         <xsl:with-param name="date-string" select="'2018-02-04'" />
         <xsl:with-param name="message" select="'the &quot;geogebra-applet&quot; element has been removed, investigate newer &quot;interactive&quot; element'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2018-02-05  booktitle becomes pubtitle -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//booktitle" />
+        <xsl:with-param name="occurrences" select="$document-root//booktitle" />
         <xsl:with-param name="date-string" select="'2018-02-05'" />
         <xsl:with-param name="message" select="'the &quot;booktitle&quot; element has been replaced by the functionally equivalent &quot;pubtitle&quot;'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2018-04-06  jsxgraph absorbed into interactive -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//jsxgraph" />
+        <xsl:with-param name="occurrences" select="$document-root//jsxgraph" />
         <xsl:with-param name="date-string" select="'2018-04-06'" />
         <xsl:with-param name="message" select="'the &quot;jsxgraph&quot; element has been deprecated, but remains functional, rework with the &quot;interactive&quot; element'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2018-05-02  paragraphs purely as a lightweight division -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//sidebyside/paragraphs" />
+        <xsl:with-param name="occurrences" select="$document-root//sidebyside/paragraphs" />
         <xsl:with-param name="date-string" select="'2018-04-06'" />
         <xsl:with-param name="message" select="'a &quot;paragraphs&quot; can no longer appear within a &quot;sidebyside&quot;, replace with a &quot;stack&quot; containing multiple elements, such as &quot;p&quot;'" />
     </xsl:call-template>
