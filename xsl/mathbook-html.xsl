@@ -44,11 +44,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:import href="./mathbook-common.xsl" />
 
-<!-- Base 64 Library, MIT License -->
-<!-- Used to encode WeBWork problems           -->
-<!-- Will also read  base64_binarydatamap.xml  -->
-<xsl:include href="./xslt_base64/base64.xsl"/>
-
 
 <!-- We create HTML5 output.  The @doctype-system attribute will    -->
 <!-- create a header in the old style that browsers will recognize  -->
@@ -73,6 +68,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Or make a thin customization layer and use 'select' to provide overrides -->
 <!-- See more generally applicable parameters in mathbook-common.xsl file     -->
 
+<!-- WeBWorK exercise may be rendered static="yes"    -->
+<!-- TODO: implement middle option static="preview"   -->
+<!-- Or static="no" makes an interactive problem      -->
+<!-- Also in play here are params from -common:       -->
+<!-- exercise.text.statement, exercise.text.hint, exercise.text.solution -->
+<!-- For a sectional exercise, when static="no", that is an intentional  -->
+<!-- decision to show the live problem, which means the statement will   -->
+<!-- be shown, regardless of exercise.text.statement. If the problem was -->
+<!-- authored in PTX source, we can respect the values for               -->
+<!-- exercise.text.hint and exercise.text.solution. If the problem       -->
+<!-- source is on the webwork server, then hints and solutions will show -->
+<!-- no matter what.                                                     -->
+<!-- For a sectional exercise, when static="yes", each of the three      -->
+<!-- -common params will be respected. Effectively the content is        -->
+<!-- handled like a non-webwork exercise.                                -->
+<!-- For an inline exercise (webwork or otherwise) statments, hints, and -->
+<!-- solutions are always shown. The -common params mentioned above      -->
+<!-- do not apply. Whether static is "yes" or "no" doesn't matter.       -->
+<xsl:param name="webwork.inline.static" select="'no'" />
+<xsl:param name="webwork.sectional.static" select="'yes'" />
+
 <!-- Content as Knowls -->
 <!-- These parameters control if content is      -->
 <!-- hidden in a knowl on first appearance       -->
@@ -93,9 +109,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- PROJECT-LIKE gets own switch here           -->
 <!-- "example" are set to 'yes' by default       -->
 <!-- so new authors know that knowls exist       -->
-<!-- "webwork" are inside "exercise" always,     -->
-<!-- and they are set to 'yes' due to their      -->
-<!-- overhead in rendering                       -->
 <xsl:param name="html.knowl.theorem" select="'no'" />
 <xsl:param name="html.knowl.proof" select="'yes'" />
 <xsl:param name="html.knowl.definition" select="'no'" />
@@ -108,8 +121,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="html.knowl.figure" select="'no'" />
 <xsl:param name="html.knowl.table" select="'no'" />
 <xsl:param name="html.knowl.listing" select="'no'" />
-<xsl:param name="html.knowl.webwork.inline" select="'no'" />
-<xsl:param name="html.knowl.webwork.sectional" select="'yes'" />
 <xsl:param name="html.knowl.exercise.inline" select="'yes'" />
 <xsl:param name="html.knowl.exercise.sectional" select="'no'" />
 <!-- html.knowl.example.solution: always "yes", could be implemented -->
@@ -158,14 +169,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- There are also "compact" versions of the navigation buttons in the top right -->
 <xsl:param name="html.navigation.style"  select="'full'" />
 
-<!-- WeBWorK -->
-<!-- There is no default server provided         -->
-<!-- Interactions are with an "anonymous" course -->
-<xsl:param name="webwork.server" select="''"/>
-<xsl:param name="webwork.version" select="'2.12'"/>
-<xsl:param name="webwork.course" select="'anonymous'" />
-<xsl:param name="webwork.userID" select="'anonymous'" />
-<xsl:param name="webwork.password" select="'anonymous'" />
 
 <!-- Permalinks -->
 <!-- Next to subdivision headings a "paragraph" symbol     -->
@@ -230,6 +233,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<xsl:variable name="webwork-server">
+    <xsl:choose>
+        <xsl:when test="//webwork-reps/server-url">
+            <xsl:value-of select="substring-before(//webwork-reps/server-url[1], '/webwork2')" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>https://webwork-ptx.aimath.org</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
 <!-- Local versions of navigation options -->
 <!-- Fatal errors if not recognized       -->
 <xsl:variable name="nav-logic">
@@ -272,16 +286,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:message terminate='yes'>MBX:ERROR: 'html.navigation.style' must be 'full' or 'compact', not '<xsl:value-of select="$html.navigation.style" />.'  Quitting...</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
-</xsl:variable>
-
-<!-- WW problem presentation needs the assistance of a server -->
-<xsl:variable name="webwork-server">
-    <xsl:if test="//webwork[@*|node()] and $webwork.server=''">
-        <xsl:message>
-            <xsl:text>MBX:WARNING: WeBWorK problems will not render with out the use of a properly configured server.  Provide a webwork server with --stringparam webwork.server as something like  https://webwork.bigstateu.edu</xsl:text>
-        </xsl:message>
-    </xsl:if>
-    <xsl:value-of select="$webwork.server" />
 </xsl:variable>
 
 <!-- Permalink display options -->
@@ -1474,10 +1478,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- build xref-knowl, and optionally a hidden-knowl duplicate       -->
-<!-- &SOLUTION-LIKE; is replaced by WW-avoiding versions             -->
 <!-- NB: "me" has all the necessary templates, but is never a target -->
 <!-- mrow is only ever an "xref" knowl, and has enclosing content    -->
-<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|objectives|&EXAMPLE-LIKE;|exercisegroup|exercise|&PROJECT-LIKE;|task|hint[not(ancestor::webwork)]|answer[not(ancestor::webwork)]|solution[not(ancestor::webwork)]|&THEOREM-LIKE;|&AXIOM-LIKE;|proof|case|fn|contributor|biblio|biblio/note|p|li|webwork[*|@*]|men|mrow" mode="xref-knowl">
+<!-- webwork-reps included to descend into static for its solution-  -->
+<!-- like children                                                   -->
+<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|objectives|&EXAMPLE-LIKE;|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|proof|case|fn|contributor|biblio|biblio/note|p|li|webwork-reps|static|men|mdn" mode="xref-knowl">
     <!-- a generally available cross-reference knowl file, of duplicated content -->
     <xsl:apply-templates select="." mode="manufacture-knowl">
         <xsl:with-param name="knowl-type" select="'xref'" />
@@ -1859,8 +1864,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- (7) TODO: "wrapped-content" called by "body" to separate code. -->
 
-<!-- &SOLUTION-LIKE; is replaced by WW-avoiding versions -->
-<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|objectives|&EXAMPLE-LIKE;|exercisegroup|exercise|&PROJECT-LIKE;|task|hint[not(ancestor::webwork)]|answer[not(ancestor::webwork)]|solution[not(ancestor::webwork)]|&THEOREM-LIKE;|&AXIOM-LIKE;|proof|case|fn|contributor|biblio|biblio/note|p|li|webwork[*|@*]|me|men|md|mdn">
+<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|objectives|&EXAMPLE-LIKE;|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|proof|case|fn|contributor|biblio|biblio/note|p|li|me|men|md|mdn">
     <xsl:param name="b-original" select="true()" />
     <xsl:variable name="hidden">
         <xsl:apply-templates select="." mode="is-hidden" />
@@ -1973,52 +1977,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="birth-element" />
     </xsl:variable>
     <xsl:element name="a">
-        <xsl:choose>
-            <!-- Hack: WW not working from embedded knowls,     -->
-            <!-- so go with external file of duplicated content -->
-            <!-- as the form og the "a" tag, preserving styling -->
-            <xsl:when test="self::webwork">
-                <!-- copied from "xref-link" template,  -->
-                <!-- maybe build a 2-parameter template -->
-                <xsl:attribute name="knowl">
-                    <xsl:apply-templates select="." mode="hidden-knowl-filename" />
-                </xsl:attribute>
-                <!-- TODO: check if this "knowl-id" is needed, knowl.js implies it is -->
-                <xsl:attribute name="knowl-id">
-                    <xsl:text>hidden-</xsl:text>
-                    <xsl:apply-templates select="." mode="internal-id" />
-                </xsl:attribute>
-                <!-- add HTML title and alt attributes to the link -->
-                <xsl:attribute name="alt">
-                    <xsl:apply-templates select="." mode="tooltip-text" />
-                </xsl:attribute>
-                <xsl:attribute name="title">
-                    <xsl:apply-templates select="." mode="tooltip-text" />
-                </xsl:attribute>
-                <xsl:apply-templates select="." mode="heading-birth" />
-            </xsl:when>
-            <!-- this is the "real" code, bust out once WW fixed -->
-            <xsl:otherwise>
-                <!-- empty, indicates content *not* in a file -->
-                <xsl:attribute name="knowl" />
-                <!-- id-ref class means content is in div referenced by id -->
-                <xsl:attribute name="class">
-                    <xsl:text>id-ref</xsl:text>
-                </xsl:attribute>
-                <!-- and the id via a template for consistency -->
-                <xsl:attribute name="refid">
-                    <xsl:apply-templates select="." mode="hidden-knowl-id" />
-                </xsl:attribute>
-                <!-- make the anchor a target, eg of an in-context link -->
-                <!-- label original -->
-                <xsl:attribute name="id">
-                    <xsl:apply-templates select="." mode="internal-id" />
-                </xsl:attribute>
-                <!-- marked-up knowl text link *inside* of knowl anchor to be effective -->
-                <!-- heading in an HTML container -->
-                <xsl:apply-templates select="." mode="heading-birth" />
-            </xsl:otherwise>
-        </xsl:choose>
+        <!-- empty, indicates content *not* in a file -->
+        <xsl:attribute name="knowl" />
+        <!-- id-ref class means content is in div referenced by id -->
+        <xsl:attribute name="class">
+            <xsl:text>id-ref</xsl:text>
+        </xsl:attribute>
+        <!-- and the id via a template for consistency -->
+        <xsl:attribute name="refid">
+            <xsl:apply-templates select="." mode="hidden-knowl-id" />
+        </xsl:attribute>
+        <!-- make the anchor a target, eg of an in-context link -->
+        <!-- label original -->
+        <xsl:attribute name="id">
+            <xsl:apply-templates select="." mode="internal-id" />
+        </xsl:attribute>
+        <!-- marked-up knowl text link *inside* of knowl anchor to be effective -->
+        <!-- heading in an HTML container -->
+        <xsl:apply-templates select="." mode="heading-birth" />
     </xsl:element>
 </xsl:template>
 
@@ -2859,7 +2835,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-original" select="true()" />
     <xsl:choose>
         <!-- just an unstructured statement, no solutions -->
-        <xsl:when test="not(statement or webwork or myopenmath)">
+        <xsl:when test="not(statement or webwork-reps or myopenmath)">
             <xsl:apply-templates select="*|text()">
                 <xsl:with-param name="b-original" select="$b-original" />
             </xsl:apply-templates>
@@ -2872,19 +2848,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:apply-templates>
             </xsl:if>
             <!-- after statement, div of hidden knowls -->
-            <xsl:if test="(hint and $exercise.text.hint='yes') or (answer and $exercise.text.answer='yes') or (solution and $exercise.text.solution='yes')">
+            <xsl:if test="(hint and (not(ancestor::exercises) or $exercise.text.hint='yes')) or (answer and (not(ancestor::exercises) or $exercise.text.answer='yes')) or (solution and (not(ancestor::exercises) or $exercise.text.solution='yes'))">
                 <div class="solutions">
-                    <xsl:if test="$exercise.text.hint='yes'">
+                    <xsl:if test="not(ancestor::exercises) or $exercise.text.hint='yes'">
                         <xsl:apply-templates select="hint">
                             <xsl:with-param name="b-original" select="$b-original" />
                         </xsl:apply-templates>
                     </xsl:if>
-                    <xsl:if test="$exercise.text.answer='yes'">
+                    <xsl:if test="not(ancestor::exercises) or $exercise.text.answer='yes'">
                         <xsl:apply-templates select="answer">
                             <xsl:with-param name="b-original" select="$b-original" />
                         </xsl:apply-templates>
                     </xsl:if>
-                    <xsl:if test="$exercise.text.solution='yes'">
+                    <xsl:if test="not(ancestor::exercises) or $exercise.text.solution='yes'">
                         <xsl:apply-templates select="solution">
                             <xsl:with-param name="b-original" select="$b-original" />
                         </xsl:apply-templates>
@@ -2893,8 +2869,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:if>
         </xsl:when>
         <!-- webwork case -->
-        <xsl:when test="webwork">
-            <xsl:apply-templates select="introduction|webwork|conclusion">
+        <xsl:when test="webwork-reps">
+            <xsl:apply-templates select="introduction|webwork-reps|conclusion">
                 <xsl:with-param name="b-original" select="$b-original" />
             </xsl:apply-templates>
         </xsl:when>
@@ -3581,7 +3557,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- but have their own specific "body" templates  -->
 <!-- due to their unique characteristics.  We have -->
 <!-- paragraphs ("p"), list items ("li"), webwork  -->
-<!-- exercises ("webwork"), and numbered           -->
+<!-- exercises ("webwork-reps"), and numbered      -->
 <!-- mathematics ("men", "md", "mdn")              -->
 
 
@@ -3778,7 +3754,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- radically diffferent looks if part -->
 <!-- of overall list versus being a     -->
 <!-- standalone display of one item     -->
-<xsl:template match="ol/li|ul/li" mode="body">
+<!-- var may be a multilpe choice list  -->
+<!-- container from a webwork-reps      -->
+<xsl:template match="ol/li|ul/li|var/li" mode="body">
     <xsl:param name="block-type" />
     <xsl:param name="b-original" select="true()" />
     <xsl:choose>
@@ -3846,133 +3824,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- WeBWorK Exercises -->
 <!-- ################# -->
 
-<!-- Exceptional: mostly just "body" as alternate       -->
-<!-- version, and control of hidden knowls via switches -->
-<!-- We condition on non-empty version at entry points  -->
-
-<xsl:template match="webwork" mode="is-hidden">
-    <xsl:choose>
-        <xsl:when test="ancestor::exercises and ($html.knowl.webwork.sectional='yes')">
-            <xsl:text>true</xsl:text>
-        </xsl:when>
-        <xsl:when test="not(ancestor::exercises) and ($html.knowl.webwork.inline='yes')">
-            <xsl:text>true</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>false</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
 <!-- Body element/css wraps hidden knowls -->
 <!-- Here, not used to wrap for content   -->
-<xsl:template match="webwork" mode="body-element">
+<xsl:template match="webwork-reps" mode="body-element">
     <xsl:text>span</xsl:text>
 </xsl:template>
 
-<xsl:template match="webwork" mode="body-css-class">
+<xsl:template match="webwork-reps" mode="body-css-class">
     <xsl:text>heading</xsl:text>
 </xsl:template>
 
-<xsl:template match="webwork" mode="birth-element">
+<xsl:template match="webwork-reps" mode="birth-element">
     <xsl:text>div</xsl:text>
 </xsl:template>
-
-<!-- WeBWork exercises do not have titles of their own -->
-<xsl:template match="webwork" mode="heading-birth">
-    <xsl:text>WeBWorK Exercise</xsl:text>
-</xsl:template>
-
-<!-- When the knowl is opened, it is obvious what it is -->
-<xsl:template match="webwork" mode="heading-xref-knowl" />
-
-<!-- The guts of a WeBWork problem realized in HTML -->
-<!-- This is heart of an external knowl version, or -->
-<!-- what is born visible under control of a switch -->
-
-<!-- Base64 resources for debugging encoding and transmission problems  -->
-<!-- ASCII Table: http://www.rapidtables.com/code/text/ascii-table.htm  -->
-<!-- Online Converter: http://www.freeformatter.com/base64-encoder.html -->
-
-<xsl:template match="webwork" mode="body">
-    <xsl:comment>use 'format=debug' on 'webwork' tag to debug problem</xsl:comment>
-    <xsl:element name="iframe">
-        <xsl:attribute name="width">100%</xsl:attribute> <!-- MBX specific -->
-        <xsl:attribute name="src">
-            <xsl:value-of select="concat($webwork-server,'/webwork2/html2xml?')"/>
-            <xsl:text>&amp;answersSubmitted=0</xsl:text>
-            <xsl:choose>
-                <xsl:when test="@source">
-                    <xsl:text>&amp;sourceFilePath=</xsl:text>
-                    <xsl:value-of select="@source" />
-                </xsl:when>
-                <xsl:when test="not(. = '')">
-                    <xsl:text>&amp;problemSource=</xsl:text>
-                    <!-- formulate PG version with included routine -->
-                    <!-- form base64 version for URL transmission -->
-                    <xsl:variable name="pg-ascii">
-                        <xsl:apply-templates select="." mode="pg" />
-                    </xsl:variable>
-                    <!-- A useful debugging message if WW problems misbehave            -->
-                    <!-- Redirect output with 2> if there is too much at the console    -->
-                    <!-- <xsl:message><xsl:value-of select="$pg-ascii" /></xsl:message> -->
-                    <xsl:call-template name="b64:encode">
-                        <xsl:with-param name="urlsafe" select="true()" />
-                        <xsl:with-param name="asciiString">
-                            <xsl:value-of select="$pg-ascii" />
-                        </xsl:with-param>
-                    </xsl:call-template>
-                </xsl:when>
-                <!-- problem not authored, nor pointed at -->
-                <xsl:otherwise>
-                    <xsl:message>
-                        <xsl:text>MBX:WARNING: A webwork problem requires a source URL or original content</xsl:text>
-                        <xsl:apply-templates select="." mode="location-report" />
-                    </xsl:message>
-                </xsl:otherwise>
-            </xsl:choose>
-            <xsl:text>&amp;problemSeed=</xsl:text>
-            <xsl:choose>
-                <xsl:when test="@seed">
-                    <xsl:value-of select="@seed"/>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:text>123567890</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-            <xsl:text>&amp;displayMode=MathJax</xsl:text>
-            <xsl:text>&amp;courseID=</xsl:text>
-            <xsl:value-of select="$webwork.course"/>
-            <xsl:text>&amp;userID=</xsl:text>
-            <xsl:value-of select="$webwork.userID"/>
-            <xsl:choose>
-                <xsl:when test="$webwork.version='2.11'">
-                    <xsl:text>&amp;password=</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:text>&amp;course_password=</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-            <xsl:value-of select="$webwork.password"/>
-            <xsl:text>&amp;outputformat=</xsl:text>
-            <xsl:choose>
-                <xsl:when test="@format"><xsl:value-of select="@format" /></xsl:when>
-                <xsl:otherwise><xsl:text>simple</xsl:text></xsl:otherwise>
-            </xsl:choose>
-        </xsl:attribute>
-        <!-- unclear what this does, mimicing Mike's blog post -->
-        <xsl:if test="not(. = '')">
-            <xsl:attribute name="base64"><xsl:text>1</xsl:text></xsl:attribute>
-            <xsl:attribute name="uri"><xsl:text>1</xsl:text></xsl:attribute>
-        </xsl:if>
-    </xsl:element> <!-- end iframe -->
-    <script type="text/javascript">
-        <xsl:text>iFrameResize({log:true,inPageLinks:true,resizeFrom:'child',checkOrigin:["</xsl:text>
-        <xsl:value-of select="$webwork-server" />
-        <xsl:text>"]})</xsl:text>
-    </script>
-</xsl:template>
-
 
 <!-- ########### -->
 <!-- Mathematics -->
@@ -6005,7 +5869,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Override to turn off cross-references as knowls          -->
 <!-- NB: this device makes it easy to turn off knowlification -->
 <!-- entirely, since some renders cannot use knowl JavaScript -->
-<xsl:template match="fn|p|blockquote|biblio|biblio/note|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|poem|assemblage|paragraphs|objectives|exercise|webwork|hint|answer|solution|exercisegroup|men|mrow|li|contributor" mode="xref-as-knowl">
+<xsl:template match="fn|p|blockquote|biblio|biblio/note|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|poem|assemblage|paragraphs|objectives|exercise|hint|answer|solution|exercisegroup|men|mrow|li|contributor" mode="xref-as-knowl">
     <xsl:value-of select="true()" />
 </xsl:template>
 <xsl:template match="*" mode="xref-as-knowl">
@@ -6015,7 +5879,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- This is the implementation of an abstract template, -->
 <!-- to accomodate hard-coded HTML numbers and for       -->
 <!-- LaTeX the \ref and \label mechanism                 -->
-<!-- NB: we do exactly the same thing in the mathbook-webwork-pg.xsl -->
 <xsl:template match="*" mode="xref-number">
     <xsl:param name="xref" select="/.." />
     <xsl:variable name="needs-part-prefix">
@@ -6052,7 +5915,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <!-- 1st exceptional case, xref in webwork -->
         <!-- Just parrot the content               -->
-        <xsl:when test="ancestor::webwork|ancestor::title|ancestor::subtitle">
+        <xsl:when test="ancestor::webwork-reps|ancestor::title|ancestor::subtitle">
             <xsl:value-of select="$content" />
         </xsl:when>
         <!-- 2nd exceptional case, xref in mrow of display math  -->
@@ -6383,6 +6246,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<xsl:template match="var[@form='checkboxes']">
+    <ul style="list-style:circle;">
+        <xsl:apply-templates select="li"/>
+    </ul>
+</xsl:template>
+
+<xsl:template match="var[@form='buttons']">
+    <ul style="list-style:circle;">
+        <xsl:apply-templates select="li"/>
+    </ul>
+</xsl:template>
+
+<xsl:template match="var[@form='popup']">
+    <ul style="list-style:circle;">
+        <xsl:for-each select="li">
+            <xsl:if test="not(p[.='?']) and not(normalize-space(.)='?')">
+                <xsl:apply-templates select='.' />
+            </xsl:if>
+        </xsl:for-each>
+    </ul>
+</xsl:template>
 
 <!-- Implication Symbols -->
 <!-- TODO: better names! -->
@@ -7630,12 +7514,100 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
 <!-- ########################## -->
 
 <!-- WeBWorK HTML CSS header -->
-<!-- MathView likely necessary for WW widgets          -->
-<!-- Incorporated only if "webwork" element is present -->
+<!-- MathView is a math entry palette tool that could be enabled in the host anonymous course -->
+<!-- Incorporated only if "webwork-reps" element is present -->
+<!-- TODO: should also depend on whether all are presented as static -->
 <xsl:template name="webwork">
     <link href="{$webwork-server}/webwork2_files/js/apps/MathView/mathview.css" rel="stylesheet" />
     <script type="text/javascript" src="{$webwork-server}/webwork2_files/js/vendor/iframe-resizer/js/iframeResizer.min.js"></script>
 </xsl:template>
+
+<!-- Fail if WeBWorK extraction and merging has not been done -->
+<xsl:template match="webwork[child::node() or @*]">
+    <xsl:message terminate="yes">PTX:ERROR: A document that uses WeBWorK must have the mbx script webwork extraction run, followed by a merge using pretext-merge.xsl. Apply subsequent style sheets to the merged output.  Quitting...</xsl:message>
+</xsl:template>
+
+<!-- The guts of a WeBWorK problem realized in HTML -->
+<!-- This is heart of an external knowl version, or -->
+<!-- what is born visible under control of a switch -->
+
+<xsl:template match="webwork-reps">
+    <xsl:param name="b-original" select="true()" />
+    <xsl:choose>
+        <xsl:when test="(ancestor::exercises and $webwork.sectional.static='yes') or (not(ancestor::exercises) and $webwork.inline.static='yes') ">
+            <xsl:apply-templates select="static">
+                <xsl:with-param name="b-original" select="$b-original" />
+            </xsl:apply-templates>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:choose>
+                <xsl:when test="not(ancestor::exercises) or ($exercise.text.hint = 'yes' and $exercise.text.solution = 'yes')">
+                    <xsl:apply-templates select="server-url[@hint='yes' and @solution='yes']" mode="body"/>
+                </xsl:when>
+                <xsl:when test="$exercise.text.hint = 'yes' and $exercise.text.solution = 'no'">
+                    <xsl:apply-templates select="server-url[@hint='yes' and @solution='no']" mode="body"/>
+                </xsl:when>
+                <xsl:when test="$exercise.text.hint = 'no' and $exercise.text.solution = 'yes'">
+                    <xsl:apply-templates select="server-url[@hint='no' and @solution='yes']" mode="body"/>
+                </xsl:when>
+                <xsl:when test="$exercise.text.hint = 'no' and $exercise.text.solution = 'no'">
+                    <xsl:apply-templates select="server-url[@hint='no' and @solution='no']" mode="body"/>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="static">
+    <xsl:param name="b-original" select="true()" />
+    <xsl:if test="$exercise.text.statement='yes'">
+        <xsl:apply-templates select="statement">
+            <xsl:with-param name="b-original" select="$b-original" />
+        </xsl:apply-templates>
+    </xsl:if>
+    <xsl:if test="(hint and (not(ancestor::exercises) or $exercise.text.hint='yes')) or (solution and (not(ancestor::exercises) or $exercise.text.solution='yes'))">
+        <div class="solutions">
+            <xsl:if test="not(ancestor::exercises) or $exercise.text.hint='yes'">
+                <xsl:apply-templates select="hint">
+                    <xsl:with-param name="b-original" select="$b-original" />
+                </xsl:apply-templates>
+            </xsl:if>
+            <xsl:if test="not(ancestor::exercises) or $exercise.text.solution='yes'">
+                <xsl:apply-templates select="solution">
+                    <xsl:with-param name="b-original" select="$b-original" />
+                </xsl:apply-templates>
+            </xsl:if>
+        </div>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="server-url" mode="body">
+    <xsl:element name="iframe">
+        <xsl:attribute name="width">100%</xsl:attribute>
+        <xsl:attribute name="src">
+            <xsl:apply-templates select="."/>
+        </xsl:attribute>
+        <!-- unclear what this does, mimicking Mike's blog post -->
+        <xsl:if test="not(. = '')">
+            <xsl:attribute name="base64"><xsl:text>1</xsl:text></xsl:attribute>
+            <xsl:attribute name="uri"><xsl:text>1</xsl:text></xsl:attribute>
+        </xsl:if>
+    </xsl:element> <!-- end iframe -->
+    <script type="text/javascript">
+        <xsl:text>iFrameResize({log:true,inPageLinks:true,resizeFrom:'child',checkOrigin:["</xsl:text>
+        <xsl:value-of select="$webwork-server" />
+        <xsl:text>"]})</xsl:text>
+    </script>
+</xsl:template>
+
+<!-- In WeBWorK problems, a p whose only child is a fillin blank     -->
+<!-- almost certainly means a question has been asked, and below it  -->
+<!-- there is an entry field. In print, there is no need to print    -->
+<!-- that entry field and removing it can save a lot of vertical     -->
+<!-- space. This is in constrast with fillins in the middle of a p,  -->
+<!-- where answer blanks need to be printed because of the fill      -->
+<!-- in the blank nature of the quesiton.                            -->
+<xsl:template match="p[not(normalize-space(text()))][count(fillin)=1 and count(*)=1][not(parent::li)]|p[not(normalize-space(text()))][count(fillin)=1 and count(*)=1][parent::li][preceding-sibling::*]" />
 
 <!-- ############################# -->
 <!-- MyOpenMath Embedded Exercises -->
@@ -7688,7 +7660,7 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
             <xsl:call-template name="jquery-sagecell" />
             <xsl:call-template name="mathjax" />
             <!-- webwork's iframeResizer needs to come before sage -->
-            <xsl:if test="$document-root//webwork[@*|node()]">
+            <xsl:if test="$document-root//webwork-reps">
                 <xsl:call-template name="webwork" />
             </xsl:if>
             <xsl:apply-templates select="." mode="sagecell" />
@@ -7788,7 +7760,7 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
             <xsl:call-template name="jquery-sagecell" />
             <xsl:call-template name="mathjax" />
             <!-- webwork's iframeResizer needs to come before sage -->
-            <xsl:if test="//webwork[@*|node()]">
+            <xsl:if test="//webwork-reps">
                 <xsl:call-template name="webwork" />
             </xsl:if>
             <xsl:apply-templates select="." mode="sagecell" />
@@ -9208,11 +9180,5 @@ var scJsHost = (("https:" == document.location.protocol) ? "https://secure." : "
         <xsl:value-of select="$content" />
     </xsl:element>
 </xsl:template>
-
-<!-- Include last, since template priorities will   -->
-<!-- tie even with more specific webwork// versions -->
-<!-- Routines specific to converting a "webwork"    -->
-<!-- element into a problem in the PGML language    -->
-<xsl:include href="./mathbook-webwork-pg.xsl" />
 
 </xsl:stylesheet>

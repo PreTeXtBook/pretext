@@ -17,7 +17,7 @@
 
     <section xml:id="webwork-configuration">
         <title>Configuring a <webwork /> Course for <pretext /></title>
-        <p>We assume a mild familiarity with administrating a <webwork /> server. The version of <webwork /> needs to be 2.14 or later for full-feature use with <pretext />, although with versions 2.12 and 2.13 most features should function except for <latex /> output (see <xref ref="webwork-latex-output">Subsection</xref>. Using the <c>admin</c> course, create a course named <c>anonymous</c>. In the course's Course Configuration menu, set all permissions to <c>admin</c> (or perhaps set some to the even more restrictive <c>nobody</c>). Except set <q>Allowed to login to the course</q> to <c>login_proctor</c>.</p>
+        <p>We assume a mild familiarity with administrating a <webwork /> server. The version of <webwork /> needs to be 2.14 or later for use with <pretext />. Using the <c>admin</c> course, create a course named <c>anonymous</c>. In the course's Course Configuration menu, set all permissions to <c>admin</c> (or perhaps set some to the even more restrictive <c>nobody</c>). Except set <q>Allowed to login to the course</q> to <c>login_proctor</c>.</p>
         <p>In the Classlist Editor, add a user named <c>anonymous</c>, and set that user's permission level to <c>login_proctor</c>, the permission level one higher than <c>student</c>. Set that user's password to <c>anonymous</c>. Note that because this is public information, anyone will be able to log into this course as user <c>anonymous</c>. This is why setting the permissions earlier is very important. (Especially preventing this user from changing its own password.)</p>
         <p>Add the following lines to the <c>course.conf</c> file (which lives in the parent folder of the <c>templates/</c> folder.)</p>
         <pre>
@@ -33,9 +33,9 @@
             my $out = MODES(
                 TeX => '',
                 Latex2HTML => '',
-                HTML => qq!<P>If you were logged into a WeBWorK course 
-                and this problem were assigned to you, 
-                you would be able to submit an essay answer 
+                HTML => qq!<P>If you were logged into a WeBWorK course
+                and this problem were assigned to you,
+                you would be able to submit an essay answer
                 that would be graded later by a human being.</P>!,
                 PTX => '',
             );
@@ -109,17 +109,17 @@
             ]]>
             </pre>
 
-            <p>The above example could be given an optional title, introduction, conclusion, hint, and solution. These are discussed in <xref ref="webwork-pg-code">Subsection</xref>.</p>
+            <p>The <tab>exercise</tab> above could be given an optional <tag>title</tag>, <tag>introduction</tag>, and <tag>conclusion</tag>. The <tag>webwork</tag> inside coun be given a <tag>hint</tag> and <tag>solution</tag>. These are discussed in <xref ref="webwork-pg-code">Subsection</xref>.</p>
 
             <p>In the above example, <c>'3'</c> is the <attr>name</attr> attribute to a <tag>var</tag> element. This is how to create an answer blank that is expecting <m>3</m> as the answer. What you give as a <attr>name</attr> attribute will be passed to PG's <c>Compute()</c> command, so it needs to be valid input for <c>Compute()</c>. Note that you could pass a string encased in quotes, or a perl expression. Just be mindful of the difference:<ul>
                 <li>
-                    <p><c>8**2</c> will process a perl real using exponentiation and come up with the MathObject Real 64.</p>
+                    <p><c>8**2</c> will process a perl real using exponentiation and lead to the MathObject Real 64.</p>
                 </li>
                 <li>
-                    <p><c>'8^2'</c> will process a perl string and come up with the MathObject Real 64.</p>
+                    <p><c>'8^2'</c> will process a perl string and lead to the MathObject Real 64.</p>
                 </li>
                 <li>
-                    <p><c>8^2</c> will process the perl real using bitwise XOR and come up with the MathObject Real 10.</p>
+                    <p><c>8^2</c> will process the perl real using bitwise XOR and lead to the MathObject Real 10.</p>
                 </li>
             </ul></p>
 
@@ -148,11 +148,10 @@
 
         <subsection xml:id="webwork-pg-code">
             <title>PG code in Problems</title>
-            <p>To have randomization in problems or otherwise take advantage of the algorithmic programming capabilities of Perl and <webwork />'s PG language requires using a <tag>setup</tag> tag. Having at least a little familiarity with coding problems in <webwork /> is necessary, although for simpler problems you could get away with mimicking the sample article in <c>mathbook/examples/webwork/</c>. A <tag>statement</tag>, (optional) <tag>hint</tag>, and (optional) <tag>solution</tag> follow. The whole thing can have an optional <tag>title</tag>.</p>
+            <p>To have randomization in problems or otherwise take advantage of the algorithmic programming capabilities of Perl and <webwork />'s PG language requires using a <tag>setup</tag> tag. Having at least a little familiarity with coding problems in <webwork /> is necessary, although for simpler problems you could get away with mimicking the sample article in <c>mathbook/examples/webwork/</c>. A <tag>statement</tag>, (optional) <tag>hint</tag>, and (optional) <tag>solution</tag> follow.</p>
             <pre>
             <![CDATA[
             <webwork>
-                <title>Optional</title>
 
                 <setup>
                 </setup>
@@ -161,11 +160,9 @@
                 </statement>
 
                 <hint>
-                    <p>Optional</p>
                 </hint>
 
                 <solution>
-                    <p>Optional</p>
                 </solution>
 
             </webwork>
@@ -174,7 +171,7 @@
 
             <p>The <tag>setup</tag> contains a section of <tag>var</tag> tags followed by a <tag>pg-code</tag>. If you are familiar with code for <webwork /> PG problems, the <tag>pg-code</tag> contains lines of PG code that would appear in the <q>setup</q> portion of the problem. Typically, this is the code that follows <c>TEXT(beginproblem());</c> and precedes the first <c>BEGIN_TEXT</c> or <c>BEGIN_PGML</c>. If your code needs any special <webwork /> macro libraries, you may load them in a <tag>pg-macros</tag> tag prior to <tag>setup</tag>, with each such <c>.pl</c> file's name inside a <tag>macro-file</tag> tag. However many of the most common macro libraries will be loaded automatically based on the content and attributes you use in the rest of your problem.</p>
 
-            <p>For each Perl variable (scalar, array, or hash) that is used in the <tag>pg-code</tag> and which will <em>also</em> be used in the <tag>statement</tag>, <tag>solution</tag>, or as an answer to an answer blank, there should be a <tag>var</tag>. These <tag>var</tag> tags are primarily to help MBX handle static output, but they also allow for some optimal leveraging of <webwork /> features.</p>
+            <p>For each Perl variable (scalar, array, or hash) that is used in the <tag>pg-code</tag> and which will <em>also</em> be used in the <tag>statement</tag>, <tag>solution</tag>, or as an answer to an answer blank, there should be a <tag>var</tag>. These <tag>var</tag> tags are primarily to help PTX handle static output, but they also allow for some optimal leveraging of <webwork /> features.</p>
 
             <p>A <tag>var</tag> in the <tag>setup</tag> always has a <attr>name</attr> attribute, which should match the variable's name in your <tag>pg-code</tag> (<eg /> <c>$x</c>, <c>@a</c>, <etc />). Each <tag>var</tag> should usually have a <tag>static</tag> tag with <latex /> code for the static version of the answer (possibly inside a <c>\text{}</c>). For PDF and other static output modes, this <latex /> code will be used to print <tag>var</tag> values, since the <webwork /> server will play no role.</p>
 
@@ -198,8 +195,8 @@
                     </var>
 
                     <pg-code>
-                        $a = Compute(random(1, 9, 1)); 
-                        $b = Compute(random(1, 9, 1)); 
+                        $a = Compute(random(1, 9, 1));
+                        $b = Compute(random(1, 9, 1));
                         $c = $a + $b;
                     </pg-code>
                 </setup>
@@ -219,15 +216,15 @@
 
             <p>Within a <tag>statement</tag>, <tag>hint</tag>, or <tag>solution</tag>, reference <tag>var</tag> tags by <attr>name</attr>. For HTML and PG output, the Perl variable will be used. For static output, the <tag>var</tag> tag's <tag>static</tag> child will be used.</p>
 
-            <p>Within the <tag>statement</tag>, a <tag>var</tag> tag with either a <attr>width</attr> or <attr>form</attr> attribute creates an input field. The <attr>name</attr> attribute declares what the answer will be.</p> 
+            <p>Within the <tag>statement</tag>, a <tag>var</tag> tag with either a <attr>width</attr> or <attr>form</attr> attribute creates an input field. The <attr>name</attr> attribute declares what the answer will be.</p>
 
-            <p>An <tag>var</tag> can have <attr>form="essay"</attr>, in which case it need not have a <attr>name</attr> attribute. This is for open-ended questions that must be graded by a human. The form field will be an expandable input block if the question is served to an authenticated user within <webwork />. But for the <webwork /> cells in MBX HTML output, there will just be a message explaining that there is no place to enter an answer.</p>
+            <p>An <tag>var</tag> can have <attr>form="essay"</attr>, in which case it need not have a <attr>name</attr> attribute. This is for open-ended questions that must be graded by a human. The form field will be an expandable input block if the question is served to an authenticated user within <webwork />. But for the <webwork /> cells in PTX HTML output, there will just be a message explaining that there is no place to enter an answer.</p>
 
-            <p>An <tag>var</tag> can have <attr>form="array"</attr>. You would use this when the answer is a Matrix or Vector MathObject (a <webwork /> classification) to cause the input form to be an array of smaller fields instead of one big field.</p> 
+            <p>An <tag>var</tag> can have <attr>form="array"</attr>. You would use this when the answer is a Matrix or Vector MathObject (a <webwork /> classification) to cause the input form to be an array of smaller fields instead of one big field.</p>
 
             <p>An <tag>var</tag> can have <attr>form="popup"</attr> or <attr>form="buttons"</attr>. These are not necessary for HTML and PG output to behave, but are needed if you intend for PDF output to emulate these answer entry field types.</p>
 
-            <p>If you are writing a multiple choice question and using <attr>form="popup"</attr> or <attr>form="buttons"</attr> in your <tag>var</tag>, instead of a <tag>static</tag> in the corresponding <tag>var</tag> from the <tag>setup</tag>, use a <tag>set</tag> tag, with <tag>member</tag> children. The <tag>member</tag> tags would be the multiple choice options, and each can have a <attr>correct="yes"</attr> attribute to identify the correct choice(s). There is some unavoidable redundancy between listing these <tag>member</tag> tags in the <tag>setup</tag> and listing them again in the actual <tag>pg-code</tag>.</p> 
+            <p>If you are writing a multiple choice question and using <attr>form="popup"</attr> or <attr>form="buttons"</attr> in your <tag>var</tag>, instead of a <tag>static</tag> in the corresponding <tag>var</tag> from the <tag>setup</tag>, use a <tag>set</tag> tag, with <tag>member</tag> children. The <tag>member</tag> tags would be the multiple choice options, and each can have a <attr>correct="yes"</attr> attribute to identify the correct choice(s). There is some unavoidable redundancy between listing these <tag>member</tag> tags in the <tag>setup</tag> and listing them again in the actual <tag>pg-code</tag>.</p>
 
             <p>If you are familiar with PG, then in your <tag>pg-code</tag> you might write a custom evaluator (a combination of a custom answer checker, post filters, pre filters, <etc />). If you store this similar to</p><pre>$my_evaluator = $answer -> cmp(...);</pre><p>then the <tag>var</tag> can have <attr>evaluator="$my_evaluator"</attr>.</p>
 
@@ -249,29 +246,19 @@
         <title>Processing</title>
 
         <subsection>
-            <title>Live HTML output</title>
-            <p>When you execute <c>xsltproc</c><idx><c>xsltproc</c></idx> using <c>mathbook-html.xsl</c>, pass a <c>webwork.server</c> string parameter to it specifying where the server is that will do your processing. Example:</p>
+            <title>Extraction and Merging</title>
+                <p>A <pretext /> project that uses <webwork /> must first have its <webwork /> content extracted into an auxiliary XML file before anything else can be done. Use the <c>mbx</c> script to extract <pretext /> content from the <webwork /> server into a <em>folder</em>, which you might call <c>webwork-extraction/</c> as in this example:</p>
             <sidebyside>
                 <console>
                     <prompt>$ </prompt>
-                    <input>xsltproc --stringparam webwork.server webwork-ptx.aimath.org mathbook-html.xsl &lt;xml&gt;</input>
+                    <input>mbx -c webwork -s &lt;server&gt; -d webwork-extraction &lt;xml&gt;</input>
                 </console>
             </sidebyside>
-            <p>Note: Make sure not to use a trailing slash (/) in the string parameter for <c>webwork.server</c>.</p>
-            <p>For live HTML output, this is all that is needed.</p>
-        </subsection>
+            <p>The <webwork /> server needs to be version 2.14 or later, specified with its protocol and domain, like <c>https://webwork-ptx.aimath.org</c>. (If you do not have a server, you may use <c>https://webwork-ptx.aimath.org</c>.)</p>
+            <p>You may need to specify a path to the <c>webwork-extraction</c> folder. Any image files that the <webwork /> server generates will be stored inside this folder. An auxiliary XML <em>file</em> called <c>webwork-extraction.xml</c> will be created in this folder. (Note that you can name the folder whatever you like, but the auxiliary file that is created will always be named <c>webwork-extraction.xml</c>.)</p>
 
-        <subsection xml:id="webwork-latex-output">
-            <title><latex /> output</title>
-            <p>To make PDF output, you must first use the <c>mbx</c> script to extract <pretext /> content from the <webwork /> server into an auxiliary XML file, which you might call <c>webwork-extraction.xml/</c> as in this example:</p>
-            <sidebyside>
-                <console>
-                    <prompt>$ </prompt>
-                    <input>mbx -c webwork -s &lt;server&gt; -d webwork-extraction.xml &lt;xml&gt;</input>
-                </console>
-            </sidebyside>
-            <p>You may want to specify a path to <c>webwork-extraction.xml</c>. Alongside this file will be stored any image files that the <webwork /> server generates.</p>
             <p>Next, use <c>xsltproc</c> with <c>pretext-merge.xsl</c> to merge your entire source tree with the extracted <webwork /> content. The string parameter <c>webwork.extraction</c> must identify the auxiliary XML file created in the previous step. Store the output in some file, for example <c>merge.ptx</c> in this example:</p>
+
             <sidebyside>
                 <console>
                     <prompt>$ </prompt>
@@ -279,13 +266,70 @@
                 </console>
             </sidebyside>
             <p>Note that you may need to provide file paths to <c>webwork-extraction.xml</c> and <c>pretext-merge.xsl</c>.</p>
-            <p>Now you may use <c>xsltproc</c> with <c>mathbook-latex.xsl</c> as usual, but applied to <c>merge.ptx</c>.</p>
+        </subsection>
+
+        <subsection>
+            <title>HTML output</title>
+            <p>When you execute <c>xsltproc</c><idx><c>xsltproc</c></idx> using <c>mathbook-html.xsl</c>, apply it to the merged file described above, not your original source. For example:</p>
+            <sidebyside>
+                <console>
+                    <prompt>$ </prompt>
+                    <input>xsltproc mathbook-html.xsl merge.ptx</input>
+                </console>
+            </sidebyside>
+            <p>There are several string parameters you may pass to <c>xsltproc</c>.</p>
+            <sidebyside>
+                <tabular valign="top">
+                    <col />
+                    <col width="60%" />
+                    <row bottom="major">
+                        <cell>stringparam</cell>
+                        <cell>options</cell>
+                    </row>
+                    <row bottom="minor">
+                        <cell><c>webwork.inline.static</c></cell>
+                        <cell>
+                            <p><c>'no'</c> (default) means inline exercises render as interactive.</p>
+                            <p><c>'yes'</c> means inline exercises render as static.</p>
+                            <p><c>'preview'</c> (planned) means inline exercises render as static until you click to activate them.</p>
+                        </cell>
+                    </row>
+                    <row bottom="minor">
+                        <cell><c>webwork.sectional.static</c></cell>
+                        <cell>
+                            <p><c>'no'</c> means sectional exercises render as interactive.</p>
+                            <p><c>'yes'</c> (default) means sectional exercises render as static.</p>
+                            <p><c>'preview'</c> (planned) means sectional exercises render as static until you click to activate them.</p>
+                        </cell>
+                    </row>
+                    <row bottom="minor">
+                        <cell><c>html.knowl.exercise.inline</c></cell>
+                        <cell>
+                            <p><c>'no'</c> means inline exercises appear on page load.</p>
+                            <p><c>'yes'</c> (default) means inline exercises are hidden in knowls.</p>
+                        </cell>
+                    </row>
+                    <row bottom="minor">
+                        <cell><c>html.knowl.exercise.sectional</c></cell>
+                        <cell>
+                            <p><c>'no'</c> (default) means sectional exercises appear on page load.</p>
+                            <p><c>'yes'</c> means sectional exercises are hidden in knowls.</p>
+                        </cell>
+                    </row>
+                </tabular>
+            </sidebyside>
+        </subsection>
+
+        <subsection xml:id="webwork-latex-output">
+            <title><latex /> output</title>
+            <p>When you execute <c>xsltproc</c><idx><c>xsltproc</c></idx> using <c>mathbook-latex.xsl</c>, apply it to the merged file described above, not your original source. For example:</p>
             <sidebyside>
                 <console>
                     <prompt>$ </prompt>
                     <input>xsltproc mathbook-latex.xsl merge.ptx</input>
                 </console>
             </sidebyside>
+            <p>One string parameter you can pass to <c>xsltproc</c> is <c>latex.fillin.style</c>, which can take values <c>'underline'</c> (the default) or <c>'box'</c>.</p>
         </subsection>
 
         <subsection>

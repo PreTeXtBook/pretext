@@ -4355,6 +4355,12 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:apply-templates select="parent::*" mode="number" />
 </xsl:template>
 
+<!-- Anything within a webwork-reps that needs a structure number    -->
+<!-- gets it from the enclosing exercise.                            -->
+<xsl:template match="webwork-reps//*" mode="structure-number">
+    <xsl:apply-templates select="ancestor::exercise" mode="number" />
+</xsl:template>
+
 <!-- Structure Numbers: Bibliographic Items -->
 <!-- With just one "references" per division, we can use the      -->
 <!-- number of the parent division.  This means that a global,    -->

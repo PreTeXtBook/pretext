@@ -118,7 +118,7 @@ mini-merge:
 	xsltproc --stringparam webwork.extraction $(WWOUT)/webwork-extraction.xml $(MBXSL)/pretext-merge.xsl $(MINI) > mini-merge.ptx
 
 # LaTeX and PDF versions,
-# see prerequisite just above about merge files.
+# see prerequisite above about merge files.
 # xsltproc may be passed --stringparam latex.fillin.style box for box answer blanks
 
 sample-chapter-pdf:
@@ -158,27 +158,22 @@ sample-chapter-extract:
 	cd $(PGOUT); \
 	xsltproc --stringparam chunk.level 1 $(MBXSL)/mathbook-webwork-archive.xsl $(WWEXAMPLE)/sample-chapter/sample-chapter.xml
 
-# HTML with WeBWorK exercises need a WW server
-# See example below for how to specify this
-# Output is:  $(HTMLOUT)/sample-ww-chapter.html
+# HTML ouptut
+# see prerequisite above about merge files.
 sample-chapter-html:
 	install -d $(HTMLOUT)
 	-rm $(HTMLOUT)/*.html
 	-rm $(HTMLOUT)/knowl/*.html
 	cp -a $(WWEXAMPLE)/sample-chapter/images $(HTMLOUT)
 	cd $(HTMLOUT); \
-	xsltproc --stringparam webwork.server $(SERVER) --stringparam html.knowl.exercise.inline no $(MBXSL)/mathbook-html.xsl $(WWEXAMPLE)/sample-chapter/sample-chapter.xml
+	xsltproc --stringparam webwork.sectional.static no $(MBXSL)/mathbook-html.xsl $(SCRATCH)/sample-chapter-merge.ptx;
 
-
-# HTML for a minimal WeBWorK cell
-# Useful for debugging
-# Output is:  $(HTMLOUT)/webwork-mini.html
-webwork-mini-html:
+mini-html:
 	install -d $(HTMLOUT)
 	-rm $(HTMLOUT)/*.html
 	-rm $(HTMLOUT)/knowl/*.html
 	cd $(HTMLOUT); \
-	xsltproc --stringparam webwork.server $(SERVER) --stringparam html.knowl.exercise.inline no $(MBXSL)/mathbook-html.xsl $(WWEXAMPLE)/minimal/mini.xml
+	xsltproc $(MBXSL)/mathbook-html.xsl $(SCRATCH)/mini-merge.ptx;
 
 ###########
 # Utilities
