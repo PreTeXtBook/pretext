@@ -345,7 +345,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The xref-knowl templates run independently on content node of document tree    -->
 <xsl:template match="/mathbook|/pretext">
     <xsl:apply-templates mode="chunking" />
-    <xsl:apply-templates select="*[not(self::docinfo)]" mode="xref-knowl" />
+    <xsl:apply-templates select="$document-root" mode="xref-knowl" />
 </xsl:template>
 
 <!-- However, some MBX document types do not have    -->
@@ -1469,31 +1469,46 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- that needs a cross-reference target as a knowl file,  -->
 <!-- that file is built and the tree traversal continues.  -->
 <!--                                                       -->
-<!-- See initiation in the entry template.  Default is to  -->
-<!-- recurse through elements to children elements.        -->
+<!-- See initiation in the entry template.                 -->
 
-<!-- recurse if not knowlizable -->
-<xsl:template match="*" mode="xref-knowl">
-    <xsl:apply-templates select="*" mode="xref-knowl" />
+<!-- Cross-references as knowls                               -->
+<!-- Override to turn off cross-references as knowls          -->
+<!-- NB: this device makes it easy to turn off knowlification -->
+<!-- entirely, since some renders cannot use knowl JavaScript -->
+<xsl:template match="*" mode="xref-as-knowl">
+    <xsl:value-of select="false()" />
+</xsl:template>
+<xsl:template match="fn|p|blockquote|biblio|biblio/note|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|poem|assemblage|paragraphs|objectives|exercise|hint|answer|solution|exercisegroup|men|mrow|li|contributor" mode="xref-as-knowl">
+    <xsl:value-of select="true()" />
 </xsl:template>
 
 <!-- build xref-knowl, and optionally a hidden-knowl duplicate       -->
 <!-- NB: "me" has all the necessary templates, but is never a target -->
 <!-- mrow is only ever an "xref" knowl, and has enclosing content    -->
-<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|objectives|&EXAMPLE-LIKE;|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|proof|case|fn|contributor|biblio|biblio/note|p|li|men|mrow" mode="xref-knowl">
-    <!-- a generally available cross-reference knowl file, of duplicated content -->
-    <xsl:apply-templates select="." mode="manufacture-knowl">
-        <xsl:with-param name="knowl-type" select="'xref'" />
-    </xsl:apply-templates>
-    <!-- optionally, a file version of duplicated hidden-knowl content -->
-    <xsl:variable name="hidden">
-        <xsl:apply-templates select="." mode="is-hidden" />
+<!-- These are "top-level" starting places for this process,         -->
+<!-- assuming divisions are never knowled                            -->
+<xsl:template match="*" mode="xref-knowl">
+    <xsl:variable name="knowlizable">
+        <xsl:apply-templates select="." mode="xref-as-knowl" />
     </xsl:variable>
-    <xsl:if test="$hidden = 'true'">
+    <xsl:if test="$knowlizable = 'true'">
+        <!-- a generally available cross-reference knowl file, of duplicated content -->
         <xsl:apply-templates select="." mode="manufacture-knowl">
-            <xsl:with-param name="knowl-type" select="'hidden'" />
+            <xsl:with-param name="knowl-type" select="'xref'" />
         </xsl:apply-templates>
+        <!-- optionally, a file version of duplicated hidden-knowl content -->
+        <xsl:variable name="hidden">
+            <xsl:apply-templates select="." mode="is-hidden" />
+        </xsl:variable>
+        <xsl:if test="$hidden = 'true'">
+            <xsl:apply-templates select="." mode="manufacture-knowl">
+                <xsl:with-param name="knowl-type" select="'hidden'" />
+            </xsl:apply-templates>
+        </xsl:if>
     </xsl:if>
+    <!-- recurse into contents, as we may just        -->
+    <!-- "skip over" some containers, such as an "ol" -->
+    <xsl:apply-templates select="*" mode="xref-knowl" />
 </xsl:template>
 
 <!-- Build one, or two, files for knowl content -->
@@ -1579,8 +1594,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </body>
         </html>
     </exsl:document>  <!-- end file -->
-    <!-- recurse the tree outside of the file-writing -->
-    <xsl:apply-templates select="*" mode="xref-knowl" />
 </xsl:template>
 
 <!-- The directory of knowls that are targets of cross-references    -->
@@ -5859,20 +5872,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A hyperlink is the default. For conversions to different       -->
 <!-- HTML outputs, the choice of targets appearing as knowls        -->
 <!-- can be adjusted by overriding the next template                -->
-
-<!-- NB: these items must have their knowl content produced -->
-<!-- NB: this is just the behavior of cross-references      -->
-
-<!-- Cross-references as knowls                               -->
-<!-- Override to turn off cross-references as knowls          -->
-<!-- NB: this device makes it easy to turn off knowlification -->
-<!-- entirely, since some renders cannot use knowl JavaScript -->
-<xsl:template match="fn|p|blockquote|biblio|biblio/note|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|poem|assemblage|paragraphs|objectives|exercise|hint|answer|solution|exercisegroup|men|mrow|li|contributor" mode="xref-as-knowl">
-    <xsl:value-of select="true()" />
-</xsl:template>
-<xsl:template match="*" mode="xref-as-knowl">
-    <xsl:value-of select="false()" />
-</xsl:template>
 
 <!-- This is the implementation of an abstract template, -->
 <!-- to accomodate hard-coded HTML numbers and for       -->
