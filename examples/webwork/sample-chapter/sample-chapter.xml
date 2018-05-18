@@ -567,8 +567,6 @@
 
                 <p>This subsection demonstrates a few more features.</p>
 
-                <p>The derivative and antiderivative of a function can be understood through study of their graphical relationships.</p>
-
                 <definition xml:id="definition-antiderivative">
                     <title>Antiderivative of a Function</title>
 
@@ -613,8 +611,8 @@
                     <p>The first problem in this list is coming from the <webwork /> Open Problem Library. One implication of this is that we might want to provide some commentary that connects the problem to the text.  The other two ask for essay answers, which would be graded by an instructor, so in the HTML output there is no opportunity to provide an answer.</p>
                 </introduction>
 
-                <exercise xml:id="ww-graphical-antiderivatives">
-                    <title>Graphical Antiderivatives</title>
+                <exercise xml:id="ww-antiderivatives">
+                    <title>Antiderivatives</title>
 
                     <introduction>
                         <p>Consult <xref ref="definition-antiderivative" /> and the <xref ref="theorem-FTC" text="title" /> to assist you with the following problem.</p>
