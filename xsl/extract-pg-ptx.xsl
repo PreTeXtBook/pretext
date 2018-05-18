@@ -87,7 +87,13 @@
 <!-- Dictionary Architecture                                               -->
 <!--#######################################################################-->
 
+<!-- Deprecation warnings are universal analysis of source and parameters   -->
+<!-- There is always a "document root" directly under the mathbook element, -->
+<!-- and we process it with the chunking template called below              -->
+<!-- Note that "docinfo" is at the same level and not structural, so killed -->
 <xsl:template match="/">
+    <xsl:apply-templates select="mathbook|pretext" mode="generic-warnings" />
+    <xsl:apply-templates select="mathbook|pretext" mode="deprecation-warnings" />
     <!-- Initialize empty dictionaries, then define key-value pairs -->
     <xsl:text>pgptx = {}&#xa;</xsl:text>
     <xsl:text>pgptx['hint_no_solution_no'] = {}&#xa;</xsl:text>
