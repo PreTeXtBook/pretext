@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <!-- ********************************************************************* -->
-<!-- Copyright 2015-7                                                      -->
+<!-- Copyright 2015-18                                                     -->
 <!-- Robert A. Beezer, Michael Gage, Geoff Goehle, Alex Jordan             -->
 <!--                                                                       -->
 <!-- This file is part of PreTeXt.                                         -->
@@ -41,15 +41,12 @@
 
 <xsl:import href="./mathbook-common.xsl" />
 
-<!-- Intend output to be a PG/PGML problem -->
+<!-- Intend output to be a PG/PGML problem or a "def" file -->
 <xsl:output method="text" />
 
 <!-- ######### -->
 <!-- Variables -->
 <!-- ######### -->
-
-<!-- Variables that affect PG archive creation -->
-<!-- More in the common file                  -->
 
 <!-- We default to one massive def file -->
 <xsl:variable name="chunk-level">
@@ -72,33 +69,19 @@
 <!-- Then chunk the document to write reasonable problem definition files     -->
 <xsl:template match="/mathbook|/pretext">
     <xsl:apply-templates select="." mode="generic-warnings" />
-    <xsl:apply-templates mode="problems" />
+    <!-- Handle <webwork-reps> element carefully -->
+    <xsl:apply-templates select="$document-root//exercise/webwork-reps" />
     <xsl:apply-templates mode="chunking" />
 </xsl:template>
 
-<!-- Handle <webwork-reps> element carefully -->
-<!-- Recurse into other elements        -->
-<xsl:template match="*" mode="problems">
-    <xsl:apply-templates select="webwork-reps" mode="problems" />
-    <xsl:apply-templates select="*[not(self::webwork-reps)]" mode="problems" />
-</xsl:template>
-
-<!-- Kill non-element content outside of webwork -->
-<xsl:template match="text()" mode="problems" />
-
-
 <!-- ################## -->
-<!-- Extraction Wrapper -->
+<!-- Filename Utilities -->
 <!-- ################## -->
 
-<!-- String for document root, but not docinfo -->
+<!-- Overall document title, for root directory name -->
 <xsl:template name="root-directory">
-    <xsl:for-each select="/mathbook/*|/pretext/*">
-        <xsl:if test="not(self::docinfo)">
-            <xsl:apply-templates select="." mode="numbered-title-filesafe" />
-            <xsl:text>/</xsl:text>
-        </xsl:if>
-    </xsl:for-each>
+    <xsl:apply-templates select="$document-root" mode="numbered-title-filesafe" />
+    <xsl:text>/</xsl:text>
 </xsl:template>
 
 <!-- Directory path, recursively climb structural nodes,  -->
@@ -147,9 +130,12 @@
     <xsl:value-of select="pg/@source" />
 </xsl:template>
 
-<!-- Extract an authored problem into its own file        -->
-<!-- This is a wrapper around the "normal" representation -->
-<xsl:template match="webwork-reps[pg][not(pg/@source)]" mode="problems">
+<!-- ################## -->
+<!-- Problem Extraction -->
+<!-- ################## -->
+
+<!-- Extract an authored problem into its own file, flush left -->
+<xsl:template match="webwork-reps[pg]" >
     <xsl:variable name="filename">
         <xsl:apply-templates select="." mode="filename" />
     </xsl:variable>
@@ -160,13 +146,13 @@
     </exsl:document>
 </xsl:template>
 
-<!-- OPL problems just get killed, they live on the server already -->
-<xsl:template match="webwork-reps[pg/@source]" mode="problems" />
+<!-- OPL problems don't produce PG source files, -->
+<!-- as they live on the server already          -->
+<xsl:template match="webwork-reps[pg/@source]" />
 
-
-<!-- ################# -->
+<!-- ################## -->
 <!-- Chunking Def Files-->
-<!-- ################# -->
+<!-- ################## -->
 
 <!-- A complete file for a structural subdivision -->
 <xsl:template match="&STRUCTURAL;" mode="chunk">
@@ -195,7 +181,6 @@
         </xsl:with-param>
     </xsl:apply-templates>
 </xsl:template>
-
 
 <!-- ##################### -->
 <!-- Def File Construction -->
@@ -263,9 +248,6 @@
             <xsl:text>description       = </xsl:text>
             <xsl:apply-templates select="." mode="title-simple" />
             <xsl:text>&#xa;</xsl:text>
-            <!-- Version 1 problem list lead-in -->
-            <!-- <xsl:text>problemList       = &#xa;</xsl:text> -->
-            <!--                                                -->
             <!-- Version 2 problem list lead-in -->
             <xsl:text>problemListV2&#xa;</xsl:text>
             <xsl:copy-of select="$content" />
@@ -277,24 +259,6 @@
             <xsl:apply-templates select="." mode="header-content" />
         </exsl:document>
     </xsl:if>
-</xsl:template>
-
-<!-- Version 1 problem info -->
-<!-- Each problem gets its own line in the problem set   -->
-<!-- definition file. Be careful to create no content if -->
-<!-- there are no problems in a subdivision as we employ -->
-<!-- non-emptieness up the wrapping chain to ensure      -->
-<!--  no trivial problem definition files are created.   -->
-<!-- http://webwork.maa.org/wiki/Set_Definition_Files#Version_1 -->
-<xsl:template match="webwork-reps" mode="def-info-v1">
-    <xsl:apply-templates select="." mode="filename" />
-    <xsl:text>, </xsl:text>
-    <xsl:text>1</xsl:text> <!-- default weight -->
-    <xsl:text>, </xsl:text>
-    <xsl:text>-1</xsl:text> <!-- default max attempts is unlimited -->
-    <xsl:text>, </xsl:text>
-    <xsl:text></xsl:text> <!-- default SMA is blank -->
-    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Version 2 problem info -->
