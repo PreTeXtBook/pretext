@@ -1527,7 +1527,7 @@
           <zeroOrMore>
             <choice>
               <ref name="TextShort"/>
-              <ref name="WWVariableUse"/>
+              <ref name="WWVariable"/>
             </choice>
           </zeroOrMore>
         </element>
@@ -2143,9 +2143,6 @@
   </define>
   <define name="WWSetup">
     <element name="setup">
-      <zeroOrMore>
-        <ref name="WWVariableSetup"/>
-      </zeroOrMore>
       <optional>
         <element name="pg-code">
           <text/>
@@ -2153,43 +2150,7 @@
       </optional>
     </element>
   </define>
-  <define name="WWVariableSetup">
-    <element name="var">
-      <attribute name="name"/>
-      <optional>
-        <attribute name="category">
-          <choice>
-            <value>integer</value>
-            <value>number</value>
-            <value>formula</value>
-          </choice>
-        </attribute>
-      </optional>
-      <optional>
-        <element name="static">
-          <text/>
-        </element>
-      </optional>
-      <optional>
-        <element name="set">
-          <oneOrMore>
-            <element name="member">
-              <optional>
-                <attribute name="correct">
-                  <choice>
-                    <value>yes</value>
-                    <value>no</value>
-                  </choice>
-                </attribute>
-              </optional>
-              <text/>
-            </element>
-          </oneOrMore>
-        </element>
-      </optional>
-    </element>
-  </define>
-  <define name="WWVariableUse">
+  <define name="WWVariable">
     <element name="var">
       <choice>
         <group>
@@ -2199,6 +2160,27 @@
           </optional>
           <optional>
             <attribute name="width"/>
+          </optional>
+          <optional>
+            <attribute name="category">
+              <choice>
+                <value>angle</value>
+                <value>decimal</value>
+                <value>exponent</value>
+                <value>formula</value>
+                <value>fraction</value>
+                <value>inequality</value>
+                <value>integer</value>
+                <value>interval</value>
+                <value>logarithm</value>
+                <value>limit</value>
+                <value>number</value>
+                <value>point</value>
+                <value>syntax</value>
+                <value>quantity</value>
+                <value>vector</value>
+              </choice>
+            </attribute>
           </optional>
           <optional>
             <attribute name="form">
@@ -2395,7 +2377,7 @@
           <ref name="Generator"/>
           <ref name="Verbatim"/>
           <ref name="Group"/>
-          <ref name="WWVariableUse"/>
+          <ref name="WWVariable"/>
           <ref name="MathInlineWW"/>
           <ref name="Music"/>
           <ref name="Reference"/>
@@ -2473,7 +2455,7 @@
           <ref name="MathInlineWW"/>
           <ref name="Music"/>
           <ref name="Reference"/>
-          <ref name="WWVariableUse"/>
+          <ref name="WWVariable"/>
         </choice>
       </zeroOrMore>
     </mixed>
@@ -2737,7 +2719,7 @@
         <zeroOrMore>
           <choice>
             <ref name="FillIn"/>
-            <ref name="WWVariableUse"/>
+            <ref name="WWVariable"/>
           </choice>
         </zeroOrMore>
       </mixed>
@@ -2767,7 +2749,7 @@
           <choice>
             <ref name="Xref"/>
             <ref name="FillIn"/>
-            <ref name="WWVariableUse"/>
+            <ref name="WWVariable"/>
           </choice>
         </zeroOrMore>
       </mixed>
@@ -2780,7 +2762,7 @@
           <zeroOrMore>
             <choice>
               <ref name="FillIn"/>
-              <ref name="WWVariableUse"/>
+              <ref name="WWVariable"/>
             </choice>
           </zeroOrMore>
         </mixed>
@@ -2791,7 +2773,7 @@
           <zeroOrMore>
             <choice>
               <ref name="FillIn"/>
-              <ref name="WWVariableUse"/>
+              <ref name="WWVariable"/>
             </choice>
           </zeroOrMore>
         </mixed>

@@ -711,7 +711,7 @@
         ImageWW = 
             element image {
                 attribute pg-name {text}?,
-                element description {(TextShort | WWVariableUse)*}?
+                element description {(TextShort | WWVariable)*}?
             }
         
         
@@ -966,26 +966,14 @@
             }
         WWSetup = 
             element setup {
-                WWVariableSetup*,
                 element pg-code {text}?
             }
-        WWVariableSetup = 
-            element var {
-                attribute name {text},
-                attribute category {"integer"|"number"|"formula"}?,
-                element static {text}?,
-                element set {
-                    element member {
-                        attribute correct {"yes"|"no"}?,
-                        text
-                    }+
-                }?
-            }
-        WWVariableUse =
+        WWVariable =
             element var {
                 (attribute name {text},
                 attribute evaluator {text}?,
                 attribute width {text}?,
+                attribute category {"angle" | "decimal" | "exponent" | "formula" | "fraction" | "inequality" | "integer" | "interval" | "logarithm" | "limit" | "number" | "point" | "syntax" | "quantity" | "vector"}?,
                 attribute form {"popup"|"buttons"|"none"}?) | 
                 (attribute form {"essay"},
                 attribute width {text}?)
@@ -1086,7 +1074,7 @@
             Generator |
             Verbatim |
             Group |
-            WWVariableUse |
+            WWVariable |
             MathInlineWW |
             Music |
             Reference |
@@ -1132,7 +1120,7 @@
             MathInlineWW |
             Music |
             Reference |
-            WWVariableUse)* }
+            WWVariable)* }
         
         
             Footnote =
@@ -1244,23 +1232,23 @@
             }
         MathInlineWW =
             element m {
-                mixed {(FillIn | WWVariableUse)*}
+                mixed {(FillIn | WWVariable)*}
             }
         MathRowWW = 
             element mrow {
                 MetaDataTarget,
                 attribute number {"yes" | "no"}?,
                 attribute break {"yes" | "no"}?,
-                mixed {(Xref | FillIn | WWVariableUse)*}
+                mixed {(Xref | FillIn | WWVariable)*}
             }
         MathDisplayWW =
             element me {
-                mixed {(FillIn | WWVariableUse)*}
+                mixed {(FillIn | WWVariable)*}
             }
         |
             element men {
                 MetaDataTarget,
-                mixed {(FillIn | WWVariableUse)*}
+                mixed {(FillIn | WWVariable)*}
             }
         |
             element md {

@@ -964,6 +964,8 @@
 </xsl:template>
 
 <!-- Convert a var's "category" to the right term for AnswerFormatHelp -->
+<!-- Keep ordered alphabetically, and one value per @test, so          -->
+<!-- that it is easier to maintain a list in the schema                -->
 <xsl:template name="category-to-form">
     <xsl:param name="category" select="none"/>
     <xsl:choose>
@@ -985,6 +987,9 @@
         <xsl:when test="$category='inequality'">
             <xsl:text>inequalities</xsl:text>
         </xsl:when>
+        <xsl:when test="$category='integer'">
+            <xsl:text>numbers</xsl:text>
+        </xsl:when>
         <xsl:when test="$category='interval'">
             <xsl:text>intervals</xsl:text>
         </xsl:when>
@@ -994,7 +999,7 @@
         <xsl:when test="$category='limit'">
             <xsl:text>limits</xsl:text>
         </xsl:when>
-        <xsl:when test="$category='number' or $category='integer'">
+        <xsl:when test="$category='number'">
             <xsl:text>numbers</xsl:text>
         </xsl:when>
         <xsl:when test="$category='point'">

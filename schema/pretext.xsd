@@ -1460,7 +1460,7 @@
               <xs:complexType mixed="true">
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
                   <xs:group ref="TextShort"/>
-                  <xs:group ref="WWVariableUse"/>
+                  <xs:element ref="var"/>
                 </xs:choice>
               </xs:complexType>
             </xs:element>
@@ -2044,75 +2044,49 @@
   <xs:element name="setup">
     <xs:complexType>
       <xs:sequence>
-        <xs:group minOccurs="0" maxOccurs="unbounded" ref="WWVariableSetup"/>
         <xs:element minOccurs="0" ref="pg-code"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="pg-code" type="xs:string"/>
-  <xs:group name="WWVariableSetup">
-    <xs:sequence>
-      <xs:element name="var">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element minOccurs="0" ref="static"/>
-            <xs:element minOccurs="0" ref="set"/>
-          </xs:sequence>
-          <xs:attribute name="name" use="required"/>
-          <xs:attribute name="category">
-            <xs:simpleType>
-              <xs:restriction base="xs:token">
-                <xs:enumeration value="integer"/>
-                <xs:enumeration value="number"/>
-                <xs:enumeration value="formula"/>
-              </xs:restriction>
-            </xs:simpleType>
-          </xs:attribute>
-        </xs:complexType>
-      </xs:element>
-    </xs:sequence>
-  </xs:group>
-  <xs:element name="static" type="xs:string"/>
-  <xs:element name="set">
+  <xs:element name="var">
     <xs:complexType>
-      <xs:sequence>
-        <xs:element maxOccurs="unbounded" ref="member"/>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="member">
-    <xs:complexType mixed="true">
-      <xs:attribute name="correct">
+      <xs:attribute name="form">
         <xs:simpleType>
           <xs:restriction base="xs:token">
-            <xs:enumeration value="yes"/>
-            <xs:enumeration value="no"/>
+            <xs:enumeration value="popup"/>
+            <xs:enumeration value="buttons"/>
+            <xs:enumeration value="none"/>
+            <xs:enumeration value="essay"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="name"/>
+      <xs:attribute name="evaluator"/>
+      <xs:attribute name="width"/>
+      <xs:attribute name="category">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="angle"/>
+            <xs:enumeration value="decimal"/>
+            <xs:enumeration value="exponent"/>
+            <xs:enumeration value="formula"/>
+            <xs:enumeration value="fraction"/>
+            <xs:enumeration value="inequality"/>
+            <xs:enumeration value="integer"/>
+            <xs:enumeration value="interval"/>
+            <xs:enumeration value="logarithm"/>
+            <xs:enumeration value="limit"/>
+            <xs:enumeration value="number"/>
+            <xs:enumeration value="point"/>
+            <xs:enumeration value="syntax"/>
+            <xs:enumeration value="quantity"/>
+            <xs:enumeration value="vector"/>
           </xs:restriction>
         </xs:simpleType>
       </xs:attribute>
     </xs:complexType>
   </xs:element>
-  <xs:group name="WWVariableUse">
-    <xs:sequence>
-      <xs:element name="var">
-        <xs:complexType>
-          <xs:attribute name="form">
-            <xs:simpleType>
-              <xs:restriction base="xs:token">
-                <xs:enumeration value="popup"/>
-                <xs:enumeration value="buttons"/>
-                <xs:enumeration value="none"/>
-                <xs:enumeration value="essay"/>
-              </xs:restriction>
-            </xs:simpleType>
-          </xs:attribute>
-          <xs:attribute name="name"/>
-          <xs:attribute name="evaluator"/>
-          <xs:attribute name="width"/>
-        </xs:complexType>
-      </xs:element>
-    </xs:sequence>
-  </xs:group>
   <xs:element name="instruction">
     <xs:complexType mixed="true">
       <xs:group ref="TextShort"/>
@@ -2251,7 +2225,7 @@
         <xs:group ref="Generator"/>
         <xs:group ref="Verbatim"/>
         <xs:group ref="Group"/>
-        <xs:group ref="WWVariableUse"/>
+        <xs:element ref="var"/>
         <xs:group ref="MathInlineWW"/>
         <xs:group ref="Music"/>
         <xs:group ref="Reference"/>
@@ -2329,7 +2303,7 @@
         <xs:group ref="MathInlineWW"/>
         <xs:group ref="Music"/>
         <xs:group ref="Reference"/>
-        <xs:group ref="WWVariableUse"/>
+        <xs:element ref="var"/>
       </xs:choice>
     </xs:sequence>
   </xs:group>
@@ -2583,7 +2557,7 @@
         <xs:complexType mixed="true">
           <xs:choice minOccurs="0" maxOccurs="unbounded">
             <xs:element ref="fillin"/>
-            <xs:group ref="WWVariableUse"/>
+            <xs:element ref="var"/>
           </xs:choice>
         </xs:complexType>
       </xs:element>
@@ -2598,7 +2572,7 @@
             <xs:choice minOccurs="0" maxOccurs="unbounded">
               <xs:element ref="xref"/>
               <xs:element ref="fillin"/>
-              <xs:group ref="WWVariableUse"/>
+              <xs:element ref="var"/>
             </xs:choice>
           </xs:sequence>
           <xs:attributeGroup ref="MetaDataTarget"/>
@@ -2628,7 +2602,7 @@
         <xs:complexType mixed="true">
           <xs:choice minOccurs="0" maxOccurs="unbounded">
             <xs:element ref="fillin"/>
-            <xs:group ref="WWVariableUse"/>
+            <xs:element ref="var"/>
           </xs:choice>
         </xs:complexType>
       </xs:element>
@@ -2638,7 +2612,7 @@
             <xs:group ref="MetaDataTarget"/>
             <xs:choice minOccurs="0" maxOccurs="unbounded">
               <xs:element ref="fillin"/>
-              <xs:group ref="WWVariableUse"/>
+              <xs:element ref="var"/>
             </xs:choice>
           </xs:sequence>
           <xs:attributeGroup ref="MetaDataTarget"/>
