@@ -83,8 +83,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- For a sectional exercise, when static="yes", each of the three      -->
 <!-- -common params will be respected. Effectively the content is        -->
 <!-- handled like a non-webwork exercise.                                -->
-<!-- For an inline exercise (webwork or otherwise) statments, hints, and -->
-<!-- solutions are always shown. The -common params mentioned above      -->
+<!-- For an inline exercise (webwork or otherwise) statements, hints,    -->
+<!-- and solutions are always shown. The -common params mentioned above  -->
 <!-- do not apply. Whether static is "yes" or "no" doesn't matter.       -->
 <xsl:param name="webwork.inline.static" select="'no'" />
 <xsl:param name="webwork.sectional.static" select="'yes'" />
@@ -7511,8 +7511,9 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
 <!-- ########################## -->
 
 <!-- WeBWorK HTML CSS header -->
-<!-- MathView is a math entry palette tool that could be enabled in the host anonymous course -->
-<!-- Incorporated only if "webwork-reps" element is present -->
+<!-- MathView is a math entry palette tool that could be enabled  -->
+<!-- in the host anonymous course.   It is incorporated only if   -->
+<!-- "webwork-reps" element is present                            -->
 <!-- TODO: should also depend on whether all are presented as static -->
 <xsl:template name="webwork">
     <link href="{$webwork-server}/webwork2_files/js/apps/MathView/mathview.css" rel="stylesheet" />
@@ -7520,7 +7521,7 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
 </xsl:template>
 
 <!-- Fail if WeBWorK extraction and merging has not been done -->
-<xsl:template match="webwork[child::node() or @*]">
+<xsl:template match="webwork[node()|@*]">
     <xsl:message terminate="yes">PTX:ERROR: A document that uses WeBWorK must have the mbx script webwork extraction run, followed by a merge using pretext-merge.xsl. Apply subsequent style sheets to the merged output.  Quitting...</xsl:message>
 </xsl:template>
 
