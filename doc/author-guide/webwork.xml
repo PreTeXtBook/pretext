@@ -319,7 +319,7 @@
 
             <p>All of the <tag>webwork</tag> that you have written into your project can be <q>harvested</q> and put into their own <c>.pg</c> files by the <c>mbx</c> script. These files are created with a folder structure that follows the chunking scheme you specify. This process also creates set definition files (<c>.def</c>) for each chunk (say, for each section): one for inline exercises and one for divisional exercises. For <tag>webwork</tag> problems that come from the <webwork /> server, the <c>.def</c> file will include them as well. This archiving process creates set header <c>.pg</c> files for each set definition.</p>
 
-            <p>As with other <webwork /> processing, you must use the extraction and merge process first that is deiscribed in <xref ref="extraction-and-merging">Subsection</xref>. For example:
+            <p>As with other <webwork /> processing, you must use the extraction and merge process first that is described in <xref ref="extraction-and-merging">Subsection</xref>. For example:</p>
             <sidebyside>
                 <console>
                     <prompt>$ </prompt>
