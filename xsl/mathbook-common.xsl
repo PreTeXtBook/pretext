@@ -3287,7 +3287,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- There are lots of exercises, but differentiated by their parents,  -->
 <!-- so we use identifiers that remind us of their location in the tree -->
 
-<!-- First, a "sectional" "exercise" in an "exercises",  -->
+<!-- First, a "divisional" "exercise" in an "exercises",     -->
 <!-- with perhaps intervening groups, like an "exercisegroup" -->
 <xsl:template match="exercises//exercise" mode="type-name">
     <xsl:call-template name="type-name">
@@ -3563,7 +3563,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- element that is at the maximum level                                        -->
 <!-- This template returns the absolute level necessary based on                 -->
 <!-- the particular scheme as a parameter: theorems, equations and footnotes.    -->
-<!-- Sectional exercises and bibliographic items (in references) will always     -->
+<!-- Divisional exercises and bibliographic items (in references) will always     -->
 <!-- get their serial numbers from within their immediately enclosing structure. -->
 <xsl:template match="*" mode="absolute-subtree-level">
     <xsl:param name="numbering-items" />
@@ -4320,7 +4320,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:apply-templates>
 </xsl:template>
 
-<!-- Structure Numbers: Sectional Exercises -->
+<!-- Structure Numbers: Divisional Exercises -->
 <!-- Within a singleton (unnumbered) "exercises", look up to enclosing      -->
 <!-- division, otherwise use number of the enclosing (numbered) "exercises" -->
 <xsl:template match="exercises//exercise" mode="structure-number">
@@ -4349,8 +4349,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:choose>
 </xsl:template>
 
-<!-- Hints, answers, solutions get structure number from parent      -->
-<!-- exercise's number. Identical for inline and sectional exercises -->
+<!-- Hints, answers, solutions get structure number from parent       -->
+<!-- exercise's number. Identical for inline and divisional exercises -->
 <xsl:template match="hint|answer|solution" mode="structure-number">
     <xsl:apply-templates select="parent::*" mode="number" />
 </xsl:template>

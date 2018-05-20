@@ -140,7 +140,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='answer'><xsl:text>Resposta</xsl:text></localization>
     <localization string-id='solution'><xsl:text>Solução</xsl:text></localization>
     <!-- Translation needed for Brazilian Portugese -->
-    <!-- A group of sectional exercises (with introduction and conclusion) -->
+    <!-- A group of divisional exercises (with introduction and conclusion) -->
     <!-- <localization string-id='exercisegroup'><xsl:text>Exercise Group</xsl:text></localization> -->
     <!-- Bibliographic items (note is distinct from sidebar "Annotations" below) -->
     <!-- <localization string-id='biblio'><xsl:text>Bibliographic Entry</xsl:text></localization> -->

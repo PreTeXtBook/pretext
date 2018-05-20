@@ -309,7 +309,7 @@
         </xsl:for-each>
     </xsl:if>
     <xsl:text>)&#xa;</xsl:text>
-    <!-- needs structural enclosure inline v. sectional          -->
+    <!-- needs structural enclosure inline v. divisional         -->
     <!-- do not use structure number, makes overrides impossible -->
     <xsl:text>## Section1(not reported</xsl:text>
         <!-- <xsl:apply-templates select="ancestor::exercise" mode="structure-number" /> -->

@@ -728,7 +728,7 @@ the xsltproc executable.
                         <title>An Inline Exercise</title>
 
                         <statement>
-                            <p>There are lots of exercises in this sample article, but mostly they are in special exercise sections.  Sometimes you just want to sprinkle some exercises through the narrative.  We call these <term>inline exercises</term>, in contrast to <term>sectional exercises</term>.  The inline exercises look a bit more like a theorem or definition, with titles and fully-qualified numbers.</p>
+                            <p>There are lots of exercises in this sample article, but mostly they are in special exercise sections.  Sometimes you just want to sprinkle some exercises through the narrative.  We call these <term>inline exercises</term>, in contrast to <term>divisional exercises</term>.  The inline exercises look a bit more like a theorem or definition, with titles and fully-qualified numbers.</p>
 
                             <p>These may also have hints, answers and solutions.</p>
                         </statement>
@@ -4329,7 +4329,7 @@ the xsltproc executable.
                 <li><p>Display Mathematics: multi-row, first with no name: <xref ref="equation-use-FTC" />.  Then with an autoname: <xref ref="equation-use-FTC" text="type-global" />.  And two, with a plural form: <xref ref="equation-alternate-FTC">Equations</xref> and <xref ref="equation-use-FTC" text="global" />.</p></li>
                 <li><p>Display mathematics: an equation with  <q>local</q> tag, which should not be used so very far away: <xref ref="equation-local-tag" />.</p></li>
                 <li><p>You can author a cross-reference to a displayed equation with no number, but it will not be very satisfying: <xref ref="equation-with-no-number" />.  Perhaps we should issue a warning?</p></li>
-                <li><p>Exercises (sectional), a range, with plural form provided to override autonaming: <xref first="exercises-null-problem" last="exercises-cosine-derivative">Exercises</xref>.</p></li>
+                <li><p>Exercises (divisional), a range, with plural form provided to override autonaming: <xref first="exercises-null-problem" last="exercises-cosine-derivative">Exercises</xref>.</p></li>
                 <li><p>Exercise (inline): with enclosed hint at <xref ref="exercise-essay" /></p></li>
                 <li><p>A group of two exercises, with introduction, conclusion: <xref ref="exercisegroup-two-problems" text="type-global" /></p></li>
                 <li><p>Solution: An autonamed portion of an exercise: <xref ref="solution-antiderivative" text="type-global" /></p></li>
@@ -6923,7 +6923,7 @@ the xsltproc executable.
 
             <p>This <tag>section</tag> of the sample article demonstrates an <q>unstructured division.</q>  There are no <tag>subsection</tag>, you are just reading the first two paragraphs, followed by some nonsense text.  Then there is a <em>single</em> <tag>exercises</tag> division.  Note that this division is not numbered (since it is unique within the <tag>section</tag>).  And a cross-reference to one of the contained <tag>exercise</tag> will be numbered as a member of the <tag>section</tag>, <xref ref="exercise-challenging-one-unstructured" text="type-global" />.</p>
 
-            <p>If you use the unstructured form of a division, <em>and</em> have both inline and sectional exercises, there is a potential to form ambiguous cross-references.  To wit, check that <xref ref="duplicate-inline" text="global" /> and <xref ref="duplicate-sectional" text="global" /> are really different exercises (which you are <em>unable to do</em> if you are reading this in print!).  The solution is to include the type of exercise in the reference, which will assist everybody, but especially your print readers:  <xref ref="duplicate-inline" text="type-global" /> and <xref ref="duplicate-sectional" text="type-global" />.</p>
+            <p>If you use the unstructured form of a division, <em>and</em> have both inline and divisional exercises, there is a potential to form ambiguous cross-references.  To wit, check that <xref ref="duplicate-inline" text="global" /> and <xref ref="duplicate-divisional" text="global" /> are really different exercises (which you are <em>unable to do</em> if you are reading this in print!).  The solution is to include the type of exercise in the reference, which will assist everybody, but especially your print readers:  <xref ref="duplicate-inline" text="type-global" /> and <xref ref="duplicate-divisional" text="type-global" />.</p>
 
             <p>Compare this section with the similar <xref ref="exercises-multiple" text="type-global" />, next.  The following text is mostly nonsense, just for testing purposes.</p>
 
@@ -6965,7 +6965,7 @@ the xsltproc executable.
                     </statement>
                 </exercise>
 
-                <exercise xml:id="duplicate-sectional">
+                <exercise xml:id="duplicate-divisional">
                     <title>Drill Two</title>
                     <statement>
                         <p>Aliquam sagittis ex at magna porttitor, quis scelerisque ligula malesuada. Vestibulum vitae mauris id nisi pretium ornare a id lectus. Nam suscipit magna id sem ultricies vestibulum. Nulla facilisi. Duis venenatis lectus massa, ac mollis nisi suscipit non. Sed et sapien vulputate, imperdiet nibh vel, lobortis nisl. Curabitur sagittis justo nibh. Nulla vulputate sodales justo at efficitur. Cras justo augue, mollis vitae nulla sed, vestibulum tincidunt ante. Vestibulum et lorem lectus. Maecenas accumsan lacus a nisi euismod rutrum eu dapibus justo. Etiam scelerisque a odio a euismod. Pellentesque vestibulum pellentesque nisi, a tempus erat cursus ac. Morbi ut auctor lectus.</p>

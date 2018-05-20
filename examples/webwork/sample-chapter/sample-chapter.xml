@@ -1530,7 +1530,7 @@
 
             <subsection>
                 <title>Inline Exercises</title>
-                <p>Some <q>inline</q> exercises, as distinguished from the <q>sectional</q> exercises below.</p>
+                <p>Some <q>inline</q> exercises, as distinguished from the <q>divisional</q> exercises below.</p>
                 <exercise>
                     <webwork>
                         <statement>
@@ -1618,7 +1618,7 @@
             </subsection>
 
             <exercises>
-                <title>Sectional Exercises</title>
+                <title>Divisional Exercises</title>
                 <exercise>
                     <webwork>
                         <statement>

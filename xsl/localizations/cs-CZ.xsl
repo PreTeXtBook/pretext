@@ -132,7 +132,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='hint'><xsl:text>Nápověda</xsl:text></localization>
     <localization string-id='answer'><xsl:text>Odpověď</xsl:text></localization>
     <localization string-id='solution'><xsl:text>Řešení</xsl:text></localization>
-    <!-- A group of sectional exercises (with introduction and conclusion) -->
+    <!-- A group of divisional exercises (with introduction and conclusion) -->
     <localization string-id='exercisegroup'><xsl:text>Skupina cvičení</xsl:text></localization>
     <!-- Bibliographic items (note is distinct from sidebar "Annotations" below) -->
     <localization string-id='biblio'><xsl:text>Bibliografický údaj</xsl:text></localization>

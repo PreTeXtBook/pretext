@@ -73,21 +73,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Or static="no" makes an interactive problem      -->
 <!-- Also in play here are params from -common:       -->
 <!-- exercise.text.statement, exercise.text.hint, exercise.text.solution -->
-<!-- For a sectional exercise, when static="no", that is an intentional  -->
+<!-- For a divisional exercise, when static="no", that is an intentional -->
 <!-- decision to show the live problem, which means the statement will   -->
 <!-- be shown, regardless of exercise.text.statement. If the problem was -->
 <!-- authored in PTX source, we can respect the values for               -->
 <!-- exercise.text.hint and exercise.text.solution. If the problem       -->
 <!-- source is on the webwork server, then hints and solutions will show -->
 <!-- no matter what.                                                     -->
-<!-- For a sectional exercise, when static="yes", each of the three      -->
+<!-- For a divisional exercise, when static="yes", each of the three     -->
 <!-- -common params will be respected. Effectively the content is        -->
 <!-- handled like a non-webwork exercise.                                -->
 <!-- For an inline exercise (webwork or otherwise) statements, hints,    -->
 <!-- and solutions are always shown. The -common params mentioned above  -->
 <!-- do not apply. Whether static is "yes" or "no" doesn't matter.       -->
 <xsl:param name="webwork.inline.static" select="'no'" />
-<xsl:param name="webwork.sectional.static" select="'yes'" />
+<xsl:param name="webwork.divisional.static" select="'yes'" />
 
 <!-- Content as Knowls -->
 <!-- These parameters control if content is      -->
@@ -1657,8 +1657,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- h6, no type name, serial number, title (if exists) -->
-<!-- exercise (sectional, as born) -->
-<xsl:template match="*" mode="heading-sectional-exercise">
+<!-- exercise (divisional, as born) -->
+<xsl:template match="*" mode="heading-divisional-exercise">
     <h6 class="heading">
         <span class="codenumber">
             <xsl:apply-templates select="." mode="serial-number" />
@@ -1673,8 +1673,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- h6, type name, serial number, title (if exists) -->
-<!-- exercise (sectional, xref-content)      -->
-<xsl:template match="*" mode="heading-sectional-exercise-typed">
+<!-- exercise (divisional, xref-content)      -->
+<xsl:template match="*" mode="heading-divisional-exercise-typed">
     <h6 class="heading">
         <span class="type">
             <xsl:apply-templates select="." mode="type-name" />
@@ -2795,10 +2795,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 
 <!-- Exercise -->
-<!-- Inline and sectional, with appendages -->
+<!-- Inline and divisional, with appendages -->
 
-<!-- Born-hidden behavior is configurable -->
-<!-- Note match first on inline first, override if sectional -->
+<!-- Born-hidden behavior is configurable   -->
+<!-- Note match first on inline first, override if divisional -->
 <xsl:template match="exercise" mode="is-hidden">
     <xsl:value-of select="$html.knowl.exercise.inline = 'yes'" />
 </xsl:template>
@@ -2822,21 +2822,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- When born use this heading -->
-<!-- Note match first on inline, override if sectional -->
+<!-- Note match first on inline, override if divisional -->
 <xsl:template match="exercise" mode="heading-birth">
     <xsl:apply-templates select="." mode="heading-full" />
 </xsl:template>
 <xsl:template match="exercises//exercise" mode="heading-birth">
-    <xsl:apply-templates select="." mode="heading-sectional-exercise" />
+    <xsl:apply-templates select="." mode="heading-divisional-exercise" />
 </xsl:template>
 
 <!-- Heading for interior of xref-knowl content -->
-<!-- Note match first on inline, override if sectional -->
+<!-- Note match first on inline, override if divisional -->
 <xsl:template match="exercise" mode="heading-xref-knowl">
     <xsl:apply-templates select="." mode="heading-full" />
 </xsl:template>
 <xsl:template match="exercises//exercise" mode="heading-xref-knowl">
-    <xsl:apply-templates select="." mode="heading-sectional-exercise-typed" />
+    <xsl:apply-templates select="." mode="heading-divisional-exercise-typed" />
 </xsl:template>
 
 <!-- Primary content of generic "body" template  -->
@@ -7532,7 +7532,7 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
 <xsl:template match="webwork-reps">
     <xsl:param name="b-original" select="true()" />
     <xsl:choose>
-        <xsl:when test="(ancestor::exercises and $webwork.sectional.static='yes') or (not(ancestor::exercises) and $webwork.inline.static='yes') ">
+        <xsl:when test="(ancestor::exercises and $webwork.divisional.static='yes') or (not(ancestor::exercises) and $webwork.inline.static='yes') ">
             <xsl:apply-templates select="static">
                 <xsl:with-param name="b-original" select="$b-original" />
             </xsl:apply-templates>

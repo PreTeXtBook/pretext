@@ -151,7 +151,7 @@ sample-chapter-html:
 	-rm $(HTMLOUT)/knowl/*.html
 	cp -a $(WWEXAMPLE)/sample-chapter/images $(HTMLOUT)
 	cd $(HTMLOUT); \
-	xsltproc --stringparam webwork.sectional.static no $(MBXSL)/mathbook-html.xsl $(SCRATCH)/sample-chapter-merge.ptx;
+	xsltproc --stringparam webwork.divisional.static no $(MBXSL)/mathbook-html.xsl $(SCRATCH)/sample-chapter-merge.ptx;
 
 mini-html:
 	install -d $(HTMLOUT)
@@ -162,7 +162,7 @@ mini-html:
 
 #  Make an archive of webwork problem sets for each "section" (as specified
 #  by chunk level) with set definition files, set header files, and problem
-#  files in a file tree. Separate problem sets for inline and sectional
+#  files in a file tree. Separate problem sets for inline and divisional
 #  problems. Requires the merged PTX file from above.
 
 sample-chapter-problem-sets:

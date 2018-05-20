@@ -277,11 +277,11 @@
                         </cell>
                     </row>
                     <row bottom="minor">
-                        <cell><c>webwork.sectional.static</c></cell>
+                        <cell><c>webwork.divisional.static</c></cell>
                         <cell>
-                            <p><c>'no'</c> means sectional exercises render as interactive.</p>
-                            <p><c>'yes'</c> (default) means sectional exercises render as static.</p>
-                            <p><c>'preview'</c> (planned) means sectional exercises render as static until you click to activate them.</p>
+                            <p><c>'no'</c> means divisional exercises render as interactive.</p>
+                            <p><c>'yes'</c> (default) means divisional exercises render as static.</p>
+                            <p><c>'preview'</c> (planned) means divisional exercises render as static until you click to activate them.</p>
                         </cell>
                     </row>
                     <row bottom="minor">
@@ -294,8 +294,8 @@
                     <row bottom="minor">
                         <cell><c>html.knowl.exercise.sectional</c></cell>
                         <cell>
-                            <p><c>'no'</c> (default) means sectional exercises appear on page load.</p>
-                            <p><c>'yes'</c> means sectional exercises are hidden in knowls.</p>
+                            <p><c>'no'</c> (default) means divisional exercises appear on page load.</p>
+                            <p><c>'yes'</c> means divisional exercises are hidden in knowls.</p>
                         </cell>
                     </row>
                 </tabular>
@@ -317,7 +317,7 @@
         <subsection>
             <title>Creating Files for Uploading to <webwork /></title>
 
-            <p>All of the <tag>webwork</tag> that you have written into your project can be <q>harvested</q> and put into their own <c>.pg</c> files by the <c>mbx</c> script. These files are created with a folder structure that follows the chunking scheme you specify. This process also creates set definition files (<c>.def</c>) for each chunk (say, for each section): one for inline exercises and one for sectional exercises. For <tag>webwork</tag> problems that come from the <webwork /> server, the <c>.def</c> file will include them as well. This archiving process creates set header <c>.pg</c> files for each set definition.</p>
+            <p>All of the <tag>webwork</tag> that you have written into your project can be <q>harvested</q> and put into their own <c>.pg</c> files by the <c>mbx</c> script. These files are created with a folder structure that follows the chunking scheme you specify. This process also creates set definition files (<c>.def</c>) for each chunk (say, for each section): one for inline exercises and one for divisional exercises. For <tag>webwork</tag> problems that come from the <webwork /> server, the <c>.def</c> file will include them as well. This archiving process creates set header <c>.pg</c> files for each set definition.</p>
 
             <p>As with other <webwork /> processing, you must use the extraction and merge process first that is deiscribed in <xref ref="extraction-and-merging">Subsection</xref>. For example:
             <sidebyside>

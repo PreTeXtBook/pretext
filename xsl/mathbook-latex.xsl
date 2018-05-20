@@ -957,7 +957,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- miscellaneous, not categorized yet -->
     <xsl:if test="$document-root//exercise[not(parent::exercises)]">
         <xsl:text>%% Numbering for inline exercises is in sync with theorems, normal text&#xa;</xsl:text>
-        <xsl:text>%% Sectional exercises are rendered into lists, not environments&#xa;</xsl:text>
+        <xsl:text>%% Divisional exercises are rendered into lists, not environments&#xa;</xsl:text>
         <!-- Cross-references are hard-coded names and happen elsewhere without incident -->
         <xsl:text>\theoremstyle{definition}&#xa;</xsl:text>
         <xsl:text>\newtheorem{inlineexercise}[theorem]{</xsl:text>
@@ -7182,7 +7182,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Exceptions -->
-<!-- We hard-code some numbers (sectional exercises) and      -->
+<!-- We hard-code some numbers (divisional exercises) and     -->
 <!-- we institute some numberings that LaTeX does not do      -->
 <!-- naturally - references in extra sections, proofs,        -->
 <!-- items in ordered lists (alone or in an exercise),        -->
@@ -7205,7 +7205,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
 </xsl:template>
 
-<!-- We hard-code some numbers (sectional exercises) and          -->
+<!-- We hard-code some numbers (divisional exercises) and         -->
 <!-- we institute some numberings that LaTeX does not do          -->
 <!-- naturally (references in extra sections, proofs,             -->
 <!-- items in ordered lists (alone or in an exercise),            -->
@@ -7278,7 +7278,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
 </xsl:template>
 
-<!-- We hard-code some numbers (sectional exercises) and    -->
+<!-- We hard-code some numbers (divisional exercises) and   -->
 <!-- we institute some numberings that LaTeX does not do    -->
 <!-- naturally (references in extra sections, proofs,       -->
 <!-- items in ordered lists (alone or in an exercise),      -->
