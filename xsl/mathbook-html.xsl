@@ -371,6 +371,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- This will explain document structure (not XML structure) and has the       -->
 <!-- routines which employ the realizations below of two abstract templates.    -->
 
+<!-- The HTML "section" elements created here could have an ARIA    -->
+<!-- role="region", but would have to then have a @aria-labelled-by -->
+<!-- whose value is the HTML id of the "hX" heading to get its      -->
+<!-- content as the label.  But the "section-header" template is    -->
+<!-- sometimes null, and even if not, the "hX" elements do not now  -->
+<!-- have natural id on them (we could manufacture such a thing).   -->
+
 <!-- Default template for content of a complete page -->
 <xsl:template match="&STRUCTURAL;">
     <!-- location info for debugging efforts -->
@@ -807,7 +814,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Tunnel the duplication flag, drop id if duplicate     -->
 <xsl:template match="introduction[parent::*[&STRUCTURAL-FILTER;]]|conclusion[parent::*[&STRUCTURAL-FILTER;]]">
     <xsl:param name="b-original" select="true()" />
-    <xsl:element name="section">
+    <section>
         <!-- cheap, but it works -->
         <xsl:attribute name="class">
             <xsl:value-of select="local-name(.)" />
@@ -826,7 +833,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates  select="*">
             <xsl:with-param name="b-original" select="$b-original" />
         </xsl:apply-templates>
-    </xsl:element>
+    </section>
 </xsl:template>
 
 <!-- ####################### -->
@@ -7675,7 +7682,7 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
             <xsl:call-template name="css" />
             <xsl:call-template name="pytutor-header" />
         </head>
-        <xsl:element name="body">
+        <body>
             <!-- the first class controls the default icon -->
             <xsl:attribute name="class">
                 <xsl:choose>
@@ -7690,7 +7697,9 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
             <!-- this *must* be first for maximum utility -->
             <xsl:call-template name="skip-to-content-link" />
             <xsl:call-template name="latex-macros" />
-             <header id="masthead" class="smallbuttons">
+            <!-- ARIA: "header" contains simple navigation as part of banner -->
+            <!-- HTML5 body/header will be a "banner" landmark automatically -->
+            <header id="masthead" class="smallbuttons" role="banner">
                 <div class="banner">
                     <div class="container">
                         <xsl:call-template name="google-search-box" />
@@ -7719,12 +7728,14 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
                             </p>
                         </div>  <!-- title-container -->
                     </div>  <!-- container -->
-                </div> <!-- banner -->
+                </div>  <!-- banner -->
             <xsl:apply-templates select="." mode="primary-navigation" />
-            </header> <!-- masthead -->
+            </header>  <!-- masthead -->
             <div class="page">
                 <xsl:apply-templates select="." mode="sidebars" />
-                <main class="main">
+                <!-- ARIA: "main" role for main content                 -->
+                <!-- HTML5 main will be a "main" landmark automatically -->
+                <main class="main" role="main">
                     <div id="content" class="mathbook-content">
                         <xsl:copy-of select="$content" />
                     </div>
@@ -7732,7 +7743,7 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
             </div>
             <xsl:apply-templates select="$docinfo/analytics" />
             <xsl:call-template name="pytutor-footer" />
-        </xsl:element>
+        </body>
     </html>
     </exsl:document>
 </xsl:template>
@@ -8395,7 +8406,10 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
 <!-- Two HTML aside's for ToC (left), Annotations (right)       -->
 <!-- Need to pass node down into "toc-items", which is per-page -->
 <xsl:template match="*" mode="sidebars">
-    <aside id="sidebar-left" class="sidebar">
+    <!-- ARIA: "navigation" role for sidebar ToC                 -->
+    <!-- HTML5 nav will be a "navigation" landmark automatically -->
+    <!-- Maybe this will change at some point                    -->
+    <aside id="sidebar-left" class="sidebar" role="navigation">
         <div class="sidebar-content">
             <nav id="toc">
                  <xsl:apply-templates select="." mode="toc-items" />
@@ -8876,7 +8890,8 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
 <!-- Empty if not enabled via presence of cx number           -->
 <xsl:template name="google-search-box">
     <xsl:if test="$b-google-cse">
-        <div class="searchwrapper">
+        <!-- ARIA: "search" role for Google Search div/wrapper -->
+        <div class="searchwrapper" role="search">
             <div class="gcse-search" />
         </div>
     </xsl:if>
