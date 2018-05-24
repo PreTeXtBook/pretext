@@ -8299,6 +8299,9 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
                     <xsl:attribute name="class">
                         <xsl:text>sidebar-left-toggle-button button active</xsl:text>
                     </xsl:attribute>
+                    <xsl:attribute name="aria-label">
+                        <xsl:text>Show or hide table of contents sidebar</xsl:text>
+                    </xsl:attribute>
                     <xsl:call-template name="type-name">
                         <xsl:with-param name="string-id" select="'toc'" />
                     </xsl:call-template>
