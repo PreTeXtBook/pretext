@@ -2056,11 +2056,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="knowl">
             <xsl:apply-templates select="." mode="hidden-knowl-filename" />
         </xsl:attribute>
-        <!-- TODO: check if this "knowl-id" is needed, knowl.js implies it is -->
-        <xsl:attribute name="knowl-id">
-            <xsl:text>hidden-</xsl:text>
-            <xsl:apply-templates select="." mode="internal-id" />
-        </xsl:attribute>
         <!-- add HTML title attribute to the link -->
         <xsl:attribute name="title">
             <xsl:apply-templates select="." mode="tooltip-text" />
@@ -5944,11 +5939,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <!-- build a modern knowl -->
                         <xsl:attribute name="knowl">
                             <xsl:apply-templates select="$target" mode="xref-knowl-filename" />
-                        </xsl:attribute>
-                        <!-- TODO: check if this "knowl-id" is needed, knowl.js implies it is -->
-                        <xsl:attribute name="knowl-id">
-                            <xsl:text>xref-</xsl:text>
-                            <xsl:apply-templates select="$target" mode="internal-id" />
                         </xsl:attribute>
                     </xsl:when>
                     <xsl:otherwise>
