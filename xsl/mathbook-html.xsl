@@ -497,9 +497,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:attribute>
-        <xsl:attribute name="alt">
-            <xsl:apply-templates select="." mode="tooltip-text" />
-        </xsl:attribute>
         <xsl:apply-templates select="." mode="header-content" />
     </xsl:element>
     <xsl:apply-templates select="." mode="permalink" />
@@ -2064,10 +2061,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>hidden-</xsl:text>
             <xsl:apply-templates select="." mode="internal-id" />
         </xsl:attribute>
-        <!-- add HTML title and alt attributes to the link -->
-        <xsl:attribute name="alt">
-            <xsl:apply-templates select="." mode="tooltip-text" />
-        </xsl:attribute>
+        <!-- add HTML title attribute to the link -->
         <xsl:attribute name="title">
             <xsl:apply-templates select="." mode="tooltip-text" />
         </xsl:attribute>
@@ -5968,10 +5962,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </xsl:attribute>
                     </xsl:otherwise>
                 </xsl:choose>
-                <!-- add HTML title and alt attributes to the link -->
-                <xsl:attribute name="alt">
-                    <xsl:apply-templates select="$target" mode="tooltip-text" />
-                </xsl:attribute>
+                <!-- add HTML title attribute to the link -->
                 <xsl:attribute name="title">
                     <xsl:apply-templates select="$target" mode="tooltip-text" />
                 </xsl:attribute>
@@ -8026,11 +8017,6 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
                         <xsl:with-param name="string-id" select="'previous'" />
                     </xsl:call-template>
                 </xsl:attribute>
-                <xsl:attribute name="alt">
-                    <xsl:call-template name="type-name">
-                        <xsl:with-param name="string-id" select="'previous'" />
-                    </xsl:call-template>
-                </xsl:attribute>
                 <xsl:call-template name="type-name">
                     <xsl:with-param name="string-id" select="'previous-short'" />
                 </xsl:call-template>
@@ -8067,11 +8053,6 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
                 <xsl:value-of select="$url" />
             </xsl:attribute>
             <xsl:attribute name="title">
-                <xsl:call-template name="type-name">
-                    <xsl:with-param name="string-id" select="'index-part'" />
-                </xsl:call-template>
-            </xsl:attribute>
-            <xsl:attribute name="alt">
                 <xsl:call-template name="type-name">
                     <xsl:with-param name="string-id" select="'index-part'" />
                 </xsl:call-template>
@@ -8150,11 +8131,6 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
                         <xsl:with-param name="string-id" select="'next'" />
                     </xsl:call-template>
                 </xsl:attribute>
-                <xsl:attribute name="alt">
-                    <xsl:call-template name="type-name">
-                        <xsl:with-param name="string-id" select="'next'" />
-                    </xsl:call-template>
-                </xsl:attribute>
                 <xsl:call-template name="type-name">
                     <xsl:with-param name="string-id" select="'next-short'" />
                 </xsl:call-template>
@@ -8195,11 +8171,6 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
                     <xsl:value-of select="$up-url" />
                 </xsl:attribute>
                 <xsl:attribute name="title">
-                    <xsl:call-template name="type-name">
-                        <xsl:with-param name="string-id" select="'up'" />
-                    </xsl:call-template>
-                </xsl:attribute>
-                <xsl:attribute name="alt">
                     <xsl:call-template name="type-name">
                         <xsl:with-param name="string-id" select="'up'" />
                     </xsl:call-template>
