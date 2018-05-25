@@ -6953,13 +6953,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Bits of Javascript for the top and bottom of the web page -->
 <xsl:template name="pytutor-header">
     <xsl:if test="$document-root//program[@interactive='pythontutor']">
-        <script type="text/javascript" src="http://pythontutor.com/build/pytutor-embed.bundle.js?cc25af72af" charset="utf-8"></script>
+        <script src="http://pythontutor.com/build/pytutor-embed.bundle.js?cc25af72af"></script>
     </xsl:if>
 </xsl:template>
 
 <xsl:template name="pytutor-footer">
     <xsl:if test="$document-root//program[@interactive='pythontutor']">
-        <script type="text/javascript">createAllVisualizersFromHtmlAttrs();</script>
+        <script>createAllVisualizersFromHtmlAttrs();</script>
     </xsl:if>
 </xsl:template>
 
@@ -7067,7 +7067,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- http://dev.geogebra.org/examples/html/example-api-save-state.html -->
     <!-- Parameter reference:                                              -->
     <!-- https://wiki.geogebra.org/en/Reference:GeoGebra_App_Parameters    -->
-    <script type="text/javascript">
+    <script>
 <xsl:text>
 var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
         "width":</xsl:text><xsl:value-of select="$width" /><xsl:text>,
@@ -7153,7 +7153,7 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
 <!-- JSXGraph header libraries -->
 <xsl:template match="interactive[@platform = 'jsxgraph']" mode="header-libraries">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jsxgraph/0.99.6/jsxgraph.css" />
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsxgraph/0.99.6/jsxgraphcore.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsxgraph/0.99.6/jsxgraphcore.js"></script>
 </xsl:template>
 
 <!-- D3.js header libraries -->
@@ -7392,7 +7392,7 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
     <xsl:choose>
         <xsl:when test="$token-list = ''" />
         <xsl:otherwise>
-            <script type="text/javascript">
+            <script>
                 <xsl:attribute name="src">
                     <xsl:value-of select="substring-before($token-list, ' ')" />
                 </xsl:attribute>
@@ -7473,9 +7473,6 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
     <!-- JSXGraph code must reference the id on the div,   -->
     <!-- so ideally an xml:id specifies this in the source -->
     <xsl:element name="script">
-        <xsl:attribute name="type">
-            <xsl:text>text/javascript</xsl:text>
-        </xsl:attribute>
         <xsl:call-template name="sanitize-text">
             <xsl:with-param name="text" select="input" />
         </xsl:call-template>
@@ -7505,7 +7502,7 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
 <!-- TODO: should also depend on whether all are presented as static -->
 <xsl:template name="webwork">
     <link href="{$webwork-server}/webwork2_files/js/apps/MathView/mathview.css" rel="stylesheet" />
-    <script type="text/javascript" src="{$webwork-server}/webwork2_files/js/vendor/iframe-resizer/js/iframeResizer.min.js"></script>
+    <script src="{$webwork-server}/webwork2_files/js/vendor/iframe-resizer/js/iframeResizer.min.js"></script>
 </xsl:template>
 
 <!-- Fail if WeBWorK extraction and merging has not been done -->
@@ -7579,7 +7576,7 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
             <xsl:attribute name="uri"><xsl:text>1</xsl:text></xsl:attribute>
         </xsl:if>
     </xsl:element> <!-- end iframe -->
-    <script type="text/javascript">
+    <script>
         <xsl:text>iFrameResize({log:true,inPageLinks:true,resizeFrom:'child',checkOrigin:["</xsl:text>
         <xsl:value-of select="$webwork-server" />
         <xsl:text>"]})</xsl:text>
@@ -7612,7 +7609,7 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
         </xsl:attribute>
     </xsl:element>
     <!-- not so great -->
-    <!-- <script type="text/javascript">iFrameResize({log:true,inPageLinks:true,resizeFrom:'child'})</script> -->
+    <!-- <script>iFrameResize({log:true,inPageLinks:true,resizeFrom:'child'})</script> -->
 </xsl:template>
 
 <!--                         -->
@@ -7678,9 +7675,8 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
             <!-- this *must* be first for maximum utility -->
             <xsl:call-template name="skip-to-content-link" />
             <xsl:call-template name="latex-macros" />
-            <!-- ARIA: "header" contains simple navigation as part of banner -->
             <!-- HTML5 body/header will be a "banner" landmark automatically -->
-            <header id="masthead" class="smallbuttons" role="banner">
+            <header id="masthead" class="smallbuttons">
                 <div class="banner">
                     <div class="container">
                         <xsl:call-template name="google-search-box" />
@@ -7714,9 +7710,8 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
             </header>  <!-- masthead -->
             <div class="page">
                 <xsl:apply-templates select="." mode="sidebars" />
-                <!-- ARIA: "main" role for main content                 -->
                 <!-- HTML5 main will be a "main" landmark automatically -->
-                <main class="main" role="main">
+                <main class="main">
                     <div id="content" class="mathbook-content">
                         <xsl:copy-of select="$content" />
                     </div>
@@ -8549,7 +8544,7 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
 <!-- MathJax Logo for bottom of left sidebar -->
 <xsl:template name="powered-by-mathjax">
     <a href="https://www.mathjax.org">
-        <img title="Powered by MathJax" src="https://www.mathjax.org/badge/badge.gif" border="0" alt="Powered by MathJax" />
+        <img title="Powered by MathJax" src="https://www.mathjax.org/badge/badge.gif" alt="Powered by MathJax" />
     </a>
 </xsl:template>
 
@@ -8637,9 +8632,6 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
     </xsl:element>
     <!-- mathjax javascript -->
     <xsl:element name="script">
-        <xsl:attribute name="type">
-            <xsl:text>text/javascript</xsl:text>
-        </xsl:attribute>
         <xsl:attribute name="src">
             <xsl:text>https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_CHTML-full</xsl:text>
         </xsl:attribute>
@@ -8653,9 +8645,9 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
 <!-- so we load the relevant JavaScript onto every page if -->
 <!-- a cell occurs *anywhere* in the entire document       -->
 <xsl:template name="jquery-sagecell">
-    <script type="text/javascript" src="https://sagecell.sagemath.org/static/jquery.min.js"></script>
+    <script src="https://sagecell.sagemath.org/static/jquery.min.js"></script>
     <xsl:if test="$document-root//sage">
-        <script type="text/javascript" src="https://sagecell.sagemath.org/embedded_sagecell.js"></script>
+        <script src="https://sagecell.sagemath.org/embedded_sagecell.js"></script>
     </xsl:if>
 </xsl:template>
 
@@ -8863,7 +8855,7 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
 
 <!-- Knowl header -->
 <xsl:template name="knowl">
-<script type="text/javascript" src="https://aimath.org/knowl.js"></script>
+<script src="https://aimath.org/knowl.js"></script>
 </xsl:template>
 
 <!-- Mathbook Javascript header -->
@@ -8905,7 +8897,7 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
 <!-- then be loaded with base64 or XML versions    -->
 <xsl:template name="geogebra">
     <xsl:if test="$b-has-geogebra">
-        <script type="text/javascript" src="https://cdn.geogebra.org/apps/deployggb.js"></script>
+        <script src="https://cdn.geogebra.org/apps/deployggb.js"></script>
     </xsl:if>
 </xsl:template>
 
@@ -8913,7 +8905,7 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
 <xsl:template name="jsxgraph">
     <xsl:if test="$b-has-jsxgraph">
         <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jsxgraph/0.99.6/jsxgraph.css" />
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsxgraph/0.99.6/jsxgraphcore.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jsxgraph/0.99.6/jsxgraphcore.js"></script>
     </xsl:if>
 </xsl:template>
 
@@ -8984,7 +8976,7 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
 <!-- "Classic", not compared to Universal -->
 <xsl:template match="google">
 <xsl:comment>Start: Google code</xsl:comment>
-<script type="text/javascript">
+<script>
 var _gaq = _gaq || [];
 _gaq.push(['_setAccount', '<xsl:value-of select="./tracking" />']);
 _gaq.push(['_trackPageview']);
@@ -9018,12 +9010,12 @@ var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga
 <!-- In noscript URL, final 1 is an edit from 0 -->
 <xsl:template match="statcounter">
 <xsl:comment>Start: StatCounter code</xsl:comment>
-<script type="text/javascript">
+<script>
 var sc_project=<xsl:value-of select="project" />;
 var sc_invisible=1;
 var sc_security="<xsl:value-of select="security" />";
 var scJsHost = (("https:" == document.location.protocol) ? "https://secure." : "https://www.");
-<![CDATA[document.write("<sc"+"ript type='text/javascript' src='" + scJsHost+ "statcounter.com/counter/counter.js'></"+"script>");]]>
+<![CDATA[document.write("<sc"+"ript src='" + scJsHost+ "statcounter.com/counter/counter.js'></"+"script>");]]>
 </script>
 <xsl:variable name="noscript_url">
     <xsl:text>https://c.statcounter.com/</xsl:text>
