@@ -8412,7 +8412,7 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
     <!-- ARIA: "navigation" role for sidebar ToC                 -->
     <!-- HTML5 nav will be a "navigation" landmark automatically -->
     <!-- Maybe this will change at some point                    -->
-    <aside id="sidebar-left" class="sidebar" role="navigation">
+    <div id="sidebar-left" class="sidebar" role="navigation">
         <div class="sidebar-content">
             <nav id="toc">
                  <xsl:apply-templates select="." mode="toc-items" />
@@ -8427,7 +8427,7 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
                 </nav>
             </div>
         </div>
-    </aside>
+    </div>
     <!-- Content here appears in odd places if turned sidebar is turned off
         <aside id="sidebar-right" class="sidebar">
             <div class="sidebar-content">Mock right sidebar content</div>
