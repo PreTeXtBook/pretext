@@ -3005,7 +3005,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- When born hidden, inline-level -->
 <xsl:template match="task" mode="birth-element">
-    <xsl:text>article</xsl:text>
+    <xsl:text>div</xsl:text>
 </xsl:template>
 
 <!-- When born use this heading -->
