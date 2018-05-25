@@ -7529,7 +7529,7 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
 
 <!-- Fail if WeBWorK extraction and merging has not been done -->
 <xsl:template match="webwork[node()|@*]">
-    <xsl:message terminate="yes">PTX:ERROR: A document that uses WeBWorK must have the mbx script webwork extraction run, followed by a merge using pretext-merge.xsl. Apply subsequent style sheets to the merged output.  Quitting...</xsl:message>
+    <xsl:message>PTX:ERROR: A document that uses WeBWorK must have the mbx script webwork extraction run, followed by a merge using pretext-merge.xsl.  Apply subsequent style sheets to the merged output.  Your WeBWorK problems will be absent from your HTML output.</xsl:message>
 </xsl:template>
 
 <!-- The guts of a WeBWorK problem realized in HTML -->
