@@ -6296,7 +6296,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </title>
                 <meta name="Keywords" content="Authored in PreTeXt" />
                 <!-- http://webdesignerwall.com/tutorials/responsive-design-in-3-steps -->
-                <meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
                 <!-- ########################################## -->
                 <!-- A variety of libraries were loaded here    -->
                 <!-- Only purpose of this page is YouTube video -->
@@ -9524,7 +9524,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </title>
             <meta name="Keywords" content="Authored in PreTeXt" />
             <!-- http://webdesignerwall.com/tutorials/responsive-design-in-3-steps -->
-            <meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
             <!-- favicon -->
             <xsl:call-template name="favicon"/>
             <!-- jquery used by sage, webwork, knowls -->
@@ -9647,7 +9647,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <html lang="{$document-language}"> <!-- dir="rtl" here -->
         <head>
             <meta name="Keywords" content="Authored in PreTeXt" />
-            <meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
             <!-- jquery used by sage, webwork, knowls -->
             <xsl:call-template name="sagecell-code" />
