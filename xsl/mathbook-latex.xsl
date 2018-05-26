@@ -3599,6 +3599,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- stage.  We realize each stage in print as a "Part", which    -->
 <!-- has a statement and optionally, hints and solutions.         -->
 
+<!-- Fail if WeBWorK extraction and merging has not been done -->
+<xsl:template match="webwork[node()|@*]">
+    <xsl:message>PTX:ERROR: A document that uses WeBWorK must have the mbx script webwork extraction run, followed by a merge using pretext-merge.xsl.  Apply subsequent style sheets to the merged output.  Your WeBWorK problems will be absent from your LaTeX output.</xsl:message>
+</xsl:template>
+
 <xsl:template match="webwork-reps/static/stage">
     <xsl:param name="b-original" />
     <xsl:param name="b-has-statement" />
