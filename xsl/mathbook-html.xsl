@@ -1870,7 +1870,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- (1) "is-hidden":  mandatory, value is 'true' or 'false' (could move to a boolean), controls visible or hidden property, so usd in a variety of situations to control flow.  Often fixed, but also responds to options. (As boolean: do conditionals in global text variable, then check value in "select" of new global boolean variable.) -->
 
-<!-- (2) "body-element", "body-css-class": useful for general production, but sometimes its employment leads to requiring exceptional templates (eg display math).  The outermost HTML element of a block.  Sometimes it gets an ID, sometimes not, which is its main purpose.  Employed in "body" templates (see below). -->
+<!-- (2) "body-element", "body-css-class": useful for general production, but sometimes its employment leads to requiring exceptional templates (eg display math).  The outermost HTML element of a block.  Sometimes it gets an ID, sometimes not, which is its main purpose.  Employed in "body" templates (see below).  The "body-element" should always be a block element, since it will be the outer-level element for knowl content, which will (always) have blocks as content. -->
 
 <!-- (3) "heading-birth": produces HTML immediately interior to the "body-element", for visible blocks, in both the original and duplication processes.  Similarly, it is the link-text of a knowl for a block that is hidden (again in original or duplication modes).  Employed in "body" templates. -->
 
@@ -3081,7 +3081,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Overall enclosing element -->
 <xsl:template match="&SOLUTION-LIKE;" mode="body-element">
-    <xsl:text>span</xsl:text>
+    <xsl:text>div</xsl:text>
 </xsl:template>
 
 <!-- And its CSS class -->
@@ -3292,6 +3292,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Overall enclosing element -->
+<!-- TODO: this is wrong, but necessary while the content of      -->
+<!-- the footnote is placed within the paragraph at its location. -->
 <xsl:template match="fn" mode="body-element">
     <xsl:text>span</xsl:text>
 </xsl:template>
@@ -3465,7 +3467,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Overall enclosing element -->
 <xsl:template match="biblio/note" mode="body-element">
-    <xsl:text>span</xsl:text>
+    <xsl:text>div</xsl:text>
 </xsl:template>
 
 <!-- And its CSS class -->
