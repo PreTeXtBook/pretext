@@ -1874,7 +1874,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- (3) "heading-birth": produces HTML immediately interior to the "body-element", for visible blocks, in both the original and duplication processes.  Similarly, it is the link-text of a knowl for a block that is hidden (again in original or duplication modes).  Employed in "body" templates. -->
 
-<!-- (4) "birth-element": 'div' or 'span' to wrap hidden knowl links and contents so they appear correctly on a page (block or inline, basically). -->
+<!-- (4) "birth-element": 'div' or 'span' to indicate how to wrap hidden knowl links so they appear correctly on a page (block or inline, basically).  'div' means a wrapper with the class of the "body-element", while 'span' means no wrapper is needed since the link is just fine in an inline situation.  Only relevant for an object which can be born hidden via a switch (e.g. a theorem), or is *always* born hidden (e.g. "fn" (footnote)).  So this template could be defined to produce no output for an object that is never born hidden and an error will be raised during processing if there is a mismatch (i.e. no ouput is a third possible value.  -->
 
 <!-- (5) "heading-xref-knowl": when a knowl is a target of a cross-reference, sometimes a better heading is necessary to help identify it.  For example, a cross-refernce to a list item can be improved by providing the number of the item in a heading. -->
 
@@ -1931,26 +1931,32 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="birth-element" />
     </xsl:variable>
     <!-- First: the link that is visible on the page         -->
-    <xsl:variable name="body-elt">
-        <xsl:apply-templates select="." mode="body-element" />
-    </xsl:variable>
-    <!-- If body-element is a span, that is an indicator that the   -->
-    <!-- bare "a" link is sufficient and it needs no more wrapping. -->
-    <!-- Presently: hint, answer, solution, footnote, biblio        -->
-    <!-- TODO: use a better indicator, perhaps an empty body-element -->
-    <xsl:element name="{$body-elt}">
-        <xsl:attribute name="class">
-            <xsl:apply-templates select="." mode="body-css-class" />
-        </xsl:attribute>
-        <!-- this horrible hack should go away once better CSS is in place -->
-        <!-- likely this particular version never gets used                -->
-        <xsl:if test="self::poem">
-            <xsl:attribute name="style">
-                <xsl:text>display: table; width: auto; max-width: 90%; margin: 0 auto;</xsl:text>
-            </xsl:attribute>
-        </xsl:if>
-        <xsl:apply-templates select="." mode="hidden-knowl-link" />
-    </xsl:element>
+    <xsl:choose>
+        <xsl:when test="$birth-elt = 'div'">
+            <xsl:variable name="body-elt">
+                <xsl:apply-templates select="." mode="body-element" />
+            </xsl:variable>
+            <xsl:element name="{$body-elt}">
+                <xsl:attribute name="class">
+                    <xsl:apply-templates select="." mode="body-css-class" />
+                </xsl:attribute>
+                <!-- this horrible hack should go away once better CSS is in place -->
+                <!-- likely this particular version never gets used                -->
+                <xsl:if test="self::poem">
+                    <xsl:attribute name="style">
+                        <xsl:text>display: table; width: auto; max-width: 90%; margin: 0 auto;</xsl:text>
+                    </xsl:attribute>
+                </xsl:if>
+                <xsl:apply-templates select="." mode="hidden-knowl-link" />
+            </xsl:element>
+        </xsl:when>
+        <xsl:when test="$birth-elt = 'span'">
+            <xsl:apply-templates select="." mode="hidden-knowl-link" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>PTX:BUG:     an object ("<xsl:value-of select="local-name(.)" />") being born hidden as a knowl does not know if the link is a block or is inline.</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
     <!-- Second: the content of the knowl, to be revealed/parsed later -->
     <xsl:apply-templates select="." mode="hidden-knowl-content">
         <xsl:with-param name="b-original" select="$b-original" />
@@ -1963,22 +1969,32 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="birth-elt">
         <xsl:apply-templates select="." mode="birth-element" />
     </xsl:variable>
-    <xsl:variable name="body-elt">
-        <xsl:apply-templates select="." mode="body-element" />
-    </xsl:variable>
-    <xsl:element name="{$body-elt}">
-        <xsl:attribute name="class">
-            <xsl:apply-templates select="." mode="body-css-class" />
-        </xsl:attribute>
-        <!-- this horrible hack should go away once better CSS is in place -->
-        <!-- likely this particular version never gets used                -->
-        <xsl:if test="self::poem">
-            <xsl:attribute name="style">
-                <xsl:text>display: table; width: auto; max-width: 90%; margin: 0 auto;</xsl:text>
-            </xsl:attribute>
-        </xsl:if>
-        <xsl:apply-templates select="." mode="duplicate-hidden-knowl-link" />
-    </xsl:element>
+    <xsl:choose>
+        <xsl:when test="$birth-elt = 'div'">
+            <xsl:variable name="body-elt">
+                <xsl:apply-templates select="." mode="body-element" />
+            </xsl:variable>
+            <xsl:element name="{$body-elt}">
+                <xsl:attribute name="class">
+                    <xsl:apply-templates select="." mode="body-css-class" />
+                </xsl:attribute>
+                <!-- this horrible hack should go away once better CSS is in place -->
+                <!-- likely this particular version never gets used                -->
+                <xsl:if test="self::poem">
+                    <xsl:attribute name="style">
+                        <xsl:text>display: table; width: auto; max-width: 90%; margin: 0 auto;</xsl:text>
+                    </xsl:attribute>
+                </xsl:if>
+                <xsl:apply-templates select="." mode="duplicate-hidden-knowl-link" />
+            </xsl:element>
+        </xsl:when>
+        <xsl:when test="$birth-elt = 'span'">
+            <xsl:apply-templates select="." mode="duplicate-hidden-knowl-link" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>PTX:BUG:     an object ("<xsl:value-of select="local-name(.)" />") being born hidden as a knowl does not know if the link is a block or is inline.</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Hidden knowls are in two pieces.  This template -->
@@ -1990,10 +2006,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- The link portion of a hidden-knowl -->
 <xsl:template match="*" mode="hidden-knowl-link">
-    <!-- TODO: only being used here as block/inline signal -->
-    <xsl:variable name="birth-elt">
-        <xsl:apply-templates select="." mode="birth-element" />
-    </xsl:variable>
     <xsl:element name="a">
         <!-- empty, indicates content *not* in a file -->
         <xsl:attribute name="knowl" />
@@ -2052,9 +2064,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- The link for a duplicate hidden knowl -->
 <xsl:template match="*" mode="duplicate-hidden-knowl-link">
-    <xsl:variable name="birth-elt">
-        <xsl:apply-templates select="." mode="birth-element" />
-    </xsl:variable>
     <xsl:element name="a">
         <xsl:attribute name="knowl">
             <xsl:apply-templates select="." mode="hidden-knowl-filename" />
@@ -2225,10 +2234,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>aside-like</xsl:text>
 </xsl:template>
 
-<!-- When born hidden, block-level -->
-<xsl:template match="&ASIDE-LIKE;" mode="birth-element">
-    <xsl:text>div</xsl:text>
-</xsl:template>
+<!-- Never born hidden -->
+<xsl:template match="&ASIDE-LIKE;" mode="birth-element" />
 
 <!-- When born use this heading -->
 <xsl:template match="&ASIDE-LIKE;" mode="heading-birth">
@@ -2273,10 +2280,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>poem</xsl:text>
 </xsl:template>
 
-<!-- When born hidden, block-level -->
-<xsl:template match="poem" mode="birth-element">
-    <xsl:text>div</xsl:text>
-</xsl:template>
+<!-- Never born hidden -->
+<xsl:template match="poem" mode="birth-element" />
 
 <!-- When born use this heading -->
 <xsl:template match="poem" mode="heading-birth">
@@ -2496,10 +2501,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>assemblage-like</xsl:text>
 </xsl:template>
 
-<!-- When born hidden, block-level -->
-<xsl:template match="assemblage" mode="birth-element">
-    <xsl:text>div</xsl:text>
-</xsl:template>
+<!-- Never born hidden -->
+<xsl:template match="assemblage" mode="birth-element" />
 
 <!-- When born use this heading -->
 <xsl:template match="assemblage" mode="heading-birth">
@@ -2543,10 +2546,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>blockquote</xsl:text>
 </xsl:template>
 
-<!-- When born hidden, block-level -->
-<xsl:template match="blockquote" mode="birth-element">
-    <xsl:text>div</xsl:text>
-</xsl:template>
+<!-- Never born hidden -->
+<xsl:template match="blockquote" mode="birth-element" />
 
 <!-- When born use this heading         -->
 <!-- Never hidden, never gets a heading -->
@@ -2586,10 +2587,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>paragraphs</xsl:text>
 </xsl:template>
 
-<!-- When born hidden, block-level -->
-<xsl:template match="paragraphs" mode="birth-element">
-    <xsl:text>div</xsl:text>
-</xsl:template>
+<!-- Never born hidden -->
+<xsl:template match="paragraphs" mode="birth-element" />
 
 <!-- When born use this heading -->
 <xsl:template match="paragraphs" mode="heading-birth">
@@ -2750,10 +2749,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>exercisegroup</xsl:text>
 </xsl:template>
 
-<!-- When born hidden, block-level -->
-<xsl:template match="exercisegroup" mode="birth-element">
-    <xsl:text>div</xsl:text>
-</xsl:template>
+<!-- Never born hidden -->
+<xsl:template match="exercisegroup" mode="birth-element" />
 
 <!-- When born use this heading         -->
 <!-- Never hidden, never gets a heading -->
@@ -3258,10 +3255,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>case</xsl:text>
 </xsl:template>
 
-<!-- When born hidden, block-level -->
-<xsl:template match="case" mode="birth-element">
-    <xsl:text>div</xsl:text>
-</xsl:template>
+<!-- Never born hidden -->
+<xsl:template match="case" mode="birth-element" />
 
 <!-- When born use this specialized heading -->
 <xsl:template match="case" mode="heading-birth">
@@ -3357,10 +3352,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>contributor</xsl:text>
 </xsl:template>
 
-<!-- When born hidden, inline-level -->
-<xsl:template match="contributor" mode="birth-element">
-    <xsl:text>span</xsl:text>
-</xsl:template>
+<!-- Never born hidden -->
+<xsl:template match="contributor" mode="birth-element" />
 
 <!-- Heading is not needed -->
 <xsl:template match="contributor" mode="heading-birth" />
@@ -3424,10 +3417,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>bib</xsl:text>
 </xsl:template>
 
-<!-- When born hidden, inline-level -->
-<xsl:template match="biblio" mode="birth-element">
-    <xsl:text>span</xsl:text>
-</xsl:template>
+<!-- Never born hidden -->
+<xsl:template match="biblio" mode="birth-element" />
 
 <!-- When born use this heading -->
 <xsl:template match="biblio" mode="heading-birth" />
@@ -3764,7 +3755,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>listitem</xsl:text>
 </xsl:template>
 
-<!-- Not applicable -->
+<!-- Never born hidden -->
 <xsl:template match="li" mode="birth-element" />
 
 <!-- Not applicable -->
