@@ -3839,24 +3839,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<!-- ################# -->
-<!-- WeBWorK Exercises -->
-<!-- ################# -->
-
-<!-- Body element/css wraps hidden knowls -->
-<!-- Here, not used to wrap for content   -->
-<xsl:template match="webwork-reps" mode="body-element">
-    <xsl:text>span</xsl:text>
-</xsl:template>
-
-<xsl:template match="webwork-reps" mode="body-css-class">
-    <xsl:text>heading</xsl:text>
-</xsl:template>
-
-<xsl:template match="webwork-reps" mode="hidden-knowl-placement">
-    <xsl:text>block</xsl:text>
-</xsl:template>
-
 <!-- ########### -->
 <!-- Mathematics -->
 <!-- ########### -->
