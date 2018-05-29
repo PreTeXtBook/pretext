@@ -858,7 +858,7 @@
                     </setup>
 
                     <statement>
-                        <p><ol label="a.">
+                        <p><ol>
                             <li>
                                 <p>Suppose the correct answer is <m><var name="$answer1"/></m>.</p>
                                 <p><ul label="square">
@@ -902,7 +902,7 @@
                     </setup>
 
                     <statement>
-                        <p><ol label="a.">
+                        <p><ol>
                             <li>
                                 <p>Suppose the correct answer is <m>\displaystyle <var name="$answer1"/></m>.</p>
                                 <p><ul label="square">
@@ -1116,6 +1116,9 @@
 
             <exercise>
                 <title>Checking Proper Indentation In Lists</title>
+                <introduction>
+                    <p>One long exercise, where ordered sublists test the specification of their labels.</p>
+                </introduction>
                 <webwork>
                     <statement>
                         <p><ol>
@@ -1165,7 +1168,7 @@
                                 <p>Structured item</p>
                             </li>
                             <li>
-                                <p><ol label="a">
+                                <p><ol label="A">
                                     <li>
                                         <p>Sublist Item</p>
                                     </li>
@@ -1187,7 +1190,7 @@
                                 <p>Structured item</p>
                             </li>
                             <li>
-                                <p>Text before.<ol label="a">
+                                <p>Text before.<ol label="i">
                                     <li>
                                         <p>Sublist Item</p>
                                     </li>
@@ -1210,7 +1213,7 @@
                                 <p>Second paragraph</p>
                             </li>
                             <li>
-                                <p><ol label="a">
+                                <p><ol label="I">
                                     <li>
                                         <p>Sublist Item</p>
                                         <p>Second paragraph</p>
@@ -1237,7 +1240,7 @@
                                 <p>Second paragraph</p>
                             </li>
                             <li>
-                                <p>Text before.<ol label="a">
+                                <p>Text before.<ol label="1">
                                     <li>
                                         <p>Sublist Item</p>
                                         <p>Second paragraph</p>
@@ -1291,7 +1294,7 @@
                                 <p>Second paragraph<me>1+1=2</me></p>
                             </li>
                             <li>
-                                <p><me>1+1=2</me>Text before.<ol label="a">
+                                <p><me>1+1=2</me>Text before.<ol label="A">
                                     <li>
                                         <p>Sublist<me>1+1=2</me> Item</p>
                                         <p>Second paragraph<me>1+1=2</me></p>
@@ -1327,7 +1330,7 @@
                                 <p><md>
                                     <mrow>1+1\amp=2</mrow>
                                     <mrow>2\amp=2</mrow>
-                                </md>Text before.<ol label="a">
+                                </md>Text before.<ol label="i">
                                     <li>
                                         <p>Sublist<md>
                                             <mrow>1+1\amp=2</mrow>
