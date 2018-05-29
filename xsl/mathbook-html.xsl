@@ -6516,13 +6516,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Left Angle Bracket -->
+<!-- LEFT ANGLE BRACKET -->
+<!-- U+2329 was once used and caused a validator warning      -->
+<!-- "Text run is not in Unicode Normalization Form C" (NFC)  -->
 <xsl:template match="langle">
-    <xsl:text>&#x2329;</xsl:text>
+    <xsl:text>&#x3008;</xsl:text>
 </xsl:template>
 
 <!-- Right Angle Bracket -->
+<!-- RIGHT ANGLE BRACKET -->
+<!-- U+232A was once used and caused a validator warning      -->
+<!-- "Text run is not in Unicode Normalization Form C" (NFC)  -->
 <xsl:template match="rangle">
-    <xsl:text>&#x232a;</xsl:text>
+    <xsl:text>&#x3009;</xsl:text>
 </xsl:template>
 
 
