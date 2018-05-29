@@ -1726,11 +1726,13 @@
                 <xsl:when test="contains(parent::*/@label,'i')">i</xsl:when>
                 <xsl:when test="contains(parent::*/@label,'I')">I</xsl:when>
                 <xsl:otherwise>
+                    <!-- the exercise will be numbered with Arabic numerals, -->
+                    <!-- so we start the default cycle with lower-case Latin -->
                     <xsl:choose>
-                        <xsl:when test="count(ancestor::ol) mod 4 = 1">1</xsl:when>
-                        <xsl:when test="count(ancestor::ol) mod 4 = 2">a</xsl:when>
-                        <xsl:when test="count(ancestor::ol) mod 4 = 3">i</xsl:when>
-                        <xsl:when test="count(ancestor::ol) mod 4 = 0">A</xsl:when>
+                        <xsl:when test="count(ancestor::ol) mod 4 = 1">a</xsl:when>
+                        <xsl:when test="count(ancestor::ol) mod 4 = 2">i</xsl:when>
+                        <xsl:when test="count(ancestor::ol) mod 4 = 3">A</xsl:when>
+                        <xsl:when test="count(ancestor::ol) mod 4 = 0">1</xsl:when>
                     </xsl:choose>
                 </xsl:otherwise>
             </xsl:choose>
