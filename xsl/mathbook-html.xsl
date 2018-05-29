@@ -1037,9 +1037,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="class">
             <xsl:text>heading</xsl:text>
         </xsl:attribute>
-         <xsl:attribute name="alt">
-            <xsl:apply-templates select="." mode="tooltip-text" />
-        </xsl:attribute>
          <xsl:attribute name="title">
             <xsl:apply-templates select="." mode="tooltip-text" />
         </xsl:attribute>
