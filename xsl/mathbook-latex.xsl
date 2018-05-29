@@ -717,18 +717,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="$latex-numbering-maxlevel" />
     <xsl:text>}&#xa;</xsl:text>
     <!-- Could condition following on existence of any amsthm environment -->
-    <xsl:text>%% Environments with amsthm package&#xa;</xsl:text>
-    <xsl:text>%% Theorem-like environments in "plain" style, with or without proof&#xa;</xsl:text>
+    <xsl:text>%% begin: General AMS environment setup&#xa;</xsl:text>
+    <xsl:text>%% Environments built with amsthm package&#xa;</xsl:text>
     <xsl:text>\usepackage{amsthm}&#xa;</xsl:text>
-    <xsl:text>\theoremstyle{plain}&#xa;</xsl:text>
     <xsl:text>%% Numbering for Theorems, Conjectures, Examples, Figures, etc&#xa;</xsl:text>
     <xsl:text>%% Controlled by  numbering.theorems.level  processing parameter&#xa;</xsl:text>
-    <xsl:text>%% Always need a theorem environment to set base numbering scheme&#xa;</xsl:text>
+    <xsl:text>%% Numbering: all theorem-like numbered consecutively&#xa;</xsl:text>
+    <xsl:text>%% i.e. Corollary 4.3 follows Theorem 4.2&#xa;</xsl:text>
+    <xsl:text>%% Always need some theorem environment to set base numbering scheme&#xa;</xsl:text>
     <xsl:text>%% even if document has no theorems (but has other environments)&#xa;</xsl:text>
     <!-- http://tex.stackexchange.com/questions/155710/understanding-the-arguments-in-newtheorem-e-g-newtheoremtheoremtheoremsec/155714#155714 -->
-    <xsl:text>\newtheorem{theorem}{</xsl:text>
-    <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'theorem'" /></xsl:call-template>
-    <xsl:text>}</xsl:text>
+    <xsl:text>%% Create a never-used style first, always&#xa;</xsl:text>
+    <xsl:text>%% simply to provide a global counter to use, namely "cthm"&#xa;</xsl:text>
+    <xsl:text>\newtheorem{cthm}{BadTheoremStringName}</xsl:text>
     <!-- See numbering-theorems variable being set in mathbook-common.xsl -->
     <xsl:if test="not($numbering-theorems = 0)">
         <xsl:text>[</xsl:text>
@@ -737,172 +738,210 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:call-template>
         <xsl:text>]&#xa;</xsl:text>
     </xsl:if>
-    <xsl:text>%% Only variants actually used in document appear here&#xa;</xsl:text>
+    <xsl:text>%% end: General AMS environment setup&#xa;</xsl:text>
+    <xsl:text>%% begin: environments with italicized bodies, theorems and similar&#xa;</xsl:text>
     <xsl:text>%% Style is like a theorem, and for statements without proofs&#xa;</xsl:text>
-    <xsl:text>%% Numbering: all theorem-like numbered consecutively&#xa;</xsl:text>
-    <xsl:text>%% i.e. Corollary 4.3 follows Theorem 4.2&#xa;</xsl:text>
-    <!-- THEOREM-LIKE blocks, environments -->
-    <xsl:if test="//corollary">
-        <xsl:text>\newtheorem{corollary}[theorem]{</xsl:text>
-        <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'corollary'" /></xsl:call-template>
-        <xsl:text>}&#xa;</xsl:text>
+    <xsl:text>%% Theorem-like environments in modified "plain" style&#xa;</xsl:text>
+    <xsl:text>%% We manage the head, do not adjust vertical spacing&#xa;</xsl:text>
+    <xsl:text>%% Thus "space after theorem head" is necessary&#xa;</xsl:text>
+    <xsl:text>%% This provides an automatic period after the number&#xa;</xsl:text>
+    <!-- Just a number, automatic period -->
+    <xsl:text>\newtheoremstyle{ptxplainnotitle}&#xa;</xsl:text>
+    <xsl:text>  {}% space above&#xa;</xsl:text>
+    <xsl:text>  {}% space below&#xa;</xsl:text>
+    <xsl:text>  {\itshape}% body font&#xa;</xsl:text>
+    <xsl:text>  {}% indent amount&#xa;</xsl:text>
+    <xsl:text>  {\bfseries}% theorem head font&#xa;</xsl:text>
+    <xsl:text>  {.}% punctuation after theorem head&#xa;</xsl:text>
+    <xsl:text>  {0.5em}% space after theorem head&#xa;</xsl:text>
+    <xsl:text>  {\thmname{#1}\thmnumber{ #2}}% theorem head specification&#xa;</xsl:text>
+    <xsl:text>%% We now manage punctuation on-sight, elsewhere,&#xa;</xsl:text>
+    <xsl:text>%% assuming non-trivial content inside a "title"&#xa;</xsl:text>
+    <!-- This could be more semantic if we split out pieces of the title -->
+    <xsl:text>\newtheoremstyle{ptxplaintitle}&#xa;</xsl:text>
+    <xsl:text>  {}% space above&#xa;</xsl:text>
+    <xsl:text>  {}% space below&#xa;</xsl:text>
+    <xsl:text>  {\itshape}% body font&#xa;</xsl:text>
+    <xsl:text>  {}% indent amount&#xa;</xsl:text>
+    <xsl:text>  {\bfseries}% theorem head font&#xa;</xsl:text>
+    <xsl:text>  {}% punctuation after theorem head&#xa;</xsl:text>
+    <xsl:text>  {0.5em}% space after theorem head&#xa;</xsl:text>
+    <xsl:text>  {\thmname{#1}\thmnumber{ #2}\thmnote{ #3}}% theorem head specification&#xa;</xsl:text>
+    <xsl:text>%% Only variants actually used in document appear here&#xa;</xsl:text>
+    <xsl:text>%% Template eventually creates an environment of the given name&#xa;</xsl:text>
+    <xsl:text>%% No arguments => Theorem 2.6. via "notitle" style variant&#xa;</xsl:text>
+    <xsl:text>%% One optional argument => Theorem 2.6 Fantastic! via "title" style variant&#xa;</xsl:text>
+    <!-- Tried two arguments (second being punctuation), but required stripping end-mark out -->
+    <xsl:if test="$document-root//theorem">
+        <xsl:call-template name="theorem-environment">
+            <xsl:with-param name="ptx-name" select="'corollary'" />
+        </xsl:call-template>
     </xsl:if>
-    <xsl:if test="//lemma">
-        <xsl:text>\newtheorem{lemma}[theorem]{</xsl:text>
-        <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'lemma'" /></xsl:call-template>
-        <xsl:text>}&#xa;</xsl:text>
+    <xsl:if test="$document-root//corollary">
+        <xsl:call-template name="theorem-environment">
+            <xsl:with-param name="ptx-name" select="'theorem'" />
+        </xsl:call-template>
     </xsl:if>
-    <xsl:if test="//algorithm">
-        <xsl:text>\newtheorem{algorithm}[theorem]{</xsl:text>
-        <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'algorithm'" /></xsl:call-template>
-        <xsl:text>}&#xa;</xsl:text>
+    <xsl:if test="$document-root//lemma">
+        <xsl:call-template name="theorem-environment">
+            <xsl:with-param name="ptx-name" select="'lemma'" />
+        </xsl:call-template>
     </xsl:if>
-    <xsl:if test="//proposition">
-        <xsl:text>\newtheorem{proposition}[theorem]{</xsl:text>
-        <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'proposition'" /></xsl:call-template>
-        <xsl:text>}&#xa;</xsl:text>
+    <xsl:if test="$document-root//algorithm">
+        <xsl:call-template name="theorem-environment">
+            <xsl:with-param name="ptx-name" select="'algorithm'" />
+        </xsl:call-template>
     </xsl:if>
-    <xsl:if test="//claim">
-        <xsl:text>\newtheorem{claim}[theorem]{</xsl:text>
-        <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'claim'" /></xsl:call-template>
-        <xsl:text>}&#xa;</xsl:text>
+    <xsl:if test="$document-root//proposition">
+        <xsl:call-template name="theorem-environment">
+            <xsl:with-param name="ptx-name" select="'proposition'" />
+        </xsl:call-template>
     </xsl:if>
-    <xsl:if test="//fact">
-        <xsl:text>\newtheorem{fact}[theorem]{</xsl:text>
-        <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'fact'" /></xsl:call-template>
-        <xsl:text>}&#xa;</xsl:text>
+    <xsl:if test="$document-root//claim">
+        <xsl:call-template name="theorem-environment">
+            <xsl:with-param name="ptx-name" select="'claim'" />
+        </xsl:call-template>
     </xsl:if>
-    <xsl:if test="//identity">
-        <xsl:text>\newtheorem{identity}[theorem]{</xsl:text>
-        <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'identity'" /></xsl:call-template>
-        <xsl:text>}&#xa;</xsl:text>
+    <xsl:if test="$document-root//fact">
+        <xsl:call-template name="theorem-environment">
+            <xsl:with-param name="ptx-name" select="'fact'" />
+        </xsl:call-template>
     </xsl:if>
-    <!-- AXIOM-LIKE blocks, environments -->
-    <xsl:if test="//axiom">
-        <xsl:text>\newtheorem{axiom}[theorem]{</xsl:text>
-        <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'axiom'" /></xsl:call-template>
-        <xsl:text>}&#xa;</xsl:text>
+    <xsl:if test="$document-root//identity">
+        <xsl:call-template name="theorem-environment">
+            <xsl:with-param name="ptx-name" select="'identity'" />
+        </xsl:call-template>
     </xsl:if>
-    <xsl:if test="//conjecture">
-        <xsl:text>\newtheorem{conjecture}[theorem]{</xsl:text>
-        <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'conjecture'" /></xsl:call-template>
-        <xsl:text>}&#xa;</xsl:text>
+    <xsl:if test="$document-root//axiom">
+        <xsl:call-template name="theorem-environment">
+            <xsl:with-param name="ptx-name" select="'axiom'" />
+        </xsl:call-template>
     </xsl:if>
-    <xsl:if test="//principle">
-        <xsl:text>\newtheorem{principle}[theorem]{</xsl:text>
-        <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'principle'" /></xsl:call-template>
-        <xsl:text>}&#xa;</xsl:text>
+    <xsl:if test="$document-root//conjecture">
+        <xsl:call-template name="theorem-environment">
+            <xsl:with-param name="ptx-name" select="'conjecture'" />
+        </xsl:call-template>
     </xsl:if>
-    <xsl:if test="//heuristic">
-        <xsl:text>\newtheorem{heuristic}[theorem]{</xsl:text>
-        <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'heuristic'" /></xsl:call-template>
-        <xsl:text>}&#xa;</xsl:text>
+    <xsl:if test="$document-root//principle">
+        <xsl:call-template name="theorem-environment">
+            <xsl:with-param name="ptx-name" select="'principle'" />
+        </xsl:call-template>
     </xsl:if>
-    <xsl:if test="//hypothesis">
-        <xsl:text>\newtheorem{hypothesis}[theorem]{</xsl:text>
-        <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'hypothesis'" /></xsl:call-template>
-        <xsl:text>}&#xa;</xsl:text>
+    <xsl:if test="$document-root//heuristic">
+        <xsl:call-template name="theorem-environment">
+            <xsl:with-param name="ptx-name" select="'heuristic'" />
+        </xsl:call-template>
     </xsl:if>
-    <xsl:if test="//assumption">
-        <xsl:text>\newtheorem{assumption}[theorem]{</xsl:text>
-        <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'assumption'" /></xsl:call-template>
-        <xsl:text>}&#xa;</xsl:text>
+    <xsl:if test="$document-root//hypothesis">
+        <xsl:call-template name="theorem-environment">
+            <xsl:with-param name="ptx-name" select="'hypothesis'" />
+        </xsl:call-template>
     </xsl:if>
-    <!-- DEFINITION-LIKE blocks, environments -->
-    <xsl:if test="//definition">
-        <xsl:text>%% Definition-like environments, normal text&#xa;</xsl:text>
-        <xsl:text>%% Numbering is in sync with theorems, etc&#xa;</xsl:text>
-        <xsl:text>\theoremstyle{definition}&#xa;</xsl:text>
-        <xsl:if test="//definition">
-            <xsl:text>\newtheorem{definition}[theorem]{</xsl:text>
-            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'definition'" /></xsl:call-template>
-            <xsl:text>}&#xa;</xsl:text>
-        </xsl:if>
+    <xsl:if test="$document-root//assumption">
+        <xsl:call-template name="theorem-environment">
+            <xsl:with-param name="ptx-name" select="'assumption'" />
+        </xsl:call-template>
     </xsl:if>
-    <!-- REMARK-LIKE blocks, environments -->
-    <xsl:if test="//remark or //convention or //note or //observation or //warning or //insight">
-        <xsl:text>%% Remark-like environments, normal text&#xa;</xsl:text>
-        <xsl:text>%% Numbering is in sync with theorems, etc&#xa;</xsl:text>
-        <xsl:text>\theoremstyle{definition}&#xa;</xsl:text>
-        <xsl:if test="//remark">
-            <xsl:text>\newtheorem{remark}[theorem]{</xsl:text>
-            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'remark'" /></xsl:call-template>
-            <xsl:text>}&#xa;</xsl:text>
-        </xsl:if>
-        <xsl:if test="//convention">
-            <xsl:text>\newtheorem{convention}[theorem]{</xsl:text>
-            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'convention'" /></xsl:call-template>
-            <xsl:text>}&#xa;</xsl:text>
-        </xsl:if>
-        <xsl:if test="//note">
-            <xsl:text>\newtheorem{note}[theorem]{</xsl:text>
-            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'note'" /></xsl:call-template>
-            <xsl:text>}&#xa;</xsl:text>
-        </xsl:if>
-        <xsl:if test="//observation">
-            <xsl:text>\newtheorem{observation}[theorem]{</xsl:text>
-            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'observation'" /></xsl:call-template>
-            <xsl:text>}&#xa;</xsl:text>
-        </xsl:if>
-        <xsl:if test="//warning">
-            <xsl:text>\newtheorem{warning}[theorem]{</xsl:text>
-            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'warning'" /></xsl:call-template>
-            <xsl:text>}&#xa;</xsl:text>
-        </xsl:if>
-        <xsl:if test="//insight">
-            <xsl:text>\newtheorem{insight}[theorem]{</xsl:text>
-            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'insight'" /></xsl:call-template>
-            <xsl:text>}&#xa;</xsl:text>
-        </xsl:if>
+    <xsl:text>%% end: environments with italicized bodies, theorems and similar&#xa;</xsl:text>
+    <xsl:text>%% begin: environments with normal bodies, examples, etc.&#xa;</xsl:text>
+    <xsl:text>%% Other environments go in modified "definition" style&#xa;</xsl:text>
+    <xsl:text>%% Similar to above&#xa;</xsl:text>
+    <!-- This could be more semantic if we split out pieces of the title -->
+    <xsl:text>\newtheoremstyle{ptxdefinitionnotitle}&#xa;</xsl:text>
+    <xsl:text>  {}% space above&#xa;</xsl:text>
+    <xsl:text>  {}% space below&#xa;</xsl:text>
+    <xsl:text>  {}% body font&#xa;</xsl:text>
+    <xsl:text>  {}% indent amount&#xa;</xsl:text>
+    <xsl:text>  {\bfseries}% theorem head font&#xa;</xsl:text>
+    <xsl:text>  {.}% punctuation after theorem head&#xa;</xsl:text>
+    <xsl:text>  {0.5em}% space after theorem head&#xa;</xsl:text>
+    <xsl:text>  {\thmname{#1}\thmnumber{ #2}}% theorem head specification&#xa;</xsl:text>
+    <xsl:text>\newtheoremstyle{ptxdefinitiontitle}&#xa;</xsl:text>
+    <xsl:text>  {}% space above&#xa;</xsl:text>
+    <xsl:text>  {}% space below&#xa;</xsl:text>
+    <xsl:text>  {}% body font&#xa;</xsl:text>
+    <xsl:text>  {}% indent amount&#xa;</xsl:text>
+    <xsl:text>  {\bfseries}% theorem head font&#xa;</xsl:text>
+    <xsl:text>  {}% punctuation after theorem head&#xa;</xsl:text>
+    <xsl:text>  {0.5em}% space after theorem head&#xa;</xsl:text>
+    <xsl:text>  {\thmname{#1}\thmnumber{ #2}\thmnote{ #3}}% theorem head specification&#xa;</xsl:text>
+    <xsl:if test="$document-root//definition">
+        <xsl:call-template name="definition-environment">
+            <xsl:with-param name="ptx-name" select="'definition'" />
+        </xsl:call-template>
     </xsl:if>
-    <!-- COMPUTATION-LIKE blocks, environments -->
-    <xsl:if test="//computation or //technology">
-        <xsl:text>%% Computation-like environments, normal text&#xa;</xsl:text>
-        <xsl:text>%% Numbering is in sync with theorems, etc&#xa;</xsl:text>
-        <xsl:text>\theoremstyle{definition}&#xa;</xsl:text>
-        <xsl:if test="//computation">
-            <xsl:text>\newtheorem{computation}[theorem]{</xsl:text>
-            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'computation'" /></xsl:call-template>
-            <xsl:text>}&#xa;</xsl:text>
-        </xsl:if>
-        <xsl:if test="//technology">
-            <xsl:text>\newtheorem{technology}[theorem]{</xsl:text>
-            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'technology'" /></xsl:call-template>
-            <xsl:text>}&#xa;</xsl:text>
-        </xsl:if>
+    <xsl:if test="$document-root//remark">
+        <xsl:call-template name="definition-environment">
+            <xsl:with-param name="ptx-name" select="'remark'" />
+        </xsl:call-template>
     </xsl:if>
-    <!-- EXAMPLE-LIKE blocks, environments -->
-    <xsl:if test="//example or //question or //problem">
-        <xsl:text>%% Example-like environments, normal text&#xa;</xsl:text>
-        <xsl:text>%% Numbering is in sync with theorems, etc&#xa;</xsl:text>
-        <xsl:text>\theoremstyle{definition}&#xa;</xsl:text>
-        <xsl:if test="//example">
-            <xsl:text>\newtheorem{example}[theorem]{</xsl:text>
-            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'example'" /></xsl:call-template>
-            <xsl:text>}&#xa;</xsl:text>
-        </xsl:if>
-        <xsl:if test="//question">
-            <xsl:text>\newtheorem{question}[theorem]{</xsl:text>
-            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'question'" /></xsl:call-template>
-            <xsl:text>}&#xa;</xsl:text>
-        </xsl:if>
-        <xsl:if test="//problem">
-            <xsl:text>\newtheorem{problem}[theorem]{</xsl:text>
-            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'problem'" /></xsl:call-template>
-            <xsl:text>}&#xa;</xsl:text>
-        </xsl:if>
+    <xsl:if test="$document-root//convention">
+        <xsl:call-template name="definition-environment">
+            <xsl:with-param name="ptx-name" select="'convention'" />
+        </xsl:call-template>
     </xsl:if>
-    <!-- PROJECT-LIKE blocks -->
-    <xsl:if test="//project or //activity or //exploration or //investigation">
+    <xsl:if test="$document-root//note">
+        <xsl:call-template name="definition-environment">
+            <xsl:with-param name="ptx-name" select="'note'" />
+        </xsl:call-template>
+    </xsl:if>
+    <xsl:if test="$document-root//observation">
+        <xsl:call-template name="definition-environment">
+            <xsl:with-param name="ptx-name" select="'observation'" />
+        </xsl:call-template>
+    </xsl:if>
+    <xsl:if test="$document-root//warning">
+        <xsl:call-template name="definition-environment">
+            <xsl:with-param name="ptx-name" select="'warning'" />
+        </xsl:call-template>
+    </xsl:if>
+    <xsl:if test="$document-root//insight">
+        <xsl:call-template name="definition-environment">
+            <xsl:with-param name="ptx-name" select="'insight'" />
+        </xsl:call-template>
+    </xsl:if>
+    <xsl:if test="$document-root//computation">
+        <xsl:call-template name="definition-environment">
+            <xsl:with-param name="ptx-name" select="'computation'" />
+        </xsl:call-template>
+    </xsl:if>
+    <xsl:if test="$document-root//technology">
+        <xsl:call-template name="definition-environment">
+            <xsl:with-param name="ptx-name" select="'technology'" />
+        </xsl:call-template>
+    </xsl:if>
+    <xsl:if test="$document-root//example">
+        <xsl:call-template name="definition-environment">
+            <xsl:with-param name="ptx-name" select="'example'" />
+        </xsl:call-template>
+    </xsl:if>
+    <xsl:if test="$document-root//question">
+        <xsl:call-template name="definition-environment">
+            <xsl:with-param name="ptx-name" select="'question'" />
+        </xsl:call-template>
+    </xsl:if>
+    <xsl:if test="$document-root//problem">
+        <xsl:call-template name="definition-environment">
+            <xsl:with-param name="ptx-name" select="'problem'" />
+        </xsl:call-template>
+    </xsl:if>
+    <xsl:if test="$document-root//exercise[not(parent::exercises)]">
+        <xsl:text>%% An inline exercise is like other environments&#xa;</xsl:text>
+        <xsl:call-template name="definition-environment">
+            <xsl:with-param name="ptx-name" select="'inlineexercise'" />
+        </xsl:call-template>
+    </xsl:if>
+    <xsl:text>%% end: environments with normal bodies, examples, etc.&#xa;</xsl:text>
+    <xsl:if test="$document-root//project or $document-root//activity or $document-root//exploration or $document-root//investigation">
+        <xsl:text>%% begin: environments for project-like, with independent counter&#xa;</xsl:text>
         <xsl:text>%% Numbering for Projects (independent of others)&#xa;</xsl:text>
         <xsl:text>%% Controlled by  numbering.projects.level  processing parameter&#xa;</xsl:text>
         <xsl:text>%% Always need a project environment to set base numbering scheme&#xa;</xsl:text>
         <xsl:text>%% even if document has no projectss (but has other blocks)&#xa;</xsl:text>
+        <xsl:text>%% So "cpjt" environment produces "cpjt" counter&#xa;</xsl:text>
         <!-- http://tex.stackexchange.com/questions/155710/understanding-the-arguments-in-newtheorem-e-g-newtheoremtheoremtheoremsec/155714#155714 -->
-        <xsl:text>\newtheorem{project}{</xsl:text>
-        <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'project'" /></xsl:call-template>
-        <xsl:text>}</xsl:text>
-        <!-- See numbering-theorems variable being set in mathbook-common.xsl -->
+        <xsl:text>\newtheorem{cpjt}{BadProjectNameString}</xsl:text>
+        <!-- See numbering-projects variable being set in mathbook-common.xsl -->
         <xsl:if test="not($numbering-projects = 0)">
             <xsl:text>[</xsl:text>
             <xsl:call-template name="level-to-name">
@@ -910,23 +949,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:call-template>
             <xsl:text>]&#xa;</xsl:text>
         </xsl:if>
-        <xsl:text>%% Project-like environments, normal text&#xa;</xsl:text>
-        <xsl:text>\theoremstyle{definition}&#xa;</xsl:text>
-        <xsl:if test="//activity">
-            <xsl:text>\newtheorem{activity}[project]{</xsl:text>
-            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'activity'" /></xsl:call-template>
-            <xsl:text>}&#xa;</xsl:text>
+        <xsl:if test="$document-root//project">
+            <xsl:call-template name="project-environment">
+                <xsl:with-param name="ptx-name" select="'project'" />
+            </xsl:call-template>
         </xsl:if>
-        <xsl:if test="//exploration">
-            <xsl:text>\newtheorem{exploration}[project]{</xsl:text>
-            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'exploration'" /></xsl:call-template>
-            <xsl:text>}&#xa;</xsl:text>
+        <xsl:if test="$document-root//activity">
+            <xsl:call-template name="project-environment">
+                <xsl:with-param name="ptx-name" select="'activity'" />
+            </xsl:call-template>
         </xsl:if>
-        <xsl:if test="//investigation">
-            <xsl:text>\newtheorem{investigation}[project]{</xsl:text>
-            <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'investigation'" /></xsl:call-template>
-            <xsl:text>}&#xa;</xsl:text>
+        <xsl:if test="$document-root//exploration">
+            <xsl:call-template name="project-environment">
+                <xsl:with-param name="ptx-name" select="'exploration'" />
+            </xsl:call-template>
         </xsl:if>
+        <xsl:if test="$document-root//investigation">
+            <xsl:call-template name="project-environment">
+                <xsl:with-param name="ptx-name" select="'investigation'" />
+            </xsl:call-template>
+        </xsl:if>
+        <xsl:text>%% end: environments for project-like, with independent counter&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$document-root//assemblage">
         <xsl:text>%% begin: assemblage&#xa;</xsl:text>
@@ -955,22 +998,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\newenvironment{objectives}[1]{\noindent\rule{\linewidth}{0.1ex}\newline{\textbf{{\large#1}}\par\smallskip}}{\par\noindent\rule{\linewidth}{0.1ex}\par\smallskip}&#xa;</xsl:text>
     </xsl:if>
     <!-- miscellaneous, not categorized yet -->
-    <xsl:if test="$document-root//exercise[not(parent::exercises)]">
-        <xsl:text>%% Numbering for inline exercises is in sync with theorems, normal text&#xa;</xsl:text>
-        <xsl:text>%% Divisional exercises are rendered into lists, not environments&#xa;</xsl:text>
-        <!-- Cross-references are hard-coded names and happen elsewhere without incident -->
-        <xsl:text>\theoremstyle{definition}&#xa;</xsl:text>
-        <xsl:text>\newtheorem{inlineexercise}[theorem]{</xsl:text>
-        <xsl:call-template name="type-name">
-            <xsl:with-param name="string-id" select="'division/exercise'" />
-        </xsl:call-template>
-        <xsl:text>}&#xa;</xsl:text>
-    </xsl:if>
     <xsl:if test="$document-root//exercises//exercise">
-        <xsl:text>%% Numbering for divisional exercises is hard-coded&#xa;</xsl:text>
-        <xsl:text>%% "xparse" environment for divisional exercises&#xa;</xsl:text>
+        <xsl:text>%% Divisional exercises are rendered as faux list items&#xa;</xsl:text>
+        <xsl:text>%% with hard-coded numbers as arguments, not as LaTeX environments&#xa;</xsl:text>
         <xsl:text>\NewDocumentEnvironment{divisionexercise}{mo}&#xa;</xsl:text>
-        <xsl:text>  {\textbf{#1}.\IfValueT{#2}{ (#2)}\quad}&#xa;</xsl:text>
+        <xsl:text>  {\textbf{#1}.\IfValueT{#2}{\ \textbf{#2}}\quad}&#xa;</xsl:text>
         <xsl:text>  {\par\smallskip\noindent}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$document-root//list">
@@ -1157,7 +1189,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:if test="not($b-number-figure-distinct)">
                 <xsl:text>%% http://tex.stackexchange.com/questions/16195&#xa;</xsl:text>
                 <xsl:text>\makeatletter&#xa;</xsl:text>
-                <xsl:text>\let\c@figure\c@theorem&#xa;</xsl:text>
+                <xsl:text>\let\c@figure\c@cthm&#xa;</xsl:text>
                 <xsl:text>\makeatother&#xa;</xsl:text>
             </xsl:if>
         </xsl:if>
@@ -1190,7 +1222,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text>\let\c@table\c@figure&#xa;</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:text>\let\c@table\c@theorem&#xa;</xsl:text>
+                    <xsl:text>\let\c@table\c@cthm&#xa;</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
             <xsl:text>\makeatother&#xa;</xsl:text>
@@ -1236,7 +1268,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text>\let\c@listingcap\c@figure&#xa;</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:text>\let\c@listingcap\c@theorem&#xa;</xsl:text>
+                    <xsl:text>\let\c@listingcap\c@cthm&#xa;</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
             <xsl:text>\makeatother&#xa;</xsl:text>
@@ -1273,7 +1305,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text>\let\c@namedlistcap\c@figure&#xa;</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:text>\let\c@namedlistcap\c@theorem&#xa;</xsl:text>
+                    <xsl:text>\let\c@namedlistcap\c@cthm&#xa;</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
             <xsl:text>\makeatother&#xa;</xsl:text>
@@ -1840,6 +1872,83 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 
 </xsl:template>
+
+<!-- ################## -->
+<!-- Preamble Utilities -->
+<!-- ################## -->
+
+<!-- Parameterized templates for repeated constructions -->
+
+
+<!-- LaTeX environments with italicized bodies (maybe associated proofs) -->
+<!--   (1) Set a theorem style, no title vs. title                       -->
+<!--   (2) Build an AMS environment of that style, with "cthm" counter   -->
+<!--   (3) Build a single enviroment that chooses between the two styles -->
+<xsl:template name="theorem-environment">
+    <xsl:param name="ptx-name" select="'NO ARGUMENT TO THEOREM-ENVIRONMENT TEMPLATE'" />
+
+    <xsl:text>\theoremstyle{ptxplainnotitle}&#xa;</xsl:text>
+    <xsl:text>\newtheorem{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>notitle}[cthm]{</xsl:text>
+    <xsl:call-template name="type-name">
+        <xsl:with-param name="string-id" select="$ptx-name" />
+    </xsl:call-template>
+    <xsl:text>}&#xa;</xsl:text>
+    <xsl:text>\theoremstyle{ptxplaintitle}&#xa;</xsl:text>
+    <xsl:text>\newtheorem{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>title}[cthm]{</xsl:text>
+    <xsl:call-template name="type-name">
+        <xsl:with-param name="string-id" select="$ptx-name" />
+    </xsl:call-template>
+    <xsl:text>}&#xa;</xsl:text>
+    <xsl:text>\NewDocumentEnvironment{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>}{o}&#xa;</xsl:text>
+    <xsl:text>  {\IfValueTF{#1}{\begin{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>title}[#1]}{\begin{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>notitle}}}&#xa;</xsl:text>
+    <xsl:text>  {\IfValueTF{#1}{\end{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>title}}{\end{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>notitle}}}&#xa;</xsl:text>
+</xsl:template>
+
+
+<!-- LaTeX environments with regular bodies (and no associated proof) -->
+<!-- Entirely similar to "theorem-environment" template above         -->
+<xsl:template name="definition-environment">
+    <xsl:param name="ptx-name" select="'NO ARGUMENT TO DEFINITION-ENVIRONMENT TEMPLATE'" />
+
+    <xsl:text>\theoremstyle{ptxdefinitionnotitle}&#xa;</xsl:text>
+    <xsl:text>\newtheorem{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>notitle}[cthm]{</xsl:text>
+    <xsl:call-template name="type-name">
+        <xsl:with-param name="string-id" select="$ptx-name" />
+    </xsl:call-template>
+    <xsl:text>}&#xa;</xsl:text>
+    <xsl:text>\theoremstyle{ptxdefinitiontitle}&#xa;</xsl:text>
+    <xsl:text>\newtheorem{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>title}[cthm]{</xsl:text>
+    <xsl:call-template name="type-name">
+        <xsl:with-param name="string-id" select="$ptx-name" />
+    </xsl:call-template>
+    <xsl:text>}&#xa;</xsl:text>
+    <xsl:text>\NewDocumentEnvironment{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>}{o}&#xa;</xsl:text>
+    <xsl:text>  {\IfValueTF{#1}{\begin{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>title}[#1]}{\begin{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>notitle}}}&#xa;</xsl:text>
+    <xsl:text>  {\IfValueTF{#1}{\end{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>title}}{\end{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>notitle}}}&#xa;</xsl:text>
+</xsl:template>
+
+<!-- LaTeX environments for projects, definition styles, own counter  -->
+<!-- Entirely similar to "theorem-environment" template above         -->
+<xsl:template name="project-environment">
+    <xsl:param name="ptx-name" select="'NO ARGUMENT TO PROJECT-ENVIRONMENT TEMPLATE'" />
+
+    <xsl:text>\theoremstyle{ptxdefinitionnotitle}&#xa;</xsl:text>
+    <xsl:text>\newtheorem{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>notitle}[cpjt]{</xsl:text>
+    <xsl:call-template name="type-name">
+        <xsl:with-param name="string-id" select="$ptx-name" />
+    </xsl:call-template>
+    <xsl:text>}&#xa;</xsl:text>
+    <xsl:text>\theoremstyle{ptxdefinitiontitle}&#xa;</xsl:text>
+    <xsl:text>\newtheorem{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>title}[cpjt]{</xsl:text>
+    <xsl:call-template name="type-name">
+        <xsl:with-param name="string-id" select="$ptx-name" />
+    </xsl:call-template>
+    <xsl:text>}&#xa;</xsl:text>
+    <xsl:text>\NewDocumentEnvironment{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>}{o}&#xa;</xsl:text>
+    <xsl:text>  {\IfValueTF{#1}{\begin{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>title}[#1]}{\begin{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>notitle}}}&#xa;</xsl:text>
+    <xsl:text>  {\IfValueTF{#1}{\end{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>title}}{\end{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>notitle}}}&#xa;</xsl:text>
+</xsl:template>
+
 
 <!-- Tack in a graphic with initials                   -->
 <!-- Height is just enough to not disrupt line spacing -->
@@ -3108,11 +3217,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Examples have no structure, or have statement and solution -->
 <!-- Exercises have hints, answers and solutions                -->
 
-<!-- Titles are passed as options to environments -->
-<!-- TODO: trash and incorporate into templates below -->
+<!-- Titles are passed as options to environments         -->
+<!-- We address punctuation here, and carry it with title -->
 <xsl:template match="title" mode="environment-option">
     <xsl:text>[{</xsl:text>
-    <xsl:apply-templates />
+    <!-- "title-full" template expects parent as context -->
+    <xsl:apply-templates select="parent::*" mode="title-full" />
+    <xsl:variable name="has-punctuation">
+        <xsl:apply-templates select="." mode="has-punctuation" />
+    </xsl:variable>
+    <!-- provide a period, if necessary -->
+    <xsl:if test="$has-punctuation = 'false'">
+        <xsl:text>.</xsl:text>
+    </xsl:if>
     <xsl:text>}]</xsl:text>
 </xsl:template>
 
@@ -3126,11 +3243,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\begin{</xsl:text>
         <xsl:value-of select="local-name(.)" />
     <xsl:text>}</xsl:text>
-    <!-- optional argument to environment -->
-    <!-- TODO: and/or credit              -->
-    <xsl:text>[{</xsl:text>
-    <xsl:apply-templates select="." mode="title-full" />
-    <xsl:text>}]</xsl:text>
+    <xsl:apply-templates select="title" mode="environment-option"/>
     <xsl:apply-templates select="." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
     <!-- statement is required now, to be relaxed in DTD      -->
@@ -3808,11 +3921,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\begin{</xsl:text>
         <xsl:value-of select="local-name(.)" />
     <xsl:text>}</xsl:text>
-    <!-- optional argument to environment -->
-    <!-- TODO: and/or credit              -->
-    <xsl:text>[</xsl:text>
-    <xsl:apply-templates select="." mode="title-full" />
-    <xsl:text>]</xsl:text>
+    <xsl:apply-templates select="title" mode="environment-option"/>
     <xsl:apply-templates select="." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
     <xsl:choose>
@@ -3868,11 +3977,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\begin{</xsl:text>
         <xsl:value-of select="local-name(.)" />
     <xsl:text>}</xsl:text>
-    <!-- optional argument to environment -->
-    <!-- TODO: and/or credit              -->
-    <xsl:text>[</xsl:text>
-    <xsl:apply-templates select="." mode="title-full" />
-    <xsl:text>]</xsl:text>
+    <xsl:apply-templates select="title" mode="environment-option"/>
     <xsl:apply-templates select="." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
     <xsl:choose>
@@ -4014,9 +4119,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="assemblage">
     <xsl:text>\begin{assemblage}</xsl:text>
     <xsl:if test="title">
-        <xsl:text>[</xsl:text>
-        <xsl:apply-templates select="." mode="title-full" />
-        <xsl:text>]</xsl:text>
+        <xsl:apply-templates select="title" mode="environment-option"/>
     </xsl:if>
     <xsl:apply-templates select="." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
