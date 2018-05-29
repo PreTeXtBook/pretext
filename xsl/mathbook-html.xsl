@@ -5380,20 +5380,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- Hidden content in here                   -->
                 <!-- Turn autoplay on, else two clicks needed -->
                 <iframe id="{$int-id}"
-                        type="text/html"
                         width="{$width}"
                         height="{$height}"
-                        frameborder="0"
                         allowfullscreen=""
                         src="{$source-url-autoplay-on}" />
             </div>
         </xsl:when>
         <xsl:otherwise>
             <iframe id="{$int-id}"
-                    type="text/html"
                     width="{$width}"
                     height="{$height}"
-                    frameborder="0"
                     allowfullscreen=""
                     src="{$source-url}" />
         </xsl:otherwise>
@@ -5443,9 +5439,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:attribute>
         <xsl:attribute name="height">
             <xsl:text>500</xsl:text>
-        </xsl:attribute>
-        <xsl:attribute name="frameborder">
-            <xsl:text>0</xsl:text>
         </xsl:attribute>
         <!-- empty attribute, just switch -->
         <xsl:attribute name="allowfullscreen">
