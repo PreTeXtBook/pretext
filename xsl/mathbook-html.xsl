@@ -657,9 +657,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- The time element has content that is "human readable" time -->
 <xsl:template match="titlepage/date">
-    <time class="date">
+    <div class="date">
         <xsl:apply-templates />
-    </time>
+    </div>
 </xsl:template>
 
 <!-- Authors, Editors, Creditors -->
