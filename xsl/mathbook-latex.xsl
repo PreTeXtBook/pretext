@@ -842,6 +842,32 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="ptx-name" select="'assumption'" />
         </xsl:call-template>
     </xsl:if>
+    <xsl:text>%% AMS proof environment is basically fine as-is and special treatment&#xa;</xsl:text>
+    <xsl:text>%% would certainly interfere with the functioning of \qed, etc.&#xa;</xsl:text>
+    <xsl:text>%% So we simply localize the default heading&#xa;</xsl:text>
+    <xsl:text>%% Redefinition of the "proof" environment is to cause a long alternate&#xa;</xsl:text>
+    <xsl:text>%% title to line-break appropriately.  Code is cut verbatim, by suggestion,&#xa;</xsl:text>
+    <xsl:text>%% from "Using the amsthm Package" Version 2.20.3, September 2017&#xa;</xsl:text>
+    <!-- AMS warns a too-long title may not line-break, due to implementation as a trivlist -->
+    <xsl:if test="$document-root//proof">
+        <xsl:text>\renewcommand*{\proofname}{</xsl:text>
+        <xsl:call-template name="type-name">
+            <xsl:with-param name="string-id" select="'proof'" />
+        </xsl:call-template>
+        <xsl:text>}&#xa;</xsl:text>
+        <xsl:text>\makeatletter&#xa;</xsl:text>
+        <xsl:text>\renewenvironment{proof}[1][\proofname]{\par&#xa;</xsl:text>
+        <xsl:text>  \pushQED{\qed}%&#xa;</xsl:text>
+        <xsl:text>  \normalfont \topsep6\p@\@plus6\p@\relax&#xa;</xsl:text>
+        <xsl:text>  \trivlist&#xa;</xsl:text>
+        <xsl:text>  \item\relax&#xa;</xsl:text>
+        <xsl:text>    {\itshape&#xa;</xsl:text>
+        <xsl:text>    #1\@addpunct{.}}\hspace\labelsep\ignorespaces&#xa;</xsl:text>
+        <xsl:text>}{%&#xa;</xsl:text>
+        <xsl:text>  \popQED\endtrivlist\@endpefalse&#xa;</xsl:text>
+        <xsl:text>}&#xa;</xsl:text>
+        <xsl:text>\makeatother&#xa;</xsl:text>
+    </xsl:if>
     <xsl:text>%% end: environments with italicized bodies, theorems and similar&#xa;</xsl:text>
     <xsl:text>%% begin: environments with normal bodies, examples, etc.&#xa;</xsl:text>
     <xsl:text>%% Other environments go in modified "definition" style&#xa;</xsl:text>
@@ -1018,12 +1044,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- http://www.tex.ac.uk/FAQ-fixnam.html           -->
     <!-- http://tex.stackexchange.com/questions/62020/how-to-change-the-word-proof-in-the-proof-environment -->
     <xsl:text>%% Localize LaTeX supplied names (possibly none)&#xa;</xsl:text>
-    <!-- Localize AMS "proof" environment -->
-    <xsl:if test="//proof">
-        <xsl:text>\renewcommand*{\proofname}{</xsl:text>
-        <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'proof'" /></xsl:call-template>
-        <xsl:text>}&#xa;</xsl:text>
-    </xsl:if>
     <xsl:if test="//appendix">
         <xsl:text>\renewcommand*{\appendixname}{</xsl:text>
         <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'appendix'" /></xsl:call-template>
@@ -3261,9 +3281,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Proofs -->
-<!-- Subsidary to THEOREM-LIKE, or standalone -->
+<!-- Subsidary to THEOREM-LIKE, or standalone        -->
+<!-- Defaults to "Proof", can be replaced by "title" -->
 <xsl:template match="proof">
     <xsl:text>\begin{proof}</xsl:text>
+    <!-- The AMS environment handles punctuation carefully,  so   -->
+    <!-- we use the "environment-option" above and just send      -->
+    <!-- along punctuation in the style of the other environments -->
+    <xsl:apply-templates select="title" mode="environment-option"/>
     <xsl:apply-templates select="." mode="label" />
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="*" />
