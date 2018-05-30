@@ -774,12 +774,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Tried two arguments (second being punctuation), but required stripping end-mark out -->
     <xsl:if test="$document-root//theorem">
         <xsl:call-template name="theorem-environment">
-            <xsl:with-param name="ptx-name" select="'corollary'" />
+            <xsl:with-param name="ptx-name" select="'theorem'" />
         </xsl:call-template>
     </xsl:if>
     <xsl:if test="$document-root//corollary">
         <xsl:call-template name="theorem-environment">
-            <xsl:with-param name="ptx-name" select="'theorem'" />
+            <xsl:with-param name="ptx-name" select="'corollary'" />
         </xsl:call-template>
     </xsl:if>
     <xsl:if test="$document-root//lemma">
