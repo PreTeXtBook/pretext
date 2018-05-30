@@ -1734,6 +1734,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Title only -->
 <!-- ASIDE-LIKE, exercisegroup      -->
+<!-- proof, when optionally titled  -->
 <!-- Subsidiary to paragraphs,      -->
 <!-- and divisions of "exercises"   -->
 <!-- No title, then nothing happens -->
@@ -3196,13 +3197,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- When born use this heading -->
+<!-- Optionally titled          -->
 <xsl:template match="proof" mode="heading-birth">
-    <xsl:apply-templates select="." mode="heading-type" />
+    <xsl:choose>
+        <xsl:when test="title">
+            <xsl:apply-templates select="." mode="heading-title" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="." mode="heading-type" />
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Heading for interior of xref-knowl content -->
+<!-- Optionally titled                          -->
 <xsl:template match="proof" mode="heading-xref-knowl">
-    <xsl:apply-templates select="." mode="heading-type" />
+    <xsl:choose>
+        <xsl:when test="title">
+            <xsl:apply-templates select="." mode="heading-title" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="." mode="heading-type" />
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 
