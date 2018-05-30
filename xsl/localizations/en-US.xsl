@@ -125,10 +125,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='blockquote'><xsl:text>Quotation</xsl:text></localization>
     <!-- Parts of an exercise and it's solution -->
     <!-- An "exercise", at any level, within an "exercises" division is a          -->
-    <!-- "divisional" exercise and the string employed is 'exercises//exercise'.   -->
+    <!-- "divisional" exercise and the string employed is 'divisionalexercise'.    -->
     <!-- An "exercise" whose parent is a division (chapter, section, etc) we       -->
-    <!-- call an "inline exercise" and the string employed is 'division/exercise'. -->
-    <!-- (A single or double slash has different meanings in this context.)        -->
+    <!-- call an "inline exercise" and the string employed is 'inlineexercise'.    -->
     <!-- It is important to use different translations so that a text with         -->
     <!-- both types of exercises does not have ambiguous cross-references          -->
     <!-- (there is an example of this at the start of one of the later             -->
@@ -139,8 +138,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- is something you must do before you do something else.  Another use of    -->
     <!-- the term is a location on a on a roadway where you must stop for the      -->
     <!-- police to do an inspection.                                               -->
-    <localization string-id='exercises//exercise'><xsl:text>Exercise</xsl:text></localization>
-    <localization string-id='division/exercise'><xsl:text>Checkpoint</xsl:text></localization>
+    <localization string-id='divisionalexercise'><xsl:text>Exercise</xsl:text></localization>
+    <localization string-id='inlineexercise'><xsl:text>Checkpoint</xsl:text></localization>
     <localization string-id='webwork'><xsl:text>WeBWorK</xsl:text></localization>
     <localization string-id='hint'><xsl:text>Hint</xsl:text></localization>
     <localization string-id='answer'><xsl:text>Answer</xsl:text></localization>

@@ -124,10 +124,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='p'><xsl:text>Paragrafus</xsl:text></localization>
     <localization string-id='blockquote'><xsl:text>Idézet</xsl:text></localization>
     <!-- Parts of an exercise and it's solution -->
-    <localization string-id='exercises//exercise'><xsl:text>Feladat</xsl:text></localization>
+    <localization string-id='divisionalexercise'><xsl:text>Feladat</xsl:text></localization>
     <!-- Translation needed for Hungary Hungarian -->
     <!-- See en-US file for distinctions here, do not repeat previous translation -->
-    <!-- <localization string-id='division/exercise'><xsl:text>Checkpoint</xsl:text></localization> -->
+    <!-- <localization string-id='inlineexercise'><xsl:text>Checkpoint</xsl:text></localization> -->
     <localization string-id='webwork'><xsl:text>WeBWorK</xsl:text></localization>
     <localization string-id='hint'><xsl:text>Tipp</xsl:text></localization>
     <localization string-id='answer'><xsl:text>Vélasz</xsl:text></localization>

@@ -118,10 +118,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='p'><xsl:text>Paragraph</xsl:text></localization>
     <localization string-id='blockquote'><xsl:text>Citation</xsl:text></localization>
     <!-- Parts of an exercise and it's solution -->
-    <localization string-id='exercises//exercise'><xsl:text>Exercice</xsl:text></localization>
+    <localization string-id='divisionalexercise'><xsl:text>Exercice</xsl:text></localization>
     <!-- Translation needed for France French -->
     <!-- See en-US file for distinctions here, do not repeat previous translation -->
-    <!-- <localization string-id='division/exercise'><xsl:text>Checkpoint</xsl:text></localization> -->
+    <!-- <localization string-id='inlineexercise'><xsl:text>Checkpoint</xsl:text></localization> -->
     <localization string-id='webwork'><xsl:text>WeBWorK</xsl:text></localization>
     <localization string-id='hint'><xsl:text>Indication</xsl:text></localization>
     <localization string-id='answer'><xsl:text>Réponse</xsl:text></localization>

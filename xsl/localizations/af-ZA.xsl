@@ -124,10 +124,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='p'><xsl:text>Paragraaf</xsl:text></localization>
     <localization string-id='blockquote'><xsl:text>Aanhaling</xsl:text></localization>
     <!-- Parts of an exercise and it's solution -->
-    <localization string-id='exercises//exercise'><xsl:text>Oefening</xsl:text></localization>
+    <localization string-id='divisionalexercise'><xsl:text>Oefening</xsl:text></localization>
     <!-- Translation needed for South African Afrikaans -->
     <!-- See en-US file for distinctions here, do not repeat previous translation -->
-    <!-- <localization string-id='division/exercise'><xsl:text>Checkpoint</xsl:text></localization> -->
+    <!-- <localization string-id='inlineexercise'><xsl:text>Checkpoint</xsl:text></localization> -->
     <localization string-id='webwork'><xsl:text>WeBWorK</xsl:text></localization>
     <localization string-id='hint'><xsl:text>Wenk</xsl:text></localization>
     <localization string-id='answer'><xsl:text>Antwoord</xsl:text></localization>

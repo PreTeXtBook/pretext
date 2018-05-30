@@ -3291,16 +3291,18 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- with perhaps intervening groups, like an "exercisegroup" -->
 <xsl:template match="exercises//exercise" mode="type-name">
     <xsl:call-template name="type-name">
-        <xsl:with-param name="string-id" select="'exercises//exercise'" />
+        <xsl:with-param name="string-id" select="'divisionalexercise'" />
     </xsl:call-template>
 </xsl:template>
 
-<!-- Finally, an inline exercise has a division (several possible)         -->
+<!-- Finally, an inline exercise has a division (several possible)        -->
 <!-- as a parent. We just drop in here last if other matches do not       -->
 <!-- succeed, but could improve with a filter or list of specific matches -->
+<!-- This matches the LaTeX environment of the same name, so              -->
+<!-- template to create an "inlineexercise" environment runs smoothly     -->
 <xsl:template match="exercise" mode="type-name">
     <xsl:call-template name="type-name">
-        <xsl:with-param name="string-id" select="'division/exercise'" />
+        <xsl:with-param name="string-id" select="'inlineexercise'" />
     </xsl:call-template>
 </xsl:template>
 
