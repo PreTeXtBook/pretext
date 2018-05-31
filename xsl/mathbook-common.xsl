@@ -3225,7 +3225,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:variable name="width-fraction">
         <xsl:value-of select="substring-before($width-percent,'%') div 100" />
     </xsl:variable>
-    <xsl:value-of select="$design-width-pixels * $width-fraction" />
+    <xsl:value-of select="round($design-width-pixels * $width-fraction)" />
 </xsl:template>
 
 <!-- Square by default, when asked.  Can override -->
@@ -3243,7 +3243,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <xsl:with-param name="default-aspect" select="$default-aspect" />
         </xsl:apply-templates>
     </xsl:variable>
-    <xsl:value-of select="$design-width-pixels * $width-fraction div $aspect-ratio" />
+    <xsl:value-of select="round($design-width-pixels * $width-fraction div $aspect-ratio)" />
 </xsl:template>
 
 <!-- The HTML conversion generates "standalone" pages for videos   -->
