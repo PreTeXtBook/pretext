@@ -7587,8 +7587,9 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
 
 <xsl:template match="myopenmath">
     <xsl:element name="iframe">
+        <!-- Let authors specify @width eventually -->
         <xsl:attribute name="width">
-            <xsl:text>100%</xsl:text>
+            <xsl:value-of select="$design-width" />
         </xsl:attribute>
         <xsl:attribute name="src">
             <xsl:text>https://www.myopenmath.com/embedq.php?id=</xsl:text>
