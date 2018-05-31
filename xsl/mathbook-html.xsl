@@ -1654,6 +1654,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="." mode="title-full" />
             </span>
         </xsl:if>
+        <xsl:if test="creator and (&THEOREM-FILTER; or &AXIOM-FILTER;)">
+            <span class="creator">
+                <xsl:apply-templates select="." mode="creator-full" />
+            </span>
+        </xsl:if>
     </h6>
 </xsl:template>
 
