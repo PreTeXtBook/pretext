@@ -4974,19 +4974,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="video">
     <!-- collect and process size information from author -->
-    <xsl:variable name="width-percent">
-        <xsl:apply-templates select="." mode="get-width-percentage" />
+    <xsl:variable name="width">
+        <xsl:apply-templates select="." mode="get-width-pixels" />
     </xsl:variable>
-    <xsl:variable name="width-fraction">
-        <xsl:value-of select="substring-before($width-percent,'%') div 100" />
-    </xsl:variable>
-    <xsl:variable name="aspect-ratio">
-        <xsl:apply-templates select="." mode="get-aspect-ratio">
+    <xsl:variable name="height">
+        <xsl:apply-templates select="." mode="get-height-pixels">
             <xsl:with-param name="default-aspect" select="'16:9'" />
         </xsl:apply-templates>
     </xsl:variable>
-    <xsl:variable name="width"  select="$design-width * $width-fraction" />
-    <xsl:variable name="height" select="$design-width * $width-fraction div $aspect-ratio" />
 
     <!-- Always build a standalone page, PDF links to these -->
     <xsl:apply-templates select="." mode="video-standalone-page" />
@@ -7469,6 +7464,7 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
             <xsl:with-param name="default-aspect" select="'1:1'" />
         </xsl:apply-templates>
     </xsl:variable>
+    <!-- these are now standardized templates -->
     <xsl:variable name="width"  select="$design-width * $width-fraction" />
     <xsl:variable name="height" select="$design-width * $width-fraction div $aspect-ratio" />
     <!-- the div to hold the JSX output -->
