@@ -754,7 +754,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>  {\bfseries}% theorem head font&#xa;</xsl:text>
     <xsl:text>  {.}% punctuation after theorem head&#xa;</xsl:text>
     <xsl:text>  {0.5em}% space after theorem head&#xa;</xsl:text>
-    <xsl:text>  {\thmname{#1}\thmnumber{ #2}}% theorem head specification&#xa;</xsl:text>
+    <xsl:text>  {}% theorem head specification&#xa;</xsl:text>
     <xsl:text>%% We now manage punctuation on-sight, elsewhere,&#xa;</xsl:text>
     <xsl:text>%% assuming non-trivial content inside a "title"&#xa;</xsl:text>
     <!-- This could be more semantic if we split out pieces of the title -->
@@ -1900,10 +1900,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Parameterized templates for repeated constructions -->
 
 
-<!-- LaTeX environments with italicized bodies (maybe associated proofs) -->
-<!--   (1) Set a theorem style, no title vs. title                       -->
-<!--   (2) Build an AMS environment of that style, with "cthm" counter   -->
-<!--   (3) Build a single enviroment that chooses between the two styles -->
+<!-- LaTeX environments with italicized bodies (maybe associated proofs)  -->
+<!--   (1) Set a theorem style, no title (usual) vs. title (enhanced)     -->
+<!--   (2) Build an AMS environment of that style, with "cthm" counter    -->
+<!--   (3) Build a single enviroment that chooses between the four styles -->
+<!-- Arguments:                                                           -->
+<!--   (a) optional creator/note,                                         -->
+<!--   (b) + indicator, followed by optional title including punctuation  -->
+<!-- First switch on + in parameter 2, title/notitle, in parameter 3      -->
+<!-- Then for each, switch on optional creator, in parameter 1            -->
+<!-- Note: just a creator, then LaTeX does its standard treatment         -->
+<!--       If creator and a title, we need to format the creator          -->
 <xsl:template name="theorem-environment">
     <xsl:param name="ptx-name" select="'NO ARGUMENT TO THEOREM-ENVIRONMENT TEMPLATE'" />
 
@@ -1919,9 +1926,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="string-id" select="$ptx-name" />
     </xsl:call-template>
     <xsl:text>}&#xa;</xsl:text>
-    <xsl:text>\NewDocumentEnvironment{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>}{o}&#xa;</xsl:text>
-    <xsl:text>  {\IfValueTF{#1}{\begin{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>title}[#1]}{\begin{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>notitle}}}&#xa;</xsl:text>
-    <xsl:text>  {\IfValueTF{#1}{\end{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>title}}{\end{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>notitle}}}&#xa;</xsl:text>
+    <xsl:text>\NewDocumentEnvironment{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>}{ot+o}&#xa;</xsl:text>
+    <xsl:text>    { \IfBooleanTF{#2}&#xa;</xsl:text>
+    <xsl:text>        { \IfValueTF{#1}{ \begin{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>title}[#3 {\mdseries(#1)}] }{ \begin{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>title}[#3]} } &#xa;</xsl:text>
+    <xsl:text>        { \IfValueTF{#1}{ \begin{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>notitle}[#1]  }{ \begin{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>notitle}} }&#xa;</xsl:text>
+    <xsl:text>    }&#xa;</xsl:text>
+    <xsl:text>    { \IfBooleanTF{#2}{\end{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>title}}{\end{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>notitle}} }&#xa;</xsl:text>
 </xsl:template>
 
 
@@ -3253,17 +3263,57 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}]</xsl:text>
 </xsl:template>
 
-<!-- Theorems, Axioms, Definitions -->
-<!-- Statement structure should be relaxed,       -->
-<!-- especially for axioms, definitions, style is -->
-<!-- controlled in the premable by the theorem    -->
-<!-- style parameters in effect when LaTeX        -->
-<!-- environments are declared                    -->
-<xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;">
+<!-- Theorems and axioms have two options, a title and/or a creator -->
+<!-- We provide them as two optional arguments                      -->
+<!--   (a) creator first, consistent with usual LaTeX use           -->
+<!--   (b) title, with all punctuation, preceded by a "+" indicator -->
+<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;" mode="title-creator-environment-option">
+    <xsl:if test="creator">
+        <xsl:text>[{</xsl:text>
+        <xsl:apply-templates select="." mode="creator-full" />
+        <xsl:text>}]</xsl:text>
+    </xsl:if>
+    <xsl:if test="title">
+        <xsl:text>+[{</xsl:text>
+        <xsl:apply-templates select="." mode="title-full" />
+        <!-- Punctuate title, if necessary -->
+        <xsl:variable name="has-punctuation">
+            <xsl:apply-templates select="title" mode="has-punctuation" />
+        </xsl:variable>
+        <!-- provide a period, if necessary -->
+        <xsl:if test="$has-punctuation = 'false'">
+            <xsl:text>.</xsl:text>
+        </xsl:if>
+        <xsl:text>}]</xsl:text>
+    </xsl:if>
+</xsl:template>
+
+<!-- Definitions -->
+<!-- Statement structure should be relaxed, -->
+<!-- Style is controlled in the preamble    -->
+<xsl:template match="&DEFINITION-LIKE;">
     <xsl:text>\begin{</xsl:text>
         <xsl:value-of select="local-name(.)" />
     <xsl:text>}</xsl:text>
     <xsl:apply-templates select="title" mode="environment-option"/>
+    <xsl:apply-templates select="." mode="label"/>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>\end{</xsl:text>
+        <xsl:value-of select="local-name(.)" />
+    <xsl:text>}&#xa;</xsl:text>
+</xsl:template>
+
+<!-- Theorems and Axioms-->
+<!-- Very similar to case of definitions   -->
+<!-- Adds (potential) proofs, and creators -->
+<!-- Statement structure should be relaxed -->
+<!-- Style is controlled in the preamble   -->
+<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;">
+    <xsl:text>\begin{</xsl:text>
+        <xsl:value-of select="local-name(.)" />
+    <xsl:text>}</xsl:text>
+    <xsl:apply-templates select="." mode="title-creator-environment-option" />
     <xsl:apply-templates select="." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
     <!-- statement is required now, to be relaxed in DTD      -->
@@ -3272,9 +3322,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{</xsl:text>
         <xsl:value-of select="local-name(.)" />
     <xsl:text>}&#xa;</xsl:text>
-    <!-- proof is optional, so may not match at  -->
-    <!-- all, make sure proof is not possible    -->
-    <!-- for AXIOM-LIKE and DEFINITION-LIKE      -->
+    <!-- proof(s) are optional, so may not match at all          -->
+    <!-- And the point of the AXIOM-LIKE is that they lack proof -->
     <xsl:if test="&THEOREM-FILTER;">
         <xsl:apply-templates select="proof" />
     </xsl:if>
