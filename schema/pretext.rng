@@ -1057,7 +1057,7 @@
     </element>
   </define>
   <define name="TheoremLike">
-    <ref name="MetaDataTitleOptional"/>
+    <ref name="MetaDataTitleCreatorOptional"/>
     <choice>
       <oneOrMore>
         <ref name="BlockStatement"/>
@@ -1099,7 +1099,7 @@
     </choice>
   </define>
   <define name="AxiomLike">
-    <ref name="MetaDataTitleOptional"/>
+    <ref name="MetaDataTitleCreatorOptional"/>
     <ref name="Statement"/>
   </define>
   <define name="Axiom">
@@ -2258,6 +2258,11 @@
       <ref name="TextLong"/>
     </element>
   </define>
+  <define name="Creator">
+    <element name="creator">
+      <ref name="TextShort"/>
+    </element>
+  </define>
   <define name="XMLBase">
     <attribute name="xml:base"/>
   </define>
@@ -2317,6 +2322,26 @@
     </optional>
     <optional>
       <ref name="Title"/>
+    </optional>
+    <zeroOrMore>
+      <ref name="Index"/>
+    </zeroOrMore>
+  </define>
+  <define name="MetaDataTitleCreatorOptional">
+    <optional>
+      <ref name="UniqueID"/>
+    </optional>
+    <optional>
+      <ref name="XMLBase"/>
+    </optional>
+    <optional>
+      <ref name="XMLLang"/>
+    </optional>
+    <optional>
+      <ref name="Title"/>
+    </optional>
+    <optional>
+      <ref name="Creator"/>
     </optional>
     <zeroOrMore>
       <ref name="Index"/>

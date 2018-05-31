@@ -996,7 +996,7 @@
                 (BlockStatement | Case)+
             }
         TheoremLike =
-            MetaDataTitleOptional,
+            MetaDataTitleCreatorOptional,
             (BlockStatement+ | (Statement, Proof*))
         Theorem =
             element theorem {TheoremLike}
@@ -1020,11 +1020,11 @@
     <section>
         <title>Axioms and Other Mathematical Statements</title>
 
-        <p>Mathematical statements that do not have proofs (in other words, no prrof is known, or a proof is not appropriate).</p>
+        <p>Mathematical statements that do not have proofs (in other words, no proof is known, or a proof is not appropriate).</p>
 
         <fragment xml:id="axiom-like">
         AxiomLike =
-            MetaDataTitleOptional,
+            MetaDataTitleCreatorOptional,
             Statement
         Axiom =
             element axiom {AxiomLike}
@@ -1690,7 +1690,7 @@
             <li>Language tags go on the root element to affect variants of names of objects, like theorems.</li>
             <li>The <c>xinlude</c> mechanism may pass language tgs down through the root element of included files to make them universally available.</li>
             <li>The <c>xinclude</c> mechanism inserts a <c>@xml:base</c> attribute on the root element of an included file.  So we allow this attribute on any element that allows a title.</li>
-            <li>These are not unordered specifications since they contain several attributes, and we enforce a <c>title</c>, <c>subtitle</c>, <c>caption</c>, <c>idx</c> order.</li>
+            <li>These are not unordered specifications since they contain several attributes, and we enforce a <c>title</c>, <c>subtitle</c>, <c>creator</c>, <c>caption</c>, <c>idx</c> order.</li>
             <li><c>MetaDataTarget</c> is for items that are targets of cross-references, but without even optional titles.  Since they will be knowled, they can appear in an index.  But without the potential to be titled, we do not set them up as possible root elements of a file to <c>xinclude</c>.</li>
             <li><c>MetaDataSubtitle</c> implicitly has an required title.  We might relax this as it is employed in more places.</li>
             <li><c>MetaDataCaption</c> implicitly has an optional title.</li>
@@ -1704,6 +1704,8 @@
             element title {TextLong}
         Subtitle =
             element subtitle {TextLong}
+        Creator =
+            element creator {TextShort}
         XMLBase = attribute xml:base {text}
         XMLLang = attribute xml:lang {text}
         MetaDataTarget =
@@ -1727,6 +1729,13 @@
             XMLBase?,
             XMLLang?,
             Title?,
+            Index*
+        MetaDataTitleCreatorOptional =
+            UniqueID?,
+            XMLBase?,
+            XMLLang?,
+            Title?,
+            Creator?,
             Index*
         MetaDataCaption =
             UniqueID?,

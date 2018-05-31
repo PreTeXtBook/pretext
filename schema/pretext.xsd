@@ -1028,17 +1028,17 @@
     </xs:complexType>
   </xs:element>
   <xs:complexType name="TheoremLike">
-    <xs:sequence>
-      <xs:group ref="MetaDataTitleOptional"/>
-      <xs:choice>
-        <xs:group maxOccurs="unbounded" ref="BlockStatement"/>
-        <xs:sequence>
-          <xs:group ref="Statement"/>
-          <xs:element minOccurs="0" maxOccurs="unbounded" ref="proof"/>
-        </xs:sequence>
-      </xs:choice>
-    </xs:sequence>
-    <xs:attributeGroup ref="MetaDataTitleOptional"/>
+    <xs:complexContent>
+      <xs:extension base="MetaDataTitleCreatorOptional">
+        <xs:choice>
+          <xs:group maxOccurs="unbounded" ref="BlockStatement"/>
+          <xs:sequence>
+            <xs:group ref="Statement"/>
+            <xs:element minOccurs="0" maxOccurs="unbounded" ref="proof"/>
+          </xs:sequence>
+        </xs:choice>
+      </xs:extension>
+    </xs:complexContent>
   </xs:complexType>
   <xs:group name="Theorem">
     <xs:choice>
@@ -1061,11 +1061,11 @@
   <xs:element name="fact" type="TheoremLike"/>
   <xs:element name="identity" type="TheoremLike"/>
   <xs:complexType name="AxiomLike">
-    <xs:sequence>
-      <xs:group ref="MetaDataTitleOptional"/>
-      <xs:group ref="Statement"/>
-    </xs:sequence>
-    <xs:attributeGroup ref="MetaDataTitleOptional"/>
+    <xs:complexContent>
+      <xs:extension base="MetaDataTitleCreatorOptional">
+        <xs:group ref="Statement"/>
+      </xs:extension>
+    </xs:complexContent>
   </xs:complexType>
   <xs:group name="Axiom">
     <xs:choice>
@@ -2135,6 +2135,11 @@
       <xs:group ref="TextLong"/>
     </xs:complexType>
   </xs:element>
+  <xs:element name="creator">
+    <xs:complexType mixed="true">
+      <xs:group ref="TextShort"/>
+    </xs:complexType>
+  </xs:element>
   <xs:attributeGroup name="XMLBase">
     <xs:attribute ref="xml:base" use="required"/>
   </xs:attributeGroup>
@@ -2179,6 +2184,16 @@
     <xs:attribute ref="xml:base"/>
     <xs:attribute ref="xml:lang"/>
   </xs:attributeGroup>
+  <xs:complexType name="MetaDataTitleCreatorOptional">
+    <xs:sequence>
+      <xs:element minOccurs="0" ref="title"/>
+      <xs:element minOccurs="0" ref="creator"/>
+      <xs:element minOccurs="0" maxOccurs="unbounded" ref="idx"/>
+    </xs:sequence>
+    <xs:attribute ref="xml:id"/>
+    <xs:attribute ref="xml:base"/>
+    <xs:attribute ref="xml:lang"/>
+  </xs:complexType>
   <xs:complexType name="MetaDataCaption">
     <xs:sequence>
       <xs:element minOccurs="0" ref="title"/>

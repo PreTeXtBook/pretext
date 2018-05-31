@@ -464,7 +464,7 @@
                 (BlockStatement | Case)+
             }
         TheoremLike =
-            MetaDataTitleOptional,
+            MetaDataTitleCreatorOptional,
             (BlockStatement+ | (Statement, Proof*))
         Theorem =
             element theorem {TheoremLike}
@@ -485,7 +485,7 @@
         
         
         AxiomLike =
-            MetaDataTitleOptional,
+            MetaDataTitleCreatorOptional,
             Statement
         Axiom =
             element axiom {AxiomLike}
@@ -1016,6 +1016,8 @@
             element title {TextLong}
         Subtitle =
             element subtitle {TextLong}
+        Creator =
+            element creator {TextShort}
         XMLBase = attribute xml:base {text}
         XMLLang = attribute xml:lang {text}
         MetaDataTarget =
@@ -1039,6 +1041,13 @@
             XMLBase?,
             XMLLang?,
             Title?,
+            Index*
+        MetaDataTitleCreatorOptional =
+            UniqueID?,
+            XMLBase?,
+            XMLLang?,
+            Title?,
+            Creator?,
             Index*
         MetaDataCaption =
             UniqueID?,
