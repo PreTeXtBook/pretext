@@ -2939,9 +2939,11 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- so we want to accomodate that option, and do so via     -->
 <!-- the localization routines.                              -->
 
-<!-- With modal templates below, the default template does nothing -->
+<!-- With modal templates below, the default template does nothing   -->
+<!-- We include the "creator" element of a theorem/axiom as metadata -->
 <xsl:template match="title" />
 <xsl:template match="subtitle" />
+<xsl:template match="creator" />
 
 <!-- Some items have default titles that make sense         -->
 <!-- Typically these are one-off subdivisions (eg preface), -->
@@ -3043,6 +3045,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:value-of select="$last-char and contains($title-ending-punctuation, $last-char)" />
 </xsl:template>
 
+<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;" mode="creator-full">
+    <xsl:apply-templates select="creator/node()" />
+</xsl:template>
 
 <!-- ################ -->
 <!-- Copies of Images -->
