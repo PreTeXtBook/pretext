@@ -428,10 +428,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <li>
         <a href="{$url}">
             <!-- important not include codenumber span -->
-            <xsl:if test="$num!=''">
+            <xsl:if test="not($num = '')">
                 <span class="codenumber">
                     <xsl:value-of select="$num" />
                 </span>
+                <xsl:text> </xsl:text>
             </xsl:if>
             <!-- title is required on structural elements -->
             <span>
@@ -527,9 +528,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <span class="type">
         <xsl:apply-templates select="." mode="type-name" />
     </span>
+    <xsl:text> </xsl:text>
     <span class="codenumber">
         <xsl:apply-templates select="." mode="number" />
     </span>
+    <xsl:text> </xsl:text>
     <span>
         <xsl:apply-templates select="." mode="title-attributes" />
         <xsl:apply-templates select="." mode="title-full" />
@@ -546,9 +549,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:with-param>
         </xsl:call-template>
     </span>
+    <xsl:text> </xsl:text>
     <span class="codenumber">
         <xsl:apply-templates select="." mode="number" />
     </span>
+    <xsl:text> </xsl:text>
     <span>
         <xsl:apply-templates select="." mode="title-attributes" />
         <xsl:apply-templates select="." mode="title-full" />
@@ -873,7 +878,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <section class="exercises">
             <h1 class="heading">
                 <span class="type">Exercises</span>
-                <span class="codenumber"><xsl:apply-templates select="." mode="number" /></span>
+                <xsl:text> </xsl:text>
+                <span class="codenumber">
+                    <xsl:apply-templates select="." mode="number" />
+                </span>
+                <xsl:text> </xsl:text>
                 <span>
                     <xsl:apply-templates select="." mode="title-attributes" />
                     <xsl:apply-templates select="." mode="title-full" />
@@ -895,8 +904,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:variable>
         <article class="exercise-like" id="{$xref}">
             <h6 class="heading hidden-type">
-            <span class="type"><xsl:apply-templates select="." mode="type-name" /></span>
-            <span class="codenumber"><xsl:apply-templates select="." mode="serial-number" /></span>
+            <span class="type">
+                <xsl:apply-templates select="." mode="type-name" />
+            </span>
+            <xsl:text> </xsl:text>
+            <span class="codenumber">
+                <xsl:apply-templates select="." mode="serial-number" />
+            </span>
+            <xsl:text> </xsl:text>
             <xsl:if test="title">
                 <span>
                     <xsl:apply-templates select="." mode="title-attributes" />
@@ -1033,24 +1048,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--   (1) No author credit                                -->
 <!--   (2) No permalink                                    -->
 <xsl:template match="*" mode="list-of-header">
-    <xsl:element name="h1">
-        <xsl:attribute name="class">
-            <xsl:text>heading</xsl:text>
-        </xsl:attribute>
+    <h1 class="heading">
          <xsl:attribute name="title">
             <xsl:apply-templates select="." mode="tooltip-text" />
         </xsl:attribute>
         <span class="type">
             <xsl:apply-templates select="." mode="type-name" />
         </span>
+        <xsl:text> </xsl:text>
         <span class="codenumber">
             <xsl:apply-templates select="." mode="number" />
         </span>
+        <xsl:text> </xsl:text>
         <span>
             <xsl:apply-templates select="." mode="title-attributes" />
             <xsl:apply-templates select="." mode="title-full" />
         </span>
-    </xsl:element>
+    </h1>
 </xsl:template>
 
 <!-- Entries in list-of's -->
@@ -1644,17 +1658,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="number" />
         </xsl:variable>
         <xsl:if test="not($the-number='')">
+            <xsl:text> </xsl:text>
             <span class="codenumber">
                 <xsl:value-of select="$the-number" />
             </span>
         </xsl:if>
         <xsl:if test="title">
+            <xsl:text> </xsl:text>
             <span>
                 <xsl:apply-templates select="." mode="title-attributes" />
                 <xsl:apply-templates select="." mode="title-full" />
             </span>
         </xsl:if>
         <xsl:if test="creator and (&THEOREM-FILTER; or &AXIOM-FILTER;)">
+            <xsl:text> </xsl:text>
             <span class="creator">
                 <xsl:apply-templates select="." mode="creator-full" />
             </span>
@@ -1669,6 +1686,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <span class="codenumber">
             <xsl:apply-templates select="." mode="serial-number" />
         </span>
+        <xsl:text> </xsl:text>
         <xsl:if test="title">
             <span>
                 <xsl:apply-templates select="." mode="title-attributes" />
@@ -1685,9 +1703,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <span class="type">
             <xsl:apply-templates select="." mode="type-name" />
         </span>
+        <xsl:text> </xsl:text>
         <span class="codenumber">
             <xsl:apply-templates select="." mode="serial-number" />
         </span>
+        <xsl:text> </xsl:text>
         <xsl:if test="title">
             <span>
                 <xsl:apply-templates select="." mode="title-attributes" />
@@ -1719,6 +1739,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </span>
         <!-- codenumber is implicit via placement -->
         <xsl:if test="title">
+        <xsl:text> </xsl:text>
             <span>
                 <xsl:apply-templates select="." mode="title-attributes" />
                 <xsl:apply-templates select="." mode="title-full" />
@@ -1783,11 +1804,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- An empty value means element is a singleton -->
     <!-- else the serial number comes through        -->
     <xsl:if test="not($the-number = '')">
+        <xsl:text> </xsl:text>
         <span class="codenumber">
             <xsl:apply-templates select="." mode="serial-number" />
         </span>
     </xsl:if>
     <xsl:if test="title">
+        <xsl:text> </xsl:text>
         <span>
             <xsl:apply-templates select="." mode="title-attributes" />
             <xsl:apply-templates select="." mode="title-full" />
@@ -2471,9 +2494,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <span class="type">
                         <xsl:apply-templates select="." mode="type-name"/>
                     </span>
+                    <xsl:text> </xsl:text>
                     <span class="codenumber">
                         <xsl:apply-templates select="." mode="number"/>
                     </span>
+                    <xsl:text> </xsl:text>
                     <xsl:apply-templates select="." mode="title-full" />
                 </figcaption>
             </xsl:if>
@@ -5797,9 +5822,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <span class="type">
             <xsl:apply-templates select="parent::*" mode="type-name"/>
         </span>
+        <xsl:text> </xsl:text>
         <span class="codenumber">
             <xsl:apply-templates select="parent::*" mode="number"/>
         </span>
+        <xsl:text> </xsl:text>
         <xsl:apply-templates />
     </figcaption>
 </xsl:template>
@@ -8441,7 +8468,10 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
                         </xsl:attribute>
                         <xsl:variable name="num"><xsl:apply-templates select="." mode="number" /></xsl:variable>
                         <xsl:if test="$num!=''">
-                            <span class="codenumber"><xsl:value-of select="$num" /></span>
+                            <span class="codenumber">
+                                <xsl:value-of select="$num" />
+                            </span>
+                            <xsl:text> </xsl:text>
                         </xsl:if>
                         <span>
                             <xsl:apply-templates select="." mode="title-attributes" />
