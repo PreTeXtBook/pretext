@@ -8539,15 +8539,22 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
 </xsl:template>
 
 <!-- Tooltip Text -->
-<!-- text for an HTML title attribute -->
-<!-- TODO: be more careful about extraneous spaces -->
-<!-- TODO: captions from figures, tables, sbs? -->
+<!-- Text for an HTML "title" attribute      -->
+<!-- Always leverage the PreTeXt title, e.g. -->
+<!-- don't use "caption", it could be BIG    -->
 <xsl:template match="*" mode="tooltip-text">
     <xsl:apply-templates select="." mode="type-name" />
-    <xsl:text> </xsl:text>
-    <xsl:apply-templates select="." mode="number" />
-    <xsl:text> </xsl:text>
-    <xsl:apply-templates select="." mode="title-simple" />
+    <xsl:variable name="num">
+        <xsl:apply-templates select="." mode="number" />
+    </xsl:variable>
+    <xsl:if test="not($num = '')">
+        <xsl:text> </xsl:text>
+        <xsl:value-of select="$num" />
+    </xsl:if>
+    <xsl:if test="title">
+        <xsl:text>: </xsl:text>
+        <xsl:apply-templates select="." mode="title-simple" />
+    </xsl:if>
 </xsl:template>
 
 <!-- MathJax header                                             -->
