@@ -212,6 +212,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <theorem>
             <title>De Morgan's Laws</title>
+            <creator>Augustus De Morgan, 1806<ndash />1871</creator>
             <idx><h>De Morgan's laws</h><h>for sets</h></idx>
             <statement>
                 <p>Let <m>A</m> and <m>B</m> be sets. Then<ol>
