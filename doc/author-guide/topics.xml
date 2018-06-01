@@ -1668,13 +1668,13 @@
 
         <p>Continuing our discussion from <xref ref="overview-accessibility" /> we begin by listing features of our conversion to <init>HTML</init> which happen automatically.<dl width="narrow">
             <li>
-                <title>CSS</title>
-                <p>Wherever possible we supply <init>HTML</init> elements and class names that will be interpreted sensibly by a screen reader in the absence of styling provided by <init>CSS</init>.</p>
+                <title>HTML</title>
+                <p>Wherever possible we supply <init>HTML</init> elements and attributes that will be interpreted sensibly by a screen reader in the absence of the visual styling provided by <init>CSS</init>.  This means we are cognizant of the role of headings (<c>h1</c> through <c>h6</c>), provide HTML that passes validation checks, and so on.  Employing attributes from the <url href="https://www.w3.org/WAI/standards-guidelines/aria/">Accessible Rich Internet Applications</url> suite of web standards (<init>ARIA</init>) at <c>www.w3.org/WAI/</c> will go a long way to improving accessibility.  This work is in-progress as of 2018-05-31.</p>
             </li>
 
             <li>
                 <title>Mathematics</title>
-                <p>MathJax (<url href="https://www.mathjax.org/"><c>mathjax.org</c></url>) is the JavaScript library we use to render mathematics.  It provides extensive capabilities for screen readers to render the mathematics audibly, and by default your document is configured to take advantage of these features.  We refer the reader to the MathJax documentation of <url href="http://docs.mathjax.org/en/latest/misc/accessibility-features.html">Accessibility Features</url> at <c>docs.mathjax.org</c>.</p>
+                <p>MathJax (<url href="https://www.mathjax.org/"><c>mathjax.org</c></url>) is the JavaScript library we use to render mathematics.  It provides extensive capabilities for screen readers to render the mathematics audibly, and by default your document is configured to take advantage of these features.  We refer the reader to the MathJax documentation of <url href="http://docs.mathjax.org/en/latest/misc/accessibility-features.html">Accessibility Features</url> at <c>docs.mathjax.org</c>.  The first step is to use the context menu (right-click) on a piece of mathematics to <c>Activate</c> the <c>Explorer</c> via the <c>Accessibility</c> menu item.  The page will reload and you will many new options to explore via the <c>Accessibility > Explorer</c> menu item.</p>
             </li>
 
             <li>
@@ -1695,12 +1695,14 @@
                 <title>Image Description</title>
                 <p>Images you author or supply will be invisible to some readers.  Within every <tag>image</tag> element you can use a <tag>description</tag> element.  The content here will migrate to places like the <init>HTML</init> <attr>alt</attr> attribute to be picked up by screen readers.</p>
 
-                <p>Make the content very expressive and detailed, but also do not use any markup whatsoever, just simple characters, and avoid quotation marks.</p>
+                <p>Make the content very expressive and detailed, but not overly verbose.  Also, do not use any markup whatsoever, just simple characters, and avoid quotation marks.  You can learn more at sites such as the one provided by the Web Accessibility Initiative (<init>WAI</init>) at <url href="https://www.w3.org/WAI/fundamentals/accessibility-principles/#alternatives">Text alternatives for non-text content</url>.</p>
+
+                <p>We cannot do this one for you, this is for the author only.  But we can give you the tools do it as easily and as correctly as possible.</p>
             </li>
 
             <li>
                 <title>Image Formats</title>
-                <p>University offices that provide services for students with disabilities are often interested in the images themselves from a text, as standalone files.  You could use the <c>mbx</c> script to produce a variety of different formats and bundle these up in a single archive file for distribution at your book's website.  Or you can make each image available through adjacent links placed automatically.  We call these <q>image archives.</q>  See <xref ref="topic-images-archive" />.</p>
+                <p>University offices that provide services for students with disabilities are often interested in the images themselves from a text, as standalone files.  For example, they might be able to manufacture tactile versions.  You could use the <c>mbx</c> script to produce a variety of different formats and bundle these up in a single archive file for distribution at your book's website.  Or you can make each image available through adjacent links placed automatically.  We call these <q>image archives.</q>  See <xref ref="topic-images-archive" />.</p>
             </li>
 
             <li>
