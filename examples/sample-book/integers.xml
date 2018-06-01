@@ -62,7 +62,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- wording change.  Suggested by P. Diethelm.  TWJ 22/4/2013 -->
 
         <example xml:id="example-integers-induction-greater-than">
-          <title>An inequality for powers of <m>2</m></title>
+            <title>An Inequality for Powers of <m>2</m></title>
             <p>For all integers <m>n \geq 3</m>, <m>2^n \gt n + 4</m>. Since
                 <me>8 = 2^3 \gt 3 + 4 = 7,</me>
             the statement is true for <m>n_0 = 3</m>.  Assume that <m>2^k \gt k + 4</m> for <m>k \geq 3</m>.  Then <m>2^{k + 1} = 2 \cdot 2^{k} \gt 2(k + 4)</m>.  But 
@@ -72,7 +72,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 
         <example xml:id="example-integers-induction-divisible">
-          <title>Some integers divisible by <m>9</m></title>
+            <title>Some Integers Divisible by <m>9</m></title>
             <p>Every integer <m>10^{n + 1} + 3 \cdot 10^n + 5</m> is divisible by 9 for <m>n \in {\mathbb N}</m>.  For <m>n = 1</m>, 
                 <me>10^{1 + 1} + 3 \cdot 10 + 5 = 135 = 9 \cdot 15</me>
             is divisible by 9.  Suppose that <m>10^{k + 1} + 3 \cdot 10^k + 5</m> is divisible by 9 for <m>k \geq 1</m>.  Then<md>
@@ -82,7 +82,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </example>
 
         <example xml:id="example-integers-binomial-theorem">
-          <title>The binomial theorem</title>
+            <title>The Binomial Theorem</title>
             <p>We will prove the binomial theorem using mathematical induction; that is, <me>(a + b)^n = \sum_{k = 0}^{n} \binom{n}{k} a^k b^{n - k},</me> where <m>a</m> and <m>b</m> are real numbers, <m>n \in \mathbb{N}</m>, and <me>\binom{n}{k} = \frac{n!}{k! (n - k)!}</me> is the binomial coefficient.  We first show that <me>\binom{n + 1}{k} = \binom{n}{k} + \binom{n}{k - 1}.</me> This result follows from<md>
                 <mrow>\binom{n}{k} + \binom{n}{k - 1} &amp; = \frac{n!}{k!(n - k)!} +\frac{n!}{(k-1)!(n - k + 1)!}</mrow>
                 <mrow>&amp; = \frac{(n + 1)!}{k!(n + 1 - k)!}</mrow>
@@ -231,6 +231,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>Among other things, <xref ref="theorem-integers-gcd" /> allows us to compute the greatest common divisor of two integers.</p>
 
             <example xml:id="example-integers-gcd">
+                <title>Greatest Common Divisor of Two Integers</title>
                 <p>Let us compute the greatest common divisor of <m>945</m> and <m>2415</m>.  First observe that<md>
                     <mrow>2415 &amp; = 945 \cdot 2 + 525</mrow>
                     <mrow>945 &amp; = 525 \cdot 1 + 420</mrow>
@@ -279,8 +280,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>Let <m>p</m> be an integer such that <m>p \gt 1</m>.  We say that <m>p</m> is a <term>prime number</term><idx><h>Prime integer</h></idx>, or simply <m>p</m> is <term>prime</term>, if the only positive numbers that divide <m>p</m> are 1 and <m>p</m> itself.  An integer <m>n \gt 1</m> that is not prime is said to be <term>composite</term><idx><h>Composite integer</h></idx>.</p>
 
             <lemma xml:id="theorem-integers-prime-divisor">
-                <title>Euclid</title>
-                
+                <creator>Euclid</creator>
+
                 <statement>
                     <p>Let <m>a</m> and <m>b</m> be integers and <m>p</m> be a prime number.  If <m>p \mid ab</m>, then either <m>p \mid a</m> or <m>p \mid b</m>.</p>
                 </statement>
@@ -292,7 +293,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </lemma>
 
             <theorem xml:id="theorem-integers-infinite-primes">
-                <title>Euclid</title>
+                <creator>Euclid</creator>
+
                 <statement>
                     <p>There exist an infinite number of primes.</p>
                 </statement>
