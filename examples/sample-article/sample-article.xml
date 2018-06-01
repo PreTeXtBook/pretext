@@ -6710,13 +6710,13 @@ the xsltproc executable.
 
                 <theorem xml:id="theorem-number-01">
                     <title>First Theorem</title>
-                    <creator>Bunyakovsky</creator>
+                    <creator>Cauchy</creator>
                     <statement><p>No statement.</p></statement>
                 </theorem>
 
                 <theorem xml:id="theorem-number-02">
                     <title>Second Theorem</title>
-                    <creator>Schwarz</creator>
+                    <creator>Bunyakovsky</creator>
                     <statement><p>No statement.</p></statement>
                 </theorem>
 
@@ -6733,12 +6733,14 @@ the xsltproc executable.
                     <p>A document leaf.</p>
 
                     <theorem xml:id="theorem-number-03">
-                        <title>First Theorem</title>
+                        <title>First Theorem!</title>
+                        <creator>Schwarz</creator>
                         <statement><p>No statement.</p></statement>
                     </theorem>
 
                     <theorem xml:id="theorem-number-04">
-                        <title>Second Theorem</title>
+                        <title>Second Theorem?</title>
+                        <creator>Inequality</creator>
                         <statement><p>No statement.</p></statement>
                     </theorem>
 
