@@ -74,25 +74,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <example xml:id="example-groups-zn-arithmetic-laws">
                 <title>Modular Arithmetic</title>
                 <p>Most, but not all, of the usual laws of arithmetic hold for addition and multiplication in <m>{\mathbb Z}_n</m>.  For instance, it is not necessarily true that there is a multiplicative inverse.  Consider the multiplication table for <m>{\mathbb Z}_8</m> in <xref ref="figure-z8-mult" />.  Notice that 2, 4, and 6 do not have multiplicative inverses; that is, for <m>n = 2</m>, 4, or 6, there is no integer <m>k</m> such that <m>k n \equiv 1 \pmod{ 8}</m>.</p>
-            </example>
 
-            <figure xml:id="figure-z8-mult">
-                <caption>Multiplication table for <m>{\mathbb Z_8}</m></caption>
-                <sidebyside>
-                    <p><me>\begin{array}{c|cccccccc}
-                    <![CDATA[\cdot & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
-                    \hline
-                    0       & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-                    1       & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
-                    2       & 0 & 2 & 4 & 6 & 0 & 2 & 4 & 6 \\
-                    3       & 0 & 3 & 6 & 1 & 4 & 7 & 2 & 5 \\
-                    4       & 0 & 4 & 0 & 4 & 0 & 4 & 0 & 4 \\
-                    5       & 0 & 5 & 2 & 7 & 4 & 1 & 6 & 3 \\
-                    6       & 0 & 6 & 4 & 2 & 0 & 6 & 4 & 2 \\
-                    7       & 0 & 7 & 6 & 5 & 4 & 3 & 2 & 1 ]]>
-                    \end{array}</me></p>
-                </sidebyside>
-            </figure>
+                <figure xml:id="figure-z8-mult">
+                    <caption>Multiplication table for <m>{\mathbb Z_8}</m></caption>
+                    <sidebyside>
+                        <p><me>\begin{array}{c|cccccccc}
+                        <![CDATA[\cdot & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+                        \hline
+                        0       & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+                        1       & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+                        2       & 0 & 2 & 4 & 6 & 0 & 2 & 4 & 6 \\
+                        3       & 0 & 3 & 6 & 1 & 4 & 7 & 2 & 5 \\
+                        4       & 0 & 4 & 0 & 4 & 0 & 4 & 0 & 4 \\
+                        5       & 0 & 5 & 2 & 7 & 4 & 1 & 6 & 3 \\
+                        6       & 0 & 6 & 4 & 2 & 0 & 6 & 4 & 2 \\
+                        7       & 0 & 7 & 6 & 5 & 4 & 3 & 2 & 1 ]]>
+                        \end{array}</me></p>
+                    </sidebyside>
+                </figure>
+            </example>
 
             <proposition xml:id="proposition-zn-equiv-classes">
                 <statement>
@@ -379,24 +379,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <example xml:id="example-groups-z5">
                 <title>Group of Integers Modulo <m>5</m></title>
                 <p>The integers mod <m>n</m> form a group under addition modulo <m>n</m>.  Consider <m>{\mathbb Z}_5</m>, consisting of the equivalence classes of the integers 0, 1, 2, 3, and 4.  We define the group operation on <m>{\mathbb Z}_5</m> by modular addition.  We write the binary operation on the group additively; that is, we write <m>m + n</m>.  The element 0 is the identity of the group and each element in <m>{\mathbb Z}_5</m> has an inverse. For instance, <m>2 + 3 = 3 + 2 = 0</m>.  <xref ref="figure-z5-cayley" /> is a Cayley table for <m>{\mathbb Z}_5</m>  (Contributed by <xref ref="rbeezer" />).  By <xref ref="proposition-zn-equiv-classes" />, <m>{\mathbb Z}_n = \{0, 1, \ldots, n-1 \}</m> is a group under the binary operation of addition mod <m>n</m>.</p>
+
+                <figure xml:id="figure-z5-cayley">
+                    <caption>Cayley table for <m>({\mathbb Z_5}, +)</m></caption>
+
+                    <sidebyside>
+                        <p><me>\begin{array}{c|ccccc}
+                        <![CDATA[+ & 0 & 1 & 2 & 3 & 4 \\
+                        \hline
+                          0 & 0 & 1 & 2 & 3 & 4 \\
+                          1 & 1 & 2 & 3 & 4 & 0 \\
+                          2 & 2 & 3 & 4 & 0 & 1 \\
+                          3 & 3 & 4 & 0 & 1 & 2 \\
+                          4 & 4 & 0 & 1 & 2 & 3]]>
+                        \end{array}</me></p>
+                    </sidebyside>
+
+                </figure>
             </example>
-
-            <figure xml:id="figure-z5-cayley">
-                <caption>Cayley table for <m>({\mathbb Z_5}, +)</m></caption>
-
-                <sidebyside>
-                    <p><me>\begin{array}{c|ccccc}
-                    <![CDATA[+ & 0 & 1 & 2 & 3 & 4 \\
-                    \hline
-                      0 & 0 & 1 & 2 & 3 & 4 \\
-                      1 & 1 & 2 & 3 & 4 & 0 \\
-                      2 & 2 & 3 & 4 & 0 & 1 \\
-                      3 & 3 & 4 & 0 & 1 & 2 \\
-                      4 & 4 & 0 & 1 & 2 & 3]]>
-                    \end{array}</me></p>
-                </sidebyside>
-
-            </figure>
 
             <example xml:id="example-groups-z6-mult">
                 <title>Multiplication of Integers Modulo <m>6</m></title>
@@ -407,21 +407,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </md></p>
 
                 <p>By <xref ref="proposition-zn-equiv-classes" />, every nonzero <m>k</m> does have an inverse in <m>{\mathbb Z}_n</m> if <m>k</m> is relatively prime to <m>n</m>.  Denote the set of all such nonzero elements in <m>{\mathbb Z}_n</m> by <m>U(n)</m>. <notation><usage>U(n)</usage><description>group of units in <m>\mathbb Z_n</m></description></notation>  Then <m>U(n)</m> is a group called the <term>group of units</term><idx><h>Group</h><h>of units</h></idx> of <m>{\mathbb Z}_n</m>.  <xref ref="figure-cayley-u8" /> is a Cayley table for the group <m>U(8)</m>.</p>
-            </example>
 
-            <figure xml:id="figure-cayley-u8">
-                <caption>Multiplication table for <m>U(8)</m></caption>
-                <sidebyside>
-                    <p><me>\begin{array}{c|cccc}
-                    <![CDATA[\cdot & 1 & 3 & 5 & 7 \\
-                    \hline
-                    1       & 1 & 3 & 5 & 7 \\
-                    3       & 3 & 1 & 7 & 5 \\
-                    5       & 5 & 7 & 1 & 3 \\
-                    7       & 7 & 5 & 3 & 1]]>
-                    \end{array}</me></p>
-                </sidebyside>
-            </figure>
+                <figure xml:id="figure-cayley-u8">
+                    <caption>Multiplication table for <m>U(8)</m></caption>
+                    <sidebyside>
+                        <p><me>\begin{array}{c|cccc}
+                        <![CDATA[\cdot & 1 & 3 & 5 & 7 \\
+                        \hline
+                        1       & 1 & 3 & 5 & 7 \\
+                        3       & 3 & 1 & 7 & 5 \\
+                        5       & 5 & 7 & 1 & 3 \\
+                        7       & 7 & 5 & 3 & 1]]>
+                        \end{array}</me></p>
+                    </sidebyside>
+                </figure>
+            </example>
 
             <example xml:id="example-groups-nonabelian">
                 <title>Symmetries of a Triangle is not Abelian</title>
@@ -660,22 +660,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <example xml:id="example-groups-z2xz2">
                 <title>Structurally Different Groups</title>
                 <p>One way of telling whether or not two groups are the same is by examining their subgroups.  Other than the trivial subgroup and the group itself, the group <m>{\mathbb Z}_4</m> has a single subgroup consisting of the elements 0 and 2. From the group <m>{\mathbb Z}_2</m>, we can form another group of four elements as follows.  As a set this group is <m>{\mathbb Z}_2 \times {\mathbb Z}_2</m>. We perform the group operation coordinatewise; that is, <m>(a,b) + (c,d) = (a+c, b+d)</m>. <xref ref="figure-z2xz2" /> is an addition table for <m>{\mathbb Z}_2 \times {\mathbb Z}_2</m>. Since there are three nontrivial proper subgroups of <m>{\mathbb Z}_2 \times {\mathbb Z}_2</m>, <m>H_1 = \{ (0,0), (0,1) \}</m>, <m>H_2 = \{ (0,0), (1,0) \}</m>, and <m>H_3 = \{ (0,0), (1,1) \}</m>, <m>{\mathbb Z}_4</m> and <m>{\mathbb Z}_2 \times {\mathbb Z}_2</m> must be different groups.</p>
+
+                <figure xml:id="figure-z2xz2">
+                    <caption>Addition table for <m>{\mathbb Z}_2 \times {\mathbb Z}_2</m></caption>
+
+                    <sidebyside>
+                        <p><me>\begin{array}{c|cccc}
+                        <![CDATA[+     & (0,0) & (0,1) & (1,0) & (1,1) \\
+                        \hline
+                        (0,0) & (0,0) & (0,1) & (1,0) & (1,1) \\
+                        (0,1) & (0,1) & (0,0) & (1,1) & (1,0) \\
+                        (1,0) & (1,0) & (1,1) & (0,0) & (0,1) \\
+                        (1,1) & (1,1) & (1,0) & (0,1) & (0,0)]]>
+                        \end{array}</me></p>
+                    </sidebyside>
+                </figure>
             </example>
 
-            <figure xml:id="figure-z2xz2">
-                <caption>Addition table for <m>{\mathbb Z}_2 \times {\mathbb Z}_2</m></caption>
-
-                <sidebyside>
-                    <p><me>\begin{array}{c|cccc}
-                    <![CDATA[+     & (0,0) & (0,1) & (1,0) & (1,1) \\
-                    \hline
-                    (0,0) & (0,0) & (0,1) & (1,0) & (1,1) \\
-                    (0,1) & (0,1) & (0,0) & (1,1) & (1,0) \\
-                    (1,0) & (1,0) & (1,1) & (0,0) & (0,1) \\
-                    (1,1) & (1,1) & (1,0) & (0,1) & (0,0)]]>
-                    \end{array}</me></p>
-                </sidebyside>
-            </figure>
 
         </subsection>
 
