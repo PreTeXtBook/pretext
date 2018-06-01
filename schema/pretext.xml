@@ -46,9 +46,17 @@
             element article {
                 MetaDataSubtitle,
                 ArticleFrontMatter?,
-                Section+,
-                Exercises*,
-                BackMatter?
+                (
+                    (BlockDivision | Paragraphs)+
+                |
+                    (
+                        IntroductionDivision?,
+                        Section+,
+                        Exercises*,
+                        ConclusionDivision?,
+                        BackMatter?
+                    )
+                )
             }
         Book =
             ## Here is what a book looks like.

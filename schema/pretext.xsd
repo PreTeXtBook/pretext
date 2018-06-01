@@ -21,9 +21,19 @@
         <xs:extension base="MetaDataSubtitle">
           <xs:sequence>
             <xs:group minOccurs="0" ref="ArticleFrontMatter"/>
-            <xs:element maxOccurs="unbounded" ref="section"/>
-            <xs:element minOccurs="0" maxOccurs="unbounded" ref="exercises"/>
-            <xs:element minOccurs="0" ref="backmatter"/>
+            <xs:choice>
+              <xs:choice maxOccurs="unbounded">
+                <xs:group ref="BlockDivision"/>
+                <xs:group ref="Paragraphs"/>
+              </xs:choice>
+              <xs:sequence>
+                <xs:group minOccurs="0" ref="IntroductionDivision"/>
+                <xs:element maxOccurs="unbounded" ref="section"/>
+                <xs:element minOccurs="0" maxOccurs="unbounded" ref="exercises"/>
+                <xs:group minOccurs="0" ref="ConclusionDivision"/>
+                <xs:element minOccurs="0" ref="backmatter"/>
+              </xs:sequence>
+            </xs:choice>
           </xs:sequence>
         </xs:extension>
       </xs:complexContent>

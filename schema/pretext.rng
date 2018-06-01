@@ -22,15 +22,31 @@
       <optional>
         <ref name="ArticleFrontMatter"/>
       </optional>
-      <oneOrMore>
-        <ref name="Section"/>
-      </oneOrMore>
-      <zeroOrMore>
-        <ref name="Exercises"/>
-      </zeroOrMore>
-      <optional>
-        <ref name="BackMatter"/>
-      </optional>
+      <choice>
+        <oneOrMore>
+          <choice>
+            <ref name="BlockDivision"/>
+            <ref name="Paragraphs"/>
+          </choice>
+        </oneOrMore>
+        <group>
+          <optional>
+            <ref name="IntroductionDivision"/>
+          </optional>
+          <oneOrMore>
+            <ref name="Section"/>
+          </oneOrMore>
+          <zeroOrMore>
+            <ref name="Exercises"/>
+          </zeroOrMore>
+          <optional>
+            <ref name="ConclusionDivision"/>
+          </optional>
+          <optional>
+            <ref name="BackMatter"/>
+          </optional>
+        </group>
+      </choice>
     </element>
   </define>
   <define name="Book">
