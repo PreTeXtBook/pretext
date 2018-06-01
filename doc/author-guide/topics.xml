@@ -1674,7 +1674,24 @@
 
             <li>
                 <title>Mathematics</title>
-                <p>MathJax (<url href="https://www.mathjax.org/"><c>mathjax.org</c></url>) is the JavaScript library we use to render mathematics.  It provides extensive capabilities for screen readers to render the mathematics audibly, and by default your document is configured to take advantage of these features.  We refer the reader to the MathJax documentation of <url href="http://docs.mathjax.org/en/latest/misc/accessibility-features.html">Accessibility Features</url> at <c>docs.mathjax.org</c>.  The first step is to use the context menu (right-click) on a piece of mathematics to <c>Activate</c> the <c>Explorer</c> via the <c>Accessibility</c> menu item.  The page will reload and you will many new options to explore via the <c>Accessibility > Explorer</c> menu item.</p>
+                <idx><h>accessibility</h><h>mathematics</h></idx>
+                <idx><h>web accessibility</h><h>mathematics</h></idx>
+                <p>MathJax (<url href="https://www.mathjax.org/"><c>mathjax.org</c></url>) is the JavaScript library we use to render mathematics within the <init>HTML</init> output.  It provides extensive capabilities for screen readers to render the mathematics audibly, and by default your project's output is configured to take advantage of these features.  We refer the reader to the MathJax documentation of <url href="http://docs.mathjax.org/en/latest/misc/accessibility-features.html">Accessibility Features</url> at <c>docs.mathjax.org</c> for details.  But here is a simple experiment you can do yourself right now to simulate how a blind reader could experience mathematics with the combination of <pretext />, MathJax, and a screen reader.<ol>
+                    <li>Find some moderately complicated mathematics, such as in the <q>Mathematics</q> section of the sample article, or your own project, or the sample from MathJax copied below.</li>
+                    <li>Bring up the context menu on that display (a mouse right-click for most).</li>
+                    <li>Turn on the <c>Accessibility > Explorer > Activate</c> menu item.  The page will reload, and the <c>Explorer</c> menu item will earn many more menu items.  This setting is reasonably sticky, so you should not have to do this repeatedly.  Having this on will incur some processing time as part of each page load, so you may want to turn it off later.</li>
+                    <li>Turn on the <c>Accessibility > Explorer > Subtitles</c> menu item.</li>
+                    <li><c>TAB</c> until some mathematics is given focus (a discrete border appears).</li>
+                    <li><c>SHIFT-SPACE</c> will activate exploration of the mathematics with the Explorer.  A subtitle, with an aural rendering of the mathematics, will appear below the display.</li>
+                    <li>You can navigate (explore) the expression tree with the up, down, left, and right arrow keys.  The subtitles will change as you do this.</li>
+                </ol></p>
+                <p>From the MathJax demonstration page, Maxwell's equations for practice:<idx>Maxwell's equations</idx><md>
+                    <mrow>\nabla \times \vec{\mathbf{B}} -\, \frac1c\, \frac{\partial\vec{\mathbf{E}}}{\partial t} &amp; = \frac{4\pi}{c}\vec{\mathbf{j}}</mrow>
+                    <mrow>\nabla \cdot \vec{\mathbf{E}} &amp; = 4 \pi \rho</mrow>
+                    <mrow>\nabla \times \vec{\mathbf{E}}\, +\, \frac1c\, \frac{\partial\vec{\mathbf{B}}}{\partial t} &amp; = \vec{\mathbf{0}}</mrow>
+                    <mrow>\nabla \cdot \vec{\mathbf{B}} &amp; = 0</mrow>
+                </md><notation><usage>\nabla</usage><description>gradient operator</description></notation></p>
+
             </li>
 
             <li>
