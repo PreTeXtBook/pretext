@@ -71,7 +71,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </example>
 
             <example xml:id="example-groups-zn-arithmetic-laws">
-                <p>Most, but not all, of the usual laws of arithmetic hold for addition and multiplication in <m>{\mathbb Z}_n</m>.  For instance, it is not necessarily true that there is a multiplicative inverse.  Consider the multiplication table for <m>{\mathbb Z}_8</m> in Figure<nbsp /><xref ref="figure-z8-mult" />.  Notice that 2, 4, and 6 do not have multiplicative inverses; that is, for <m>n = 2</m>, 4, or 6, there is no integer <m>k</m> such that <m>k n \equiv 1 \pmod{ 8}</m>.</p>
+                <p>Most, but not all, of the usual laws of arithmetic hold for addition and multiplication in <m>{\mathbb Z}_n</m>.  For instance, it is not necessarily true that there is a multiplicative inverse.  Consider the multiplication table for <m>{\mathbb Z}_8</m> in <xref ref="figure-z8-mult" />.  Notice that 2, 4, and 6 do not have multiplicative inverses; that is, for <m>n = 2</m>, 4, or 6, there is no integer <m>k</m> such that <m>k n \equiv 1 \pmod{ 8}</m>.</p>
             </example>
 
             <figure xml:id="figure-z8-mult">
@@ -215,7 +215,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </image>
             </figure>
 
-            <p>A <term>symmetry</term> of a geometric figure is a rearrangement of the figure preserving the arrangement of its sides and vertices as well as its distances and angles.  A map from the plane to itself preserving the symmetry of an object is called a <term>rigid motion</term><idx><h>Rigid motion</h></idx>.  For example, if we look at the rectangle in Figure<nbsp /><xref ref="figure-groups-rectangle" />, it is easy to see that a rotation of <m>180^{\circ}</m> or <m>360^{\circ}</m> returns a rectangle in the plane with the same orientation as the original rectangle and the same relationship among the vertices.  A reflection of the rectangle across either the vertical axis or the horizontal axis can also be seen to be a symmetry.  However, a <m>90^{\circ}</m> rotation in either direction cannot be a symmetry unless the rectangle is a square.</p>
+            <p>A <term>symmetry</term> of a geometric figure is a rearrangement of the figure preserving the arrangement of its sides and vertices as well as its distances and angles.  A map from the plane to itself preserving the symmetry of an object is called a <term>rigid motion</term><idx><h>Rigid motion</h></idx>.  For example, if we look at the rectangle in <xref ref="figure-groups-rectangle" />, it is easy to see that a rotation of <m>180^{\circ}</m> or <m>360^{\circ}</m> returns a rectangle in the plane with the same orientation as the original rectangle and the same relationship among the vertices.  A reflection of the rectangle across either the vertical axis or the horizontal axis can also be seen to be a symmetry.  However, a <m>90^{\circ}</m> rotation in either direction cannot be a symmetry unless the rectangle is a square.</p>
 
             <!-- Replaced diagram with a tikz figure - TWJ 5/5/2010 -->
             <figure xml:id="figure-s3-symmetry">
@@ -318,7 +318,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 A & B & C \\
                 B & C & A
                 ]]>\end{pmatrix}.</me>
-            Notice that this particular permutation corresponds to the rigid motion of rotating the triangle by <m>120^{\circ}</m> in a clockwise direction.  In fact, every permutation gives rise to a symmetry of the triangle.  All of these symmetries are shown in Figure<nbsp /><xref ref="figure-s3-symmetry" />.</p>
+            Notice that this particular permutation corresponds to the rigid motion of rotating the triangle by <m>120^{\circ}</m> in a clockwise direction.  In fact, every permutation gives rise to a symmetry of the triangle.  All of these symmetries are shown in <xref ref="figure-s3-symmetry" />.</p>
 
             <p>A natural question to ask is what happens if one motion of the triangle <m>\bigtriangleup ABC</m> is followed by another.  Which symmetry is <m>\mu_1 \rho_1</m>; that is, what happens when we do the permutation <m>\rho_1</m> and then the permutation <m>\mu_1</m>?  <em>Remember that we are composing functions here.  Although we usually multiply left to right, we compose functions right to left.</em> We have<md>
                 <mrow>(\mu_1 \rho_1)(A) &amp; = \mu_1( \rho_1( A ) ) = \mu_1( B ) = C</mrow>
@@ -326,7 +326,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <mrow>(\mu_1 \rho_1)(C) &amp; = \mu_1( \rho_1( C ) ) = \mu_1( A ) = A.</mrow>
             </md></p>
 
-            <p>This is the same symmetry as <m>\mu_2</m>. Suppose we do these motions in the opposite order, <m>\rho_1</m> then <m>\mu_1</m>.  It is easy to determine that this is the same as the symmetry <m>\mu_3</m>; hence, <m>\rho_1 \mu_1 \neq \mu_1 \rho_1</m>.  A multiplication table for the symmetries of an equilateral triangle <m>\bigtriangleup ABC</m> is given in Figure<nbsp /><xref ref="figure-s3" />.</p>
+            <p>This is the same symmetry as <m>\mu_2</m>. Suppose we do these motions in the opposite order, <m>\rho_1</m> then <m>\mu_1</m>.  It is easy to determine that this is the same as the symmetry <m>\mu_3</m>; hence, <m>\rho_1 \mu_1 \neq \mu_1 \rho_1</m>.  A multiplication table for the symmetries of an equilateral triangle <m>\bigtriangleup ABC</m> is given in <xref ref="figure-s3" />.</p>
 
             <p>Notice that in the multiplication table for the symmetries of an equilateral triangle, for every motion of the triangle <m>\alpha</m> there is another motion <m>\beta</m> such that <m>\alpha \beta = id</m>; that is, for every motion there is another  motion that takes the triangle back to its original orientation.</p>
 
@@ -374,7 +374,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>It is often convenient to describe a group in terms of an addition or multiplication table.  Such a table is called a <term>Cayley table</term><idx><h>Cayley table</h></idx>.</p>
 
             <example xml:id="example-groups-z5">
-                <p>The integers mod <m>n</m> form a group under addition modulo <m>n</m>.  Consider <m>{\mathbb Z}_5</m>, consisting of the equivalence classes of the integers 0, 1, 2, 3, and 4.  We define the group operation on <m>{\mathbb Z}_5</m> by modular addition.  We write the binary operation on the group additively; that is, we write <m>m + n</m>.  The element 0 is the identity of the group and each element in <m>{\mathbb Z}_5</m> has an inverse. For instance, <m>2 + 3 = 3 + 2 = 0</m>.  Figure<nbsp /><xref ref="figure-z5-cayley" /> is a Cayley table for <m>{\mathbb Z}_5</m>  (Contributed by <xref ref="rbeezer" />).  By Proposition<nbsp /><xref ref="proposition-zn-equiv-classes" />, <m>{\mathbb Z}_n = \{0, 1, \ldots, n-1 \}</m> is a group under the binary operation of addition mod <m>n</m>.</p>
+                <p>The integers mod <m>n</m> form a group under addition modulo <m>n</m>.  Consider <m>{\mathbb Z}_5</m>, consisting of the equivalence classes of the integers 0, 1, 2, 3, and 4.  We define the group operation on <m>{\mathbb Z}_5</m> by modular addition.  We write the binary operation on the group additively; that is, we write <m>m + n</m>.  The element 0 is the identity of the group and each element in <m>{\mathbb Z}_5</m> has an inverse. For instance, <m>2 + 3 = 3 + 2 = 0</m>.  <xref ref="figure-z5-cayley" /> is a Cayley table for <m>{\mathbb Z}_5</m>  (Contributed by <xref ref="rbeezer" />).  By <xref ref="proposition-zn-equiv-classes" />, <m>{\mathbb Z}_n = \{0, 1, \ldots, n-1 \}</m> is a group under the binary operation of addition mod <m>n</m>.</p>
             </example>
 
             <figure xml:id="figure-z5-cayley">
@@ -401,7 +401,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <mrow> 4 \cdot 2 &amp; = 2 \qquad 5 \cdot 2 = 4.</mrow>
                 </md></p>
 
-                <p>By Proposition<nbsp /><xref ref="proposition-zn-equiv-classes" />, every nonzero <m>k</m> does have an inverse in <m>{\mathbb Z}_n</m> if <m>k</m> is relatively prime to <m>n</m>.  Denote the set of all such nonzero elements in <m>{\mathbb Z}_n</m> by <m>U(n)</m>. <notation><usage>U(n)</usage><description>group of units in <m>\mathbb Z_n</m></description></notation>  Then <m>U(n)</m> is a group called the <term>group of units</term><idx><h>Group</h><h>of units</h></idx> of <m>{\mathbb Z}_n</m>.  Figure<nbsp /><xref ref="figure-cayley-u8" /> is a Cayley table for the group <m>U(8)</m>.</p>
+                <p>By <xref ref="proposition-zn-equiv-classes" />, every nonzero <m>k</m> does have an inverse in <m>{\mathbb Z}_n</m> if <m>k</m> is relatively prime to <m>n</m>.  Denote the set of all such nonzero elements in <m>{\mathbb Z}_n</m> by <m>U(n)</m>. <notation><usage>U(n)</usage><description>group of units in <m>\mathbb Z_n</m></description></notation>  Then <m>U(n)</m> is a group called the <term>group of units</term><idx><h>Group</h><h>of units</h></idx> of <m>{\mathbb Z}_n</m>.  <xref ref="figure-cayley-u8" /> is a Cayley table for the group <m>U(8)</m>.</p>
             </example>
 
             <figure xml:id="figure-cayley-u8">
@@ -419,7 +419,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </figure>
 
             <example xml:id="example-groups-nonabelian">
-                <p>The symmetries of an equilateral triangle described in Section<nbsp /><xref ref="section-mod-n-sym" /> form a nonabelian group. As we observed, it is not necessarily true that <m>\alpha \beta = \beta \alpha</m> for two symmetries <m>\alpha</m> and <m>\beta</m>.  Using Figure<nbsp /><xref ref="figure-s3" />, which is a Cayley table for this group, we can easily check that the symmetries of an equilateral triangle are indeed a group. We will denote this group by either <m>S_3</m> or <m>D_3</m>, for reasons that will be explained later.</p>
+                <p>The symmetries of an equilateral triangle described in <xref ref="section-mod-n-sym" /> form a nonabelian group. As we observed, it is not necessarily true that <m>\alpha \beta = \beta \alpha</m> for two symmetries <m>\alpha</m> and <m>\beta</m>.  Using <xref ref="figure-s3" />, which is a Cayley table for this group, we can easily check that the symmetries of an equilateral triangle are indeed a group. We will denote this group by either <m>S_3</m> or <m>D_3</m>, for reasons that will be explained later.</p>
             </example>
 
             <example xml:id="example-groups-gl2">
@@ -645,7 +645,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </example>
 
             <example xml:id="example-groups-z2xz2">
-                <p>One way of telling whether or not two groups are the same is by examining their subgroups.  Other than the trivial subgroup and the group itself, the group <m>{\mathbb Z}_4</m> has a single subgroup consisting of the elements 0 and 2. From the group <m>{\mathbb Z}_2</m>, we can form another group of four elements as follows.  As a set this group is <m>{\mathbb Z}_2 \times {\mathbb Z}_2</m>. We perform the group operation coordinatewise; that is, <m>(a,b) + (c,d) = (a+c, b+d)</m>. Figure<nbsp /><xref ref="figure-z2xz2" /> is an addition table for <m>{\mathbb Z}_2 \times {\mathbb Z}_2</m>. Since there are three nontrivial proper subgroups of <m>{\mathbb Z}_2 \times {\mathbb Z}_2</m>, <m>H_1 = \{ (0,0), (0,1) \}</m>, <m>H_2 = \{ (0,0), (1,0) \}</m>, and <m>H_3 = \{ (0,0), (1,1) \}</m>, <m>{\mathbb Z}_4</m> and <m>{\mathbb Z}_2 \times {\mathbb Z}_2</m> must be different groups.</p>
+                <p>One way of telling whether or not two groups are the same is by examining their subgroups.  Other than the trivial subgroup and the group itself, the group <m>{\mathbb Z}_4</m> has a single subgroup consisting of the elements 0 and 2. From the group <m>{\mathbb Z}_2</m>, we can form another group of four elements as follows.  As a set this group is <m>{\mathbb Z}_2 \times {\mathbb Z}_2</m>. We perform the group operation coordinatewise; that is, <m>(a,b) + (c,d) = (a+c, b+d)</m>. <xref ref="figure-z2xz2" /> is an addition table for <m>{\mathbb Z}_2 \times {\mathbb Z}_2</m>. Since there are three nontrivial proper subgroups of <m>{\mathbb Z}_2 \times {\mathbb Z}_2</m>, <m>H_1 = \{ (0,0), (0,1) \}</m>, <m>H_2 = \{ (0,0), (1,0) \}</m>, and <m>H_3 = \{ (0,0), (1,1) \}</m>, <m>{\mathbb Z}_4</m> and <m>{\mathbb Z}_2 \times {\mathbb Z}_2</m> must be different groups.</p>
             </example>
 
             <figure xml:id="figure-z2xz2">
@@ -733,11 +733,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <title>UPC Symbols</title>
 
             <statement>
-                <p>Universal Product Code<idx><h>Universal Product Code</h></idx> (UPC) symbols are found on most products in grocery and retail stores. The UPC symbol is a 12-digit code identifying the manufacturer of a product and the product itself (Figure<nbsp /><xref ref="figure-upc-codes" />). The first 11 digits contain information about the product; the twelfth digit is used for error detection. If <m>d_1 d_2 \cdots d_{12}</m> is a valid UPC number, then 
+                <p>Universal Product Code<idx><h>Universal Product Code</h></idx> (UPC) symbols are found on most products in grocery and retail stores. The UPC symbol is a 12-digit code identifying the manufacturer of a product and the product itself (<xref ref="figure-upc-codes" />). The first 11 digits contain information about the product; the twelfth digit is used for error detection. If <m>d_1 d_2 \cdots d_{12}</m> is a valid UPC number, then 
                 <me>3 \cdot d_1 + 1 \cdot d_2 + 3 \cdot d_3 + \cdots + 3 \cdot d_{11} + 1 \cdot d_{12} \equiv 0 \pmod{10}.</me></p>
 
                 <ol>
-                    <li><p>Show that the UPC number  0-50000-30042-6, which appears in Figure<nbsp /><xref ref="figure-upc-codes" />, is a valid UPC number.</p></li>
+                    <li><p>Show that the UPC number  0-50000-30042-6, which appears in <xref ref="figure-upc-codes" />, is a valid UPC number.</p></li>
                     <li><p>Show that the number 0-50000-30043-6 is not a valid UPC number.</p></li>
                     <li><p>Write a  formula to calculate the check digit, <m>d_{12}</m>, in the UPC number.</p></li>
                     <li><p>The  UPC error detection scheme can detect most transposition errors; that is, it can determine if two digits have been interchanged.  Show that the transposition error 0-05000-30042-6 is not detected.  Find a transposition error that is detected.  Can you find a general rule for the types of transposition errors that can be detected? </p></li>

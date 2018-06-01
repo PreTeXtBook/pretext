@@ -145,7 +145,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>The Principle of Mathematical Induction implies the Principle of Well-Ordering.  That is, every nonempty subset of <m>\mathbb N</m> contains a least element.</p>
             </statement>
             <proof>
-                <p>We must show that if <m>S</m> is a nonempty subset of the natural numbers, then <m>S</m> contains a least element.  If <m>S</m> contains 1, then the theorem is true by Lemma<nbsp /><xref ref="lemma-integers-smallest-number" />.  Assume that if <m>S</m> contains an integer <m>k</m> such that <m>1 \leq k \leq n</m>, then <m>S</m> contains a least element.  We will show that if a set <m>S</m> contains an integer less than or equal to <m>n + 1</m>, then <m>S</m> has a least element.  If <m>S</m> does not contain an integer less than <m>n+1</m>, then <m>n+1</m> is the smallest integer in <m>S</m>.  Otherwise, since <m>S</m> is nonempty, <m>S</m> must contain an integer less than or equal to <m>n</m>. In this case, by induction, <m>S</m> contains a least element.</p>
+                <p>We must show that if <m>S</m> is a nonempty subset of the natural numbers, then <m>S</m> contains a least element.  If <m>S</m> contains 1, then the theorem is true by <xref ref="lemma-integers-smallest-number" />.  Assume that if <m>S</m> contains an integer <m>k</m> such that <m>1 \leq k \leq n</m>, then <m>S</m> contains a least element.  We will show that if a set <m>S</m> contains an integer less than or equal to <m>n + 1</m>, then <m>S</m> has a least element.  If <m>S</m> does not contain an integer less than <m>n+1</m>, then <m>n+1</m> is the smallest integer in <m>S</m>.  Otherwise, since <m>S</m> is nonempty, <m>S</m> must contain an integer less than or equal to <m>n</m>. In this case, by induction, <m>S</m> contains a least element.</p>
             </proof>
         </theorem>
 
@@ -228,7 +228,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <subsection>
             <title>The Euclidean Algorithm</title>
 
-            <p>Among other things, Theorem<nbsp /><xref ref="theorem-integers-gcd" /> allows us to compute the greatest common divisor of two integers.</p>
+            <p>Among other things, <xref ref="theorem-integers-gcd" /> allows us to compute the greatest common divisor of two integers.</p>
 
             <example xml:id="example-integers-gcd">
                 <p>Let us compute the greatest common divisor of <m>945</m> and <m>2415</m>.  First observe that<md>
@@ -316,7 +316,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <proof>
                     <p><em>Uniqueness.</em>  To show uniqueness we will use induction on <m>n</m>. The theorem is certainly true for <m>n = 2</m> since in this case <m>n</m> is prime.  Now assume that the result holds for all integers <m>m</m> such that <m>1 \leq m \lt n</m>, and 
                         <me>n = p_1 p_2 \cdots p_k = q_1 q_2 \cdots q_l,</me>
-                    where <m>p_1 \leq p_2 \leq \cdots \leq p_k</m> and <m>q_1 \leq q_2 \leq \cdots \leq q_l</m>. By Lemma<nbsp /><xref ref="theorem-integers-prime-divisor" />, <m>p_1  \mid  q_i</m> for some <m>i = 1, \ldots, l</m> and <m>q_1  \mid  p_j</m> for some <m>j = 1, \ldots, k</m>.  Since all of the <m>p_i</m>'s and <m>q_i</m>'s are prime, <m>p_1 = q_i</m> and  <m>q_1 = p_j</m>. Hence, <m>p_1 = q_1</m> since <m>p_1 \leq p_j = q_1 \leq q_i = p_1</m>.  By the induction hypothesis, 
+                    where <m>p_1 \leq p_2 \leq \cdots \leq p_k</m> and <m>q_1 \leq q_2 \leq \cdots \leq q_l</m>. By <xref ref="theorem-integers-prime-divisor" />, <m>p_1  \mid  q_i</m> for some <m>i = 1, \ldots, l</m> and <m>q_1  \mid  p_j</m> for some <m>j = 1, \ldots, k</m>.  Since all of the <m>p_i</m>'s and <m>q_i</m>'s are prime, <m>p_1 = q_i</m> and  <m>q_1 = p_j</m>. Hence, <m>p_1 = q_1</m> since <m>p_1 \leq p_j = q_1 \leq q_i = p_1</m>.  By the induction hypothesis, 
                         <me>n' = p_2 \cdots p_k = q_2 \cdots q_l</me>
                     has a unique factorization.  Hence, <m>k = l</m> and <m>q_i = p_i</m> for <m>i = 1, \ldots, k</m>.</p>
 

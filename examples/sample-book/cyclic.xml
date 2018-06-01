@@ -43,7 +43,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </example>
 
         <example xml:id="example-cyclic-2n">
-            <p>If <m>H = \{ 2^n : n \in {\mathbb Z} \}</m>, then <m>H</m> is a subgroup of the multiplicative group of nonzero rational numbers, <m>{\mathbb Q}^*</m>.  If <m>a = 2^m</m> and <m>b = 2^n</m> are in <m>H</m>, then <m>ab^{-1} = 2^m 2^{-n} = 2^{m-n}</m> is also in <m>H</m>.  By Proposition<nbsp /><xref ref="proposition-subgroup" />, <m>H</m> is a subgroup of <m>{\mathbb Q}^*</m> determined by the element 2.</p>
+            <p>If <m>H = \{ 2^n : n \in {\mathbb Z} \}</m>, then <m>H</m> is a subgroup of the multiplicative group of nonzero rational numbers, <m>{\mathbb Q}^*</m>.  If <m>a = 2^m</m> and <m>b = 2^n</m> are in <m>H</m>, then <m>ab^{-1} = 2^m 2^{-n} = 2^{m-n}</m> is also in <m>H</m>.  By <xref ref="proposition-subgroup" />, <m>H</m> is a subgroup of <m>{\mathbb Q}^*</m> determined by the element 2.</p>
         </example>
 
         <theorem xml:id="theorem-cyclic-subgroup">
@@ -79,7 +79,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </example>
 
         <example xml:id="example-cyclic-s3-not-cyclic">
-            <p>Not every group is a cyclic group.  Consider the symmetry group of an equilateral triangle <m>S_3</m>.  The subgroups of <m>S_3</m> are shown in Figure<nbsp /><xref ref="figure-subgrps-s3" />.  Notice that every subgroup is cyclic; however, no single element generates the entire group.</p>
+            <p>Not every group is a cyclic group.  Consider the symmetry group of an equilateral triangle <m>S_3</m>.  The subgroups of <m>S_3</m> are shown in <xref ref="figure-subgrps-s3" />.  Notice that every subgroup is cyclic; however, no single element generates the entire group.</p>
         </example>
 
         <figure xml:id="figure-subgrps-s3">
@@ -159,7 +159,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>Let <m>G</m> be a cyclic group of order <m>n</m> and suppose that <m>a \in G</m> is a generator of the group.  If <m>b = a^k</m>, then the order of <m>b</m> is <m>n/d</m>, where <m>d = \gcd(k,n)</m>.</p>
             </statement>
             <proof>
-                <p>We wish to find the smallest integer <m>m</m> such that <m>e = b^m = a^{km}</m>. By Proposition<nbsp /><xref ref="proposition-cyclic-subgrp-order" />, this is the smallest integer <m>m</m> such that <m>n</m> divides <m>km</m> or, equivalently, <m>n/d</m> divides <m>m(k/d)</m>.  Since <m>d</m> is the greatest common divisor of <m>n</m> and <m>k</m>, <m>n/d</m> and <m>k/d</m> are relatively prime. Hence, for <m>n/d</m> to divide <m>m(k/d)</m> it must divide <m>m</m>.  The smallest such <m>m</m> is <m>n/d</m>.</p>
+                <p>We wish to find the smallest integer <m>m</m> such that <m>e = b^m = a^{km}</m>. By <xref ref="proposition-cyclic-subgrp-order" />, this is the smallest integer <m>m</m> such that <m>n</m> divides <m>km</m> or, equivalently, <m>n/d</m> divides <m>m(k/d)</m>.  Since <m>d</m> is the greatest common divisor of <m>n</m> and <m>k</m>, <m>n/d</m> and <m>k/d</m> are relatively prime. Hence, for <m>n/d</m> to divide <m>m(k/d)</m> it must divide <m>m</m>.  The smallest such <m>m</m> is <m>n/d</m>.</p>
             </proof>
         </theorem>
 
@@ -224,7 +224,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </image>
         </figure>
 
-        <p>There are several ways of graphically representing complex numbers. We can represent a complex number <m>z = a +bi</m> as an ordered pair on the <m>xy</m> plane where <m>a</m> is the <m>x</m> (or real) coordinate and <m>b</m> is the <m>y</m> (or imaginary) coordinate. This is called the <term>rectangular</term> or <term>Cartesian</term> representation. The rectangular representations of <m>z_1 = 2 + 3i</m>, <m>z_2 = 1 - 2i</m>, and <m>z_3 = - 3 + 2i</m> are depicted in Figure<nbsp /><xref ref="figure-rectcoord" />.</p>
+        <p>There are several ways of graphically representing complex numbers. We can represent a complex number <m>z = a +bi</m> as an ordered pair on the <m>xy</m> plane where <m>a</m> is the <m>x</m> (or real) coordinate and <m>b</m> is the <m>y</m> (or imaginary) coordinate. This is called the <term>rectangular</term> or <term>Cartesian</term> representation. The rectangular representations of <m>z_1 = 2 + 3i</m>, <m>z_2 = 1 - 2i</m>, and <m>z_3 = - 3 + 2i</m> are depicted in <xref ref="figure-rectcoord" />.</p>
 
         <figure xml:id="figure-polarcoord">
             <caption>Polar coordinates of a complex number</caption>
@@ -252,7 +252,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </image>
         </figure>
 
-        <p>Nonzero complex numbers can also be represented using <term>polar coordinates</term>.  To specify  any nonzero point on the plane, it suffices to give an angle <m>\theta</m> from the positive <m>x</m> axis in the counterclockwise direction and a distance <m>r</m> from the origin, as in  Figure<nbsp /><xref ref="figure-polarcoord" />. We can see that <me>z = a + bi = r( \cos \theta + i \sin \theta).</me> Hence, <me>r = |z| = \sqrt{a^2 + b^2}</me> and <md>
+        <p>Nonzero complex numbers can also be represented using <term>polar coordinates</term>.  To specify  any nonzero point on the plane, it suffices to give an angle <m>\theta</m> from the positive <m>x</m> axis in the counterclockwise direction and a distance <m>r</m> from the origin, as in <xref ref="figure-polarcoord" />. We can see that <me>z = a + bi = r( \cos \theta + i \sin \theta).</me> Hence, <me>r = |z| = \sqrt{a^2 + b^2}</me> and <md>
             <mrow>a &amp; = r \cos \theta</mrow>
             <mrow>b &amp; = r \sin \theta.</mrow>
         </md> We sometimes abbreviate <m>r( \cos \theta + i \sin \theta)</m> as <m>r \cis \theta</m>.  To assure that the representation of <m>z</m> is  well-defined, we also require that <m>0^{\circ} \leq \theta \lt 360^{\circ}</m>.  If the measurement is in radians, then <m>0 \leq \theta \lt2 \pi</m>.<notation>
@@ -305,7 +305,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </md></p>
         </example>
 
-        <p>The multiplicative group of the complex numbers, <m>{\mathbb C}^*</m>, possesses some interesting subgroups.  Whereas <m>{\mathbb Q}^*</m> and <m>{\mathbb R}^*</m> have no interesting subgroups of finite order, <m>{\mathbb C}^*</m> has many. We first consider the <term>circle group</term><idx><h>Group</h><h>circle</h></idx>, <me>{\mathbb T} = \{ z \in {\mathbb C} : |z| = 1 \}.</me> The following proposition is a direct result of Proposition<nbsp /><xref ref="proposition-polar-mult" />.<notation>
+        <p>The multiplicative group of the complex numbers, <m>{\mathbb C}^*</m>, possesses some interesting subgroups.  Whereas <m>{\mathbb Q}^*</m> and <m>{\mathbb R}^*</m> have no interesting subgroups of finite order, <m>{\mathbb C}^*</m> has many. We first consider the <term>circle group</term><idx><h>Group</h><h>circle</h></idx>, <me>{\mathbb T} = \{ z \in {\mathbb C} : |z| = 1 \}.</me> The following proposition is a direct result of <xref ref="proposition-polar-mult" />.<notation>
             <usage>\mathbb T</usage>
             <description>the circle group</description>
         </notation></p>
@@ -330,7 +330,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <p>A generator for the group of the <m>n</m>th roots of unity is called a <term>primitive <m>n</m>th root of unity</term><idx><h>Primitive <m>n</m>th root of unity</h></idx>.</p>
 
         <example xml:id="example-roots_unity">
-            <p>The 8th roots of unity can be represented as eight equally spaced points on the unit circle (Figure<nbsp /><xref ref="figure-rtsunity" />).  The primitive 8th roots of unity are<md>
+            <p>The 8th roots of unity can be represented as eight equally spaced points on the unit circle (<xref ref="figure-rtsunity" />).  The primitive 8th roots of unity are<md>
                 <mrow>\omega &amp; = \frac{\sqrt{2}}{2}  + \frac{\sqrt{2}}{2} i</mrow>
                 <mrow>\omega^3 &amp; = -\frac{\sqrt{2}}{2}  + \frac{\sqrt{2}}{2} i</mrow>
                 <mrow>\omega^5 &amp; = -\frac{\sqrt{2}}{2}  - \frac{\sqrt{2}}{2} i</mrow>
@@ -361,7 +361,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <p>Computing large powers can be very time-consuming. Just as anyone can compute <m>2^2</m> or <m>2^8</m>, everyone knows how to compute
             <me>2^{2^{1000000} }.</me>
-        However, such numbers are so large that we do not want to attempt the calculations; moreover, past a certain point the computations would not be feasible even if we had every computer in the world at our disposal. Even writing down the decimal representation of a very large number may not be reasonable. It could be thousands or even millions of digits long. However, if we could compute something like <m>2^{37398332 } \pmod{ 46389}</m>, we could very easily write the result down since it would be a number between 0 and 46,388. If we want to compute powers modulo <m>n</m> quickly and efficiently, we will have to be clever.<fn>The results in this section are needed only in Chapter<nbsp/><xref ref="integers"/> (not really).</fn></p>
+        However, such numbers are so large that we do not want to attempt the calculations; moreover, past a certain point the computations would not be feasible even if we had every computer in the world at our disposal. Even writing down the decimal representation of a very large number may not be reasonable. It could be thousands or even millions of digits long. However, if we could compute something like <m>2^{37398332 } \pmod{ 46389}</m>, we could very easily write the result down since it would be a number between 0 and 46,388. If we want to compute powers modulo <m>n</m> quickly and efficiently, we will have to be clever.<fn>The results in this section are needed only in <xref ref="integers"/> (not really).</fn></p>
 
         <p>The first thing to notice is that any number <m>a</m> can be written as the sum of distinct powers of 2; that is, we can write <me>a = 2^{k_1} + 2^{k_2} + \cdots + 2^{k_n},</me> where <m>k_1 \lt k_2 \lt \cdots \lt k_n</m>.  This is just the binary representation of <m>a</m>. For example, the binary representation of 57 is 111001, since we can write <m>57 = 2^0 + 2^3 + 2^4 + 2^5</m>.</p>
 
