@@ -1714,6 +1714,14 @@
                 </cd>would then cause the clickable portion to be simply the much shorter <q>5.16</q>.  Of course, you can set a default style for your entire document, so it is not necessary to continually provide the <attr>text</attr> attribute.</p>
             </li>
         </dl></p>
+
+        <p>Watching a blind reader navigate a web page can be a very enlightening experience.  Or you might even undertake learning one yourself.  Here are some suggestions for getting started (current on 2018-05-31).<ul>
+            <li><init>NVDA</init>, <url href="https://www.nvaccess.org/"><c>www.nvaccess.org</c></url>, Windows, open source via GPL</li>
+            <li>Orca, <url href="https://help.gnome.org/users/orca/stable/"><c>help.gnome.org/users</c></url>, Linux, open source via LGPL</li>
+            <li>VoiceOver, included with Apple's macOS and iOS</li>
+            <li>ChromeVox, <url href="http://www.chromevox.com/"><c>www.chromevox.com</c></url>, ChromeOS, free from Google</li>
+            <li><acro>JAWS</acro>, <url href="https://www.freedomscientific.com/Products/Blindness/JAWS"><c>www.freedomscientific.com</c></url>, Windows, commercial</li>
+        </ul></p>
     </section>
 
     <!--
