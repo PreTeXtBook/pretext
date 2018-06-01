@@ -6752,12 +6752,12 @@ the xsltproc executable.
                     <p>A document leaf.</p>
 
                     <theorem xml:id="theorem-number-05">
-                        <title>First Theorem</title>
+                        <title>First Theorem?</title>
                         <statement><p>No statement.</p></statement>
                     </theorem>
 
                     <theorem xml:id="theorem-number-06">
-                        <title>Second Theorem</title>
+                        <title>Second Theorem!</title>
                         <statement><p>No statement.</p></statement>
                     </theorem>
 
@@ -6893,6 +6893,7 @@ the xsltproc executable.
                 <p>However, you may want to have <q>Conundrum</q>s<idx><h>conundrum</h><h>repurposed from proposition</h></idx> in your document and you have no use for any <q>Proposition</q>s.  So you can repurpose the <c>proposition</c> tag to render a different name.  Or you might have a Lab Manual and want to rename <c>subsection</c> as <q>Activity</q>.  See the <c>docinfo</c> portion of this sample article to see how this is done, in concert with the example below.  Note that you may provide versions for different languages, and that the <attr>lang</attr> attribute here is just slightly different than the general <attr>@xml:lang</attr> attribute.</p>
 
                 <proposition xml:id="proposition-as-conundrum">
+                    <creator>Smith</creator>
                     <statement>
                         <p>Aah, this <em>is</em> confusing!</p>
                     </statement>
