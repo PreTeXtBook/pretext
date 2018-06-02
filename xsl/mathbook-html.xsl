@@ -7613,18 +7613,23 @@ function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject(
 <!-- ############################# -->
 
 <xsl:template match="myopenmath">
-    <xsl:element name="iframe">
-        <!-- Let authors specify @width eventually -->
-        <xsl:attribute name="width">
-            <xsl:value-of select="$design-width" />
-        </xsl:attribute>
-        <xsl:attribute name="src">
-            <xsl:text>https://www.myopenmath.com/embedq.php?id=</xsl:text>
-            <xsl:value-of select="@problem" />
-            <!-- can't disable escaping text of an attribute -->
-            <xsl:text>&amp;resizer=true</xsl:text>
-        </xsl:attribute>
-    </xsl:element>
+    <!-- A container controls the width. At 100% this is the     -->
+    <!-- full page width and when revealed in a knowl it shrinks -->
+    <!-- to fill available width.  In another application, the   -->
+    <!-- width might come from an author's source.               -->
+    <div style="width:100%;">
+        <!-- This preserves the aspect-ratio, and there is no       -->
+        <!-- clipping.  Basically this says scale the iframe to     -->
+        <!-- fill whatever width is available in the containing div -->
+        <iframe style="object-fit: contain; width: 100%;">
+            <xsl:attribute name="src">
+                <xsl:text>https://www.myopenmath.com/embedq.php?id=</xsl:text>
+                <xsl:value-of select="@problem" />
+                <!-- can't disable escaping text of an attribute -->
+                <xsl:text>&amp;resizer=true</xsl:text>
+            </xsl:attribute>
+        </iframe>
+    </div>
     <!-- not so great -->
     <!-- <script>iFrameResize({log:true,inPageLinks:true,resizeFrom:'child'})</script> -->
 </xsl:template>
