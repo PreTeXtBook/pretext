@@ -2752,6 +2752,8 @@ the xsltproc executable.
                     <li>Tres item.</li>
                     <li>Quattro items.</li>
                 </ul></p>
+
+                <p>And a paragraph after that list so that spacing can be checked.</p>
             </subsection>
 
             <subsection>
