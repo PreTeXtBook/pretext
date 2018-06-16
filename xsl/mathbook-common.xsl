@@ -5067,6 +5067,53 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:if>
 </xsl:template>
 
+<!-- A list may have a cols attribute (enforced to be 2|3|4|5|6)    -->
+<!-- but in some circumstances it can be hard to locate             -->
+<!-- (for example after the list has been put through a WW server)  -->
+<!-- we use string() to flatten an RTF into a string, since we want -->
+<!-- the empty string to evaluate as 'false', but an RTF containing -->
+<!-- an empty string evalutes as 'true'.                            -->
+<xsl:template match="ol|ul" mode="get-cols">
+    <xsl:variable name="cols">
+        <xsl:choose>
+            <xsl:when test="@cols">
+                <xsl:value-of select="@cols"/>
+            </xsl:when>
+            <!-- If the list is inside a webwork-reps/static, make a node set of all -->
+            <!-- lists in the authored block, and collate with lists in the static   -->
+            <xsl:when test="ancestor::static/parent::webwork-reps">
+                <xsl:variable name="static" select="ancestor::static"/>
+                <xsl:variable name="position">
+                    <xsl:choose>
+                        <xsl:when test="name(.)='ol'">
+                            <xsl:value-of select="count(preceding::ol[ancestor::static=$static])+1" />
+                        </xsl:when>
+                        <xsl:when test="name(.)='ul'">
+                            <xsl:value-of select="count(preceding::ul[ancestor::static=$static])+1" />
+                        </xsl:when>
+                    </xsl:choose>
+                </xsl:variable>
+                <xsl:choose>
+                    <xsl:when test="name(.)='ol'">
+                        <xsl:if test="ancestor::webwork-reps/authored/descendant::ol[position()=$position][@cols]">
+                            <xsl:value-of select="ancestor::webwork-reps/authored/descendant::ol[position()=$position]/@cols" />
+                        </xsl:if>
+                    </xsl:when>
+                    <xsl:when test="name(.)='ul'">
+                        <xsl:if test="ancestor::webwork-reps/authored/descendant::ul[position()=$position][@cols]">
+                            <xsl:value-of select="ancestor::webwork-reps/authored/descendant::ul[position()=$position]/@cols" />
+                        </xsl:if>
+                    </xsl:when>
+                </xsl:choose>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:if test="string($cols) and not($cols=2 or $cols=3 or $cols=4 or $cols=5 or $cols=6)">
+        <xsl:message terminate="yes">MBX:ERROR: @cols attribute of lists must be between 2 and 6 (inclusive), not "cols=<xsl:value-of select="$cols" />"</xsl:message>
+    </xsl:if>
+    <xsl:value-of select="string($cols)" />
+</xsl:template>
+
 <!-- List Levels -->
 <!-- Utility templates to determine the depth      -->
 <!-- of a list, relative to nesting in other lists -->
@@ -5234,9 +5281,19 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- CSS class for multi-column lists -->
 <!-- Context is element carrying the "cols" attribute   -->
 <!-- Value is "colsN" with 2 <= N <= 6                  -->
-<!-- Error message of out-of-range, could be made fatal -->
-<!-- DTD should enforce this restriction also           -->
-<xsl:template match="ol|ul|exercisegroup" mode="number-cols-CSS-class">
+<!-- Enforced in get-cols, or right here                -->
+<xsl:template match="ol|ul" mode="number-cols-CSS-class">
+    <xsl:variable name="cols">
+        <xsl:apply-templates select="." mode="get-cols" />
+    </xsl:variable>
+    <!-- string() flattens RTF to string to evaluate to false when empty -->
+    <xsl:if test="string($cols)">
+        <xsl:text>cols</xsl:text>
+        <xsl:value-of select="$cols" />
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="exercisegroup" mode="number-cols-CSS-class">
     <xsl:choose>
         <xsl:when test="@cols=2 or @cols=3 or @cols=4 or @cols=5 or @cols=6">
             <xsl:text>cols</xsl:text>

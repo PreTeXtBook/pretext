@@ -4647,6 +4647,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- introduction, and its absence does not seem      -->
 <!-- to cause any problems.                           -->
 <xsl:template match="ol">
+    <xsl:variable name="cols">
+        <xsl:apply-templates select="." mode="get-cols" />
+    </xsl:variable>
     <xsl:choose>
         <xsl:when test="not(ancestor::ol or ancestor::ul or ancestor::dl or parent::objectives)">
             <xsl:call-template name="leave-vertical-mode" />
@@ -4655,9 +4658,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>%&#xa;</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
-    <xsl:if test="@cols">
+    <xsl:if test="string($cols)">
         <xsl:text>\begin{multicols}{</xsl:text>
-        <xsl:value-of select="@cols" />
+        <xsl:value-of select="$cols" />
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>\begin{enumerate}</xsl:text>
@@ -4670,7 +4673,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;</xsl:text>
      <xsl:apply-templates />
     <xsl:text>\end{enumerate}&#xa;</xsl:text>
-    <xsl:if test="@cols">
+    <xsl:if test="string($cols)">
         <xsl:text>\end{multicols}&#xa;</xsl:text>
     </xsl:if>
 </xsl:template>
@@ -4679,6 +4682,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- from LaTeX's so we write out a label  -->
 <!-- choice for each such list             -->
 <xsl:template match="ul">
+    <xsl:variable name="cols">
+        <xsl:apply-templates select="." mode="get-cols" />
+    </xsl:variable>
     <xsl:choose>
         <xsl:when test="not(ancestor::ol or ancestor::ul or ancestor::dl or parent::objectives)">
             <xsl:call-template name="leave-vertical-mode" />
@@ -4687,9 +4693,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>%&#xa;</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
-    <xsl:if test="@cols">
+    <xsl:if test="string($cols)">
         <xsl:text>\begin{multicols}{</xsl:text>
-        <xsl:value-of select="@cols" />
+        <xsl:value-of select="$cols" />
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>\begin{itemize}[label=</xsl:text>
@@ -4697,7 +4703,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>]&#xa;</xsl:text>
     <xsl:apply-templates />
     <xsl:text>\end{itemize}&#xa;</xsl:text>
-    <xsl:if test="@cols">
+    <xsl:if test="string($cols)">
         <xsl:text>\end{multicols}&#xa;</xsl:text>
     </xsl:if>
 </xsl:template>
@@ -4711,17 +4717,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>%&#xa;</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
-    <xsl:if test="@cols">
-        <xsl:text>\begin{multicols}{</xsl:text>
-        <xsl:value-of select="@cols" />
-        <xsl:text>}&#xa;</xsl:text>
-    </xsl:if>
+    <!-- dl cannot have mutliple columns -->
     <xsl:text>\begin{description}&#xa;</xsl:text>
     <xsl:apply-templates />
     <xsl:text>\end{description}&#xa;</xsl:text>
-    <xsl:if test="@cols">
-        <xsl:text>\end{multicols}&#xa;</xsl:text>
-    </xsl:if>
 </xsl:template>
 
 <!-- List Items -->

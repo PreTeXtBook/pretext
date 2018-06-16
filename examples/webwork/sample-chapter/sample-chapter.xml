@@ -599,6 +599,79 @@
                 </webwork>
             </exercise>
 
+            <exercise>
+                <introduction>
+                    <p>This exercise illustrates what happens when source has a multicolumn list. In <webwork /> itself, there is no provisioning for multicolumn lists, so live output here should not respect the indicated <c>cols</c> attribute. However, when <pretext /> produces static output, we do recover the value of <c>cols</c>. So in PDF and static HTML these lists should appear with multiple columns.</p>
+                </introduction>
+                <webwork>
+                    <statement>
+                        <p>This list has three columns in static output.<ol cols="3">
+                            <li>
+                                <p>Argentina</p>
+                            </li>
+                            <li>
+                                <p>Belize</p>
+                            </li>
+                            <li>
+                                <p>Canada</p>
+                            </li>
+                            <li>
+                                <p>Denmark</p>
+                            </li>
+                            <li>
+                                <p>Ethiopia</p>
+                            </li>
+                        </ol></p>
+                        <p>This list has one column in static output.<ol>
+                            <li>
+                                <p>Finland</p>
+                            </li>
+                            <li>
+                                <p>Ghana</p>
+                            </li>
+                        </ol></p>
+                    </statement>
+                    <hint>
+                        <p>This (unordered) list has two columns in static output.<ul cols="2">
+                            <li>
+                                <p>Hungary</p>
+                            </li>
+                            <li>
+                                <p>Iceland</p>
+                            </li>
+                            <li>
+                                <p>Jamaica</p>
+                            </li>
+                            <li>
+                                <p>Korea</p>
+                            </li>
+                            <li>
+                                <p>Lesotho</p>
+                            </li>
+                        </ul></p>
+                    </hint>
+                    <solution>
+                        <p>This list has five columns in static output.<ol cols="5">
+                            <li>
+                                <p>Mali</p>
+                            </li>
+                            <li>
+                                <p>Nepal</p>
+                            </li>
+                            <li>
+                                <p>Oman</p>
+                            </li>
+                            <li>
+                                <p>Peru</p>
+                            </li>
+                            <li>
+                                <p>Qatar</p>
+                            </li>
+                        </ol></p>
+                    </solution>
+                </webwork>
+            </exercise>
+
         </section>
 
         <section>

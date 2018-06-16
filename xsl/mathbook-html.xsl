@@ -4152,13 +4152,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Tunnel duplication flag to list items -->
 <xsl:template match="ol|ul">
     <xsl:param name="b-original" select="true()" />
+    <xsl:variable name="cols">
+        <xsl:apply-templates select="." mode="get-cols" />
+    </xsl:variable>
     <xsl:element name="{local-name(.)}">
         <xsl:apply-templates select="." mode="insert-paragraph-id" >
             <xsl:with-param name="b-original" select="$b-original" />
         </xsl:apply-templates>
         <xsl:attribute name="class">
             <xsl:apply-templates select="." mode="html-list-class" />
-            <xsl:if test="@cols">
+            <xsl:if test="string($cols)">
                 <xsl:text> </xsl:text>
                 <!-- HTML-specific, but in mathbook-common.xsl -->
                 <xsl:apply-templates select="." mode="number-cols-CSS-class" />
