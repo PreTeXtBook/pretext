@@ -6936,6 +6936,36 @@ the xsltproc executable.
         </section>
 
 
+        <section xml:id="ancillaries">
+            <title>Ancillaries</title>
+
+            <p>Once your content is in place, you can begin thinking about various useful derivative works.  A natural example for a textbook is an <q>Instructor's Version</q>.  Various switches for hints, answers, and solutions to exercises would allow you to include more of these for the use of just an instructor.  Here we also demonstrate the <tag>commentary</tag> element.  It is similar in many ways to a <tag>paragraphs</tag> in that it can be placed within any division and must be titled.  The main difference is that it is not displayed by default, so you must set a processing switch to enable its appearance:<cd>
+                <cline>xsltproc -stringparam commentary yes ...</cline>
+            </cd>Other distinctions are:<ul>
+                <li>Since it is elective, you need to be careful about cross-references to and from a <tag>commentary</tag>.  It is highly likely that you will want to make cross-references <em>within</em> a <tag>commentary</tag> <em>pointing to</em> other portions of your text, and this is always a good idea.  You will want to avoid making cross-references <em>to</em> a <tag>commentary</tag> from other parts of the text, with the exception of a cross-reference that originates <em>within</em> some <tag>commentary</tag>.</li>
+                <li>Numbered items are prohibited within a <tag>commentary</tag>, such as a <tag>figure</tag> or a <tag>theorem</tag>.  Doing so would disrupt consecutive numbering in different versions, with or without, <tag>commentary</tag> included.  Numbered equations are not prohibited in the schema, but should definitely be avoided anyway.</li>
+            </ul></p>
+
+            <p>After some nonsense text in a paragraph, there is a <tag>commentary</tag> with two paragraphs.  For the online version of this sample article, we have enabled commentaries.  But if you are experimenting yourself, you will want to be aware if you are enabling these or not.</p>
+
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam odio orci, ullamcorper eget quam et, viverra tristique magna. Integer auctor arcu a sapien pulvinar elementum. Mauris porta, nulla id molestie dignissim, urna dolor rutrum ligula, eu elementum odio nisl sed libero. Nulla nec libero sem.</p>
+
+            <commentary>
+                <title>Some Commentary</title>
+                <idx>commentary</idx>
+
+                <p>Nullam vulputate metus a diam rutrum vehicula. Sed cursus iaculis venenatis. Morbi ullamcorper at mi non facilisis. Cras sit amet justo vel ante luctus placerat. Nunc in ligula iaculis enim condimentum suscipit eget vel mi. Ut at sapien mauris. Vestibulum nec tellus pellentesque, placerat nunc ac, luctus turpis.</p>
+
+                <p>Curabitur eros nibh, lacinia at commodo ut, feugiat sit amet velit. Pellentesque venenatis dui vehicula, porta magna at, dignissim metus. Nam fringilla tortor nec dignissim dictum. Cras tempor purus nisi, sit amet aliquam risus ornare vel. Proin ullamcorper pulvinar elementum. Praesent gravida magna in imperdiet pretium. In sed consectetur arcu. Donec imperdiet, urna in egestas suscipit, risus dolor ultrices erat, id ultricies sem nisl eget ex. Fusce at mattis sem. Fusce lacinia purus tellus, nec fringilla nisi maximus vel.<idx><h>commentary</h><h>contained paragraph</h></idx></p>
+            </commentary>
+
+            <p>Sed justo ex, efficitur dictum risus nec, eleifend consequat nibh. Proin rutrum mi id metus viverra blandit. In vel ligula a nibh aliquam pellentesque. Duis placerat purus et ligula sollicitudin, sodales consectetur ante viverra.</p>
+
+            <p>Mauris fringilla nulla arcu, sagittis ultrices quam malesuada eleifend. Proin tristique elit eu bibendum tincidunt. Donec commodo lorem in magna egestas, vitae malesuada velit ornare. Pellentesque finibus neque in venenatis tristique. In id blandit est, in euismod urna. Donec commodo sagittis ligula, in venenatis nulla porttitor in. Donec nec tortor sit amet felis posuere ultricies. Suspendisse euismod quis ex eu placerat.</p>
+
+        </section>
+
+
         <section xml:id="exercises-single">
             <title>Exercises, One Subsection</title>
 
