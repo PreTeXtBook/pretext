@@ -612,7 +612,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <example xml:id="example-groups-multiplicative-subgroup">
                 <title>A Subgroup of the Reals</title>
                 <p>Consider the set of nonzero real numbers, <m>{\mathbb R}^*</m>, with the group operation of multiplication. <notation><usage>\mathbb R^*</usage><description>the multiplicative group of real numbers</description></notation> The identity of this group is 1 and the inverse of any element <m>a \in {\mathbb R}^*</m> is just <m>1/a</m>. We will show that
-                    <me>{\mathbb Q}^* = \{ p/q : p \, {\rm and }\, q\, {\rm are\, nonzero\, integers} \}</me>
+                    <me>{\mathbb Q}^* = \{ p/q : p\text{ and }q\text{ are nonzero integers}\}</me>
                 is a subgroup of <m>{\mathbb R}^*</m>. <notation><usage>\mathbb Q^*</usage><description>the multiplicative group of rational numbers</description></notation> The identity of <m>{\mathbb R}^*</m> is 1; however,  <m>1 = 1/1</m> is the quotient of two nonzero integers. Hence, the identity of <m>{\mathbb R}^*</m> is in <m>{\mathbb Q}^*</m>. Given two elements in <m>{\mathbb Q}^*</m>, say <m>p/q</m> and <m>r/s</m>, their product <m>pr/qs</m> is also in <m>{\mathbb Q}^*</m>. The inverse of any element <m>p/q \in {\mathbb Q}^*</m> is again in <m>{\mathbb Q}^*</m> since <m>(p/q)^{-1} = q/p</m>. Since multiplication in <m>{\mathbb R}^*</m> is associative, multiplication in <m>{\mathbb Q}^*</m> is associative. </p> 
             </example>
 

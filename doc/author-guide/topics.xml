@@ -902,10 +902,11 @@
         <subsection>
             <title>Text in Mathematics</title>
 
-            <p>Once in a while, you need a little bit of <q>regular</q> text within an expression and you do not want it to look like a product of a bunch of one-letter variables.  Use the <c>\text{}</c> macro for these.<ul>
+            <p>Once in a while, you need a little bit of <q>regular</q> text within an expression and you do not want it to look like a product of a bunch of one-letter variables.  Use the <c>\text{}</c> macro for these.  Only.  Other ways of switching out of math-mode and into some sort of <q>regular</q> text will appear inferior, and can raise errors in certain conversions.<ul>
                 <li>Do place surrounding spaces inside the <c>\text{}</c> macro.</li>
                 <li>Do not place any mathematics inside the  <c>\text{}</c> macro.</li>
                 <li>Do not use the <c>\mbox{}</c> macro as a substitute.</li>
+                <li>Do not use font-changing commands (<eg /> <c>\rm</c>) as a substitute.</li>
             </ul></p>
 
             <p>For example,<cd>
