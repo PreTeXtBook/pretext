@@ -1023,6 +1023,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% objectives environment and style&#xa;</xsl:text>
         <xsl:text>\newenvironment{objectives}[1]{\noindent\rule{\linewidth}{0.1ex}\newline{\textbf{{\large#1}}\par\smallskip}}{\par\noindent\rule{\linewidth}{0.1ex}\par\smallskip}&#xa;</xsl:text>
     </xsl:if>
+    <!-- An example of "Greg's L" with tcolorbox and tikz code                   -->
+    <!-- The "enhanced" skin is necessary for the predefined "frame.*" nodes     -->
+    <!-- The 5% horizontal leg is a "partway modifier", from                     -->
+    <!-- https://tex.stackexchange.com/questions/48756/tikz-relative-coordinates -->
+    <xsl:if test="$b-commentary and $document-root//commentary">
+        <xsl:text>%% commentary: elective, additional comments in an enhanced edition&#xa;</xsl:text>
+        <xsl:text>\DeclareTColorBox{commentary}{m}&#xa;</xsl:text>
+        <xsl:text>{breakable,skin=enhanced,title=#1,fonttitle=\bfseries,coltitle=black,colback=white,frame code={&#xa;</xsl:text>
+        <xsl:text>\path[draw=red!75!black,line width=0.5mm] (frame.north west) -- (frame.south west) -- ($ (frame.south west)!0.05!(frame.south east) $);}}&#xa;</xsl:text>
+    </xsl:if>
     <!-- miscellaneous, not categorized yet -->
     <xsl:if test="$document-root//exercises//exercise">
         <xsl:text>%% Divisional exercises are rendered as faux list items&#xa;</xsl:text>
@@ -3240,6 +3250,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="*" />
 </xsl:template>
 
+<!-- Commentary -->
+<!-- For an enhanced edition, like an Instructor's Manual. -->
+<!-- Must be elected by a publisher, based on the switch.  -->
+<xsl:template match="commentary">
+    <xsl:if test="$b-commentary">
+        <xsl:text>\begin{commentary}</xsl:text>
+        <xsl:text>{</xsl:text>
+        <xsl:apply-templates select="." mode="title-full" />
+        <xsl:text>}&#xa;</xsl:text>
+        <!-- coordinate select with schema's BlockStatementNoCaption       -->
+        <!-- Note sufficiency and necessity of processing index items here -->
+        <xsl:apply-templates select="idx|p|blockquote|pre|aside|sidebyside|sbsgroup" />
+        <xsl:text>\end{commentary}&#xa;</xsl:text>
+    </xsl:if>
+</xsl:template>
+
 <!-- Theorems, Proofs, Definitions, Examples, Exercises -->
 
 <!-- Theorems have statement/proof structure                    -->
@@ -4256,7 +4282,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- TODO: maybe we could look backward at the end of a paragraph       -->
 <!-- to see if the above scenario happens, and we could end gracefully. -->
 <xsl:template match="p">
-    <xsl:if test="preceding-sibling::*[not(&SUBDIVISION-METADATA-FILTER;)][1][self::p or self::paragraphs or self::sidebyside]">
+    <xsl:if test="preceding-sibling::*[not(&SUBDIVISION-METADATA-FILTER;)][1][self::p or self::paragraphs or self::commentary or self::sidebyside]">
         <xsl:text>\par&#xa;</xsl:text>
     </xsl:if>
     <xsl:apply-templates select="." mode="label" />
