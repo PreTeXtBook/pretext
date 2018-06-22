@@ -109,7 +109,7 @@
             ]]>
             </pre>
 
-            <p>The <tab>exercise</tab> above could be given an optional <tag>title</tag>, <tag>introduction</tag>, and <tag>conclusion</tag>. The <tag>webwork</tag> inside could be given a <tag>hint</tag> and <tag>solution</tag>. These are discussed in <xref ref="webwork-pg-code">Subsection</xref>.</p>
+            <p>The <tag>exercise</tag> above could be given an optional <tag>title</tag>, <tag>introduction</tag>, and <tag>conclusion</tag>. The <tag>webwork</tag> inside could be given a <tag>hint</tag> and <tag>solution</tag>. These are discussed in <xref ref="webwork-pg-code">Subsection</xref>.</p>
 
             <p>In the above example, <c>'3'</c> is the <attr>name</attr> attribute to a <tag>var</tag> element. This is how to create an answer blank that is expecting <m>3</m> as the answer. What you give as a <attr>name</attr> attribute will be passed to PG's <c>Compute()</c> command, so it needs to be valid input for <c>Compute()</c>. Note that you could pass a string encased in quotes, or a perl expression. Just be mindful of the difference:<ul>
                 <li>
