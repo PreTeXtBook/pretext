@@ -184,6 +184,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Publisher option to surround emdash -->
 <!-- Default is none, option is thin     -->
 <xsl:param name="emdash.space" select="''" />
+<!-- Publisher option to include "commentary" -->
+<!-- Default will be "no"                     -->
+<xsl:param name="commentary" select="''" />
 <!-- Whitespace discussion: http://www.xmlplease.com/whitespace               -->
 <!-- Describes source expectations, DO NOT override in subsequent conversions -->
 <!-- Strip whitespace text nodes from container elements                      -->
@@ -842,6 +845,31 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
+
+<!-- Commentary is meant for an enhanced edition, -->
+<!-- like an "Instructor's Manual".  A publisher  -->
+<!-- will need to consciously elect "yes".        -->
+<!-- $input-commentary is local and short-lived,  -->
+<!-- $b-commentary is boolean and used elsewhere. -->
+<xsl:variable name="input-commentary">
+    <xsl:choose>
+        <xsl:when test="$commentary = ''">
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <xsl:when test="$commentary = 'no'">
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <xsl:when test="$commentary = 'yes'">
+            <xsl:text>yes</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>no</xsl:text>
+            <xsl:message>MBX:WARNING: the "commentary" stringparam should be "yes" or "no", not "<xsl:value-of select="$commentary"/>", so assuming "no"</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="b-commentary" select="$input-commentary = 'yes'" />
 
 <!-- ############## -->
 <!-- Entry Template -->
@@ -2688,7 +2716,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- descended introduction or conclusion .                          -->
 <!-- Also, list items are considered blocks.                         -->
 <!-- NB: we don't point to a sidebyside, so not included here        -->
-<xsl:template match="md|mdn|ul|ol|dl|blockquote|pre|sage|&FIGURE-LIKE;|poem|program|image|tabular|paragraphs|&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|exercise|li" mode="is-block">
+<xsl:template match="md|mdn|ul|ol|dl|blockquote|pre|sage|&FIGURE-LIKE;|poem|program|image|tabular|paragraphs|commentary|&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|exercise|li" mode="is-block">
     <xsl:value-of select="true()" />
 </xsl:template>
 

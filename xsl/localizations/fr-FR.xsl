@@ -73,6 +73,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='backmatter'><xsl:text>Appendices</xsl:text></localization>
     <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
     <localization string-id='paragraphs'><xsl:text>Paragraphes</xsl:text></localization>  <!--checked-->
+    <!-- <localization string-id='commentary'><xsl:text>Commentary</xsl:text></localization> -->
     <localization string-id='subparagraph'><xsl:text>Sous-paragraphe</xsl:text></localization> <!--checked-->
     <!-- Components of the narrative -->
     <!-- REMARK-LIKE blocks -->
