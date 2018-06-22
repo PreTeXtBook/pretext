@@ -27,6 +27,7 @@
           <choice>
             <ref name="BlockDivision"/>
             <ref name="Paragraphs"/>
+            <ref name="Commentary"/>
           </choice>
         </oneOrMore>
         <group>
@@ -99,6 +100,7 @@
             <choice>
               <ref name="BlockDivision"/>
               <ref name="Paragraphs"/>
+              <ref name="Commentary"/>
             </choice>
           </oneOrMore>
           <optional>
@@ -140,6 +142,7 @@
             <choice>
               <ref name="BlockDivision"/>
               <ref name="Paragraphs"/>
+              <ref name="Commentary"/>
             </choice>
           </oneOrMore>
           <optional>
@@ -181,6 +184,7 @@
             <choice>
               <ref name="BlockDivision"/>
               <ref name="Paragraphs"/>
+              <ref name="Commentary"/>
             </choice>
           </oneOrMore>
           <optional>
@@ -220,6 +224,7 @@
         <choice>
           <ref name="BlockDivision"/>
           <ref name="Paragraphs"/>
+          <ref name="Commentary"/>
         </choice>
       </oneOrMore>
       <optional>
@@ -238,6 +243,7 @@
           <choice>
             <ref name="BlockDivision"/>
             <ref name="Paragraphs"/>
+            <ref name="Commentary"/>
             <ref name="NotationList"/>
             <ref name="SolutionList"/>
           </choice>
@@ -479,6 +485,7 @@
         <choice>
           <ref name="BlockStatementNoCaption"/>
           <ref name="ParagraphsNoNumber"/>
+          <ref name="Commentary"/>
         </choice>
       </oneOrMore>
     </element>
@@ -501,6 +508,7 @@
         <choice>
           <ref name="BlockStatementNoCaption"/>
           <ref name="ParagraphsNoNumber"/>
+          <ref name="Commentary"/>
         </choice>
       </oneOrMore>
     </element>
@@ -514,6 +522,7 @@
             <choice>
               <ref name="BlockStatementNoCaption"/>
               <ref name="ParagraphsNoNumber"/>
+              <ref name="Commentary"/>
             </choice>
           </oneOrMore>
           <zeroOrMore>
@@ -525,6 +534,7 @@
             <choice>
               <ref name="BlockStatementNoCaption"/>
               <ref name="ParagraphsNoNumber"/>
+              <ref name="Commentary"/>
             </choice>
           </zeroOrMore>
           <ref name="Contributors"/>
@@ -532,6 +542,7 @@
             <choice>
               <ref name="BlockStatementNoCaption"/>
               <ref name="ParagraphsNoNumber"/>
+              <ref name="Commentary"/>
             </choice>
           </zeroOrMore>
         </group>
@@ -582,6 +593,17 @@
   </define>
   <define name="ParagraphsNoNumber">
     <element name="paragraphs">
+      <ref name="MetaDataTitle"/>
+      <zeroOrMore>
+        <ref name="Index"/>
+      </zeroOrMore>
+      <oneOrMore>
+        <ref name="BlockStatementNoCaption"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="Commentary">
+    <element name="commentary">
       <ref name="MetaDataTitle"/>
       <zeroOrMore>
         <ref name="Index"/>

@@ -14,7 +14,7 @@
                 MetaDataSubtitle,
                 ArticleFrontMatter?,
                 (
-                    (BlockDivision | Paragraphs)+
+                    (BlockDivision | Paragraphs | Commentary)+
                 |
                     (
                         IntroductionDivision?,
@@ -49,7 +49,7 @@
                 Objectives?,
                 (
                     (
-                        (BlockDivision | Paragraphs)+,
+                        (BlockDivision | Paragraphs | Commentary)+,
                         Exercises?,
                         References?
                     )
@@ -69,7 +69,7 @@
                 Objectives?,
                 (
                     (
-                        (BlockDivision | Paragraphs)+,
+                        (BlockDivision | Paragraphs | Commentary)+,
                         Exercises?,
                         References?
                     )
@@ -89,7 +89,7 @@
                 Objectives?,
                 (
                     (
-                        (BlockDivision | Paragraphs)+,
+                        (BlockDivision | Paragraphs | Commentary)+,
                         Exercises?,
                         References?
                     )
@@ -107,7 +107,7 @@
             element subsubsection {
                 MetaDataTitle,
                 Objectives?,
-                (BlockDivision | Paragraphs)+,
+                (BlockDivision | Paragraphs | Commentary)+,
                 Exercises?,
                 References?
             }
@@ -115,7 +115,7 @@
             element appendix {
                 MetaDataTitle,
                 (
-                    (BlockDivision | Paragraphs | NotationList | SolutionList )+ |
+                    (BlockDivision | Paragraphs | Commentary | NotationList | SolutionList )+ |
                     (
                         IntroductionDivision?,
                         Section,
@@ -210,7 +210,7 @@
         Biography = 
             element biography {
                 MetaDataTitleOptional,
-                (BlockStatementNoCaption | ParagraphsNoNumber)+
+                (BlockStatementNoCaption | ParagraphsNoNumber | Commentary)+
             }
         Dedication = 
             element dedication {
@@ -220,21 +220,21 @@
         Acknowledgement = 
             element acknowledgement {
                 MetaDataTitleOptional,
-                (BlockStatementNoCaption | ParagraphsNoNumber)+
+                (BlockStatementNoCaption | ParagraphsNoNumber | Commentary)+
             }
         Preface =
             element preface {
                 MetaDataTitleOptional,
                 (
                     (
-                        (BlockStatementNoCaption | ParagraphsNoNumber)+, 
+                        (BlockStatementNoCaption | ParagraphsNoNumber | Commentary)+,
                         Attribution*
                     )
                     |
                     (
-                        (BlockStatementNoCaption | ParagraphsNoNumber)*, 
+                        (BlockStatementNoCaption | ParagraphsNoNumber | Commentary)*,
                         Contributors, 
-                        (BlockStatementNoCaption | ParagraphsNoNumber)*
+                        (BlockStatementNoCaption | ParagraphsNoNumber | Commentary)*
                     )
                 )
             }
@@ -263,6 +263,12 @@
             }
         ParagraphsNoNumber =
             element paragraphs {
+                MetaDataTitle,
+                Index*,
+                BlockStatementNoCaption+
+            }
+        Commentary =
+            element commentary {
                 MetaDataTitle,
                 Index*,
                 BlockStatementNoCaption+

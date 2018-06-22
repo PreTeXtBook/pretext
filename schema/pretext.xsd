@@ -25,6 +25,7 @@
               <xs:choice maxOccurs="unbounded">
                 <xs:group ref="BlockDivision"/>
                 <xs:group ref="Paragraphs"/>
+                <xs:element ref="commentary"/>
               </xs:choice>
               <xs:sequence>
                 <xs:group minOccurs="0" ref="IntroductionDivision"/>
@@ -86,6 +87,7 @@
                 <xs:choice maxOccurs="unbounded">
                   <xs:group ref="BlockDivision"/>
                   <xs:group ref="Paragraphs"/>
+                  <xs:element ref="commentary"/>
                 </xs:choice>
                 <xs:element minOccurs="0" ref="exercises"/>
                 <xs:element minOccurs="0" ref="references"/>
@@ -114,6 +116,7 @@
                 <xs:choice maxOccurs="unbounded">
                   <xs:group ref="BlockDivision"/>
                   <xs:group ref="Paragraphs"/>
+                  <xs:element ref="commentary"/>
                 </xs:choice>
                 <xs:element minOccurs="0" ref="exercises"/>
                 <xs:element minOccurs="0" ref="references"/>
@@ -142,6 +145,7 @@
                 <xs:choice maxOccurs="unbounded">
                   <xs:group ref="BlockDivision"/>
                   <xs:group ref="Paragraphs"/>
+                  <xs:element ref="commentary"/>
                 </xs:choice>
                 <xs:element minOccurs="0" ref="exercises"/>
                 <xs:element minOccurs="0" ref="references"/>
@@ -168,6 +172,7 @@
             <xs:choice maxOccurs="unbounded">
               <xs:group ref="BlockDivision"/>
               <xs:group ref="Paragraphs"/>
+              <xs:element ref="commentary"/>
             </xs:choice>
             <xs:element minOccurs="0" ref="exercises"/>
             <xs:element minOccurs="0" ref="references"/>
@@ -184,6 +189,7 @@
             <xs:choice maxOccurs="unbounded">
               <xs:group ref="BlockDivision"/>
               <xs:group ref="Paragraphs"/>
+              <xs:element ref="commentary"/>
               <xs:element ref="notation-list"/>
               <xs:element ref="solution-list"/>
             </xs:choice>
@@ -424,6 +430,7 @@
         <xs:choice maxOccurs="unbounded">
           <xs:group ref="BlockStatementNoCaption"/>
           <xs:group ref="ParagraphsNoNumber"/>
+          <xs:element ref="commentary"/>
         </xs:choice>
       </xs:sequence>
       <xs:attributeGroup ref="MetaDataTitleOptional"/>
@@ -448,6 +455,7 @@
         <xs:choice maxOccurs="unbounded">
           <xs:group ref="BlockStatementNoCaption"/>
           <xs:group ref="ParagraphsNoNumber"/>
+          <xs:element ref="commentary"/>
         </xs:choice>
       </xs:sequence>
       <xs:attributeGroup ref="MetaDataTitleOptional"/>
@@ -462,6 +470,7 @@
             <xs:choice maxOccurs="unbounded">
               <xs:group ref="BlockStatementNoCaption"/>
               <xs:group ref="ParagraphsNoNumber"/>
+              <xs:element ref="commentary"/>
             </xs:choice>
             <xs:element minOccurs="0" maxOccurs="unbounded" ref="attribution"/>
           </xs:sequence>
@@ -469,11 +478,13 @@
             <xs:choice minOccurs="0" maxOccurs="unbounded">
               <xs:group ref="BlockStatementNoCaption"/>
               <xs:group ref="ParagraphsNoNumber"/>
+              <xs:element ref="commentary"/>
             </xs:choice>
             <xs:element ref="contributors"/>
             <xs:choice minOccurs="0" maxOccurs="unbounded">
               <xs:group ref="BlockStatementNoCaption"/>
               <xs:group ref="ParagraphsNoNumber"/>
+              <xs:element ref="commentary"/>
             </xs:choice>
           </xs:sequence>
         </xs:choice>
@@ -539,6 +550,18 @@
       </xs:element>
     </xs:sequence>
   </xs:group>
+  <xs:element name="commentary">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="MetaDataTitle">
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" ref="idx"/>
+            <xs:group maxOccurs="unbounded" ref="BlockStatementNoCaption"/>
+          </xs:sequence>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="exercises">
     <xs:complexType>
       <xs:sequence>

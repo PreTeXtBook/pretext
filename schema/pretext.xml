@@ -47,7 +47,7 @@
                 MetaDataSubtitle,
                 ArticleFrontMatter?,
                 (
-                    (BlockDivision | Paragraphs)+
+                    (BlockDivision | Paragraphs | Commentary)+
                 |
                     (
                         IntroductionDivision?,
@@ -93,7 +93,7 @@
                 Objectives?,
                 (
                     (
-                        (BlockDivision | Paragraphs)+,
+                        (BlockDivision | Paragraphs | Commentary)+,
                         Exercises?,
                         References?
                     )
@@ -113,7 +113,7 @@
                 Objectives?,
                 (
                     (
-                        (BlockDivision | Paragraphs)+,
+                        (BlockDivision | Paragraphs | Commentary)+,
                         Exercises?,
                         References?
                     )
@@ -133,7 +133,7 @@
                 Objectives?,
                 (
                     (
-                        (BlockDivision | Paragraphs)+,
+                        (BlockDivision | Paragraphs | Commentary)+,
                         Exercises?,
                         References?
                     )
@@ -151,7 +151,7 @@
             element subsubsection {
                 MetaDataTitle,
                 Objectives?,
-                (BlockDivision | Paragraphs)+,
+                (BlockDivision | Paragraphs | Commentary)+,
                 Exercises?,
                 References?
             }
@@ -159,7 +159,7 @@
             element appendix {
                 MetaDataTitle,
                 (
-                    (BlockDivision | Paragraphs | NotationList | SolutionList )+ |
+                    (BlockDivision | Paragraphs | Commentary | NotationList | SolutionList )+ |
                     (
                         IntroductionDivision?,
                         Section,
@@ -190,6 +190,8 @@
 
         <p>The <c>NoNumber</c> variant allows for light-weight sectioning of un-numbered divisions, such as a Preface.</p>
 
+        <p><tag>commentary</tag> is elective, so should not have any numbered items ever, so the <q>NoNumber</q> provision is implicit.</p>
+
         <fragment xml:id="paragraphs">
         Paragraphs =
             element paragraphs {
@@ -199,6 +201,12 @@
             }
         ParagraphsNoNumber =
             element paragraphs {
+                MetaDataTitle,
+                Index*,
+                BlockStatementNoCaption+
+            }
+        Commentary =
+            element commentary {
                 MetaDataTitle,
                 Index*,
                 BlockStatementNoCaption+
@@ -1869,7 +1877,7 @@
         Biography = 
             element biography {
                 MetaDataTitleOptional,
-                (BlockStatementNoCaption | ParagraphsNoNumber)+
+                (BlockStatementNoCaption | ParagraphsNoNumber | Commentary)+
             }
         Dedication = 
             element dedication {
@@ -1879,21 +1887,21 @@
         Acknowledgement = 
             element acknowledgement {
                 MetaDataTitleOptional,
-                (BlockStatementNoCaption | ParagraphsNoNumber)+
+                (BlockStatementNoCaption | ParagraphsNoNumber | Commentary)+
             }
         Preface =
             element preface {
                 MetaDataTitleOptional,
                 (
                     (
-                        (BlockStatementNoCaption | ParagraphsNoNumber)+, 
+                        (BlockStatementNoCaption | ParagraphsNoNumber | Commentary)+,
                         Attribution*
                     )
                     |
                     (
-                        (BlockStatementNoCaption | ParagraphsNoNumber)*, 
+                        (BlockStatementNoCaption | ParagraphsNoNumber | Commentary)*,
                         Contributors, 
-                        (BlockStatementNoCaption | ParagraphsNoNumber)*
+                        (BlockStatementNoCaption | ParagraphsNoNumber | Commentary)*
                     )
                 )
             }
