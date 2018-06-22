@@ -1117,8 +1117,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- or replacement <idx> as mixed-content     -->
     <!-- start attribute is actual end of a        -->
     <!-- "page range", goodies at @finish          -->
+    <!-- "commentary" is elective, so condition    -->
     <xsl:variable name="unstructured-index">
-        <xsl:for-each select="//index[not(main) and not(@start) and not(index-list)] | $document-root//idx[not(h) and not(@start)]">
+        <xsl:for-each select="//index[not(main) and not(@start) and not(index-list) and (not(ancestor::commentary) or $b-commentary)] | $document-root//idx[not(h) and not(@start) and (not(ancestor::commentary) or $b-commentary)]">
             <xsl:variable name="content">
                 <xsl:apply-templates select="*|text()" />
             </xsl:variable>
@@ -1149,8 +1150,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:for-each>
     </xsl:variable>
     <!-- index entries with structure, cant't be end of a "page range" -->
+    <!-- "commentary" is elective, so process, or not                  -->
     <xsl:variable name="structured-index">
-        <xsl:for-each select="//index[main and not(@start)] | $document-root//idx[h and not(@start)]">
+        <xsl:for-each select="//index[main and not(@start) and (not(ancestor::commentary) or $b-commentary)] | $document-root//idx[h and not(@start) and (not(ancestor::commentary) or $b-commentary)]">
             <index>
                 <xsl:for-each select="main|sub|h">
                     <xsl:variable name="content">
@@ -1493,6 +1495,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="*" mode="xref-as-knowl">
     <xsl:value-of select="false()" />
 </xsl:template>
+<!-- As an elective enhancement, we only make a knowl of -->
+<!-- the commentary if they are being displayed anyway,  -->
+<!-- since we may not want the content to bleed through  -->
+<!-- into a knowl posted publicly                        -->
+<xsl:template match="commentary" mode="xref-as-knowl">
+    <xsl:value-of select="$b-commentary" />
+</xsl:template>
 <xsl:template match="fn|p|blockquote|biblio|biblio/note|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|poem|assemblage|paragraphs|objectives|exercise|hint|answer|solution|exercisegroup|men|mrow|li|contributor" mode="xref-as-knowl">
     <xsl:value-of select="true()" />
 </xsl:template>
@@ -1775,7 +1784,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- Title only, paragraphs -->
+<!-- Title only, paragraphs, commentary   -->
 <!-- h5 for paragraphs, lowest of the low -->
 <!-- No title, then nothing happens       -->
 <!-- TODO: titles will be mandatory sometime -->
@@ -1905,7 +1914,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- (7) TODO: "wrapped-content" called by "body" to separate code. -->
 
-<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|objectives|&EXAMPLE-LIKE;|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|proof|case|fn|contributor|biblio|biblio/note|p|li|me|men|md|mdn">
+<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|commentary|objectives|&EXAMPLE-LIKE;|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|proof|case|fn|contributor|biblio|biblio/note|p|li|me|men|md|mdn">
     <xsl:param name="b-original" select="true()" />
     <xsl:variable name="hidden">
         <xsl:apply-templates select="." mode="is-hidden" />
@@ -2631,6 +2640,49 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="paragraphs" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
     <xsl:apply-templates select="*" >
+        <xsl:with-param name="b-original" select="$b-original" />
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- Commentary -->
+<!-- Like "paragraphs" but electively not displayed -->
+
+<!-- Not born-hidden by choice -->
+<xsl:template match="commentary" mode="is-hidden">
+    <xsl:text>false</xsl:text>
+</xsl:template>
+
+<!-- Overall enclosing element -->
+<xsl:template match="commentary" mode="body-element">
+    <xsl:text>article</xsl:text>
+</xsl:template>
+
+<!-- And its CSS class -->
+<xsl:template match="commentary" mode="body-css-class">
+    <xsl:text>commentary</xsl:text>
+</xsl:template>
+
+<!-- Not born hidden -->
+<xsl:template match="commentary" mode="hidden-knowl-placement" />
+
+<!-- When born use this heading -->
+<xsl:template match="commentary" mode="heading-birth">
+    <xsl:apply-templates select="." mode="heading-title-paragraphs" />
+</xsl:template>
+
+<!-- Heading for interior of xref-knowl content -->
+<xsl:template match="commentary" mode="heading-xref-knowl">
+    <xsl:apply-templates select="." mode="heading-title-paragraphs" />
+</xsl:template>
+
+<!-- Primary content of generic "body" template -->
+<!-- Pass along b-original flag                 -->
+<!-- Simply process contents, we restrict here  -->
+<xsl:template match="commentary" mode="wrapped-content">
+    <xsl:param name="b-original" select="true()" />
+    <!-- coordinate select with schema's BlockStatementNoCaption -->
+    <!-- Note that index items are dealt with elsewhere          -->
+    <xsl:apply-templates select="idx|p|blockquote|pre|aside|sidebyside|sbsgroup">
         <xsl:with-param name="b-original" select="$b-original" />
     </xsl:apply-templates>
 </xsl:template>
@@ -3537,7 +3589,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- and top-down when components are also knowled.  -->
 
 
-<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|objectives|&EXAMPLE-LIKE;|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|proof|case|fn|contributor|biblio|biblio/note" mode="body">
+<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|commentary|objectives|&EXAMPLE-LIKE;|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|proof|case|fn|contributor|biblio|biblio/note" mode="body">
     <xsl:param name="block-type" />
     <xsl:param name="b-original" select="true()" />
     <!-- prelude beforehand, when original -->
@@ -3546,39 +3598,46 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="b-original" select="$b-original" />
         </xsl:apply-templates>
     </xsl:if>
-    <xsl:variable name="body-elt">
-        <xsl:apply-templates select="." mode="body-element" />
-    </xsl:variable>
-    <xsl:element name="{$body-elt}">
-        <xsl:attribute name="class">
-            <xsl:apply-templates select="." mode="body-css-class" />
-        </xsl:attribute>
-        <!-- Label original, but not if embedded            -->
-        <!-- Then id goes onto the knowl text, so locatable -->
-        <xsl:if test="$b-original and not($block-type = 'embed')">
-            <xsl:attribute name="id">
-                <xsl:apply-templates select="." mode="internal-id" />
+    <!-- A "commentary" element is a top-level block,    -->
+    <!-- unlike a subsidiary element like a "hint",      -->
+    <!-- which must be elected to be visible, so this is -->
+    <!-- a bit of an ad-hock hack to handle this case    -->
+    <!-- No prelude, postlude, proof for "commentary"    -->
+    <xsl:if test="not(self::commentary) or $b-commentary">
+        <xsl:variable name="body-elt">
+            <xsl:apply-templates select="." mode="body-element" />
+        </xsl:variable>
+        <xsl:element name="{$body-elt}">
+            <xsl:attribute name="class">
+                <xsl:apply-templates select="." mode="body-css-class" />
             </xsl:attribute>
-        </xsl:if>
-        <!-- this horrible hack should go away once better CSS is in place -->
-        <xsl:if test="self::poem">
-            <xsl:attribute name="style">
-                <xsl:text>display: table; width: auto; max-width: 90%; margin: 0 auto;</xsl:text>
-            </xsl:attribute>
-        </xsl:if>
-        <!-- If visible, heading interior to article -->
-        <xsl:if test="$block-type = 'visible'">
-            <xsl:apply-templates select="." mode="heading-birth" />
-        </xsl:if>
-        <!-- If xref-knowl, heading interior to article -->
-        <xsl:if test="$block-type = 'xref'">
-            <xsl:apply-templates select="." mode="heading-xref-knowl" />
-        </xsl:if>
-        <!-- Then actual content, respecting b-original flag -->
-        <xsl:apply-templates select="." mode="wrapped-content">
-            <xsl:with-param name="b-original" select="$b-original" />
-        </xsl:apply-templates>
-    </xsl:element>
+            <!-- Label original, but not if embedded            -->
+            <!-- Then id goes onto the knowl text, so locatable -->
+            <xsl:if test="$b-original and not($block-type = 'embed')">
+                <xsl:attribute name="id">
+                    <xsl:apply-templates select="." mode="internal-id" />
+                </xsl:attribute>
+            </xsl:if>
+            <!-- this horrible hack should go away once better CSS is in place -->
+            <xsl:if test="self::poem">
+                <xsl:attribute name="style">
+                    <xsl:text>display: table; width: auto; max-width: 90%; margin: 0 auto;</xsl:text>
+                </xsl:attribute>
+            </xsl:if>
+            <!-- If visible, heading interior to article -->
+            <xsl:if test="$block-type = 'visible'">
+                <xsl:apply-templates select="." mode="heading-birth" />
+            </xsl:if>
+            <!-- If xref-knowl, heading interior to article -->
+            <xsl:if test="$block-type = 'xref'">
+                <xsl:apply-templates select="." mode="heading-xref-knowl" />
+            </xsl:if>
+            <!-- Then actual content, respecting b-original flag -->
+            <xsl:apply-templates select="." mode="wrapped-content">
+                <xsl:with-param name="b-original" select="$b-original" />
+            </xsl:apply-templates>
+        </xsl:element>
+    </xsl:if>
     <!-- Extraordinary: proofs are not displayed within their    -->
     <!-- parent theorem, but as a sibling, following.  It might  -->
     <!-- be a hidden knowl, it might just be the proof visible.  -->
