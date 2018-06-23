@@ -3713,6 +3713,39 @@ the xsltproc executable.
                     <cline>merganser.math.gvsu.edu/david/linear.algebra/ula/index.html</cline>
                 </cd>David's contribution of examples, and assistance designing the <pretext /> elements is greatly appreciated.  Alright, let's learn some linear algebra.  Yes, there are some learning opportunities in this subsection.</p>
 
+                <figure xml:id="figure-SAGE">
+                    <caption>SAGE</caption>
+
+                    <interactive xml:id="interactive-SAGE" platform="sage" width="100%" aspect="2:3">
+                        <slate surface="sage">
+var('x')
+@interact
+def midpoint(n = slider(1,100,1,4), f = input_box(default = "x^2", type = str), start = input_box(default = "0", type = str), end = input_box(default = "1", type = str)):
+    a = N(start)
+    b = N(end)
+    func = sage_eval(f, locals={'x':x})
+    dx = (b-a)/n
+    midxs = [q*dx+dx/2 + a for q in range(n)]
+    midys = [func(x=x_val) for x_val in midxs]
+    rects = Graphics()
+    for q in range(n):
+        xm = midxs[q]
+        ym = midys[q]
+        rects = rects + line([[xm-dx/2,0],[xm-dx/2,ym],[xm+dx/2,ym],[xm+dx/2,0]], rgbcolor = (1,0,0)) + point((xm,ym), rgbcolor = (1,0,0))
+    min_y = min(0, find_local_minimum(func,a,b)[0])
+    max_y = max(0, find_local_maximum(func,a,b)[0])
+    pretty_print(html('&lt;h3&gt;Numerical integrals with the midpoint rule&lt;/h3&gt;'))
+    pretty_print(html('$\int_{a}^{b}{f(x) dx} {\\approx} \sum_i{f(x_i) \Delta x}$'))
+    print "\n\nSage numerical answer: " + str(integral_numerical(func,a,b,max_points = 200)[0])
+    print "Midpoint estimated answer: " + str(RDF(dx*sum([midys[q] for q in range(n)])))
+    show(plot(func,a,b) + rects, xmin = a, xmax = b, ymin = min_y, ymax = max_y)
+                        </slate>
+                        <instructions>
+                            <p>Do something here to see something.</p>
+                        </instructions>
+                    </interactive>
+                </figure>
+
                 <figure xml:id="figure-simple-eigenvector">
                     <caption>A simple eigenvector demonstration</caption>
 

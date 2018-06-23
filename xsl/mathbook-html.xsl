@@ -7269,6 +7269,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <script type="text/javascript" src="https://cdn.geogebra.org/apps/deployggb.js"></script>
 </xsl:template>
 
+<!-- Sage Interact header libraries -->
+<xsl:template match="interactive[@platform = 'sage']" mode="header-libraries">
+    <script src="https://sagecell.sagemath.org/static/embedded_sagecell.js"></script>
+    <script>
+        <xsl:text>sagecell.makeSagecell({
+    inputLocation: ".sage-interact",
+    autoeval: 'true',
+    hide: ["editor", "evalButton", "permalink"]
+});</xsl:text>
+    </script>
+    <link rel="stylesheet" type="text/css" href="https://sagecell.sagemath.org/static/sagecell_embed.css" />
+</xsl:template>
+
 <!-- JSXGraph header libraries -->
 <xsl:template match="interactive[@platform = 'jsxgraph']" mode="header-libraries">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jsxgraph/0.99.6/jsxgraph.css" />
@@ -7349,6 +7362,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>jxgbox</xsl:text>
         </xsl:attribute>
         <xsl:apply-templates select="." mode="size-pixels-style-attribute" />
+    </div>
+</xsl:template>
+
+<!-- Sage Cell Server will execute an interact, when  -->
+<!-- properly bundled up with the right HTML markup   -->
+<xsl:template match="slate[@surface = 'sage']">
+    <div class="sage-interact">
+      <script type="text/x-sage">
+          <xsl:value-of select="." />
+      </script>
     </div>
 </xsl:template>
 
