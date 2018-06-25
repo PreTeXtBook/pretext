@@ -7270,14 +7270,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Sage Interact header libraries -->
+<!-- ".sage-interact" must match use in "slate" -->
 <xsl:template match="interactive[@platform = 'sage']" mode="header-libraries">
     <script src="https://sagecell.sagemath.org/static/embedded_sagecell.js"></script>
     <script>
-        <xsl:text>sagecell.makeSagecell({
-    inputLocation: ".sage-interact",
-    autoeval: 'true',
-    hide: ["editor", "evalButton", "permalink"]
-});</xsl:text>
+        <xsl:text>sagecell.makeSagecell({&#xa;</xsl:text>
+        <xsl:text>    inputLocation: ".sage-interact",&#xa;</xsl:text>
+        <xsl:text>    autoeval: 'true',&#xa;</xsl:text>
+        <xsl:text>    hide: ["editor", "evalButton", "permalink"]&#xa;</xsl:text>
+        <xsl:text>});&#xa;</xsl:text>
     </script>
     <link rel="stylesheet" type="text/css" href="https://sagecell.sagemath.org/static/sagecell_embed.css" />
 </xsl:template>
@@ -7365,12 +7366,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </div>
 </xsl:template>
 
-<!-- Sage Cell Server will execute an interact, when  -->
-<!-- properly bundled up with the right HTML markup   -->
+<!-- Sage Cell Server will execute an interact, when     -->
+<!-- properly bundled up with the right HTML markup      -->
+<!-- ".sage-interact" must match use in "header-library" -->
 <xsl:template match="slate[@surface = 'sage']">
     <div class="sage-interact">
       <script type="text/x-sage">
-          <xsl:value-of select="." />
+        <xsl:call-template name="sanitize-text">
+            <xsl:with-param name="text" select="." />
+        </xsl:call-template>
       </script>
     </div>
 </xsl:template>
