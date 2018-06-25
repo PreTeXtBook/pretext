@@ -6080,6 +6080,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
  -->    <xsl:text>{\mono{www.monroecc.edu/faculty/paulseeburger/calcnsf/CalcPlot3D}}&#xa;</xsl:text>
 </xsl:template>
 
+<!-- Temporary -->
+<xsl:template match="interactive">
+    <xsl:text>[INTERACTIVE]</xsl:text>
+</xsl:template>
 
 <!-- Static interactives -->
 <!-- Contents of "static" element, plus    -->
