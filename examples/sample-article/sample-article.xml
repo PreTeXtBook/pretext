@@ -3713,39 +3713,6 @@ the xsltproc executable.
                     <cline>merganser.math.gvsu.edu/david/linear.algebra/ula/index.html</cline>
                 </cd>David's contribution of examples, and assistance designing the <pretext /> elements is greatly appreciated.  Alright, let's learn some linear algebra.  Yes, there are some learning opportunities in this subsection.</p>
 
-                <figure xml:id="figure-SAGE">
-                    <caption>SAGE</caption>
-
-                    <interactive xml:id="interactive-SAGE" platform="sage" width="100%" aspect="2:3">
-                        <slate surface="sage">
-var('x')
-@interact
-def midpoint(n = slider(1,100,1,4), f = input_box(default = "x^2", type = str), start = input_box(default = "0", type = str), end = input_box(default = "1", type = str)):
-    a = N(start)
-    b = N(end)
-    func = sage_eval(f, locals={'x':x})
-    dx = (b-a)/n
-    midxs = [q*dx+dx/2 + a for q in range(n)]
-    midys = [func(x=x_val) for x_val in midxs]
-    rects = Graphics()
-    for q in range(n):
-        xm = midxs[q]
-        ym = midys[q]
-        rects = rects + line([[xm-dx/2,0],[xm-dx/2,ym],[xm+dx/2,ym],[xm+dx/2,0]], rgbcolor = (1,0,0)) + point((xm,ym), rgbcolor = (1,0,0))
-    min_y = min(0, find_local_minimum(func,a,b)[0])
-    max_y = max(0, find_local_maximum(func,a,b)[0])
-    pretty_print(html('&lt;h3&gt;Numerical integrals with the midpoint rule&lt;/h3&gt;'))
-    pretty_print(html('$\int_{a}^{b}{f(x) dx} {\\approx} \sum_i{f(x_i) \Delta x}$'))
-    print "\n\nSage numerical answer: " + str(integral_numerical(func,a,b,max_points = 200)[0])
-    print "Midpoint estimated answer: " + str(RDF(dx*sum([midys[q] for q in range(n)])))
-    show(plot(func,a,b) + rects, xmin = a, xmax = b, ymin = min_y, ymax = max_y)
-                        </slate>
-                        <instructions>
-                            <p>Do something here to see something.</p>
-                        </instructions>
-                    </interactive>
-                </figure>
-
                 <figure xml:id="figure-simple-eigenvector">
                     <caption>A simple eigenvector demonstration</caption>
 
@@ -4047,6 +4014,55 @@ def midpoint(n = slider(1,100,1,4), f = input_box(default = "x^2", type = str), 
                 </figure>
 
                 <p>Generally, we load an interactive into an HTML <c>iframe</c> to sandbox (isolate) it from other interactives.  We does this for your own protection.  So, for example, one interactive cannot talk to another.  If two <tag>slate</tag> need to communicate, then they are related, and should be placed into a single <tag>interactive</tag>, allowed to layout themselves, or grouped within a <tag>sidebyside</tag> allowing finer control.  Even if we have this under control, you might still enjoy reading <url href="http://mikecavaliere.com/your-js-is-a-mess-javascript-namespacing/">Your JS is a Mess</url> at <c>mikecavaliere.com/your-js-is-a-mess-javascript-namespacing/</c>.</p>
+            </subsection>
+
+            <subsection>
+                <title>Sage Interacts</title>
+                <idx><h>Sage</h><h>interacts</h></idx>
+
+                <p>Sage, and the Sage Cell Server, support interactive demonstrations, called <term>interacts</term>.<ul>
+                    <li>The interactive elements are nearly trivial to construct.</li>
+                    <li>An interact is simply a single Python function (acted on by a decorator).</li>
+                    <li>You have the full mathematical power of Sage at your disposal, so can do some very powerful computations with high precision (or exactly).</li>
+                    <li>The interface is not as polished as what you can achieve with Javascript libraries.</li>
+                    <li>Graphics refresh with a round-trip to the server, so are not nearly as fluid as with other tools.</li>
+                </ul>  Note that each interact is insulated from the others, unlike our other employment of the Sage Cell Server.</p>
+
+                <p>This example is by Marshall Hampton, taken from the Sage interact wiki, <url href="https://wiki.sagemath.org/interact/calculus"><c>wiki.sagemath.org/interact/calculus</c></url>, specifically <url href="https://wiki.sagemath.org/interact/calculus#Numerical_integrals_with_the_midpoint_rule">here</url>.</p>
+
+                <!-- It would be better to xi:include this Sage code, but we don't want    -->
+                <!-- newcomers to need to use the "-xinclude" switch while getting started -->
+                <figure xml:id="figure-interactive-numerical-integral">
+                    <caption>Numerical integrals using the midpoint rule</caption>
+
+                    <interactive xml:id="interactive-numerical-integral" platform="sage" width="100%" aspect="2:3">
+                        <!-- Changes: gave 3 input boxes widths -->
+                        <slate surface="sage">
+                        var('x')
+                        @interact
+                        def midpoint(n = slider(1,100,1,4), f = input_box(default = "x^2", type = str, width=40), start = input_box(default = "0", type = str, width=6), end = input_box(default = "1", type = str,width=6)):
+                            a = N(start)
+                            b = N(end)
+                            func = sage_eval(f, locals={'x':x})
+                            dx = (b-a)/n
+                            midxs = [q*dx+dx/2 + a for q in range(n)]
+                            midys = [func(x=x_val) for x_val in midxs]
+                            rects = Graphics()
+                            for q in range(n):
+                                xm = midxs[q]
+                                ym = midys[q]
+                                rects = rects + line([[xm-dx/2,0],[xm-dx/2,ym],[xm+dx/2,ym],[xm+dx/2,0]], rgbcolor = (1,0,0)) + point((xm,ym), rgbcolor = (1,0,0))
+                            min_y = min(0, find_local_minimum(func,a,b)[0])
+                            max_y = max(0, find_local_maximum(func,a,b)[0])
+                            pretty_print(html('&lt;h3&gt;Numerical integrals with the midpoint rule&lt;/h3&gt;'))
+                            pretty_print(html('$\int_{a}^{b}{f(x) dx} {\\approx} \sum_i{f(x_i) \Delta x}$'))
+                            print "\n\nSage numerical answer: " + str(integral_numerical(func,a,b,max_points = 200)[0])
+                            print "Midpoint estimated answer: " + str(RDF(dx*sum([midys[q] for q in range(n)])))
+                            show(plot(func,a,b) + rects, xmin = a, xmax = b, ymin = min_y, ymax = max_y)
+                        </slate>
+                    </interactive>
+                </figure>
+
             </subsection>
 
             <subsection>
