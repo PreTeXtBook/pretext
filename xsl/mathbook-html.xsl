@@ -7215,7 +7215,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ######################### -->
 
 <!-- Build a minimal page for iframe contents -->
-<!-- This version for @platform variant        -->
+<!-- This version for @platform variant       -->
+<!--   MathJax for PTX delimiters             -->
 <!--   Platform specific libraries into head  -->
 <!--   Author-libraries after slate exist     -->
 <xsl:template match="interactive[@platform]" mode="create-iframe-page">
@@ -7226,6 +7227,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:call-template name="converter-blurb-html" />
         <html lang="{$document-language}">
             <head>
+                <!-- configure MathJax by default for @platform variants -->
+                <xsl:call-template name="mathjax" />
                 <!-- need CSS for sidebyside         -->
                 <!-- perhaps this can be specialized -->
                 <xsl:call-template name="css" />
