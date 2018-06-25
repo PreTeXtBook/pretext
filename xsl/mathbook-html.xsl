@@ -7252,6 +7252,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="interactive[@desmos|@geogebra|@calcplot3d|@wolfram-cdf]" mode="create-iframe-page" />
 
 
+<!-- ################ -->
+<!-- Header Libraries -->
+<!-- ################ -->
+
 <!-- Specified by libraries through @platform attribute  -->
 <!-- or explicitly with @library, and with per-slate     -->
 <!-- @source files stored locally, these draw on "slate" -->
@@ -7395,131 +7399,6 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
     <div class="geogebra-applet" id="{$applet-container}">
         <xsl:apply-templates select="." mode="size-pixels-style-attribute" />
     </div>
-</xsl:template>
-
-<!-- Geogebra header libraries -->
-<xsl:template match="interactive[@platform = 'geogebra']" mode="header-libraries">
-    <script type="text/javascript" src="https://cdn.geogebra.org/apps/deployggb.js"></script>
-</xsl:template>
-
-<!-- JSXGraph header libraries -->
-<xsl:template match="interactive[@platform = 'jsxgraph']" mode="header-libraries">
-    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jsxgraph/0.99.6/jsxgraph.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsxgraph/0.99.6/jsxgraphcore.js"></script>
-</xsl:template>
-
-<!-- D3.js header libraries -->
-<xsl:template match="interactive[@platform = 'd3']" mode="header-libraries">
-    <xsl:variable name="d3-library-url">
-        <xsl:text>https://d3js.org/d3.v</xsl:text>
-        <!-- versions could be 3, 4, 5 -->
-        <xsl:choose>
-            <xsl:when test="@version">
-                <xsl:value-of select="@version" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>5</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-        <xsl:text>.min.js</xsl:text>
-    </xsl:variable>
-    <script src="{$d3-library-url}"></script>
-</xsl:template>
-
-<!-- Javascript header libraries -->
-<xsl:template match="interactive[@platform = 'javascript']" mode="header-libraries" />
-
-<!-- JSXGraph, Javascript, D3 Interactives -->
-<xsl:template match="interactive[@platform]">
-    <!-- (1) Build, display full content on the page, where born -->
-    <xsl:apply-templates select="." mode="interactive-core" />
-    <!-- (2) Identical content, but now isolated on a reader-friendly page -->
-    <xsl:apply-templates select="." mode="standalone-page" >
-        <xsl:with-param name="content">
-            <xsl:apply-templates select="." mode="interactive-core" />
-        </xsl:with-param>
-    </xsl:apply-templates>
-    <!-- (3) A simple page that can be used in an iframe construction -->
-    <xsl:apply-templates select="." mode="create-iframe-page" />
-</xsl:template>
-
-<!-- Build a minimal page for iframe contents -->
-<!-- This version for @platform variant        -->
-<!--   Platform specific libraries into head  -->
-<!--   Author-libraries after slate exist     -->
-<xsl:template match="interactive[@platform]" mode="create-iframe-page">
-    <xsl:variable name="if-filename">
-        <xsl:apply-templates select="." mode="iframe-filename" />
-    </xsl:variable>
-    <exsl:document href="{$if-filename}" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
-        <xsl:call-template name="converter-blurb-html" />
-        <html lang="{$document-language}">
-            <head>
-                <!-- need CSS for sidebyside         -->
-                <!-- perhaps this can be specialized -->
-                <xsl:call-template name="css" />
-                <!-- and CSS for the entire interactive, into the head -->
-                <xsl:apply-templates select="@css" />
-                <!-- load header libraries (for all "slate") -->
-                <xsl:apply-templates select="." mode="header-libraries" />
-            </head>
-            <body class="mathbook-content">
-                <div>
-                    <!-- the actual interactive bit          -->
-                    <xsl:apply-templates select="." mode="size-pixels-style-attribute" />
-                    <!-- stack, else use a layout -->
-                    <xsl:apply-templates select="slate|sidebyside|sbsgroup" />
-                    <!-- accumulate script tags *after* HTML elements -->
-                    <xsl:apply-templates select="@source" />
-                </div>
-            </body>
-        </html>
-    </exsl:document>
-</xsl:template>
-
-<!-- These forms *are* iframes, so we don't need to build their content -->
-<xsl:template match="interactive[@desmos|@geogebra|@calcplot3d|@wolfram-cdf]" mode="create-iframe-page" />
-
-
-<!-- Following will generate:                               -->
-<!-- 1.  Instructions (paragraphs, etc)                     -->
-<!-- 2.  An iframe, for sandboxing, especially              -->
-<!-- 3.  Assumes super-minimal HTML page as @src of iframe, -->
-<!--     living at file given by "iframe-filename" template -->
-<xsl:template match="interactive[@platform]" mode="interactive-core">
-    <!-- "instructions" first in identical-width div -->
-    <xsl:if test="instructions">
-        <div>
-            <xsl:variable name="width">
-                <xsl:apply-templates select="." mode="get-width-pixels" />
-            </xsl:variable>
-            <xsl:attribute name="style">
-                <xsl:text>width:</xsl:text>
-                <xsl:value-of select="$width" />
-                <xsl:text>px;</xsl:text>
-            </xsl:attribute>
-            <xsl:apply-templates select="instructions" />
-        </div>
-    </xsl:if>
-    <!-- Drop an iframe, with predictable "src" attribute -->
-    <!-- Requires a height, so we need to get this sorted -->
-    <!-- Or use some JS device to adjust height post-load -->
-    <!-- https://stackoverflow.com/questions/9162933/     -->
-    <!-- This provides some sandboxing, if we choose      -->
-    <!-- https://www.html5rocks.com/en/tutorials/security/sandboxed-iframes/ -->
-    <xsl:apply-templates select="." mode="iframe-interactive" />
-</xsl:template>
-
-<xsl:template match="interactive[@platform]" mode="iframe-interactive">
-    <xsl:variable name="int-id">
-        <xsl:apply-templates select="." mode="internal-id" />
-    </xsl:variable>
-    <iframe id="{$int-id}">
-        <xsl:apply-templates select="." mode="size-pixels-attributes" />
-        <xsl:attribute name="src">
-            <xsl:apply-templates select="." mode="iframe-filename" />
-        </xsl:attribute>
-    </iframe>
 </xsl:template>
 
 <!-- Utilities -->
