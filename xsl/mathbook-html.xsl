@@ -7311,6 +7311,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </div>
 </xsl:template>
 
+<xsl:template match="slate[@surface='svg']">
+    <svg>
+        <xsl:attribute name="id">
+            <xsl:value-of select="@xml:id" />
+        </xsl:attribute>
+        <!-- <xsl:apply-templates select="." mode="size-pixels-style-attribute" /> -->
+    </svg>
+</xsl:template>
+
 <xsl:template match="slate[@surface = 'canvas']">
     <!-- display:block allows precise sizes, without   -->
     <!-- having inline content with extra line height, -->
