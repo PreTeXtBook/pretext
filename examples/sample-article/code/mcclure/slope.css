@@ -1,0 +1,49 @@
+/* From Mark McClure, 2018-06-24              */
+/* https://marksmath.org/visualization/slope/ */
+/* Changes:  #h_info_container to 75% width   */
+
+body {
+    margin: auto;
+    background: #F0F0F0;
+    font-family: sans-serif;
+}
+
+main {
+/*   overflow: auto; */
+  border-bottom: 1px solid darkslategray;
+  padding-bottom: 20px;
+}
+
+h1 {
+	padding-left: 10px;
+	border-bottom: 1px solid darkslategray;
+}
+
+.p {
+	padding: 10px;
+}
+
+.em_display {
+	text-align: center;
+	font-style: italic;
+	font-weight: bold;
+	padding: 20px;
+}
+	
+.svg_container {
+	margin: 0 auto;
+}
+svg {
+	background: white;
+	border: 1px solid darkslategray;
+	margin: 20px;
+}
+
+.function_radio_container {
+	padding-left: 30px;
+}
+
+#h_info_container {
+	width: 75%;
+    margin: 0 auto;
+}

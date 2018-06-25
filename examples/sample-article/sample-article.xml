@@ -3704,7 +3704,7 @@ the xsltproc executable.
                 <p>(2018-06-22) Almost everything in this section is under active development and not stable yet.  Feel free to experiment and make suggestions and requests.  This page takes a while to completely load, so be patient.</p>
             </introduction>
 
-            <subsection>
+            <subsection xml:id="interactive-html5-canvas">
                 <title>HTML5 Canvas</title>
 
                 <p><init>HTML5</init> introduced the <tag>canvas</tag> element, which can be thought of a blank slate, a place to draw or write on.  So <pretext /> has the <tag>slate</tag> element for a similar purpose.  Generally, but not exclusively, <init>HTML5</init> writes on a <tag>canvas</tag> using the Javascript language.  We demonstrate this approach to interactive diagrams in this subsection.</p>
@@ -3855,6 +3855,78 @@ the xsltproc executable.
                         </instructions>
                     </interactive>
                 </figure>
+            </subsection>
+
+            <subsection>
+                <title>SVG</title>
+
+                <p>Entirely similar to using an HTML5 <c>canvas</c> element (<xref ref="interactive-html5-canvas" />), it is possible to control an <init>SVG</init> element with Javascript.  This example is from Mark McClure.</p>
+
+                <figure xml:id="figure-interactive-slopes">
+                    <caption>Tangent and secant slopes</caption>
+                    <interactive xml:id="interactive-slopes" platform="javascript" width="100%" aspect="6:8" source="https://code.jquery.com/jquery-1.11.3.min.js https://d3js.org/d3.v3.min.js https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.2.1/math.min.js code/mcclure/slope.js" css="code/mcclure/slope.css">
+                        <!-- intro text, plus curve radio buttons -->
+                        <slate xml:id="function-list" surface="html" aspect="6:2">
+                            <div class="p">
+                            Calculus consists of those problems in mathematics that can be solved with the
+                            following basic approach:
+                            </div>
+                            <div class="em_display">
+                            Approximate and take a limit!
+                            </div>
+                            <div class="p">
+                            The simplest, standard, geometric example of this process is the approximation
+                            of the slope of a tangent line with a secant line.
+                            Here's an illustration of this basic idea.
+                            </div>
+                            <div id="function_list" style="text-align: center">
+                                Choose \(f\):
+                                <span class="function_radio_container" style="padding-left: 10px">
+                                    <input type="radio" class="radio" name="function" value="f1" id="f1" />
+                                    \(f(x)=x^2\)
+                                </span>
+                                <span class="function_radio_container">
+                                    <input type="radio" class="radio" name="function" value="f2" />
+                                    \(f(x)=\frac{1}{3}e^x\)
+                                </span>
+                                <span class="function_radio_container">
+                                    <input type="radio" class="radio" name="function" value="f3" />
+                                    \(f(x)=\sin(2x^2)+x/4\)
+                                </span>
+                            </div>
+                        </slate>
+                        <!-- the curve/graph/interactive itself -->
+                        <slate xml:id="the_graph" surface="svg" aspect="6:4"/>
+                        <!-- slopes and secant line checkbox -->
+                        <slate xml:id="info-container" surface="html" aspect="6:2">
+                            <div id="h_info_container">
+                            <table>
+                                <tr>
+                                    <td><table>
+                                        <tr><td><input id="show_secant_checkbox" type="checkbox" /> Show secant line</td></tr>
+                                        <tr><td><input id="h_slider" type="range" min="-0.5" max="0.5" step="0.01" /></td></tr>
+                                    </table></td>
+                                    <td><table>
+                                        <tr><td class="dimit" style="text-align: left;">\(h = \) <span id="h_value_display"></span></td></tr>
+                                        <tr><td class="dimit" style="text-align: left;">secant slope = <span id="secant_value_display"></span></td></tr>
+                                        <tr><td style="text-align: left;">tangent slope = <span id="tangent_value_display"></span></td></tr>
+                                    </table></td>
+                                </tr>
+                            </table>
+                            </div>
+                        </slate>
+                        <instructions>
+                            <p>Select a function with the radio buttons, then use the checkbox to add the secant line.  The denominator of the difference quotient, <m>h</m>, can be adjusted with the slider and the red point will react to the different values.  The green point is the point of tangency, and can be dragged with the mouse.</p>
+                        </instructions>
+                    </interactive>
+                </figure>
+
+                <exercise>
+                    <title>Changing Secant Lines</title>
+                    <statement>
+                        <p>When discussing the derivative as a limit, we think of the point of tangency as being fixed (the green point in <xref ref="figure-interactive-slopes" />) and the <q>other</q> point defining the secant line as changing (the red point in <xref ref="figure-interactive-slopes" />).  Switch it up!  Fix a large value of <m>h</m> (positive or negative) and then change the point of tangency (the green point).  Discuss what you observe.</p>
+                    </statement>
+                </exercise>
             </subsection>
 
             <subsection>
