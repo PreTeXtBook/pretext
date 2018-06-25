@@ -7690,7 +7690,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <!--  -->
     <!-- 2017-07-05  top-level items that should have captions, but don't -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurrences" select="$document-root//figure[not(caption) and not(parent::sidebyside)] | $document-root//table[not(caption) and not(parent::sidebyside)] | $document-root//listing[not(caption) and not(parent::sidebyside)]" />
+        <xsl:with-param name="occurrences" select="$document-root//figure[not(caption) and not(parent::sidebyside)] | $document-root//table[not(caption) and not(parent::sidebyside) and not(ancestor::interactive)] | $document-root//listing[not(caption) and not(parent::sidebyside)]" />
         <xsl:with-param name="date-string" select="'2017-07-05'" />
         <xsl:with-param name="message" select="'a &lt;figure&gt;, &lt;table&gt;, or &lt;listing&gt; as a child of a division must contain a &lt;caption&gt; element.  A &lt;sidebyside&gt; can be used as a functional equivalent, or add a caption element (possibly with empty content) to replace with a numbered version.'" />
     </xsl:call-template>
