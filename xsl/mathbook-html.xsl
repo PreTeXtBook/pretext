@@ -5410,7 +5410,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </xsl:when>
                     <!-- author-provided -->
                     <xsl:when test="@preview and not(@preview = 'default')">
-                        <img src="{@preview}" width="{$width}" height="{$height}"/>
+                        <img src="{@preview}" width="{$width}" height="{$height}" alt="Video cover image"/>
                     </xsl:when>
                     <!-- this id-device should be replaced by graceful failure  -->
                     <!-- to the generic preview with a console warning          -->
@@ -5420,7 +5420,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <xsl:value-of select="$int-id" />
                             <xsl:text>.jpg</xsl:text>
                         </xsl:variable>
-                        <img src="{$thumbnail-image}" width="{$width}" height="{$height}"/>
+                        <img src="{$thumbnail-image}" width="{$width}" height="{$height}" alt="Video cover image"/>
                     </xsl:when>
                 </xsl:choose>
             </a>
@@ -5804,7 +5804,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </xsl:call-template>
                     </xsl:when>
                     <xsl:otherwise>
-                        <img width="{$width}" height="{$height}" src="{@preview}" />
+                        <img width="{$width}" height="{$height}" src="{@preview}" alt="Video cover image"/>
                     </xsl:otherwise>
                 </xsl:choose>
             </div>
