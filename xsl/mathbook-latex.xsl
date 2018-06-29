@@ -2789,6 +2789,59 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\\&#xa;</xsl:text>
 </xsl:template>
 
+<!-- ####################################### -->
+<!-- Solutions Divisions, Content Generation -->
+<!-- ####################################### -->
+
+<xsl:template match="chapter|section|subsection|subsubsection|exercises" mode="division-in-solutions">
+    <xsl:param name="scope" />
+    <xsl:param name="content" />
+
+    <xsl:variable name="division-name">
+        <xsl:choose>
+            <!-- backmatter placement gets appendix like chapter -->
+            <xsl:when test="$scope/self::book">
+                <xsl:text>section</xsl:text>
+            </xsl:when>
+            <!-- backmatter placement gets appendix like section -->
+            <xsl:when test="$scope/self::article">
+                <xsl:text>subsection</xsl:text>
+            </xsl:when>
+            <!-- divisional placement is one level less -->
+            <xsl:when test="$scope/self::chapter">
+                <xsl:text>section</xsl:text>
+            </xsl:when>
+            <xsl:when test="$scope/self::section">
+                <xsl:text>subsection</xsl:text>
+            </xsl:when>
+            <xsl:when test="$scope/self::subsection">
+                <xsl:text>subsubsection</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:message>PTX:BUG:     "solutions" division lacks a LaTeX name</xsl:message>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+
+    <!-- LaTeX heading with hard-coded number -->
+    <xsl:text>\</xsl:text>
+    <xsl:value-of select="$division-name" />
+    <xsl:text>*{</xsl:text>
+    <!-- control the numbering, i.e. hard-coded -->
+    <xsl:variable name="the-number">
+        <xsl:apply-templates select="." mode="number" />
+    </xsl:variable>
+    <!-- no trailing space if no number -->
+    <xsl:if test="not($the-number = '')">
+        <xsl:value-of select="$the-number" />
+        <xsl:text> </xsl:text>
+    </xsl:if>
+    <xsl:apply-templates select="." mode="title-full" />
+    <xsl:text>}&#xa;</xsl:text>
+
+    <xsl:copy-of select="$content" />
+</xsl:template>
+
 <!-- ############### -->
 <!-- Arbitrary Lists -->
 <!-- ############### -->
