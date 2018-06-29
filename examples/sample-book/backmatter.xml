@@ -36,10 +36,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <notation-list />
     </appendix>
 
-    <appendix>
+    <solutions divisional="hint answer solution">
         <title>Hints and Solutions to Selected Exercises</title>
-        <solution-list />
-    </appendix>
+    </solutions>
 
     <appendix>
         <title>A Structured Appendix</title>

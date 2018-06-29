@@ -948,11 +948,9 @@ the xsltproc executable.
 
                         <p>But you might want to describe how to use some other calculator, or maybe some numerical method.</p>
                     </technology>
-
                 </subsubsection>
 
                 <exercises>
-
                     <exercise xml:id="exercise-test-number">
                         <statement>
                             <p>This is an exercise in an <q>Exercises</q> subdivision at the level of a subsubsection.  There is no question other than if the numbering is appropriate.  Here is a self-referential link: Exercise<nbsp /><xref ref="exercise-test-number" />.</p>
@@ -968,6 +966,11 @@ the xsltproc executable.
                         </solution>
                     </exercise>
                 </exercises>
+
+                <solutions inline="hint solution answer" divisional="hint solution answer" project="hint solution answer">
+                    <title>Solutions for This Subsection</title>
+                    <idx><h>solutions</h><h>for a division</h></idx>
+                </solutions>
 
             </subsection>
 
@@ -7482,9 +7485,14 @@ the xsltproc executable.
                 <notation-list />
             </appendix>
 
-            <appendix>
+            <solutions inline="hint solution answer" divisional="hint solution answer" project="answer">
                 <title>Solutions to Selected Exercises</title>
-                <solution-list />
+                <idx><h>solutions</h><h>as an appendix</h></idx>
+            </solutions>
+
+            <appendix>
+                <title>Solutions to Selected Exercises (Deprecated)</title>
+                <solution-list inline="hint solution answer" divisional="hint solution answer" project="answer" />
             </appendix>
 
             <appendix xml:id="appendix-results">
