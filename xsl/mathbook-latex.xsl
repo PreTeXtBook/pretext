@@ -202,36 +202,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
-<!-- ########################### -->
-<!-- Exercise component switches -->
-<!-- ########################### -->
-
-<!-- The "entered-*" versions have been sanitized to be   -->
-<!-- "yes", "hidden", "no" or "".  For LaTeX output we    -->
-<!-- just show the component or not, and do not implement -->
-<!-- "hidden".  Thus we have some technical debt here.    -->
-<!-- But we just make and use boolean switches. Unset,    -->
-<!-- or mis-entered is the default, which is to show all  -->
-<!-- components until an author decides to hide them.     -->
-<xsl:variable name="b-has-inline-hint"
-              select="($entered-exercise-inline-hint = 'yes') or ($entered-exercise-inline-hint = '')" />
-<xsl:variable name="b-has-inline-answer"
-              select="($entered-exercise-inline-answer = 'yes') or ($entered-exercise-inline-answer = '')" />
-<xsl:variable name="b-has-inline-solution"
-              select="($entered-exercise-inline-solution = 'yes') or ($entered-exercise-inline-solution = '')" />
-<xsl:variable name="b-has-divisional-hint"
-              select="($entered-exercise-divisional-hint = 'yes') or ($entered-exercise-divisional-hint = '')" />
-<xsl:variable name="b-has-divisional-answer"
-              select="($entered-exercise-divisional-answer = 'yes') or ($entered-exercise-divisional-answer = '')" />
-<xsl:variable name="b-has-divisional-solution"
-              select="($entered-exercise-divisional-solution = 'yes') or ($entered-exercise-divisional-solution = '')" />
-<xsl:variable name="b-has-project-hint"
-              select="($entered-project-hint = 'yes') or ($entered-project-hint = '')" />
-<xsl:variable name="b-has-project-answer"
-              select="($entered-project-answer = 'yes') or ($entered-project-answer = '')" />
-<xsl:variable name="b-has-project-solution"
-              select="($entered-project-solution = 'yes') or ($entered-project-solution = '')" />
-
 <!-- ############## -->
 <!-- Entry Template -->
 <!-- ############## -->

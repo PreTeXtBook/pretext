@@ -438,18 +438,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ########################### -->
 
 <!-- We santitize exercise component switches.  These control    -->
-<!-- text/narrative appearances only, solution lists in the      -->
+<!-- text/narrative appearances *only*, solution lists in the    -->
 <!-- backmatter are given in alternate ways.  We only do quality -->
-<!-- control here, conversions are obligated to interpret        -->
-<!-- and employ in appropriate ways (especially "hidden").  But  -->
-<!-- conversions can be certain they receive only one of four    -->
-<!-- values in the "entered-*" variables.  The "*.text.*" forms  -->
-<!-- are deprecated with warnings elsewhere.                     -->
+<!-- control here first.  The "*.text.*" forms are deprecated    -->
+<!-- with warnings elsewhere.                                    -->
 
 <xsl:variable name="entered-exercise-inline-hint">
     <xsl:choose>
         <xsl:when test="($exercise.inline.hint = 'yes') or
-                        ($exercise.inline.hint = 'hidden') or
                         ($exercise.inline.hint = 'no')">
             <xsl:value-of select="$exercise.inline.hint" />
         </xsl:when>
@@ -463,7 +459,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$exercise.text.hint" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message >MBX:WARNING: exercise.inline.hint parameter should be "yes", "hidden", or "no", not "<xsl:value-of select="$exercise.inline.hint" />".  Proceeding with default value.</xsl:message>
+            <xsl:message >MBX:WARNING: exercise.inline.hint parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.inline.hint" />".  Proceeding with default value.</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -471,7 +467,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="entered-exercise-inline-answer">
     <xsl:choose>
         <xsl:when test="($exercise.inline.answer = 'yes') or
-                        ($exercise.inline.answer = 'hidden') or
                         ($exercise.inline.answer = 'no')">
             <xsl:value-of select="$exercise.inline.answer" />
         </xsl:when>
@@ -485,7 +480,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$exercise.text.answer" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message >MBX:WARNING: exercise.inline.answer parameter should be "yes", "hidden", or "no", not "<xsl:value-of select="$exercise.inline.answer" />".  Proceeding with default value.</xsl:message>
+            <xsl:message >MBX:WARNING: exercise.inline.answer parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.inline.answer" />".  Proceeding with default value.</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -493,7 +488,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="entered-exercise-inline-solution">
     <xsl:choose>
         <xsl:when test="($exercise.inline.solution = 'yes') or
-                        ($exercise.inline.solution = 'hidden') or
                         ($exercise.inline.solution = 'no')">
             <xsl:value-of select="$exercise.inline.solution" />
         </xsl:when>
@@ -507,7 +501,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$exercise.text.solution" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message >MBX:WARNING: exercise.inline.solution parameter should be "yes", "hidden", or "no", not "<xsl:value-of select="$exercise.inline.solution" />".  Proceeding with default value.</xsl:message>
+            <xsl:message >MBX:WARNING: exercise.inline.solution parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.inline.solution" />".  Proceeding with default value.</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -515,7 +509,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="entered-exercise-divisional-hint">
     <xsl:choose>
         <xsl:when test="($exercise.divisional.hint = 'yes') or
-                        ($exercise.divisional.hint = 'hidden') or
                         ($exercise.divisional.hint = 'no')">
             <xsl:value-of select="$exercise.divisional.hint" />
         </xsl:when>
@@ -529,7 +522,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$exercise.divisional.hint" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message >MBX:WARNING: exercise.divisional.hint parameter should be "yes", "hidden", or "no", not "<xsl:value-of select="$exercise.divisional.hint" />".  Proceeding with default value.</xsl:message>
+            <xsl:message >MBX:WARNING: exercise.divisional.hint parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.divisional.hint" />".  Proceeding with default value.</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -537,7 +530,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="entered-exercise-divisional-answer">
     <xsl:choose>
         <xsl:when test="($exercise.divisional.answer = 'yes') or
-                        ($exercise.divisional.answer = 'hidden') or
                         ($exercise.divisional.answer = 'no')">
             <xsl:value-of select="$exercise.divisional.answer" />
         </xsl:when>
@@ -551,7 +543,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$exercise.divisional.answer" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message >MBX:WARNING: exercise.divisional.answer parameter should be "yes", "hidden", or "no", not "<xsl:value-of select="$exercise.divisional.answer" />".  Proceeding with default value.</xsl:message>
+            <xsl:message >MBX:WARNING: exercise.divisional.answer parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.divisional.answer" />".  Proceeding with default value.</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -559,7 +551,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="entered-exercise-divisional-solution">
     <xsl:choose>
         <xsl:when test="($exercise.divisional.solution = 'yes') or
-                        ($exercise.divisional.solution = 'hidden') or
                         ($exercise.divisional.solution = 'no')">
             <xsl:value-of select="$exercise.divisional.solution" />
         </xsl:when>
@@ -573,7 +564,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$exercise.divisional.solution" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message >MBX:WARNING: exercise.divisional.solution parameter should be "yes", "hidden", or "no", not "<xsl:value-of select="$exercise.divisional.solution" />".  Proceeding with default value.</xsl:message>
+            <xsl:message >MBX:WARNING: exercise.divisional.solution parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.divisional.solution" />".  Proceeding with default value.</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -581,7 +572,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="entered-project-hint">
     <xsl:choose>
         <xsl:when test="($project.hint = 'yes') or
-                        ($project.hint = 'hidden') or
                         ($project.hint = 'no')">
             <xsl:value-of select="$project.hint" />
         </xsl:when>
@@ -595,7 +585,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$project.hint" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message >MBX:WARNING: project.hint parameter should be "yes", "hidden", or "no", not "<xsl:value-of select="$project.hint" />".  Proceeding with default value.</xsl:message>
+            <xsl:message >MBX:WARNING: project.hint parameter should be "yes" or "no", not "<xsl:value-of select="$project.hint" />".  Proceeding with default value.</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -603,7 +593,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="entered-project-answer">
     <xsl:choose>
         <xsl:when test="($project.answer = 'yes') or
-                        ($project.answer = 'hidden') or
                         ($project.answer = 'no')">
             <xsl:value-of select="$project.answer" />
         </xsl:when>
@@ -617,7 +606,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$project.answer" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message >MBX:WARNING: project.answer parameter should be "yes", "hidden", or "no", not "<xsl:value-of select="$project.answer" />".  Proceeding with default value.</xsl:message>
+            <xsl:message >MBX:WARNING: project.answer parameter should be "yes" or "no", not "<xsl:value-of select="$project.answer" />".  Proceeding with default value.</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -625,7 +614,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="entered-project-solution">
     <xsl:choose>
         <xsl:when test="($project.solution = 'yes') or
-                        ($project.solution = 'hidden') or
                         ($project.solution = 'no')">
             <xsl:value-of select="$project.solution" />
         </xsl:when>
@@ -639,10 +627,35 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$project.solution" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message >MBX:WARNING: project.solution parameter should be "yes", "hidden", or "no", not "<xsl:value-of select="$project.solution" />".  Proceeding with default value.</xsl:message>
+            <xsl:message >MBX:WARNING: project.solution parameter should be "yes" or "no", not "<xsl:value-of select="$project.solution" />".  Proceeding with default value.</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
+
+<!-- The "entered-*" versions have been sanitized      -->
+<!-- to be "yes", "no" or "".  We make and use boolean -->
+<!-- switches. Unset, or mis-entered is the default,   -->
+<!-- which is to show all components until an author   -->
+<!-- decides to hide them.                             -->
+<xsl:variable name="b-has-inline-hint"
+              select="($entered-exercise-inline-hint = 'yes') or ($entered-exercise-inline-hint = '')" />
+<xsl:variable name="b-has-inline-answer"
+              select="($entered-exercise-inline-answer = 'yes') or ($entered-exercise-inline-answer = '')" />
+<xsl:variable name="b-has-inline-solution"
+              select="($entered-exercise-inline-solution = 'yes') or ($entered-exercise-inline-solution = '')" />
+<xsl:variable name="b-has-divisional-hint"
+              select="($entered-exercise-divisional-hint = 'yes') or ($entered-exercise-divisional-hint = '')" />
+<xsl:variable name="b-has-divisional-answer"
+              select="($entered-exercise-divisional-answer = 'yes') or ($entered-exercise-divisional-answer = '')" />
+<xsl:variable name="b-has-divisional-solution"
+              select="($entered-exercise-divisional-solution = 'yes') or ($entered-exercise-divisional-solution = '')" />
+<xsl:variable name="b-has-project-hint"
+              select="($entered-project-hint = 'yes') or ($entered-project-hint = '')" />
+<xsl:variable name="b-has-project-answer"
+              select="($entered-project-answer = 'yes') or ($entered-project-answer = '')" />
+<xsl:variable name="b-has-project-solution"
+              select="($entered-project-solution = 'yes') or ($entered-project-solution = '')" />
+
 
 
 <!-- The main "mathbook" element only has two possible children     -->
