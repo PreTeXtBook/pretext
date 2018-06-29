@@ -3006,11 +3006,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- (1) appendices are just chapters after \appendix macro -->
 <!-- (2) exercises, references can appear at any depth,       -->
 <!--     so compute the subdivision name                      -->
-<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|exercises|references">
+<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|exercises|solutions|references">
     <!-- appendices are peers of chapters (book) or sections (article)  -->
     <!-- so we need to slip this in first, with book's \backmatter later-->
     <!-- NB: if no appendices, the backmatter template does \backmatter -->
-    <xsl:if test="self::appendix and not(preceding-sibling::appendix)">
+    <xsl:if test="(self::appendix or (parent::backmatter and self::solutions)) and not(preceding-sibling::appendix or preceding-sibling::solutions)">
         <xsl:text>%&#xa;</xsl:text>
         <xsl:text>\appendix&#xa;</xsl:text>
         <xsl:text>%&#xa;</xsl:text>
@@ -3038,6 +3038,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- We have such protection below, and elsewhere without comment      -->
     <!-- See http://tex.stackexchange.com/questions/99495                  -->
     <!-- LaTeX3e with the xparse package might make this unnecessary       -->
+
+    <!-- Some divisions are not born with a number, so we need * form   -->
+    <!-- This should only be at the end of the parent division, so that -->
+    <!-- numbering otherwise is not disturbed                           -->
     <xsl:variable name="b-unnumbered">
         <xsl:choose>
             <!-- references are never numbered -->
@@ -3055,6 +3059,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:value-of select="false()" />
                     </xsl:otherwise>
                 </xsl:choose>
+            </xsl:when>
+            <xsl:when test="self::solutions and not(ancestor::backmatter)">
+                <xsl:value-of select="true()" />
             </xsl:when>
             <!-- no other divisions are exceptional -->
             <xsl:otherwise>
@@ -3101,10 +3108,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="author" mode="name-list"/>
         <xsl:text>}}\par\bigskip&#xa;</xsl:text>
     </xsl:if>
-    <xsl:apply-templates select="*[not(self::author)]" />
+    <!-- Process the contents, title, idx killed, but avoid author -->
+    <!-- "solutions" content needs to call content generator       -->
+    <xsl:choose>
+        <xsl:when test="self::solutions">
+            <xsl:apply-templates select="." mode="solutions" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="*[not(self::author)]" />
+        </xsl:otherwise>
+    </xsl:choose>
     <xsl:apply-templates select="." mode="end-language" />
-    <!-- transition to book backmatter, if done with last appendix -->
-    <xsl:if test="ancestor::book and self::appendix and not(following-sibling::appendix)">
+    <!-- transition to LaTeX's book backmatter, which is not -->
+    <!-- our backmatter: identify last appendix or solutions  -->
+    <xsl:if test="ancestor::book and ancestor::backmatter and (self::appendix or self::solutions) and not(following-sibling::appendix or following-sibling::solutions)">
         <xsl:text>%&#xa;</xsl:text>
         <xsl:text>\backmatter&#xa;</xsl:text>
         <xsl:text>%&#xa;</xsl:text>
