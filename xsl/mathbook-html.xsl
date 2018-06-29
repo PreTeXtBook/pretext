@@ -1041,6 +1041,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- ####################################### -->
+<!-- Solutions Divisions, Content Generation -->
+<!-- ####################################### -->
+
+<xsl:template match="chapter|section|subsection|subsubsection|exercises" mode="division-in-solutions">
+    <xsl:param name="scope" /> <!-- ignored -->
+    <xsl:param name="content" />
+
+    <!-- as a duplicate generated content, no HTML id -->
+    <section class="{local-name(.)}">
+        <xsl:apply-templates select="." mode="section-header" />
+        <xsl:copy-of select="$content" />
+    </section>
+</xsl:template>
+
 <!-- ############### -->
 <!-- Arbitrary Lists -->
 <!-- ############### -->
