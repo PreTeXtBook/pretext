@@ -194,7 +194,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Newlines with &#xa; : http://stackoverflow.com/questions/723226/producing-a-new-line-in-xslt -->
 <!-- Removing whitespace: http://stackoverflow.com/questions/1468984/xslt-remove-whitespace-from-template -->
 <xsl:strip-space elements="mathbook pretext book article memo letter" />
-<xsl:strip-space elements="frontmatter chapter appendix index-part index section subsection subsubsection exercises references introduction conclusion paragraphs subparagraph backmatter" />
+<xsl:strip-space elements="frontmatter chapter appendix index-part index section subsection subsubsection exercises solutions references introduction conclusion paragraphs subparagraph backmatter" />
 <xsl:strip-space elements="docinfo author abstract" />
 <xsl:strip-space elements="titlepage preface acknowledgement biography foreword dedication colophon" />
 <!-- List is elements in DEFINITION-LIKE entity -->
@@ -926,6 +926,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="ancestor-or-self::appendix and $document-root//part">
             <xsl:value-of select="count($hierarchy) - 2 + 1" />
         </xsl:when>
+        <xsl:when test="self::solutions and parent::backmatter and $document-root//part">
+            <xsl:value-of select="count($hierarchy) - 2 + 1" />
+        </xsl:when>
         <xsl:otherwise>
             <xsl:value-of select="count($hierarchy) - 2" />
         </xsl:otherwise>
@@ -1016,7 +1019,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- are just containers, so we subtract them away        -->
 <!-- The frontmatter is divided for books in HTML,        -->
 <!-- and the backmatter is divided for articles and books -->
-<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|exercises|references|introduction|conclusion|colophon|biography|dedication|acknowledgement|preface|index" mode="division-name">
+<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|exercises|solutions|references|introduction|conclusion|colophon|biography|dedication|acknowledgement|preface|index" mode="division-name">
     <xsl:variable name="relative-level">
         <xsl:apply-templates select="." mode="level" />
     </xsl:variable>
@@ -2684,8 +2687,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- frontmatter itself.  So an article/frontmatter    -->
 <!-- is always a leaf, and a book/frontmatter is not   -->
 <!-- a leaf if it has a child other than a "titlepage" -->
-<!-- Generaly, we look for definitive markers          -->
-<!-- Note: references and exercises are not markers    -->
+<!-- Generally, we look for definitive markers         -->
+<!-- NB: references, exercises, solutions not relevant -->
 <xsl:template match="&STRUCTURAL;" mode="is-leaf">
     <xsl:choose>
         <xsl:when test="self::frontmatter">
@@ -2989,7 +2992,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Some items have default titles that make sense         -->
 <!-- Typically these are one-off subdivisions (eg preface), -->
 <!-- or repeated generic divisions (eg exercises)           -->
-<xsl:template match="frontmatter|colophon|preface|foreword|acknowledgement|dedication|biography|references|exercises|backmatter|index-part|index[index-list]" mode="has-default-title">
+<xsl:template match="frontmatter|colophon|preface|foreword|acknowledgement|dedication|biography|references|exercises|solutions|backmatter|index-part|index[index-list]" mode="has-default-title">
     <xsl:text>true</xsl:text>
 </xsl:template>
 <xsl:template match="*" mode="has-default-title">
@@ -3523,7 +3526,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- (so sometimes the "subdivision-serial-number" is empty)     -->
 <!-- References are "one-off" always, hence never numbered,      -->
 <!-- and so have a blank serial number                           -->
-<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|exercises" mode="serial-number">
+<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|exercises|backmatter/solutions" mode="serial-number">
     <xsl:variable name="relative-level">
         <xsl:apply-templates select="." mode="level" />
     </xsl:variable>
@@ -3544,6 +3547,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!--      we require these to appear *after* real divisions, making        -->
 <!--      counts simpler since for the divisions we just need number       -->
 <!--      preceding, with nothing intermediate to count                    -->
+<!--   4. "solutions" - counted with appendix, when in backmatter          -->
 <xsl:template match="part" mode="division-serial-number">
     <xsl:number format="I" />
 </xsl:template>
@@ -3573,7 +3577,10 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:choose>
 </xsl:template>
 <xsl:template match="appendix" mode="division-serial-number">
-    <xsl:number format="A" />
+    <xsl:number from="backmatter" level="any" count="appendix|solutions" format="A"/>
+</xsl:template>
+<xsl:template match="backmatter/solutions" mode="division-serial-number">
+    <xsl:number from="backmatter" level="any" count="appendix|solutions" format="A"/>
 </xsl:template>
 <xsl:template match="section" mode="division-serial-number">
     <xsl:number count="section" format="1" />
@@ -4119,6 +4126,12 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- They get their structure numbers from their parents                    -->
 <xsl:template match="references" mode="serial-number" />
 
+<!-- "solutions" not in the "backmatter" get  -->
+<!-- their serial-number from their parent's -->
+<xsl:template match="solutions[not(parent::backmatter)]" mode="serial-number">
+    <xsl:apply-templates select="parent::*" mode="serial-number" />
+</xsl:template>
+
 <!-- Some items are "containers".  They are not numbered, you  -->
 <!-- cannot point to them, they are invisible to the reader    -->
 <!-- in a way.  We kill their serial nuumbers explicitly here. -->
@@ -4212,7 +4225,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- to exclude "part" from the ancestors?                        -->
 
 <xsl:template match="*" mode="multi-number">
-    <xsl:param name="nodes" select="ancestor::*[self::part or self::chapter or self::appendix or self::section or self::subsection or self::subsubsection or self::exercises or self::references]"/>
+    <xsl:param name="nodes" select="ancestor::*[self::part or self::chapter or self::appendix or self::section or self::subsection or self::subsubsection or self::exercises or self::solutions or self::references]"/>
     <xsl:param name="levels" />
     <xsl:param name="pad" />
 
@@ -4281,7 +4294,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- NB: this is number of the *container* of the division,   -->
 <!-- a serial number for the division itself will be appended -->
 <!-- NB:  newexercises: removed "exercises" here, duplicated below -->
-<xsl:template match="part|chapter|appendix|section|subsection|subsubsection" mode="structure-number">
+<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|backmatter/solutions" mode="structure-number">
     <xsl:apply-templates select="." mode="multi-number">
         <xsl:with-param name="levels" select="$numbering-maxlevel - 1" />
         <xsl:with-param name="pad" select="'no'" />
@@ -4298,6 +4311,12 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:with-param name="levels" select="$numbering-maxlevel - 1" />
         <xsl:with-param name="pad" select="'no'" />
     </xsl:apply-templates>
+</xsl:template>
+
+<!-- "solutions" not in the "backmatter" get    -->
+<!-- their structure number from their parent's -->
+<xsl:template match="solutions[not(parent::backmatter)]" mode="structure-number">
+    <xsl:apply-templates select="parent::*" mode="structure-number" />
 </xsl:template>
 
 <!-- "references" are not numbered, and get their structure  -->

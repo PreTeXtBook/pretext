@@ -73,6 +73,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='introduction'><xsl:text>Úvod</xsl:text></localization>
     <localization string-id='conclusion'><xsl:text>Závěr</xsl:text></localization>
     <localization string-id='exercises'><xsl:text>Cvičení</xsl:text></localization>
+    <!-- <localization string-id='solutions'><xsl:text>Solutions</xsl:text></localization> -->
     <localization string-id='references'><xsl:text>Odkazy</xsl:text></localization>
     <localization string-id='backmatter'><xsl:text>Závěrečná část</xsl:text></localization>
     <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->

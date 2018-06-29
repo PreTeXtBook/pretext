@@ -76,6 +76,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='introduction'><xsl:text>Introdução</xsl:text></localization>
     <localization string-id='conclusion'><xsl:text>Conclusão</xsl:text></localization>
     <localization string-id='exercises'><xsl:text>Exercícios</xsl:text></localization>
+    <!-- <localization string-id='solutions'><xsl:text>Solutions</xsl:text></localization> -->
     <localization string-id='references'><xsl:text>Referências</xsl:text></localization>
     <localization string-id='backmatter'><xsl:text>Pós Texto</xsl:text></localization>
     <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
