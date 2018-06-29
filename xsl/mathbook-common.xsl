@@ -5451,6 +5451,86 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:apply-templates>
 </xsl:template>
 
+<!-- ####################################### -->
+<!-- Solutions Divisions, Content Generation -->
+<!-- ####################################### -->
+
+<xsl:template match="solutions" mode="solutions">
+    <xsl:variable name="b-inline-statement"     select="contains(@inline,     'statement')" />
+    <xsl:variable name="b-inline-hint"          select="contains(@inline,     'hint')"      />
+    <xsl:variable name="b-inline-answer"        select="contains(@inline,     'answer')"    />
+    <xsl:variable name="b-inline-solution"      select="contains(@inline,     'solution')"  />
+    <xsl:variable name="b-divisional-statement" select="contains(@divisional, 'statement')" />
+    <xsl:variable name="b-divisional-hint"      select="contains(@divisional, 'hint')"      />
+    <xsl:variable name="b-divisional-answer"    select="contains(@divisional, 'answer')"    />
+    <xsl:variable name="b-divisional-solution"  select="contains(@divisional, 'solution')"  />
+    <xsl:variable name="b-project-statement"    select="contains(@project,    'statement')" />
+    <xsl:variable name="b-project-hint"         select="contains(@project,    'hint')"      />
+    <xsl:variable name="b-project-answer"       select="contains(@project,    'answer')"    />
+    <xsl:variable name="b-project-solution"     select="contains(@project,    'solution')"  />
+    <!-- TODO: check here once for backmatter switches set to "knowl", which is unrealizable -->
+
+    <!-- Look up a level, skipping backmatter -->
+    <xsl:variable name="scope" select="ancestor::*[not(self::backmatter)][1]" />
+
+    <xsl:for-each select="$scope//chapter|$scope//section|$scope//subsection|$scope//subsubsection|$scope//exercises" mode="solutions">
+        <!-- see if division has *any* content, at any depth, in light of switches -->
+        <xsl:variable name="dry-run">
+            <xsl:apply-templates select="." mode="dry-run">
+                <xsl:with-param name="b-inline-statement"     select="$b-inline-statement" />
+                <xsl:with-param name="b-inline-answer"        select="$b-inline-answer" />
+                <xsl:with-param name="b-inline-hint"          select="$b-inline-hint" />
+                <xsl:with-param name="b-inline-solution"      select="$b-inline-solution" />
+                <xsl:with-param name="b-divisional-statement" select="$b-divisional-statement" />
+                <xsl:with-param name="b-divisional-answer"    select="$b-divisional-answer" />
+                <xsl:with-param name="b-divisional-hint"      select="$b-divisional-hint" />
+                <xsl:with-param name="b-divisional-solution"  select="$b-divisional-solution" />
+                <xsl:with-param name="b-project-statement"    select="$b-project-statement" />
+                <xsl:with-param name="b-project-answer"       select="$b-project-answer" />
+                <xsl:with-param name="b-project-hint"         select="$b-project-hint" />
+                <xsl:with-param name="b-project-solution"     select="$b-project-solution" />
+            </xsl:apply-templates>
+        </xsl:variable>
+
+        <xsl:if test="not($dry-run = '')">
+            <xsl:apply-templates select="." mode="division-in-solutions">
+                <xsl:with-param name="scope" select="$scope" />
+                <xsl:with-param name="content">
+                    <xsl:for-each select="exercise|exercisegroup|&PROJECT-LIKE;">
+                         <xsl:choose>
+                            <xsl:when test="self::exercise and not(ancestor::exercises)">
+                                <xsl:apply-templates select="." mode="solutions">
+                                    <xsl:with-param name="b-has-statement" select="$b-inline-statement" />
+                                    <xsl:with-param name="b-has-answer"    select="$b-inline-answer" />
+                                    <xsl:with-param name="b-has-hint"      select="$b-inline-hint" />
+                                    <xsl:with-param name="b-has-solution"  select="$b-inline-solution" />
+                                </xsl:apply-templates>
+                            </xsl:when>
+                            <xsl:when test="self::exercisegroup or (self::exercise and ancestor::exercises)">
+                                <xsl:apply-templates select="." mode="solutions">
+                                    <xsl:with-param name="b-has-statement" select="$b-divisional-statement" />
+                                    <xsl:with-param name="b-has-answer"    select="$b-divisional-answer" />
+                                    <xsl:with-param name="b-has-hint"      select="$b-divisional-hint" />
+                                    <xsl:with-param name="b-has-solution"  select="$b-divisional-solution" />
+                                </xsl:apply-templates>
+                            </xsl:when>
+                            <xsl:when test="&PROJECT-FILTER;">
+                                <xsl:apply-templates select="." mode="solutions">
+                                    <xsl:with-param name="b-has-statement" select="$b-project-statement" />
+                                    <xsl:with-param name="b-has-answer"    select="$b-project-answer" />
+                                    <xsl:with-param name="b-has-hint"      select="$b-project-hint" />
+                                    <xsl:with-param name="b-has-solution"  select="$b-project-solution" />
+                                </xsl:apply-templates>
+                            </xsl:when>
+                        </xsl:choose>
+                    </xsl:for-each>
+                </xsl:with-param>
+            </xsl:apply-templates>
+        </xsl:if>
+    </xsl:for-each>
+</xsl:template>
+
+
 <!-- ############### -->
 <!-- Arbitrary Lists -->
 <!-- ############### -->
