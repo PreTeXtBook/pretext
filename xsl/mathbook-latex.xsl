@@ -3398,19 +3398,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Free-range (inline) exercises go into environments,       -->
 <!-- they earn a different name this way, and their numbers    -->
 <!-- are integrated with LaTeX's automated numbering schemes   -->
-<xsl:template match="exercise">
-    <xsl:param name="b-original" select="true()" />
-    <xsl:param name="b-has-statement" select="true()" />
-    <xsl:param name="b-has-hint"      select="$b-has-inline-hint" />
-    <xsl:param name="b-has-answer"    select="$b-has-inline-answer" />
-    <xsl:param name="b-has-solution"  select="$b-has-inline-solution" />
 
+<xsl:template match="exercise">
     <!-- heading, start enclosure/environment -->
     <xsl:text>\begin{inlineexercise}</xsl:text>
     <xsl:apply-templates select="title" mode="environment-option" />
-    <xsl:if test="$b-original">
-        <xsl:apply-templates select="." mode="label"/>
-    </xsl:if>
+    <xsl:apply-templates select="." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
     <!-- Allow a webwork or myopenmath exercise to introduce/connect    -->
     <!-- a problem (especially from server) to the text in various ways -->
@@ -3422,21 +3415,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- webwork, structured with "stage" matches first -->
         <xsl:when test="webwork-reps/static/stage">
             <xsl:apply-templates select="webwork-reps/static/stage">
-                <xsl:with-param name="b-original" select="$b-original" />
-                <xsl:with-param name="b-has-statement" select="$b-has-statement" />
-                <xsl:with-param name="b-has-hint" select="$b-has-hint" />
-                <xsl:with-param name="b-has-answer" select="$b-has-answer" />
-                <xsl:with-param name="b-has-solution" select="$b-has-solution" />
+                <xsl:with-param name="b-original" select="true()" />
+                <xsl:with-param name="b-has-statement" select="true()" />
+                <xsl:with-param name="b-has-hint"      select="$b-has-inline-hint" />
+                <xsl:with-param name="b-has-answer"    select="false()" />
+                <xsl:with-param name="b-has-solution"  select="$b-has-inline-solution" />
             </xsl:apply-templates>
         </xsl:when>
         <!-- webwork exercise, no "stage" -->
         <xsl:when test="webwork-reps/static">
             <xsl:apply-templates select="webwork-reps/static" mode="exercise-components">
-                <xsl:with-param name="b-original" select="$b-original" />
-                <xsl:with-param name="b-has-statement" select="$b-has-statement" />
-                <xsl:with-param name="b-has-hint" select="$b-has-hint" />
-                <xsl:with-param name="b-has-answer" select="$b-has-answer" />
-                <xsl:with-param name="b-has-solution" select="$b-has-solution" />
+                <xsl:with-param name="b-original" select="true()" />
+                <xsl:with-param name="b-has-statement" select="true()" />
+                <xsl:with-param name="b-has-hint"      select="$b-has-inline-hint" />
+                <xsl:with-param name="b-has-answer"    select="false()" />
+                <xsl:with-param name="b-has-solution"  select="$b-has-inline-solution" />
             </xsl:apply-templates>
         </xsl:when>
         <!-- myopenmath exercise -->
@@ -3451,21 +3444,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="myopenmath">
             <xsl:variable name="filename" select="concat(concat('problems/mom-', myopenmath/@problem), '.xml')" />
             <xsl:apply-templates select="document($filename, .)/myopenmath"  mode="exercise-components">
-                <xsl:with-param name="b-original" select="$b-original" />
-                <xsl:with-param name="b-has-statement" select="$b-has-statement" />
-                <xsl:with-param name="b-has-hint" select="false()" />
-                <xsl:with-param name="b-has-answer" select="false()" />
-                <xsl:with-param name="b-has-solution" select="$b-has-solution" />
+                <xsl:with-param name="b-original" select="true()" />
+                <xsl:with-param name="b-has-statement" select="true()" />
+                <xsl:with-param name="b-has-hint"      select="false()" />
+                <xsl:with-param name="b-has-answer"    select="false()" />
+                <xsl:with-param name="b-has-solution"  select="$b-has-inline-solution" />
             </xsl:apply-templates>
         </xsl:when>
-        <!-- "normal" exercise -->
+        <!-- "normal" exercise, unstructured -->
+        <xsl:when test="not(statement)">
+            <!-- eventually pass b-original? -->
+            <xsl:apply-templates select="*" />
+        </xsl:when>
+        <!-- "normal" exercise, structured -->
         <xsl:otherwise>
             <xsl:apply-templates select="." mode="exercise-components">
-                <xsl:with-param name="b-original" select="$b-original" />
-                <xsl:with-param name="b-has-statement" select="$b-has-statement" />
-                <xsl:with-param name="b-has-hint" select="$b-has-hint" />
-                <xsl:with-param name="b-has-answer" select="$b-has-answer" />
-                <xsl:with-param name="b-has-solution" select="$b-has-solution" />
+                <xsl:with-param name="b-original" select="true()" />
+                <xsl:with-param name="b-has-statement" select="true()" />
+                <xsl:with-param name="b-has-hint"      select="$b-has-inline-hint" />
+                <xsl:with-param name="b-has-answer"    select="$b-has-inline-answer" />
+                <xsl:with-param name="b-has-solution"  select="$b-has-inline-solution" />
             </xsl:apply-templates>
         </xsl:otherwise>
     </xsl:choose>
@@ -3485,14 +3483,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "exercises" may be divided by an "exercisedivision"     -->
 <!-- and/or by an "exercisegroup", so we match with "//"     -->
 <xsl:template match="exercises//exercise">
-    <xsl:param name="b-original" select="true()" />
-    <xsl:param name="b-has-statement" select="true()" />
-    <xsl:param name="b-has-hint"      select="$b-has-divisional-hint" />
-    <xsl:param name="b-has-answer"    select="$b-has-divisional-answer" />
-    <xsl:param name="b-has-solution"  select="$b-has-divisional-solution" />
-
     <!-- heading, start enclosure/environment                    -->
     <!-- This environment is different within an "exercisegroup" -->
+    <!-- Using only serial number since born here                -->
     <xsl:choose>
         <xsl:when test="parent::exercisegroup">
             <xsl:text>\exercise[</xsl:text>
@@ -3507,9 +3500,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="title" mode="environment-option" />
         </xsl:otherwise>
     </xsl:choose>
-    <xsl:if test="$b-original">
-        <xsl:apply-templates select="." mode="label"/>
-    </xsl:if>
+    <xsl:apply-templates select="." mode="label"/>
     <xsl:text>&#xa;</xsl:text>
     <!-- Allow a webwork or myopenmath exercise to introduce/connect    -->
     <!-- a problem (especially from server) to the text in various ways -->
@@ -3521,21 +3512,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- webwork, structured with "stage" matches first -->
         <xsl:when test="webwork-reps/static/stage">
             <xsl:apply-templates select="webwork-reps/static/stage">
-                <xsl:with-param name="b-original" select="$b-original" />
-                <xsl:with-param name="b-has-statement" select="$b-has-statement" />
-                <xsl:with-param name="b-has-hint" select="$b-has-hint" />
-                <xsl:with-param name="b-has-answer" select="$b-has-answer" />
-                <xsl:with-param name="b-has-solution" select="$b-has-solution" />
+                <xsl:with-param name="b-original" select="true()" />
+                <xsl:with-param name="b-has-statement" select="true()" />
+                <xsl:with-param name="b-has-hint"      select="$b-has-divisional-hint" />
+                <xsl:with-param name="b-has-answer"    select="$b-has-divisional-answer" />
+                <xsl:with-param name="b-has-solution"  select="$b-has-divisional-solution" />
             </xsl:apply-templates>
         </xsl:when>
         <!-- webwork exercise, no "stage" -->
         <xsl:when test="webwork-reps/static">
             <xsl:apply-templates select="webwork-reps/static" mode="exercise-components">
-                <xsl:with-param name="b-original" select="$b-original" />
-                <xsl:with-param name="b-has-statement" select="$b-has-statement" />
-                <xsl:with-param name="b-has-hint" select="$b-has-hint" />
-                <xsl:with-param name="b-has-answer" select="$b-has-answer" />
-                <xsl:with-param name="b-has-solution" select="$b-has-solution" />
+                <xsl:with-param name="b-original" select="true()" />
+                <xsl:with-param name="b-has-statement" select="true()" />
+                <xsl:with-param name="b-has-hint"      select="$b-has-divisional-hint" />
+                <xsl:with-param name="b-has-answer"    select="$b-has-divisional-answer" />
+                <xsl:with-param name="b-has-solution"  select="$b-has-divisional-solution" />
             </xsl:apply-templates>
         </xsl:when>
         <!-- myopenmath exercise -->
@@ -3550,21 +3541,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="myopenmath">
             <xsl:variable name="filename" select="concat(concat('problems/mom-', myopenmath/@problem), '.xml')" />
             <xsl:apply-templates select="document($filename, .)/myopenmath"  mode="exercise-components">
-                <xsl:with-param name="b-original" select="$b-original" />
-                <xsl:with-param name="b-has-statement" select="$b-has-statement" />
-                <xsl:with-param name="b-has-hint" select="false()" />
-                <xsl:with-param name="b-has-answer" select="false()" />
-                <xsl:with-param name="b-has-solution" select="$b-has-solution" />
+                <xsl:with-param name="b-original" select="true()" />
+                <xsl:with-param name="b-has-statement" select="true()" />
+                <xsl:with-param name="b-has-hint"      select="false()" />
+                <xsl:with-param name="b-has-answer"    select="false()" />
+                <xsl:with-param name="b-has-solution"  select="$b-has-divisional-solution" />
             </xsl:apply-templates>
         </xsl:when>
-        <!-- "normal" exercise -->
+        <!-- "normal" exercise, unstructured -->
+        <xsl:when test="not(statement)">
+            <!-- eventually pass b-original? -->
+            <xsl:apply-templates select="*" />
+        </xsl:when>
+        <!-- "normal" exercise, structured -->
         <xsl:otherwise>
             <xsl:apply-templates select="." mode="exercise-components">
-                <xsl:with-param name="b-original" select="$b-original" />
-                <xsl:with-param name="b-has-statement" select="$b-has-statement" />
-                <xsl:with-param name="b-has-hint" select="$b-has-hint" />
-                <xsl:with-param name="b-has-answer" select="$b-has-answer" />
-                <xsl:with-param name="b-has-solution" select="$b-has-solution" />
+                <xsl:with-param name="b-original" select="true()" />
+                <xsl:with-param name="b-has-statement" select="true()" />
+                <xsl:with-param name="b-has-hint"      select="$b-has-divisional-hint" />
+                <xsl:with-param name="b-has-answer"    select="$b-has-divisional-answer" />
+                <xsl:with-param name="b-has-solution"  select="$b-has-divisional-solution" />
             </xsl:apply-templates>
         </xsl:otherwise>
     </xsl:choose>
@@ -3761,7 +3757,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
     <xsl:text>)&#xa;</xsl:text>
-    <xsl:apply-templates select="exercise"/>
+    <xsl:apply-templates select="exercise">
+        <xsl:with-param name="b-has-hint" select="$b-has-divisional-hint" />
+        <xsl:with-param name="b-has-answer" select="$b-has-divisional-answer" />
+        <xsl:with-param name="b-has-solution" select="$b-has-divisional-solution" />
+        </xsl:apply-templates>
     <xsl:text>\end{exercisegroup}</xsl:text>
     <xsl:apply-templates select="conclusion" />
     <xsl:text>\par\medskip\noindent&#xa;</xsl:text>
@@ -3980,8 +3980,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\par\smallskip&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Remark Like, Computation Like, Example Like -->
-<!-- Simpler than theorems, definitions, etc     -->
+<!-- Remark Like, Computation Like, Example Like  -->
+<!-- Simpler than theorems, definitions, etc      -->
+<!-- Only EXAMPLE-LIKE has hint, answer, solution -->
 <xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;">
     <!-- structured version may contain a prelude -->
     <xsl:if test="statement">
@@ -4033,17 +4034,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- More complicated structure possibly, with task as division -->
 <!-- Parameterized to allow control on hint, answer, solution   -->
 <xsl:template match="&PROJECT-LIKE;">
-    <xsl:param name="b-original" select="true()" />
-    <xsl:param name="b-has-statement" select="true()" />
-    <xsl:param name="b-has-hint"      select="$b-has-project-hint" />
-    <xsl:param name="b-has-answer"    select="$b-has-project-answer" />
-    <xsl:param name="b-has-solution"  select="$b-has-project-solution" />
-
     <!-- structured version may contain a prelude -->
     <xsl:if test="statement or task">
         <xsl:apply-templates select="prelude" />
     </xsl:if>
-    <!-- TODO: move to semantic xparse/tcolorbox versions -->
     <xsl:text>\begin{</xsl:text>
         <xsl:value-of select="local-name(.)" />
     <xsl:text>}</xsl:text>
@@ -4060,11 +4054,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:call-template name="leave-vertical-mode" />
             </xsl:if>
             <xsl:apply-templates select="task">
-                <xsl:with-param name="b-original" select="$b-original" />
-                <xsl:with-param name="b-has-statement" select="$b-has-statement" />
-                <xsl:with-param name="b-has-hint" select="$b-has-hint" />
-                <xsl:with-param name="b-has-answer" select="$b-has-answer" />
-                <xsl:with-param name="b-has-solution" select="$b-has-solution" />
+                <xsl:with-param name="b-has-hint" select="$b-has-project-hint" />
+                <xsl:with-param name="b-has-answer" select="$b-has-project-answer" />
+                <xsl:with-param name="b-has-solution" select="$b-has-project-solution" />
             </xsl:apply-templates>
             <xsl:apply-templates select="conclusion"/>
         </xsl:when>
@@ -4072,11 +4064,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- prelude?, statement, hint*, answer*, solution*, postlude? -->
         <xsl:when test="statement">
             <xsl:apply-templates select="." mode="exercise-components">
-                <xsl:with-param name="b-original" select="$b-original" />
-                <xsl:with-param name="b-has-statement" select="$b-has-statement" />
-                <xsl:with-param name="b-has-hint" select="$b-has-hint" />
-                <xsl:with-param name="b-has-answer" select="$b-has-answer" />
-                <xsl:with-param name="b-has-solution" select="$b-has-solution" />
+                <xsl:with-param name="b-original" select="true()" />
+                <xsl:with-param name="b-has-statement" select="true()" />
+                <xsl:with-param name="b-has-hint"      select="$b-has-project-hint" />
+                <xsl:with-param name="b-has-answer"    select="$b-has-project-answer" />
+                <xsl:with-param name="b-has-solution"  select="$b-has-project-solution" />
             </xsl:apply-templates>
         </xsl:when>
         <!-- Potential common mistake, no statement, and so no content results -->
@@ -4138,28 +4130,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- introduction?, task+, conclusion? -->
         <xsl:when test="task">
             <xsl:apply-templates select="introduction"/>
-            <xsl:apply-templates select="task">
-                <xsl:with-param name="b-original" select="$b-original" />
-                <xsl:with-param name="b-has-statement" select="$b-has-statement" />
-                <xsl:with-param name="b-has-hint" select="$b-has-hint" />
-                <xsl:with-param name="b-has-answer" select="$b-has-answer" />
-                <xsl:with-param name="b-has-solution" select="$b-has-solution" />
-            </xsl:apply-templates>
+            <xsl:apply-templates select="task" />
             <xsl:apply-templates select="conclusion"/>
         </xsl:when>
         <!-- statement, hint*, answer*, solution* -->
         <xsl:when test="statement">
             <xsl:apply-templates select="." mode="exercise-components">
-                <xsl:with-param name="b-original" select="$b-original" />
-                <xsl:with-param name="b-has-statement" select="$b-has-statement" />
-                <xsl:with-param name="b-has-hint" select="$b-has-hint" />
-                <xsl:with-param name="b-has-answer" select="$b-has-answer" />
-                <xsl:with-param name="b-has-solution" select="$b-has-solution" />
+                <xsl:with-param name="b-original" select="true()" />
+                <xsl:with-param name="b-has-statement" select="true()" />
+                <xsl:with-param name="b-has-hint" select="$b-has-project-hint" />
+                <xsl:with-param name="b-has-answer" select="$b-has-project-answer" />
+                <xsl:with-param name="b-has-solution" select="$b-has-project-solution" />
             </xsl:apply-templates>
         </xsl:when>
         <!-- unstructured -->
         <xsl:otherwise>
-            <xsl:apply-templates />
+            <xsl:apply-templates select="*" />
         </xsl:otherwise>
     </xsl:choose>
     <!-- if last at its level, end the list environment -->
