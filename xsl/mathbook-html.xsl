@@ -388,7 +388,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <section class="{local-name(.)}" id="{$ident}">
         <xsl:apply-templates select="." mode="section-header" />
-        <xsl:apply-templates />
+        <!-- the main content of a division is created here    -->
+        <!-- a "solutions" is exceptional as generated content -->
+        <xsl:choose>
+            <xsl:when test="self::solutions">
+                <xsl:apply-templates select="." mode="solutions" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="*" />
+            </xsl:otherwise>
+        </xsl:choose>
     </section>
 </xsl:template>
 
@@ -539,9 +548,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </span>
 </xsl:template>
 
-<!-- References and Exercises are universal subdivisions       -->
-<!-- We give them a localized "type" computed from their level -->
-<xsl:template match="exercises|references" mode="header-content">
+<!-- References, Exercises, Solutions are universal subdivisions -->
+<!-- We give them a localized "type" computed from their level   -->
+<xsl:template match="exercises|solutions|references" mode="header-content">
     <span class="type">
         <xsl:call-template name="type-name">
             <xsl:with-param name="string-id">
@@ -551,7 +560,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </span>
     <xsl:text> </xsl:text>
     <span class="codenumber">
-        <xsl:apply-templates select="." mode="number" />
+        <!-- don't show "solutions" number, it is implicit in mainmatter -->
+        <xsl:if test="not(self::solutions) or parent::backmatter">
+            <xsl:apply-templates select="." mode="number" />
+        </xsl:if>
     </span>
     <xsl:text> </xsl:text>
     <span>
