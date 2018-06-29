@@ -5309,7 +5309,147 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:choose>
 </xsl:template>
 
+<!-- ################## -->
+<!-- Exercise Utilities -->
+<!-- ################## -->
 
+<!-- Exercises and projects generally have "statement", "hint", "answer", and "solution".  Switches control appearance  in teh main matter and in solution lists. -->
+
+<!-- But they are surrounded by infrastructure:  number and title, exercise group with introduction and conclusion, division headings.  If switches make all the content disappear within some infrastructure, then the infrastructure becomes superfluous.  So we provide a hierarchy of templates to determine if structure and content yield output. -->
+
+<!-- authored exercise, terminal (leaf) tasks -->
+<xsl:template match="exercise|task[not(task)]" mode="dry-run">
+    <xsl:param name="b-has-statement" />
+    <xsl:param name="b-has-hint" />
+    <xsl:param name="b-has-answer" />
+    <xsl:param name="b-has-solution" />
+
+    <xsl:choose>
+        <!-- burrow through "stage", do not consider "answer" -->
+        <xsl:when test="webwork-reps">
+            <xsl:if test="$b-has-statement or ($b-has-hint and webwork-reps/static//hint) or ($b-has-solution and webwork-reps/static//solution)">
+                <xsl:text>X</xsl:text>
+            </xsl:if>
+        </xsl:when>
+        <!-- effective squash just for LaTeX -->
+        <xsl:when test="myopenmath" />
+        <xsl:otherwise>
+            <xsl:if test="$b-has-statement or ($b-has-hint and hint) or ($b-has-answer and answer) or ($b-has-solution and solution)">
+                <xsl:text>X</xsl:text>
+            </xsl:if>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="task[task]" mode="dry-run">
+    <xsl:param name="b-has-statement" />
+    <xsl:param name="b-has-hint" />
+    <xsl:param name="b-has-answer" />
+    <xsl:param name="b-has-solution" />
+
+    <xsl:apply-templates select="task" mode="dry-run">
+        <xsl:with-param name="b-has-statement" select="$b-has-statement" />
+        <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
+        <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
+        <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
+    </xsl:apply-templates>
+</xsl:template>
+
+<xsl:template match="&PROJECT-LIKE;" mode="dry-run">
+    <xsl:param name="b-has-statement" />
+    <xsl:param name="b-has-hint" />
+    <xsl:param name="b-has-answer" />
+    <xsl:param name="b-has-solution" />
+
+    <xsl:choose>
+        <xsl:when test="task">
+            <xsl:apply-templates select="task" mode="dry-run">
+                <xsl:with-param name="b-has-statement" select="$b-has-statement" />
+                <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
+                <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
+                <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
+            </xsl:apply-templates>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:if test="$b-has-statement or ($b-has-hint and hint) or ($b-has-answer and answer) or ($b-has-solution and solution)">
+                <xsl:text>X</xsl:text>
+            </xsl:if>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- An "exercisegroup" potentially has an "introduction" -->
+<!-- and "conclusion" as infrastructure, and can only     -->
+<!-- contain divisional "exercise" as varying items, so   -->
+<!-- switches passed in are for divisional exercises      -->
+<xsl:template match="exercisegroup" mode="dry-run">
+    <xsl:param name="b-has-statement" />
+    <xsl:param name="b-has-hint" />
+    <xsl:param name="b-has-answer" />
+    <xsl:param name="b-has-solution" />
+
+    <xsl:apply-templates select="exercise" mode="dry-run">
+        <xsl:with-param name="b-has-statement" select="$b-has-statement" />
+        <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
+        <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
+        <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- An "exercises" division will have a heading as infrastructure.  -->
+<!-- We can investigate varying "exercise" by just digging down      -->
+<!-- into "exercisegroup" to find all divisional "exercise"          -->
+<xsl:template match="exercises" mode="dry-run">
+    <xsl:param name="b-divisional-statement" />
+    <xsl:param name="b-divisional-hint" />
+    <xsl:param name="b-divisional-answer" />
+    <xsl:param name="b-divisional-solution" />
+
+    <xsl:apply-templates select=".//exercise" mode="dry-run">
+        <xsl:with-param name="b-has-statement" select="$b-divisional-statement" />
+        <xsl:with-param name="b-has-hint"      select="$b-divisional-hint" />
+        <xsl:with-param name="b-has-answer"    select="$b-divisional-answer" />
+        <xsl:with-param name="b-has-solution"  select="$b-divisional-solution" />
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- An arbitrary division will have a heading as infrastructure.  -->
+<!-- We investigate varying "exercise" and "project" by digging    -->
+<!-- down into all three types with the right switches.            -->
+<xsl:template match="chapter|section|subsection|subsubsection" mode="dry-run">
+    <xsl:param name="b-inline-statement" />
+    <xsl:param name="b-inline-answer" />
+    <xsl:param name="b-inline-hint" />
+    <xsl:param name="b-inline-solution" />
+    <xsl:param name="b-divisional-statement" />
+    <xsl:param name="b-divisional-answer" />
+    <xsl:param name="b-divisional-hint" />
+    <xsl:param name="b-divisional-solution" />
+    <xsl:param name="b-project-statement" />
+    <xsl:param name="b-project-answer" />
+    <xsl:param name="b-project-hint" />
+    <xsl:param name="b-project-solution" />
+
+    <xsl:apply-templates select=".//exercise[not(ancestor::exercises)]" mode="dry-run">
+        <xsl:with-param name="b-has-statement" select="$b-inline-statement" />
+        <xsl:with-param name="b-has-answer"    select="$b-inline-answer" />
+        <xsl:with-param name="b-has-hint"      select="$b-inline-hint" />
+        <xsl:with-param name="b-has-solution"  select="$b-inline-solution" />
+    </xsl:apply-templates>
+    <!-- &PROJECT-LIKE; "project|activity|exploration|investigation"> -->
+    <xsl:apply-templates select=".//project|.//activity|.//exploration|.//investigation" mode="dry-run">
+        <xsl:with-param name="b-has-statement" select="$b-project-statement" />
+        <xsl:with-param name="b-has-answer"    select="$b-project-answer" />
+        <xsl:with-param name="b-has-hint"      select="$b-project-hint" />
+        <xsl:with-param name="b-has-solution"  select="$b-project-solution" />
+    </xsl:apply-templates>
+    <xsl:apply-templates select=".//exercises//exercise" mode="dry-run">
+        <xsl:with-param name="b-has-statement" select="$b-divisional-statement" />
+        <xsl:with-param name="b-has-answer"    select="$b-divisional-answer" />
+        <xsl:with-param name="b-has-hint"      select="$b-divisional-hint" />
+        <xsl:with-param name="b-has-solution"  select="$b-divisional-solution" />
+    </xsl:apply-templates>
+</xsl:template>
 
 <!-- ############### -->
 <!-- Arbitrary Lists -->
