@@ -8178,6 +8178,12 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="date-string" select="'2018-05-18'" />
         <xsl:with-param name="message" select="'&quot;var&quot; elements in a &quot;webwork/setup&quot; no longer do anything; you may delete them from source'" />
     </xsl:call-template>
+    <!-- 2018-07-04  "solution-list" generator element replaced by "solutions" division -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//solution-list" />
+        <xsl:with-param name="date-string" select="'2018-07-04'" />
+        <xsl:with-param name="message" select="'the &quot;solution-list&quot; element has been deprecated, please switch to using the improved &quot;solutions&quot; division in your back matter (and elsewhere)'" />
+    </xsl:call-template>
 </xsl:template>
 
 <!-- Miscellaneous -->

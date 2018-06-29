@@ -7510,11 +7510,6 @@ the xsltproc executable.
                 </conclusion>
             </solutions>
 
-            <appendix>
-                <title>Solutions to Selected Exercises (Deprecated)</title>
-                <solution-list inline="hint solution answer" divisional="hint solution answer" project="answer" />
-            </appendix>
-
             <appendix xml:id="appendix-results">
                 <title>List of Results</title>
 

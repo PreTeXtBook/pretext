@@ -857,97 +857,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Back Colophon -->
 <!-- Nothing special, so just process similarly to front -->
 
-
 <xsl:template match="index-list">
     <xsl:call-template name="print-index" />
-</xsl:template>
-
-
-
-<!-- Solutions List -->
-<!-- We construct one huge list of solutions, organized      -->
-<!-- as divisions, one per "exercises" section.  Seperate    -->
-<!-- parameters control visibility. We eventually appeal     -->
-<!-- to the environment/knowl code to realize each hint, etc -->
-<!-- as a knowl for decent page-loading time.                -->
-
-<!-- This is a hack that should go away when backmatter exercises are rethought -->
-<xsl:template match="title" mode="backmatter" />
-
-<xsl:template match="solution-list">
-    <xsl:apply-templates select="//exercises" mode="backmatter" />
-</xsl:template>
-
-<xsl:template match="exercises" mode="backmatter">
-    <!-- see if an "exercises" section has any solutions -->
-    <xsl:variable name="nonempty" select="(.//hint and $exercise.backmatter.hint='yes') or
-                                          (.//answer and $exercise.backmatter.answer='yes') or
-                                          (.//solution and $exercise.backmatter.solution='yes')" />
-
-    <xsl:if test="$nonempty='true'">
-        <!-- these sections do not have HTML id, so no way to point to them -->
-        <!-- maybe there is a way to generate a reasonable internal-id      -->
-        <section class="exercises">
-            <h1 class="heading">
-                <span class="type">Exercises</span>
-                <xsl:text> </xsl:text>
-                <span class="codenumber">
-                    <xsl:apply-templates select="." mode="number" />
-                </span>
-                <xsl:text> </xsl:text>
-                <span>
-                    <xsl:apply-templates select="." mode="title-attributes" />
-                    <xsl:apply-templates select="." mode="title-full" />
-                </span>
-            </h1>
-            <!-- ignore introduction, conclusion, exercise groups -->
-            <xsl:apply-templates select=".//exercise" mode="backmatter" />
-        </section>
-    </xsl:if>
-</xsl:template>
-
-<!-- Print exercises with some solution component -->
-<!-- Respect switches about visibility            -->
-<xsl:template match="exercise" mode="backmatter">
-    <xsl:if test="hint or answer or solution">
-        <!-- Lead with the problem number and some space -->
-        <xsl:variable name="xref">
-            <xsl:apply-templates select="." mode="internal-id" />
-        </xsl:variable>
-        <article class="exercise-like" id="{$xref}">
-            <h6 class="heading hidden-type">
-            <span class="type">
-                <xsl:apply-templates select="." mode="type-name" />
-            </span>
-            <xsl:text> </xsl:text>
-            <span class="codenumber">
-                <xsl:apply-templates select="." mode="serial-number" />
-            </span>
-            <xsl:text> </xsl:text>
-            <xsl:if test="title">
-                <span>
-                    <xsl:apply-templates select="." mode="title-attributes" />
-                    <xsl:apply-templates select="." mode="title-full" />
-                </span>
-            </xsl:if>
-            </h6>
-            <xsl:if test="$exercise.backmatter.statement='yes'">
-                <xsl:apply-templates select="statement" />
-            </xsl:if>
-            <!-- default templates will produce hidden knowls -->
-            <div class="solutions">
-                <xsl:if test="hint and $exercise.backmatter.hint='yes'">
-                    <xsl:apply-templates select="hint" />
-                </xsl:if>
-                <xsl:if test="answer and $exercise.backmatter.answer='yes'">
-                    <xsl:apply-templates select="answer" />
-                </xsl:if>
-                <xsl:if test="solution and $exercise.backmatter.solution='yes'">
-                    <xsl:apply-templates select="solution" />
-                </xsl:if>
-            </div>
-        </article>
-    </xsl:if>
 </xsl:template>
 
 <!--               -->
@@ -9546,5 +9457,89 @@ var scJsHost = (("https:" == document.location.protocol) ? "https://secure." : "
         <xsl:value-of select="$content" />
     </xsl:element>
 </xsl:template>
+
+<!-- "solution-list" was supported by elaborate -->
+<!-- modal templates, which are now renamed     -->
+<!-- 2018-07-04: some day remove all this code  -->
+
+<xsl:template match="solution-list">
+    <xsl:apply-templates select="//exercises" mode="obsolete-backmatter" />
+</xsl:template>
+
+<!-- This is a hack that should go away when backmatter exercises are rethought -->
+<xsl:template match="title" mode="obsolete-backmatter" />
+
+<xsl:template match="exercises" mode="obsolete-backmatter">
+    <!-- see if an "exercises" section has any solutions -->
+    <xsl:variable name="nonempty" select="(.//hint and $exercise.backmatter.hint='yes') or
+                                          (.//answer and $exercise.backmatter.answer='yes') or
+                                          (.//solution and $exercise.backmatter.solution='yes')" />
+
+    <xsl:if test="$nonempty='true'">
+        <!-- these sections do not have HTML id, so no way to point to them -->
+        <!-- maybe there is a way to generate a reasonable internal-id      -->
+        <section class="exercises">
+            <h1 class="heading">
+                <span class="type">Exercises</span>
+                <xsl:text> </xsl:text>
+                <span class="codenumber">
+                    <xsl:apply-templates select="." mode="number" />
+                </span>
+                <xsl:text> </xsl:text>
+                <span>
+                    <xsl:apply-templates select="." mode="title-attributes" />
+                    <xsl:apply-templates select="." mode="title-full" />
+                </span>
+            </h1>
+            <!-- ignore introduction, conclusion, exercise groups -->
+            <xsl:apply-templates select=".//exercise" mode="obsolete-backmatter" />
+        </section>
+    </xsl:if>
+</xsl:template>
+
+<!-- Print exercises with some solution component -->
+<!-- Respect switches about visibility            -->
+<xsl:template match="exercise" mode="obsolete-backmatter">
+    <xsl:if test="hint or answer or solution">
+        <!-- Lead with the problem number and some space -->
+        <xsl:variable name="xref">
+            <xsl:apply-templates select="." mode="internal-id" />
+        </xsl:variable>
+        <article class="exercise-like" id="{$xref}">
+            <h6 class="heading hidden-type">
+            <span class="type">
+                <xsl:apply-templates select="." mode="type-name" />
+            </span>
+            <xsl:text> </xsl:text>
+            <span class="codenumber">
+                <xsl:apply-templates select="." mode="serial-number" />
+            </span>
+            <xsl:text> </xsl:text>
+            <xsl:if test="title">
+                <span>
+                    <xsl:apply-templates select="." mode="title-attributes" />
+                    <xsl:apply-templates select="." mode="title-full" />
+                </span>
+            </xsl:if>
+            </h6>
+            <xsl:if test="$exercise.backmatter.statement='yes'">
+                <xsl:apply-templates select="statement" />
+            </xsl:if>
+            <!-- default templates will produce hidden knowls -->
+            <div class="solutions">
+                <xsl:if test="hint and $exercise.backmatter.hint='yes'">
+                    <xsl:apply-templates select="hint" />
+                </xsl:if>
+                <xsl:if test="answer and $exercise.backmatter.answer='yes'">
+                    <xsl:apply-templates select="answer" />
+                </xsl:if>
+                <xsl:if test="solution and $exercise.backmatter.solution='yes'">
+                    <xsl:apply-templates select="solution" />
+                </xsl:if>
+            </div>
+        </article>
+    </xsl:if>
+</xsl:template>
+
 
 </xsl:stylesheet>

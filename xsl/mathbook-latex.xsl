@@ -4422,108 +4422,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- This is a hack that should go away when backmatter exercises are rethought -->
-<xsl:template match="title" mode="backmatter" />
-
-<xsl:template match="solution-list">
-    <!-- TODO: check here once for backmatter switches set to "knowl", which is unrealizable -->
-    <xsl:apply-templates select="//exercises" mode="backmatter" />
-</xsl:template>
-
-<!-- Create a heading for each non-empty collection of solutions -->
-<!-- Format as appropriate LaTeX subdivision for this level      -->
-<!-- But number according to the actual Exercises section        -->
-<xsl:template match="exercises" mode="backmatter">
-    <xsl:variable name="nonempty" select="(.//hint and $exercise.backmatter.hint='yes') or (.//answer and $exercise.backmatter.answer='yes') or (.//solution and $exercise.backmatter.solution='yes')" />
-    <xsl:if test="$nonempty='true'">
-        <xsl:text>\</xsl:text>
-        <xsl:apply-templates select="." mode="division-name" />
-        <xsl:text>*{</xsl:text>
-        <xsl:apply-templates select="." mode="number" />
-        <xsl:text> </xsl:text>
-        <xsl:apply-templates select="." mode="title-full" />
-        <xsl:text>}&#xa;</xsl:text>
-        <xsl:apply-templates select="*" mode="backmatter" />
-    </xsl:if>
-</xsl:template>
-
-<!-- We kill the introduction and conclusion for -->
-<!-- the exercises and for the exercisegroups    -->
-<xsl:template match="exercises//introduction|exercises//conclusion" mode="backmatter" />
-
-<!-- Print exercises with some solution component -->
-<!-- Respect switches about visibility ("knowl" is assumed to be 'no') -->
-<xsl:template match="exercise" mode="backmatter">
-    <xsl:choose>
-        <xsl:when test="webwork-reps/static/stage and (webwork-reps/static/stage/hint or webwork-reps/static/stage/solution)">
-            <!-- Lead with the problem number and some space -->
-            <xsl:text>\noindent\textbf{</xsl:text>
-            <xsl:apply-templates select="." mode="serial-number" />
-            <xsl:text>.}\quad{}</xsl:text>
-            <!-- Within each stage enforce order -->
-            <xsl:apply-templates select="webwork-reps/static/stage" mode="backmatter"/>
-        </xsl:when>
-        <xsl:when test="webwork-reps/static and (webwork-reps/static/hint or webwork-reps/static/solution)">
-            <!-- Lead with the problem number and some space -->
-            <xsl:text>\noindent\textbf{</xsl:text>
-            <xsl:apply-templates select="." mode="serial-number" />
-            <xsl:text>.}\quad{}</xsl:text>
-            <xsl:if test="$exercise.backmatter.statement='yes'">
-                <xsl:apply-templates select="webwork-reps/static/statement" />
-                <xsl:text>\par\smallskip&#xa;</xsl:text>
-            </xsl:if>
-            <xsl:if test="webwork-reps/static/hint and $exercise.backmatter.hint='yes'">
-                <xsl:apply-templates select="webwork-reps/static/hint" mode="backmatter"/>
-            </xsl:if>
-            <xsl:if test="webwork-reps/static/solution and $exercise.backmatter.solution='yes'">
-                <xsl:apply-templates select="webwork-reps/static/solution" mode="backmatter"/>
-            </xsl:if>
-        </xsl:when>
-        <xsl:when test="hint or answer or solution">
-            <!-- Lead with the problem number and some space -->
-            <xsl:text>\noindent\textbf{</xsl:text>
-            <xsl:apply-templates select="." mode="serial-number" />
-            <xsl:text>.}\quad{}</xsl:text>
-            <xsl:if test="$exercise.backmatter.statement='yes'">
-                <!-- TODO: not a "backmatter" template - make one possibly? Or not necessary -->
-                <xsl:apply-templates select="statement" />
-                <xsl:text>\par\smallskip&#xa;</xsl:text>
-            </xsl:if>
-            <xsl:if test="//hint and $exercise.backmatter.hint='yes'">
-                <xsl:apply-templates select="hint" mode="backmatter" />
-            </xsl:if>
-            <xsl:if test="answer and $exercise.backmatter.answer='yes'">
-                <xsl:apply-templates select="answer" mode="backmatter" />
-            </xsl:if>
-            <xsl:if test="solution and $exercise.backmatter.solution='yes'">
-                <xsl:apply-templates select="solution" mode="backmatter" />
-            </xsl:if>
-        </xsl:when>
-    </xsl:choose>
-</xsl:template>
-
-<!-- For stages of a webwork exercise inside an exercises, we must respect  -->
-<!-- string parameters controlling whether to display parts.                -->
-<xsl:template match="webwork-reps/static/stage" mode="backmatter">
-    <xsl:if test="$exercise.backmatter.statement='yes'">
-        <xsl:apply-templates select="statement" />
-        <xsl:text>\par\smallskip&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:if test="hint and $exercise.backmatter.hint='yes'">
-        <xsl:apply-templates select="hint" mode="backmatter"/>
-    </xsl:if>
-    <xsl:if test="solution and $exercise.backmatter.solution='yes'">
-        <xsl:apply-templates select="solution" mode="backmatter"/>
-    </xsl:if>
-</xsl:template>
-
-<!-- We print hints, answers, solutions with no heading. -->
-<!-- TODO: make heading on solution components configurable -->
-<xsl:template match="exercise/hint|exercise/answer|exercise/solution|webwork-reps/static/hint|webwork-reps/static/stage/hint|webwork-reps/static/solution|webwork-reps/static/stage/solution" mode="backmatter">
-    <xsl:apply-templates />
-    <xsl:text>\par\smallskip&#xa;</xsl:text>
-</xsl:template>
-
 <!-- Remark Like, Computation Like, Example Like  -->
 <!-- Simpler than theorems, definitions, etc      -->
 <!-- Only EXAMPLE-LIKE has hint, answer, solution -->
@@ -8754,4 +8652,109 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>}</xsl:text>
 </xsl:template>
 
+<!-- "solution-list" was supported by elaborate -->
+<!-- modal templates, which are now renamed     -->
+<!-- 2018-07-04: some day remove all this code  -->
+
+<xsl:template match="solution-list">
+    <!-- TODO: check here once for backmatter switches set to "knowl", which is unrealizable -->
+    <xsl:apply-templates select="//exercises" mode="obsolete-backmatter" />
+</xsl:template>
+
+<!-- This is a hack that should go away when backmatter exercises are rethought -->
+<xsl:template match="title" mode="obsolete-backmatter" />
+
+<!-- Create a heading for each non-empty collection of solutions -->
+<!-- Format as appropriate LaTeX subdivision for this level      -->
+<!-- But number according to the actual Exercises section        -->
+<xsl:template match="exercises" mode="obsolete-backmatter">
+    <xsl:variable name="nonempty" select="(.//hint and $exercise.backmatter.hint='yes') or (.//answer and $exercise.backmatter.answer='yes') or (.//solution and $exercise.backmatter.solution='yes')" />
+    <xsl:if test="$nonempty='true'">
+        <xsl:text>\</xsl:text>
+        <xsl:apply-templates select="." mode="division-name" />
+        <xsl:text>*{</xsl:text>
+        <xsl:apply-templates select="." mode="number" />
+        <xsl:text> </xsl:text>
+        <xsl:apply-templates select="." mode="title-full" />
+        <xsl:text>}&#xa;</xsl:text>
+        <xsl:apply-templates select="*" mode="obsolete-backmatter" />
+    </xsl:if>
+</xsl:template>
+
+<!-- We kill the introduction and conclusion for -->
+<!-- the exercises and for the exercisegroups    -->
+<xsl:template match="exercises//introduction|exercises//conclusion" mode="obsolete-backmatter" />
+
+<!-- Print exercises with some solution component -->
+<!-- Respect switches about visibility ("knowl" is assumed to be 'no') -->
+<xsl:template match="exercise" mode="obsolete-backmatter">
+    <xsl:choose>
+        <xsl:when test="webwork-reps/static/stage and (webwork-reps/static/stage/hint or webwork-reps/static/stage/solution)">
+            <!-- Lead with the problem number and some space -->
+            <xsl:text>\noindent\textbf{</xsl:text>
+            <xsl:apply-templates select="." mode="serial-number" />
+            <xsl:text>.}\quad{}</xsl:text>
+            <!-- Within each stage enforce order -->
+            <xsl:apply-templates select="webwork-reps/static/stage" mode="obsolete-backmatter"/>
+        </xsl:when>
+        <xsl:when test="webwork-reps/static and (webwork-reps/static/hint or webwork-reps/static/solution)">
+            <!-- Lead with the problem number and some space -->
+            <xsl:text>\noindent\textbf{</xsl:text>
+            <xsl:apply-templates select="." mode="serial-number" />
+            <xsl:text>.}\quad{}</xsl:text>
+            <xsl:if test="$exercise.backmatter.statement='yes'">
+                <xsl:apply-templates select="webwork-reps/static/statement" />
+                <xsl:text>\par\smallskip&#xa;</xsl:text>
+            </xsl:if>
+            <xsl:if test="webwork-reps/static/hint and $exercise.backmatter.hint='yes'">
+                <xsl:apply-templates select="webwork-reps/static/hint" mode="obsolete-backmatter"/>
+            </xsl:if>
+            <xsl:if test="webwork-reps/static/solution and $exercise.backmatter.solution='yes'">
+                <xsl:apply-templates select="webwork-reps/static/solution" mode="obsolete-backmatter"/>
+            </xsl:if>
+        </xsl:when>
+        <xsl:when test="hint or answer or solution">
+            <!-- Lead with the problem number and some space -->
+            <xsl:text>\noindent\textbf{</xsl:text>
+            <xsl:apply-templates select="." mode="serial-number" />
+            <xsl:text>.}\quad{}</xsl:text>
+            <xsl:if test="$exercise.backmatter.statement='yes'">
+                <!-- TODO: not a "backmatter" template - make one possibly? Or not necessary -->
+                <xsl:apply-templates select="statement" />
+                <xsl:text>\par\smallskip&#xa;</xsl:text>
+            </xsl:if>
+            <xsl:if test="//hint and $exercise.backmatter.hint='yes'">
+                <xsl:apply-templates select="hint" mode="obsolete-backmatter" />
+            </xsl:if>
+            <xsl:if test="answer and $exercise.backmatter.answer='yes'">
+                <xsl:apply-templates select="answer" mode="obsolete-backmatter" />
+            </xsl:if>
+            <xsl:if test="solution and $exercise.backmatter.solution='yes'">
+                <xsl:apply-templates select="solution" mode="obsolete-backmatter" />
+            </xsl:if>
+        </xsl:when>
+    </xsl:choose>
+</xsl:template>
+
+<!-- For stages of a webwork exercise inside an exercises, we must respect  -->
+<!-- string parameters controlling whether to display parts.                -->
+<xsl:template match="webwork-reps/static/stage" mode="obsolete-backmatter">
+    <xsl:if test="$exercise.backmatter.statement='yes'">
+        <xsl:apply-templates select="statement" />
+        <xsl:text>\par\smallskip&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="hint and $exercise.backmatter.hint='yes'">
+        <xsl:apply-templates select="hint" mode="obsolete-backmatter"/>
+    </xsl:if>
+    <xsl:if test="solution and $exercise.backmatter.solution='yes'">
+        <xsl:apply-templates select="solution" mode="obsolete-backmatter"/>
+    </xsl:if>
+</xsl:template>
+
+<!-- We print hints, answers, solutions with no heading. -->
+<!-- TODO: make heading on solution components configurable -->
+<xsl:template match="exercise/hint|exercise/answer|exercise/solution|webwork-reps/static/hint|webwork-reps/static/stage/hint|webwork-reps/static/solution|webwork-reps/static/stage/solution" mode="obsolete-backmatter">
+    <xsl:apply-templates />
+    <xsl:text>\par\smallskip&#xa;</xsl:text>
+</xsl:template>
 </xsl:stylesheet>
