@@ -5416,7 +5416,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- An arbitrary division will have a heading as infrastructure.  -->
 <!-- We investigate varying "exercise" and "project" by digging    -->
 <!-- down into all three types with the right switches.            -->
-<xsl:template match="chapter|section|subsection|subsubsection" mode="dry-run">
+<xsl:template match="part|chapter|section|subsection|subsubsection" mode="dry-run">
     <xsl:param name="b-inline-statement" />
     <xsl:param name="b-inline-answer" />
     <xsl:param name="b-inline-hint" />
@@ -5455,25 +5455,53 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Solutions Divisions, Content Generation -->
 <!-- ####################################### -->
 
+<!-- A light wrapper around the "solutions-generator" template (next). -->
+<!-- We just examine the attributes describing a "solutions" division. -->
 <xsl:template match="solutions" mode="solutions">
-    <xsl:variable name="b-inline-statement"     select="contains(@inline,     'statement')" />
-    <xsl:variable name="b-inline-hint"          select="contains(@inline,     'hint')"      />
-    <xsl:variable name="b-inline-answer"        select="contains(@inline,     'answer')"    />
-    <xsl:variable name="b-inline-solution"      select="contains(@inline,     'solution')"  />
-    <xsl:variable name="b-divisional-statement" select="contains(@divisional, 'statement')" />
-    <xsl:variable name="b-divisional-hint"      select="contains(@divisional, 'hint')"      />
-    <xsl:variable name="b-divisional-answer"    select="contains(@divisional, 'answer')"    />
-    <xsl:variable name="b-divisional-solution"  select="contains(@divisional, 'solution')"  />
-    <xsl:variable name="b-project-statement"    select="contains(@project,    'statement')" />
-    <xsl:variable name="b-project-hint"         select="contains(@project,    'hint')"      />
-    <xsl:variable name="b-project-answer"       select="contains(@project,    'answer')"    />
-    <xsl:variable name="b-project-solution"     select="contains(@project,    'solution')"  />
-    <!-- TODO: check here once for backmatter switches set to "knowl", which is unrealizable -->
-
     <!-- Look up a level, skipping backmatter -->
     <xsl:variable name="scope" select="ancestor::*[not(self::backmatter)][1]" />
 
-    <xsl:for-each select="$scope//chapter|$scope//section|$scope//subsection|$scope//subsubsection|$scope//exercises" mode="solutions">
+    <xsl:apply-templates select="$scope" mode="solutions-generator">
+        <xsl:with-param name="b-inline-statement"     select="contains(@inline,     'statement')" />
+        <xsl:with-param name="b-inline-hint"          select="contains(@inline,     'hint')"      />
+        <xsl:with-param name="b-inline-answer"        select="contains(@inline,     'answer')"    />
+        <xsl:with-param name="b-inline-solution"      select="contains(@inline,     'solution')"  />
+        <xsl:with-param name="b-divisional-statement" select="contains(@divisional, 'statement')" />
+        <xsl:with-param name="b-divisional-hint"      select="contains(@divisional, 'hint')"      />
+        <xsl:with-param name="b-divisional-answer"    select="contains(@divisional, 'answer')"    />
+        <xsl:with-param name="b-divisional-solution"  select="contains(@divisional, 'solution')"  />
+        <xsl:with-param name="b-project-statement"    select="contains(@project,    'statement')" />
+        <xsl:with-param name="b-project-hint"         select="contains(@project,    'hint')"      />
+        <xsl:with-param name="b-project-answer"       select="contains(@project,    'answer')"    />
+        <xsl:with-param name="b-project-solution"     select="contains(@project,    'solution')"  />
+    </xsl:apply-templates>
+</xsl:template>
+
+
+<!-- Context is the scope (root of subtree examined)      -->
+<!-- Cannot locate a "solutions" division inside a "part" -->
+<xsl:template match="book|article|chapter|section|subsection|subsubsection" mode="solutions-generator">
+    <xsl:param name="b-inline-statement"     />
+    <xsl:param name="b-inline-hint"          />
+    <xsl:param name="b-inline-answer"        />
+    <xsl:param name="b-inline-solution"      />
+    <xsl:param name="b-divisional-statement" />
+    <xsl:param name="b-divisional-hint"      />
+    <xsl:param name="b-divisional-answer"    />
+    <xsl:param name="b-divisional-solution"  />
+    <xsl:param name="b-project-statement"    />
+    <xsl:param name="b-project-hint"         />
+    <xsl:param name="b-project-answer"       />
+    <xsl:param name="b-project-solution"     />
+
+    <!-- We need to save off the the main context before the "for-each" -->
+    <!-- context change, in order to decide how "big" division headings -->
+    <!-- will be via the "division-in-solutions" template               -->
+    <xsl:variable name="scope" select="." />
+
+    <!-- consider each possible division, below the context      -->
+    <!-- Only output heading and content if there is any content -->
+    <xsl:for-each select=".//part|.//chapter|.//section|.//subsection|.//subsubsection|.//exercises" mode="solutions">
         <!-- see if division has *any* content, at any depth, in light of switches -->
         <xsl:variable name="dry-run">
             <xsl:apply-templates select="." mode="dry-run">
@@ -5493,6 +5521,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         </xsl:variable>
 
         <xsl:if test="not($dry-run = '')">
+            <!-- this is the only real abstract template, it simply     -->
+            <!-- provides the correct wrapping for a division appearing -->
+            <!-- to aid in organizing a collection of solutions         -->
             <xsl:apply-templates select="." mode="division-in-solutions">
                 <xsl:with-param name="scope" select="$scope" />
                 <xsl:with-param name="content">
