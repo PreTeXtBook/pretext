@@ -1086,7 +1086,7 @@ def sanitize_url(url):
 def sanitize_alpha_num_underscore(param):
     """Verify parameter is a string containing only alphanumeric and undescores"""
     import string
-    allowed = set(string.ascii_lowercase + string.ascii_uppercase + '_')
+    allowed = set(string.ascii_letters + string.digits + '_')
     _verbose('verifying parameter: {}'.format(param))
     if not(set(param) <= allowed):
         raise ValueError('param {} contains characters other than a-zA-Z0-9_ '.format(param))
