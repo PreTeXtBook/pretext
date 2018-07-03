@@ -1715,11 +1715,85 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>\newlist{exerciselist}{description}{4}&#xa;</xsl:text>
                 <xsl:text>\setlist[exerciselist]{leftmargin=0pt,itemsep=1.0ex,topsep=1.0ex,partopsep=0pt,parsep=0pt}&#xa;</xsl:text>
             </xsl:if>
-            <xsl:if test="//exercisegroup">
+            <xsl:if test="$document-root//exercisegroup">
                 <xsl:text>%% Indented groups of exercises within an exercise section&#xa;</xsl:text>
-                <xsl:text>%% Add  debug=true  option to see boxes around contents&#xa;</xsl:text>
-                <xsl:text>\usepackage{tasks}&#xa;</xsl:text>
-                <xsl:text>\NewTasks[label-format=\bfseries,item-indent=3.3em,label-offset=0.4em,label-width=1.7em,label-align=right,after-item-skip=\smallskipamount,after-skip=\smallskipamount]{exercisegroup}[\exercise]&#xa;</xsl:text>
+                <!-- We use XSL to compute six styles for width and spacing of  -->
+                <!-- exercises within a group, largely to accomodate multiple   -->
+                <!-- column scenarios.  Perhaps the gap should be parameterized -->
+                <!-- as well (smaller for more columns).                        -->
+                <xsl:variable name="egindent">
+                    <xsl:text>0.05</xsl:text>
+                </xsl:variable>
+                <xsl:variable name="eggap">
+                    <xsl:text>0.03</xsl:text>
+                </xsl:variable>
+                <xsl:variable name="width1" select="(1.0 - $egindent - (1 - 1) * $eggap) div 1" />
+                <xsl:variable name="width2" select="(1.0 - $egindent - (2 - 1) * $eggap) div 2" />
+                <xsl:variable name="width3" select="(1.0 - $egindent - (3 - 1) * $eggap) div 3" />
+                <xsl:variable name="width4" select="(1.0 - $egindent - (4 - 1) * $eggap) div 4" />
+                <xsl:variable name="width5" select="(1.0 - $egindent - (5 - 1) * $eggap) div 5" />
+                <xsl:variable name="width6" select="(1.0 - $egindent - (6 - 1) * $eggap) div 6" />
+                <xsl:text>%% tcolorbox styles for exercisegroup layout&#xa;</xsl:text>
+                <xsl:text>%% We use a LaTeX length to pass a width from the enclosing&#xa;</xsl:text>
+                <xsl:text>%% exercisegroup (parameterized by the number of columns)&#xa;</xsl:text>
+                <xsl:text>%% down into the environment for the actual exercises.&#xa;</xsl:text>
+                <xsl:text>%% "exercise group exercise width"&#xa;</xsl:text>
+                <xsl:text>\newlength{\egexwidth}&#xa;</xsl:text>
+                <!-- tcolorbox's "raster every box" style could perhaps be used  -->
+                <!-- if we computed widths in the LaTeX code, reacting to the    -->
+                <!-- parameter of the exercisegroup giving the number of columns -->
+                <xsl:text>%% An "exercise group exercise" has a bold number inline at&#xa;</xsl:text>
+                <xsl:text>%% the start of the exercise.  This serial number is a parameter&#xa;</xsl:text>
+                <xsl:text>%% of the tcolorbox "egexercise" environment, so is passed to "title".&#xa;</xsl:text>
+                <xsl:text>%% Debug: to make spacing obvious, set "colback=green" in "exgroupexstyle"&#xa;</xsl:text>
+                <!-- "frame empty" is needed to counteract very faint outlines in some PDF viewers -->
+                <!-- framecol=white is inadvisable, "frame hidden" is ineffective for default skin -->
+                <xsl:text>\tcbset{ exgroupexstyle/.style={size=minimal,width=\egexwidth,colback=white,frame empty,valign=top,coltitle=black,fonttitle=\bfseries,attach title to upper,after title={.\space}} }&#xa;</xsl:text>
+                <xsl:text>\DeclareTColorBox{egexercise}{m}{title=#1, exgroupexstyle}&#xa;</xsl:text>
+                <xsl:text>%% An "xparse" environment will represent the entire exercise group,&#xa;</xsl:text>
+                <xsl:text>%% with the number of columns as a parameter.&#xa;</xsl:text>
+                <xsl:text>%% TODO: make the 1-column version the default without an argument, bail on raster&#xa;</xsl:text>
+                <xsl:text>%% The "egexwidth" length gets set on entry, widths are computed in XSL stylesheet&#xa;</xsl:text>
+                <xsl:text>%% The overall indentation and gaps are also hard-coded in the XSL&#xa;</xsl:text>
+                <xsl:text>%% The "solution" version only changes to no-indentation&#xa;</xsl:text>
+                <!-- "regular" version, indent on left -->
+                <xsl:text>\tcbset{ exgroupstyle/.style={raster equal height=rows,raster force size=false, raster left skip=</xsl:text>
+                <xsl:value-of select="$egindent" />
+                <xsl:text>\linewidth, raster column skip=&#xa;</xsl:text>
+                <xsl:value-of select="$eggap" />
+                <xsl:text>\linewidth} }&#xa;</xsl:text>
+                <!-- "solution" version, indent on right. Silly, but easy -->
+                <xsl:text>\tcbset{ exgroupsolutionstyle/.style={raster equal height=rows,raster force size=false, raster right skip=</xsl:text>
+                <xsl:value-of select="$egindent" />
+                <xsl:text>\linewidth, raster column skip=&#xa;</xsl:text>
+                <xsl:value-of select="$eggap" />
+                <xsl:text>\linewidth} }&#xa;</xsl:text>
+                <!-- raster equal height: boxes of same *row* have same height -->
+                <!-- raster force size: false lets us control width            -->
+                <xsl:text>\NewDocumentEnvironment{exercisegroup}{m}&#xa;</xsl:text>
+                <xsl:text>  {\setlength{\egexwidth}{</xsl:text>
+                <xsl:text>\ifx1#1{</xsl:text><xsl:value-of select="$width1" /><xsl:text>}\fi</xsl:text>
+                <xsl:text>\ifx2#1{</xsl:text><xsl:value-of select="$width2" /><xsl:text>}\fi</xsl:text>
+                <xsl:text>\ifx3#1{</xsl:text><xsl:value-of select="$width3" /><xsl:text>}\fi</xsl:text>
+                <xsl:text>\ifx4#1{</xsl:text><xsl:value-of select="$width4" /><xsl:text>}\fi</xsl:text>
+                <xsl:text>\ifx5#1{</xsl:text><xsl:value-of select="$width5" /><xsl:text>}\fi</xsl:text>
+                <xsl:text>\ifx6#1{</xsl:text><xsl:value-of select="$width5" /><xsl:text>}\fi</xsl:text>
+                <xsl:text>\linewidth}&#xa;</xsl:text>
+                <xsl:text>   \begin{tcbraster}&#xa;</xsl:text>
+                <xsl:text>    [exgroupstyle,raster columns=#1]}&#xa;</xsl:text>
+                <xsl:text>  {\end{tcbraster}}&#xa;</xsl:text>
+                <xsl:text>\NewDocumentEnvironment{exercisegroupsolution}{m}&#xa;</xsl:text>
+                <xsl:text>  {\setlength{\egexwidth}{</xsl:text>
+                <xsl:text>\ifx1#1{</xsl:text><xsl:value-of select="$width1" /><xsl:text>}\fi</xsl:text>
+                <xsl:text>\ifx2#1{</xsl:text><xsl:value-of select="$width2" /><xsl:text>}\fi</xsl:text>
+                <xsl:text>\ifx3#1{</xsl:text><xsl:value-of select="$width3" /><xsl:text>}\fi</xsl:text>
+                <xsl:text>\ifx4#1{</xsl:text><xsl:value-of select="$width4" /><xsl:text>}\fi</xsl:text>
+                <xsl:text>\ifx5#1{</xsl:text><xsl:value-of select="$width5" /><xsl:text>}\fi</xsl:text>
+                <xsl:text>\ifx6#1{</xsl:text><xsl:value-of select="$width5" /><xsl:text>}\fi</xsl:text>
+                <xsl:text>\linewidth}&#xa;</xsl:text>
+                <xsl:text>   \begin{tcbraster}&#xa;</xsl:text>
+                <xsl:text>    [exgroupsolutionstyle,raster columns=#1]}&#xa;</xsl:text>
+                <xsl:text>  {\end{tcbraster}}&#xa;</xsl:text>
             </xsl:if>
         </xsl:if>
     </xsl:if>
@@ -3735,9 +3809,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Using only serial number since born here                -->
     <xsl:choose>
         <xsl:when test="parent::exercisegroup">
-            <xsl:text>\exercise[</xsl:text>
+            <xsl:text>\begin{egexercise}{</xsl:text>
             <xsl:apply-templates select="." mode="serial-number" />
-            <xsl:text>.] </xsl:text>
+            <xsl:text>}</xsl:text>
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>\begin{divisionexercise}</xsl:text>
@@ -3816,17 +3890,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="webwork-reps|myopenmath">
         <xsl:apply-templates select="conclusion"/>
     </xsl:if>
-    <!-- end enclosure/environment                               -->
-    <!-- This environment is different within an "exercisegroup" -->
+    <!-- end enclosure/environment                                     -->
+    <!-- This environment is different within an "exercisegroup"       -->
+    <!-- closing % necessary, as newline between adjacent environments -->
+    <!-- will cause a slight indent on trailing exercise               -->
     <xsl:choose>
-        <xsl:when test="parent::exercisegroup" />
-        <!-- closing % necessary, as newline between adjacent environments -->
-        <!-- will cause a slight indent on trailing exercise               -->
+        <!-- <xsl:when test="parent::exercisegroup" /> -->
+        <xsl:when test="parent::exercisegroup" >
+            <xsl:text>\end{egexercise}%&#xa;</xsl:text>
+        </xsl:when>
         <xsl:otherwise>
-            <xsl:text>\end{divisionexercise}%</xsl:text>
+            <xsl:text>\end{divisionexercise}%&#xa;</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
-    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 
@@ -3865,9 +3941,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- Using fully-qualified number in solution lists          -->
         <xsl:choose>
             <xsl:when test="parent::exercisegroup">
-                <xsl:text>\exercise[</xsl:text>
+                <xsl:text>\begin{egexercise}{</xsl:text>
                 <xsl:apply-templates select="." mode="number" />
-                <xsl:text>.] </xsl:text>
+                <xsl:text>}</xsl:text>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:text>\begin{divisionexercise}</xsl:text>
@@ -3950,17 +4026,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="webwork-reps|myopenmath">
             <xsl:apply-templates select="conclusion"/>
         </xsl:if>
-        <!-- end enclosure/environment                               -->
-        <!-- This environment is different within an "exercisegroup" -->
+        <!-- end enclosure/environment                                     -->
+        <!-- This environment is different within an "exercisegroup"       -->
+        <!-- closing % necessary, as newline between adjacent environments -->
+        <!-- will cause a slight indent on trailing exercise               -->
         <xsl:choose>
-            <xsl:when test="parent::exercisegroup" />
-            <!-- closing % necessary, as newline between adjacent environments -->
-            <!-- will cause a slight indent on trailing exercise               -->
+            <!-- <xsl:when test="parent::exercisegroup" /> -->
+            <xsl:when test="parent::exercisegroup" >
+                <xsl:text>\end{egexercise}%&#xa;</xsl:text>
+            </xsl:when>
             <xsl:otherwise>
-                <xsl:text>\end{divisionexercise}%</xsl:text>
+                <xsl:text>\end{divisionexercise}%&#xa;</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
-        <xsl:text>&#xa;</xsl:text>
     </xsl:if>
 </xsl:template>
 
@@ -4126,7 +4204,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="label" />
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="introduction" />
-    <xsl:text>\begin{exercisegroup}(</xsl:text>
+    <xsl:text>\begin{exercisegroup}{</xsl:text>
     <xsl:choose>
         <xsl:when test="not(@cols)">
             <xsl:text>1</xsl:text>
@@ -4138,13 +4216,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:message terminate="yes">MBX:ERROR: invalid value <xsl:value-of select="@cols" /> for cols attribute of exercisegroup</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
-    <xsl:text>)&#xa;</xsl:text>
+    <xsl:text>}&#xa;</xsl:text>
     <xsl:apply-templates select="exercise">
         <xsl:with-param name="b-has-hint" select="$b-has-divisional-hint" />
         <xsl:with-param name="b-has-answer" select="$b-has-divisional-answer" />
         <xsl:with-param name="b-has-solution" select="$b-has-divisional-solution" />
         </xsl:apply-templates>
-    <xsl:text>\end{exercisegroup}</xsl:text>
+    <xsl:text>\end{exercisegroup}&#xa;</xsl:text>
+    <xsl:text>\par\noindent%&#xa;</xsl:text>
     <xsl:apply-templates select="conclusion" />
     <xsl:text>\par\medskip\noindent&#xa;</xsl:text>
 </xsl:template>
@@ -4181,13 +4260,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>{</xsl:text>
             <xsl:apply-templates select="." mode="title-full" />
             <xsl:text>}</xsl:text>
+            <!-- no label, as this is a duplicate              -->
+            <!-- no title, no heading, so only line-break here -->
+            <xsl:text>&#xa;</xsl:text>
         </xsl:if>
-        <!-- no label, as this is a duplicate -->
-        <xsl:text>&#xa;</xsl:text>
         <xsl:if test="$b-has-statement">
             <xsl:apply-templates select="introduction" />
         </xsl:if>
-        <xsl:text>\begin{exercisegroup}(</xsl:text>
+        <!-- use a specialized format when statements are turned off  -->
+        <!-- or when there is no introduction nor conclusion          -->
+        <!-- Typically this will just switch-off indentation          -->
+        <xsl:choose>
+            <xsl:when test="$b-has-statement and (introduction or conclusion)">
+                <xsl:text>\begin{exercisegroup}{</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>\begin{exercisegroupsolution}{</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
         <xsl:choose>
             <xsl:when test="not(@cols)">
                 <xsl:text>1</xsl:text>
@@ -4199,14 +4289,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:message terminate="yes">MBX:ERROR: invalid value <xsl:value-of select="@cols" /> for cols attribute of exercisegroup</xsl:message>
             </xsl:otherwise>
         </xsl:choose>
-        <xsl:text>)&#xa;</xsl:text>
+        <xsl:text>}&#xa;</xsl:text>
         <xsl:apply-templates select="exercise" mode="solutions">
             <xsl:with-param name="b-has-statement" select="$b-has-statement" />
             <xsl:with-param name="b-has-hint" select="$b-has-hint" />
             <xsl:with-param name="b-has-answer" select="$b-has-answer" />
             <xsl:with-param name="b-has-solution" select="$b-has-solution" />
         </xsl:apply-templates>
-        <xsl:text>\end{exercisegroup}</xsl:text>
+        <xsl:choose>
+            <xsl:when test="$b-has-statement and (introduction or conclusion)">
+                <xsl:text>\end{exercisegroup}&#xa;</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>\end{exercisegroupsolution}&#xa;</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
         <xsl:if test="$b-has-statement">
             <xsl:apply-templates select="conclusion" />
         </xsl:if>
