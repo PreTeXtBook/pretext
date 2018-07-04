@@ -1695,107 +1695,100 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Multiple column, column-major lists&#xa;</xsl:text>
         <xsl:text>\usepackage{multicol}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="//ol or //ul or //dl or //exercises or //solutions or //references or //task">
-        <xsl:text>%% More flexible list management, esp. for references and exercises&#xa;</xsl:text>
+    <xsl:if test="$document-root//ol or $document-root//ul or $document-root//dl or $document-root//task or $document-root//references or $document-root//webwork-reps">
+        <xsl:text>%% More flexible list management, esp. for references&#xa;</xsl:text>
         <xsl:text>%% But also for specifying labels (i.e. custom order) on nested lists&#xa;</xsl:text>
         <xsl:text>\usepackage</xsl:text>
         <xsl:if test="//webwork-reps/static//statement//var[@form='checkboxes' or @form='popup']">
             <xsl:text>[inline]</xsl:text>
         </xsl:if>
         <xsl:text>{enumitem}&#xa;</xsl:text>
-        <xsl:if test="//exercises or //references">
-            <xsl:if test="//references">
-                <xsl:text>%% Lists of references in their own section, maximum depth 1&#xa;</xsl:text>
-                <xsl:text>\newlist{referencelist}{description}{4}&#xa;</xsl:text>
-                <!-- labelindent defaults to 0, ! means computed -->
-                <xsl:text>\setlist[referencelist]{leftmargin=!,labelwidth=!,labelsep=0ex,itemsep=1.0ex,topsep=1.0ex,partopsep=0pt,parsep=0pt}&#xa;</xsl:text>
-            </xsl:if>
-            <xsl:if test="//exercises">
-                <xsl:text>%% Lists of exercises in their own section, maximum depth 4&#xa;</xsl:text>
-                <xsl:text>\newlist{exerciselist}{description}{4}&#xa;</xsl:text>
-                <xsl:text>\setlist[exerciselist]{leftmargin=0pt,itemsep=1.0ex,topsep=1.0ex,partopsep=0pt,parsep=0pt}&#xa;</xsl:text>
-            </xsl:if>
-            <xsl:if test="$document-root//exercisegroup">
-                <xsl:text>%% Indented groups of exercises within an exercise section&#xa;</xsl:text>
-                <!-- We use XSL to compute six styles for width and spacing of  -->
-                <!-- exercises within a group, largely to accomodate multiple   -->
-                <!-- column scenarios.  Perhaps the gap should be parameterized -->
-                <!-- as well (smaller for more columns).                        -->
-                <xsl:variable name="egindent">
-                    <xsl:text>0.05</xsl:text>
-                </xsl:variable>
-                <xsl:variable name="eggap">
-                    <xsl:text>0.03</xsl:text>
-                </xsl:variable>
-                <xsl:variable name="width1" select="(1.0 - $egindent - (1 - 1) * $eggap) div 1" />
-                <xsl:variable name="width2" select="(1.0 - $egindent - (2 - 1) * $eggap) div 2" />
-                <xsl:variable name="width3" select="(1.0 - $egindent - (3 - 1) * $eggap) div 3" />
-                <xsl:variable name="width4" select="(1.0 - $egindent - (4 - 1) * $eggap) div 4" />
-                <xsl:variable name="width5" select="(1.0 - $egindent - (5 - 1) * $eggap) div 5" />
-                <xsl:variable name="width6" select="(1.0 - $egindent - (6 - 1) * $eggap) div 6" />
-                <xsl:text>%% tcolorbox styles for exercisegroup layout&#xa;</xsl:text>
-                <xsl:text>%% We use a LaTeX length to pass a width from the enclosing&#xa;</xsl:text>
-                <xsl:text>%% exercisegroup (parameterized by the number of columns)&#xa;</xsl:text>
-                <xsl:text>%% down into the environment for the actual exercises.&#xa;</xsl:text>
-                <xsl:text>%% "exercise group exercise width"&#xa;</xsl:text>
-                <xsl:text>\newlength{\egexwidth}&#xa;</xsl:text>
-                <!-- tcolorbox's "raster every box" style could perhaps be used  -->
-                <!-- if we computed widths in the LaTeX code, reacting to the    -->
-                <!-- parameter of the exercisegroup giving the number of columns -->
-                <xsl:text>%% An "exercise group exercise" has a bold number inline at&#xa;</xsl:text>
-                <xsl:text>%% the start of the exercise.  This serial number is a parameter&#xa;</xsl:text>
-                <xsl:text>%% of the tcolorbox "egexercise" environment, so is passed to "title".&#xa;</xsl:text>
-                <xsl:text>%% Debug: to make spacing obvious, set "colback=green" in "exgroupexstyle"&#xa;</xsl:text>
-                <!-- "frame empty" is needed to counteract very faint outlines in some PDF viewers -->
-                <!-- framecol=white is inadvisable, "frame hidden" is ineffective for default skin -->
-                <xsl:text>\tcbset{ exgroupexstyle/.style={size=minimal,width=\egexwidth,colback=white,frame empty,valign=top,coltitle=black,fonttitle=\bfseries,attach title to upper,after title={.\space}} }&#xa;</xsl:text>
-                <xsl:text>\DeclareTColorBox{egexercise}{m}{title=#1, exgroupexstyle}&#xa;</xsl:text>
-                <xsl:text>%% An "xparse" environment will represent the entire exercise group,&#xa;</xsl:text>
-                <xsl:text>%% with the number of columns as a parameter.&#xa;</xsl:text>
-                <xsl:text>%% TODO: make the 1-column version the default without an argument, bail on raster&#xa;</xsl:text>
-                <xsl:text>%% The "egexwidth" length gets set on entry, widths are computed in XSL stylesheet&#xa;</xsl:text>
-                <xsl:text>%% The overall indentation and gaps are also hard-coded in the XSL&#xa;</xsl:text>
-                <xsl:text>%% The "solution" version only changes to no-indentation&#xa;</xsl:text>
-                <!-- "regular" version, indent on left -->
-                <xsl:text>\tcbset{ exgroupstyle/.style={raster equal height=rows,raster force size=false, raster left skip=</xsl:text>
-                <xsl:value-of select="$egindent" />
-                <xsl:text>\linewidth, raster column skip=&#xa;</xsl:text>
-                <xsl:value-of select="$eggap" />
-                <xsl:text>\linewidth} }&#xa;</xsl:text>
-                <!-- "solution" version, indent on right. Silly, but easy -->
-                <xsl:text>\tcbset{ exgroupsolutionstyle/.style={raster equal height=rows,raster force size=false, raster right skip=</xsl:text>
-                <xsl:value-of select="$egindent" />
-                <xsl:text>\linewidth, raster column skip=&#xa;</xsl:text>
-                <xsl:value-of select="$eggap" />
-                <xsl:text>\linewidth} }&#xa;</xsl:text>
-                <!-- raster equal height: boxes of same *row* have same height -->
-                <!-- raster force size: false lets us control width            -->
-                <xsl:text>\NewDocumentEnvironment{exercisegroup}{m}&#xa;</xsl:text>
-                <xsl:text>  {\setlength{\egexwidth}{</xsl:text>
-                <xsl:text>\ifx1#1{</xsl:text><xsl:value-of select="$width1" /><xsl:text>}\fi</xsl:text>
-                <xsl:text>\ifx2#1{</xsl:text><xsl:value-of select="$width2" /><xsl:text>}\fi</xsl:text>
-                <xsl:text>\ifx3#1{</xsl:text><xsl:value-of select="$width3" /><xsl:text>}\fi</xsl:text>
-                <xsl:text>\ifx4#1{</xsl:text><xsl:value-of select="$width4" /><xsl:text>}\fi</xsl:text>
-                <xsl:text>\ifx5#1{</xsl:text><xsl:value-of select="$width5" /><xsl:text>}\fi</xsl:text>
-                <xsl:text>\ifx6#1{</xsl:text><xsl:value-of select="$width5" /><xsl:text>}\fi</xsl:text>
-                <xsl:text>\linewidth}&#xa;</xsl:text>
-                <xsl:text>   \begin{tcbraster}&#xa;</xsl:text>
-                <xsl:text>    [exgroupstyle,raster columns=#1]}&#xa;</xsl:text>
-                <xsl:text>  {\end{tcbraster}}&#xa;</xsl:text>
-                <xsl:text>\NewDocumentEnvironment{exercisegroupsolution}{m}&#xa;</xsl:text>
-                <xsl:text>  {\setlength{\egexwidth}{</xsl:text>
-                <xsl:text>\ifx1#1{</xsl:text><xsl:value-of select="$width1" /><xsl:text>}\fi</xsl:text>
-                <xsl:text>\ifx2#1{</xsl:text><xsl:value-of select="$width2" /><xsl:text>}\fi</xsl:text>
-                <xsl:text>\ifx3#1{</xsl:text><xsl:value-of select="$width3" /><xsl:text>}\fi</xsl:text>
-                <xsl:text>\ifx4#1{</xsl:text><xsl:value-of select="$width4" /><xsl:text>}\fi</xsl:text>
-                <xsl:text>\ifx5#1{</xsl:text><xsl:value-of select="$width5" /><xsl:text>}\fi</xsl:text>
-                <xsl:text>\ifx6#1{</xsl:text><xsl:value-of select="$width5" /><xsl:text>}\fi</xsl:text>
-                <xsl:text>\linewidth}&#xa;</xsl:text>
-                <xsl:text>   \begin{tcbraster}&#xa;</xsl:text>
-                <xsl:text>    [exgroupsolutionstyle,raster columns=#1]}&#xa;</xsl:text>
-                <xsl:text>  {\end{tcbraster}}&#xa;</xsl:text>
-            </xsl:if>
+        <xsl:if test="$document-root//references">
+            <xsl:text>%% Lists of references in their own section, maximum depth 1&#xa;</xsl:text>
+            <xsl:text>\newlist{referencelist}{description}{4}&#xa;</xsl:text>
+            <!-- labelindent defaults to 0, ! means computed -->
+            <xsl:text>\setlist[referencelist]{leftmargin=!,labelwidth=!,labelsep=0ex,itemsep=1.0ex,topsep=1.0ex,partopsep=0pt,parsep=0pt}&#xa;</xsl:text>
         </xsl:if>
+    </xsl:if>
+    <xsl:if test="$document-root//exercisegroup">
+        <xsl:text>%% Indented groups of "exercise" within an "exercises" division&#xa;</xsl:text>
+        <!-- We use XSL to compute six styles for width and spacing of  -->
+        <!-- exercises within a group, largely to accomodate multiple   -->
+        <!-- column scenarios.  Perhaps the gap should be parameterized -->
+        <!-- as well (smaller for more columns).                        -->
+        <xsl:variable name="egindent">
+            <xsl:text>0.05</xsl:text>
+        </xsl:variable>
+        <xsl:variable name="eggap">
+            <xsl:text>0.03</xsl:text>
+        </xsl:variable>
+        <xsl:variable name="width1" select="(1.0 - $egindent - (1 - 1) * $eggap) div 1" />
+        <xsl:variable name="width2" select="(1.0 - $egindent - (2 - 1) * $eggap) div 2" />
+        <xsl:variable name="width3" select="(1.0 - $egindent - (3 - 1) * $eggap) div 3" />
+        <xsl:variable name="width4" select="(1.0 - $egindent - (4 - 1) * $eggap) div 4" />
+        <xsl:variable name="width5" select="(1.0 - $egindent - (5 - 1) * $eggap) div 5" />
+        <xsl:variable name="width6" select="(1.0 - $egindent - (6 - 1) * $eggap) div 6" />
+        <xsl:text>%% tcolorbox styles for exercisegroup layout&#xa;</xsl:text>
+        <xsl:text>%% We use a LaTeX length to pass a width from the enclosing&#xa;</xsl:text>
+        <xsl:text>%% exercisegroup (parameterized by the number of columns)&#xa;</xsl:text>
+        <xsl:text>%% down into the environment for the actual exercises.&#xa;</xsl:text>
+        <xsl:text>%% "exercise group exercise width"&#xa;</xsl:text>
+        <xsl:text>\newlength{\egexwidth}&#xa;</xsl:text>
+        <!-- tcolorbox's "raster every box" style could perhaps be used  -->
+        <!-- if we computed widths in the LaTeX code, reacting to the    -->
+        <!-- parameter of the exercisegroup giving the number of columns -->
+        <xsl:text>%% An "exercise group exercise" has a bold number inline at&#xa;</xsl:text>
+        <xsl:text>%% the start of the exercise.  This serial number is a parameter&#xa;</xsl:text>
+        <xsl:text>%% of the tcolorbox "egexercise" environment, so is passed to "title".&#xa;</xsl:text>
+        <xsl:text>%% Debug: to make spacing obvious, set "colback=green" in "exgroupexstyle"&#xa;</xsl:text>
+        <!-- "frame empty" is needed to counteract very faint outlines in some PDF viewers -->
+        <!-- framecol=white is inadvisable, "frame hidden" is ineffective for default skin -->
+        <xsl:text>\tcbset{ exgroupexstyle/.style={size=minimal,width=\egexwidth,colback=white,frame empty,valign=top,coltitle=black,fonttitle=\bfseries,attach title to upper,after title={.\space}} }&#xa;</xsl:text>
+        <xsl:text>\DeclareTColorBox{egexercise}{m}{title=#1, exgroupexstyle}&#xa;</xsl:text>
+        <xsl:text>%% An "xparse" environment will represent the entire exercise group,&#xa;</xsl:text>
+        <xsl:text>%% with the number of columns as a parameter.&#xa;</xsl:text>
+        <xsl:text>%% TODO: make the 1-column version the default without an argument, bail on raster&#xa;</xsl:text>
+        <xsl:text>%% The "egexwidth" length gets set on entry, widths are computed in XSL stylesheet&#xa;</xsl:text>
+        <xsl:text>%% The overall indentation and gaps are also hard-coded in the XSL&#xa;</xsl:text>
+        <xsl:text>%% The "solution" version only changes to no-indentation&#xa;</xsl:text>
+        <!-- "regular" version, indent on left -->
+        <xsl:text>\tcbset{ exgroupstyle/.style={raster equal height=rows,raster force size=false, raster left skip=</xsl:text>
+        <xsl:value-of select="$egindent" />
+        <xsl:text>\linewidth, raster column skip=&#xa;</xsl:text>
+        <xsl:value-of select="$eggap" />
+        <xsl:text>\linewidth} }&#xa;</xsl:text>
+        <!-- "solution" version, indent on right. Silly, but easy -->
+        <xsl:text>\tcbset{ exgroupsolutionstyle/.style={raster equal height=rows,raster force size=false, raster right skip=</xsl:text>
+        <xsl:value-of select="$egindent" />
+        <xsl:text>\linewidth, raster column skip=&#xa;</xsl:text>
+        <xsl:value-of select="$eggap" />
+        <xsl:text>\linewidth} }&#xa;</xsl:text>
+        <!-- raster equal height: boxes of same *row* have same height -->
+        <!-- raster force size: false lets us control width            -->
+        <xsl:text>\NewDocumentEnvironment{exercisegroup}{m}&#xa;</xsl:text>
+        <xsl:text>  {\setlength{\egexwidth}{</xsl:text>
+        <xsl:text>\ifx1#1{</xsl:text><xsl:value-of select="$width1" /><xsl:text>}\fi</xsl:text>
+        <xsl:text>\ifx2#1{</xsl:text><xsl:value-of select="$width2" /><xsl:text>}\fi</xsl:text>
+        <xsl:text>\ifx3#1{</xsl:text><xsl:value-of select="$width3" /><xsl:text>}\fi</xsl:text>
+        <xsl:text>\ifx4#1{</xsl:text><xsl:value-of select="$width4" /><xsl:text>}\fi</xsl:text>
+        <xsl:text>\ifx5#1{</xsl:text><xsl:value-of select="$width5" /><xsl:text>}\fi</xsl:text>
+        <xsl:text>\ifx6#1{</xsl:text><xsl:value-of select="$width5" /><xsl:text>}\fi</xsl:text>
+        <xsl:text>\linewidth}&#xa;</xsl:text>
+        <xsl:text>   \begin{tcbraster}&#xa;</xsl:text>
+        <xsl:text>    [exgroupstyle,raster columns=#1]}&#xa;</xsl:text>
+        <xsl:text>  {\end{tcbraster}}&#xa;</xsl:text>
+        <xsl:text>\NewDocumentEnvironment{exercisegroupsolution}{m}&#xa;</xsl:text>
+        <xsl:text>  {\setlength{\egexwidth}{</xsl:text>
+        <xsl:text>\ifx1#1{</xsl:text><xsl:value-of select="$width1" /><xsl:text>}\fi</xsl:text>
+        <xsl:text>\ifx2#1{</xsl:text><xsl:value-of select="$width2" /><xsl:text>}\fi</xsl:text>
+        <xsl:text>\ifx3#1{</xsl:text><xsl:value-of select="$width3" /><xsl:text>}\fi</xsl:text>
+        <xsl:text>\ifx4#1{</xsl:text><xsl:value-of select="$width4" /><xsl:text>}\fi</xsl:text>
+        <xsl:text>\ifx5#1{</xsl:text><xsl:value-of select="$width5" /><xsl:text>}\fi</xsl:text>
+        <xsl:text>\ifx6#1{</xsl:text><xsl:value-of select="$width5" /><xsl:text>}\fi</xsl:text>
+        <xsl:text>\linewidth}&#xa;</xsl:text>
+        <xsl:text>   \begin{tcbraster}&#xa;</xsl:text>
+        <xsl:text>    [exgroupsolutionstyle,raster columns=#1]}&#xa;</xsl:text>
+        <xsl:text>  {\end{tcbraster}}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$document-root/backmatter/index-part | $document-root//index-list">
         <!-- See http://tex.blogoverflow.com/2012/09/dont-forget-to-run-makeindex/ for "imakeidx" usage -->
