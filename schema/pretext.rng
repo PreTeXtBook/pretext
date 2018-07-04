@@ -245,7 +245,6 @@
             <ref name="Paragraphs"/>
             <ref name="Commentary"/>
             <ref name="NotationList"/>
-            <ref name="SolutionList"/>
           </choice>
         </oneOrMore>
         <group>
@@ -3403,11 +3402,6 @@
   </define>
   <define name="NotationList">
     <element name="notation-list">
-      <empty/>
-    </element>
-  </define>
-  <define name="SolutionList">
-    <element name="solution-list">
       <empty/>
     </element>
   </define>

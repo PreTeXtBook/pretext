@@ -115,7 +115,7 @@
             element appendix {
                 MetaDataTitle,
                 (
-                    (BlockDivision | Paragraphs | Commentary | NotationList | SolutionList )+ |
+                    (BlockDivision | Paragraphs | Commentary | NotationList )+ |
                     (
                         IntroductionDivision?,
                         Section,
@@ -1483,8 +1483,6 @@
             }
         NotationList =
             element notation-list {empty}
-        SolutionList =
-            element solution-list {empty}
         
         
         Demonstration = element demonstration {

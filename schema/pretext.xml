@@ -159,7 +159,7 @@
             element appendix {
                 MetaDataTitle,
                 (
-                    (BlockDivision | Paragraphs | Commentary | NotationList | SolutionList )+ |
+                    (BlockDivision | Paragraphs | Commentary | NotationList )+ |
                     (
                         IntroductionDivision?,
                         Section,
@@ -1779,7 +1779,7 @@
 
         <p>A <term>list generator</term> is a convenient device.  It can create appendices, or smaller table-of-contents at the start of divisions.</p>
 
-        <p>Notation and solution lists can be automatically generated.  We restrict their locations to appendices.</p>
+        <p>Notation can be automatically generated.  We restrict its locations to appendices.</p>
 
         <fragment xml:id="listgenerator">
         ListGenerator =
@@ -1791,8 +1791,6 @@
             }
         NotationList =
             element notation-list {empty}
-        SolutionList =
-            element solution-list {empty}
         </fragment>
     </section>
 

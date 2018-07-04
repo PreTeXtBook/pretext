@@ -191,7 +191,6 @@
               <xs:group ref="Paragraphs"/>
               <xs:element ref="commentary"/>
               <xs:element ref="notation-list"/>
-              <xs:element ref="solution-list"/>
             </xs:choice>
             <xs:sequence>
               <xs:group minOccurs="0" ref="IntroductionDivision"/>
@@ -3297,9 +3296,6 @@
     </xs:complexType>
   </xs:element>
   <xs:element name="notation-list">
-    <xs:complexType/>
-  </xs:element>
-  <xs:element name="solution-list">
     <xs:complexType/>
   </xs:element>
   <xs:element name="demonstration">
