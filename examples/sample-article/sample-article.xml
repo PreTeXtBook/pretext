@@ -2437,11 +2437,10 @@ the xsltproc executable.
                         <p>You could <q>connect</q> the image above with the exercises following as part of this <c>introduction</c> for the <c>exercisegroup</c>.</p>
                     </introduction>
 
+                    <!-- This exercise has no solutions, so we can dispense with the "statement" structure -->
                     <exercise>
-                        <statement>
-                            <p xml:id="paragraph-in-exercise"><m>f(x)=x^3</m>, <m>\frac{df}{dx}</m>.  This sentence is just a bunch of gibberish to check where the second line of the problem begins relative to the first line.</p>
-                            <p>We cross-reference the next problem in this exercise group.  For the <c>phrase-global</c> form, the common element of the cross-reference and the target should be the <c>exercises</c> division, and not the enclosing <c>exercisegroup</c>:  <xref ref="exercises-cosine-derivative" text="phrase-global" />.</p>
-                        </statement>
+                        <p xml:id="paragraph-in-exercise"><m>f(x)=x^3</m>, <m>\frac{df}{dx}</m>.  This sentence is just a bunch of gibberish to check where the second line of the problem begins relative to the first line.</p>
+                        <p>We cross-reference the next problem in this exercise group.  For the <c>phrase-global</c> form, the common element of the cross-reference and the target should be the <c>exercises</c> division, and not the enclosing <c>exercisegroup</c>:  <xref ref="exercises-cosine-derivative" text="phrase-global" />.</p>
                     </exercise>
 
                     <exercise xml:id="exercises-cosine-derivative">
@@ -2457,9 +2456,7 @@ the xsltproc executable.
                 </exercisegroup>
 
                 <exercise>
-                    <statement>
-                        <p>Compute <m>\int 3x^2\,dx</m>.</p>
-                    </statement>
+                    <p>Compute <m>\int 3x^2\,dx</m>.</p>
                 </exercise>
 
                 <exercise>

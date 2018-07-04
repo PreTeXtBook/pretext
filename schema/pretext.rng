@@ -1908,32 +1908,35 @@
   <define name="AttributesYouTube">
     <attribute name="youtube"/>
   </define>
+  <define name="ExerciseBody">
+    <oneOrMore>
+      <choice>
+        <ref name="BlockStatement"/>
+        <element name="ol">
+          <optional>
+            <attribute name="cols"/>
+          </optional>
+          <optional>
+            <attribute name="label"/>
+          </optional>
+          <oneOrMore>
+            <element name="li">
+              <ref name="MetaDataTarget"/>
+              <choice>
+                <ref name="TextParagraph"/>
+                <oneOrMore>
+                  <ref name="BlockText"/>
+                </oneOrMore>
+              </choice>
+            </element>
+          </oneOrMore>
+        </element>
+      </choice>
+    </oneOrMore>
+  </define>
   <define name="StatementExercise">
     <element name="statement">
-      <oneOrMore>
-        <choice>
-          <ref name="BlockStatement"/>
-          <element name="ol">
-            <optional>
-              <attribute name="cols"/>
-            </optional>
-            <optional>
-              <attribute name="label"/>
-            </optional>
-            <oneOrMore>
-              <element name="li">
-                <ref name="MetaDataTarget"/>
-                <choice>
-                  <ref name="TextParagraph"/>
-                  <oneOrMore>
-                    <ref name="BlockText"/>
-                  </oneOrMore>
-                </choice>
-              </element>
-            </oneOrMore>
-          </element>
-        </choice>
-      </oneOrMore>
+      <ref name="ExerciseBody"/>
     </element>
   </define>
   <define name="Exercise">
@@ -1943,6 +1946,7 @@
         <attribute name="number"/>
       </optional>
       <choice>
+        <ref name="ExerciseBody"/>
         <group>
           <ref name="StatementExercise"/>
           <zeroOrMore>

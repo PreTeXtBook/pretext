@@ -1530,25 +1530,26 @@
 
 
         <fragment xml:id="exercise">
+        ExerciseBody =
+            (
+                BlockStatement |
+                element ol {
+                    attribute cols {text}?,
+                    attribute label {text}?,
+                    element li {
+                        MetaDataTarget,
+                        (TextParagraph | BlockText+)
+                    }+
+                }
+            )+
         StatementExercise = 
-            element statement {
-                (
-                    BlockStatement |
-                    element ol {
-                        attribute cols {text}?,
-                        attribute label {text}?,
-                        element li {
-                            MetaDataTarget,
-                            (TextParagraph | BlockText+)
-                        }+
-                    }
-                )+
-            }
+            element statement { ExerciseBody }
         Exercise = 
             element exercise {
                 MetaDataTitleOptional,
                 attribute number {text}?,
                 (
+                ExerciseBody |
                 (StatementExercise, Hint*, Answer*, Solution*) |
                 (IntroductionText?, WebWork, ConclusionText?)
                 )

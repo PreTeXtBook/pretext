@@ -1813,33 +1813,38 @@
   <xs:attributeGroup name="AttributesYouTube">
     <xs:attribute name="youtube" use="required"/>
   </xs:attributeGroup>
+  <xs:group name="ExerciseBody">
+    <xs:sequence>
+      <xs:choice maxOccurs="unbounded">
+        <xs:group ref="BlockStatement"/>
+        <xs:element name="ol">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element maxOccurs="unbounded" name="li">
+                <xs:complexType mixed="true">
+                  <xs:sequence>
+                    <xs:group ref="MetaDataTarget"/>
+                    <xs:choice>
+                      <xs:group ref="TextParagraph"/>
+                      <xs:group maxOccurs="unbounded" ref="BlockText"/>
+                    </xs:choice>
+                  </xs:sequence>
+                  <xs:attributeGroup ref="MetaDataTarget"/>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute name="cols"/>
+            <xs:attribute name="label"/>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:sequence>
+  </xs:group>
   <xs:group name="StatementExercise">
     <xs:sequence>
       <xs:element name="statement">
         <xs:complexType>
-          <xs:choice maxOccurs="unbounded">
-            <xs:group ref="BlockStatement"/>
-            <xs:element name="ol">
-              <xs:complexType>
-                <xs:sequence>
-                  <xs:element maxOccurs="unbounded" name="li">
-                    <xs:complexType mixed="true">
-                      <xs:sequence>
-                        <xs:group ref="MetaDataTarget"/>
-                        <xs:choice>
-                          <xs:group ref="TextParagraph"/>
-                          <xs:group maxOccurs="unbounded" ref="BlockText"/>
-                        </xs:choice>
-                      </xs:sequence>
-                      <xs:attributeGroup ref="MetaDataTarget"/>
-                    </xs:complexType>
-                  </xs:element>
-                </xs:sequence>
-                <xs:attribute name="cols"/>
-                <xs:attribute name="label"/>
-              </xs:complexType>
-            </xs:element>
-          </xs:choice>
+          <xs:group ref="ExerciseBody"/>
         </xs:complexType>
       </xs:element>
     </xs:sequence>
@@ -1849,6 +1854,7 @@
       <xs:sequence>
         <xs:group ref="MetaDataTitleOptional"/>
         <xs:choice>
+          <xs:group ref="ExerciseBody"/>
           <xs:sequence>
             <xs:group ref="StatementExercise"/>
             <xs:group minOccurs="0" maxOccurs="unbounded" ref="Hint"/>
