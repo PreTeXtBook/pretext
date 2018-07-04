@@ -5457,9 +5457,15 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 
 <!-- A light wrapper around the "solutions-generator" template (next). -->
 <!-- We just examine the attributes describing a "solutions" division. -->
+<!-- The division is one-off (not knowled), so we treat the            -->
+<!-- introduction and conclusion as original                           -->
 <xsl:template match="solutions" mode="solutions">
     <!-- Look up a level, skipping backmatter -->
     <xsl:variable name="scope" select="ancestor::*[not(self::backmatter)][1]" />
+
+    <xsl:apply-templates select="introduction">
+        <xsl:with-param name="b-original" select="true()" />
+    </xsl:apply-templates>
 
     <xsl:apply-templates select="$scope" mode="solutions-generator">
         <xsl:with-param name="b-inline-statement"     select="contains(@inline,     'statement')" />
@@ -5474,6 +5480,10 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:with-param name="b-project-hint"         select="contains(@project,    'hint')"      />
         <xsl:with-param name="b-project-answer"       select="contains(@project,    'answer')"    />
         <xsl:with-param name="b-project-solution"     select="contains(@project,    'solution')"  />
+    </xsl:apply-templates>
+
+    <xsl:apply-templates select="conclusion">
+        <xsl:with-param name="b-original" select="true()" />
     </xsl:apply-templates>
 </xsl:template>
 

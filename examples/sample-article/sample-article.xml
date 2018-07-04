@@ -970,6 +970,16 @@ the xsltproc executable.
                 <solutions inline="hint solution answer" divisional="hint solution answer" project="hint solution answer">
                     <title>Solutions for This Subsection</title>
                     <idx><h>solutions</h><h>for a division</h></idx>
+
+                    <introduction>
+                        <p>This is an introduction, where you might explain that this division of this subsection contains various hints, answers, solutions of inline exercises, divisional exercises, and/or project-like blocks.  See the source to see just how this solutions division was built.</p>
+                    </introduction>
+
+                    <!-- content will happen here automatically -->
+
+                    <conclusion>
+                        <p>And a conclusion to this solutions division, which may not be readily apparent as distinct from the final division's worth of solutions, but since it is not prefixed with a number, it may be different enough.</p>
+                    </conclusion>
                 </solutions>
 
             </subsection>
@@ -7488,6 +7498,16 @@ the xsltproc executable.
             <solutions inline="hint solution answer" divisional="hint solution answer" project="answer">
                 <title>Solutions to Selected Exercises</title>
                 <idx><h>solutions</h><h>as an appendix</h></idx>
+
+                <introduction>
+                    <p>This is an introduction, where you might explain that this division of the back matter contains various hints, answers, solutions of inline exercises, divisional exercises, and/or project-like blocks.  See the source to see just how this solutions division was built.</p>
+                </introduction>
+
+                <!-- content will happen here automatically -->
+
+                <conclusion>
+                    <p>And a conclusion to this solutions division, which may not be readily apparent as distinct from the final division's worth of solutions, but since it is not prefixed with a number, it may be different enough.</p>
+                </conclusion>
             </solutions>
 
             <appendix>
