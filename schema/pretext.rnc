@@ -51,6 +51,7 @@
                     (
                         (BlockDivision | Paragraphs | Commentary)+,
                         Exercises?,
+                        Solutions?,
                         References?
                     )
                 |
@@ -58,6 +59,7 @@
                         IntroductionDivision?,
                         Section+,
                         Exercises*,
+                        Solutions?,
                         References?,
                         ConclusionDivision?
                     )
@@ -71,6 +73,7 @@
                     (
                         (BlockDivision | Paragraphs | Commentary)+,
                         Exercises?,
+                        Solutions?,
                         References?
                     )
                 |
@@ -78,6 +81,7 @@
                         IntroductionDivision?,
                         Subsection+,
                         Exercises*,
+                        Solutions?,
                         References?,
                         ConclusionDivision?
                     )
@@ -91,6 +95,7 @@
                     (
                         (BlockDivision | Paragraphs | Commentary)+,
                         Exercises?,
+                        Solutions?,
                         References?
                     )
                 |
@@ -98,6 +103,7 @@
                         IntroductionDivision?,
                         Subsubsection+,
                         Exercises*,
+                        Solutions?,
                         References?,
                         ConclusionDivision?
                     )
@@ -109,6 +115,7 @@
                 Objectives?,
                 (BlockDivision | Paragraphs | Commentary)+,
                 Exercises?,
+                Solutions?,
                 References?
             }
         Appendix =
@@ -243,7 +250,7 @@
         BackMatter = 
             element backmatter {
                 MetaDataTitleOptional,
-                Appendix*,
+                (Appendix|Solutions)*,
                 References?,
                 IndexDivision?,
                 ColophonBack?
@@ -280,6 +287,15 @@
                 MetaDataTitleOptional,
                 IntroductionDivision?,
                 (ToDo | Exercise | ExerciseGroup)+,
+                ConclusionDivision?
+            }
+        Solutions =
+            element solutions {
+                MetaDataTitleOptional,
+                attribute inline {text}?,
+                attribute divisional {text}?,
+                attribute project {text}?,
+                IntroductionDivision?,
                 ConclusionDivision?
             }
         References =

@@ -90,12 +90,14 @@
                   <xs:element ref="commentary"/>
                 </xs:choice>
                 <xs:element minOccurs="0" ref="exercises"/>
+                <xs:element minOccurs="0" ref="solutions"/>
                 <xs:element minOccurs="0" ref="references"/>
               </xs:sequence>
               <xs:sequence>
                 <xs:group minOccurs="0" ref="IntroductionDivision"/>
                 <xs:element maxOccurs="unbounded" ref="section"/>
                 <xs:element minOccurs="0" maxOccurs="unbounded" ref="exercises"/>
+                <xs:element minOccurs="0" ref="solutions"/>
                 <xs:element minOccurs="0" ref="references"/>
                 <xs:group minOccurs="0" ref="ConclusionDivision"/>
               </xs:sequence>
@@ -119,12 +121,14 @@
                   <xs:element ref="commentary"/>
                 </xs:choice>
                 <xs:element minOccurs="0" ref="exercises"/>
+                <xs:element minOccurs="0" ref="solutions"/>
                 <xs:element minOccurs="0" ref="references"/>
               </xs:sequence>
               <xs:sequence>
                 <xs:group minOccurs="0" ref="IntroductionDivision"/>
                 <xs:element maxOccurs="unbounded" ref="subsection"/>
                 <xs:element minOccurs="0" maxOccurs="unbounded" ref="exercises"/>
+                <xs:element minOccurs="0" ref="solutions"/>
                 <xs:element minOccurs="0" ref="references"/>
                 <xs:group minOccurs="0" ref="ConclusionDivision"/>
               </xs:sequence>
@@ -148,12 +152,14 @@
                   <xs:element ref="commentary"/>
                 </xs:choice>
                 <xs:element minOccurs="0" ref="exercises"/>
+                <xs:element minOccurs="0" ref="solutions"/>
                 <xs:element minOccurs="0" ref="references"/>
               </xs:sequence>
               <xs:sequence>
                 <xs:group minOccurs="0" ref="IntroductionDivision"/>
                 <xs:element maxOccurs="unbounded" ref="subsubsection"/>
                 <xs:element minOccurs="0" maxOccurs="unbounded" ref="exercises"/>
+                <xs:element minOccurs="0" ref="solutions"/>
                 <xs:element minOccurs="0" ref="references"/>
                 <xs:group minOccurs="0" ref="ConclusionDivision"/>
               </xs:sequence>
@@ -175,6 +181,7 @@
               <xs:element ref="commentary"/>
             </xs:choice>
             <xs:element minOccurs="0" ref="exercises"/>
+            <xs:element minOccurs="0" ref="solutions"/>
             <xs:element minOccurs="0" ref="references"/>
           </xs:sequence>
         </xs:extension>
@@ -495,7 +502,10 @@
     <xs:complexType>
       <xs:sequence>
         <xs:group ref="MetaDataTitleOptional"/>
-        <xs:element minOccurs="0" maxOccurs="unbounded" ref="appendix"/>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element ref="appendix"/>
+          <xs:element ref="solutions"/>
+        </xs:choice>
         <xs:element minOccurs="0" ref="references"/>
         <xs:element minOccurs="0" ref="index"/>
         <xs:group minOccurs="0" ref="ColophonBack"/>
@@ -574,6 +584,19 @@
         <xs:group minOccurs="0" ref="ConclusionDivision"/>
       </xs:sequence>
       <xs:attributeGroup ref="MetaDataTitleOptional"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="solutions">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="MetaDataTitleOptional"/>
+        <xs:group minOccurs="0" ref="IntroductionDivision"/>
+        <xs:group minOccurs="0" ref="ConclusionDivision"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="MetaDataTitleOptional"/>
+      <xs:attribute name="inline"/>
+      <xs:attribute name="divisional"/>
+      <xs:attribute name="project"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="references">

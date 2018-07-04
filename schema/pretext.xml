@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
+<!--   = one, mandatory -->
+<!-- ? = one, optional  -->
+<!-- * = zero or more   -->
+<!-- + = one or more    -->
 
 <mathbook>
 
@@ -95,6 +99,7 @@
                     (
                         (BlockDivision | Paragraphs | Commentary)+,
                         Exercises?,
+                        Solutions?,
                         References?
                     )
                 |
@@ -102,6 +107,7 @@
                         IntroductionDivision?,
                         Section+,
                         Exercises*,
+                        Solutions?,
                         References?,
                         ConclusionDivision?
                     )
@@ -115,6 +121,7 @@
                     (
                         (BlockDivision | Paragraphs | Commentary)+,
                         Exercises?,
+                        Solutions?,
                         References?
                     )
                 |
@@ -122,6 +129,7 @@
                         IntroductionDivision?,
                         Subsection+,
                         Exercises*,
+                        Solutions?,
                         References?,
                         ConclusionDivision?
                     )
@@ -135,6 +143,7 @@
                     (
                         (BlockDivision | Paragraphs | Commentary)+,
                         Exercises?,
+                        Solutions?,
                         References?
                     )
                 |
@@ -142,6 +151,7 @@
                         IntroductionDivision?,
                         Subsubsection+,
                         Exercises*,
+                        Solutions?,
                         References?,
                         ConclusionDivision?
                     )
@@ -153,6 +163,7 @@
                 Objectives?,
                 (BlockDivision | Paragraphs | Commentary)+,
                 Exercises?,
+                Solutions?,
                 References?
             }
         Appendix =
@@ -225,6 +236,15 @@
                 MetaDataTitleOptional,
                 IntroductionDivision?,
                 (ToDo | Exercise | ExerciseGroup)+,
+                ConclusionDivision?
+            }
+        Solutions =
+            element solutions {
+                MetaDataTitleOptional,
+                attribute inline {text}?,
+                attribute divisional {text}?,
+                attribute project {text}?,
+                IntroductionDivision?,
                 ConclusionDivision?
             }
         References =
@@ -1932,13 +1952,13 @@
     <section>
         <title>Back Matter</title>
 
-        <p>Articles and books have material at the end, structured as a sequence of <c>appendix</c>.</p>
+        <p>Articles and books have material at the end, structured as a sequence of <c>appendix</c>.  A <c>solutions</c> division should be numbered and rendered as if it was one of the <c>appendix</c>, and so can mix-in in any order.</p>
 
         <fragment xml:id="backmatter">
         BackMatter = 
             element backmatter {
                 MetaDataTitleOptional,
-                Appendix*,
+                (Appendix|Solutions)*,
                 References?,
                 IndexDivision?,
                 ColophonBack?

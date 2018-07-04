@@ -107,6 +107,9 @@
             <ref name="Exercises"/>
           </optional>
           <optional>
+            <ref name="Solutions"/>
+          </optional>
+          <optional>
             <ref name="References"/>
           </optional>
         </group>
@@ -120,6 +123,9 @@
           <zeroOrMore>
             <ref name="Exercises"/>
           </zeroOrMore>
+          <optional>
+            <ref name="Solutions"/>
+          </optional>
           <optional>
             <ref name="References"/>
           </optional>
@@ -149,6 +155,9 @@
             <ref name="Exercises"/>
           </optional>
           <optional>
+            <ref name="Solutions"/>
+          </optional>
+          <optional>
             <ref name="References"/>
           </optional>
         </group>
@@ -162,6 +171,9 @@
           <zeroOrMore>
             <ref name="Exercises"/>
           </zeroOrMore>
+          <optional>
+            <ref name="Solutions"/>
+          </optional>
           <optional>
             <ref name="References"/>
           </optional>
@@ -191,6 +203,9 @@
             <ref name="Exercises"/>
           </optional>
           <optional>
+            <ref name="Solutions"/>
+          </optional>
+          <optional>
             <ref name="References"/>
           </optional>
         </group>
@@ -204,6 +219,9 @@
           <zeroOrMore>
             <ref name="Exercises"/>
           </zeroOrMore>
+          <optional>
+            <ref name="Solutions"/>
+          </optional>
           <optional>
             <ref name="References"/>
           </optional>
@@ -229,6 +247,9 @@
       </oneOrMore>
       <optional>
         <ref name="Exercises"/>
+      </optional>
+      <optional>
+        <ref name="Solutions"/>
       </optional>
       <optional>
         <ref name="References"/>
@@ -552,7 +573,10 @@
     <element name="backmatter">
       <ref name="MetaDataTitleOptional"/>
       <zeroOrMore>
-        <ref name="Appendix"/>
+        <choice>
+          <ref name="Appendix"/>
+          <ref name="Solutions"/>
+        </choice>
       </zeroOrMore>
       <optional>
         <ref name="References"/>
@@ -625,6 +649,26 @@
           <ref name="ExerciseGroup"/>
         </choice>
       </oneOrMore>
+      <optional>
+        <ref name="ConclusionDivision"/>
+      </optional>
+    </element>
+  </define>
+  <define name="Solutions">
+    <element name="solutions">
+      <ref name="MetaDataTitleOptional"/>
+      <optional>
+        <attribute name="inline"/>
+      </optional>
+      <optional>
+        <attribute name="divisional"/>
+      </optional>
+      <optional>
+        <attribute name="project"/>
+      </optional>
+      <optional>
+        <ref name="IntroductionDivision"/>
+      </optional>
       <optional>
         <ref name="ConclusionDivision"/>
       </optional>
