@@ -950,7 +950,7 @@ the xsltproc executable.
                     </technology>
                 </subsubsection>
 
-                <exercises>
+                <exercises xml:id="exercises-subsection-solo">
                     <exercise xml:id="exercise-test-number">
                         <statement>
                             <p>This is an exercise in an <q>Exercises</q> subdivision at the level of a subsubsection.  There is no question other than if the numbering is appropriate.  Here is a self-referential link: Exercise<nbsp /><xref ref="exercise-test-number" />.</p>
@@ -967,7 +967,7 @@ the xsltproc executable.
                     </exercise>
                 </exercises>
 
-                <solutions inline="hint solution answer" divisional="hint solution answer" project="hint solution answer">
+                <solutions xml:id="solutions-subsection" inline="hint solution answer" divisional="hint solution answer" project="hint solution answer">
                     <title>Solutions for This Subsection</title>
                     <idx><h>solutions</h><h>for a division</h></idx>
 
@@ -1524,7 +1524,7 @@ the xsltproc executable.
                 </md></p>
 
                 <p>Generally, you cannot use any <init>XML</init> elements inside of the mathematics elements.  An exception is the <c>xref</c> element which you might want to use to provide justifications for the steps of a derivation.  Here is a visual example that is mathematically meaningless,<md>
-                    <mrow xml:id="equation-with-no-number">A&amp;=B+C&amp;&amp;<xref ref="corollary-FTC-derivative" text="type-global" /></mrow>
+                    <mrow>A&amp;=B+C&amp;&amp;<xref ref="corollary-FTC-derivative" text="type-global" /></mrow>
                     <mrow>&amp;=D+E&amp;&amp;<xref ref="theorem-FTC" text="title" /></mrow>
                 </md>.</p>
             </subsection>
@@ -2482,7 +2482,7 @@ the xsltproc executable.
 
             </exercises>
 
-            <exercises>
+            <exercises xml:id="exercises-section-multiple">
                 <title>More Exercises</title>
 
                 <exercise>
@@ -2535,7 +2535,7 @@ the xsltproc executable.
 
             </exercises>
 
-            <references>
+            <references xml:id="references-section">
                 <title>References</title>
                 <idx><h>references</h><h>within a section</h></idx>
 
@@ -4467,7 +4467,7 @@ the xsltproc executable.
                 <li><p>Display Mathematics: single, first with no name: <xref ref="equation-alternate-FTC" />.  Then with an autoname: <xref ref="equation-alternate-FTC" text="type-global" />.</p></li>
                 <li><p>Display Mathematics: multi-row, first with no name: <xref ref="equation-use-FTC" />.  Then with an autoname: <xref ref="equation-use-FTC" text="type-global" />.  And two, with a plural form: <xref ref="equation-alternate-FTC">Equations</xref> and <xref ref="equation-use-FTC" text="global" />.</p></li>
                 <li><p>Display mathematics: an equation with  <q>local</q> tag, which should not be used so very far away: <xref ref="equation-local-tag" />.</p></li>
-                <li><p>You can author a cross-reference to a displayed equation with no number, but it will not be very satisfying: <xref ref="equation-with-no-number" />.  Perhaps we should issue a warning?</p></li>
+                <li><p>You can author a cross-reference to a displayed equation with no number, but it will not be very satisfying.  You should get a warning if you try.</p></li>
                 <li><p>Exercises (divisional), a range, with plural form provided to override autonaming: <xref first="exercises-null-problem" last="exercises-cosine-derivative">Exercises</xref>.</p></li>
                 <li><p>Exercise (inline): with enclosed hint at <xref ref="exercise-essay" /></p></li>
                 <li><p>A group of two exercises, with introduction, conclusion: <xref ref="exercisegroup-two-problems" text="type-global" /></p></li>
@@ -4502,7 +4502,9 @@ the xsltproc executable.
                 <li><p>A cross-reference to a paragraph (<c>p</c>) in the <c>statement</c> of an <c>exercise</c>: <xref ref="paragraph-in-exercise" text="title">paragraph</xref>.  Notice that such a paragraph has no number and no title, so you need to (a) use <c>text='title'</c>, and (b) provide custom text for the title, as an override that becomes the content of the link.  You may wish to provide very explicit location information for hardcopy print.  Notice that this is not a cross-reference to the <c>exercise</c>, just a small portion of it.</p></li>
                 <li><p>This opens a knowl for an <c>example</c>.  It has a solution, which is orginally presented as a hidden knowl.  But since this version is a duplicate, the knowl for the solution is a file version, not an embedded version, and hence free from duplicating any unique identifaction like an <init>HTML</init> id.  So we test its styling and function here: <xref ref="example-structured" text="type-global" /></p></li>
                 <li><p>A cross-reference to a poem, where we need to use a title for the link text, since a <c>poem</c> is not numbered: <xref ref="poem-light-brigade" text="title" /></p></li>
-                <!-- <li><p>: <xref ref="" /></p></li> -->
+                <li><p>A cross-reference to a <tag>references</tag> division in a subsection, which should not be numbered where born, but which has the number of its parent division in a cross-reference: <xref ref="references-section" text="type-global"/>.  And a cross-reference to a <tag>references</tag> division, which is the <q>main</q> bibliography in the back matter, and so is not numbered where born, nor in a cross-reference (which we must accomplish via it's title): <xref ref="references-backmatter" text="title"/>.</p></li>
+                <li><p>A cross-reference to a <tag>solutions</tag> division in a subsection, which should not be numbered where born, but which has the number of its parent division in a cross-reference: <xref ref="solutions-subsection" text="type-global"/>.  And a cross-reference to a <tag>solutions</tag> division, which should appear as an appendix both where born and as a cross-reference: <xref ref="solutions-backmatter" text="type-global"/>.</p></li>
+                <li><p>A cross-reference to an <tag>exercises</tag> division in a subsection, which is the only such division in that subsection and therefore should not be numbered where born, but which has the number of its parent division in a cross-reference: <xref ref="exercises-subsection-solo" text="type-global"/>.  In contrast we cross-reference an <tag>exercises</tag> division which is one of two inside a section, and therefore is numbered, when born and when cross-referenced, in continuity with the preceding subsections: <xref ref="exercises-section-multiple" text="type-global"/>.</p></li>
             </ul></p>
 
             <p>Cross-references to structural elements of the document will always take you there directly, since even in the HTML version these parts never get realized as knowls.  You will find such links sprinkled through this document, but here is an autonamed link to a subsubsection:  <xref ref="subsubsection-different-integrals" text="type-global" />.</p>
@@ -7492,7 +7494,7 @@ the xsltproc executable.
                 <notation-list />
             </appendix>
 
-            <solutions inline="hint solution answer" divisional="hint solution answer" project="answer">
+            <solutions xml:id="solutions-backmatter" inline="hint solution answer" divisional="hint solution answer" project="answer">
                 <title>Solutions to Selected Exercises</title>
                 <idx><h>solutions</h><h>as an appendix</h></idx>
 
@@ -7540,7 +7542,7 @@ the xsltproc executable.
             <!-- Bibliography/References can appear anywhere, -->
             <!-- but these are in the backmatter              -->
 
-            <references>
+            <references xml:id="references-backmatter">
                 <title>References</title>
 
                 <biblio type="raw" xml:id="biblio-judson-AATA">Tom Judson, <title>Abstract Algebra: Theory and Applications</title>.
