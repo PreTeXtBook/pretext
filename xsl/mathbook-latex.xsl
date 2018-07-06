@@ -3180,109 +3180,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Structural Nodes -->
 <!-- ################ -->
 
-<!-- TODO: split out an appendix-specific version of following? -->
-
-<!-- Subdivisions, Parts down to Subsubsections               -->
-<!-- Mostly relies on element names echoing latex names       -->
-<!-- (1) appendices are just chapters after \appendix macro -->
-<!-- (2) exercises, references can appear at any depth,       -->
-<!--     so compute the subdivision name                      -->
+<!-- Divisions, "part" to "subsubsection", and specialized -->
 <xsl:template match="part|chapter|appendix|section|subsection|subsubsection|exercises|solutions|references">
     <!-- appendices are peers of chapters (book) or sections (article)  -->
     <!-- so we need to slip this in first, with book's \backmatter later-->
     <!-- NB: if no appendices, the backmatter template does \backmatter -->
-    <xsl:if test="(self::appendix or (parent::backmatter and self::solutions)) and not(preceding-sibling::appendix or preceding-sibling::solutions)">
-        <xsl:text>%&#xa;</xsl:text>
-        <xsl:text>\appendix&#xa;</xsl:text>
-        <xsl:text>%&#xa;</xsl:text>
-    </xsl:if>
     <xsl:apply-templates select="." mode="console-typeout" />
     <xsl:apply-templates select="." mode="begin-language" />
-    <!-- Construct the header of the subdivision -->
-    <xsl:text>\</xsl:text>
-    <xsl:apply-templates select="." mode="division-name" />
-    <!-- Handle section titles carefully.  Sanitized versions              -->
-    <!-- as optional argument to table of contents, headers.               -->
-    <!-- http://www.tex.ac.uk/cgi-bin/texfaq2html?label=ftnsect            -->
-    <!-- TODO: get non-footnote title from "simple" title routines         -->
-    <!-- TODO: let author specify short versions (ToC, header)             -->
-    <!--                                                                   -->
-    <!-- There is no \backmatter macro for the article class A final       -->
-    <!-- references section and a back colophon need to have their number  -->
-    <!-- suppressed and a table of contents entry manufactured This ad-hoc -->
-    <!-- treatment seems preferable to a more general scheme, but maybe    -->
-    <!-- someday numbering will be on/off and this will be easy            -->
-    <!--                                                                   -->
-    <!-- LaTeX's *optional* arguments are counter to TeX's arguments       -->
-    <!-- So text in an optional argument should always be in a group,      -->
-    <!-- especially if it contains a closing bracket                       -->
-    <!-- We have such protection below, and elsewhere without comment      -->
-    <!-- See http://tex.stackexchange.com/questions/99495                  -->
-    <!-- LaTeX3e with the xparse package might make this unnecessary       -->
-
-    <!-- Some divisions are not born with a number, so we need * form   -->
-    <!-- This should only be at the end of the parent division, so that -->
-    <!-- numbering otherwise is not disturbed                           -->
-    <xsl:variable name="b-unnumbered">
-        <xsl:choose>
-            <!-- references are never numbered -->
-            <xsl:when test="self::references">
-                <xsl:value-of select="true()" />
-            </xsl:when>
-            <!-- exercises are numbered if not unique within division -->
-            <xsl:when test="self::exercises">
-                <xsl:variable name="nexercises" select="count(preceding-sibling::exercises|following-sibling::exercises) + 1" />
-                <xsl:choose>
-                    <xsl:when test="$nexercises = 1">
-                        <xsl:value-of select="true()" />
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:value-of select="false()" />
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:when>
-            <xsl:when test="self::solutions and not(ancestor::backmatter)">
-                <xsl:value-of select="true()" />
-            </xsl:when>
-            <!-- no other divisions are exceptional -->
-            <xsl:otherwise>
-                <xsl:value-of select="false()" />
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <!-- Either this is an unnumbered, no ToC version -->
-    <!-- or it is a numbered, ToC short title version -->
-    <xsl:choose>
-        <!-- Use starred form in these unnumbered cases -->
-        <xsl:when test="$b-unnumbered = 'true'">
-            <xsl:text>*</xsl:text>
-        </xsl:when>
-        <!-- otherwise provide the short version as optional argument -->
-        <xsl:otherwise>
-            <xsl:text>[{</xsl:text>
-            <xsl:apply-templates select="." mode="title-simple"/>
-            <xsl:text>}]</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-    <!-- The real title and a label -->
-    <xsl:text>{</xsl:text>
-    <xsl:apply-templates select="." mode="title-full"/>
-    <xsl:text>}</xsl:text>
-    <xsl:apply-templates select="." mode="label" />
-    <xsl:text>&#xa;</xsl:text>
-    <!-- We add a ToC entry for the starred versions that lacked them -->
-    <!-- These may be created for divisions below the ToC display     -->
-    <!-- level, but they do not render as the ToC level prevails      -->
-    <!-- NB: an optional short title on a starred form caused a LaTeX -->
-    <!-- compilation that rendered poorly, which we never figured     -->
-    <!-- out, so we just avoid that combination (2018-04-12)          -->
-    <xsl:if test="$b-unnumbered = 'true'">
-        <xsl:text>\addcontentsline{toc}{</xsl:text>
-        <xsl:apply-templates select="." mode="division-name" />
-        <xsl:text>}{</xsl:text>
-        <xsl:apply-templates select="." mode="title-simple" />
-        <xsl:text>}&#xa;</xsl:text>
-    </xsl:if>
+    <xsl:apply-templates select="." mode="latex-division-heading" />
     <!-- List the author of this division, if present -->
     <xsl:if test="author">
         <xsl:text>\noindent{\Large\textbf{</xsl:text>
@@ -3318,6 +3223,86 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\typeout{************************************************}&#xa;</xsl:text>
 </xsl:template>
 
+<!-- ################ -->
+<!-- Division Headers -->
+<!-- ################ -->
+
+<!-- The first line or two of a division vary some, -->
+<!-- especially for specialized divisions, so we    -->
+<!-- abstract that portion of the output            -->
+
+<!-- The "normal" parts of a book are straightforward       -->
+<!-- Always titled, always numbered by LaTeX, always to ToC -->
+<!-- Includes a "short" title for ToC, running heads, etc   -->
+<!-- LaTeX's *optional* arguments are counter to TeX's arguments  -->
+<!-- So text in an optional argument should always be in a group, -->
+<!-- especially if it contains a closing bracket                  -->
+<!-- We have such protection below, and elsewhere without comment -->
+<!-- See http://tex.stackexchange.com/questions/99495             -->
+<!-- LaTeX3e with the xparse package might make this unnecessary  -->
+
+<xsl:template match="part|chapter|section|subsection|subsubsection|exercises[count(parent::*/exercises) > 1]" mode="latex-division-heading">
+    <xsl:text>\</xsl:text>
+    <xsl:apply-templates select="." mode="division-name" />
+    <xsl:text>[{</xsl:text>
+    <xsl:apply-templates select="." mode="title-simple"/>
+    <xsl:text>}]</xsl:text>
+    <xsl:text>{</xsl:text>
+    <xsl:apply-templates select="." mode="title-full"/>
+    <xsl:text>}</xsl:text>
+    <xsl:apply-templates select="." mode="label" />
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
+<!-- A "solutions" division in the back matter is implemented as        -->
+<!-- an appendix.  The levels and division-name templates will produce  -->
+<!-- a LaTeX chapter for a "book" and a LaTeX section for an "article". -->
+<!-- To make LaTeX produce "lettered" appendices we issue the \appendix -->
+<!-- macro prior to the first to match here.                            -->
+<xsl:template match="appendix|backmatter/solutions" mode="latex-division-heading">
+    <xsl:if test="not(preceding-sibling::appendix|preceding-sibling::solutions)">
+        <xsl:text>%&#xa;</xsl:text>
+        <xsl:text>\appendix&#xa;</xsl:text>
+        <xsl:text>%&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:text>\</xsl:text>
+    <xsl:apply-templates select="." mode="division-name" />
+    <xsl:text>[{</xsl:text>
+    <xsl:apply-templates select="." mode="title-simple"/>
+    <xsl:text>}]</xsl:text>
+    <xsl:text>{</xsl:text>
+    <xsl:apply-templates select="." mode="title-full"/>
+    <xsl:text>}</xsl:text>
+    <xsl:apply-templates select="." mode="label" />
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
+<!-- Following elements never have their number displayed at birth -->
+<!-- since they are unique either (a) within the document (as part -->
+<!-- of the back matter), or (b) within some division (chapter,    -->
+<!-- section,...).  So we use a *-form and manually create a ToC   -->
+<!-- entry with a "simple" title at the right level.               -->
+<xsl:template match="solutions|references|exercises[count(parent::*/exercises) = 1]" mode="latex-division-heading">
+    <xsl:text>\</xsl:text>
+    <xsl:apply-templates select="." mode="division-name" />
+    <xsl:text>*</xsl:text>
+    <xsl:text>{</xsl:text>
+    <xsl:apply-templates select="." mode="title-full"/>
+    <xsl:text>}</xsl:text>
+    <xsl:apply-templates select="." mode="label" />
+    <xsl:text>&#xa;</xsl:text>
+    <!-- We add a ToC entry for the starred versions. These may be    -->
+    <!-- generated for divisions that are below the ToC display       -->
+    <!-- level, but they do not render as the ToC level prevails      -->
+    <!-- NB: an optional short title on a starred form caused a LaTeX -->
+    <!-- compilation that rendered poorly, which we never figured     -->
+    <!-- out, so we just avoid that combination (2018-04-12)          -->
+    <xsl:text>\addcontentsline{toc}{</xsl:text>
+    <xsl:apply-templates select="." mode="division-name" />
+    <xsl:text>}{</xsl:text>
+    <xsl:apply-templates select="." mode="title-simple" />
+    <xsl:text>}&#xa;</xsl:text>
+</xsl:template>
 
 <!-- Introductions and Conclusions -->
 <!-- Simple containers, allowed before and after      -->
