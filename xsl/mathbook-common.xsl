@@ -3521,12 +3521,18 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- To respect the maximum level for numbering, we              -->
 <!-- return an empty serial number at an excessive level,        -->
 <!-- otherwise we call for a serial number relative to peers     -->
-<!-- Exercises can be multiple (numbered) or single (unnumbered, -->
-<!-- with contents getting their structure number from parent)   -->
-<!-- (so sometimes the "subdivision-serial-number" is empty)     -->
-<!-- References are "one-off" always, hence never numbered,      -->
-<!-- and so have a blank serial number                           -->
-<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|exercises|backmatter/solutions" mode="serial-number">
+<!-- References are numbered divisions when used in the main     -->
+<!-- matter, but their number comes from their parent, since     -->
+<!-- they are unique.  The instance in the back matter is also   -->
+<!-- unique, and so does not get a number.                       -->
+<!-- "exercises" divisions may come solo, or alongside others.   -->
+<!-- When multiple, they get hierachical numbers like other      -->
+<!-- divisions.  When solo, they are numbered like their         -->
+<!-- enclosing parent.  So here, and elsewhere, we integrate     -->
+<!-- the multiple case.  Similarly, solutions in the back matter -->
+<!-- get rendered like appendices, but are always solo when      -->
+<!-- contained in a main matter division.                        -->
+<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|backmatter/solutions|exercises[count(parent::*/exercises)>1]" mode="serial-number">
     <xsl:variable name="relative-level">
         <xsl:apply-templates select="." mode="level" />
     </xsl:variable>
@@ -3538,20 +3544,19 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:choose>
 </xsl:template>
 
-<!-- Division number relative to parent (super-division, or book/article)  -->
-<!--   1. One-Off always (eg references), must appear at end of parent:    -->
- <!--     Not numbered, so structure number of contents comes from parent  -->
-<!--   2. "Real" divisions (eg subsection)                                 -->
-<!--       Count from parent but avoid un-numbered (specialized) divisions -->
-<!--   3. "exercises" - numbered if multiple, un-numbered if exactly one,  -->
-<!--      we require these to appear *after* real divisions, making        -->
-<!--      counts simpler since for the divisions we just need number       -->
-<!--      preceding, with nothing intermediate to count                    -->
-<!--   4. "solutions" - counted with appendix, when in backmatter          -->
+<!-- Division number relative to parent (super-division, or book/article)   -->
+<!--   1. Unique always (eg "references"), must appear at end of a division -->
+<!--      Numbers come from elsewhere, typically their parents              -->
+<!--   2. "Real" divisions (eg subsection)                                  -->
+<!--       Count from parent but avoid un-numbered (specialized) divisions  -->
+<!--   3. "exercises" - numbered if multiple, un-numbered if exactly one,   -->
+<!--      We require these to appear *after* real divisions, making         -->
+<!--      counts simpler since for the divisions we just need number        -->
+<!--      preceding, with nothing intermediate to count or discount         -->
+<!--   4. "solutions" - counted with appendix, when in backmatter           -->
 <xsl:template match="part" mode="division-serial-number">
     <xsl:number format="I" />
 </xsl:template>
-<!-- TODO: ban references and exercises as peers of chapters (overall references can go in backmatter) -->
 <xsl:template match="chapter" mode="division-serial-number">
     <!-- chapters, in parts or not -->
     <xsl:choose>
@@ -3591,17 +3596,10 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <xsl:template match="subsubsection" mode="division-serial-number">
     <xsl:number count="subsubsection" format="1" />
 </xsl:template>
-<!-- "exercises": single or multiple -->
-<xsl:template match="exercises" mode="division-serial-number">
-    <xsl:variable name="nexercises" select="count(preceding-sibling::exercises|following-sibling::exercises) + 1" />
-    <xsl:choose>
-        <!-- if singleton, then empty, will signal empty "serial-number" -->
-        <xsl:when test="$nexercises = 1" />
-        <xsl:otherwise>
-            <!-- else count preceding peers that are numbered divisions -->
-            <xsl:number count="part|chapter|appendix|section|subsection|subsubsection|exercises" format="1" />
-        </xsl:otherwise>
-    </xsl:choose>
+<!-- "exercises": multiple only, include all possible -->
+<!-- peers, which excludes "part" and "appendix"      -->
+<xsl:template match="exercises[count(parent::*/exercises)>1]" mode="division-serial-number">
+    <xsl:number count="chapter|section|subsection|subsubsection|exercises[count(parent::*/exercises)>1]" format="1" />
 </xsl:template>
 
 <!-- Serial Numbers: Theorems, Examples, Inline Exercise, Figures, Etc. -->
@@ -4122,15 +4120,13 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- a title for identification and cross-referencing.   -->
 <xsl:template match="book|article|letter|memo|paragraphs|blockquote|preface|abstract|acknowledgement|biography|foreword|dedication|index-part|index[index-list]|colophon|webwork|p|assemblage|aside|biographical|historical|case|contributor" mode="serial-number" />
 
-<!-- There are one-off divisions, such as references, we do not ever number -->
-<!-- They get their structure numbers from their parents                    -->
-<xsl:template match="references" mode="serial-number" />
-
-<!-- "solutions" not in the "backmatter" get  -->
-<!-- their serial-number from their parent's -->
-<xsl:template match="solutions[not(parent::backmatter)]" mode="serial-number">
-    <xsl:apply-templates select="parent::*" mode="serial-number" />
-</xsl:template>
+<!-- Some divisions, like "exercises", "solutions", "references",     -->
+<!-- are part of the hierarchical numbering scheme, and look simply   -->
+<!-- to their parent.  Which could be the top-level when in th main   -->
+<!-- matter (we handle cases of children of "backmatter" carefully    -->
+<!-- elsewhere or it does not happen).  So we need an empty structure -->
+<!-- number for these cases.                                          -->
+<xsl:template match="book|article|letter|memo" mode="structure-number" />
 
 <!-- Some items are "containers".  They are not numbered, you  -->
 <!-- cannot point to them, they are invisible to the reader    -->
@@ -4149,18 +4145,10 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- in the vicinity of computing serial numbers of list items in    -->
 <!-- ordered lists.                                                  -->
 
-<!-- References in the backmatter are the "master" version -->
-<!-- The subdivision gets no number and the references     -->
-<!-- should similarly lack a structural number prefix      -->
-<xsl:template match="backmatter/references" mode="serial-number" />
-
 <!-- Various displayed equations are not numbered.     -->
 <!-- We do not consider the local @tag to be a number, -->
 <!-- as it is more a string, formed from symbols       -->
 <xsl:template match="me|md/mrow[not(@number='yes')]|mdn/mrow[@number='no']|mrow[@tag]" mode="serial-number" />
-
-
-
 
 <!-- WeBWorK problems are never numbered, because they live    -->
 <!-- in (numbered) exercises.  But they have identically named -->
@@ -4188,6 +4176,34 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- "webwork-reps" collection                              -->
 <xsl:template match="webwork-reps/static/stage" mode="serial-number">
     <xsl:number count="stage" from="static" />
+</xsl:template>
+
+<!-- Serial Numbers: Specialized Divisions -->
+
+<!-- Some divisions get their numbers from their parents, or  -->
+<!-- in other ways.  We are careful to do this by determining -->
+<!-- the serial-numer and the structure-number, so that other -->
+<!-- devices (like local numbers) will behave correctly.      -->
+<!-- Structure numbers are computed elsewhere, but in tandem. -->
+
+<!-- "references" are solo in main matter divisions, -->
+<!-- unique and not numbered in back matter          -->
+<xsl:template match="references" mode="serial-number">
+    <xsl:apply-templates select="parent::*" mode="serial-number" />
+</xsl:template>
+<xsl:template match="backmatter/references" mode="serial-number" />
+
+<!-- "solutions", not in the "backmatter", get their    -->
+<!-- serial-number from their parent  (those in the     -->
+<!-- back matter get counted elsewhere with appendices) -->
+<xsl:template match="solutions[not(parent::backmatter)]" mode="serial-number">
+    <xsl:apply-templates select="parent::*" mode="serial-number" />
+</xsl:template>
+
+<!-- "solo" exercises, in main matter divisions, or inside -->
+<!-- an "appendix" are numbered as by their parent         -->
+<xsl:template match="exercises[count(parent::*/exercises)=1]" mode="serial-number">
+    <xsl:apply-templates select="parent::*" mode="serial-number" />
 </xsl:template>
 
 
@@ -4225,7 +4241,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- to exclude "part" from the ancestors?                        -->
 
 <xsl:template match="*" mode="multi-number">
-    <xsl:param name="nodes" select="ancestor::*[self::part or self::chapter or self::appendix or self::section or self::subsection or self::subsubsection or self::exercises or self::solutions or self::references]"/>
+    <xsl:param name="nodes" select="ancestor::*[self::part or self::chapter or self::appendix or self::section or self::subsection or self::subsubsection or self::solutions or self::exercises[count(parent::*/exercises)>1]]"/>
     <xsl:param name="levels" />
     <xsl:param name="pad" />
 
@@ -4293,36 +4309,38 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Structure Numbers: Divisions -->
 <!-- NB: this is number of the *container* of the division,   -->
 <!-- a serial number for the division itself will be appended -->
-<!-- NB:  newexercises: removed "exercises" here, duplicated below -->
-<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|backmatter/solutions" mode="structure-number">
+<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|backmatter/solutions|exercises[count(parent::*/exercises)>1]" mode="structure-number">
     <xsl:apply-templates select="." mode="multi-number">
         <xsl:with-param name="levels" select="$numbering-maxlevel - 1" />
         <xsl:with-param name="pad" select="'no'" />
     </xsl:apply-templates>
 </xsl:template>
 
-<!-- Structure Numbers: Exercises Division -->
-<!-- A singleton "exercises" has an empty "divisional-serial-number"  -->
-<!-- and hence an empty "serial-number".  In this case we should      -->
-<!-- always be getting the structure number of a contained "exercise" -->
-<!-- by looking up to the enclosing division                          -->
-<xsl:template match="exercises" mode="structure-number">
-    <xsl:apply-templates select="." mode="multi-number">
-        <xsl:with-param name="levels" select="$numbering-maxlevel - 1" />
-        <xsl:with-param name="pad" select="'no'" />
-    </xsl:apply-templates>
-</xsl:template>
+<!-- Structure Numbers: Specialized Divisions -->
+<!-- Some divisions get their numbers from their parents, or  -->
+<!-- in other ways.  We are careful to do this by determining -->
+<!-- the serial-numer and the structure-number, so that other -->
+<!-- devices (like local numbers) will behave correctly.      -->
+<!-- Serial numbers are computed elsewhere, but in tandem.    -->
 
-<!-- "solutions" not in the "backmatter" get    -->
-<!-- their structure number from their parent's -->
+<!-- "references" are solo in main matter divisions, -->
+<!-- unique and not numbered in back matter          -->
+<xsl:template match="references" mode="structure-number">
+    <xsl:apply-templates select="parent::*" mode="structure-number" />
+</xsl:template>
+<xsl:template match="backmatter/references" mode="structure-number" />
+
+<!-- "solutions", not in the "backmatter", get their    -->
+<!-- structure-number from their parent  (those in the  -->
+<!-- back matter get counted elsewhere with appendices) -->
 <xsl:template match="solutions[not(parent::backmatter)]" mode="structure-number">
     <xsl:apply-templates select="parent::*" mode="structure-number" />
 </xsl:template>
 
-<!-- "references" are not numbered, and get their structure  -->
-<!-- number from their parent, due to being always one-off   -->
-<xsl:template match="references" mode="structure-number">
-    <xsl:apply-templates select="parent::*" mode="number" />
+<!-- "solo" exercises, in main matter divisions, or inside -->
+<!-- an "appendix" are numbered as by their parent         -->
+<xsl:template match="exercises[count(parent::*/exercises)=1]" mode="structure-number">
+    <xsl:apply-templates select="parent::*" mode="structure-number" />
 </xsl:template>
 
 <!-- Structure Numbers: Theorems, Examples, Projects, Figures -->
