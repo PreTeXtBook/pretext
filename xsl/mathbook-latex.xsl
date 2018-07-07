@@ -2959,8 +2959,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="the-number">
         <xsl:apply-templates select="." mode="number" />
     </xsl:variable>
-    <!-- no trailing space if no number -->
-    <xsl:if test="not($the-number = '')">
+    <!-- no trailing space if no number                          -->
+    <!-- Solo "exercises" do not display their number at "birth" -->
+    <xsl:if test="not($the-number = '' or self::exercises[count(parent::*/exercises)=1])">
         <xsl:value-of select="$the-number" />
         <xsl:text> </xsl:text>
     </xsl:if>
