@@ -7932,162 +7932,157 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<!-- ################ -->
-<!-- Cross-References -->
-<!-- ################ -->
+<!-- ########################### -->
+<!-- Labels and Cross-References -->
+<!-- ########################### -->
 
-<!-- Most cross-references use the traditional LaTeX  -->
-<!-- \label, \ref scheme.  But we use \hyperref to    -->
-<!-- achieve this, so we get active links in an       -->
-<!-- electronic PDF.  We can squelch their electronic -->
-<!-- character (and color) for a print version        -->
-<!-- with a switch. The flexibility of the hyperref   -->
-<!-- package allows us to make our own link text in   -->
-<!-- a variety of different ways, duplicating         -->
-<!-- functionality of a package like  cleverref.      -->
-<!--                                                  -->
-<!-- Some objects LaTeX will not number (ie a         -->
-<!-- \label{} is ineffective), and others we may not  -->
-<!-- want to number.  But we want to cross-reference  -->
-<!-- to them anyway (generally, PreTeXt-wide), so we  -->
-<!-- use the \hypertarget, \hyperref scheme.          -->
-<!--                                                  -->
-<!-- The next modal template encodes this distinction -->
 
-<!-- Unless exceptional, traditional LaTeX -->
+<!-- We have two schemes in place for marking, number-generation, and       -->
+<!-- cross-referencing of objects.  Our use of the  hyperref  package       -->
+<!-- allows for more expressive links which allow us to duplicate LaTeX     -->
+<!-- packages like "cleverref" and the base functionality of HTML.  We      -->
+<!-- could accomplish (nearly) all of this with the second scheme only, but -->
+<!-- we are following LaTeX's rules for numbering PreTeXt-wide, so the      -->
+<!-- first scheme provides good checks.                                     -->
+<!--                                                                        -->
+<!-- 1.  Traditional LaTeX \label{}, \ref{}                                 -->
+<!-- \label marks a location.  If inside an item/object which LaTeX numbers -->
+<!-- \naturally, then ref{} will generate that number.  In order to make an -->
+<!-- \electronic PDF, we use the  hyperref  package, and specifically, the  -->
+<!-- \hyperref[]{} command.  The string that associates these comes from    -->
+<!-- \our "internal-id" template, often the @xml:id.  Example:              -->
+<!--                                                                        -->
+<!--   \begin{theorem}\label{foo}                                           -->
+<!--                                                                        -->
+<!--   \hyperref[foo]{Theorem~\ref{foo}}                                    -->
+<!--                                                                        -->
+<!-- Note: for print, we could use "Theorem~\ref{foo}" just as easily and   -->
+<!-- not utilize  hyperref  (presently, we just color links black and make  -->
+<!-- them inactive via \hypersetup{draft}).                                 -->
+<!--                                                                        -->
+<!-- 2.  Hyperref                                                           -->
+<!-- Some items are not numbered naturally by LaTeX, like a "proof".  Other -->
+<!-- items we number in different ways, such as a solo "exercises" division -->
+<!-- whose number is that of its containing division.  Some items are not   -->
+<!-- numbered at all, like a "preface".  Here we use \hypertarget{}{} as    -->
+<!-- the marker, and \hyperlink{}{} with custom text (title, hard-coded     -->
+<!-- number, etc) as the visual, clickable link.  The "internal-id" is used -->
+<!-- as before to link the two commands.  The second argument of            -->
+<!-- \hypertarget can be text, but we uniformly leave it empty (a \null     -->
+<!-- target text was unnecessary and visible, 2015-12-12).  Example:        -->
+<!--                                                                        -->
+<!--   \begin{proof}\hypertarget{foo}{}                                     -->
+<!--                                                                        -->
+<!--   \hyperlink{foo}{Proof~2.4.17}                                        -->
+<!--                                                                        -->
+<!-- Note: for print, we could use "Proof~2.4.17" just as easily and not    -->
+<!-- utilize  hyperref  (presently, we just color links black and make them -->
+<!-- inactive via \hypersetup{draft}).                                      -->
+<!--                                                                        -->
+<!-- Note: footnotes, "fn" are exceptional, see notes below                 -->
+
+<!-- ################################ -->
+<!-- Labels (cross-reference targets) -->
+<!-- ################################ -->
+
+<!-- We assume traditional LaTeX  label/ref  system as the default, so      -->
+<!-- anything that we allow to be the target of a cross-reference AND LaTeX -->
+<!-- does not number automatically, we need to list in the "false"          -->
+<!-- template. Anything in this latter list, which can be cross-referenced  -->
+<!-- (by number or by title) will get a  \hypertarget  via the "label"      -->
+<!-- template. Exceptions - "book" and "article" are carefully marked in    -->
+<!-- special ways, so inclusion here is not ever exercised, unless we made  -->
+<!-- some edits to employ this template in those special places. This list  -->
+<!-- here is everything numbered by PreTeXt, followed by targets that are   -->
+<!-- not numbered.                                                          -->
+
 <xsl:template match="*" mode="xref-as-ref">
     <xsl:value-of select="true()" />
 </xsl:template>
 
-<!-- Exceptions -->
-<!-- We hard-code some numbers (divisional exercises) and     -->
-<!-- we institute some numberings that LaTeX does not do      -->
-<!-- naturally - references in extra sections, proofs,        -->
-<!-- items in ordered lists (alone or in an exercise),        -->
-<!-- hints, answers, solutions. A xref to the very top level  -->
-<!-- will land at the table of contents or at the             -->
-<!-- title/titlepage. For an exercise group we point to       -->
-<!-- the introduction.                                        -->
-<xsl:template match="p|paragraphs|blockquote|exercises//exercise|biblio|biblio/note|proof|case|ol/li|dl/li|hint|answer|solution|exercisegroup|book|article|contributor" mode="xref-as-ref">
+<!-- Any target of a PreTeXt cross-reference, which is not naturally  -->
+<!-- numbered by a LaTeX \label{} command, needs to go here. -->
+<xsl:template match="exercises//exercise|biblio|biblio/note|proof|case|ol/li|dl/li|hint|answer|solution|exercisegroup|p|paragraphs|blockquote|contributor|colophon|book|article" mode="xref-as-ref">
     <xsl:value-of select="false()" />
 </xsl:template>
 
-<!-- Labels  (cross-reference target)-->
-
-<!-- Insert an identifier as a LaTeX label on anything       -->
-<!-- Calls to this template need come from where LaTeX likes -->
-<!-- a \label, generally someplace that can be numbered      -->
 <xsl:template match="*" mode="label">
-    <xsl:text>\label{</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
-    <xsl:text>}</xsl:text>
+    <xsl:variable name="xref-as-ref">
+        <xsl:apply-templates select="." mode="xref-as-ref" />
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$xref-as-ref = 'true'">
+            <xsl:text>\label{</xsl:text>
+            <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:text>}</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>\hypertarget{</xsl:text>
+            <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:text>}{}</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
-<!-- We hard-code some numbers (divisional exercises) and         -->
-<!-- we institute some numberings that LaTeX does not do          -->
-<!-- naturally (references in extra sections, proofs,             -->
-<!-- items in ordered lists (alone or in an exercise),            -->
-<!-- hints, answers, solutions).  We also point to                -->
-<!-- items without numbers, like a "p". For a "label"             -->
-<!-- hyperref's hypertarget mechanism fits the bill.              -->
-<!-- \null target text was unnecessary and visible (2015-12-12)   -->
-<!-- (See also modal templates for "xref-link" and "xref-number") -->
-<xsl:template match="p|paragraphs|blockquote|exercises//exercise|biblio|biblio/note|proof|exercisegroup|case|ol/li|dl/li|hint|answer|solution|contributor|colophon" mode="label">
-    <xsl:text>\hypertarget{</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
-    <xsl:text>}{}</xsl:text>
-</xsl:template>
+<!-- ################ -->
+<!-- Cross-References -->
+<!-- ################ -->
 
-<!-- Much of the cross-reference mechanism is -->
-<!-- implemented in the common routines,      -->
-<!-- here we implement two abstract templates -->
-<!-- which are called from those routines     -->
+<!-- Much of the cross-reference mechanism is implemented in the common     -->
+<!-- routines, here we need to implement two abstract templates which are   -->
+<!-- called from those routines. First we generate a number, which for      -->
+<!-- LaTeX may be the abstract representation of a \ref{} with a string     -->
+<!-- identifier.  This goes back to the common routines and is used to      -->
+<!-- fashion the entire link text.  This is the $content variable below.    -->
+<!-- From this the actual \hyperref or \hypertarget is made. Almost always, -->
+<!-- across PreTeXt, the "xref-number" template will return the number of   -->
+<!-- an item as computed in teh -common routines.  However, to maintain     -->
+<!-- fidelity with LaTeX's automatic numbering system, we create  \ref{}    -->
+<!-- as often as possible. -->
+<!--                                                                        -->
+<!-- This is the implementation of an abstract template, creating \ref{} by -->
+<!-- default. We check if a part number is needed to prevent ambiguity. The -->
+<!-- exceptions above should be either (a) not numbered, or (b) numbered in -->
+<!-- ways LaTeX cannot, so the union of the match critera here should be    -->
+<!-- the list above.  Or said differently, a new object needs to preserve   -->
+<!-- this union property across the various "xref-number" templates.        -->
+<!-- See xsl/mathbook-common.xsl for more info.                             -->
 
-<!-- The "text" of a cross-reference typically includes  -->
-<!-- a number and for LaTeX we try as hard as possible   -->
-<!-- to use the automatic numbering system.  So the text -->
-<!-- is usually a command, "\ref{}".                     -->
-
-<!-- We do not use \cite{} since we allow for multiple     -->
-<!-- bibliographies and we do not use AMSmath's \eqref{}.  -->
-<!-- Instead, we universally supply the enclosing brackets -->
-<!-- and parentheses provided by these LaTeX mechanisms.   -->
-<!-- Presumably, careful use of sed would allow these      -->
-<!-- distinctions to be recognized in the LaTeX output.    -->
-
-<!-- NB: see extensive discussion of a parallel numbering system -->
-<!-- with the hyperref package's hypertarget/hyperlink mechanism -->
-
-<!-- This is the implementation of an abstract template,  -->
-<!-- using the LaTeX \ref and \label mechanism.           -->
-<!-- We check that the item is numbered or is a displayed -->
-<!-- equation with a local tag, before dropping a \ref as -->
-<!-- part of the cross-reference                          -->
 <xsl:template match="*" mode="xref-number">
     <xsl:param name="xref" select="/.." />
+
+    <!-- number is necessary only for a checking mechanism -->
     <xsl:variable name="the-number">
         <xsl:apply-templates select="." mode="number" />
     </xsl:variable>
-    <xsl:if test="not($the-number = '')">
-        <!-- check if part prefix is needed -->
-        <xsl:variable name="needs-part-prefix">
-            <xsl:apply-templates select="." mode="crosses-part-boundary">
-                <xsl:with-param name="xref" select="$xref" />
-            </xsl:apply-templates>
-        </xsl:variable>
-        <!-- if so, append prefix with separator -->
-        <xsl:if test="$needs-part-prefix = 'true'">
+    <xsl:choose>
+        <xsl:when test="not($the-number = '')">
+            <!-- check if part prefix is needed -->
+            <xsl:variable name="needs-part-prefix">
+                <xsl:apply-templates select="." mode="crosses-part-boundary">
+                    <xsl:with-param name="xref" select="$xref" />
+                </xsl:apply-templates>
+            </xsl:variable>
+            <!-- if so, append prefix with separator -->
+            <xsl:if test="$needs-part-prefix = 'true'">
+                <xsl:text>\ref{</xsl:text>
+                <xsl:apply-templates select="ancestor::part" mode="internal-id" />
+                <xsl:text>}</xsl:text>
+                <xsl:text>.</xsl:text>
+            </xsl:if>
+            <!-- and always, a representation for the text of the xref -->
             <xsl:text>\ref{</xsl:text>
-            <xsl:apply-templates select="ancestor::part" mode="internal-id" />
+            <xsl:apply-templates select="." mode="internal-id" />
             <xsl:text>}</xsl:text>
-            <xsl:text>.</xsl:text>
-        </xsl:if>
-        <!-- and always, a representation for the text of the xref -->
-        <xsl:text>\ref{</xsl:text>
-        <xsl:apply-templates select="." mode="internal-id" />
-        <xsl:text>}</xsl:text>
-    </xsl:if>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>PTX:WARNING: there appears to be an "xref" by number to an item (of type "<xsl:value-of select="local-name(.)" />") without a number (or there is a bug).  The "xref" is</xsl:message>
+            <xsl:apply-templates select="$xref" mode="location-report" />
+            <xsl:message>             The target is</xsl:message>
+            <xsl:apply-templates select="." mode="location-report" />
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
-
-<!-- Straightforward exception, simple implementation -->
-<xsl:template match="mrow[@tag]" mode="xref-number">
-    <xsl:text>\ref{</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
-    <xsl:text>}</xsl:text>
-</xsl:template>
-
-<!-- We hard-code some numbers (divisional exercises) and   -->
-<!-- we institute some numberings that LaTeX does not do    -->
-<!-- naturally (references in extra sections, proofs,       -->
-<!-- items in ordered lists (alone or in an exercise),      -->
-<!-- hints, answers, solutions).  So for the text of a      -->
-<!-- cross-reference we use the actual number, not a \ref.  -->
-<!-- (See also modal templates for "label" and "xref-link") -->
-<!-- Exercises in sets may have hard-coded numbers, -->
-<!-- so we provide a hard-coded number              -->
-<!-- Footnotes print serial-numbers only, but   -->
-<!-- as knowls/references we desire a fully     -->
-<!-- qualified number.  So we just override the -->
-<!-- visual version in a cross-reference,       -->
-<!-- leaving the label/ref mechanism in place.  -->
-<xsl:template match="exercises//exercise|biblio|biblio/note|proof|exercisegroup|ol/li|hint|answer|solution|fn" mode="xref-number">
-    <xsl:param name="xref" select="/.." />
-    <xsl:variable name="needs-part-prefix">
-        <xsl:apply-templates select="." mode="crosses-part-boundary">
-            <xsl:with-param name="xref" select="$xref" />
-        </xsl:apply-templates>
-    </xsl:variable>
-    <xsl:if test="$needs-part-prefix = 'true'">
-        <xsl:apply-templates select="ancestor::part" mode="serial-number" />
-        <xsl:text>.</xsl:text>
-    </xsl:if>
-    <xsl:apply-templates select="." mode="number" />
-</xsl:template>
-
-<!-- Note: objectives are one-per-subdivision,  -->
-<!-- and precede the introduction, so the LaTeX -->
-<!-- \ref{} mechanism assigns the correct       -->
-<!-- number - that of the enclosing subdivision -->
 
 <!-- Tasks have a structure number from the enclosing project   -->
 <!-- and a serial number from the enumitem package on the lists -->
@@ -8103,17 +8098,71 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
 </xsl:template>
 
-<!-- This is the second abstract template                -->
-<!-- We implement every cross-reference with hyperref.   -->
-<!-- For pure print, we can turn off the actual links    -->
-<!-- in the PDF (and/or control color etc)               -->
-<!-- Mostly this is for consistency in the source        -->
-<!-- LaTeX linking is not sensitive to being located     -->
-<!-- in display mathematics, and so $location is ignored -->
-<!-- See xsl/mathbook-common.xsl for more info           -->
+<!-- Straightforward exception, simple implementation,  -->
+<!-- when an "mrow" of display mathematics is tagged    -->
+<!-- with symbols not numbers                           -->
+<xsl:template match="mrow[@tag]" mode="xref-number">
+    <xsl:text>\ref{</xsl:text>
+    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
+<!-- These exceptions are unnumbered, and are just handled explicitly, -->
+<!-- along with a check, the template produces *nothing*               -->
+<xsl:template match="p|paragraphs|blockquote|contributor|colophon|book|article" mode="xref-number">
+    <xsl:param name="xref" select="/.." />
+
+    <!-- number is necessary only for a checking mechanism -->
+    <xsl:variable name="the-number">
+        <xsl:apply-templates select="." mode="number" />
+    </xsl:variable>
+    <xsl:if test="not($the-number = '')">
+        <xsl:message>PTX:BUG:     LaTeX conversion thinks an item is not numbered, but common routines do produce a number.  The "xref" is</xsl:message>
+        <xsl:apply-templates select="$xref" mode="location-report" />
+        <xsl:message>             The target is</xsl:message>
+        <xsl:apply-templates select="." mode="location-report" />
+    </xsl:if>
+</xsl:template>
+
+<!-- Now we have items that PreTeXt numbers itself, in ways LaTeX does not. -->
+<!-- "fn" is exceptional - the \label\ref mechanism works well, providing   -->
+<!-- local numbers where born (both on the same page), but we need to       -->
+<!-- inlude "fn" at the end of this template so that cross-references get   -->
+<!-- fully-qualified numbers in the link text.                              -->
+<!--                                                                        -->
+<!-- Note: objectives are one-per-subdivision, and precede the              -->
+<!-- introduction, so the LaTeX \ref{} mechanism assigns the correct        -->
+<!-- number - that of the enclosing subdivision                             -->
+<xsl:template match="exercises//exercise|biblio|biblio/note|proof|case|ol/li|dl/li|hint|answer|solution|exercisegroup|fn" mode="xref-number">
+    <xsl:param name="xref" select="/.." />
+    <xsl:variable name="needs-part-prefix">
+        <xsl:apply-templates select="." mode="crosses-part-boundary">
+            <xsl:with-param name="xref" select="$xref" />
+        </xsl:apply-templates>
+    </xsl:variable>
+    <xsl:if test="$needs-part-prefix = 'true'">
+        <xsl:apply-templates select="ancestor::part" mode="serial-number" />
+        <xsl:text>.</xsl:text>
+    </xsl:if>
+    <xsl:apply-templates select="." mode="number" />
+</xsl:template>
+
+<!-- This template actually manufactures the link.  When the link lives in  -->
+<!-- a title, the link text is just reproduced.  If the number is hard-     -->
+<!-- coded, fine.  If the number is obtained by a \ref, we use the starred  -->
+<!-- form to prevent some link-inside-a-link confusion.  Some internet      -->
+<!-- sites suggest maybe we should just use the *-form universally, though  -->
+<!-- that would make the LaTex source a bit less portable?  This is where   -->
+<!-- we could use "latex.print" to output the $content variable with no     -->
+<!-- linking, perhaps making a better PDF?                                  -->
+<!--                                                                        -->
+<!-- Note that the "xref-as-ref" template is needed here to accomodate the  -->
+<!-- $target's characteristics.  Also, this template then does not need to  -->
+<!-- be edited.                                                             -->
 <xsl:template match="*" mode="xref-link">
     <xsl:param name="target" select="/.." />
     <xsl:param name="content" select="'MISSING LINK CONTENT'"/>
+
     <xsl:variable name="xref-as-ref">
         <xsl:apply-templates select="$target" mode="xref-as-ref" />
     </xsl:variable>
@@ -8154,6 +8203,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
+
 
 <!-- ################## -->
 <!-- Languages, Scripts -->
