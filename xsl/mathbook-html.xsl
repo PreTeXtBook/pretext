@@ -436,8 +436,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <li>
         <a href="{$url}">
-            <!-- important not include codenumber span -->
-            <xsl:if test="not($num = '')">
+            <!-- important not include codenumber span           -->
+            <!-- Either does not exist, or suppress as redundant -->
+            <xsl:if test="not($num = '' or self::references or self::solutions[not(parent::backmatter)] or self::exercises[count(parent::*/exercises)=1])">
                 <span class="codenumber">
                     <xsl:value-of select="$num" />
                 </span>
@@ -550,6 +551,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- References, Exercises, Solutions are universal subdivisions -->
 <!-- We give them a localized "type" computed from their level   -->
+<!-- We never show the number of a "references", where born.     -->
+<!-- We only show a "solutions" number at birth in "backmatter". -->
+<!-- We show "exercises" number at birth, if multiple.           -->
 <xsl:template match="exercises|solutions|references" mode="header-content">
     <span class="type">
         <xsl:call-template name="type-name">
@@ -560,8 +564,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </span>
     <xsl:text> </xsl:text>
     <span class="codenumber">
-        <!-- don't show "solutions" number, it is implicit in mainmatter -->
-        <xsl:if test="not(self::solutions) or parent::backmatter">
+        <!-- be selective about showing numbers -->
+        <xsl:if test="self::solutions[parent::backmatter] or self::exercises[count(parent::*/exercises)>1]">
             <xsl:apply-templates select="." mode="number" />
         </xsl:if>
     </span>
