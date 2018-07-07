@@ -3355,6 +3355,23 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:call-template>
 </xsl:template>
 
+<!-- "solutions" divisions are "Solutions 5.6" in the  -->
+<!-- main matter, but "Appendix D" in the back matter -->
+<xsl:template match="solutions" mode="type-name">
+    <xsl:choose>
+        <xsl:when test="parent::backmatter">
+            <xsl:call-template name="type-name">
+                <xsl:with-param name="string-id" select="'appendix'" />
+            </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:call-template name="type-name">
+                <xsl:with-param name="string-id" select="'solutions'" />
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- This template translates an string to an upper-case language-equivalent -->
 <!-- Sometimes we must call this directly, but usually better to apply the   -->
 <!-- template mode="type-name" to the node, which then calls this routine    -->
