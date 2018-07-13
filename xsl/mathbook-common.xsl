@@ -673,6 +673,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- the presence of certain elements -->
 <xsl:variable name="b-has-geogebra" select="boolean($document-root//interactive[@platform='geogebra'])" />
 <xsl:variable name="b-has-jsxgraph" select="boolean($document-root//interactive[@platform='jsxgraph'])" />
+<!-- "book" and "article" are sometimes different, esp. for LaTeX -->
+<xsl:variable name="b-is-book"    select="$document-root/self::book" />
+<xsl:variable name="b-is-article" select="$document-root/self::article" />
 
 <!-- Some groups of elements are counted distinct -->
 <!-- from other blocks.  A configuration element  -->
