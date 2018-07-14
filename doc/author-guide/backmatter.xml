@@ -10,6 +10,7 @@
 <backmatter xml:id="backmatter" xmlns:xi="http://www.w3.org/2001/XInclude">
     <title>Appendices</title>
 
+    <xi:include href="welcome.xml" />
     <xi:include href="faq.xml" />
     <!-- collect references to each Best Practice note -->
     <appendix xml:id="best-practices">
