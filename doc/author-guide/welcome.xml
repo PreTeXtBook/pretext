@@ -12,6 +12,10 @@
 
     <intoduction>
         <p>Thank-you for your interest in <pretext/>, and welcome!  This appendix is meant to answer some questions you may have about how this open-source project is organized, how you can get help, and how you can contribute back.</p>
+
+        <p><pretext/> is not <latex/> and it is not Word.  Some <q>features</q> of those languages are intentionally missing, but more importantly, the mind-set expected of authors is completely different. One of the most important distinctions is that <pretext/> treats the author, the publisher, and the reader (which might be an instructor) as separate entities<mdash/>even when those are all the same person.</p>
+
+        <p>Newcomers to <pretext/> should focus on the author role. Make sure the structure of your book is marked-up properly. If something looks wrong in your output, assume it is a problem with the source markup.  If the source is correct but the output does not look as you wish, leave that as a problem for the publisher, to be addressed <em>after</em> you have finished writing the content.</p>
     </intoduction>
 
     <section xml:id="help-and-support">
@@ -33,7 +37,7 @@
 
         <p>We use the <term>issue tracker</term> at the GitHub site as an organized to-do list.  You do not need to know anything about <c>git</c> to use this forum.  Just make a new issue, or make a comment on an existing issue.  Frequently, a discussion on the groups will culminate with the creation of a new issue.  It is nice to have a link from the discussion to the issue, and vice-versa.</p>
 
-        <p>If you are asked to create an issue in response to a discussion you initiated, please consider doing so.  It will save the other volunteers just a bit of time to work on other parts of <pretext />.  And you will also get email for life as the issue is discussed and eventually closed.  It is a very helpful contribution.</p>
+        <p>If you are asked to create an issue in response to a discussion you initiated, please consider doing so.  It will save the other volunteers just a bit of time to work on other parts of <pretext />.  And you will also get email-for-life as the issue is discussed and eventually closed.  It is a very helpful contribution.</p>
 
         <p>As you gain more experience, you will identify bugs, obsolete instructions, typos, <etc/>  Search the issues to see if there is something relevant you can add to.  For example, your particular version of a bug might provide the key insight into identifying the cause.  When you are certain something is wrong, and there is no need to discuss it in the groups, feel free to go straight to making an issue.  For something like a list of typos, make a single issue and just keep editing your initial post.</p>
 
@@ -44,7 +48,7 @@
     <section xml:id="contributing">
         <title>Contributing</title>
 
-        <p>As a project that is licensed openly, we welcome contributions.  And this does not necessarily mean you need to learn our primary language, <init>XSL</init>.  For ideas find the issues on GitHub that have the label <c>contributor project</c>.  As one example, it would be very helpful if a member of the community would create and maintain a Wikipedia page.  That is a skill that is very distinct from the other skills used to create and maintain other parts of the project.  See <url href="https://github.com/rbeezer/mathbook/issues/207">Issue <hash />207</url>.</p>
+        <p>As a project that is licensed openly, we welcome contributions.  And this does not necessarily mean you need to learn our primary language, <init>XSL</init>.  For ideas, find the issues on GitHub that have the label <c>contributor project</c>.  As one example, it would be very helpful if a member of the community would create and maintain a Wikipedia page.  That is a skill that is very distinct from the other skills used to create and maintain other parts of the project.  See <url href="https://github.com/rbeezer/mathbook/issues/207">Issue <hash />207</url>.</p>
 
         <p>The documentation is authored in <pretext />, so you know how to create additions, clean-up obsolete parts, and fix typos.  If you know <c>git</c> and GitHub, then a pull request (on a new branch!) is a very economical way for us to manage contributions.  Even if you do not know GitHub, we can easily accept files written in <pretext/> that contain changes to the documentation.  (Send them to us by email, or post as attachments.)</p>
 
@@ -54,7 +58,7 @@
     <section xml:id="personal-email">
         <title>Personal Email</title>
 
-        <p>How do we put this politely?  Personal email to the core <pretext/> developers should be your last resort.  We are not unfriendly<mdash/>just the opposite.  Here is the rationale:<ul>
+        <p>How do we put this politely?  Personal email to the core <pretext/> developers should be your last resort.  We are not unfriendly<mdash/>just the opposite.  We would love to hear from you, but in the groups.  Here is the rationale:<ul>
             <li>You may get a better answer from somebody who is not the most active developer, but understands your particular need better than anybody else.  You will never get that answer with a personal email.</li>
             <li>Developers teach university courses, travel to professional meetings, sleep at night, take naps, turn off their email for big coding pushes, and sometimes travel in the wilderness and are offline for days at a time.  You are likely to get quick responses from the core developers through the groups, but if they are not available a personal email may get a slower response.  (I am inclined to answer posts on the groups before I work through personal email.)</li>
             <li>Many contributors prefer to provide help in a public forum because then their efforts are more widely recognized.</li>
@@ -64,7 +68,7 @@
             <li>Everybody who has committed their big writing project to <pretext/> likes to see an active, responsive, friendly community supporting its use and growth.  Just by asking a necessary question, you can add to that community.</li>
         </ul></p>
 
-        <p>We understand that nobody likes to pop their head up and ask a <q>stupid question</q>.  But it is counter-productive to do personally what we can do better collectively.  The groups are friendly forums (we will enforce that if we ever have to) and everybody there made an initial post once.  And the group members largely enjoy sharing their advice, experience, and knowledge.  So, please make a contribution simply by saving the personal emails for that which really is personal.  Thanks, and we'll look forward to chatting with you on the groups!</p>
+        <p>We understand that nobody likes to pop their head up and ask a <q>stupid question.</q>  But it is counter-productive to do personally what we can do better collectively.  The groups are friendly forums (we will enforce that if we ever have to) and everybody there made an initial post once.  And the group members largely enjoy sharing their advice, experience, and knowledge.  So, please make a contribution simply by saving the personal emails for that which really is personal.  Thanks, and we'll look forward to chatting with you on the groups!</p>
     </section>
 
 </appendix>
