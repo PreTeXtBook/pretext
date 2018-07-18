@@ -7941,6 +7941,8 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
             <meta name="Keywords" content="Authored in PreTeXt" />
             <!-- http://webdesignerwall.com/tutorials/responsive-design-in-3-steps -->
             <meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" />
+            <!-- favicon -->
+            <xsl:call-template name="favicon"/>
             <!-- jquery used by sage, webwork, knowls -->
             <xsl:call-template name="jquery-sagecell" />
             <xsl:call-template name="mathjax" />
@@ -9168,6 +9170,15 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
 <!-- Knowl header -->
 <xsl:template name="knowl">
 <script src="https://aimath.org/knowl.js"></script>
+</xsl:template>
+
+<!-- Header information for favicon -->
+<!-- Needs two image files in root of HTML output -->
+<xsl:template name="favicon">
+    <xsl:if test="$docinfo/html/favicon">
+        <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png"/>
+        <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png"/>
+    </xsl:if>
 </xsl:template>
 
 <!-- Mathbook Javascript header -->
