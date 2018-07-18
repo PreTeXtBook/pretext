@@ -119,6 +119,11 @@ the xsltproc executable.
         Sage worksheet production.)
         -->
         <initialism>SA</initialism>
+        <!-- Items peculiar to an HTML output -->
+        <html>
+            <!-- Expects favicon/favicon-32x32.png, and favicon/favicon-16x16.png -->
+            <favicon/>
+        </html>
         <!--
         With a <feedback> element, in the HTML version, you get a button
         for reporting typos and errors.  You might link to a Google Docs
