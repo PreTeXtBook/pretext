@@ -899,158 +899,69 @@
           <xs:attribute name="label"/>
         </xs:complexType>
       </xs:element>
-      <xs:element name="ul">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element maxOccurs="unbounded" name="li">
-              <xs:complexType mixed="true">
-                <xs:choice>
-                  <xs:group ref="TextParagraph"/>
-                  <xs:group maxOccurs="unbounded" ref="BlockStatement"/>
-                </xs:choice>
-              </xs:complexType>
-            </xs:element>
-          </xs:sequence>
-          <xs:attribute name="cols">
-            <xs:simpleType>
-              <xs:restriction base="xs:token">
-                <xs:enumeration value="2"/>
-                <xs:enumeration value="3"/>
-                <xs:enumeration value="4"/>
-                <xs:enumeration value="5"/>
-                <xs:enumeration value="6"/>
-              </xs:restriction>
-            </xs:simpleType>
-          </xs:attribute>
-          <xs:attribute name="label">
-            <xs:simpleType>
-              <xs:restriction base="xs:token">
-                <xs:enumeration value="disc"/>
-                <xs:enumeration value="circle"/>
-                <xs:enumeration value="square"/>
-                <xs:enumeration value=""/>
-              </xs:restriction>
-            </xs:simpleType>
-          </xs:attribute>
-        </xs:complexType>
-      </xs:element>
-      <xs:element name="dl">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element maxOccurs="unbounded" name="li">
-              <xs:complexType>
-                <xs:complexContent>
-                  <xs:extension base="MetaDataTitle">
-                    <xs:group maxOccurs="unbounded" ref="BlockStatement"/>
-                  </xs:extension>
-                </xs:complexContent>
-              </xs:complexType>
-            </xs:element>
-          </xs:sequence>
-          <xs:attribute name="width">
-            <xs:simpleType>
-              <xs:restriction base="xs:token">
-                <xs:enumeration value="narrow"/>
-                <xs:enumeration value="medium"/>
-                <xs:enumeration value="wide"/>
-              </xs:restriction>
-            </xs:simpleType>
-          </xs:attribute>
-        </xs:complexType>
-      </xs:element>
+      <xs:element ref="ul"/>
+      <xs:element ref="dl"/>
     </xs:choice>
   </xs:group>
-  <xs:group name="ListWW">
-    <xs:choice>
-      <xs:element name="ol">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element maxOccurs="unbounded" name="li">
-              <xs:complexType mixed="true">
-                <xs:sequence>
-                  <xs:group ref="MetaDataTarget"/>
-                  <xs:choice>
-                    <xs:group ref="TextParagraphWW"/>
-                    <xs:group maxOccurs="unbounded" ref="ParagraphWW"/>
-                  </xs:choice>
-                </xs:sequence>
-                <xs:attributeGroup ref="MetaDataTarget"/>
-              </xs:complexType>
-            </xs:element>
-          </xs:sequence>
-          <xs:attribute name="cols">
-            <xs:simpleType>
-              <xs:restriction base="xs:token">
-                <xs:enumeration value="2"/>
-                <xs:enumeration value="3"/>
-                <xs:enumeration value="4"/>
-                <xs:enumeration value="5"/>
-                <xs:enumeration value="6"/>
-              </xs:restriction>
-            </xs:simpleType>
-          </xs:attribute>
-          <xs:attribute name="label"/>
-        </xs:complexType>
-      </xs:element>
-      <xs:element name="ul">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element maxOccurs="unbounded" name="li">
-              <xs:complexType mixed="true">
-                <xs:choice>
-                  <xs:group ref="TextParagraphWW"/>
-                  <xs:group maxOccurs="unbounded" ref="ParagraphWW"/>
-                </xs:choice>
-              </xs:complexType>
-            </xs:element>
-          </xs:sequence>
-          <xs:attribute name="cols">
-            <xs:simpleType>
-              <xs:restriction base="xs:token">
-                <xs:enumeration value="2"/>
-                <xs:enumeration value="3"/>
-                <xs:enumeration value="4"/>
-                <xs:enumeration value="5"/>
-                <xs:enumeration value="6"/>
-              </xs:restriction>
-            </xs:simpleType>
-          </xs:attribute>
-          <xs:attribute name="label">
-            <xs:simpleType>
-              <xs:restriction base="xs:token">
-                <xs:enumeration value=""/>
-                <xs:enumeration value="square"/>
-              </xs:restriction>
-            </xs:simpleType>
-          </xs:attribute>
-        </xs:complexType>
-      </xs:element>
-      <xs:element name="dl">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element maxOccurs="unbounded" name="li">
-              <xs:complexType>
-                <xs:complexContent>
-                  <xs:extension base="MetaDataTitle">
-                    <xs:group maxOccurs="unbounded" ref="ParagraphWW"/>
-                  </xs:extension>
-                </xs:complexContent>
-              </xs:complexType>
-            </xs:element>
-          </xs:sequence>
-          <xs:attribute name="width">
-            <xs:simpleType>
-              <xs:restriction base="xs:token">
-                <xs:enumeration value="narrow"/>
-                <xs:enumeration value="medium"/>
-                <xs:enumeration value="wide"/>
-              </xs:restriction>
-            </xs:simpleType>
-          </xs:attribute>
-        </xs:complexType>
-      </xs:element>
-    </xs:choice>
-  </xs:group>
+  <xs:element name="ul">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" name="li">
+          <xs:complexType mixed="true">
+            <xs:choice>
+              <xs:group ref="TextParagraph"/>
+              <xs:group maxOccurs="unbounded" ref="BlockStatement"/>
+            </xs:choice>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="cols">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="2"/>
+            <xs:enumeration value="3"/>
+            <xs:enumeration value="4"/>
+            <xs:enumeration value="5"/>
+            <xs:enumeration value="6"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="label">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="disc"/>
+            <xs:enumeration value="circle"/>
+            <xs:enumeration value="square"/>
+            <xs:enumeration value=""/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="dl">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" name="li">
+          <xs:complexType>
+            <xs:complexContent>
+              <xs:extension base="MetaDataTitle">
+                <xs:group maxOccurs="unbounded" ref="BlockStatement"/>
+              </xs:extension>
+            </xs:complexContent>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="width">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="narrow"/>
+            <xs:enumeration value="medium"/>
+            <xs:enumeration value="wide"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
   <xs:complexType name="DefinitionLike">
     <xs:sequence>
       <xs:group ref="MetaDataTitleOptional"/>
@@ -1320,7 +1231,9 @@
     <xs:complexType>
       <xs:complexContent>
         <xs:extension base="MetaDataCaption">
-          <xs:group ref="Tabular"/>
+          <xs:sequence>
+            <xs:element ref="tabular"/>
+          </xs:sequence>
         </xs:extension>
       </xs:complexContent>
     </xs:complexType>
@@ -1353,7 +1266,7 @@
   <xs:element name="stack">
     <xs:complexType>
       <xs:choice maxOccurs="unbounded">
-        <xs:group ref="Tabular"/>
+        <xs:element ref="tabular"/>
         <xs:group ref="Image"/>
         <xs:element ref="video"/>
         <xs:element ref="program"/>
@@ -1386,7 +1299,7 @@
           <xs:choice maxOccurs="unbounded">
             <xs:group ref="Figure"/>
             <xs:element ref="poem"/>
-            <xs:group ref="Tabular"/>
+            <xs:element ref="tabular"/>
             <xs:group ref="Image"/>
             <xs:element ref="video"/>
             <xs:element ref="program"/>
@@ -1407,8 +1320,9 @@
         <xs:complexType>
           <xs:choice maxOccurs="unbounded">
             <xs:element ref="poem"/>
-            <xs:group ref="Tabular"/>
+            <xs:element ref="tabular"/>
             <xs:group ref="Image"/>
+            <xs:group ref="ImageWW"/>
             <xs:element ref="video"/>
             <xs:element ref="program"/>
             <xs:element ref="console"/>
@@ -1437,19 +1351,6 @@
       <xs:element name="sbsgroup">
         <xs:complexType>
           <xs:group maxOccurs="unbounded" ref="SideBySideNoCaption"/>
-          <xs:attributeGroup ref="SidebySideAttributes"/>
-        </xs:complexType>
-      </xs:element>
-    </xs:sequence>
-  </xs:group>
-  <xs:group name="SideBySideWW">
-    <xs:sequence>
-      <xs:element name="sidebyside">
-        <xs:complexType>
-          <xs:choice maxOccurs="unbounded">
-            <xs:group ref="TabularWW"/>
-            <xs:group ref="ImageWW"/>
-          </xs:choice>
           <xs:attributeGroup ref="SidebySideAttributes"/>
         </xs:complexType>
       </xs:element>
@@ -1568,62 +1469,56 @@
       </xs:simpleType>
     </xs:attribute>
   </xs:attributeGroup>
-  <xs:group name="TableCell">
-    <xs:sequence>
-      <xs:element name="cell">
-        <xs:complexType mixed="true">
-          <xs:choice>
-            <xs:group ref="TextLong"/>
-            <xs:group maxOccurs="unbounded" ref="Line"/>
-            <xs:group maxOccurs="unbounded" ref="Paragraph"/>
-          </xs:choice>
-          <xs:attribute name="halign">
-            <xs:simpleType>
-              <xs:restriction base="xs:token">
-                <xs:enumeration value="left"/>
-                <xs:enumeration value="center"/>
-                <xs:enumeration value="right"/>
-                <xs:enumeration value="justify"/>
-              </xs:restriction>
-            </xs:simpleType>
-          </xs:attribute>
-          <xs:attribute name="bottom" type="BorderThickness"/>
-          <xs:attribute name="right" type="BorderThickness"/>
-          <xs:attribute name="colspan"/>
-        </xs:complexType>
-      </xs:element>
-    </xs:sequence>
-  </xs:group>
-  <xs:group name="TableRow">
-    <xs:sequence>
-      <xs:element name="row">
-        <xs:complexType>
-          <xs:group maxOccurs="unbounded" ref="TableCell"/>
-          <xs:attribute name="halign">
-            <xs:simpleType>
-              <xs:restriction base="xs:token">
-                <xs:enumeration value="left"/>
-                <xs:enumeration value="center"/>
-                <xs:enumeration value="right"/>
-                <xs:enumeration value="justify"/>
-              </xs:restriction>
-            </xs:simpleType>
-          </xs:attribute>
-          <xs:attribute name="valign">
-            <xs:simpleType>
-              <xs:restriction base="xs:token">
-                <xs:enumeration value="top"/>
-                <xs:enumeration value="middle"/>
-                <xs:enumeration value="bottom"/>
-              </xs:restriction>
-            </xs:simpleType>
-          </xs:attribute>
-          <xs:attribute name="bottom" type="BorderThickness"/>
-          <xs:attribute name="left" type="BorderThickness"/>
-        </xs:complexType>
-      </xs:element>
-    </xs:sequence>
-  </xs:group>
+  <xs:element name="cell">
+    <xs:complexType mixed="true">
+      <xs:choice>
+        <xs:group ref="TextLong"/>
+        <xs:group maxOccurs="unbounded" ref="Line"/>
+        <xs:group maxOccurs="unbounded" ref="Paragraph"/>
+      </xs:choice>
+      <xs:attribute name="halign">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="left"/>
+            <xs:enumeration value="center"/>
+            <xs:enumeration value="right"/>
+            <xs:enumeration value="justify"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="bottom" type="BorderThickness"/>
+      <xs:attribute name="right" type="BorderThickness"/>
+      <xs:attribute name="colspan"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="row">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="cell"/>
+      </xs:sequence>
+      <xs:attribute name="halign">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="left"/>
+            <xs:enumeration value="center"/>
+            <xs:enumeration value="right"/>
+            <xs:enumeration value="justify"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="valign">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="top"/>
+            <xs:enumeration value="middle"/>
+            <xs:enumeration value="bottom"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="bottom" type="BorderThickness"/>
+      <xs:attribute name="left" type="BorderThickness"/>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="col">
     <xs:complexType>
       <xs:attribute name="halign">
@@ -1641,132 +1536,37 @@
       <xs:attribute name="width"/>
     </xs:complexType>
   </xs:element>
-  <xs:group name="Tabular">
-    <xs:sequence>
-      <xs:element name="tabular">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element minOccurs="0" maxOccurs="unbounded" ref="col"/>
-            <xs:group maxOccurs="unbounded" ref="TableRow"/>
-          </xs:sequence>
-          <xs:attribute name="halign">
-            <xs:simpleType>
-              <xs:restriction base="xs:token">
-                <xs:enumeration value="left"/>
-                <xs:enumeration value="center"/>
-                <xs:enumeration value="right"/>
-                <xs:enumeration value="justify"/>
-              </xs:restriction>
-            </xs:simpleType>
-          </xs:attribute>
-          <xs:attribute name="valign">
-            <xs:simpleType>
-              <xs:restriction base="xs:token">
-                <xs:enumeration value="top"/>
-                <xs:enumeration value="middle"/>
-                <xs:enumeration value="bottom"/>
-              </xs:restriction>
-            </xs:simpleType>
-          </xs:attribute>
-          <xs:attribute name="top" type="BorderThickness"/>
-          <xs:attribute name="bottom" type="BorderThickness"/>
-          <xs:attribute name="left" type="BorderThickness"/>
-          <xs:attribute name="right" type="BorderThickness"/>
-        </xs:complexType>
-      </xs:element>
-    </xs:sequence>
-  </xs:group>
-  <xs:group name="TableCellWW">
-    <xs:sequence>
-      <xs:element name="cell">
-        <xs:complexType mixed="true">
-          <xs:choice>
-            <xs:group ref="TextLongWW"/>
-            <xs:group maxOccurs="unbounded" ref="Line"/>
-            <xs:group maxOccurs="unbounded" ref="ParagraphWW"/>
-          </xs:choice>
-          <xs:attribute name="halign">
-            <xs:simpleType>
-              <xs:restriction base="xs:token">
-                <xs:enumeration value="left"/>
-                <xs:enumeration value="center"/>
-                <xs:enumeration value="right"/>
-                <xs:enumeration value="justify"/>
-              </xs:restriction>
-            </xs:simpleType>
-          </xs:attribute>
-          <xs:attribute name="bottom" type="BorderThickness"/>
-          <xs:attribute name="right" type="BorderThickness"/>
-          <xs:attribute name="colspan"/>
-        </xs:complexType>
-      </xs:element>
-    </xs:sequence>
-  </xs:group>
-  <xs:group name="TableRowWW">
-    <xs:sequence>
-      <xs:element name="row">
-        <xs:complexType>
-          <xs:group maxOccurs="unbounded" ref="TableCellWW"/>
-          <xs:attribute name="halign">
-            <xs:simpleType>
-              <xs:restriction base="xs:token">
-                <xs:enumeration value="left"/>
-                <xs:enumeration value="center"/>
-                <xs:enumeration value="right"/>
-                <xs:enumeration value="justify"/>
-              </xs:restriction>
-            </xs:simpleType>
-          </xs:attribute>
-          <xs:attribute name="valign">
-            <xs:simpleType>
-              <xs:restriction base="xs:token">
-                <xs:enumeration value="top"/>
-                <xs:enumeration value="middle"/>
-                <xs:enumeration value="bottom"/>
-              </xs:restriction>
-            </xs:simpleType>
-          </xs:attribute>
-          <xs:attribute name="bottom" type="BorderThickness"/>
-          <xs:attribute name="left" type="BorderThickness"/>
-        </xs:complexType>
-      </xs:element>
-    </xs:sequence>
-  </xs:group>
-  <xs:group name="TabularWW">
-    <xs:sequence>
-      <xs:element name="tabular">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element minOccurs="0" maxOccurs="unbounded" ref="col"/>
-            <xs:group maxOccurs="unbounded" ref="TableRowWW"/>
-          </xs:sequence>
-          <xs:attribute name="halign">
-            <xs:simpleType>
-              <xs:restriction base="xs:token">
-                <xs:enumeration value="left"/>
-                <xs:enumeration value="center"/>
-                <xs:enumeration value="right"/>
-                <xs:enumeration value="justify"/>
-              </xs:restriction>
-            </xs:simpleType>
-          </xs:attribute>
-          <xs:attribute name="valign">
-            <xs:simpleType>
-              <xs:restriction base="xs:token">
-                <xs:enumeration value="top"/>
-                <xs:enumeration value="middle"/>
-                <xs:enumeration value="bottom"/>
-              </xs:restriction>
-            </xs:simpleType>
-          </xs:attribute>
-          <xs:attribute name="top" type="BorderThickness"/>
-          <xs:attribute name="bottom" type="BorderThickness"/>
-          <xs:attribute name="left" type="BorderThickness"/>
-          <xs:attribute name="right" type="BorderThickness"/>
-        </xs:complexType>
-      </xs:element>
-    </xs:sequence>
-  </xs:group>
+  <xs:element name="tabular">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="col"/>
+        <xs:element maxOccurs="unbounded" ref="row"/>
+      </xs:sequence>
+      <xs:attribute name="halign">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="left"/>
+            <xs:enumeration value="center"/>
+            <xs:enumeration value="right"/>
+            <xs:enumeration value="justify"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="valign">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="top"/>
+            <xs:enumeration value="middle"/>
+            <xs:enumeration value="bottom"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="top" type="BorderThickness"/>
+      <xs:attribute name="bottom" type="BorderThickness"/>
+      <xs:attribute name="left" type="BorderThickness"/>
+      <xs:attribute name="right" type="BorderThickness"/>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="sage">
     <xs:complexType>
       <xs:sequence minOccurs="0">
@@ -2085,10 +1885,10 @@
       <xs:element name="statement">
         <xs:complexType>
           <xs:choice maxOccurs="unbounded">
-            <xs:group ref="ParagraphWW"/>
+            <xs:group ref="Paragraph"/>
             <xs:element ref="instruction"/>
             <xs:element ref="pre"/>
-            <xs:group ref="SideBySideWW"/>
+            <xs:group ref="SideBySideNoCaption"/>
           </xs:choice>
         </xs:complexType>
       </xs:element>
@@ -2111,6 +1911,9 @@
   </xs:element>
   <xs:element name="pg-code" type="xs:string"/>
   <xs:element name="var">
+    <xs:annotation>
+      <xs:documentation>The WeBWorK "var" element appears in the RELAX-NG schema as a child of many elements, but almost always as a descendant of a "p" element or a "cell" element.  As an element that is only relevant for a WeBWorK problem, occurences of "var" must be within a "webwork" element.  A Schematron rule will check on these two situations.</xs:documentation>
+    </xs:annotation>
     <xs:complexType>
       <xs:attribute name="form">
         <xs:simpleType>
@@ -2158,9 +1961,9 @@
       <xs:element name="hint">
         <xs:complexType>
           <xs:choice maxOccurs="unbounded">
-            <xs:group ref="ParagraphWW"/>
+            <xs:group ref="Paragraph"/>
             <xs:element ref="pre"/>
-            <xs:group ref="SideBySideWW"/>
+            <xs:group ref="SideBySideNoCaption"/>
           </xs:choice>
         </xs:complexType>
       </xs:element>
@@ -2171,9 +1974,9 @@
       <xs:element name="solution">
         <xs:complexType>
           <xs:choice maxOccurs="unbounded">
-            <xs:group ref="ParagraphWW"/>
+            <xs:group ref="Paragraph"/>
             <xs:element ref="pre"/>
-            <xs:group ref="SideBySideWW"/>
+            <xs:group ref="SideBySideNoCaption"/>
           </xs:choice>
         </xs:complexType>
       </xs:element>
@@ -2272,7 +2075,8 @@
         <xs:group ref="Generator"/>
         <xs:group ref="Verbatim"/>
         <xs:group ref="Group"/>
-        <xs:group ref="MathInline"/>
+        <xs:element ref="var"/>
+        <xs:element ref="m"/>
         <xs:group ref="Music"/>
         <xs:group ref="Reference"/>
         <xs:element ref="cd"/>
@@ -2290,35 +2094,6 @@
         <xs:complexType mixed="true">
           <xs:group ref="TextParagraph"/>
           <xs:attribute ref="xml:id"/>
-        </xs:complexType>
-      </xs:element>
-    </xs:sequence>
-  </xs:group>
-  <xs:group name="TextParagraphWW">
-    <xs:sequence>
-      <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:group ref="Character"/>
-        <xs:group ref="Generator"/>
-        <xs:group ref="Verbatim"/>
-        <xs:group ref="Group"/>
-        <xs:element ref="var"/>
-        <xs:group ref="MathInlineWW"/>
-        <xs:group ref="Music"/>
-        <xs:group ref="Reference"/>
-        <xs:element ref="cd"/>
-        <xs:group ref="MathDisplayWW"/>
-        <xs:group ref="ListWW"/>
-        <xs:element ref="fn"/>
-        <xs:element ref="notation"/>
-        <xs:element ref="idx"/>
-      </xs:choice>
-    </xs:sequence>
-  </xs:group>
-  <xs:group name="ParagraphWW">
-    <xs:sequence>
-      <xs:element name="p">
-        <xs:complexType mixed="true">
-          <xs:group ref="TextParagraphWW"/>
         </xs:complexType>
       </xs:element>
     </xs:sequence>
@@ -2351,7 +2126,7 @@
         <xs:group ref="Generator"/>
         <xs:group ref="Verbatim"/>
         <xs:group ref="Group"/>
-        <xs:group ref="MathInline"/>
+        <xs:element ref="m"/>
         <xs:group ref="Music"/>
       </xs:choice>
     </xs:sequence>
@@ -2363,20 +2138,7 @@
         <xs:group ref="Generator"/>
         <xs:group ref="Verbatim"/>
         <xs:group ref="Group"/>
-        <xs:group ref="MathInline"/>
-        <xs:group ref="Music"/>
-        <xs:group ref="Reference"/>
-      </xs:choice>
-    </xs:sequence>
-  </xs:group>
-  <xs:group name="TextLongWW">
-    <xs:sequence>
-      <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:group ref="Character"/>
-        <xs:group ref="Generator"/>
-        <xs:group ref="Verbatim"/>
-        <xs:group ref="Group"/>
-        <xs:group ref="MathInlineWW"/>
+        <xs:element ref="m"/>
         <xs:group ref="Music"/>
         <xs:group ref="Reference"/>
         <xs:element ref="var"/>
@@ -2483,67 +2245,61 @@
     </xs:complexType>
   </xs:element>
   <xs:element name="usage" type="xs:string"/>
-  <xs:group name="MathInline">
-    <xs:sequence>
-      <xs:element name="m">
-        <xs:complexType mixed="true">
-          <xs:sequence>
-            <xs:element minOccurs="0" maxOccurs="unbounded" ref="fillin"/>
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
-    </xs:sequence>
-  </xs:group>
-  <xs:group name="MathRow">
-    <xs:sequence>
-      <xs:element name="mrow">
-        <xs:complexType mixed="true">
-          <xs:sequence>
-            <xs:group ref="MetaDataTarget"/>
-            <xs:choice minOccurs="0" maxOccurs="unbounded">
-              <xs:element ref="xref"/>
-              <xs:element ref="fillin"/>
-            </xs:choice>
-          </xs:sequence>
-          <xs:attributeGroup ref="MetaDataTarget"/>
-          <xs:attribute name="number">
-            <xs:simpleType>
-              <xs:restriction base="xs:token">
-                <xs:enumeration value="yes"/>
-                <xs:enumeration value="no"/>
-              </xs:restriction>
-            </xs:simpleType>
-          </xs:attribute>
-          <xs:attribute name="tag">
-            <xs:simpleType>
-              <xs:restriction base="xs:token">
-                <xs:enumeration value="star"/>
-                <xs:enumeration value="dstar"/>
-                <xs:enumeration value="tstar"/>
-                <xs:enumeration value="dagger"/>
-                <xs:enumeration value="ddagger"/>
-                <xs:enumeration value="tdagger"/>
-                <xs:enumeration value="hash"/>
-                <xs:enumeration value="dhash"/>
-                <xs:enumeration value="thash"/>
-                <xs:enumeration value="maltese"/>
-                <xs:enumeration value="dmaltese"/>
-                <xs:enumeration value="tmaltese"/>
-              </xs:restriction>
-            </xs:simpleType>
-          </xs:attribute>
-          <xs:attribute name="break">
-            <xs:simpleType>
-              <xs:restriction base="xs:token">
-                <xs:enumeration value="yes"/>
-                <xs:enumeration value="no"/>
-              </xs:restriction>
-            </xs:simpleType>
-          </xs:attribute>
-        </xs:complexType>
-      </xs:element>
-    </xs:sequence>
-  </xs:group>
+  <xs:element name="m">
+    <xs:complexType mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="fillin"/>
+        <xs:element ref="var"/>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="mrow">
+    <xs:complexType mixed="true">
+      <xs:sequence>
+        <xs:group ref="MetaDataTarget"/>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element ref="xref"/>
+          <xs:element ref="fillin"/>
+          <xs:element ref="var"/>
+        </xs:choice>
+      </xs:sequence>
+      <xs:attributeGroup ref="MetaDataTarget"/>
+      <xs:attribute name="number">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="tag">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="star"/>
+            <xs:enumeration value="dstar"/>
+            <xs:enumeration value="tstar"/>
+            <xs:enumeration value="dagger"/>
+            <xs:enumeration value="ddagger"/>
+            <xs:enumeration value="tdagger"/>
+            <xs:enumeration value="hash"/>
+            <xs:enumeration value="dhash"/>
+            <xs:enumeration value="thash"/>
+            <xs:enumeration value="maltese"/>
+            <xs:enumeration value="dmaltese"/>
+            <xs:enumeration value="tmaltese"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="break">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="intertext">
     <xs:complexType mixed="true">
       <xs:group ref="TextLong"/>
@@ -2551,209 +2307,90 @@
   </xs:element>
   <xs:group name="MathDisplay">
     <xs:choice>
-      <xs:element name="me">
-        <xs:complexType mixed="true">
-          <xs:sequence>
-            <xs:element minOccurs="0" maxOccurs="unbounded" ref="fillin"/>
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
-      <xs:element name="men">
-        <xs:complexType mixed="true">
-          <xs:sequence>
-            <xs:group ref="MetaDataTarget"/>
-            <xs:element minOccurs="0" maxOccurs="unbounded" ref="fillin"/>
-          </xs:sequence>
-          <xs:attributeGroup ref="MetaDataTarget"/>
-        </xs:complexType>
-      </xs:element>
-      <xs:element name="md">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:group ref="MathRow"/>
-            <xs:choice minOccurs="0" maxOccurs="unbounded">
-              <xs:group ref="MathRow"/>
-              <xs:element ref="intertext"/>
-            </xs:choice>
-          </xs:sequence>
-          <xs:attribute name="number">
-            <xs:simpleType>
-              <xs:restriction base="xs:token">
-                <xs:enumeration value="yes"/>
-                <xs:enumeration value="no"/>
-              </xs:restriction>
-            </xs:simpleType>
-          </xs:attribute>
-          <xs:attribute name="break">
-            <xs:simpleType>
-              <xs:restriction base="xs:token">
-                <xs:enumeration value="yes"/>
-                <xs:enumeration value="no"/>
-              </xs:restriction>
-            </xs:simpleType>
-          </xs:attribute>
-          <xs:attribute name="alignment"/>
-          <xs:attribute name="alignat-columns"/>
-        </xs:complexType>
-      </xs:element>
-      <xs:element name="mdn">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:group ref="MathRow"/>
-            <xs:choice minOccurs="0" maxOccurs="unbounded">
-              <xs:group ref="MathRow"/>
-              <xs:element ref="intertext"/>
-            </xs:choice>
-          </xs:sequence>
-          <xs:attribute name="number">
-            <xs:simpleType>
-              <xs:restriction base="xs:token">
-                <xs:enumeration value="yes"/>
-                <xs:enumeration value="no"/>
-              </xs:restriction>
-            </xs:simpleType>
-          </xs:attribute>
-          <xs:attribute name="break">
-            <xs:simpleType>
-              <xs:restriction base="xs:token">
-                <xs:enumeration value="yes"/>
-                <xs:enumeration value="no"/>
-              </xs:restriction>
-            </xs:simpleType>
-          </xs:attribute>
-          <xs:attribute name="alignment"/>
-          <xs:attribute name="alignat-columns"/>
-        </xs:complexType>
-      </xs:element>
+      <xs:element ref="me"/>
+      <xs:element ref="men"/>
+      <xs:element ref="md"/>
+      <xs:element ref="mdn"/>
     </xs:choice>
   </xs:group>
-  <xs:group name="MathInlineWW">
-    <xs:sequence>
-      <xs:element name="m">
-        <xs:complexType mixed="true">
-          <xs:choice minOccurs="0" maxOccurs="unbounded">
-            <xs:element ref="fillin"/>
-            <xs:element ref="var"/>
-          </xs:choice>
-        </xs:complexType>
-      </xs:element>
-    </xs:sequence>
-  </xs:group>
-  <xs:group name="MathRowWW">
-    <xs:sequence>
-      <xs:element name="mrow">
-        <xs:complexType mixed="true">
-          <xs:sequence>
-            <xs:group ref="MetaDataTarget"/>
-            <xs:choice minOccurs="0" maxOccurs="unbounded">
-              <xs:element ref="xref"/>
-              <xs:element ref="fillin"/>
-              <xs:element ref="var"/>
-            </xs:choice>
-          </xs:sequence>
-          <xs:attributeGroup ref="MetaDataTarget"/>
-          <xs:attribute name="number">
-            <xs:simpleType>
-              <xs:restriction base="xs:token">
-                <xs:enumeration value="yes"/>
-                <xs:enumeration value="no"/>
-              </xs:restriction>
-            </xs:simpleType>
-          </xs:attribute>
-          <xs:attribute name="break">
-            <xs:simpleType>
-              <xs:restriction base="xs:token">
-                <xs:enumeration value="yes"/>
-                <xs:enumeration value="no"/>
-              </xs:restriction>
-            </xs:simpleType>
-          </xs:attribute>
-        </xs:complexType>
-      </xs:element>
-    </xs:sequence>
-  </xs:group>
-  <xs:group name="MathDisplayWW">
-    <xs:choice>
-      <xs:element name="me">
-        <xs:complexType mixed="true">
-          <xs:choice minOccurs="0" maxOccurs="unbounded">
-            <xs:element ref="fillin"/>
-            <xs:element ref="var"/>
-          </xs:choice>
-        </xs:complexType>
-      </xs:element>
-      <xs:element name="men">
-        <xs:complexType mixed="true">
-          <xs:sequence>
-            <xs:group ref="MetaDataTarget"/>
-            <xs:choice minOccurs="0" maxOccurs="unbounded">
-              <xs:element ref="fillin"/>
-              <xs:element ref="var"/>
-            </xs:choice>
-          </xs:sequence>
-          <xs:attributeGroup ref="MetaDataTarget"/>
-        </xs:complexType>
-      </xs:element>
-      <xs:element name="md">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:group ref="MathRowWW"/>
-            <xs:choice minOccurs="0" maxOccurs="unbounded">
-              <xs:group ref="MathRowWW"/>
-              <xs:element ref="intertext"/>
-            </xs:choice>
-          </xs:sequence>
-          <xs:attribute name="number">
-            <xs:simpleType>
-              <xs:restriction base="xs:token">
-                <xs:enumeration value="yes"/>
-                <xs:enumeration value="no"/>
-              </xs:restriction>
-            </xs:simpleType>
-          </xs:attribute>
-          <xs:attribute name="break">
-            <xs:simpleType>
-              <xs:restriction base="xs:token">
-                <xs:enumeration value="yes"/>
-                <xs:enumeration value="no"/>
-              </xs:restriction>
-            </xs:simpleType>
-          </xs:attribute>
-          <xs:attribute name="alignment"/>
-          <xs:attribute name="alignat-columns"/>
-        </xs:complexType>
-      </xs:element>
-      <xs:element name="mdn">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:group ref="MathRowWW"/>
-            <xs:choice minOccurs="0" maxOccurs="unbounded">
-              <xs:group ref="MathRowWW"/>
-              <xs:element ref="intertext"/>
-            </xs:choice>
-          </xs:sequence>
-          <xs:attribute name="number">
-            <xs:simpleType>
-              <xs:restriction base="xs:token">
-                <xs:enumeration value="yes"/>
-                <xs:enumeration value="no"/>
-              </xs:restriction>
-            </xs:simpleType>
-          </xs:attribute>
-          <xs:attribute name="break">
-            <xs:simpleType>
-              <xs:restriction base="xs:token">
-                <xs:enumeration value="yes"/>
-                <xs:enumeration value="no"/>
-              </xs:restriction>
-            </xs:simpleType>
-          </xs:attribute>
-          <xs:attribute name="alignment"/>
-          <xs:attribute name="alignat-columns"/>
-        </xs:complexType>
-      </xs:element>
-    </xs:choice>
-  </xs:group>
+  <xs:element name="me">
+    <xs:complexType mixed="true">
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="fillin"/>
+        <xs:element ref="var"/>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="men">
+    <xs:complexType mixed="true">
+      <xs:sequence>
+        <xs:group ref="MetaDataTarget"/>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element ref="fillin"/>
+          <xs:element ref="var"/>
+        </xs:choice>
+      </xs:sequence>
+      <xs:attributeGroup ref="MetaDataTarget"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="md">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="mrow"/>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element ref="mrow"/>
+          <xs:element ref="intertext"/>
+        </xs:choice>
+      </xs:sequence>
+      <xs:attribute name="number">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="break">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="alignment"/>
+      <xs:attribute name="alignat-columns"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="mdn">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="mrow"/>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element ref="mrow"/>
+          <xs:element ref="intertext"/>
+        </xs:choice>
+      </xs:sequence>
+      <xs:attribute name="number">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="break">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="yes"/>
+            <xs:enumeration value="no"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+      <xs:attribute name="alignment"/>
+      <xs:attribute name="alignat-columns"/>
+    </xs:complexType>
+  </xs:element>
   <xs:group name="Verbatim">
     <xs:choice>
       <xs:element ref="c"/>

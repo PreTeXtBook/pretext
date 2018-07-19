@@ -286,14 +286,6 @@
             Group |
             MathInline |
             Music |
-            Reference)* }
-        TextLongWW =  mixed { (
-            Character |
-            Generator |
-            Verbatim |
-            Group |
-            MathInlineWW |
-            Music |
             Reference |
             WWVariable)* }
         </fragment>
@@ -308,6 +300,7 @@
             Generator |
             Verbatim |
             Group |
+            WWVariable |
             MathInline |
             Music |
             Reference |
@@ -317,29 +310,10 @@
             Footnote |
             Notation |
             Index)* }
-        Paragraph = 
+        Paragraph =
             element p {
                 UniqueID?,
                 TextParagraph
-            }
-        TextParagraphWW = mixed { (
-            Character |
-            Generator |
-            Verbatim |
-            Group |
-            WWVariable |
-            MathInlineWW |
-            Music |
-            Reference |
-            CodeDisplay |
-            MathDisplayWW |
-            ListWW |
-            Footnote |
-            Notation |
-            Index)* }
-        ParagraphWW =
-            element p {
-                TextParagraphWW
             }
         ParagraphLined =
             element p {
@@ -610,7 +584,7 @@
         <fragment xml:id="mathematics">
         MathInline =
             element m {
-                mixed {FillIn*}
+                mixed {(FillIn | WWVariable)*}
             }
         MathRow = 
             element mrow {
@@ -624,17 +598,17 @@
                                    "maltese" | "dmaltese" | "tmaltese" }
                 )?,
                 attribute break {"yes" | "no"}?,
-                mixed {(Xref | FillIn)*}
+                mixed {(Xref | FillIn | WWVariable)*}
             }
         MathIntertext = element intertext {TextLong}
         MathDisplay =
             element me {
-                mixed {FillIn*}
+                mixed {(FillIn | WWVariable)*}
             }
         |
             element men {
                 MetaDataTarget,
-                mixed {FillIn*}
+                mixed {(FillIn | WWVariable)*}
             }
         |
             element md {
@@ -653,44 +627,6 @@
                 attribute alignat-columns {text}?,
                 MathRow,
                 (MathRow | MathIntertext)*
-            }
-        MathInlineWW =
-            element m {
-                mixed {(FillIn | WWVariable)*}
-            }
-        MathRowWW = 
-            element mrow {
-                MetaDataTarget,
-                attribute number {"yes" | "no"}?,
-                attribute break {"yes" | "no"}?,
-                mixed {(Xref | FillIn | WWVariable)*}
-            }
-        MathDisplayWW =
-            element me {
-                mixed {(FillIn | WWVariable)*}
-            }
-        |
-            element men {
-                MetaDataTarget,
-                mixed {(FillIn | WWVariable)*}
-            }
-        |
-            element md {
-                attribute number {"yes" | "no"}?,
-                attribute break {"yes" | "no"}?,
-                attribute alignment {text}?,
-                attribute alignat-columns {text}?,
-                MathRowWW,
-                (MathRowWW | MathIntertext)*
-            }
-        |
-            element mdn {
-                attribute number {"yes" | "no"}?,
-                attribute break {"yes" | "no"}?,
-                attribute alignment {text}?,
-                attribute alignat-columns {text}?,
-                MathRowWW,
-                (MathRowWW | MathIntertext)*
             }
         </fragment>
     </section>
@@ -969,31 +905,6 @@
                 element li {
                     MetaDataTitle,
                     BlockStatement+
-                }+
-            }
-        ListWW =
-            element ol {
-                attribute cols {"2"|"3"|"4"|"5"|"6"}?,
-                attribute label {text}?,
-                element li {
-                    MetaDataTarget,
-                    (TextParagraphWW | ParagraphWW+)
-                }+
-            }
-        |
-            element ul {
-                attribute cols {"2"|"3"|"4"|"5"|"6"}?,
-                attribute label {"" | "square"}?,
-                    element li {
-                    (TextParagraphWW | ParagraphWW+)
-                }+
-            }
-        |
-            element dl {
-                attribute width {"narrow" | "medium" | "wide"}?,
-                element li {
-                    MetaDataTitle,
-                    ParagraphWW+
                 }+
             }
         </fragment>
@@ -1278,38 +1189,6 @@
                 TableColumn*,
                 TableRow+
             }
-
-        TableCellWW =
-            element cell {
-                AlignmentHorizontal?,
-                BorderBottom?,
-                BorderRight?,
-                attribute colspan {text}?,
-                (
-                    TextLongWW |
-                    Line+ |
-                    ParagraphWW+
-                )
-            }
-        TableRowWW =
-            element row {
-                AlignmentHorizontal?,
-                AlignmentVertical?,
-                BorderBottom?,
-                BorderLeft?,
-                TableCellWW+
-            }
-        TabularWW = 
-            element tabular {
-                AlignmentHorizontal?,
-                AlignmentVertical?,
-                BorderTop?,
-                BorderBottom?,
-                BorderLeft?,
-                BorderRight?,
-                TableColumn*,
-                TableRowWW+
-            }
         </fragment>
     </section>
 
@@ -1328,7 +1207,7 @@
 
         <p>A group of side-by-sides is designed to stack vertically with common controls on widths, etc.  Its implementation is entirely experimental right now, even if we are relatively confident of the markup.</p>
 
-        <p>The <webwork /> variant allows only a single tabular or image.  The <q>NoCaption</q> variants prohibits captioned or numbered items as panels.</p>
+        <p>For <webwork /> the NoCaption variant allows <c>Tabular</c> and <c>ImageWW</c>.  This may change if these two items are liberated from <tag>sidebyside</tag>.  Presently, there should only be a single item inside a <c>sidebyside</c> inside a <c>webwork</c>, but we do not have a rule for that.</p>
 
         <fragment xml:id="sidebyside">
         Stack =
@@ -1372,6 +1251,7 @@
                     Poem |
                     Tabular |
                     Image |
+                    ImageWW |
                     Video |
                     Program |
                     Console |
@@ -1390,14 +1270,6 @@
             element sbsgroup {
                 SidebySideAttributes,
                 SideBySideNoCaption+
-            }
-        SideBySideWW =
-            element sidebyside {
-                SidebySideAttributes,
-                (
-                    TabularWW |
-                    ImageWW
-                )+
             }
         </fragment>
     </section>
@@ -1474,7 +1346,7 @@
         <p>Well, just video right now.  The <c>xml:id</c> is not used as a target, but rather as a name for a static preview image that is auto-generated by the <c>mbx</c> script thumbnail file, hence optional.  <c>preview</c> maybe be one of two reserved switches, or the filename of a static preview image.</p>
 
         <fragment xml:id="audiovideo">
-        Video = 
+        Video =
             element video {
                 UniqueID?,
                 attribute width {text}?,
@@ -1651,10 +1523,10 @@
         StatementExerciseWW =
             element statement {
                 (
-                    ParagraphWW |
+                    Paragraph |
                     WWInstruction |
                     Preformatted |
-                    SideBySideWW
+                    SideBySideNoCaption
                 )+
             }
         WWMacros = 
@@ -1666,6 +1538,7 @@
                 element pg-code {text}?
             }
         WWVariable =
+            ## The WeBWorK "var" element appears in the RELAX-NG schema as a child of many elements, but almost always as a descendant of a "p" element or a "cell" element.  As an element that is only relevant for a WeBWorK problem, occurences of "var" must be within a "webwork" element.  A Schematron rule will check on these two situations.
             element var {
                 (attribute name {text},
                 attribute evaluator {text}?,
@@ -1680,17 +1553,17 @@
         HintWW =
             element hint {
                 (
-                    ParagraphWW |
+                    Paragraph |
                     Preformatted |
-                    SideBySideWW
+                    SideBySideNoCaption
                 )+
             }
         SolutionWW =
             element solution {
                 (
-                    ParagraphWW |
+                    Paragraph |
                     Preformatted |
-                    SideBySideWW
+                    SideBySideNoCaption
                 )+
             }
         </fragment>
