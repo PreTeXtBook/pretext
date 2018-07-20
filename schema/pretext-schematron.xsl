@@ -7,7 +7,7 @@
 
 
 <!--PROLOG-->
-
+<axsl:output method="text"/>
 
 <!--KEYS-->
 
@@ -37,7 +37,11 @@
 <axsl:template match="/" mode="generate-id-2">U</axsl:template><axsl:template match="*" mode="generate-id-2" priority="2"><axsl:text>U</axsl:text><axsl:number level="multiple" count="*"/></axsl:template><axsl:template match="node()" mode="generate-id-2"><axsl:text>U.</axsl:text><axsl:number level="multiple" count="*"/><axsl:text>n</axsl:text><axsl:number count="node()"/></axsl:template><axsl:template match="@*" mode="generate-id-2"><axsl:text>U.</axsl:text><axsl:number level="multiple" count="*"/><axsl:text>_</axsl:text><axsl:value-of select="string-length(local-name(.))"/><axsl:text>_</axsl:text><axsl:value-of select="translate(name(),':','.')"/></axsl:template><!--Strip characters--><axsl:template match="text()" priority="-1"/>
 
 <!--SCHEMA METADATA-->
-<axsl:template match="/"><axsl:apply-templates select="/" mode="M0"/><axsl:apply-templates select="/" mode="M1"/></axsl:template>
+<axsl:template match="/">
+** Start checking PreTeXt Schematron rules **
+<axsl:apply-templates select="/" mode="M0"/><axsl:apply-templates select="/" mode="M1"/>** End checking PreTeXt Schematron rules   **
+
+</axsl:template>
 
 <!--SCHEMATRON PATTERNS-->
 

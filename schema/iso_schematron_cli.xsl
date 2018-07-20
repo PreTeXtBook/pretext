@@ -36,6 +36,22 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:import href="/home/rob/mathbook/schematron/trunk/schematron/code/iso_schematron_skeleton_for_xslt1.xsl"/>
 
+<!-- Causes early output=text declaration -->
+<xsl:template name="process-prolog">
+   <axsl:output method="text" />
+</xsl:template>
+
+<!-- Add a pre/post message to usual results -->
+<!-- And blank line before/after             -->
+<xsl:template name="process-root">
+    <xsl:param name="contents"/>
+
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>** Start checking PreTeXt Schematron rules **&#xa;</xsl:text>
+    <xsl:copy-of select="$contents" />
+    <xsl:text>** End checking PreTeXt Schematron rules   **&#xa;&#xa;</xsl:text>
+</xsl:template>
+
 <xsl:template name="process-report">
     <xsl:param name="id"/>
     <xsl:param name="test"/>
