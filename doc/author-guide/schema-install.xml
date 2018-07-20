@@ -102,7 +102,7 @@
 
         <p>The second step of validation is checking the Schematron rules.  Fortunately, there is nothing to install.  Use is just like the conversions you have already been doing.  In the PreTeXt distribution, there are three files related to Schematron in the <c>schema</c> directory.  Two of them are meant for developer use, or for the curious.  The file you are interested in is <c>pretext-schematron.xsl</c>.  This is a stylesheet, unique to <pretext/>, which will carefully analyze your source to find any exceptions that the <acro>RELAX-NG</acro> schema was not designed to catch.  You use the stylesheet like any other,<cd>
             <cline>xsltproc schema/pretext-schematron.xsl ~/books/aota/animals.xml</cline>
-        </cd>with suitably adjusted paths.  No news is good news, but each exception found should provide enough explanation for you to locate, and correct, the problem.  These messages are under <pretext/>'s control, so please report any that are not helpful enough.  That's it<mdash/>easy.</p>
+        </cd>with suitably adjusted paths, and be sure to provide the <c>-xinclude</c> switch if your source is modularized across multiple files (<xref ref="processing-modular" />).  No news is good news, but each exception found should provide enough explanation for you to locate, and correct, the problem.  These messages are under <pretext/>'s control, so please report any that are not helpful enough.  That's it<mdash/>easy.</p>
     </section>
 
 
