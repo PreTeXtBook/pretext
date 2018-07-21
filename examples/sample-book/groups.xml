@@ -27,6 +27,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <chapter xml:id="groups" xmlns:xi="http://www.w3.org/2001/XInclude">
     <title>Groups</title>
+    <author><xref ref="dfarmer"/></author>
 
     <introduction>
         <p>We begin our study of algebraic structures by investigating sets associated with single operations that satisfy certain reasonable axioms; that is, we want to define an operation on a set in a way that will generalize such familiar structures as the integers <m>{\mathbb Z}</m> together with the single operation of  addition, or invertible <m>2 \times 2</m> matrices together with the single operation of matrix multiplication.  The integers and the <m>2 \times 2</m> matrices, together with their respective single operations, are examples of algebraic structures known as groups.</p>
@@ -39,6 +40,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     <section xml:id="section-mod-n-sym">
         <title>Integer Equivalence Classes and Symmetries</title>
+        <author>Carl Friedrich Gauß</author>
+        <author>Leonhard Euler</author>
 
         <introduction>
 
@@ -48,6 +51,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <subsection>
             <title>The Integers mod <m>n</m></title>
+            <author>Gottfried Wilhelm Leibniz</author>
 
             <p>The integers mod <m>n</m> have become indispensable in the theory and applications of algebra.  In mathematics they are used in cryptography, coding theory, and the detection of errors in identification codes.</p>
 

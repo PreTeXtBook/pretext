@@ -36,6 +36,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <email>judsontw@sfasu.edu</email>
         </author>
 
+        <editor>
+            <personname>Isaac Newton</personname>
+            <institution>Trinity College</institution>
+        </editor>
+
         <credit>
             <title>Sage Exercises for Abstract Algebra</title>
             <author>
