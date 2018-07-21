@@ -292,7 +292,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="$document-class-prefix" />
     <xsl:text>book}&#xa;</xsl:text>
     <xsl:call-template name="latex-preamble" />
-    <xsl:call-template name="title-page-info-book" />
     <xsl:text>\begin{document}&#xa;</xsl:text>
     <xsl:apply-templates />
     <xsl:text>\end{document}</xsl:text>
@@ -554,6 +553,33 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$document-root//term">
         <xsl:text>%% Used for inline definitions of terms&#xa;</xsl:text>
         <xsl:text>\newcommand{\terminology}[1]{\textbf{#1}}&#xa;</xsl:text>
+    </xsl:if>
+    <!-- Macros for formatting per-division authors                -->
+    <!-- Large, large, normalsize, small tested for top two levels -->
+    <!-- \protect needed for xrefs converted to hyperlinks         -->
+    <!-- TODO: to get better spacing will require re-defining headings -->
+    <!-- TODO: \divisionauthors{div-name}{names}? -->
+    <xsl:if test="$document-root//chapter/author">
+        <xsl:text>\newcommand{\chapterauthors}[1]{\noindent{\Large\textbf{\protect#1}}\par\bigskip}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="$document-root//section/author">
+        <xsl:text>\newcommand{\sectionauthors}[1]{\noindent{\large\textbf{\protect#1}}\par\bigskip}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="$document-root//subsection/author">
+        <xsl:text>\newcommand{\subsectionauthors}[1]{\noindent{\normalsize\textbf{\protect#1}}\par\bigskip}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="$document-root//subsubsection/author">
+        <xsl:text>\newcommand{\subsubsectionauthors}[1]{\noindent{\small\textbf{\protect#1}}\par\bigskip}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="$document-root//appendix/author">
+        <xsl:choose>
+            <xsl:when test="$b-is-book">
+                <xsl:text>\newcommand{\appendixauthors}[1]{\noindent{\Large\textbf{\protect#1}}\par\bigskip}&#xa;</xsl:text>
+            </xsl:when>
+            <xsl:when test="$b-is-article">
+                <xsl:text>\newcommand{\appendixauthors}[1]{\noindent{\large\textbf{\protect#1}}\par\bigskip}&#xa;</xsl:text>
+            </xsl:when>
+        </xsl:choose>
     </xsl:if>
     <!-- http://tex.stackexchange.com/questions/23711/strikethrough-text -->
     <!-- http://tex.stackexchange.com/questions/287599/thickness-for-sout-strikethrough-command-from-ulem-package -->
@@ -2101,22 +2127,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
   <xsl:text>}}\hspace*{-0.75ex}{}</xsl:text>
 </xsl:template>
 
-<xsl:template name="title-page-info-book">
-    <xsl:text>%% Title page information for book&#xa;</xsl:text>
-    <xsl:text>\title{</xsl:text>
-    <xsl:apply-templates select="." mode="title-full" />
-    <xsl:if test="subtitle">
-        <xsl:text>\\&#xa;</xsl:text>
-        <!-- Trying to match author fontsize -->
-        <xsl:text>{\large </xsl:text>
-        <xsl:apply-templates select="." mode="subtitle" />
-        <xsl:text>}</xsl:text>
-    </xsl:if>
-    <xsl:text>}&#xa;</xsl:text>
-    <xsl:text>\author{</xsl:text><xsl:apply-templates select="frontmatter/titlepage/author" /><xsl:apply-templates select="frontmatter/titlepage/editor" /><xsl:text>}&#xa;</xsl:text>
-    <xsl:text>\date{</xsl:text><xsl:apply-templates select="frontmatter/titlepage/date" /><xsl:text>}&#xa;</xsl:text>
-</xsl:template>
-
 <!-- Includes an "event" for presentations -->
 <xsl:template name="title-page-info-article">
     <xsl:text>%% Title page information for article&#xa;</xsl:text>
@@ -2138,8 +2148,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}&#xa;</xsl:text>
     <xsl:if test="frontmatter/titlepage/author or frontmatter/titlepage/editor">
         <xsl:text>\author{</xsl:text>
-        <xsl:apply-templates select="frontmatter/titlepage/author" />
-        <xsl:apply-templates select="frontmatter/titlepage/editor" />
+        <xsl:apply-templates select="frontmatter/titlepage/author" mode="article-info"/>
+        <xsl:apply-templates select="frontmatter/titlepage/editor" mode="article-info"/>
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>\date{</xsl:text><xsl:apply-templates select="frontmatter/titlepage/date" /><xsl:text>}&#xa;</xsl:text>
@@ -2369,9 +2379,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\par&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Authors, editors, full info for titlepage -->
+<!-- Authors, editors, info for article info to \maketitle -->
 <!-- http://stackoverflow.com/questions/2817664/xsl-how-to-tell-if-element-is-last-in-series -->
-<xsl:template match="author">
+<xsl:template match="author" mode="article-info">
     <xsl:apply-templates select="personname" />
     <xsl:if test="department">
         <xsl:text>\\&#xa;</xsl:text>
@@ -2390,7 +2400,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
-<xsl:template match="editor">
+
+<xsl:template match="editor" mode="article-info">
     <xsl:apply-templates select="personname" />
     <xsl:text>, </xsl:text>
     <xsl:call-template name="type-name">
@@ -2413,6 +2424,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
+
 
 <!-- Departments and Institutions are free-form, or sequences of lines -->
 <!-- Line breaks are inserted above, due to \and, etc,                 -->
@@ -3191,11 +3203,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="console-typeout" />
     <xsl:apply-templates select="." mode="begin-language" />
     <xsl:apply-templates select="." mode="latex-division-heading" />
-    <!-- List the author of this division, if present -->
+    <!-- List the author(s) of this division, if present -->
     <xsl:if test="author">
-        <xsl:text>\noindent{\Large\textbf{</xsl:text>
+        <xsl:text>\</xsl:text>
+        <xsl:value-of select="local-name(.)"/>
+        <xsl:text>authors{</xsl:text>
         <xsl:apply-templates select="author" mode="name-list"/>
-        <xsl:text>}}\par\bigskip&#xa;</xsl:text>
+        <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
     <!-- Process the contents, title, idx killed, but avoid author -->
     <!-- "solutions" content needs to call content generator       -->
@@ -3204,7 +3218,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="solutions" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:apply-templates select="*[not(self::author)]" />
+            <xsl:apply-templates select="*"/>
         </xsl:otherwise>
     </xsl:choose>
     <xsl:apply-templates select="." mode="end-language" />
