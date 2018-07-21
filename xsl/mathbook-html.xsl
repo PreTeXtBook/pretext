@@ -388,6 +388,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <section class="{local-name(.)}" id="{$ident}">
         <xsl:apply-templates select="." mode="section-header" />
+        <xsl:apply-templates select="." mode="author-byline"/>
         <!-- the main content of a division is created here    -->
         <!-- a "solutions" is exceptional as generated content -->
         <xsl:choose>
@@ -414,7 +415,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <section class="{local-name(.)}" id="{$ident}">
         <xsl:apply-templates select="." mode="section-header" />
-        <xsl:apply-templates select="author|objectives|introduction|titlepage|abstract" />
+        <xsl:apply-templates select="." mode="author-byline"/>
+        <xsl:apply-templates select="objectives|introduction|titlepage|abstract" />
         <nav class="summary-links">
             <ul>
                 <xsl:apply-templates select="*" mode="summary-nav" />
@@ -511,8 +513,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="header-content" />
     </xsl:element>
     <xsl:apply-templates select="." mode="permalink" />
+</xsl:template>
+
+<!-- Add an author's names, if present   -->
+<!-- TODO: make match more restrictive?  -->
+<xsl:template match="&STRUCTURAL;" mode="author-byline">
     <xsl:if test="author">
-        <p class="byline"><xsl:apply-templates select="author" mode="name-list"/></p>
+        <p class="byline">
+            <xsl:apply-templates select="author" mode="name-list"/>
+        </p>
     </xsl:if>
 </xsl:template>
 
@@ -940,6 +949,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- as a duplicate generated content, no HTML id -->
     <section class="{local-name(.)}">
         <xsl:apply-templates select="." mode="section-header" />
+        <!-- we don't do an "author-byline" here in duplication -->
         <xsl:copy-of select="$content" />
     </section>
 </xsl:template>
@@ -5395,8 +5405,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                 </h1>
                                 <!-- Serial list of authors/editors -->
                                 <p class="byline">
-                                    <xsl:apply-templates select="//frontmatter/titlepage/author" mode="name-list"/>
-                                    <xsl:apply-templates select="//frontmatter/titlepage/editor" mode="name-list"/>
+                                    <xsl:apply-templates select="$document-root/frontmatter/titlepage/author" mode="name-list"/>
+                                    <xsl:apply-templates select="$document-root/frontmatter/titlepage/editor" mode="name-list"/>
                                 </p>
                             </div>  <!-- title-container -->
                         </div>  <!-- container -->
