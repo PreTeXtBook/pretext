@@ -1854,8 +1854,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="personname">
             <xsl:apply-templates select="personname"/>
         </xsl:when>
+        <!-- Schematron assertion requires the target -->
+        <!-- of the xref to be a contributor element  -->
         <xsl:when test="xref">
-            <!-- TODO: could catch bad pointer with Schematron -->
             <xsl:apply-templates select="xref"/>
         </xsl:when>
         <xsl:otherwise>

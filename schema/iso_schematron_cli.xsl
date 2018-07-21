@@ -47,12 +47,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="contents"/>
 
     <xsl:text>&#xa;</xsl:text>
-    <xsl:text>** Start checking PreTeXt Schematron rules **&#xa;</xsl:text>
+    <xsl:text>** Begin checking PreTeXt Schematron rules      **&#xa;</xsl:text>
     <xsl:copy-of select="$contents" />
-    <xsl:text>** End checking PreTeXt Schematron rules   **&#xa;&#xa;</xsl:text>
+    <xsl:text>** Finished checking PreTeXt Schematron rules   **&#xa;&#xa;</xsl:text>
 </xsl:template>
 
-<xsl:template name="process-report">
+<xsl:template name="process-assert">
     <xsl:param name="id"/>
     <xsl:param name="test"/>
     <xsl:param name="diagnostics"/>
@@ -71,7 +71,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <axsl:apply-templates select="." mode="schematron-get-full-path"/>
     <xsl:text>&#xa;</xsl:text>
 
-    <xsl:text>Condition:        </xsl:text>
+    <xsl:text>Requirement:      </xsl:text>
     <xsl:value-of select="$test" />
     <xsl:text>&#xa;</xsl:text>
 

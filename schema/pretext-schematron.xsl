@@ -38,8 +38,8 @@
 
 <!--SCHEMA METADATA-->
 <axsl:template match="/">
-** Start checking PreTeXt Schematron rules **
-<axsl:apply-templates select="/" mode="M0"/><axsl:apply-templates select="/" mode="M1"/>** End checking PreTeXt Schematron rules   **
+** Begin checking PreTeXt Schematron rules      **
+<axsl:apply-templates select="/" mode="M0"/><axsl:apply-templates select="/" mode="M1"/>** Finished checking PreTeXt Schematron rules   **
 
 </axsl:template>
 
@@ -50,40 +50,40 @@
 
 
 	<!--RULE -->
-<axsl:template match="cell" priority="1000" mode="M0">
+<axsl:template match="var" priority="1000" mode="M0">
 
-		<!--REPORT -->
-<axsl:if test=".//var and not(ancestor::webwork)">Location:         <axsl:apply-templates select="." mode="schematron-get-full-path"/>
-Condition:        .//var and not(ancestor::webwork)
-Explanation:       the "var" element may only appear in a "p" if enclosed within a "webwork" element <axsl:text/>
+		<!--ASSERT -->
+<axsl:choose><axsl:when test="ancestor::webwork"/><axsl:otherwise>Location:         <axsl:apply-templates select="." mode="schematron-get-full-path"/>
+Requirement:      ancestor::webwork
+Explanation:       the &lt;var&gt; element is exclusive to a WeBWorK problem, and so must only appear within a &lt;webwork&gt; element <axsl:text/>
             <axsl:text/><axsl:value-of select="'&#10;Enclosing Title:    &quot;'"/><axsl:text/>
             <axsl:text/><axsl:value-of select="ancestor::*[title][1]/title"/><axsl:text/>
-            <axsl:text/><axsl:value-of select="concat('&quot; (on a &quot;', local-name(ancestor::*[title][1]), '&quot;)')"/><axsl:text/>
+            <axsl:text/><axsl:value-of select="concat('&quot; (on a &lt;', local-name(ancestor::*[title][1]), '&gt;)')"/><axsl:text/>
         <axsl:text/> <axsl:text/>
                 <axsl:text/><axsl:value-of select="'&#10;Enclosing xml:id: &quot;'"/><axsl:text/>
                 <axsl:text/><axsl:value-of select="ancestor::*[@xml:id][1]/@xml:id"/><axsl:text/>
-                <axsl:text/><axsl:value-of select="concat('&quot; (on a &quot;', local-name(ancestor::*[@xml:id][1]), '&quot;)')"/><axsl:text/>
+                <axsl:text/><axsl:value-of select="concat('&quot; (on a &lt;', local-name(ancestor::*[@xml:id][1]), '&gt;)')"/><axsl:text/>
         <axsl:text/>
 - - - - - - - - -
-</axsl:if><axsl:apply-templates select="*|comment()|processing-instruction()" mode="M0"/></axsl:template><axsl:template match="text()" priority="-1" mode="M0"/><axsl:template match="@*|node()" priority="-2" mode="M0"><axsl:apply-templates select="*|comment()|processing-instruction()" mode="M0"/></axsl:template>
+</axsl:otherwise></axsl:choose><axsl:apply-templates select="*|comment()|processing-instruction()" mode="M0"/></axsl:template><axsl:template match="text()" priority="-1" mode="M0"/><axsl:template match="@*|node()" priority="-2" mode="M0"><axsl:apply-templates select="*|comment()|processing-instruction()" mode="M0"/></axsl:template>
 
 <!--PATTERN -->
 
 
 	<!--RULE -->
-<axsl:template match="p" priority="1000" mode="M1">
+<axsl:template match="author/xref" priority="1000" mode="M1">
 
-		<!--REPORT -->
-<axsl:if test=".//var and not(ancestor::webwork)">Location:         <axsl:apply-templates select="." mode="schematron-get-full-path"/>
-Condition:        .//var and not(ancestor::webwork)
-Explanation:       the "var" element may only appear in a "tabular/row/cell" if enclosed within a "webwork" element <axsl:text/>
+		<!--ASSERT -->
+<axsl:choose><axsl:when test="id(@ref)/self::contributor"/><axsl:otherwise>Location:         <axsl:apply-templates select="." mode="schematron-get-full-path"/>
+Requirement:      id(@ref)/self::contributor
+Explanation:       an &lt;xref&gt; within an &lt;author&gt; must point to a &lt;contributor&gt; <axsl:text/>
             <axsl:text/><axsl:value-of select="'&#10;Enclosing Title:    &quot;'"/><axsl:text/>
             <axsl:text/><axsl:value-of select="ancestor::*[title][1]/title"/><axsl:text/>
-            <axsl:text/><axsl:value-of select="concat('&quot; (on a &quot;', local-name(ancestor::*[title][1]), '&quot;)')"/><axsl:text/>
+            <axsl:text/><axsl:value-of select="concat('&quot; (on a &lt;', local-name(ancestor::*[title][1]), '&gt;)')"/><axsl:text/>
         <axsl:text/> <axsl:text/>
                 <axsl:text/><axsl:value-of select="'&#10;Enclosing xml:id: &quot;'"/><axsl:text/>
                 <axsl:text/><axsl:value-of select="ancestor::*[@xml:id][1]/@xml:id"/><axsl:text/>
-                <axsl:text/><axsl:value-of select="concat('&quot; (on a &quot;', local-name(ancestor::*[@xml:id][1]), '&quot;)')"/><axsl:text/>
+                <axsl:text/><axsl:value-of select="concat('&quot; (on a &lt;', local-name(ancestor::*[@xml:id][1]), '&gt;)')"/><axsl:text/>
         <axsl:text/>
 - - - - - - - - -
-</axsl:if><axsl:apply-templates select="*|comment()|processing-instruction()" mode="M1"/></axsl:template><axsl:template match="text()" priority="-1" mode="M1"/><axsl:template match="@*|node()" priority="-2" mode="M1"><axsl:apply-templates select="*|comment()|processing-instruction()" mode="M1"/></axsl:template></axsl:stylesheet>
+</axsl:otherwise></axsl:choose><axsl:apply-templates select="*|comment()|processing-instruction()" mode="M1"/></axsl:template><axsl:template match="text()" priority="-1" mode="M1"/><axsl:template match="@*|node()" priority="-2" mode="M1"><axsl:apply-templates select="*|comment()|processing-instruction()" mode="M1"/></axsl:template></axsl:stylesheet>

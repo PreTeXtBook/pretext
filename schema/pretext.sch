@@ -48,14 +48,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" -->
     <!-- xmlns="http://relaxng.org/ns/structure/1.0"                   -->
     <s:pattern>
-        <s:rule context="cell">
-            <s:report test=".//var and not(ancestor::webwork)" diagnostics="enclosing-title enclosing-id">the &quot;var&quot; element may only appear in a &quot;p&quot; if enclosed within a &quot;webwork&quot; element</s:report>
+        <s:rule context="var">
+            <s:assert test="ancestor::webwork" diagnostics="enclosing-title enclosing-id">the &lt;var&gt; element is exclusive to a WeBWorK problem, and so must only appear within a &lt;webwork&gt; element</s:assert>
         </s:rule>
     </s:pattern>
 
     <s:pattern>
-        <s:rule context="p">
-            <s:report test=".//var and not(ancestor::webwork)" diagnostics="enclosing-title enclosing-id">the &quot;var&quot; element may only appear in a &quot;tabular/row/cell&quot; if enclosed within a &quot;webwork&quot; element</s:report>
+        <s:rule context="author/xref">
+            <s:assert test="id(@ref)/self::contributor" diagnostics="enclosing-title enclosing-id">an &lt;xref&gt; within an &lt;author&gt; must point to a &lt;contributor&gt;</s:assert>
         </s:rule>
     </s:pattern>
 
@@ -67,13 +67,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <s:diagnostic id="enclosing-title" xml:space="default">
             <s:value-of select="'&#xa;Enclosing Title:    &quot;'"/>
             <s:value-of select="ancestor::*[title][1]/title"/>
-            <s:value-of select="concat('&quot; (on a &quot;', local-name(ancestor::*[title][1]), '&quot;)')"/>
+            <s:value-of select="concat('&quot; (on a &lt;', local-name(ancestor::*[title][1]), '&gt;)')"/>
         </s:diagnostic>
 
         <s:diagnostic id="enclosing-id" xml:space="default">
                 <s:value-of select="'&#xa;Enclosing xml:id: &quot;'"/>
                 <s:value-of select="ancestor::*[@xml:id][1]/@xml:id"/>
-                <s:value-of select="concat('&quot; (on a &quot;', local-name(ancestor::*[@xml:id][1]), '&quot;)')"/>
+                <s:value-of select="concat('&quot; (on a &lt;', local-name(ancestor::*[@xml:id][1]), '&gt;)')"/>
         </s:diagnostic>
     </s:diagnostics>
 </s:schema>
