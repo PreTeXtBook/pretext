@@ -1831,6 +1831,54 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
+<!-- ############## -->
+<!-- Lists of Names -->
+<!-- ############## -->
+
+<!-- Authors and editors are people credited in the front matter and in   -->
+<!-- mastheads, etc.  Authors can appear on major divisions, such as      -->
+<!-- chapters and sections.  There can be multiple, and we want to string -->
+<!-- them together with commas, and give editors a parenthetical          -->
+<!-- distinction.                                                         -->
+
+<!-- First, we kill these elements as metadata, so we do not process them  -->
+<!-- in document order, but instead need to always process them with modal -->
+<!-- templates.                                                            -->
+<xsl:template match="author|editor" />
+
+<!-- Names can appear structured in the front matter, unstructured on -->
+<!-- divisions, or as cross-references to contributors.               -->
+<xsl:template match="author|editor" mode="name-only">
+    <xsl:choose>
+        <!-- structured version -->
+        <xsl:when test="personname">
+            <xsl:apply-templates select="personname"/>
+        </xsl:when>
+        <xsl:when test="xref">
+            <!-- TODO: could catch bad pointer with Schematron -->
+            <xsl:apply-templates select="xref"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="node()"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Authors, editors in serial lists for headers -->
+<xsl:template match="author|editor" mode="name-list" >
+    <!-- separator, if following -->
+    <xsl:if test="preceding-sibling::author|preceding-sibling::editor">
+        <xsl:text>, </xsl:text>
+    </xsl:if>
+    <!-- name itself, from "personname" or the content -->
+    <xsl:apply-templates select="." mode="name-only"/>
+    <xsl:if test="self::editor">
+        <xsl:text> (</xsl:text>
+        <xsl:apply-templates select="." mode="type-name" />
+        <xsl:text>)</xsl:text>
+    </xsl:if>
+</xsl:template>
+
 <!-- ########################## -->
 <!-- Text Manipulation Routines -->
 <!-- ########################## -->

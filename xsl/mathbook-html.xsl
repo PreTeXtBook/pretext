@@ -737,33 +737,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- Authors, editors in serial lists for headers           -->
-<!-- Presumes authors get selected first, so editors follow -->
-<!-- TODO: Move to common -->
-<xsl:template match="author[1]" mode="name-list" >
-    <xsl:apply-templates select="personname" />
-</xsl:template>
-<xsl:template match="author" mode="name-list" >
-    <xsl:text>, </xsl:text>
-    <xsl:apply-templates select="personname" />
-</xsl:template>
-<xsl:template match="editor[1]" mode="name-list" >
-    <xsl:if test="//frontmatter/titlepage/author" >
-        <xsl:text>, </xsl:text>
-    </xsl:if>
-    <xsl:apply-templates select="personname" />
-    <xsl:text> (</xsl:text>
-    <xsl:apply-templates select="." mode="type-name" />
-    <xsl:text>)</xsl:text>
-</xsl:template>
-<xsl:template match="editor" mode="name-list" >
-    <xsl:text>, </xsl:text>
-    <xsl:apply-templates select="personname" />
-    <xsl:text> (</xsl:text>
-    <xsl:apply-templates select="." mode="type-name" />
-    <xsl:text>)</xsl:text>
-</xsl:template>
-
 <!-- Front Colophon -->
 <!-- Licenses, ISBN, Cover Designer, etc -->
 <!-- We process pieces, in document order -->
