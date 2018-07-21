@@ -46,6 +46,7 @@
         Chapter =
             element chapter {
                 MetaDataTitle,
+                AuthorByline*,
                 Objectives?,
                 (
                     (
@@ -68,6 +69,7 @@
         Section =
             element section {
                 MetaDataTitle,
+                AuthorByline*,
                 Objectives?,
                 (
                     (
@@ -90,6 +92,7 @@
         Subsection =
             element subsection {
                 MetaDataTitle,
+                AuthorByline*,
                 Objectives?,
                 (
                     (
@@ -112,6 +115,7 @@
         Subsubsection =
             element subsubsection {
                 MetaDataTitle,
+                AuthorByline*,
                 Objectives?,
                 (BlockDivision | Paragraphs | Commentary)+,
                 Exercises?,
@@ -121,6 +125,7 @@
         Appendix =
             element appendix {
                 MetaDataTitle,
+                AuthorByline*,
                 (
                     (BlockDivision | Paragraphs | Commentary | NotationList )+ |
                     (
@@ -893,6 +898,8 @@
             element contributors {
                 Contributor+
             }
+        AuthorByline =
+            element author {(TextSimple|Xref)}
         
         
         WebWork = (WebWorkAuthored | WebWorkSource)

@@ -81,6 +81,7 @@
       <xs:complexContent>
         <xs:extension base="MetaDataTitle">
           <xs:sequence>
+            <xs:group minOccurs="0" maxOccurs="unbounded" ref="AuthorByline"/>
             <xs:element minOccurs="0" ref="objectives"/>
             <xs:choice>
               <xs:sequence>
@@ -112,6 +113,7 @@
       <xs:complexContent>
         <xs:extension base="MetaDataTitle">
           <xs:sequence>
+            <xs:group minOccurs="0" maxOccurs="unbounded" ref="AuthorByline"/>
             <xs:element minOccurs="0" ref="objectives"/>
             <xs:choice>
               <xs:sequence>
@@ -143,6 +145,7 @@
       <xs:complexContent>
         <xs:extension base="MetaDataTitle">
           <xs:sequence>
+            <xs:group minOccurs="0" maxOccurs="unbounded" ref="AuthorByline"/>
             <xs:element minOccurs="0" ref="objectives"/>
             <xs:choice>
               <xs:sequence>
@@ -174,6 +177,7 @@
       <xs:complexContent>
         <xs:extension base="MetaDataTitle">
           <xs:sequence>
+            <xs:group minOccurs="0" maxOccurs="unbounded" ref="AuthorByline"/>
             <xs:element minOccurs="0" ref="objectives"/>
             <xs:choice maxOccurs="unbounded">
               <xs:group ref="BlockDivision"/>
@@ -192,24 +196,27 @@
     <xs:complexType>
       <xs:complexContent>
         <xs:extension base="MetaDataTitle">
-          <xs:choice>
-            <xs:choice maxOccurs="unbounded">
-              <xs:group ref="BlockDivision"/>
-              <xs:group ref="Paragraphs"/>
-              <xs:element ref="commentary"/>
-              <xs:element ref="notation-list"/>
-            </xs:choice>
-            <xs:sequence>
-              <xs:group minOccurs="0" ref="IntroductionDivision"/>
-              <xs:element ref="section"/>
-              <xs:choice minOccurs="0" maxOccurs="unbounded">
-                <xs:element ref="section"/>
-                <xs:element ref="exercises"/>
-                <xs:element ref="references"/>
+          <xs:sequence>
+            <xs:group minOccurs="0" maxOccurs="unbounded" ref="AuthorByline"/>
+            <xs:choice>
+              <xs:choice maxOccurs="unbounded">
+                <xs:group ref="BlockDivision"/>
+                <xs:group ref="Paragraphs"/>
+                <xs:element ref="commentary"/>
+                <xs:element ref="notation-list"/>
               </xs:choice>
-              <xs:group minOccurs="0" ref="ConclusionDivision"/>
-            </xs:sequence>
-          </xs:choice>
+              <xs:sequence>
+                <xs:group minOccurs="0" ref="IntroductionDivision"/>
+                <xs:element ref="section"/>
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                  <xs:element ref="section"/>
+                  <xs:element ref="exercises"/>
+                  <xs:element ref="references"/>
+                </xs:choice>
+                <xs:group minOccurs="0" ref="ConclusionDivision"/>
+              </xs:sequence>
+            </xs:choice>
+          </xs:sequence>
         </xs:extension>
       </xs:complexContent>
     </xs:complexType>
@@ -260,8 +267,8 @@
       <xs:sequence>
         <xs:choice>
           <xs:sequence>
-            <xs:element ref="author"/>
-            <xs:element minOccurs="0" maxOccurs="unbounded" ref="author"/>
+            <xs:group ref="Author"/>
+            <xs:group minOccurs="0" maxOccurs="unbounded" ref="Author"/>
             <xs:element minOccurs="0" maxOccurs="unbounded" ref="editor"/>
           </xs:sequence>
           <xs:sequence>
@@ -274,30 +281,34 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="author">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element ref="personname"/>
-        <xs:element minOccurs="0" name="department">
-          <xs:complexType mixed="true">
-            <xs:choice>
-              <xs:group ref="TextSimple"/>
-              <xs:group maxOccurs="unbounded" ref="Line"/>
-            </xs:choice>
-          </xs:complexType>
-        </xs:element>
-        <xs:element minOccurs="0" name="institution">
-          <xs:complexType mixed="true">
-            <xs:choice>
-              <xs:group ref="TextSimple"/>
-              <xs:group maxOccurs="unbounded" ref="Line"/>
-            </xs:choice>
-          </xs:complexType>
-        </xs:element>
-        <xs:element minOccurs="0" ref="email"/>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
+  <xs:group name="Author">
+    <xs:sequence>
+      <xs:element name="author">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref="personname"/>
+            <xs:element minOccurs="0" name="department">
+              <xs:complexType mixed="true">
+                <xs:choice>
+                  <xs:group ref="TextSimple"/>
+                  <xs:group maxOccurs="unbounded" ref="Line"/>
+                </xs:choice>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" name="institution">
+              <xs:complexType mixed="true">
+                <xs:choice>
+                  <xs:group ref="TextSimple"/>
+                  <xs:group maxOccurs="unbounded" ref="Line"/>
+                </xs:choice>
+              </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="0" ref="email"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
   <xs:element name="personname">
     <xs:complexType mixed="true">
       <xs:group ref="TextSimple"/>
@@ -332,7 +343,7 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element ref="title"/>
-        <xs:element maxOccurs="unbounded" ref="author"/>
+        <xs:group maxOccurs="unbounded" ref="Author"/>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1831,6 +1842,18 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:group name="AuthorByline">
+    <xs:sequence>
+      <xs:element name="author">
+        <xs:complexType mixed="true">
+          <xs:choice>
+            <xs:group ref="TextSimple"/>
+            <xs:element ref="xref"/>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
   <xs:group name="WebWork">
     <xs:choice>
       <xs:group ref="WebWorkAuthored"/>

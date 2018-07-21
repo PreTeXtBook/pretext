@@ -91,6 +91,9 @@
   <define name="Chapter">
     <element name="chapter">
       <ref name="MetaDataTitle"/>
+      <zeroOrMore>
+        <ref name="AuthorByline"/>
+      </zeroOrMore>
       <optional>
         <ref name="Objectives"/>
       </optional>
@@ -139,6 +142,9 @@
   <define name="Section">
     <element name="section">
       <ref name="MetaDataTitle"/>
+      <zeroOrMore>
+        <ref name="AuthorByline"/>
+      </zeroOrMore>
       <optional>
         <ref name="Objectives"/>
       </optional>
@@ -187,6 +193,9 @@
   <define name="Subsection">
     <element name="subsection">
       <ref name="MetaDataTitle"/>
+      <zeroOrMore>
+        <ref name="AuthorByline"/>
+      </zeroOrMore>
       <optional>
         <ref name="Objectives"/>
       </optional>
@@ -235,6 +244,9 @@
   <define name="Subsubsection">
     <element name="subsubsection">
       <ref name="MetaDataTitle"/>
+      <zeroOrMore>
+        <ref name="AuthorByline"/>
+      </zeroOrMore>
       <optional>
         <ref name="Objectives"/>
       </optional>
@@ -259,6 +271,9 @@
   <define name="Appendix">
     <element name="appendix">
       <ref name="MetaDataTitle"/>
+      <zeroOrMore>
+        <ref name="AuthorByline"/>
+      </zeroOrMore>
       <choice>
         <oneOrMore>
           <choice>
@@ -1981,6 +1996,14 @@
       <oneOrMore>
         <ref name="Contributor"/>
       </oneOrMore>
+    </element>
+  </define>
+  <define name="AuthorByline">
+    <element name="author">
+      <choice>
+        <ref name="TextSimple"/>
+        <ref name="Xref"/>
+      </choice>
     </element>
   </define>
   <define name="WebWork">

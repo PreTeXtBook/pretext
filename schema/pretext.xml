@@ -94,6 +94,7 @@
         Chapter =
             element chapter {
                 MetaDataTitle,
+                AuthorByline*,
                 Objectives?,
                 (
                     (
@@ -116,6 +117,7 @@
         Section =
             element section {
                 MetaDataTitle,
+                AuthorByline*,
                 Objectives?,
                 (
                     (
@@ -138,6 +140,7 @@
         Subsection =
             element subsection {
                 MetaDataTitle,
+                AuthorByline*,
                 Objectives?,
                 (
                     (
@@ -160,6 +163,7 @@
         Subsubsection =
             element subsubsection {
                 MetaDataTitle,
+                AuthorByline*,
                 Objectives?,
                 (BlockDivision | Paragraphs | Commentary)+,
                 Exercises?,
@@ -169,6 +173,7 @@
         Appendix =
             element appendix {
                 MetaDataTitle,
+                AuthorByline*,
                 (
                     (BlockDivision | Paragraphs | Commentary | NotationList )+ |
                     (
@@ -1803,7 +1808,7 @@
     <section>
         <title>Contributors</title>
 
-        <p>A single <c>contributors</c> element may be placed into a <c>preface</c> and is a list of <c>contributor</c>.  It can be optionally preceded, or followed, by all the usual things that can go into any preface.</p>
+        <p>A single <c>contributors</c> element may be placed into a <c>preface</c> and is a list of <c>contributor</c>.  It can be optionally preceded, or followed, by all the usual things that can go into any preface.  An AuthorByline is a special instance of acknowledging a contributor on a division.</p>
 
         <fragment xml:id="contributor">
         Contributor =
@@ -1819,6 +1824,8 @@
             element contributors {
                 Contributor+
             }
+        AuthorByline =
+            element author {(TextSimple|Xref)}
         </fragment>
     </section>
 
