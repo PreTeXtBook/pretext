@@ -1710,11 +1710,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Title only -->
-<!-- ASIDE-LIKE, exercisegroup      -->
-<!-- proof, when optionally titled  -->
-<!-- Subsidiary to paragraphs,      -->
-<!-- and divisions of "exercises"   -->
-<!-- No title, then nothing happens -->
+<!-- ASIDE-LIKE, exercisegroup, dl/li -->
+<!-- proof, when optionally titled    -->
+<!-- Subsidiary to paragraphs,        -->
+<!-- and divisions of "exercises"     -->
+<!-- No title, then nothing happens   -->
 <xsl:template match="*" mode="heading-title">
     <xsl:if test="title/*|title/text()">
         <h6 class="heading">
@@ -4038,7 +4038,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="li" mode="heading-birth" />
 
 <xsl:template match="li" mode="heading-xref-knowl">
-    <xsl:apply-templates select="." mode="heading-full" />
+    <xsl:apply-templates select="." mode="heading-title" />
 </xsl:template>
 
 <!-- Pass-through regular list items    -->
