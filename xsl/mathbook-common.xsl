@@ -6603,10 +6603,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Provisional cross-references -->
 <!-- A convenience for authors in early stages of writing -->
 <!-- Appear both inline and moreso in author tools        -->
-<!-- TODO: Make cite/@provisional an error eventually     -->
-<xsl:template match="cite[@provisional]|xref[@provisional]">
-    <!-- DEPRECATED: 2014-06-25 -->
-    <xsl:if test="self::cite" />
+<xsl:template match="xref[@provisional]">
     <xsl:variable name="inline-warning">
         <xsl:value-of select="@provisional" />
     </xsl:variable>
@@ -7962,11 +7959,6 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     </xsl:call-template>
     <!--  -->
     <!-- 2014-06-25  xref once had cite as a variant -->
-    <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurrences" select="$document-root//cite" />
-        <xsl:with-param name="date-string" select="'2014-06-25'" />
-        <xsl:with-param name="message" select="'the &quot;cite&quot; element is deprecated, convert to &quot;xref&quot;'" />
-    </xsl:call-template>
     <!--  -->
     <!-- 2015-01-28  once both circum and circumflex existed, circumflex won -->
     <xsl:call-template name="deprecation-message">

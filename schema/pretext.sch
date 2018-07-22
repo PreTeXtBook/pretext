@@ -51,6 +51,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- xmlns="http://relaxng.org/ns/structure/1.0"                   -->
 
 <s:schema xmlns:s="http://purl.oclc.org/dsdl/schematron">
+
+    <!-- Begin: Deprecations -->
+    <!-- Comments are copied from original warnings in -common templates -->
+
+    <!-- 2014-06-25  xref once had cite as a variant -->
+    <!-- 2018-07-21  remove all relevant code        -->
+    <s:pattern>
+        <s:rule context="cite">
+            <s:report test="true()" diagnostics="enclosing-title enclosing-id">the &lt;cite&gt; element is deprecated (2014-06-25) and no code remains (2018-07-21), convert to an &lt;xref&gt;</s:report>
+        </s:rule>
+    </s:pattern>
+
+    <!-- End: Deprecations -->
+
     <s:pattern>
         <s:rule context="var">
             <s:assert test="ancestor::webwork" diagnostics="enclosing-title enclosing-id">the &lt;var&gt; element is exclusive to a WeBWorK problem, and so must only appear within a &lt;webwork&gt; element</s:assert>

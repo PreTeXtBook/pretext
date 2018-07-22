@@ -8680,23 +8680,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Uninteresting Code, aka the Bad Bank                    -->
 <!-- Deprecated, unmaintained, etc, parked here out of sight -->
 
-<!-- Legacy code: not maintained                  -->
-<!-- Banish to common file when removed, as error -->
-<!-- 2014/06/25:  All functionality here is replicated -->
-<xsl:template match="cite[@ref]">
-    <xsl:message>MBX:WARNING: &lt;cite ref="<xsl:value-of select="@ref" />"&gt; is deprecated, convert to &lt;xref ref="<xsl:value-of select="@ref" />"&gt;</xsl:message>
-    <xsl:variable name="target" select="id(@ref)" />
-        <xsl:text>\cite</xsl:text>
-        <xsl:if test="@detail">
-            <xsl:text>[</xsl:text>
-            <xsl:apply-templates select="@detail" />
-            <xsl:text>]</xsl:text>
-        </xsl:if>
-        <xsl:text>{</xsl:text>
-        <xsl:apply-templates select="$target" mode="internal-id" />
-        <xsl:text>}</xsl:text>
-</xsl:template>
-
 <!-- "solution-list" was supported by elaborate -->
 <!-- modal templates, which are now renamed     -->
 <!-- 2018-07-04: some day remove all this code  -->

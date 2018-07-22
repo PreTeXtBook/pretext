@@ -9414,48 +9414,6 @@ var scJsHost = (("https:" == document.location.protocol) ? "https://secure." : "
 <!-- Uninteresting Code, aka the Bad Bank                    -->
 <!-- Deprecated, unmaintained, etc, parked here out of sight -->
 
-<!-- Legacy code: not maintained                  -->
-<!-- Banish to common file when removed, as error -->
-<!-- 2014/06/25: implemented with xref as link, need to duplicate knowl functionality -->
-<!-- 2014/08/14: remove knowl-link-factory at the same time -->
-<xsl:template match="cite[@ref]">
-    <xsl:message>MBX:WARNING: &lt;cite ref="<xsl:value-of select="@ref" />&gt; is deprecated, convert to &lt;xref ref="<xsl:value-of select="@ref" />"&gt;</xsl:message>
-    <xsl:apply-templates select="." mode="location-report" />
-    <xsl:call-template name="knowl-link-factory">
-        <xsl:with-param name="css-class">cite</xsl:with-param>
-        <xsl:with-param name="identifier">
-            <xsl:apply-templates select="id(@ref)" mode="internal-id" />
-        </xsl:with-param>
-        <xsl:with-param name="content">
-            <xsl:text>[</xsl:text>
-            <xsl:apply-templates select="id(@ref)" mode="number" />
-            <xsl:if test="@detail">
-                <xsl:text>, </xsl:text>
-                <xsl:apply-templates select="@detail" />
-            </xsl:if>
-            <xsl:text>]</xsl:text>
-        </xsl:with-param>
-    </xsl:call-template>
-</xsl:template>
-
-<!-- Only used by <cite> above, so can be removed at same time -->
-<xsl:template name="knowl-link-factory">
-    <xsl:param name="css-class"/>
-    <xsl:param name="identifier"/>
-    <xsl:param name="content"/>
-    <xsl:element name ="a">
-        <xsl:attribute name="class">
-            <xsl:value-of select="$css-class" />
-        </xsl:attribute>
-        <xsl:attribute name="knowl">
-            <xsl:text>./knowl/</xsl:text>
-            <xsl:value-of select="$identifier" />
-            <xsl:text>.html</xsl:text>
-        </xsl:attribute>
-        <xsl:value-of select="$content" />
-    </xsl:element>
-</xsl:template>
-
 <!-- "solution-list" was supported by elaborate -->
 <!-- modal templates, which are now renamed     -->
 <!-- 2018-07-04: some day remove all this code  -->
