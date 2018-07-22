@@ -55,6 +55,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Begin: Deprecations -->
     <!-- Comments are copied from original warnings in -common templates -->
 
+    <!-- 2014-05-04  @filebase has been replaced in function by @xml:id -->
+    <!-- 2018-07-21  remove all relevant code                           -->
+    <s:pattern>
+        <s:rule context="@filebase">
+            <s:report test="true()" diagnostics="enclosing-title enclosing-id">the @filebase attribute is deprecated (2014-05-04) and no code remains (2018-07-21), convert to using @xml:id for this purpose</s:report>
+        </s:rule>
+    </s:pattern>
+
     <!-- 2014-06-25  xref once had cite as a variant -->
     <!-- 2018-07-21  remove all relevant code        -->
     <s:pattern>

@@ -2987,9 +2987,6 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:when test="$intermediate='true' or $chunk='true'">
             <xsl:apply-templates select="." mode="internal-id" />
             <xsl:value-of select="$file-extension" />
-            <!-- DEPRECATION: May 2015, ignore silently here, warning in -common -->
-            <!-- could replace with terminate=yes if present without an xml:id   -->
-            <xsl:if test="@filebase" />
         </xsl:when>
         <!-- Halts since "mathbook" element will be chunk (or earlier) -->
         <xsl:otherwise>
@@ -7948,16 +7945,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 </xsl:template>
 
 <xsl:template match="*" mode="deprecation-warnings">
-    <!-- older deprecations at the top of this list, -->
-    <!-- so author will see new at the tail end      -->
+    <!-- Older deprecations at the top of this list, -->
+    <!-- so author will see new at the tail end.     -->
+    <!-- Comments without implementations have moved -->
+    <!-- to Schematron rules after residing here for -->
+    <!-- at least 16 months (one year plus grace)    -->
     <!--  -->
     <!-- 2014-05-04  @filebase has been replaced in function by @xml:id -->
-    <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurrences" select="$document-root//@filebase" />
-        <xsl:with-param name="date-string" select="'2014-05-04'" />
-        <xsl:with-param name="message" select="'the &quot;filebase&quot; attribute is deprecated, convert to &quot;xml:id&quot;'" />
-    </xsl:call-template>
-    <!--  -->
     <!-- 2014-06-25  xref once had cite as a variant -->
     <!--  -->
     <!-- 2015-01-28  once both circum and circumflex existed, circumflex won -->
