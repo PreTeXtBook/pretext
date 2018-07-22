@@ -39,7 +39,7 @@
 <!--SCHEMA METADATA-->
 <axsl:template match="/">
 ** Begin checking PreTeXt Schematron rules      **
-<axsl:apply-templates select="/" mode="M0"/><axsl:apply-templates select="/" mode="M1"/><axsl:apply-templates select="/" mode="M2"/><axsl:apply-templates select="/" mode="M3"/>** Finished checking PreTeXt Schematron rules   **
+<axsl:apply-templates select="/" mode="M0"/><axsl:apply-templates select="/" mode="M1"/><axsl:apply-templates select="/" mode="M2"/><axsl:apply-templates select="/" mode="M3"/><axsl:apply-templates select="/" mode="M4"/>** Finished checking PreTeXt Schematron rules   **
 
 </axsl:template>
 
@@ -92,7 +92,28 @@ Explanation:       the &lt;cite&gt; element is deprecated (2014-06-25) and no co
 
 
 	<!--RULE -->
-<axsl:template match="var" priority="1000" mode="M2">
+<axsl:template match="circum" priority="1000" mode="M2">
+
+		<!--REPORT -->
+<axsl:if test="true()">Location:         <axsl:apply-templates select="." mode="schematron-get-full-path"/>
+Condition:         true()
+Explanation:       the &lt;circum&gt; element is deprecated (2015-01-28) and no code remains (2018-07-22), convert to a &lt;circumflex&gt; <axsl:text/>
+            <axsl:text/><axsl:value-of select="'&#10;Enclosing Title:    &quot;'"/><axsl:text/>
+            <axsl:text/><axsl:value-of select="ancestor::*[title][1]/title"/><axsl:text/>
+            <axsl:text/><axsl:value-of select="concat('&quot; (on a &lt;', local-name(ancestor::*[title][1]), '&gt;)')"/><axsl:text/>
+        <axsl:text/> <axsl:text/>
+                <axsl:text/><axsl:value-of select="'&#10;Enclosing xml:id: &quot;'"/><axsl:text/>
+                <axsl:text/><axsl:value-of select="ancestor::*[@xml:id][1]/@xml:id"/><axsl:text/>
+                <axsl:text/><axsl:value-of select="concat('&quot; (on a &lt;', local-name(ancestor::*[@xml:id][1]), '&gt;)')"/><axsl:text/>
+        <axsl:text/>
+- - - - - - - - -
+</axsl:if><axsl:apply-templates select="@*|*|comment()|processing-instruction()" mode="M2"/></axsl:template><axsl:template match="text()" priority="-1" mode="M2"/><axsl:template match="@*|node()" priority="-2" mode="M2"><axsl:apply-templates select="@*|*|comment()|processing-instruction()" mode="M2"/></axsl:template>
+
+<!--PATTERN -->
+
+
+	<!--RULE -->
+<axsl:template match="var" priority="1000" mode="M3">
 
 		<!--ASSERT -->
 <axsl:choose><axsl:when test="ancestor::webwork"/><axsl:otherwise>Location:         <axsl:apply-templates select="." mode="schematron-get-full-path"/>
@@ -107,13 +128,13 @@ Explanation:       the &lt;var&gt; element is exclusive to a WeBWorK problem, an
                 <axsl:text/><axsl:value-of select="concat('&quot; (on a &lt;', local-name(ancestor::*[@xml:id][1]), '&gt;)')"/><axsl:text/>
         <axsl:text/>
 - - - - - - - - -
-</axsl:otherwise></axsl:choose><axsl:apply-templates select="@*|*|comment()|processing-instruction()" mode="M2"/></axsl:template><axsl:template match="text()" priority="-1" mode="M2"/><axsl:template match="@*|node()" priority="-2" mode="M2"><axsl:apply-templates select="@*|*|comment()|processing-instruction()" mode="M2"/></axsl:template>
+</axsl:otherwise></axsl:choose><axsl:apply-templates select="@*|*|comment()|processing-instruction()" mode="M3"/></axsl:template><axsl:template match="text()" priority="-1" mode="M3"/><axsl:template match="@*|node()" priority="-2" mode="M3"><axsl:apply-templates select="@*|*|comment()|processing-instruction()" mode="M3"/></axsl:template>
 
 <!--PATTERN -->
 
 
 	<!--RULE -->
-<axsl:template match="author/xref" priority="1000" mode="M3">
+<axsl:template match="author/xref" priority="1000" mode="M4">
 
 		<!--ASSERT -->
 <axsl:choose><axsl:when test="id(@ref)/self::contributor"/><axsl:otherwise>Location:         <axsl:apply-templates select="." mode="schematron-get-full-path"/>
@@ -128,4 +149,4 @@ Explanation:       an &lt;xref&gt; within an &lt;author&gt; must point to a &lt;
                 <axsl:text/><axsl:value-of select="concat('&quot; (on a &lt;', local-name(ancestor::*[@xml:id][1]), '&gt;)')"/><axsl:text/>
         <axsl:text/>
 - - - - - - - - -
-</axsl:otherwise></axsl:choose><axsl:apply-templates select="@*|*|comment()|processing-instruction()" mode="M3"/></axsl:template><axsl:template match="text()" priority="-1" mode="M3"/><axsl:template match="@*|node()" priority="-2" mode="M3"><axsl:apply-templates select="@*|*|comment()|processing-instruction()" mode="M3"/></axsl:template></axsl:stylesheet>
+</axsl:otherwise></axsl:choose><axsl:apply-templates select="@*|*|comment()|processing-instruction()" mode="M4"/></axsl:template><axsl:template match="text()" priority="-1" mode="M4"/><axsl:template match="@*|node()" priority="-2" mode="M4"><axsl:apply-templates select="@*|*|comment()|processing-instruction()" mode="M4"/></axsl:template></axsl:stylesheet>

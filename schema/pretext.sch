@@ -71,6 +71,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </s:rule>
     </s:pattern>
 
+    <!-- 2015-01-28  once both circum and circumflex existed, circumflex won -->
+    <!-- 2018-07-21  remove all relevant code                                -->
+    <s:pattern>
+        <s:rule context="circum">
+            <s:report test="true()" diagnostics="enclosing-title enclosing-id">the &lt;circum&gt; element is deprecated (2015-01-28) and no code remains (2018-07-22), convert to a &lt;circumflex&gt;</s:report>
+        </s:rule>
+    </s:pattern>
+
     <!-- End: Deprecations -->
 
     <s:pattern>

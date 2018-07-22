@@ -7313,13 +7313,6 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:text>[CIRCUMFLEX]</xsl:text>
 </xsl:template>
 
-<!-- 2015/01/28: there was a mismatch between HTML and LaTeX names -->
-<!-- We only have this warning only here                           -->
-<!-- DEPRECATION: 2015-01-28 -->
-<xsl:template match="circum">
-    <xsl:text>[CIRCUM-DEPRECATED]</xsl:text>
-</xsl:template>
-
 <!-- Ampersand -->
 <!-- Handled above -->
 
@@ -7953,13 +7946,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <!--  -->
     <!-- 2014-05-04  @filebase has been replaced in function by @xml:id -->
     <!-- 2014-06-25  xref once had cite as a variant -->
-    <!--  -->
     <!-- 2015-01-28  once both circum and circumflex existed, circumflex won -->
-    <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurrences" select="$document-root//circum" />
-        <xsl:with-param name="date-string" select="'2015-01-28'" />
-        <xsl:with-param name="message" select="'the &quot;circum&quot; element has been replaced by the &quot;circumflex&quot; element'" />
-    </xsl:call-template>
     <!--  -->
     <!-- 2015-02-08  naked tikz, asymptote, sageplot are banned    -->
     <!-- typically these would be in a figure, but not necessarily -->
