@@ -41,12 +41,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Removed from schema:                            -->
 <!-- xmlns:rng="http://relaxng.org/ns/structure/1.0" -->
-<s:schema xmlns:s="http://purl.oclc.org/dsdl/schematron">
+<!-- Removed from each "pattern":                                  -->
+<!-- xmlns:xsl="http://www.w3.org/1999/XSL/Transform"              -->
+<!-- xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" -->
+<!-- xmlns="http://relaxng.org/ns/structure/1.0"                   -->
+<!-- Removed from each diagnostic:                                 -->
+<!-- xmlns:xsl="http://www.w3.org/1999/XSL/Transform"              -->
+<!-- xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" -->
+<!-- xmlns="http://relaxng.org/ns/structure/1.0"                   -->
 
-    <!-- Removed from each "pattern":                                  -->
-    <!-- xmlns:xsl="http://www.w3.org/1999/XSL/Transform"              -->
-    <!-- xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" -->
-    <!-- xmlns="http://relaxng.org/ns/structure/1.0"                   -->
+<s:schema xmlns:s="http://purl.oclc.org/dsdl/schematron">
     <s:pattern>
         <s:rule context="var">
             <s:assert test="ancestor::webwork" diagnostics="enclosing-title enclosing-id">the &lt;var&gt; element is exclusive to a WeBWorK problem, and so must only appear within a &lt;webwork&gt; element</s:assert>
@@ -59,10 +63,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </s:rule>
     </s:pattern>
 
-    <!-- Removed from each diagnostic:                                 -->
-    <!-- xmlns:xsl="http://www.w3.org/1999/XSL/Transform"              -->
-    <!-- xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" -->
-    <!-- xmlns="http://relaxng.org/ns/structure/1.0"                   -->
     <s:diagnostics>
         <s:diagnostic id="enclosing-title" xml:space="default">
             <s:value-of select="'&#xa;Enclosing Title:    &quot;'"/>

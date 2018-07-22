@@ -52,6 +52,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>** Finished checking PreTeXt Schematron rules   **&#xa;&#xa;</xsl:text>
 </xsl:template>
 
+<!-- An assertion is something that must happen,     -->
+<!-- so we call the Schematron @test a "requirement" -->
+<!-- Messages are emitted on a failure               -->
 <xsl:template name="process-assert">
     <xsl:param name="id"/>
     <xsl:param name="test"/>
@@ -77,6 +80,50 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
     <xsl:text>Explanation:       </xsl:text>
     <xsl:apply-templates mode="text" />
+    <!-- split "diagnostic" template begins with a stray space             -->
+    <!-- So                                                                -->
+    <!--   (1) don't line-break here, so the space continues the last line -->
+    <!--   (2) author diagnostics with a *leading* newline -->
+    <!-- <xsl:text>&#xa;</xsl:text> -->
+
+    <xsl:call-template name="diagnosticsSplit">
+        <xsl:with-param name="str" select="$diagnostics"/>
+    </xsl:call-template>
+
+    <!-- need pre- and post- newline, see above -->
+    <xsl:text>&#xa;- - - - - - - - -&#xa;</xsl:text>
+</xsl:template>
+
+<!-- A reporting is something that must not happen, -->
+<!-- so we call the Schematron @test a "condition"  -->
+<!-- Messages are emitted on a success              -->
+<xsl:template name="process-report">
+    <xsl:param name="id"/>
+    <xsl:param name="test"/>
+    <xsl:param name="diagnostics"/>
+    <xsl:param name="flag" />
+    <!-- "Linkable" parameters -->
+    <xsl:param name="role"/>
+    <xsl:param name="subject"/>
+    <!-- "Rich" parameters -->
+    <xsl:param name="fpi" />
+    <xsl:param name="icon" />
+    <xsl:param name="lang" />
+    <xsl:param name="see" />
+    <xsl:param name="space" />
+
+    <xsl:text>Location:         </xsl:text>
+    <axsl:apply-templates select="." mode="schematron-get-full-path"/>
+    <xsl:text>&#xa;</xsl:text>
+
+    <xsl:text>Condition:         </xsl:text>
+    <xsl:value-of select="$test" />
+    <xsl:value-of select="$role" />
+    <xsl:text>&#xa;</xsl:text>
+
+    <xsl:text>Explanation:       </xsl:text>
+    <xsl:apply-templates mode="text" />
+
     <!-- split "diagnostic" template begins with a stray space             -->
     <!-- So                                                                -->
     <!--   (1) don't line-break here, so the space continues the last line -->
