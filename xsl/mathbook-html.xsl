@@ -4038,6 +4038,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="li" mode="heading-birth" />
 
 <xsl:template match="li" mode="heading-xref-knowl">
+    <xsl:apply-templates select="." mode="heading-full" />
+</xsl:template>
+
+<!-- For a description list, the title alone is enough -->
+<xsl:template match="dl/li" mode="heading-xref-knowl">
     <xsl:apply-templates select="." mode="heading-title" />
 </xsl:template>
 
