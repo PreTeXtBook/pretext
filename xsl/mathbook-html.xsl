@@ -4887,12 +4887,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:attribute>
 </xsl:template>
 
-<!-- We take in all three rows and package  -->
-<!-- them up inside an overriding "sidebyside" -->
-<!-- div containing three "sbsrow" divs -->
+<!-- We take in all three rows and package       -->
+<!-- them up inside an overriding "sidebyside"   -->
+<!-- div containing three "sbsrow" divs.  Purely -->
+<!--  a container, never a target, so no xml:id  -->
+<!-- in source, so no HTML id on div.sidebyside  -->
 <xsl:template match="sidebyside" mode="compose-panels">
-    <xsl:param name="b-original" select="true()" />
-
     <xsl:param name="layout" />
     <xsl:param name="has-headings" />
     <xsl:param name="has-captions" />
@@ -4915,13 +4915,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>-moz-box-sizing: border-box;</xsl:text>
                 <xsl:text>-webkit-box-sizing: border-box;</xsl:text>
                 <xsl:text>border: 2px solid purple;</xsl:text>
-            </xsl:attribute>
-        </xsl:if>
-
-        <!-- this will need work to differentiate sbs from sbsrow -->
-        <xsl:if test="self::sidebyside and $b-original">
-            <xsl:attribute name="id">
-                <xsl:apply-templates select="." mode="internal-id" />
             </xsl:attribute>
         </xsl:if>
 
