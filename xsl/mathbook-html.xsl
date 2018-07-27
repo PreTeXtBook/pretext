@@ -8928,7 +8928,7 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
     <!-- mathjax javascript -->
     <xsl:element name="script">
         <xsl:attribute name="src">
-            <xsl:text>https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_CHTML-full</xsl:text>
+            <xsl:text>https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_CHTML-full</xsl:text>
         </xsl:attribute>
     </xsl:element>
 </xsl:template>
@@ -9167,7 +9167,7 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
     <!-- condition first on toc present? -->
     <script src="{$html.js.server}/mathbook/js/lib/jquery.sticky.js" ></script>
     <script src="{$html.js.server}/mathbook/js/lib/jquery.espy.min.js"></script>
-    <script src="{$html.js.server}/mathbook/js/Mathbook.js"></script>
+    <script src="https://pretextbook.org/js/0.1/pretext.js"></script>
 </xsl:template>
 
 <!-- Font header -->
