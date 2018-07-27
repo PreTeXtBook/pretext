@@ -9167,7 +9167,7 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
     <!-- condition first on toc present? -->
     <script src="{$html.js.server}/mathbook/js/lib/jquery.sticky.js" ></script>
     <script src="{$html.js.server}/mathbook/js/lib/jquery.espy.min.js"></script>
-    <script src="{$html.js.server}/mathbook/js/Mathbook.js"></script>
+    <script src="https://pretextbook.org/js/0.1/pretext.js"></script>
 </xsl:template>
 
 <!-- Font header -->
