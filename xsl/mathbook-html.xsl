@@ -144,7 +144,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We just like #3 as the default                          -->
 <!-- N.B.:  This scheme is transitional and may change             -->
 <!-- N.B.:  without warning and without any deprecation indicators -->
-<xsl:param name="html.js.server"  select="'https://aimath.org'" />
+<!-- 2018-07-27:  html.js.server  stringparam removed with no fallback -->
 <xsl:param name="html.css.server" select="'https://aimath.org'" />
 <xsl:param name="html.css.file"   select="'mathbook-3.css'" />
 <!-- A space-separated list of CSS URLs (points to servers or local files) -->
@@ -9165,8 +9165,8 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
 <!-- Mathbook Javascript header -->
 <xsl:template name="mathbook-js">
     <!-- condition first on toc present? -->
-    <script src="{$html.js.server}/mathbook/js/lib/jquery.sticky.js" ></script>
-    <script src="{$html.js.server}/mathbook/js/lib/jquery.espy.min.js"></script>
+    <script src="https://aimath.org/mathbook/js/lib/jquery.sticky.js" ></script>
+    <script src="https://aimath.org/mathbook/js/lib/jquery.espy.min.js"></script>
     <script src="https://pretextbook.org/js/0.1/pretext.js"></script>
 </xsl:template>
 

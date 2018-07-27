@@ -887,6 +887,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:variable name="b-commentary" select="$input-commentary = 'yes'" />
 
+<!-- ################# -->
+<!-- Variable Bad Bank -->
+<!-- ################# -->
+
+<!-- DO NOT USE THESE; THEY ARE TOTALLY DEPRECATED -->
+
+<!-- Some string parameters have been deprecated without any      -->
+<!-- sort of replacement, fallback, or upgrade.  But for a        -->
+<!-- deprecation message to be effective, they need to exist.     -->
+<!-- If you add something here, make a note by the deprecation    -->
+<!-- message.  These definitions expain why it is *always* best   -->
+<!-- to define a user variable as empty, and then supply defaults -->
+<!-- to an internal variable.                                     -->
+
+<xsl:variable name="html.js.server" select="''"/>
+
+
 <!-- ############## -->
 <!-- Entry Template -->
 <!-- ############## -->
@@ -8243,6 +8260,14 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="occurrences" select="$document-root//solution-list" />
         <xsl:with-param name="date-string" select="'2018-07-04'" />
         <xsl:with-param name="message" select="'the &quot;solution-list&quot; element has been deprecated, please switch to using the improved &quot;solutions&quot; division in your back matter (and elsewhere)'" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2018-07-27  transitional  html.js.server  removed -->
+    <!-- Still exists in "Variable Bad Bank" for use here  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2018-07-27'" />
+        <xsl:with-param name="message" select="'the transitional  html.js.server  parameter has been removed'" />
+            <xsl:with-param name="incorrect-use" select="($html.js.server != '')" />
     </xsl:call-template>
 </xsl:template>
 
