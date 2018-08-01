@@ -7013,7 +7013,20 @@ the xsltproc executable.
             <subsection>
                 <title>A Title with ] a Right Bracket</title>
 
-                <p><latex /> has trouble with brackets that end up inside optional arguments, so this is only a check on the defense against that.</p>
+                <p><latex /> has trouble with brackets that end up inside optional arguments, so this subsection title is only a check on the defense against that.  And now an <tag>exercise</tag> with a title that could really be a problem.</p>
+
+                <exercise xml:id="exercise-difficult-title">
+                    <title>A Right Brace <rbrace /> and a Right Bracket]</title>
+
+                    <statement>
+                        <p>The right brace is obtained with an empty element, <tage>rbrace</tage>, and the right bracket is simply the character, <c>]</c>.  Both are used by <latex/> as grouping characters, so need to be handled with care in titles.</p>
+                    </statement>
+                    <hint>
+                        <p>A faux hint to get this exercise to migrate into a <tag>solutions</tag>.</p>
+                    </hint>
+                </exercise>
+
+
             </subsection>
         </section>
 
