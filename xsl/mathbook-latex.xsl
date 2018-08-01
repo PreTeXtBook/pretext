@@ -1956,6 +1956,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Enviroments for side-by-side and components&#xa;</xsl:text>
         <xsl:text>%% Necessary to use \NewTColorBox for boxes of the panels&#xa;</xsl:text>
         <xsl:text>%% "newfloat" environment to squash page-breaks within a single sidebyside&#xa;</xsl:text>
+        <xsl:text>%% \leavevmode necessary when a side-by-side comes first, right after a heading&#xa;</xsl:text>
         <xsl:text>\DeclareFloatingEnvironment[placement={H}]{sbscontainer}&#xa;</xsl:text>
         <!-- Main side-by-side environment, given by xparse            -->
         <!-- raster equal height: boxes of same *row* have same height -->
@@ -6727,9 +6728,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Seems LaTeX is stacking boxes vertically, and we need to go to   -->
 <!-- horizontal mode before doing these floating layout-type elements -->
 <!-- Necessary before a "lstlisting" environment with surrounding box -->
-<!-- http://tex.stackexchange.com/questions/22852/function-and-usage-of-leavevmode                       -->
-<!-- Potential alternate solution: write a leading "empty" \mbox{}                                       -->
-<!-- http://tex.stackexchange.com/questions/171220/include-non-floating-graphic-in-a-theorem-environment -->
+<!-- Explanation:  http://tex.stackexchange.com/questions/22852/      -->
+<!-- function-and-usage-of-leavevmode                                 -->
+<!--   "Use \leavevmode for all macros which could be used at         -->
+<!--   the begin of the paragraph and add horizontal boxes            -->
+<!--   by themselves (e.g. in form of text)."                         -->
+<!-- Potential alternate solution: write a leading "empty" \mbox{}    -->
+<!-- http://tex.stackexchange.com/questions/171220/                   -->
+<!-- include-non-floating-graphic-in-a-theorem-environment            -->
 <xsl:template name="leave-vertical-mode">
     <xsl:text>\leavevmode%&#xa;</xsl:text>
 </xsl:template>
@@ -6869,6 +6875,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="left-margin" select="$layout/left-margin" />
     <xsl:variable name="right-margin" select="$layout/right-margin" />
     <xsl:variable name="space-width" select="$layout/space-width" />
+
+    <!-- If a side-by-side is first in a container, such as an   -->
+    <!-- "example", the layout appears *before* the "title",     -->
+    <!-- *unless* we leave "vmode".  As a "sbsgroup" is a series -->
+    <!-- of "sidebyside", we make the right adjustment there     -->
+    <!-- (and not here, where then *every* "sbsgroup" would      -->
+    <!-- earn protection.                                        -->
+    <xsl:if test="not(preceding-sibling::*) and not(parent::sbsgroup)">
+        <xsl:call-template name="leave-vertical-mode"/>
+    </xsl:if>
 
     <xsl:text>\begin{sidebyside}{</xsl:text>
     <xsl:value-of select="$number-panels" />
