@@ -1080,8 +1080,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Divisional exercises are rendered as faux list items&#xa;</xsl:text>
         <xsl:text>%% with hard-coded numbers as arguments, not as LaTeX environments&#xa;</xsl:text>
         <xsl:text>\NewDocumentEnvironment{divisionexercise}{mo}&#xa;</xsl:text>
-        <xsl:text>  {\textbf{#1}.\IfValueT{#2}{\ \textbf{#2}}\quad}&#xa;</xsl:text>
-        <xsl:text>  {\par\smallskip\noindent}&#xa;</xsl:text>
+        <xsl:text>  {\begin{itemize}\item[\textbf{#1}.]\IfValueT{#2}{\textbf{#2}}}&#xa;</xsl:text>
+        <xsl:text>  {\end{itemize}}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$document-root//list">
         <xsl:text>%% named list environment and style&#xa;</xsl:text>
