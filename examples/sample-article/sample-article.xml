@@ -6538,6 +6538,49 @@ the xsltproc executable.
             </subsection>
 
             <subsection>
+                <title>Testing a Side-By-Side First</title>
+
+                <p>A <tag>sidebyside</tag> that appears first within some other container can wreak havoc in <latex /> output.  Below we have this situation twice, once in an <tag>activity</tag>, then in an <tag>example</tag>.</p>
+
+                <activity>
+                    <statement>
+                        <sidebyside widths="47% 47%" valign="bottom" margins="0%">
+                            <p>Here is text block 1</p>
+                            <p>Here is text block 2</p>
+                        </sidebyside>
+                    </statement>
+
+                </activity>
+
+                <example>
+                    <statement>
+                        <sidebyside>
+                            <p>Here is text block 1</p>
+                            <p>Here is text block 2</p>
+                        </sidebyside>
+                    </statement>
+                </example>
+
+                <p>And a <tag>sbsgroup</tag> in similar circumstances.</p>
+
+                <example>
+                    <statement>
+                        <sbsgroup>
+                            <sidebyside>
+                                <p>Here is text block 1</p>
+                                <p>Here is text block 2</p>
+                            </sidebyside>
+                            <sidebyside>
+                                <p>Here is text block 3</p>
+                                <p>Here is text block 4</p>
+                            </sidebyside>
+                        </sbsgroup>
+                    </statement>
+                </example>
+
+            </subsection>
+
+            <subsection>
                 <title>Testing Styling of Related Elements</title>
 
                 <p>This subsection has non-side-by-side structures, to aid with the effects of styling decisions across the range of possibilities.  First a <c>figure</c> with a <c>caption</c> holding a scaled image and a cross-reference for knowl testing: <xref ref="figure-traditional" text="type-global" />.</p>
