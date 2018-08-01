@@ -672,7 +672,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Some boolean variables ("b-*") for -->
 <!-- the presence of certain elements -->
 <xsl:variable name="b-has-geogebra" select="boolean($document-root//interactive[@platform='geogebra'])" />
-<xsl:variable name="b-has-jsxgraph" select="boolean($document-root//interactive[@platform='jsxgraph'])" />
+<xsl:variable name="b-has-jsxgraph" select="boolean($document-root//jsxgraph)" />
 <!-- "book" and "article" are sometimes different, esp. for LaTeX -->
 <xsl:variable name="b-is-book"    select="$document-root/self::book" />
 <xsl:variable name="b-is-article" select="$document-root/self::article" />
