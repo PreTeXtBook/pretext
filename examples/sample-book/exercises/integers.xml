@@ -95,7 +95,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <me>(fg)^{(n)}(x) = \sum_{k = 0}^{n} \binom{n}{k} f^{(k)}(x) g^{(n - k)}(x).</me></p>
         </statement>
         <hint>
-            <p>Follow the proof in Example<nbsp/><xref ref="example-integers-binomial-theorem"/>.</p>
+            <p>Follow the proof in <xref ref="example-integers-binomial-theorem"/>.</p>
         </hint>
     </exercise>
 
@@ -139,7 +139,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     <exercise number="13">
         <statement>
-            <p>Prove that the two principles of mathematical induction stated in Section <xref ref="section-math-induction"/> are equivalent.</p>
+            <p>Prove that the two principles of mathematical induction stated in <xref ref="section-math-induction"/> are equivalent.</p>
         </statement>
     </exercise>
 
@@ -189,7 +189,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>For <xref ref="fn_ineq"/> and <xref ref="fn_prod"/> use mathematical induction.
                <xref ref="fn_formula"/> Show that <m>f_1 = 1</m>, <m>f_2 = 1</m>, and <m>f_{n + 2} = f_{n + 1} + f_n</m>.
                <xref ref="fn_ratio"/>  Use part <xref ref="fn_formula"/>.
-               <xref ref="fn_coprime"/> Use part <xref ref="fn_prod"/> and Exercise<nbsp/><xref ref="exercise-integers-gcd-1"/>.</p>
+               <xref ref="fn_coprime"/> Use part <xref ref="fn_prod"/> and <xref ref="exercise-integers-gcd-1"/>.</p>
         </hint>
     </exercise>
 

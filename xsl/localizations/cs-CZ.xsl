@@ -73,10 +73,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='introduction'><xsl:text>Úvod</xsl:text></localization>
     <localization string-id='conclusion'><xsl:text>Závěr</xsl:text></localization>
     <localization string-id='exercises'><xsl:text>Cvičení</xsl:text></localization>
+    <!-- <localization string-id='solutions'><xsl:text>Solutions</xsl:text></localization> -->
     <localization string-id='references'><xsl:text>Odkazy</xsl:text></localization>
     <localization string-id='backmatter'><xsl:text>Závěrečná část</xsl:text></localization>
     <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
     <localization string-id='paragraphs'><xsl:text>Odstavce</xsl:text></localization>
+    <!-- <localization string-id='commentary'><xsl:text>Commentary</xsl:text></localization> -->
     <localization string-id='subparagraph'><xsl:text>Pododstavec</xsl:text></localization>
     <localization string-id='case'><xsl:text>Případ</xsl:text></localization>
     <!-- Components of the narrative -->
@@ -124,15 +126,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='p'><xsl:text>Odstavec</xsl:text></localization>
     <localization string-id='blockquote'><xsl:text>Citát</xsl:text></localization>
     <!-- Parts of an exercise and it's solution -->
-    <localization string-id='exercises//exercise'><xsl:text>Cvičení</xsl:text></localization>
+    <localization string-id='divisionalexercise'><xsl:text>Cvičení</xsl:text></localization>
     <!-- Translation needed for Czech Czech -->
     <!-- See en-US file for distinctions here, do not repeat previous translation -->
-    <!-- <localization string-id='division/exercise'><xsl:text>Checkpoint</xsl:text></localization> -->
+    <!-- <localization string-id='inlineexercise'><xsl:text>Checkpoint</xsl:text></localization> -->
     <localization string-id='webwork'><xsl:text>WeBWorK</xsl:text></localization>
     <localization string-id='hint'><xsl:text>Nápověda</xsl:text></localization>
     <localization string-id='answer'><xsl:text>Odpověď</xsl:text></localization>
     <localization string-id='solution'><xsl:text>Řešení</xsl:text></localization>
-    <!-- A group of sectional exercises (with introduction and conclusion) -->
+    <!-- A group of divisional exercises (with introduction and conclusion) -->
     <localization string-id='exercisegroup'><xsl:text>Skupina cvičení</xsl:text></localization>
     <!-- Bibliographic items (note is distinct from sidebar "Annotations" below) -->
     <localization string-id='biblio'><xsl:text>Bibliografický údaj</xsl:text></localization>

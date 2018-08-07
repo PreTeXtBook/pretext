@@ -27,6 +27,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <chapter xml:id="groups" xmlns:xi="http://www.w3.org/2001/XInclude">
     <title>Groups</title>
+    <author><xref ref="dfarmer"/></author>
 
     <introduction>
         <p>We begin our study of algebraic structures by investigating sets associated with single operations that satisfy certain reasonable axioms; that is, we want to define an operation on a set in a way that will generalize such familiar structures as the integers <m>{\mathbb Z}</m> together with the single operation of  addition, or invertible <m>2 \times 2</m> matrices together with the single operation of matrix multiplication.  The integers and the <m>2 \times 2</m> matrices, together with their respective single operations, are examples of algebraic structures known as groups.</p>
@@ -39,6 +40,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     <section xml:id="section-mod-n-sym">
         <title>Integer Equivalence Classes and Symmetries</title>
+        <author>Carl Friedrich Gauß</author>
+        <author>Leonhard Euler</author>
 
         <introduction>
 
@@ -48,6 +51,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <subsection>
             <title>The Integers mod <m>n</m></title>
+            <author>Gottfried Wilhelm Leibniz</author>
 
             <p>The integers mod <m>n</m> have become indispensable in the theory and applications of algebra.  In mathematics they are used in cryptography, coding theory, and the detection of errors in identification codes.</p>
 
@@ -61,6 +65,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>When no confusion can arise, we will use <m>0, 1, \ldots, 11</m> to indicate the equivalence classes  <m>{[0]}, {[1]}, \ldots, {[11]}</m> respectively.  We can do arithmetic on <m>{\mathbb Z}_n</m>.  For two integers <m>a</m> and <m>b</m>, define addition modulo <m>n</m> to be <m>(a + b) \pmod{n}</m>; that is, the remainder when <m>a + b</m> is divided by <m>n</m>.  Similarly, multiplication modulo <m>n</m> is defined as <m>(a  b) \pmod{ n}</m>, the remainder when <m>a  b</m> is divided by <m>n</m>.</p>
 
             <example xml:id="example-groups-zn-addition">
+                <title>Modular Addition</title>
                 <p>The following examples illustrate integer arithmetic modulo <m>n</m>:<md>
                     <mrow>7 + 4  &amp; \equiv  1 \pmod{ 5}   &amp; 7 \cdot 3 &amp; \equiv 1 \pmod{ 5}</mrow> 
                     <mrow>3 + 5  &amp; \equiv  0 \pmod{ 8}   &amp; 3 \cdot 5 &amp; \equiv 7 \pmod{ 8}</mrow>
@@ -71,26 +76,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </example>
 
             <example xml:id="example-groups-zn-arithmetic-laws">
-                <p>Most, but not all, of the usual laws of arithmetic hold for addition and multiplication in <m>{\mathbb Z}_n</m>.  For instance, it is not necessarily true that there is a multiplicative inverse.  Consider the multiplication table for <m>{\mathbb Z}_8</m> in Figure<nbsp /><xref ref="figure-z8-mult" />.  Notice that 2, 4, and 6 do not have multiplicative inverses; that is, for <m>n = 2</m>, 4, or 6, there is no integer <m>k</m> such that <m>k n \equiv 1 \pmod{ 8}</m>.</p>
-            </example>
+                <title>Modular Arithmetic</title>
+                <p>Most, but not all, of the usual laws of arithmetic hold for addition and multiplication in <m>{\mathbb Z}_n</m>.  For instance, it is not necessarily true that there is a multiplicative inverse.  Consider the multiplication table for <m>{\mathbb Z}_8</m> in <xref ref="figure-z8-mult" />.  Notice that 2, 4, and 6 do not have multiplicative inverses; that is, for <m>n = 2</m>, 4, or 6, there is no integer <m>k</m> such that <m>k n \equiv 1 \pmod{ 8}</m>.</p>
 
-            <figure xml:id="figure-z8-mult">
-                <caption>Multiplication table for <m>{\mathbb Z_8}</m></caption>
-                <sidebyside>
-                    <p><me>\begin{array}{c|cccccccc}
-                    <![CDATA[\cdot & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
-                    \hline
-                    0       & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
-                    1       & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
-                    2       & 0 & 2 & 4 & 6 & 0 & 2 & 4 & 6 \\
-                    3       & 0 & 3 & 6 & 1 & 4 & 7 & 2 & 5 \\
-                    4       & 0 & 4 & 0 & 4 & 0 & 4 & 0 & 4 \\
-                    5       & 0 & 5 & 2 & 7 & 4 & 1 & 6 & 3 \\
-                    6       & 0 & 6 & 4 & 2 & 0 & 6 & 4 & 2 \\
-                    7       & 0 & 7 & 6 & 5 & 4 & 3 & 2 & 1 ]]>
-                    \end{array}</me></p>
-                </sidebyside>
-            </figure>
+                <figure xml:id="figure-z8-mult">
+                    <caption>Multiplication table for <m>{\mathbb Z_8}</m></caption>
+                    <sidebyside>
+                        <p><me>\begin{array}{c|cccccccc}
+                        <![CDATA[\cdot & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+                        \hline
+                        0       & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+                        1       & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 \\
+                        2       & 0 & 2 & 4 & 6 & 0 & 2 & 4 & 6 \\
+                        3       & 0 & 3 & 6 & 1 & 4 & 7 & 2 & 5 \\
+                        4       & 0 & 4 & 0 & 4 & 0 & 4 & 0 & 4 \\
+                        5       & 0 & 5 & 2 & 7 & 4 & 1 & 6 & 3 \\
+                        6       & 0 & 6 & 4 & 2 & 0 & 6 & 4 & 2 \\
+                        7       & 0 & 7 & 6 & 5 & 4 & 3 & 2 & 1 ]]>
+                        \end{array}</me></p>
+                    </sidebyside>
+                </figure>
+            </example>
 
             <proposition xml:id="proposition-zn-equiv-classes">
                 <statement>
@@ -215,7 +221,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </image>
             </figure>
 
-            <p>A <term>symmetry</term> of a geometric figure is a rearrangement of the figure preserving the arrangement of its sides and vertices as well as its distances and angles.  A map from the plane to itself preserving the symmetry of an object is called a <term>rigid motion</term><idx><h>Rigid motion</h></idx>.  For example, if we look at the rectangle in Figure<nbsp /><xref ref="figure-groups-rectangle" />, it is easy to see that a rotation of <m>180^{\circ}</m> or <m>360^{\circ}</m> returns a rectangle in the plane with the same orientation as the original rectangle and the same relationship among the vertices.  A reflection of the rectangle across either the vertical axis or the horizontal axis can also be seen to be a symmetry.  However, a <m>90^{\circ}</m> rotation in either direction cannot be a symmetry unless the rectangle is a square.</p>
+            <p>A <term>symmetry</term> of a geometric figure is a rearrangement of the figure preserving the arrangement of its sides and vertices as well as its distances and angles.  A map from the plane to itself preserving the symmetry of an object is called a <term>rigid motion</term><idx><h>Rigid motion</h></idx>.  For example, if we look at the rectangle in <xref ref="figure-groups-rectangle" />, it is easy to see that a rotation of <m>180^{\circ}</m> or <m>360^{\circ}</m> returns a rectangle in the plane with the same orientation as the original rectangle and the same relationship among the vertices.  A reflection of the rectangle across either the vertical axis or the horizontal axis can also be seen to be a symmetry.  However, a <m>90^{\circ}</m> rotation in either direction cannot be a symmetry unless the rectangle is a square.</p>
 
             <!-- Replaced diagram with a tikz figure - TWJ 5/5/2010 -->
             <figure xml:id="figure-s3-symmetry">
@@ -318,7 +324,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 A & B & C \\
                 B & C & A
                 ]]>\end{pmatrix}.</me>
-            Notice that this particular permutation corresponds to the rigid motion of rotating the triangle by <m>120^{\circ}</m> in a clockwise direction.  In fact, every permutation gives rise to a symmetry of the triangle.  All of these symmetries are shown in Figure<nbsp /><xref ref="figure-s3-symmetry" />.</p>
+            Notice that this particular permutation corresponds to the rigid motion of rotating the triangle by <m>120^{\circ}</m> in a clockwise direction.  In fact, every permutation gives rise to a symmetry of the triangle.  All of these symmetries are shown in <xref ref="figure-s3-symmetry" />.</p>
 
             <p>A natural question to ask is what happens if one motion of the triangle <m>\bigtriangleup ABC</m> is followed by another.  Which symmetry is <m>\mu_1 \rho_1</m>; that is, what happens when we do the permutation <m>\rho_1</m> and then the permutation <m>\mu_1</m>?  <em>Remember that we are composing functions here.  Although we usually multiply left to right, we compose functions right to left.</em> We have<md>
                 <mrow>(\mu_1 \rho_1)(A) &amp; = \mu_1( \rho_1( A ) ) = \mu_1( B ) = C</mrow>
@@ -326,7 +332,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <mrow>(\mu_1 \rho_1)(C) &amp; = \mu_1( \rho_1( C ) ) = \mu_1( A ) = A.</mrow>
             </md></p>
 
-            <p>This is the same symmetry as <m>\mu_2</m>. Suppose we do these motions in the opposite order, <m>\rho_1</m> then <m>\mu_1</m>.  It is easy to determine that this is the same as the symmetry <m>\mu_3</m>; hence, <m>\rho_1 \mu_1 \neq \mu_1 \rho_1</m>.  A multiplication table for the symmetries of an equilateral triangle <m>\bigtriangleup ABC</m> is given in Figure<nbsp /><xref ref="figure-s3" />.</p>
+            <p>This is the same symmetry as <m>\mu_2</m>. Suppose we do these motions in the opposite order, <m>\rho_1</m> then <m>\mu_1</m>.  It is easy to determine that this is the same as the symmetry <m>\mu_3</m>; hence, <m>\rho_1 \mu_1 \neq \mu_1 \rho_1</m>.  A multiplication table for the symmetries of an equilateral triangle <m>\bigtriangleup ABC</m> is given in <xref ref="figure-s3" />.</p>
 
             <p>Notice that in the multiplication table for the symmetries of an equilateral triangle, for every motion of the triangle <m>\alpha</m> there is another motion <m>\beta</m> such that <m>\alpha \beta = id</m>; that is, for every motion there is another  motion that takes the triangle back to its original orientation.</p>
 
@@ -366,6 +372,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>A group <m>G</m> with the property that <m>a \circ b = b \circ a</m> for all <m>a, b \in G</m> is called <term>abelian</term><idx><h>Abelian group</h></idx><idx><h>Group</h><h>abelian</h></idx> or <term>commutative</term><idx><h>Group</h><h>commutative</h></idx>.  Groups not satisfying this property are said to be  <term>nonabelian</term><idx><h>Group</h><h>nonabelian</h></idx> or <term>noncommutative</term><idx><h>Group</h><h>noncommutative</h></idx>.</p>
 
             <example xml:id="example-groups-integers">
+                <title>Group of All Integers</title>
                 <p>The integers <m>{\mathbb Z } = \{ \ldots , -1, 0, 1, 2, \ldots \}</m> form a group under the operation of addition.  The binary operation on two integers <m>m, n \in {\mathbb Z}</m> is just their sum.  Since the integers under addition already have a well-established notation, we will use the operator <m>+</m> instead of <m>\circ</m>; that is, we shall write <m>m + n</m> instead of <m>m \circ n</m>.  The identity is 0, and the inverse of <m>n \in {\mathbb Z}</m> is written as <m>-n</m> instead of <m>n^{-1}</m>.  Notice that the set of integers under addition have the additional property that <m>m + n = n + m</m> and therefore form an abelian group.</p>
             </example>
 
@@ -374,55 +381,59 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>It is often convenient to describe a group in terms of an addition or multiplication table.  Such a table is called a <term>Cayley table</term><idx><h>Cayley table</h></idx>.</p>
 
             <example xml:id="example-groups-z5">
-                <p>The integers mod <m>n</m> form a group under addition modulo <m>n</m>.  Consider <m>{\mathbb Z}_5</m>, consisting of the equivalence classes of the integers 0, 1, 2, 3, and 4.  We define the group operation on <m>{\mathbb Z}_5</m> by modular addition.  We write the binary operation on the group additively; that is, we write <m>m + n</m>.  The element 0 is the identity of the group and each element in <m>{\mathbb Z}_5</m> has an inverse. For instance, <m>2 + 3 = 3 + 2 = 0</m>.  Figure<nbsp /><xref ref="figure-z5-cayley" /> is a Cayley table for <m>{\mathbb Z}_5</m>  (Contributed by <xref ref="rbeezer" />).  By Proposition<nbsp /><xref ref="proposition-zn-equiv-classes" />, <m>{\mathbb Z}_n = \{0, 1, \ldots, n-1 \}</m> is a group under the binary operation of addition mod <m>n</m>.</p>
+                <title>Group of Integers Modulo <m>5</m></title>
+                <p>The integers mod <m>n</m> form a group under addition modulo <m>n</m>.  Consider <m>{\mathbb Z}_5</m>, consisting of the equivalence classes of the integers 0, 1, 2, 3, and 4.  We define the group operation on <m>{\mathbb Z}_5</m> by modular addition.  We write the binary operation on the group additively; that is, we write <m>m + n</m>.  The element 0 is the identity of the group and each element in <m>{\mathbb Z}_5</m> has an inverse. For instance, <m>2 + 3 = 3 + 2 = 0</m>.  <xref ref="figure-z5-cayley" /> is a Cayley table for <m>{\mathbb Z}_5</m>  (Contributed by <xref ref="rbeezer" />).  By <xref ref="proposition-zn-equiv-classes" />, <m>{\mathbb Z}_n = \{0, 1, \ldots, n-1 \}</m> is a group under the binary operation of addition mod <m>n</m>.</p>
+
+                <figure xml:id="figure-z5-cayley">
+                    <caption>Cayley table for <m>({\mathbb Z_5}, +)</m></caption>
+
+                    <sidebyside>
+                        <p><me>\begin{array}{c|ccccc}
+                        <![CDATA[+ & 0 & 1 & 2 & 3 & 4 \\
+                        \hline
+                          0 & 0 & 1 & 2 & 3 & 4 \\
+                          1 & 1 & 2 & 3 & 4 & 0 \\
+                          2 & 2 & 3 & 4 & 0 & 1 \\
+                          3 & 3 & 4 & 0 & 1 & 2 \\
+                          4 & 4 & 0 & 1 & 2 & 3]]>
+                        \end{array}</me></p>
+                    </sidebyside>
+
+                </figure>
             </example>
 
-            <figure xml:id="figure-z5-cayley">
-                <caption>Cayley table for <m>({\mathbb Z_5}, +)</m></caption>
-
-                <sidebyside>
-                    <p><me>\begin{array}{c|ccccc}
-                    <![CDATA[+ & 0 & 1 & 2 & 3 & 4 \\
-                    \hline
-                      0 & 0 & 1 & 2 & 3 & 4 \\
-                      1 & 1 & 2 & 3 & 4 & 0 \\
-                      2 & 2 & 3 & 4 & 0 & 1 \\
-                      3 & 3 & 4 & 0 & 1 & 2 \\
-                      4 & 4 & 0 & 1 & 2 & 3]]>
-                    \end{array}</me></p>
-                </sidebyside>
-
-            </figure>
-
             <example xml:id="example-groups-z6-mult">
+                <title>Multiplication of Integers Modulo <m>6</m></title>
                 <p>Not every set with a binary operation is a group.  For example, if we let modular multiplication be the binary operation on <m>{\mathbb Z}_n</m>, then <m>{\mathbb Z}_n</m> fails to be a group.  The element 1 acts as a group identity since <m>1 \cdot k = k \cdot 1 = k</m> for any <m>k \in {\mathbb Z}_n</m>; however, a multiplicative inverse for <m>0</m> does not exist since <m>0 \cdot k = k \cdot 0 = 0</m> for every <m>k</m> in <m>{\mathbb Z}_n</m>.  Even if we consider the set <m>{\mathbb Z}_n \setminus \{0 \}</m>, we still may not have a group.  For instance, let <m>2 \in {\mathbb Z}_6</m>. Then 2 has no multiplicative inverse since<md>
                     <mrow> 0 \cdot 2 &amp; = 0 \qquad 1 \cdot 2 = 2</mrow>
                     <mrow> 2 \cdot 2 &amp; = 4 \qquad 3 \cdot 2 = 0</mrow>
                     <mrow> 4 \cdot 2 &amp; = 2 \qquad 5 \cdot 2 = 4.</mrow>
                 </md></p>
 
-                <p>By Proposition<nbsp /><xref ref="proposition-zn-equiv-classes" />, every nonzero <m>k</m> does have an inverse in <m>{\mathbb Z}_n</m> if <m>k</m> is relatively prime to <m>n</m>.  Denote the set of all such nonzero elements in <m>{\mathbb Z}_n</m> by <m>U(n)</m>. <notation><usage>U(n)</usage><description>group of units in <m>\mathbb Z_n</m></description></notation>  Then <m>U(n)</m> is a group called the <term>group of units</term><idx><h>Group</h><h>of units</h></idx> of <m>{\mathbb Z}_n</m>.  Figure<nbsp /><xref ref="figure-cayley-u8" /> is a Cayley table for the group <m>U(8)</m>.</p>
+                <p>By <xref ref="proposition-zn-equiv-classes" />, every nonzero <m>k</m> does have an inverse in <m>{\mathbb Z}_n</m> if <m>k</m> is relatively prime to <m>n</m>.  Denote the set of all such nonzero elements in <m>{\mathbb Z}_n</m> by <m>U(n)</m>. <notation><usage>U(n)</usage><description>group of units in <m>\mathbb Z_n</m></description></notation>  Then <m>U(n)</m> is a group called the <term>group of units</term><idx><h>Group</h><h>of units</h></idx> of <m>{\mathbb Z}_n</m>.  <xref ref="figure-cayley-u8" /> is a Cayley table for the group <m>U(8)</m>.</p>
+
+                <figure xml:id="figure-cayley-u8">
+                    <caption>Multiplication table for <m>U(8)</m></caption>
+                    <sidebyside>
+                        <p><me>\begin{array}{c|cccc}
+                        <![CDATA[\cdot & 1 & 3 & 5 & 7 \\
+                        \hline
+                        1       & 1 & 3 & 5 & 7 \\
+                        3       & 3 & 1 & 7 & 5 \\
+                        5       & 5 & 7 & 1 & 3 \\
+                        7       & 7 & 5 & 3 & 1]]>
+                        \end{array}</me></p>
+                    </sidebyside>
+                </figure>
             </example>
 
-            <figure xml:id="figure-cayley-u8">
-                <caption>Multiplication table for <m>U(8)</m></caption>
-                <sidebyside>
-                    <p><me>\begin{array}{c|cccc}
-                    <![CDATA[\cdot & 1 & 3 & 5 & 7 \\
-                    \hline
-                    1       & 1 & 3 & 5 & 7 \\
-                    3       & 3 & 1 & 7 & 5 \\
-                    5       & 5 & 7 & 1 & 3 \\
-                    7       & 7 & 5 & 3 & 1]]>
-                    \end{array}</me></p>
-                </sidebyside>
-            </figure>
-
             <example xml:id="example-groups-nonabelian">
-                <p>The symmetries of an equilateral triangle described in Section<nbsp /><xref ref="section-mod-n-sym" /> form a nonabelian group. As we observed, it is not necessarily true that <m>\alpha \beta = \beta \alpha</m> for two symmetries <m>\alpha</m> and <m>\beta</m>.  Using Figure<nbsp /><xref ref="figure-s3" />, which is a Cayley table for this group, we can easily check that the symmetries of an equilateral triangle are indeed a group. We will denote this group by either <m>S_3</m> or <m>D_3</m>, for reasons that will be explained later.</p>
+                <title>Symmetries of a Triangle is not Abelian</title>
+                <p>The symmetries of an equilateral triangle described in <xref ref="section-mod-n-sym" /> form a nonabelian group. As we observed, it is not necessarily true that <m>\alpha \beta = \beta \alpha</m> for two symmetries <m>\alpha</m> and <m>\beta</m>.  Using <xref ref="figure-s3" />, which is a Cayley table for this group, we can easily check that the symmetries of an equilateral triangle are indeed a group. We will denote this group by either <m>S_3</m> or <m>D_3</m>, for reasons that will be explained later.</p>
             </example>
 
             <example xml:id="example-groups-gl2">
+                <title>Matrix Multiplication of <m>2\times 2</m> Matrices is a Group</title>
                 <p>We use  <m>{\mathbb M}_2 ( {\mathbb R})</m> to denote the set of all <m>2 \times 2</m> matrices.  Let <m>GL_2({\mathbb R})</m> be the subset of <m>{\mathbb M}_2 ( {\mathbb R})</m> consisting of invertible matrices; that is, a matrix <notation><usage>\mathbb M_n(\mathbb R)</usage><description>the <m>n \times n</m> matrices with entries in <m>\mathbb R</m></description></notation>
                     <me>A =
                     \begin{pmatrix}<![CDATA[
@@ -449,6 +460,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- % Changed <m>AB \neq BA</m> to <m>AB = BA</m>. Suggested by Isaac Coombs. TWJ 8/24/2011 -->
 
             <example xml:id="example-groups-quaterions">
+                <title>Group of Quaternions</title>
                 <p>Let<md>
                     <mrow>1 &amp; = 
                     \begin{pmatrix}<![CDATA[
@@ -485,6 +497,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </example>
 
             <example xml:id="example-groups-c-star">
+                <title>Group of Nonzero Complex Numbers</title>
                 <p>Let <m>{\mathbb C}^\ast</m>be the set of nonzero complex numbers. <notation><usage>\mathbb C^*</usage><description>the multiplicative group of complex numbers</description></notation> Under the operation of multiplication <m>{\mathbb C}^\ast</m> forms a group.  The identity is 1. If <m>z = a+bi</m> is a nonzero complex number, then <me>z^{-1} = \frac{a -bi}{a^2 +b^2}</me> is the inverse of <m>z</m>.  It is easy to see that the remaining group axioms hold.</p>
             </example>
 
@@ -601,16 +614,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>Sometimes we wish to investigate smaller groups sitting inside a larger group.   The set of even integers <m>2{\mathbb Z} = \{\ldots, -2, 0, 2, 4, \ldots \}</m> is a group  under the operation of addition. This smaller group sits naturally inside of the group of integers under addition.  We define a <term>subgroup</term><idx><h>Subgroup</h><h>definition of</h></idx> <m>H</m> of a group <m>G</m> to be a subset <m>H</m> of <m>G</m> such that when the group operation of <m>G</m> is restricted to <m>H</m>, <m>H</m> is a group in its own right. Observe that every group <m>G</m> with at least two elements will always have at least two subgroups, the subgroup consisting of the identity element alone and the entire group itself. The subgroup <m>H = \{ e \}</m> of a group <m>G</m> is called the <term>trivial subgroup</term><idx><h>Subgroup</h><h>trivial</h></idx>.  A subgroup that is a proper subset of <m>G</m> is called a <term>proper subgroup</term><idx><h>Subgroup</h><h>proper</h></idx>. In many of the examples that we have investigated up to this point, there exist other subgroups besides the trivial and improper subgroups.</p>
 
             <example xml:id="example-groups-multiplicative-subgroup">
+                <title>A Subgroup of the Reals</title>
                 <p>Consider the set of nonzero real numbers, <m>{\mathbb R}^*</m>, with the group operation of multiplication. <notation><usage>\mathbb R^*</usage><description>the multiplicative group of real numbers</description></notation> The identity of this group is 1 and the inverse of any element <m>a \in {\mathbb R}^*</m> is just <m>1/a</m>. We will show that
-                    <me>{\mathbb Q}^* = \{ p/q : p \, {\rm and }\, q\, {\rm are\, nonzero\, integers} \}</me>
+                    <me>{\mathbb Q}^* = \{ p/q : p\text{ and }q\text{ are nonzero integers}\}</me>
                 is a subgroup of <m>{\mathbb R}^*</m>. <notation><usage>\mathbb Q^*</usage><description>the multiplicative group of rational numbers</description></notation> The identity of <m>{\mathbb R}^*</m> is 1; however,  <m>1 = 1/1</m> is the quotient of two nonzero integers. Hence, the identity of <m>{\mathbb R}^*</m> is in <m>{\mathbb Q}^*</m>. Given two elements in <m>{\mathbb Q}^*</m>, say <m>p/q</m> and <m>r/s</m>, their product <m>pr/qs</m> is also in <m>{\mathbb Q}^*</m>. The inverse of any element <m>p/q \in {\mathbb Q}^*</m> is again in <m>{\mathbb Q}^*</m> since <m>(p/q)^{-1} = q/p</m>. Since multiplication in <m>{\mathbb R}^*</m> is associative, multiplication in <m>{\mathbb Q}^*</m> is associative. </p> 
             </example>
 
             <example xml:id="example-groups-subgroup-h">
+                <title>A Subgroup of the Nonzero Complex Numbers</title>
                 <p>Recall that <m>{\mathbb C}^{\ast}</m>  is the multiplicative group of nonzero complex numbers. Let <m>H = \{ 1, -1, i, -i \}</m>. Then <m>H</m> is a subgroup of <m>{\mathbb C}^{\ast}</m>. It is quite easy to verify  that <m>H</m> is a group under multiplication and that <m>H \subset {\mathbb C}^{\ast}</m>.</p>
             </example>
 
             <example xml:id="example-groups-sl2">
+                <title>A Subgroup of Matrices With Determinant One</title>
                 <p>Let <m>SL_2( {\mathbb R})</m> be the subset of <m>GL_2( {\mathbb R })</m>consisting of matrices of determinant one; that is, a matrix <notation><usage>SL_n(\mathbb R)</usage><description>the special linear group</description></notation>
                     <me>A =
                     \begin{pmatrix}<![CDATA[
@@ -627,6 +643,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </example>
 
             <example xml:id="example-groups-gl2-subgroup">
+                <title>Groups, Subsets, Operations</title>
                 <p>It is important to realize that a subset <m>H</m> of a group <m>G</m> can be a group without being a subgroup of <m>G</m>. For <m>H</m> to be a subgroup of <m>G</m> it must inherit <m>G</m>'s binary operation.  The set of all <m>2 \times 2</m> matrices, <m>{\mathbb M}_2(\mathbb R)</m>, forms a group under the operation of addition. The <m>2 \times 2</m> general linear group is a subset of <m>{\mathbb M}_2(\mathbb R)</m> and is a group under matrix multiplication, but it is not a subgroup of <m>{\mathbb M}_2(\mathbb R)</m>.  If we add two invertible matrices, we do not necessarily obtain another invertible matrix. Observe that<me>\begin{pmatrix}<![CDATA[
                 1 & 0 \\
                 0 & 1
@@ -645,23 +662,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </example>
 
             <example xml:id="example-groups-z2xz2">
-                <p>One way of telling whether or not two groups are the same is by examining their subgroups.  Other than the trivial subgroup and the group itself, the group <m>{\mathbb Z}_4</m> has a single subgroup consisting of the elements 0 and 2. From the group <m>{\mathbb Z}_2</m>, we can form another group of four elements as follows.  As a set this group is <m>{\mathbb Z}_2 \times {\mathbb Z}_2</m>. We perform the group operation coordinatewise; that is, <m>(a,b) + (c,d) = (a+c, b+d)</m>. Figure<nbsp /><xref ref="figure-z2xz2" /> is an addition table for <m>{\mathbb Z}_2 \times {\mathbb Z}_2</m>. Since there are three nontrivial proper subgroups of <m>{\mathbb Z}_2 \times {\mathbb Z}_2</m>, <m>H_1 = \{ (0,0), (0,1) \}</m>, <m>H_2 = \{ (0,0), (1,0) \}</m>, and <m>H_3 = \{ (0,0), (1,1) \}</m>, <m>{\mathbb Z}_4</m> and <m>{\mathbb Z}_2 \times {\mathbb Z}_2</m> must be different groups.</p>
+                <title>Structurally Different Groups</title>
+                <p>One way of telling whether or not two groups are the same is by examining their subgroups.  Other than the trivial subgroup and the group itself, the group <m>{\mathbb Z}_4</m> has a single subgroup consisting of the elements 0 and 2. From the group <m>{\mathbb Z}_2</m>, we can form another group of four elements as follows.  As a set this group is <m>{\mathbb Z}_2 \times {\mathbb Z}_2</m>. We perform the group operation coordinatewise; that is, <m>(a,b) + (c,d) = (a+c, b+d)</m>. <xref ref="figure-z2xz2" /> is an addition table for <m>{\mathbb Z}_2 \times {\mathbb Z}_2</m>. Since there are three nontrivial proper subgroups of <m>{\mathbb Z}_2 \times {\mathbb Z}_2</m>, <m>H_1 = \{ (0,0), (0,1) \}</m>, <m>H_2 = \{ (0,0), (1,0) \}</m>, and <m>H_3 = \{ (0,0), (1,1) \}</m>, <m>{\mathbb Z}_4</m> and <m>{\mathbb Z}_2 \times {\mathbb Z}_2</m> must be different groups.</p>
+
+                <figure xml:id="figure-z2xz2">
+                    <caption>Addition table for <m>{\mathbb Z}_2 \times {\mathbb Z}_2</m></caption>
+
+                    <sidebyside>
+                        <p><me>\begin{array}{c|cccc}
+                        <![CDATA[+     & (0,0) & (0,1) & (1,0) & (1,1) \\
+                        \hline
+                        (0,0) & (0,0) & (0,1) & (1,0) & (1,1) \\
+                        (0,1) & (0,1) & (0,0) & (1,1) & (1,0) \\
+                        (1,0) & (1,0) & (1,1) & (0,0) & (0,1) \\
+                        (1,1) & (1,1) & (1,0) & (0,1) & (0,0)]]>
+                        \end{array}</me></p>
+                    </sidebyside>
+                </figure>
             </example>
 
-            <figure xml:id="figure-z2xz2">
-                <caption>Addition table for <m>{\mathbb Z}_2 \times {\mathbb Z}_2</m></caption>
-
-                <sidebyside>
-                    <p><me>\begin{array}{c|cccc}
-                    <![CDATA[+     & (0,0) & (0,1) & (1,0) & (1,1) \\
-                    \hline
-                    (0,0) & (0,0) & (0,1) & (1,0) & (1,1) \\
-                    (0,1) & (0,1) & (0,0) & (1,1) & (1,0) \\
-                    (1,0) & (1,0) & (1,1) & (0,0) & (0,1) \\
-                    (1,1) & (1,1) & (1,0) & (0,1) & (0,0)]]>
-                    \end{array}</me></p>
-                </sidebyside>
-            </figure>
 
         </subsection>
 
@@ -733,11 +752,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <title>UPC Symbols</title>
 
             <statement>
-                <p>Universal Product Code<idx><h>Universal Product Code</h></idx> (UPC) symbols are found on most products in grocery and retail stores. The UPC symbol is a 12-digit code identifying the manufacturer of a product and the product itself (Figure<nbsp /><xref ref="figure-upc-codes" />). The first 11 digits contain information about the product; the twelfth digit is used for error detection. If <m>d_1 d_2 \cdots d_{12}</m> is a valid UPC number, then 
+                <p>Universal Product Code<idx><h>Universal Product Code</h></idx> (UPC) symbols are found on most products in grocery and retail stores. The UPC symbol is a 12-digit code identifying the manufacturer of a product and the product itself (<xref ref="figure-upc-codes" />). The first 11 digits contain information about the product; the twelfth digit is used for error detection. If <m>d_1 d_2 \cdots d_{12}</m> is a valid UPC number, then 
                 <me>3 \cdot d_1 + 1 \cdot d_2 + 3 \cdot d_3 + \cdots + 3 \cdot d_{11} + 1 \cdot d_{12} \equiv 0 \pmod{10}.</me></p>
 
                 <ol>
-                    <li><p>Show that the UPC number  0-50000-30042-6, which appears in Figure<nbsp /><xref ref="figure-upc-codes" />, is a valid UPC number.</p></li>
+                    <li><p>Show that the UPC number  0-50000-30042-6, which appears in <xref ref="figure-upc-codes" />, is a valid UPC number.</p></li>
                     <li><p>Show that the number 0-50000-30043-6 is not a valid UPC number.</p></li>
                     <li><p>Write a  formula to calculate the check digit, <m>d_{12}</m>, in the UPC number.</p></li>
                     <li><p>The  UPC error detection scheme can detect most transposition errors; that is, it can determine if two digits have been interchanged.  Show that the transposition error 0-05000-30042-6 is not detected.  Find a transposition error that is detected.  Can you find a general rule for the types of transposition errors that can be detected? </p></li>

@@ -173,7 +173,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <p>The final list comprehension deserves comment.  The <c>.domain()</c> method gives a lait of the symbols used for the permutation group <c>triangle</c> and then <c>rho2</c> is employed with syntax like it is a function (it <em>is</em> a function) to create the images that would occupy the bottom row.</p>
 
-        <p>With a double list comprehension we can list all six elements of the group in the <q>bottom row</q> format.  A good exercise would be to pair up each element with its name as given in Figure<nbsp /><xref ref="figure-s3-symmetry" />.</p>
+        <p>With a double list comprehension we can list all six elements of the group in the <q>bottom row</q> format.  A good exercise would be to pair up each element with its name as given in <xref ref="figure-s3-symmetry" />.</p>
 
         <sage>
             <input>[[a(x) for x in triangle.domain()] for a in triangle]</input>
@@ -182,7 +182,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <p>Different books, different authors, different software all have different ideas about the order in which to write multiplication of functions.  This textbook builds on the idea of composition of functions, so that <m>fg</m> is the composition <m>(fg)(x)=f(g(x))</m> and it is natural to apply <m>g</m> first.  Sage takes the opposite view and since we write <m>fg</m>, Sage will understand that we want to do <m>f</m> first.  Neither approach is wrong, and neither is necessarily superior, they are just different and there are good arguments for either one.  When you consult other books that work with permutation groups, you want to first determine which approach it takes.</p>
 
-        <p>The translation here between the text and Sage will be worthwhile practice.  Here we will reprise the discussion at the end of Section<nbsp /><xref ref="section-mod-n-sym" />, but reverse the order on each product to compute Sage-style and exactly mirror what the text does.</p>
+        <p>The translation here between the text and Sage will be worthwhile practice.  Here we will reprise the discussion at the end of <xref ref="section-mod-n-sym" />, but reverse the order on each product to compute Sage-style and exactly mirror what the text does.</p>
 
         <sage>
             <input>
@@ -369,7 +369,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <output>True</output>
         </sage>
 
-        <p>In Sage the complex numbers are known by the name <c>CC</c>.  We can create a list of the elements in the subgroup described in Example<nbsp /><xref ref="example-groups-c-star" />.  Then we can verify that this set is a subgroup by examining the Cayley table, using multiplication as the operation.</p>
+        <p>In Sage the complex numbers are known by the name <c>CC</c>.  We can create a list of the elements in the subgroup described in <xref ref="example-groups-c-star" />.  Then we can verify that this set is a subgroup by examining the Cayley table, using multiplication as the operation.</p>
 
         <sage>
             <input>

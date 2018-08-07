@@ -76,10 +76,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='introduction'><xsl:text>Introdução</xsl:text></localization>
     <localization string-id='conclusion'><xsl:text>Conclusão</xsl:text></localization>
     <localization string-id='exercises'><xsl:text>Exercícios</xsl:text></localization>
+    <!-- <localization string-id='solutions'><xsl:text>Solutions</xsl:text></localization> -->
     <localization string-id='references'><xsl:text>Referências</xsl:text></localization>
     <localization string-id='backmatter'><xsl:text>Pós Texto</xsl:text></localization>
     <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
     <localization string-id='paragraphs'><xsl:text>Parágrafos</xsl:text></localization>
+    <!-- <localization string-id='commentary'><xsl:text>Commentary</xsl:text></localization> -->
     <localization string-id='subparagraph'><xsl:text>Subparágrafo</xsl:text></localization>
     <!-- Components of the narrative -->
     <!-- REMARK-LIKE blocks -->
@@ -129,16 +131,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='p'><xsl:text>Parágrafo</xsl:text></localization>
     <!-- <localization string-id='blockquote'><xsl:text>Quotation</xsl:text></localization> -->
     <!-- Parts of an exercise and it's solution -->
-    <localization string-id='exercises//exercise'><xsl:text>Exercício</xsl:text></localization>
+    <localization string-id='divisionalexercise'><xsl:text>Exercício</xsl:text></localization>
     <!-- Translation needed for Portugal Portugese -->
     <!-- See en-US file for distinctions here, do not repeat previous translation -->
-    <!-- <localization string-id='division/exercise'><xsl:text>Checkpoint</xsl:text></localization> -->
+    <!-- <localization string-id='inlineexercise'><xsl:text>Checkpoint</xsl:text></localization> -->
     <localization string-id='webwork'><xsl:text>WeBWorK</xsl:text></localization>
     <localization string-id='hint'><xsl:text>Dica</xsl:text></localization>
     <localization string-id='answer'><xsl:text>Resposta</xsl:text></localization>
     <localization string-id='solution'><xsl:text>Solução</xsl:text></localization>
     <!-- Translation needed for Portugal Portugese -->
-    <!-- A group of sectional exercises (with introduction and conclusion) -->
+    <!-- A group of divisional exercises (with introduction and conclusion) -->
     <!-- <localization string-id='exercisegroup'><xsl:text>Exercise Group</xsl:text></localization> -->
     <!-- Bibliographic items (note is distinct from sidebar "Annotations" below) -->
     <!-- the term 'Bibliographic Item' could be just 'Referência'... -->

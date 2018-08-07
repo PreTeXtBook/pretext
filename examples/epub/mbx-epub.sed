@@ -9,15 +9,21 @@
 # Careful, the single whitespace below is character "&xa0;" in XML notation
 s/&nbsp;/ /g
 
-# Close image tags, br tags
+# Close image tags, br tags, link tags
 s/<img \([^>]*\)>/<img \1\/>/g
 s/<br>/<br \/>/g
+s/<link \([^>]*\)>/<link \1\/>/g
 
 # SVG Per-file, remove from  .MathJax_SVG  style
 s/direction: ltr;//g
 
 # SVG, per-image, add SVG namespace
-s/<svg /<svg xmlns="http:\/\/www.w3.org\/2000\/svg" /g
+# No longer necessary after the move from page2svg to mjpage
+# s/<svg /<svg xmlns="http:\/\/www.w3.org\/2000\/svg" /g
+
+# But mjpage doesn't put the necessary namespace on the glyphs tag. Grrrr.
+# Fortunately, that svg looks like <svg style, so it's easy for sed to find
+s/<svg style/<svg xmlns="http:\/\/www.w3.org\/2000\/svg" style/g
 
 # SVG, per-image, removals
 s/role="img"//g

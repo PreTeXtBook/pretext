@@ -119,6 +119,11 @@ the xsltproc executable.
         Sage worksheet production.)
         -->
         <initialism>SA</initialism>
+        <!-- Items peculiar to an HTML output -->
+        <html>
+            <!-- Expects favicon/favicon-32x32.png, and favicon/favicon-16x16.png -->
+            <favicon/>
+        </html>
         <!--
         With a <feedback> element, in the HTML version, you get a button
         for reporting typos and errors.  You might link to a Google Docs
@@ -516,7 +521,7 @@ the xsltproc executable.
                 </output>
             </sage>
 
-            <p>Our maximum width for text, designed for readability, suggests you should format your Sage code with a maximum of about 54 characters. On a mobile device, the number of displayed characters might be as low as 28 in portrait orintation, and again around 50 in landscape.  You can use a variety of techniques to shorten long lines, such as using intermediate variables.  Since Sage is just a huge Python library, you can use any of Python's facilities for handling long lines.  These include a continuation character (which I try to avoid using) or natural places where you can break long lines, such as between entries of a list.  Also, if writing loops or functions, you may wish to have your indentation be only two characters wide (rather than, say, four).</p>
+            <p>Our maximum width for text, designed for readability, suggests you should format your Sage code with a maximum of about 54 characters. On a mobile device, the number of displayed characters might be as low as 28 in portrait orientation, and again around 50 in landscape.  You can use a variety of techniques to shorten long lines, such as using intermediate variables.  Since Sage is just a huge Python library, you can use any of Python's facilities for handling long lines.  These include a continuation character (which I try to avoid using) or natural places where you can break long lines, such as between entries of a list.  Also, if writing loops or functions, you may wish to have your indentation be only two characters wide (rather than, say, four).</p>
 
             <p>Sage output can sometimes be quite long, though this has improved with some changes in Sage's output routines.  Output code should be included primarily for doctesting purposes, and in this use, you may break at almost whitespace character and the doctesting framework will adjust accordingly.  You may wish to show sample output in a static format, like a PDF, so you can consider formatting your output to fit the width constraints of that medium.  Or you may even adjust exactly what is output, to keep it from being too verbose.  Sage doctesting also allows for a wild-card style syntax which allows you to skip over huge chunks of meaningless or unpredictable output, such as tracebacks on error messages.</p>
 
@@ -592,6 +597,7 @@ the xsltproc executable.
                 <todo>Should equation references come with parentheses?</todo>
 
                 <corollary xml:id="corollary-FTC-derivative">
+                    <creator>Leibniz, Newton</creator>
                     <idx><h>Fundamental Theorem of Calculus</h><h>Corollary</h></idx>
                     <statement>
                         <p>Suppose <m>f(x)</m> is a continuous function.  Then <men xml:id="equation-alternate-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}=f(x)</men>.</p>
@@ -604,7 +610,8 @@ the xsltproc executable.
                         </mdn>.</p>
                     </proof>
                     <proof>
-                        <p>You can have multiple proofs.  Here we just exercise displayed math with no automatic numbering, and an elective number on the middle equation.  For <latex /> output, with no number on the third line, the tombstone is placed on that line.<md>
+                        <title>Alternate Proof</title>
+                        <p>You can have multiple proofs, and they can have titles which replace the word <q>Proof</q> as a heading.  Here we just exercise displayed math with no automatic numbering, and an elective number on the middle equation.  For <latex /> output, with no number on the third line, the tombstone is placed on that line.<md>
                             <mrow>\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}&amp;=\frac{d}{dx}\left(F(x)-F(a)\right)</mrow>
                             <mrow number="yes">&amp;=\frac{d}{dx}F(x)-\frac{d}{dx}F(a)</mrow>
                             <mrow>&amp;=f(x)-0 = f(x)</mrow>
@@ -659,6 +666,15 @@ the xsltproc executable.
 
                             <p>If you like, you can have both indications.</p>
                         </case>
+                    </proof>
+                    <proof>
+                        <title>Exciting Proof!</title>
+                        <p>We test here that punctuation at the end of the title of a proof is handled correctly.</p>
+                    </proof>
+                    <proof>
+                        <title>Really Long Titles for Proofs Could Fail to Line-Break in a Print Version and Extend Far Into the Right Margin and so Portions Will Never Be Visible to Anybody, All Due to a Known Bug in LaTeX</title>
+                        <p>We incorporate extra code to compensate, provided by the <latex /> package authors, <circa/> September<nbsp />2017.  This could be used to test if the bug is fixed, by commenting out the relevant code that redefines the <c>proof</c> environment.</p>
+                        <p>We seem to have uncovered a different bug, we suspect the fact that the title ends in a wide letter is resulting a failure to recognize the period we have supplied, somehow.</p>
                     </proof>
                 </claim>
             </subsection>
@@ -728,7 +744,7 @@ the xsltproc executable.
                         <title>An Inline Exercise</title>
 
                         <statement>
-                            <p>There are lots of exercises in this sample article, but mostly they are in special exercise sections.  Sometimes you just want to sprinkle some exercises through the narrative.  We call these <term>inline exercises</term>, in contrast to <term>sectional exercises</term>.  The inline exercises look a bit more like a theorem or definition, with titles and fully-qualified numbers.</p>
+                            <p>There are lots of exercises in this sample article, but mostly they are in special exercise sections.  Sometimes you just want to sprinkle some exercises through the narrative.  We call these <term>inline exercises</term>, in contrast to <term>divisional exercises</term>.  The inline exercises look a bit more like a theorem or definition, with titles and fully-qualified numbers.</p>
 
                             <p>These may also have hints, answers and solutions.</p>
                         </statement>
@@ -937,11 +953,9 @@ the xsltproc executable.
 
                         <p>But you might want to describe how to use some other calculator, or maybe some numerical method.</p>
                     </technology>
-
                 </subsubsection>
 
-                <exercises>
-
+                <exercises xml:id="exercises-subsection-solo">
                     <exercise xml:id="exercise-test-number">
                         <statement>
                             <p>This is an exercise in an <q>Exercises</q> subdivision at the level of a subsubsection.  There is no question other than if the numbering is appropriate.  Here is a self-referential link: Exercise<nbsp /><xref ref="exercise-test-number" />.</p>
@@ -957,6 +971,21 @@ the xsltproc executable.
                         </solution>
                     </exercise>
                 </exercises>
+
+                <solutions xml:id="solutions-subsection" inline="hint solution answer" divisional="hint solution answer" project="hint solution answer">
+                    <title>Solutions for This Subsection</title>
+                    <idx><h>solutions</h><h>for a division</h></idx>
+
+                    <introduction>
+                        <p>This is an introduction, where you might explain that this division of this subsection contains various hints, answers, solutions of inline exercises, divisional exercises, and/or project-like blocks.  See the source to see just how this solutions division was built.</p>
+                    </introduction>
+
+                    <!-- content will happen here automatically -->
+
+                    <conclusion>
+                        <p>And a conclusion to this solutions division, which may not be readily apparent as distinct from the final division's worth of solutions, but since it is not prefixed with a number, it may be different enough.</p>
+                    </conclusion>
+                </solutions>
 
             </subsection>
 
@@ -1049,13 +1078,13 @@ the xsltproc executable.
                     <title>Test One</title>
 
                     <p>An intervening subsubsection just after an introduction.</p>
-                </subsubsection> 
+                </subsubsection>
 
                 <subsubsection>
                     <title>Test Two</title>
 
                     <p>An intervening subsubsection just before a conclusion.</p>
-                </subsubsection> 
+                </subsubsection>
 
                 <conclusion>
                     <p>Entirely analogous to introductions are conclusions.  Any subdivision may have a sequence of paragraphs within a <c>&lt;conclusion&gt;</c> that follows previous further subdivisions.  You are reading one now.  They are always leaves of the document structure, so are rendered on some pages that reference the preceding subdivisions.</p>
@@ -1334,7 +1363,7 @@ the xsltproc executable.
                 <p>A long equation, to check layout on various screen sizes.  This is Weil's <q>explicit formula</q> for the
                    Riemann <m>\zeta</m>-function:
                   <men>
-        \sum_\gamma S_-(\gamma) = \frac{\log Q}{\pi} \hat S_-(0) 
+        \sum_\gamma S_-(\gamma) = \frac{\log Q}{\pi} \hat S_-(0)
         + \frac{1}{2\pi} \sum_{j=1}^d \Re\left\{ \int_{-\infty}^\infty \frac{\Gamma'}{\Gamma}\left(\frac{1}{4} + \frac{it}{2} + \mu_j\right)S_-(t) dt\right\}
         - \frac{d}{2\pi}\hat S_-(0)\log \pi
                   </men>.
@@ -1500,7 +1529,7 @@ the xsltproc executable.
                 </md></p>
 
                 <p>Generally, you cannot use any <init>XML</init> elements inside of the mathematics elements.  An exception is the <c>xref</c> element which you might want to use to provide justifications for the steps of a derivation.  Here is a visual example that is mathematically meaningless,<md>
-                    <mrow xml:id="equation-with-no-number">A&amp;=B+C&amp;&amp;<xref ref="corollary-FTC-derivative" text="type-global" /></mrow>
+                    <mrow>A&amp;=B+C&amp;&amp;<xref ref="corollary-FTC-derivative" text="type-global" /></mrow>
                     <mrow>&amp;=D+E&amp;&amp;<xref ref="theorem-FTC" text="title" /></mrow>
                 </md>.</p>
             </subsection>
@@ -2413,11 +2442,10 @@ the xsltproc executable.
                         <p>You could <q>connect</q> the image above with the exercises following as part of this <c>introduction</c> for the <c>exercisegroup</c>.</p>
                     </introduction>
 
+                    <!-- This exercise has no solutions, so we can dispense with the "statement" structure -->
                     <exercise>
-                        <statement>
-                            <p xml:id="paragraph-in-exercise"><m>f(x)=x^3</m>, <m>\frac{df}{dx}</m>.  This sentence is just a bunch of gibberish to check where the second line of the problem begins relative to the first line.</p>
-                            <p>We cross-reference the next problem in this exercise group.  For the <c>phrase-global</c> form, the common element of the cross-reference and the target should be the <c>exercises</c> division, and not the enclosing <c>exercisegroup</c>:  <xref ref="exercises-cosine-derivative" text="phrase-global" />.</p>
-                        </statement>
+                        <p xml:id="paragraph-in-exercise"><m>f(x)=x^3</m>, <m>\frac{df}{dx}</m>.  This sentence is just a bunch of gibberish to check where the second line of the problem begins relative to the first line.</p>
+                        <p>We cross-reference the next problem in this exercise group.  For the <c>phrase-global</c> form, the common element of the cross-reference and the target should be the <c>exercises</c> division, and not the enclosing <c>exercisegroup</c>:  <xref ref="exercises-cosine-derivative" text="phrase-global" />.</p>
                     </exercise>
 
                     <exercise xml:id="exercises-cosine-derivative">
@@ -2433,9 +2461,7 @@ the xsltproc executable.
                 </exercisegroup>
 
                 <exercise>
-                    <statement>
-                        <p>Compute <m>\int 3x^2\,dx</m>.</p>
-                    </statement>
+                    <p>Compute <m>\int 3x^2\,dx</m>.</p>
                 </exercise>
 
                 <exercise>
@@ -2461,7 +2487,7 @@ the xsltproc executable.
 
             </exercises>
 
-            <exercises>
+            <exercises xml:id="exercises-section-multiple">
                 <title>More Exercises</title>
 
                 <exercise>
@@ -2514,7 +2540,7 @@ the xsltproc executable.
 
             </exercises>
 
-            <references>
+            <references xml:id="references-section">
                 <title>References</title>
                 <idx><h>references</h><h>within a section</h></idx>
 
@@ -2560,7 +2586,13 @@ the xsltproc executable.
                 </p>
 
 
-                <p>This section contains nested lists, to demonstrate how they get assigned labels (numbering, symbols).  But we begin with two simple lists, demonstrating an ordered list and an unordered list.  See the end of section for an example of a description list.Note in the source the optional use of a paragraph (<c>p</c>) for the list items of the list of colors.</p>
+                <p>This section contains nested lists,
+                   to demonstrate how they get assigned labels (numbering, symbols).
+                   But we begin with two simple lists,
+                   demonstrating an ordered list and an unordered list.
+                   See the end of section for an example of a description list.
+                   Note in the source the optional use of a paragraph
+                   (<c>p</c>) for the list items of the list of colors.</p>
 
                 <p><ol>
                     <li>First.</li>
@@ -2735,6 +2767,8 @@ the xsltproc executable.
                     <li>Tres item.</li>
                     <li>Quattro items.</li>
                 </ul></p>
+
+                <p>And a paragraph after that list so that spacing can be checked.</p>
             </subsection>
 
             <subsection>
@@ -3671,21 +3705,21 @@ the xsltproc executable.
 
         </section>
 
-        <section xml:id="section-interactive-open">
-            <title>Open Interactive Elements</title>
-            <idx><h>interactive elements</h><h>open</h></idx>
-            <idx><h>embedded interactive elements</h><h>open</h></idx>
+        <section xml:id="section-interactive-authored">
+            <title>Interactive Elements, Authored</title>
+            <idx><h>interactive elements</h><h>authored</h></idx>
+            <idx><h>embedded interactive elements</h><h>authored</h></idx>
 
             <introduction>
                 <!-- First paragraph duplicated in next section -->
                 <p>When outputting Web page versions, it is possible to embed a variety of dynamic interactive elements.  In a <latex />/PDF version, these will necessarily need to be replaced by some static substitute, such as a screenshot.  See <xref ref="section-sage-cells" text="type-global" /> for the specifics of embedding instances of the Sage Cell Server, which is more elaborate, and not entirely similar.</p>
 
-                <p>Interactives in this section are generally unencumbered from copyright or licensing restrictions.  See <xref ref="section-interactive-free" text="type-global" /> for more interactives that are not as open.</p>
+                <p>Interactives in this section are those for which you provide code you have authored.  Generally, the libraries involved to support this have open licenses, though the player for GeoGebra may be an exception.  Creating these assumes some familiarity with <init>HTML</init> and Javascript.  See <xref ref="section-interactive-server" text="type-global" /> for more interactives that are perhaps simpler to create or use.</p>
 
-                <p>(2018-03-05) Almost everything in this section is under active development and not stable yet.  Feel free to experiment and make suggestions and requests.  This page takes a while to completely load, so be patient.</p>
+                <p>(2018-06-22) Almost everything in this section is under active development and not stable yet.  Feel free to experiment and make suggestions and requests.  This page takes a while to completely load, so be patient.</p>
             </introduction>
 
-            <subsection>
+            <subsection xml:id="interactive-html5-canvas">
                 <title>HTML5 Canvas</title>
 
                 <p><init>HTML5</init> introduced the <tag>canvas</tag> element, which can be thought of a blank slate, a place to draw or write on.  So <pretext /> has the <tag>slate</tag> element for a similar purpose.  Generally, but not exclusively, <init>HTML5</init> writes on a <tag>canvas</tag> using the Javascript language.  We demonstrate this approach to interactive diagrams in this subsection.</p>
@@ -3697,8 +3731,8 @@ the xsltproc executable.
                 <figure xml:id="figure-simple-eigenvector">
                     <caption>A simple eigenvector demonstration</caption>
 
-                    <interactive xml:id="interactive-simple-eigenvector" platform="html5" width="60%" source="code/austin/figures.js code/austin/simple-ev.js" preview="images/simple-eigenvector-preview.jpg">
-                        <slate xml:id="eigenvector" language="javascript" />
+                    <interactive xml:id="interactive-simple-eigenvector" platform="javascript" width="60%" source="code/austin/figures.js code/austin/simple-ev.js" preview="images/simple-eigenvector-preview.jpg">
+                        <slate xml:id="eigenvector" surface="canvas" />
                         <instructions>
                             <p>Let <m>\vec{x}</m> be represented by the red arrow, and <m>A\vec{x}</m> by the grey arrow, for some particular <m>2\times 2</m> matrix <m>A</m>.  Drag the <em>tip</em> of the red arrow to see the grey arrow change.</p>
                         </instructions>
@@ -3714,9 +3748,9 @@ the xsltproc executable.
                 <figure xml:id="figure-eigenvectors">
                     <caption>Eigenvector demonstration</caption>
 
-                    <interactive xml:id="interactive-eigenvectors" platform="html5" width="90%" aspect="4:5" source="code/austin/figures.js code/austin/eigenvectors.js" preview="images/eigenvectors-preview.jpg">
-                        <slate xml:id="sliders"      aspect="4:1" language="javascript" />
-                        <slate xml:id="eigenvectors" aspect="4:4" language="javascript" />
+                    <interactive xml:id="interactive-eigenvectors" platform="javascript" width="90%" aspect="4:5" source="code/austin/figures.js code/austin/eigenvectors.js" preview="images/eigenvectors-preview.jpg">
+                        <slate xml:id="sliders"      aspect="4:1" surface="canvas" />
+                        <slate xml:id="eigenvectors" aspect="4:4" surface="canvas" />
                         <instructions>
                             <p>Let <m>\vec{x}</m> be represented by the red arrow, and <m>A\vec{x}</m> by the grey arrow, for a <m>2\times 2</m> matrix <m>A</m>.  Drag the <em>tip</em> of the red arrow to see the grey arrow change.  Or drag the blue sliders to change the numerical values of the four entries of the <m>2\times 2</m> matrix <m>A</m>.  You will not see the grey vector until you change the matrix using one of the two sliders on the left.  Why is that?  What are the eigenvectors of the initial matrix?</p>
                         </instructions>
@@ -3730,27 +3764,27 @@ the xsltproc executable.
 
                     <!-- The "10" in the "12:10" should really be a "9".  I suspect -->
                     <!-- there is some inline element that induces scroll bars      -->
-                    <interactive xml:id="interactive-animation" platform="html5" width="100%" aspect="12:10" source="code/austin/animation.js" preview="images/animation-preview.jpg">
+                    <interactive xml:id="interactive-animation" platform="javascript" width="100%" aspect="12:10" source="code/austin/animation.js" preview="images/animation-preview.jpg">
                         <sbsgroup>
                             <sidebyside>
-                                <slate xml:id="a" language="javascript" aspect="4:1" />
-                                <slate xml:id="b" language="javascript" aspect="4:1" />
-                                <slate xml:id="c" language="javascript" aspect="4:1" />
+                                <slate xml:id="a" surface="canvas" aspect="4:1" />
+                                <slate xml:id="b" surface="canvas" aspect="4:1" />
+                                <slate xml:id="c" surface="canvas" aspect="4:1" />
                             </sidebyside>
                             <sidebyside>
-                                <slate xml:id="d" language="javascript" aspect="4:1" />
-                                <slate xml:id="e" language="javascript" aspect="4:1" />
-                                <slate xml:id="f" language="javascript" aspect="4:1" />
+                                <slate xml:id="d" surface="canvas" aspect="4:1" />
+                                <slate xml:id="e" surface="canvas" aspect="4:1" />
+                                <slate xml:id="f" surface="canvas" aspect="4:1" />
                             </sidebyside>
                             <sidebyside>
-                                <slate xml:id="left"  language="javascript" aspect="6:6" />
-                                <slate xml:id="right" language="javascript" aspect="6:6" />
+                                <slate xml:id="left"  surface="canvas" aspect="6:6" />
+                                <slate xml:id="right" surface="canvas" aspect="6:6" />
                             </sidebyside>
                             <sidebyside width="25%" margins="25% 25%">
-                                <slate language="html" aspect="3:1">
+                                <slate surface="html" aspect="3:1">
                                     <button type="button" id="compose">Compose</button>
                                 </slate>
-                                <slate language="html" aspect="3:1">
+                                <slate surface="html" aspect="3:1">
                                     <button type="button" id="reset">Reset</button>
                                 </slate>
                             </sidebyside>
@@ -3776,7 +3810,7 @@ the xsltproc executable.
                 <figure>
                     <caption>Force layout and collision detection</caption>
                     <interactive xml:id="interactive-d3-collision" platform="d3" version="3" width="80%" aspect="1:1" source="code/d3/collision.js" preview="images/collision-preview.png">
-                        <slate xml:id="d3-collision" language="d3" aspect="1:1"/>
+                        <slate xml:id="d3-collision" surface="div" aspect="1:1"/>
                         <instructions>
                             <p>Place your mouse/pointer at the center of the interactive to repel the 200 circles.</p>
                         </instructions>
@@ -3793,7 +3827,7 @@ the xsltproc executable.
                 <figure>
                     <caption>Graph Layout</caption>
                     <interactive xml:id="interactive-d3-graph-layout" platform="d3" version="4" width="60%" aspect="1:1" source="code/d3/graph-layout.js" preview="images/graph-layout-preview.png">
-                        <slate xml:id="d3-graph-layout" language="d3" aspect="1:1"/>
+                        <slate xml:id="d3-graph-layout" surface="div" aspect="1:1"/>
                         <instructions>
                             <p>Drag a vertex to a new location to see the graph adjust its layout.</p>
                         </instructions>
@@ -3830,12 +3864,84 @@ the xsltproc executable.
                 <figure>
                     <caption>Tweet mentions within the Welsh Assembly</caption>
                     <interactive xml:id="interactive-d3-welsh" platform="d3" version="4" width="100%" aspect="1:2" source="code/d3/welsh.js" css="code/d3/welsh.css" preview="images/welsh-assembly-preview.png">
-                        <slate xml:id="d3-welsh" language="d3" aspect="1:2"/>
+                        <slate xml:id="d3-welsh" surface="div" aspect="1:2"/>
                         <instructions>
                             <p>Hover on the name of an Assembly Member to concentrate on their tweet mentions.</p>
                         </instructions>
                     </interactive>
                 </figure>
+            </subsection>
+
+            <subsection>
+                <title>SVG</title>
+
+                <p>Entirely similar to using an HTML5 <c>canvas</c> element (<xref ref="interactive-html5-canvas" />), it is possible to control an <init>SVG</init> element with Javascript.  This example is from Mark McClure.</p>
+
+                <figure xml:id="figure-interactive-slopes">
+                    <caption>Tangent and secant slopes</caption>
+                    <interactive xml:id="interactive-slopes" platform="javascript" width="100%" aspect="6:8" source="https://code.jquery.com/jquery-1.11.3.min.js https://d3js.org/d3.v3.min.js https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.2.1/math.min.js code/mcclure/slope.js" css="code/mcclure/slope.css">
+                        <!-- intro text, plus curve radio buttons -->
+                        <slate xml:id="function-list" surface="html" aspect="6:2">
+                            <div class="p">
+                            Calculus consists of those problems in mathematics that can be solved with the
+                            following basic approach:
+                            </div>
+                            <div class="em_display">
+                            Approximate and take a limit!
+                            </div>
+                            <div class="p">
+                            The simplest, standard, geometric example of this process is the approximation
+                            of the slope of a tangent line with a secant line.
+                            Here's an illustration of this basic idea.
+                            </div>
+                            <div id="function_list" style="text-align: center">
+                                Choose \(f\):
+                                <span class="function_radio_container" style="padding-left: 10px">
+                                    <input type="radio" class="radio" name="function" value="f1" id="f1" />
+                                    \(f(x)=x^2\)
+                                </span>
+                                <span class="function_radio_container">
+                                    <input type="radio" class="radio" name="function" value="f2" />
+                                    \(f(x)=\frac{1}{3}e^x\)
+                                </span>
+                                <span class="function_radio_container">
+                                    <input type="radio" class="radio" name="function" value="f3" />
+                                    \(f(x)=\sin(2x^2)+x/4\)
+                                </span>
+                            </div>
+                        </slate>
+                        <!-- the curve/graph/interactive itself -->
+                        <slate xml:id="the_graph" surface="svg" aspect="6:4"/>
+                        <!-- slopes and secant line checkbox -->
+                        <slate xml:id="info-container" surface="html" aspect="6:2">
+                            <div id="h_info_container">
+                            <table>
+                                <tr>
+                                    <td><table>
+                                        <tr><td><input id="show_secant_checkbox" type="checkbox" /> Show secant line</td></tr>
+                                        <tr><td><input id="h_slider" type="range" min="-0.5" max="0.5" step="0.01" /></td></tr>
+                                    </table></td>
+                                    <td><table>
+                                        <tr><td class="dimit" style="text-align: left;">\(h = \) <span id="h_value_display"></span></td></tr>
+                                        <tr><td class="dimit" style="text-align: left;">secant slope = <span id="secant_value_display"></span></td></tr>
+                                        <tr><td style="text-align: left;">tangent slope = <span id="tangent_value_display"></span></td></tr>
+                                    </table></td>
+                                </tr>
+                            </table>
+                            </div>
+                        </slate>
+                        <instructions>
+                            <p>Select a function with the radio buttons, then use the checkbox to add the secant line.  The denominator of the difference quotient, <m>h</m>, can be adjusted with the slider and the red point will react to the different values.  The green point is the point of tangency, and can be dragged with the mouse.</p>
+                        </instructions>
+                    </interactive>
+                </figure>
+
+                <exercise>
+                    <title>Changing Secant Lines</title>
+                    <statement>
+                        <p>When discussing the derivative as a limit, we think of the point of tangency as being fixed (the green point in <xref ref="figure-interactive-slopes" />) and the <q>other</q> point defining the secant line as changing (the red point in <xref ref="figure-interactive-slopes" />).  Switch it up!  Fix a large value of <m>h</m> (positive or negative) and then change the point of tangency (the green point).  Discuss what you observe.</p>
+                    </statement>
+                </exercise>
             </subsection>
 
             <subsection>
@@ -3853,7 +3959,7 @@ the xsltproc executable.
                     <idx>Archimedian Spiral</idx>
 
                     <interactive xml:id="interactive-archimedian-spiral" platform="jsxgraph" width="80%" aspect="4:3" source="code/jsxgraph/archimedian.js">
-                        <slate xml:id="jsxgraph-archimedian-spiral" language="jsxgraph" aspect="4:3"/>
+                        <slate xml:id="jsxgraph-archimedian-spiral" surface="jsxboard" aspect="4:3"/>
                         <instructions>
                             <p>Drag the sliders to change the parameters <m>a</m> and <m>b</m>.  Controls in the lower-right will adjust the viewing window.</p>
                         </instructions>
@@ -3868,7 +3974,7 @@ the xsltproc executable.
                     <caption>Infinity, from the JSXGraph Showcase</caption>
 
                     <interactive xml:id="interactive-infinity" platform="jsxgraph" width="60%" source="code/jsxgraph/infinity.js">
-                        <slate xml:id="jsxgraph-infinity" language="jsxgraph"/>
+                        <slate xml:id="jsxgraph-infinity" surface="jsxboard"/>
                         <instructions>
                             <p>Drag the sliders to change the pattern, and drag any of the four red corners to change the overall shape.</p>
                         </instructions>
@@ -3879,14 +3985,14 @@ the xsltproc executable.
 
                 <sidebyside widths="40% 40%">
                     <interactive xml:id="interactive-fermats-spiral" platform="jsxgraph" source="code/jsxgraph/fermats-spiral.js">
-                        <slate xml:id="jsxgraph-fermats-spiral" language="jsxgraph" />
+                        <slate xml:id="jsxgraph-fermats-spiral" surface="jsxboard" />
                         <instructions>
                             <p>Drag the slider to change the curve.</p>
                         </instructions>
                     </interactive>
 
                     <interactive xml:id="interactive-bspline" platform="jsxgraph" source="code/jsxgraph/bspline.js">
-                        <slate xml:id="jsxgraph-bspline" language="jsxgraph" />
+                        <slate xml:id="jsxgraph-bspline" surface="jsxboard" />
                         <instructions>
                             <p>Any of the 8 red control points may be moved anywhere.</p>
                         </instructions>
@@ -3902,16 +4008,16 @@ the xsltproc executable.
                     <interactive xml:id="interactive-piecewise" platform="jsxgraph" aspect="20:8" source="code/jsxgraph/piecewise.js">
                         <sbsgroup>
                             <sidebyside width="30%" margins="0%">
-                                <slate xml:id="box_p3"  language="jsxgraph" aspect="6:6" />
-                                <slate xml:id="box2_p3" language="jsxgraph" aspect="6:6" />
-                                <slate xml:id="box3_p3" language="jsxgraph" aspect="6:6" />
+                                <slate xml:id="box_p3"  surface="jsxboard" aspect="6:6" />
+                                <slate xml:id="box2_p3" surface="jsxboard" aspect="6:6" />
+                                <slate xml:id="box3_p3" surface="jsxboard" aspect="6:6" />
                             </sidebyside>
                             <!-- buttons should have aspect 6:1, if we could set it -->
                             <sidebyside widths="30% 30%" margins="20%">
-                                <slate language="html">
+                                <slate surface="html">
                                     <input type="button" value="Animate" onkeypress="animate_p3(s_p3,75,100);" onclick="animate_p3(s_p3,75,100);" style="font-size:16px; width:100%"/>
                                 </slate>
-                                <slate language="html">
+                                <slate surface="html">
                                     <input type="button" value="Clear Traces" onkeypress="clearTraces_p3();" onclick="clearTraces_p3();" style="font-size:16px; width:100%"/>
                                 </slate>
                             </sidebyside>
@@ -3926,58 +4032,112 @@ the xsltproc executable.
             </subsection>
 
             <subsection>
-                <title>CalcPlot3D</title>
-                <idx>CalcPlot3D</idx>
+                <title>Sage Interacts</title>
+                <idx><h>Sage</h><h>interacts</h></idx>
 
-                <p>CalcPlot3D is a Javascript application for creating, visualizing, and understanding plots of 3D surfaces.  So it would be an ideal companion to a book on multivariate calculus, but should be useful in other courses of study.</p>
+                <p>Sage, and the Sage Cell Server, support interactive demonstrations, called <term>interacts</term>.<ul>
+                    <li>The interactive elements are nearly trivial to construct.</li>
+                    <li>An interact is simply a single Python function (acted on by a decorator).</li>
+                    <li>You have the full mathematical power of Sage at your disposal, so can do some very powerful computations with high precision (or exactly).</li>
+                    <li>The interface is not as polished as what you can achieve with Javascript libraries.</li>
+                    <li>Graphics refresh with a round-trip to the server, so are not nearly as fluid as with other tools.</li>
+                </ul>  Note that each interact is insulated from the others, unlike our other employment of the Sage Cell Server.</p>
 
-                <p>To use it, find find the <url href="http://www.monroecc.edu/faculty/paulseeburger/calcnsf/CalcPlot3D/">online app version</url> at<cd>http://www.monroecc.edu/faculty/paulseeburger/calcnsf/CalcPlot3D/</cd>Create a plot and adjust the image to a viewpoint and scale you like.  Then, click the menu icon in the upper-left and choose <c>File</c>.  From here you can save a <init>PNG</init> image for the static version, but you also want to select <c>Encode View in URL</c>.  Now your browser address bar is filled with a query string (<em>all</em> the stuff <em>after</em> the question-mark) that has all the information necessary to reproduce your plot (and view).  Copy everything after the first question-mark to the <c>interactive/code</c> element.  Be sure to replace any ampersands by <c>&amp;amp;</c> (see the Author's Guide for more about certain characters in <init>URL</init>s).  Examine the source for the examples below to see how they are authored.</p>
+                <p>This example is by Marshall Hampton, taken from the Sage interact wiki, <url href="https://wiki.sagemath.org/interact/calculus"><c>wiki.sagemath.org/interact/calculus</c></url>, specifically <url href="https://wiki.sagemath.org/interact/calculus#Numerical_integrals_with_the_midpoint_rule">here</url>.</p>
 
-                <figure>
-                    <caption>Intersection of two planes (minimal embedding)</caption>
-                    <interactive platform="calcplot3d" variant="minimal" width="80%">
-                        <code language="url">type=implicit;equation=2x-y+z~0;cubes=16;visible=true;xmin=-2;xmax=2;ymin=-2;ymax=2;zmin=-2;zmax=2;alpha=-1;format=constant;constcol=rgb(61,133,198)&amp;type=parametric;parametric=2;x=-(u+v)/2;y=(u-v)/2;z=v;visible=true;umin=-3;umax=3;usteps=30;vmin=-2;vmax=2;vsteps=15;alpha=193;format=constant;constcol=rgb(255,161,114)&amp;type=text;text=x%20%2B%20y%20%2B%20z%20~%200;visible=true;point=(.5,-2.5,2.1);color=rgb(0,0,0);font=Times%20New%20Roman;fontsize=14pt;bold=false;italic=false;fontmath=true;align=Upper-right&amp;type=text;text=2x%20-%20y%20%2B%20z%20~%200;visible=true;point=(2,2.2,-1.25);color=rgb(0,0,0);font=Times%20New%20Roman;fontsize=14pt;bold=false;italic=false;fontmath=true;align=Upper-right&amp;type=window;hsrmode=0;anaglyph=-1;center=7.006292692220367,5.09036960455127,4.999999999999999,1;focus=0,0,0,1;up=-0.3290568564833397,-0.23907380036690282,0.9135454576426009,1;transparent=true;alpha=140;edgeson=false;faceson=true;showbox=false;showaxes=true;showticks=true;perspective=true;centerxpercent=0.5;centerypercent=0.5;rotationsteps=30;autospin=true;xygrid=false;yzgrid=false;xzgrid=false;gridsonbox=true;gridplanes=false;gridcolor=rgb(128,128,128);xmin=-2;xmax=2;ymin=-2;ymax=2;zmin=-2;zmax=2;xscale=1;yscale=1;zscale=1;zcmin=-4;zcmax=4;zoom=0.655294;xscalefactor=1;yscalefactor=1;zscalefactor=1</code>
-                    </interactive>
-                </figure>
+                <!-- It would be better to xi:include this Sage code, but we don't want    -->
+                <!-- newcomers to need to use the "-xinclude" switch while getting started -->
+                <figure xml:id="figure-interactive-numerical-integral">
+                    <caption>Numerical integrals using the midpoint rule</caption>
 
-                <figure>
-                    <caption>Probability wavefunction with contours (includes controls)</caption>
-                    <interactive platform="calcplot3d" variant="controls" width="95%" aspect="1:2">
-                        <code language="url">type=jaxlabel;position=middle;math=%255Cpsi_%257Bn_x%252Cn_y%257D(x%252Cy);textonly=false&amp;type=z;z=sin(api*x)sin(bpi*y);visible=true;umin=0;umax=1;vmin=0;vmax=1;grid=50;format=normal;alpha=200;constcol=rgb(255,0,0);view=0;contourcolor=rgb(255,0,0);contourplot=true;showcontourplot=true;firstvalue=-1;stepsize=0.2;numlevels=11;xnum=75;ynum=75;show2d=false;hidesurface=false;hidelabels=false;showprojections=false;surfacecontours=true;projectioncolor=rgba(51,153,0,1);showxygrid=false;showxygridonbox=false&amp;type=slider;slider=a;value=1;steps=2;pmin=1;pmax=3;repeat=true;bounce=true;waittime=40;careful=true;noanimate=true;name=n_x&amp;type=slider;slider=b;value=1;steps=2;pmin=1;pmax=3;repeat=true;bounce=true;waittime=40;careful=true;noanimate=true;name=n_y&amp;type=text;text=0;visible=true;point=(0,0,0);color=rgb(0,0,0);font=Times%20New%20Roman;fontsize=15pt;bold=true;italic=false;fontmath=true;align=Center-left&amp;type=text;text=L;visible=true;point=(1,-0.025,0);color=rgb(0,0,0);font=Times%20New%20Roman;fontsize=14pt;bold=true;italic=false;fontmath=true;align=Center&amp;type=text;text=L;visible=true;point=(-0.05,1,0);color=rgb(0,0,0);font=Times%20New%20Roman;fontsize=14pt;bold=true;italic=false;fontmath=true;align=Center&amp;type=text;text=x;visible=true;point=(0.5,-0.07,0);color=rgb(0,0,0);font=Times%20New%20Roman;fontsize=14pt;bold=true;italic=false;fontmath=true;align=Center&amp;type=text;text=y;visible=true;point=(-0.08,0.5,0);color=rgb(0,0,0);font=Times%20New%20Roman;fontsize=14pt;bold=true;italic=false;fontmath=true;align=Center&amp;type=window;hsrmode=3;anaglyph=-1;center=-7.447051206708178,-2.790794355991455,3.71998429905919,1;focus=0.5,0.5,0.5,1;up=0.39804763218685024,0.14521777837291014,0.9057979241281567,1;transparent=true;alpha=140;twoviews=false;unlinkviews=false;axisextension=0;xaxislabel=%20;yaxislabel=%20;zaxislabel=%20;edgeson=false;faceson=true;showbox=false;showaxes=false;showticks=false;perspective=true;centerxpercent=0.5;centerypercent=0.4;rotationsteps=30;autospin=true;xygrid=false;yzgrid=false;xzgrid=false;gridsonbox=false;gridplanes=true;gridcolor=rgb(128,128,128);xmin=0;xmax=1;ymin=0;ymax=1;zmin=0;zmax=1;xscale=1;yscale=1;zscale=1;zcmin=-4;zcmax=4;zoom=3.543529;xscalefactor=1;yscalefactor=1;zscalefactor=0.5;hidexysliders=true;hidetracevalue=true
-                        </code>
-                    </interactive>
-                </figure>
-
-                <figure>
-                    <caption>Plot of <m>f(x,y)=\dfrac{1}{y-x^2}</m> on <m>[-2,2]\times[-2,2] (full application)</m></caption>
-                    <interactive platform="calcplot3d" variant="application" width="95%" aspect="10:13">
-                        <code language="url">type=z;z=1/(y-x^2);visible=true;umin=-2;umax=2;vmin=-2;vmax=2;grid=30;format=normal;alpha=-1;constcol=rgb(255,0,0);contourcolor=red&amp;type=window;hsrmode=3;anaglyph=-1;center=5.529712854135209,7.349875454071844,3.9244880634856956,1;focus=0,0,0,1;up=-0.26875302682986874,-0.2884991397174344,0.9189886054528014,1;transparent=true;alpha=140;edgeson=true;faceson=true;showbox=true;showaxes=true;showticks=true;perspective=true;centerxpercent=0.5;centerypercent=0.5;rotationsteps=30;autospin=true;xygrid=false;yzgrid=false;xzgrid=false;gridsonbox=true;gridplanes=false;gridcolor=rgb(128,128,128);xmin=-2;xmax=2;ymin=-2;ymax=2;zmin=-4;zmax=4;xscale=1;yscale=1;zscale=1;zcmin=-4;zcmax=4;zoom=0.468667;xscalefactor=1;yscalefactor=1;zscalefactor=1</code>
-                        <static>
-                            <image source="images/calcplot3d.png" width="45%"/>
-                        </static>
+                    <interactive xml:id="interactive-numerical-integral" platform="sage" width="100%" aspect="2:3">
+                        <!-- Changes: gave 3 input boxes widths -->
+                        <slate surface="sage">
+                        var('x')
+                        @interact
+                        def midpoint(n = slider(1,100,1,4), f = input_box(default = "x^2", type = str, width=40), start = input_box(default = "0", type = str, width=6), end = input_box(default = "1", type = str,width=6)):
+                            a = N(start)
+                            b = N(end)
+                            func = sage_eval(f, locals={'x':x})
+                            dx = (b-a)/n
+                            midxs = [q*dx+dx/2 + a for q in range(n)]
+                            midys = [func(x=x_val) for x_val in midxs]
+                            rects = Graphics()
+                            for q in range(n):
+                                xm = midxs[q]
+                                ym = midys[q]
+                                rects = rects + line([[xm-dx/2,0],[xm-dx/2,ym],[xm+dx/2,ym],[xm+dx/2,0]], rgbcolor = (1,0,0)) + point((xm,ym), rgbcolor = (1,0,0))
+                            min_y = min(0, find_local_minimum(func,a,b)[0])
+                            max_y = max(0, find_local_maximum(func,a,b)[0])
+                            pretty_print(html('&lt;h3&gt;Numerical integrals with the midpoint rule&lt;/h3&gt;'))
+                            pretty_print(html('$\int_{a}^{b}{f(x) dx} {\\approx} \sum_i{f(x_i) \Delta x}$'))
+                            print "\n\nSage numerical answer: " + str(integral_numerical(func,a,b,max_points = 200)[0])
+                            print "Midpoint estimated answer: " + str(RDF(dx*sum([midys[q] for q in range(n)])))
+                            show(plot(func,a,b) + rects, xmin = a, xmax = b, ymin = min_y, ymax = max_y)
+                        </slate>
                     </interactive>
                 </figure>
 
             </subsection>
+
+            <subsection>
+                <title>Geogebra</title>
+
+                <p>Better than using the server version of Geogebra might be designing your own material, retaining your copyright, and using one of Geogebra's <q>Apps</q> to embed the material in your document.  (But note, use of the App comes with licensing restrictions.)  <pretext /> will handle the technical details for you.<ol>
+                    <li>Use Geogebra to make a material.  Maybe you need to install a desktop program that allows you to do this.  Then export, or otherwise discover the <q>base64-encoded</q> version which may be identified by <c>ggb</c>.  See the source of this page for examples of what this looks like.</li>
+                    <li>Mimic the source of the examples below.</li>
+                    <li>Long-run it will be better to park these strings in files (in a <c>code</c> subdirectory?) and <tag>xi:include</tag> them with the <attr>parse</attr> attribute set to <c>text</c>.  But we do not want to impede a newcomer's quickstart with the problematic <c>-xinclude</c> switch.</li>
+                </ol></p>
+
+                <p>The sliders on the next applet seem to be at fixed locations.  Make it too skinny and you will never see them, rendering the material useless.  However the window will pan (drag with a mouse) and zoom (scroll wheel of a mouse), so you can adjust that way.</p>
+
+                <figure>
+                    <caption>GeoGebra: astroids (from Dave Rosoff)</caption>
+                    <interactive xml:id="geogebra-astroid" platform="geogebra" width="100%" aspect="4:3">
+                        <slate xml:id="astroid" surface="geogebra" source="code/rosoff/astroid.ggb" aspect="4:3" />
+                    </interactive>
+                </figure>
+
+                <p>Now the controls are in the upper-left corner, so we can more easily make the window a little smaller.  Pan and zoom to put the action where you can see it better.</p>
+
+                <figure>
+                    <caption>GeoGebra: cycloids (from Dave Rosoff)</caption>
+                    <interactive xml:id="geogebra-cycloid" platform="geogebra" width="75%" aspect="3:4">
+                        <slate xml:id="cycloid" surface="geogebra" source="code/rosoff/epi-hypocycloids-default.ggb" aspect="3:4"/>
+                    </interactive>
+                </figure>
+
+                <p>You will need to zoom out a bit, and then pan over some, to see all the pieces of the next GeoGebra material.</p>
+
+                <figure>
+                    <caption>GeoGebra: a constructive <q>proof</q> that SAS congruence holds in Euclidean geometry (from Tevian Dray)</caption>
+                    <interactive xml:id="geogebra-SAS" platform="geogebra" width="100%" aspect="1:1">
+                        <slate xml:id="SAS" surface="geogebra" source="code/dray/SAS.ggb" />
+                        <instructions>
+                            <p>Drag some of the points and some of the circles to change them, and watch the remainder react.</p>
+                        </instructions>
+                    </interactive>
+                </figure>
+            </subsection>
         </section>
 
-        <section xml:id="section-interactive-free">
-            <title>Free Interactive Elements</title>
-            <idx><h>interactive elements</h><h>free</h></idx>
-            <idx><h>embedded interactive elements</h><h>free</h></idx>
+        <section xml:id="section-interactive-server">
+            <title>Interactive Elements, Server</title>
+            <idx><h>interactive elements</h><h>server</h></idx>
+            <idx><h>embedded interactive elements</h><h>server</h></idx>
 
             <introduction>
                 <!-- First paragraph duplicated in previous section -->
                 <p>When outputting Web page versions, it is possible to embed a variety of dynamic interactive elements.  In a <latex />/PDF version, these will necessarily need to be replaced by some static substitute, such as a screenshot.  See <xref ref="section-sage-cells" text="type-global" /> for the specifics of embedding instances of the Sage Cell Server, which is more elaborate, and not entirely similar.</p>
 
-                <p>Interactives in this section can be used without paying any fees.  However, their use is generally encumbered by copyright and/or licensing restrictions, and may limit the license you can use on your own work.  So carefully study copyrights, licenses, and terms of use.  See <xref ref="section-interactive-open" text="type-global" /> for more interactives that are free as in <q>freedom</q> or <foreign xml:lang="fr-FR">liberté</foreign>.</p>
+                <p>Interactives in this section have code that lives on a server somewhere (in the <q>cloud</q>).  So maybe you uploaded an interactive demonstration, or maybe somebody else did.  In this sense, these are easier to create or use.  But pay attention, the code may come with restrictive licenses, even if you are the author originally.  See <xref ref="section-interactive-authored" text="type-global" /> for more interactives that can be free as in <q>freedom</q> or <foreign xml:lang="fr-FR">liberté</foreign>.  CalcPlot3D is the notable exception here.</p>
 
-                <p>(2018-03-05) Almost everything in this section is under active development and not stable yet.  Feel free to experiment and make suggestions and requests.  This page takes a while to completely load, so be patient.</p>
+                <p>(2018-06-22) Almost everything in this section is under active development and not stable yet.  Feel free to experiment and make suggestions and requests.  This page takes a while to completely load, so be patient.</p>
             </introduction>
 
             <subsection>
-                <title>GeoGebra (Cloud)</title>
-                <idx><h>Geogebra</h><h>cloud</h></idx>
+                <title>GeoGebra</title>
+                <idx><h>Geogebra</h><h>server</h></idx>
                 <idx><h>Geogebra</h><h>material</h></idx>
 
                 <p>A Geogebra <term>material</term> is something you might use in a class.  It could also be called an interactive demonstration.  Go browsing at <url href="https://www.geogebra.org/materials/">www.geogebra.org/materials</url> and find something appropriate for your project.  Or make an account and create your own.</p>
@@ -3999,54 +4159,16 @@ the xsltproc executable.
             </subsection>
 
             <subsection>
-                <title>Geogebra (Source)</title>
-
-                <p>Better might be designing your own material, retaining your copyright, and using one of Geogebra's <q>Apps</q> to embed the material in your document.  (But note, use of the App comes with licensing restrictions.)  <pretext /> will handle the technical details for you.<ol>
-                    <li>Use Geogebra to make a material.  Maybe you need to install a desktop program that allows you to do this.  Then export, or otherwise discover the <q>base64-encoded</q> version which may be identified by <c>ggb</c>.  See the source of this page for examples of what this looks like.</li>
-                    <li>Mimic the source of the examples below.</li>
-                    <li>Long-run it will be better to park these strings in files (in a <c>code</c> subdirectory?) and <tag>xi:include</tag> them with the <attr>parse</attr> attribute set to <c>text</c>.  But we do not want to impede newcomer's quickstart with that problematic switch.</li>
-                    <li>This is preliminary and subject to change.  Do not get carried away yet.  Please report problems or request features.</li>
-                </ol></p>
-
-                <p>The sliders on the next applet seem to be at fixed locations.  Make it too skinny and you will never see them, rendering the material useless.  However the window will pan (drag with a mouse) and zoom (scroll wheel of a mouse), so you can adjust that way.</p>
-
-                <figure>
-                    <caption>GeoGebra: astroids (from Dave Rosoff)</caption>
-                    <interactive xml:id="geogebra-astroid" platform="geogebra" width="100%" aspect="4:3" source="code/rosoff/astroid.ggb">
-                    </interactive>
-                </figure>
-
-                <p>Now the controls are in the upper-left corner, so we can more easily make the window a little smaller.  Pan and zoom to put the action where you can see it better.</p>
-
-                <figure>
-                    <caption>GeoGebra: cycloids (from Dave Rosoff)</caption>
-                    <interactive xml:id="geogebra-cycloid" platform="geogebra" width="75%" aspect="3:4" source="code/rosoff/epi-hypocycloids-default.ggb">
-                    </interactive>
-                </figure>
-
-                <p>You will need to zoom out a bit, and then pan over some, to see all the pieces of the next GeoGebra material.</p>
-
-                <figure>
-                    <caption>GeoGebra: a constructive <q>proof</q> that SAS congruence holds in Euclidean geometry (from Tevian Dray)</caption>
-                    <interactive xml:id="geogebra-SAS" platform="geogebra" width="100%" aspect="1:1" source="code/dray/SAS.ggb">
-                        <instructions>
-                            <p>Drag some of the points and some of the circles to change them, and watch the remainder react.</p>
-                        </instructions>
-                    </interactive>
-                </figure>
-            </subsection>
-
-            <subsection>
-                <title>Desmos Graphs (Cloud)</title>
+                <title>Desmos Graphs</title>
                 <idx>Desmos graphs</idx>
 
-                <p><term>Desmos</term> provides interactive graphing applications.  The following example was created by Ann Cary and made available via the <q>Share</q> function of Desmos.  You can make your own Desmos graph, choose the <q>Share</q> icon, and the <q>Embed</q> option, to get a <init>URL</init> such as <cd>https://www.desmos.com/calculator/ttox1bvxku</cd>  You want to pick off the identifier on the end, in this case <c>ttox1bvxku</c>, then author<cd>&lt;interactive desmos="ttox1bvxku" /&gt;</cd> as we have done here.</p>
+                <p><term>Desmos</term> provides interactive graphing applications.  The following example was created by Ann Cary and made available via the <q>Share</q> function of Desmos.  You can make your own Desmos graph, choose the <q>Share</q> icon, and the <q>Embed</q> option, to get a <init>URL</init> such as <cd>https://www.desmos.com/calculator/ttox1bvxku</cd>  You want to pick off the identifier on the end, in this case <c>ttox1bvxku</c>, then author<cd>&lt;interactive desmos="ttox1bvxku" width="60%" aspect="2:3" /&gt;</cd> as we have done here.</p>
 
                 <p>The static image employed in the <latex /> version of this article was obtained by viewing the graph at the Desmos site (<ie />, not the embedded version in the <pretext /> HTML version), and using the Share button to export a <init>PNG</init> image.  In this case, we used a <q>Medium Rectangle</q> and <q>Thick</q> lines.</p>
 
                 <figure>
                     <caption>Graph of <m>ln(x^2+5)-3</m></caption>
-                    <interactive desmos="ttox1bvxku">
+                    <interactive desmos="ttox1bvxku" width="60%" aspect="2:3">
                         <static>
                             <image source="images/desmos-graph.png" width="60%"/>
                         </static>
@@ -4057,7 +4179,35 @@ the xsltproc executable.
             </subsection>
 
             <subsection>
-                <title>Wolfram CDF (Cloud)</title>
+                <title>CalcPlot3D</title>
+                <idx>CalcPlot3D</idx>
+
+                <p>CalcPlot3D is a Javascript application for creating, visualizing, and understanding plots of 3D surfaces.  So it would be an ideal companion to a book on multivariate calculus, but should be useful in other courses of study.</p>
+
+                <p>To use it, find find the <url href="http://www.monroecc.edu/faculty/paulseeburger/calcnsf/CalcPlot3D/">online app version</url> at<cd>http://www.monroecc.edu/faculty/paulseeburger/calcnsf/CalcPlot3D/</cd>Create a plot and adjust the image to a viewpoint and scale you like.  Then, click the menu icon in the upper-left and choose <c>File</c>.  From here you can save a <init>PNG</init> image for the static version, but you also want to select <c>Encode View in URL</c>.  Now your browser address bar is filled with a query string (<em>all</em> the stuff <em>after</em> the question-mark) that has all the information necessary to reproduce your plot (and view).  Copy everything after the first question-mark to the <c>interactive/code</c> element.  Be sure to replace any ampersands by <c>&amp;amp;</c> (see the Author's Guide for more about certain characters in <init>URL</init>s).  Examine the source for the examples below to see how they are authored.</p>
+
+                <figure>
+                    <caption>Intersection of two planes (minimal embedding)</caption>
+                    <interactive calcplot3d="type=implicit;equation=2x-y+z~0;cubes=16;visible=true;xmin=-2;xmax=2;ymin=-2;ymax=2;zmin=-2;zmax=2;alpha=-1;format=constant;constcol=rgb(61,133,198)&amp;type=parametric;parametric=2;x=-(u+v)/2;y=(u-v)/2;z=v;visible=true;umin=-3;umax=3;usteps=30;vmin=-2;vmax=2;vsteps=15;alpha=193;format=constant;constcol=rgb(255,161,114)&amp;type=text;text=x%20%2B%20y%20%2B%20z%20~%200;visible=true;point=(.5,-2.5,2.1);color=rgb(0,0,0);font=Times%20New%20Roman;fontsize=14pt;bold=false;italic=false;fontmath=true;align=Upper-right&amp;type=text;text=2x%20-%20y%20%2B%20z%20~%200;visible=true;point=(2,2.2,-1.25);color=rgb(0,0,0);font=Times%20New%20Roman;fontsize=14pt;bold=false;italic=false;fontmath=true;align=Upper-right&amp;type=window;hsrmode=0;anaglyph=-1;center=7.006292692220367,5.09036960455127,4.999999999999999,1;focus=0,0,0,1;up=-0.3290568564833397,-0.23907380036690282,0.9135454576426009,1;transparent=true;alpha=140;edgeson=false;faceson=true;showbox=false;showaxes=true;showticks=true;perspective=true;centerxpercent=0.5;centerypercent=0.5;rotationsteps=30;autospin=true;xygrid=false;yzgrid=false;xzgrid=false;gridsonbox=true;gridplanes=false;gridcolor=rgb(128,128,128);xmin=-2;xmax=2;ymin=-2;ymax=2;zmin=-2;zmax=2;xscale=1;yscale=1;zscale=1;zcmin=-4;zcmax=4;zoom=0.655294;xscalefactor=1;yscalefactor=1;zscalefactor=1" variant="minimal" width="80%"/>
+                </figure>
+
+                <figure>
+                    <caption>Probability wavefunction with contours (includes controls)</caption>
+                    <interactive calcplot3d="type=jaxlabel;position=middle;math=%255Cpsi_%257Bn_x%252Cn_y%257D(x%252Cy);textonly=false&amp;type=z;z=sin(api*x)sin(bpi*y);visible=true;umin=0;umax=1;vmin=0;vmax=1;grid=50;format=normal;alpha=200;constcol=rgb(255,0,0);view=0;contourcolor=rgb(255,0,0);contourplot=true;showcontourplot=true;firstvalue=-1;stepsize=0.2;numlevels=11;xnum=75;ynum=75;show2d=false;hidesurface=false;hidelabels=false;showprojections=false;surfacecontours=true;projectioncolor=rgba(51,153,0,1);showxygrid=false;showxygridonbox=false&amp;type=slider;slider=a;value=1;steps=2;pmin=1;pmax=3;repeat=true;bounce=true;waittime=40;careful=true;noanimate=true;name=n_x&amp;type=slider;slider=b;value=1;steps=2;pmin=1;pmax=3;repeat=true;bounce=true;waittime=40;careful=true;noanimate=true;name=n_y&amp;type=text;text=0;visible=true;point=(0,0,0);color=rgb(0,0,0);font=Times%20New%20Roman;fontsize=15pt;bold=true;italic=false;fontmath=true;align=Center-left&amp;type=text;text=L;visible=true;point=(1,-0.025,0);color=rgb(0,0,0);font=Times%20New%20Roman;fontsize=14pt;bold=true;italic=false;fontmath=true;align=Center&amp;type=text;text=L;visible=true;point=(-0.05,1,0);color=rgb(0,0,0);font=Times%20New%20Roman;fontsize=14pt;bold=true;italic=false;fontmath=true;align=Center&amp;type=text;text=x;visible=true;point=(0.5,-0.07,0);color=rgb(0,0,0);font=Times%20New%20Roman;fontsize=14pt;bold=true;italic=false;fontmath=true;align=Center&amp;type=text;text=y;visible=true;point=(-0.08,0.5,0);color=rgb(0,0,0);font=Times%20New%20Roman;fontsize=14pt;bold=true;italic=false;fontmath=true;align=Center&amp;type=window;hsrmode=3;anaglyph=-1;center=-7.447051206708178,-2.790794355991455,3.71998429905919,1;focus=0.5,0.5,0.5,1;up=0.39804763218685024,0.14521777837291014,0.9057979241281567,1;transparent=true;alpha=140;twoviews=false;unlinkviews=false;axisextension=0;xaxislabel=%20;yaxislabel=%20;zaxislabel=%20;edgeson=false;faceson=true;showbox=false;showaxes=false;showticks=false;perspective=true;centerxpercent=0.5;centerypercent=0.4;rotationsteps=30;autospin=true;xygrid=false;yzgrid=false;xzgrid=false;gridsonbox=false;gridplanes=true;gridcolor=rgb(128,128,128);xmin=0;xmax=1;ymin=0;ymax=1;zmin=0;zmax=1;xscale=1;yscale=1;zscale=1;zcmin=-4;zcmax=4;zoom=3.543529;xscalefactor=1;yscalefactor=1;zscalefactor=0.5;hidexysliders=true;hidetracevalue=true" variant="controls" width="95%" aspect="1:2" />
+                </figure>
+
+                <figure>
+                    <caption>Plot of <m>f(x,y)=\dfrac{1}{y-x^2}</m> on <m>[-2,2]\times[-2,2] (full application)</m></caption>
+                    <interactive calcplot3d="type=z;z=1/(y-x^2);visible=true;umin=-2;umax=2;vmin=-2;vmax=2;grid=30;format=normal;alpha=-1;constcol=rgb(255,0,0);contourcolor=red&amp;type=window;hsrmode=3;anaglyph=-1;center=5.529712854135209,7.349875454071844,3.9244880634856956,1;focus=0,0,0,1;up=-0.26875302682986874,-0.2884991397174344,0.9189886054528014,1;transparent=true;alpha=140;edgeson=true;faceson=true;showbox=true;showaxes=true;showticks=true;perspective=true;centerxpercent=0.5;centerypercent=0.5;rotationsteps=30;autospin=true;xygrid=false;yzgrid=false;xzgrid=false;gridsonbox=true;gridplanes=false;gridcolor=rgb(128,128,128);xmin=-2;xmax=2;ymin=-2;ymax=2;zmin=-4;zmax=4;xscale=1;yscale=1;zscale=1;zcmin=-4;zcmax=4;zoom=0.468667;xscalefactor=1;yscalefactor=1;zscalefactor=1" variant="application" width="95%" aspect="10:13">
+                        <static>
+                            <image source="images/calcplot3d.png" width="45%"/>
+                        </static>
+                    </interactive>
+                </figure>
+            </subsection>
+
+            <subsection>
+                <title>Wolfram CDF</title>
                 <idx>Wolfram CDF</idx>
 
                 <p>You can embed interactive demonstrations created in Wolfram's <term>Computable Document Format</term> so that they will be played with the Wolfram CDF Player<trademark />.  Once you create and save a demonstration, you want to determine the UUID that is the identifier of your demonstration.  For example, <xref ref="wolfram-cdf-cellular-automata" text="type-global" /> is identified by <c>9fa2acff-c809-4b7f-a73b-c59ace36affc</c>.  This identifier is enough to create the <pretext /> to embed the demonstration.  See <url href="https://reference.wolfram.com/language/howto/DeployInteractiveContentInTheWolframCloud.html" /> for information about creating your demonstration.</p>
@@ -4070,12 +4220,12 @@ the xsltproc executable.
 
                 <figure xml:id="wolfram-cdf-sine-curve">
                     <caption>Variable Sine Curve</caption>
-                    <interactive wolfram-cdf="fe1be5c3-d105-43d0-bf4b-9f2eb1028b84" />
+                    <interactive wolfram-cdf="fe1be5c3-d105-43d0-bf4b-9f2eb1028b84" width="80%" aspect="1:1" />
                 </figure>
 
                 <figure xml:id="wolfram-cdf-cellular-automata">
                     <caption>Cellular Automata</caption>
-                    <interactive wolfram-cdf="9fa2acff-c809-4b7f-a73b-c59ace36affc" />
+                    <interactive wolfram-cdf="9fa2acff-c809-4b7f-a73b-c59ace36affc" width="80%" aspect="1:1" />
                 </figure>
             </subsection>
         </section>
@@ -4322,8 +4472,8 @@ the xsltproc executable.
                 <li><p>Display Mathematics: single, first with no name: <xref ref="equation-alternate-FTC" />.  Then with an autoname: <xref ref="equation-alternate-FTC" text="type-global" />.</p></li>
                 <li><p>Display Mathematics: multi-row, first with no name: <xref ref="equation-use-FTC" />.  Then with an autoname: <xref ref="equation-use-FTC" text="type-global" />.  And two, with a plural form: <xref ref="equation-alternate-FTC">Equations</xref> and <xref ref="equation-use-FTC" text="global" />.</p></li>
                 <li><p>Display mathematics: an equation with  <q>local</q> tag, which should not be used so very far away: <xref ref="equation-local-tag" />.</p></li>
-                <li><p>You can author a cross-reference to a displayed equation with no number, but it will not be very satisfying: <xref ref="equation-with-no-number" />.  Perhaps we should issue a warning?</p></li>
-                <li><p>Exercises (sectional), a range, with plural form provided to override autonaming: <xref first="exercises-null-problem" last="exercises-cosine-derivative">Exercises</xref>.</p></li>
+                <li><p>You can author a cross-reference to a displayed equation with no number, but it will not be very satisfying.  You should get a warning if you try.</p></li>
+                <li><p>Exercises (divisional), a range, with plural form provided to override autonaming: <xref first="exercises-null-problem" last="exercises-cosine-derivative">Exercises</xref>.</p></li>
                 <li><p>Exercise (inline): with enclosed hint at <xref ref="exercise-essay" /></p></li>
                 <li><p>A group of two exercises, with introduction, conclusion: <xref ref="exercisegroup-two-problems" text="type-global" /></p></li>
                 <li><p>Solution: An autonamed portion of an exercise: <xref ref="solution-antiderivative" text="type-global" /></p></li>
@@ -4357,7 +4507,9 @@ the xsltproc executable.
                 <li><p>A cross-reference to a paragraph (<c>p</c>) in the <c>statement</c> of an <c>exercise</c>: <xref ref="paragraph-in-exercise" text="title">paragraph</xref>.  Notice that such a paragraph has no number and no title, so you need to (a) use <c>text='title'</c>, and (b) provide custom text for the title, as an override that becomes the content of the link.  You may wish to provide very explicit location information for hardcopy print.  Notice that this is not a cross-reference to the <c>exercise</c>, just a small portion of it.</p></li>
                 <li><p>This opens a knowl for an <c>example</c>.  It has a solution, which is orginally presented as a hidden knowl.  But since this version is a duplicate, the knowl for the solution is a file version, not an embedded version, and hence free from duplicating any unique identifaction like an <init>HTML</init> id.  So we test its styling and function here: <xref ref="example-structured" text="type-global" /></p></li>
                 <li><p>A cross-reference to a poem, where we need to use a title for the link text, since a <c>poem</c> is not numbered: <xref ref="poem-light-brigade" text="title" /></p></li>
-                <!-- <li><p>: <xref ref="" /></p></li> -->
+                <li><p>A cross-reference to a <tag>references</tag> division in a subsection, which should not be numbered where born, but which has the number of its parent division in a cross-reference: <xref ref="references-section" text="type-global"/>.  And a cross-reference to a <tag>references</tag> division, which is the <q>main</q> bibliography in the back matter, and so is not numbered where born, nor in a cross-reference (which we must accomplish via it's title): <xref ref="references-backmatter" text="title"/>.</p></li>
+                <li><p>A cross-reference to a <tag>solutions</tag> division in a subsection, which should not be numbered where born, but which has the number of its parent division in a cross-reference: <xref ref="solutions-subsection" text="type-global"/>.  And a cross-reference to a <tag>solutions</tag> division, which should appear as an appendix both where born and as a cross-reference: <xref ref="solutions-backmatter" text="type-global"/>.</p></li>
+                <li><p>A cross-reference to an <tag>exercises</tag> division in a subsection, which is the only such division in that subsection and therefore should not be numbered where born, but which has the number of its parent division in a cross-reference: <xref ref="exercises-subsection-solo" text="type-global"/>.  In contrast we cross-reference an <tag>exercises</tag> division which is one of two inside a section, and therefore is numbered, when born and when cross-referenced, in continuity with the preceding subsections: <xref ref="exercises-section-multiple" text="type-global"/>.</p></li>
             </ul></p>
 
             <p>Cross-references to structural elements of the document will always take you there directly, since even in the HTML version these parts never get realized as knowls.  You will find such links sprinkled through this document, but here is an autonamed link to a subsubsection:  <xref ref="subsubsection-different-integrals" text="type-global" />.</p>
@@ -5088,7 +5240,7 @@ the xsltproc executable.
             <introduction>
                 <title>Introduction</title>
 
-                <p>The flow of a page is almost universally top-to-bottom.  But at times you would like to go <em>across</em> a page, perhaps to compare items (identical content in two different languages), or to make good use of a page real estate by grouping several small items together (<eg /> images).  So the <c>&lt;sidebyside&gt;</c> tag is strictly a layout device, though it does convey some meaning by grouping certain objects together. A variety of different objects can be put side-by-side using the <c>sidebyside</c> element.  Specifically, <c>figure</c>, <c>table</c>, <c>listing</c>, <c>paragraphs</c>, <c>image</c>, <c>tabular</c>, <c>p</c>, <c>ol</c>, <c>ul</c>, <c>dl</c>, <c>pre</c>, <c>poem</c>, and more.  The individual components of a <c>&lt;sidebyside&gt;</c> are generically called <term>panels</term><idx>panels</idx>.</p>
+                <p>The flow of a page is almost universally top-to-bottom.  But at times you would like to go <em>across</em> a page, perhaps to compare items (identical content in two different languages), or to make good use of a page real estate by grouping several small items together (<eg /> images).  So the <c>&lt;sidebyside&gt;</c> tag is strictly a layout device, though it does convey some meaning by grouping certain objects together. A variety of different objects can be put side-by-side using the <c>sidebyside</c> element.  Specifically, <c>figure</c>, <c>image</c>, <c>tabular</c>, <c>p</c>, <c>ol</c>, <c>ul</c>, <c>dl</c>, <c>pre</c>, <c>poem</c>, and more.  The individual components of a <c>&lt;sidebyside&gt;</c> are generically called <term>panels</term><idx>panels</idx>.</p>
 
                 <p>As a layout device, the <c>&lt;sidebyside&gt;</c> does not allow a <c>&lt;caption&gt;</c>, is never numbered, and therefore cannot be cross-referenced.  You may cross-reference whatever element holds the <c>&lt;sidebyside&gt;</c>, and many of the panels may be cross-referenced individually.</p>
 
@@ -5233,17 +5385,17 @@ the xsltproc executable.
                     </tabular>
                 </table>
             </subsection>
-            
+
             <subsection>
                 <title>A Single Captionless Image</title>
 
                 <p>Sometimes you may want to include a single <c>image</c> or <c>table</c> in an example or exercise without a caption. You can also achieve this using <c>sidebyside</c>. The first has width <c>10%</c>, and the second has width <c>10%</c> and margins <c>25%</c>.</p>
-                    
+
                 <sidebyside width="10%">
                     <image source="images/cross-square.png"/>
                 </sidebyside>
 
-                <p>A paragraph, just to show where the first stops and the second ends.</p> 
+                <p>A paragraph, just to show where the first stops and the second ends.</p>
 
                 <sidebyside width="10%" margins="25%">
                     <image source="images/cross-square.png"/>
@@ -5269,7 +5421,7 @@ the xsltproc executable.
                 </sidebyside>
 
             </subsection>
-            
+
             <subsection>
                 <title>Vertical Alignment</title>
                 <p>Vertical alignment can be specified using the <c>valign</c> attribute which admits a space-separated list of <c>top</c>, <c>middle</c>, and <c>bottom</c>; the default is <c>top</c>.</p>
@@ -5303,23 +5455,17 @@ the xsltproc executable.
             <subsection>
                 <title>Text Next to Text and Images</title>
 
-                <p>Text can be put next to other blocks of text using either the <c>paragraphs</c> element, which can contain multiple paragraphs using the <c>p</c> element.</p>
-
-                <p>If only one paragraph is required, simply use the <c>p</c> element on its own.  In addtion to captions, elements which allow titles will have those displayed above the panel.  So <c>paragraphs</c> can carry a <c>title</c>, but a single paragraph, <c>p</c>, will not.</p>
-
-                <p>Note: The <c>paragraphs</c> element, used as a container for several <c>p</c> in a panel, and without a <c>title</c>, will be replaced by some sort of stacking mechanism.  A single <c>p</c> may be used now as the contents of a panel, without a title.</p>
+                <p>Text can be put next to other blocks of text using the <c>stack</c> element, which can contain multiple paragraphs using the <c>p</c> element (see <xref ref="stacking-side-by-side" text="type-global" />).  If only one paragraph is required, simply use the <c>p</c> element on its own.</p>
 
                 <sidebyside widths="20% 20% 20% 20%" valigns="middle top middle top">
-                    <paragraphs>
-                        <title>Sample Title</title>
+                    <stack>
                         <p>here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text</p>
-                    </paragraphs>
-                    <paragraphs>
-                        <title>A Really Long Title on a Fairly Skinny Paragraphs Element</title>
+                    </stack>
+                    <stack>
                         <p>here is some text here is some text here is some text here is some text here</p>
                         <p>here is some text here is some text here is some text here is some text here</p>
                         <p>here is some text here is some text here is some text here is some text here</p>
-                    </paragraphs>
+                    </stack>
                     <p>here is some text here is some text here is some text here is some text here</p>
                     <p>here is some text here is some text here is some text here is some text here</p>
                 </sidebyside>
@@ -5334,9 +5480,7 @@ the xsltproc executable.
                 <p>You can place text next to numbered figures, as shown below in <xref ref="text-next-to-figure" text="type-global"/>.</p>
 
                 <sidebyside widths="50% 20%" valigns="middle top">
-                    <paragraphs>
-                        <p>here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text; cross reference: <xref ref="text-next-to-figure" text="type-global"/> and math: <m>x^2</m></p>
-                    </paragraphs>
+                    <p>here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text here is some text; cross reference: <xref ref="text-next-to-figure" text="type-global"/> and math: <m>x^2</m></p>
                     <figure xml:id="text-next-to-figure">
                         <caption>Text next to a figure</caption>
                         <image source="images/cross-square.png" />
@@ -5645,7 +5789,7 @@ the xsltproc executable.
             <subsection>
                 <title>Tables Next to Text</title>
 
-                <p>Tables can go next to blocks of text using the <c>&lt;paragraphs&gt;</c> element.</p>
+                <p>Tables can go next to blocks of text using the <tag>stack</tag> element (see <xref ref="stacking-side-by-side" text="type-global" />).</p>
 
                 <sidebyside widths="50% 20% 20%" valigns="top top middle">
                     <table>
@@ -5669,15 +5813,15 @@ the xsltproc executable.
                             </row>
                         </tabular>
                     </table>
-                    <paragraphs>
+                    <stack>
                         <p>here is some text here is some text here is some text here is some text here</p>
                         <p>here is some text here is some text here is some text here is some text here</p>
                         <p>here is some text here is some text here is some text here is some text here</p>
-                    </paragraphs>
-                    <paragraphs>
+                    </stack>
+                    <stack>
                         <p>here is some text here is some text here is some text here is some text here</p>
                         <p>here is some text here is some text here is some text here is some text here</p>
-                    </paragraphs>
+                    </stack>
                 </sidebyside>
             </subsection>
 
@@ -5824,6 +5968,111 @@ the xsltproc executable.
                 </ol></p>
             </subsection>
 
+            <subsection xml:id="stacking-side-by-side">
+                <title>Stacking: Back to Vertical Flow</title>
+
+                <p>You might wish to mix disparate items within a panel, returning to a vertical flow within a panel.  For example, you might want a diagram to the left and some paragraphs of commentary to the right.  Or perhaps a photograph on one side and a list of bullet points to the other side.  A <tag>stack</tag> is a container that can only be used to collect several items into a single panel of a <tag>sidebyside</tag>.  You cannot point to it, but you can point to its contents as usual.  Contents may be anything you could otherwise put into a <c>sidebyside</c> panel that does not have a <tag>caption</tag> or a <tag>title</tag>.  In particular, these panels cannot be sub-numbered since the panel cannot be made into a <tag>figure</tag>.</p>
+
+                <p>Similar items can also be stacked, of course.  Most importantly, a normal panel will accept a single paragraph.  If you want several paragraphs, simply collect them in a <c>stack</c>.</p>
+
+                <sidebyside widths="55% 35%" valigns="middle top">
+                    <stack>
+                        <p>A simple sentence inside a single <tag>p</tag> as the first item in a stack.</p>
+                        <image source="images/cross-rectangle.png" />
+                    </stack>
+                    <stack>
+                        <image source="images/cross-rectangle.png" />
+                        <p>A less simple sentence that will wrap inside the panel to make the right panel taller and allow us to experiment with sliding the left panel contents up and down, here it is placed in the <c>middle</c>.</p>
+                    </stack>
+                </sidebyside>
+
+                <p>We have an image to the left, as a regular panel (not a stack).  In the right panel we stack a list of properties, followed by a descriptive paragraph.  We middle-align the stack at the <c>bottom</c>, just as a demonstration (it would likely look better with <c>top</c> alignment).</p>
+
+                <sidebyside widths="60% 30%" valigns="top bottom">
+                    <image source="images/cross-square.png" />
+                    <stack>
+                        <ul>
+                            <li>Blue</li>
+                            <li>Square</li>
+                            <li>Geometric</li>
+                        </ul>
+                        <p>The blue-ness of the border contrasts with the stark emptieness of the white interior, evoking images of blue skies and vast sandy deserts.  The harsh black cross draws the viewer's attention to the exact center.</p>
+                    </stack>
+                </sidebyside>
+
+                <p>In <latex /> an image or a tabular can be used <em>within</em> a paragraph.  Here we test a mixture of the three items to make sure they are properly separated in a conversion to <latex />.</p>
+
+                 <sidebyside widths="30% 25%">
+                    <stack>
+                        <p>Paragraph one.</p>
+                        <image source="images/cross-square.png"/>
+                        <p>Paragraph two.</p>
+                        <tabular top="minor" left="minor" halign="center">
+                            <col right="medium"/>
+                            <col right="major"/>
+                            <col />
+                            <!--  -->
+                            <row bottom="medium">
+                                <cell>1111</cell>
+                                <cell right="minor">2222</cell>
+                            </row>
+                            <row bottom="major">
+                                <cell>aaaa</cell>
+                                <cell right="medium">bbbb</cell>
+                            </row>
+                            <row>
+                                <cell bottom="minor">AAAA</cell>
+                                <cell bottom="major" right="major">BBBB</cell>
+                            </row>
+                        </tabular>
+                    </stack>
+                    <image source="images/cross-square.png"/>
+                </sidebyside>
+
+                <p>We imagine a <tag>sidebyside</tag> using a <tag>stack</tag> to enable constructions like a table of data in one panel, and maybe a plot with some text next to it.</p>
+
+                <p>In the toy example next, the list of data is rigid, so we have set the first panel width to <c>40%</c>, a value obtained experimentally to just contain the list.  This allow us to set the second panel to a width of <c>58%</c>, and we use no margins.  If you try to balance the heights of the two panels, this can become a bit of a zero-sum game.  A wider second column means the text occupies fewer lines, but the wider image also creates a taller image, consuming more vertical space.</p>
+
+                <figure>
+                    <caption>Experimental results collected in a figure</caption>
+                    <sidebyside widths="40% 58%">
+                        <tabular top="major" halign="center">
+                            <row bottom="minor">
+                                <cell><m>i</m></cell>
+                                <cell><m>t_i</m></cell>
+                                <cell><m>x_i</m></cell>
+                                <cell><m>y_i</m></cell>
+                            </row>
+                            <row> <cell>0</cell><cell>0.00</cell><cell>0.0000</cell><cell>0.5000</cell></row>
+                            <row> <cell>1</cell><cell>0.20</cell><cell>0.1000</cell><cell>0.4800</cell></row>
+                            <row> <cell>2</cell><cell>0.40</cell><cell>0.1960</cell><cell>0.4560</cell></row>
+                            <row> <cell>3</cell><cell>0.60</cell><cell>0.2872</cell><cell>0.4295</cell></row>
+                            <row> <cell>4</cell><cell>0.80</cell><cell>0.3731</cell><cell>0.4027</cell></row>
+                            <row> <cell>5</cell><cell>1.00</cell><cell>0.4536</cell><cell>0.3783</cell></row>
+                            <row> <cell>6</cell><cell>1.20</cell><cell>0.5293</cell><cell>0.3591</cell></row>
+                            <row> <cell>7</cell><cell>1.40</cell><cell>0.6011</cell><cell>0.3480</cell></row>
+                            <row> <cell>8</cell><cell>1.60</cell><cell>0.6707</cell><cell>0.3474</cell></row>
+                            <row> <cell>9</cell><cell>1.80</cell><cell>0.7402</cell><cell>0.3603</cell></row>
+                            <row bottom="medium">
+                                  <cell>10</cell><cell>2.00</cell><cell>0.8123</cell><cell>0.3900</cell></row>
+                        </tabular>
+                        <stack>
+                            <image source="images/cubic-function.png" />
+                            <p>This set of values and this plot have nothing to do with each other.  You'll recognize that they've been liberated from earlier in this work.</p>
+                            <p>Step back and simply examine how the pieces all fit together within a <tag>figure</tag>.</p>
+                        </stack>
+                    </sidebyside>
+                </figure>
+
+                <paragraphs>
+                    <title>Bully Pulpit</title>
+
+                    <p>Remember that <tag>sidebyside</tag> has attributes that strongly influence layout.  That is intentional.  But to support a variety of output formats, it does not allow overly-precise control, and they be viewed as providing <em>hints</em> to an implementer of a conversion.  So for example, do not expect <tag>sidebyside</tag> to function like a <latex /> <c>tabular</c> or an <init>HTML</init> <c>table</c>.</p>
+
+                    <p>In particular, elements of two consecutive <tag>stack</tag> will not line up, unless perhaps you construct them identically.  Consider a <tag>sbsgroup</tag> for something closer to putting items into rows.</p>
+                </paragraphs>
+            </subsection>
+
             <subsection xml:id="subsection-sbs-other-panels">
                 <title>Other Panels</title>
 
@@ -5847,22 +6096,20 @@ the xsltproc executable.
                 <p>You can place <em>aligned</em> equations in paragraphs within a <c>sidebyside</c> element.</p>
 
                 <sidebyside valigns="middle top">
-                    <paragraphs>
+                    <p>here is some text, and here is an equation that contains alignment.<md>
+                        <mrow>f(x)&amp;= x^2+3x+2</mrow>
+                        <mrow>&amp;=(x+2)(x+1)</mrow>
+                    </md></p>
+                    <stack>
                         <p>here is some text, and here is an equation that contains alignment.<md>
                             <mrow>f(x)&amp;= x^2+3x+2</mrow>
                             <mrow>&amp;=(x+2)(x+1)</mrow>
                         </md></p>
-                    </paragraphs>
-                    <paragraphs>
                         <p>here is some text, and here is an equation that contains alignment.<md>
                             <mrow>f(x)&amp;= x^2+3x+2</mrow>
                             <mrow>&amp;=(x+2)(x+1)</mrow>
                         </md></p>
-                        <p>here is some text, and here is an equation that contains alignment.<md>
-                            <mrow>f(x)&amp;= x^2+3x+2</mrow>
-                            <mrow>&amp;=(x+2)(x+1)</mrow>
-                        </md></p>
-                    </paragraphs>
+                    </stack>
                 </sidebyside>
 
                 <p>Pre-formatted text may be included by using the <c>pre</c> element.  This content is horizontally-rigid, so as the author, you need to be sure to provide enough width for the panel to contain the content.  It is easy to see the boundary of the panels when rendered in HTML since there is a background that fills the panel.</p>
@@ -5934,11 +6181,10 @@ the xsltproc executable.
                             <line>And would suffice.</line>
                         </stanza>
                     </poem>
-                    <paragraphs>
-                        <title>Commentary</title>
+                    <stack>
                         <p>You might have several things to say about a poem and you could use a sequence of paragraphs immediately adjacent.</p>
                         <p>This is a second paragraph of commentary.</p>
-                    </paragraphs>
+                    </stack>
                 </sidebyside>
 
                 <p>Poems are not horizontally-rigid, but they are not perfectly horizontally-flexible either.  The left copy of this next poem is in a panel roughly 2/3 the width of the page and fits there.  The right copy has the first five lines and is in space about half the previous width, and you can see the lines being wrapped with obvious indentation.  So you <em>can</em> constrain the width of a poem if you do not mind the additional indentation.  (Recognize that this example is a bit extreme.)</p>
@@ -6024,10 +6270,9 @@ the xsltproc executable.
                                 <line>can understand.</line>
                             </stanza>
                         </poem>
-                        <paragraphs>
-                            <title>Stanza One</title>
-                            <p>Some commentary</p>
-                        </paragraphs>
+                        <stack>
+                            <p>Some commentary on Stanza One.</p>
+                        </stack>
                     </sidebyside>
                     <!--  -->
                     <sidebyside>
@@ -6051,10 +6296,9 @@ the xsltproc executable.
                                 <line>can understand.</line>
                             </stanza>
                         </poem>
-                        <paragraphs>
-                            <title>Stanza Two</title>
-                            <p>Some commentary</p>
-                        </paragraphs>
+                        <stack>
+                            <p>Some commentary on Stanza Two.</p>
+                        </stack>
                     </sidebyside>
                     <!--  -->
                     <sidebyside>
@@ -6077,10 +6321,9 @@ the xsltproc executable.
                                 <line>can understand.</line>
                             </stanza>
                         </poem>
-                        <paragraphs>
-                            <title>Stanza Three</title>
-                            <p>Some commentary</p>
-                        </paragraphs>
+                        <stack>
+                            <p>Some commentary on Stanza Three.</p>
+                        </stack>
                     </sidebyside>
                     <!--  -->
                     <sidebyside>
@@ -6102,10 +6345,9 @@ the xsltproc executable.
                                 <line>can understand.</line>
                             </stanza>
                         </poem>
-                        <paragraphs>
-                            <title>Stanza Four</title>
-                            <p>Some commentary</p>
-                        </paragraphs>
+                        <stack>
+                            <p>Some commentary on Stanza Four.</p>
+                        </stack>
                     </sidebyside>
                     <!--  -->
                 </sbsgroup>
@@ -6296,6 +6538,49 @@ the xsltproc executable.
             </subsection>
 
             <subsection>
+                <title>Testing a Side-By-Side First</title>
+
+                <p>A <tag>sidebyside</tag> that appears first within some other container can wreak havoc in <latex /> output.  Below we have this situation twice, once in an <tag>activity</tag>, then in an <tag>example</tag>.</p>
+
+                <activity>
+                    <statement>
+                        <sidebyside widths="47% 47%" valign="bottom" margins="0%">
+                            <p>Here is text block 1</p>
+                            <p>Here is text block 2</p>
+                        </sidebyside>
+                    </statement>
+
+                </activity>
+
+                <example>
+                    <statement>
+                        <sidebyside>
+                            <p>Here is text block 1</p>
+                            <p>Here is text block 2</p>
+                        </sidebyside>
+                    </statement>
+                </example>
+
+                <p>And a <tag>sbsgroup</tag> in similar circumstances.</p>
+
+                <example>
+                    <statement>
+                        <sbsgroup>
+                            <sidebyside>
+                                <p>Here is text block 1</p>
+                                <p>Here is text block 2</p>
+                            </sidebyside>
+                            <sidebyside>
+                                <p>Here is text block 3</p>
+                                <p>Here is text block 4</p>
+                            </sidebyside>
+                        </sbsgroup>
+                    </statement>
+                </example>
+
+            </subsection>
+
+            <subsection>
                 <title>Testing Styling of Related Elements</title>
 
                 <p>This subsection has non-side-by-side structures, to aid with the effects of styling decisions across the range of possibilities.  First a <c>figure</c> with a <c>caption</c> holding a scaled image and a cross-reference for knowl testing: <xref ref="figure-traditional" text="type-global" />.</p>
@@ -6316,19 +6601,18 @@ the xsltproc executable.
             <p>We begin with <q>simpler</q> atomic items.  If necessary, comments follow each.</p>
 
             <figure>
-                <caption>Single <c>p</c> (left), <c>paragraphs</c> (right)</caption>
+                <caption>Single <tag>p</tag> (left), <tag>stack</tag> (right)</caption>
                 <sidebyside margins="5%" widths="40% 45%">
                     <p>Vestibulum sit amet est non lacus accumsan iaculis aliquam nec leo. Maecenas placerat consequat quam, a lobortis odio convallis vitae. Curabitur sagittis, risus non suscipit pulvinar, enim tortor posuere purus, id dignissim sapien sapien non dui. Vestibulum ultrices, enim a ornare consectetur, nisl est iaculis arcu, eget scelerisque nunc magna a nisl. Vestibulum vestibulum ante sit amet ex vulputate, eu facilisis sapien tempor.</p>
-                    <paragraphs>
-                        <title>Lorem Ipsum</title>
+                    <stack>
                         <p>Aliquam dui nisi, pharetra id enim vel, imperdiet laoreet risus. Nunc convallis elit eu erat imperdiet tincidunt. Sed eget augue et nunc mollis tempor. Suspendisse luctus elit non lorem scelerisque, nec lacinia lectus dictum.</p>
                         <p>Vivamus ut orci nisl. Donec eleifend ultricies tortor, a pellentesque neque dignissim in. Praesent maximus, augue eu pretium auctor, dolor quam feugiat augue, ut vulputate nunc eros vitae massa. Phasellus quis ante quis est venenatis dapibus eget luctus ipsum.</p>
-                    </paragraphs>
+                    </stack>
                 </sidebyside>
             </figure>
 
             <figure>
-                <caption>An <c>ol</c> with simple items, a <c>ul</c> with items with paragraphs</caption>
+                <caption>An <tag>ol</tag> with simple items, a <tag>ul</tag> with items with paragraphs</caption>
                 <sidebyside margins="5%" widths="40% 45%">
                     <ol>
                         <li>Blue</li>
@@ -6348,7 +6632,7 @@ the xsltproc executable.
             </figure>
 
             <figure>
-                <caption>A <c>program</c> and a <c>console</c></caption>
+                <caption>A <tag>program</tag> and a <tag>console</tag></caption>
                 <sidebyside margins="5%" widths="40% 45%">
                     <program language="r">
                         <input>
@@ -6378,7 +6662,7 @@ the xsltproc executable.
             <p>Note that these two chunks of verbatim text will very likely exceed the right side of a too-skinny panel.  We have severly edited these two examples from previous appearances just to fit here.</p>
 
             <figure>
-                <caption>An <c>poem</c> and a <c>tabular</c></caption>
+                <caption>An <tag>poem</tag> and a <tag>tabular</tag></caption>
                 <sidebyside margins="5%" widths="40% 45%">
                     <poem>
                         <title>To A Friend Whose Work Has Come To Nothing</title>
@@ -6418,7 +6702,7 @@ the xsltproc executable.
             <p>A <c>tabular</c> can exceed the width of its panel in print, while in <c>HTML</c> it may reflow individual cells to stay within a panel, depending on their contents.</p>
 
             <figure>
-                <caption>A <c>pre</c>, and a <c>pre</c> employing <c>cline</c></caption>
+                <caption>A <tag>pre</tag>, and a <tag>pre</tag> employing <tag>cline</tag></caption>
                 <sidebyside margins="5%" widths="40% 45%">
                     <pre>
                     Vestibulum sit amet est non
@@ -6442,7 +6726,7 @@ the xsltproc executable.
             <p>Be aware that the lines of <c>pre</c> can spill outside of its panel without any word-wrapping.  So you may need to vary panel widths or rearrange line breaks manually.  Page width is a scarce resource.</p>
 
             <figure>
-                <caption>An identical <c>image</c>, twice</caption>
+                <caption>An identical <tag>image</tag>, twice</caption>
                 <sidebyside margins="5%" widths="40% 45%">
                     <image source="images/cross-rectangle.png" />
                     <image source="images/cross-rectangle.png" />
@@ -6454,7 +6738,7 @@ the xsltproc executable.
             <p>Now we turn to <q>captioned</q> items: <c>figure</c>, <c>table</c>, <c>listing</c>, and the anomalous <q>named list</q>, <c>list</c>, whose future is uncertain.  We test subcaptions here.  Note that many different atomic items can go in a figure, and largely they will behave in a <c>sidebyside</c> much as they do when placed in a panel all by themselves (<ie /> captionless).</p>
 
             <figure>
-                <caption>A <c>figure</c> and a <c>table</c></caption>
+                <caption>A <tag>figure</tag> and a <tag>table</tag></caption>
                 <sidebyside margins="5%" widths="40% 45%">
                     <figure>
                         <caption>A Rectangular Test Image</caption>
@@ -6477,7 +6761,7 @@ the xsltproc executable.
             </figure>
 
             <figure>
-                <caption>A <c>listing</c> and a <c>list</c></caption>
+                <caption>A <tag>listing</tag> and a <tag>list</tag></caption>
                 <sidebyside margins="5%" widths="40% 45%">
                     <listing>
                         <caption>A statistical computation</caption>
@@ -6525,7 +6809,7 @@ the xsltproc executable.
             <p>Videos can be placed quite compactly for HTML output, but we display a fair amount of information for a YouTube video in print, and therefore two videos side-by-side gets pretty crowded.  The examples above have the bare minimum amount of information attached (not in an overarching <c>figure</c>), and the bare amount which which is displayed in print.  We could relax our common spacing to make it a bit better.  For other examples see <xref ref="section-video" text="type-global" />.</p>
 
             <figure>
-                <caption>A <c>sidebyside</c> with one large panel</caption>
+                <caption>A <tag>sidebyside</tag> with one large panel</caption>
                 <sidebyside margins="10%">
                     <figure>
                         <title>Sometime Around Midnight</title>
@@ -6604,11 +6888,13 @@ the xsltproc executable.
 
                 <theorem xml:id="theorem-number-01">
                     <title>First Theorem</title>
+                    <creator>Cauchy</creator>
                     <statement><p>No statement.</p></statement>
                 </theorem>
 
                 <theorem xml:id="theorem-number-02">
                     <title>Second Theorem</title>
+                    <creator>Bunyakovsky</creator>
                     <statement><p>No statement.</p></statement>
                 </theorem>
 
@@ -6625,12 +6911,14 @@ the xsltproc executable.
                     <p>A document leaf.</p>
 
                     <theorem xml:id="theorem-number-03">
-                        <title>First Theorem</title>
+                        <title>First Theorem!</title>
+                        <creator>Schwarz</creator>
                         <statement><p>No statement.</p></statement>
                     </theorem>
 
                     <theorem xml:id="theorem-number-04">
-                        <title>Second Theorem</title>
+                        <title>Second Theorem?</title>
+                        <creator>Inequality</creator>
                         <statement><p>No statement.</p></statement>
                     </theorem>
 
@@ -6642,12 +6930,12 @@ the xsltproc executable.
                     <p>A document leaf.</p>
 
                     <theorem xml:id="theorem-number-05">
-                        <title>First Theorem</title>
+                        <title>First Theorem?</title>
                         <statement><p>No statement.</p></statement>
                     </theorem>
 
                     <theorem xml:id="theorem-number-06">
-                        <title>Second Theorem</title>
+                        <title>Second Theorem!</title>
                         <statement><p>No statement.</p></statement>
                     </theorem>
 
@@ -6768,7 +7056,20 @@ the xsltproc executable.
             <subsection>
                 <title>A Title with ] a Right Bracket</title>
 
-                <p><latex /> has trouble with brackets that end up inside optional arguments, so this is only a check on the defense against that.</p>
+                <p><latex /> has trouble with brackets that end up inside optional arguments, so this subsection title is only a check on the defense against that.  And now an <tag>exercise</tag> with a title that could really be a problem.</p>
+
+                <exercise xml:id="exercise-difficult-title">
+                    <title>A Right Brace <rbrace /> and a Right Bracket]</title>
+
+                    <statement>
+                        <p>The right brace is obtained with an empty element, <tage>rbrace</tage>, and the right bracket is simply the character, <c>]</c>.  Both are used by <latex/> as grouping characters, so need to be handled with care in titles.</p>
+                    </statement>
+                    <hint>
+                        <p>A faux hint to get this exercise to migrate into a <tag>solutions</tag>.</p>
+                    </hint>
+                </exercise>
+
+
             </subsection>
         </section>
 
@@ -6783,6 +7084,7 @@ the xsltproc executable.
                 <p>However, you may want to have <q>Conundrum</q>s<idx><h>conundrum</h><h>repurposed from proposition</h></idx> in your document and you have no use for any <q>Proposition</q>s.  So you can repurpose the <c>proposition</c> tag to render a different name.  Or you might have a Lab Manual and want to rename <c>subsection</c> as <q>Activity</q>.  See the <c>docinfo</c> portion of this sample article to see how this is done, in concert with the example below.  Note that you may provide versions for different languages, and that the <attr>lang</attr> attribute here is just slightly different than the general <attr>@xml:lang</attr> attribute.</p>
 
                 <proposition xml:id="proposition-as-conundrum">
+                    <creator>Smith</creator>
                     <statement>
                         <p>Aah, this <em>is</em> confusing!</p>
                     </statement>
@@ -6823,12 +7125,42 @@ the xsltproc executable.
         </section>
 
 
+        <section xml:id="ancillaries">
+            <title>Ancillaries</title>
+
+            <p>Once your content is in place, you can begin thinking about various useful derivative works.  A natural example for a textbook is an <q>Instructor's Version</q>.  Various switches for hints, answers, and solutions to exercises would allow you to include more of these for the use of just an instructor.  Here we also demonstrate the <tag>commentary</tag> element.  It is similar in many ways to a <tag>paragraphs</tag> in that it can be placed within any division and must be titled.  The main difference is that it is not displayed by default, so you must set a processing switch to enable its appearance:<cd>
+                <cline>xsltproc -stringparam commentary yes ...</cline>
+            </cd>Other distinctions are:<ul>
+                <li>Since it is elective, you need to be careful about cross-references to and from a <tag>commentary</tag>.  It is highly likely that you will want to make cross-references <em>within</em> a <tag>commentary</tag> <em>pointing to</em> other portions of your text, and this is always a good idea.  You will want to avoid making cross-references <em>to</em> a <tag>commentary</tag> from other parts of the text, with the exception of a cross-reference that originates <em>within</em> some <tag>commentary</tag>.</li>
+                <li>Numbered items are prohibited within a <tag>commentary</tag>, such as a <tag>figure</tag> or a <tag>theorem</tag>.  Doing so would disrupt consecutive numbering in different versions, with or without, <tag>commentary</tag> included.  Numbered equations are not prohibited in the schema, but should definitely be avoided anyway.</li>
+            </ul></p>
+
+            <p>After some nonsense text in a paragraph, there is a <tag>commentary</tag> with two paragraphs.  For the online version of this sample article, we have enabled commentaries.  But if you are experimenting yourself, you will want to be aware if you are enabling these or not.</p>
+
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam odio orci, ullamcorper eget quam et, viverra tristique magna. Integer auctor arcu a sapien pulvinar elementum. Mauris porta, nulla id molestie dignissim, urna dolor rutrum ligula, eu elementum odio nisl sed libero. Nulla nec libero sem.</p>
+
+            <commentary>
+                <title>Some Commentary</title>
+                <idx>commentary</idx>
+
+                <p>Nullam vulputate metus a diam rutrum vehicula. Sed cursus iaculis venenatis. Morbi ullamcorper at mi non facilisis. Cras sit amet justo vel ante luctus placerat. Nunc in ligula iaculis enim condimentum suscipit eget vel mi. Ut at sapien mauris. Vestibulum nec tellus pellentesque, placerat nunc ac, luctus turpis.</p>
+
+                <p>Curabitur eros nibh, lacinia at commodo ut, feugiat sit amet velit. Pellentesque venenatis dui vehicula, porta magna at, dignissim metus. Nam fringilla tortor nec dignissim dictum. Cras tempor purus nisi, sit amet aliquam risus ornare vel. Proin ullamcorper pulvinar elementum. Praesent gravida magna in imperdiet pretium. In sed consectetur arcu. Donec imperdiet, urna in egestas suscipit, risus dolor ultrices erat, id ultricies sem nisl eget ex. Fusce at mattis sem. Fusce lacinia purus tellus, nec fringilla nisi maximus vel.<idx><h>commentary</h><h>contained paragraph</h></idx></p>
+            </commentary>
+
+            <p>Sed justo ex, efficitur dictum risus nec, eleifend consequat nibh. Proin rutrum mi id metus viverra blandit. In vel ligula a nibh aliquam pellentesque. Duis placerat purus et ligula sollicitudin, sodales consectetur ante viverra.</p>
+
+            <p>Mauris fringilla nulla arcu, sagittis ultrices quam malesuada eleifend. Proin tristique elit eu bibendum tincidunt. Donec commodo lorem in magna egestas, vitae malesuada velit ornare. Pellentesque finibus neque in venenatis tristique. In id blandit est, in euismod urna. Donec commodo sagittis ligula, in venenatis nulla porttitor in. Donec nec tortor sit amet felis posuere ultricies. Suspendisse euismod quis ex eu placerat.</p>
+
+        </section>
+
+
         <section xml:id="exercises-single">
             <title>Exercises, One Subsection</title>
 
             <p>This <tag>section</tag> of the sample article demonstrates an <q>unstructured division.</q>  There are no <tag>subsection</tag>, you are just reading the first two paragraphs, followed by some nonsense text.  Then there is a <em>single</em> <tag>exercises</tag> division.  Note that this division is not numbered (since it is unique within the <tag>section</tag>).  And a cross-reference to one of the contained <tag>exercise</tag> will be numbered as a member of the <tag>section</tag>, <xref ref="exercise-challenging-one-unstructured" text="type-global" />.</p>
 
-            <p>If you use the unstructured form of a division, <em>and</em> have both inline and sectional exercises, there is a potential to form ambiguous cross-references.  To wit, check that <xref ref="duplicate-inline" text="global" /> and <xref ref="duplicate-sectional" text="global" /> are really different exercises (which you are <em>unable to do</em> if you are reading this in print!).  The solution is to include the type of exercise in the reference, which will assist everybody, but especially your print readers:  <xref ref="duplicate-inline" text="type-global" /> and <xref ref="duplicate-sectional" text="type-global" />.</p>
+            <p>If you use the unstructured form of a division, <em>and</em> have both inline and divisional exercises, there is a potential to form ambiguous cross-references.  To wit, check that <xref ref="duplicate-inline" text="global" /> and <xref ref="duplicate-divisional" text="global" /> are really different exercises (which you are <em>unable to do</em> if you are reading this in print!).  The solution is to include the type of exercise in the reference, which will assist everybody, but especially your print readers:  <xref ref="duplicate-inline" text="type-global" /> and <xref ref="duplicate-divisional" text="type-global" />.</p>
 
             <p>Compare this section with the similar <xref ref="exercises-multiple" text="type-global" />, next.  The following text is mostly nonsense, just for testing purposes.</p>
 
@@ -6870,7 +7202,7 @@ the xsltproc executable.
                     </statement>
                 </exercise>
 
-                <exercise xml:id="duplicate-sectional">
+                <exercise xml:id="duplicate-divisional">
                     <title>Drill Two</title>
                     <statement>
                         <p>Aliquam sagittis ex at magna porttitor, quis scelerisque ligula malesuada. Vestibulum vitae mauris id nisi pretium ornare a id lectus. Nam suscipit magna id sem ultricies vestibulum. Nulla facilisi. Duis venenatis lectus massa, ac mollis nisi suscipit non. Sed et sapien vulputate, imperdiet nibh vel, lobortis nisl. Curabitur sagittis justo nibh. Nulla vulputate sodales justo at efficitur. Cras justo augue, mollis vitae nulla sed, vestibulum tincidunt ante. Vestibulum et lorem lectus. Maecenas accumsan lacus a nisi euismod rutrum eu dapibus justo. Etiam scelerisque a odio a euismod. Pellentesque vestibulum pellentesque nisi, a tempus erat cursus ac. Morbi ut auctor lectus.</p>
@@ -7223,10 +7555,20 @@ the xsltproc executable.
                 <notation-list />
             </appendix>
 
-            <appendix>
+            <solutions xml:id="solutions-backmatter" inline="hint solution answer" divisional="hint solution answer" project="answer">
                 <title>Solutions to Selected Exercises</title>
-                <solution-list />
-            </appendix>
+                <idx><h>solutions</h><h>as an appendix</h></idx>
+
+                <introduction>
+                    <p>This is an introduction, where you might explain that this division of the back matter contains various hints, answers, solutions of inline exercises, divisional exercises, and/or project-like blocks.  See the source to see just how this solutions division was built.</p>
+                </introduction>
+
+                <!-- content will happen here automatically -->
+
+                <conclusion>
+                    <p>And a conclusion to this solutions division, which may not be readily apparent as distinct from the final division's worth of solutions, but since it is not prefixed with a number, it may be different enough.</p>
+                </conclusion>
+            </solutions>
 
             <appendix xml:id="appendix-results">
                 <title>List of Results</title>
@@ -7261,7 +7603,7 @@ the xsltproc executable.
             <!-- Bibliography/References can appear anywhere, -->
             <!-- but these are in the backmatter              -->
 
-            <references>
+            <references xml:id="references-backmatter">
                 <title>References</title>
 
                 <biblio type="raw" xml:id="biblio-judson-AATA">Tom Judson, <title>Abstract Algebra: Theory and Applications</title>.

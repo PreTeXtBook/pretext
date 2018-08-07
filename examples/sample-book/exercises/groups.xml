@@ -311,13 +311,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     <exercise number="28">
         <statement>
-            <p>Prove the remainder of Proposition<nbsp/><xref ref="proposition-group-equations"/>: if <m>G</m> is a group and <m>a, b \in G</m>, then the equation <m>xa = b</m> has a unique solution in <m>G</m>. </p>
+            <p>Prove the remainder of <xref ref="proposition-group-equations"/>: if <m>G</m> is a group and <m>a, b \in G</m>, then the equation <m>xa = b</m> has a unique solution in <m>G</m>. </p>
         </statement>
     </exercise>
 
     <exercise number="29">
         <statement>
-            <p>Prove Theorem<nbsp/><xref ref="theorem-exponent-laws"/>.</p>
+            <p>Prove <xref ref="theorem-exponent-laws"/>.</p>
         </statement>
     </exercise>
 
@@ -350,7 +350,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     <exercise number="34">
         <statement>
-            <p>Find all the subgroups of <m>{\mathbb Z}_3 \times {\mathbb Z}_3</m>. Use this information to show that <m>{\mathbb Z}_3 \times {\mathbb Z}_3</m> is not the same group as <m>{\mathbb Z}_9</m>.  (See Example<nbsp/><xref ref="example-groups-z2xz2"/>  for a short description of the product of groups.)</p>
+            <p>Find all the subgroups of <m>{\mathbb Z}_3 \times {\mathbb Z}_3</m>. Use this information to show that <m>{\mathbb Z}_3 \times {\mathbb Z}_3</m> is not the same group as <m>{\mathbb Z}_9</m>.  (See <xref ref="example-groups-z2xz2"/>  for a short description of the product of groups.)</p>
         </statement>
     </exercise>
 

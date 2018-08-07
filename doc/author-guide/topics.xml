@@ -500,7 +500,7 @@
     </section>
 
     <section xml:id="topic-exercises">
-        <title>(*) Exercises, Inline and Sectional</title>
+        <title>(*) Exercises, Inline and Divisional</title>
         <p></p>
     </section>
 
@@ -902,10 +902,11 @@
         <subsection>
             <title>Text in Mathematics</title>
 
-            <p>Once in a while, you need a little bit of <q>regular</q> text within an expression and you do not want it to look like a product of a bunch of one-letter variables.  Use the <c>\text{}</c> macro for these.<ul>
+            <p>Once in a while, you need a little bit of <q>regular</q> text within an expression and you do not want it to look like a product of a bunch of one-letter variables.  Use the <c>\text{}</c> macro for these.  Only.  Other ways of switching out of math-mode and into some sort of <q>regular</q> text will appear inferior, and can raise errors in certain conversions.<ul>
                 <li>Do place surrounding spaces inside the <c>\text{}</c> macro.</li>
                 <li>Do not place any mathematics inside the  <c>\text{}</c> macro.</li>
                 <li>Do not use the <c>\mbox{}</c> macro as a substitute.</li>
+                <li>Do not use font-changing commands (<eg /> <c>\rm</c>) as a substitute.</li>
             </ul></p>
 
             <p>For example,<cd>
@@ -1668,13 +1669,30 @@
 
         <p>Continuing our discussion from <xref ref="overview-accessibility" /> we begin by listing features of our conversion to <init>HTML</init> which happen automatically.<dl width="narrow">
             <li>
-                <title>CSS</title>
-                <p>Wherever possible we supply <init>HTML</init> elements and class names that will be interpreted sensibly by a screen reader in the absence of styling provided by <init>CSS</init>.</p>
+                <title>HTML</title>
+                <p>Wherever possible we supply <init>HTML</init> elements and attributes that will be interpreted sensibly by a screen reader in the absence of the visual styling provided by <init>CSS</init>.  This means we are cognizant of the role of headings (<c>h1</c> through <c>h6</c>), provide HTML that passes validation checks, and so on.  Employing attributes from the <url href="https://www.w3.org/WAI/standards-guidelines/aria/">Accessible Rich Internet Applications</url> suite of web standards (<init>ARIA</init>) at <c>www.w3.org/WAI/</c> will go a long way to improving accessibility.  This work is in-progress as of 2018-05-31.</p>
             </li>
 
             <li>
                 <title>Mathematics</title>
-                <p>MathJax (<url href="https://www.mathjax.org/"><c>mathjax.org</c></url>) is the JavaScript library we use to render mathematics.  It provides extensive capabilities for screen readers to render the mathematics audibly, and by default your document is configured to take advantage of these features.  We refer the reader to the MathJax documentation of <url href="http://docs.mathjax.org/en/latest/misc/accessibility-features.html">Accessibility Features</url> at <c>docs.mathjax.org</c>.</p>
+                <idx><h>accessibility</h><h>mathematics</h></idx>
+                <idx><h>web accessibility</h><h>mathematics</h></idx>
+                <p>MathJax (<url href="https://www.mathjax.org/"><c>mathjax.org</c></url>) is the JavaScript library we use to render mathematics within the <init>HTML</init> output.  It provides extensive capabilities for screen readers to render the mathematics audibly, and by default your project's output is configured to take advantage of these features.  We refer the reader to the MathJax documentation of <url href="http://docs.mathjax.org/en/latest/misc/accessibility-features.html">Accessibility Features</url> at <c>docs.mathjax.org</c> for details.  But here is a simple experiment you can do yourself right now to simulate how a blind reader could experience mathematics with the combination of <pretext />, MathJax, and a screen reader.<ol>
+                    <li>Find some moderately complicated mathematics, such as in the <q>Mathematics</q> section of the sample article, or your own project, or the sample from MathJax copied below.</li>
+                    <li>Bring up the context menu on that display (a mouse right-click for most).</li>
+                    <li>Turn on the <c>Accessibility > Explorer > Activate</c> menu item.  The page will reload, and the <c>Explorer</c> menu item will earn many more menu items.  This setting is reasonably sticky, so you should not have to do this repeatedly.  Having this on will incur some processing time as part of each page load, so you may want to turn it off later.</li>
+                    <li>Turn on the <c>Accessibility > Explorer > Subtitles</c> menu item.</li>
+                    <li><c>TAB</c> until some mathematics is given focus (a discrete border appears).</li>
+                    <li><c>SHIFT-SPACE</c> will activate exploration of the mathematics with the Explorer.  A subtitle, with an aural rendering of the mathematics, will appear below the display.</li>
+                    <li>You can navigate (explore) the expression tree with the up, down, left, and right arrow keys.  The subtitles will change as you do this.</li>
+                </ol></p>
+                <p>From the MathJax demonstration page, Maxwell's equations for practice:<idx>Maxwell's equations</idx><md>
+                    <mrow>\nabla \times \vec{\mathbf{B}} -\, \frac1c\, \frac{\partial\vec{\mathbf{E}}}{\partial t} &amp; = \frac{4\pi}{c}\vec{\mathbf{j}}</mrow>
+                    <mrow>\nabla \cdot \vec{\mathbf{E}} &amp; = 4 \pi \rho</mrow>
+                    <mrow>\nabla \times \vec{\mathbf{E}}\, +\, \frac1c\, \frac{\partial\vec{\mathbf{B}}}{\partial t} &amp; = \vec{\mathbf{0}}</mrow>
+                    <mrow>\nabla \cdot \vec{\mathbf{B}} &amp; = 0</mrow>
+                </md><notation><usage>\nabla</usage><description>gradient operator</description></notation></p>
+
             </li>
 
             <li>
@@ -1695,12 +1713,14 @@
                 <title>Image Description</title>
                 <p>Images you author or supply will be invisible to some readers.  Within every <tag>image</tag> element you can use a <tag>description</tag> element.  The content here will migrate to places like the <init>HTML</init> <attr>alt</attr> attribute to be picked up by screen readers.</p>
 
-                <p>Make the content very expressive and detailed, but also do not use any markup whatsoever, just simple characters, and avoid quotation marks.</p>
+                <p>Make the content very expressive and detailed, but not overly verbose.  Also, do not use any markup whatsoever, just simple characters, and avoid quotation marks.  You can learn more at sites such as the one provided by the Web Accessibility Initiative (<init>WAI</init>) at <url href="https://www.w3.org/WAI/fundamentals/accessibility-principles/#alternatives">Text alternatives for non-text content</url>.</p>
+
+                <p>We cannot do this one for you, this is for the author only.  But we can give you the tools do it as easily and as correctly as possible.</p>
             </li>
 
             <li>
                 <title>Image Formats</title>
-                <p>University offices that provide services for students with disabilities are often interested in the images themselves from a text, as standalone files.  You could use the <c>mbx</c> script to produce a variety of different formats and bundle these up in a single archive file for distribution at your book's website.  Or you can make each image available through adjacent links placed automatically.  We call these <q>image archives.</q>  See <xref ref="topic-images-archive" />.</p>
+                <p>University offices that provide services for students with disabilities are often interested in the images themselves from a text, as standalone files.  For example, they might be able to manufacture tactile versions.  You could use the <c>mbx</c> script to produce a variety of different formats and bundle these up in a single archive file for distribution at your book's website.  Or you can make each image available through adjacent links placed automatically.  We call these <q>image archives.</q>  See <xref ref="topic-images-archive" />.</p>
             </li>
 
             <li>
@@ -1712,6 +1732,14 @@
                 </cd>would then cause the clickable portion to be simply the much shorter <q>5.16</q>.  Of course, you can set a default style for your entire document, so it is not necessary to continually provide the <attr>text</attr> attribute.</p>
             </li>
         </dl></p>
+
+        <p>Watching a blind reader navigate a web page can be a very enlightening experience.  Or you might even undertake learning one yourself.  Here are some suggestions for getting started (current on 2018-05-31).<ul>
+            <li><init>NVDA</init>, <url href="https://www.nvaccess.org/"><c>www.nvaccess.org</c></url>, Windows, open source via GPL</li>
+            <li>Orca, <url href="https://help.gnome.org/users/orca/stable/"><c>help.gnome.org/users</c></url>, Linux, open source via LGPL</li>
+            <li>VoiceOver, included with Apple's macOS and iOS</li>
+            <li>ChromeVox, <url href="http://www.chromevox.com/"><c>www.chromevox.com</c></url>, ChromeOS, free from Google</li>
+            <li><acro>JAWS</acro>, <url href="https://www.freedomscientific.com/Products/Blindness/JAWS"><c>www.freedomscientific.com</c></url>, Windows, commercial</li>
+        </ul></p>
     </section>
 
     <!--

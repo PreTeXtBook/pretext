@@ -61,6 +61,9 @@
                         <p>Compute the sum of <m><var name="$a" /></m> and <m><var name="$b" /></m>:</p>
                         <p><m><var name="$a" /> + <var name="$b" /> =</m> <var name="$c" width="2" /></p>
                     </statement>
+                    <hint>
+                        <p>Add <m><var name="$a" /></m> and <m><var name="$b" /></m> together.</p>
+                    </hint>
                     <solution>
                         <p><m><var name="$a" /> + <var name="$b" /> = <var name="$c" /></m>.</p>
                     </solution>

@@ -34,6 +34,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Deprecations that can be fixed with a transformation -->
 <!-- In reverse chronological order, with dates           -->
 
+<!-- 2018-05-02  sidebyside paragraphs to stack, preserve title -->
+<xsl:template match="sidebyside/paragraphs">
+    <stack>
+        <xsl:comment> Old paragraphs title: <xsl:apply-templates select="title/node()" /> </xsl:comment>
+        <xsl:apply-templates select="@*[not(self::title)] | node()" />
+    </stack>
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2018-05-02</xsl:with-param>
+        <xsl:with-param name="message">Replacing &lt;paragraphs&gt; inside &lt;sidebyside&gt; with &lt;stack&gt;, &quot;title&quot; preserved in a comment</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
 <!-- 2018-02-05  booktitle to simply pubtitle -->
 <xsl:template match="booktitle">
     <pubtitle>

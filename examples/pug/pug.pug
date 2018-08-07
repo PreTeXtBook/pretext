@@ -2,12 +2,13 @@ doctype xml
 
 mathbook
 
+    // Pug code can contain comments, they will show up as XML comments.
     docinfo
         macros
             | \newcommand{\doubler}[1]{2#1}
 
     article(xml:id="pug")
-        title Pug meets MathBook XML
+        title Pug meets PreTeXt
 
         frontmatter
             titlepage
@@ -17,10 +18,9 @@ mathbook
                 date
                     today/
 
-            abstract
-                p.
-                    This is a very short demo, how writing MathBook XML
-                    can be simplified by using Pug <xref ref="biblio-pug" />.
+            abstract: p.
+                This is a very short demo, how writing PreTeXt
+                can be simplified by using Pug #[xref(ref="biblio-pug")/].
 
         introduction
           p.
@@ -29,10 +29,10 @@ mathbook
               What if, you can start writing in version control (Git) friendly multiple line documents?
               You are finally able to limit yourself to 80 character line lengths and
               make the source of your documents look more like a tidy
-              Python <xref ref="biblio-python"/> program.
+              Python #[xref(ref="biblio-python")/] program.
           p.
               Additionally, all this works well together with Pug's include statement,
-              mixin <q>macros</q> and much more.
+              mixin #[q macros] and much more.
           p.
               ... and yes, inline XML tags do just <q>work</q>, too!
 
@@ -41,51 +41,50 @@ mathbook
 
             p.
                 This is just copied from the minimal demo.
-                The interesting thing to see here is the source of this in the <c>pug.pug</c> file.
+                The interesting thing to see here is the source of this in the #[c pug.pug] file.
 
             p.
                 Now a single paragraph inside a titled section of the article.
                 Which has some text on a second line.
-                ... and a bit of <em>emphasizing</em>.
+                ... and a bit of #[em emphasizing].
 
             p.
                 The code to accomplish this looks like this:
 
-            pre.
-                section(xml:id="section-textual")
-                  title Some Demo Text
+                pre.
+                    section(xml:id="section-textual")
+                      title Some Demo Text
 
-                  p.
-                    This is just copied from the minimal demo.
-                    The interesting thing to see here is the source of this in the &lt;c&gt;pug.pug&lt;/c&gt; file.
+                      p.
+                        This is just copied from the minimal demo.
+                        The interesting thing to see here is the source of this in the \#[c pug.pug] file.
 
-                  p.
-                    Now a single paragraph inside a titled section of the article.
-                    Which has some text on a second line.
-                    ... and a bit of &lt;em&gt;emphasizing&lt;/em&gt;.
+                      p.
+                        Now a single paragraph inside a titled section of the article.
+                        Which has some text on a second line.
+                        ... and a bit of \#[em emphasizing].
 
         section(xml:id="section-interesting")
-            title.
-                A Bit More Interesting
+            title A Bit More Interesting
 
-            p The previous section (<xref ref="section-textual" autoname="yes"/>) was a bit boring.
+            p The previous section (#[xref(ref="section-textual" text="type-global")/]) was a bit boring.
 
             p
                 | This paragraph has some inline math, a Diophantine equation, 
                 m x^2 + \doubler{y^2} = z^2
-                | , and some display math about infinite series: <me>\sum_{n=1}^\infty\,\frac{1}{n^2} = \frac{\pi^2}{6}.</me>
-                | Look at the Pug source to see how <latex /> macros are employed universally across all possible output formats.
+                | , and some display math about infinite series: #[me \sum_{n=1}^\infty\,\frac{1}{n^2} = \frac{\pi^2}{6}].
+                | Look at the Pug source to see how #[latex/] macros are employed universally across all possible output formats.
 
             p
                 | We could even write a formula
                 me \int_0^\infty 3 x^2 + 1 \mathrm{d}x
-                | inside a p-tag text on its separate line prefixed by <c>me</c> only!
+                | inside a p-tag text on its separate line prefixed by #[c me] only!
             p   This looks like that:
             pre.
                 p
-                | We could even write a formula
-                me \int_0^\infty 3 x^2 + 1 \mathrm{d}x
-                | inside a p-tag text on its separate line prefixed by &lt;c&gt;me&lt;/c&gt; only!
+                  | We could even write a formula
+                  me \int_0^\infty 3 x^2 + 1 \mathrm{d}x
+                  | inside a p-tag text on its separate line prefixed by \#[c me] only!
 
         section(xml:id="section-computation")
             title Computation
@@ -100,27 +99,100 @@ mathbook
                 then you can test the example to verify that the behavior of Sage has not changed.
 
             sage
-                input
-                    | A = matrix(4,5, srange(20))
-                    | A.rref()
-                output
-                    | [ 1  0 -1 -2 -3]
-                    | [ 0  1  2  3  4]
-                    | [ 0  0  0  0  0]
-                    | [ 0  0  0  0  0]
+                input.
+                    A = matrix(4,5, srange(20))
+                    A.rref()
+                output.
+                    [ 1  0 -1 -2 -3]
+                    [ 0  1  2  3  4]
+                    [ 0  0  0  0  0]
+                    [ 0  0  0  0  0]
 
         section(xml:id="section-pug")
             title Pug
 
-            p.
-                Pug is a template engine for Node, see <xref ref="biblio-pug" />.
-
             include ./pug-include.pug
+
+        section(xml:id="section-gotchas")
+            title Some gotchas
+
+            p.
+                Here are some pitfalls that it's helpful to be aware of if you want to use Pug more seriously:
+
+            paragraphs
+                title The case keyword
+
+                p
+                    | For Pug #[c case] is a keyword, used in program control.
+                    | For example like this:
+                pre.
+                    - var friends = 3
+                    case friends
+                      when 0
+                        - break
+                      when 1
+                        p you have very few friends
+                      default
+                        p you have #{friends} friends
+                p This produces:
+
+                - var friends = 3
+                case friends
+                    when 0
+                        - break
+                    when 1
+                        p you have very few friends
+                    default
+                        p you have #{friends} friends
+
+                p
+                    | Unfortunately, #[c case] is also a tag used by PreTeXt,
+                    | for a case of a proof, so the following Pug code will throw an error
+                pre.
+                    proof
+                      case: p
+                        | First case.
+                      case: p
+                        | Second case.
+                p
+                    | To work around this issue you could use a different keyword,
+                    | such as #[c proofcase] and use a simple script
+                    | to change all instances of #[c proofcase] to #[c case] in the XML Pug produces.
+
+            paragraphs
+                title Braces in inline tags
+
+                p
+                    | The Pug way of typing inline math is to use \#[m f\in R[x],g \in R[y]].
+                    | But Pug will interpret the first instance of ] in this snippet as the end of the tag, producing #[m f\in R[x], g\in R[y]].
+                    | There a few ways to avoid this
+                    ol
+                        li
+                            p Define #[latex/] macros for these characters, just like #[c \lt] and #[c \gt]:
+                            pre.
+                                \newcommand{\lb}{[}
+                                \newcommand{\rb}{]}
+                            p And use these whenever needed (as a bonus you can use #[c \left] and #[c \right] in these macros too).
+                        li
+                            p
+                                | Only use non-inline tags for math containing ].
+                                | For example
+                            pre.
+                                p
+                                    | It would be annoying but doable to write: let
+                                    m f \in K[x]
+                                    |  and
+                                    m g \in K[y]
+                                    |  so that
+                                    m fg \in K[x,y]
+                                    | .
+                        li
+                            | Use only XML style inline tags for math &lt;m&gt; f\in R[x] &lt;/m&gt; (or at least for math containing the ] character.
 
         backmatter
             references
                 title References
                 biblio(type="raw" xml:id="biblio-pug").
-                    The magic behind all this is provided by the <url href="http://pug-lang.com/">Pug Template Engine</url>.
+                    The magic behind all this is provided by the #[url(href="https://pugjs.org/") Pug Template Engine].
                 biblio(type="raw" xml:id="biblio-python").
                     Python Programming Language.

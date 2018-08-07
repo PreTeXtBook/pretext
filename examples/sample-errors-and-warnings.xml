@@ -92,7 +92,7 @@ systems.
         <section xml:id="section-images">
             <title>Images</title>
 
-            <p>TikZ code no longer goes in a <c>tikz</c> element, but <c>latex-image-code</c> instead.  And similar graphics languages need to go into an <c>image</c>c&gt; element.  We globally trap occurence inside <c>figure</c>c&gt; without an intervening <c>image</c>, which may not be the only way this could occur.</p>
+            <p>TikZ code no longer goes in a <c>tikz</c> element, but <c>latex-image-code</c> instead.  And similar graphics languages need to go into an <c>image</c>c&gt; element.  We globally trap occurrence inside <c>figure</c>c&gt; without an intervening <c>image</c>, which may not be the only way this could occur.</p>
 
             <tikz/>
 
@@ -225,6 +225,21 @@ systems.
         </section>
 
         <section>
+            <title>Side-by-Side Paragraphs</title>
+
+            <sidebyside>
+                <p>First panel.</p>
+                <paragraphs>
+                    <title>Mock Title</title>
+                    <p>Paragraph one.</p>
+                    <image source="images/foobar.png"/>
+                    <p>Paragraph two.</p>
+                </paragraphs>
+            </sidebyside>
+
+        </section>
+
+        <section>
             <title>WeBWorK</title>
 
             <p>A WeBWorK problem will need a server.  You will get a warning if you do not specify one.  But you should not be warned just because you use the empty element to get the stylized version, like this: <webwork/>.  So you can test warnings by commenting out one or the other instance.</p>
@@ -258,6 +273,250 @@ systems.
 
         </section>
 
+        <section>
+            <title>Bona Fide <webwork/> Problems</title>
+
+            <p>These are two legitimate <webwork/> problems copied from the WW sample chapter on 2018-07-12.  We are using them, and variants below, to test Schematron rules enforcing locations where <webwork/>-specific exceptions are alllowed.</p>
+
+            <exercise>
+                <title>Solving Quadratic Equations</title>
+
+                <webwork xml:id="quadratic-equation">
+                    <setup>
+                        <!-- TODO: move out context shift -->
+                        <pg-code>
+                        Context("Fraction");
+
+                        $a = Compute(random(2,6,1));
+                        do {$k = Compute(random(2,6,1))} until (gcd($a,$k)==1);
+                        $r = Compute(random(2,6,1));
+                        $c = $k*-$r;
+                        $b = $a*-$r+$k;
+                        $quadratic = Formula("$a x^2 + $b x + $c")->reduce;
+                        $x1 = Fraction($r,1);
+                        $x2 = Fraction(-$k,$a);
+                        Context()->flags->set(reduceConstants=>0,reduceConstantFunctions=>0);
+                        $solnum1 = Formula("-$b+sqrt(($b)**2-4($a)($c))");
+                        $solnum2 = Formula("-$b-sqrt(($b)**2-4($a)($c))");
+
+                        $evaluatorfora = $a->cmp()->withPostFilter(AnswerHints(
+                            [-$a] =>
+                            "Do you have the sign correct?"));
+                        $evaluatorforb = $b->cmp()->withPostFilter(AnswerHints(
+                            [-$b] =>
+                            "Do you have the sign correct?"));
+                        $evaluatorforc = $c->cmp()->withPostFilter(AnswerHints(
+                            [-$c] =>
+                            "Do you have the sign correct?"));
+
+                        Context("LimitedFraction");
+                        $multians1 = MultiAnswer(Fraction("$x1"),Fraction("$x2"))->with(
+                            singleResult => 0,
+                            allowBlankAnswers => 1,
+                            checker => sub {
+                                my ($correct,$student,$self) = @_;
+                                my ($s1, $s2) = @{$student};
+                                my ($c1, $c2) = @{$correct};
+
+                                return (1,1) if ($c1 == $s1 and $c2 == $s2) or
+                                                ($c1 == $s2 and $c2 == $s1);
+                                return (1,0) if $c1 == $s1 or $c2 == $s1;
+                                return (0,1) if $c1 == $s2 or $c2 == $s2;
+                                return (0,0);
+                             }
+                          );
+
+                        </pg-code>
+                    </setup>
+
+                    <stage>
+                        <title>Part 1: Identify the coefficients</title>
+
+                        <statement>
+                            <p>Consider the quadratic equation given by <me><var name="$quadratic" /> = 0\text{.}</me>  First, identify the coefficients for the quadratic equation using the standard form from <xref ref="theorem-quadratic-formula" />.</p>
+
+                            <p><m>a=</m> <var name="$a" width="4" evaluator="$evaluatorfora"/>, <m>b=</m> <var name="$b" width="4" evaluator="$evaluatorforb"/>, <m>c=</m> <var name="$c" width="4" evaluator="$evaluatorforc"/></p>
+                        </statement>
+
+                        <solution>
+                            <p> Take the coefficient of <m>x^2</m> for the value of <m>a</m>, the coefficient of <m>x</m> for <m>b</m>, and the constant for <m>c</m>.  <em>In this case</em>, they are <m>a = <var name="$a" /></m>, <m>b = <var name="$b" /></m>, <m>c = <var name="$c" /></m>.</p>
+                        </solution>
+                    </stage>
+
+                    <stage>
+                        <title>Part 2: Solve using the quadratic formula</title>
+
+                        <statement>
+                            <p>Using the quadratic formula, solve <m><var name="$quadratic"/>=0</m>.</p>
+                            <p><m>x=</m> <var name="$multians1" width="15"/> or <m>x=</m> <var name="$multians1" width="15"/></p>
+                        </statement>
+
+                        <solution>
+                            <p>Recall that the quadratic formula is given in <xref ref="theorem-quadratic-formula" />.</p>
+
+                            <p>You already identified <m>a = <var name="$a"/></m>, <m>b = <var name="$b"/></m>, and <m>c = <var name="$c"/></m>, so the results are: <me>x = {<var name="$solnum1"/> \over 2(<var name="$a"/>)} = <var name="$x1"/></me> or <me>x = {<var name="$solnum2"/> \over 2(<var name="$a"/>)} = <var name="$x2"/></me></p>
+                        </solution>
+                    </stage>
+                </webwork>
+            </exercise>
+
+
+            <exercise>
+                <title>Tables</title>
+
+                <webwork xml:id="tables">
+                    <setup>
+                        <pg-code>
+                            $x = Real(5);
+                        </pg-code>
+                    </setup>
+
+                    <statement>
+                        <p>A table with minimal XML source.</p>
+
+                        <sidebyside>
+                            <tabular>
+                                <row>
+                                    <cell>A</cell>
+                                    <cell>B</cell>
+                                    <cell>C</cell>
+                                </row>
+                                <row>
+                                    <cell>D</cell>
+                                    <cell>E</cell>
+                                    <cell>F</cell>
+                                </row>
+                                <row>
+                                    <cell>G</cell>
+                                    <cell>H</cell>
+                                    <cell>I</cell>
+                                </row>
+                            </tabular>
+                        </sidebyside>
+                        <p>Finish this table.</p>
+
+                        <sidebyside>
+                            <tabular top="major" left="major" bottom="major" right="minor" halign="center">
+                                <col halign="right" top="minor"/>
+                                <col right="medium"/>
+                                <col halign="left"/>
+                                <row bottom="none" left="none">
+                                <cell right="minor">1</cell>
+                                    <cell>two</cell>
+                                    <cell><m>\lfloor\pi\rfloor</m></cell>
+                                </row>
+                                <row valign="bottom">
+                                    <cell bottom="minor"><line><m>\text{I}+\text{I}</m></line><line><m>{}+\text{I}+\text{I}</m></line></cell>
+                                    <cell><var name="$x" form="none" category="integer"/></cell>
+                                    <cell>six</cell>
+                                </row>
+                                <row halign="right">
+                                    <cell><m>2^3-1</m></cell>
+                                    <cell colspan="2" halign="center">VIII</cell>
+                                </row>
+                            </tabular>
+                        </sidebyside>
+                    </statement>
+
+                    <solution>
+                        <p>The missing number is <var name="$x"/>.</p>
+                    </solution>
+                </webwork>
+            </exercise>
+        </section>
+
+
+        <section>
+            <title>Broken <webwork/> Problems</title>
+
+            <p>These are remnants of the two legitimate <webwork/> problems copied from the WW sample chapter on 2018-07-12 (above).  We are leaving them as <tag>exercise</tag> but removing the <tag>webwork</tag> wrapper to provoke errors.</p>
+
+            <exercise>
+                        <title>Part 1: Identify the coefficients</title>
+
+                        <statement>
+                            <p>Consider the quadratic equation given by <me><var name="$quadratic" /> = 0\text{.}</me>  First, identify the coefficients for the quadratic equation using the standard form from <xref ref="theorem-quadratic-formula" />.</p>
+
+                            <p><m>a=</m> <var name="$a" width="4" evaluator="$evaluatorfora"/>, <m>b=</m> <var name="$b" width="4" evaluator="$evaluatorforb"/>, <m>c=</m> <var name="$c" width="4" evaluator="$evaluatorforc"/></p>
+                        </statement>
+
+                        <solution>
+                            <p> Take the coefficient of <m>x^2</m> for the value of <m>a</m>, the coefficient of <m>x</m> for <m>b</m>, and the constant for <m>c</m>.  <em>In this case</em>, they are <m>a = <var name="$a" /></m>, <m>b = <var name="$b" /></m>, <m>c = <var name="$c" /></m>.</p>
+                        </solution>
+            </exercise>
+
+            <exercise>
+                        <title>Part 2: Solve using the quadratic formula</title>
+
+                        <statement>
+                            <p>Using the quadratic formula, solve <m><var name="$quadratic"/>=0</m>.</p>
+                            <p><m>x=</m> <var name="$multians1" width="15"/> or <m>x=</m> <var name="$multians1" width="15"/></p>
+                        </statement>
+
+                        <solution>
+                            <p>Recall that the quadratic formula is given in <xref ref="theorem-quadratic-formula" />.</p>
+
+                            <p>You already identified <m>a = <var name="$a"/></m>, <m>b = <var name="$b"/></m>, and <m>c = <var name="$c"/></m>, so the results are: <me>x = {<var name="$solnum1"/> \over 2(<var name="$a"/>)} = <var name="$x1"/></me> or <me>x = {<var name="$solnum2"/> \over 2(<var name="$a"/>)} = <var name="$x2"/></me></p>
+                        </solution>
+            </exercise>
+
+
+            <exercise>
+                <title>Tables</title>
+
+
+                    <statement>
+                        <p>A table with minimal XML source.</p>
+
+                        <sidebyside>
+                            <tabular>
+                                <row>
+                                    <cell>A</cell>
+                                    <cell>B</cell>
+                                    <cell>C</cell>
+                                </row>
+                                <row>
+                                    <cell>D</cell>
+                                    <cell>E</cell>
+                                    <cell>F</cell>
+                                </row>
+                                <row>
+                                    <cell>G</cell>
+                                    <cell>H</cell>
+                                    <cell>I</cell>
+                                </row>
+                            </tabular>
+                        </sidebyside>
+                        <p>Finish this table.</p>
+
+                        <sidebyside>
+                            <tabular top="major" left="major" bottom="major" right="minor" halign="center">
+                                <col halign="right" top="minor"/>
+                                <col right="medium"/>
+                                <col halign="left"/>
+                                <row bottom="none" left="none">
+                                <cell right="minor">1</cell>
+                                    <cell>two</cell>
+                                    <cell><m>\lfloor\pi\rfloor</m></cell>
+                                </row>
+                                <row valign="bottom">
+                                    <cell bottom="minor"><line><m>\text{I}+\text{I}</m></line><line><m>{}+\text{I}+\text{I}</m></line></cell>
+                                    <cell><var name="$x" form="none" category="integer"/></cell>
+                                    <cell>six</cell>
+                                </row>
+                                <row halign="right">
+                                    <cell><m>2^3-1</m></cell>
+                                    <cell colspan="2" halign="center">VIII</cell>
+                                </row>
+                            </tabular>
+                        </sidebyside>
+                    </statement>
+
+                    <solution>
+                        <p>The missing number is <var name="$x"/>.</p>
+                    </solution>
+            </exercise>
+        </section>
     </article>
 
 </mathbook>

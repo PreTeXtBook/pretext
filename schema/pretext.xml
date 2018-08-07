@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
+<!--   = one, mandatory -->
+<!-- ? = one, optional  -->
+<!-- * = zero or more   -->
+<!-- + = one or more    -->
 
 <mathbook>
 
@@ -46,9 +50,17 @@
             element article {
                 MetaDataSubtitle,
                 ArticleFrontMatter?,
-                Section+,
-                Exercises*,
-                BackMatter?
+                (
+                    (BlockDivision | Paragraphs | Commentary)+
+                |
+                    (
+                        IntroductionDivision?,
+                        Section+,
+                        Exercises*,
+                        ConclusionDivision?,
+                        BackMatter?
+                    )
+                )
             }
         Book =
             ## Here is what a book looks like.
@@ -82,11 +94,13 @@
         Chapter =
             element chapter {
                 MetaDataTitle,
+                AuthorByline*,
                 Objectives?,
                 (
                     (
-                        (BlockDivision | Paragraphs)+,
+                        (BlockDivision | Paragraphs | Commentary)+,
                         Exercises?,
+                        Solutions?,
                         References?
                     )
                 |
@@ -94,6 +108,7 @@
                         IntroductionDivision?,
                         Section+,
                         Exercises*,
+                        Solutions?,
                         References?,
                         ConclusionDivision?
                     )
@@ -102,11 +117,13 @@
         Section =
             element section {
                 MetaDataTitle,
+                AuthorByline*,
                 Objectives?,
                 (
                     (
-                        (BlockDivision | Paragraphs)+,
+                        (BlockDivision | Paragraphs | Commentary)+,
                         Exercises?,
+                        Solutions?,
                         References?
                     )
                 |
@@ -114,6 +131,7 @@
                         IntroductionDivision?,
                         Subsection+,
                         Exercises*,
+                        Solutions?,
                         References?,
                         ConclusionDivision?
                     )
@@ -122,11 +140,13 @@
         Subsection =
             element subsection {
                 MetaDataTitle,
+                AuthorByline*,
                 Objectives?,
                 (
                     (
-                        (BlockDivision | Paragraphs)+,
+                        (BlockDivision | Paragraphs | Commentary)+,
                         Exercises?,
+                        Solutions?,
                         References?
                     )
                 |
@@ -134,6 +154,7 @@
                         IntroductionDivision?,
                         Subsubsection+,
                         Exercises*,
+                        Solutions?,
                         References?,
                         ConclusionDivision?
                     )
@@ -142,16 +163,19 @@
         Subsubsection =
             element subsubsection {
                 MetaDataTitle,
+                AuthorByline*,
                 Objectives?,
-                (BlockDivision | Paragraphs)+,
+                (BlockDivision | Paragraphs | Commentary)+,
                 Exercises?,
+                Solutions?,
                 References?
             }
         Appendix =
             element appendix {
                 MetaDataTitle,
+                AuthorByline*,
                 (
-                    (BlockDivision | Paragraphs | NotationList | SolutionList )+ |
+                    (BlockDivision | Paragraphs | Commentary | NotationList )+ |
                     (
                         IntroductionDivision?,
                         Section,
@@ -180,7 +204,9 @@
 
         <p>It is especially useful in a short document (like a class handout, letter, memorandum, or short proposal) where numbered divisions might feel like overkill.</p>
 
-        <p>The <c>TitleOptional</c> variant is only for use in <c>sidebyside</c> and will be removed once <c>p</c> can be stacked in a panel of a <c>sidebyside</c>.</p>
+        <p>The <c>NoNumber</c> variant allows for light-weight sectioning of un-numbered divisions, such as a Preface.</p>
+
+        <p><tag>commentary</tag> is elective, so should not have any numbered items ever, so the <q>NoNumber</q> provision is implicit.</p>
 
         <fragment xml:id="paragraphs">
         Paragraphs =
@@ -195,11 +221,11 @@
                 Index*,
                 BlockStatementNoCaption+
             }
-        ParagraphsTitleOptional =
-            element paragraphs {
-                MetaDataTitleOptional,
+        Commentary =
+            element commentary {
+                MetaDataTitle,
                 Index*,
-                BlockDivision+
+                BlockStatementNoCaption+
             }
         </fragment>
     </section>
@@ -215,6 +241,15 @@
                 MetaDataTitleOptional,
                 IntroductionDivision?,
                 (ToDo | Exercise | ExerciseGroup)+,
+                ConclusionDivision?
+            }
+        Solutions =
+            element solutions {
+                MetaDataTitleOptional,
+                attribute inline {text}?,
+                attribute divisional {text}?,
+                attribute project {text}?,
+                IntroductionDivision?,
                 ConclusionDivision?
             }
         References =
@@ -256,16 +291,8 @@
             Group |
             MathInline |
             Music |
-            Reference)* }
-        TextLongWW =  mixed { (
-            Character |
-            Generator |
-            Verbatim |
-            Group |
-            MathInlineWW |
-            Music |
             Reference |
-            WWVariableUse)* }
+            WWVariable)* }
         </fragment>
 
         <p>A paragraph is a key bottleneck between structure and prose.  You can use a variety of constructs in a paragraph, and you may use a paragraph in many places.  So the name of the element is very simple, just a <c>p</c>.  Now you can include footnotes, display mathematics, display verbatim text, and lists.  Note that a list can <em>only</em> occur in a paragraph, so to make nested lists you must structure a list item of the exterior list with a paragraph to contain the interior list.  A paragraph can contain some metadata, like index entries and mathematical notation.  It does not have a title, not is it ever numbered.  It can be the target of a cross-reference, but only with some care.</p>
@@ -278,6 +305,7 @@
             Generator |
             Verbatim |
             Group |
+            WWVariable |
             MathInline |
             Music |
             Reference |
@@ -287,29 +315,10 @@
             Footnote |
             Notation |
             Index)* }
-        Paragraph = 
+        Paragraph =
             element p {
                 UniqueID?,
                 TextParagraph
-            }
-        TextParagraphWW = mixed { (
-            Character |
-            Generator |
-            Verbatim |
-            Group |
-            WWVariableUse |
-            MathInlineWW |
-            Music |
-            Reference |
-            CodeDisplay |
-            MathDisplayWW |
-            ListWW |
-            Footnote |
-            Notation |
-            Index)* }
-        ParagraphWW =
-            element p {
-                TextParagraphWW
             }
         ParagraphLined =
             element p {
@@ -580,7 +589,7 @@
         <fragment xml:id="mathematics">
         MathInline =
             element m {
-                mixed {FillIn*}
+                mixed {(FillIn | WWVariable)*}
             }
         MathRow = 
             element mrow {
@@ -594,17 +603,17 @@
                                    "maltese" | "dmaltese" | "tmaltese" }
                 )?,
                 attribute break {"yes" | "no"}?,
-                mixed {(Xref | FillIn)*}
+                mixed {(Xref | FillIn | WWVariable)*}
             }
         MathIntertext = element intertext {TextLong}
         MathDisplay =
             element me {
-                mixed {FillIn*}
+                mixed {(FillIn | WWVariable)*}
             }
         |
             element men {
                 MetaDataTarget,
-                mixed {FillIn*}
+                mixed {(FillIn | WWVariable)*}
             }
         |
             element md {
@@ -623,44 +632,6 @@
                 attribute alignat-columns {text}?,
                 MathRow,
                 (MathRow | MathIntertext)*
-            }
-        MathInlineWW =
-            element m {
-                mixed {(FillIn | WWVariableUse)*}
-            }
-        MathRowWW = 
-            element mrow {
-                MetaDataTarget,
-                attribute number {"yes" | "no"}?,
-                attribute break {"yes" | "no"}?,
-                mixed {(Xref | FillIn | WWVariableUse)*}
-            }
-        MathDisplayWW =
-            element me {
-                mixed {(FillIn | WWVariableUse)*}
-            }
-        |
-            element men {
-                MetaDataTarget,
-                mixed {(FillIn | WWVariableUse)*}
-            }
-        |
-            element md {
-                attribute number {"yes" | "no"}?,
-                attribute break {"yes" | "no"}?,
-                attribute alignment {text}?,
-                attribute alignat-columns {text}?,
-                MathRowWW,
-                (MathRowWW | MathIntertext)*
-            }
-        |
-            element mdn {
-                attribute number {"yes" | "no"}?,
-                attribute break {"yes" | "no"}?,
-                attribute alignment {text}?,
-                attribute alignat-columns {text}?,
-                MathRowWW,
-                (MathRowWW | MathIntertext)*
             }
         </fragment>
     </section>
@@ -941,31 +912,6 @@
                     BlockStatement+
                 }+
             }
-        ListWW =
-            element ol {
-                attribute cols {"2"|"3"|"4"|"5"|"6"}?,
-                attribute label {text}?,
-                element li {
-                    MetaDataTarget,
-                    (TextParagraphWW | ParagraphWW+)
-                }+
-            }
-        |
-            element ul {
-                attribute cols {"2"|"3"|"4"|"5"|"6"}?,
-                attribute label {"" | "square"}?,
-                    element li {
-                    (TextParagraphWW | ParagraphWW+)
-                }+
-            }
-        |
-            element dl {
-                attribute width {"narrow" | "medium" | "wide"}?,
-                element li {
-                    MetaDataTitle,
-                    ParagraphWW+
-                }+
-            }
         </fragment>
     </section>
 
@@ -1002,7 +948,7 @@
                 (BlockStatement | Case)+
             }
         TheoremLike =
-            MetaDataTitleOptional,
+            MetaDataTitleCreatorOptional,
             (BlockStatement+ | (Statement, Proof*))
         Theorem =
             element theorem {TheoremLike}
@@ -1026,11 +972,11 @@
     <section>
         <title>Axioms and Other Mathematical Statements</title>
 
-        <p>Mathematical statements that do not have proofs (in other words, no prrof is known, or a proof is not appropriate).</p>
+        <p>Mathematical statements that do not have proofs (in other words, no proof is known, or a proof is not appropriate).</p>
 
         <fragment xml:id="axiom-like">
         AxiomLike =
-            MetaDataTitleOptional,
+            MetaDataTitleCreatorOptional,
             Statement
         Axiom =
             element axiom {AxiomLike}
@@ -1248,38 +1194,6 @@
                 TableColumn*,
                 TableRow+
             }
-
-        TableCellWW =
-            element cell {
-                AlignmentHorizontal?,
-                BorderBottom?,
-                BorderRight?,
-                attribute colspan {text}?,
-                (
-                    TextLongWW |
-                    Line+ |
-                    ParagraphWW+
-                )
-            }
-        TableRowWW =
-            element row {
-                AlignmentHorizontal?,
-                AlignmentVertical?,
-                BorderBottom?,
-                BorderLeft?,
-                TableCellWW+
-            }
-        TabularWW = 
-            element tabular {
-                AlignmentHorizontal?,
-                AlignmentVertical?,
-                BorderTop?,
-                BorderBottom?,
-                BorderLeft?,
-                BorderRight?,
-                TableColumn*,
-                TableRowWW+
-            }
         </fragment>
     </section>
 
@@ -1294,11 +1208,26 @@
 
         <p>Note that widths give on a <c>sidebyside</c> override any width given to the components of the panels.</p>
 
+        <p>A <tag>stack</tag> allows non-captioned, non-titled elements to accumulate vertically in a single panel.  It is a basic container.</p>
+
         <p>A group of side-by-sides is designed to stack vertically with common controls on widths, etc.  Its implementation is entirely experimental right now, even if we are relatively confident of the markup.</p>
 
-        <p>The <webwork /> variant allows only a single tabular or image.  The <q>NoCaption</q> variants prohibits captioned or numbered items as panels.  The <c>ParagraphsTitleOptional</c> will be removed once <c>p</c> can stack in a panel.</p>
+        <p>For <webwork /> the NoCaption variant allows <c>Tabular</c> and <c>ImageWW</c>.  This may change if these two items are liberated from <tag>sidebyside</tag>.  Presently, there should only be a single item inside a <c>sidebyside</c> inside a <c>webwork</c>, but we do not have a rule for that.</p>
 
         <fragment xml:id="sidebyside">
+        Stack =
+            element stack {
+                (
+                    Tabular |
+                    Image |
+                    Video |
+                    Program |
+                    Console |
+                    Paragraph |
+                    Preformatted |
+                    List
+                )+
+            }
         SidebySideAttributes =
             attribute margins {text}?,
             (attribute width {text} | attribute widths {text})?,
@@ -1316,9 +1245,8 @@
                     Console |
                     Paragraph |
                     Preformatted |
-                    Paragraphs |
-                    ParagraphsTitleOptional |
-                    List
+                    List |
+                    Stack
                 )+
             }
         SideBySideNoCaption =
@@ -1328,14 +1256,14 @@
                     Poem |
                     Tabular |
                     Image |
+                    ImageWW |
                     Video |
                     Program |
                     Console |
                     Paragraph |
                     Preformatted |
-                    Paragraphs |
-                    ParagraphsTitleOptional |
-                    List
+                    List |
+                    Stack
                 )+
             }
         SideBySideGroup =
@@ -1347,14 +1275,6 @@
             element sbsgroup {
                 SidebySideAttributes,
                 SideBySideNoCaption+
-            }
-        SideBySideWW =
-            element sidebyside {
-                SidebySideAttributes,
-                (
-                    TabularWW |
-                    ImageWW
-                )+
             }
         </fragment>
     </section>
@@ -1389,7 +1309,7 @@
         ImageWW = 
             element image {
                 attribute pg-name {text}?,
-                element description {(TextShort | WWVariableUse)*}?
+                element description {(TextShort | WWVariable)*}?
             }
         </fragment>
     </section>
@@ -1431,7 +1351,7 @@
         <p>Well, just video right now.  The <c>xml:id</c> is not used as a target, but rather as a name for a static preview image that is auto-generated by the <c>mbx</c> script thumbnail file, hence optional.  <c>preview</c> maybe be one of two reserved switches, or the filename of a static preview image.</p>
 
         <fragment xml:id="audiovideo">
-        Video = 
+        Video =
             element video {
                 UniqueID?,
                 attribute width {text}?,
@@ -1482,30 +1402,31 @@
     <section>
         <title>Exercises</title>
 
-        <p>Inline, sectional, and <webwork />.  Exercises use ordered lists for parts of their statement (something that may need to be revisited).</p>
+        <p>Inline, divisional, and <webwork />.  Exercises use ordered lists for parts of their statement (something that may need to be revisited).</p>
 
 
 
         <fragment xml:id="exercise">
+        ExerciseBody =
+            (
+                BlockStatement |
+                element ol {
+                    attribute cols {text}?,
+                    attribute label {text}?,
+                    element li {
+                        MetaDataTarget,
+                        (TextParagraph | BlockText+)
+                    }+
+                }
+            )+
         StatementExercise = 
-            element statement {
-                (
-                    BlockStatement |
-                    element ol {
-                        attribute cols {text}?,
-                        attribute label {text}?,
-                        element li {
-                            MetaDataTarget,
-                            (TextParagraph | BlockText+)
-                        }+
-                    }
-                )+
-            }
+            element statement { ExerciseBody }
         Exercise = 
             element exercise {
                 MetaDataTitleOptional,
                 attribute number {text}?,
                 (
+                ExerciseBody |
                 (StatementExercise, Hint*, Answer*, Solution*) |
                 (IntroductionText?, WebWork, ConclusionText?)
                 )
@@ -1607,10 +1528,10 @@
         StatementExerciseWW =
             element statement {
                 (
-                    ParagraphWW |
+                    Paragraph |
                     WWInstruction |
                     Preformatted |
-                    SideBySideWW
+                    SideBySideNoCaption
                 )+
             }
         WWMacros = 
@@ -1619,26 +1540,15 @@
             }
         WWSetup = 
             element setup {
-                WWVariableSetup*,
                 element pg-code {text}?
             }
-        WWVariableSetup = 
-            element var {
-                attribute name {text},
-                attribute category {"integer"|"number"|"formula"}?,
-                element static {text}?,
-                element set {
-                    element member {
-                        attribute correct {"yes"|"no"}?,
-                        text
-                    }+
-                }?
-            }
-        WWVariableUse =
+        WWVariable =
+            ## The WeBWorK "var" element appears in the RELAX-NG schema as a child of many elements, but almost always as a descendant of a "p" element or a "cell" element.  As an element that is only relevant for a WeBWorK problem, occurences of "var" must be within a "webwork" element.  A Schematron rule will check on these two situations.
             element var {
                 (attribute name {text},
                 attribute evaluator {text}?,
                 attribute width {text}?,
+                attribute category {"angle" | "decimal" | "exponent" | "formula" | "fraction" | "inequality" | "integer" | "interval" | "logarithm" | "limit" | "number" | "point" | "syntax" | "quantity" | "vector"}?,
                 attribute form {"popup"|"buttons"|"none"}?) | 
                 (attribute form {"essay"},
                 attribute width {text}?)
@@ -1648,17 +1558,17 @@
         HintWW =
             element hint {
                 (
-                    ParagraphWW |
+                    Paragraph |
                     Preformatted |
-                    SideBySideWW
+                    SideBySideNoCaption
                 )+
             }
         SolutionWW =
             element solution {
                 (
-                    ParagraphWW |
+                    Paragraph |
                     Preformatted |
-                    SideBySideWW
+                    SideBySideNoCaption
                 )+
             }
         </fragment>
@@ -1695,7 +1605,7 @@
             <li>Language tags go on the root element to affect variants of names of objects, like theorems.</li>
             <li>The <c>xinlude</c> mechanism may pass language tgs down through the root element of included files to make them universally available.</li>
             <li>The <c>xinclude</c> mechanism inserts a <c>@xml:base</c> attribute on the root element of an included file.  So we allow this attribute on any element that allows a title.</li>
-            <li>These are not unordered specifications since they contain several attributes, and we enforce a <c>title</c>, <c>subtitle</c>, <c>caption</c>, <c>idx</c> order.</li>
+            <li>These are not unordered specifications since they contain several attributes, and we enforce a <c>title</c>, <c>subtitle</c>, <c>creator</c>, <c>caption</c>, <c>idx</c> order.</li>
             <li><c>MetaDataTarget</c> is for items that are targets of cross-references, but without even optional titles.  Since they will be knowled, they can appear in an index.  But without the potential to be titled, we do not set them up as possible root elements of a file to <c>xinclude</c>.</li>
             <li><c>MetaDataSubtitle</c> implicitly has an required title.  We might relax this as it is employed in more places.</li>
             <li><c>MetaDataCaption</c> implicitly has an optional title.</li>
@@ -1709,6 +1619,8 @@
             element title {TextLong}
         Subtitle =
             element subtitle {TextLong}
+        Creator =
+            element creator {TextShort}
         XMLBase = attribute xml:base {text}
         XMLLang = attribute xml:lang {text}
         MetaDataTarget =
@@ -1732,6 +1644,13 @@
             XMLBase?,
             XMLLang?,
             Title?,
+            Index*
+        MetaDataTitleCreatorOptional =
+            UniqueID?,
+            XMLBase?,
+            XMLLang?,
+            Title?,
+            Creator?,
             Index*
         MetaDataCaption =
             UniqueID?,
@@ -1759,7 +1678,7 @@
 
         <p>A <term>list generator</term> is a convenient device.  It can create appendices, or smaller table-of-contents at the start of divisions.</p>
 
-        <p>Notation and solution lists can be automatically generated.  We restrict their locations to appendices.</p>
+        <p>Notation can be automatically generated.  We restrict its locations to appendices.</p>
 
         <fragment xml:id="listgenerator">
         ListGenerator =
@@ -1771,8 +1690,6 @@
             }
         NotationList =
             element notation-list {empty}
-        SolutionList =
-            element solution-list {empty}
         </fragment>
     </section>
 
@@ -1857,7 +1774,7 @@
         Biography = 
             element biography {
                 MetaDataTitleOptional,
-                (BlockStatementNoCaption | ParagraphsNoNumber)+
+                (BlockStatementNoCaption | ParagraphsNoNumber | Commentary)+
             }
         Dedication = 
             element dedication {
@@ -1867,21 +1784,21 @@
         Acknowledgement = 
             element acknowledgement {
                 MetaDataTitleOptional,
-                (BlockStatementNoCaption | ParagraphsNoNumber)+
+                (BlockStatementNoCaption | ParagraphsNoNumber | Commentary)+
             }
         Preface =
             element preface {
                 MetaDataTitleOptional,
                 (
                     (
-                        (BlockStatementNoCaption | ParagraphsNoNumber)+, 
+                        (BlockStatementNoCaption | ParagraphsNoNumber | Commentary)+,
                         Attribution*
                     )
                     |
                     (
-                        (BlockStatementNoCaption | ParagraphsNoNumber)*, 
+                        (BlockStatementNoCaption | ParagraphsNoNumber | Commentary)*,
                         Contributors, 
-                        (BlockStatementNoCaption | ParagraphsNoNumber)*
+                        (BlockStatementNoCaption | ParagraphsNoNumber | Commentary)*
                     )
                 )
             }
@@ -1891,7 +1808,7 @@
     <section>
         <title>Contributors</title>
 
-        <p>A single <c>contributors</c> element may be placed into a <c>preface</c> and is a list of <c>contributor</c>.  It can be optionally preceded, or followed, by all the usual things that can go into any preface.</p>
+        <p>A single <c>contributors</c> element may be placed into a <c>preface</c> and is a list of <c>contributor</c>.  It can be optionally preceded, or followed, by all the usual things that can go into any preface.  An AuthorByline is a special instance of acknowledging a contributor on a division.</p>
 
         <fragment xml:id="contributor">
         Contributor =
@@ -1907,6 +1824,8 @@
             element contributors {
                 Contributor+
             }
+        AuthorByline =
+            element author {(TextSimple|Xref)}
         </fragment>
     </section>
 
@@ -1914,13 +1833,13 @@
     <section>
         <title>Back Matter</title>
 
-        <p>Articles and books have material at the end, structured as a sequence of <c>appendix</c>.</p>
+        <p>Articles and books have material at the end, structured as a sequence of <c>appendix</c>.  A <c>solutions</c> division should be numbered and rendered as if it was one of the <c>appendix</c>, and so can mix-in in any order.</p>
 
         <fragment xml:id="backmatter">
         BackMatter = 
             element backmatter {
                 MetaDataTitleOptional,
-                Appendix*,
+                (Appendix|Solutions)*,
                 References?,
                 IndexDivision?,
                 ColophonBack?

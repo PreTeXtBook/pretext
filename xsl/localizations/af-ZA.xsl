@@ -75,10 +75,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='introduction'><xsl:text>Inleiding</xsl:text></localization>
     <localization string-id='conclusion'><xsl:text>Slot</xsl:text></localization>
     <localization string-id='exercises'><xsl:text>Oefeninge</xsl:text></localization>
+    <!-- <localization string-id='solutions'><xsl:text>Solutions</xsl:text></localization> -->
     <localization string-id='references'><xsl:text>Verwysings</xsl:text></localization>
     <localization string-id='backmatter'><xsl:text>Nasake</xsl:text></localization> <!-- Can't find this anywhere, so I made it up. -->
     <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
     <localization string-id='paragraphs'><xsl:text>Paragrawe</xsl:text></localization>
+    <!-- <localization string-id='commentary'><xsl:text>Commentary</xsl:text></localization> -->
     <localization string-id='subparagraph'><xsl:text>Onderparagrawe</xsl:text></localization>
     <!-- Components of the narrative -->
     <!-- REMARK-LIKE blocks -->
@@ -124,15 +126,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='p'><xsl:text>Paragraaf</xsl:text></localization>
     <localization string-id='blockquote'><xsl:text>Aanhaling</xsl:text></localization>
     <!-- Parts of an exercise and it's solution -->
-    <localization string-id='exercises//exercise'><xsl:text>Oefening</xsl:text></localization>
+    <localization string-id='divisionalexercise'><xsl:text>Oefening</xsl:text></localization>
     <!-- Translation needed for South African Afrikaans -->
     <!-- See en-US file for distinctions here, do not repeat previous translation -->
-    <!-- <localization string-id='division/exercise'><xsl:text>Checkpoint</xsl:text></localization> -->
+    <!-- <localization string-id='inlineexercise'><xsl:text>Checkpoint</xsl:text></localization> -->
     <localization string-id='webwork'><xsl:text>WeBWorK</xsl:text></localization>
     <localization string-id='hint'><xsl:text>Wenk</xsl:text></localization>
     <localization string-id='answer'><xsl:text>Antwoord</xsl:text></localization>
     <localization string-id='solution'><xsl:text>Oplossing</xsl:text></localization>
-    <!-- A group of sectional exercises (with introduction and conclusion) -->
+    <!-- A group of divisional exercises (with introduction and conclusion) -->
     <localization string-id='exercisegroup'><xsl:text>Oefening Groep</xsl:text></localization>
     <!-- Bibliographic items (note is distinct from sidebar "Annotations" below) -->
     <localization string-id='biblio'><xsl:text>Bibliografiese Inskrywing</xsl:text></localization>
