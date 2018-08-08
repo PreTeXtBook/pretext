@@ -686,10 +686,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- exercise historical default -->
 <xsl:variable name="b-number-exercise-distinct" select="false()" />
 
-<!-- TEMPORARY: exercise numbering cutover -->
-<xsl:param name="new.exercises" select="'no'" />
-<xsl:variable name="b-newexercises" select="boolean($new.exercises = 'yes')" />
-
 <!-- Status quo, for no-part books and articles is "absent".     -->
 <!-- The "structural" option will change numbers and numbering   -->
 <!-- substantially.  The "decorative" option is the default for  -->
@@ -4427,7 +4423,6 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 </xsl:template>
 
 <!-- Structure Numbers: Theorems, Examples, Projects, Figures -->
-<!-- NB: newexercises: inline copied out below                -->
 <xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;" mode="structure-number">
     <xsl:apply-templates select="." mode="multi-number">
         <xsl:with-param name="levels" select="$numbering-theorems" />
@@ -4505,16 +4500,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 
 <!-- Structure Numbers: Exercise Groups -->
 <!-- An exercisegroup gets it structure number from the parent exercises -->
-<!-- NB: newexercises: step up one more parent -->
 <xsl:template match="exercisegroup" mode="structure-number">
-    <xsl:choose>
-        <xsl:when test="$b-newexercises">
-            <xsl:apply-templates select="parent::exercises/parent::*" mode="number" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:apply-templates select="parent::*" mode="number" />
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="parent::*" mode="number" />
 </xsl:template>
 
 <!-- Hints, answers, solutions get structure number from parent       -->
