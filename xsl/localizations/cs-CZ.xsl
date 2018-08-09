@@ -24,7 +24,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- See  xsl/localizations/README.md  for an explanation of this file -->
 
 <!-- cs-CZ, Czech (Czechia) -->
-<!-- Jiri Lebl, lebl@okstate.edu, 2018-02-07   -->
+<!-- Jiri Lebl, lebl@okstate.edu, 2018-08-08   -->
 
 <xsl:variable name="cs-CZ">
     <!-- THEOREM-LIKE blocks -->
@@ -73,13 +73,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='introduction'><xsl:text>Úvod</xsl:text></localization>
     <localization string-id='conclusion'><xsl:text>Závěr</xsl:text></localization>
     <localization string-id='exercises'><xsl:text>Cvičení</xsl:text></localization>
-    <!-- <localization string-id='worksheet'><xsl:text>Worksheet</xsl:text></localization> -->
-    <!-- <localization string-id='solutions'><xsl:text>Solutions</xsl:text></localization> -->
+    <localization string-id='worksheet'><xsl:text>Pracovní list</xsl:text></localization>
+    <localization string-id='solutions'><xsl:text>Řešení</xsl:text></localization>
     <localization string-id='references'><xsl:text>Odkazy</xsl:text></localization>
     <localization string-id='backmatter'><xsl:text>Závěrečná část</xsl:text></localization>
     <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
     <localization string-id='paragraphs'><xsl:text>Odstavce</xsl:text></localization>
-    <!-- <localization string-id='commentary'><xsl:text>Commentary</xsl:text></localization> -->
+    <localization string-id='commentary'><xsl:text>Komentář</xsl:text></localization>
     <localization string-id='subparagraph'><xsl:text>Pododstavec</xsl:text></localization>
     <localization string-id='case'><xsl:text>Případ</xsl:text></localization>
     <!-- Components of the narrative -->
@@ -130,7 +130,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='divisionalexercise'><xsl:text>Cvičení</xsl:text></localization>
     <!-- Translation needed for Czech Czech -->
     <!-- See en-US file for distinctions here, do not repeat previous translation -->
-    <!-- <localization string-id='inlineexercise'><xsl:text>Checkpoint</xsl:text></localization> -->
+    <localization string-id='inlineexercise'><xsl:text>Zkouška</xsl:text></localization>
     <localization string-id='webwork'><xsl:text>WeBWorK</xsl:text></localization>
     <localization string-id='hint'><xsl:text>Nápověda</xsl:text></localization>
     <localization string-id='answer'><xsl:text>Odpověď</xsl:text></localization>
