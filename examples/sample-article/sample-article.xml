@@ -109,6 +109,7 @@ the xsltproc executable.
         \usetikzlibrary{backgrounds}
         \usetikzlibrary{arrows,matrix}
         \usetikzlibrary{positioning}        % for Dave R's worksheet
+        \usepackage{circuitikz}             % for Virgil P's worksheet
         </latex-image-preamble>
         <!--
         The Sage Notebook has its own interface and worksheet list.
@@ -7174,7 +7175,7 @@ the xsltproc executable.
                 </ul>
               </objectives>
               <introduction>
-                <p>This <em>real</em> two-page worksheet was generously donated to the sample article by Dave Rosoff.</p>
+                <p>This two-page worksheet was generously donated to the sample article by Dave Rosoff.</p>
 
                 <p>It was known to Euclid, and probably earlier, that the midpoints of the sides of any quadrilateral all lie in the same plane (even if the vertices of the quadrilateral do not). In fact, these midpoints are the vertices of a parallelogram, as pictured in <xref ref="figure-midpoints-of-quadrilateral" text="type-global"/>.</p>
                 <sidebyside width="30%">
@@ -7290,6 +7291,236 @@ the xsltproc executable.
                 <title>Wrap-up</title>
                 <p>It's possible to do interesting things with vector arithmetic in a coordinate-free way: we didn't specify an origin, or any entries of any vectors in the examples.</p>
               </conclusion>
+            </worksheet>
+
+            <worksheet>
+                <title>Networks Worksheet</title>
+                <!-- <subtitle>An Activity Using Linear Algebra to Solve Network Applications</subtitle> -->
+
+                <introduction>
+                    <title>Basic laws for electrical circuits</title>
+
+                    <p>This two-page worksheet was generously donated to the sample article by Virgil Pierce.</p>
+
+                    <theorem>
+                        <title> Ohms Law </title>
+                        <p> The current through a resistor is proportional to the ratio of the <em> Voltage </em> to the <em> Resistance </em>
+                            <me> I = \frac{V}{R} </me>
+                            Or for our purposes
+                            <me> I R = V </me>
+                        </p>
+                    </theorem>
+
+                    <theorem>
+                        <title>Kirchoffs Current Law</title>
+                        <p> The sum of the currents in a network meeting at a point is zero.
+                            <me> \sum_{k=1}^n I_k = 0 </me>
+                        </p>
+                    </theorem>
+
+                    <example>
+                        <title> Kirchoff's Current Law </title>
+                        <p> For the circuit below <m> I_1 + I_2 = I_3 </m>.</p>
+                        <sidebyside width="40%">
+                            <image>
+                                <latex-image>
+                                \begin{circuitikz}
+                                \draw (0,0)
+                                to[R, i=$I_1$, *-o](2,2);
+                                \draw (0,0)
+                                to[R, i=$I_2$, *-o](2,-2);
+                                \draw (-3, 0)
+                                to[R, i=$I_3$, o-*](0,0);
+                                \end{circuitikz}
+                                </latex-image>
+                            </image>
+                        </sidebyside>
+                    </example>
+
+                    <theorem>
+                        <title> Kirchoffs Voltage Law </title>
+                        <p> The sum of the voltages around any closed circuit (or subcircuit) is zero.
+                            <me> \sum_{k=1}^n V_k = 0 </me>
+                        </p>
+                    </theorem>
+
+                    <p> Kirchoffs Current Law and Kirkoffs Voltage Law combined with Ohms Law gives for any circuit of resistors and sources a linear system that may (or may not) determine the currents.
+                    </p>
+                </introduction>
+
+                <pagebreak/>
+
+                <sidebyside width="45%" margins="0%">
+                    <exercise workspace="15%">
+                        <statement>
+                        <p>For the simple network pictured, calculuate the amperage in each part of the network by setting up a system of linear equations for the amperages. </p>
+                       <p><image>
+                        <latex-image>
+                            \begin{circuitikz}
+                            \draw (0,0)
+                            to[V, v=$11\quad \mbox{volt}$](0, 3)
+                            to[short](2,3)
+                            to[R, R=$4\quad \mbox{ohm}$] (3, 3)
+                            to[short](4,3)
+                            to[R, R=$3\quad \mbox{ohm}$](4,0)
+                            to[short](3,0)
+                            to[R, R=$3\quad \mbox{ohm}$](2,0)
+                            to[short](0,0);
+                            \end{circuitikz}
+                        </latex-image>
+                        </image></p>
+                       </statement>
+                    </exercise>
+
+                    <exercise workspace="15%">
+                        <statement>
+                        <p> Compare it with a parallel circuit network. Calculate the amperage in each part of the network by setting up a system of linear equations for the amperages. </p>
+                        <sidebyside>
+                            <image>
+                                <latex-image>
+                                \begin{circuitikz}
+                                \draw(0,0)
+                                to[V, v=$11\quad \mbox{volt}$](0, 3)
+                                to[short](5,3)
+                                to[R, R=$4\quad \mbox{ohm}$](6,3)
+                                to[short](7,3)
+                                to[R, R=$3\quad \mbox{ohm}$](7,0)
+                                to[short](6,0)
+                                to[R, R=$3\quad \mbox{ohm}$](5,0)
+                                to[short](0,0);
+                                \draw(4,0)
+                                to[R, R=$3\quad \mbox{ohm}$](4,3);
+                                \end{circuitikz}
+                                </latex-image>
+                            </image>
+                        </sidebyside>
+                        </statement>
+                    </exercise>
+                </sidebyside>
+
+                <exercise workspace="20%">
+                    <statement>
+                    <p> Now for a more complicated network. Calculate the amperage in each part of the network by setting up a system of linear equations for the amperages. </p>
+                        <sidebyside>
+                            <image>
+                                <latex-image>
+                                \begin{circuitikz}
+                                \draw(0,0)
+                                to[V, v=$11 \quad \mbox{volt}$](0, 3)
+                                to[short](5,3)
+                                to[R, R=$4 \quad \mbox{ohm}$](6,3)
+                                to[short](9,3)
+                                to[R, R=$4 \quad \mbox{ohm}$](10,3)
+                                to[short](11,3)
+                                to[R, R=$3 \quad \mbox{ohm}$](11, 0)
+                                to[short](10,0)
+                                to[R, R=$2\quad \mbox{ohm}$](9,0)
+                                to[short](6,0)
+                                to[R, R=$2\quad \mbox{ohm}$](5,0)
+                                to[short](0,0);
+                                \draw(4,0)
+                                to[R, R=$3\quad \mbox{ohm}$](4,3);
+                                \draw(8,0)
+                                to[R, R=$1\quad \mbox{ohm}$](8,3);
+                                \end{circuitikz}
+                                </latex-image>
+                            </image>
+                        </sidebyside>
+                    </statement>
+                </exercise>
+
+                <pagebreak/>
+
+                <exercise workspace="20%">
+                    <statement>
+                        <p> Now generalize these ideas to a context outside of electrical circuits. Consider the network of streets given in the diagram (with one-way directions as indicated).</p>
+
+                        <sidebyside>
+                            <image>
+                                <latex-image>
+                                <![CDATA[
+                                \begin{tikzpicture}[>=stealth]
+                                \draw[->, very thick] (0,0) -- (10, 0) node[midway, below]{East Bound Winooski Ave};
+                                \draw[<-, very thick] (0, 1) -- (10, 1) node[midway, above]{West Bound Winooski Ave};
+                                    \draw[<-, very thick] (0, 4) -- (10, 4) node[midway, above]{Shelburne St};
+                                    \draw[<-, very thick] (1, -1) -- (1, 5) node[midway, above, sloped]{Willow};
+                                    \draw[->, very thick] (9, -1) -- (9, 5) node[midway, above, sloped]{Jay};
+                                    \end{tikzpicture}
+                                ]]>
+                                </latex-image>
+                            </image>
+                        </sidebyside>
+
+                        <p>A traffic engineer counts the hourly flow of cars into and out of this network at the entrances.  They get (EB = East Bound; WB = West Bound): </p>
+
+                        <table>
+                            <caption> Estimated hourly traffic flow for the road network.</caption>
+                            <tabular>
+                                <row>
+                                    <cell>
+                                    </cell>
+                                    <cell>
+                                        EB Winooski
+                                    </cell>
+                                    <cell>
+                                        WB Winooski
+                                    </cell>
+                                    <cell>
+                                        Shelbrun St
+                                    </cell>
+                                    <cell>
+                                        Willow
+                                    </cell>
+                                    <cell>
+                                        Jay
+                                    </cell>
+                                </row>
+                                <row>
+                                    <cell>
+                                        into
+                                    </cell>
+                                    <cell>
+                                        50
+                                    </cell>
+                                    <cell>
+                                        400
+                                    </cell>
+                                    <cell>
+                                        0
+                                    </cell>
+                                    <cell>
+                                        10
+                                    </cell>
+                                    <cell>
+                                        50
+                                    </cell>
+                                </row>
+                                <row>
+                                    <cell>
+                                        out of
+                                    </cell>
+                                    <cell>
+                                        55
+                                    </cell>
+                                    <cell>
+                                        390
+                                    </cell>
+                                    <cell>
+                                        20
+                                    </cell>
+                                    <cell>
+                                        15
+                                    </cell>
+                                    <cell>
+                                        30
+                                    </cell>
+                                </row>
+                            </tabular>
+                        </table>
+
+                        <p> Use a variable for each segment inside of the network and set up a system of linear equations restricting the flow. Solve the system.  Note that you should not get a unique solution as traffic should be able to flow through the network in various ways. </p>
+                    </statement>
+                </exercise>
             </worksheet>
 
             <worksheet>
