@@ -3201,7 +3201,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ################ -->
 
 <!-- Divisions, "part" to "subsubsection", and specialized -->
-<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|exercises|solutions|references">
+<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|exercises|worksheet|solutions|references">
     <!-- appendices are peers of chapters (book) or sections (article)  -->
     <!-- so we need to slip this in first, with book's \backmatter later-->
     <!-- NB: if no appendices, the backmatter template does \backmatter -->
@@ -3226,6 +3226,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="*"/>
         </xsl:otherwise>
     </xsl:choose>
+    <xsl:apply-templates select="." mode="latex-division-footing" />
     <xsl:apply-templates select="." mode="end-language" />
     <!-- transition to LaTeX's book backmatter, which is not -->
     <!-- our backmatter: identify last appendix or solutions  -->
@@ -3245,9 +3246,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\typeout{************************************************}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- ################ -->
-<!-- Division Headers -->
-<!-- ################ -->
+<!-- ############################ -->
+<!-- Division Headers and Footers -->
+<!-- ############################ -->
 
 <!-- The first line or two of a division vary some, -->
 <!-- especially for specialized divisions, so we    -->
@@ -3263,7 +3264,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- See http://tex.stackexchange.com/questions/99495             -->
 <!-- LaTeX3e with the xparse package might make this unnecessary  -->
 
-<xsl:template match="part|chapter|section|subsection|subsubsection|exercises[count(parent::*/exercises) > 1]" mode="latex-division-heading">
+<xsl:template match="part|chapter|section|subsection|subsubsection|exercises[count(parent::*/exercises) > 1]|worksheet[count(parent::*/worksheet) > 1]" mode="latex-division-heading">
+    <xsl:if test="self::worksheet">
+        <!-- \newgeometry includes a \clearpage -->
+        <xsl:text>\newgeometry{left=0.5in,right=0.5in,top=0.5in,bottom=0.5in}&#xa;</xsl:text>
+    </xsl:if>
     <xsl:text>\</xsl:text>
     <xsl:apply-templates select="." mode="division-name" />
     <xsl:text>[{</xsl:text>
@@ -3304,7 +3309,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- of the back matter), or (b) within some division (chapter,    -->
 <!-- section,...).  So we use a *-form and manually create a ToC   -->
 <!-- entry with a "simple" title at the right level.               -->
-<xsl:template match="solutions|references|exercises[count(parent::*/exercises) = 1]" mode="latex-division-heading">
+<xsl:template match="solutions|references|exercises[count(parent::*/exercises) = 1]|worksheet[count(parent::*/worksheet) = 1]" mode="latex-division-heading">
+    <xsl:if test="self::worksheet">
+        <!-- \newgeometry includes a \clearpage -->
+        <xsl:text>\newgeometry{left=0.5in,right=0.5in,top=0.5in,bottom=0.5in}&#xa;</xsl:text>
+    </xsl:if>
     <xsl:text>\</xsl:text>
     <xsl:apply-templates select="." mode="division-name" />
     <xsl:text>*</xsl:text>
@@ -3325,6 +3334,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="title-simple" />
     <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
+
+<!-- Footers are mostly empty, except for "worksheet" -->
+<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|exercises|solutions|references" mode="latex-division-footing"/>
+
+<!-- The heading will change the geometry, this will restore it -->
+<xsl:template match="worksheet" mode="latex-division-footing">
+    <!-- \restoregeometry includes a \clearpage -->
+    <xsl:text>\restoregeometry&#xa;</xsl:text>
+</xsl:template>
+
 
 <!-- Introductions and Conclusions -->
 <!-- Simple containers, allowed before and after      -->
@@ -3387,6 +3406,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="exercisegroup/conclusion">
     <xsl:apply-templates select="*" />
+</xsl:template>
+
+<!-- Page Break in a Worksheet -->
+<!-- Not very semantic, but worksheet construction for        -->
+<!-- print does involve some layout. Only with a "worksheet". -->
+<!-- NB: A "page" grouping interferes with numbering that     -->
+<!-- looks to the parent.                                     -->
+<xsl:template match="worksheet/pagebreak">
+    <xsl:text>\clearpage&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Statement -->
@@ -8170,7 +8198,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Note: objectives are one-per-subdivision, and precede the              -->
 <!-- introduction, so the LaTeX \ref{} mechanism assigns the correct        -->
 <!-- number - that of the enclosing subdivision                             -->
-<xsl:template match="references|exercises[count(parent::*/exercises)=1]|solutions[not(parent::backmatter)]|exercises//exercise|biblio|biblio/note|proof|case|ol/li|dl/li|hint|answer|solution|exercisegroup|fn" mode="xref-number">
+<xsl:template match="references|exercises[count(parent::*/exercises)=1]|worksheet[count(parent::*/worksheet)=1]|solutions[not(parent::backmatter)]|exercises//exercise|worksheet//exercise|biblio|biblio/note|proof|case|ol/li|dl/li|hint|answer|solution|exercisegroup|fn" mode="xref-number">
     <xsl:param name="xref" select="/.." />
     <xsl:variable name="needs-part-prefix">
         <xsl:apply-templates select="." mode="crosses-part-boundary">
