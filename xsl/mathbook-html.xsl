@@ -9389,6 +9389,15 @@ var scJsHost = (("https:" == document.location.protocol) ? "https://secure." : "
 
 <!-- Miscellaneous -->
 
+<!-- Page Break in a Worksheet -->
+<!-- Not very semantic, but worksheet construction -->
+<!-- for print does involve some layout. We can    -->
+<!-- style an indicator in the HTML version.       -->
+<xsl:template match="worksheet/pagebreak">
+    <hr class="pagebreak"/>
+</xsl:template>
+
+
 <!-- Inline warnings go into text, no matter what -->
 <!-- They are colored for an author's report -->
 <xsl:template name="inline-warning">

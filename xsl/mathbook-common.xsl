@@ -8300,7 +8300,8 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 
 <!-- Miscellaneous -->
 
-<!-- A "pagebreak" is only available for print output of a "worksheet" -->
+<!-- A "pagebreak" should have limited availability, -->
+<!-- so we explicitly kill it here.                  -->
 <xsl:template match="pagebreak"/>
 
 <!-- ToDo's are silent unless requested           -->
