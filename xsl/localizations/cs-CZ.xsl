@@ -24,7 +24,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- See  xsl/localizations/README.md  for an explanation of this file -->
 
 <!-- cs-CZ, Czech (Czechia) -->
-<!-- Jiri Lebl, lebl@okstate.edu, 2018-02-07   -->
+<!-- Jiri Lebl, lebl@okstate.edu, 2018-08-08   -->
 
 <xsl:variable name="cs-CZ">
     <!-- THEOREM-LIKE blocks -->
