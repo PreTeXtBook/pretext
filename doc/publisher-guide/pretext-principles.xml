@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--   This file is part of the documentation of PreTeXt      -->
+<!--                                                          -->
+<!--      PreTeXt Author's Guide                              -->
+<!--                                                          -->
+<!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<appendix xml:id="pretext-principles" xmlns:xi="http://www.w3.org/2001/XInclude">
+    <title><pretext /> Principles</title>
+
+     <p>The development of <pretext /> is guided by a list of principles, which appear early in the Author's Guide.  We duplicate them here so we can reference them as motivation for various decisions described here.</p>
+
+     <xi:include href="principles.xml" />
+
+</appendix>

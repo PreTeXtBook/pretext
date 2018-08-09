@@ -15,7 +15,7 @@
         <p><init>XSL</init> is a very powerful language for text processing.  However, it cannot do everything.  The <c>mbx</c> script is a Swiss Army Knife of sorts to operate on parts of your document and manage processing that requires the application of external programs, such as <latex /> and Sage.</p>
     </introduction>
 
-    <section>
+    <section xml:id="mbx-executing">
         <title>Running <c>mbx</c></title>
 
         <p><c>mbx</c> is a Python script, so you will need to have the Python interpreter on your system.  At a command-line (in a terminal or console), you can run<cd>
@@ -27,7 +27,7 @@
         </cd>will provide progress indicators along with additional information that will help you or a fellow author to discern where a problem lies.  Please <em>include all of this output</em> if you are asking for help, and do not assume you know exactly which part is relevant.</p>
     </section>
 
-    <section>
+    <section xml:id="mbx-example-use">
         <title>Example Use</title>
 
         <p>Here is a typical example of using <c>mbx</c>.  You have several (or many!) diagrams and figures in your <pretext /> source, all authored in the TikZ language, and so packaged up within <tag>latex-image-code</tag> elements.  Your <latex />/<init>PDF</init> output looks beautiful, since <pretext /> simply inserts the TikZ code into the right place in the generated <c>*.tex</c> file, and you have done this several times until your figures look just right.</p>
@@ -37,7 +37,7 @@
         </cd>Here <c>-c</c> is specifying the <q>component</q> of your book to process, and <c>-f</c> is specifying the <q>format</q> of what is being produced.  The <c>-d</c> argument specifies a directory where the output ends up, in this case a collection of <init>SVG</init> files, one per image.</p>
     </section>
 
-    <section>
+    <section xml:id="mbx-strategy">
         <title>Strategy</title>
 
         <p>Much like the build advice at the end of <xref ref="processing-file-management" />, the <c>mbx</c><idx><c>mbx</c></idx> script collects necessary bits into a system-created temporary directory, does its work, and copies out the desired results.  So in the example of the previous section, each chunk of TikZ code is isolated, your <latex /> macros are copied from <tag>docinfo</tag>, and a syntactically correct <latex /> file is produced (one per image).  Then <c>mbx</c> calls your <latex /> executable on each of these files to produce a one-page <init>PDF</init>.  This is then cropped and converted to  an <init>SVG</init> version, which at the end is copied to the location specified in the <c>-d</c> argument.</p>
@@ -70,12 +70,12 @@
     <section xml:id="restrict-mbx-scope">
         <title>Restricting the Scope</title>
 
-        <p>The <c>-r</c><idx><c>-r</c></idx> (<c>--restrict</c><idx><c>--restrict</c></idx>) switch deserves special mention.  It is followed by the value of an <attribute>xml:id</attribute> attribute present in your source XML file.  Then whatever action the script is asked to perform, it will only act on a subtree of the hierarchy, rooted at the element with the given <attribute>xml:id</attribute> value.</p>
+        <p>The <c>-r</c><idx><c>-r</c></idx> (<c>--restrict</c><idx><c>--restrict</c></idx>) switch deserves special mention.  It is followed by the value of an <attr>xml:id</attr> attribute present in your source XML file.  Then whatever action the script is asked to perform, it will only act on a subtree of the hierarchy, rooted at the element with the given <attr>xml:id</attr> value.</p>
 
         <p>So if your images are complex or numerous (or both!) and take a long time to process, you can restrict attention to whatever part of the document you are actively editing, and you can even restrict to a single <tag>image</tag> and so produce just a single graphics file.</p>
     </section>
 
-    <section>
+    <section xml:id="mbx-helpers">
         <title>Configuring External Helper Programs</title>
 
         <p>Our main processor, <c>xsltproc</c><idx><c>xsltproc</c></idx>, is not a general-purpose compiler, and does not <q>call</q> external programs.  That is the primary purpose of the <c>mbx</c> script.  You will see a configuration file, <c>script/mbx.cfg</c>, as part of the distribution.  Read the comments at the top of this file, but foremost, realize that you are not meant to edit this file.  It is a template, and any changes you make will be overwritten with an original version when you update.  Instead, make a copy and place it as <c>mathbook/user/mbx.cfg</c>.  The script will look for this copy first, then fallback to the generic version.</p>
@@ -83,7 +83,7 @@
         <p>The entries of this file are the names of executable files that perform certain tasks as part of the script's functions.  If it seems that certain helper programs are not being found, you can provide full path names, and that may solve the problem.</p>
     </section>
 
-    <section>
+    <section xml:id="mbx-output">
         <title>Output</title>
 
         <p>Once the <c>mbx</c> script produces results, it is your responsibility to keep track of them.  Early in a project, you may wish to regenerate images regularly, and not save the results permanently (for instance, you  may not want to track them under version control).  In this case, a build script is very useful.  For a mature project, you may only regenerate images you know have changed, or when you create a new edition.  And you may wish to include them with your source files, under revision control, for your readers to use.</p>
@@ -91,7 +91,7 @@
         <p>More critically, you need to place items generated by the <c>mbx</c> script where the rest of your output can find them.  For example, by default <init>HTML</init> output expects images to be in a subdirectory named <c>images</c>.  (This default can be changed, though it seems almost nobody does.)</p>
     </section>
 
-    <section>
+    <section xml:id="mbx-capabilities">
         <title><c>mbx</c> Capabilities</title>
 
         <p>Again, the command <c>mbx -h</c> will remind you of the various options for the script.  The followinng is a brief summary, in general terms, of what is possible.<dl width="narrow">
@@ -130,15 +130,14 @@
     <section xml:id="section-mbx-on-windows">
         <title><c>mbx</c> on Windows</title>
         <p>At present, the <c>mbx</c> script assumes that your installation is similar to the one described in <xref ref="windows-install-notes" />. Making the <c>mbx</c> script Windows-compatible is an ongoing project. It is possible you may find a bug, which we would ask that you report. In addition, if you have followed the directions in <xref ref="windows-install-notes" />, then you will need to customize the <c>mbx.cfg</c> configuration file, which tells <c>mbx</c> where to find the helper programs it relies on. See below for the details.</p>
-        <p>The script uses a <latex /> utility called <c>pdfcrop</c><idx><c>pdfcrop</c></idx> to, well, crop PDF images generated by a <latex /> engine. This utility has not been made to work in the Windows CMD shell. If you want to generate images on Windows, you should use the Git Bash shell as described in <xref ref="installing-git" />.</p>
-        <ol>
+        <p>The script uses a <latex /> utility called <c>pdfcrop</c><idx><c>pdfcrop</c></idx> to, well, crop PDF images generated by a <latex /> engine. This utility has not been made to work in the Windows CMD shell. If you want to generate images on Windows, you should use the Git Bash shell as described in <xref ref="installing-git" />.<ol>
             <li>
                 <p>Copy the file <cd>/path/to/mathbook/script/mbx.cfg</cd> to <cd>/path/to/mathbook/user/mbx.cfg</cd></p>
             </li>
             <li>
                 <p>Replace the right-hand side of the entry for <c>pdfpng</c> with the full path name of the <c>convert</c> utility installed with ImageMagick (<xref ref="installing-imagemagick" />), <alert>using forward slashes</alert>. It will be something like <cd>c:/ImageMagick-7.0.1-Q16/convert.exe</cd></p>
             </li>
-        </ol>
+        </ol></p>
     </section>
 
     <section xml:id="section-python-requests">

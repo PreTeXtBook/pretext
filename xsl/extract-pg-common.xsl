@@ -309,7 +309,7 @@
         </xsl:for-each>
     </xsl:if>
     <xsl:text>)&#xa;</xsl:text>
-    <!-- needs structural enclosure inline v. sectional          -->
+    <!-- needs structural enclosure inline v. divisional         -->
     <!-- do not use structure number, makes overrides impossible -->
     <xsl:text>## Section1(not reported</xsl:text>
         <!-- <xsl:apply-templates select="ancestor::exercise" mode="structure-number" /> -->
@@ -454,7 +454,8 @@
             <xsl:text>  "PGgraphmacros.pl",&#xa;</xsl:text>
         </xsl:if>
         <!-- instructions for entering answers into HTML forms -->
-        <xsl:if test=".//instruction">
+        <!-- utility for randomly generating variable letters -->
+        <xsl:if test=".//instruction or contains(./setup/pg-code,'RandomVariableName')">
             <xsl:text>  "PCCmacros.pl",&#xa;</xsl:text>
         </xsl:if>
         <!-- ################### -->
@@ -520,6 +521,9 @@
         </xsl:if>
         <xsl:if test="contains(./setup/pg-code,'LimitedRadical')">
             <xsl:text>  "contextLimitedRadical.pl",&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:if test="contains(./setup/pg-code,'FiniteSolutionSets')">
+            <xsl:text>  "contextFiniteSolutionSets.pl",&#xa;</xsl:text>
         </xsl:if>
     </xsl:variable>
     <!-- capture problem root to use inside upcoming for-each -->
@@ -636,8 +640,9 @@
             <xsl:text>"PGgraphmacros.pl",</xsl:text>
         </xsl:if>
         <!-- instructions for entering answers into HTML forms -->
-        <xsl:if test=".//instruction">
-            <xsl:text>"PCCmacros.pl",</xsl:text>
+        <!-- utility for randomly generating variable letters -->
+        <xsl:if test=".//instruction or contains(./setup/pg-code,'RandomVariableName')">
+            <xsl:text>  "PCCmacros.pl",&#xa;</xsl:text>
         </xsl:if>
         <!-- ################### -->
         <!-- Parser Enhancements -->
@@ -702,6 +707,9 @@
         </xsl:if>
         <xsl:if test="contains(./setup/pg-code,'LimitedRadical')">
             <xsl:text>"contextLimitedRadical.pl",</xsl:text>
+        </xsl:if>
+        <xsl:if test="contains(./setup/pg-code,'FiniteSolutionSets')">
+            <xsl:text>  "contextFiniteSolutionSets.pl",&#xa;</xsl:text>
         </xsl:if>
     </xsl:variable>
     <!-- capture problem root to use inside upcoming for-each -->
@@ -956,6 +964,8 @@
 </xsl:template>
 
 <!-- Convert a var's "category" to the right term for AnswerFormatHelp -->
+<!-- Keep ordered alphabetically, and one value per @test, so          -->
+<!-- that it is easier to maintain a list in the schema                -->
 <xsl:template name="category-to-form">
     <xsl:param name="category" select="none"/>
     <xsl:choose>
@@ -977,6 +987,9 @@
         <xsl:when test="$category='inequality'">
             <xsl:text>inequalities</xsl:text>
         </xsl:when>
+        <xsl:when test="$category='integer'">
+            <xsl:text>numbers</xsl:text>
+        </xsl:when>
         <xsl:when test="$category='interval'">
             <xsl:text>intervals</xsl:text>
         </xsl:when>
@@ -986,7 +999,7 @@
         <xsl:when test="$category='limit'">
             <xsl:text>limits</xsl:text>
         </xsl:when>
-        <xsl:when test="$category='number' or $category='integer'">
+        <xsl:when test="$category='number'">
             <xsl:text>numbers</xsl:text>
         </xsl:when>
         <xsl:when test="$category='point'">
@@ -1191,7 +1204,7 @@
 <!-- ######### -->
 
 <!-- extract-pg.xsl documentation -->
-<!-- PGML inline math uses its own delimiters: [`...`] and [``...``]       -->
+<!-- PGML inline math uses its own delimiters: [`...`] and [```...```]     -->
 <!-- NB: we allow the "var" element as a child                             -->
 <!-- To support a PTX author's custom LaTeX macros when the problem is     -->
 <!-- used within WeBWorK, we must define each macro as it is used within   -->
@@ -1199,7 +1212,7 @@
 <!-- support HTML_mathjax, HTML_dpng, and TeX display modes.               -->
 
 <!-- extract-pg-ptx.xsl documentation -->
-<!-- PGML inline math uses its own delimiters: [`...`] and [``...``]       -->
+<!-- PGML inline math uses its own delimiters: [`...`] and [```...```]     -->
 <!-- NB: we allow the "var" element as a child                             -->
 
 <!-- Common documentation -->
@@ -1223,22 +1236,21 @@
     <xsl:text>`]</xsl:text>
 </xsl:template>
 
-<!-- PGML [``...``] creates displaystyle math, but does not by itself      -->
-<!-- center it on a new line, so we manually apply that here.              -->
+<!-- PGML [```...```] creates display math -->
 <xsl:template match="webwork//me">
     <xsl:param name="b-verbose" />
     <xsl:text>&#xa;&#xa;</xsl:text>
     <xsl:if test="ancestor::ul|ancestor::ol">
         <xsl:call-template name="potential-list-indent" />
     </xsl:if>
-    <xsl:text>&gt;&gt; [``</xsl:text>
+    <xsl:text>[```</xsl:text>
     <xsl:if test="$b-verbose">
         <xsl:call-template name="select-latex-macros"/>
     </xsl:if>
     <xsl:apply-templates select="text()|var" />
     <!-- look ahead to absorb immediate clause-ending punctuation -->
     <xsl:apply-templates select="." mode="get-clause-punctuation" />
-    <xsl:text>``] &lt;&lt;&#xa;&#xa;</xsl:text>
+    <xsl:text>```]&#xa;&#xa;</xsl:text>
     <xsl:if test="following-sibling::text()[normalize-space()] or following-sibling::*">
         <xsl:call-template name="potential-list-indent" />
     </xsl:if>
@@ -1250,28 +1262,27 @@
         <xsl:if test="ancestor::ul|ancestor::ol">
             <xsl:call-template name="potential-list-indent" />
         </xsl:if>
-    <xsl:text>&gt;&gt; </xsl:text>
     <xsl:choose>
         <xsl:when test="contains(., '&amp;') or contains(., '\amp')">
-            <xsl:text>[``</xsl:text>
+            <xsl:text>[```</xsl:text>
             <xsl:if test="$b-verbose">
                 <xsl:call-template name="select-latex-macros"/>
             </xsl:if>
             <xsl:text>\begin{aligned}&#xa;</xsl:text>
             <xsl:apply-templates select="mrow" />
-            <xsl:text>\end{aligned}``]</xsl:text>
+            <xsl:text>\end{aligned}```]</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:text>[``</xsl:text>
+            <xsl:text>[```</xsl:text>
             <xsl:if test="$b-verbose">
                 <xsl:call-template name="select-latex-macros"/>
             </xsl:if>
             <xsl:text>\begin{gathered}&#xa;</xsl:text>
             <xsl:apply-templates select="mrow" />
-            <xsl:text>\end{gathered}``]</xsl:text>
+            <xsl:text>\end{gathered}```]</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
-    <xsl:text> &lt;&lt;&#xa;&#xa;</xsl:text>
+    <xsl:text>&#xa;&#xa;</xsl:text>
     <xsl:if test="following-sibling::text()[normalize-space()] or following-sibling::*">
         <xsl:call-template name="potential-list-indent" />
     </xsl:if>
@@ -1446,9 +1457,9 @@
 
 <!-- Alert: asterik-underscore produces bold-italic -->
 <xsl:template match="webwork//alert">
-    <xsl:text>*_</xsl:text>
+    <xsl:text>*</xsl:text>
     <xsl:apply-templates />
-    <xsl:text>_*</xsl:text>
+    <xsl:text>*</xsl:text>
 </xsl:template>
 
 <!-- LaTeX logo  -->
@@ -1713,11 +1724,13 @@
                 <xsl:when test="contains(parent::*/@label,'i')">i</xsl:when>
                 <xsl:when test="contains(parent::*/@label,'I')">I</xsl:when>
                 <xsl:otherwise>
+                    <!-- the exercise will be numbered with Arabic numerals, -->
+                    <!-- so we start the default cycle with lower-case Latin -->
                     <xsl:choose>
-                        <xsl:when test="count(ancestor::ol) mod 4 = 1">1</xsl:when>
-                        <xsl:when test="count(ancestor::ol) mod 4 = 2">a</xsl:when>
-                        <xsl:when test="count(ancestor::ol) mod 4 = 3">i</xsl:when>
-                        <xsl:when test="count(ancestor::ol) mod 4 = 0">A</xsl:when>
+                        <xsl:when test="count(ancestor::ol) mod 4 = 1">a</xsl:when>
+                        <xsl:when test="count(ancestor::ol) mod 4 = 2">i</xsl:when>
+                        <xsl:when test="count(ancestor::ol) mod 4 = 3">A</xsl:when>
+                        <xsl:when test="count(ancestor::ol) mod 4 = 0">1</xsl:when>
                     </xsl:choose>
                 </xsl:otherwise>
             </xsl:choose>

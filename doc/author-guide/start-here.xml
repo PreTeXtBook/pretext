@@ -7,17 +7,17 @@
 <!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
 <!-- See the file COPYING for copying conditions.             -->
 
-<chapter xml:id="start-here">
+<chapter xml:id="start-here" xmlns:xi="http://www.w3.org/2001/XInclude">
     <title>Start Here</title>
 
     <introduction>
-        <p>Welcome to the Author's Guide for <pretext />.  You are likely eager to get started, but familiarizing yourself with this chapter should save you a lot of time in the long run.  We will try to keep it short and at the end of early chapters we will guide you on where to go next.  Not everything we say here will make sense on your first reading, so come back after your first few trial runs.</p>
+        <p>Welcome to the Author's Guide for <pretext />.  You are likely eager to get started, but familiarizing yourself with this chapter should save you a lot of time in the long run.  We will try to keep it short and at the end of early chapters we will guide you on where to go next.  Not everything we say here will make sense on your first reading, so come back after your first few trial runs.  When you are ready to seek further help, or ask questions, please read the <xref ref="welcome" text="title"/> in <xref ref="welcome"/>.</p>
     </introduction>
 
     <section xml:id="philosophy">
         <title>Philosophy</title>
 
-        <p><pretext /> is a <term index="yes">markup language</term><idx>markup language</idx>, which means that you explicitly specify the logical parts of your document and not how these parts should be displayed.  This is very liberating for an author, since it frees you to concentrate on capturing your ideas to share with others, leaving the construction of the visual presentation to the software.  As an example, you might specify the content of the title of a chapter to be <c>Further Experiments</c>, but you will not be concerned if a 36 point sans-serif font in black will be used for this title in the print version of your book, or a CSS class specifying 18 pixel height in blue is used for a title in an online web version of your book.  You can just trust that a reasonable choice has been made for displaying a title of a chapter in a way that a reader will recognize it as a name for a chapter.  (And if all that talk of fonts was unfamiliar, all the more reason to trust the design to software.)</p>
+        <p><pretext /> is a <term>markup language</term><idx>markup language</idx>, which means that you explicitly specify the logical parts of your document and not how these parts should be displayed.  This is very liberating for an author, since it frees you to concentrate on capturing your ideas to share with others, leaving the construction of the visual presentation to the software.  As an example, you might specify the content of the title of a chapter to be <c>Further Experiments</c>, but you will not be concerned if a 36 point sans-serif font in black will be used for this title in the print version of your book, or a CSS class specifying 18 pixel height in blue is used for a title in an online web version of your book.  You can just trust that a reasonable choice has been made for displaying a title of a chapter in a way that a reader will recognize it as a name for a chapter.  (And if all that talk of fonts was unfamiliar, all the more reason to trust the design to software.)</p>
 
         <p>You are also freed from the technical details of presenting your ideas in the plethora of new formats available as a consequence of the advances in computers (including tablets and smartphones) and networks (global and wireless).  Your output <q>just works</q> and the software keeps up with technical advances and the introduction of new formats, while you concentrate on the content of your book (or article, or report, or proposal, or<nbsp /><ellipsis />).</p>
 
@@ -30,42 +30,19 @@
 
             <p>The creation, design, development and maintenance of <pretext /> (<init>MBX</init> here) is guided by the following list of principles.  They may not be fully understood on a first reading, but should be useful as you become more familiar with authoring texts with <pretext /> and should amplify some of the previous discussion.</p>
 
-            <list xml:id="list-principles">
-                <caption><pretext /> Principles</caption>
-                <!-- sync edits with main README.md -->
-
-                <ol>
-                    <li xml:id="principle-markup"><p><init>MBX</init> is a markup language that captures the structure of textbooks and research papers in the mathematical sciences.</p></li>
-
-                    <li><p><init>MBX</init> is human-readable and human-writable.</p></li>
-
-                    <li><p><init>MBX</init> documents serve as a single source which can be easily converted to multiple other formats, current and future.</p></li>
-
-                    <li xml:id="principle-good-design"><p><init>MBX</init> respects the good design practices which have been developed over the past centuries.</p></li>
-
-                    <li><p><init>MBX</init> makes it easy for authors to implement features which are both common and reasonable.</p></li>
-
-                    <li><p><init>MBX</init> supports online documents which make use of the full capabilities of the Web.</p></li>
-
-                    <li xml:id="principle-output-styles"><p><init>MBX</init> output is styled by selecting from a list of available templates, relieving the author of the burden involved in micromanaging the output format.</p></li>
-
-                    <li xml:id="principle-open-software"><p><init>MBX</init> is free: the software is available at no cost, with an open license. The use of <init>MBX</init> does not impose any constraints on documents prepared with the system.</p></li>
-
-                    <li><p><init>MBX</init> is not a closed system: documents can be converted to <latex /> and then developed using standard <latex /> tools.</p></li>
-                </ol>
-            </list>
+            <xi:include href="principles.xml" />
         </paragraphs>
     </section>
 
     <section xml:id="introduction-to-source-formatting">
         <title>Formatting Your Source</title>
 
-        <p>There are a lot of details related to how you prepare your <term index="yes">source</term><idx>source</idx>: the actual files that you, and you alone, will create.  At least skim through the following, come back here often, and also consult <xref provisional="exhaustive-chapter-on-source-files" />.</p>
+        <p>There are a lot of details related to how you prepare your <term>source</term><idx>source</idx>: the actual files that you, and you alone, will create.  At least skim through the following, come back here often, and also consult <xref provisional="exhaustive-chapter-on-source-files" />.</p>
 
         <paragraphs>
             <title>File Format</title>
 
-            <p>Your source should be plain <term index="yes">ASCII files</term><idx>ASCII file</idx> which you will create with a text editor.  In other words, do not create your source with Word, LibreOffice, WordPerfect, AbiWord, Pages or similar programs.  Popular text editors include vi, emacs, Notepad, Notepad++, Atom, TextWrangler, and BBEdit.  I have had a very good experience with Sublime Text, which is cross-platform (Windows, OS X, Linux), and can be used for free, though it has a very liberal license and is well worth the cost.  Sometimes these editors are known as a <term>programmer's editor</term><idx>programmer's editor</idx> (though we will be doing no programming).  Support for writing HTML sometimes translates directly to good support for XML.</p>
+            <p>Your source should be plain <term>ASCII files</term><idx>ASCII file</idx> which you will create with a text editor.  In other words, do not create your source with Word, LibreOffice, WordPerfect, AbiWord, Pages or similar programs.  Popular text editors include vi, emacs, Notepad, Notepad++, Atom, TextWrangler, and BBEdit.  I have had a very good experience with Sublime Text, which is cross-platform (Windows, OS X, Linux), and can be used for free, though it has a very liberal license and is well worth the cost.  Sometimes these editors are known as a <term>programmer's editor</term><idx>programmer's editor</idx> (though we will be doing no programming).  Support for writing HTML sometimes translates directly to good support for XML.</p>
 
             <p>There are <term>XML editors</term><idx>XML editor</idx>, which I have generally found too complex for authoring in <pretext />.  They do have some advantages and XML Copy Editor is one that I have found that is possibly useful.</p>
         </paragraphs>
@@ -83,7 +60,7 @@
         <paragraphs>
             <title>Revision Control</title>
 
-            <p>If you are writing a book, or if you are collaborating with co-authors, then you owe it to yourself and your co-authors to learn how to use revision control<idx>revision control</idx>, which works well with <pretext />.  The hands-down favorite is <c>git</c> which has a steep learning curve, and so is beyond the scope of this guide.  But see <xref provisional="topic-git-coexistence" /> which has hints on how to best use <c>git</c> together with a <pretext /> project and look for Beezer and Farmer's <booktitle>Git For Authors</booktitle>.</p>
+            <p>If you are writing a book, or if you are collaborating with co-authors, then you owe it to yourself and your co-authors to learn how to use revision control<idx>revision control</idx>, which works well with <pretext />.  The hands-down favorite is <c>git</c> which has a steep learning curve, and so is beyond the scope of this guide.  But see <xref provisional="topic-git-coexistence" /> which has hints on how to best use <c>git</c> together with a <pretext /> project and look for Beezer and Farmer's <pubtitle>Git For Authors</pubtitle>.</p>
         </paragraphs>
 
         <paragraphs>
@@ -107,7 +84,7 @@
         </paragraphs>
     </section>
 
-    <section>
+    <section xml:id="start-next">
         <title>Where Next?</title>
 
         <p>We will end each of the early chapters with suggestions on where to read next.</p>

@@ -75,10 +75,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='introduction'><xsl:text>Introduction</xsl:text></localization>
     <localization string-id='conclusion'><xsl:text>Conclusion</xsl:text></localization>
     <localization string-id='exercises'><xsl:text>Exercises</xsl:text></localization>
+    <localization string-id='worksheet'><xsl:text>Worksheet</xsl:text></localization>
+    <localization string-id='solutions'><xsl:text>Solutions</xsl:text></localization>
     <localization string-id='references'><xsl:text>References</xsl:text></localization>
     <localization string-id='backmatter'><xsl:text>Back Matter</xsl:text></localization>
     <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
     <localization string-id='paragraphs'><xsl:text>Paragraphs</xsl:text></localization>
+    <localization string-id='commentary'><xsl:text>Commentary</xsl:text></localization>
     <localization string-id='subparagraph'><xsl:text>Subparagraph</xsl:text></localization>
     <!-- Components of the narrative -->
     <!-- REMARK-LIKE blocks -->
@@ -124,12 +127,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='p'><xsl:text>Paragraph</xsl:text></localization>
     <localization string-id='blockquote'><xsl:text>Quotation</xsl:text></localization>
     <!-- Parts of an exercise and it's solution -->
-    <localization string-id='exercise'><xsl:text>Exercise</xsl:text></localization>
+    <!-- An "exercise", at any level, within an "exercises" division is a          -->
+    <!-- "divisional" exercise and the string employed is 'divisionalexercise'.    -->
+    <!-- An "exercise" whose parent is a division (chapter, section, etc) we       -->
+    <!-- call an "inline exercise" and the string employed is 'inlineexercise'.    -->
+    <!-- It is important to use different translations so that a text with         -->
+    <!-- both types of exercises does not have ambiguous cross-references          -->
+    <!-- (there is an example of this at the start of one of the later             -->
+    <!-- sections of the sample article).                                          -->
+    <!--                                                                           -->
+    <!-- In English, an "Exercise" is something you do that has a beneficial       -->
+    <!-- outcome, such as "I am going to the gym to exercise."  A "Checkpoint"     -->
+    <!-- is something you must do before you do something else.  Another use of    -->
+    <!-- the term is a location on a on a roadway where you must stop for the      -->
+    <!-- police to do an inspection.                                               -->
+    <localization string-id='divisionalexercise'><xsl:text>Exercise</xsl:text></localization>
+    <localization string-id='inlineexercise'><xsl:text>Checkpoint</xsl:text></localization>
     <localization string-id='webwork'><xsl:text>WeBWorK</xsl:text></localization>
     <localization string-id='hint'><xsl:text>Hint</xsl:text></localization>
     <localization string-id='answer'><xsl:text>Answer</xsl:text></localization>
     <localization string-id='solution'><xsl:text>Solution</xsl:text></localization>
-    <!-- A group of sectional exercises (with introduction and conclusion) -->
+    <!-- A group of divisional exercises (with introduction and conclusion) -->
     <localization string-id='exercisegroup'><xsl:text>Exercise Group</xsl:text></localization>
     <!-- Bibliographic items (note is distinct from sidebar "Annotations" below) -->
     <localization string-id='biblio'><xsl:text>Bibliographic Entry</xsl:text></localization>

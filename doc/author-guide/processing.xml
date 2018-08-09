@@ -28,7 +28,7 @@
             </console>
         </sidebyside>
 
-        <p>By default, <c>xsltproc</c> writes output to <c>stdout</c> (the screen), which you could redirect to a file, or you could use the <c>-o</c> switch to send the output to a named file.  However, <pretext /> automatically writes to a file whose name is derived from the <attribute>xml:id</attribute> attribute of the top-level <tag>book</tag> or <tag>article</tag> tag.  If no such attribute is given the filename will be derived from <c>book-1</c> or <c>article-1</c>.  All output is produced in whatever the current default directory is, so you will likely want to set this beforehand.</p>
+        <p>By default, <c>xsltproc</c> writes output to <c>stdout</c> (the screen), which you could redirect to a file, or you could use the <c>-o</c> switch to send the output to a named file.  However, <pretext /> automatically writes to a file whose name is derived from the <attr>xml:id</attr> attribute of the top-level <tag>book</tag> or <tag>article</tag> tag.  If no such attribute is given the filename will be derived from <c>book-1</c> or <c>article-1</c>.  All output is produced in whatever the current default directory is, so you will likely want to set this beforehand.</p>
 
         <p>The <c>xsl</c> subdirectory of the <pretext /> distribution contains a variety of XSL stylesheets<idx>XSL stylesheet</idx>, which I will also refer to as <term>converters</term><idx><h>converter</h><see>XSL stylesheet</see></idx> or <term>conversions</term><idx><h>conversion</h><see>XSL stylesheet</see></idx>.  The ones that you will use as an author all have filenames of the form <c>xsl/mathbook-XXX.xsl</c>, where <c>XXX</c> is some indication of the output produced.  Conversions to <latex /> or HTML output are the two most mature converters.</p>
 
@@ -44,21 +44,19 @@
             <li><p>For the file containing the <tag>chapter</tag> tag for the chapter on mammals, place the attribute<cd>
                 <cline>xmlns:xi="http://www.w3.org/2001/XInclude"</cline>
             </cd> on the outermost tag in the file.</p></li>
-            <li><p>Within the <tag>chapter</tag> element for the chapter on mammals, add the line <c>&lt;xi:include href="monkeys.xml" /&gt;</c> to <q>pull in</q> the section on monkeys at that location.  The <attribute>href</attribute> attribute can point to a file in a subdirectory, but will be interpreted relative to the location of the file containing the mammal chapter element.</p></li>
+            <li><p>Within the <tag>chapter</tag> element for the chapter on mammals, add the line <c>&lt;xi:include href="monkeys.xml" /&gt;</c> to <q>pull in</q> the section on monkeys at that location.  The <attr>href</attr> attribute can point to a file in a subdirectory, but will be interpreted relative to the location of the file containing the mammal chapter element.</p></li>
             <li><p>Add the switch <c>-xinclude</c> to your invocation of <c>xsltproc</c>, just after <c>xsltproc</c>, but before the filenames for the stylesheet and the master source file.  Note that for some versions of <c>xsltproc</c> it might be necessary to use two dashes for the switch, <c>--xinclude</c>.</p></li>
         </ol>So now a typical invocation (using one dash) might look like<cd>
             <cline>xsltproc -xinclude xsl/mathbook-html.xsl ~/books/aota/animals.xml</cline>
         </cd></p>
 
-        <p>Note that when you invoke <c>xsltproc</c> the default directory can be far away from your source, and the processor will locate all the component files of your project through the relative file locations in the <attribute>href</attribute> attribute.  Several comments are in order.</p>
-
-        <ul>
+        <p>Note that when you invoke <c>xsltproc</c> the default directory can be far away from your source, and the processor will locate all the component files of your project through the relative file locations in the <attr>href</attr> attribute.  Several comments are in order.<ul>
             <li><p>Begin small and start a project <em>without</em> using modular files.  Modularizing seems to add a layer of complexity that sometimes obscures other beginner's errors.  So get comfortable with a single source file before branching out.</p></li>
             <li><p>I am forever forgetting the <c>-xinclude</c> switch.  Empty output, or cryptic error messages, are your first clue to this simple, but common, mistake.</p></li>
             <li><p>The <init>XML</init> specification requires that a source file only contain a single outermost element.  So for example, two <tag>chapter</tag> elements cannot go into the same file as simultaneous outermost elements.</p></li>
             <li><p>Any file that uses an <tag>xi:include</tag> element will need the <c>xml:ns</c> delaration on the outermost element.  So in our animal book example, the <q>master</q> file, which presumably includes several chapter files, would need this declaration on the <tag>mathbook</tag> element.</p></li>
             <li><p>In practice, there is not a lot to be gained by creating a subdirectory structure mirroring your modularization<mdash />all your source files can go into one big directory and the XML hierarchy will take care of the organization.  I do sometimes like to name my files accordingly, so for example <c>chapter-mammals.xml</c> and <c>section-monkeys.xml</c>.</p></li>
-        </ul>
+        </ul></p>
 
         <p>The sample book in <c>examples/sample-book</c> amply demonstrates different ways to modularize parts of a project (but in no way should be taken as best practice in this regard).  This guide, in <c>doc/author-guide</c> is a simple example of modular source files, and might be a good template to follow for your book.  See <xref ref="topic-xinclude" /> for some of the finer points of this topic.</p>
     </section>
@@ -110,11 +108,12 @@
 
         <p>We have done several things to encourage such customizations.  We have tried to put as much stylistic information as possible in the <latex /> preamble and keep as much as possible out of the body.  (There is always room for improvement on this score, please be in touch if you have a need.)  For small adjustments the <c>latex.preamble.early</c> and <c>latex.preamble.late</c> stringparam are possible vehicles, though all the <latex /> code to make light blue, flush-right rules is going to be messy on the command-line.</p>
 
-        <p>Instead, you can make a small XSL file<idx>thin XSL stylesheet</idx><idx><h>XSL stylesheet</h><seealso>thin XSL stylesheet</seealso></idx>, to use as input to <c>xsltproc</c>.  The first thing it should do is import the stock <pretext /> file for the type of output you want to create.  You can use an absolute path to the <pretext /> distribution (which will not be very portable), or utilize the <c>mathbook/user</c> directory and a relative path from there.  The easiest thing to put in this file is elements like<pre>
-        &lt;xsl:param name="latex.font.size" select="'20pt'" /&gt;
-        </pre>which is functionally equivalent to our example in <xref ref="processing-stringparam" />.  Values given on the command-line supersede those given in an XSL file this way.</p>
+        <p>Instead, you can make a small XSL file<idx>thin XSL stylesheet</idx><idx><h>XSL stylesheet</h><seealso>thin XSL stylesheet</seealso></idx>, to use as input to <c>xsltproc</c>.  The first thing it should do is import the stock <pretext /> file for the type of output you want to create.  You can use an absolute path to the <pretext /> distribution (which will not be very portable), or utilize the <c>mathbook/user</c> directory and a relative path from there.  The easiest thing to put in this file is elements like
+            <cd>&lt;xsl:param name="latex.font.size" select="'20pt'" /&gt;</cd>
+        which is functionally equivalent to our example in <xref ref="processing-stringparam" />.  Values given on the command-line supersede those given in an XSL file this way.</p>
 
         <p>You can augment the <latex /> preamble with as much <latex /> code as you like in the following way.</p>
+
         <pre>
         &lt;xsl:param name="latex.preamble.late"&gt;
             &lt;xsl:text&gt;% Proof environment with heading in small caps&amp;#xa;&lt;/xsl:text&gt;
@@ -123,6 +122,7 @@
             &lt;xsl:text&gt;\renewenvironment{proof}[1][\proofname]{\oldp[\scshape #1]}{\oldep}&amp;#xa;&lt;/xsl:text&gt;
         &lt;/xsl:param&gt;
         </pre>
+
         <p>There are a variety of things you can do generally, by overriding the imported XSL templates to change behavior, but such modifications are beyond the scope of this guide.</p>
     </section>
 
@@ -219,13 +219,13 @@
         <paragraphs>
             <title>Source</title>
 
-            <p>I am fond of describing my own books with an initialism formed from the title.  So <booktitle>A First Course in Linear Algebra</booktitle> becomes <acronym>FCLA</acronym>, and in file and directory names becomes <c>fcla</c>.  So I have a top-level directory <c>books</c> and then <c>books/fcla</c>, but this directory is not the book itself, this is all the extra stuff that goes along with writing a book, much of it in <c>books/fcla/local</c>.  The actual book, the part everybody sees with an open license, lives in <c>books/fcla/fcla</c>.  This subdirectory has files like <c>COPYING</c>, which is a free software standard for license information, and <c>README.md</c> which is a file in the simplistic Markdown format that is picked up automatically by GitHub and displayed nicely at the book's repository's main page.  Subdirectories include <c>src</c> for the actual XML files, <c>xsl</c> for any customizing XSL (<xref ref="processing-thin-xsl" />), and <c>script</c> for shell scripts used to process the book (see below).</p>
+            <p>I am fond of describing my own books with an initialism formed from the title.  So <pubtitle>A First Course in Linear Algebra</pubtitle> becomes <acro>FCLA</acro>, and in file and directory names becomes <c>fcla</c>.  So I have a top-level directory <c>books</c> and then <c>books/fcla</c>, but this directory is not the book itself, this is all the extra stuff that goes along with writing a book, much of it in <c>books/fcla/local</c>.  The actual book, the part everybody sees with an open license, lives in <c>books/fcla/fcla</c>.  This subdirectory has files like <c>COPYING</c>, which is a free software standard for license information, and <c>README.md</c> which is a file in the simplistic Markdown format that is picked up automatically by GitHub and displayed nicely at the book's repository's main page.  Subdirectories include <c>src</c> for the actual XML files, <c>xsl</c> for any customizing XSL (<xref ref="processing-thin-xsl" />), and <c>script</c> for shell scripts used to process the book (see below).</p>
 
             <p>I do not use any additional directory structure below <c>src</c> to manage modular files for a book, since the XML and the <c>--xinclude</c> mechanism manage that just fine.  I see little benefit to extra subdirectories for organization and some resulting inconvenience.  I do typically have a single subdirectory <c>src/images</c> for raster images and other graphics files.</p>
 
             <p>I believe it is critically important to put your project under revision control, and if licensed openly, in a public GitHub repository.  So the <c>books/fcla/fcla</c> directory and all of its contents and subdirectories is tracked as a <c>git</c> repository and hosted on GitHub.  Because this directory is <em>source</em> I try very hard to <em>never</em> have any temporary files in these directories since I do not want to accidentally incorporate them into the <c>git</c> repository.  As a general rule-of-thumb, only original material goes in this directory and anything that can be re-created belongs outside.</p>
 
-            <p>A tutorial on <c>git</c> would be way outside the scope of this guide, but Beezer and Farmer <em>have</em> written <booktitle>Git For Authors</booktitle>, so perhaps look for that.</p>
+            <p>A tutorial on <c>git</c> would be way outside the scope of this guide, but Beezer and Farmer <em>have</em> written <pubtitle>Git For Authors</pubtitle>, so perhaps look for that.</p>
         </paragraphs>
 
         <paragraphs>
@@ -288,7 +288,7 @@
     <section xml:id="processing-author-tools">
         <title>Author Tools</title>
 
-        <p>The general stringparam <c>author-tools</c><idx><c>author-tools</c></idx> may be set to <c>yes</c> to activate special handling of the <tag>todo</tag> element, the <attribute>provisional</attribute> attribute of an <tag>xref</tag> element, and notation and index entries.  The <latex />-specific stringparam <c>latex.draft</c> set to <c>yes</c> will automatically activate the previous features, in addition to a few others appropriate to the printed page.  We have an XSL stylesheet that dumps every <tag>todo</tag> and every <attribute>provisional</attribute> attribute to the screen as a simply-formatted text report, but it is not public now.</p>
+        <p>The general stringparam <c>author-tools</c><idx><c>author-tools</c></idx> may be set to <c>yes</c> to activate special handling of the <tag>todo</tag> element, the <attr>provisional</attr> attribute of an <tag>xref</tag> element, and notation and index entries.  The <latex />-specific stringparam <c>latex.draft</c> set to <c>yes</c> will automatically activate the previous features, in addition to a few others appropriate to the printed page.  We have an XSL stylesheet that dumps every <tag>todo</tag> and every <attr>provisional</attr> attribute to the screen as a simply-formatted text report, but it is not public now.</p>
 
         <p>The intent here is to make a rough draft, for an author or collaborator only, reporting as much as possible that is incomplete, pending or hidden in the usual output.  But none of this is carefully supported.  Requests for improvements, and overall comments, from working authors are invited.  They will help to make this feature more useful for everybody.</p>
     </section>
@@ -296,9 +296,7 @@
     <section xml:id="topic-build-in-cocalc">
         <title>Building Output in CoCalc</title>
 
-        <p>CoCalc <url href="https://cocalc.com/"><c>cocalc.com</c></url><idx>CoCalc</idx> has <em>all</em> the tools you need to author with MathBook <init>XML</init>.  You will need an upgrade from a subscription to allow Internet connectivity, but at a minimum a colleague with a paid plan can spare you one, they are plentiful and meant to be shared.</p>
-
-        <ul>
+        <p>CoCalc <url href="https://cocalc.com/"><c>cocalc.com</c></url><idx>CoCalc</idx> has <em>all</em> the tools you need to author with MathBook <init>XML</init>.  You will need an upgrade from a subscription to allow Internet connectivity, but at a minimum a colleague with a paid plan can spare you one, they are plentiful and meant to be shared.<ul>
             <li><p>Text editor: reasonably good, partially <init>XML</init> syntax-aware.</p></li>
             <li><p><c>git</c>: installed (so clone <pretext />).</p></li>
             <li><p><latex />: installed with many additional packages.</p></li>
@@ -306,6 +304,6 @@
             <li><p><init>PDF</init> viewer: handed off to your browser.</p></li>
             <li><p><init>HTML</init> viewer: convert to the <q>raw</q> <init>URL</init> and you can preview.</p></li>
             <li><p><init>HTML</init> server: nope.  Zip up output and host elsewhere.</p></li>
-        </ul>
+        </ul></p>
     </section>
 </chapter>

@@ -111,10 +111,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- First, an exercise in exercises section.              -->
 <!-- Default is "yes" for every part, so experiment        -->
 <!-- with parameters to make some parts hidden.            -->
+<xsl:param name="exercise.inline.hint" select="''" />
+<xsl:param name="exercise.inline.answer" select="''" />
+<xsl:param name="exercise.inline.solution" select="''" />
+<xsl:param name="exercise.divisional.hint" select="''" />
+<xsl:param name="exercise.divisional.answer" select="''" />
+<xsl:param name="exercise.divisional.solution" select="''" />
+<xsl:param name="project.hint" select="''" />
+<xsl:param name="project.answer" select="''" />
+<xsl:param name="project.solution" select="''" />
+
+<!-- These switches are deprecated/ignored.  Some have been reset -->
+<!-- to empty (from "yes") so that we can (a) see attempted use    -->
+<!-- for warnings, (b) interpret them in backward-compatible ways -->
 <xsl:param name="exercise.text.statement" select="'yes'" />
-<xsl:param name="exercise.text.hint" select="'yes'" />
-<xsl:param name="exercise.text.answer" select="'yes'" />
-<xsl:param name="exercise.text.solution" select="'yes'" />
+<xsl:param name="exercise.text.hint" select="''" />
+<xsl:param name="exercise.text.answer" select="''" />
+<xsl:param name="exercise.text.solution" select="''" />
 <!-- Second, an exercise in a solutions list in backmatter.-->
 <xsl:param name="exercise.backmatter.statement" select="'yes'" />
 <xsl:param name="exercise.backmatter.hint" select="'yes'" />
@@ -122,23 +135,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="exercise.backmatter.solution" select="'yes'" />
 <!-- Now project-like elements, in main text.  -->
 <!-- A task is a division of a project         -->
-<xsl:param name="project.text.statement" select="'yes'" /> <!-- not implemented -->
-<xsl:param name="project.text.hint" select="'yes'" />
-<xsl:param name="project.text.answer" select="'yes'" />
-<xsl:param name="project.text.solution" select="'yes'" />
-<xsl:param name="task.text.statement" select="'yes'" /> <!-- not implemented -->
+<xsl:param name="project.text.hint" select="''" />
+<xsl:param name="project.text.answer" select="''" />
+<xsl:param name="project.text.solution" select="''" />
 <xsl:param name="task.text.hint" select="'yes'" />
 <xsl:param name="task.text.answer" select="'yes'" />
 <xsl:param name="task.text.solution" select="'yes'" />
-<!-- And project-like elements, in back matter (none implemented). -->
-<xsl:param name="project.backmatter.statement" select="'yes'" />
-<xsl:param name="project.backmatter.hint" select="'yes'" />
-<xsl:param name="project.backmatter.answer" select="'yes'" />
-<xsl:param name="project.backmatter.solution" select="'yes'" />
-<xsl:param name="task.backmatter.statement" select="'yes'" />
-<xsl:param name="task.backmatter.hint" select="'yes'" />
-<xsl:param name="task.backmatter.answer" select="'yes'" />
-<xsl:param name="task.backmatter.solution" select="'yes'" />
+
 <!-- Author tools are for drafts, mostly "todo" items                 -->
 <!-- and "provisional" citations and cross-references                 -->
 <!-- Default is to hide todo's, inline provisionals                   -->
@@ -181,6 +184,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Publisher option to surround emdash -->
 <!-- Default is none, option is thin     -->
 <xsl:param name="emdash.space" select="''" />
+<!-- Publisher option to include "commentary" -->
+<!-- Default will be "no"                     -->
+<xsl:param name="commentary" select="''" />
 <!-- Whitespace discussion: http://www.xmlplease.com/whitespace               -->
 <!-- Describes source expectations, DO NOT override in subsequent conversions -->
 <!-- Strip whitespace text nodes from container elements                      -->
@@ -188,7 +194,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Newlines with &#xa; : http://stackoverflow.com/questions/723226/producing-a-new-line-in-xslt -->
 <!-- Removing whitespace: http://stackoverflow.com/questions/1468984/xslt-remove-whitespace-from-template -->
 <xsl:strip-space elements="mathbook pretext book article memo letter" />
-<xsl:strip-space elements="frontmatter chapter appendix index-part index section subsection subsubsection exercises references introduction conclusion paragraphs subparagraph backmatter" />
+<xsl:strip-space elements="frontmatter chapter appendix index-part index section subsection subsubsection exercises worksheet solutions references introduction conclusion paragraphs subparagraph backmatter" />
 <xsl:strip-space elements="docinfo author abstract" />
 <xsl:strip-space elements="titlepage preface acknowledgement biography foreword dedication colophon" />
 <!-- List is elements in DEFINITION-LIKE entity -->
@@ -427,6 +433,231 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!-- ########################### -->
+<!-- Exercise component switches -->
+<!-- ########################### -->
+
+<!-- We santitize exercise component switches.  These control    -->
+<!-- text/narrative appearances *only*, solution lists in the    -->
+<!-- backmatter are given in alternate ways.  We only do quality -->
+<!-- control here first.  The "*.text.*" forms are deprecated    -->
+<!-- with warnings elsewhere.                                    -->
+
+<xsl:variable name="entered-exercise-inline-hint">
+    <xsl:choose>
+        <xsl:when test="($exercise.inline.hint = 'yes') or
+                        ($exercise.inline.hint = 'no')">
+            <xsl:value-of select="$exercise.inline.hint" />
+        </xsl:when>
+        <!-- deprecated, but still honored, though with no error-checking, -->
+        <!-- erroneous values will fall into default of replacement switch -->
+        <xsl:when test="($exercise.text.hint = 'yes') or ($exercise.text.hint = 'no')">
+            <xsl:value-of select="$exercise.text.hint" />
+        </xsl:when>
+        <!-- stick with no action by author/publisher -->
+        <xsl:when test="$exercise.inline.hint = ''">
+            <xsl:value-of select="$exercise.text.hint" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message >MBX:WARNING: exercise.inline.hint parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.inline.hint" />".  Proceeding with default value.</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="entered-exercise-inline-answer">
+    <xsl:choose>
+        <xsl:when test="($exercise.inline.answer = 'yes') or
+                        ($exercise.inline.answer = 'no')">
+            <xsl:value-of select="$exercise.inline.answer" />
+        </xsl:when>
+        <!-- deprecated, but still honored, though with no error-checking, -->
+        <!-- erroneous values will fall into default of replacement switch -->
+        <xsl:when test="($exercise.text.answer = 'yes') or ($exercise.text.answer = 'no')">
+            <xsl:value-of select="$exercise.text.answer" />
+        </xsl:when>
+        <!-- stick with no action by author/publisher -->
+        <xsl:when test="$exercise.inline.answer = ''">
+            <xsl:value-of select="$exercise.text.answer" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message >MBX:WARNING: exercise.inline.answer parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.inline.answer" />".  Proceeding with default value.</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="entered-exercise-inline-solution">
+    <xsl:choose>
+        <xsl:when test="($exercise.inline.solution = 'yes') or
+                        ($exercise.inline.solution = 'no')">
+            <xsl:value-of select="$exercise.inline.solution" />
+        </xsl:when>
+        <!-- deprecated, but still honored, though with no error-checking, -->
+        <!-- erroneous values will fall into default of replacement switch -->
+        <xsl:when test="($exercise.text.solution = 'yes') or ($exercise.text.solution = 'no')">
+            <xsl:value-of select="$exercise.text.solution" />
+        </xsl:when>
+        <!-- stick with no action by author/publisher -->
+        <xsl:when test="$exercise.inline.solution = ''">
+            <xsl:value-of select="$exercise.text.solution" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message >MBX:WARNING: exercise.inline.solution parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.inline.solution" />".  Proceeding with default value.</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="entered-exercise-divisional-hint">
+    <xsl:choose>
+        <xsl:when test="($exercise.divisional.hint = 'yes') or
+                        ($exercise.divisional.hint = 'no')">
+            <xsl:value-of select="$exercise.divisional.hint" />
+        </xsl:when>
+        <!-- deprecated, but still honored, though with no error-checking, -->
+        <!-- erroneous values will fall into default of replacement switch -->
+        <xsl:when test="($exercise.text.hint = 'yes') or ($exercise.text.hint = 'no')">
+            <xsl:value-of select="$exercise.text.hint" />
+        </xsl:when>
+        <!-- stick with no action by author/publisher -->
+        <xsl:when test="$exercise.divisional.hint = ''">
+            <xsl:value-of select="$exercise.divisional.hint" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message >MBX:WARNING: exercise.divisional.hint parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.divisional.hint" />".  Proceeding with default value.</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="entered-exercise-divisional-answer">
+    <xsl:choose>
+        <xsl:when test="($exercise.divisional.answer = 'yes') or
+                        ($exercise.divisional.answer = 'no')">
+            <xsl:value-of select="$exercise.divisional.answer" />
+        </xsl:when>
+        <!-- deprecated, but still honored, though with no error-checking, -->
+        <!-- erroneous values will fall into default of replacement switch -->
+        <xsl:when test="($exercise.text.answer = 'yes') or ($exercise.text.answer = 'no')">
+            <xsl:value-of select="$exercise.text.answer" />
+        </xsl:when>
+        <!-- stick with no action by author/publisher -->
+        <xsl:when test="$exercise.divisional.answer = ''">
+            <xsl:value-of select="$exercise.divisional.answer" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message >MBX:WARNING: exercise.divisional.answer parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.divisional.answer" />".  Proceeding with default value.</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="entered-exercise-divisional-solution">
+    <xsl:choose>
+        <xsl:when test="($exercise.divisional.solution = 'yes') or
+                        ($exercise.divisional.solution = 'no')">
+            <xsl:value-of select="$exercise.divisional.solution" />
+        </xsl:when>
+        <!-- deprecated, but still honored, though with no error-checking, -->
+        <!-- erroneous values will fall into default of replacement switch -->
+        <xsl:when test="($exercise.text.solution = 'yes') or ($exercise.text.solution = 'no')">
+            <xsl:value-of select="$exercise.text.solution" />
+        </xsl:when>
+        <!-- stick with no action by author/publisher -->
+        <xsl:when test="$exercise.divisional.solution = ''">
+            <xsl:value-of select="$exercise.divisional.solution" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message >MBX:WARNING: exercise.divisional.solution parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.divisional.solution" />".  Proceeding with default value.</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="entered-project-hint">
+    <xsl:choose>
+        <xsl:when test="($project.hint = 'yes') or
+                        ($project.hint = 'no')">
+            <xsl:value-of select="$project.hint" />
+        </xsl:when>
+        <!-- deprecated, but still honored, though with no error-checking, -->
+        <!-- erroneous values will fall into default of replacement switch -->
+        <xsl:when test="($project.text.hint = 'yes') or ($project.text.hint = 'no')">
+            <xsl:value-of select="$project.text.hint" />
+        </xsl:when>
+        <!-- stick with no action by author/publisher -->
+        <xsl:when test="$project.hint = ''">
+            <xsl:value-of select="$project.hint" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message >MBX:WARNING: project.hint parameter should be "yes" or "no", not "<xsl:value-of select="$project.hint" />".  Proceeding with default value.</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="entered-project-answer">
+    <xsl:choose>
+        <xsl:when test="($project.answer = 'yes') or
+                        ($project.answer = 'no')">
+            <xsl:value-of select="$project.answer" />
+        </xsl:when>
+        <!-- deprecated, but still honored, though with no error-checking, -->
+        <!-- erroneous values will fall into default of replacement switch -->
+        <xsl:when test="($project.text.answer = 'yes') or ($project.text.answer = 'no')">
+            <xsl:value-of select="$project.text.answer" />
+        </xsl:when>
+        <!-- stick with no action by author/publisher -->
+        <xsl:when test="$project.answer = ''">
+            <xsl:value-of select="$project.answer" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message >MBX:WARNING: project.answer parameter should be "yes" or "no", not "<xsl:value-of select="$project.answer" />".  Proceeding with default value.</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="entered-project-solution">
+    <xsl:choose>
+        <xsl:when test="($project.solution = 'yes') or
+                        ($project.solution = 'no')">
+            <xsl:value-of select="$project.solution" />
+        </xsl:when>
+        <!-- deprecated, but still honored, though with no error-checking, -->
+        <!-- erroneous values will fall into default of replacement switch -->
+        <xsl:when test="($project.text.solution = 'yes') or ($project.text.solution = 'no')">
+            <xsl:value-of select="$project.text.solution" />
+        </xsl:when>
+        <!-- stick with no action by author/publisher -->
+        <xsl:when test="$project.solution = ''">
+            <xsl:value-of select="$project.solution" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message >MBX:WARNING: project.solution parameter should be "yes" or "no", not "<xsl:value-of select="$project.solution" />".  Proceeding with default value.</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- The "entered-*" versions have been sanitized      -->
+<!-- to be "yes", "no" or "".  We make and use boolean -->
+<!-- switches. Unset, or mis-entered is the default,   -->
+<!-- which is to show all components until an author   -->
+<!-- decides to hide them.                             -->
+<xsl:variable name="b-has-inline-hint"
+              select="($entered-exercise-inline-hint = 'yes') or ($entered-exercise-inline-hint = '')" />
+<xsl:variable name="b-has-inline-answer"
+              select="($entered-exercise-inline-answer = 'yes') or ($entered-exercise-inline-answer = '')" />
+<xsl:variable name="b-has-inline-solution"
+              select="($entered-exercise-inline-solution = 'yes') or ($entered-exercise-inline-solution = '')" />
+<xsl:variable name="b-has-divisional-hint"
+              select="($entered-exercise-divisional-hint = 'yes') or ($entered-exercise-divisional-hint = '')" />
+<xsl:variable name="b-has-divisional-answer"
+              select="($entered-exercise-divisional-answer = 'yes') or ($entered-exercise-divisional-answer = '')" />
+<xsl:variable name="b-has-divisional-solution"
+              select="($entered-exercise-divisional-solution = 'yes') or ($entered-exercise-divisional-solution = '')" />
+<xsl:variable name="b-has-project-hint"
+              select="($entered-project-hint = 'yes') or ($entered-project-hint = '')" />
+<xsl:variable name="b-has-project-answer"
+              select="($entered-project-answer = 'yes') or ($entered-project-answer = '')" />
+<xsl:variable name="b-has-project-solution"
+              select="($entered-project-solution = 'yes') or ($entered-project-solution = '')" />
+
+
+
 <!-- The main "mathbook" element only has two possible children     -->
 <!-- Or the main element could be "pretext" after name change       -->
 <!-- One is "docinfo", the other is "book", "article", etc.         -->
@@ -440,7 +671,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Source Analysis -->
 <!-- Some boolean variables ("b-*") for -->
 <!-- the presence of certain elements -->
+<xsl:variable name="b-has-geogebra" select="boolean($document-root//interactive[@platform='geogebra'])" />
 <xsl:variable name="b-has-jsxgraph" select="boolean($document-root//jsxgraph)" />
+<!-- "book" and "article" are sometimes different, esp. for LaTeX -->
+<xsl:variable name="b-is-book"    select="$document-root/self::book" />
+<xsl:variable name="b-is-article" select="$document-root/self::article" />
 
 <!-- Some groups of elements are counted distinct -->
 <!-- from other blocks.  A configuration element  -->
@@ -450,10 +685,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="b-number-project-distinct" select="true()" />
 <!-- exercise historical default -->
 <xsl:variable name="b-number-exercise-distinct" select="false()" />
-
-<!-- TEMPORARY: exercise numbering cutover -->
-<xsl:param name="new.exercises" select="'no'" />
-<xsl:variable name="b-newexercises" select="boolean($new.exercises = 'yes')" />
 
 <!-- Status quo, for no-part books and articles is "absent".     -->
 <!-- The "structural" option will change numbers and numbering   -->
@@ -606,6 +837,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="debug.datedfiles" select="'yes'" />
 <xsl:variable name="b-debug-datedfiles" select="not($debug.datedfiles = 'no')" />
 
+<!-- This code is correct, interface is temporary and will be redone with no notice -->
+<xsl:param name="debug.chapter.start" select="''" />
+
 <xsl:variable name="emdash-space">
     <xsl:choose>
         <xsl:when test="$emdash.space = ''">
@@ -623,6 +857,48 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
+
+<!-- Commentary is meant for an enhanced edition, -->
+<!-- like an "Instructor's Manual".  A publisher  -->
+<!-- will need to consciously elect "yes".        -->
+<!-- $input-commentary is local and short-lived,  -->
+<!-- $b-commentary is boolean and used elsewhere. -->
+<xsl:variable name="input-commentary">
+    <xsl:choose>
+        <xsl:when test="$commentary = ''">
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <xsl:when test="$commentary = 'no'">
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <xsl:when test="$commentary = 'yes'">
+            <xsl:text>yes</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>no</xsl:text>
+            <xsl:message>MBX:WARNING: the "commentary" stringparam should be "yes" or "no", not "<xsl:value-of select="$commentary"/>", so assuming "no"</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="b-commentary" select="$input-commentary = 'yes'" />
+
+<!-- ################# -->
+<!-- Variable Bad Bank -->
+<!-- ################# -->
+
+<!-- DO NOT USE THESE; THEY ARE TOTALLY DEPRECATED -->
+
+<!-- Some string parameters have been deprecated without any      -->
+<!-- sort of replacement, fallback, or upgrade.  But for a        -->
+<!-- deprecation message to be effective, they need to exist.     -->
+<!-- If you add something here, make a note by the deprecation    -->
+<!-- message.  These definitions expain why it is *always* best   -->
+<!-- to define a user variable as empty, and then supply defaults -->
+<!-- to an internal variable.                                     -->
+
+<xsl:variable name="html.js.server" select="''"/>
+
 
 <!-- ############## -->
 <!-- Entry Template -->
@@ -664,6 +940,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="hierarchy" select="ancestor-or-self::*[not(self::backmatter or self::frontmatter)]" />
     <xsl:choose>
         <xsl:when test="ancestor-or-self::appendix and $document-root//part">
+            <xsl:value-of select="count($hierarchy) - 2 + 1" />
+        </xsl:when>
+        <xsl:when test="self::solutions and parent::backmatter and $document-root//part">
             <xsl:value-of select="count($hierarchy) - 2 + 1" />
         </xsl:when>
         <xsl:otherwise>
@@ -756,7 +1035,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- are just containers, so we subtract them away        -->
 <!-- The frontmatter is divided for books in HTML,        -->
 <!-- and the backmatter is divided for articles and books -->
-<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|exercises|references|introduction|conclusion|colophon|biography|dedication|acknowledgement|preface|index" mode="division-name">
+<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|exercises|worksheet|solutions|references|introduction|conclusion|colophon|biography|dedication|acknowledgement|preface|index" mode="division-name">
     <xsl:variable name="relative-level">
         <xsl:apply-templates select="." mode="level" />
     </xsl:variable>
@@ -818,7 +1097,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- text nodes within "m" with no changes  -->
     <xsl:variable name="raw-latex">
         <xsl:choose>
-            <xsl:when test="ancestor::webwork">
+            <xsl:when test="ancestor::webwork|ancestor::webwork-reps">
                 <xsl:apply-templates select="text()|var" />
             </xsl:when>
             <xsl:otherwise>
@@ -1565,6 +1844,55 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
+<!-- ############## -->
+<!-- Lists of Names -->
+<!-- ############## -->
+
+<!-- Authors and editors are people credited in the front matter and in   -->
+<!-- mastheads, etc.  Authors can appear on major divisions, such as      -->
+<!-- chapters and sections.  There can be multiple, and we want to string -->
+<!-- them together with commas, and give editors a parenthetical          -->
+<!-- distinction.                                                         -->
+
+<!-- First, we kill these elements as metadata, so we do not process them  -->
+<!-- in document order, but instead need to always process them with modal -->
+<!-- templates.                                                            -->
+<xsl:template match="author|editor" />
+
+<!-- Names can appear structured in the front matter, unstructured on -->
+<!-- divisions, or as cross-references to contributors.               -->
+<xsl:template match="author|editor" mode="name-only">
+    <xsl:choose>
+        <!-- structured version -->
+        <xsl:when test="personname">
+            <xsl:apply-templates select="personname"/>
+        </xsl:when>
+        <!-- Schematron assertion requires the target -->
+        <!-- of the xref to be a contributor element  -->
+        <xsl:when test="xref">
+            <xsl:apply-templates select="xref"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="node()"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Authors, editors in serial lists for headers -->
+<xsl:template match="author|editor" mode="name-list" >
+    <!-- separator, if following -->
+    <xsl:if test="preceding-sibling::author|preceding-sibling::editor">
+        <xsl:text>, </xsl:text>
+    </xsl:if>
+    <!-- name itself, from "personname" or the content -->
+    <xsl:apply-templates select="." mode="name-only"/>
+    <xsl:if test="self::editor">
+        <xsl:text> (</xsl:text>
+        <xsl:apply-templates select="." mode="type-name" />
+        <xsl:text>)</xsl:text>
+    </xsl:if>
+</xsl:template>
+
 <!-- ########################## -->
 <!-- Text Manipulation Routines -->
 <!-- ########################## -->
@@ -1792,6 +2120,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<!-- If the substring is not contained, the first substring-after()   -->
+<!-- will return empty and entire template will return empty.  To     -->
+<!-- get the whole string, prepend $input with $substr prior to using -->
 <xsl:template name="substring-after-last">
     <xsl:param name="input"/>
     <xsl:param name="substr"/>
@@ -2158,16 +2489,43 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- File Extension -->
 <!-- Input: full filename                       -->
 <!-- Output: extension (no period), lowercase'd -->
+<!-- Note: appended query string is stripped    -->
 <xsl:template name="file-extension">
     <xsl:param name="filename" />
+    <!-- Add a question mark, then grab leading substring -->
+    <!-- This will fail if "?" is encoded                 -->
+    <xsl:variable name="no-query-string" select="substring-before(concat($filename, '?'), '?')" />
+    <!-- get extension after last period   -->
+    <!-- will return empty if no extension -->
     <xsl:variable name="extension">
         <xsl:call-template name="substring-after-last">
-            <xsl:with-param name="input" select="$filename" />
+            <xsl:with-param name="input" select="$no-query-string" />
             <xsl:with-param name="substr" select="'.'" />
         </xsl:call-template>
     </xsl:variable>
+    <!-- to lowercase -->
     <xsl:value-of select="translate($extension, &UPPERCASE;, &LOWERCASE;)" />
 </xsl:template>
+
+<!-- ############### -->
+<!-- Token Utilities -->
+<!-- ############### -->
+
+<!-- Routines that can be employed in a recursive      -->
+<!-- formulation to process a string (attribute value, -->
+<!-- usually) that is separated by spaces or by commas -->
+
+<!-- Replace commas by blanks, constrict blanks to singletons, -->
+<!-- add trailing blank for last step of iteration             -->
+<xsl:template name="prepare-token-list">
+    <xsl:param name="token-list" />
+    <xsl:value-of select="concat(normalize-space(str:replace($token-list, ',', ' ')), ' ')" />
+</xsl:template>
+
+<!-- Now, to work through the $token-list                          -->
+<!--   1. If $token-list = '', end recursion                       -->
+<!--   2. Process substring-before($token-list, ' ') as next token -->
+<!--   3. Pass substring-after($token-list, ' ') recursively       -->
 
 <!-- ################## -->
 <!-- LaTeX Shortcomings -->
@@ -2394,8 +2752,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- frontmatter itself.  So an article/frontmatter    -->
 <!-- is always a leaf, and a book/frontmatter is not   -->
 <!-- a leaf if it has a child other than a "titlepage" -->
-<!-- Generaly, we look for definitive markers          -->
-<!-- Note: references and exercises are not markers    -->
+<!-- Generally, we look for definitive markers         -->
+<!-- NB: references, exercises, solutions not relevant -->
 <xsl:template match="&STRUCTURAL;" mode="is-leaf">
     <xsl:choose>
         <xsl:when test="self::frontmatter">
@@ -2439,7 +2797,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- descended introduction or conclusion .                          -->
 <!-- Also, list items are considered blocks.                         -->
 <!-- NB: we don't point to a sidebyside, so not included here        -->
-<xsl:template match="md|mdn|ul|ol|dl|blockquote|pre|sage|&FIGURE-LIKE;|poem|program|image|tabular|paragraphs|&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|exercise|li" mode="is-block">
+<xsl:template match="md|mdn|ul|ol|dl|blockquote|pre|sage|&FIGURE-LIKE;|poem|program|image|tabular|paragraphs|commentary|&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|exercise|li" mode="is-block">
     <xsl:value-of select="true()" />
 </xsl:template>
 
@@ -2642,9 +3000,6 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:when test="$intermediate='true' or $chunk='true'">
             <xsl:apply-templates select="." mode="internal-id" />
             <xsl:value-of select="$file-extension" />
-            <!-- DEPRECATION: May 2015, ignore silently here, warning in -common -->
-            <!-- could replace with terminate=yes if present without an xml:id   -->
-            <xsl:if test="@filebase" />
         </xsl:when>
         <!-- Halts since "mathbook" element will be chunk (or earlier) -->
         <xsl:otherwise>
@@ -2690,14 +3045,16 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- so we want to accomodate that option, and do so via     -->
 <!-- the localization routines.                              -->
 
-<!-- With modal templates below, the default template does nothing -->
+<!-- With modal templates below, the default template does nothing   -->
+<!-- We include the "creator" element of a theorem/axiom as metadata -->
 <xsl:template match="title" />
 <xsl:template match="subtitle" />
+<xsl:template match="creator" />
 
 <!-- Some items have default titles that make sense         -->
 <!-- Typically these are one-off subdivisions (eg preface), -->
 <!-- or repeated generic divisions (eg exercises)           -->
-<xsl:template match="frontmatter|colophon|preface|foreword|acknowledgement|dedication|biography|references|exercises|backmatter|index-part|index[index-list]" mode="has-default-title">
+<xsl:template match="frontmatter|colophon|preface|foreword|acknowledgement|dedication|biography|references|exercises|worksheet|solutions|backmatter|index-part|index[index-list]" mode="has-default-title">
     <xsl:text>true</xsl:text>
 </xsl:template>
 <xsl:template match="*" mode="has-default-title">
@@ -2785,13 +3142,18 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Text generators (eg <today />) may fool this, but applying       -->
 <!-- templates first will introduce LaTeX macros that will fool this  -->
 <!-- To debug: add messages here, then call via this default template -->
+<!-- TODO: maybe warn about "bad" ending-punctuation, like a colon? -->
 <xsl:template match="title|subtitle" mode="has-punctuation">
+    <xsl:variable name="title-ending-punctuation" select="'?!'" />
     <xsl:variable name="all-text" select="normalize-space(string(.))" />
     <xsl:variable name="last-char" select="substring($all-text, string-length($all-text))" />
     <!-- title should not be empty, but if so, the contains() alone is true -->
-    <xsl:value-of select="$last-char and contains('?!', $last-char)" />
+    <xsl:value-of select="$last-char and contains($title-ending-punctuation, $last-char)" />
 </xsl:template>
 
+<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;" mode="creator-full">
+    <xsl:apply-templates select="creator/node()" />
+</xsl:template>
 
 <!-- ################ -->
 <!-- Copies of Images -->
@@ -2830,34 +3192,56 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Entirely similar for jsxgraph and video but we do                    -->
 <!-- not consult default *image* width in docinfo                         -->
 
-<xsl:template match="image[not(ancestor::sidebyside)]|video[not(ancestor::sidebyside)]|jsxgraph[not(ancestor::sidebyside)]" mode="get-width-percentage">
+<xsl:template match="image[not(ancestor::sidebyside)]|video[not(ancestor::sidebyside)]|jsxgraph[not(ancestor::sidebyside)]|interactive[not(ancestor::sidebyside)]|slate[not(ancestor::sidebyside)]" mode="get-width-percentage">
+    <!-- find it first -->
+    <xsl:variable name="raw-width">
+        <xsl:choose>
+            <!-- right on the element! -->
+            <xsl:when test="@width">
+                <xsl:value-of select="@width" />
+            </xsl:when>
+            <!-- not on an image, but doc-wide default exists -->
+            <xsl:when test="self::image and $docinfo/defaults/image-width">
+                <xsl:value-of select="$docinfo/defaults/image-width" />
+            </xsl:when>
+            <!-- naked slate, look to enclosing interactive -->
+            <xsl:when test="self::slate">
+                <xsl:apply-templates select="parent::interactive" mode="get-width-percentage" />
+            </xsl:when>
+            <!-- what to do? Author will figure it out if too extreme -->
+            <xsl:otherwise>
+                <xsl:text>100%</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- now sanitize it -->
+    <xsl:variable name="normalized-width" select="normalize-space($raw-width)" />
     <xsl:choose>
-         <!-- check for @width on the image itself -->
-         <!-- a good place to check author input   -->
-        <xsl:when test="@width">
-            <xsl:variable name="normalized-width" select="normalize-space(@width)" />
-            <xsl:choose>
-                <xsl:when test="not(substring($normalized-width, string-length($normalized-width)) = '%')">
-                    <xsl:message>MBX:ERROR:   a "width" attribute should be given as a percentage (such as "40%", not as "<xsl:value-of select="$normalized-width" />"</xsl:message>
-                    <xsl:apply-templates select="." mode="location-report" />
-                    <!-- replace by 100% -->
-                    <xsl:text>100%</xsl:text>
-                </xsl:when>
-                <!-- test for stray spaces? -->
-                <xsl:otherwise>
-                    <xsl:value-of select="$normalized-width" />
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:when>
-        <!-- perhaps an author-specific default width for images -->
-        <xsl:when test="self::image and $docinfo/defaults/image-width">
-            <xsl:value-of select="normalize-space($docinfo/defaults/image-width)" />
-        </xsl:when>
-        <!-- what else to do? Author will figure it out if too extreme -->
-        <xsl:otherwise>
+        <xsl:when test="not(substring($normalized-width, string-length($normalized-width)) = '%')">
+            <xsl:message>MBX:ERROR:   a "width" attribute should be given as a percentage (such as "40%", not as "<xsl:value-of select="$normalized-width" />, using 100% instead"</xsl:message>
+            <xsl:apply-templates select="." mode="location-report" />
+            <!-- replace by 100% -->
             <xsl:text>100%</xsl:text>
+        </xsl:when>
+        <!-- test for stray interior spaces here? -->
+        <xsl:otherwise>
+            <xsl:value-of select="$normalized-width" />
         </xsl:otherwise>
     </xsl:choose>
+</xsl:template>
+
+<!-- Any way that an image gets placed in a sidebyside -->
+<!-- panel it should have a relative size filling that -->
+<!-- panel, so this is easy, just 100% all the time    -->
+<xsl:template match="image[ancestor::sidebyside]" mode="get-width-percentage">
+    <xsl:text>100%</xsl:text>
+</xsl:template>
+
+<!-- The exception is an image inside a sidebyside in a webwork  -->
+<!-- where the parent sidebyside should only have a single percentage in its @widths -->
+<!-- N.B. This should be reworked/removed when there is a one-item sbs equivalent -->
+<xsl:template match="webwork//image[parent::sidebyside/@widths]" mode="get-width-percentage">
+    <xsl:value-of select="parent::sidebyside/@widths" />
 </xsl:template>
 
 <!-- We need to get the right entry from the sidebyside layout.         -->
@@ -2866,7 +3250,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Widths from sidebyside layouts have been error-checked as input    -->
 
 <!-- occurs in a figure, not contained in a sidebyside -->
-<xsl:template match="image[ancestor::sidebyside]|video[ancestor::sidebyside]|jsxgraph[ancestor::sidebyside]" mode="get-width-percentage">
+<xsl:template match="video[ancestor::sidebyside]|jsxgraph[ancestor::sidebyside]|interactive[ancestor::sidebyside]|slate[ancestor::sidebyside]" mode="get-width-percentage">
     <!-- in a side-by-side, get layout, locate in layout -->
     <!-- and get width.  The layout-parameters template  -->
     <!-- will analyze an enclosing sbsgroup              -->
@@ -2892,7 +3276,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Input:  "width:height", or decimal width/height -->
 <!-- Return: real number as fraction width/height    -->
 <!-- Totally blank means nothing could be determined -->
-<xsl:template match="jsxgraph|video" mode="get-aspect-ratio">
+<xsl:template match="slate|interactive|jsxgraph|video" mode="get-aspect-ratio">
     <xsl:param name="default-aspect" select="''" />
 
     <!-- look to element first, then to supplied default          -->
@@ -2930,6 +3314,59 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:choose>
 </xsl:template>
 
+<!-- This is cribbed from the CSS "max-width"-->
+<!-- Design width, measured in pixels        -->
+<!-- NB: the exact same value, for similar,  -->
+<!-- but not identical, reasons is used in   -->
+<!-- the formation of WeBWorK problems       -->
+<xsl:variable name="design-width-pixels" select="'600'" />
+
+
+<!-- Pixels are an HTML thing, but we may need these numbers -->
+<!-- elsewhere, and these are are pure text templates        -->
+<xsl:template match="slate|video|interactive" mode="get-width-pixels">
+    <xsl:variable name="width-percent">
+        <xsl:apply-templates select="." mode="get-width-percentage" />
+    </xsl:variable>
+    <xsl:variable name="width-fraction">
+        <xsl:value-of select="substring-before($width-percent,'%') div 100" />
+    </xsl:variable>
+    <xsl:value-of select="round($design-width-pixels * $width-fraction)" />
+</xsl:template>
+
+<!-- Square by default, when asked.  Can override -->
+<xsl:template match="slate|video|interactive" mode="get-height-pixels">
+    <xsl:param name="default-aspect" select="'1:1'" />
+
+    <xsl:variable name="width-percent">
+        <xsl:apply-templates select="." mode="get-width-percentage" />
+    </xsl:variable>
+    <xsl:variable name="width-fraction">
+        <xsl:value-of select="substring-before($width-percent,'%') div 100" />
+    </xsl:variable>
+    <xsl:variable name="aspect-ratio">
+        <xsl:apply-templates select="." mode="get-aspect-ratio">
+            <xsl:with-param name="default-aspect" select="$default-aspect" />
+        </xsl:apply-templates>
+    </xsl:variable>
+    <xsl:value-of select="round($design-width-pixels * $width-fraction div $aspect-ratio)" />
+</xsl:template>
+
+<!-- The HTML conversion generates "standalone" pages for videos   -->
+<!-- and other interactives.  Then the LaTeX conversion will make  -->
+<!-- links to these pages (eg, via QR codes).  And we might use    -->
+<!-- these pages as the basis for scraping preview images.  So we  -->
+<!-- place a template here to achieve consistency across uses.     -->
+<xsl:template match="video|interactive" mode="standalone-filename">
+    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:text>.html</xsl:text>
+</xsl:template>
+<xsl:template match="*" mode="standalone-filename">
+    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:text>-ERROR-no-standalone-filename.html</xsl:text>
+</xsl:template>
+
+
 <!-- ################ -->
 <!-- Names of Objects -->
 <!-- ################ -->
@@ -2947,11 +3384,55 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:call-template>
 </xsl:template>
 
-<!-- a single objective is authored as a list item -->
+<!-- We override a few elements using their XSLT locations      -->
+<!-- There are corresponing strings in the localizations files, -->
+<!-- and the "en-US" file will be the best documented           -->
+
+<!-- A single objective is authored as a list item -->
 <xsl:template match="objectives/ol/li|objectives/ul/li|objectives/dl/li" mode="type-name">
     <xsl:call-template name="type-name">
         <xsl:with-param name="string-id" select="'objective'" />
     </xsl:call-template>
+</xsl:template>
+
+<!-- There are lots of exercises, but differentiated by their parents,  -->
+<!-- so we use identifiers that remind us of their location in the tree -->
+
+<!-- First, a "divisional" "exercise" in an "exercises",      -->
+<!-- with perhaps intervening groups, like an "exercisegroup" -->
+<!-- or an "exercise" placed within a "worksheet"             -->
+<xsl:template match="exercises//exercise|worksheet//exercise" mode="type-name">
+    <xsl:call-template name="type-name">
+        <xsl:with-param name="string-id" select="'divisionalexercise'" />
+    </xsl:call-template>
+</xsl:template>
+
+<!-- Finally, an inline exercise has a division (several possible)        -->
+<!-- as a parent. We just drop in here last if other matches do not       -->
+<!-- succeed, but could improve with a filter or list of specific matches -->
+<!-- This matches the LaTeX environment of the same name, so              -->
+<!-- template to create an "inlineexercise" environment runs smoothly     -->
+<xsl:template match="exercise" mode="type-name">
+    <xsl:call-template name="type-name">
+        <xsl:with-param name="string-id" select="'inlineexercise'" />
+    </xsl:call-template>
+</xsl:template>
+
+<!-- "solutions" divisions are "Solutions 5.6" in the  -->
+<!-- main matter, but "Appendix D" in the back matter -->
+<xsl:template match="solutions" mode="type-name">
+    <xsl:choose>
+        <xsl:when test="parent::backmatter">
+            <xsl:call-template name="type-name">
+                <xsl:with-param name="string-id" select="'appendix'" />
+            </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:call-template name="type-name">
+                <xsl:with-param name="string-id" select="'solutions'" />
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- This template translates an string to an upper-case language-equivalent -->
@@ -3051,6 +3532,18 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:choose>
 </xsl:template>
 
+<!-- We manufacture Javascript variables sometimes using            -->
+<!-- this id to keep them unique, but a dash (encouraged in PTX)    -->
+<!-- is banned in Javascript, so we make a "no-only" version,     -->
+<!-- by replacing a hyphen by a double-underscore.                  -->
+<!-- NB: This runs some non-zero probability of breaking uniqueness -->
+<xsl:template match="*" mode="internal-id-no-dash">
+    <xsl:variable name="the-id">
+        <xsl:apply-templates select="." mode="internal-id" />
+    </xsl:variable>
+    <xsl:value-of select="str:replace($the-id, '-', '__')" />
+</xsl:template>
+
 <!--            -->
 <!-- Long Names -->
 <!--            -->
@@ -3101,91 +3594,95 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Serial Numbers -->
 <!-- ############## -->
 
-<!-- These count the occurence of the item, within it's  -->
+<!-- These count the occurrence of the item, within it's  -->
 <!-- scheme and within a natural, or configured, subtree -->
 
-<!-- Serial Numbers: Subdivisions -->
-<!-- To respect the maximum level for numbering, we               -->
-<!-- return an empty serial number at an excessive level,         -->
-<!-- otherwise we call for a serial number relative to peers      -->
-<!-- via particular modal templates.  These may include Exercises -->
-<!-- and References sections, which can occur at multiple levels  -->
-<!-- NB: newexercises: hack to kill "exercises" division numbering, later move to "the unnumbered" -->
-<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|exercises|references" mode="serial-number">
+<!-- Serial Numbers: Divisions -->
+<!-- To respect the maximum level for numbering, we              -->
+<!-- return an empty serial number at an excessive level,        -->
+<!-- otherwise we call for a serial number relative to peers     -->
+<!-- References are numbered divisions when used in the main     -->
+<!-- matter, but their number comes from their parent, since     -->
+<!-- they are unique.  The instance in the back matter is also   -->
+<!-- unique, and so does not get a number.                       -->
+<!-- "exercises" divisions may come solo, or alongside others.   -->
+<!-- When multiple, they get hierachical numbers like other      -->
+<!-- divisions.  When solo, they are numbered like their         -->
+<!-- enclosing parent.  So here, and elsewhere, we integrate     -->
+<!-- the multiple case.  Similarly, solutions in the back matter -->
+<!-- get rendered like appendices, but are always solo when      -->
+<!-- contained in a main matter division.                        -->
+<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|backmatter/solutions|exercises[count(parent::*/exercises)>1]|worksheet[count(parent::*/worksheet)>1]" mode="serial-number">
     <xsl:variable name="relative-level">
         <xsl:apply-templates select="." mode="level" />
     </xsl:variable>
     <xsl:choose>
-        <xsl:when test="$relative-level > $numbering-maxlevel">
-            <xsl:text></xsl:text>
-        </xsl:when>
+        <xsl:when test="$relative-level > $numbering-maxlevel" />
         <xsl:otherwise>
             <xsl:apply-templates select="." mode="division-serial-number" />
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 
-<!-- Each division has different formats or quirks -->
-
+<!-- Division number relative to parent (super-division, or book/article)   -->
+<!--   1. Unique always (eg "references"), must appear at end of a division -->
+<!--      Numbers come from elsewhere, typically their parents              -->
+<!--   2. "Real" divisions (eg subsection)                                  -->
+<!--       Count from parent but avoid un-numbered (specialized) divisions  -->
+<!--   3. "exercises" - numbered if multiple, un-numbered if exactly one,   -->
+<!--      We require these to appear *after* real divisions, making         -->
+<!--      counts simpler since for the divisions we just need number        -->
+<!--      preceding, with nothing intermediate to count or discount         -->
+<!--   4. "solutions" - counted with appendix, when in backmatter           -->
 <xsl:template match="part" mode="division-serial-number">
     <xsl:number format="I" />
 </xsl:template>
-<!-- TODO: ban references and exercises as peers of chapters (overall references can go in backmatter) -->
 <xsl:template match="chapter" mode="division-serial-number">
-    <!-- chapters, in parts or not, do not have "references" -->
-    <!-- or "exercises" divisions as peers, so we just count -->
-    <!-- chapters, varying the subtree considered depending  -->
-    <!-- on the style elected for how parts are numbered     -->
+    <!-- chapters, in parts or not -->
     <xsl:choose>
         <xsl:when test="($parts = 'absent') or ($parts = 'decorative')">
-            <xsl:number from="book" level="any" count="chapter" format="1" />
+            <xsl:variable name="true-count">
+                <xsl:number from="book" level="any" count="chapter" format="1" />
+            </xsl:variable>
+            <xsl:choose>
+                <!-- This code is correct, interface is temporary and will be redone with no notice -->
+                <xsl:when test="$debug.chapter.start = ''">
+                    <xsl:value-of select="$true-count" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$true-count + $debug.chapter.start - 1" />
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:when>
+        <!-- author-specified chapter strat number does  -->
+        <!-- not really make sense for structural parts? -->
         <xsl:when test="$parts = 'structural'">
             <xsl:number from="part" count="chapter" format="1" />
         </xsl:when>
     </xsl:choose>
 </xsl:template>
 <xsl:template match="appendix" mode="division-serial-number">
-    <xsl:number format="A" />
+    <xsl:number from="backmatter" level="any" count="appendix|solutions" format="A"/>
+</xsl:template>
+<xsl:template match="backmatter/solutions" mode="division-serial-number">
+    <xsl:number from="backmatter" level="any" count="appendix|solutions" format="A"/>
 </xsl:template>
 <xsl:template match="section" mode="division-serial-number">
-    <xsl:choose>
-        <xsl:when test="$b-newexercises">
-            <xsl:number count="section" format="1" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:number count="section|references|exercises" format="1" />
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:number count="section" format="1" />
 </xsl:template>
 <xsl:template match="subsection" mode="division-serial-number">
-    <xsl:choose>
-        <xsl:when test="$b-newexercises">
-            <xsl:number count="subsection" format="1" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:number count="subsection|references|exercises" format="1" />
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:number count="subsection" format="1" />
 </xsl:template>
 <xsl:template match="subsubsection" mode="division-serial-number">
-    <xsl:choose>
-        <xsl:when test="$b-newexercises">
-            <xsl:number count="subsubsection" format="1" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:number count="subsubsection|references|exercises" format="1" />
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:number count="subsubsection" format="1" />
 </xsl:template>
-<!-- Convert references and exercises to the unnumbered once cutover -->
-<xsl:template match="exercises|references" mode="division-serial-number">
-    <xsl:choose>
-        <xsl:when test="$b-newexercises" />
-        <xsl:otherwise>
-            <xsl:number count="part|chapter|appendix|section|subsection|subsubsection|references|exercises" format="1" />
-        </xsl:otherwise>
-    </xsl:choose>
+<!-- "exercises", "worksheet": multiple only, include all -->
+<!-- possible peers, which excludes "part" and "appendix" -->
+<xsl:template match="exercises[count(parent::*/exercises)>1]" mode="division-serial-number">
+    <xsl:number count="chapter|section|subsection|subsubsection|exercises[count(parent::*/exercises)>1]|worksheet[count(parent::*/worksheet)>1]" format="1" />
+</xsl:template>
+<xsl:template match="worksheet[count(parent::*/worksheet)>1]" mode="division-serial-number">
+    <xsl:number count="chapter|section|subsection|subsubsection|exercises[count(parent::*/exercises)>1]|worksheet[count(parent::*/worksheet)>1]" format="1" />
 </xsl:template>
 
 <!-- Serial Numbers: Theorems, Examples, Inline Exercise, Figures, Etc. -->
@@ -3202,7 +3699,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- element that is at the maximum level                                        -->
 <!-- This template returns the absolute level necessary based on                 -->
 <!-- the particular scheme as a parameter: theorems, equations and footnotes.    -->
-<!-- Sectional exercises and bibliographic items (in references) will always     -->
+<!-- Divisional exercises and bibliographic items (in references) will always     -->
 <!-- get their serial numbers from within their immediately enclosing structure. -->
 <xsl:template match="*" mode="absolute-subtree-level">
     <xsl:param name="numbering-items" />
@@ -3468,27 +3965,27 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:choose>
         <xsl:when test="$subtree-level=-1">
             <xsl:number from="book|article|letter|memo" level="any"
-                count="exercise[not(ancestor::exercises)]" />
+                count="exercise[not(ancestor::exercises or ancestor::worksheet)]" />
         </xsl:when>
         <xsl:when test="$subtree-level=0">
             <xsl:number from="part" level="any"
-                count="exercise[not(ancestor::exercises)]" />
+                count="exercise[not(ancestor::exercises or ancestor::worksheet)]" />
         </xsl:when>
         <xsl:when test="$subtree-level=1">
             <xsl:number from="chapter|book/backmatter/appendix" level="any"
-                count="exercise[not(ancestor::exercises)]" />
+                count="exercise[not(ancestor::exercises or ancestor::worksheet)]" />
         </xsl:when>
         <xsl:when test="$subtree-level=2">
             <xsl:number from="section|article/backmatter/appendix" level="any"
-                count="exercise[not(ancestor::exercises)]" />
+                count="exercise[not(ancestor::exercises or ancestor::worksheet)]" />
         </xsl:when>
         <xsl:when test="$subtree-level=3">
             <xsl:number from="subsection" level="any"
-                count="exercise[not(ancestor::exercises)]" />
+                count="exercise[not(ancestor::exercises or ancestor::worksheet)]" />
         </xsl:when>
         <xsl:when test="$subtree-level=4">
             <xsl:number from="subsubsection" level="any"
-                count="exercise[not(ancestor::exercises)]" />
+                count="exercise[not(ancestor::exercises or ancestor::worksheet)]" />
         </xsl:when>
         <xsl:otherwise>
             <xsl:message>MBX:ERROR: Subtree level for atomic exercise number computation is out-of-bounds (<xsl:value-of select="$subtree-level" />)</xsl:message>
@@ -3527,50 +4024,23 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:choose>
 </xsl:template>
 
-<!-- Serial Numbers: Exercises in Exercises Sections -->
-<!-- We determine the appropriate subtree to count within         -->
-<!-- given the document root and the configured depth             -->
-<!-- Note: numbers may be hard-coded for longevity                -->
-<!-- exercisegroups might be intermediate, but do not hinder      -->
-<!-- N.B. Same priority as above, so needs to come in this order, -->
-<!-- as we wish hard-coded to have higher priority                -->
-<xsl:template match="exercises/exercise|exercises/exercisegroup/exercise" mode="serial-number">
-    <!-- A sectional exercise is numbered from where the previous "exercises" section leaves off -->
-    <xsl:variable name="base">
-        <xsl:choose>
-            <!-- status quo from old days -->
-            <xsl:when test="not($b-newexercises)">
-                <xsl:text>0</xsl:text>
-            </xsl:when>
-            <!-- now in  $b-newexercises  true scenario -->
-            <!-- first, respect explicit numbering request -->
-            <!-- do a NaN test?, or restrict in schema? -->
-            <xsl:when test="ancestor::exercises/@first-number">
-                <xsl:value-of select="ancestor::exercises/@first-number - 1" />
-            </xsl:when>
-            <!-- now automatic -->
-            <!-- if first, start at 1 -->
-            <xsl:when test="not(ancestor::exercises/preceding-sibling::exercises)">
-                <xsl:text>0</xsl:text>
-            </xsl:when>
-            <!-- this should be the "otherwise" clause, but presently debugging -->
-            <!-- compute serial number of previous "exercises" last exercise -->
-            <xsl:when test="ancestor::exercises/preceding-sibling::exercises">
-                <xsl:apply-templates select="ancestor::exercises/preceding-sibling::exercises[1]/descendant::exercise[last()]" mode="serial-number"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:message>MBX:DEBUG:   base number for sectional exercises not determined</xsl:message>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <!-- NB: newexercises:  offset is the original definition here -->
-    <xsl:variable name="offset">
-        <xsl:number from="exercises" level="any" count="exercise" />
-    </xsl:variable>
-    <xsl:value-of select="$base + $offset" />
+<!-- Serial Numbers: Exercises in Exercises or Worksheet Divisions -->
+<!-- Note: numbers may be hard-coded for longevity        -->
+<!-- exercisegroups  and future lightweight divisions may -->
+<!-- be intermediate, but should not hinder the count     -->
+<xsl:template match="exercises//exercise" mode="serial-number">
+    <xsl:number from="exercises" level="any" count="exercise" />
 </xsl:template>
 
-<xsl:template match="exercises/exercise[@number]|exercisegroup/exercise[@number]" mode="serial-number">
+<xsl:template match="exercises//exercise[@number]" mode="serial-number">
+    <xsl:apply-templates select="@number" />
+</xsl:template>
+
+<xsl:template match="worksheet//exercise" mode="serial-number">
+    <xsl:number from="worksheet" level="any" count="exercise" />
+</xsl:template>
+
+<xsl:template match="worksheet//exercise[@number]" mode="serial-number">
     <xsl:apply-templates select="@number" />
 </xsl:template>
 
@@ -3669,8 +4139,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 
 <!-- Serial Numbers: List Items -->
 
-<!-- First, the number of a list item within its own list -->
-<!-- This trades on the MBX format codes being identical to the XSLT codes -->
+<!-- First, the number of a list item within its own ordered list.  This -->
+<!-- trades on the MBX format codes being identical to the XSLT codes.   -->
 <xsl:template match="ol/li" mode="item-number">
     <xsl:variable name="code">
         <xsl:apply-templates select=".." mode="format-code" />
@@ -3678,20 +4148,21 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:number format="{$code}" />
 </xsl:template>
 
-<!-- Second, the serial number computed recursively             -->
-<!-- We first check if the list is inside a named list and      -->
-<!-- prefix with that number, using a colon to help distinguish -->
-<xsl:template match="li" mode="serial-number">
-    <xsl:if test="not(ancestor::li) and ancestor::list">
-        <xsl:apply-templates select="ancestor::list" mode="number" />
-        <xsl:text>:</xsl:text>
-    </xsl:if>
+<!-- Second, the serial number computed recursively.  The       -->
+<!-- entire hierarchy should be ordered lists, since otherwise, -->
+<!-- the template just below will apply instead.                -->
+<xsl:template match="ol/li" mode="serial-number">
     <xsl:if test="ancestor::li">
         <xsl:apply-templates select="ancestor::li[1]" mode="serial-number" />
         <xsl:text>.</xsl:text>
     </xsl:if>
     <xsl:apply-templates select="." mode="item-number" />
 </xsl:template>
+
+<!-- If any ancestor of a list item is not ordered, this     -->
+<!-- template should match first, and the serial number      -->
+<!-- will be empty, the signal that an object has no number. -->
+<xsl:template match="ul//li|dl//li" mode="serial-number" />
 
 
 <!-- Serial Numbers: Exercise Groups -->
@@ -3740,6 +4211,14 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- a title for identification and cross-referencing.   -->
 <xsl:template match="book|article|letter|memo|paragraphs|blockquote|preface|abstract|acknowledgement|biography|foreword|dedication|index-part|index[index-list]|colophon|webwork|p|assemblage|aside|biographical|historical|case|contributor" mode="serial-number" />
 
+<!-- Some divisions, like "exercises", "solutions", "references",     -->
+<!-- are part of the hierarchical numbering scheme, and look simply   -->
+<!-- to their parent.  Which could be the top-level when in th main   -->
+<!-- matter (we handle cases of children of "backmatter" carefully    -->
+<!-- elsewhere or it does not happen).  So we need an empty structure -->
+<!-- number for these cases.                                          -->
+<xsl:template match="book|article|letter|memo" mode="structure-number" />
+
 <!-- Some items are "containers".  They are not numbered, you  -->
 <!-- cannot point to them, they are invisible to the reader    -->
 <!-- in a way.  We kill their serial nuumbers explicitly here. -->
@@ -3751,22 +4230,16 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Poems go by their titles, not numbers -->
 <xsl:template match="poem" mode="serial-number" />
 
-<!-- If a list item has any ancestor that is not  -->
-<!-- an ordered list, then it gets no number      -->
-<xsl:template match="ul//li|dl//li" mode="serial-number" />
-
-<!-- References in the backmatter are the "master" version -->
-<!-- The subdivision gets no number and the references     -->
-<!-- should similarly lack a structural number prefix      -->
-<xsl:template match="backmatter/references" mode="serial-number" />
+<!-- List items, subordinate to an unordered list, or a description  -->
+<!-- list, will have numbers that are especically ambiguous, perhaps -->
+<!-- even very clsoe within a multi-level list. They are unnumbered  -->
+<!-- in the vicinity of computing serial numbers of list items in    -->
+<!-- ordered lists.                                                  -->
 
 <!-- Various displayed equations are not numbered.     -->
 <!-- We do not consider the local @tag to be a number, -->
 <!-- as it is more a string, formed from symbols       -->
 <xsl:template match="me|md/mrow[not(@number='yes')]|mdn/mrow[@number='no']|mrow[@tag]" mode="serial-number" />
-
-
-
 
 <!-- WeBWorK problems are never numbered, because they live    -->
 <!-- in (numbered) exercises.  But they have identically named -->
@@ -3779,14 +4252,55 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:apply-templates select="parent::*" mode="serial-number" />
 </xsl:template>
 
-<!-- Multi-part WeBWorK problems have MBX elements        -->
+<!-- Multi-part WeBWorK problems have PTX elements        -->
 <!-- called "stage" which typically render as "Part..."   -->
 <!-- Their serial numbers are useful, there is no attempt -->
 <!-- above to integrate these into our general scheme     -->
 <!-- These are just counted among enclosing "webwork"     -->
-<xsl:template match="stage" mode="serial-number">
-        <xsl:number count="stage" from="webwork" />
+<xsl:template match="webwork/stage" mode="serial-number">
+    <xsl:number count="stage" from="webwork" />
 </xsl:template>
+
+<!-- But when a problem is part of the OPL and is retrieved -->
+<!-- from the server, then we don't see the "stage" element -->
+<!-- until we merge in the "static" version as part of the  -->
+<!-- "webwork-reps" collection                              -->
+<xsl:template match="webwork-reps/static/stage" mode="serial-number">
+    <xsl:number count="stage" from="static" />
+</xsl:template>
+
+<!-- Serial Numbers: Specialized Divisions -->
+
+<!-- Some divisions get their numbers from their parents, or  -->
+<!-- in other ways.  We are careful to do this by determining -->
+<!-- the serial-numer and the structure-number, so that other -->
+<!-- devices (like local numbers) will behave correctly.      -->
+<!-- Structure numbers are computed elsewhere, but in tandem. -->
+
+<!-- "references" are solo in main matter divisions, -->
+<!-- unique and not numbered in back matter          -->
+<xsl:template match="references" mode="serial-number">
+    <xsl:apply-templates select="parent::*" mode="serial-number" />
+</xsl:template>
+<xsl:template match="backmatter/references" mode="serial-number" />
+
+<!-- "solutions", not in the "backmatter", get their    -->
+<!-- serial-number from their parent  (those in the     -->
+<!-- back matter get counted elsewhere with appendices) -->
+<xsl:template match="solutions[not(parent::backmatter)]" mode="serial-number">
+    <xsl:apply-templates select="parent::*" mode="serial-number" />
+</xsl:template>
+
+<!-- solo "exercises" or "worksheet", in main matter divisions, -->
+<!-- or inside an "appendix" are numbered as by their parent    -->
+<xsl:template match="exercises[count(parent::*/exercises)=1]" mode="serial-number">
+    <xsl:apply-templates select="parent::*" mode="serial-number" />
+</xsl:template>
+
+<xsl:template match="worksheet[count(parent::*/worksheet)=1]" mode="serial-number">
+    <xsl:apply-templates select="parent::*" mode="serial-number" />
+</xsl:template>
+
 
 <!-- Convert this to a warning?  Should not drop in here ever? -->
 <xsl:template match="*" mode="serial-number">
@@ -3821,7 +4335,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- to exclude "part" from the ancestors?                        -->
 
 <xsl:template match="*" mode="multi-number">
-    <xsl:param name="nodes" select="ancestor::*[self::part or self::chapter or self::appendix or self::section or self::subsection or self::subsubsection or self::exercises or self::references]"/>
+    <xsl:param name="nodes" select="ancestor::*[self::part or self::chapter or self::appendix or self::section or self::subsection or self::subsubsection or self::solutions or self::exercises[count(parent::*/exercises)>1] or self::worksheet[count(parent::*/worksheet)>1]]"/>
     <xsl:param name="levels" />
     <xsl:param name="pad" />
 
@@ -3889,16 +4403,41 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Structure Numbers: Divisions -->
 <!-- NB: this is number of the *container* of the division,   -->
 <!-- a serial number for the division itself will be appended -->
-<!-- NB:  newexercises: removed "exercises" here, duplicated below -->
-<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|references" mode="structure-number">
+<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|backmatter/solutions|exercises[count(parent::*/exercises)>1]|worksheet[count(parent::*/worksheet)>1]" mode="structure-number">
     <xsl:apply-templates select="." mode="multi-number">
         <xsl:with-param name="levels" select="$numbering-maxlevel - 1" />
         <xsl:with-param name="pad" select="'no'" />
     </xsl:apply-templates>
 </xsl:template>
 
+<!-- Structure Numbers: Specialized Divisions -->
+<!-- Some divisions get their numbers from their parents, or  -->
+<!-- in other ways.  We are careful to do this by determining -->
+<!-- the serial-numer and the structure-number, so that other -->
+<!-- devices (like local numbers) will behave correctly.      -->
+<!-- Serial numbers are computed elsewhere, but in tandem.    -->
+
+<!-- "references" are solo in main matter divisions, -->
+<!-- unique and not numbered in back matter          -->
+<xsl:template match="references" mode="structure-number">
+    <xsl:apply-templates select="parent::*" mode="structure-number" />
+</xsl:template>
+<xsl:template match="backmatter/references" mode="structure-number" />
+
+<!-- "solutions", not in the "backmatter", get their    -->
+<!-- structure-number from their parent  (those in the  -->
+<!-- back matter get counted elsewhere with appendices) -->
+<xsl:template match="solutions[not(parent::backmatter)]" mode="structure-number">
+    <xsl:apply-templates select="parent::*" mode="structure-number" />
+</xsl:template>
+
+<!-- solo "exercises" or "worksheet", in main matter divisions, -->
+<!-- or inside an "appendix" are numbered as by their parent    -->
+<xsl:template match="exercises[count(parent::*/exercises)=1]|worksheet[count(parent::*/worksheet)=1]" mode="structure-number">
+    <xsl:apply-templates select="parent::*" mode="structure-number" />
+</xsl:template>
+
 <!-- Structure Numbers: Theorems, Examples, Projects, Figures -->
-<!-- NB: newexercises: inline copied out below                -->
 <xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;" mode="structure-number">
     <xsl:apply-templates select="." mode="multi-number">
         <xsl:with-param name="levels" select="$numbering-theorems" />
@@ -3950,96 +4489,68 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:apply-templates>
 </xsl:template>
 
-<!-- NB: newexercises: consolidated "exercises/exercise" structure numbering here -->
-
-<!-- Structure Numbers: Exercises Division -->
-<!-- NB:  newexercises = true : then no effect here, should not ever called -->
-<xsl:template match="exercises" mode="structure-number">
-    <xsl:apply-templates select="." mode="multi-number">
-        <xsl:with-param name="levels" select="$numbering-maxlevel - 1" />
-        <xsl:with-param name="pad" select="'no'" />
-    </xsl:apply-templates>
-</xsl:template>
-
 <!-- Structure Numbers: Inline Exercises -->
-<!-- NB: newexercises: preserve behavior, copied out of above -->
-<!-- Eventually breakout (optionally) into its own scheme     -->
-<xsl:template match="exercise[not(ancestor::exercises)]" mode="structure-number">
+<!-- Follows the theorem/figure/etc scheme (can't poll parent) -->
+<xsl:template match="exercise[not(ancestor::exercises or ancestor::worksheet)]" mode="structure-number">
     <xsl:apply-templates select="." mode="multi-number">
         <xsl:with-param name="levels" select="$numbering-theorems" />
         <xsl:with-param name="pad" select="'yes'" />
     </xsl:apply-templates>
 </xsl:template>
 
-<!-- Structure Numbers: Sectional Exercises -->
-<!-- If we set a level for sectional exercises, and pad,        -->
-<!-- then we could mimic the AMSMath scheme.  But we control    -->
-<!-- these numbers universally, so we do not copy this behavior -->
-<!-- NB: newexercises: simplified match from before -->
-<xsl:template match="exercises/exercise" mode="structure-number">
+<!-- Structure Numbers: Divisional Exercises -->
+<!-- Within a singleton (unnumbered) "exercises", look up to enclosing      -->
+<!-- division, otherwise use number of the enclosing (numbered) "exercises" -->
+<xsl:template match="exercises//exercise" mode="structure-number">
+    <xsl:variable name="nexercises" select="count(ancestor::exercises/preceding-sibling::exercises|ancestor::exercises/following-sibling::exercises) + 1" />
     <xsl:choose>
-        <xsl:when test="$b-newexercises">
-            <!-- hop exercisegroup (perhaps explicitly?) -->
-            <xsl:apply-templates select="parent::exercises/parent::*" mode="number" />
+        <xsl:when test="$nexercises = 1">
+            <xsl:apply-templates select="ancestor::exercises/parent::*" mode="number" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:apply-templates select="." mode="multi-number">
-                <xsl:with-param name="levels" select="$numbering-maxlevel" />
-                <xsl:with-param name="pad" select="'no'" />
-            </xsl:apply-templates>
+            <xsl:apply-templates select="ancestor::exercises" mode="number" />
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 
-<xsl:template match="exercises/exercisegroup/exercise" mode="structure-number">
+<xsl:template match="worksheet//exercise" mode="structure-number">
+    <xsl:variable name="nworksheet" select="count(ancestor::worksheet/preceding-sibling::worksheet|ancestor::worksheet/following-sibling::worksheet) + 1" />
     <xsl:choose>
-        <xsl:when test="$b-newexercises">
-            <!-- hop exercisegroup (perhaps explicitly?) -->
-            <xsl:apply-templates select="ancestor::exercises/parent::*" mode="number" />
+        <xsl:when test="$nworksheet = 1">
+            <xsl:apply-templates select="ancestor::worksheet/parent::*" mode="number" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:apply-templates select="parent::exercisegroup" mode="multi-number">
-                <xsl:with-param name="levels" select="$numbering-maxlevel" />
-                <xsl:with-param name="pad" select="'no'" />
-            </xsl:apply-templates>
+            <xsl:apply-templates select="ancestor::worksheet" mode="number" />
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 
 <!-- Structure Numbers: Exercise Groups -->
 <!-- An exercisegroup gets it structure number from the parent exercises -->
-<!-- NB: newexercises: step up one more parent -->
 <xsl:template match="exercisegroup" mode="structure-number">
-    <xsl:choose>
-        <xsl:when test="$b-newexercises">
-            <xsl:apply-templates select="parent::exercises/parent::*" mode="number" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:apply-templates select="parent::*" mode="number" />
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="parent::*" mode="number" />
 </xsl:template>
 
-<!-- Hints, answers, solutions get structure number from parent      -->
-<!-- exercise's number. Identical for inline and sectional exercises -->
+<!-- Hints, answers, solutions get structure number from parent       -->
+<!-- exercise's number. Identical for inline and divisional exercises -->
 <xsl:template match="hint|answer|solution" mode="structure-number">
     <xsl:apply-templates select="parent::*" mode="number" />
 </xsl:template>
 
+<!-- Anything within a webwork-reps that needs a structure number    -->
+<!-- gets it from the enclosing exercise.                            -->
+<xsl:template match="webwork-reps//*" mode="structure-number">
+    <xsl:apply-templates select="ancestor::exercise" mode="number" />
+</xsl:template>
+
 <!-- Structure Numbers: Bibliographic Items -->
-<!-- If we set a level for bibliographic items, and pad,        -->
-<!-- then we could mimic the AMSMath scheme.  But we control    -->
-<!-- these numbers universally, so we do not copy this behavior -->
+<!-- With just one "references" per division, we can use the      -->
+<!-- number of the parent division.  This means that a global,    -->
+<!-- once-per-document "references" will get un-qualified numbers -->
 <xsl:template match="biblio" mode="structure-number">
-    <xsl:apply-templates select="." mode="multi-number">
-        <xsl:with-param name="levels" select="$numbering-maxlevel" />
-        <xsl:with-param name="pad" select="'no'" />
-    </xsl:apply-templates>
+    <xsl:apply-templates select="parent::references/parent::*" mode="number" />
 </xsl:template>
-<!-- "main" bibliography gets unqualified numbers -->
-<xsl:template match="backmatter/references/biblio" mode="structure-number">
-    <xsl:text />
-</xsl:template>
+
 <!-- Notes get structure number from parent biblio's number -->
 <xsl:template match="biblio/note" mode="structure-number">
     <xsl:apply-templates select="parent::*" mode="number" />
@@ -4054,21 +4565,22 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 </xsl:template>
 
 <!-- Structure Numbers: Lists -->
-<!-- Lists themselves are not numbered, though     -->
-<!-- some individual list items are, so we just    -->
-<!-- provide an empty string to prefix list items. -->
-<!-- In effect, references are "local"             -->
-<xsl:template match="ol/li" mode="structure-number">
-    <xsl:text />
+<!-- Lists occur in paragraphs (anonymously), in "list"      -->
+<!-- blocks (numbered), and within exercises (numbered).     -->
+<!-- Typically we are interested in list items (only),       -->
+<!-- since that is where there is content.  And then we      -->
+<!-- are only interested in the list items within an ordered -->
+<!-- list.  We control for items under unordered lists or    -->
+<!-- description lists elsewhere by providing empty numbers. -->
+<!-- NB: the order of these templates may matter             -->
+<xsl:template match="li" mode="structure-number" />
+
+<xsl:template match="list//li" mode="structure-number">
+    <xsl:apply-templates select="ancestor::list" mode="number" />
 </xsl:template>
-<!-- An exception is lists inside of exercises, so we     -->
-<!-- use the number of the exercise itself as a prefix    -->
-<!-- to the number within the list.  We provide the       -->
-<!-- separator here since the list item number is allowed -->
-<!-- to be local and has no leading symbol                -->
-<!-- NB: these templates have equal priority, so order matters -->
-<xsl:template match="exercise//ol/li" mode="structure-number">
-    <xsl:apply-templates select="ancestor::exercise[1]" mode="number" />
+
+<xsl:template match="exercise//li" mode="structure-number">
+    <xsl:apply-templates select="ancestor::exercise" mode="number" />
 </xsl:template>
 
 <!-- Structure Numbers: Tasks (in projects) -->
@@ -4096,10 +4608,11 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Full Numbers -->
 <!--              -->
 
-<!-- Now trivial, container structure plus serial -->
-<!-- We condition on empty serial number in       -->
-<!-- order to create empty full numbers           -->
-<!-- This is where we add separator, a period     -->
+<!-- Now trivial, the container structure plus the serial.  -->
+<!-- We condition on empty serial number in order to create -->
+<!-- empty full numbers.  This is where we add separator,   -->
+<!-- normally a period, but for a list item within a named  -->
+<!-- list, we use a colon (a double period?).               -->
 <xsl:template match="*" mode="number">
     <xsl:variable name="serial">
         <xsl:apply-templates select="." mode="serial-number" />
@@ -4112,7 +4625,14 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             </xsl:variable>
             <xsl:if test="not($structure='')">
                 <xsl:value-of select="$structure" />
-                <xsl:text>.</xsl:text>
+                <xsl:choose>
+                    <xsl:when test="self::li and ancestor::list">
+                        <xsl:text>:</xsl:text>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:text>.</xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:if>
             <xsl:value-of select="$serial" />
         </xsl:otherwise>
@@ -4625,8 +5145,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <!-- It has setup (LaTeX), headings (titles), panels,   -->
     <!-- and captions.  These then go to "compose-panels".  -->
     <!-- Implementations need to define modal templates     -->
-    <!--   panel-setup, panel-heading,                      -->
-    <!--   panel-panel, panel-caption                       -->
+    <!--   panel-heading, panel-panel, panel-caption        -->
     <!-- The parameters passed to each is the union of what -->
     <!-- is needed for LaTeX and HTML implementations.      -->
     <!-- Final results are collectively sent to modal       -->
@@ -4634,16 +5153,6 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <!-- template to be arranged                            -->
     <!-- TODO: Instead we could pass the $layout to the four,    -->
     <!-- and infer the $panel-number in the receiving templates. -->
-
-    <xsl:variable name="setup">
-        <xsl:for-each select="$panels">
-            <!-- context is now a particular panel -->
-            <xsl:variable name="panel-number" select="count(preceding-sibling::*) + 1" />
-            <xsl:apply-templates select="." mode="panel-setup">
-                <xsl:with-param name="width" select="$layout/width[$panel-number]" />
-            </xsl:apply-templates>
-        </xsl:for-each>
-    </xsl:variable>
 
     <xsl:variable name="headings">
         <xsl:for-each select="$panels">
@@ -4690,7 +5199,6 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:with-param name="layout" select="$layout" />
         <xsl:with-param name="has-headings" select="$has-headings" />
         <xsl:with-param name="has-captions" select="$has-captions" />
-        <xsl:with-param name="setup" select="$setup" />
         <xsl:with-param name="headings" select="$headings" />
         <xsl:with-param name="panels" select="$panel-panels" />
         <xsl:with-param name="captions" select="$captions" />
@@ -4713,8 +5221,21 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- that goes out to the enclosing group to get them  -->
 
 <xsl:template match="sbsgroup">
+    <!-- Leaving vertical mode is peculiar to LaTeX output.     -->
+    <!-- When we make the LaTeX version into a table of panels, -->
+    <!-- and not a succession of side-by-side, this workaround  -->
+    <!-- can be removed.                                        -->
+    <xsl:if test="not(preceding-sibling::*)">
+        <xsl:call-template name="leave-vertical-mode"/>
+    </xsl:if>
+
     <xsl:apply-templates select="sidebyside" />
 </xsl:template>
+
+<!-- This is an abstract stub for HTML production,     -->
+<!-- see note and first use in template for "sbsgroup" -->
+<!-- here in -common templates                         -->
+<xsl:template name="leave-vertical-mode"/>
 
 
 <!-- ############## -->
@@ -4773,7 +5294,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <!-- Since exercises and references are top-level        -->
         <!-- ordered lists, when these are the only interesting  -->
         <!-- ancestor, we add one to the level and return        -->
-        <xsl:when test="(ancestor::exercises or ancestor::references) and not(ancestor::ol)">
+        <xsl:when test="(ancestor::exercises or ancestor::worksheet or ancestor::references) and not(ancestor::ol)">
             <xsl:value-of select="$level + 1" />
         </xsl:when>
         <xsl:when test="ancestor::ol">
@@ -4916,6 +5437,267 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:choose>
 </xsl:template>
 
+<!-- ################## -->
+<!-- Exercise Utilities -->
+<!-- ################## -->
+
+<!-- Exercises and projects generally have "statement", "hint", "answer", and "solution".  Switches control appearance  in teh main matter and in solution lists. -->
+
+<!-- But they are surrounded by infrastructure:  number and title, exercise group with introduction and conclusion, division headings.  If switches make all the content disappear within some infrastructure, then the infrastructure becomes superfluous.  So we provide a hierarchy of templates to determine if structure and content yield output. -->
+
+<!-- authored exercise, terminal (leaf) tasks -->
+<xsl:template match="exercise|task[not(task)]" mode="dry-run">
+    <xsl:param name="b-has-statement" />
+    <xsl:param name="b-has-hint" />
+    <xsl:param name="b-has-answer" />
+    <xsl:param name="b-has-solution" />
+
+    <xsl:choose>
+        <!-- burrow through "stage", do not consider "answer" -->
+        <xsl:when test="webwork-reps">
+            <xsl:if test="$b-has-statement or ($b-has-hint and webwork-reps/static//hint) or ($b-has-solution and webwork-reps/static//solution)">
+                <xsl:text>X</xsl:text>
+            </xsl:if>
+        </xsl:when>
+        <!-- effective squash just for LaTeX -->
+        <xsl:when test="myopenmath" />
+        <xsl:otherwise>
+            <xsl:if test="$b-has-statement or ($b-has-hint and hint) or ($b-has-answer and answer) or ($b-has-solution and solution)">
+                <xsl:text>X</xsl:text>
+            </xsl:if>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="task[task]" mode="dry-run">
+    <xsl:param name="b-has-statement" />
+    <xsl:param name="b-has-hint" />
+    <xsl:param name="b-has-answer" />
+    <xsl:param name="b-has-solution" />
+
+    <xsl:apply-templates select="task" mode="dry-run">
+        <xsl:with-param name="b-has-statement" select="$b-has-statement" />
+        <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
+        <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
+        <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
+    </xsl:apply-templates>
+</xsl:template>
+
+<xsl:template match="&PROJECT-LIKE;" mode="dry-run">
+    <xsl:param name="b-has-statement" />
+    <xsl:param name="b-has-hint" />
+    <xsl:param name="b-has-answer" />
+    <xsl:param name="b-has-solution" />
+
+    <xsl:choose>
+        <xsl:when test="task">
+            <xsl:apply-templates select="task" mode="dry-run">
+                <xsl:with-param name="b-has-statement" select="$b-has-statement" />
+                <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
+                <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
+                <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
+            </xsl:apply-templates>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:if test="$b-has-statement or ($b-has-hint and hint) or ($b-has-answer and answer) or ($b-has-solution and solution)">
+                <xsl:text>X</xsl:text>
+            </xsl:if>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- An "exercisegroup" potentially has an "introduction" -->
+<!-- and "conclusion" as infrastructure, and can only     -->
+<!-- contain divisional "exercise" as varying items, so   -->
+<!-- switches passed in are for divisional exercises      -->
+<xsl:template match="exercisegroup" mode="dry-run">
+    <xsl:param name="b-has-statement" />
+    <xsl:param name="b-has-hint" />
+    <xsl:param name="b-has-answer" />
+    <xsl:param name="b-has-solution" />
+
+    <xsl:apply-templates select="exercise" mode="dry-run">
+        <xsl:with-param name="b-has-statement" select="$b-has-statement" />
+        <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
+        <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
+        <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- An "exercises" division will have a heading as infrastructure.  -->
+<!-- We can investigate varying "exercise" by just digging down      -->
+<!-- into "exercisegroup" to find all divisional "exercise"          -->
+<xsl:template match="exercises" mode="dry-run">
+    <xsl:param name="b-divisional-statement" />
+    <xsl:param name="b-divisional-hint" />
+    <xsl:param name="b-divisional-answer" />
+    <xsl:param name="b-divisional-solution" />
+
+    <xsl:apply-templates select=".//exercise" mode="dry-run">
+        <xsl:with-param name="b-has-statement" select="$b-divisional-statement" />
+        <xsl:with-param name="b-has-hint"      select="$b-divisional-hint" />
+        <xsl:with-param name="b-has-answer"    select="$b-divisional-answer" />
+        <xsl:with-param name="b-has-solution"  select="$b-divisional-solution" />
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- An arbitrary division will have a heading as infrastructure.  -->
+<!-- We investigate varying "exercise" and "project" by digging    -->
+<!-- down into all three types with the right switches.            -->
+<xsl:template match="part|chapter|section|subsection|subsubsection" mode="dry-run">
+    <xsl:param name="b-inline-statement" />
+    <xsl:param name="b-inline-answer" />
+    <xsl:param name="b-inline-hint" />
+    <xsl:param name="b-inline-solution" />
+    <xsl:param name="b-divisional-statement" />
+    <xsl:param name="b-divisional-answer" />
+    <xsl:param name="b-divisional-hint" />
+    <xsl:param name="b-divisional-solution" />
+    <xsl:param name="b-project-statement" />
+    <xsl:param name="b-project-answer" />
+    <xsl:param name="b-project-hint" />
+    <xsl:param name="b-project-solution" />
+
+    <xsl:apply-templates select=".//exercise[not(ancestor::exercises)]" mode="dry-run">
+        <xsl:with-param name="b-has-statement" select="$b-inline-statement" />
+        <xsl:with-param name="b-has-answer"    select="$b-inline-answer" />
+        <xsl:with-param name="b-has-hint"      select="$b-inline-hint" />
+        <xsl:with-param name="b-has-solution"  select="$b-inline-solution" />
+    </xsl:apply-templates>
+    <!-- &PROJECT-LIKE; "project|activity|exploration|investigation"> -->
+    <xsl:apply-templates select=".//project|.//activity|.//exploration|.//investigation" mode="dry-run">
+        <xsl:with-param name="b-has-statement" select="$b-project-statement" />
+        <xsl:with-param name="b-has-answer"    select="$b-project-answer" />
+        <xsl:with-param name="b-has-hint"      select="$b-project-hint" />
+        <xsl:with-param name="b-has-solution"  select="$b-project-solution" />
+    </xsl:apply-templates>
+    <xsl:apply-templates select=".//exercises//exercise" mode="dry-run">
+        <xsl:with-param name="b-has-statement" select="$b-divisional-statement" />
+        <xsl:with-param name="b-has-answer"    select="$b-divisional-answer" />
+        <xsl:with-param name="b-has-hint"      select="$b-divisional-hint" />
+        <xsl:with-param name="b-has-solution"  select="$b-divisional-solution" />
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- ####################################### -->
+<!-- Solutions Divisions, Content Generation -->
+<!-- ####################################### -->
+
+<!-- A light wrapper around the "solutions-generator" template (next). -->
+<!-- We just examine the attributes describing a "solutions" division. -->
+<!-- The division is one-off (not knowled), so we treat the            -->
+<!-- introduction and conclusion as original                           -->
+<xsl:template match="solutions" mode="solutions">
+    <!-- Look up a level, skipping backmatter -->
+    <xsl:variable name="scope" select="ancestor::*[not(self::backmatter)][1]" />
+
+    <xsl:apply-templates select="introduction">
+        <xsl:with-param name="b-original" select="true()" />
+    </xsl:apply-templates>
+
+    <xsl:apply-templates select="$scope" mode="solutions-generator">
+        <xsl:with-param name="b-inline-statement"     select="contains(@inline,     'statement')" />
+        <xsl:with-param name="b-inline-hint"          select="contains(@inline,     'hint')"      />
+        <xsl:with-param name="b-inline-answer"        select="contains(@inline,     'answer')"    />
+        <xsl:with-param name="b-inline-solution"      select="contains(@inline,     'solution')"  />
+        <xsl:with-param name="b-divisional-statement" select="contains(@divisional, 'statement')" />
+        <xsl:with-param name="b-divisional-hint"      select="contains(@divisional, 'hint')"      />
+        <xsl:with-param name="b-divisional-answer"    select="contains(@divisional, 'answer')"    />
+        <xsl:with-param name="b-divisional-solution"  select="contains(@divisional, 'solution')"  />
+        <xsl:with-param name="b-project-statement"    select="contains(@project,    'statement')" />
+        <xsl:with-param name="b-project-hint"         select="contains(@project,    'hint')"      />
+        <xsl:with-param name="b-project-answer"       select="contains(@project,    'answer')"    />
+        <xsl:with-param name="b-project-solution"     select="contains(@project,    'solution')"  />
+    </xsl:apply-templates>
+
+    <xsl:apply-templates select="conclusion">
+        <xsl:with-param name="b-original" select="true()" />
+    </xsl:apply-templates>
+</xsl:template>
+
+
+<!-- Context is the scope (root of subtree examined)      -->
+<!-- Cannot locate a "solutions" division inside a "part" -->
+<xsl:template match="book|article|chapter|section|subsection|subsubsection" mode="solutions-generator">
+    <xsl:param name="b-inline-statement"     />
+    <xsl:param name="b-inline-hint"          />
+    <xsl:param name="b-inline-answer"        />
+    <xsl:param name="b-inline-solution"      />
+    <xsl:param name="b-divisional-statement" />
+    <xsl:param name="b-divisional-hint"      />
+    <xsl:param name="b-divisional-answer"    />
+    <xsl:param name="b-divisional-solution"  />
+    <xsl:param name="b-project-statement"    />
+    <xsl:param name="b-project-hint"         />
+    <xsl:param name="b-project-answer"       />
+    <xsl:param name="b-project-solution"     />
+
+    <!-- We need to save off the the main context before the "for-each" -->
+    <!-- context change, in order to decide how "big" division headings -->
+    <!-- will be via the "division-in-solutions" template               -->
+    <xsl:variable name="scope" select="." />
+
+    <!-- consider each possible division, below the context      -->
+    <!-- Only output heading and content if there is any content -->
+    <xsl:for-each select=".//part|.//chapter|.//section|.//subsection|.//subsubsection|.//exercises" mode="solutions">
+        <!-- see if division has *any* content, at any depth, in light of switches -->
+        <xsl:variable name="dry-run">
+            <xsl:apply-templates select="." mode="dry-run">
+                <xsl:with-param name="b-inline-statement"     select="$b-inline-statement" />
+                <xsl:with-param name="b-inline-answer"        select="$b-inline-answer" />
+                <xsl:with-param name="b-inline-hint"          select="$b-inline-hint" />
+                <xsl:with-param name="b-inline-solution"      select="$b-inline-solution" />
+                <xsl:with-param name="b-divisional-statement" select="$b-divisional-statement" />
+                <xsl:with-param name="b-divisional-answer"    select="$b-divisional-answer" />
+                <xsl:with-param name="b-divisional-hint"      select="$b-divisional-hint" />
+                <xsl:with-param name="b-divisional-solution"  select="$b-divisional-solution" />
+                <xsl:with-param name="b-project-statement"    select="$b-project-statement" />
+                <xsl:with-param name="b-project-answer"       select="$b-project-answer" />
+                <xsl:with-param name="b-project-hint"         select="$b-project-hint" />
+                <xsl:with-param name="b-project-solution"     select="$b-project-solution" />
+            </xsl:apply-templates>
+        </xsl:variable>
+
+        <xsl:if test="not($dry-run = '')">
+            <!-- this is the only real abstract template, it simply     -->
+            <!-- provides the correct wrapping for a division appearing -->
+            <!-- to aid in organizing a collection of solutions         -->
+            <xsl:apply-templates select="." mode="division-in-solutions">
+                <xsl:with-param name="scope" select="$scope" />
+                <xsl:with-param name="content">
+                    <xsl:for-each select="exercise|exercisegroup|&PROJECT-LIKE;">
+                         <xsl:choose>
+                            <xsl:when test="self::exercise and not(ancestor::exercises)">
+                                <xsl:apply-templates select="." mode="solutions">
+                                    <xsl:with-param name="b-has-statement" select="$b-inline-statement" />
+                                    <xsl:with-param name="b-has-answer"    select="$b-inline-answer" />
+                                    <xsl:with-param name="b-has-hint"      select="$b-inline-hint" />
+                                    <xsl:with-param name="b-has-solution"  select="$b-inline-solution" />
+                                </xsl:apply-templates>
+                            </xsl:when>
+                            <xsl:when test="self::exercisegroup or (self::exercise and ancestor::exercises)">
+                                <xsl:apply-templates select="." mode="solutions">
+                                    <xsl:with-param name="b-has-statement" select="$b-divisional-statement" />
+                                    <xsl:with-param name="b-has-answer"    select="$b-divisional-answer" />
+                                    <xsl:with-param name="b-has-hint"      select="$b-divisional-hint" />
+                                    <xsl:with-param name="b-has-solution"  select="$b-divisional-solution" />
+                                </xsl:apply-templates>
+                            </xsl:when>
+                            <xsl:when test="&PROJECT-FILTER;">
+                                <xsl:apply-templates select="." mode="solutions">
+                                    <xsl:with-param name="b-has-statement" select="$b-project-statement" />
+                                    <xsl:with-param name="b-has-answer"    select="$b-project-answer" />
+                                    <xsl:with-param name="b-has-hint"      select="$b-project-hint" />
+                                    <xsl:with-param name="b-has-solution"  select="$b-project-solution" />
+                                </xsl:apply-templates>
+                            </xsl:when>
+                        </xsl:choose>
+                    </xsl:for-each>
+                </xsl:with-param>
+            </xsl:apply-templates>
+        </xsl:if>
+    </xsl:for-each>
+</xsl:template>
 
 
 <!-- ############### -->
@@ -5862,10 +6644,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Provisional cross-references -->
 <!-- A convenience for authors in early stages of writing -->
 <!-- Appear both inline and moreso in author tools        -->
-<!-- TODO: Make cite/@provisional an error eventually     -->
-<xsl:template match="cite[@provisional]|xref[@provisional]">
-    <!-- DEPRECATED: 2014-06-25 -->
-    <xsl:if test="self::cite" />
+<xsl:template match="xref[@provisional]">
     <xsl:variable name="inline-warning">
         <xsl:value-of select="@provisional" />
     </xsl:variable>
@@ -6124,6 +6903,12 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:when>
+        <!-- special case for phrase options and list items of anonymous lists        -->
+        <!-- catch this first and provide no text at all (could provide busted text?) -->
+        <!-- anonymous lists live in "p", but this is an unreliable indication        -->
+        <xsl:when test="($text-style = 'phrase-global' or $text-style = 'phrase-hybrid') and ($target/self::li and not($target/ancestor::list or $target/ancestor::objectives or $target/ancestor::exercise))">
+            <xsl:message>MBX:WARNING: a cross-reference to a list item of an anonymous list ("<xsl:apply-templates select="$target" mode="serial-number" />") with 'phrase-global' and 'phrase-hybrid' styles for the xref text will yield no text at all, and possibly create unpredictable results in output</xsl:message>
+        </xsl:when>
         <xsl:when test="$text-style = 'phrase-global' or $text-style = 'phrase-hybrid'">
             <!-- no content override in this case -->
             <!-- maybe we can relax this somehow? -->
@@ -6280,6 +7065,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             </xsl:variable>
             <!-- now know local/global, write trailing portion of text -->
             <!-- here based on the style and the global requirement    -->
+            <!-- NB: the "choose" is mirrored in the more specific template, next -->
+            <!-- Question:  why does "phrase-global" come through here?           -->
             <xsl:choose>
                 <!-- phrase styles may need remainder of phrase -->
                 <xsl:when test="(($text-style='phrase-global') or ($text-style='phrase-hybrid')) and ($requires-global = 'true')">
@@ -6333,6 +7120,55 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <!-- impossible to get here -->
     </xsl:choose>
 </xsl:template>
+
+<!-- A hybrid scheme for a list item is only for list items         -->
+<!-- of an ordered list, we drop the list number (structure number) -->
+<!-- when xref and target are both inside the same list.            -->
+<!-- No need to recurse.  $target is context, allowing a match.     -->
+
+<xsl:template match="list//li" mode="smart-xref-text">
+    <xsl:param name="text-style" />
+    <xsl:param name="xref" />
+    <xsl:param name="target" />
+
+    <xsl:variable name="targets-list" select="$target/ancestor::list" />
+    <xsl:variable name="xrefs-list"   select="$xref/ancestor::list" />
+
+    <!-- To be a local xref, the "xref" must live in some "list", and -->
+    <!-- it must be the same "list" as the "li" (which is in a list   -->
+    <!-- due to the match).  We use the negation to keep the logic    -->
+    <!-- the same as in the more general template, above              -->
+    <xsl:variable name="requires-global" select="not((count($xrefs-list) = 1) and (count($targets-list|$xrefs-list) = 1))" />
+
+    <!-- This "choose" largely matches above, and so maybe  -->
+    <!-- could be consolidated into a parameterized template -->
+    <xsl:choose>
+        <!-- phrase styles may need remainder of phrase -->
+        <xsl:when test="(($text-style='phrase-global') or ($text-style='phrase-hybrid')) and ($requires-global = 'true')">
+            <!-- connector, internationalize -->
+            <xsl:text> of </xsl:text>
+            <xsl:apply-templates select="$targets-list" mode="type-name" />
+            <xsl:apply-templates select="." mode="nbsp" />
+            <xsl:apply-templates select="$targets-list" mode="xref-number">
+                <xsl:with-param name="xref" select="." />
+            </xsl:apply-templates>
+        </xsl:when>
+        <!-- hybrid styles need number for remainder -->
+        <xsl:when test="($text-style='hybrid') or ($text-style='type-hybrid')">
+            <xsl:choose>
+                <xsl:when test="$requires-global = 'true'">
+                    <xsl:apply-templates select="$target" mode="xref-number">
+                        <xsl:with-param name="xref" select="." />
+                    </xsl:apply-templates>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates select="$target" mode="serial-number" />
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+    </xsl:choose>
+</xsl:template>
+
 
 <!-- This is an abstract template, to accomodate -->
 <!-- hard-coded HTML numbers and for LaTeX the   -->
@@ -6407,6 +7243,38 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <xsl:template match="pretext">
     <xsl:text>PreTeXt</xsl:text>
 </xsl:template>
+
+<!-- We place the 13 Latin abbreviations here since they  -->
+<!-- are so simple, however, we override them all in the  -->
+<!-- LaTeX conversion, since most need special treatment  -->
+<!-- of the periods. -->
+
+<!-- anno Domini, in the year of the Lord -->
+<xsl:template match="ad">    <xsl:text>AD</xsl:text></xsl:template>
+<!-- ante meridiem, before midday -->
+<xsl:template match="am">    <xsl:text>A.M.</xsl:text></xsl:template>
+<!-- before Christ? -->
+<xsl:template match="bc">    <xsl:text>BC</xsl:text></xsl:template>
+<!-- circa, about -->
+<xsl:template match="circa"> <xsl:text>c.</xsl:text></xsl:template>
+<!-- exempli gratia, for example -->
+<xsl:template match="eg">    <xsl:text>e.g.</xsl:text></xsl:template>
+<!-- et alia, and others -->
+<xsl:template match="etal">  <xsl:text>et al.</xsl:text></xsl:template>
+<!-- et caetera, and the rest -->
+<xsl:template match="etc">   <xsl:text>etc.</xsl:text></xsl:template>
+<!-- id est, in other words -->
+<xsl:template match="ie">    <xsl:text>i.e.</xsl:text></xsl:template>
+<!-- nota bene, note well -->
+<xsl:template match="nb">    <xsl:text>N.B.</xsl:text></xsl:template>
+<!-- post meridiem, after midday -->
+<xsl:template match="pm">    <xsl:text>P.M.</xsl:text></xsl:template>
+<!-- post scriptum, after what has been written -->
+<xsl:template match="ps">    <xsl:text>P.S.</xsl:text></xsl:template>
+<!-- versus, against -->
+<xsl:template match="vs">    <xsl:text>vs.</xsl:text></xsl:template>
+<!-- videlicet, namely -->
+<xsl:template match="viz">   <xsl:text>viz.</xsl:text></xsl:template>
 
 <!-- ################## -->
 <!-- Special Characters -->
@@ -6487,13 +7355,6 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Circumflex  -->
 <xsl:template match="circumflex">
     <xsl:text>[CIRCUMFLEX]</xsl:text>
-</xsl:template>
-
-<!-- 2015/01/28: there was a mismatch between HTML and LaTeX names -->
-<!-- We only have this warning only here                           -->
-<!-- DEPRECATION: 2015-01-28 -->
-<xsl:template match="circum">
-    <xsl:text>[CIRCUM-DEPRECATED]</xsl:text>
 </xsl:template>
 
 <!-- Ampersand -->
@@ -6654,77 +7515,128 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- as a polymorphic technique for the actual characters    -->
 <!-- LaTeX quotes are odd, so we override "q" and "sq" there -->
 
+<!-- NB: An RTF has a "root" node.  Then the elements      -->
+<!-- manufactured for it occur as children.  If the        -->
+<!-- "apply-templates" fails to have the "/*" at the end   -->
+<!-- of the "select", then the main entry template will be -->
+<!-- called to do any housekeeping it might do.            -->
+<!-- This was a really tough bug to track down.            -->
+
 <xsl:template match="q">
     <xsl:variable name="lq-rtf">
         <lq />
     </xsl:variable>
-    <xsl:apply-templates select="exsl:node-set($lq-rtf)" />
+    <xsl:apply-templates select="exsl:node-set($lq-rtf)/*" />
     <xsl:apply-templates />
     <xsl:variable name="rq-rtf">
         <rq />
     </xsl:variable>
-    <xsl:apply-templates select="exsl:node-set($rq-rtf)" />
+    <xsl:apply-templates select="exsl:node-set($rq-rtf)/*" />
 </xsl:template>
 
 <xsl:template match="sq">
     <xsl:variable name="lsq-rtf">
         <lsq />
     </xsl:variable>
-    <xsl:apply-templates select="exsl:node-set($lsq-rtf)" />
+    <xsl:apply-templates select="exsl:node-set($lsq-rtf)/*" />
     <xsl:apply-templates />
     <xsl:variable name="rsq-rtf">
         <rsq />
     </xsl:variable>
-    <xsl:apply-templates select="exsl:node-set($rsq-rtf)" />
+    <xsl:apply-templates select="exsl:node-set($rsq-rtf)/*" />
 </xsl:template>
 
 <xsl:template match="braces">
     <xsl:variable name="lbrace-rtf">
         <lbrace />
     </xsl:variable>
-    <xsl:apply-templates select="exsl:node-set($lbrace-rtf)" />
+    <xsl:apply-templates select="exsl:node-set($lbrace-rtf)/*" />
     <xsl:apply-templates />
     <xsl:variable name="rbrace-rtf">
         <rbrace />
     </xsl:variable>
-    <xsl:apply-templates select="exsl:node-set($rbrace-rtf)" />
+    <xsl:apply-templates select="exsl:node-set($rbrace-rtf)/*" />
 </xsl:template>
 
 <xsl:template match="brackets">
     <xsl:variable name="lbracket-rtf">
         <lbracket />
     </xsl:variable>
-    <xsl:apply-templates select="exsl:node-set($lbracket-rtf)" />
+    <xsl:apply-templates select="exsl:node-set($lbracket-rtf)/*" />
     <xsl:apply-templates />
     <xsl:variable name="rbracket-rtf">
         <rbracket />
     </xsl:variable>
-    <xsl:apply-templates select="exsl:node-set($rbracket-rtf)" />
+    <xsl:apply-templates select="exsl:node-set($rbracket-rtf)/*" />
 </xsl:template>
 
 <xsl:template match="dblbrackets">
     <xsl:variable name="ldblbracket-rtf">
         <ldblbracket />
     </xsl:variable>
-    <xsl:apply-templates select="exsl:node-set($ldblbracket-rtf)" />
+    <xsl:apply-templates select="exsl:node-set($ldblbracket-rtf)/*" />
     <xsl:apply-templates />
     <xsl:variable name="rdblbracket-rtf">
         <rdblbracket />
     </xsl:variable>
-    <xsl:apply-templates select="exsl:node-set($rdblbracket-rtf)" />
+    <xsl:apply-templates select="exsl:node-set($rdblbracket-rtf)/*" />
 </xsl:template>
 
 <xsl:template match="angles">
     <xsl:variable name="langle-rtf">
         <langle />
     </xsl:variable>
-    <xsl:apply-templates select="exsl:node-set($langle-rtf)" />
+    <xsl:apply-templates select="exsl:node-set($langle-rtf)/*" />
     <xsl:apply-templates />
     <xsl:variable name="rangle-rtf">
         <rangle />
     </xsl:variable>
-    <xsl:apply-templates select="exsl:node-set($rangle-rtf)" />
+    <xsl:apply-templates select="exsl:node-set($rangle-rtf)/*" />
 </xsl:template>
+
+<!-- ########## -->
+<!-- XML Syntax -->
+<!-- ########## -->
+
+<!-- So we can write knowledgeably about XML in documentation -->
+<!-- NB: we can use RTFs to keep this in -common since the    -->
+<!-- content of each element is so simple                     -->
+
+<!-- A tag, with angle brackets and monospace font -->
+<xsl:template match="tag">
+    <xsl:variable name="the-element">
+        <c>
+            <xsl:text>&lt;</xsl:text>
+            <xsl:apply-templates />
+            <xsl:text>&gt;</xsl:text>
+        </c>
+    </xsl:variable>
+    <xsl:apply-templates select="exsl:node-set($the-element)" />
+</xsl:template>
+
+<!-- An empty tag, with angle brackets and monospace font -->
+<xsl:template match="tage">
+    <xsl:variable name="the-element">
+        <c>
+            <xsl:text>&lt;</xsl:text>
+            <xsl:apply-templates />
+            <xsl:text> /&gt;</xsl:text>
+        </c>
+    </xsl:variable>
+    <xsl:apply-templates select="exsl:node-set($the-element)" />
+</xsl:template>
+
+<!-- An attribute, with @ and monospace font -->
+<xsl:template match="attr">
+    <xsl:variable name="the-attribute">
+        <c>
+            <xsl:text>@</xsl:text>
+            <xsl:apply-templates />
+        </c>
+    </xsl:variable>
+    <xsl:apply-templates select="exsl:node-set($the-attribute)" />
+</xsl:template>
+
 
 <!-- ############ -->
 <!-- Conveniences -->
@@ -7019,28 +7931,28 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- ############ -->
 
 <!-- Generic deprecation message for uniformity   -->
-<!-- occurences is a node-list of "problem" nodes -->
+<!-- occurrences is a node-list of "problem" nodes -->
 <xsl:template name="deprecation-message">
-    <xsl:param name="occurences" />
+    <xsl:param name="occurrences" />
     <xsl:param name="date-string" />
     <xsl:param name="message" />
-    <xsl:if test="$occurences">
+    <xsl:if test="$occurrences">
         <xsl:message>
             <xsl:text>MBX:DEPRECATE: (</xsl:text>
             <xsl:value-of select="$date-string" />
             <xsl:text>) </xsl:text>
             <xsl:value-of select="$message" />
             <xsl:text> (</xsl:text>
-            <xsl:value-of select="count($occurences)" />
+            <xsl:value-of select="count($occurrences)" />
             <xsl:text> time</xsl:text>
-            <xsl:if test="count($occurences) > 1">
+            <xsl:if test="count($occurrences) > 1">
                 <xsl:text>s</xsl:text>
             </xsl:if>
             <xsl:text>)</xsl:text>
             <!-- once verbosity is implemented -->
             <!-- <xsl:text>, set log.level to see more details</xsl:text> -->
         </xsl:message>
-        <xsl:for-each select="$occurences">
+        <xsl:for-each select="$occurrences">
             <xsl:apply-templates select="." mode="location-report" />
         </xsl:for-each>
         <xsl:message>
@@ -7070,41 +7982,27 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 </xsl:template>
 
 <xsl:template match="*" mode="deprecation-warnings">
-    <!-- older deprecations at the top of this list, -->
-    <!-- so author will see new at the tail end      -->
+    <!-- Older deprecations at the top of this list, -->
+    <!-- so author will see new at the tail end.     -->
+    <!-- Comments without implementations have moved -->
+    <!-- to Schematron rules after residing here for -->
+    <!-- at least 16 months (one year plus grace)    -->
     <!--  -->
     <!-- 2014-05-04  @filebase has been replaced in function by @xml:id -->
-    <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//@filebase" />
-        <xsl:with-param name="date-string" select="'2014-05-04'" />
-        <xsl:with-param name="message" select="'the &quot;filebase&quot; attribute is deprecated, convert to &quot;xml:id&quot;'" />
-    </xsl:call-template>
-    <!--  -->
     <!-- 2014-06-25  xref once had cite as a variant -->
-    <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//cite" />
-        <xsl:with-param name="date-string" select="'2014-06-25'" />
-        <xsl:with-param name="message" select="'the &quot;cite&quot; element is deprecated, convert to &quot;xref&quot;'" />
-    </xsl:call-template>
-    <!--  -->
     <!-- 2015-01-28  once both circum and circumflex existed, circumflex won -->
-    <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//circum" />
-        <xsl:with-param name="date-string" select="'2015-01-28'" />
-        <xsl:with-param name="message" select="'the &quot;circum&quot; element has been replaced by the &quot;circumflex&quot; element'" />
-    </xsl:call-template>
     <!--  -->
     <!-- 2015-02-08  naked tikz, asymptote, sageplot are banned    -->
     <!-- typically these would be in a figure, but not necessarily -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//tikz[not(parent::image)]|$document-root//asymptote[not(parent::image)]|$document-root//sageplot[not(parent::image)]" />
+        <xsl:with-param name="occurrences" select="$document-root//tikz[not(parent::image)]|$document-root//asymptote[not(parent::image)]|$document-root//sageplot[not(parent::image)]" />
         <xsl:with-param name="date-string" select="'2015-02-08'" />
         <xsl:with-param name="message" select="'&quot;tikz&quot;, &quot;asymptote&quot;, &quot;sageplot&quot;, elements must always be contained directly within an &quot;image&quot; element, rather than directly within a &quot;figure&quot; element'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2015-02-20  tikz is generalized to latex-image-code -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//tikz" />
+        <xsl:with-param name="occurrences" select="$document-root//tikz" />
         <xsl:with-param name="date-string" select="'2015-02-20'" />
         <xsl:with-param name="message" select="'the &quot;tikz&quot; element is deprecated, convert to &quot;latex-image-code&quot; inside &quot;image&quot;'" />
     </xsl:call-template>
@@ -7112,19 +8010,19 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <!-- 2015-03-13  paragraph is renamed more accurately to paragraphs           -->
     <!-- 2017-07-16  removed all backwards compatibility and added empty template -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//paragraph" />
+        <xsl:with-param name="occurrences" select="$document-root//paragraph" />
         <xsl:with-param name="date-string" select="'2015-03-13'" />
         <xsl:with-param name="message" select="'the &quot;paragraph&quot; element is deprecated and any contained content will silently not appear, replaced by functional equivalent &quot;paragraphs&quot;'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2015-03-17  various indicators of table rearrangement -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//tgroup" />
+        <xsl:with-param name="occurrences" select="$document-root//tgroup" />
         <xsl:with-param name="date-string" select="'2015-03-17'" />
         <xsl:with-param name="message" select="'tables are done quite differently, the &quot;tgroup&quot; element is indicative'" />
     </xsl:call-template>
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//tgroup/thead/row/entry|$document-root//tgroup/tbody/row/entry" />
+        <xsl:with-param name="occurrences" select="$document-root//tgroup/thead/row/entry|$document-root//tgroup/tbody/row/entry" />
         <xsl:with-param name="date-string" select="'2015-03-17'" />
             <xsl:with-param name="message" select="'tables are done quite differently, the &quot;entry&quot; element should be replaced by the &quot;cell&quot; element'" />
     </xsl:call-template>
@@ -7140,70 +8038,70 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <!--  -->
     <!-- 2015-12-12  empty labels on an ordered list was a bad idea -->
      <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//ol[@label='']" />
+        <xsl:with-param name="occurrences" select="$document-root//ol[@label='']" />
         <xsl:with-param name="date-string" select="'2015-12-12'" />
         <xsl:with-param name="message" select="'an ordered list (&lt;ol&gt;) may not have empty labels, and numbering will be unpredictable.  Switch to an unordered list  (&lt;ul&gt;)'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2016-04-07  'plural' option for @autoname discarded -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//xref[@autoname='plural']" />
+        <xsl:with-param name="occurrences" select="$document-root//xref[@autoname='plural']" />
         <xsl:with-param name="date-string" select="'2016-04-07'" />
         <xsl:with-param name="message" select="'a &lt;xref&gt; element may not have an @autoname attribute set to plural.  There is no replacement, perhaps use content in the &lt;xref&gt;.'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2016-05-23  Require parts of a letter to be structured (could be relaxed) -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//letter/frontmatter/from[not(line)] | $document-root//letter/frontmatter/to[not(line)] | $document-root//letter/backmatter/signature[not(line)]" />
+        <xsl:with-param name="occurrences" select="$document-root//letter/frontmatter/from[not(line)] | $document-root//letter/frontmatter/to[not(line)] | $document-root//letter/backmatter/signature[not(line)]" />
         <xsl:with-param name="date-string" select="'2016-05-23'" />
         <xsl:with-param name="message" select="'&lt;to&gt;, &lt;from&gt;, and &lt;signature&gt; of a letter must be structured as a sequence of &lt;line&gt;'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2016-05-23  line breaks are not XML-ish, some places allow "line" -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//br" />
+        <xsl:with-param name="occurrences" select="$document-root//br" />
         <xsl:with-param name="date-string" select="'2016-05-23'" />
         <xsl:with-param name="message" select="'&lt;br&gt; can no longer be used to create multiline output; you may use &lt;line&gt; elements in select situations'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2016-07-31  ban @height attribute, except within webwork problems -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//image[@height and not(ancestor::*[self::webwork])]" />
+        <xsl:with-param name="occurrences" select="$document-root//image[@height and not(ancestor::*[self::webwork])]" />
         <xsl:with-param name="date-string" select="'2016-07-31'" />
         <xsl:with-param name="message" select="'@height attribute on &lt;image&gt; is no longer effective and will be ignored, except within a WeBWorK exercise'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2016-07-31  widths of images must be expressed as percentages -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//image[@width and not(contains(@width, '%'))]" />
+        <xsl:with-param name="occurrences" select="$document-root//image[@width and not(contains(@width, '%'))]" />
         <xsl:with-param name="date-string" select="'2016-07-31'" />
         <xsl:with-param name="message" select="'@width attribute on &lt;image&gt; must be expressed as a percentage'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2017-02-05  hyphen-minus replaces hyphen -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//hyphen" />
+        <xsl:with-param name="occurrences" select="$document-root//hyphen" />
         <xsl:with-param name="date-string" select="'2017-02-05'" />
         <xsl:with-param name="message" select="'use the &lt;hyphen-minus/&gt; element as a direct replacement for &lt;hyphen/&gt;'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2017-07-05  top-level items that should have captions, but don't -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//figure[not(caption) and not(parent::sidebyside)] | $document-root//table[not(caption) and not(parent::sidebyside)] | $document-root//listing[not(caption) and not(parent::sidebyside)]" />
+        <xsl:with-param name="occurrences" select="$document-root//figure[not(caption) and not(parent::sidebyside)] | $document-root//table[not(caption) and not(parent::sidebyside) and not(ancestor::interactive)] | $document-root//listing[not(caption) and not(parent::sidebyside)]" />
         <xsl:with-param name="date-string" select="'2017-07-05'" />
         <xsl:with-param name="message" select="'a &lt;figure&gt;, &lt;table&gt;, or &lt;listing&gt; as a child of a division must contain a &lt;caption&gt; element.  A &lt;sidebyside&gt; can be used as a functional equivalent, or add a caption element (possibly with empty content) to replace with a numbered version.'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2017-07-05  sidebyside items that do not have captions, so ineffective -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//figure[not(caption) and parent::sidebyside] | $document-root//table[not(caption) and parent::sidebyside] | $document-root//listing[not(caption) and parent::sidebyside]" />
+        <xsl:with-param name="occurrences" select="$document-root//figure[not(caption) and parent::sidebyside] | $document-root//table[not(caption) and parent::sidebyside] | $document-root//listing[not(caption) and parent::sidebyside]" />
         <xsl:with-param name="date-string" select="'2017-07-05'" />
         <xsl:with-param name="message" select="'a &lt;figure&gt;, &lt;table&gt;, or &lt;listing&gt; as a child of a &lt;sidebyside&gt;, and without a &lt;caption&gt; element, is ineffective, redundant, and deprecated.  Remove the enclosing element, perhaps migrating an xml:id attribute to the contents.'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2017-07-05  a sidebyside cannot have a caption -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//sidebyside[caption]" />
+        <xsl:with-param name="occurrences" select="$document-root//sidebyside[caption]" />
         <xsl:with-param name="date-string" select="'2017-07-05'" />
         <xsl:with-param name="message" select="'a &lt;sidebyside&gt; cannot have a &lt;caption&gt;.  Place the &lt;sidebyside&gt; inside a &lt;figure&gt;, employing the &lt;caption&gt;, which will be the functional equivalent.'" />
     </xsl:call-template>
@@ -7217,43 +8115,43 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <!--  -->
     <!-- 2017-07-14  index specification and production reworked -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//index-part" />
+        <xsl:with-param name="occurrences" select="$document-root//index-part" />
         <xsl:with-param name="date-string" select="'2017-07-14'" />
         <xsl:with-param name="message" select="'the &quot;index-part&quot; element is deprecated, replaced by functional equivalent &quot;index&quot;'" />
     </xsl:call-template>
     <!--  -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//index[not(main) and not(index-list)]" />
+        <xsl:with-param name="occurrences" select="$document-root//index[not(main) and not(index-list)]" />
         <xsl:with-param name="date-string" select="'2017-07-14'" />
         <xsl:with-param name="message" select="'a &quot;index&quot; element is deprecated, replaced by functional equivalent &quot;idx&quot;'" />
     </xsl:call-template>
     <!--  -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//index[main]" />
+        <xsl:with-param name="occurrences" select="$document-root//index[main]" />
         <xsl:with-param name="date-string" select="'2017-07-14'" />
         <xsl:with-param name="message" select="'a &quot;index&quot; element with &quot;main&quot; and &quot;sub&quot; headings is deprecated, replaced by functional equivalent &quot;idx&quot; with &quot;h&quot; headings'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2017-07-14  cosmetic replacement of WW image/@tex_size by image/@tex-size -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//@tex_size" />
+        <xsl:with-param name="occurrences" select="$document-root//@tex_size" />
         <xsl:with-param name="date-string" select="'2017-07-18'" />
         <xsl:with-param name="message" select="'the &quot;tex_size&quot; attribute is deprecated, replaced by functional equivalent &quot;tex-size&quot;'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2017-07-25  replacement of three xref/@autoname attributes by @text -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//xref[@autoname='no']" />
+        <xsl:with-param name="occurrences" select="$document-root//xref[@autoname='no']" />
         <xsl:with-param name="date-string" select="'2017-07-25'" />
         <xsl:with-param name="message" select="'the &quot;xref/autoname&quot; attribute is deprecated, replace  autoname=&quot;no&quot;  by functional equivalent  text=&quot;global&quot;'" />
     </xsl:call-template>
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//xref[@autoname='yes']" />
+        <xsl:with-param name="occurrences" select="$document-root//xref[@autoname='yes']" />
         <xsl:with-param name="date-string" select="'2017-07-25'" />
         <xsl:with-param name="message" select="'the &quot;xref/autoname&quot; attribute is deprecated, replace  autoname=&quot;yes&quot;  by functional equivalent  text=&quot;type-global&quot;'" />
     </xsl:call-template>
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//xref[@autoname='title']" />
+        <xsl:with-param name="occurrences" select="$document-root//xref[@autoname='title']" />
         <xsl:with-param name="date-string" select="'2017-07-25'" />
         <xsl:with-param name="message" select="'the &quot;xref/autoname&quot; attribute is deprecated, replace  autoname=&quot;title&quot;  by functional equivalent  text=&quot;title&quot;'" />
     </xsl:call-template>
@@ -7278,81 +8176,132 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <!--  -->
     <!-- 2017-08-04  repurpose task block for division of project-like -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//task[parent::chapter or parent::appendix or parent::section or parent::subsection or parent::subsubsection or parent::paragraphs or parent::introduction or parent::conclusion]" />
+        <xsl:with-param name="occurrences" select="$document-root//task[parent::chapter or parent::appendix or parent::section or parent::subsection or parent::subsubsection or parent::paragraphs or parent::introduction or parent::conclusion]" />
         <xsl:with-param name="date-string" select="'2017-08-04'" />
         <xsl:with-param name="message" select="'the &quot;task&quot; element is no longer used as a child of a top-level division, but is instead being used to divide the other &quot;project-like&quot; elements.  It can be replaced by a functional equivalent: &quot;project&quot;, &quot;activity&quot;, &quot;exploration&quot;, or &quot;investigation&quot;'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2017-08-06  remove "program" and "console" as top-level blocks -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//program[not(parent::sidebyside or parent::listing)]" />
+        <xsl:with-param name="occurrences" select="$document-root//program[not(parent::sidebyside or parent::listing)]" />
         <xsl:with-param name="date-string" select="'2017-08-06'" />
         <xsl:with-param name="message" select="'the &quot;program&quot; element is no longer used as a child of a top-level division, but instead should be enclosed by a &quot;listing&quot; or &quot;sidebyside&quot;'" />
     </xsl:call-template>
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//console[not(parent::sidebyside or parent::listing)]" />
+        <xsl:with-param name="occurrences" select="$document-root//console[not(parent::sidebyside or parent::listing)]" />
         <xsl:with-param name="date-string" select="'2017-08-06'" />
         <xsl:with-param name="message" select="'the &quot;console&quot; element is no longer used as a child of a top-level division, but instead should be enclosed by a &quot;listing&quot; or &quot;sidebyside&quot;'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2017-08-25  deprecate named lists to be captioned lists -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//list[title and not(caption)]" />
+        <xsl:with-param name="occurrences" select="$document-root//list[title and not(caption)]" />
         <xsl:with-param name="date-string" select="'2017-08-25'" />
         <xsl:with-param name="message" select="'the &quot;list&quot; element now requires a &quot;caption&quot; and the &quot;title&quot; is optional'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2017-09-10  deprecate title-less paragraphs, outside of sidebyside -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//paragraphs[not(title) and not(parent::sidebyside)]" />
+        <xsl:with-param name="occurrences" select="$document-root//paragraphs[not(title) and not(parent::sidebyside)]" />
         <xsl:with-param name="date-string" select="'2017-09-10'" />
         <xsl:with-param name="message" select="'the &quot;paragraphs&quot; element (outside of a &quot;sidebyside&quot;) now requires a &quot;title&quot; (but you can xref individual &quot;p&quot; now, if that is your purpose)'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2017-11-09  WeBWorK images now with widths as percentages, only on an enclosing sidebyside -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//webwork//image[@width or @height or @tex-size]" />
+        <xsl:with-param name="occurrences" select="$document-root//webwork//image[@width or @height or @tex-size]" />
         <xsl:with-param name="date-string" select="'2017-11-09'" />
         <xsl:with-param name="message" select="'an &quot;image&quot; within a &quot;webwork&quot; now has its size given by just a &quot;width&quot; attribute expressed as a percentage, including the percent sign (so in particular do not use &quot;height&quot; or &quot;tex-size&quot;).  Within &quot;webwork&quot;, the &quot;width&quot; needs to be given on an enclosing &quot;sidebyside&quot;'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2017-11-09  Assemblages have been rationalized, warn about captioned items -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//assemblage//*[caption]" />
+        <xsl:with-param name="occurrences" select="$document-root//assemblage//*[caption]" />
         <xsl:with-param name="date-string" select="'2017-11-09'" />
         <xsl:with-param name="message" select="'an &quot;assemblage&quot; should not contain any items with a &quot;caption&quot;.  You can instead place the content in a bare &quot;sidebyside&quot;'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2017-12-07  "c" content totally escaped for LaTeX -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//c/@latexsep|$document-root//cd/@latexsep" />
+        <xsl:with-param name="occurrences" select="$document-root//c/@latexsep|$document-root//cd/@latexsep" />
         <xsl:with-param name="date-string" select="'2017-12-07'" />
         <xsl:with-param name="message" select="'the &quot;@latexsep&quot; attribute on the &quot;c&quot; and &quot;cd&quot; elements is no longer necessary.  It is being ignored, and can be removed'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2017-12-21  remove sage/@copy -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//sage/@copy" />
+        <xsl:with-param name="occurrences" select="$document-root//sage/@copy" />
         <xsl:with-param name="date-string" select="'2017-12-21'" />
         <xsl:with-param name="message" select="'@copy on a &quot;sage&quot; element is deprecated, use the xinclude mechanism with common code in an external file'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2017-12-21  remove image/@copy -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//image/@copy" />
+        <xsl:with-param name="occurrences" select="$document-root//image/@copy" />
         <xsl:with-param name="date-string" select="'2017-12-21'" />
         <xsl:with-param name="message" select="'@copy on an &quot;image&quot; element is deprecated, possibly use the xinclude mechanism with common source code in an external file'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2017-12-22  latex-image-code to simply latex-image -->
     <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurences" select="$document-root//latex-image-code" />
+        <xsl:with-param name="occurrences" select="$document-root//latex-image-code" />
         <xsl:with-param name="date-string" select="'2017-08-25'" />
         <xsl:with-param name="message" select="'the &quot;latex-image-code&quot; element has been replaced by the functionally equivalent &quot;latex-image&quot;'" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2018-02-04  geogebra-applet gone -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//geogebra-applet" />
+        <xsl:with-param name="date-string" select="'2018-02-04'" />
+        <xsl:with-param name="message" select="'the &quot;geogebra-applet&quot; element has been removed, investigate newer &quot;interactive&quot; element'" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2018-02-05  booktitle becomes pubtitle -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//booktitle" />
+        <xsl:with-param name="date-string" select="'2018-02-05'" />
+        <xsl:with-param name="message" select="'the &quot;booktitle&quot; element has been replaced by the functionally equivalent &quot;pubtitle&quot;'" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2018-04-06  jsxgraph absorbed into interactive -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//jsxgraph" />
+        <xsl:with-param name="date-string" select="'2018-04-06'" />
+        <xsl:with-param name="message" select="'the &quot;jsxgraph&quot; element has been deprecated, but remains functional, rework with the &quot;interactive&quot; element'" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2018-05-02  paragraphs purely as a lightweight division -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//sidebyside/paragraphs" />
+        <xsl:with-param name="date-string" select="'2018-04-06'" />
+        <xsl:with-param name="message" select="'a &quot;paragraphs&quot; can no longer appear within a &quot;sidebyside&quot;, replace with a &quot;stack&quot; containing multiple elements, such as &quot;p&quot;'" />
+    </xsl:call-template>
+    <!-- 2018-05-18  WeBWorK refactor no longer needs setup/var elements for static representations-->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//webwork/setup/var" />
+        <xsl:with-param name="date-string" select="'2018-05-18'" />
+        <xsl:with-param name="message" select="'&quot;var&quot; elements in a &quot;webwork/setup&quot; no longer do anything; you may delete them from source'" />
+    </xsl:call-template>
+    <!-- 2018-07-04  "solution-list" generator element replaced by "solutions" division -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//solution-list" />
+        <xsl:with-param name="date-string" select="'2018-07-04'" />
+        <xsl:with-param name="message" select="'the &quot;solution-list&quot; element has been deprecated, please switch to using the improved &quot;solutions&quot; division in your back matter (and elsewhere)'" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2018-07-27  transitional  html.js.server  removed -->
+    <!-- Still exists in "Variable Bad Bank" for use here  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2018-07-27'" />
+        <xsl:with-param name="message" select="'the transitional  html.js.server  parameter has been removed'" />
+            <xsl:with-param name="incorrect-use" select="($html.js.server != '')" />
     </xsl:call-template>
 </xsl:template>
 
 <!-- Miscellaneous -->
+
+<!-- A "pagebreak" is only available for print output of a "worksheet" -->
+<xsl:template match="pagebreak"/>
 
 <!-- ToDo's are silent unless requested           -->
 <!-- as part of an author's report, then marginal -->

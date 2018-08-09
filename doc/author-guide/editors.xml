@@ -36,12 +36,11 @@
             <title>Package Control</title>
             <p>Sublime Text's Python <init>API</init> exposes a lot of the Sublime Text internals to plugin and package authors. Packages extend Sublime Text's functionality, much like Emacs major modes. A package usually consists of some Python scripts that define Sublime Text events and actions, some text-based configuration files (<init>XML</init>/<init>JSON</init>/<init>YAML</init> files defining language syntax, symbol recognition, custom snippet insertion triggers and contexts, keybindings for new and old commands, <etc />), and perhaps some other stuff too. These typically get bundled into a <c>.zip</c> archive that is disguised with the unusual extension <c>.sublime-package</c>. These archives live in the Packages directory, accessible via the Preferences menu (the Sublime Text/Preferences menu on <init>OS X</init>). Sublime Text monitors the <c>Packages</c> directory for changes and reloads all affected plugins on the fly.</p>
             <p>The first thing you should do after installing Sublime Text is install the Package Control package. This package manager operates within Sublime Text to automatically fetch updates for packages you have installed (unless you disable this feature). You can also list currently installed packages, find new packages to investigate, remove packages, <etc /></p>
-            <p>Thousands of user-contributed packages are available for easy installation via Package Control. It is possible to maintain packages by hand, since most package authors publish via GitHub, but Package Control is the universally recommended method of obtaining, managing, and removing packages for your installation.</p>
-            <ol>
+            <p>Thousands of user-contributed packages are available for easy installation via Package Control. It is possible to maintain packages by hand, since most package authors publish via GitHub, but Package Control is the universally recommended method of obtaining, managing, and removing packages for your installation.<ol>
                 <li><p>Visit the <url href="https://packagecontrol.io/">Package Control download site</url>.</p></li>
                 <li><p>Find the Sublime Text console command (make sure the correct version of Sublime Text is selected) and copy it to the clipboard.</p></li>
                 <li><p>Open the Sublime Text console (<c>Ctrl-`</c>) and paste the command into the window that appears, then press <c>Enter</c>.</p></li>
-            </ol>
+            </ol></p>
             <p>Having installed Package Control, you can use the command palette to deploy its commands, such as Install Package, List Packages, and Remove Package. See the documentation for more. A few packages that are especially useful are recommended throughout this section, and summarized in <xref ref="subsection-recommended-packages" />.</p>
         </subsection>
         <subsection xml:id="subsection-keyboard-shortcuts">
@@ -62,14 +61,13 @@
             <subsubsection xml:id="subsubsection-explicit-projects">
                 <title>Explicit Projects</title>
                 <p>To save your project explicitly, use the Project menu to choose Save As Project<ellipsis /> and choose an appropriate name and location. For a MathBook <init>XML</init> project, this would probably be the same name and location as the document root file. Use the Project menu commands to open and close your project.</p>
-                <p>There are a few benefits to using an explicit project to group files.</p>
-                <ul>
+                <p>There are a few benefits to using an explicit project to group files.<ul>
                     <li><p>You can group together files and folders in different parts of the filesystem, instead of being restricted to subtrees.</p></li>
                     <li><p>You can have project-specific settings that are different from Sublime Text's defaults and different from your user preferences (<xref provisional="subsection-settings" />).</p></li>
                     <li><p>Sublime's project workspaces will remember which files you had open when you last closed the project, and at which positions.</p></li>
                     <li><p>If you get very fancy, you can have multiple workspaces for the same project, with different filters and views for different purposes.</p></li>
                     <li><p>It is fine to include <c>.sublime-project</c> files in Git repositories, but <c>.sublime-workspace</c> files should <alert>never</alert> be so included (according to the Sublime Text documentation).</p></li>
-                </ul>
+                </ul></p>
             </subsubsection>
             <subsubsection xml:id="subsubsection-using-the-sidebar">
                 <title>Using the Sidebar</title>
@@ -85,8 +83,7 @@
                 <p>Any praise about multiple selections is an understatement.</p>
             </blockquote>
             <p>The base functionality of multiple selections is simple. Hold down the <c>Ctrl</c> key (<c>Cmd</c> on <init>OS X</init>), and click somewhere in the open view to get a second cursor. Continue to add more cursors. All of them will behave together when you type: text will be inserted, most snippets or other text commands function as usual, etc. Even mouse commands work in an intuitive way with multiple selections. </p>
-            <p>It is hard to explain exactly what makes multiple selections so powerful. You just have to try it for yourself. Here is a typical example. In a structured document, many bits of text occur quite frequently<mdash />element and attribute names, for example. You may want to update several occurrences of a fragment at once<mdash />making several identical changes. Sublime's Quick Add Next command (<c>Ctrl+D</c>/<c>Cmd+D</c>) makes this a snap.</p>
-            <ol>
+            <p>It is hard to explain exactly what makes multiple selections so powerful. You just have to try it for yourself. Here is a typical example. In a structured document, many bits of text occur quite frequently<mdash />element and attribute names, for example. You may want to update several occurrences of a fragment at once<mdash />making several identical changes. Sublime's Quick Add Next command (<c>Ctrl+D</c>/<c>Cmd+D</c>) makes this a snap.<ol>
                 <li>
                     <p>Place the caret somewhere in the word you'd like to modify.</p>
                 </li>
@@ -102,12 +99,11 @@
                 <li>
                     <p>Make your modification, only one time.</p>
                 </li>
-            </ol>
+            </ol></p>
             <p>Another example that occurs frequently when authoring <init>XML</init> is when you use the Wrap with Tag snippet (<c>Alt+Shift+W</c>/<c>Ctrl+Shift+W</c>). This snippet wraps the selection(s) in a <tag>p</tag> tag, with the tag name highlighted in both the start and end tags. If the <c>p</c> element is not what you wanted, just type. Both tags are replaced. This is a huge benefit to the <init>XML</init> author that makes essential use of multiple selections, even though you are barely aware of this as you use the feature.</p>
             <p>Column selection allows you to select a rectangular area of a file. This is unbelievably useful when editing a structured document. There are lots of ways to do it (<url href="http://docs.sublimetext.info/en/latest/editing/editing.html">see the Sublime Text documentation</url> for a mostly exhaustive list), but the most frequently used is to hold down <c>Shift</c> while clicking and dragging with the right mouse button (on <init>OS X</init>, hold down <c>Option</c> while dragging with the right mouse button). See the documentation for keyboard-based shortcuts.</p>
             <p>Column selection becomes even more useful when used in combination with the keyboard shortcuts for moving and selecting, such as <c>Ctrl+Shift+Right</c> (select to end of word) and <c>Shift+End</c> (select to end of line).</p>
-            <p>Yet another example of the appallingly great utility of multiple selection comes when copying and pasting from a different file format. Suppose you have copied some lines of text and wish each such line to become a list item in your MathBook <init>XML</init> source.</p>
-            <ol>
+            <p>Yet another example of the appallingly great utility of multiple selection comes when copying and pasting from a different file format. Suppose you have copied some lines of text and wish each such line to become a list item in your MathBook <init>XML</init> source.<ol>
                 <li>
                     <p>Use column selection, as described above, to select each line individually.</p>
                 </li>
@@ -126,7 +122,7 @@
                 <li>
                     <p>Use Wrap with Tag to wrap each of the selected lines with matched begin/end <tag>p</tag> tags, all at once.</p>
                 </li>
-            </ol>
+            </ol></p>
             <p>This does take a little mouse-work, but the keystroke savings can be considerable. (The Emmet package, described in <xref ref="subsection-emmet" />, provides an even quicker way to do this task and much more complicated ones.)</p>
             <p>There are so many incredibly handy ways to use multiple selections that we will forgo any further examples to leave the reader the pleasure of discovering her own favorites. One particularly helpful package is Text Pastry, which provides some autonumbering and text insertion commands that work nicely with multiple selections. There are also a handful of packages that extend multiple selection functionality, such as PowerCursors and MultiEditUtils. PowerCursors allows you to add cursors and manipulate them without using the mouse. MultiEditUtils provides additional text processing commands designed to work with multiple selections.</p>
         </subsection>
@@ -206,22 +202,21 @@
                 <title>Usage</title>
                 <p>You can activate the package features by enabling the MathBook <init>XML</init> syntax. The syntax definition looks for <c>.mbx</c> file extensions, which most of us do not use (yet?). If your MathBook <init>XML</init> files end with <c>.xml</c>, you will either need to add a comment to the first line of each file (after the <init>XML</init> declaration):<cd>&lt;!-- MBX --&gt;</cd>or you will need to enable the syntax manually using the command palette. To enable it manually, open a MathBook <init>XML</init> file and press <c>Ctrl+Shift+P</c> (<c>Cmd+Shift+P</c> on <init>OS X</init>) and type <c>mbx</c>. Select <q>Set Syntax: MathBook <init>XML</init></q> from the list of options.</p>
                 <p>You should see the text <q>MathBook <init>XML</init></q> in the lower right corner if you have the status bar visible (command palette: Toggle Status Bar).</p>
-                <p>There are only a few features implemented so far.</p>
-                <ol>
+                <p>There are only a few features implemented so far.<ol>
                     <li>
-                        <p>If you have some sectioning in your MBX file, hit <c>Ctrl+R</c> (<c>Cmd+R</c> on <init>OS X</init>) to run the Go To Symbol command. You should see a panel showing all the divisions' <c>@xml:id</c> names.</p>
+                        <p>If you have some sectioning in your MBX file, hit <c>Ctrl+R</c> (<c>Cmd+R</c> on <init>OS X</init>) to run the Go To Symbol command. You should see a panel showing all the divisions' <attr>xml:id</attr> names.</p>
                     </li>
                     <li>
-                        <p>If you have been using <c>@xml:id</c> to label your stuff, try typing <c>&lt;xref ref="</c> (the beginning of a cross-reference). Sublime Text should show you a panel containing all <c>@xml:id</c> values along with the elements they go with. Choose one to insert it at the caret and close the <c>xref</c> tag. Alternatively, type <c>ref</c> and hit <c>Tab</c> to activate the <c>xref</c> snippet. Then hit <c>Ctrl+l</c> followed by <c>x</c> or <c>Ctrl+l</c> followed by <c>Ctrl+Space</c> to bring up the completions menu. There are several variants of the <c>ref</c> snippet, namely <c>refa</c>, <c>refp</c>, and <c>refpa</c>.</p>
+                        <p>If you have been using <attr>xml:id</attr> to label your stuff, try typing <c>&lt;xref ref="</c> (the beginning of a cross-reference). Sublime Text should show you a panel containing all <attr>xml:id</attr> values along with the elements they go with. Choose one to insert it at the caret and close the <c>xref</c> tag. Alternatively, type <c>ref</c> and hit <c>Tab</c> to activate the <c>xref</c> snippet. Then hit <c>Ctrl+l</c> followed by <c>x</c> or <c>Ctrl+l</c> followed by <c>Ctrl+Space</c> to bring up the completions menu. There are several variants of the <c>ref</c> snippet, namely <c>refa</c>, <c>refp</c>, and <c>refpa</c>.</p>
                     </li>
                     <li>
-                        <p>Type <c>chp</c>, <c>sec</c>, <c>ssec</c>, or <c>sssec</c> and hit <c>Tab</c> to activate the division snippets. A blank <c>title</c> element is provided and the cursor positioned within it. As you type, the <c>@xml:id</c> field for the division is filled with similar text mirroring the title you are entering.</p>
+                        <p>Type <c>chp</c>, <c>sec</c>, <c>ssec</c>, or <c>sssec</c> and hit <c>Tab</c> to activate the division snippets. A blank <c>title</c> element is provided and the cursor positioned within it. As you type, the <attr>xml:id</attr> field for the division is filled with similar text mirroring the title you are entering.</p>
                     </li>
-                </ol>
+                </ol></p>
             </subsubsection>
             <subsubsection xml:id="mbxtools-known-issues">
                 <title>Known issues</title>
-                <ol>
+                <p><ol>
                     <li>
                         <p>When manually adding an <c>xref</c> (not using the snippets or autocomplete), you will frequently see a spurious <q>Unrecognized format</q> error.</p>
                     </li>
@@ -235,7 +230,7 @@
                     <li>
                         <p>Nothing has been tested on OS X or Linux.</p>
                     </li>
-                </ol>
+                </ol></p>
             </subsubsection>
         </subsection>
         <subsection xml:id="subsection-sublime-linter">
@@ -244,7 +239,7 @@
         </subsection>
         <subsection xml:id="subsection-recommended-packages">
             <title>Recommended Packages</title>
-            <ol>
+            <p><ol>
                 <li><p>Package Control</p></li>
                 <li><p>Emmet</p></li>
                 <li><p>SideBarEnhancements</p></li>
@@ -254,7 +249,7 @@
                 <li><p>Git or SublimeGit</p></li>
                 <li><p>SublimeLinter</p></li>
                 <li><p>MBXTools</p></li>
-            </ol>
+            </ol></p>
         </subsection>
     </section>
 

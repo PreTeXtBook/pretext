@@ -13,19 +13,24 @@
             element article {
                 MetaDataSubtitle,
                 ArticleFrontMatter?,
-                Section,
-                (Section | Exercises | References)*,
-                BackMatter?
+                (
+                    (BlockDivision | Paragraphs | Commentary)+
+                |
+                    (
+                        IntroductionDivision?,
+                        Section+,
+                        Exercises*,
+                        ConclusionDivision?,
+                        BackMatter?
+                    )
+                )
             }
         Book =
             ## Here is what a book looks like.
             element book {
                 MetaDataSubtitle,
                 BookFrontMatter?,
-                (
-                    (Chapter, (Chapter | Exercises | References)*) |
-                    Part+
-                ),
+                (Part+ | Chapter+ ),
                 BackMatter?
             }
         Letter =
@@ -41,65 +46,88 @@
         Chapter =
             element chapter {
                 MetaDataTitle,
+                AuthorByline*,
                 Objectives?,
                 (
-                    (BlockDivision | Paragraphs)+ |
+                    (
+                        (BlockDivision | Paragraphs | Commentary)+,
+                        Exercises?,
+                        Solutions?,
+                        References?
+                    )
+                |
                     (
                         IntroductionDivision?,
-                        Section,
-                        (
-                            Section |
-                            Exercises |
-                            References
-                        )*,
-                        ConclusionDivision?)
+                        Section+,
+                        Exercises*,
+                        Solutions?,
+                        References?,
+                        ConclusionDivision?
+                    )
                 )
             }
         Section =
             element section {
                 MetaDataTitle,
+                AuthorByline*,
                 Objectives?,
                 (
-                    (BlockDivision | Paragraphs)+ |
+                    (
+                        (BlockDivision | Paragraphs | Commentary)+,
+                        Exercises?,
+                        Solutions?,
+                        References?
+                    )
+                |
                     (
                         IntroductionDivision?,
-                        Subsection,
-                        (
-                            Subsection |
-                            Exercises |
-                            References
-                        )*,
-                        ConclusionDivision?)
+                        Subsection+,
+                        Exercises*,
+                        Solutions?,
+                        References?,
+                        ConclusionDivision?
+                    )
                 )
             }
         Subsection =
             element subsection {
                 MetaDataTitle,
+                AuthorByline*,
                 Objectives?,
                 (
-                    (BlockDivision | Paragraphs)+ |
+                    (
+                        (BlockDivision | Paragraphs | Commentary)+,
+                        Exercises?,
+                        Solutions?,
+                        References?
+                    )
+                |
                     (
                         IntroductionDivision?,
-                        Subsubsection,
-                        (
-                            Subsubsection |
-                            Exercises |
-                            References
-                        )*,
-                        ConclusionDivision?)
+                        Subsubsection+,
+                        Exercises*,
+                        Solutions?,
+                        References?,
+                        ConclusionDivision?
+                    )
                 )
             }
         Subsubsection =
             element subsubsection {
                 MetaDataTitle,
+                AuthorByline*,
                 Objectives?,
-                (BlockDivision | Paragraphs)+
+                (BlockDivision | Paragraphs | Commentary)+,
+                Exercises?,
+                Solutions?,
+                References?
             }
         Appendix =
             element appendix {
                 MetaDataTitle,
+                AuthorByline*,
                 (
-                    (BlockDivision | Paragraphs | NotationList | SolutionList )+ |
+                    (BlockDivision | Paragraphs | Commentary | NotationList )+ |
                     (
                         IntroductionDivision?,
                         Section,
@@ -194,7 +222,7 @@
         Biography = 
             element biography {
                 MetaDataTitleOptional,
-                (BlockStatementNoCaption | ParagraphsNoNumber)+
+                (BlockStatementNoCaption | ParagraphsNoNumber | Commentary)+
             }
         Dedication = 
             element dedication {
@@ -204,21 +232,21 @@
         Acknowledgement = 
             element acknowledgement {
                 MetaDataTitleOptional,
-                (BlockStatementNoCaption | ParagraphsNoNumber)+
+                (BlockStatementNoCaption | ParagraphsNoNumber | Commentary)+
             }
         Preface =
             element preface {
                 MetaDataTitleOptional,
                 (
                     (
-                        (BlockStatementNoCaption | ParagraphsNoNumber)+, 
+                        (BlockStatementNoCaption | ParagraphsNoNumber | Commentary)+,
                         Attribution*
                     )
                     |
                     (
-                        (BlockStatementNoCaption | ParagraphsNoNumber)*, 
+                        (BlockStatementNoCaption | ParagraphsNoNumber | Commentary)*,
                         Contributors, 
-                        (BlockStatementNoCaption | ParagraphsNoNumber)*
+                        (BlockStatementNoCaption | ParagraphsNoNumber | Commentary)*
                     )
                 )
             }
@@ -227,7 +255,7 @@
         BackMatter = 
             element backmatter {
                 MetaDataTitleOptional,
-                Appendix*,
+                (Appendix|Solutions)*,
                 References?,
                 IndexDivision?,
                 ColophonBack?
@@ -251,11 +279,11 @@
                 Index*,
                 BlockStatementNoCaption+
             }
-        ParagraphsTitleOptional =
-            element paragraphs {
-                MetaDataTitleOptional,
+        Commentary =
+            element commentary {
+                MetaDataTitle,
                 Index*,
-                BlockDivision+
+                BlockStatementNoCaption+
             }
         
         
@@ -264,6 +292,15 @@
                 MetaDataTitleOptional,
                 IntroductionDivision?,
                 (ToDo | Exercise | ExerciseGroup)+,
+                ConclusionDivision?
+            }
+        Solutions =
+            element solutions {
+                MetaDataTitleOptional,
+                attribute inline {text}?,
+                attribute divisional {text}?,
+                attribute project {text}?,
+                IntroductionDivision?,
                 ConclusionDivision?
             }
         References =
@@ -289,7 +326,7 @@
             Remark | Computation | Theorem | Proof | Definition |
             Axiom | Example | Exercise | Project |
             Poem | Assemblage | ListGenerator |
-            GGB | Demonstration
+            Demonstration
         
         
         Prelude =
@@ -415,31 +452,6 @@
                     BlockStatement+
                 }+
             }
-        ListWW =
-            element ol {
-                attribute cols {"2"|"3"|"4"|"5"|"6"}?,
-                attribute label {text}?,
-                element li {
-                    MetaDataTarget,
-                    (TextParagraphWW | ParagraphWW+)
-                }+
-            }
-        |
-            element ul {
-                attribute cols {"2"|"3"|"4"|"5"|"6"}?,
-                attribute label {"" | "square"}?,
-                    element li {
-                    (TextParagraphWW | ParagraphWW+)
-                }+
-            }
-        |
-            element dl {
-                attribute width {"narrow" | "medium" | "wide"}?,
-                element li {
-                    MetaDataTitle,
-                    ParagraphWW+
-                }+
-            }
         
         
         DefinitionLike =
@@ -462,7 +474,7 @@
                 (BlockStatement | Case)+
             }
         TheoremLike =
-            MetaDataTitleOptional,
+            MetaDataTitleCreatorOptional,
             (BlockStatement+ | (Statement, Proof*))
         Theorem =
             element theorem {TheoremLike}
@@ -483,7 +495,7 @@
         
         
         AxiomLike =
-            MetaDataTitleOptional,
+            MetaDataTitleCreatorOptional,
             Statement
         Axiom =
             element axiom {AxiomLike}
@@ -590,7 +602,6 @@
                     SideBySide |
                     SideBySideGroup |
                     Video |
-                    JSXGraph |
                     MuseScore
                 )
             }
@@ -616,6 +627,19 @@
             }
         
         
+        Stack =
+            element stack {
+                (
+                    Tabular |
+                    Image |
+                    Video |
+                    Program |
+                    Console |
+                    Paragraph |
+                    Preformatted |
+                    List
+                )+
+            }
         SidebySideAttributes =
             attribute margins {text}?,
             (attribute width {text} | attribute widths {text})?,
@@ -633,9 +657,8 @@
                     Console |
                     Paragraph |
                     Preformatted |
-                    Paragraphs |
-                    ParagraphsTitleOptional |
-                    List
+                    List |
+                    Stack
                 )+
             }
         SideBySideNoCaption =
@@ -645,14 +668,14 @@
                     Poem |
                     Tabular |
                     Image |
+                    ImageWW |
                     Video |
                     Program |
                     Console |
                     Paragraph |
                     Preformatted |
-                    Paragraphs |
-                    ParagraphsTitleOptional |
-                    List
+                    List |
+                    Stack
                 )+
             }
         SideBySideGroup =
@@ -664,14 +687,6 @@
             element sbsgroup {
                 SidebySideAttributes,
                 SideBySideNoCaption+
-            }
-        SideBySideWW =
-            element sidebyside {
-                SidebySideAttributes,
-                (
-                    TabularWW |
-                    ImageWW
-                )+
             }
         
         
@@ -699,7 +714,7 @@
         ImageWW = 
             element image {
                 attribute pg-name {text}?,
-                element description {(TextShort | WWVariableUse)*}?
+                element description {(TextShort | WWVariable)*}?
             }
         
         
@@ -755,38 +770,6 @@
                 TableColumn*,
                 TableRow+
             }
-
-        TableCellWW =
-            element cell {
-                AlignmentHorizontal?,
-                BorderBottom?,
-                BorderRight?,
-                attribute colspan {text}?,
-                (
-                    TextLongWW |
-                    Line+ |
-                    ParagraphWW+
-                )
-            }
-        TableRowWW =
-            element row {
-                AlignmentHorizontal?,
-                AlignmentVertical?,
-                BorderBottom?,
-                BorderLeft?,
-                TableCellWW+
-            }
-        TabularWW = 
-            element tabular {
-                AlignmentHorizontal?,
-                AlignmentVertical?,
-                BorderTop?,
-                BorderBottom?,
-                BorderLeft?,
-                BorderRight?,
-                TableColumn*,
-                TableRowWW+
-            }
         
         
         Sage = element sage {
@@ -799,13 +782,6 @@
         }
         
         
-        JSXGraph = 
-            element jsxgraph {
-                UniqueID,
-                attribute width {text}?,
-                attribute aspect {text}?,
-                element input {text}
-            }
         MuseScore = 
             element score {
                 attribute musescoreuser {text},
@@ -813,7 +789,7 @@
             }
         
         
-        Video = 
+        Video =
             element video {
                 UniqueID?,
                 attribute width {text}?,
@@ -821,7 +797,7 @@
                 attribute start {xsd:integer}?,
                 attribute end {xsd:integer}?,
                 attribute play-at {"embed" | "popout" | "select"}?,
-                attribute preview {"default" | "generic" }?,
+                attribute preview {"default" | "generic" | text}?,
                 (AttributesSourceFile | AttributesYouTube)
             }
         AttributesSourceFile =
@@ -830,32 +806,33 @@
             attribute youtube {text}
         
         
+        ExerciseBody =
+            (
+                BlockStatement |
+                element ol {
+                    attribute cols {text}?,
+                    attribute label {text}?,
+                    element li {
+                        MetaDataTarget,
+                        (TextParagraph | BlockText+)
+                    }+
+                }
+            )+
         StatementExercise = 
-            element statement {
-                (
-                    BlockStatement |
-                    element ol {
-                        attribute cols {text}?,
-                        attribute label {text}?,
-                        element li {
-                            MetaDataTarget,
-                            (TextParagraph | BlockText+)
-                        }+
-                    }
-                )+
-            }
+            element statement { ExerciseBody }
         Exercise = 
             element exercise {
                 MetaDataTitleOptional,
                 attribute number {text}?,
                 (
+                ExerciseBody |
                 (StatementExercise, Hint*, Answer*, Solution*) |
                 (IntroductionText?, WebWork, ConclusionText?)
                 )
             }
         ExerciseGroup =
             element exercisegroup {
-                MetaDataTarget,
+                MetaDataTitleOptional,
                 attribute cols {"2"|"3"|"4"|"5"|"6"}?,
                 IntroductionStatementNoCaption?,
                 Exercise+,
@@ -921,6 +898,8 @@
             element contributors {
                 Contributor+
             }
+        AuthorByline =
+            element author {(TextSimple|Xref)}
         
         
         WebWork = (WebWorkAuthored | WebWorkSource)
@@ -949,10 +928,10 @@
         StatementExerciseWW =
             element statement {
                 (
-                    ParagraphWW |
+                    Paragraph |
                     WWInstruction |
                     Preformatted |
-                    SideBySideWW
+                    SideBySideNoCaption
                 )+
             }
         WWMacros = 
@@ -961,26 +940,15 @@
             }
         WWSetup = 
             element setup {
-                WWVariableSetup*,
                 element pg-code {text}?
             }
-        WWVariableSetup = 
-            element var {
-                attribute name {text},
-                attribute category {"integer"|"number"|"formula"}?,
-                element static {text}?,
-                element set {
-                    element member {
-                        attribute correct {"yes"|"no"}?,
-                        text
-                    }+
-                }?
-            }
-        WWVariableUse =
+        WWVariable =
+            ## The WeBWorK "var" element appears in the RELAX-NG schema as a child of many elements, but almost always as a descendant of a "p" element or a "cell" element.  As an element that is only relevant for a WeBWorK problem, occurences of "var" must be within a "webwork" element.  A Schematron rule will check on these two situations.
             element var {
                 (attribute name {text},
                 attribute evaluator {text}?,
                 attribute width {text}?,
+                attribute category {"angle" | "decimal" | "exponent" | "formula" | "fraction" | "inequality" | "integer" | "interval" | "logarithm" | "limit" | "number" | "point" | "syntax" | "quantity" | "vector"}?,
                 attribute form {"popup"|"buttons"|"none"}?) | 
                 (attribute form {"essay"},
                 attribute width {text}?)
@@ -990,17 +958,17 @@
         HintWW =
             element hint {
                 (
-                    ParagraphWW |
+                    Paragraph |
                     Preformatted |
-                    SideBySideWW
+                    SideBySideNoCaption
                 )+
             }
         SolutionWW =
             element solution {
                 (
-                    ParagraphWW |
+                    Paragraph |
                     Preformatted |
-                    SideBySideWW
+                    SideBySideNoCaption
                 )+
             }
         
@@ -1023,6 +991,8 @@
             element title {TextLong}
         Subtitle =
             element subtitle {TextLong}
+        Creator =
+            element creator {TextShort}
         XMLBase = attribute xml:base {text}
         XMLLang = attribute xml:lang {text}
         MetaDataTarget =
@@ -1047,6 +1017,13 @@
             XMLLang?,
             Title?,
             Index*
+        MetaDataTitleCreatorOptional =
+            UniqueID?,
+            XMLBase?,
+            XMLLang?,
+            Title?,
+            Creator?,
+            Index*
         MetaDataCaption =
             UniqueID?,
             XMLBase?,
@@ -1062,6 +1039,7 @@
             Generator |
             Verbatim |
             Group |
+            WWVariable |
             MathInline |
             Music |
             Reference |
@@ -1071,29 +1049,10 @@
             Footnote |
             Notation |
             Index)* }
-        Paragraph = 
+        Paragraph =
             element p {
                 UniqueID?,
                 TextParagraph
-            }
-        TextParagraphWW = mixed { (
-            Character |
-            Generator |
-            Verbatim |
-            Group |
-            WWVariableUse |
-            MathInlineWW |
-            Music |
-            Reference |
-            CodeDisplay |
-            MathDisplayWW |
-            ListWW |
-            Footnote |
-            Notation |
-            Index)* }
-        ParagraphWW =
-            element p {
-                TextParagraphWW
             }
         ParagraphLined =
             element p {
@@ -1118,16 +1077,8 @@
             Group |
             MathInline |
             Music |
-            Reference)* }
-        TextLongWW =  mixed { (
-            Character |
-            Generator |
-            Verbatim |
-            Group |
-            MathInlineWW |
-            Music |
             Reference |
-            WWVariableUse)* }
+            WWVariable)* }
         
         
             Footnote =
@@ -1193,7 +1144,7 @@
         
         MathInline =
             element m {
-                mixed {FillIn*}
+                mixed {(FillIn | WWVariable)*}
             }
         MathRow = 
             element mrow {
@@ -1207,17 +1158,17 @@
                                    "maltese" | "dmaltese" | "tmaltese" }
                 )?,
                 attribute break {"yes" | "no"}?,
-                mixed {(Xref | FillIn)*}
+                mixed {(Xref | FillIn | WWVariable)*}
             }
         MathIntertext = element intertext {TextLong}
         MathDisplay =
             element me {
-                mixed {FillIn*}
+                mixed {(FillIn | WWVariable)*}
             }
         |
             element men {
                 MetaDataTarget,
-                mixed {FillIn*}
+                mixed {(FillIn | WWVariable)*}
             }
         |
             element md {
@@ -1236,44 +1187,6 @@
                 attribute alignat-columns {text}?,
                 MathRow,
                 (MathRow | MathIntertext)*
-            }
-        MathInlineWW =
-            element m {
-                mixed {(FillIn | WWVariableUse)*}
-            }
-        MathRowWW = 
-            element mrow {
-                MetaDataTarget,
-                attribute number {"yes" | "no"}?,
-                attribute break {"yes" | "no"}?,
-                mixed {(Xref | FillIn | WWVariableUse)*}
-            }
-        MathDisplayWW =
-            element me {
-                mixed {(FillIn | WWVariableUse)*}
-            }
-        |
-            element men {
-                MetaDataTarget,
-                mixed {(FillIn | WWVariableUse)*}
-            }
-        |
-            element md {
-                attribute number {"yes" | "no"}?,
-                attribute break {"yes" | "no"}?,
-                attribute alignment {text}?,
-                attribute alignat-columns {text}?,
-                MathRowWW,
-                (MathRowWW | MathIntertext)*
-            }
-        |
-            element mdn {
-                attribute number {"yes" | "no"}?,
-                attribute break {"yes" | "no"}?,
-                attribute alignment {text}?,
-                attribute alignat-columns {text}?,
-                MathRowWW,
-                (MathRowWW | MathIntertext)*
             }
         
         
@@ -1302,14 +1215,24 @@
             element em {TextLong} |
             element term {TextLong} |
             element alert {TextLong} |
-            element foreign {TextLong} |
-            element booktitle {TextLong}
+            element pubtitle {TextLong} |
+            element articletitle {TextLong} |
+            element foreign {
+              XMLLang?,
+              TextLong
+            }
         
             
         Group |= 
             element delete {TextLong} |
             element insert {TextLong} |
             element stale {TextLong}
+        
+            
+        Group |=
+            element tag {text} |
+            element tage {text} |
+            element attr {text}
         
             
         Group |=
@@ -1333,10 +1256,19 @@
             element latex {empty} |
             element pretext {empty} |
             element webwork {empty} |
-            element eg {empty} |
-            element ie {empty} |
+            element ad {empty} |
+            element am {empty} |
+            element bc {empty} |
             element circa {empty} |
-            element etc {empty}
+            element eg {empty} |
+            element etal {empty} |
+            element etc {empty} |
+            element ie {empty} |
+            element nb {empty} |
+            element pm {empty} |
+            element ps {empty} |
+            element vs {empty} |
+            element viz {empty}
         
         
         UnitSpecification =
@@ -1396,6 +1328,7 @@
         Character |= 
             element ellipsis {empty} |
             element asterisk {empty} |
+            element backtick {empty} |
             element slash {empty} |
             element midpoint {empty} |
             element swungdash {empty} |
@@ -1447,16 +1380,8 @@
             }
         NotationList =
             element notation-list {empty}
-        SolutionList =
-            element solution-list {empty}
         
         
-        GGB = 
-            element geogebra-applet {
-                empty |
-                (element ggbBase64 {text},
-                Figure)
-            }
         Demonstration = element demonstration {
             Title,
             Paragraph,

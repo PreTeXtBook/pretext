@@ -53,7 +53,7 @@
         <p>That's it.  You now have a complete, properly-formed <pretext /> document.  You are ready to organize the two tools necessary to process your source into different formats.</p>
     </section>
 
-    <section>
+    <section xml:id="quickstart-setup">
         <title>Setup</title>
 
         <p>There are two components to processing your document, the <pretext /> stylesheets and the <c>xsltproc</c> program.  We work at the <term>command-line</term><idx>command-line</idx> inside of a <term>terminal</term><idx>terminal</idx> or <term>console</term><idx>console</idx>.  If you do not know what this is, it will seem very primitive at first.  Sometimes the old ways are the best ways.  This will be called a <q>Command Prompt</q> in Windows or a <q>Terminal</q> on a Mac.  In Linux it may be known as a <q>console</q> or a <q>shell</q>.  A tutorial, which is Linux-specific, can be found at <url href="http://ryanstutorials.net/linuxtutorial/">Ryan's Tutorials</url> and certainly others exist.</p>
@@ -80,7 +80,7 @@
 
     </section>
 
-    <section>
+    <section xml:id="quickstart-processing">
         <title>Processing</title>
 
         <p>At a command prompt in your terminal or console adjust the pathnames for the two files and execute:<cd>
@@ -98,12 +98,12 @@
         <p>That's it.  You now know all the basics of authoring with <pretext />, since you have produced two radically different output formats with identical content from the exact same structured input, via two different command lines.  Everything you need to author a complete article or textbook, and produce it in many different formats, is just an extension or variation on what you just did.  Let us look at a few simple extensions right away before being more methodical.</p>
     </section>
 
-    <section>
+    <section xml:id="quickstart-extend-minimal-example">
         <title>Extending the Minimal Example</title>
 
         <p>We will not keep reproducing the entire example but instead suggest a series of modifications.  After each edit, process the file again to make sure your syntax is correct (before you get too far along) and to see the changes.</p>
 
-        <p>The generic name of the resulting files is pretty bland, and it would be nice to have a title for our article.  We will add an <term>attribute</term><idx>attribute</idx> to the <tag>article</tag> tag, specifically <attribute>xml:id</attribute>, which is a very important part of <pretext /> and used frequently.  For now, it will be used to generate the names of the output files.  (The <q>at</q> symbol is a way of reminding you that it is an attribute, it is not part of what you author.)</p>
+        <p>The generic name of the resulting files is pretty bland, and it would be nice to have a title for our article.  We will add an <term>attribute</term><idx>attribute</idx> to the <tag>article</tag> tag, specifically <attr>xml:id</attr>, which is a very important part of <pretext /> and used frequently.  For now, it will be used to generate the names of the output files.  (The <q>at</q> symbol is a way of reminding you that it is an attribute, it is not part of what you author.)</p>
 
         <p>So make the following modifications:</p>
 
@@ -143,7 +143,7 @@
         ]]>
         </pre>
 
-        <p>The <latex />/PDF output will be a bit odd looking since every paragraph is so short, but all the content should be there.  Notice that the HTML output now has a table of contents to the left and active navigation buttons.  Also the two sections are in their own files and the URLs have been constructed from the supplied values of the <attribute>xml:id</attribute> attribute.</p>
+        <p>The <latex />/PDF output will be a bit odd looking since every paragraph is so short, but all the content should be there.  Notice that the HTML output now has a table of contents to the left and active navigation buttons.  Also the two sections are in their own files and the URLs have been constructed from the supplied values of the <attr>xml:id</attr> attribute.</p>
 
         <p>One last experiment<mdash />let us add some mathematics.  We use XML tags, <tag>m</tag> for <q>inline</q> mathematics and <tag>me</tag> for a <q>math equation</q> which will be rendered with a bit of vertical separation and centered from left to right.  We use <latex /> syntax for mathematics, which has been the standard for working mathematicians for decades.  For electronic presentation, we rely on the excellent <url href="https://www.mathjax.org/">MathJax</url> project which basically supports all the syntax of the <url href="https://www.ctan.org/pkg/amsmath?lang=en">amsmath</url> package from the American Mathematical Society.  Add the following sentence to any of the paragraphs of your article.</p>
 
@@ -189,7 +189,7 @@
         </pre>
     </section>
 
-    <section>
+    <section xml:id="quickstart-next">
         <title>Where Next?</title>
 
         <p>Next chapter has more detail.</p>

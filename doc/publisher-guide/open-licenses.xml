@@ -52,6 +52,7 @@
         <p>We describe the Creative Commons (<init>CC</init>) licenses first, since they have various options, which are a convenient way to compartmentalize and describe the features of other open licenses.  They are known by abbreviations, so a license might be shortened to something like just <c>CC BY-SA</c>.</p>
 
         <list>
+            <caption>Creative Commons Options</caption>
             <dl>
                 <li>
                     <title>Creative Commons, <c>CC</c></title>
@@ -78,7 +79,6 @@
                     <p>Derivative works are not allowed.</p>
                 </li>
             </dl>
-            <caption>Creative Commons Options</caption>
         </list>
 
         <paragraphs>
@@ -171,7 +171,7 @@
     <section>
         <title>A Final Comment</title>
 
-        <p>These discussions remind us of a <a href="http://www.let.rug.nl/usa/presidents/thomas-jefferson/letters-of-thomas-jefferson/jefl220.php">letter by Thomas Jefferson</a>, the principal author of the United States' <booktitle>Declaration of Independence</booktitle>, writing about another monoply granted by governments<mdash />patents.</p>
+        <p>These discussions remind us of a <url href="http://www.let.rug.nl/usa/presidents/thomas-jefferson/letters-of-thomas-jefferson/jefl220.php">letter by Thomas Jefferson</url>, the principal author of the United States' <pubtitle>Declaration of Independence</pubtitle>, writing about another monoply granted by governments<mdash />patents.</p>
 
         <blockquote>
             <p>If nature has made any one thing less susceptible than all others of exclusive property, it is the action of the thinking power called an idea, which an individual may exclusively possess as long as he keeps it to himself; but the moment it is divulged, it forces itself into the possession of every one, and the receiver cannot dispossess himself of it. Its peculiar character, too, is that no one possesses the less, because every other possesses the whole of it. He who receives an idea from me, receives instruction himself without lessening mine; as he who lights his taper at mine, receives light without darkening me. That ideas should freely spread from one to another over the globe, for the moral and mutual instruction of man, and improvement of his condition, seems to have been peculiarly and benevolently designed by nature, when she made them, like fire, expansible over all space, without lessening their density in any point, and like the air in which we breathe, move, and have our physical being, incapable of confinement or exclusive appropriation.</p>

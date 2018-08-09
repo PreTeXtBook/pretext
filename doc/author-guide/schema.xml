@@ -11,7 +11,7 @@
     <title><pretext /> Vocabulary Specification</title>
 
     <introduction>
-        <p>This Author's Guide, along with the sample article and sample book distributed with the <pretext /> source, provide a wealth of examples of how to author in <pretext />. However, at some point, you will undoubtedly encounter a situation where some of your text fails to appear in your output or <c>xsltproc</c> produces an error. Those are good moments to start investigating the formal specifications of the <pretext /> vocabulary, as most likely you tried to use something in a way incompatible with those specifications.  This chapter will help you understand and work with the formal specification of <pretext />.</p>
+        <p>This Author's Guide, along with the sample article and sample book distributed with the <pretext /> source, provide a wealth of examples of how to author in <pretext />. However, at some point, you will undoubtedly encounter a situation where some of your text fails to appear in your output or <c>xsltproc</c> produces an error. Those are good moments to start investigating the formal specifications of the <pretext /> vocabulary, as most likely you tried to use something in a way incompatible with those specifications.  This chapter will help you understand, and work with, the formal specification of <pretext />.</p>
     </introduction>
 
     <section xml:id="schema-relaxng">
@@ -25,10 +25,22 @@
 
         <p>In summary, the <acro>RELAX-NG</acro> schema<ul>
             <li>is the formal specification of the <pretext /> vocabulary,</li>
-            <li>is the key input to validation,</li>
+            <li>is a key input to validation,</li>
             <li>can be incredibly helpful in the editing process, and</li>
             <li>provides guidance to implementors of conversions.</li>
         </ul>As such, we are very deliberate about changes, and hope over time to make changes only very rarely.</p>
+    </section>
+
+    <section xml:id="schematron">
+        <title>Schematron Rules</title>
+        <idx>Schematron</idx>
+
+        <p>The <acro>RELAX-NG</acro> schema is very good at specifying <q>parent-child</q> relationships, in other words, which elements can nest directly under/within other elements.  But we have situations where the possible elements depend on grandparents, great-grandparents, or older ancestors.  An example is the <tag>var</tag> element, which is only useful if it is contained <em>somewhere</em> within a <tag>webwork</tag> element.  You can describe these situations with <acro>RELAX-NG</acro>, but it becomes cumbersome and redundant.  So our stategy is to allow some prohibited situations in the <acro>RELAX-NG</acro> schema, and use <url href="http://schematron.com/">Schematron</url> rules to identify the prohibited situations.  Continuing our <webwork/> example, the <acro>RELAX-NG</acro> schema makes it appear that <tag>var</tag> can be used many places, but a Schematron rule will provide a helpful message indicating you have used it outside the context of a <webwork/> problem.</p>
+
+        <blockquote>
+            <p>Schematron is a feather duster to reach the corners that other schema languages cannot reach.</p>
+            <attribution>Rick Jelliffe</attribution>
+        </blockquote>
     </section>
 
     <section xml:id="schema-products">
@@ -48,7 +60,7 @@
         <p>If you are intersted in conversions, more tools can be found at <url href="http://relaxng.org/"><c>relaxng.org</c></url> and we have information on installation in <xref ref="schema-install" />.  We would be pleased to learn more about authors' experiences with other converters.</p>
     </section>
 
-    <section>
+    <section xml:id="schema-reading-relaxng">
         <title>Reading <acro>RELAX-NG</acro> Compact Syntax</title>
 
         <p>The compact syntax might remind you of Java or C++ syntax.  We do not provide a tutorial here, but do provide some hints on the various delimiters and special symbols, which may make it fairly easy to see your way through to the meaning.  The fundamental object of the schema is a <term>pattern</term><idx>pattern</idx>, and <term>named patterns</term><idx>named pattern</idx><idx><h>pattern</h><h>named pattern</h></idx> can be reused in order to reuse common patterns<idx>common pattern</idx><idx><h>pattern</h><h>common pattern</h></idx> and modularize the description.  One approach to validation is to remove portions of your source that match required patterns until only optional material remains.  Notice that if you were to chase your way through substituting the named patterns with their employment, you would have a single (large) pattern which every possible <pretext /> document would match, and by definition an <init>XML</init> document that does not match is not <pretext />.  (OK, that is a slight exaggeration, see <xref ref="schematron" />.)</p>
@@ -62,7 +74,7 @@
                 <cell>Define <tag>foo</tag> and children</cell></row>
                 <!--  -->
                 <row><cell>attribute bar <lbrace /> <rbrace /></cell>
-                <cell>Define <attribute>bar</attribute> and values</cell></row>
+                <cell>Define <attr>bar</attr> and values</cell></row>
                 <!--  -->
                 <row><cell>text</cell>
                 <cell>Sequence of characters (any length)</cell></row>
@@ -103,35 +115,30 @@
         </table>
     </section>
 
-    <section>
+    <section xml:id="schema-validation">
         <title>Validation</title>
 
         <p>We cannot stress enough the importance of validating<idx>valid schema</idx> your source early and frequently.  Error conditions and messages can be built into processing (we have some anyway), but they are much better accomodated by tools built for just this purpose.  If your processing with <c>xsltproc</c> suddenly fails, or if chunks of your content fail to materialize, it is highly likely that a validation check will tell you where the problem lies.  If you integrate regular checks into your workflow, then sudden problems can be traced to recent changes.  (Perhaps paired with using <c>git bisect</c>, in the extreme.  You are using revision control, aren't you?)</p>
 
-        <p>We use <c>jing</c><idx><c>jing</c></idx> for validation, an open source companion to the <c>trang</c> converter described above.  As a Java program, it should be cross-platform.  It is also packaged for Debian and Ubuntu Linux.  It provides messages keyed to the line number and character number of your source, and the messages are very clear and informative.  See notes on installation in <xref ref="schema-install" />.  We would be pleased to learn more about authors' experiences with other validators.</p>
+        <p>We use <c>jing</c><idx><c>jing</c></idx> for the first step, <acro>RELAX-NG</acro> validation.  This is an open source companion to the <c>trang</c> converter described above.  As a Java program, it should be cross-platform.  It is also packaged for Debian and Ubuntu Linux.  It provides messages keyed to the line number and character number of your source, and the messages are very clear and informative.  See notes on installation in <xref ref="schema-install" />.  We would be pleased to learn more about authors' experiences with other validators.</p>
 
         <p>You might get a lot of error messages the first time you use <c>jing</c>. If so, it might be that many of them are the same situation.  If you pipe the output of <c>jing</c> through <c>sort -k 2</c> then the output will group similar messages together.</p>
 
         <p>If you use <c>xsltproc</c> as your <init>XSLT</init> processor, then you likely automatically also have the <c>xmllint</c><idx><c>xmllint</c></idx> program, which will perform validation with <acro>RELAX-NG</acro> schema.  Our experience is that it bails out at the first warning, or at least does not process the remainder of the current subtree, and that the error messages are often very misleading.  We will not support questions about validation based on output from <c>xmllint</c>.</p>
+
+        <p>The second step is easier, since it is an <init>XSL</init> transform.  In other words, it is just another stylesheet, which you run against your source, with a processor like <c>xsltproc</c>.  This stylesheet encoding Schematron rules is unique to <pretext/> and will report exceptions that are too difficult to express with <acro>RELAX-NG</acro>.  So validation is two complementary steps.  See <xref ref="schema-install" /> for the exact syntax for using this stylesheet.</p>
     </section>
 
-    <section>
+    <section xml:id="schema-browser">
         <title>Schema Browser</title>
 
         <p>We use the DocFlex/XML <url href="http://www.filigris.com/docflex-xml/xsddoc/">XML Schema Documentation Generator</url><idx>DocFlex/XML XML schema documentation generator</idx> to automatically produce hyperlinked documentation of the schema as part of the online documentation at the <pretext /> website, located at <url href="http://mathbook.pugetsound.edu/doc/schema/"><c>mathbook.pugetsound.edu/doc/schema/</c></url>.  Because this is produced from the <init>XSD</init> version of the schema, it will reproduce the small inaccuracies mentioned above.  But it is still a very convenient and informative way to explore the schema, or use it for reference.   If you know of a similar tool of the same quality, but which documents <acro>RELAX-NG</acro> schema, a report would be greatly appreciated.</p>
 
         <p>Do not be intimidated by the list of roughly 300 elements in the left navigation panel.  Many are configuration options, many are special-purpose, and many you will never use.  (Someday we will do lexical analysis on a substantial range of <pretext /> texts to see just which elements do get used most frequently).  Instead, scroll down to the 70 or so <q>Element Groups</q>.  These are thematic bundles of related elements, named to help you locate them later.  The right panel will list the elements near the top as part of the <q>Complex Content Model.</q>  Just below you will see the <q>Known Usage Locations</q> which list places every element in the group may appear.  Similarly, if you explore a particular element, you can see the pattern describing the attributes and elements allowed as children, and lists of the possible parents.</p>
 
+        <p>Elements which have complicated restrictions handled by Schematron rules will have some written documentation to this effect as part of their page within the schema browser.</p>
+
         <p>The XML Schema Documentation Generator<idx>XML schema documentation generator</idx><idx><h>XML schema documentation generator</h><seealso>DocFlex/XML XML schema documentation generator</seealso></idx> is a commercial program, but provides a free license allowing minimal customization and embeddeding promotion in the output.  (Thank-you, Filigris Works!)  In particular, as an author you should not need to install or use this program.</p>
-    </section>
-
-    <section xml:id="schematron">
-        <title>Schematron Rules</title>
-
-        <p>Schematron's<idx>Schematron</idx> inventor, Rick Jelliffe, described <url href="http://schematron.com/">Schematron</url> as <q>a feather duster to reach the parts other schema languages cannot reach.</q></p>
-        <!-- https://en.wikipedia.org/wiki/Schematron on 2017-07-21 -->
-
-        <p>We will augment the <acro>RELAX-NG</acro> schema with Schematron rules, and migrate source-specific error messages and special conditions away from the <init>XSLT</init> processing step.  It appears possible to integrate Schematron rules into the <pretext /> document describing the schema and to conduct processing with existing tools (<ie />, <c>xsltproc</c>).</p>
     </section>
 
     <section xml:id="editors-supporting-schema">

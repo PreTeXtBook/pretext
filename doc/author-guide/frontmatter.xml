@@ -20,7 +20,7 @@
         <date>DRAFT <today /> DRAFT</date>
     </titlepage>
 
-    <colophon>
+    <colophon xml:id="colophon">
         <copyright>
             <year>2013<ndash />2016</year>
             <holder>Robert A. Beezer</holder>
@@ -28,7 +28,7 @@
         </copyright>
     </colophon>
 
-    <preface>
-        <p>This guide will help you <em>author</em> a <pretext /> document.  So it serves as a description of the <pretext /> <init>XML</init> vocabulary, along with the mechanics of creating the source and common output formats.  Note that this is different than <em>publishing</em> your document, which is described in the <booktitle><pretext /> Publisher's Guide</booktitle>.  Even if you intend to distribute your document with an open license, and you are both author <em>and</em> publisher, it is still helpful and instructive to understand, and separate, the two different steps and roles.</p>
+    <preface xml:id="preface">
+        <p>This guide will help you <em>author</em> a <pretext /> document.  So it serves as a description of the <pretext /> <init>XML</init> vocabulary, along with the mechanics of creating the source and common output formats.  Note that this is different than <em>publishing</em> your document, which is described in the <pubtitle><pretext /> Publisher's Guide</pubtitle>.  Even if you intend to distribute your document with an open license, and you are both author <em>and</em> publisher, it is still helpful and instructive to understand, and separate, the two different steps and roles.</p>
     </preface>
 </frontmatter>

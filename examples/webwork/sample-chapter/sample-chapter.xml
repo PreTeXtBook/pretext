@@ -132,16 +132,6 @@
                     <title>Integer Addition</title>
 
                     <setup>
-                        <var name="$a">
-                            <static>9</static>
-                        </var>
-                        <var name="$b">
-                            <static>8</static>
-                        </var>
-                        <var name="$c" category="integer">
-                            <static>17</static>
-                        </var>
-
                         <pg-code>
                             $a = Compute(random(1, 9, 1));
                             $b = Compute(random(1, 9, 1));
@@ -151,7 +141,7 @@
 
                     <statement>
                         <p>Compute the sum of <m><var name="$a" /></m> and <m><var name="$b" /></m>:</p>
-                        <p><m><var name="$a" /> + <var name="$b" /> =</m> <var name="$c" width="2" /></p>
+                        <p><m><var name="$a" /> + <var name="$b" /> =</m> <var name="$c" width="2" category="integer" /></p>
                     </statement>
 
                     <solution>
@@ -177,16 +167,6 @@
                     <title>Integer Addition</title>
 
                     <setup>
-                        <var name="$a">
-                            <static>5</static>
-                        </var>
-                        <var name="$b">
-                            <static>8</static>
-                        </var>
-                        <var name="$c" category="integer">
-                            <static>13</static>
-                        </var>
-
                         <pg-code>
                             $a = Compute(random(1, 9, 1));
                             $b = Compute(random(1, 9, 1));
@@ -196,7 +176,7 @@
 
                     <statement>
                         <p>Compute the sum of <m><var name="$a" /></m> and <m><var name="$b" /></m>:</p>
-                        <p><m><var name="$a" /> + <var name="$b" /> =</m> <var name="$c" width="2" /></p>
+                        <p><m><var name="$a" /> + <var name="$b" /> =</m> <var name="$c" width="2" category="integer" /></p>
                     </statement>
 
                     <solution>
@@ -216,16 +196,6 @@
                     <title>Integer Addition</title>
 
                     <setup>
-                        <var name="$a">
-                            <static>1</static>
-                        </var>
-                        <var name="$b">
-                            <static>2</static>
-                        </var>
-                        <var name="$c" category="integer">
-                            <static>3</static>
-                        </var>
-
                         <pg-code>
                             $a = Compute(random(1, 9, 1));
                             $b = Compute(random(1, 9, 1));
@@ -236,7 +206,7 @@
 
                     <statement>
                         <p>Compute the sum of <m><var name="$a" /></m> and <m><var name="$b" /></m>:</p>
-                        <p><m><var name="$a" /> + <var name="$b" /> =</m> <var name="$c" width="2" /></p>
+                        <p><m><var name="$a" /> + <var name="$b" /> =</m> <var name="$c" width="2" category="integer" /></p>
                     </statement>
 
                     <solution>
@@ -250,8 +220,7 @@
                 <title>Special Answer Checking</title>
 
                 <introduction>
-                    <p>One of the strengths of <webwork /> is its ability to give intelligent feedback for incorrect answers.</p>
-                    <p><ul>
+                    <p>One of the strengths of <webwork /> is its ability to give intelligent feedback for incorrect answers.<ul>
                         <li><p>There is general feedback for when the student's answer is in an entirely different ballpark from the correct answer. Try entering something like <q><c>y</c></q>.</p></li>
                         <li><p>There is general feedback for when the student's answer is not in the right form. Try entering <q><c>x^2*x^3</c></q>, which, right or wrong, is unsimplified.</p></li>
                         <li><p>And problems can be written to detect and respond to common mistakes. Try entering an answer where you multiply the two exponents (instead of adding them, which would be correct.)</p></li>
@@ -265,22 +234,6 @@
                     </pg-macros>
 
                     <setup>
-                        <var name="$a">
-                            <static>5</static>
-                        </var>
-                        <var name="$b">
-                            <static>8</static>
-                        </var>
-                        <var name="$c">
-                            <static>13</static>
-                        </var>
-                        <var name="$expression">
-                            <static>x^5\cdot x^8</static>
-                        </var>
-                        <var name="$answer" category="formula">
-                            <static>x^{13}</static>
-                        </var>
-
                         <pg-code>
                             $a = Compute(random(1, 9, 1));
                             $b = Compute(random(1, 9, 1));
@@ -305,7 +258,7 @@
 
                         <instruction>To enter a power, use a <c>^</c>, as in <c>x^2</c> for <m>x^2</m>.</instruction>
 
-                        <p><m><var name="$expression" />=</m><var name="$answer" evaluator="$evaluator" width="8" /></p>
+                        <p><m><var name="$expression" />=</m><var name="$answer" evaluator="$evaluator" width="8" category="formula" /></p>
 
                     </statement>
 
@@ -327,19 +280,6 @@
                 <webwork>
                     <title>Multiplication with Exponents</title>
                     <setup>
-                        <var name="$a">
-                            <static>5</static>
-                        </var>
-                        <var name="$b">
-                            <static>3</static>
-                        </var>
-                        <var name="$expression">
-                            <static>\sqrt{45}</static>
-                        </var>
-                        <var name="$answer" category="number">
-                            <static>3\sqrt{5}</static>
-                        </var>
-
                         <pg-code>
                             do {
                                 $a = Compute(list_random(2,3,5,6));
@@ -420,38 +360,6 @@
                 <webwork xml:id="quadratic-equation">
 
                     <setup>
-                        <var name="$a">
-                            <static>2</static>
-                        </var>
-                        <var name="$b">
-                            <static>1</static>
-                        </var>
-                        <var name="$c">
-                            <static>-6</static>
-                        </var>
-                        <var name="$quadratic">
-                            <static>2x^2 + x - 6</static>
-                        </var>
-                        <var name="$x1">
-                            <static>\frac{3}{2}</static>
-                        </var>
-                        <var name="$x2">
-                            <static>-2</static>
-                        </var>
-                        <var name="$solnum1">
-                            <static>-1+\sqrt{1^2-4(2)(-6)}</static>
-                        </var>
-                        <var name="$solnum2">
-                            <static>-1-\sqrt{1^2-4(2)(-6)}</static>
-                        </var>
-
-                        <var name="$multians1">
-                            <set>
-                                <member correct="yes">1.5</member>
-                                <member correct="yes">2</member>
-                            </set>
-                        </var>
-
                         <!-- TODO: move out context shift -->
                         <pg-code>
                         Context("Fraction");
@@ -548,7 +456,7 @@
                     <p>This problem is one that Portland Community College has donated to the Open Problem Library.</p>
                 </introduction>
 
-                <webwork source="BasicAlgebra/Geometry/CylinderVolume10.pg" seed="8435"/>
+                <webwork source="Library/PCC/BasicAlgebra/Geometry/CylinderVolume10.pg" seed="8435"/>
             </exercise>
 
             <warning>
@@ -567,8 +475,6 @@
                 <title>A Few More Features</title>
 
                 <p>This subsection demonstrates a few more features.</p>
-
-                <p>The derivative and antiderivative of a function can be understood through study of their graphical relationships.</p>
 
                 <definition xml:id="definition-antiderivative">
                     <title>Antiderivative of a Function</title>
@@ -611,17 +517,21 @@
                 <title><webwork /> Exercises</title>
 
                 <introduction>
-                    <p>The first problem in this list is coming from the <webwork /> Open Problem Library. One implication of this is that we might want to provide some commentary that connects the problem to the text.  The other two ask for essay answers, which would be graded by an instructor, so there is no opportunity to provide answer.</p>
+                    <p>The first problem in this list is coming from the <webwork /> Open Problem Library. One implication of this is that we might want to provide some commentary that connects the problem to the text.  The other two ask for essay answers, which would be graded by an instructor, so in the HTML output there is no opportunity to provide an answer.</p>
                 </introduction>
 
-                <exercise xml:id="ww-graphical-antiderivatives">
-                    <title>Graphical Antiderivatives</title>
+                <exercise xml:id="ww-antiderivatives">
+                    <title>Antiderivatives</title>
 
                     <introduction>
                         <p>Consult <xref ref="definition-antiderivative" /> and the <xref ref="theorem-FTC" text="title" /> to assist you with the following problem.</p>
                     </introduction>
 
                     <webwork source="Library/ma122DB/set12/s5_4_26.pg" />
+
+                    <conclusion>
+                        <p>Unless the OPL has changed this problem out from under us, note the <q>SOLUTION</q> appearing in the solution. That is hard-coded into the OPL version of the problem. This is an example of something undesirable that may happen when using OPL problems that were not originally written with <pretext /> in mind.</p>
+                    </conclusion>
                 </exercise>
 
                 <exercise xml:id="ww-discuss-always-antiderivative">
@@ -706,13 +616,6 @@
                 <webwork>
 
                     <setup>
-                        <var name="$rational">
-                            <set>
-                                <member>is</member>
-                                <member correct="yes">is not</member>
-                            </set>
-                        </var>
-
                         <pg-code>
                             $rational = PopUp(
                                 ["?","is","is not",],
@@ -739,14 +642,6 @@
                 <webwork>
 
                     <setup>
-                        <var name="$theorem">
-                            <set>
-                                <member>The Quadratic Formula</member>
-                                <member correct="yes">The Fundamental Theorem of Calculus</member>
-                                <member>The Fundamental Theorem of Arithmetic</member>
-                            </set>
-                        </var>
-
                         <pg-code>
                             $theorem = RadioButtons(
                               ["The Quadratic Formula","The Fundamental Theorem of Calculus","The Fundamental Theorem of Arithmetic","None of these"],
@@ -775,17 +670,6 @@
                 <webwork>
 
                     <setup>
-                        <var name="$expressions">
-                            <set>
-                                <member correct="yes"><m>e^{x^2}e^{1/x}</m></member>
-                                <member><m>\frac{e^{x^2}}{e^x}</m></member>
-                                <member correct="yes"><m>e^{x^2}e^{x^{-1}}</m></member>
-                                <member correct="yes"><m>e^{(x^3+1)/x}</m></member>
-                                <member><m>e^{x^2}+e^{1/x}</m></member>
-                                <member>None of the above</member>
-                            </set>
-                        </var>
-
                         <pg-code>
                             $expressions = new_checkbox_multiple_choice();
                             $expressions -> qa (
@@ -826,31 +710,6 @@
 
                 <webwork>
                     <setup>
-                        <var name="$a[0]" category="integer">
-                            <static>2</static>
-                        </var>
-                        <var name="$a[1]" category="integer">
-                            <static>4</static>
-                        </var>
-                        <var name="$b[0]" category="integer">
-                            <static>5</static>
-                        </var>
-                        <var name="$b[1]" category="integer">
-                            <static>7</static>
-                        </var>
-                        <var name="$p[0]" category="integer">
-                            <static>10</static>
-                        </var>
-                        <var name="$p[1]" category="integer">
-                            <static>14</static>
-                        </var>
-                        <var name="$p[2]" category="integer">
-                            <static>20</static>
-                        </var>
-                        <var name="$p[3]" category="integer">
-                            <static>28</static>
-                        </var>
-
                         <pg-code>
                             @a = (random(2,9,1),random(2,9,1));
                             @b = (random(2,9,1),random(2,9,1));
@@ -873,13 +732,13 @@
                                 </row>
                                 <row>
                                     <cell><m><var name="$b[0]"/></m></cell>
-                                    <cell><var name="$p[0]" form="none"/></cell>
-                                    <cell><var name="$p[2]" form="none"/></cell>
+                                    <cell><var name="$p[0]" form="none" category="integer"/></cell>
+                                    <cell><var name="$p[2]" form="none" category="integer"/></cell>
                                 </row>
                                 <row>
                                     <cell><m><var name="$b[1]"/></m></cell>
-                                    <cell><var name="$p[1]" form="none"/></cell>
-                                    <cell><var name="$p[3]" form="none"/></cell>
+                                    <cell><var name="$p[1]" form="none" category="integer"/></cell>
+                                    <cell><var name="$p[3]" form="none" category="integer"/></cell>
                                 </row>
                             </tabular>
                         </sidebyside>
@@ -927,13 +786,6 @@
                 <webwork>
 
                     <setup>
-                        <var name="$answer" category="number">
-                            <static>3</static>
-                        </var>
-                        <var name="$second_x" category="number">
-                            <static>3.8</static>
-                        </var>
-
                         <pg-code>
                             $answer = random(1,3,1);
                             $gr = init_graph(-1,-1,4,4,
@@ -966,7 +818,7 @@
                             </image>
                         </sidebyside>
 
-                        <p><m>x=</m> <var name="$answer" width="5"/></p>
+                        <p><m>x=</m> <var name="$answer" width="5" category="number"/></p>
                     </statement>
 
                     <solution>
@@ -997,13 +849,6 @@
                 <webwork xml:id="number-or-function">
 
                     <setup>
-                        <var name="$answer1" category="integer">
-                            <static>5</static>
-                        </var>
-                        <var name="$answer2" category="formula">
-                            <static>{5x^8+8}{x}</static>
-                        </var>
-
                         <pg-code>
                             $a = non_zero_random(-9,9,1);
                             do { $b = random(2,9,1); } until ( $b != $a );
@@ -1013,12 +858,12 @@
                     </setup>
 
                     <statement>
-                        <p><ol label="a.">
+                        <p><ol>
                             <li>
                                 <p>Suppose the correct answer is <m><var name="$answer1"/></m>.</p>
                                 <p><ul label="square">
                                     <li>
-                                        <p><var name="$answer1" width="15"/></p>
+                                        <p><var name="$answer1" width="15" category="integer"/></p>
                                     </li>
                                 </ul></p>
                             </li>
@@ -1026,7 +871,7 @@
                                 <p>Suppose the correct answer is <m>\displaystyle <var name="$answer2"/></m>.</p>
                                 <p><ul label="square">
                                     <li>
-                                        <p><var name="$answer2" width="15"/></p>
+                                        <p><var name="$answer2" width="15" category="formula"/></p>
                                     </li>
                                 </ul></p>
                             </li>
@@ -1046,13 +891,6 @@
                 <webwork xml:id="function-with-domain-issues">
 
                     <setup>
-                        <var name="$answer1" category="formula">
-                            <static>\sqrt{x-2}</static>
-                        </var>
-                        <var name="$answer2" category="formula">
-                            <static>\ln\left(\left\lvert\frac{x}{x-2}\right\rvert\right)</static>
-                        </var>
-
                         <pg-code>
                             $a = random(2,5,1);
                             $answer1 = Compute("sqrt(x-$a)");
@@ -1064,12 +902,12 @@
                     </setup>
 
                     <statement>
-                        <p><ol label="a.">
+                        <p><ol>
                             <li>
                                 <p>Suppose the correct answer is <m>\displaystyle <var name="$answer1"/></m>.</p>
                                 <p><ul label="square">
                                     <li>
-                                        <p><var name="$answer1" width="15"/></p>
+                                        <p><var name="$answer1" width="15" category="formula"/></p>
                                     </li>
                                 </ul></p>
                             </li>
@@ -1077,7 +915,7 @@
                                 <p>Suppose the correct answer is <m>\displaystyle <var name="$answer2"/></m>.</p>
                                 <p><ul label="square">
                                     <li>
-                                        <p><var name="$answer2" width="15" evaluator="$answer2evaluator"/></p>
+                                        <p><var name="$answer2" width="15" evaluator="$answer2evaluator" category="formula"/></p>
                                     </li>
                                 </ul></p>
                             </li>
@@ -1098,32 +936,6 @@
                 <webwork xml:id="multiple-choice-popup-or-radio-buttons">
 
                     <setup>
-                        <var name="$color1">
-                            <set>
-                                <member>Red</member>
-                                <member correct="yes">Blue</member>
-                                <member>Green</member>
-                            </set>
-                        </var>
-                        <var name="$color2">
-                            <set>
-                                <member>Red</member>
-                                <member correct="yes">Blue</member>
-                                <member>Green</member>
-                                <member>None of these</member>
-                            </set>
-                        </var>
-                        <!--<var name="$mc">
-                            <set>
-                                <member correct="yes">e^{x^2}e^{1/x}</member>
-                                <member>\frac{e^{x^2}}{e^x}</member>
-                                <member correct="yes">e^{x^2}e^{x^{-1}}</member>
-                                <member correct="yes">e^{(x^3+1)/x}</member>
-                                <member>e^{x^2}+e^{1/x}</member>
-                                <member>None of the above</member>
-                            </set>
-                        </var>-->
-
                         <pg-code>
                             $color1 = PopUp(
                                 ["?","Red","Blue","Green"],
@@ -1178,10 +990,6 @@
                 <webwork xml:id="tables">
 
                     <setup>
-                        <var name="$x" category="integer">
-                            <static>5</static>
-                        </var>
-
                         <pg-code>
                             $x = Real(5);
                         </pg-code>
@@ -1223,7 +1031,7 @@
                                 </row>
                                 <row valign="bottom">
                                     <cell bottom="minor"><line><m>\text{I}+\text{I}</m></line><line><m>{}+\text{I}+\text{I}</m></line></cell>
-                                    <cell><var name="$x" form="none"/></cell>
+                                    <cell><var name="$x" form="none" category="integer"/></cell>
                                     <cell>six</cell>
                                 </row>
                                 <row halign="right">
@@ -1308,6 +1116,9 @@
 
             <exercise>
                 <title>Checking Proper Indentation In Lists</title>
+                <introduction>
+                    <p>One long exercise, where ordered sublists test the specification of their labels.</p>
+                </introduction>
                 <webwork>
                     <statement>
                         <p><ol>
@@ -1357,7 +1168,7 @@
                                 <p>Structured item</p>
                             </li>
                             <li>
-                                <p><ol label="a">
+                                <p><ol label="A">
                                     <li>
                                         <p>Sublist Item</p>
                                     </li>
@@ -1379,7 +1190,7 @@
                                 <p>Structured item</p>
                             </li>
                             <li>
-                                <p>Text before.<ol label="a">
+                                <p>Text before.<ol label="i">
                                     <li>
                                         <p>Sublist Item</p>
                                     </li>
@@ -1402,7 +1213,7 @@
                                 <p>Second paragraph</p>
                             </li>
                             <li>
-                                <p><ol label="a">
+                                <p><ol label="I">
                                     <li>
                                         <p>Sublist Item</p>
                                         <p>Second paragraph</p>
@@ -1429,7 +1240,7 @@
                                 <p>Second paragraph</p>
                             </li>
                             <li>
-                                <p>Text before.<ol label="a">
+                                <p>Text before.<ol label="1">
                                     <li>
                                         <p>Sublist Item</p>
                                         <p>Second paragraph</p>
@@ -1483,7 +1294,7 @@
                                 <p>Second paragraph<me>1+1=2</me></p>
                             </li>
                             <li>
-                                <p><me>1+1=2</me>Text before.<ol label="a">
+                                <p><me>1+1=2</me>Text before.<ol label="A">
                                     <li>
                                         <p>Sublist<me>1+1=2</me> Item</p>
                                         <p>Second paragraph<me>1+1=2</me></p>
@@ -1519,7 +1330,7 @@
                                 <p><md>
                                     <mrow>1+1\amp=2</mrow>
                                     <mrow>2\amp=2</mrow>
-                                </md>Text before.<ol label="a">
+                                </md>Text before.<ol label="i">
                                     <li>
                                         <p>Sublist<md>
                                             <mrow>1+1\amp=2</mrow>
@@ -1722,7 +1533,7 @@
 
             <subsection>
                 <title>Inline Exercises</title>
-                <p>Some <q>inline</q> exercises, as distinguished from the <q>sectional</q> exercises below.</p>
+                <p>Some <q>inline</q> exercises, as distinguished from the <q>divisional</q> exercises below.</p>
                 <exercise>
                     <webwork>
                         <statement>
@@ -1810,7 +1621,7 @@
             </subsection>
 
             <exercises>
-                <title>Sectional Exercises</title>
+                <title>Divisional Exercises</title>
                 <exercise>
                     <webwork>
                         <statement>

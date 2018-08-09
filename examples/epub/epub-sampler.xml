@@ -28,6 +28,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </docinfo>
 
     <book>
+        <title>An EPUB Sampler</title>
 
         <frontmatter>
             <titlepage>
@@ -36,8 +37,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </author>
             </titlepage>
         </frontmatter>
-
-        <title>An EPUB Sampler</title>
 
         <chapter>
             <title>One</title>

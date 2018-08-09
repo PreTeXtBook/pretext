@@ -77,11 +77,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <localization string-id='introduction'><xsl:text>Introduction</xsl:text></localization> -->
     <!-- <localization string-id='conclusion'><xsl:text>Conclusion</xsl:text></localization> -->
     <localization string-id='exercises'><xsl:text>Ejercicios</xsl:text></localization>
+    <!-- <localization string-id='worksheet'><xsl:text>Worksheet</xsl:text></localization> -->
+    <!-- <localization string-id='solutions'><xsl:text>Solutions</xsl:text></localization> -->
     <localization string-id='references'><xsl:text>Referencias</xsl:text></localization>
     <!-- Translation needed for Spain Spanish -->
     <!-- <localization string-id='backmatter'><xsl:text>Back Matter</xsl:text></localization> -->
     <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
     <localization string-id='paragraphs'><xsl:text>Párrafo</xsl:text></localization>
+    <!-- <localization string-id='commentary'><xsl:text>Commentary</xsl:text></localization> -->
     <localization string-id='subparagraph'><xsl:text>Subpárrafo</xsl:text></localization>
     <!-- Components of the narrative -->
     <!-- REMARK-LIKE blocks -->
@@ -131,13 +134,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='p'><xsl:text>Párrafo</xsl:text></localization>
     <!-- <localization string-id='blockquote'><xsl:text>Quotation</xsl:text></localization> -->
     <!-- Parts of an exercise and it's solution -->
-    <localization string-id='exercise'><xsl:text>Ejercicio</xsl:text></localization>
+    <localization string-id='divisionalexercise'><xsl:text>Ejercicio</xsl:text></localization>
+    <!-- Translation needed for Spain Spanish -->
+    <!-- See en-US file for distinctions here, do not repeat previous translation -->
+    <!-- <localization string-id='inlineexercise'><xsl:text>Checkpoint</xsl:text></localization> -->
     <localization string-id='webwork'><xsl:text>WeBWorK</xsl:text></localization>
     <localization string-id='hint'><xsl:text>Pista</xsl:text></localization>
     <localization string-id='answer'><xsl:text>Respuesta</xsl:text></localization>
     <localization string-id='solution'><xsl:text>Solución</xsl:text></localization>
     <!-- Translation needed for Spain Spanish -->
-    <!-- A group of sectional exercises (with introduction and conclusion) -->
+    <!-- A group of divisional exercises (with introduction and conclusion) -->
     <!-- <localization string-id='exercisegroup'><xsl:text>Exercise Group</xsl:text></localization> -->
     <!-- Bibliographic items (note is distinct from sidebar "Annotations" below) -->
     <!-- <localization string-id='biblio'><xsl:text>Bibliographic Entry</xsl:text></localization> -->

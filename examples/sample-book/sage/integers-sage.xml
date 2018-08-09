@@ -35,7 +35,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <subsection>
         <title>Division Algorithm</title>
 
-        <p>The code <c>a % b</c> will return the remainder upon division of <m>a</m> by <m>b</m>.  In other words, the result is the unique integer <m>r</m> such that (1) <m>0\leq r\lt b</m>, and (2) <m>a=bq+r</m> for some integer <m>q</m> (the quotient), as guaranteed by the Division Algorithm (Theorem<nbsp /><xref ref="theorem-integers-division_algorithm" />).  Then <m>(a-r)/b</m> will equal <m>q</m>.  For example,</p>
+        <p>The code <c>a % b</c> will return the remainder upon division of <m>a</m> by <m>b</m>.  In other words, the result is the unique integer <m>r</m> such that (1) <m>0\leq r\lt b</m>, and (2) <m>a=bq+r</m> for some integer <m>q</m> (the quotient), as guaranteed by the Division Algorithm (<xref ref="theorem-integers-division_algorithm" />).  Then <m>(a-r)/b</m> will equal <m>q</m>.  For example,</p>
 
         <sage>
             <input>
@@ -202,7 +202,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <sage type="practice"/>
 
-        <p>In addition to checking if integers are prime or not, or generating prime numbers, Sage can also decompose any integer into its prime factors, as described by the Fundamental Theorem of Arithmetic (Theorem<nbsp /><xref ref="theorem-fund-theorem-arithmetic" />).</p>
+        <p>In addition to checking if integers are prime or not, or generating prime numbers, Sage can also decompose any integer into its prime factors, as described by the Fundamental Theorem of Arithmetic (<xref ref="theorem-fund-theorem-arithmetic" />).</p>
 
         <sage>
             <input>

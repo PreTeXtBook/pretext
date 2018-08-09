@@ -81,13 +81,10 @@ EPUBOUT    = $(SCRATCH)/epub
 WWOUT      = $(SCRATCH)/webwork-extraction
 
 # Some aspects of producing these examples require a WeBWorK server.
-# For all but trivial testing or examples, please look into setting
-# up your own WeBWorK server, or consult Alex Jordan about the use
-# of PCC's server in a nontrivial capacity.    <alex.jordan@pcc.edu>
 # Either specify only the protocol and domain (like https://webwork.yourschool.edu)
 # or specify a 5-tuple with quotes exactly as in this example
-# SERVER = "(https://webwork.pcc.edu,courseID,userID,password,course_password)"
-SERVER = http://localhost
+# SERVER = "(https://webwork-ptx.aimath.org,courseID,userID,password,course_password)"
+SERVER = https://webwork-ptx.aimath.org
 
 
 ################
@@ -110,7 +107,7 @@ mini-extraction:
 
 #  Make a new PTX file from the source tree, with webwork elements replaced
 #  by the webwork-reps from webwork-extraction.xml. (So run the above at
-#  least once first.) Subsequent templates are applied to the result here.
+#  least once first.) Subsequent templates are applied to the result.
 
 sample-chapter-merge:
 	cd $(SCRATCH); \
@@ -120,62 +117,65 @@ mini-merge:
 	cd $(SCRATCH); \
 	xsltproc --stringparam webwork.extraction $(WWOUT)/webwork-extraction.xml $(MBXSL)/pretext-merge.xsl $(MINI) > mini-merge.ptx
 
-#  Write out each WW problem of the "sample-chapter" as a
-#  standalone problem in PGML ready for use on a WW server.
-#  "def" files and "header" files are produced. Directories
-#  and filenames are derived from titles of chapters, sections,
-#  etc., in addition to the titles of the problems themselves.
-#
-#  level 1 here partitions by sections of the sample chapter
-#
-#  Results land in the subdirectory:  $(PGOUT)/local
-#
-sample-chapter-extract:
-	install -d $(PGOUT)
-	cd $(PGOUT); \
-	xsltproc --stringparam chunk.level 1 $(MBXSL)/mathbook-webwork-archive.xsl $(WWEXAMPLE)/sample-chapter/sample-chapter.xml
+# LaTeX and PDF versions
+# See prerequisite above about merge files.
+# xsltproc may be passed --stringparam latex.fillin.style box for box answer blanks
 
-# HTML with WeBWorK exercises need a WW server
-# See example below for how to specify this
-# Output is:  $(HTMLOUT)/sample-ww-chapter.html
+sample-chapter-pdf:
+	install -d $(PDFOUT)
+	install -d $(PDFOUT)/images
+	-rm $(PDFOUT)/*.*
+	-rm $(PDFOUT)/images/*
+	cp -a $(WWOUT)/*.png $(PDFOUT)/images
+	cd $(PDFOUT); \
+	xsltproc $(MBXSL)/mathbook-latex.xsl $(SCRATCH)/sample-chapter-merge.ptx; \
+	xelatex sample-ww-chapter.tex; \
+	xelatex sample-ww-chapter.tex; \
+
+mini-pdf:
+	install -d $(PDFOUT)
+	install -d $(PDFOUT)/images
+	-rm $(PDFOUT)/*.*
+	-rm $(PDFOUT)/images/*
+	cp -a $(WWOUT)/*.png $(PDFOUT)/images
+	cd $(PDFOUT); \
+	xsltproc $(MBXSL)/mathbook-latex.xsl $(SCRATCH)/mini-merge.ptx; \
+	xelatex webwork-mini.tex; \
+	xelatex webwork-mini.tex; \
+
+# HTML output
+# See prerequisite above about merge files.
 sample-chapter-html:
 	install -d $(HTMLOUT)
 	-rm $(HTMLOUT)/*.html
 	-rm $(HTMLOUT)/knowl/*.html
 	cp -a $(WWEXAMPLE)/sample-chapter/images $(HTMLOUT)
 	cd $(HTMLOUT); \
-	xsltproc --stringparam webwork.server $(SERVER) --stringparam html.knowl.exercise.inline no $(MBXSL)/mathbook-html.xsl $(WWEXAMPLE)/sample-chapter/sample-chapter.xml
+	xsltproc --stringparam webwork.divisional.static no $(MBXSL)/mathbook-html.xsl $(SCRATCH)/sample-chapter-merge.ptx;
 
-
-# a one-time prerequisite for LaTeX conversion
-# problems living on a server, and image construction at server
-# our "webwork-tex" is a subdirectory of where the PDF is compiled
-# -s specifies an existing WW server to use (ignore security warnings)
-sample-chapter-server-tex:
-	install -d $(PDFOUT)/webwork-tex
-	$(MB)/script/mbx -v -c webwork-tex -s $(SERVER) -d $(PDFOUT)/webwork-tex $(WWEXAMPLE)/sample-chapter/sample-chapter.xml
-
-# LaTeX version of the sample chapter
-# see prerequisite just above
-# the "webwork-tex" directory must be given here
-# [note trailing slash (subject to change)]
-sample-chapter-latex:
-	install -d $(PDFOUT)
-	-rm $(PDFOUT)/*.tex
-	cd $(PDFOUT); \
-	xsltproc --stringparam webwork.server.latex $(PDFOUT)/webwork-tex/ $(MBXSL)/mathbook-latex.xsl $(WWEXAMPLE)/sample-chapter/sample-chapter.xml; \
-	xelatex sample-ww-chapter.tex; \
-	xelatex sample-ww-chapter.tex
-
-# HTML for a minimal WeBWorK cell
-# Useful for debugging
-# Output is:  $(HTMLOUT)/webwork-mini.html
-webwork-mini-html:
+mini-html:
 	install -d $(HTMLOUT)
 	-rm $(HTMLOUT)/*.html
 	-rm $(HTMLOUT)/knowl/*.html
 	cd $(HTMLOUT); \
-	xsltproc --stringparam webwork.server $(SERVER) --stringparam html.knowl.exercise.inline no $(MBXSL)/mathbook-html.xsl $(WWEXAMPLE)/minimal/mini.xml
+	xsltproc $(MBXSL)/mathbook-html.xsl $(SCRATCH)/mini-merge.ptx;
+
+#  Make an archive of webwork problem sets for each "section" (as specified
+#  by chunk level) with set definition files, set header files, and problem
+#  files in a file tree. Separate problem sets for inline and divisional
+#  problems. Requires the merged PTX file from above.
+
+sample-chapter-problem-sets:
+	install -d $(PGOUT)
+	cd $(PGOUT); \
+	rm -r Integrating_WeBWorK_into_Textbooks; \
+	xsltproc --stringparam chunk.level 1 $(MBXSL)/pretext-ww-problem-sets.xsl $(SCRATCH)/sample-chapter-merge.ptx
+
+mini-problem-sets:
+	install -d $(PGOUT)
+	cd $(PGOUT); \
+	rm -r WeBWorK_Minimal_Example; \
+	xsltproc --stringparam chunk.level 1 $(MBXSL)/pretext-ww-problem-sets.xsl $(SCRATCH)/mini-merge.ptx
 
 ###########
 # Utilities

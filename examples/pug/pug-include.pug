@@ -1,13 +1,14 @@
 - var name = "content of variable <q>name</q>"
 
-p.
-    Besides these basics, Pug also offers <q>true</q> includes.
-    This means, just write the text and don't think about additional overheads,
-    like that it also has to be an XML document.
+introduction
+    p.
+        Besides these basics, Pug also offers #[q true] includes.
+        This means, just write the text and don't think about additional overheads,
+        like that it also has to be an XML document.
 
-p.
-    This makes it easy to divide your document into smaller parts,
-    while MathBook XML will see the <q>full</q> XML file later on.
+    p.
+        This makes it easy to divide your document into smaller parts,
+        while PreTeXt will see the #[q full] XML file later on.
 
 subsection
 
@@ -17,12 +18,11 @@ subsection
         You can use variables like that: !{name}.
         They are pre-processed by Pug and inserted via string interpolation.
 
-    p.
-        You could even go ahead and include some code in your template,
-        or use <q>mixins</q> as macros.
-        E.g. below here, this variable is inserted several times in a for loop:
-
-    ul
-        - for (var x = 1; x <= 5; x++)
-            li This is iteration #{x}, inserting variable name: !{name}
+    p
+        | You could even go ahead and include some code in your template,
+        | or use #[q mixins] as macros.
+        | E.g. below here, this variable is inserted several times in a for loop:
+        ul
+            - for (var x = 1; x <= 5; x++)
+                li This is iteration #{x}, inserting variable name: !{name}
 
