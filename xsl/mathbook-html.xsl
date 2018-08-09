@@ -123,6 +123,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="html.knowl.listing" select="'no'" />
 <xsl:param name="html.knowl.exercise.inline" select="'yes'" />
 <xsl:param name="html.knowl.exercise.sectional" select="'no'" />
+<xsl:param name="html.knowl.exercise.worksheet" select="'no'" />
 <!-- html.knowl.example.solution: always "yes", could be implemented -->
 
 <!-- (2018-05-16) These are 100% temporary, to recover from -common edits to support changes in LaTeX for exercises, etc.  Once we mirror that work for HTML, these will be surplus and will go way.  So avert your eyes -->
@@ -2867,6 +2868,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="exercises//exercise" mode="is-hidden">
     <xsl:value-of select="$html.knowl.exercise.sectional = 'yes'" />
 </xsl:template>
+<xsl:template match="worksheet//exercise" mode="is-hidden">
+    <xsl:value-of select="$html.knowl.exercise.worksheet = 'yes'" />
+</xsl:template>
 
 <!-- Overall enclosing element -->
 <xsl:template match="exercise" mode="body-element">
@@ -2888,7 +2892,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="exercise" mode="heading-birth">
     <xsl:apply-templates select="." mode="heading-full" />
 </xsl:template>
-<xsl:template match="exercises//exercise" mode="heading-birth">
+<xsl:template match="exercises//exercise|worksheet//exercise" mode="heading-birth">
     <xsl:apply-templates select="." mode="heading-divisional-exercise-serial" />
 </xsl:template>
 
@@ -2897,7 +2901,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="exercise" mode="heading-xref-knowl">
     <xsl:apply-templates select="." mode="heading-full" />
 </xsl:template>
-<xsl:template match="exercises//exercise" mode="heading-xref-knowl">
+<xsl:template match="exercises//exercise|worksheet//exercise" mode="heading-xref-knowl">
     <xsl:apply-templates select="." mode="heading-divisional-exercise-typed" />
 </xsl:template>
 
@@ -5070,6 +5074,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </div>
 </xsl:template>
 
+<!-- A worksheet/exercise slots into the div nicely -->
+<xsl:template match="exercise" mode="panel-html-box">
+    <xsl:apply-templates select="." />
+</xsl:template>
+
 <!-- An image "knows" how to look outward         -->
 <!-- for side-by-side layout, or other width      -->
 <!-- specification so we do nothing extraordinary -->
@@ -5127,7 +5136,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- routines all the same.                                 -->
 <xsl:template match="stack" mode="panel-html-box">
     <xsl:param name="b-original" select="true()" />
-    <xsl:apply-templates select="tabular|image|p|pre|ol|ul|dl|video|interactive|program|console" mode="panel-html-box">
+    <xsl:apply-templates select="tabular|image|p|pre|ol|ul|dl|video|interactive|program|console|exercise" mode="panel-html-box">
         <xsl:with-param name="b-original" select="$b-original" />
     </xsl:apply-templates>
 </xsl:template>
@@ -7794,14 +7803,14 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
 <xsl:template match="webwork-reps">
     <xsl:param name="b-original" select="true()" />
     <xsl:choose>
-        <xsl:when test="(ancestor::exercises and $webwork.divisional.static='yes') or (not(ancestor::exercises) and $webwork.inline.static='yes') ">
+        <xsl:when test="(ancestor::exercises and $webwork.divisional.static='yes') or (not(ancestor::exercises or ancestor::worksheet) and $webwork.inline.static='yes') ">
             <xsl:apply-templates select="static">
                 <xsl:with-param name="b-original" select="$b-original" />
             </xsl:apply-templates>
         </xsl:when>
         <xsl:otherwise>
             <xsl:choose>
-                <xsl:when test="not(ancestor::exercises) or ($exercise.text.hint = 'yes' and $exercise.text.solution = 'yes')">
+                <xsl:when test="not(ancestor::exercises or ancestor::worksheet) or ($exercise.text.hint = 'yes' and $exercise.text.solution = 'yes')">
                     <xsl:apply-templates select="server-url[@hint='yes' and @solution='yes']" mode="body"/>
                 </xsl:when>
                 <xsl:when test="$exercise.text.hint = 'yes' and $exercise.text.solution = 'no'">
@@ -7825,14 +7834,14 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
             <xsl:with-param name="b-original" select="$b-original" />
         </xsl:apply-templates>
     </xsl:if>
-    <xsl:if test="(hint and (not(ancestor::exercises) or $exercise.text.hint='yes')) or (solution and (not(ancestor::exercises) or $exercise.text.solution='yes'))">
+    <xsl:if test="(hint and (not(ancestor::exercises or ancestor::worksheet) or $exercise.text.hint='yes')) or (solution and (not(ancestor::exercises or ancestor::worksheet) or $exercise.text.solution='yes'))">
         <div class="solutions">
-            <xsl:if test="not(ancestor::exercises) or $exercise.text.hint='yes'">
+            <xsl:if test="not(ancestor::exercises or ancestor::worksheet) or $exercise.text.hint='yes'">
                 <xsl:apply-templates select="hint">
                     <xsl:with-param name="b-original" select="$b-original" />
                 </xsl:apply-templates>
             </xsl:if>
-            <xsl:if test="not(ancestor::exercises) or $exercise.text.solution='yes'">
+            <xsl:if test="not(ancestor::exercises or ancestor::worksheet) or $exercise.text.solution='yes'">
                 <xsl:apply-templates select="solution">
                     <xsl:with-param name="b-original" select="$b-original" />
                 </xsl:apply-templates>
