@@ -75,6 +75,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='introduction'><xsl:text>Inleiding</xsl:text></localization>
     <localization string-id='conclusion'><xsl:text>Slot</xsl:text></localization>
     <localization string-id='exercises'><xsl:text>Oefeninge</xsl:text></localization>
+    <!-- <localization string-id='worksheet'><xsl:text>Worksheet</xsl:text></localization> -->
     <!-- <localization string-id='solutions'><xsl:text>Solutions</xsl:text></localization> -->
     <localization string-id='references'><xsl:text>Verwysings</xsl:text></localization>
     <localization string-id='backmatter'><xsl:text>Nasake</xsl:text></localization> <!-- Can't find this anywhere, so I made it up. -->

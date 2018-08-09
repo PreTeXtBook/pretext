@@ -69,6 +69,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='subsection'><xsl:text>Sous-section</xsl:text></localization>
     <localization string-id='subsubsection'><xsl:text>Sous-sous-section</xsl:text></localization>
     <localization string-id='exercises'><xsl:text>Exercices</xsl:text></localization>
+    <!-- <localization string-id='worksheet'><xsl:text>Worksheet</xsl:text></localization> -->
     <!-- <localization string-id='solutions'><xsl:text>Solutions</xsl:text></localization> -->
     <localization string-id='references'><xsl:text>Références</xsl:text></localization>
     <localization string-id='backmatter'><xsl:text>Appendices</xsl:text></localization>

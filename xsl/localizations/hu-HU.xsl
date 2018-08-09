@@ -75,6 +75,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='introduction'><xsl:text>Bevezetés</xsl:text></localization>
     <localization string-id='conclusion'><xsl:text>Következtetés</xsl:text></localization>
     <localization string-id='exercises'><xsl:text>Feladatok</xsl:text></localization>
+    <!-- <localization string-id='worksheet'><xsl:text>Worksheet</xsl:text></localization> -->
     <!-- <localization string-id='solutions'><xsl:text>Solutions</xsl:text></localization> -->
     <localization string-id='references'><xsl:text>Hivatkozások</xsl:text></localization>
     <localization string-id='backmatter'><xsl:text>Záró rész</xsl:text></localization>
