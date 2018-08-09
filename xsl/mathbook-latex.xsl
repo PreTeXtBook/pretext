@@ -947,8 +947,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="ptx-name" select="'problem'" />
         </xsl:call-template>
     </xsl:if>
-    <xsl:if test="$document-root//exercise[not(parent::exercises)]">
-        <xsl:text>%% An inline exercise is like other environments&#xa;</xsl:text>
+    <xsl:if test="$document-root//exercise[not(parent::exercises or parent::worksheet)]">
+        <xsl:text>%% An inline exercise is like other AMSmath environments&#xa;</xsl:text>
         <xsl:call-template name="definition-environment">
             <xsl:with-param name="ptx-name" select="'inlineexercise'" />
         </xsl:call-template>
@@ -1082,6 +1082,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\NewDocumentEnvironment{divisionexercise}{mo}&#xa;</xsl:text>
         <xsl:text>  {\textbf{#1}.\IfValueT{#2}{\ \textbf{#2}}\quad}&#xa;</xsl:text>
         <xsl:text>  {\par\smallskip\noindent}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="$document-root//worksheet//exercise">
+        <xsl:text>%% Worksheet exercises are rendered as faux list items&#xa;</xsl:text>
+        <xsl:text>%% with hard-coded numbers as arguments, not as LaTeX environments&#xa;</xsl:text>
+        <xsl:text>%% They have additional options for extra workspace in worksheets&#xa;</xsl:text>
+        <xsl:text>%% Always full-width, use in a side-by-side will constrain that&#xa;</xsl:text>
+        <xsl:text>\newlength{\worksheetstrutwidth}&#xa;</xsl:text>
+        <xsl:choose>
+            <xsl:when test="latex.draft ='yes'">
+                <xsl:text>%% LaTeX draft mode, @workspace strut is visible&#xa;</xsl:text>
+                <xsl:text>\setlength{\worksheetstrutwidth}{2pt}&#xa;</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>%% @workspace strut is invisible&#xa;</xsl:text>
+                <xsl:text>\setlength{\worksheetstrutwidth}{0pt}&#xa;</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+        <xsl:text>\DeclareTColorBox{worksheetexercise}{mmo}&#xa;</xsl:text>
+        <xsl:text>  {size=minimal,attach title to upper,title={#1.\space\IfValueT{#3}{#3\space}}, fonttitle=\bfseries,coltitle=black,colback=white, after={\newline\rule{\worksheetstrutwidth}{#2\textheight}\newline}}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$document-root//list">
         <xsl:text>%% named list environment and style&#xa;</xsl:text>
@@ -3824,14 +3843,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- Divisional Exercises (exercises//exercise) -->
+<!-- Divisional Exercises (exercises//exercise, worksheet//exercise) -->
 <!-- Divisional exercises are not named when born, by virtue -->
 <!-- of being within an "exercises" division.  We hard-code  -->
 <!-- their numbers to allow for flexibility, and since it is -->
 <!-- too hard (impossible?) to mesh into LaTeX's scheme.  An -->
 <!-- "exercises" may be divided by an "exercisedivision"     -->
 <!-- and/or by an "exercisegroup", so we match with "//"     -->
-<xsl:template match="exercises//exercise">
+<xsl:template match="exercises//exercise|worksheet//exercise">
     <!-- heading, start enclosure/environment                    -->
     <!-- This environment is different within an "exercisegroup" -->
     <!-- Using only serial number since born here                -->
@@ -3841,12 +3860,32 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="serial-number" />
             <xsl:text>}</xsl:text>
         </xsl:when>
-        <xsl:otherwise>
+        <xsl:when test="ancestor::exercises">
             <xsl:text>\begin{divisionexercise}</xsl:text>
             <xsl:text>{</xsl:text>
             <xsl:apply-templates select="." mode="serial-number" />
             <xsl:text>}</xsl:text>
             <xsl:apply-templates select="title" mode="environment-option" />
+        </xsl:when>
+        <xsl:when test="ancestor::worksheet">
+            <xsl:text>\begin{worksheetexercise}</xsl:text>
+            <xsl:text>{</xsl:text>
+            <xsl:apply-templates select="." mode="serial-number" />
+            <xsl:text>}</xsl:text>
+            <xsl:text>{</xsl:text>
+            <xsl:choose>
+                <xsl:when test="@workspace">
+                    <xsl:value-of select="substring-before(@workspace,'%') div 100" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>0.0</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+            <xsl:text>}</xsl:text>
+            <xsl:apply-templates select="title" mode="environment-option" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>PTX:BUG:     type of "exercise" missed</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
     <xsl:apply-templates select="." mode="label"/>
@@ -3927,9 +3966,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="parent::exercisegroup" >
             <xsl:text>\end{egexercise}%&#xa;</xsl:text>
         </xsl:when>
-        <xsl:otherwise>
+        <xsl:when test="ancestor::exercises">
             <xsl:text>\end{divisionexercise}%&#xa;</xsl:text>
-        </xsl:otherwise>
+        </xsl:when>
+        <xsl:when test="ancestor::worksheet">
+            <xsl:text>\end{worksheetexercise}%&#xa;</xsl:text>
+        </xsl:when>
+        <!-- error check is above -->
     </xsl:choose>
 </xsl:template>
 
@@ -5304,7 +5347,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:text>\begin{enumerate}</xsl:text>
     <!-- override LaTeX defaults as indicated -->
-    <xsl:if test="@label or ancestor::exercises or ancestor::references">
+    <xsl:if test="@label or ancestor::exercises or ancestor::worksheet or ancestor::references">
         <xsl:text>[label=</xsl:text>
         <xsl:apply-templates select="." mode="latex-list-label" />
         <xsl:text>]</xsl:text>
@@ -7020,12 +7063,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{tcolorbox}&#xa;</xsl:text>
 </xsl:template>
 
+<!-- A worksheet/exercise is a tcolorbox and -->
+<!-- so slots into the tcbraster nicely      -->
+<xsl:template match="exercise" mode="panel-latex-box">
+        <xsl:apply-templates select="." />
+</xsl:template>
+
+
 <!-- Since stackable items do not carry titles or captions, -->
 <!-- their "panel-latex-box" templates do the right thing   -->
 <!-- Items that normally could go inline within a paragraph -->
 <!-- without any spacing will be preceded by a \par         -->
 <xsl:template match="stack" mode="panel-latex-box">
-    <xsl:for-each select="tabular|image|p|pre|ol|ul|dl|video|interactive|program|console">
+    <xsl:for-each select="tabular|image|p|pre|ol|ul|dl|video|interactive|program|console|exercise">
         <xsl:if test="preceding-sibling::* and (self::image or self::tabular)">
             <xsl:text>\par&#xa;</xsl:text>
         </xsl:if>
@@ -8065,9 +8115,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="true()" />
 </xsl:template>
 
-<!-- Any target of a PreTeXt cross-reference, which is not naturally  -->
-<!-- numbered by a LaTeX \label{} command, needs to go here. -->
-<xsl:template match="references|exercises[count(parent::*/exercises)=1]|solutions[not(parent::backmatter)]|exercises//exercise|biblio|biblio/note|proof|case|ol/li|dl/li|hint|answer|solution|exercisegroup|p|paragraphs|blockquote|contributor|colophon|book|article" mode="xref-as-ref">
+<!-- Any target of a PreTeXt cross-reference, which is not naturally -->
+<!-- numbered by a LaTeX \label{} command, needs to go here.         -->
+<xsl:template match="references|exercises[count(parent::*/exercises)=1]|worksheet[count(parent::*/worksheet)=1]|solutions[not(parent::backmatter)]|exercises//exercise|worksheet//exercise|biblio|biblio/note|proof|case|ol/li|dl/li|hint|answer|solution|exercisegroup|p|paragraphs|blockquote|contributor|colophon|book|article" mode="xref-as-ref">
     <xsl:value-of select="false()" />
 </xsl:template>
 
