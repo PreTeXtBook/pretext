@@ -1088,6 +1088,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% with hard-coded numbers as arguments, not as LaTeX environments&#xa;</xsl:text>
         <xsl:text>%% They have additional options for extra workspace in worksheets&#xa;</xsl:text>
         <xsl:text>%% Always full-width, use in a side-by-side will constrain that&#xa;</xsl:text>
+        <!-- "frame empty" is needed to counteract very faint outlines in some PDF viewers -->
         <xsl:text>\newlength{\worksheetstrutwidth}&#xa;</xsl:text>
         <xsl:choose>
             <xsl:when test="$latex.draft ='yes'">
@@ -1100,7 +1101,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
         <xsl:text>\DeclareTColorBox{worksheetexercise}{mmo}&#xa;</xsl:text>
-        <xsl:text>  {size=minimal,attach title to upper,title={#1.\space\IfValueT{#3}{#3\space}}, fonttitle=\bfseries,coltitle=black,colback=white, after={\newline\rule{\worksheetstrutwidth}{#2\textheight}\newline}}&#xa;</xsl:text>
+        <xsl:text>  {size=minimal, frame empty, attach title to upper,title={#1.\space\IfValueT{#3}{#3\space}}, fonttitle=\bfseries,coltitle=black,colback=white, after={\newline\rule{\worksheetstrutwidth}{#2\textheight}\newline}}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$document-root//list">
         <xsl:text>%% named list environment and style&#xa;</xsl:text>
