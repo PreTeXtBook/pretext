@@ -7775,7 +7775,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
             <xsl:text>Your &lt;book&gt; does not have any chapters.  Maybe you forgot the '--xinclude' switch on your 'xsltproc' command line?</xsl:text>
         </xsl:message>
     </xsl:if>
-    <xsl:if test="article and not(article/p) and not(article/section) and noT(article/worksheet)">
+    <xsl:if test="article and not(article/p) and not(article/section) and not(article/worksheet)">
         <xsl:message>
             <xsl:text>MBX:WARNING:    </xsl:text>
             <xsl:text>Your &lt;article&gt; does not have any sections or worksheets, nor any top-level paragraphs.  Maybe you forgot the '--xinclude' switch on your 'xsltproc' command line?</xsl:text>
