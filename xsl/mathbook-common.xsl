@@ -282,7 +282,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$root/book/chapter/section">2</xsl:when>
         <xsl:when test="$root/book/chapter">1</xsl:when>
         <xsl:when test="$root/article/section/subsection">2</xsl:when>
-        <xsl:when test="$root/article/section">1</xsl:when>
+        <xsl:when test="$root/article/section|$root/article/worksheet">1</xsl:when>
         <xsl:when test="$root/article">0</xsl:when>
         <xsl:when test="$root/letter">0</xsl:when>
         <xsl:when test="$root/memo">0</xsl:when>
@@ -301,7 +301,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:when test="$root/book/part">3</xsl:when>
         <xsl:when test="$root/book">2</xsl:when>
-        <xsl:when test="$root/article/section">1</xsl:when>
+        <xsl:when test="$root/article/section|$root/article/worksheet">1</xsl:when>
         <xsl:when test="$root/article">0</xsl:when>
         <xsl:when test="$root/letter">0</xsl:when>
         <xsl:when test="$root/memo">0</xsl:when>
@@ -321,7 +321,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:when test="$root/book/part">3</xsl:when>
         <xsl:when test="$root/book">2</xsl:when>
-        <xsl:when test="$root/article/section">1</xsl:when>
+        <xsl:when test="$root/article/section|$root/article/worksheet">1</xsl:when>
         <xsl:when test="$root/article">0</xsl:when>
         <xsl:when test="$root/letter">0</xsl:when>
         <xsl:when test="$root/memo">0</xsl:when>
@@ -340,7 +340,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:when test="$root/book/part">3</xsl:when>
         <xsl:when test="$root/book">2</xsl:when>
-        <xsl:when test="$root/article/section">1</xsl:when>
+        <xsl:when test="$root/article/section|$root/article/worksheet">1</xsl:when>
         <xsl:when test="$root/article">0</xsl:when>
         <xsl:when test="$root/letter">0</xsl:when>
         <xsl:when test="$root/memo">0</xsl:when>
@@ -359,7 +359,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:when test="$root/book/part">3</xsl:when>
         <xsl:when test="$root/book">2</xsl:when>
-        <xsl:when test="$root/article/section">1</xsl:when>
+        <xsl:when test="$root/article/section|$root/article/worksheet">1</xsl:when>
         <xsl:when test="$root/article">0</xsl:when>
         <xsl:when test="$root/letter">0</xsl:when>
         <xsl:when test="$root/memo">0</xsl:when>
@@ -376,7 +376,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:choose>
             <xsl:when test="$root/book/part">5</xsl:when>
             <xsl:when test="$root/book">4</xsl:when>
-            <xsl:when test="$root/article/section">3</xsl:when>
+            <xsl:when test="$root/article/section|$root/article/worksheet">3</xsl:when>
             <xsl:when test="$root/article">0</xsl:when>
             <xsl:when test="$root/letter">0</xsl:when>
             <xsl:when test="$root/memo">0</xsl:when>
@@ -7775,10 +7775,10 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
             <xsl:text>Your &lt;book&gt; does not have any chapters.  Maybe you forgot the '--xinclude' switch on your 'xsltproc' command line?</xsl:text>
         </xsl:message>
     </xsl:if>
-    <xsl:if test="article and not(article/p) and not(article/section)">
+    <xsl:if test="article and not(article/p) and not(article/section) and noT(article/worksheet)">
         <xsl:message>
             <xsl:text>MBX:WARNING:    </xsl:text>
-            <xsl:text>Your &lt;article&gt; does not have any sections, nor any top-level paragraphs.  Maybe you forgot the '--xinclude' switch on your 'xsltproc' command line?</xsl:text>
+            <xsl:text>Your &lt;article&gt; does not have any sections or worksheets, nor any top-level paragraphs.  Maybe you forgot the '--xinclude' switch on your 'xsltproc' command line?</xsl:text>
         </xsl:message>
     </xsl:if>
 </xsl:template>
