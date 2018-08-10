@@ -7322,7 +7322,7 @@ the xsltproc executable.
                         <title> Kirchoff's Current Law </title>
                         <p> For the circuit below <m> I_1 + I_2 = I_3 </m>.</p>
                         <sidebyside width="40%">
-                            <image>
+                            <image xml:id="worksheet-kirchoff-law">
                                 <latex-image>
                                 \begin{circuitikz}
                                 \draw (0,0)
@@ -7354,21 +7354,23 @@ the xsltproc executable.
                     <exercise workspace="15%">
                         <statement>
                         <p>For the simple network pictured, calculuate the amperage in each part of the network by setting up a system of linear equations for the amperages. </p>
-                       <p><image>
-                        <latex-image>
-                            \begin{circuitikz}
-                            \draw (0,0)
-                            to[V, v=$11\quad \mbox{volt}$](0, 3)
-                            to[short](2,3)
-                            to[R, R=$4\quad \mbox{ohm}$] (3, 3)
-                            to[short](4,3)
-                            to[R, R=$3\quad \mbox{ohm}$](4,0)
-                            to[short](3,0)
-                            to[R, R=$3\quad \mbox{ohm}$](2,0)
-                            to[short](0,0);
-                            \end{circuitikz}
-                        </latex-image>
-                        </image></p>
+                       <sidebyside>
+                            <image xml:id="worksheet-simple-network">
+                                <latex-image>
+                                \begin{circuitikz}
+                                \draw (0,0)
+                                to[V, v=$11\quad \mbox{volt}$](0, 3)
+                                to[short](2,3)
+                                to[R, R=$4\quad \mbox{ohm}$] (3, 3)
+                                to[short](4,3)
+                                to[R, R=$3\quad \mbox{ohm}$](4,0)
+                                to[short](3,0)
+                                to[R, R=$3\quad \mbox{ohm}$](2,0)
+                                to[short](0,0);
+                                \end{circuitikz}
+                                </latex-image>
+                            </image>
+                        </sidebyside>
                        </statement>
                     </exercise>
 
@@ -7376,7 +7378,7 @@ the xsltproc executable.
                         <statement>
                         <p> Compare it with a parallel circuit network. Calculate the amperage in each part of the network by setting up a system of linear equations for the amperages. </p>
                         <sidebyside>
-                            <image>
+                            <image xml:id="worksheet-parallel-circuit">
                                 <latex-image>
                                 \begin{circuitikz}
                                 \draw(0,0)
@@ -7398,11 +7400,11 @@ the xsltproc executable.
                     </exercise>
                 </sidebyside>
 
-                <exercise workspace="20%">
+                <exercise workspace="15%">
                     <statement>
                     <p> Now for a more complicated network. Calculate the amperage in each part of the network by setting up a system of linear equations for the amperages. </p>
                         <sidebyside>
-                            <image>
+                            <image xml:id="worksheet-complicated-network">
                                 <latex-image>
                                 \begin{circuitikz}
                                 \draw(0,0)
@@ -7436,7 +7438,7 @@ the xsltproc executable.
                         <p> Now generalize these ideas to a context outside of electrical circuits. Consider the network of streets given in the diagram (with one-way directions as indicated).</p>
 
                         <sidebyside>
-                            <image>
+                            <image xml:id="worksheet-street-network">
                                 <latex-image>
                                 <![CDATA[
                                 \begin{tikzpicture}[>=stealth]
