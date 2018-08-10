@@ -1090,7 +1090,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Always full-width, use in a side-by-side will constrain that&#xa;</xsl:text>
         <xsl:text>\newlength{\worksheetstrutwidth}&#xa;</xsl:text>
         <xsl:choose>
-            <xsl:when test="latex.draft ='yes'">
+            <xsl:when test="$latex.draft ='yes'">
                 <xsl:text>%% LaTeX draft mode, @workspace strut is visible&#xa;</xsl:text>
                 <xsl:text>\setlength{\worksheetstrutwidth}{2pt}&#xa;</xsl:text>
             </xsl:when>
