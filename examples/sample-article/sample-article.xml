@@ -201,6 +201,12 @@ the xsltproc executable.
         </images>
         -->
 
+        <latex-output>
+            <!-- turn this on once it is easier to make   -->
+            <!-- standalone worksheets, uncomment to test -->
+            <!-- <worksheet top="3cm" left="4cm" margin="12cm"/> -->
+        </latex-output>
+
     </docinfo>
 
     <!--
@@ -7177,7 +7183,7 @@ the xsltproc executable.
                 </ul>
               </objectives>
               <introduction>
-                <p>This two-page worksheet was generously donated to the sample article by Dave Rosoff.</p>
+                <p>This two-page worksheet was generously donated to the sample article by Dave Rosoff at a CuratedCourses workshop in August<nbsp/>2018.  It has the default (skinny) margins.</p>
 
                 <p>It was known to Euclid, and probably earlier, that the midpoints of the sides of any quadrilateral all lie in the same plane (even if the vertices of the quadrilateral do not). In fact, these midpoints are the vertices of a parallelogram, as pictured in <xref ref="figure-midpoints-of-quadrilateral" text="type-global"/>.</p>
                 <sidebyside width="30%">
@@ -7295,14 +7301,14 @@ the xsltproc executable.
               </conclusion>
             </worksheet>
 
-            <worksheet>
+            <worksheet top="3cm" bottom="100pt">
                 <title>Networks Worksheet</title>
                 <!-- <subtitle>An Activity Using Linear Algebra to Solve Network Applications</subtitle> -->
 
                 <introduction>
                     <title>Basic laws for electrical circuits</title>
 
-                    <p>This two-page worksheet was generously donated to the sample article by Virgil Pierce.</p>
+                    <p>This two-page worksheet was generously donated to the sample article by Virgil Pierce at a CuratedCourses workshop in August<nbsp/>2018.  It has default (skinny) left and right margins, but we have specified longer top and bottom margins, with the top being the larger of the two.</p>
 
                     <theorem>
                         <title> Ohms Law </title>
@@ -7353,7 +7359,7 @@ the xsltproc executable.
                 <pagebreak/>
 
                 <sidebyside width="45%" margins="0%">
-                    <exercise workspace="15%">
+                    <exercise workspace="12%">
                         <statement>
                         <p>For the simple network pictured, calculuate the amperage in each part of the network by setting up a system of linear equations for the amperages. </p>
                        <sidebyside>
@@ -7376,7 +7382,7 @@ the xsltproc executable.
                        </statement>
                     </exercise>
 
-                    <exercise workspace="15%">
+                    <exercise workspace="12%">
                         <statement>
                         <p> Compare it with a parallel circuit network. Calculate the amperage in each part of the network by setting up a system of linear equations for the amperages. </p>
                         <sidebyside>
@@ -7402,7 +7408,7 @@ the xsltproc executable.
                     </exercise>
                 </sidebyside>
 
-                <exercise workspace="15%">
+                <exercise workspace="12%">
                     <statement>
                     <p> Now for a more complicated network. Calculate the amperage in each part of the network by setting up a system of linear equations for the amperages. </p>
                         <sidebyside>
@@ -7435,11 +7441,11 @@ the xsltproc executable.
 
                 <pagebreak/>
 
-                <exercise workspace="20%">
+                <exercise workspace="30%">
                     <statement>
                         <p> Now generalize these ideas to a context outside of electrical circuits. Consider the network of streets given in the diagram (with one-way directions as indicated).</p>
 
-                        <sidebyside>
+                        <sidebyside width="65%">
                             <image xml:id="worksheet-street-network">
                                 <latex-image>
                                 <![CDATA[
@@ -7470,7 +7476,7 @@ the xsltproc executable.
                                         WB Winooski
                                     </cell>
                                     <cell>
-                                        Shelbrun St
+                                        Shelburne St
                                     </cell>
                                     <cell>
                                         Willow
@@ -7527,9 +7533,9 @@ the xsltproc executable.
                 </exercise>
             </worksheet>
 
-            <worksheet>
+            <worksheet margin="1cm">
                 <introduction>
-                    <p>This is a mock one-page worksheet for testing purposes.</p>
+                    <p>This is a mock one-page worksheet for testing purposes. We have specified an overall margin just slightly less than the default.</p>
                 </introduction>
 
                 <sidebyside width="45%" margins="0%">
