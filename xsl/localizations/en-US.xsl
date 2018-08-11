@@ -131,8 +131,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- "divisional" exercise and the string employed is 'divisionalexercise'.    -->
     <!-- An "exercise" whose parent is a division (chapter, section, etc) we       -->
     <!-- call an "inline exercise" and the string employed is 'inlineexercise'.    -->
+    <!-- And an "exercise" in a "worksheet" is a 'worksheetexercise'.              -->
     <!-- It is important to use different translations so that a text with         -->
-    <!-- both types of exercises does not have ambiguous cross-references          -->
+    <!-- different types of exercises do not have ambiguous cross-references       -->
     <!-- (there is an example of this at the start of one of the later             -->
     <!-- sections of the sample article).                                          -->
     <!--                                                                           -->
@@ -140,9 +141,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- outcome, such as "I am going to the gym to exercise."  A "Checkpoint"     -->
     <!-- is something you must do before you do something else.  Another use of    -->
     <!-- the term is a location on a on a roadway where you must stop for the      -->
-    <!-- police to do an inspection.                                               -->
+    <!-- police to do an inspection. A worksheet is a collection of activities or  -->
+    <!-- problems, typically printed on paper, which might be used in a classroom. -->
     <localization string-id='divisionalexercise'><xsl:text>Exercise</xsl:text></localization>
     <localization string-id='inlineexercise'><xsl:text>Checkpoint</xsl:text></localization>
+    <localization string-id='worksheetexercise'><xsl:text>Worksheet Exercise</xsl:text></localization>
     <localization string-id='webwork'><xsl:text>WeBWorK</xsl:text></localization>
     <localization string-id='hint'><xsl:text>Hint</xsl:text></localization>
     <localization string-id='answer'><xsl:text>Answer</xsl:text></localization>

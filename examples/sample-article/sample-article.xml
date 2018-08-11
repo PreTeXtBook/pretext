@@ -4480,6 +4480,7 @@ the xsltproc executable.
                 <li><p>Solution: An autonamed portion of an exercise: <xref ref="solution-antiderivative" text="type-global" /></p></li>
                 <li><p>Parts of a complicated exercise: <xref ref="exercise-complicated-second-hint" text="type-global" /> <xref ref="exercise-complicated-first-answer" text="type-global" /></p></li>
                 <li><p>A subsidary part of an exercise: <xref ref="exercise-one-two-one" /></p></li>
+                <li><p>Three cross-references to individual exercises, but due to their location, they should have different <q>type names</q> in the cross-reference: in an <tag>exercises</tag> division, <xref ref="duplicate-divisional"  text="type-global"/>; in the narrative, <xref ref="exercise-essay"  text="type-global"/>; and in a <tag>worksheet</tag>, <xref ref="exercise-vector-addition"  text="type-global"/>.</p></li>
                 <li><p>An item buried in nested ordered lists: <xref ref="list-two-two-two-three" text="type-global"/></p></li>
                 <li><p>List item as knowls in HTML, including nested lists: <xref ref="list-two" />, <xref ref="list-two-two-two" text="type-global" /></p></li>
                 <li><p>A titled list: <xref ref="list-colors-rainbow" /></p></li>
@@ -4511,6 +4512,7 @@ the xsltproc executable.
                 <li><p>A cross-reference to a <tag>references</tag> division in a subsection, which should not be numbered where born, but which has the number of its parent division in a cross-reference: <xref ref="references-section" text="type-global"/>.  And a cross-reference to a <tag>references</tag> division, which is the <q>main</q> bibliography in the back matter, and so is not numbered where born, nor in a cross-reference (which we must accomplish via it's title): <xref ref="references-backmatter" text="title"/>.</p></li>
                 <li><p>A cross-reference to a <tag>solutions</tag> division in a subsection, which should not be numbered where born, but which has the number of its parent division in a cross-reference: <xref ref="solutions-subsection" text="type-global"/>.  And a cross-reference to a <tag>solutions</tag> division, which should appear as an appendix both where born and as a cross-reference: <xref ref="solutions-backmatter" text="type-global"/>.</p></li>
                 <li><p>A cross-reference to an <tag>exercises</tag> division in a subsection, which is the only such division in that subsection and therefore should not be numbered where born, but which has the number of its parent division in a cross-reference: <xref ref="exercises-subsection-solo" text="type-global"/>.  In contrast we cross-reference an <tag>exercises</tag> division which is one of two inside a section, and therefore is numbered, when born and when cross-referenced, in continuity with the preceding subsections: <xref ref="exercises-section-multiple" text="type-global"/>.</p></li>
+                <!-- <li><p>: <xref ref="" /></p></li> -->
             </ul></p>
 
             <p>Cross-references to structural elements of the document will always take you there directly, since even in the HTML version these parts never get realized as knowls.  You will find such links sprinkled through this document, but here is an autonamed link to a subsubsection:  <xref ref="subsubsection-different-integrals" text="type-global" />.</p>
@@ -7266,7 +7268,7 @@ the xsltproc executable.
                 </image>
               </figure>
               <sidebyside margins="0%" widths="30% 60%" valign="top">
-                <exercise workspace="40%">
+                <exercise xml:id="exercise-vector-addition" workspace="40%">
                   <statement>
                     <p>Show that <m>\vec{M}_{1} + \vec{M}_{2} + \vec{M}_{3} = 0</m>.</p>
                   </statement>

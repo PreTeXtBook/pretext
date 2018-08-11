@@ -3400,10 +3400,16 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 
 <!-- First, a "divisional" "exercise" in an "exercises",      -->
 <!-- with perhaps intervening groups, like an "exercisegroup" -->
-<!-- or an "exercise" placed within a "worksheet"             -->
-<xsl:template match="exercises//exercise|worksheet//exercise" mode="type-name">
+<xsl:template match="exercises//exercise" mode="type-name">
     <xsl:call-template name="type-name">
         <xsl:with-param name="string-id" select="'divisionalexercise'" />
+    </xsl:call-template>
+</xsl:template>
+
+<!-- Second, an "exercise" placed within a "worksheet"-->
+<xsl:template match="worksheet//exercise" mode="type-name">
+    <xsl:call-template name="type-name">
+        <xsl:with-param name="string-id" select="'worksheetexercise'" />
     </xsl:call-template>
 </xsl:template>
 

@@ -125,6 +125,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Translation needed for France French -->
     <!-- See en-US file for distinctions here, do not repeat previous translation -->
     <!-- <localization string-id='inlineexercise'><xsl:text>Checkpoint</xsl:text></localization> -->
+    <!-- <localization string-id='worksheetexercise'><xsl:text>Worksheet Exercise</xsl:text></localization> -->
     <localization string-id='webwork'><xsl:text>WeBWorK</xsl:text></localization>
     <localization string-id='hint'><xsl:text>Indication</xsl:text></localization>
     <localization string-id='answer'><xsl:text>Réponse</xsl:text></localization>
