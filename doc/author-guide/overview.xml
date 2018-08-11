@@ -117,6 +117,19 @@
         <p>Within a run of divisional exercises a subgroup can be delimited as an <tag>exercisegroup</tag>, which allows an <tag>introduction</tag> and/or <tag>conclusion</tag> to explain some commonality.  An <tag>exercisegroup</tag> should be rendered in some way that makes it clear to the reader that they are a group.</p>
     </section>
 
+    <section xml:id="overview-worksheet">
+        <title>Worksheets</title>
+        <idx>worksheet</idx>
+
+        <p>Another division is a <tag>worksheet</tag>.  It is similar to a <tag>chapter</tag>, <tag>section</tag>, and so on, but with some variations to support a worksheet or in-class activity.  Here we recognize the primacy of printed output (perhaps to bring into a classroom), and the online version is a less-capable representation.</p>
+
+        <p>There is no limit to what you can place in a <tag>worksheet</tag> division: objectives, an introduction, theorems, figures, images, and so on.  But the principal element is an <tag>exercise</tag>, which mostly behaves like an <tag>exercise</tag> in an <tag>exercises</tag> division, but with additional capabilities.</p>
+
+        <p>An <tag>exercise</tag> in a <tag>worksheet</tag> can have a specified width when included in a <tag>sidebyside</tag>, and in any case may have a specified additional blank working space of specified height.  Page breaks can be specified, and the four margins on a page can be independently controlled.  So if you want to create ancillary worksheets for your project, and you like to use <em>all</em> of the space on a printed page, then there is some layout control to support that.</p>
+
+        <p>Notice that all of this layout control is an exception to the philosophy of <pretext />.  So in particular, margins and working space do not appear in the <init>HTML</init> output.  We do give a visual indication where a page break in a <tag>worksheet</tag> is placed.  An author might wish to collect all of the worksheets in a book, for printing as an <q>activity book</q>, and so there are plans (2018-08-11) to support and automate that process.  Details for authoring worksheets can be found in <xref ref="topic-worksheet"/>.</p>
+    </section>
+
     <section xml:id="overview-references">
         <title>References</title>
         <idx>reference</idx>
