@@ -3287,7 +3287,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="part|chapter|section|subsection|subsubsection|exercises[count(parent::*/exercises) > 1]|worksheet[count(parent::*/worksheet) > 1]" mode="latex-division-heading">
     <xsl:if test="self::worksheet">
         <!-- \newgeometry includes a \clearpage -->
-        <xsl:text>\newgeometry{left=0.5in,right=0.5in,top=0.5in,bottom=0.5in}&#xa;</xsl:text>
+        <xsl:apply-templates select="." mode="new-geometry"/>
     </xsl:if>
     <xsl:text>\</xsl:text>
     <xsl:apply-templates select="." mode="division-name" />
@@ -3332,7 +3332,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="solutions|references|exercises[count(parent::*/exercises) = 1]|worksheet[count(parent::*/worksheet) = 1]" mode="latex-division-heading">
     <xsl:if test="self::worksheet">
         <!-- \newgeometry includes a \clearpage -->
-        <xsl:text>\newgeometry{left=0.5in,right=0.5in,top=0.5in,bottom=0.5in}&#xa;</xsl:text>
+        <xsl:apply-templates select="." mode="new-geometry"/>
     </xsl:if>
     <xsl:text>\</xsl:text>
     <xsl:apply-templates select="." mode="division-name" />
@@ -3352,6 +3352,96 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="division-name" />
     <xsl:text>}{</xsl:text>
     <xsl:apply-templates select="." mode="title-simple" />
+    <xsl:text>}&#xa;</xsl:text>
+</xsl:template>
+
+<!-- Exceptional, for a worksheet only, we clear the page  -->
+<!-- at the start and provide many options for specifying  -->
+<!-- the four margins, in units LaTeX understands (such as -->
+<!-- cm, in, pt).  This only produces text, so could go in -->
+<!-- -common, but is also only useful for LaTeX output.    -->
+<xsl:template match="worksheet" mode="new-geometry">
+    <!-- Roughly, skinny half-inch margins, -->
+    <!-- to use lots of the available space -->
+    <!-- Perhaps this should be global, but -->
+    <!-- no harm placing it here for now.   -->
+    <xsl:variable name="default-worksheet-margin" select="'1.25cm'"/>
+    <!-- Four similar "choose" effect hierarchy/priority -->
+    <!-- NB: a publisher string parameter to      -->
+    <!-- *really* override (worksheet.left, etc.) -->
+    <xsl:text>\newgeometry{</xsl:text>
+    <xsl:text>left=</xsl:text>
+    <xsl:choose>
+        <xsl:when test="@left">
+            <xsl:value-of select="normalize-space(@left)"/>
+        </xsl:when>
+        <xsl:when test="@margin">
+            <xsl:value-of select="normalize-space(@margin)"/>
+        </xsl:when>
+        <xsl:when test="$docinfo/latex-output/worksheet/@left">
+            <xsl:value-of select="normalize-space($docinfo/latex-output/worksheet/@left)"/>
+        </xsl:when>
+        <xsl:when test="$docinfo/latex-output/worksheet/@margin">
+            <xsl:value-of select="normalize-space($docinfo/latex-output/worksheet/@margin)"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="$default-worksheet-margin"/>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>, right=</xsl:text>
+    <xsl:choose>
+        <xsl:when test="@right">
+            <xsl:value-of select="normalize-space(@right)"/>
+        </xsl:when>
+        <xsl:when test="@margin">
+            <xsl:value-of select="normalize-space(@margin)"/>
+        </xsl:when>
+        <xsl:when test="$docinfo/latex-output/worksheet/@right">
+            <xsl:value-of select="normalize-space($docinfo/latex-output/worksheet/@right)"/>
+        </xsl:when>
+        <xsl:when test="$docinfo/latex-output/worksheet/@margin">
+            <xsl:value-of select="normalize-space($docinfo/latex-output/worksheet/@margin)"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="$default-worksheet-margin"/>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>, top=</xsl:text>
+    <xsl:choose>
+        <xsl:when test="@top">
+            <xsl:value-of select="normalize-space(@top)"/>
+        </xsl:when>
+        <xsl:when test="@margin">
+            <xsl:value-of select="normalize-space(@margin)"/>
+        </xsl:when>
+        <xsl:when test="$docinfo/latex-output/worksheet/@top">
+            <xsl:value-of select="normalize-space($docinfo/latex-output/worksheet/@top)"/>
+        </xsl:when>
+        <xsl:when test="$docinfo/latex-output/worksheet/@margin">
+            <xsl:value-of select="normalize-space($docinfo/latex-output/worksheet/@margin)"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="$default-worksheet-margin"/>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>, bottom=</xsl:text>
+    <xsl:choose>
+        <xsl:when test="@bottom">
+            <xsl:value-of select="normalize-space(@bottom)"/>
+        </xsl:when>
+        <xsl:when test="@margin">
+            <xsl:value-of select="normalize-space(@margin)"/>
+        </xsl:when>
+        <xsl:when test="$docinfo/latex-output/worksheet/@bottom">
+            <xsl:value-of select="normalize-space($docinfo/latex-output/worksheet/@bottom)"/>
+        </xsl:when>
+        <xsl:when test="$docinfo/latex-output/worksheet/@margin">
+            <xsl:value-of select="normalize-space($docinfo/latex-output/worksheet/@margin)"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="$default-worksheet-margin"/>
+        </xsl:otherwise>
+    </xsl:choose>
     <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
