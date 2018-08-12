@@ -352,6 +352,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\usepackage{ifxetex,ifluatex}&#xa;</xsl:text>
     <xsl:text>%% Raster graphics inclusion&#xa;</xsl:text>
     <xsl:text>\usepackage{graphicx}&#xa;</xsl:text>
+    <xsl:text>%% Color support, xcolor package&#xa;</xsl:text>
+    <xsl:text>%% Always loaded, for: add/delete text, author tools&#xa;</xsl:text>
+    <xsl:text>%% Here, since tcolorbox loads tikz, and tikz loads xcolor&#xa;</xsl:text>
+    <!-- Avoid option conflicts causing errors: -->
+    <!-- http://tex.stackexchange.com/questions/57364/option-clash-for-package-xcolor -->
+    <!-- svg later will clobber dvips?  See starred versions in xcolor documentation  -->
+    <!-- TODO: usenames may be obsolete? -->
+    <xsl:text>\PassOptionsToPackage{usenames,dvipsnames,svgnames,table}{xcolor}&#xa;</xsl:text>
+    <xsl:text>\usepackage{xcolor}&#xa;</xsl:text>
     <xsl:text>%% Colored boxes, and much more, though mostly styling&#xa;</xsl:text>
     <xsl:text>%% skins library provides "enhanced" skin, employing tikzpicture&#xa;</xsl:text>
     <xsl:text>%% boxes may be configured as "breakable" or "unbreakable"&#xa;</xsl:text>
@@ -534,14 +543,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% xfrac package for 'beveled fractions': http://tex.stackexchange.com/questions/3372/how-do-i-typeset-arbitrary-fractions-like-the-standard-symbol-for-5-%C2%BD&#xa;</xsl:text>
         <xsl:text>\usepackage{xfrac}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:text>%%&#xa;</xsl:text>
-    <!-- load following conditionally if it presents problems -->
-    <xsl:text>%% Color support, xcolor package&#xa;</xsl:text>
-    <xsl:text>%% Always loaded, for: add/delete text, author tools&#xa;</xsl:text>
-    <!-- Avoid option conflicts causing errors: -->
-    <!-- http://tex.stackexchange.com/questions/57364/option-clash-for-package-xcolor -->
-    <xsl:text>\PassOptionsToPackage{usenames,dvipsnames,svgnames,table}{xcolor}&#xa;</xsl:text>
-    <xsl:text>\usepackage{xcolor}&#xa;</xsl:text>
     <xsl:text>%%&#xa;</xsl:text>
     <xsl:text>%% Semantic Macros&#xa;</xsl:text>
     <xsl:text>%% To preserve meaning in a LaTeX file&#xa;</xsl:text>
@@ -1434,6 +1435,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- and is therefore in the public domain.                                            -->
         <!-- Converted from HTML's SVG into tikZ code via  github.com/kjellmf/svg2tikz.git     -->
         <xsl:text>%% Generic red play button (from SVG)&#xa;</xsl:text>
+        <xsl:text>%% tikz package should be loaded by now&#xa;</xsl:text>
         <xsl:text>\definecolor{playred}{RGB}{230,33,23}&#xa;</xsl:text>
         <xsl:text>\newcommand{\genericpreview}{
         \begin{tikzpicture}[y=0.80pt, x=0.80pt, yscale=-1.000000, xscale=1.000000, inner sep=0pt, outer sep=0pt]
