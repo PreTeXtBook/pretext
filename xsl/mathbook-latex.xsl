@@ -1064,7 +1064,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="//objectives">
         <xsl:text>%% objectives: early in a subdivision, introduction/list/conclusion&#xa;</xsl:text>
         <xsl:text>%% objectives environment and style&#xa;</xsl:text>
-        <xsl:text>\newenvironment{objectives}[1]{\noindent\rule{\linewidth}{0.1ex}\newline{\textbf{{\large#1}}\par\smallskip}}{\par\noindent\rule{\linewidth}{0.1ex}\par\smallskip}&#xa;</xsl:text>
+        <xsl:text>\tcbset{ objectivestyle/.style={size=minimal, colback=white, colbacktitle=white, coltitle=black, fonttitle=\large\bfseries, toprule=0.1ex, toptitle=0.5ex, top=2ex,bottom=0.5ex, bottomrule=0.1ex} }&#xa;</xsl:text>
+        <xsl:text>&#xa;</xsl:text>
+        <xsl:text>\newtcolorbox{objectives}[1]{title=#1,objectivestyle}&#xa;</xsl:text>
     </xsl:if>
     <!-- An example of "Greg's L" with tcolorbox and tikz code                   -->
     <!-- The "enhanced" skin is necessary for the predefined "frame.*" nodes     -->
