@@ -1061,12 +1061,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>   add to width=-1ex, shadow={1ex}{-1ex}{0ex}{black!50!white},&#xa;</xsl:text>
         <xsl:text>   coltitle=black, fonttitle=\bfseries, title={#1}, detach title, before upper={\tcbtitle\ \ }}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="//objectives">
+    <xsl:if test="$document-root//objectives|$document-root//outcomes">
+        <!-- Note: brackets on title necessary to protect against commas in title -->
         <xsl:text>%% objectives: early in a subdivision, introduction/list/conclusion&#xa;</xsl:text>
-        <xsl:text>%% objectives environment and style&#xa;</xsl:text>
+        <xsl:text>%% outcomes: late in a subdivision, introduction/list/conclusion&#xa;</xsl:text>
+        <xsl:text>%% objectives and outcomes, environment (shared!) and style&#xa;</xsl:text>
         <xsl:text>\tcbset{ objectivestyle/.style={size=minimal, colback=white, colbacktitle=white, coltitle=black, fonttitle=\large\bfseries, toprule=0.1ex, toptitle=0.5ex, top=2ex,bottom=0.5ex, bottomrule=0.1ex} }&#xa;</xsl:text>
         <xsl:text>&#xa;</xsl:text>
-        <xsl:text>\newtcolorbox{objectives}[1]{title=#1,objectivestyle}&#xa;</xsl:text>
+        <xsl:text>\newtcolorbox{objectives}[1]{title={#1},objectivestyle}&#xa;</xsl:text>
+        <xsl:text>\newtcolorbox{outcomes}[1]{title={#1},objectivestyle, before skip=2ex}&#xa;</xsl:text>
     </xsl:if>
     <!-- An example of "Greg's L" with tcolorbox and tikz code                   -->
     <!-- The "enhanced" skin is necessary for the predefined "frame.*" nodes     -->
@@ -5000,6 +5003,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{objectives}&#xa;</xsl:text>
 </xsl:template>
 
+<!-- An outcomes element holds a list, surrounded by introduction and conclusion -->
+<xsl:template match="outcomes">
+    <xsl:text>\begin{outcomes}{</xsl:text>
+    <xsl:call-template name="type-name">
+        <xsl:with-param name="string-id" select="'outcomes'" />
+    </xsl:call-template>
+    <xsl:if test="title">
+        <xsl:text>: </xsl:text>
+        <xsl:apply-templates select="." mode="title-full" />
+    </xsl:if>
+    <xsl:text>}</xsl:text>
+    <xsl:apply-templates select="." mode="label"/>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates select="introduction" />
+    <xsl:apply-templates select="ol|ul|dl" />
+    <xsl:apply-templates select="conclusion" />
+    <xsl:text>\end{outcomes}&#xa;</xsl:text>
+</xsl:template>
+
 <!-- Named Lists -->
 <xsl:template match="list">
     <xsl:text>\begin{namedlist}&#xa;</xsl:text>
@@ -5428,7 +5450,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- to cause any problems.                           -->
 <xsl:template match="ol">
     <xsl:choose>
-        <xsl:when test="not(ancestor::ol or ancestor::ul or ancestor::dl or parent::objectives)">
+        <xsl:when test="not(ancestor::ol or ancestor::ul or ancestor::dl or parent::objectives or parent::outcomes)">
             <xsl:call-template name="leave-vertical-mode" />
         </xsl:when>
         <xsl:otherwise>
@@ -5460,7 +5482,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- choice for each such list             -->
 <xsl:template match="ul">
     <xsl:choose>
-        <xsl:when test="not(ancestor::ol or ancestor::ul or ancestor::dl or parent::objectives)">
+        <xsl:when test="not(ancestor::ol or ancestor::ul or ancestor::dl or parent::objectives or parent::outcomes)">
             <xsl:call-template name="leave-vertical-mode" />
         </xsl:when>
         <xsl:otherwise>
@@ -5484,7 +5506,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="dl">
     <xsl:choose>
-        <xsl:when test="not(ancestor::ol or ancestor::ul or ancestor::dl or parent::objectives)">
+        <xsl:when test="not(ancestor::ol or ancestor::ul or ancestor::dl or parent::objectives or parent::outcomes)">
             <xsl:call-template name="leave-vertical-mode" />
         </xsl:when>
         <xsl:otherwise>
