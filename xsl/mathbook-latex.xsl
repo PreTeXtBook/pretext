@@ -7159,14 +7159,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The image "knows" how to size itself for a panel   -->
 <!-- Baseline is automatically at the bottom of the box -->
 <xsl:template match="image" mode="panel-latex-box">
-    <xsl:apply-templates select="." />
+    <xsl:apply-templates select="." mode="image-inclusion"/>
 </xsl:template>
 
 <!-- With raw LaTeX code, we use a \resizebox from the      -->
 <!-- graphicx package to scale the image to the panel width -->
 <xsl:template match="image[latex-image-code]|image[latex-image]" mode="panel-latex-box">
     <xsl:text>\resizebox{\linewidth}{!}{</xsl:text>
-    <xsl:apply-templates select="." />
+    <xsl:apply-templates select="." mode="image-inclusion"/>
     <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
@@ -7212,18 +7212,55 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Images -->
 <!-- ###### -->
 
-<!-- With full source specified, default to PDF format -->
-<xsl:template match="image[@source]" >
-    <xsl:variable name="width">
-        <xsl:apply-templates select="." mode="get-width-percentage" />
+<!-- Get the layout, get the width, convert to real number decimal, -->
+<!-- so as to fill the width key on a LaTeX \includegraphics        -->
+<xsl:template match="image" mode="get-width-fraction">
+    <xsl:variable name="rtf-layout">
+        <xsl:apply-templates select="." mode="layout-parameters" />
     </xsl:variable>
+    <xsl:variable name="layout" select="exsl:node-set($rtf-layout)" />
+    <xsl:value-of select="$layout/width div 100" />
+</xsl:template>
+
+<!-- Anyway that an image is buried in a side-by-side control passes to  -->
+<!-- the sbs layout and the linewidth of the resulting tcolorboxes is restricted -->
+<xsl:template match="image[ancestor::sidebyside]" mode="get-width-fraction">
+    <xsl:value-of select="'1'"/>
+</xsl:template>
+
+<xsl:template match="image[not(parent::figure or parent::sidebyside or parent::stack)]" priority="50">
+    <xsl:variable name="rtf-layout">
+        <xsl:apply-templates select="." mode="layout-parameters" />
+    </xsl:variable>
+    <xsl:variable name="layout" select="exsl:node-set($rtf-layout)" />
+    <xsl:text>\begin{figure}</xsl:text>
+    <xsl:choose>
+        <xsl:when test="$layout/centered = 'true'">
+            <xsl:text>\centering</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>\hspace*{</xsl:text>
+            <xsl:value-of select="$layout/left-margin div 100" />
+            <xsl:text>\linewidth}</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:apply-templates select="." mode="image-inclusion" />
+    <xsl:text>\end{figure}</xsl:text>
+</xsl:template>
+
+<xsl:template match="image[parent::figure and not(ancestor::sidebyside)]" priority="100">
+    <xsl:apply-templates select="." mode="image-inclusion" />
+</xsl:template>
+
+<!-- With full source specified, default to PDF format -->
+<xsl:template match="image[@source]" mode="image-inclusion">
     <xsl:variable name="extension">
         <xsl:call-template name="file-extension">
             <xsl:with-param name="filename" select="@source" />
         </xsl:call-template>
     </xsl:variable>
     <xsl:text>\includegraphics[width=</xsl:text>
-    <xsl:value-of select="substring-before($width,'%') div 100" />
+    <xsl:apply-templates select="." mode="get-width-fraction" />
     <xsl:text>\linewidth]</xsl:text>
     <xsl:text>{</xsl:text>
     <xsl:apply-templates select="@source" mode="internal-id" />
@@ -7235,12 +7272,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Asymptote graphics language  -->
 <!-- PDF's produced by mbx script -->
-<xsl:template match="image[asymptote]">
-    <xsl:variable name="width">
-        <xsl:apply-templates select="." mode="get-width-percentage" />
-    </xsl:variable>
+<xsl:template match="image[asymptote]" mode="image-inclusion">
     <xsl:text>\includegraphics[width=</xsl:text>
-    <xsl:value-of select="substring-before($width,'%') div 100" />
+    <xsl:apply-templates select="." mode="get-width-fraction" />
     <xsl:text>\linewidth]</xsl:text>
     <xsl:text>{</xsl:text>
     <xsl:value-of select="$directory.images" />
@@ -7252,17 +7286,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Sage graphics plots          -->
 <!-- PDF's produced by mbx script -->
 <!-- PNGs are fallback for 3D     -->
-<xsl:template match="image[sageplot]">
-    <xsl:variable name="width">
-        <xsl:apply-templates select="." mode="get-width-percentage" />
-    </xsl:variable>
+<xsl:template match="image[sageplot]" mode="image-inclusion">
     <xsl:text>\IfFileExists{</xsl:text>
     <xsl:value-of select="$directory.images" />
     <xsl:text>/</xsl:text>
     <xsl:apply-templates select="." mode="internal-id" />
     <xsl:text>.pdf}%&#xa;</xsl:text>
     <xsl:text>{\includegraphics[width=</xsl:text>
-    <xsl:value-of select="substring-before($width,'%') div 100" />
+    <xsl:apply-templates select="." mode="get-width-fraction" />
     <xsl:text>\linewidth]</xsl:text>
     <xsl:text>{</xsl:text>
     <xsl:value-of select="$directory.images" />
@@ -7270,7 +7301,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="internal-id" />
     <xsl:text>.pdf}}%&#xa;</xsl:text>
     <xsl:text>{\includegraphics[width=</xsl:text>
-    <xsl:value-of select="substring-before($width,'%') div 100" />
+    <xsl:apply-templates select="." mode="get-width-fraction" />
     <xsl:text>\linewidth]</xsl:text>
     <xsl:text>{</xsl:text>
     <xsl:value-of select="$directory.images" />
@@ -7283,7 +7314,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Clean indentation, drop into LaTeX               -->
 <!-- See "latex-image-preamble" for critical parts    -->
 <!-- Side-By-Side scaling happens there, could be here -->
-<xsl:template match="image[latex-image-code]|image[latex-image]">
+<xsl:template match="image[latex-image-code]|image[latex-image]" mode="image-inclusion">
     <!-- outer braces rein in the scope of any local graphics settings -->
     <xsl:text>{&#xa;</xsl:text>
     <xsl:call-template name="sanitize-text">
