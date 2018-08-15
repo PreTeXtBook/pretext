@@ -4651,6 +4651,273 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 </xsl:template>
 
 
+<!-- TESTING -->
+<!-- Some test images and debugging output, -->
+<!-- while this is still in development -->
+
+<!--
+<image />
+<image margins="20% 5%" />
+<image width="75%" />
+<image margins="20% 5%" width="75%" />
+ -->
+<!-- ~~~~~~~~~~~~~~ -->
+<!--
+<image margins="150pt" />
+<image width="2000" />
+<image margins="-40%" />
+<image margins="300%" />
+<image margins="-20% 5%" />
+<image margins="20% 150%" />
+<image margins="90% 40%" />
+<image margins="5% 10%" width="120%" />
+<image margins="5% 10%" width="-10%" />
+<image margins="5% 10%" width="90%" />
+<image margins="35% 25%" width="39.5%" />
+-->
+
+<!--
+<xsl:template match="image[not(parent::sidebyside or parent::figure)]">
+    <xsl:variable name="rtf-layout">
+        <xsl:apply-templates select="." mode="layout-parameters" />
+    </xsl:variable>
+    <xsl:variable name="layout" select="exsl:node-set($rtf-layout)" />
+    <xsl:message><xsl:value-of select="$layout/left-margin" /></xsl:message>
+    <xsl:message><xsl:value-of select="$layout/width" /></xsl:message>
+    <xsl:message><xsl:value-of select="$layout/right-margin" /></xsl:message>
+    <xsl:message><xsl:value-of select="$layout/left-margin = $layout/right-margin" /></xsl:message>
+</xsl:template>
+-->
+
+<!-- ############## -->
+<!-- Simple Layouts -->
+<!-- ############## -->
+
+<!-- This template creates a RTF (result tree fragment), -->
+<!-- which needs to be captured in one variable, then    -->
+<!-- converted to a node-set with an extension function  -->
+<xsl:template match="image" mode="layout-parameters">
+    <!-- clean up margins -->
+    <xsl:variable name="normalized-margins">
+        <xsl:choose>
+            <xsl:when test="@margins">
+                <xsl:value-of select="normalize-space(@margins)" />
+            </xsl:when>
+            <!-- default if not specified -->
+            <xsl:otherwise>
+                <xsl:text>auto</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+
+    <!-- split on space, or else duplicate (signals centered) -->
+    <xsl:variable name="normalized-left-margin">
+        <xsl:choose>
+            <xsl:when test="contains($normalized-margins, ' ')">
+                <xsl:value-of select="substring-before($normalized-margins, ' ')" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$normalized-margins" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+
+    <xsl:variable name="normalized-right-margin">
+        <xsl:choose>
+            <xsl:when test="contains($normalized-margins, ' ')">
+                <xsl:value-of select="substring-after($normalized-margins, ' ')" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$normalized-margins" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+
+    <!-- clean-up single width -->
+    <xsl:variable name="normalized-width">
+        <xsl:choose>
+            <xsl:when test="@width">
+                <xsl:value-of select="normalize-space(@width)" />
+            </xsl:when>
+            <!-- not placed on image, or figure/image,    -->
+            <!-- but a document-wide default width exists -->
+            <xsl:when test="self::image and not(ancestor::sidebyside) and $docinfo/defaults/image-width">
+                <xsl:value-of select="$docinfo/defaults/image-width" />
+            </xsl:when>
+            <!-- default setting if not specified, and not global -->
+            <xsl:otherwise>
+                <xsl:value-of select="'auto'" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+
+    <!-- Error checks on author's specifications     -->
+    <!-- First, normalized to strings or percentages -->
+
+    <xsl:if test="not(($normalized-left-margin = 'auto') or substring($normalized-left-margin, string-length($normalized-left-margin)) = '%')">
+        <xsl:message>PTX:ERROR:   left margin (<xsl:value-of select="$normalized-left-margin" />) should be given as a percentage (such as "40%"), or as the string "auto"</xsl:message>
+            <xsl:apply-templates select="." mode="location-report" />
+    </xsl:if>
+
+    <xsl:if test="not(($normalized-width = 'auto') or substring($normalized-width, string-length($normalized-width)) = '%')">
+        <xsl:message>PTX:ERROR:   width (<xsl:value-of select="$normalized-width" />) should be given as a percentage (such as "40%"), or as the string "auto"</xsl:message>
+            <xsl:apply-templates select="." mode="location-report" />
+    </xsl:if>
+
+    <xsl:if test="not(($normalized-right-margin = 'auto') or substring($normalized-right-margin, string-length($normalized-right-margin)) = '%')">
+        <xsl:message>PTX:ERROR:   right margin (<xsl:value-of select="$normalized-right-margin" />) should be given as a percentage (such as "40%"), or as the string "auto"</xsl:message>
+            <xsl:apply-templates select="." mode="location-report" />
+    </xsl:if>
+
+    <!-- Second, cases where computed values could be negative or too large -->
+
+    <!-- Sanity check author's left margin -->
+    <xsl:if test="not($normalized-left-margin = 'auto') and ((substring-before($normalized-left-margin, '%') &lt; 0) or (substring-before($normalized-left-margin, '%') &gt; 100))">
+        <xsl:message>PTX:ERROR:   left margin (<xsl:value-of select="$normalized-left-margin" />) must be in the interval [0%, 100%]</xsl:message>
+        <xsl:apply-templates select="." mode="location-report" />
+    </xsl:if>
+
+    <!-- Sanity check author's width -->
+    <xsl:if test="not($normalized-width= 'auto') and ((substring-before($normalized-width, '%') &lt; 0) or (substring-before($normalized-width, '%') &gt; 100))">
+        <xsl:message>PTX:ERROR:   width (<xsl:value-of select="$normalized-width" />) must be in the interval [0%, 100%]</xsl:message>
+        <xsl:apply-templates select="." mode="location-report" />
+    </xsl:if>
+
+    <!-- Sanity check author's right margin -->
+    <xsl:if test="not($normalized-right-margin = 'auto') and ((substring-before($normalized-right-margin, '%') &lt; 0) or (substring-before($normalized-right-margin, '%') &gt; 100))">
+        <xsl:message>PTX:ERROR:   right margin (<xsl:value-of select="$normalized-right-margin" />) must be in the interval [0%, 100%]</xsl:message>
+        <xsl:apply-templates select="." mode="location-report" />
+    </xsl:if>
+
+    <!-- Sanity check author's cumulative margins -->
+    <xsl:if test="not($normalized-left-margin = 'auto') and ((substring-before($normalized-left-margin, '%') + substring-before($normalized-right-margin, '%') &gt; 100))">
+        <xsl:message>PTX:ERROR:   margins (<xsl:value-of select="$normalized-left-margin" />, <xsl:value-of select="$normalized-right-margin" />) must not have a sum exceeding 100%</xsl:message>
+        <xsl:apply-templates select="." mode="location-report" />
+    </xsl:if>
+
+    <!-- Sanity check all parameters together as too large -->
+    <xsl:if test="not($normalized-left-margin = 'auto') and not($normalized-width= 'auto') and ((substring-before($normalized-left-margin, '%') + substring-before($normalized-width, '%') + substring-before($normalized-right-margin, '%') &gt; 100))">
+        <xsl:message>PTX:ERROR:   margins and width (<xsl:value-of select="$normalized-left-margin" />, <xsl:value-of select="$normalized-width" />, <xsl:value-of select="$normalized-right-margin" />) must not have a sum exceeding 100%</xsl:message>
+        <xsl:apply-templates select="." mode="location-report" />
+    </xsl:if>
+
+    <!-- Sanity check that all three parameters together sum to 100 *exactly* -->
+    <xsl:if test="not($normalized-left-margin = 'auto') and not($normalized-width= 'auto') and not((substring-before($normalized-left-margin, '%') + substring-before($normalized-width, '%') + substring-before($normalized-right-margin, '%') = 100))">
+        <xsl:message>PTX:ERROR:   margins and width (<xsl:value-of select="$normalized-left-margin" />, <xsl:value-of select="$normalized-width" />, <xsl:value-of select="$normalized-right-margin" />) must sum to 100%</xsl:message>
+        <xsl:apply-templates select="." mode="location-report" />
+    </xsl:if>
+
+    <!-- Perhaps save for debugging -->
+    <!-- <xsl:message>L:<xsl:value-of select="$normalized-left-margin" />:L W:<xsl:value-of select="$normalized-width" />:W R:<xsl:value-of select="$normalized-right-margin" />:R</xsl:message> -->
+
+    <!-- Now have three "normalized" percentages, with percentages   -->
+    <!-- or default string values.  We would read the table below as -->
+    <!-- rows (cases), but we instead focus on the three outcomes    -->
+    <!-- as a single variable each.                                  -->
+    <!--                                                             -->
+    <!--     Margin   Width      Left      Width     Right           -->
+    <!--                                                             -->
+    <!--     auto     auto          0        100         0           -->
+    <!--     value    auto      value    compute     value           -->
+    <!--     auto     value    center      value    center           -->
+    <!--     value    value     value      value     value           -->
+    <!--                                                             -->
+    <!-- In contrast to earlier practice, we now (2018-07-20) return -->
+    <!-- percentages with no percent sign, so as to do the least     -->
+    <!-- manipulation possible here.  Consumers can add back the     -->
+    <!-- percent sign, divide by 100, take a fraction of a maximum   -->
+    <!-- width, and so on.                                           -->
+
+    <xsl:variable name="left-margin">
+        <xsl:choose>
+            <xsl:when test="($normalized-left-margin = 'auto') and ($normalized-width = 'auto')">
+                <xsl:value-of select="'0'" />
+            </xsl:when>
+            <xsl:when test="not($normalized-left-margin = 'auto') and ($normalized-width = 'auto')">
+                <xsl:value-of select="substring-before($normalized-left-margin, '%')" />
+            </xsl:when>
+            <xsl:when test="($normalized-left-margin = 'auto') and not($normalized-width = 'auto')">
+                <xsl:value-of select="(100 - substring-before($normalized-width, '%')) div 2" />
+            </xsl:when>
+            <xsl:when test="not($normalized-left-margin = 'auto') and not($normalized-width = 'auto')">
+                <xsl:value-of select="substring-before($normalized-left-margin, '%')" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>OOOPS1111</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+
+    <xsl:variable name="right-margin">
+        <xsl:choose>
+            <xsl:when test="($normalized-left-margin = 'auto') and ($normalized-width = 'auto')">
+                <xsl:value-of select="'0'" />
+            </xsl:when>
+            <xsl:when test="not($normalized-left-margin = 'auto') and ($normalized-width = 'auto')">
+                <xsl:value-of select="substring-before($normalized-right-margin, '%')" />
+            </xsl:when>
+            <xsl:when test="($normalized-left-margin = 'auto') and not($normalized-width = 'auto')">
+                <xsl:value-of select="(100 - substring-before($normalized-width, '%')) div 2" />
+            </xsl:when>
+            <xsl:when test="not($normalized-left-margin = 'auto') and not($normalized-width = 'auto')">
+                <xsl:value-of select="substring-before($normalized-right-margin, '%')" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>OOOPS22222</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+
+    <xsl:variable name="width">
+        <xsl:choose>
+            <xsl:when test="($normalized-left-margin = 'auto') and ($normalized-width = 'auto')">
+                <xsl:value-of select="'100'" />
+            </xsl:when>
+            <xsl:when test="not($normalized-left-margin = 'auto') and ($normalized-width = 'auto')">
+                <xsl:value-of select="100 - substring-before($normalized-left-margin, '%') - substring-before($normalized-right-margin, '%')" />
+            </xsl:when>
+            <xsl:when test="($normalized-left-margin = 'auto') and not($normalized-width = 'auto')">
+                <xsl:value-of select="substring-before($normalized-width, '%')" />
+            </xsl:when>
+            <xsl:when test="not($normalized-left-margin = 'auto') and not($normalized-width = 'auto')">
+                <xsl:value-of select="substring-before($normalized-width, '%')" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>OOOPS33333</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+
+    <xsl:variable name="centered" select="$left-margin = $right-margin" />
+
+    <!-- This is the RTF, which will automatically be bundled with -->
+    <!-- a root. Elements should be mostly self-explanatory.       -->
+    <!-- "centered" is reported NOW, not computed later, when the  -->
+    <!-- two margins are either                                    -->
+    <!--   (a) specified identically by the author,                -->
+    <!--   (b) computed identically above, or                      -->
+    <!--   (c) default to identical values.                        -->
+
+    <left-margin>
+        <xsl:value-of select="$left-margin" />
+    </left-margin>
+    <width>
+        <xsl:value-of select="$width" />
+    </width>
+    <right-margin>
+        <xsl:value-of select="$right-margin" />
+    </right-margin>
+    <centered>
+        <xsl:value-of select="$centered" />
+    </centered>
+
+    <!-- This will be useful in a debugging switch -->
+<!--
+    <xsl:message>l:<xsl:value-of select="$left-margin" />:l w:<xsl:value-of select="$width" />:w r:<xsl:value-of select="$right-margin" />:r c:<xsl:value-of select="$centered" />:c</xsl:message>
+    <xsl:message>- - - - - - - - - - - - - </xsl:message>
+-->
+</xsl:template>
+
 <!-- ################## -->
 <!-- SideBySide Layouts -->
 <!-- ################## -->
