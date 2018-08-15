@@ -118,6 +118,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="html.knowl.list" select="'no'" />
 <xsl:param name="html.knowl.remark" select="'no'" />
 <xsl:param name="html.knowl.objectives" select="'no'" />
+<xsl:param name="html.knowl.outcomes" select="'no'" />
 <xsl:param name="html.knowl.figure" select="'no'" />
 <xsl:param name="html.knowl.table" select="'no'" />
 <xsl:param name="html.knowl.listing" select="'no'" />
@@ -423,7 +424,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="*" mode="summary-nav" />
             </ul>
         </nav>
-        <xsl:apply-templates select="conclusion"/>
+        <xsl:apply-templates select="conclusion|outcomes"/>
     </section>
 </xsl:template>
 
@@ -1428,7 +1429,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="commentary" mode="xref-as-knowl">
     <xsl:value-of select="$b-commentary" />
 </xsl:template>
-<xsl:template match="fn|p|blockquote|biblio|biblio/note|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|poem|assemblage|paragraphs|objectives|exercise|hint|answer|solution|exercisegroup|men|mrow|li|contributor" mode="xref-as-knowl">
+<xsl:template match="fn|p|blockquote|biblio|biblio/note|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|poem|assemblage|paragraphs|objectives|outcomes|exercise|hint|answer|solution|exercisegroup|men|mrow|li|contributor" mode="xref-as-knowl">
     <xsl:value-of select="true()" />
 </xsl:template>
 
@@ -1583,7 +1584,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- These are convenience methods for frequently-used headings -->
 
 <!-- h6, type name, number (if exists), title (if exists) -->
-<!-- REMARK-LIKE, COMPUTATION-LIKE, DEFINITION-LIKE, SOLUTION-LIKE, objectives (xref-content), EXAMPLE-LIKE, PROJECT-LIKE, exercise (inline), task (xref-content), fn (xref-content), biblio/note (xref-content)-->
+<!-- REMARK-LIKE, COMPUTATION-LIKE, DEFINITION-LIKE, SOLUTION-LIKE, objectives (xref-content), outcomes (xref-content), EXAMPLE-LIKE, PROJECT-LIKE, exercise (inline), task (xref-content), fn (xref-content), biblio/note (xref-content)-->
 <xsl:template match="*" mode="heading-full">
     <h6 class="heading">
         <span class="type">
@@ -1683,7 +1684,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- h6, type name, no number (even if exists), title (if exists)              -->
 <!-- eg, objectives is one-per-subdivison, max, so no need to display at birth -->
-<!-- objectives (when born) -->
+<!-- objectives and outcomes (when born) -->
 <xsl:template match="*" mode="heading-full-implicit-number">
     <h6 class="heading">
         <span class="type">
@@ -1857,7 +1858,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- (7) TODO: "wrapped-content" called by "body" to separate code. -->
 
-<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|commentary|objectives|&EXAMPLE-LIKE;|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|proof|case|fn|contributor|biblio|biblio/note|p|li|me|men|md|mdn">
+<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|commentary|objectives|outcomes|&EXAMPLE-LIKE;|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|proof|case|fn|contributor|biblio|biblio/note|p|li|me|men|md|mdn">
     <xsl:param name="b-original" select="true()" />
     <xsl:variable name="hidden">
         <xsl:apply-templates select="." mode="is-hidden" />
@@ -2631,16 +2632,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<!-- Objectives -->
-<!-- A special, and restricted block -->
+<!-- Objectives and Outcomes -->
+<!-- Special, and restricted, blocks -->
 
 <!-- Born-hidden behavior is configurable -->
 <xsl:template match="objectives" mode="is-hidden">
     <xsl:value-of select="$html.knowl.objectives = 'yes'" />
 </xsl:template>
+<xsl:template match="outcomes" mode="is-hidden">
+    <xsl:value-of select="$html.knowl.outcomes = 'yes'" />
+</xsl:template>
 
 <!-- Overall enclosing element -->
-<xsl:template match="objectives" mode="body-element">
+<xsl:template match="objectives|outcomes" mode="body-element">
     <xsl:text>article</xsl:text>
 </xsl:template>
 
@@ -2648,26 +2652,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="objectives" mode="body-css-class">
     <xsl:text>objectives</xsl:text>
 </xsl:template>
+<xsl:template match="outcomes" mode="body-css-class">
+    <xsl:text>outcomes</xsl:text>
+</xsl:template>
 
 <!-- When born hidden, block-level -->
-<xsl:template match="objectives" mode="hidden-knowl-placement">
+<xsl:template match="objectives|outcomes" mode="hidden-knowl-placement">
     <xsl:text>block</xsl:text>
 </xsl:template>
 
 <!-- When born use this heading -->
-<xsl:template match="objectives" mode="heading-birth">
+<xsl:template match="objectives|outcomes" mode="heading-birth">
     <xsl:apply-templates select="." mode="heading-full-implicit-number" />
 </xsl:template>
 
 <!-- Heading for interior of xref-knowl content -->
-<xsl:template match="objectives" mode="heading-xref-knowl">
+<xsl:template match="objectives|outcomes" mode="heading-xref-knowl">
     <xsl:apply-templates select="." mode="heading-full" />
 </xsl:template>
 
 <!-- Primary content of generic "body" template        -->
 <!-- Pass along b-original flag                        -->
 <!-- Simply process contents, with partial restriction -->
-<xsl:template match="objectives" mode="wrapped-content">
+<xsl:template match="objectives|outcomes" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
     <xsl:apply-templates select="introduction|ol|ul|dl|conclusion" >
         <xsl:with-param name="b-original" select="$b-original" />
@@ -3783,7 +3790,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- and top-down when components are also knowled.  -->
 
 
-<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|commentary|objectives|&EXAMPLE-LIKE;|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|proof|case|fn|contributor|biblio|biblio/note" mode="body">
+<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|commentary|objectives|outcomes|&EXAMPLE-LIKE;|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|proof|case|fn|contributor|biblio|biblio/note" mode="body">
     <xsl:param name="block-type" />
     <xsl:param name="b-original" select="true()" />
     <!-- prelude beforehand, when original -->
