@@ -4465,11 +4465,39 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Images -->
 <!-- ###### -->
 
+
+<xsl:template match="image[not(ancestor::sidebyside)]">
+    <xsl:variable name="rtf-layout">
+        <xsl:apply-templates select="." mode="layout-parameters" />
+    </xsl:variable>
+    <xsl:variable name="layout" select="exsl:node-set($rtf-layout)" />
+    <!-- div is constraint for contained image, needs CSS class name -->
+    <div>
+        <xsl:attribute name="style">
+            <xsl:text>width: </xsl:text>
+            <xsl:value-of select="$layout/width"/>
+            <xsl:text>%;</xsl:text>
+            <xsl:text> margin-left: </xsl:text>
+            <xsl:value-of select="$layout/left-margin"/>
+            <xsl:text>%;</xsl:text>
+            <xsl:text> margin-right: </xsl:text>
+            <xsl:value-of select="$layout/right-margin"/>
+            <xsl:text>%;</xsl:text>
+            <!-- <xsl:text> margin-top: 0%; margin-bottom: 0; </xsl:text> -->
+        </xsl:attribute>
+        <xsl:apply-templates select="." mode="image-inclusion"/>
+    </div>
+</xsl:template>
+
+<xsl:template match="image[ancestor::sidebyside]">
+    <xsl:apply-templates select="." mode="image-inclusion" />
+</xsl:template>
+
 <!-- With a @source attribute, without an extension, -->
 <!--   we presume an SVG has been manufactured       -->
 <!-- With a @source attribute, with an extension,    -->
 <!--   we write an HTML "img" tag with attributes    -->
-<xsl:template match="image[@source]" >
+<xsl:template match="image[@source]" mode="image-inclusion">
     <!-- condition on file extension -->
     <!-- no period, lowercase'ed     -->
     <xsl:variable name="extension">
@@ -4501,11 +4529,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- with extension, just include it -->
         <xsl:otherwise>
             <xsl:element name="img">
-                <xsl:attribute name="width">
-                    <xsl:apply-templates select="." mode="get-width-percentage" />
-                </xsl:attribute>
                 <xsl:attribute name="src">
                     <xsl:value-of select="@source" />
+                </xsl:attribute>
+                <!-- replace with a CSS class -->
+                <xsl:attribute name="style">
+                    <xsl:text>width: 100%; height: auto;</xsl:text>
                 </xsl:attribute>
                 <!-- alt attribute for accessibility -->
                 <xsl:attribute name="alt">
@@ -4530,7 +4559,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--   LaTeX source code images                       -->
 <!--   Sage graphics plots, w/ PNG fallback for 3D    -->
 <!--   Match style is duplicated in mathbook-epub.xsl -->
-<xsl:template match="image[asymptote]|image[latex-image-code]|image[latex-image]|image[sageplot]">
+<xsl:template match="image[asymptote]|image[latex-image-code]|image[latex-image]|image[sageplot]" mode="image-inclusion">
     <xsl:variable name="base-pathname">
         <xsl:value-of select="$directory.images" />
         <xsl:text>/</xsl:text>
@@ -4574,17 +4603,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="src">
             <xsl:value-of select="$svg-filename" />
         </xsl:attribute>
-        <!-- fix width, let browser get aspect ration from SVG viewBox -->
-        <!-- attribute (svg/@viewBox) and compute the height           -->
-        <!-- https://css-tricks.com/scale-svg/#article-header-id-7     -->
-        <xsl:attribute name="width">
-            <xsl:value-of select="$image-width" />
-        </xsl:attribute>
-        <!-- center the image, either in some figure (necessary),    -->
-        <!-- or in a side-by-side (redundant).  The 0 is top/bottom, -->
-        <!-- and the auto is left/right in concert with width        -->
+        <!-- replace with a CSS class -->
         <xsl:attribute name="style">
-            <xsl:text>display: block; margin: 0 auto;</xsl:text>
+            <xsl:text>width: 100%; height: auto;</xsl:text>
         </xsl:attribute>
         <!-- alt attribute for accessibility -->
         <xsl:attribute name="alt">
@@ -5090,7 +5111,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- for side-by-side layout, or other width      -->
 <!-- specification so we do nothing extraordinary -->
 <xsl:template match="image" mode="panel-html-box">
-    <xsl:apply-templates select="." />
+    <xsl:apply-templates select="." mode="image-inclusion"/>
 </xsl:template>
 
 <!-- An video "knows" how to look outward         -->
