@@ -3388,10 +3388,15 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- There are corresponing strings in the localizations files, -->
 <!-- and the "en-US" file will be the best documented           -->
 
-<!-- A single objective is authored as a list item -->
+<!-- A single objective or outcome is authored as a list item -->
 <xsl:template match="objectives/ol/li|objectives/ul/li|objectives/dl/li" mode="type-name">
     <xsl:call-template name="type-name">
         <xsl:with-param name="string-id" select="'objective'" />
+    </xsl:call-template>
+</xsl:template>
+<xsl:template match="outcomes/ol/li|outcomes/ul/li|outcomes/dl/li" mode="type-name">
+    <xsl:call-template name="type-name">
+        <xsl:with-param name="string-id" select="'outcome'" />
     </xsl:call-template>
 </xsl:template>
 
@@ -4227,7 +4232,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 
 <!-- Some items are "containers".  They are not numbered, you  -->
 <!-- cannot point to them, they are invisible to the reader    -->
-<!-- in a way.  We kill their serial nuumbers explicitly here. -->
+<!-- in a way.  We kill their serial numbers explicitly here.  -->
 <!-- Lists live in paragraphs, exercises, objectives, so       -->
 <!-- should be referenced as part of some enclosing element.   -->
 <!-- "mathbook" helps some tree-climbing routines halt -->
@@ -4252,9 +4257,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- components of exercises, so we might need to explicitly   -->
 <!-- make webwork/solution, etc to be unnumbered.              -->
 
-<!-- Objectives are one-per-subdivision, and so -->
-<!-- get their serial number from their parent  -->
-<xsl:template match="objectives" mode="serial-number">
+<!-- Objectives and outcomes are one-per-subdivision, -->
+<!-- and so get their serial number from their parent -->
+<xsl:template match="objectives|outcomes" mode="serial-number">
     <xsl:apply-templates select="parent::*" mode="serial-number" />
 </xsl:template>
 
@@ -4599,14 +4604,14 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Structure Numbers: Objectives -->
 <!-- Objectives are one-per-subdivision, and so   -->
 <!-- get their structure number from their parent -->
-<xsl:template match="objectives" mode="structure-number">
+<xsl:template match="objectives|outcomes" mode="structure-number">
     <xsl:apply-templates select="parent::*" mode="structure-number" />
 </xsl:template>
 
-<!-- Structure Numbers: Objective -->
-<!-- A single objective is a list item -->
-<!-- in an objectives environment       -->
-<xsl:template match="objectives/ol/li" mode="structure-number">
+<!-- Structure Numbers: Objective and Outcome-->
+<!-- A single objective or outcome is a list item -->
+<!-- in an objectives or outcomes environment     -->
+<xsl:template match="objectives/ol/li|outcomes/ol/li" mode="structure-number">
     <xsl:apply-templates select="ancestor::*[&STRUCTURAL-FILTER;][1]" mode="number" />
 </xsl:template>
 
@@ -6912,7 +6917,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <!-- special case for phrase options and list items of anonymous lists        -->
         <!-- catch this first and provide no text at all (could provide busted text?) -->
         <!-- anonymous lists live in "p", but this is an unreliable indication        -->
-        <xsl:when test="($text-style = 'phrase-global' or $text-style = 'phrase-hybrid') and ($target/self::li and not($target/ancestor::list or $target/ancestor::objectives or $target/ancestor::exercise))">
+        <xsl:when test="($text-style = 'phrase-global' or $text-style = 'phrase-hybrid') and ($target/self::li and not($target/ancestor::list or $target/ancestor::objectives or $target/ancestor::outcomes or $target/ancestor::exercise))">
             <xsl:message>MBX:WARNING: a cross-reference to a list item of an anonymous list ("<xsl:apply-templates select="$target" mode="serial-number" />") with 'phrase-global' and 'phrase-hybrid' styles for the xref text will yield no text at all, and possibly create unpredictable results in output</xsl:message>
         </xsl:when>
         <xsl:when test="$text-style = 'phrase-global' or $text-style = 'phrase-hybrid'">

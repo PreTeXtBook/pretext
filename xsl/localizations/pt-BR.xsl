@@ -118,6 +118,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Objectives is the block, objective is a list item within -->
     <!-- <localization string-id='objectives'><xsl:text>Objectives</xsl:text></localization> -->
     <!-- <localization string-id='objective'><xsl:text>Objective</xsl:text></localization> -->
+    <!-- Outcomes is the block, outcome is a list item within (different) -->
+    <!-- <localization string-id='outcomes'><xsl:text>Outcomes</xsl:text></localization> -->
+    <!-- <localization string-id='outcome'><xsl:text>Outcome</xsl:text></localization> -->
     <!--  -->
     <localization string-id='figure'><xsl:text>Figura</xsl:text></localization>
     <localization string-id='table'><xsl:text>Tabela</xsl:text></localization>
