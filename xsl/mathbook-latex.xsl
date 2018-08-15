@@ -1075,7 +1075,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$b-commentary and $document-root//commentary">
         <xsl:text>%% commentary: elective, additional comments in an enhanced edition&#xa;</xsl:text>
         <xsl:text>\DeclareTColorBox{commentary}{m}&#xa;</xsl:text>
-        <xsl:text>{breakable,skin=enhanced,title=#1,fonttitle=\bfseries,coltitle=black,colback=white,frame code={&#xa;</xsl:text>
+        <xsl:text>{breakable,skin=enhanced,title={#1},fonttitle=\bfseries,coltitle=black,colback=white,frame code={&#xa;</xsl:text>
         <xsl:text>\path[draw=red!75!black,line width=0.5mm] (frame.north west) -- (frame.south west) -- ($ (frame.south west)!0.05!(frame.south east) $);}}&#xa;</xsl:text>
     </xsl:if>
     <!-- miscellaneous, not categorized yet -->
@@ -1794,7 +1794,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- "frame empty" is needed to counteract very faint outlines in some PDF viewers -->
         <!-- framecol=white is inadvisable, "frame hidden" is ineffective for default skin -->
         <xsl:text>\tcbset{ exgroupexstyle/.style={size=minimal,width=\egexwidth,colback=white,frame empty,valign=top,coltitle=black,fonttitle=\bfseries,attach title to upper,after title={.\space}} }&#xa;</xsl:text>
-        <xsl:text>\DeclareTColorBox{egexercise}{m}{title=#1, exgroupexstyle}&#xa;</xsl:text>
+        <xsl:text>\DeclareTColorBox{egexercise}{m}{title={#1}, exgroupexstyle}&#xa;</xsl:text>
         <xsl:text>%% An "xparse" environment will represent the entire exercise group,&#xa;</xsl:text>
         <xsl:text>%% with the number of columns as a parameter.&#xa;</xsl:text>
         <xsl:text>%% TODO: make the 1-column version the default without an argument, bail on raster&#xa;</xsl:text>
