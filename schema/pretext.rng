@@ -137,6 +137,9 @@
           </optional>
         </group>
       </choice>
+      <optional>
+        <ref name="Outcomes"/>
+      </optional>
     </element>
   </define>
   <define name="Section">
@@ -188,6 +191,9 @@
           </optional>
         </group>
       </choice>
+      <optional>
+        <ref name="Outcomes"/>
+      </optional>
     </element>
   </define>
   <define name="Subsection">
@@ -239,6 +245,9 @@
           </optional>
         </group>
       </choice>
+      <optional>
+        <ref name="Outcomes"/>
+      </optional>
     </element>
   </define>
   <define name="Subsubsection">
@@ -265,6 +274,9 @@
       </optional>
       <optional>
         <ref name="References"/>
+      </optional>
+      <optional>
+        <ref name="Outcomes"/>
       </optional>
     </element>
   </define>
@@ -861,6 +873,18 @@
   </define>
   <define name="Objectives">
     <element name="objectives">
+      <ref name="MetaDataTitleOptional"/>
+      <optional>
+        <ref name="IntroductionText"/>
+      </optional>
+      <ref name="List"/>
+      <optional>
+        <ref name="ConclusionText"/>
+      </optional>
+    </element>
+  </define>
+  <define name="Outcomes">
+    <element name="outcomes">
       <ref name="MetaDataTitleOptional"/>
       <optional>
         <ref name="IntroductionText"/>

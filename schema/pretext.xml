@@ -112,7 +112,8 @@
                         References?,
                         ConclusionDivision?
                     )
-                )
+                ),
+                Outcomes?
             }
         Section =
             element section {
@@ -135,7 +136,8 @@
                         References?,
                         ConclusionDivision?
                     )
-                )
+                ),
+                Outcomes?
             }
         Subsection =
             element subsection {
@@ -158,7 +160,8 @@
                         References?,
                         ConclusionDivision?
                     )
-                )
+                ),
+                Outcomes?
             }
         Subsubsection =
             element subsubsection {
@@ -168,7 +171,8 @@
                 (BlockDivision | Paragraphs | Commentary)+,
                 Exercises?,
                 Solutions?,
-                References?
+                References?,
+                Outcomes?
             }
         Appendix =
             element appendix {
@@ -814,11 +818,18 @@
     <section>
         <title>Objectives</title>
 
-        <p>A division may lead (first) with an optional list of objectives for the division.</p>
+        <p>A division may lead (first) with an optional list of objectives for the division and may be followed by a (final) optional list of outcomes.  The element names are only chosen to reflect a pre- and post- behavior and so could be used for objectivbes, outcomes, and standards in a variety of ways.</p>
 
-        <fragment xml:id="objectives">
+        <fragment xml:id="objective-outcome">
         Objectives =
             element objectives {
+                MetaDataTitleOptional,
+                IntroductionText?,
+                List,
+                ConclusionText?
+            }
+        Outcomes =
+            element outcomes {
                 MetaDataTitleOptional,
                 IntroductionText?,
                 List,
@@ -2022,7 +2033,7 @@
         <fragment ref="block" />
         <fragment ref="block-component" />
         <fragment ref="introduction-conclusion" />
-        <fragment ref="objectives" />
+        <fragment ref="objective-outcome" />
         <fragment ref="blockquote" />
         <fragment ref="verbatimdisplay" />
         <fragment ref="list" />

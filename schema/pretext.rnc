@@ -64,7 +64,8 @@
                         References?,
                         ConclusionDivision?
                     )
-                )
+                ),
+                Outcomes?
             }
         Section =
             element section {
@@ -87,7 +88,8 @@
                         References?,
                         ConclusionDivision?
                     )
-                )
+                ),
+                Outcomes?
             }
         Subsection =
             element subsection {
@@ -110,7 +112,8 @@
                         References?,
                         ConclusionDivision?
                     )
-                )
+                ),
+                Outcomes?
             }
         Subsubsection =
             element subsubsection {
@@ -120,7 +123,8 @@
                 (BlockDivision | Paragraphs | Commentary)+,
                 Exercises?,
                 Solutions?,
-                References?
+                References?,
+                Outcomes?
             }
         Appendix =
             element appendix {
@@ -382,6 +386,13 @@
         
         Objectives =
             element objectives {
+                MetaDataTitleOptional,
+                IntroductionText?,
+                List,
+                ConclusionText?
+            }
+        Outcomes =
+            element outcomes {
                 MetaDataTitleOptional,
                 IntroductionText?,
                 List,
