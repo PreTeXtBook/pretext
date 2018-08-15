@@ -2343,7 +2343,7 @@ the xsltproc executable.
             <subsection>
                 <title>Copies of Images</title>
 
-                <p>Sometimes you want to use the same image more than once.  For a raster image, you can just point to it again.  You are free to wrap it in a <c>figure</c> or <c>sidebyside</c> and can change the caption.  It will get a new number as a new figure, and you will need to assign a unique <c>@xml:id</c> attribute.  Maybe appending <c>-copy-2</c>, or similar, will be helpful.</p>
+                <p>Sometimes you want to use the same image more than once.  For a raster image, you can just point to it again.  You are free to wrap it in a <c>figure</c> or <c>sidebyside</c> and change the caption.  It will get a new number as a new figure, and you will need to assign a unique <c>@xml:id</c> attribute.  Maybe appending <c>-copy-2</c>, or similar, will be helpful.</p>
 
                 <figure xml:id="figure-raster-image-copy">
                     <caption>Copy of raster image, in a figure, so now numbered and captioned</caption>
@@ -5421,17 +5421,13 @@ the xsltproc executable.
             <subsection>
                 <title>A Single Captionless Image</title>
 
-                <p>Sometimes you may want to include a single <c>image</c> or <c>table</c> in an example or exercise without a caption. You can also achieve this using <c>sidebyside</c>. The first has width <c>10%</c>, and the second has width <c>10%</c> and margins <c>25%</c>.</p>
+                <p>Sometimes you may want to include a single <c>image</c> or <c>table</c> in an example or exercise without a caption.   This formerly required a <c>sidebyside</c>, but here we are testing a more direct markup. The first has width <c>10%</c>, and the second has width <c>10%</c> and left margin of <c>25%</c>.</p>
 
-                <sidebyside width="10%">
-                    <image source="images/cross-square.png"/>
-                </sidebyside>
+                <image source="images/cross-square.png" width="10%"/>
 
                 <p>A paragraph, just to show where the first stops and the second ends.</p>
 
-                <sidebyside width="10%" margins="25%">
-                    <image source="images/cross-square.png"/>
-                </sidebyside>
+                <image source="images/cross-square.png" width="10%" margins="25% 65%"/>
 
                 <p>You might wish to place a single image flush-left, or flush-right.  You can specify the <c>margins</c> attribute as a pair of percentages for different left and right margins.  The following are laid out with two margins, with a 0<percent /> left margin and right margin (respectively). </p>
 
