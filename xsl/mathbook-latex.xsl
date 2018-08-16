@@ -3575,9 +3575,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Must be elected by a publisher, based on the switch.  -->
 <xsl:template match="commentary">
     <xsl:if test="$b-commentary">
+        <!-- true, false, or if no title, then empty -->
+        <xsl:variable name="has-punctuation">
+            <xsl:apply-templates select="title" mode="has-punctuation" />
+        </xsl:variable>
         <xsl:text>\begin{commentary}</xsl:text>
         <xsl:text>{</xsl:text>
         <xsl:apply-templates select="." mode="title-full" />
+        <xsl:if test="$has-punctuation = 'false'">
+            <xsl:text>.</xsl:text>
+        </xsl:if>
         <xsl:text>}&#xa;</xsl:text>
         <!-- coordinate select with schema's BlockStatementNoCaption       -->
         <!-- Note sufficiency and necessity of processing index items here -->
