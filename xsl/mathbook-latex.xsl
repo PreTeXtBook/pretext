@@ -2047,6 +2047,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Provide some comments for the LaTeX source, to aid     -->
 <!-- with standalone use or debugging.  Preface with "%% ". -->
 
+<!-- "commentary" -->
 <!-- Body:  \begin{commentary}{m:title}    -->
 <!-- Title comes with punctuation, always. -->
 <xsl:template match="commentary" mode="environment">
@@ -2055,7 +2056,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <commentary />
     </xsl:variable>
     <xsl:text>\DeclareTColorBox{commentary}{m}&#xa;</xsl:text>
-    <xsl:text>{</xsl:text>
+    <xsl:text>{title={#1}, </xsl:text>
     <xsl:apply-templates select="exsl:node-set($rtf)/*" mode="tcb-style" />
     <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
@@ -2078,7 +2079,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The 5% horizontal leg is a "partway modifier", from     -->
 <!-- https://tex.stackexchange.com/questions/48756/tikz-relative-coordinates -->
 <xsl:template match="commentary" mode="tcb-style">
-    <xsl:text>breakable,skin=enhanced,title={#1},fonttitle=\bfseries,coltitle=black,colback=white,frame code={&#xa;</xsl:text>
+    <xsl:text>breakable,skin=enhanced,fonttitle=\bfseries,coltitle=black,colback=white,frame code={&#xa;</xsl:text>
     <xsl:text>\path[draw=red!75!black,line width=0.5mm] (frame.north west) -- (frame.south west) -- ($ (frame.south west)!0.05!(frame.south east) $);}</xsl:text>
 </xsl:template>
 
