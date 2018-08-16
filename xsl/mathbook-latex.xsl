@@ -1071,15 +1071,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\newtcolorbox{objectives}[1]{title={#1},objectivestyle}&#xa;</xsl:text>
         <xsl:text>\newtcolorbox{outcomes}[1]{title={#1},objectivestyle, before skip=2ex}&#xa;</xsl:text>
     </xsl:if>
-    <!-- An example of "Greg's L" with tcolorbox and tikz code                   -->
-    <!-- The "enhanced" skin is necessary for the predefined "frame.*" nodes     -->
-    <!-- The 5% horizontal leg is a "partway modifier", from                     -->
-    <!-- https://tex.stackexchange.com/questions/48756/tikz-relative-coordinates -->
+    <!-- "commentary" is elective, with global switch set at startup -->
     <xsl:if test="$b-commentary and $document-root//commentary">
-        <xsl:text>%% commentary: elective, additional comments in an enhanced edition&#xa;</xsl:text>
-        <xsl:text>\DeclareTColorBox{commentary}{m}&#xa;</xsl:text>
-        <xsl:text>{breakable,skin=enhanced,title={#1},fonttitle=\bfseries,coltitle=black,colback=white,frame code={&#xa;</xsl:text>
-        <xsl:text>\path[draw=red!75!black,line width=0.5mm] (frame.north west) -- (frame.south west) -- ($ (frame.south west)!0.05!(frame.south east) $);}}&#xa;</xsl:text>
+        <xsl:variable name="rtf">
+            <commentary />
+        </xsl:variable>
+        <xsl:apply-templates select="exsl:node-set($rtf)/*" mode="environment" />
     </xsl:if>
     <!-- miscellaneous, not categorized yet -->
     <xsl:if test="$document-root//exercises//exercise">
@@ -2039,6 +2036,52 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 
 </xsl:template>
+
+
+<!-- ############################# -->
+<!-- LaTeX Environment Definitions -->
+<!-- ############################# -->
+
+<!-- These are not yet meant for style writer use. -->
+
+<!-- Provide some comments for the LaTeX source, to aid     -->
+<!-- with standalone use or debugging.  Preface with "%% ". -->
+
+<!-- Body:  \begin{commentary}{m:title}    -->
+<!-- Title comes with punctuation, always. -->
+<xsl:template match="commentary" mode="environment">
+    <xsl:text>%% commentary: elective, additional comments in an enhanced edition&#xa;</xsl:text>
+    <xsl:variable name="rtf">
+        <commentary />
+    </xsl:variable>
+    <xsl:text>\DeclareTColorBox{commentary}{m}&#xa;</xsl:text>
+    <xsl:text>{</xsl:text>
+    <xsl:apply-templates select="exsl:node-set($rtf)/*" mode="tcb-style" />
+    <xsl:text>}&#xa;</xsl:text>
+</xsl:template>
+
+
+<!-- ########################## -->
+<!-- LaTeX Styling via Preamble -->
+<!-- ########################## -->
+
+<!-- General Notes: -->
+<!--                -->
+<!-- 1.  Protect tcolorbox arguments with braces, especially titles, -->
+<!-- since commas will bleed through into the options otherwise      -->
+<!-- 2.  Separate the tcolorbox options with spaces after commas     -->
+
+
+<!-- "commentary" -->
+<!-- "Greg's L" with tcolorbox and tikz code. The "enhanced" -->
+<!-- skin is necessary for the predefined "frame.*" nodes    -->
+<!-- The 5% horizontal leg is a "partway modifier", from     -->
+<!-- https://tex.stackexchange.com/questions/48756/tikz-relative-coordinates -->
+<xsl:template match="commentary" mode="tcb-style">
+    <xsl:text>breakable,skin=enhanced,title={#1},fonttitle=\bfseries,coltitle=black,colback=white,frame code={&#xa;</xsl:text>
+    <xsl:text>\path[draw=red!75!black,line width=0.5mm] (frame.north west) -- (frame.south west) -- ($ (frame.south west)!0.05!(frame.south east) $);}</xsl:text>
+</xsl:template>
+
 
 <!-- ################## -->
 <!-- Preamble Utilities -->
