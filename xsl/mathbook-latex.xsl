@@ -1061,15 +1061,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>   add to width=-1ex, shadow={1ex}{-1ex}{0ex}{black!50!white},&#xa;</xsl:text>
         <xsl:text>   coltitle=black, fonttitle=\bfseries, title={#1}, detach title, before upper={\tcbtitle\ \ }}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="$document-root//objectives|$document-root//outcomes">
-        <!-- Note: brackets on title necessary to protect against commas in title -->
-        <xsl:text>%% objectives: early in a subdivision, introduction/list/conclusion&#xa;</xsl:text>
-        <xsl:text>%% outcomes: late in a subdivision, introduction/list/conclusion&#xa;</xsl:text>
-        <xsl:text>%% objectives and outcomes, environment (shared!) and style&#xa;</xsl:text>
-        <xsl:text>\tcbset{ objectivestyle/.style={size=minimal, colback=white, colbacktitle=white, coltitle=black, fonttitle=\large\bfseries, toprule=0.1ex, toptitle=0.5ex, top=2ex,bottom=0.5ex, bottomrule=0.1ex} }&#xa;</xsl:text>
-        <xsl:text>&#xa;</xsl:text>
-        <xsl:text>\newtcolorbox{objectives}[1]{title={#1},objectivestyle}&#xa;</xsl:text>
-        <xsl:text>\newtcolorbox{outcomes}[1]{title={#1},objectivestyle, before skip=2ex}&#xa;</xsl:text>
+    <xsl:if test="$document-root//objectives">
+        <xsl:variable name="rtf">
+            <objectives />
+        </xsl:variable>
+        <xsl:apply-templates select="exsl:node-set($rtf)/*" mode="environment" />
+    </xsl:if>
+    <xsl:if test="$document-root//outcomes">
+        <xsl:variable name="rtf">
+            <outcomes />
+        </xsl:variable>
+        <xsl:apply-templates select="exsl:node-set($rtf)/*" mode="environment" />
     </xsl:if>
     <!-- "commentary" is elective, with global switch set at startup -->
     <xsl:if test="$b-commentary and $document-root//commentary">
@@ -2061,6 +2063,34 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
+<!-- "objectives" -->
+<!-- Body:  \begin{objectives}{m:title}    -->
+<!-- Title comes without new punctuation.  -->
+<xsl:template match="objectives" mode="environment">
+    <xsl:text>%% objectives: early in a subdivision, introduction/list/conclusion&#xa;</xsl:text>
+    <xsl:variable name="rtf">
+        <objectives />
+    </xsl:variable>
+    <xsl:text>\tcbset{ objectivesstyle/.style={</xsl:text>
+    <xsl:apply-templates select="exsl:node-set($rtf)/*" mode="tcb-style" />
+    <xsl:text>} }&#xa;</xsl:text>
+    <xsl:text>\newtcolorbox{objectives}[1]{title={#1},objectivesstyle}&#xa;</xsl:text>
+</xsl:template>
+
+<!-- "outcomes" -->
+<!-- Body:  \begin{outcomes}{m:title}      -->
+<!-- Title comes without new punctuation.  -->
+<xsl:template match="outcomes" mode="environment">
+    <xsl:text>%% outcomes: late in a subdivision, introduction/list/conclusion&#xa;</xsl:text>
+    <xsl:variable name="rtf">
+        <outcomes />
+    </xsl:variable>
+    <xsl:text>\tcbset{ outcomesstyle/.style={</xsl:text>
+    <xsl:apply-templates select="exsl:node-set($rtf)/*" mode="tcb-style" />
+    <xsl:text>} }&#xa;</xsl:text>
+    <xsl:text>\newtcolorbox{outcomes}[1]{title={#1},outcomesstyle}&#xa;</xsl:text>
+</xsl:template>
+
 
 <!-- ########################## -->
 <!-- LaTeX Styling via Preamble -->
@@ -2081,6 +2111,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="commentary" mode="tcb-style">
     <xsl:text>breakable,skin=enhanced,fonttitle=\bfseries,coltitle=black,colback=white,frame code={&#xa;</xsl:text>
     <xsl:text>\path[draw=red!75!black,line width=0.5mm] (frame.north west) -- (frame.south west) -- ($ (frame.south west)!0.05!(frame.south east) $);}</xsl:text>
+</xsl:template>
+
+<!-- "objectives" -->
+<!-- Rules top and bottom, title on its own line, as a heading -->
+<xsl:template match="objectives" mode="tcb-style">
+    <xsl:text>size=minimal, colback=white, colbacktitle=white, coltitle=black, fonttitle=\large\bfseries, toprule=0.1ex, toptitle=0.5ex, top=2ex, bottom=0.5ex, bottomrule=0.1ex</xsl:text>
+</xsl:template>
+
+<!-- "outcomes" -->
+<!-- Differs only by spacing prior, this could go away  -->
+<!-- if headings, etc handle vertical space correctly   -->
+<xsl:template match="outcomes" mode="tcb-style">
+    <xsl:text>size=minimal, colback=white, colbacktitle=white, coltitle=black, fonttitle=\large\bfseries, toprule=0.1ex, toptitle=0.5ex, top=2ex, bottom=0.5ex, bottomrule=0.1ex, before skip=2ex</xsl:text>
 </xsl:template>
 
 
