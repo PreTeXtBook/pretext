@@ -48,5 +48,107 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text/>
 </xsl:template>
 
-</xsl:stylesheet>
+<!-- EXAMPLE-LIKE: "example", "question", "problem" -->
+<!-- Default tcolorbox, but with tricolor titles    -->
+<!-- Each just slightly different                   -->
 
+<!-- Example styling from CLP -->
+<xsl:template match="example" mode="tcb-style">
+    <xsl:text>colback=white, colframe=black, colbacktitle=white, coltitle=black,
+      enhanced,
+      breakable,
+      attach boxed title to top left={xshift=7mm, yshift*=-\tcboxedtitleheight/2},
+      frame hidden,
+      overlay unbroken={
+      \draw[thick, \lt-, rounded corners] ([yshift=-3ex]interior.north west)--(interior.north west)--(title);
+      \draw[thick, -\gt, rounded corners] (title)--(interior.north east)--([yshift=-3ex]interior.north east);
+      \draw[thick, \lt-\gt, rounded corners] ([yshift=3ex]interior.south west)--(interior.south west)--(interior.south east)--([yshift=3ex]interior.south east);
+      },
+      overlay first={
+        \draw[thick, \lt-, rounded corners] ([yshift=-3ex]interior.north west)--(interior.north west)--(title);
+        \draw[thick, -\gt, rounded corners] (title)--(interior.north east)--([yshift=-3ex]interior.north east);
+        },
+      overlay middle={},
+      overlay last={
+        \node[draw, thick, rectangle, rounded corners] (repeatTitle) at ([xshift=-12ex]interior.south east) {\textbf{Example~\thetcbcounter}};
+        \draw[thick, \lt-, rounded corners] ([yshift=3ex]interior.south west)--(interior.south west)--(repeatTitle);
+        \draw[thick,-\gt,rounded corners] (repeatTitle)--(interior.south east)--([yshift=3ex]interior.south east);
+        },
+    </xsl:text>
+</xsl:template>
+
+<xsl:template match="question" mode="tcb-style">
+    <xsl:text>
+      colback=white, colframe=blue, colbacktitle=white, coltitle=blue,
+        enhanced,
+        breakable,
+        attach boxed title to top left={xshift=7mm, yshift*=-\tcboxedtitleheight/2},
+        frame hidden,
+        overlay unbroken={
+        \draw[blue, thick, square-, rounded corners] ([yshift=-3ex]interior.north west)--(interior.north west)--(title);
+        \draw[blue,thick, -square, rounded corners] (title)--(interior.north east)--([yshift=-3ex]interior.north east);
+        \draw[blue,thick, square-square, rounded corners] ([yshift=3ex]interior.south west)--(interior.south west)--(interior.south east)--([yshift=3ex]interior.south east);
+        },
+        overlay first={
+          \draw[blue,thick, square-, rounded corners] ([yshift=-3ex]interior.north west)--(interior.north west)--(title);
+          \draw[blue,thick, -square, rounded corners] (title)--(interior.north east)--([yshift=-3ex]interior.north east);
+          },
+        overlay middle={},
+        overlay last={
+          \node[blue, draw, thick, rectangle, rounded corners] (repeatTitle) at ([xshift=-12ex]interior.south east) {\textbf{Example~\thetcbcounter}};
+          \draw[blue, thick, square-, rounded corners] ([yshift=3ex]interior.south west)--(interior.south west)--(repeatTitle);
+          \draw[blue, thick, -square,rounded corners] (repeatTitle)--(interior.south east)--([yshift=3ex]interior.south east);
+          },
+    </xsl:text>
+</xsl:template>
+
+<xsl:template match="problem" mode="tcb-style">
+    <xsl:text>
+      colback=white, colframe=red, colbacktitle=white, coltitle=red,
+        enhanced,
+        breakable,
+        attach boxed title to top left={xshift=7mm, yshift*=-\tcboxedtitleheight/2},
+        frame hidden,
+        overlay unbroken={
+        \draw[red, thick, |-, rounded corners] ([yshift=-3ex]interior.north west)--(interior.north west)--(title);
+        \draw[red,thick, -|, rounded corners] (title)--(interior.north east)--([yshift=-3ex]interior.north east);
+        \draw[red,thick, |-|, rounded corners] ([yshift=3ex]interior.south west)--(interior.south west)--(interior.south east)--([yshift=3ex]interior.south east);
+        },
+        overlay first={
+          \draw[red,thick, |-, rounded corners] ([yshift=-3ex]interior.north west)--(interior.north west)--(title);
+          \draw[red,thick, -|, rounded corners] (title)--(interior.north east)--([yshift=-3ex]interior.north east);
+          },
+        overlay middle={},
+        overlay last={
+          \node[red, draw, thick, rectangle, rounded corners] (repeatTitle) at ([xshift=-12ex]interior.south east) {\textbf{Example~\thetcbcounter}};
+          \draw[red, thick, |-, rounded corners] ([yshift=3ex]interior.south west)--(interior.south west)--(repeatTitle);
+          \draw[red, thick, -|,rounded corners] (repeatTitle)--(interior.south east)--([yshift=3ex]interior.south east);
+          },
+    </xsl:text>
+</xsl:template>
+
+<!-- DEFINITION-LIKE: "definition"   -->
+<!-- Various extreme choices from the tcolorbox documentation -->
+<!-- Note: a trailing comma is OK, and maybe a good idea      -->
+<!-- Note: the style definition may split across several line -->
+<!-- of the LaTeX source using the hex A (dec 10) character   -->
+<!-- Note: "enhanced" is necessary for boxed titles           -->
+<xsl:template match="&DEFINITION-LIKE;" mode="tcb-style">
+  breakable, colframe=MidnightBlue, colback=MidnightBlue!5, colbacktitle=MidnightBlue!70, coltitle=black, enhanced, attach boxed title to top left={xshift=7mm, yshift*=-2ex},sharp corners=northwest, arc=10pt,
+</xsl:template>
+
+<!-- REMARK-LIKE: "remark", "convention", "note",   -->
+<!--            "observation", "warning", "insight" -->
+<!-- COMPUTATION-LIKE: "computation", "technology"  -->
+ <!--White title text, but title backgounds vary    -->
+ <!--by category, and remarks have sharp corners    -->
+<xsl:template match="&REMARK-LIKE;" mode="tcb-style">
+    <xsl:text>colbacktitle=red, sharp corners</xsl:text>
+</xsl:template>
+<xsl:template match="&COMPUTATION-LIKE;" mode="tcb-style">
+    <xsl:text>colbacktitle=blue</xsl:text>
+</xsl:template>
+
+
+
+</xsl:stylesheet>
