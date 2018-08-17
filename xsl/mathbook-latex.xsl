@@ -1048,15 +1048,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>   fonttitle=\bfseries, attach boxed title to top left={xshift=4mm,yshift=-3mm}, top=3mm, title={#1}}&#xa;</xsl:text>
         <xsl:text>%% end: assemblage&#xa;</xsl:text>
     </xsl:if>
-    <!-- Following chould be duplicated as three environments, perhaps with  \tcbset{}   -->
-    <!-- See https://tex.stackexchange.com/questions/180898/                             -->
-    <!-- (is-it-possible-to-reuse-tcolorbox-definitions-in-another-tcolorbox-definition) -->
-    <xsl:if test="$document-root//aside|$document-root//historical|$document-root//biographical">
-        <xsl:text>%% aside, biographical, historical environments and style&#xa;</xsl:text>
-        <xsl:text>\newtcolorbox{aside}[1]&#xa;</xsl:text>
-        <xsl:text>  {breakable, skin=enhanced, sharp corners, colback=blue!3, colframe=blue!50!black,&#xa;</xsl:text>
-        <xsl:text>   add to width=-1ex, shadow={1ex}{-1ex}{0ex}{black!50!white},&#xa;</xsl:text>
-        <xsl:text>   coltitle=black, fonttitle=\bfseries, title={#1}, detach title, before upper={\tcbtitle\ \ }}&#xa;</xsl:text>
+    <xsl:if test="$document-root//aside">
+        <xsl:variable name="instance" select="($document-root//aside)[1]"/>
+        <xsl:apply-templates select="$instance" mode="environment"/>
+    </xsl:if>
+    <xsl:if test="$document-root//historical">
+        <xsl:variable name="instance" select="($document-root//historical)[1]"/>
+        <xsl:apply-templates select="$instance" mode="environment"/>
+    </xsl:if>
+    <xsl:if test="$document-root//biographical">
+        <xsl:variable name="instance" select="($document-root//biographical)[1]"/>
+        <xsl:apply-templates select="$instance" mode="environment"/>
     </xsl:if>
     <xsl:if test="$document-root//objectives">
         <xsl:variable name="instance" select="($document-root//objectives)[1]"/>
@@ -2046,7 +2048,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- with standalone use or debugging.  Preface with "%% ". -->
 
 <!-- "commentary" -->
-<!-- Body:  \begin{commentary}{m:title}    -->
+<!-- Body:  \begin{commentary}{title}      -->
 <!-- Title comes with punctuation, always. -->
 <xsl:template match="commentary" mode="environment">
     <xsl:text>%% commentary: elective, additional comments in an enhanced edition&#xa;</xsl:text>
@@ -2078,18 +2080,41 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\newtcolorbox{outcomes}[1]{title={#1}, breakable, outcomesstyle}&#xa;</xsl:text>
 </xsl:template>
 
+<!-- ASIDE-LIKE: "aside", "historical", "biographical" -->
+<!-- Note: do not integrate into others, as treatment may necessarily vary -->
+<xsl:template match="&ASIDE-LIKE;" mode="environment">
+    <!-- Names of various pieces use the element name -->
+    <xsl:variable name="environment-name">
+        <xsl:value-of select="local-name(.)"/>
+    </xsl:variable>
+    <xsl:text>%% </xsl:text>
+    <xsl:value-of select="$environment-name"/>
+    <xsl:text>: fairly simple un-numbered block/structure&#xa;</xsl:text>
+    <xsl:text>\tcbset{ </xsl:text>
+    <xsl:value-of select="$environment-name"/>
+    <xsl:text>style/.style={</xsl:text>
+    <xsl:apply-templates select="." mode="tcb-style"/>
+    <xsl:text>} }&#xa;</xsl:text>
+    <xsl:text>\newtcolorbox{</xsl:text>
+    <xsl:value-of select="$environment-name"/>
+    <xsl:text>}[2]{title={\notblank{#1}{#1}{}}, </xsl:text>
+    <xsl:text>label=#2, breakable, </xsl:text>
+    <xsl:value-of select="$environment-name"/>
+    <xsl:text>style}&#xa;</xsl:text>
+</xsl:template>
 
-<!-- DEFINITION-LIKE: "definition"                  -->
-<!-- REMARK-LIKE: "remark", "convention", "note",   -->
-<!--            "observation", "warning", "insight" -->
-<!-- COMPUTATION-LIKE: "computation", "technology"  -->
-<!-- EXAMPLE-LIKE: "example", "question", "problem" -->
-<!-- Inline Exercises                               -->
-<!-- Body: \begin{example}{m:title}{m:label}, etc.  -->
-<!--       \begin{inlineexercise}{m:title}{m:label} -->
-<!-- Title comes without new punctuation.           -->
+<!-- DEFINITION-LIKE: "definition"                     -->
+<!-- REMARK-LIKE: "remark", "convention", "note",      -->
+<!--              "observation", "warning", "insight"  -->
+<!-- COMPUTATION-LIKE: "computation", "technology"     -->
+<!-- EXAMPLE-LIKE: "example", "question", "problem"    -->
+<!-- Inline Exercises                                  -->
+<!-- Body: \begin{example}{title}{label}, etc.         -->
+<!--       \begin{inlineexercise}{title}{label}        -->
+<!-- Type, number, optional title                      -->
+<!-- Title comes without new punctuation.              -->
 <xsl:template match="&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|exercise[not(parent::exercises or parent::worksheet)]" mode="environment">
-    <!-- Names of various pieces are normally the      -->
+    <!-- Names of various pieces normally use the      -->
     <!-- element name, but "exercise" does triple duty -->
     <xsl:variable name="environment-name">
         <xsl:choose>
@@ -2137,6 +2162,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--     since commas will bleed through into the options otherwise  -->
 <!-- 2.  Separate the tcolorbox options with spaces after commas     -->
 <!-- 3.  Run the LaTeX compilation at least twice before giving up   -->
+<!-- 4.  The tcolorbox "title" option is set in the environment      -->
+<!-- 5.  End lists of styling options with a trailing comma          -->
 
 
 <!-- "commentary" -->
@@ -2162,14 +2189,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>size=minimal, colback=white, colbacktitle=white, coltitle=black, fonttitle=\large\bfseries, toprule=0.1ex, toptitle=0.5ex, top=2ex, bottom=0.5ex, bottomrule=0.1ex, before skip=2ex</xsl:text>
 </xsl:template>
 
-<!-- DEFINITION-LIKE: "definition"                  -->
-<!-- REMARK-LIKE: "remark", "convention", "note",   -->
-<!--            "observation", "warning", "insight" -->
-<!-- COMPUTATION-LIKE: "computation", "technology"  -->
-<!-- EXAMPLE-LIKE: "example", "question", "problem" -->
-<!-- Inline Exercises                               -->
-<!-- Inline, bold face title, otherwise B/W, plain  -->
-<xsl:template match="&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|exercise[not(parent::exercises or parent::worksheet)]" mode="tcb-style">
+<!-- DEFINITION-LIKE: "definition"                     -->
+<!-- REMARK-LIKE: "remark", "convention", "note",      -->
+<!--              "observation", "warning", "insight"  -->
+<!-- COMPUTATION-LIKE: "computation", "technology"     -->
+<!-- EXAMPLE-LIKE: "example", "question", "problem"    -->
+<!-- Inline Exercises                                  -->
+<!-- ASIDE-LIKE: "aside", "historical", "biographical" -->
+<!-- Inline, bold face title, otherwise B/W, plain     -->
+<xsl:template match="&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|exercise[not(parent::exercises or parent::worksheet)]|&ASIDE-LIKE;" mode="tcb-style">
     <xsl:text>size=minimal, colback=white, colbacktitle=white, coltitle=black, fonttitle=\bfseries, attach title to upper, after title={\space}</xsl:text>
 </xsl:template>
 
@@ -5072,13 +5100,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- historical semantically, but perhaps should -->
 <!-- title is inline, boldface in mdframe setup  -->
 <xsl:template match="&ASIDE-LIKE;">
-    <xsl:text>\begin{aside}{</xsl:text>
-    <xsl:apply-templates select="." mode="title-full" />
-    <xsl:text>}</xsl:text>
-    <xsl:apply-templates select="." mode="label"/>
+    <!-- environment, title, label string -->
+    <xsl:text>\begin{</xsl:text>
+    <xsl:value-of select="local-name(.)" />
+    <xsl:text>}{</xsl:text>
+    <xsl:apply-templates select="." mode="title-full"/>
+    <xsl:text>}{</xsl:text>
+    <xsl:apply-templates select="." mode="internal-id"/>
+    <xsl:text>}%</xsl:text>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="p|&FIGURE-LIKE;|sidebyside" />
-    <xsl:text>\end{aside}&#xa;</xsl:text>
+    <xsl:text>\end{</xsl:text>
+    <xsl:value-of select="local-name(.)" />
+    <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Assemblages -->

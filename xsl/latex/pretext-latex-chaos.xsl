@@ -85,6 +85,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>coltitle=yellow</xsl:text>
 </xsl:template>
 
+<!-- ASIDE-LIKE: "aside", "historical", "biographical" -->
+<!-- Square, drop shadow, borrowed from the AIM style  -->
+<xsl:template match="&ASIDE-LIKE;" mode="tcb-style">
+    <xsl:text>enhanced, sharp corners, colback=blue!3, colframe=blue!50!black,&#xa;</xsl:text>
+    <xsl:text>add to width=-1ex, shadow={1ex}{-1ex}{0ex}{black!50!white},&#xa;</xsl:text>
+    <xsl:text>coltitle=black, fonttitle=\bfseries, attach title to upper, after title={\space},</xsl:text>
+</xsl:template>
+
 
 </xsl:stylesheet>
 
