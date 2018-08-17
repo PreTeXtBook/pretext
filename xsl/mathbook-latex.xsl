@@ -869,28 +869,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\makeatother&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>%% end: environments with italicized bodies, theorems and similar&#xa;</xsl:text>
-    <xsl:text>%% begin: environments with normal bodies, examples, etc.&#xa;</xsl:text>
-    <xsl:text>%% Other environments go in modified "definition" style&#xa;</xsl:text>
-    <xsl:text>%% Similar to above&#xa;</xsl:text>
-    <!-- This could be more semantic if we split out pieces of the title -->
-    <xsl:text>\newtheoremstyle{ptxdefinitionnotitle}&#xa;</xsl:text>
-    <xsl:text>  {}% space above&#xa;</xsl:text>
-    <xsl:text>  {}% space below&#xa;</xsl:text>
-    <xsl:text>  {}% body font&#xa;</xsl:text>
-    <xsl:text>  {}% indent amount&#xa;</xsl:text>
-    <xsl:text>  {\bfseries}% theorem head font&#xa;</xsl:text>
-    <xsl:text>  {.}% punctuation after theorem head&#xa;</xsl:text>
-    <xsl:text>  {0.5em}% space after theorem head&#xa;</xsl:text>
-    <xsl:text>  {\thmname{#1}\thmnumber{ #2}}% theorem head specification&#xa;</xsl:text>
-    <xsl:text>\newtheoremstyle{ptxdefinitiontitle}&#xa;</xsl:text>
-    <xsl:text>  {}% space above&#xa;</xsl:text>
-    <xsl:text>  {}% space below&#xa;</xsl:text>
-    <xsl:text>  {}% body font&#xa;</xsl:text>
-    <xsl:text>  {}% indent amount&#xa;</xsl:text>
-    <xsl:text>  {\bfseries}% theorem head font&#xa;</xsl:text>
-    <xsl:text>  {}% punctuation after theorem head&#xa;</xsl:text>
-    <xsl:text>  {0.5em}% space after theorem head&#xa;</xsl:text>
-    <xsl:text>  {\thmname{#1}\thmnumber{ #2}\thmnote{ #3}}% theorem head specification&#xa;</xsl:text>
     <!-- TODO: roll into a huge "for-each" when extant! -->
     <!-- context will be the variable, thus the select -->
     <!-- DEFINITION-LIKE -->
@@ -950,10 +928,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:variable name="instance" select="($document-root//exercise[not(parent::exercises or parent::worksheet)])[1]"/>
         <xsl:apply-templates select="$instance" mode="environment"/>
     </xsl:if>
+    <!-- PROJECT-LIKE -->
+    <xsl:variable name="representatives" select="($document-root//project)[1]|($document-root//activity)[1]|($document-root//exploration)[1]|($document-root//investigation)[1]"/>
+    <xsl:for-each select="$representatives">
+        <xsl:apply-templates select="." mode="environment"/>
+    </xsl:for-each>
     <!--  -->
-    <xsl:text>%% end: environments with normal bodies, examples, etc.&#xa;</xsl:text>
     <xsl:if test="$document-root//project or $document-root//activity or $document-root//exploration or $document-root//investigation">
-        <xsl:text>%% begin: environments for project-like, with independent counter&#xa;</xsl:text>
         <xsl:text>%% Numbering for Projects (independent of others)&#xa;</xsl:text>
         <xsl:text>%% Controlled by  numbering.projects.level  processing parameter&#xa;</xsl:text>
         <xsl:text>%% Always need a project environment to set base numbering scheme&#xa;</xsl:text>
@@ -969,27 +950,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:call-template>
             <xsl:text>]&#xa;</xsl:text>
         </xsl:if>
-        <xsl:if test="$document-root//project">
-            <xsl:call-template name="project-environment">
-                <xsl:with-param name="ptx-name" select="'project'" />
-            </xsl:call-template>
-        </xsl:if>
-        <xsl:if test="$document-root//activity">
-            <xsl:call-template name="project-environment">
-                <xsl:with-param name="ptx-name" select="'activity'" />
-            </xsl:call-template>
-        </xsl:if>
-        <xsl:if test="$document-root//exploration">
-            <xsl:call-template name="project-environment">
-                <xsl:with-param name="ptx-name" select="'exploration'" />
-            </xsl:call-template>
-        </xsl:if>
-        <xsl:if test="$document-root//investigation">
-            <xsl:call-template name="project-environment">
-                <xsl:with-param name="ptx-name" select="'investigation'" />
-            </xsl:call-template>
-        </xsl:if>
-        <xsl:text>%% end: environments for project-like, with independent counter&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$document-root//solutions">
         <xsl:text>%% begin: environments for duplicates in solutions divisions&#xa;</xsl:text>
@@ -2124,12 +2084,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--              "observation", "warning", "insight"  -->
 <!-- COMPUTATION-LIKE: "computation", "technology"     -->
 <!-- EXAMPLE-LIKE: "example", "question", "problem"    -->
+<!-- PROJECT-LIKE: "activity", "exploration",          -->
+<!--               "exploration", "investigation"      -->
 <!-- Inline Exercises                                  -->
 <!-- Body: \begin{example}{title}{label}, etc.         -->
 <!--       \begin{inlineexercise}{title}{label}        -->
 <!-- Type, number, optional title                      -->
 <!-- Title comes without new punctuation.              -->
-<xsl:template match="&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|exercise[not(parent::exercises or parent::worksheet)]" mode="environment">
+<xsl:template match="&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|exercise[not(parent::exercises or parent::worksheet)]" mode="environment">
     <!-- Names of various pieces normally use the      -->
     <!-- element name, but "exercise" does triple duty -->
     <xsl:variable name="environment-name">
@@ -2142,7 +2104,38 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
+    <!-- projects run on their own counter -->
+    <xsl:variable name="counter">
+        <xsl:choose>
+            <xsl:when test="&PROJECT-FILTER;">
+                <xsl:text>cpjt</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>cthm</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- levels of counters, empty is document-wide -->
+    <xsl:variable name="counter-division">
+        <xsl:choose>
+            <xsl:when test="&PROJECT-FILTER;">
+                <xsl:if test="not($numbering-projects = 0)">
+                    <xsl:call-template name="level-to-name">
+                        <xsl:with-param name="level" select="$numbering-projects" />
+                    </xsl:call-template>
+                </xsl:if>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:if test="not($numbering-theorems = 0)">
+                    <xsl:call-template name="level-to-name">
+                        <xsl:with-param name="level" select="$numbering-theorems" />
+                    </xsl:call-template>
+                </xsl:if>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
     <xsl:text>%% </xsl:text>
+    <!-- per-environment style -->
     <xsl:value-of select="$environment-name"/>
     <xsl:text>: fairly simple numbered block/structure&#xa;</xsl:text>
     <xsl:text>\tcbset{ </xsl:text>
@@ -2150,14 +2143,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>style/.style={</xsl:text>
     <xsl:apply-templates select="." mode="tcb-style"/>
     <xsl:text>} }&#xa;</xsl:text>
-    <xsl:text>\newtcolorbox[use counter=cthm</xsl:text>
-    <xsl:if test="not($numbering-theorems = 0)">
+    <!-- create and configure the environment/tcolorbox -->
+    <xsl:text>\newtcolorbox</xsl:text>
+    <!-- numbering setup -->
+    <xsl:text>[</xsl:text>
+    <xsl:text>use counter=</xsl:text>
+    <xsl:value-of select="$counter"/>
+    <xsl:if test="$counter-division">
         <xsl:text>, number within=</xsl:text>
-        <xsl:call-template name="level-to-name">
-            <xsl:with-param name="level" select="$numbering-theorems" />
-        </xsl:call-template>
+        <xsl:value-of select="$counter-division"/>
     </xsl:if>
-    <xsl:text>]{</xsl:text>
+    <xsl:text>]</xsl:text>
+    <!-- environment's tcolorbox name, pair -->
+    <!-- with actual constructions in body  -->
+    <xsl:text>{</xsl:text>
     <xsl:value-of select="$environment-name"/>
     <xsl:text>}[2]{title={{</xsl:text>
     <xsl:apply-templates select="." mode="type-name"/>
@@ -2210,11 +2209,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--              "observation", "warning", "insight"  -->
 <!-- COMPUTATION-LIKE: "computation", "technology"     -->
 <!-- EXAMPLE-LIKE: "example", "question", "problem"    -->
+<!-- PROJECT-LIKE: "activity", "exploration",          -->
+<!--               "exploration", "investigation"      -->
 <!-- Inline Exercises                                  -->
 <!-- "assemblage"                                      -->
 <!-- ASIDE-LIKE: "aside", "historical", "biographical" -->
 <!-- Inline, bold face title, otherwise B/W, plain     -->
-<xsl:template match="&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|exercise[not(parent::exercises or parent::worksheet)]|assemblage|&ASIDE-LIKE;" mode="tcb-style">
+<xsl:template match="&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|exercise[not(parent::exercises or parent::worksheet)]|assemblage|&ASIDE-LIKE;" mode="tcb-style">
     <xsl:text>size=minimal, colback=white, colbacktitle=white, coltitle=black, fonttitle=\bfseries, attach title to upper, after title={\space}</xsl:text>
 </xsl:template>
 
@@ -2267,28 +2268,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>    { \IfBooleanTF{#2}{\end{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>title}}{\end{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>notitle}} }&#xa;</xsl:text>
 </xsl:template>
 
-
-<!-- LaTeX environments for projects, definition styles, own counter  -->
-<!-- Entirely similar to "theorem-environment" template above         -->
-<xsl:template name="project-environment">
-    <xsl:param name="ptx-name" select="'NO ARGUMENT TO PROJECT-ENVIRONMENT TEMPLATE'" />
-
-    <xsl:text>\theoremstyle{ptxdefinitionnotitle}&#xa;</xsl:text>
-    <xsl:text>\newtheorem{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>notitle}[cpjt]{</xsl:text>
-    <xsl:call-template name="type-name">
-        <xsl:with-param name="string-id" select="$ptx-name" />
-    </xsl:call-template>
-    <xsl:text>}&#xa;</xsl:text>
-    <xsl:text>\theoremstyle{ptxdefinitiontitle}&#xa;</xsl:text>
-    <xsl:text>\newtheorem{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>title}[cpjt]{</xsl:text>
-    <xsl:call-template name="type-name">
-        <xsl:with-param name="string-id" select="$ptx-name" />
-    </xsl:call-template>
-    <xsl:text>}&#xa;</xsl:text>
-    <xsl:text>\NewDocumentEnvironment{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>}{o}&#xa;</xsl:text>
-    <xsl:text>  {\IfValueTF{#1}{\begin{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>title}[{#1}]}{\begin{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>notitle}}}&#xa;</xsl:text>
-    <xsl:text>  {\IfValueTF{#1}{\end{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>title}}{\end{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>notitle}}}&#xa;</xsl:text>
-</xsl:template>
 
 <!-- LaTeX environments for project solutions, definition styles, no counter  -->
 <!-- The second \space was not needed with amsthm of 2015/03/04 v2.20.2,      -->
@@ -4806,11 +4785,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="statement or task">
         <xsl:apply-templates select="prelude" />
     </xsl:if>
+    <!-- environment, title, label string -->
     <xsl:text>\begin{</xsl:text>
         <xsl:value-of select="local-name(.)" />
-    <xsl:text>}</xsl:text>
-    <xsl:apply-templates select="title" mode="environment-option"/>
-    <xsl:apply-templates select="." mode="label"/>
+    <xsl:text>}{</xsl:text>
+    <xsl:apply-templates select="." mode="title-full"/>
+    <xsl:text>}{</xsl:text>
+    <xsl:apply-templates select="." mode="internal-id"/>
+    <xsl:text>}%</xsl:text>
     <xsl:text>&#xa;</xsl:text>
     <xsl:choose>
         <!-- structured versions first      -->
