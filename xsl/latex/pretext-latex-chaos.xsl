@@ -85,6 +85,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>coltitle=yellow</xsl:text>
 </xsl:template>
 
+<!-- PROJECT-LIKE: "activity", "exploration",      -->
+<!--               "exploration", "investigation"  -->
+<!-- This green "vignette" is straight             -->
+<!-- from the tcolorbox documentation              -->
+<xsl:template match="&PROJECT-LIKE;" mode="tcb-style">
+    <xsl:text>enhanced, size=small, sharp corners, colback=green!10, colframe=green!50!black,&#xa;</xsl:text>
+    <xsl:text>boxrule=1mm, titlerule=0mm, center title, fonttitle=\bfseries,&#xa;</xsl:text>
+    <xsl:text>underlay={\tcbvignette{size=1mm,inside node=frame, raised color=green!50!black}},</xsl:text>
+</xsl:template>
+
 <!-- "assemblage" -->
 <!-- Boxed title, borrowed from the AIM style -->
 <xsl:template match="assemblage" mode="tcb-style">
