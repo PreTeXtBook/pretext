@@ -48,5 +48,43 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>size=minimal, attach title to upper, after title={\space}, fonttitle=\bfseries, coltitle=black, colback=green</xsl:text>
 </xsl:template>
 
+<!-- DEFINITION-LIKE: "definition"   -->
+<!-- Various extreme choices from the tcolorbox documentation -->
+<!-- Note: a trailing comma is OK, and maybe a good idea      -->
+<!-- Note: the style definition may split across several line -->
+<!-- of the LaTeX source using the hex A (dec 10) character   -->
+<!-- Note: "enhanced" is necessary for boxed titles           -->
+<xsl:template match="&DEFINITION-LIKE;" mode="tcb-style">
+    <xsl:text>enhanced, arc=4mm,outer arc=1mm,colback=pink,&#xa;</xsl:text>
+    <xsl:text>attach boxed title to top center={yshift=-\tcboxedtitleheight/2},&#xa;</xsl:text>
+    <xsl:text>boxed title style={size=small,colback=blue},&#xa;</xsl:text>
+</xsl:template>
+
+<!-- REMARK-LIKE: "remark", "convention", "note",   -->
+<!--            "observation", "warning", "insight" -->
+<!-- COMPUTATION-LIKE: "computation", "technology"  -->
+ <!--White title text, but title backgounds vary    -->
+ <!--by category, and remarks have sharp corners    -->
+<xsl:template match="&REMARK-LIKE;" mode="tcb-style">
+    <xsl:text>colbacktitle=red, sharp corners</xsl:text>
+</xsl:template>
+<xsl:template match="&COMPUTATION-LIKE;" mode="tcb-style">
+    <xsl:text>colbacktitle=blue</xsl:text>
+</xsl:template>
+
+<!-- EXAMPLE-LIKE: "example", "question", "problem" -->
+<!-- Default tcolorbox, but with tricolor titles    -->
+<!-- Each just slightly different                   -->
+<xsl:template match="example" mode="tcb-style">
+    <xsl:text>coltitle=red</xsl:text>
+</xsl:template>
+<xsl:template match="question" mode="tcb-style">
+    <xsl:text>coltitle=blue</xsl:text>
+</xsl:template>
+<xsl:template match="problem" mode="tcb-style">
+    <xsl:text>coltitle=yellow</xsl:text>
+</xsl:template>
+
+
 </xsl:stylesheet>
 
