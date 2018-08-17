@@ -1038,15 +1038,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% end: environments for duplicates in solutions divisions&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$document-root//assemblage">
-        <xsl:text>%% begin: assemblage&#xa;</xsl:text>
-        <xsl:text>%% minimally structured content, high visibility presentation&#xa;</xsl:text>
-        <xsl:text>%% One optional argument (title) with default value blank&#xa;</xsl:text>
-        <xsl:text>%% 3mm space below dropped title is increase over 2mm default&#xa;</xsl:text>
-        <xsl:text>\newtcolorbox{assemblage}[1][]&#xa;</xsl:text>
-        <xsl:text>  {breakable, skin=enhanced, arc=2ex, colback=blue!5, colframe=blue!75!black,&#xa;</xsl:text>
-        <xsl:text>   colbacktitle=blue!20, coltitle=black, boxed title style={sharp corners, frame hidden},&#xa;</xsl:text>
-        <xsl:text>   fonttitle=\bfseries, attach boxed title to top left={xshift=4mm,yshift=-3mm}, top=3mm, title={#1}}&#xa;</xsl:text>
-        <xsl:text>%% end: assemblage&#xa;</xsl:text>
+        <xsl:variable name="instance" select="($document-root//assemblage)[1]"/>
+        <xsl:apply-templates select="$instance" mode="environment"/>
     </xsl:if>
     <xsl:if test="$document-root//aside">
         <xsl:variable name="instance" select="($document-root//aside)[1]"/>
@@ -2080,6 +2073,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\newtcolorbox{outcomes}[1]{title={#1}, breakable, outcomesstyle}&#xa;</xsl:text>
 </xsl:template>
 
+<!-- "assemblage" -->
+<!-- Identical to ASIDE-LIKE, but we keep it distinct -->
+<xsl:template match="assemblage" mode="environment">
+    <!-- Names of various pieces use the element name -->
+    <xsl:variable name="environment-name">
+        <xsl:value-of select="local-name(.)"/>
+    </xsl:variable>
+    <xsl:text>%% </xsl:text>
+    <xsl:value-of select="$environment-name"/>
+    <xsl:text>: fairly simple un-numbered block/structure&#xa;</xsl:text>
+    <xsl:text>\tcbset{ </xsl:text>
+    <xsl:value-of select="$environment-name"/>
+    <xsl:text>style/.style={</xsl:text>
+    <xsl:apply-templates select="." mode="tcb-style"/>
+    <xsl:text>} }&#xa;</xsl:text>
+    <xsl:text>\newtcolorbox{</xsl:text>
+    <xsl:value-of select="$environment-name"/>
+    <xsl:text>}[2]{title={\notblank{#1}{#1}{}}, </xsl:text>
+    <xsl:text>label=#2, breakable, </xsl:text>
+    <xsl:value-of select="$environment-name"/>
+    <xsl:text>style}&#xa;</xsl:text>
+</xsl:template>
+
 <!-- ASIDE-LIKE: "aside", "historical", "biographical" -->
 <!-- Note: do not integrate into others, as treatment may necessarily vary -->
 <xsl:template match="&ASIDE-LIKE;" mode="environment">
@@ -2195,9 +2211,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- COMPUTATION-LIKE: "computation", "technology"     -->
 <!-- EXAMPLE-LIKE: "example", "question", "problem"    -->
 <!-- Inline Exercises                                  -->
+<!-- "assemblage"                                      -->
 <!-- ASIDE-LIKE: "aside", "historical", "biographical" -->
 <!-- Inline, bold face title, otherwise B/W, plain     -->
-<xsl:template match="&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|exercise[not(parent::exercises or parent::worksheet)]|&ASIDE-LIKE;" mode="tcb-style">
+<xsl:template match="&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|exercise[not(parent::exercises or parent::worksheet)]|assemblage|&ASIDE-LIKE;" mode="tcb-style">
     <xsl:text>size=minimal, colback=white, colbacktitle=white, coltitle=black, fonttitle=\bfseries, attach title to upper, after title={\space}</xsl:text>
 </xsl:template>
 
@@ -5118,16 +5135,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Assemblages -->
 <!-- Low-structure content, high-visibility presentation -->
 <!-- Title is optional, keep remainders coordinated      -->
-
 <xsl:template match="assemblage">
-    <xsl:text>\begin{assemblage}</xsl:text>
-    <xsl:if test="title">
-        <xsl:apply-templates select="title" mode="environment-option"/>
-    </xsl:if>
-    <xsl:apply-templates select="." mode="label"/>
+    <!-- environment, title, label string -->
+    <xsl:text>\begin{</xsl:text>
+    <xsl:value-of select="local-name(.)" />
+    <xsl:text>}{</xsl:text>
+    <xsl:apply-templates select="." mode="title-full"/>
+    <xsl:text>}{</xsl:text>
+    <xsl:apply-templates select="." mode="internal-id"/>
+    <xsl:text>}%</xsl:text>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="p|blockquote|pre|sidebyside|sbsgroup" />
-    <xsl:text>\end{assemblage}&#xa;</xsl:text>
+    <xsl:text>\end{</xsl:text>
+    <xsl:value-of select="local-name(.)" />
+    <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- An objectives element holds a list, surrounded by introduction and conclusion -->

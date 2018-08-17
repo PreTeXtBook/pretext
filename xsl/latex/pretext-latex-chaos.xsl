@@ -85,6 +85,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>coltitle=yellow</xsl:text>
 </xsl:template>
 
+<!-- "assemblage" -->
+<!-- Boxed title, borrowed from the AIM style -->
+<xsl:template match="assemblage" mode="tcb-style">
+    <xsl:text>enhanced, arc=2ex, colback=blue!5, colframe=blue!75!black,&#xa;</xsl:text>
+    <xsl:text>colbacktitle=blue!20, coltitle=black, boxed title style={sharp corners, frame hidden},&#xa;</xsl:text>
+    <xsl:text>fonttitle=\bfseries, attach boxed title to top left={xshift=4mm,yshift=-3mm}, top=3mm,&#xa;</xsl:text>
+</xsl:template>
+
 <!-- ASIDE-LIKE: "aside", "historical", "biographical" -->
 <!-- Square, drop shadow, borrowed from the AIM style  -->
 <xsl:template match="&ASIDE-LIKE;" mode="tcb-style">
