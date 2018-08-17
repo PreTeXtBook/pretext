@@ -891,72 +891,66 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>  {}% punctuation after theorem head&#xa;</xsl:text>
     <xsl:text>  {0.5em}% space after theorem head&#xa;</xsl:text>
     <xsl:text>  {\thmname{#1}\thmnumber{ #2}\thmnote{ #3}}% theorem head specification&#xa;</xsl:text>
+    <!-- TODO: roll into a huge "for-each" when extant! -->
+    <!-- context will be the variable, thus the select -->
+    <!-- DEFINITION-LIKE -->
     <xsl:if test="$document-root//definition">
-        <xsl:call-template name="definition-environment">
-            <xsl:with-param name="ptx-name" select="'definition'" />
-        </xsl:call-template>
+        <xsl:variable name="instance" select="($document-root//definition)[1]"/>
+        <xsl:apply-templates select="$instance" mode="environment"/>
     </xsl:if>
+    <!-- REMARK-LIKE -->
     <xsl:if test="$document-root//remark">
-        <xsl:call-template name="definition-environment">
-            <xsl:with-param name="ptx-name" select="'remark'" />
-        </xsl:call-template>
+        <xsl:variable name="instance" select="($document-root//remark)[1]"/>
+        <xsl:apply-templates select="$instance" mode="environment"/>
     </xsl:if>
     <xsl:if test="$document-root//convention">
-        <xsl:call-template name="definition-environment">
-            <xsl:with-param name="ptx-name" select="'convention'" />
-        </xsl:call-template>
+        <xsl:variable name="instance" select="($document-root//convention)[1]"/>
+        <xsl:apply-templates select="$instance" mode="environment"/>
     </xsl:if>
     <xsl:if test="$document-root//note">
-        <xsl:call-template name="definition-environment">
-            <xsl:with-param name="ptx-name" select="'note'" />
-        </xsl:call-template>
+        <xsl:variable name="instance" select="($document-root//note)[1]"/>
+        <xsl:apply-templates select="$instance" mode="environment"/>
     </xsl:if>
     <xsl:if test="$document-root//observation">
-        <xsl:call-template name="definition-environment">
-            <xsl:with-param name="ptx-name" select="'observation'" />
-        </xsl:call-template>
+        <xsl:variable name="instance" select="($document-root//observation)[1]"/>
+        <xsl:apply-templates select="$instance" mode="environment"/>
     </xsl:if>
     <xsl:if test="$document-root//warning">
-        <xsl:call-template name="definition-environment">
-            <xsl:with-param name="ptx-name" select="'warning'" />
-        </xsl:call-template>
+        <xsl:variable name="instance" select="($document-root//warning)[1]"/>
+        <xsl:apply-templates select="$instance" mode="environment"/>
     </xsl:if>
     <xsl:if test="$document-root//insight">
-        <xsl:call-template name="definition-environment">
-            <xsl:with-param name="ptx-name" select="'insight'" />
-        </xsl:call-template>
+        <xsl:variable name="instance" select="($document-root//insight)[1]"/>
+        <xsl:apply-templates select="$instance" mode="environment"/>
     </xsl:if>
+    <!-- COMPUTATION-LIKE -->
     <xsl:if test="$document-root//computation">
-        <xsl:call-template name="definition-environment">
-            <xsl:with-param name="ptx-name" select="'computation'" />
-        </xsl:call-template>
+        <xsl:variable name="instance" select="($document-root//computation)[1]"/>
+        <xsl:apply-templates select="$instance" mode="environment"/>
     </xsl:if>
     <xsl:if test="$document-root//technology">
-        <xsl:call-template name="definition-environment">
-            <xsl:with-param name="ptx-name" select="'technology'" />
-        </xsl:call-template>
+        <xsl:variable name="instance" select="($document-root//technology)[1]"/>
+        <xsl:apply-templates select="$instance" mode="environment"/>
     </xsl:if>
+    <!-- EXAMPLE-LIKE -->
     <xsl:if test="$document-root//example">
-        <xsl:call-template name="definition-environment">
-            <xsl:with-param name="ptx-name" select="'example'" />
-        </xsl:call-template>
+        <xsl:variable name="instance" select="($document-root//example)[1]"/>
+        <xsl:apply-templates select="$instance" mode="environment"/>
     </xsl:if>
     <xsl:if test="$document-root//question">
-        <xsl:call-template name="definition-environment">
-            <xsl:with-param name="ptx-name" select="'question'" />
-        </xsl:call-template>
+        <xsl:variable name="instance" select="($document-root//question)[1]"/>
+        <xsl:apply-templates select="$instance" mode="environment"/>
     </xsl:if>
     <xsl:if test="$document-root//problem">
-        <xsl:call-template name="definition-environment">
-            <xsl:with-param name="ptx-name" select="'problem'" />
-        </xsl:call-template>
+        <xsl:variable name="instance" select="($document-root//problem)[1]"/>
+        <xsl:apply-templates select="$instance" mode="environment"/>
     </xsl:if>
+    <!-- Inline Exercises -->
     <xsl:if test="$document-root//exercise[not(parent::exercises or parent::worksheet)]">
-        <xsl:text>%% An inline exercise is like other AMSmath environments&#xa;</xsl:text>
-        <xsl:call-template name="definition-environment">
-            <xsl:with-param name="ptx-name" select="'inlineexercise'" />
-        </xsl:call-template>
+        <xsl:variable name="instance" select="($document-root//exercise[not(parent::exercises or parent::worksheet)])[1]"/>
+        <xsl:apply-templates select="$instance" mode="environment"/>
     </xsl:if>
+    <!--  -->
     <xsl:text>%% end: environments with normal bodies, examples, etc.&#xa;</xsl:text>
     <xsl:if test="$document-root//project or $document-root//activity or $document-root//exploration or $document-root//investigation">
         <xsl:text>%% begin: environments for project-like, with independent counter&#xa;</xsl:text>
@@ -2043,6 +2037,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- These are not yet meant for style writer use. -->
 
+<!-- Notes: -->
+<!-- 1. Generally, all boxes should be "breakable" -->
+<!-- 2. The  etoolbox  package has some good tools -->
+
+<!-- Style: -->
 <!-- Provide some comments for the LaTeX source, to aid     -->
 <!-- with standalone use or debugging.  Preface with "%% ". -->
 
@@ -2080,6 +2079,54 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
+<!-- DEFINITION-LIKE: "definition"                  -->
+<!-- REMARK-LIKE: "remark", "convention", "note",   -->
+<!--            "observation", "warning", "insight" -->
+<!-- COMPUTATION-LIKE: "computation", "technology"  -->
+<!-- EXAMPLE-LIKE: "example", "question", "problem" -->
+<!-- Inline Exercises                               -->
+<!-- Body: \begin{example}{m:title}{m:label}, etc.  -->
+<!--       \begin{inlineexercise}{m:title}{m:label} -->
+<!-- Title comes without new punctuation.           -->
+<xsl:template match="&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|exercise[not(parent::exercises or parent::worksheet)]" mode="environment">
+    <!-- Names of various pieces are normally the      -->
+    <!-- element name, but "exercise" does triple duty -->
+    <xsl:variable name="environment-name">
+        <xsl:choose>
+            <xsl:when test="self::exercise and not(parent::exercises or parent::worksheet)">
+                <xsl:text>inlineexercise</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="local-name(.)"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:text>%% </xsl:text>
+    <xsl:value-of select="$environment-name"/>
+    <xsl:text>: fairly simple numbered block/structure&#xa;</xsl:text>
+    <xsl:text>\tcbset{ </xsl:text>
+    <xsl:value-of select="$environment-name"/>
+    <xsl:text>style/.style={</xsl:text>
+    <xsl:apply-templates select="." mode="tcb-style"/>
+    <xsl:text>} }&#xa;</xsl:text>
+    <xsl:text>\newtcolorbox[use counter=cthm</xsl:text>
+    <xsl:if test="not($numbering-theorems = 0)">
+        <xsl:text>, number within=</xsl:text>
+        <xsl:call-template name="level-to-name">
+            <xsl:with-param name="level" select="$numbering-theorems" />
+        </xsl:call-template>
+    </xsl:if>
+    <xsl:text>]{</xsl:text>
+    <xsl:value-of select="$environment-name"/>
+    <xsl:text>}[2]{title={{</xsl:text>
+    <xsl:apply-templates select="." mode="type-name"/>
+    <xsl:text>~\thetcbcounter\notblank{#1}{\space\space#1}{}}</xsl:text>
+    <xsl:text>}, label=#2, breakable, </xsl:text>
+    <xsl:value-of select="$environment-name"/>
+    <xsl:text>style}&#xa;</xsl:text>
+</xsl:template>
+
+
 <!-- ########################## -->
 <!-- LaTeX Styling via Preamble -->
 <!-- ########################## -->
@@ -2087,8 +2134,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- General Notes: -->
 <!--                -->
 <!-- 1.  Protect tcolorbox arguments with braces, especially titles, -->
-<!-- since commas will bleed through into the options otherwise      -->
+<!--     since commas will bleed through into the options otherwise  -->
 <!-- 2.  Separate the tcolorbox options with spaces after commas     -->
+<!-- 3.  Run the LaTeX compilation at least twice before giving up   -->
 
 
 <!-- "commentary" -->
@@ -2114,6 +2162,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>size=minimal, colback=white, colbacktitle=white, coltitle=black, fonttitle=\large\bfseries, toprule=0.1ex, toptitle=0.5ex, top=2ex, bottom=0.5ex, bottomrule=0.1ex, before skip=2ex</xsl:text>
 </xsl:template>
 
+<!-- DEFINITION-LIKE: "definition"                  -->
+<!-- REMARK-LIKE: "remark", "convention", "note",   -->
+<!--            "observation", "warning", "insight" -->
+<!-- COMPUTATION-LIKE: "computation", "technology"  -->
+<!-- EXAMPLE-LIKE: "example", "question", "problem" -->
+<!-- Inline Exercises                               -->
+<!-- Inline, bold face title, otherwise B/W, plain  -->
+<xsl:template match="&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|exercise[not(parent::exercises or parent::worksheet)]" mode="tcb-style">
+    <xsl:text>size=minimal, colback=white, colbacktitle=white, coltitle=black, fonttitle=\bfseries, attach title to upper, after title={\space}</xsl:text>
+</xsl:template>
+
+<!-- This is the gross default, acreoss all objects and all styles -->
+<!-- It is convenient for development, testing, and convenience    -->
+<xsl:template match="*" mode="tcb-style" />
 
 <!-- ################## -->
 <!-- Preamble Utilities -->
@@ -2160,28 +2222,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>    { \IfBooleanTF{#2}{\end{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>title}}{\end{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>notitle}} }&#xa;</xsl:text>
 </xsl:template>
 
-
-<!-- LaTeX environments with regular bodies (and no associated proof) -->
-<!-- Entirely similar to "theorem-environment" template above         -->
-<xsl:template name="definition-environment">
-    <xsl:param name="ptx-name" select="'NO ARGUMENT TO DEFINITION-ENVIRONMENT TEMPLATE'" />
-
-    <xsl:text>\theoremstyle{ptxdefinitionnotitle}&#xa;</xsl:text>
-    <xsl:text>\newtheorem{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>notitle}[cthm]{</xsl:text>
-    <xsl:call-template name="type-name">
-        <xsl:with-param name="string-id" select="$ptx-name" />
-    </xsl:call-template>
-    <xsl:text>}&#xa;</xsl:text>
-    <xsl:text>\theoremstyle{ptxdefinitiontitle}&#xa;</xsl:text>
-    <xsl:text>\newtheorem{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>title}[cthm]{</xsl:text>
-    <xsl:call-template name="type-name">
-        <xsl:with-param name="string-id" select="$ptx-name" />
-    </xsl:call-template>
-    <xsl:text>}&#xa;</xsl:text>
-    <xsl:text>\NewDocumentEnvironment{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>}{o}&#xa;</xsl:text>
-    <xsl:text>  {\IfValueTF{#1}{\begin{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>title}[{#1}]}{\begin{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>notitle}}}&#xa;</xsl:text>
-    <xsl:text>  {\IfValueTF{#1}{\end{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>title}}{\end{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>notitle}}}&#xa;</xsl:text>
-</xsl:template>
 
 <!-- LaTeX environments for projects, definition styles, own counter  -->
 <!-- Entirely similar to "theorem-environment" template above         -->
@@ -3716,22 +3756,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- Definitions -->
-<!-- Statement structure should be relaxed, -->
-<!-- Style is controlled in the preamble    -->
-<xsl:template match="&DEFINITION-LIKE;">
-    <xsl:text>\begin{</xsl:text>
-        <xsl:value-of select="local-name(.)" />
-    <xsl:text>}</xsl:text>
-    <xsl:apply-templates select="title" mode="environment-option"/>
-    <xsl:apply-templates select="." mode="label"/>
-    <xsl:text>&#xa;</xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>\end{</xsl:text>
-        <xsl:value-of select="local-name(.)" />
-    <xsl:text>}&#xa;</xsl:text>
-</xsl:template>
-
 <!-- Theorems and Axioms-->
 <!-- Very similar to case of definitions   -->
 <!-- Adds (potential) proofs, and creators -->
@@ -3834,8 +3858,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="exercise">
     <!-- heading, start enclosure/environment -->
     <xsl:text>\begin{inlineexercise}</xsl:text>
-    <xsl:apply-templates select="title" mode="environment-option" />
-    <xsl:apply-templates select="." mode="label"/>
+    <xsl:text>{</xsl:text>
+    <xsl:apply-templates select="." mode="title-full"/>
+    <xsl:text>}{</xsl:text>
+    <xsl:apply-templates select="." mode="internal-id"/>
+    <xsl:text>}%</xsl:text>
     <xsl:text>&#xa;</xsl:text>
     <!-- Allow a webwork or myopenmath exercise to introduce/connect    -->
     <!-- a problem (especially from server) to the text in various ways -->
@@ -4673,20 +4700,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- Remark Like, Computation Like, Example Like  -->
+<!-- Definition Like, Remark Like, Computation Like, Example Like  -->
 <!-- Simpler than theorems, definitions, etc      -->
 <!-- Only EXAMPLE-LIKE has hint, answer, solution -->
-<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;">
+<xsl:template match="&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;">
     <!-- structured version may contain a prelude -->
     <xsl:if test="statement">
         <xsl:apply-templates select="prelude" />
     </xsl:if>
-    <!-- TODO: move to semantic xparse/tcolorbox versions -->
+    <!-- environment, title, label string -->
     <xsl:text>\begin{</xsl:text>
         <xsl:value-of select="local-name(.)" />
-    <xsl:text>}</xsl:text>
-    <xsl:apply-templates select="title" mode="environment-option"/>
-    <xsl:apply-templates select="." mode="label"/>
+    <xsl:text>}{</xsl:text>
+    <xsl:apply-templates select="." mode="title-full"/>
+    <xsl:text>}{</xsl:text>
+    <xsl:apply-templates select="." mode="internal-id"/>
+    <xsl:text>}%</xsl:text>
     <xsl:text>&#xa;</xsl:text>
     <xsl:choose>
         <!-- We use common routines for this variant, but     -->
@@ -4695,7 +4724,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- are essential, not like exercises or projects.   -->
         <!-- NB: template is not parameterized at all         -->
         <!-- prelude?, statement, hint*, answer*, solution*, postlude? -->
-        <xsl:when test="statement">
+        <xsl:when test="statement and (self::example or self::question or self::problem)">
             <xsl:apply-templates select="." mode="exercise-components">
                 <xsl:with-param name="b-original" select="true()" />
                 <xsl:with-param name="b-has-statement" select="true()" />
@@ -4706,10 +4735,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <!-- Potential common mistake, no statement, and so no content results -->
         <xsl:when test="prelude|hint|answer|solution|postlude">
-            <xsl:message>MBX:WARNING: a &lt;prelude&gt;, &lt;hint&gt;, &lt;answer&gt;, &lt;solution&gt;, or &lt;postlude&gt; in a remark-like, computation-like, or example-like block will need to also be structured with a &lt;statement&gt;.  Content will be missing from output.</xsl:message>
+            <xsl:message>MBX:WARNING: a &lt;prelude&gt;, &lt;hint&gt;, &lt;answer&gt;, &lt;solution&gt;, or &lt;postlude&gt; in a definition-like, remark-like, computation-like, or example-like block will need to also be structured with a &lt;statement&gt;.  Content will be missing from output.</xsl:message>
             <xsl:apply-templates select="." mode="location-report" />
         </xsl:when>
-        <!-- unstructured, no need to avoid dangerous misunderstandings -->
+        <!-- unstructured, or just a simple "statement"   -->
+        <!-- no need to avoid dangerous misunderstandings -->
         <xsl:otherwise>
             <xsl:apply-templates select="*"/>
         </xsl:otherwise>
