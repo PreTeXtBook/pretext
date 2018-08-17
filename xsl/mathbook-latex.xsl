@@ -1065,23 +1065,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>   coltitle=black, fonttitle=\bfseries, title={#1}, detach title, before upper={\tcbtitle\ \ }}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$document-root//objectives">
-        <xsl:variable name="rtf">
-            <objectives />
-        </xsl:variable>
-        <xsl:apply-templates select="exsl:node-set($rtf)/*" mode="environment" />
+        <xsl:variable name="instance" select="($document-root//objectives)[1]"/>
+        <xsl:apply-templates select="$instance" mode="environment"/>
     </xsl:if>
     <xsl:if test="$document-root//outcomes">
-        <xsl:variable name="rtf">
-            <outcomes />
-        </xsl:variable>
-        <xsl:apply-templates select="exsl:node-set($rtf)/*" mode="environment" />
+        <xsl:variable name="instance" select="($document-root//outcomes)[1]"/>
+        <xsl:apply-templates select="$instance" mode="environment"/>
     </xsl:if>
     <!-- "commentary" is elective, with global switch set at startup -->
     <xsl:if test="$b-commentary and $document-root//commentary">
-        <xsl:variable name="rtf">
-            <commentary />
-        </xsl:variable>
-        <xsl:apply-templates select="exsl:node-set($rtf)/*" mode="environment" />
+        <xsl:variable name="instance" select="($document-root//commentary)[1]"/>
+        <xsl:apply-templates select="$instance" mode="environment"/>
     </xsl:if>
     <!-- miscellaneous, not categorized yet -->
     <xsl:if test="$document-root//exercises//exercise">
@@ -2057,13 +2051,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Title comes with punctuation, always. -->
 <xsl:template match="commentary" mode="environment">
     <xsl:text>%% commentary: elective, additional comments in an enhanced edition&#xa;</xsl:text>
-    <xsl:variable name="rtf">
-        <commentary />
-    </xsl:variable>
-    <xsl:text>\DeclareTColorBox{commentary}{m}&#xa;</xsl:text>
-    <xsl:text>{title={#1}, </xsl:text>
-    <xsl:apply-templates select="exsl:node-set($rtf)/*" mode="tcb-style" />
-    <xsl:text>}&#xa;</xsl:text>
+    <xsl:text>\tcbset{ commentarystyle/.style={</xsl:text>
+    <xsl:apply-templates select="." mode="tcb-style" />
+    <xsl:text>} }&#xa;</xsl:text>
+    <xsl:text>\newtcolorbox{commentary}[1]{title={#1}, breakable, commentarystyle}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- "objectives" -->
@@ -2071,13 +2062,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Title comes without new punctuation.  -->
 <xsl:template match="objectives" mode="environment">
     <xsl:text>%% objectives: early in a subdivision, introduction/list/conclusion&#xa;</xsl:text>
-    <xsl:variable name="rtf">
-        <objectives />
-    </xsl:variable>
     <xsl:text>\tcbset{ objectivesstyle/.style={</xsl:text>
-    <xsl:apply-templates select="exsl:node-set($rtf)/*" mode="tcb-style" />
+    <xsl:apply-templates select="." mode="tcb-style" />
     <xsl:text>} }&#xa;</xsl:text>
-    <xsl:text>\newtcolorbox{objectives}[1]{title={#1},objectivesstyle}&#xa;</xsl:text>
+    <xsl:text>\newtcolorbox{objectives}[1]{title={#1}, breakable, objectivesstyle}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- "outcomes" -->
@@ -2085,13 +2073,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Title comes without new punctuation.  -->
 <xsl:template match="outcomes" mode="environment">
     <xsl:text>%% outcomes: late in a subdivision, introduction/list/conclusion&#xa;</xsl:text>
-    <xsl:variable name="rtf">
-        <outcomes />
-    </xsl:variable>
     <xsl:text>\tcbset{ outcomesstyle/.style={</xsl:text>
-    <xsl:apply-templates select="exsl:node-set($rtf)/*" mode="tcb-style" />
+    <xsl:apply-templates select="." mode="tcb-style" />
     <xsl:text>} }&#xa;</xsl:text>
-    <xsl:text>\newtcolorbox{outcomes}[1]{title={#1},outcomesstyle}&#xa;</xsl:text>
+    <xsl:text>\newtcolorbox{outcomes}[1]{title={#1}, breakable, outcomesstyle}&#xa;</xsl:text>
 </xsl:template>
 
 

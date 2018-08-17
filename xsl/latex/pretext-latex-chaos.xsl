@@ -43,7 +43,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- "objectives", "outcomes" -->
-<!-- Green and ugly and identical, via the dual match -->
+<!-- Green and ugly, plus identical, via the dual match -->
 <xsl:template match="objectives|outcomes" mode="tcb-style">
     <xsl:text>size=minimal, attach title to upper, after title={\space}, fonttitle=\bfseries, coltitle=black, colback=green</xsl:text>
 </xsl:template>
