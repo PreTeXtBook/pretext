@@ -349,6 +349,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% Some aspects of the preamble are conditional,&#xa;</xsl:text>
     <xsl:text>%% the LaTeX engine is one such determinant&#xa;</xsl:text>
     <xsl:text>\usepackage{ifthen}&#xa;</xsl:text>
+    <xsl:text>%% etoolbox has a variety of modern conveniences&#xa;</xsl:text>
+    <!-- e.g, \isblank -->
+    <xsl:text>\usepackage{etoolbox}&#xa;</xsl:text>
     <xsl:text>\usepackage{ifxetex,ifluatex}&#xa;</xsl:text>
     <xsl:text>%% Raster graphics inclusion&#xa;</xsl:text>
     <xsl:text>\usepackage{graphicx}&#xa;</xsl:text>
