@@ -741,117 +741,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>]&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>%% end: General AMS environment setup&#xa;</xsl:text>
-    <xsl:text>%% begin: environments with italicized bodies, theorems and similar&#xa;</xsl:text>
-    <xsl:text>%% Style is like a theorem, and for statements without proofs&#xa;</xsl:text>
-    <xsl:text>%% Theorem-like environments in modified "plain" style&#xa;</xsl:text>
-    <xsl:text>%% We manage the head, do not adjust vertical spacing&#xa;</xsl:text>
-    <xsl:text>%% Thus "space after theorem head" is necessary&#xa;</xsl:text>
-    <xsl:text>%% This provides an automatic period after the number&#xa;</xsl:text>
-    <!-- Just a number, automatic period -->
-    <xsl:text>\newtheoremstyle{ptxplainnotitle}&#xa;</xsl:text>
-    <xsl:text>  {}% space above&#xa;</xsl:text>
-    <xsl:text>  {}% space below&#xa;</xsl:text>
-    <xsl:text>  {\itshape}% body font&#xa;</xsl:text>
-    <xsl:text>  {}% indent amount&#xa;</xsl:text>
-    <xsl:text>  {\bfseries}% theorem head font&#xa;</xsl:text>
-    <xsl:text>  {.}% punctuation after theorem head&#xa;</xsl:text>
-    <xsl:text>  {0.5em}% space after theorem head&#xa;</xsl:text>
-    <xsl:text>  {}% theorem head specification&#xa;</xsl:text>
-    <xsl:text>%% We now manage punctuation on-sight, elsewhere,&#xa;</xsl:text>
-    <xsl:text>%% assuming non-trivial content inside a "title"&#xa;</xsl:text>
-    <!-- This could be more semantic if we split out pieces of the title -->
-    <xsl:text>\newtheoremstyle{ptxplaintitle}&#xa;</xsl:text>
-    <xsl:text>  {}% space above&#xa;</xsl:text>
-    <xsl:text>  {}% space below&#xa;</xsl:text>
-    <xsl:text>  {\itshape}% body font&#xa;</xsl:text>
-    <xsl:text>  {}% indent amount&#xa;</xsl:text>
-    <xsl:text>  {\bfseries}% theorem head font&#xa;</xsl:text>
-    <xsl:text>  {}% punctuation after theorem head&#xa;</xsl:text>
-    <xsl:text>  {0.5em}% space after theorem head&#xa;</xsl:text>
-    <xsl:text>  {\thmname{#1}\thmnumber{ #2}\thmnote{ #3}}% theorem head specification&#xa;</xsl:text>
-    <xsl:text>%% Only variants actually used in document appear here&#xa;</xsl:text>
-    <xsl:text>%% Template eventually creates an environment of the given name&#xa;</xsl:text>
-    <xsl:text>%% No arguments => Theorem 2.6. via "notitle" style variant&#xa;</xsl:text>
-    <xsl:text>%% One optional argument => Theorem 2.6 Fantastic! via "title" style variant&#xa;</xsl:text>
-    <!-- Tried two arguments (second being punctuation), but required stripping end-mark out -->
-    <xsl:if test="$document-root//theorem">
-        <xsl:call-template name="theorem-environment">
-            <xsl:with-param name="ptx-name" select="'theorem'" />
-        </xsl:call-template>
-    </xsl:if>
-    <xsl:if test="$document-root//corollary">
-        <xsl:call-template name="theorem-environment">
-            <xsl:with-param name="ptx-name" select="'corollary'" />
-        </xsl:call-template>
-    </xsl:if>
-    <xsl:if test="$document-root//lemma">
-        <xsl:call-template name="theorem-environment">
-            <xsl:with-param name="ptx-name" select="'lemma'" />
-        </xsl:call-template>
-    </xsl:if>
-    <xsl:if test="$document-root//algorithm">
-        <xsl:call-template name="theorem-environment">
-            <xsl:with-param name="ptx-name" select="'algorithm'" />
-        </xsl:call-template>
-    </xsl:if>
-    <xsl:if test="$document-root//proposition">
-        <xsl:call-template name="theorem-environment">
-            <xsl:with-param name="ptx-name" select="'proposition'" />
-        </xsl:call-template>
-    </xsl:if>
-    <xsl:if test="$document-root//claim">
-        <xsl:call-template name="theorem-environment">
-            <xsl:with-param name="ptx-name" select="'claim'" />
-        </xsl:call-template>
-    </xsl:if>
-    <xsl:if test="$document-root//fact">
-        <xsl:call-template name="theorem-environment">
-            <xsl:with-param name="ptx-name" select="'fact'" />
-        </xsl:call-template>
-    </xsl:if>
-    <xsl:if test="$document-root//identity">
-        <xsl:call-template name="theorem-environment">
-            <xsl:with-param name="ptx-name" select="'identity'" />
-        </xsl:call-template>
-    </xsl:if>
-    <xsl:if test="$document-root//axiom">
-        <xsl:call-template name="theorem-environment">
-            <xsl:with-param name="ptx-name" select="'axiom'" />
-        </xsl:call-template>
-    </xsl:if>
-    <xsl:if test="$document-root//conjecture">
-        <xsl:call-template name="theorem-environment">
-            <xsl:with-param name="ptx-name" select="'conjecture'" />
-        </xsl:call-template>
-    </xsl:if>
-    <xsl:if test="$document-root//principle">
-        <xsl:call-template name="theorem-environment">
-            <xsl:with-param name="ptx-name" select="'principle'" />
-        </xsl:call-template>
-    </xsl:if>
-    <xsl:if test="$document-root//heuristic">
-        <xsl:call-template name="theorem-environment">
-            <xsl:with-param name="ptx-name" select="'heuristic'" />
-        </xsl:call-template>
-    </xsl:if>
-    <xsl:if test="$document-root//hypothesis">
-        <xsl:call-template name="theorem-environment">
-            <xsl:with-param name="ptx-name" select="'hypothesis'" />
-        </xsl:call-template>
-    </xsl:if>
-    <xsl:if test="$document-root//assumption">
-        <xsl:call-template name="theorem-environment">
-            <xsl:with-param name="ptx-name" select="'assumption'" />
-        </xsl:call-template>
-    </xsl:if>
-    <xsl:text>%% AMS proof environment is basically fine as-is and special treatment&#xa;</xsl:text>
-    <xsl:text>%% would certainly interfere with the functioning of \qed, etc.&#xa;</xsl:text>
-    <xsl:text>%% So we simply localize the default heading&#xa;</xsl:text>
-    <xsl:text>%% Redefinition of the "proof" environment is to cause a long alternate&#xa;</xsl:text>
-    <xsl:text>%% title to line-break appropriately.  Code is cut verbatim, by suggestion,&#xa;</xsl:text>
-    <xsl:text>%% from "Using the amsthm Package" Version 2.20.3, September 2017&#xa;</xsl:text>
-    <!-- AMS warns a too-long title may not line-break, due to implementation as a trivlist -->
     <xsl:if test="$document-root//proof">
+        <xsl:text>%% AMS proof environment is basically fine as-is and special treatment&#xa;</xsl:text>
+        <xsl:text>%% would certainly interfere with the functioning of \qed, etc.&#xa;</xsl:text>
+        <xsl:text>%% So we simply localize the default heading&#xa;</xsl:text>
+        <xsl:text>%% Redefinition of the "proof" environment is to cause a long alternate&#xa;</xsl:text>
+        <xsl:text>%% title to line-break appropriately.  Code is cut verbatim, by suggestion,&#xa;</xsl:text>
+        <xsl:text>%% from "Using the amsthm Package" Version 2.20.3, September 2017&#xa;</xsl:text>
+        <!-- AMS warns a too-long title may not line-break, due to implementation as a trivlist -->
         <xsl:text>\renewcommand*{\proofname}{</xsl:text>
         <xsl:call-template name="type-name">
             <xsl:with-param name="string-id" select="'proof'" />
@@ -870,9 +767,33 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>}&#xa;</xsl:text>
         <xsl:text>\makeatother&#xa;</xsl:text>
     </xsl:if>
-    <xsl:text>%% end: environments with italicized bodies, theorems and similar&#xa;</xsl:text>
-    <!-- TODO: roll into a huge "for-each" when extant! -->
+    <!-- TODO: roll into several huge "for-each" when extant! -->
     <!-- context will be the variable, thus the select -->
+    <!-- include some preamble info -->
+    <!-- THEOREM-LIKE -->
+    <xsl:variable name="theorem-reps" select="
+        ($document-root//theorem)[1]|
+        ($document-root//lemma)[1]|
+        ($document-root//corollary)[1]|
+        ($document-root//algorithm)[1]|
+        ($document-root//proposition)[1]|
+        ($document-root//claim)[1]|
+        ($document-root//fact)[1]|
+        ($document-root//identity)[1]"/>
+    <xsl:for-each select="$theorem-reps">
+        <xsl:apply-templates select="." mode="environment"/>
+    </xsl:for-each>
+    <!-- AXIOM-LIKE -->
+    <xsl:variable name="axiom-reps" select="
+        ($document-root//axiom)[1]|
+        ($document-root//conjecture)[1]|
+        ($document-root//principle)[1]|
+        ($document-root//heuristic)[1]|
+        ($document-root//hypothesis)[1]|
+        ($document-root//assumption)[1]"/>
+    <xsl:for-each select="$axiom-reps">
+        <xsl:apply-templates select="." mode="environment"/>
+    </xsl:for-each>
     <!-- DEFINITION-LIKE -->
     <xsl:if test="$document-root//definition">
         <xsl:variable name="instance" select="($document-root//definition)[1]"/>
@@ -2081,6 +2002,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>style}&#xa;</xsl:text>
 </xsl:template>
 
+
+<!-- THEOREM-LIKE: "theorem", "corollary", "lemma",    -->
+<!--               "algorithm", "proposition",         -->
+<!--               "claim", "fact", "identity"         -->
+<!-- AXIOM-LIKE: "axiom", "conjecture", "principle",   -->
+<!--             "heuristic", "hypothesis",            -->
+<!--             "assumption                           -->
 <!-- DEFINITION-LIKE: "definition"                     -->
 <!-- REMARK-LIKE: "remark", "convention", "note",      -->
 <!--              "observation", "warning", "insight"  -->
@@ -2093,7 +2021,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--       \begin{inlineexercise}{title}{label}        -->
 <!-- Type, number, optional title                      -->
 <!-- Title comes without new punctuation.              -->
-<xsl:template match="&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|exercise[not(parent::exercises or parent::worksheet)]" mode="environment">
+<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|exercise[not(parent::exercises or parent::worksheet)]" mode="environment">
     <!-- Names of various pieces normally use the      -->
     <!-- element name, but "exercise" does triple duty -->
     <xsl:variable name="environment-name">
@@ -2160,12 +2088,53 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- with actual constructions in body  -->
     <xsl:text>{</xsl:text>
     <xsl:value-of select="$environment-name"/>
-    <xsl:text>}[2]{title={{</xsl:text>
+    <xsl:text>}</xsl:text>
+    <!-- number of arguments -->
+    <xsl:choose>
+        <xsl:when test="&THEOREM-FILTER; or &AXIOM-FILTER;">
+            <xsl:text>[3]</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>[2]</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <!-- begin: options -->
+    <xsl:text>{</xsl:text>
+    <!-- begin: title construction -->
+    <xsl:text>title={{</xsl:text>
     <xsl:apply-templates select="." mode="type-name"/>
-    <xsl:text>~\thetcbcounter\notblank{#1}{\space\space#1}{}}</xsl:text>
-    <xsl:text>}, label=#2, breakable, </xsl:text>
+    <xsl:text>~\thetcbcounter</xsl:text>
+    <xsl:choose>
+        <xsl:when test="&THEOREM-FILTER; or &AXIOM-FILTER;">
+            <!-- first space of double space -->
+            <xsl:text>\notblank{#1#2}{\space}{}</xsl:text>
+            <xsl:text>\notblank{#1}{\space#1}{}</xsl:text>
+            <xsl:text>\notblank{#2}{\space(#2)}{}</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>\notblank{#1}{\space\space#1}{}</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>}}, </xsl:text>
+    <!-- end: title construction -->
+    <!-- label in argument 2 or argument 3 -->
+    <xsl:choose>
+        <xsl:when test="&THEOREM-FILTER; or &AXIOM-FILTER;">
+        </xsl:when>
+            <xsl:text>label=#3, </xsl:text>
+        <xsl:otherwise>
+            <xsl:text>label=#2, </xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <!-- always breakable -->
+    <xsl:text>breakable, </xsl:text>
+    <!-- italic body (this should be set elsewhere) -->
+    <xsl:if test="&THEOREM-FILTER; or &AXIOM-FILTER;">
+        <xsl:text>fontupper=\itshape, </xsl:text>
+    </xsl:if>
     <xsl:value-of select="$environment-name"/>
-    <xsl:text>style}&#xa;</xsl:text>
+    <xsl:text>style, }&#xa;</xsl:text>
+    <!-- end: options -->
 </xsl:template>
 
 
@@ -2206,6 +2175,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>size=minimal, colback=white, colbacktitle=white, coltitle=black, fonttitle=\large\bfseries, toprule=0.1ex, toptitle=0.5ex, top=2ex, bottom=0.5ex, bottomrule=0.1ex, before skip=2ex</xsl:text>
 </xsl:template>
 
+<!-- THEOREM-LIKE: "theorem", "corollary", "lemma",    -->
+<!--               "algorithm", "proposition",         -->
+<!--               "claim", "fact", "identity"         -->
+<!-- AXIOM-LIKE: "axiom", "conjecture", "principle",   -->
+<!--             "heuristic", "hypothesis",            -->
+<!--             "assumption                           -->
 <!-- DEFINITION-LIKE: "definition"                     -->
 <!-- REMARK-LIKE: "remark", "convention", "note",      -->
 <!--              "observation", "warning", "insight"  -->
@@ -2217,8 +2192,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "assemblage"                                      -->
 <!-- ASIDE-LIKE: "aside", "historical", "biographical" -->
 <!-- Inline, bold face title, otherwise B/W, plain     -->
-<xsl:template match="&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|exercise[not(parent::exercises or parent::worksheet)]|assemblage|&ASIDE-LIKE;" mode="tcb-style">
-    <xsl:text>size=minimal, colback=white, colbacktitle=white, coltitle=black, fonttitle=\bfseries, attach title to upper, after title={\space}</xsl:text>
+<!-- The "\normalfont" on the title is to counteract   -->
+<!-- the italicized bodies of theorems and axioms      -->
+<!-- coming from the "environment" template, since the -->
+<!-- title is being smashed inline into the upper part -->
+<!-- of the box.  It has no effect on other            -->
+<!-- environments.  But ideally, we would split out    -->
+<!-- this piece into a template for just theorems      -->
+<!-- and axioms.                                       -->
+<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|exercise[not(parent::exercises or parent::worksheet)]|assemblage|&ASIDE-LIKE;" mode="tcb-style">
+    <xsl:text>size=minimal, colback=white, colbacktitle=white, coltitle=black, fonttitle=\normalfont\bfseries, attach title to upper, after title={\space}</xsl:text>
 </xsl:template>
 
 <!-- This is the gross default, acreoss all objects and all styles -->
@@ -2230,46 +2213,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ################## -->
 
 <!-- Parameterized templates for repeated constructions -->
-
-
-<!-- LaTeX environments with italicized bodies (maybe associated proofs)  -->
-<!--   (1) Set a theorem style, no title (usual) vs. title (enhanced)     -->
-<!--   (2) Build an AMS environment of that style, with "cthm" counter    -->
-<!--   (3) Build a single enviroment that chooses between the four styles -->
-<!-- Arguments:                                                           -->
-<!--   (a) optional creator/note,                                         -->
-<!--   (b) + indicator, followed by optional title including punctuation  -->
-<!-- First switch on + in parameter 2, title/notitle, in parameter 3      -->
-<!-- Then for each, switch on optional creator, in parameter 1            -->
-<!-- Note: just a creator, then LaTeX does its standard treatment         -->
-<!--       If creator and a title, we need to format the creator          -->
-<!-- Note: titles are protected in {}, or \textbf{}.  If we parse {}, [], -->
-<!--       to be replaced by \text* macros, possibly relax these.         -->
-<!--       See: https://tex.stackexchange.com/questions/99495/            -->
-<!--            inside-an-optional-argument                               -->
-<xsl:template name="theorem-environment">
-    <xsl:param name="ptx-name" select="'NO ARGUMENT TO THEOREM-ENVIRONMENT TEMPLATE'" />
-
-    <xsl:text>\theoremstyle{ptxplainnotitle}&#xa;</xsl:text>
-    <xsl:text>\newtheorem{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>notitle}[cthm]{</xsl:text>
-    <xsl:call-template name="type-name">
-        <xsl:with-param name="string-id" select="$ptx-name" />
-    </xsl:call-template>
-    <xsl:text>}&#xa;</xsl:text>
-    <xsl:text>\theoremstyle{ptxplaintitle}&#xa;</xsl:text>
-    <xsl:text>\newtheorem{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>title}[cthm]{</xsl:text>
-    <xsl:call-template name="type-name">
-        <xsl:with-param name="string-id" select="$ptx-name" />
-    </xsl:call-template>
-    <xsl:text>}&#xa;</xsl:text>
-    <xsl:text>\NewDocumentEnvironment{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>}{ot+o}&#xa;</xsl:text>
-    <xsl:text>    { \IfBooleanTF{#2}&#xa;</xsl:text>
-    <xsl:text>        { \IfValueTF{#1}{ \begin{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>title}[#3 {\mdseries(#1)}] }{ \begin{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>title}[#3]} } &#xa;</xsl:text>
-    <xsl:text>        { \IfValueTF{#1}{ \begin{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>notitle}[#1]  }{ \begin{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>notitle}} }&#xa;</xsl:text>
-    <xsl:text>    }&#xa;</xsl:text>
-    <xsl:text>    { \IfBooleanTF{#2}{\end{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>title}}{\end{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>notitle}} }&#xa;</xsl:text>
-</xsl:template>
-
 
 <!-- LaTeX environments for project solutions, definition styles, no counter  -->
 <!-- The second \space was not needed with amsthm of 2015/03/04 v2.20.2,      -->
@@ -3788,11 +3731,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Statement structure should be relaxed -->
 <!-- Style is controlled in the preamble   -->
 <xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;">
+    <!-- environment, title, label string -->
     <xsl:text>\begin{</xsl:text>
         <xsl:value-of select="local-name(.)" />
-    <xsl:text>}</xsl:text>
-    <xsl:apply-templates select="." mode="title-creator-environment-option" />
-    <xsl:apply-templates select="." mode="label"/>
+    <xsl:text>}{</xsl:text>
+    <xsl:apply-templates select="." mode="title-full"/>
+    <xsl:text>}{</xsl:text>
+    <xsl:apply-templates select="." mode="creator-full" />
+    <xsl:text>}{</xsl:text>
+    <xsl:apply-templates select="." mode="internal-id"/>
+    <xsl:text>}%</xsl:text>
     <xsl:text>&#xa;</xsl:text>
     <!-- statement is required now, to be relaxed in DTD      -->
     <!-- explicitly ignore proof and pickup just for theorems -->
