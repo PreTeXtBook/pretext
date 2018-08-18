@@ -767,9 +767,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>}&#xa;</xsl:text>
         <xsl:text>\makeatother&#xa;</xsl:text>
     </xsl:if>
-    <!-- TODO: roll into several huge "for-each" when extant! -->
-    <!-- context will be the variable, thus the select -->
-    <!-- include some preamble info -->
+    <!-- Groups of environments/blocks -->
+    <!-- Variables hold exactly one node of each type in use -->
+    <!-- "environment" template constructs...environments -->
     <!-- THEOREM-LIKE -->
     <xsl:variable name="theorem-reps" select="
         ($document-root//theorem)[1]|
@@ -780,6 +780,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         ($document-root//claim)[1]|
         ($document-root//fact)[1]|
         ($document-root//identity)[1]"/>
+    <xsl:if test="$theorem-reps">
+        <xsl:text>%%&#xa;</xsl:text>
+        <xsl:text>%% tcolorbox, with styles, for THEOREM-LIKE&#xa;</xsl:text>
+        <xsl:text>%%&#xa;</xsl:text>
+    </xsl:if>
     <xsl:for-each select="$theorem-reps">
         <xsl:apply-templates select="." mode="environment"/>
     </xsl:for-each>
@@ -791,73 +796,133 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         ($document-root//heuristic)[1]|
         ($document-root//hypothesis)[1]|
         ($document-root//assumption)[1]"/>
+    <xsl:if test="$axiom-reps">
+        <xsl:text>%%&#xa;</xsl:text>
+        <xsl:text>%% tcolorbox, with styles, for AXIOM-LIKE&#xa;</xsl:text>
+        <xsl:text>%%&#xa;</xsl:text>
+    </xsl:if>
     <xsl:for-each select="$axiom-reps">
         <xsl:apply-templates select="." mode="environment"/>
     </xsl:for-each>
     <!-- DEFINITION-LIKE -->
-    <xsl:if test="$document-root//definition">
-        <xsl:variable name="instance" select="($document-root//definition)[1]"/>
-        <xsl:apply-templates select="$instance" mode="environment"/>
+    <xsl:variable name="definition-reps" select="
+        ($document-root//definition)[1]"/>
+    <xsl:if test="$definition-reps">
+        <xsl:text>%%&#xa;</xsl:text>
+        <xsl:text>%% tcolorbox, with styles, for DEFINITION-LIKE&#xa;</xsl:text>
+        <xsl:text>%%&#xa;</xsl:text>
     </xsl:if>
-    <!-- REMARK-LIKE -->
-    <xsl:if test="$document-root//remark">
-        <xsl:variable name="instance" select="($document-root//remark)[1]"/>
-        <xsl:apply-templates select="$instance" mode="environment"/>
-    </xsl:if>
-    <xsl:if test="$document-root//convention">
-        <xsl:variable name="instance" select="($document-root//convention)[1]"/>
-        <xsl:apply-templates select="$instance" mode="environment"/>
-    </xsl:if>
-    <xsl:if test="$document-root//note">
-        <xsl:variable name="instance" select="($document-root//note)[1]"/>
-        <xsl:apply-templates select="$instance" mode="environment"/>
-    </xsl:if>
-    <xsl:if test="$document-root//observation">
-        <xsl:variable name="instance" select="($document-root//observation)[1]"/>
-        <xsl:apply-templates select="$instance" mode="environment"/>
-    </xsl:if>
-    <xsl:if test="$document-root//warning">
-        <xsl:variable name="instance" select="($document-root//warning)[1]"/>
-        <xsl:apply-templates select="$instance" mode="environment"/>
-    </xsl:if>
-    <xsl:if test="$document-root//insight">
-        <xsl:variable name="instance" select="($document-root//insight)[1]"/>
-        <xsl:apply-templates select="$instance" mode="environment"/>
-    </xsl:if>
-    <!-- COMPUTATION-LIKE -->
-    <xsl:if test="$document-root//computation">
-        <xsl:variable name="instance" select="($document-root//computation)[1]"/>
-        <xsl:apply-templates select="$instance" mode="environment"/>
-    </xsl:if>
-    <xsl:if test="$document-root//technology">
-        <xsl:variable name="instance" select="($document-root//technology)[1]"/>
-        <xsl:apply-templates select="$instance" mode="environment"/>
-    </xsl:if>
-    <!-- EXAMPLE-LIKE -->
-    <xsl:if test="$document-root//example">
-        <xsl:variable name="instance" select="($document-root//example)[1]"/>
-        <xsl:apply-templates select="$instance" mode="environment"/>
-    </xsl:if>
-    <xsl:if test="$document-root//question">
-        <xsl:variable name="instance" select="($document-root//question)[1]"/>
-        <xsl:apply-templates select="$instance" mode="environment"/>
-    </xsl:if>
-    <xsl:if test="$document-root//problem">
-        <xsl:variable name="instance" select="($document-root//problem)[1]"/>
-        <xsl:apply-templates select="$instance" mode="environment"/>
-    </xsl:if>
-    <!-- Inline Exercises -->
-    <xsl:if test="$document-root//exercise[not(parent::exercises or parent::worksheet)]">
-        <xsl:variable name="instance" select="($document-root//exercise[not(parent::exercises or parent::worksheet)])[1]"/>
-        <xsl:apply-templates select="$instance" mode="environment"/>
-    </xsl:if>
-    <!-- PROJECT-LIKE -->
-    <xsl:variable name="representatives" select="($document-root//project)[1]|($document-root//activity)[1]|($document-root//exploration)[1]|($document-root//investigation)[1]"/>
-    <xsl:for-each select="$representatives">
+    <xsl:for-each select="$definition-reps">
         <xsl:apply-templates select="." mode="environment"/>
     </xsl:for-each>
+    <!-- REMARK-LIKE -->
+    <!-- NB: a "note" in "biblio" is a (harmless?) false positive here -->
+    <xsl:variable name="remark-reps" select="
+        ($document-root//remark)[1]|
+        ($document-root//convention)[1]|
+        ($document-root//note)[1]|
+        ($document-root//observation)[1]|
+        ($document-root//warning)[1]|
+        ($document-root//insight)[1]"/>
+    <xsl:if test="$remark-reps">
+        <xsl:text>%%&#xa;</xsl:text>
+        <xsl:text>%% tcolorbox, with styles, for REMARK-LIKE&#xa;</xsl:text>
+        <xsl:text>%%&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:for-each select="$remark-reps">
+        <xsl:apply-templates select="." mode="environment"/>
+    </xsl:for-each>
+    <!-- COMPUTATION-LIKE -->
+    <xsl:variable name="computation-reps" select="
+        ($document-root//computation)[1]|
+        ($document-root//technology)[1]"/>
+    <xsl:if test="$computation-reps">
+        <xsl:text>%%&#xa;</xsl:text>
+        <xsl:text>%% tcolorbox, with styles, for COMPUTATION-LIKE&#xa;</xsl:text>
+        <xsl:text>%%&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:for-each select="$computation-reps">
+        <xsl:apply-templates select="." mode="environment"/>
+    </xsl:for-each>
+    <!-- EXAMPLE-LIKE -->
+    <xsl:variable name="example-reps" select="
+        ($document-root//example)[1]|
+        ($document-root//question)[1]|
+        ($document-root//problem)[1]"/>
+    <xsl:if test="$example-reps">
+        <xsl:text>%%&#xa;</xsl:text>
+        <xsl:text>%% tcolorbox, with styles, for EXAMPLE-LIKE&#xa;</xsl:text>
+        <xsl:text>%%&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:for-each select="$example-reps">
+        <xsl:apply-templates select="." mode="environment"/>
+    </xsl:for-each>
+    <!-- Inline Exercises -->
+    <xsl:variable name="inlineexercise-reps" select="
+        ($document-root//exercise[not(parent::exercises or parent::worksheet)])[1]"/>
+    <xsl:if test="$inlineexercise-reps">
+        <xsl:text>%%&#xa;</xsl:text>
+        <xsl:text>%% tcolorbox, with styles, for inline exercises&#xa;</xsl:text>
+        <xsl:text>%%&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:for-each select="$inlineexercise-reps">
+        <xsl:apply-templates select="." mode="environment"/>
+    </xsl:for-each>
+    <!-- PROJECT-LIKE -->
+    <xsl:variable name="project-reps" select="
+        ($document-root//project)[1]|
+        ($document-root//activity)[1]|
+        ($document-root//exploration)[1]|
+        ($document-root//investigation)[1]"/>
+    <xsl:if test="$project-reps">
+        <xsl:text>%%&#xa;</xsl:text>
+        <xsl:text>%% tcolorbox, with styles, for PROJECT-LIKE&#xa;</xsl:text>
+        <xsl:text>%%&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:for-each select="$project-reps">
+        <xsl:apply-templates select="." mode="environment"/>
+    </xsl:for-each>
+    <!-- ASIDE-LIKE -->
+    <xsl:variable name="aside-reps" select="
+        ($document-root//aside)[1]|
+        ($document-root//historical)[1]|
+        ($document-root//biographical)[1]"/>
+    <xsl:if test="$aside-reps">
+        <xsl:text>%%&#xa;</xsl:text>
+        <xsl:text>%% tcolorbox, with styles, for ASIDE-LIKE&#xa;</xsl:text>
+        <xsl:text>%%&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:for-each select="$aside-reps">
+        <xsl:apply-templates select="." mode="environment"/>
+    </xsl:for-each>
+    <!-- MISCELLANEOUS -->
+    <xsl:variable name="miscellaneous-reps" select="
+        ($document-root//assemblage)[1]|
+        ($document-root//objectives)[1]|
+        ($document-root//outcomes)[1]"/>
+    <xsl:if test="$miscellaneous-reps">
+        <xsl:text>%%&#xa;</xsl:text>
+        <xsl:text>%% tcolorbox, with styles, for miscellaneous environments&#xa;</xsl:text>
+        <xsl:text>%%&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:for-each select="$miscellaneous-reps">
+        <xsl:apply-templates select="." mode="environment"/>
+    </xsl:for-each>
+    <!-- Commentary -->
+    <!-- "commentary" is elective, with global switch set at startup -->
+    <xsl:if test="$b-commentary">
+        <xsl:variable name="instance" select="($document-root//commentary)[1]"/>
+        <xsl:if test="$instance">
+            <xsl:text>%%&#xa;</xsl:text>
+            <xsl:text>%% tcolorbox, with style, for elected commentary&#xa;</xsl:text>
+            <xsl:text>%%&#xa;</xsl:text>
+            <xsl:apply-templates select="$instance" mode="environment"/>
+        </xsl:if>
+    </xsl:if>
     <!--  -->
-    <xsl:if test="$document-root//project or $document-root//activity or $document-root//exploration or $document-root//investigation">
+    <!--  -->
+    <!--  -->
+    <xsl:if test="$project-reps">
         <xsl:text>%% Numbering for Projects (independent of others)&#xa;</xsl:text>
         <xsl:text>%% Controlled by  numbering.projects.level  processing parameter&#xa;</xsl:text>
         <xsl:text>%% Always need a project environment to set base numbering scheme&#xa;</xsl:text>
@@ -919,35 +984,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:call-template>
         </xsl:if>
         <xsl:text>%% end: environments for duplicates in solutions divisions&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:if test="$document-root//assemblage">
-        <xsl:variable name="instance" select="($document-root//assemblage)[1]"/>
-        <xsl:apply-templates select="$instance" mode="environment"/>
-    </xsl:if>
-    <xsl:if test="$document-root//aside">
-        <xsl:variable name="instance" select="($document-root//aside)[1]"/>
-        <xsl:apply-templates select="$instance" mode="environment"/>
-    </xsl:if>
-    <xsl:if test="$document-root//historical">
-        <xsl:variable name="instance" select="($document-root//historical)[1]"/>
-        <xsl:apply-templates select="$instance" mode="environment"/>
-    </xsl:if>
-    <xsl:if test="$document-root//biographical">
-        <xsl:variable name="instance" select="($document-root//biographical)[1]"/>
-        <xsl:apply-templates select="$instance" mode="environment"/>
-    </xsl:if>
-    <xsl:if test="$document-root//objectives">
-        <xsl:variable name="instance" select="($document-root//objectives)[1]"/>
-        <xsl:apply-templates select="$instance" mode="environment"/>
-    </xsl:if>
-    <xsl:if test="$document-root//outcomes">
-        <xsl:variable name="instance" select="($document-root//outcomes)[1]"/>
-        <xsl:apply-templates select="$instance" mode="environment"/>
-    </xsl:if>
-    <!-- "commentary" is elective, with global switch set at startup -->
-    <xsl:if test="$b-commentary and $document-root//commentary">
-        <xsl:variable name="instance" select="($document-root//commentary)[1]"/>
-        <xsl:apply-templates select="$instance" mode="environment"/>
     </xsl:if>
     <!-- miscellaneous, not categorized yet -->
     <xsl:if test="$document-root//exercises//exercise">
