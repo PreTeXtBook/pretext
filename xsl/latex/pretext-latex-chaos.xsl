@@ -48,6 +48,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>size=minimal, attach title to upper, after title={\space}, fonttitle=\bfseries, coltitle=black, colback=green</xsl:text>
 </xsl:template>
 
+<!-- THEOREM-LIKE: "theorem", "corollary", "lemma",    -->
+<!--               "algorithm", "proposition",         -->
+<!--               "claim", "fact", "identity"         -->
+<!-- AXIOM-LIKE: "axiom", "conjecture", "principle",   -->
+<!--             "heuristic", "hypothesis",            -->
+<!--             "assumption                           -->
+<!-- A "skin" example from the tcolorbox documentation -->
+<!-- Documentation suggests "title engine=path"        -->
+<!-- is necessary, but it seems to not be              -->
+<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;" mode="tcb-style">
+    <xsl:text>enhanced, title engine=path, colback=red!5!white,&#xa;</xsl:text>
+    <xsl:text>colframe=red!75!black, coltitle=blue!50!black,fonttitle=\bfseries,&#xa;</xsl:text>
+    <xsl:text>title style={left color=blue!15!yellow, right color=red!85!black}, </xsl:text>
+</xsl:template>
+
 <!-- DEFINITION-LIKE: "definition"   -->
 <!-- Various extreme choices from the tcolorbox documentation -->
 <!-- Note: a trailing comma is OK, and maybe a good idea      -->
