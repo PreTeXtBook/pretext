@@ -9435,9 +9435,9 @@ var scJsHost = (("https:" == document.location.protocol) ? "https://secure." : "
         <xsl:if test="$author-tools='yes'" >
             <xsl:attribute name="style">color:red</xsl:attribute>
         </xsl:if>
-        <xsl:text>&lt;&lt;</xsl:text>
+        <xsl:text>(((</xsl:text>
         <xsl:value-of select="$warning" />
-        <xsl:text>&gt;&gt;</xsl:text>
+        <xsl:text>)))</xsl:text>
     </xsl:element>
 </xsl:template>
 

@@ -9009,9 +9009,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\textcolor{red}</xsl:text>
     </xsl:if>
     <xsl:text>{</xsl:text>
-    <xsl:text>$\langle\langle$</xsl:text>
+    <xsl:text>(((</xsl:text>
     <xsl:value-of select="str:replace($warning, '_', '\_')" />
-    <xsl:text>$\rangle\rangle$</xsl:text>
+    <xsl:text>)))</xsl:text>
     <xsl:text>}</xsl:text>
 </xsl:template>
 
