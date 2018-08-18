@@ -2156,8 +2156,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- label in argument 2 or argument 3 -->
     <xsl:choose>
         <xsl:when test="&THEOREM-FILTER; or &AXIOM-FILTER;">
-        </xsl:when>
             <xsl:text>label=#3, </xsl:text>
+        </xsl:when>
         <xsl:otherwise>
             <xsl:text>label=#2, </xsl:text>
         </xsl:otherwise>
