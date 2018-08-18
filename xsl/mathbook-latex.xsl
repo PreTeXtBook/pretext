@@ -3695,17 +3695,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Must be elected by a publisher, based on the switch.  -->
 <xsl:template match="commentary">
     <xsl:if test="$b-commentary">
-        <!-- true, false, or if no title, then empty -->
-        <xsl:variable name="has-punctuation">
-            <xsl:apply-templates select="title" mode="has-punctuation" />
-        </xsl:variable>
+        <!-- environment, title, label string, newline -->
         <xsl:text>\begin{commentary}</xsl:text>
-        <xsl:text>{</xsl:text>
-        <xsl:apply-templates select="." mode="title-full" />
-        <xsl:if test="$has-punctuation = 'false'">
-            <xsl:text>.</xsl:text>
-        </xsl:if>
-        <xsl:text>}&#xa;</xsl:text>
+        <xsl:apply-templates select="." mode="block-options"/>
+        <xsl:text>%&#xa;</xsl:text>
         <!-- coordinate select with schema's BlockStatementNoCaption       -->
         <!-- Note sufficiency and necessity of processing index items here -->
         <xsl:apply-templates select="idx|p|blockquote|pre|aside|sidebyside|sbsgroup" />
@@ -3736,29 +3729,47 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}]</xsl:text>
 </xsl:template>
 
-<!-- Theorems and axioms have two options, a title and/or a creator -->
-<!-- We provide them as two optional arguments                      -->
-<!--   (a) creator first, consistent with usual LaTeX use           -->
-<!--   (b) title, with all punctuation, preceded by a "+" indicator -->
-<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;" mode="title-creator-environment-option">
-    <xsl:if test="creator">
-        <xsl:text>[{</xsl:text>
-        <xsl:apply-templates select="." mode="creator-full" />
-        <xsl:text>}]</xsl:text>
-    </xsl:if>
-    <xsl:if test="title">
-        <xsl:text>+[{</xsl:text>
-        <xsl:apply-templates select="." mode="title-full" />
-        <!-- Punctuate title, if necessary -->
-        <xsl:variable name="has-punctuation">
+<!-- Environments/blocks implemented with tcolorbox          -->
+<!-- expect certain arguments.  This template provides them. -->
+<!--                                                         -->
+<!-- 1.  title, right now we add punctuation as needed       -->
+<!-- 2.  the "internal-id", which suffices for               -->
+<!--     the LaTeX label/ref mechanism                       -->
+<!--                                                         -->
+<!-- Or, for THEOREM-LIKE and AXIOM-LIKE,                    -->
+<!--                                                         -->
+<!-- 1.  title, right now we add punctuation as needed       -->
+<!-- 2.  a list of creator(s)                                -->
+<!-- 3.  the "internal-id", which suffices for               -->
+<!--     the LaTeX label/ref mechanism                       -->
+<!-- N.B.: "objectives", "outcomes" need to use this         -->
+<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&ASIDE-LIKE;|exercise[not(parent::exercises or parent::worksheet)]|commentary|assemblage" mode="block-options">
+    <!-- "title-full" template for title, supplied or default -->
+    <xsl:text>{</xsl:text>
+    <xsl:apply-templates select="." mode="title-full" />
+    <!-- no title case?  should be a default when optional -->
+    <!-- next template will cause variable to be empty     -->
+    <!-- Add a period if has-default-title???              -->
+    <xsl:variable name="has-punctuation">
+        <xsl:if test="title">
             <xsl:apply-templates select="title" mode="has-punctuation" />
-        </xsl:variable>
-        <!-- provide a period, if necessary -->
-        <xsl:if test="$has-punctuation = 'false'">
-            <xsl:text>.</xsl:text>
         </xsl:if>
-        <xsl:text>}]</xsl:text>
+    </xsl:variable>
+    <!-- provide a period, if necessary -->
+    <xsl:if test="$has-punctuation = 'false'">
+        <xsl:text>.</xsl:text>
     </xsl:if>
+    <xsl:text>}</xsl:text>
+    <!-- special case, creators -->
+    <xsl:if test="&THEOREM-FILTER; or &AXIOM-FILTER;">
+        <xsl:text>{</xsl:text>
+        <xsl:apply-templates select="." mode="creator-full" />
+        <xsl:text>}</xsl:text>
+    </xsl:if>
+    <!-- internal-id destined for tcolorbox  label=  option -->
+    <xsl:text>{</xsl:text>
+    <xsl:apply-templates select="." mode="internal-id"/>
+    <xsl:text>}</xsl:text>
 </xsl:template>
 
 <!-- Theorems and Axioms-->
@@ -3767,17 +3778,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Statement structure should be relaxed -->
 <!-- Style is controlled in the preamble   -->
 <xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;">
-    <!-- environment, title, label string -->
+    <!-- environment, title, label string, newline -->
     <xsl:text>\begin{</xsl:text>
-        <xsl:value-of select="local-name(.)" />
-    <xsl:text>}{</xsl:text>
-    <xsl:apply-templates select="." mode="title-full"/>
-    <xsl:text>}{</xsl:text>
-    <xsl:apply-templates select="." mode="creator-full" />
-    <xsl:text>}{</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id"/>
-    <xsl:text>}%</xsl:text>
-    <xsl:text>&#xa;</xsl:text>
+    <xsl:value-of select="local-name(.)" />
+    <xsl:text>}</xsl:text>
+    <xsl:apply-templates select="." mode="block-options"/>
+    <xsl:text>%&#xa;</xsl:text>
     <!-- statement is required now, to be relaxed in DTD      -->
     <!-- explicitly ignore proof and pickup just for theorems -->
     <xsl:apply-templates select="*[not(self::proof)]" />
@@ -3866,14 +3872,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- are integrated with LaTeX's automated numbering schemes   -->
 
 <xsl:template match="exercise">
-    <!-- heading, start enclosure/environment -->
+    <!-- environment, title, label string, newline -->
     <xsl:text>\begin{inlineexercise}</xsl:text>
-    <xsl:text>{</xsl:text>
-    <xsl:apply-templates select="." mode="title-full"/>
-    <xsl:text>}{</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id"/>
-    <xsl:text>}%</xsl:text>
-    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates select="." mode="block-options"/>
+    <xsl:text>%&#xa;</xsl:text>
     <!-- Allow a webwork or myopenmath exercise to introduce/connect    -->
     <!-- a problem (especially from server) to the text in various ways -->
     <xsl:if test="webwork-reps|myopenmath">
@@ -4718,15 +4720,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="statement">
         <xsl:apply-templates select="prelude" />
     </xsl:if>
-    <!-- environment, title, label string -->
+    <!-- environment, title, label string, newline -->
     <xsl:text>\begin{</xsl:text>
-        <xsl:value-of select="local-name(.)" />
-    <xsl:text>}{</xsl:text>
-    <xsl:apply-templates select="." mode="title-full"/>
-    <xsl:text>}{</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id"/>
-    <xsl:text>}%</xsl:text>
-    <xsl:text>&#xa;</xsl:text>
+    <xsl:value-of select="local-name(.)" />
+    <xsl:text>}</xsl:text>
+    <xsl:apply-templates select="." mode="block-options"/>
+    <xsl:text>%&#xa;</xsl:text>
     <xsl:choose>
         <!-- We use common routines for this variant, but     -->
         <!-- components of these objects are not controllable -->
@@ -4771,15 +4770,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="statement or task">
         <xsl:apply-templates select="prelude" />
     </xsl:if>
-    <!-- environment, title, label string -->
+    <!-- environment, title, label string, newline -->
     <xsl:text>\begin{</xsl:text>
-        <xsl:value-of select="local-name(.)" />
-    <xsl:text>}{</xsl:text>
-    <xsl:apply-templates select="." mode="title-full"/>
-    <xsl:text>}{</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id"/>
-    <xsl:text>}%</xsl:text>
-    <xsl:text>&#xa;</xsl:text>
+    <xsl:value-of select="local-name(.)" />
+    <xsl:text>}</xsl:text>
+    <xsl:apply-templates select="." mode="block-options"/>
+    <xsl:text>%&#xa;</xsl:text>
     <xsl:choose>
         <!-- structured versions first      -->
         <!-- prelude?, introduction?, task+, conclusion?, postlude? -->
@@ -5085,15 +5081,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- historical semantically, but perhaps should -->
 <!-- title is inline, boldface in mdframe setup  -->
 <xsl:template match="&ASIDE-LIKE;">
-    <!-- environment, title, label string -->
+    <!-- environment, title, label string, newline -->
     <xsl:text>\begin{</xsl:text>
     <xsl:value-of select="local-name(.)" />
-    <xsl:text>}{</xsl:text>
-    <xsl:apply-templates select="." mode="title-full"/>
-    <xsl:text>}{</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id"/>
-    <xsl:text>}%</xsl:text>
-    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>}</xsl:text>
+    <xsl:apply-templates select="." mode="block-options"/>
+    <xsl:text>%&#xa;</xsl:text>
     <xsl:apply-templates select="p|&FIGURE-LIKE;|sidebyside" />
     <xsl:text>\end{</xsl:text>
     <xsl:value-of select="local-name(.)" />
@@ -5104,27 +5097,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Low-structure content, high-visibility presentation -->
 <!-- Title is optional, keep remainders coordinated      -->
 <xsl:template match="assemblage">
-    <!-- environment, title, label string -->
+    <!-- environment, title, label string, newline -->
     <xsl:text>\begin{</xsl:text>
     <xsl:value-of select="local-name(.)" />
-    <xsl:text>}{</xsl:text>
-    <xsl:apply-templates select="." mode="title-full"/>
-    <xsl:text>}{</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id"/>
-    <xsl:text>}%</xsl:text>
-    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>}</xsl:text>
+    <xsl:apply-templates select="." mode="block-options"/>
+    <xsl:text>%&#xa;</xsl:text>
     <xsl:apply-templates select="p|blockquote|pre|sidebyside|sbsgroup" />
     <xsl:text>\end{</xsl:text>
     <xsl:value-of select="local-name(.)" />
     <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- An objectives element holds a list, surrounded by introduction and conclusion -->
-<xsl:template match="objectives">
-    <xsl:text>\begin{objectives}{</xsl:text>
-    <xsl:call-template name="type-name">
-        <xsl:with-param name="string-id" select="'objectives'" />
-    </xsl:call-template>
+<!-- An objectives or outcomes element holds a list, -->
+<!-- surrounded by introduction and conclusion       -->
+<xsl:template match="objectives|outcomes">
+    <xsl:text>\begin{</xsl:text>
+    <xsl:value-of select="local-name(.)" />
+    <xsl:text>}</xsl:text>
+    <xsl:text>{</xsl:text>
+    <!-- Following is not consistent, might be better to    -->
+    <!-- opt for a default title of one is not provided     -->
+    <!-- Then maybe integrate with "block-options" template -->
+    <xsl:apply-templates select="." mode="type-name"/>
     <xsl:if test="title">
         <xsl:text>: </xsl:text>
         <xsl:apply-templates select="." mode="title-full" />
@@ -5135,26 +5130,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="introduction" />
     <xsl:apply-templates select="ol|ul|dl" />
     <xsl:apply-templates select="conclusion" />
-    <xsl:text>\end{objectives}&#xa;</xsl:text>
-</xsl:template>
-
-<!-- An outcomes element holds a list, surrounded by introduction and conclusion -->
-<xsl:template match="outcomes">
-    <xsl:text>\begin{outcomes}{</xsl:text>
-    <xsl:call-template name="type-name">
-        <xsl:with-param name="string-id" select="'outcomes'" />
-    </xsl:call-template>
-    <xsl:if test="title">
-        <xsl:text>: </xsl:text>
-        <xsl:apply-templates select="." mode="title-full" />
-    </xsl:if>
-    <xsl:text>}</xsl:text>
-    <xsl:apply-templates select="." mode="label"/>
-    <xsl:text>&#xa;</xsl:text>
-    <xsl:apply-templates select="introduction" />
-    <xsl:apply-templates select="ol|ul|dl" />
-    <xsl:apply-templates select="conclusion" />
-    <xsl:text>\end{outcomes}&#xa;</xsl:text>
+    <xsl:text>\end{</xsl:text>
+    <xsl:value-of select="local-name(.)" />
+    <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Named Lists -->
