@@ -36,6 +36,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Intend output for rendering by pdflatex -->
 <xsl:output method="text" />
 
+<!-- "abbr", "acro", "init" -->
+<!-- Simply wild colors, for effect -->
+<!-- Opposite of "red" (?) -->
+<xsl:template match="abbr" mode="tex-macro-style">
+    <xsl:text>\textcolor{-red}{#1}</xsl:text>
+</xsl:template>
+<!-- A "dvipsnames" color -->
+<xsl:template match="acro" mode="tex-macro-style">
+    <xsl:text>\textcolor{JungleGreen}{#1}</xsl:text>
+</xsl:template>
+<!-- A "svgnames" color -->
+<xsl:template match="init" mode="tex-macro-style">
+    <xsl:text>\textcolor{LightCoral}{#1}</xsl:text>
+</xsl:template>
+
 <!-- "commentary" -->
 <!-- No options, so whatever is default tcolorbox -->
 <xsl:template match="commentary" mode="tcb-style">

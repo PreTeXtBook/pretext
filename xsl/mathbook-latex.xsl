@@ -552,6 +552,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% Semantic Macros&#xa;</xsl:text>
     <xsl:text>%% To preserve meaning in a LaTeX file&#xa;</xsl:text>
     <xsl:text>%% Only defined here if required in this document&#xa;</xsl:text>
+    <xsl:variable name="one-line-reps" select="
+        ($document-root//abbr)[1]|
+        ($document-root//acro)[1]|
+        ($document-root//init)[1]"/>
+    <!-- (after fillin before swung-dash) -->
+    <!-- Eventually move explanation of section to condition  -->
+    <xsl:for-each select="$one-line-reps">
+        <xsl:apply-templates select="." mode="tex-macro"/>
+    </xsl:for-each>
     <xsl:if test="$document-root//alert">
         <xsl:text>%% Used for warnings, typically bold and italic&#xa;</xsl:text>
         <xsl:text>\newcommand{\alert}[1]{\textbf{\textit{#1}}}&#xa;</xsl:text>
@@ -647,36 +656,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:message terminate="yes">MBX:ERROR: invalid value <xsl:value-of select="$latex.fillin.style" /> for latex.fillin.style stringparam. Should be 'underline' or 'box'.</xsl:message>
             </xsl:otherwise>
         </xsl:choose>
-    </xsl:if>
-    <!-- lower-casing macro from: http://tex.stackexchange.com/questions/114592/force-all-small-caps -->
-    <!-- Letter-spacing LaTeX: http://tex.stackexchange.com/questions/114578/tufte-running-headers-not-using-full-width-of-page -->
-    <!-- PDF navigation panels has titles as simple strings,    -->
-    <!-- devoid of any formatting, so we just give up, as any   -->
-    <!-- attempt to use title-specific macros, \texorpdfstring, -->
-    <!-- \protect, \DeclareRobustCommand does not help get      -->
-    <!-- ToC, PDF navigation panel, text heading all correct    -->
-    <!-- Obstacle is that sc shape does not come in bold,       -->
-    <!-- http://tex.stackexchange.com/questions/17830/using-textsc-within-section -->
-    <xsl:if test="$document-root//abbr">
-        <xsl:text>%% Used to markup abbreviations, text or titles&#xa;</xsl:text>
-        <xsl:text>%% default is small caps (Bringhurst, 4e, 3.2.2, p. 48)&#xa;</xsl:text>
-        <xsl:text>%% Titles are no-ops now, see comments in XSL source&#xa;</xsl:text>
-        <xsl:text>\newcommand{\abbreviation}[1]{\textsc{\MakeLowercase{#1}}}&#xa;</xsl:text>
-        <xsl:text>\DeclareRobustCommand{\abbreviationintitle}[1]{\texorpdfstring{#1}{#1}}&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:if test="$document-root//acro">
-        <xsl:text>%% Used to markup acronyms, text or titles&#xa;</xsl:text>
-        <xsl:text>%% default is small caps (Bringhurst, 4e, 3.2.2, p. 48)&#xa;</xsl:text>
-        <xsl:text>%% Titles are no-ops now, see comments in XSL source&#xa;</xsl:text>
-        <xsl:text>\newcommand{\acronym}[1]{\textsc{\MakeLowercase{#1}}}&#xa;</xsl:text>
-        <xsl:text>\DeclareRobustCommand{\acronymintitle}[1]{\texorpdfstring{#1}{#1}}&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:if test="$document-root//init">
-        <xsl:text>%% Used to markup initialisms, text or titles&#xa;</xsl:text>
-        <xsl:text>%% default is small caps (Bringhurst, 4e, 3.2.2, p. 48)&#xa;</xsl:text>
-        <xsl:text>%% Titles are no-ops now, see comments in XSL source&#xa;</xsl:text>
-        <xsl:text>\newcommand{\initialism}[1]{\textsc{\MakeLowercase{#1}}}&#xa;</xsl:text>
-        <xsl:text>\DeclareRobustCommand{\initialismintitle}[1]{\texorpdfstring{#1}{#1}}&#xa;</xsl:text>
     </xsl:if>
     <!-- http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/ -->
     <xsl:if test="$document-root//swungdash">
@@ -1945,6 +1924,45 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
+<!-- ####################### -->
+<!-- LaTeX Macro Definitions -->
+<!-- ####################### -->
+
+<!-- These are not yet meant for style writer use. -->
+
+<!-- Abbreviations, Acronyms, Initialisms, -->
+<!-- "abbr", "acro", "init"                -->
+<!-- Body: \abbreviation{ABC}              -->
+<!-- Titles: \abbreviationuntitle{ABC}     -->
+<!-- PDF navigation panels has titles as simple strings,    -->
+<!-- devoid of any formatting, so we just give up, as any   -->
+<!-- attempt to use title-specific macros, \texorpdfstring, -->
+<!-- \protect, \DeclareRobustCommand does not help get      -->
+<!-- ToC, PDF navigation panel, text heading all correct    -->
+<!-- Obstacle is that sc shape does not come in bold,       -->
+<!-- http://tex.stackexchange.com/questions/17830/using-textsc-within-section -->
+<xsl:template match="abbr" mode="tex-macro">
+    <xsl:text>\newcommand{\abbreviation}[1]{</xsl:text>
+    <xsl:text>%% Used to markup abbreviations, text or titles&#xa;</xsl:text>
+    <xsl:apply-templates select="." mode="tex-macro-style"/>
+    <xsl:text>}&#xa;</xsl:text>
+    <xsl:text>\DeclareRobustCommand{\abbreviationintitle}[1]{\texorpdfstring{#1}{#1}}&#xa;</xsl:text>
+</xsl:template>
+<xsl:template match="acro" mode="tex-macro">
+    <xsl:text>%% Used to markup acronyms, text or titles&#xa;</xsl:text>
+    <xsl:text>\newcommand{\acronym}[1]{</xsl:text>
+    <xsl:apply-templates select="." mode="tex-macro-style"/>
+    <xsl:text>}&#xa;</xsl:text>
+    <xsl:text>\DeclareRobustCommand{\acronymintitle}[1]{\texorpdfstring{#1}{#1}}&#xa;</xsl:text>
+</xsl:template>
+<xsl:template match="init" mode="tex-macro">
+    <xsl:text>%% Used to markup initialisms, text or titles&#xa;</xsl:text>
+    <xsl:text>\newcommand{\initialism}[1]{</xsl:text>
+    <xsl:apply-templates select="." mode="tex-macro-style"/>
+    <xsl:text>}&#xa;</xsl:text>
+    <xsl:text>\DeclareRobustCommand{\initialismintitle}[1]{\texorpdfstring{#1}{#1}}&#xa;</xsl:text>
+</xsl:template>
+
 <!-- ############################# -->
 <!-- LaTeX Environment Definitions -->
 <!-- ############################# -->
@@ -2187,6 +2205,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 4.  The tcolorbox "title" option is set in the environment      -->
 <!-- 5.  End lists of styling options with a trailing comma          -->
 
+<!-- "abbr", "acro", "init" -->
+<!-- We default to small caps for abbreviations, acronyms, and  -->
+<!-- initialisms.  See Bringhurst, 4e, 3.2.2, p. 48.  These can -->
+<!-- be overridden with simply "#1" to provide macros that just -->
+<!-- repeat their arguments.                                    -->
+<!-- lower-casing macro:  ("force-all-small-caps") at           -->
+<!-- http://tex.stackexchange.com/questions/114592/             -->
+<xsl:template match="abbr|acro|init" mode="tex-macro-style">
+    <xsl:text>\textsc{\MakeLowercase{#1}}</xsl:text>
+</xsl:template>
 
 <!-- "commentary" -->
 <!-- "Greg's L" with tcolorbox and tikz code. The "enhanced" -->
