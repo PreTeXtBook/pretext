@@ -328,7 +328,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="$document-class-prefix" />
     <xsl:text>article}&#xa;</xsl:text>
     <xsl:call-template name="latex-preamble" />
-    <xsl:text>\begin{document}&#xa;%&#xa;</xsl:text>
+    <xsl:text>\begin{document}&#xa;</xsl:text>
     <xsl:apply-templates />
     <xsl:text>\end{document}&#xa;</xsl:text>
 </xsl:template>
@@ -3385,12 +3385,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Information to console for latex run -->
+<!-- Generally these precede structural divisions, so some -->
+<!-- nearly-blank lines provide some visual organization   -->
 <xsl:template match="*" mode="console-typeout">
+    <xsl:text>%&#xa;</xsl:text>
+    <xsl:text>%&#xa;</xsl:text>
     <xsl:text>\typeout{************************************************}&#xa;</xsl:text>
     <xsl:text>\typeout{</xsl:text>
     <xsl:apply-templates select="." mode="long-name" />
     <xsl:text>}&#xa;</xsl:text>
     <xsl:text>\typeout{************************************************}&#xa;</xsl:text>
+    <xsl:text>%&#xa;</xsl:text>
 </xsl:template>
 
 <!-- ############################ -->
@@ -5170,6 +5175,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- TODO: maybe we could look backward at the end of a paragraph       -->
 <!-- to see if the above scenario happens, and we could end gracefully. -->
+<!-- Note: a commentary may be present in PTX, but not in LaTeX         -->
 <xsl:template match="p">
     <xsl:if test="preceding-sibling::*[not(&SUBDIVISION-METADATA-FILTER;)][1][self::p or self::paragraphs or self::commentary or self::sidebyside]">
         <xsl:text>\par&#xa;</xsl:text>
@@ -7068,7 +7074,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="*[not(self::caption)]"/>
     <xsl:text>\par&#xa;</xsl:text>
     <xsl:apply-templates select="caption" />
-    <xsl:text>&#xa;</xsl:text>
     <xsl:text>\end{listing}&#xa;</xsl:text>
 </xsl:template>
 
