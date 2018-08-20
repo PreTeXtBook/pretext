@@ -57,7 +57,7 @@
 
         <p>We once provided a <term>document type definition</term><idx>document type definition</idx> (<init>DTD</init><idx><h>DTD</h><see>document type definition</see></idx>) as a description of the <pretext /> vocabulary.  <url href="http://rellek.net/home/">Mitch Keller</url> wrote an excellent initial version of this chapter to help others understand similar principles in the context of the <init>DTD</init>.  However, the <init>DTD</init> was not sufficiently flexible to handle elements that behave differently in different locations, such as an <tag>introduction</tag> to a <tag>chapter</tag> versus an <tag>introduction</tag> to an <tag>exercisegroup</tag>.  As further evidence, <c>trang</c> will knowingly refuse to convert the <pretext /> schema to a <init>DTD</init> since the <init>DTD</init> syntax is not sufficiently expressive to describe <pretext />.</p>
 
-        <p>If you are intersted in conversions, more tools can be found at <url href="http://relaxng.org/"><c>relaxng.org</c></url> and we have information on installation in <xref ref="schema-install" />.  We would be pleased to learn more about authors' experiences with other converters.</p>
+        <p>If you are interested in conversions, more tools can be found at <url href="http://relaxng.org/"><c>relaxng.org</c></url> and we have information on installation in <xref ref="schema-install" />.  We would be pleased to learn more about authors' experiences with other converters.</p>
     </section>
 
     <section xml:id="schema-reading-relaxng">
