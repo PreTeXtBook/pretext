@@ -745,6 +745,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>  \popQED\endtrivlist\@endpefalse&#xa;</xsl:text>
         <xsl:text>}&#xa;</xsl:text>
         <xsl:text>\makeatother&#xa;</xsl:text>
+        <xsl:text>%% And a filled-in Halmos, making hollow available for examples&#xa;</xsl:text>
+        <xsl:text>\renewcommand{\qedsymbol}{\(\blacksquare\)}&#xa;</xsl:text>
     </xsl:if>
     <!-- Groups of environments/blocks -->
     <!-- Variables hold exactly one node of each type in use -->
@@ -2267,11 +2269,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- environments.  But ideally, we would split out    -->
 <!-- this piece into a template for just theorems      -->
 <!-- and axioms.                                       -->
-<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|exercise[not(parent::exercises or parent::worksheet)]|assemblage|&ASIDE-LIKE;" mode="tcb-style">
-    <xsl:text>size=minimal, boxrule=-0.3pt, frame empty, colback=white, colbacktitle=white, coltitle=black, fonttitle=\normalfont\bfseries, attach title to upper, after title={\space}</xsl:text>
+<!-- DEFINITION-LIKE and EXAMPLE-LIKE are exceptional  -->
+<!-- in that markers are inserted with "after upper"   -->
+<!-- to indicate the end of the environment.           -->
+<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|exercise[not(parent::exercises or parent::worksheet)]|assemblage|&ASIDE-LIKE;" mode="tcb-style">
+    <xsl:text>size=minimal, boxrule=-0.3pt, frame empty, colback=white, colbacktitle=white, coltitle=black, fonttitle=\normalfont\bfseries, attach title to upper, after title={\space}, </xsl:text>
 </xsl:template>
 
-<!-- This is the gross default, acreoss all objects and all styles -->
+<xsl:template match="&DEFINITION-LIKE;" mode="tcb-style">
+    <xsl:text>size=minimal, boxrule=-0.3pt, frame empty, colback=white, colbacktitle=white, coltitle=black, fonttitle=\normalfont\bfseries, attach title to upper, after title={\space}, after upper={\hfill{}\(\lozenge\)}, </xsl:text>
+</xsl:template>
+
+<xsl:template match="&EXAMPLE-LIKE;" mode="tcb-style">
+    <xsl:text>size=minimal, boxrule=-0.3pt, frame empty, colback=white, colbacktitle=white, coltitle=black, fonttitle=\normalfont\bfseries, attach title to upper, after title={\space}, after upper={\hfill{}\(\square\)}, </xsl:text>
+</xsl:template>
+
+<!-- This is the gross default, across all objects and all styles -->
 <!-- It is convenient for development, testing, and convenience    -->
 <xsl:template match="*" mode="tcb-style" />
 
