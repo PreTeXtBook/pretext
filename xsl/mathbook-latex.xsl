@@ -2204,6 +2204,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 3.  Run the LaTeX compilation at least twice before giving up   -->
 <!-- 4.  The tcolorbox "title" option is set in the environment      -->
 <!-- 5.  End lists of styling options with a trailing comma          -->
+<!-- 6.  tcolorbox, boxrule=-0.3pt seems necessary to avoid          -->
+<!--     very faint lines/rules appearing in some PDF viewers,       -->
+<!--     not clear if "frame empty" is also necessary                -->
 
 <!-- "abbr", "acro", "init" -->
 <!-- We default to small caps for abbreviations, acronyms, and  -->
@@ -2229,14 +2232,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "objectives" -->
 <!-- Rules top and bottom, title on its own line, as a heading -->
 <xsl:template match="objectives" mode="tcb-style">
-    <xsl:text>size=minimal, colback=white, colbacktitle=white, coltitle=black, fonttitle=\large\bfseries, toprule=0.1ex, toptitle=0.5ex, top=2ex, bottom=0.5ex, bottomrule=0.1ex</xsl:text>
+    <xsl:text>size=minimal, boxrule=-0.3pt, colback=white, colbacktitle=white, coltitle=black, fonttitle=\large\bfseries, toprule=0.1ex, toptitle=0.5ex, top=2ex, bottom=0.5ex, bottomrule=0.1ex</xsl:text>
 </xsl:template>
 
 <!-- "outcomes" -->
 <!-- Differs only by spacing prior, this could go away  -->
 <!-- if headings, etc handle vertical space correctly   -->
 <xsl:template match="outcomes" mode="tcb-style">
-    <xsl:text>size=minimal, colback=white, colbacktitle=white, coltitle=black, fonttitle=\large\bfseries, toprule=0.1ex, toptitle=0.5ex, top=2ex, bottom=0.5ex, bottomrule=0.1ex, before skip=2ex</xsl:text>
+    <xsl:text>size=minimal, boxrule=-0.3pt, colback=white, colbacktitle=white, coltitle=black, fonttitle=\large\bfseries, toprule=0.1ex, toptitle=0.5ex, top=2ex, bottom=0.5ex, bottomrule=0.1ex, before skip=2ex</xsl:text>
 </xsl:template>
 
 <!-- THEOREM-LIKE: "theorem", "corollary", "lemma",    -->
@@ -2265,7 +2268,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- this piece into a template for just theorems      -->
 <!-- and axioms.                                       -->
 <xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|exercise[not(parent::exercises or parent::worksheet)]|assemblage|&ASIDE-LIKE;" mode="tcb-style">
-    <xsl:text>size=minimal, colback=white, colbacktitle=white, coltitle=black, fonttitle=\normalfont\bfseries, attach title to upper, after title={\space}</xsl:text>
+    <xsl:text>size=minimal, boxrule=-0.3pt, frame empty, colback=white, colbacktitle=white, coltitle=black, fonttitle=\normalfont\bfseries, attach title to upper, after title={\space}</xsl:text>
 </xsl:template>
 
 <!-- This is the gross default, acreoss all objects and all styles -->
