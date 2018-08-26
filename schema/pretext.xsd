@@ -1631,6 +1631,7 @@
       <xs:attribute name="preview"/>
       <xs:attribute name="source"/>
       <xs:attribute name="youtube"/>
+      <xs:attribute name="youtubeplaylist"/>
     </xs:complexType>
   </xs:element>
   <xs:attributeGroup name="AttributesSourceFile">
@@ -1638,6 +1639,9 @@
   </xs:attributeGroup>
   <xs:attributeGroup name="AttributesYouTube">
     <xs:attribute name="youtube" use="required"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="AttributesYouTubePlaylist">
+    <xs:attribute name="youtubeplaylist" use="required"/>
   </xs:attributeGroup>
   <xs:group name="ExerciseBody">
     <xs:sequence>
