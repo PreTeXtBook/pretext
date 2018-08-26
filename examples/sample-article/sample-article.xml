@@ -4325,7 +4325,7 @@ the xsltproc executable.
             <!-- A Coursera URL that expires via digital signature scheme:
             https://d18ky98rnyall9.cloudfront.net/u5_p4_1_%20chisq_gof.77c96ac0ad8211e498e5e34296ce5455/full/360p/index.webm?Expires=1522800000&Signature=DJKrmAOfuGF4HMmWmQ2nCHnOdoeFzZd7qJzp1cfwOjQa-J~1kGNzwllMxFmGi8UXxt3wTXrhdhTQVcFQNk5nPzAi64mjJkMVu0m~QyKISqzjkFBZJm1NCnkNcbSyOk6WRDj6mjlrxEDaUSD6hHmD04ehumORG3G55Sp5OGEhYnU_&Key-Pair-Id=APKAJLTNE6QMUY6HBC5A -->
 
-            <p>YouTube<idx><h>YouTube videos</h></idx><idx><h>videos</h><h>YouTube</h></idx> videos may be embedded with only knowledge of the <q>ID</q>.  This a string of eleven seemingly random characters that show up in the URL when you watch a video.  For the Led Zeppelin performance below, the ID is <c>hAzdgU_kpGo</c>, which you might normally watch directly from the URL <url href="https://www.youtube.com/watch?v=hAzdgU_kpGo" />.  Screen real estate is determined by specifying an optional <c>@width</c> attribute as a percentage, and aspect ratio is preserved on the assumption of HD video (16:9).  (Enhancements will include other aspect ratios.)</p>
+            <p>YouTube<idx><h>YouTube videos</h></idx><idx><h>videos</h><h>YouTube</h></idx> videos may be embedded with only knowledge of a video's <q>ID</q> or a <q>playlist ID</q>.  A single video's YouTube ID is a string of eleven seemingly random characters that show up in the URL when you watch a video.  For the Led Zeppelin performance below, the ID is <c>hAzdgU_kpGo</c>, which you might normally watch directly from the URL <url href="https://www.youtube.com/watch?v=hAzdgU_kpGo" />.  Screen real estate is determined by specifying an optional <c>@width</c> attribute as a percentage, and aspect ratio is preserved on the assumption of HD video (16:9).  (Enhancements will include other aspect ratios.)</p>
 
             <p>If you have ever owned a drone, you sympathize with this guy.  Way funnier than a cat video.</p>
 
@@ -4387,7 +4387,22 @@ the xsltproc executable.
                 </figure>
             </sidebyside>
 
-            <p>Videos may be embedded, or popped-out to play in a new window or tab (at greater width), or a link will give the reader the option to choose either style of playback.  The automatic pop-out option requires a static thumbnail image is available.  (For YouTube, these iamges can be obtained automatically with the <c>mbx</c> script.)</p>
+            <p>A YouTube <q>playlist</q> can be built in one of two ways. You may specify the <c>youtube</c> attribute to be a space-separated list of several video IDs. Alternatively, you may set the <c>youtubeplaylist</c> attribute to a YouTube playlist ID.</p>
+
+            <sidebyside margins="10%" widths="35% 35%">
+                <figure>
+                    <caption>Invidual IDs Specified</caption>
+                    <video youtube="6tlSx0jkuLM FeJkDewhTEw" />
+                    <!-- https://www.youtube.com/embed?playlist=6tlSx0jkuLM,FeJkDewhTEw -->
+                </figure>
+                <figure>
+                    <caption>YouTube Playlist ID</caption>
+                    <video youtubeplaylist="PLjH4YJfu1WfE2bciiQZ7Ci0TiIDzYE3HJ" />
+                    <!-- https://www.youtube.com/embed?listType=playlist&list=PLjH4YJfu1WfE2bciiQZ7Ci0TiIDzYE3HJ -->
+                </figure>
+            </sidebyside>
+
+            <p>Videos may be embedded, or popped-out to play in a new window or tab (at greater width), or a link will give the reader the option to choose either style of playback.  The automatic pop-out option requires a static thumbnail image.  (For YouTube, these images can be obtained automatically with the <c>mbx</c> script.)</p>
 
             <figure>
                 <caption>YouTube Play Location Options (<c>play-at</c> attribute)</caption>
