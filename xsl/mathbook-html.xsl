@@ -476,6 +476,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- "introduction" and "conclusion", and "appendix".      -->
     <!-- Result is strict part -> subsubsection hierachy.      -->
     <!-- Find it in mathbook-common.xsl                        -->
+    <!-- NB: this should go away once we count hN levels from  -->
+    <!-- the root of an HTML page, then "division-name" may    -->
+    <!-- become a pure-LaTeX temnplate                         -->
     <xsl:variable name="normalized-division-name">
         <xsl:apply-templates select="." mode="division-name" />
     </xsl:variable>
@@ -496,6 +499,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="$normalized-division-name = 'subsubsection'">
                 <xsl:text>h4</xsl:text>
             </xsl:when>
+            <xsl:when test="$normalized-division-name = 'paragraph'">
+                <xsl:text>h5</xsl:text>
+            </xsl:when>
             <!-- any bug will be exposed by "division-name" template -->
             <xsl:otherwise />
         </xsl:choose>
@@ -515,6 +521,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
     <xsl:apply-templates select="." mode="permalink" />
 </xsl:template>
+
+<!-- THIS NEXT BIT IS ONLY FOR HTML AND SHOULD NOT BE       -->
+<!-- TAKEN SERIOUSLY, BE SURE TO REMOVE IT WHEN THE         -->
+<!-- "division-name" TEMPLATE MIGRATES FROM COMMON TO LATEX -->
+<xsl:template match="colophon|biography|dedication" mode="division-name">
+    <xsl:text>chapter</xsl:text>
+</xsl:template>
+
 
 <!-- Add an author's names, if present   -->
 <!-- TODO: make match more restrictive?  -->
