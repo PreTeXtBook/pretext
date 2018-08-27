@@ -17,6 +17,7 @@
         <title>Best Practices</title>
         <list-of elements="note" />
     </appendix>
+    <xi:include href="latex-conversion.xml" />
     <xi:include href="editors.xml" />
     <xi:include href="schema-install.xml" />
     <xi:include href="git.xml" />
