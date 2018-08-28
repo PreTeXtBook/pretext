@@ -3666,7 +3666,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="exercisegroup/introduction">
-    <xsl:text>\par\noindent </xsl:text>
     <xsl:apply-templates select="*" />
 </xsl:template>
 
@@ -4530,18 +4529,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Commentary goes in an introduction and/or conclusion   -->
 <!-- When we point to these, we use custom hypertarget, etc -->
 <xsl:template match="exercisegroup">
+    <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
     <xsl:if test="title">
-        <xsl:text>\subparagraph</xsl:text>
-        <!-- keep optional title if LaTeX source is re-purposed -->
-        <xsl:text>[{</xsl:text>
-        <xsl:apply-templates select="." mode="title-simple" />
-        <xsl:text>}]</xsl:text>
-        <xsl:text>{</xsl:text>
+        <xsl:text>\textbf{</xsl:text>
         <xsl:apply-templates select="." mode="title-full" />
-        <xsl:text>}</xsl:text>
+        <xsl:text>}\space\space</xsl:text>
     </xsl:if>
     <xsl:apply-templates select="." mode="label" />
-    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>%&#xa;</xsl:text>
     <xsl:apply-templates select="introduction" />
     <xsl:text>\begin{exercisegroup}{</xsl:text>
     <xsl:choose>
@@ -4562,8 +4557,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="b-has-solution" select="$b-has-divisional-solution" />
         </xsl:apply-templates>
     <xsl:text>\end{exercisegroup}&#xa;</xsl:text>
-    <xsl:text>\par\noindent%&#xa;</xsl:text>
-    <xsl:apply-templates select="conclusion" />
+    <xsl:if test="conclusion">
+        <xsl:text>\par\noindent%&#xa;</xsl:text>
+        <xsl:apply-templates select="conclusion" />
+    </xsl:if>
     <xsl:text>\par\medskip\noindent&#xa;</xsl:text>
 </xsl:template>
 
