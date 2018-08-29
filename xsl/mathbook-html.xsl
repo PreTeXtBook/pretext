@@ -5638,7 +5638,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- dimensions and autoplay as parameters        -->
 <!-- Normally $preview is true, and not passed in -->
 <!-- 'false' is an override for standalone pages  -->
-<xsl:template match="video[@youtube]" mode="video-embed">
+<xsl:template match="video[@youtube|@youtubeplaylist]" mode="video-embed">
     <xsl:param name="width" select="''" />
     <xsl:param name="height" select="''" />
     <xsl:param name="preview" select="'true'" />
@@ -5705,16 +5705,32 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Creates a YouTube URL for embedding, typically in an iframe -->
 <!-- autoplay for popout, otherwise not                          -->
-<xsl:template match="video[@youtube]" mode="youtube-embed-url">
+<xsl:template match="video[@youtube|@youtubeplaylist]" mode="youtube-embed-url">
     <xsl:param name="autoplay" select="'false'" />
-    <xsl:text>https://www.youtube.com/embed/</xsl:text>
-    <xsl:value-of select="@youtube" />
-    <!-- alphabetical, ? separator first -->
-    <!-- enables keyboard controls       -->
-    <xsl:text>?disablekd=1</xsl:text>
+    <xsl:text>https://www.youtube.com/embed</xsl:text>
+    <xsl:choose>
+        <!-- playlist with a YouTube ID -->
+        <xsl:when test="@youtubeplaylist">
+            <xsl:text>?listType=playlist&amp;list=</xsl:text>
+            <xsl:value-of select="@youtubeplaylist" />
+            <xsl:text>&amp;modestbranding=1</xsl:text>
+        </xsl:when>
+        <!-- now there must be a @youtube          -->
+        <!-- playlist built from YouTube video IDs -->
+        <xsl:when test="contains(@youtube, ' ') or contains(@youtube, ',')">
+            <xsl:text>?playlist=</xsl:text>
+            <!-- replace any commas with spaces, then normalize space, then replace spaces with commmas -->
+            <xsl:value-of select="str:replace(normalize-space(str:replace(@youtube, ',', ' ')), ' ', ',')" />
+            <xsl:text>&amp;modestbranding=1</xsl:text>
+        </xsl:when>
+        <!-- a single video ID -->
+        <xsl:otherwise>
+            <xsl:text>/</xsl:text>
+            <xsl:value-of select="@youtube" />
+            <xsl:text>?modestbranding=1</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
     <!-- use &amp; separator for remainder -->
-    <!-- modest branding -->
-    <xsl:text>&amp;modestbranding=1</xsl:text>
     <!-- kill related videos at end -->
     <xsl:text>&amp;rel=0</xsl:text>
     <xsl:if test="@start">
