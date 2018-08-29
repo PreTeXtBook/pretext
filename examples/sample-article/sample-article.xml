@@ -4389,9 +4389,9 @@ the xsltproc executable.
 
             <p>A YouTube <q>playlist</q> can be built in one of two ways. You may specify the <c>youtube</c> attribute to be a space-separated list of several video IDs. Alternatively, you may set the <c>youtubeplaylist</c> attribute to a YouTube playlist ID.</p>
 
-            <sidebyside margins="10%" widths="35% 35%">
+            <sidebyside margins="0%" widths="47% 47%">
                 <figure>
-                    <caption>Invidual IDs Specified</caption>
+                    <caption>Individual IDs Specified</caption>
                     <video youtube="6tlSx0jkuLM FeJkDewhTEw" />
                     <!-- https://www.youtube.com/embed?playlist=6tlSx0jkuLM,FeJkDewhTEw -->
                 </figure>
