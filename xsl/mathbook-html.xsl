@@ -5712,27 +5712,32 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- playlist with a YouTube ID -->
         <xsl:when test="@youtubeplaylist">
             <xsl:text>?listType=playlist&amp;list=</xsl:text>
-            <xsl:value-of select="@youtubeplaylist" />
-            <xsl:text>&amp;modestbranding=1</xsl:text>
+            <xsl:value-of select="normalize-space(@youtubeplaylist)" />
+            <xsl:text>&amp;</xsl:text>
         </xsl:when>
         <!-- now there must be a @youtube          -->
         <!-- playlist built from YouTube video IDs -->
-        <xsl:when test="contains(@youtube, ' ') or contains(@youtube, ',')">
+        <xsl:when test="contains(normalize-space(@youtube), ' ') or contains(@youtube, ',')">
             <xsl:text>?playlist=</xsl:text>
             <!-- replace any commas with spaces, then normalize space, then replace spaces with commmas -->
+            <!-- final result should have no spaces; just the IDs separated by commas                   -->
             <xsl:value-of select="str:replace(normalize-space(str:replace(@youtube, ',', ' ')), ' ', ',')" />
-            <xsl:text>&amp;modestbranding=1</xsl:text>
+            <xsl:text>&amp;</xsl:text>
         </xsl:when>
         <!-- a single video ID -->
         <xsl:otherwise>
             <xsl:text>/</xsl:text>
-            <xsl:value-of select="@youtube" />
-            <xsl:text>?modestbranding=1</xsl:text>
+            <!-- normalize-space here to forgive leading or trailing space -->
+            <xsl:value-of select="normalize-space(@youtube)" />
+            <xsl:text>?</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
+    <!-- either ? or &amp; separator prepped in xsl:choose above -->
+    <xsl:text>modestbranding=1</xsl:text>
     <!-- use &amp; separator for remainder -->
     <!-- kill related videos at end -->
     <xsl:text>&amp;rel=0</xsl:text>
+    <!-- start and end times; for a playlist these are applied to first video -->
     <xsl:if test="@start">
         <xsl:text>&amp;start=</xsl:text>
         <xsl:value-of select="@start" />
