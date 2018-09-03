@@ -440,9 +440,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <li>
         <a href="{$url}">
-            <!-- important not include codenumber span           -->
-            <!-- Either does not exist, or suppress as redundant -->
-            <xsl:if test="not($num = '' or self::references or self::solutions[not(parent::backmatter)] or self::exercises[count(parent::*/exercises)=1] or self::worksheet[count(parent::*/worksheet)=1])">
+            <!-- do not include an empty codenumber span -->
+            <xsl:if test="not($num = '')">
                 <span class="codenumber">
                     <xsl:value-of select="$num" />
                 </span>
@@ -560,12 +559,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </span>
 </xsl:template>
 
-<!-- References, Exercises, Solutions are universal subdivisions -->
-<!-- We give them a localized "type" computed from their level   -->
-<!-- We never show the number of a "references", where born.     -->
-<!-- We only show a "solutions" number at birth in "backmatter". -->
-<!-- We show "exercises" number at birth, if multiple.           -->
-<xsl:template match="exercises|worksheet|solutions|references" mode="header-content">
+<!-- Exercises, Solutions, References, Worksheets -->
+<!-- We give them a localized "type" computed from     -->
+<!-- their level. Numbers are displayed for structured -->
+<!-- divisions, but not for unstructured divisions.    -->
+<xsl:template match="exercises|solutions|references|worksheet" mode="header-content">
     <span class="type">
         <xsl:call-template name="type-name">
             <xsl:with-param name="string-id">
@@ -574,11 +572,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:call-template>
     </span>
     <xsl:text> </xsl:text>
+    <!-- be selective about showing numbers -->
+    <xsl:variable name="is-structured">
+        <xsl:apply-templates select="parent::*" mode="is-structured-division"/>
+    </xsl:variable>
+    <xsl:variable name="b-is-structured" select="$is-structured = 'true'"/>
     <span class="codenumber">
-        <!-- be selective about showing numbers -->
-        <xsl:if test="self::solutions[parent::backmatter] or self::exercises[count(parent::*/exercises)>1] or self::worksheet[count(parent::*/worksheet)>1]">
-            <xsl:apply-templates select="." mode="number" />
-        </xsl:if>
+        <xsl:choose>
+            <xsl:when test="self::references[parent::backmatter]"/>
+            <xsl:when test="$b-is-structured or self::solutions[parent::backmatter]">
+                <xsl:apply-templates select="." mode="number" />
+            </xsl:when>
+            <xsl:otherwise/>
+        </xsl:choose>
     </span>
     <xsl:text> </xsl:text>
     <span>
