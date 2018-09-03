@@ -3460,11 +3460,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- See http://tex.stackexchange.com/questions/99495             -->
 <!-- LaTeX3e with the xparse package might make this unnecessary  -->
 
-<xsl:template match="part|chapter|section|subsection|subsubsection|exercises[count(parent::*/exercises) > 1]|worksheet[count(parent::*/worksheet) > 1]" mode="latex-division-heading">
-    <xsl:if test="self::worksheet">
-        <!-- \newgeometry includes a \clearpage -->
-        <xsl:apply-templates select="." mode="new-geometry"/>
-    </xsl:if>
+<xsl:template match="part|chapter|section|subsection|subsubsection" mode="latex-division-heading">
     <xsl:text>\</xsl:text>
     <xsl:apply-templates select="." mode="division-name" />
     <xsl:text>[{</xsl:text>
@@ -3500,19 +3496,37 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Following elements never have their number displayed at birth -->
-<!-- since they are unique either (a) within the document (as part -->
-<!-- of the back matter), or (b) within some division (chapter,    -->
-<!-- section,...).  So we use a *-form and manually create a ToC   -->
-<!-- entry with a "simple" title at the right level.               -->
-<xsl:template match="solutions|references|exercises[count(parent::*/exercises) = 1]|worksheet[count(parent::*/worksheet) = 1]" mode="latex-division-heading">
+<!-- Specialized divisions are numbered just like         -->
+<!-- other divisions, if within a division structured     -->
+<!-- by subdivisons.  Otherwise they are limited by the   -->
+<!-- schema to one per division and when referenced their -->
+<!-- number will be that of the containing division.      -->
+<xsl:template match="exercises|solutions[not(parent::backmatter)]|references|worksheet" mode="latex-division-heading">
     <xsl:if test="self::worksheet">
         <!-- \newgeometry includes a \clearpage -->
         <xsl:apply-templates select="." mode="new-geometry"/>
     </xsl:if>
+    <!-- Inspect parent (part through subsubsection)  -->
+    <!-- to determine one of two models of a division -->
+    <!-- NB: return values are 'true' and empty       -->
+    <xsl:variable name="is-structured">
+        <xsl:apply-templates select="parent::*" mode="is-structured-division"/>
+    </xsl:variable>
+    <xsl:variable name="b-is-structured" select="$is-structured = 'true'"/>
     <xsl:text>\</xsl:text>
     <xsl:apply-templates select="." mode="division-name" />
-    <xsl:text>*</xsl:text>
+    <!-- optional simple title if numbered, or -->
+    <!-- starred form if not visually numbered -->
+    <xsl:choose>
+        <xsl:when test="$b-is-structured">
+            <xsl:text>[{</xsl:text>
+            <xsl:apply-templates select="." mode="title-simple"/>
+            <xsl:text>}]</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>*</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
     <xsl:text>{</xsl:text>
     <xsl:apply-templates select="." mode="title-full"/>
     <xsl:text>}</xsl:text>
@@ -3521,14 +3535,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- We add a ToC entry for the starred versions. These may be    -->
     <!-- generated for divisions that are below the ToC display       -->
     <!-- level, but they do not render as the ToC level prevails      -->
-    <!-- NB: an optional short title on a starred form caused a LaTeX -->
-    <!-- compilation that rendered poorly, which we never figured     -->
-    <!-- out, so we just avoid that combination (2018-04-12)          -->
-    <xsl:text>\addcontentsline{toc}{</xsl:text>
-    <xsl:apply-templates select="." mode="division-name" />
-    <xsl:text>}{</xsl:text>
-    <xsl:apply-templates select="." mode="title-simple" />
-    <xsl:text>}&#xa;</xsl:text>
+    <xsl:if test="not($b-is-structured)">
+        <xsl:text>\addcontentsline{toc}{</xsl:text>
+        <xsl:apply-templates select="." mode="division-name" />
+        <xsl:text>}{</xsl:text>
+        <xsl:apply-templates select="." mode="title-simple" />
+        <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <!-- Exceptional, for a worksheet only, we clear the page  -->
