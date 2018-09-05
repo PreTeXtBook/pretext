@@ -5845,8 +5845,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Natural override for YouTube videos               -->
 <!-- Better - standalone page, with "View on You Tube" -->
 <xsl:template match="video[@youtube]" mode="static-url">
+    <xsl:apply-templates select="." mode="youtube-view-url" />
+    <xsl:if test="@start">
+        <xsl:text>\&amp;start=</xsl:text>
+        <xsl:value-of select="@start" />
+    </xsl:if>
+    <xsl:if test="@end">
+        <xsl:text>\&amp;end=</xsl:text>
+        <xsl:value-of select="@end" />
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="video[@youtubeplaylist]" mode="static-url">
+    <xsl:variable name="youtubeplaylist" select="normalize-space(str:replace(@youtubeplaylist, ',', ' '))" />
+    <xsl:variable name="first" select="substring-before(concat($youtubeplaylist, ' '), ' ')" />
     <xsl:text>https://www.youtube.com/watch?v=</xsl:text>
-    <xsl:value-of select="@youtube" />
+    <xsl:value-of select="$first" />
+    <xsl:text>&amp;list=</xsl:text>
+    <xsl:value-of select="$youtubeplaylist" />
     <xsl:if test="@start">
         <xsl:text>\&amp;start=</xsl:text>
         <xsl:value-of select="@start" />
@@ -5881,6 +5897,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\includegraphics[width=0.80\linewidth,height=\qrsize,keepaspectratio]{</xsl:text>
             <xsl:value-of select="@preview" />
             <xsl:text>}</xsl:text>
+        </xsl:when>
+        <!-- No good way to scrape image from a playlist, so do as with @preview='generic' for now -->
+        <xsl:when test="@youtubeplaylist">
+            <xsl:text>\resizebox{!}{\qrsize}{\genericpreview}</xsl:text>
         </xsl:when>
         <!-- nothing specified, look for scraped via internal-id -->
         <xsl:otherwise>
@@ -5937,8 +5957,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>YouTube: </xsl:text>
             <xsl:variable name="visual-url">
                 <c>
-                    <xsl:text>www.youtube.com/watch?v=</xsl:text>
-                    <xsl:value-of select="@youtube" />
+                    <xsl:apply-templates select="." mode="youtube-view-url" />
                 </c>
             </xsl:variable>
             <xsl:apply-templates select="exsl:node-set($visual-url)" />
@@ -5946,8 +5965,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$width-scale &gt; 0.4499">
             <xsl:variable name="visual-url">
                 <c>
-                    <xsl:text>www.youtube.com/watch?v=</xsl:text>
-                    <xsl:value-of select="@youtube" />
+                    <xsl:apply-templates select="." mode="youtube-view-url" />
                 </c>
             </xsl:variable>
             <xsl:apply-templates select="exsl:node-set($visual-url)" />
@@ -5962,6 +5980,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="exsl:node-set($visual-url)" />
         </xsl:otherwise>
     </xsl:choose>
+</xsl:template>
+
+<xsl:template match="video[@youtube]" mode="youtube-view-url">
+    <xsl:variable name="youtube" select="normalize-space(str:replace(@youtube, ',', ' '))" />
+    <xsl:text>https://www.youtube.com/</xsl:text>
+    <xsl:choose>
+        <xsl:when test="contains($youtube, ' ')">
+            <xsl:text>watch_videos?video_ids=</xsl:text>
+            <xsl:value-of select="str:replace($youtube, ' ', ',')" />
+        </xsl>
+        <xsl:otherwise>
+            <xsl:text>watch?v=</xsl:text>
+            <xsl:value-of select="$youtube" />
+        </xsl:otherwise>
+    </xsl:when>
 </xsl:template>
 
 <xsl:template match="interactive[(@platform = 'jsxgraph')]" mode="static-image">
