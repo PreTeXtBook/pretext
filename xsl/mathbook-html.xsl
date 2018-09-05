@@ -6685,8 +6685,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Reserved Characters -->
 <!-- ################### -->
 
-<!-- Across all possibilities                     -->
-<!-- See mathbook-common.xsl for discussion       -->
+<!-- XML and LaTeX equal to ASCII defaults  -->
+<!-- See mathbook-common.xsl for discussion -->
 
 <!--           -->
 <!-- XML, HTML -->
@@ -6695,19 +6695,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- & < > -->
 
 <!-- Ampersand -->
-<xsl:template match="ampersand">
-    <xsl:text>&amp;</xsl:text>
-</xsl:template>
-
 <!-- Less Than -->
-<xsl:template match="less">
-    <xsl:text>&lt;</xsl:text>
-</xsl:template>
-
 <!-- Greater Than -->
-<xsl:template match="greater">
-    <xsl:text>&gt;</xsl:text>
-</xsl:template>
 
 <!--       -->
 <!-- LaTeX -->
@@ -6716,101 +6705,67 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- # $ % ^ & _ { } ~ \ -->
 
 <!-- Number Sign, Hash, Octothorpe -->
-<xsl:template match="hash">
-    <xsl:text>#</xsl:text>
-</xsl:template>
+<!-- ASCII from -common suffices -->
 
 <!-- Dollar sign -->
-<xsl:template match="dollar">
-    <xsl:text>$</xsl:text>
-</xsl:template>
-
 <!-- Percent sign -->
-<xsl:template match="percent">
-    <xsl:text>%</xsl:text>
-</xsl:template>
-
 <!-- Circumflex  -->
-<xsl:template match="circumflex">
-    <xsl:text>^</xsl:text>
-</xsl:template>
-
 <!-- Ampersand -->
 <!-- Handled above -->
-
 <!-- Underscore -->
-<xsl:template match="underscore">
-    <xsl:text>_</xsl:text>
-</xsl:template>
-
 <!-- Left Brace -->
-<xsl:template match="lbrace">
-    <xsl:text>{</xsl:text>
-</xsl:template>
-
 <!-- Right  Brace -->
-<xsl:template match="rbrace">
-    <xsl:text>}</xsl:text>
-</xsl:template>
-
 <!-- Tilde -->
-<xsl:template match="tilde">
-    <xsl:text>~</xsl:text>
-</xsl:template>
-
 <!-- Backslash -->
-<xsl:template match="backslash">
-    <xsl:text>\</xsl:text>
-</xsl:template>
 
 <!-- Asterisk -->
 <!-- Centered as a character, not an exponent                    -->
 <!-- Unicode Character 'ASTERISK OPERATOR' (U+2217)              -->
 <!-- See raised asterisk for other options:                      -->
 <!-- http://www.fileformat.info/info/unicode/char/002a/index.htm -->
-<xsl:template match="asterisk">
+<xsl:template name="asterisk-character">
     <xsl:text>&#x2217;</xsl:text>
 </xsl:template>
 
 <!-- Left Single Quote -->
-<xsl:template match="lsq">
+<xsl:template name="lsq-character">
     <xsl:text>&#x2018;</xsl:text>
 </xsl:template>
 
 <!-- Right Single Quote -->
-<xsl:template match="rsq">
+<xsl:template name="rsq-character">
     <xsl:text>&#x2019;</xsl:text>
 </xsl:template>
 
 <!-- Left (Double) Quote -->
-<xsl:template match="lq">
+<xsl:template name="lq-character">
     <xsl:text>&#x201c;</xsl:text>
 </xsl:template>
 
 <!-- Right (Double) Quote -->
-<xsl:template match="rq">
+<xsl:template name="rq-character">
     <xsl:text>&#x201d;</xsl:text>
 </xsl:template>
 
 <!-- Left Bracket -->
-<xsl:template match="lbracket">
+<xsl:template name="lbracket-character">
     <xsl:text>[</xsl:text>
 </xsl:template>
 
 <!-- Right Bracket -->
-<xsl:template match="rbracket">
+<xsl:template name="rbracket-character">
     <xsl:text>]</xsl:text>
 </xsl:template>
 
 <!-- Left Double Bracket -->
 <!-- MATHEMATICAL LEFT WHITE SQUARE BRACKET -->
-<xsl:template match="ldblbracket">
+<xsl:template name="ldblbracket-character">
     <xsl:text>&#x27e6;</xsl:text>
 </xsl:template>
 
 <!-- Right Double Bracket -->
 <!-- MATHEMATICAL RIGHT WHITE SQUARE BRACKET -->
-<xsl:template match="rdblbracket">
+<xsl:template name="rdblbracket-character">
     <xsl:text>&#x27e7;</xsl:text>
 </xsl:template>
 
@@ -6818,7 +6773,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- LEFT ANGLE BRACKET -->
 <!-- U+2329 was once used and caused a validator warning      -->
 <!-- "Text run is not in Unicode Normalization Form C" (NFC)  -->
-<xsl:template match="langle">
+<xsl:template name="langle-character">
     <xsl:text>&#x3008;</xsl:text>
 </xsl:template>
 
@@ -6826,7 +6781,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- RIGHT ANGLE BRACKET -->
 <!-- U+232A was once used and caused a validator warning      -->
 <!-- "Text run is not in Unicode Normalization Form C" (NFC)  -->
-<xsl:template match="rangle">
+<xsl:template name="rangle-character">
     <xsl:text>&#x3009;</xsl:text>
 </xsl:template>
 
@@ -6834,37 +6789,37 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Other Miscellaneous Symbols, Constructions -->
 
 <!-- Ellipsis (dots), for text, not math -->
-<xsl:template match="ellipsis">
+<xsl:template name="ellipsis-character">
     <xsl:text>&#x2026;</xsl:text>
 </xsl:template>
 
 <!-- Midpoint -->
 <!-- A centered dot used sometimes like a decorative dash -->
-<xsl:template match="midpoint">
+<xsl:template name="midpoint-character">
     <xsl:text>&#xb7;</xsl:text>
 </xsl:template>
 
 <!-- Swung Dash -->
 <!-- A decorative dash, like a tilde, but bigger, and centered -->
-<xsl:template match="swungdash">
+<xsl:template name="swungdash-character">
     <xsl:text>&#x2053;</xsl:text>
 </xsl:template>
 
 <!-- Per Mille -->
 <!-- Or, per thousand, like a percent sign -->
-<xsl:template match="permille">
+<xsl:template name="permille-character">
     <xsl:text>&#x2030;</xsl:text>
 </xsl:template>
 
 <!-- Pilcrow -->
 <!-- Often used to mark the start of a paragraph -->
-<xsl:template match="pilcrow">
+<xsl:template name="pilcrow-character">
     <xsl:text>&#xb6;</xsl:text>
 </xsl:template>
 
 <!-- Section Mark -->
 <!-- The stylized double-S to indicate section numbers -->
-<xsl:template match="section-mark">
+<xsl:template name="section-mark-character">
     <xsl:text>&#xa7;</xsl:text>
 </xsl:template>
 
@@ -6872,7 +6827,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A "multiplication sign" symbol for use in text   -->
 <!-- Styled to enhance, consensus at Google Group was -->
 <!-- font-size: larger; vertical-align: -.2ex;        -->
-<xsl:template match="times">
+<xsl:template name="times-character">
     <xsl:element name="span">
         <xsl:attribute name="class">
             <xsl:text>times-sign</xsl:text>
@@ -6883,13 +6838,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Slash -->
 <!-- Forward slash, or virgule (see solidus) -->
-<xsl:template match="slash">
+<xsl:template name="slash-character">
     <xsl:text>&#x2f;</xsl:text>
 </xsl:template>
 
 <!-- Solidus -->
 <!-- Fraction bar, not as steep as a forward slash -->
-<xsl:template match="solidus">
+<xsl:template name="solidus-character">
     <xsl:text>&#x2044;</xsl:text>
 </xsl:template>
 
@@ -6904,7 +6859,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- text context use this empty element.  For example,    -->
 <!-- this is a character Markdown uses, so we want to      -->
 <!-- provide this safety valve.                            -->
-<xsl:template match="backtick">
+<xsl:template name="backtick-character">
     <xsl:text>&#x60;</xsl:text>
 </xsl:template>
 

@@ -7648,6 +7648,23 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- in LaTeX syntax, nor to function as special          -->
 <!-- characters themselves                                -->
 
+<!-- #################### -->
+<!-- In transition.  Empty elements for simple, ASCII,  -->
+<!-- "first 128", characters will eventually be deprecated  -->
+<!-- in favor of text()-processing which will make  -->
+<!-- replacements as needed, via a per-conversion hook  -->
+<!-- placed into the generic "text()" template. -->
+<!--  -->
+<!-- Otherwise, a conversion only needs to implement a  -->
+<!-- named template for a particular character whn an  -->
+<!-- escaped version, or a better Unicode version, is  -->
+<!-- necessary or desired. -->
+<!-- #################### -->
+
+<!-- These XML and LaTeX reserved characters all have natural     -->
+<!-- keyboard equivalents which will suffice in most conversions, -->
+<!-- so we implement default versions in U+00-U+7F.               -->
+
 <!--           -->
 <!-- XML, HTML -->
 <!--           -->
@@ -7655,18 +7672,27 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- & < > -->
 
 <!-- Ampersand -->
+<xsl:template name="ampersand-character">
+    <xsl:text>&amp;</xsl:text>
+</xsl:template>
 <xsl:template match="ampersand">
-    <xsl:text>[AMPERSAND]</xsl:text>
+    <xsl:call-template name="ampersand-character"/>
 </xsl:template>
 
 <!-- Less Than -->
+<xsl:template name="less-character">
+    <xsl:text>&lt;</xsl:text>
+</xsl:template>
 <xsl:template match="less">
-    <xsl:text>[LESSTHAN]</xsl:text>
+    <xsl:call-template name="less-character"/>
 </xsl:template>
 
 <!-- Greater Than -->
+<xsl:template name="greater-character">
+    <xsl:text>&gt;</xsl:text>
+</xsl:template>
 <xsl:template match="greater">
-    <xsl:text>[GREATERTHAN]</xsl:text>
+    <xsl:call-template name="greater-character"/>
 </xsl:template>
 
 <!--       -->
@@ -7676,165 +7702,322 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- # $ % ^ & _ { } ~ \ -->
 
 <!-- Number Sign, Hash, Octothorpe -->
+<xsl:template name="hash-character">
+    <xsl:text>#</xsl:text>
+</xsl:template>
 <xsl:template match="hash">
-    <xsl:text>[HASH]</xsl:text>
+    <xsl:call-template name="hash-character"/>
 </xsl:template>
 
+
 <!-- Dollar sign -->
+<xsl:template name="dollar-character">
+    <xsl:text>$</xsl:text>
+</xsl:template>
 <xsl:template match="dollar">
-    <xsl:text>[DOLLAR]</xsl:text>
+    <xsl:call-template name="dollar-character"/>
 </xsl:template>
 
 <!-- Percent sign -->
+<xsl:template name="percent-character">
+    <xsl:text>%</xsl:text>
+</xsl:template>
 <xsl:template match="percent">
-    <xsl:text>[PERCENT]</xsl:text>
+    <xsl:call-template name="percent-character"/>
 </xsl:template>
 
 <!-- Circumflex  -->
+<xsl:template name="circumflex-character">
+    <xsl:text>^</xsl:text>
+</xsl:template>
 <xsl:template match="circumflex">
-    <xsl:text>[CIRCUMFLEX]</xsl:text>
+    <xsl:call-template name="circumflex-character"/>
 </xsl:template>
 
 <!-- Ampersand -->
 <!-- Handled above -->
 
 <!-- Underscore -->
+<xsl:template name="underscore-character">
+    <xsl:text>_</xsl:text>
+</xsl:template>
 <xsl:template match="underscore">
-    <xsl:text>[UNDERSCORE]</xsl:text>
+    <xsl:call-template name="underscore-character"/>
 </xsl:template>
 
 <!-- Left Brace -->
+<xsl:template name="lbrace-character">
+    <xsl:text>{</xsl:text>
+</xsl:template>
 <xsl:template match="lbrace">
-    <xsl:text>[LEFTBRACE]</xsl:text>
+    <xsl:call-template name="lbrace-character"/>
 </xsl:template>
 
-<!-- Right  Brace -->
+<!-- Right Brace -->
+<xsl:template name="rbrace-character">
+    <xsl:text>}</xsl:text>
+</xsl:template>
 <xsl:template match="rbrace">
-    <xsl:text>[RIGHTBRACE]</xsl:text>
+    <xsl:call-template name="rbrace-character"/>
 </xsl:template>
 
 <!-- Tilde -->
+<xsl:template name="tilde-character">
+    <xsl:text>~</xsl:text>
+</xsl:template>
 <xsl:template match="tilde">
-    <xsl:text>[TILDE]</xsl:text>
+    <xsl:call-template name="tilde-character"/>
 </xsl:template>
 
 <!-- Backslash -->
+<xsl:template name="backslash-character">
+    <xsl:text>\</xsl:text>
+</xsl:template>
 <xsl:template match="backslash">
-    <xsl:text>[BACKSLASH]</xsl:text>
+    <xsl:call-template name="backslash-character"/>
 </xsl:template>
 
 <!-- ################ -->
 <!-- Other Characters -->
 <!-- ################ -->
 
+<!-- These are characters which may be reserved in certain          -->
+<!-- conversions (such as star/asterisk/* in Markdown), or          -->
+<!-- have fancier left/right versions (like double quote marks),    -->
+<!-- or look really bad if faked from a keyboard (double brackets), -->
+<!-- or lack an ASCII equivalent (like per-mille).  So we leave     -->
+<!-- them undefined here as named templates with warnings and       -->
+<!-- alarm bells, so that if a new conversion does not have an      -->
+<!-- implementation, that will be discovered early in development.  -->
+
+<xsl:template name="warn-unimplemented-character">
+    <xsl:param name="char-name"/>
+     <xsl:message>PTX:ERROR:   the character named "<xsl:value-of select="$char-name"/>" needs an implementation in the current conversion</xsl:message>
+     <xsl:text>[[[</xsl:text>
+     <xsl:value-of select="$char-name"/>
+     <xsl:text>]]]</xsl:text>
+ </xsl:template>
+
+
+
 <!-- Asterisk -->
 <!-- Centered as a character, not an exponent -->
+<xsl:template name="asterisk-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'asterisk'"/>
+    </xsl:call-template>
+</xsl:template>
 <xsl:template match="asterisk">
-    <xsl:text>[ASTERISK]</xsl:text>
+    <xsl:call-template name="asterisk-character"/>
 </xsl:template>
 
 <!-- Left Single Quote -->
+<xsl:template name="lsq-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="''"/>
+    </xsl:call-template>
+</xsl:template>
 <xsl:template match="lsq">
-    <xsl:text>[LEFTSINGLEQUOTE]</xsl:text>
+    <xsl:call-template name="lsq-character"/>
 </xsl:template>
 
 <!-- Right Single Quote -->
+<xsl:template name="rsq-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'rsq'"/>
+    </xsl:call-template>
+</xsl:template>
 <xsl:template match="rsq">
-    <xsl:text>[RIGHTSINGLEQUOTE]</xsl:text>
+    <xsl:call-template name="rsq-character"/>
 </xsl:template>
 
 <!-- Left (Double) Quote -->
+<xsl:template name="lq-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'lq'"/>
+    </xsl:call-template>
+</xsl:template>
 <xsl:template match="lq">
-    <xsl:text>[LEFTQUOTE]</xsl:text>
+    <xsl:call-template name="lq-character"/>
 </xsl:template>
 
 <!-- Right (Double) Quote -->
+<xsl:template name="rq-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'rq'"/>
+    </xsl:call-template>
+</xsl:template>
 <xsl:template match="rq">
-    <xsl:text>[RIGHTQUOTE]</xsl:text>
+    <xsl:call-template name="rq-character"/>
 </xsl:template>
 
 <!-- Left Bracket -->
+<xsl:template name="lbracket-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'lbracket'"/>
+    </xsl:call-template>
+</xsl:template>
 <xsl:template match="lbracket">
-    <xsl:text>[LEFTBRACKET]</xsl:text>
+    <xsl:call-template name="lbracket-character"/>
 </xsl:template>
 
 <!-- Right Bracket -->
+<xsl:template name="rbracket-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'rbracket'"/>
+    </xsl:call-template>
+</xsl:template>
 <xsl:template match="rbracket">
-    <xsl:text>[RIGHTBRACKET]</xsl:text>
+    <xsl:call-template name="rbracket-character"/>
 </xsl:template>
 
 <!-- Left Double Bracket -->
+<xsl:template name="ldblbracket-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'ldblbracket'"/>
+    </xsl:call-template>
+</xsl:template>
 <xsl:template match="ldblbracket">
-    <xsl:text>[LEFTDOUBLEBRACKET]</xsl:text>
+    <xsl:call-template name="ldblbracket-character"/>
 </xsl:template>
 
 <!-- Right Double Bracket -->
+<xsl:template name="rdblbracket-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'rdblbracket'"/>
+    </xsl:call-template>
+</xsl:template>
 <xsl:template match="rdblbracket">
-    <xsl:text>[RIGHTDOUBLEBRACKET]</xsl:text>
+    <xsl:call-template name="rdblbracket-character"/>
 </xsl:template>
 
 <!-- Left Angle Bracket -->
+<xsl:template name="langle-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'langle'"/>
+    </xsl:call-template>
+</xsl:template>
 <xsl:template match="langle">
-    <xsl:text>[LEFTANGLEBRACKET]</xsl:text>
+    <xsl:call-template name="langle-character"/>
 </xsl:template>
 
 <!-- Right Angle Bracket -->
+<xsl:template name="rangle-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'rangle'"/>
+    </xsl:call-template>
+</xsl:template>
 <xsl:template match="rangle">
-    <xsl:text>[RIGHTANGLEBRACKET]</xsl:text>
+    <xsl:call-template name="rangle-character"/>
+</xsl:template>
+
+<!-- Ellipsis (dots), for text, not math -->
+<xsl:template name="ellipsis-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'ellipsis'"/>
+    </xsl:call-template>
+</xsl:template>
+<xsl:template match="ellipsis">
+    <xsl:call-template name="ellipsis-character"/>
 </xsl:template>
 
 <!-- Midpoint -->
 <!-- A centered dot used sometimes like a decorative dash -->
+<xsl:template name="midpoint-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'midpoint'"/>
+    </xsl:call-template>
+</xsl:template>
 <xsl:template match="midpoint">
-    <xsl:text>[MIDPOINT]</xsl:text>
+    <xsl:call-template name="midpoint-character"/>
 </xsl:template>
 
 <!-- Swung Dash -->
 <!-- A decorative dash, like a tilde, but bigger, and centered -->
+<xsl:template name="swungdash-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'swungdash'"/>
+    </xsl:call-template>
+</xsl:template>
 <xsl:template match="swungdash">
-    <xsl:text>[SWUNGDASH]</xsl:text>
+    <xsl:call-template name="swungdash-character"/>
 </xsl:template>
 
 <!-- Per Mille -->
 <!-- Or, per thousand, like a percent sign -->
+<xsl:template name="permille-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'permille'"/>
+    </xsl:call-template>
+</xsl:template>
 <xsl:template match="permille">
-    <xsl:text>[PERMILLE]</xsl:text>
+    <xsl:call-template name="permille-character"/>
 </xsl:template>
 
 <!-- Pilcrow -->
 <!-- Often used to mark the start of a paragraph -->
+<xsl:template name="pilcrow-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'pilcrow'"/>
+    </xsl:call-template>
+</xsl:template>
 <xsl:template match="pilcrow">
-    <xsl:text>[PILCROW]</xsl:text>
+    <xsl:call-template name="pilcrow-character"/>
 </xsl:template>
 
 <!-- Section Mark -->
 <!-- The stylized double-S to indicate section numbers -->
+<xsl:template name="section-mark-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'section-mark'"/>
+    </xsl:call-template>
+</xsl:template>
 <xsl:template match="section-mark">
-    <xsl:text>[SECTION]</xsl:text>
+    <xsl:call-template name="section-mark-character"/>
 </xsl:template>
 
 <!-- Times -->
 <!-- A "multiplication sign" symbol for use in text -->
+<xsl:template name="times-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'times'"/>
+    </xsl:call-template>
+</xsl:template>
 <xsl:template match="times">
-    <xsl:text>[TIMES]</xsl:text>
+    <xsl:call-template name="times-character"/>
 </xsl:template>
 
 <!-- Slash -->
 <!-- Forward slash, or virgule (see solidus) -->
+<xsl:template name="slash-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'slash'"/>
+    </xsl:call-template>
+</xsl:template>
 <xsl:template match="slash">
-    <xsl:text>[SLASH]</xsl:text>
+    <xsl:call-template name="slash-character"/>
 </xsl:template>
 
 <!-- Solidus -->
 <!-- Fraction bar, not as steep as a forward slash -->
+<xsl:template name="solidus-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'solidus'"/>
+    </xsl:call-template>
+</xsl:template>
 <xsl:template match="solidus">
-    <xsl:text>[SOLIDUS]</xsl:text>
+    <xsl:call-template name="solidus-character"/>
 </xsl:template>
 
 <!-- Backtick -->
 <!-- Accent grave, as a text character -->
+<xsl:template name="backtick-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'backtick'"/>
+    </xsl:call-template>
+</xsl:template>
 <xsl:template match="backtick">
-    <xsl:text>[BACKTICK]</xsl:text>
+    <xsl:call-template name="backtick-character"/>
 </xsl:template>
 
 <!-- Dots

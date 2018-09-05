@@ -6363,17 +6363,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- & < > -->
 
 <!-- Ampersand -->
-<xsl:template match="ampersand">
+<xsl:template name="ampersand-character">
     <xsl:text>\&amp;</xsl:text>
 </xsl:template>
 
 <!-- Less Than -->
-<xsl:template match="less">
+<xsl:template name="less-character">
     <xsl:text>\textless{}</xsl:text>
 </xsl:template>
 
 <!-- Greater Than -->
-<xsl:template match="greater">
+<xsl:template name="greater-character">
     <xsl:text>\textgreater{}</xsl:text>
 </xsl:template>
 
@@ -6384,22 +6384,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- # $ % ^ & _ { } ~ \ -->
 
 <!-- Number Sign, Hash, Octothorpe -->
-<xsl:template match="hash">
+<xsl:template name="hash-character">
     <xsl:text>\#</xsl:text>
 </xsl:template>
 
 <!-- Dollar sign -->
-<xsl:template match="dollar">
+<xsl:template name="dollar-character">
     <xsl:text>\textdollar{}</xsl:text>
 </xsl:template>
 
 <!-- Percent sign -->
-<xsl:template match="percent">
+<xsl:template name="percent-character">
     <xsl:text>\%</xsl:text>
 </xsl:template>
 
 <!-- Circumflex  -->
-<xsl:template match="circumflex">
+<xsl:template name="circumflex-character">
     <xsl:text>\textasciicircum{}</xsl:text>
 </xsl:template>
 
@@ -6407,27 +6407,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Handled above -->
 
 <!-- Underscore -->
-<xsl:template match="underscore">
+<xsl:template name="underscore-character">
     <xsl:text>\textunderscore{}</xsl:text>
 </xsl:template>
 
 <!-- Left Brace -->
-<xsl:template match="lbrace">
+<xsl:template name="lbrace-character">
     <xsl:text>\textbraceleft{}</xsl:text>
 </xsl:template>
 
 <!-- Right  Brace -->
-<xsl:template match="rbrace">
+<xsl:template name="rbrace-character">
     <xsl:text>\textbraceright{}</xsl:text>
 </xsl:template>
 
 <!-- Tilde -->
-<xsl:template match="tilde">
+<xsl:template name="tilde-character">
     <xsl:text>\textasciitilde{}</xsl:text>
 </xsl:template>
 
 <!-- Backslash -->
-<xsl:template match="backslash">
+<xsl:template name="backslash-character">
     <xsl:text>\textbackslash{}</xsl:text>
 </xsl:template>
 
@@ -6435,120 +6435,121 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Asterisk -->
 <!-- Centered as a character, not an exponent -->
-<xsl:template match="asterisk">
+<xsl:template name="asterisk-character">
     <xsl:text>\textasteriskcentered{}</xsl:text>
 </xsl:template>
 
 <!-- Left Single Quote -->
-<xsl:template match="lsq">
+<xsl:template name="lsq-character">
     <xsl:text>`</xsl:text>
 </xsl:template>
 
 <!-- Right Single Quote -->
-<xsl:template match="rsq">
+<xsl:template name="rsq-character">
     <xsl:text>'</xsl:text>
 </xsl:template>
 
 <!-- Left (Double) Quote -->
-<xsl:template match="lq">
+<xsl:template name="lq-character">
     <xsl:text>``</xsl:text>
 </xsl:template>
 
 <!-- Right (Double) Quote -->
-<xsl:template match="rq">
+<xsl:template name="rq-character">
     <xsl:text>''</xsl:text>
 </xsl:template>
 
 <!-- Left Bracket -->
-<xsl:template match="lbracket">
+<xsl:template name="lbracket-character">
     <xsl:text>[</xsl:text>
 </xsl:template>
 
 <!-- Right Bracket -->
-<xsl:template match="rbracket">
+<xsl:template name="rbracket-character">
     <xsl:text>]</xsl:text>
 </xsl:template>
 
 <!-- Left Double Bracket -->
-<xsl:template match="ldblbracket">
+<xsl:template name="ldblbracket-character">
     <xsl:text>\textlbrackdbl{}</xsl:text>
 </xsl:template>
 
 <!-- Right Double Bracket -->
-<xsl:template match="rdblbracket">
+<xsl:template name="rdblbracket-character">
     <xsl:text>\textrbrackdbl{}</xsl:text>
 </xsl:template>
 
 <!-- Left Angle Bracket -->
-<xsl:template match="langle">
+<xsl:template name="langle-character">
     <xsl:text>\textlangle{}</xsl:text>
 </xsl:template>
 
 <!-- Right Angle Bracket -->
-<xsl:template match="rangle">
+<xsl:template name="rangle-character">
     <xsl:text>\textrangle{}</xsl:text>
 </xsl:template>
 
 <!-- Other Miscellaneous Symbols, Constructions -->
 
 <!-- Ellipsis (dots), for text, not math -->
-<xsl:template match="ellipsis">
+<xsl:template name="ellipsis-character">
     <xsl:text>\textellipsis{}</xsl:text>
 </xsl:template>
 
 <!-- Midpoint -->
 <!-- A centered dot used sometimes like a decorative dash -->
 <!-- http://tex.stackexchange.com/questions/19180/which-dot-character-to-use-in-which-context -->
-<xsl:template match="midpoint">
+<xsl:template name="midpoint-character">
     <xsl:text>\textperiodcentered{}</xsl:text>
 </xsl:template>
 
 <!-- Swung Dash -->
 <!-- A decorative dash, like a tilde, but bigger, and centered -->
 <!-- http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/  -->
-<xsl:template match="swungdash">
+<xsl:template name="swungdash-character">
     <xsl:text>\swungdash{}</xsl:text>
 </xsl:template>
 <!-- Protect the version of the macro appearing in titles -->
-<xsl:template match="title//swungdash">
-    <xsl:text>\protect\swungdash{}</xsl:text>
+<xsl:template match="title//swungdash-character">
+    <xsl:text>\protect</xsl:text>
+    <xsl:call-template name="swungdash-character"/>
 </xsl:template>
 
 <!-- Per Mille -->
 <!-- Or, per thousand, like a percent sign -->
-<xsl:template match="permille">
+<xsl:template name="permille-character">
     <xsl:text>\textperthousand{}</xsl:text>
 </xsl:template>
 
 <!-- Pilcrow -->
 <!-- Often used to mark the start of a paragraph -->
-<xsl:template match="pilcrow">
+<xsl:template name="pilcrow-character">
     <xsl:text>\textpilcrow{}</xsl:text>
 </xsl:template>
 
 <!-- Section Mark -->
 <!-- The stylized double-S to indicate section numbers -->
-<xsl:template match="section-mark">
+<xsl:template name="section-mark-character">
     <xsl:text>\textsection{}</xsl:text>
 </xsl:template>
 
 <!-- Times -->
 <!-- A "multiplication sign" symbol for use in text -->
-<xsl:template match="times">
+<xsl:template name="times-character">
     <xsl:text>\texttimes{}</xsl:text>
 </xsl:template>
 
 <!-- Slash -->
 <!-- Forward slash, or virgule (see solidus)   -->
 <!-- This should allow a linebreak, not tested -->
-<xsl:template match="slash">
+<xsl:template name="slash-character">
     <xsl:text>\slash{}</xsl:text>
 </xsl:template>
 
 <!-- Solidus -->
 <!-- Fraction bar, not as steep as a forward slash -->
 <!-- This should not allow a linebreak, not tested -->
-<xsl:template match="solidus">
+<xsl:template name="solidus-character">
     <xsl:text>\textfractionsolidus{}</xsl:text>
 </xsl:template>
 
@@ -6563,7 +6564,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- text context use this empty element.  For example,    -->
 <!-- this is a character Markdown uses, so we want to      -->
 <!-- provide this safety valve.                            -->
-<xsl:template match="backtick">
+<xsl:template name="backtick-character">
     <xsl:text>\textasciigrave{}</xsl:text>
 </xsl:template>
 
