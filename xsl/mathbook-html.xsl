@@ -9288,11 +9288,13 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
 
 <!-- MathJax expects math wrapping, and we place in   -->
 <!-- a hidden div so not visible and take up no space -->
+<!-- Inline CSS added because a "flash" was visible   -->
+<!-- between HTML loading and CSS taking effect.      -->
 <!-- We could rename this properly, since we are      -->
 <!-- sneaking in packages, which load first, in       -->
 <!-- case authors want to build on these macros       -->
 <xsl:template name="latex-macros">
-    <div class="hidden-content">
+    <div class="hidden-content" style="display:none">
     <xsl:call-template name="begin-inline-math" />
     <xsl:value-of select="$latex-packages-mathjax" />
     <xsl:value-of select="$latex-macros" />
