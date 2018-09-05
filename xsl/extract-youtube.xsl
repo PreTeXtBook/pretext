@@ -26,6 +26,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
     xmlns:exsl="http://exslt.org/common"
+    xmlns:str="http://exslt.org/strings"
     extension-element-prefixes="exsl"
 >
 
@@ -53,9 +54,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="video[@youtube]">
     <!-- replace commas with spaces, then normalize space,                       -->
     <!-- then tack on a space at the end, then grab content prior to first space -->
-    <xsl:variable name="first-video-id" select="str:before(concat(normalize-space(str:replace(@youtube, ',', ' ')), ' '), ' ')" />
+    <!-- <xsl:variable name="first-video-id" select="str:before(concat(normalize-space(str:replace(@youtube, ',', ' ')), ' '), ' ')" /> -->
+    <xsl:variable name="first-video-id" select="substring-before(concat(normalize-space(str:replace(@youtube, ',', ' ')), ' '), ' ')" />
     <xsl:text>('</xsl:text>
-    <xsl:value-of select="@first-video-id" />
+    <xsl:value-of select="$first-video-id" />
     <xsl:text>', '</xsl:text>
     <xsl:apply-templates select="." mode="internal-id" />
     <xsl:text>'), </xsl:text>

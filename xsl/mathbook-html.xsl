@@ -5731,7 +5731,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- and $youtube is one or more video IDs       -->
         <xsl:when test="contains($youtube, ' ')">
             <xsl:text>?playlist=</xsl:text>
-            <xsl:value-of select="str:replace(, ' ', ',')" />
+            <xsl:value-of select="str:replace($youtube, ' ', ',')" />
         </xsl:when>
         <!-- a single video ID -->
         <xsl:otherwise>

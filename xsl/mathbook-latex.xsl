@@ -5968,13 +5968,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="video[@youtube|@youtubeplaylist]" mode="youtube-view-url">
     <xsl:variable name="youtube">
         <xsl:choose>
-            <xsl:test when="@youtubeplaylist">
+            <xsl:when test="@youtubeplaylist">
                 <xsl:value-of select="normalize-space(@youtubeplaylist)"/>
-            </xsl:test>
+            </xsl:when>
             <xsl:otherwise>
                 <xsl:value-of select="normalize-space(str:replace(@youtube, ',', ' '))" />
             </xsl:otherwise>
         </xsl:choose>
+    </xsl:variable>
     <xsl:text>https://www.youtube.com/</xsl:text>
     <xsl:choose>
         <xsl:when test="@youtubeplaylist">
@@ -5984,12 +5985,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="contains($youtube, ' ')">
             <xsl:text>watch_videos?video_ids=</xsl:text>
             <xsl:value-of select="str:replace($youtube, ' ', ',')" />
-        </xsl>
+        </xsl:when>
         <xsl:otherwise>
             <xsl:text>watch?v=</xsl:text>
             <xsl:value-of select="$youtube" />
         </xsl:otherwise>
-    </xsl:when>
+    </xsl:choose>
 </xsl:template>
 
 <xsl:template match="interactive[(@platform = 'jsxgraph')]" mode="static-image">
