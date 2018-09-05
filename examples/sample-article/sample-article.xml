@@ -7705,6 +7705,11 @@ the xsltproc executable.
                     <title>Drill One</title>
                     <statement>
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras congue urna nulla. Aliquam eget euismod tellus. Maecenas nibh libero, venenatis a laoreet in, tempor sit amet sem. Morbi sit amet justo tempor velit auctor placerat. Maecenas nec lobortis orci. Aenean dictum enim lacus, ac blandit lacus elementum nec. Mauris porttitor neque volutpat tincidunt sollicitudin. Cras porta lectus ac facilisis tempor. Suspendisse in velit nisl. Sed convallis leo at nunc aliquet fermentum. Pellentesque feugiat at ex sed elementum. In porta vulputate ipsum sit amet consectetur.</p>
+
+                        <figure>
+                            <caption>A figure in an <tag>exercise</tag> in an <em>unstructured</em> division to test that it is numbered as if the containing <tag>exercises</tag> is not present</caption>
+                            <image xml:id="cross-square-unstructured" width="10%" source="images/cross-square.png"/>
+                        </figure>
                     </statement>
                 </exercise>
 
@@ -7833,6 +7838,11 @@ the xsltproc executable.
                     <title>Drill One</title>
                     <statement>
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras congue urna nulla. Aliquam eget euismod tellus. Maecenas nibh libero, venenatis a laoreet in, tempor sit amet sem. Morbi sit amet justo tempor velit auctor placerat. Maecenas nec lobortis orci. Aenean dictum enim lacus, ac blandit lacus elementum nec. Mauris porttitor neque volutpat tincidunt sollicitudin. Cras porta lectus ac facilisis tempor. Suspendisse in velit nisl. Sed convallis leo at nunc aliquet fermentum. Pellentesque feugiat at ex sed elementum. In porta vulputate ipsum sit amet consectetur.</p>
+
+                        <figure>
+                            <caption>A figure in an <tag>exercise</tag> in a <em>structured</em> division to test that it is numbered with consideration of the containing <tag>exercises</tag></caption>
+                            <image xml:id="cross-square-structured" width="10%" source="images/cross-square.png"/>
+                        </figure>
                     </statement>
                 </exercise>
 
