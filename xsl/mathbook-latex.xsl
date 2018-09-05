@@ -5844,25 +5844,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Natural override for YouTube videos               -->
 <!-- Better - standalone page, with "View on You Tube" -->
-<xsl:template match="video[@youtube]" mode="static-url">
+<xsl:template match="video[@youtube|@youtubeplaylist]" mode="static-url">
     <xsl:apply-templates select="." mode="youtube-view-url" />
-    <xsl:if test="@start">
-        <xsl:text>\&amp;start=</xsl:text>
-        <xsl:value-of select="@start" />
-    </xsl:if>
-    <xsl:if test="@end">
-        <xsl:text>\&amp;end=</xsl:text>
-        <xsl:value-of select="@end" />
-    </xsl:if>
-</xsl:template>
-
-<xsl:template match="video[@youtubeplaylist]" mode="static-url">
-    <xsl:variable name="youtubeplaylist" select="normalize-space(str:replace(@youtubeplaylist, ',', ' '))" />
-    <xsl:variable name="first" select="substring-before(concat($youtubeplaylist, ' '), ' ')" />
-    <xsl:text>https://www.youtube.com/watch?v=</xsl:text>
-    <xsl:value-of select="$first" />
-    <xsl:text>&amp;list=</xsl:text>
-    <xsl:value-of select="$youtubeplaylist" />
     <xsl:if test="@start">
         <xsl:text>\&amp;start=</xsl:text>
         <xsl:value-of select="@start" />
@@ -5945,7 +5928,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<xsl:template match="video[@youtube]" mode="static-caption">
+<xsl:template match="video[@youtube|@youtubeplaylist]" mode="static-caption">
     <xsl:param name="width-scale" />
     <xsl:choose>
         <!-- author-supplied override -->
@@ -5974,7 +5957,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>YT: </xsl:text>
             <xsl:variable name="visual-url">
                 <c>
-                    <xsl:value-of select="@youtube" />
+                    <xsl:value-of select="@youtube|@youtubeplaylist" />
                 </c>
             </xsl:variable>
             <xsl:apply-templates select="exsl:node-set($visual-url)" />
@@ -5982,10 +5965,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<xsl:template match="video[@youtube]" mode="youtube-view-url">
-    <xsl:variable name="youtube" select="normalize-space(str:replace(@youtube, ',', ' '))" />
+<xsl:template match="video[@youtube|@youtubeplaylist]" mode="youtube-view-url">
+    <xsl:variable name="youtube">
+        <xsl:choose>
+            <xsl:test when="@youtubeplaylist">
+                <xsl:value-of select="normalize-space(@youtubeplaylist)"/>
+            </xsl:test>
+            <xsl:otherwise>
+                <xsl:value-of select="normalize-space(str:replace(@youtube, ',', ' '))" />
+            </xsl:otherwise>
+        </xsl:choose>
     <xsl:text>https://www.youtube.com/</xsl:text>
     <xsl:choose>
+        <xsl:when test="@youtubeplaylist">
+            <xsl:text>playlist?list=</xsl:text>
+            <xsl:value-of select="$youtube" />
+        </xsl:when>
         <xsl:when test="contains($youtube, ' ')">
             <xsl:text>watch_videos?video_ids=</xsl:text>
             <xsl:value-of select="str:replace($youtube, ' ', ',')" />
