@@ -51,8 +51,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- YouTube ID, and internal id as a Python pair -->
 <xsl:template match="video[@youtube]">
+    <!-- replace commas with spaces, then normalize space,                       -->
+    <!-- then tack on a space at the end, then grab content prior to first space -->
+    <xsl:variable name="first-video-id" select="str:before(concat(normalize-space(str:replace(@youtube, ',', ' ')), ' '), ' ')" />
     <xsl:text>('</xsl:text>
-    <xsl:value-of select="@youtube" />
+    <xsl:value-of select="@first-video-id" />
     <xsl:text>', '</xsl:text>
     <xsl:apply-templates select="." mode="internal-id" />
     <xsl:text>'), </xsl:text>
