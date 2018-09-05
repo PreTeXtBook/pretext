@@ -5707,33 +5707,40 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- autoplay for popout, otherwise not                          -->
 <xsl:template match="video[@youtube|@youtubeplaylist]" mode="youtube-embed-url">
     <xsl:param name="autoplay" select="'false'" />
+    <xsl:variable name="youtube">
+        <xsl:choose>
+            <!-- forgive an author's leading or trailing space -->
+            <xsl:when test="@youtubeplaylist">
+                <xsl:value-of select="normalize-space(@youtubeplaylist)" />
+            </xsl:when>
+            <!-- replace commas with spaces then normalize space    -->
+            <!-- result is a trim space-separated list of video IDs -->
+            <xsl:otherwise>
+                <xsl:value-of select="normalize-space(str:replace(@youtube, ',', ' '))" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
     <xsl:text>https://www.youtube.com/embed</xsl:text>
     <xsl:choose>
         <!-- playlist with a YouTube ID -->
         <xsl:when test="@youtubeplaylist">
             <xsl:text>?listType=playlist&amp;list=</xsl:text>
-            <xsl:value-of select="normalize-space(@youtubeplaylist)" />
-            <xsl:text>&amp;</xsl:text>
+            <xsl:value-of select="$youtube" />
         </xsl:when>
-        <!-- now there must be a @youtube          -->
-        <!-- playlist built from YouTube video IDs -->
-        <xsl:when test="contains(normalize-space(@youtube), ' ') or contains(@youtube, ',')">
+        <!-- if we get this far there must be a @youtube -->
+        <!-- and $youtube is one or more video IDs       -->
+        <xsl:when test="contains($youtube, ' ')">
             <xsl:text>?playlist=</xsl:text>
-            <!-- replace any commas with spaces, then normalize space, then replace spaces with commmas -->
-            <!-- final result should have no spaces; just the IDs separated by commas                   -->
-            <xsl:value-of select="str:replace(normalize-space(str:replace(@youtube, ',', ' ')), ' ', ',')" />
-            <xsl:text>&amp;</xsl:text>
+            <xsl:value-of select="str:replace(, ' ', ',')" />
         </xsl:when>
         <!-- a single video ID -->
         <xsl:otherwise>
             <xsl:text>/</xsl:text>
-            <!-- normalize-space here to forgive leading or trailing space -->
-            <xsl:value-of select="normalize-space(@youtube)" />
+            <xsl:value-of select="$youtube" />
             <xsl:text>?</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
-    <!-- either ? or &amp; separator prepped in xsl:choose above -->
-    <xsl:text>modestbranding=1</xsl:text>
+    <xsl:text>&amp;modestbranding=1</xsl:text>
     <!-- use &amp; separator for remainder -->
     <!-- kill related videos at end -->
     <xsl:text>&amp;rel=0</xsl:text>
