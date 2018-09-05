@@ -1649,7 +1649,7 @@ the xsltproc executable.
                 <p>There are a handful of characters that might render just fine in HTML, but <latex /> reserves them for special purposes.  So if they appear unadorned in your source, they will wreak havoc with the <latex /> processing.  And if you escape them with backslashes to migrate to the <latex /> output, then you will see those backslashes in your HTML.  And the backslash is the escape character for Markdown and JSON.  You can't win.  Thus, you need to be aware of these symbols and use the provided <pretext /> elements for each in order to get the right behavior in each type of output.  Here are the outputs, look at the source of this document to see the input elements.</p>
 
                 <!-- Carriage returns are unwise, but this is impossible to read otherwise -->
-                <p><hash /><nbsp /><nbsp />
+                <p>&amp; &lt; &gt; # $ % ^ _ { } ~ \ XXXXXXXXXXXXXXXXXX <hash /><nbsp /><nbsp />
                 <dollar /><nbsp /><nbsp />
                 <percent /><nbsp /><nbsp />
                 <circumflex /><nbsp /><nbsp />

@@ -2652,6 +2652,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
+    <!-- After math clause-ending rearrangements, we provide some    -->
+    <!-- low-level text manipulations.  We do this via a conversion- -->
+    <!-- specific hook, so we do not do more processing than is      -->
+    <!-- necessary, presuming this template is executed frequently.  -->
+    <!-- A math element that allows XML elements within will         -->
+    <!-- be hit with "xsl:apply-templates" and arrive here,          -->
+    <!-- so we need to guard against "text()" with parents:          -->
+    <!-- "fillin", "xref", "var"   inside   "m", "me", "men", "mrow" -->
+    <!-- The default behavior is a straight copy, with no changes.   -->
+    <!-- NB: We defer WW-specific work for now.                      -->
+    <xsl:variable name="text-processed">
+        <xsl:choose>
+            <xsl:when test="not(ancestor::webwork-tex) and 
+                            not(parent::m or parent::me or parent::men or parent::mrow)">
+                <xsl:call-template name="text-processing">
+                    <xsl:with-param name="text" select="$math-punctuation"/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$math-punctuation"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
     <!-- TODO: strip leading whitespace above only under  -->
     <!-- 'strict' policy, and combine two when clauses.   -->
     <!-- Below, strip leading and trailing whitespace on  -->
@@ -2660,24 +2683,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <!-- pass through if a node within "webwork-tex" -->
         <xsl:when test="ancestor::webwork-tex">
-            <xsl:value-of select="$math-punctuation" />
+            <xsl:value-of select="$text-processed" />
         </xsl:when>
         <!-- pass through if assuming strict adherence to whitespace policy -->
         <xsl:when test="$whitespace='strict'">
-            <xsl:value-of select="$math-punctuation" />
+            <xsl:value-of select="$text-processed" />
         </xsl:when>
         <!-- We must "apply-templates" to math bits in order    -->
         <!-- to process "var", "fillin" and "xref", so we pass  -->
         <!-- through neighboring text nodes under any policy    -->
         <!-- and we handle whitespace specially afterward       -->
         <xsl:when test="parent::*[self::m or self::me or self::men or self::mrow]">
-            <xsl:value-of select="$math-punctuation" />
+            <xsl:value-of select="$text-processed" />
         </xsl:when>
         <!-- manipulate leading, trailing, intermediate whitespace under flexible policy -->
         <!-- if only text node inside parent, all three transformations may apply        -->
         <!-- Note: space after clause-punctuation will not be deleted here               -->
         <xsl:when test="$whitespace='flexible'">
-            <xsl:variable name="original" select="$math-punctuation" />
+            <xsl:variable name="original" select="$text-processed" />
             <xsl:variable name="front-cleaned">
                 <xsl:choose>
                     <xsl:when test="not(preceding-sibling::node()[self::* or self::text()]) or preceding-sibling::node()[self::* or self::text()][1][self::me or self::men or self::md or self::mdn or self::cd or self::pre]">
@@ -2709,7 +2732,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:variable>
             <!-- ACTUAL output -->
             <xsl:value-of select="$middle-cleaned" />
-            <xsl:if test="$wsdebug and not($math-punctuation = $middle-cleaned)">
+            <xsl:if test="$wsdebug and not($text-processed = $middle-cleaned)">
                 <!-- DEBUGGING follows, maybe move outward later -->
                 <xsl:message>
                     <xsl:text>****&#xa;</xsl:text>
@@ -2717,7 +2740,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:value-of select="." />
                     <xsl:text>:O&#xa;</xsl:text>
                     <xsl:text>M:</xsl:text>
-                    <xsl:value-of select="$math-punctuation" />
+                    <xsl:value-of select="$text-processed" />
                     <xsl:text>:M&#xa;</xsl:text>
                     <xsl:text>F:</xsl:text>
                     <xsl:value-of select="$front-cleaned" />
@@ -2733,6 +2756,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:if>
         </xsl:when>
     </xsl:choose>
+</xsl:template>
+
+<!-- Text-processing should be done carefully in a per-conversion -->
+<!-- manner.  Absent anything special, we just duplicate.         -->
+<xsl:template name="text-processing">
+    <xsl:param name="text"/>
+    <xsl:value-of select="$text"/>
 </xsl:template>
 
 <!-- Date and Time Functions -->
