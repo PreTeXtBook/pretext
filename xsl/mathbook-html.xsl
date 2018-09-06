@@ -5638,7 +5638,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- dimensions and autoplay as parameters        -->
 <!-- Normally $preview is true, and not passed in -->
 <!-- 'false' is an override for standalone pages  -->
-<xsl:template match="video[@youtube]" mode="video-embed">
+<xsl:template match="video[@youtube|@youtubeplaylist]" mode="video-embed">
     <xsl:param name="width" select="''" />
     <xsl:param name="height" select="''" />
     <xsl:param name="preview" select="'true'" />
@@ -5705,18 +5705,46 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Creates a YouTube URL for embedding, typically in an iframe -->
 <!-- autoplay for popout, otherwise not                          -->
-<xsl:template match="video[@youtube]" mode="youtube-embed-url">
+<xsl:template match="video[@youtube|@youtubeplaylist]" mode="youtube-embed-url">
     <xsl:param name="autoplay" select="'false'" />
-    <xsl:text>https://www.youtube.com/embed/</xsl:text>
-    <xsl:value-of select="@youtube" />
-    <!-- alphabetical, ? separator first -->
-    <!-- enables keyboard controls       -->
-    <xsl:text>?disablekd=1</xsl:text>
-    <!-- use &amp; separator for remainder -->
-    <!-- modest branding -->
+    <xsl:variable name="youtube">
+        <xsl:choose>
+            <!-- forgive an author's leading or trailing space -->
+            <xsl:when test="@youtubeplaylist">
+                <xsl:value-of select="normalize-space(@youtubeplaylist)" />
+            </xsl:when>
+            <!-- replace commas with spaces then normalize space    -->
+            <!-- result is a trim space-separated list of video IDs -->
+            <xsl:otherwise>
+                <xsl:value-of select="normalize-space(str:replace(@youtube, ',', ' '))" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:text>https://www.youtube.com/embed</xsl:text>
+    <xsl:choose>
+        <!-- playlist with a YouTube ID -->
+        <xsl:when test="@youtubeplaylist">
+            <xsl:text>?listType=playlist&amp;list=</xsl:text>
+            <xsl:value-of select="$youtube" />
+        </xsl:when>
+        <!-- if we get this far there must be a @youtube -->
+        <!-- and $youtube is one or more video IDs       -->
+        <xsl:when test="contains($youtube, ' ')">
+            <xsl:text>?playlist=</xsl:text>
+            <xsl:value-of select="str:replace($youtube, ' ', ',')" />
+        </xsl:when>
+        <!-- a single video ID -->
+        <xsl:otherwise>
+            <xsl:text>/</xsl:text>
+            <xsl:value-of select="$youtube" />
+            <xsl:text>?</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <!-- use &amp; separator for remaining options -->
     <xsl:text>&amp;modestbranding=1</xsl:text>
     <!-- kill related videos at end -->
     <xsl:text>&amp;rel=0</xsl:text>
+    <!-- start and end times; for a playlist these are applied to first video -->
     <xsl:if test="@start">
         <xsl:text>&amp;start=</xsl:text>
         <xsl:value-of select="@start" />
