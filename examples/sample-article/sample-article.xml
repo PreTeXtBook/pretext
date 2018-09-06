@@ -4392,7 +4392,7 @@ the xsltproc executable.
             <sidebyside margins="0%" widths="47% 47%">
                 <figure>
                     <caption>Individual IDs specified in an <q>itemized</q> playlist</caption>
-                    <video youtube="6tlSx0jkuLM FeJkDewhTEw" />
+                    <video xml:id="zeppelin-playlist" youtube="6tlSx0jkuLM FeJkDewhTEw" />
                     <!-- https://www.youtube.com/embed?playlist=6tlSx0jkuLM,FeJkDewhTEw -->
                 </figure>
                 <figure>
