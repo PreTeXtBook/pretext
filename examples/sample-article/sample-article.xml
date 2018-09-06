@@ -4391,12 +4391,12 @@ the xsltproc executable.
 
             <sidebyside margins="0%" widths="47% 47%">
                 <figure>
-                    <caption>Individual IDs Specified</caption>
+                    <caption>Individual IDs specified in an <q>itemized</q> playlist</caption>
                     <video youtube="6tlSx0jkuLM FeJkDewhTEw" />
                     <!-- https://www.youtube.com/embed?playlist=6tlSx0jkuLM,FeJkDewhTEw -->
                 </figure>
                 <figure>
-                    <caption>YouTube Playlist ID</caption>
+                    <caption>YouTube playlist ID specified in a <q>named</q> playlist</caption>
                     <video youtubeplaylist="PLGRecdYLYDNdX5NEkS3KH-ZtCqc2f8lJ_" />
                     <!-- https://www.youtube.com/embed?listType=playlist&list=PLGRecdYLYDNdX5NEkS3KH-ZtCqc2f8lJ_ -->
                 </figure>

@@ -54,7 +54,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="video[@youtube]">
     <!-- replace commas with spaces, then normalize space,                       -->
     <!-- then tack on a space at the end, then grab content prior to first space -->
-    <!-- <xsl:variable name="first-video-id" select="str:before(concat(normalize-space(str:replace(@youtube, ',', ' ')), ' '), ' ')" /> -->
     <xsl:variable name="first-video-id" select="substring-before(concat(normalize-space(str:replace(@youtube, ',', ' ')), ' '), ' ')" />
     <xsl:text>('</xsl:text>
     <xsl:value-of select="$first-video-id" />

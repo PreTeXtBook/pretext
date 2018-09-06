@@ -5740,8 +5740,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>?</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
+    <!-- use &amp; separator for remaining options -->
     <xsl:text>&amp;modestbranding=1</xsl:text>
-    <!-- use &amp; separator for remainder -->
     <!-- kill related videos at end -->
     <xsl:text>&amp;rel=0</xsl:text>
     <!-- start and end times; for a playlist these are applied to first video -->
