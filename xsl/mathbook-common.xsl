@@ -4756,6 +4756,14 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- This template creates a RTF (result tree fragment), -->
 <!-- which needs to be captured in one variable, then    -->
 <!-- converted to a node-set with an extension function  -->
+
+<!-- NB: An RTF has a "root" node.  Then the elements      -->
+<!-- manufactured for it occur as children.  If the        -->
+<!-- "apply-templates" fails to have the "/*" at the end   -->
+<!-- of the "select", then the main entry template will be -->
+<!-- called to do any housekeeping it might do.            -->
+<!-- This was a really tough bug to track down.            -->
+
 <xsl:template match="image" mode="layout-parameters">
     <!-- clean up margins -->
     <xsl:variable name="normalized-margins">
@@ -8035,13 +8043,6 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- We implement these here with Result Tree Fragments      -->
 <!-- as a polymorphic technique for the actual characters    -->
 <!-- LaTeX quotes are odd, so we override "q" and "sq" there -->
-
-<!-- NB: An RTF has a "root" node.  Then the elements      -->
-<!-- manufactured for it occur as children.  If the        -->
-<!-- "apply-templates" fails to have the "/*" at the end   -->
-<!-- of the "select", then the main entry template will be -->
-<!-- called to do any housekeeping it might do.            -->
-<!-- This was a really tough bug to track down.            -->
 
 <xsl:template match="q">
     <xsl:call-template name="lq-character"/>
