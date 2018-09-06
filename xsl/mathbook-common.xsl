@@ -8044,75 +8044,39 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- This was a really tough bug to track down.            -->
 
 <xsl:template match="q">
-    <xsl:variable name="lq-rtf">
-        <lq />
-    </xsl:variable>
-    <xsl:apply-templates select="exsl:node-set($lq-rtf)/*" />
+    <xsl:call-template name="lq-character"/>
     <xsl:apply-templates />
-    <xsl:variable name="rq-rtf">
-        <rq />
-    </xsl:variable>
-    <xsl:apply-templates select="exsl:node-set($rq-rtf)/*" />
+    <xsl:call-template name="rq-character"/>
 </xsl:template>
 
 <xsl:template match="sq">
-    <xsl:variable name="lsq-rtf">
-        <lsq />
-    </xsl:variable>
-    <xsl:apply-templates select="exsl:node-set($lsq-rtf)/*" />
+    <xsl:call-template name="lsq-character"/>
     <xsl:apply-templates />
-    <xsl:variable name="rsq-rtf">
-        <rsq />
-    </xsl:variable>
-    <xsl:apply-templates select="exsl:node-set($rsq-rtf)/*" />
+    <xsl:call-template name="rsq-character"/>
 </xsl:template>
 
 <xsl:template match="braces">
-    <xsl:variable name="lbrace-rtf">
-        <lbrace />
-    </xsl:variable>
-    <xsl:apply-templates select="exsl:node-set($lbrace-rtf)/*" />
+    <xsl:call-template name="lbrace-character"/>
     <xsl:apply-templates />
-    <xsl:variable name="rbrace-rtf">
-        <rbrace />
-    </xsl:variable>
-    <xsl:apply-templates select="exsl:node-set($rbrace-rtf)/*" />
+    <xsl:call-template name="rbrace-character"/>
 </xsl:template>
 
 <xsl:template match="brackets">
-    <xsl:variable name="lbracket-rtf">
-        <lbracket />
-    </xsl:variable>
-    <xsl:apply-templates select="exsl:node-set($lbracket-rtf)/*" />
+    <xsl:call-template name="lbracket-character"/>
     <xsl:apply-templates />
-    <xsl:variable name="rbracket-rtf">
-        <rbracket />
-    </xsl:variable>
-    <xsl:apply-templates select="exsl:node-set($rbracket-rtf)/*" />
+    <xsl:call-template name="rbracket-character"/>
 </xsl:template>
 
 <xsl:template match="dblbrackets">
-    <xsl:variable name="ldblbracket-rtf">
-        <ldblbracket />
-    </xsl:variable>
-    <xsl:apply-templates select="exsl:node-set($ldblbracket-rtf)/*" />
+    <xsl:call-template name="ldblbracket-character"/>
     <xsl:apply-templates />
-    <xsl:variable name="rdblbracket-rtf">
-        <rdblbracket />
-    </xsl:variable>
-    <xsl:apply-templates select="exsl:node-set($rdblbracket-rtf)/*" />
+    <xsl:call-template name="rdblbracket-character"/>
 </xsl:template>
 
 <xsl:template match="angles">
-    <xsl:variable name="langle-rtf">
-        <langle />
-    </xsl:variable>
-    <xsl:apply-templates select="exsl:node-set($langle-rtf)/*" />
+    <xsl:call-template name="langle-character"/>
     <xsl:apply-templates />
-    <xsl:variable name="rangle-rtf">
-        <rangle />
-    </xsl:variable>
-    <xsl:apply-templates select="exsl:node-set($rangle-rtf)/*" />
+    <xsl:call-template name="rangle-character"/>
 </xsl:template>
 
 <!-- ########## -->
