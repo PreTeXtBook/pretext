@@ -2937,7 +2937,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- switch on inline vs. divisional (could do this in match?) -->
             <xsl:choose>
                 <!-- divisional -->
-                <xsl:when test="parent::exercises">
+                <xsl:when test="parent::exercises or parent::exercisegroup">
                     <xsl:apply-templates select="."  mode="exercise-components">
                         <xsl:with-param name="b-original" select="$b-original" />
                         <xsl:with-param name="b-has-statement" select="true()" />
