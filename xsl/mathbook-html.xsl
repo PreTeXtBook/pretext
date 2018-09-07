@@ -2937,7 +2937,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- switch on inline vs. divisional (could do this in match?) -->
             <xsl:choose>
                 <!-- divisional -->
-                <xsl:when test="parent::exercises">
+                <xsl:when test="ancestor::exercises">
                     <xsl:apply-templates select="."  mode="exercise-components">
                         <xsl:with-param name="b-original" select="$b-original" />
                         <xsl:with-param name="b-has-statement" select="true()" />
@@ -2995,7 +2995,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <article class="exercise-like">
             <xsl:choose>
                 <!-- with full number just for solution list -->
-                <xsl:when test="parent::exercises">
+                <xsl:when test="ancestor::exercises">
                     <xsl:apply-templates select="." mode="heading-divisional-exercise" />
                 </xsl:when>
                 <!-- inline can go with generic, which is switched on inline/divisional -->

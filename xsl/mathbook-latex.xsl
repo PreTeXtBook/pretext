@@ -844,7 +844,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:for-each>
     <!-- Inline Exercises -->
     <xsl:variable name="inlineexercise-reps" select="
-        ($document-root//exercise[not(parent::exercises or parent::worksheet)])[1]"/>
+        ($document-root//exercise[not(ancestor::exercises or ancestor::worksheet)])[1]"/>
     <xsl:if test="$inlineexercise-reps">
         <xsl:text>%%&#xa;</xsl:text>
         <xsl:text>%% tcolorbox, with styles, for inline exercises&#xa;</xsl:text>
@@ -2081,12 +2081,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--       \begin{inlineexercise}{title}{label}        -->
 <!-- Type, number, optional title                      -->
 <!-- Title comes without new punctuation.              -->
-<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|exercise[not(parent::exercises or parent::worksheet)]" mode="environment">
+<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|exercise[not(ancestor::exercises or ancestor::worksheet)]" mode="environment">
     <!-- Names of various pieces normally use the      -->
     <!-- element name, but "exercise" does triple duty -->
     <xsl:variable name="environment-name">
         <xsl:choose>
-            <xsl:when test="self::exercise and not(parent::exercises or parent::worksheet)">
+            <xsl:when test="self::exercise and not(ancestor::exercises or ancestor::worksheet)">
                 <xsl:text>inlineexercise</xsl:text>
             </xsl:when>
             <xsl:otherwise>
@@ -2276,7 +2276,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- DEFINITION-LIKE and EXAMPLE-LIKE are exceptional  -->
 <!-- in that markers are inserted with "after upper"   -->
 <!-- to indicate the end of the environment.           -->
-<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|exercise[not(parent::exercises or parent::worksheet)]|assemblage|&ASIDE-LIKE;" mode="tcb-style">
+<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|exercise[not(ancestor::exercises or ancestor::worksheet)]|assemblage|&ASIDE-LIKE;" mode="tcb-style">
     <xsl:text>size=minimal, boxrule=-0.3pt, frame empty, colback=white, colbacktitle=white, coltitle=black, fonttitle=\normalfont\bfseries, attach title to upper, after title={\space}, </xsl:text>
 </xsl:template>
 
@@ -3808,7 +3808,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 3.  the "internal-id", which suffices for               -->
 <!--     the LaTeX label/ref mechanism                       -->
 <!-- N.B.: "objectives", "outcomes" need to use this         -->
-<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&ASIDE-LIKE;|exercise[not(parent::exercises or parent::worksheet)]|commentary|assemblage" mode="block-options">
+<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&ASIDE-LIKE;|exercise[not(ancestor::exercises or ancestor::worksheet)]|commentary|assemblage" mode="block-options">
     <!-- "title-full" template for title, supplied or default -->
     <xsl:text>{</xsl:text>
     <xsl:apply-templates select="." mode="title-full" />
