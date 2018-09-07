@@ -6539,7 +6539,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\swungdash{}</xsl:text>
 </xsl:template>
 <!-- Protect the version of the macro appearing in titles -->
-<xsl:template match="title//swungdash-character">
+<!-- This is an override of the base *template*           -->
+<xsl:template match="title//swungdash">
     <xsl:text>\protect</xsl:text>
     <xsl:call-template name="swungdash-character"/>
 </xsl:template>
