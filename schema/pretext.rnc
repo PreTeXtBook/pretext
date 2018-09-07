@@ -809,12 +809,14 @@
                 attribute end {xsd:integer}?,
                 attribute play-at {"embed" | "popout" | "select"}?,
                 attribute preview {"default" | "generic" | text}?,
-                (AttributesSourceFile | AttributesYouTube)
+                (AttributesSourceFile | AttributesYouTube | AttributesYouTubePlaylist)
             }
         AttributesSourceFile =
             attribute source {text}
         AttributesYouTube =
             attribute youtube {text}
+        AttributesYouTubePlaylist =
+            attribute youtubeplaylist {text}
         
         
         ExerciseBody =
