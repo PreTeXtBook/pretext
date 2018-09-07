@@ -3397,7 +3397,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="notation" mode="backmatter">
     <xsl:text>\(</xsl:text>
-    <xsl:apply-templates select="usage" />
+    <!-- "usage" should be raw latex, so -->
+    <!-- should avoid text processing    -->
+    <xsl:value-of select="usage" />
     <xsl:text>\)</xsl:text>
     <xsl:text>&amp;</xsl:text>
     <xsl:apply-templates select="description" />

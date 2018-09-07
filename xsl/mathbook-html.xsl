@@ -911,6 +911,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <tr>
         <td style="text-align:left; vertical-align:top;">
             <xsl:call-template name="begin-inline-math" />
+            <!-- "usage" should be raw latex, so -->
+            <!-- should avoid text processing    -->
             <xsl:value-of select="usage" />
             <xsl:call-template name="end-inline-math" />
         </td>
