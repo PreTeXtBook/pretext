@@ -1040,6 +1040,12 @@ def get_cli_arguments():
     format_help = 'Output formats are:\n' + '\n'.join(['  {} - {}'.format(info[0], info[1]) for info in format_info])
     parser.add_argument('-f', '--format', help=format_help, action="store", dest='format')
 
+    # "nargs" allows multiple options following the flag
+    # separate by spaces, can't use "-stringparam"
+    # stringparams is a list of strings on return
+    parser.add_argument('-p', '--parameters', nargs='+', help='stringparam options to pass to XSLT extraction stylesheet (option/value pairs)',
+                         action="store", dest='stringparams')
+
     # default to an empty string, which signals root to XSL stylesheet
     parser.add_argument('-r', '--restrict', help='restrict to subtree rooted at element with specified xml:id',
                          action="store", dest='xmlid', default='')
