@@ -484,7 +484,7 @@
             element viz {empty}
         </fragment>
 
-        <p>A large class of similary indivisible items are units on physical quantities.</p>
+        <p>A large class of similary indivisible items are units on physical quantities.  The <tag>quantity</tag> element is allowed to be empty, and the code should silently produce no output.  Expressing non-emptieness here might get a bit messy, so a Schematron warning could be a good alternative.</p>
 
         <fragment xml:id="siunit">
         UnitSpecification =
