@@ -6033,7 +6033,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- magnitude, plus units -->
         <xsl:when test="mag and (unit or per)">
             <xsl:text>\SI{</xsl:text>
-            <xsl:apply-templates select="mag"/>
+            <xsl:value-of select="mag"/>
             <xsl:text>}{</xsl:text>
             <xsl:apply-templates select="unit"/>
             <xsl:apply-templates select="per"/>
@@ -6042,7 +6042,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- magnitude only -->
         <xsl:when test="mag">
             <xsl:text>\num{</xsl:text>
-            <xsl:apply-templates select="mag"/>
+            <xsl:value-of select="mag"/>
             <xsl:text>}</xsl:text>
         </xsl:when>
         <!-- nothing (really should be caught in schema) -->

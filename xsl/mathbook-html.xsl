@@ -6329,7 +6329,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="mag">
     <xsl:variable name="mag">
-        <xsl:apply-templates />
+        <xsl:value-of select="."/>
     </xsl:variable>
     <xsl:variable name="math-pi">
         <xsl:call-template name="begin-inline-math" />
