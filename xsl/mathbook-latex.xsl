@@ -6017,53 +6017,41 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}} not yet realized in \LaTeX]&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Numbers, units, quantities                     -->
-<!-- quantity                                       -->
+<!-- ######## -->
+<!-- SI Units -->
+<!-- ######## -->
+
 <xsl:template match="quantity">
-    <!-- warning if there is no content -->
-    <xsl:if test="not(descendant::unit) and not(descendant::per) and not(descendant::mag)">
-        <xsl:message terminate="no">
-        <xsl:text>MBX:WARNING: magnitude or units needed</xsl:text>
-        </xsl:message>
-    </xsl:if>
-    <!-- if it's just a number with no units -->
-    <xsl:if test="not(descendant::unit) and not(descendant::per) and (descendant::mag)">
-        <xsl:text>\num{</xsl:text>
-        <xsl:apply-templates select="mag"/>
-        <xsl:text>}</xsl:text>
-    </xsl:if>
-    <!-- if it has a magnitude and units -->
-    <xsl:if test="((descendant::unit) or (descendant::per)) and descendant::mag">
-        <xsl:text>\SI{</xsl:text>
-        <xsl:apply-templates select="mag"/>
-        <xsl:text>}{</xsl:text>
-        <xsl:apply-templates select="unit"/>
-        <xsl:apply-templates select="per"/>
-        <xsl:text>}</xsl:text>
-    </xsl:if>
-    <!-- if it is just units with no magnitude -->
-    <xsl:if test="((descendant::unit) or (descendant::per)) and not(descendant::mag)">
-        <xsl:text>\si{</xsl:text>
-        <xsl:apply-templates select="unit"/>
-        <xsl:apply-templates select="per"/>
-        <xsl:text>}</xsl:text>
-    </xsl:if>
+    <xsl:choose>
+        <!-- no magnitude, only units -->
+        <xsl:when test="not(mag) and (unit or per)">
+            <xsl:text>\si{</xsl:text>
+            <xsl:apply-templates select="unit"/>
+            <xsl:apply-templates select="per"/>
+            <xsl:text>}</xsl:text>
+        </xsl:when>
+        <!-- magnitude, plus units -->
+        <xsl:when test="mag and (unit or per)">
+            <xsl:text>\SI{</xsl:text>
+            <xsl:apply-templates select="mag"/>
+            <xsl:text>}{</xsl:text>
+            <xsl:apply-templates select="unit"/>
+            <xsl:apply-templates select="per"/>
+            <xsl:text>}</xsl:text>
+        </xsl:when>
+        <!-- magnitude only -->
+        <xsl:when test="mag">
+            <xsl:text>\num{</xsl:text>
+            <xsl:apply-templates select="mag"/>
+            <xsl:text>}</xsl:text>
+        </xsl:when>
+        <!-- nothing (really should be caught in schema) -->
+        <!-- but no real harm in just doing nothing      -->
+        <xsl:otherwise />
+    </xsl:choose>
 </xsl:template>
 
-<!-- Magnitude                                      -->
-<xsl:template match="mag">
-    <xsl:if test="not(parent::quantity)">
-        <xsl:message>MBX:WARNING: mag element should have parent quantity element</xsl:message>
-    </xsl:if>
-    <xsl:apply-templates />
-</xsl:template>
-
-<!-- Units                                          -->
 <xsl:template match="unit|per">
-    <xsl:if test="not(parent::quantity)">
-        <xsl:message>MBX:WARNING: unit or per element should have parent quantity element</xsl:message>
-    </xsl:if>
-    <!-- if we're in a 'per' node -->
     <xsl:if test="self::per">
         <xsl:text>\per</xsl:text>
     </xsl:if>
@@ -6072,18 +6060,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\</xsl:text>
         <xsl:value-of select="@prefix"/>
     </xsl:if>
-    <!-- base unit is *mandatory* so check to see if it has been provided -->
-    <xsl:choose>
-        <xsl:when test="@base">
-            <xsl:text>\</xsl:text>
-            <xsl:value-of select="@base"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:message terminate="no">
-                <xsl:text>MBX:WARNING: base unit needed</xsl:text>
-            </xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
+    <!-- base unit is required -->
+    <xsl:text>\</xsl:text>
+    <xsl:value-of select="@base"/>
     <!-- optional exponent -->
     <xsl:if test="@exp">
         <xsl:text>\tothe{</xsl:text>
@@ -6091,6 +6070,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>}</xsl:text>
     </xsl:if>
 </xsl:template>
+
 
 <!-- Actual Quotations                -->
 <!-- TODO: <quote> element for inline -->

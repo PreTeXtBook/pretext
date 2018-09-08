@@ -6290,42 +6290,43 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- Numbers, units, quantities                     -->
-<!-- quantity                                       -->
+<!-- ######## -->
+<!-- SI Units -->
+<!-- ######## -->
+
 <xsl:template match="quantity">
-    <!-- warning if there is no content -->
-    <xsl:if test="not(descendant::unit) and not(descendant::per) and not(descendant::mag)">
-        <xsl:message terminate="no">
-        <xsl:text>MBX:WARNING: magnitude or units needed</xsl:text>
-        </xsl:message>
+    <!-- Unicode NARROW NO-BREAK SPACE -->
+    <xsl:variable name="thin-space" select="'&#x202f;'"/>
+    <!-- Unicode FRACTION SLASH -->
+    <xsl:variable name="fraction-slash" select="'&#x2044;'"/>
+
+    <xsl:apply-templates select="mag"/>
+    <!-- if not solo, add separation -->
+    <xsl:if test="mag and (unit or per)">
+        <xsl:value-of select="$thin-space"/>
     </xsl:if>
-    <!-- print magnitude if there is one -->
-    <xsl:if test="descendant::mag">
-        <xsl:apply-templates select="mag"/>
-        <!-- if the units that follow are fractional, thin space -->
-        <xsl:if test="descendant::per">
-            <xsl:text>&#8239;</xsl:text>
-        </xsl:if>
-    </xsl:if>
-    <!-- if there are non-fracitonal units, print them -->
-    <xsl:if test="descendant::unit and not(descendant::per)">
-        <xsl:apply-templates select="unit" />
-    </xsl:if>
-    <!-- if there are fracitonal units with a numerator part, print them -->
-    <xsl:if test="descendant::unit and descendant::per">
-        <sup> <xsl:apply-templates select="unit" /> </sup>
-        <xsl:text>&#8260;</xsl:text>
-        <sub> <xsl:apply-templates select="per" /> </sub>
-    </xsl:if>
-    <!-- if there are fracitonal units without a numerator part, print them -->
-    <xsl:if test="not(descendant::unit) and descendant::per">
-        <sup> <xsl:text>1</xsl:text></sup>
-        <xsl:text>&#8260;</xsl:text>
-        <sub> <xsl:apply-templates select="per" /> </sub>
-    </xsl:if>
+    <xsl:choose>
+        <xsl:when test="per">
+           <sup>
+                <xsl:if test="not(unit)">
+                    <xsl:text>1</xsl:text>
+                </xsl:if>
+                <xsl:apply-templates select="unit" />
+            </sup>
+            <xsl:value-of select="$fraction-slash"/>
+            <sub>
+                <xsl:apply-templates select="per" />
+            </sub>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="unit"/>
+        </xsl:otherwise>
+    </xsl:choose>
+    <!-- NB: no mag, no per, no unit implies no output -->
+    <!-- (really should be caught in schema), but      -->
+    <!-- no real harm in just doing nothing            -->
 </xsl:template>
 
-<!-- Magnitude                                      -->
 <xsl:template match="mag">
     <xsl:variable name="mag">
         <xsl:apply-templates />
@@ -6347,12 +6348,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:key name="base-key" match="base" use="concat(../@name, @full)"/>
 
 <xsl:template match="unit|per">
-    <xsl:if test="not(parent::quantity)">
-        <xsl:message>MBX:WARNING: unit or per element should have parent quantity element</xsl:message>
-    </xsl:if>
-    <!-- if the unit is 1st and no mag, no need for thinspace. Otherwise, give thinspace -->
-    <xsl:if test="position() != 1 or (local-name(.)='unit' and (preceding-sibling::mag or following-sibling::mag) and not(preceding-sibling::per or following-sibling::per))">
-        <xsl:text>&#8239;</xsl:text>
+    <!-- Unicode NARROW NO-BREAK SPACE -->
+    <xsl:variable name="thin-space" select="'&#x202f;'"/>
+
+    <!-- add internal spaces within a numerator or denominator of units -->
+    <xsl:if test="(self::unit and preceding-sibling::unit) or (self::per and preceding-sibling::per)">
+        <xsl:value-of select="$thin-space"/>
     </xsl:if>
     <!-- prefix is optional -->
     <xsl:if test="@prefix">
@@ -6366,28 +6367,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:variable>
         <xsl:value-of select="$short" />
     </xsl:if>
-    <!-- base unit is *mandatory* so check to see if it has been provided -->
-    <xsl:choose>
-        <xsl:when test="@base">
-            <xsl:variable name="base">
-                <xsl:value-of select="@base" />
-            </xsl:variable>
-            <xsl:variable name="short">
-                <xsl:for-each select="document('mathbook-units.xsl')">
-                    <xsl:value-of select="key('base-key',concat('bases',$base))/@short"/>
-                </xsl:for-each>
-            </xsl:variable>
-            <xsl:value-of select="$short" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:message terminate="no">
-                <xsl:text>MBX:WARNING: base unit needed</xsl:text>
-            </xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
-    <!-- exponent is optional -->
+    <!-- base unit is required -->
+    <xsl:variable name="base">
+        <xsl:value-of select="@base" />
+    </xsl:variable>
+    <xsl:variable name="short">
+        <xsl:for-each select="document('mathbook-units.xsl')">
+            <xsl:value-of select="key('base-key',concat('bases',$base))/@short"/>
+        </xsl:for-each>
+    </xsl:variable>
+    <xsl:value-of select="$short" />
+     <!-- exponent is optional -->
     <xsl:if test="@exp">
-        <sup><xsl:value-of select="@exp"/></sup>
+        <sup>
+            <xsl:value-of select="@exp"/>
+        </sup>
     </xsl:if>
 </xsl:template>
 
