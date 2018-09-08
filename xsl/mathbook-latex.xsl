@@ -173,6 +173,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- provides an error message and also sets a value -->
 <!-- we can condition on for the extsizes package.   -->
 <!-- In predicted order, sort of, so fall out early  -->
+
+<!-- NB: Code using $font-size and latex.geometry is also -->
+<!-- used in the latex-image extraction stylesheet. Until -->
+<!-- we do a better job of ensuring they remain in-sync,  -->
+<!-- please coordinate the two sets of templates by hand  -->
+
 <xsl:variable name="font-size">
     <xsl:choose>
         <xsl:when test="$latex.font.size='10pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
