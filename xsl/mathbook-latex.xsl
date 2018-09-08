@@ -1128,7 +1128,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\usepackage{caption}</xsl:text>
         <!-- First, captioned items subsidiary to a captioned figure -->
         <!-- Seem to be bold face without extra effort               -->
-        <xsl:if test="$document-root//figure/sidebyside/*[caption]">
+        <xsl:if test="$document-root//figure/sidebyside/*[caption] | $document-root//figure/sbsgroup/sidebyside/*[caption]">
             <xsl:text>%% Captioned items inside side-by-side within captioned figure&#xa;</xsl:text>
             <xsl:text>\usepackage{subcaption}&#xa;</xsl:text>
             <xsl:text>\captionsetup[subfigure]{labelformat=simple}&#xa;</xsl:text>
