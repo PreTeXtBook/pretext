@@ -5489,6 +5489,30 @@ the xsltproc executable.
                 <title>Vertical Alignment</title>
                 <p>Vertical alignment can be specified using the <c>valign</c> attribute which admits a space-separated list of <c>top</c>, <c>middle</c>, and <c>bottom</c>; the default is <c>top</c>.</p>
 
+                <!-- Following paragraph will just barely push following sidebyside -->
+                <!-- onto a new page, to test that the captions remain attached     -->
+                <!-- (presuming no edits prior!).  Removing a line should bring the -->
+                <!-- sidebyside back to fill the previous page, intact.  So keep    -->
+                <!-- this in place for use in testing.                              -->
+
+                <!--
+                <p>\noindent
+                Vertical alignment can be specified using the <c>valign</c> attribute which admits a
+                Vertical alignment can be specified using the <c>valign</c> attribute which admits a
+                Vertical alignment can be specified using the <c>valign</c> attribute which admits a
+                Vertical alignment can be specified using the <c>valign</c> attribute which admits a
+                Vertical alignment can be specified using the <c>valign</c> attribute which admits a
+                Vertical alignment can be specified using the <c>valign</c> attribute which admits a
+                Vertical alignment can be specified using the <c>valign</c> attribute which admits a
+                Vertical alignment can be specified using the <c>valign</c> attribute which admits a
+                Vertical alignment can be specified using the <c>valign</c> attribute which admits a
+                Vertical alignment can be specified using the <c>valign</c> attribute which admits a
+                Vertical alignment can be specified using the <c>valign</c> attribute which admits a
+                Vertical alignment can be specified using the <c>valign</c> attribute which admits a
+                Vertical alignment can be specified using the <c>valign</c> attribute which admits a
+                Vertical alignment can be specified using the <c>valign</c> attribute which admits a</p>
+                -->
+
                 <sidebyside widths="33% 17% 50%" valigns="middle top middle">
                     <figure>
                         <caption>Middle</caption>

@@ -1873,17 +1873,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Necessary to use \NewTColorBox for boxes of the panels&#xa;</xsl:text>
         <xsl:text>%% "newfloat" environment to squash page-breaks within a single sidebyside&#xa;</xsl:text>
         <xsl:text>%% \leavevmode necessary when a side-by-side comes first, right after a heading&#xa;</xsl:text>
-        <xsl:text>\DeclareFloatingEnvironment[placement={H}]{sbscontainer}&#xa;</xsl:text>
         <!-- Main side-by-side environment, given by xparse            -->
         <!-- raster equal height: boxes of same *row* have same height -->
         <!-- raster force size: false lets us control width            -->
-        <!-- An uncaptioned "figure" is used to prevent page breaks    -->
+        <!-- We do not try here to keep captions attached (when not    -->
+        <!-- in a "figure"), unfortunately, this is an un-semantic     -->
+        <!-- command inbetween the list of panels and the captions     -->
         <xsl:text>%% "xparse" environment for entire sidebyside&#xa;</xsl:text>
         <xsl:text>\NewDocumentEnvironment{sidebyside}{mmmm}&#xa;</xsl:text>
-        <xsl:text>  {\begin{sbscontainer}\begin{tcbraster}&#xa;</xsl:text>
+        <xsl:text>  {\begin{tcbraster}&#xa;</xsl:text>
         <xsl:text>    [sbsstyle,raster columns=#1,&#xa;</xsl:text>
         <xsl:text>    raster left skip=#2\linewidth,raster right skip=#3\linewidth,raster column skip=#4\linewidth]}&#xa;</xsl:text>
-        <xsl:text>  {\end{tcbraster}\end{sbscontainer}}&#xa;</xsl:text>
+        <xsl:text>  {\end{tcbraster}}&#xa;</xsl:text>
         <xsl:text>%% "tcolorbox" environments for three components of a panel&#xa;</xsl:text>
         <xsl:text>\NewTColorBox{sbsheading}{m}{sbsheadingstyle,width=#1\linewidth}&#xa;</xsl:text>
         <xsl:text>\NewTColorBox{sbspanel}{mO{top}}{sbspanelstyle,width=#1\linewidth,valign=#2}&#xa;</xsl:text>
@@ -7156,6 +7157,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The main templates for "sidebyside" and "sbsgroup"   -->
 <!-- are in xsl/mathbook-common.xsl, as befits containers -->
 
+<!-- Note: Various end-of-line "%" are necessary to keep  -->
+<!-- headings, panels, and captions together as one unit  -->
+<!-- without a page -break, via the LaTeX                 -->
+<!-- \nopagebreak=\nopagebreak[4] command                 -->
+
 <!-- If an object carries a title, we add it to the -->
 <!-- row of titles across the top of the table      -->
 <!-- Bold, but not with a font-size increase, since -->
@@ -7168,7 +7174,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="title">
         <xsl:apply-templates select="." mode="title-full" />
     </xsl:if>
-    <xsl:text>\end{sbsheading}&#xa;</xsl:text>
+    <xsl:text>\end{sbsheading}%&#xa;</xsl:text>
 </xsl:template>
 
 
@@ -7178,7 +7184,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     <xsl:text>\begin{sbspanel}{</xsl:text>
     <xsl:value-of select="substring-before($width,'%') div 100" />
-    <xsl:text>}</xsl:text>
+    <xsl:text>}%</xsl:text>
     <!-- 'top' is the sbspanel environment default -->
     <!-- could generate brackets of optional       -->
     <!-- argument outside of the choose            -->
@@ -7193,7 +7199,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="." mode="panel-latex-box" />
-    <xsl:text>\end{sbspanel}&#xa;</xsl:text>
+    <xsl:text>\end{sbspanel}%&#xa;</xsl:text>
 </xsl:template>
 
 
@@ -7201,7 +7207,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="width" />
     <xsl:text>\begin{sbscaption}{</xsl:text>
     <xsl:value-of select="substring-before($width,'%') div 100" />
-    <xsl:text>}&#xa;</xsl:text>
+    <xsl:text>}%&#xa;</xsl:text>
     <xsl:choose>
         <!-- Exceptional situation for backward-compatibility -->
         <!-- Titled/environment version deprecated 2017-08-25 -->
@@ -7232,7 +7238,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- fill space -->
         <xsl:otherwise />
     </xsl:choose>
-    <xsl:text>\end{sbscaption}&#xa;</xsl:text>
+    <xsl:text>\end{sbscaption}%&#xa;</xsl:text>
 </xsl:template>
 
 <!-- We take in all three rows of a LaTeX    -->
@@ -7261,6 +7267,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:call-template name="leave-vertical-mode"/>
     </xsl:if>
 
+    <!-- TODO: Make "sidebyside" a 3-argument environment:          -->
+    <!-- headings, panels, captions.  Then put "\nopagebreak"       -->
+    <!-- into the definition, so it is "hidden" and not in the body -->
+
     <xsl:text>\begin{sidebyside}{</xsl:text>
     <xsl:value-of select="$number-panels" />
     <xsl:text>}{</xsl:text>
@@ -7269,19 +7279,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="substring-before($right-margin, '%') div 100" />
     <xsl:text>}{</xsl:text>
     <xsl:value-of select="substring-before($space-width, '%') div 100" />
-    <xsl:text>}&#xa;</xsl:text>
+    <xsl:text>}%&#xa;</xsl:text>
+    <!-- If the sidebyside is inside a figure, the floating -->
+    <!-- environment keeps it from page breaking, otherwise -->
+    <!-- we need to add in the necessary discouragement     -->
+    <!-- Headings (titles) are "all or nothing"             -->
 
-    <!-- Headings (titles) are "all or nothing" -->
     <xsl:if test="$has-headings">
         <xsl:value-of select="$headings" />
+        <xsl:if test="not(ancestor::figure)">
+            <xsl:text>\nopagebreak%&#xa;</xsl:text>
+        </xsl:if>
     </xsl:if>
     <!-- The main event -->
     <xsl:value-of select="$panels" />
-    <!-- Captions are "all or nothing" -->
+    <!-- Captions are "all or nothing"       -->
+    <!-- We try to keep them attached to the -->
+    <!-- panels with a firm "no-page-break"  -->
     <xsl:if test="$has-captions">
+        <xsl:if test="not(ancestor::figure)">
+            <xsl:text>\nopagebreak%&#xa;</xsl:text>
+        </xsl:if>
         <xsl:value-of select="$captions" />
     </xsl:if>
-    <xsl:text>\end{sidebyside}&#xa;</xsl:text>
+    <xsl:text>\end{sidebyside}%&#xa;</xsl:text>
 </xsl:template>
 
 
