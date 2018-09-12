@@ -6349,7 +6349,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 
 <!-- Note -->
 <xsl:template match="n">
-    <xsl:text>\(</xsl:text>
+    <xsl:call-template name="begin-inline-math"/>
     <!-- Test that pitch class is NOT castable as a number -->
     <xsl:if test="not(number(@pc) = number(@pc))">
         <xsl:text>\text{</xsl:text>
@@ -6382,20 +6382,25 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:value-of select="@octave"/>
         <xsl:text>}</xsl:text>
     </xsl:if>
-    <xsl:text>\)</xsl:text>
+    <xsl:call-template name="end-inline-math"/>
 </xsl:template>
 
 <!-- Scale Degrees -->
 <xsl:template match="scaledeg">
     <!-- Arabic numeral with circumflex accent above)-->
-    <xsl:text>\(\hat{</xsl:text>
+    <xsl:call-template name="begin-inline-math"/>
+    <xsl:text>\hat{</xsl:text>
     <xsl:apply-templates/>
-    <xsl:text>}\) </xsl:text>
+    <xsl:text>}</xsl:text>
+    <xsl:call-template name="end-inline-math"/>
+    <!-- TODO: unclear if trailing space is necessary -->
+    <xsl:text> </xsl:text>
 </xsl:template>
 
 <!-- Chord -->
 <xsl:template match="chord">
-    <xsl:text>\(\left.</xsl:text>
+    <xsl:call-template name="begin-inline-math"/>
+    <xsl:text>\left.</xsl:text>
     <!-- Root -->
     <xsl:choose>
         <!-- There is an accidental -->
@@ -6529,7 +6534,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             </xsl:otherwise>
         </xsl:choose>
     </xsl:if>
-    <xsl:text>\right.\)</xsl:text>
+    <xsl:text>\right.</xsl:text>
+    <xsl:call-template name="end-inline-math"/>
 </xsl:template>
 
 <!-- Chord Alteration -->
