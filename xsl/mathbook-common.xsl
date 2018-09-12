@@ -6397,6 +6397,17 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:text> </xsl:text>
 </xsl:template>
 
+<!-- Time Signatures -->
+<xsl:template match="timesignature">
+    <xsl:call-template name="begin-inline-math"/>
+    <xsl:text>\begin{smallmatrix}</xsl:text>
+    <xsl:value-of select="@top"/>
+    <xsl:text>\\</xsl:text>
+    <xsl:value-of select="@bottom"/>
+    <xsl:text>\end{smallmatrix}</xsl:text>
+    <xsl:call-template name="end-inline-math"/>
+</xsl:template>
+
 <!-- Chord -->
 <xsl:template match="chord">
     <xsl:call-template name="begin-inline-math"/>
