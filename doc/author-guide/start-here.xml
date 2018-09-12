@@ -92,6 +92,8 @@
         <p>If you are impatient (sometimes a good quality!), then <xref ref="quickstart-example" /> should be next, where we construct and process a short example and then expand it slightly with several additions.</p>
 
         <p>If you would like a general, high-level overview of features skip ahead to <xref ref="overview" />.</p>
+
+        <p>If you have an existing project authored in <latex/> you may be interested in the conversion process described in <xref ref="latex-conversion"/>.</p>
     </section>
 
 </chapter>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--   This file is part of the documentation of PreTeXt      -->
+<!--                                                          -->
+<!--      PreTeXt Author's Guide                              -->
+<!--                                                          -->
+<!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<appendix xml:id="latex-conversion">
+    <title>Conversion from <latex /></title>
+
+    <p>As part of the <url href="https://utmost.aimath.org/"><init>UTMOST</init></url> project, we offer a service to help convert existing textbooks from <latex/> to <pretext/>. The service is free if you are planning to release your book with an open license.  The conversion will only be 95 percent correct, but that means it will take you 20 times less effort than converting it yourself.</p>
+
+    <p>Before converting your book, familiarize yourself with <pretext/> to the point of being able to compile the sample article and sample book into <init>HTML</init> and <init>PDF</init>.  Check that you can edit the source files and the resulting output files behave as expected.  That way, you will be on familiar ground when you finish the last 5 percent of the conversion.</p>
+
+    <p>The actual conversion will be done by David Farmer from the American Institute of Mathematics.  The first hurdle is to get your <latex/> files to David.  The preferred method is:<ol>
+
+        <li>Put your <em>entire</em> <latex/> source into a GitHub repository.  Do not edit or restructure in any way, nor provide just a subset for <q>testing,</q> since this only complicates the process.  You do not need to include the image files.</li>
+
+        <li>If the repository is private, make David a collaborator so he can access it. (GitHub username: <c>davidfarmer</c>.)</li>
+
+        <li>Email <c>farmer@aimath.org</c> with your request for conversion, including the <init>URL</init> of your repository and a brief description of your project.</li>
+
+        <li>When the first draft of the conversion is ready, you will receive a pull request from David via GitHub. Go ahead and accept it, and now your repository will have new files that are the <pretext/> source.</li>
+
+        <li>Spend some time to review the files carefully, looking for consistent mis-interpretations of your intent. Convert to <init>HTML</init> and <init>PDF</init> and see how they look. There may be some back-and-forth with you explaining what your <latex/> was trying to do, and David improving the conversion to <pretext/>.</li>
+
+        <li>At some point it will be up to you to take ownership of the <pretext/> source and finish the conversion.</li>
+    </ol></p>
+
+    <p>This service is for authors who wish to consider having <pretext/> as the <q>official</q> source of their textbook.  It is not feasible to maintain <latex/> source and expect to have all of the features of <pretext/>.</p>
+</appendix>

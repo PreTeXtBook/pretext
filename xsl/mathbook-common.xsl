@@ -194,7 +194,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Newlines with &#xa; : http://stackoverflow.com/questions/723226/producing-a-new-line-in-xslt -->
 <!-- Removing whitespace: http://stackoverflow.com/questions/1468984/xslt-remove-whitespace-from-template -->
 <xsl:strip-space elements="mathbook pretext book article memo letter" />
-<xsl:strip-space elements="frontmatter chapter appendix index-part index section subsection subsubsection exercises solutions references introduction conclusion paragraphs subparagraph backmatter" />
+<xsl:strip-space elements="frontmatter chapter appendix index-part index section subsection subsubsection exercises worksheet solutions references introduction conclusion paragraphs subparagraph backmatter" />
 <xsl:strip-space elements="docinfo author abstract" />
 <xsl:strip-space elements="titlepage preface acknowledgement biography foreword dedication colophon" />
 <!-- List is elements in DEFINITION-LIKE entity -->
@@ -282,7 +282,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$root/book/chapter/section">2</xsl:when>
         <xsl:when test="$root/book/chapter">1</xsl:when>
         <xsl:when test="$root/article/section/subsection">2</xsl:when>
-        <xsl:when test="$root/article/section">1</xsl:when>
+        <xsl:when test="$root/article/section|$root/article/worksheet">1</xsl:when>
         <xsl:when test="$root/article">0</xsl:when>
         <xsl:when test="$root/letter">0</xsl:when>
         <xsl:when test="$root/memo">0</xsl:when>
@@ -301,7 +301,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:when test="$root/book/part">3</xsl:when>
         <xsl:when test="$root/book">2</xsl:when>
-        <xsl:when test="$root/article/section">1</xsl:when>
+        <xsl:when test="$root/article/section|$root/article/worksheet">1</xsl:when>
         <xsl:when test="$root/article">0</xsl:when>
         <xsl:when test="$root/letter">0</xsl:when>
         <xsl:when test="$root/memo">0</xsl:when>
@@ -321,7 +321,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:when test="$root/book/part">3</xsl:when>
         <xsl:when test="$root/book">2</xsl:when>
-        <xsl:when test="$root/article/section">1</xsl:when>
+        <xsl:when test="$root/article/section|$root/article/worksheet">1</xsl:when>
         <xsl:when test="$root/article">0</xsl:when>
         <xsl:when test="$root/letter">0</xsl:when>
         <xsl:when test="$root/memo">0</xsl:when>
@@ -340,7 +340,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:when test="$root/book/part">3</xsl:when>
         <xsl:when test="$root/book">2</xsl:when>
-        <xsl:when test="$root/article/section">1</xsl:when>
+        <xsl:when test="$root/article/section|$root/article/worksheet">1</xsl:when>
         <xsl:when test="$root/article">0</xsl:when>
         <xsl:when test="$root/letter">0</xsl:when>
         <xsl:when test="$root/memo">0</xsl:when>
@@ -359,7 +359,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:when test="$root/book/part">3</xsl:when>
         <xsl:when test="$root/book">2</xsl:when>
-        <xsl:when test="$root/article/section">1</xsl:when>
+        <xsl:when test="$root/article/section|$root/article/worksheet">1</xsl:when>
         <xsl:when test="$root/article">0</xsl:when>
         <xsl:when test="$root/letter">0</xsl:when>
         <xsl:when test="$root/memo">0</xsl:when>
@@ -376,7 +376,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:choose>
             <xsl:when test="$root/book/part">5</xsl:when>
             <xsl:when test="$root/book">4</xsl:when>
-            <xsl:when test="$root/article/section">3</xsl:when>
+            <xsl:when test="$root/article/section|$root/article/worksheet">3</xsl:when>
             <xsl:when test="$root/article">0</xsl:when>
             <xsl:when test="$root/letter">0</xsl:when>
             <xsl:when test="$root/memo">0</xsl:when>
@@ -685,10 +685,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="b-number-project-distinct" select="true()" />
 <!-- exercise historical default -->
 <xsl:variable name="b-number-exercise-distinct" select="false()" />
-
-<!-- TEMPORARY: exercise numbering cutover -->
-<xsl:param name="new.exercises" select="'no'" />
-<xsl:variable name="b-newexercises" select="boolean($new.exercises = 'yes')" />
 
 <!-- Status quo, for no-part books and articles is "absent".     -->
 <!-- The "structural" option will change numbers and numbering   -->
@@ -1039,7 +1035,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- are just containers, so we subtract them away        -->
 <!-- The frontmatter is divided for books in HTML,        -->
 <!-- and the backmatter is divided for articles and books -->
-<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|exercises|solutions|references|introduction|conclusion|colophon|biography|dedication|acknowledgement|preface|index" mode="division-name">
+<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|exercises|worksheet|solutions|references|introduction|conclusion|colophon|biography|dedication|acknowledgement|preface|index" mode="division-name">
     <xsl:variable name="relative-level">
         <xsl:apply-templates select="." mode="level" />
     </xsl:variable>
@@ -2792,6 +2788,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <xsl:message>MBX:BUG:     asking if a non-structural division is a leaf</xsl:message> -->
 </xsl:template>
 
+<!-- There are two models for most of the divisions (part    -->
+<!-- through subsubsection).  One has subdivisions, and      -->
+<!-- possibly multiple "exercises", or other specialized     -->
+<!-- subdivisions.  The other has no subdivisions, and then  -->
+<!-- at most one of each type of specialized subdivision,    -->
+<!-- which inherit numbers from their parent division. This  -->
+<!-- is the test, which is very similar to "is-leaf" above.  -->
+<!--                                                         -->
+<!-- A "part" must have chapters, so will always return      -->
+<!-- 'true' and for a 'subsubsection' there are no more      -->
+<!-- subdivisions to employ and so will return empty.        -->
+<xsl:template match="part|chapter|section|subsection|subsubsection" mode="is-structured-division">
+    <xsl:if test="chapter|section|subsection|subsubsection">
+        <xsl:text>true</xsl:text>
+    </xsl:if>
+</xsl:template>
+
 <!-- We also want to identify smaller pieces of a document,          -->
 <!-- such as when they contain an index element or defined term,     -->
 <!-- so we can reference back to them.  We call these "blocks" here, -->
@@ -3058,7 +3071,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Some items have default titles that make sense         -->
 <!-- Typically these are one-off subdivisions (eg preface), -->
 <!-- or repeated generic divisions (eg exercises)           -->
-<xsl:template match="frontmatter|colophon|preface|foreword|acknowledgement|dedication|biography|references|exercises|solutions|backmatter|index-part|index[index-list]" mode="has-default-title">
+<xsl:template match="frontmatter|colophon|preface|foreword|acknowledgement|dedication|biography|assemblage|references|exercises|worksheet|solutions|backmatter|index-part|index[index-list]" mode="has-default-title">
     <xsl:text>true</xsl:text>
 </xsl:template>
 <xsl:template match="*" mode="has-default-title">
@@ -3392,21 +3405,33 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- There are corresponing strings in the localizations files, -->
 <!-- and the "en-US" file will be the best documented           -->
 
-<!-- A single objective is authored as a list item -->
+<!-- A single objective or outcome is authored as a list item -->
 <xsl:template match="objectives/ol/li|objectives/ul/li|objectives/dl/li" mode="type-name">
     <xsl:call-template name="type-name">
         <xsl:with-param name="string-id" select="'objective'" />
+    </xsl:call-template>
+</xsl:template>
+<xsl:template match="outcomes/ol/li|outcomes/ul/li|outcomes/dl/li" mode="type-name">
+    <xsl:call-template name="type-name">
+        <xsl:with-param name="string-id" select="'outcome'" />
     </xsl:call-template>
 </xsl:template>
 
 <!-- There are lots of exercises, but differentiated by their parents,  -->
 <!-- so we use identifiers that remind us of their location in the tree -->
 
-<!-- First, a "divisional" "exercise" in an "exercises",     -->
+<!-- First, a "divisional" "exercise" in an "exercises",      -->
 <!-- with perhaps intervening groups, like an "exercisegroup" -->
 <xsl:template match="exercises//exercise" mode="type-name">
     <xsl:call-template name="type-name">
         <xsl:with-param name="string-id" select="'divisionalexercise'" />
+    </xsl:call-template>
+</xsl:template>
+
+<!-- Second, an "exercise" placed within a "worksheet"-->
+<xsl:template match="worksheet//exercise" mode="type-name">
+    <xsl:call-template name="type-name">
+        <xsl:with-param name="string-id" select="'worksheetexercise'" />
     </xsl:call-template>
 </xsl:template>
 
@@ -3601,21 +3626,13 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- scheme and within a natural, or configured, subtree -->
 
 <!-- Serial Numbers: Divisions -->
-<!-- To respect the maximum level for numbering, we              -->
-<!-- return an empty serial number at an excessive level,        -->
-<!-- otherwise we call for a serial number relative to peers     -->
-<!-- References are numbered divisions when used in the main     -->
-<!-- matter, but their number comes from their parent, since     -->
-<!-- they are unique.  The instance in the back matter is also   -->
-<!-- unique, and so does not get a number.                       -->
-<!-- "exercises" divisions may come solo, or alongside others.   -->
-<!-- When multiple, they get hierachical numbers like other      -->
-<!-- divisions.  When solo, they are numbered like their         -->
-<!-- enclosing parent.  So here, and elsewhere, we integrate     -->
-<!-- the multiple case.  Similarly, solutions in the back matter -->
-<!-- get rendered like appendices, but are always solo when      -->
-<!-- contained in a main matter division.                        -->
-<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|backmatter/solutions|exercises[count(parent::*/exercises)>1]" mode="serial-number">
+<!-- To respect the maximum level for numbering, we          -->
+<!-- return an empty serial number at an excessive level,    -->
+<!-- otherwise we call for a serial number relative to peers -->
+<!-- An unstructured division has solo specialized divisions -->
+<!-- which inherit numbers from their parents.  This too is  -->
+<!-- handled in the "division-serial-number" template.       -->
+<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|exercises|solutions|references[not(parent::backmatter)]|worksheet" mode="serial-number">
     <xsl:variable name="relative-level">
         <xsl:apply-templates select="." mode="level" />
     </xsl:variable>
@@ -3626,17 +3643,10 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
+<!-- Backmatter references are unique and un-numbered -->
+<xsl:template match="backmatter/references" mode="serial-number" />
 
-<!-- Division number relative to parent (super-division, or book/article)   -->
-<!--   1. Unique always (eg "references"), must appear at end of a division -->
-<!--      Numbers come from elsewhere, typically their parents              -->
-<!--   2. "Real" divisions (eg subsection)                                  -->
-<!--       Count from parent but avoid un-numbered (specialized) divisions  -->
-<!--   3. "exercises" - numbered if multiple, un-numbered if exactly one,   -->
-<!--      We require these to appear *after* real divisions, making         -->
-<!--      counts simpler since for the divisions we just need number        -->
-<!--      preceding, with nothing intermediate to count or discount         -->
-<!--   4. "solutions" - counted with appendix, when in backmatter           -->
+<!-- Divisions -->
 <xsl:template match="part" mode="division-serial-number">
     <xsl:number format="I" />
 </xsl:template>
@@ -3670,6 +3680,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <xsl:template match="backmatter/solutions" mode="division-serial-number">
     <xsl:number from="backmatter" level="any" count="appendix|solutions" format="A"/>
 </xsl:template>
+<!-- NB: following (and chapter above), assume subdivisions come first -->
 <xsl:template match="section" mode="division-serial-number">
     <xsl:number count="section" format="1" />
 </xsl:template>
@@ -3679,10 +3690,29 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <xsl:template match="subsubsection" mode="division-serial-number">
     <xsl:number count="subsubsection" format="1" />
 </xsl:template>
-<!-- "exercises": multiple only, include all possible -->
-<!-- peers, which excludes "part" and "appendix"      -->
-<xsl:template match="exercises[count(parent::*/exercises)>1]" mode="division-serial-number">
-    <xsl:number count="chapter|section|subsection|subsubsection|exercises[count(parent::*/exercises)>1]" format="1" />
+<!-- Specialized Divisions -->
+<!-- "exercises", "solutions", references, "worksheet" -->
+<!-- Count preceding peers in structured case,         -->
+<!-- or copy parent in unstructured case               -->
+<!-- NB: a backmatter/references should never come through here -->
+<xsl:template match="exercises|solutions[not(parent::backmatter)]|references|worksheet" mode="division-serial-number">
+    <!-- Inspect parent (part through subsubsection)  -->
+    <!-- to determine one of two models of a division -->
+    <!-- NB: return values are 'true" and empty       -->
+    <xsl:variable name="is-structured">
+        <xsl:apply-templates select="parent::*" mode="is-structured-division"/>
+    </xsl:variable>
+    <xsl:variable name="b-is-structured" select="$is-structured = 'true'"/>
+    <xsl:choose>
+        <xsl:when test="$b-is-structured">
+            <!-- NB: only one type of division will be a peer          -->
+            <!-- NB: not assuming an order on the specialized divisons -->
+            <xsl:number count="chapter|section|subsection|subsubsection|exercises|solutions|references|worksheet" format="1" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="parent::*" mode="serial-number"/>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Serial Numbers: Theorems, Examples, Inline Exercise, Figures, Etc. -->
@@ -3704,9 +3734,35 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <xsl:template match="*" mode="absolute-subtree-level">
     <xsl:param name="numbering-items" />
     <!-- determine enclosing level of numbered item -->
-    <xsl:variable name="raw-element-level">
+
+    <!-- determine if the object being numbered is inside  -->
+    <!-- a decorative "exercises" or "worksheet" -->
+    <xsl:variable name="inside-decorative">
+        <xsl:if test="ancestor::*[self::exercises or self::worksheet]">
+            <xsl:variable name="is-structured">
+                <xsl:apply-templates select="ancestor::*[self::exercises or self::worksheet]/parent::*" mode="is-structured-division"/>
+            </xsl:variable>
+            <xsl:if test="not($is-structured ='true')">
+                <xsl:text>true</xsl:text>
+            </xsl:if>
+        </xsl:if>
+    </xsl:variable>
+
+    <xsl:variable name="enclosing-level">
         <xsl:apply-templates select="." mode="enclosing-level" />
     </xsl:variable>
+    <!-- we move up a level if the structural element is decorative -->
+    <xsl:variable name="raw-element-level">
+        <xsl:choose>
+            <xsl:when test="$inside-decorative = 'true'">
+                <xsl:value-of select="$enclosing-level - 1"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$enclosing-level"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+
     <!-- if we are deep into the tree, beyond resetting counters,           -->
     <!-- then count from a subtree at the numbering level,                  -->
     <!-- else remain within enclosing level, as structure number will reset -->
@@ -3839,13 +3895,13 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <xsl:number from="chapter|book/backmatter/appendix" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;" />
         </xsl:when>
         <xsl:when test="$subtree-level=2">
-            <xsl:number from="section|article/backmatter/appendix" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;" />
+            <xsl:number from="section|article/backmatter/appendix|chapter/exercises|chapter/worksheet" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;" />
         </xsl:when>
         <xsl:when test="$subtree-level=3">
-            <xsl:number from="subsection" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;" />
+            <xsl:number from="subsection|section/exercises|section/worksheet" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;" />
         </xsl:when>
         <xsl:when test="$subtree-level=4">
-            <xsl:number from="subsubsection" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;" />
+            <xsl:number from="subsubsection|subsection/exercises|subsection/worksheet" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;" />
         </xsl:when>
         <xsl:otherwise>
             <xsl:message>MBX:ERROR: Subtree level for atomic block number computation is out-of-bounds (<xsl:value-of select="$subtree-level" />)</xsl:message>
@@ -3871,13 +3927,13 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <xsl:number from="chapter|book/backmatter/appendix" level="any" count="&PROJECT-LIKE;" />
         </xsl:when>
         <xsl:when test="$subtree-level=2">
-            <xsl:number from="section|article/backmatter/appendix" level="any" count="&PROJECT-LIKE;" />
+            <xsl:number from="section|article/backmatter/appendix|chapter/exercises|chapter/worksheet" level="any" count="&PROJECT-LIKE;" />
         </xsl:when>
         <xsl:when test="$subtree-level=3">
-            <xsl:number from="subsection" level="any" count="&PROJECT-LIKE;" />
+            <xsl:number from="subsection|section/exercises|section/worksheet" level="any" count="&PROJECT-LIKE;" />
         </xsl:when>
         <xsl:when test="$subtree-level=4">
-            <xsl:number from="subsubsection" level="any" count="&PROJECT-LIKE;" />
+            <xsl:number from="subsubsection|subsection/exercises|subsection/worksheet" level="any" count="&PROJECT-LIKE;" />
         </xsl:when>
         <xsl:otherwise>
             <xsl:message>MBX:ERROR: Subtree level for project number computation is out-of-bounds (<xsl:value-of select="$subtree-level" />)</xsl:message>
@@ -3929,21 +3985,21 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                 list[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]" />
         </xsl:when>
         <xsl:when test="$subtree-level=2">
-            <xsl:number from="section|article/backmatter/appendix" level="any"
+            <xsl:number from="section|article/backmatter/appendix|chapter/exercises|chapter/worksheet" level="any"
                 count="figure[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|
                 table[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|
                 listing[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|
                 list[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]" />
         </xsl:when>
         <xsl:when test="$subtree-level=3">
-            <xsl:number from="subsection" level="any"
+            <xsl:number from="subsection|section/exercises|section/worksheet" level="any"
                 count="figure[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|
                 table[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|
                 listing[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|
                 list[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]" />
         </xsl:when>
         <xsl:when test="$subtree-level=4">
-            <xsl:number from="subsubsection" level="any"
+            <xsl:number from="subsubsection|subsection/exercises|subsection/worksheet" level="any"
                 count="figure[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|
                 table[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|
                 listing[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|
@@ -3965,27 +4021,27 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:choose>
         <xsl:when test="$subtree-level=-1">
             <xsl:number from="book|article|letter|memo" level="any"
-                count="exercise[not(ancestor::exercises)]" />
+                count="exercise[not(ancestor::exercises or ancestor::worksheet)]" />
         </xsl:when>
         <xsl:when test="$subtree-level=0">
             <xsl:number from="part" level="any"
-                count="exercise[not(ancestor::exercises)]" />
+                count="exercise[not(ancestor::exercises or ancestor::worksheet)]" />
         </xsl:when>
         <xsl:when test="$subtree-level=1">
             <xsl:number from="chapter|book/backmatter/appendix" level="any"
-                count="exercise[not(ancestor::exercises)]" />
+                count="exercise[not(ancestor::exercises or ancestor::worksheet)]" />
         </xsl:when>
         <xsl:when test="$subtree-level=2">
-            <xsl:number from="section|article/backmatter/appendix" level="any"
-                count="exercise[not(ancestor::exercises)]" />
+            <xsl:number from="section|article/backmatter/appendix|chapter/exercises|chapter/worksheet" level="any"
+                count="exercise[not(ancestor::exercises or ancestor::worksheet)]" />
         </xsl:when>
         <xsl:when test="$subtree-level=3">
-            <xsl:number from="subsection" level="any"
-                count="exercise[not(ancestor::exercises)]" />
+            <xsl:number from="subsection|section/exercises|section/worksheet" level="any"
+                count="exercise[not(ancestor::exercises or ancestor::worksheet)]" />
         </xsl:when>
         <xsl:when test="$subtree-level=4">
-            <xsl:number from="subsubsection" level="any"
-                count="exercise[not(ancestor::exercises)]" />
+            <xsl:number from="subsubsection|subsection/exercises|subsection/worksheet" level="any"
+                count="exercise[not(ancestor::exercises or ancestor::worksheet)]" />
         </xsl:when>
         <xsl:otherwise>
             <xsl:message>MBX:ERROR: Subtree level for atomic exercise number computation is out-of-bounds (<xsl:value-of select="$subtree-level" />)</xsl:message>
@@ -4012,19 +4068,30 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         </xsl:apply-templates>
     </xsl:variable>
     <xsl:choose>
-        <xsl:when test="$subtree-level=-1"><xsl:number from="book|article|letter|memo" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no' or @tag)]"/></xsl:when>
-        <xsl:when test="$subtree-level=0"><xsl:number from="part" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no' or @tag)]"/></xsl:when>
-        <xsl:when test="$subtree-level=1"><xsl:number from="chapter|book/backmatter/appendix" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no' or @tag)]"/></xsl:when>
-        <xsl:when test="$subtree-level=2"><xsl:number from="section|article/backmatter/appendix" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no' or @tag)]"/></xsl:when>
-        <xsl:when test="$subtree-level=3"><xsl:number from="subsection" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no' or @tag)]"/></xsl:when>
-        <xsl:when test="$subtree-level=4"><xsl:number from="subsubsection" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no' or @tag)]"/></xsl:when>
+        <xsl:when test="$subtree-level=-1">
+            <xsl:number from="book|article|letter|memo" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no' or @tag)]"/>
+        </xsl:when>
+        <xsl:when test="$subtree-level=0">
+            <xsl:number from="part" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no' or @tag)]"/></xsl:when>
+        <xsl:when test="$subtree-level=1">
+            <xsl:number from="chapter|book/backmatter/appendix" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no' or @tag)]"/>
+        </xsl:when>
+        <xsl:when test="$subtree-level=2">
+            <xsl:number from="section|article/backmatter/appendix|chapter/exercises|chapter/worksheet" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no' or @tag)]"/>
+        </xsl:when>
+        <xsl:when test="$subtree-level=3">
+            <xsl:number from="subsection|section/exercises|section/worksheet" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no' or @tag)]"/>
+        </xsl:when>
+        <xsl:when test="$subtree-level=4">
+            <xsl:number from="subsubsection|subsection/exercises|subsection/worksheet" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no' or @tag)]"/>
+        </xsl:when>
         <xsl:otherwise>
             <xsl:message>MBX:ERROR: Subtree level for equation number computation is out-of-bounds (<xsl:value-of select="$subtree-level" />)</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 
-<!-- Serial Numbers: Exercises in Exercises Sections -->
+<!-- Serial Numbers: Exercises in Exercises or Worksheet Divisions -->
 <!-- Note: numbers may be hard-coded for longevity        -->
 <!-- exercisegroups  and future lightweight divisions may -->
 <!-- be intermediate, but should not hinder the count     -->
@@ -4033,6 +4100,14 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 </xsl:template>
 
 <xsl:template match="exercises//exercise[@number]" mode="serial-number">
+    <xsl:apply-templates select="@number" />
+</xsl:template>
+
+<xsl:template match="worksheet//exercise" mode="serial-number">
+    <xsl:number from="worksheet" level="any" count="exercise" />
+</xsl:template>
+
+<xsl:template match="worksheet//exercise[@number]" mode="serial-number">
     <xsl:apply-templates select="@number" />
 </xsl:template>
 
@@ -4091,12 +4166,24 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         </xsl:apply-templates>
     </xsl:variable>
     <xsl:choose>
-        <xsl:when test="$subtree-level=-1"><xsl:number from="book|article|letter|memo" level="any" count="fn" /></xsl:when>
-        <xsl:when test="$subtree-level=0"><xsl:number from="part" level="any" count="fn" /></xsl:when>
-        <xsl:when test="$subtree-level=1"><xsl:number from="chapter|book/backmatter/appendix" level="any" count="fn" /></xsl:when>
-        <xsl:when test="$subtree-level=2"><xsl:number from="section|article/backmatter/appendix" level="any" count="fn" /></xsl:when>
-        <xsl:when test="$subtree-level=3"><xsl:number from="subsection" level="any" count="fn" /></xsl:when>
-        <xsl:when test="$subtree-level=4"><xsl:number from="subsubsection" level="any" count="fn" /></xsl:when>
+        <xsl:when test="$subtree-level=-1">
+            <xsl:number from="book|article|letter|memo" level="any" count="fn" />
+        </xsl:when>
+        <xsl:when test="$subtree-level=0">
+            <xsl:number from="part" level="any" count="fn" />
+        </xsl:when>
+        <xsl:when test="$subtree-level=1">
+            <xsl:number from="chapter|book/backmatter/appendix" level="any" count="fn" />
+        </xsl:when>
+        <xsl:when test="$subtree-level=2">
+            <xsl:number from="section|article/backmatter/appendix|chapter/exercises|chapter/worksheet" level="any" count="fn" />
+        </xsl:when>
+        <xsl:when test="$subtree-level=3">
+            <xsl:number from="subsection|section/exercises|section/worksheet" level="any" count="fn" />
+        </xsl:when>
+        <xsl:when test="$subtree-level=4">
+            <xsl:number from="subsubsection|subsection/exercises|subsection/worksheet" level="any" count="fn" />
+        </xsl:when>
         <xsl:otherwise>
             <xsl:message>MBX:ERROR: Subtree level for footnote number computation is out-of-bounds (<xsl:value-of select="$subtree-level" />)</xsl:message>
         </xsl:otherwise>
@@ -4213,7 +4300,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 
 <!-- Some items are "containers".  They are not numbered, you  -->
 <!-- cannot point to them, they are invisible to the reader    -->
-<!-- in a way.  We kill their serial nuumbers explicitly here. -->
+<!-- in a way.  We kill their serial numbers explicitly here.  -->
 <!-- Lists live in paragraphs, exercises, objectives, so       -->
 <!-- should be referenced as part of some enclosing element.   -->
 <!-- "mathbook" helps some tree-climbing routines halt -->
@@ -4238,9 +4325,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- components of exercises, so we might need to explicitly   -->
 <!-- make webwork/solution, etc to be unnumbered.              -->
 
-<!-- Objectives are one-per-subdivision, and so -->
-<!-- get their serial number from their parent  -->
-<xsl:template match="objectives" mode="serial-number">
+<!-- Objectives and outcomes are one-per-subdivision, -->
+<!-- and so get their serial number from their parent -->
+<xsl:template match="objectives|outcomes" mode="serial-number">
     <xsl:apply-templates select="parent::*" mode="serial-number" />
 </xsl:template>
 
@@ -4261,39 +4348,12 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:number count="stage" from="static" />
 </xsl:template>
 
-<!-- Serial Numbers: Specialized Divisions -->
 
-<!-- Some divisions get their numbers from their parents, or  -->
-<!-- in other ways.  We are careful to do this by determining -->
-<!-- the serial-numer and the structure-number, so that other -->
-<!-- devices (like local numbers) will behave correctly.      -->
-<!-- Structure numbers are computed elsewhere, but in tandem. -->
-
-<!-- "references" are solo in main matter divisions, -->
-<!-- unique and not numbered in back matter          -->
-<xsl:template match="references" mode="serial-number">
-    <xsl:apply-templates select="parent::*" mode="serial-number" />
-</xsl:template>
-<xsl:template match="backmatter/references" mode="serial-number" />
-
-<!-- "solutions", not in the "backmatter", get their    -->
-<!-- serial-number from their parent  (those in the     -->
-<!-- back matter get counted elsewhere with appendices) -->
-<xsl:template match="solutions[not(parent::backmatter)]" mode="serial-number">
-    <xsl:apply-templates select="parent::*" mode="serial-number" />
-</xsl:template>
-
-<!-- "solo" exercises, in main matter divisions, or inside -->
-<!-- an "appendix" are numbered as by their parent         -->
-<xsl:template match="exercises[count(parent::*/exercises)=1]" mode="serial-number">
-    <xsl:apply-templates select="parent::*" mode="serial-number" />
-</xsl:template>
-
-
-
-<!-- Convert this to a warning?  Should not drop in here ever? -->
+<!-- Should not drop in here.  Ever. -->
 <xsl:template match="*" mode="serial-number">
     <xsl:text>[NUM]</xsl:text>
+    <xsl:message>PTX:BUG:     An object (<xsl:value-of select="local-name(.)" />) lacks a serial number, search output for "[NUM]"</xsl:message>
+    <xsl:apply-templates select="." mode="location-report" />
 </xsl:template>
 
 <!--                       -->
@@ -4323,10 +4383,30 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- NB: decorative parts may mean we need                        -->
 <!-- to exclude "part" from the ancestors?                        -->
 
+<!-- BUG: we include specialized divisions here, which inherit -->
+<!-- their serial number from their parent.  The symptom is a  -->
+<!-- duplicated serial number just before padding begins.  The -->
+<!-- offending specialized division should be skipped with no  -->
+<!-- contribution to the multi-number and no decrease in the   -->
+<!-- level when passed recursively.                            -->
+
 <xsl:template match="*" mode="multi-number">
-    <xsl:param name="nodes" select="ancestor::*[self::part or self::chapter or self::appendix or self::section or self::subsection or self::subsubsection or self::solutions or self::exercises[count(parent::*/exercises)>1]]"/>
+    <xsl:param name="nodes" select="ancestor::*[self::part or self::chapter or self::appendix or self::section or self::subsection or self::subsubsection or self::exercises or self::solutions or self::references or self::worksheet]"/>
     <xsl:param name="levels" />
     <xsl:param name="pad" />
+
+    <!-- Test if last node is unnumbered specialized division -->
+    <!-- we do not want to duplicate the serial number, which is from the containing division -->
+    <xsl:variable name="decorative-division">
+        <xsl:if test="$nodes[last()][self::exercises or self::worksheet]">
+            <xsl:variable name="is-structured">
+                <xsl:apply-templates select="$nodes[last()]/parent::*" mode="is-structured-division"/>
+            </xsl:variable>
+            <xsl:if test="not($is-structured = 'true')">
+                <xsl:text>true</xsl:text>
+            </xsl:if>
+        </xsl:if>
+    </xsl:variable>
 
     <xsl:choose>
         <!-- when the lead node is a part, we just drop it,   -->
@@ -4340,6 +4420,14 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <xsl:apply-templates select="." mode="multi-number">
                 <xsl:with-param name="nodes" select="$nodes[position() > 1]" />
                 <xsl:with-param name="levels" select="$levels - 1" />
+                <xsl:with-param name="pad" select="$pad" />
+            </xsl:apply-templates>
+        </xsl:when>
+        <!-- strip a decorative division -->
+        <xsl:when test="$decorative-division = 'true'">
+            <xsl:apply-templates select="." mode="multi-number">
+                <xsl:with-param name="nodes" select="$nodes[position() &lt; last()]" />
+                <xsl:with-param name="levels" select="$levels" />
                 <xsl:with-param name="pad" select="$pad" />
             </xsl:apply-templates>
         </xsl:when>
@@ -4392,7 +4480,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Structure Numbers: Divisions -->
 <!-- NB: this is number of the *container* of the division,   -->
 <!-- a serial number for the division itself will be appended -->
-<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|backmatter/solutions|exercises[count(parent::*/exercises)>1]" mode="structure-number">
+<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|backmatter/solutions" mode="structure-number">
     <xsl:apply-templates select="." mode="multi-number">
         <xsl:with-param name="levels" select="$numbering-maxlevel - 1" />
         <xsl:with-param name="pad" select="'no'" />
@@ -4405,29 +4493,29 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- the serial-numer and the structure-number, so that other -->
 <!-- devices (like local numbers) will behave correctly.      -->
 <!-- Serial numbers are computed elsewhere, but in tandem.    -->
-
+<xsl:template match="exercises|solutions[not(parent::backmatter)]|references[not(parent::backmatter)]|worksheet" mode="structure-number">
+    <xsl:variable name="is-structured">
+        <xsl:apply-templates select="parent::*" mode="is-structured-division"/>
+    </xsl:variable>
+    <xsl:variable name="b-is-structured" select="$is-structured = 'true'"/>
+    <xsl:choose>
+        <xsl:when test="$b-is-structured">
+            <xsl:apply-templates select="." mode="multi-number">
+                <xsl:with-param name="levels" select="$numbering-maxlevel - 1" />
+                <xsl:with-param name="pad" select="'no'" />
+            </xsl:apply-templates>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="parent::*" mode="structure-number" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
 <!-- "references" are solo in main matter divisions, -->
 <!-- unique and not numbered in back matter          -->
-<xsl:template match="references" mode="structure-number">
-    <xsl:apply-templates select="parent::*" mode="structure-number" />
-</xsl:template>
 <xsl:template match="backmatter/references" mode="structure-number" />
 
-<!-- "solutions", not in the "backmatter", get their    -->
-<!-- structure-number from their parent  (those in the  -->
-<!-- back matter get counted elsewhere with appendices) -->
-<xsl:template match="solutions[not(parent::backmatter)]" mode="structure-number">
-    <xsl:apply-templates select="parent::*" mode="structure-number" />
-</xsl:template>
-
-<!-- "solo" exercises, in main matter divisions, or inside -->
-<!-- an "appendix" are numbered as by their parent         -->
-<xsl:template match="exercises[count(parent::*/exercises)=1]" mode="structure-number">
-    <xsl:apply-templates select="parent::*" mode="structure-number" />
-</xsl:template>
 
 <!-- Structure Numbers: Theorems, Examples, Projects, Figures -->
-<!-- NB: newexercises: inline copied out below                -->
 <xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;" mode="structure-number">
     <xsl:apply-templates select="." mode="multi-number">
         <xsl:with-param name="levels" select="$numbering-theorems" />
@@ -4481,40 +4569,37 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 
 <!-- Structure Numbers: Inline Exercises -->
 <!-- Follows the theorem/figure/etc scheme (can't poll parent) -->
-<xsl:template match="exercise[not(ancestor::exercises)]" mode="structure-number">
+<xsl:template match="exercise[not(ancestor::exercises or ancestor::worksheet)]" mode="structure-number">
     <xsl:apply-templates select="." mode="multi-number">
         <xsl:with-param name="levels" select="$numbering-theorems" />
         <xsl:with-param name="pad" select="'yes'" />
     </xsl:apply-templates>
 </xsl:template>
 
-<!-- Structure Numbers: Divisional Exercises -->
-<!-- Within a singleton (unnumbered) "exercises", look up to enclosing      -->
-<!-- division, otherwise use number of the enclosing (numbered) "exercises" -->
-<xsl:template match="exercises//exercise" mode="structure-number">
-    <xsl:variable name="nexercises" select="count(ancestor::exercises/preceding-sibling::exercises|ancestor::exercises/following-sibling::exercises) + 1" />
+<!-- Structure Numbers: Divisional and Worksheet Exercises -->
+<!-- Within a "exercises" or "worksheet", look up to enclosing division -->
+<!-- in order to decide where the structure number comes from           -->
+<xsl:template match="exercises//exercise|worksheet//exercise" mode="structure-number">
+    <!-- one or the other, just a single node in variable -->
+    <xsl:variable name="container" select="ancestor::*[self::exercises or self::worksheet]"/>
+    <xsl:variable name="is-structured">
+        <xsl:apply-templates select="$container/parent::*" mode="is-structured-division"/>
+    </xsl:variable>
+    <xsl:variable name="b-is-structured" select="$is-structured = 'true'"/>
     <xsl:choose>
-        <xsl:when test="$nexercises = 1">
-            <xsl:apply-templates select="ancestor::exercises/parent::*" mode="number" />
+        <xsl:when test="$b-is-structured">
+            <xsl:apply-templates select="$container" mode="number" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:apply-templates select="ancestor::exercises" mode="number" />
+            <xsl:apply-templates select="$container/parent::*" mode="number" />
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 
 <!-- Structure Numbers: Exercise Groups -->
 <!-- An exercisegroup gets it structure number from the parent exercises -->
-<!-- NB: newexercises: step up one more parent -->
 <xsl:template match="exercisegroup" mode="structure-number">
-    <xsl:choose>
-        <xsl:when test="$b-newexercises">
-            <xsl:apply-templates select="parent::exercises/parent::*" mode="number" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:apply-templates select="parent::*" mode="number" />
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="parent::*" mode="number" />
 </xsl:template>
 
 <!-- Hints, answers, solutions get structure number from parent       -->
@@ -4579,14 +4664,14 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Structure Numbers: Objectives -->
 <!-- Objectives are one-per-subdivision, and so   -->
 <!-- get their structure number from their parent -->
-<xsl:template match="objectives" mode="structure-number">
+<xsl:template match="objectives|outcomes" mode="structure-number">
     <xsl:apply-templates select="parent::*" mode="structure-number" />
 </xsl:template>
 
-<!-- Structure Numbers: Objective -->
-<!-- A single objective is a list item -->
-<!-- in an objectives environment       -->
-<xsl:template match="objectives/ol/li" mode="structure-number">
+<!-- Structure Numbers: Objective and Outcome-->
+<!-- A single objective or outcome is a list item -->
+<!-- in an objectives or outcomes environment     -->
+<xsl:template match="objectives/ol/li|outcomes/ol/li" mode="structure-number">
     <xsl:apply-templates select="ancestor::*[&STRUCTURAL-FILTER;][1]" mode="number" />
 </xsl:template>
 
@@ -4625,6 +4710,281 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:choose>
 </xsl:template>
 
+
+<!-- TESTING -->
+<!-- Some test images and debugging output, -->
+<!-- while this is still in development -->
+
+<!--
+<image />
+<image margins="20% 5%" />
+<image width="75%" />
+<image margins="20% 5%" width="75%" />
+ -->
+<!-- ~~~~~~~~~~~~~~ -->
+<!--
+<image margins="150pt" />
+<image width="2000" />
+<image margins="-40%" />
+<image margins="300%" />
+<image margins="-20% 5%" />
+<image margins="20% 150%" />
+<image margins="90% 40%" />
+<image margins="5% 10%" width="120%" />
+<image margins="5% 10%" width="-10%" />
+<image margins="5% 10%" width="90%" />
+<image margins="35% 25%" width="39.5%" />
+-->
+
+<!--
+<xsl:template match="image[not(parent::sidebyside or parent::figure)]">
+    <xsl:variable name="rtf-layout">
+        <xsl:apply-templates select="." mode="layout-parameters" />
+    </xsl:variable>
+    <xsl:variable name="layout" select="exsl:node-set($rtf-layout)" />
+    <xsl:message><xsl:value-of select="$layout/left-margin" /></xsl:message>
+    <xsl:message><xsl:value-of select="$layout/width" /></xsl:message>
+    <xsl:message><xsl:value-of select="$layout/right-margin" /></xsl:message>
+    <xsl:message><xsl:value-of select="$layout/left-margin = $layout/right-margin" /></xsl:message>
+</xsl:template>
+-->
+
+<!-- ############## -->
+<!-- Simple Layouts -->
+<!-- ############## -->
+
+<!-- This template creates a RTF (result tree fragment), -->
+<!-- which needs to be captured in one variable, then    -->
+<!-- converted to a node-set with an extension function  -->
+
+<!-- NB: An RTF has a "root" node.  Then the elements      -->
+<!-- manufactured for it occur as children.  If the        -->
+<!-- "apply-templates" fails to have the "/*" at the end   -->
+<!-- of the "select", then the main entry template will be -->
+<!-- called to do any housekeeping it might do.            -->
+<!-- This was a really tough bug to track down.            -->
+
+<xsl:template match="image" mode="layout-parameters">
+    <!-- clean up margins -->
+    <xsl:variable name="normalized-margins">
+        <xsl:choose>
+            <xsl:when test="@margins">
+                <xsl:value-of select="normalize-space(@margins)" />
+            </xsl:when>
+            <!-- default if not specified -->
+            <xsl:otherwise>
+                <xsl:text>auto</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+
+    <!-- split on space, or else duplicate (signals centered) -->
+    <xsl:variable name="normalized-left-margin">
+        <xsl:choose>
+            <xsl:when test="contains($normalized-margins, ' ')">
+                <xsl:value-of select="substring-before($normalized-margins, ' ')" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$normalized-margins" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+
+    <xsl:variable name="normalized-right-margin">
+        <xsl:choose>
+            <xsl:when test="contains($normalized-margins, ' ')">
+                <xsl:value-of select="substring-after($normalized-margins, ' ')" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$normalized-margins" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+
+    <!-- clean-up single width -->
+    <xsl:variable name="normalized-width">
+        <xsl:choose>
+            <xsl:when test="@width">
+                <xsl:value-of select="normalize-space(@width)" />
+            </xsl:when>
+            <!-- not placed on image, or figure/image,    -->
+            <!-- but a document-wide default width exists -->
+            <xsl:when test="self::image and not(ancestor::sidebyside) and $docinfo/defaults/image-width">
+                <xsl:value-of select="$docinfo/defaults/image-width" />
+            </xsl:when>
+            <!-- default setting if not specified, and not global -->
+            <xsl:otherwise>
+                <xsl:value-of select="'auto'" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+
+    <!-- Error checks on author's specifications     -->
+    <!-- First, normalized to strings or percentages -->
+
+    <xsl:if test="not(($normalized-left-margin = 'auto') or substring($normalized-left-margin, string-length($normalized-left-margin)) = '%')">
+        <xsl:message>PTX:ERROR:   left margin (<xsl:value-of select="$normalized-left-margin" />) should be given as a percentage (such as "40%"), or as the string "auto"</xsl:message>
+            <xsl:apply-templates select="." mode="location-report" />
+    </xsl:if>
+
+    <xsl:if test="not(($normalized-width = 'auto') or substring($normalized-width, string-length($normalized-width)) = '%')">
+        <xsl:message>PTX:ERROR:   width (<xsl:value-of select="$normalized-width" />) should be given as a percentage (such as "40%"), or as the string "auto"</xsl:message>
+            <xsl:apply-templates select="." mode="location-report" />
+    </xsl:if>
+
+    <xsl:if test="not(($normalized-right-margin = 'auto') or substring($normalized-right-margin, string-length($normalized-right-margin)) = '%')">
+        <xsl:message>PTX:ERROR:   right margin (<xsl:value-of select="$normalized-right-margin" />) should be given as a percentage (such as "40%"), or as the string "auto"</xsl:message>
+            <xsl:apply-templates select="." mode="location-report" />
+    </xsl:if>
+
+    <!-- Second, cases where computed values could be negative or too large -->
+
+    <!-- Sanity check author's left margin -->
+    <xsl:if test="not($normalized-left-margin = 'auto') and ((substring-before($normalized-left-margin, '%') &lt; 0) or (substring-before($normalized-left-margin, '%') &gt; 100))">
+        <xsl:message>PTX:ERROR:   left margin (<xsl:value-of select="$normalized-left-margin" />) must be in the interval [0%, 100%]</xsl:message>
+        <xsl:apply-templates select="." mode="location-report" />
+    </xsl:if>
+
+    <!-- Sanity check author's width -->
+    <xsl:if test="not($normalized-width= 'auto') and ((substring-before($normalized-width, '%') &lt; 0) or (substring-before($normalized-width, '%') &gt; 100))">
+        <xsl:message>PTX:ERROR:   width (<xsl:value-of select="$normalized-width" />) must be in the interval [0%, 100%]</xsl:message>
+        <xsl:apply-templates select="." mode="location-report" />
+    </xsl:if>
+
+    <!-- Sanity check author's right margin -->
+    <xsl:if test="not($normalized-right-margin = 'auto') and ((substring-before($normalized-right-margin, '%') &lt; 0) or (substring-before($normalized-right-margin, '%') &gt; 100))">
+        <xsl:message>PTX:ERROR:   right margin (<xsl:value-of select="$normalized-right-margin" />) must be in the interval [0%, 100%]</xsl:message>
+        <xsl:apply-templates select="." mode="location-report" />
+    </xsl:if>
+
+    <!-- Sanity check author's cumulative margins -->
+    <xsl:if test="not($normalized-left-margin = 'auto') and ((substring-before($normalized-left-margin, '%') + substring-before($normalized-right-margin, '%') &gt; 100))">
+        <xsl:message>PTX:ERROR:   margins (<xsl:value-of select="$normalized-left-margin" />, <xsl:value-of select="$normalized-right-margin" />) must not have a sum exceeding 100%</xsl:message>
+        <xsl:apply-templates select="." mode="location-report" />
+    </xsl:if>
+
+    <!-- Sanity check all parameters together as too large -->
+    <xsl:if test="not($normalized-left-margin = 'auto') and not($normalized-width= 'auto') and ((substring-before($normalized-left-margin, '%') + substring-before($normalized-width, '%') + substring-before($normalized-right-margin, '%') &gt; 100))">
+        <xsl:message>PTX:ERROR:   margins and width (<xsl:value-of select="$normalized-left-margin" />, <xsl:value-of select="$normalized-width" />, <xsl:value-of select="$normalized-right-margin" />) must not have a sum exceeding 100%</xsl:message>
+        <xsl:apply-templates select="." mode="location-report" />
+    </xsl:if>
+
+    <!-- Sanity check that all three parameters together sum to 100 *exactly* -->
+    <xsl:if test="not($normalized-left-margin = 'auto') and not($normalized-width= 'auto') and not((substring-before($normalized-left-margin, '%') + substring-before($normalized-width, '%') + substring-before($normalized-right-margin, '%') = 100))">
+        <xsl:message>PTX:ERROR:   margins and width (<xsl:value-of select="$normalized-left-margin" />, <xsl:value-of select="$normalized-width" />, <xsl:value-of select="$normalized-right-margin" />) must sum to 100%</xsl:message>
+        <xsl:apply-templates select="." mode="location-report" />
+    </xsl:if>
+
+    <!-- Perhaps save for debugging -->
+    <!-- <xsl:message>L:<xsl:value-of select="$normalized-left-margin" />:L W:<xsl:value-of select="$normalized-width" />:W R:<xsl:value-of select="$normalized-right-margin" />:R</xsl:message> -->
+
+    <!-- Now have three "normalized" percentages, with percentages   -->
+    <!-- or default string values.  We would read the table below as -->
+    <!-- rows (cases), but we instead focus on the three outcomes    -->
+    <!-- as a single variable each.                                  -->
+    <!--                                                             -->
+    <!--     Margin   Width      Left      Width     Right           -->
+    <!--                                                             -->
+    <!--     auto     auto          0        100         0           -->
+    <!--     value    auto      value    compute     value           -->
+    <!--     auto     value    center      value    center           -->
+    <!--     value    value     value      value     value           -->
+    <!--                                                             -->
+    <!-- In contrast to earlier practice, we now (2018-07-20) return -->
+    <!-- percentages with no percent sign, so as to do the least     -->
+    <!-- manipulation possible here.  Consumers can add back the     -->
+    <!-- percent sign, divide by 100, take a fraction of a maximum   -->
+    <!-- width, and so on.                                           -->
+
+    <xsl:variable name="left-margin">
+        <xsl:choose>
+            <xsl:when test="($normalized-left-margin = 'auto') and ($normalized-width = 'auto')">
+                <xsl:value-of select="'0'" />
+            </xsl:when>
+            <xsl:when test="not($normalized-left-margin = 'auto') and ($normalized-width = 'auto')">
+                <xsl:value-of select="substring-before($normalized-left-margin, '%')" />
+            </xsl:when>
+            <xsl:when test="($normalized-left-margin = 'auto') and not($normalized-width = 'auto')">
+                <xsl:value-of select="(100 - substring-before($normalized-width, '%')) div 2" />
+            </xsl:when>
+            <xsl:when test="not($normalized-left-margin = 'auto') and not($normalized-width = 'auto')">
+                <xsl:value-of select="substring-before($normalized-left-margin, '%')" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>OOOPS1111</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+
+    <xsl:variable name="right-margin">
+        <xsl:choose>
+            <xsl:when test="($normalized-left-margin = 'auto') and ($normalized-width = 'auto')">
+                <xsl:value-of select="'0'" />
+            </xsl:when>
+            <xsl:when test="not($normalized-left-margin = 'auto') and ($normalized-width = 'auto')">
+                <xsl:value-of select="substring-before($normalized-right-margin, '%')" />
+            </xsl:when>
+            <xsl:when test="($normalized-left-margin = 'auto') and not($normalized-width = 'auto')">
+                <xsl:value-of select="(100 - substring-before($normalized-width, '%')) div 2" />
+            </xsl:when>
+            <xsl:when test="not($normalized-left-margin = 'auto') and not($normalized-width = 'auto')">
+                <xsl:value-of select="substring-before($normalized-right-margin, '%')" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>OOOPS22222</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+
+    <xsl:variable name="width">
+        <xsl:choose>
+            <xsl:when test="($normalized-left-margin = 'auto') and ($normalized-width = 'auto')">
+                <xsl:value-of select="'100'" />
+            </xsl:when>
+            <xsl:when test="not($normalized-left-margin = 'auto') and ($normalized-width = 'auto')">
+                <xsl:value-of select="100 - substring-before($normalized-left-margin, '%') - substring-before($normalized-right-margin, '%')" />
+            </xsl:when>
+            <xsl:when test="($normalized-left-margin = 'auto') and not($normalized-width = 'auto')">
+                <xsl:value-of select="substring-before($normalized-width, '%')" />
+            </xsl:when>
+            <xsl:when test="not($normalized-left-margin = 'auto') and not($normalized-width = 'auto')">
+                <xsl:value-of select="substring-before($normalized-width, '%')" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>OOOPS33333</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+
+    <xsl:variable name="centered" select="$left-margin = $right-margin" />
+
+    <!-- This is the RTF, which will automatically be bundled with -->
+    <!-- a root. Elements should be mostly self-explanatory.       -->
+    <!-- "centered" is reported NOW, not computed later, when the  -->
+    <!-- two margins are either                                    -->
+    <!--   (a) specified identically by the author,                -->
+    <!--   (b) computed identically above, or                      -->
+    <!--   (c) default to identical values.                        -->
+
+    <left-margin>
+        <xsl:value-of select="$left-margin" />
+    </left-margin>
+    <width>
+        <xsl:value-of select="$width" />
+    </width>
+    <right-margin>
+        <xsl:value-of select="$right-margin" />
+    </right-margin>
+    <centered>
+        <xsl:value-of select="$centered" />
+    </centered>
+
+    <!-- This will be useful in a debugging switch -->
+<!--
+    <xsl:message>l:<xsl:value-of select="$left-margin" />:l w:<xsl:value-of select="$width" />:w r:<xsl:value-of select="$right-margin" />:r c:<xsl:value-of select="$centered" />:c</xsl:message>
+    <xsl:message>- - - - - - - - - - - - - </xsl:message>
+-->
+</xsl:template>
 
 <!-- ################## -->
 <!-- SideBySide Layouts -->
@@ -5280,7 +5640,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <!-- Since exercises and references are top-level        -->
         <!-- ordered lists, when these are the only interesting  -->
         <!-- ancestor, we add one to the level and return        -->
-        <xsl:when test="(ancestor::exercises or ancestor::references) and not(ancestor::ol)">
+        <xsl:when test="(ancestor::exercises or ancestor::worksheet or ancestor::references) and not(ancestor::ol)">
             <xsl:value-of select="$level + 1" />
         </xsl:when>
         <xsl:when test="ancestor::ol">
@@ -5989,7 +6349,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 
 <!-- Note -->
 <xsl:template match="n">
-    <xsl:text>\(</xsl:text>
+    <xsl:call-template name="begin-inline-math"/>
     <!-- Test that pitch class is NOT castable as a number -->
     <xsl:if test="not(number(@pc) = number(@pc))">
         <xsl:text>\text{</xsl:text>
@@ -6022,20 +6382,36 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:value-of select="@octave"/>
         <xsl:text>}</xsl:text>
     </xsl:if>
-    <xsl:text>\)</xsl:text>
+    <xsl:call-template name="end-inline-math"/>
 </xsl:template>
 
 <!-- Scale Degrees -->
 <xsl:template match="scaledeg">
     <!-- Arabic numeral with circumflex accent above)-->
-    <xsl:text>\(\hat{</xsl:text>
+    <xsl:call-template name="begin-inline-math"/>
+    <xsl:text>\hat{</xsl:text>
     <xsl:apply-templates/>
-    <xsl:text>}\) </xsl:text>
+    <xsl:text>}</xsl:text>
+    <xsl:call-template name="end-inline-math"/>
+    <!-- TODO: unclear if trailing space is necessary -->
+    <xsl:text> </xsl:text>
+</xsl:template>
+
+<!-- Time Signatures -->
+<xsl:template match="timesignature">
+    <xsl:call-template name="begin-inline-math"/>
+    <xsl:text>\begin{smallmatrix}</xsl:text>
+    <xsl:value-of select="@top"/>
+    <xsl:text>\\</xsl:text>
+    <xsl:value-of select="@bottom"/>
+    <xsl:text>\end{smallmatrix}</xsl:text>
+    <xsl:call-template name="end-inline-math"/>
 </xsl:template>
 
 <!-- Chord -->
 <xsl:template match="chord">
-    <xsl:text>\(\left.</xsl:text>
+    <xsl:call-template name="begin-inline-math"/>
+    <xsl:text>\left.</xsl:text>
     <!-- Root -->
     <xsl:choose>
         <!-- There is an accidental -->
@@ -6169,7 +6545,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             </xsl:otherwise>
         </xsl:choose>
     </xsl:if>
-    <xsl:text>\right.\)</xsl:text>
+    <xsl:text>\right.</xsl:text>
+    <xsl:call-template name="end-inline-math"/>
 </xsl:template>
 
 <!-- Chord Alteration -->
@@ -6892,7 +7269,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <!-- special case for phrase options and list items of anonymous lists        -->
         <!-- catch this first and provide no text at all (could provide busted text?) -->
         <!-- anonymous lists live in "p", but this is an unreliable indication        -->
-        <xsl:when test="($text-style = 'phrase-global' or $text-style = 'phrase-hybrid') and ($target/self::li and not($target/ancestor::list or $target/ancestor::objectives or $target/ancestor::exercise))">
+        <xsl:when test="($text-style = 'phrase-global' or $text-style = 'phrase-hybrid') and ($target/self::li and not($target/ancestor::list or $target/ancestor::objectives or $target/ancestor::outcomes or $target/ancestor::exercise))">
             <xsl:message>MBX:WARNING: a cross-reference to a list item of an anonymous list ("<xsl:apply-templates select="$target" mode="serial-number" />") with 'phrase-global' and 'phrase-hybrid' styles for the xref text will yield no text at all, and possibly create unpredictable results in output</xsl:message>
         </xsl:when>
         <xsl:when test="$text-style = 'phrase-global' or $text-style = 'phrase-hybrid'">
@@ -7296,6 +7673,23 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- in LaTeX syntax, nor to function as special          -->
 <!-- characters themselves                                -->
 
+<!-- #################### -->
+<!-- In transition.  Empty elements for simple, ASCII,  -->
+<!-- "first 128", characters will eventually be deprecated  -->
+<!-- in favor of text()-processing which will make  -->
+<!-- replacements as needed, via a per-conversion hook  -->
+<!-- placed into the generic "text()" template. -->
+<!--  -->
+<!-- Otherwise, a conversion only needs to implement a  -->
+<!-- named template for a particular character whn an  -->
+<!-- escaped version, or a better Unicode version, is  -->
+<!-- necessary or desired. -->
+<!-- #################### -->
+
+<!-- These XML and LaTeX reserved characters all have natural     -->
+<!-- keyboard equivalents which will suffice in most conversions, -->
+<!-- so we implement default versions in U+00-U+7F.               -->
+
 <!--           -->
 <!-- XML, HTML -->
 <!--           -->
@@ -7303,18 +7697,27 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- & < > -->
 
 <!-- Ampersand -->
+<xsl:template name="ampersand-character">
+    <xsl:text>&amp;</xsl:text>
+</xsl:template>
 <xsl:template match="ampersand">
-    <xsl:text>[AMPERSAND]</xsl:text>
+    <xsl:call-template name="ampersand-character"/>
 </xsl:template>
 
 <!-- Less Than -->
+<xsl:template name="less-character">
+    <xsl:text>&lt;</xsl:text>
+</xsl:template>
 <xsl:template match="less">
-    <xsl:text>[LESSTHAN]</xsl:text>
+    <xsl:call-template name="less-character"/>
 </xsl:template>
 
 <!-- Greater Than -->
+<xsl:template name="greater-character">
+    <xsl:text>&gt;</xsl:text>
+</xsl:template>
 <xsl:template match="greater">
-    <xsl:text>[GREATERTHAN]</xsl:text>
+    <xsl:call-template name="greater-character"/>
 </xsl:template>
 
 <!--       -->
@@ -7324,165 +7727,322 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- # $ % ^ & _ { } ~ \ -->
 
 <!-- Number Sign, Hash, Octothorpe -->
+<xsl:template name="hash-character">
+    <xsl:text>#</xsl:text>
+</xsl:template>
 <xsl:template match="hash">
-    <xsl:text>[HASH]</xsl:text>
+    <xsl:call-template name="hash-character"/>
 </xsl:template>
 
+
 <!-- Dollar sign -->
+<xsl:template name="dollar-character">
+    <xsl:text>$</xsl:text>
+</xsl:template>
 <xsl:template match="dollar">
-    <xsl:text>[DOLLAR]</xsl:text>
+    <xsl:call-template name="dollar-character"/>
 </xsl:template>
 
 <!-- Percent sign -->
+<xsl:template name="percent-character">
+    <xsl:text>%</xsl:text>
+</xsl:template>
 <xsl:template match="percent">
-    <xsl:text>[PERCENT]</xsl:text>
+    <xsl:call-template name="percent-character"/>
 </xsl:template>
 
 <!-- Circumflex  -->
+<xsl:template name="circumflex-character">
+    <xsl:text>^</xsl:text>
+</xsl:template>
 <xsl:template match="circumflex">
-    <xsl:text>[CIRCUMFLEX]</xsl:text>
+    <xsl:call-template name="circumflex-character"/>
 </xsl:template>
 
 <!-- Ampersand -->
 <!-- Handled above -->
 
 <!-- Underscore -->
+<xsl:template name="underscore-character">
+    <xsl:text>_</xsl:text>
+</xsl:template>
 <xsl:template match="underscore">
-    <xsl:text>[UNDERSCORE]</xsl:text>
+    <xsl:call-template name="underscore-character"/>
 </xsl:template>
 
 <!-- Left Brace -->
+<xsl:template name="lbrace-character">
+    <xsl:text>{</xsl:text>
+</xsl:template>
 <xsl:template match="lbrace">
-    <xsl:text>[LEFTBRACE]</xsl:text>
+    <xsl:call-template name="lbrace-character"/>
 </xsl:template>
 
-<!-- Right  Brace -->
+<!-- Right Brace -->
+<xsl:template name="rbrace-character">
+    <xsl:text>}</xsl:text>
+</xsl:template>
 <xsl:template match="rbrace">
-    <xsl:text>[RIGHTBRACE]</xsl:text>
+    <xsl:call-template name="rbrace-character"/>
 </xsl:template>
 
 <!-- Tilde -->
+<xsl:template name="tilde-character">
+    <xsl:text>~</xsl:text>
+</xsl:template>
 <xsl:template match="tilde">
-    <xsl:text>[TILDE]</xsl:text>
+    <xsl:call-template name="tilde-character"/>
 </xsl:template>
 
 <!-- Backslash -->
+<xsl:template name="backslash-character">
+    <xsl:text>\</xsl:text>
+</xsl:template>
 <xsl:template match="backslash">
-    <xsl:text>[BACKSLASH]</xsl:text>
+    <xsl:call-template name="backslash-character"/>
 </xsl:template>
 
 <!-- ################ -->
 <!-- Other Characters -->
 <!-- ################ -->
 
+<!-- These are characters which may be reserved in certain          -->
+<!-- conversions (such as star/asterisk/* in Markdown), or          -->
+<!-- have fancier left/right versions (like double quote marks),    -->
+<!-- or look really bad if faked from a keyboard (double brackets), -->
+<!-- or lack an ASCII equivalent (like per-mille).  So we leave     -->
+<!-- them undefined here as named templates with warnings and       -->
+<!-- alarm bells, so that if a new conversion does not have an      -->
+<!-- implementation, that will be discovered early in development.  -->
+
+<xsl:template name="warn-unimplemented-character">
+    <xsl:param name="char-name"/>
+     <xsl:message>PTX:ERROR:   the character named "<xsl:value-of select="$char-name"/>" needs an implementation in the current conversion</xsl:message>
+     <xsl:text>[[[</xsl:text>
+     <xsl:value-of select="$char-name"/>
+     <xsl:text>]]]</xsl:text>
+ </xsl:template>
+
+
+
 <!-- Asterisk -->
 <!-- Centered as a character, not an exponent -->
+<xsl:template name="asterisk-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'asterisk'"/>
+    </xsl:call-template>
+</xsl:template>
 <xsl:template match="asterisk">
-    <xsl:text>[ASTERISK]</xsl:text>
+    <xsl:call-template name="asterisk-character"/>
 </xsl:template>
 
 <!-- Left Single Quote -->
+<xsl:template name="lsq-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="''"/>
+    </xsl:call-template>
+</xsl:template>
 <xsl:template match="lsq">
-    <xsl:text>[LEFTSINGLEQUOTE]</xsl:text>
+    <xsl:call-template name="lsq-character"/>
 </xsl:template>
 
 <!-- Right Single Quote -->
+<xsl:template name="rsq-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'rsq'"/>
+    </xsl:call-template>
+</xsl:template>
 <xsl:template match="rsq">
-    <xsl:text>[RIGHTSINGLEQUOTE]</xsl:text>
+    <xsl:call-template name="rsq-character"/>
 </xsl:template>
 
 <!-- Left (Double) Quote -->
+<xsl:template name="lq-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'lq'"/>
+    </xsl:call-template>
+</xsl:template>
 <xsl:template match="lq">
-    <xsl:text>[LEFTQUOTE]</xsl:text>
+    <xsl:call-template name="lq-character"/>
 </xsl:template>
 
 <!-- Right (Double) Quote -->
+<xsl:template name="rq-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'rq'"/>
+    </xsl:call-template>
+</xsl:template>
 <xsl:template match="rq">
-    <xsl:text>[RIGHTQUOTE]</xsl:text>
+    <xsl:call-template name="rq-character"/>
 </xsl:template>
 
 <!-- Left Bracket -->
+<xsl:template name="lbracket-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'lbracket'"/>
+    </xsl:call-template>
+</xsl:template>
 <xsl:template match="lbracket">
-    <xsl:text>[LEFTBRACKET]</xsl:text>
+    <xsl:call-template name="lbracket-character"/>
 </xsl:template>
 
 <!-- Right Bracket -->
+<xsl:template name="rbracket-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'rbracket'"/>
+    </xsl:call-template>
+</xsl:template>
 <xsl:template match="rbracket">
-    <xsl:text>[RIGHTBRACKET]</xsl:text>
+    <xsl:call-template name="rbracket-character"/>
 </xsl:template>
 
 <!-- Left Double Bracket -->
+<xsl:template name="ldblbracket-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'ldblbracket'"/>
+    </xsl:call-template>
+</xsl:template>
 <xsl:template match="ldblbracket">
-    <xsl:text>[LEFTDOUBLEBRACKET]</xsl:text>
+    <xsl:call-template name="ldblbracket-character"/>
 </xsl:template>
 
 <!-- Right Double Bracket -->
+<xsl:template name="rdblbracket-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'rdblbracket'"/>
+    </xsl:call-template>
+</xsl:template>
 <xsl:template match="rdblbracket">
-    <xsl:text>[RIGHTDOUBLEBRACKET]</xsl:text>
+    <xsl:call-template name="rdblbracket-character"/>
 </xsl:template>
 
 <!-- Left Angle Bracket -->
+<xsl:template name="langle-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'langle'"/>
+    </xsl:call-template>
+</xsl:template>
 <xsl:template match="langle">
-    <xsl:text>[LEFTANGLEBRACKET]</xsl:text>
+    <xsl:call-template name="langle-character"/>
 </xsl:template>
 
 <!-- Right Angle Bracket -->
+<xsl:template name="rangle-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'rangle'"/>
+    </xsl:call-template>
+</xsl:template>
 <xsl:template match="rangle">
-    <xsl:text>[RIGHTANGLEBRACKET]</xsl:text>
+    <xsl:call-template name="rangle-character"/>
+</xsl:template>
+
+<!-- Ellipsis (dots), for text, not math -->
+<xsl:template name="ellipsis-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'ellipsis'"/>
+    </xsl:call-template>
+</xsl:template>
+<xsl:template match="ellipsis">
+    <xsl:call-template name="ellipsis-character"/>
 </xsl:template>
 
 <!-- Midpoint -->
 <!-- A centered dot used sometimes like a decorative dash -->
+<xsl:template name="midpoint-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'midpoint'"/>
+    </xsl:call-template>
+</xsl:template>
 <xsl:template match="midpoint">
-    <xsl:text>[MIDPOINT]</xsl:text>
+    <xsl:call-template name="midpoint-character"/>
 </xsl:template>
 
 <!-- Swung Dash -->
 <!-- A decorative dash, like a tilde, but bigger, and centered -->
+<xsl:template name="swungdash-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'swungdash'"/>
+    </xsl:call-template>
+</xsl:template>
 <xsl:template match="swungdash">
-    <xsl:text>[SWUNGDASH]</xsl:text>
+    <xsl:call-template name="swungdash-character"/>
 </xsl:template>
 
 <!-- Per Mille -->
 <!-- Or, per thousand, like a percent sign -->
+<xsl:template name="permille-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'permille'"/>
+    </xsl:call-template>
+</xsl:template>
 <xsl:template match="permille">
-    <xsl:text>[PERMILLE]</xsl:text>
+    <xsl:call-template name="permille-character"/>
 </xsl:template>
 
 <!-- Pilcrow -->
 <!-- Often used to mark the start of a paragraph -->
+<xsl:template name="pilcrow-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'pilcrow'"/>
+    </xsl:call-template>
+</xsl:template>
 <xsl:template match="pilcrow">
-    <xsl:text>[PILCROW]</xsl:text>
+    <xsl:call-template name="pilcrow-character"/>
 </xsl:template>
 
 <!-- Section Mark -->
 <!-- The stylized double-S to indicate section numbers -->
+<xsl:template name="section-mark-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'section-mark'"/>
+    </xsl:call-template>
+</xsl:template>
 <xsl:template match="section-mark">
-    <xsl:text>[SECTION]</xsl:text>
+    <xsl:call-template name="section-mark-character"/>
 </xsl:template>
 
 <!-- Times -->
 <!-- A "multiplication sign" symbol for use in text -->
+<xsl:template name="times-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'times'"/>
+    </xsl:call-template>
+</xsl:template>
 <xsl:template match="times">
-    <xsl:text>[TIMES]</xsl:text>
+    <xsl:call-template name="times-character"/>
 </xsl:template>
 
 <!-- Slash -->
 <!-- Forward slash, or virgule (see solidus) -->
+<xsl:template name="slash-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'slash'"/>
+    </xsl:call-template>
+</xsl:template>
 <xsl:template match="slash">
-    <xsl:text>[SLASH]</xsl:text>
+    <xsl:call-template name="slash-character"/>
 </xsl:template>
 
 <!-- Solidus -->
 <!-- Fraction bar, not as steep as a forward slash -->
+<xsl:template name="solidus-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'solidus'"/>
+    </xsl:call-template>
+</xsl:template>
 <xsl:template match="solidus">
-    <xsl:text>[SOLIDUS]</xsl:text>
+    <xsl:call-template name="solidus-character"/>
 </xsl:template>
 
 <!-- Backtick -->
 <!-- Accent grave, as a text character -->
+<xsl:template name="backtick-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'backtick'"/>
+    </xsl:call-template>
+</xsl:template>
 <xsl:template match="backtick">
-    <xsl:text>[BACKTICK]</xsl:text>
+    <xsl:call-template name="backtick-character"/>
 </xsl:template>
 
 <!-- Dots
@@ -7501,83 +8061,40 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- as a polymorphic technique for the actual characters    -->
 <!-- LaTeX quotes are odd, so we override "q" and "sq" there -->
 
-<!-- NB: An RTF has a "root" node.  Then the elements      -->
-<!-- manufactured for it occur as children.  If the        -->
-<!-- "apply-templates" fails to have the "/*" at the end   -->
-<!-- of the "select", then the main entry template will be -->
-<!-- called to do any housekeeping it might do.            -->
-<!-- This was a really tough bug to track down.            -->
-
 <xsl:template match="q">
-    <xsl:variable name="lq-rtf">
-        <lq />
-    </xsl:variable>
-    <xsl:apply-templates select="exsl:node-set($lq-rtf)/*" />
+    <xsl:call-template name="lq-character"/>
     <xsl:apply-templates />
-    <xsl:variable name="rq-rtf">
-        <rq />
-    </xsl:variable>
-    <xsl:apply-templates select="exsl:node-set($rq-rtf)/*" />
+    <xsl:call-template name="rq-character"/>
 </xsl:template>
 
 <xsl:template match="sq">
-    <xsl:variable name="lsq-rtf">
-        <lsq />
-    </xsl:variable>
-    <xsl:apply-templates select="exsl:node-set($lsq-rtf)/*" />
+    <xsl:call-template name="lsq-character"/>
     <xsl:apply-templates />
-    <xsl:variable name="rsq-rtf">
-        <rsq />
-    </xsl:variable>
-    <xsl:apply-templates select="exsl:node-set($rsq-rtf)/*" />
+    <xsl:call-template name="rsq-character"/>
 </xsl:template>
 
 <xsl:template match="braces">
-    <xsl:variable name="lbrace-rtf">
-        <lbrace />
-    </xsl:variable>
-    <xsl:apply-templates select="exsl:node-set($lbrace-rtf)/*" />
+    <xsl:call-template name="lbrace-character"/>
     <xsl:apply-templates />
-    <xsl:variable name="rbrace-rtf">
-        <rbrace />
-    </xsl:variable>
-    <xsl:apply-templates select="exsl:node-set($rbrace-rtf)/*" />
+    <xsl:call-template name="rbrace-character"/>
 </xsl:template>
 
 <xsl:template match="brackets">
-    <xsl:variable name="lbracket-rtf">
-        <lbracket />
-    </xsl:variable>
-    <xsl:apply-templates select="exsl:node-set($lbracket-rtf)/*" />
+    <xsl:call-template name="lbracket-character"/>
     <xsl:apply-templates />
-    <xsl:variable name="rbracket-rtf">
-        <rbracket />
-    </xsl:variable>
-    <xsl:apply-templates select="exsl:node-set($rbracket-rtf)/*" />
+    <xsl:call-template name="rbracket-character"/>
 </xsl:template>
 
 <xsl:template match="dblbrackets">
-    <xsl:variable name="ldblbracket-rtf">
-        <ldblbracket />
-    </xsl:variable>
-    <xsl:apply-templates select="exsl:node-set($ldblbracket-rtf)/*" />
+    <xsl:call-template name="ldblbracket-character"/>
     <xsl:apply-templates />
-    <xsl:variable name="rdblbracket-rtf">
-        <rdblbracket />
-    </xsl:variable>
-    <xsl:apply-templates select="exsl:node-set($rdblbracket-rtf)/*" />
+    <xsl:call-template name="rdblbracket-character"/>
 </xsl:template>
 
 <xsl:template match="angles">
-    <xsl:variable name="langle-rtf">
-        <langle />
-    </xsl:variable>
-    <xsl:apply-templates select="exsl:node-set($langle-rtf)/*" />
+    <xsl:call-template name="langle-character"/>
     <xsl:apply-templates />
-    <xsl:variable name="rangle-rtf">
-        <rangle />
-    </xsl:variable>
-    <xsl:apply-templates select="exsl:node-set($rangle-rtf)/*" />
+    <xsl:call-template name="rangle-character"/>
 </xsl:template>
 
 <!-- ########## -->
@@ -7761,10 +8278,10 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
             <xsl:text>Your &lt;book&gt; does not have any chapters.  Maybe you forgot the '--xinclude' switch on your 'xsltproc' command line?</xsl:text>
         </xsl:message>
     </xsl:if>
-    <xsl:if test="article and not(article/p) and not(article/section)">
+    <xsl:if test="article and not(article/p) and not(article/section) and not(article/worksheet)">
         <xsl:message>
             <xsl:text>MBX:WARNING:    </xsl:text>
-            <xsl:text>Your &lt;article&gt; does not have any sections, nor any top-level paragraphs.  Maybe you forgot the '--xinclude' switch on your 'xsltproc' command line?</xsl:text>
+            <xsl:text>Your &lt;article&gt; does not have any sections or worksheets, nor any top-level paragraphs.  Maybe you forgot the '--xinclude' switch on your 'xsltproc' command line?</xsl:text>
         </xsl:message>
     </xsl:if>
 </xsl:template>
@@ -8285,6 +8802,10 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 </xsl:template>
 
 <!-- Miscellaneous -->
+
+<!-- A "pagebreak" should have limited availability, -->
+<!-- so we explicitly kill it here.                  -->
+<xsl:template match="pagebreak"/>
 
 <!-- ToDo's are silent unless requested           -->
 <!-- as part of an author's report, then marginal -->

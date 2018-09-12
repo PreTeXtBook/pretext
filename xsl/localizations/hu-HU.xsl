@@ -75,6 +75,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='introduction'><xsl:text>Bevezetés</xsl:text></localization>
     <localization string-id='conclusion'><xsl:text>Következtetés</xsl:text></localization>
     <localization string-id='exercises'><xsl:text>Feladatok</xsl:text></localization>
+    <!-- <localization string-id='worksheet'><xsl:text>Worksheet</xsl:text></localization> -->
     <!-- <localization string-id='solutions'><xsl:text>Solutions</xsl:text></localization> -->
     <localization string-id='references'><xsl:text>Hivatkozások</xsl:text></localization>
     <localization string-id='backmatter'><xsl:text>Záró rész</xsl:text></localization>
@@ -113,6 +114,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Objectives is the block, objective is a list item within -->
     <localization string-id='objectives'><xsl:text>Célkitűzések</xsl:text></localization>
     <localization string-id='objective'><xsl:text>Célkitűzés</xsl:text></localization>
+    <!-- Outcomes is the block, outcome is a list item within (different) -->
+    <!-- <localization string-id='outcomes'><xsl:text>Outcomes</xsl:text></localization> -->
+    <!-- <localization string-id='outcome'><xsl:text>Outcome</xsl:text></localization> -->
     <!--  -->
     <localization string-id='figure'><xsl:text>Ábra</xsl:text></localization>
     <localization string-id='table'><xsl:text>Táblázat</xsl:text></localization>
@@ -130,6 +134,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Translation needed for Hungary Hungarian -->
     <!-- See en-US file for distinctions here, do not repeat previous translation -->
     <!-- <localization string-id='inlineexercise'><xsl:text>Checkpoint</xsl:text></localization> -->
+    <!-- <localization string-id='worksheetexercise'><xsl:text>Worksheet Exercise</xsl:text></localization> -->
     <localization string-id='webwork'><xsl:text>WeBWorK</xsl:text></localization>
     <localization string-id='hint'><xsl:text>Tipp</xsl:text></localization>
     <localization string-id='answer'><xsl:text>Vélasz</xsl:text></localization>

@@ -30,10 +30,10 @@
 <!ENTITY SIMPLECHAR "'0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'">
 
 <!-- for match/select -->
-<!ENTITY STRUCTURAL "book|article|letter|memo|frontmatter|part|chapter|appendix|index[index-list]|index-part|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|exercises|solutions|references|backmatter">
+<!ENTITY STRUCTURAL "book|article|letter|memo|frontmatter|part|chapter|appendix|index[index-list]|index-part|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|exercises|worksheet|solutions|references|backmatter">
 
 <!-- for filtering nodes, eg *[&STRUCTURAL-FILTER;], *[not(&STRUCTURAL-FILTER;)] -->
-<!ENTITY STRUCTURAL-FILTER "self::book or self::article or self::letter or self::memo or self::frontmatter or self::part or self::chapter or self::appendix or self::index[index-list] or self::index-part or self::preface or self::acknowledgement or self::biography or self::foreword or self::dedication or self::colophon or self::section or self::subsection or self::subsubsection or self::exercises or self::solutions or self::references or self::backmatter">
+<!ENTITY STRUCTURAL-FILTER "self::book or self::article or self::letter or self::memo or self::frontmatter or self::part or self::chapter or self::appendix or self::index[index-list] or self::index-part or self::preface or self::acknowledgement or self::biography or self::foreword or self::dedication or self::colophon or self::section or self::subsection or self::subsubsection or self::exercises or self::worksheet or self::solutions or self::references or self::backmatter">
 
 <!-- typical items in blocks that get special treatment -->
 <!ENTITY METADATA "title|subtitle|caption|index">
@@ -71,8 +71,8 @@
 <!ENTITY AXIOM-FILTER "self::axiom or self::conjecture or self::principle or self::heuristic or self::hypothesis or self::assumption">
 
 <!-- narrative, set off for structure, reference -->
-<!ENTITY REMARK-LIKE "remark|convention|note|observation|warning|insight|computation|technology">
-<!ENTITY REMARK-FILTER "self::remark or self::convention or self::note or self::observation or self::warning or self::insight or self::computation or self::technology">
+<!ENTITY REMARK-LIKE "remark|convention|note|observation|warning|insight">
+<!ENTITY REMARK-FILTER "self::remark or self::convention or self::note or self::observation or self::warning or self::insight">
 
 <!-- about computations or technology -->
 <!ENTITY COMPUTATION-LIKE "computation|technology">

@@ -34,6 +34,18 @@
             </ul></p>
         </example>
     </section>
+    <section xml:id="time-signatures">
+        <title>Time Signatures</title>
+        <p>Time signatures are formed with the <tage>timesignature</tage> element and the <attr>top</attr> and <attr>bottom</attr> attributes.  For example,<ul>
+            <li><c>&lt;timesignature top="2" bottom="4"/&gt;</c>: <timesignature top="2"  bottom="4"/></li>
+            <li><c>&lt;timesignature top="12" bottom="8"/&gt;</c>: <timesignature top="12" bottom="8"/></li>
+            <li><c>&lt;timesignature top="7" bottom="8"/&gt;</c>: <timesignature top="7" bottom="8"/></li>
+
+            <li><c>&lt;timesignature top="5" bottom="24"/&gt;</c>: <timesignature top="5" bottom="24"/></li>
+            <li><c>&lt;timesignature top="3+2+3" bottom="8"/&gt;</c>: <timesignature top="3+2+3" bottom="8"/></li>
+            <li><c>&lt;timesignature top="5" bottom="8"/&gt;&lt;ampersand/&gt;&lt;timesignature top="3" bottom="8"/&gt;</c>: <timesignature top="5" bottom="8"/><ampersand/><timesignature top="3" bottom="8"/></li>
+        </ul></p>
+    </section>
     <section xml:id="notes">
         <title>Notes</title>
         <p>Notes are created using the <c>&lt;n&gt;</c> tag with a pitch class, <c>@pc</c>. Optional attributes include accidentals, <c>@acc</c>, and octaves, <c>@octave</c>. Please note, accidentals precede numeric pitch classes.</p>

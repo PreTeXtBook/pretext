@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--   This file is part of the documentation of PreTeXt      -->
+<!--                                                          -->
+<!--      PreTeXt Author's Guide                              -->
+<!--                                                          -->
+<!-- Copyright (C) 2013-2018  Robert A. Beezer                -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<chapter xml:id="advice">
+    <title>Authoring Advice</title>
+
+    <introduction>
+        <p>In this chapter we gather advice on authoring.  In some cases it is discipline-specific.</p>
+    </introduction>
+
+    <section xml:id="advice-math-textbook">
+        <title>Writing Your Student-Friendly Math Textbook</title>
+        <author>Kathy Yoshiwara</author>
+
+        <p>So you are writing a math textbook. You love your subject enough to put in the hours, and you probably have some ideas on how the standard presentation can be improved. You care about good pedagogy and want to engage your students.</p>
+
+        <p>You know that writing a text for undergraduates requires a different style from writing a research paper or a scholarly article for colleagues. But how to achieve that style? A good first step is to adjust your linguistic goal from</p>
+
+        <sidebyside margins="5%" widths="25% 5% 35%">
+            <p>Elegant Argument</p>
+            <p>to</p>
+            <p>Illuminating Explanation</p>
+        </sidebyside>
+
+        <p>We can examine this strategy in three areas:<ol>
+            <li>Language</li>
+            <li>Layout or Format</li>
+            <li>Content</li>
+        </ol></p>
+
+        <paragraphs>
+            <title>Language</title>
+
+            <p>In the exposition, it is useful to adopt an informal voice. But, perhaps counter-intuitively, that does not mean a conversational voice. In conversation, you have gestures and tone of voice to help convey meaning: what are the main points, what are helpful hints, what are asides, and what are social interactions.</p>
+
+            <p>None of these prompts are available when communicating in print. The author must shape the material so that the reader can navigate the ideas on his or her own. It is best to be as brief and direct as possible. After writing a section or so, go back and omit any unnecessary words or phrases. For example, before presenting an Example, there is no need to say <q>Here is an example to illustrate the ideas we have just discussed.</q> Subconsciously, the reader must absorb and then jettison this comment as unimportant. Doing so constantly leads to <q>reader fatigue.</q></p>
+
+            <p>Often an explanation can be improved just by (judiciously) making it shorter. In addition, while trying to understand a new concept, most students will not find helpful our philosophical musings or historical anecdotes. These can be presented in a sidebar or addendum. Do try to relate new ideas to previous ones and show how they fit into the overall scheme, but avoid references such as <q>we'll need this for our later study of (whatever).</q></p>
+
+            <p>The principles of good writing for any format apply equally to textbooks, mathematical or otherwise. Usually, active voice is more effective than passive voice, and a positive form is clearer than a negative one. Strunk and White's classic <pubtitle>The Elements of Style</pubtitle> and, more recently, George Gopen's reader expectation approach are standard resources for techniques of composition. (Although sometimes their advice is contradictory, which just goes to show that no rule is appropriate in every situation.) Steven Pinker's <pubtitle>The Sense of Style</pubtitle> is also useful.</p>
+        </paragraphs>
+
+        <paragrpahs>
+            <title>Layout or Format</title>
+
+            <p>In a textbook, it is good practice to deliver material in digestible portions. Try to keep blocks of uninterrupted text rather short. Break up the exposition visually with boxes, Examples, Cautions, Notes, and so on. Use bulleted or numbered lists to highlight important points. Consider whether it would be more effective to start a particular section with a motivating example, or perhaps with a few sentences explaining how the new topic arises naturally, or in some other way.</p>
+
+            <p>Instead of opening your textbook with a <q>Chapter 0</q> type catalog of all the notation and terminology needed in the entire book, it would be kinder to students to introduce new notation and terminology as needed. Also, it is not necessary to front-load all the information about a topic at one time; let students absorb and practice the fundamental ideas, then return later to elaborate, generalize, or present exceptions. Resist the temptation to proceed too quickly to general or abstract statements. Most people grasp abstract ideas more easily if they first see specific and concrete examples.</p>
+
+            <p>Choosing effective examples helps make your text student-friendly. A simple example has greater impact than a complicated one. If you are introducing asymptotes, the graph of<me>
+                y=\dfrac{x-3}{x-2}
+            </me>is a better example than<me>
+                y=\dfrac{x^2-9}{x^2-x-2}
+            </me>. It is also better than<me>
+                y=\dfrac{1}{x}
+            </me>because the latter may lead students to believe that asymptotes are identified with the coordinate axes. If you are introducing subgroups, do not limit your examples to subgroups of cyclic groups. Always consider your example from the students' point of view! Is your example too general or too specific? Are there confounding features that may distract from the intended message?</p>
+
+            <p>What about proofs? These days a good background in mathematics is necessary for a wide variety of occupations, so that only a small number of your students may be headed to graduate school in mathematics, even in junior or senior level classes. Here is a good place to strive for <q>illuminating</q> rather than <q>elegant.</q></p>
+        </paragrpahs>
+
+        <paragraphs>
+            <title>Content</title>
+
+            <p>Choosing and organizing the material for your textbook requires more thought than any other aspect of the creative process. To make your textbook truly student-friendly, you may want to rethink the traditional or standard order of content. If you are used to presenting material by topic, you might want to consider how better to make connections or to take advantage of sound pedagogical principles.</p>
+
+            <p>For example, forty years ago high school algebra was taught by first covering all the <q>one-variable</q> material and then (if time permitted) considering graphs and other <q>two-variable</q> topics. Now it is considered more effective to study graphs throughout the course. Linear algebra courses used to start with the study of vector spaces. Now many texts prefer to begin with systems of linear equations. In trigonometry, maybe we can start with just three trig functions instead of six; maybe we can work in one quadrant first, then add the second quadrant, before treating all four.</p>
+
+            <p>In a sense, textbooks drive the curriculum. Think of the innovations introduced in the calculus renewal movement that are now incorporated into most calculus texts: the catalog of functions, the rule of four, the inclusion of conceptual exercises. Many instructors, especially adjunct or part-time instructors, rely on their textbooks to shape their courses. You have a real opportunity to influence the direction of your field and to shape the way it is taught. Now get to work.</p>
+        </paragraphs>
+    </section>
+</chapter>

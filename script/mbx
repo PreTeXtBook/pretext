@@ -157,11 +157,20 @@ def sage_conversion(xml_source, xmlid_root, dest_dir, outformat):
             for f in glob.glob(sagepng):
                 shutil.copy2(f, dest_dir)
 
-def latex_image_conversion(xml_source, xmlid_root, data_dir, dest_dir, outformat):
+def latex_image_conversion(xml_source, stringparams, xmlid_root, data_dir, dest_dir, outformat):
     global config
     import tempfile, os, os.path, subprocess, shutil
     plat = get_platform()
     _verbose('converting latex-image pictures from {} to {} graphics for placement in {}'.format(xml_source, outformat, dest_dir))
+    _verbose('string parameters after command line is parsed: {}'.format(stringparams))
+    params = []
+    if stringparams:
+        # assumes pairs, could add crude check for even length
+        for i in range(len(stringparams)/2):
+            params.append('-stringparam')
+            params.append(stringparams[2*i])
+            params.append(stringparams[2*i+1])
+        _verbose('options added to xsltproc extraction: {}'.format(params))
     dest_dir = sanitize_directory(dest_dir)
     tmp_dir = tempfile.mkdtemp()
     if plat == "Windows":
@@ -175,7 +184,7 @@ def latex_image_conversion(xml_source, xmlid_root, data_dir, dest_dir, outformat
     # http://stackoverflow.com/questions/11269575/how-to-hide-output-of-subprocess-in-python-2-7
     devnull = open(os.devnull, 'w')
     if plat == "Windows":
-        convert_cmd = [xslt_executable,
+        convert_cmd = [xslt_executable] + params + [
             '--stringparam', 'scratch', tmp_dir,
             '--stringparam', 'subtree', xmlid_root,
             '--xinclude',
@@ -184,7 +193,7 @@ def latex_image_conversion(xml_source, xmlid_root, data_dir, dest_dir, outformat
             xml_source
             ]
     else:
-        convert_cmd = [xslt_executable,
+        convert_cmd = [xslt_executable] + params + [
             '--stringparam', 'scratch', tmp_dir,
             '--stringparam', 'subtree', xmlid_root,
             '--xinclude',
@@ -1040,6 +1049,12 @@ def get_cli_arguments():
     format_help = 'Output formats are:\n' + '\n'.join(['  {} - {}'.format(info[0], info[1]) for info in format_info])
     parser.add_argument('-f', '--format', help=format_help, action="store", dest='format')
 
+    # "nargs" allows multiple options following the flag
+    # separate by spaces, can't use "-stringparam"
+    # stringparams is a list of strings on return
+    parser.add_argument('-p', '--parameters', nargs='+', help='stringparam options to pass to XSLT extraction stylesheet (option/value pairs)',
+                         action="store", dest='stringparams')
+
     # default to an empty string, which signals root to XSL stylesheet
     parser.add_argument('-r', '--restrict', help='restrict to subtree rooted at element with specified xml:id',
                          action="store", dest='xmlid', default='')
@@ -1206,17 +1221,17 @@ elif args.component == 'sageplot':
         raise NotImplementedError('cannot make Sage graphics in "{}" format'.format(args.format))
 elif args.component == 'latex-image':
     if args.format == 'pdf':
-        latex_image_conversion(args.xml_file, args.xmlid, args.data_dir, output_dir, 'pdf')
+        latex_image_conversion(args.xml_file, args.stringparams, args.xmlid, args.data_dir, output_dir, 'pdf')
     elif args.format == 'svg':
-        latex_image_conversion(args.xml_file, args.xmlid, args.data_dir, output_dir, 'svg')
+        latex_image_conversion(args.xml_file, args.stringparams, args.xmlid, args.data_dir, output_dir, 'svg')
     elif args.format == 'source':
-        latex_image_conversion(args.xml_file, args.xmlid, args.data_dir, output_dir, 'source')
+        latex_image_conversion(args.xml_file, args.stringparams, args.xmlid, args.data_dir, output_dir, 'source')
     elif args.format == 'png':
-        latex_image_conversion(args.xml_file, args.xmlid, args.data_dir, output_dir, 'png')
+        latex_image_conversion(args.xml_file, args.stringparams, args.xmlid, args.data_dir, output_dir, 'png')
     elif args.format == 'eps':
-        latex_image_conversion(args.xml_file, args.xmlid, args.data_dir, output_dir, 'eps')
+        latex_image_conversion(args.xml_file, args.stringparams, args.xmlid, args.data_dir, output_dir, 'eps')
     elif args.format == 'all':
-        latex_image_conversion(args.xml_file, args.xmlid, args.data_dir, output_dir, 'all')
+        latex_image_conversion(args.xml_file, args.stringparams, args.xmlid, args.data_dir, output_dir, 'all')
     else:
         raise NotImplementedError('cannot make LaTeX pictures in "{}" format'.format(args.format))
 elif args.component == 'webwork-tex':

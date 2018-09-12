@@ -103,6 +103,7 @@
                 <xs:group minOccurs="0" ref="ConclusionDivision"/>
               </xs:sequence>
             </xs:choice>
+            <xs:element minOccurs="0" ref="outcomes"/>
           </xs:sequence>
         </xs:extension>
       </xs:complexContent>
@@ -135,6 +136,7 @@
                 <xs:group minOccurs="0" ref="ConclusionDivision"/>
               </xs:sequence>
             </xs:choice>
+            <xs:element minOccurs="0" ref="outcomes"/>
           </xs:sequence>
         </xs:extension>
       </xs:complexContent>
@@ -167,6 +169,7 @@
                 <xs:group minOccurs="0" ref="ConclusionDivision"/>
               </xs:sequence>
             </xs:choice>
+            <xs:element minOccurs="0" ref="outcomes"/>
           </xs:sequence>
         </xs:extension>
       </xs:complexContent>
@@ -187,6 +190,7 @@
             <xs:element minOccurs="0" ref="exercises"/>
             <xs:element minOccurs="0" ref="solutions"/>
             <xs:element minOccurs="0" ref="references"/>
+            <xs:element minOccurs="0" ref="outcomes"/>
           </xs:sequence>
         </xs:extension>
       </xs:complexContent>
@@ -805,6 +809,17 @@
     </xs:sequence>
   </xs:group>
   <xs:element name="objectives">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="MetaDataTitleOptional"/>
+        <xs:group minOccurs="0" ref="IntroductionText"/>
+        <xs:group ref="List"/>
+        <xs:group minOccurs="0" ref="ConclusionText"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="MetaDataTitleOptional"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="outcomes">
     <xs:complexType>
       <xs:sequence>
         <xs:group ref="MetaDataTitleOptional"/>
@@ -1616,6 +1631,7 @@
       <xs:attribute name="preview"/>
       <xs:attribute name="source"/>
       <xs:attribute name="youtube"/>
+      <xs:attribute name="youtubeplaylist"/>
     </xs:complexType>
   </xs:element>
   <xs:attributeGroup name="AttributesSourceFile">
@@ -1623,6 +1639,9 @@
   </xs:attributeGroup>
   <xs:attributeGroup name="AttributesYouTube">
     <xs:attribute name="youtube" use="required"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="AttributesYouTubePlaylist">
+    <xs:attribute name="youtubeplaylist" use="required"/>
   </xs:attributeGroup>
   <xs:group name="ExerciseBody">
     <xs:sequence>
@@ -2842,6 +2861,7 @@
       <xs:element ref="flat"/>
       <xs:element ref="doubleflat"/>
       <xs:element ref="scaledeg"/>
+      <xs:element ref="timesignature"/>
       <xs:element ref="n"/>
       <xs:element ref="chord"/>
     </xs:choice>
@@ -2877,6 +2897,12 @@
         <xs:enumeration value="10"/>
       </xs:restriction>
     </xs:simpleType>
+  </xs:element>
+  <xs:element name="timesignature">
+    <xs:complexType>
+      <xs:attribute name="top" use="required"/>
+      <xs:attribute name="bottom" use="required"/>
+    </xs:complexType>
   </xs:element>
   <xs:element name="n">
     <xs:complexType>

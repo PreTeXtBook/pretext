@@ -39,7 +39,7 @@ shopt -s -o nounset
 # PreTeXt distribution
 declare MB=${HOME}/mathbook/mathbook
 # DocFlex installation
-declare DFH=/opt/docflex/docflex-xml-1.11
+declare DFH=/opt/docflex/docflex-xml-1.12
 # DocFlex output directory
 declare DFOUTDIR=${HOME}/mathbook/website/mathbook.pugetsound.edu/doc/schema
 # Java root to locate executables
@@ -93,9 +93,11 @@ xsltproc ${MB}/schema/iso_schematron_cli.xsl ${MB}/schema/pretext.sch > ${MB}/sc
 # Execution and options cribbed from DocFlex distribution
 #
 # -docflexconfig specifies a DocFlex Linux-specific configuration
+#  v1.12 config now in bin directory
+#  v1.12 requires Oracle Java (ie OpenJDK lacks "javafx")
 
 ${JAVA_HOME}/bin/java ${JAVA_OPTIONS} -cp ${CLASS_PATH} com.docflex.xml.Generator \
-    -docflexconfig ${DFH}/linux/docflex.config -quiet \
+    -docflexconfig ${DFH}/bin/linux/docflex.config -quiet \
     -nodialog -launchviewer=false -d ${DFOUTDIR} pretext.xsd
 
 # exit cleanly

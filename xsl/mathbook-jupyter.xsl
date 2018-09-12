@@ -483,7 +483,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- interpreted incorrectly.  But they can be escaped.   -->
 <!-- Not a Markdown element, but critical so here anyway. -->
 <!-- So authors should use the "dollar" element.          -->
-<xsl:template match="dollar">
+<xsl:template name="dollar-character">
     <xsl:text>\$</xsl:text>
 </xsl:template>
 
@@ -493,39 +493,39 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- (&, <, >) or as fancier, non-ASCII, Unicode versions.         -->
 
 <!-- Number Sign, Hash, Octothorpe -->
-<xsl:template match="hash">
+<xsl:template name="hash-character">
     <xsl:text>\#</xsl:text>
 </xsl:template>
 
 <!-- Underscore -->
-<xsl:template match="underscore">
+<xsl:template name="underscore-character">
     <xsl:text>\_</xsl:text>
 </xsl:template>
 
 <!-- Left Brace -->
-<xsl:template match="lbrace">
+<xsl:template name="lbrace-character">
     <xsl:text>\{</xsl:text>
 </xsl:template>
 
 <!-- Right  Brace -->
-<xsl:template match="rbrace">
+<xsl:template name="rbrace-character">
     <xsl:text>\}</xsl:text>
 </xsl:template>
 
 <!-- Backslash -->
-<xsl:template match="backslash">
+<xsl:template name="backslash-character">
     <xsl:text>\\</xsl:text>
 </xsl:template>
 
 <!-- Asterisk, implemented as Unicode  -->
 
 <!-- Left Bracket -->
-<xsl:template match="lbracket">
+<xsl:template name="lbracket-character">
     <xsl:text>\[</xsl:text>
 </xsl:template>
 
 <!-- Right Bracket -->
-<xsl:template match="rbracket">
+<xsl:template name="rbracket-character">
     <xsl:text>\]</xsl:text>
 </xsl:template>
 
@@ -533,7 +533,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- This is the rationale for this element. -->
 <!-- We can use it in a text context,        -->
 <!-- and protect it here from Markdown.      -->
-<xsl:template match="backtick">
+<xsl:template name="backtick-character">
     <xsl:text>\`</xsl:text>
 </xsl:template>
 

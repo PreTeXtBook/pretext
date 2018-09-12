@@ -112,7 +112,8 @@
                         References?,
                         ConclusionDivision?
                     )
-                )
+                ),
+                Outcomes?
             }
         Section =
             element section {
@@ -135,7 +136,8 @@
                         References?,
                         ConclusionDivision?
                     )
-                )
+                ),
+                Outcomes?
             }
         Subsection =
             element subsection {
@@ -158,7 +160,8 @@
                         References?,
                         ConclusionDivision?
                     )
-                )
+                ),
+                Outcomes?
             }
         Subsubsection =
             element subsubsection {
@@ -168,7 +171,8 @@
                 (BlockDivision | Paragraphs | Commentary)+,
                 Exercises?,
                 Solutions?,
-                References?
+                References?,
+                Outcomes?
             }
         Appendix =
             element appendix {
@@ -420,6 +424,10 @@
             element flat {empty} |
             element doubleflat {empty} |
             element scaledeg {"0"|"1"|"2"|"3"|"4"|"5"|"6"|"7"|"8"|"9"|"10"} |
+            element timesignature {
+                attribute top {text},
+                attribute bottom {text}
+            } |
             element n {
                 attribute pc {
                     "A"|"B"|"C"|"D"|"E"|"F"|"G"|"a"|"b"|"c"|"d"|"e"|"f"|"g"|
@@ -480,7 +488,7 @@
             element viz {empty}
         </fragment>
 
-        <p>A large class of similary indivisible items are units on physical quantities.</p>
+        <p>A large class of similary indivisible items are units on physical quantities.  The <tag>quantity</tag> element is allowed to be empty, and the code should silently produce no output.  Expressing non-emptieness here might get a bit messy, so a Schematron warning could be a good alternative.</p>
 
         <fragment xml:id="siunit">
         UnitSpecification =
@@ -814,11 +822,18 @@
     <section>
         <title>Objectives</title>
 
-        <p>A division may lead (first) with an optional list of objectives for the division.</p>
+        <p>A division may lead (first) with an optional list of objectives for the division and may be followed by a (final) optional list of outcomes.  The element names are only chosen to reflect a pre- and post- behavior and so could be used for objectivbes, outcomes, and standards in a variety of ways.</p>
 
-        <fragment xml:id="objectives">
+        <fragment xml:id="objective-outcome">
         Objectives =
             element objectives {
+                MetaDataTitleOptional,
+                IntroductionText?,
+                List,
+                ConclusionText?
+            }
+        Outcomes =
+            element outcomes {
                 MetaDataTitleOptional,
                 IntroductionText?,
                 List,
@@ -1360,12 +1375,14 @@
                 attribute end {xsd:integer}?,
                 attribute play-at {"embed" | "popout" | "select"}?,
                 attribute preview {"default" | "generic" | text}?,
-                (AttributesSourceFile | AttributesYouTube)
+                (AttributesSourceFile | AttributesYouTube | AttributesYouTubePlaylist)
             }
         AttributesSourceFile =
             attribute source {text}
         AttributesYouTube =
             attribute youtube {text}
+        AttributesYouTubePlaylist =
+            attribute youtubeplaylist {text}
         </fragment>
     </section>
 
@@ -2022,7 +2039,7 @@
         <fragment ref="block" />
         <fragment ref="block-component" />
         <fragment ref="introduction-conclusion" />
-        <fragment ref="objectives" />
+        <fragment ref="objective-outcome" />
         <fragment ref="blockquote" />
         <fragment ref="verbatimdisplay" />
         <fragment ref="list" />
