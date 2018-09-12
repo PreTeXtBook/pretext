@@ -1709,24 +1709,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- raster force size: false lets us control width            -->
         <xsl:text>\NewDocumentEnvironment{exercisegroup}{m}&#xa;</xsl:text>
         <xsl:text>  {\setlength{\egexwidth}{</xsl:text>
-        <xsl:text>\ifx1#1{</xsl:text><xsl:value-of select="$width1" /><xsl:text>}\fi</xsl:text>
-        <xsl:text>\ifx2#1{</xsl:text><xsl:value-of select="$width2" /><xsl:text>}\fi</xsl:text>
-        <xsl:text>\ifx3#1{</xsl:text><xsl:value-of select="$width3" /><xsl:text>}\fi</xsl:text>
-        <xsl:text>\ifx4#1{</xsl:text><xsl:value-of select="$width4" /><xsl:text>}\fi</xsl:text>
-        <xsl:text>\ifx5#1{</xsl:text><xsl:value-of select="$width5" /><xsl:text>}\fi</xsl:text>
-        <xsl:text>\ifx6#1{</xsl:text><xsl:value-of select="$width5" /><xsl:text>}\fi</xsl:text>
+        <xsl:text>\ifx1#1</xsl:text><xsl:value-of select="$width1" /><xsl:text>\fi</xsl:text>
+        <xsl:text>\ifx2#1</xsl:text><xsl:value-of select="$width2" /><xsl:text>\fi</xsl:text>
+        <xsl:text>\ifx3#1</xsl:text><xsl:value-of select="$width3" /><xsl:text>\fi</xsl:text>
+        <xsl:text>\ifx4#1</xsl:text><xsl:value-of select="$width4" /><xsl:text>\fi</xsl:text>
+        <xsl:text>\ifx5#1</xsl:text><xsl:value-of select="$width5" /><xsl:text>\fi</xsl:text>
+        <xsl:text>\ifx6#1</xsl:text><xsl:value-of select="$width5" /><xsl:text>\fi</xsl:text>
         <xsl:text>\linewidth}&#xa;</xsl:text>
         <xsl:text>   \begin{tcbraster}&#xa;</xsl:text>
         <xsl:text>    [exgroupstyle,raster columns=#1]}&#xa;</xsl:text>
         <xsl:text>  {\end{tcbraster}}&#xa;</xsl:text>
         <xsl:text>\NewDocumentEnvironment{exercisegroupsolution}{m}&#xa;</xsl:text>
         <xsl:text>  {\setlength{\egexwidth}{</xsl:text>
-        <xsl:text>\ifx1#1{</xsl:text><xsl:value-of select="$width1" /><xsl:text>}\fi</xsl:text>
-        <xsl:text>\ifx2#1{</xsl:text><xsl:value-of select="$width2" /><xsl:text>}\fi</xsl:text>
-        <xsl:text>\ifx3#1{</xsl:text><xsl:value-of select="$width3" /><xsl:text>}\fi</xsl:text>
-        <xsl:text>\ifx4#1{</xsl:text><xsl:value-of select="$width4" /><xsl:text>}\fi</xsl:text>
-        <xsl:text>\ifx5#1{</xsl:text><xsl:value-of select="$width5" /><xsl:text>}\fi</xsl:text>
-        <xsl:text>\ifx6#1{</xsl:text><xsl:value-of select="$width5" /><xsl:text>}\fi</xsl:text>
+        <xsl:text>\ifx1#1</xsl:text><xsl:value-of select="$width1" /><xsl:text>\fi</xsl:text>
+        <xsl:text>\ifx2#1</xsl:text><xsl:value-of select="$width2" /><xsl:text>\fi</xsl:text>
+        <xsl:text>\ifx3#1</xsl:text><xsl:value-of select="$width3" /><xsl:text>\fi</xsl:text>
+        <xsl:text>\ifx4#1</xsl:text><xsl:value-of select="$width4" /><xsl:text>\fi</xsl:text>
+        <xsl:text>\ifx5#1</xsl:text><xsl:value-of select="$width5" /><xsl:text>\fi</xsl:text>
+        <xsl:text>\ifx6#1</xsl:text><xsl:value-of select="$width5" /><xsl:text>\fi</xsl:text>
         <xsl:text>\linewidth}&#xa;</xsl:text>
         <xsl:text>   \begin{tcbraster}&#xa;</xsl:text>
         <xsl:text>    [exgroupsolutionstyle,raster columns=#1]}&#xa;</xsl:text>
