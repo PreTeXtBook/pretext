@@ -117,12 +117,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- PROJECT-LIKE: "activity", "exploration",      -->
 <!--               "exploration", "investigation"  -->
-<!-- This green "vignette" is straight             -->
-<!-- from the tcolorbox documentation              -->
+<!-- This from the tcolorbox documentation of      -->
+<!-- the "tcbinvclipframe" documentation           -->
 <xsl:template match="&PROJECT-LIKE;" mode="tcb-style">
-    <xsl:text>enhanced, size=small, sharp corners, colback=green!10, colframe=green!50!black,&#xa;</xsl:text>
-    <xsl:text>boxrule=1mm, titlerule=0mm, center title, fonttitle=\bfseries,&#xa;</xsl:text>
-    <xsl:text>underlay={\tcbvignette{size=1mm,inside node=frame, raised color=green!50!black}},</xsl:text>
+    <xsl:text>enhanced jigsaw,fonttitle=\bfseries,opacityback=0.35,colback=blue!5!white,</xsl:text>
+    <xsl:text>frame style={left color=red!75!black,right color=red!10!yellow},</xsl:text>
+    <xsl:text>overlay={\begin{tcbinvclipframe}</xsl:text>
+    <xsl:text>\draw[red,line width=1cm] ([xshift=-2mm,yshift=2mm]frame.north west)</xsl:text>
+    <xsl:text>--([xshift=2mm,yshift=-2mm]frame.south east);</xsl:text>
+    <xsl:text>\draw[red,line width=1cm] ([xshift=-2mm,yshift=-2mm]frame.south west)</xsl:text>
+    <xsl:text>--([xshift=2mm,yshift=2mm]frame.north east);</xsl:text>
+    <xsl:text>\end{tcbinvclipframe}}</xsl:text>
 </xsl:template>
 
 <!-- "assemblage" -->
