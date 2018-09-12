@@ -2861,6 +2861,7 @@
       <xs:element ref="flat"/>
       <xs:element ref="doubleflat"/>
       <xs:element ref="scaledeg"/>
+      <xs:element ref="timesignature"/>
       <xs:element ref="n"/>
       <xs:element ref="chord"/>
     </xs:choice>
@@ -2896,6 +2897,12 @@
         <xs:enumeration value="10"/>
       </xs:restriction>
     </xs:simpleType>
+  </xs:element>
+  <xs:element name="timesignature">
+    <xs:complexType>
+      <xs:attribute name="top" use="required"/>
+      <xs:attribute name="bottom" use="required"/>
+    </xs:complexType>
   </xs:element>
   <xs:element name="n">
     <xs:complexType>

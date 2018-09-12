@@ -3060,6 +3060,10 @@
           <value>10</value>
         </choice>
       </element>
+      <element name="timesignature">
+        <attribute name="top"/>
+        <attribute name="bottom"/>
+      </element>
       <element name="n">
         <attribute name="pc">
           <choice>
