@@ -979,9 +979,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% with hard-coded numbers as arguments, not as LaTeX environments&#xa;</xsl:text>
         <xsl:text>%% Third argument is option for extra workspace in worksheets&#xa;</xsl:text>
         <xsl:text>%% Always full-width, use in a side-by-side will constrain that&#xa;</xsl:text>
-        <xsl:text>\tcbset{ divisionexercisestyle/.style={size=minimal, boxrule=-0.3pt, frame empty, colback=white, colbacktitle=white, coltitle=black, fonttitle=\normalfont\bfseries, attach title to upper, after title={\space}, } }&#xa;</xsl:text>
+        <xsl:text>%% Hanging indent occupies a 5ex width slot prior to left margin&#xa;</xsl:text>
+        <xsl:text>%% Experimentally this seems just barely sufficient for a bold "888."&#xa;</xsl:text>
+        <xsl:text>\tcbset{ divisionexercisestyle/.style={size=minimal, boxrule=-0.3pt, frame empty, colback=white, colbacktitle=white, coltitle=black, fonttitle=\normalfont\bfseries, attach title to upper, left=5ex } }&#xa;</xsl:text>
         <xsl:text>\newtcolorbox{divisionexercise}[4]</xsl:text>
-        <xsl:text>{divisionexercisestyle, title={#1.\space\notblank{#2}{\space#2}{}}, phantom={\hypertarget{#4}{}}, after={\notblank{#3}{\newline\rule{\workspacestrutwidth}{#3\textheight}\newline}{}}}&#xa;</xsl:text>
+        <xsl:text>{divisionexercisestyle, before title={\hspace{-5ex}\makebox[5ex][l]{#1.}}, title={\notblank{#2}{#2\space}{}}, phantom={\hypertarget{#4}{}}, after={\notblank{#3}{\newline\rule{\workspacestrutwidth}{#3\textheight}\newline}{}}}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$document-root//exercise[@workspace]">
         <xsl:text>%% Worksheet exercises may have workspaces&#xa;</xsl:text>
