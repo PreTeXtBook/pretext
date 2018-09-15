@@ -356,7 +356,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% the LaTeX engine is one such determinant&#xa;</xsl:text>
     <xsl:text>\usepackage{ifthen}&#xa;</xsl:text>
     <xsl:text>%% etoolbox has a variety of modern conveniences&#xa;</xsl:text>
-    <!-- e.g, \isblank -->
+    <!-- e.g, \notblank -->
     <xsl:text>\usepackage{etoolbox}&#xa;</xsl:text>
     <xsl:text>\usepackage{ifxetex,ifluatex}&#xa;</xsl:text>
     <xsl:text>%% Raster graphics inclusion&#xa;</xsl:text>
@@ -854,6 +854,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="environment"/>
     </xsl:for-each>
     <!-- PROJECT-LIKE -->
+    <!-- Used three times, search on $project-reps -->
     <xsl:variable name="project-reps" select="
         ($document-root//project)[1]|
         ($document-root//activity)[1]|
@@ -926,77 +927,75 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:if test="$document-root//solutions">
         <xsl:text>%% begin: environments for duplicates in solutions divisions&#xa;</xsl:text>
-        <xsl:text>%% An AMS theorem style for solution list environments&#xa;</xsl:text>
-        <xsl:text>\newtheoremstyle{ptxdefinitiontitlenonumber}&#xa;</xsl:text>
-        <xsl:text>  {}% space above&#xa;</xsl:text>
-        <xsl:text>  {}% space below&#xa;</xsl:text>
-        <xsl:text>  {}% body font&#xa;</xsl:text>
-        <xsl:text>  {}% indent amount&#xa;</xsl:text>
-        <xsl:text>  {\bfseries}% theorem head font&#xa;</xsl:text>
-        <xsl:text>  {}% punctuation after theorem head&#xa;</xsl:text>
-        <xsl:text>  {0.5em}% space after theorem head&#xa;</xsl:text>
-        <xsl:text>  {\thmname{#1}\thmnote{ #3}}% theorem head specification&#xa;</xsl:text>
-        <xsl:text>%% An un-numbered AMS theorem for solution list inline exercises&#xa;</xsl:text>
-        <xsl:text>\theoremstyle{ptxdefinitiontitlenonumber}&#xa;</xsl:text>
-        <xsl:text>\newtheorem*{inlineexercisesolutiontitle}{</xsl:text>
-        <xsl:call-template name="type-name">
-            <xsl:with-param name="string-id" select="'inlineexercise'" />
-        </xsl:call-template>
-        <xsl:text>}&#xa;</xsl:text>
-        <xsl:text>%% A slightly different environment for inline exercises in solutions&#xa;</xsl:text>
-        <xsl:text>%% Mandatory number argument combined into amsthm title&#xa;</xsl:text>
-        <xsl:text>\NewDocumentEnvironment{inlineexercisesolution}{mo}&#xa;</xsl:text>
-        <xsl:text>  {\begin{inlineexercisesolutiontitle}{\textbf{#1\IfValueT{#2}{ #2}}}}&#xa;</xsl:text>
-        <xsl:text>  {\end{inlineexercisesolutiontitle}}&#xa;</xsl:text>
-        <xsl:if test="$document-root//project">
-            <xsl:call-template name="project-solution-environment">
-                <xsl:with-param name="ptx-name" select="'project'" />
+        <!-- Solutions present, check for exercise types     -->
+        <!-- This may have false positives, but no real harm -->
+        <!--  -->
+        <!-- solutions to inline exercises -->
+        <xsl:if test="$document-root//exercise[not(ancestor::exercises or ancestor::worksheet)]">
+        <xsl:text>%% Solutions to inline exercises, style and environment&#xa;</xsl:text>
+            <xsl:text>\tcbset{ inlineexercisesolutionstyle/.style={size=minimal, boxrule=-0.3pt, frame empty, colback=white, colbacktitle=white, coltitle=black, fonttitle=\normalfont\bfseries, attach title to upper, after title={\space}, } }&#xa;</xsl:text>
+            <xsl:text>\newtcolorbox{inlineexercisesolution}[2]</xsl:text>
+            <xsl:text>{inlineexercisesolutionstyle, title={</xsl:text>
+            <!-- Hardcode "name" of an inline exercise in the environment -->
+            <xsl:call-template name="type-name">
+                <xsl:with-param name="string-id" select="'inlineexercise'" />
             </xsl:call-template>
+            <xsl:text>~#1\notblank{#2}{\space#2}{}}}&#xa;</xsl:text>
         </xsl:if>
-        <xsl:if test="$document-root//activity">
-            <xsl:call-template name="project-solution-environment">
-                <xsl:with-param name="ptx-name" select="'activity'" />
-            </xsl:call-template>
+        <!-- solutions to division exercises -->
+        <xsl:if test="$document-root//exercises//exercise|$document-root//worksheet//exercise">
+        <xsl:text>%% Solutions to division exercises, style and environment&#xa;</xsl:text>
+            <xsl:text>\tcbset{ divisionexercisesolutionstyle/.style={size=minimal, boxrule=-0.3pt, frame empty, colback=white, colbacktitle=white, coltitle=black, fonttitle=\normalfont\bfseries, attach title to upper, after title={\space}, } }&#xa;</xsl:text>
+            <xsl:text>\newtcolorbox{divisionexercisesolution}[2]</xsl:text>
+            <xsl:text>{divisionexercisesolutionstyle, title={#1.\notblank{#2}{\space#2}{}}}&#xa;</xsl:text>
         </xsl:if>
-        <xsl:if test="$document-root//exploration">
-            <xsl:call-template name="project-solution-environment">
-                <xsl:with-param name="ptx-name" select="'exploration'" />
-            </xsl:call-template>
-        </xsl:if>
-        <xsl:if test="$document-root//investigation">
-            <xsl:call-template name="project-solution-environment">
-                <xsl:with-param name="ptx-name" select="'investigation'" />
-            </xsl:call-template>
-        </xsl:if>
-        <xsl:text>%% end: environments for duplicates in solutions divisions&#xa;</xsl:text>
+        <!-- solutions to PROJECT-LIKE -->
+        <xsl:for-each select="$project-reps">
+            <xsl:variable name="elt-name">
+                <xsl:value-of select="local-name(.)"/>
+            </xsl:variable>
+            <xsl:variable name="type-name">
+                <xsl:apply-templates select="." mode="type-name"/>
+            </xsl:variable>
+            <!-- set the style -->
+            <xsl:text>\tcbset{ </xsl:text>
+            <xsl:value-of select="$elt-name"/>
+            <xsl:text>solutionstyle/.style={size=minimal, boxrule=-0.3pt, frame empty, colback=white, colbacktitle=white, coltitle=black, fonttitle=\normalfont\bfseries, attach title to upper, after title={\space}, } }&#xa;</xsl:text>
+            <!-- create the environment -->
+            <xsl:text>\newtcolorbox{</xsl:text>
+            <xsl:value-of select="$elt-name"/>
+            <xsl:text>solution}[2]</xsl:text>
+            <xsl:text>{</xsl:text>
+            <xsl:value-of select="$elt-name"/>
+            <xsl:text>solutionstyle, title={</xsl:text>
+            <!-- Hardcode "name" of "project" in the environment -->
+            <xsl:value-of select="$type-name"/>
+            <xsl:text>~#1\notblank{#2}{\space#2}{}}}&#xa;</xsl:text>
+        </xsl:for-each>
     </xsl:if>
     <!-- miscellaneous, not categorized yet -->
-    <xsl:if test="$document-root//exercises//exercise">
+    <xsl:if test="$document-root//exercises//exercise|$document-root//worksheet//exercise">
         <xsl:text>%% Divisional exercises are rendered as faux list items&#xa;</xsl:text>
         <xsl:text>%% with hard-coded numbers as arguments, not as LaTeX environments&#xa;</xsl:text>
-        <xsl:text>\NewDocumentEnvironment{divisionexercise}{mo}&#xa;</xsl:text>
-        <xsl:text>  {\textbf{#1}.\IfValueT{#2}{\ \textbf{#2}}\quad}&#xa;</xsl:text>
-        <xsl:text>  {\par\smallskip\noindent}&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:if test="$document-root//worksheet//exercise">
-        <xsl:text>%% Worksheet exercises are rendered as faux list items&#xa;</xsl:text>
-        <xsl:text>%% with hard-coded numbers as arguments, not as LaTeX environments&#xa;</xsl:text>
-        <xsl:text>%% They have additional options for extra workspace in worksheets&#xa;</xsl:text>
+        <xsl:text>%% Third argument is option for extra workspace in worksheets&#xa;</xsl:text>
         <xsl:text>%% Always full-width, use in a side-by-side will constrain that&#xa;</xsl:text>
-        <!-- "frame empty" is needed to counteract very faint outlines in some PDF viewers -->
-        <xsl:text>\newlength{\worksheetstrutwidth}&#xa;</xsl:text>
+        <xsl:text>\tcbset{ divisionexercisestyle/.style={size=minimal, boxrule=-0.3pt, frame empty, colback=white, colbacktitle=white, coltitle=black, fonttitle=\normalfont\bfseries, attach title to upper, after title={\space}, } }&#xa;</xsl:text>
+        <xsl:text>\newtcolorbox{divisionexercise}[4]</xsl:text>
+        <xsl:text>{divisionexercisestyle, title={#1.\space\notblank{#2}{\space#2}{}}, phantom={\hypertarget{#4}{}}, after={\notblank{#3}{\newline\rule{\workspacestrutwidth}{#3\textheight}\newline}{}}}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="$document-root//exercise[@workspace]">
+        <xsl:text>%% Worksheet exercises may have workspaces&#xa;</xsl:text>
+        <xsl:text>\newlength{\workspacestrutwidth}&#xa;</xsl:text>
         <xsl:choose>
             <xsl:when test="$latex.draft ='yes'">
                 <xsl:text>%% LaTeX draft mode, @workspace strut is visible&#xa;</xsl:text>
-                <xsl:text>\setlength{\worksheetstrutwidth}{2pt}&#xa;</xsl:text>
+                <xsl:text>\setlength{\workspacestrutwidth}{2pt}&#xa;</xsl:text>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:text>%% @workspace strut is invisible&#xa;</xsl:text>
-                <xsl:text>\setlength{\worksheetstrutwidth}{0pt}&#xa;</xsl:text>
+                <xsl:text>\setlength{\workspacestrutwidth}{0pt}&#xa;</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
-        <xsl:text>\DeclareTColorBox{worksheetexercise}{mmo}&#xa;</xsl:text>
-        <xsl:text>  {size=minimal, frame empty, attach title to upper,title={#1.\space\IfValueT{#3}{#3\space}}, fonttitle=\bfseries,coltitle=black,colback=white, after={\newline\rule{\worksheetstrutwidth}{#2\textheight}\newline}}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$document-root//list">
         <xsl:text>%% named list environment and style&#xa;</xsl:text>
@@ -1654,83 +1653,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:if test="$document-root//exercisegroup">
         <xsl:text>%% Indented groups of "exercise" within an "exercises" division&#xa;</xsl:text>
-        <!-- We use XSL to compute six styles for width and spacing of  -->
-        <!-- exercises within a group, largely to accomodate multiple   -->
-        <!-- column scenarios.  Perhaps the gap should be parameterized -->
-        <!-- as well (smaller for more columns).                        -->
-        <xsl:variable name="egindent">
-            <xsl:text>0.05</xsl:text>
-        </xsl:variable>
-        <xsl:variable name="eggap">
-            <xsl:text>0.03</xsl:text>
-        </xsl:variable>
-        <xsl:variable name="width1" select="(1.0 - $egindent - (1 - 1) * $eggap) div 1" />
-        <xsl:variable name="width2" select="(1.0 - $egindent - (2 - 1) * $eggap) div 2" />
-        <xsl:variable name="width3" select="(1.0 - $egindent - (3 - 1) * $eggap) div 3" />
-        <xsl:variable name="width4" select="(1.0 - $egindent - (4 - 1) * $eggap) div 4" />
-        <xsl:variable name="width5" select="(1.0 - $egindent - (5 - 1) * $eggap) div 5" />
-        <xsl:variable name="width6" select="(1.0 - $egindent - (6 - 1) * $eggap) div 6" />
-        <xsl:text>%% tcolorbox styles for exercisegroup layout&#xa;</xsl:text>
-        <xsl:text>%% We use a LaTeX length to pass a width from the enclosing&#xa;</xsl:text>
-        <xsl:text>%% exercisegroup (parameterized by the number of columns)&#xa;</xsl:text>
-        <xsl:text>%% down into the environment for the actual exercises.&#xa;</xsl:text>
-        <xsl:text>%% "exercise group exercise width"&#xa;</xsl:text>
-        <xsl:text>\newlength{\egexwidth}&#xa;</xsl:text>
-        <!-- tcolorbox's "raster every box" style could perhaps be used  -->
-        <!-- if we computed widths in the LaTeX code, reacting to the    -->
-        <!-- parameter of the exercisegroup giving the number of columns -->
-        <xsl:text>%% An "exercise group exercise" has a bold number inline at&#xa;</xsl:text>
-        <xsl:text>%% the start of the exercise.  This serial number is a parameter&#xa;</xsl:text>
-        <xsl:text>%% of the tcolorbox "egexercise" environment, so is passed to "title".&#xa;</xsl:text>
-        <xsl:text>%% Debug: to make spacing obvious, set "colback=green" in "exgroupexstyle"&#xa;</xsl:text>
-        <!-- "frame empty" is needed to counteract very faint outlines in some PDF viewers -->
-        <!-- framecol=white is inadvisable, "frame hidden" is ineffective for default skin -->
-        <xsl:text>\tcbset{ exgroupexstyle/.style={size=minimal,width=\egexwidth,colback=white,frame empty,valign=top,coltitle=black,fonttitle=\bfseries,attach title to upper,after title={.\space}} }&#xa;</xsl:text>
-        <xsl:text>\DeclareTColorBox{egexercise}{m}{title={#1}, exgroupexstyle}&#xa;</xsl:text>
-        <xsl:text>%% An "xparse" environment will represent the entire exercise group,&#xa;</xsl:text>
-        <xsl:text>%% with the number of columns as a parameter.&#xa;</xsl:text>
-        <xsl:text>%% TODO: make the 1-column version the default without an argument, bail on raster&#xa;</xsl:text>
-        <xsl:text>%% The "egexwidth" length gets set on entry, widths are computed in XSL stylesheet&#xa;</xsl:text>
-        <xsl:text>%% The overall indentation and gaps are also hard-coded in the XSL&#xa;</xsl:text>
-        <xsl:text>%% The "solution" version only changes to no-indentation&#xa;</xsl:text>
+        <xsl:text>%% An "xparse" environment will represent the entire exercise&#xa;</xsl:text>
+        <xsl:text>%% group, with the number of columns as a parameter.&#xa;</xsl:text>
+        <xsl:text>%% tcolorbox styles control the exercisegroup layout&#xa;</xsl:text>
+        <xsl:text>%% Indentation is 5% of overall width&#xa;</xsl:text>
+        <xsl:text>%% Gap between exercises is 3% of overall width&#xa;</xsl:text>
         <!-- "regular" version, indent on left -->
-        <xsl:text>\tcbset{ exgroupstyle/.style={raster equal height=rows,raster force size=false, raster left skip=</xsl:text>
-        <xsl:value-of select="$egindent" />
-        <xsl:text>\linewidth, raster column skip=&#xa;</xsl:text>
-        <xsl:value-of select="$eggap" />
-        <xsl:text>\linewidth} }&#xa;</xsl:text>
+        <xsl:text>\tcbset{ exgroupstyle/.style={raster equal height=rows, raster left skip=0.05\linewidth, raster column skip=0.03\linewidth} }&#xa;</xsl:text>
         <!-- "solution" version, indent on right. Silly, but easy -->
-        <xsl:text>\tcbset{ exgroupsolutionstyle/.style={raster equal height=rows,raster force size=false, raster right skip=</xsl:text>
-        <xsl:value-of select="$egindent" />
-        <xsl:text>\linewidth, raster column skip=&#xa;</xsl:text>
-        <xsl:value-of select="$eggap" />
-        <xsl:text>\linewidth} }&#xa;</xsl:text>
-        <!-- raster equal height: boxes of same *row* have same height -->
-        <!-- raster force size: false lets us control width            -->
+        <xsl:text>\tcbset{ exgroupsolutionstyle/.style={raster equal height=rows, raster right skip=0.05\linewidth, raster column skip=0.03\linewidth} }&#xa;</xsl:text>
+        <!-- raster equal height: boxes of same *row* have same height    -->
+        <!-- raster columns: controls layout, so no line separators, etc. -->
         <xsl:text>\NewDocumentEnvironment{exercisegroup}{m}&#xa;</xsl:text>
-        <xsl:text>  {\setlength{\egexwidth}{</xsl:text>
-        <xsl:text>\ifx1#1</xsl:text><xsl:value-of select="$width1" /><xsl:text>\fi</xsl:text>
-        <xsl:text>\ifx2#1</xsl:text><xsl:value-of select="$width2" /><xsl:text>\fi</xsl:text>
-        <xsl:text>\ifx3#1</xsl:text><xsl:value-of select="$width3" /><xsl:text>\fi</xsl:text>
-        <xsl:text>\ifx4#1</xsl:text><xsl:value-of select="$width4" /><xsl:text>\fi</xsl:text>
-        <xsl:text>\ifx5#1</xsl:text><xsl:value-of select="$width5" /><xsl:text>\fi</xsl:text>
-        <xsl:text>\ifx6#1</xsl:text><xsl:value-of select="$width5" /><xsl:text>\fi</xsl:text>
-        <xsl:text>\linewidth}&#xa;</xsl:text>
-        <xsl:text>   \begin{tcbraster}&#xa;</xsl:text>
-        <xsl:text>    [exgroupstyle,raster columns=#1]}&#xa;</xsl:text>
-        <xsl:text>  {\end{tcbraster}}&#xa;</xsl:text>
+        <xsl:text>{\begin{tcbraster}[exgroupstyle,raster columns=#1]}{\end{tcbraster}}&#xa;</xsl:text>
         <xsl:text>\NewDocumentEnvironment{exercisegroupsolution}{m}&#xa;</xsl:text>
-        <xsl:text>  {\setlength{\egexwidth}{</xsl:text>
-        <xsl:text>\ifx1#1</xsl:text><xsl:value-of select="$width1" /><xsl:text>\fi</xsl:text>
-        <xsl:text>\ifx2#1</xsl:text><xsl:value-of select="$width2" /><xsl:text>\fi</xsl:text>
-        <xsl:text>\ifx3#1</xsl:text><xsl:value-of select="$width3" /><xsl:text>\fi</xsl:text>
-        <xsl:text>\ifx4#1</xsl:text><xsl:value-of select="$width4" /><xsl:text>\fi</xsl:text>
-        <xsl:text>\ifx5#1</xsl:text><xsl:value-of select="$width5" /><xsl:text>\fi</xsl:text>
-        <xsl:text>\ifx6#1</xsl:text><xsl:value-of select="$width5" /><xsl:text>\fi</xsl:text>
-        <xsl:text>\linewidth}&#xa;</xsl:text>
-        <xsl:text>   \begin{tcbraster}&#xa;</xsl:text>
-        <xsl:text>    [exgroupsolutionstyle,raster columns=#1]}&#xa;</xsl:text>
-        <xsl:text>  {\end{tcbraster}}&#xa;</xsl:text>
+        <xsl:text>{\begin{tcbraster}[exgroupsolutionstyle,raster columns=#1]}{\end{tcbraster}}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$document-root/backmatter/index-part | $document-root//index-list">
         <!-- See http://tex.blogoverflow.com/2012/09/dont-forget-to-run-makeindex/ for "imakeidx" usage -->
@@ -2294,28 +2231,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="*" mode="tcb-style" />
 
 <!-- ################## -->
-<!-- Preamble Utilities -->
+<!-- End: LaTeX Styling -->
 <!-- ################## -->
-
-<!-- Parameterized templates for repeated constructions -->
-
-<!-- LaTeX environments for project solutions, definition styles, no counter  -->
-<!-- The second \space was not needed with amsthm of 2015/03/04 v2.20.2,      -->
-<!-- but was necessary with 2017/10/31 v2.20.4                                -->
-<xsl:template name="project-solution-environment">
-    <xsl:param name="ptx-name" select="'NO ARGUMENT TO PROJECT-SOLUTION-ENVIRONMENT TEMPLATE'" />
-
-    <xsl:text>\theoremstyle{ptxdefinitiontitlenonumber}&#xa;</xsl:text>
-    <xsl:text>\newtheorem*{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>solutiontitle}{</xsl:text>
-    <xsl:call-template name="type-name">
-        <xsl:with-param name="string-id" select="$ptx-name" />
-    </xsl:call-template>
-    <xsl:text>}&#xa;</xsl:text>
-    <xsl:text>\NewDocumentEnvironment{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>solution}{mo}&#xa;</xsl:text>
-    <xsl:text>  {\begin{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>solutiontitle}{\textbf{#1\IfValueT{#2}{\space#2}\space}}}&#xa;</xsl:text>
-    <xsl:text>  {\end{</xsl:text><xsl:value-of select="$ptx-name" /><xsl:text>solutiontitle}}&#xa;</xsl:text>
-</xsl:template>
-
 
 <!-- Tack in a graphic with initials                   -->
 <!-- Height is just enough to not disrupt line spacing -->
@@ -4156,48 +4073,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- of being within an "exercises" division.  We hard-code  -->
 <!-- their numbers to allow for flexibility, and since it is -->
 <!-- too hard (impossible?) to mesh into LaTeX's scheme.  An -->
-<!-- "exercises" may be divided by an "exercisedivision"     -->
+<!-- "exercises" may be divided by a future "subexercises"   -->
 <!-- and/or by an "exercisegroup", so we match with "//"     -->
 <xsl:template match="exercises//exercise|worksheet//exercise">
-    <!-- heading, start enclosure/environment                    -->
-    <!-- This environment is different within an "exercisegroup" -->
-    <!-- Using only serial number since born here                -->
-    <xsl:choose>
-        <xsl:when test="parent::exercisegroup">
-            <xsl:text>\begin{egexercise}{</xsl:text>
-            <xsl:apply-templates select="." mode="serial-number" />
-            <xsl:text>}</xsl:text>
-        </xsl:when>
-        <xsl:when test="ancestor::exercises">
-            <xsl:text>\begin{divisionexercise}</xsl:text>
-            <xsl:text>{</xsl:text>
-            <xsl:apply-templates select="." mode="serial-number" />
-            <xsl:text>}</xsl:text>
-            <xsl:apply-templates select="title" mode="environment-option" />
-        </xsl:when>
-        <xsl:when test="ancestor::worksheet">
-            <xsl:text>\begin{worksheetexercise}</xsl:text>
-            <xsl:text>{</xsl:text>
-            <xsl:apply-templates select="." mode="serial-number" />
-            <xsl:text>}</xsl:text>
-            <xsl:text>{</xsl:text>
-            <xsl:choose>
-                <xsl:when test="@workspace">
-                    <xsl:value-of select="substring-before(@workspace,'%') div 100" />
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:text>0.0</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-            <xsl:text>}</xsl:text>
-            <xsl:apply-templates select="title" mode="environment-option" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:message>PTX:BUG:     type of "exercise" missed</xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
-    <xsl:apply-templates select="." mode="label"/>
-    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>\begin{divisionexercise}</xsl:text>
+    <xsl:text>{</xsl:text>
+    <xsl:apply-templates select="." mode="serial-number" />
+    <xsl:text>}</xsl:text>
+    <xsl:apply-templates select="." mode="environment-title-argument" />
+    <!-- workspace fraction, only if given, else blank -->
+    <!-- worksheets only now, eventually exams?        -->
+    <xsl:text>{</xsl:text>
+    <xsl:if test="ancestor::worksheet and @workspace">
+        <xsl:value-of select="substring-before(@workspace,'%') div 100" />
+    </xsl:if>
+    <xsl:text>}</xsl:text>
+    <xsl:text>{</xsl:text>
+    <xsl:apply-templates select="." mode="internal-id"/>
+    <xsl:text>}</xsl:text>
+    <xsl:text>%&#xa;</xsl:text>
     <!-- Allow a webwork or myopenmath exercise to introduce/connect    -->
     <!-- a problem (especially from server) to the text in various ways -->
     <xsl:if test="webwork-reps|myopenmath">
@@ -4265,30 +4159,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="webwork-reps|myopenmath">
         <xsl:apply-templates select="conclusion"/>
     </xsl:if>
-    <!-- end enclosure/environment                                     -->
-    <!-- This environment is different within an "exercisegroup"       -->
     <!-- closing % necessary, as newline between adjacent environments -->
     <!-- will cause a slight indent on trailing exercise               -->
-    <xsl:choose>
-        <!-- <xsl:when test="parent::exercisegroup" /> -->
-        <xsl:when test="parent::exercisegroup" >
-            <xsl:text>\end{egexercise}%&#xa;</xsl:text>
-        </xsl:when>
-        <xsl:when test="ancestor::exercises">
-            <xsl:text>\end{divisionexercise}%&#xa;</xsl:text>
-        </xsl:when>
-        <xsl:when test="ancestor::worksheet">
-            <xsl:text>\end{worksheetexercise}%&#xa;</xsl:text>
-        </xsl:when>
-        <!-- error check is above -->
-    </xsl:choose>
+    <xsl:text>\end{divisionexercise}%&#xa;</xsl:text>
 </xsl:template>
 
 
 <!-- Divisional Exercises (exercises//exercise) in solutions-->
 <!-- Nothing produced if there is no content -->
 <!-- Otherwise, no label, since duplicate    -->
-<xsl:template match="exercises//exercise" mode="solutions">
+<xsl:template match="exercises//exercise|worksheet//exercise" mode="solutions">
     <xsl:param name="b-has-statement" />
     <xsl:param name="b-has-hint" />
     <xsl:param name="b-has-answer" />
@@ -4315,25 +4195,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <xsl:variable name="nonempty" select="$b-has-statement or ($b-has-hint and hint) or ($b-has-answer and answer) or ($b-has-solution and solution)" /> -->
 
     <xsl:if test="not($dry-run = '')">
-        <!-- heading, start enclosure/environment                    -->
-        <!-- This environment is different within an "exercisegroup" -->
-        <!-- Using fully-qualified number in solution lists          -->
-        <xsl:choose>
-            <xsl:when test="parent::exercisegroup">
-                <xsl:text>\begin{egexercise}{</xsl:text>
-                <xsl:apply-templates select="." mode="number" />
-                <xsl:text>}</xsl:text>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>\begin{divisionexercise}</xsl:text>
-                <xsl:text>{</xsl:text>
-                <xsl:apply-templates select="." mode="number" />
-                <xsl:text>}</xsl:text>
-                <xsl:apply-templates select="title" mode="environment-option" />
-            </xsl:otherwise>
-        </xsl:choose>
-        <!-- no label since duplicating in a solutions division -->
-        <xsl:text>&#xa;</xsl:text>
+        <!-- Using fully-qualified number in solution lists -->
+        <xsl:text>\begin{divisionexercisesolution}</xsl:text>
+        <xsl:text>{</xsl:text>
+        <xsl:apply-templates select="." mode="number" />
+        <xsl:text>}</xsl:text>
+        <xsl:apply-templates select="." mode="environment-title-argument" />
+        <!-- no workspace fraction in a        solution -->
+        <!-- duplicate, so no label, or manufacture one -->
+        <xsl:text>%&#xa;</xsl:text>
         <!-- Allow a webwork or myopenmath exercise to introduce/connect    -->
         <!-- a problem (especially from server) to the text in various ways -->
         <xsl:if test="webwork-reps|myopenmath">
@@ -4405,19 +4275,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="webwork-reps|myopenmath">
             <xsl:apply-templates select="conclusion"/>
         </xsl:if>
-        <!-- end enclosure/environment                                     -->
-        <!-- This environment is different within an "exercisegroup"       -->
         <!-- closing % necessary, as newline between adjacent environments -->
         <!-- will cause a slight indent on trailing exercise               -->
-        <xsl:choose>
-            <!-- <xsl:when test="parent::exercisegroup" /> -->
-            <xsl:when test="parent::exercisegroup" >
-                <xsl:text>\end{egexercise}%&#xa;</xsl:text>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>\end{divisionexercise}%&#xa;</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
+        <xsl:text>\end{divisionexercisesolution}%&#xa;</xsl:text>
     </xsl:if>
 </xsl:template>
 
@@ -4940,9 +4800,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>{</xsl:text>
         <xsl:apply-templates select="." mode="number" />
         <xsl:text>}</xsl:text>
-        <xsl:apply-templates select="title" mode="environment-option"/>
+        <xsl:apply-templates select="." mode="environment-title-argument"/>
         <!-- no label as duplicating for solutions division -->
-        <xsl:text>&#xa;</xsl:text>
+        <xsl:text>%&#xa;</xsl:text>
         <xsl:choose>
             <!-- structured versions first      -->
             <!-- prelude?, introduction?, task+, conclusion?, postlude? -->
@@ -4994,7 +4854,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\end{</xsl:text>
         <xsl:value-of select="local-name(.)" />
         <xsl:text>solution</xsl:text>
-        <xsl:text>}&#xa;</xsl:text>
+        <xsl:text>}%&#xa;</xsl:text>
     </xsl:if>
     <!-- no prelude as duplicating in solutions division -->
 </xsl:template>
