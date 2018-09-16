@@ -1356,6 +1356,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         \end{tikzpicture}
         }&#xa;</xsl:text>
     </xsl:if>
+    <xsl:if test="$document-root//icon">
+        <xsl:text>%% Font Awesome icons in a LaTeX package&#xa;</xsl:text>
+        <xsl:text>\usepackage{fontawesome}&#xa;</xsl:text>
+    </xsl:if>
     <!-- Poetry -->
     <xsl:if test="//poem">
         <xsl:text>%% Poetry Support&#xa;</xsl:text>
@@ -6650,6 +6654,58 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
+
+<!-- ##### -->
+<!-- Icons -->
+<!-- ##### -->
+
+<xsl:template match="icon">
+    <!-- the name attribute of the "icon" in text as a string -->
+    <xsl:variable name="icon-name">
+        <xsl:value-of select="@name"/>
+    </xsl:variable>
+
+    <xsl:variable name="fa-name">
+        <xsl:choose>
+            <!-- @latex (in FA style) is override for lagging package -->
+            <xsl:when test="@latex">
+                <xsl:value-of select="@latex"/>
+            </xsl:when>
+            <xsl:otherwise>
+            <!-- for-each is just one node, but sets context for key() -->
+                <xsl:for-each select="$icon-table">
+                    <xsl:value-of select="key('icon-key', $icon-name)/@font-awesome"/>
+                </xsl:for-each>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:text>\fa</xsl:text>
+    <xsl:call-template name="camel-case-font-name">
+        <xsl:with-param name="text" select="$fa-name"/>
+    </xsl:call-template>
+    <xsl:text>{}</xsl:text>
+</xsl:template>
+
+<xsl:template name="camel-case-font-name">
+    <xsl:param name="text"/>
+    <xsl:choose>
+        <xsl:when test="not(contains($text, '-'))">
+            <xsl:value-of select="translate(substring($text, 1, 1), &LOWERCASE;, &UPPERCASE;)"/>
+            <xsl:value-of select="substring($text, 2)"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:variable name="first-part">
+                <xsl:value-of select="substring-before($text, '-')"/>
+            </xsl:variable>
+            <xsl:value-of select="translate(substring($first-part, 1, 1), &LOWERCASE;, &UPPERCASE;)"/>
+            <xsl:value-of select="substring($first-part, 2)"/>
+            <xsl:call-template name="camel-case-font-name">
+                <xsl:with-param name="text" select="substring-after($text, '-')"/>
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 
 <!-- ################ -->
 <!-- Biological Names -->

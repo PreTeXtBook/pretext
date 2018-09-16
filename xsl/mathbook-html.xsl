@@ -5404,6 +5404,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:call-template name="mathbook-js" />
                 <xsl:call-template name="fonts" />
                 <xsl:call-template name="css" />
+                <xsl:call-template name="font-awesome" />
             </head>
             <xsl:element name="body">
                 <!-- the first class controls the default icon -->
@@ -6940,6 +6941,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#8208;</xsl:text>
 </xsl:template>
 
+<!-- ##### -->
+<!-- Icons -->
+<!-- ##### -->
+
+<!-- Presumes CSS headers have been loaded -->
+<xsl:template match="icon">
+    <!-- the name attribute of the "icon" in text as a string -->
+    <xsl:variable name="icon-name">
+        <xsl:value-of select="@name"/>
+    </xsl:variable>
+
+    <!-- for-each is just one node, but sets context for key() -->
+    <xsl:variable name="fa-name">
+        <xsl:for-each select="$icon-table">
+            <xsl:value-of select="key('icon-key', $icon-name)/@font-awesome"/>
+        </xsl:for-each>
+    </xsl:variable>
+
+    <span class ="fas fa-{$fa-name}"/>
+</xsl:template>
+
+
+
 <!-- ################ -->
 <!-- Biological Names -->
 <!-- ################ -->
@@ -7440,6 +7464,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- need CSS for sidebyside         -->
                 <!-- perhaps this can be specialized -->
                 <xsl:call-template name="css" />
+                <!-- maybe icons in captions? -->
+                <xsl:call-template name="font-awesome" />
                 <!-- and CSS for the entire interactive, into the head -->
                 <xsl:apply-templates select="@css" />
                 <!-- load header libraries (for all "slate") -->
@@ -7964,6 +7990,7 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
             <xsl:call-template name="jsxgraph" />
             <xsl:call-template name="css" />
             <xsl:call-template name="pytutor-header" />
+            <xsl:call-template name="font-awesome" />
         </head>
         <body>
             <!-- the first class controls the default icon -->
@@ -8060,6 +8087,7 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
             <xsl:call-template name="geogebra" />
             <xsl:call-template name="jsxgraph" />
             <xsl:call-template name="css" />
+            <xsl:call-template name="font-awesome" />
         </head>
         <!-- TODO: needs some padding etc -->
         <body>
@@ -9251,6 +9279,15 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
         </xsl:call-template>
     </xsl:if>
 </xsl:template>
+
+<!-- Treated as characters, these could show up often, -->
+<!-- so load into every possible HTML page instance    -->
+<xsl:template name="font-awesome">
+    <xsl:if test="$document-root//icon">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"/>
+    </xsl:if>
+</xsl:template>
+
 
 <!-- ############## -->
 <!-- LaTeX Preamble -->
