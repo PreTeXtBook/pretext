@@ -1709,6 +1709,56 @@ the xsltproc executable.
                 <p>An <term>em dash</term> is the long dash used much like parentheses (not an <term>en dash</term> used to denote a range, such as a range of page numbers).  It should not have spaces around it, but some style guides allow for a <em>thin</em> space, which<mdash />we test right now.  The command line stringparam <c>emdash.space</c> can be set to <c>none</c> or <c>thin</c> to control this.</p>
             </subsection>
 
+            <subsection xml:id="subsection-icons-in-text">
+                <title>Icons in Text</title>
+
+                <p>A limited supply of icons can be used when explaining how to use some computer application.  The empty element is <tage>icon</tage> and the attribute is <attr>name</attr>.</p>
+
+                <p>We sprinkle <icon name="gear"/> a few into a few sentences <icon name="wrench"/> to check baselines <icon name="file-save"/> and font sizing.  We sprinkle <icon name="gear"/> a few into a few sentences <icon name="wrench"/> to check baselines <icon name="file-save"/> and font sizing.  We sprinkle <icon name="gear"/> a few into a few sentences <icon name="wrench"/> to check baselines <icon name="file-save"/> and font sizing.  We sprinkle <icon name="gear"/> a few into a few sentences <icon name="wrench"/> to check baselines <icon name="file-save"/> and font sizing.</p>
+
+                <table>
+                    <caption>User-Interface Icons</caption>
+
+                    <tabular>
+                        <col/>
+                        <col halign="center" right="medium"/>
+                        <col/>
+                        <col halign="center" right="medium"/>
+                        <col/>
+                        <col halign="center"/>
+                        <row bottom="medium">
+                            <cell>Name</cell><cell>Icon</cell>
+                            <cell>Name</cell><cell>Icon</cell>
+                            <cell>Name</cell><cell>Icon</cell>
+                        </row>
+                        <row>
+                            <cell><c>arrow-down</c></cell><cell><icon name="arrow-down"/></cell>
+                            <cell><c>arrow-left</c></cell><cell><icon name="arrow-left"/></cell>
+                            <cell><c>arrow-right</c></cell><cell><icon name="arrow-right"/></cell>
+                        </row>
+                        <row>
+                            <cell><c>arrow-up</c></cell><cell><icon name="arrow-up"/></cell>
+                            <cell><c>file-save</c></cell><cell><icon name="file-save"/></cell>
+                            <cell><c>gear</c></cell><cell><icon name="gear"/></cell>
+                        </row>
+                         <row>
+                            <cell><c>menu</c></cell><cell><icon name="menu"/></cell>
+                            <cell><c>wrench</c></cell><cell><icon name="wrench"/></cell>
+                            <!-- <cell><c></c></cell><cell><icon name=""/></cell> -->
+                        </row>
+
+                    </tabular>
+                </table>
+
+                <p>Nominations of new icons must<ul>
+                    <li>Have a Unicode character representation.</li>
+                    <li>Be in the <init>HTML/CSS/JS</init> Font Awesome catalog.</li>
+                    <li>Be in the <latex/> <c>fontawesome</c> package.</li>
+                    <li>Have a reasonably semantic <pretext/> name.</li>
+                </ul>Please supply all this information, including the official Unicode name, with your request.  Better yet, form a pull request.</p>
+
+            </subsection>
+
             <subsection xml:id="section-urls">
                 <title>URLs, such as <url href="http://example.com" /></title>
 
