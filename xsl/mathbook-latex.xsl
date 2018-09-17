@@ -3667,12 +3667,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Warn about paragraph deprecation -->
     <xsl:apply-templates select="." mode="console-typeout" />
     <xsl:text>\paragraph</xsl:text>
-    <!-- keep optional title if LaTeX source is re-purposed -->
-    <xsl:text>[{</xsl:text>
-    <xsl:apply-templates select="." mode="title-simple" />
-    <xsl:text>}]</xsl:text>
     <xsl:text>{</xsl:text>
-    <xsl:apply-templates select="." mode="title-full" />
+    <xsl:apply-templates select="." mode="title-punctuated" />
     <xsl:text>}</xsl:text>
     <xsl:apply-templates select="." mode="label" />
     <xsl:text>&#xa;</xsl:text>
@@ -3702,59 +3698,40 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Examples have no structure, or have statement and solution -->
 <!-- Exercises have hints, answers and solutions                -->
 
-<!-- Titles are passed as options to environments         -->
-<!-- We address punctuation here, and carry it with title -->
-<xsl:template match="title" mode="environment-option">
-    <xsl:text>[{</xsl:text>
-    <!-- "title-full" template expects parent as context -->
-    <xsl:apply-templates select="parent::*" mode="title-full" />
-    <xsl:variable name="has-punctuation">
-        <xsl:apply-templates select="." mode="has-punctuation" />
+<!-- A full title, with a period at the end.  Only necessary -->
+<!-- for LaTeX, since HTML does this via CSS.  Similar to    -->
+<!-- "-title-full" template living in "-common"              -->
+<xsl:template match="*" mode="title-punctuated">
+    <xsl:variable name="default-exists">
+        <xsl:apply-templates select="." mode="has-default-title" />
     </xsl:variable>
-    <!-- provide a period, if necessary -->
-    <xsl:if test="$has-punctuation = 'false'">
-        <xsl:text>.</xsl:text>
-    </xsl:if>
-    <xsl:text>}]</xsl:text>
-</xsl:template>
-
-<!-- TRANSITION TO MANDATORY ARGUMENT (NOT OPTIONAL)  -->
-<!-- Titles are passed as options to environments     -->
-<!-- This creates a mandatory argument as property of -->
-<!-- the object, possibly empty                       -->
-<xsl:template match="*" mode="environment-title-argument">
-    <xsl:text>{</xsl:text>
-    <!-- title could be empty, or could have default supplied -->
-    <xsl:variable name="the-title">
-        <xsl:apply-templates select="." mode="title-full" />
-    </xsl:variable>
-    <xsl:variable name="has-punctuation">
-        <xsl:choose>
-            <xsl:when test="title">
+    <xsl:choose>
+        <xsl:when test="title">
+            <!-- since selecting on "title" just gets killed -->
+            <!-- use node() matching text nodes and elements -->
+            <xsl:apply-templates select="title/node()" />
+            <!-- see if a closing period is necessary -->
+            <xsl:variable name="has-punctuation">
                 <xsl:apply-templates select="title" mode="has-punctuation" />
-            </xsl:when>
-            <!-- empty title, don't add punctuation -->
-            <xsl:when test="$the-title = ''">
-                <xsl:text>true</xsl:text>
-            </xsl:when>
-            <!-- must be supplied default, add punctuation -->
-            <xsl:otherwise>
-                <xsl:text>false</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <!-- do it -->
-    <xsl:value-of select="$the-title"/>
-    <xsl:if test="$has-punctuation = 'false'">
-        <xsl:text>.</xsl:text>
-    </xsl:if>
-    <xsl:text>}</xsl:text>
+            </xsl:variable>
+            <xsl:if test="$has-punctuation = 'false'">
+                <xsl:text>.</xsl:text>
+            </xsl:if>
+        </xsl:when>
+        <!-- use default title, which always needs punctuation -->
+        <xsl:when test="$default-exists='true'">
+            <xsl:apply-templates select="." mode="type-name"/>
+            <xsl:text>.</xsl:text>
+        </xsl:when>
+        <!-- return empty if there is no title, no default -->
+        <xsl:otherwise/>
+    </xsl:choose>
 </xsl:template>
 
 <!-- Environments/blocks implemented with tcolorbox          -->
 <!-- expect certain arguments.  This template provides them. -->
 <!--                                                         -->
-<!-- 1.  title, right now we add punctuation as needed       -->
+<!-- 1.  title, with punctuation as needed                   -->
 <!-- 2.  the "internal-id", which suffices for               -->
 <!--     the LaTeX label/ref mechanism                       -->
 <!--                                                         -->
@@ -3766,9 +3743,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--     the LaTeX label/ref mechanism                       -->
 <!-- N.B.: "objectives", "outcomes" need to use this         -->
 <xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&ASIDE-LIKE;|exercise[not(ancestor::exercises or ancestor::worksheet)]|commentary|assemblage" mode="block-options">
-    <!-- Produce a regular argument, possibly empty -->
-    <!-- Punctuation is added in the process        -->
-    <xsl:apply-templates select="." mode="environment-title-argument"/>
+    <xsl:text>{</xsl:text>
+    <xsl:apply-templates select="." mode="title-punctuated"/>
+    <xsl:text>}</xsl:text>
     <xsl:if test="&THEOREM-FILTER; or &AXIOM-FILTER;">
         <xsl:text>{</xsl:text>
         <xsl:apply-templates select="." mode="creator-full" />
@@ -3810,14 +3787,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Defaults to "Proof", can be replaced by "title" -->
 <xsl:template match="proof">
     <xsl:text>\begin{proof}</xsl:text>
-    <!-- The AMS environment handles punctuation carefully,  so   -->
-    <!-- we use the "environment-option" above and just send      -->
-    <!-- along punctuation in the style of the other environments -->
-    <!-- Would need to rework "environment-title-argument"        -->
-    <!-- slightly, with perhaps also putting punctuation into     -->
-    <!-- some other "title" template before this can be removed.  -->
-    <!-- Or move proof enviroment to tcolorbox, breaking \qed.    -->
-    <xsl:apply-templates select="title" mode="environment-option"/>
+    <!-- The AMS environment handles punctuation carefully, so  -->
+    <!-- we just use the "title-full" template, with protection -->
+    <xsl:if test="title">
+        <xsl:text>[{</xsl:text>
+        <xsl:apply-templates select="." mode="title-full"/>
+        <xsl:text>}]</xsl:text>
+    </xsl:if>
     <xsl:apply-templates select="." mode="label" />
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="*" />
@@ -3994,7 +3970,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>{</xsl:text>
         <xsl:apply-templates select="." mode="number" />
         <xsl:text>}</xsl:text>
-        <xsl:apply-templates select="." mode="environment-title-argument" />
+        <xsl:text>{</xsl:text>
+        <xsl:apply-templates select="." mode="title-punctuated"/>
+        <xsl:text>}</xsl:text>
         <!-- no label since duplicating in solutions division -->
         <xsl:text>&#xa;</xsl:text>
         <!-- Allow a webwork or myopenmath exercise to introduce/connect    -->
@@ -4086,7 +4064,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>{</xsl:text>
     <xsl:apply-templates select="." mode="serial-number" />
     <xsl:text>}</xsl:text>
-    <xsl:apply-templates select="." mode="environment-title-argument" />
+    <xsl:text>{</xsl:text>
+    <xsl:apply-templates select="." mode="title-punctuated"/>
+    <xsl:text>}</xsl:text>
     <!-- workspace fraction, only if given, else blank -->
     <!-- worksheets only now, eventually exams?        -->
     <xsl:text>{</xsl:text>
@@ -4206,7 +4186,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>{</xsl:text>
         <xsl:apply-templates select="." mode="number" />
         <xsl:text>}</xsl:text>
-        <xsl:apply-templates select="." mode="environment-title-argument" />
+        <xsl:text>{</xsl:text>
+        <xsl:apply-templates select="." mode="title-punctuated"/>
+        <xsl:text>}</xsl:text>
         <!-- no workspace fraction in a        solution -->
         <!-- duplicate, so no label, or manufacture one -->
         <xsl:text>%&#xa;</xsl:text>
@@ -4806,7 +4788,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>{</xsl:text>
         <xsl:apply-templates select="." mode="number" />
         <xsl:text>}</xsl:text>
-        <xsl:apply-templates select="." mode="environment-title-argument"/>
+        <xsl:text>{</xsl:text>
+        <xsl:apply-templates select="." mode="title-punctuated"/>
+        <xsl:text>}</xsl:text>
         <!-- no label as duplicating for solutions division -->
         <xsl:text>%&#xa;</xsl:text>
         <xsl:choose>
