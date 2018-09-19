@@ -897,7 +897,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="miscellaneous-reps" select="
         ($document-root//assemblage)[1]|
         ($document-root//objectives)[1]|
-        ($document-root//outcomes)[1]"/>
+        ($document-root//outcomes)[1]|
+        ($document-root//backmatter/colophon)[1]"/>
     <xsl:if test="$miscellaneous-reps">
         <xsl:text>%%&#xa;</xsl:text>
         <xsl:text>%% tcolorbox, with styles, for miscellaneous environments&#xa;</xsl:text>
@@ -1995,6 +1996,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\newtcolorbox{outcomes}[1]{title={#1}, breakable, outcomesstyle}&#xa;</xsl:text>
 </xsl:template>
 
+<!-- back "colophon" -->
+<!-- Body:  \begin{backcolophon}{label} -->
+<xsl:template match="backmatter/colophon" mode="environment">
+    <xsl:text>%% back colophon, at the very end, typically on its own page&#xa;</xsl:text>
+    <xsl:text>\tcbset{ backcolophonstyle/.style={</xsl:text>
+    <xsl:apply-templates select="." mode="tcb-style" />
+    <xsl:text>} }&#xa;</xsl:text>
+    <xsl:text>\newtcolorbox{backcolophon}[1]{title={</xsl:text>
+    <xsl:apply-templates select="." mode="type-name"/>
+    <xsl:text>}, phantom={\hypertarget{#1}{}}, breakable, backcolophonstyle}&#xa;</xsl:text>
+</xsl:template>
+
 <!-- "assemblage" -->
 <!-- Identical to ASIDE-LIKE, but we keep it distinct -->
 <xsl:template match="assemblage" mode="environment">
@@ -2238,6 +2251,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- if headings, etc handle vertical space correctly   -->
 <xsl:template match="outcomes" mode="tcb-style">
     <xsl:text>size=minimal, boxrule=-0.3pt, colback=white, colbacktitle=white, coltitle=black, fonttitle=\large\bfseries, toprule=0.1ex, toptitle=0.5ex, top=2ex, bottom=0.5ex, bottomrule=0.1ex, before skip=2ex</xsl:text>
+</xsl:template>
+
+<!-- back "colophon" -->
+<xsl:template match="backmatter/colophon" mode="tcb-style">
+    <xsl:text>size=minimal, before skip=5ex, left skip=0.15\textwidth, right skip=0.15\textwidth, boxrule=-0.3pt, colback=white, colbacktitle=white, coltitle=black, fonttitle=\large\bfseries, center title, halign=center, bottomtitle=2ex</xsl:text>
 </xsl:template>
 
 <!-- THEOREM-LIKE: "theorem", "corollary", "lemma",    -->
@@ -2991,31 +3009,31 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates />
 </xsl:template>
 
-<!-- The back colophon of a book goes on its own recto page     -->
-<!-- the centering is on the assumption it is a simple sentence -->
-<!-- Maybe a parbox, centered, etc is necessary                 -->
+<!-- The back colophon of a book goes on its own recto page -->
+<!-- The "backcolophon" environment is a tcolorbox          -->
 <xsl:template match="book/backmatter/colophon">
     <xsl:text>\cleardoublepage&#xa;</xsl:text>
     <xsl:text>\pagestyle{empty}&#xa;</xsl:text>
-    <xsl:apply-templates select="." mode="label" />
     <xsl:text>\vspace*{\stretch{1}}&#xa;</xsl:text>
-    <xsl:text>\centerline{</xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>}&#xa;</xsl:text>
+    <xsl:text>\begin{backcolophon}</xsl:text>
+    <xsl:text>{</xsl:text>
+    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:text>}</xsl:text>
+    <xsl:text>%&#xa;</xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>\end{backcolophon}%&#xa;</xsl:text>
     <xsl:text>\vspace*{\stretch{2}}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- The back colophon of an article is an -->
-<!-- unnumbered section, not centered, etc -->
-<!-- but it is titled (not to ToC, though) -->
+<!-- The back colophon of an article is simpler -->
 <xsl:template match="article/backmatter/colophon">
-    <xsl:text>\section*{</xsl:text>
-    <xsl:call-template name="type-name">
-        <xsl:with-param name="string-id" select="'colophon'" />
-    </xsl:call-template>
-    <xsl:text>}&#xa;</xsl:text>
-    <xsl:apply-templates select="." mode="label" />
-    <xsl:apply-templates />
+    <xsl:text>\begin{backcolophon}</xsl:text>
+    <xsl:text>{</xsl:text>
+    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:text>}</xsl:text>
+    <xsl:text>%&#xa;</xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>\end{backcolophon}%&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Appendices are handled in the general subdivision template -->

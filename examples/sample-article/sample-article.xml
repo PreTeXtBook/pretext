@@ -8224,7 +8224,7 @@ the xsltproc executable.
             </index>
 
             <colophon>
-                <p>This article was authored in <pretext />.</p>
+                <p>This article was authored in, and produced with, <pretext />.  It is typeset with the Latin Modern font.</p>
             </colophon>
         </backmatter>
     </article>
