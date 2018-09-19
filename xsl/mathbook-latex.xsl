@@ -881,6 +881,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:for-each select="$aside-reps">
         <xsl:apply-templates select="." mode="environment"/>
     </xsl:for-each>
+    <!-- INTRODUCTION, CONCLUSION (divisional) -->
+    <xsl:variable name="introduction-reps" select="
+        ($document-root/../article/introduction|$document-root//chapter/introduction|$document-root//section/introduction|$document-root//subsection/introduction|$document-root//appendix/introduction|$document-root//exercises/introduction|$document-root//solutions/introduction|$document-root//worksheet/introduction|$document-root//references/introduction)[1]|
+        ($document-root/../article/conclusion|$document-root//chapter/conclusion|$document-root//section/conclusion|$document-root//subsection/conclusion|$document-root//appendix/conclusion|$document-root//exercises/conclusion|$document-root//solutions/conclusion|$document-root//worksheet/conclusion|$document-root//references/conclusion)[1]"/>
+    <xsl:if test="$introduction-reps">
+        <xsl:text>%%&#xa;</xsl:text>
+        <xsl:text>%% tcolorbox, with styles, for introductions and conclusions of divisions&#xa;</xsl:text>
+        <xsl:text>%%&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:for-each select="$introduction-reps">
+        <xsl:apply-templates select="." mode="environment"/>
+    </xsl:for-each>
     <!-- MISCELLANEOUS -->
     <xsl:variable name="miscellaneous-reps" select="
         ($document-root//assemblage)[1]|
@@ -1927,6 +1939,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Provide some comments for the LaTeX source, to aid     -->
 <!-- with standalone use or debugging.  Preface with "%% ". -->
 
+<!-- "introduction", "conclusion" -->
+<!-- Body:  \begin{outcomes}{m:title}        -->
+<!-- Divisional, want to obsolete title soon -->
+<!-- (so don't merge with other titled environments) -->
+<xsl:template match="introduction|conclusion" mode="environment">
+    <xsl:variable name="environment-name">
+        <xsl:value-of select="local-name(.)"/>
+    </xsl:variable>
+    <xsl:text>%% </xsl:text>
+    <xsl:value-of select="$environment-name"/>
+    <xsl:text>: in a structured division&#xa;</xsl:text>
+    <xsl:text>\tcbset{ </xsl:text>
+    <xsl:value-of select="$environment-name"/>
+    <xsl:text>style/.style={</xsl:text>
+    <xsl:apply-templates select="." mode="tcb-style" />
+    <xsl:text>} }&#xa;</xsl:text>
+    <xsl:text>\newtcolorbox{</xsl:text>
+    <xsl:value-of select="$environment-name"/>
+    <xsl:text>}[1]{title={\notblank{#1}{#1\space}{}}, breakable, </xsl:text>
+    <xsl:value-of select="$environment-name"/>
+    <xsl:text>style}&#xa;</xsl:text>
+</xsl:template>
+
 <!-- "commentary" -->
 <!-- Body:  \begin{commentary}{title}      -->
 <!-- Title comes with punctuation, always. -->
@@ -2167,6 +2202,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- http://tex.stackexchange.com/questions/114592/             -->
 <xsl:template match="abbr|acro|init" mode="tex-macro-style">
     <xsl:text>\textsc{\MakeLowercase{#1}}</xsl:text>
+</xsl:template>
+
+<!-- "introduction", "conclusion" -->
+<!-- Run-in optional title, which will eventually go away       -->
+<!-- We add a gap before just a "conclusion", using XSL.        -->
+<!-- If you are using this as an example/guide, and don't       -->
+<!-- understand this more advanced use of XSL, just make two    -->
+<!-- templates, one for "introduction" and one for "conclusion" -->
+<xsl:template match="introduction|conclusion" mode="tcb-style">
+    <xsl:text>size=minimal, boxrule=-0.3pt, frame empty, colback=white, colbacktitle=white, coltitle=black, fonttitle=\normalfont\bfseries, attach title to upper, </xsl:text>
+    <xsl:if test="self::conclusion">
+        <xsl:text>before skip=3ex</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <!-- "commentary" -->
@@ -3575,28 +3623,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Introductions and Conclusions -->
 <!-- Simple containers, allowed before and after      -->
 <!-- explicit subdivisions, to introduce or summarize -->
-<!-- Title optional (and discouraged),                -->
+<!-- Title optional (and discouraged), in argument    -->
 <!-- typically just a few paragraphs                  -->
-<!-- TOD0: design a LaTeX environment to make this more semantic -->
-<xsl:template match="introduction[title]|conclusion[title]">
-    <xsl:if test="self::*[&STRUCTURAL-FILTER;]">
-        <xsl:apply-templates select="." mode="console-typeout" />
-    </xsl:if>
-    <xsl:text>\</xsl:text>
-    <xsl:apply-templates select="." mode="division-name" />
-    <xsl:text>*{</xsl:text>
-    <xsl:apply-templates select="." mode="title-full" />
-    <xsl:text>}&#xa;</xsl:text>
-    <xsl:apply-templates select="*" />
+<xsl:template match="article/introduction|chapter/introduction|section/introduction|subsection/introduction|appendix/introduction|exercises/introduction|solutions/introduction|worksheet/introduction|references/introduction">
+    <xsl:text>\begin{introduction}</xsl:text>
+    <xsl:text>{</xsl:text>
+    <xsl:apply-templates select="." mode="title-punctuated" />
+    <xsl:text>}</xsl:text>
+    <xsl:text>%&#xa;</xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>\end{introduction}%&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Spacing comes from division header above, subdivision header below -->
-<xsl:template match="introduction">
-    <xsl:if test="self::*[&STRUCTURAL-FILTER;]">
-        <xsl:apply-templates select="." mode="console-typeout" />
-    </xsl:if>
-    <xsl:apply-templates select="*" />
+<xsl:template match="article/conclusion|chapter/conclusion|section/conclusion|subsection/conclusion|appendix/conclusion|exercises/conclusion|solutions/conclusion|worksheet/conclusion|references/conclusion">
+    <xsl:text>\begin{conclusion}</xsl:text>
+    <xsl:text>{</xsl:text>
+    <xsl:apply-templates select="." mode="title-punctuated" />
+    <xsl:text>}</xsl:text>
+    <xsl:text>%&#xa;</xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>\end{conclusion}%&#xa;</xsl:text>
 </xsl:template>
+
 
 <!-- Most introductions are followed by other sectioning blocks (e.g. subsection) -->
 <!-- And then there is a resetting of the carriage. An introduction preceding a   -->
@@ -3604,22 +3652,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="introduction[following-sibling::webwork-reps]">
     <xsl:apply-templates select="*" />
     <xsl:text>\par\medskip&#xa;</xsl:text>
-</xsl:template>
-
-<xsl:template match="exercisegroup/introduction">
-    <xsl:apply-templates select="*" />
-</xsl:template>
-
-<!-- Last subdivision just ends, presumably a \par is order -->
-<!-- Some visual separation is a necessity, with no title   -->
-<!-- "break" command is like also using a \par and encourages a page break     -->
-<!-- http://tex.stackexchange.com/questions/41476/lengths-and-when-to-use-them -->
-<xsl:template match="conclusion">
-    <xsl:if test="self::*[&STRUCTURAL-FILTER;]">
-        <xsl:apply-templates select="." mode="console-typeout" />
-    </xsl:if>
-    <xsl:text>\bigbreak&#xa;</xsl:text>
-    <xsl:apply-templates select="*" />
 </xsl:template>
 
 <!-- webwork conclusions forego the \bigbreak  -->
@@ -3630,8 +3662,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\par&#xa;</xsl:text>
 </xsl:template>
 
+<xsl:template match="exercisegroup/introduction">
+    <xsl:apply-templates/>
+</xsl:template>
+
 <xsl:template match="exercisegroup/conclusion">
-    <xsl:apply-templates select="*" />
+    <xsl:apply-templates/>
 </xsl:template>
 
 <!-- Page Break in a Worksheet -->
