@@ -894,11 +894,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="environment"/>
     </xsl:for-each>
     <!-- MISCELLANEOUS -->
+    <!-- "paragraphs" are partly like a division, -->
+    <!-- but we include it here as a one-off      -->
     <xsl:variable name="miscellaneous-reps" select="
         ($document-root//assemblage)[1]|
         ($document-root//objectives)[1]|
         ($document-root//outcomes)[1]|
-        ($document-root//backmatter/colophon)[1]"/>
+        ($document-root//backmatter/colophon)[1]|
+        ($document-root//paragraphs)[1]"/>
     <xsl:if test="$miscellaneous-reps">
         <xsl:text>%%&#xa;</xsl:text>
         <xsl:text>%% tcolorbox, with styles, for miscellaneous environments&#xa;</xsl:text>
@@ -2031,6 +2034,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>style}&#xa;</xsl:text>
 </xsl:template>
 
+<!-- "paragraphs" -->
+<!-- Body:  \begin{paragraphs}{title}{label}  -->
+<xsl:template match="paragraphs" mode="environment">
+    <xsl:text>%% paragraphs: the terminal, pseudo-division&#xa;</xsl:text>
+    <xsl:text>\tcbset{ paragraphsstyle/.style={</xsl:text>
+    <xsl:apply-templates select="." mode="tcb-style" />
+    <xsl:text>} }&#xa;</xsl:text>
+    <xsl:text>\newtcolorbox{paragraphs}[2]{title={#1}, phantom={\hypertarget{#2}{}}, breakable, paragraphsstyle}&#xa;</xsl:text>
+</xsl:template>
+
 <!-- ASIDE-LIKE: "aside", "historical", "biographical" -->
 <!-- Note: do not integrate into others, as treatment may necessarily vary -->
 <xsl:template match="&ASIDE-LIKE;" mode="environment">
@@ -2256,6 +2269,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- back "colophon" -->
 <xsl:template match="backmatter/colophon" mode="tcb-style">
     <xsl:text>size=minimal, before skip=5ex, left skip=0.15\textwidth, right skip=0.15\textwidth, boxrule=-0.3pt, colback=white, colbacktitle=white, coltitle=black, fonttitle=\large\bfseries, center title, halign=center, bottomtitle=2ex</xsl:text>
+</xsl:template>
+
+<!-- "paragraphs" -->
+<!-- Run-in title, mandatory -->
+<xsl:template match="paragraphs" mode="tcb-style">
+    <xsl:text>size=minimal, boxrule=-0.3pt, before skip=3ex, frame empty, colback=white, colbacktitle=white, coltitle=black, fonttitle=\normalfont\bfseries, attach title to upper, after title={\space}</xsl:text>
 </xsl:template>
 
 <!-- THEOREM-LIKE: "theorem", "corollary", "lemma",    -->
@@ -3714,19 +3733,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Paragraphs -->
 <!-- Non-structural, even if they appear to be -->
-<!-- Note: Presumes we never go below subsubsection  -->
-<!-- in our MBX hierarchy and bump into this level   -->
-<!-- Maybe then migrate to "subparagraph"?           -->
 <xsl:template match="paragraphs">
     <!-- Warn about paragraph deprecation -->
-    <xsl:apply-templates select="." mode="console-typeout" />
-    <xsl:text>\paragraph</xsl:text>
+    <xsl:text>\begin{paragraphs}</xsl:text>
     <xsl:text>{</xsl:text>
     <xsl:apply-templates select="." mode="title-punctuated" />
     <xsl:text>}</xsl:text>
-    <xsl:apply-templates select="." mode="label" />
-    <xsl:text>&#xa;</xsl:text>
-    <xsl:apply-templates select="*" />
+    <xsl:text>{</xsl:text>
+    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:text>}</xsl:text>
+    <xsl:text>%&#xa;</xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>\end{paragraphs}%&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Commentary -->
