@@ -1571,13 +1571,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The file extension is *.html so recognized as OK by Moodle, etc -->
 <xsl:template match="*" mode="xref-knowl-filename">
     <xsl:text>./knowl/</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="file-id" />
     <xsl:text>.html</xsl:text>
 </xsl:template>
 
 <xsl:template match="*" mode="hidden-knowl-filename">
     <xsl:text>./knowl/</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="file-id" />
     <xsl:text>-hidden.html</xsl:text>
 </xsl:template>
 
@@ -2016,7 +2016,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- make the anchor a target, eg of an in-context link -->
         <!-- label original -->
         <xsl:attribute name="id">
-            <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:apply-templates select="." mode="file-id" />
+            <!-- not sure if that should be internal-id or file-id -DWF -->
         </xsl:attribute>
         <!-- marked-up knowl text link *inside* of knowl anchor to be effective -->
         <!-- heading in an HTML container -->
@@ -4583,7 +4584,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="base-pathname">
         <xsl:value-of select="$directory.images" />
         <xsl:text>/</xsl:text>
-        <xsl:apply-templates select="." mode="internal-id" />
+        <xsl:apply-templates select="." mode="file-id" />
     </xsl:variable>
     <xsl:call-template name="svg-wrapper">
         <xsl:with-param name="svg-filename" select="concat($base-pathname, '.svg')" />
@@ -5211,7 +5212,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="data">
             <xsl:value-of select="$directory.images" />
             <xsl:text>/</xsl:text>
-            <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:apply-templates select="." mode="file-id" />
             <xsl:text>.svg</xsl:text>
         </xsl:attribute>
         <p style="margin:auto">&lt;&lt;Your browser is unable to render this SVG image&gt;&gt;</p>
@@ -5227,7 +5228,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="data">
             <xsl:value-of select="$directory.images" />
             <xsl:text>/</xsl:text>
-            <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:apply-templates select="." mode="file-id" />
             <xsl:text>.svg</xsl:text>
         </xsl:attribute>
         <p style="margin:auto">&lt;&lt;Your browser is unable to render this SVG image&gt;&gt;</p>
@@ -5243,14 +5244,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="data">
             <xsl:value-of select="$directory.images" />
             <xsl:text>/</xsl:text>
-            <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:apply-templates select="." mode="file-id" />
             <xsl:text>.svg</xsl:text>
         </xsl:attribute>
         <xsl:element name="img">
             <xsl:attribute name="src">
                 <xsl:value-of select="$directory.images" />
                 <xsl:text>/</xsl:text>
-                <xsl:apply-templates select="." mode="internal-id" />
+                <xsl:apply-templates select="." mode="file-id" />
                 <xsl:text>.png</xsl:text>
             </xsl:attribute>
         </xsl:element>
@@ -5291,12 +5292,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="video-standalone-page" />
 
     <!-- standalone page uses internal-id of the video -->
-    <xsl:variable name="int-id">
-        <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:variable name="file-id">
+        <xsl:apply-templates select="." mode="file-id" />
     </xsl:variable>
     <xsl:choose>
         <xsl:when test="@play-at = 'popout'">
-            <a href="{$int-id}.html" target="_blank">
+            <a href="{$file-id}.html" target="_blank">
             <!-- place a thumbnail as clickable for page already extant -->
                 <xsl:choose>
                     <!-- generic requested -->
@@ -5315,7 +5316,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:when test="(@preview = 'default') or not(@preview)">
                         <xsl:variable name="thumbnail-image">
                             <xsl:text>images/</xsl:text>
-                            <xsl:value-of select="$int-id" />
+                            <xsl:value-of select="$file-id" />
                             <xsl:text>.jpg</xsl:text>
                         </xsl:variable>
                         <img src="{$thumbnail-image}" width="{$width}" height="{$height}"/>
@@ -5336,7 +5337,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- if this case is deprecated, we can drop this thing -->
             <xsl:if test="@play-at = 'select'">
                 <div style="text-align: center;">
-                    <a href="{$int-id}.html" target="_blank">
+                    <a href="{$file-id}.html" target="_blank">
                         <xsl:text>Click to Pop-Out</xsl:text>
                     </a>
                 </div>
@@ -5376,7 +5377,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Use this to ensure consistency -->
 <xsl:template match="*" mode="iframe-filename">
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="file-id" />
     <xsl:text>-if.html</xsl:text>
 </xsl:template>
 
@@ -7148,7 +7149,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Demonstrations -->
 <!-- A simple page with no constraints -->
 <xsl:template match="demonstration">
-    <xsl:variable name="url"><xsl:apply-templates select="." mode="internal-id" />.html</xsl:variable>
+    <xsl:variable name="url"><xsl:apply-templates select="." mode="file-id" />.html</xsl:variable>
     <a href="{$url}" target="_blank" class="link">
         <xsl:apply-templates select="." mode="title-full" />
     </a>
@@ -7243,6 +7244,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- check that the language is Python? -->
     <xsl:variable name="internalid">
         <xsl:apply-templates select="." mode="internal-id" />
+        <!-- The variable name is internalid, but it seems to be used in a file-like way -->
     </xsl:variable>
     <xsl:element name="div">
         <xsl:attribute name="class">
@@ -7446,7 +7448,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- For more complicated interactives, we just point to the page we generate -->
 <xsl:template match="interactive[@platform]" mode="iframe-interactive">
     <xsl:variable name="int-id">
-        <xsl:apply-templates select="." mode="internal-id" />
+        <xsl:apply-templates select="." mode="file-id" />
     </xsl:variable>
     <iframe id="{$int-id}">
         <xsl:apply-templates select="." mode="size-pixels-attributes" />
@@ -8077,7 +8079,7 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
 <xsl:template match="*" mode="simple-file-wrap">
     <xsl:param name="content" />
     <xsl:variable name="filename">
-        <xsl:apply-templates select="." mode="internal-id" />
+        <xsl:apply-templates select="." mode="file-id" />
         <text>.html</text>
     </xsl:variable>
     <exsl:document href="{$filename}" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
