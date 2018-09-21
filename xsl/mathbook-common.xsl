@@ -3064,7 +3064,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:variable>
     <xsl:choose>
         <xsl:when test="$intermediate='true' or $chunk='true'">
-            <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:apply-templates select="." mode="file-id" />
             <xsl:value-of select="$file-extension" />
         </xsl:when>
         <!-- Halts since "mathbook" element will be chunk (or earlier) -->
@@ -3424,11 +3424,11 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- these pages as the basis for scraping preview images.  So we  -->
 <!-- place a template here to achieve consistency across uses.     -->
 <xsl:template match="video|interactive" mode="standalone-filename">
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="file-id" />
     <xsl:text>.html</xsl:text>
 </xsl:template>
 <xsl:template match="*" mode="standalone-filename">
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="file-id" />
     <xsl:text>-ERROR-no-standalone-filename.html</xsl:text>
 </xsl:template>
 
@@ -3625,23 +3625,26 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- for use on the root element        -->
 <xsl:variable name="b-index-is-available" select="not(//@xml:id[.='index'])" />
 
-<!-- A *unique* text identifier for any element    -->
+<!-- Two text identifiers for any element:         -->
+<!--     internal-id for anchors and labels        -->
+<!--     file-id for file names                    -->
+<!-- internal-id uses @permid if it exists,        -->
+<!--     and otherwise uses file-id                -->
+<!-- file-id uses the xml:id if it exists,         -->
+<!-- otherwise elementname-serialnumber (doc-wide) -->
 <!-- NB: only count from root of content portion   -->
 <!-- (not duplicates that might appear in docinfo) -->
 <!-- Uses:                                      -->
 <!--   HTML: filenames (pages and knowls)       -->
 <!--   HTML: anchors for references into pages  -->
 <!--   LaTeX: labels, ie cross-references       -->
-<!-- Format:                                          -->
-<!--   the content (text) of an xml:id if provided    -->
-<!--   otherwise, elementname-serialnumber (doc-wide) -->
 <!-- MathJax:                                                   -->
 <!--   Can manufacture an HTML id= for equations, so            -->
 <!--   we configure MathJax to use the TeX \label contents      -->
 <!--   which we must be sure to provide via this routine here   -->
 <!--   Then our URL/anchor scheme will point to the right place -->
-<!--   So this is applied to men and (numbered) mrow elements    -->
-<xsl:template match="*" mode="internal-id">
+<!--   So this is applied to men and (numbered) mrow elements   -->
+<xsl:template match="*" mode="file-id">
     <xsl:choose>
         <xsl:when test="@xml:id">
             <xsl:value-of select="@xml:id" />
@@ -3657,7 +3660,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Override for document root node,          -->
 <!-- slide in "index" as preferential default, -->
 <!-- presuming it is not in use anywhere else  -->
-<xsl:template match="/mathbook/*[not(self::docinfo)]|/pretext/*[not(self::docinfo)]" mode="internal-id">
+<xsl:template match="/mathbook/*[not(self::docinfo)]|/pretext/*[not(self::docinfo)]" mode="file-id">
     <xsl:choose>
         <xsl:when test="@xml:id">
             <xsl:value-of select="@xml:id" />
@@ -3672,6 +3675,18 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
+
+<xsl:template match="*" mode="internal-id">
+    <xsl:choose>
+        <xsl:when test="@permid">
+            <xsl:value-of select="@permid" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="." mode="file-id" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 
 <!-- We manufacture Javascript variables sometimes using            -->
 <!-- this id to keep them unique, but a dash (encouraged in PTX)    -->
