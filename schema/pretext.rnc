@@ -14,7 +14,12 @@
                 MetaDataSubtitle,
                 ArticleFrontMatter?,
                 (
-                    (BlockDivision | Paragraphs | Commentary)+
+                    (
+                        (BlockDivision | Paragraphs | Commentary)+,
+                        Exercises?,
+                        Solutions?,
+                        References?
+                    )
                 |
                     (
                         IntroductionDivision?,
@@ -151,7 +156,7 @@
             }
         
         
-        ArticleFrontMatter = 
+        ArticleFrontMatter =
             element frontmatter {
                 MetaDataTitleOptional,
                 TitlePage,
@@ -195,7 +200,7 @@
                 element title {TextLong},
                 Author+
             }
-        Date = 
+        Date =
             element date {
                 mixed {(Character | Generator)*}
             }
@@ -223,17 +228,17 @@
                     element shortlicense {TextLong}?
                 }?
             }
-        Biography = 
+        Biography =
             element biography {
                 MetaDataTitleOptional,
                 (BlockStatementNoCaption | ParagraphsNoNumber | Commentary)+
             }
-        Dedication = 
+        Dedication =
             element dedication {
                 MetaDataTitleOptional,
                 (Paragraph|ParagraphLined)+
             }
-        Acknowledgement = 
+        Acknowledgement =
             element acknowledgement {
                 MetaDataTitleOptional,
                 (BlockStatementNoCaption | ParagraphsNoNumber | Commentary)+
@@ -249,14 +254,14 @@
                     |
                     (
                         (BlockStatementNoCaption | ParagraphsNoNumber | Commentary)*,
-                        Contributors, 
+                        Contributors,
                         (BlockStatementNoCaption | ParagraphsNoNumber | Commentary)*
                     )
                 )
             }
         
         
-        BackMatter = 
+        BackMatter =
             element backmatter {
                 MetaDataTitleOptional,
                 (Appendix|Solutions)*,
@@ -339,21 +344,21 @@
             element interlude {BlockText+}
         Postlude =
             element postlude {BlockText+}
-        Statement = 
+        Statement =
             element statement {
                 BlockStatement+
             }
-        Hint = 
+        Hint =
             element hint {
                 MetaDataTitleOptional,
                 BlockStatement+
             }
-        Answer = 
+        Answer =
             element answer {
                 MetaDataTitleOptional,
                 BlockStatement+
             }
-        Solution = 
+        Solution =
             element solution {
                 MetaDataTitleOptional,
                 BlockStatement+
@@ -469,17 +474,17 @@
             MetaDataTitleOptional,
             Notation*,
             Statement
-        Definition = 
+        Definition =
             element definition {DefinitionLike}
         
         
-        Case = 
+        Case =
             element case {
                MetaDataTitleOptional,
                attribute direction {text}?,
                BlockStatement+
                }
-        Proof = 
+        Proof =
             element proof {
                 MetaDataTitleOptional,
                 (BlockStatement | Case)+
@@ -562,7 +567,7 @@
         RemarkLike =
             MetaDataTitleOptional,
             BlockText+
-        Remark = 
+        Remark =
             element remark {RemarkLike}
         |
             element convention {RemarkLike}
@@ -603,7 +608,7 @@
             }
         
         
-        Caption = 
+        Caption =
             element caption {TextLong}
         Figure =
             element figure {
@@ -702,7 +707,7 @@
         
         
         Image = ImageRaster | ImageCode
-        ImageRaster = 
+        ImageRaster =
             element image {
                 UniqueID?,
                 attribute width {text}?,
@@ -710,7 +715,7 @@
                 element description {TextShort}?,
                 attribute source {text}
             }
-        ImageCode = 
+        ImageCode =
             element image {
                 UniqueID?,
                 attribute width {text}?,
@@ -722,7 +727,7 @@
                     element sageplot {text}
                 )
             }
-        ImageWW = 
+        ImageWW =
             element image {
                 attribute pg-name {text}?,
                 element description {(TextShort | WWVariable)*}?
@@ -793,7 +798,7 @@
         }
         
         
-        MuseScore = 
+        MuseScore =
             element score {
                 attribute musescoreuser {text},
                 attribute musescore {text}
@@ -831,9 +836,9 @@
                     }+
                 }
             )+
-        StatementExercise = 
+        StatementExercise =
             element statement { ExerciseBody }
-        Exercise = 
+        Exercise =
             element exercise {
                 MetaDataTitleOptional,
                 attribute number {text}?,
@@ -854,7 +859,7 @@
         
         
         AlignmentPoem = attribute halign {"left" | "center" | "right"}
-        Poem = 
+        Poem =
             element poem {
                 MetaDataTitleOptional,
                 AlignmentPoem?,
@@ -864,12 +869,12 @@
                 }?,
                 (PoemLine+ | Stanza+)
             }
-        Stanza = 
+        Stanza =
             element stanza {
                 MetaDataTitleOptional,
                 PoemLine+
             }
-        PoemLine = 
+        PoemLine =
             element line {
                 attribute indent {xsd:integer}?,
                 TextShort
@@ -916,12 +921,12 @@
         
         
         WebWork = (WebWorkAuthored | WebWorkSource)
-        WebWorkSource = 
+        WebWorkSource =
             element webwork {
                 attribute source {text}?,
                 attribute seed {xsd:integer}?
             }
-        WebWorkAuthored = 
+        WebWorkAuthored =
             element webwork {
                 MetaDataTitleOptional,
                 attribute seed {xsd:integer}?,
@@ -947,11 +952,11 @@
                     SideBySideNoCaption
                 )+
             }
-        WWMacros = 
+        WWMacros =
             element pg-macros {
                 element macro-file {text}+
             }
-        WWSetup = 
+        WWSetup =
             element setup {
                 element pg-code {text}?
             }
@@ -962,7 +967,7 @@
                 attribute evaluator {text}?,
                 attribute width {text}?,
                 attribute category {"angle" | "decimal" | "exponent" | "formula" | "fraction" | "inequality" | "integer" | "interval" | "logarithm" | "limit" | "number" | "point" | "syntax" | "quantity" | "vector"}?,
-                attribute form {"popup"|"buttons"|"none"}?) | 
+                attribute form {"popup"|"buttons"|"none"}?) |
                 (attribute form {"essay"},
                 attribute width {text}?)
             }
@@ -1074,7 +1079,7 @@
             }
         
         
-        TextSimple = mixed { 
+        TextSimple = mixed {
             Character* }
         TextShort = mixed { (
             Character |
@@ -1112,7 +1117,7 @@
                 attribute sortby {text}?,
                 attribute start {text}?,
                 attribute finish {text}?,
-                (   
+                (
                     TextShort
                 |
                     (
@@ -1138,8 +1143,8 @@
         Xref =
             element xref {
                     (
-                        attribute ref {text} | 
-                        (attribute first {text}, attribute last {text}) | 
+                        attribute ref {text} |
+                        (attribute first {text}, attribute last {text}) |
                         attribute provisional {text}
                     ),
                     attribute text { XrefTextStyle }?,
@@ -1159,7 +1164,7 @@
             element m {
                 mixed {(FillIn | WWVariable)*}
             }
-        MathRow = 
+        MathRow =
             element mrow {
                 MetaDataTarget,
                 (
@@ -1203,7 +1208,7 @@
             }
         
         
-        Verbatim = 
+        Verbatim =
             element c {text} |
             element email {text}
         
@@ -1215,7 +1220,7 @@
             element init {TextSimple}
         
             
-        Group |= 
+        Group |=
             element q {TextLong} |
             element sq {TextLong} |
             element braces {TextLong} |
@@ -1224,7 +1229,7 @@
             element dblbrackets {TextLong}
         
             
-        Group |= 
+        Group |=
             element em {TextLong} |
             element term {TextLong} |
             element alert {TextLong} |
@@ -1236,7 +1241,7 @@
             }
         
             
-        Group |= 
+        Group |=
             element delete {TextLong} |
             element insert {TextLong} |
             element stale {TextLong}
@@ -1262,7 +1267,7 @@
         
         
         
-        Generator = 
+        Generator =
             element today {empty} |
             element timeofday {empty} |
             element tex {empty} |
@@ -1288,7 +1293,7 @@
                 attribute prefix {text}?,
                 attribute base {text},
                 attribute exp {xsd:integer}?
-        Generator |= 
+        Generator |=
             element quantity {
                 element mag {text}?,
                 element unit {UnitSpecification}*,
@@ -1315,30 +1320,30 @@
             element rbrace {empty}
         
             
-        Character |= 
+        Character |=
             element nbsp {empty} |
             element ndash {empty} |
             element mdash {empty}
         
             
         FillIn = element fillin {attribute characters {xsd:integer}?, empty}
-        Character |= 
+        Character |=
             FillIn
         
             
-        Character |= 
+        Character |=
             element lsq {empty} |
             element rsq {empty} |
             element rq {empty} |
             element lq {empty}
         
             
-        Character |= 
+        Character |=
             element solidus {empty} |
             element times {empty}
         
             
-        Character |= 
+        Character |=
             element ellipsis {empty} |
             element asterisk {empty} |
             element backtick {empty} |
@@ -1353,7 +1358,7 @@
             element trademark {empty}
         
             
-        Music = 
+        Music =
             element doublesharp {empty} |
             element sharp {empty} |
             element natural {empty} |

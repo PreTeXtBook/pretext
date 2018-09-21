@@ -51,7 +51,12 @@
                 MetaDataSubtitle,
                 ArticleFrontMatter?,
                 (
-                    (BlockDivision | Paragraphs | Commentary)+
+                    (
+                        (BlockDivision | Paragraphs | Commentary)+,
+                        Exercises?,
+                        Solutions?,
+                        References?
+                    )
                 |
                     (
                         IntroductionDivision?,

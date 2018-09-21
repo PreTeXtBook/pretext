@@ -23,13 +23,24 @@
         <ref name="ArticleFrontMatter"/>
       </optional>
       <choice>
-        <oneOrMore>
-          <choice>
-            <ref name="BlockDivision"/>
-            <ref name="Paragraphs"/>
-            <ref name="Commentary"/>
-          </choice>
-        </oneOrMore>
+        <group>
+          <oneOrMore>
+            <choice>
+              <ref name="BlockDivision"/>
+              <ref name="Paragraphs"/>
+              <ref name="Commentary"/>
+            </choice>
+          </oneOrMore>
+          <optional>
+            <ref name="Exercises"/>
+          </optional>
+          <optional>
+            <ref name="Solutions"/>
+          </optional>
+          <optional>
+            <ref name="References"/>
+          </optional>
+        </group>
         <group>
           <optional>
             <ref name="IntroductionDivision"/>

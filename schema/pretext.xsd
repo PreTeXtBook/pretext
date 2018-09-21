@@ -22,11 +22,16 @@
           <xs:sequence>
             <xs:group minOccurs="0" ref="ArticleFrontMatter"/>
             <xs:choice>
-              <xs:choice maxOccurs="unbounded">
-                <xs:group ref="BlockDivision"/>
-                <xs:group ref="Paragraphs"/>
-                <xs:element ref="commentary"/>
-              </xs:choice>
+              <xs:sequence>
+                <xs:choice maxOccurs="unbounded">
+                  <xs:group ref="BlockDivision"/>
+                  <xs:group ref="Paragraphs"/>
+                  <xs:element ref="commentary"/>
+                </xs:choice>
+                <xs:element minOccurs="0" ref="exercises"/>
+                <xs:element minOccurs="0" ref="solutions"/>
+                <xs:element minOccurs="0" ref="references"/>
+              </xs:sequence>
               <xs:sequence>
                 <xs:group minOccurs="0" ref="IntroductionDivision"/>
                 <xs:element maxOccurs="unbounded" ref="section"/>
