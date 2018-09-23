@@ -6305,6 +6305,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- A URL is needed various places, but perhaps a cross-reference -->
+<!-- to material larger than a knowl is the most typical use.      -->
+<!-- This is strictly an HTML item.                                -->
+<!-- A containing filename, plus an optional fragment identifier.  -->
+<xsl:template match="*" mode="url">
+    <xsl:variable name="intermediate">
+        <xsl:apply-templates select="." mode="is-intermediate" />
+    </xsl:variable>
+    <xsl:variable name="chunk">
+        <xsl:apply-templates select="." mode="is-chunk" />
+    </xsl:variable>
+    <xsl:apply-templates select="." mode="containing-filename" />
+    <xsl:if test="$intermediate='false' and $chunk='false'">
+        <xsl:text>#</xsl:text>
+        <!-- the ids on equations are manufactured -->
+        <!-- by MathJax to look this way           -->
+        <xsl:if test="self::men|self::mrow">
+            <xsl:text>mjx-eqn-</xsl:text>
+        </xsl:if>
+        <xsl:apply-templates select="." mode="internal-id" />
+    </xsl:if>
+</xsl:template>
+
 <!-- ######## -->
 <!-- SI Units -->
 <!-- ######## -->
