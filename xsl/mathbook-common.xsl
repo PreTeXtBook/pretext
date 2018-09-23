@@ -6263,56 +6263,77 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- for motivation and document() syntax for standalone file -->
 <!-- Also: see contributors in FCLA work                      -->
 
-<!-- The data: attribute is our usage,    -->
-<!-- elements belong to other packages.   -->
-<!-- Blank means not explicitly supported -->
-<!-- Alphabetical by type                 -->
+<!-- The data: attribute is our usage, elements belong to     -->
+<!-- other packages. Blank means not explicitly supported.    -->
+<!-- Alphabetical by type.                                    -->
+
 <!-- Prettify: -->
-<!-- Last reviewed 2014/06/28                                                     -->
-<!-- http://code.google.com/p/google-code-prettify/source/browse/trunk/src        -->
-<!-- Look inside files, it can be a one-handler-to-several-languages relationship -->
+<!-- Last reviewed 2018/09/23                      -->
+<!-- https://github.com/google/code-prettify       -->
+<!-- Some languages can be "guessed", indicated by -->
+<!-- "Prettify default"  in the comments.  But we  -->
+<!-- provide strings anyway.  List on 2019-09-23:  -->
+<!--                                               -->
+<!--     "bsh", "c", "cc", "cpp", "cs", "csh",     -->
+<!--     "cyc", "cv", "htm", "html", "java", "js", -->
+<!--     "m", "mxml", "perl", "pl", "pm", "py",    -->
+<!--     "rb", "sh", "xhtml", "xml", "xsl".        -->
+<!--                                               -->
+<!-- There are extension files for some other      -->
+<!-- languages, which register identifying strings -->
+<!-- that can be determined by opening their       -->
+<!-- files/code.  We use such strings here.        -->
+<!-- Comments say "Prettify extension".            -->
+<!-- 2019-09-23: there may be some new ones we     -->
+<!-- could add, but we have not reviewed the       -->
+<!-- necessary "listings" options: bash, Haskell   -->
+
 <!-- Listings: -->
-<!-- Last reviewed 2014/06/28                           -->
-<!-- Exact matches, or best guesses, some unimplemented -->
+<!-- Last reviewed carefully: 2014/06/28           -->
+<!-- Exact matches, or best guesses, some          -->
+<!-- unimplemented.  [] notation is for variants.  -->
+<!-- 2019-09-23: minor review, v 1.7 (2018-09-02)  -->
 
 <!-- Our strings (@mbx) are always all-lowercase, no symbols, no punctuation -->
 <mb:programming>
     <!-- Procedural -->
-    <language mbx="basic"       listings="Basic"        prettify="basic" />     <!-- Prettify handler verified -->
-    <language mbx="c"           listings="C"            prettify="" />          <!-- No Prettify handler -->
-    <language mbx="cpp"         listings="C++"          prettify="" />          <!-- No Prettify handler -->
-    <language mbx="go"          listings="C"            prettify="go" />        <!-- Prettify handler verified -->
-    <language mbx="java"        listings="Java"         prettify="" />          <!-- No Prettify handler -->
-    <language mbx="lua"         listings="Lua"          prettify="lua" />       <!-- Prettify handler verified -->
-    <language mbx="pascal"      listings="Pascal"       prettify="pascal" />    <!-- Prettify handler verified -->
-    <language mbx="perl"        listings="Perl"         prettify="" />          <!-- No Prettify handler -->
-    <language mbx="python"      listings="Python"       prettify="" />          <!-- No Prettify handler -->
-    <language mbx="r"           listings="R"            prettify="r" />         <!-- Prettify handler verified -->
-    <language mbx="s"           listings="S"            prettify="s" />         <!-- Prettify handler verified -->
-    <language mbx="sas"         listings="SAS"          prettify="s" />         <!-- Prettify handler verified -->
-    <language mbx="sage"        listings="Python"       prettify="" />          <!-- No Prettify handler -->
-    <language mbx="splus"       listings="[Plus]S"      prettify="Splus" />     <!-- Prettify handler verified -->
-    <language mbx="vbasic"     listings="[Visual]Basic" prettify="vb" />        <!-- Prettify handler verified -->
-    <language mbx="vbscript"    listings="VBscript"     prettify="vbs" />       <!-- Prettify handler verified -->
+    <language mbx="basic"       listings="Basic"            prettify="basic"/>     <!-- Prettify extension 2018-09-23 -->
+    <language mbx="c"           listings="C"                prettify="c"/>         <!-- Prettify default   2018-09-23 -->
+    <language mbx="cpp"         listings="C++"              prettify="cpp"/>       <!-- Prettify default   2018-09-23 -->
+    <language mbx="go"          listings="C"                prettify="go"/>        <!-- Prettify extension 2018-09-23 -->
+    <language mbx="java"        listings="Java"             prettify="java"/>      <!-- Prettify default   2018-09-23 -->
+    <language mbx="javascript"  listings=""                 prettify="js"/>        <!-- Prettify default   2018-09-23 -->
+    <language mbx="lua"         listings="Lua"              prettify="lua"/>       <!-- Prettify extension 2018-09-23 -->
+    <language mbx="pascal"      listings="Pascal"           prettify="pascal"/>    <!-- Prettify extension 2018-09-23 -->
+    <language mbx="perl"        listings="Perl"             prettify="perl"/>      <!-- Prettify default   2018-09-23 -->
+    <language mbx="python"      listings="Python"           prettify="py"/>        <!-- Prettify default   2018-09-23 -->
+    <language mbx="r"           listings="R"                prettify="r"/>         <!-- Prettify extension 2018-09-23 -->
+    <language mbx="s"           listings="S"                prettify="s"/>         <!-- Prettify extension 2018-09-23 -->
+    <language mbx="sas"         listings="SAS"              prettify="s"/>         <!-- Prettify extension 2018-09-23 -->
+    <language mbx="sage"        listings="Python"           prettify="py"/>        <!-- Prettify default   2018-09-23 -->
+    <language mbx="splus"       listings="[Plus]S"          prettify="s"/>         <!-- Prettify extension 2018-09-23 -->
+    <language mbx="vbasic"      listings="[Visual]Basic"    prettify="vb"/>        <!-- Prettify extension 2018-09-23 -->
+    <language mbx="vbscript"    listings="VBscript"         prettify="vbs"/>       <!-- Prettify extension 2018-09-23 -->
     <!-- Others (esp. functional-->
-    <language mbx="apollo"      listings=""             prettify="apollo" />    <!-- Prettify handler verified --> 
-    <language mbx="clojure"     listings="Lisp"         prettify="clojure" />   <!-- Prettify handler verified -->
-    <language mbx="lisp"        listings="Lisp"         prettify="lisp" />      <!-- Prettify handler verified -->
-    <language mbx="clisp"       listings="Lisp"         prettify="cl" />        <!-- Prettify handler verified -->
-    <language mbx="elisp"       listings="Lisp"         prettify="el" />        <!-- Prettify handler verified -->
-    <language mbx="scheme"      listings="Lisp"         prettify="scm" />       <!-- Prettify handler verified -->
-    <language mbx="racket"      listings="Lisp"         prettify="rkt" />       <!-- Prettify handler verified -->
-    <language mbx="llvm"        listings="LLVM"         prettify="llvm" />      <!-- Prettify handler verified -->
-    <language mbx="matlab"      listings="Matlab"       prettify="" />          <!-- No Prettify handler -->
-    <language mbx="ml"          listings="ML"           prettify="ml" />        <!-- Prettify handler verified -->
-    <language mbx="fsharp"      listings="ML"           prettify="fs" />        <!-- Prettify handler verified -->
+    <language mbx="apollo"      listings=""                 prettify="apollo"/>    <!-- Prettify extension 2018-09-23 -->
+    <language mbx="clojure"     listings="Lisp"             prettify="clj"/>       <!-- Prettify extension 2018-09-23 -->
+    <language mbx="lisp"        listings="Lisp"             prettify="lisp"/>      <!-- Prettify extension 2018-09-23 -->
+    <language mbx="clisp"       listings="Lisp"             prettify="cl"/>        <!-- Prettify extension 2018-09-23 -->
+    <language mbx="elisp"       listings="Lisp"             prettify="el"/>        <!-- Prettify extension 2018-09-23 -->
+    <language mbx="scheme"      listings="Lisp"             prettify="scm"/>       <!-- Prettify extension 2018-09-23 -->
+    <language mbx="racket"      listings="Lisp"             prettify="rkt"/>       <!-- Prettify extension 2018-09-23 -->
+    <language mbx="llvm"        listings="LLVM"             prettify="llvm"/>      <!-- Prettify extension 2018-09-23 -->
+    <language mbx="matlab"      listings="Matlab"           prettify="matlab"/>    <!-- Prettify extension 2018-09-23 -->
+    <language mbx="ml"          listings="ML"               prettify="ml"/>        <!-- Prettify extension 2018-09-23 -->
+    <language mbx="ocaml"       listings="[Objective]Caml"  prettify="ml"/>        <!-- Prettify extension 2018-09-23 -->
+    <language mbx="fsharp"      listings="ML"               prettify="fs"/>        <!-- Prettify extension 2018-09-23 -->
     <!-- Text Manipulation -->
-    <language mbx="css"         listings=""             prettify="css" />       <!-- Prettify handler verified -->
-    <language mbx="latex"       listings="TeX"          prettify="latex" />     <!-- Prettify handler verified -->
-    <language mbx="html"        listings="HTML"         prettify="" />          <!-- No Prettify handler -->
-    <language mbx="tex"         listings="TeX"          prettify="tex" />       <!-- Prettify handler verified -->
-    <language mbx="xml"         listings="XML"          prettify="" />          <!-- No Prettify handler -->
-    <language mbx="xslt"        listings="XSLT"         prettify="" />          <!-- No Prettify handler -->
+    <language mbx="css"         listings=""                 prettify="css-str"/>   <!-- Prettify extension 2018-09-23 -->
+    <language mbx="latex"       listings="[LaTeX]TeX"       prettify="latex"/>     <!-- Prettify extension 2018-09-23 -->
+    <language mbx="html"        listings="HTML"             prettify="html"/>      <!-- Prettify default   2018-09-23 -->
+    <language mbx="tex"         listings="[plain]TeX"       prettify="tex"/>       <!-- Prettify extension 2018-09-23 -->
+    <language mbx="xml"         listings="XML"              prettify="xml"/>       <!-- Prettify default   2018-09-23 -->
+    <language mbx="xslt"        listings="XSLT"             prettify="xsl"/>       <!-- Prettify default   2018-09-23 -->
 </mb:programming>
 
 <!-- Define the key for indexing into the data list -->
