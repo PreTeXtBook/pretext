@@ -7217,22 +7217,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="program">
     <!-- with language, pre.prettyprint activates styling and Prettifier -->
     <!-- with no language, pre.plainprint just yields some styling       -->
-    <xsl:variable name="classes">
-        <xsl:choose>
-            <xsl:when test="@language">
-                <xsl:text>prettyprint</xsl:text>
-                <xsl:text> lang-</xsl:text>
-                <xsl:value-of select="@language" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>plainprint</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
+    <xsl:variable name="pretty-language">
+        <xsl:apply-templates select="." mode="prettify-language"/>
     </xsl:variable>
-    <pre class="{$classes}">
-    <xsl:call-template name="sanitize-text">
-        <xsl:with-param name="text" select="input" />
-    </xsl:call-template>
+    <pre>
+        <xsl:attribute name="class">
+            <xsl:choose>
+                <xsl:when test="not($pretty-language = '')">
+                    <xsl:text>prettyprint</xsl:text>
+                    <xsl:text> </xsl:text>
+                    <xsl:text>lang-</xsl:text>
+                    <xsl:value-of select="$pretty-language" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>plainprint</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:attribute>
+        <xsl:call-template name="sanitize-text">
+            <xsl:with-param name="text" select="input" />
+        </xsl:call-template>
     </pre>
 </xsl:template>
 

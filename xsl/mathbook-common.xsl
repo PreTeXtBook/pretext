@@ -6353,7 +6353,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <xsl:template match="*" mode="prettify-language">
     <xsl:variable name="language"><xsl:value-of select="@language" /></xsl:variable>
     <xsl:for-each select="document('')/*/mb:programming">
-        <xsl:value-of select="key('proglang', $language)/@listings" />
+        <xsl:value-of select="key('proglang', $language)/@prettify" />
     </xsl:for-each>
 </xsl:template>
 
