@@ -1936,6 +1936,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:attribute name="class">
                     <xsl:apply-templates select="." mode="body-css-class" />
                 </xsl:attribute>
+                <!-- HTML id is best on element surrounding born-hidden knowl anchor -->
+                <xsl:attribute name="id">
+                    <xsl:apply-templates select="." mode="perm-id" />
+                </xsl:attribute>
                 <!-- this horrible hack should go away once better CSS is in place -->
                 <!-- likely this particular version never gets used                -->
                 <xsl:if test="self::poem">
@@ -1943,11 +1947,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:text>display: table; width: auto; max-width: 90%; margin: 0 auto;</xsl:text>
                     </xsl:attribute>
                 </xsl:if>
-                <xsl:apply-templates select="." mode="hidden-knowl-link" />
+                <xsl:apply-templates select="." mode="hidden-knowl-link">
+                    <xsl:with-param name="placement" select="$placement"/>
+                </xsl:apply-templates>
             </xsl:element>
         </xsl:when>
         <xsl:when test="$placement = 'inline'">
-            <xsl:apply-templates select="." mode="hidden-knowl-link" />
+            <xsl:apply-templates select="." mode="hidden-knowl-link">
+                <xsl:with-param name="placement" select="$placement"/>
+            </xsl:apply-templates>
         </xsl:when>
         <xsl:otherwise>
             <xsl:message>PTX:BUG:     an object ("<xsl:value-of select="local-name(.)" />") being born hidden as a knowl does not know if the link is a block or is inline.</xsl:message>
@@ -2002,6 +2010,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- The link portion of a hidden-knowl -->
 <xsl:template match="*" mode="hidden-knowl-link">
+    <xsl:param name="placement"/>
+
     <xsl:element name="a">
         <!-- empty, indicates content *not* in a file -->
         <xsl:attribute name="knowl" />
@@ -2013,11 +2023,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="refid">
             <xsl:apply-templates select="." mode="hidden-knowl-id" />
         </xsl:attribute>
-        <!-- make the anchor a target, eg of an in-context link -->
-        <!-- label original -->
-        <xsl:attribute name="id">
-            <xsl:apply-templates select="." mode="perm-id" />
-        </xsl:attribute>
+        <!-- the object could be the target of an in-context link, and     -->
+        <!-- if inline, then just a bare anchor, so put id here, otherwise -->
+        <!-- in the 'block' case, it is on the surrounding element         -->
+        <xsl:if test="$placement = 'inline'">
+            <xsl:attribute name="id">
+                <xsl:apply-templates select="." mode="perm-id" />
+            </xsl:attribute>
+        </xsl:if>
         <!-- marked-up knowl text link *inside* of knowl anchor to be effective -->
         <!-- heading in an HTML container -->
         <xsl:apply-templates select="." mode="heading-birth" />
