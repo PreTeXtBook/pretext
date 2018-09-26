@@ -5909,7 +5909,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:choose>
         <!-- burrow through "stage", do not consider "answer" -->
         <xsl:when test="webwork-reps">
-            <xsl:if test="$b-has-statement or ($b-has-hint and webwork-reps/static//hint) or ($b-has-solution and webwork-reps/static//solution)">
+            <xsl:if test="$b-has-statement or ($b-has-hint and webwork-reps/static//hint) or ($b-has-answer and webwork-reps/static//answer) or ($b-has-solution and webwork-reps/static//solution)">
                 <xsl:text>X</xsl:text>
             </xsl:if>
         </xsl:when>
