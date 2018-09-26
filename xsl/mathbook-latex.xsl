@@ -553,6 +553,52 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\usepackage{xfrac}&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>%%&#xa;</xsl:text>
+    <xsl:text>%% Division Titles, and Page Headers/Footers&#xa;</xsl:text>
+    <!-- "explicit" is necessary to keep title implicitly following  -->
+    <!-- "before-code". "pagestyles" option is equivalent to loading -->
+    <!-- the "titleps" package and have it execute cooperatively     -->
+    <xsl:text>%% titlesec package, with titleps package&#xa;</xsl:text>
+    <xsl:text>\usepackage[explicit, pagestyles]{titlesec}&#xa;</xsl:text>
+    <xsl:variable name="empty-pagestyle">
+        <xsl:apply-templates select="$document-root" mode="titleps-empty"/>
+    </xsl:variable>
+    <xsl:if test="not($empty-pagestyle = '')">
+        <xsl:text>\renewpagestyle{empty}</xsl:text>
+        <xsl:value-of select="$empty-pagestyle"/>
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
+    <!--  -->
+    <xsl:variable name="plain-pagestyle">
+        <xsl:apply-templates select="$document-root" mode="titleps-plain"/>
+    </xsl:variable>
+    <xsl:if test="not($plain-pagestyle = '')">
+        <xsl:text>\renewpagestyle{plain}</xsl:text>
+        <xsl:value-of select="$plain-pagestyle"/>
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
+    <!--  -->
+    <xsl:variable name="headings-pagestyle">
+        <xsl:apply-templates select="$document-root" mode="titleps-headings"/>
+    </xsl:variable>
+    <xsl:if test="not($headings-pagestyle = '')">
+        <xsl:text>\renewpagestyle{headings}</xsl:text>
+        <xsl:value-of select="$headings-pagestyle"/>
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
+    <!--  -->
+    <xsl:variable name="global-pagestyle">
+        <xsl:apply-templates select="$document-root" mode="titleps-global-style"/>
+    </xsl:variable>
+    <xsl:if test="$global-pagestyle = ''">
+        <xsl:message>PTX:ERROR: The "titleps-global-style" template should *never* produce empty text.  LaTeX compilation will definitely fail.</xsl:message>
+    </xsl:if>
+    <xsl:text>%% Set global/default page style for document due&#xa;</xsl:text>
+    <xsl:text>%% to potential re-definitions after documentclass&#xa;</xsl:text>
+    <xsl:text>\pagestyle{</xsl:text>
+    <xsl:value-of select="$global-pagestyle"/>
+    <xsl:text>}&#xa;</xsl:text>
+    <!--  -->
+    <xsl:text>%%&#xa;</xsl:text>
     <xsl:text>%% Semantic Macros&#xa;</xsl:text>
     <xsl:text>%% To preserve meaning in a LaTeX file&#xa;</xsl:text>
     <xsl:text>%% Only defined here if required in this document&#xa;</xsl:text>
@@ -2320,6 +2366,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- This is the gross default, across all objects and all styles -->
 <!-- It is convenient for development, testing, and convenience    -->
 <xsl:template match="*" mode="tcb-style" />
+
+<!-- Page Styles, Headers/Footers -->
+<!-- This is all default LaTeX                                        -->
+<!-- TODO: See titleps.pdf in the "titlesec" package for definitions  -->
+<!-- similar to stock LaTeX but without the all-caps look.  Implement -->
+<!-- this when the default style is changed.                          -->
+<xsl:template match="book|article|letter|memo" mode="titleps-empty"/>
+<xsl:template match="book|article|letter|memo" mode="titleps-plain"/>
+<xsl:template match="book|article|letter|memo" mode="titleps-headings"/>
+
+<!-- Seems to be necessary to issue a "\pagestyle" for the main style -->
+<!-- when it gets "renew'ed".  These are the defaults.  Do not ever   -->
+<!-- override these to be empty, or their employment will fail.       -->
+<xsl:template match="book" mode="titleps-global-style">
+    <xsl:text>headings</xsl:text>
+</xsl:template>
+<xsl:template match="article|letter|memo" mode="titleps-global-style">
+    <xsl:text>plain</xsl:text>
+</xsl:template>
 
 <!-- ################## -->
 <!-- End: LaTeX Styling -->
