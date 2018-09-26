@@ -3945,6 +3945,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <!-- webwork, structured with "stage" matches first -->
         <xsl:when test="webwork-reps/static/stage">
+            <!-- Needs this fix, but requires more care                                              -->
+            <!-- <xsl:apply-templates select="webwork-reps/static/stage" mode="exercise-components"> -->
             <xsl:apply-templates select="webwork-reps/static/stage">
                 <xsl:with-param name="b-original" select="true()" />
                 <xsl:with-param name="b-has-statement" select="true()" />
@@ -4058,6 +4060,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:choose>
             <!-- webwork, structured with "stage" matches first -->
             <xsl:when test="webwork-reps/static/stage">
+                <!-- Needs this fix, but requires more care                                              -->
+                <!-- <xsl:apply-templates select="webwork-reps/static/stage" mode="exercise-components"> -->
                 <xsl:apply-templates select="webwork-reps/static/stage">
                     <xsl:with-param name="b-original" select="$b-original" />
                     <xsl:with-param name="b-has-statement" select="$b-has-statement" />
@@ -4162,7 +4166,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- condition on how statement, hint, answer, solution are presented -->
     <xsl:choose>
         <!-- webwork, structured with "stage" matches first -->
+        <!-- Someplace, something like  -->
+        <!-- \par\medskip\noindent% -->
+        <!-- \textbf{Part 2.}\quad  -->
+        <!-- needs to happen for each stage in a solution -->
+        <!-- maybe based on a dry-run -->
         <xsl:when test="webwork-reps/static/stage">
+            <!-- Needs this fix, but requires more care                                              -->
+            <!-- <xsl:apply-templates select="webwork-reps/static/stage" mode="exercise-components"> -->
             <xsl:apply-templates select="webwork-reps/static/stage">
                 <xsl:with-param name="b-original" select="true()" />
                 <xsl:with-param name="b-has-statement" select="true()" />
@@ -4279,6 +4290,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:choose>
             <!-- webwork, structured with "stage" matches first -->
             <xsl:when test="webwork-reps/static/stage">
+                <!-- Needs this fix, but requires more care                                              -->
+                <!-- <xsl:apply-templates select="webwork-reps/static/stage" mode="exercise-components"> -->
                 <xsl:apply-templates select="webwork-reps/static/stage">
                     <xsl:with-param name="b-original" select="false()" />
                     <xsl:with-param name="b-has-statement" select="$b-has-statement" />
