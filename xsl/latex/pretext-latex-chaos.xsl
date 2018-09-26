@@ -146,6 +146,68 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>coltitle=black, fonttitle=\bfseries, attach title to upper, after title={\space},</xsl:text>
 </xsl:template>
 
+<!-- LaTeX uses four page styles, and we use the "titleps" package  -->
+<!-- to redefine the "empty", "plain", and "headings" styles.  The  -->
+<!-- actual management of which style is used, and when, is         -->
+<!-- controlled by LaTeX with help from PreTeXt.  You can use the   -->
+<!-- "titleps-global-style" template to change which style is the   -->
+<!-- global default, optionally in concert with redefinitions of    -->
+<!-- the style.                                                     -->
+<!--                                                                -->
+<!-- We do limited demonstration with the head, and use the         -->
+<!-- left-side of the foot to display information on which          -->
+<!-- pagestyle is in effect, so you could experiment here before    -->
+<!-- making your own style.                                         -->
+<!--                                                                -->
+<!-- Note: the templates will be placed after a "\renewpagestyle{}" -->
+<!-- command, so should be an optional argument, followed by a      -->
+<!-- mandatory argument with commands like \setfoot, \sethead,      -->
+<!-- \headrule, and \footrule.                                      -->
+<!-- See titleps.pdf in the "titlesec" package for more             -->
+<xsl:template match="book|article|letter|memo" mode="titleps-empty">
+    <xsl:text>{
+    \setfoot[foot/odd/empty][][]
+    {foot/even or one-sided/empty}{}{}
+    }</xsl:text>
+</xsl:template>
+
+<xsl:template match="book|article|letter|memo" mode="titleps-plain">
+    <xsl:text>{
+    \setfoot[foot/odd/plain][\thepage][]
+    {foot/even or one-sided/plain}{\thepage}{}
+    }</xsl:text>
+</xsl:template>
+
+<!-- This is cribbed from Section 8 of "titleps.pdf" (2016-03-15) -->
+<xsl:template match="book" mode="titleps-headings">
+    <xsl:text>[\small\sffamily]{
+    \sethead[\textbf{\thepage}]
+    [\textsl{\chaptertitle}]
+    [\toptitlemarks\thesection--\bottitlemarks\thesection]
+    {\toptitlemarks\thesection--\bottitlemarks\thesection]}
+    {\textsl{\sectiontitle}}
+    {\textbf{\thepage}}}
+    \setfoot[foot/odd/headings/book][][]
+    {foot/even or one-sided/headings/book}{}{}</xsl:text>
+</xsl:template>
+
+<xsl:template match="article|letter|memo" mode="titleps-headings">
+    <xsl:text>[\small\sffamily]{
+    \headrule
+    \sethead[\thepage][\sectiontitle][]
+    {}{\sectiontitle}{\thepage}
+    \setfoot[foot/odd/headings/article][][]
+    {foot/even or one-sided/headings/article}{}{}
+    }</xsl:text>
+</xsl:template>
+
+<!-- Experiment with "empty", "plain", and "headings" to      -->
+<!-- see the effect of the above definitions (for "article")  -->
+<!-- employed in the sample article                           -->
+<!-- DO NOT set this to return empty text, errors will result -->
+<!-- You can comment it out, and let base definition execute  -->
+<xsl:template match="article" mode="titleps-global-style">
+    <xsl:text>plain</xsl:text>
+</xsl:template>
 
 </xsl:stylesheet>
-
