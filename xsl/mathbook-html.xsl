@@ -8799,9 +8799,13 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
         </xsl:variable>
         <!-- Subtree for page this sidebar will adorn -->
         <xsl:variable name="this-page-node" select="self::*" />
-        <!-- If a book has parts, we include them as top level -->
-        <!-- Note: these include front matter, back matter     -->
-        <xsl:for-each select="$root/book/*|$root/book/part/*|$root/article/*">
+        <!-- If a book has parts, they appear as top-level items.       -->
+        <!-- Front matter and back matter will also appear as top-level -->
+        <!-- items, which is especially ueful when they get renamed     -->
+        <!-- (eg "Reference" for "backmatter").  Children of backmatter -->
+        <!-- are like "book/chapter" or "article/section" and also get  -->
+        <!-- a top-level appearance.                                    -->
+        <xsl:for-each select="$root/book/*|$root/book/part/*|$root/article/*|$root/book/backmatter/*|$root/article/backmatter/*">
             <xsl:variable name="structural">
                 <xsl:apply-templates select="." mode="is-structural" />
             </xsl:variable>
@@ -8849,9 +8853,11 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
                         </span>
                     </xsl:element>
                 </h2>
-                <!-- We don't divide parts again, their  -->
-                <!-- chapters will be in $sublist anyway -->
-                <xsl:if test="not(self::part) and $adjusted-toc-level > 1">
+                <!-- Any "part" or "backmatter" displayed as top-level items     -->
+                <!-- have children that are also considered as top-level items,  -->
+                <!-- so we do not examine the children of "part" or "backmatter" -->
+                <!-- as potential second-level items. -->
+                <xsl:if test="not(self::part or self::backmatter) and $adjusted-toc-level > 1">
                     <!-- a level 1 ToC entry may not have any structural      -->
                     <!-- descendants, so we build a possible sublist in a     -->
                     <!-- variable and do not use it if it ends up being empty -->
