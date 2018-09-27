@@ -1384,6 +1384,12 @@
             element trademark {empty}
         
             
+        Character |=
+            element icon {
+                attribute name {text}
+            }
+        
+            
         Music =
             element doublesharp {empty} |
             element sharp {empty} |

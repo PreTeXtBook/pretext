@@ -2812,6 +2812,7 @@
         <xs:element ref="registered"/>
         <xs:element ref="trademark"/>
       </xs:choice>
+      <xs:element ref="icon"/>
     </xs:choice>
   </xs:group>
   <xs:element name="ampersand">
@@ -2912,6 +2913,11 @@
   </xs:element>
   <xs:element name="trademark">
     <xs:complexType/>
+  </xs:element>
+  <xs:element name="icon">
+    <xs:complexType>
+      <xs:attribute name="name" use="required"/>
+    </xs:complexType>
   </xs:element>
   <xs:element name="fillin">
     <xs:complexType>

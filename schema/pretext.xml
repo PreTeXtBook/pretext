@@ -437,6 +437,15 @@
             element trademark {empty}
         </fragment>
 
+        <p>Icons are available through a <attr>name</attr> attribute, which is meant to usually be more semantic than just a description of the picture, though that may sometimes be the case.  These are intended for use when describing elements of computer interfaces.  Icons which are decorative shuld be supplied as part of styling, not as part of the source language.</p>
+
+        <fragment xml:id="icon-character">
+        Character |=
+            element icon {
+                attribute name {text}
+            }
+        </fragment>
+
         <p>We support musical notation as if they were characters: accidentals, scale degrees, notes, and chords.  Implementation of these is about as complicated as inline mathematical notation, hence they have identical rules about placement.</p>
 
         <fragment xml:id="music-character">
@@ -482,6 +491,7 @@
             <fragment ref="delimiter-character" />
             <fragment ref="arithmetic-character" />
             <fragment ref="exotic-character" />
+            <fragment ref="icon-character" />
             <fragment ref="music-character" />
         </fragment>
 

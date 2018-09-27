@@ -3093,6 +3093,11 @@
       </element>
     </choice>
   </define>
+  <define name="Character" combine="choice">
+    <element name="icon">
+      <attribute name="name"/>
+    </element>
+  </define>
   <define name="Music">
     <choice>
       <element name="doublesharp">
