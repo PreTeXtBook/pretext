@@ -63,7 +63,7 @@
                         Section+,
                         Exercises*,
                         ConclusionDivision?,
-                        BackMatter?
+                        ArticleBackMatter?
                     )
                 )
             }
@@ -73,7 +73,7 @@
                 MetaDataSubtitle,
                 BookFrontMatter?,
                 (Part+ | Chapter+ ),
-                BackMatter?
+                BookBackMatter?
             }
         Letter =
             element letter {empty}
@@ -179,7 +179,25 @@
                 References?,
                 Outcomes?
             }
-        Appendix =
+        ArticleAppendix =
+            element appendix {
+                MetaDataTitle,
+                AuthorByline*,
+                (
+                    (BlockDivision | Paragraphs | Commentary | NotationList )+ |
+                    (
+                        IntroductionDivision?,
+                        Subsection,
+                        (
+                            Subsection |
+                            Exercises |
+                            References
+                        )*,
+                        ConclusionDivision?
+                    )
+                )
+            }
+        BookAppendix =
             element appendix {
                 MetaDataTitle,
                 AuthorByline*,
@@ -1858,10 +1876,18 @@
         <p>Articles and books have material at the end, structured as a sequence of <c>appendix</c>.  A <c>solutions</c> division should be numbered and rendered as if it was one of the <c>appendix</c>, and so can mix-in in any order.</p>
 
         <fragment xml:id="backmatter">
-        BackMatter =
+        ArticleBackMatter =
             element backmatter {
                 MetaDataTitleOptional,
-                (Appendix|Solutions)*,
+                (ArticleAppendix|Solutions)*,
+                References?,
+                IndexDivision?,
+                ColophonBack?
+            }
+        BookBackMatter =
+            element backmatter {
+                MetaDataTitleOptional,
+                (BookAppendix|Solutions)*,
                 References?,
                 IndexDivision?,
                 ColophonBack?

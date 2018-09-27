@@ -26,7 +26,7 @@
                         Section+,
                         Exercises*,
                         ConclusionDivision?,
-                        BackMatter?
+                        ArticleBackMatter?
                     )
                 )
             }
@@ -36,7 +36,7 @@
                 MetaDataSubtitle,
                 BookFrontMatter?,
                 (Part+ | Chapter+ ),
-                BackMatter?
+                BookBackMatter?
             }
         Letter =
             element letter {empty}
@@ -131,7 +131,25 @@
                 References?,
                 Outcomes?
             }
-        Appendix =
+        ArticleAppendix =
+            element appendix {
+                MetaDataTitle,
+                AuthorByline*,
+                (
+                    (BlockDivision | Paragraphs | Commentary | NotationList )+ |
+                    (
+                        IntroductionDivision?,
+                        Subsection,
+                        (
+                            Subsection |
+                            Exercises |
+                            References
+                        )*,
+                        ConclusionDivision?
+                    )
+                )
+            }
+        BookAppendix =
             element appendix {
                 MetaDataTitle,
                 AuthorByline*,
@@ -261,10 +279,18 @@
             }
         
         
-        BackMatter =
+        ArticleBackMatter =
             element backmatter {
                 MetaDataTitleOptional,
-                (Appendix|Solutions)*,
+                (ArticleAppendix|Solutions)*,
+                References?,
+                IndexDivision?,
+                ColophonBack?
+            }
+        BookBackMatter =
+            element backmatter {
+                MetaDataTitleOptional,
+                (BookAppendix|Solutions)*,
                 References?,
                 IndexDivision?,
                 ColophonBack?

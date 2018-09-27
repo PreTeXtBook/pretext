@@ -55,7 +55,7 @@
             <ref name="ConclusionDivision"/>
           </optional>
           <optional>
-            <ref name="BackMatter"/>
+            <ref name="ArticleBackMatter"/>
           </optional>
         </group>
       </choice>
@@ -77,7 +77,7 @@
         </oneOrMore>
       </choice>
       <optional>
-        <ref name="BackMatter"/>
+        <ref name="BookBackMatter"/>
       </optional>
     </element>
   </define>
@@ -291,7 +291,41 @@
       </optional>
     </element>
   </define>
-  <define name="Appendix">
+  <define name="ArticleAppendix">
+    <element name="appendix">
+      <ref name="MetaDataTitle"/>
+      <zeroOrMore>
+        <ref name="AuthorByline"/>
+      </zeroOrMore>
+      <choice>
+        <oneOrMore>
+          <choice>
+            <ref name="BlockDivision"/>
+            <ref name="Paragraphs"/>
+            <ref name="Commentary"/>
+            <ref name="NotationList"/>
+          </choice>
+        </oneOrMore>
+        <group>
+          <optional>
+            <ref name="IntroductionDivision"/>
+          </optional>
+          <ref name="Subsection"/>
+          <zeroOrMore>
+            <choice>
+              <ref name="Subsection"/>
+              <ref name="Exercises"/>
+              <ref name="References"/>
+            </choice>
+          </zeroOrMore>
+          <optional>
+            <ref name="ConclusionDivision"/>
+          </optional>
+        </group>
+      </choice>
+    </element>
+  </define>
+  <define name="BookAppendix">
     <element name="appendix">
       <ref name="MetaDataTitle"/>
       <zeroOrMore>
@@ -607,12 +641,32 @@
       </choice>
     </element>
   </define>
-  <define name="BackMatter">
+  <define name="ArticleBackMatter">
     <element name="backmatter">
       <ref name="MetaDataTitleOptional"/>
       <zeroOrMore>
         <choice>
-          <ref name="Appendix"/>
+          <ref name="ArticleAppendix"/>
+          <ref name="Solutions"/>
+        </choice>
+      </zeroOrMore>
+      <optional>
+        <ref name="References"/>
+      </optional>
+      <optional>
+        <ref name="IndexDivision"/>
+      </optional>
+      <optional>
+        <ref name="ColophonBack"/>
+      </optional>
+    </element>
+  </define>
+  <define name="BookBackMatter">
+    <element name="backmatter">
+      <ref name="MetaDataTitleOptional"/>
+      <zeroOrMore>
+        <choice>
+          <ref name="BookAppendix"/>
           <ref name="Solutions"/>
         </choice>
       </zeroOrMore>
