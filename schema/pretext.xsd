@@ -420,6 +420,7 @@
       <xs:element name="colophon">
         <xs:complexType>
           <xs:sequence>
+            <xs:group ref="MetaDataTarget"/>
             <xs:element minOccurs="0" maxOccurs="unbounded" name="credit">
               <xs:complexType>
                 <xs:sequence>
@@ -445,7 +446,7 @@
               </xs:complexType>
             </xs:element>
           </xs:sequence>
-          <xs:attribute ref="xml:id"/>
+          <xs:attributeGroup ref="MetaDataTarget"/>
         </xs:complexType>
       </xs:element>
     </xs:sequence>
@@ -597,12 +598,15 @@
     <xs:sequence>
       <xs:element name="colophon">
         <xs:complexType>
-          <xs:choice maxOccurs="unbounded">
-            <xs:group ref="BlockText"/>
-            <xs:group ref="SideBySideNoCaption"/>
-            <xs:group ref="SideBySideGroupNoCaption"/>
-          </xs:choice>
-          <xs:attribute ref="xml:id"/>
+          <xs:sequence>
+            <xs:group ref="MetaDataTarget"/>
+            <xs:choice maxOccurs="unbounded">
+              <xs:group ref="BlockText"/>
+              <xs:group ref="SideBySideNoCaption"/>
+              <xs:group ref="SideBySideGroupNoCaption"/>
+            </xs:choice>
+          </xs:sequence>
+          <xs:attributeGroup ref="MetaDataTarget"/>
         </xs:complexType>
       </xs:element>
     </xs:sequence>
@@ -937,6 +941,7 @@
         <xs:element minOccurs="0" ref="input"/>
         <xs:element minOccurs="0" ref="output"/>
       </xs:sequence>
+      <xs:attribute name="permid"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="prompt" type="xs:string"/>
@@ -947,7 +952,7 @@
       <xs:sequence>
         <xs:element ref="input"/>
       </xs:sequence>
-      <xs:attribute ref="xml:id"/>
+      <xs:attribute name="permid"/>
       <xs:attribute name="language"/>
       <xs:attribute name="interactive">
         <xs:simpleType>
@@ -976,6 +981,7 @@
               </xs:complexType>
             </xs:element>
           </xs:sequence>
+          <xs:attribute name="permid"/>
           <xs:attribute name="cols">
             <xs:simpleType>
               <xs:restriction base="xs:token">
@@ -1003,9 +1009,11 @@
               <xs:group ref="TextParagraph"/>
               <xs:group maxOccurs="unbounded" ref="BlockStatement"/>
             </xs:choice>
+            <xs:attribute name="permid"/>
           </xs:complexType>
         </xs:element>
       </xs:sequence>
+      <xs:attribute name="permid"/>
       <xs:attribute name="cols">
         <xs:simpleType>
           <xs:restriction base="xs:token">
@@ -1042,6 +1050,7 @@
           </xs:complexType>
         </xs:element>
       </xs:sequence>
+      <xs:attribute name="permid"/>
       <xs:attribute name="width">
         <xs:simpleType>
           <xs:restriction base="xs:token">
@@ -1369,6 +1378,7 @@
     </xs:complexType>
   </xs:element>
   <xs:attributeGroup name="SidebySideAttributes">
+    <xs:attribute name="permid"/>
     <xs:attribute name="margins"/>
     <xs:attribute name="width"/>
     <xs:attribute name="widths"/>
@@ -1464,7 +1474,7 @@
               </xs:complexType>
             </xs:element>
           </xs:sequence>
-          <xs:attribute ref="xml:id"/>
+          <xs:attribute name="permid"/>
           <xs:attribute name="width"/>
           <xs:attribute name="archive"/>
           <xs:attribute name="source" use="required"/>
@@ -1489,6 +1499,7 @@
             </xs:choice>
           </xs:sequence>
           <xs:attribute ref="xml:id"/>
+          <xs:attribute name="permid"/>
           <xs:attribute name="width"/>
           <xs:attribute name="archive"/>
         </xs:complexType>
@@ -1633,6 +1644,7 @@
         <xs:element minOccurs="0" maxOccurs="unbounded" ref="col"/>
         <xs:element maxOccurs="unbounded" ref="row"/>
       </xs:sequence>
+      <xs:attribute name="permid"/>
       <xs:attribute name="halign">
         <xs:simpleType>
           <xs:restriction base="xs:token">
@@ -1664,7 +1676,7 @@
         <xs:element ref="input"/>
         <xs:element minOccurs="0" ref="output"/>
       </xs:sequence>
-      <xs:attribute ref="xml:id"/>
+      <xs:attribute name="permid"/>
       <xs:attribute name="doctest"/>
       <xs:attribute name="tolerance"/>
       <xs:attribute name="language"/>
@@ -1680,6 +1692,7 @@
   <xs:element name="video">
     <xs:complexType>
       <xs:attribute ref="xml:id"/>
+      <xs:attribute name="permid"/>
       <xs:attribute name="width"/>
       <xs:attribute name="aspect"/>
       <xs:attribute name="start" type="xs:integer"/>
@@ -1856,17 +1869,20 @@
   </xs:group>
   <xs:element name="biblio">
     <xs:complexType mixed="true">
-      <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:group ref="TextLong"/>
-        <xs:element ref="ibid"/>
-        <xs:element ref="title"/>
-        <xs:element ref="year"/>
-        <xs:element ref="journal"/>
-        <xs:element ref="number"/>
-        <xs:element ref="volume"/>
-        <xs:group ref="BibNote"/>
-      </xs:choice>
-      <xs:attribute ref="xml:id"/>
+      <xs:sequence>
+        <xs:group ref="MetaDataTarget"/>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:group ref="TextLong"/>
+          <xs:element ref="ibid"/>
+          <xs:element ref="title"/>
+          <xs:element ref="year"/>
+          <xs:element ref="journal"/>
+          <xs:element ref="number"/>
+          <xs:element ref="volume"/>
+          <xs:group ref="BibNote"/>
+        </xs:choice>
+      </xs:sequence>
+      <xs:attributeGroup ref="MetaDataTarget"/>
       <xs:attribute name="type">
         <xs:simpleType>
           <xs:restriction base="xs:token">
@@ -2101,6 +2117,9 @@
   <xs:attributeGroup name="UniqueID">
     <xs:attribute ref="xml:id" use="required"/>
   </xs:attributeGroup>
+  <xs:attributeGroup name="PermanentID">
+    <xs:attribute name="permid" use="required"/>
+  </xs:attributeGroup>
   <xs:element name="subtitle">
     <xs:complexType mixed="true">
       <xs:group ref="TextLong"/>
@@ -2124,6 +2143,7 @@
   </xs:group>
   <xs:attributeGroup name="MetaDataTarget">
     <xs:attribute ref="xml:id"/>
+    <xs:attribute name="permid"/>
   </xs:attributeGroup>
   <xs:complexType name="MetaDataTitle">
     <xs:sequence>
@@ -2131,6 +2151,7 @@
       <xs:element minOccurs="0" maxOccurs="unbounded" ref="idx"/>
     </xs:sequence>
     <xs:attribute ref="xml:id"/>
+    <xs:attribute name="permid"/>
     <xs:attribute ref="xml:base"/>
     <xs:attribute ref="xml:lang"/>
   </xs:complexType>
@@ -2141,6 +2162,7 @@
       <xs:element minOccurs="0" maxOccurs="unbounded" ref="idx"/>
     </xs:sequence>
     <xs:attribute ref="xml:id"/>
+    <xs:attribute name="permid"/>
     <xs:attribute ref="xml:base"/>
     <xs:attribute ref="xml:lang"/>
   </xs:complexType>
@@ -2152,6 +2174,7 @@
   </xs:group>
   <xs:attributeGroup name="MetaDataTitleOptional">
     <xs:attribute ref="xml:id"/>
+    <xs:attribute name="permid"/>
     <xs:attribute ref="xml:base"/>
     <xs:attribute ref="xml:lang"/>
   </xs:attributeGroup>
@@ -2162,6 +2185,7 @@
       <xs:element minOccurs="0" maxOccurs="unbounded" ref="idx"/>
     </xs:sequence>
     <xs:attribute ref="xml:id"/>
+    <xs:attribute name="permid"/>
     <xs:attribute ref="xml:base"/>
     <xs:attribute ref="xml:lang"/>
   </xs:complexType>
@@ -2172,6 +2196,7 @@
       <xs:element minOccurs="0" maxOccurs="unbounded" ref="idx"/>
     </xs:sequence>
     <xs:attribute ref="xml:id"/>
+    <xs:attribute name="permid"/>
     <xs:attribute ref="xml:base"/>
     <xs:attribute ref="xml:lang"/>
   </xs:complexType>
@@ -2201,6 +2226,7 @@
         <xs:complexType mixed="true">
           <xs:group ref="TextParagraph"/>
           <xs:attribute ref="xml:id"/>
+          <xs:attribute name="permid"/>
         </xs:complexType>
       </xs:element>
     </xs:sequence>
@@ -2217,6 +2243,7 @@
             </xs:element>
           </xs:sequence>
           <xs:attribute ref="xml:id"/>
+          <xs:attribute name="permid"/>
         </xs:complexType>
       </xs:element>
     </xs:sequence>

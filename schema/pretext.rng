@@ -520,9 +520,7 @@
   </define>
   <define name="ColophonFront">
     <element name="colophon">
-      <optional>
-        <ref name="UniqueID"/>
-      </optional>
+      <ref name="MetaDataTarget"/>
       <zeroOrMore>
         <element name="credit">
           <element name="role">
@@ -683,9 +681,7 @@
   </define>
   <define name="ColophonBack">
     <element name="colophon">
-      <optional>
-        <ref name="UniqueID"/>
-      </optional>
+      <ref name="MetaDataTarget"/>
       <oneOrMore>
         <choice>
           <ref name="BlockText"/>
@@ -1006,6 +1002,9 @@
   </define>
   <define name="Console">
     <element name="console">
+      <optional>
+        <ref name="PermanentID"/>
+      </optional>
       <oneOrMore>
         <optional>
           <element name="prompt">
@@ -1028,7 +1027,7 @@
   <define name="Program">
     <element name="program">
       <optional>
-        <ref name="UniqueID"/>
+        <ref name="PermanentID"/>
       </optional>
       <optional>
         <attribute name="language"/>
@@ -1046,6 +1045,9 @@
   <define name="List">
     <choice>
       <element name="ol">
+        <optional>
+          <ref name="PermanentID"/>
+        </optional>
         <optional>
           <attribute name="cols">
             <choice>
@@ -1074,6 +1076,9 @@
       </element>
       <element name="ul">
         <optional>
+          <ref name="PermanentID"/>
+        </optional>
+        <optional>
           <attribute name="cols">
             <choice>
               <value>2</value>
@@ -1096,6 +1101,9 @@
         </optional>
         <oneOrMore>
           <element name="li">
+            <optional>
+              <ref name="PermanentID"/>
+            </optional>
             <choice>
               <ref name="TextParagraph"/>
               <oneOrMore>
@@ -1106,6 +1114,9 @@
         </oneOrMore>
       </element>
       <element name="dl">
+        <optional>
+          <ref name="PermanentID"/>
+        </optional>
         <optional>
           <attribute name="width">
             <choice>
@@ -1486,6 +1497,9 @@
   </define>
   <define name="SidebySideAttributes">
     <optional>
+      <ref name="PermanentID"/>
+    </optional>
+    <optional>
       <attribute name="margins"/>
     </optional>
     <optional>
@@ -1566,7 +1580,7 @@
   <define name="ImageRaster">
     <element name="image">
       <optional>
-        <ref name="UniqueID"/>
+        <ref name="PermanentID"/>
       </optional>
       <optional>
         <attribute name="width"/>
@@ -1586,6 +1600,9 @@
     <element name="image">
       <optional>
         <ref name="UniqueID"/>
+      </optional>
+      <optional>
+        <ref name="PermanentID"/>
       </optional>
       <optional>
         <attribute name="width"/>
@@ -1738,6 +1755,9 @@
   <define name="Tabular">
     <element name="tabular">
       <optional>
+        <ref name="PermanentID"/>
+      </optional>
+      <optional>
         <ref name="AlignmentHorizontal"/>
       </optional>
       <optional>
@@ -1766,7 +1786,7 @@
   <define name="Sage">
     <element name="sage">
       <optional>
-        <ref name="UniqueID"/>
+        <ref name="PermanentID"/>
       </optional>
       <optional>
         <attribute name="doctest"/>
@@ -1802,6 +1822,9 @@
     <element name="video">
       <optional>
         <ref name="UniqueID"/>
+      </optional>
+      <optional>
+        <ref name="PermanentID"/>
       </optional>
       <optional>
         <attribute name="width"/>
@@ -1994,9 +2017,7 @@
   </define>
   <define name="BibliographyItem">
     <element name="biblio">
-      <optional>
-        <ref name="UniqueID"/>
-      </optional>
+      <ref name="MetaDataTarget"/>
       <optional>
         <attribute name="type">
           <value>raw</value>
@@ -2287,6 +2308,9 @@
   <define name="UniqueID">
     <attribute name="xml:id"/>
   </define>
+  <define name="PermanentID">
+    <attribute name="permid"/>
+  </define>
   <define name="Title">
     <element name="title">
       <ref name="TextLong"/>
@@ -2312,6 +2336,9 @@
     <optional>
       <ref name="UniqueID"/>
     </optional>
+    <optional>
+      <ref name="PermanentID"/>
+    </optional>
     <zeroOrMore>
       <ref name="Index"/>
     </zeroOrMore>
@@ -2319,6 +2346,9 @@
   <define name="MetaDataTitle">
     <optional>
       <ref name="UniqueID"/>
+    </optional>
+    <optional>
+      <ref name="PermanentID"/>
     </optional>
     <optional>
       <ref name="XMLBase"/>
@@ -2334,6 +2364,9 @@
   <define name="MetaDataSubtitle">
     <optional>
       <ref name="UniqueID"/>
+    </optional>
+    <optional>
+      <ref name="PermanentID"/>
     </optional>
     <optional>
       <ref name="XMLBase"/>
@@ -2354,6 +2387,9 @@
       <ref name="UniqueID"/>
     </optional>
     <optional>
+      <ref name="PermanentID"/>
+    </optional>
+    <optional>
       <ref name="XMLBase"/>
     </optional>
     <optional>
@@ -2369,6 +2405,9 @@
   <define name="MetaDataTitleCreatorOptional">
     <optional>
       <ref name="UniqueID"/>
+    </optional>
+    <optional>
+      <ref name="PermanentID"/>
     </optional>
     <optional>
       <ref name="XMLBase"/>
@@ -2389,6 +2428,9 @@
   <define name="MetaDataCaption">
     <optional>
       <ref name="UniqueID"/>
+    </optional>
+    <optional>
+      <ref name="PermanentID"/>
     </optional>
     <optional>
       <ref name="XMLBase"/>
@@ -2431,6 +2473,9 @@
       <optional>
         <ref name="UniqueID"/>
       </optional>
+      <optional>
+        <ref name="PermanentID"/>
+      </optional>
       <ref name="TextParagraph"/>
     </element>
   </define>
@@ -2438,6 +2483,9 @@
     <element name="p">
       <optional>
         <ref name="UniqueID"/>
+      </optional>
+      <optional>
+        <ref name="PermanentID"/>
       </optional>
       <oneOrMore>
         <element name="line">
