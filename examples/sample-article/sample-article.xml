@@ -8185,7 +8185,7 @@ the xsltproc executable.
             <appendix>
                 <title>A Structured Appendix</title>
                 <introduction><p>A deeply-structured appendix for testing purposes.</p></introduction>
-                <section>
+                <subsection>
                     <title>A Subsection in an Appendix</title>
                     <introduction><p>Inside a subsection.</p></introduction>
                     <subsubsection>
@@ -8196,7 +8196,7 @@ the xsltproc executable.
                             <p>The <c>paragraphs</c> element can go in any division, but does not get a number.</p>
                         </paragraphs>
                     </subsubsection>
-                </section>
+                </subsection>
             </appendix>
 
             <appendix>
