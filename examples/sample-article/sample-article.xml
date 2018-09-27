@@ -423,7 +423,7 @@ the xsltproc executable.
 
             <p>Sage can compute definite integrals.  The output contains the approximate numerical value of the definite integral, followed by an upper bound  of the error in the approximation.</p>
 
-            <sage xml:id="sage-numerical-integral">
+            <sage>
                 <input>numerical_integral(sin(x)^2, (0, 2))</input>
                 <!-- need to use wildcard matching to make this doctestable -->
                 <output>(1.189200623826982, 1.320277913471315e-14)</output>
@@ -7306,8 +7306,8 @@ the xsltproc executable.
             <worksheet>
               <title>A Geometric Prelude</title>
               <!-- <author>Dave Rosoff</author> -->
-              <objectives>
-                <ul xml:id="objectives">
+              <objectives xml:id="objectives">
+                <ul>
                   <li>Practice visualizing vector addition</li>
                   <li>Use vectors without explicit coordinates</li>
                 </ul>
