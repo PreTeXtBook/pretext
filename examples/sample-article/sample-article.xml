@@ -8183,6 +8183,23 @@ the xsltproc executable.
             </appendix>
 
             <appendix>
+                <title>A Structured Appendix</title>
+                <introduction><p>A deeply-structured appendix for testing purposes.</p></introduction>
+                <section>
+                    <title>A Subsection in an Appendix</title>
+                    <introduction><p>Inside a subsection.</p></introduction>
+                    <subsubsection>
+                        <title>A Subsubsection in a Subsection in an Appendix</title>
+                        <p>Nearly terminal.</p>
+                        <paragraphs>
+                            <title>Paragraphs in a Subsubsection in a Subsection in an Appendix</title>
+                            <p>The <c>paragraphs</c> element can go in any division, but does not get a number.</p>
+                        </paragraphs>
+                    </subsubsection>
+                </section>
+            </appendix>
+
+            <appendix>
                 <title>Index</title>
 
                 <p>There is an index manufactured at the end of the back matter.  So we are talking about it here, rather than within the index, which is an impossibility.  It contains some sample entries, and is not meant to be comprehensive.  Look at the source of this XML file, searching on <c>&lt;idx&gt;</c>, to see how they are written.  They may be placed inside of a a variety of structures, and their location greatly influences the cross-references produced in the HTML version of the index.</p>
