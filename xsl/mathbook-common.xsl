@@ -8928,6 +8928,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'the transitional  html.js.server  parameter has been removed'" />
             <xsl:with-param name="incorrect-use" select="($html.js.server != '')" />
     </xsl:call-template>
+    <!--  -->
+    <!-- 2018-09-26  appendix subdivision confusion resolved -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$root/article/backmatter/appendix/section" />
+        <xsl:with-param name="date-string" select="'2018-09-26'" />
+        <xsl:with-param name="message" select="'the first division of an &quot;appendix&quot; of an &quot;article&quot;should be a &quot;subsection&quot;'" />
+    </xsl:call-template>
 </xsl:template>
 
 <!-- Miscellaneous -->
