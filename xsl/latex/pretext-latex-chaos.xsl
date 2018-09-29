@@ -166,15 +166,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- See titleps.pdf in the "titlesec" package for more             -->
 <xsl:template match="book|article|letter|memo" mode="titleps-empty">
     <xsl:text>{
-    \setfoot[foot/odd/empty][][]
-    {foot/even or one-sided/empty}{}{}
+    \setfoot[foot/even/empty][][]
+    {foot/odd or one-sided/empty}{}{}
     }</xsl:text>
 </xsl:template>
 
 <xsl:template match="book|article|letter|memo" mode="titleps-plain">
     <xsl:text>{
-    \setfoot[foot/odd/plain][\thepage][]
-    {foot/even or one-sided/plain}{\thepage}{}
+    \setfoot[foot/even/plain][\thepage][]
+    {foot/odd or one-sided/plain}{\thepage}{}
     }</xsl:text>
 </xsl:template>
 
@@ -186,9 +186,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     [\toptitlemarks\thesection--\bottitlemarks\thesection]
     {\toptitlemarks\thesection--\bottitlemarks\thesection]}
     {\textsl{\sectiontitle}}
-    {\textbf{\thepage}}}
-    \setfoot[foot/odd/headings/book][][]
-    {foot/even or one-sided/headings/book}{}{}</xsl:text>
+    {\textbf{\thepage}}
+    \setfoot[foot/even/headings/book][][]
+    {foot/odd or one-sided/headings/book}{}{}
+    }</xsl:text>
 </xsl:template>
 
 <xsl:template match="article|letter|memo" mode="titleps-headings">
@@ -196,8 +197,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     \headrule
     \sethead[\thepage][\sectiontitle][]
     {}{\sectiontitle}{\thepage}
-    \setfoot[foot/odd/headings/article][][]
-    {foot/even or one-sided/headings/article}{}{}
+    \setfoot[foot/even/headings/article][][]
+    {foot/odd or one-sided/headings/article}{}{}
     }</xsl:text>
 </xsl:template>
 
