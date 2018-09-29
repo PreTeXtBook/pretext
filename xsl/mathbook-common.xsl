@@ -2848,7 +2848,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A "part" must have chapters, so will always return      -->
 <!-- 'true' and for a 'subsubsection' there are no more      -->
 <!-- subdivisions to employ and so will return empty.        -->
-<xsl:template match="part|chapter|section|subsection|subsubsection" mode="is-structured-division">
+<xsl:template match="book|article|part|chapter|section|subsection|subsubsection" mode="is-structured-division">
     <xsl:if test="chapter|section|subsection|subsubsection">
         <xsl:text>true</xsl:text>
     </xsl:if>
