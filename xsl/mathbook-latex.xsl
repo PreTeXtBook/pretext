@@ -2093,13 +2093,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- "paragraphs" -->
-<!-- Body:  \begin{paragraphs}{title}{label}  -->
+<!-- Body:  \begin{paragraphs}{title}{label}   -->
+<!-- No styling options for now, no ToC        -->
+<!-- Once a tcolorbox, see warnings as part of -->
+<!-- divisional introductions and conclusions  -->
 <xsl:template match="paragraphs" mode="environment">
     <xsl:text>%% paragraphs: the terminal, pseudo-division&#xa;</xsl:text>
-    <xsl:text>\tcbset{ paragraphsstyle/.style={</xsl:text>
-    <xsl:apply-templates select="." mode="tcb-style" />
-    <xsl:text>} }&#xa;</xsl:text>
-    <xsl:text>\newtcolorbox{paragraphs}[2]{title={#1}, phantom={\hypertarget{#2}{}}, breakable, paragraphsstyle}&#xa;</xsl:text>
+    <xsl:text>%% We use the lowest LaTeX traditional division&#xa;</xsl:text>
+    <xsl:text>\NewDocumentEnvironment{paragraphs}{mm}&#xa;</xsl:text>
+    <xsl:text>{\subparagraph*{#1}\hypertarget{#2}{}}{}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- ASIDE-LIKE: "aside", "historical", "biographical" -->
@@ -2327,12 +2329,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- back "colophon" -->
 <xsl:template match="backmatter/colophon" mode="tcb-style">
     <xsl:text>size=minimal, before skip=5ex, left skip=0.15\textwidth, right skip=0.15\textwidth, boxrule=-0.3pt, frame empty, colback=white, colbacktitle=white, coltitle=black, fonttitle=\large\bfseries, center title, halign=center, bottomtitle=2ex</xsl:text>
-</xsl:template>
-
-<!-- "paragraphs" -->
-<!-- Run-in title, mandatory -->
-<xsl:template match="paragraphs" mode="tcb-style">
-    <xsl:text>size=minimal, before skip=3ex, boxrule=-0.3pt, frame empty, colback=white, colbacktitle=white, coltitle=black, fonttitle=\normalfont\bfseries, attach title to upper, after title={\space}</xsl:text>
 </xsl:template>
 
 <!-- THEOREM-LIKE: "theorem", "corollary", "lemma",    -->
