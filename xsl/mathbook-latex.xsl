@@ -933,7 +933,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         ($root/article/conclusion|$document-root//chapter/conclusion|$document-root//section/conclusion|$document-root//subsection/conclusion|$document-root//appendix/conclusion|$document-root//exercises/conclusion|$document-root//solutions/conclusion|$document-root//worksheet/conclusion|$document-root//references/conclusion)[1]"/>
     <xsl:if test="$introduction-reps">
         <xsl:text>%%&#xa;</xsl:text>
-        <xsl:text>%% tcolorbox, with styles, for introductions and conclusions of divisions&#xa;</xsl:text>
+        <xsl:text>%% xparse environments for introductions and conclusions of divisions&#xa;</xsl:text>
         <xsl:text>%%&#xa;</xsl:text>
     </xsl:if>
     <xsl:for-each select="$introduction-reps">
@@ -1992,9 +1992,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- with standalone use or debugging.  Preface with "%% ". -->
 
 <!-- "introduction", "conclusion" -->
-<!-- Body:  \begin{outcomes}{m:title}        -->
-<!-- Divisional, want to obsolete title soon -->
+<!-- Body:  \begin{outcomes}{title}              -->
+<!-- Divisional, want to obsolete title soon     -->
+<!-- Simple, w/ temporary run-in title, no label -->
 <!-- (so don't merge with other titled environments) -->
+
+<!-- NB: Once upon a time, this was a breakable tcolorbox.  But then if   -->
+<!-- the contents were too complicated, then a breakable tcolorbox might  -->
+<!-- be contained (like a theorem, say).  That interior breakable         -->
+<!-- tcolorbox would *automatically* be made unbreakable, and the result  -->
+<!-- was really bad page breaks, or worse, the potential for the interior -->
+<!-- box dribbling off the bottom of the page.                            -->
 <xsl:template match="introduction|conclusion" mode="environment">
     <xsl:variable name="environment-name">
         <xsl:value-of select="local-name(.)"/>
@@ -2002,16 +2010,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% </xsl:text>
     <xsl:value-of select="$environment-name"/>
     <xsl:text>: in a structured division&#xa;</xsl:text>
-    <xsl:text>\tcbset{ </xsl:text>
+    <xsl:text>\NewDocumentEnvironment{</xsl:text>
     <xsl:value-of select="$environment-name"/>
-    <xsl:text>style/.style={</xsl:text>
-    <xsl:apply-templates select="." mode="tcb-style" />
-    <xsl:text>} }&#xa;</xsl:text>
-    <xsl:text>\newtcolorbox{</xsl:text>
-    <xsl:value-of select="$environment-name"/>
-    <xsl:text>}[1]{title={\notblank{#1}{#1\space}{}}, breakable, </xsl:text>
-    <xsl:value-of select="$environment-name"/>
-    <xsl:text>style}&#xa;</xsl:text>
+    <xsl:text>}{m}&#xa;</xsl:text>
+    <xsl:choose>
+        <xsl:when test="self::introduction">
+            <xsl:text>{\notblank{#1}{\noindent\textbf{#1}\space}{}}</xsl:text>
+        </xsl:when>
+        <xsl:when test="self::conclusion">
+            <xsl:text>{\par\bigskip\notblank{#1}{\noindent\textbf{#1}\space}{}}</xsl:text>
+        </xsl:when>
+    </xsl:choose>
+    <xsl:text>{}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- "commentary" -->
