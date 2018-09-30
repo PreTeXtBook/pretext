@@ -995,7 +995,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- solutions to inline exercises -->
         <xsl:if test="$document-root//exercise[not(ancestor::exercises or ancestor::worksheet)]">
         <xsl:text>%% Solutions to inline exercises, style and environment&#xa;</xsl:text>
-            <xsl:text>\tcbset{ inlineexercisesolutionstyle/.style={size=minimal, boxrule=-0.3pt, frame empty, colback=white, colbacktitle=white, coltitle=black, fonttitle=\normalfont\bfseries, attach title to upper, after title={\space}, } }&#xa;</xsl:text>
+            <xsl:text>\tcbset{ inlineexercisesolutionstyle/.style={size=minimal, boxrule=-0.3pt, frame empty, colback=white, colbacktitle=white, coltitle=black, fonttitle=\normalfont\bfseries, attach title to upper, after title={\space}, breakable } }&#xa;</xsl:text>
             <xsl:text>\newtcolorbox{inlineexercisesolution}[2]</xsl:text>
             <xsl:text>{inlineexercisesolutionstyle, title={</xsl:text>
             <!-- Hardcode "name" of an inline exercise in the environment -->
@@ -1007,7 +1007,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- solutions to division exercises -->
         <xsl:if test="$document-root//exercises//exercise|$document-root//worksheet//exercise">
         <xsl:text>%% Solutions to division exercises, style and environment&#xa;</xsl:text>
-            <xsl:text>\tcbset{ divisionexercisesolutionstyle/.style={size=minimal, boxrule=-0.3pt, frame empty, colback=white, colbacktitle=white, coltitle=black, fonttitle=\normalfont\bfseries, attach title to upper, after title={\space}, } }&#xa;</xsl:text>
+            <xsl:text>\tcbset{ divisionexercisesolutionstyle/.style={size=minimal, boxrule=-0.3pt, frame empty, colback=white, colbacktitle=white, coltitle=black, fonttitle=\normalfont\bfseries, attach title to upper, after title={\space}, breakable } }&#xa;</xsl:text>
             <xsl:text>\newtcolorbox{divisionexercisesolution}[2]</xsl:text>
             <xsl:text>{divisionexercisesolutionstyle, title={#1.\notblank{#2}{\space#2}{}}}&#xa;</xsl:text>
         </xsl:if>
@@ -1022,7 +1022,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- set the style -->
             <xsl:text>\tcbset{ </xsl:text>
             <xsl:value-of select="$elt-name"/>
-            <xsl:text>solutionstyle/.style={size=minimal, boxrule=-0.3pt, frame empty, colback=white, colbacktitle=white, coltitle=black, fonttitle=\normalfont\bfseries, attach title to upper, after title={\space}, } }&#xa;</xsl:text>
+            <xsl:text>solutionstyle/.style={size=minimal, boxrule=-0.3pt, frame empty, colback=white, colbacktitle=white, coltitle=black, fonttitle=\normalfont\bfseries, attach title to upper, after title={\space}, breakable } }&#xa;</xsl:text>
             <!-- create the environment -->
             <xsl:text>\newtcolorbox{</xsl:text>
             <xsl:value-of select="$elt-name"/>
@@ -1043,7 +1043,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Always full-width, use in a side-by-side will constrain that&#xa;</xsl:text>
         <xsl:text>%% Hanging indent occupies a 5ex width slot prior to left margin&#xa;</xsl:text>
         <xsl:text>%% Experimentally this seems just barely sufficient for a bold "888."&#xa;</xsl:text>
-        <xsl:text>\tcbset{ divisionexercisestyle/.style={size=minimal, boxrule=-0.3pt, frame empty, colback=white, colbacktitle=white, coltitle=black, fonttitle=\normalfont\bfseries, attach title to upper, left=5ex } }&#xa;</xsl:text>
+        <xsl:text>\tcbset{ divisionexercisestyle/.style={size=minimal, boxrule=-0.3pt, frame empty, colback=white, colbacktitle=white, coltitle=black, fonttitle=\normalfont\bfseries, attach title to upper, left=5ex, breakable } }&#xa;</xsl:text>
         <xsl:text>\newtcolorbox{divisionexercise}[4]</xsl:text>
         <xsl:text>{divisionexercisestyle, before title={\hspace{-5ex}\makebox[5ex][l]{#1.}}, title={\notblank{#2}{#2\space}{}}, phantom={\hypertarget{#4}{}}, after={\notblank{#3}{\newline\rule{\workspacestrutwidth}{#3\textheight}\newline}{}}}&#xa;</xsl:text>
     </xsl:if>
