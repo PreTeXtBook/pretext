@@ -554,10 +554,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:text>%%&#xa;</xsl:text>
     <xsl:text>%% Division Titles, and Page Headers/Footers&#xa;</xsl:text>
-    <!-- "explicit" is necessary to keep title implicitly following  -->
-    <!-- "before-code". "pagestyles" option is equivalent to loading -->
-    <!-- the "titleps" package and have it execute cooperatively     -->
-    <xsl:text>%% titlesec package, with titleps package&#xa;</xsl:text>
+    <!-- The final mandatory argument of the titlesec \titleformat  -->
+    <!-- command is the "before-code", meaning before the text of   -->
+    <!-- the title.  For greater flexibility, the text of the title -->
+    <!-- can be referenced *explicitly* by macro parameter #1 in    -->
+    <!-- whatever code is placed into this argument.  This is       -->
+    <!-- accomplished with the "explicit" argument.                 -->
+    <!-- In particular, the numberless, chapter-level "Index" and   -->
+    <!-- "Contents" are generated semi-automatically with a macro,  -->
+    <!-- so PTX never sees the title (but can use built-in LaTeX    -->
+    <!-- facilities to change it to another language)               -->
+    <!-- "pagestyles" option is equivalent to loading the           -->
+    <!-- "titleps" package and have it execute cooperatively        -->
+    <xsl:text>%% titlesec package, loading "titleps" package cooperatively&#xa;</xsl:text>
+    <xsl:text>%% See code comments about the necessity and purpose of "explicit" option&#xa;</xsl:text>
     <xsl:text>\usepackage[explicit, pagestyles]{titlesec}&#xa;</xsl:text>
     <xsl:variable name="empty-pagestyle">
         <xsl:apply-templates select="$document-root" mode="titleps-empty"/>
@@ -599,6 +609,72 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}&#xa;</xsl:text>
     <!--  -->
     <xsl:text>%%&#xa;</xsl:text>
+    <!--  -->
+    <xsl:text>%% Create globally-available macros to be provided for style writers&#xa;</xsl:text>
+    <xsl:text>%% These are redefined for each occurence of each division&#xa;</xsl:text>
+    <xsl:text>\newcommand{\divisionnameptx}{\relax}%&#xa;</xsl:text>
+    <xsl:text>\newcommand{\titleptx}{\relax}%&#xa;</xsl:text>
+    <xsl:text>\newcommand{\subtitleptx}{\relax}%&#xa;</xsl:text>
+    <xsl:text>\newcommand{\shortitleptx}{\relax}%&#xa;</xsl:text>
+    <xsl:text>\newcommand{\authorsptx}{\relax}%&#xa;</xsl:text>
+    <xsl:text>\newcommand{\epigraphptx}{\relax}%&#xa;</xsl:text>
+    <!-- Create xparse enviroments for each PTX division.          -->
+    <!-- The pervasive environments need qualification so          -->
+    <!-- that the right LaTeX divisions are created.               -->
+    <!-- These look like environments like "solutions-subsection"  -->
+    <!-- We want one (and only one) of each type that is necessary -->
+    <!-- For each line below think CAREFULLY about the level       -->
+    <!-- created, it is one level below what it might appear       -->
+    <xsl:variable name="division-reps" select="
+        ($document-root//acknowledgement)[1]|
+        ($document-root//foreword)[1]|
+        ($document-root//preface)[1]|
+        ($document-root//part)[1]|
+        ($document-root//chapter)[1]|
+        ($document-root//section)[1]|
+        ($document-root//subsection)[1]|
+        ($document-root//subsubsection)[1]|
+        ($document-root//subsubsection)[1]|
+        ($root/book/backmatter/appendix|$root/article/backmatter/appendix)[1]|
+        ($document-root//index)[1]|
+        ($document-root//chapter/exercises|$root/article/exercises)[1]|
+        ($document-root//section/exercises)[1]|
+        ($document-root//subsection/exercises)[1]|
+        ($document-root//subsubsection/exercises)[1]|
+        ($root/book/backmatter/solutions)[1]|
+        ($document-root//chapter/solutions|$root/article/backmatter/solutions)[1]|
+        ($document-root//section/solutions)[1]|
+        ($document-root//subsection/solutions)[1]|
+        ($document-root//subsubsection/solutions)[1]|
+        ($document-root//chapter/worksheet|$root/article/worksheet)[1]|
+        ($document-root//section/worksheet)[1]|
+        ($document-root//subsection/worksheet)[1]|
+        ($document-root//subsubsection/worksheet)[1]|
+        ($root/book/backmatter/references)[1]|
+        ($document-root//chapter/references|$root/article/backmatter/references)[1]|
+        ($document-root//section/references)[1]|
+        ($document-root//subsection/references)[1]|
+        ($document-root//subsubsection/references)[1]"/>
+    <xsl:text>%% Create environments for possible occurences of each division&#xa;</xsl:text>
+    <xsl:for-each select="$division-reps">
+        <xsl:apply-templates select="." mode="environment"/>
+    </xsl:for-each>
+    <xsl:text>%%&#xa;</xsl:text>
+    <xsl:text>%% Styles for the traditional LaTeX divisions&#xa;</xsl:text>
+    <!-- Create five title styles, part to subsubsection -->
+    <!-- "titlesec" works on a level basis,              -->
+    <!-- so we just build all five named styles          -->
+    <!-- A specialized division of a subsubsection would -->
+    <!-- require a "paragraph" style.  We are using the  -->
+    <!-- LaTeX "subparagraph" traditional division for a -->
+    <!-- PTX "paragraphs", but perhaps we can fake that, -->
+    <!-- since we don't allow it to be styled.           -->
+    <xsl:call-template name="titlesec-part-style"/>
+    <xsl:call-template name="titlesec-chapter-style"/>
+    <xsl:call-template name="titlesec-section-style"/>
+    <xsl:call-template name="titlesec-subsection-style"/>
+    <xsl:call-template name="titlesec-subsubsection-style"/>
+    <xsl:text>%%&#xa;</xsl:text>
     <xsl:text>%% Semantic Macros&#xa;</xsl:text>
     <xsl:text>%% To preserve meaning in a LaTeX file&#xa;</xsl:text>
     <xsl:text>%% Only defined here if required in this document&#xa;</xsl:text>
@@ -618,33 +694,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$document-root//term">
         <xsl:text>%% Used for inline definitions of terms&#xa;</xsl:text>
         <xsl:text>\newcommand{\terminology}[1]{\textbf{#1}}&#xa;</xsl:text>
-    </xsl:if>
-    <!-- Macros for formatting per-division authors                -->
-    <!-- Large, large, normalsize, small tested for top two levels -->
-    <!-- \protect needed for xrefs converted to hyperlinks         -->
-    <!-- TODO: to get better spacing will require re-defining headings -->
-    <!-- TODO: \divisionauthors{div-name}{names}? -->
-    <xsl:if test="$document-root//chapter/author">
-        <xsl:text>\newcommand{\chapterauthors}[1]{\noindent{\Large\textbf{\protect#1}}\par\bigskip}&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:if test="$document-root//section/author">
-        <xsl:text>\newcommand{\sectionauthors}[1]{\noindent{\large\textbf{\protect#1}}\par\bigskip}&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:if test="$document-root//subsection/author">
-        <xsl:text>\newcommand{\subsectionauthors}[1]{\noindent{\normalsize\textbf{\protect#1}}\par\bigskip}&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:if test="$document-root//subsubsection/author">
-        <xsl:text>\newcommand{\subsubsectionauthors}[1]{\noindent{\small\textbf{\protect#1}}\par\bigskip}&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:if test="$document-root//appendix/author">
-        <xsl:choose>
-            <xsl:when test="$b-is-book">
-                <xsl:text>\newcommand{\appendixauthors}[1]{\noindent{\Large\textbf{\protect#1}}\par\bigskip}&#xa;</xsl:text>
-            </xsl:when>
-            <xsl:when test="$b-is-article">
-                <xsl:text>\newcommand{\appendixauthors}[1]{\noindent{\large\textbf{\protect#1}}\par\bigskip}&#xa;</xsl:text>
-            </xsl:when>
-        </xsl:choose>
     </xsl:if>
     <!-- http://tex.stackexchange.com/questions/23711/strikethrough-text -->
     <!-- http://tex.stackexchange.com/questions/287599/thickness-for-sout-strikethrough-command-from-ulem-package -->
@@ -1991,6 +2040,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Provide some comments for the LaTeX source, to aid     -->
 <!-- with standalone use or debugging.  Preface with "%% ". -->
 
+<!-- We have lots of divisions, some traditional (chapters),      -->
+<!-- some one-off (preface), some pervasive (exercises).  Many    -->
+<!-- are always numbered (chapters), some are never numbered      -->
+<!-- (prefaces), some go both ways (exercises).  All get their    -->
+<!-- own environments, with two for the numbered/unnumbered.      -->
+<!-- Traditional need a suffix 'ptx' to distinguish from the      -->
+<!-- built-in LaTeX names, one-off get their own natural name,    -->
+<!-- and pervasive get a suffix that indicates their level.       -->
+<!--                                                              -->
+<!-- These environments will be defined using the LaTeX macros    -->
+<!-- which correspond to the traditional names, so as to leverage -->
+<!-- LaTeX numbering, titlesec styling, and migration of titles   -->
+<!-- to running heads via the cooperating titleps package.  But   -->
+<!-- the environments will also be enhanced through the titlesec  -->
+<!-- package to allow the seamless addition of authors and        -->
+<!-- epigraphs, in addition to actual styling.                    -->
+
 <!-- "introduction", "conclusion" -->
 <!-- Body:  \begin{outcomes}{title}              -->
 <!-- Divisional, want to obsolete title soon     -->
@@ -2022,6 +2088,103 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
     </xsl:choose>
     <xsl:text>{}&#xa;</xsl:text>
+</xsl:template>
+
+<!-- A division has a PTX name via local-name() and a corresponding -->
+<!-- LaTeX traditional division via the "division-name" template.   -->
+<!-- The following templates build the names of the environments,   -->
+<!-- so we can build and employ them consistently.                  -->
+
+<!-- Traditional -->
+<!-- Add suffix to avoid clashes (NB: \appendix, \index exists) -->
+<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|index" mode="division-environment-name">
+    <xsl:value-of select="local-name(.)"/>
+    <xsl:text>ptx</xsl:text>
+</xsl:template>
+
+<!-- One-Off -->
+<!-- Free here to use the PTX name, without clashing with LaTeX -->
+<xsl:template match="acknowledgement|foreword|preface" mode="division-environment-name">
+    <xsl:value-of select="local-name(.)"/>
+</xsl:template>
+
+<!-- Pervasive -->
+<!-- Product of PTX name with LaTeX level/division -->
+<xsl:template match="exercises|solutions|worksheet|references" mode="division-environment-name">
+    <xsl:value-of select="local-name(.)"/>
+    <xsl:text>-</xsl:text>
+    <xsl:apply-templates select="." mode="division-name"/>
+</xsl:template>
+
+<xsl:template match="*" mode="division-environment-name">
+    <xsl:message>NO DIVISION ENVIRONMENT NAME for <xsl:value-of select="local-name(.)"/></xsl:message>
+</xsl:template>
+
+
+<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|acknowledgement|foreword|preface|index|exercises|solutions|worksheet|references" mode="environment">
+    <!-- for specialized divisions we always make a numbered -->
+    <!-- and unnumbered version, with the latter happening   -->
+    <!-- on a second trip through the template               -->
+    <xsl:param name="second-trip" select="false()"/>
+
+    <xsl:variable name="elt-name" select="local-name(.)"/>
+    <!-- the (traditional) LaTex name of this division -->
+    <xsl:variable name="div-name">
+        <xsl:apply-templates select="." mode="division-name"/>
+    </xsl:variable>
+    <!-- explanatory string in preamble -->
+    <xsl:text>%% Environment for a PTX "</xsl:text>
+    <xsl:value-of select="$elt-name"/>
+    <xsl:text>" at the level of a LaTeX "</xsl:text>
+    <xsl:value-of select="$div-name"/>
+    <xsl:text>"&#xa;</xsl:text>
+    <!-- Define implementation of a 5-argument environment          -->
+    <!-- Template ensures consistency of definition and application -->
+    <xsl:text>\NewDocumentEnvironment{</xsl:text>
+    <xsl:apply-templates select="." mode="division-environment-name"/>
+    <!-- second trip through for a specialized -->
+    <!-- division, build unnumbered version    -->
+    <xsl:if test="$second-trip">
+        <xsl:text>-numberless</xsl:text>
+    </xsl:if>
+    <xsl:text>}{mmmmm}&#xa;</xsl:text>
+    <xsl:text>{%&#xa;</xsl:text>
+    <!-- load 6 macros with values, for style writer use -->
+    <xsl:text>\renewcommand{\divisionnameptx}{</xsl:text>
+    <xsl:apply-templates select="." mode="type-name"/>
+    <xsl:text>}%&#xa;</xsl:text>
+    <xsl:text>\renewcommand{\titleptx}{#1}%&#xa;</xsl:text>
+    <xsl:text>\renewcommand{\subtitleptx}{#2}%&#xa;</xsl:text>
+    <xsl:text>\renewcommand{\shortitleptx}{#3}%&#xa;</xsl:text>
+    <xsl:text>\renewcommand{\authorsptx}{#4}%&#xa;</xsl:text>
+    <xsl:text>\renewcommand{\epigraphptx}{#5}%&#xa;</xsl:text>
+    <!-- invoke the right LaTeX division, causes title format -->
+    <!-- and spacing, along with setting running heads        -->
+    <xsl:text>\</xsl:text>
+    <xsl:value-of select="$div-name"/>
+    <xsl:choose>
+        <!-- Second trip through, building unnumbered version -->
+        <!-- OR                                               -->
+        <!-- Never numbered, always build a starred form      -->
+        <!-- and manually add short version to ToC            -->
+        <xsl:when test="$second-trip or boolean(self::acknowledgement|self::foreword|self::preface|self::index)">
+            <xsl:text>*</xsl:text>
+            <xsl:text>{#1}%&#xa;</xsl:text>
+            <xsl:text>\addcontentsline{toc}{chapter}{#3}&#xa;</xsl:text>
+        </xsl:when>
+        <!-- optional short title, real title -->
+        <xsl:otherwise>
+            <xsl:text>[#3]{#1}%&#xa;</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <!-- close the environment definition, no finish -->
+    <xsl:text>}{}%&#xa;</xsl:text>
+    <!-- send specialized division back through a second time -->
+    <xsl:if test="not($second-trip) and boolean(self::exercises|self::solutions|self::worksheet|self::references)">
+        <xsl:apply-templates select="." mode="environment">
+            <xsl:with-param name="second-trip" select="true()"/>
+        </xsl:apply-templates>
+    </xsl:if>
 </xsl:template>
 
 <!-- "commentary" -->
@@ -2884,30 +3047,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="*" />
 </xsl:template>
 
-<!-- Preface, etc within \frontmatter is usually handled correctly by LaTeX -->
-<!-- Allow alternative titles, like "Preface to 2nd Edition"                -->
-<!-- But we use starred version anyway, so chapter headings react properly  -->
-<!-- DTD: enforce order: dedication, acknowledgements, forewords, prefaces -->
-<!-- TODO: add other frontmatter, move in title handling        -->
-<!-- TODO: add to headers, currently just CONTENTS, check backmatter        -->
-<xsl:template match="acknowledgement|foreword|preface">
-    <xsl:text>%% begin: </xsl:text>
-    <xsl:value-of select="local-name(.)" />
-    <xsl:text>&#xa;</xsl:text>
-    <xsl:text>\chapter*{</xsl:text>
-    <xsl:apply-templates  select="." mode="title-full" />
-    <xsl:text>}</xsl:text>
-    <xsl:apply-templates select="." mode="label" />
-    <xsl:text>&#xa;</xsl:text>
-    <xsl:text>\addcontentsline{toc}{chapter}{</xsl:text>
-    <xsl:apply-templates select="." mode="title-simple" />
-    <xsl:text>}&#xa;</xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>%% end:   </xsl:text>
-    <xsl:value-of select="local-name(.)" />
-    <xsl:text>&#xa;</xsl:text>
-</xsl:template>
-
 <!-- Dedication page is very plain, with a blank obverse     -->
 <!-- Accomodates multiple recipient (eg if multiple authors) -->
 <xsl:template match="dedication">
@@ -3492,21 +3631,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ################ -->
 
 <!-- Divisions, "part" to "subsubsection", and specialized -->
-<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|exercises|worksheet|solutions|references">
+<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|acknowledgement|foreword|preface|exercises|worksheet|solutions|references">
     <!-- appendices are peers of chapters (book) or sections (article)  -->
     <!-- so we need to slip this in first, with book's \backmatter later-->
     <!-- NB: if no appendices, the backmatter template does \backmatter -->
     <xsl:apply-templates select="." mode="console-typeout" />
     <xsl:apply-templates select="." mode="begin-language" />
-    <xsl:apply-templates select="." mode="latex-division-heading" />
-    <!-- List the author(s) of this division, if present -->
-    <xsl:if test="author">
-        <xsl:text>\</xsl:text>
-        <xsl:value-of select="local-name(.)"/>
-        <xsl:text>authors{</xsl:text>
-        <xsl:apply-templates select="author" mode="name-list"/>
-        <xsl:text>}&#xa;</xsl:text>
+    <!-- To make LaTeX produce "lettered" appendices we issue the \appendix -->
+    <!-- macro prior to the first to the first "appendix" or backmatter/solutions.                            -->
+    <xsl:if test="(self::appendix or self::solutions[parent::backmatter]) and not(preceding-sibling::appendix|preceding-sibling::solutions)">
+        <xsl:text>%&#xa;</xsl:text>
+        <xsl:text>\appendix&#xa;</xsl:text>
+        <xsl:text>%&#xa;</xsl:text>
     </xsl:if>
+    <xsl:apply-templates select="." mode="latex-division-heading" />
     <!-- Process the contents, title, idx killed, but avoid author -->
     <!-- "solutions" content needs to call content generator       -->
     <xsl:choose>
@@ -3546,66 +3684,48 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Division Headers and Footers -->
 <!-- ############################ -->
 
-<!-- The first line or two of a division vary some, -->
-<!-- especially for specialized divisions, so we    -->
-<!-- abstract that portion of the output            -->
+<!-- A typical division has 5 arguments (below).  For specialized       -->
+<!-- divisions we need to adjust the environment name for numbered      -->
+<!-- v. unnumbered instances.  Worksheets are exception with a          -->
+<!-- page layout change.                                                -->
+<!--                                                                    -->
+<!--    1. title                                                        -->
+<!--    2. subtitle                                                     -->
+<!--    3. shorttitle                                                   -->
+<!--    4. author                                                       -->
+<!--    5. epigraph (unimplemented)                                     -->
+<!--                                                                    -->
+<!-- A "solutions" division in the back matter is implemented as an     -->
+<!-- appendix.  The levels and division-name templates will produce a   -->
+<!-- LaTeX chapter for a "book" and a LaTeX "section" for an "article". -->
 
-<!-- The "normal" parts of a book are straightforward       -->
-<!-- Always titled, always numbered by LaTeX, always to ToC -->
-<!-- Includes a "short" title for ToC, running heads, etc   -->
-<!-- LaTeX's *optional* arguments are counter to TeX's arguments  -->
-<!-- So text in an optional argument should always be in a group, -->
-<!-- especially if it contains a closing bracket                  -->
-<!-- We have such protection below, and elsewhere without comment -->
-<!-- See http://tex.stackexchange.com/questions/99495             -->
-<!-- LaTeX3e with the xparse package might make this unnecessary  -->
-
-<xsl:template match="part|chapter|section|subsection|subsubsection" mode="latex-division-heading">
-    <xsl:text>\</xsl:text>
-    <xsl:apply-templates select="." mode="division-name" />
-    <xsl:text>[{</xsl:text>
-    <xsl:apply-templates select="." mode="title-simple"/>
-    <xsl:text>}]</xsl:text>
+<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|acknowledgement|foreword|preface|solutions[parent::backmatter]" mode="latex-division-heading">
+    <xsl:text>\begin{</xsl:text>
+    <xsl:apply-templates select="." mode="division-environment-name" />
+    <xsl:text>}</xsl:text>
     <xsl:text>{</xsl:text>
     <xsl:apply-templates select="." mode="title-full"/>
+    <xsl:text>}</xsl:text>
+    <xsl:text>{</xsl:text>
+    <!-- subtitle here -->
+    <xsl:text>}</xsl:text>
+    <xsl:text>{</xsl:text>
+    <xsl:apply-templates select="." mode="title-simple"/>
+    <xsl:text>}</xsl:text>
+    <xsl:text>{</xsl:text>
+    <xsl:apply-templates select="author" mode="name-list"/>
+    <xsl:text>}</xsl:text>
+    <xsl:text>{</xsl:text>
+    <!-- subtitle here -->
+    <!-- <xsl:text>An epigraph here\\with two lines\\-Rob</xsl:text> -->
     <xsl:text>}</xsl:text>
     <xsl:apply-templates select="." mode="label" />
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
-<!-- A "solutions" division in the back matter is implemented as        -->
-<!-- an appendix.  The levels and division-name templates will produce  -->
-<!-- a LaTeX chapter for a "book" and a LaTeX section for an "article". -->
-<!-- To make LaTeX produce "lettered" appendices we issue the \appendix -->
-<!-- macro prior to the first to match here.                            -->
-<xsl:template match="appendix|backmatter/solutions" mode="latex-division-heading">
-    <xsl:if test="not(preceding-sibling::appendix|preceding-sibling::solutions)">
-        <xsl:text>%&#xa;</xsl:text>
-        <xsl:text>\appendix&#xa;</xsl:text>
-        <xsl:text>%&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:text>\</xsl:text>
-    <xsl:apply-templates select="." mode="division-name" />
-    <xsl:text>[{</xsl:text>
-    <xsl:apply-templates select="." mode="title-simple"/>
-    <xsl:text>}]</xsl:text>
-    <xsl:text>{</xsl:text>
-    <xsl:apply-templates select="." mode="title-full"/>
-    <xsl:text>}</xsl:text>
-    <xsl:apply-templates select="." mode="label" />
-    <xsl:text>&#xa;</xsl:text>
-</xsl:template>
-
-<!-- Specialized divisions are numbered just like         -->
-<!-- other divisions, if within a division structured     -->
-<!-- by subdivisons.  Otherwise they are limited by the   -->
-<!-- schema to one per division and when referenced their -->
-<!-- number will be that of the containing division.      -->
+<!-- Specialized Divisions: we do not implement "author", "subtitle",  -->
+<!-- or "epigraph" yet.  These may be added/supported later.           -->
 <xsl:template match="exercises|solutions[not(parent::backmatter)]|references|worksheet" mode="latex-division-heading">
-    <xsl:if test="self::worksheet">
-        <!-- \newgeometry includes a \clearpage -->
-        <xsl:apply-templates select="." mode="new-geometry"/>
-    </xsl:if>
     <!-- Inspect parent (part through subsubsection)  -->
     <!-- to determine one of two models of a division -->
     <!-- NB: return values are 'true' and empty       -->
@@ -3613,35 +3733,34 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="parent::*" mode="is-structured-division"/>
     </xsl:variable>
     <xsl:variable name="b-is-structured" select="$is-structured = 'true'"/>
-    <xsl:text>\</xsl:text>
-    <xsl:apply-templates select="." mode="division-name" />
-    <!-- optional simple title if numbered, or -->
-    <!-- starred form if not visually numbered -->
-    <xsl:choose>
-        <xsl:when test="$b-is-structured">
-            <xsl:text>[{</xsl:text>
-            <xsl:apply-templates select="." mode="title-simple"/>
-            <xsl:text>}]</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>*</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+
+    <xsl:if test="self::worksheet">
+        <!-- \newgeometry includes a \clearpage -->
+        <xsl:apply-templates select="." mode="new-geometry"/>
+    </xsl:if>
+    <xsl:text>\begin{</xsl:text>
+    <xsl:apply-templates select="." mode="division-environment-name" />
+    <xsl:if test="not($b-is-structured)">
+        <xsl:text>-numberless</xsl:text>
+    </xsl:if>
+    <xsl:text>}</xsl:text>
     <xsl:text>{</xsl:text>
     <xsl:apply-templates select="." mode="title-full"/>
     <xsl:text>}</xsl:text>
+    <xsl:text>{</xsl:text>
+    <!-- subtitle here -->
+    <xsl:text>}</xsl:text>
+    <xsl:text>{</xsl:text>
+    <xsl:apply-templates select="." mode="title-simple"/>
+    <xsl:text>}</xsl:text>
+    <xsl:text>{</xsl:text>
+    <!-- author here -->
+    <xsl:text>}</xsl:text>
+    <xsl:text>{</xsl:text>
+    <!-- subtitle here -->
+    <xsl:text>}</xsl:text>
     <xsl:apply-templates select="." mode="label" />
     <xsl:text>&#xa;</xsl:text>
-    <!-- We add a ToC entry for the starred versions. These may be    -->
-    <!-- generated for divisions that are below the ToC display       -->
-    <!-- level, but they do not render as the ToC level prevails      -->
-    <xsl:if test="not($b-is-structured)">
-        <xsl:text>\addcontentsline{toc}{</xsl:text>
-        <xsl:apply-templates select="." mode="division-name" />
-        <xsl:text>}{</xsl:text>
-        <xsl:apply-templates select="." mode="title-simple" />
-        <xsl:text>}&#xa;</xsl:text>
-    </xsl:if>
 </xsl:template>
 
 <!-- Exceptional, for a worksheet only, we clear the page  -->
@@ -3734,15 +3853,33 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Footers are mostly empty, except for "worksheet" -->
-<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|exercises|solutions|references" mode="latex-division-footing"/>
-
-<!-- The heading will change the geometry, this will restore it -->
-<xsl:template match="worksheet" mode="latex-division-footing">
-    <!-- \restoregeometry includes a \clearpage -->
-    <xsl:text>\restoregeometry&#xa;</xsl:text>
+<!-- Footers are straightfoward, except for specialized divisions -->
+<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|acknowledgement|foreword|preface|solutions[parent::backmatter]" mode="latex-division-footing">
+    <xsl:text>\end{</xsl:text>
+    <xsl:apply-templates select="." mode="division-environment-name" />
+    <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
+<xsl:template match="exercises|solutions[not(parent::backmatter)]|references|worksheet" mode="latex-division-footing">
+    <!-- Inspect parent (part through subsubsection)  -->
+    <!-- to determine one of two models of a division -->
+    <!-- NB: return values are 'true' and empty       -->
+    <xsl:variable name="is-structured">
+        <xsl:apply-templates select="parent::*" mode="is-structured-division"/>
+    </xsl:variable>
+    <xsl:variable name="b-is-structured" select="$is-structured = 'true'"/>
+
+    <xsl:text>\end{</xsl:text>
+    <xsl:apply-templates select="." mode="division-environment-name" />
+    <xsl:if test="not($b-is-structured)">
+        <xsl:text>-numberless</xsl:text>
+    </xsl:if>
+    <xsl:text>}&#xa;</xsl:text>
+    <xsl:if test="self::worksheet">
+        <!-- \restoregeometry includes a \clearpage -->
+        <xsl:text>\restoregeometry&#xa;</xsl:text>
+    </xsl:if>
+</xsl:template>
 
 <!-- Introductions and Conclusions -->
 <!-- Simple containers, allowed before and after      -->
