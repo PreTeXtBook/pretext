@@ -2094,12 +2094,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- "paragraphs" -->
 <!-- Body:  \begin{paragraphs}{title}{label}   -->
-<!-- No styling options for now, no ToC        -->
-<!-- Once a tcolorbox, see warnings as part of -->
-<!-- divisional introductions and conclusions  -->
+<!-- "titlesec" package, Subsection 9.2 has LaTeX defaults -->
+<!-- We drop the indentation, and we pass the title itself -->
+<!-- explicity with macro parameter #1 since we do not save-->
+<!-- off the title in a PTX macro.  None of this is meant  -->
+<!-- to support customization in a style.                  -->
+<!-- Once a tcolorbox, see warnings as part of divisional  -->
+<!-- introductions and conclusions.                        -->
 <xsl:template match="paragraphs" mode="environment">
     <xsl:text>%% paragraphs: the terminal, pseudo-division&#xa;</xsl:text>
     <xsl:text>%% We use the lowest LaTeX traditional division&#xa;</xsl:text>
+    <xsl:text>\titleformat{\subparagraph}[runin]{\normalfont\normalsize\bfseries}{\thesubparagraph}{1em}{#1}&#xa;</xsl:text>
+    <xsl:text>\titlespacing*{\subparagraph}{0pt}{3.25ex plus 1ex minus .2ex}{1em}&#xa;</xsl:text>
     <xsl:text>\NewDocumentEnvironment{paragraphs}{mm}&#xa;</xsl:text>
     <xsl:text>{\subparagraph*{#1}\hypertarget{#2}{}}{}&#xa;</xsl:text>
 </xsl:template>
