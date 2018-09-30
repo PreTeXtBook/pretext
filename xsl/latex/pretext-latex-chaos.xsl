@@ -36,6 +36,86 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Intend output for rendering by pdflatex -->
 <xsl:output method="text" />
 
+<!-- ################### -->
+<!-- Titles of Divisions -->
+<!-- ################### -->
+
+<xsl:template name="titlesec-chapter-style">
+    <!-- should be a global style definitions -->
+    <!-- MOVE ME!!!!!!!!!!!!!!!!!!!!!! -->
+    <xsl:text>\usepackage[geometry]{ifsym} %to get nice triangles&#xa;</xsl:text>
+    <!-- MOVE ME!!!!!!!!!!!!!!!!!!!!!! -->
+    <xsl:text>\tikzset{weird fill/.style={append after command={
+    \pgfextra
+        \draw[sharp corners, fill=#1]%
+    (\tikzlastnode.west)%
+    [rounded corners=0pt] |- (\tikzlastnode.north)%
+    [rounded corners=5pt] -| (\tikzlastnode.east)%
+    [rounded corners=0pt] |- (\tikzlastnode.south)%
+    [rounded corners=5pt] -| (\tikzlastnode.west)%
+    ;
+    \endpgfextra}}}&#xa;</xsl:text>
+    <!-- NB: #1 used in chapter/numberless because we     -->
+    <!-- can't control the Table of Contents anyway other -->
+    <!-- than redefining the actual name used elsewhere   -->
+    <xsl:text>\titleformat{name=\chapter}
+    {\normalfont}
+    {}
+    {8pt}
+    {
+    \begin{center}\begin{tikzpicture}
+    \draw node[
+    inner sep=10pt, inner ysep=20pt, very thick,
+    weird fill=Green, text=white, minimum width={0.9\textwidth},
+    text width={0.9\textwidth}, align=center
+    ](b) {\scshape\huge\filcenter\titleptx};
+    \node[right=10pt, rounded corners=0pt, draw, fill=white] at (b.north west)
+    {\divisionnameptx\space\thechapter};
+    \end{tikzpicture}\end{center}
+    }
+    [\hfill{\Large\authorsptx}]
+    %%
+    \titleformat{name=\chapter,numberless}
+    {\normalfont}
+    {}
+    {8pt}
+    {
+    \begin{center}\begin{tikzpicture}
+    \draw node[
+    inner sep=10pt, inner ysep=20pt, very thick,
+    weird fill=Green, text=white, minimum width={0.9\textwidth},
+    text width={0.9\textwidth}, align=center
+    ](b) {\scshape\huge\filcenter#1};
+    \end{tikzpicture}\end{center}
+    }&#xa;</xsl:text>
+    <!-- \begin{flushright}\epigraphptx\end{flushright} -->
+</xsl:template>
+
+<xsl:template name="titlesec-section-style">
+    <xsl:text>\titleformat{\section}
+    {\titlerule
+    \vspace{.8ex}%
+    \Large\bfseries}
+    {\llap{\thesection}}{0.0em}{{\small\FilledSmallTriangleUp}\space\titleptx}
+    [\hfill{\large\authorsptx}]&#xa;</xsl:text>
+    <xsl:text>\titleformat{name=\section,numberless}
+    {\titlerule
+    \vspace{.8ex}%
+    \Large\bfseries}
+    {}{0.0em}{{\small\FilledSmallTriangleUp}\space#1}&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template name="titlesec-subsection-style">
+    <xsl:text>\titleformat{\subsection}{\large\bfseries}
+    {\llap{\thesubsection}}{0.0em}{ {\small\FilledSmallTriangleRight\!\!\!\FilledSmallTriangleRight}\space\titleptx}
+    [\hfill{\normalsize\authorsptx}]&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template name="titlesec-subsubsection-style">
+    <xsl:text>\titleformat{\subsubsection}{\bfseries}{\llap{\thesubsubsection}}{0.0em}{{\small\FilledSmallTriangleRight\!\!\!\FilledSmallTriangleRight\!\!\!\FilledSmallTriangleRight}\space\titleptx}
+    [\hfill{\normalsize\authorsptx}]&#xa;</xsl:text>
+</xsl:template>
+
 <!-- "abbr", "acro", "init" -->
 <!-- Simply wild colors, for effect -->
 <!-- Opposite of "red" (?) -->
