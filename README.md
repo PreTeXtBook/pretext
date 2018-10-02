@@ -35,5 +35,7 @@ open license. The use of PreTeXt does not impose any constraints
 on documents prepared with the system.
 9. PreTeXt is not a closed system: documents can be converted to
 LaTeX and then developed using standard LaTeX tools.
-
-
+10. PreTeXt recognizes that scholarly documents involve the
+interaction of authors, publishers, scholars, instructors,
+students, and readers, with each group having its own needs
+and goals.

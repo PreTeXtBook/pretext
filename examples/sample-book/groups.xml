@@ -362,7 +362,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- % TWJ, 2010/03/31 -->
         <!-- % Fixed the error  <m>(a,b) \in G \times G</m> -->
 
-        <introduction>
+        <subsection>
+            <title>Definition of a Group</title>
+
             <p>The integers mod <m>n</m> and the symmetries of a triangle or a rectangle are examples of groups.  A <term>binary operation</term><idx><h>Binary operation</h></idx> or <term>law of composition</term> on a set <m>G</m> is a function <m>G \times G \rightarrow G</m> that assigns to each pair <m>(a,b) \in G \times G</m> a unique element <m>a \circ b</m>, or <m>ab</m> in <m>G</m>, called the composition of <m>a</m> and <m>b</m>.  A <term>group</term><idx><h>Group</h><h>definition of</h></idx> <m>(G, \circ )</m> is a set <m>G</m> together with a law of composition <m>(a,b) \mapsto a \circ b</m> that satisfies the following axioms.<ul>
                 <li><p> The law of composition is <term>associative</term>. That is, <me> (a \circ b) \circ c = a \circ (b \circ c) </me> for <m>a, b, c \in G</m>.</p></li>
                 <li><p> There exists an element <m>e \in G</m>, called the <term>identity element</term><idx><h>Element</h><h>identity</h></idx>, such that for any element <m>a \in G</m> <me> e \circ a = a \circ e = a. </me></p></li>
@@ -370,6 +372,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </ul></p>
 
             <p>A group <m>G</m> with the property that <m>a \circ b = b \circ a</m> for all <m>a, b \in G</m> is called <term>abelian</term><idx><h>Abelian group</h></idx><idx><h>Group</h><h>abelian</h></idx> or <term>commutative</term><idx><h>Group</h><h>commutative</h></idx>.  Groups not satisfying this property are said to be  <term>nonabelian</term><idx><h>Group</h><h>nonabelian</h></idx> or <term>noncommutative</term><idx><h>Group</h><h>noncommutative</h></idx>.</p>
+        </subsection>
+
+        <subsection>
+            <title>Examples of Groups</title>
 
             <example xml:id="example-groups-integers">
                 <title>Group of All Integers</title>
@@ -502,8 +508,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </example>
 
             <p>A group is <term>finite</term><idx><h>Group</h><h>finite</h></idx>, or has <term>finite order</term>, if it contains a finite number of elements; otherwise, the group is said to be <term>infinite</term> or to have <term>infinite order</term><idx><h>Group</h><h>infinite</h></idx>. The <term>order</term><idx><h>Group</h><h>order of</h></idx> of a finite group is the number of elements that it contains. If <m>G</m> is a group containing <m>n</m> elements, we write <m>|G| = n</m>. <notation><usage>|G|</usage><description>the order of a group</description></notation> The group <m>{\mathbb Z}_5</m> is a finite group of order 5; the integers <m>{\mathbb Z}</m> form an infinite group under addition, and we sometimes write <m>|{\mathbb Z}| = \infty</m>.</p>
-
-        </introduction>
+        </subsection>
 
         <subsection>
             <title>Basic Properties of Groups</title>

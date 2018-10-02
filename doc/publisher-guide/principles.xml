@@ -35,5 +35,7 @@
         <li xml:id="principle-open-software"><pretext /> is free: the software is available at no cost, with an open license. The use of <pretext /> does not impose any constraints on documents prepared with the system.</li>
 
         <li xml:id="principle-open"><pretext /> is not a closed system: documents can be converted to <latex /> and then developed using standard <latex /> tools.</li>
+
+        <li xml:id="principle-users"><pretext /> recognizes that scholarly documents involve the interaction of authors, publishers, scholars, instructors, students, and readers, with each group having its own needs and goals.</li>
     </ol>
 </list>

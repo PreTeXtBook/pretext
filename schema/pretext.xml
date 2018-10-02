@@ -51,14 +51,19 @@
                 MetaDataSubtitle,
                 ArticleFrontMatter?,
                 (
-                    (BlockDivision | Paragraphs | Commentary)+
+                    (
+                        (BlockDivision | Paragraphs | Commentary)+,
+                        Exercises?,
+                        Solutions?,
+                        References?
+                    )
                 |
                     (
                         IntroductionDivision?,
                         Section+,
                         Exercises*,
                         ConclusionDivision?,
-                        BackMatter?
+                        ArticleBackMatter?
                     )
                 )
             }
@@ -68,7 +73,7 @@
                 MetaDataSubtitle,
                 BookFrontMatter?,
                 (Part+ | Chapter+ ),
-                BackMatter?
+                BookBackMatter?
             }
         Letter =
             element letter {empty}
@@ -174,7 +179,25 @@
                 References?,
                 Outcomes?
             }
-        Appendix =
+        ArticleAppendix =
+            element appendix {
+                MetaDataTitle,
+                AuthorByline*,
+                (
+                    (BlockDivision | Paragraphs | Commentary | NotationList )+ |
+                    (
+                        IntroductionDivision?,
+                        Subsection,
+                        (
+                            Subsection |
+                            Exercises |
+                            References
+                        )*,
+                        ConclusionDivision?
+                    )
+                )
+            }
+        BookAppendix =
             element appendix {
                 MetaDataTitle,
                 AuthorByline*,
@@ -279,7 +302,7 @@
         <p><term>Long text</term> is everything that is short text, but also allows for references, both external (internet <init>URL</init>s) and internal (cross-references).  It is used for the content of footnotes and captions.  The <webwork /> variant allows for variables in inline mathematics.</p>
 
         <fragment xml:id="shorttext">
-        TextSimple = mixed { 
+        TextSimple = mixed {
             Character* }
         TextShort = mixed { (
             Character |
@@ -303,6 +326,8 @@
 
         <p>A <term>lined paragraph</term> is a variant, for use when the line-by-line structure is necessary.  The <webwork /> variant of a <c>p</c> element allows for using the <c>var</c> element as an answer blank or generated content, possibly inside mathematics, and possibly inside lists.</p>
 
+        <p>Note: A paragraph effectively could have the <c>MetaDataTarget</c> pattern, except that we allow index elements (<tag>idx</tag>) to go anywhere within the paragraph.</p>
+
         <fragment xml:id="paragraph">
         TextParagraph = mixed { (
             Character |
@@ -322,11 +347,13 @@
         Paragraph =
             element p {
                 UniqueID?,
+                PermanentID?,
                 TextParagraph
             }
         ParagraphLined =
             element p {
                 UniqueID?,
+                PermanentID?,
                 element line {TextShort}+
             }
         </fragment>
@@ -362,7 +389,7 @@
         <p>See below for elements that can be used to form groupings with left and right delimiters.  For example, a simple quotation should use a left double quote and a right double quote, and these characters should look different (so-called <term>smart</term> quotes).  Notice that a keyboard only has a single <term>dumb</term> quote.  If you need these characters in isolation (<ie />, not in pairs), these are the best way to ensure you get what you want in all possible conversions.  Note that left and right braces (<q>curly brackets</q>) are previously defined with the <latex /> characters.</p>
 
         <fragment xml:id="delimiter-character">
-        Character |= 
+        Character |=
             element lsq {empty} |
             element rsq {empty} |
             element rq {empty} |
@@ -374,7 +401,7 @@
         <p>There is a variety of dashes of various lengths.  Use the keyboard character for a <term>hyphen</term>, use an <term>ndash</term> to seperate a range of numbers or dates, and use an <term>mdash</term> as punctuation within a sentence to isolate a clause.  These are implemented differently for different conversions, so their use is strongly encouraged.</p>
 
         <fragment xml:id="dash-character">
-        Character |= 
+        Character |=
             element nbsp {empty} |
             element ndash {empty} |
             element mdash {empty}
@@ -384,14 +411,14 @@
 
         <fragment xml:id="fillin-character">
         FillIn = element fillin {attribute characters {xsd:integer}?, empty}
-        Character |= 
+        Character |=
             FillIn
         </fragment>
 
         <p>We define a few characters to help with simple expressions in arithmetic.  The <term>solidus</term> is slightly different from the <term>slash</term> found on a keyboard and is used for fractions and ratios.  These are for simple uses in regular text, not for actual mathematics, which is described later.</p>
 
         <fragment xml:id="arithmetic-character">
-        Character |= 
+        Character |=
             element solidus {empty} |
             element times {empty}
         </fragment>
@@ -399,7 +426,7 @@
         <p>The following are largely conveniences.  They are typically not available on keyboards, and their implementations for various conversions can involve some subtleties.  Again, their use is encouraged for the best quality output.</p>
 
         <fragment xml:id="exotic-character">
-        Character |= 
+        Character |=
             element ellipsis {empty} |
             element asterisk {empty} |
             element backtick {empty} |
@@ -414,10 +441,19 @@
             element trademark {empty}
         </fragment>
 
+        <p>Icons are available through a <attr>name</attr> attribute, which is meant to usually be more semantic than just a description of the picture, though that may sometimes be the case.  These are intended for use when describing elements of computer interfaces.  Icons which are decorative shuld be supplied as part of styling, not as part of the source language.</p>
+
+        <fragment xml:id="icon-character">
+        Character |=
+            element icon {
+                attribute name {text}
+            }
+        </fragment>
+
         <p>We support musical notation as if they were characters: accidentals, scale degrees, notes, and chords.  Implementation of these is about as complicated as inline mathematical notation, hence they have identical rules about placement.</p>
 
         <fragment xml:id="music-character">
-        Music = 
+        Music =
             element doublesharp {empty} |
             element sharp {empty} |
             element natural {empty} |
@@ -459,6 +495,7 @@
             <fragment ref="delimiter-character" />
             <fragment ref="arithmetic-character" />
             <fragment ref="exotic-character" />
+            <fragment ref="icon-character" />
             <fragment ref="music-character" />
         </fragment>
 
@@ -466,7 +503,7 @@
 
         <!-- webwork, latex will need work -->
         <fragment xml:id="generator">
-        Generator = 
+        Generator =
             element today {empty} |
             element timeofday {empty} |
             element tex {empty} |
@@ -495,7 +532,7 @@
                 attribute prefix {text}?,
                 attribute base {text},
                 attribute exp {xsd:integer}?
-        Generator |= 
+        Generator |=
             element quantity {
                 element mag {text}?,
                 element unit {UnitSpecification}*,
@@ -506,7 +543,7 @@
         <p>Some markup is for just ASCII characters, in other words, unadorned verbatim text.</p>
 
         <fragment xml:id="verbatim">
-        Verbatim = 
+        Verbatim =
             element c {text} |
             element email {text}
         </fragment>
@@ -514,7 +551,7 @@
         <p>Simple markup is groupings of text that gets a different typographic appearance, either through font changes or through delimiters.  Examples are emphasis or paired quotations, non-examples are cross-references or footnotes.</p>
 
         <p>Abbreviations are sequences of characters that shorten some longer word or words (<eg /> <abbr>vs.</abbr> for the Latin <foreign>versus</foreign>), initialisms are formed from the first letters of a sequence of words (<eg /> <init>HTML</init>), acronyms are pronouncable as words (<eg /> <acro>SCUBA</acro>).</p>
-        
+
         <fragment xml:id="abbreviation-group">
         Group |=
             element abbr {TextSimple} |
@@ -525,7 +562,7 @@
         <p>Notice that long text can be part of a grouping construction, and that long text can can contain a group construction.  The effect is that these groupings can be nested arbitrarily deep.</p>
 
         <fragment xml:id="delimiter-group">
-        Group |= 
+        Group |=
             element q {TextLong} |
             element sq {TextLong} |
             element braces {TextLong} |
@@ -535,7 +572,7 @@
         </fragment>
 
         <fragment xml:id="highlight-group">
-        Group |= 
+        Group |=
             element em {TextLong} |
             element term {TextLong} |
             element alert {TextLong} |
@@ -548,7 +585,7 @@
         </fragment>
 
         <fragment xml:id="editing-group">
-        Group |= 
+        Group |=
             element delete {TextLong} |
             element insert {TextLong} |
             element stale {TextLong}
@@ -599,7 +636,7 @@
             element m {
                 mixed {(FillIn | WWVariable)*}
             }
-        MathRow = 
+        MathRow =
             element mrow {
                 MetaDataTarget,
                 (
@@ -687,21 +724,21 @@
             element interlude {BlockText+}
         Postlude =
             element postlude {BlockText+}
-        Statement = 
+        Statement =
             element statement {
                 BlockStatement+
             }
-        Hint = 
+        Hint =
             element hint {
                 MetaDataTitleOptional,
                 BlockStatement+
             }
-        Answer = 
+        Answer =
             element answer {
                 MetaDataTitleOptional,
                 BlockStatement+
             }
-        Solution = 
+        Solution =
             element solution {
                 MetaDataTitleOptional,
                 BlockStatement+
@@ -758,8 +795,8 @@
         Xref =
             element xref {
                     (
-                        attribute ref {text} | 
-                        (attribute first {text}, attribute last {text}) | 
+                        attribute ref {text} |
+                        (attribute first {text}, attribute last {text}) |
                         attribute provisional {text}
                     ),
                     attribute text { XrefTextStyle }?,
@@ -803,7 +840,7 @@
                 attribute sortby {text}?,
                 attribute start {text}?,
                 attribute finish {text}?,
-                (   
+                (
                     TextShort
                 |
                     (
@@ -878,6 +915,7 @@
             }
         Console =
             element console {
+                PermanentID?,
                 (
                     element prompt {text}?,
                     element input {text}?,
@@ -886,7 +924,7 @@
             }
         Program =
             element program {
-                UniqueID?,
+                PermanentID?,
                 attribute language {text}?,
                 attribute interactive {"pythontutor"}?,
                 element input {text}
@@ -904,6 +942,7 @@
         <fragment xml:id="list">
         List =
             element ol {
+                PermanentID?,
                 attribute cols {"2"|"3"|"4"|"5"|"6"}?,
                 attribute label {text}?,
                 element li {
@@ -913,14 +952,17 @@
             }
         |
             element ul {
+                PermanentID?,
                 attribute cols {"2"|"3"|"4"|"5"|"6"}?,
                 attribute label {"disc" | "circle" | "square" | ""}?,
-                    element li {
+                element li {
+                    PermanentID?,
                     (TextParagraph | BlockStatement+)
                 }+
             }
         |
             element dl {
+                PermanentID?,
                 attribute width {"narrow" | "medium" | "wide"}?,
                 element li {
                     MetaDataTitle,
@@ -940,7 +982,7 @@
             MetaDataTitleOptional,
             Notation*,
             Statement
-        Definition = 
+        Definition =
             element definition {DefinitionLike}
         </fragment>
     </section>
@@ -951,13 +993,13 @@
         <p>Theorems, corollaries, lemmas <mdash /> they all have statements, and should have proof(s).  Otherwise they are all the same.  A proof may be divided with cases, in no particular rigid way, just as a marker of any number of different, non-overlapping portions of a proof.  Titles can be used to describe each case, or implication arrows may be used (typically with a prrof of an equivalence).  A <c>proof</c> is also allowed to stand on its own as a block, independent of a structure like a <c>theorem</c> or <c>algorithm</c>.</p>
 
         <fragment xml:id="theorem-like">
-        Case = 
+        Case =
             element case {
                MetaDataTitleOptional,
                attribute direction {text}?,
                BlockStatement+
                }
-        Proof = 
+        Proof =
             element proof {
                 MetaDataTitleOptional,
                 (BlockStatement | Case)+
@@ -1050,7 +1092,7 @@
         RemarkLike =
             MetaDataTitleOptional,
             BlockText+
-        Remark = 
+        Remark =
             element remark {RemarkLike}
         |
             element convention {RemarkLike}
@@ -1119,7 +1161,7 @@
         <p>These are containers that carry titles, captions, and numbers and need to be filled with other (indivisable) items.  They have a mandatory <c>caption</c> (which can have no text, but will still produce a numbered caption), and may have a <c>title</c>, which could more appropriately be called a <term>heading</term>.  These are also called <term>captioned items</term>.</p>
 
         <fragment xml:id="table-figure">
-        Caption = 
+        Caption =
             element caption {TextLong}
         Figure =
             element figure {
@@ -1200,6 +1242,7 @@
             }
         Tabular =
             element tabular {
+                PermanentID?,
                 AlignmentHorizontal?,
                 AlignmentVertical?,
                 BorderTop?,
@@ -1244,6 +1287,7 @@
                 )+
             }
         SidebySideAttributes =
+            PermanentID?,
             attribute margins {text}?,
             (attribute width {text} | attribute widths {text})?,
             (AlignmentVertical | attribute valigns {text})?
@@ -1299,19 +1343,22 @@
 
         <p>Raster, and described by languages, plus 100<percent /> duplicates.  The <webwork /> variant is quite different.</p>
 
+        <p>Note: the <c>ImageCode</c> pattern allows an <attr>xml:id</attr> attribute since it is used to construct a filename.</p>
+
         <fragment xml:id="image">
         Image = ImageRaster | ImageCode
-        ImageRaster = 
+        ImageRaster =
             element image {
-                UniqueID?,
+                PermanentID?,
                 attribute width {text}?,
                 attribute archive {text}?,
                 element description {TextShort}?,
                 attribute source {text}
             }
-        ImageCode = 
+        ImageCode =
             element image {
                 UniqueID?,
+                PermanentID?,
                 attribute width {text}?,
                 attribute archive {text}?,
                 element description {TextShort}?,
@@ -1321,7 +1368,7 @@
                     element sageplot {text}
                 )
             }
-        ImageWW = 
+        ImageWW =
             element image {
                 attribute pg-name {text}?,
                 element description {(TextShort | WWVariable)*}?
@@ -1336,7 +1383,7 @@
 
         <fragment xml:id="sage">
         Sage = element sage {
-            UniqueID?,
+            PermanentID?,
             attribute doctest {text}?,
             attribute tolerance {text}?,
             attribute language {text}?,
@@ -1352,7 +1399,7 @@
         <p>Some specific interactive goodies.  These are being phased-out in favor of a more general <tag>interactive</tag> element.</p>
 
         <fragment xml:id="interactive">
-        MuseScore = 
+        MuseScore =
             element score {
                 attribute musescoreuser {text},
                 attribute musescore {text}
@@ -1365,10 +1412,14 @@
 
         <p>Well, just video right now.  The <c>xml:id</c> is not used as a target, but rather as a name for a static preview image that is auto-generated by the <c>mbx</c> script thumbnail file, hence optional.  <c>preview</c> maybe be one of two reserved switches, or the filename of a static preview image.</p>
 
+        <p>Note: the <c>Video</c> pattern allows an <attr>xml:id</attr> attribute since it is used to construct a filename for preview images (<q>poster</q>), especially when scraped.</p>
+
+
         <fragment xml:id="audiovideo">
         Video =
             element video {
                 UniqueID?,
+                PermanentID?,
                 attribute width {text}?,
                 attribute aspect {text}?,
                 attribute start {xsd:integer}?,
@@ -1393,7 +1444,7 @@
 
         <fragment xml:id="poetry">
         AlignmentPoem = attribute halign {"left" | "center" | "right"}
-        Poem = 
+        Poem =
             element poem {
                 MetaDataTitleOptional,
                 AlignmentPoem?,
@@ -1403,12 +1454,12 @@
                 }?,
                 (PoemLine+ | Stanza+)
             }
-        Stanza = 
+        Stanza =
             element stanza {
                 MetaDataTitleOptional,
                 PoemLine+
             }
-        PoemLine = 
+        PoemLine =
             element line {
                 attribute indent {xsd:integer}?,
                 TextShort
@@ -1436,9 +1487,9 @@
                     }+
                 }
             )+
-        StatementExercise = 
+        StatementExercise =
             element statement { ExerciseBody }
-        Exercise = 
+        Exercise =
             element exercise {
                 MetaDataTitleOptional,
                 attribute number {text}?,
@@ -1467,7 +1518,7 @@
         <fragment xml:id="bibliography">
         BibliographyItem =
             element biblio {
-                UniqueID?,
+                MetaDataTarget,
                 attribute type {"raw"}?,
                 (TextLong |
                 Ibid |
@@ -1520,12 +1571,12 @@
 
         <fragment xml:id="webwork">
         WebWork = (WebWorkAuthored | WebWorkSource)
-        WebWorkSource = 
+        WebWorkSource =
             element webwork {
                 attribute source {text}?,
                 attribute seed {xsd:integer}?
             }
-        WebWorkAuthored = 
+        WebWorkAuthored =
             element webwork {
                 MetaDataTitleOptional,
                 attribute seed {xsd:integer}?,
@@ -1551,11 +1602,11 @@
                     SideBySideNoCaption
                 )+
             }
-        WWMacros = 
+        WWMacros =
             element pg-macros {
                 element macro-file {text}+
             }
-        WWSetup = 
+        WWSetup =
             element setup {
                 element pg-code {text}?
             }
@@ -1566,7 +1617,7 @@
                 attribute evaluator {text}?,
                 attribute width {text}?,
                 attribute category {"angle" | "decimal" | "exponent" | "formula" | "fraction" | "inequality" | "integer" | "interval" | "logarithm" | "limit" | "number" | "point" | "syntax" | "quantity" | "vector"}?,
-                attribute form {"popup"|"buttons"|"none"}?) | 
+                attribute form {"popup"|"buttons"|"none"}?) |
                 (attribute form {"essay"},
                 attribute width {text}?)
             }
@@ -1620,6 +1671,7 @@
 
         <p>Notes: <ul>
             <li>Language tags go on the root element to affect variants of names of objects, like theorems.</li>
+            <li><attr>permid</attr> is part of managing editions, and is supplied by a script.  You should not be adding thse manually as an author.  (You do want to manually author <attr>xml:id</attr>.)</li>
             <li>The <c>xinlude</c> mechanism may pass language tgs down through the root element of included files to make them universally available.</li>
             <li>The <c>xinclude</c> mechanism inserts a <c>@xml:base</c> attribute on the root element of an included file.  So we allow this attribute on any element that allows a title.</li>
             <li>These are not unordered specifications since they contain several attributes, and we enforce a <c>title</c>, <c>subtitle</c>, <c>creator</c>, <c>caption</c>, <c>idx</c> order.</li>
@@ -1632,6 +1684,8 @@
         <fragment xml:id="metadata">
         UniqueID =
             attribute xml:id {text}
+        PermanentID =
+            attribute permid {text}
         Title =
             element title {TextLong}
         Subtitle =
@@ -1642,15 +1696,18 @@
         XMLLang = attribute xml:lang {text}
         MetaDataTarget =
             UniqueID?,
+            PermanentID?,
             Index*
         MetaDataTitle =
             UniqueID?,
+            PermanentID?,
             XMLBase?,
             XMLLang?,
             Title,
             Index*
         MetaDataSubtitle =
             UniqueID?,
+            PermanentID?,
             XMLBase?,
             XMLLang?,
             Title,
@@ -1658,12 +1715,14 @@
             Index*
         MetaDataTitleOptional =
             UniqueID?,
+            PermanentID?,
             XMLBase?,
             XMLLang?,
             Title?,
             Index*
         MetaDataTitleCreatorOptional =
             UniqueID?,
+            PermanentID?,
             XMLBase?,
             XMLLang?,
             Title?,
@@ -1671,6 +1730,7 @@
             Index*
         MetaDataCaption =
             UniqueID?,
+            PermanentID?,
             XMLBase?,
             XMLLang?,
             Title?,
@@ -1716,7 +1776,7 @@
         <p>Articles and books have material at the start, which gets organized in interesting ways. <c>minilicense</c> is very restrictive, <c>shortlicense</c> allows references (<eg /> <init>URL</init>s).  <c>titlepage</c> is like a very small database<mdash />for HTML it migrates to the top of the page for the <c>frontmatter</c>, and for <latex /> it migrates to the half-title and title pages.  Since it generally makes no sense as the target of a cross-reference, <c>titlepagfe</c> does not allow an <c>@xml:id</c> attribute.</p>
 
         <fragment xml:id="frontmatter">
-        ArticleFrontMatter = 
+        ArticleFrontMatter =
             element frontmatter {
                 MetaDataTitleOptional,
                 TitlePage,
@@ -1760,7 +1820,7 @@
                 element title {TextLong},
                 Author+
             }
-        Date = 
+        Date =
             element date {
                 mixed {(Character | Generator)*}
             }
@@ -1771,7 +1831,7 @@
             }
         ColophonFront =
             element colophon {
-                UniqueID?,
+                MetaDataTarget,
                 element credit {
                     element role {TextShort},
                     element entity {TextLong}
@@ -1788,17 +1848,17 @@
                     element shortlicense {TextLong}?
                 }?
             }
-        Biography = 
+        Biography =
             element biography {
                 MetaDataTitleOptional,
                 (BlockStatementNoCaption | ParagraphsNoNumber | Commentary)+
             }
-        Dedication = 
+        Dedication =
             element dedication {
                 MetaDataTitleOptional,
                 (Paragraph|ParagraphLined)+
             }
-        Acknowledgement = 
+        Acknowledgement =
             element acknowledgement {
                 MetaDataTitleOptional,
                 (BlockStatementNoCaption | ParagraphsNoNumber | Commentary)+
@@ -1814,7 +1874,7 @@
                     |
                     (
                         (BlockStatementNoCaption | ParagraphsNoNumber | Commentary)*,
-                        Contributors, 
+                        Contributors,
                         (BlockStatementNoCaption | ParagraphsNoNumber | Commentary)*
                     )
                 )
@@ -1853,17 +1913,25 @@
         <p>Articles and books have material at the end, structured as a sequence of <c>appendix</c>.  A <c>solutions</c> division should be numbered and rendered as if it was one of the <c>appendix</c>, and so can mix-in in any order.</p>
 
         <fragment xml:id="backmatter">
-        BackMatter = 
+        ArticleBackMatter =
             element backmatter {
                 MetaDataTitleOptional,
-                (Appendix|Solutions)*,
+                (ArticleAppendix|Solutions)*,
+                References?,
+                IndexDivision?,
+                ColophonBack?
+            }
+        BookBackMatter =
+            element backmatter {
+                MetaDataTitleOptional,
+                (BookAppendix|Solutions)*,
                 References?,
                 IndexDivision?,
                 ColophonBack?
             }
         ColophonBack =
             element colophon {
-                UniqueID?,
+                MetaDataTarget,
                 (BlockText | SideBySideNoCaption | SideBySideGroupNoCaption)+
             }
         </fragment>

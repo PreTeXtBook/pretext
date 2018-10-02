@@ -391,7 +391,7 @@ the xsltproc executable.
         the first non-trivial character.
         -->
 
-        <section xml:id="section-sage-cells">
+        <section permid="Abc" xml:id="section-sage-cells">
             <title>Computing Integrals with Sage (<m>\int</m>)</title>
             <!-- Index testing, semi-realistic -->
             <idx><h>Sage</h><h>integration</h></idx>
@@ -423,7 +423,7 @@ the xsltproc executable.
 
             <p>Sage can compute definite integrals.  The output contains the approximate numerical value of the definite integral, followed by an upper bound  of the error in the approximation.</p>
 
-            <sage xml:id="sage-numerical-integral">
+            <sage>
                 <input>numerical_integral(sin(x)^2, (0, 2))</input>
                 <!-- need to use wildcard matching to make this doctestable -->
                 <output>(1.189200623826982, 1.320277913471315e-14)</output>
@@ -573,7 +573,7 @@ the xsltproc executable.
         <section xml:id="interesting-corollary">
             <title>An Interesting Corollary</title>
 
-            <objectives xml:id="objectives-structures">
+            <objectives permid="dEf" xml:id="objectives-structures">
                 <title>Fundamental Structures</title>
 
                 <introduction>
@@ -602,13 +602,13 @@ the xsltproc executable.
 
                 <todo>Should equation references come with parentheses?</todo>
 
-                <corollary xml:id="corollary-FTC-derivative">
+                <corollary permid="ghI" xml:id="corollary-FTC-derivative">
                     <creator>Leibniz, Newton</creator>
                     <idx><h>Fundamental Theorem of Calculus</h><h>Corollary</h></idx>
                     <statement>
                         <p>Suppose <m>f(x)</m> is a continuous function.  Then <men xml:id="equation-alternate-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}=f(x)</men>.</p>
                     </statement>
-                    <proof xml:id="proof-FTC-corollary">
+                    <proof permid="Jkl" xml:id="proof-FTC-corollary">
                         <p>We simply take the indicated derivative, applying Theorem<nbsp /><xref ref="theorem-FTC" /> at <xref ref="equation-use-FTC" /><mdn>
                             <mrow xml:id="equation-use-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}&amp;=\frac{d}{dx}\left(F(x)-F(a)\right)</mrow>
                             <mrow number="no">&amp;=\frac{d}{dx}F(x)-\frac{d}{dx}F(a)</mrow>
@@ -632,7 +632,7 @@ the xsltproc executable.
                     <input>2+2</input>
                 </sage>
 
-                <example xml:id="example-mysterious">
+                <example permid="mNo" xml:id="example-mysterious">
                     <title>A Mysterious Derivative!</title>
                     <p>So if we define a function with its variable employed as a limit of integration, like so <me>K(z)=\definiteintegral{345}{z}{x^4\sin(x^2)}{x}</me> then we get the derivative of that function so easily it seems like a mystery, <me>\frac{d}{dz}K(z)=z^4\sin(z^2)</me>. That's it.</p>
 
@@ -667,7 +667,7 @@ the xsltproc executable.
                             <p>A case may also have a <c>title</c>, whose formatting and structure is entirely up to the author.  This then becomes the text of a cross-reference, as well.</p>
                         </case>
 
-                        <case direction="forward" xml:id="forward">
+                        <case permid="pqR" direction="forward" xml:id="forward">
                             <title>Necessity</title>
 
                             <p>If you like, you can have both indications.</p>
@@ -701,7 +701,7 @@ the xsltproc executable.
 
                     <p>The Fundamental Theorem explains why we use the same notation for a definite integral, which is a numerical calculation,<fn>Which I think sometimes students lose sight of.</fn> and an antiderivative, which is a symbolic expression.</p>
 
-                    <exercise xml:id="exercise-essay">
+                    <exercise permid="Stu" xml:id="exercise-essay">
                         <title>Essay Question: Compare and Contrast</title>
                         <statement>
                             <p>Write a short paragraph which compares, and contrasts, the definite and indefinite integral. This is an exercise which sits in the midst of the narrative, so is formatted more like an example or a remark.  It can have a hint and a solution, but this one does not.  It can have a title, which this one does.</p>
@@ -757,8 +757,8 @@ the xsltproc executable.
                         <hint>
                             <p>A good hint.</p>
                         </hint>
-                        <answer>
-                            <p>42.</p>
+                        <answer permid="Vwx">
+                            <p permid="Xyz">42.</p>
                         </answer>
                         <solution>
                             <p>What was the question?</p>
@@ -843,7 +843,7 @@ the xsltproc executable.
                         <p>An <c>&lt;aside&gt;</c> is similar to a remark, but is not as critical to the narrative.  It is not numbered, and so requires a title.  It can be the target of a cross-reference.  They are meant to be short, and so are not knowlized at their first appearance.  If the content is appropriate, these can be marked as <c>&lt;historical&gt;</c> or <c>&lt;biographical&gt;</c>, though longer items should use subdivisions (<eg /> sections, subsections) instead.</p>
                     </aside>
 
-                    <project xml:id="project-structured">
+                    <project permid="aBc" xml:id="project-structured">
                         <title>A very structured project</title>
 
                         <prelude>
@@ -859,7 +859,7 @@ the xsltproc executable.
                             <p>This first task is very simple, just a paragraph.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
                         </task>
 
-                        <task>
+                        <task permid="abC">
                             <p>Now three paragraphs.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
                             <p>In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
                             <p>In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
@@ -970,7 +970,7 @@ the xsltproc executable.
                         </statement>
                         <solution>
                             <p>This solution will migrate to a list of solutions in the backmatter.  We include a <c>sidebyside</c> as a test.</p>
-                            <sidebyside width="30%">
+                            <sidebyside permid="dEf" width="30%">
                                 <p>This is a skinny paragraph which should be just 30<percent /> of the width.</p>
                                 <p>And another skinny paragraph which should also be just 30<percent /> of the width.</p>
                             </sidebyside>
@@ -988,7 +988,7 @@ the xsltproc executable.
 
                     <!-- content will happen here automatically -->
 
-                    <conclusion>
+                    <conclusion permid="deF">
                         <p>And a conclusion to this solutions division, which may not be readily apparent as distinct from the final division's worth of solutions, but since it is not prefixed with a number, it may be different enough.</p>
                     </conclusion>
                 </solutions>
@@ -1035,7 +1035,7 @@ the xsltproc executable.
                 </paragraphs>
 
 
-                <assemblage xml:id="assemblage-basics">
+                <assemblage permid="Ghi" xml:id="assemblage-basics">
                     <title>Assemblages: Collections and Summaries</title>
 
                     <p>An <c>&lt;assemblage&gt;</c> is a collection, or summary, that does not have much structure to it.  So you are limited to paragraphs and friends (<c>p</c>, <c>blockquote</c>, <c>pre</c>) and side-by-sides that do not contain captioned items (<c>sidebyside</c>, <c>sbsgroup</c>).  The intent is that contents are not numbered, so cannot be cross-referenced individually, and so also do not become knowls.  You may place <c>&lt;image&gt;</c>, <c>&lt;tabular&gt;</c>, and <c>&lt;program&gt;</c> inside a <c>&lt;sidebyside&gt;</c>, in addition to other objects that do not have captions.  Note that <c>p</c> may by extension contain lists (<c>ol</c>, <c>ul</c>, <c>dl</c>).  Despite limited structure, the presentation should draw attention to it, because the contents should be seen as more important in some way.  It should be <q>highlighted</q> in some manner.  If you need to connect the entire assemblage with material elsewhere, you can do that with the usual <c>xref/xml:id</c> mechanism.<idx><h>assemblage</h></idx></p>
@@ -1124,7 +1124,7 @@ the xsltproc executable.
                     <p>This is a <tag>outcomes</tag> element you are reading, and this is its introduction.  This early section has really grown and we have tried to accomplish many things.  Not all of them are listed here.</p>
                 </introduction>
 
-                <ol>
+                <ol permid="gHi">
                     <li>Display various <q>blocks</q>, fundamental units of the flow.</li>
                     <li xml:id="outcome-structure">More, and this is what the cross-references above are pointing to.</li>
                     <li>Evermore.</li>
@@ -1148,7 +1148,7 @@ the xsltproc executable.
         in HTML, which are similar, but not identical.
         -->
 
-        <section>
+        <section permid="Bcd">
             <title>Some Facts and Figures</title>
 
             <!-- This is not implemented
@@ -1209,7 +1209,7 @@ the xsltproc executable.
                 <li><p>Black</p></li>
                 <li><p>Orange</p></li>
                 <li><p>Pink</p></li>
-                <li><p>Salmon<idx><h>strange colors</h></idx></p></li>
+                <li permid="bCd"><p permid="bcD">Salmon<idx><h>strange colors</h></idx></p></li>
                 <li><p>Aqua</p></li>
                 <li><p>Cyan</p></li>
                 <li><p>Puce<idx><h>strange colors</h></idx></p></li>
@@ -1528,7 +1528,7 @@ the xsltproc executable.
                     <p>So.  Do not take any extra steps and let <latex /> figure out the breaks.  If you do not like a break, modify the <c>md</c> or <c>mdn</c> to go back to the AMSmath default behavior and not break at all.  Ever.  Or rather, go further and modify an individual <c>mrow</c> to suggest that it is a good place for a break.</p>
                 </example>
 
-                <p>This is a poorly-authored paragaph to test the conversion to <init>HTML</init>.  There are two displayed equations, separated by a period ending the first one's sentence, which should migrate into the display, and not leave behind an empty paragraph: <me>z+y = z</me>.  <me>a + b = c</me>.  This final sentence should remain, inside another <init>HTML</init> paragraph, without the second equation's period.</p>
+                <p permid="Cde">This is a poorly-authored paragaph to test the conversion to <init>HTML</init>.  There are two displayed equations, separated by a period ending the first one's sentence, which should migrate into the display, and not leave behind an empty paragraph: <me permid="Fgh">z+y = z</me>.  <me>a + b = c</me>.  This final sentence should remain, inside another <init>HTML</init> paragraph, without the second equation's period.</p>
             </subsection>
 
             <subsection>
@@ -1707,6 +1707,56 @@ the xsltproc executable.
                 <p>We also distinguish between abbreviations (<abbr>vs.</abbr>), acronyms (<acro>SCUBA</acro>) and initialisms (<init>XML</init>).  This is a test of the text version of a multiplication symbol: 2<nbsp /><times /><nbsp />4.</p>
 
                 <p>An <term>em dash</term> is the long dash used much like parentheses (not an <term>en dash</term> used to denote a range, such as a range of page numbers).  It should not have spaces around it, but some style guides allow for a <em>thin</em> space, which<mdash />we test right now.  The command line stringparam <c>emdash.space</c> can be set to <c>none</c> or <c>thin</c> to control this.</p>
+            </subsection>
+
+            <subsection xml:id="subsection-icons-in-text">
+                <title>Icons in Text</title>
+
+                <p>A limited supply of icons can be used when explaining how to use some computer application.  The empty element is <tage>icon</tage> and the attribute is <attr>name</attr>.</p>
+
+                <p>We sprinkle <icon name="gear"/> a few into a few sentences <icon name="wrench"/> to check baselines <icon name="file-save"/> and font sizing.  We sprinkle <icon name="gear"/> a few into a few sentences <icon name="wrench"/> to check baselines <icon name="file-save"/> and font sizing.  We sprinkle <icon name="gear"/> a few into a few sentences <icon name="wrench"/> to check baselines <icon name="file-save"/> and font sizing.  We sprinkle <icon name="gear"/> a few into a few sentences <icon name="wrench"/> to check baselines <icon name="file-save"/> and font sizing.</p>
+
+                <table>
+                    <caption>User-Interface Icons</caption>
+
+                    <tabular>
+                        <col/>
+                        <col halign="center" right="medium"/>
+                        <col/>
+                        <col halign="center" right="medium"/>
+                        <col/>
+                        <col halign="center"/>
+                        <row bottom="medium">
+                            <cell>Name</cell><cell>Icon</cell>
+                            <cell>Name</cell><cell>Icon</cell>
+                            <cell>Name</cell><cell>Icon</cell>
+                        </row>
+                        <row>
+                            <cell><c>arrow-down</c></cell><cell><icon name="arrow-down"/></cell>
+                            <cell><c>arrow-left</c></cell><cell><icon name="arrow-left"/></cell>
+                            <cell><c>arrow-right</c></cell><cell><icon name="arrow-right"/></cell>
+                        </row>
+                        <row>
+                            <cell><c>arrow-up</c></cell><cell><icon name="arrow-up"/></cell>
+                            <cell><c>file-save</c></cell><cell><icon name="file-save"/></cell>
+                            <cell><c>gear</c></cell><cell><icon name="gear"/></cell>
+                        </row>
+                         <row>
+                            <cell><c>menu</c></cell><cell><icon name="menu"/></cell>
+                            <cell><c>wrench</c></cell><cell><icon name="wrench"/></cell>
+                            <!-- <cell><c></c></cell><cell><icon name=""/></cell> -->
+                        </row>
+
+                    </tabular>
+                </table>
+
+                <p>Nominations of new icons must<ul>
+                    <li>Have a Unicode character representation.</li>
+                    <li>Be in the <init>HTML/CSS/JS</init> Font Awesome catalog.</li>
+                    <li>Be in the <latex/> <c>fontawesome</c> package.</li>
+                    <li>Have a reasonably semantic <pretext/> name.</li>
+                </ul>Please supply all this information, including the official Unicode name, with your request.  Better yet, form a pull request.</p>
+
             </subsection>
 
             <subsection xml:id="section-urls">
@@ -5489,6 +5539,30 @@ the xsltproc executable.
                 <title>Vertical Alignment</title>
                 <p>Vertical alignment can be specified using the <c>valign</c> attribute which admits a space-separated list of <c>top</c>, <c>middle</c>, and <c>bottom</c>; the default is <c>top</c>.</p>
 
+                <!-- Following paragraph will just barely push following sidebyside -->
+                <!-- onto a new page, to test that the captions remain attached     -->
+                <!-- (presuming no edits prior!).  Removing a line should bring the -->
+                <!-- sidebyside back to fill the previous page, intact.  So keep    -->
+                <!-- this in place for use in testing.                              -->
+
+                <!--
+                <p>\noindent
+                Vertical alignment can be specified using the <c>valign</c> attribute which admits a
+                Vertical alignment can be specified using the <c>valign</c> attribute which admits a
+                Vertical alignment can be specified using the <c>valign</c> attribute which admits a
+                Vertical alignment can be specified using the <c>valign</c> attribute which admits a
+                Vertical alignment can be specified using the <c>valign</c> attribute which admits a
+                Vertical alignment can be specified using the <c>valign</c> attribute which admits a
+                Vertical alignment can be specified using the <c>valign</c> attribute which admits a
+                Vertical alignment can be specified using the <c>valign</c> attribute which admits a
+                Vertical alignment can be specified using the <c>valign</c> attribute which admits a
+                Vertical alignment can be specified using the <c>valign</c> attribute which admits a
+                Vertical alignment can be specified using the <c>valign</c> attribute which admits a
+                Vertical alignment can be specified using the <c>valign</c> attribute which admits a
+                Vertical alignment can be specified using the <c>valign</c> attribute which admits a
+                Vertical alignment can be specified using the <c>valign</c> attribute which admits a</p>
+                -->
+
                 <sidebyside widths="33% 17% 50%" valigns="middle top middle">
                     <figure>
                         <caption>Middle</caption>
@@ -7232,8 +7306,8 @@ the xsltproc executable.
             <worksheet>
               <title>A Geometric Prelude</title>
               <!-- <author>Dave Rosoff</author> -->
-              <objectives>
-                <ul xml:id="objectives">
+              <objectives xml:id="objectives">
+                <ul>
                   <li>Practice visualizing vector addition</li>
                   <li>Use vectors without explicit coordinates</li>
                 </ul>
@@ -8109,6 +8183,23 @@ the xsltproc executable.
             </appendix>
 
             <appendix>
+                <title>A Structured Appendix</title>
+                <introduction><p>A deeply-structured appendix for testing purposes.</p></introduction>
+                <subsection>
+                    <title>A Subsection in an Appendix</title>
+                    <introduction><p>Inside a subsection.</p></introduction>
+                    <subsubsection>
+                        <title>A Subsubsection in a Subsection in an Appendix</title>
+                        <p>Nearly terminal.</p>
+                        <paragraphs>
+                            <title>Paragraphs in a Subsubsection in a Subsection in an Appendix</title>
+                            <p>The <c>paragraphs</c> element can go in any division, but does not get a number.</p>
+                        </paragraphs>
+                    </subsubsection>
+                </subsection>
+            </appendix>
+
+            <appendix>
                 <title>Index</title>
 
                 <p>There is an index manufactured at the end of the back matter.  So we are talking about it here, rather than within the index, which is an impossibility.  It contains some sample entries, and is not meant to be comprehensive.  Look at the source of this XML file, searching on <c>&lt;idx&gt;</c>, to see how they are written.  They may be placed inside of a a variety of structures, and their location greatly influences the cross-references produced in the HTML version of the index.</p>
@@ -8150,7 +8241,7 @@ the xsltproc executable.
             </index>
 
             <colophon>
-                <p>This article was authored in <pretext />.</p>
+                <p>This article was authored in, and produced with, <pretext />.  It is typeset with the Latin Modern font.</p>
             </colophon>
         </backmatter>
     </article>

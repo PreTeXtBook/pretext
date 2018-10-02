@@ -23,13 +23,24 @@
         <ref name="ArticleFrontMatter"/>
       </optional>
       <choice>
-        <oneOrMore>
-          <choice>
-            <ref name="BlockDivision"/>
-            <ref name="Paragraphs"/>
-            <ref name="Commentary"/>
-          </choice>
-        </oneOrMore>
+        <group>
+          <oneOrMore>
+            <choice>
+              <ref name="BlockDivision"/>
+              <ref name="Paragraphs"/>
+              <ref name="Commentary"/>
+            </choice>
+          </oneOrMore>
+          <optional>
+            <ref name="Exercises"/>
+          </optional>
+          <optional>
+            <ref name="Solutions"/>
+          </optional>
+          <optional>
+            <ref name="References"/>
+          </optional>
+        </group>
         <group>
           <optional>
             <ref name="IntroductionDivision"/>
@@ -44,7 +55,7 @@
             <ref name="ConclusionDivision"/>
           </optional>
           <optional>
-            <ref name="BackMatter"/>
+            <ref name="ArticleBackMatter"/>
           </optional>
         </group>
       </choice>
@@ -66,7 +77,7 @@
         </oneOrMore>
       </choice>
       <optional>
-        <ref name="BackMatter"/>
+        <ref name="BookBackMatter"/>
       </optional>
     </element>
   </define>
@@ -280,7 +291,41 @@
       </optional>
     </element>
   </define>
-  <define name="Appendix">
+  <define name="ArticleAppendix">
+    <element name="appendix">
+      <ref name="MetaDataTitle"/>
+      <zeroOrMore>
+        <ref name="AuthorByline"/>
+      </zeroOrMore>
+      <choice>
+        <oneOrMore>
+          <choice>
+            <ref name="BlockDivision"/>
+            <ref name="Paragraphs"/>
+            <ref name="Commentary"/>
+            <ref name="NotationList"/>
+          </choice>
+        </oneOrMore>
+        <group>
+          <optional>
+            <ref name="IntroductionDivision"/>
+          </optional>
+          <ref name="Subsection"/>
+          <zeroOrMore>
+            <choice>
+              <ref name="Subsection"/>
+              <ref name="Exercises"/>
+              <ref name="References"/>
+            </choice>
+          </zeroOrMore>
+          <optional>
+            <ref name="ConclusionDivision"/>
+          </optional>
+        </group>
+      </choice>
+    </element>
+  </define>
+  <define name="BookAppendix">
     <element name="appendix">
       <ref name="MetaDataTitle"/>
       <zeroOrMore>
@@ -475,9 +520,7 @@
   </define>
   <define name="ColophonFront">
     <element name="colophon">
-      <optional>
-        <ref name="UniqueID"/>
-      </optional>
+      <ref name="MetaDataTarget"/>
       <zeroOrMore>
         <element name="credit">
           <element name="role">
@@ -596,12 +639,32 @@
       </choice>
     </element>
   </define>
-  <define name="BackMatter">
+  <define name="ArticleBackMatter">
     <element name="backmatter">
       <ref name="MetaDataTitleOptional"/>
       <zeroOrMore>
         <choice>
-          <ref name="Appendix"/>
+          <ref name="ArticleAppendix"/>
+          <ref name="Solutions"/>
+        </choice>
+      </zeroOrMore>
+      <optional>
+        <ref name="References"/>
+      </optional>
+      <optional>
+        <ref name="IndexDivision"/>
+      </optional>
+      <optional>
+        <ref name="ColophonBack"/>
+      </optional>
+    </element>
+  </define>
+  <define name="BookBackMatter">
+    <element name="backmatter">
+      <ref name="MetaDataTitleOptional"/>
+      <zeroOrMore>
+        <choice>
+          <ref name="BookAppendix"/>
           <ref name="Solutions"/>
         </choice>
       </zeroOrMore>
@@ -618,9 +681,7 @@
   </define>
   <define name="ColophonBack">
     <element name="colophon">
-      <optional>
-        <ref name="UniqueID"/>
-      </optional>
+      <ref name="MetaDataTarget"/>
       <oneOrMore>
         <choice>
           <ref name="BlockText"/>
@@ -941,6 +1002,9 @@
   </define>
   <define name="Console">
     <element name="console">
+      <optional>
+        <ref name="PermanentID"/>
+      </optional>
       <oneOrMore>
         <optional>
           <element name="prompt">
@@ -963,7 +1027,7 @@
   <define name="Program">
     <element name="program">
       <optional>
-        <ref name="UniqueID"/>
+        <ref name="PermanentID"/>
       </optional>
       <optional>
         <attribute name="language"/>
@@ -981,6 +1045,9 @@
   <define name="List">
     <choice>
       <element name="ol">
+        <optional>
+          <ref name="PermanentID"/>
+        </optional>
         <optional>
           <attribute name="cols">
             <choice>
@@ -1009,6 +1076,9 @@
       </element>
       <element name="ul">
         <optional>
+          <ref name="PermanentID"/>
+        </optional>
+        <optional>
           <attribute name="cols">
             <choice>
               <value>2</value>
@@ -1031,6 +1101,9 @@
         </optional>
         <oneOrMore>
           <element name="li">
+            <optional>
+              <ref name="PermanentID"/>
+            </optional>
             <choice>
               <ref name="TextParagraph"/>
               <oneOrMore>
@@ -1041,6 +1114,9 @@
         </oneOrMore>
       </element>
       <element name="dl">
+        <optional>
+          <ref name="PermanentID"/>
+        </optional>
         <optional>
           <attribute name="width">
             <choice>
@@ -1421,6 +1497,9 @@
   </define>
   <define name="SidebySideAttributes">
     <optional>
+      <ref name="PermanentID"/>
+    </optional>
+    <optional>
       <attribute name="margins"/>
     </optional>
     <optional>
@@ -1501,7 +1580,7 @@
   <define name="ImageRaster">
     <element name="image">
       <optional>
-        <ref name="UniqueID"/>
+        <ref name="PermanentID"/>
       </optional>
       <optional>
         <attribute name="width"/>
@@ -1521,6 +1600,9 @@
     <element name="image">
       <optional>
         <ref name="UniqueID"/>
+      </optional>
+      <optional>
+        <ref name="PermanentID"/>
       </optional>
       <optional>
         <attribute name="width"/>
@@ -1673,6 +1755,9 @@
   <define name="Tabular">
     <element name="tabular">
       <optional>
+        <ref name="PermanentID"/>
+      </optional>
+      <optional>
         <ref name="AlignmentHorizontal"/>
       </optional>
       <optional>
@@ -1701,7 +1786,7 @@
   <define name="Sage">
     <element name="sage">
       <optional>
-        <ref name="UniqueID"/>
+        <ref name="PermanentID"/>
       </optional>
       <optional>
         <attribute name="doctest"/>
@@ -1737,6 +1822,9 @@
     <element name="video">
       <optional>
         <ref name="UniqueID"/>
+      </optional>
+      <optional>
+        <ref name="PermanentID"/>
       </optional>
       <optional>
         <attribute name="width"/>
@@ -1929,9 +2017,7 @@
   </define>
   <define name="BibliographyItem">
     <element name="biblio">
-      <optional>
-        <ref name="UniqueID"/>
-      </optional>
+      <ref name="MetaDataTarget"/>
       <optional>
         <attribute name="type">
           <value>raw</value>
@@ -2222,6 +2308,9 @@
   <define name="UniqueID">
     <attribute name="xml:id"/>
   </define>
+  <define name="PermanentID">
+    <attribute name="permid"/>
+  </define>
   <define name="Title">
     <element name="title">
       <ref name="TextLong"/>
@@ -2247,6 +2336,9 @@
     <optional>
       <ref name="UniqueID"/>
     </optional>
+    <optional>
+      <ref name="PermanentID"/>
+    </optional>
     <zeroOrMore>
       <ref name="Index"/>
     </zeroOrMore>
@@ -2254,6 +2346,9 @@
   <define name="MetaDataTitle">
     <optional>
       <ref name="UniqueID"/>
+    </optional>
+    <optional>
+      <ref name="PermanentID"/>
     </optional>
     <optional>
       <ref name="XMLBase"/>
@@ -2269,6 +2364,9 @@
   <define name="MetaDataSubtitle">
     <optional>
       <ref name="UniqueID"/>
+    </optional>
+    <optional>
+      <ref name="PermanentID"/>
     </optional>
     <optional>
       <ref name="XMLBase"/>
@@ -2289,6 +2387,9 @@
       <ref name="UniqueID"/>
     </optional>
     <optional>
+      <ref name="PermanentID"/>
+    </optional>
+    <optional>
       <ref name="XMLBase"/>
     </optional>
     <optional>
@@ -2304,6 +2405,9 @@
   <define name="MetaDataTitleCreatorOptional">
     <optional>
       <ref name="UniqueID"/>
+    </optional>
+    <optional>
+      <ref name="PermanentID"/>
     </optional>
     <optional>
       <ref name="XMLBase"/>
@@ -2324,6 +2428,9 @@
   <define name="MetaDataCaption">
     <optional>
       <ref name="UniqueID"/>
+    </optional>
+    <optional>
+      <ref name="PermanentID"/>
     </optional>
     <optional>
       <ref name="XMLBase"/>
@@ -2366,6 +2473,9 @@
       <optional>
         <ref name="UniqueID"/>
       </optional>
+      <optional>
+        <ref name="PermanentID"/>
+      </optional>
       <ref name="TextParagraph"/>
     </element>
   </define>
@@ -2373,6 +2483,9 @@
     <element name="p">
       <optional>
         <ref name="UniqueID"/>
+      </optional>
+      <optional>
+        <ref name="PermanentID"/>
       </optional>
       <oneOrMore>
         <element name="line">
@@ -3027,6 +3140,11 @@
         <empty/>
       </element>
     </choice>
+  </define>
+  <define name="Character" combine="choice">
+    <element name="icon">
+      <attribute name="name"/>
+    </element>
   </define>
   <define name="Music">
     <choice>

@@ -1025,23 +1025,72 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- This is the context-sensitive version of the previous -->
-<!-- named template, with protection against mis-use       -->
-<!-- Nodes to Subdivision Names -->
-<!-- Compute relative level of a node, adjust to absolute -->
-<!-- Subdivision name comes from named template above     -->
-<!-- Note: frontmatter and backmatter are structural, so  -->
-<!-- get considered in level computation.  However, they  -->
-<!-- are just containers, so we subtract them away        -->
-<!-- The frontmatter is divided for books in HTML,        -->
-<!-- and the backmatter is divided for articles and books -->
-<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|exercises|worksheet|solutions|references|introduction|conclusion|colophon|biography|dedication|acknowledgement|preface|index" mode="division-name">
-    <xsl:variable name="relative-level">
-        <xsl:apply-templates select="." mode="level" />
-    </xsl:variable>
-    <xsl:call-template name="level-to-name">
-        <xsl:with-param name="level" select="$relative-level" />
-    </xsl:call-template>
+<!-- PTX Divisions to LaTeX Divisions -->
+
+<!-- PTX has a variety of divisions not native to LaTeX, so normally -->
+<!-- an author would have to engineer/design these themselves.  We   -->
+<!-- do something similar and implement them using the stock LaTeX   -->
+<!-- divisons.  This is the dictionary which maps PreTeXt division   -->
+<!-- elements to stock LaTeX division environments.                  -->
+<!-- NB: we formerly did this using the "level" template and the     -->
+<!-- "level-to-name" templates, which we should consider obsoleting, -->
+<!-- simplifying, or consolidating.                                  -->
+<!-- NB: move this to the -latex XSL once it is removed from -html   -->
+<xsl:template match="part|chapter|section|subsection|subsubsection" mode="division-name">
+    <xsl:value-of select="local-name(.)"/>
+</xsl:template>
+
+<!-- Front matter divisions are only in book, and always at chapter level -->
+<xsl:template match="acknowledgement|foreword|preface" mode="division-name">
+    <xsl:text>chapter</xsl:text>
+</xsl:template>
+
+<!-- Some divisions can appear at multiple levels (eg, exercises) -->
+<!-- Divisions in the back matter vary between books and articles -->
+<!--     Book:    children of backmatter -> chapter               -->
+<!--     Article: children of backmatter -> section               -->
+<xsl:template match="exercises|solutions|worksheet|references|appendix|index" mode="division-name">
+    <xsl:choose>
+        <xsl:when test="parent::article">
+            <xsl:text>section</xsl:text>
+        </xsl:when>
+        <xsl:when test="parent::chapter">
+            <xsl:text>section</xsl:text>
+        </xsl:when>
+        <xsl:when test="parent::section">
+            <xsl:text>subsection</xsl:text>
+        </xsl:when>
+        <xsl:when test="parent::subsection">
+            <xsl:text>subsubsection</xsl:text>
+        </xsl:when>
+        <xsl:when test="parent::subsubsection">
+            <xsl:text>paragraph</xsl:text>
+        </xsl:when>
+        <!-- children of backmatter (appendix, solutions, reference, index) -->
+        <!-- in book/article are at chapter/section level                   -->
+        <xsl:when test="parent::backmatter">
+            <xsl:choose>
+                <xsl:when test="ancestor::book">
+                    <xsl:text>chapter</xsl:text>
+                </xsl:when>
+                <xsl:when test="ancestor::article">
+                    <xsl:text>section</xsl:text>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:when>
+        <!-- appendix in book/article is at chapter/section level -->
+        <!-- so descendants (exercises, solutions) down one level -->
+        <xsl:when test="parent::appendix">
+            <xsl:choose>
+                <xsl:when test="ancestor::book">
+                    <xsl:text>section</xsl:text>
+                </xsl:when>
+                <xsl:when test="ancestor::article">
+                    <xsl:text>subsection</xsl:text>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:when>
+    </xsl:choose>
 </xsl:template>
 
 <xsl:template match="*" mode="division-name">
@@ -2799,7 +2848,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A "part" must have chapters, so will always return      -->
 <!-- 'true' and for a 'subsubsection' there are no more      -->
 <!-- subdivisions to employ and so will return empty.        -->
-<xsl:template match="part|chapter|section|subsection|subsubsection" mode="is-structured-division">
+<xsl:template match="book|article|part|chapter|section|subsection|subsubsection" mode="is-structured-division">
     <xsl:if test="chapter|section|subsection|subsubsection">
         <xsl:text>true</xsl:text>
     </xsl:if>
@@ -3023,27 +3072,6 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <xsl:apply-templates select=".." mode="containing-filename" />
         </xsl:otherwise>
     </xsl:choose>
-</xsl:template>
-
-<!-- Every XML element has a URL associated with it -->
-<!-- A containing filename, plus an optional anchor/id  -->
-<xsl:template match="*" mode="url">
-    <xsl:variable name="intermediate">
-        <xsl:apply-templates select="." mode="is-intermediate" />
-    </xsl:variable>
-    <xsl:variable name="chunk">
-        <xsl:apply-templates select="." mode="is-chunk" />
-    </xsl:variable>
-    <xsl:apply-templates select="." mode="containing-filename" />
-    <xsl:if test="$intermediate='false' and $chunk='false'">
-        <xsl:text>#</xsl:text>
-        <!-- the ids on equations are manufactured -->
-        <!-- by MathJax to look this way           -->
-        <xsl:if test="self::men|self::mrow">
-            <xsl:text>mjx-eqn-</xsl:text>
-        </xsl:if>
-        <xsl:apply-templates select="." mode="internal-id" />
-    </xsl:if>
 </xsl:template>
 
 
@@ -3499,6 +3527,70 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:choose>
 </xsl:template>
 
+<!-- ##### -->
+<!-- Icons -->
+<!-- ##### -->
+
+<!-- Comments are Unicode names, from fileformat.info -->
+<!-- @latex takes priority for LaTeX output when the  -->
+<!-- Font Awesome name has changed, but the LaTeX     -->
+<!-- package is lagging.  This needs to be in the     -->
+<!-- Font Awesome style, with dashes and no CamelCase -->
+<xsl:variable name="icon-rtf">
+    <!-- see Unicode Character 'LEFTWARDS HEAVY ARROW' (U+1F844) -->
+    <!-- for bulkier arrows (in "Supplemental Arrows-C Block")   -->
+    <iconinfo name="arrow-left"
+              font-awesome="arrow-left"
+              unicode="&#x2190;"/> <!-- LEFTWARDS ARROW -->
+    <iconinfo name="arrow-up"
+              font-awesome="arrow-up"
+              unicode="&#x2191;"/> <!-- UPWARDS ARROW -->
+    <iconinfo name="arrow-right"
+              font-awesome="arrow-right"
+              unicode="&#x2192;"/> <!-- RIGHTWARDS ARROW -->
+    <iconinfo name="arrow-down"
+              font-awesome="arrow-down"
+              unicode="&#x2193;"/> <!-- DOWNWARDS ARROW -->
+    <iconinfo name="file-save"
+              font-awesome="save"
+              unicode="&#x1f4be;"/> <!-- FLOPPY DISK -->
+    <iconinfo name="gear"
+              font-awesome="cog"
+              unicode="&#x2699;" /> <!-- GEAR -->
+    <iconinfo name="menu"
+              latex="favicon"
+              font-awesome="bars"
+              unicode="&#x2630;" /> <!-- TRIGRAM FOR HEAVEN -->
+    <iconinfo name="wrench"
+              font-awesome="wrench"
+              unicode="&#x1f527;"/> <!-- WRENCH -->
+</xsl:variable>
+
+<!-- If read from a file via "document()" then   -->
+<!-- the exsl:node-set() call would seem to be   -->
+<!-- unnecessary.  When list above gets too big, -->
+<!-- migrate to a new file after consulting      -->
+<!-- localization scheme                         -->
+<xsl:variable name="icon-table" select="exsl:node-set($icon-rtf)"/>
+
+<xsl:key name="icon-key" match="iconinfo" use="@name"/>
+
+<!-- ##### -->
+<!-- Icons -->
+<!-- ##### -->
+
+<xsl:template match="icon">
+    <!-- the name attribute of the "icon" in text as a string -->
+    <xsl:variable name="icon-name">
+        <xsl:value-of select="@name"/>
+    </xsl:variable>
+
+    <!-- for-each is just one node, but sets context for key() -->
+    <xsl:for-each select="$icon-table">
+        <xsl:value-of select="key('icon-key', $icon-name)/@unicode" />
+    </xsl:for-each>
+</xsl:template>
+
 
 <!-- ########### -->
 <!-- Identifiers        -->
@@ -3537,6 +3629,22 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <xsl:value-of select="local-name(.)" />
             <xsl:text>-</xsl:text>
             <xsl:number from="book|article|letter|memo" level="any" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="*" mode="perm-id">
+    <xsl:choose>
+        <xsl:when test="@permid">
+            <xsl:value-of select="@permid"/>
+        </xsl:when>
+        <xsl:when test="@xml:id">
+            <xsl:value-of select="@xml:id"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="local-name(.)"/>
+            <xsl:text>-</xsl:text>
+            <xsl:number from="book|article|letter|memo" level="any"/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -5801,7 +5909,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:choose>
         <!-- burrow through "stage", do not consider "answer" -->
         <xsl:when test="webwork-reps">
-            <xsl:if test="$b-has-statement or ($b-has-hint and webwork-reps/static//hint) or ($b-has-solution and webwork-reps/static//solution)">
+            <xsl:if test="$b-has-statement or ($b-has-hint and webwork-reps/static//hint) or ($b-has-answer and webwork-reps/static//answer) or ($b-has-solution and webwork-reps/static//solution)">
                 <xsl:text>X</xsl:text>
             </xsl:if>
         </xsl:when>
@@ -6150,56 +6258,77 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- for motivation and document() syntax for standalone file -->
 <!-- Also: see contributors in FCLA work                      -->
 
-<!-- The data: attribute is our usage,    -->
-<!-- elements belong to other packages.   -->
-<!-- Blank means not explicitly supported -->
-<!-- Alphabetical by type                 -->
+<!-- The data: attribute is our usage, elements belong to     -->
+<!-- other packages. Blank means not explicitly supported.    -->
+<!-- Alphabetical by type.                                    -->
+
 <!-- Prettify: -->
-<!-- Last reviewed 2014/06/28                                                     -->
-<!-- http://code.google.com/p/google-code-prettify/source/browse/trunk/src        -->
-<!-- Look inside files, it can be a one-handler-to-several-languages relationship -->
+<!-- Last reviewed 2018/09/23                      -->
+<!-- https://github.com/google/code-prettify       -->
+<!-- Some languages can be "guessed", indicated by -->
+<!-- "Prettify default"  in the comments.  But we  -->
+<!-- provide strings anyway.  List on 2019-09-23:  -->
+<!--                                               -->
+<!--     "bsh", "c", "cc", "cpp", "cs", "csh",     -->
+<!--     "cyc", "cv", "htm", "html", "java", "js", -->
+<!--     "m", "mxml", "perl", "pl", "pm", "py",    -->
+<!--     "rb", "sh", "xhtml", "xml", "xsl".        -->
+<!--                                               -->
+<!-- There are extension files for some other      -->
+<!-- languages, which register identifying strings -->
+<!-- that can be determined by opening their       -->
+<!-- files/code.  We use such strings here.        -->
+<!-- Comments say "Prettify extension".            -->
+<!-- 2019-09-23: there may be some new ones we     -->
+<!-- could add, but we have not reviewed the       -->
+<!-- necessary "listings" options: bash, Haskell   -->
+
 <!-- Listings: -->
-<!-- Last reviewed 2014/06/28                           -->
-<!-- Exact matches, or best guesses, some unimplemented -->
+<!-- Last reviewed carefully: 2014/06/28           -->
+<!-- Exact matches, or best guesses, some          -->
+<!-- unimplemented.  [] notation is for variants.  -->
+<!-- 2019-09-23: minor review, v 1.7 (2018-09-02)  -->
 
 <!-- Our strings (@mbx) are always all-lowercase, no symbols, no punctuation -->
 <mb:programming>
     <!-- Procedural -->
-    <language mbx="basic"       listings="Basic"        prettify="basic" />     <!-- Prettify handler verified -->
-    <language mbx="c"           listings="C"            prettify="" />          <!-- No Prettify handler -->
-    <language mbx="cpp"         listings="C++"          prettify="" />          <!-- No Prettify handler -->
-    <language mbx="go"          listings="C"            prettify="go" />        <!-- Prettify handler verified -->
-    <language mbx="java"        listings="Java"         prettify="" />          <!-- No Prettify handler -->
-    <language mbx="lua"         listings="Lua"          prettify="lua" />       <!-- Prettify handler verified -->
-    <language mbx="pascal"      listings="Pascal"       prettify="pascal" />    <!-- Prettify handler verified -->
-    <language mbx="perl"        listings="Perl"         prettify="" />          <!-- No Prettify handler -->
-    <language mbx="python"      listings="Python"       prettify="" />          <!-- No Prettify handler -->
-    <language mbx="r"           listings="R"            prettify="r" />         <!-- Prettify handler verified -->
-    <language mbx="s"           listings="S"            prettify="s" />         <!-- Prettify handler verified -->
-    <language mbx="sas"         listings="SAS"          prettify="s" />         <!-- Prettify handler verified -->
-    <language mbx="sage"        listings="Python"       prettify="" />          <!-- No Prettify handler -->
-    <language mbx="splus"       listings="[Plus]S"      prettify="Splus" />     <!-- Prettify handler verified -->
-    <language mbx="vbasic"     listings="[Visual]Basic" prettify="vb" />        <!-- Prettify handler verified -->
-    <language mbx="vbscript"    listings="VBscript"     prettify="vbs" />       <!-- Prettify handler verified -->
+    <language mbx="basic"       listings="Basic"            prettify="basic"/>     <!-- Prettify extension 2018-09-23 -->
+    <language mbx="c"           listings="C"                prettify="c"/>         <!-- Prettify default   2018-09-23 -->
+    <language mbx="cpp"         listings="C++"              prettify="cpp"/>       <!-- Prettify default   2018-09-23 -->
+    <language mbx="go"          listings="C"                prettify="go"/>        <!-- Prettify extension 2018-09-23 -->
+    <language mbx="java"        listings="Java"             prettify="java"/>      <!-- Prettify default   2018-09-23 -->
+    <language mbx="javascript"  listings=""                 prettify="js"/>        <!-- Prettify default   2018-09-23 -->
+    <language mbx="lua"         listings="Lua"              prettify="lua"/>       <!-- Prettify extension 2018-09-23 -->
+    <language mbx="pascal"      listings="Pascal"           prettify="pascal"/>    <!-- Prettify extension 2018-09-23 -->
+    <language mbx="perl"        listings="Perl"             prettify="perl"/>      <!-- Prettify default   2018-09-23 -->
+    <language mbx="python"      listings="Python"           prettify="py"/>        <!-- Prettify default   2018-09-23 -->
+    <language mbx="r"           listings="R"                prettify="r"/>         <!-- Prettify extension 2018-09-23 -->
+    <language mbx="s"           listings="S"                prettify="s"/>         <!-- Prettify extension 2018-09-23 -->
+    <language mbx="sas"         listings="SAS"              prettify="s"/>         <!-- Prettify extension 2018-09-23 -->
+    <language mbx="sage"        listings="Python"           prettify="py"/>        <!-- Prettify default   2018-09-23 -->
+    <language mbx="splus"       listings="[Plus]S"          prettify="s"/>         <!-- Prettify extension 2018-09-23 -->
+    <language mbx="vbasic"      listings="[Visual]Basic"    prettify="vb"/>        <!-- Prettify extension 2018-09-23 -->
+    <language mbx="vbscript"    listings="VBscript"         prettify="vbs"/>       <!-- Prettify extension 2018-09-23 -->
     <!-- Others (esp. functional-->
-    <language mbx="apollo"      listings=""             prettify="apollo" />    <!-- Prettify handler verified --> 
-    <language mbx="clojure"     listings="Lisp"         prettify="clojure" />   <!-- Prettify handler verified -->
-    <language mbx="lisp"        listings="Lisp"         prettify="lisp" />      <!-- Prettify handler verified -->
-    <language mbx="clisp"       listings="Lisp"         prettify="cl" />        <!-- Prettify handler verified -->
-    <language mbx="elisp"       listings="Lisp"         prettify="el" />        <!-- Prettify handler verified -->
-    <language mbx="scheme"      listings="Lisp"         prettify="scm" />       <!-- Prettify handler verified -->
-    <language mbx="racket"      listings="Lisp"         prettify="rkt" />       <!-- Prettify handler verified -->
-    <language mbx="llvm"        listings="LLVM"         prettify="llvm" />      <!-- Prettify handler verified -->
-    <language mbx="matlab"      listings="Matlab"       prettify="" />          <!-- No Prettify handler -->
-    <language mbx="ml"          listings="ML"           prettify="ml" />        <!-- Prettify handler verified -->
-    <language mbx="fsharp"      listings="ML"           prettify="fs" />        <!-- Prettify handler verified -->
+    <language mbx="apollo"      listings=""                 prettify="apollo"/>    <!-- Prettify extension 2018-09-23 -->
+    <language mbx="clojure"     listings="Lisp"             prettify="clj"/>       <!-- Prettify extension 2018-09-23 -->
+    <language mbx="lisp"        listings="Lisp"             prettify="lisp"/>      <!-- Prettify extension 2018-09-23 -->
+    <language mbx="clisp"       listings="Lisp"             prettify="cl"/>        <!-- Prettify extension 2018-09-23 -->
+    <language mbx="elisp"       listings="Lisp"             prettify="el"/>        <!-- Prettify extension 2018-09-23 -->
+    <language mbx="scheme"      listings="Lisp"             prettify="scm"/>       <!-- Prettify extension 2018-09-23 -->
+    <language mbx="racket"      listings="Lisp"             prettify="rkt"/>       <!-- Prettify extension 2018-09-23 -->
+    <language mbx="llvm"        listings="LLVM"             prettify="llvm"/>      <!-- Prettify extension 2018-09-23 -->
+    <language mbx="matlab"      listings="Matlab"           prettify="matlab"/>    <!-- Prettify extension 2018-09-23 -->
+    <language mbx="ml"          listings="ML"               prettify="ml"/>        <!-- Prettify extension 2018-09-23 -->
+    <language mbx="ocaml"       listings="[Objective]Caml"  prettify="ml"/>        <!-- Prettify extension 2018-09-23 -->
+    <language mbx="fsharp"      listings="ML"               prettify="fs"/>        <!-- Prettify extension 2018-09-23 -->
     <!-- Text Manipulation -->
-    <language mbx="css"         listings=""             prettify="css" />       <!-- Prettify handler verified -->
-    <language mbx="latex"       listings="TeX"          prettify="latex" />     <!-- Prettify handler verified -->
-    <language mbx="html"        listings="HTML"         prettify="" />          <!-- No Prettify handler -->
-    <language mbx="tex"         listings="TeX"          prettify="tex" />       <!-- Prettify handler verified -->
-    <language mbx="xml"         listings="XML"          prettify="" />          <!-- No Prettify handler -->
-    <language mbx="xslt"        listings="XSLT"         prettify="" />          <!-- No Prettify handler -->
+    <language mbx="css"         listings=""                 prettify="css-str"/>   <!-- Prettify extension 2018-09-23 -->
+    <language mbx="latex"       listings="[LaTeX]TeX"       prettify="latex"/>     <!-- Prettify extension 2018-09-23 -->
+    <language mbx="html"        listings="HTML"             prettify="html"/>      <!-- Prettify default   2018-09-23 -->
+    <language mbx="tex"         listings="[plain]TeX"       prettify="tex"/>       <!-- Prettify extension 2018-09-23 -->
+    <language mbx="xml"         listings="XML"              prettify="xml"/>       <!-- Prettify default   2018-09-23 -->
+    <language mbx="xslt"        listings="XSLT"             prettify="xsl"/>       <!-- Prettify default   2018-09-23 -->
 </mb:programming>
 
 <!-- Define the key for indexing into the data list -->
@@ -6219,7 +6348,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <xsl:template match="*" mode="prettify-language">
     <xsl:variable name="language"><xsl:value-of select="@language" /></xsl:variable>
     <xsl:for-each select="document('')/*/mb:programming">
-        <xsl:value-of select="key('proglang', $language)/@listings" />
+        <xsl:value-of select="key('proglang', $language)/@prettify" />
     </xsl:for-each>
 </xsl:template>
 
@@ -8798,6 +8927,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="date-string" select="'2018-07-27'" />
         <xsl:with-param name="message" select="'the transitional  html.js.server  parameter has been removed'" />
             <xsl:with-param name="incorrect-use" select="($html.js.server != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2018-09-26  appendix subdivision confusion resolved -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$root/article/backmatter/appendix/section" />
+        <xsl:with-param name="date-string" select="'2018-09-26'" />
+        <xsl:with-param name="message" select="'the first division of an &quot;appendix&quot; of an &quot;article&quot; should be a &quot;subsection&quot;'" />
     </xsl:call-template>
 </xsl:template>
 
