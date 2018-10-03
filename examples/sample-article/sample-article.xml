@@ -2631,11 +2631,69 @@ the xsltproc executable.
                     </exercise>
                     <exercise>
                         <statement><p>Add seven to eight.</p></statement>
+                        <answer><p><m>15</m></p></answer>
                     </exercise>
                     <exercise>
                         <statement><p><m>9+10</m></p></statement>
                     </exercise>
-                    <conclusion><p>This feature was designed with short <q>drill</q> exercises in mind.</p></conclusion>
+                    <exercise>
+                        <statement><p><m>1+2</m></p></statement>
+                    </exercise>
+                    <exercise>
+                        <statement><p><m>3+4+5</m></p></statement>
+                        <hint><p>Addition is associative.</p></hint>
+                        <answer><p><m>12</m></p></answer>
+                        <solution><p>First, add <m>3</m> and <m>4</m> to get <m>7</m>, then add <m>5</m> to arrive at <m>12</m>.</p></solution>
+                    </exercise>
+                    <exercise>
+                        <statement><p><m>5+6</m></p></statement>
+                    </exercise>
+                    <exercise>
+                        <statement><p>Add seven to eight.</p></statement>
+                        <answer><p><m>15</m></p></answer>
+                    </exercise>
+                    <exercise>
+                        <statement><p><m>9+10</m></p></statement>
+                    </exercise>
+                    <exercise>
+                        <statement><p><m>1+2</m></p></statement>
+                    </exercise>
+                    <exercise>
+                        <statement><p><m>3+4+5</m></p></statement>
+                        <hint><p>Addition is associative.</p></hint>
+                        <answer><p><m>12</m></p></answer>
+                        <solution><p>First, add <m>3</m> and <m>4</m> to get <m>7</m>, then add <m>5</m> to arrive at <m>12</m>.</p></solution>
+                    </exercise>
+                    <exercise>
+                        <statement><p><m>5+6</m></p></statement>
+                    </exercise>
+                    <exercise>
+                        <statement><p>Add seven to eight.</p></statement>
+                        <answer><p><m>15</m></p></answer>
+                    </exercise>
+                    <exercise>
+                        <statement><p><m>9+10</m></p></statement>
+                    </exercise>
+                    <exercise>
+                        <statement><p><m>1+2</m></p></statement>
+                    </exercise>
+                    <exercise>
+                        <statement><p><m>3+4+5</m></p></statement>
+                        <hint><p>Addition is associative.</p></hint>
+                        <answer><p><m>12</m></p></answer>
+                        <solution><p>First, add <m>3</m> and <m>4</m> to get <m>7</m>, then add <m>5</m> to arrive at <m>12</m>.</p></solution>
+                    </exercise>
+                    <exercise>
+                        <statement><p><m>5+6</m></p></statement>
+                    </exercise>
+                    <exercise>
+                        <statement><p>Add seven to eight.</p></statement>
+                        <answer><p><m>15</m></p></answer>
+                    </exercise>
+                    <exercise>
+                        <statement><p><m>9+10</m></p></statement>
+                    </exercise>
+                    <conclusion><p>This feature was designed with short <q>drill</q> exercises in mind.  With long exercises, or exercises with long hints, answers, or solutions, there is a risk that the <latex/> output will have bad page breaks in the vicinity (just before) such an exercise that occupies too much vertical space.  Edit, rearrange, or use fewer columns to see if the situation improves.</p></conclusion>
                 </exercisegroup>
 
             </exercises>
