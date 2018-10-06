@@ -1776,21 +1776,31 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:if test="$document-root//exercisegroup">
         <xsl:text>%% Indented groups of "exercise" within an "exercises" division&#xa;</xsl:text>
-        <xsl:text>%% An "xparse" environment will represent the entire exercise&#xa;</xsl:text>
-        <xsl:text>%% group, with the number of columns as a parameter.&#xa;</xsl:text>
-        <xsl:text>%% tcolorbox styles control the exercisegroup layout&#xa;</xsl:text>
-        <xsl:text>%% Indentation is 5% of overall width&#xa;</xsl:text>
-        <xsl:text>%% Gap between exercises is 3% of overall width&#xa;</xsl:text>
-        <!-- "regular" version, indent on left -->
-        <xsl:text>\tcbset{ exgroupstyle/.style={raster equal height=rows, raster left skip=0.05\linewidth, raster column skip=0.03\linewidth} }&#xa;</xsl:text>
-        <!-- "solution" version, indent on right. Silly, but easy -->
-        <xsl:text>\tcbset{ exgroupsolutionstyle/.style={raster equal height=rows, raster right skip=0.05\linewidth, raster column skip=0.03\linewidth} }&#xa;</xsl:text>
-        <!-- raster equal height: boxes of same *row* have same height    -->
-        <!-- raster columns: controls layout, so no line separators, etc. -->
-        <xsl:text>\NewDocumentEnvironment{exercisegroup}{m}&#xa;</xsl:text>
-        <xsl:text>{\begin{tcbraster}[exgroupstyle,raster columns=#1]}{\end{tcbraster}}&#xa;</xsl:text>
-        <xsl:text>\NewDocumentEnvironment{exercisegroupsolution}{m}&#xa;</xsl:text>
-        <xsl:text>{\begin{tcbraster}[exgroupsolutionstyle,raster columns=#1]}{\end{tcbraster}}&#xa;</xsl:text>
+        <xsl:text>%% Lengths control the indentation (always) and gaps (multi-column)&#xa;</xsl:text>
+        <xsl:text>\newlength{\egindent}\setlength{\egindent}{0.05\linewidth}&#xa;</xsl:text>
+        <xsl:text>\newlength{\exggap}\setlength{\exggap}{0.05\linewidth}&#xa;</xsl:text>
+        <xsl:if test="$document-root//exercisegroup[not(@cols)]">
+            <xsl:text>%% Thin "xparse" environments will represent the entire exercise&#xa;</xsl:text>
+            <xsl:text>%% group, in the case when it does not hold multiple columns.&#xa;</xsl:text>
+            <!-- DO NOT make this a tcolorbox, since we would want it -->
+            <!-- to be breakable, and then the individual exercises   -->
+            <!-- could not be breakable tcolorbox themselves          -->
+            <!-- TODO: add some pre- spacing commands here -->
+            <xsl:text>\NewDocumentEnvironment{exercisegroup}{}&#xa;</xsl:text>
+            <xsl:text>{}{}&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:if test="$document-root//exercisegroup/@cols">
+            <xsl:text>%% An exercise group with multiple columns is a tcbraster.&#xa;</xsl:text>
+            <xsl:text>%% If the contained exercises are explicitly unbreakable,&#xa;</xsl:text>
+            <xsl:text>%% the raster should break at rows for page breaks.&#xa;</xsl:text>
+            <xsl:text>%% The number of columns is a parameter, passed to tcbraster.&#xa;</xsl:text>
+            <!-- raster equal height: boxes of same *row* have same height    -->
+            <!-- raster left skip: indentation of all exercises               -->
+            <!-- raster columns: controls layout, so no line separators, etc. -->
+            <xsl:text>\tcbset{ exgroupcolstyle/.style={raster equal height=rows, raster left skip=\egindent, raster column skip=\exggap} }&#xa;</xsl:text>
+            <xsl:text>\NewDocumentEnvironment{exercisegroupcol}{m}&#xa;</xsl:text>
+            <xsl:text>{\begin{tcbraster}[exgroupcolstyle,raster columns=#1]}{\end{tcbraster}}&#xa;</xsl:text>
+        </xsl:if>
     </xsl:if>
     <xsl:if test="$document-root/backmatter/index-part | $document-root//index-list">
         <!-- See http://tex.blogoverflow.com/2012/09/dont-forget-to-run-makeindex/ for "imakeidx" usage -->
@@ -4802,25 +4812,33 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="label" />
     <xsl:text>%&#xa;</xsl:text>
     <xsl:apply-templates select="introduction" />
-    <xsl:text>\begin{exercisegroup}{</xsl:text>
     <xsl:choose>
-        <xsl:when test="not(@cols)">
-            <xsl:text>1</xsl:text>
+        <xsl:when test="not(@cols) or (@cols = 1)">
+            <xsl:text>\begin{exercisegroup}&#xa;</xsl:text>
         </xsl:when>
-        <xsl:when test="@cols = 1 or @cols = 2 or @cols = 3 or @cols = 4 or @cols = 5 or @cols = 6">
+        <xsl:when test="@cols = 2 or @cols = 3 or @cols = 4 or @cols = 5 or @cols = 6">
+            <xsl:text>\begin{exercisegroupcol}</xsl:text>
+            <xsl:text>{</xsl:text>
             <xsl:value-of select="@cols"/>
+            <xsl:text>}&#xa;</xsl:text>
         </xsl:when>
         <xsl:otherwise>
             <xsl:message terminate="yes">MBX:ERROR: invalid value <xsl:value-of select="@cols" /> for cols attribute of exercisegroup</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
-    <xsl:text>}&#xa;</xsl:text>
     <xsl:apply-templates select="exercise">
         <xsl:with-param name="b-has-hint" select="$b-has-divisional-hint" />
         <xsl:with-param name="b-has-answer" select="$b-has-divisional-answer" />
         <xsl:with-param name="b-has-solution" select="$b-has-divisional-solution" />
-        </xsl:apply-templates>
-    <xsl:text>\end{exercisegroup}&#xa;</xsl:text>
+    </xsl:apply-templates>
+    <xsl:choose>
+        <xsl:when test="not(@cols) or (@cols = 1)">
+            <xsl:text>\end{exercisegroup}&#xa;</xsl:text>
+        </xsl:when>
+        <xsl:when test="@cols = 2 or @cols = 3 or @cols = 4 or @cols = 5 or @cols = 6">
+            <xsl:text>\end{exercisegroupcol}&#xa;</xsl:text>
+        </xsl:when>
+    </xsl:choose>
     <xsl:if test="conclusion">
         <xsl:text>\par\noindent%&#xa;</xsl:text>
         <xsl:apply-templates select="conclusion" />
@@ -4867,29 +4885,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$b-has-statement">
             <xsl:apply-templates select="introduction" />
         </xsl:if>
-        <!-- use a specialized format when statements are turned off  -->
-        <!-- or when there is no introduction nor conclusion          -->
-        <!-- Typically this will just switch-off indentation          -->
+        <!-- the container for the exercisegroup does not need to change -->
+        <!-- when in a solutions list.  The indentation might look odd   -->
+        <!-- without an introduction (when there are no statements), or  -->
+        <!-- it might remind the reader of the grouping                  -->
         <xsl:choose>
-            <xsl:when test="$b-has-statement and (introduction or conclusion)">
-                <xsl:text>\begin{exercisegroup}{</xsl:text>
+            <xsl:when test="not(@cols) or (@cols = 1)">
+                <xsl:text>\begin{exercisegroup}&#xa;</xsl:text>
             </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>\begin{exercisegroupsolution}{</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-        <xsl:choose>
-            <xsl:when test="not(@cols)">
-                <xsl:text>1</xsl:text>
-            </xsl:when>
-            <xsl:when test="@cols = 1 or @cols = 2 or @cols = 3 or @cols = 4 or @cols = 5 or @cols = 6">
+            <xsl:when test="@cols = 2 or @cols = 3 or @cols = 4 or @cols = 5 or @cols = 6">
+                <xsl:text>\begin{exercisegroupcol}</xsl:text>
+                <xsl:text>{</xsl:text>
                 <xsl:value-of select="@cols"/>
+                <xsl:text>}&#xa;</xsl:text>
             </xsl:when>
-            <xsl:otherwise>
-                <xsl:message terminate="yes">MBX:ERROR: invalid value <xsl:value-of select="@cols" /> for cols attribute of exercisegroup</xsl:message>
-            </xsl:otherwise>
         </xsl:choose>
-        <xsl:text>}&#xa;</xsl:text>
         <xsl:apply-templates select="exercise" mode="solutions">
             <xsl:with-param name="b-has-statement" select="$b-has-statement" />
             <xsl:with-param name="b-has-hint" select="$b-has-hint" />
@@ -4897,12 +4907,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="b-has-solution" select="$b-has-solution" />
         </xsl:apply-templates>
         <xsl:choose>
-            <xsl:when test="$b-has-statement and (introduction or conclusion)">
+            <xsl:when test="not(@cols) or (@cols = 1)">
                 <xsl:text>\end{exercisegroup}&#xa;</xsl:text>
             </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>\end{exercisegroupsolution}&#xa;</xsl:text>
-            </xsl:otherwise>
+            <xsl:when test="@cols = 2 or @cols = 3 or @cols = 4 or @cols = 5 or @cols = 6">
+                <xsl:text>\end{exercisegroupcol}&#xa;</xsl:text>
+            </xsl:when>
         </xsl:choose>
         <xsl:if test="$b-has-statement">
             <xsl:apply-templates select="conclusion" />
