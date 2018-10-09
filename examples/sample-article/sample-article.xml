@@ -1660,6 +1660,10 @@ the xsltproc executable.
                 <tilde /><nbsp /><nbsp />
                 <backslash /><nbsp /><nbsp />
                 <asterisk /><nbsp /><nbsp /></p>
+
+                <p>(2010-10-09)  Experimental code is in place to make much of the preceding unnecessary.  In particular, it should be possible to use the folowing  characters straight from your keyboard, and without an <init>XML</init> element.  But remember, the three special <init>XML</init> characters need to actually be authored using the escaped versions.</p>
+
+                <p>&amp; &lt; &gt; # $ % ^ _ { } ~ \</p>
             </subsection>
 
             <subsection>
