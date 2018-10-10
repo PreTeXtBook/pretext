@@ -8287,7 +8287,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <c>
             <xsl:text>&lt;</xsl:text>
             <xsl:apply-templates />
-            <xsl:text> /&gt;</xsl:text>
+            <xsl:text>/&gt;</xsl:text>
         </c>
     </xsl:variable>
     <xsl:apply-templates select="exsl:node-set($the-element)" />
