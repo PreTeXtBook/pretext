@@ -6574,11 +6574,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Within titles, we just produce (formatted)      -->
 <!-- text, but nothing active                        -->
 
+<!-- content-less form, active or not -->
 <xsl:template match="url">
     <!-- choose a macro, font change, or active link -->
     <xsl:choose>
         <xsl:when test="ancestor::title|ancestor::subtitle">
             <xsl:text>\mono{</xsl:text>
+        </xsl:when>
+        <xsl:when test="@link = 'no'">
+            <xsl:text>\nolinkurl{</xsl:text>
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>\url{</xsl:text>
