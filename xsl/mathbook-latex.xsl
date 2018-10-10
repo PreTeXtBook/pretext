@@ -1053,12 +1053,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:call-template>
             <xsl:text>~#1\notblank{#2}{\space#2}{}}}&#xa;</xsl:text>
         </xsl:if>
-        <!-- solutions to division exercises -->
-        <xsl:if test="$document-root//exercises//exercise|$document-root//worksheet//exercise">
-        <xsl:text>%% Solutions to division exercises, style and environment&#xa;</xsl:text>
-            <xsl:text>\tcbset{ divisionexercisesolutionstyle/.style={size=minimal, boxrule=-0.3pt, frame empty, colback=white, colbacktitle=white, coltitle=black, fonttitle=\normalfont\bfseries, attach title to upper, after title={\space}, breakable } }&#xa;</xsl:text>
-            <xsl:text>\newtcolorbox{divisionexercisesolution}[2]</xsl:text>
-            <xsl:text>{divisionexercisesolutionstyle, title={#1.\notblank{#2}{\space#2}{}}}&#xa;</xsl:text>
+        <!-- Division Solution -->
+        <!-- Explicitly breakable, run-in title -->
+        <xsl:if test="$document-root//exercises//exercise[not(ancestor::exercisegroup)]|$document-root//worksheet//exercise[not(ancestor::exercisegroup)]">
+            <xsl:text>%% Solutions to division exercises, not in exercise group&#xa;</xsl:text>
+            <xsl:text>\tcbset{ divisionsolutionstyle/.style={size=minimal, boxrule=-0.3pt, frame empty, colback=white, colbacktitle=white, coltitle=black, fonttitle=\normalfont\bfseries, attach title to upper, after title={\space}, breakable } }&#xa;</xsl:text>
+            <xsl:text>\newtcolorbox{divisionsolution}[2]</xsl:text>
+            <xsl:text>{divisionsolutionstyle, title={#1.\notblank{#2}{\space#2}{}}}&#xa;</xsl:text>
+        </xsl:if>
+        <!-- Division Solution, Exercise Group -->
+        <!-- Explicitly breakable, run-in title -->
+        <xsl:if test="$document-root//exercisegroup[not(@cols)]">
+            <xsl:text>%% Solutions to division exercises, in exercise group, no columns&#xa;</xsl:text>
+            <xsl:text>\tcbset{ divisionsolutionegstyle/.style={size=minimal, boxrule=-0.3pt, frame empty, colback=white, colbacktitle=white, coltitle=black, fonttitle=\normalfont\bfseries, attach title to upper, after title={\space}, left skip=\egindent, breakable } }&#xa;</xsl:text>
+            <xsl:text>\newtcolorbox{divisionsolutioneg}[2]</xsl:text>
+            <xsl:text>{divisionsolutionegstyle, title={#1.\notblank{#2}{\space#2}{}}}&#xa;</xsl:text>
+        </xsl:if>
+        <!-- Division Solution, Exercise Group, Columnar -->
+        <!-- Explicity unbreakable, to behave in multicolumn tcbraster -->
+        <xsl:if test="$document-root//exercisegroup/@cols">
+            <xsl:text>%% Solutions to division exercises, in exercise group with columns&#xa;</xsl:text>
+            <xsl:text>\tcbset{ divisionsolutionegcolstyle/.style={size=minimal, boxrule=-0.3pt, frame empty, colback=white, colbacktitle=white, coltitle=black, fonttitle=\normalfont\bfseries, attach title to upper, after title={\space}, halign=flush left, unbreakable } }&#xa;</xsl:text>
+            <xsl:text>\newtcolorbox{divisionsolutionegcol}[2]</xsl:text>
+            <xsl:text>{divisionsolutionegcolstyle, title={#1.\notblank{#2}{\space#2}{}}}&#xa;</xsl:text>
         </xsl:if>
         <!-- solutions to PROJECT-LIKE -->
         <xsl:for-each select="$project-reps">
@@ -1084,17 +1101,39 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>~#1\notblank{#2}{\space#2}{}}}&#xa;</xsl:text>
         </xsl:for-each>
     </xsl:if>
-    <!-- miscellaneous, not categorized yet -->
+    <!-- Generic exercise lead-in -->
     <xsl:if test="$document-root//exercises//exercise|$document-root//worksheet//exercise">
-        <xsl:text>%% Divisional exercises are rendered as faux list items&#xa;</xsl:text>
-        <xsl:text>%% with hard-coded numbers as arguments, not as LaTeX environments&#xa;</xsl:text>
+        <xsl:text>%% Divisional exercises (and worksheet) as LaTeX environments&#xa;</xsl:text>
         <xsl:text>%% Third argument is option for extra workspace in worksheets&#xa;</xsl:text>
-        <xsl:text>%% Always full-width, use in a side-by-side will constrain that&#xa;</xsl:text>
         <xsl:text>%% Hanging indent occupies a 5ex width slot prior to left margin&#xa;</xsl:text>
         <xsl:text>%% Experimentally this seems just barely sufficient for a bold "888."&#xa;</xsl:text>
+    </xsl:if>
+    <!-- Division Exercise -->
+    <!-- Numbered, styled with a hanging indent -->
+    <xsl:if test="$document-root//exercises//exercise[not(ancestor::exercisegroup)]|$document-root//worksheet//exercise[not(ancestor::exercisegroup)]">
+        <xsl:text>%% Division exercises, not in exercise group&#xa;</xsl:text>
         <xsl:text>\tcbset{ divisionexercisestyle/.style={size=minimal, boxrule=-0.3pt, frame empty, colback=white, colbacktitle=white, coltitle=black, fonttitle=\normalfont\bfseries, attach title to upper, left=5ex, breakable } }&#xa;</xsl:text>
         <xsl:text>\newtcolorbox{divisionexercise}[4]</xsl:text>
         <xsl:text>{divisionexercisestyle, before title={\hspace{-5ex}\makebox[5ex][l]{#1.}}, title={\notblank{#2}{#2\space}{}}, phantom={\hypertarget{#4}{}}, after={\notblank{#3}{\newline\rule{\workspacestrutwidth}{#3\textheight}\newline}{}}}&#xa;</xsl:text>
+    </xsl:if>
+    <!-- Division Exercise, Exercise Group -->
+    <!-- The exercise itself carries the indentation, hence we can use breakable -->
+    <!-- boxes and get good page breaks (as these problems could be long)        -->
+    <xsl:if test="$document-root//exercisegroup[not(@cols)]">
+        <xsl:text>%% Division exercises, in exercise group, no columns&#xa;</xsl:text>
+        <xsl:text>\tcbset{ divisionexerciseegstyle/.style={size=minimal, boxrule=-0.3pt, frame empty, colback=white, colbacktitle=white, coltitle=black, fonttitle=\normalfont\bfseries, attach title to upper, left=5ex, left skip=\egindent, breakable } }&#xa;</xsl:text>
+        <xsl:text>\newtcolorbox{divisionexerciseeg}[4]</xsl:text>
+        <xsl:text>{divisionexerciseegstyle, before title={\hspace{-5ex}\makebox[5ex][l]{#1.}}, title={\notblank{#2}{#2\space}{}}, phantom={\hypertarget{#4}{}}, after={\notblank{#3}{\newline\rule{\workspacestrutwidth}{#3\textheight}\newline}{}}}&#xa;</xsl:text>
+    </xsl:if>
+    <!-- Division Solution, Exercise Group, Columnar -->
+    <!-- Explicity unbreakable, to behave in multicolumn tcbraster -->
+    <xsl:if test="$document-root//exercisegroup/@cols">
+        <xsl:text>%% Division exercises, in exercise group with columns&#xa;</xsl:text>
+        <!-- Division Exercise, Exercise Group, Columnar -->
+        <!-- Explicity unbreakable, to behave in multicolumn tcbraster -->
+        <xsl:text>\tcbset{ divisionexerciseegcolstyle/.style={size=minimal, boxrule=-0.3pt, frame empty, colback=white, colbacktitle=white, coltitle=black, fonttitle=\normalfont\bfseries, attach title to upper, left=5ex, halign=flush left, unbreakable } }&#xa;</xsl:text>
+        <xsl:text>\newtcolorbox{divisionexerciseegcol}[4]</xsl:text>
+        <xsl:text>{divisionexerciseegcolstyle, before title={\hspace{-5ex}\makebox[5ex][l]{#1.}}, title={\notblank{#2}{#2\space}{}}, phantom={\hypertarget{#4}{}}, after={\notblank{#3}{\newline\rule{\workspacestrutwidth}{#3\textheight}\newline}{}}}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$document-root//exercise[@workspace]">
         <xsl:text>%% Worksheet exercises may have workspaces&#xa;</xsl:text>
@@ -1110,6 +1149,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:if>
+    <!-- miscellaneous, not categorized yet -->
     <xsl:if test="$document-root//list">
         <xsl:text>%% named list environment and style&#xa;</xsl:text>
         <xsl:text>\newtcolorbox{namedlistcontent}&#xa;</xsl:text>
@@ -1770,21 +1810,31 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:if test="$document-root//exercisegroup">
         <xsl:text>%% Indented groups of "exercise" within an "exercises" division&#xa;</xsl:text>
-        <xsl:text>%% An "xparse" environment will represent the entire exercise&#xa;</xsl:text>
-        <xsl:text>%% group, with the number of columns as a parameter.&#xa;</xsl:text>
-        <xsl:text>%% tcolorbox styles control the exercisegroup layout&#xa;</xsl:text>
-        <xsl:text>%% Indentation is 5% of overall width&#xa;</xsl:text>
-        <xsl:text>%% Gap between exercises is 3% of overall width&#xa;</xsl:text>
-        <!-- "regular" version, indent on left -->
-        <xsl:text>\tcbset{ exgroupstyle/.style={raster equal height=rows, raster left skip=0.05\linewidth, raster column skip=0.03\linewidth} }&#xa;</xsl:text>
-        <!-- "solution" version, indent on right. Silly, but easy -->
-        <xsl:text>\tcbset{ exgroupsolutionstyle/.style={raster equal height=rows, raster right skip=0.05\linewidth, raster column skip=0.03\linewidth} }&#xa;</xsl:text>
-        <!-- raster equal height: boxes of same *row* have same height    -->
-        <!-- raster columns: controls layout, so no line separators, etc. -->
-        <xsl:text>\NewDocumentEnvironment{exercisegroup}{m}&#xa;</xsl:text>
-        <xsl:text>{\begin{tcbraster}[exgroupstyle,raster columns=#1]}{\end{tcbraster}}&#xa;</xsl:text>
-        <xsl:text>\NewDocumentEnvironment{exercisegroupsolution}{m}&#xa;</xsl:text>
-        <xsl:text>{\begin{tcbraster}[exgroupsolutionstyle,raster columns=#1]}{\end{tcbraster}}&#xa;</xsl:text>
+        <xsl:text>%% Lengths control the indentation (always) and gaps (multi-column)&#xa;</xsl:text>
+        <xsl:text>\newlength{\egindent}\setlength{\egindent}{0.05\linewidth}&#xa;</xsl:text>
+        <xsl:text>\newlength{\exggap}\setlength{\exggap}{0.05\linewidth}&#xa;</xsl:text>
+        <xsl:if test="$document-root//exercisegroup[not(@cols)]">
+            <xsl:text>%% Thin "xparse" environments will represent the entire exercise&#xa;</xsl:text>
+            <xsl:text>%% group, in the case when it does not hold multiple columns.&#xa;</xsl:text>
+            <!-- DO NOT make this a tcolorbox, since we would want it -->
+            <!-- to be breakable, and then the individual exercises   -->
+            <!-- could not be breakable tcolorbox themselves          -->
+            <!-- TODO: add some pre- spacing commands here -->
+            <xsl:text>\NewDocumentEnvironment{exercisegroup}{}&#xa;</xsl:text>
+            <xsl:text>{}{}&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:if test="$document-root//exercisegroup/@cols">
+            <xsl:text>%% An exercise group with multiple columns is a tcbraster.&#xa;</xsl:text>
+            <xsl:text>%% If the contained exercises are explicitly unbreakable,&#xa;</xsl:text>
+            <xsl:text>%% the raster should break at rows for page breaks.&#xa;</xsl:text>
+            <xsl:text>%% The number of columns is a parameter, passed to tcbraster.&#xa;</xsl:text>
+            <!-- raster equal height: boxes of same *row* have same height    -->
+            <!-- raster left skip: indentation of all exercises               -->
+            <!-- raster columns: controls layout, so no line separators, etc. -->
+            <xsl:text>\tcbset{ exgroupcolstyle/.style={raster equal height=rows, raster left skip=\egindent, raster column skip=\exggap} }&#xa;</xsl:text>
+            <xsl:text>\NewDocumentEnvironment{exercisegroupcol}{m}&#xa;</xsl:text>
+            <xsl:text>{\begin{tcbraster}[exgroupcolstyle,raster columns=#1]}{\end{tcbraster}}&#xa;</xsl:text>
+        </xsl:if>
     </xsl:if>
     <xsl:if test="$document-root/backmatter/index-part | $document-root//index-list">
         <!-- See http://tex.blogoverflow.com/2012/09/dont-forget-to-run-makeindex/ for "imakeidx" usage -->
@@ -3397,7 +3447,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="notation" mode="backmatter">
     <xsl:text>\(</xsl:text>
-    <xsl:apply-templates select="usage" />
+    <!-- "usage" should be raw latex, so -->
+    <!-- should avoid text processing    -->
+    <xsl:value-of select="usage" />
     <xsl:text>\)</xsl:text>
     <xsl:text>&amp;</xsl:text>
     <xsl:apply-templates select="description" />
@@ -4414,7 +4466,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "exercises" may be divided by a future "subexercises"   -->
 <!-- and/or by an "exercisegroup", so we match with "//"     -->
 <xsl:template match="exercises//exercise|worksheet//exercise">
-    <xsl:text>\begin{divisionexercise}</xsl:text>
+    <xsl:variable name="env-name">
+        <xsl:text>divisionexercise</xsl:text>
+        <xsl:if test="ancestor::exercisegroup">
+            <xsl:text>eg</xsl:text>
+        </xsl:if>
+        <xsl:if test="ancestor::exercisegroup/@cols">
+            <xsl:text>col</xsl:text>
+        </xsl:if>
+    </xsl:variable>
+    <xsl:text>\begin{</xsl:text>
+    <xsl:value-of select="$env-name"/>
+    <xsl:text>}</xsl:text>
     <xsl:text>{</xsl:text>
     <xsl:apply-templates select="." mode="serial-number" />
     <xsl:text>}</xsl:text>
@@ -4510,7 +4573,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <!-- closing % necessary, as newline between adjacent environments -->
     <!-- will cause a slight indent on trailing exercise               -->
-    <xsl:text>\end{divisionexercise}%&#xa;</xsl:text>
+    <xsl:text>\end{</xsl:text>
+    <xsl:value-of select="$env-name"/>
+    <xsl:text>}%&#xa;</xsl:text>
 </xsl:template>
 
 
@@ -4545,7 +4610,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     <xsl:if test="not($dry-run = '')">
         <!-- Using fully-qualified number in solution lists -->
-        <xsl:text>\begin{divisionexercisesolution}</xsl:text>
+        <xsl:variable name="env-name">
+            <xsl:text>divisionsolution</xsl:text>
+            <xsl:if test="ancestor::exercisegroup">
+                <xsl:text>eg</xsl:text>
+            </xsl:if>
+            <xsl:if test="ancestor::exercisegroup/@cols">
+                <xsl:text>col</xsl:text>
+            </xsl:if>
+        </xsl:variable>
+        <xsl:text>\begin{</xsl:text>
+        <xsl:value-of select="$env-name"/>
+        <xsl:text>}</xsl:text>
         <xsl:text>{</xsl:text>
         <xsl:apply-templates select="." mode="number" />
         <xsl:text>}</xsl:text>
@@ -4632,7 +4708,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
         <!-- closing % necessary, as newline between adjacent environments -->
         <!-- will cause a slight indent on trailing exercise               -->
-        <xsl:text>\end{divisionexercisesolution}%&#xa;</xsl:text>
+        <xsl:text>\end{</xsl:text>
+        <xsl:value-of select="$env-name"/>
+        <xsl:text>}%&#xa;</xsl:text>
     </xsl:if>
 </xsl:template>
 
@@ -4794,25 +4872,33 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="label" />
     <xsl:text>%&#xa;</xsl:text>
     <xsl:apply-templates select="introduction" />
-    <xsl:text>\begin{exercisegroup}{</xsl:text>
     <xsl:choose>
-        <xsl:when test="not(@cols)">
-            <xsl:text>1</xsl:text>
+        <xsl:when test="not(@cols) or (@cols = 1)">
+            <xsl:text>\begin{exercisegroup}&#xa;</xsl:text>
         </xsl:when>
-        <xsl:when test="@cols = 1 or @cols = 2 or @cols = 3 or @cols = 4 or @cols = 5 or @cols = 6">
+        <xsl:when test="@cols = 2 or @cols = 3 or @cols = 4 or @cols = 5 or @cols = 6">
+            <xsl:text>\begin{exercisegroupcol}</xsl:text>
+            <xsl:text>{</xsl:text>
             <xsl:value-of select="@cols"/>
+            <xsl:text>}&#xa;</xsl:text>
         </xsl:when>
         <xsl:otherwise>
             <xsl:message terminate="yes">MBX:ERROR: invalid value <xsl:value-of select="@cols" /> for cols attribute of exercisegroup</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
-    <xsl:text>}&#xa;</xsl:text>
     <xsl:apply-templates select="exercise">
         <xsl:with-param name="b-has-hint" select="$b-has-divisional-hint" />
         <xsl:with-param name="b-has-answer" select="$b-has-divisional-answer" />
         <xsl:with-param name="b-has-solution" select="$b-has-divisional-solution" />
-        </xsl:apply-templates>
-    <xsl:text>\end{exercisegroup}&#xa;</xsl:text>
+    </xsl:apply-templates>
+    <xsl:choose>
+        <xsl:when test="not(@cols) or (@cols = 1)">
+            <xsl:text>\end{exercisegroup}&#xa;</xsl:text>
+        </xsl:when>
+        <xsl:when test="@cols = 2 or @cols = 3 or @cols = 4 or @cols = 5 or @cols = 6">
+            <xsl:text>\end{exercisegroupcol}&#xa;</xsl:text>
+        </xsl:when>
+    </xsl:choose>
     <xsl:if test="conclusion">
         <xsl:text>\par\noindent%&#xa;</xsl:text>
         <xsl:apply-templates select="conclusion" />
@@ -4859,29 +4945,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$b-has-statement">
             <xsl:apply-templates select="introduction" />
         </xsl:if>
-        <!-- use a specialized format when statements are turned off  -->
-        <!-- or when there is no introduction nor conclusion          -->
-        <!-- Typically this will just switch-off indentation          -->
+        <!-- the container for the exercisegroup does not need to change -->
+        <!-- when in a solutions list.  The indentation might look odd   -->
+        <!-- without an introduction (when there are no statements), or  -->
+        <!-- it might remind the reader of the grouping                  -->
         <xsl:choose>
-            <xsl:when test="$b-has-statement and (introduction or conclusion)">
-                <xsl:text>\begin{exercisegroup}{</xsl:text>
+            <xsl:when test="not(@cols) or (@cols = 1)">
+                <xsl:text>\begin{exercisegroup}&#xa;</xsl:text>
             </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>\begin{exercisegroupsolution}{</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-        <xsl:choose>
-            <xsl:when test="not(@cols)">
-                <xsl:text>1</xsl:text>
-            </xsl:when>
-            <xsl:when test="@cols = 1 or @cols = 2 or @cols = 3 or @cols = 4 or @cols = 5 or @cols = 6">
+            <xsl:when test="@cols = 2 or @cols = 3 or @cols = 4 or @cols = 5 or @cols = 6">
+                <xsl:text>\begin{exercisegroupcol}</xsl:text>
+                <xsl:text>{</xsl:text>
                 <xsl:value-of select="@cols"/>
+                <xsl:text>}&#xa;</xsl:text>
             </xsl:when>
-            <xsl:otherwise>
-                <xsl:message terminate="yes">MBX:ERROR: invalid value <xsl:value-of select="@cols" /> for cols attribute of exercisegroup</xsl:message>
-            </xsl:otherwise>
         </xsl:choose>
-        <xsl:text>}&#xa;</xsl:text>
         <xsl:apply-templates select="exercise" mode="solutions">
             <xsl:with-param name="b-has-statement" select="$b-has-statement" />
             <xsl:with-param name="b-has-hint" select="$b-has-hint" />
@@ -4889,12 +4967,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="b-has-solution" select="$b-has-solution" />
         </xsl:apply-templates>
         <xsl:choose>
-            <xsl:when test="$b-has-statement and (introduction or conclusion)">
+            <xsl:when test="not(@cols) or (@cols = 1)">
                 <xsl:text>\end{exercisegroup}&#xa;</xsl:text>
             </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>\end{exercisegroupsolution}&#xa;</xsl:text>
-            </xsl:otherwise>
+            <xsl:when test="@cols = 2 or @cols = 3 or @cols = 4 or @cols = 5 or @cols = 6">
+                <xsl:text>\end{exercisegroupcol}&#xa;</xsl:text>
+            </xsl:when>
         </xsl:choose>
         <xsl:if test="$b-has-statement">
             <xsl:apply-templates select="conclusion" />
@@ -6496,11 +6574,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Within titles, we just produce (formatted)      -->
 <!-- text, but nothing active                        -->
 
+<!-- content-less form, active or not -->
 <xsl:template match="url">
     <!-- choose a macro, font change, or active link -->
     <xsl:choose>
         <xsl:when test="ancestor::title|ancestor::subtitle">
             <xsl:text>\mono{</xsl:text>
+        </xsl:when>
+        <xsl:when test="@link = 'no'">
+            <xsl:text>\nolinkurl{</xsl:text>
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>\url{</xsl:text>
@@ -9280,6 +9362,104 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates />
 </xsl:template>
+
+<!-- ############### -->
+<!-- Text Processing -->
+<!-- ############### -->
+
+<!-- The general template for matching "text()" nodes will     -->
+<!-- apply this template (there is a hook there).  Verbatim    -->
+<!-- text should be manipulated in templates with              -->
+<!-- "xsl:value-of" and so not come through here.  Conversely, -->
+<!-- when "xsl:apply-templates" is applied, the template will  -->
+<!-- have effect.                                              -->
+<!--                                                           -->
+<!-- Our emphasis originally is on escaping characters that    -->
+<!-- LaTeX has hijacked for special purposes.  First we define -->
+<!-- some variables globally, so it is only necessary once.    -->
+
+
+<!-- XML: & < > -->
+
+
+<!-- LaTeX: # $ % ^ & _ { } ~ \ -->
+
+
+<xsl:variable name="temp-left-brace"  select="'[x[UxDbNWiRqGnV.]x]'" />
+<xsl:variable name="temp-right-brace" select="'[x[ohQiMJjEdf0jQ]x]'" />
+
+
+<xsl:variable name="ampersand-replacement">
+    <xsl:call-template name="ampersand-character"/>
+</xsl:variable>
+
+<xsl:variable name="less-replacement">
+    <xsl:call-template name="less-character"/>
+</xsl:variable>
+
+<xsl:variable name="greater-replacement">
+    <xsl:call-template name="greater-character"/>
+</xsl:variable>
+
+<xsl:variable name="hash-replacement">
+    <xsl:call-template name="hash-character"/>
+</xsl:variable>
+
+<xsl:variable name="backslash-replacement">
+    <xsl:call-template name="backslash-character"/>
+</xsl:variable>
+
+<xsl:variable name="lbrace-replacement">
+    <xsl:call-template name="lbrace-character"/>
+</xsl:variable>
+
+<xsl:variable name="rbrace-replacement">
+    <xsl:call-template name="rbrace-character"/>
+</xsl:variable>
+
+<xsl:variable name="dollar-replacement">
+    <xsl:call-template name="dollar-character"/>
+</xsl:variable>
+
+<xsl:variable name="percent-replacement">
+    <xsl:call-template name="percent-character"/>
+</xsl:variable>
+
+<xsl:variable name="circumflex-replacement">
+    <xsl:call-template name="circumflex-character"/>
+</xsl:variable>
+
+<xsl:variable name="underscore-replacement">
+    <xsl:call-template name="underscore-character"/>
+</xsl:variable>
+
+<xsl:variable name="tilde-replacement">
+    <xsl:call-template name="tilde-character"/>
+</xsl:variable>
+
+<xsl:template name="text-processing">
+    <xsl:param name="text"/>
+    <!-- Braces first, then backslash is OK, then rest -->
+    <xsl:variable name="lbrace-temped" select="str:replace($text,          '{', $temp-left-brace)"/>
+    <xsl:variable name="rbrace-temped" select="str:replace($lbrace-temped, '}', $temp-right-brace)"/>
+
+    <xsl:variable name="backslash-fixed"  select="str:replace($rbrace-temped,    '\',     $backslash-replacement)"/>
+    <xsl:variable name="amp-fixed"        select="str:replace($backslash-fixed,  '&amp;', $ampersand-replacement)"/>
+    <xsl:variable name="less-fixed"       select="str:replace($amp-fixed,        '&lt;',  $less-replacement)"/>
+    <xsl:variable name="greater-fixed"    select="str:replace($less-fixed,       '&gt;',  $greater-replacement)"/>
+    <xsl:variable name="hash-fixed"       select="str:replace($greater-fixed,    '#',     $hash-replacement)"/>
+    <xsl:variable name="dollar-fixed"     select="str:replace($hash-fixed,       '$',     $dollar-replacement)"/>
+    <xsl:variable name="percent-fixed"    select="str:replace($dollar-fixed,     '%',     $percent-replacement)"/>
+    <xsl:variable name="circumflex-fixed" select="str:replace($percent-fixed,    '^',     $circumflex-replacement)"/>
+    <xsl:variable name="underscore-fixed" select="str:replace($circumflex-fixed, '_',     $underscore-replacement)"/>
+    <xsl:variable name="tilde-fixed"      select="str:replace($underscore-fixed, '~',     $tilde-replacement)"/>
+
+    <xsl:variable name="lbrace-fixed" select="str:replace($tilde-fixed,  $temp-left-brace, $lbrace-replacement)"/>
+    <xsl:variable name="rbrace-fixed" select="str:replace($lbrace-fixed, $temp-right-brace, $rbrace-replacement)"/>
+
+    <xsl:value-of select="$rbrace-fixed"/>
+</xsl:template>
+
 
 <!-- ######### -->
 <!-- Utilities -->

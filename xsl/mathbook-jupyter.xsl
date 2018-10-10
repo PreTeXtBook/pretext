@@ -590,6 +590,63 @@ TODO: (overall)
     (General improvement, but not so important with knowls available.)
 -->
 
+
+<!-- ############### -->
+<!-- Text Processing -->
+<!-- ############### -->
+
+<!-- The general template for matching "text()" nodes will     -->
+<!-- apply this template (there is a hook there).  Verbatim    -->
+<!-- text should be manipulated in templates with              -->
+<!-- "xsl:value-of" and so not come through here.  Conversely, -->
+<!-- when "xsl:apply-templates" is applied, the template will  -->
+<!-- have effect.                                              -->
+<!--                                                           -->
+<!-- Our emphasis originally is on escaping characters that    -->
+<!-- LaTeX has hijacked for special purposes.  First we define -->
+<!-- some variables globally, so it is only necessary once.    -->
+
+<!-- XML: & < > -->
+
+<!-- LaTeX: # $ % ^ & _ { } ~ \ -->
+
+<xsl:variable name="hash-replacement">
+    <xsl:call-template name="hash-character"/>
+</xsl:variable>
+
+<xsl:variable name="backslash-replacement">
+    <xsl:call-template name="backslash-character"/>
+</xsl:variable>
+
+<xsl:variable name="lbrace-replacement">
+    <xsl:call-template name="lbrace-character"/>
+</xsl:variable>
+
+<xsl:variable name="rbrace-replacement">
+    <xsl:call-template name="rbrace-character"/>
+</xsl:variable>
+
+<xsl:variable name="dollar-replacement">
+    <xsl:call-template name="dollar-character"/>
+</xsl:variable>
+
+<xsl:variable name="underscore-replacement">
+    <xsl:call-template name="underscore-character"/>
+</xsl:variable>
+
+<xsl:template name="text-processing">
+    <xsl:param name="text"/>
+    <!-- Backslash first, then clear to add more -->
+    <xsl:variable name="backslash-fixed"  select="str:replace($text,            '\',  $backslash-replacement)"/>
+    <xsl:variable name="lbrace-fixed"     select="str:replace($backslash-fixed, '{',  $lbrace-replacement)"/>
+    <xsl:variable name="rbrace-fixed"     select="str:replace($lbrace-fixed,    '}',  $rbrace-replacement)"/>
+    <xsl:variable name="hash-fixed"       select="str:replace($rbrace-fixed,    '#',  $hash-replacement)"/>
+    <xsl:variable name="dollar-fixed"     select="str:replace($hash-fixed,      '$',  $dollar-replacement)"/>
+    <xsl:variable name="underscore-fixed" select="str:replace($dollar-fixed,    '_',  $underscore-replacement)"/>
+
+    <xsl:value-of select="$underscore-fixed"/>
+</xsl:template>
+
 <!-- ########################## -->
 <!-- Intermediate Pseudo-Markup -->
 <!-- ########################## -->

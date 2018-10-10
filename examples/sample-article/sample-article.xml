@@ -1660,6 +1660,10 @@ the xsltproc executable.
                 <tilde /><nbsp /><nbsp />
                 <backslash /><nbsp /><nbsp />
                 <asterisk /><nbsp /><nbsp /></p>
+
+                <p>(2010-10-09)  Experimental code is in place to make much of the preceding unnecessary.  In particular, it should be possible to use the folowing  characters straight from your keyboard, and without an <init>XML</init> element.  But remember, the three special <init>XML</init> characters need to actually be authored using the escaped versions.</p>
+
+                <p>&amp; &lt; &gt; # $ % ^ _ { } ~ \</p>
             </subsection>
 
             <subsection>
@@ -1762,6 +1766,24 @@ the xsltproc executable.
             <subsection xml:id="section-urls">
                 <title>URLs, such as <url href="http://example.com" /></title>
 
+                <p>An internet <init>URL</init> (<term>Uniform Resource Locator</term>) frequently is presented as an active link, along with a visual version.  These may be identical, similar, or very different.  <pretext/> give you three ways to construct a <init>URL</init>.<dl>
+                    <li>
+                        <title>Link only</title>
+                        <p>Place the full <init>URL</init> into the <attr>href</attr> attribute of the <tage>url</tage> element.  The result will be an active link (if the format supports it), along with a visual that is a duplicate, typically in a monospace font.</p>
+                    </li>
+
+                    <li>
+                        <title>Link and text</title>
+                        <p>Form the link as above, using the<attr>href</attr> attribute.  But now use a <tag>url</tag> element with content.  All of the usual rules about <q>normal</q> text apply, but now this text may have visual clues that it is an active link.</p>
+                    </li>
+
+                    <li>
+                        <title>Text only</title>
+                        <p>Use an empty <tage>url</tage> element with an <attr>href</attr> attribute, but also include a <attr>link</attr> attribute set to the value <c>no</c>.  (The default value is <c>yes</c>.)  The value of <attr>href</attr> will typically be typeset in a monospace font and some effort will be made to have sensible line breaks in some output formats.  Note you can <q>shorten</q> the <init>URL</init> some, since it is not active, such as dropping <c>http://</c>.</p>
+                    </li>
+                </dl></p>
+
+
                 <p>An internet <init>URL</init><idx><h>URLs</h></idx> can very well contain some of the characters that <latex /> needs to escape.  But the packages we use for embedded links should be smart about this.  So we include a long <init>URL</init> for testing <latex /> output, with one reserved character, though maybe someday it will become stale and we need to change it out:  <url href="http://www.pcc.edu/enroll/registration/dropping.html#withdraw">www.pcc.edu/enroll/registration/dropping.html<hash />withdraw</url>.  Notice in the source that you <em>cannot</em> put a tag inside the <c>href</c> attribute, and do need to use an element within the content (unless you like to wrap the content in a <c>c</c> element).  Here is a totally bogus <init>URL</init>, which contains every possible legal character, so if this fails to convert there is some problematic character.  Four combinations: with the content as normal text versus with the characters as verbatim text, and as a <init>URL</init> versus not.</p>
 
                 <blockquote>
@@ -1788,6 +1810,18 @@ the xsltproc executable.
                 </blockquote>
 
                 <p>We are not fans of footnotes, they are totally unstructured<fn><url href="https://en.wikipedia.org/wiki/Carleson%27s_theorem">Carleson's Theorem</url></fn>.  A URL in a footnote migrates around, and so care must be taken with special characters, such as the percent and hash<fn><url href="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%-._~:/?#[]@!$&amp;'()*+,;="><c>ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%-._~:/?#[]@!$&amp;'()*+,;=</c></url></fn>.  This paragraph has two footnotes, one with a real URL from Jesse Oldroyd, another with a fake URL from the above suite (the fourth one).  For good measure, we repeat the URL found in the first footnote: <url href="https://en.wikipedia.org/wiki/Carleson%27s_theorem">Carleson's Theorem</url>.  And we include a no-content version of the same link:  <url href="https://en.wikipedia.org/wiki/Carleson%27s_theorem" />.</p>
+
+                <p>More testing, with a moderately long URL, lifted from a 1999 <pubtitle>Wired</pubtitle> article titled <articletitle>Ooooh, That URL Is Ugly!</articletitle> (<url href="https://www.wired.com/1999/10/ooooh-that-url-is-ugly/"/>).  Note that in <latex/> output the first and third forms attempt to line-break the URL at sensible locations, but the second version makes no extra assumptiions about the content, and so does not line-break at all.<ul>
+                    <li>Link only: <url href="http://www.sfgate.com/cgibin/srch_archive/dropdn_srch.cgi?template=templates2Ftypes2F food2Ffd_ddstemplate.shtml&amp;item=templates%2Ftypes%2Ffood%2Ffd_ddsitem.txt&amp;subject=RESTAURANTS%2BAND%2BREVIEW&amp;keyword=shrimp&amp;datesearch=366&amp;year=."/></li>
+                    <li>Link and text: <url href="http://www.sfgate.com/cgibin/srch_archive/dropdn_srch.cgi?template=templates2Ftypes2F food2Ffd_ddstemplate.shtml&amp;item=templates%2Ftypes%2Ffood%2Ffd_ddsitem.txt&amp;subject=RESTAURANTS%2BAND%2BREVIEW&amp;keyword=shrimp&amp;datesearch=366&amp;year=.">http://www.sfgate.com/cgibin/srch_archive/dropdn_srch.cgi?template=templates2Ftypes2F food2Ffd_ddstemplate.shtml&amp;item=templates%2Ftypes%2Ffood%2Ffd_ddsitem.txt&amp;subject=RESTAURANTS%2BAND%2BREVIEW&amp;keyword=shrimp&amp;datesearch=366&amp;year=.</url></li>
+                    <li>Text only: <url link="no" href="http://www.sfgate.com/cgibin/srch_archive/dropdn_srch.cgi?template=templates2Ftypes2F food2Ffd_ddstemplate.shtml&amp;item=templates%2Ftypes%2Ffood%2Ffd_ddsitem.txt&amp;subject=RESTAURANTS%2BAND%2BREVIEW&amp;keyword=shrimp&amp;datesearch=366&amp;year=."/></li>
+                </ul></p>
+
+                <p>More testing, with an extremely long URL, formed from <url href="http://pugetsound.edu"/> at <url href="https://longurlmaker.com"/>, and lacking <em>any</em> good places to line break.<ul>
+                    <li>Link only: <url href="https://longurlmaker.com/go?id=1URLPieenduring1lengthened0elongateLiteURL0f8lnkZinStartURLextensiveEasyURL10l1023NanoRefprotracted1lingeringwfarawaydgangling6SitelutionsLiteURLc64FwdURLURLZcoZuk11181ca514c1sustainedURlZieenduring048Ne13sfarZreachingm30URLcut3MyURL9a80lingering11URLZcoZukrangy7484ay0lfw2NotLongEzURL1fc94119507tTinyLinkn04BeamZtoShortenURL1lastingwfrunningmIsZgdfarawaya14Shorl6faraway1dqShrtnd129high6outstretched8G8Ldistant0prolongedboutstretched981e6sustained5cremote5longishTraceURLe52stretchingShortenURL5d0dzSimURLaBeamZtotmShorl2redistantremoteShredURLDoiopGetShorty4NutshellURL53NanoReflengthened9d66towering80stretchingdistanttUlimit5Dwarfurl199elengthened9o1lnkZinrunninglanky00qd14c1947901G8LfarZoff32RedirxRubyURL42farZreachingx01lingeringganglingj1301URLDecentURL7NutshellURL1greato19yTightURLd119zCanURLenlargedu00thg5bfURLPie15c8vfarZreachingenlarged2Fly2b1FwdURL2tallURLHawk39303dIsZgd881301URL8distantShredURL5co5bYATUC0XZse17venlarged010elongatef8yaf86ek1ShoterLinkcontinued60URlZieMooURL1092TraceURLShortURLeprolonged010PiURLMetamarkelongateDecentURLaeShortlinksa451mUlimit41lofty00TightURL10remote14lengthenedd202e015937Minilienstretched1ah019ShortenURLenduring71efarZreaching20distant1great9104XZse00spunZoutfc02efarZoffb5qbspreadZout0j25k18farZreachingB659lengthyc903h71stringy347a308a617017faraway07elongate8216enlarged00ShrinkrlengthenedFly2lingering4SmallrcwstretchYATUCURLvirShim78UrlTea3UrlTea0lengthy118Dwarfurl7sv6TightURL186farZreachingz5aSmallr1y6cGetShortystretchedexpandedghShortlinks3StartURLfMetamark3runningastringyd1extensive11ShredURL3c931URLcut4tlengthy102d1Sitelutions30NutshellURL1MooURLstretchedo001aSitelutions0zbrunningremote01z4farawayexpanded1427fGetShorty717698c1rXZse92bspunZoutc5URLCutter51stretchedh0a2950b1j0IsZgd1911drawnZout0khr810B652gNotLongySitelutionsShrinkr4ecacd11943runningcclengthy719spreadZout0806stringy10faraway01URLCutter6rg0691cTinyLinkelongateremote1c1stretch3LiteURLShorl2stretchUlimittowering0running4736alengthenedtwYATUC8709TraceURLe0spunZoutURLZcoZukShortlinks61lanky27n0URLcutShrtndPiURL0c0"/></li>
+                    <li>Link and text: <url href="https://longurlmaker.com/go?id=1URLPieenduring1lengthened0elongateLiteURL0f8lnkZinStartURLextensiveEasyURL10l1023NanoRefprotracted1lingeringwfarawaydgangling6SitelutionsLiteURLc64FwdURLURLZcoZuk11181ca514c1sustainedURlZieenduring048Ne13sfarZreachingm30URLcut3MyURL9a80lingering11URLZcoZukrangy7484ay0lfw2NotLongEzURL1fc94119507tTinyLinkn04BeamZtoShortenURL1lastingwfrunningmIsZgdfarawaya14Shorl6faraway1dqShrtnd129high6outstretched8G8Ldistant0prolongedboutstretched981e6sustained5cremote5longishTraceURLe52stretchingShortenURL5d0dzSimURLaBeamZtotmShorl2redistantremoteShredURLDoiopGetShorty4NutshellURL53NanoReflengthened9d66towering80stretchingdistanttUlimit5Dwarfurl199elengthened9o1lnkZinrunninglanky00qd14c1947901G8LfarZoff32RedirxRubyURL42farZreachingx01lingeringganglingj1301URLDecentURL7NutshellURL1greato19yTightURLd119zCanURLenlargedu00thg5bfURLPie15c8vfarZreachingenlarged2Fly2b1FwdURL2tallURLHawk39303dIsZgd881301URL8distantShredURL5co5bYATUC0XZse17venlarged010elongatef8yaf86ek1ShoterLinkcontinued60URlZieMooURL1092TraceURLShortURLeprolonged010PiURLMetamarkelongateDecentURLaeShortlinksa451mUlimit41lofty00TightURL10remote14lengthenedd202e015937Minilienstretched1ah019ShortenURLenduring71efarZreaching20distant1great9104XZse00spunZoutfc02efarZoffb5qbspreadZout0j25k18farZreachingB659lengthyc903h71stringy347a308a617017faraway07elongate8216enlarged00ShrinkrlengthenedFly2lingering4SmallrcwstretchYATUCURLvirShim78UrlTea3UrlTea0lengthy118Dwarfurl7sv6TightURL186farZreachingz5aSmallr1y6cGetShortystretchedexpandedghShortlinks3StartURLfMetamark3runningastringyd1extensive11ShredURL3c931URLcut4tlengthy102d1Sitelutions30NutshellURL1MooURLstretchedo001aSitelutions0zbrunningremote01z4farawayexpanded1427fGetShorty717698c1rXZse92bspunZoutc5URLCutter51stretchedh0a2950b1j0IsZgd1911drawnZout0khr810B652gNotLongySitelutionsShrinkr4ecacd11943runningcclengthy719spreadZout0806stringy10faraway01URLCutter6rg0691cTinyLinkelongateremote1c1stretch3LiteURLShorl2stretchUlimittowering0running4736alengthenedtwYATUC8709TraceURLe0spunZoutURLZcoZukShortlinks61lanky27n0URLcutShrtndPiURL0c0">https://longurlmaker.com/go?id=1URLPieenduring1lengthened0elongateLiteURL0f8lnkZinStartURLextensiveEasyURL10l1023NanoRefprotracted1lingeringwfarawaydgangling6SitelutionsLiteURLc64FwdURLURLZcoZuk11181ca514c1sustainedURlZieenduring048Ne13sfarZreachingm30URLcut3MyURL9a80lingering11URLZcoZukrangy7484ay0lfw2NotLongEzURL1fc94119507tTinyLinkn04BeamZtoShortenURL1lastingwfrunningmIsZgdfarawaya14Shorl6faraway1dqShrtnd129high6outstretched8G8Ldistant0prolongedboutstretched981e6sustained5cremote5longishTraceURLe52stretchingShortenURL5d0dzSimURLaBeamZtotmShorl2redistantremoteShredURLDoiopGetShorty4NutshellURL53NanoReflengthened9d66towering80stretchingdistanttUlimit5Dwarfurl199elengthened9o1lnkZinrunninglanky00qd14c1947901G8LfarZoff32RedirxRubyURL42farZreachingx01lingeringganglingj1301URLDecentURL7NutshellURL1greato19yTightURLd119zCanURLenlargedu00thg5bfURLPie15c8vfarZreachingenlarged2Fly2b1FwdURL2tallURLHawk39303dIsZgd881301URL8distantShredURL5co5bYATUC0XZse17venlarged010elongatef8yaf86ek1ShoterLinkcontinued60URlZieMooURL1092TraceURLShortURLeprolonged010PiURLMetamarkelongateDecentURLaeShortlinksa451mUlimit41lofty00TightURL10remote14lengthenedd202e015937Minilienstretched1ah019ShortenURLenduring71efarZreaching20distant1great9104XZse00spunZoutfc02efarZoffb5qbspreadZout0j25k18farZreachingB659lengthyc903h71stringy347a308a617017faraway07elongate8216enlarged00ShrinkrlengthenedFly2lingering4SmallrcwstretchYATUCURLvirShim78UrlTea3UrlTea0lengthy118Dwarfurl7sv6TightURL186farZreachingz5aSmallr1y6cGetShortystretchedexpandedghShortlinks3StartURLfMetamark3runningastringyd1extensive11ShredURL3c931URLcut4tlengthy102d1Sitelutions30NutshellURL1MooURLstretchedo001aSitelutions0zbrunningremote01z4farawayexpanded1427fGetShorty717698c1rXZse92bspunZoutc5URLCutter51stretchedh0a2950b1j0IsZgd1911drawnZout0khr810B652gNotLongySitelutionsShrinkr4ecacd11943runningcclengthy719spreadZout0806stringy10faraway01URLCutter6rg0691cTinyLinkelongateremote1c1stretch3LiteURLShorl2stretchUlimittowering0running4736alengthenedtwYATUC8709TraceURLe0spunZoutURLZcoZukShortlinks61lanky27n0URLcutShrtndPiURL0c0</url></li>
+                    <li>Text only: <url link="no" href="https://longurlmaker.com/go?id=1URLPieenduring1lengthened0elongateLiteURL0f8lnkZinStartURLextensiveEasyURL10l1023NanoRefprotracted1lingeringwfarawaydgangling6SitelutionsLiteURLc64FwdURLURLZcoZuk11181ca514c1sustainedURlZieenduring048Ne13sfarZreachingm30URLcut3MyURL9a80lingering11URLZcoZukrangy7484ay0lfw2NotLongEzURL1fc94119507tTinyLinkn04BeamZtoShortenURL1lastingwfrunningmIsZgdfarawaya14Shorl6faraway1dqShrtnd129high6outstretched8G8Ldistant0prolongedboutstretched981e6sustained5cremote5longishTraceURLe52stretchingShortenURL5d0dzSimURLaBeamZtotmShorl2redistantremoteShredURLDoiopGetShorty4NutshellURL53NanoReflengthened9d66towering80stretchingdistanttUlimit5Dwarfurl199elengthened9o1lnkZinrunninglanky00qd14c1947901G8LfarZoff32RedirxRubyURL42farZreachingx01lingeringganglingj1301URLDecentURL7NutshellURL1greato19yTightURLd119zCanURLenlargedu00thg5bfURLPie15c8vfarZreachingenlarged2Fly2b1FwdURL2tallURLHawk39303dIsZgd881301URL8distantShredURL5co5bYATUC0XZse17venlarged010elongatef8yaf86ek1ShoterLinkcontinued60URlZieMooURL1092TraceURLShortURLeprolonged010PiURLMetamarkelongateDecentURLaeShortlinksa451mUlimit41lofty00TightURL10remote14lengthenedd202e015937Minilienstretched1ah019ShortenURLenduring71efarZreaching20distant1great9104XZse00spunZoutfc02efarZoffb5qbspreadZout0j25k18farZreachingB659lengthyc903h71stringy347a308a617017faraway07elongate8216enlarged00ShrinkrlengthenedFly2lingering4SmallrcwstretchYATUCURLvirShim78UrlTea3UrlTea0lengthy118Dwarfurl7sv6TightURL186farZreachingz5aSmallr1y6cGetShortystretchedexpandedghShortlinks3StartURLfMetamark3runningastringyd1extensive11ShredURL3c931URLcut4tlengthy102d1Sitelutions30NutshellURL1MooURLstretchedo001aSitelutions0zbrunningremote01z4farawayexpanded1427fGetShorty717698c1rXZse92bspunZoutc5URLCutter51stretchedh0a2950b1j0IsZgd1911drawnZout0khr810B652gNotLongySitelutionsShrinkr4ecacd11943runningcclengthy719spreadZout0806stringy10faraway01URLCutter6rg0691cTinyLinkelongateremote1c1stretch3LiteURLShorl2stretchUlimittowering0running4736alengthenedtwYATUC8709TraceURLe0spunZoutURLZcoZukShortlinks61lanky27n0URLcutShrtndPiURL0c0"/></li>
+                </ul></p>
             </subsection>
 
             <subsection>
@@ -2631,11 +2665,69 @@ the xsltproc executable.
                     </exercise>
                     <exercise>
                         <statement><p>Add seven to eight.</p></statement>
+                        <answer><p><m>15</m></p></answer>
                     </exercise>
                     <exercise>
                         <statement><p><m>9+10</m></p></statement>
                     </exercise>
-                    <conclusion><p>This feature was designed with short <q>drill</q> exercises in mind.</p></conclusion>
+                    <exercise>
+                        <statement><p><m>1+2</m></p></statement>
+                    </exercise>
+                    <exercise>
+                        <statement><p><m>3+4+5</m></p></statement>
+                        <hint><p>Addition is associative.</p></hint>
+                        <answer><p><m>12</m></p></answer>
+                        <solution><p>First, add <m>3</m> and <m>4</m> to get <m>7</m>, then add <m>5</m> to arrive at <m>12</m>.</p></solution>
+                    </exercise>
+                    <exercise>
+                        <statement><p><m>5+6</m></p></statement>
+                    </exercise>
+                    <exercise>
+                        <statement><p>Add seven to eight.</p></statement>
+                        <answer><p><m>15</m></p></answer>
+                    </exercise>
+                    <exercise>
+                        <statement><p><m>9+10</m></p></statement>
+                    </exercise>
+                    <exercise>
+                        <statement><p><m>1+2</m></p></statement>
+                    </exercise>
+                    <exercise>
+                        <statement><p><m>3+4+5</m></p></statement>
+                        <hint><p>Addition is associative.</p></hint>
+                        <answer><p><m>12</m></p></answer>
+                        <solution><p>First, add <m>3</m> and <m>4</m> to get <m>7</m>, then add <m>5</m> to arrive at <m>12</m>.</p></solution>
+                    </exercise>
+                    <exercise>
+                        <statement><p><m>5+6</m></p></statement>
+                    </exercise>
+                    <exercise>
+                        <statement><p>Add seven to eight.</p></statement>
+                        <answer><p><m>15</m></p></answer>
+                    </exercise>
+                    <exercise>
+                        <statement><p><m>9+10</m></p></statement>
+                    </exercise>
+                    <exercise>
+                        <statement><p><m>1+2</m></p></statement>
+                    </exercise>
+                    <exercise>
+                        <statement><p><m>3+4+5</m></p></statement>
+                        <hint><p>Addition is associative.</p></hint>
+                        <answer><p><m>12</m></p></answer>
+                        <solution><p>First, add <m>3</m> and <m>4</m> to get <m>7</m>, then add <m>5</m> to arrive at <m>12</m>.</p></solution>
+                    </exercise>
+                    <exercise>
+                        <statement><p><m>5+6</m></p></statement>
+                    </exercise>
+                    <exercise>
+                        <statement><p>Add seven to eight.</p></statement>
+                        <answer><p><m>15</m></p></answer>
+                    </exercise>
+                    <exercise>
+                        <statement><p><m>9+10</m></p></statement>
+                    </exercise>
+                    <conclusion><p>This feature was designed with short <q>drill</q> exercises in mind.  With long exercises, or exercises with long hints, answers, or solutions, there is a risk that the <latex/> output will have bad page breaks in the vicinity (just before) such an exercise that occupies too much vertical space.  Edit, rearrange, or use fewer columns to see if the situation improves.</p></conclusion>
                 </exercisegroup>
 
             </exercises>

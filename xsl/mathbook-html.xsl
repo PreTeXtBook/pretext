@@ -911,6 +911,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <tr>
         <td style="text-align:left; vertical-align:top;">
             <xsl:call-template name="begin-inline-math" />
+            <!-- "usage" should be raw latex, so -->
+            <!-- should avoid text processing    -->
             <xsl:value-of select="usage" />
             <xsl:call-template name="end-inline-math" />
         </td>
@@ -6668,8 +6670,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
     </xsl:variable>
     <!-- Normally in an active link, except inactive in titles -->
+    <!-- Or elect to be inactive via the @link attribute       -->
     <xsl:choose>
-        <xsl:when test="ancestor::title|ancestor::subtitle">
+        <xsl:when test="boolean(ancestor::title|ancestor::subtitle) or @link = 'no'">
             <xsl:copy-of select="$visible-text" />
         </xsl:when>
         <xsl:otherwise>
