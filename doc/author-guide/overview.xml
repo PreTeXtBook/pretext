@@ -285,7 +285,9 @@
         <idx>URL</idx>
         <idx>external reference</idx><idx><h>external reference</h><seealso>URL</seealso></idx>
 
-        <p>The <tag>url</tag><idx>URL</idx> tag always requires an <attr>href</attr> attribute.  Usually this will be some external web page, or other resource.  If the <tag>url</tag> is empty, then the value of the <attr>href</attr> attribute will be the link text, typically in a monospace font.  You can also provide your own content, using elements much like any other piece of text that would occur in a paragraph.  Of course, there is no need to anticipate any problems with <latex /> output and special characters like a tilde.  Use the character itself in the <attr>href</attr>, and use the <tag>tilde</tag> element in the content (or wrap the content in the <tag>c</tag> element and use the literal character).</p>
+        <p>The <tag>url</tag><idx>URL</idx> tag always requires an <attr>href</attr> attribute.  Usually this will be some external web page, or other resource.  If the <tag>url</tag> is empty, then the value of the <attr>href</attr> attribute will be the link text, typically in a monospace font.  You can also provide your own content, using elements much like any other piece of text that would occur in a paragraph.  Finally, the <attr>link</attr> attribute can be set to <c>no</c> to make the <init>URL</init> purely visual, and inactive.</p>
+
+        <p>Of course, there is no need to anticipate any problems with <latex /> output and special characters like a tilde.  Use the character itself in the <attr>href</attr> attribute, and use the <tag>tilde</tag> element in the content (or wrap the content in the <tag>c</tag> element and use the literal character).</p>
 
         <p>This element may also be used to link to external data files.  See <xref ref="topic-url" /> for details.</p>
 

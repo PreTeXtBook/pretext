@@ -1416,12 +1416,31 @@
         <subsection>
             <title><init>URL</init>s to External Web Pages</title>
 
-            <p>The <tag>url</tag><idx>URL</idx> tag can be used to point to external items (as distinct from other internal portions of your current document, which is accomplished with the <tage>xref</tage> element, <xref ref="overview-cross-references" />).  It always needs a value for the <attr>href</attr> attribute, most likely a <init>URL</init>.  Most of this time, this will point to some resource available on the Internet but it could be a file on the system hosting your document, perhaps using a relative address (but see the rest of this section for some cautions).  Here are three scenarios:<ul>
-                <li><p>The <tag>url</tag> element is empty.  Then the value of the <attr>href</attr> is also used for the visible text of the link, verbatim, and usually in a monospace font.  Use <term>percent-encoding</term><idx>percent encoding</idx><idx><h>percent encoding</h><seealso>URL encoding</seealso></idx> (aka <term>URL encoding</term><idx><h>URL</h><h>URL encoding</h></idx>) for the <attr>href</attr> attribute to include special characters, such as spaces.</p></li>
+            <p>The <tag>url</tag><idx>URL</idx> tag can be used to point to external items (as distinct from other internal portions of your current document, which is accomplished with the <tage>xref</tage> element, <xref ref="overview-cross-references" />).  It always needs a value for the <attr>href</attr> attribute, most likely a <init>URL</init> (<term>Uniform Resource Locator</term>).  Most of this time, this will point to some resource available on the Internet but it could be a file on the system hosting your document, perhaps using a relative address (but see the rest of this section for some cautions).  Here are three scenarios:<dl width="narrow">
+                <li>
+                    <title>Link only</title>
+                    <p>The <tage>url</tage> element is empty.  Then the value of the <attr>href</attr> is also used for the visible text of the link, verbatim, and usually in a monospace font.  Use <term>percent-encoding</term><idx>percent encoding</idx><idx><h>percent encoding</h><seealso>URL encoding</seealso></idx> (aka <term>URL encoding</term><idx><h>URL</h><h>URL encoding</h></idx>) for the <attr>href</attr> attribute to include special characters, such as spaces.  There will be some edffort to line-break where supported by the output format.</p>
+                </li>
 
-                <li><p>The <tag>url</tag> element has content.  Now the content should be authored as you would any other text in a sentence.  Potentially problematic characters, such as a tilde should be authored with provided empty elements (as distinct from being authored literally in the <attr>href</attr> attribute).</p></li>
+                <li>
+                    <title>Link and text</title>
+                    <p>The <tag>url</tag> element has content.  Now the content should be authored as you would any other text in a sentence.  Potentially problematic characters, such as a tilde should be authored with provided empty elements (as distinct from being authored literally in the <attr>href</attr> attribute).  It is not a good idea to put a very long <init>URL</init> here, since we do not assume anything special about this text and cannot make assumptions about places to break lines.</p>
+                </li>
 
-                <li><p>The <tag>url</tag> element has content, but you want this content to look like a <init>URL</init>.  Use the <tag>c</tag> element around the content, and follow the rules for verbatim text.  I do this often for simple <init>URL</init>s that point to the top level of a website.  The <attr>href</attr> is a complete <init>URL</init> like <c>https://pretextbook.org/</c> but for content I use a less-imposing reader-friendly version like <c>pretextbook.org</c>.</p></li>
+                <li>
+                    <title>Text only</title>
+                    <p>Use an empty <tage>url</tage> element with an <attr>href</attr> attribute, but also include a <attr>link</attr> attribute set to the value <c>no</c>.  (The default value is <c>yes</c>.)  The value of <attr>href</attr> will typically be typeset in a monospace font and some effort will be made to have sensible line breaks in some output formats.  Note you can <q>shorten</q> the <init>URL</init> some, since it is not active, such as dropping <c>http://</c>.</p>
+                </li>
+            </dl></p>
+
+            <p>Realize that a <init>PDF</init> may be destined for print, and you do not want to hide the actual link in a way that is only clickable and not visible.  Two options are<ul>
+                <li>
+                    <p>Provide content for the <tag>url</tag> element that looks like a <init>URL</init>.  Use the <tag>c</tag> element around the content, and follow the rules for verbatim text.  I do this often for simple <init>URL</init>s that point to the top level of a website.  The <attr>href</attr> is a complete <init>URL</init> like <c>https://pretextbook.org/</c> but for content I use a less-imposing reader-friendly version like <c>pretextbook.org</c>.  Again, this is <em>not</em> a good solution unless the <init>URL</init> is very short.</p>
+                </li>
+
+                <li>
+                    <p>Provide simple textual content for the <tag>url</tag> element, such as <q><pretext/> site</q>, which uses the content for the clickable text, and hides the actual <init>URL</init> from the <attr>href</attr> attribute.  Then provide a text-only version of the actual <init>URL</init>, possibly shortened some, and which may format better since it can be assumed the text is a <init>URL</init>.</p>
+                </li>
             </ul></p>
 
             <p>You can place an external reference into a <tag>title</tag> element, but conversions may choose to simply render it as text, and not as an active link.</p>
