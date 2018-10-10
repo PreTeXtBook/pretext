@@ -2608,6 +2608,14 @@
   <define name="Url">
     <element name="url">
       <attribute name="href"/>
+      <optional>
+        <attribute name="link">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
       <ref name="TextShort"/>
     </element>
   </define>
