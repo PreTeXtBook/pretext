@@ -790,7 +790,6 @@
         Url =
             element url {
                 attribute href {text},
-                attribute link {"yes"|"no"}?,
                 TextShort
             }
         Xref =

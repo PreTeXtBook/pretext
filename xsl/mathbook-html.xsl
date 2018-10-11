@@ -6670,9 +6670,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
     </xsl:variable>
     <!-- Normally in an active link, except inactive in titles -->
-    <!-- Or elect to be inactive via the @link attribute       -->
     <xsl:choose>
-        <xsl:when test="boolean(ancestor::title|ancestor::subtitle) or @link = 'no'">
+        <xsl:when test="ancestor::title|ancestor::subtitle">
             <xsl:copy-of select="$visible-text" />
         </xsl:when>
         <xsl:otherwise>
