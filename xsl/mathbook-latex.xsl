@@ -2134,10 +2134,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>{\notblank{#1}{\noindent\textbf{#1}\space}{}}</xsl:text>
         </xsl:when>
         <xsl:when test="self::conclusion">
-            <xsl:text>{\par\bigskip\notblank{#1}{\noindent\textbf{#1}\space}{}}</xsl:text>
+            <xsl:text>{\par\medskip\noindent\notblank{#1}{\textbf{#1}\space}{}}</xsl:text>
         </xsl:when>
     </xsl:choose>
-    <xsl:text>{}&#xa;</xsl:text>
+    <xsl:choose>
+        <xsl:when test="self::introduction">
+            <xsl:text>{\par\medskip}</xsl:text>
+        </xsl:when>
+        <xsl:when test="self::conclusion">
+            <xsl:text>{}</xsl:text>
+        </xsl:when>
+    </xsl:choose>
+    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <!-- A division has a PTX name via local-name() and a corresponding -->
