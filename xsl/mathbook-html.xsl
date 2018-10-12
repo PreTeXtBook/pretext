@@ -125,6 +125,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="html.knowl.exercise.inline" select="'yes'" />
 <xsl:param name="html.knowl.exercise.sectional" select="'no'" />
 <xsl:param name="html.knowl.exercise.worksheet" select="'no'" />
+<xsl:param name="html.knowl.exercise.readingquestion" select="'no'" />
 <!-- html.knowl.example.solution: always "yes", could be implemented -->
 
 <!-- (2018-05-16) These are 100% temporary, to recover from -common edits to support changes in LaTeX for exercises, etc.  Once we mirror that work for HTML, these will be surplus and will go way.  So avert your eyes -->
@@ -397,6 +398,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="self::solutions">
                 <xsl:apply-templates select="." mode="solutions" />
             </xsl:when>
+            <!-- a glossary is like a big list, and we need  -->
+            <!-- to handle it in an exceptional manner -->
+            <xsl:when test="self::glossary">
+                <xsl:apply-templates select="introduction"/>
+                <dl class="glossary">
+                    <xsl:apply-templates select="defined-term"/>
+                </dl>
+                <xsl:apply-templates select="conclusion"/>
+            </xsl:when>
             <xsl:otherwise>
                 <xsl:apply-templates select="*" />
             </xsl:otherwise>
@@ -577,7 +587,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We give them a localized "type" computed from     -->
 <!-- their level. Numbers are displayed for structured -->
 <!-- divisions, but not for unstructured divisions.    -->
-<xsl:template match="exercises|solutions|references|worksheet" mode="header-content">
+<xsl:template match="exercises|solutions|glossary|references|worksheet|reading-questions" mode="header-content">
     <span class="type">
         <xsl:call-template name="type-name">
             <xsl:with-param name="string-id">
@@ -594,6 +604,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <span class="codenumber">
         <xsl:choose>
             <xsl:when test="self::references[parent::backmatter]"/>
+            <xsl:when test="self::glossary[parent::backmatter]"/>
             <xsl:when test="$b-is-structured or self::solutions[parent::backmatter]">
                 <xsl:apply-templates select="." mode="number" />
             </xsl:when>
@@ -966,7 +977,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Solutions Divisions, Content Generation -->
 <!-- ####################################### -->
 
-<xsl:template match="chapter|section|subsection|subsubsection|exercises" mode="division-in-solutions">
+<xsl:template match="chapter|section|subsection|subsubsection|exercises|reading-questions" mode="division-in-solutions">
     <xsl:param name="scope" /> <!-- ignored -->
     <xsl:param name="content" />
 
@@ -1451,7 +1462,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="commentary" mode="xref-as-knowl">
     <xsl:value-of select="$b-commentary" />
 </xsl:template>
-<xsl:template match="fn|p|blockquote|biblio|biblio/note|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|poem|assemblage|paragraphs|objectives|outcomes|exercise|hint|answer|solution|exercisegroup|men|mrow|li|contributor" mode="xref-as-knowl">
+<xsl:template match="fn|p|blockquote|biblio|biblio/note|defined-term|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|poem|assemblage|paragraphs|objectives|outcomes|exercise|hint|answer|solution|exercisegroup|men|mrow|li|contributor" mode="xref-as-knowl">
     <xsl:value-of select="true()" />
 </xsl:template>
 
@@ -1724,7 +1735,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Not normally titled, but knowl content gives some indication -->
-<!-- blockquote, exercisegroup, proof -->
+<!-- blockquote, exercisegroup, proof, defined term -->
 <xsl:template match="*" mode="heading-type">
     <h6 class="heading">
         <span class="type">
@@ -1880,7 +1891,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- (7) TODO: "wrapped-content" called by "body" to separate code. -->
 
-<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|commentary|objectives|outcomes|&EXAMPLE-LIKE;|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|proof|case|fn|contributor|biblio|biblio/note|p|li|me|men|md|mdn">
+<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|commentary|objectives|outcomes|&EXAMPLE-LIKE;|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|proof|case|fn|contributor|biblio|biblio/note|defined-term|p|li|me|men|md|mdn">
     <xsl:param name="b-original" select="true()" />
     <xsl:variable name="hidden">
         <xsl:apply-templates select="." mode="is-hidden" />
@@ -2914,6 +2925,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="$html.knowl.exercise.worksheet = 'yes'" />
 </xsl:template>
 
+<xsl:template match="reading-questions//exercise" mode="is-hidden">
+    <xsl:value-of select="$html.knowl.exercise.readingquestion = 'yes'" />
+</xsl:template>
+
 <!-- Overall enclosing element -->
 <xsl:template match="exercise" mode="body-element">
     <xsl:text>article</xsl:text>
@@ -2934,7 +2949,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="exercise" mode="heading-birth">
     <xsl:apply-templates select="." mode="heading-full" />
 </xsl:template>
-<xsl:template match="exercises//exercise|worksheet//exercise" mode="heading-birth">
+<xsl:template match="exercises//exercise|worksheet//exercise|reading-questions//exercise" mode="heading-birth">
     <xsl:apply-templates select="." mode="heading-divisional-exercise-serial" />
 </xsl:template>
 
@@ -2943,7 +2958,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="exercise" mode="heading-xref-knowl">
     <xsl:apply-templates select="." mode="heading-full" />
 </xsl:template>
-<xsl:template match="exercises//exercise|worksheet//exercise" mode="heading-xref-knowl">
+<xsl:template match="exercises//exercise|worksheet//exercise|reading-questions//exercise" mode="heading-xref-knowl">
     <xsl:apply-templates select="." mode="heading-divisional-exercise-typed" />
 </xsl:template>
 
@@ -3713,6 +3728,68 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </div>
 </xsl:template>
 
+
+<!-- Defined Terms (of a Glossary) -->
+
+<!-- Never born-hidden, always in "glossary" -->
+<xsl:template match="defined-term" mode="is-hidden">
+    <xsl:text>false</xsl:text>
+</xsl:template>
+
+<!-- Overall enclosing element -->
+<xsl:template match="defined-term" mode="body-element">
+    <xsl:text>article</xsl:text>
+</xsl:template>
+
+<!-- And its CSS class -->
+<xsl:template match="defined-term" mode="body-css-class">
+    <xsl:text>defined-term</xsl:text>
+</xsl:template>
+
+<!-- Never born hidden -->
+<xsl:template match="defined-term" mode="hidden-knowl-placement" />
+
+<!-- When born use this heading -->
+<xsl:template match="defined-term" mode="heading-birth" />
+
+<!-- Heading for interior of xref-knowl content -->
+<!-- Not necessary, obvious by appearance       -->
+<xsl:template match="defined-term" mode="heading-xref-knowl" />
+
+<!-- Glossary defined terms have more structure -->
+<!-- The id is placed on the title as a target  -->
+<xsl:template match="defined-term" mode="body">
+    <xsl:param name="block-type" />
+    <xsl:param name="b-original" select="true()" />
+    <xsl:choose>
+        <xsl:when test="$block-type = 'xref'">
+            <article class="listitem">
+                <!-- "title" of item is replicated in heading -->
+                <xsl:apply-templates select="." mode="heading-xref-knowl" />
+                <!-- a run of paragraphs, conceivably, title is killed -->
+                <xsl:apply-templates select="*">
+                    <xsl:with-param name="b-original" select="$b-original" />
+                </xsl:apply-templates>
+            </article>
+        </xsl:when>
+        <xsl:otherwise>
+            <dt>
+                <!-- label original -->
+                <xsl:if test="$b-original">
+                    <xsl:attribute name="id">
+                        <xsl:apply-templates select="." mode="perm-id" />
+                    </xsl:attribute>
+                </xsl:if>
+                <xsl:apply-templates select="." mode="title-full" />
+            </dt>
+            <dd>
+                <xsl:apply-templates>
+                    <xsl:with-param name="b-original" select="$b-original" />
+                </xsl:apply-templates>
+            </dd>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
 
 <!-- Bibliographic Entries -->
 <!-- An obvious use for knowls, but occur inline -->
@@ -7896,14 +7973,14 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
 <xsl:template match="webwork-reps">
     <xsl:param name="b-original" select="true()" />
     <xsl:choose>
-        <xsl:when test="(ancestor::exercises and $webwork.divisional.static='yes') or (not(ancestor::exercises or ancestor::worksheet) and $webwork.inline.static='yes') ">
+        <xsl:when test="(ancestor::exercises and $webwork.divisional.static='yes') or (not(ancestor::exercises or ancestor::worksheet or ancestor::reading-questions) and $webwork.inline.static='yes') ">
             <xsl:apply-templates select="static">
                 <xsl:with-param name="b-original" select="$b-original" />
             </xsl:apply-templates>
         </xsl:when>
         <xsl:otherwise>
             <xsl:choose>
-                <xsl:when test="not(ancestor::exercises or ancestor::worksheet) or ($exercise.text.hint = 'yes' and $exercise.text.solution = 'yes')">
+                <xsl:when test="not(ancestor::exercises or ancestor::worksheet or ancestor::reading-questions) or ($exercise.text.hint = 'yes' and $exercise.text.solution = 'yes')">
                     <xsl:apply-templates select="server-url[@hint='yes' and @solution='yes']" mode="body"/>
                 </xsl:when>
                 <xsl:when test="$exercise.text.hint = 'yes' and $exercise.text.solution = 'no'">
@@ -7927,14 +8004,14 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
             <xsl:with-param name="b-original" select="$b-original" />
         </xsl:apply-templates>
     </xsl:if>
-    <xsl:if test="(hint and (not(ancestor::exercises or ancestor::worksheet) or $exercise.text.hint='yes')) or (solution and (not(ancestor::exercises or ancestor::worksheet) or $exercise.text.solution='yes'))">
+    <xsl:if test="(hint and (not(ancestor::exercises or ancestor::worksheet or ancestor::reading-questions) or $exercise.text.hint='yes')) or (solution and (not(ancestor::exercises or ancestor::worksheet or ancestor::reading-questions) or $exercise.text.solution='yes'))">
         <div class="solutions">
-            <xsl:if test="not(ancestor::exercises or ancestor::worksheet) or $exercise.text.hint='yes'">
+            <xsl:if test="not(ancestor::exercises or ancestor::worksheet or ancestor::reading-questions) or $exercise.text.hint='yes'">
                 <xsl:apply-templates select="hint">
                     <xsl:with-param name="b-original" select="$b-original" />
                 </xsl:apply-templates>
             </xsl:if>
-            <xsl:if test="not(ancestor::exercises or ancestor::worksheet) or $exercise.text.solution='yes'">
+            <xsl:if test="not(ancestor::exercises or ancestor::worksheet or ancestor::reading-questions) or $exercise.text.solution='yes'">
                 <xsl:apply-templates select="solution">
                     <xsl:with-param name="b-original" select="$b-original" />
                 </xsl:apply-templates>
