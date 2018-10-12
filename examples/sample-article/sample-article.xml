@@ -978,6 +978,48 @@ the xsltproc executable.
                     </exercise>
                 </exercises>
 
+                <reading-questions>
+                    <introduction>
+                        <p>A set of reading questions may have an <tag>introduction</tag>, perhaps for preparatory explanation.</p>
+                    </introduction>
+
+                    <exercise xml:id="first-reading">
+                        <statement>
+                            <p>This is a <term>reading question</term> that you might have a student read prior to a class session, based on reading part of the book.</p>
+                        </statement>
+                    </exercise>
+
+                    <exercise>
+                        <statement>
+                            <p>And a second one, with a cross-reference to the first, as a check on numbering: <xref ref="first-reading" text="type-global"/>.</p>
+                        </statement>
+                    </exercise>
+
+                    <conclusion>
+                        <p>And for symmetry, a <tag>conclusion</tag>.</p>
+                    </conclusion>
+                </reading-questions>
+
+                <glossary>
+                    <introduction>
+                        <p>A glossary may have an <tag>introduction</tag>, perhaps with some explanation.</p>
+                    </introduction>
+
+                    <defined-term>
+                        <title>bar</title>
+                        <p>A part of <term>foobar</term>.  See <xref ref="foobar-defined" text="title"/>.</p>
+                    </defined-term>
+
+                    <defined-term xml:id="foobar-defined">
+                        <title>foobar</title>
+                        <p>A synonym for the acronym <acro>FUBAR</acro>.</p>
+                    </defined-term>
+
+                    <conclusion>
+                        <p>And for symmetry, a <tag>conclusion</tag>.</p>
+                    </conclusion>
+                </glossary>
+
                 <solutions xml:id="solutions-subsection" inline="hint solution answer" divisional="hint solution answer" project="hint solution answer">
                     <title>Solutions for This Subsection</title>
                     <idx><h>solutions</h><h>for a division</h></idx>
