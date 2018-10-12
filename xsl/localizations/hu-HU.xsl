@@ -78,6 +78,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <localization string-id='worksheet'><xsl:text>Worksheet</xsl:text></localization> -->
     <!-- <localization string-id='reading-questions'><xsl:text>Reading Questions</xsl:text></localization> -->
     <!-- <localization string-id='solutions'><xsl:text>Solutions</xsl:text></localization> -->
+    <!-- <localization string-id='glossary'><xsl:text>Glossary</xsl:text></localization> -->
     <localization string-id='references'><xsl:text>Hivatkozások</xsl:text></localization>
     <localization string-id='backmatter'><xsl:text>Záró rész</xsl:text></localization>
     <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
@@ -127,6 +128,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Lists and their items -->
     <localization string-id='list'><xsl:text>Lista</xsl:text></localization>
     <localization string-id='li'><xsl:text>Tétel</xsl:text></localization>
+    <!-- A term (word) defined in a glossary -->
+    <!-- <localization string-id='defined-term'><xsl:text>Term</xsl:text></localization> -->
     <!-- A regular paragraph, not the old sectioning structure -->
     <localization string-id='p'><xsl:text>Paragrafus</xsl:text></localization>
     <localization string-id='blockquote'><xsl:text>Idézet</xsl:text></localization>

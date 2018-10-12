@@ -225,7 +225,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:strip-space elements="list" />
 <xsl:strip-space elements="sage program console task" />
 <xsl:strip-space elements="exercisegroup" />
-<xsl:strip-space elements="ul ol dl" />
+<xsl:strip-space elements="ul ol dl defined-term" />
 <xsl:strip-space elements="md mdn" />
 <xsl:strip-space elements="sage figure table listing index" />
 <xsl:strip-space elements="sidebyside paragraphs" />
@@ -3793,8 +3793,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
-<!-- Backmatter references are unique and un-numbered -->
+<!-- Backmatter references and glossary are unique and un-numbered -->
 <xsl:template match="backmatter/references" mode="serial-number" />
+<xsl:template match="backmatter/glossary" mode="serial-number" />
 
 <!-- Divisions -->
 <xsl:template match="part" mode="division-serial-number">
@@ -4484,6 +4485,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- components of exercises, so we might need to explicitly   -->
 <!-- make webwork/solution, etc to be unnumbered.              -->
 
+<!-- Defined terms, in a "glossary", are known by their title  -->
+<xsl:template match="defined-term" mode="serial-number"/>
+
 <!-- Objectives and outcomes are one-per-subdivision, -->
 <!-- and so get their serial number from their parent -->
 <xsl:template match="objectives|outcomes" mode="serial-number">
@@ -4669,9 +4673,10 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
-<!-- "references" are solo in main matter divisions, -->
-<!-- unique and not numbered in back matter          -->
+<!-- "references" and "glossary" are solo in main matter -->
+<!-- divisions, unique and not numbered in back matter   -->
 <xsl:template match="backmatter/references" mode="structure-number" />
+<xsl:template match="backmatter/glossary" mode="structure-number" />
 
 
 <!-- Structure Numbers: Theorems, Examples, Projects, Figures -->
