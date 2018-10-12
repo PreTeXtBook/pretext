@@ -650,6 +650,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         ($document-root//section/worksheet)[1]|
         ($document-root//subsection/worksheet)[1]|
         ($document-root//subsubsection/worksheet)[1]|
+        ($document-root//chapter/reading-questions|$root/article/reading-questions)[1]|
+        ($document-root//section/reading-questions)[1]|
+        ($document-root//subsection/reading-questions)[1]|
+        ($document-root//subsubsection/reading-questions)[1]|
+        ($root/book/backmatter/glossary)[1]|
+        ($document-root//chapter/glossary|$root/article/backmatter/glossary)[1]|
+        ($document-root//section/glossary)[1]|
+        ($document-root//subsection/glossary)[1]|
+        ($document-root//subsubsection/glossary)[1]|
         ($root/book/backmatter/references)[1]|
         ($document-root//chapter/references|$root/article/backmatter/references)[1]|
         ($document-root//section/references)[1]|
@@ -978,8 +987,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:for-each>
     <!-- INTRODUCTION, CONCLUSION (divisional) -->
     <xsl:variable name="introduction-reps" select="
-        ($root/article/introduction|$document-root//chapter/introduction|$document-root//section/introduction|$document-root//subsection/introduction|$document-root//appendix/introduction|$document-root//exercises/introduction|$document-root//solutions/introduction|$document-root//worksheet/introduction|$document-root//references/introduction)[1]|
-        ($root/article/conclusion|$document-root//chapter/conclusion|$document-root//section/conclusion|$document-root//subsection/conclusion|$document-root//appendix/conclusion|$document-root//exercises/conclusion|$document-root//solutions/conclusion|$document-root//worksheet/conclusion|$document-root//references/conclusion)[1]"/>
+        ($root/article/introduction|$document-root//chapter/introduction|$document-root//section/introduction|$document-root//subsection/introduction|$document-root//appendix/introduction|$document-root//exercises/introduction|$document-root//solutions/introduction|$document-root//worksheet/introduction|$document-root//reading-questions/introduction|$document-root//glossary/introduction|$document-root//references/introduction)[1]|
+        ($root/article/conclusion|$document-root//chapter/conclusion|$document-root//section/conclusion|$document-root//subsection/conclusion|$document-root//appendix/conclusion|$document-root//exercises/conclusion|$document-root//solutions/conclusion|$document-root//worksheet/conclusion|$document-root//reading-questions/conclusion|$document-root//glossary/conclusion|$document-root//references/conclusion)[1]"/>
     <xsl:if test="$introduction-reps">
         <xsl:text>%%&#xa;</xsl:text>
         <xsl:text>%% xparse environments for introductions and conclusions of divisions&#xa;</xsl:text>
@@ -992,6 +1001,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- "paragraphs" are partly like a division, -->
     <!-- but we include it here as a one-off      -->
     <xsl:variable name="miscellaneous-reps" select="
+        ($document-root//defined-term)[1]|
         ($document-root//assemblage)[1]|
         ($document-root//objectives)[1]|
         ($document-root//outcomes)[1]|
@@ -1042,7 +1052,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- This may have false positives, but no real harm -->
         <!--  -->
         <!-- solutions to inline exercises -->
-        <xsl:if test="$document-root//exercise[not(ancestor::exercises or ancestor::worksheet)]">
+        <xsl:if test="$document-root//exercise[not(ancestor::exercises or ancestor::worksheet or ancestor::reading-questions)]">
         <xsl:text>%% Solutions to inline exercises, style and environment&#xa;</xsl:text>
             <xsl:text>\tcbset{ inlineexercisesolutionstyle/.style={size=minimal, boxrule=-0.3pt, frame empty, colback=white, colbacktitle=white, coltitle=black, fonttitle=\normalfont\bfseries, attach title to upper, after title={\space}, breakable } }&#xa;</xsl:text>
             <xsl:text>\newtcolorbox{inlineexercisesolution}[2]</xsl:text>
@@ -1055,7 +1065,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
         <!-- Division Solution -->
         <!-- Explicitly breakable, run-in title -->
-        <xsl:if test="$document-root//exercises//exercise[not(ancestor::exercisegroup)]|$document-root//worksheet//exercise[not(ancestor::exercisegroup)]">
+        <xsl:if test="$document-root//exercises//exercise[not(ancestor::exercisegroup)]|$document-root//worksheet//exercise[not(ancestor::exercisegroup)]|$document-root//reading-questions//exercise[not(ancestor::exercisegroup)]">
             <xsl:text>%% Solutions to division exercises, not in exercise group&#xa;</xsl:text>
             <xsl:text>\tcbset{ divisionsolutionstyle/.style={size=minimal, boxrule=-0.3pt, frame empty, colback=white, colbacktitle=white, coltitle=black, fonttitle=\normalfont\bfseries, attach title to upper, after title={\space}, breakable } }&#xa;</xsl:text>
             <xsl:text>\newtcolorbox{divisionsolution}[2]</xsl:text>
@@ -1102,7 +1112,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:for-each>
     </xsl:if>
     <!-- Generic exercise lead-in -->
-    <xsl:if test="$document-root//exercises//exercise|$document-root//worksheet//exercise">
+    <xsl:if test="$document-root//exercises//exercise|$document-root//worksheet//exercise|$document-root//reading-questions//exercise">
         <xsl:text>%% Divisional exercises (and worksheet) as LaTeX environments&#xa;</xsl:text>
         <xsl:text>%% Third argument is option for extra workspace in worksheets&#xa;</xsl:text>
         <xsl:text>%% Hanging indent occupies a 5ex width slot prior to left margin&#xa;</xsl:text>
@@ -1110,7 +1120,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <!-- Division Exercise -->
     <!-- Numbered, styled with a hanging indent -->
-    <xsl:if test="$document-root//exercises//exercise[not(ancestor::exercisegroup)]|$document-root//worksheet//exercise[not(ancestor::exercisegroup)]">
+    <xsl:if test="$document-root//exercises//exercise[not(ancestor::exercisegroup)]|$document-root//worksheet//exercise[not(ancestor::exercisegroup)]|$document-root//reading-questions//exercise[not(ancestor::exercisegroup)]">
         <xsl:text>%% Division exercises, not in exercise group&#xa;</xsl:text>
         <xsl:text>\tcbset{ divisionexercisestyle/.style={size=minimal, boxrule=-0.3pt, frame empty, colback=white, colbacktitle=white, coltitle=black, fonttitle=\normalfont\bfseries, attach title to upper, left=5ex, breakable } }&#xa;</xsl:text>
         <xsl:text>\newtcolorbox{divisionexercise}[4]</xsl:text>
@@ -2168,7 +2178,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Pervasive -->
 <!-- Product of PTX name with LaTeX level/division -->
-<xsl:template match="exercises|solutions|worksheet|references" mode="division-environment-name">
+<xsl:template match="exercises|solutions|worksheet|reading-questions|glossary|references" mode="division-environment-name">
     <xsl:value-of select="local-name(.)"/>
     <xsl:text>-</xsl:text>
     <xsl:apply-templates select="." mode="division-name"/>
@@ -2179,7 +2189,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|acknowledgement|foreword|preface|index|exercises|solutions|worksheet|references" mode="environment">
+<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|acknowledgement|foreword|preface|index|exercises|solutions|worksheet|reading-questions|glossary|references" mode="environment">
     <!-- for specialized divisions we always make a numbered -->
     <!-- and unnumbered version, with the latter happening   -->
     <!-- on a second trip through the template               -->
@@ -2238,7 +2248,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- close the environment definition, no finish -->
     <xsl:text>}{}%&#xa;</xsl:text>
     <!-- send specialized division back through a second time -->
-    <xsl:if test="not($second-trip) and boolean(self::exercises|self::solutions|self::worksheet|self::references)">
+    <xsl:if test="not($second-trip) and boolean(self::exercises|self::solutions|self::worksheet|self::reading-questions|self::glossary|self::references)">
         <xsl:apply-templates select="." mode="environment">
             <xsl:with-param name="second-trip" select="true()"/>
         </xsl:apply-templates>
@@ -2313,6 +2323,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>style}&#xa;</xsl:text>
 </xsl:template>
 
+<!-- "defined-term" -->
+<!-- Body:  \begin{definedterm}{title}{label} -->
+<xsl:template match="defined-term" mode="environment">
+    <xsl:text>%% commentary: elective, additional comments in an enhanced edition&#xa;</xsl:text>
+    <xsl:text>\tcbset{ definedtermstyle/.style={</xsl:text>
+    <xsl:apply-templates select="." mode="tcb-style" />
+    <xsl:text>} }&#xa;</xsl:text>
+    <xsl:text>\newtcolorbox{definedterm}[2]{title={#1\space}, label={#2}, breakable, definedtermstyle}&#xa;</xsl:text>
+</xsl:template>
+
 <!-- "paragraphs" -->
 <!-- Body:  \begin{paragraphs}{title}{label}   -->
 <!-- "titlesec" package, Subsection 9.2 has LaTeX defaults -->
@@ -2373,12 +2393,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--       \begin{inlineexercise}{title}{label}        -->
 <!-- Type, number, optional title                      -->
 <!-- Title comes without new punctuation.              -->
-<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|exercise[not(ancestor::exercises or ancestor::worksheet)]" mode="environment">
+<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|exercise[not(ancestor::exercises or ancestor::worksheet or ancestor::reading-questions)]" mode="environment">
     <!-- Names of various pieces normally use the      -->
     <!-- element name, but "exercise" does triple duty -->
     <xsl:variable name="environment-name">
         <xsl:choose>
-            <xsl:when test="self::exercise and not(ancestor::exercises or ancestor::worksheet)">
+            <xsl:when test="self::exercise and not(ancestor::exercises or ancestor::worksheet or ancestor::reading-questions)">
                 <xsl:text>inlineexercise</xsl:text>
             </xsl:when>
             <xsl:otherwise>
@@ -2558,6 +2578,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>size=minimal, before skip=5ex, left skip=0.15\textwidth, right skip=0.15\textwidth, boxrule=-0.3pt, frame empty, colback=white, colbacktitle=white, coltitle=black, fonttitle=\large\bfseries, center title, halign=center, bottomtitle=2ex</xsl:text>
 </xsl:template>
 
+<!-- "defined-term" -->
+<!-- Differs only by spacing prior, this could go away  -->
+<!-- if headings, etc handle vertical space correctly   -->
+<xsl:template match="defined-term" mode="tcb-style">
+    <xsl:text>size=minimal, boxrule=-0.3pt, frame empty, colback=white, colbacktitle=white, coltitle=black, fonttitle=\normalfont\bfseries, attach title to upper, </xsl:text>
+</xsl:template>
+
+
 <!-- THEOREM-LIKE: "theorem", "corollary", "lemma",    -->
 <!--               "algorithm", "proposition",         -->
 <!--               "claim", "fact", "identity"         -->
@@ -2586,7 +2614,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- DEFINITION-LIKE and EXAMPLE-LIKE are exceptional  -->
 <!-- in that markers are inserted with "after upper"   -->
 <!-- to indicate the end of the environment.           -->
-<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|exercise[not(ancestor::exercises or ancestor::worksheet)]|assemblage|&ASIDE-LIKE;" mode="tcb-style">
+<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|exercise[not(ancestor::exercises or ancestor::worksheet or ancestor::reading-questions)]|assemblage|&ASIDE-LIKE;" mode="tcb-style">
     <xsl:text>size=minimal, boxrule=-0.3pt, frame empty, colback=white, colbacktitle=white, coltitle=black, fonttitle=\normalfont\bfseries, attach title to upper, after title={\space}, </xsl:text>
 </xsl:template>
 
@@ -3741,7 +3769,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ################ -->
 
 <!-- Divisions, "part" to "subsubsection", and specialized -->
-<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|acknowledgement|foreword|preface|exercises|worksheet|solutions|references">
+<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|acknowledgement|foreword|preface|exercises|worksheet|reading-questions|solutions|glossary|references">
     <!-- appendices are peers of chapters (book) or sections (article)  -->
     <!-- so we need to slip this in first, with book's \backmatter later-->
     <!-- NB: if no appendices, the backmatter template does \backmatter -->
@@ -3835,7 +3863,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Specialized Divisions: we do not implement "author", "subtitle",  -->
 <!-- or "epigraph" yet.  These may be added/supported later.           -->
-<xsl:template match="exercises|solutions[not(parent::backmatter)]|references|worksheet" mode="latex-division-heading">
+<xsl:template match="exercises|solutions[not(parent::backmatter)]|reading-questions|glossary|references|worksheet" mode="latex-division-heading">
     <!-- Inspect parent (part through subsubsection)  -->
     <!-- to determine one of two models of a division -->
     <!-- NB: return values are 'true' and empty       -->
@@ -3970,7 +3998,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
-<xsl:template match="exercises|solutions[not(parent::backmatter)]|references|worksheet" mode="latex-division-footing">
+<xsl:template match="exercises|solutions[not(parent::backmatter)]|reading-questions|glossary|references|worksheet" mode="latex-division-footing">
     <!-- Inspect parent (part through subsubsection)  -->
     <!-- to determine one of two models of a division -->
     <!-- NB: return values are 'true' and empty       -->
@@ -3996,7 +4024,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- explicit subdivisions, to introduce or summarize -->
 <!-- Title optional (and discouraged), in argument    -->
 <!-- typically just a few paragraphs                  -->
-<xsl:template match="article/introduction|chapter/introduction|section/introduction|subsection/introduction|appendix/introduction|exercises/introduction|solutions/introduction|worksheet/introduction|references/introduction">
+<xsl:template match="article/introduction|chapter/introduction|section/introduction|subsection/introduction|appendix/introduction|exercises/introduction|solutions/introduction|worksheet/introduction|reading-questions/introduction|glossary/introduction|references/introduction">
     <xsl:text>\begin{introduction}</xsl:text>
     <xsl:text>{</xsl:text>
     <xsl:apply-templates select="." mode="title-punctuated" />
@@ -4006,7 +4034,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{introduction}%&#xa;</xsl:text>
 </xsl:template>
 
-<xsl:template match="article/conclusion|chapter/conclusion|section/conclusion|subsection/conclusion|appendix/conclusion|exercises/conclusion|solutions/conclusion|worksheet/conclusion|references/conclusion">
+<xsl:template match="article/conclusion|chapter/conclusion|section/conclusion|subsection/conclusion|appendix/conclusion|exercises/conclusion|solutions/conclusion|worksheet/conclusion|reading-questions/conclusion|glossary/conclusion|references/conclusion">
     <xsl:text>\begin{conclusion}</xsl:text>
     <xsl:text>{</xsl:text>
     <xsl:apply-templates select="." mode="title-punctuated" />
@@ -4148,7 +4176,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 3.  the "internal-id", which suffices for               -->
 <!--     the LaTeX label/ref mechanism                       -->
 <!-- N.B.: "objectives", "outcomes" need to use this         -->
-<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&ASIDE-LIKE;|exercise[not(ancestor::exercises or ancestor::worksheet)]|commentary|assemblage" mode="block-options">
+<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&ASIDE-LIKE;|exercise[not(ancestor::exercises or ancestor::worksheet or ancestor::reading-questions)]|commentary|assemblage" mode="block-options">
     <xsl:text>{</xsl:text>
     <xsl:apply-templates select="." mode="title-punctuated"/>
     <xsl:text>}</xsl:text>
@@ -4473,7 +4501,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- too hard (impossible?) to mesh into LaTeX's scheme.  An -->
 <!-- "exercises" may be divided by a future "subexercises"   -->
 <!-- and/or by an "exercisegroup", so we match with "//"     -->
-<xsl:template match="exercises//exercise|worksheet//exercise">
+<xsl:template match="exercises//exercise|worksheet//exercise|reading-questions//exercise">
     <xsl:variable name="env-name">
         <xsl:text>divisionexercise</xsl:text>
         <xsl:if test="ancestor::exercisegroup">
@@ -4590,7 +4618,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Divisional Exercises (exercises//exercise) in solutions-->
 <!-- Nothing produced if there is no content -->
 <!-- Otherwise, no label, since duplicate    -->
-<xsl:template match="exercises//exercise|worksheet//exercise" mode="solutions">
+<xsl:template match="exercises//exercise|worksheet//exercise|reading-questions//exercise" mode="solutions">
     <xsl:param name="b-has-statement" />
     <xsl:param name="b-has-hint" />
     <xsl:param name="b-has-answer" />
@@ -5970,7 +5998,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:text>\begin{enumerate}</xsl:text>
     <!-- override LaTeX defaults as indicated -->
-    <xsl:if test="@label or ancestor::exercises or ancestor::worksheet or ancestor::references">
+    <xsl:if test="@label or ancestor::exercises or ancestor::worksheet or ancestor::reading-questions or ancestor::references">
         <xsl:text>[label=</xsl:text>
         <xsl:apply-templates select="." mode="latex-list-label" />
         <xsl:text>]</xsl:text>
@@ -8853,7 +8881,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Any target of a PreTeXt cross-reference, which is not naturally -->
 <!-- numbered by a LaTeX \label{} command, needs to go here.         -->
-<xsl:template match="references|exercises[count(parent::*/exercises)=1]|worksheet[count(parent::*/worksheet)=1]|solutions[not(parent::backmatter)]|exercises//exercise|worksheet//exercise|biblio|biblio/note|proof|case|ol/li|dl/li|hint|answer|solution|exercisegroup|p|paragraphs|blockquote|contributor|colophon|book|article" mode="xref-as-ref">
+<xsl:template match="glossary|references|exercises[count(parent::*/exercises)=1]|worksheet[count(parent::*/worksheet)=1]|solutions[not(parent::backmatter)]|exercises//exercise|worksheet//exercise|reading-questions//exercise|biblio|biblio/note|proof|case|ol/li|dl/li|hint|answer|solution|exercisegroup|p|paragraphs|blockquote|contributor|colophon|book|article" mode="xref-as-ref">
     <xsl:value-of select="false()" />
 </xsl:template>
 
@@ -8984,7 +9012,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Note: objectives are one-per-subdivision, and precede the              -->
 <!-- introduction, so the LaTeX \ref{} mechanism assigns the correct        -->
 <!-- number - that of the enclosing subdivision                             -->
-<xsl:template match="references|exercises[count(parent::*/exercises)=1]|worksheet[count(parent::*/worksheet)=1]|solutions[not(parent::backmatter)]|exercises//exercise|worksheet//exercise|biblio|biblio/note|proof|case|ol/li|dl/li|hint|answer|solution|exercisegroup|fn" mode="xref-number">
+<xsl:template match="glossary|references|exercises[count(parent::*/exercises)=1]|worksheet[count(parent::*/worksheet)=1]|solutions[not(parent::backmatter)]|exercises//exercise|worksheet//exercise|reading-questions//exercise|biblio|biblio/note|proof|case|ol/li|dl/li|hint|answer|solution|exercisegroup|fn" mode="xref-number">
     <xsl:param name="xref" select="/.." />
     <xsl:variable name="needs-part-prefix">
         <xsl:apply-templates select="." mode="crosses-part-boundary">
@@ -9281,6 +9309,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates />
     <xsl:apply-templates select="." mode="label" />
     <xsl:text>}</xsl:text>
+</xsl:template>
+
+<!-- Defined Terms, in a Glossary -->
+<xsl:template match="defined-term">
+    <xsl:text>\begin{definedterm}</xsl:text>
+    <xsl:text>{</xsl:text>
+    <xsl:apply-templates select="." mode="title-punctuated"/>
+    <xsl:text>}</xsl:text>
+    <xsl:text>{</xsl:text>
+    <xsl:apply-templates select="." mode="internal-id"/>
+    <xsl:text>}</xsl:text>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>\end{definedterm}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- References Sections -->
