@@ -194,7 +194,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Newlines with &#xa; : http://stackoverflow.com/questions/723226/producing-a-new-line-in-xslt -->
 <!-- Removing whitespace: http://stackoverflow.com/questions/1468984/xslt-remove-whitespace-from-template -->
 <xsl:strip-space elements="mathbook pretext book article memo letter" />
-<xsl:strip-space elements="frontmatter chapter appendix index-part index section subsection subsubsection exercises worksheet solutions references introduction conclusion paragraphs subparagraph backmatter" />
+<xsl:strip-space elements="frontmatter chapter appendix index-part index section subsection subsubsection exercises worksheet reading-questions solutions references glossary introduction conclusion paragraphs subparagraph backmatter" />
 <xsl:strip-space elements="docinfo author abstract" />
 <xsl:strip-space elements="titlepage preface acknowledgement biography foreword dedication colophon" />
 <!-- List is elements in DEFINITION-LIKE entity -->
@@ -1049,7 +1049,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Divisions in the back matter vary between books and articles -->
 <!--     Book:    children of backmatter -> chapter               -->
 <!--     Article: children of backmatter -> section               -->
-<xsl:template match="exercises|solutions|worksheet|references|appendix|index" mode="division-name">
+<xsl:template match="exercises|solutions|worksheet|reading-questions|references|glossary|appendix|index" mode="division-name">
     <xsl:choose>
         <xsl:when test="parent::article">
             <xsl:text>section</xsl:text>
@@ -3134,7 +3134,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Some items have default titles that make sense         -->
 <!-- Typically these are one-off subdivisions (eg preface), -->
 <!-- or repeated generic divisions (eg exercises)           -->
-<xsl:template match="frontmatter|colophon|preface|foreword|acknowledgement|dedication|biography|assemblage|references|exercises|worksheet|solutions|backmatter|index-part|index[index-list]" mode="has-default-title">
+<xsl:template match="frontmatter|colophon|preface|foreword|acknowledgement|dedication|biography|assemblage|references|glossary|exercises|worksheet|reading-questions|solutions|backmatter|index-part|index[index-list]" mode="has-default-title">
     <xsl:text>true</xsl:text>
 </xsl:template>
 <xsl:template match="*" mode="has-default-title">
@@ -3775,7 +3775,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- An unstructured division has solo specialized divisions -->
 <!-- which inherit numbers from their parents.  This too is  -->
 <!-- handled in the "division-serial-number" template.       -->
-<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|exercises|solutions|references[not(parent::backmatter)]|worksheet" mode="serial-number">
+<xsl:template match="part|chapter|appendix|section|subsection|subsubsection|exercises|solutions|reading-questions|references[not(parent::backmatter)]|glossary[not(parent::backmatter)]|worksheet" mode="serial-number">
     <xsl:variable name="relative-level">
         <xsl:apply-templates select="." mode="level" />
     </xsl:variable>
@@ -3837,8 +3837,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- "exercises", "solutions", references, "worksheet" -->
 <!-- Count preceding peers in structured case,         -->
 <!-- or copy parent in unstructured case               -->
-<!-- NB: a backmatter/references should never come through here -->
-<xsl:template match="exercises|solutions[not(parent::backmatter)]|references|worksheet" mode="division-serial-number">
+<!-- NB: backmatter/references and backmatter/glossary -->
+<!-- should never come through here                    -->
+<xsl:template match="exercises|reading-questions|solutions[not(parent::backmatter)]|references|glossary|worksheet" mode="division-serial-number">
     <!-- Inspect parent (part through subsubsection)  -->
     <!-- to determine one of two models of a division -->
     <!-- NB: return values are 'true" and empty       -->
@@ -3850,7 +3851,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:when test="$b-is-structured">
             <!-- NB: only one type of division will be a peer          -->
             <!-- NB: not assuming an order on the specialized divisons -->
-            <xsl:number count="chapter|section|subsection|subsubsection|exercises|solutions|references|worksheet" format="1" />
+            <xsl:number count="chapter|section|subsection|subsubsection|exercises|reading-questions|solutions|references|glossary|worksheet" format="1" />
         </xsl:when>
         <xsl:otherwise>
             <xsl:apply-templates select="parent::*" mode="serial-number"/>
@@ -4534,7 +4535,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- level when passed recursively.                            -->
 
 <xsl:template match="*" mode="multi-number">
-    <xsl:param name="nodes" select="ancestor::*[self::part or self::chapter or self::appendix or self::section or self::subsection or self::subsubsection or self::exercises or self::solutions or self::references or self::worksheet]"/>
+    <xsl:param name="nodes" select="ancestor::*[self::part or self::chapter or self::appendix or self::section or self::subsection or self::subsubsection or self::exercises or self::reading-questions or self::solutions or self::references or self::glossary or self::worksheet]"/>
     <xsl:param name="levels" />
     <xsl:param name="pad" />
 
@@ -4636,7 +4637,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- the serial-numer and the structure-number, so that other -->
 <!-- devices (like local numbers) will behave correctly.      -->
 <!-- Serial numbers are computed elsewhere, but in tandem.    -->
-<xsl:template match="exercises|solutions[not(parent::backmatter)]|references[not(parent::backmatter)]|worksheet" mode="structure-number">
+<xsl:template match="exercises|solutions[not(parent::backmatter)]|worksheet|reading-questions|references[not(parent::backmatter)]|glossary[not(parent::backmatter)]" mode="structure-number">
     <xsl:variable name="is-structured">
         <xsl:apply-templates select="parent::*" mode="is-structured-division"/>
     </xsl:variable>
