@@ -76,6 +76,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='conclusion'><xsl:text>Következtetés</xsl:text></localization>
     <localization string-id='exercises'><xsl:text>Feladatok</xsl:text></localization>
     <!-- <localization string-id='worksheet'><xsl:text>Worksheet</xsl:text></localization> -->
+    <!-- <localization string-id='reading-questions'><xsl:text>Reading Questions</xsl:text></localization> -->
     <!-- <localization string-id='solutions'><xsl:text>Solutions</xsl:text></localization> -->
     <localization string-id='references'><xsl:text>Hivatkozások</xsl:text></localization>
     <localization string-id='backmatter'><xsl:text>Záró rész</xsl:text></localization>
@@ -135,6 +136,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- See en-US file for distinctions here, do not repeat previous translation -->
     <!-- <localization string-id='inlineexercise'><xsl:text>Checkpoint</xsl:text></localization> -->
     <!-- <localization string-id='worksheetexercise'><xsl:text>Worksheet Exercise</xsl:text></localization> -->
+    <!-- <localization string-id='readingquestion'><xsl:text>Reading Question</xsl:text></localization> -->
     <localization string-id='webwork'><xsl:text>WeBWorK</xsl:text></localization>
     <localization string-id='hint'><xsl:text>Tipp</xsl:text></localization>
     <localization string-id='answer'><xsl:text>Vélasz</xsl:text></localization>

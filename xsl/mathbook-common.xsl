@@ -3498,6 +3498,13 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:call-template>
 </xsl:template>
 
+<!-- Third, an "exercise" placed within a "reading-questions"-->
+<xsl:template match="reading-questions//exercise" mode="type-name">
+    <xsl:call-template name="type-name">
+        <xsl:with-param name="string-id" select="'readingquestion'" />
+    </xsl:call-template>
+</xsl:template>
+
 <!-- Finally, an inline exercise has a division (several possible)        -->
 <!-- as a parent. We just drop in here last if other matches do not       -->
 <!-- succeed, but could improve with a filter or list of specific matches -->
@@ -3882,9 +3889,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <!-- determine if the object being numbered is inside  -->
     <!-- a decorative "exercises" or "worksheet" -->
     <xsl:variable name="inside-decorative">
-        <xsl:if test="ancestor::*[self::exercises or self::worksheet]">
+        <xsl:if test="ancestor::*[self::exercises or self::reading-questions or self::worksheet]">
             <xsl:variable name="is-structured">
-                <xsl:apply-templates select="ancestor::*[self::exercises or self::worksheet]/parent::*" mode="is-structured-division"/>
+                <xsl:apply-templates select="ancestor::*[self::exercises or self::worksheet or self::reading-questions]/parent::*" mode="is-structured-division"/>
             </xsl:variable>
             <xsl:if test="not($is-structured ='true')">
                 <xsl:text>true</xsl:text>
@@ -4039,13 +4046,13 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <xsl:number from="chapter|book/backmatter/appendix" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;" />
         </xsl:when>
         <xsl:when test="$subtree-level=2">
-            <xsl:number from="section|article/backmatter/appendix|chapter/exercises|chapter/worksheet" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;" />
+            <xsl:number from="section|article/backmatter/appendix|chapter/exercises|chapter/worksheet|chapter/reading-questions" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;" />
         </xsl:when>
         <xsl:when test="$subtree-level=3">
-            <xsl:number from="subsection|section/exercises|section/worksheet" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;" />
+            <xsl:number from="subsection|section/exercises|section/worksheet|section/reading-questions" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;" />
         </xsl:when>
         <xsl:when test="$subtree-level=4">
-            <xsl:number from="subsubsection|subsection/exercises|subsection/worksheet" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;" />
+            <xsl:number from="subsubsection|subsection/exercises|subsection/worksheet|subsection/reading-questions" level="any" count="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;" />
         </xsl:when>
         <xsl:otherwise>
             <xsl:message>MBX:ERROR: Subtree level for atomic block number computation is out-of-bounds (<xsl:value-of select="$subtree-level" />)</xsl:message>
@@ -4071,13 +4078,13 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <xsl:number from="chapter|book/backmatter/appendix" level="any" count="&PROJECT-LIKE;" />
         </xsl:when>
         <xsl:when test="$subtree-level=2">
-            <xsl:number from="section|article/backmatter/appendix|chapter/exercises|chapter/worksheet" level="any" count="&PROJECT-LIKE;" />
+            <xsl:number from="section|article/backmatter/appendix|chapter/exercises|chapter/worksheet|chapter/reading-questions" level="any" count="&PROJECT-LIKE;" />
         </xsl:when>
         <xsl:when test="$subtree-level=3">
-            <xsl:number from="subsection|section/exercises|section/worksheet" level="any" count="&PROJECT-LIKE;" />
+            <xsl:number from="subsection|section/exercises|section/worksheet|section/reading-questions" level="any" count="&PROJECT-LIKE;" />
         </xsl:when>
         <xsl:when test="$subtree-level=4">
-            <xsl:number from="subsubsection|subsection/exercises|subsection/worksheet" level="any" count="&PROJECT-LIKE;" />
+            <xsl:number from="subsubsection|subsection/exercises|subsection/worksheet|subsection/reading-questions" level="any" count="&PROJECT-LIKE;" />
         </xsl:when>
         <xsl:otherwise>
             <xsl:message>MBX:ERROR: Subtree level for project number computation is out-of-bounds (<xsl:value-of select="$subtree-level" />)</xsl:message>
@@ -4129,21 +4136,21 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                 list[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]" />
         </xsl:when>
         <xsl:when test="$subtree-level=2">
-            <xsl:number from="section|article/backmatter/appendix|chapter/exercises|chapter/worksheet" level="any"
+            <xsl:number from="section|article/backmatter/appendix|chapter/exercises|chapter/worksheet|chapter/reading-questions" level="any"
                 count="figure[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|
                 table[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|
                 listing[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|
                 list[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]" />
         </xsl:when>
         <xsl:when test="$subtree-level=3">
-            <xsl:number from="subsection|section/exercises|section/worksheet" level="any"
+            <xsl:number from="subsection|section/exercises|section/worksheet|section/reading-questions" level="any"
                 count="figure[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|
                 table[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|
                 listing[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|
                 list[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]" />
         </xsl:when>
         <xsl:when test="$subtree-level=4">
-            <xsl:number from="subsubsection|subsection/exercises|subsection/worksheet" level="any"
+            <xsl:number from="subsubsection|subsection/exercises|subsection/worksheet|subsection/reading-questions" level="any"
                 count="figure[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|
                 table[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|
                 listing[not(parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure)]|
@@ -4165,27 +4172,27 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:choose>
         <xsl:when test="$subtree-level=-1">
             <xsl:number from="book|article|letter|memo" level="any"
-                count="exercise[not(ancestor::exercises or ancestor::worksheet)]" />
+                count="exercise[not(ancestor::exercises or ancestor::worksheet or ancestor::reading-questions)]" />
         </xsl:when>
         <xsl:when test="$subtree-level=0">
             <xsl:number from="part" level="any"
-                count="exercise[not(ancestor::exercises or ancestor::worksheet)]" />
+                count="exercise[not(ancestor::exercises or ancestor::worksheet or ancestor::reading-questions)]" />
         </xsl:when>
         <xsl:when test="$subtree-level=1">
             <xsl:number from="chapter|book/backmatter/appendix" level="any"
-                count="exercise[not(ancestor::exercises or ancestor::worksheet)]" />
+                count="exercise[not(ancestor::exercises or ancestor::worksheet or ancestor::reading-questions)]" />
         </xsl:when>
         <xsl:when test="$subtree-level=2">
             <xsl:number from="section|article/backmatter/appendix|chapter/exercises|chapter/worksheet" level="any"
-                count="exercise[not(ancestor::exercises or ancestor::worksheet)]" />
+                count="exercise[not(ancestor::exercises or ancestor::worksheet or ancestor::reading-questions)]" />
         </xsl:when>
         <xsl:when test="$subtree-level=3">
             <xsl:number from="subsection|section/exercises|section/worksheet" level="any"
-                count="exercise[not(ancestor::exercises or ancestor::worksheet)]" />
+                count="exercise[not(ancestor::exercises or ancestor::worksheet or ancestor::reading-questions)]" />
         </xsl:when>
         <xsl:when test="$subtree-level=4">
             <xsl:number from="subsubsection|subsection/exercises|subsection/worksheet" level="any"
-                count="exercise[not(ancestor::exercises or ancestor::worksheet)]" />
+                count="exercise[not(ancestor::exercises or ancestor::worksheet or ancestor::reading-questions)]" />
         </xsl:when>
         <xsl:otherwise>
             <xsl:message>MBX:ERROR: Subtree level for atomic exercise number computation is out-of-bounds (<xsl:value-of select="$subtree-level" />)</xsl:message>
@@ -4221,13 +4228,13 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <xsl:number from="chapter|book/backmatter/appendix" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no' or @tag)]"/>
         </xsl:when>
         <xsl:when test="$subtree-level=2">
-            <xsl:number from="section|article/backmatter/appendix|chapter/exercises|chapter/worksheet" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no' or @tag)]"/>
+            <xsl:number from="section|article/backmatter/appendix|chapter/exercises|chapter/worksheet|chapter/reading-questions" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no' or @tag)]"/>
         </xsl:when>
         <xsl:when test="$subtree-level=3">
-            <xsl:number from="subsection|section/exercises|section/worksheet" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no' or @tag)]"/>
+            <xsl:number from="subsection|section/exercises|section/worksheet|section/reading-questions" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no' or @tag)]"/>
         </xsl:when>
         <xsl:when test="$subtree-level=4">
-            <xsl:number from="subsubsection|subsection/exercises|subsection/worksheet" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no' or @tag)]"/>
+            <xsl:number from="subsubsection|subsection/exercises|subsection/worksheet|subsection/reading-questions" level="any" count="men|md/mrow[@number = 'yes']|mdn/mrow[not(@number = 'no' or @tag)]"/>
         </xsl:when>
         <xsl:otherwise>
             <xsl:message>MBX:ERROR: Subtree level for equation number computation is out-of-bounds (<xsl:value-of select="$subtree-level" />)</xsl:message>
@@ -4235,7 +4242,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:choose>
 </xsl:template>
 
-<!-- Serial Numbers: Exercises in Exercises or Worksheet Divisions -->
+<!-- Serial Numbers: Exercises in Exercises or Worksheet or Reading Question Divisions -->
 <!-- Note: numbers may be hard-coded for longevity        -->
 <!-- exercisegroups  and future lightweight divisions may -->
 <!-- be intermediate, but should not hinder the count     -->
@@ -4252,6 +4259,14 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 </xsl:template>
 
 <xsl:template match="worksheet//exercise[@number]" mode="serial-number">
+    <xsl:apply-templates select="@number" />
+</xsl:template>
+
+<xsl:template match="reading-questions//exercise" mode="serial-number">
+    <xsl:number from="reading-questions" level="any" count="exercise" />
+</xsl:template>
+
+<xsl:template match="reading-questions//exercise[@number]" mode="serial-number">
     <xsl:apply-templates select="@number" />
 </xsl:template>
 
@@ -4320,13 +4335,13 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <xsl:number from="chapter|book/backmatter/appendix" level="any" count="fn" />
         </xsl:when>
         <xsl:when test="$subtree-level=2">
-            <xsl:number from="section|article/backmatter/appendix|chapter/exercises|chapter/worksheet" level="any" count="fn" />
+            <xsl:number from="section|article/backmatter/appendix|chapter/exercises|chapter/worksheet|chapter/reading-questions" level="any" count="fn" />
         </xsl:when>
         <xsl:when test="$subtree-level=3">
-            <xsl:number from="subsection|section/exercises|section/worksheet" level="any" count="fn" />
+            <xsl:number from="subsection|section/exercises|section/worksheet|section/reading-questions" level="any" count="fn" />
         </xsl:when>
         <xsl:when test="$subtree-level=4">
-            <xsl:number from="subsubsection|subsection/exercises|subsection/worksheet" level="any" count="fn" />
+            <xsl:number from="subsubsection|subsection/exercises|subsection/worksheet|subsection/reading-questions" level="any" count="fn" />
         </xsl:when>
         <xsl:otherwise>
             <xsl:message>MBX:ERROR: Subtree level for footnote number computation is out-of-bounds (<xsl:value-of select="$subtree-level" />)</xsl:message>
@@ -4542,7 +4557,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <!-- Test if last node is unnumbered specialized division -->
     <!-- we do not want to duplicate the serial number, which is from the containing division -->
     <xsl:variable name="decorative-division">
-        <xsl:if test="$nodes[last()][self::exercises or self::worksheet]">
+        <xsl:if test="$nodes[last()][self::exercises or self::worksheet or self::reading-questions]">
             <xsl:variable name="is-structured">
                 <xsl:apply-templates select="$nodes[last()]/parent::*" mode="is-structured-division"/>
             </xsl:variable>
@@ -4713,7 +4728,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 
 <!-- Structure Numbers: Inline Exercises -->
 <!-- Follows the theorem/figure/etc scheme (can't poll parent) -->
-<xsl:template match="exercise[not(ancestor::exercises or ancestor::worksheet)]" mode="structure-number">
+<xsl:template match="exercise[not(ancestor::exercises or ancestor::worksheet or ancestor::reading-questions)]" mode="structure-number">
     <xsl:apply-templates select="." mode="multi-number">
         <xsl:with-param name="levels" select="$numbering-theorems" />
         <xsl:with-param name="pad" select="'yes'" />
@@ -4723,9 +4738,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Structure Numbers: Divisional and Worksheet Exercises -->
 <!-- Within a "exercises" or "worksheet", look up to enclosing division -->
 <!-- in order to decide where the structure number comes from           -->
-<xsl:template match="exercises//exercise|worksheet//exercise" mode="structure-number">
+<xsl:template match="exercises//exercise|worksheet//exercise|reading-questions//exercise" mode="structure-number">
     <!-- one or the other, just a single node in variable -->
-    <xsl:variable name="container" select="ancestor::*[self::exercises or self::worksheet]"/>
+    <xsl:variable name="container" select="ancestor::*[self::exercises or self::worksheet or self::reading-questions]"/>
     <xsl:variable name="is-structured">
         <xsl:apply-templates select="$container/parent::*" mode="is-structured-division"/>
     </xsl:variable>
@@ -5781,10 +5796,10 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <xsl:template match="ol" mode="ordered-list-level">
     <xsl:param name="level" select="0"/>
     <xsl:choose>
-        <!-- Since exercises and references are top-level        -->
-        <!-- ordered lists, when these are the only interesting  -->
-        <!-- ancestor, we add one to the level and return        -->
-        <xsl:when test="(ancestor::exercises or ancestor::worksheet or ancestor::references) and not(ancestor::ol)">
+        <!-- Since exercises divisions and references are top-level -->
+        <!-- ordered lists, when these are the only interesting     -->
+        <!-- ancestor, we add one to the level and return           -->
+        <xsl:when test="(ancestor::exercises or ancestor::worksheet or ancestor::reading-questions or ancestor::references) and not(ancestor::ol)">
             <xsl:value-of select="$level + 1" />
         </xsl:when>
         <xsl:when test="ancestor::ol">
@@ -5800,7 +5815,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 
 <!-- Exercises and References are        -->
 <!-- specialized top-level ordered lists -->
-<xsl:template match="exercises|references" mode="ordered-list-level">
+<xsl:template match="exercises|worksheet|reading-questions|references" mode="ordered-list-level">
     <xsl:value-of select="0" />
 </xsl:template>
 
@@ -6014,10 +6029,11 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:apply-templates>
 </xsl:template>
 
-<!-- An "exercises" division will have a heading as infrastructure.  -->
-<!-- We can investigate varying "exercise" by just digging down      -->
-<!-- into "exercisegroup" to find all divisional "exercise"          -->
-<xsl:template match="exercises" mode="dry-run">
+<!-- An "exercises" or "reading-questions" division will have  -->
+<!-- a heading as infrastructure. We can investigate varying  -->
+<!-- "exercise" by just digging down into "exercisegroup" to  -->
+<!-- find all divisional "exercise"                           -->
+<xsl:template match="exercises|reading-questions" mode="dry-run">
     <xsl:param name="b-divisional-statement" />
     <xsl:param name="b-divisional-hint" />
     <xsl:param name="b-divisional-answer" />
@@ -6048,7 +6064,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:param name="b-project-hint" />
     <xsl:param name="b-project-solution" />
 
-    <xsl:apply-templates select=".//exercise[not(ancestor::exercises)]" mode="dry-run">
+    <xsl:apply-templates select=".//exercise[not(ancestor::exercises or ancestor::reading-questions)]" mode="dry-run">
         <xsl:with-param name="b-has-statement" select="$b-inline-statement" />
         <xsl:with-param name="b-has-answer"    select="$b-inline-answer" />
         <xsl:with-param name="b-has-hint"      select="$b-inline-hint" />
