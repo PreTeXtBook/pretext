@@ -24,7 +24,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- See  xsl/localizations/README.md  for an explanation of this file -->
 
 <!-- cs-CZ, Czech (Czechia) -->
-<!-- Jiri Lebl, lebl@okstate.edu, 2018-08-08   -->
+<!-- Jiri Lebl, lebl@okstate.edu, 2018-10-13   -->
 
 <xsl:variable name="cs-CZ">
     <!-- THEOREM-LIKE blocks -->
@@ -74,9 +74,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='conclusion'><xsl:text>Závěr</xsl:text></localization>
     <localization string-id='exercises'><xsl:text>Cvičení</xsl:text></localization>
     <localization string-id='worksheet'><xsl:text>Pracovní list</xsl:text></localization>
-    <!-- <localization string-id='reading-questions'><xsl:text>Reading Questions</xsl:text></localization> -->
+    <localization string-id='reading-questions'><xsl:text>Otázky ze čtení</xsl:text></localization>
     <localization string-id='solutions'><xsl:text>Řešení</xsl:text></localization>
-    <!-- <localization string-id='glossary'><xsl:text>Glossary</xsl:text></localization> -->
+    <localization string-id='glossary'><xsl:text>Vysvětlivky</xsl:text></localization>
     <localization string-id='references'><xsl:text>Odkazy</xsl:text></localization>
     <localization string-id='backmatter'><xsl:text>Závěrečná část</xsl:text></localization>
     <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
@@ -117,8 +117,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='objectives'><xsl:text>Cíle</xsl:text></localization>
     <localization string-id='objective'><xsl:text>Cíl</xsl:text></localization>
     <!-- Outcomes is the block, outcome is a list item within (different) -->
-    <!-- <localization string-id='outcomes'><xsl:text>Outcomes</xsl:text></localization> -->
-    <!-- <localization string-id='outcome'><xsl:text>Outcome</xsl:text></localization> -->
+    <localization string-id='outcomes'><xsl:text>Výsledky</xsl:text></localization>
+    <localization string-id='outcome'><xsl:text>Výsledek</xsl:text></localization>
     <!--  -->
     <localization string-id='figure'><xsl:text>Obrázek</xsl:text></localization>
     <localization string-id='table'><xsl:text>Tabulka</xsl:text></localization>
@@ -129,7 +129,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='list'><xsl:text>Seznam</xsl:text></localization>
     <localization string-id='li'><xsl:text>Bod</xsl:text></localization>
     <!-- A term (word) defined in a glossary -->
-    <!-- <localization string-id='defined-term'><xsl:text>Term</xsl:text></localization> -->
+    <localization string-id='defined-term'><xsl:text>Termín</xsl:text></localization>
     <!-- A regular paragraph, not the old sectioning structure -->
     <localization string-id='p'><xsl:text>Odstavec</xsl:text></localization>
     <localization string-id='blockquote'><xsl:text>Citát</xsl:text></localization>
@@ -138,8 +138,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Translation needed for Czech Czech -->
     <!-- See en-US file for distinctions here, do not repeat previous translation -->
     <localization string-id='inlineexercise'><xsl:text>Zkouška</xsl:text></localization>
-    <!-- <localization string-id='worksheetexercise'><xsl:text>Worksheet Exercise</xsl:text></localization> -->
-    <!-- <localization string-id='readingquestion'><xsl:text>Reading Question</xsl:text></localization> -->
+    <localization string-id='worksheetexercise'><xsl:text>Cvičení pracovního listu</xsl:text></localization>
+    <localization string-id='readingquestion'><xsl:text>Otázka ze čtení</xsl:text></localization>
     <localization string-id='webwork'><xsl:text>WeBWorK</xsl:text></localization>
     <localization string-id='hint'><xsl:text>Nápověda</xsl:text></localization>
     <localization string-id='answer'><xsl:text>Odpověď</xsl:text></localization>
@@ -211,7 +211,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- This needs to be defined to *something* (English)       -->
     <!-- else whatever crud ends up on the button kills the cell -->
     <!-- Translate at first opportunity, please                  -->
-    <localization string-id='evaluate'><xsl:text>Evaluate</xsl:text></localization>
+    <localization string-id='evaluate'><xsl:text>Ohodnotit</xsl:text></localization>
     <localization string-id='code'><xsl:text>Kód</xsl:text></localization>
 </xsl:variable>
 
