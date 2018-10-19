@@ -208,6 +208,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!-- Conversions, like creating a solutions manual, may need   -->
+<!-- LaTeX styles for the solutions to exercises, even if the  -->
+<!-- source never has a "solutions" element.  So this variable -->
+<!-- is set to false here, and an importing stylesheet can     -->
+<!-- override it to be true.                                   -->
+<xsl:variable name="b-needs-solution-styles" select="false()"/>
+
 <!-- ############## -->
 <!-- Entry Template -->
 <!-- ############## -->
@@ -1046,7 +1053,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>]&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
-    <xsl:if test="$document-root//solutions">
+    <xsl:if test="$document-root//solutions or $b-needs-solution-styles">
         <xsl:text>%% begin: environments for duplicates in solutions divisions&#xa;</xsl:text>
         <!-- Solutions present, check for exercise types     -->
         <!-- This may have false positives, but no real harm -->

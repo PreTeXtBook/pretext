@@ -39,6 +39,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Intend output for rendering by pdflatex -->
 <xsl:output method="text" />
 
+<!-- We have a switch for just this situation, to force -->
+<!-- (overrule) the auto-detetion of the necessity for  -->
+<!-- LaTeX styles for the solutions to exercises.       -->
+<!-- See  mathbook-latex.xsl  for more explanation.     -->
+<xsl:variable name="b-needs-solution-styles" select="true()"/>
+
 <!-- For a "book" we replace the first chapter by a call to the        -->
 <!-- solutions generator.  So we burrow into parts to get at chapters. -->
 
