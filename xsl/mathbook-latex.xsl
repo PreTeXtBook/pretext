@@ -955,7 +955,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:for-each>
     <!-- Inline Exercises -->
     <xsl:variable name="inlineexercise-reps" select="
-        ($document-root//exercise[not(ancestor::exercises or ancestor::worksheet)])[1]"/>
+        ($document-root//exercise[not(ancestor::exercises or ancestor::worksheet or ancestor::reading-questions)])[1]"/>
     <xsl:if test="$inlineexercise-reps">
         <xsl:text>%%&#xa;</xsl:text>
         <xsl:text>%% tcolorbox, with styles, for inline exercises&#xa;</xsl:text>
