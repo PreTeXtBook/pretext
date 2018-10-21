@@ -576,6 +576,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% titlesec package, loading "titleps" package cooperatively&#xa;</xsl:text>
     <xsl:text>%% See code comments about the necessity and purpose of "explicit" option&#xa;</xsl:text>
     <xsl:text>\usepackage[explicit, pagestyles]{titlesec}&#xa;</xsl:text>
+    <!-- Necessary fix for chapter/appendix transition              -->
+    <!-- From titleps package author, 2013 post                     -->
+    <!-- https://tex.stackexchange.com/questions/117222/            -->
+    <!-- issue-with-titlesec-page-styles-and-appendix-in-book-class -->
+    <xsl:text>\newtitlemark{\chaptertitlename}&#xa;</xsl:text>
     <xsl:variable name="empty-pagestyle">
         <xsl:apply-templates select="$document-root" mode="titleps-empty"/>
     </xsl:variable>
