@@ -103,4 +103,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:copy-of select="$content" />
 </xsl:template>
 
+<!-- Hard-Coded Numbers -->
+<!-- As a subset of full content, we can't          -->
+<!-- point to much of the content with hyperlinks   -->
+<!-- But we do have the full context as we process, -->
+<!-- so we can get numbers for cross-references     -->
+<!-- and *hard-code* them into the LaTeX              -->
+
+<!-- We don't dither about possibly using a \ref{} and  -->
+<!-- just produce numbers.  These might lack the "part" -->
+<xsl:template match="*" mode="xref-number">
+  <xsl:apply-templates select="." mode="number" />
+</xsl:template>
+
+<!-- The actual link is not a \hyperlink nor a    -->
+<!-- hyperref, but instead is just plain 'ol text -->
+<xsl:template match="*" mode="xref-link">
+    <xsl:param name="content" select="'MISSING LINK CONTENT'"/>
+    <xsl:value-of select="$content" />
+</xsl:template>
+
 </xsl:stylesheet>
