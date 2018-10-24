@@ -637,6 +637,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- switches. Unset, or mis-entered is the default,   -->
 <!-- which is to show all components until an author   -->
 <!-- decides to hide them.                             -->
+<!-- These are used in the solution manual conversion  -->
 <xsl:variable name="b-has-inline-hint"
               select="($entered-exercise-inline-hint = 'yes') or ($entered-exercise-inline-hint = '')" />
 <xsl:variable name="b-has-inline-answer"

@@ -39,6 +39,33 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Intend output for rendering by pdflatex -->
 <xsl:output method="text" />
 
+<!-- These variables are interpreted in mathbook-common.xsl and  -->
+<!-- so may be used/set in a custom XSL stylesheet for a         -->
+<!-- project's solution manual.                                  -->
+<!--                                                             -->
+<!-- exercise.inline.hint                                        -->
+<!-- exercise.inline.answer                                      -->
+<!-- exercise.inline.solution                                    -->
+<!-- exercise.divisional.hint                                    -->
+<!-- exercise.divisional.answer                                  -->
+<!-- exercise.divisional.solution                                -->
+<!-- project.hint                                                -->
+<!-- project.answer                                              -->
+<!-- project.solution                                            -->
+<!--                                                             -->
+<!-- The second set of variables are internal, and are derived   -->
+<!-- from the above via careful routines in mathbook-common.xsl. -->
+<!--                                                             -->
+<!-- b-has-inline-hint                                           -->
+<!-- b-has-inline-answer                                         -->
+<!-- b-has-inline-solution                                       -->
+<!-- b-has-divisional-hint                                       -->
+<!-- b-has-divisional-answer                                     -->
+<!-- b-has-divisional-solution                                   -->
+<!-- b-has-project-hint                                          -->
+<!-- b-has-project-answer                                        -->
+<!-- b-has-project-solution                                      -->
+
 <!-- We have a switch for just this situation, to force -->
 <!-- (overrule) the auto-detetion of the necessity for  -->
 <!-- LaTeX styles for the solutions to exercises.       -->
@@ -57,17 +84,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="chapter[1]">
     <xsl:apply-templates select="$document-root" mode="solutions-generator">
         <xsl:with-param name="b-inline-statement"     select="false()" />
-        <xsl:with-param name="b-inline-hint"          select="true()"  />
-        <xsl:with-param name="b-inline-answer"        select="true()"  />
-        <xsl:with-param name="b-inline-solution"      select="true()"  />
+        <xsl:with-param name="b-inline-hint"          select="$b-has-inline-hint"  />
+        <xsl:with-param name="b-inline-answer"        select="$b-has-inline-answer"  />
+        <xsl:with-param name="b-inline-solution"      select="$b-has-inline-solution"  />
         <xsl:with-param name="b-divisional-statement" select="false()" />
-        <xsl:with-param name="b-divisional-hint"      select="true()"  />
-        <xsl:with-param name="b-divisional-answer"    select="true()"  />
-        <xsl:with-param name="b-divisional-solution"  select="true()"  />
+        <xsl:with-param name="b-divisional-hint"      select="$b-has-divisional-hint"  />
+        <xsl:with-param name="b-divisional-answer"    select="$b-has-divisional-answer"  />
+        <xsl:with-param name="b-divisional-solution"  select="$b-has-divisional-solution"  />
         <xsl:with-param name="b-project-statement"    select="false()" />
-        <xsl:with-param name="b-project-hint"         select="true()"  />
-        <xsl:with-param name="b-project-answer"       select="true()"  />
-        <xsl:with-param name="b-project-solution"     select="true()"  />
+        <xsl:with-param name="b-project-hint"         select="$b-has-project-hint"  />
+        <xsl:with-param name="b-project-answer"       select="$b-has-project-answer"  />
+        <xsl:with-param name="b-project-solution"     select="$b-has-project-solution"  />
     </xsl:apply-templates>
 </xsl:template>
 
