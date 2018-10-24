@@ -98,33 +98,43 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:apply-templates>
 </xsl:template>
 
+<!-- Hard-code numbers into titles -->
 <xsl:template match="part|chapter|section|subsection|subsubsection|exercises" mode="division-in-solutions">
     <xsl:param name="scope" />
     <xsl:param name="content" />
+
+    <xsl:variable name="the-number">
+        <xsl:apply-templates select="." mode="number" />
+    </xsl:variable>
+    <xsl:variable name="original-title">
+        <!-- no trailing space if no number -->
+        <xsl:if test="not($the-number = '')">
+            <xsl:value-of select="$the-number" />
+            <xsl:text> </xsl:text>
+        </xsl:if>
+        <xsl:apply-templates select="." mode="title-full" />
+    </xsl:variable>
+    <xsl:variable name="moving-title">
+        <!-- no trailing space if no number -->
+        <xsl:if test="not($the-number = '')">
+            <xsl:value-of select="$the-number" />
+            <xsl:text> </xsl:text>
+        </xsl:if>
+        <xsl:apply-templates select="." mode="title-simple" />
+    </xsl:variable>
 
     <!-- LaTeX heading with hard-coded number -->
     <xsl:text>\</xsl:text>
     <xsl:apply-templates select="." mode="division-name" />
     <xsl:text>*{</xsl:text>
-    <!-- control the numbering, i.e. hard-coded -->
-    <xsl:variable name="the-number">
-        <xsl:apply-templates select="." mode="number" />
-    </xsl:variable>
-    <!-- no trailing space if no number -->
-    <xsl:if test="not($the-number = '')">
-        <xsl:value-of select="$the-number" />
-        <xsl:text> </xsl:text>
-    </xsl:if>
-    <xsl:apply-templates select="." mode="title-full" />
+    <xsl:value-of select="$original-title"/>
     <xsl:text>}&#xa;</xsl:text>
     <!-- An entry for the ToC, since we hard-code numbers -->
     <!-- These mainmatter divisions should always have a number -->
     <xsl:text>\addcontentsline{toc}{</xsl:text>
     <xsl:apply-templates select="." mode="division-name" />
     <xsl:text>}{</xsl:text>
-    <xsl:value-of select="$the-number" />
-    <xsl:text> </xsl:text>
-    <xsl:apply-templates select="." mode="title-simple" />
+    <xsl:value-of select="$moving-title"/>
     <xsl:text>}&#xa;</xsl:text>
 
     <xsl:copy-of select="$content" />
