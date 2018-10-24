@@ -2650,7 +2650,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- which mimic LaTeX style and spacing.  We use those here, so    -->
 <!-- we can integrate an author credit into the heading/title       -->
 <!-- before any spacing happens.  Authors are one fontsize smaller, -->
-<!-- and placed in the optional "after-code" argument               -->
+<!-- and placed in the optional "after-code" argument.              -->
+<!-- We provide variants for the "numberless" case, which are only  -->
+<!-- primarily necessary for chapter-level items (eg "preface"),    -->
+<!-- but might also occur due to one-count specialized divisions,   -->
+<!-- present in "unstructured" divisions                            -->
 <!-- TODO: integrate "epigraph" package perhaps                     -->
 
 <!-- Not implemented/explored -->
@@ -2660,6 +2664,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="titlesec-chapter-style">
     <xsl:text>\titleformat{\chapter}[display]&#xa;</xsl:text>
     <xsl:text>{\normalfont\huge\bfseries}{\divisionnameptx\space\thechapter}{20pt}{\Huge#1}&#xa;</xsl:text>
+    <xsl:text>[{\Large\authorsptx}]&#xa;</xsl:text>
+    <xsl:text>\titleformat{name=\chapter,numberless}[display]&#xa;</xsl:text>
+    <xsl:text>{\normalfont\huge\bfseries}{}{0pt}{#1}&#xa;</xsl:text>
     <xsl:text>[{\Large\authorsptx}]&#xa;</xsl:text>
     <xsl:text>\titlespacing*{\chapter}{0pt}{50pt}{40pt}&#xa;</xsl:text>
 </xsl:template>
@@ -2672,12 +2679,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>[{\large\authorsptx}]&#xa;</xsl:text>
     <xsl:text>\titleformat{name=\section,numberless}&#xa;</xsl:text>
     <xsl:text>{\normalfont\Large\bfseries}{}{0pt}{#1}&#xa;</xsl:text>
+    <xsl:text>[{\large\authorsptx}]&#xa;</xsl:text>
     <xsl:text>\titlespacing*{\section}{0pt}{3.5ex plus 1ex minus .2ex}{2.3ex plus .2ex}&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template name="titlesec-subsection-style">
     <xsl:text>\titleformat{\subsection}&#xa;</xsl:text>
     <xsl:text>{\normalfont\large\bfseries}{\thesubsection\space\titleptx}{1em}{}&#xa;</xsl:text>
+    <xsl:text>[{\normalsize\authorsptx}]&#xa;</xsl:text>
+    <xsl:text>\titleformat{name=\subsection,numberless}&#xa;</xsl:text>
+    <xsl:text>{\normalfont\large\bfseries}{}{0pt}{#1}&#xa;</xsl:text>
     <xsl:text>[{\normalsize\authorsptx}]&#xa;</xsl:text>
     <xsl:text>\titlespacing*{\subsection}{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}&#xa;</xsl:text>
 </xsl:template>
@@ -2686,6 +2697,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\titleformat{\subsubsection}&#xa;</xsl:text>
     <xsl:text>{\normalfont\normalsize\bfseries}{\thesubsubsection\space\titleptx}{1em}{}&#xa;</xsl:text>
     <xsl:text>[{\small\authorsptx}]&#xa;</xsl:text>
+    <xsl:text>\titleformat{name=\subsubsection,numberless}&#xa;</xsl:text>
+    <xsl:text>{\normalfont\normalsize\bfseries}{}{0pt}{#1}&#xa;</xsl:text>
+    <xsl:text>[{\normalsize\authorsptx}]&#xa;</xsl:text>
     <xsl:text>\titlespacing*{\subsubsection}{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}&#xa;</xsl:text>
 </xsl:template>
 
