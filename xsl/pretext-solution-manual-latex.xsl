@@ -136,9 +136,34 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}{</xsl:text>
     <xsl:value-of select="$moving-title"/>
     <xsl:text>}&#xa;</xsl:text>
+    <!-- Explicit marks, since divisions are the starred form -->
+    <xsl:choose>
+        <xsl:when test="self::chapter">
+            <xsl:text>\chaptermark{</xsl:text>
+            <xsl:value-of select="$moving-title"/>
+            <xsl:text>}&#xa;</xsl:text>
+        </xsl:when>
+        <!-- "section", "exercises", "worksheet", at section-level, etc. -->
+        <xsl:when test="parent::chapter">
+            <xsl:text>\sectionmark{</xsl:text>
+            <xsl:value-of select="$moving-title"/>
+            <xsl:text>}&#xa;</xsl:text>
+        </xsl:when>
+    </xsl:choose>
 
     <xsl:copy-of select="$content" />
 </xsl:template>
+
+<!-- Page headers + Chapter/Section XYZ Title      -->
+<!-- \sethead[even-left][even-center][even-right]  -->
+<!--         {odd-left}{odd-center}{odd-right}     -->
+<xsl:template match="book" mode="titleps-headings">
+    <xsl:text>{&#xa;</xsl:text>
+    <xsl:text>\sethead[\thepage][][\textsl{\chaptertitle}]&#xa;</xsl:text>
+    <xsl:text>{\textsl{\sectiontitle}}{}{\thepage}&#xa;</xsl:text>
+    <xsl:text>}&#xa;</xsl:text>
+</xsl:template>
+
 
 <!-- Hard-Coded Numbers -->
 <!-- As a subset of full content, we can't          -->
