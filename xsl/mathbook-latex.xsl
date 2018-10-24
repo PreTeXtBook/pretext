@@ -1941,6 +1941,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\@addtoreset{chapter}{part}&#xa;</xsl:text>
         <xsl:text>\makeatother&#xa;</xsl:text>
     </xsl:if>
+    <!-- The "xwatermark" package has way more options, including the -->
+    <!-- possibility of putting the watermark onto the foreground     -->
+    <!-- (above shaded/colored "tcolorbox").  But on 2018-10-24,      -->
+    <!-- xwatermark was at v1.5.2d, 2012-10-23, and draftwatermark    -->
+    <!-- was at v1.2, 2015-02-19.                                     -->
     <xsl:if test="$latex.watermark">
         <xsl:text>\usepackage{draftwatermark}&#xa;</xsl:text>
         <xsl:text>\SetWatermarkText{</xsl:text>
