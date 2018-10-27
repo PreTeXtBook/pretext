@@ -14,14 +14,14 @@
         <p>Once your content is in place, you can begin thinking about various useful derivative versions.  A natural example for a textbook is an <q>Instructor's Version</q>, enhanced with additional material to help an instructor understand your organization and intent, or to provide advice and counsel about teaching the material.</p>
     </introduction>
 
-    <section>
+    <section xml:id="instructor-solutions">
         <title>Solutions</title>
 
-        <p>Philosophies about the purpose and use of exercises varies among authors and instructors.  Some think hints, answers, and/or solutions, should be available to students to use responsibly.  Others like to assign exercises to be graded as part of a course grade.  Some are resigned to solutions that are distributed in a limited fashion eventually becoming public, or that some groups of students will distribute their own solutions, possibly not uniformly.  Wherever you place yourself in this debate, distributing solutions to only instructors is one approach, and some instructors may find this a very helpful aid when they teach material new to them.</p>
+        <p>Philosophies about the purpose and use of exercises varies among authors and instructors.  Some think hints, answers, and/or solutions, should be universally available to students to use responsibly.  Others like to assign exercises to be graded as part of a course grade.  Some are resigned to solutions that are distributed in a limited fashion eventually becoming public, or that some groups of students will distribute their own solutions, possibly not uniformly.  Wherever you place yourself in this debate, distributing solutions to only instructors is one approach, and some instructors may find this a very helpful aid when they teach material new to them.</p>
 
-        <p>There is flexibility in which of <tag>hint</tag>, <tag>answer</tag>, and <tag>solution</tag> may be included or excluded.  You can choose to author these or not, and then decide which to include in the student version, and which to include in an independently produced instructor version.</p>
+        <p>There is flexibility in which of <tag>hint</tag>, <tag>answer</tag>, and <tag>solution</tag> can be included or excluded in your text, which can be included or excluded in an Instructor's Version, and which can be included or excluded in a Solution Manual (see <xref ref="solution-manual"/>).  You can choose to author these or not, and then decide which to include in the student version, and which to include in an independently-produced Instructor Version, and which to include in a Solution Manual.</p>
 
-        <p>One approach is to distribute an Instructor Version only on request, and only as a PDF.  The ability to provide a watermark on every page allows you to include a personalized message such as <cd>Issued to Charles Darwin.  Do Not Copy.</cd>It would be a trivial technical exercise to remove this, but perhaps the moral imperative (in an extra <tag>preface</tag>?) would dissuade most?</p>
+        <p>Read <xref ref="private-solutions"/> for some practical advice about limiting distribution of solutions.</p>
     </section>
 
     <section>

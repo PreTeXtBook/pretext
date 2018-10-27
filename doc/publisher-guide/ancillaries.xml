@@ -45,4 +45,23 @@
         </paragraphs>
     </section>
 
+    <section xml:id="private-solutions">
+        <title>Private Solutions</title>
+
+        <p>Suppose an author distributes a textbook with an open license, and so makes the <pretext/> source available publicly (perhaps as a condition of the license).  Perhaps the author also intends <tag>hint</tag> provided with <tag>exercise</tag> to assist students, and having them available as knowls in <init>HTML</init> output is a great way to make them easily available, but not immediately visible.  But the author has also written some, or many, <tag>solution</tag> for the <tag>exercise</tag>, but these are only meant for instructors, and not for students.  See the discussion at <xref ref="instructor-solutions"/> for more background.</p>
+
+        <p>One approach is to distribute an Instructor Version or Solution Manual only on request, and only as a PDF.  The ability to provide a watermark on every page (via switches in the <latex/> conversion) allows you to include a personalized message such as <cd>Issued to Charles Darwin.  Do Not Copy.</cd>It would be a trivial technical exercise to remove this, but perhaps the moral imperative (in an extra <tag>preface</tag> as well?) would dissuade most from distributing further?</p>
+
+        <p>But what about publicly available source code?  After several unsatisfactory experiments, we have arrived at the following <em>solution</em>.  Again it involves an intermediate understanding of the revision control software, git.  And again, this is an outline.<ul>
+            <li>Create a private repository for authors, and other trusted contributors.  In other words, if shared, read access is controlled via passwords or something similar.</li>
+            <li>Create a branch off of <c>master</c> called <c>solutions</c>.</li>
+            <li>Do all editing of private material, and only editing of private material, as commits to this branch.  So a typical commit might just be <tag>solution</tag> elements inside existing <tag>exercise</tag>.  Any script or master file for producing a solution manual might also be part of this branch.</li>
+            <li>Do all authoring in this private repository, mostly as commits on <c>master</c>.</li>
+            <li>Periodically, while the <c>solutions</c> branch is checked out, merge <c>master</c> to bring in new changes to the main content.</li>
+            <li>Never ever merge <c>solutions</c> into <c>master</c>.  In other words, <c>solutions</c> is a long-lived branch which never dies and is never merged into another branch. (Never rebase this branch if you have collaborators sharing the private repository.)</li>
+            <li>Push and pull both <c>master</c> and <c>solutions</c> to and from the private repository by setting up tracking branches.</li>
+            <li>Create a public repository which is a strict duplicate of the <c>master</c> branch.  Periodically push the <c>master</c> branch of the private repository to the <c>master</c> branch of the public repository.  Only.  Its only purpose is for the next item.  Use commands or a setup which makes it impossible to accidentally push <c>solutions</c> to this public repository.</li>
+            <li>The commits in the public repository will be <em>identical</em> to those on <c>master</c> in the private repository.  So anyone can clone or fork this repository and make pull requests, which authors can apply and mange via the private repository.  But solutions will never be part of the interaction with this repository.</li>
+        </ul></p>
+    </section>
 </chapter>
