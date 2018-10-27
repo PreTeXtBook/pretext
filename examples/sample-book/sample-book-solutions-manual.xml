@@ -37,7 +37,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     <book xml:id="sample-book-solutions-manual">
         <title>Abstract Algebra</title>
-        <subtitle>Solutions Manual (PRETEXT XML SAMPLE ONLY)</subtitle>
+        <subtitle>Solutions Manual (PRETEXT SAMPLE ONLY)</subtitle>
 
 
         <!-- We include a subset of the front matter as a  -->
