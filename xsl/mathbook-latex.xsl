@@ -8919,8 +8919,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Any target of a PreTeXt cross-reference, which is not naturally -->
 <!-- numbered by a LaTeX \label{} command, needs to go here.         -->
-<xsl:template match="glossary|references|exercises[count(parent::*/exercises)=1]|worksheet[count(parent::*/worksheet)=1]|solutions[not(parent::backmatter)]|exercises//exercise|worksheet//exercise|reading-questions//exercise|biblio|biblio/note|proof|case|ol/li|dl/li|hint|answer|solution|exercisegroup|p|paragraphs|blockquote|contributor|colophon|book|article" mode="xref-as-ref">
+<xsl:template match="exercises//exercise|worksheet//exercise|reading-questions//exercise|biblio|biblio/note|proof|case|ol/li|dl/li|hint|answer|solution|exercisegroup|p|paragraphs|blockquote|contributor|colophon|book|article" mode="xref-as-ref">
     <xsl:value-of select="false()" />
+</xsl:template>
+
+<!-- A specialized division in an unstructured division may  -->
+<!-- not be numbered correctly via LaTeX's label/ref system, -->
+<!-- so we will use the hypertarget/hyperlink system         -->
+<xsl:template  match="exercises|reading-questions|glossary|references|worksheet|solutions[not(parent::backmatter)]" mode="xref-as-ref">
+    <xsl:variable name="is-structured">
+        <xsl:apply-templates select="parent::*" mode="is-structured-division"/>
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$is-structured = 'true'">
+            <xsl:value-of select="true()"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="false()"/>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <xsl:template match="*" mode="label">
@@ -8968,37 +8985,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="*" mode="xref-number">
     <xsl:param name="xref" select="/.." />
 
-    <!-- number is necessary only for a checking mechanism -->
-    <xsl:variable name="the-number">
-        <xsl:apply-templates select="." mode="number" />
-    </xsl:variable>
-    <xsl:choose>
-        <xsl:when test="not($the-number = '')">
-            <!-- check if part prefix is needed -->
-            <xsl:variable name="needs-part-prefix">
-                <xsl:apply-templates select="." mode="crosses-part-boundary">
-                    <xsl:with-param name="xref" select="$xref" />
-                </xsl:apply-templates>
-            </xsl:variable>
-            <!-- if so, append prefix with separator -->
-            <xsl:if test="$needs-part-prefix = 'true'">
-                <xsl:text>\ref{</xsl:text>
-                <xsl:apply-templates select="ancestor::part" mode="internal-id" />
-                <xsl:text>}</xsl:text>
-                <xsl:text>.</xsl:text>
-            </xsl:if>
-            <!-- and always, a representation for the text of the xref -->
-            <xsl:text>\ref{</xsl:text>
-            <xsl:apply-templates select="." mode="internal-id" />
-            <xsl:text>}</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:message>PTX:WARNING: there appears to be an "xref" by number to an item (of type "<xsl:value-of select="local-name(.)" />") without a number (or there is a bug).  The "xref" is</xsl:message>
-            <xsl:apply-templates select="$xref" mode="location-report" />
-            <xsl:message>             The target is</xsl:message>
-            <xsl:apply-templates select="." mode="location-report" />
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="." mode="xref-number-latex">
+        <xsl:with-param name="xref" select="$xref"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Tasks have a structure number from the enclosing project   -->
@@ -9050,8 +9039,48 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Note: objectives are one-per-subdivision, and precede the              -->
 <!-- introduction, so the LaTeX \ref{} mechanism assigns the correct        -->
 <!-- number - that of the enclosing subdivision                             -->
-<xsl:template match="glossary|references|exercises[count(parent::*/exercises)=1]|worksheet[count(parent::*/worksheet)=1]|solutions[not(parent::backmatter)]|exercises//exercise|worksheet//exercise|reading-questions//exercise|biblio|biblio/note|proof|case|ol/li|dl/li|hint|answer|solution|exercisegroup|fn" mode="xref-number">
+<xsl:template match="exercises//exercise|worksheet//exercise|reading-questions//exercise|biblio|biblio/note|proof|case|ol/li|dl/li|hint|answer|solution|exercisegroup|fn" mode="xref-number">
     <xsl:param name="xref" select="/.." />
+
+    <xsl:apply-templates select="." mode="xref-number-hardcoded">
+        <xsl:with-param name="xref" select="$xref"/>
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- A specialized division in an unstructured division may  -->
+<!-- not be numbered correctly via LaTeX's label/ref system, -->
+<!-- so we will use the hypertarget/hyperlink system         -->
+<!-- This template just copies the gut of two above, perhaps -->
+<!-- there should be two utility templates that each get     -->
+<!-- called twice overall.                                   -->
+<xsl:template  match="exercises|reading-questions|glossary|references|worksheet|solutions[not(parent::backmatter)]" mode="xref-number">
+    <xsl:param name="xref" select="/.." />
+
+    <xsl:variable name="is-structured">
+        <xsl:apply-templates select="parent::*" mode="is-structured-division"/>
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$is-structured = 'true'">
+            <xsl:apply-templates select="." mode="xref-number-latex">
+                <xsl:with-param name="xref" select="$xref"/>
+            </xsl:apply-templates>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="." mode="xref-number-hardcoded">
+                <xsl:with-param name="xref" select="$xref"/>
+            </xsl:apply-templates>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Two utility routines generate an "xref number" in a   -->
+<!-- traditional way or in a hyperref way.  These are used -->
+<!-- above in at least two places each.                    -->
+
+<!-- A hardcoded number respecting the necessity of parts -->
+<xsl:template  match="*" mode="xref-number-hardcoded">
+    <xsl:param name="xref" select="/.." />
+
     <xsl:variable name="needs-part-prefix">
         <xsl:apply-templates select="." mode="crosses-part-boundary">
             <xsl:with-param name="xref" select="$xref" />
@@ -9062,6 +9091,43 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>.</xsl:text>
     </xsl:if>
     <xsl:apply-templates select="." mode="number" />
+</xsl:template>
+
+<!-- A LaTeX \ref (number) respecting the necessity of parts -->
+<xsl:template  match="*" mode="xref-number-latex">
+    <xsl:param name="xref" select="/.." />
+
+    <!-- number is necessary only for a checking mechanism -->
+    <xsl:variable name="the-number">
+        <xsl:apply-templates select="." mode="number" />
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="not($the-number = '')">
+            <!-- check if part prefix is needed -->
+            <xsl:variable name="needs-part-prefix">
+                <xsl:apply-templates select="." mode="crosses-part-boundary">
+                    <xsl:with-param name="xref" select="$xref" />
+                </xsl:apply-templates>
+            </xsl:variable>
+            <!-- if so, append prefix with separator -->
+            <xsl:if test="$needs-part-prefix = 'true'">
+                <xsl:text>\ref{</xsl:text>
+                <xsl:apply-templates select="ancestor::part" mode="internal-id" />
+                <xsl:text>}</xsl:text>
+                <xsl:text>.</xsl:text>
+            </xsl:if>
+            <!-- and always, a representation for the text of the xref -->
+            <xsl:text>\ref{</xsl:text>
+            <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:text>}</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>PTX:WARNING: there appears to be an "xref" by number to an item (of type "<xsl:value-of select="local-name(.)" />") without a number (or there is a bug).  The "xref" is</xsl:message>
+            <xsl:apply-templates select="$xref" mode="location-report" />
+            <xsl:message>             The target is</xsl:message>
+            <xsl:apply-templates select="." mode="location-report" />
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- This template actually manufactures the link.  When the link lives in  -->
