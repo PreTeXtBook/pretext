@@ -2119,6 +2119,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 2. The  etoolbox  package has some good tools     -->
 <!-- 3. Some items need a "phantom={\hypertarget{}{}}" -->
 <!--    search on mode="xref-as-ref" for more          -->
+<!-- 4. Traditional LaTeX labels are implemented with  -->
+<!--    tcolorbox "phantomlabel=" option               -->
 
 <!-- Style: -->
 <!-- Provide some comments for the LaTeX source, to aid     -->
@@ -2287,7 +2289,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\tcbset{ commentarystyle/.style={</xsl:text>
     <xsl:apply-templates select="." mode="tcb-style" />
     <xsl:text>} }&#xa;</xsl:text>
-    <xsl:text>\newtcolorbox{commentary}[2]{title={#1}, label={#2}, breakable, commentarystyle}&#xa;</xsl:text>
+    <xsl:text>\newtcolorbox{commentary}[2]{title={#1}, phantomlabel={#2}, breakable, commentarystyle}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- "objectives" -->
@@ -2298,7 +2300,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\tcbset{ objectivesstyle/.style={</xsl:text>
     <xsl:apply-templates select="." mode="tcb-style" />
     <xsl:text>} }&#xa;</xsl:text>
-    <xsl:text>\newtcolorbox{objectives}[2]{title={#1}, label={#2}, breakable, objectivesstyle}&#xa;</xsl:text>
+    <xsl:text>\newtcolorbox{objectives}[2]{title={#1}, phantomlabel={#2}, breakable, objectivesstyle}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- "outcomes" -->
@@ -2309,7 +2311,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\tcbset{ outcomesstyle/.style={</xsl:text>
     <xsl:apply-templates select="." mode="tcb-style" />
     <xsl:text>} }&#xa;</xsl:text>
-    <xsl:text>\newtcolorbox{outcomes}[2]{title={#1}, label={#2}, breakable, outcomesstyle}&#xa;</xsl:text>
+    <xsl:text>\newtcolorbox{outcomes}[2]{title={#1}, phantomlabel={#2}, breakable, outcomesstyle}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- back "colophon" -->
@@ -2342,7 +2344,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\newtcolorbox{</xsl:text>
     <xsl:value-of select="$environment-name"/>
     <xsl:text>}[2]{title={\notblank{#1}{#1}{}}, </xsl:text>
-    <xsl:text>label=#2, breakable, </xsl:text>
+    <xsl:text>phantomlabel={#2}, breakable, </xsl:text>
     <xsl:value-of select="$environment-name"/>
     <xsl:text>style}&#xa;</xsl:text>
 </xsl:template>
@@ -2354,7 +2356,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\tcbset{ definedtermstyle/.style={</xsl:text>
     <xsl:apply-templates select="." mode="tcb-style" />
     <xsl:text>} }&#xa;</xsl:text>
-    <xsl:text>\newtcolorbox{definedterm}[2]{title={#1\space}, label={#2}, breakable, definedtermstyle}&#xa;</xsl:text>
+    <xsl:text>\newtcolorbox{definedterm}[2]{title={#1\space}, phantomlabel={#2}, breakable, definedtermstyle}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- "paragraphs" -->
@@ -2393,7 +2395,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\newtcolorbox{</xsl:text>
     <xsl:value-of select="$environment-name"/>
     <xsl:text>}[2]{title={\notblank{#1}{#1}{}}, </xsl:text>
-    <xsl:text>label=#2, breakable, </xsl:text>
+    <xsl:text>phantomlabel={#2}, breakable, </xsl:text>
     <xsl:value-of select="$environment-name"/>
     <xsl:text>style}&#xa;</xsl:text>
 </xsl:template>
@@ -2516,10 +2518,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- label in argument 2 or argument 3 -->
     <xsl:choose>
         <xsl:when test="&THEOREM-FILTER; or &AXIOM-FILTER;">
-            <xsl:text>label=#3, </xsl:text>
+            <xsl:text>phantomlabel={#3}, </xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:text>label=#2, </xsl:text>
+            <xsl:text>phantomlabel={#2}, </xsl:text>
         </xsl:otherwise>
     </xsl:choose>
     <!-- always breakable -->
@@ -4223,7 +4225,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="creator-full" />
         <xsl:text>}</xsl:text>
     </xsl:if>
-    <!-- internal-id destined for tcolorbox  label=  option -->
+    <!-- internal-id destined for tcolorbox  phantomlabel=  option -->
     <xsl:text>{</xsl:text>
     <xsl:apply-templates select="." mode="internal-id"/>
     <xsl:text>}</xsl:text>
