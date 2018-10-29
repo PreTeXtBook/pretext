@@ -3544,9 +3544,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Solutions Divisions, Content Generation -->
 <!-- ####################################### -->
 
+<!-- We pass in the "scope", which will be a traditional division   -->
+<!-- and then can create an appropriate size for a heading (without -->
+<!-- needing to deal with specialized divisions possibly appearing  -->
+<!-- at most any level).                                            -->
 <!-- TODO: this could be an xparse environment, perhaps -->
 <!-- with a key indicating fontsize or division level   -->
-<xsl:template match="chapter|section|subsection|subsubsection|exercises" mode="division-in-solutions">
+<xsl:template match="chapter|section|subsection|subsubsection|exercises|worksheet|reading-questions" mode="division-in-solutions">
     <xsl:param name="scope" />
     <xsl:param name="content" />
 

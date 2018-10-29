@@ -977,7 +977,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Solutions Divisions, Content Generation -->
 <!-- ####################################### -->
 
-<xsl:template match="chapter|section|subsection|subsubsection|exercises|reading-questions" mode="division-in-solutions">
+<xsl:template match="chapter|section|subsection|subsubsection|exercises|worksheet|reading-questions" mode="division-in-solutions">
     <xsl:param name="scope" /> <!-- ignored -->
     <xsl:param name="content" />
 
@@ -3039,7 +3039,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <article class="exercise-like">
             <xsl:choose>
                 <!-- with full number just for solution list -->
-                <xsl:when test="ancestor::exercises">
+                <xsl:when test="ancestor::exercises or ancestor::worksheet or ancestor::reading-questions">
                     <xsl:apply-templates select="." mode="heading-divisional-exercise" />
                 </xsl:when>
                 <!-- inline can go with generic, which is switched on inline/divisional -->

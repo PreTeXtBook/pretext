@@ -5952,9 +5952,16 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Exercise Utilities -->
 <!-- ################## -->
 
-<!-- Exercises and projects generally have "statement", "hint", "answer", and "solution".  Switches control appearance  in teh main matter and in solution lists. -->
-
-<!-- But they are surrounded by infrastructure:  number and title, exercise group with introduction and conclusion, division headings.  If switches make all the content disappear within some infrastructure, then the infrastructure becomes superfluous.  So we provide a hierarchy of templates to determine if structure and content yield output. -->
+<!-- Exercises and projects generally have "statement", "hint",    -->
+<!-- "answer", and "solution".  Switches control appearance in     -->
+<!-- the main matter and in solution lists.                        -->
+<!--                                                               -->
+<!-- But they are surrounded by infrastructure:  number and title, -->
+<!-- exercise group with introduction and conclusion, division     -->
+<!-- headings.  If switches make all the content disappear within  -->
+<!-- some infrastructure, then the infrastructure becomes          -->
+<!-- superfluous.  So we provide a hierarchy of templates to       -->
+<!-- determine if structure and content yield output.              -->
 
 <!-- authored exercise, terminal (leaf) tasks -->
 <xsl:template match="exercise|task[not(task)]" mode="dry-run">
@@ -5964,7 +5971,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:param name="b-has-solution" />
 
     <xsl:choose>
-        <!-- burrow through "stage", do not consider "answer" -->
+        <!-- burrow through potential "stage" -->
         <xsl:when test="webwork-reps">
             <xsl:if test="$b-has-statement or ($b-has-hint and webwork-reps/static//hint) or ($b-has-answer and webwork-reps/static//answer) or ($b-has-solution and webwork-reps/static//solution)">
                 <xsl:text>X</xsl:text>
@@ -6017,10 +6024,12 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:choose>
 </xsl:template>
 
-<!-- An "exercisegroup" potentially has an "introduction" -->
-<!-- and "conclusion" as infrastructure, and can only     -->
-<!-- contain divisional "exercise" as varying items, so   -->
-<!-- switches passed in are for divisional exercises      -->
+<!-- An "exercisegroup" potentially has an "introduction"  -->
+<!-- and "conclusion" as infrastructure, and can only      -->
+<!-- contain divisional "exercise" as varying items        -->
+<!-- In a way, this is like an "exercise", it has content  -->
+<!-- that is like a "statement", so a "dry-run" is checked -->
+<!-- before outputting its introduction/conclusion         -->
 <xsl:template match="exercisegroup" mode="dry-run">
     <xsl:param name="b-has-statement" />
     <xsl:param name="b-has-hint" />
@@ -6039,7 +6048,10 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- a heading as infrastructure. We can investigate varying  -->
 <!-- "exercise" by just digging down into "exercisegroup" to  -->
 <!-- find all divisional "exercise"                           -->
-<xsl:template match="exercises|reading-questions" mode="dry-run">
+
+<!-- "exercises" is a specialized division and so needs only receive a subset of the many swithces the solutions-generator holds -->
+
+<xsl:template match="exercises" mode="dry-run">
     <xsl:param name="b-divisional-statement" />
     <xsl:param name="b-divisional-hint" />
     <xsl:param name="b-divisional-answer" />
@@ -6053,9 +6065,39 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:apply-templates>
 </xsl:template>
 
-<!-- An arbitrary division will have a heading as infrastructure.  -->
-<!-- We investigate varying "exercise" and "project" by digging    -->
-<!-- down into all three types with the right switches.            -->
+<xsl:template match="worksheet" mode="dry-run">
+    <xsl:param name="b-worksheet-statement" />
+    <xsl:param name="b-worksheet-hint" />
+    <xsl:param name="b-worksheet-answer" />
+    <xsl:param name="b-worksheet-solution" />
+
+    <xsl:apply-templates select=".//exercise" mode="dry-run">
+        <xsl:with-param name="b-has-statement" select="$b-worksheet-statement" />
+        <xsl:with-param name="b-has-hint"      select="$b-worksheet-hint" />
+        <xsl:with-param name="b-has-answer"    select="$b-worksheet-answer" />
+        <xsl:with-param name="b-has-solution"  select="$b-worksheet-solution" />
+    </xsl:apply-templates>
+</xsl:template>
+
+<xsl:template match="reading-questions" mode="dry-run">
+    <xsl:param name="b-reading-statement" />
+    <xsl:param name="b-reading-hint" />
+    <xsl:param name="b-reading-answer" />
+    <xsl:param name="b-reading-solution" />
+
+    <xsl:apply-templates select="exercise" mode="dry-run">
+        <xsl:with-param name="b-has-statement" select="$b-reading-statement" />
+        <xsl:with-param name="b-has-hint"      select="$b-reading-hint" />
+        <xsl:with-param name="b-has-answer"    select="$b-reading-answer" />
+        <xsl:with-param name="b-has-solution"  select="$b-reading-solution" />
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- An arbitrary division will have a heading as infrastructure.     -->
+<!-- We drill down into the division at any depth looking for objects -->
+<!-- based on the switches that control them.  This means we do not   -->
+<!-- have to examine all possible subdivisions, both traditional      -->
+<!-- and specialized.  Instead, we just pass through them.            -->
 <xsl:template match="part|chapter|section|subsection|subsubsection" mode="dry-run">
     <xsl:param name="b-inline-statement" />
     <xsl:param name="b-inline-answer" />
@@ -6069,8 +6111,16 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:param name="b-project-answer" />
     <xsl:param name="b-project-hint" />
     <xsl:param name="b-project-solution" />
+    <xsl:param name="b-worksheet-statement" />
+    <xsl:param name="b-worksheet-answer" />
+    <xsl:param name="b-worksheet-hint" />
+    <xsl:param name="b-worksheet-solution" />
+    <xsl:param name="b-reading-statement" />
+    <xsl:param name="b-reading-answer" />
+    <xsl:param name="b-reading-hint" />
+    <xsl:param name="b-reading-solution" />
 
-    <xsl:apply-templates select=".//exercise[not(ancestor::exercises or ancestor::reading-questions)]" mode="dry-run">
+    <xsl:apply-templates select=".//exercise[not(ancestor::exercises or ancestor::worksheet or ancestor::reading-questions)]" mode="dry-run">
         <xsl:with-param name="b-has-statement" select="$b-inline-statement" />
         <xsl:with-param name="b-has-answer"    select="$b-inline-answer" />
         <xsl:with-param name="b-has-hint"      select="$b-inline-hint" />
@@ -6088,6 +6138,18 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:with-param name="b-has-answer"    select="$b-divisional-answer" />
         <xsl:with-param name="b-has-hint"      select="$b-divisional-hint" />
         <xsl:with-param name="b-has-solution"  select="$b-divisional-solution" />
+    </xsl:apply-templates>
+    <xsl:apply-templates select=".//worksheet//exercise" mode="dry-run">
+        <xsl:with-param name="b-has-statement" select="$b-worksheet-statement" />
+        <xsl:with-param name="b-has-answer"    select="$b-worksheet-answer" />
+        <xsl:with-param name="b-has-hint"      select="$b-worksheet-hint" />
+        <xsl:with-param name="b-has-solution"  select="$b-worksheet-solution" />
+    </xsl:apply-templates>
+    <xsl:apply-templates select=".//reading-questions//exercise" mode="dry-run">
+        <xsl:with-param name="b-has-statement" select="$b-reading-statement" />
+        <xsl:with-param name="b-has-answer"    select="$b-reading-answer" />
+        <xsl:with-param name="b-has-hint"      select="$b-reading-hint" />
+        <xsl:with-param name="b-has-solution"  select="$b-reading-solution" />
     </xsl:apply-templates>
 </xsl:template>
 
@@ -6120,6 +6182,14 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:with-param name="b-project-hint"         select="contains(@project,    'hint')"      />
         <xsl:with-param name="b-project-answer"       select="contains(@project,    'answer')"    />
         <xsl:with-param name="b-project-solution"     select="contains(@project,    'solution')"  />
+        <xsl:with-param name="b-worksheet-statement"  select="contains(@worksheet,  'statement')" />
+        <xsl:with-param name="b-worksheet-hint"       select="contains(@worksheet,  'hint')"      />
+        <xsl:with-param name="b-worksheet-answer"     select="contains(@worksheet,  'answer')"    />
+        <xsl:with-param name="b-worksheet-solution"   select="contains(@worksheet,  'solution')"  />
+        <xsl:with-param name="b-reading-statement"    select="contains(@reading,    'statement')" />
+        <xsl:with-param name="b-reading-hint"         select="contains(@reading,    'hint')"      />
+        <xsl:with-param name="b-reading-answer"       select="contains(@reading,    'answer')"    />
+        <xsl:with-param name="b-reading-solution"     select="contains(@reading,    'solution')"  />
     </xsl:apply-templates>
 
     <xsl:apply-templates select="conclusion">
@@ -6143,6 +6213,14 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:param name="b-project-hint"         />
     <xsl:param name="b-project-answer"       />
     <xsl:param name="b-project-solution"     />
+    <xsl:param name="b-worksheet-statement"  />
+    <xsl:param name="b-worksheet-hint"       />
+    <xsl:param name="b-worksheet-answer"     />
+    <xsl:param name="b-worksheet-solution"   />
+    <xsl:param name="b-reading-statement"    />
+    <xsl:param name="b-reading-hint"         />
+    <xsl:param name="b-reading-answer"       />
+    <xsl:param name="b-reading-solution"     />
 
     <!-- We need to save off the the main context before the "for-each" -->
     <!-- context change, in order to decide how "big" division headings -->
@@ -6151,8 +6229,10 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 
     <!-- consider each possible division, below the context      -->
     <!-- Only output heading and content if there is any content -->
-    <xsl:for-each select=".//part|.//chapter|.//section|.//subsection|.//subsubsection|.//exercises" mode="solutions">
-        <!-- see if division has *any* content, at any depth, in light of switches -->
+    <xsl:for-each select=".//part|.//chapter|.//section|.//subsection|.//subsubsection|.//exercises|.//worksheet|.//reading-questions">
+        <!-- See if division has *any* content, at any depth, in light of switches. -->
+        <!-- Traditional divisions expect many switches, while specialized          -->
+        <!-- divisions expect a limited subset                                      -->
         <xsl:variable name="dry-run">
             <xsl:apply-templates select="." mode="dry-run">
                 <xsl:with-param name="b-inline-statement"     select="$b-inline-statement" />
@@ -6167,19 +6247,38 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                 <xsl:with-param name="b-project-answer"       select="$b-project-answer" />
                 <xsl:with-param name="b-project-hint"         select="$b-project-hint" />
                 <xsl:with-param name="b-project-solution"     select="$b-project-solution" />
+                <xsl:with-param name="b-worksheet-statement"  select="$b-worksheet-statement" />
+                <xsl:with-param name="b-worksheet-answer"     select="$b-worksheet-answer" />
+                <xsl:with-param name="b-worksheet-hint"       select="$b-worksheet-hint" />
+                <xsl:with-param name="b-worksheet-solution"   select="$b-worksheet-solution" />
+                <xsl:with-param name="b-reading-statement"    select="$b-reading-statement" />
+                <xsl:with-param name="b-reading-answer"       select="$b-reading-answer" />
+                <xsl:with-param name="b-reading-hint"         select="$b-reading-hint" />
+                <xsl:with-param name="b-reading-solution"     select="$b-worksheet-solution" />
             </xsl:apply-templates>
         </xsl:variable>
 
         <xsl:if test="not($dry-run = '')">
-            <!-- this is the only real abstract template, it simply     -->
-            <!-- provides the correct wrapping for a division appearing -->
-            <!-- to aid in organizing a collection of solutions         -->
+            <!-- We call the only real abstract template, it simply        -->
+            <!-- provides the correct wrapping for a division appearing    -->
+            <!-- to aid in organizing a collection of solutions.           -->
+            <!--                                                           -->
+            <!-- Context is a division: traditional, or specialized.       -->
+            <!-- We want all "exercise" and "project", in document order,  -->
+            <!-- without descending into subdivisions.  We handle          -->
+            <!-- "exercisegroup" specially, since it has "statement"       -->
+            <!-- characteristics.  In a traditional division, an inline    -->
+            <!-- exercise can be inside a "paragraphs".  If we divide an   -->
+            <!-- "exercises" division, we will need to explicitly burrow   -->
+            <!-- down into it.  Finally, a "worksheet" can have "exercise" -->
+            <!-- laid out via "sidebyside".                                -->
             <xsl:apply-templates select="." mode="division-in-solutions">
                 <xsl:with-param name="scope" select="$scope" />
                 <xsl:with-param name="content">
-                    <xsl:for-each select="exercise|exercisegroup|&PROJECT-LIKE;">
+
+                    <xsl:for-each select="exercise|exercisegroup|&PROJECT-LIKE;|paragraphs/exercise|self::worksheet//exercise">
                          <xsl:choose>
-                            <xsl:when test="self::exercise and not(ancestor::exercises)">
+                            <xsl:when test="self::exercise and not(ancestor::exercises or ancestor::worksheet or ancestor::reading-questions)">
                                 <xsl:apply-templates select="." mode="solutions">
                                     <xsl:with-param name="b-has-statement" select="$b-inline-statement" />
                                     <xsl:with-param name="b-has-answer"    select="$b-inline-answer" />
@@ -6187,7 +6286,15 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                                     <xsl:with-param name="b-has-solution"  select="$b-inline-solution" />
                                 </xsl:apply-templates>
                             </xsl:when>
-                            <xsl:when test="self::exercisegroup or (self::exercise and ancestor::exercises)">
+                            <xsl:when test="self::exercisegroup">
+                                <xsl:apply-templates select="." mode="solutions">
+                                    <xsl:with-param name="b-has-statement" select="$b-divisional-statement" />
+                                    <xsl:with-param name="b-has-answer"    select="$b-divisional-answer" />
+                                    <xsl:with-param name="b-has-hint"      select="$b-divisional-hint" />
+                                    <xsl:with-param name="b-has-solution"  select="$b-divisional-solution" />
+                                </xsl:apply-templates>
+                            </xsl:when>
+                            <xsl:when test="self::exercise and ancestor::exercises">
                                 <xsl:apply-templates select="." mode="solutions">
                                     <xsl:with-param name="b-has-statement" select="$b-divisional-statement" />
                                     <xsl:with-param name="b-has-answer"    select="$b-divisional-answer" />
@@ -6201,6 +6308,22 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                                     <xsl:with-param name="b-has-answer"    select="$b-project-answer" />
                                     <xsl:with-param name="b-has-hint"      select="$b-project-hint" />
                                     <xsl:with-param name="b-has-solution"  select="$b-project-solution" />
+                                </xsl:apply-templates>
+                            </xsl:when>
+                            <xsl:when test="self::exercise and ancestor::worksheet">
+                                <xsl:apply-templates select="." mode="solutions">
+                                    <xsl:with-param name="b-has-statement" select="$b-worksheet-statement" />
+                                    <xsl:with-param name="b-has-answer"    select="$b-worksheet-answer" />
+                                    <xsl:with-param name="b-has-hint"      select="$b-worksheet-hint" />
+                                    <xsl:with-param name="b-has-solution"  select="$b-worksheet-solution" />
+                                </xsl:apply-templates>
+                            </xsl:when>
+                            <xsl:when test="self::exercise and ancestor::reading-questions">
+                                <xsl:apply-templates select="." mode="solutions">
+                                    <xsl:with-param name="b-has-statement" select="$b-reading-statement" />
+                                    <xsl:with-param name="b-has-answer"    select="$b-reading-answer" />
+                                    <xsl:with-param name="b-has-hint"      select="$b-reading-hint" />
+                                    <xsl:with-param name="b-has-solution"  select="$b-reading-solution" />
                                 </xsl:apply-templates>
                             </xsl:when>
                         </xsl:choose>
