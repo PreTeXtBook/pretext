@@ -394,6 +394,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% Space afterwards will be controlled by environment,&#xa;</xsl:text>
     <xsl:text>%% dependent of constructions of the tcb title&#xa;</xsl:text>
     <xsl:text>\tcbset{ runintitlestyle/.style={fonttitle=\normalfont\bfseries, attach title to upper} }&#xa;</xsl:text>
+    <xsl:text>%% Spacing prior to each exercise, anywhere&#xa;</xsl:text>
+    <xsl:text>\tcbset{ exercisespacingstyle/.style={before skip={1.5ex plus 0.5ex}} }&#xa;</xsl:text>
     <xsl:text>%% xparse allows the construction of more robust commands,&#xa;</xsl:text>
     <xsl:text>%% this is a necessity for isolating styling and behavior&#xa;</xsl:text>
     <xsl:text>%% The tcolorbox library of the same name loads the base library&#xa;</xsl:text>
@@ -1075,7 +1077,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- solutions to inline exercises -->
         <xsl:if test="$document-root//exercise[not(ancestor::exercises or ancestor::worksheet or ancestor::reading-questions)]">
         <xsl:text>%% Solutions to inline exercises, style and environment&#xa;</xsl:text>
-            <xsl:text>\tcbset{ inlineexercisesolutionstyle/.style={bwminimalstyle, runintitlestyle, after title={\space}, breakable } }&#xa;</xsl:text>
+            <xsl:text>\tcbset{ inlineexercisesolutionstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, after title={\space}, breakable } }&#xa;</xsl:text>
             <xsl:text>\newtcolorbox{inlineexercisesolution}[2]</xsl:text>
             <xsl:text>{inlineexercisesolutionstyle, title={</xsl:text>
             <!-- Hardcode "name" of an inline exercise in the environment -->
@@ -1088,7 +1090,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- Explicitly breakable, run-in title -->
         <xsl:if test="$document-root//exercises//exercise[not(ancestor::exercisegroup)]|$document-root//worksheet//exercise[not(ancestor::exercisegroup)]|$document-root//reading-questions//exercise[not(ancestor::exercisegroup)]">
             <xsl:text>%% Solutions to division exercises, not in exercise group&#xa;</xsl:text>
-            <xsl:text>\tcbset{ divisionsolutionstyle/.style={bwminimalstyle, runintitlestyle, after title={\space}, breakable } }&#xa;</xsl:text>
+            <xsl:text>\tcbset{ divisionsolutionstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, after title={\space}, breakable } }&#xa;</xsl:text>
             <xsl:text>\newtcolorbox{divisionsolution}[2]</xsl:text>
             <xsl:text>{divisionsolutionstyle, title={#1.\notblank{#2}{\space#2}{}}}&#xa;</xsl:text>
         </xsl:if>
@@ -1096,7 +1098,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- Explicitly breakable, run-in title -->
         <xsl:if test="$document-root//exercisegroup[not(@cols)]">
             <xsl:text>%% Solutions to division exercises, in exercise group, no columns&#xa;</xsl:text>
-            <xsl:text>\tcbset{ divisionsolutionegstyle/.style={bwminimalstyle, runintitlestyle, after title={\space}, left skip=\egindent, breakable } }&#xa;</xsl:text>
+            <xsl:text>\tcbset{ divisionsolutionegstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, after title={\space}, left skip=\egindent, breakable } }&#xa;</xsl:text>
             <xsl:text>\newtcolorbox{divisionsolutioneg}[2]</xsl:text>
             <xsl:text>{divisionsolutionegstyle, title={#1.\notblank{#2}{\space#2}{}}}&#xa;</xsl:text>
         </xsl:if>
@@ -1104,7 +1106,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- Explicity unbreakable, to behave in multicolumn tcbraster -->
         <xsl:if test="$document-root//exercisegroup/@cols">
             <xsl:text>%% Solutions to division exercises, in exercise group with columns&#xa;</xsl:text>
-            <xsl:text>\tcbset{ divisionsolutionegcolstyle/.style={bwminimalstyle, runintitlestyle, after title={\space}, halign=flush left, unbreakable } }&#xa;</xsl:text>
+            <xsl:text>\tcbset{ divisionsolutionegcolstyle/.style={bwminimalstyle, runintitlestyle,  exercisespacingstyle, after title={\space}, halign=flush left, unbreakable } }&#xa;</xsl:text>
             <xsl:text>\newtcolorbox{divisionsolutionegcol}[2]</xsl:text>
             <xsl:text>{divisionsolutionegcolstyle, title={#1.\notblank{#2}{\space#2}{}}}&#xa;</xsl:text>
         </xsl:if>
@@ -1119,7 +1121,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- set the style -->
             <xsl:text>\tcbset{ </xsl:text>
             <xsl:value-of select="$elt-name"/>
-            <xsl:text>solutionstyle/.style={bwminimalstyle, runintitlestyle, after title={\space}, breakable } }&#xa;</xsl:text>
+            <xsl:text>solutionstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, after title={\space}, breakable } }&#xa;</xsl:text>
             <!-- create the environment -->
             <xsl:text>\newtcolorbox{</xsl:text>
             <xsl:value-of select="$elt-name"/>
@@ -1143,7 +1145,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Numbered, styled with a hanging indent -->
     <xsl:if test="$document-root//exercises//exercise[not(ancestor::exercisegroup)]|$document-root//worksheet//exercise[not(ancestor::exercisegroup)]|$document-root//reading-questions//exercise[not(ancestor::exercisegroup)]">
         <xsl:text>%% Division exercises, not in exercise group&#xa;</xsl:text>
-        <xsl:text>\tcbset{ divisionexercisestyle/.style={bwminimalstyle, runintitlestyle, left=5ex, breakable } }&#xa;</xsl:text>
+        <xsl:text>\tcbset{ divisionexercisestyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, left=5ex, breakable } }&#xa;</xsl:text>
         <xsl:text>\newtcolorbox{divisionexercise}[4]</xsl:text>
         <xsl:text>{divisionexercisestyle, before title={\hspace{-5ex}\makebox[5ex][l]{#1.}}, title={\notblank{#2}{#2\space}{}}, phantom={\hypertarget{#4}{}}, after={\notblank{#3}{\newline\rule{\workspacestrutwidth}{#3\textheight}\newline}{}}}&#xa;</xsl:text>
     </xsl:if>
@@ -1152,7 +1154,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- boxes and get good page breaks (as these problems could be long)        -->
     <xsl:if test="$document-root//exercisegroup[not(@cols)]">
         <xsl:text>%% Division exercises, in exercise group, no columns&#xa;</xsl:text>
-        <xsl:text>\tcbset{ divisionexerciseegstyle/.style={bwminimalstyle, runintitlestyle, left=5ex, left skip=\egindent, breakable } }&#xa;</xsl:text>
+        <xsl:text>\tcbset{ divisionexerciseegstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, left=5ex, left skip=\egindent, breakable } }&#xa;</xsl:text>
         <xsl:text>\newtcolorbox{divisionexerciseeg}[4]</xsl:text>
         <xsl:text>{divisionexerciseegstyle, before title={\hspace{-5ex}\makebox[5ex][l]{#1.}}, title={\notblank{#2}{#2\space}{}}, phantom={\hypertarget{#4}{}}, after={\notblank{#3}{\newline\rule{\workspacestrutwidth}{#3\textheight}\newline}{}}}&#xa;</xsl:text>
     </xsl:if>
@@ -1162,7 +1164,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Division exercises, in exercise group with columns&#xa;</xsl:text>
         <!-- Division Exercise, Exercise Group, Columnar -->
         <!-- Explicity unbreakable, to behave in multicolumn tcbraster -->
-        <xsl:text>\tcbset{ divisionexerciseegcolstyle/.style={bwminimalstyle, runintitlestyle, left=5ex, halign=flush left, unbreakable } }&#xa;</xsl:text>
+        <xsl:text>\tcbset{ divisionexerciseegcolstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, left=5ex, halign=flush left, unbreakable } }&#xa;</xsl:text>
         <xsl:text>\newtcolorbox{divisionexerciseegcol}[4]</xsl:text>
         <xsl:text>{divisionexerciseegcolstyle, before title={\hspace{-5ex}\makebox[5ex][l]{#1.}}, title={\notblank{#2}{#2\space}{}}, phantom={\hypertarget{#4}{}}, after={\notblank{#3}{\newline\rule{\workspacestrutwidth}{#3\textheight}\newline}{}}}&#xa;</xsl:text>
     </xsl:if>
