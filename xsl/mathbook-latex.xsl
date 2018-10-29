@@ -396,6 +396,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\tcbset{ runintitlestyle/.style={fonttitle=\normalfont\bfseries, attach title to upper} }&#xa;</xsl:text>
     <xsl:text>%% Spacing prior to each exercise, anywhere&#xa;</xsl:text>
     <xsl:text>\tcbset{ exercisespacingstyle/.style={before skip={1.5ex plus 0.5ex}} }&#xa;</xsl:text>
+    <xsl:text>%% Spacing prior to each block&#xa;</xsl:text>
+    <xsl:text>\tcbset{ blockspacingstyle/.style={before skip={2.0ex plus 0.5ex}} }&#xa;</xsl:text>
     <xsl:text>%% xparse allows the construction of more robust commands,&#xa;</xsl:text>
     <xsl:text>%% this is a necessity for isolating styling and behavior&#xa;</xsl:text>
     <xsl:text>%% The tcolorbox library of the same name loads the base library&#xa;</xsl:text>
@@ -2572,7 +2574,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- understand this more advanced use of XSL, just make two    -->
 <!-- templates, one for "introduction" and one for "conclusion" -->
 <xsl:template match="introduction|conclusion" mode="tcb-style">
-    <xsl:text>bwminimalstyle, runintitlestyle, </xsl:text>
+    <xsl:text>bwminimalstyle, runintitlestyle, blockspacingstyle, </xsl:text>
     <xsl:if test="self::conclusion">
         <xsl:text>before skip=3ex</xsl:text>
     </xsl:if>
@@ -2584,26 +2586,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The 5% horizontal leg is a "partway modifier", from     -->
 <!-- https://tex.stackexchange.com/questions/48756/tikz-relative-coordinates -->
 <xsl:template match="commentary" mode="tcb-style">
-    <xsl:text>breakable,skin=enhanced,fonttitle=\bfseries,coltitle=black,colback=white,frame code={&#xa;</xsl:text>
+    <xsl:text>blockspacingstyle, breakable,skin=enhanced,fonttitle=\bfseries,coltitle=black,colback=white,frame code={&#xa;</xsl:text>
     <xsl:text>\path[draw=red!75!black,line width=0.5mm] (frame.north west) -- (frame.south west) -- ($ (frame.south west)!0.05!(frame.south east) $);}</xsl:text>
 </xsl:template>
 
 <!-- "objectives" -->
 <!-- Rules top and bottom, title on its own line, as a heading -->
 <xsl:template match="objectives" mode="tcb-style">
-    <xsl:text>bwminimalstyle, fonttitle=\large\bfseries, toprule=0.1ex, toptitle=0.5ex, top=2ex, bottom=0.5ex, bottomrule=0.1ex</xsl:text>
+    <xsl:text>bwminimalstyle, blockspacingstyle, fonttitle=\large\bfseries, toprule=0.1ex, toptitle=0.5ex, top=2ex, bottom=0.5ex, bottomrule=0.1ex</xsl:text>
 </xsl:template>
 
 <!-- "outcomes" -->
 <!-- Differs only by spacing prior, this could go away  -->
 <!-- if headings, etc handle vertical space correctly   -->
 <xsl:template match="outcomes" mode="tcb-style">
-    <xsl:text>bwminimalstyle, fonttitle=\large\bfseries, toprule=0.1ex, toptitle=0.5ex, top=2ex, bottom=0.5ex, bottomrule=0.1ex, before skip=2ex</xsl:text>
+    <xsl:text>bwminimalstyle, blockspacingstyle, fonttitle=\large\bfseries, toprule=0.1ex, toptitle=0.5ex, top=2ex, bottom=0.5ex, bottomrule=0.1ex, before skip=2ex</xsl:text>
 </xsl:template>
 
 <!-- back "colophon" -->
 <xsl:template match="backmatter/colophon" mode="tcb-style">
-    <xsl:text>bwminimalstyle, before skip=5ex, left skip=0.15\textwidth, right skip=0.15\textwidth, fonttitle=\large\bfseries, center title, halign=center, bottomtitle=2ex</xsl:text>
+    <xsl:text>bwminimalstyle, blockspacingstyle, before skip=5ex, left skip=0.15\textwidth, right skip=0.15\textwidth, fonttitle=\large\bfseries, center title, halign=center, bottomtitle=2ex</xsl:text>
 </xsl:template>
 
 <!-- "defined-term" -->
@@ -2643,15 +2645,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- in that markers are inserted with "after upper"   -->
 <!-- to indicate the end of the environment.           -->
 <xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|exercise[not(ancestor::exercises or ancestor::worksheet or ancestor::reading-questions)]|assemblage|&ASIDE-LIKE;" mode="tcb-style">
-    <xsl:text>bwminimalstyle, runintitlestyle, after title={\space}, </xsl:text>
+    <xsl:text>bwminimalstyle, runintitlestyle, blockspacingstyle, after title={\space}, </xsl:text>
 </xsl:template>
 
 <xsl:template match="&DEFINITION-LIKE;" mode="tcb-style">
-    <xsl:text>bwminimalstyle, runintitlestyle, after title={\space}, after upper={\hfill{}\(\lozenge\)}, </xsl:text>
+    <xsl:text>bwminimalstyle, runintitlestyle, blockspacingstyle, after title={\space}, after upper={\hfill{}\(\lozenge\)}, </xsl:text>
 </xsl:template>
 
 <xsl:template match="&EXAMPLE-LIKE;" mode="tcb-style">
-    <xsl:text>bwminimalstyle, runintitlestyle, after title={\space}, after upper={\hfill{}\(\square\)}, </xsl:text>
+    <xsl:text>bwminimalstyle, runintitlestyle, blockspacingstyle, after title={\space}, after upper={\hfill{}\(\square\)}, </xsl:text>
 </xsl:template>
 
 <!-- This is the gross default, across all objects and all styles -->
