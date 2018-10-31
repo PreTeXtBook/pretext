@@ -31,11 +31,6 @@
 
         <p>The philosophy behind this conversion is that a publisher may wish to create a <em>different</em> range of solutions for instructors, for limited distribution in ways that students are unlikely to find.  Thus, we have tried to produce a <em>functional</em> document by default, without too much attention to making a <em>beautiful</em> document.  Of course, improvements and suggestions are always welcome, though here the priority will be ease-of-use.</p>
 
-        <p>As of 2018-10-26 this conversion has been tested carefully and produces attractive and usable output.  The following enhancements are planned.  Please report any oddities, feature requests, or urgency.<ul>
-            <li>A switch to include <tag>statement</tag>.  Likely off by default, which is current behavior.</li>
-            <li>Switches to include <tag>exercise</tag> from <tag>reading-question</tag> and <tag>worksheet</tag>.</li>
-        </ul></p>
-
         <paragraphs>
             <title>Digression</title>
 
