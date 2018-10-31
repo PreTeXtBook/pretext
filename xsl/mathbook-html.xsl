@@ -3038,13 +3038,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="not($dry-run = '')">
         <article class="exercise-like">
             <xsl:choose>
-                <!-- with full number just for solution list -->
-                <xsl:when test="ancestor::exercises or ancestor::worksheet or ancestor::reading-questions">
-                    <xsl:apply-templates select="." mode="heading-divisional-exercise" />
-                </xsl:when>
                 <!-- inline can go with generic, which is switched on inline/divisional -->
-                <xsl:otherwise>
+                <xsl:when test="boolean(&INLINE-EXERCISE-FILTER;)">
                     <xsl:apply-templates select="." mode="heading-birth" />
+                </xsl:when>
+                <!-- with full number just for solution list -->
+                <xsl:otherwise>
+                    <xsl:apply-templates select="." mode="heading-divisional-exercise" />
                 </xsl:otherwise>
             </xsl:choose>
             <xsl:choose>
@@ -7969,7 +7969,8 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
 <!-- The guts of a WeBWorK problem realized in HTML -->
 <!-- This is heart of an external knowl version, or -->
 <!-- what is born visible under control of a switch -->
-
+<!-- NB: Context is not "exercise", so do not       -->
+<!-- use "boolean(&INLINE-EXERCISE-FILTER;)"        -->
 <xsl:template match="webwork-reps">
     <xsl:param name="b-original" select="true()" />
     <xsl:choose>

@@ -973,7 +973,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:for-each>
     <!-- Inline Exercises -->
     <xsl:variable name="inlineexercise-reps" select="
-        ($document-root//exercise[not(ancestor::exercises or ancestor::worksheet or ancestor::reading-questions)])[1]"/>
+        ($document-root//exercise[boolean(&INLINE-EXERCISE-FILTER;)])[1]"/>
     <xsl:if test="$inlineexercise-reps">
         <xsl:text>%%&#xa;</xsl:text>
         <xsl:text>%% tcolorbox, with styles, for inline exercises&#xa;</xsl:text>
@@ -1077,7 +1077,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- This may have false positives, but no real harm -->
         <!--  -->
         <!-- solutions to inline exercises -->
-        <xsl:if test="$document-root//exercise[not(ancestor::exercises or ancestor::worksheet or ancestor::reading-questions)]">
+        <xsl:if test="$document-root//exercise[boolean(&INLINE-EXERCISE-FILTER;)]">
         <xsl:text>%% Solutions to inline exercises, style and environment&#xa;</xsl:text>
             <xsl:text>\tcbset{ inlineexercisesolutionstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, after title={\space}, breakable } }&#xa;</xsl:text>
             <xsl:text>\newtcolorbox{inlineexercisesolution}[2]</xsl:text>
@@ -2423,12 +2423,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--       \begin{inlineexercise}{title}{label}        -->
 <!-- Type, number, optional title                      -->
 <!-- Title comes without new punctuation.              -->
-<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|exercise[not(ancestor::exercises or ancestor::worksheet or ancestor::reading-questions)]" mode="environment">
+<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|exercise[boolean(&INLINE-EXERCISE-FILTER;)]" mode="environment">
     <!-- Names of various pieces normally use the      -->
     <!-- element name, but "exercise" does triple duty -->
     <xsl:variable name="environment-name">
         <xsl:choose>
-            <xsl:when test="self::exercise and not(ancestor::exercises or ancestor::worksheet or ancestor::reading-questions)">
+            <xsl:when test="self::exercise and boolean(&INLINE-EXERCISE-FILTER;)">
                 <xsl:text>inlineexercise</xsl:text>
             </xsl:when>
             <xsl:otherwise>
@@ -2644,7 +2644,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- DEFINITION-LIKE and EXAMPLE-LIKE are exceptional  -->
 <!-- in that markers are inserted with "after upper"   -->
 <!-- to indicate the end of the environment.           -->
-<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|exercise[not(ancestor::exercises or ancestor::worksheet or ancestor::reading-questions)]|assemblage|&ASIDE-LIKE;" mode="tcb-style">
+<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|exercise[boolean(&INLINE-EXERCISE-FILTER;)]|assemblage|&ASIDE-LIKE;" mode="tcb-style">
     <xsl:text>bwminimalstyle, runintitlestyle, blockspacingstyle, after title={\space}, </xsl:text>
 </xsl:template>
 
@@ -4224,7 +4224,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 3.  the "internal-id", which suffices for               -->
 <!--     the LaTeX label/ref mechanism                       -->
 <!-- N.B.: "objectives", "outcomes" need to use this         -->
-<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&ASIDE-LIKE;|exercise[not(ancestor::exercises or ancestor::worksheet or ancestor::reading-questions)]|commentary|assemblage" mode="block-options">
+<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&ASIDE-LIKE;|exercise[boolean(&INLINE-EXERCISE-FILTER;)]|commentary|assemblage" mode="block-options">
     <xsl:text>{</xsl:text>
     <xsl:apply-templates select="." mode="title-punctuated"/>
     <xsl:text>}</xsl:text>

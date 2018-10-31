@@ -4174,27 +4174,27 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:choose>
         <xsl:when test="$subtree-level=-1">
             <xsl:number from="book|article|letter|memo" level="any"
-                count="exercise[not(ancestor::exercises or ancestor::worksheet or ancestor::reading-questions)]" />
+                count="exercise[boolean(&INLINE-EXERCISE-FILTER;)]" />
         </xsl:when>
         <xsl:when test="$subtree-level=0">
             <xsl:number from="part" level="any"
-                count="exercise[not(ancestor::exercises or ancestor::worksheet or ancestor::reading-questions)]" />
+                count="exercise[boolean(&INLINE-EXERCISE-FILTER;)]" />
         </xsl:when>
         <xsl:when test="$subtree-level=1">
             <xsl:number from="chapter|book/backmatter/appendix" level="any"
-                count="exercise[not(ancestor::exercises or ancestor::worksheet or ancestor::reading-questions)]" />
+                count="exercise[boolean(&INLINE-EXERCISE-FILTER;)]" />
         </xsl:when>
         <xsl:when test="$subtree-level=2">
             <xsl:number from="section|article/backmatter/appendix|chapter/exercises|chapter/worksheet" level="any"
-                count="exercise[not(ancestor::exercises or ancestor::worksheet or ancestor::reading-questions)]" />
+                count="exercise[boolean(&INLINE-EXERCISE-FILTER;)]" />
         </xsl:when>
         <xsl:when test="$subtree-level=3">
             <xsl:number from="subsection|section/exercises|section/worksheet" level="any"
-                count="exercise[not(ancestor::exercises or ancestor::worksheet or ancestor::reading-questions)]" />
+                count="exercise[boolean(&INLINE-EXERCISE-FILTER;)]" />
         </xsl:when>
         <xsl:when test="$subtree-level=4">
             <xsl:number from="subsubsection|subsection/exercises|subsection/worksheet" level="any"
-                count="exercise[not(ancestor::exercises or ancestor::worksheet or ancestor::reading-questions)]" />
+                count="exercise[boolean(&INLINE-EXERCISE-FILTER;)]" />
         </xsl:when>
         <xsl:otherwise>
             <xsl:message>MBX:ERROR: Subtree level for atomic exercise number computation is out-of-bounds (<xsl:value-of select="$subtree-level" />)</xsl:message>
@@ -4734,7 +4734,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 
 <!-- Structure Numbers: Inline Exercises -->
 <!-- Follows the theorem/figure/etc scheme (can't poll parent) -->
-<xsl:template match="exercise[not(ancestor::exercises or ancestor::worksheet or ancestor::reading-questions)]" mode="structure-number">
+<xsl:template match="exercise[boolean(&INLINE-EXERCISE-FILTER;)]" mode="structure-number">
     <xsl:apply-templates select="." mode="multi-number">
         <xsl:with-param name="levels" select="$numbering-theorems" />
         <xsl:with-param name="pad" select="'yes'" />
@@ -6120,7 +6120,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:param name="b-project-hint" />
     <xsl:param name="b-project-solution" />
 
-    <xsl:apply-templates select=".//exercise[not(ancestor::exercises or ancestor::worksheet or ancestor::reading-questions)]" mode="dry-run">
+    <xsl:apply-templates select=".//exercise[boolean(&INLINE-EXERCISE-FILTER;)]" mode="dry-run">
         <xsl:with-param name="b-has-statement" select="$b-inline-statement" />
         <xsl:with-param name="b-has-answer"    select="$b-inline-answer" />
         <xsl:with-param name="b-has-hint"      select="$b-inline-hint" />
@@ -6278,7 +6278,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 
                     <xsl:for-each select="exercise|exercisegroup|&PROJECT-LIKE;|paragraphs/exercise|self::worksheet//exercise">
                          <xsl:choose>
-                            <xsl:when test="self::exercise and not(ancestor::exercises or ancestor::worksheet or ancestor::reading-questions)">
+                            <xsl:when test="self::exercise and boolean(&INLINE-EXERCISE-FILTER;)">
                                 <xsl:apply-templates select="." mode="solutions">
                                     <xsl:with-param name="b-has-statement" select="$b-inline-statement" />
                                     <xsl:with-param name="b-has-answer"    select="$b-inline-answer" />

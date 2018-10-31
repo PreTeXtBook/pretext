@@ -98,3 +98,9 @@
 <!-- appendages of examples, exercises, tasks -->
 <!ENTITY SOLUTION-LIKE "hint|answer|solution">
 <!ENTITY SOLUTION-FILTER "self::hint or self::answer or self::solution">
+
+<!-- When context is an inline "exercise", then this condition is      -->
+<!-- true. We are positive, so as new locations of "exercise"          -->
+<!-- are added, then this need not change                              -->
+<!-- Typical use: self::exercise and boolean(&INLINE-EXERCISE-FILTER;) -->
+<!ENTITY INLINE-EXERCISE-FILTER "parent::article|parent::paragraphs|parent::chapter|parent::section|parent::subsection|parent::subsubsection">
