@@ -987,6 +987,9 @@ the xsltproc executable.
                         <statement>
                             <p>This is a <term>reading question</term> that you might have a student read prior to a class session, based on reading part of the book.</p>
                         </statement>
+                        <answer>
+                            <p>Which might help make the classroom session improve.</p>
+                        </answer>
                     </exercise>
 
                     <exercise>
@@ -8263,12 +8266,12 @@ the xsltproc executable.
                 <notation-list />
             </appendix>
 
-            <solutions xml:id="solutions-backmatter" inline="hint solution answer" divisional="hint solution answer" project="answer">
+            <solutions xml:id="solutions-backmatter" inline="hint solution answer" divisional="hint solution answer" project="answer" worksheet="hint" reading="answer">
                 <title>Solutions to Selected Exercises</title>
                 <idx><h>solutions</h><h>as an appendix</h></idx>
 
                 <introduction>
-                    <p>This is an introduction, where you might explain that this division of the back matter contains various hints, answers, solutions of inline exercises, divisional exercises, and/or project-like blocks.  See the source to see just how this solutions division was built.</p>
+                    <p>This is an introduction, where you might explain that this division of the back matter contains various hints, answers, solutions of inline exercises, divisional exercises, project-like blocks, worksheet exercises, and/or reading questions.  See the source to see just how this solutions division was built.</p>
                 </introduction>
 
                 <!-- content will happen here automatically -->
