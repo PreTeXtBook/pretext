@@ -102,21 +102,36 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- the *visibility* of these four parts                  -->
 <!--                                                       -->
 <!-- Parameters are:                                       -->
-<!--   'yes' - immediately visible                         -->
-<!--   'knowl' - adjacent, but requires action to reveal   -->
-<!--    NB: HTML - 'knowl' not implemented or recognized   -->
-<!--       'yes' makes knowls for hints, etc *always*      -->
-<!--   'no' - not visible at all                           -->
+<!--   'yes' - visible                                     -->
+<!--   'no' - not visible                                  -->
 <!--                                                       -->
-<!-- First, an exercise in exercises section.              -->
+<!-- Five categories:                                      -->
+<!--   inline (checpoint) exercises                        -->
+<!--   divisional (inside an "exercises" division)         -->
+<!--   worksheet (inside a "worksheet" division)           -->
+<!--   reading (inside a "reading-questions" division)     -->
+<!--   project (on a project-like,                         -->
+<!--   or possibly on a terminal "task" of a project-like) -->
+<!--                                                       -->
 <!-- Default is "yes" for every part, so experiment        -->
 <!-- with parameters to make some parts hidden.            -->
+<xsl:param name="exercise.inline.statement" select="''" />
 <xsl:param name="exercise.inline.hint" select="''" />
 <xsl:param name="exercise.inline.answer" select="''" />
 <xsl:param name="exercise.inline.solution" select="''" />
+<xsl:param name="exercise.divisional.statement" select="''" />
 <xsl:param name="exercise.divisional.hint" select="''" />
 <xsl:param name="exercise.divisional.answer" select="''" />
 <xsl:param name="exercise.divisional.solution" select="''" />
+<xsl:param name="exercise.worksheet.statement" select="''" />
+<xsl:param name="exercise.worksheet.hint" select="''" />
+<xsl:param name="exercise.worksheet.answer" select="''" />
+<xsl:param name="exercise.worksheet.solution" select="''" />
+<xsl:param name="exercise.reading.statement" select="''" />
+<xsl:param name="exercise.reading.hint" select="''" />
+<xsl:param name="exercise.reading.answer" select="''" />
+<xsl:param name="exercise.reading.solution" select="''" />
+<xsl:param name="project.statement" select="''" />
 <xsl:param name="project.hint" select="''" />
 <xsl:param name="project.answer" select="''" />
 <xsl:param name="project.solution" select="''" />
@@ -443,6 +458,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- control here first.  The "*.text.*" forms are deprecated    -->
 <!-- with warnings elsewhere.                                    -->
 
+<xsl:variable name="entered-exercise-inline-statement">
+    <xsl:choose>
+        <xsl:when test="($exercise.inline.statement = 'yes') or
+                        ($exercise.inline.statement = 'no')">
+            <xsl:value-of select="$exercise.inline.hint" />
+        </xsl:when>
+        <!-- deprecated, but still honored, though with no error-checking, -->
+        <!-- erroneous values will fall into default of replacement switch -->
+        <xsl:when test="($exercise.text.statement = 'yes') or ($exercise.text.statement = 'no')">
+            <xsl:value-of select="$exercise.text.statement" />
+        </xsl:when>
+        <!-- stick with no action by author/publisher -->
+        <xsl:when test="$exercise.inline.statement = ''">
+            <xsl:value-of select="$exercise.text.statement" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message >MBX:WARNING: exercise.inline.statement parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.inline.statement" />".  Proceeding with default value.</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
 <xsl:variable name="entered-exercise-inline-hint">
     <xsl:choose>
         <xsl:when test="($exercise.inline.hint = 'yes') or
@@ -506,6 +542,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<xsl:variable name="entered-exercise-divisional-statement">
+    <xsl:choose>
+        <xsl:when test="($exercise.divisional.statement = 'yes') or
+                        ($exercise.divisional.statement = 'no')">
+            <xsl:value-of select="$exercise.divisional.statement" />
+        </xsl:when>
+        <!-- deprecated, but still honored, though with no error-checking, -->
+        <!-- erroneous values will fall into default of replacement switch -->
+        <xsl:when test="($exercise.text.statement = 'yes') or ($exercise.text.statement = 'no')">
+            <xsl:value-of select="$exercise.text.statement" />
+        </xsl:when>
+        <!-- stick with no action by author/publisher -->
+        <xsl:when test="$exercise.divisional.statement = ''">
+            <xsl:value-of select="$exercise.divisional.statement" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message >MBX:WARNING: exercise.divisional.statement parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.divisional.statement" />".  Proceeding with default value.</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
 <xsl:variable name="entered-exercise-divisional-hint">
     <xsl:choose>
         <xsl:when test="($exercise.divisional.hint = 'yes') or
@@ -565,6 +622,190 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:otherwise>
             <xsl:message >MBX:WARNING: exercise.divisional.solution parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.divisional.solution" />".  Proceeding with default value.</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="entered-exercise-worksheet-statement">
+    <xsl:choose>
+        <xsl:when test="($exercise.worksheet.statement = 'yes') or
+                        ($exercise.worksheet.statement = 'no')">
+            <xsl:value-of select="$exercise.worksheet.statement" />
+        </xsl:when>
+        <!-- deprecated, but still honored, though with no error-checking, -->
+        <!-- erroneous values will fall into default of replacement switch -->
+        <xsl:when test="($exercise.text.statement = 'yes') or ($exercise.text.statement = 'no')">
+            <xsl:value-of select="$exercise.text.statement" />
+        </xsl:when>
+        <!-- stick with no action by author/publisher -->
+        <xsl:when test="$exercise.worksheet.statement = ''">
+            <xsl:value-of select="$exercise.worksheet.statement" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message >MBX:WARNING: exercise.worksheet.statement parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.worksheet.statement" />".  Proceeding with default value.</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="entered-exercise-worksheet-hint">
+    <xsl:choose>
+        <xsl:when test="($exercise.worksheet.hint = 'yes') or
+                        ($exercise.worksheet.hint = 'no')">
+            <xsl:value-of select="$exercise.worksheet.hint" />
+        </xsl:when>
+        <!-- deprecated, but still honored, though with no error-checking, -->
+        <!-- erroneous values will fall into default of replacement switch -->
+        <xsl:when test="($exercise.text.hint = 'yes') or ($exercise.text.hint = 'no')">
+            <xsl:value-of select="$exercise.text.hint" />
+        </xsl:when>
+        <!-- stick with no action by author/publisher -->
+        <xsl:when test="$exercise.worksheet.hint = ''">
+            <xsl:value-of select="$exercise.worksheet.hint" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message >MBX:WARNING: exercise.worksheet.hint parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.worksheet.hint" />".  Proceeding with default value.</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="entered-exercise-worksheet-answer">
+    <xsl:choose>
+        <xsl:when test="($exercise.worksheet.answer = 'yes') or
+                        ($exercise.worksheet.answer = 'no')">
+            <xsl:value-of select="$exercise.worksheet.answer" />
+        </xsl:when>
+        <!-- deprecated, but still honored, though with no error-checking, -->
+        <!-- erroneous values will fall into default of replacement switch -->
+        <xsl:when test="($exercise.text.answer = 'yes') or ($exercise.text.answer = 'no')">
+            <xsl:value-of select="$exercise.text.answer" />
+        </xsl:when>
+        <!-- stick with no action by author/publisher -->
+        <xsl:when test="$exercise.worksheet.answer = ''">
+            <xsl:value-of select="$exercise.worksheet.answer" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message >MBX:WARNING: exercise.worksheet.answer parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.worksheet.answer" />".  Proceeding with default value.</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="entered-exercise-worksheet-solution">
+    <xsl:choose>
+        <xsl:when test="($exercise.worksheet.solution = 'yes') or
+                        ($exercise.worksheet.solution = 'no')">
+            <xsl:value-of select="$exercise.worksheet.solution" />
+        </xsl:when>
+        <!-- deprecated, but still honored, though with no error-checking, -->
+        <!-- erroneous values will fall into default of replacement switch -->
+        <xsl:when test="($exercise.text.solution = 'yes') or ($exercise.text.solution = 'no')">
+            <xsl:value-of select="$exercise.text.solution" />
+        </xsl:when>
+        <!-- stick with no action by author/publisher -->
+        <xsl:when test="$exercise.worksheet.solution = ''">
+            <xsl:value-of select="$exercise.worksheet.solution" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message >MBX:WARNING: exercise.worksheet.solution parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.worksheet.solution" />".  Proceeding with default value.</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="entered-exercise-reading-statement">
+    <xsl:choose>
+        <xsl:when test="($exercise.reading.statement = 'yes') or
+                        ($exercise.reading.statement = 'no')">
+            <xsl:value-of select="$exercise.reading.statement" />
+        </xsl:when>
+        <!-- deprecated, but still honored, though with no error-checking, -->
+        <!-- erroneous values will fall into default of replacement switch -->
+        <xsl:when test="($exercise.text.statement = 'yes') or ($exercise.text.statement = 'no')">
+            <xsl:value-of select="$exercise.text.statement" />
+        </xsl:when>
+        <!-- stick with no action by author/publisher -->
+        <xsl:when test="$exercise.reading.statement = ''">
+            <xsl:value-of select="$exercise.reading.statement" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message >MBX:WARNING: exercise.reading.statement parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.reading.statement" />".  Proceeding with default value.</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="entered-exercise-reading-hint">
+    <xsl:choose>
+        <xsl:when test="($exercise.reading.hint = 'yes') or
+                        ($exercise.reading.hint = 'no')">
+            <xsl:value-of select="$exercise.reading.hint" />
+        </xsl:when>
+        <!-- deprecated, but still honored, though with no error-checking, -->
+        <!-- erroneous values will fall into default of replacement switch -->
+        <xsl:when test="($exercise.text.hint = 'yes') or ($exercise.text.hint = 'no')">
+            <xsl:value-of select="$exercise.text.hint" />
+        </xsl:when>
+        <!-- stick with no action by author/publisher -->
+        <xsl:when test="$exercise.reading.hint = ''">
+            <xsl:value-of select="$exercise.reading.hint" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message >MBX:WARNING: exercise.reading.hint parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.reading.hint" />".  Proceeding with default value.</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="entered-exercise-reading-answer">
+    <xsl:choose>
+        <xsl:when test="($exercise.reading.answer = 'yes') or
+                        ($exercise.reading.answer = 'no')">
+            <xsl:value-of select="$exercise.reading.answer" />
+        </xsl:when>
+        <!-- deprecated, but still honored, though with no error-checking, -->
+        <!-- erroneous values will fall into default of replacement switch -->
+        <xsl:when test="($exercise.text.answer = 'yes') or ($exercise.text.answer = 'no')">
+            <xsl:value-of select="$exercise.text.answer" />
+        </xsl:when>
+        <!-- stick with no action by author/publisher -->
+        <xsl:when test="$exercise.reading.answer = ''">
+            <xsl:value-of select="$exercise.reading.answer" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message >MBX:WARNING: exercise.reading.answer parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.reading.answer" />".  Proceeding with default value.</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="entered-exercise-reading-solution">
+    <xsl:choose>
+        <xsl:when test="($exercise.reading.solution = 'yes') or
+                        ($exercise.reading.solution = 'no')">
+            <xsl:value-of select="$exercise.reading.solution" />
+        </xsl:when>
+        <!-- deprecated, but still honored, though with no error-checking, -->
+        <!-- erroneous values will fall into default of replacement switch -->
+        <xsl:when test="($exercise.text.solution = 'yes') or ($exercise.text.solution = 'no')">
+            <xsl:value-of select="$exercise.text.solution" />
+        </xsl:when>
+        <!-- stick with no action by author/publisher -->
+        <xsl:when test="$exercise.reading.solution = ''">
+            <xsl:value-of select="$exercise.reading.solution" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message >MBX:WARNING: exercise.reading.solution parameter should be "yes" or "no", not "<xsl:value-of select="$exercise.reading.solution" />".  Proceeding with default value.</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="entered-project-statement">
+    <xsl:choose>
+        <xsl:when test="($project.statement = 'yes') or
+                        ($project.statement = 'no')">
+            <xsl:value-of select="$project.statement" />
+        </xsl:when>
+        <!-- stick with no action by author/publisher -->
+        <xsl:when test="$project.statement = ''">
+            <xsl:value-of select="$project.statement" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message >MBX:WARNING: project.statement parameter should be "yes" or "no", not "<xsl:value-of select="$project.statement" />".  Proceeding with default value.</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -638,25 +879,46 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- which is to show all components until an author   -->
 <!-- decides to hide them.                             -->
 <!-- These are used in the solution manual conversion  -->
+<xsl:variable name="b-has-inline-statement"
+              select="($entered-exercise-inline-statement = 'yes') or ($entered-exercise-inline-statement = '')" />
 <xsl:variable name="b-has-inline-hint"
               select="($entered-exercise-inline-hint = 'yes') or ($entered-exercise-inline-hint = '')" />
 <xsl:variable name="b-has-inline-answer"
               select="($entered-exercise-inline-answer = 'yes') or ($entered-exercise-inline-answer = '')" />
 <xsl:variable name="b-has-inline-solution"
               select="($entered-exercise-inline-solution = 'yes') or ($entered-exercise-inline-solution = '')" />
+<xsl:variable name="b-has-divisional-statement"
+              select="($entered-exercise-divisional-statement = 'yes') or ($entered-exercise-divisional-statement = '')" />
 <xsl:variable name="b-has-divisional-hint"
               select="($entered-exercise-divisional-hint = 'yes') or ($entered-exercise-divisional-hint = '')" />
 <xsl:variable name="b-has-divisional-answer"
               select="($entered-exercise-divisional-answer = 'yes') or ($entered-exercise-divisional-answer = '')" />
 <xsl:variable name="b-has-divisional-solution"
               select="($entered-exercise-divisional-solution = 'yes') or ($entered-exercise-divisional-solution = '')" />
+<xsl:variable name="b-has-worksheet-statement"
+              select="($entered-exercise-worksheet-statement = 'yes') or ($entered-exercise-worksheet-statement = '')" />
+<xsl:variable name="b-has-worksheet-hint"
+              select="($entered-exercise-worksheet-hint = 'yes') or ($entered-exercise-worksheet-hint = '')" />
+<xsl:variable name="b-has-worksheet-answer"
+              select="($entered-exercise-worksheet-answer = 'yes') or ($entered-exercise-worksheet-answer = '')" />
+<xsl:variable name="b-has-worksheet-solution"
+              select="($entered-exercise-worksheet-solution = 'yes') or ($entered-exercise-worksheet-solution = '')" />
+<xsl:variable name="b-has-reading-statement"
+              select="($entered-exercise-reading-statement = 'yes') or ($entered-exercise-reading-statement = '')" />
+<xsl:variable name="b-has-reading-hint"
+              select="($entered-exercise-reading-hint = 'yes') or ($entered-exercise-reading-hint = '')" />
+<xsl:variable name="b-has-reading-answer"
+              select="($entered-exercise-reading-answer = 'yes') or ($entered-exercise-reading-answer = '')" />
+<xsl:variable name="b-has-reading-solution"
+              select="($entered-exercise-reading-solution = 'yes') or ($entered-exercise-reading-solution = '')" />
+<xsl:variable name="b-has-project-statement"
+              select="($entered-project-statement = 'yes') or ($entered-project-statement = '')" />
 <xsl:variable name="b-has-project-hint"
               select="($entered-project-hint = 'yes') or ($entered-project-hint = '')" />
 <xsl:variable name="b-has-project-answer"
               select="($entered-project-answer = 'yes') or ($entered-project-answer = '')" />
 <xsl:variable name="b-has-project-solution"
               select="($entered-project-solution = 'yes') or ($entered-project-solution = '')" />
-
 
 
 <!-- The main "mathbook" element only has two possible children     -->
