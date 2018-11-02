@@ -2945,17 +2945,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- When born use this heading -->
-<!-- Note match first on inline, override if divisional -->
-<xsl:template match="exercise" mode="heading-birth">
+<!-- Note match first on inline, then divisional -->
+<xsl:template match="exercise[boolean(&INLINE-EXERCISE-FILTER;)]" mode="heading-birth">
     <xsl:apply-templates select="." mode="heading-full" />
 </xsl:template>
 <xsl:template match="exercises//exercise|worksheet//exercise|reading-questions//exercise" mode="heading-birth">
     <xsl:apply-templates select="." mode="heading-divisional-exercise-serial" />
 </xsl:template>
 
-<!-- Heading for interior of xref-knowl content -->
-<!-- Note match first on inline, override if divisional -->
-<xsl:template match="exercise" mode="heading-xref-knowl">
+<!-- Heading for interior of xref-knowl content  -->
+<!-- Note match first on inline, then divisional -->
+<xsl:template match="exercise[boolean(&INLINE-EXERCISE-FILTER;)]" mode="heading-xref-knowl">
     <xsl:apply-templates select="." mode="heading-full" />
 </xsl:template>
 <xsl:template match="exercises//exercise|worksheet//exercise|reading-questions//exercise" mode="heading-xref-knowl">
@@ -2980,26 +2980,46 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- statement plus div of solution knowls                     -->
             <!-- switch on inline vs. divisional (could do this in match?) -->
             <xsl:choose>
+                <!-- inline -->
+                <xsl:when test="boolean(&INLINE-EXERCISE-FILTER;)">
+                    <xsl:apply-templates select="."  mode="exercise-components">
+                        <xsl:with-param name="b-original" select="$b-original" />
+                        <xsl:with-param name="b-has-statement" select="$b-has-inline-statement" />
+                        <xsl:with-param name="b-has-hint"      select="$b-has-inline-hint" />
+                        <xsl:with-param name="b-has-answer"    select="$b-has-inline-answer" />
+                        <xsl:with-param name="b-has-solution"  select="$b-has-inline-solution" />
+                    </xsl:apply-templates>
+                </xsl:when>
                 <!-- divisional -->
                 <xsl:when test="ancestor::exercises">
                     <xsl:apply-templates select="."  mode="exercise-components">
                         <xsl:with-param name="b-original" select="$b-original" />
-                        <xsl:with-param name="b-has-statement" select="true()" />
+                        <xsl:with-param name="b-has-statement" select="$b-has-divisional-statement" />
                         <xsl:with-param name="b-has-hint"      select="$b-has-divisional-hint" />
                         <xsl:with-param name="b-has-answer"    select="$b-has-divisional-answer" />
                         <xsl:with-param name="b-has-solution"  select="$b-has-divisional-solution" />
                     </xsl:apply-templates>
                 </xsl:when>
-                <!-- inline -->
-                <xsl:otherwise>
+                <!-- worksheet -->
+                <xsl:when test="ancestor::worksheet">
                     <xsl:apply-templates select="."  mode="exercise-components">
                         <xsl:with-param name="b-original" select="$b-original" />
-                        <xsl:with-param name="b-has-statement" select="true()" />
-                        <xsl:with-param name="b-has-hint"      select="$b-has-inline-hint" />
-                        <xsl:with-param name="b-has-answer"    select="$b-has-inline-answer" />
-                        <xsl:with-param name="b-has-solution"  select="$b-has-inline-solution" />
+                        <xsl:with-param name="b-has-statement" select="$b-has-worksheet-statement" />
+                        <xsl:with-param name="b-has-hint"      select="$b-has-worksheet-hint" />
+                        <xsl:with-param name="b-has-answer"    select="$b-has-worksheet-answer" />
+                        <xsl:with-param name="b-has-solution"  select="$b-has-worksheet-solution" />
                     </xsl:apply-templates>
-                </xsl:otherwise>
+                </xsl:when>
+                <!-- reading -->
+                <xsl:when test="ancestor::reading-questions">
+                    <xsl:apply-templates select="."  mode="exercise-components">
+                        <xsl:with-param name="b-original" select="$b-original" />
+                        <xsl:with-param name="b-has-statement" select="$b-has-reading-statement" />
+                        <xsl:with-param name="b-has-hint"      select="$b-has-reading-hint" />
+                        <xsl:with-param name="b-has-answer"    select="$b-has-reading-answer" />
+                        <xsl:with-param name="b-has-solution"  select="$b-has-reading-solution" />
+                    </xsl:apply-templates>
+                </xsl:when>
             </xsl:choose>
         </xsl:when>
         <!-- webwork case -->
