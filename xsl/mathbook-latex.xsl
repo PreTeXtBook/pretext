@@ -685,8 +685,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         ($document-root//subsection/glossary)[1]|
         ($document-root//subsubsection/glossary)[1]|
         ($root/book/backmatter/references)[1]|
-        ($document-root//chapter/references|$root/article/backmatter/references)[1]|
-        ($document-root//section/references)[1]|
+        ($document-root//chapter/references|$root/article/backmatter/references|$root/book/backmatter/appendix/references)[1]|
+        ($document-root//section/references|$root/article/backmatter/appendix/references)[1]|
         ($document-root//subsection/references)[1]|
         ($document-root//subsubsection/references)[1]"/>
     <xsl:text>%% Create environments for possible occurences of each division&#xa;</xsl:text>
