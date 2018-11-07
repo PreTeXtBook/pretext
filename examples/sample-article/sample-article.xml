@@ -993,9 +993,7 @@ the xsltproc executable.
                     </exercise>
 
                     <exercise>
-                        <statement>
-                            <p>And a second one, with a cross-reference to the first, as a check on numbering: <xref ref="first-reading" text="type-global"/>.</p>
-                        </statement>
+                        <p>And a second one, with a cross-reference to the first, as a check on numbering: <xref ref="first-reading" text="type-global"/>.</p>
                     </exercise>
 
                     <conclusion>
@@ -3947,9 +3945,7 @@ the xsltproc executable.
                 </figure>
 
                 <exercise>
-                    <statement>
-                        <p>The interactive in <xref ref="figure-simple-eigenvector" text="type-global" /> shows a vector <m>\vec{x}</m> in red, and the matrix-vector product <m>A\vec{x}</m> in grey, for a particular <m>2\times 2</m> matrix <m>A</m>.  The four entries of the matrix <m>A</m> are coded into the interactive.  Can you deduce <m>A</m> simply by using the interactive?  Which theorem is the key?</p>
-                    </statement>
+                    <p>The interactive in <xref ref="figure-simple-eigenvector" text="type-global" /> shows a vector <m>\vec{x}</m> in red, and the matrix-vector product <m>A\vec{x}</m> in grey, for a particular <m>2\times 2</m> matrix <m>A</m>.  The four entries of the matrix <m>A</m> are coded into the interactive.  Can you deduce <m>A</m> simply by using the interactive?  Which theorem is the key?</p>
                 </exercise>
 
                 <figure xml:id="figure-eigenvectors">
@@ -7528,9 +7524,7 @@ the xsltproc executable.
                 </exercise>
               </sidebyside>
               <exercise workspace="5%">
-                <statement>
-                  <p>If you have time, try to devise a vector proof of Euclid's result presented at the beginning of the workshop. Recall that a <term>parallelogram</term> is a four-sided polygon whose opposite sides are parallel.</p>
-                </statement>
+                <p>If you have time, try to devise a vector proof of Euclid's result presented at the beginning of the workshop. Recall that a <term>parallelogram</term> is a four-sided polygon whose opposite sides are parallel.</p>
               </exercise>
               <conclusion>
                 <title>Wrap-up</title>
@@ -7877,9 +7871,7 @@ the xsltproc executable.
 
             <exercise xml:id="duplicate-inline">
                 <title>Inline Two</title>
-                <statement>
-                    <p>Ut porttitor neque a pharetra euismod. Vivamus ut metus pretium, placerat massa tempor, condimentum metus. Phasellus vestibulum iaculis turpis non posuere. Vestibulum quis aliquet neque. Donec nec metus iaculis, laoreet massa vitae, suscipit tellus. Etiam et ultrices quam, quis pretium ligula. In ut cursus metus. Aenean volutpat quam odio, quis tempus dolor egestas eget. Nunc fringilla lobortis nunc, ut interdum lorem posuere sed. Sed sodales risus a laoreet venenatis. Nunc sodales tempor mollis. Nam sollicitudin velit sed ex viverra feugiat. Nunc consectetur mi vitae urna sollicitudin malesuada. Fusce eget risus lectus. Mauris augue velit, vestibulum vitae tempus sit amet, porttitor eget turpis.</p>
-                </statement>
+                <p>Ut porttitor neque a pharetra euismod. Vivamus ut metus pretium, placerat massa tempor, condimentum metus. Phasellus vestibulum iaculis turpis non posuere. Vestibulum quis aliquet neque. Donec nec metus iaculis, laoreet massa vitae, suscipit tellus. Etiam et ultrices quam, quis pretium ligula. In ut cursus metus. Aenean volutpat quam odio, quis tempus dolor egestas eget. Nunc fringilla lobortis nunc, ut interdum lorem posuere sed. Sed sodales risus a laoreet venenatis. Nunc sodales tempor mollis. Nam sollicitudin velit sed ex viverra feugiat. Nunc consectetur mi vitae urna sollicitudin malesuada. Fusce eget risus lectus. Mauris augue velit, vestibulum vitae tempus sit amet, porttitor eget turpis.</p>
             </exercise>
 
             <theorem>
