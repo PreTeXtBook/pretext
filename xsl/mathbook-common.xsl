@@ -115,6 +115,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--                                                       -->
 <!-- Default is "yes" for every part, so experiment        -->
 <!-- with parameters to make some parts hidden.            -->
+<!--                                                       -->
+<!-- These are global switches, so only need to be fed     -->
+<!-- into the construction of exercises via the            -->
+<!-- "exercise-components" template.                       -->
+<!-- N.B. "statement" switches are necessary or desirable  -->
+<!-- for alternate collections of solutions (only)         -->
 <xsl:param name="exercise.inline.statement" select="''" />
 <xsl:param name="exercise.inline.hint" select="''" />
 <xsl:param name="exercise.inline.answer" select="''" />
@@ -452,12 +458,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Exercise component switches -->
 <!-- ########################### -->
 
-<!-- We santitize exercise component switches.  These control    -->
-<!-- text/narrative appearances *only*, solution lists in the    -->
-<!-- backmatter are given in alternate ways.  We only do quality -->
-<!-- control here first.  The "*.text.*" forms are deprecated    -->
-<!-- with warnings elsewhere.                                    -->
-
+<!-- We santitize exercise component switches.  These control -->
+<!-- text/narrative appearances *only*, solution lists in the -->
+<!-- backmatter are given in alternate ways.  However, an     -->
+<!-- alternate conversion (such as an Instructor's Guide) may -->
+<!-- use these as well. We only do quality control here       -->
+<!-- first. The "*.text.*" forms are deprecated with warnings -->
+<!-- elsewhere, but we try to preserve their intent here.     -->
 <xsl:variable name="entered-exercise-inline-statement">
     <xsl:choose>
         <xsl:when test="($exercise.inline.statement = 'yes') or

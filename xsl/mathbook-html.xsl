@@ -130,16 +130,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="html.knowl.exercise.readingquestion" select="'no'" />
 <!-- html.knowl.example.solution: always "yes", could be implemented -->
 
-<!-- (2018-05-16) These are 100% temporary, to recover from -common edits to support changes in LaTeX for exercises, etc.  Once we mirror that work for HTML, these will be surplus and will go way.  So avert your eyes -->
-<xsl:param name="exercise.text.hint" select="'yes'" />
-<xsl:param name="exercise.text.answer" select="'yes'" />
-<xsl:param name="exercise.text.solution" select="'yes'" />
-<xsl:param name="project.text.statement" select="'yes'" /> <!-- not implemented -->
-<xsl:param name="project.text.hint" select="'yes'" />
-<xsl:param name="project.text.answer" select="'yes'" />
-<xsl:param name="project.text.solution" select="'yes'" />
-<xsl:param name="task.text.statement" select="'yes'" /> <!-- not implemented -->
-
 <!-- CSS and Javascript Servers -->
 <!-- We allow processing paramteers to specify new servers   -->
 <!-- or to specify the particular CSS file, which may have   -->
@@ -2972,7 +2962,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="boolean(&INLINE-EXERCISE-FILTER;)">
             <xsl:apply-templates select="."  mode="exercise-components">
                 <xsl:with-param name="b-original" select="$b-original" />
-                <xsl:with-param name="b-has-statement" select="$b-has-inline-statement" />
+                <xsl:with-param name="b-has-statement" select="true()" />
                 <xsl:with-param name="b-has-hint"      select="$b-has-inline-hint" />
                 <xsl:with-param name="b-has-answer"    select="$b-has-inline-answer" />
                 <xsl:with-param name="b-has-solution"  select="$b-has-inline-solution" />
@@ -2982,7 +2972,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="ancestor::exercises">
             <xsl:apply-templates select="."  mode="exercise-components">
                 <xsl:with-param name="b-original" select="$b-original" />
-                <xsl:with-param name="b-has-statement" select="$b-has-divisional-statement" />
+                <xsl:with-param name="b-has-statement" select="true()" />
                 <xsl:with-param name="b-has-hint"      select="$b-has-divisional-hint" />
                 <xsl:with-param name="b-has-answer"    select="$b-has-divisional-answer" />
                 <xsl:with-param name="b-has-solution"  select="$b-has-divisional-solution" />
@@ -2992,7 +2982,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="ancestor::worksheet">
             <xsl:apply-templates select="."  mode="exercise-components">
                 <xsl:with-param name="b-original" select="$b-original" />
-                <xsl:with-param name="b-has-statement" select="$b-has-worksheet-statement" />
+                <xsl:with-param name="b-has-statement" select="true()" />
                 <xsl:with-param name="b-has-hint"      select="$b-has-worksheet-hint" />
                 <xsl:with-param name="b-has-answer"    select="$b-has-worksheet-answer" />
                 <xsl:with-param name="b-has-solution"  select="$b-has-worksheet-solution" />
@@ -3002,7 +2992,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="ancestor::reading-questions">
             <xsl:apply-templates select="."  mode="exercise-components">
                 <xsl:with-param name="b-original" select="$b-original" />
-                <xsl:with-param name="b-has-statement" select="$b-has-reading-statement" />
+                <xsl:with-param name="b-has-statement" select="true()" />
                 <xsl:with-param name="b-has-hint"      select="$b-has-reading-hint" />
                 <xsl:with-param name="b-has-answer"    select="$b-has-reading-answer" />
                 <xsl:with-param name="b-has-solution"  select="$b-has-reading-solution" />
@@ -3104,7 +3094,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:otherwise>
             <xsl:apply-templates select="."  mode="exercise-components">
                 <xsl:with-param name="b-original" select="$b-original" />
-                <xsl:with-param name="b-has-statement" select="$b-has-project-statement" />
+                <xsl:with-param name="b-has-statement" select="true()" />
                 <xsl:with-param name="b-has-hint"      select="$b-has-project-hint" />
                 <xsl:with-param name="b-has-answer"    select="$b-has-project-answer" />
                 <xsl:with-param name="b-has-solution"  select="$b-has-project-solution" />
@@ -3219,7 +3209,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:otherwise>
             <xsl:apply-templates select="."  mode="exercise-components">
                 <xsl:with-param name="b-original" select="$b-original" />
-                <xsl:with-param name="b-has-statement" select="$b-has-project-statement" />
+                <xsl:with-param name="b-has-statement" select="true()" />
                 <xsl:with-param name="b-has-hint"      select="$b-has-project-hint" />
                 <xsl:with-param name="b-has-answer"    select="$b-has-project-answer" />
                 <xsl:with-param name="b-has-solution"  select="$b-has-project-solution" />
@@ -7910,7 +7900,7 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
             <!-- static, usual HTML treatment -->
             <xsl:apply-templates select="static" mode="exercise-components">
                 <xsl:with-param name="b-original" select="$b-original"/>
-                <xsl:with-param name="b-has-statement" select="$b-has-divisional-statement"/>
+                <xsl:with-param name="b-has-statement" select="true()"/>
                 <xsl:with-param name="b-has-hint"      select="$b-has-divisional-hint"/>
                 <xsl:with-param name="b-has-answer"    select="$b-has-divisional-answer"/>
                 <xsl:with-param name="b-has-solution"  select="$b-has-divisional-solution"/>
@@ -7933,7 +7923,7 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
             <!-- static, usual HTML treatment -->
             <xsl:apply-templates select="static" mode="exercise-components">
                 <xsl:with-param name="b-original" select="$b-original"/>
-                <xsl:with-param name="b-has-statement" select="$b-has-reading-statement"/>
+                <xsl:with-param name="b-has-statement" select="true()"/>
                 <xsl:with-param name="b-has-hint"      select="$b-has-reading-hint"/>
                 <xsl:with-param name="b-has-answer"    select="$b-has-reading-answer"/>
                 <xsl:with-param name="b-has-solution"  select="$b-has-reading-solution"/>
@@ -7956,7 +7946,7 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
             <!-- static, usual HTML treatment -->
             <xsl:apply-templates select="static" mode="exercise-components">
                 <xsl:with-param name="b-original" select="$b-original"/>
-                <xsl:with-param name="b-has-statement" select="$b-has-worksheet-statement"/>
+                <xsl:with-param name="b-has-statement" select="true()"/>
                 <xsl:with-param name="b-has-hint"      select="$b-has-worksheet-hint"/>
                 <xsl:with-param name="b-has-answer"    select="$b-has-worksheet-answer"/>
                 <xsl:with-param name="b-has-solution"  select="$b-has-worksheet-solution"/>
@@ -7982,7 +7972,7 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
             <!-- static, usual HTML treatment -->
             <xsl:apply-templates select="static" mode="exercise-components">
                 <xsl:with-param name="b-original" select="$b-original"/>
-                <xsl:with-param name="b-has-statement" select="$b-has-inline-statement"/>
+                <xsl:with-param name="b-has-statement" select="true()"/>
                 <xsl:with-param name="b-has-hint"      select="$b-has-inline-hint"/>
                 <xsl:with-param name="b-has-answer"    select="$b-has-inline-answer"/>
                 <xsl:with-param name="b-has-solution"  select="$b-has-inline-solution"/>
