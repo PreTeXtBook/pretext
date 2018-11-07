@@ -4396,12 +4396,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="b-has-solution"  select="$b-has-inline-solution" />
             </xsl:apply-templates>
         </xsl:when>
-        <!-- "normal" exercise, unstructured -->
-        <xsl:when test="not(statement)">
-            <!-- eventually pass b-original? -->
-            <xsl:apply-templates select="*" />
-        </xsl:when>
-        <!-- "normal" exercise, structured -->
+        <!-- "normal" exercise -->
         <xsl:otherwise>
             <xsl:apply-templates select="." mode="exercise-components">
                 <xsl:with-param name="b-original" select="true()" />
@@ -4513,16 +4508,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
                 </xsl:apply-templates>
             </xsl:when>
-            <!-- "normal" exercise, unstructured -->
-            <xsl:when test="not(statement)">
-                <!-- not structured and statements turned off   -->
-                <!-- means dry-run is empty, but we test anyway -->
-                <xsl:if test="$b-has-statement">
-                    <!-- eventually pass b-original? -->
-                    <xsl:apply-templates select="*" />
-                </xsl:if>
-            </xsl:when>
-            <!-- "normal" exercise, structured -->
+            <!-- "normal" exercise -->
             <xsl:otherwise>
                 <xsl:apply-templates select="." mode="exercise-components">
                     <xsl:with-param name="b-original" select="$b-original" />
@@ -4658,12 +4644,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
             </xsl:apply-templates>
         </xsl:when>
-        <!-- "normal" exercise, unstructured -->
-        <xsl:when test="not(statement)">
-            <!-- eventually pass b-original? -->
-            <xsl:apply-templates select="*" />
-        </xsl:when>
-        <!-- "normal" exercise, structured -->
+        <!-- "normal" exercise -->
         <xsl:otherwise>
             <xsl:apply-templates select="." mode="exercise-components">
                 <xsl:with-param name="b-original" select="true()" />
@@ -4791,16 +4772,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
                 </xsl:apply-templates>
             </xsl:when>
-            <!-- "normal" exercise, unstructured -->
-            <xsl:when test="not(statement)">
-                <!-- not structured and statements turned off   -->
-                <!-- means dry-run is empty, but we test anyway -->
-                <xsl:if test="$b-has-statement">
-                    <!-- eventually pass b-original? -->
-                    <xsl:apply-templates select="*" />
-                </xsl:if>
-            </xsl:when>
-            <!-- "normal" exercise, structured -->
+            <!-- "normal" exercise -->
             <xsl:otherwise>
                 <xsl:apply-templates select="." mode="exercise-components">
                     <xsl:with-param name="b-original" select="false()" />
@@ -4835,39 +4807,53 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "answer", "solution".  For re-use in solution lists and          -->
 <!-- solutions manuals, we also interpret "statement" as a component. -->
 
-<xsl:template match="exercise|webwork-reps/static|webwork-reps/static/stage|myopenmath|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task" mode="exercise-components">
+<xsl:template match="exercise|webwork-reps/static|webwork-reps/static/stage|myopenmath|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task" mode="exercise-components">
     <xsl:param name="b-original" />
     <xsl:param name="b-has-statement" />
     <xsl:param name="b-has-hint" />
     <xsl:param name="b-has-answer"  />
     <xsl:param name="b-has-solution"  />
 
-    <xsl:if test="$b-has-statement">
-        <xsl:apply-templates select="statement">
-            <xsl:with-param name="b-original" select="$b-original" />
-        </xsl:apply-templates>
-        <xsl:if test="(hint and $b-has-hint) or (answer and $b-has-answer) or (solution and $b-has-solution)">
-            <xsl:call-template name="exercise-component-separator" />
-        </xsl:if>
-    </xsl:if>
-    <xsl:if test="$b-has-hint">
-        <xsl:apply-templates select="hint">
-            <xsl:with-param name="b-original" select="$b-original" />
-            <xsl:with-param name="b-has-answer" select="$b-has-answer" />
-            <xsl:with-param name="b-has-solution" select="$b-has-solution" />
-        </xsl:apply-templates>
-    </xsl:if>
-    <xsl:if test="$b-has-answer">
-        <xsl:apply-templates select="answer">
-            <xsl:with-param name="b-original" select="$b-original" />
-            <xsl:with-param name="b-has-solution" select="$b-has-solution" />
-        </xsl:apply-templates>
-    </xsl:if>
-    <xsl:if test="$b-has-solution">
-        <xsl:apply-templates select="solution">
-            <xsl:with-param name="b-original" select="$b-original" />
-        </xsl:apply-templates>
-    </xsl:if>
+    <!-- structured (with components) versus unstructured (simply a bare statement) -->
+    <xsl:choose>
+        <xsl:when test="statement">
+            <xsl:if test="$b-has-statement">
+                <xsl:apply-templates select="statement">
+                    <xsl:with-param name="b-original" select="$b-original" />
+                </xsl:apply-templates>
+                <xsl:if test="(hint and $b-has-hint) or (answer and $b-has-answer) or (solution and $b-has-solution)">
+                    <xsl:call-template name="exercise-component-separator" />
+                </xsl:if>
+            </xsl:if>
+            <xsl:if test="$b-has-hint">
+                <xsl:apply-templates select="hint">
+                    <xsl:with-param name="b-original" select="$b-original" />
+                    <xsl:with-param name="b-has-answer" select="$b-has-answer" />
+                    <xsl:with-param name="b-has-solution" select="$b-has-solution" />
+                </xsl:apply-templates>
+            </xsl:if>
+            <xsl:if test="$b-has-answer">
+                <xsl:apply-templates select="answer">
+                    <xsl:with-param name="b-original" select="$b-original" />
+                    <xsl:with-param name="b-has-solution" select="$b-has-solution" />
+                </xsl:apply-templates>
+            </xsl:if>
+            <xsl:if test="$b-has-solution">
+                <xsl:apply-templates select="solution">
+                    <xsl:with-param name="b-original" select="$b-original" />
+                </xsl:apply-templates>
+            </xsl:if>
+        </xsl:when>
+        <xsl:otherwise>
+            <!-- no explicit "statement", so all content is the statement -->
+            <xsl:if test="$b-has-statement">
+                <xsl:apply-templates select="*">
+                    <xsl:with-param name="b-original" select="$b-original" />
+                </xsl:apply-templates>
+                <!-- no separator, since no trailing components -->
+            </xsl:if>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <xsl:template match="hint">
@@ -5226,7 +5212,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- are essential, not like exercises or projects.   -->
         <!-- NB: template is not parameterized at all         -->
         <!-- prelude?, statement, hint*, answer*, solution*, postlude? -->
-        <xsl:when test="statement and (self::example or self::question or self::problem)">
+        <xsl:when test="&EXAMPLE-FILTER;">
             <xsl:apply-templates select="." mode="exercise-components">
                 <xsl:with-param name="b-original" select="true()" />
                 <xsl:with-param name="b-has-statement" select="true()" />
@@ -5235,12 +5221,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="b-has-solution" select="true()" />
             </xsl:apply-templates>
         </xsl:when>
-        <!-- Potential common mistake, no statement, and so no content results -->
-        <xsl:when test="prelude|hint|answer|solution|postlude">
-            <xsl:message>MBX:WARNING: a &lt;prelude&gt;, &lt;hint&gt;, &lt;answer&gt;, &lt;solution&gt;, or &lt;postlude&gt; in a definition-like, remark-like, computation-like, or example-like block will need to also be structured with a &lt;statement&gt;.  Content will be missing from output.</xsl:message>
-            <xsl:apply-templates select="." mode="location-report" />
-        </xsl:when>
-        <!-- unstructured, or just a simple "statement"   -->
+        <!-- unstructured, just a bare statement          -->
         <!-- no need to avoid dangerous misunderstandings -->
         <xsl:otherwise>
             <xsl:apply-templates select="*"/>
@@ -5285,9 +5266,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:apply-templates>
             <xsl:apply-templates select="conclusion"/>
         </xsl:when>
-        <!-- Now no project/task possibility -->
-        <!-- prelude?, statement, hint*, answer*, solution*, postlude? -->
-        <xsl:when test="statement">
+        <xsl:otherwise>
             <xsl:apply-templates select="." mode="exercise-components">
                 <xsl:with-param name="b-original" select="true()" />
                 <xsl:with-param name="b-has-statement" select="true()" />
@@ -5295,15 +5274,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="b-has-answer"    select="$b-has-project-answer" />
                 <xsl:with-param name="b-has-solution"  select="$b-has-project-solution" />
             </xsl:apply-templates>
-        </xsl:when>
-        <!-- Potential common mistake, no statement, and so no content results -->
-        <xsl:when test="hint|answer|solution">
-            <xsl:message>MBX:WARNING: a &lt;hint&gt;, &lt;answer&gt;, or &lt;solution&gt; in a project-like block will need to also be structured with a &lt;statement&gt;.  Content will be missing from output.</xsl:message>
-            <xsl:apply-templates select="." mode="location-report" />
-        </xsl:when>
-        <!-- unstructured, no need to avoid dangerous misunderstandings -->
-        <xsl:otherwise>
-            <xsl:apply-templates select="*"/>
         </xsl:otherwise>
     </xsl:choose>
     <xsl:text>\end{</xsl:text>
@@ -5374,8 +5344,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:if>
             </xsl:when>
             <!-- Now no project/task possibility -->
-            <!-- prelude?, statement, hint*, answer*, solution*, postlude? -->
-            <xsl:when test="statement">
+            <xsl:otherwise>
                 <xsl:apply-templates select="." mode="exercise-components">
                     <xsl:with-param name="b-original" select="false()" />
                     <xsl:with-param name="b-has-statement" select="$b-has-statement" />
@@ -5383,20 +5352,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:with-param name="b-has-answer" select="$b-has-answer" />
                     <xsl:with-param name="b-has-solution" select="$b-has-solution" />
                 </xsl:apply-templates>
-            </xsl:when>
-            <!-- Potential common mistake, no statement, and so no content results -->
-            <xsl:when test="hint|answer|solution">
-                <xsl:message>MBX:WARNING: a &lt;hint&gt;, &lt;answer&gt;, or &lt;solution&gt; in a project-like block will need to also be structured with a &lt;statement&gt;.  Content will be missing from output.</xsl:message>
-                <xsl:apply-templates select="." mode="location-report" />
-            </xsl:when>
-            <!-- unstructured, no need to avoid dangerous misunderstandings -->
-            <xsl:otherwise>
-                <!-- not structured and statements turned off   -->
-                <!-- means dry-run is empty, but we test anyway -->
-                <xsl:if test="$b-has-statement">
-                    <!-- eventually pass b-original? -->
-                    <xsl:apply-templates select="*" />
-                </xsl:if>
             </xsl:otherwise>
         </xsl:choose>
         <xsl:text>\end{</xsl:text>
@@ -5438,14 +5393,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text> </xsl:text>
     <!-- more structured versions first -->
     <xsl:choose>
-        <!-- introduction?, task+, conclusion? -->
         <xsl:when test="task">
             <xsl:apply-templates select="introduction"/>
             <xsl:apply-templates select="task" />
             <xsl:apply-templates select="conclusion"/>
         </xsl:when>
-        <!-- statement, hint*, answer*, solution* -->
-        <xsl:when test="statement">
+        <xsl:otherwise>
             <xsl:apply-templates select="." mode="exercise-components">
                 <xsl:with-param name="b-original" select="true()" />
                 <xsl:with-param name="b-has-statement" select="true()" />
@@ -5453,10 +5406,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="b-has-answer" select="$b-has-project-answer" />
                 <xsl:with-param name="b-has-solution" select="$b-has-project-solution" />
             </xsl:apply-templates>
-        </xsl:when>
-        <!-- unstructured -->
-        <xsl:otherwise>
-            <xsl:apply-templates select="*" />
         </xsl:otherwise>
     </xsl:choose>
     <!-- if last at its level, end the list environment -->
@@ -5545,23 +5494,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:apply-templates select="conclusion"/>
                 </xsl:if>
             </xsl:when>
-            <!-- statement, hint*, answer*, solution* -->
-            <xsl:when test="statement">
+            <xsl:otherwise>
                 <xsl:apply-templates select="." mode="exercise-components">
                     <xsl:with-param name="b-has-statement" select="$b-has-statement" />
                     <xsl:with-param name="b-has-hint" select="$b-has-hint" />
                     <xsl:with-param name="b-has-answer" select="$b-has-answer" />
                     <xsl:with-param name="b-has-solution" select="$b-has-solution" />
                 </xsl:apply-templates>
-            </xsl:when>
-            <!-- unstructured -->
-            <xsl:otherwise>
-                <!-- not structured and statements turned off   -->
-                <!-- means dry-run is empty, but we test anyway -->
-                <xsl:if test="$b-has-statement">
-                    <!-- eventually pass b-original? -->
-                    <xsl:apply-templates select="*" />
-                </xsl:if>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:if>
