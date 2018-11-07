@@ -680,8 +680,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         ($document-root//subsection/reading-questions)[1]|
         ($document-root//subsubsection/reading-questions)[1]|
         ($root/book/backmatter/glossary)[1]|
-        ($document-root//chapter/glossary|$root/article/backmatter/glossary)[1]|
-        ($document-root//section/glossary)[1]|
+        ($document-root//chapter/glossary|$root/article/backmatter/glossary|$root/book/backmatter/appendix/glossary)[1]|
+        ($document-root//section/glossary|$root/article/backmatter/appendix/glossary)[1]|
         ($document-root//subsection/glossary)[1]|
         ($document-root//subsubsection/glossary)[1]|
         ($root/book/backmatter/references)[1]|
