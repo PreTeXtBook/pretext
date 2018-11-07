@@ -88,6 +88,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- do not apply. Whether static is "yes" or "no" doesn't matter.       -->
 <xsl:param name="webwork.inline.static" select="'no'" />
 <xsl:param name="webwork.divisional.static" select="'yes'" />
+<xsl:param name="webwork.reading.static" select="'yes'" />
+<xsl:param name="webwork.worksheet.static" select="'yes'" />
 
 <!-- Content as Knowls -->
 <!-- These parameters control if content is      -->
@@ -3327,7 +3329,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:apply-templates>
 </xsl:template>
 
-<xsl:template match="exercise|&PROJECT-LIKE;|task|&EXAMPLE-LIKE;" mode="exercise-components">
+<xsl:template match="exercise|&PROJECT-LIKE;|task|&EXAMPLE-LIKE;|webwork-reps/static" mode="exercise-components">
     <xsl:param name="b-original" />
     <xsl:param name="b-has-statement" />
     <xsl:param name="b-has-hint" />
@@ -7901,70 +7903,127 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
 <!-- The guts of a WeBWorK problem realized in HTML -->
 <!-- This is heart of an external knowl version, or -->
 <!-- what is born visible under control of a switch -->
-<!-- NB: Context is not "exercise", so do not       -->
-<!-- use "boolean(&INLINE-EXERCISE-FILTER;)"        -->
-<xsl:template match="webwork-reps">
-    <xsl:param name="b-original" select="true()" />
+<xsl:template match="webwork-reps[ancestor::exercises]">
+    <xsl:param name="b-original" select="true()"/>
     <xsl:choose>
-        <xsl:when test="(ancestor::exercises and $webwork.divisional.static='yes') or (not(ancestor::exercises or ancestor::worksheet or ancestor::reading-questions) and $webwork.inline.static='yes') ">
-            <xsl:apply-templates select="static">
-                <xsl:with-param name="b-original" select="$b-original" />
+        <xsl:when test="$webwork.divisional.static = 'yes'">
+            <!-- static, usual HTML treatment -->
+            <xsl:apply-templates select="static" mode="exercise-components">
+                <xsl:with-param name="b-original" select="$b-original"/>
+                <xsl:with-param name="b-has-statement" select="$b-has-divisional-statement"/>
+                <xsl:with-param name="b-has-hint"      select="$b-has-divisional-hint"/>
+                <xsl:with-param name="b-has-answer"    select="$b-has-divisional-answer"/>
+                <xsl:with-param name="b-has-solution"  select="$b-has-divisional-solution"/>
             </xsl:apply-templates>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:choose>
-                <xsl:when test="not(ancestor::exercises or ancestor::worksheet or ancestor::reading-questions) or ($exercise.text.hint = 'yes' and $exercise.text.solution = 'yes')">
-                    <xsl:apply-templates select="server-url[@hint='yes' and @solution='yes']" mode="body"/>
-                </xsl:when>
-                <xsl:when test="$exercise.text.hint = 'yes' and $exercise.text.solution = 'no'">
-                    <xsl:apply-templates select="server-url[@hint='yes' and @solution='no']" mode="body"/>
-                </xsl:when>
-                <xsl:when test="$exercise.text.hint = 'no' and $exercise.text.solution = 'yes'">
-                    <xsl:apply-templates select="server-url[@hint='no' and @solution='yes']" mode="body"/>
-                </xsl:when>
-                <xsl:when test="$exercise.text.hint = 'no' and $exercise.text.solution = 'no'">
-                    <xsl:apply-templates select="server-url[@hint='no' and @solution='no']" mode="body"/>
-                </xsl:when>
-            </xsl:choose>
+            <!-- dynamic, iframe -->
+            <xsl:apply-templates select="." mode="webwork-iframe">
+                <xsl:with-param name="b-has-hint"     select="$b-has-divisional-hint"/>
+                <xsl:with-param name="b-has-solution" select="$b-has-divisional-solution"/>
+            </xsl:apply-templates>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 
-<xsl:template match="webwork-reps/static">
-    <xsl:param name="b-original" select="true()" />
-    <xsl:if test="$exercise.text.statement='yes'">
-        <xsl:apply-templates select="statement">
-            <xsl:with-param name="b-original" select="$b-original" />
-        </xsl:apply-templates>
-    </xsl:if>
-    <xsl:if test="(hint and (not(ancestor::exercises or ancestor::worksheet or ancestor::reading-questions) or $exercise.text.hint='yes')) or (solution and (not(ancestor::exercises or ancestor::worksheet or ancestor::reading-questions) or $exercise.text.solution='yes'))">
-        <div class="solutions">
-            <xsl:if test="not(ancestor::exercises or ancestor::worksheet or ancestor::reading-questions) or $exercise.text.hint='yes'">
-                <xsl:apply-templates select="hint">
-                    <xsl:with-param name="b-original" select="$b-original" />
-                </xsl:apply-templates>
-            </xsl:if>
-            <xsl:if test="not(ancestor::exercises or ancestor::worksheet or ancestor::reading-questions) or $exercise.text.solution='yes'">
-                <xsl:apply-templates select="solution">
-                    <xsl:with-param name="b-original" select="$b-original" />
-                </xsl:apply-templates>
-            </xsl:if>
-        </div>
-    </xsl:if>
+<xsl:template match="webwork-reps[ancestor::reading-questions]">
+    <xsl:param name="b-original" select="true()"/>
+    <xsl:choose>
+        <xsl:when test="$webwork.reading.static = 'yes'">
+            <!-- static, usual HTML treatment -->
+            <xsl:apply-templates select="static" mode="exercise-components">
+                <xsl:with-param name="b-original" select="$b-original"/>
+                <xsl:with-param name="b-has-statement" select="$b-has-reading-statement"/>
+                <xsl:with-param name="b-has-hint"      select="$b-has-reading-hint"/>
+                <xsl:with-param name="b-has-answer"    select="$b-has-reading-answer"/>
+                <xsl:with-param name="b-has-solution"  select="$b-has-reading-solution"/>
+            </xsl:apply-templates>
+        </xsl:when>
+        <xsl:otherwise>
+            <!-- dynamic, iframe -->
+            <xsl:apply-templates select="." mode="webwork-iframe">
+                <xsl:with-param name="b-has-hint"     select="$b-has-reading-hint"/>
+                <xsl:with-param name="b-has-solution" select="$b-has-reading-solution"/>
+            </xsl:apply-templates>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
-<xsl:template match="server-url" mode="body">
-    <xsl:element name="iframe">
-        <xsl:attribute name="width">100%</xsl:attribute>
-        <xsl:attribute name="src">
-            <xsl:apply-templates select="."/>
-        </xsl:attribute>
-        <!-- unclear what this does, mimicking Mike's blog post -->
-        <xsl:if test="not(. = '')">
-            <xsl:attribute name="base64"><xsl:text>1</xsl:text></xsl:attribute>
-            <xsl:attribute name="uri"><xsl:text>1</xsl:text></xsl:attribute>
-        </xsl:if>
-    </xsl:element> <!-- end iframe -->
+<xsl:template match="webwork-reps[ancestor::worksheet]">
+    <xsl:param name="b-original" select="true()"/>
+    <xsl:choose>
+        <xsl:when test="$webwork.worksheet.static = 'yes'">
+            <!-- static, usual HTML treatment -->
+            <xsl:apply-templates select="static" mode="exercise-components">
+                <xsl:with-param name="b-original" select="$b-original"/>
+                <xsl:with-param name="b-has-statement" select="$b-has-worksheet-statement"/>
+                <xsl:with-param name="b-has-hint"      select="$b-has-worksheet-hint"/>
+                <xsl:with-param name="b-has-answer"    select="$b-has-worksheet-answer"/>
+                <xsl:with-param name="b-has-solution"  select="$b-has-worksheet-solution"/>
+            </xsl:apply-templates>
+        </xsl:when>
+        <xsl:otherwise>
+            <!-- dynamic, iframe -->
+            <xsl:apply-templates select="." mode="webwork-iframe">
+                <xsl:with-param name="b-has-hint"     select="$b-has-worksheet-hint"/>
+                <xsl:with-param name="b-has-solution" select="$b-has-worksheet-solution"/>
+            </xsl:apply-templates>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- NB: Context is not "exercise", so do not -->
+<!-- use "boolean(&INLINE-EXERCISE-FILTER;)"  -->
+<!-- Maybe when webwork-reps is removed?      -->
+<xsl:template match="webwork-reps[not(ancestor::exercises or ancestor::reading-questions or ancestor::worksheet)]">
+    <xsl:param name="b-original" select="true()"/>
+    <xsl:choose>
+        <xsl:when test="$webwork.inline.static = 'yes'">
+            <!-- static, usual HTML treatment -->
+            <xsl:apply-templates select="static" mode="exercise-components">
+                <xsl:with-param name="b-original" select="$b-original"/>
+                <xsl:with-param name="b-has-statement" select="$b-has-inline-statement"/>
+                <xsl:with-param name="b-has-hint"      select="$b-has-inline-hint"/>
+                <xsl:with-param name="b-has-answer"    select="$b-has-inline-answer"/>
+                <xsl:with-param name="b-has-solution"  select="$b-has-inline-solution"/>
+            </xsl:apply-templates>
+        </xsl:when>
+        <xsl:otherwise>
+            <!-- dynamic, iframe -->
+            <xsl:apply-templates select="." mode="webwork-iframe">
+                <xsl:with-param name="b-has-hint"     select="$b-has-inline-hint"/>
+                <xsl:with-param name="b-has-solution" select="$b-has-inline-solution"/>
+            </xsl:apply-templates>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+
+<!-- Select the correct URL from four pre-generated choices -->
+<!-- and package up as an iframe for interactive version    -->
+<xsl:template match="webwork-reps" mode="webwork-iframe">
+    <xsl:param name="b-has-hint"/>
+    <xsl:param name="b-has-solution"/>
+
+    <xsl:variable name="the-url">
+        <xsl:choose>
+            <xsl:when test="$b-has-hint and $b-has-solution">
+                <xsl:apply-templates select="server-url[@hint='yes' and @solution='yes']"/>
+            </xsl:when>
+            <xsl:when test="$b-has-hint and not($b-has-solution)">
+                <xsl:apply-templates select="server-url[@hint='yes' and @solution='no']"/>
+            </xsl:when>
+            <xsl:when test="not($b-has-hint) and $b-has-solution">
+                <xsl:apply-templates select="server-url[@hint='no'  and @solution='yes']"/>
+            </xsl:when>
+            <xsl:when test="not($b-has-hint) and not($b-has-solution)">
+                <xsl:apply-templates select="server-url[@hint='no'  and @solution='no']"/>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- build the iframe -->
+    <!-- mimicking Mike Gage's blog post -->
+    <iframe width="100%" src="{$the-url}" base64="1" uri="1"/>
     <script>
         <xsl:text>iFrameResize({log:true,inPageLinks:true,resizeFrom:'child',checkOrigin:["</xsl:text>
         <xsl:value-of select="$webwork-server" />
