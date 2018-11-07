@@ -1252,8 +1252,116 @@
     </section>
 
     <section xml:id="topic-exercises-solutions">
-        <title>(*) Exercises and their Answers</title>
-        <p></p>
+        <title>Exercises and their Solutions</title>
+
+        <introduction>
+            <p>As described in <xref ref="overview-exercises"/> an <tag>exercise</tag> can be placed in many different locations, and a <tag>project</tag> has similar features.  It is critical to understand that you want to author any hints, answers, or solutions immediately following the statement of an exercise.  If your <pretext/> source is public, and you would like to keep some aspects of the solutions private, then read the <pubtitle>Publisher's Guide</pubtitle> for some practical advice.  See the <pubtitle>Publisher's Guide</pubtitle> as well for information on creating a standalone <pubtitle>Solutions Guide</pubtitle>.  We concentrate here on techniques for controlling visibility and location of the components of exercises within your primary output.</p>
+        </introduction>
+
+        <subsection>
+            <title>Exercises, Original Versions</title>
+
+            <p>A <tag>hint</tag> to an <tag>exercise</tag> renders nicely in a knowl, right below the exercise statement, as part of a conversion to <init>HTML</init>.  For a conversion to <latex/>/<init>PDF</init>/print, you might wish to display a hint, visibly, as part of the exercise, or you may wish to park the hint in a <pubtitle>Hints to Exercises</pubtitle> division in the back matter.  To control visibility of the components of exercises (and projects) there are fifteen switches you can use as string parameters on the command line, or in an extra <init>XSL</init> file.  Each takes values of <c>yes</c> or <c>no</c>.</p>
+
+            <table>
+                <caption>Exercise Component Switches, Original Versions</caption>
+
+                <tabular>
+                    <row>
+                        <cell><c>exercise.inline.hint</c></cell>
+                        <cell><c>exercise.inline.answer</c></cell>
+                    </row>
+                    <row>
+                        <cell><c>exercise.inline.solution</c></cell>
+                        <cell/>
+                    </row>
+                    <row>
+                        <cell><c>exercise.divisional.hint</c></cell>
+                        <cell><c>exercise.divisional.answer</c></cell>
+                    </row>
+                    <row>
+                        <cell><c>exercise.divisional.solution</c></cell>
+                        <cell/>
+                    </row>
+                    <row>
+                        <cell><c>exercise.worksheet.hint</c></cell>
+                        <cell><c>exercise.worksheet.answer</c></cell>
+                    </row>
+                    <row>
+                        <cell><c>exercise.worksheet.solution</c></cell>
+                        <cell/>
+                    </row>
+                    <row>
+                        <cell><c>exercise.reading.hint</c></cell>
+                        <cell><c>exercise.reading.answer</c></cell>
+                    </row>
+                    <row>
+                        <cell><c>exercise.reading.solution</c></cell>
+                        <cell/>
+                    </row>
+                    <row>
+                        <cell><c>project.hint</c></cell>
+                        <cell><c>project.answer</c></cell>
+                    </row>
+                    <row>
+                        <cell><c>project.solution</c></cell>
+                        <cell/>
+                    </row>
+                </tabular>
+            </table>
+
+        </subsection>
+
+        <subsection>
+            <title>Exercises, Solutions Versions</title>
+
+            <p>Exercises, and their components may be duplicated easily, to provide a back matter appendix with solutions, or within each division.  For example, you can easily create an end-of-chapter division with solutions to every inline exercise throughout the chapter and solutions to all the divisional exercises from each section of the chapter.</p>
+
+            <p>The <tag>solutions</tag> element will create an entire division, semi-automatically.  You can provide a <tag>title</tag>, an <tag>introduction</tag>, and <tag>conclusion</tag>.  The remaining content is statements, hints, answers, and solutions to exercises (and projects).</p>
+
+            <p>If <tag>solutions</tag> is a child of <tag>backmatter</tag>, then an appendix will be generated, and covering <tag>exercise</tag> from the entire <tag>book</tag> or <tag>article</tag>.  If <tag>solutions</tag> is a child of a division, then a new subdivision is created and the scope is all <tag>exercise</tag> for the division.  So, for example, a <tag>solutions</tag> placed inside a <tag>chapter</tag> will render as a division that looks like a <tag>section</tag> and will include components of all the exercises (at any level) contained within the <tag>chapter</tag>.</p>
+
+            <p>An author filters the types of exercises, and their components, through attributes of the <tag>soutions</tag> element.  For example<cd>
+                <cline>reading="hint answer"</cline>
+            </cd>would cause every <tag>exercise</tag> within each <tag>reading-questions</tag> to have its <tag>hint</tag> and <tag>answer</tag> displayed, but not its <tag>statement</tag> nor its <tag>solution</tag>.  These are the attribute names and the possible values.</p>
+
+            <table>
+                <caption>Attributes (left) and Values (right) for <tag>solutions</tag> element</caption>
+
+                <tabular>
+                    <row>
+                        <cell><c>inline</c></cell>
+                        <cell><c>statement</c></cell>
+                    </row>
+                    <row>
+                        <cell><c>divisional</c></cell>
+                        <cell><c>hint</c></cell>
+                    </row>
+                    <row>
+                        <cell><c>reading</c></cell>
+                        <cell><c>answer</c></cell>
+                    </row>
+                    <row>
+                        <cell><c>worksheet</c></cell>
+                        <cell><c>solution</c></cell>
+                    </row>
+                    <row>
+                        <cell><c>project</c></cell>
+                        <cell/>
+                    </row>
+                </tabular>
+            </table>
+
+            <p>So, <pretext/> source like<cd>
+                <cline>&lt;section&gt;</cline>
+                <cline>  &lt;title&gt;Tropical Bird of Paradise&lt;title&gt;</cline>
+                <cline>  ...</cline>
+                <cline>  &lt;solutions worksheet="hint solution" project="hint solution"&gt;</cline>
+                <cline>    &lt;title&gt;Hints and Solutions to Worksheets and Projects&lt;title&gt;</cline>
+                <cline>  &lt;/solutions&gt;</cline>
+                <cline>&lt;/section&gt;</cline>
+            </cd>would generate an entire subsection with hints and solutions to every worksheet and every project, located anywhere (including in subsections and subsubsections) in the section on Birds of Paradise.</p>
+        </subsection>
     </section>
 
     <section xml:id="topic-images">
