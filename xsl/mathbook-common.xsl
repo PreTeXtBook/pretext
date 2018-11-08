@@ -142,27 +142,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="project.answer" select="''" />
 <xsl:param name="project.solution" select="''" />
 
-<!-- These switches are deprecated/ignored.  Some have been reset -->
-<!-- to empty (from "yes") so that we can (a) see attempted use    -->
-<!-- for warnings, (b) interpret them in backward-compatible ways -->
-<xsl:param name="exercise.text.statement" select="'yes'" />
-<xsl:param name="exercise.text.hint" select="''" />
-<xsl:param name="exercise.text.answer" select="''" />
-<xsl:param name="exercise.text.solution" select="''" />
-<!-- Second, an exercise in a solutions list in backmatter.-->
-<xsl:param name="exercise.backmatter.statement" select="'yes'" />
-<xsl:param name="exercise.backmatter.hint" select="'yes'" />
-<xsl:param name="exercise.backmatter.answer" select="'yes'" />
-<xsl:param name="exercise.backmatter.solution" select="'yes'" />
-<!-- Now project-like elements, in main text.  -->
-<!-- A task is a division of a project         -->
-<xsl:param name="project.text.hint" select="''" />
-<xsl:param name="project.text.answer" select="''" />
-<xsl:param name="project.text.solution" select="''" />
-<xsl:param name="task.text.hint" select="'yes'" />
-<xsl:param name="task.text.answer" select="'yes'" />
-<xsl:param name="task.text.solution" select="'yes'" />
-
 <!-- Author tools are for drafts, mostly "todo" items                 -->
 <!-- and "provisional" citations and cross-references                 -->
 <!-- Default is to hide todo's, inline provisionals                   -->
@@ -1169,6 +1148,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:variable name="html.js.server" select="''"/>
 
+<!-- The old (incomplete) methods for duplicating components of -->
+<!-- exercises have been deprecated as of 2018-11-07.  We keep  -->
+<!-- these here as we have tried to preserve their intent, and  -->
+<!-- we are generating warnings if they are ever set.           -->
+<xsl:param name="exercise.text.statement" select="''" />
+<xsl:param name="exercise.text.hint" select="''" />
+<xsl:param name="exercise.text.answer" select="''" />
+<xsl:param name="exercise.text.solution" select="''" />
+<xsl:param name="exercise.backmatter.statement" select="''" />
+<xsl:param name="exercise.backmatter.hint" select="''" />
+<xsl:param name="exercise.backmatter.answer" select="''" />
+<xsl:param name="exercise.backmatter.solution" select="''" />
+<xsl:param name="project.text.hint" select="''" />
+<xsl:param name="project.text.answer" select="''" />
+<xsl:param name="project.text.solution" select="''" />
+<xsl:param name="task.text.hint" select="''" />
+<xsl:param name="task.text.answer" select="''" />
+<xsl:param name="task.text.solution" select="''" />
 
 <!-- ############## -->
 <!-- Entry Template -->
@@ -9384,6 +9381,22 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="occurrences" select="$root/article/backmatter/appendix/section" />
         <xsl:with-param name="date-string" select="'2018-09-26'" />
         <xsl:with-param name="message" select="'the first division of an &quot;appendix&quot; of an &quot;article&quot; should be a &quot;subsection&quot;'" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2018-11-07  obsolete exercise component switches -->
+    <!-- Still exists in "Variable Bad Bank" for use here  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2018-11-07'" />
+        <xsl:with-param name="message" select="'the  *.text.*  parameters that control the visibility of components of exercises and projects have been removed and replaced by a greater variety of  exercise.*.*  and  project.*  parameters'" />
+            <xsl:with-param name="incorrect-use" select="not(($exercise.text.statement = '') and ($exercise.text.hint = '') and ($exercise.text.answer = '') and ($exercise.text.solution = '') and ($project.text.hint = '') and ($project.text.answer = '') and ($project.text.solution = '') and ($task.text.hint = '') and ($task.text.answer = '') and ($task.text.solution = ''))"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2018-11-07  obsolete backmatter exercise component switches -->
+    <!-- Still exists in "Variable Bad Bank" for use here            -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2018-11-07'" />
+        <xsl:with-param name="message" select="'the  exercise.backmatter.*  parameters that control the visibility of components of exercises and projects in the back matter have been removed and replaced by the &quot;solutions&quot; element, which is much more versatile'"/>
+            <xsl:with-param name="incorrect-use" select="not(($exercise.backmatter.statement = '') and ($exercise.backmatter.hint = '') and ($exercise.backmatter.answer = '') and ($exercise.backmatter.solution = ''))" />
     </xsl:call-template>
 </xsl:template>
 
