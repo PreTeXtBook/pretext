@@ -42,12 +42,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- These switches default to "yes" if not set, so -->
 <!-- we explicitly set most to "no" and only set    -->
 <!-- "divisional hint and solution" to "yes".       -->
+<xsl:param name="exercise.inline.statement" select="'no'" />
 <xsl:param name="exercise.inline.hint" select="'no'" />
 <xsl:param name="exercise.inline.answer" select="'no'" />
 <xsl:param name="exercise.inline.solution" select="'no'" />
+
+<xsl:param name="exercise.divisional.statement" select="'yes'" />
 <xsl:param name="exercise.divisional.hint" select="'yes'" />
 <xsl:param name="exercise.divisional.answer" select="'yes'" />
 <xsl:param name="exercise.divisional.solution" select="'no'" />
+
+<xsl:param name="exercise.worksheet.statement" select="'yes'" />
+<xsl:param name="exercise.worksheet.hint" select="'no'" />
+<xsl:param name="exercise.worksheet.answer" select="'no'" />
+<xsl:param name="exercise.worksheet.solution" select="'no'" />
+
+<xsl:param name="exercise.reading.statement" select="'yes'" />
+<xsl:param name="exercise.reading.hint" select="'no'" />
+<xsl:param name="exercise.reading.answer" select="'no'" />
+<xsl:param name="exercise.reading.solution" select="'no'" />
+
+<xsl:param name="project.statement" select="'no'" />
 <xsl:param name="project.hint" select="'no'" />
 <xsl:param name="project.answer" select="'no'" />
 <xsl:param name="project.solution" select="'no'" />
