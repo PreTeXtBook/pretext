@@ -43,12 +43,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- so may be used/set in a custom XSL stylesheet for a         -->
 <!-- project's solution manual.                                  -->
 <!--                                                             -->
+<!-- exercise.inline.statement                                   -->
 <!-- exercise.inline.hint                                        -->
 <!-- exercise.inline.answer                                      -->
 <!-- exercise.inline.solution                                    -->
+<!-- exercise.divisional.statement                               -->
 <!-- exercise.divisional.hint                                    -->
 <!-- exercise.divisional.answer                                  -->
 <!-- exercise.divisional.solution                                -->
+<!-- exercise.worksheet.statement                                -->
+<!-- exercise.worksheet.hint                                     -->
+<!-- exercise.worksheet.answer                                   -->
+<!-- exercise.worksheet.solution                                 -->
+<!-- exercise.reading.statement                                  -->
+<!-- exercise.reading.hint                                       -->
+<!-- exercise.reading.answer                                     -->
+<!-- exercise.reading.solution                                   -->
+<!-- project.statement                                           -->
 <!-- project.hint                                                -->
 <!-- project.answer                                              -->
 <!-- project.solution                                            -->
@@ -56,12 +67,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The second set of variables are internal, and are derived   -->
 <!-- from the above via careful routines in mathbook-common.xsl. -->
 <!--                                                             -->
+<!-- b-has-inline-statement                                      -->
 <!-- b-has-inline-hint                                           -->
 <!-- b-has-inline-answer                                         -->
 <!-- b-has-inline-solution                                       -->
+<!-- b-has-divisional-statement                                  -->
 <!-- b-has-divisional-hint                                       -->
 <!-- b-has-divisional-answer                                     -->
 <!-- b-has-divisional-solution                                   -->
+<!-- b-has-worksheet-statement                                   -->
+<!-- b-has-worksheet-hint                                        -->
+<!-- b-has-worksheet-answer                                      -->
+<!-- b-has-worksheet-solution                                    -->
+<!-- b-has-reading-statement                                     -->
+<!-- b-has-reading-hint                                          -->
+<!-- b-has-reading-answer                                        -->
+<!-- b-has-reading-solution                                      -->
+<!-- b-has-project-statement                                     -->
 <!-- b-has-project-hint                                          -->
 <!-- b-has-project-answer                                        -->
 <!-- b-has-project-solution                                      -->
@@ -83,15 +105,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="chapter[1]">
     <xsl:apply-templates select="$document-root" mode="solutions-generator">
-        <xsl:with-param name="b-inline-statement"     select="false()" />
+        <xsl:with-param name="b-inline-statement"     select="$b-has-inline-statement" />
         <xsl:with-param name="b-inline-hint"          select="$b-has-inline-hint"  />
         <xsl:with-param name="b-inline-answer"        select="$b-has-inline-answer"  />
         <xsl:with-param name="b-inline-solution"      select="$b-has-inline-solution"  />
-        <xsl:with-param name="b-divisional-statement" select="false()" />
+        <xsl:with-param name="b-divisional-statement" select="$b-has-divisional-statement" />
         <xsl:with-param name="b-divisional-hint"      select="$b-has-divisional-hint"  />
         <xsl:with-param name="b-divisional-answer"    select="$b-has-divisional-answer"  />
         <xsl:with-param name="b-divisional-solution"  select="$b-has-divisional-solution"  />
-        <xsl:with-param name="b-project-statement"    select="false()" />
+        <xsl:with-param name="b-worksheet-statement"  select="$b-has-worksheet-statement" />
+        <xsl:with-param name="b-worksheet-hint"       select="$b-has-worksheet-hint"  />
+        <xsl:with-param name="b-worksheet-answer"     select="$b-has-worksheet-answer"  />
+        <xsl:with-param name="b-worksheet-solution"   select="$b-has-worksheet-solution"  />
+        <xsl:with-param name="b-reading-statement"    select="$b-has-reading-statement" />
+        <xsl:with-param name="b-reading-hint"         select="$b-has-reading-hint"  />
+        <xsl:with-param name="b-reading-answer"       select="$b-has-reading-answer"  />
+        <xsl:with-param name="b-reading-solution"     select="$b-has-reading-solution"  />
+        <xsl:with-param name="b-project-statement"    select="$b-has-project-statement" />
         <xsl:with-param name="b-project-hint"         select="$b-has-project-hint"  />
         <xsl:with-param name="b-project-answer"       select="$b-has-project-answer"  />
         <xsl:with-param name="b-project-solution"     select="$b-has-project-solution"  />
