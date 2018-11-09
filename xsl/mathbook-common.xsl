@@ -3139,18 +3139,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <xsl:message>MBX:BUG:     asking if a non-structural division is a leaf</xsl:message> -->
 </xsl:template>
 
-<!-- There are two models for most of the divisions (part    -->
-<!-- through subsubsection).  One has subdivisions, and      -->
-<!-- possibly multiple "exercises", or other specialized     -->
-<!-- subdivisions.  The other has no subdivisions, and then  -->
-<!-- at most one of each type of specialized subdivision,    -->
-<!-- which inherit numbers from their parent division. This  -->
-<!-- is the test, which is very similar to "is-leaf" above.  -->
-<!--                                                         -->
-<!-- A "part" must have chapters, so will always return      -->
-<!-- 'true' and for a 'subsubsection' there are no more      -->
-<!-- subdivisions to employ and so will return empty.        -->
-<xsl:template match="book|article|part|chapter|section|subsection|subsubsection" mode="is-structured-division">
+<!-- There are two models for most of the divisions (part -->
+<!-- through subsubsection, plus appendix).  One has      -->
+<!-- subdivisions, and possibly multiple "exercises", or  -->
+<!-- other specialized subdivisions.  The other has no    -->
+<!-- subdivisions, and then at most one of each type of   -->
+<!-- specialized subdivision, which inherit numbers from  -->
+<!-- their parent division. This is the test, which is    -->
+<!-- very similar to "is-leaf" above.                     -->
+<!--                                                      -->
+<!-- A "part" must have chapters, so will always return   -->
+<!-- 'true' and for a 'subsubsection' there are no more   -->
+<!-- subdivisions to employ and so will return empty.     -->
+<xsl:template match="book|article|part|chapter|appendix|section|subsection|subsubsection" mode="is-structured-division">
     <xsl:if test="chapter|section|subsection|subsubsection">
         <xsl:text>true</xsl:text>
     </xsl:if>
