@@ -1080,37 +1080,37 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$document-root//exercise[boolean(&INLINE-EXERCISE-FILTER;)]">
         <xsl:text>%% Solutions to inline exercises, style and environment&#xa;</xsl:text>
             <xsl:text>\tcbset{ inlineexercisesolutionstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, after title={\space}, breakable } }&#xa;</xsl:text>
-            <xsl:text>\newtcolorbox{inlineexercisesolution}[2]</xsl:text>
-            <xsl:text>{inlineexercisesolutionstyle, title={</xsl:text>
+            <xsl:text>\newtcolorbox{inlineexercisesolution}[3]</xsl:text>
+            <xsl:text>{inlineexercisesolutionstyle, title={\hyperref[#3]{</xsl:text>
             <!-- Hardcode "name" of an inline exercise in the environment -->
             <xsl:call-template name="type-name">
                 <xsl:with-param name="string-id" select="'inlineexercise'" />
             </xsl:call-template>
-            <xsl:text>~#1\notblank{#2}{\space#2}{}}}&#xa;</xsl:text>
+            <xsl:text>~#1}\notblank{#2}{\space#2}{}}}&#xa;</xsl:text>
         </xsl:if>
         <!-- Division Solution -->
         <!-- Explicitly breakable, run-in title -->
         <xsl:if test="$document-root//exercises//exercise[not(ancestor::exercisegroup)]|$document-root//worksheet//exercise[not(ancestor::exercisegroup)]|$document-root//reading-questions//exercise[not(ancestor::exercisegroup)]">
             <xsl:text>%% Solutions to division exercises, not in exercise group&#xa;</xsl:text>
             <xsl:text>\tcbset{ divisionsolutionstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, after title={\space}, breakable } }&#xa;</xsl:text>
-            <xsl:text>\newtcolorbox{divisionsolution}[2]</xsl:text>
-            <xsl:text>{divisionsolutionstyle, title={#1.\notblank{#2}{\space#2}{}}}&#xa;</xsl:text>
+            <xsl:text>\newtcolorbox{divisionsolution}[3]</xsl:text>
+            <xsl:text>{divisionsolutionstyle, title={\hyperlink{#3}{#1}.\notblank{#2}{\space#2}{}}}&#xa;</xsl:text>
         </xsl:if>
         <!-- Division Solution, Exercise Group -->
         <!-- Explicitly breakable, run-in title -->
         <xsl:if test="$document-root//exercisegroup[not(@cols)]">
             <xsl:text>%% Solutions to division exercises, in exercise group, no columns&#xa;</xsl:text>
             <xsl:text>\tcbset{ divisionsolutionegstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, after title={\space}, left skip=\egindent, breakable } }&#xa;</xsl:text>
-            <xsl:text>\newtcolorbox{divisionsolutioneg}[2]</xsl:text>
-            <xsl:text>{divisionsolutionegstyle, title={#1.\notblank{#2}{\space#2}{}}}&#xa;</xsl:text>
+            <xsl:text>\newtcolorbox{divisionsolutioneg}[3]</xsl:text>
+            <xsl:text>{divisionsolutionegstyle, title={\hyperlink{#3}{#1}.\notblank{#2}{\space#2}{}}}&#xa;</xsl:text>
         </xsl:if>
         <!-- Division Solution, Exercise Group, Columnar -->
         <!-- Explicity unbreakable, to behave in multicolumn tcbraster -->
         <xsl:if test="$document-root//exercisegroup/@cols">
             <xsl:text>%% Solutions to division exercises, in exercise group with columns&#xa;</xsl:text>
             <xsl:text>\tcbset{ divisionsolutionegcolstyle/.style={bwminimalstyle, runintitlestyle,  exercisespacingstyle, after title={\space}, halign=flush left, unbreakable } }&#xa;</xsl:text>
-            <xsl:text>\newtcolorbox{divisionsolutionegcol}[2]</xsl:text>
-            <xsl:text>{divisionsolutionegcolstyle, title={#1.\notblank{#2}{\space#2}{}}}&#xa;</xsl:text>
+            <xsl:text>\newtcolorbox{divisionsolutionegcol}[3]</xsl:text>
+            <xsl:text>{divisionsolutionegcolstyle, title={\hyperlink{#3}{#1}.\notblank{#2}{\space#2}{}}}&#xa;</xsl:text>
         </xsl:if>
         <!-- solutions to PROJECT-LIKE -->
         <xsl:for-each select="$project-reps">
@@ -1127,13 +1127,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- create the environment -->
             <xsl:text>\newtcolorbox{</xsl:text>
             <xsl:value-of select="$elt-name"/>
-            <xsl:text>solution}[2]</xsl:text>
+            <xsl:text>solution}[3]</xsl:text>
             <xsl:text>{</xsl:text>
             <xsl:value-of select="$elt-name"/>
-            <xsl:text>solutionstyle, title={</xsl:text>
+            <xsl:text>solutionstyle, title={\hyperref[#3]{</xsl:text>
             <!-- Hardcode "name" of "project" in the environment -->
             <xsl:value-of select="$type-name"/>
-            <xsl:text>~#1\notblank{#2}{\space#2}{}}}&#xa;</xsl:text>
+            <xsl:text>~#1}\notblank{#2}{\space#2}{}}}&#xa;</xsl:text>
         </xsl:for-each>
     </xsl:if>
     <!-- Generic exercise lead-in -->
@@ -4456,7 +4456,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>{</xsl:text>
         <xsl:apply-templates select="." mode="title-punctuated"/>
         <xsl:text>}</xsl:text>
-        <!-- no label since duplicating in solutions division -->
+        <!-- label of the exercise, to link back to it -->
+        <xsl:text>{</xsl:text>
+        <xsl:apply-templates select="." mode="internal-id"/>
+        <xsl:text>}</xsl:text>
         <xsl:text>&#xa;</xsl:text>
         <!-- Allow a webwork or myopenmath exercise to introduce/connect    -->
         <!-- a problem (especially from server) to the text in various ways -->
@@ -4716,8 +4719,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>{</xsl:text>
         <xsl:apply-templates select="." mode="title-punctuated"/>
         <xsl:text>}</xsl:text>
-        <!-- no workspace fraction in a        solution -->
-        <!-- duplicate, so no label, or manufacture one -->
+        <!-- label of the exercise, to link back to it -->
+        <xsl:text>{</xsl:text>
+        <xsl:apply-templates select="." mode="internal-id"/>
+        <xsl:text>}</xsl:text>
+        <!-- no workspace fraction in a solution -->
         <xsl:text>%&#xa;</xsl:text>
         <!-- Allow a webwork or myopenmath exercise to introduce/connect    -->
         <!-- a problem (especially from server) to the text in various ways -->
@@ -5307,7 +5313,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>{</xsl:text>
         <xsl:apply-templates select="." mode="title-punctuated"/>
         <xsl:text>}</xsl:text>
-        <!-- no label as duplicating for solutions division -->
+        <!-- label of the project, to link back to it -->
+        <xsl:text>{</xsl:text>
+        <xsl:apply-templates select="." mode="internal-id"/>
+        <xsl:text>}</xsl:text>
         <xsl:text>%&#xa;</xsl:text>
         <xsl:choose>
             <!-- structured versions first      -->
