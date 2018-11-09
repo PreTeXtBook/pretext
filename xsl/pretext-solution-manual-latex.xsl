@@ -88,6 +88,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- b-has-project-answer                                        -->
 <!-- b-has-project-solution                                      -->
 
+<!-- Conceived as a "print only" PDF, this is also necessary    -->
+<!-- to keep links (such as a solution number linking back to   -->
+<!-- the original) from being seen/interpreted as actual links. -->
+<xsl:param name="latex.print" select="'yes'"/>
+
 <!-- We have a switch for just this situation, to force -->
 <!-- (overrule) the auto-detetion of the necessity for  -->
 <!-- LaTeX styles for the solutions to exercises.       -->
@@ -193,7 +198,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>{\textsl{\sectiontitle}}{}{\thepage}&#xa;</xsl:text>
     <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
-
 
 <!-- Hard-Coded Numbers -->
 <!-- As a subset of full content, we can't          -->
