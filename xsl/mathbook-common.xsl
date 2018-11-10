@@ -5047,11 +5047,14 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 </xsl:template>
 
 <!-- Structure Numbers: Bibliographic Items -->
-<!-- With just one "references" per division, we can use the      -->
-<!-- number of the parent division.  This means that a global,    -->
-<!-- once-per-document "references" will get un-qualified numbers -->
+<!-- Bibliographic items get their number from the containing     -->
+<!-- "references", which may be solo in an unstructured division, -->
+<!-- or one of potentially several in a structured division.      -->
+<!-- Since the global "references" (child of "backmatter") is not -->
+<!-- numbered, these items will have un-qualified numbers         -->
+<!-- (serial number only). -->
 <xsl:template match="biblio" mode="structure-number">
-    <xsl:apply-templates select="parent::references/parent::*" mode="number" />
+    <xsl:apply-templates select="parent::*" mode="number" />
 </xsl:template>
 
 <!-- Notes get structure number from parent biblio's number -->
