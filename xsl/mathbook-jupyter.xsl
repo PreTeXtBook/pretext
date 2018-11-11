@@ -196,18 +196,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>{&#xa;</xsl:text>
         <!-- cell list first, majority of notebook, metadata to finish -->
         <xsl:text>"cells": [&#xa;</xsl:text>
-        <!-- Escape backslashes first, because more are coming -->
-        <xsl:variable name="escape-backslash" select="str:replace($cell-list, '\','\\')" />
-        <!-- Escape quote marks -->
-        <xsl:variable name="escape-quote" select="str:replace($escape-backslash, '&quot;','\&quot;')" />
-        <!-- Replace all newlines -->
-        <xsl:variable name="replace-newline" select="str:replace($escape-quote, '&#xa;','\n')" />
+        <!-- Escape JSON strings now, be sure later adjustments -->
+        <!-- conform to JSON syntax in this regard              -->
+        <xsl:variable name="escaped-cell-list">
+            <xsl:call-template name="escape-json-string">
+                <xsl:with-param name="text" select="$cell-list"/>
+            </xsl:call-template>
+        </xsl:variable>
         <!-- Multiple strings in a cell are merged into one by    -->
         <!-- combining adjoining end/begin pairs, leaving only    -->
         <!-- leading and trailing delimiters (next substitution). -->
         <!-- This is one solution of the problem of $n-1$         -->
         <!-- separators for $n$ items.                            -->
-        <xsl:variable name="split-strings" select="str:replace($replace-newline, $ESBS, '')" />
+        <xsl:variable name="split-strings" select="str:replace($escaped-cell-list, $ESBS, '')" />
         <xsl:variable name="finalize-strings" select="str:replace(str:replace($split-strings, $ES, '&quot;'), $BS, '&quot;')" />
         <!-- The only pseudo-markup left is that of the two types -->
         <!-- of cells possible in a Jupyter notebook.  We split   -->
