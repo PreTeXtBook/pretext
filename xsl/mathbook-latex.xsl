@@ -6317,7 +6317,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:apply-templates select="." mode="youtube-view-url" />
                 </c>
             </xsl:variable>
-            <xsl:apply-templates select="exsl:node-set($visual-url)" />
+            <xsl:apply-templates select="exsl:node-set($visual-url)/*" />
         </xsl:when>
         <xsl:when test="$width-scale &gt; 0.4499">
             <xsl:variable name="visual-url">
@@ -6325,7 +6325,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:apply-templates select="." mode="youtube-view-url" />
                 </c>
             </xsl:variable>
-            <xsl:apply-templates select="exsl:node-set($visual-url)" />
+            <xsl:apply-templates select="exsl:node-set($visual-url)/*" />
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>YT: </xsl:text>
@@ -6334,7 +6334,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:value-of select="@youtube|@youtubeplaylist" />
                 </c>
             </xsl:variable>
-            <xsl:apply-templates select="exsl:node-set($visual-url)" />
+            <xsl:apply-templates select="exsl:node-set($visual-url)/*" />
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>

@@ -8728,7 +8728,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
             <xsl:text>&gt;</xsl:text>
         </c>
     </xsl:variable>
-    <xsl:apply-templates select="exsl:node-set($the-element)" />
+    <xsl:apply-templates select="exsl:node-set($the-element)/*" />
 </xsl:template>
 
 <!-- An empty tag, with angle brackets and monospace font -->
@@ -8740,7 +8740,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
             <xsl:text>/&gt;</xsl:text>
         </c>
     </xsl:variable>
-    <xsl:apply-templates select="exsl:node-set($the-element)" />
+    <xsl:apply-templates select="exsl:node-set($the-element)/*" />
 </xsl:template>
 
 <!-- An attribute, with @ and monospace font -->
@@ -8751,7 +8751,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
             <xsl:apply-templates />
         </c>
     </xsl:variable>
-    <xsl:apply-templates select="exsl:node-set($the-attribute)" />
+    <xsl:apply-templates select="exsl:node-set($the-attribute)/*" />
 </xsl:template>
 
 
