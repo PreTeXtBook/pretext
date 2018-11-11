@@ -2802,6 +2802,40 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- JSON Escaped Strings -->
+<!-- Convert a string, just prior to dropping it into a  -->
+<!-- JSON data structure, so this presumes nothing       -->
+<!-- special has been done with the contents before-hand -->
+<!-- In order converted, using the standard JSON names:  -->
+<!--     reverse solidus (backslash), solidus (slash),   -->
+<!--     quotation mark, backspace, horizontal tab,      -->
+<!--     newline, form feed, carriage return             -->
+<!-- Escaping solidus (forward slash) is only necessary  -->
+<!-- for <\ inside a script tag (or similar?)  It makes  -->
+<!-- URLs ugly, but we do it anyway so we don't get bit. -->
+<!-- Strictly needed:  backslash, double quote, newline. -->
+<!-- XSLT3:                                              -->
+<!-- But XML 1.0 does not allow x08 (backspace) and x0c  -->
+<!-- (form feed) so we ignore them for now.  Perhaps see -->
+<!-- https://stackoverflow.com/questions/404107/         -->
+<!-- why-are-control-characters-illegal-in-xml-1-0       -->
+<xsl:template name="escape-json-string">
+    <xsl:param name="text"/>
+
+    <!-- backslash first since it will be introduced -->
+    <!-- later as the escape character itself        -->
+    <xsl:variable name="sans-backslash" select="str:replace($text,           '\',      '\\'     )"/>
+    <xsl:variable name="sans-slash"     select="str:replace($sans-backslash, '/',      '\/'     )"/>
+    <xsl:variable name="sans-quote"     select="str:replace($sans-slash,     '&#x22;', '\&#x22;')"/>
+<!--<xsl:variable name="sans-backspace" select="str:replace($sans-quote,     '&#x08;', '\b'     )"/>-->
+    <xsl:variable name="sans-tab"       select="str:replace($sans-quote,     '&#x09;', '\t'     )"/>
+    <xsl:variable name="sans-newline"   select="str:replace($sans-tab,       '&#x0a;', '\n'     )"/>
+<!--<xsl:variable name="sans-formfeed"  select="str:replace($sans-newline,   '&#x0c;', '\f'     )"/>-->
+    <xsl:variable name="sans-return"    select="str:replace($sans-newline,   '&#x0d;', '\r'     )"/>
+
+    <xsl:value-of select="$sans-return" />
+</xsl:template>
+
 <!-- File Extension -->
 <!-- Input: full filename                       -->
 <!-- Output: extension (no period), lowercase'd -->
