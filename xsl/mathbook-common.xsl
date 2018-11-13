@@ -4154,15 +4154,18 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <xsl:template match="backmatter/solutions" mode="division-serial-number">
     <xsl:number from="backmatter" level="any" count="appendix|solutions" format="A"/>
 </xsl:template>
-<!-- NB: following (and chapter above), assume subdivisions come first -->
+<!-- NB: following do not assume an ordering on the subdivisions,     -->
+<!-- since this has not been solidified in the schema. At that point, -->
+<!-- we might enforce some assumptions here, and elsewhere, by only   -->
+<!-- including predecessors in the @count attribute.                  -->
 <xsl:template match="section" mode="division-serial-number">
-    <xsl:number count="section" format="1" />
+    <xsl:number count="section|exercises|reading-questions|solutions|references|glossary|worksheet" format="1" />
 </xsl:template>
 <xsl:template match="subsection" mode="division-serial-number">
-    <xsl:number count="subsection" format="1" />
+    <xsl:number count="subsection|exercises|reading-questions|solutions|references|glossary|worksheet" format="1" />
 </xsl:template>
 <xsl:template match="subsubsection" mode="division-serial-number">
-    <xsl:number count="subsubsection" format="1" />
+    <xsl:number count="subsubsection|exercises|reading-questions|solutions|references|glossary|worksheet" format="1" />
 </xsl:template>
 <!-- Specialized Divisions -->
 <!-- "exercises", "solutions", references, "worksheet" -->
@@ -4180,8 +4183,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:variable name="b-is-structured" select="$is-structured = 'true'"/>
     <xsl:choose>
         <xsl:when test="$b-is-structured">
-            <!-- NB: only one type of division will be a peer          -->
-            <!-- NB: not assuming an order on the specialized divisons -->
+            <!-- NB: only one type of division will be a peer -->
+            <!-- NB: not assuming an order on the divisions   -->
             <xsl:number count="chapter|section|subsection|subsubsection|exercises|reading-questions|solutions|references|glossary|worksheet" format="1" />
         </xsl:when>
         <xsl:otherwise>
