@@ -4817,7 +4817,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Should not drop in here.  Ever. -->
 <xsl:template match="*" mode="serial-number">
     <xsl:text>[NUM]</xsl:text>
-    <xsl:message>PTX:BUG:     An object (<xsl:value-of select="local-name(.)" />) lacks a serial number, search output for "[NUM]"</xsl:message>
+    <xsl:message>PTX:ERROR:   An object (<xsl:value-of select="local-name(.)" />) lacks a serial number, search output for "[NUM]"</xsl:message>
     <xsl:apply-templates select="." mode="location-report" />
 </xsl:template>
 
@@ -5142,6 +5142,13 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- in an objectives or outcomes environment     -->
 <xsl:template match="objectives/ol/li|outcomes/ol/li" mode="structure-number">
     <xsl:apply-templates select="ancestor::*[&STRUCTURAL-FILTER;][1]" mode="number" />
+</xsl:template>
+
+<!-- Should not drop in here.  Ever. -->
+<xsl:template match="*" mode="structure-number">
+    <xsl:text>[STRUCT]</xsl:text>
+    <xsl:message>PTX:ERROR:   An object (<xsl:value-of select="local-name(.)" />) lacks a structure number, search output for "[STRUCT]"</xsl:message>
+    <xsl:apply-templates select="." mode="location-report" />
 </xsl:template>
 
 <!--              -->
