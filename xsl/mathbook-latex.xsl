@@ -6487,12 +6487,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- At end of: blockquote, preface, foreword       -->
 <!-- free-form for one line, or structured as lines -->
 <!-- LaTeX lacks a quotation dash, emdash instead   -->
+<!-- Discourage a page break prior                  -->
 
 <!-- Single line, mixed-content                     -->
 <!-- Quotation dash if within blockquote            -->
 <!-- A table, pushed right, with left-justification -->
 <xsl:template match="attribution">
-    <xsl:text>\par\hfill\begin{tabular}{l@{}}&#xa;</xsl:text>
+    <xsl:text>\nopagebreak\par%&#xa;</xsl:text>
+    <xsl:text>\hfill\begin{tabular}{l@{}}&#xa;</xsl:text>
     <xsl:if test="parent::blockquote">
         <xsl:text>\textemdash{}</xsl:text>
     </xsl:if>
@@ -6503,7 +6505,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Multiple lines, structured by lines -->
 <xsl:template match="attribution[line]">
-    <xsl:text>\par\hfill\begin{tabular}{l@{}}&#xa;</xsl:text>
+    <xsl:text>\nopagebreak\par%&#xa;</xsl:text>
+    <xsl:text>\hfill\begin{tabular}{l@{}}&#xa;</xsl:text>
     <xsl:apply-templates select="line" />
     <xsl:text>\end{tabular}\\\par&#xa;</xsl:text>
 </xsl:template>
