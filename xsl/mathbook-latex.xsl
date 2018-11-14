@@ -88,6 +88,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Any color options go to black and white, as possible -->
 <xsl:param name="latex.print" select="'no'"/>
 <!--  -->
+<!-- Sidedness -->
+<xsl:param name="latex.sides" select="''"/>
+<!--  -->
 <!-- Fillin Style Option                                  -->
 <!-- Can be 'underline' or 'box'                          -->
 <xsl:param name="latex.fillin.style" select="'underline'"/>
@@ -109,13 +112,44 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ######### -->
 
 <!-- Variables that affect LaTeX creation -->
-<!-- More in the common file              -->
+<!-- More in the -common file             -->
 
 <!-- LaTeX is handled natively, so we flip a  -->
 <!-- switch here to signal the general text() -->
 <!-- handler in xsl/mathbook-common.xsl to    -->
 <!-- not dress-up clause-ending punctuation   -->
 <xsl:variable name="latex-processing" select="'native'" />
+
+<!-- We allow publishers to choose one-sided or two-sided -->
+<!-- "printing" though the default will vary with the     -->
+<!-- electronic/print dichotomy                           -->
+<xsl:variable name="latex-sides">
+    <xsl:variable name="default-sides">
+        <xsl:choose>
+            <xsl:when test="$latex.print = 'yes'">
+                <xsl:text>two</xsl:text>
+            </xsl:when>
+            <xsl:otherwise> <!-- electronic -->
+                <xsl:text>one</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$latex.sides = ''">
+            <xsl:value-of select="$default-sides"/>
+        </xsl:when>
+        <xsl:when test="$latex.sides = 'one'">
+            <xsl:text>one</xsl:text>
+        </xsl:when>
+        <xsl:when test="$latex.sides = 'two'">
+            <xsl:text>two</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="$default-sides"/>
+            <xsl:message>PTX:WARNING: the "latex.sides" stringparam should be "one" or "two", not "<xsl:value-of select="$latex.sides"/>", so assuming "<xsl:value-of select="$default-sides"/>"</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
 
 <!-- We generally want one large complete LaTeX file -->
 <xsl:variable name="chunk-level">
@@ -251,6 +285,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="article">
     <xsl:call-template name="converter-blurb-latex" />
     <xsl:text>\documentclass[</xsl:text>
+    <xsl:call-template name="sidedness"/>
+    <xsl:text>,</xsl:text>
     <xsl:value-of select="$font-size" />
     <xsl:text>,</xsl:text>
     <xsl:if test="$latex.draft='yes'" >
@@ -297,6 +333,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="book">
     <xsl:call-template name="converter-blurb-latex" />
     <xsl:text>\documentclass[</xsl:text>
+    <xsl:call-template name="sidedness"/>
+    <xsl:text>,</xsl:text>
     <xsl:value-of select="$font-size" />
     <xsl:text>,</xsl:text>
     <xsl:if test="$latex.draft='yes'" >
@@ -316,6 +354,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="letter">
     <xsl:call-template name="converter-blurb-latex" />
     <xsl:text>\documentclass[</xsl:text>
+    <xsl:call-template name="sidedness"/>
+    <xsl:text>,</xsl:text>
     <xsl:value-of select="$font-size" />
     <xsl:text>,</xsl:text>
     <xsl:if test="$latex.draft='yes'" >
@@ -335,6 +375,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="memo">
     <xsl:call-template name="converter-blurb-latex" />
     <xsl:text>\documentclass[</xsl:text>
+    <xsl:call-template name="sidedness"/>
+    <xsl:text>,</xsl:text>
     <xsl:value-of select="$font-size" />
     <xsl:text>,</xsl:text>
     <xsl:if test="$latex.draft='yes'" >
@@ -2088,6 +2130,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\RaggedRight&#xa;</xsl:text>
     </xsl:if>
     <!-- $text-alignment = 'justify' => default LaTeX -->
+</xsl:template>
+
+<!-- Sidedness -->
+<!-- \documentclass option, no comma -->
+<xsl:template name="sidedness">
+    <xsl:choose>
+        <xsl:when test="$latex-sides= 'one'">
+            <xsl:text>oneside</xsl:text>
+        </xsl:when>
+        <xsl:when test="$latex-sides= 'two'">
+            <xsl:text>twoside</xsl:text>
+        </xsl:when>
+    </xsl:choose>
 </xsl:template>
 
 <!-- ####################### -->
