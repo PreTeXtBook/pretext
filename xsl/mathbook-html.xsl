@@ -314,6 +314,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="html.presentation" select="'no'" />
 <xsl:variable name="b-html-presentation" select="$html.presentation = 'yes'" />
 
+<!-- We may someday support justified text, presuming good browser  -->
+<!-- support.  For now, we warn if the global parameter is set, and -->
+<!-- override the variable's value, which is not ever consulted     -->
+<xsl:variable name="text-alignment">
+    <xsl:if test="not($text.alignment = '')">
+        <xsl:message>PTX:WARNING: the "text.alignment" string parameter ("<xsl:value-of select="$text.alignment"/>") has no effect on this conversion, assuming "raggedright"</xsl:message>
+    </xsl:if>
+    <xsl:text>raggedright</xsl:text>
+</xsl:variable>
+
+
 <!-- ############## -->
 <!-- Entry Template -->
 <!-- ############## -->

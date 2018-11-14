@@ -263,6 +263,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- parameterize preamble template with "page-geometry" template conditioned on self::article etc -->
     <xsl:call-template name="title-page-info-article" />
     <xsl:text>\begin{document}&#xa;</xsl:text>
+    <xsl:call-template name="text-alignment"/>
     <!-- Target for xref to top-level element -->
     <!-- immediately, or first in ToC         -->
     <xsl:choose>
@@ -306,6 +307,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>book}&#xa;</xsl:text>
     <xsl:call-template name="latex-preamble" />
     <xsl:text>\begin{document}&#xa;</xsl:text>
+    <xsl:call-template name="text-alignment"/>
     <xsl:apply-templates />
     <xsl:text>\end{document}</xsl:text>
 </xsl:template>
@@ -324,6 +326,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>article}&#xa;</xsl:text>
     <xsl:call-template name="latex-preamble" />
     <xsl:text>\begin{document}&#xa;</xsl:text>
+    <xsl:call-template name="text-alignment"/>
     <xsl:apply-templates />
     <xsl:text>\end{document}</xsl:text>
 </xsl:template>
@@ -342,6 +345,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>article}&#xa;</xsl:text>
     <xsl:call-template name="latex-preamble" />
     <xsl:text>\begin{document}&#xa;</xsl:text>
+    <xsl:call-template name="text-alignment"/>
     <xsl:apply-templates />
     <xsl:text>\end{document}&#xa;</xsl:text>
 </xsl:template>
@@ -435,6 +439,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\geometry{</xsl:text>
         <xsl:value-of select="$latex.geometry" />
         <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="not($text-alignment = 'justify')">
+        <xsl:text>%% better handing of text alignment&#xa;</xsl:text>
+        <xsl:text>\usepackage{ragged2e}&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>%% This LaTeX file may be compiled with pdflatex, xelatex, or lualatex&#xa;</xsl:text>
     <xsl:text>%% The following provides engine-specific capabilities&#xa;</xsl:text>
@@ -2072,6 +2080,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 </xsl:template>
 
+<!-- Text Alignment -->
+<!-- Overall alignment can be "justify" (the default) or      -->
+<!-- "raggedright" (as implemented by the "ragged2e" package) -->
+<xsl:template name="text-alignment">
+    <xsl:if test="$text-alignment = 'raggedright'">
+        <xsl:text>\RaggedRight&#xa;</xsl:text>
+    </xsl:if>
+    <!-- $text-alignment = 'justify' => default LaTeX -->
+</xsl:template>
 
 <!-- ####################### -->
 <!-- LaTeX Macro Definitions -->
