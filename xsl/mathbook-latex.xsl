@@ -2675,6 +2675,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- primarily necessary for chapter-level items (eg "preface"),    -->
 <!-- but might also occur due to one-count specialized divisions,   -->
 <!-- present in "unstructured" divisions                            -->
+<!-- "chapter" has a "display" format, to mimic the LaTeX two-line  -->
+<!-- look, otherwise we use the "block" format to get a paragraph   -->
+<!-- which will wrap long titles.  If more elaborate styling is     -->
+<!-- employed, it may be necessary to put titles into "minipage"    -->
+<!-- environments, or other LaTex boxes                             -->
 <!-- TODO: integrate "epigraph" package perhaps                     -->
 
 <!-- Not implemented/explored -->
@@ -2694,30 +2699,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Refences, and especially Index, are unnumbered -->
 <!-- section-level items in the back matter         -->
 <xsl:template name="titlesec-section-style">
-    <xsl:text>\titleformat{\section}&#xa;</xsl:text>
+    <xsl:text>\titleformat{\section}[block]&#xa;</xsl:text>
     <xsl:text>{\normalfont\Large\bfseries}{\thesection\space\titleptx}{1em}{}&#xa;</xsl:text>
     <xsl:text>[{\large\authorsptx}]&#xa;</xsl:text>
-    <xsl:text>\titleformat{name=\section,numberless}&#xa;</xsl:text>
+    <xsl:text>\titleformat{name=\section,numberless}[block]&#xa;</xsl:text>
     <xsl:text>{\normalfont\Large\bfseries}{}{0pt}{#1}&#xa;</xsl:text>
     <xsl:text>[{\large\authorsptx}]&#xa;</xsl:text>
     <xsl:text>\titlespacing*{\section}{0pt}{3.5ex plus 1ex minus .2ex}{2.3ex plus .2ex}&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template name="titlesec-subsection-style">
-    <xsl:text>\titleformat{\subsection}&#xa;</xsl:text>
+    <xsl:text>\titleformat{\subsection}[block]&#xa;</xsl:text>
     <xsl:text>{\normalfont\large\bfseries}{\thesubsection\space\titleptx}{1em}{}&#xa;</xsl:text>
     <xsl:text>[{\normalsize\authorsptx}]&#xa;</xsl:text>
-    <xsl:text>\titleformat{name=\subsection,numberless}&#xa;</xsl:text>
+    <xsl:text>\titleformat{name=\subsection,numberless}[block]&#xa;</xsl:text>
     <xsl:text>{\normalfont\large\bfseries}{}{0pt}{#1}&#xa;</xsl:text>
     <xsl:text>[{\normalsize\authorsptx}]&#xa;</xsl:text>
     <xsl:text>\titlespacing*{\subsection}{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template name="titlesec-subsubsection-style">
-    <xsl:text>\titleformat{\subsubsection}&#xa;</xsl:text>
+    <xsl:text>\titleformat{\subsubsection}[block]&#xa;</xsl:text>
     <xsl:text>{\normalfont\normalsize\bfseries}{\thesubsubsection\space\titleptx}{1em}{}&#xa;</xsl:text>
     <xsl:text>[{\small\authorsptx}]&#xa;</xsl:text>
-    <xsl:text>\titleformat{name=\subsubsection,numberless}&#xa;</xsl:text>
+    <xsl:text>\titleformat{name=\subsubsection,numberless}[block]&#xa;</xsl:text>
     <xsl:text>{\normalfont\normalsize\bfseries}{}{0pt}{#1}&#xa;</xsl:text>
     <xsl:text>[{\normalsize\authorsptx}]&#xa;</xsl:text>
     <xsl:text>\titlespacing*{\subsubsection}{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}&#xa;</xsl:text>

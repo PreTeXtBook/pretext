@@ -7318,7 +7318,7 @@ the xsltproc executable.
             <title>Customizations</title>
 
             <subsection xml:id="rename-facility">
-                <title>Renaming Document Parts</title>
+                <title>Renaming Document Parts, Plus This Is A Really Long Title So That We Can Test How Well It Reacts To The Right Margin And Wraps Around To Form A Couple Of Lines, Plus How It Sits Relative To The Number Of The Subsection</title>
 
                 <p><q>Names</q><idx>name</idx> for various parts of a document are determined exactly once for each language, ensuring consistency and saving you the bother of always typing them in.</p>
 
