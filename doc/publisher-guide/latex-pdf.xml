@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--   This file is part of the documentation of PreTeXt      -->
+<!--                                                          -->
+<!--      PreTeXt Publisher's Guide                           -->
+<!--                                                          -->
+<!-- Copyright (C) 2013-2017  Robert A. Beezer, David Farmer  -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<chapter xml:id="latex-pdf">
+    <title>(*) Conversion to <latex/> and PDF</title>
+
+        <p>TODO, just some notes right now</p>
+
+        <p>
+            <idx><h>PDF</h><h>electronic</h></idx>
+            <idx><h>PDF</h><h>print</h></idx>
+            The stylesheet <c>mathbook-latex.xsl</c> can produce two very similar outputs.  Each is a file in <latex/> syntax, which can be converted to a <init>PDF</init> with a <latex/> executable (<q>engine</q>).  However, there are two purposes for such a <init>PDF</init>.  The first is a document which is meant to be read on a screen.  We call this an <term>electronic <init>PDF</init></term>.  The second is meant to be printed as a physical book, so it would be the file you provide to a copy shop, campus bookstore, or print-on-demand service (see <xref ref="print-on-demand"/>).  We call this a <term>print <init>PDF</init></term>.
+        </p>
+
+        <p>As an illustration of the difference, an electronic <init>PDF</init> will contain cross-references that are active, and colored to be obvious to the reader.  For the print <init>PDF</init> the same cross-reference will be black and inactive.</p>
+
+        <p>The two output modes of this single stylesheet are controlled by the <c>latex.print</c> switch.  The default is <c>no</c> for the electronic version, and <c>yes</c> will change to the print version.  In this chapter, we describe common aspects of these two conversions.</p>
+
+        <p>The <c>text.alignment</c> switch will control how text is aligned (such as in paragraphs).  The value <c>justify</c> is the default, and <c>raggedright</c> will cause alignment on the left, with an uneven right edge, employing less hypenation.</p>
+
+
+        <p><latex /> can fail if lists are nested too deeply.  Maximums may be up to four nested ordered lists, and up to six overall (mixing in unordered lists).  If you hit these limits, ask yourself if your situation is really that complicated, or ask us to consider a feature request adding a technical fix.</p>
+
+        <p>Lists with several columns are rendered in column-major order, as of 2018-02-28.  In other words, the first list items (<tag>li</tag>) in your source will populate the first column.</p>
+
+        <table>
+            <caption>Options for <latex/> Conversion</caption>
+
+            <tabular>
+                <row>
+                    <cell>Switch</cell>
+                    <cell>Default</cell>
+                    <cell>Values</cell>
+                </row>
+                <row>
+                    <cell><c>latex.print</c></cell>
+                    <cell><c>no</c></cell>
+                    <cell><c>yes</c>, <c>no</c></cell>
+                </row>
+                <row>
+                    <cell><c>text.alignment</c></cell>
+                    <cell><c>justify</c></cell>
+                    <cell><c>raggedright</c>, <c>justify</c></cell>
+                </row>
+            </tabular>
+        </table>
+
+
+
+</chapter>
