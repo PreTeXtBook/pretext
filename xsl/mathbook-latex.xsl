@@ -2268,7 +2268,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$second-trip or boolean(self::acknowledgement|self::foreword|self::preface|self::index)">
             <xsl:text>*</xsl:text>
             <xsl:text>{#1}%&#xa;</xsl:text>
-            <xsl:text>\addcontentsline{toc}{chapter}{#3}&#xa;</xsl:text>
+            <xsl:text>\addcontentsline{toc}{</xsl:text>
+            <xsl:value-of select="$div-name"/>
+            <xsl:text>}{#3}&#xa;</xsl:text>
         </xsl:when>
         <!-- optional short title, real title -->
         <xsl:otherwise>
