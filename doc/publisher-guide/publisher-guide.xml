@@ -29,9 +29,7 @@
         <xi:include href="open-licenses.xml" />
         <xi:include href="conversions.xml" />
         <xi:include href="online-html.xml" />
-        <xi:include href="latex-pdf.xml" />
-        <xi:include href="electronic-pdf.xml" />
-        <xi:include href="print-pdf.xml" />
+        <xi:include href="pdf-print.xml" />
         <xi:include href="epub.xml" />
         <xi:include href="jupyter-notebook.xml" />
         <xi:include href="instructor-version.xml" />

@@ -11,7 +11,7 @@
     <title>(*) Conversion to Online HTML</title>
 
     <introduction>
-        <p>Similar to the case for <latex /> conversion (<xref ref="electronic-pdf" />) there is a variety of command-line processing parameters available (<xref ref="processing-parameters" />).  Until we are ready to document these carefully, open <c>xsl/mathbook-html.xsl</c> and poke around to see what is available.</p>
+        <p>Similar to the case for <latex /> conversion (<xref ref="pdf-print"/>) there is a variety of command-line processing parameters available (<xref ref="processing-parameters" />).  Until we are ready to document these carefully, open <c>xsl/mathbook-html.xsl</c> and poke around to see what is available.</p>
     </introduction>
 
     <section xml:id="knowled-content">
