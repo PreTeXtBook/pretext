@@ -87,9 +87,15 @@
     </paragraphs>
 
     <paragraphs>
+        <title>Styling</title>
+
+        <p>Note that some of these switches are about <em>style</em>.  There are many more ways to influence the style of the <latex/> output, see <xref ref="latex-styles"/>.</p>
+    </paragraphs>
+
+    <paragraphs>
         <title>Switch Reference</title>
 
-        <p>The following switches can be provided on the command-line, or perhaps more conveniently in a simple <init>XSL</init> file.</p>
+        <p>The following switches can be provided on the command-line, or perhaps more conveniently in a simple <init>XSL</init> file.  See <xref ref="processing-parameters"/> for more detail.</p>
 
         <table>
             <caption>Options for <latex/> Conversion</caption>
