@@ -153,4 +153,16 @@
             </tabular>
         </table>
     </paragraphs>
+
+    <paragraphs>
+        <title><latex /> File</title>
+
+        <p>The <latex/> file created by <pretext/> will contain the majority of your content in a form that you could use it in a new standalone <latex/> document, in accordance with Principle <xref ref="principle-open" text="global"/>.  However some constructions which are not natural in <latex/>, such as a <tag>sidebyside</tag>, may be cumbersome to reuse.  We continue to improve and refine these situations, though.</p>
+
+        <p>Our philosophy is to create and use many new <latex/> environments, allowing styling and fine-tuning to occur in the preamble.  This makes the body look more like simple <latex/> and allows for much greater flexiblity in styling, along with greater reliability for successful <latex/> compilation.</p>
+
+        <p>The existence, variety, and quality of <latex/> packages changes continuously.  We can, and will, swap out some packages for replacements, as needed or desirable.  This is to your advantage, as you are absolved of the need to evaluate competing packages, and to insure that they do not clash with each other.  So resist the temptation to modify the <latex/> output significantly prior to compilation, as it will inevitably lead to frustration.  The <latex/> file is a means to an end<mdash/>it allows us to create a <init>PDF</init> with excellent typography, and especially for the demands of technical discplines, such as <acro>STEM</acro> and music.  It is meant to ephemeral, not archival.</p>
+
+        <p>If some other variety of <latex/> (or <tex/>) file is desired, a new conversion could be created.  Many of the more complicated aspects of any conversion are purposely isolated in the <c>mathbook-common.xsl</c> file so that they can be easily re-purposed and there is consistency across output formats.</p>
+    </paragraphs>
 </chapter>
