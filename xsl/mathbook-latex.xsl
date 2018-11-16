@@ -2551,14 +2551,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>} }&#xa;</xsl:text>
     <!-- create and configure the environment/tcolorbox -->
     <xsl:text>\newtcolorbox</xsl:text>
-    <!-- numbering setup -->
+    <!-- numbering setup: * indicates existing, -->
+    <!-- already configured, LaTeX counter      -->
     <xsl:text>[</xsl:text>
-    <xsl:text>use counter=</xsl:text>
+    <xsl:text>use counter*=</xsl:text>
     <xsl:value-of select="$counter"/>
-    <xsl:if test="$counter-division">
-        <xsl:text>, number within=</xsl:text>
-        <xsl:value-of select="$counter-division"/>
-    </xsl:if>
     <xsl:text>]</xsl:text>
     <!-- environment's tcolorbox name, pair -->
     <!-- with actual constructions in body  -->
@@ -2579,7 +2576,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- begin: title construction -->
     <xsl:text>title={{</xsl:text>
     <xsl:apply-templates select="." mode="type-name"/>
-    <xsl:text>~\thetcbcounter</xsl:text>
+    <xsl:text>~\the</xsl:text>
+    <xsl:value-of select="$counter"/>
     <xsl:choose>
         <xsl:when test="&THEOREM-FILTER; or &AXIOM-FILTER;">
             <!-- first space of double space -->
