@@ -57,13 +57,20 @@ for (var j=0; j < reading_questions.length; ++j) {
 
        var this_rq_id_text = reading_question_id + "_text";
        var this_rq_id_controls = reading_question_id + "_controls";
-       var answer_pre = '<pre';
-       answer_pre += ' id="' + this_rq_id_text + '"'
-       answer_pre += ' rows="' + '3' + '"';
-       answer_pre += ' style="width:100%; margin-top:0.5em;"';
-       answer_pre += '>';
-       answer_pre += existing_content
-       answer_pre += '</pre>';
+       var answer_div = '<div';
+       answer_div += ' id="' + this_rq_id_text + '"'
+       answer_div += ' rows="' + '3' + '"';
+       answer_div += ' style="width:100%; margin-top:0.5em;"';
+       answer_div += '>';
+       answer_div += existing_content;
+       answer_div += '</div>';
+
+/* need to save the original so that MathJax does not change it */
+       var hidden_answer_div = '<div';
+       hidden_answer_div += ' id="' + this_rq_id_text + '_hidden' + '"';
+       hidden_answer_div += ' class="tex2jax_ignore" style="display: none">';
+       hidden_answer_div += existing_content;
+       hidden_answer_div += '</div>';
 
 
        var this_rq_controls = '<div id="' + this_rq_id_controls + '" class="input_controls hidecontrols" style="margin-bottom:-1.9em;">';
@@ -73,14 +80,16 @@ for (var j=0; j < reading_questions.length; ++j) {
        var this_rq_answer_and_controls = document.createElement('div');
        this_rq_answer_and_controls.setAttribute('style', 'width:80%; margin-left:auto; margin-right:auto; margin-top:0.5em;');
        this_rq_answer_and_controls.setAttribute('class', 'rq_answer');
-       console.log("about to show the existing answer on #", reading_question_id);
-       this_rq_answer_and_controls.innerHTML = answer_pre + this_rq_controls;
+       console.log("iiiii about to show the existing answer on #", reading_question_id);
+       this_rq_answer_and_controls.innerHTML = hidden_answer_div + answer_div + this_rq_controls;
        $('#'+reading_question_id).append(this_rq_answer_and_controls);
      //  this.parentNode.insertAdjacentElement("afterend", this_rq_answer_and_controls);
 
     }
 
 }
+/* typeset the math in teh reading quesitons answers */
+MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
 
 $('.readingquestion_make_answer').mousedown(function(e){
   console.log(".readingquestion_make_answer");
@@ -107,6 +116,8 @@ $('.readingquestion_make_answer').mousedown(function(e){
   this_rq_answer_and_controls.innerHTML = answer_textarea + this_rq_controls;
   this.parentNode.insertAdjacentElement("afterend", this_rq_answer_and_controls);
 
+  MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+
   var textarea = window.document.querySelector("textarea");
   textarea.addEventListener("keypress", function() {
      if(textarea.scrollTop != 0){
@@ -130,11 +141,15 @@ $('body').on('click','.rq_save', function(){
   console.log("this_rq_text", this_rq_text);
   localStorage.setObject(this_rq_id, this_rq_text);
 
-  var this_ans_static = document.createElement('pre');
+  document.getElementById(this_rq_id + "_hidden").innerHTML = this_rq_text;
+
+  var this_ans_static = document.createElement('div');
   this_ans_static.setAttribute('id', this_rq_id);
   this_ans_static.setAttribute('style', "margin-top: 0.5em;");
   this_ans_static.innerHTML = this_rq_text
   this_rq_ans.replaceWith(this_ans_static);
+
+  MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
 
   $(this).parent().addClass("hidecontrols");
 
@@ -154,7 +169,9 @@ $('body').on('click','.rq_edit', function(){
   console.log(".rq_edit", this_rq_id);
   console.log("this_rq_ans", this_rq_ans);
   var this_rq_text = this_rq_ans.innerHTML;
+  var this_rq_text_raw = document.getElementById(this_rq_id + "_hidden").innerHTML;
   console.log("this_rq_text", this_rq_text);
+  console.log("this_rq_text raw", this_rq_text_raw);
 
    //this is copied from above.  need to eliminate repeated code
 
@@ -176,7 +193,7 @@ $('body').on('click','.rq_edit', function(){
   save_button.innerHTML = "save";
   this.replaceWith(save_button);
 
-  $('#' + this_rq_id).val(this_rq_text);
+  $('#' + this_rq_id).val(this_rq_text_raw);
 
   var textarea = window.document.querySelector("textarea");
   textarea.style.height = textarea.scrollHeight + "px";
