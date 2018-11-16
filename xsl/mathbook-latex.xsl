@@ -3563,8 +3563,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Deccription column is "p" to enable word-wrapping  -->
 <!-- The 60% width is arbitrary, could see improvements -->
+<!-- This is not a PreTeXt "table" so we don't let      -->
+<!-- LaTeX number it, nor increment the table counter   -->
 <xsl:template match="notation-list">
     <xsl:text>\begin{longtable}[l]{lp{0.60\textwidth}r}&#xa;</xsl:text>
+    <xsl:text>\addtocounter{table}{-1}&#xa;</xsl:text>
     <xsl:text>\textbf{</xsl:text>
     <xsl:call-template name="type-name">
         <xsl:with-param name="string-id" select="'symbol'" />
@@ -3694,12 +3697,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- two division'al and element'al templates below,  -->
 <!-- it contains the logic of constructing such a list -->
 
-<!-- List-of entry/exit hooks   -->
-<!-- Long table, two columns    -->
-<!-- Just "continued" adornment -->
+<!-- List-of entry/exit hooks, for long table,        -->
+<!-- two columns and just "continued" adornment       -->
+<!-- This is not a PreTeXt "table" so we don't let    -->
+<!-- LaTeX number it, nor increment the table counter -->
 <xsl:template name="list-of-begin">
     <xsl:text>\noindent&#xa;</xsl:text>
     <xsl:text>\begin{longtable}[l]{ll}&#xa;</xsl:text>
+    <xsl:text>\addtocounter{table}{-1}&#xa;</xsl:text>
     <xsl:text>\endfirsthead&#xa;</xsl:text>
     <xsl:text>\endhead&#xa;</xsl:text>
     <xsl:text>\multicolumn{2}{r}{(</xsl:text>
