@@ -196,18 +196,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>{&#xa;</xsl:text>
         <!-- cell list first, majority of notebook, metadata to finish -->
         <xsl:text>"cells": [&#xa;</xsl:text>
-        <!-- Escape backslashes first, because more are coming -->
-        <xsl:variable name="escape-backslash" select="str:replace($cell-list, '\','\\')" />
-        <!-- Escape quote marks -->
-        <xsl:variable name="escape-quote" select="str:replace($escape-backslash, '&quot;','\&quot;')" />
-        <!-- Replace all newlines -->
-        <xsl:variable name="replace-newline" select="str:replace($escape-quote, '&#xa;','\n')" />
+        <!-- Escape JSON strings now, be sure later adjustments -->
+        <!-- conform to JSON syntax in this regard              -->
+        <xsl:variable name="escaped-cell-list">
+            <xsl:call-template name="escape-json-string">
+                <xsl:with-param name="text" select="$cell-list"/>
+            </xsl:call-template>
+        </xsl:variable>
         <!-- Multiple strings in a cell are merged into one by    -->
         <!-- combining adjoining end/begin pairs, leaving only    -->
         <!-- leading and trailing delimiters (next substitution). -->
         <!-- This is one solution of the problem of $n-1$         -->
         <!-- separators for $n$ items.                            -->
-        <xsl:variable name="split-strings" select="str:replace($replace-newline, $ESBS, '')" />
+        <xsl:variable name="split-strings" select="str:replace($escaped-cell-list, $ESBS, '')" />
         <xsl:variable name="finalize-strings" select="str:replace(str:replace($split-strings, $ES, '&quot;'), $BS, '&quot;')" />
         <!-- The only pseudo-markup left is that of the two types -->
         <!-- of cells possible in a Jupyter notebook.  We split   -->
@@ -450,6 +451,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
+<!-- ##### -->
+<!-- Icons -->
+<!-- ##### -->
+
+<!-- Unicode characters will relieve necessity of        -->
+<!-- Font Awesome CSS loading, $icon-table is in -common -->
+<xsl:template match="icon">
+    <!-- the name attribute of the "icon" in text as a string -->
+    <xsl:variable name="icon-name">
+        <xsl:value-of select="@name"/>
+    </xsl:variable>
+
+    <!-- for-each is just one node, but sets context for key() -->
+    <xsl:for-each select="$icon-table">
+        <xsl:value-of select="key('icon-key', $icon-name)/@unicode" />
+    </xsl:for-each>
+</xsl:template>
+
 <!-- ################### -->
 <!-- Markdown Protection -->
 <!-- ################### -->
@@ -483,7 +502,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- interpreted incorrectly.  But they can be escaped.   -->
 <!-- Not a Markdown element, but critical so here anyway. -->
 <!-- So authors should use the "dollar" element.          -->
-<xsl:template match="dollar">
+<xsl:template name="dollar-character">
     <xsl:text>\$</xsl:text>
 </xsl:template>
 
@@ -493,39 +512,39 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- (&, <, >) or as fancier, non-ASCII, Unicode versions.         -->
 
 <!-- Number Sign, Hash, Octothorpe -->
-<xsl:template match="hash">
+<xsl:template name="hash-character">
     <xsl:text>\#</xsl:text>
 </xsl:template>
 
 <!-- Underscore -->
-<xsl:template match="underscore">
+<xsl:template name="underscore-character">
     <xsl:text>\_</xsl:text>
 </xsl:template>
 
 <!-- Left Brace -->
-<xsl:template match="lbrace">
+<xsl:template name="lbrace-character">
     <xsl:text>\{</xsl:text>
 </xsl:template>
 
 <!-- Right  Brace -->
-<xsl:template match="rbrace">
+<xsl:template name="rbrace-character">
     <xsl:text>\}</xsl:text>
 </xsl:template>
 
 <!-- Backslash -->
-<xsl:template match="backslash">
+<xsl:template name="backslash-character">
     <xsl:text>\\</xsl:text>
 </xsl:template>
 
 <!-- Asterisk, implemented as Unicode  -->
 
 <!-- Left Bracket -->
-<xsl:template match="lbracket">
+<xsl:template name="lbracket-character">
     <xsl:text>\[</xsl:text>
 </xsl:template>
 
 <!-- Right Bracket -->
-<xsl:template match="rbracket">
+<xsl:template name="rbracket-character">
     <xsl:text>\]</xsl:text>
 </xsl:template>
 
@@ -533,7 +552,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- This is the rationale for this element. -->
 <!-- We can use it in a text context,        -->
 <!-- and protect it here from Markdown.      -->
-<xsl:template match="backtick">
+<xsl:template name="backtick-character">
     <xsl:text>\`</xsl:text>
 </xsl:template>
 
@@ -571,6 +590,63 @@ TODO: (overall)
 8.  Hyperlinks within a file work better if not prefixed with file name.
     (General improvement, but not so important with knowls available.)
 -->
+
+
+<!-- ############### -->
+<!-- Text Processing -->
+<!-- ############### -->
+
+<!-- The general template for matching "text()" nodes will     -->
+<!-- apply this template (there is a hook there).  Verbatim    -->
+<!-- text should be manipulated in templates with              -->
+<!-- "xsl:value-of" and so not come through here.  Conversely, -->
+<!-- when "xsl:apply-templates" is applied, the template will  -->
+<!-- have effect.                                              -->
+<!--                                                           -->
+<!-- Our emphasis originally is on escaping characters that    -->
+<!-- LaTeX has hijacked for special purposes.  First we define -->
+<!-- some variables globally, so it is only necessary once.    -->
+
+<!-- XML: & < > -->
+
+<!-- LaTeX: # $ % ^ & _ { } ~ \ -->
+
+<xsl:variable name="hash-replacement">
+    <xsl:call-template name="hash-character"/>
+</xsl:variable>
+
+<xsl:variable name="backslash-replacement">
+    <xsl:call-template name="backslash-character"/>
+</xsl:variable>
+
+<xsl:variable name="lbrace-replacement">
+    <xsl:call-template name="lbrace-character"/>
+</xsl:variable>
+
+<xsl:variable name="rbrace-replacement">
+    <xsl:call-template name="rbrace-character"/>
+</xsl:variable>
+
+<xsl:variable name="dollar-replacement">
+    <xsl:call-template name="dollar-character"/>
+</xsl:variable>
+
+<xsl:variable name="underscore-replacement">
+    <xsl:call-template name="underscore-character"/>
+</xsl:variable>
+
+<xsl:template name="text-processing">
+    <xsl:param name="text"/>
+    <!-- Backslash first, then clear to add more -->
+    <xsl:variable name="backslash-fixed"  select="str:replace($text,            '\',  $backslash-replacement)"/>
+    <xsl:variable name="lbrace-fixed"     select="str:replace($backslash-fixed, '{',  $lbrace-replacement)"/>
+    <xsl:variable name="rbrace-fixed"     select="str:replace($lbrace-fixed,    '}',  $rbrace-replacement)"/>
+    <xsl:variable name="hash-fixed"       select="str:replace($rbrace-fixed,    '#',  $hash-replacement)"/>
+    <xsl:variable name="dollar-fixed"     select="str:replace($hash-fixed,      '$',  $dollar-replacement)"/>
+    <xsl:variable name="underscore-fixed" select="str:replace($dollar-fixed,    '_',  $underscore-replacement)"/>
+
+    <xsl:value-of select="$underscore-fixed"/>
+</xsl:template>
 
 <!-- ########################## -->
 <!-- Intermediate Pseudo-Markup -->

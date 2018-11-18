@@ -109,6 +109,7 @@ the xsltproc executable.
         \usetikzlibrary{backgrounds}
         \usetikzlibrary{arrows,matrix}
         \usetikzlibrary{positioning}        % for Dave R's worksheet
+        \usepackage{circuitikz}             % for Virgil P's worksheet
         </latex-image-preamble>
         <!--
         The Sage Notebook has its own interface and worksheet list.
@@ -199,6 +200,12 @@ the xsltproc executable.
             <archive from="figure-asymptote-contour-plot">exceptional</archive>
         </images>
         -->
+
+        <latex-output>
+            <!-- turn this on once it is easier to make   -->
+            <!-- standalone worksheets, uncomment to test -->
+            <!-- <worksheet top="3cm" left="4cm" margin="12cm"/> -->
+        </latex-output>
 
     </docinfo>
 
@@ -384,7 +391,7 @@ the xsltproc executable.
         the first non-trivial character.
         -->
 
-        <section xml:id="section-sage-cells">
+        <section permid="Abc" xml:id="section-sage-cells">
             <title>Computing Integrals with Sage (<m>\int</m>)</title>
             <!-- Index testing, semi-realistic -->
             <idx><h>Sage</h><h>integration</h></idx>
@@ -416,7 +423,7 @@ the xsltproc executable.
 
             <p>Sage can compute definite integrals.  The output contains the approximate numerical value of the definite integral, followed by an upper bound  of the error in the approximation.</p>
 
-            <sage xml:id="sage-numerical-integral">
+            <sage>
                 <input>numerical_integral(sin(x)^2, (0, 2))</input>
                 <!-- need to use wildcard matching to make this doctestable -->
                 <output>(1.189200623826982, 1.320277913471315e-14)</output>
@@ -566,17 +573,17 @@ the xsltproc executable.
         <section xml:id="interesting-corollary">
             <title>An Interesting Corollary</title>
 
-            <objectives xml:id="objectives-structures">
+            <objectives permid="dEf" xml:id="objectives-structures">
                 <title>Fundamental Structures</title>
 
                 <introduction>
-                    <p>This is an <c>&lt;objectives&gt;</c> element you are reading, and this is its introduction.  This early section has really grown and tries to accomplish many things.  Not all of them are listed here.</p>
+                    <p>This is an <tag>objectives</tag> element you are reading, and this is its introduction.  This early section has really grown and tries to accomplish many things.  Not all of them are listed here.</p>
                 </introduction>
 
                 <ol>
                     <li xml:id="objective-structure">Display various <q>blocks</q>, fundamental units of the flow.</li>
-                    <li>More</li>
-                    <li>Evermore</li>
+                    <li>More.</li>
+                    <li>Evermore.</li>
                 </ol>
 
                 <conclusion>
@@ -584,9 +591,8 @@ the xsltproc executable.
                 </conclusion>
             </objectives>
 
-
             <introduction>
-                <p>This is across-reference to one of the objectives above, forced to always using the <c>type-global</c> form of the text.  It should describe the objective as belonging to the <em>section</em> (rather than the <em>objectives</em>), since objectives are one-per-subdivision and are numbered based upon the chapter number: <xref ref="objective-structure" text="phrase-global" />.  For comparison this is the (forced) <c>type-global</c> cross-reference: <xref ref="objective-structure" text="type-global" />.</p>
+                <p>This is a cross-reference to one of the objectives above, forced to use the <c>type-global</c> form of the text.  It should describe the objective as belonging to the <em>section</em> (rather than the <em>objectives</em>), since objectives are one-per-subdivision and are numbered based upon the containing division: <xref ref="objective-structure" text="phrase-global" />.  For comparison this is the (forced) <c>type-global</c> cross-reference: <xref ref="objective-structure" text="type-global" />.</p>
 
                 <p>The Fundamental Theorem comes in two flavors, where usually one is a corollary of the other.</p>
             </introduction>
@@ -596,13 +602,13 @@ the xsltproc executable.
 
                 <todo>Should equation references come with parentheses?</todo>
 
-                <corollary xml:id="corollary-FTC-derivative">
+                <corollary permid="ghI" xml:id="corollary-FTC-derivative">
                     <creator>Leibniz, Newton</creator>
                     <idx><h>Fundamental Theorem of Calculus</h><h>Corollary</h></idx>
                     <statement>
                         <p>Suppose <m>f(x)</m> is a continuous function.  Then <men xml:id="equation-alternate-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}=f(x)</men>.</p>
                     </statement>
-                    <proof xml:id="proof-FTC-corollary">
+                    <proof permid="Jkl" xml:id="proof-FTC-corollary">
                         <p>We simply take the indicated derivative, applying Theorem<nbsp /><xref ref="theorem-FTC" /> at <xref ref="equation-use-FTC" /><mdn>
                             <mrow xml:id="equation-use-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}&amp;=\frac{d}{dx}\left(F(x)-F(a)\right)</mrow>
                             <mrow number="no">&amp;=\frac{d}{dx}F(x)-\frac{d}{dx}F(a)</mrow>
@@ -626,7 +632,7 @@ the xsltproc executable.
                     <input>2+2</input>
                 </sage>
 
-                <example xml:id="example-mysterious">
+                <example permid="mNo" xml:id="example-mysterious">
                     <title>A Mysterious Derivative!</title>
                     <p>So if we define a function with its variable employed as a limit of integration, like so <me>K(z)=\definiteintegral{345}{z}{x^4\sin(x^2)}{x}</me> then we get the derivative of that function so easily it seems like a mystery, <me>\frac{d}{dz}K(z)=z^4\sin(z^2)</me>. That's it.</p>
 
@@ -661,7 +667,7 @@ the xsltproc executable.
                             <p>A case may also have a <c>title</c>, whose formatting and structure is entirely up to the author.  This then becomes the text of a cross-reference, as well.</p>
                         </case>
 
-                        <case direction="forward" xml:id="forward">
+                        <case permid="pqR" direction="forward" xml:id="forward">
                             <title>Necessity</title>
 
                             <p>If you like, you can have both indications.</p>
@@ -695,7 +701,7 @@ the xsltproc executable.
 
                     <p>The Fundamental Theorem explains why we use the same notation for a definite integral, which is a numerical calculation,<fn>Which I think sometimes students lose sight of.</fn> and an antiderivative, which is a symbolic expression.</p>
 
-                    <exercise xml:id="exercise-essay">
+                    <exercise permid="Stu" xml:id="exercise-essay">
                         <title>Essay Question: Compare and Contrast</title>
                         <statement>
                             <p>Write a short paragraph which compares, and contrasts, the definite and indefinite integral. This is an exercise which sits in the midst of the narrative, so is formatted more like an example or a remark.  It can have a hint and a solution, but this one does not.  It can have a title, which this one does.</p>
@@ -751,8 +757,8 @@ the xsltproc executable.
                         <hint>
                             <p>A good hint.</p>
                         </hint>
-                        <answer>
-                            <p>42.</p>
+                        <answer permid="Vwx">
+                            <p permid="Xyz">42.</p>
                         </answer>
                         <solution>
                             <p>What was the question?</p>
@@ -837,7 +843,7 @@ the xsltproc executable.
                         <p>An <c>&lt;aside&gt;</c> is similar to a remark, but is not as critical to the narrative.  It is not numbered, and so requires a title.  It can be the target of a cross-reference.  They are meant to be short, and so are not knowlized at their first appearance.  If the content is appropriate, these can be marked as <c>&lt;historical&gt;</c> or <c>&lt;biographical&gt;</c>, though longer items should use subdivisions (<eg /> sections, subsections) instead.</p>
                     </aside>
 
-                    <project xml:id="project-structured">
+                    <project permid="aBc" xml:id="project-structured">
                         <title>A very structured project</title>
 
                         <prelude>
@@ -853,7 +859,7 @@ the xsltproc executable.
                             <p>This first task is very simple, just a paragraph.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
                         </task>
 
-                        <task>
+                        <task permid="abC">
                             <p>Now three paragraphs.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
                             <p>In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
                             <p>In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
@@ -964,13 +970,56 @@ the xsltproc executable.
                         </statement>
                         <solution>
                             <p>This solution will migrate to a list of solutions in the backmatter.  We include a <c>sidebyside</c> as a test.</p>
-                            <sidebyside width="30%">
+                            <sidebyside permid="dEf" width="30%">
                                 <p>This is a skinny paragraph which should be just 30<percent /> of the width.</p>
                                 <p>And another skinny paragraph which should also be just 30<percent /> of the width.</p>
                             </sidebyside>
                         </solution>
                     </exercise>
                 </exercises>
+
+                <reading-questions>
+                    <introduction>
+                        <p>A set of reading questions may have an <tag>introduction</tag>, perhaps for preparatory explanation.</p>
+                    </introduction>
+
+                    <exercise xml:id="first-reading">
+                        <statement>
+                            <p>This is a <term>reading question</term> that you might have a student read prior to a class session, based on reading part of the book.</p>
+                        </statement>
+                        <answer>
+                            <p>Which might help make the classroom session improve.</p>
+                        </answer>
+                    </exercise>
+
+                    <exercise>
+                        <p>And a second one, with a cross-reference to the first, as a check on numbering: <xref ref="first-reading" text="type-global"/>.</p>
+                    </exercise>
+
+                    <conclusion>
+                        <p>And for symmetry, a <tag>conclusion</tag>.</p>
+                    </conclusion>
+                </reading-questions>
+
+                <glossary>
+                    <introduction>
+                        <p>A glossary may have an <tag>introduction</tag>, perhaps with some explanation.</p>
+                    </introduction>
+
+                    <defined-term>
+                        <title>bar</title>
+                        <p>A part of <term>foobar</term>.  See <xref ref="foobar-defined" text="title"/>.</p>
+                    </defined-term>
+
+                    <defined-term xml:id="foobar-defined">
+                        <title>foobar</title>
+                        <p>A synonym for the acronym <acro>FUBAR</acro>.</p>
+                    </defined-term>
+
+                    <conclusion>
+                        <p>And for symmetry, a <tag>conclusion</tag>.</p>
+                    </conclusion>
+                </glossary>
 
                 <solutions xml:id="solutions-subsection" inline="hint solution answer" divisional="hint solution answer" project="hint solution answer">
                     <title>Solutions for This Subsection</title>
@@ -982,7 +1031,7 @@ the xsltproc executable.
 
                     <!-- content will happen here automatically -->
 
-                    <conclusion>
+                    <conclusion permid="deF">
                         <p>And a conclusion to this solutions division, which may not be readily apparent as distinct from the final division's worth of solutions, but since it is not prefixed with a number, it may be different enough.</p>
                     </conclusion>
                 </solutions>
@@ -1029,7 +1078,7 @@ the xsltproc executable.
                 </paragraphs>
 
 
-                <assemblage xml:id="assemblage-basics">
+                <assemblage permid="Ghi" xml:id="assemblage-basics">
                     <title>Assemblages: Collections and Summaries</title>
 
                     <p>An <c>&lt;assemblage&gt;</c> is a collection, or summary, that does not have much structure to it.  So you are limited to paragraphs and friends (<c>p</c>, <c>blockquote</c>, <c>pre</c>) and side-by-sides that do not contain captioned items (<c>sidebyside</c>, <c>sbsgroup</c>).  The intent is that contents are not numbered, so cannot be cross-referenced individually, and so also do not become knowls.  You may place <c>&lt;image&gt;</c>, <c>&lt;tabular&gt;</c>, and <c>&lt;program&gt;</c> inside a <c>&lt;sidebyside&gt;</c>, in addition to other objects that do not have captions.  Note that <c>p</c> may by extension contain lists (<c>ol</c>, <c>ul</c>, <c>dl</c>).  Despite limited structure, the presentation should draw attention to it, because the contents should be seen as more important in some way.  It should be <q>highlighted</q> in some manner.  If you need to connect the entire assemblage with material elsewhere, you can do that with the usual <c>xref/xml:id</c> mechanism.<idx><h>assemblage</h></idx></p>
@@ -1104,6 +1153,30 @@ the xsltproc executable.
 
                 <p>Long after we started this mess, we added <pretext /> tags to mark up tags and attributes.  The elements are: <tag>tag</tag>, <tag>tage</tag>, <tag>attr</tag>.  Examples of how these render are (respectively): <tag>section</tag>, <tage>hash</tage>, <attr>width</attr>.  Perhaps this document will make greater use of these tags.</p>
             </subsection>
+
+            <conclusion>
+                <p>A conclusion here, which we fill with some numbering tests.</p>
+
+                <p>This is a cross-reference to one of the outcomes, forced to use the <c>type-global</c> form of the text.  It should describe the outcome as belonging to the <em>section</em> (rather than the <em>outcomes</em>), since outcomes are one-per-subdivision and are numbered based upon the containing division: <xref ref="outcome-structure" text="phrase-global" />.  For comparison this is the (forced) <c>type-global</c> cross-reference: <xref ref="outcome-structure" text="type-global" />.</p>
+            </conclusion>
+
+            <outcomes xml:id="outcomes-structures">
+                <title>Fundamental Structures, Revisited</title>
+
+                <introduction>
+                    <p>This is a <tag>outcomes</tag> element you are reading, and this is its introduction.  This early section has really grown and we have tried to accomplish many things.  Not all of them are listed here.</p>
+                </introduction>
+
+                <ol permid="gHi">
+                    <li>Display various <q>blocks</q>, fundamental units of the flow.</li>
+                    <li xml:id="outcome-structure">More, and this is what the cross-references above are pointing to.</li>
+                    <li>Evermore.</li>
+                </ol>
+
+                <conclusion>
+                    <p>This concludes the (incomplete) outcomes for this section, so now we can carry-on to the next section.</p>
+                </conclusion>
+            </outcomes>
         </section>
 
         <!--
@@ -1118,7 +1191,7 @@ the xsltproc executable.
         in HTML, which are similar, but not identical.
         -->
 
-        <section>
+        <section permid="Bcd">
             <title>Some Facts and Figures</title>
 
             <!-- This is not implemented
@@ -1179,7 +1252,7 @@ the xsltproc executable.
                 <li><p>Black</p></li>
                 <li><p>Orange</p></li>
                 <li><p>Pink</p></li>
-                <li><p>Salmon<idx><h>strange colors</h></idx></p></li>
+                <li permid="bCd"><p permid="bcD">Salmon<idx><h>strange colors</h></idx></p></li>
                 <li><p>Aqua</p></li>
                 <li><p>Cyan</p></li>
                 <li><p>Puce<idx><h>strange colors</h></idx></p></li>
@@ -1498,7 +1571,7 @@ the xsltproc executable.
                     <p>So.  Do not take any extra steps and let <latex /> figure out the breaks.  If you do not like a break, modify the <c>md</c> or <c>mdn</c> to go back to the AMSmath default behavior and not break at all.  Ever.  Or rather, go further and modify an individual <c>mrow</c> to suggest that it is a good place for a break.</p>
                 </example>
 
-                <p>This is a poorly-authored paragaph to test the conversion to <init>HTML</init>.  There are two displayed equations, separated by a period ending the first one's sentence, which should migrate into the display, and not leave behind an empty paragraph: <me>z+y = z</me>.  <me>a + b = c</me>.  This final sentence should remain, inside another <init>HTML</init> paragraph, without the second equation's period.</p>
+                <p permid="Cde">This is a poorly-authored paragaph to test the conversion to <init>HTML</init>.  There are two displayed equations, separated by a period ending the first one's sentence, which should migrate into the display, and not leave behind an empty paragraph: <me permid="Fgh">z+y = z</me>.  <me>a + b = c</me>.  This final sentence should remain, inside another <init>HTML</init> paragraph, without the second equation's period.</p>
             </subsection>
 
             <subsection>
@@ -1630,6 +1703,10 @@ the xsltproc executable.
                 <tilde /><nbsp /><nbsp />
                 <backslash /><nbsp /><nbsp />
                 <asterisk /><nbsp /><nbsp /></p>
+
+                <p>(2010-10-09)  Experimental code is in place to make much of the preceding unnecessary.  In particular, it should be possible to use the folowing  characters straight from your keyboard, and without an <init>XML</init> element.  But remember, the three special <init>XML</init> characters need to actually be authored using the escaped versions.</p>
+
+                <p>&amp; &lt; &gt; # $ % ^ _ { } ~ \</p>
             </subsection>
 
             <subsection>
@@ -1677,6 +1754,56 @@ the xsltproc executable.
                 <p>We also distinguish between abbreviations (<abbr>vs.</abbr>), acronyms (<acro>SCUBA</acro>) and initialisms (<init>XML</init>).  This is a test of the text version of a multiplication symbol: 2<nbsp /><times /><nbsp />4.</p>
 
                 <p>An <term>em dash</term> is the long dash used much like parentheses (not an <term>en dash</term> used to denote a range, such as a range of page numbers).  It should not have spaces around it, but some style guides allow for a <em>thin</em> space, which<mdash />we test right now.  The command line stringparam <c>emdash.space</c> can be set to <c>none</c> or <c>thin</c> to control this.</p>
+            </subsection>
+
+            <subsection xml:id="subsection-icons-in-text">
+                <title>Icons in Text</title>
+
+                <p>A limited supply of icons can be used when explaining how to use some computer application.  The empty element is <tage>icon</tage> and the attribute is <attr>name</attr>.</p>
+
+                <p>We sprinkle <icon name="gear"/> a few into a few sentences <icon name="wrench"/> to check baselines <icon name="file-save"/> and font sizing.  We sprinkle <icon name="gear"/> a few into a few sentences <icon name="wrench"/> to check baselines <icon name="file-save"/> and font sizing.  We sprinkle <icon name="gear"/> a few into a few sentences <icon name="wrench"/> to check baselines <icon name="file-save"/> and font sizing.  We sprinkle <icon name="gear"/> a few into a few sentences <icon name="wrench"/> to check baselines <icon name="file-save"/> and font sizing.</p>
+
+                <table>
+                    <caption>User-Interface Icons</caption>
+
+                    <tabular>
+                        <col/>
+                        <col halign="center" right="medium"/>
+                        <col/>
+                        <col halign="center" right="medium"/>
+                        <col/>
+                        <col halign="center"/>
+                        <row bottom="medium">
+                            <cell>Name</cell><cell>Icon</cell>
+                            <cell>Name</cell><cell>Icon</cell>
+                            <cell>Name</cell><cell>Icon</cell>
+                        </row>
+                        <row>
+                            <cell><c>arrow-down</c></cell><cell><icon name="arrow-down"/></cell>
+                            <cell><c>arrow-left</c></cell><cell><icon name="arrow-left"/></cell>
+                            <cell><c>arrow-right</c></cell><cell><icon name="arrow-right"/></cell>
+                        </row>
+                        <row>
+                            <cell><c>arrow-up</c></cell><cell><icon name="arrow-up"/></cell>
+                            <cell><c>file-save</c></cell><cell><icon name="file-save"/></cell>
+                            <cell><c>gear</c></cell><cell><icon name="gear"/></cell>
+                        </row>
+                         <row>
+                            <cell><c>menu</c></cell><cell><icon name="menu"/></cell>
+                            <cell><c>wrench</c></cell><cell><icon name="wrench"/></cell>
+                            <!-- <cell><c></c></cell><cell><icon name=""/></cell> -->
+                        </row>
+
+                    </tabular>
+                </table>
+
+                <p>Nominations of new icons must<ul>
+                    <li>Have a Unicode character representation.</li>
+                    <li>Be in the <init>HTML/CSS/JS</init> Font Awesome catalog.</li>
+                    <li>Be in the <latex/> <c>fontawesome</c> package.</li>
+                    <li>Have a reasonably semantic <pretext/> name.</li>
+                </ul>Please supply all this information, including the official Unicode name, with your request.  Better yet, form a pull request.</p>
+
             </subsection>
 
             <subsection xml:id="section-urls">
@@ -2313,7 +2440,7 @@ the xsltproc executable.
             <subsection>
                 <title>Copies of Images</title>
 
-                <p>Sometimes you want to use the same image more than once.  For a raster image, you can just point to it again.  You are free to wrap it in a <c>figure</c> or <c>sidebyside</c> and can change the caption.  It will get a new number as a new figure, and you will need to assign a unique <c>@xml:id</c> attribute.  Maybe appending <c>-copy-2</c>, or similar, will be helpful.</p>
+                <p>Sometimes you want to use the same image more than once.  For a raster image, you can just point to it again.  You are free to wrap it in a <c>figure</c> or <c>sidebyside</c> and change the caption.  It will get a new number as a new figure, and you will need to assign a unique <c>@xml:id</c> attribute.  Maybe appending <c>-copy-2</c>, or similar, will be helpful.</p>
 
                 <figure xml:id="figure-raster-image-copy">
                     <caption>Copy of raster image, in a figure, so now numbered and captioned</caption>
@@ -2461,6 +2588,26 @@ the xsltproc executable.
                 </exercisegroup>
 
                 <exercise>
+                    <p>This isn't really an exercise, but an explanation that the next <tag>exercisegroup</tag> has a title and no <tag>introduction</tag>, which once resulted in some aberrant formatting in <latex/> output.</p>
+                </exercise>
+
+                <exercisegroup xml:id="exercisegroup-two-more-problems">
+                    <title>Two More Derivative Problems</title>
+
+                    <exercise>
+                        <p><m>f(x)=x^3</m>, <m>\frac{df}{dx}</m>.  This sentence is just a bunch of gibberish to check where the second line of the problem begins relative to the first line.</p>
+                        <p>We cross-reference the next problem in this exercise group.  For the <c>phrase-global</c> form, the common element of the cross-reference and the target should be the <c>exercises</c> division, and not the enclosing <c>exercisegroup</c>:  <xref ref="exercises-cosine-derivative" text="phrase-global" />.</p>
+                    </exercise>
+
+                    <exercise>
+                        <statement>
+                            <p><m>y = \cos(x)</m>, <m>y^\prime</m>.</p>
+                        </statement>
+                    </exercise>
+
+                </exercisegroup>
+
+                <exercise>
                     <p>Compute <m>\int 3x^2\,dx</m>.</p>
                 </exercise>
 
@@ -2531,11 +2678,69 @@ the xsltproc executable.
                     </exercise>
                     <exercise>
                         <statement><p>Add seven to eight.</p></statement>
+                        <answer><p><m>15</m></p></answer>
                     </exercise>
                     <exercise>
                         <statement><p><m>9+10</m></p></statement>
                     </exercise>
-                    <conclusion><p>This feature was designed with short <q>drill</q> exercises in mind.</p></conclusion>
+                    <exercise>
+                        <statement><p><m>1+2</m></p></statement>
+                    </exercise>
+                    <exercise>
+                        <statement><p><m>3+4+5</m></p></statement>
+                        <hint><p>Addition is associative.</p></hint>
+                        <answer><p><m>12</m></p></answer>
+                        <solution><p>First, add <m>3</m> and <m>4</m> to get <m>7</m>, then add <m>5</m> to arrive at <m>12</m>.</p></solution>
+                    </exercise>
+                    <exercise>
+                        <statement><p><m>5+6</m></p></statement>
+                    </exercise>
+                    <exercise>
+                        <statement><p>Add seven to eight.</p></statement>
+                        <answer><p><m>15</m></p></answer>
+                    </exercise>
+                    <exercise>
+                        <statement><p><m>9+10</m></p></statement>
+                    </exercise>
+                    <exercise>
+                        <statement><p><m>1+2</m></p></statement>
+                    </exercise>
+                    <exercise>
+                        <statement><p><m>3+4+5</m></p></statement>
+                        <hint><p>Addition is associative.</p></hint>
+                        <answer><p><m>12</m></p></answer>
+                        <solution><p>First, add <m>3</m> and <m>4</m> to get <m>7</m>, then add <m>5</m> to arrive at <m>12</m>.</p></solution>
+                    </exercise>
+                    <exercise>
+                        <statement><p><m>5+6</m></p></statement>
+                    </exercise>
+                    <exercise>
+                        <statement><p>Add seven to eight.</p></statement>
+                        <answer><p><m>15</m></p></answer>
+                    </exercise>
+                    <exercise>
+                        <statement><p><m>9+10</m></p></statement>
+                    </exercise>
+                    <exercise>
+                        <statement><p><m>1+2</m></p></statement>
+                    </exercise>
+                    <exercise>
+                        <statement><p><m>3+4+5</m></p></statement>
+                        <hint><p>Addition is associative.</p></hint>
+                        <answer><p><m>12</m></p></answer>
+                        <solution><p>First, add <m>3</m> and <m>4</m> to get <m>7</m>, then add <m>5</m> to arrive at <m>12</m>.</p></solution>
+                    </exercise>
+                    <exercise>
+                        <statement><p><m>5+6</m></p></statement>
+                    </exercise>
+                    <exercise>
+                        <statement><p>Add seven to eight.</p></statement>
+                        <answer><p><m>15</m></p></answer>
+                    </exercise>
+                    <exercise>
+                        <statement><p><m>9+10</m></p></statement>
+                    </exercise>
+                    <conclusion><p>This feature was designed with short <q>drill</q> exercises in mind.  With long exercises, or exercises with long hints, answers, or solutions, there is a risk that the <latex/> output will have bad page breaks in the vicinity (just before) such an exercise that occupies too much vertical space.  Edit, rearrange, or use fewer columns to see if the situation improves.</p></conclusion>
                 </exercisegroup>
 
             </exercises>
@@ -3740,9 +3945,7 @@ the xsltproc executable.
                 </figure>
 
                 <exercise>
-                    <statement>
-                        <p>The interactive in <xref ref="figure-simple-eigenvector" text="type-global" /> shows a vector <m>\vec{x}</m> in red, and the matrix-vector product <m>A\vec{x}</m> in grey, for a particular <m>2\times 2</m> matrix <m>A</m>.  The four entries of the matrix <m>A</m> are coded into the interactive.  Can you deduce <m>A</m> simply by using the interactive?  Which theorem is the key?</p>
-                    </statement>
+                    <p>The interactive in <xref ref="figure-simple-eigenvector" text="type-global" /> shows a vector <m>\vec{x}</m> in red, and the matrix-vector product <m>A\vec{x}</m> in grey, for a particular <m>2\times 2</m> matrix <m>A</m>.  The four entries of the matrix <m>A</m> are coded into the interactive.  Can you deduce <m>A</m> simply by using the interactive?  Which theorem is the key?</p>
                 </exercise>
 
                 <figure xml:id="figure-eigenvectors">
@@ -4275,7 +4478,7 @@ the xsltproc executable.
             <!-- A Coursera URL that expires via digital signature scheme:
             https://d18ky98rnyall9.cloudfront.net/u5_p4_1_%20chisq_gof.77c96ac0ad8211e498e5e34296ce5455/full/360p/index.webm?Expires=1522800000&Signature=DJKrmAOfuGF4HMmWmQ2nCHnOdoeFzZd7qJzp1cfwOjQa-J~1kGNzwllMxFmGi8UXxt3wTXrhdhTQVcFQNk5nPzAi64mjJkMVu0m~QyKISqzjkFBZJm1NCnkNcbSyOk6WRDj6mjlrxEDaUSD6hHmD04ehumORG3G55Sp5OGEhYnU_&Key-Pair-Id=APKAJLTNE6QMUY6HBC5A -->
 
-            <p>YouTube<idx><h>YouTube videos</h></idx><idx><h>videos</h><h>YouTube</h></idx> videos may be embedded with only knowledge of the <q>ID</q>.  This a string of eleven seemingly random characters that show up in the URL when you watch a video.  For the Led Zeppelin performance below, the ID is <c>hAzdgU_kpGo</c>, which you might normally watch directly from the URL <url href="https://www.youtube.com/watch?v=hAzdgU_kpGo" />.  Screen real estate is determined by specifying an optional <c>@width</c> attribute as a percentage, and aspect ratio is preserved on the assumption of HD video (16:9).  (Enhancements will include other aspect ratios.)</p>
+            <p>YouTube<idx><h>YouTube videos</h></idx><idx><h>videos</h><h>YouTube</h></idx> videos may be embedded with only knowledge of a video's <q>ID</q> or a <q>playlist ID</q>.  A single video's YouTube ID is a string of eleven seemingly random characters that show up in the URL when you watch a video.  For the Led Zeppelin performance below, the ID is <c>hAzdgU_kpGo</c>, which you might normally watch directly from the URL <url href="https://www.youtube.com/watch?v=hAzdgU_kpGo" />.  Screen real estate is determined by specifying an optional <c>@width</c> attribute as a percentage, and aspect ratio is preserved on the assumption of HD video (16:9).  (Enhancements will include other aspect ratios.)</p>
 
             <p>If you have ever owned a drone, you sympathize with this guy.  Way funnier than a cat video.</p>
 
@@ -4337,7 +4540,22 @@ the xsltproc executable.
                 </figure>
             </sidebyside>
 
-            <p>Videos may be embedded, or popped-out to play in a new window or tab (at greater width), or a link will give the reader the option to choose either style of playback.  The automatic pop-out option requires a static thumbnail image is available.  (For YouTube, these iamges can be obtained automatically with the <c>mbx</c> script.)</p>
+            <p>A YouTube <q>playlist</q> can be built in one of two ways. You may specify the <c>youtube</c> attribute to be a space-separated list of several video IDs. Alternatively, you may set the <c>youtubeplaylist</c> attribute to a YouTube playlist ID.</p>
+
+            <sidebyside margins="0%" widths="47% 47%">
+                <figure>
+                    <caption>Individual IDs specified in an <q>itemized</q> playlist</caption>
+                    <video xml:id="zeppelin-playlist" youtube="6tlSx0jkuLM FeJkDewhTEw" />
+                    <!-- https://www.youtube.com/embed?playlist=6tlSx0jkuLM,FeJkDewhTEw -->
+                </figure>
+                <figure>
+                    <caption>YouTube playlist ID specified in a <q>named</q> playlist</caption>
+                    <video youtubeplaylist="PLGRecdYLYDNdX5NEkS3KH-ZtCqc2f8lJ_" />
+                    <!-- https://www.youtube.com/embed?listType=playlist&list=PLGRecdYLYDNdX5NEkS3KH-ZtCqc2f8lJ_ -->
+                </figure>
+            </sidebyside>
+
+            <p>Videos may be embedded, or popped-out to play in a new window or tab (at greater width), or a link will give the reader the option to choose either style of playback.  The automatic pop-out option requires a static thumbnail image.  (For YouTube, these images can be obtained automatically with the <c>mbx</c> script.)</p>
 
             <figure>
                 <caption>YouTube Play Location Options (<c>play-at</c> attribute)</caption>
@@ -4458,6 +4676,7 @@ the xsltproc executable.
                 <li><p>Footnotes: Fermat allusion at <xref ref="footnote-fermat" />.</p></li>
                 <li><p>Citations: Judson's AATA with annotation at <xref ref="biblio-judson-AATA" /></p></li>
                 <li><p>Citations: Judson's AATA with autoname that should have zero effect <xref ref="biblio-judson-AATA" text="type-global"/></p></li>
+                <li><p>Citations: In a <tag>references</tag> division inside an appendix <xref ref="biblio-strang-article-uno"/></p></li>
                 <li><p>Note: just the annotation of previous citation at <xref ref="note-judson-AATA" /></p></li>
                 <li><p>Examples: Mystery derivative at <xref ref="example-mysterious" />, or a question at <xref ref="sample-question" />.</p></li>
                 <li><p>Definition-like: A mathematical statement with no proof <xref ref="principle-principle" />.</p></li>
@@ -4479,6 +4698,7 @@ the xsltproc executable.
                 <li><p>Solution: An autonamed portion of an exercise: <xref ref="solution-antiderivative" text="type-global" /></p></li>
                 <li><p>Parts of a complicated exercise: <xref ref="exercise-complicated-second-hint" text="type-global" /> <xref ref="exercise-complicated-first-answer" text="type-global" /></p></li>
                 <li><p>A subsidary part of an exercise: <xref ref="exercise-one-two-one" /></p></li>
+                <li><p>Three cross-references to individual exercises, but due to their location, they should have different <q>type names</q> in the cross-reference: in an <tag>exercises</tag> division, <xref ref="duplicate-divisional"  text="type-global"/>; in the narrative, <xref ref="exercise-essay"  text="type-global"/>; and in a <tag>worksheet</tag>, <xref ref="exercise-vector-addition"  text="type-global"/>.</p></li>
                 <li><p>An item buried in nested ordered lists: <xref ref="list-two-two-two-three" text="type-global"/></p></li>
                 <li><p>List item as knowls in HTML, including nested lists: <xref ref="list-two" />, <xref ref="list-two-two-two" text="type-global" /></p></li>
                 <li><p>A titled list: <xref ref="list-colors-rainbow" /></p></li>
@@ -4510,6 +4730,7 @@ the xsltproc executable.
                 <li><p>A cross-reference to a <tag>references</tag> division in a subsection, which should not be numbered where born, but which has the number of its parent division in a cross-reference: <xref ref="references-section" text="type-global"/>.  And a cross-reference to a <tag>references</tag> division, which is the <q>main</q> bibliography in the back matter, and so is not numbered where born, nor in a cross-reference (which we must accomplish via it's title): <xref ref="references-backmatter" text="title"/>.</p></li>
                 <li><p>A cross-reference to a <tag>solutions</tag> division in a subsection, which should not be numbered where born, but which has the number of its parent division in a cross-reference: <xref ref="solutions-subsection" text="type-global"/>.  And a cross-reference to a <tag>solutions</tag> division, which should appear as an appendix both where born and as a cross-reference: <xref ref="solutions-backmatter" text="type-global"/>.</p></li>
                 <li><p>A cross-reference to an <tag>exercises</tag> division in a subsection, which is the only such division in that subsection and therefore should not be numbered where born, but which has the number of its parent division in a cross-reference: <xref ref="exercises-subsection-solo" text="type-global"/>.  In contrast we cross-reference an <tag>exercises</tag> division which is one of two inside a section, and therefore is numbered, when born and when cross-referenced, in continuity with the preceding subsections: <xref ref="exercises-section-multiple" text="type-global"/>.</p></li>
+                <!-- <li><p>: <xref ref="" /></p></li> -->
             </ul></p>
 
             <p>Cross-references to structural elements of the document will always take you there directly, since even in the HTML version these parts never get realized as knowls.  You will find such links sprinkled through this document, but here is an autonamed link to a subsubsection:  <xref ref="subsubsection-different-integrals" text="type-global" />.</p>
@@ -4614,7 +4835,7 @@ the xsltproc executable.
                     <row><cell><c>002_</c></cell><cell>&#x0020;</cell><cell>&#x0021;</cell><cell>&#x0022;</cell><cell><hash /></cell><cell><dollar /></cell><cell><percent /></cell><cell><ampersand /></cell><cell>&#x0027;</cell>
                                                  <cell>&#x0028;</cell><cell>&#x0029;</cell><cell>&#x002A;</cell><cell>&#x002B;</cell><cell>&#x002C;</cell><cell>&#x002D;</cell><cell>&#x002E;</cell><cell>&#x002F;</cell></row>
                     <row><cell><c>003_</c></cell><cell>&#x0030;</cell><cell>&#x0031;</cell><cell>&#x0032;</cell><cell>&#x0033;</cell><cell>&#x0034;</cell><cell>&#x0035;</cell><cell>&#x0036;</cell><cell>&#x0037;</cell>
-                                                 <cell>&#x0038;</cell><cell>&#x0039;</cell><cell>&#x003A;</cell><cell>&#x003B;</cell><cell><less /></cell><cell>&#x003D;</cell><cell>&#x003E;</cell><cell>&#x003F;</cell></row>
+                                                 <cell>&#x0038;</cell><cell>&#x0039;</cell><cell>&#x003A;</cell><cell>&#x003B;</cell><cell><less /></cell><cell>&#x003D;</cell><cell><greater /></cell><cell>&#x003F;</cell></row>
                     <row><cell><c>004_</c></cell><cell>&#x0040;</cell><cell>&#x0041;</cell><cell>&#x0042;</cell><cell>&#x0043;</cell><cell>&#x0044;</cell><cell>&#x0045;</cell><cell>&#x0046;</cell><cell>&#x0047;</cell>
                                                  <cell>&#x0048;</cell><cell>&#x0049;</cell><cell>&#x004A;</cell><cell>&#x004B;</cell><cell>&#x004C;</cell><cell>&#x004D;</cell><cell>&#x004E;</cell><cell>&#x004F;</cell></row>
                     <row><cell><c>005_</c></cell><cell>&#x0050;</cell><cell>&#x0051;</cell><cell>&#x0052;</cell><cell>&#x0053;</cell><cell>&#x0054;</cell><cell>&#x0055;</cell><cell>&#x0056;</cell><cell>&#x0057;</cell>
@@ -5389,17 +5610,13 @@ the xsltproc executable.
             <subsection>
                 <title>A Single Captionless Image</title>
 
-                <p>Sometimes you may want to include a single <c>image</c> or <c>table</c> in an example or exercise without a caption. You can also achieve this using <c>sidebyside</c>. The first has width <c>10%</c>, and the second has width <c>10%</c> and margins <c>25%</c>.</p>
+                <p>Sometimes you may want to include a single <c>image</c> or <c>table</c> in an example or exercise without a caption.   This formerly required a <c>sidebyside</c>, but here we are testing a more direct markup. The first has width <c>10%</c>, and the second has width <c>10%</c> and left margin of <c>25%</c>.</p>
 
-                <sidebyside width="10%">
-                    <image source="images/cross-square.png"/>
-                </sidebyside>
+                <image source="images/cross-square.png" width="10%"/>
 
                 <p>A paragraph, just to show where the first stops and the second ends.</p>
 
-                <sidebyside width="10%" margins="25%">
-                    <image source="images/cross-square.png"/>
-                </sidebyside>
+                <image source="images/cross-square.png" width="10%" margins="25% 65%"/>
 
                 <p>You might wish to place a single image flush-left, or flush-right.  You can specify the <c>margins</c> attribute as a pair of percentages for different left and right margins.  The following are laid out with two margins, with a 0<percent /> left margin and right margin (respectively). </p>
 
@@ -5425,6 +5642,30 @@ the xsltproc executable.
             <subsection>
                 <title>Vertical Alignment</title>
                 <p>Vertical alignment can be specified using the <c>valign</c> attribute which admits a space-separated list of <c>top</c>, <c>middle</c>, and <c>bottom</c>; the default is <c>top</c>.</p>
+
+                <!-- Following paragraph will just barely push following sidebyside -->
+                <!-- onto a new page, to test that the captions remain attached     -->
+                <!-- (presuming no edits prior!).  Removing a line should bring the -->
+                <!-- sidebyside back to fill the previous page, intact.  So keep    -->
+                <!-- this in place for use in testing.                              -->
+
+                <!--
+                <p>\noindent
+                Vertical alignment can be specified using the <c>valign</c> attribute which admits a
+                Vertical alignment can be specified using the <c>valign</c> attribute which admits a
+                Vertical alignment can be specified using the <c>valign</c> attribute which admits a
+                Vertical alignment can be specified using the <c>valign</c> attribute which admits a
+                Vertical alignment can be specified using the <c>valign</c> attribute which admits a
+                Vertical alignment can be specified using the <c>valign</c> attribute which admits a
+                Vertical alignment can be specified using the <c>valign</c> attribute which admits a
+                Vertical alignment can be specified using the <c>valign</c> attribute which admits a
+                Vertical alignment can be specified using the <c>valign</c> attribute which admits a
+                Vertical alignment can be specified using the <c>valign</c> attribute which admits a
+                Vertical alignment can be specified using the <c>valign</c> attribute which admits a
+                Vertical alignment can be specified using the <c>valign</c> attribute which admits a
+                Vertical alignment can be specified using the <c>valign</c> attribute which admits a
+                Vertical alignment can be specified using the <c>valign</c> attribute which admits a</p>
+                -->
 
                 <sidebyside widths="33% 17% 50%" valigns="middle top middle">
                     <figure>
@@ -7077,7 +7318,7 @@ the xsltproc executable.
             <title>Customizations</title>
 
             <subsection xml:id="rename-facility">
-                <title>Renaming Document Parts</title>
+                <title>Renaming Document Parts, Plus This Is A Really Long Title So That We Can Test How Well It Reacts To The Right Margin And Wraps Around To Form A Couple Of Lines, Plus How It Sits Relative To The Number Of The Subsection</title>
 
                 <p><q>Names</q><idx>name</idx> for various parts of a document are determined exactly once for each language, ensuring consistency and saving you the bother of always typing them in.</p>
 
@@ -7151,7 +7392,463 @@ the xsltproc executable.
             <p>Sed justo ex, efficitur dictum risus nec, eleifend consequat nibh. Proin rutrum mi id metus viverra blandit. In vel ligula a nibh aliquam pellentesque. Duis placerat purus et ligula sollicitudin, sodales consectetur ante viverra.</p>
 
             <p>Mauris fringilla nulla arcu, sagittis ultrices quam malesuada eleifend. Proin tristique elit eu bibendum tincidunt. Donec commodo lorem in magna egestas, vitae malesuada velit ornare. Pellentesque finibus neque in venenatis tristique. In id blandit est, in euismod urna. Donec commodo sagittis ligula, in venenatis nulla porttitor in. Donec nec tortor sit amet felis posuere ultricies. Suspendisse euismod quis ex eu placerat.</p>
+        </section>
 
+        <section xml:id="worksheets">
+            <title>Worksheets</title>
+
+            <subsection>
+                <title>About Worksheets</title>
+
+                <p>This is a section full of worksheets.  Each is a division of its own, via the <tag>worksheet</tag> element.  This is a necessary initial <tag>subsection</tag> to the current <tag>section</tag>, since we will have multiple worksheets.  In practice you might want to rip out all the worksheets of an entire book and bundle them up as an <q>activity book.</q></p>
+
+                <p>If you make PDF output you will notice an increased amount of control over layout.  Also, with the command-line argument<cd>
+                    <cline>-stringparam latex.draft yes</cline>
+                </cd>there will be visual indicators of prescribed whitespace.</p>
+            </subsection>
+
+            <worksheet>
+              <title>A Geometric Prelude</title>
+              <!-- <author>Dave Rosoff</author> -->
+              <objectives xml:id="objectives">
+                <ul>
+                  <li>Practice visualizing vector addition</li>
+                  <li>Use vectors without explicit coordinates</li>
+                </ul>
+              </objectives>
+              <introduction>
+                <p>This two-page worksheet was generously donated to the sample article by Dave Rosoff at a CuratedCourses workshop in August<nbsp/>2018.  It has the default (skinny) margins.</p>
+
+                <p>It was known to Euclid, and probably earlier, that the midpoints of the sides of any quadrilateral all lie in the same plane (even if the vertices of the quadrilateral do not). In fact, these midpoints are the vertices of a parallelogram, as pictured in <xref ref="figure-midpoints-of-quadrilateral" text="type-global"/>.</p>
+                <sidebyside width="30%">
+                  <figure xml:id="figure-midpoints-of-quadrilateral">
+                    <caption>The midpoints of the sides of a quadrilateral are the vertices of a parallelogram.</caption>
+                    <image xml:id="worksheet-midpoints-of-quadrilateral">
+                      <latex-image>
+                        \begin{tikzpicture}[xscale=0.8, yscale=0.8]
+                         \draw[style={black, ultra thick}] (0,0) -- (5,0) -- (4,4) -- (2,5) -- (0,0);
+                         \draw[style={black, dashed, very thick}] (2.5, 0) -- (4.5, 2) -- (3, 4.5) -- (1, 2.5) -- (2.5, 0);
+                        \end{tikzpicture}
+                      </latex-image>
+                    </image>
+                  </figure>
+                  <figure xml:id="figure-triangle-cyclic-vectors">
+                    <caption>The sides of a triangle presented as vectors.</caption>
+                    <image xml:id="worksheet-triangle-cyclic-vectors">
+                      <latex-image>
+                        \begin{tikzpicture}[xscale=1.5, yscale=1.5]
+                          \draw[->,>=latex, style={black, thick}] (0,0) -- (2.30 , 0) node [below] {$\vec{A}$} --  (3,0);
+                          \draw[->,>=latex, style={black, thick}] (3,0) -- (1.47, 1.53) node [above right =1mm] {$\vec{B}$} -- (1,2);
+                          \draw[->,>=latex, style={black, thick}] (1,2) -- (0.23 , 0.46) node [above left=1mm] {$\vec{C}$} -- (0,0);
+                          % \draw[->,>=latex, style={black,semithick,dashed}] (1,2) -- (7/6, 4/3) node
+                          %   {} -- (1.5,0) node[below right=0mm and 3mm] {$\vec{A}$};
+                          %\draw[->,>=latex, style={black,semithick,dashed}] (0,0) -- (2/3, 1/3) node
+                          %  {} -- (2,1) node[above left=5mm and 1mm] {$\vec{B}$};
+                          %\draw[->,>=latex, style={black,semithick,dashed}] (3,0) -- (13/6,1/3) node
+                          %  {} -- (0.5,1) node[below left=1mm and 3mm] {$\vec{C}$};
+                          %\node[draw,shape=circle,fill=black,name=P,scale=0.5] at (4/3,2/3) {};
+                          %\node[above right=1.2mm and -0.5mm of P] at (4/3,2/3) {$P$};
+                          % \node {$P$} (1.3333,0.6667);
+                        \end{tikzpicture}
+                      </latex-image>
+                    </image>
+                  </figure>
+                  <figure xml:id="figure-triangle-cyclic-medians">
+                    <caption>The medians of the triangle are <m>\vec{M}_1</m>, <m>\vec{M}_2</m>, and <m>\vec{M}_3</m>.</caption>
+                    <image xml:id="worksheet-triangle-cyclic-medians" width="50%">
+                      <latex-image>
+                        \begin{tikzpicture}[xscale=1.5, yscale=1.5]
+                          \draw[->,>=latex, style={black, thick}] (0,0) -- (2.30 , 0) node [below] {$\vec{A}$} --  (3,0);
+                          \draw[->,>=latex, style={black, thick}] (3,0) -- (1.47, 1.53) node [above right =1mm] {$\vec{B}$} -- (1,2);
+                          \draw[->,>=latex, style={black, thick}] (1,2) -- (0.23 , 0.46) node [above left=1mm] {$\vec{C}$} -- (0,0);
+                          \draw[->,>=latex, style={black,semithick,dashed}] (1,2) -- (7/6, 4/3) node
+                            {$\vec{M}_{1}$} -- (1.5,0);% node[below right=0mm and 3mm] {$\vec{A}$};
+                          \draw[->,>=latex, style={black,semithick,dashed}] (0,0) -- (2/3, 1/3) node
+                           {$\vec{M}_{2}$} -- (2,1);% node[above left=5mm and 1mm] {$\vec{B}$};
+                          \draw[->,>=latex, style={black,semithick,dashed}] (3,0) -- (13/6,1/3) node
+                           {$\vec{M}_{3}$} -- (0.5,1);% node[below left=1mm and 3mm] {$\vec{C}$};
+                          \node[draw,shape=circle,fill=black,name=P,scale=0.5] at (4/3,2/3) {};
+                          \node[above right=1.2mm and -0.5mm of P] at (4/3,2/3) {$P$};
+                          % \node {$P$} (1.3333,0.6667);
+                        \end{tikzpicture}
+                      </latex-image>
+                    </image>
+                  </figure>
+                </sidebyside>
+                <p>In this exercise, we'll use vectors to show that the medians of any triangle (<xref ref="figure-triangle-cyclic-vectors" text="type-global"/>) intersect at a point. Recall that medians are the lines connecting the vertices of the triangle to the midpoints of their opposite edges, as in the figure. We'll do this in a few steps.</p>
+              </introduction>
+              <exercise xml:id="ex-cyclic" workspace="30%">
+                <statement>
+                  <p>What is the value of <m>\vec{A} + \vec{B} + \vec{C}</m>?</p>
+                </statement>
+              </exercise>
+
+              <pagebreak/>
+
+              <p><xref ref="figure-triangle-cyclic-medians" text="type-global"/> from the previous page is reproduced for your convenience.</p>
+              <figure xml:id="figure-triangle-cyclic-medians-copy">
+                <caption>The medians of the triangle are <m>\vec{M}_1</m>, <m>\vec{M}_2</m>, and <m>\vec{M}_3</m>.</caption>
+                <image xml:id="worksheet-triangle-cyclic-medians-copy" width="50%">
+                  <latex-image>
+                    \begin{tikzpicture}[xscale=1.5, yscale=1.5]
+                      \draw[->,>=latex, style={black, thick}] (0,0) -- (2.30 , 0) node [below] {$\vec{A}$} --  (3,0);
+                      \draw[->,>=latex, style={black, thick}] (3,0) -- (1.47, 1.53) node [above right =1mm] {$\vec{B}$} -- (1,2);
+                      \draw[->,>=latex, style={black, thick}] (1,2) -- (0.23 , 0.46) node [above left=1mm] {$\vec{C}$} -- (0,0);
+                      \draw[->,>=latex, style={black,semithick,dashed}] (1,2) -- (7/6, 4/3) node
+                        {$\vec{M}_{1}$} -- (1.5,0);% node[below right=0mm and 3mm] {$\vec{A}$};
+                      \draw[->,>=latex, style={black,semithick,dashed}] (0,0) -- (2/3, 1/3) node
+                       {$\vec{M}_{2}$} -- (2,1);% node[above left=5mm and 1mm] {$\vec{B}$};
+                      \draw[->,>=latex, style={black,semithick,dashed}] (3,0) -- (13/6,1/3) node
+                       {$\vec{M}_{3}$} -- (0.5,1);% node[below left=1mm and 3mm] {$\vec{C}$};
+                      \node[draw,shape=circle,fill=black,name=P,scale=0.5] at (4/3,2/3) {};
+                      \node[above right=1.2mm and -0.5mm of P] at (4/3,2/3) {$P$};
+                      % \node {$P$} (1.3333,0.6667);
+                    \end{tikzpicture}
+                  </latex-image>
+                </image>
+              </figure>
+              <sidebyside margins="0%" widths="30% 60%" valign="top">
+                <exercise xml:id="exercise-vector-addition" workspace="40%">
+                  <statement>
+                    <p>Show that <m>\vec{M}_{1} + \vec{M}_{2} + \vec{M}_{3} = 0</m>.</p>
+                  </statement>
+                  <hint>
+                    <p>Use <xref ref="ex-cyclic" text="type-global"/>.</p>
+                  </hint>
+                </exercise>
+                <exercise workspace="40%">
+                  <statement>
+                    <p>To show that the point <m>P</m> exists (as the common intersection of the <m>\vec{M}_{i}</m>), show that <me>
+                      \vec{A} + \frac{2}{3} \vec{M}_{3} = \frac{2}{3} \vec{M}_{2} = <fillin characters="10"/>
+                    </me>.</p>
+                  </statement>
+                </exercise>
+              </sidebyside>
+              <exercise workspace="5%">
+                <p>If you have time, try to devise a vector proof of Euclid's result presented at the beginning of the workshop. Recall that a <term>parallelogram</term> is a four-sided polygon whose opposite sides are parallel.</p>
+              </exercise>
+              <conclusion>
+                <title>Wrap-up</title>
+                <p>It's possible to do interesting things with vector arithmetic in a coordinate-free way: we didn't specify an origin, or any entries of any vectors in the examples.</p>
+              </conclusion>
+            </worksheet>
+
+            <worksheet top="3cm" bottom="100pt">
+                <title>Networks Worksheet</title>
+                <!-- <subtitle>An Activity Using Linear Algebra to Solve Network Applications</subtitle> -->
+
+                <introduction>
+                    <title>Basic laws for electrical circuits</title>
+
+                    <p>This two-page worksheet was generously donated to the sample article by Virgil Pierce at a CuratedCourses workshop in August<nbsp/>2018.  It has default (skinny) left and right margins, but we have specified longer top and bottom margins, with the top being the larger of the two.</p>
+
+                    <theorem>
+                        <title> Ohms Law </title>
+                        <p> The current through a resistor is proportional to the ratio of the <em> Voltage </em> to the <em> Resistance </em>
+                            <me> I = \frac{V}{R} </me>
+                            Or for our purposes
+                            <me> I R = V </me>
+                        </p>
+                    </theorem>
+
+                    <theorem>
+                        <title>Kirchoffs Current Law</title>
+                        <p> The sum of the currents in a network meeting at a point is zero.
+                            <me> \sum_{k=1}^n I_k = 0 </me>
+                        </p>
+                    </theorem>
+
+                    <example>
+                        <title> Kirchoff's Current Law </title>
+                        <p> For the circuit below <m> I_1 + I_2 = I_3 </m>.</p>
+                        <sidebyside width="40%">
+                            <image xml:id="worksheet-kirchoff-law">
+                                <latex-image>
+                                \begin{circuitikz}
+                                \draw (0,0)
+                                to[R, i=$I_1$, *-o](2,2);
+                                \draw (0,0)
+                                to[R, i=$I_2$, *-o](2,-2);
+                                \draw (-3, 0)
+                                to[R, i=$I_3$, o-*](0,0);
+                                \end{circuitikz}
+                                </latex-image>
+                            </image>
+                        </sidebyside>
+                    </example>
+
+                    <theorem>
+                        <title> Kirchoffs Voltage Law </title>
+                        <p> The sum of the voltages around any closed circuit (or subcircuit) is zero.
+                            <me> \sum_{k=1}^n V_k = 0 </me>
+                        </p>
+                    </theorem>
+
+                    <p> Kirchoffs Current Law and Kirkoffs Voltage Law combined with Ohms Law gives for any circuit of resistors and sources a linear system that may (or may not) determine the currents.
+                    </p>
+                </introduction>
+
+                <pagebreak/>
+
+                <sidebyside width="45%" margins="0%">
+                    <exercise workspace="12%">
+                        <statement>
+                        <p>For the simple network pictured, calculuate the amperage in each part of the network by setting up a system of linear equations for the amperages. </p>
+                       <sidebyside>
+                            <image xml:id="worksheet-simple-network">
+                                <latex-image>
+                                \begin{circuitikz}
+                                \draw (0,0)
+                                to[V, v=$11\quad \mbox{volt}$](0, 3)
+                                to[short](2,3)
+                                to[R, R=$4\quad \mbox{ohm}$] (3, 3)
+                                to[short](4,3)
+                                to[R, R=$3\quad \mbox{ohm}$](4,0)
+                                to[short](3,0)
+                                to[R, R=$3\quad \mbox{ohm}$](2,0)
+                                to[short](0,0);
+                                \end{circuitikz}
+                                </latex-image>
+                            </image>
+                        </sidebyside>
+                       </statement>
+                    </exercise>
+
+                    <exercise workspace="12%">
+                        <statement>
+                        <p> Compare it with a parallel circuit network. Calculate the amperage in each part of the network by setting up a system of linear equations for the amperages. </p>
+                        <sidebyside>
+                            <image xml:id="worksheet-parallel-circuit">
+                                <latex-image>
+                                \begin{circuitikz}
+                                \draw(0,0)
+                                to[V, v=$11\quad \mbox{volt}$](0, 3)
+                                to[short](5,3)
+                                to[R, R=$4\quad \mbox{ohm}$](6,3)
+                                to[short](7,3)
+                                to[R, R=$3\quad \mbox{ohm}$](7,0)
+                                to[short](6,0)
+                                to[R, R=$3\quad \mbox{ohm}$](5,0)
+                                to[short](0,0);
+                                \draw(4,0)
+                                to[R, R=$3\quad \mbox{ohm}$](4,3);
+                                \end{circuitikz}
+                                </latex-image>
+                            </image>
+                        </sidebyside>
+                        </statement>
+                    </exercise>
+                </sidebyside>
+
+                <exercise workspace="12%">
+                    <statement>
+                    <p> Now for a more complicated network. Calculate the amperage in each part of the network by setting up a system of linear equations for the amperages. </p>
+                        <sidebyside>
+                            <image xml:id="worksheet-complicated-network">
+                                <latex-image>
+                                \begin{circuitikz}
+                                \draw(0,0)
+                                to[V, v=$11 \quad \mbox{volt}$](0, 3)
+                                to[short](5,3)
+                                to[R, R=$4 \quad \mbox{ohm}$](6,3)
+                                to[short](9,3)
+                                to[R, R=$4 \quad \mbox{ohm}$](10,3)
+                                to[short](11,3)
+                                to[R, R=$3 \quad \mbox{ohm}$](11, 0)
+                                to[short](10,0)
+                                to[R, R=$2\quad \mbox{ohm}$](9,0)
+                                to[short](6,0)
+                                to[R, R=$2\quad \mbox{ohm}$](5,0)
+                                to[short](0,0);
+                                \draw(4,0)
+                                to[R, R=$3\quad \mbox{ohm}$](4,3);
+                                \draw(8,0)
+                                to[R, R=$1\quad \mbox{ohm}$](8,3);
+                                \end{circuitikz}
+                                </latex-image>
+                            </image>
+                        </sidebyside>
+                    </statement>
+                </exercise>
+
+                <pagebreak/>
+
+                <exercise workspace="30%">
+                    <statement>
+                        <p> Now generalize these ideas to a context outside of electrical circuits. Consider the network of streets given in the diagram (with one-way directions as indicated).</p>
+
+                        <sidebyside width="65%">
+                            <image xml:id="worksheet-street-network">
+                                <latex-image>
+                                <![CDATA[
+                                \begin{tikzpicture}[>=stealth]
+                                \draw[->, very thick] (0,0) -- (10, 0) node[midway, below]{East Bound Winooski Ave};
+                                \draw[<-, very thick] (0, 1) -- (10, 1) node[midway, above]{West Bound Winooski Ave};
+                                    \draw[<-, very thick] (0, 4) -- (10, 4) node[midway, above]{Shelburne St};
+                                    \draw[<-, very thick] (1, -1) -- (1, 5) node[midway, above, sloped]{Willow};
+                                    \draw[->, very thick] (9, -1) -- (9, 5) node[midway, above, sloped]{Jay};
+                                    \end{tikzpicture}
+                                ]]>
+                                </latex-image>
+                            </image>
+                        </sidebyside>
+
+                        <p>A traffic engineer counts the hourly flow of cars into and out of this network at the entrances.  They get (EB = East Bound; WB = West Bound): </p>
+
+                        <table>
+                            <caption> Estimated hourly traffic flow for the road network.</caption>
+                            <tabular>
+                                <row>
+                                    <cell>
+                                    </cell>
+                                    <cell>
+                                        EB Winooski
+                                    </cell>
+                                    <cell>
+                                        WB Winooski
+                                    </cell>
+                                    <cell>
+                                        Shelburne St
+                                    </cell>
+                                    <cell>
+                                        Willow
+                                    </cell>
+                                    <cell>
+                                        Jay
+                                    </cell>
+                                </row>
+                                <row>
+                                    <cell>
+                                        into
+                                    </cell>
+                                    <cell>
+                                        50
+                                    </cell>
+                                    <cell>
+                                        400
+                                    </cell>
+                                    <cell>
+                                        0
+                                    </cell>
+                                    <cell>
+                                        10
+                                    </cell>
+                                    <cell>
+                                        50
+                                    </cell>
+                                </row>
+                                <row>
+                                    <cell>
+                                        out of
+                                    </cell>
+                                    <cell>
+                                        55
+                                    </cell>
+                                    <cell>
+                                        390
+                                    </cell>
+                                    <cell>
+                                        20
+                                    </cell>
+                                    <cell>
+                                        15
+                                    </cell>
+                                    <cell>
+                                        30
+                                    </cell>
+                                </row>
+                            </tabular>
+                        </table>
+
+                        <p> Use a variable for each segment inside of the network and set up a system of linear equations restricting the flow. Solve the system.  Note that you should not get a unique solution as traffic should be able to flow through the network in various ways. </p>
+                    </statement>
+                </exercise>
+            </worksheet>
+
+            <worksheet margin="1cm">
+                <introduction>
+                    <p>This is a mock one-page worksheet for testing purposes. We have specified an overall margin just slightly less than the default.</p>
+                </introduction>
+
+                <sidebyside width="45%" margins="0%">
+                    <exercise workspace="5%">
+                        <statement>
+                            <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
+                        </statement>
+                    </exercise>
+
+                    <exercise workspace="10%">
+                        <statement>
+                            <p>Integer sagittis dictum turpis vel aliquet. Fusce ut suscipit dolor, nec tristique nisl. Aenean luctus, leo et ornare fermentum, nibh dui vulputate leo, nec tincidunt augue ipsum sed odio. Nunc non erat sollicitudin, iaculis eros consequat, dapibus eros.</p>
+                        </statement>
+                    </exercise>
+                </sidebyside>
+
+                <p>A two-line paragraph interspersed to check on spacing, breaks and all that.</p>
+
+                <exercise workspace="8%">
+                    <title>A full-width exercise</title>
+                    <statement>
+                        <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
+                        <p>Integer sagittis dictum turpis vel aliquet. Fusce ut suscipit dolor, nec tristique nisl. Aenean luctus, leo et ornare fermentum, nibh dui vulputate leo, nec tincidunt augue ipsum sed odio. Nunc non erat sollicitudin, iaculis eros consequat, dapibus eros.</p>
+                    </statement>
+                </exercise>
+
+                <p>A two-line paragraph interspersed to check on spacing, breaks and all that.</p>
+
+                <sidebyside width="30%" margins="0%">
+                    <exercise>
+                        <statement>
+                            <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
+                        </statement>
+                    </exercise>
+
+                    <exercise workspace="12%">
+                        <!-- <title>The Tallest</title> -->
+                        <statement>
+                            <p>Integer sagittis dictum turpis vel aliquet. Fusce ut suscipit dolor, nec tristique nisl. Aenean luctus, leo et ornare fermentum, nibh dui vulputate leo, nec tincidunt augue ipsum sed odio. Nunc non erat sollicitudin, iaculis eros consequat, dapibus eros.</p>
+                        </statement>
+                    </exercise>
+
+                    <exercise workspace="12%">
+                        <statement>
+                            <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
+                        </statement>
+                    </exercise>
+                </sidebyside>
+
+                <activity>
+                    <title>A Mock Activity</title>
+
+                    <statement>
+                        <p>The problem, as we see it.</p>
+                    </statement>
+                    <hint>
+                        <p>A worksheet could have hints, no?  But no spacing. Note row below has widths set to balance the heights.</p>
+                    </hint>
+                </activity>
+
+                <sidebyside widths="25% 40% 25%" margins="0%">
+                    <exercise workspace="4%">
+                        <statement>
+                            <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
+                        </statement>
+                    </exercise>
+
+                    <exercise workspace="4%">
+                        <!-- <title>Balanced Heights</title> -->
+                        <statement>
+                            <p>Integer sagittis dictum turpis vel aliquet. Fusce ut suscipit dolor, nec tristique nisl. Aenean luctus, leo et ornare fermentum, nibh dui vulputate leo, nec tincidunt augue ipsum sed odio. Nunc non erat sollicitudin, iaculis eros consequat, dapibus eros.</p>
+                        </statement>
+                    </exercise>
+
+                    <exercise workspace="4%">
+                        <statement>
+                            <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
+                        </statement>
+                    </exercise>
+                </sidebyside>
+            </worksheet>
         </section>
 
 
@@ -7175,9 +7872,7 @@ the xsltproc executable.
 
             <exercise xml:id="duplicate-inline">
                 <title>Inline Two</title>
-                <statement>
-                    <p>Ut porttitor neque a pharetra euismod. Vivamus ut metus pretium, placerat massa tempor, condimentum metus. Phasellus vestibulum iaculis turpis non posuere. Vestibulum quis aliquet neque. Donec nec metus iaculis, laoreet massa vitae, suscipit tellus. Etiam et ultrices quam, quis pretium ligula. In ut cursus metus. Aenean volutpat quam odio, quis tempus dolor egestas eget. Nunc fringilla lobortis nunc, ut interdum lorem posuere sed. Sed sodales risus a laoreet venenatis. Nunc sodales tempor mollis. Nam sollicitudin velit sed ex viverra feugiat. Nunc consectetur mi vitae urna sollicitudin malesuada. Fusce eget risus lectus. Mauris augue velit, vestibulum vitae tempus sit amet, porttitor eget turpis.</p>
-                </statement>
+                <p>Ut porttitor neque a pharetra euismod. Vivamus ut metus pretium, placerat massa tempor, condimentum metus. Phasellus vestibulum iaculis turpis non posuere. Vestibulum quis aliquet neque. Donec nec metus iaculis, laoreet massa vitae, suscipit tellus. Etiam et ultrices quam, quis pretium ligula. In ut cursus metus. Aenean volutpat quam odio, quis tempus dolor egestas eget. Nunc fringilla lobortis nunc, ut interdum lorem posuere sed. Sed sodales risus a laoreet venenatis. Nunc sodales tempor mollis. Nam sollicitudin velit sed ex viverra feugiat. Nunc consectetur mi vitae urna sollicitudin malesuada. Fusce eget risus lectus. Mauris augue velit, vestibulum vitae tempus sit amet, porttitor eget turpis.</p>
             </exercise>
 
             <theorem>
@@ -7199,6 +7894,11 @@ the xsltproc executable.
                     <title>Drill One</title>
                     <statement>
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras congue urna nulla. Aliquam eget euismod tellus. Maecenas nibh libero, venenatis a laoreet in, tempor sit amet sem. Morbi sit amet justo tempor velit auctor placerat. Maecenas nec lobortis orci. Aenean dictum enim lacus, ac blandit lacus elementum nec. Mauris porttitor neque volutpat tincidunt sollicitudin. Cras porta lectus ac facilisis tempor. Suspendisse in velit nisl. Sed convallis leo at nunc aliquet fermentum. Pellentesque feugiat at ex sed elementum. In porta vulputate ipsum sit amet consectetur.</p>
+
+                        <figure>
+                            <caption>A figure in an <tag>exercise</tag> in an <em>unstructured</em> division to test that it is numbered as if the containing <tag>exercises</tag> is not present</caption>
+                            <image xml:id="cross-square-unstructured" width="10%" source="images/cross-square.png"/>
+                        </figure>
                     </statement>
                 </exercise>
 
@@ -7206,6 +7906,12 @@ the xsltproc executable.
                     <title>Drill Two</title>
                     <statement>
                         <p>Aliquam sagittis ex at magna porttitor, quis scelerisque ligula malesuada. Vestibulum vitae mauris id nisi pretium ornare a id lectus. Nam suscipit magna id sem ultricies vestibulum. Nulla facilisi. Duis venenatis lectus massa, ac mollis nisi suscipit non. Sed et sapien vulputate, imperdiet nibh vel, lobortis nisl. Curabitur sagittis justo nibh. Nulla vulputate sodales justo at efficitur. Cras justo augue, mollis vitae nulla sed, vestibulum tincidunt ante. Vestibulum et lorem lectus. Maecenas accumsan lacus a nisi euismod rutrum eu dapibus justo. Etiam scelerisque a odio a euismod. Pellentesque vestibulum pellentesque nisi, a tempus erat cursus ac. Morbi ut auctor lectus.</p>
+
+                        <figure>
+                            <caption>Testing numbering, figure in a <tag>exercise</tag> in an un-numbered <tag>exercises</tag></caption>
+                            <image source="images/cross-square.png" width="20%" />
+                        </figure>
+
                     </statement>
                 </exercise>
 
@@ -7327,6 +8033,11 @@ the xsltproc executable.
                     <title>Drill One</title>
                     <statement>
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras congue urna nulla. Aliquam eget euismod tellus. Maecenas nibh libero, venenatis a laoreet in, tempor sit amet sem. Morbi sit amet justo tempor velit auctor placerat. Maecenas nec lobortis orci. Aenean dictum enim lacus, ac blandit lacus elementum nec. Mauris porttitor neque volutpat tincidunt sollicitudin. Cras porta lectus ac facilisis tempor. Suspendisse in velit nisl. Sed convallis leo at nunc aliquet fermentum. Pellentesque feugiat at ex sed elementum. In porta vulputate ipsum sit amet consectetur.</p>
+
+                        <figure>
+                            <caption>A figure in an <tag>exercise</tag> in a <em>structured</em> division to test that it is numbered with consideration of the containing <tag>exercises</tag></caption>
+                            <image xml:id="cross-square-structured" width="10%" source="images/cross-square.png"/>
+                        </figure>
                     </statement>
                 </exercise>
 
@@ -7413,219 +8124,6 @@ the xsltproc executable.
                 <biblio type="raw" xml:id="biblio-lay-article-repeat1">David C. Lay, <title>Subspaces and Echelon Forms</title>. <journal>The College Mathematics Journal</journal>, January 1993, <volume>24</volume> <number>1</number>, 57<ndash />62.</biblio>
 
             </references>
-
-            <worksheet>
-                    <introduction>
-                        <p>This is a mock one-page worksheet for testing.</p>
-                    </introduction>
-
-                    <sidebyside width="45%" margins="0%">
-                        <exercise workspace="5%">
-                            <statement>
-                                <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
-                            </statement>
-                        </exercise>
-
-                        <exercise workspace="10%">
-                            <statement>
-                                <p>Integer sagittis dictum turpis vel aliquet. Fusce ut suscipit dolor, nec tristique nisl. Aenean luctus, leo et ornare fermentum, nibh dui vulputate leo, nec tincidunt augue ipsum sed odio. Nunc non erat sollicitudin, iaculis eros consequat, dapibus eros.</p>
-                            </statement>
-                        </exercise>
-                    </sidebyside>
-
-                    <p>A two-line paragraph interspersed to check on spacing, breaks and all that.</p>
-
-                    <exercise workspace="8%">
-                        <title>A full-width exercise</title>
-                        <statement>
-                            <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
-                            <p>Integer sagittis dictum turpis vel aliquet. Fusce ut suscipit dolor, nec tristique nisl. Aenean luctus, leo et ornare fermentum, nibh dui vulputate leo, nec tincidunt augue ipsum sed odio. Nunc non erat sollicitudin, iaculis eros consequat, dapibus eros.</p>
-                        </statement>
-                    </exercise>
-
-                    <p>A two-line paragraph interspersed to check on spacing, breaks and all that.</p>
-
-                    <sidebyside width="30%" margins="0%">
-                        <exercise>
-                            <statement>
-                                <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
-                            </statement>
-                        </exercise>
-
-                        <exercise workspace="12%">
-                            <!-- <title>The Tallest</title> -->
-                            <statement>
-                                <p>Integer sagittis dictum turpis vel aliquet. Fusce ut suscipit dolor, nec tristique nisl. Aenean luctus, leo et ornare fermentum, nibh dui vulputate leo, nec tincidunt augue ipsum sed odio. Nunc non erat sollicitudin, iaculis eros consequat, dapibus eros.</p>
-                            </statement>
-                        </exercise>
-
-                        <exercise workspace="12%">
-                            <statement>
-                                <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
-                            </statement>
-                        </exercise>
-                    </sidebyside>
-
-                    <activity>
-                        <title>A Mock Activity</title>
-
-                        <statement>
-                            <p>The problem, as we see it.</p>
-                        </statement>
-                        <hint>
-                            <p>A worksheet could have hints, no?  But no spacing. Note row below has widths set to balance the heights.</p>
-                        </hint>
-                    </activity>
-
-                    <sidebyside widths="25% 40% 25%" margins="0%">
-                        <exercise workspace="4%">
-                            <statement>
-                                <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
-                            </statement>
-                        </exercise>
-
-                        <exercise workspace="4%">
-                            <!-- <title>Balanced Heights</title> -->
-                            <statement>
-                                <p>Integer sagittis dictum turpis vel aliquet. Fusce ut suscipit dolor, nec tristique nisl. Aenean luctus, leo et ornare fermentum, nibh dui vulputate leo, nec tincidunt augue ipsum sed odio. Nunc non erat sollicitudin, iaculis eros consequat, dapibus eros.</p>
-                            </statement>
-                        </exercise>
-
-                        <exercise workspace="4%">
-                            <statement>
-                                <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.</p>
-                            </statement>
-                        </exercise>
-                    </sidebyside>
-            </worksheet>
-
-            <worksheet>
-              <title>A geometric prelude</title>
-              <!-- <author>Dave Rosoff</author> -->
-              <objectives>
-                <ul xml:id="objectives">
-                  <li>Practice visualizing vector addition</li>
-                  <li>Use vectors without explicit coordinates</li>
-                </ul>
-              </objectives>
-              <introduction>
-                <p>This <em>real</em> two-page worksheet was generously donated to the sample article by Dave Rosoff.</p>
-
-                <p>It was known to Euclid, and probably earlier, that the midpoints of the sides of any quadrilateral all lie in the same plane (even if the vertices of the quadrilateral do not). In fact, these midpoints are the vertices of a parallelogram, as pictured in <xref ref="figure-midpoints-of-quadrilateral" text="type-global"/>.</p>
-                <sidebyside width="30%">
-                  <figure xml:id="figure-midpoints-of-quadrilateral">
-                    <caption>The midpoints of the sides of a quadrilateral are the vertices of a parallelogram.</caption>
-                    <image xml:id="worksheet-midpoints-of-quadrilateral">
-                      <latex-image>
-                        \begin{tikzpicture}[xscale=0.8, yscale=0.8]
-                         \draw[style={black, ultra thick}] (0,0) -- (5,0) -- (4,4) -- (2,5) -- (0,0);
-                         \draw[style={black, dashed, very thick}] (2.5, 0) -- (4.5, 2) -- (3, 4.5) -- (1, 2.5) -- (2.5, 0);
-                        \end{tikzpicture}
-                      </latex-image>
-                    </image>
-                  </figure>
-                  <figure xml:id="figure-triangle-cyclic-vectors">
-                    <caption>The sides of a triangle presented as vectors.</caption>
-                    <image xml:id="worksheet-triangle-cyclic-vectors">
-                      <latex-image>
-                        \begin{tikzpicture}[xscale=1.5, yscale=1.5]
-                          \draw[->,>=latex, style={black, thick}] (0,0) -- (2.30 , 0) node [below] {$\vec{A}$} --  (3,0);
-                          \draw[->,>=latex, style={black, thick}] (3,0) -- (1.47, 1.53) node [above right =1mm] {$\vec{B}$} -- (1,2);
-                          \draw[->,>=latex, style={black, thick}] (1,2) -- (0.23 , 0.46) node [above left=1mm] {$\vec{C}$} -- (0,0);
-                          % \draw[->,>=latex, style={black,semithick,dashed}] (1,2) -- (7/6, 4/3) node
-                          %   {} -- (1.5,0) node[below right=0mm and 3mm] {$\vec{A}$};
-                          %\draw[->,>=latex, style={black,semithick,dashed}] (0,0) -- (2/3, 1/3) node
-                          %  {} -- (2,1) node[above left=5mm and 1mm] {$\vec{B}$};
-                          %\draw[->,>=latex, style={black,semithick,dashed}] (3,0) -- (13/6,1/3) node
-                          %  {} -- (0.5,1) node[below left=1mm and 3mm] {$\vec{C}$};
-                          %\node[draw,shape=circle,fill=black,name=P,scale=0.5] at (4/3,2/3) {};
-                          %\node[above right=1.2mm and -0.5mm of P] at (4/3,2/3) {$P$};
-                          % \node {$P$} (1.3333,0.6667);
-                        \end{tikzpicture}
-                      </latex-image>
-                    </image>
-                  </figure>
-                  <figure xml:id="figure-triangle-cyclic-medians">
-                    <caption>The medians of the triangle are <m>\vec{M}_1</m>, <m>\vec{M}_2</m>, and <m>\vec{M}_3</m>.</caption>
-                    <image xml:id="worksheet-triangle-cyclic-medians" width="50%">
-                      <latex-image>
-                        \begin{tikzpicture}[xscale=1.5, yscale=1.5]
-                          \draw[->,>=latex, style={black, thick}] (0,0) -- (2.30 , 0) node [below] {$\vec{A}$} --  (3,0);
-                          \draw[->,>=latex, style={black, thick}] (3,0) -- (1.47, 1.53) node [above right =1mm] {$\vec{B}$} -- (1,2);
-                          \draw[->,>=latex, style={black, thick}] (1,2) -- (0.23 , 0.46) node [above left=1mm] {$\vec{C}$} -- (0,0);
-                          \draw[->,>=latex, style={black,semithick,dashed}] (1,2) -- (7/6, 4/3) node
-                            {$\vec{M}_{1}$} -- (1.5,0);% node[below right=0mm and 3mm] {$\vec{A}$};
-                          \draw[->,>=latex, style={black,semithick,dashed}] (0,0) -- (2/3, 1/3) node
-                           {$\vec{M}_{2}$} -- (2,1);% node[above left=5mm and 1mm] {$\vec{B}$};
-                          \draw[->,>=latex, style={black,semithick,dashed}] (3,0) -- (13/6,1/3) node
-                           {$\vec{M}_{3}$} -- (0.5,1);% node[below left=1mm and 3mm] {$\vec{C}$};
-                          \node[draw,shape=circle,fill=black,name=P,scale=0.5] at (4/3,2/3) {};
-                          \node[above right=1.2mm and -0.5mm of P] at (4/3,2/3) {$P$};
-                          % \node {$P$} (1.3333,0.6667);
-                        \end{tikzpicture}
-                      </latex-image>
-                    </image>
-                  </figure>
-                </sidebyside>
-                <p>In this exercise, we'll use vectors to show that the medians of any triangle (<xref ref="figure-triangle-cyclic-vectors" text="type-global"/>) intersect at a point. Recall that medians are the lines connecting the vertices of the triangle to the midpoints of their opposite edges, as in the figure. We'll do this in a few steps.</p>
-              </introduction>
-              <exercise xml:id="ex-cyclic" workspace="30%">
-                <statement>
-                  <p>What is the value of <m>\vec{A} + \vec{B} + \vec{C}</m>?</p>
-                </statement>
-              </exercise>
-
-              <pagebreak/>
-
-              <p><xref ref="figure-triangle-cyclic-medians" text="type-global"/> from the previous page is reproduced for your convenience.</p>
-              <figure xml:id="figure-triangle-cyclic-medians-copy">
-                <caption>The medians of the triangle are <m>\vec{M}_1</m>, <m>\vec{M}_2</m>, and <m>\vec{M}_3</m>.</caption>
-                <image xml:id="worksheet-triangle-cyclic-medians-copy" width="50%">
-                  <latex-image>
-                    \begin{tikzpicture}[xscale=1.5, yscale=1.5]
-                      \draw[->,>=latex, style={black, thick}] (0,0) -- (2.30 , 0) node [below] {$\vec{A}$} --  (3,0);
-                      \draw[->,>=latex, style={black, thick}] (3,0) -- (1.47, 1.53) node [above right =1mm] {$\vec{B}$} -- (1,2);
-                      \draw[->,>=latex, style={black, thick}] (1,2) -- (0.23 , 0.46) node [above left=1mm] {$\vec{C}$} -- (0,0);
-                      \draw[->,>=latex, style={black,semithick,dashed}] (1,2) -- (7/6, 4/3) node
-                        {$\vec{M}_{1}$} -- (1.5,0);% node[below right=0mm and 3mm] {$\vec{A}$};
-                      \draw[->,>=latex, style={black,semithick,dashed}] (0,0) -- (2/3, 1/3) node
-                       {$\vec{M}_{2}$} -- (2,1);% node[above left=5mm and 1mm] {$\vec{B}$};
-                      \draw[->,>=latex, style={black,semithick,dashed}] (3,0) -- (13/6,1/3) node
-                       {$\vec{M}_{3}$} -- (0.5,1);% node[below left=1mm and 3mm] {$\vec{C}$};
-                      \node[draw,shape=circle,fill=black,name=P,scale=0.5] at (4/3,2/3) {};
-                      \node[above right=1.2mm and -0.5mm of P] at (4/3,2/3) {$P$};
-                      % \node {$P$} (1.3333,0.6667);
-                    \end{tikzpicture}
-                  </latex-image>
-                </image>
-              </figure>
-              <sidebyside margins="0%" widths="30% 60%" valign="top">
-                <exercise workspace="40%">
-                  <statement>
-                    <p>Show that <m>\vec{M}_{1} + \vec{M}_{2} + \vec{M}_{3} = 0</m>.</p>
-                  </statement>
-                  <hint>
-                    <p>Use <xref ref="ex-cyclic" text="type-global"/>.</p>
-                  </hint>
-                </exercise>
-                <exercise workspace="40%">
-                  <statement>
-                    <p>To show that the point <m>P</m> exists (as the common intersection of the <m>\vec{M}_{i}</m>), show that <me>
-                      \vec{A} + \frac{2}{3} \vec{M}_{3} = \frac{2}{3} \vec{M}_{2} = <fillin characters="10"/>
-                    </me>.</p>
-                  </statement>
-                </exercise>
-              </sidebyside>
-              <exercise workspace="5%">
-                <statement>
-                  <p>If you have time, try to devise a vector proof of Euclid's result presented at the beginning of the workshop. Recall that a <term>parallelogram</term> is a four-sided polygon whose opposite sides are parallel.</p>
-                </statement>
-              </exercise>
-              <conclusion>
-                <title>Wrap-up</title>
-                <p>It's possible to do interesting things with vector arithmetic in a coordinate-free way: we didn't specify an origin, or any entries of any vectors in the examples.</p>
-              </conclusion>
-            </worksheet>
         </section>
 
         <exercises xml:id="exercises">
@@ -7647,6 +8145,11 @@ the xsltproc executable.
                 <title>Drill Two</title>
                 <statement>
                     <p>Aliquam sagittis ex at magna porttitor, quis scelerisque ligula malesuada. Vestibulum vitae mauris id nisi pretium ornare a id lectus. Nam suscipit magna id sem ultricies vestibulum. Nulla facilisi. Duis venenatis lectus massa, ac mollis nisi suscipit non. Sed et sapien vulputate, imperdiet nibh vel, lobortis nisl. Curabitur sagittis justo nibh. Nulla vulputate sodales justo at efficitur. Cras justo augue, mollis vitae nulla sed, vestibulum tincidunt ante. Vestibulum et lorem lectus. Maecenas accumsan lacus a nisi euismod rutrum eu dapibus justo. Etiam scelerisque a odio a euismod. Pellentesque vestibulum pellentesque nisi, a tempus erat cursus ac. Morbi ut auctor lectus.</p>
+
+                    <figure>
+                        <caption>Testing numbering in a <tag>exercises</tag> without a number</caption>
+                        <image source="images/cross-square.png" width="20%" />
+                    </figure>
                 </statement>
             </exercise>
 
@@ -7767,12 +8270,12 @@ the xsltproc executable.
                 <notation-list />
             </appendix>
 
-            <solutions xml:id="solutions-backmatter" inline="hint solution answer" divisional="hint solution answer" project="answer">
+            <solutions xml:id="solutions-backmatter" inline="hint solution answer" divisional="hint solution answer" project="answer" worksheet="hint" reading="answer">
                 <title>Solutions to Selected Exercises</title>
                 <idx><h>solutions</h><h>as an appendix</h></idx>
 
                 <introduction>
-                    <p>This is an introduction, where you might explain that this division of the back matter contains various hints, answers, solutions of inline exercises, divisional exercises, and/or project-like blocks.  See the source to see just how this solutions division was built.</p>
+                    <p>This is an introduction, where you might explain that this division of the back matter contains various hints, answers, solutions of inline exercises, divisional exercises, project-like blocks, worksheet exercises, and/or reading questions.  See the source to see just how this solutions division was built.</p>
                 </introduction>
 
                 <!-- content will happen here automatically -->
@@ -7788,6 +8291,23 @@ the xsltproc executable.
                 <p>We had an automatic list of theorems for just one section, back in <xref ref="subsection-local-theorems" text="type-global" />.  Here we expand to include <c>corollary</c> in our space-delimited list of <c>elements</c> and we request <c>divisions</c> (headings) at each <c>subsection</c> and <c>section</c>.  The default <c>scope</c> is the entire document, which is appropriate here in the backmatter.  There are many subsections with no results, so we set the <c>empty</c> attribute to <c>no</c> to suppress them, though this is the default behavior (<c>yes</c> being the other option to see divisions with no list items).  These lists are most valuable if you are in the practice of giving items titles.</p>
 
                 <list-of elements="  theorem corollary" divisions="section    subsection " empty="no" />
+            </appendix>
+
+            <appendix>
+                <title>A Structured Appendix</title>
+                <introduction><p>A deeply-structured appendix for testing purposes.</p></introduction>
+                <subsection>
+                    <title>A Subsection in an Appendix</title>
+                    <introduction><p>Inside a subsection.</p></introduction>
+                    <subsubsection>
+                        <title>A Subsubsection in a Subsection in an Appendix</title>
+                        <p>Nearly terminal.</p>
+                        <paragraphs>
+                            <title>Paragraphs in a Subsubsection in a Subsection in an Appendix</title>
+                            <p>The <c>paragraphs</c> element can go in any division, but does not get a number.</p>
+                        </paragraphs>
+                    </subsubsection>
+                </subsection>
             </appendix>
 
             <appendix>
@@ -7812,8 +8332,8 @@ the xsltproc executable.
                 </paragraphs>
             </appendix>
 
-            <!-- Bibliography/References can appear anywhere, -->
-            <!-- but these are in the backmatter              -->
+            <!-- Bibliography/References can appear anywhere,  -->
+            <!-- but these are in the backmatter, hence global -->
 
             <references xml:id="references-backmatter">
                 <title>References</title>
@@ -7826,13 +8346,37 @@ the xsltproc executable.
 
             </references>
 
+            <appendix xml:id="references">
+                <title>Multiple References</title>
+
+                <subsection>
+                    <title>Multiple Specialized References</title>
+
+                    <p>You might want to have lists of references, in the back, but with multiple such lists.  Make an <tag>appendix</tag> to hold them, give it some structure (for an <tag>article</tag>, a leading <tag>subsection</tag>, such as the one you are reading right now), then follow with multiple <tag>references</tag> divisions.  A typical citation will then look like: <xref ref="biblio-strang-article-tres"/>.</p>
+                </subsection>
+
+                <references>
+                    <title>General References</title>
+
+                    <biblio type="raw" xml:id="biblio-strang-article-uno">Gilbert Strang, <title>The Fundamental Theorem of Linear Algebra</title>, <journal>The American Mathematical Monthly</journal> November 1993, <volume>100</volume> <number>9</number>, 848<ndash />855.</biblio>
+                </references>
+
+                <references>
+                    <title>Specialized References</title>
+
+                    <biblio type="raw" xml:id="biblio-strang-article-dos">Gilbert Strang, <title>The Fundamental Theorem of Linear Algebra</title>, <journal>The American Mathematical Monthly</journal> November 1993, <volume>100</volume> <number>9</number>, 848<ndash />855.</biblio>
+
+                    <biblio type="raw" xml:id="biblio-strang-article-tres">Gilbert Strang, <title>The Fundamental Theorem of Linear Algebra</title>, <journal>The American Mathematical Monthly</journal> November 1993, <volume>100</volume> <number>9</number>, 848<ndash />855.</biblio>
+                </references>
+             </appendix>
+
             <index>
                 <title>Index</title>
                 <index-list />
             </index>
 
             <colophon>
-                <p>This article was authored in <pretext />.</p>
+                <p>This article was authored in, and produced with, <pretext />.  It is typeset with the Latin Modern font.</p>
             </colophon>
         </backmatter>
     </article>

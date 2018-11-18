@@ -616,4 +616,22 @@
     </aside>
 </xsl:template>
 
+<!-- ##### -->
+<!-- Icons -->
+<!-- ##### -->
+
+<!-- Unicode characters will relieve necessity of        -->
+<!-- Font Awesome CSS loading, $icon-table is in -common -->
+<xsl:template match="icon">
+    <!-- the name attribute of the "icon" in text as a string -->
+    <xsl:variable name="icon-name">
+        <xsl:value-of select="@name"/>
+    </xsl:variable>
+
+    <!-- for-each is just one node, but sets context for key() -->
+    <xsl:for-each select="$icon-table">
+        <xsl:value-of select="key('icon-key', $icon-name)/@unicode" />
+    </xsl:for-each>
+</xsl:template>
+
 </xsl:stylesheet>

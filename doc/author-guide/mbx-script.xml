@@ -117,7 +117,7 @@
 
             <li>
                 <title>YouTube Thumbnails</title>
-                <p>For each YouTube video you specify, the script will go the YouTube site and grab a thumbnail image for that video.  These get used in static formats, such  as <init>PDF</init>.</p>
+                <p>For each YouTube video (or itemized playlist) you specify, the script will go the YouTube site and grab a thumbnail image for that video (or first video from the itemized playlist). These get used in static formats, such as <init>PDF</init>.</p>
             </li>
 
             <li>

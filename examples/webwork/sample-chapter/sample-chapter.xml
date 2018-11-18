@@ -1797,5 +1797,13 @@
                 </exercisegroup>
             </exercises>
         </section>
+
+        <backmatter>
+            <!-- 2018-09-19: answers are not yet available, so we -->
+            <!-- still test that asking for them is not a problem -->
+            <solutions inline="hint answer solution" divisional="hint answer solution">
+                <title>Hints, Answers, and Solutions</title>
+            </solutions>
+        </backmatter>
     </article>
 </mathbook>

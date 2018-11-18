@@ -70,7 +70,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='subsubsection'><xsl:text>Sous-sous-section</xsl:text></localization>
     <localization string-id='exercises'><xsl:text>Exercices</xsl:text></localization>
     <!-- <localization string-id='worksheet'><xsl:text>Worksheet</xsl:text></localization> -->
+    <!-- <localization string-id='reading-questions'><xsl:text>Reading Questions</xsl:text></localization> -->
     <!-- <localization string-id='solutions'><xsl:text>Solutions</xsl:text></localization> -->
+    <!-- <localization string-id='glossary'><xsl:text>Glossary</xsl:text></localization> -->
     <localization string-id='references'><xsl:text>Références</xsl:text></localization>
     <localization string-id='backmatter'><xsl:text>Appendices</xsl:text></localization>
     <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
@@ -109,6 +111,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Objectives is the block, objective is a list item within -->
     <localization string-id='objectives'><xsl:text>Objectifs</xsl:text></localization>
     <localization string-id='objective'><xsl:text>Objectif</xsl:text></localization>
+    <!-- Outcomes is the block, outcome is a list item within (different) -->
+    <!-- <localization string-id='outcomes'><xsl:text>Outcomes</xsl:text></localization> -->
+    <!-- <localization string-id='outcome'><xsl:text>Outcome</xsl:text></localization> -->
     <!--  -->
     <localization string-id='figure'><xsl:text>Figure</xsl:text></localization>
     <localization string-id='table'><xsl:text>Table</xsl:text></localization>
@@ -117,6 +122,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Translations needed for France French -->
     <localization string-id='list'><xsl:text>Liste</xsl:text></localization>
     <localization string-id='li'><xsl:text>Point</xsl:text></localization>
+    <!-- A term (word) defined in a glossary -->
+    <!-- <localization string-id='defined-term'><xsl:text>Term</xsl:text></localization> -->
     <!-- A regular paragraph, not the old sectioning structure -->
     <localization string-id='p'><xsl:text>Paragraph</xsl:text></localization>
     <localization string-id='blockquote'><xsl:text>Citation</xsl:text></localization>
@@ -125,6 +132,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Translation needed for France French -->
     <!-- See en-US file for distinctions here, do not repeat previous translation -->
     <!-- <localization string-id='inlineexercise'><xsl:text>Checkpoint</xsl:text></localization> -->
+    <!-- <localization string-id='worksheetexercise'><xsl:text>Worksheet Exercise</xsl:text></localization> -->
+    <!-- <localization string-id='readingquestion'><xsl:text>Reading Question</xsl:text></localization> -->
     <localization string-id='webwork'><xsl:text>WeBWorK</xsl:text></localization>
     <localization string-id='hint'><xsl:text>Indication</xsl:text></localization>
     <localization string-id='answer'><xsl:text>Réponse</xsl:text></localization>

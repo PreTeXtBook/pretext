@@ -106,15 +106,49 @@
         <title>Exercises</title>
         <idx>exercise</idx>
 
-        <p>An exercise can appear in the narrative as an <term>inline exercise</term><idx><h>exercise</h><h>inline exercise</h></idx> or in a special <tag>exercises</tag><idx><h>exercise</h><h>divisional exercise</h></idx> division and is then known as a <term>divisional exercise</term>.  The syntax is the same in both cases, there are just some minor differences in their use and treatment.  The <tag>exercises</tag> division can be used at any level.  In other words, it can be a peer of any other division.</p>
+        <p>Textbooks in many disciplines have exercises for the reader.  In <pretext/> there are five places where you can set a question for the reader to pursue.<dl>
+            <li>
+                <title>Divisional</title>
+                <p>There is a special <tag>exercises</tag><idx><h>exercise</h><h>divisional exercise</h></idx> division and an <tag>exercise</tag> placed there is then known as a <term>divisional exercise</term>.  This division supports extra features designed for exercises, such as an <tag>exercisegroup</tag> for short exercises with common instructions.  The <tag>exercises</tag> division can be used at any level.  In other words, it can be a peer of any other division.</p>
+            </li>
+            <li>
+                <title>Inline</title>
+                <p>Immediately within any division, you can interrupt the narrative with an <term>inline exercise</term>.<idx><h>exercise</h><h>inline exercise</h></idx>  It will be rendered similar to a <tag>theorem</tag> or other block, with a number, and a optional <tag>title</tag>.</p>
+            </li>
+            <li>
+                <title>Reading Question</title>
+                <p>Another specialized division, <tag>reading-questions</tag>, can be used to house <tag>exercise</tag> designed to test or guide a reader's comprehension of the material in that division.</p>
+            </li>
+            <li>
+                <title>Worksheet</title>
+                <p>The main component of a <tag>worksheet</tag> is an <tag>exercise</tag> (<xref ref="overview-worksheet"/>).  Notably the exercises in a worksheet may be arranged with a <tag>sidebyside</tag> element (<xref ref="overview-sidebyside"/>).</p>
+            </li>
+            <li>
+                <title>Project</title>
+                <p>A <tag>project</tag> is a bit different than the prior situations, since this element is structured with <tag>task</tag>.  But it has many common features, such as allowing optional <tag>hint</tag>, <tag>answer</tag>, <tag>solution</tag>.</p>
+            </li>
+        </dl></p>
 
-        <p>An <tag>exercise</tag> is a mandatory <tag>statement</tag> followed by possibly several optional <tag>hint</tag>, <tag>answer</tag> and/or <tag>solution</tag>.  Conceptually, an <tag>answer</tag> is a short final result, while a <tag>solution</tag> provides details about the route to the answer.  Each of these four components is structured further, with paragraph-like elements, and the exercise itself may have a <tag>title</tag>.</p>
+        <p>If an <tag>exercise</tag> is simply a statement of the question, then it may be authored with paragraphs (<tag>p</tag>) and similar elements.  If an <tag>exercise</tag> has hints, answers, or solutions, then it must be structured with a <tag>statement</tag>, followed by (possibly several) optional <tag>hint</tag>, <tag>answer</tag> and/or <tag>solution</tag>.  Conceptually, an <tag>answer</tag> is a short final result, while a <tag>solution</tag> provides details about the route to the answer.  Each of these four components is structured further, with paragraph-like elements, and the exercise itself may have a <tag>title</tag>.  A title is strongly encouraged for inline exercises, and nearly-mandatory if you plan to have inline exercises rendered in knowls in a conversion to <init>HTML</init>.</p>
 
-        <p>You need (and want) to have the hints, answers and solutions grouped with the statement, but there is a lot of flexibility on making these available at the location of the exercise, or in the back matter.  See <xref ref="topic-exercises-solutions" /> for more.</p>
+        <p>You need (and want) to have the hints, answers and solutions grouped with the statement as you author, but there is a lot of flexibility on making these available at the location of the exercise, or in the back matter.  See <xref ref="topic-exercises-solutions" /> for more.</p>
 
-        <p>An inline exercise typically gets a fully qualified unique number and is rendered similar to an <tag>example</tag> or a <tag>remark</tag>.  A divisional exercise only gets a sequential number, though this can be overridden with the <attr>number</attr> attribute if you want to maintain stable numbering in response to edits.  (Be careful, once you override the sequential numbering, you probably need to manually specify every subsequent number, so save overrides for when your project matures.)</p>
+        <p>An inline exercise typically gets a fully qualified unique number and is rendered similar to an <tag>example</tag> or a <tag>remark</tag>.  A divisional exercise (including reading questions and worksheet exercises) only gets a sequential number, though this can be overridden with the <attr>number</attr> attribute if you want to maintain stable numbering in response to edits.  (Be careful, once you override the sequential numbering, you probably need to manually specify every subsequent number, so save overrides for when your project matures.)</p>
 
         <p>Within a run of divisional exercises a subgroup can be delimited as an <tag>exercisegroup</tag>, which allows an <tag>introduction</tag> and/or <tag>conclusion</tag> to explain some commonality.  An <tag>exercisegroup</tag> should be rendered in some way that makes it clear to the reader that they are a group.</p>
+    </section>
+
+    <section xml:id="overview-worksheet">
+        <title>Worksheets</title>
+        <idx>worksheet</idx>
+
+        <p>Another division is a <tag>worksheet</tag>.  It is similar to a <tag>chapter</tag>, <tag>section</tag>, and so on, but with some variations to support a worksheet or in-class activity.  Here we recognize the primacy of printed output (perhaps to bring into a classroom), and the online version is a less-capable representation.</p>
+
+        <p>There is no limit to what you can place in a <tag>worksheet</tag> division: objectives, an introduction, theorems, figures, images, and so on.  But the principal element is an <tag>exercise</tag>, which mostly behaves like an <tag>exercise</tag> in an <tag>exercises</tag> division, but with additional capabilities.</p>
+
+        <p>An <tag>exercise</tag> in a <tag>worksheet</tag> can have a specified width when included in a <tag>sidebyside</tag>, and in any case may have a specified additional blank working space of specified height.  Page breaks can be specified, and the four margins on a page can be independently controlled.  So if you want to create ancillary worksheets for your project, and you like to use <em>all</em> of the space on a printed page, then there is some layout control to support that.</p>
+
+        <p>Notice that all of this layout control is an exception to the philosophy of <pretext />.  So in particular, margins and working space do not appear in the <init>HTML</init> output.  We do give a visual indication where a page break in a <tag>worksheet</tag> is placed.  An author might wish to collect all of the worksheets in a book, for printing as an <q>activity book</q>, and so there are plans (2018-08-11) to support and automate that process.  Details for authoring worksheets can be found in <xref ref="topic-worksheet"/>.</p>
     </section>
 
     <section xml:id="overview-references">
