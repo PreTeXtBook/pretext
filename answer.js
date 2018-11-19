@@ -114,7 +114,7 @@ $('.readingquestion_make_answer').mousedown(function(e){
 
   var this_rq_answer_and_controls = document.createElement('div');
   this_rq_answer_and_controls.setAttribute('style', 'width:80%; margin-left:auto; margin-right:auto; margin-top:0.5em;');
-//  this_rq_answer_and_controls.setAttribute('z-index', '2000');
+
   this_rq_answer_and_controls.innerHTML = answer_textarea + this_rq_controls;
   this.parentNode.insertAdjacentElement("afterend", this_rq_answer_and_controls);
 
@@ -146,7 +146,17 @@ $('body').on('click','.rq_save', function(){
   localStorage.setObject(this_rq_id, this_rq_text);
 
   console.log("looking for", this_rq_id + "_hidden");
-// when the initial answer box is created, there is no hidded version
+// when the initial answer box is created, there is no hidden version
+  if ( !document.getElementById(this_rq_id + "_hidden")) {
+     var hidden_answer_div = document.createElement('div');
+      hidden_answer_div.setAttribute('id', this_rq_id + '_hidden');
+      hidden_answer_div.setAttribute('class', 'tex2jax_ignore');
+      hidden_answer_div.setAttribute('style', 'display: none');
+      this_rq_ans.insertAdjacentElement("beforebegin", hidden_answer_div);
+  }
+  document.getElementById(this_rq_id + "_hidden").innerHTML = this_rq_text;
+
+/*
   if (document.getElementById(this_rq_id + "_hidden")) {
       document.getElementById(this_rq_id + "_hidden").innerHTML = this_rq_text;
   } else {
@@ -158,6 +168,7 @@ $('body').on('click','.rq_save', function(){
       document.getElementById(this_rq_id + "_hidden").innerHTML = this_rq_text;
  //need to create the hidden div, then populate it, then reorganize this if/then
   }
+*/
 
   var this_ans_static = document.createElement('div');
   this_ans_static.setAttribute('id', this_rq_id);
