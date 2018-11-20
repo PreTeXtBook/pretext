@@ -2317,7 +2317,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$second-trip">
         <xsl:text>-numberless</xsl:text>
     </xsl:if>
-    <xsl:text>}{mmmmm}&#xa;</xsl:text>
+    <xsl:text>}{mmmmmm}&#xa;</xsl:text>
     <xsl:text>{%&#xa;</xsl:text>
     <!-- load 6 macros with values, for style writer use -->
     <xsl:text>\renewcommand{\divisionnameptx}{</xsl:text>
@@ -2349,6 +2349,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>[#3]{#1}%&#xa;</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
+    <xsl:text>\label{#6}%&#xa;</xsl:text>
     <!-- close the environment definition, no finish -->
     <xsl:text>}{}%&#xa;</xsl:text>
     <!-- send specialized division back through a second time -->
@@ -3987,7 +3988,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- subtitle here -->
     <!-- <xsl:text>An epigraph here\\with two lines\\-Rob</xsl:text> -->
     <xsl:text>}</xsl:text>
-    <xsl:apply-templates select="." mode="label" />
+    <xsl:text>{</xsl:text>
+    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:text>}</xsl:text>
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
@@ -4027,7 +4030,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>{</xsl:text>
     <!-- subtitle here -->
     <xsl:text>}</xsl:text>
-    <xsl:apply-templates select="." mode="label" />
+    <xsl:text>{</xsl:text>
+    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:text>}</xsl:text>
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
