@@ -5786,13 +5786,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "me" is not numbered, not a cross-reference target -->
 <xsl:template match="me" mode="tag" />
 
-<!-- Identical to the modal "label" template,  -->
-<!-- but a different name as abstract template -->
-<!-- related to equation numbering             -->
+<!-- Simply apply modal "label" template,  -->
+<!-- to allow for LaTeX equation numbering -->
 <xsl:template match="men|mrow" mode="tag">
-    <xsl:text>\label{</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
-    <xsl:text>}</xsl:text>
+    <xsl:apply-templates select="." mode="label" />
 </xsl:template>
 
 <!-- An mrow with a \label{} can be cross-referenced    -->
@@ -5804,9 +5801,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\tag{</xsl:text>
     <xsl:apply-templates select="@tag" mode="tag-symbol" />
     <xsl:text>}</xsl:text>
-    <xsl:text>\label{</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
-    <xsl:text>}</xsl:text>
+    <xsl:apply-templates select="." mode="label" />
 </xsl:template>
 
 <!-- QED Here -->
