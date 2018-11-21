@@ -872,9 +872,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:for-each>
     </xsl:if>
     <xsl:if test="$document-root//case[@direction]">
+        <!-- Perhaps customize these via something like tex-macro-style      -->
+        <!-- And/or move these closer to the environment where they are used -->
         <xsl:text>%% Arrows for iff proofs, with trailing space&#xa;</xsl:text>
-        <xsl:text>\newcommand{\forwardimplication}{($\Rightarrow$)\space\space}&#xa;</xsl:text>
-        <xsl:text>\newcommand{\backwardimplication}{($\Leftarrow$)\space\space}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\forwardimplication}{($\Rightarrow$)}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\backwardimplication}{($\Leftarrow$)}&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>%% Subdivision Numbering, Chapters, Sections, Subsections, etc&#xa;</xsl:text>
     <xsl:text>%% Subdivision numbers may be turned off at some level ("depth")&#xa;</xsl:text>
@@ -1059,6 +1061,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="miscellaneous-reps" select="
         ($document-root//defined-term)[1]|
         ($document-root//proof)[1]|
+        ($document-root//case)[1]|
         ($document-root//assemblage)[1]|
         ($document-root//objectives)[1]|
         ($document-root//outcomes)[1]|
@@ -2354,7 +2357,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- "proof" -->
-<!-- Body:  \begin{proof}{title}           -->
+<!-- Body:  \begin{proof}{title}{label}    -->
 <!-- Title comes with punctuation, always. -->
 <xsl:template match="proof" mode="environment">
     <xsl:text>%% proof: title is a replacement&#xa;</xsl:text>
@@ -2364,6 +2367,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\newtcolorbox{proofptx}[2]{title={\notblank{#1}{#1}{</xsl:text>
     <xsl:apply-templates select="." mode="type-name"/>
     <xsl:text>.}}, phantom={\hypertarget{#2}{}}, breakable, proofstyle }&#xa;</xsl:text>
+</xsl:template>
+
+<!-- "case" (of a proof) -->
+<!-- Body:  \begin{proof}{directionarrow}{title}{label} -->
+<!-- Title comes with punctuation, always.              -->
+<!-- TODO: move implication definitions here, and       -->
+<!-- pass semantic strings out of the construction      -->
+<xsl:template match="case" mode="environment">
+    <xsl:text>\NewDocumentEnvironment{case}{mmm}&#xa;</xsl:text>
+    <xsl:text>{\par\medskip\noindent\notblank{#1}{#1\space{}}{}\textit{\notblank{#2}{#2\space{}}{}\notblank{#1#2}{}{</xsl:text>
+    <xsl:apply-templates select="." mode="type-name"/>
+    <xsl:text>.\space{}}}\hypertarget{#3}{}}{}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- "objectives" -->
@@ -4375,32 +4390,35 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- cases in proofs -->
-<!-- No newline after macros, so inline to text      -->
-<!-- A proof gets no metadata in DTD                 -->
-<!-- but if that changes, ignore in "preceding" test -->
+<!-- Three arguments: direction arrow, title, label -->
+<!-- The environment combines and styles            -->
 <xsl:template match="case">
-    <xsl:if test="preceding-sibling::*">
-        <xsl:text>\par\medskip\noindent&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:apply-templates select="." mode="label" />
+    <xsl:text>\begin{case}&#xa;</xsl:text>
+    <xsl:text>{</xsl:text>
+    <!-- optional direction, given by attribute -->
     <xsl:choose>
         <xsl:when test="@direction='forward'">
-            <xsl:text>\forwardimplication{}</xsl:text>
+            <xsl:text>\forwardimplication</xsl:text>
         </xsl:when>
         <xsl:when test="@direction='backward'">
-            <xsl:text>\backwardimplication{}</xsl:text>
+            <xsl:text>\backwardimplication</xsl:text>
         </xsl:when>
-        <!-- DTD will catch wrong values -->
-        <xsl:otherwise />
+        <!-- DTD will catch incorrect values -->
     </xsl:choose>
-    <!-- arrows should provide trailing space here -->
+    <xsl:text>}</xsl:text>
+    <!-- optional title -->
+    <xsl:text>{</xsl:text>
     <xsl:if test="title">
-        <xsl:text>\textit{</xsl:text>
-        <xsl:apply-templates select="." mode="title-full" />
-        <xsl:text>}. </xsl:text>
+        <xsl:apply-templates select="." mode="title-punctuated" />
     </xsl:if>
-    <!-- period should provide trailing space -->
-    <xsl:apply-templates select="*" />
+    <xsl:text>}</xsl:text>
+    <!-- label -->
+    <xsl:text>{</xsl:text>
+    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:text>}</xsl:text>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>\end{case}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- ######### -->
