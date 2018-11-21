@@ -672,6 +672,10 @@ the xsltproc executable.
 
                             <p>If you like, you can have both indications.</p>
                         </case>
+
+                        <case xml:id="empty-case">
+                            <p>No direction, no title, then just a generic title.</p>
+                        </case>
                     </proof>
                     <proof>
                         <title>Exciting Proof!</title>

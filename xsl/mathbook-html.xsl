@@ -1612,7 +1612,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>title</xsl:text>
         <!-- if punctuated, add a class to this effect -->
         <xsl:if test="$has-punctuation = 'true'">
-                <xsl:text> punctuated</xsl:text>
+            <xsl:text> punctuated</xsl:text>
         </xsl:if>
     </xsl:attribute>
 </xsl:template>
@@ -1815,20 +1815,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- 'RIGHTWARDS DOUBLE ARROW' (U+21D2) -->
             <xsl:when test="@direction='forward'">
                 <xsl:comment>Style arrows in CSS?</xsl:comment>
-                <xsl:text>(&#x21d2;)&#xa0;&#xa0;</xsl:text>
+                <xsl:text>(&#x21d2;)&#xa0;</xsl:text>
             </xsl:when>
             <!-- 'LEFTWARDS DOUBLE ARROW' (U+21D0) -->
             <xsl:when test="@direction='backward'">
                 <xsl:comment>Style arrows in CSS?</xsl:comment>
-                <xsl:text>(&#x21d0;)&#xa0;&#xa0;</xsl:text>
+                <xsl:text>(&#x21d0;)&#xa0;</xsl:text>
             </xsl:when>
             <!-- DTD will catch wrong values -->
             <xsl:otherwise />
         </xsl:choose>
-        <xsl:if test="title">
-            <xsl:apply-templates select="." mode="title-full" />
-            <xsl:text>.</xsl:text>
-        </xsl:if>
+        <xsl:choose>
+            <xsl:when test="title">
+                <xsl:apply-templates select="." mode="title-full" />
+                <xsl:text>.&#xa0;</xsl:text>
+            </xsl:when>
+            <!-- no title, no direction, default to "Case." -->
+            <xsl:when test="not(@direction)">
+                <xsl:apply-templates select="." mode="type-name"/>
+                <xsl:text>.&#xa0;</xsl:text>
+            </xsl:when>
+        </xsl:choose>
     </h6>
 </xsl:template>
 
