@@ -300,6 +300,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="title-page-info-article" />
     <xsl:text>\begin{document}&#xa;</xsl:text>
     <xsl:call-template name="text-alignment"/>
+    <xsl:call-template name="front-cover"/>
     <!-- Target for xref to top-level element -->
     <!-- immediately, or first in ToC         -->
     <xsl:choose>
@@ -324,6 +325,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
     </xsl:if>
     <xsl:apply-templates />
+    <xsl:call-template name="back-cover"/>
    <xsl:text>\end{document}</xsl:text>
 </xsl:template>
 
@@ -347,6 +349,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\begin{document}&#xa;</xsl:text>
     <xsl:call-template name="text-alignment"/>
     <xsl:apply-templates />
+    <xsl:call-template name="back-cover"/>
     <xsl:text>\end{document}</xsl:text>
 </xsl:template>
 
@@ -621,6 +624,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="//m[contains(text(),'sfrac')] or //md[contains(text(),'sfrac')] or //me[contains(text(),'sfrac')] or //mrow[contains(text(),'sfrac')]">
         <xsl:text>%% xfrac package for 'beveled fractions': http://tex.stackexchange.com/questions/3372/how-do-i-typeset-arbitrary-fractions-like-the-standard-symbol-for-5-%C2%BD&#xa;</xsl:text>
         <xsl:text>\usepackage{xfrac}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:text>%%&#xa;</xsl:text>
+    <xsl:if test="$docinfo/covers">
+        <xsl:text>%% pdfpages package for front and back covers as PDFs&#xa;</xsl:text>
+        <xsl:text>\usepackage[</xsl:text>
+        <xsl:choose>
+            <xsl:when test="$latex.draft ='yes'">
+                <xsl:text>draft</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>final</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+        <xsl:text>]{pdfpages}&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>%%&#xa;</xsl:text>
     <xsl:text>%% Division Titles, and Page Headers/Footers&#xa;</xsl:text>
@@ -2130,6 +2147,36 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- For a "book" place *before* \frontmatter so  -->
+<!-- as to not disrupt Roman numeral numbering -->
+<xsl:template name="front-cover">
+    <xsl:if test="$docinfo/covers[@front]">
+        <xsl:text>%% Cover image, not numbered&#xa;</xsl:text>
+        <xsl:text>\setcounter{page}{0}%&#xa;</xsl:text>
+        <xsl:text>\includepdf[noautoscale=false]{</xsl:text>
+        <xsl:value-of select="$docinfo/covers/@front"/>
+        <xsl:text>}%&#xa;</xsl:text>
+        <xsl:if test="$latex-sides= 'two'">
+            <xsl:text>%% Blank obverse for 2-sided version&#xa;</xsl:text>
+            <xsl:text>\thispagestyle{empty}\hbox{}\setcounter{page}{0}\cleardoublepage%&#xa;</xsl:text>
+        </xsl:if>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template name="back-cover">
+    <xsl:if test="$docinfo/covers[@back]">
+        <xsl:text>%% Back cover image, not numbered&#xa;</xsl:text>
+        <xsl:text>\cleardoublepage%&#xa;</xsl:text>
+        <xsl:if test="$latex-sides= 'two'">
+            <xsl:text>%% 2-sided, and at end of even page, so add odd page&#xa;</xsl:text>
+            <xsl:text>\thispagestyle{empty}\hbox{}\newpage%&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:text>\includepdf[noautoscale=false]{</xsl:text>
+        <xsl:value-of select="$docinfo/covers/@back"/>
+        <xsl:text>}%&#xa;</xsl:text>
+    </xsl:if>
+</xsl:template>
+
 <!-- ####################### -->
 <!-- LaTeX Macro Definitions -->
 <!-- ####################### -->
@@ -3227,6 +3274,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="book/frontmatter">
     <!-- DTD: does the next line presume <frontmatter> is required? -->
     <xsl:text>\frontmatter&#xa;</xsl:text>
+    <xsl:call-template name="front-cover"/>
     <xsl:apply-templates select="*[not(self::colophon or self::biography)]" />
     <xsl:text>%% begin: table of contents&#xa;</xsl:text>
     <xsl:if test="$latex-toc-level > -1">
