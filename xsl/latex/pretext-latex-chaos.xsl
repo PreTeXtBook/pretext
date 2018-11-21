@@ -137,6 +137,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text/>
 </xsl:template>
 
+<!-- "proof" -->
+<!-- Changes: Bold upright font, abnormally large spacing after title, no tombstone. -->
+<!-- bwminimalstyle is part of the mathbook-latex.xsl file, uncertain                -->
+<!-- if we are committed to making it universally available to be used               -->
+<!-- like this by style writers.                                                     -->
+<xsl:template match="proof" mode="tcb-style">
+    <xsl:text>bwminimalstyle, fonttitle=\normalfont\bfseries, attach title to upper, after title={\qquad}&#xa;</xsl:text>
+</xsl:template>
+
 <!-- "objectives", "outcomes" -->
 <!-- Green and ugly, plus identical, via the dual match -->
 <xsl:template match="objectives|outcomes" mode="tcb-style">

@@ -907,35 +907,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:call-template>
         <xsl:text>]&#xa;</xsl:text>
     </xsl:if>
+    <xsl:text>%% AMS "proof" environment is not used, but we leave previously&#xa;</xsl:text>
+    <xsl:text>%% implemented \qedhere in place, should the LaTeX be recycled&#xa;</xsl:text>
+    <xsl:text>\renewcommand{\qedhere}{\relax}&#xa;</xsl:text>
     <xsl:text>%% end: General AMS environment setup&#xa;</xsl:text>
-    <xsl:if test="$document-root//proof">
-        <xsl:text>%% AMS proof environment is basically fine as-is and special treatment&#xa;</xsl:text>
-        <xsl:text>%% would certainly interfere with the functioning of \qed, etc.&#xa;</xsl:text>
-        <xsl:text>%% So we simply localize the default heading&#xa;</xsl:text>
-        <xsl:text>%% Redefinition of the "proof" environment is to cause a long alternate&#xa;</xsl:text>
-        <xsl:text>%% title to line-break appropriately.  Code is cut verbatim, by suggestion,&#xa;</xsl:text>
-        <xsl:text>%% from "Using the amsthm Package" Version 2.20.3, September 2017&#xa;</xsl:text>
-        <!-- AMS warns a too-long title may not line-break, due to implementation as a trivlist -->
-        <xsl:text>\renewcommand*{\proofname}{</xsl:text>
-        <xsl:call-template name="type-name">
-            <xsl:with-param name="string-id" select="'proof'" />
-        </xsl:call-template>
-        <xsl:text>}&#xa;</xsl:text>
-        <xsl:text>\makeatletter&#xa;</xsl:text>
-        <xsl:text>\renewenvironment{proof}[1][\proofname]{\par&#xa;</xsl:text>
-        <xsl:text>  \pushQED{\qed}%&#xa;</xsl:text>
-        <xsl:text>  \normalfont \topsep6\p@\@plus6\p@\relax&#xa;</xsl:text>
-        <xsl:text>  \trivlist&#xa;</xsl:text>
-        <xsl:text>  \item\relax&#xa;</xsl:text>
-        <xsl:text>    {\itshape&#xa;</xsl:text>
-        <xsl:text>    #1\@addpunct{.}}\hspace\labelsep\ignorespaces&#xa;</xsl:text>
-        <xsl:text>}{%&#xa;</xsl:text>
-        <xsl:text>  \popQED\endtrivlist\@endpefalse&#xa;</xsl:text>
-        <xsl:text>}&#xa;</xsl:text>
-        <xsl:text>\makeatother&#xa;</xsl:text>
-        <xsl:text>%% And a filled-in Halmos, making hollow available for examples&#xa;</xsl:text>
-        <xsl:text>\renewcommand{\qedsymbol}{\(\blacksquare\)}&#xa;</xsl:text>
-    </xsl:if>
+    <!--  -->
     <!-- Groups of environments/blocks -->
     <!-- Variables hold exactly one node of each type in use -->
     <!-- "environment" template constructs...environments -->
@@ -1082,6 +1058,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- but we include it here as a one-off      -->
     <xsl:variable name="miscellaneous-reps" select="
         ($document-root//defined-term)[1]|
+        ($document-root//proof)[1]|
         ($document-root//assemblage)[1]|
         ($document-root//objectives)[1]|
         ($document-root//outcomes)[1]|
@@ -2376,6 +2353,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\newtcolorbox{commentary}[2]{title={#1}, phantomlabel={#2}, breakable, commentarystyle}&#xa;</xsl:text>
 </xsl:template>
 
+<!-- "proof" -->
+<!-- Body:  \begin{proof}{title}           -->
+<!-- Title comes with punctuation, always. -->
+<xsl:template match="proof" mode="environment">
+    <xsl:text>%% proof: title is a replacement&#xa;</xsl:text>
+    <xsl:text>\tcbset{ proofstyle/.style={</xsl:text>
+    <xsl:apply-templates select="." mode="tcb-style" />
+    <xsl:text>} }&#xa;</xsl:text>
+    <xsl:text>\newtcolorbox{proofptx}[2]{title={\notblank{#1}{#1}{</xsl:text>
+    <xsl:apply-templates select="." mode="type-name"/>
+    <xsl:text>.}}, phantom={\hypertarget{#2}{}}, breakable, proofstyle }&#xa;</xsl:text>
+</xsl:template>
+
 <!-- "objectives" -->
 <!-- Body:  \begin{objectives}{m:title}    -->
 <!-- Title comes without new punctuation.  -->
@@ -2666,6 +2656,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="commentary" mode="tcb-style">
     <xsl:text>blockspacingstyle, breakable,skin=enhanced,fonttitle=\bfseries,coltitle=black,colback=white,frame code={&#xa;</xsl:text>
     <xsl:text>\path[draw=red!75!black,line width=0.5mm] (frame.north west) -- (frame.south west) -- ($ (frame.south west)!0.05!(frame.south east) $);}</xsl:text>
+</xsl:template>
+
+<!-- "proof" -->
+<!-- Title in italics, as in amsthm style.           -->
+<!-- Filled, black square as QED, tombstone, Halmos. -->
+<xsl:template match="proof" mode="tcb-style">
+    <xsl:text>bwminimalstyle, fonttitle=\normalfont\itshape, attach title to upper, after title={\space}, after upper={\hfill{}\(\blacksquare\)}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- "objectives" -->
@@ -4359,19 +4356,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Proofs -->
 <!-- Subsidary to THEOREM-LIKE, or standalone        -->
 <!-- Defaults to "Proof", can be replaced by "title" -->
+<!-- TODO: rename as "proof" once  amsthm  package goes away -->
 <xsl:template match="proof">
-    <xsl:text>\begin{proof}</xsl:text>
+    <xsl:text>\begin{proofptx}</xsl:text>
     <!-- The AMS environment handles punctuation carefully, so  -->
     <!-- we just use the "title-full" template, with protection -->
+    <xsl:text>{</xsl:text>
     <xsl:if test="title">
-        <xsl:text>[{</xsl:text>
-        <xsl:apply-templates select="." mode="title-full"/>
-        <xsl:text>}]</xsl:text>
+        <xsl:apply-templates select="." mode="title-punctuated"/>
     </xsl:if>
-    <xsl:apply-templates select="." mode="label" />
+    <xsl:text>}</xsl:text>
+    <xsl:text>{</xsl:text>
+    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:text>}</xsl:text>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="*" />
-    <xsl:text>\end{proof}&#xa;</xsl:text>
+    <xsl:text>\end{proofptx}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- cases in proofs -->
@@ -5815,6 +5815,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- QED Here -->
+<!-- 2018-11-20: we have abandoned the amsthm "proof"              -->
+<!-- environment, in favor of tcolorbox.  But this is              -->
+<!--   (a) some fancy XSL                                          -->
+<!--   (b) perhaps useful if the LaTeX is recycled                 -->
+<!-- So elsewhere, we redefine \qedhere to do nothing              -->
+<!--                                                               -->
 <!-- Analyze a final "mrow" or any "me"                            -->
 <!-- Strictly LaTeX/amsthm, not a MathJax feature (yet? ever?)     -->
 <!--   (1) Locate enclosing proof, quit if no such thing           -->
