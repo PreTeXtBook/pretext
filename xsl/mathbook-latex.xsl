@@ -643,7 +643,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- From titleps package author, 2013 post                     -->
     <!-- https://tex.stackexchange.com/questions/117222/            -->
     <!-- issue-with-titlesec-page-styles-and-appendix-in-book-class -->
-    <xsl:text>\newtitlemark{\chaptertitlename}&#xa;</xsl:text>
+    <!-- Maybe this is a problem for an "article" as well?  Hints:  -->
+    <!-- https://tex.stackexchange.com/questions/319581/   issue-   -->
+    <!-- with-titlesec-section-styles-and-appendix-in-article-class -->
+    <xsl:if test="$b-is-book">
+        <xsl:text>\newtitlemark{\chaptertitlename}&#xa;</xsl:text>
+    </xsl:if>
     <xsl:variable name="empty-pagestyle">
         <xsl:apply-templates select="$document-root" mode="titleps-empty"/>
     </xsl:variable>
