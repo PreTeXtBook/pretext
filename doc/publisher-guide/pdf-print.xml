@@ -72,6 +72,14 @@
         <p>You can add a watermark to your <ini>PDF</ini> which will render as large, light grey text, at an angle across teh page.  Use <c>latex.watermark</c> to set the text (avoid obscure characters or symbols, and do not use any <init>XML</init> markup).  Use <c>latex.watermark.scale</c> to adjust for long or short text.  The <latex/>-only <q>\\</q> will survive in the text to create multiple lines of text.  Submit a feature request if this is not flexible enough to meet a special need.</p>
     </paragraphs>
 
+    <paragraphs xml:id="latex-cover-images">
+        <title>Cover Images</title>
+
+        <p>The <c>docinfo/covers</c> element may be used to specify the filenames (with relative paths) of a front-cover image and a back-cover image via the <attr>front</attr> and <attr>back</attr> attributes.  The image must be a single-page <init>PDF</init>, and it will be scaled to fit an entire page.  So it is your responsibility to supply an image which has the correct aspect ratio and sufficient resolution.  These are only supported for the <latex/> conversion.</p>
+
+        <p>This is meant to help you create a professional electronic <init>PDF</init>.  A print-on-demand service (<xref ref="print-on-demand"/>) will likely want a standalone image (possibly with the front and back, plus a spine, all rolled into one <term>wrap</term> image).  So build your <em>real</em> cover images (<xref ref="cover-design"/>), and then modify them for this use.</p>
+    </paragraphs>
+
     <paragraphs>
         <title>Fill-Ins</title>
 

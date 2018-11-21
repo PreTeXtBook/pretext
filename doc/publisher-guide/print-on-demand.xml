@@ -23,7 +23,7 @@
 
         <li>
             <title>Covers</title>
-            <p>You may need to provide a cover, typically as a <init>PDF</init> meeting some exact specifications.  Though you may be able to choose a fairly generic look through a template or wizard.  Or pay to have one created for you.</p>
+            <p>You may need to provide a cover, typically as a <init>PDF</init> meeting some exact specifications.  Though you may be able to choose a fairly generic look through a template or wizard.  Or pay to have one created for you.  See also <xref ref="latex-cover-images"/> and <xref ref="cover-design"/>.</p>
         </li>
 
         <li>
