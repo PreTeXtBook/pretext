@@ -2940,15 +2940,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="wsdebug" select="boolean($ws.debug = 'yes')" />
 
 <!-- Text adjustments -->
-<!-- This is a general template for every text node. -->
-<!-- Note that most verbatim-ish elements should not -->
-<!-- be applying templates, but instead will use     -->
-<!-- "xsl:value-of".  Math is an exception, since    -->
-<!-- we allow some elements in amongst the           -->
-<!-- "pure text" LaTeX syntax.  We are first using   -->
-<!-- it to adjust for clause-ending punctuation      -->
-<!-- being absorbed elsewhere into math, so we place -->
-<!-- this near math handling.                        -->
+<!-- This is a general template for every text node.  -->
+<!-- Note that most verbatim-ish elements should not  -->
+<!-- be applying templates, but instead will use      -->
+<!-- "xsl:value-of".  Math is an exception, since     -->
+<!-- we allow some elements in amongst the            -->
+<!-- "pure text" LaTeX syntax.  We are first using    -->
+<!-- it to adjust for clause-ending punctuation       -->
+<!-- being absorbed elsewhere into math, so we place  -->
+<!-- this near math handling.                         -->
+<!--                                                  -->
+<!-- Later Strategy                                   -->
+<!--                                                  -->
+<!-- 1.  "Display" objects, such as lists, display    -->
+<!-- math, and displayed verbatim text, can have text -->
+<!-- nodes (before and after), stripped of whitespace -->
+<!-- (trailing and leading, respectively).            -->
+<!--                                                  -->
+<!-- 2.  Any newlines left after this can be removed, -->
+<!-- with some whitespace consolidated                -->
+
 <xsl:template match="text()">
     <!-- Scrub clause-ending punctuation immediately after math  -->
     <!-- It migrates and is absorbed in math templates elsewhere -->
@@ -3030,7 +3041,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:variable name="original" select="$text-processed" />
             <xsl:variable name="front-cleaned">
                 <xsl:choose>
-                    <xsl:when test="not(preceding-sibling::node()[self::* or self::text()]) or preceding-sibling::node()[self::* or self::text()][1][self::me or self::men or self::md or self::mdn or self::cd or self::pre]">
+                    <xsl:when test="not(preceding-sibling::node()[self::* or self::text()]) or preceding-sibling::node()[self::* or self::text()][1][self::me or self::men or self::md or self::mdn or self::cd or self::pre or self::ol/parent::p or self::ul/parent::p or self::dl/parent::p]">
                         <xsl:call-template name="strip-leading-whitespace">
                             <xsl:with-param name="text" select="$original" />
                         </xsl:call-template>
@@ -3042,7 +3053,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:variable>
             <xsl:variable name="back-cleaned">
                 <xsl:choose>
-                    <xsl:when test="not(following-sibling::node()[self::* or self::text()])  or following-sibling::node()[self::* or self::text()][1][self::me or self::men or self::md or self::mdn or self::cd or self::pre]">
+                    <xsl:when test="not(following-sibling::node()[self::* or self::text()])  or following-sibling::node()[self::* or self::text()][1][self::me or self::men or self::md or self::mdn or self::cd or self::pre or self::ol/parent::p or self::ul/parent::p or self::dl/parent::p]">
                         <xsl:call-template name="strip-trailing-whitespace">
                             <xsl:with-param name="text" select="$front-cleaned" />
                         </xsl:call-template>
