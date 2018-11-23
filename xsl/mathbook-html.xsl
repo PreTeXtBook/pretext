@@ -3989,6 +3989,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="b-original" select="$b-original" />
         </xsl:apply-templates>
     </xsl:variable>
+    <!-- XSLT 1.0: RTF is just a string if not converted to node set -->
+    <!-- This comparison might improve with a normalize-space()      -->
     <xsl:if test="not($initial-content='')">
         <p>
             <xsl:if test="$b-original">
@@ -4022,8 +4024,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:with-param name="b-original" select="$b-original" />
                     </xsl:apply-templates>
                 </xsl:variable>
-                <!-- XSLT 1.0: string value of $common-content RTF is just first node? -->
-                <!-- that is the most pressing case: trailing punctuation squashed     -->
+                <!-- XSLT 1.0: RTF is just a string if not converted to node set -->
+                <!-- This comparison might improve with a normalize-space()      -->
                 <xsl:if test="not($common-content = '')">
                     <p>
                         <xsl:copy-of select="$common-content" />
@@ -4037,8 +4039,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:with-param name="b-original" select="$b-original" />
                     </xsl:apply-templates>
                 </xsl:variable>
-                <!-- XSLT 1.0: string value of $common-content RTF is just first node? -->
-                <!-- that is the most pressing case: trailing punctuation squashed     -->
+                <!-- XSLT 1.0: RTF is just a string if not converted to node set -->
+                <!-- This comparison might improve with a normalize-space()      -->
                 <xsl:if test="not($common-content = '')">
                     <p>
                         <xsl:copy-of select="$common-content" />
