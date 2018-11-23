@@ -4581,7 +4581,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Switches for solutions are generated          -->
 <!-- elsewhere and always supplied in call         -->
 <xsl:template match="exercise[boolean(&INLINE-EXERCISE-FILTER;)]" mode="solutions">
-    <xsl:param name="b-original" select="true()" />
     <xsl:param name="b-has-statement" />
     <xsl:param name="b-has-hint"      />
     <xsl:param name="b-has-answer"    />
@@ -4631,7 +4630,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- Needs this fix, but requires more care                                              -->
                 <!-- <xsl:apply-templates select="webwork-reps/static/stage" mode="exercise-components"> -->
                 <xsl:apply-templates select="webwork-reps/static/stage">
-                    <xsl:with-param name="b-original" select="$b-original" />
+                    <xsl:with-param name="b-original" select="false()" />
                     <xsl:with-param name="b-has-statement" select="$b-has-statement" />
                     <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
                     <!-- 2018-09-21: WW answers may become available -->
@@ -4642,7 +4641,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- webwork exercise, no "stage" -->
             <xsl:when test="webwork-reps/static">
                 <xsl:apply-templates select="webwork-reps/static" mode="exercise-components">
-                    <xsl:with-param name="b-original" select="$b-original" />
+                    <xsl:with-param name="b-original" select="false()" />
                     <xsl:with-param name="b-has-statement" select="$b-has-statement" />
                     <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
                     <!-- 2018-09-21: WW answers may become available -->
@@ -4662,7 +4661,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="myopenmath">
                 <xsl:variable name="filename" select="concat(concat('problems/mom-', myopenmath/@problem), '.xml')" />
                 <xsl:apply-templates select="document($filename, .)/myopenmath"  mode="exercise-components">
-                    <xsl:with-param name="b-original" select="$b-original" />
+                    <xsl:with-param name="b-original" select="false()" />
                     <xsl:with-param name="b-has-statement" select="$b-has-statement" />
                     <xsl:with-param name="b-has-hint"      select="false()" />
                     <xsl:with-param name="b-has-answer"    select="false()" />
@@ -4672,7 +4671,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- "normal" exercise -->
             <xsl:otherwise>
                 <xsl:apply-templates select="." mode="exercise-components">
-                    <xsl:with-param name="b-original" select="$b-original" />
+                    <xsl:with-param name="b-original" select="false()" />
                     <xsl:with-param name="b-has-statement" select="$b-has-statement" />
                     <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
                     <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
@@ -5651,6 +5650,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:when>
             <xsl:otherwise>
                 <xsl:apply-templates select="." mode="exercise-components">
+                    <xsl:with-param name="b-original" select="false()"/>
                     <xsl:with-param name="b-has-statement" select="$b-has-statement" />
                     <xsl:with-param name="b-has-hint" select="$b-has-hint" />
                     <xsl:with-param name="b-has-answer" select="$b-has-answer" />
