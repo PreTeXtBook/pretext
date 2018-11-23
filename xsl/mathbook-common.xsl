@@ -2970,7 +2970,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="math-punctuation">
         <xsl:choose>
             <!-- always adjust display math punctuation -->
-            <xsl:when test="contains($clause-ending-marks, $first-char) and preceding-sibling::node()[1][self::me or self::men or self::md or self::mdn]">
+            <xsl:when test="contains($clause-ending-marks, $first-char) and preceding-sibling::node()[1][self::me|self::men|self::md|self::mdn]">
                 <xsl:call-template name="strip-leading-whitespace">
                     <xsl:with-param name="text">
                         <xsl:call-template name="drop-clause-punctuation">
@@ -3003,7 +3003,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="text-processed">
         <xsl:choose>
             <xsl:when test="not(ancestor::webwork-tex) and
-                            not(parent::m or parent::me or parent::men or parent::mrow)">
+                            not(parent::m|parent::me|parent::men|parent::mrow)">
                 <xsl:call-template name="text-processing">
                     <xsl:with-param name="text" select="$math-punctuation"/>
                 </xsl:call-template>
@@ -3031,7 +3031,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- to process "var", "fillin" and "xref", so we pass  -->
         <!-- through neighboring text nodes under any policy    -->
         <!-- and we handle whitespace specially afterward       -->
-        <xsl:when test="parent::*[self::m or self::me or self::men or self::mrow]">
+        <xsl:when test="parent::*[self::m|self::me|self::men|self::mrow]">
             <xsl:value-of select="$text-processed" />
         </xsl:when>
         <!-- manipulate leading, trailing, intermediate whitespace under flexible policy -->
@@ -3041,7 +3041,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:variable name="original" select="$text-processed" />
             <xsl:variable name="front-cleaned">
                 <xsl:choose>
-                    <xsl:when test="not(preceding-sibling::node()[self::* or self::text()]) or preceding-sibling::node()[self::* or self::text()][1][self::me or self::men or self::md or self::mdn or self::cd or self::pre or self::ol/parent::p or self::ul/parent::p or self::dl/parent::p]">
+                    <xsl:when test="not(preceding-sibling::node()[self::*|self::text()]) or preceding-sibling::node()[self::*|self::text()][1][self::me|self::men|self::md|self::mdn|self::cd|self::pre|self::ol/parent::p|self::ul/parent::p|self::dl/parent::p]">
                         <xsl:call-template name="strip-leading-whitespace">
                             <xsl:with-param name="text" select="$original" />
                         </xsl:call-template>
@@ -3053,7 +3053,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:variable>
             <xsl:variable name="back-cleaned">
                 <xsl:choose>
-                    <xsl:when test="not(following-sibling::node()[self::* or self::text()])  or following-sibling::node()[self::* or self::text()][1][self::me or self::men or self::md or self::mdn or self::cd or self::pre or self::ol/parent::p or self::ul/parent::p or self::dl/parent::p]">
+                    <xsl:when test="not(following-sibling::node()[self::*|self::text()])  or following-sibling::node()[self::*|self::text()][1][self::me|self::men|self::md|self::mdn|self::cd|self::pre|self::ol/parent::p|self::ul/parent::p|self::dl/parent::p]">
                         <xsl:call-template name="strip-trailing-whitespace">
                             <xsl:with-param name="text" select="$front-cleaned" />
                         </xsl:call-template>
