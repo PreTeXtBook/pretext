@@ -1152,6 +1152,79 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!-- To forward-reference solutions to exercises, we need       -->
+<!-- to know which ones atually have solutions in place later.  -->
+<!-- So we build 30 node-lists according to the direct product  -->
+<!--                                                            -->
+<!--   {inline, divisional, worksheet, reading, project}        -->
+<!--     x                                                      -->
+<!--   {hint, answer, solution}                                 -->
+<!--     x                                                      -->
+<!--   {main, back}                                             -->
+<!--                                                            -->
+<!-- iff they are elected to be displayed at some point         -->
+<!-- (intra-division or back matter) via a "solutions" element. -->
+<!--                                                            -->
+<!-- First, we provide enough of a path to clearly identify the -->
+<!-- exercise component and its location, allowing steps where  -->
+<!-- there may be intervening structure (such as an             -->
+<!-- "exercisegroup").  Careful - a component in a "worksheet"  -->
+<!-- can be part of an "exercise" (worksheet exercise) or part  -->
+<!-- of "project" inside a worksheet.                           -->
+<!--                                                            -->
+<!-- Second, we condition on whether there is a                 -->
+<!-- backmatter/solutions  that elects inclusion of the         -->
+<!-- component, or if there is a containing division which      -->
+<!-- contains a solutions (ancestor::*/child::solutions)        -->
+<!-- with the same election.                                    -->
+
+<!-- Hint, Main Matter -->
+<xsl:variable name="inline-hint-main"     select="$document-root//exercise[&INLINE-EXERCISE-FILTER;]//hint[ancestor::*/solutions[contains(@inline, 'hint')]]"/>
+<xsl:variable name="divisional-hint-main" select="$document-root//exercises//hint[ancestor::*/solutions[contains(@divisional, 'hint')]]"/>
+<xsl:variable name="worksheet-hint-main"  select="$document-root//worksheet//exercise//hint[ancestor::*/solutions[contains(@worksheet, 'hint')]]"/>
+<xsl:variable name="reading-hint-main"    select="$document-root//reading-questions//hint[ancestor::*/solutions[contains(@reading, 'hint')]]"/>
+<xsl:variable name="project-hint-main"    select="$document-root//*[&PROJECT-FILTER;]//hint[ancestor::*/solutions[contains(@project, 'hint')]]"/>
+<!-- Hint, Back Matter -->
+<xsl:variable name="inline-hint-back"     select="$document-root//exercise[&INLINE-EXERCISE-FILTER;]//hint[$document-root/backmatter/solutions[contains(@inline, 'hint')]]"/>
+<xsl:variable name="divisional-hint-back" select="$document-root//exercises//hint[$document-root/backmatter/solutions[contains(@divisional, 'hint')]]"/>
+<xsl:variable name="worksheet-hint-back"  select="$document-root//worksheet//exercise//hint[$document-root/backmatter/solutions[contains(@worksheet, 'hint')]]"/>
+<xsl:variable name="reading-hint-back"    select="$document-root//reading-questions//hint[$document-root/backmatter/solutions[contains(@reading, 'hint')]]"/>
+<xsl:variable name="project-hint-back"    select="$document-root//*[&PROJECT-FILTER;]//hint[$document-root/backmatter/solutions[contains(@project, 'hint')]]"/>
+<!-- Answer, Main Matter -->
+<xsl:variable name="inline-answer-main"     select="$document-root//exercise[&INLINE-EXERCISE-FILTER;]//answer[ancestor::*/solutions[contains(@inline, 'answer')]]"/>
+<xsl:variable name="divisional-answer-main" select="$document-root//exercises//answer[ancestor::*/solutions[contains(@divisional, 'answer')]]"/>
+<xsl:variable name="worksheet-answer-main"  select="$document-root//worksheet//exercise//answer[ancestor::*/solutions[contains(@worksheet, 'answer')]]"/>
+<xsl:variable name="reading-answer-main"    select="$document-root//reading-questions//answer[ancestor::*/solutions[contains(@reading, 'answer')]]"/>
+<xsl:variable name="project-answer-main"    select="$document-root//*[&PROJECT-FILTER;]//answer[ancestor::*/solutions[contains(@project, 'answer')]]"/>
+<!-- Answer, Back Matter -->
+<xsl:variable name="inline-answer-back"     select="$document-root//exercise[&INLINE-EXERCISE-FILTER;]//answer[$document-root/backmatter/solutions[contains(@inline, 'answer')]]"/>
+<xsl:variable name="divisional-answer-back" select="$document-root//exercises//answer[$document-root/backmatter/solutions[contains(@divisional, 'answer')]]"/>
+<xsl:variable name="worksheet-answer-back"  select="$document-root//worksheet//exercise//answer[$document-root/backmatter/solutions[contains(@worksheet, 'answer')]]"/>
+<xsl:variable name="reading-answer-back"    select="$document-root//reading-questions//answer[$document-root/backmatter/solutions[contains(@reading, 'answer')]]"/>
+<xsl:variable name="project-answer-back"    select="$document-root//*[&PROJECT-FILTER;]//answer[$document-root/backmatter/solutions[contains(@project, 'answer')]]"/>
+<!-- Solution, Main Matter -->
+<xsl:variable name="inline-solution-main"     select="$document-root//exercise[&INLINE-EXERCISE-FILTER;]//solution[ancestor::*/solutions[contains(@inline, 'solution')]]"/>
+<xsl:variable name="divisional-solution-main" select="$document-root//exercises//solution[ancestor::*/solutions[contains(@divisional, 'solution')]]"/>
+<xsl:variable name="worksheet-solution-main"  select="$document-root//worksheet//exercise//solution[ancestor::*/solutions[contains(@worksheet, 'solution')]]"/>
+<xsl:variable name="reading-solution-main"    select="$document-root//reading-questions//solution[ancestor::*/solutions[contains(@reading, 'solution')]]"/>
+<xsl:variable name="project-solution-main"    select="$document-root//*[&PROJECT-FILTER;]//solution[ancestor::*/solutions[contains(@project, 'solution')]]"/>
+<!-- Solution, Back Matter -->
+<xsl:variable name="inline-solution-back"     select="$document-root//exercise[&INLINE-EXERCISE-FILTER;]//solution[$document-root/backmatter/solutions[contains(@inline, 'solution')]]"/>
+<xsl:variable name="divisional-solution-back" select="$document-root//exercises//solution[$document-root/backmatter/solutions[contains(@divisional, 'solution')]]"/>
+<xsl:variable name="worksheet-solution-back"  select="$document-root//worksheet//exercise//solution[$document-root/backmatter/solutions[contains(@worksheet, 'solution')]]"/>
+<xsl:variable name="reading-solution-back"    select="$document-root//reading-questions//solution[$document-root/backmatter/solutions[contains(@reading, 'solution')]]"/>
+<xsl:variable name="project-solution-back"    select="$document-root//*[&PROJECT-FILTER;]//solution[$document-root/backmatter/solutions[contains(@project, 'solution')]]"/>
+
+<!-- Combinations that are useful -->
+<!-- First: main matter placement vs. back matter placement -->
+<xsl:variable name="solutions-mainmatter" select="
+$inline-hint-main    |$divisional-hint-main    |$worksheet-hint-main    |$reading-hint-main    |$project-hint-main|
+$inline-answer-main  |$divisional-answer-main  |$worksheet-answer-main  |$reading-answer-main  |$project-answer-main|
+$inline-solution-main|$divisional-solution-main|$worksheet-solution-main|$reading-solution-main|$project-solution-main"/>
+<xsl:variable name="solutions-backmatter" select="
+$inline-hint-back    |$divisional-hint-back    |$worksheet-hint-back    |$reading-hint-back    |$project-hint-back|
+$inline-answer-back  |$divisional-answer-back  |$worksheet-answer-back  |$reading-answer-back  |$project-answer-back|
+$inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$reading-solution-back|$project-solution-back"/>
 
 <!-- ################# -->
 <!-- Variable Bad Bank -->
