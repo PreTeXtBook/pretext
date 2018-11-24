@@ -4995,6 +4995,34 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="statement">
                     <xsl:with-param name="b-original" select="$b-original" />
                 </xsl:apply-templates>
+                <xsl:if test="$b-original and ($debug.exercises.forward = 'yes')">
+                    <!-- if several, all exist together, so just work with first one -->
+                    <xsl:for-each select="hint[1]|answer[1]|solution[1]">
+                        <!-- closer is better, so mainmatter solutions first -->
+                        <xsl:choose>
+                            <xsl:when test="count(.|$solutions-mainmatter) = count($solutions-mainmatter)">
+                                <xsl:text>\space</xsl:text>
+                                <xsl:text>\hyperlink{</xsl:text>
+                                <xsl:apply-templates select="." mode="internal-id-duplicate">
+                                    <xsl:with-param name="suffix" select="'main'"/>
+                                </xsl:apply-templates>
+                                <xsl:text>}{[</xsl:text>
+                                <xsl:apply-templates select="." mode="type-name"/>
+                                <xsl:text>]}</xsl:text>
+                            </xsl:when>
+                            <xsl:when test="count(.|$solutions-backmatter) = count($solutions-backmatter)">
+                                <xsl:text>\space</xsl:text>
+                                <xsl:text>\hyperlink{</xsl:text>
+                                <xsl:apply-templates select="." mode="internal-id-duplicate">
+                                    <xsl:with-param name="suffix" select="'back'"/>
+                                </xsl:apply-templates>
+                                <xsl:text>}{[</xsl:text>
+                                <xsl:apply-templates select="." mode="type-name"/>
+                                <xsl:text>]}</xsl:text>
+                            </xsl:when>
+                        </xsl:choose>
+                    </xsl:for-each>
+                </xsl:if>
                 <xsl:if test="(hint and $b-has-hint) or (answer and $b-has-answer) or (solution and $b-has-solution)">
                     <xsl:call-template name="exercise-component-separator" />
                 </xsl:if>
@@ -5124,9 +5152,38 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>)</xsl:text>
     </xsl:if>
     <xsl:text>.</xsl:text>
-    <xsl:if test="$b-original">
-        <xsl:apply-templates select="." mode="label" />
-    </xsl:if>
+    <!-- if original, label in the usual ways  -->
+    <!-- if duplicate, use extraordinary label -->
+    <xsl:choose>
+        <!-- a solution right where the exercise is born -->
+        <xsl:when test="$b-original">
+            <xsl:apply-templates select="." mode="label"/>
+        </xsl:when>
+            <!-- Finally, the purpose of $purpose.  We know if this  -->
+            <!-- solution is being displayed in the main matter or   -->
+            <!-- in the back matter, so we can provide the correct   -->
+            <!-- suffix to the label.                                -->
+        <xsl:when test="$purpose = 'mainmatter'">
+            <xsl:text>\hypertarget{</xsl:text>
+            <xsl:apply-templates select="." mode="internal-id-duplicate">
+                <xsl:with-param name="suffix" select="'main'"/>
+            </xsl:apply-templates>
+            <xsl:text>}</xsl:text>
+        </xsl:when>
+        <xsl:when test="$purpose = 'backmatter'">
+            <xsl:text>\hypertarget{</xsl:text>
+            <xsl:apply-templates select="." mode="internal-id-duplicate">
+                <xsl:with-param name="suffix" select="'back'"/>
+            </xsl:apply-templates>
+            <xsl:text>}</xsl:text>
+        </xsl:when>
+        <!-- linking not enabled for PDF solution manual -->
+        <xsl:when test="$purpose = 'solutionmanual'" />
+        <!-- born (original=true), or mainmatter, or backmatter, or solutionmanual -->
+        <xsl:otherwise>
+            <xsl:message>PTX:BUG:     Exercise component mis-labeled</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
     <!-- some distance to actual content -->
     <xsl:text>\quad%&#xa;</xsl:text>
 </xsl:template>
@@ -9126,6 +9183,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
+
+<!-- An extraordinary template produces labels for exercise components -->
+<!-- (hint, answer, solution) displayed in solution lists (via the     -->
+<!-- "solutions" element).  The purpose is to allow the original       -->
+<!-- version of an exercise to point to solutions elsewhere.           -->
+<!-- The suffix is general-purpose, but is intended now to be          -->
+<!-- "main" or "back", depending on where the solution is located.     -->
+<xsl:template match="hint|answer|solution" mode="internal-id-duplicate">
+    <xsl:param name="suffix" select="'bad-suffix'"/>
+    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:text>-</xsl:text>
+    <xsl:value-of select="$suffix"/>
+</xsl:template>
+
 
 <!-- ################ -->
 <!-- Cross-References -->
