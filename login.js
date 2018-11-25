@@ -83,7 +83,7 @@ function loadScript(script) {
   var newscript = document.createElement('script');
   newscript.type = 'text/javascript';
   newscript.async = true;
-  newscript.src = 'https://aimath.org/~farmer/tmp/' + script + '.js';
+  newscript.src = 'https://pretextbook.org/js/0.1/' + script + '.js';
   var allscripts = document.getElementsByTagName('script');
   var s = allscripts[allscripts.length - 1];
   console.log('s',s);
