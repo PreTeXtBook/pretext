@@ -1246,12 +1246,7 @@ $('body').on('click','img.mag_popup', function(){
 
 },
 false);
-/*
-};
 
-window.onload = function()
-{
-*/
 window.addEventListener("load",function(event) {
     document.onkeyup = function(event)
     {                   
@@ -1285,6 +1280,8 @@ window.addEventListener("load",function(event) {
 };              
 },
 false);      
+
+
 
 /* was temporarily needed for a bug in webkit 
 window.addEventListener("load",function(event) {
