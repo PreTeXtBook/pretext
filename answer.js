@@ -23,6 +23,7 @@ function uNescapeHTML(text) {
     the_ans = text;
     the_ans = the_ans.replace(/&lt; /g, "<");
     the_ans = the_ans.replace(/&lt;/g, "<");
+    the_ans = the_ans.replace(/&gt;/g, ">");
     the_ans = the_ans.replace(/&amp;/g, "&");
     the_ans = the_ans.replace(/<([a-zA-Z])/g, "< $1");
 
