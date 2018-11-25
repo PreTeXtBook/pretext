@@ -1,0 +1,169 @@
+
+/*
+ *
+ * login
+ *
+ */
+
+ /* Bordered form */
+.login form {
+    border: 3px solid #f1f1f1;
+}
+
+/* Full-width inputs */
+.login input[type=text], input[type=password] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+/* Set a style for all buttons */
+.login button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+
+.login .instructions {
+    padding-left: 1em;
+}
+
+/* Add a hover effect for buttons */
+.login button:hover {
+    opacity: 0.8;
+}
+
+/* Add padding to containers */
+.login .container {
+    padding: 16px;
+    padding-bottom: 32px;
+}
+
+/* The "Forgot password" text */
+.login span.psw {
+    float: right;
+}
+
+ /* The Modal (background) */
+.login.modal {
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    padding-top: 60px;
+}
+
+/* Modal Content/Box */
+.login .modal-content {
+    background-color: #fefefe;
+    margin: 5px auto; /* 15% from the top and centered */
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button */
+.login .close {
+    /* Position it in the top right corner outside of the modal */
+    position: absolute;
+    right: 25px;
+    top: 0;
+    color: #000;
+    font-size: 35px;
+    font-weight: bold;
+}
+
+/* Close button on hover */
+.login .close:hover,
+.login .close:focus {
+    color: red;
+    cursor: pointer;
+}
+
+/* Add Zoom Animation */
+.login .animate {
+    animation: animatezoom 0.6s
+}
+
+.login-link {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+.login-link > * {
+    visibility: hidden;
+}
+.login-link:hover > * {
+    visibility: visible;
+    background-color: #fcc;
+}
+
+/*
+ *
+ * reading questions
+ *
+ */
+
+.rq_answer {
+    background: #ffd;
+}
+
+.addcontent, .action {
+    cursor: pointer;
+}
+
+.addcontent:hover, .action:hover {
+    background: #eff;
+}
+
+.action + .action {
+    margin-left: 0.25em;
+}
+
+.input_controls {
+    font-family: sans-serif;
+    font-weight: lighter;
+    font-size: 90%;
+    background: #fff;
+    padding-left: 0.5em;
+    padding-bottom: 1ex;
+    margin-top: 5px;
+
+}
+.input_controls .action {
+    border: 1px solid #aaa;
+    border-radius: 3px;
+    padding: 1px 2px;
+}
+.clear_item:hover {
+    background: #fdd;
+}
+
+.save_item:hover, .edit_item:hover {
+    background: #dfd;
+}
+
+.hidecontrols {
+    display: none;
+}
+
+.given_answer {
+    font-family: monospace;
+    font-family: "Lucida Console", Monaco, monospace;
+    white-space: pre-wrap;
+    margin-top: 0.5em;
+}
+article.exercise-like textarea {
+        font-family: "Lucida Console", Monaco, monospace;
+}
