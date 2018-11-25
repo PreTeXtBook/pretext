@@ -39,14 +39,9 @@ function dollars_to_slashparen(text) {
     return the_ans
 }
 
-console.log('22222222222222 222222222222222 222222222222');
-
 var reading_questions = document.querySelectorAll("section.reading-questions article.exercise-like");
 
-console.log('aaaaa reading_questions.length', reading_questions.length);
-console.log('reading_questions 1', reading_questions[0]);
-console.log('reading_questions 2', reading_questions[1]);
-
+console.log('reading_questions.length', reading_questions.length);
 
 rq_answer_label = '<span'
 rq_answer_label += ' class="readingquestion_make_answer addcontent';
@@ -106,7 +101,6 @@ for (var j=0; j < reading_questions.length; ++j) {
        var this_rq_answer_and_controls = document.createElement('div');
        this_rq_answer_and_controls.setAttribute('style', 'width:80%; margin-left:auto; margin-right:auto; margin-top:0.5em;');
        this_rq_answer_and_controls.setAttribute('class', 'rq_answer');
-       console.log("iiiii about to show the existing answer on #", reading_question_id);
        this_rq_answer_and_controls.innerHTML = hidden_answer_div + answer_div + this_rq_controls;
        $('#'+reading_question_id).append(this_rq_answer_and_controls);
      //  this.parentNode.insertAdjacentElement("afterend", this_rq_answer_and_controls);
@@ -205,10 +199,8 @@ $('body').on('click','.rq_edit', function(){
   var this_rq_id = this.parentNode.previousSibling.id;
   var this_rq_ans = this.parentNode.previousSibling;
   console.log(".rq_edit", this_rq_id);
-  console.log("this_rq_ans", this_rq_ans);
   var this_rq_text = this_rq_ans.innerHTML;
   var this_rq_text_raw = uNescapeHTML(document.getElementById(this_rq_id + "_hidden").innerHTML);
-  console.log("this_rq_text raw", this_rq_text_raw);
 
    //this is copied from above.  need to eliminate repeated code
 
@@ -233,7 +225,6 @@ $('body').on('click','.rq_edit', function(){
   console.log("this textarea ", answer_textarea_editable);
   answer_textarea_editable.style.height = answer_textarea_editable.scrollHeight + "px";
   answer_textarea_editable.addEventListener("keypress", function() {
-     console.log("typed in a textarea", answer_textarea_editable.scrollHeight, "zz", answer_textarea_editable.scrollTop);
 //     if(answer_textarea_editable.scrollTop != 0){
         answer_textarea_editable.style.height = answer_textarea_editable.scrollHeight + "px";
 //     }

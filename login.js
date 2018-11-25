@@ -104,9 +104,6 @@ function validateLogin() {
     var the_password_guest = "guest";
     var the_un_enc = hash_of_string(un);
     var the_url_enc = hash_of_string(window.location.hostname);
-    console.log("in validateLogin");
-    console.log(un);
-    console.log(pw);
     console.log('window.location.hostname ' + window.location.hostname);
     if ((typeof guest_access !== 'undefined') && guest_access && (un == guest_name) && (pw == the_password_guest)) {
         console.log("setting the guest tr_cookie");
@@ -120,7 +117,7 @@ function validateLogin() {
         logged_in = true;
     }
     else if (pw == the_url_enc) {
-        console.log("setting the tr_cookie");
+        console.log("setting the url tr_cookie");
         createCookie('tr_cookie',un,1);
         logged_in = true;
     }
@@ -170,8 +167,6 @@ if (a_id) {
     console.log("found "+a_id);
     $("#theloginform").hide();
 
-    console.log("repeating "+a_id);
-
 /*    dataurlbase = dataurlbase.concat("tr_id").concat("=").concat(a_id).concat("&");
 */
     document.getElementById('loginlogout').className = 'logout';
@@ -180,16 +175,13 @@ if (a_id) {
     loadScript('answer');
 }
 else if (typeof login_required !== 'undefined' && login_required) {
-    console.log("show the generated login form");
     login_form();
 }
 
   $("#loginlogout.logout").click(function(){
-     console.log("make the logout form");
      login_form('logout');
     });
   $("#loginlogout.login").click(function(){
-     console.log("make the login form");
      login_form('login');
     });
 });
