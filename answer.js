@@ -12,6 +12,33 @@ Storage.prototype.getObject = function(key) {
     return value && JSON.parse(value);
 }
 
+function escapeHTML(text) {
+    the_ans = text;
+    the_ans = the_ans.replace(/&/g, "&amp;");
+    the_ans = the_ans.replace(/<([a-zA-Z])/g, '< $1');
+
+    return the_ans
+}
+function uNescapeHTML(text) {
+    the_ans = text;
+    the_ans = the_ans.replace(/&lt; /g, "<");
+    the_ans = the_ans.replace(/&lt;/g, "<");
+    the_ans = the_ans.replace(/&gt;/g, ">");
+    the_ans = the_ans.replace(/&amp;/g, "&");
+    the_ans = the_ans.replace(/<([a-zA-Z])/g, "< $1");
+
+    return the_ans
+}
+
+function dollars_to_slashparen(text) {
+    the_ans = text;
+    the_ans = the_ans.replace(/(^|\s|-)\$([^\$\f\r\n]+)\$(\s|\.|,|;|:|\?|!|$)/g, "$1\\($2\\)$3");
+       //twice, for $5$-$6$
+    the_ans = the_ans.replace(/(^|\s|-)\$([^\$\f\r\n]+)\$(\s|\.|,|;|:|\?|!|-|$)/g, "$1\\($2\\)$3");
+
+    return the_ans
+}
+
 console.log('22222222222222 222222222222222 222222222222');
 
 var reading_questions = document.querySelectorAll("section.reading-questions article.exercise-like");
@@ -58,20 +85,17 @@ for (var j=0; j < reading_questions.length; ++j) {
        var this_rq_id_text = reading_question_id + "_text";
        var this_rq_id_controls = reading_question_id + "_controls";
        var answer_div = '<div';
-       answer_div += ' id="' + this_rq_id_text + '"'
-       answer_div += ' rows="' + '3' + '"';
-/*       answer_div += ' style="white-space: pre;"';
-*/
+       answer_div += ' id="' + this_rq_id_text + '"';
        answer_div += ' class="given_answer"';
        answer_div += '>';
-       answer_div += existing_content;
+       answer_div += dollars_to_slashparen(escapeHTML(existing_content));
        answer_div += '</div>';
 
 /* need to save the original so that MathJax does not change it */
        var hidden_answer_div = '<div';
        hidden_answer_div += ' id="' + this_rq_id_text + '_hidden' + '"';
-       hidden_answer_div += ' class="tex2jax_ignore" style="display: none">';
-       hidden_answer_div += existing_content;
+       hidden_answer_div += ' class="tex2jax_ignore asciimath2jax_ignore" style="display: none">';
+       hidden_answer_div += escapeHTML(existing_content);
        hidden_answer_div += '</div>';
 
 
@@ -90,13 +114,13 @@ for (var j=0; j < reading_questions.length; ++j) {
     }
 
 }
-/* typeset the math in teh reading quesitons answers */
+/* typeset the math in the reading questions answers */
 MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
 
+/* make a new blank area to answer a question */
 $('.readingquestion_make_answer').mousedown(function(e){
   console.log(".readingquestion_make_answer");
   $(this).addClass("hidecontrols");
-//  var this_canvas_id = this.parentNode.nextSibling.id;
   var this_rq_id = this.parentNode.parentNode.id;
   var this_rq_id_text = this_rq_id + "_text";
   var this_rq_id_controls = this_rq_id + "_controls";
@@ -118,7 +142,7 @@ $('.readingquestion_make_answer').mousedown(function(e){
   this_rq_answer_and_controls.innerHTML = answer_textarea + this_rq_controls;
   this.parentNode.insertAdjacentElement("afterend", this_rq_answer_and_controls);
 
-  MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+//  MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
 
   console.log("adding other keypress listener");
   var this_textarea = document.getElementById(this_rq_id_text);
@@ -127,15 +151,13 @@ $('.readingquestion_make_answer').mousedown(function(e){
 //     if(this_textarea.scrollTop != 0){
         this_textarea.style.height = this_textarea.scrollHeight + "px";
 //     }
-  }, false);
+     }, false);
 
 });
 
-// does not work because the content is dynamically loaded later
-// $('.rq_save').mousedown(function(e){
+/* save a reading question */
 $('body').on('click','.rq_save', function(){
   console.log(".rq_save");
-//  var this_canvas_id = this.parentNode.nextSibling.id;
   var this_rq_id = this.parentNode.previousSibling.id;
   var this_rq_ans = this.parentNode.previousSibling;
   console.log(".rq_save", this_rq_id);
@@ -143,37 +165,26 @@ $('body').on('click','.rq_save', function(){
   var this_rq_text = this_rq_ans.value;
   this_rq_text = this_rq_text.trim();
   console.log("this_rq_text", this_rq_text);
+//we have the vontents of the answer, so save it to local storage
   localStorage.setObject(this_rq_id, this_rq_text);
 
+//and save a copy hidden on the page
   console.log("looking for", this_rq_id + "_hidden");
 // when the initial answer box is created, there is no hidden version
   if ( !document.getElementById(this_rq_id + "_hidden")) {
      var hidden_answer_div = document.createElement('div');
       hidden_answer_div.setAttribute('id', this_rq_id + '_hidden');
-      hidden_answer_div.setAttribute('class', 'tex2jax_ignore');
+      hidden_answer_div.setAttribute('class', 'tex2jax_ignore asciimath2jax_ignore');
       hidden_answer_div.setAttribute('style', 'display: none');
       this_rq_ans.insertAdjacentElement("beforebegin", hidden_answer_div);
   }
-  document.getElementById(this_rq_id + "_hidden").innerHTML = this_rq_text;
+  document.getElementById(this_rq_id + "_hidden").innerHTML = escapeHTML(this_rq_text);
 
-/*
-  if (document.getElementById(this_rq_id + "_hidden")) {
-      document.getElementById(this_rq_id + "_hidden").innerHTML = this_rq_text;
-  } else {
-      var hidden_answer_div = document.createElement('div');
-      hidden_answer_div.setAttribute('id', this_rq_id + '_hidden');
-      hidden_answer_div.setAttribute('class', 'tex2jax_ignore');
-      hidden_answer_div.setAttribute('style', 'display: none');
-      this_rq_ans.insertAdjacentElement("beforebegin", hidden_answer_div);
-      document.getElementById(this_rq_id + "_hidden").innerHTML = this_rq_text;
- //need to create the hidden div, then populate it, then reorganize this if/then
-  }
-*/
-
+//and show it on the page
   var this_ans_static = document.createElement('div');
   this_ans_static.setAttribute('id', this_rq_id);
   this_ans_static.setAttribute('class', 'given_answer');
-  this_ans_static.innerHTML = this_rq_text
+  this_ans_static.innerHTML = dollars_to_slashparen(escapeHTML(this_rq_text))
   this_rq_ans.replaceWith(this_ans_static);
 
   MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
@@ -188,18 +199,15 @@ $('body').on('click','.rq_save', function(){
   this.replaceWith(edit_button);
 });
 
+/* edit an existing answer */
 $('body').on('click','.rq_edit', function(){
   console.log(".rq_edit");
-//  var this_canvas_id = this.parentNode.nextSibling.id;
   var this_rq_id = this.parentNode.previousSibling.id;
   var this_rq_ans = this.parentNode.previousSibling;
   console.log(".rq_edit", this_rq_id);
   console.log("this_rq_ans", this_rq_ans);
   var this_rq_text = this_rq_ans.innerHTML;
-  var this_rq_text_raw = document.getElementById(this_rq_id + "_hidden").innerHTML;
-/*
-  console.log("this_rq_text", this_rq_text);
-*/
+  var this_rq_text_raw = uNescapeHTML(document.getElementById(this_rq_id + "_hidden").innerHTML);
   console.log("this_rq_text raw", this_rq_text_raw);
 
    //this is copied from above.  need to eliminate repeated code
@@ -210,8 +218,6 @@ $('body').on('click','.rq_edit', function(){
   answer_textarea_editable.setAttribute('style', 'width:100%; height: 44px;');
 
   this_rq_ans.replaceWith(answer_textarea_editable);
-//  this_rq_ans.innerHTML = answer_textarea;
-//  this_rq_ans.replaceWith(this_ans_static);
 
   $(this).parent().removeClass("hidecontrols");
 
@@ -231,7 +237,7 @@ $('body').on('click','.rq_edit', function(){
 //     if(answer_textarea_editable.scrollTop != 0){
         answer_textarea_editable.style.height = answer_textarea_editable.scrollHeight + "px";
 //     }
-  }, false);
+     }, false);
 });
 
 $('body').on('mouseover','.rq_answer', function(){
