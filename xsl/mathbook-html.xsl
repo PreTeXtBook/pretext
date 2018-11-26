@@ -7345,6 +7345,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<xsl:template name="login-header">
+    <link href="https://pretextbook.org/css/0.1/features.css" rel="stylesheet" type="text/css"/>
+    <script>
+       <xsl:text>var logged_in = false;&#xa;</xsl:text>
+       <xsl:text>var role = 'student';&#xa;</xsl:text>
+       <xsl:text>var guest_access = true;&#xa;</xsl:text>
+       <xsl:text>var login_required = false;&#xa;</xsl:text>
+    </script>
+</xsl:template>
+
+<xsl:template name="login-footer">
+    <div class="login-link"><span id="loginlogout" class="login">login</span></div>
+    <script src="https://pretextbook.org/js/0.1/login.js"></script>
+</xsl:template>
 <!-- Console Session -->
 <!-- An interactive command-line session with a prompt, input and output -->
 <xsl:template match="console">
@@ -8124,6 +8138,7 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
             <xsl:call-template name="geogebra" />
             <xsl:call-template name="jsxgraph" />
             <xsl:call-template name="css" />
+            <xsl:call-template name="login-header" />
             <xsl:call-template name="pytutor-header" />
             <xsl:call-template name="font-awesome" />
         </head>
@@ -8186,6 +8201,7 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
             </div>
             <xsl:apply-templates select="$docinfo/analytics" />
             <xsl:call-template name="pytutor-footer" />
+            <xsl:call-template name="login-footer" />
         </body>
     </html>
     </exsl:document>
