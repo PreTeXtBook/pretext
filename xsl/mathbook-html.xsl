@@ -9067,8 +9067,9 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
         <!-- MathJax.Ajax.config.path["Contrib"] = "<some-url>";           -->
         <xsl:text>MathJax.Hub.Config({&#xa;</xsl:text>
         <xsl:text>    tex2jax: {&#xa;</xsl:text>
-        <xsl:text>        inlineMath: [['\\(','\\)']],&#xa;</xsl:text>
+        <xsl:text>        inlineMath: [['\\(','\\)']]&#xa;</xsl:text>
         <xsl:text>    },&#xa;</xsl:text>
+        <xsl:text>    extensions: ["asciimath2jax.js"],&#xa;</xsl:text>
         <xsl:text>    TeX: {&#xa;</xsl:text>
         <xsl:text>        extensions: ["extpfeil.js", "autobold.js", "https://aimath.org/mathbook/mathjaxknowl.js", ],&#xa;</xsl:text>
         <xsl:text>        // scrolling to fragment identifiers is controlled by other Javascript&#xa;</xsl:text>
@@ -9117,7 +9118,7 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
     <!-- mathjax javascript -->
     <xsl:element name="script">
         <xsl:attribute name="src">
-            <xsl:text>https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_CHTML-full</xsl:text>
+            <xsl:text>https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML-full</xsl:text>
         </xsl:attribute>
     </xsl:element>
 </xsl:template>
