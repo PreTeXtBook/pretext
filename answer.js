@@ -232,12 +232,10 @@ $('body').on('click','.rq_edit', function(){
 });
 
 $('body').on('mouseover','.rq_answer', function(){
-  console.log(".rq_answer");
   $(this).children().last().removeClass("hidecontrols");
   $(this).attr('z-index', '2000');
 });
 $('body').on('mouseleave','.rq_answer', function(){
-  console.log(".rq_answer");
   $(this).children().last().addClass("hidecontrols");
   $(this).attr('z-index', '');
 });
