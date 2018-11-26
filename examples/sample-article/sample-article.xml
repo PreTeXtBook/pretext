@@ -980,19 +980,36 @@ the xsltproc executable.
                 <reading-questions>
                     <introduction>
                         <p>A set of reading questions may have an <tag>introduction</tag>, perhaps for preparatory explanation.</p>
+                        <p>If a student has logged in to the HTML version,
+                           then they can answer the reading questions directly in the book.
+                           Inline math LaTeX can be entered using
+                           <c>$</c>...<c>$</c> or <c>\(</c>...<c>\)</c> delimiters,
+                           and inline AsciiMath using backticks <c>`</c>...<c>`</c> as delimiters.
+                        </p>
                     </introduction>
 
                     <exercise xml:id="first-reading">
-                        <statement>
-                            <p>This is a <term>reading question</term> that you might have a student read prior to a class session, based on reading part of the book.</p>
-                        </statement>
-                        <answer>
-                            <p>Which might help make the classroom session improve.</p>
-                        </answer>
+                      <p>
+                        This is a <term>reading question</term> that you might have a student answer prior to a class session,
+                        based on reading part of the book.
+                        A quick glance before class can help you tailor class time to the specific needs of your students.
+                        The perfect reading question will reveal whether the student has read and understood the material,
+                        and will be difficult to answer if they have not.
+                        What do you think of that?
+                      </p>
                     </exercise>
 
                     <exercise>
-                        <p>And a second one, with a cross-reference to the first, as a check on numbering: <xref ref="first-reading" text="type-global"/>.</p>
+                      <p>
+                        And a second one, with a cross-reference to the first,
+                        as a check on numbering:
+                        <xref ref="first-reading" text="type-global"/>.
+                        Reading questions are allowed to have answers,
+                        but providing answers misses the point of a reading question,
+                        and the answer knowl interacts poorly with the mechanism used to
+                        allow students to answer directly in the book.
+                        Do you think the schema should ban answers to reading questions?
+                      </p>
                     </exercise>
 
                     <conclusion>
