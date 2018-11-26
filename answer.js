@@ -59,10 +59,8 @@ for (var j=0; j < reading_questions.length; ++j) {
     var reading_question = reading_questions[j];
     var reading_question_id = reading_question.id;
 
-    console.log("reading_question_id, last_child_type", reading_question_id, reading_question, "zzzz",reading_question.firstChild, "ggggg", reading_question.lastElementChild.tagName);
     rq_answer_id = reading_question_id + "_text";
     var existing_content = localStorage.getObject(rq_answer_id);
-    console.log(rq_answer_id, "existing_rq_content", existing_content);
 
     if (reading_question.lastElementChild.tagName === "P") {
         console.log("ends in a p");
@@ -73,8 +71,6 @@ for (var j=0; j < reading_questions.length; ++j) {
        reading_question.insertAdjacentElement("afterend", this_answer_link);
     }
     if (existing_content) {
-       console.log("RQ_existing_content", reading_question_id, reading_question);
-       console.log("those children", $('#'+reading_question_id).children(".readingquestion_make_answer"));
        $('#'+reading_question_id).find(".readingquestion_make_answer").addClass("hidecontrols");
 
        var this_rq_id_text = reading_question_id + "_text";
@@ -141,7 +137,6 @@ $('.readingquestion_make_answer').mousedown(function(e){
   console.log("adding other keypress listener");
   var this_textarea = document.getElementById(this_rq_id_text);
   this_textarea.addEventListener("keypress", function() {
-     console.log("typing in text area");
 //     if(this_textarea.scrollTop != 0){
         this_textarea.style.height = this_textarea.scrollHeight + "px";
 //     }
@@ -155,14 +150,12 @@ $('body').on('click','.rq_save', function(){
   var this_rq_id = this.parentNode.previousSibling.id;
   var this_rq_ans = this.parentNode.previousSibling;
   console.log(".rq_save", this_rq_id);
-  console.log("this_rq_ans", this_rq_ans);
   var this_rq_text = this_rq_ans.value;
   this_rq_text = this_rq_text.trim();
-  console.log("this_rq_text", this_rq_text);
-//we have the vontents of the answer, so save it to local storage
+// we have the contents of the answer, so save it to local storage
   localStorage.setObject(this_rq_id, this_rq_text);
 
-//and save a copy hidden on the page
+// and save a copy hidden on the page
   console.log("looking for", this_rq_id + "_hidden");
 // when the initial answer box is created, there is no hidden version
   if ( !document.getElementById(this_rq_id + "_hidden")) {
@@ -222,7 +215,6 @@ $('body').on('click','.rq_edit', function(){
 
   $('#' + this_rq_id).val(this_rq_text_raw);
 
-  console.log("this textarea ", answer_textarea_editable);
   answer_textarea_editable.style.height = answer_textarea_editable.scrollHeight + "px";
   answer_textarea_editable.addEventListener("keypress", function() {
 //     if(answer_textarea_editable.scrollTop != 0){
