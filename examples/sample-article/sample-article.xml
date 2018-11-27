@@ -981,10 +981,12 @@ the xsltproc executable.
                     <introduction>
                         <p>A set of reading questions may have an <tag>introduction</tag>, perhaps for preparatory explanation.</p>
                         <p>If a student has logged in to the HTML version,
-                           then they can answer the reading questions directly in the book.
+                           then they can `answer the reading` questions directly in the book.
                            Inline math LaTeX can be entered using
                            <c>$</c>...<c>$</c> or <c>\(</c>...<c>\)</c> delimiters,
                            and inline AsciiMath using backticks <c>`</c>...<c>`</c> as delimiters.
+                           Here are some `gratuitous backticks` to check that AsciiMath is only
+                           active in the answers to reading questions.
                         </p>
                     </introduction>
 

@@ -7359,6 +7359,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <div class="login-link"><span id="loginlogout" class="login">login</span></div>
     <script src="https://pretextbook.org/js/0.1/login.js"></script>
 </xsl:template>
+
 <!-- Console Session -->
 <!-- An interactive command-line session with a prompt, input and output -->
 <xsl:template match="console">
@@ -9085,6 +9086,11 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
         <xsl:text>    tex2jax: {&#xa;</xsl:text>
         <xsl:text>        inlineMath: [['\\(','\\)']]&#xa;</xsl:text>
         <xsl:text>    },&#xa;</xsl:text>
+        <xsl:text>    asciimath2jax: {&#xa;</xsl:text>
+        <xsl:text>        ignoreClass: ".*",&#xa;</xsl:text>
+        <xsl:text>        processClass: "has_am"&#xa;</xsl:text>
+        <xsl:text>    },&#xa;</xsl:text>
+        <xsl:text>    jax: ["input/AsciiMath"],&#xa;</xsl:text>
         <xsl:text>    extensions: ["asciimath2jax.js"],&#xa;</xsl:text>
         <xsl:text>    TeX: {&#xa;</xsl:text>
         <xsl:text>        extensions: ["extpfeil.js", "autobold.js", "https://aimath.org/mathbook/mathjaxknowl.js", ],&#xa;</xsl:text>
@@ -9134,7 +9140,7 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
     <!-- mathjax javascript -->
     <xsl:element name="script">
         <xsl:attribute name="src">
-            <xsl:text>https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML-full</xsl:text>
+            <xsl:text>https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_CHTML-full</xsl:text>
         </xsl:attribute>
     </xsl:element>
 </xsl:template>
