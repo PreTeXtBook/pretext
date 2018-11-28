@@ -1496,6 +1496,7 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 <!--                                                     -->
 <!-- (1) begin-inline-math, end-inline-math              -->
 <!--       The delimiters for inline mathematics         -->
+<!--       Stub warnings follow below                    -->
 <!-- (2) get-clause-punctuation                          -->
 <!--       Look at next node, and if a text node,        -->
 <!--       then look for leading punctuation, and        -->
@@ -1538,6 +1539,15 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
     <xsl:call-template name="end-inline-math" />
 </xsl:template>
 
+<xsl:template name="begin-inline-math">
+     <xsl:message>PTX:ERROR:   the "begin-inline-math" template needs an implementation in the current conversion</xsl:message>
+     <xsl:text>[[[</xsl:text>
+ </xsl:template>
+
+<xsl:template name="end-inline-math">
+     <xsl:message>PTX:ERROR:   the "end-inline-math" template needs an implementation in the current conversion</xsl:message>
+     <xsl:text>]]]</xsl:text>
+ </xsl:template>
 
 <!-- Displayed Single-Line Math ("me", "men") -->
 <!-- Single equations ("math equation"), contained within paragraphs -->
@@ -6877,6 +6887,18 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:for-each>
     <xsl:call-template name="list-of-end" />
 </xsl:template>
+
+<!-- Stub implementations, with warnings -->
+<xsl:template name="list-of-begin">
+     <xsl:message>PTX:ERROR:   the "list-of-begin" template needs an implementation in the current conversion</xsl:message>
+     <xsl:text>[[[BEGINLIST]]]</xsl:text>
+ </xsl:template>
+
+<xsl:template name="list-of-end">
+     <xsl:message>PTX:ERROR:   the "list-of-end" template needs an implementation in the current conversion</xsl:message>
+     <xsl:text>[[[ENDLIST]]]</xsl:text>
+ </xsl:template>
+
 
 <!-- Programming Language Names -->
 <!-- Packages for listing and syntax highlighting             -->
