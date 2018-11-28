@@ -7123,6 +7123,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\textrangle{}</xsl:text>
 </xsl:template>
 
+<!-- At -->
+<xsl:template name="at-character">
+    <xsl:text>@</xsl:text>
+</xsl:template>
+
+<!-- Pipe (Vertical Bar) -->
+<xsl:template name="pipe-character">
+    <xsl:text>\textbar</xsl:text>
+</xsl:template>
+
 <!-- Other Miscellaneous Symbols, Constructions -->
 
 <!-- Ellipsis (dots), for text, not math -->
@@ -9827,12 +9837,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="tilde-character"/>
 </xsl:variable>
 
+<xsl:variable name="backtick-replacement">
+    <xsl:call-template name="backtick-character"/>
+</xsl:variable>
+
+<xsl:variable name="at-replacement">
+    <xsl:call-template name="at-character"/>
+</xsl:variable>
+
+<xsl:variable name="pipe-replacement">
+    <xsl:call-template name="pipe-character"/>
+</xsl:variable>
+
 <xsl:template name="text-processing">
     <xsl:param name="text"/>
-    <!-- Braces first, then backslash is OK, then rest -->
+    <!-- Strategy: braces first, then backslash is OK, then rest -->
+
+    <!-- TeX grouping characters, temporarily marked -->
     <xsl:variable name="lbrace-temped" select="str:replace($text,          '{', $temp-left-brace)"/>
     <xsl:variable name="rbrace-temped" select="str:replace($lbrace-temped, '}', $temp-right-brace)"/>
 
+    <!-- XML + LaTeX characters with extra-special meanings -->
     <xsl:variable name="backslash-fixed"  select="str:replace($rbrace-temped,    '\',     $backslash-replacement)"/>
     <xsl:variable name="amp-fixed"        select="str:replace($backslash-fixed,  '&amp;', $ampersand-replacement)"/>
     <xsl:variable name="less-fixed"       select="str:replace($amp-fixed,        '&lt;',  $less-replacement)"/>
@@ -9844,7 +9869,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="underscore-fixed" select="str:replace($circumflex-fixed, '_',     $underscore-replacement)"/>
     <xsl:variable name="tilde-fixed"      select="str:replace($underscore-fixed, '~',     $tilde-replacement)"/>
 
-    <xsl:variable name="lbrace-fixed" select="str:replace($tilde-fixed,  $temp-left-brace, $lbrace-replacement)"/>
+    <!-- LaTeX characters that map to other characters/macros -->
+    <xsl:variable name="backtick-fixed" select="str:replace($tilde-fixed,    '`', $backtick-replacement)"/>
+    <xsl:variable name="at-fixed"       select="str:replace($backtick-fixed, '@', $at-replacement)"/>
+    <xsl:variable name="pipe-fixed"     select="str:replace($at-fixed,       '|', $pipe-replacement)"/>
+
+    <!-- TeX grouping characters, marked versions converted -->
+    <xsl:variable name="lbrace-fixed" select="str:replace($pipe-fixed,  $temp-left-brace, $lbrace-replacement)"/>
     <xsl:variable name="rbrace-fixed" select="str:replace($lbrace-fixed, $temp-right-brace, $rbrace-replacement)"/>
 
     <xsl:value-of select="$rbrace-fixed"/>

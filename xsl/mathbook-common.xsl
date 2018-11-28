@@ -8802,6 +8802,24 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:call-template name="backtick-character"/>
 </xsl:template>
 
+<!-- At -->
+<!-- at symbol, circled a -->
+<xsl:template name="at-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'at'"/>
+    </xsl:call-template>
+</xsl:template>
+<!-- not implemented as an empty element -->
+
+<!-- Pipe -->
+<!-- pipe, vertical bar -->
+<xsl:template name="pipe-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'pipe'"/>
+    </xsl:call-template>
+</xsl:template>
+<!-- not implemented as an empty element -->
+
 <!-- Dots
 http://tex.stackexchange.com/questions/19180/which-dot-character-to-use-in-which-context
 
