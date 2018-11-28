@@ -1691,7 +1691,7 @@ the xsltproc executable.
                 <p>So as a summary of how to avoid conflicts with XML's reserved characters, we have the following.  (The exclamation on the third entry is just a test and does not mean anything special here.)<dl>
                     <li>
                         <title><q>Normal</q> Text</title>
-                        <p>Use <c>&lt;ampersand /&gt;</c>, <c>&lt;less /&gt;</c>, <c>&lt;greater /&gt;</c>.</p>
+                        <p>Use the XML entities <c>&amp;amp;</c>, <c>&amp;lt;</c>, <c>&amp;gt;</c>, or use the following empty elements, which will be deprecated: <tage>ampersand</tage>, <tage>less</tage>, <tage>greater</tage>.</p>
                     </li>
                     <li xml:id="reserved-characters-mathematics">
                         <title>Mathematics</title>
@@ -1699,7 +1699,7 @@ the xsltproc executable.
                     </li>
                     <li xml:id="reserved-characters-verbatim">
                         <title>Verbatim, Code!</title>
-                        <p>Within verbatim text (<c>c</c>, <c>cd</c>, and <c>pre</c> elements), Sage code, program listings, and console sessions, use the XML entitites <c>&amp;amp;</c>, <c>&amp;lt;</c>, <c>&amp;gt;</c> to get exactly the characters desired.</p>
+                        <p>Within verbatim text (<c>c</c>, <c>cd</c>, and <c>pre</c> elements), Sage code, program listings, and console sessions, use the XML entities <c>&amp;amp;</c>, <c>&amp;lt;</c>, <c>&amp;gt;</c> (only) to get exactly the characters desired.</p>
                     </li>
                 </dl></p>
 
@@ -1722,7 +1722,7 @@ the xsltproc executable.
                 <backslash /><nbsp /><nbsp />
                 <asterisk /><nbsp /><nbsp /></p>
 
-                <p>(2010-10-09)  Experimental code is in place to make much of the preceding unnecessary.  In particular, it should be possible to use the folowing  characters straight from your keyboard, and without an <init>XML</init> element.  But remember, the three special <init>XML</init> characters need to actually be authored using the escaped versions.</p>
+                <p>(2018-10-09)  Experimental code is in place to make much of the preceding unnecessary.  In particular, it should be possible to use the folowing  characters straight from your keyboard, and without an <init>XML</init> element.  But remember, the three special <init>XML</init> characters need to actually be authored using the escaped versions.</p>
 
                 <p>&amp; &lt; &gt; # $ % ^ _ { } ~ \</p>
             </subsection>
