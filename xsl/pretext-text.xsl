@@ -64,4 +64,64 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="file-extension" select="'.txt'"/>
 
 
+<!-- Entry Template -->
+<!-- Kickstart the process, ignore "docinfo"  -->
+<xsl:template match="/">
+    <xsl:call-template name="banner-warning">
+        <xsl:with-param name="warning">Conversion to simple text is incomplete&#xa;But importing this stylesheet could be helpful for certain purposes&#xa;Override the entry template to make this warning go away</xsl:with-param>
+    </xsl:call-template>
+    <xsl:apply-templates select="$document-root"/>
+</xsl:template>
+
+<!-- TEMPORARY: defined to stop errors, need stubs in -common -->
+<xsl:template name="inline-warning"/>
+<xsl:template name="margin-warning"/>
+<xsl:template name="sage-active-markup"/>
+<xsl:template name="sage-display-markup"/>
+
+<!-- TODO: implement titles/headings for divisions, -->
+<!-- with two blank lines prior?                    -->
+
+<!-- Characters -->
+
+<xsl:template name="lsq-character">
+    <xsl:text>'</xsl:text>
+</xsl:template>
+
+<xsl:template name="rsq-character">
+    <xsl:text>'</xsl:text>
+</xsl:template>
+
+<xsl:template name="lq-character">
+    <xsl:text>"</xsl:text>
+</xsl:template>
+
+<xsl:template name="rq-character">
+    <xsl:text>"</xsl:text>
+</xsl:template>
+
+<xsl:template name="ellipsis-character">
+    <xsl:text>...</xsl:text>
+</xsl:template>
+
+<!-- Math -->
+<!-- Until we think of something better, we just -->
+<!-- bracket raw LaTeX that appears inline       -->
+<!-- This can be overridden, if necessary        -->
+<xsl:template name="begin-inline-math">
+    <xsl:text>[</xsl:text>
+</xsl:template>
+
+<xsl:template name="end-inline-math">
+    <xsl:text>]</xsl:text>
+</xsl:template>
+
+<xsl:template match="p">
+    <!-- space with a blank line -->
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates/>
+    <!-- end at newline -->
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
 </xsl:stylesheet>
