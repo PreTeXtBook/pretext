@@ -80,19 +80,20 @@ function login_form(mode="login") {
 }
 
 function loadScript(script) {
+  var version = '0.1';
   var newscript = document.createElement('script');
   newscript.type = 'text/javascript';
   newscript.async = true;
-  newscript.src = 'https://pretextbook.org/js/0.1/' + script + '.js';
+  newscript.src = 'https://pretextbook.org/js/' + version + '/' + script + '.js';
   var allscripts = document.getElementsByTagName('script');
   var s = allscripts[allscripts.length - 1];
   console.log('s',s);
-  s.parentNode.insertBefore(newscript, s);
+  s.parentNode.insertBefore(newscript, s.nextSibling);
 }
 
 
 function removeLogin() {
-    eraseCookie("tr_cookie");
+    eraseCookie("ut_cookie");
 }
 
 function validateLogin() {
@@ -106,39 +107,42 @@ function validateLogin() {
     var the_url_enc = hash_of_string(window.location.hostname);
     console.log('window.location.hostname ' + window.location.hostname);
     if ((typeof guest_access !== 'undefined') && guest_access && (un == guest_name) && (pw == the_password_guest)) {
-        console.log("setting the guest tr_cookie");
-        createCookie('tr_cookie',un,0.125);
+        console.log("setting the guest ut_cookie");
+        createCookie('ut_cookie',un,0.125);
         logged_in = true;
         console.log("logged in as guest", logged_in);
     }
     else if (pw == the_un_enc) {
-        console.log("setting the tr_cookie");
-        createCookie('tr_cookie',un,150);
+        console.log("setting the ut_cookie");
+        createCookie('ut_cookie',un,150);
         logged_in = true;
     }
     else if (pw == the_url_enc) {
-        console.log("setting the url tr_cookie");
-        createCookie('tr_cookie',un,1);
+        console.log("setting the url ut_cookie");
+        createCookie('ut_cookie',un,1);
         logged_in = true;
     }
     else {
         alert ("Login was unsuccessful, please check id and password");
-        console.log("failed to set the tr_cookie");
+        console.log("failed to set the ut_cookie");
         logged_in = false;
     }
     console.log("logged_in", logged_in);
     if (logged_in) {
         document.getElementById('loginlogout').innerHTML = 'logout';
         loadScript('answer');
+        if ((typeof trail !== 'undefined') && trail) {
+            loadScript('trails');
+        }
     }
     return logged_in
   }
 
-var this_id = readCookie('p_cookie');
+var aa_id = readCookie('aa_cookie');
 
-if (this_id) {
+if (aa_id) {
     console.log("found cookie");
-    console.log(this_id);
+    console.log(aa_id);
     var date = new Date();
     var date_now = date.getTime();
     var date_str = date_now.toString();
@@ -152,27 +156,30 @@ else {
     var date_now = date.getTime();
     var date_str = date_now.toString();
     var date_str_trimmed = date_str.slice(5,13);
-    this_id = date_str_trimmed;
-    createCookie('p_cookie',this_id,150);
+    aa_id = date_str_trimmed;
+    createCookie('aa_cookie',aa_id,150);
 }
 
-/* dataurlbase = dataurlbase.concat("per").concat("=").concat(this_id).concat("&");
+/* dataurlbase = dataurlbase.concat("per").concat("=").concat(aa_id).concat("&");
 */
 
-var a_id = readCookie('tr_cookie');
+var ut_id = readCookie('ut_cookie');
 
 window.addEventListener('load', function(){
-    console.log("checking login", a_id);
-if (a_id) {
-    console.log("found "+a_id);
+    console.log("checking login", ut_id);
+if (ut_id) {
+    console.log("found "+ut_id);
     $("#theloginform").hide();
 
-/*    dataurlbase = dataurlbase.concat("tr_id").concat("=").concat(a_id).concat("&");
+/*    dataurlbase = dataurlbase.concat("ut_id").concat("=").concat(ut_id).concat("&");
 */
     document.getElementById('loginlogout').className = 'logout';
     document.getElementById('loginlogout').innerHTML = 'logout';
-    console.log("done hiding "+a_id);
+    console.log("done hiding "+ut_id);
     loadScript('answer');
+    if ((typeof trail !== 'undefined') && trail) {
+            loadScript('trails');
+    }
 }
 else if (typeof login_required !== 'undefined' && login_required) {
     login_form();
@@ -185,3 +192,7 @@ else if (typeof login_required !== 'undefined' && login_required) {
      login_form('login');
     });
 });
+
+if (!logged_in && typeof login_required !== 'undefined' && login_required) {
+    login_form("login")
+}
