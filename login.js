@@ -80,7 +80,7 @@ function login_form(mode="login") {
 }
 
 function loadScript(script) {
-  var version = '0.1';
+  if (typeof version === 'undefined') { version = '0.1' }
   var newscript = document.createElement('script');
   newscript.type = 'text/javascript';
   newscript.async = true;
