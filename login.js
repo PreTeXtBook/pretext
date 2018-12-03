@@ -131,7 +131,7 @@ function validateLogin() {
     if (logged_in) {
         document.getElementById('loginlogout').innerHTML = 'logout';
         loadScript('answer');
-        if ((typeof trail !== 'undefined') && trail) {
+        if ((typeof trails !== 'undefined') && trails) {
             loadScript('trails');
         }
     }
@@ -177,7 +177,7 @@ if (ut_id) {
     document.getElementById('loginlogout').innerHTML = 'logout';
     console.log("done hiding "+ut_id);
     loadScript('answer');
-    if ((typeof trail !== 'undefined') && trail) {
+    if ((typeof trails !== 'undefined') && trails) {
             loadScript('trails');
     }
 }
@@ -193,6 +193,9 @@ else if (typeof login_required !== 'undefined' && login_required) {
     });
 });
 
+/*
 if (!logged_in && typeof login_required !== 'undefined' && login_required) {
     login_form("login")
 }
+*/
+

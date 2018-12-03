@@ -51,7 +51,7 @@ rq_answer_label += '>';
 if (role == "instructor") {
     rq_answer_label += 'Responses';
 } else {
-    rq_answer_label += 'Answer&rarr;';
+    rq_answer_label += 'My answer&rarr;';
 }
 rq_answer_label +='</span>';
 
@@ -79,7 +79,7 @@ for (var j=0; j < reading_questions.length; ++j) {
        answer_div += ' id="' + this_rq_id_text + '"';
        answer_div += ' class="given_answer has_am"';
        answer_div += '>';
-       answer_div += dollars_to_slashparen(escapeHTML(existing_content));
+       answer_div += dollars_to_slashparen(escapeHTML(existing_content)) + " ";
        answer_div += '</div>';
 
 /* need to save the original so that MathJax does not change it */
