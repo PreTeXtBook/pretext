@@ -42,7 +42,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:exsl="http://exslt.org/common"
     xmlns:str="http://exslt.org/strings"
     extension-element-prefixes="exsl date str"
-    xmlns:mb="http://mathbook.pugetsound.edu/"
+    xmlns:mb="https://pretextbook.org/"
     exclude-result-prefixes="mb"
 >
 
@@ -9652,7 +9652,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
                                                                       <xsl:text>    *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
     </xsl:if>
     <xsl:copy-of select="$lead-in" /><xsl:text>*                                    *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
-    <xsl:copy-of select="$lead-in" /><xsl:text>*   http://mathbook.pugetsound.edu   *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
+    <xsl:copy-of select="$lead-in" /><xsl:text>*      https://pretextbook.org       *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
     <xsl:copy-of select="$lead-in" /><xsl:text>*                                    *</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
     <xsl:copy-of select="$lead-in" /><xsl:text>**************************************</xsl:text><xsl:copy-of select="$lead-out" /><xsl:text>&#xa;</xsl:text>
 </xsl:template>

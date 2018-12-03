@@ -67,7 +67,7 @@
 
             <p>Once you have a clone of the repository, you can issue <c>git pull</c>, and git will update your local copy with any recent changes.  You should do this <em>regularly</em><mdash />meaning on the order of <em>daily</em>.  See the <xref ref="faq-pull-regularly" text="title">FAQ entry</xref> for more about why we <em>expect</em> you to do this.</p>
 
-            <p>See the website at <url href="https://mathbook.pugetsound.edu/"><c>mathbook.pugetsound.edu</c></url> for details and commands for this step, right on the main page.</p>
+            <p>See the website at <url href="https://pretextbook.org/"><c>pretextbook.org</c></url> for details and commands for this step, right on the main page.</p>
         </paragraphs>
 
         <paragraphs>

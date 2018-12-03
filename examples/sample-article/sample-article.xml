@@ -36,7 +36,7 @@ Ignore any warnings, they are part of testing the warning system.
 
 To see images in your results, copy the examples/images directory
 so that your working directory has the images subdirectory.  See
-the  mathbook.pugetsound.edu  website for information on installing
+the  pretextbook.org  website for information on installing
 the xsltproc executable.
 -->
 
@@ -64,7 +64,7 @@ the xsltproc executable.
         16th Century Art Book Cover, 176x240 pixels, Public Domain, due to age
         http://commons.wikimedia.org/wiki/File:Book_Cover_-_Google_Art_Project.jpg
         -->
-        <brandlogo url="http://mathbook.pugetsound.edu" source="images/book-cover-google-art-project.jpg" />
+        <brandlogo url="https://pretextbook.org" source="images/book-cover-google-art-project.jpg" />
         <!--
         LaTeX packages that are also implemented as MathJax extensions
         may be specified here and any macros they have in common may be
@@ -169,7 +169,7 @@ the xsltproc executable.
         <!-- There does not need to be a trailing / on the URL -->
         <!-- NB This is likely to change, it should be a publisher option -->
         <html>
-            <baseurl href="http://mathbook.pugetsound.edu/examples/sample-article/html" />
+            <baseurl href="https://pretextbook.org/examples/sample-article/html" />
         </html>
 
         <!-- Images in HTML output may carry a discreet list of links    -->
@@ -286,7 +286,7 @@ the xsltproc executable.
             example near the discussion of Asymptote.
             -->
 
-            <p>We consider definite integrals of functions <m>f(x)</m>.  For example, <me>\definiteintegral{0}{2}{\sin^2(x)}{x}</me>.  This is also a demonstration of the capabilities of <url href="http://mathbook.pugetsound.edu"><pretext /></url>.<notation>
+            <p>We consider definite integrals of functions <m>f(x)</m>.  For example, <me>\definiteintegral{0}{2}{\sin^2(x)}{x}</me>.  This is also a demonstration of the capabilities of <url href="https://pretextbook.org"><pretext /></url>.<notation>
                 <usage>\int_a^b\,f(x)\,dx</usage>
                 <description>definite integral of <m>f(x)</m></description>
             </notation></p>
@@ -2540,7 +2540,7 @@ the xsltproc executable.
                 <p>A caption could be as substantial as a paragraph, here we test out one such example.</p>
 
                 <figure xml:id="figure-long-caption">
-                    <caption>A caption can be a whole paragraph with lots of technical details, and maybe a hyperlink to something external, such as <url href="http://mathbook.pugetsound.edu"><c>mathbook.pugetsound.edu</c></url>.  There could be some inline mathematics, such as <m>x^2 + y^2 = c^2</m>.  Would a knowl open here?  Recursively?  Let's see: <xref ref="figure-long-caption" />.  Display mathematics, side-by-sides, theorems, and lots of other things should be banned.  Footnotes sound like a bad idea.  Strange characters should be fine: <section-mark />.</caption>
+                    <caption>A caption can be a whole paragraph with lots of technical details, and maybe a hyperlink to something external, such as <url href="https://pretextbook.org"><c>pretextbook.org</c></url>.  There could be some inline mathematics, such as <m>x^2 + y^2 = c^2</m>.  Would a knowl open here?  Recursively?  Let's see: <xref ref="figure-long-caption" />.  Display mathematics, side-by-sides, theorems, and lots of other things should be banned.  Footnotes sound like a bad idea.  Strange characters should be fine: <section-mark />.</caption>
 
                     <image source="images/cross-square.png" width="20%" />
                 </figure>

@@ -9026,7 +9026,7 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
 <!-- Branding in "extras", mostly hard-coded        -->
 <!-- HTTPS for authors delivering from secure sites -->
 <xsl:template name="mathbook-link">
-    <a class="mathbook-link" href="https://mathbook.pugetsound.edu">
+    <a class="mathbook-link" href="https://pretextbook.org">
         <xsl:call-template name="type-name">
             <xsl:with-param name="string-id" select="'authored'" />
         </xsl:call-template>

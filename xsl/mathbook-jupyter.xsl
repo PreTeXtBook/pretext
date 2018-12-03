@@ -284,7 +284,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>%%html&#xa;</xsl:text>
             <!-- for offline testing -->
             <!-- <xsl:text>&lt;link href="./mathbook-content.css" rel="stylesheet" type="text/css" /&gt;&#xa;</xsl:text> -->
-            <xsl:text>&lt;link href="http://mathbook.pugetsound.edu/beta/mathbook-content.css" rel="stylesheet" type="text/css" /&gt;&#xa;</xsl:text>
+            <xsl:text>&lt;link href="https://pretextbook.org/beta/mathbook-content.css" rel="stylesheet" type="text/css" /&gt;&#xa;</xsl:text>
             <xsl:text>&lt;link href="https://aimath.org/mathbook/mathbook-add-on.css" rel="stylesheet" type="text/css" /&gt;&#xa;</xsl:text>
             <!-- A bad hack since "subtitle" is in masthead code, better CSS should take care of this -->
             <xsl:if test="$document-root/subtitle">
