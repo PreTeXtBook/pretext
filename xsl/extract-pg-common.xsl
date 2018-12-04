@@ -380,19 +380,6 @@
 <!-- Load PG Macros -->
 <!-- ############## -->
 
-<!-- There was once a compact, and a verbose, version of this template.    -->
-<!-- But we were too lazy to put in all the conditionals for all the       -->
-<!-- spaces and commas.  So if edits are necessary, do them twice,         -->
-<!-- nearly identically.  Or                                               -->
-<!--                                                                       -->
-<!-- (1) choose one version, base64 length vs. readability                 -->
-<!-- (2) slowly factor out the two versions, using conditionals,           -->
-<!--     working from the top and from the bottom                          -->
-<!-- (3) make a big string with markers, and search/replace                -->
-<!--     to make a compact or readable version                             -->
-<!--                                                                       -->
-<!-- NB: we have preserved indentation, which is a bit confusing           -->
-
 <!-- call exactly once,        -->
 <!-- context is "webwork" root -->
 <xsl:template name="pg-macros">
@@ -403,204 +390,22 @@
         <xsl:with-param name="b-verbose" select="$b-verbose" />
     </xsl:call-template>
 
-    <xsl:choose>
-        <xsl:when test="$b-verbose">
-
-    <!-- ############## -->
-    <!-- Begin Verbose  -->
-    <!-- ############## -->
     <!-- three standard macros always, order and placement is critical -->
     <xsl:variable name="standard-macros">
-        <xsl:text>  "PGstandard.pl",&#xa;</xsl:text>
-        <xsl:text>  "MathObjects.pl",&#xa;</xsl:text>
-        <xsl:text>  "PGML.pl",&#xa;</xsl:text>
-    </xsl:variable>
-    <!-- accumulate macros evidenced by some aspect of problem design      -->
-    <!-- for details on what each macro file provides, see their source at -->
-    <!-- https://github.com/openwebwork/pg/tree/master/macros              -->
-    <!-- or                                                                -->
-    <!-- https://github.com/openwebwork/webwork-open-problem-library/tree/master/OpenProblemLibrary/macros -->
-    <xsl:variable name="implied-macros">
-        <!-- tables -->
-        <xsl:if test=".//tabular">
-            <xsl:text>  "niceTables.pl",&#xa;</xsl:text>
-        </xsl:if>
-        <!-- bizarro arithmetic technique for assesing answer form -->
-        <xsl:if test="contains(./setup/pg-code,'bizarro')">
-            <xsl:text>  "bizarroArithmetic.pl",&#xa;</xsl:text>
-        </xsl:if>
-        <!-- multistage problems ("scaffolded") -->
-        <xsl:if test=".//stage">
-            <xsl:text>  "scaffold.pl",&#xa;</xsl:text>
-        </xsl:if>
-        <!-- links to syntax help following answer blanks -->
-        <xsl:if test="$pg.answer.form.help = 'yes'">
-            <xsl:text>  "AnswerFormatHelp.pl",&#xa;</xsl:text>
-        </xsl:if>
-        <!-- targeted feedback messages for specific wrong answers -->
-        <xsl:if test="contains(./setup/pg-code,'AnswerHints')">
-            <xsl:text>  "answerHints.pl",&#xa;</xsl:text>
-        </xsl:if>
-        <!-- checkboxes multiple choice answers or the very useful NchooseK function-->
-        <xsl:if test=".//var[@form='checkboxes'] or contains(./setup/pg-code,'NchooseK')">
-            <xsl:text>  "PGchoicemacros.pl",&#xa;</xsl:text>
-        </xsl:if>
-        <!-- essay answers -->
-        <xsl:if test=".//var[@form='essay']">
-            <xsl:text>  "PGessaymacros.pl",&#xa;</xsl:text>
-        </xsl:if>
-        <!-- when there is a PGgraphmacros graph -->
-        <xsl:if test=".//image[@pg-name]">
-            <xsl:text>  "PGgraphmacros.pl",&#xa;</xsl:text>
-        </xsl:if>
-        <!-- instructions for entering answers into HTML forms -->
-        <!-- utility for randomly generating variable letters -->
-        <xsl:if test=".//instruction or contains(./setup/pg-code,'RandomVariableName')">
-            <xsl:text>  "PCCmacros.pl",&#xa;</xsl:text>
-        </xsl:if>
-        <!-- ################### -->
-        <!-- Parser Enhancements -->
-        <!-- ################### -->
-        <!-- popup menu multiple choice answers -->
-        <xsl:if test=".//var[@form='popup']">
-            <xsl:text>  "parserPopUp.pl",&#xa;</xsl:text>
-        </xsl:if>
-        <!-- radio buttons multiple choice answers -->
-        <xsl:if test=".//var[@form='buttons']">
-            <xsl:text>  "parserRadioButtons.pl",&#xa;</xsl:text>
-        </xsl:if>
-        <!-- "assignment" answers, like "y=x+1", "f(x)=x+1" -->
-        <xsl:if test="contains(./setup/pg-code,'parser::Assignment')">
-            <xsl:text>  "parserAssignment.pl",&#xa;</xsl:text>
-        </xsl:if>
-        <!-- allow "f(x)" as part of answers -->
-        <xsl:if test="contains(./setup/pg-code,'parserFunction')">
-            <xsl:text>  "parserFunction.pl",&#xa;</xsl:text>
-        </xsl:if>
-        <!-- numbers with units -->
-        <xsl:if test="contains(./setup/pg-code,'NumberWithUnits')">
-            <xsl:text>  "parserNumberWithUnits.pl",&#xa;</xsl:text>
-        </xsl:if>
-        <!-- formulas with units -->
-        <xsl:if test="contains(./setup/pg-code,'FormulaWithUnits')">
-            <xsl:text>  "parserFormulaWithUnits.pl",&#xa;</xsl:text>
-        </xsl:if>
-        <!-- implicit planes, e.g. x+2y=3z+1 -->
-        <xsl:if test="contains(./setup/pg-code,'ImplicitPlane')">
-            <xsl:text>  "parserImplicitPlane.pl",&#xa;</xsl:text>
-        </xsl:if>
-        <!-- implicit equations, e.g. x^2+sin(x+y)=5 -->
-        <xsl:if test="contains(./setup/pg-code,'ImplicitEquation')">
-            <xsl:text>  "parserImplicitEquation.pl",&#xa;</xsl:text>
-        </xsl:if>
-        <!-- for questions where multiple answer blanks work in conjunction  -->
-        <xsl:if test="contains(./setup/pg-code,'MultiAnswer')">
-            <xsl:text>  "parserMultiAnswer.pl",&#xa;</xsl:text>
-        </xsl:if>
-        <!-- for questions where any one of a finite list of answers is allowable  -->
-        <xsl:if test="contains(./setup/pg-code,'OneOf')">
-            <xsl:text>  "parserOneOf.pl",&#xa;</xsl:text>
-        </xsl:if>
-        <!-- #################### -->
-        <!-- Math Object contexts -->
-        <!-- #################### -->
-        <xsl:if test="contains(./setup/pg-code,'Fraction')">
-            <xsl:text>  "contextFraction.pl",&#xa;</xsl:text>
-        </xsl:if>
-        <xsl:if test="contains(./setup/pg-code,'PiecewiseFunction')">
-            <xsl:text>  "contextPiecewiseFunction.pl",&#xa;</xsl:text>
-        </xsl:if>
-        <xsl:if test="contains(./setup/pg-code,'Ordering')">
-            <xsl:text>  "contextOrdering.pl",&#xa;</xsl:text>
-        </xsl:if>
-        <xsl:if test="contains(./setup/pg-code,'InequalitySetBuilder')">
-            <xsl:text>  "contextInequalitySetBuilder.pl",&#xa;</xsl:text>
-        </xsl:if>
-        <xsl:if test="contains(./setup/pg-code,'Inequalities')">
-            <xsl:text>  "contextInequalities.pl",&#xa;</xsl:text>
-        </xsl:if>
-        <xsl:if test="contains(./setup/pg-code,'LimitedRadical')">
-            <xsl:text>  "contextLimitedRadical.pl",&#xa;</xsl:text>
-        </xsl:if>
-        <xsl:if test="contains(./setup/pg-code,'FiniteSolutionSets')">
-            <xsl:text>  "contextFiniteSolutionSets.pl",&#xa;</xsl:text>
-        </xsl:if>
-    </xsl:variable>
-    <!-- capture problem root to use inside upcoming for-each -->
-    <xsl:variable name="problem-root" select="." />
-    <!-- accumulate new macros supplied by problem author, warn if not new -->
-    <xsl:variable name="user-macros">
-        <xsl:for-each select=".//pg-macros/macro-file">
-            <!-- wrap in quotes to protect accidental matches -->
-            <xsl:variable name="fenced-macro">
-                <xsl:text>"</xsl:text>
-                <xsl:value-of select="." />
-                <xsl:text>"</xsl:text>
-            </xsl:variable>
-            <xsl:choose>
-                <xsl:when test="contains($standard-macros, $fenced-macro)">
-                    <xsl:message>PTX:WARNING: the WeBWorK PG macro <xsl:value-of select="."/> is always included for every problem</xsl:message>
-                    <xsl:apply-templates select="." mode="location-report" />
-                </xsl:when>
-                <xsl:when test="contains($implied-macros, $fenced-macro)">
-                    <xsl:message>PTX:WARNING: the WeBWorK PG macro <xsl:value-of select="."/> is implied by the problem construction and already included</xsl:message>
-                    <xsl:apply-templates select="." mode="location-report" />
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:text>  </xsl:text>
-                    <xsl:value-of select="$fenced-macro" />
-                    <xsl:text>,&#xa;</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:for-each>
-    </xsl:variable>
-    <!-- always finish with PG course macro -->
-    <xsl:variable name="course-macro">
-        <xsl:variable name="fenced-macro">
-            <xsl:text>"PGcourse.pl"</xsl:text>
-        </xsl:variable>
         <xsl:choose>
-            <xsl:when test="contains($standard-macros, $fenced-macro)">
-                <xsl:message>PTX:WARNING: the WeBWorK PG macro PGcourse.pl is always included for every problem</xsl:message>
-                <xsl:apply-templates select="." mode="location-report" />
+            <xsl:when test="$b-verbose">
+                <xsl:text>  "PGstandard.pl",&#xa;</xsl:text>
+                <xsl:text>  "MathObjects.pl",&#xa;</xsl:text>
+                <xsl:text>  "PGML.pl",&#xa;</xsl:text>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:text>  </xsl:text>
-                <xsl:value-of select="$fenced-macro" />
-                <xsl:text>,&#xa;</xsl:text>
+                <xsl:text>"PGstandard.pl",</xsl:text>
+                <xsl:text>"MathObjects.pl",</xsl:text>
+                <xsl:text>"PGML.pl",</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <!-- put them together with a wrapper -->
-    <xsl:variable name="load-macros">
-        <xsl:text>loadMacros(&#xa;</xsl:text>
-        <xsl:value-of select="$standard-macros" />
-        <xsl:value-of select="$implied-macros" />
-        <xsl:value-of select="$user-macros" />
-        <xsl:value-of select="$course-macro" />
-        <xsl:text>);&#xa;</xsl:text>
-    </xsl:variable>
-    <xsl:value-of select="$load-macros" />
-    <!-- if images are used, explicitly refresh or stale images will be used in HTML -->
-    <xsl:if test=".//image[@pg-name]">
-        <xsl:text>$refreshCachedImages= 1;</xsl:text>
-    </xsl:if>
-    <!-- ########### -->
-    <!-- End Verbose -->
-    <!-- ########### -->
 
-        </xsl:when>
-        <xsl:otherwise>
-
-    <!-- ############# -->
-    <!-- Begin Compact -->
-    <!-- ############# -->
-    <!-- three standard macros always, order and placement is critical -->
-    <xsl:variable name="standard-macros">
-        <xsl:text>"PGstandard.pl",</xsl:text>
-        <xsl:text>"MathObjects.pl",</xsl:text>
-        <xsl:text>"PGML.pl",</xsl:text>
-    </xsl:variable>
     <!-- accumulate macros evidenced by some aspect of problem design      -->
     <!-- for details on what each macro file provides, see their source at -->
     <!-- https://github.com/openwebwork/pg/tree/master/macros              -->
@@ -609,107 +414,293 @@
     <xsl:variable name="implied-macros">
         <!-- tables -->
         <xsl:if test=".//tabular">
-            <xsl:text>"niceTables.pl",</xsl:text>
+            <xsl:choose>
+                <xsl:when test="$b-verbose">
+                    <xsl:text>  "niceTables.pl",&#xa;</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>"niceTables.pl",</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:if>
         <!-- bizarro arithmetic technique for assesing answer form -->
         <xsl:if test="contains(./setup/pg-code,'bizarro')">
-            <xsl:text>"bizarroArithmetic.pl",</xsl:text>
+            <xsl:choose>
+                <xsl:when test="$b-verbose">
+                    <xsl:text>  "bizarroArithmetic.pl",&#xa;</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>"bizarroArithmetic.pl",</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:if>
         <!-- multistage problems ("scaffolded") -->
         <xsl:if test=".//stage">
-            <xsl:text>"scaffold.pl",</xsl:text>
+            <xsl:choose>
+                <xsl:when test="$b-verbose">
+                    <xsl:text>  "scaffold.pl",&#xa;</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>"scaffold.pl",</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:if>
         <!-- links to syntax help following answer blanks -->
         <xsl:if test="$pg.answer.form.help = 'yes'">
-            <xsl:text>"AnswerFormatHelp.pl",</xsl:text>
+            <xsl:choose>
+                <xsl:when test="$b-verbose">
+                    <xsl:text>  "AnswerFormatHelp.pl",&#xa;</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>"AnswerFormatHelp.pl",</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:if>
         <!-- targeted feedback messages for specific wrong answers -->
         <xsl:if test="contains(./setup/pg-code,'AnswerHints')">
-            <xsl:text>"answerHints.pl",</xsl:text>
+            <xsl:choose>
+                <xsl:when test="$b-verbose">
+                    <xsl:text>  "answerHints.pl",&#xa;</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>"answerHints.pl",</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:if>
         <!-- checkboxes multiple choice answers or the very useful NchooseK function-->
         <xsl:if test=".//var[@form='checkboxes'] or contains(./setup/pg-code,'NchooseK')">
-            <xsl:text>"PGchoicemacros.pl",</xsl:text>
+            <xsl:choose>
+                <xsl:when test="$b-verbose">
+                    <xsl:text>  "PGchoicemacros.pl",&#xa;</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>"PGchoicemacros.pl",</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:if>
         <!-- essay answers -->
         <xsl:if test=".//var[@form='essay']">
-            <xsl:text>"PGessaymacros.pl",</xsl:text>
+            <xsl:choose>
+                <xsl:when test="$b-verbose">
+                    <xsl:text>  "PGessaymacros.pl",&#xa;</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>"PGessaymacros.pl",</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:if>
         <!-- when there is a PGgraphmacros graph -->
         <xsl:if test=".//image[@pg-name]">
-            <xsl:text>"PGgraphmacros.pl",</xsl:text>
+            <xsl:choose>
+                <xsl:when test="$b-verbose">
+                    <xsl:text>  "PGgraphmacros.pl",&#xa;</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>"PGgraphmacros.pl",</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:if>
         <!-- instructions for entering answers into HTML forms -->
         <!-- utility for randomly generating variable letters -->
         <xsl:if test=".//instruction or contains(./setup/pg-code,'RandomVariableName')">
-            <xsl:text>  "PCCmacros.pl",&#xa;</xsl:text>
+            <xsl:choose>
+            <!-- these are identical, as part of *not* changing -->
+            <!-- output, likely this should be changed later    -->
+                <xsl:when test="$b-verbose">
+                    <xsl:text>  "PCCmacros.pl",&#xa;</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>  "PCCmacros.pl",&#xa;</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:if>
         <!-- ################### -->
         <!-- Parser Enhancements -->
         <!-- ################### -->
         <!-- popup menu multiple choice answers -->
         <xsl:if test=".//var[@form='popup']">
-            <xsl:text>"parserPopUp.pl",</xsl:text>
+            <xsl:choose>
+                <xsl:when test="$b-verbose">
+                    <xsl:text>  "parserPopUp.pl",&#xa;</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>"parserPopUp.pl",</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:if>
         <!-- radio buttons multiple choice answers -->
         <xsl:if test=".//var[@form='buttons']">
-            <xsl:text>"parserRadioButtons.pl",</xsl:text>
+            <xsl:choose>
+                <xsl:when test="$b-verbose">
+                    <xsl:text>  "parserRadioButtons.pl",&#xa;</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>"parserRadioButtons.pl",</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:if>
         <!-- "assignment" answers, like "y=x+1", "f(x)=x+1" -->
         <xsl:if test="contains(./setup/pg-code,'parser::Assignment')">
-            <xsl:text>"parserAssignment.pl",</xsl:text>
+            <xsl:choose>
+                <xsl:when test="$b-verbose">
+                    <xsl:text>  "parserAssignment.pl",&#xa;</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>"parserAssignment.pl",</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:if>
         <!-- allow "f(x)" as part of answers -->
         <xsl:if test="contains(./setup/pg-code,'parserFunction')">
-            <xsl:text>"parserFunction.pl",</xsl:text>
+            <xsl:choose>
+                <xsl:when test="$b-verbose">
+                    <xsl:text>  "parserFunction.pl",&#xa;</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>"parserFunction.pl",</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:if>
         <!-- numbers with units -->
         <xsl:if test="contains(./setup/pg-code,'NumberWithUnits')">
-            <xsl:text>"parserNumberWithUnits.pl",</xsl:text>
+            <xsl:choose>
+                <xsl:when test="$b-verbose">
+                    <xsl:text>  "parserNumberWithUnits.pl",&#xa;</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>"parserNumberWithUnits.pl",</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:if>
         <!-- formulas with units -->
         <xsl:if test="contains(./setup/pg-code,'FormulaWithUnits')">
-            <xsl:text>"parserFormulaWithUnits.pl",</xsl:text>
+            <xsl:choose>
+                <xsl:when test="$b-verbose">
+                    <xsl:text>  "parserFormulaWithUnits.pl",&#xa;</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>"parserFormulaWithUnits.pl",</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:if>
         <!-- implicit planes, e.g. x+2y=3z+1 -->
         <xsl:if test="contains(./setup/pg-code,'ImplicitPlane')">
-            <xsl:text>"parserImplicitPlane.pl",</xsl:text>
+            <xsl:choose>
+                <xsl:when test="$b-verbose">
+                    <xsl:text>  "parserImplicitPlane.pl",&#xa;</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>"parserImplicitPlane.pl",</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:if>
         <!-- implicit equations, e.g. x^2+sin(x+y)=5 -->
         <xsl:if test="contains(./setup/pg-code,'ImplicitEquation')">
-            <xsl:text>"parserImplicitEquation.pl",</xsl:text>
+            <xsl:choose>
+                <xsl:when test="$b-verbose">
+                    <xsl:text>  "parserImplicitEquation.pl",&#xa;</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>"parserImplicitEquation.pl",</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:if>
         <!-- for questions where multiple answer blanks work in conjunction  -->
         <xsl:if test="contains(./setup/pg-code,'MultiAnswer')">
-            <xsl:text>"parserMultiAnswer.pl",</xsl:text>
+            <xsl:choose>
+                <xsl:when test="$b-verbose">
+                    <xsl:text>  "parserMultiAnswer.pl",&#xa;</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>"parserMultiAnswer.pl",</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:if>
         <!-- for questions where any one of a finite list of answers is allowable  -->
         <xsl:if test="contains(./setup/pg-code,'OneOf')">
-            <xsl:text>"parserOneOf.pl",</xsl:text>
+            <xsl:choose>
+                <xsl:when test="$b-verbose">
+                    <xsl:text>  "parserOneOf.pl",&#xa;</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>"parserOneOf.pl",</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:if>
         <!-- #################### -->
         <!-- Math Object contexts -->
         <!-- #################### -->
         <xsl:if test="contains(./setup/pg-code,'Fraction')">
-            <xsl:text>"contextFraction.pl",</xsl:text>
+            <xsl:choose>
+                <xsl:when test="$b-verbose">
+                    <xsl:text>  "contextFraction.pl",&#xa;</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>"contextFraction.pl",</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:if>
         <xsl:if test="contains(./setup/pg-code,'PiecewiseFunction')">
-            <xsl:text>"contextPiecewiseFunction.pl",</xsl:text>
+            <xsl:choose>
+                <xsl:when test="$b-verbose">
+                    <xsl:text>  "contextPiecewiseFunction.pl",&#xa;</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>"contextPiecewiseFunction.pl",</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:if>
         <xsl:if test="contains(./setup/pg-code,'Ordering')">
-            <xsl:text>"contextOrdering.pl",</xsl:text>
+            <xsl:choose>
+                <xsl:when test="$b-verbose">
+                    <xsl:text>  "contextOrdering.pl",&#xa;</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>"contextOrdering.pl",</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:if>
         <xsl:if test="contains(./setup/pg-code,'InequalitySetBuilder')">
-            <xsl:text>"contextInequalitySetBuilder.pl",</xsl:text>
+            <xsl:choose>
+                <xsl:when test="$b-verbose">
+                    <xsl:text>  "contextInequalitySetBuilder.pl",&#xa;</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>"contextInequalitySetBuilder.pl",</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:if>
         <xsl:if test="contains(./setup/pg-code,'Inequalities')">
-            <xsl:text>"contextInequalities.pl",</xsl:text>
+            <xsl:choose>
+                <xsl:when test="$b-verbose">
+                    <xsl:text>  "contextInequalities.pl",&#xa;</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>"contextInequalities.pl",</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:if>
         <xsl:if test="contains(./setup/pg-code,'LimitedRadical')">
-            <xsl:text>"contextLimitedRadical.pl",</xsl:text>
+            <xsl:choose>
+                <xsl:when test="$b-verbose">
+                    <xsl:text>  "contextLimitedRadical.pl",&#xa;</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>"contextLimitedRadical.pl",</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:if>
         <xsl:if test="contains(./setup/pg-code,'FiniteSolutionSets')">
-            <xsl:text>  "contextFiniteSolutionSets.pl",&#xa;</xsl:text>
+            <!-- these are identical, as part of *not* changing -->
+            <!-- output, likely this should be changed later    -->
+            <xsl:choose>
+                <xsl:when test="$b-verbose">
+                    <xsl:text>  "contextFiniteSolutionSets.pl",&#xa;</xsl:text>
+                </xsl:when>
+                    <xsl:text>  "contextFiniteSolutionSets.pl",&#xa;</xsl:text>
+                <xsl:otherwise>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:if>
     </xsl:variable>
     <!-- capture problem root to use inside upcoming for-each -->
@@ -733,9 +724,14 @@
                     <xsl:apply-templates select="." mode="location-report" />
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:text></xsl:text>
+                    <xsl:if test="$b-verbose">
+                        <xsl:text>  </xsl:text>
+                    </xsl:if>
                     <xsl:value-of select="$fenced-macro" />
                     <xsl:text>,</xsl:text>
+                    <xsl:if test="$b-verbose">
+                        <xsl:text>&#xa;</xsl:text>
+                    </xsl:if>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:for-each>
@@ -751,32 +747,37 @@
                 <xsl:apply-templates select="." mode="location-report" />
             </xsl:when>
             <xsl:otherwise>
-                <xsl:text></xsl:text>
+                <xsl:if test="$b-verbose">
+                    <xsl:text>  </xsl:text>
+                </xsl:if>
                 <xsl:value-of select="$fenced-macro" />
                 <xsl:text>,</xsl:text>
+                <xsl:if test="$b-verbose">
+                    <xsl:text>&#xa;</xsl:text>
+                </xsl:if>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
     <!-- put them together with a wrapper -->
     <xsl:variable name="load-macros">
         <xsl:text>loadMacros(</xsl:text>
+        <xsl:if test="$b-verbose">
+            <xsl:text>&#xa;</xsl:text>
+        </xsl:if>
         <xsl:value-of select="$standard-macros" />
         <xsl:value-of select="$implied-macros" />
         <xsl:value-of select="$user-macros" />
         <xsl:value-of select="$course-macro" />
         <xsl:text>);</xsl:text>
+        <xsl:if test="$b-verbose">
+            <xsl:text>&#xa;</xsl:text>
+        </xsl:if>
     </xsl:variable>
     <xsl:value-of select="$load-macros" />
     <!-- if images are used, explicitly refresh or stale images will be used in HTML -->
     <xsl:if test=".//image[@pg-name]">
         <xsl:text>$refreshCachedImages= 1;</xsl:text>
     </xsl:if>
-    <!-- ########### -->
-    <!-- End Compact -->
-    <!-- ########### -->
-
-        </xsl:otherwise>
-    </xsl:choose>
 </xsl:template>
 
 <!-- ############## -->
