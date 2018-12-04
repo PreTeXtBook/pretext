@@ -1744,232 +1744,74 @@
     </xsl:apply-templates>
 </xsl:template>
 
-
-<!-- There was once a compact, and a verbose, version of this template.    -->
-<!-- But we were too lazy to put in all the conditionals for all the       -->
-<!-- spaces and commas.  So if edits are necessary, do them twice,         -->
-<!-- nearly identically.  Or                                               -->
-<!--                                                                       -->
-<!-- (1) choose one version, base64 length vs. readability                 -->
-<!-- (2) slowly factor out the two versions, using conditionals,           -->
-<!--     working from the top and from the bottom                          -->
-<!-- (3) make a big string with markers, and search/replace                -->
-<!--     to make a compact or readable version                             -->
-<!--                                                                       -->
-<!-- NB: we have preserved indentation, which is a bit confusing           -->
-
 <xsl:template match="webwork//tabular">
     <!-- PTX tabular attributes top, bottom, left, right, halign are essentially passed -->
     <!-- down to cells, rather than used at the tabular level.                          -->
     <xsl:param name="b-verbose" />
 
+    <xsl:text>[@DataTable(</xsl:text>
+    <xsl:if test="$b-verbose">
+        <xsl:text>&#xa;</xsl:text>
+        <xsl:call-template name="potential-list-indent" />
+        <xsl:text>  </xsl:text>
+    </xsl:if>
+    <xsl:text>[</xsl:text>
+    <xsl:if test="$b-verbose">
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:apply-templates select="row">
+        <xsl:with-param name="b-verbose" select="$b-verbose" />
+    </xsl:apply-templates>
+    <xsl:if test="$b-verbose">
+        <xsl:call-template name="potential-list-indent" />
+        <xsl:text>  </xsl:text>
+    </xsl:if>
+    <xsl:text>],</xsl:text>
+    <xsl:if test="$b-verbose">
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:variable name="table-left">
+        <xsl:choose>
+            <xsl:when test="@left">
+                <xsl:value-of select="@left" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>none</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="table-right">
+        <xsl:choose>
+            <xsl:when test="@right">
+                <xsl:value-of select="@right" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>none</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="table-halign">
+        <xsl:choose>
+            <xsl:when test="@halign">
+                <xsl:value-of select="@halign" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>left</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- Build latex column specification                         -->
+    <!--   vertical borders (left side, right side, three widths) -->
+    <!--   horizontal alignment (left, center, right)             -->
     <xsl:choose>
         <xsl:when test="$b-verbose">
-    <!-- ############## -->
-    <!-- Begin Verbose  -->
-    <!-- ############## -->
-    <xsl:text>[@DataTable(&#xa;</xsl:text>
-    <xsl:call-template name="potential-list-indent" />
-    <xsl:text>  [&#xa;</xsl:text>
-    <xsl:apply-templates select="row">
-        <xsl:with-param name="b-verbose" select="$b-verbose" />
-    </xsl:apply-templates>
-    <xsl:call-template name="potential-list-indent" />
-    <xsl:text>  ],&#xa;</xsl:text>
-    <xsl:variable name="table-left">
-        <xsl:choose>
-            <xsl:when test="@left">
-                <xsl:value-of select="@left" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>none</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:variable name="table-right">
-        <xsl:choose>
-            <xsl:when test="@right">
-                <xsl:value-of select="@right" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>none</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:variable name="table-halign">
-        <xsl:choose>
-            <xsl:when test="@halign">
-                <xsl:value-of select="@halign" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>left</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <!-- Build latex column specification                         -->
-    <!--   vertical borders (left side, right side, three widths) -->
-    <!--   horizontal alignment (left, center, right)             -->
-    <xsl:call-template name="potential-list-indent" />
-    <xsl:text>  align => '</xsl:text>
-        <!-- start with left vertical border -->
-        <xsl:call-template name="pg-vrule-specification">
-            <xsl:with-param name="width" select="$table-left" />
-        </xsl:call-template>
-        <xsl:choose>
-            <!-- Potential for individual column overrides    -->
-            <!--   Deduce number of columns from col elements -->
-            <!--   Employ individual column overrides,        -->
-            <!--   or use global table-wide values            -->
-            <!--   write alignment (mandatory)                -->
-            <!--   follow with right border (optional)        -->
-            <xsl:when test="col">
-                <xsl:for-each select="col">
-                    <xsl:call-template name="halign-specification">
-                        <xsl:with-param name="align">
-                            <xsl:choose>
-                                <xsl:when test="@halign">
-                                    <xsl:value-of select="@halign" />
-                                </xsl:when>
-                                <xsl:otherwise>
-                                    <xsl:value-of select="$table-halign" />
-                                </xsl:otherwise>
-                            </xsl:choose>
-                        </xsl:with-param>
-                    </xsl:call-template>
-                    <xsl:call-template name="pg-vrule-specification">
-                        <xsl:with-param name="width">
-                            <xsl:choose>
-                                <xsl:when test="@right">
-                                    <xsl:value-of select="@right" />
-                                </xsl:when>
-                                <xsl:otherwise>
-                                    <xsl:value-of select="$table-right" />
-                                </xsl:otherwise>
-                            </xsl:choose>
-                        </xsl:with-param>
-                    </xsl:call-template>
-                </xsl:for-each>
-            </xsl:when>
-            <!-- No col specification                                  -->
-            <!--   so default identically to global, table-wide values -->
-            <!--   first row determines the  number of columns         -->
-            <!--   write the alignment (mandatory)                     -->
-            <!--   follow with right border (optional)                 -->
-            <!-- TODO: error check each row for correct number of columns -->
-            <xsl:otherwise>
-                <xsl:variable name="ncols" select="count(row[1]/cell) + sum(row[1]/cell[@colspan]/@colspan) - count(row[1]/cell[@colspan])" />
-                <xsl:call-template name="duplicate-string">
-                    <xsl:with-param name="count" select="$ncols" />
-                    <xsl:with-param name="text">
-                        <xsl:call-template name="halign-specification">
-                            <xsl:with-param name="align" select="$table-halign" />
-                        </xsl:call-template>
-                        <xsl:call-template name="pg-vrule-specification">
-                            <xsl:with-param name="width" select="$table-right" />
-                        </xsl:call-template>
-                    </xsl:with-param>
-                </xsl:call-template>
-            </xsl:otherwise>
-        </xsl:choose>
-    <xsl:text>',&#xa;</xsl:text>
-    <!-- kill all of niceTable's column left/right border thickness in colgroup/col css; just let cellcss control border thickness -->
-    <xsl:variable name="columns-css">
-        <xsl:if test="col[@right] or @left">
             <xsl:call-template name="potential-list-indent" />
-            <xsl:text>    [</xsl:text>
-                <xsl:for-each select="col">
-                    <xsl:text>'</xsl:text>
-                    <xsl:if test="not($table-left='none') and (count(preceding-sibling::col)=0)">
-                        <xsl:text>border-left: </xsl:text>
-                        <xsl:call-template name="thickness-specification">
-                            <xsl:with-param name="width" select="'none'" />
-                        </xsl:call-template>
-                        <xsl:text>px solid;</xsl:text>
-                    </xsl:if>
-                    <xsl:if test="@right">
-                        <xsl:text>border-right: </xsl:text>
-                        <xsl:call-template name="thickness-specification">
-                            <xsl:with-param name="width" select="'none'" />
-                        </xsl:call-template>
-                        <xsl:text>px solid;</xsl:text>
-                    </xsl:if>
-                    <xsl:text> ',</xsl:text>
-                    <xsl:choose>
-                        <xsl:when test="following-sibling::col">
-                            <xsl:text>&#xa;     </xsl:text>
-                            <xsl:call-template name="potential-list-indent" />
-                        </xsl:when>
-                    </xsl:choose>
-                </xsl:for-each>
-            <xsl:text>]</xsl:text>
-        </xsl:if>
-    </xsl:variable>
-    <xsl:if test="not($columns-css='')">
-        <xsl:call-template name="potential-list-indent" />
-        <xsl:text>  columnscss =>&#xa;</xsl:text>
-        <xsl:call-template name="potential-list-indent" />
-        <xsl:value-of select="$columns-css"/>
-        <xsl:text>,&#xa;</xsl:text>
-    </xsl:if>
-    <!-- column specification done -->
-    <xsl:if test="not(parent::table)">
-        <xsl:call-template name="potential-list-indent" />
-        <xsl:text>  center => 0,&#xa;</xsl:text>
-    </xsl:if>
-    <!-- remains to apply tabular/@top and tabular/@bottom -->
-    <!-- will handle these at cell level -->
-    <xsl:call-template name="potential-list-indent" />
-    <xsl:text>);@]*</xsl:text>
-    <!-- ########### -->
-    <!-- End Verbose -->
-    <!-- ########### -->
-
+            <xsl:text>  align => '</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-
-    <!-- ############# -->
-    <!-- Begin Compact -->
-    <!-- ############# -->
-    <xsl:text>[@DataTable(</xsl:text>
-    <xsl:text>[</xsl:text>
-    <xsl:apply-templates select="row">
-        <xsl:with-param name="b-verbose" select="$b-verbose" />
-    </xsl:apply-templates>
-    <xsl:text>],</xsl:text>
-    <xsl:variable name="table-left">
-        <xsl:choose>
-            <xsl:when test="@left">
-                <xsl:value-of select="@left" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>none</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:variable name="table-right">
-        <xsl:choose>
-            <xsl:when test="@right">
-                <xsl:value-of select="@right" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>none</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:variable name="table-halign">
-        <xsl:choose>
-            <xsl:when test="@halign">
-                <xsl:value-of select="@halign" />
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>left</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <!-- Build latex column specification                         -->
-    <!--   vertical borders (left side, right side, three widths) -->
-    <!--   horizontal alignment (left, center, right)             -->
-    <xsl:text>align=>'</xsl:text>
+            <xsl:text>align=>'</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
         <!-- start with left vertical border -->
         <xsl:call-template name="pg-vrule-specification">
             <xsl:with-param name="width" select="$table-left" />
@@ -2031,49 +1873,98 @@
             </xsl:otherwise>
         </xsl:choose>
     <xsl:text>',</xsl:text>
+    <xsl:if test="$b-verbose">
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
     <!-- kill all of niceTable's column left/right border thickness in colgroup/col css; just let cellcss control border thickness -->
     <xsl:variable name="columns-css">
         <xsl:if test="col[@right] or @left">
+            <xsl:if test="$b-verbose">
+                <xsl:call-template name="potential-list-indent" />
+                <xsl:text>    </xsl:text>
+            </xsl:if>
             <xsl:text>[</xsl:text>
                 <xsl:for-each select="col">
                     <xsl:text>'</xsl:text>
                     <xsl:if test="not($table-left='none') and (count(preceding-sibling::col)=0)">
-                        <xsl:text>border-left:</xsl:text>
+                        <xsl:choose>
+                            <xsl:when test="$b-verbose">
+                                <xsl:text>border-left: </xsl:text>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:text>border-left:</xsl:text>
+                            </xsl:otherwise>
+                        </xsl:choose>
                         <xsl:call-template name="thickness-specification">
                             <xsl:with-param name="width" select="'none'" />
                         </xsl:call-template>
                         <xsl:text>px solid;</xsl:text>
                     </xsl:if>
                     <xsl:if test="@right">
-                        <xsl:text>border-right:</xsl:text>
+                        <xsl:choose>
+                            <xsl:when test="$b-verbose">
+                                <xsl:text>border-right: </xsl:text>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:text>border-right:</xsl:text>
+                            </xsl:otherwise>
+                        </xsl:choose>
                         <xsl:call-template name="thickness-specification">
                             <xsl:with-param name="width" select="'none'" />
                         </xsl:call-template>
                         <xsl:text>px solid;</xsl:text>
                     </xsl:if>
+                    <xsl:if test="$b-verbose">
+                        <xsl:text> </xsl:text>
+                    </xsl:if>
                     <xsl:text>',</xsl:text>
+                    <xsl:choose>
+                        <xsl:when test="following-sibling::col">
+                            <xsl:if test="$b-verbose">
+                                <xsl:text>&#xa;     </xsl:text>
+                                <xsl:call-template name="potential-list-indent" />
+                            </xsl:if>
+                        </xsl:when>
+                    </xsl:choose>
                 </xsl:for-each>
             <xsl:text>]</xsl:text>
         </xsl:if>
     </xsl:variable>
     <xsl:if test="not($columns-css='')">
-        <xsl:text>columnscss=></xsl:text>
+        <xsl:choose>
+            <xsl:when test="$b-verbose">
+                <xsl:call-template name="potential-list-indent" />
+                <xsl:text>  columnscss =>&#xa;</xsl:text>
+                <xsl:call-template name="potential-list-indent" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>columnscss=></xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
         <xsl:value-of select="$columns-css"/>
         <xsl:text>,</xsl:text>
+        <xsl:if test="$b-verbose">
+            <xsl:text>&#xa;</xsl:text>
+        </xsl:if>
     </xsl:if>
     <!-- column specification done -->
     <xsl:if test="not(parent::table)">
-        <xsl:text>center=>0,</xsl:text>
+        <xsl:choose>
+            <xsl:when test="$b-verbose">
+                <xsl:call-template name="potential-list-indent" />
+                <xsl:text>  center => 0,&#xa;</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>center=>0,</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:if>
     <!-- remains to apply tabular/@top and tabular/@bottom -->
     <!-- will handle these at cell level -->
+    <xsl:if test="$b-verbose">
+        <xsl:call-template name="potential-list-indent" />
+    </xsl:if>
     <xsl:text>);@]*</xsl:text>
-    <!-- ########### -->
-    <!-- End Compact -->
-    <!-- ########### -->
-
-        </xsl:otherwise>
-    </xsl:choose>
 </xsl:template>
 
 
