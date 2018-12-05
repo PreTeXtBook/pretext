@@ -94,11 +94,11 @@
         <fragment xml:id="divisions">
         Part =
             element part {
-                MetaDataTitle, Chapter+
+                MetaDataShortTitle, Chapter+
             }
         Chapter =
             element chapter {
-                MetaDataTitle,
+                MetaDataShortTitle,
                 AuthorByline*,
                 Objectives?,
                 (
@@ -122,7 +122,7 @@
             }
         Section =
             element section {
-                MetaDataTitle,
+                MetaDataShortTitle,
                 AuthorByline*,
                 Objectives?,
                 (
@@ -146,7 +146,7 @@
             }
         Subsection =
             element subsection {
-                MetaDataTitle,
+                MetaDataShortTitle,
                 AuthorByline*,
                 Objectives?,
                 (
@@ -170,7 +170,7 @@
             }
         Subsubsection =
             element subsubsection {
-                MetaDataTitle,
+                MetaDataShortTitle,
                 AuthorByline*,
                 Objectives?,
                 (BlockDivision | Paragraphs | Commentary)+,
@@ -181,7 +181,7 @@
             }
         ArticleAppendix =
             element appendix {
-                MetaDataTitle,
+                MetaDataShortTitle,
                 AuthorByline*,
                 (
                     (BlockDivision | Paragraphs | Commentary | NotationList )+ |
@@ -199,7 +199,7 @@
             }
         BookAppendix =
             element appendix {
-                MetaDataTitle,
+                MetaDataShortTitle,
                 AuthorByline*,
                 (
                     (BlockDivision | Paragraphs | Commentary | NotationList )+ |
@@ -217,7 +217,7 @@
             }
         IndexDivision =
             element index {
-                MetaDataTitleOptional,
+                MetaDataShortTitleOptional,
                 IndexList
             }
         </fragment>
@@ -265,14 +265,14 @@
         <fragment xml:id="universal">
         Exercises =
             element exercises {
-                MetaDataTitleOptional,
+                MetaDataShortTitleOptional,
                 IntroductionDivision?,
                 (ToDo | Exercise | ExerciseGroup)+,
                 ConclusionDivision?
             }
         Solutions =
             element solutions {
-                MetaDataTitleOptional,
+                MetaDataShortTitleOptional,
                 attribute inline {text}?,
                 attribute divisional {text}?,
                 attribute project {text}?,
@@ -281,7 +281,7 @@
             }
         References =
             element references {
-                MetaDataTitleOptional,
+                MetaDataShortTitleOptional,
                 IntroductionDivision?,
                 BibliographyItem+,
                 ConclusionDivision?
@@ -1674,9 +1674,10 @@
             <li><attr>permid</attr> is part of managing editions, and is supplied by a script.  You should not be adding thse manually as an author.  (You do want to manually author <attr>xml:id</attr>.)</li>
             <li>The <c>xinlude</c> mechanism may pass language tgs down through the root element of included files to make them universally available.</li>
             <li>The <c>xinclude</c> mechanism inserts a <c>@xml:base</c> attribute on the root element of an included file.  So we allow this attribute on any element that allows a title.</li>
-            <li>These are not unordered specifications since they contain several attributes, and we enforce a <c>title</c>, <c>subtitle</c>, <c>creator</c>, <c>caption</c>, <c>idx</c> order.</li>
+            <li>These are not unordered specifications since they contain several attributes, and we enforce a <c>title</c>, <c>subtitle</c>, <tag>shorttitle</tag>, <c>creator</c>, <c>caption</c>, <c>idx</c> order.</li>
             <li><c>MetaDataTarget</c> is for items that are targets of cross-references, but without even optional titles.  Since they will be knowled, they can appear in an index.  But without the potential to be titled, we do not set them up as possible root elements of a file to <c>xinclude</c>.</li>
-            <li><c>MetaDataSubtitle</c> implicitly has an required title.  We might relax this as it is employed in more places.</li>
+            <li><c>MetaDataTitle</c> has a required <tag>title</tag>, and allows an optional <tag>shorttitle</tag>.</li>
+            <li><c>MetaDataSubtitle</c> implicitly has a required <tag>title</tag>, and allows optional <tag>subtitle</tag> and <tag>shorttitle</tag>.</li>
             <li><c>MetaDataCaption</c> implicitly has an optional title.</li>
             <li>Titles may contain external references (<c>url</c>) or internal cross-references (<c>xref</c>), but implementers need not make them active (<ie />, they maybe text only), since titles are prone to migrating to other locations.</li>
         </ul></p>
@@ -1690,6 +1691,8 @@
             element title {TextLong}
         Subtitle =
             element subtitle {TextLong}
+        ShortTitle =
+            element shorttitle {TextShort}
         Creator =
             element creator {TextShort}
         XMLBase = attribute xml:base {text}
@@ -1705,6 +1708,14 @@
             XMLLang?,
             Title,
             Index*
+        MetaDataShortTitle =
+            UniqueID?,
+            PermanentID?,
+            XMLBase?,
+            XMLLang?,
+            Title,
+            ShortTitle?,
+            Index*
         MetaDataSubtitle =
             UniqueID?,
             PermanentID?,
@@ -1712,6 +1723,7 @@
             XMLLang?,
             Title,
             Subtitle?,
+            ShortTitle?,
             Index*
         MetaDataTitleOptional =
             UniqueID?,
@@ -1719,6 +1731,13 @@
             XMLBase?,
             XMLLang?,
             Title?,
+            Index*
+        MetaDataShortTitleOptional =
+            UniqueID?,
+            PermanentID?,
+            XMLBase?,
+            XMLLang?,
+            (Title, ShortTitle?)?,
             Index*
         MetaDataTitleCreatorOptional =
             UniqueID?,
