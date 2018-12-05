@@ -278,6 +278,7 @@ the xsltproc executable.
 
         <section>
             <title>Introduction</title>
+            <shorttitle>foo</shorttitle>
 
             <!--
             URLs can be done in a traditional fashion, as in the
