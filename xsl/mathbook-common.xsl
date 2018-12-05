@@ -3582,14 +3582,19 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- of them for purposes where only a restricted subset of  -->
 <!-- their content is allowed.                               -->
 <!--                                                         -->
-<!-- Also, many subdivisions have natural default titles,    -->
+<!-- Also, many stock divisions have natural default titles, -->
 <!-- so we want to accomodate that option, and do so via     -->
 <!-- the localization routines.                              -->
 
+
 <!-- With modal templates below, the default template does nothing   -->
 <!-- We include the "creator" element of a theorem/axiom as metadata -->
+<!-- NB: since these elements get killed on-sight, when we actually  -->
+<!-- want to process them we need to use a "select" attribute like   -->
+<!-- foo/node().                                                     -->
 <xsl:template match="title" />
 <xsl:template match="subtitle" />
+<xsl:template match="shorttitle"/>
 <xsl:template match="creator" />
 
 <!-- Some items have default titles that make sense         -->
@@ -3601,6 +3606,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <xsl:template match="*" mode="has-default-title">
     <xsl:text>false</xsl:text>
 </xsl:template>
+
+<!-- NB: these templates return a property of the title's parent -->
 
 <xsl:template match="*" mode="title-full">
     <xsl:variable name="default-exists">
@@ -3614,10 +3621,18 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:when test="$default-exists='true'">
             <xsl:apply-templates select="." mode="type-name" />
         </xsl:when>
-        <xsl:otherwise></xsl:otherwise>
+        <!-- otherwise empty -->
+        <xsl:otherwise />
     </xsl:choose>
 </xsl:template>
 
+<!-- This template does elective sanitization of a title, which  -->
+<!-- is distinct for universal adjustments (such as protecting   -->
+<!-- LaTeX macros, or making any "xref" static.  So removing a   -->
+<!-- footnote is such a sanitization (we allow it on a "real"    -->
+<!-- title, but not when migrating other places).  This template -->
+<!-- is not called often, usually the "title-short" template is  -->
+<!-- the right template to call when a title is duplicated.      -->
 <!-- TODO: ban fn in titles, then maybe this is obsolete -->
 <!-- or maybe we should be careful about math            -->
 <xsl:template match="*" mode="title-simple">
@@ -3632,11 +3647,30 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:when test="$default-exists='true'">
             <xsl:apply-templates select="." mode="type-name" />
         </xsl:when>
-        <xsl:otherwise></xsl:otherwise>
+        <!-- otherwise empty -->
+        <xsl:otherwise />
     </xsl:choose>
 </xsl:template>
 
-<!-- A version of the title with all abnormal characters stripped --><!-- http://stackoverflow.com/questions/1267934/removing-non-alphanumeric-characters-from-string-in-xsl -->
+<!-- Short titles are meant for places such as the Table of  -->
+<!-- Contents and for LaTeX, the page headers and/or footers -->
+<xsl:template match="*" mode="title-short">
+    <xsl:choose>
+        <!-- schema should control content, eg no footnotes -->
+        <!-- optional, so check for author's suggestion     -->
+        <xsl:when test="shorttitle">
+            <xsl:apply-templates select="shorttitle/node()[not(self::fn)]"/>
+        </xsl:when>
+        <!-- else, existing title, cleaned up -->
+        <xsl:otherwise>
+            <xsl:apply-templates select="." mode="title-simple"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- A version of the title with all abnormal characters stripped -->
+<!-- http://stackoverflow.com/questions/1267934/                  -->
+<!-- removing-non-alphanumeric-characters-from-string-in-xsl      -->
 <xsl:template match="*" mode="title-filesafe">
     <xsl:variable name="raw-title">
         <xsl:apply-templates  select="title/node()[not(self::fn)]" />
