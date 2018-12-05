@@ -1991,7 +1991,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\hypersetup{draft}&#xa;</xsl:text>
     </xsl:if>
     <xsl:text>\hypersetup{pdftitle={</xsl:text>
-    <xsl:apply-templates select="." mode="title-simple" />
+    <xsl:apply-templates select="." mode="title-short" />
     <xsl:text>}}&#xa;</xsl:text>
     <!-- http://tex.stackexchange.com/questions/44088/when-do-i-need-to-invoke-phantomsection -->
     <xsl:text>%% If you manually remove hyperref, leave in this next command&#xa;</xsl:text>
@@ -4044,7 +4044,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- subtitle here -->
     <xsl:text>}</xsl:text>
     <xsl:text>{</xsl:text>
-    <xsl:apply-templates select="." mode="title-simple"/>
+    <xsl:apply-templates select="." mode="title-short"/>
     <xsl:text>}</xsl:text>
     <xsl:text>{</xsl:text>
     <xsl:apply-templates select="author" mode="name-list"/>
@@ -4087,7 +4087,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- subtitle here -->
     <xsl:text>}</xsl:text>
     <xsl:text>{</xsl:text>
-    <xsl:apply-templates select="." mode="title-simple"/>
+    <xsl:apply-templates select="." mode="title-short"/>
     <xsl:text>}</xsl:text>
     <xsl:text>{</xsl:text>
     <!-- author here -->
@@ -5269,7 +5269,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\subparagraph</xsl:text>
             <!-- keep optional title if LaTeX source is re-purposed -->
             <xsl:text>[{</xsl:text>
-            <xsl:apply-templates select="." mode="title-simple" />
+            <xsl:apply-templates select="." mode="title-short" />
             <xsl:text>}]</xsl:text>
             <xsl:text>{</xsl:text>
             <xsl:apply-templates select="." mode="title-full" />
@@ -6773,7 +6773,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
 </xsl:template>
 <!-- Protect the version of the macro appearing in titles -->
-<xsl:template match="title//insert">
+<xsl:template match="title//insert|shortitle//insert">
     <xsl:text>\protect\inserted{</xsl:text>
     <xsl:apply-templates />
     <xsl:text>}</xsl:text>
@@ -6787,7 +6787,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
 </xsl:template>
 <!-- Protect the version of the macro appearing in titles -->
-<xsl:template match="title//delete">
+<xsl:template match="title//delete|shortitle//delete">
     <xsl:text>\protect\deleted{</xsl:text>
     <xsl:apply-templates />
     <xsl:text>}</xsl:text>
@@ -6801,7 +6801,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
 </xsl:template>
 <!-- Protect the version of the macro appearing in titles -->
-<xsl:template match="title//stale">
+<xsl:template match="title//stale|shorttitle//stale">
     <xsl:text>\protect\stale{</xsl:text>
     <xsl:apply-templates />
     <xsl:text>}</xsl:text>
@@ -6844,19 +6844,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Titles migrate to PDF bookmarks/ToC and need to be handled  -->
 <!-- differently, even if we haven't quite figured out how       -->
-<xsl:template match="title//abbr">
+<xsl:template match="title//abbr|shortitle//abbr">
     <xsl:text>\abbreviationintitle{</xsl:text>
     <xsl:apply-templates />
     <xsl:text>}</xsl:text>
 </xsl:template>
 
-<xsl:template match="title//acro">
+<xsl:template match="title//acro|shortitle//acro">
     <xsl:text>\acronymintitle{</xsl:text>
     <xsl:apply-templates />
     <xsl:text>}</xsl:text>
 </xsl:template>
 
-<xsl:template match="title//init">
+<xsl:template match="title//init|shortitle//acro">
     <xsl:text>\initialismintitle{</xsl:text>
     <xsl:apply-templates />
     <xsl:text>}</xsl:text>
@@ -7155,7 +7155,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 <!-- Protect the version of the macro appearing in titles -->
 <!-- This is an override of the base *template*           -->
-<xsl:template match="title//swungdash">
+<xsl:template match="title//swungdash|shortitle//swungdash">
     <xsl:text>\protect</xsl:text>
     <xsl:call-template name="swungdash-character"/>
 </xsl:template>
@@ -9599,7 +9599,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Double Sharp -->
 <xsl:template name="doublesharp">
     <xsl:choose>
-        <xsl:when test="ancestor::title">
+        <xsl:when test="ancestor::title|ancestor::subtitle">
             <xsl:text>\protect\doublesharp</xsl:text>
         </xsl:when>
         <xsl:otherwise>
@@ -9611,7 +9611,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Sharp -->
 <xsl:template name="sharp">
     <xsl:choose>
-        <xsl:when test="ancestor::title">
+        <xsl:when test="ancestor::title|ancestor::subtitle">
             <xsl:text>\protect\sharp</xsl:text>
         </xsl:when>
         <xsl:otherwise>
@@ -9623,7 +9623,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Natural -->
 <xsl:template name="natural">
     <xsl:choose>
-        <xsl:when test="ancestor::title">
+        <xsl:when test="ancestor::title|ancestor::subtitle">
             <xsl:text>\protect\natural</xsl:text>
         </xsl:when>
         <xsl:otherwise>
@@ -9635,7 +9635,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Flat -->
 <xsl:template name="flat">
     <xsl:choose>
-        <xsl:when test="ancestor::title">
+        <xsl:when test="ancestor::title|ancestor::subtitle">
             <xsl:text>\protect\flat</xsl:text>
         </xsl:when>
         <xsl:otherwise>
@@ -9647,7 +9647,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Double Flat -->
 <xsl:template name="doubleflat">
     <xsl:choose>
-        <xsl:when test="ancestor::title">
+        <xsl:when test="ancestor::title|ancestor::subtitle">
             <xsl:text>\protect\doubleflat</xsl:text>
         </xsl:when>
         <xsl:otherwise>
