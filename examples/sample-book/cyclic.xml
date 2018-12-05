@@ -27,6 +27,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <chapter xml:id="cyclic" xmlns:xi="http://www.w3.org/2001/XInclude">
     <title>Cyclic Groups</title>
+    <!-- A sample short title for testing purposes, -->
+    <!-- Not really necessary content-wise          -->
+    <shorttitle>Cyclicity</shorttitle>
 
     <introduction>
         <p>The groups <m>\mathbb Z</m> and <m>{\mathbb Z}_n</m>, which are among the most familiar and easily understood groups, are both examples of what are called cyclic groups.  In this chapter we will study the properties of cyclic groups and cyclic subgroups, which play a fundamental part in the classification of all abelian groups.</p>
