@@ -463,7 +463,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- title is required on structural elements -->
             <span>
                 <xsl:apply-templates select="." mode="title-attributes" />
-                <xsl:apply-templates select="." mode="title-simple" />
+                <xsl:apply-templates select="." mode="title-short" />
             </span>
         </a>
     </li>
@@ -5440,7 +5440,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:apply-templates select="//docinfo/initialism" />
                         <xsl:text> </xsl:text>
                     </xsl:if>
-                <xsl:apply-templates select="." mode="title-simple" />
+                <xsl:apply-templates select="." mode="title-short" />
                 </title>
                 <meta name="Keywords" content="Authored in PreTeXt" />
                 <!-- http://webdesignerwall.com/tutorials/responsive-design-in-3-steps -->
@@ -5486,6 +5486,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                         </xsl:attribute>
                                         <span>
                                             <xsl:apply-templates select="." mode="title-attributes" />
+                                            <!-- Do not use shorttitle in masthead,  -->
+                                            <!-- which is much like cover of a book  -->
                                             <xsl:apply-templates select="$document-root" mode="title-simple" />
                                         </span>
                                         <xsl:if test="normalize-space($document-root/subtitle)">
@@ -6284,9 +6286,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="$target" mode="xref-as-knowl" />
     </xsl:variable>
     <xsl:choose>
-        <!-- 1st exceptional case, xref in webwork -->
-        <!-- Just parrot the content               -->
-        <xsl:when test="ancestor::webwork-reps|ancestor::title|ancestor::subtitle">
+        <!-- 1st exceptional case, xref in a webwork, or in    -->
+        <!-- some sort of title.  Then just parrot the content -->
+        <xsl:when test="ancestor::webwork-reps|ancestor::title|ancestor::shorttitle|ancestor::subtitle">
             <xsl:value-of select="$content" />
         </xsl:when>
         <!-- 2nd exceptional case, xref in mrow of display math  -->
@@ -6692,7 +6694,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <!-- Normally in an active link, except inactive in titles -->
     <xsl:choose>
-        <xsl:when test="ancestor::title|ancestor::subtitle">
+        <xsl:when test="ancestor::title|ancestor::shorttitle|ancestor::subtitle">
             <xsl:copy-of select="$visible-text" />
         </xsl:when>
         <xsl:otherwise>
@@ -8113,7 +8115,7 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
                     <xsl:apply-templates select="//docinfo/initialism" />
                     <xsl:text> </xsl:text>
                 </xsl:if>
-            <xsl:apply-templates select="." mode="title-simple" />
+            <xsl:apply-templates select="." mode="title-short" />
             </title>
             <meta name="Keywords" content="Authored in PreTeXt" />
             <!-- http://webdesignerwall.com/tutorials/responsive-design-in-3-steps -->
@@ -8172,6 +8174,8 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
                                     </xsl:attribute>
                                     <span>
                                         <xsl:apply-templates select="." mode="title-attributes" />
+                                        <!-- Do not use shorttitle in masthead,  -->
+                                        <!-- which is much like cover of a book  -->
                                         <xsl:apply-templates select="$document-root" mode="title-simple" />
                                     </span>
                                     <xsl:if test="normalize-space($document-root/subtitle)">
@@ -8947,7 +8951,7 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
                         </xsl:if>
                         <span>
                             <xsl:apply-templates select="." mode="title-attributes" />
-                            <xsl:apply-templates select="." mode="title-simple" />
+                            <xsl:apply-templates select="." mode="title-short" />
                         </span>
                     </xsl:element>
                 </h2>
@@ -8985,7 +8989,7 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
                                         <xsl:if test="count($this-page-node|$inner-node) = 1">
                                             <xsl:attribute name="class">active</xsl:attribute>
                                         </xsl:if>
-                                        <xsl:apply-templates select="." mode="title-simple" />
+                                        <xsl:apply-templates select="." mode="title-short" />
                                     </xsl:element>
                                 </li>
                             </xsl:if>
@@ -9057,7 +9061,7 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
     </xsl:if>
     <xsl:if test="title">
         <xsl:text>: </xsl:text>
-        <xsl:apply-templates select="." mode="title-simple" />
+        <xsl:apply-templates select="." mode="title-short" />
     </xsl:if>
 </xsl:template>
 
