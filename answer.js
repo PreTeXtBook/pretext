@@ -171,7 +171,7 @@ $('body').on('click','.rq_save', function(){
   var this_ans_static = document.createElement('div');
   this_ans_static.setAttribute('id', this_rq_id);
   this_ans_static.setAttribute('class', 'given_answer has_am');
-  this_ans_static.innerHTML = dollars_to_slashparen(escapeHTML(this_rq_text))
+  this_ans_static.innerHTML = dollars_to_slashparen(escapeHTML(this_rq_text)) + " "
   this_rq_ans.replaceWith(this_ans_static);
 
   MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
