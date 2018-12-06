@@ -24,6 +24,25 @@
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
 >
 
+<!-- IMPORTANT (2018-12-06):  this stylesheet is include'd at the end      -->
+<!-- of two different stylesheets.  Each does different things with the    -->
+<!-- PGML produced from PreTeXt source that describes a WeBWorK problem.   -->
+<!-- A significant variance is whether or not the PGML is formatted        -->
+<!-- verbosely for human viewing, or compactly for an economical base64    -->
+<!-- string not exceeding capacities of web browser communications.        -->
+<!--                                                                       -->
+<!-- But principally, any stylesheet which uses this should operate        -->
+<!-- exclusively on "webwork" elements, since these templates are only     -->
+<!-- designed for producing PGML from "webwork" and there is no defense    -->
+<!-- against the templates being applied elsewhere.  So a stylesheet which -->
+<!-- includes this can (and typically should) import  mathbook-common.xsl  -->
+<!-- for universal templates, but should not be simultaneously converting  -->
+<!-- to some other output format.                                          -->
+<!--                                                                       -->
+<!-- The eventual goal is to produce an enhanced version of the PreTeXt    -->
+<!-- source which includes identifiable representations of the WeBWorK     -->
+<!-- problem described by PreTeXt source.                                  -->
+
 <!-- Default randomization seed based on the webwork's number()  -->
 <!-- This is better than a constant default seed, which can lead -->
 <!-- to adjacent problems using the same random values           -->
@@ -183,7 +202,7 @@
 
 <!-- A stage is part of a multi-stage problem. WeBWorK calls these         -->
 <!-- "scaffold" problems, which have "section"s                            -->
-<xsl:template match="webwork/stage">
+<xsl:template match="stage">
     <xsl:param name="b-hint" select="true()" />
     <xsl:param name="b-solution" select="true()" />
     <xsl:param name="b-verbose" />
@@ -220,7 +239,7 @@
 </xsl:template>
 
 <!-- default template, for complete presentation -->
-<xsl:template match="webwork/stage/statement|webwork/statement">
+<xsl:template match="stage/statement|statement">
     <xsl:param name="b-verbose" />
     <xsl:call-template name="begin-block">
         <xsl:with-param name="block-title">Body</xsl:with-param>
@@ -234,7 +253,7 @@
 </xsl:template>
 
 <!-- default template, for solution -->
-<xsl:template match="webwork/stage/solution|webwork/solution">
+<xsl:template match="stage/solution|solution">
     <xsl:param name="b-verbose" />
     <xsl:call-template name="begin-block">
         <xsl:with-param name="block-title">Solution</xsl:with-param>
@@ -248,7 +267,7 @@
 </xsl:template>
 
 <!-- default template, for hint -->
-<xsl:template match="webwork/stage/hint|webwork/hint">
+<xsl:template match="stage/hint|hint">
     <xsl:param name="b-verbose" />
     <xsl:call-template name="begin-block">
         <xsl:with-param name="block-title">Hint</xsl:with-param>
@@ -781,7 +800,7 @@
 <!-- ############## -->
 
 <!-- PGML markup for Perl variable in LaTeX expression -->
-<xsl:template match="webwork//statement//var|webwork//hint//var|webwork//solution//var">
+<xsl:template match="statement//var|hint//var|solution//var">
     <xsl:text>[</xsl:text>
     <xsl:value-of select="@name" />
     <xsl:if test="@form='checkboxes'">
@@ -792,7 +811,7 @@
 
 <!-- An image description may depend on the value of a simple scalar var   -->
 <!-- Perhaps this should warn if @name is not in Perl scalar syntax        -->
-<xsl:template match="webwork//description//var">
+<xsl:template match="description//var">
     <xsl:value-of select="@name"/>
 </xsl:template>
 
@@ -803,7 +822,7 @@
 
 <!-- PGML answer input               -->
 <!-- Example: [_____]{$ans}          -->
-<xsl:template match="webwork//statement//var[@width|@form]">
+<xsl:template match="statement//var[@width|@form]">
     <xsl:param name="b-verbose" />
     <xsl:apply-templates select="." mode="field">
         <xsl:with-param name="b-verbose" select="$b-verbose" />
@@ -814,7 +833,7 @@
 <!-- MathObject answers -->
 <!-- with variant for MathObjects like Matrix, Vector, ColumnVector      -->
 <!-- where the shape of the MathObject guides the array of answer blanks -->
-<xsl:template match="webwork//var[@width|@form]" mode="field">
+<xsl:template match="var[@width|@form]" mode="field">
     <xsl:param name="b-verbose" />
     <xsl:variable name="width">
         <xsl:choose>
@@ -882,7 +901,7 @@
 <!-- technically broken. The issue is only surfacing when trying to do a  -->
 <!-- checkbox problem from an iframe. Any attempt to check multiple boxes -->
 <!-- and submit leads to only one box being seen as checked by WeBWorK.   -->
-<xsl:template match="webwork//var[@form='checkboxes']" mode="field">
+<xsl:template match="var[@form='checkboxes']" mode="field">
     <xsl:text>    [@</xsl:text>
     <xsl:value-of select="@name"/>
     <xsl:text>->print_a() @]*&#xa;</xsl:text>
@@ -897,7 +916,7 @@
 <!-- Example: [@ ANS(essay_cmp); essay_box(6,76) @]*   -->
 <!-- Requires:  PGessaymacros.pl, automatically loaded -->
 <!-- http://webwork.maa.org/moodle/mod/forum/discuss.php?d=3370 -->
-<xsl:template match="webwork//var[@form='essay']" mode="field">
+<xsl:template match="var[@form='essay']" mode="field">
     <xsl:param name="b-verbose" />
     <xsl:text>[@ANS(essay_cmp);</xsl:text>
     <!-- NECESSARY? -->
@@ -925,7 +944,7 @@
     <xsl:text>)@]*</xsl:text>
 </xsl:template>
 
-<xsl:template match="webwork//var[@width]|var[@form]" mode="form-help">
+<xsl:template match="var[@width]|var[@form]" mode="form-help">
     <xsl:variable name="form">
         <xsl:choose>
             <xsl:when test="@form">
@@ -1022,7 +1041,7 @@
 <!-- PGML Image Construction -->
 <!-- ####################### -->
 
-<xsl:template match="webwork//image[@pg-name]">
+<xsl:template match="image[@pg-name]">
     <xsl:variable name="width">
         <xsl:apply-templates select="." mode="get-width-percentage" />
     </xsl:variable>
@@ -1040,14 +1059,14 @@
 
 <!-- A description here should only have text nodes and var children.      -->
 <!-- Puts the description into an "alt" tag.                               -->
-<xsl:template match="webwork//image[@pg-name]/description">
+<xsl:template match="image[@pg-name]/description">
     <xsl:apply-templates select="text()|var"/>
 </xsl:template>
 
 <!-- An "instruction" is a peer of p, only within a webwork. The purpose   -->
 <!-- is to give the reader something like keyboard syntax instructions     -->
 <!-- but withhold these in print output.                                   -->
-<xsl:template match="webwork//instruction">
+<xsl:template match="instruction">
     <xsl:if test="preceding-sibling::p|preceding-sibling::sidebyside and not(child::*[1][self::ol] or child::*[1][self::ul])">
         <xsl:call-template name="potential-list-indent" />
     </xsl:if>
@@ -1135,7 +1154,7 @@
 <!-- In PGML, paragraph breaks are just blank lines. End as normal with a -->
 <!-- line feed, then issue a blank line to signify the break. If p is     -->
 <!-- inside a list, special handling                                      -->
-<xsl:template match="webwork//p">
+<xsl:template match="p">
     <xsl:param name="b-verbose" />
     <xsl:if test="preceding-sibling::p|preceding-sibling::sidebyside and not(child::*[1][self::ol] or child::*[1][self::ul])">
         <xsl:call-template name="potential-list-indent" />
@@ -1158,7 +1177,7 @@
 <!-- Just applies templates to its child                                  -->
 <!-- NB: this may need improvements, such as positioning                  -->
 <!-- NB: a Schematron rule should enforce the single child                -->
-<xsl:template match="webwork//sidebyside">
+<xsl:template match="sidebyside">
     <xsl:param name="b-verbose" />
     <xsl:if test="preceding-sibling::p|preceding-sibling::sidebyside">
         <xsl:call-template name="potential-list-indent" />
@@ -1191,7 +1210,7 @@
 
 <!-- In common template, but have to point -->
 <!-- to it since it is a modal template    -->
-<xsl:template match="webwork//exercisegroup" mode="xref-number">
+<xsl:template match="exercisegroup" mode="xref-number">
     <xsl:apply-imports />
 </xsl:template>
 
@@ -1221,7 +1240,7 @@
 <!-- processing itself. Then the math templates need to look forward and   -->
 <!-- recover this punctuation with a \text{} wrapper.                      -->
 
-<xsl:template match="webwork//m">
+<xsl:template match="m">
     <xsl:param name="b-verbose" />
     <xsl:text>[`</xsl:text>
     <xsl:if test="$b-verbose">
@@ -1234,7 +1253,7 @@
 </xsl:template>
 
 <!-- PGML [```...```] creates display math -->
-<xsl:template match="webwork//me">
+<xsl:template match="me">
     <xsl:param name="b-verbose" />
     <xsl:text>&#xa;&#xa;</xsl:text>
     <xsl:if test="ancestor::ul|ancestor::ol">
@@ -1253,7 +1272,7 @@
     </xsl:if>
 </xsl:template>
 
-<xsl:template match="webwork//md">
+<xsl:template match="md">
     <xsl:param name="b-verbose" />
     <xsl:text>&#xa;&#xa;</xsl:text>
         <xsl:if test="ancestor::ul|ancestor::ol">
@@ -1285,7 +1304,7 @@
     </xsl:if>
 </xsl:template>
 
-<xsl:template match="webwork//md/mrow">
+<xsl:template match="md/mrow">
     <xsl:if test="ancestor::ul|ancestor::ol">
         <xsl:call-template name="potential-list-indent" />
     </xsl:if>
@@ -1310,7 +1329,7 @@
 <!-- sup elements for a fractional unit. And implement exponent with a    -->
 <!-- literal ^ instead of superscript. Perhaps once unicode is supported  -->
 <!-- in WeBWorK, revisit some of these differences.                       -->
-<xsl:template match="webwork//quantity">
+<xsl:template match="quantity">
     <!-- warning if there is no content -->
     <xsl:if test="not(descendant::unit) and not(descendant::per) and not(descendant::mag)">
         <xsl:message terminate="no">
@@ -1344,7 +1363,7 @@
 </xsl:template>
 
 <!-- Magnitude                                      -->
-<xsl:template match="webwork//mag">
+<xsl:template match="mag">
     <xsl:variable name="mag">
         <xsl:apply-templates />
     </xsl:variable>
@@ -1360,7 +1379,7 @@
 <xsl:key name="prefix-key" match="prefix" use="concat(../@name, @full)"/>
 <xsl:key name="base-key" match="base" use="concat(../@name, @full)"/>
 
-<xsl:template match="webwork//unit|webwork//per">
+<xsl:template match="unit|per">
     <xsl:if test="not(parent::quantity)">
         <xsl:message>PTX:WARNING: unit or per element should have parent quantity element</xsl:message>
     </xsl:if>
@@ -1411,7 +1430,7 @@
 <!-- Various Markup -->
 <!-- ############## -->
 
-<xsl:template match="webwork//url">
+<xsl:template match="url">
     <xsl:text>[@htmlLink("</xsl:text>
     <xsl:value-of select="@href" />
     <xsl:text>","</xsl:text>
@@ -1429,7 +1448,7 @@
 <!-- http://webwork.maa.org/wiki/Introduction_to_PGML#Basic_Formatting -->
 
 <!-- two spaces at line-end makes a newline in PGML-->
-<xsl:template match="webwork//cell/line">
+<xsl:template match="cell/line">
     <!-- This leads to lines of PG code that would ideally be indented     -->
     <!-- for human readability, but it cannot be avoided because the       -->
     <!-- cell is fed to PGML::Format(), and would act on the indentation.  -->
@@ -1439,28 +1458,28 @@
 
 <!-- Emphasis: underscores produce italic -->
 <!-- Foreign:  for phrases                -->
-<xsl:template match="webwork//em|webwork//foreign">
+<xsl:template match="em|foreign">
     <xsl:text>_</xsl:text>
     <xsl:apply-templates />
     <xsl:text>_</xsl:text>
 </xsl:template>
 
 <!-- Booktitle: slanted normally, we italic here-->
-<xsl:template match="webwork//booktitle">
+<xsl:template match="booktitle">
     <xsl:text>_</xsl:text>
     <xsl:apply-templates />
     <xsl:text>_</xsl:text>
 </xsl:template>
 
 <!-- Alert: asterik-underscore produces bold-italic -->
-<xsl:template match="webwork//alert">
+<xsl:template match="alert">
     <xsl:text>*</xsl:text>
     <xsl:apply-templates />
     <xsl:text>*</xsl:text>
 </xsl:template>
 
 <!-- LaTeX logo  -->
-<xsl:template match="webwork//latex">
+<xsl:template match="latex">
     <xsl:param name="b-verbose" />
     <xsl:choose>
         <xsl:when test="$b-verbose">
@@ -1572,7 +1591,7 @@
 </xsl:template>
 
 <!-- Verbatim Snippets, Code -->
-<xsl:template match="webwork//c">
+<xsl:template match="c">
     <xsl:choose>
         <xsl:when test="contains(.,'[|') or contains(.,'|]')">
             <xsl:message>PTX:ERROR:   the strings '[|' and '|]' are not supported within verbatim text in WeBWorK problems</xsl:message>
@@ -1589,7 +1608,7 @@
 <!-- Preformatted Text -->
 <!-- Sanitization analyzes *all* lines for left margin         -->
 <!-- "prepend-string" adds colon and three spaces to each line -->
-<xsl:template match="webwork//pre">
+<xsl:template match="pre">
     <xsl:call-template name="prepend-string">
         <xsl:with-param name="text">
             <xsl:call-template name="sanitize-text">
@@ -1634,7 +1653,7 @@
 <!-- ##### -->
 
 <!-- Implement PGML unordered lists -->
-<xsl:template match="webwork//ul|webwork//ol">
+<xsl:template match="ul|ol">
     <xsl:param name="b-verbose" />
     <!-- Lists are always inside a p.                                         -->
     <!-- If some text content or other elements precede the list within the p -->
@@ -1655,7 +1674,7 @@
     </xsl:if>
 </xsl:template>
 
-<xsl:template match="webwork//li">
+<xsl:template match="li">
     <xsl:param name="b-verbose" />
     <!-- Indent according to list depth; note this differs from potential-list-indent template. -->
     <xsl:call-template name="duplicate-string">
@@ -1728,14 +1747,14 @@
 <!-- Tables -->
 <!-- ###### -->
 
-<xsl:template match="webwork//table">
+<xsl:template match="table">
     <xsl:param name="b-verbose" />
     <xsl:apply-templates select="*[not(self::caption)]">
         <xsl:with-param name="b-verbose" select="$b-verbose" />
     </xsl:apply-templates>
 </xsl:template>
 
-<xsl:template match="webwork//tabular">
+<xsl:template match="tabular">
     <!-- PTX tabular attributes top, bottom, left, right, halign are essentially passed -->
     <!-- down to cells, rather than used at the tabular level.                          -->
     <xsl:param name="b-verbose" />
@@ -1959,7 +1978,7 @@
 </xsl:template>
 
 
-<xsl:template match="webwork//tabular/row">
+<xsl:template match="tabular/row">
     <xsl:param name="b-verbose" />
     <xsl:if test="$b-verbose">
         <xsl:call-template name="potential-list-indent" />
@@ -1980,7 +1999,7 @@
 </xsl:template>
 
 
-<xsl:template match="webwork//tabular/row/cell">
+<xsl:template match="tabular/row/cell">
     <xsl:param name="b-verbose" />
     <xsl:variable name="this-cells-left-column" select="count(preceding-sibling::cell) + 1 + sum(preceding-sibling::cell[@colspan]/@colspan) - count(preceding-sibling::cell[@colspan])"/>
     <xsl:variable name="this-cells-right-column" select="$this-cells-left-column + sum(self::cell[@colspan]/@colspan) - count(self::cell[@colspan]/@colspan)"/>
