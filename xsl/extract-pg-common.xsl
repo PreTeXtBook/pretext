@@ -1475,38 +1475,23 @@
     </xsl:choose>
 </xsl:template>
 
-<!-- Quotes, double or single -->
-<!-- PGML will do the right thing with "dumb" quotes          -->
-<!-- in the source, so we implement these to allow for        -->
-<!-- direct/easy cut/paste to/from other MathBook XML sources -->
-<xsl:template match="webwork//q">
-    <xsl:text>"</xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>"</xsl:text>
-</xsl:template>
+<!-- PGML is content with "dumb" quotes and will do    -->
+<!-- the right thing in a conversion to "smart" quotes -->
+<!-- in various WW output formats                      -->
 
-<xsl:template match="webwork//sq">
-    <xsl:text>'</xsl:text>
-    <xsl:apply-templates />
+<xsl:template name="lsq-character">
     <xsl:text>'</xsl:text>
 </xsl:template>
 
-<!-- Sometimes you need an "unbalanced" quotation make,    -->
-<!-- maybe because you are crossing some other XML element -->
-<!-- So here are left and right, single and double         -->
-<xsl:template match="webwork//lsq">
+<xsl:template name="rsq-character">
     <xsl:text>'</xsl:text>
 </xsl:template>
 
-<xsl:template match="webwork//rsq">
-    <xsl:text>'</xsl:text>
-</xsl:template>
-
-<xsl:template match="webwork//lq">
+<xsl:template name="lq-character">
     <xsl:text>"</xsl:text>
 </xsl:template>
 
-<xsl:template match="webwork//rq">
+<xsl:template name="rq-character">
     <xsl:text>"</xsl:text>
 </xsl:template>
 
@@ -1526,56 +1511,49 @@
 <!-- Ampersand -->
 <!-- Not for controlling mathematics -->
 <!-- or table formatting             -->
-<xsl:template match="webwork//ampersand">
+<xsl:template name="ampersand-character">
     <xsl:text>\&amp;</xsl:text>
 </xsl:template>
 
 <!-- Percent sign -->
-<xsl:template match="webwork//percent">
+<xsl:template name="percent-character">
     <xsl:text>\%</xsl:text>
 </xsl:template>
 
 <!-- Dollar sign -->
-<xsl:template match="webwork//dollar">
+<xsl:template name="dollar-character">
     <xsl:text>\$</xsl:text>
 </xsl:template>
 
 <!-- Circumflex  -->
-<!-- 2015/01/28: there was a mismatch between HTML and LaTeX names -->
-<xsl:template match="webwork//circum">
-    <xsl:text>\^</xsl:text>
-    <xsl:message>PTX:WARNING: the "circum" element is deprecated (2015/01/28), use "circumflex"</xsl:message>
-    <xsl:apply-templates select="." mode="location-report" />
-</xsl:template>
-
-<xsl:template match="webwork//circumflex">
+<xsl:template name="circumflex-character">
     <xsl:text>\^</xsl:text>
 </xsl:template>
 
 <!-- Text underscore -->
-<xsl:template match="webwork//underscore">
+<xsl:template name="underscore-character">
     <xsl:text>\_</xsl:text>
 </xsl:template>
 
 <!-- Number Sign, Hash, Octothorpe -->
-<xsl:template match="webwork//hash">
+<xsl:template name="hash-character">
     <xsl:text>\#</xsl:text>
 </xsl:template>
 
 <!-- Tilde -->
-<xsl:template match="webwork//tilde">
+<xsl:template name="tilde-character">
     <xsl:text>\~</xsl:text>
 </xsl:template>
 
 <!-- Asterisk -->
 <!-- Centered as a character, not an exponent -->
-<xsl:template match="webwork//asterisk">
+<xsl:template name="asterisk-character">
     <xsl:text>\*</xsl:text>
 </xsl:template>
 
 <!-- Ellipsis -->
 <!-- Just three periods -->
-<xsl:template match="webwork//ellipsis">
+<xsl:template name="ellipsis-character">
     <xsl:text>...</xsl:text>
 </xsl:template>
 
@@ -1584,10 +1562,10 @@
 <!-- Individually, or matched            -->
 <!-- All escaped to avoid conflicts with -->
 <!-- use after answer blanks, etc.       -->
-<xsl:template match="webwork//lbrace">
+<xsl:template name="lbrace-character">
     <xsl:text>\{</xsl:text>
 </xsl:template>
-<xsl:template match="webwork//rbrace">
+<xsl:template name="rbrace-character">
     <xsl:text>\}</xsl:text>
 </xsl:template>
 <xsl:template match="webwork//braces">
@@ -1597,7 +1575,7 @@
 </xsl:template>
 
 <!-- Backslash -->
-<xsl:template match="webwork//backslash">
+<xsl:template name="backslash-character">
     <xsl:text>\\</xsl:text>
 </xsl:template>
 
