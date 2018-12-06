@@ -578,6 +578,7 @@
                         <p>Emphasis: <em>very important</em></p>
                         <p>Alert: <alert>do not</alert> do it</p>
                         <p>Verbatim: code, <c>with special characters: a * , a \, and a #</c></p>
+                        <p>Braces: <braces>text that looks like a set</braces></p>
                         <!-- uncomment next to test, will not activate generally in sample document -->
                         <!-- <p>Verbatim: code, <c>with banned substring: [|</c></p>                -->
                         <pre>

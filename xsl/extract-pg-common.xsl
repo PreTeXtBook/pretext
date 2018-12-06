@@ -504,13 +504,11 @@
         <!-- utility for randomly generating variable letters -->
         <xsl:if test=".//instruction or contains(./setup/pg-code,'RandomVariableName')">
             <xsl:choose>
-            <!-- these are identical, as part of *not* changing -->
-            <!-- output, likely this should be changed later    -->
                 <xsl:when test="$b-verbose">
                     <xsl:text>  "PCCmacros.pl",&#xa;</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:text>  "PCCmacros.pl",&#xa;</xsl:text>
+                    <xsl:text>"PCCmacros.pl",</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:if>
@@ -691,13 +689,11 @@
             </xsl:choose>
         </xsl:if>
         <xsl:if test="contains(./setup/pg-code,'FiniteSolutionSets')">
-            <!-- these are identical, as part of *not* changing -->
-            <!-- output, likely this should be changed later    -->
             <xsl:choose>
                 <xsl:when test="$b-verbose">
                     <xsl:text>  "contextFiniteSolutionSets.pl",&#xa;</xsl:text>
                 </xsl:when>
-                    <xsl:text>  "contextFiniteSolutionSets.pl",&#xa;</xsl:text>
+                    <xsl:text>"contextFiniteSolutionSets.pl",</xsl:text>
                 <xsl:otherwise>
                 </xsl:otherwise>
             </xsl:choose>
@@ -1567,11 +1563,6 @@
     <xsl:text>\{</xsl:text>
 </xsl:template>
 <xsl:template name="rbrace-character">
-    <xsl:text>\}</xsl:text>
-</xsl:template>
-<xsl:template match="webwork//braces">
-    <xsl:text>\{</xsl:text>
-    <xsl:apply-templates />>
     <xsl:text>\}</xsl:text>
 </xsl:template>
 
