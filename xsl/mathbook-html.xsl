@@ -6981,41 +6981,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </i>
 </xsl:template>
 
-<!-- Non-breaking space, which "joins" two words as a unit            -->
-<!-- Using &nbsp; does not travel well into node-set() in common file -->
-<!-- http://stackoverflow.com/questions/31870/using-a-html-entity-in-xslt-e-g-nbsp -->
-<xsl:template match="nbsp">
-    <xsl:text>&#xa0;</xsl:text>
-</xsl:template>
-
-<!-- Dashes, Hyphen -->
-<!-- http://www.cs.tut.fi/~jkorpela/dashes.html -->
-<!-- NB: global $emdash-space-char could go local to "mdash" template -->
-<xsl:variable name="emdash-space-char">
-    <xsl:choose>
-        <xsl:when test="$emdash-space='none'">
-            <xsl:text />
-        </xsl:when>
-        <xsl:when test="$emdash-space='thin'">
-            <xsl:text>&#8201;</xsl:text>
-        </xsl:when>
-    </xsl:choose>
-</xsl:variable>
-<xsl:template match="mdash">
-    <xsl:value-of select="$emdash-space-char"/>
-    <xsl:text>&#8212;</xsl:text>
-    <xsl:value-of select="$emdash-space-char"/>
-</xsl:template>
-<xsl:template match="ndash">
-    <xsl:text>&#8211;</xsl:text>
-</xsl:template>
-<!-- A "hyphen" element was a bad idea, very cumbersome -->
-<xsl:template match="hyphen">
-    <xsl:message>MBX:WARNING: the "hyphen" element is deprecated (2017-02-05), use the "hyphen-minus" character instead (aka the "ASCII hyphen")</xsl:message>
-    <xsl:apply-templates select="." mode="location-report" />
-    <xsl:text>&#8208;</xsl:text>
-</xsl:template>
-
 <!-- ##### -->
 <!-- Icons -->
 <!-- ##### -->
@@ -7095,19 +7060,33 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- These are specific instances of abstract templates        -->
 <!-- See the similar section of  mathbook-common.xsl  for more -->
 
-<xsl:template match="*" mode="nbsp">
+<!-- Non-breaking space, which "joins" two words as a unit            -->
+<!-- Using &nbsp; does not travel well into node-set() in common file -->
+<!-- http://stackoverflow.com/questions/31870                         -->
+<!-- /using-a-html-entity-in-xslt-e-g-nbsp                            -->
+<!-- Should create UTF-8 anyway:                                      -->
+<!-- https://html.spec.whatwg.org/multipage/semantics.html#charset    -->
+
+<xsl:template name="nbsp-character">
     <xsl:text>&#xa0;</xsl:text>
 </xsl:template>
 
-<xsl:template match="*" mode="ndash">
+<xsl:template name="ndash-character">
     <xsl:text>&#8211;</xsl:text>
 </xsl:template>
 
-<xsl:template match="*" mode="mdash">
+<xsl:template name="mdash-character">
     <xsl:text>&#8212;</xsl:text>
 </xsl:template>
 
+<!-- The abstract template for "mdash" consults a publisher option -->
+<!-- for thin space, or no space, surrounding an em-dash.  So the  -->
+<!-- "thin-space-character" is needed for that purpose, and does   -->
+<!-- not have an associated empty PTX element.                     -->
 
+<xsl:template name="thin-space-character">
+    <xsl:text>&#8201;</xsl:text>
+</xsl:template>
 
 <!--       -->
 <!-- Music -->

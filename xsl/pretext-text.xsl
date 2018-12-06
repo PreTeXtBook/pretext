@@ -84,6 +84,33 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Characters -->
 
+<!-- Idea: variables from "choose" on $text.encoding variable      -->
+<!-- to use cheap ASCII versions (or stand-ins, like [PER-MILLE]), -->
+<!-- versus more realistic Unicode versions                        -->
+
+<!-- ASCII we just use a regular space -->
+<xsl:template name="nbsp-character">
+    <xsl:text> </xsl:text>
+</xsl:template>
+
+<xsl:template name="ndash-character">
+    <xsl:text>-</xsl:text>
+</xsl:template>
+
+<xsl:template name="mdash-character">
+    <xsl:text>-</xsl:text>
+</xsl:template>
+
+<!-- The abstract template for "mdash" consults a publisher option -->
+<!-- for thin space, or no space, surrounding an em-dash.  So the  -->
+<!-- "thin-space-character" is needed for that purpose, and does   -->
+<!-- not have an associated empty PTX element.                     -->
+
+<!-- ASCII we just use a full space -->
+<xsl:template name="thin-space-character">
+    <xsl:text> </xsl:text>
+</xsl:template>
+
 <xsl:template name="lsq-character">
     <xsl:text>'</xsl:text>
 </xsl:template>

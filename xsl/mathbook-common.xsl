@@ -4907,7 +4907,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- group as its serial number.     -->
 <xsl:template match="exercisegroup" mode="serial-number">
     <xsl:apply-templates select="exercise[1]" mode="serial-number" />
-    <xsl:apply-templates select="." mode="ndash"/>
+    <xsl:call-template name="ndash-character"/>
     <xsl:apply-templates select="exercise[last()]" mode="serial-number" />
 </xsl:template>
 
@@ -7625,7 +7625,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <xsl:choose>
                 <xsl:when test="$b-is-biblio-target">
                     <xsl:text>,</xsl:text>
-                    <xsl:apply-templates select="." mode="nbsp"/>
+                    <xsl:call-template name="nbsp-character"/>
                     <!-- this info should not be in an attribute! -->
                     <xsl:apply-templates select="@detail" />
                 </xsl:when>
@@ -7731,7 +7731,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                 <xsl:apply-templates />
             </xsl:with-param>
         </xsl:apply-templates>
-        <xsl:apply-templates select="." mode="ndash"/>
+        <xsl:call-template name="ndash-character"/>
         <xsl:apply-templates select="." mode="xref-text" >
             <xsl:with-param name="target" select="$target-two" />
             <xsl:with-param name="text-style" select="$text-style-two" />
@@ -8049,7 +8049,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:when test="$b-is-equation-target">
             <xsl:if test="$b-has-content">
                 <xsl:copy-of select="$custom-text" />
-                <xsl:apply-templates select="." mode="nbsp"/>
+                <xsl:call-template name="nbsp-character"/>
             </xsl:if>
             <xsl:text>(</xsl:text>
             <xsl:apply-templates select="$target" mode="xref-number">
@@ -8070,7 +8070,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:when test="$text-style = 'global'">
             <xsl:if test="$b-has-content">
                 <xsl:copy-of select="$custom-text" />
-                <xsl:apply-templates select="." mode="nbsp"/>
+                <xsl:call-template name="nbsp-character"/>
             </xsl:if>
             <xsl:apply-templates select="$target" mode="xref-number">
                 <xsl:with-param name="xref" select="." />
@@ -8080,7 +8080,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:when test="$text-style = 'local'">
             <xsl:if test="$b-has-content">
                 <xsl:copy-of select="$custom-text" />
-                <xsl:apply-templates select="." mode="nbsp"/>
+                <xsl:call-template name="nbsp-character"/>
             </xsl:if>
             <xsl:apply-templates select="$target" mode="serial-number" />
         </xsl:when>
@@ -8089,7 +8089,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                 <!-- content override of type-prefix -->
                 <xsl:when test="$b-has-content">
                     <xsl:copy-of select="$custom-text" />
-                    <xsl:apply-templates select="." mode="nbsp"/>
+                    <xsl:call-template name="nbsp-character"/>
                     <xsl:apply-templates select="$target" mode="xref-number">
                         <xsl:with-param name="xref" select="." />
                     </xsl:apply-templates>
@@ -8097,7 +8097,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                 <!-- usual, default case -->
                 <xsl:otherwise>
                     <xsl:apply-templates select="$target" mode="type-name" />
-                    <xsl:apply-templates select="." mode="nbsp"/>
+                    <xsl:call-template name="nbsp-character"/>
                     <xsl:apply-templates select="$target" mode="xref-number">
                         <xsl:with-param name="xref" select="." />
                     </xsl:apply-templates>
@@ -8109,13 +8109,13 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                 <!-- content override of type-prefix -->
                 <xsl:when test="$b-has-content">
                     <xsl:copy-of select="$custom-text" />
-                    <xsl:apply-templates select="." mode="nbsp"/>
+                    <xsl:call-template name="nbsp-character"/>
                     <xsl:apply-templates select="$target" mode="serial-number" />
                 </xsl:when>
                 <!-- usual, default case -->
                 <xsl:otherwise>
                     <xsl:apply-templates select="$target" mode="type-name" />
-                    <xsl:apply-templates select="." mode="nbsp"/>
+                    <xsl:call-template name="nbsp-character"/>
                     <xsl:apply-templates select="$target" mode="serial-number" />
                 </xsl:otherwise>
             </xsl:choose>
@@ -8136,7 +8136,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <!-- type-local first, no matter what    -->
             <!-- for each of the two phrase styles   -->
             <xsl:apply-templates select="$target" mode="type-name" />
-            <xsl:apply-templates select="." mode="nbsp"/>
+            <xsl:call-template name="nbsp-character"/>
             <xsl:apply-templates select="$target" mode="serial-number" />
             <!-- climb up tree to find highest matching structure numbers -->
             <!-- we pass through the two styles so reaction can occur     -->
@@ -8159,12 +8159,12 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                 <!-- or addtion to plain number      -->
                 <xsl:when test="$b-has-content">
                     <xsl:copy-of select="$custom-text" />
-                    <xsl:apply-templates select="." mode="nbsp"/>
+                    <xsl:call-template name="nbsp-character"/>
                 </xsl:when>
                 <!-- no override, use type as prefix -->
                 <xsl:when test="$text-style = 'type-hybrid'">
                     <xsl:apply-templates select="$target" mode="type-name" />
-                    <xsl:apply-templates select="." mode="nbsp"/>
+                    <xsl:call-template name="nbsp-character"/>
                 </xsl:when>
                 <!-- just a plain number, do nothing at all -->
                 <xsl:otherwise />
@@ -8290,7 +8290,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                     <!-- connector, internationalize -->
                     <xsl:text> of </xsl:text>
                     <xsl:apply-templates select="$highest-match" mode="type-name" />
-                    <xsl:apply-templates select="." mode="nbsp" />
+                    <xsl:call-template name="nbsp-character"/>
                     <xsl:apply-templates select="$highest-match" mode="xref-number">
                         <xsl:with-param name="xref" select="." />
                     </xsl:apply-templates>
@@ -8365,7 +8365,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <!-- connector, internationalize -->
             <xsl:text> of </xsl:text>
             <xsl:apply-templates select="$targets-list" mode="type-name" />
-            <xsl:apply-templates select="." mode="nbsp" />
+            <xsl:call-template name="nbsp-character"/>
             <xsl:apply-templates select="$targets-list" mode="xref-number">
                 <xsl:with-param name="xref" select="." />
             </xsl:apply-templates>
@@ -8497,21 +8497,62 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Special Characters -->
 <!-- ################## -->
 
-<!-- We build modal templates for certain characters       -->
-<!-- so we can employ these templates in generic templates -->
-<!-- The defaults here are meant to be unattractive        -->
-<!-- The last importing stylesheet wins, so be careful     -->
+<!-- Dashes and hyphens - worth reviewing       -->
+<!-- http://www.cs.tut.fi/~jkorpela/dashes.html -->
 
-<xsl:template match="*" mode="nbsp">
-    <xsl:text>[NBSP]</xsl:text>
+<xsl:template name="nbsp-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'nbsp'"/>
+    </xsl:call-template>
+</xsl:template>
+<xsl:template match="nbsp">
+    <xsl:call-template name="nbsp-character"/>
 </xsl:template>
 
-<xsl:template match="*" mode="ndash">
-    <xsl:text>[NDASH]</xsl:text>
+<xsl:template name="ndash-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'ndash'"/>
+    </xsl:call-template>
+</xsl:template>
+<xsl:template match="ndash">
+    <xsl:call-template name="ndash-character"/>
 </xsl:template>
 
-<xsl:template match="*" mode="mdash">
-    <xsl:text>[MDASH]</xsl:text>
+<!-- An mdash may have thin space around it, otherwise it        -->
+<!-- should have none.  It might be difficult to enforce this    -->
+<!-- (we could!), but we don't.  Instead, we make the thin-space -->
+<!-- version a publisher option.  So we need two base characters -->
+<!-- as abstract templates and do everything else here.          -->
+
+<xsl:template name="mdash-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'mdash'"/>
+    </xsl:call-template>
+</xsl:template>
+
+<xsl:template name="thin-space-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'thin-space'"/>
+    </xsl:call-template>
+</xsl:template>
+
+<!-- The variable, surrounding space. This approach is   -->
+<!-- executed once, so not local to template for "mdash" -->
+<xsl:variable name="emdash-space-char">
+    <xsl:choose>
+        <xsl:when test="$emdash-space='none'">
+            <xsl:text />
+        </xsl:when>
+        <xsl:when test="$emdash-space='thin'">
+            <xsl:call-template name="thin-space-character"/>
+        </xsl:when>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:template match="mdash">
+    <xsl:value-of select="$emdash-space-char"/>
+    <xsl:call-template name="mdash-character"/>
+    <xsl:value-of select="$emdash-space-char"/>
 </xsl:template>
 
 <!-- ################### -->
@@ -9453,11 +9494,11 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'@width attribute on &lt;image&gt; must be expressed as a percentage'" />
     </xsl:call-template>
     <!--  -->
-    <!-- 2017-02-05  hyphen-minus replaces hyphen -->
+    <!-- 2017-02-05  hyphen-minus replaces hyphen; 2018-12-01 use keyboard hyphen -->
     <xsl:call-template name="deprecation-message">
         <xsl:with-param name="occurrences" select="$document-root//hyphen" />
         <xsl:with-param name="date-string" select="'2017-02-05'" />
-        <xsl:with-param name="message" select="'use the &lt;hyphen-minus/&gt; element as a direct replacement for &lt;hyphen/&gt;'" />
+        <xsl:with-param name="message" select="'use the keyboard hyphen character as a direct replacement for &lt;hyphen/&gt;'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2017-07-05  top-level items that should have captions, but don't -->

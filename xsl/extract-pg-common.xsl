@@ -1629,43 +1629,35 @@
     </xsl:call-template>
 </xsl:template>
 
-<!-- The next three are macros that will format  -->
-<!-- properly for PGML realized as HTML or LaTeX -->
+<!-- The next three are WW macros that PGML will format  -->
+<!-- properly for WW HTML or LaTeX output, and so we use -->
+<!-- them as the desired characters                      -->
 
 <!-- Nonbreaking space -->
-<xsl:template match="webwork//nbsp">
+<xsl:template name="nbsp-character">
     <xsl:text>[$NBSP]*</xsl:text>
 </xsl:template>
 
 <!-- En dash           -->
-<xsl:template match="webwork//ndash">
+<xsl:template name="ndash-character">
     <xsl:text>[$NDASH]*</xsl:text>
 </xsl:template>
 
 <!-- Em dash           -->
-<xsl:template match="webwork//mdash">
+<xsl:template name="mdash-character">
     <xsl:text>[$MDASH]*</xsl:text>
 </xsl:template>
 
-<!-- These same three characters have modal    -->
-<!-- templates in  xsl/mathbook-common.xsl     -->
-<!-- to allow for some generic routines        -->
-<!-- (eg, xref with autoname) that only depend -->
-<!-- on variants of these.  Here we recognize  -->
-<!-- that we are in PG mode and supply the     -->
-<!-- right representations.                    -->
+<!-- The abstract template for "mdash" consults a publisher option -->
+<!-- for thin space, or no space, surrounding an em-dash.  So the  -->
+<!-- "thin-space-character" is needed for that purpose, and does   -->
+<!-- not have an associated empty PTX element.                     -->
+<!-- Cannot find such a thing documented for PGML, so just normal  -->
 
-<xsl:template match="webwork//*" mode="nbsp">
-    <xsl:text>[$NBSP]*</xsl:text>
+<xsl:template name="thin-space-character">
+    <xsl:text> </xsl:text>
 </xsl:template>
 
-<xsl:template match="webwork//*" mode="ndash">
-    <xsl:text>[$NDASH]*</xsl:text>
-</xsl:template>
-
-<xsl:template match="webwork//*" mode="mdash">
-    <xsl:text>[$MDASH]*</xsl:text>
-</xsl:template>
 
 <!-- ##### -->
 <!-- Lists -->

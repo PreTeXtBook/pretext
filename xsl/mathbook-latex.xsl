@@ -6712,6 +6712,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- free-form for one line, or structured as lines -->
 <!-- LaTeX lacks a quotation dash, emdash instead   -->
 <!-- Discourage a page break prior                  -->
+<!-- TODO: make a rule for quotation-dash?          -->
 
 <!-- Single line, mixed-content                     -->
 <!-- Quotation dash if within blockquote            -->
@@ -6720,7 +6721,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\nopagebreak\par%&#xa;</xsl:text>
     <xsl:text>\hfill\begin{tabular}{l@{}}&#xa;</xsl:text>
     <xsl:if test="parent::blockquote">
-        <xsl:text>\textemdash{}</xsl:text>
+        <xsl:call-template name="mdash-character"/>
     </xsl:if>
     <xsl:apply-templates />
     <xsl:text>&#xa;</xsl:text>
@@ -6738,7 +6739,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- General line of an attribution -->
 <xsl:template match="attribution/line">
     <xsl:if test="parent::attribution/parent::blockquote and not(preceding-sibling::*)">
-        <xsl:text>\textemdash{}</xsl:text>
+        <xsl:call-template name="mdash-character"/>
     </xsl:if>
     <xsl:apply-templates />
     <!-- is there a next line to separate? -->
@@ -7314,41 +7315,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="end-language" />
 </xsl:template>
 
-<!-- Non-breaking space, which "joins" two words as a unit -->
-<xsl:template match="nbsp">
-    <xsl:text>~</xsl:text>
-</xsl:template>
-
-
-<!-- Dashes, Hyphen -->
-<!-- http://www.public.asu.edu/~arrows/tidbits/dashes.html -->
-<!-- NB: global $emdash-space-char could go local to "mdash" template -->
-<xsl:variable name="emdash-space-char">
-    <xsl:choose>
-        <xsl:when test="$emdash-space='none'">
-            <xsl:text />
-        </xsl:when>
-        <xsl:when test="$emdash-space='thin'">
-            <xsl:text>\,</xsl:text>
-        </xsl:when>
-    </xsl:choose>
-</xsl:variable>
-<xsl:template match="mdash">
-    <xsl:value-of select="$emdash-space-char" />
-    <xsl:text>\textemdash{}</xsl:text>
-    <xsl:value-of select="$emdash-space-char" />
-</xsl:template>
-<xsl:template match="ndash">
-    <xsl:text>\textendash{}</xsl:text>
-</xsl:template>
-<!-- A "hyphen" element was a bad idea, very cumbersome -->
-<xsl:template match="hyphen">
-    <xsl:message>MBX:WARNING: the "hyphen" element is deprecated (2017-02-05), use the "hyphen-minus" character instead (aka the "ASCII hyphen")</xsl:message>
-    <xsl:apply-templates select="." mode="location-report" />
-    <xsl:text>-</xsl:text>
-</xsl:template>
-
-
 <!-- Single and Double Quote Groupings -->
 <!-- LaTeX is a bit brain-dead when a single quote        -->
 <!-- is up tight against a double quote, or vice-versa,   -->
@@ -7502,18 +7468,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- These are specific instances of abstract templates        -->
 <!-- See the similar section of  mathbook-common.xsl  for more -->
 
-<xsl:template match="*" mode="nbsp">
+<!-- TODO: Perhaps use LaTeX double and triple hyphen variants of  -->
+<!-- en-dash and em-dash under some option for human-variant LaTeX -->
+
+<xsl:template name="nbsp-character">
     <xsl:text>~</xsl:text>
 </xsl:template>
 
-<xsl:template match="*" mode="ndash">
-    <xsl:text>--</xsl:text>
+<xsl:template name="ndash-character">
+    <xsl:text>\textendash{}</xsl:text>
 </xsl:template>
 
-<xsl:template match="*" mode="mdash">
-    <xsl:text>---</xsl:text>
+<xsl:template name="mdash-character">
+    <xsl:text>\textemdash{}</xsl:text>
 </xsl:template>
 
+<!-- The abstract template for "mdash" consults a publisher option -->
+<!-- for thin space, or no space, surrounding an em-dash.  So the  -->
+<!-- "thin-space-character" is needed for that purpose, and does   -->
+<!-- not have an associated empty PTX element.                     -->
+
+<xsl:template name="thin-space-character">
+    <xsl:text>\,</xsl:text>
+</xsl:template>
 
 <!-- Sage Cells -->
 
