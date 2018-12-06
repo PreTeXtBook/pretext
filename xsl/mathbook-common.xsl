@@ -1511,7 +1511,7 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
     <!-- text nodes within "m" with no changes  -->
     <xsl:variable name="raw-latex">
         <xsl:choose>
-            <xsl:when test="ancestor::webwork|ancestor::webwork-reps">
+            <xsl:when test="ancestor::static/parent::webwork-reps">
                 <xsl:apply-templates select="text()|var" />
             </xsl:when>
             <xsl:otherwise>
@@ -3129,8 +3129,7 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
     <!-- NB: We defer WW-specific work for now.                      -->
     <xsl:variable name="text-processed">
         <xsl:choose>
-            <xsl:when test="not(ancestor::webwork-tex) and
-                            not(parent::m|parent::me|parent::men|parent::mrow)">
+            <xsl:when test="not(parent::m|parent::me|parent::men|parent::mrow)">
                 <xsl:call-template name="text-processing">
                     <xsl:with-param name="text" select="$math-punctuation"/>
                 </xsl:call-template>
@@ -3146,10 +3145,6 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
     <!-- either side of displayed objects, math and lists -->
     <!-- (only?), in addition to first and last nodes     -->
     <xsl:choose>
-        <!-- pass through if a node within "webwork-tex" -->
-        <xsl:when test="ancestor::webwork-tex">
-            <xsl:value-of select="$text-processed" />
-        </xsl:when>
         <!-- pass through if assuming strict adherence to whitespace policy -->
         <xsl:when test="$whitespace='strict'">
             <xsl:value-of select="$text-processed" />
