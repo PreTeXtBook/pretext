@@ -1591,6 +1591,7 @@
 </xsl:template>
 
 <!-- Verbatim Snippets, Code -->
+<!-- *Must* be "value-of" to avoid low-level text-processing template -->
 <xsl:template match="c">
     <xsl:choose>
         <xsl:when test="contains(.,'[|') or contains(.,'|]')">
@@ -1599,7 +1600,7 @@
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>[|</xsl:text>
-            <xsl:apply-templates />
+            <xsl:value-of select="."/>
             <xsl:text>|]*</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
