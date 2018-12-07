@@ -577,7 +577,7 @@
                         <p>Smart single quotes: <sq>Whatever the mind of man can conceive and believe, it can achieve.</sq></p>
                         <p>Emphasis: <em>very important</em></p>
                         <p>Alert: <alert>do not</alert> do it</p>
-                        <p>Verbatim: code, <c>with special characters: a * , a \, and a #</c></p>
+                        <p>Verbatim: code, <c>with special characters: a * , a \, a {, a }, and a #</c></p>
                         <p>Braces: <braces>text that looks like a set</braces></p>
                         <!-- uncomment next to test, will not activate generally in sample document -->
                         <!-- <p>Verbatim: code, <c>with banned substring: [|</c></p>                -->
@@ -587,10 +587,14 @@
                         and an out-dented line
                         </pre>
 
-                        <p>Some of <latex />'s special characters:</p>
+                        <p>Some of <latex />'s special characters, as empty elements, which will eventually be deprecated:</p>
                         <p><hash /> <dollar /> <percent /> <circumflex /> <ampersand /> <underscore /> <lbrace /> <rbrace /> <tilde />  <backslash /></p>
 
-                        <p>Some characters that need special handling for PG conversion to HTML or <latex />:</p>
+                        <p>Some raw characters, XML/HTML:    &amp; &lt; &gt;</p>
+                        <p>Some raw characters, LaTeX:       # $ % ^ &amp; _ { } ~ \</p>
+                        <p>Some raw characters, PGML:        \ * { }</p>
+
+                        <p>Some characters that need special handling for PGML conversion to HTML or <latex />:</p>
 
                         <p>A non<nbsp />breaking space (invisble where a hyphen should be)</p>
                         <p>An ndash<ndash />right here.</p>
