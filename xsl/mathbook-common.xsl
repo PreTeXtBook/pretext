@@ -2596,12 +2596,8 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 <!-- Add  count  copies of the string  pad  to  each line of  text -->
 <!-- Presumes  text  has a newline character at the very end       -->
 <!-- Note: this is not in use and has seen only limited testing    -->
-<!-- Note: mathbook-webwork-pg has a template with the same name   -->
-<!-- and mathbook-webwork-pg is included in both mathbook-html and -->
-<!-- mathbook-webwork-archive subsequent to importing              -->
-<!-- mathbook-common. Therefore if this template is developed to   -->
-<!-- be used more, it should be reconciled with the version in     -->
-<!-- mathbook-webwork-pg.                                          -->
+<!-- NB: extract-pg-common has a similar, but simpler,             -->
+<!-- template that could be replaced by this                       -->
 <xsl:template name="prepend-string">
     <xsl:param name="text" />
     <xsl:param name="pad" />

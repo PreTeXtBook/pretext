@@ -1651,10 +1651,10 @@
 </xsl:template>
 
 <!-- Preformatted Text -->
-<!-- Sanitization analyzes *all* lines for left margin         -->
-<!-- "prepend-string" adds colon and three spaces to each line -->
+<!-- Sanitization analyzes *all* lines for left margin.               -->
+<!-- "prepend-verbatim-marker" adds colon, three spaces, to each line -->
 <xsl:template match="pre">
-    <xsl:call-template name="prepend-string">
+    <xsl:call-template name="prepend-verbatim-marker">
         <xsl:with-param name="text">
             <xsl:call-template name="sanitize-text">
                 <xsl:with-param name="text" select="." />
@@ -2549,9 +2549,8 @@
 <!-- Recursively prepend to multiple lines -->
 <!-- Presumes pre-processing with line-feed at very end                      -->
 <!-- Borrowed from more complicated routine in xsl/mathbook-sage-doctest.xsl -->
-<!-- Generalize: pass pre-pending string at invocation and each iteration    -->
-<!-- TODO: perhaps consolidate with similar routine for Sage doctesting      -->
-<xsl:template name="prepend-string">
+<!-- TODO: See disused general version in mathbook-common.xsl                -->
+<xsl:template name="prepend-verbatim-marker">
     <xsl:param name="text" />
     <!-- Quit when string becomes empty -->
     <xsl:if test="string-length($text)">
@@ -2560,7 +2559,7 @@
         <xsl:value-of select="$first-line"/>
         <xsl:text>&#xA;</xsl:text>
         <!-- recursive call on remainder of string -->
-        <xsl:call-template name="prepend-string">
+        <xsl:call-template name="prepend-verbatim-marker">
             <xsl:with-param name="text" select="substring-after($text, '&#xA;')"/>
         </xsl:call-template>
     </xsl:if>
