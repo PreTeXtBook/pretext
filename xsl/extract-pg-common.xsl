@@ -22,6 +22,8 @@
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+    xmlns:str="http://exslt.org/strings"
+    extension-element-prefixes="str"
 >
 
 <!-- IMPORTANT (2018-12-06):  this stylesheet is include'd at the end      -->
@@ -1588,6 +1590,48 @@
 <!-- Backslash -->
 <xsl:template name="backslash-character">
     <xsl:text>\\</xsl:text>
+</xsl:template>
+
+<!-- ############### -->
+<!-- Text Processing -->
+<!-- ############### -->
+
+<!-- The general template for matching "text()" nodes will     -->
+<!-- apply this template (there is a hook there).  Verbatim    -->
+<!-- text should be manipulated in templates with              -->
+<!-- "xsl:value-of" and so not come through here.  Conversely, -->
+<!-- when "xsl:apply-templates" is applied, the template will  -->
+<!-- have effect.                                              -->
+<!--                                                           -->
+<!-- These are characters which PGML gives special meaning,    -->
+<!-- and should be escaped to prevent accidents.               -->
+
+<xsl:variable name="asterisk-replacement">
+    <xsl:call-template name="asterisk-character"/>
+</xsl:variable>
+
+<xsl:variable name="backslash-replacement">
+    <xsl:call-template name="backslash-character"/>
+</xsl:variable>
+
+<xsl:variable name="lbrace-replacement">
+    <xsl:call-template name="lbrace-character"/>
+</xsl:variable>
+
+<xsl:variable name="rbrace-replacement">
+    <xsl:call-template name="rbrace-character"/>
+</xsl:variable>
+
+<xsl:template name="text-processing">
+    <xsl:param name="text"/>
+
+    <!-- Backslash first, since more will be introduced in other replacments -->
+    <xsl:variable name="backslash-fixed" select="str:replace($text,            '\', $backslash-replacement)"/>
+    <xsl:variable name="asterisk-fixed"  select="str:replace($backslash-fixed, '*', $asterisk-replacement)"/>
+    <xsl:variable name="lbrace-fixed"    select="str:replace($asterisk-fixed,  '{', $lbrace-replacement)"/>
+    <xsl:variable name="rbrace-fixed"    select="str:replace($lbrace-fixed,    '}', $rbrace-replacement)"/>
+
+    <xsl:value-of select="$rbrace-fixed"/>
 </xsl:template>
 
 <!-- Verbatim Snippets, Code -->
