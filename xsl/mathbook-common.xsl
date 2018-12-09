@@ -9765,6 +9765,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 </xsl:template>
 
 <!-- We issue specialized blurbs with appropriate comment lines -->
+<xsl:template name="converter-blurb-text">
+    <xsl:call-template name="converter-blurb">
+        <xsl:with-param name="lead-in"  select="''" />
+        <xsl:with-param name="lead-out" select="''" />
+    </xsl:call-template>
+</xsl:template>
+
 <xsl:template name="converter-blurb-latex">
     <xsl:call-template name="converter-blurb">
         <xsl:with-param name="lead-in"  select="'%'" />
