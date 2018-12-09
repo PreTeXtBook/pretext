@@ -585,6 +585,8 @@
                             Some pre-formatted text
                                         with an indented line
                         and an out-dented line
+                        This should not be altered *a problem*
+                        And this [$NDASH]* should not be an en-dash
                         </pre>
 
                         <p>Some of <tex/>'s and <latex />'s special characters, as empty elements, which will eventually be deprecated:</p>
@@ -623,13 +625,6 @@
 
                         <p>+ Not an unordered list item</p>
                         <p>- Not an unordered list item</p>
-
-                        <p>The PGML verbatim environment still allows some markup:</p>
-
-                        <pre>
-                            This is *a problem*
-                            And so is this [$NDASH]*
-                        </pre>
 
                     </statement>
                 </webwork>

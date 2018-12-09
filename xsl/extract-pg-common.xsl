@@ -1788,16 +1788,13 @@
 </xsl:template>
 
 <!-- Preformatted Text -->
-<!-- Sanitization analyzes *all* lines for left margin.               -->
-<!-- "prepend-verbatim-marker" adds colon, three spaces, to each line -->
+<!-- Sanitization analyzes *all* lines for left margin. -->
 <xsl:template match="pre">
-    <xsl:call-template name="prepend-verbatim-marker">
-        <xsl:with-param name="text">
-            <xsl:call-template name="sanitize-text">
-                <xsl:with-param name="text" select="." />
-            </xsl:call-template>
-        </xsl:with-param>
+    <xsl:text>```</xsl:text>
+    <xsl:call-template name="sanitize-text">
+        <xsl:with-param name="text" select="." />
     </xsl:call-template>
+    <xsl:text>```&#xa;</xsl:text>
 </xsl:template>
 
 <!-- The next three are WW macros that PGML will format  -->
@@ -2680,25 +2677,6 @@
         <xsl:value-of select="$block-title"/>
         <xsl:text>&#xa;</xsl:text>
         <xsl:text>############################################################&#xa;</xsl:text>
-    </xsl:if>
-</xsl:template>
-
-<!-- Recursively prepend to multiple lines -->
-<!-- Presumes pre-processing with line-feed at very end                      -->
-<!-- Borrowed from more complicated routine in xsl/mathbook-sage-doctest.xsl -->
-<!-- TODO: See disused general version in mathbook-common.xsl                -->
-<xsl:template name="prepend-verbatim-marker">
-    <xsl:param name="text" />
-    <!-- Quit when string becomes empty -->
-    <xsl:if test="string-length($text)">
-        <xsl:variable name="first-line" select="substring-before($text, '&#xA;')" />
-        <xsl:text>:   </xsl:text> <!-- the string, yields PG pre-formatted -->
-        <xsl:value-of select="$first-line"/>
-        <xsl:text>&#xA;</xsl:text>
-        <!-- recursive call on remainder of string -->
-        <xsl:call-template name="prepend-verbatim-marker">
-            <xsl:with-param name="text" select="substring-after($text, '&#xA;')"/>
-        </xsl:call-template>
     </xsl:if>
 </xsl:template>
 
