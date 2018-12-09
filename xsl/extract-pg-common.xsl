@@ -1480,15 +1480,28 @@
     <xsl:text>*</xsl:text>
 </xsl:template>
 
+<!-- TeX logo  -->
+<xsl:template match="tex">
+    <xsl:param name="b-verbose" />
+    <xsl:choose>
+        <xsl:when test="$b-verbose">
+            <xsl:text>[@MODES(HTML =&gt; '\(\mathrm\TeX\)', TeX =&gt; '\TeX', PTX =&gt; '&lt;tex/&gt;')@]*</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>[@MODES(HTML=&gt;'\(\mathrm\TeX\)',TeX=&gt;'\TeX', PTX=&gt;'&lt;tex/&gt;')@]*</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- LaTeX logo  -->
 <xsl:template match="latex">
     <xsl:param name="b-verbose" />
     <xsl:choose>
         <xsl:when test="$b-verbose">
-            <xsl:text>[@MODES(HTML =&gt; '\(\mathrm\LaTeX\)', TeX =&gt; '\LaTeX')@]*</xsl:text>
+            <xsl:text>[@MODES(HTML =&gt; '\(\mathrm\LaTeX\)', TeX =&gt; '\LaTeX', PTX =&gt; '&lt;latex/&gt;')@]*</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:text>[@MODES(HTML=&gt;'\(\mathrm\LaTeX\)',TeX=&gt;'\LaTeX')@]*</xsl:text>
+            <xsl:text>[@MODES(HTML=&gt;'\(\mathrm\LaTeX\)',TeX=&gt;'\LaTeX', PTX=&gt;'&lt;latex/&gt;')@]*</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>

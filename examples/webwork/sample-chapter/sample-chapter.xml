@@ -587,11 +587,11 @@
                         and an out-dented line
                         </pre>
 
-                        <p>Some of <latex />'s special characters, as empty elements, which will eventually be deprecated:</p>
+                        <p>Some of <tex/>'s and <latex />'s special characters, as empty elements, which will eventually be deprecated:</p>
                         <p><hash /> <dollar /> <percent /> <circumflex /> <ampersand /> <underscore /> <lbrace /> <rbrace /> <tilde />  <backslash /></p>
 
                         <p>Some raw characters, XML/HTML:    &amp; &lt; &gt;</p>
-                        <p>Some raw characters, LaTeX:       # $ % ^ &amp; _ { } ~ \</p>
+                        <p>Some raw characters, <latex/>:    # $ % ^ &amp; _ { } ~ \</p>
                         <p>Some raw characters, PGML:        \ * # { } [ ]</p>
 
                         <p>Some characters that need special handling for PGML conversion to HTML or <latex />:</p>
