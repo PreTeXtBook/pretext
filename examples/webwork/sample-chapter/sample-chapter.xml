@@ -592,13 +592,44 @@
 
                         <p>Some raw characters, XML/HTML:    &amp; &lt; &gt;</p>
                         <p>Some raw characters, LaTeX:       # $ % ^ &amp; _ { } ~ \</p>
-                        <p>Some raw characters, PGML:        \ * { }</p>
+                        <p>Some raw characters, PGML:        \ * # { } [ ]</p>
 
                         <p>Some characters that need special handling for PGML conversion to HTML or <latex />:</p>
 
                         <p>A non<nbsp />breaking space (invisble where a hyphen should be)</p>
                         <p>An ndash<ndash />right here.</p>
                         <p>An mdash<mdash />right here.</p>
+
+                        <p>Some constructions in <q>normal</q> text, which need to be manipulated, lest they get interpreted as PGML markup:</p>
+
+                        <p>&gt;&gt; This should not be a centered line &lt;&lt;</p>
+
+                        <p>&gt;&gt; Nor a right-justified line, either</p>
+
+                        <p>We should not get _a phrase in italics_ in the midst of this sentence.</p>
+
+                        <p>Brackets, unpaired; ] with content between [</p>
+
+                        <p>Brackets, paired, in PGML constructions; [$NDASH]*, [___]{$answer}</p>
+
+                        <p>### This should not be a level 3 heading</p>
+
+                        <p>===   Not a horizontal rule from three equal signs</p>
+                        <p>==    Not a horizontal rule from two equal signs</p>
+                        <p>===== Not a horizontal rule from five equal signs</p>
+                        <p>---   Not a horizontal rule from three hyphens</p>
+                        <p>--    Not a horizontal rule from two hyphens</p>
+                        <p>----- Not a horizontal rule from five hyphens</p>
+
+                        <p>+ Not an unordered list item</p>
+                        <p>- Not an unordered list item</p>
+
+                        <p>The PGML verbatim environment still allows some markup:</p>
+
+                        <pre>
+                            This is *a problem*
+                            And so is this [$NDASH]*
+                        </pre>
 
                     </statement>
                 </webwork>
