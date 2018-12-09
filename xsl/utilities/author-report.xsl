@@ -1,58 +1,85 @@
 <?xml version='1.0'?> <!-- As XML file -->
+
+<!--********************************************************************
+Copyright 2018 Robert A. Beezer
+
+This file is part of PreTeXt.
+
+PreTeXt is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+PreTeXt is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+
+<!-- http://pimpmyxslt.com/articles/entity-tricks-part2/ -->
+<!DOCTYPE xsl:stylesheet [
+    <!ENTITY % entities SYSTEM "../entities.ent">
+    %entities;
+]>
+
 <!-- Identify as a stylesheet -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace" >
 
-<xsl:import href="./mathbook-common.xsl" />
+<xsl:import href="../mathbook-common.xsl" />
 
-<!-- ASCII output intended -->
+<!-- ASCII output intended, consistent with -common -->
 <xsl:output method="text" />
 
-<!-- Traverse the tree,       -->
-<!-- looking for things to do -->
-<!-- http://stackoverflow.com/questions/3776333/stripping-all-elements-except-one-in-xml-using-xslt -->
+<!-- Generally, traverse the tree,                       -->
+<!-- looking for things to do                            -->
+<!-- http://stackoverflow.com/questions/3776333/         -->
+<!-- stripping-all-elements-except-one-in-xml-using-xslt -->
 <xsl:template match="@*|node()">
     <xsl:apply-templates select="@*|node()"/>
 </xsl:template>
 
-<!-- Headers, per sectioning -->
-<xsl:template match="book|article|preface|chapter|section|subsection|subsubsection|references|exercises|frontmatter|backmatter">
-    <xsl:text>&#xa;************************&#xa;</xsl:text>
-    <xsl:apply-templates select="." mode="long-name"/>
-    <xsl:text>&#xa;************************&#xa;</xsl:text>
-    <xsl:apply-templates select="*[not(self::title)]"/>
+<!-- ############## -->
+<!-- Entry Template -->
+<!-- ############## -->
+
+<xsl:template match="/">
+    <xsl:call-template name="converter-blurb-text"/>
+    <xsl:apply-templates select="$document-root" />
+</xsl:template>
+
+<!-- Headers, per division or structure -->
+<xsl:template match="&STRUCTURAL;">
+    <xsl:text>&#xa;**************************************&#xa;</xsl:text>
+    <xsl:apply-templates select="." mode="long-name" />
+    <xsl:text>&#xa;**************************************&#xa;</xsl:text>
+    <xsl:apply-templates select="*[not(self::subtitle)]"/>
+</xsl:template>
+
+<!-- Kill titles as metadata, but restore behavior on nodes to   -->
+<!-- allow the "long-name" template above to perform as intended -->
+<xsl:template match="title"/>
+<xsl:template match="title/node()">
+    <xsl:value-of select="." />
 </xsl:template>
 
 <!-- Looking for todo's and provisional citations, cross-references -->
-<!-- Can't seem to get numbers to right-justify easily (across fixed field width) -->
+<!-- May need to abandon counting if conditions get more complex    -->
 <xsl:template match="todo">
-    <xsl:number level="any" count="todo|xref[@provisional]|cite[@provisional]"/>
+    <xsl:number level="any" count="todo|xref[@provisional]"/>
     <xsl:text>. </xsl:text>
     <xsl:value-of select="." />
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="xref[@provisional]">
-    <xsl:number level="any" count="todo|xref[@provisional]|cite[@provisional]"/>
+    <xsl:number level="any" count="todo|xref[@provisional]"/>
     <xsl:text>. xref: </xsl:text>
     <xsl:value-of select="@provisional" />
     <xsl:text>&#xa;</xsl:text>
-</xsl:template>
-
-<xsl:template match="cite[@provisional]">
-    <xsl:number level="any" count="todo|xref[@provisional]|cite[@provisional]"/>
-    <xsl:text>. cite: </xsl:text>
-    <xsl:value-of select="@provisional" />
-    <xsl:text>&#xa;</xsl:text>
-</xsl:template>
-
-<!-- Explicitly kill titles and do not recurse            -->
-<!-- But get *value* of their nodes for long-name templates -->
-<xsl:template match="title">
-</xsl:template>
-
-<xsl:template match="title/node()">
-    <xsl:value-of select="." />
 </xsl:template>
 
 </xsl:stylesheet>
