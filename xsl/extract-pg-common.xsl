@@ -1513,6 +1513,14 @@
     <xsl:text>"</xsl:text>
 </xsl:template>
 
+<xsl:template name="lbracket-character">
+    <xsl:text>\[</xsl:text>
+</xsl:template>
+
+<xsl:template name="rbracket-character">
+    <xsl:text>\]</xsl:text>
+</xsl:template>
+
 <!-- http://webwork.maa.org/wiki/Special_Characters_-_PGML -->
 <!-- suggests PGML understands the TeX special characters. -->
 <!-- There seems enough exceptions that we will routinely  -->
@@ -1526,26 +1534,91 @@
 <!-- implemented throughout MBX.  But for math *only*         -->
 <!-- (ie LaTeX) the macros \lt, \gt are supported universally -->
 
+<!--       Alex Jordan, 2018-12-07, pretext-dev list                 -->
+<!--                                                                 -->
+<!-- * >  if there are two of these and then a space at the          -->
+<!--      start of a line, right justify the line.                   -->
+<!--                                                                 -->
+<!-- * <  if the above is in effect, and the line ends with          -->
+<!--      a space and two of these, center the line.                 -->
+<!--                                                                 -->
+<!-- * Some combinations of whitespace before the &lt;&lt; and       -->
+<!--   after the &gt;&gt; will prevent any action and print the      -->
+<!--   characters, and other combinations allow the action. I        -->
+<!--   think this is a bug and white space should not prevent        -->
+<!--   the action.                                                   -->
+<!--                                                                 -->
+<!-- * &, %, $, ^, ~  No need to escape in PGML                      -->
+<!--                                                                 -->
+<!-- * _  If there are two of these in a line, the parts in          -->
+<!--      between are italicized.                                    -->
+<!--                                                                 -->
+<!-- * [, ] should always be escaped if you want the characters      -->
+<!--        printed. Except if they don't pair up, you don't need to -->
+<!--        escape them.                                             -->
+<!--                                                                 -->
+<!-- * #  If n of these are at the start of a line, that makes       -->
+<!--      the line a header level n. Whitespace before the # may or  -->
+<!--      may not break that, but I think it is a bug and whitespace -->
+<!--      shouldn't break that. Otherwise # doesn't need escaping.   -->
+<!--                                                                 -->
+<!-- * {  I think only needs to be escaped when immediately          -->
+<!--      follow a [ ] pair.                                         -->
+<!--                                                                 -->
+<!-- * }  Not sure about this one if it ever would need escaping.    -->
+<!--                                                                 -->
+<!-- * - - -, ===  Three or more of these in a row make a horizontal -->
+<!--             rule when they start a line, even if other          -->
+<!--             characters come after on that line. (They get       -->
+<!--             printed on the next line.) Leading white space      -->
+<!--             seems to prevent this but I don't think it should.  -->
+<!--                                                                 -->
+<!-- * *  Always escape this if you want the character.              -->
+<!--                                                                 -->
+<!--                                                                 -->
+<!-- * -, + Escape these if they are the first non-white space       -->
+<!--       character on a line or they will start an unordered list. -->
+<!--                                                                 -->
+<!-- * ```  three backticks start "code" (seems not?, unimplemented) -->
+<!--                                                                 -->
+<!-- * :  A line opening with a colon and two (three) spaces makes   -->
+<!--      preformatted text. (not really a verbatim block)           -->
+<!--                                                                 -->
+<!-- * ', " If you want "dumb" quotes, escape them.                  -->
+<!--                                                                 -->
+<!-- * \    Always escape backslash.                                 -->
+<!-- #################################################### -->
+
+
 <!-- Ampersand -->
 <!-- Not for controlling mathematics -->
 <!-- or table formatting             -->
 <xsl:template name="ampersand-character">
-    <xsl:text>\&amp;</xsl:text>
+    <xsl:text>&amp;</xsl:text>
 </xsl:template>
 
+<!-- Less Than -->
+<xsl:template name="less-character">
+    <xsl:text>&lt;</xsl:text>
+</xsl:template>
+
+<!-- Greater Than -->
+<xsl:template name="greater-character">
+    <xsl:text>&gt;</xsl:text>
+</xsl:template>
 <!-- Percent sign -->
 <xsl:template name="percent-character">
-    <xsl:text>\%</xsl:text>
+    <xsl:text>%</xsl:text>
 </xsl:template>
 
 <!-- Dollar sign -->
 <xsl:template name="dollar-character">
-    <xsl:text>\$</xsl:text>
+    <xsl:text>$</xsl:text>
 </xsl:template>
 
 <!-- Circumflex  -->
 <xsl:template name="circumflex-character">
-    <xsl:text>\^</xsl:text>
+    <xsl:text>^</xsl:text>
 </xsl:template>
 
 <!-- Text underscore -->
@@ -1560,7 +1633,7 @@
 
 <!-- Tilde -->
 <xsl:template name="tilde-character">
-    <xsl:text>\~</xsl:text>
+    <xsl:text>~</xsl:text>
 </xsl:template>
 
 <!-- Asterisk -->
@@ -1622,16 +1695,63 @@
     <xsl:call-template name="rbrace-character"/>
 </xsl:variable>
 
+<xsl:variable name="lbracket-replacement">
+    <xsl:call-template name="lbracket-character"/>
+</xsl:variable>
+
+<xsl:variable name="rbracket-replacement">
+    <xsl:call-template name="rbracket-character"/>
+</xsl:variable>
+
+<xsl:variable name="underscore-replacement">
+    <xsl:call-template name="underscore-character"/>
+</xsl:variable>
+
+<xsl:variable name="hash-replacement">
+    <xsl:call-template name="hash-character"/>
+</xsl:variable>
+
 <xsl:template name="text-processing">
     <xsl:param name="text"/>
+
+    <!-- NB: many of these symbols only need to be disrupted in certain    -->
+    <!-- locations or in certain combinations.  With regular expressions   -->
+    <!-- in XSLT 3 we could do better, especially in cases where the       -->
+    <!-- effect only happens at the start of a line.  So, as is, we overdo -->
+    <!-- it, without making too big of an unnecessary mess elsewhere.      -->
 
     <!-- Backslash first, since more will be introduced in other replacments -->
     <xsl:variable name="backslash-fixed" select="str:replace($text,            '\', $backslash-replacement)"/>
     <xsl:variable name="asterisk-fixed"  select="str:replace($backslash-fixed, '*', $asterisk-replacement)"/>
-    <xsl:variable name="lbrace-fixed"    select="str:replace($asterisk-fixed,  '{', $lbrace-replacement)"/>
+    <xsl:variable name="hash-fixed"      select="str:replace($asterisk-fixed,  '#', $hash-replacement)"/>
+    <xsl:variable name="lbrace-fixed"    select="str:replace($hash-fixed,      '{', $lbrace-replacement)"/>
     <xsl:variable name="rbrace-fixed"    select="str:replace($lbrace-fixed,    '}', $rbrace-replacement)"/>
+    <xsl:variable name="lbracket-fixed"  select="str:replace($rbrace-fixed,    '[', $lbracket-replacement)"/>
+    <xsl:variable name="rbracket-fixed"  select="str:replace($lbracket-fixed,  ']', $rbracket-replacement)"/>
 
-    <xsl:value-of select="$rbrace-fixed"/>
+    <!-- Break up right justify AND center line -->
+    <xsl:variable name="centerline-fixed" select="str:replace($rbracket-fixed, '&gt;&gt; ', '\&gt;\&gt;')"/>
+
+    <!-- Break up any possibility of paired underscores for italics (overkill) -->
+    <xsl:variable name="italicization-fixed" select="str:replace($centerline-fixed, '_', $underscore-replacement)"/>
+
+    <!-- Break up horizontal rule from three equals or three hyphens -->
+    <!-- We escape the *middle* symbol, as a minimal disruption      -->
+    <xsl:variable name="equalrule-fixed"  select="str:replace($italicization-fixed, '===', '=\==')"/>
+    <xsl:variable name="hyphenrule-fixed" select="str:replace($equalrule-fixed,     '---', '-\--')"/>
+
+    <!-- A line-leading hyphen is a list item, but we don't want *every* hyphen escaped  -->
+    <!-- So we trap a hyphen with a space after it, as a compromise                      -->
+    <!-- A regular expression with a match on "line beginning" will work better          -->
+    <!-- A plus sign is similar, but outside mathematics, not so pervasive               -->
+    <!-- NB: the hyphen substitution should not introduce consecutive backslashes when   -->
+    <!-- triple-hyphen above is disrupted                                                -->
+    <xsl:variable name="unordered-hyphen-fixed" select="str:replace($hyphenrule-fixed,       '- ', '\- ')"/>
+    <xsl:variable name="unordered-plus-fixed"   select="str:replace($unordered-hyphen-fixed, '+',  '\+')"/>
+
+    <!-- Triple backticks indicate code?  Not implemented. -->
+
+    <xsl:value-of select="$unordered-plus-fixed"/>
 </xsl:template>
 
 <!-- Verbatim Snippets, Code -->
