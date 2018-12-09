@@ -1732,6 +1732,10 @@
     <!-- in XSLT 3 we could do better, especially in cases where the       -->
     <!-- effect only happens at the start of a line.  So, as is, we overdo -->
     <!-- it, without making too big of an unnecessary mess elsewhere.      -->
+    <!--                                                                   -->
+    <!-- Precise regular expressions for various conditions are at         -->
+    <!-- https://github.com/openwebwork/pg/blob/master/macros/PGML.pl      -->
+    <!-- (as of 2018-12-09)                                                -->
 
     <!-- Backslash first, since more will be introduced in other replacments -->
     <xsl:variable name="backslash-fixed" select="str:replace($text,            '\', $backslash-replacement)"/>
