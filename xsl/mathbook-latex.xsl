@@ -1236,7 +1236,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:if>
-    <!-- miscellaneous, not categorized yet -->
+    <!-- miscellaneous, not categorized yet             -->
+    <!-- the sharp corners are meant to distinguis this -->
+    <!-- from an assemblage, which as rounded corners   -->
     <xsl:if test="$document-root//list">
         <xsl:text>%% named list environment and style&#xa;</xsl:text>
         <xsl:text>\newtcolorbox{namedlistcontent}&#xa;</xsl:text>
@@ -2781,7 +2783,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- DEFINITION-LIKE and EXAMPLE-LIKE are exceptional  -->
 <!-- in that markers are inserted with "after upper"   -->
 <!-- to indicate the end of the environment.           -->
-<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|exercise[boolean(&INLINE-EXERCISE-FILTER;)]|assemblage|&ASIDE-LIKE;" mode="tcb-style">
+<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|exercise[boolean(&INLINE-EXERCISE-FILTER;)]|&ASIDE-LIKE;" mode="tcb-style">
     <xsl:text>bwminimalstyle, runintitlestyle, blockspacingstyle, after title={\space}, </xsl:text>
 </xsl:template>
 
@@ -2791,6 +2793,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="&EXAMPLE-LIKE;" mode="tcb-style">
     <xsl:text>bwminimalstyle, runintitlestyle, blockspacingstyle, after title={\space}, after upper={\hfill{}\(\square\)}, </xsl:text>
+</xsl:template>
+
+<!-- This is mostly ad-hoc.  An assemblage is meant to be prominent,   -->
+<!-- we just use a simple box with rounded corners as a default, with  -->
+<!-- the title (if present) centered.  Note that we get a bit of extra -->
+<!-- vertical space in the title box in the event the title is null.   -->
+<!-- For a document with titled and untitled assemblages maybe we need -->
+<!-- a way to have two styles (tcb-title-style, tcb-notitle-style?)    -->
+<!-- specified?                                                        -->
+<!--                                                                   -->
+<!-- A "list" will have square corners, thus the explicit rounded      -->
+<!-- corners (the default).  We want to tell the difference when       -->
+<!-- debugging or authoring.                                           -->
+<!--                                                                   -->
+<!-- NB: standard jigsaw, opacityback=0.0, opacitybacktitle=0.0  makes -->
+<!-- title rule visible, and  opacity-fill=0.0  kills the the border   -->
+<xsl:template match="assemblage" mode="tcb-style">
+    <xsl:text>size=normal, colback=white, colbacktitle=white, coltitle=black, colframe=black, rounded corners, titlerule=0.0pt, center title, fonttitle=\normalfont\bfseries, blockspacingstyle, </xsl:text>
 </xsl:template>
 
 <!-- This is the gross default, across all objects and all styles -->
