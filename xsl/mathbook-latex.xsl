@@ -101,6 +101,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Any color options go to black and white, as possible -->
 <xsl:param name="latex.print" select="'no'"/>
 <!--  -->
+<!-- Page Numbers in cross-references -->
+<xsl:param name="latex.pageref" select="''"/>
+<!--  -->
 <!-- Sidedness -->
 <xsl:param name="latex.sides" select="''"/>
 <!--  -->
@@ -277,6 +280,38 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!-- Including page numbers in cross-references defaults to      -->
+<!-- 'yes' for an electronic PDF and to 'no' for a print PDF,    -->
+<!-- and of course can be switched away from the default at will -->
+<!-- NB: upgrade the latex.print variable to something like this -->
+<xsl:variable name="pagerefs-option">
+    <xsl:choose>
+        <!-- electronic PDF -->
+        <xsl:when test="$latex.print = 'no'">
+            <xsl:choose>
+                <xsl:when test="$latex.pageref = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="($latex.pageref = 'no') or ($latex.pageref = '')">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:when>
+        <!-- print PDF -->
+        <xsl:when test="$latex.print = 'yes'">
+            <xsl:choose>
+                <xsl:when test="$latex.pageref = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:when test="($latex.pageref = 'yes') or ($latex.pageref = '')">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:when>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="b-pageref" select="$pagerefs-option = 'yes'"/>
+
 <!-- Conversions, like creating a solutions manual, may need   -->
 <!-- LaTeX styles for the solutions to exercises, even if the  -->
 <!-- source never has a "solutions" element.  So this variable -->
@@ -339,12 +374,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <xsl:when test="$b-has-toc">
             <xsl:text>%% Target for xref to top-level element is ToC&#xa;</xsl:text>
-            <xsl:text>\addtocontents{toc}{\protect\hypertarget{</xsl:text>
+            <xsl:text>\addtocontents{toc}{</xsl:text>
+            <xsl:if test="$b-pageref">
+                <xsl:text>\protect\label{</xsl:text>
+                <xsl:apply-templates select="." mode="latex-id" />
+                <xsl:text>}</xsl:text>
+            </xsl:if>
+            <xsl:text>\protect\hypertarget{</xsl:text>
             <xsl:apply-templates select="." mode="latex-id" />
-            <xsl:text>}{}}&#xa;</xsl:text>
+            <xsl:text>}{}</xsl:text>
+            <xsl:text>}&#xa;</xsl:text>
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>%% Target for xref to top-level element is document start&#xa;</xsl:text>
+            <xsl:if test="$b-pageref">
+                <xsl:text>\label{</xsl:text>
+                <xsl:apply-templates select="." mode="latex-id" />
+                <xsl:text>}</xsl:text>
+            </xsl:if>
             <xsl:text>\hypertarget{</xsl:text>
             <xsl:apply-templates select="." mode="latex-id" />
             <xsl:text>}{}&#xa;</xsl:text>
@@ -1288,7 +1335,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Division exercises, not in exercise group&#xa;</xsl:text>
         <xsl:text>\tcbset{ divisionexercisestyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, left=5ex, breakable, parbox=false } }&#xa;</xsl:text>
         <xsl:text>\newtcolorbox{divisionexercise}[4]</xsl:text>
-        <xsl:text>{divisionexercisestyle, before title={\hspace{-5ex}\makebox[5ex][l]{#1.}}, title={\notblank{#2}{#2\space}{}}, phantom={\hypertarget{#4}{}}, after={\notblank{#3}{\newline\rule{\workspacestrutwidth}{#3\textheight}\newline}{}}}&#xa;</xsl:text>
+        <xsl:text>{divisionexercisestyle, before title={\hspace{-5ex}\makebox[5ex][l]{#1.}}, title={\notblank{#2}{#2\space}{}}, phantom={</xsl:text>
+        <xsl:if test="$b-pageref">
+            <xsl:text>\label{#4}</xsl:text>
+        </xsl:if>
+        <xsl:text>\hypertarget{#4}{}}, after={\notblank{#3}{\newline\rule{\workspacestrutwidth}{#3\textheight}\newline}{}}}&#xa;</xsl:text>
     </xsl:if>
     <!-- Division Exercise, Exercise Group -->
     <!-- The exercise itself carries the indentation, hence we can use breakable -->
@@ -1297,7 +1348,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Division exercises, in exercise group, no columns&#xa;</xsl:text>
         <xsl:text>\tcbset{ divisionexerciseegstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, left=5ex, left skip=\egindent, breakable, parbox=false } }&#xa;</xsl:text>
         <xsl:text>\newtcolorbox{divisionexerciseeg}[4]</xsl:text>
-        <xsl:text>{divisionexerciseegstyle, before title={\hspace{-5ex}\makebox[5ex][l]{#1.}}, title={\notblank{#2}{#2\space}{}}, phantom={\hypertarget{#4}{}}, after={\notblank{#3}{\newline\rule{\workspacestrutwidth}{#3\textheight}\newline}{}}}&#xa;</xsl:text>
+        <xsl:text>{divisionexerciseegstyle, before title={\hspace{-5ex}\makebox[5ex][l]{#1.}}, title={\notblank{#2}{#2\space}{}}, phantom={</xsl:text>
+        <xsl:if test="$b-pageref">
+            <xsl:text>\label{#4}</xsl:text>
+        </xsl:if>
+        <xsl:text>\hypertarget{#4}{}}, after={\notblank{#3}{\newline\rule{\workspacestrutwidth}{#3\textheight}\newline}{}}}&#xa;</xsl:text>
     </xsl:if>
     <!-- Division Exercise, Exercise Group, Columnar -->
     <!-- Explicity unbreakable, to behave in multicolumn tcbraster -->
@@ -1305,7 +1360,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Division exercises, in exercise group with columns&#xa;</xsl:text>
         <xsl:text>\tcbset{ divisionexerciseegcolstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, left=5ex, halign=flush left, unbreakable, parbox=false } }&#xa;</xsl:text>
         <xsl:text>\newtcolorbox{divisionexerciseegcol}[4]</xsl:text>
-        <xsl:text>{divisionexerciseegcolstyle, before title={\hspace{-5ex}\makebox[5ex][l]{#1.}}, title={\notblank{#2}{#2\space}{}}, phantom={\hypertarget{#4}{}}, after={\notblank{#3}{\newline\rule{\workspacestrutwidth}{#3\textheight}\newline}{}}}&#xa;</xsl:text>
+        <xsl:text>{divisionexerciseegcolstyle, before title={\hspace{-5ex}\makebox[5ex][l]{#1.}}, title={\notblank{#2}{#2\space}{}}, phantom={</xsl:text>
+        <xsl:if test="$b-pageref">
+            <xsl:text>\label{#4}</xsl:text>
+        </xsl:if>
+        <xsl:text>\hypertarget{#4}{}}, after={\notblank{#3}{\newline\rule{\workspacestrutwidth}{#3\textheight}\newline}{}}}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$document-root//exercise[@workspace]">
         <xsl:text>%% Worksheet exercises may have workspaces&#xa;</xsl:text>
@@ -2614,7 +2673,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>} }&#xa;</xsl:text>
     <xsl:text>\newtcolorbox{proofptx}[2]{title={\notblank{#1}{#1}{</xsl:text>
     <xsl:apply-templates select="." mode="type-name"/>
-    <xsl:text>.}}, phantom={\hypertarget{#2}{}}, breakable, parbox=false, proofstyle }&#xa;</xsl:text>
+    <xsl:text>.}}, phantom={</xsl:text>
+    <xsl:if test="$b-pageref">
+        <xsl:text>\label{#2}</xsl:text>
+    </xsl:if>
+    <xsl:text>\hypertarget{#2}{}}, breakable, parbox=false, proofstyle }&#xa;</xsl:text>
 </xsl:template>
 
 <!-- "case" (of a proof) -->
@@ -2626,7 +2689,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\NewDocumentEnvironment{case}{mmm}&#xa;</xsl:text>
     <xsl:text>{\par\medskip\noindent\notblank{#1}{#1\space{}}{}\textit{\notblank{#2}{#2\space{}}{}\notblank{#1#2}{}{</xsl:text>
     <xsl:apply-templates select="." mode="type-name"/>
-    <xsl:text>.\space{}}}\hypertarget{#3}{}}{}&#xa;</xsl:text>
+    <xsl:text>.\space{}}}</xsl:text>
+    <xsl:if test="$b-pageref">
+        <xsl:text>\label{#3}</xsl:text>
+    </xsl:if>
+    <xsl:text>\hypertarget{#3}{}}{}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- "objectives" -->
@@ -2660,7 +2727,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>} }&#xa;</xsl:text>
     <xsl:text>\newtcolorbox{backcolophon}[1]{title={</xsl:text>
     <xsl:apply-templates select="." mode="type-name"/>
-    <xsl:text>}, phantom={\hypertarget{#1}{}}, breakable, parbox=false, backcolophonstyle}&#xa;</xsl:text>
+    <xsl:text>}, phantom={</xsl:text>
+    <xsl:if test="$b-pageref">
+        <xsl:text>\label{#1}</xsl:text>
+    </xsl:if>
+    <xsl:text>\hypertarget{#1}{}}, breakable, parbox=false, backcolophonstyle}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- "assemblage" -->
@@ -2711,7 +2782,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\titleformat{\subparagraph}[runin]{\normalfont\normalsize\bfseries}{\thesubparagraph}{1em}{#1}&#xa;</xsl:text>
     <xsl:text>\titlespacing*{\subparagraph}{0pt}{3.25ex plus 1ex minus .2ex}{1em}&#xa;</xsl:text>
     <xsl:text>\NewDocumentEnvironment{paragraphs}{mm}&#xa;</xsl:text>
-    <xsl:text>{\subparagraph*{#1}\hypertarget{#2}{}}{}&#xa;</xsl:text>
+    <xsl:text>{\subparagraph*{#1}</xsl:text>
+    <xsl:if test="$b-pageref">
+        <xsl:text>\label{#2}</xsl:text>
+    </xsl:if>
+    <xsl:text>\hypertarget{#2}{}}{}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- ASIDE-LIKE: "aside", "historical", "biographical" -->
@@ -3275,12 +3350,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <xsl:when test="$b-has-toc">
             <xsl:text>%% Target for xref to top-level element is ToC&#xa;</xsl:text>
-            <xsl:text>\addtocontents{toc}{\protect\hypertarget{</xsl:text>
+            <xsl:text>\addtocontents{toc}{</xsl:text>
+            <xsl:if test="$b-pageref">
+                <xsl:text>\protect\label{</xsl:text>
+                <xsl:apply-templates select="." mode="latex-id" />
+                <xsl:text>}</xsl:text>
+            </xsl:if>
+            <xsl:text>\protect\hypertarget{</xsl:text>
             <xsl:apply-templates select="." mode="latex-id" />
-            <xsl:text>}{}}&#xa;</xsl:text>
+            <xsl:text>}{}</xsl:text>
+            <xsl:text>}&#xa;</xsl:text>
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>%% Target for xref to top-level element is document start&#xa;</xsl:text>
+            <xsl:if test="$b-pageref">
+                <xsl:text>\label{</xsl:text>
+                <xsl:apply-templates select="." mode="latex-id" />
+                <xsl:text>}</xsl:text>
+            </xsl:if>
             <xsl:text>\hypertarget{</xsl:text>
             <xsl:apply-templates select="." mode="latex-id" />
             <xsl:text>}{}&#xa;</xsl:text>
@@ -9614,7 +9701,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="latex-id" />
             <xsl:text>}</xsl:text>
         </xsl:when>
+        <!-- Objects cross-referenced outside of LaTeX's usual     -->
+        <!-- scheme need a \hypertarget, but for page numbers      -->
+        <!-- in cross-references, we need a traditional label.     -->
         <xsl:otherwise>
+            <xsl:if test="$b-pageref">
+                <xsl:text>\label{</xsl:text>
+                <xsl:apply-templates select="." mode="latex-id" />
+                <xsl:text>}{}</xsl:text>
+            </xsl:if>
             <xsl:text>\hypertarget{</xsl:text>
             <xsl:apply-templates select="." mode="latex-id" />
             <xsl:text>}{}</xsl:text>
@@ -9860,6 +9955,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>}</xsl:text>
             <xsl:text>{</xsl:text>
             <xsl:value-of select="$content" />
+            <xsl:text>}</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="xref" mode="latex-page-number">
+    <xsl:param name="target"/>
+
+    <xsl:choose>
+        <!-- looks bad when bibliographic number gets wrapped in [] -->
+        <!-- and the number should suffice on its own               -->
+        <xsl:when test="$target/self::biblio"/>
+        <!-- and trailing a () for an equation number is overkill -->
+        <xsl:when test="$target/self::mrow|$target/self::men"/>
+        <!-- and it is really bad for an xref inside a title -->
+        <xsl:when test="ancestor::title"/>
+        <!-- off by default electronic PDF, -->
+        <!-- or on by default for print PDF -->
+        <xsl:when test="not($b-pageref)"/>
+        <!-- OK, requested and helps, let's add it -->
+        <xsl:otherwise>
+            <xsl:text>, p.\,\pageref{</xsl:text>
+            <xsl:apply-templates select="$target" mode="latex-id"/>
             <xsl:text>}</xsl:text>
         </xsl:otherwise>
     </xsl:choose>

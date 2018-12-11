@@ -8614,6 +8614,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <xsl:message>MBX:BUG:  NO XREF TEXT GENERATED</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
+    <xsl:apply-templates select="." mode="latex-page-number">
+        <xsl:with-param name="target" select="$target"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- "xref text" like "Theorem 4.5" benefits from a non-breaking   -->
@@ -8632,6 +8635,11 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
+
+<!-- This is a hook to add page numbers to the end of the    -->
+<!-- xref text in LaTeX output via a \pageref{}, optionally. -->
+<!-- Default for this hook is to do nothing.                 -->
+<xsl:template match="xref" mode="latex-page-number"/>
 
 
 <!-- ###################### -->
