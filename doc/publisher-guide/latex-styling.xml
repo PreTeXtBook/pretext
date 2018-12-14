@@ -98,6 +98,16 @@
         <p>The definition of this template will override (replace) the definition given in any imported stylesheet.  You can replace the value of the <attr>match</attr> attribute with <c>book</c> to make your style apply to a <pretext/> <tag>book</tag>.  If your style will be used for both books and articles, and you want the <c>plain</c> style to be identical for both, you can expand the <attr>match</attr> attribute to have the value <c>article|book</c>.  To have different <c>plain</c> styles for a book versus an article, make two separate templates.</p>
 
         <p>The <c>titleps</c> package allows at least twelve options per page style:  even-numbered page versus odd-numbered page with two-sided printing; left, center, right; header or footer.  There are semi-automatic customizable rules, variable widths allowing hanging styles, choices of marks (division at page-start versus division at page-end versus new-division-mid-page, including combinations at the same time), and more.  Note that the <latex/> system of <c>\markleft</c> and <c>\markboth</c> has been abandonded.  (Did I hear you say, <q>Good riddance!</q>?)</p>
+        
+        <p>
+          Some care must be taken with using <c>\thechapter</c> to get the chapter number, since strange things happen in the frontmatter and backmatter, where chapters are numberless.   One solutions is to use <c>\ifthechapter{}{}</c> which allows you to control the behavior dependent on whether there is a current chapter number.  For example, if you wanted the center of the even-numbered pages to contain <q>Chapter 3: Derivatives</q> you would use
+            <cline>\sethead[][\ifthechapter{Chapter \thechapter: }{}\chaptertitle][]{}{}{}</cline>
+          which would then just put <q>Index</q> in the index, and nothing at all in the preface.
+        </p>
+        
+        <p>
+          A similar approach could be used to deal with section numbers and titles in the case that the introduction of a chapter is multiple pages, using <c>\ifthesection{}{}</c>.
+        </p>
 
         <p>2019-09-30: we have not tested one-sided versus two-sided very rigoursly.  Please report problems.</p>
     </section>
