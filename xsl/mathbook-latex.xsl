@@ -1348,7 +1348,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- http://tex.stackexchange.com/questions/127914/custom-counter-steps-twice-when-invoked-from-caption-using-caption-package -->
     <!-- http://tex.stackexchange.com/questions/160207/side-effect-of-caption-package-with-custom-counter                         -->
     <!-- NB: sidebyside is to make a fixed floating enviroment, it should be replaced -->
-    <xsl:if test="$document-root//figure | $document-root//table | $document-root//listing | $document-root//list | $document-root//sidebyside">
+    <xsl:if test="$document-root//figure | $document-root//image | $document-root//table | $document-root//listing | $document-root//list | $document-root//sidebyside">
         <xsl:text>%% Figures, Tables, Listings, Named Lists, Floats&#xa;</xsl:text>
         <xsl:text>%% The [H]ere option of the float package fixes floats in-place,&#xa;</xsl:text>
         <xsl:text>%% in deference to web usage, where floats are totally irrelevant&#xa;</xsl:text>
@@ -1395,7 +1395,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- The "figure" counter is the lead for captioned items, -->
         <!-- so if these are distinct, we make this environment    -->
         <!-- just to make the counter, even if not explicitly used -->
-        <xsl:if test="$document-root//figure or $b-number-figure-distinct">
+        <!-- A bare image is implemented as a caption-less figure  -->
+        <xsl:if test="$document-root//figure or $document-root//image or $b-number-figure-distinct">
             <xsl:text>%% Adjust stock figure environment so that it no longer floats&#xa;</xsl:text>
             <xsl:text>\SetupFloatingEnvironment{figure}{fileext=lof,placement={H},within=</xsl:text>
             <xsl:choose>
