@@ -267,14 +267,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     }</xsl:text>
 </xsl:template>
 
-<!-- This is cribbed from Section 8 of "titleps.pdf" (2016-03-15) -->
+<!-- This is based from Section 8 of "titleps.pdf" (2016-03-15) -->
+<!-- Modified to include \ifthechapter and \ifthesection -->
 <xsl:template match="book" mode="titleps-headings">
     <xsl:text>[\small\sffamily]{
     \sethead[\textbf{\thepage}]
-    [\textsl{\chaptertitle}]
-    [\toptitlemarks\thesection--\bottitlemarks\thesection]
-    {\toptitlemarks\thesection--\bottitlemarks\thesection]}
-    {\textsl{\sectiontitle}}
+    [\ifthechapter{\textsl{Chapter \thechapter: \chaptertitle}}{\textsl{\chaptertitle}}]
+    [\ifthesection{\toptitlemarks\thesection--\bottitlemarks\thesection}{}]
+    {\ifthesection{\toptitlemarks\thesection--\bottitlemarks\thesection}{}}
+    {\ifthesection{\textsl{\sectiontitle}}{\chaptertitle}}
     {\textbf{\thepage}}
     \setfoot[foot/even/headings/book][][]
     {foot/odd or one-sided/headings/book}{}{}
