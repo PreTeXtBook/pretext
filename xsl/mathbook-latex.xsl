@@ -7152,7 +7152,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Pipe (Vertical Bar) -->
 <xsl:template name="pipe-character">
-    <xsl:text>\textbar</xsl:text>
+    <xsl:text>\textbar{}</xsl:text>
 </xsl:template>
 
 <!-- Other Miscellaneous Symbols, Constructions -->
