@@ -458,7 +458,7 @@ def webwork_to_xml(xslt_exec, ptx_xsl_dir, xml_source, server_params, dest_dir):
             msg = "There was a problem collecting a problem,\n Server: {}\nRequest Parameters: {}\n"
             raise ValueError(msg.format(wwurl, server_params) + root_cause)
 
-        # Obtained static, check for errors with PG processing
+        # Check for errors with PG processing
         # First, get booleans file_empty, no_compile, and bad_xml
         file_empty = 'ERROR:  This problem file was empty!' in response.text
         no_compile = 'ERROR caught by Translator while processing problem file:' in response.text
@@ -469,7 +469,7 @@ def webwork_to_xml(xslt_exec, ptx_xsl_dir, xml_source, server_params, dest_dir):
             msg = 'failed to import ElementTree from xml.etree'
             raise ValueError(msg)
         try:
-            x = ElementTree.fromstring(response.text)
+            x = ElementTree.fromstring(response.text.encode('utf-8'))
         except:
             bad_xml = True
 
@@ -482,14 +482,50 @@ def webwork_to_xml(xslt_exec, ptx_xsl_dir, xml_source, server_params, dest_dir):
             if file_empty:
                 raise ValueError(file_empty_msg.format(problem_identifier))
             if no_compile:
-                raise ValueError(no_compile_msg.format(problem_identifier, seed[problem], pg[problem]))
+                raise ValueError(no_compile_msg.format(problem_identifier, seed[problem], response.text))
             if bad_xml:
                 raise ValueError(bad_xml_msg.format(problem_identifier, seed[problem], response.text))
 
-        # Otherwise...
+        # When a PG Math Object is a text string that has to be rendered in a math environment,
+        # it is wrapped like this: \verb\x85string\x85.
+        # The first thing we want to do is replace all instances with \text{string}.
+        # But \text does not behave equivalently in tex and MathJax.
+        # Certain characters _need_ to be escaped in TeX, but must _not_ be escaped in MathJax.
+        # So we only make the change after checking that none of the dangerous characters are present.
+
+        verbatim_split = re.split(r'(\\verb\x85.*?\x85)', response.text)
+        response_text = ''
+        for item in verbatim_split:
+            if re.compile(r'(\\verb\x85.*?\x85)').match(item):
+                verbatim_content = re.findall(r'\\verb\x85(.*?)\x85', item)[0]
+                if set(['#', '%', '&', '<', '>', '\\', '^', '_', '`', '|', '~']).intersection(set(list(verbatim_content))):
+                    index = 33
+                    while index < 127:
+                        if index in [42, 34, 38, 39, 59, 60, 62] or chr(index) in verbatim_content:
+                            # the one character you cannot use with \verb as a delimiter is chr(42), *
+                            # the others excluded here are the XML control characters,
+                            # and semicolon for good measure (as the closer for escaped characters)
+                            index += 1
+                        else:
+                            break
+                    if index == 127:
+                        print('PTX:WARNING: Could not find delimiter for verbatim expression')
+                        return '!Could not find delimiter for verbatim expression.!'
+                    else:
+                        response_text += item.replace(u'\x85', chr(index))
+                else:
+                    # These three characters are escaped in both TeX and MathJax
+                    text_content = verbatim_content.replace('$', '\\$')
+                    text_content = text_content.replace('{', '\\{')
+                    text_content = text_content.replace('}', '\\}')
+                    response_text += '\\text{' + text_content + '}'
+            else:
+                response_text += item
+
+        # Now if we are not aborting upon recoverable errors
         if not file_empty and not no_compile and not bad_xml:
             # add to dictionary
-            static[problem] = response.text
+            static[problem] = response_text
             # strip out actual PTX code between markers
             start = start_marker.split(static[problem], maxsplit=1)
             static[problem] = start[1]
@@ -517,6 +553,47 @@ def webwork_to_xml(xslt_exec, ptx_xsl_dir, xml_source, server_params, dest_dir):
             if title:
                 title = title.group(1)
                 static[problem] = static[problem].replace('<static>\n','<static>\n' + title + '\n\n')
+
+        # Convert answerhashes XML to a sequence of answer elements
+        # This is crude text operation on the XML
+        # If correct_ans_latex_string is nonempty, use it, encased in <p><m>
+        # Else if correct_ans is nonempty, use it, encased in just <p>
+        # Else we have no answer to print out
+        answerhashes = re.findall(r'<AnSwEr\d+ (.*?) />', static[problem])
+        if answerhashes:
+            answer = ''
+            for answerhash in answerhashes:
+                try:
+                    correct_ans = re.search('correct_ans="(.*?)"', answerhash).group(1)
+                except:
+                    correct_ans = ''
+                try:
+                    correct_ans_latex_string = re.search('correct_ans_latex_string="(.*?)"', answerhash).group(1)
+                except:
+                    correct_ans_latex_string = ''
+
+                if correct_ans_latex_string != '' or correct_ans != '':
+                    answer += "<answer>\n  <p>"
+                    if correct_ans_latex_string == '':
+                        answer += correct_ans
+                    else:
+                        answer += '<m>' + correct_ans_latex_string + '</m>'
+                    answer += "</p>\n</answer>\n"
+
+            # Now we need to cut out the answerhashes that came from the server.
+            beforehashes = re.compile('<answerhashes>').split(static[problem])
+            beforehashes = beforehashes[0]
+            afterhashes = re.compile('</answerhashes>').split(static[problem])
+            afterhashes = afterhashes[1]
+            static[problem] = beforehashes + afterhashes
+
+            # We don't just replace it with the answer we just built. To be
+            # schema-compliant, the answer should come right after the latter of
+            # (last closing statement, last closing hint)
+            # By reversing the string, we can just target first match
+            reverse = static[problem][::-1]
+            parts = re.split(r"(\n>tnemetats/<|\n>tnih/<)",reverse, 1)
+            static[problem] = parts[2][::-1] + parts[1][::-1] + answer + parts[0][::-1]
 
         # nice to know what seed was used
         static[problem] = static[problem].replace('<static', '<static seed="' + seed[problem] + '"')
