@@ -852,24 +852,7 @@
     <xsl:if test="(count(preceding-sibling::*)+count(preceding-sibling::text()))=0 and parent::p/parent::statement">
         <xsl:text>    </xsl:text>
     </xsl:if>
-    <xsl:text>[</xsl:text>
-    <!-- for small width, print underscores; otherwise, specify by number -->
-    <xsl:choose>
-        <xsl:when test="$width &lt; 13">
-            <xsl:call-template name="duplicate-string">
-                <xsl:with-param name="count" select="$width" />
-                <xsl:with-param name="text"  select="'_'" />
-            </xsl:call-template>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>_</xsl:text> <!-- width specified after evaluator -->
-            <!-- NECESSARY? -->
-            <xsl:if test="$b-verbose">
-                <xsl:text>_</xsl:text>
-            </xsl:if>
-        </xsl:otherwise>
-    </xsl:choose>
-    <xsl:text>]</xsl:text>
+    <xsl:text>[_]</xsl:text>
     <!-- multiplier for MathObjects like Matrix, Vector, ColumnVector -->
     <xsl:if test="@form='array'">
         <xsl:text>*</xsl:text>
@@ -884,18 +867,9 @@
         </xsl:otherwise>
     </xsl:choose>
     <xsl:text>}</xsl:text>
-    <xsl:if test="$width &gt; 12">
-        <xsl:choose>
-            <xsl:when test="$b-verbose">
-                <xsl:text>{width => </xsl:text>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>{width=></xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-        <xsl:value-of select="$width"/>
-        <xsl:text>}</xsl:text>
-    </xsl:if>
+    <xsl:text>{</xsl:text>
+    <xsl:value-of select="$width"/>
+    <xsl:text>}</xsl:text>
 </xsl:template>
 
 <!-- Checkbox answers -->
