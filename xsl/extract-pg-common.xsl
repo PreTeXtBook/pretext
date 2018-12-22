@@ -1472,10 +1472,10 @@
     <xsl:param name="b-verbose" />
     <xsl:choose>
         <xsl:when test="$b-verbose">
-            <xsl:text>[@MODES(HTML =&gt; '\(\mathrm\LaTeX\)', TeX =&gt; '\LaTeX', PTX =&gt; '&lt;latex/&gt;')@]*</xsl:text>
+            <xsl:text>[$LATEX]*</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:text>[@MODES(HTML=&gt;'\(\mathrm\LaTeX\)',TeX=&gt;'\LaTeX', PTX=&gt;'&lt;latex/&gt;')@]*</xsl:text>
+            <xsl:text>[$TEX]*</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
