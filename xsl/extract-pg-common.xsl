@@ -1566,7 +1566,8 @@
 <!-- * -, + Escape these if they are the first non-white space       -->
 <!--       character on a line or they will start an unordered list. -->
 <!--                                                                 -->
-<!-- * ```  three backticks start "code" (seems not?, unimplemented) -->
+<!-- * ```  three backticks start and end "code" which is more like  -->
+<!--        PTX pre                                                  -->
 <!--                                                                 -->
 <!-- * :  A line opening with a colon and two (three) spaces makes   -->
 <!--      preformatted text. (not really a verbatim block)           -->
@@ -1593,6 +1594,7 @@
 <xsl:template name="greater-character">
     <xsl:text>&gt;</xsl:text>
 </xsl:template>
+
 <!-- Percent sign -->
 <xsl:template name="percent-character">
     <xsl:text>%</xsl:text>
@@ -1737,14 +1739,48 @@
     </xsl:choose>
 </xsl:template>
 
+<!-- Lines of Code -->
+<!-- Note this contruct uses PGML ```,                   -->
+<!-- so it will return with the encompassing p closed,   -->
+<!-- and inside a pre. WeBWorK doesn't really know where -->
+<!-- p's open and close, so we can't hop to return cd.   -->
+<xsl:template match="cd">
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:call-template name="potential-list-indent" />
+    <xsl:text>```&#xa;</xsl:text>
+    <!-- Subsequent lines of PGML should not be indented -->
+    <xsl:choose>
+        <xsl:when test="cline">
+            <xsl:apply-templates select="cline" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:call-template name="sanitize-text">
+                <xsl:with-param name="text" select="." />
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>```&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="cline">
+    <xsl:variable name="trimmed-text">
+        <xsl:call-template name="sanitize-text">
+            <xsl:with-param name="text" select="." />
+        </xsl:call-template>
+    </xsl:variable>
+    <!-- Remove carriage return, then append three spaces and carriage return for PGML line break -->
+    <xsl:value-of select="concat(substring($trimmed-text, 1, string-length($trimmed-text) - 1),'   &#xa;')"/>
+</xsl:template>
+
+
 <!-- Preformatted Text -->
 <!-- Sanitization analyzes *all* lines for left margin. -->
 <xsl:template match="pre">
-    <xsl:text>```</xsl:text>
+    <xsl:text>```&#xa;</xsl:text>
     <xsl:call-template name="sanitize-text">
         <xsl:with-param name="text" select="." />
     </xsl:call-template>
-    <xsl:text>```&#xa;</xsl:text>
+    <xsl:text>```&#xa;&#xa;</xsl:text>
 </xsl:template>
 
 <!-- The next three are WW macros that PGML will format  -->
