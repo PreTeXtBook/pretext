@@ -131,6 +131,7 @@ function validateLogin() {
     if (logged_in) {
         document.getElementById('loginlogout').innerHTML = 'logout';
         loadScript('answer');
+        loadScript('highlight');
         if ((typeof trails !== 'undefined') && trails) {
             loadScript('trails');
         }
@@ -177,6 +178,7 @@ if (ut_id) {
     document.getElementById('loginlogout').innerHTML = 'logout';
     console.log("done hiding "+ut_id);
     loadScript('answer');
+    loadScript('highlight');
     if ((typeof trails !== 'undefined') && trails) {
             loadScript('trails');
     }
