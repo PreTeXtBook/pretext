@@ -108,17 +108,21 @@ function enclosing_p_or_li(obj) {
 // the structure of the paragraph.
 async function display_one_highlight(parent_id, hl) {
             console.log("setting", hl, "on", parent_id);
-            st_node_ind = hl['start_nn'];
-            st_offset = hl['start_offset'];
-            end_node_ind = hl['end_nn'];
-            end_offset = hl['end_offset'];
-            // error checks: same parent
+            var st_node_ind = hl['start_nn'];
+            var st_offset = hl['start_offset'];
+            var end_node_ind = hl['end_nn'];
+            var end_offset = hl['end_offset'];
+            var the_parent = document.getElementById(parent_id);
+            // other error checks: same parent
+            if (st_offset < 0 || st_offset > the_parent.childNodes[st_node_ind].textContent.length || end_offset < 0 || end_offset > the_parent.childNodes[end_node_ind].textContent.length) {
+                return
+            }
+
             let this_range = document.createRange();
-            the_parent = document.getElementById(parent_id);
             console.log("setting this_range.setStart", the_parent.childNodes[st_node_ind], "with offset", st_offset, "out of", the_parent.childNodes[st_node_ind].textContent.length);
             this_range.setStart(the_parent.childNodes[st_node_ind], st_offset);
             this_range.setEnd(the_parent.childNodes[end_node_ind], end_offset);
-            inside_part = document.createElement("span")
+            var inside_part = document.createElement("span")
             inside_part.classList.add("hl");
             inside_part.id = hl['id'];
             this_range.surroundContents(inside_part);
