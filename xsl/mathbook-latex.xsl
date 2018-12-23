@@ -7864,7 +7864,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     <xsl:text>\begin{sbspanel}{</xsl:text>
     <xsl:value-of select="substring-before($width,'%') div 100" />
-    <xsl:text>}%</xsl:text>
+    <xsl:text>}</xsl:text>
     <!-- 'top' is the sbspanel environment default -->
     <!-- could generate brackets of optional       -->
     <!-- argument outside of the choose            -->
@@ -7877,7 +7877,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>[bottom]</xsl:text>
         </xsl:when>
     </xsl:choose>
-    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>%&#xa;</xsl:text>
     <xsl:apply-templates select="." mode="panel-latex-box" />
     <xsl:text>\end{sbspanel}%&#xa;</xsl:text>
 </xsl:template>
