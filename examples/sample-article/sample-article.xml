@@ -278,7 +278,6 @@ the xsltproc executable.
 
         <section>
             <title>Introduction</title>
-            <shorttitle>foo</shorttitle>
 
             <!--
             URLs can be done in a traditional fashion, as in the
@@ -1645,6 +1644,8 @@ the xsltproc executable.
 
         <section>
             <title>Special, Reserved, and Escape Characters</title>
+            <shorttitle>Special Characters</shorttitle>
+
 
             <subsection xml:id="subsection-reserved-characters">
                 <title>Reserved Characters</title>
