@@ -7235,42 +7235,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\textasciigrave{}</xsl:text>
 </xsl:template>
 
-<!-- We override all 13 Latin abbreviations, in order -->
-<!-- to handle the periods correctly, as necessary    -->
+<!-- All Latin abbreviations are defined in -common    -->
+<!-- since they are largely very simple.  But we       -->
+<!-- implement the final period with a named template, -->
+<!-- so we can get better behavior from LaTeX, mostly  -->
+<!-- avoiding confusion with the end of a sentence.    -->
 
-<!-- \@ following a period makes it an abbreviation, not the end of a sentence -->
-<!-- So use it for abbreviations which will not end a sentence                 -->
-<!-- Best: \makeatletter\newcommand\etc{etc\@ifnextchar.{}{.\@}}\makeatother   -->
-<!-- http://latex-alive.tumblr.com/post/827168808/correct-punctuation-spaces   -->
+<!-- \@ following a period makes it an abbreviation, not the end of          -->
+<!-- a sentence. So use it for abbreviations which will not end a sentence   -->
+<!-- Best: \makeatletter\newcommand\etc{etc\@ifnextchar.{}{.\@}}\makeatother -->
+<!-- http://latex-alive.tumblr.com/post/827168808/                           -->
+<!-- correct-punctuation-spaces                                              -->
+<!-- https://tex.stackexchange.com/questions/22561/                          -->
+<!-- what-is-the-proper-use-of-i-e-backslash-at                              -->
 
-<!-- anno Domini, in the year of the Lord -->
-<xsl:template match="ad">    <xsl:text>AD</xsl:text></xsl:template>
-<!-- ante meridiem, before midday -->
-<xsl:template match="am">    <xsl:text>A.M.\@</xsl:text></xsl:template>
-<!-- before Christ? -->
-<xsl:template match="bc">    <xsl:text>BC</xsl:text></xsl:template>
-<!-- circa, about -->
-<xsl:template match="circa"> <xsl:text>c.\@</xsl:text></xsl:template>
-<!-- exempli gratia, for example -->
-<xsl:template match="eg">    <xsl:text>e.g.\@</xsl:text></xsl:template>
-<!-- et alia, and others -->
-<xsl:template match="etal">  <xsl:text>et al.\@</xsl:text></xsl:template>
-<!-- et caetera, and the rest -->
-<xsl:template match="etc">   <xsl:text>etc.\@</xsl:text></xsl:template>
-<!-- id est, in other words -->
-<xsl:template match="ie">    <xsl:text>i.e.\@</xsl:text></xsl:template>
-<!-- nota bene, note well -->
-<xsl:template match="nb">    <xsl:text>N.B.\@</xsl:text></xsl:template>
-<!-- post meridiem, after midday -->
-<xsl:template match="pm">    <xsl:text>P.M.\@</xsl:text></xsl:template>
-<!-- post scriptum, after what has been written -->
-<xsl:template match="ps">    <xsl:text>P.S.\@</xsl:text></xsl:template>
-<!-- versus, against -->
-<xsl:template match="vs">    <xsl:text>vs.\@</xsl:text></xsl:template>
-<!-- videlicet, namely -->
-<xsl:template match="viz">   <xsl:text>viz.\@</xsl:text></xsl:template>
-
-
+<xsl:template name="abbreviation-period">
+    <xsl:text>.\@</xsl:text>
+</xsl:template>
 
 <!-- Copyright symbol -->
 <!-- http://tex.stackexchange.com/questions/1676/how-to-get-good-looking-copyright-and-registered-symbols -->

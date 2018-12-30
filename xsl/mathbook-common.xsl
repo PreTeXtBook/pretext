@@ -8450,37 +8450,79 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:text>PreTeXt</xsl:text>
 </xsl:template>
 
-<!-- We place the 13 Latin abbreviations here since they  -->
-<!-- are so simple, however, we override them all in the  -->
-<!-- LaTeX conversion, since most need special treatment  -->
-<!-- of the periods. -->
+<!-- We place the 13 Latin abbreviations here since they -->
+<!-- are fairly basic.  The final period is implemented  -->
+<!-- as a named template, so we can override it in the   -->
+<!-- LaTeX conversion and get reasonable behavior (i.e.  -->
+<!-- not confused as the end of a sentence).             -->
+
+<xsl:template name="abbreviation-period">
+    <xsl:text>.</xsl:text>
+</xsl:template>
 
 <!-- anno Domini, in the year of the Lord -->
-<xsl:template match="ad">    <xsl:text>AD</xsl:text></xsl:template>
+<xsl:template match="ad">
+    <xsl:text>AD</xsl:text>
+</xsl:template>
 <!-- ante meridiem, before midday -->
-<xsl:template match="am">    <xsl:text>A.M.</xsl:text></xsl:template>
+<xsl:template match="am">
+    <xsl:text>A.M</xsl:text>
+    <xsl:call-template name="abbreviation-period"/>
+</xsl:template>
 <!-- before Christ? -->
-<xsl:template match="bc">    <xsl:text>BC</xsl:text></xsl:template>
+<xsl:template match="bc">
+    <xsl:text>BC</xsl:text>
+</xsl:template>
 <!-- circa, about -->
-<xsl:template match="circa"> <xsl:text>c.</xsl:text></xsl:template>
+<xsl:template match="circa">
+ <xsl:text>c</xsl:text>
+    <xsl:call-template name="abbreviation-period"/>
+</xsl:template>
 <!-- exempli gratia, for example -->
-<xsl:template match="eg">    <xsl:text>e.g.</xsl:text></xsl:template>
+<xsl:template match="eg">
+    <xsl:text>e.g</xsl:text>
+    <xsl:call-template name="abbreviation-period"/>
+</xsl:template>
 <!-- et alia, and others -->
-<xsl:template match="etal">  <xsl:text>et al.</xsl:text></xsl:template>
+<xsl:template match="etal">
+    <xsl:text>et al</xsl:text>
+    <xsl:call-template name="abbreviation-period"/>
+</xsl:template>
 <!-- et caetera, and the rest -->
-<xsl:template match="etc">   <xsl:text>etc.</xsl:text></xsl:template>
+<xsl:template match="etc">
+    <xsl:text>etc</xsl:text>
+    <xsl:call-template name="abbreviation-period"/>
+</xsl:template>
 <!-- id est, in other words -->
-<xsl:template match="ie">    <xsl:text>i.e.</xsl:text></xsl:template>
+<xsl:template match="ie">
+    <xsl:text>i.e</xsl:text>
+    <xsl:call-template name="abbreviation-period"/>
+</xsl:template>
 <!-- nota bene, note well -->
-<xsl:template match="nb">    <xsl:text>N.B.</xsl:text></xsl:template>
+<xsl:template match="nb">
+    <xsl:text>N.B</xsl:text>
+    <xsl:call-template name="abbreviation-period"/>
+</xsl:template>
 <!-- post meridiem, after midday -->
-<xsl:template match="pm">    <xsl:text>P.M.</xsl:text></xsl:template>
+<xsl:template match="pm">
+    <xsl:text>P.M</xsl:text>
+    <xsl:call-template name="abbreviation-period"/>
+</xsl:template>
 <!-- post scriptum, after what has been written -->
-<xsl:template match="ps">    <xsl:text>P.S.</xsl:text></xsl:template>
+<xsl:template match="ps">
+    <xsl:text>P.S</xsl:text>
+    <xsl:call-template name="abbreviation-period"/>
+</xsl:template>
 <!-- versus, against -->
-<xsl:template match="vs">    <xsl:text>vs.</xsl:text></xsl:template>
+<xsl:template match="vs">
+    <xsl:text>vs</xsl:text>
+    <xsl:call-template name="abbreviation-period"/>
+</xsl:template>
 <!-- videlicet, namely -->
-<xsl:template match="viz">   <xsl:text>viz.</xsl:text></xsl:template>
+<xsl:template match="viz">
+    <xsl:text>viz</xsl:text>
+    <xsl:call-template name="abbreviation-period"/>
+</xsl:template>
 
 <!-- ################## -->
 <!-- Special Characters -->
