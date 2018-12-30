@@ -3122,7 +3122,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- And its CSS class -->
 <xsl:template match="&PROJECT-LIKE;" mode="body-css-class">
-    <xsl:text>example-like</xsl:text>
+    <xsl:text>project-like</xsl:text>
 </xsl:template>
 
 <!-- When born hidden, block-level -->
@@ -3189,7 +3189,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
 
     <xsl:if test="not($dry-run = '')">
-        <article class="example-like">
+        <article class="project-like">
             <xsl:apply-templates select="." mode="heading-birth" />
 
             <xsl:choose>
