@@ -8456,26 +8456,32 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- LaTeX conversion and get reasonable behavior (i.e.  -->
 <!-- not confused as the end of a sentence).             -->
 
+<!-- See: Chicago Manual of Style, 15e, 15.44, 15.55     -->
+<!-- See: Bringhurst, 4e, 5.4.4                          -->
+
 <xsl:template name="abbreviation-period">
     <xsl:text>.</xsl:text>
 </xsl:template>
 
 <!-- anno Domini, in the year of the Lord -->
+<!-- CMOS, Bringurst 5.4.4, no periods    -->
 <xsl:template match="ad">
     <xsl:text>AD</xsl:text>
 </xsl:template>
-<!-- ante meridiem, before midday -->
+<!-- ante meridiem, before midday      -->
+<!-- CMOS, Bringurst 5.4.4, no periods -->
 <xsl:template match="am">
-    <xsl:text>A.M</xsl:text>
-    <xsl:call-template name="abbreviation-period"/>
+    <xsl:text>AM</xsl:text>
 </xsl:template>
-<!-- before Christ? -->
+<!-- before Christ                     -->
+<!-- CMOS, Bringurst 5.4.4, no periods -->
 <xsl:template match="bc">
     <xsl:text>BC</xsl:text>
 </xsl:template>
-<!-- circa, about -->
+<!-- circa, about                         -->
+<!-- CMOS, ca. preferable (c. is century) -->
 <xsl:template match="circa">
- <xsl:text>c</xsl:text>
+    <xsl:text>ca</xsl:text>
     <xsl:call-template name="abbreviation-period"/>
 </xsl:template>
 <!-- exempli gratia, for example -->
@@ -8499,21 +8505,22 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:call-template name="abbreviation-period"/>
 </xsl:template>
 <!-- nota bene, note well -->
+<!-- CMOS, no periods     -->
 <xsl:template match="nb">
-    <xsl:text>N.B</xsl:text>
-    <xsl:call-template name="abbreviation-period"/>
+    <xsl:text>NB</xsl:text>
 </xsl:template>
-<!-- post meridiem, after midday -->
+<!-- post meridiem, after midday       -->
+<!-- CMOS, Bringurst 5.4.4, no periods -->
 <xsl:template match="pm">
-    <xsl:text>P.M</xsl:text>
-    <xsl:call-template name="abbreviation-period"/>
+    <xsl:text>PM</xsl:text>
 </xsl:template>
 <!-- post scriptum, after what has been written -->
+<!-- CMOS, no periods                           -->
 <xsl:template match="ps">
-    <xsl:text>P.S</xsl:text>
-    <xsl:call-template name="abbreviation-period"/>
+    <xsl:text>PS</xsl:text>
 </xsl:template>
-<!-- versus, against -->
+<!-- versus, against                 -->
+<!-- CMOS, v. only in legal contexts -->
 <xsl:template match="vs">
     <xsl:text>vs</xsl:text>
     <xsl:call-template name="abbreviation-period"/>
