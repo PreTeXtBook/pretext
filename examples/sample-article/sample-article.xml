@@ -1745,6 +1745,16 @@ the xsltproc executable.
                 <p>(2018-10-09)  Experimental code is in place to make much of the preceding unnecessary.  In particular, it should be possible to use the folowing  characters straight from your keyboard, and without an <init>XML</init> element.  But remember, the three special <init>XML</init> characters need to actually be authored using the escaped versions.</p>
 
                 <p>&amp; &lt; &gt; # $ % ^ _ { } ~ \</p>
+
+                <p>We also disrupt certain constructions from <latex/>.  Attempting to sneak-in any traditional macro for the purposes of <latex/>-only output, such as, say a \newpage, will fail since the leading backslash will be caught and converted to <c>\textbackslash</c>.</p>
+
+                <p>Also, runs of consecutive hyphens, a so-called <q><tex/> ligature</q> will be converted to the intended hyphens.  Such as: - (one), -- (two), --- (three), ---- (four), ----- (five), ------ (six), ------- (seven).  Use the empty elements <tage>ndash</tage> and <tage>mdash</tage> for the longer dashes/hyphens.</p>
+
+                <p>Runs of apostrophes should not become smart right double quotes:  ' (one), '' (two), ''' (three), '''' (four), ''''' (five), '''''' (six), ''''''' (seven).    You might want to cut-and-paste these into a text file to convince yourself there are the right number of characters.  Here are two smart right double quotes, separated by a non-breaking space, for visual comparison: <rq/><nbsp/><rq/>.  Or 30 apostrophes on a line of their own (longer) followed by 15 smart right double quotes (shorter).</p>
+                <p>''''''''''''''''''''''''''''''.</p>
+                <p><rq/><rq/><rq/><rq/><rq/><rq/><rq/><rq/><rq/><rq/><rq/><rq/><rq/><rq/><rq/>.</p>
+
+                <p>Runs of backticks should not become smart left double quotes:  ` (one), `` (two), ``` (three), ```` (four), ````` (five), `````` (six), ``````` (seven).</p>
             </subsection>
 
             <subsection>

@@ -9900,6 +9900,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="pipe-character"/>
 </xsl:variable>
 
+<!-- Following for disruption of "TeX ligatures" -->
+<xsl:variable name="double-hyphen">
+    <text>--</text>
+</xsl:variable>
+<xsl:variable name="double-hyphen-replacement">
+    <text>-{}-{}</text>
+</xsl:variable>
+
+<xsl:variable name="double-apostrophe">
+    <text>''</text>
+</xsl:variable>
+<xsl:variable name="double-apostrophe-replacement">
+    <text>'{}'{}</text>
+</xsl:variable>
+
 <xsl:template name="text-processing">
     <xsl:param name="text"/>
     <!-- Strategy: braces first, then backslash is OK, then rest -->
@@ -9929,7 +9944,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="lbrace-fixed" select="str:replace($pipe-fixed,  $temp-left-brace, $lbrace-replacement)"/>
     <xsl:variable name="rbrace-fixed" select="str:replace($lbrace-fixed, $temp-right-brace, $rbrace-replacement)"/>
 
-    <xsl:value-of select="$rbrace-fixed"/>
+    <!-- We disrupt certain "TeX ligatures" - combinations of keyboard -->
+    <!-- characters which result in a single glyph in output           -->
+
+    <!-- Hyphens -->
+    <!-- An even number of hyphens will earn the same number of disrupting {} -->
+    <!-- An odd number of hyphens will earn one less disrupting {} -->
+    <!-- In particular, a single hyphen gets none -->
+    <xsl:variable name="hyphen-fixed"    select="str:replace($rbrace-fixed, $double-hyphen, $double-hyphen-replacement)"/>
+
+    <!-- Apostrophes -->
+    <!-- Should not be combined in pairs to become a single right -->
+    <!-- smart quote. Strategy is the same as for hyphens         -->
+    <xsl:variable name="apostrophe-fixed" select="str:replace($hyphen-fixed, $double-apostrophe, $double-apostrophe-replacement)"/>
+
+    <!-- Backticks -->
+    <!-- Should not be combined in pairs to become a single left smart -->
+    <!-- quote.  Replacement above by a macro will prevent this.       -->
+
+    <xsl:value-of select="$apostrophe-fixed"/>
 </xsl:template>
 
 
