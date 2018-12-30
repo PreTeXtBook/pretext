@@ -434,7 +434,7 @@
             </paragraphs>
 
             <paragraphs>
-                <title><tage>ie</tage>, <tage>eg</tage>, <tage>circa</tage>, <tage>vs</tage>, <tage>etc</tage>, <ie />, <eg />, <circa />, <vs />, <etc /></title>
+                <title><tage>ie</tage>, <tage>eg</tage>, <tage>ca</tage>, <tage>vs</tage>, <tage>etc</tage>, <ie />, <eg />, <ca />, <vs />, <etc /></title>
                 <p>A small collection of frequently-used Latin abbreviations, with attempts to handle the tricky periods wisely in <latex /> output.  Strictly speaking <bc /> is not Latin, but we include it for completeness.  Tags are always lowercase, no punctuation, usually two letters.</p>
                 <sidebyside>
                     <tabular>
