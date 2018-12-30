@@ -443,7 +443,7 @@
                         <row><cell><c>ad</c></cell>    <cell><ad/>    </cell><cell><foreign>anno Domini</foreign>, in the year of the Lord</cell>      </row>
                         <row><cell><c>am</c></cell>    <cell><am/>    </cell><cell><foreign>ante meridiem</foreign>, before midday</cell>              </row>
                         <row><cell><c>bc</c></cell>    <cell><bc/>    </cell><cell>English, before Christ</cell>                                       </row>
-                        <row><cell><c>circa</c></cell> <cell><circa/> </cell><cell><foreign>circa</foreign>, about</cell>                              </row>
+                        <row><cell><c>ca</c></cell>    <cell><ca/>    </cell><cell><foreign>circa</foreign>, about</cell>                              </row>
                         <row><cell><c>eg</c></cell>    <cell><eg/>    </cell><cell><foreign>exempli gratia</foreign>, for example</cell>               </row>
                         <row><cell><c>etal</c></cell>  <cell><etal/>  </cell><cell><foreign>et alia</foreign>, and others</cell>                       </row>
                         <row><cell><c>etc</c></cell>   <cell><etc/>   </cell><cell><foreign>et caetera</foreign>, and the rest</cell>                  </row>

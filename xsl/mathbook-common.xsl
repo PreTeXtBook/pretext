@@ -8480,7 +8480,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 </xsl:template>
 <!-- circa, about                         -->
 <!-- CMOS, ca. preferable (c. is century) -->
-<xsl:template match="circa">
+<!-- "circa" deprecated 2018-12-30        -->
+<xsl:template match="ca">
     <xsl:text>ca</xsl:text>
     <xsl:call-template name="abbreviation-period"/>
 </xsl:template>
@@ -9773,6 +9774,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'the  exercise.backmatter.*  parameters that control the visibility of components of exercises and projects in the back matter have been removed and replaced by the &quot;solutions&quot; element, which is much more versatile'"/>
             <xsl:with-param name="incorrect-use" select="not(($exercise.backmatter.statement = '') and ($exercise.backmatter.hint = '') and ($exercise.backmatter.answer = '') and ($exercise.backmatter.solution = ''))" />
     </xsl:call-template>
+    <!--  -->
+    <!-- 2018-12-30  circa shortened to ca -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//circa" />
+        <xsl:with-param name="date-string" select="'2018-12-30'" />
+        <xsl:with-param name="message" select="'the &quot;circa&quot; element has been replaced by the functionally equivalent &quot;ca&quot;'" />
+    </xsl:call-template>
 </xsl:template>
 
 <!-- Miscellaneous -->
@@ -9915,6 +9923,14 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 
 <!-- This where old elements go to die.        -->
 <!-- Deprecated, then totally discarded later. -->
+
+<!-- Deprecated 2018-12-30           -->
+<!-- Simultaneously changed to "ca." -->
+<xsl:template match="circa">
+ <xsl:text>ca</xsl:text>
+    <xsl:call-template name="abbreviation-period"/>
+</xsl:template>
+
 
 <!-- 2017-07-16  killed, from 2015-03-13 deprecation -->
 <xsl:template match="paragraph" />

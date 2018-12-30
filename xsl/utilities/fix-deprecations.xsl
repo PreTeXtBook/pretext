@@ -34,6 +34,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Deprecations that can be fixed with a transformation -->
 <!-- In reverse chronological order, with dates           -->
 
+<!-- 2018-12-30  circa shortened to ca -->
+<xsl:template match="circa">
+    <ca/>
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2018-12-30</xsl:with-param>
+        <xsl:with-param name="message">Replacing &lt;circa/&gt; by &lt;ca/&gt;</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
 <!-- 2018-05-02  sidebyside paragraphs to stack, preserve title -->
 <xsl:template match="sidebyside/paragraphs">
     <stack>

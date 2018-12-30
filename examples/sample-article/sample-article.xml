@@ -1741,7 +1741,7 @@ the xsltproc executable.
                         <row><cell><c>ad</c></cell>    <cell><ad/>    </cell><cell><foreign>anno Domini</foreign>, in the year of the Lord</cell>      </row>
                         <row><cell><c>am</c></cell>    <cell><am/>    </cell><cell><foreign>ante meridiem</foreign>, before midday</cell>              </row>
                         <row><cell><c>bc</c></cell>    <cell><bc/>    </cell><cell>English, before Christ</cell>                                       </row>
-                        <row><cell><c>circa</c></cell> <cell><circa/> </cell><cell><foreign>circa</foreign>, about</cell>                              </row>
+                        <row><cell><c>ca</c></cell>    <cell><ca/>    </cell><cell><foreign>circa</foreign>, about</cell>                              </row>
                         <row><cell><c>eg</c></cell>    <cell><eg/>    </cell><cell><foreign>exempli gratia</foreign>, for example</cell>               </row>
                         <row><cell><c>etal</c></cell>  <cell><etal/>  </cell><cell><foreign>et alia</foreign>, and others</cell>                       </row>
                         <row><cell><c>etc</c></cell>   <cell><etc/>   </cell><cell><foreign>et caetera</foreign>, and the rest</cell>                  </row>
@@ -5216,7 +5216,7 @@ the xsltproc executable.
             <algorithm xml:id="algorithm-sieve-eratosthenes">
                 <title>Sieve of Eratosthenes</title>
                 <statement>
-                    <p>On input of a positive integer <c>n</c> this algorithm will compute all the prime numbers up to, and including, <c>n</c>.  It was named for Eratosthenes of Cyrene (<circa /> 276 BC<ndash /><circa /> 195/194 BC) by Nicomachus (<circa /> 60<ndash /><circa /> 120 CE) in <pubtitle>Introduction to Arithmetic</pubtitle>. (<url href="http://en.wikipedia.org/wiki/Sieve_of_Eratosthenes">Wikipedia</url>, 2015)<ol>
+                    <p>On input of a positive integer <c>n</c> this algorithm will compute all the prime numbers up to, and including, <c>n</c>.  It was named for Eratosthenes of Cyrene (<ca/> 276 BC<ndash /><ca /> 195/194 BC) by Nicomachus (<ca /> 60<ndash /><ca /> 120 CE) in <pubtitle>Introduction to Arithmetic</pubtitle>. (<url href="http://en.wikipedia.org/wiki/Sieve_of_Eratosthenes">Wikipedia</url>, 2015)<ol>
                         <li>Input: <c>n</c></li>
                         <li>Form the list of all integers from <c>2</c> to <c>n</c></li>
                         <li>Set <c>p = 2</c></li>

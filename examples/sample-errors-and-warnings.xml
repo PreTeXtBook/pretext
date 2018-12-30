@@ -140,7 +140,7 @@ systems.
         <section>
             <title>Miscellaneous</title>
 
-            <p>A circumflex should still be obtainable with <c>circum</c>: <circum/>.</p>
+            <p>A circumflex should still be obtainable with <c>circum</c>: <circum/>. And <circa/> is now <ca/>.</p>
 
             <paragraph>
                 <title>Groups of paragraphs</title>
