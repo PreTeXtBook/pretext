@@ -547,10 +547,14 @@ if(typeof MathJax == 'undefined' ) {
             // To be safe, don't allow negative
             espyOptions.size = Math.max(espyOptions.size, 0);
 
+            // the espy.configure() was there from the beginning, but gave an error that espy was not known
+            espy = new Espy(w, self.onSectionStateChange);
             espy.configure(espyOptions);
         };
 
         self.refreshEspy = function() {
+            // the espy.reload() was there from the beginning, but gave an error that espy was not known
+            espy = new Espy(w, self.onSectionStateChange);
             espy.reload();
         };
 
