@@ -7073,6 +7073,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- See default LaTeX2e textcomp symbols at:     -->
 <!-- http://hevea.inria.fr/examples/test/sym.html -->
 
+<!-- Note: characters given by argument-less macros    -->
+<!-- should finish with an empty group ({}) so that    -->
+<!-- they do not run-in to subsequent text.            -->
+<!-- Alternatives:                                     -->
+<!--   1.  Wrap macro in a group, eg "{\foo}".         -->
+<!--       Disrupts any kerning that might occur.      -->
+<!--   2.  Add a trailing space, eg "\foo ".           -->
+<!--       Breaks when output is edited, lines broken. -->
+<!--   3.  \xspace might work after words.             -->
+<!--       Even if followed by punctuation (?).  Ugly. -->
+
 <!--           -->
 <!-- XML, HTML -->
 <!--           -->
