@@ -2717,7 +2717,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The 5% horizontal leg is a "partway modifier", from     -->
 <!-- https://tex.stackexchange.com/questions/48756/tikz-relative-coordinates -->
 <xsl:template match="commentary" mode="tcb-style">
-    <xsl:text>blockspacingstyle, breakable,skin=enhanced,fonttitle=\bfseries,coltitle=black,colback=white,frame code={&#xa;</xsl:text>
+    <xsl:text>blockspacingstyle, skin=enhanced,fonttitle=\bfseries,coltitle=black,colback=white,frame code={&#xa;</xsl:text>
     <xsl:text>\path[draw=red!75!black,line width=0.5mm] (frame.north west) -- (frame.south west) -- ($ (frame.south west)!0.05!(frame.south east) $);}</xsl:text>
 </xsl:template>
 
