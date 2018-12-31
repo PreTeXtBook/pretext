@@ -6903,6 +6903,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Midpoint -->
 <!-- A centered dot used sometimes like a decorative dash -->
+<!-- Bringhurst: Not Unicode +387, "GREEK ANO TELEIA"     -->
 <xsl:template name="midpoint-character">
     <xsl:text>&#xb7;</xsl:text>
 </xsl:template>
