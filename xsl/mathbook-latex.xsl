@@ -2680,15 +2680,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- General Notes: -->
 <!--                -->
-<!-- 1.  Protect tcolorbox arguments with braces, especially titles, -->
-<!--     since commas will bleed through into the options otherwise  -->
-<!-- 2.  Separate the tcolorbox options with spaces after commas     -->
-<!-- 3.  Run the LaTeX compilation at least twice before giving up   -->
-<!-- 4.  The tcolorbox "title" option is set in the environment      -->
-<!-- 5.  End lists of styling options with a trailing comma          -->
-<!-- 6.  tcolorbox, boxrule=-0.3pt seems necessary to avoid          -->
-<!--     very faint lines/rules appearing in some PDF viewers,       -->
-<!--     not clear if "frame empty" is also necessary                -->
+<!-- * Protect tcolorbox arguments with braces, especially titles, -->
+<!--   since commas will bleed through into the options otherwise  -->
+<!-- * Separate the tcolorbox options with spaces after commas     -->
+<!-- * Run the LaTeX compilation at least twice before giving up   -->
+<!-- * The tcolorbox "title" option is set in the environment      -->
+<!-- * End lists of styling options with a trailing comma          -->
+<!-- * tcolorbox, boxrule=-0.3pt seems necessary to avoid          -->
+<!--   very faint lines/rules appearing in some PDF viewers,       -->
+<!--   not clear if "frame empty" is also necessary                -->
+<!-- * See discussion of end-of-block markers (eg, a proof         -->
+<!--   tombstone/Halmos) at the default style for proof            -->
 
 <!-- "abbr", "acro", "init" -->
 <!-- We default to small caps for abbreviations, acronyms, and  -->
@@ -2727,8 +2729,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "proof" -->
 <!-- Title in italics, as in amsthm style.           -->
 <!-- Filled, black square as QED, tombstone, Halmos. -->
+<!-- Pushing the tombstone flush-right is a bit      -->
+<!-- ham-handed, but more elegant TeX-isms           -->
+<!-- (eg \hfill) did not get it done.  We require at -->
+<!-- least two spaces gap to remain on the same      -->
+<!-- line. Presumably the line will stretch when the -->
+<!-- tombstone moves onto its own line.              -->
 <xsl:template match="proof" mode="tcb-style">
-    <xsl:text>bwminimalstyle, fonttitle=\normalfont\itshape, attach title to upper, after title={\space}, after upper={\hfill{}\(\blacksquare\)}&#xa;</xsl:text>
+    <xsl:text>bwminimalstyle, fonttitle=\normalfont\itshape, attach title to upper, after title={\space}, after upper={\space\space\hspace*{\stretch{1}}\(\blacksquare\)}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- "objectives" -->
@@ -2790,11 +2798,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="&DEFINITION-LIKE;" mode="tcb-style">
-    <xsl:text>bwminimalstyle, runintitlestyle, blockspacingstyle, after title={\space}, after upper={\hfill{}\(\lozenge\)}, </xsl:text>
+    <xsl:text>bwminimalstyle, runintitlestyle, blockspacingstyle, after title={\space}, after upper={\space\space\hspace*{\stretch{1}}\(\lozenge\)}, </xsl:text>
 </xsl:template>
 
 <xsl:template match="&EXAMPLE-LIKE;" mode="tcb-style">
-    <xsl:text>bwminimalstyle, runintitlestyle, blockspacingstyle, after title={\space}, after upper={\hfill{}\(\square\)}, </xsl:text>
+    <xsl:text>bwminimalstyle, runintitlestyle, blockspacingstyle, after title={\space}, after upper={\space\space\hspace*{\stretch{1}}\(\square\)}, </xsl:text>
 </xsl:template>
 
 <!-- This is mostly ad-hoc.  An assemblage is meant to be prominent,   -->

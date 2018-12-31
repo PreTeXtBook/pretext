@@ -681,6 +681,10 @@ the xsltproc executable.
                         <title>Exciting Proof!</title>
                         <p>We test here that punctuation at the end of the title of a proof is handled correctly.</p>
                     </proof>
+                    <proof>
+                        <title>Exact Proof</title>
+                        <p>This proof should fill exactly three lines (as of defaults in place 2018-12-31) and so the tombstone/Halmos should be on a fourth line, and then <em>flush right</em>. xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx.</p>
+                    </proof>
                 </claim>
             </subsection>
 
