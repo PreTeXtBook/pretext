@@ -7222,8 +7222,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>@</xsl:text>
 </xsl:template>
 
-<!-- Pipe (Vertical Bar) -->
-<xsl:template name="pipe-character">
+<!-- Vertical Bar -->
+<!-- Bringhurst: a "pipe" is a broken bar -->
+<!-- Exists as \textbrokenbar             -->
+<xsl:template name="bar-character">
     <xsl:text>\textbar{}</xsl:text>
 </xsl:template>
 
@@ -9896,8 +9898,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="at-character"/>
 </xsl:variable>
 
-<xsl:variable name="pipe-replacement">
-    <xsl:call-template name="pipe-character"/>
+<xsl:variable name="bar-replacement">
+    <xsl:call-template name="bar-character"/>
 </xsl:variable>
 
 <!-- Following for disruption of "TeX ligatures" -->
@@ -9938,10 +9940,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- LaTeX characters that map to other characters/macros -->
     <xsl:variable name="backtick-fixed" select="str:replace($tilde-fixed,    '`', $backtick-replacement)"/>
     <xsl:variable name="at-fixed"       select="str:replace($backtick-fixed, '@', $at-replacement)"/>
-    <xsl:variable name="pipe-fixed"     select="str:replace($at-fixed,       '|', $pipe-replacement)"/>
+    <xsl:variable name="bar-fixed"      select="str:replace($at-fixed,       '|', $bar-replacement)"/>
 
     <!-- TeX grouping characters, marked versions converted -->
-    <xsl:variable name="lbrace-fixed" select="str:replace($pipe-fixed,  $temp-left-brace, $lbrace-replacement)"/>
+    <xsl:variable name="lbrace-fixed" select="str:replace($bar-fixed,    $temp-left-brace, $lbrace-replacement)"/>
     <xsl:variable name="rbrace-fixed" select="str:replace($lbrace-fixed, $temp-right-brace, $rbrace-replacement)"/>
 
     <!-- We disrupt certain "TeX ligatures" - combinations of keyboard -->

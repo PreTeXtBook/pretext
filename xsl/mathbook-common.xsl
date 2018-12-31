@@ -9044,11 +9044,12 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 </xsl:template>
 <!-- not implemented as an empty element -->
 
-<!-- Pipe -->
-<!-- pipe, vertical bar -->
-<xsl:template name="pipe-character">
+<!-- Bar -->
+<!-- vertical bar                         -->
+<!-- Bringhurst: a "pipe" is a broken bar -->
+<xsl:template name="bar-character">
     <xsl:call-template name="warn-unimplemented-character">
-        <xsl:with-param name="char-name" select="'pipe'"/>
+        <xsl:with-param name="char-name" select="'bar'"/>
     </xsl:call-template>
 </xsl:template>
 <!-- not implemented as an empty element -->
