@@ -1813,6 +1813,98 @@ the xsltproc executable.
                 <p>We also distinguish between abbreviations (<abbr>vs.</abbr>), acronyms (<acro>SCUBA</acro>) and initialisms (<init>XML</init>).  This is a test of the text version of a multiplication symbol: 2<nbsp /><times /><nbsp />4.</p>
 
                 <p>An <term>em dash</term> is the long dash used much like parentheses (not an <term>en dash</term> used to denote a range, such as a range of page numbers).  It should not have spaces around it, but some style guides allow for a <em>thin</em> space, which<mdash />we test right now.  The command line stringparam <c>emdash.space</c> can be set to <c>none</c> or <c>thin</c> to control this.</p>
+
+                <paragraphs>
+                    <title>Currency</title>
+
+                    <p>For best results, be certain the right Unicode characters are in your source.  If you only need a certain symbol rarely, you can enter it in your source via its Unicode number.  For example, to obtain a peso, type <c>&amp;#x20B1;</c>.  This table has been tested with our default fonts, and should be fine for <init>HTML</init> output.  Please report any difficulties with different <latex/> fonts, as there are extra measures we can take to make these more robust.  (We've already done this for the Paraguayan guaraní.)</p>
+                    <table>
+                        <caption>Supported Currency</caption>
+                        <tabular>
+                            <row bottom="medium">
+                                <cell>Sign</cell>
+                                <cell>Unicode</cell>
+                                <cell>Name</cell>
+                            </row>
+                            <row>
+                                <cell>&#x0024;</cell>
+                                <cell><c>U+0024</c></cell>
+                                <cell>dollar</cell>
+                            </row>
+                            <row>
+                                <cell>&#x00a2;</cell>
+                                <cell><c>U+00A2</c></cell>
+                                <cell>cent</cell>
+                            </row>
+                            <row>
+                                <cell>&#x00a3;</cell>
+                                <cell><c>U+00A3</c></cell>
+                                <cell>sterling</cell>
+                            </row>
+                            <row>
+                                <cell>&#x00a4;</cell>
+                                <cell><c>U+00A4</c></cell>
+                                <cell>currency</cell>
+                            </row>
+                            <row>
+                                <cell>&#x00a5;</cell>
+                                <cell><c>U+00A5</c></cell>
+                                <cell>yen</cell>
+                            </row>
+                            <row>
+                                <cell>&#x0192;</cell>
+                                <cell><c>U+0192</c></cell>
+                                <cell>florin</cell>
+                            </row>
+                            <row>
+                                <cell>&#x0e3f;</cell>
+                                <cell><c>U+0E3F</c></cell>
+                                <cell>baht</cell>
+                            </row>
+                            <row>
+                                <cell>&#x20a1;</cell>
+                                <cell><c>U+20A1</c></cell>
+                                <cell>colon</cell>
+                            </row>
+                            <row>
+                                <cell>&#x20a4;</cell>
+                                <cell><c>U+20A4</c></cell>
+                                <cell>lira</cell>
+                            </row>
+                            <row>
+                                <cell>&#x20a6;</cell>
+                                <cell><c>U+20A6</c></cell>
+                                <cell>naira</cell>
+                            </row>
+                            <row>
+                                <cell>&#x20a9;</cell>
+                                <cell><c>U+20A9</c></cell>
+                                <cell>won</cell>
+                            </row>
+                            <row>
+                                <cell>&#x20ab;</cell>
+                                <cell><c>U+20AB</c></cell>
+                                <cell>dong</cell>
+                            </row>
+                            <row>
+                                <cell>&#x20ac;</cell>
+                                <cell><c>U+20AC</c></cell>
+                                <cell>euro</cell>
+                            </row>
+                            <row>
+                                <cell>&#x20b1;</cell>
+                                <cell><c>U+20B1</c></cell>
+                                <cell>peso</cell>
+                            </row>
+                            <row>
+                                <cell>&#x20b2;</cell>
+                                <cell><c>U+20B2</c></cell>
+                                <cell>guarani</cell>
+                            </row>
+                        </tabular>
+                    </table>
+                </paragraphs>
+
             </subsection>
 
             <subsection xml:id="subsection-icons-in-text">

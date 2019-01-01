@@ -10003,7 +10003,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Should not be combined in pairs to become a single left smart -->
     <!-- quote.  Replacement above by a macro will prevent this.       -->
 
-    <xsl:value-of select="$apostrophe-fixed"/>
+    <!-- Currency -->
+    <!-- Dollar is processed above.  13 other currencies seem to     -->
+    <!-- behave just fine with our defaults, when simply entered     -->
+    <!-- by their Unicode numbers, though each could be replaced     -->
+    <!-- by a textcomp version, which we have elected to skirt until -->
+    <!-- necessary.  The one exception is the Paraguayan guarani.    -->
+
+    <!-- Paraguayan guarani -->
+    <xsl:variable name="guarani-fixed" select="str:replace($apostrophe-fixed, '&#x20b2;', '\textguarani')"/>
+
+    <xsl:value-of select="$guarani-fixed"/>
 </xsl:template>
 
 
