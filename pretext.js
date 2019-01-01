@@ -419,9 +419,12 @@ if(typeof MathJax == 'undefined' ) {
         self.postMathJax = function() {
             // we handle the hash positioning so that it lines up
             // nicely with our fixed header
-            self.initializeSectionTracking();
-            self.scrollToSection(hashOnLoad.substr(1));
-            self.$body.addClass(settings.sectionTrackingLoadedClass);
+      // I am disabling the TOC scrolling because changes in jQuery 3 are
+      // incompatible with Espy and I have not been able to figure out
+      // how to fix it.  David Farmer 1/1/19
+   //         self.initializeSectionTracking();
+   //         self.scrollToSection(hashOnLoad.substr(1));
+   //         self.$body.addClass(settings.sectionTrackingLoadedClass);
 
             // TODO expand knowl from hash if there's a match?
         };
@@ -548,13 +551,13 @@ if(typeof MathJax == 'undefined' ) {
             espyOptions.size = Math.max(espyOptions.size, 0);
 
             // the espy.configure() was there from the beginning, but gave an error that espy was not known
-            espy = new Espy(w, self.onSectionStateChange);
+     //       espy = new Espy(w, self.onSectionStateChange);
             espy.configure(espyOptions);
         };
 
         self.refreshEspy = function() {
             // the espy.reload() was there from the beginning, but gave an error that espy was not known
-            espy = new Espy(w, self.onSectionStateChange);
+    //        espy = new Espy(w, self.onSectionStateChange);
             espy.reload();
         };
 
@@ -916,7 +919,7 @@ if(typeof MathJax == 'undefined' ) {
                 clearTimeout(sidebarLeftTransitionTimeoutId);
                 // Set a new one
                 sidebarLeftTransitionTimeoutId = setTimeout(function() {
-                    self.refreshEspy();
+        //            self.refreshEspy();
 
                 }, settings.sidebarTransitionDuration);
             }
