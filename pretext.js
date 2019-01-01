@@ -551,13 +551,15 @@ if(typeof MathJax == 'undefined' ) {
             espyOptions.size = Math.max(espyOptions.size, 0);
 
             // the espy.configure() was there from the beginning, but gave an error that espy was not known
-     //       espy = new Espy(w, self.onSectionStateChange);
+            // so I added the next line --DF
+            espy = new Espy(w, self.onSectionStateChange);
             espy.configure(espyOptions);
         };
 
         self.refreshEspy = function() {
             // the espy.reload() was there from the beginning, but gave an error that espy was not known
-    //        espy = new Espy(w, self.onSectionStateChange);
+            // so I added the next line --DF
+            espy = new Espy(w, self.onSectionStateChange);
             espy.reload();
         };
 
