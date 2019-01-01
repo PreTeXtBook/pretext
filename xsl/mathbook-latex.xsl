@@ -7328,19 +7328,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Copyright symbol -->
-<!-- http://tex.stackexchange.com/questions/1676/how-to-get-good-looking-copyright-and-registered-symbols -->
-<xsl:template match="copyright">
+<!-- http://tex.stackexchange.com/questions/1676/             -->
+<!-- how-to-get-good-looking-copyright-and-registered-symbols -->
+<xsl:template name="copyright-character">
     <xsl:text>\textcopyright{}</xsl:text>
 </xsl:template>
 
-<!-- Registered symbol          -->
-<!-- \textsuperscript can raise -->
-<xsl:template match="registered">
-    <xsl:text>\textregistered{}</xsl:text>
+<!-- Registered symbol                      -->
+<!-- Bringhurst: \textsuperscript necessary -->
+<!-- Or a font might already superscript??? -->
+<xsl:template name="registered-character">
+    <xsl:text>\textsuperscript\textregistered{}</xsl:text>
 </xsl:template>
 
 <!-- Trademark symbol -->
-<xsl:template match="trademark">
+<xsl:template name="trademark-character">
     <xsl:text>\texttrademark{}</xsl:text>
 </xsl:template>
 

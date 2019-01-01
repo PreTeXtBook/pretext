@@ -9054,6 +9054,40 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 </xsl:template>
 <!-- not implemented as an empty element -->
 
+<!-- Copyright -->
+<!-- Bringhurst: on baseline (i.e. not superscript) -->
+<xsl:template name="copyright-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'copyright'"/>
+    </xsl:call-template>
+</xsl:template>
+<xsl:template match="copyright">
+    <xsl:call-template name="copyright-character"/>
+</xsl:template>
+
+<!-- Registered -->
+<!-- Bringhurst: should be superscript -->
+<xsl:template name="registered-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'registered'"/>
+    </xsl:call-template>
+</xsl:template>
+<xsl:template match="registered">
+    <xsl:call-template name="registered-character"/>
+</xsl:template>
+
+<!-- Trademark -->
+<!-- Bringhurst: should be superscript -->
+<xsl:template name="trademark-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'trademark'"/>
+    </xsl:call-template>
+</xsl:template>
+<xsl:template match="trademark">
+    <xsl:call-template name="trademark-character"/>
+</xsl:template>
+
+
 <!-- Dots
 http://tex.stackexchange.com/questions/19180/which-dot-character-to-use-in-which-context
 

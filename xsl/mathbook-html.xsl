@@ -6584,18 +6584,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Copyright symbol -->
-<xsl:template match="copyright">
-    <xsl:text>&#169;</xsl:text>
+<xsl:template name="copyright-character">
+    <xsl:text>&#xa9;</xsl:text>
 </xsl:template>
 
-<!-- Registered symbol    -->
-<!-- "sup" tag will raise -->
-<xsl:template match="registered">
-    <xsl:text>&#174;</xsl:text>
+<!-- Registered symbol -->
+<!-- Bringhurst: should be superscript                    -->
+<!-- We consider it a font mistake if not superscripted,  -->
+<!-- since if we use a "sup" tag then a correct font will -->
+<!-- get way too small                                    -->
+<xsl:template name="registered-character">
+    <xsl:text>&#xae;</xsl:text>
 </xsl:template>
 
 <!-- Trademark symbol -->
-<xsl:template match="trademark">
+<xsl:template name="trademark-character">
     <xsl:text>&#x2122;</xsl:text>
 </xsl:template>
 
