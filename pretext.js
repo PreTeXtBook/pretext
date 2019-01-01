@@ -419,9 +419,12 @@ if(typeof MathJax == 'undefined' ) {
         self.postMathJax = function() {
             // we handle the hash positioning so that it lines up
             // nicely with our fixed header
-            self.initializeSectionTracking();
-            self.scrollToSection(hashOnLoad.substr(1));
-            self.$body.addClass(settings.sectionTrackingLoadedClass);
+      // I am disabling the TOC scrolling because changes in jQuery 3 are
+      // incompatible with Espy and I have not been able to figure out
+      // how to fix it.  David Farmer 1/1/19
+   //         self.initializeSectionTracking();
+   //         self.scrollToSection(hashOnLoad.substr(1));
+   //         self.$body.addClass(settings.sectionTrackingLoadedClass);
 
             // TODO expand knowl from hash if there's a match?
         };
@@ -493,7 +496,7 @@ if(typeof MathJax == 'undefined' ) {
                 var $link = self.$sectionLinks.filter(linkSelector);
 
                 // If this section has a link
-                if($link.size() > 0) {
+                if($link.length > 0) {
                     // Create an entry in our section map
                     sectionMap[hash] = {
                         $section: $section,
@@ -547,10 +550,16 @@ if(typeof MathJax == 'undefined' ) {
             // To be safe, don't allow negative
             espyOptions.size = Math.max(espyOptions.size, 0);
 
+            // the espy.configure() was there from the beginning, but gave an error that espy was not known
+            // so I added the next line --DF
+            espy = new Espy(w, self.onSectionStateChange);
             espy.configure(espyOptions);
         };
 
         self.refreshEspy = function() {
+            // the espy.reload() was there from the beginning, but gave an error that espy was not known
+            // so I added the next line --DF
+            espy = new Espy(w, self.onSectionStateChange);
             espy.reload();
         };
 
@@ -575,7 +584,7 @@ if(typeof MathJax == 'undefined' ) {
             var $activeItems =
                 self.$toc.find("." + settings.sectionLinkActiveClass);
 
-            if($activeItems.size() > 0) {
+            if($activeItems.length > 0) {
                 // Scroll to the last of the active links
                 self.scrollTocToItem($activeItems.last(), duration);
             }
@@ -591,7 +600,7 @@ if(typeof MathJax == 'undefined' ) {
 
             var $item = $(element);
             // IF the given item is in the toc
-            if($item.parents().filter(self.$toc).size() > 0) {
+            if($item.parents().filter(self.$toc).length > 0) {
                 // The offset from the top of the toc is the difference
                 // between the offsets from the top of the document
                 var tocDocumentTopOffset = self.$toc.position().top;
@@ -912,7 +921,7 @@ if(typeof MathJax == 'undefined' ) {
                 clearTimeout(sidebarLeftTransitionTimeoutId);
                 // Set a new one
                 sidebarLeftTransitionTimeoutId = setTimeout(function() {
-                    self.refreshEspy();
+        //            self.refreshEspy();
 
                 }, settings.sidebarTransitionDuration);
             }
@@ -953,9 +962,9 @@ if(typeof MathJax == 'undefined' ) {
          */
         self.hasSidebarLeft = function() {
             // To be safe, we'll require everything
-            return self.$sidebarLeft.size() > 0 &&
-                   self.$sidebarLeftToggleButton.size() > 0 &&
-                   self.$main.size() > 0;
+            return self.$sidebarLeft.length > 0 &&
+                   self.$sidebarLeftToggleButton.length > 0 &&
+                   self.$main.length > 0;
         };
 
         /**
@@ -964,9 +973,9 @@ if(typeof MathJax == 'undefined' ) {
          */
         self.hasSidebarRight = function() {
             // To be safe, we'll require everything
-            return self.$sidebarRight.size() > 0 &&
-                   self.$sidebarRightToggleButton.size() > 0 &&
-                   self.$main.size() > 0;
+            return self.$sidebarRight.length > 0 &&
+                   self.$sidebarRightToggleButton.length > 0 &&
+                   self.$main.length > 0;
         };
 
         /**
@@ -1119,7 +1128,7 @@ if(typeof MathJax == 'undefined' ) {
         self.resizeToc = function(activeAreaHeight) {
             // The height of the left sidebar extras box if it exists
             var extrasHeight = 0;
-            if(self.$sidebarLeftExtras.size() !== 0) {
+            if(self.$sidebarLeftExtras.length !== 0) {
                 extrasHeight = self.$sidebarLeftExtras.outerHeight();
             }
 
@@ -1190,7 +1199,7 @@ if(typeof MathJax == 'undefined' ) {
         w.mathbook = new Mathbook({});
     } else {
         // wait and init when the DOM is fully loaded
-        $(window).load( function() {
+        $(window).on("load", function() {
             w.mathbook = new Mathbook();
         });
     }
