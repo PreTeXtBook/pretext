@@ -7362,6 +7362,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\textservicemark{}</xsl:text>
 </xsl:template>
 
+<!-- Degree -->
+<xsl:template name="degree-character">
+    <xsl:text>\textdegree{}</xsl:text>
+</xsl:template>
+
+<!-- Prime -->
+<!-- A construction such as  \(^{\prime}\)  looks much better,     -->
+<!-- but will require a lot of extra care in the "text-processing" -->
+<!-- template since all this math-mode will need to be protected   -->
+<!-- at the outset.  Bringhurst opines that many text fonts lack   -->
+<!-- a prime and/or double-prime glyph, and LaTeX does not seem    -->
+<!-- to have any good way to realize them without using math-mode. -->
+<xsl:template name="prime-character">
+    <xsl:text>\textquotesingle{}</xsl:text>
+</xsl:template>
+
+<!-- Double Prime -->
+<xsl:template name="dblprime-character">
+    <xsl:text>\textquotesingle\textquotesingle{}</xsl:text>
+</xsl:template>
+
 <!-- Fill-in blank -->
 <!-- \fillin{} defined in preamble as semantic macro       -->
 <!-- argument is number of "em", Bringhurst suggests 5/11  -->

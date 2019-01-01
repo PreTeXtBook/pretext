@@ -6618,6 +6618,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#x2120;</xsl:text>
 </xsl:template>
 
+<!-- Degree -->
+<xsl:template name="degree-character">
+    <xsl:text>&#xb0;</xsl:text>
+</xsl:template>
+
+<!-- Prime -->
+<xsl:template name="prime-character">
+    <xsl:text>&#x2032;</xsl:text>
+</xsl:template>
+
+<xsl:template name="dblprime-character">
+    <xsl:text>&#x2033;</xsl:text>
+</xsl:template>
+
 <!-- Fill-in blank -->
 <!-- Bringhurst suggests 5/11 em per character                            -->
 <!-- A 'span' normally, but a MathJax non-standard \Rule for math         -->

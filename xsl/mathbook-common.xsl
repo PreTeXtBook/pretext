@@ -9121,6 +9121,41 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:call-template name="servicemark-character"/>
 </xsl:template>
 
+<!-- Coordinates, Temperature, English distance -->
+<!-- Intended for simple non-technical uses, without too -->
+<!-- much overhead.  The SI unit markup would be better  -->
+<!-- suited for scientific or technical work.            -->
+
+<!-- Degree -->
+<xsl:template name="degree-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'degree'"/>
+    </xsl:call-template>
+</xsl:template>
+<xsl:template match="degree">
+    <xsl:call-template name="degree-character"/>
+</xsl:template>
+
+<!-- Prime -->
+<xsl:template name="prime-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'prime'"/>
+    </xsl:call-template>
+</xsl:template>
+<xsl:template match="prime">
+    <xsl:call-template name="prime-character"/>
+</xsl:template>
+
+<!-- Double Prime -->
+<xsl:template name="dblprime-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'dblprime'"/>
+    </xsl:call-template>
+</xsl:template>
+<xsl:template match="dblprime">
+    <xsl:call-template name="dblprime-character"/>
+</xsl:template>
+
 
 <!-- Dots
 http://tex.stackexchange.com/questions/19180/which-dot-character-to-use-in-which-context
