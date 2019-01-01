@@ -825,8 +825,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="frontmatter/colophon/copyright">
     <p class="copyright">
-        <!-- Unicode copyright symbol -->
-        <xsl:text>&#xa9;</xsl:text>
+        <xsl:call-template name="copyright-character"/>
         <xsl:apply-templates select="year" />
         <xsl:text> </xsl:text>
         <xsl:apply-templates select="holder" />
@@ -6588,6 +6587,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa9;</xsl:text>
 </xsl:template>
 
+<!-- Phonomark symbol -->
+<xsl:template name="phonomark-character">
+    <xsl:text>&#x2117;</xsl:text>
+</xsl:template>
+
+<!-- Copyleft symbol -->
+<!-- May not be universally available in fonts                 -->
+<!-- Open C (U+254) plus Combining Circle (U+20dd) can imitate -->
+<xsl:template name="copyleft-character">
+    <xsl:text>&#x1f12f;</xsl:text>
+</xsl:template>
+
 <!-- Registered symbol -->
 <!-- Bringhurst: should be superscript                    -->
 <!-- We consider it a font mistake if not superscripted,  -->
@@ -6600,6 +6611,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Trademark symbol -->
 <xsl:template name="trademark-character">
     <xsl:text>&#x2122;</xsl:text>
+</xsl:template>
+
+<!-- Servicemark symbol -->
+<xsl:template name="servicemark-character">
+    <xsl:text>&#x2120;</xsl:text>
 </xsl:template>
 
 <!-- Fill-in blank -->

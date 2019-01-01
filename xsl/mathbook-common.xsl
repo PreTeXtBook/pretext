@@ -9065,6 +9065,29 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:call-template name="copyright-character"/>
 </xsl:template>
 
+<!-- Phonomark -->
+<!-- copyright on sound recordings                 -->
+<!-- Bringhurst: counterpart copyright on baseline -->
+<xsl:template name="phonomark-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'phonomark'"/>
+    </xsl:call-template>
+</xsl:template>
+<xsl:template match="phonomark">
+    <xsl:call-template name="phonomark-character"/>
+</xsl:template>
+
+<!-- Copyleft -->
+<!-- Bringhurst: counterpart copyright on baseline -->
+<xsl:template name="copyleft-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'copyleft'"/>
+    </xsl:call-template>
+</xsl:template>
+<xsl:template match="copyleft">
+    <xsl:call-template name="copyleft-character"/>
+</xsl:template>
+
 <!-- Registered -->
 <!-- Bringhurst: should be superscript -->
 <xsl:template name="registered-character">
@@ -9085,6 +9108,17 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 </xsl:template>
 <xsl:template match="trademark">
     <xsl:call-template name="trademark-character"/>
+</xsl:template>
+
+<!-- Servicemark -->
+<!-- Bringhurst: counterpart trademark should be superscript -->
+<xsl:template name="servicemark-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'servicemark'"/>
+    </xsl:call-template>
+</xsl:template>
+<xsl:template match="servicemark">
+    <xsl:call-template name="servicemark-character"/>
 </xsl:template>
 
 

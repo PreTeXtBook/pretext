@@ -3189,7 +3189,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 
     <xsl:if test="frontmatter/colophon/copyright" >
-        <xsl:text>\noindent\textcopyright\ </xsl:text>
+        <xsl:text>\noindent</xsl:text>
+        <xsl:call-template name="copyright-character"/>
         <xsl:apply-templates select="frontmatter/colophon/copyright/year" />
         <xsl:text>\quad{}</xsl:text>
         <xsl:apply-templates select="frontmatter/colophon/copyright/holder" />
@@ -7334,6 +7335,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\textcopyright{}</xsl:text>
 </xsl:template>
 
+<!-- Phonomark symbol -->
+<xsl:template name="phonomark-character">
+    <xsl:text>\textcircledP{}</xsl:text>
+</xsl:template>
+
+<!-- Copyleft symbol -->
+<xsl:template name="copyleft-character">
+    <xsl:text>\textcopyleft{}</xsl:text>
+</xsl:template>
+
 <!-- Registered symbol                      -->
 <!-- Bringhurst: \textsuperscript necessary -->
 <!-- Or a font might already superscript??? -->
@@ -7344,6 +7355,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Trademark symbol -->
 <xsl:template name="trademark-character">
     <xsl:text>\texttrademark{}</xsl:text>
+</xsl:template>
+
+<!-- Servicemark symbol -->
+<xsl:template name="servicemark-character">
+    <xsl:text>\textservicemark{}</xsl:text>
 </xsl:template>
 
 <!-- Fill-in blank -->
