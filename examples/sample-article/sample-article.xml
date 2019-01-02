@@ -1746,6 +1746,8 @@ the xsltproc executable.
 
                 <p>&amp; &lt; &gt; # $ % ^ _ { } ~ \</p>
 
+                <p>Upright quotes from the double-quote character: " x " x " x ".</p>
+
                 <p>We also disrupt certain constructions from <latex/>.  Attempting to sneak-in any traditional macro for the purposes of <latex/>-only output, such as, say a \newpage, will fail since the leading backslash will be caught and converted to <c>\textbackslash</c>.</p>
 
                 <p>Also, runs of consecutive hyphens, a so-called <q><tex/> ligature</q> will be converted to the intended hyphens.  Such as: - (one), -- (two), --- (three), ---- (four), ----- (five), ------ (six), ------- (seven).  Use the empty elements <tage>ndash</tage> and <tage>mdash</tage> for the longer dashes/hyphens.</p>
