@@ -2941,6 +2941,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--   CM-Super fonts will be loaded.  These work well, but           -->
 <!--   are inferior to Latin Modern in some ways                      -->
 <!--   http://tex.stackexchange.com/questions/88368/                  -->
+<!--   https://tex.stackexchange.com/questions/1390/                  -->
 <!-- * Check new fonts carefully for missing, or poorly created,      -->
 <!--   glyphs.  The sample article can be useful for this.            -->
 
