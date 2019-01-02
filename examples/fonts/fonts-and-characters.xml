@@ -547,6 +547,67 @@ and apply  xelatex  to  "fonts-and-characters.tex"  in the current working direc
                     </tabular>
                 </table>
             </paragraphs>
+
+            <paragraphs>
+                <title>Latin Extended Additional, <c>U+1E00</c><ndash /><c>U+1EFF</c></title>
+
+                <p>Latin Modern, our default font, supports this range of 256 characters, which includes 90 Vietnamese characters.  Their documentation shows about 140 characters rendered correctly, which seems to jibe with the examples here that render properly.</p>
+
+                <table>
+                    <caption>Latin Extended Additional</caption>
+                <tabular>
+                    <row><cell />
+                    <cell><c>0</c></cell>
+                    <cell><c>1</c></cell>
+                    <cell><c>2</c></cell>
+                    <cell><c>3</c></cell>
+                    <cell><c>4</c></cell>
+                    <cell><c>5</c></cell>
+                    <cell><c>6</c></cell>
+                    <cell><c>7</c></cell>
+                    <cell><c>8</c></cell>
+                    <cell><c>9</c></cell>
+                    <cell><c>A</c></cell>
+                    <cell><c>B</c></cell>
+                    <cell><c>C</c></cell>
+                    <cell><c>D</c></cell>
+                    <cell><c>E</c></cell>
+                    <cell><c>F</c></cell></row>
+                    <row><cell><c>1E0_</c></cell><cell>&#x1E00;</cell><cell>&#x1E01;</cell><cell>&#x1E02;</cell><cell>&#x1E03;</cell><cell>&#x1E04;</cell><cell>&#x1E05;</cell><cell>&#x1E06;</cell><cell>&#x1E07;</cell>
+                                                 <cell>&#x1E08;</cell><cell>&#x1E09;</cell><cell>&#x1E0A;</cell><cell>&#x1E0B;</cell><cell>&#x1E0C;</cell><cell>&#x1E0D;</cell><cell>&#x1E0E;</cell><cell>&#x1E0F;</cell></row>
+                    <row><cell><c>1E1_</c></cell><cell>&#x1E10;</cell><cell>&#x1E11;</cell><cell>&#x1E12;</cell><cell>&#x1E13;</cell><cell>&#x1E14;</cell><cell>&#x1E15;</cell><cell>&#x1E16;</cell><cell>&#x1E17;</cell>
+                                                 <cell>&#x1E18;</cell><cell>&#x1E19;</cell><cell>&#x1E1A;</cell><cell>&#x1E1B;</cell><cell>&#x1E1C;</cell><cell>&#x1E1D;</cell><cell>&#x1E1E;</cell><cell>&#x1E1F;</cell></row>
+                    <row><cell><c>1E2_</c></cell><cell>&#x1E20;</cell><cell>&#x1E21;</cell><cell>&#x1E22;</cell><cell>&#x1E23;</cell><cell>&#x1E24;</cell><cell>&#x1E25;</cell><cell>&#x1E26;</cell><cell>&#x1E27;</cell>
+                                                 <cell>&#x1E28;</cell><cell>&#x1E29;</cell><cell>&#x1E2A;</cell><cell>&#x1E2B;</cell><cell>&#x1E2C;</cell><cell>&#x1E2D;</cell><cell>&#x1E2E;</cell><cell>&#x1E2F;</cell></row>
+                    <row><cell><c>1E3_</c></cell><cell>&#x1E30;</cell><cell>&#x1E31;</cell><cell>&#x1E32;</cell><cell>&#x1E33;</cell><cell>&#x1E34;</cell><cell>&#x1E35;</cell><cell>&#x1E36;</cell><cell>&#x1E37;</cell>
+                                                 <cell>&#x1E38;</cell><cell>&#x1E39;</cell><cell>&#x1E3A;</cell><cell>&#x1E3B;</cell><cell>&#x1E3C;</cell><cell>&#x1E3D;</cell><cell>&#x1E3E;</cell><cell>&#x1E3F;</cell></row>
+                    <row><cell><c>1E4_</c></cell><cell>&#x1E40;</cell><cell>&#x1E41;</cell><cell>&#x1E42;</cell><cell>&#x1E43;</cell><cell>&#x1E44;</cell><cell>&#x1E45;</cell><cell>&#x1E46;</cell><cell>&#x1E47;</cell>
+                                                 <cell>&#x1E48;</cell><cell>&#x1E49;</cell><cell>&#x1E4A;</cell><cell>&#x1E4B;</cell><cell>&#x1E4C;</cell><cell>&#x1E4D;</cell><cell>&#x1E4E;</cell><cell>&#x1E4F;</cell></row>
+                    <row><cell><c>1E5_</c></cell><cell>&#x1E50;</cell><cell>&#x1E51;</cell><cell>&#x1E52;</cell><cell>&#x1E53;</cell><cell>&#x1E54;</cell><cell>&#x1E55;</cell><cell>&#x1E56;</cell><cell>&#x1E57;</cell>
+                                                 <cell>&#x1E58;</cell><cell>&#x1E59;</cell><cell>&#x1E5A;</cell><cell>&#x1E5B;</cell><cell>&#x1E5C;</cell><cell>&#x1E5D;</cell><cell>&#x1E5E;</cell><cell>&#x1E5F;</cell></row>
+                    <row><cell><c>1E6_</c></cell><cell>&#x1E60;</cell><cell>&#x1E61;</cell><cell>&#x1E62;</cell><cell>&#x1E63;</cell><cell>&#x1E64;</cell><cell>&#x1E65;</cell><cell>&#x1E66;</cell><cell>&#x1E67;</cell>
+                                                 <cell>&#x1E68;</cell><cell>&#x1E69;</cell><cell>&#x1E6A;</cell><cell>&#x1E6B;</cell><cell>&#x1E6C;</cell><cell>&#x1E6D;</cell><cell>&#x1E6E;</cell><cell>&#x1E6F;</cell></row>
+                    <row><cell><c>1E7_</c></cell><cell>&#x1E70;</cell><cell>&#x1E71;</cell><cell>&#x1E72;</cell><cell>&#x1E73;</cell><cell>&#x1E74;</cell><cell>&#x1E75;</cell><cell>&#x1E76;</cell><cell>&#x1E77;</cell>
+                                                 <cell>&#x1E78;</cell><cell>&#x1E79;</cell><cell>&#x1E7A;</cell><cell>&#x1E7B;</cell><cell>&#x1E7C;</cell><cell>&#x1E7D;</cell><cell>&#x1E7E;</cell><cell>&#x1E7F;</cell></row>
+                    <row><cell><c>1E8_</c></cell><cell>&#x1E80;</cell><cell>&#x1E81;</cell><cell>&#x1E82;</cell><cell>&#x1E83;</cell><cell>&#x1E84;</cell><cell>&#x1E85;</cell><cell>&#x1E86;</cell><cell>&#x1E87;</cell>
+                                                 <cell>&#x1E88;</cell><cell>&#x1E89;</cell><cell>&#x1E8A;</cell><cell>&#x1E8B;</cell><cell>&#x1E8C;</cell><cell>&#x1E8D;</cell><cell>&#x1E8E;</cell><cell>&#x1E8F;</cell></row>
+                    <row><cell><c>1E9_</c></cell><cell>&#x1E90;</cell><cell>&#x1E91;</cell><cell>&#x1E92;</cell><cell>&#x1E93;</cell><cell>&#x1E94;</cell><cell>&#x1E95;</cell><cell>&#x1E96;</cell><cell>&#x1E97;</cell>
+                                                 <cell>&#x1E98;</cell><cell>&#x1E99;</cell><cell>&#x1E9A;</cell><cell>&#x1E9B;</cell><cell>&#x1E9C;</cell><cell>&#x1E9D;</cell><cell>&#x1E9E;</cell><cell>&#x1E9F;</cell></row>
+                    <row><cell><c>1EA_</c></cell><cell>&#x1EA0;</cell><cell>&#x1EA1;</cell><cell>&#x1EA2;</cell><cell>&#x1EA3;</cell><cell>&#x1EA4;</cell><cell>&#x1EA5;</cell><cell>&#x1EA6;</cell><cell>&#x1EA7;</cell>
+                                                 <cell>&#x1EA8;</cell><cell>&#x1EA9;</cell><cell>&#x1EAA;</cell><cell>&#x1EAB;</cell><cell>&#x1EAC;</cell><cell>&#x1EAD;</cell><cell>&#x1EAE;</cell><cell>&#x1EAF;</cell></row>
+                    <row><cell><c>1EB_</c></cell><cell>&#x1EB0;</cell><cell>&#x1EB1;</cell><cell>&#x1EB2;</cell><cell>&#x1EB3;</cell><cell>&#x1EB4;</cell><cell>&#x1EB5;</cell><cell>&#x1EB6;</cell><cell>&#x1EB7;</cell>
+                                                 <cell>&#x1EB8;</cell><cell>&#x1EB9;</cell><cell>&#x1EBA;</cell><cell>&#x1EBB;</cell><cell>&#x1EBC;</cell><cell>&#x1EBD;</cell><cell>&#x1EBE;</cell><cell>&#x1EBF;</cell></row>
+                    <row><cell><c>1EC_</c></cell><cell>&#x1EC0;</cell><cell>&#x1EC1;</cell><cell>&#x1EC2;</cell><cell>&#x1EC3;</cell><cell>&#x1EC4;</cell><cell>&#x1EC5;</cell><cell>&#x1EC6;</cell><cell>&#x1EC7;</cell>
+                                                 <cell>&#x1EC8;</cell><cell>&#x1EC9;</cell><cell>&#x1ECA;</cell><cell>&#x1ECB;</cell><cell>&#x1ECC;</cell><cell>&#x1ECD;</cell><cell>&#x1ECE;</cell><cell>&#x1ECF;</cell></row>
+                    <row><cell><c>1ED_</c></cell><cell>&#x1ED0;</cell><cell>&#x1ED1;</cell><cell>&#x1ED2;</cell><cell>&#x1ED3;</cell><cell>&#x1ED4;</cell><cell>&#x1ED5;</cell><cell>&#x1ED6;</cell><cell>&#x1ED7;</cell>
+                                                 <cell>&#x1ED8;</cell><cell>&#x1ED9;</cell><cell>&#x1EDA;</cell><cell>&#x1EDB;</cell><cell>&#x1EDC;</cell><cell>&#x1EDD;</cell><cell>&#x1EDE;</cell><cell>&#x1EDF;</cell></row>
+                    <row><cell><c>1EE_</c></cell><cell>&#x1EE0;</cell><cell>&#x1EE1;</cell><cell>&#x1EE2;</cell><cell>&#x1EE3;</cell><cell>&#x1EE4;</cell><cell>&#x1EE5;</cell><cell>&#x1EE6;</cell><cell>&#x1EE7;</cell>
+                                                 <cell>&#x1EE8;</cell><cell>&#x1EE9;</cell><cell>&#x1EEA;</cell><cell>&#x1EEB;</cell><cell>&#x1EEC;</cell><cell>&#x1EED;</cell><cell>&#x1EEE;</cell><cell>&#x1EEF;</cell></row>
+                    <row><cell><c>1EF_</c></cell><cell>&#x1EF0;</cell><cell>&#x1EF1;</cell><cell>&#x1EF2;</cell><cell>&#x1EF3;</cell><cell>&#x1EF4;</cell><cell>&#x1EF5;</cell><cell>&#x1EF6;</cell><cell>&#x1EF7;</cell>
+                                                 <cell>&#x1EF8;</cell><cell>&#x1EF9;</cell><cell>&#x1EFA;</cell><cell>&#x1EFB;</cell><cell>&#x1EFC;</cell><cell>&#x1EFD;</cell><cell>&#x1EFE;</cell><cell>&#x1EFF;</cell></row>
+                    </tabular>
+                </table>
+            </paragraphs>
         </section>
 
         <section>
