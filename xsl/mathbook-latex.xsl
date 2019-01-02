@@ -567,8 +567,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- https://tex.stackexchange.com/questions/664/why-should-i-use-usepackaget1fontenc -->
     <!-- http://tex.stackexchange.com/questions/88368/how-do-i-invoke-cm-super -->
     <xsl:text>%% (\input{ix-utf8enc.dfu} from the "inputenx" package is possible addition (broken?)&#xa;</xsl:text>
-    <xsl:text>\usepackage[T1]{fontenc}&#xa;</xsl:text>
     <xsl:text>\usepackage[utf8]{inputenc}&#xa;</xsl:text>
+    <xsl:text>\usepackage[T1]{fontenc}&#xa;</xsl:text>
+    <xsl:text>\usepackage{lmodern}&#xa;</xsl:text>
     <!-- TODO: put a pdflatex font package hook here? -->
     <xsl:text>%% end: pdflatex-specific configuration&#xa;</xsl:text>
     <xsl:text>}&#xa;</xsl:text>
