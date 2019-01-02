@@ -148,6 +148,9 @@ systems.
                 <p>There has always been a sort of odd mini-sectioning element, called <c>paragraph</c> orignally since that is what it is in <latex/>, but now better named as <c>paragraphs</c>.</p>
             </paragraph>
 
+            <!-- # $ % ^ & _ { } ~ \  -->
+            <p><latex/>'s ten reserved characters once each had an empty element of its own: <hash/> <dollar/> <percent/> <circumflex/> <ampersand/> <underscore/> <lbrace/> <rbrace/> <tilde/> <backslash/>.</p>
+
             <p>Tables once looked like this, but now are really different.</p>
 
              <table xml:id="table-euler1">

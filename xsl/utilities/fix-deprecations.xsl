@@ -34,6 +34,78 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Deprecations that can be fixed with a transformation -->
 <!-- In reverse chronological order, with dates           -->
 
+<!-- 2019-02-06 LaTeX's 10 reserved characters: # $ % ^ & _ { } ~ \ -->
+<xsl:template match="hash">
+    <xsl:text>#</xsl:text>
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2019-02-06</xsl:with-param>
+        <xsl:with-param name="message">Replacing &lt;hash/&gt; with &quot;#&quot;</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+<xsl:template match="dollar">
+    <xsl:text>$</xsl:text>
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2019-02-06</xsl:with-param>
+        <xsl:with-param name="message">Replacing &lt;dollar/&gt; with &quot;$&quot;</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+<xsl:template match="percent">
+    <xsl:text>%</xsl:text>
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2019-02-06</xsl:with-param>
+        <xsl:with-param name="message">Replacing &lt;percent/&gt; with &quot;%&quot;</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+<xsl:template match="circumflex">
+    <xsl:text>^</xsl:text>
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2019-02-06</xsl:with-param>
+        <xsl:with-param name="message">Replacing &lt;circumflex/&gt; with &quot;^&quot;</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+<xsl:template match="ampersand">
+    <xsl:text>&amp;</xsl:text>
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2019-02-06</xsl:with-param>
+        <xsl:with-param name="message">Replacing &lt;ampersand/&gt; with &quot;&amp;&quot;</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+<xsl:template match="underscore">
+    <xsl:text>_</xsl:text>
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2019-02-06</xsl:with-param>
+        <xsl:with-param name="message">Replacing &lt;underscore/&gt; with &quot;_&quot;</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+<xsl:template match="lbrace">
+    <xsl:text>{</xsl:text>
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2019-02-06</xsl:with-param>
+        <xsl:with-param name="message">Replacing &lt;lbrace/&gt; with &quot;{&quot;</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+<xsl:template match="rbrace">
+    <xsl:text>}</xsl:text>
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2019-02-06</xsl:with-param>
+        <xsl:with-param name="message">Replacing &lt;rbrace/&gt; with &quot;}&quot;</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+<xsl:template match="tilde">
+    <xsl:text>~</xsl:text>
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2019-02-06</xsl:with-param>
+        <xsl:with-param name="message">Replacing &lt;tilde/&gt; with &quot;~&quot;</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+<xsl:template match="backslash">
+    <xsl:text>\</xsl:text>
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2019-02-06</xsl:with-param>
+        <xsl:with-param name="message">Replacing &lt;backslash/&gt; with &quot;\&quot;</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
 <!-- 2018-12-30  circa shortened to ca -->
 <xsl:template match="circa">
     <ca/>

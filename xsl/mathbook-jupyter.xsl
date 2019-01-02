@@ -501,7 +501,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- two used for financial reasons, they will be         -->
 <!-- interpreted incorrectly.  But they can be escaped.   -->
 <!-- Not a Markdown element, but critical so here anyway. -->
-<!-- So authors should use the "dollar" element.          -->
 <xsl:template name="dollar-character">
     <xsl:text>\$</xsl:text>
 </xsl:template>

@@ -8782,9 +8782,6 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <xsl:template name="ampersand-character">
     <xsl:text>&amp;</xsl:text>
 </xsl:template>
-<xsl:template match="ampersand">
-    <xsl:call-template name="ampersand-character"/>
-</xsl:template>
 
 <!-- Less Than -->
 <xsl:template name="less-character">
@@ -8812,76 +8809,45 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <xsl:template name="hash-character">
     <xsl:text>#</xsl:text>
 </xsl:template>
-<xsl:template match="hash">
-    <xsl:call-template name="hash-character"/>
-</xsl:template>
-
 
 <!-- Dollar sign -->
 <xsl:template name="dollar-character">
     <xsl:text>$</xsl:text>
-</xsl:template>
-<xsl:template match="dollar">
-    <xsl:call-template name="dollar-character"/>
 </xsl:template>
 
 <!-- Percent sign -->
 <xsl:template name="percent-character">
     <xsl:text>%</xsl:text>
 </xsl:template>
-<xsl:template match="percent">
-    <xsl:call-template name="percent-character"/>
-</xsl:template>
 
 <!-- Circumflex  -->
 <xsl:template name="circumflex-character">
     <xsl:text>^</xsl:text>
 </xsl:template>
-<xsl:template match="circumflex">
-    <xsl:call-template name="circumflex-character"/>
-</xsl:template>
-
-<!-- Ampersand -->
-<!-- Handled above -->
 
 <!-- Underscore -->
 <xsl:template name="underscore-character">
     <xsl:text>_</xsl:text>
-</xsl:template>
-<xsl:template match="underscore">
-    <xsl:call-template name="underscore-character"/>
 </xsl:template>
 
 <!-- Left Brace -->
 <xsl:template name="lbrace-character">
     <xsl:text>{</xsl:text>
 </xsl:template>
-<xsl:template match="lbrace">
-    <xsl:call-template name="lbrace-character"/>
-</xsl:template>
 
 <!-- Right Brace -->
 <xsl:template name="rbrace-character">
     <xsl:text>}</xsl:text>
-</xsl:template>
-<xsl:template match="rbrace">
-    <xsl:call-template name="rbrace-character"/>
 </xsl:template>
 
 <!-- Tilde -->
 <xsl:template name="tilde-character">
     <xsl:text>~</xsl:text>
 </xsl:template>
-<xsl:template match="tilde">
-    <xsl:call-template name="tilde-character"/>
-</xsl:template>
 
 <!-- Backslash -->
 <xsl:template name="backslash-character">
     <xsl:text>\</xsl:text>
-</xsl:template>
-<xsl:template match="backslash">
-    <xsl:call-template name="backslash-character"/>
 </xsl:template>
 
 <!-- ################ -->
@@ -10014,6 +9980,79 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="date-string" select="'2018-12-30'" />
         <xsl:with-param name="message" select="'the &quot;circa&quot; element has been replaced by the functionally equivalent &quot;ca&quot;'" />
     </xsl:call-template>
+    <!--                                                     -->
+    <!-- LaTeX's 10 reserved characters: # $ % ^ & _ { } ~ \ -->
+    <!--                                                     -->
+    <!--  -->
+    <!-- 2019-02-06  hash gone -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//hash" />
+        <xsl:with-param name="date-string" select="'2019-02-06'" />
+        <xsl:with-param name="message" select="'the &quot;hash&quot; element is no longer necessary, simply replace with a bare &quot;#&quot; character'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2019-02-06  dollar gone -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//dollar" />
+        <xsl:with-param name="date-string" select="'2019-02-06'" />
+        <xsl:with-param name="message" select="'the &quot;dollar&quot; element is no longer necessary, simply replace with a bare &quot;$&quot; character'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2019-02-06  percent gone -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//percent" />
+        <xsl:with-param name="date-string" select="'2019-02-06'" />
+        <xsl:with-param name="message" select="'the &quot;percent&quot; element is no longer necessary, simply replace with a bare &quot;%&quot; character'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2019-02-06  circumflex gone -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//circumflex" />
+        <xsl:with-param name="date-string" select="'2019-02-06'" />
+        <xsl:with-param name="message" select="'the &quot;circumflex&quot; element is no longer necessary, simply replace with a bare &quot;^&quot; character'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2019-02-06  ampersand gone -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//ampersand" />
+        <xsl:with-param name="date-string" select="'2019-02-06'" />
+        <xsl:with-param name="message" select="'the &quot;ampersand&quot; element is no longer necessary, simply replace with a bare &quot;&amp;&quot; character (properly escaped, i.e. &quot;&amp;amp;&quot;)'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2019-02-06  underscore gone -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//underscore" />
+        <xsl:with-param name="date-string" select="'2019-02-06'" />
+        <xsl:with-param name="message" select="'the &quot;underscore&quot; element is no longer necessary, simply replace with a bare &quot;_&quot; character'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2019-02-06  lbrace gone -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//lbrace" />
+        <xsl:with-param name="date-string" select="'2019-02-06'" />
+        <xsl:with-param name="message" select="'the &quot;lbrace&quot; element is no longer necessary, simply replace with a bare &quot;{&quot; character'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2019-02-06  rbrace gone -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//rbrace" />
+        <xsl:with-param name="date-string" select="'2019-02-06'" />
+        <xsl:with-param name="message" select="'the &quot;rbrace&quot; element is no longer necessary, simply replace with a bare &quot;}&quot; character'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2019-02-06  tilde gone -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//tilde" />
+        <xsl:with-param name="date-string" select="'2019-02-06'" />
+        <xsl:with-param name="message" select="'the &quot;tilde&quot; element is no longer necessary, simply replace with a bare &quot;~&quot; character'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2019-02-06  backslash gone -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//backslash" />
+        <xsl:with-param name="date-string" select="'2019-02-06'" />
+        <xsl:with-param name="message" select="'the &quot;backslash&quot; element is no longer necessary, simply replace with a bare &quot;\&quot; character'"/>
+    </xsl:call-template>
 </xsl:template>
 
 <!-- Miscellaneous -->
@@ -10156,6 +10195,11 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 
 <!-- This where old elements go to die.        -->
 <!-- Deprecated, then totally discarded later. -->
+<!-- When discarded, move to Schematron rules. -->
+
+<!-- #################################### -->
+<!-- Deprecations, in Chronological Order -->
+<!-- #################################### -->
 
 <!-- Deprecated 2018-12-30           -->
 <!-- Simultaneously changed to "ca." -->
@@ -10164,6 +10208,44 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:call-template name="abbreviation-period"/>
 </xsl:template>
 
+<!-- Ten laTeX empty elements -->
+<!-- Deprecated 2019-02-06    -->
+<!-- # $ % ^ & _ { } ~ \      -->
+
+<xsl:template match="hash">
+    <xsl:call-template name="hash-character"/>
+</xsl:template>
+<xsl:template match="ampersand">
+    <xsl:call-template name="ampersand-character"/>
+</xsl:template>
+<xsl:template match="dollar">
+    <xsl:call-template name="dollar-character"/>
+</xsl:template>
+<xsl:template match="percent">
+    <xsl:call-template name="percent-character"/>
+</xsl:template>
+<xsl:template match="circumflex">
+    <xsl:call-template name="circumflex-character"/>
+</xsl:template>
+<xsl:template match="underscore">
+    <xsl:call-template name="underscore-character"/>
+</xsl:template>
+<xsl:template match="lbrace">
+    <xsl:call-template name="lbrace-character"/>
+</xsl:template>
+<xsl:template match="rbrace">
+    <xsl:call-template name="rbrace-character"/>
+</xsl:template>
+<xsl:template match="tilde">
+    <xsl:call-template name="tilde-character"/>
+</xsl:template>
+<xsl:template match="backslash">
+    <xsl:call-template name="backslash-character"/>
+</xsl:template>
+
+<!-- ############################## -->
+<!-- Killed, in Chronological Order -->
+<!-- ############################## -->
 
 <!-- 2017-07-16  killed, from 2015-03-13 deprecation -->
 <xsl:template match="paragraph" />
