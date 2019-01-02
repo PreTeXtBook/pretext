@@ -437,6 +437,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!-- An author may elect to place a unique string into   -->
+<!-- the docinfo/document-id element and conversions may -->
+<!-- use this to distinguish one document from another.  -->
+<!-- The global variable here is empty to signal         -->
+<!-- "no choice" by the author.                          -->
+<xsl:variable name="document-id">
+    <xsl:value-of select="$docinfo/document-id"/>
+</xsl:variable>
+
 <!-- ########################### -->
 <!-- Exercise component switches -->
 <!-- ########################### -->

@@ -121,6 +121,20 @@ the xsltproc executable.
         Sage worksheet production.)
         -->
         <initialism>SA</initialism>
+        <!-- For various purposes, it is helpful to have a unique identifier    -->
+        <!-- for your entire document.  As of 2019-01-02 this will be used as   -->
+        <!-- the HTML id attribute on the body element of *every* page created  -->
+        <!-- by the HTML conversion.                                            -->
+        <!--                                                                    -->
+        <!--   * Start with a letter                                            -->
+        <!--   * No strange characters, just 52 Latin letters, and 10 digits    -->
+        <!--   * No spaces                                                      -->
+        <!--   * Use only a hyphen (-) to separate words                        -->
+        <!--                                                                    -->
+        <!-- Make it so there is a reasonable expectation of being unique.      -->
+        <!-- "my-book" is a poor choice, "beezer-first-course-linear-algebra"   -->
+        <!-- is better.  And maybe something in-between is best: "beezer-FCLA". -->
+        <document-id>pretext-SA</document-id>
         <!-- Items peculiar to an HTML output -->
         <html>
             <!-- Expects favicon/favicon-32x32.png, and favicon/favicon-16x16.png -->
