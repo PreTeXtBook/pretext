@@ -301,4 +301,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>plain</xsl:text>
 </xsl:template>
 
+<!-- The Iwona font is just chosen from the LaTeX Font      -->
+<!-- Catalogue as a font with math support.  It is an       -->
+<!-- alternative to the Kurier fonts and part of the        -->
+<!-- GUST font project.                                     -->
+<!-- http://www.gust.org.pl/projects/e-foundry/kurier-iwona -->
+<!--                                                        -->
+<!-- Seems to be missing U+0060, "accent grave"             -->
+<!-- Seems to be missing U+00B4, "accent acute"             -->
+<!-- Seems to be missing superior numbers (1, 2, 3)         -->
+<xsl:template name="font-pdflatex-style">
+    <xsl:text>\usepackage[math]{iwona}&#xa;</xsl:text>
+    <xsl:text>\usepackage[T1]{fontenc}&#xa;</xsl:text>
+</xsl:template>
+
 </xsl:stylesheet>

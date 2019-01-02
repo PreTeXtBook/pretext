@@ -562,15 +562,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% end: xelatex and lualatex-specific configuration&#xa;</xsl:text>
     <xsl:text>}{%&#xa;</xsl:text>
     <xsl:text>%% begin: pdflatex-specific configuration&#xa;</xsl:text>
-    <xsl:text>%% translate common Unicode to their LaTeX equivalents&#xa;</xsl:text>
-    <xsl:text>%% Also, fontenc with T1 makes CM-Super the default font&#xa;</xsl:text>
-    <!-- https://tex.stackexchange.com/questions/664/why-should-i-use-usepackaget1fontenc -->
-    <!-- http://tex.stackexchange.com/questions/88368/how-do-i-invoke-cm-super -->
-    <xsl:text>%% (\input{ix-utf8enc.dfu} from the "inputenx" package is possible addition (broken?)&#xa;</xsl:text>
     <xsl:text>\usepackage[utf8]{inputenc}&#xa;</xsl:text>
-    <xsl:text>\usepackage[T1]{fontenc}&#xa;</xsl:text>
-    <xsl:text>\usepackage{lmodern}&#xa;</xsl:text>
-    <!-- TODO: put a pdflatex font package hook here? -->
+    <xsl:text>%% PreTeXt will create a UTF-8 encoded file&#xa;</xsl:text>
+    <xsl:text>%% begin: font setup and configuration for use with pdflatex&#xa;</xsl:text>
+    <xsl:call-template name="font-pdflatex-style"/>
+    <xsl:text>%% end: font setup and configuration for use with pdflatex&#xa;</xsl:text>
     <xsl:text>%% end: pdflatex-specific configuration&#xa;</xsl:text>
     <xsl:text>}&#xa;</xsl:text>
     <xsl:if test="$document-root//c or $document-root//cd or $document-root//pre or $document-root//program or $document-root//console or $document-root//sage or $document-root//tag or $document-root//tage or $document-root//attr">
@@ -2914,6 +2910,43 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 <xsl:template match="article|letter|memo" mode="titleps-global-style">
     <xsl:text>plain</xsl:text>
+</xsl:template>
+
+
+<!-- ##### -->
+<!-- Fonts -->
+<!-- ##### -->
+
+<!-- General notes:                                                   -->
+<!--                                                                  -->
+<!-- * Any preamble activity relative to fonts can be set here        -->
+<!-- * A font which has a "T1" encoding is more modern than one       -->
+<!--   with "OT1" encoding, and preferred                             -->
+<!--   https://tex.stackexchange.com/questions/664/                   -->
+<!--   https://tex.stackexchange.com/questions/108417/                -->
+<!-- * We could assume everybody will use fonts with T1 encoding,     -->
+<!--   but have instead allowed for flexibility, so be sure to        -->
+<!--   include the \usepackage{fontenc} with an option for the        -->
+<!--   default encoding                                               -->
+<!-- * If the <, > characters become upside-down exclamation or       -->
+<!--   question mark, then you have a problem with font-encoding      -->
+<!--   https://tex.stackexchange.com/questions/2369/                  -->
+<!-- * The LaTeX Font Catalogue is a good place to start and shows    -->
+<!--   recommended commands.  That is all we have done here to obtain -->
+<!--   Latin Modern (which seems to be universally recommended)       -->
+<!--   http://www.tug.dk/FontCatalogue/                               -->
+<!-- * Some math fonts are designed to be more harmonious             -->
+<!--   with certain text fonts, do your research                      -->
+<!-- * If you only use "\usepackage[T1]{fontenc}" then the            -->
+<!--   CM-Super fonts will be loaded.  These work well, but           -->
+<!--   are inferior to Latin Modern in some ways                      -->
+<!--   http://tex.stackexchange.com/questions/88368/                  -->
+<!-- * Check new fonts carefully for missing, or poorly created,      -->
+<!--   glyphs.  The sample article can be useful for this.            -->
+
+<xsl:template name="font-pdflatex-style">
+    <xsl:text>\usepackage{lmodern}&#xa;</xsl:text>
+    <xsl:text>\usepackage[T1]{fontenc}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- ################## -->
