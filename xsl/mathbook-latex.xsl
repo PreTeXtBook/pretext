@@ -7345,11 +7345,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\textcopyleft{}</xsl:text>
 </xsl:template>
 
-<!-- Registered symbol                      -->
-<!-- Bringhurst: \textsuperscript necessary -->
-<!-- Or a font might already superscript??? -->
+<!-- Registered symbol -->
 <xsl:template name="registered-character">
-    <xsl:text>\textsuperscript\textregistered{}</xsl:text>
+    <xsl:text>\textregistered{}</xsl:text>
 </xsl:template>
 
 <!-- Trademark symbol -->
