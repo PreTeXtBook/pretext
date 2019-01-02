@@ -5456,7 +5456,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:call-template name="css" />
                 <xsl:call-template name="font-awesome" />
             </head>
-            <xsl:element name="body">
+            <body>
+                <!-- potential document-id per-page -->
+                <xsl:call-template name="document-id"/>
                 <!-- the first class controls the default icon -->
                 <xsl:attribute name="class">
                     <xsl:choose>
@@ -5520,7 +5522,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </div>
                 <xsl:apply-templates select="$docinfo/analytics" />
                 <!-- <xsl:call-template name="pytutor-footer" /> -->
-            </xsl:element>
+            </body>
         </html>
     </exsl:document>
 </xsl:template>
@@ -7544,6 +7546,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="." mode="header-libraries" />
             </head>
             <body class="mathbook-content">
+                <!-- potential document-id per-page -->
+                <xsl:call-template name="document-id"/>
                 <div>
                     <!-- the actual interactive bit          -->
                     <xsl:apply-templates select="." mode="size-pixels-style-attribute" />
@@ -8125,6 +8129,8 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
             <xsl:call-template name="font-awesome" />
         </head>
         <body>
+            <!-- potential document-id per-page -->
+            <xsl:call-template name="document-id"/>
             <!-- the first class controls the default icon -->
             <xsl:attribute name="class">
                 <xsl:choose>
@@ -8226,11 +8232,26 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
         </head>
         <!-- TODO: needs some padding etc -->
         <body>
+            <!-- potential document-id per-page -->
+            <xsl:call-template name="document-id"/>
             <xsl:copy-of select="$content" />
             <xsl:apply-templates select="$docinfo/analytics" />
         </body>
     </html>
     </exsl:document>
+</xsl:template>
+
+<!-- The body element of every page will (optionally) carry  -->
+<!-- an id that identifies which document the HTML page is a -->
+<!-- portion of.  This requires the author to specify the    -->
+<!-- string in the docinfo/document-id element, which comes  -->
+<!-- here via the $document-id variable.                     -->
+<xsl:template name="document-id">
+    <xsl:if test="not($document-id = '')">
+        <xsl:attribute name="id">
+            <xsl:value-of select="$document-id"/>
+        </xsl:attribute>
+    </xsl:if>
 </xsl:template>
 
 <!-- ################# -->
