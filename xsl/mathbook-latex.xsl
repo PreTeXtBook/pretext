@@ -2996,6 +2996,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--   https://tex.stackexchange.com/questions/1390/                  -->
 <!-- * Check new fonts carefully for missing, or poorly created,      -->
 <!--   glyphs.  The sample article can be useful for this.            -->
+<!--   Also: search the LaTeX *.log file for the string               -->
+<!--   "Missing character:" for further clues.                        -->
 
 <xsl:template name="font-pdflatex-style">
     <xsl:text>\usepackage{lmodern}&#xa;</xsl:text>
