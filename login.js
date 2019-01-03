@@ -29,6 +29,17 @@ function eraseCookie(name) {
 	createCookie(name,"",-1);
 }
 
+Storage.prototype.setObject = function(key, value) {
+//    this.setItem(key, JSON.stringify(value));
+    this.setItem(key, JSON.stringify(value, function(key, val) {
+    return val.toFixed ? Number(val.toFixed(3)) : val;
+}));
+}
+Storage.prototype.getObject = function(key) {
+    var value = this.getItem(key);
+    return value && JSON.parse(value);
+}
+
 function hash_of_string(str) {
     str = str.toString();
     var the_len = str.length;
