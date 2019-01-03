@@ -1,25 +1,4 @@
 
-//Wrap selected text in  tags with the class 'hl'
-//Take some action after (in this case, a simple alert)
-// $("p, li").on("mouseup",
-//     function() {
-//         var selection = getSelectedText(); 
-//         if(selection.length >= 3) {
-//             console.log(selection);
-//             
-//             
-//             var replacement = $('<span></span>').attr({'class':'hl'}).html(selection);
-//             console.log(replacement);
-//             
-//             var replacementHtml = $('<div>').append(replacement.clone()).remove().html();
-//             console.log(replacementHtml);
-// 
-//             $(this).html( $(this).html().replace(selection, replacementHtml) );
-//             alert(selection);
-//         }        
-//     }
-// ); 
-
 highlight_css = document.createElement('style');
 highlight_css.type = "text/css";
 highlight_css.id = "highlight_css";
@@ -107,12 +86,16 @@ function enclosing_p_or_li(obj) {
 // you end up with a race condition because each highlight changes
 // the structure of the paragraph.
 async function display_one_highlight(parent_id, hl) {
+            var the_parent = document.getElementById(parent_id);
+            if (!the_parent) {
+                console.log("this id not on this page:", parent_id);
+                return
+            }
             console.log("setting", hl, "on", parent_id);
             var st_node_ind = hl['start_nn'];
             var st_offset = hl['start_offset'];
             var end_node_ind = hl['end_nn'];
             var end_offset = hl['end_offset'];
-            var the_parent = document.getElementById(parent_id);
             // other error checks: same parent
             if (st_offset < 0 || st_offset > the_parent.childNodes[st_node_ind].textContent.length || end_offset < 0 || end_offset > the_parent.childNodes[end_node_ind].textContent.length) {
                 return
@@ -125,6 +108,8 @@ async function display_one_highlight(parent_id, hl) {
             var inside_part = document.createElement("span")
             inside_part.classList.add("hl");
             inside_part.id = hl['id'];
+            console.log("inside_part", inside_part, "going inside this_range",this_range);
+            console.log("in the_parent",the_parent);
             this_range.surroundContents(inside_part);
             return;
 }
@@ -236,6 +221,24 @@ $("p[id], li[id]").on("mouseup",
         }
         display_one_highlight(starting_parent_id, this_highlight);
         localStorage.setObject("all_highlights", all_highlights);
+
+//  var xhr = new XMLHttpRequest();
+//  xhr.open("post", "https://aimath.org/cgi-bin/highlights.py", true);
+//  xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+//  xhr.send(JSON.stringify(all_highlights));
+
+$.ajax({
+    url: "https://aimath.org/cgi-bin/highlights.py",
+    type: "post",
+    data: JSON.stringify(all_highlights),
+    dataType: "json",
+    success: function(response) {
+        alert(response);
+    }
+});
+
+  console.log("just ajax sent", JSON.stringify(all_highlights));
+
         console.log("all_highlights", all_highlights);
         return "";
 

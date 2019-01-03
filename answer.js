@@ -1,17 +1,4 @@
 
-
-Storage.prototype.setObject = function(key, value) {
-//    this.setItem(key, JSON.stringify(value));
-    this.setItem(key, JSON.stringify(value, function(key, val) {
-    return val.toFixed ? Number(val.toFixed(3)) : val;
-}));
-}
-
-Storage.prototype.getObject = function(key) {
-    var value = this.getItem(key);
-    return value && JSON.parse(value);
-}
-
 function escapeHTML(text) {
     the_ans = text;
     the_ans = the_ans.replace(/&/g, "&amp;");
