@@ -222,11 +222,7 @@ $("p[id], li[id]").on("mouseup",
         display_one_highlight(starting_parent_id, this_highlight);
         localStorage.setObject("all_highlights", all_highlights);
 
-//  var xhr = new XMLHttpRequest();
-//  xhr.open("post", "https://aimath.org/cgi-bin/highlights.py", true);
-//  xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
-//  xhr.send(JSON.stringify(all_highlights));
-
+/*
 $.ajax({
     url: "https://aimath.org/cgi-bin/highlights.py",
     type: "post",
@@ -238,11 +234,10 @@ $.ajax({
 });
 
   console.log("just ajax sent", JSON.stringify(all_highlights));
-
+*/
         console.log("all_highlights", all_highlights);
         return "";
 
-//        return window.getSelection().toString(); 
     } 
 }); 
 

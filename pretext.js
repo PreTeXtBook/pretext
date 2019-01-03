@@ -12,31 +12,6 @@
  *******************************************************************************
  */
 
-/*  document.write is deprecated for scripts
-if(typeof MathJax == 'undefined' ) {
-    document.write('<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML-full"></script>')
-}
-*/
-
-/* load MathJax if not already loaded */
-/* omitted in version 0.1
-if(typeof MathJax == 'undefined' ) {
-    (function(d, script) {
-       script = d.createElement('script');
-       script.type = 'text/javascript';
-       script.async = true;
-       script.onload = function() {
-        // remote script has loaded
-       };
-       script.onerror = function(){
-        // something went wrong
-       }
-       script.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML-full';
-       d.getElementsByTagName('head')[0].appendChild(script);
-      }(document));
-}
-*/
-
 /* global MathJax, jQuery */
 // Leading semicolon safeguards against errors in script concatenation
 // Pass dependencies into this closure from the bottom of the file
