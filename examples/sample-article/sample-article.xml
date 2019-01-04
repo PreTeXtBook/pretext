@@ -1243,7 +1243,7 @@ the xsltproc executable.
             </sage>
             -->
 
-            <p>Because of the Fundamental Theorem, for every derivative we know, there is an antiderivative we might find useful.  Because of the Fundamental Theorem of Calculus, we recycle the <q><m>\int</m></q> symbol as notation for an antiderivative.<ul cols="2">
+            <p>Because of the Fundamental Theorem<fn>First test footnote</fn>, for every derivative we know, there is an antiderivative we might find useful.  Because of the Fundamental Theorem of Calculus<fn>Second test footnote</fn>, we recycle the <q><m>\int</m></q> symbol as notation for an antiderivative.<ul cols="2">
                 <li>
                     <p>Derivatives<ol label="(a)">
                         <li><m>\frac{d}{dx}x^n = nx^{n-1}</m></li>
@@ -1260,7 +1260,7 @@ the xsltproc executable.
             </ul></p>
 
             <remark>
-                <p>You can gain a greater understanding of derivatives by studying the graphs of functions with their derivatives.  Can you discern the derivative<ndash />antiderivative relationship in Figure<nbsp /><xref ref="figure-function-derivative" />?</p>
+                <p>You can<fn>Third test footnote</fn> gain a greater understanding of derivatives by studying the graphs of functions with their derivatives.  Can<fn>Fourth test footnote</fn> you discern the derivative<ndash />antiderivative<fn>Fifth test footnote</fn> relationship in Figure<nbsp /><xref ref="figure-function-derivative" />?</p>
             </remark>
 
             <!--
@@ -1279,7 +1279,7 @@ the xsltproc executable.
                 </image>
             </figure>
 
-            <p>Lists can have multiple columns.  With <init>HTML</init> items displayed in row-major order (horizontally first) and with <latex /> items are displayed in column-major order (vertically first).  When one order, or the other, becomes workable in both variants, maybe we will be consistent in presentation.  (Note that with just one row, it makes no difference.)  We used it above for the two items<mdash />derivatives and integrals<mdash />where each item was a list of its own.  Here are two more examples, one with short snippets and lots of columns, the other with lots of text in paragraphs.<idx xml:id="index-start-multicolumn" finish="index-finish-multicolumn"><h>list</h><h>multicolumn</h></idx><ol cols="5">
+            <p>Lists<fn>Sixth test footnote</fn> can have multiple columns.  With <init>HTML</init> items displayed in row-major order (horizontally first) and<fn>Seventh test footnote</fn> with <latex /> items are displayed in column-major order (vertically first).  When one order, or the other, becomes workable in both variants, maybe we will be consistent in presentation.  (Note that with just one row, it makes no difference.)  We used it above for the two items<mdash />derivatives and integrals<mdash />where each item was a list of its own.  Here are two more examples, one with short snippets and lots of columns, the other with lots of text in paragraphs.<idx xml:id="index-start-multicolumn" finish="index-finish-multicolumn"><h>list</h><h>multicolumn</h></idx><ol cols="5">
                 <li><p>Red</p></li>
                 <li><p>Blue</p></li>
                 <li><p>Green</p></li>
