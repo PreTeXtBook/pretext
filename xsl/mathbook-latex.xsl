@@ -2853,6 +2853,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "before-code" argument.                                        -->
 <!-- TODO: integrate "epigraph" package perhaps                     -->
 
+<!-- Pretty much everything for actually manipulating titles -->
+<!-- happens in the -common template. But when structured by -->
+<!-- "line" we need to implement an abstract variable with a -->
+<!-- separator string.                                       -->
+<!-- NB: \\ works better than \newline in a \centering       -->
+<xsl:variable name="title-separator" select="'\\'"/>
+
 <!-- Not implemented/explored -->
 <xsl:template name="titlesec-part-style"/>
 

@@ -1601,6 +1601,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Headings -->
 <!-- ######## -->
 
+<!-- Pretty much everything for actually manipluating titles -->
+<!-- happens in the -common template. But when structured by -->
+<!-- "line" we need to implement an abstract variable with a -->
+<!-- separator string.  Since HTML (and EPUB, etc) are       -->
+<!-- zoomable and reflowable, we just insert spaces and      -->
+<!-- leave actual line-breaking to the laTeX conversion.     -->
+<xsl:variable name="title-separator" select="' '"/>
+
 <!-- Titles get variable CSS to control punctuation -->
 <!-- select on parent, checks title as child        -->
 <xsl:template match="*" mode="title-attributes">

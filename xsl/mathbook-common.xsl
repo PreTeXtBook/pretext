@@ -3588,8 +3588,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- With modal templates below, the default template does nothing   -->
 <!-- We include the "creator" element of a theorem/axiom as metadata -->
 <!-- NB: since these elements get killed on-sight, when we actually  -->
-<!-- want to process them we need to use a "select" attribute like   -->
-<!-- foo/node().                                                     -->
+<!-- want to process them we need to use a "select" attribute        -->
+<!-- similar to  title/*|title/text().                               -->
 <xsl:template match="title" />
 <xsl:template match="subtitle" />
 <xsl:template match="shorttitle"/>
@@ -3612,9 +3612,14 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:apply-templates select="." mode="has-default-title" />
     </xsl:variable>
     <xsl:choose>
-        <!-- node() matches text nodes and elements -->
+        <xsl:when test="title/line">
+            <xsl:apply-templates select="title/line">
+                <xsl:with-param name="separator" select="$title-separator"/>
+            </xsl:apply-templates>
+        </xsl:when>
+        <!-- select="title" would just get it killed -->
         <xsl:when test="title">
-            <xsl:apply-templates select="title/node()" />
+            <xsl:apply-templates select="title/*|title/text()" />
         </xsl:when>
         <xsl:when test="$default-exists='true'">
             <xsl:apply-templates select="." mode="type-name" />
@@ -3631,6 +3636,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- title, but not when migrating other places).  This template -->
 <!-- is not called often, usually the "title-short" template is  -->
 <!-- the right template to call when a title is duplicated.      -->
+<!-- We pass a space for the version structured with "line".     -->
 <!-- TODO: ban fn in titles, then maybe this is obsolete -->
 <!-- or maybe we should be careful about math            -->
 <xsl:template match="*" mode="title-simple">
@@ -3638,9 +3644,15 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:apply-templates select="." mode="has-default-title" />
     </xsl:variable>
     <xsl:choose>
-        <!-- node() matches text nodes and elements -->
+        <xsl:when test="title/line">
+            <xsl:apply-templates select="title/line">
+                <xsl:with-param name="separator" select="' '"/>
+            </xsl:apply-templates>
+        </xsl:when>
+        <!-- select="title" would just get it killed -->
+        <!-- avoid footnotes in simple version       -->
         <xsl:when test="title">
-            <xsl:apply-templates select="title/node()[not(self::fn)]"/>
+            <xsl:apply-templates select="title/*[not(self::fn)]|title/text()" />
         </xsl:when>
         <xsl:when test="$default-exists='true'">
             <xsl:apply-templates select="." mode="type-name" />
@@ -3652,6 +3664,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 
 <!-- Short titles are meant for places such as the Table of  -->
 <!-- Contents and for LaTeX, the page headers and/or footers -->
+<!-- It'd be silly to structure this with "line"             -->
 <xsl:template match="*" mode="title-short">
     <xsl:choose>
         <!-- schema should control content, eg no footnotes -->
@@ -3667,11 +3680,13 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 </xsl:template>
 
 <!-- A version of the title with all abnormal characters stripped -->
+<!-- and using underscores in place of spaces                     -->
 <!-- http://stackoverflow.com/questions/1267934/                  -->
 <!-- removing-non-alphanumeric-characters-from-string-in-xsl      -->
 <xsl:template match="*" mode="title-filesafe">
+    <!-- first, the simple title -->
     <xsl:variable name="raw-title">
-        <xsl:apply-templates  select="title/node()[not(self::fn)]" />
+        <xsl:apply-templates select="." mode="title-simple"/>
     </xsl:variable>
     <xsl:variable name="letter-only-title">
         <xsl:value-of select="translate($raw-title, translate($raw-title,
@@ -3703,8 +3718,19 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 </xsl:template>
 
 <!-- We get subtitles the same way, but with no variations -->
+<!-- Structured with "line" is a possibility               -->
 <xsl:template match="*" mode="subtitle">
-    <xsl:apply-templates select="subtitle/node()" />
+    <xsl:choose>
+        <xsl:when test="subtitle/line">
+            <xsl:apply-templates select="subtitle/line">
+                <xsl:with-param name="separator" select="$title-separator"/>
+            </xsl:apply-templates>
+        </xsl:when>
+        <!-- select="subtitle" would just get it killed -->
+        <xsl:when test="subtitle">
+            <xsl:apply-templates select="subtitle/*|subtitle/text()" />
+        </xsl:when>
+    </xsl:choose>
 </xsl:template>
 
 <!-- We let styling provide punctuation for titles, principally       -->
@@ -3725,7 +3751,28 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 </xsl:template>
 
 <xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;" mode="creator-full">
-    <xsl:apply-templates select="creator/node()" />
+    <!-- select="creator" would just get it killed -->
+    <xsl:apply-templates select="creator/*|creator/text()" />
+</xsl:template>
+
+<!-- Structured titles -->
+
+<!-- Each "line", except the last, gets a separator     -->
+<!-- Almost always a space, but for LaTeX, at birth,    -->
+<!-- a newline.  We make it obvious that this character -->
+<!-- has not been overridden in a conversion            -->
+
+<xsl:variable name="title-separator" select="'[TITLESEP]'"/>
+
+<!-- Books:    title, subtitle, titles of parts, titles of chapters -->
+<!-- Articles: title, subtitle, titles of sections                  -->
+<xsl:template match="book/title/line|book/subtitle/line|book/part/title/line|book/part/chapter/title/line|book/chapter/title/line|article/title/line|article/subtitle/line|article/section/title/line">
+    <xsl:param name="separator"/>
+
+    <xsl:apply-templates/>
+    <xsl:if test="following-sibling::line">
+        <xsl:value-of select="$separator"/>
+    </xsl:if>
 </xsl:template>
 
 <!-- ################ -->
