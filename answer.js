@@ -30,15 +30,59 @@ var reading_questions = document.querySelectorAll("section.reading-questions art
 
 console.log('reading_questions.length', reading_questions.length);
 
+function make_submit_button() {
+    if (document.getElementById("rq_submit")) {  // don't make the button if it already exists
+        console.log("button exists", document.getElementById("rq_submit"));
+        return
+    }
+    last_reading_question = reading_questions[reading_questions.length - 1];
+    answer_button_holder = document.createElement('div');
+    answer_button_holder.setAttribute('class', 'rq_submit_wrapper');
+    answer_button_holder.innerHTML = rq_submit_button;
+    last_reading_question.insertAdjacentElement("afterend", answer_button_holder);
+}
+
+function save_reading_questions() {
+    rq_data = {"user": uname, "pw": emanu, "pI": pageIdentifier, "type": "readingquestions", "rq": JSON.stringify(reading_questions_object)}
+    $.ajax({
+    url: "https://aimath.org/cgi-bin/highlights.py",
+    type: "post",
+    data: JSON.stringify(rq_data),
+    dataType: "json",
+    success: function(response) {
+        alert(response);
+    }
+});
+
+  console.log("just ajax sent", JSON.stringify(reading_questions_object));
+}
+
 // no point in handling reading questions if there are not any
 if (reading_questions.length) {
 
   // retrieve the existing reading questions, if they exist
-  var reading_questions_object_id = pageIdentifier + "___" + "rq".
+  var reading_questions_object_id = pageIdentifier + "___" + "rq";
   var reading_questions_object = localStorage.getObject(reading_questions_object_id);
+  var reading_questions_all_answered = false;
+  var reading_questions_submitted = false;
+
   if (!reading_questions_object) {
       reading_questions_object = {}
   }
+
+  if (Object.keys(reading_questions_object).length == reading_questions.length) {
+      console.log("all reading questions have previously been answered");
+      reading_questions_all_answered = true;
+  }
+
+  answer_css = document.createElement('style');
+  answer_css.type = "text/css";
+  answer_css.id = "highlight_css";
+  document.head.appendChild(answer_css);
+  var css_for_ans = '#rq_submit { background: #FDD; padding: 5px;}\n';
+  css_for_ans += '#rq_submit.submitted { background: #DFD}';
+  css_for_ans += '.rq_submit_wrapper { margin-top: 0.5em; float: right}';
+  answer_css.innerHTML = css_for_ans;
 
   var rq_answer_label = '<span'
   rq_answer_label += ' class="readingquestion_make_answer addcontent';
@@ -51,7 +95,13 @@ if (reading_questions.length) {
       rq_answer_label += 'My answer&rarr;';
   }
   rq_answer_label +='</span>';
-  
+
+  var rq_submit_button = '<span';
+  rq_submit_button += ' id="rq_submit"';
+  rq_submit_button += '>';
+  rq_submit_button += 'Submit answers';
+  rq_submit_button +='</span>';
+
   // make reading quesitons active, and insert answers if available
   for (var j=0; j < reading_questions.length; ++j) {
       var reading_question = reading_questions[j];
@@ -59,7 +109,7 @@ if (reading_questions.length) {
   
       rq_answer_id = reading_question_id + "_text";
  //     var existing_content = localStorage.getObject(rq_answer_id);
-      var existing_content = reading_questions_object(rq_answer_id);
+      var existing_content = reading_questions_object[rq_answer_id];
   
       if (reading_question.lastElementChild.tagName === "P") {
           console.log("ends in a p");
@@ -154,6 +204,11 @@ if (reading_questions.length) {
   // we have the contents of the answer, so save it to local storage
     reading_questions_object[this_rq_id] = this_rq_text;
     localStorage.setObject(reading_questions_object_id, reading_questions_object);
+    if (Object.keys(reading_questions_object).length == reading_questions.length) {
+        console.log("all reading questions have been answered");
+        reading_questions_all_answered = true;
+        make_submit_button();
+    }
   
   // and save a copy hidden on the page
     console.log("looking for", this_rq_id + "_hidden");
@@ -238,8 +293,21 @@ if (reading_questions.length) {
     console.log(".rq_delete", this_rq_id);
     $(this).parent().parent().prev().children(".readingquestion_make_answer").removeClass("hidecontrols");
     $(this).parent().parent().remove();
-    localStorage.removeItem(this_rq_id);
-  
+    console.log("reading_questions_object", reading_questions_object);
+    delete reading_questions_object[this_rq_id];
+    console.log("now reading_questions_object", reading_questions_object);
+ //   localStorage.removeItem(this_rq_id);
+    localStorage.setObject(reading_questions_object_id, reading_questions_object);
   });
   
+  $('body').on('click','#rq_submit', function(){
+    console.log("submitting rq answers");
+    $('#rq_submit').addClass('submitted');
+    $('#rq_submit').innerHTML = "Resubmit answer";
+    save_reading_questions();
+  });
+
+  if(reading_questions_all_answered) {
+        make_submit_button();
+  }
 }

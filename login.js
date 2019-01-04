@@ -29,12 +29,14 @@ function eraseCookie(name) {
 	createCookie(name,"",-1);
 }
 
+
 Storage.prototype.setObject = function(key, value) {
 //    this.setItem(key, JSON.stringify(value));
     this.setItem(key, JSON.stringify(value, function(key, val) {
     return val.toFixed ? Number(val.toFixed(3)) : val;
 }));
 }
+
 Storage.prototype.getObject = function(key) {
     var value = this.getItem(key);
     return value && JSON.parse(value);
@@ -99,6 +101,7 @@ function loadScript(script) {
   var allscripts = document.getElementsByTagName('script');
   var s = allscripts[allscripts.length - 1];
   console.log('s',s);
+  console.log("adding a script", newscript);
   s.parentNode.insertBefore(newscript, s.nextSibling);
 }
 
@@ -107,11 +110,16 @@ function removeLogin() {
     eraseCookie("ut_cookie");
 }
 
+var uname = "";
+var emanu = "";
+
 function validateLogin() {
     var logged_in = false;
     var un = document.loginform.uname.value;
     un = un.toLowerCase();
+    uname = un;
     var pw = document.loginform.psw.value;
+    emanu = pw;
     var guest_name = "guest";
     var the_password_guest = "guest";
     var the_un_enc = hash_of_string(un);
@@ -176,10 +184,24 @@ else {
 */
 
 var ut_id = readCookie('ut_cookie');
+uname = ut_id;
+
+var pageIdentifier = "";
 
 window.addEventListener('load', function(){
     console.log("checking login", ut_id);
-if (ut_id) {
+var bodyID = document.getElementsByTagName('body')[0].id;
+console.log("bodyID", bodyID);
+if (bodyID) {
+    var secID = document.getElementsByTagName('section')[0].id;
+    if (secID) {
+        pageIdentifier = bodyID + "___" + secID
+    }
+}
+
+if (pageIdentifier) {
+
+  if (ut_id) {
     console.log("found "+ut_id);
     $("#theloginform").hide();
 
@@ -193,10 +215,10 @@ if (ut_id) {
     if ((typeof trails !== 'undefined') && trails) {
             loadScript('trails');
     }
-}
-else if (typeof login_required !== 'undefined' && login_required) {
+  }
+  else if (typeof login_required !== 'undefined' && login_required) {
     login_form();
-}
+  }
 
   $("#loginlogout.logout").click(function(){
      login_form('logout');
@@ -204,6 +226,9 @@ else if (typeof login_required !== 'undefined' && login_required) {
   $("#loginlogout.login").click(function(){
      login_form('login');
     });
+} else {
+    console.log("login not enabled because document not identified")
+}
 });
 
 /*
