@@ -2836,18 +2836,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We provide variants for the "numberless" case, which are only  -->
 <!-- primarily necessary for chapter-level items (eg "preface"),    -->
 <!-- but might also occur due to one-count specialized divisions,   -->
-<!-- present in "unstructured" divisions                            -->
-<!-- "chapter" has a "display" format, to mimic the LaTeX two-line  -->
-<!-- look, otherwise we use the "block" format to get a paragraph   -->
-<!-- which will wrap long titles.  If more elaborate styling is     -->
-<!-- employed, it may be necessary to put titles into "minipage"    -->
-<!-- environments, or other LaTex boxes                             -->
+<!-- present in "unstructured" divisions. "chapter" has a "display" -->
+<!-- format, to mimic the LaTeX two-line look, even for multiline   -->
+<!-- titles.  For finer divisions, when numbered, we use a "hang"   -->
+<!-- format, so any extra lines begin aligned with the first line   -->
+<!-- (whether they are authored-too long and then wtap, or if       -->
+<!-- structured with a "line" element and so earning dedicated "\\" -->
+<!-- automatically.  For "numberless" variants the "block" shape    -->
+<!-- seems sufficient as there is no label.  If more elaborate      -->
+<!-- styling is employed, it may be necessary to put titles into    -->
+<!-- "minipage" environments, or other LaTex boxes                  -->
+<!-- NB: since have elected to use the "explicit" package option    -->
+<!-- of titlesec, we need to *explicity* place a parameter #1.      -->
+<!-- This will allow maximum flexibility for style writers.         -->
+<!-- Simple use (as here) will be as the last thing in the          -->
+<!-- "before-code" argument.                                        -->
 <!-- TODO: integrate "epigraph" package perhaps                     -->
 
 <!-- Not implemented/explored -->
 <xsl:template name="titlesec-part-style"/>
 
-<!-- Note the use of "\divisionnameptx" macro -->
+<!-- Note the use of "\divisionnameptx" macro              -->
+<!-- A multiline title should be fine in a "display" shape -->
 <xsl:template name="titlesec-chapter-style">
     <xsl:text>\titleformat{\chapter}[display]&#xa;</xsl:text>
     <xsl:text>{\normalfont\huge\bfseries}{\divisionnameptx\space\thechapter}{20pt}{\Huge#1}&#xa;</xsl:text>
@@ -2861,8 +2871,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Refences, and especially Index, are unnumbered -->
 <!-- section-level items in the back matter         -->
 <xsl:template name="titlesec-section-style">
-    <xsl:text>\titleformat{\section}[block]&#xa;</xsl:text>
-    <xsl:text>{\normalfont\Large\bfseries}{\thesection\space\titleptx}{1em}{}&#xa;</xsl:text>
+    <xsl:text>\titleformat{\section}[hang]&#xa;</xsl:text>
+    <xsl:text>{\normalfont\Large\bfseries}{\thesection}{1ex}{#1}&#xa;</xsl:text>
     <xsl:text>[{\large\authorsptx}]&#xa;</xsl:text>
     <xsl:text>\titleformat{name=\section,numberless}[block]&#xa;</xsl:text>
     <xsl:text>{\normalfont\Large\bfseries}{}{0pt}{#1}&#xa;</xsl:text>
@@ -2871,8 +2881,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template name="titlesec-subsection-style">
-    <xsl:text>\titleformat{\subsection}[block]&#xa;</xsl:text>
-    <xsl:text>{\normalfont\large\bfseries}{\thesubsection\space\titleptx}{1em}{}&#xa;</xsl:text>
+    <xsl:text>\titleformat{\subsection}[hang]&#xa;</xsl:text>
+    <xsl:text>{\normalfont\large\bfseries}{\thesubsection}{1ex}{#1}&#xa;</xsl:text>
     <xsl:text>[{\normalsize\authorsptx}]&#xa;</xsl:text>
     <xsl:text>\titleformat{name=\subsection,numberless}[block]&#xa;</xsl:text>
     <xsl:text>{\normalfont\large\bfseries}{}{0pt}{#1}&#xa;</xsl:text>
@@ -2881,8 +2891,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template name="titlesec-subsubsection-style">
-    <xsl:text>\titleformat{\subsubsection}[block]&#xa;</xsl:text>
-    <xsl:text>{\normalfont\normalsize\bfseries}{\thesubsubsection\space\titleptx}{1em}{}&#xa;</xsl:text>
+    <xsl:text>\titleformat{\subsubsection}[hang]&#xa;</xsl:text>
+    <xsl:text>{\normalfont\normalsize\bfseries}{\thesubsubsection}{1em}{#1}&#xa;</xsl:text>
     <xsl:text>[{\small\authorsptx}]&#xa;</xsl:text>
     <xsl:text>\titleformat{name=\subsubsection,numberless}[block]&#xa;</xsl:text>
     <xsl:text>{\normalfont\normalsize\bfseries}{}{0pt}{#1}&#xa;</xsl:text>
