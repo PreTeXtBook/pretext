@@ -2009,14 +2009,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!--                                                                 -->
     <!-- http://tex.stackexchange.com/questions/106159/why-i-shouldnt-load-pdftex-option-with-hyperref -->
     <xsl:text>%% hyperref driver does not need to be specified, it will be detected&#xa;</xsl:text>
-    <xsl:text>\usepackage{hyperref}&#xa;</xsl:text>
+    <xsl:text>%% Footnote marks in tcolorbox have broken linking under&#xa;</xsl:text>
+    <xsl:text>%% hyperref, so it is necessary to turn off all linking&#xa;</xsl:text>
+    <xsl:text>%% It *must* be given as a package option, not with \hypersetup&#xa;</xsl:text>
+    <xsl:text>\usepackage[hyperfootnotes=false]{hyperref}&#xa;</xsl:text>
     <!-- http://tex.stackexchange.com/questions/79051/how-to-style-text-in-hyperref-url -->
     <xsl:if test="//url">
     <xsl:text>%% configure hyperref's  \url  to match listings' inline verbatim&#xa;</xsl:text>
         <xsl:text>\renewcommand\UrlFont{\small\ttfamily}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$latex.print='no'">
-        <xsl:text>%% Hyperlinking active in PDFs, all links solid and blue&#xa;</xsl:text>
+        <xsl:text>%% Hyperlinking active in electronic PDFs, all links solid and blue&#xa;</xsl:text>
         <xsl:text>\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,filecolor=blue,urlcolor=blue}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$latex.print='yes'">
@@ -2810,9 +2813,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- EXAMPLE-LIKE: "example", "question", "problem"    -->
 <!-- PROJECT-LIKE: "activity", "exploration",          -->
 <!--               "exploration", "investigation"      -->
-<!-- Inline Exercises                                  -->
-<!-- "assemblage"                                      -->
 <!-- ASIDE-LIKE: "aside", "historical", "biographical" -->
+<!-- Inline Exercises                                  -->
+<!--                                                   -->
 <!-- Inline, bold face title, otherwise B/W, plain     -->
 <!-- The "\normalfont" on the title is to counteract   -->
 <!-- the italicized bodies of theorems and axioms      -->
@@ -3702,6 +3705,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%&#xa;</xsl:text>
     <xsl:apply-templates/>
     <xsl:text>\end{backcolophon}%&#xa;</xsl:text>
+    <xsl:apply-templates select="." mode="pop-footnote-text"/>
     <xsl:text>\vspace*{\stretch{2}}&#xa;</xsl:text>
 </xsl:template>
 
@@ -3714,6 +3718,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%&#xa;</xsl:text>
     <xsl:apply-templates/>
     <xsl:text>\end{backcolophon}%&#xa;</xsl:text>
+    <xsl:apply-templates select="." mode="pop-footnote-text"/>
 </xsl:template>
 
 <!-- Appendices are handled in the general subdivision template -->
@@ -4442,6 +4447,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- Note sufficiency and necessity of processing index items here -->
         <xsl:apply-templates select="idx|p|blockquote|pre|aside|sidebyside|sbsgroup" />
         <xsl:text>\end{commentary}&#xa;</xsl:text>
+        <xsl:apply-templates select="." mode="pop-footnote-text"/>
     </xsl:if>
 </xsl:template>
 
@@ -4534,6 +4540,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="&THEOREM-FILTER;">
         <xsl:apply-templates select="proof" />
     </xsl:if>
+    <xsl:apply-templates select="." mode="pop-footnote-text"/>
 </xsl:template>
 
 <!-- Proofs -->
@@ -4692,6 +4699,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <!-- end enclosure/environment -->
     <xsl:text>\end{inlineexercise}&#xa;</xsl:text>
+    <xsl:apply-templates select="." mode="pop-footnote-text"/>
 </xsl:template>
 
 <!-- Inline Exercises (exercises//exercise) in solutions-->
@@ -4947,6 +4955,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{</xsl:text>
     <xsl:value-of select="$env-name"/>
     <xsl:text>}%&#xa;</xsl:text>
+    <xsl:apply-templates select="." mode="pop-footnote-text"/>
 </xsl:template>
 
 
@@ -5588,6 +5597,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{</xsl:text>
         <xsl:value-of select="local-name(.)" />
     <xsl:text>}&#xa;</xsl:text>
+    <xsl:apply-templates select="." mode="pop-footnote-text"/>
     <!-- structured version may contain a postlude -->
     <xsl:if test="statement">
         <xsl:apply-templates select="postlude" />
@@ -5633,6 +5643,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{</xsl:text>
         <xsl:value-of select="local-name(.)" />
     <xsl:text>}&#xa;</xsl:text>
+    <xsl:apply-templates select="." mode="pop-footnote-text"/>
     <!-- structured version may contain a postlude -->
     <xsl:if test="statement or task">
         <xsl:apply-templates select="postlude" />
@@ -5889,6 +5900,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{</xsl:text>
     <xsl:value-of select="local-name(.)" />
     <xsl:text>}&#xa;</xsl:text>
+    <xsl:apply-templates select="." mode="pop-footnote-text"/>
 </xsl:template>
 
 <!-- Assemblages -->
@@ -5905,6 +5917,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{</xsl:text>
     <xsl:value-of select="local-name(.)" />
     <xsl:text>}&#xa;</xsl:text>
+    <xsl:apply-templates select="." mode="pop-footnote-text"/>
 </xsl:template>
 
 <!-- An objectives or outcomes element holds a list, -->
@@ -5933,6 +5946,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{</xsl:text>
     <xsl:value-of select="local-name(.)" />
     <xsl:text>}&#xa;</xsl:text>
+    <xsl:apply-templates select="." mode="pop-footnote-text"/>
 </xsl:template>
 
 <!-- Named Lists -->
@@ -5941,6 +5955,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\begin{namedlistcontent}&#xa;</xsl:text>
     <xsl:apply-templates select="*[not(self::caption)]"/>
     <xsl:text>\end{namedlistcontent}&#xa;</xsl:text>
+    <xsl:apply-templates select="." mode="pop-footnote-text"/>
     <!-- Titled/environment version deprecated 2017-08-25   -->
     <!-- Title only is converted on the fly here            -->
     <!-- Schema requires a caption, so this is OK long-term -->
@@ -8112,6 +8127,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="$captions" />
     </xsl:if>
     <xsl:text>\end{sidebyside}%&#xa;</xsl:text>
+    <xsl:apply-templates select="." mode="pop-footnote-text"/>
 </xsl:template>
 
 
@@ -9783,13 +9799,44 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- Footnotes               -->
-<!--   with no customization -->
+<!-- Footnotes -->
+<!-- For blocks implemented as "tcolorbox" we need to manage -->
+<!-- footnotes more carefully.  At the location, we just     -->
+<!-- drop a mark, with no text.  Testing with the "footmisc" -->
+<!-- package, and its "\mpfootnotemark" alternative works    -->
+<!-- worse than simple default LaTeX (though the numbers     -->
+<!-- could be hard-coded if necessary).                      -->
 <xsl:template match="fn">
-    <xsl:text>\footnote{</xsl:text>
-    <xsl:apply-templates />
-    <xsl:apply-templates select="." mode="label" />
-    <xsl:text>}</xsl:text>
+    <xsl:choose>
+        <xsl:when test="ancestor::*[&ASIDE-FILTER; or &THEOREM-FILTER; or &AXIOM-FILTER;  or &DEFINITION-FILTER; or &REMARK-FILTER; or &COMPUTATION-FILTER; or &EXAMPLE-FILTER; or &PROJECT-FILTER; or self::list or self::sidebyside or self::defined-term or self::objectives or self::outcomes or self::colophon/parent::backmatter or self::assemblage or self::exercise]">
+            <xsl:text>\footnotemark{}</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>\footnote{</xsl:text>
+            <xsl:apply-templates />
+            <xsl:apply-templates select="." mode="label" />
+            <xsl:text>}</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Part 2: for items implemented as "tcolorbox" we scan back     -->
+<!-- through the contents, formulating the text of footnotes,      -->
+<!-- in order.  it is necessary to hard-code the (serial) number   -->
+<!-- of the footnote since otherwise the numbering gets confused   -->
+<!-- by an intervening "tcolorbox".  The template should be placed -->
+<!-- immediately after the "\end{}" of affected environments.      -->
+<!-- It will format as one footnote text per output line.          -->
+<xsl:template match="&ASIDE-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|list|sidebyside|defined-term|objectives|outcomes|backmatter/colophon|assemblage|exercise" mode="pop-footnote-text">
+    <xsl:for-each select=".//fn">
+        <xsl:text>\footnotetext[</xsl:text>
+        <xsl:apply-templates select="." mode="serial-number"/>
+        <xsl:text>]</xsl:text>
+        <xsl:text>{</xsl:text>
+        <xsl:apply-templates />
+        <xsl:apply-templates select="." mode="label" />
+        <xsl:text>}%&#xa;</xsl:text>
+    </xsl:for-each>
 </xsl:template>
 
 <!-- Defined Terms, in a Glossary -->
@@ -9804,6 +9851,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates/>
     <xsl:text>\end{definedterm}&#xa;</xsl:text>
+    <xsl:apply-templates select="." mode="pop-footnote-text"/>
 </xsl:template>
 
 <!-- References Sections -->
