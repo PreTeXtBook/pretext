@@ -1724,6 +1724,10 @@
     <xsl:call-template name="hash-character"/>
 </xsl:variable>
 
+<xsl:variable name="apostrophe">
+    <xsl:text>'</xsl:text>
+</xsl:variable>
+
 <xsl:template name="text-processing">
     <xsl:param name="text"/>
 
@@ -1737,7 +1741,7 @@
     <!-- https://github.com/openwebwork/pg/blob/master/macros/PGML.pl      -->
     <!-- (as of 2018-12-09)                                                -->
 
-    <!-- Backslash first, since more will be introduced in other replacments -->
+    <!-- Backslash first, since more will be introduced in other replacements -->
     <xsl:variable name="backslash-fixed" select="str:replace($text,            '\', $backslash-replacement)"/>
     <xsl:variable name="asterisk-fixed"  select="str:replace($backslash-fixed, '*', $asterisk-replacement)"/>
     <xsl:variable name="hash-fixed"      select="str:replace($asterisk-fixed,  '#', $hash-replacement)"/>
@@ -1746,8 +1750,11 @@
     <xsl:variable name="lbracket-fixed"  select="str:replace($rbrace-fixed,    '[', $lbracket-replacement)"/>
     <xsl:variable name="rbracket-fixed"  select="str:replace($lbracket-fixed,  ']', $rbracket-replacement)"/>
 
+    <!-- We translate textual apostrophes to the escape sequence [$APOS] -->
+    <xsl:variable name="apostrophe-fixed"  select="str:replace($rbracket-fixed, $apostrophe, '[$APOS]')"/>
+
     <!-- Break up right justify AND center line -->
-    <xsl:variable name="centerline-fixed" select="str:replace($rbracket-fixed, '&gt;&gt; ', '\&gt;\&gt;')"/>
+    <xsl:variable name="centerline-fixed" select="str:replace($apostrophe-fixed, '&gt;&gt; ', '\&gt;\&gt;')"/>
 
     <!-- Break up any possibility of paired underscores for italics (overkill) -->
     <xsl:variable name="italicization-fixed" select="str:replace($centerline-fixed, '_', $underscore-replacement)"/>
