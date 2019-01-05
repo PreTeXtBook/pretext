@@ -214,7 +214,7 @@
                 Subfamily:           Regular
                 Full name:           Iwona-Regular
                 PostScript name:     Iwona-Regular
-                </cd>.  The critical piece of information here is the font's name: <c>Iwona-Regular</c>.  I can also learn which OpenType features are available
+                </cd>  The critical piece of information here is the font's name: <c>Iwona-Regular</c>.  I can also learn which OpenType features are available
                 <cd>
                 $ otfinfo -f Iwona-Regular.otf
 

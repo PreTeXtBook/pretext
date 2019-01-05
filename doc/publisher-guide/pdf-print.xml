@@ -13,7 +13,7 @@
     <p>
         <idx><h>PDF</h><h>electronic</h></idx>
         <idx><h>PDF</h><h>print</h></idx>
-        The stylesheet <c>mathbook-latex.xsl</c> can produce two very similar outputs.  Each is a file in <latex/> syntax, which can be converted to a <init>PDF</init> with a <latex/> executable (<q>engine</q>).  However, there are two purposes for such a <init>PDF</init>.  The first is a document which is meant to be read on a screen.  We call this an <term>electronic <init>PDF</init></term>.  The second is meant to be printed as a physical book, so it would be the file you provide to a copy shop, campus bookstore, or print-on-demand service (see <xref ref="print-on-demand"/>).  We call this a <term>print <init>PDF</init></term>.
+        The stylesheet <c>mathbook-latex.xsl</c> can produce two very similar outputs.  Each is a file in <latex/> syntax, which can be converted to a <init>PDF</init> with a <latex/> executable (<q>engine</q>).  However, there are two purposes for such a <init>PDF</init>.  The first is a document which is meant to be read on a screen.  We call this an <term>electronic PDF</term>.  The second is meant to be printed as a physical book, so it would be the file you provide to a copy shop, campus bookstore, or print-on-demand service (see <xref ref="print-on-demand"/>).  We call this a <term>print PDF</term>.
     </p>
 
     <p>As an illustration of the difference, an electronic <init>PDF</init> will contain cross-references that are active, and colored to be obvious to the reader.  For the print <init>PDF</init> the same cross-reference will be black and inactive.</p>
@@ -64,6 +64,16 @@
         <title>Multi-Column List Order</title>
 
         <p>Lists with several columns are rendered in column-major order, as of 2018-02-28.  In other words, the first list items (<tag>li</tag>) in your source will populate the first column.</p>
+    </paragraphs>
+
+    <paragraphs>
+        <title>Footnotes</title>
+
+        <p>Footnotes are the farthest thing imaginable from structured authoring.  You can put them anywhere, and conceivably they can contain anything.  But they do work great in <init>HTML</init> presentations as knowls.  However, we do not let the tail wag the dog, and so have to make some <em>compromises</em> for footnotes output in print formats.<ul>
+            <li>As of 2019-01-04 we are fairly restrictive about content.  No paragraphs, more like a few sentences, max.  If you have more content, consider the <tag>aside</tag> element, and send feature requests for that.</li>
+            <li>Many blocks, such as <tag>example</tag> and <tag>remark</tag>, are implemented with the <latex/> <c>tcolorbox</c> package, to make styling and layout much more capable and reliable.  But footnotes get trapped within these boxes and render at the end of the box (not the bottom of the page) and have a different scheme for the marks (letters, not numbers).  We have mitigated much of this behavior, but the cost is that these footnotes are delayed until the box finishes.  So if you have a 4-page example, and use a footnote early, it may appear at the bottom of a page that is 3 or 4 pages away.</li>
+            <li>Another consequence of the above is that hyperlinks in electronic <init>PDF</init>s, from the mark to the text, need to be disabled (they will never work within a <c>tcolorbox</c>).  Cross-references to a footmark's text will still be active in an electronic <init>PDF</init>.</li>
+        </ul></p>
     </paragraphs>
 
     <paragraphs>
