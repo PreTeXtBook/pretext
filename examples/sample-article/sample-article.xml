@@ -4215,6 +4215,10 @@ the xsltproc executable.
 
                 <p>Entirely similar to using an HTML5 <c>canvas</c> element (<xref ref="interactive-html5-canvas" />), it is possible to control an <init>SVG</init> element with Javascript.  This example is from Mark McClure.</p>
 
+                <p>Look carefully at the source and rendering of this example as <init>HTML</init>.  The change in <m>x</m>, denoted here as <m>h</m>, is reported when the <q>Show secant line</q> option is ticked.  The <m>h</m> is being rendered as mathematics by the Javascript MathJax library.  However, this cannot be accomplished with <c>$...$</c> nor by <c>\(...\)</c>, but instead by using <tag>script</tag> tags that MathJax recognizes.  So the employment of MathJax here is accomplished with<cd>
+                    <cline>&lt;script type="math/tex">h = &lt;/script></cline>
+                </cd></p>
+
                 <figure xml:id="figure-interactive-slopes">
                     <caption>Tangent and secant slopes</caption>
                     <interactive xml:id="interactive-slopes" platform="javascript" width="100%" aspect="6:8" source="https://code.jquery.com/jquery-1.11.3.min.js https://d3js.org/d3.v3.min.js https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.2.1/math.min.js code/mcclure/slope.js" css="code/mcclure/slope.css">
@@ -4260,7 +4264,7 @@ the xsltproc executable.
                                         <tr><td><input id="h_slider" type="range" min="-0.5" max="0.5" step="0.01" /></td></tr>
                                     </table></td>
                                     <td><table>
-                                        <tr><td class="dimit" style="text-align: left;">\(h = \) <span id="h_value_display"></span></td></tr>
+                                        <tr><td class="dimit" style="text-align: left;"><script type="math/tex">h = </script> <span id="h_value_display"></span></td></tr>
                                         <tr><td class="dimit" style="text-align: left;">secant slope = <span id="secant_value_display"></span></td></tr>
                                         <tr><td style="text-align: left;">tangent slope = <span id="tangent_value_display"></span></td></tr>
                                     </table></td>
