@@ -4386,6 +4386,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
+<!-- It is too easy to type in LaTeX which can be picked up by   -->
+<!-- MathJax in HTML.  We provide just enough disruption with    -->
+<!-- the insertion of a "zero width space", U+200B, into the     -->
+<!-- opening signals.  Note that MathJax needs both an opening   -->
+<!-- signal, and a closing signal, in proximity, before anything -->
+<!-- gets processed.  So the situations considered here are      -->
+<!-- either rare or intentional.                                 -->
+<!--                                                             -->
+<!-- Note this holds for parts of interactives as well, so       -->
+<!-- authors need to use the MathJax script tags for any part of -->
+<!-- thier HTML they want displayed as mathematics.              -->
+
+<xsl:template name="text-processing">
+    <xsl:param name="text"/>
+
+    <xsl:variable name="inline-fixed"      select="str:replace($text,         '\(',      '\&#x200b;(' )"/>
+    <xsl:variable name="environment-fixed" select="str:replace($inline-fixed, '\begin{', '\&#x200b;begin{' )"/>
+
+    <xsl:value-of select="$environment-fixed"/>
+</xsl:template>
 
 <!-- ############################# -->
 <!-- End: Block Production, Knowls -->

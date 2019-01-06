@@ -2047,6 +2047,20 @@ the xsltproc executable.
 
                 <p>Runs of backticks (accent grave) should not become smart left double quotes:  ` (one), `` (two), ``` (three), ```` (four), ````` (five), `````` (six), ``````` (seven).</p>
             </subsection>
+
+            <subsection>
+                <title><init>HTML</init> and accidental mathematics</title>
+
+                <p>We render mathematics in web pages with the fantastic MathJax Javascript library.  Simplifying just a bit, it recognizes <latex/> syntax within a page, takes control of that text, and replaces it wth nice fonts and formatting.  Now, if you write about <latex/> you might well have some mathematics in your examples.  Best practice would be to use verbatim text for that, and we mark off such text as being off-limits to MathJax.</p>
+
+                <p>But if you are writing running text, then you can (accidentally) author some text which MathJax recognizes and converts to something (unintended).  And if you are doing this intentionally, then you have ignored <pretext/> markup for mathematics, and are missing out on some features.</p>
+
+                <p>A few tests that we can prevent any accidents.</p>
+
+                <p>Inline mathematics: \(x^2\).</p>
+
+                <p>Display mathematics: \begin{align}x^2+y^2=z^2\end{align}</p>
+            </subsection>
         </section>
 
         <section xml:id="graphics">
