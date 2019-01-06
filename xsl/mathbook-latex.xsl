@@ -505,6 +505,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% fontspec will make Latin Modern (lmodern) the default font&#xa;</xsl:text>
     <!-- http://tex.stackexchange.com/questions/115321/how-to-optimize-latin-modern-font-with-xelatex -->
     <xsl:text>\usepackage{fontspec}&#xa;</xsl:text>
+    <xsl:if test="$document-root//icon">
+        <xsl:text>%% Icons being used, so xelatex needs a system font&#xa;</xsl:text>
+        <xsl:text>%% This can only be determined at compile-time&#xa;</xsl:text>
+        <xsl:text>\IfFontExistsTF{FontAwesome}{}{\GenericError{}{"FontAwesome" font is not installed as a system font}{Consult the PreTeXt Author's Guide (or sample article) for help with the icon fonts.}{}}&#xa;</xsl:text>
+    </xsl:if>
     <xsl:text>%% &#xa;</xsl:text>
     <!-- language tags appear in docinfo in renames, so be careful -->
     <xsl:text>%% Extensive support for other languages&#xa;</xsl:text>

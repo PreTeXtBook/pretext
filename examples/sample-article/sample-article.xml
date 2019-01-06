@@ -1937,6 +1937,13 @@ the xsltproc executable.
                     <li>Have a reasonably semantic <pretext/> name.</li>
                 </ul>Please supply all this information, including the official Unicode name, with your request.  Better yet, form a pull request.</p>
 
+                <warning>
+                    <title>Icons, <c>xelatex</c>, and Fonts</title>
+
+                    <p>When processing a <latex/> file with <c>xelatex</c> the FontAwesome icons are expected to be in a <em>system</em> font whose name is <c>FontAwesome</c>.  This is not a filename, and installing the <latex/> <c>fontawesome</c> package into your <latex/> installation does not mean you have made this font available as a <em>system</em> font.</p>
+
+                    <p>The Publisher's Guide contains some discussion about installing fonts into a system, as part of the documentation of creating a <latex/> style.</p>
+                </warning>
             </subsection>
 
             <subsection xml:id="section-urls">
