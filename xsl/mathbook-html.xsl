@@ -1890,7 +1890,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- The upshot is that the main pages have visible content and hidden, embedded content (knowls) with full identification as original canonical versions.  Cross-references open external file knowls, whose hidden components are again accessed via knowls that use external files of duplicated content.  None of the knowl files contain any identification, so these identifiers remain unique in their appearances as part of the main pages. -->
 
-<!-- This process is controlled by the boolean "b-original" parameter, which needs to be laboriously passed down and through templates, including containers like "sidebyside."  The XSLT 2.0 tunnel parameter would be a huge advantage here.  The parameter "block-type" can take on the values: 'visible', 'embed', 'xref', 'hidden'.  The four situations above can be identified with these parameters.  The block-type parameter is also used to aid in placement of identification.  For example, an element born visible will have an HTML id on its outermost element, such as an "article".  But as an embedded knowl, we put the id onto the visible link text instead, even if the same outermost element is employed for the hidden content. -->
+<!-- This process is controlled by the boolean "b-original" parameter, which needs to be laboriously passed down and through templates, including containers like "sidebyside."  The XSLT 2.0 tunnel parameter would be a huge advantage here.  The parameter "block-type" can take on the values: 'visible', 'embed', 'xref', 'hidden'.  The four situations above can be identified with these parameters.  The block-type parameter is also used to aid in placement of identification.  For example, an element born visible will have an HTML id on its outermost element, such as an "article".  But as an embedded knowl, we put the id onto the visible link text instead, even if the same outermost element is employed for the hidden content.  Also, the block-type parameter is tunneled down to the Sage cells so they can be constructed properly when inside of knowls. -->
 
 <!-- The relevant templates controlling production of a block, and their use, are: -->
 
@@ -2158,11 +2158,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Primary content of generic "body" template  -->
 <!-- Pass along b-original flag                  -->
+<!-- Potentially knowled, may have statement     -->
+<!-- with Sage, so pass block type               -->
 <!-- Simply process contents, could restict here -->
 <xsl:template match="&REMARK-LIKE;" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
+    <xsl:param name="block-type"/>
+
     <xsl:apply-templates select="*" >
-        <xsl:with-param name="b-original" select="$b-original" />
+        <xsl:with-param name="b-original" select="$b-original"/>
+        <xsl:with-param name="block-type" select="$block-type"/>
     </xsl:apply-templates>
 </xsl:template>
 
@@ -2202,11 +2207,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Primary content of generic "body" template  -->
 <!-- Pass along b-original flag                  -->
+<!-- Potentially knowled, may have statement     -->
+<!-- with Sage, so pass block type               -->
 <!-- Simply process contents, could restict here -->
 <xsl:template match="&COMPUTATION-LIKE;" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
+    <xsl:param name="block-type"/>
+
     <xsl:apply-templates select="*" >
-        <xsl:with-param name="b-original" select="$b-original" />
+        <xsl:with-param name="b-original" select="$b-original"/>
+        <xsl:with-param name="block-type" select="$block-type"/>
     </xsl:apply-templates>
 </xsl:template>
 
@@ -2246,11 +2256,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Primary content of generic "body" template  -->
 <!-- Pass along b-original flag                  -->
+<!-- Potentially knowled, may have statement     -->
+<!-- with Sage, so pass block type               -->
 <!-- Simply process contents, could restict here -->
 <xsl:template match="&DEFINITION-LIKE;" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
+    <xsl:param name="block-type"/>
+
     <xsl:apply-templates select="*" >
-        <xsl:with-param name="b-original" select="$b-original" />
+        <xsl:with-param name="b-original" select="$b-original"/>
+        <xsl:with-param name="block-type" select="$block-type"/>
     </xsl:apply-templates>
 </xsl:template>
 
@@ -2288,11 +2303,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Primary content of generic "body" template   -->
 <!-- Pass along b-original flag                   -->
+<!-- Potentially knowled, may have statement      -->
+<!-- with Sage, so pass block type                -->
 <!-- Simply process contents, could restrict here -->
 <xsl:template match="&ASIDE-LIKE;" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
+    <xsl:param name="block-type"/>
+
     <xsl:apply-templates select="*" >
-        <xsl:with-param name="b-original" select="$b-original" />
+        <xsl:with-param name="b-original" select="$b-original"/>
+        <xsl:with-param name="block-type" select="$block-type"/>
     </xsl:apply-templates>
 </xsl:template>
 
@@ -2788,12 +2808,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Primary content of generic "body" template  -->
 <!-- Pass along b-original flag                  -->
+<!-- Potentially knowled, may have statement     -->
+<!-- with Sage, so pass block type               -->
 <!-- Process according to structure              -->
 <xsl:template match="&EXAMPLE-LIKE;" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
+    <xsl:param name="block-type"/>
 
     <xsl:apply-templates select="." mode="exercise-components">
-        <xsl:with-param name="b-original" select="$b-original" />
+        <xsl:with-param name="b-original" select="$b-original"/>
+        <xsl:with-param name="block-type" select="$block-type"/>
         <xsl:with-param name="b-has-statement" select="true()" />
         <xsl:with-param name="b-has-hint"      select="true()" />
         <xsl:with-param name="b-has-answer"    select="true()" />
@@ -2966,10 +2990,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Primary content of generic "body" template  -->
 <!-- Pass along b-original flag                  -->
+<!-- Potentially knowled, may have statement     -->
+<!-- with Sage, so pass block type               -->
 <!-- Process according to structure              -->
 <!-- Mirror changes here into "solutions" below  -->
 <xsl:template match="exercise" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
+    <xsl:param name="block-type"/>
+
     <xsl:choose>
         <!-- webwork case -->
         <xsl:when test="webwork-reps">
@@ -2983,10 +3011,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="b-original" select="$b-original" />
             </xsl:apply-templates>
         </xsl:when>
-        <!-- inline -->
+        <!-- inline                                        -->
+        <!-- only possibility to be knowled, so only time  -->
+        <!-- we pass block-type for Sage cells to react to -->
         <xsl:when test="boolean(&INLINE-EXERCISE-FILTER;)">
             <xsl:apply-templates select="."  mode="exercise-components">
-                <xsl:with-param name="b-original" select="$b-original" />
+                <xsl:with-param name="b-original" select="$b-original"/>
+                <xsl:with-param name="block-type" select="$block-type"/>
                 <xsl:with-param name="b-has-statement" select="true()" />
                 <xsl:with-param name="b-has-hint"      select="$b-has-inline-hint" />
                 <xsl:with-param name="b-has-answer"    select="$b-has-inline-answer" />
@@ -2996,7 +3027,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- divisional -->
         <xsl:when test="ancestor::exercises">
             <xsl:apply-templates select="."  mode="exercise-components">
-                <xsl:with-param name="b-original" select="$b-original" />
+                <xsl:with-param name="b-original" select="$b-original"/>
                 <xsl:with-param name="b-has-statement" select="true()" />
                 <xsl:with-param name="b-has-hint"      select="$b-has-divisional-hint" />
                 <xsl:with-param name="b-has-answer"    select="$b-has-divisional-answer" />
@@ -3006,7 +3037,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- worksheet -->
         <xsl:when test="ancestor::worksheet">
             <xsl:apply-templates select="."  mode="exercise-components">
-                <xsl:with-param name="b-original" select="$b-original" />
+                <xsl:with-param name="b-original" select="$b-original"/>
                 <xsl:with-param name="b-has-statement" select="true()" />
                 <xsl:with-param name="b-has-hint"      select="$b-has-worksheet-hint" />
                 <xsl:with-param name="b-has-answer"    select="$b-has-worksheet-answer" />
@@ -3016,7 +3047,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- reading -->
         <xsl:when test="ancestor::reading-questions">
             <xsl:apply-templates select="."  mode="exercise-components">
-                <xsl:with-param name="b-original" select="$b-original" />
+                <xsl:with-param name="b-original" select="$b-original"/>
                 <xsl:with-param name="b-has-statement" select="true()" />
                 <xsl:with-param name="b-has-hint"      select="$b-has-reading-hint" />
                 <xsl:with-param name="b-has-answer"    select="$b-has-reading-answer" />
@@ -3105,20 +3136,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Primary content of generic "body" template  -->
 <!-- Pass along b-original flag                  -->
+<!-- Potentially knowled, may have statement    -->
+<!-- with Sage, so pass block type              -->
 <!-- Process according to structure              -->
 <!-- Mirror changes here into "solutions" below  -->
 <xsl:template match="&PROJECT-LIKE;" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
+    <xsl:param name="block-type"/>
 
     <xsl:choose>
         <xsl:when test="task">
             <xsl:apply-templates select="introduction|task|conclusion">
-                <xsl:with-param name="b-original" select="$b-original" />
+                <xsl:with-param name="b-original" select="$b-original"/>
+                <xsl:with-param name="block-type" select="$block-type"/>
             </xsl:apply-templates>
         </xsl:when>
         <xsl:otherwise>
             <xsl:apply-templates select="."  mode="exercise-components">
-                <xsl:with-param name="b-original" select="$b-original" />
+                <xsl:with-param name="b-original" select="$b-original"/>
+                <xsl:with-param name="block-type" select="$block-type"/>
                 <xsl:with-param name="b-has-statement" select="true()" />
                 <xsl:with-param name="b-has-hint"      select="$b-has-project-hint" />
                 <xsl:with-param name="b-has-answer"    select="$b-has-project-answer" />
@@ -3220,20 +3256,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Primary content of generic "body" template   -->
 <!-- Pass along b-original flag                   -->
+<!-- Potentially knowled, may have statement      -->
+<!-- with Sage, so pass block type                -->
 <!-- Process according to structure               -->
 <!-- Mirror changes here into "solutions" below  -->
 <xsl:template match="task" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
+    <xsl:param name="block-type"/>
+
     <xsl:choose>
         <!-- introduction?, task+, conclusion? -->
         <xsl:when test="task">
             <xsl:apply-templates select="introduction|task|conclusion">
-                <xsl:with-param name="b-original" select="$b-original" />
+                <xsl:with-param name="b-original" select="$b-original"/>
+                <xsl:with-param name="block-type" select="$block-type"/>
             </xsl:apply-templates>
         </xsl:when>
         <xsl:otherwise>
             <xsl:apply-templates select="."  mode="exercise-components">
-                <xsl:with-param name="b-original" select="$b-original" />
+                <xsl:with-param name="b-original" select="$b-original"/>
+                <xsl:with-param name="block-type" select="$block-type"/>
                 <xsl:with-param name="b-has-statement" select="true()" />
                 <xsl:with-param name="b-has-hint"      select="$b-has-project-hint" />
                 <xsl:with-param name="b-has-answer"    select="$b-has-project-answer" />
@@ -3336,16 +3378,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Primary content of generic "body" template   -->
 <!-- Pass along b-original flag                   -->
+<!-- Potentially knowled, may have statement      -->
+<!-- with Sage, so pass block type                -->
 <!-- Simply process contents, could restrict here -->
 <xsl:template match="&SOLUTION-LIKE;" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
+    <xsl:param name="block-type"/>
+
     <xsl:apply-templates select="*" >
-        <xsl:with-param name="b-original" select="$b-original" />
+        <xsl:with-param name="b-original" select="$b-original"/>
+        <xsl:with-param name="block-type" select="$block-type"/>
     </xsl:apply-templates>
 </xsl:template>
 
 <xsl:template match="exercise|&PROJECT-LIKE;|task|&EXAMPLE-LIKE;|webwork-reps/static" mode="exercise-components">
-    <xsl:param name="b-original" />
+    <xsl:param name="b-original"/>
+    <xsl:param name="block-type"/>
     <xsl:param name="b-has-statement" />
     <xsl:param name="b-has-hint" />
     <xsl:param name="b-has-answer" />
@@ -3357,6 +3405,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:if test="$b-has-statement">
                 <xsl:apply-templates select="statement">
                     <xsl:with-param name="b-original" select="$b-original" />
+                    <xsl:with-param name="block-type" select="$block-type"/>
                 </xsl:apply-templates>
             </xsl:if>
             <!-- no  div.solutions  if there is nothing to go into it -->
@@ -3365,16 +3414,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:if test="$b-has-hint">
                         <xsl:apply-templates select="hint">
                             <xsl:with-param name="b-original" select="$b-original" />
+                            <xsl:with-param name="block-type" select="$block-type"/>
                         </xsl:apply-templates>
                     </xsl:if>
                     <xsl:if test="$b-has-answer">
                         <xsl:apply-templates select="answer">
                             <xsl:with-param name="b-original" select="$b-original" />
+                            <xsl:with-param name="block-type" select="$block-type"/>
                         </xsl:apply-templates>
                     </xsl:if>
                     <xsl:if test="$b-has-solution">
                         <xsl:apply-templates select="solution">
                             <xsl:with-param name="b-original" select="$b-original" />
+                            <xsl:with-param name="block-type" select="$block-type"/>
                         </xsl:apply-templates>
                     </xsl:if>
                 </div>
@@ -3385,6 +3437,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:if test="$b-has-statement">
                 <xsl:apply-templates select="*">
                     <xsl:with-param name="b-original" select="$b-original" />
+                    <xsl:with-param name="block-type" select="$block-type"/>
                 </xsl:apply-templates>
                 <!-- no separator, since no trailing components -->
             </xsl:if>
@@ -3433,11 +3486,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Primary content of generic "body" template  -->
 <!-- Pass along b-original flag                  -->
+<!-- Potentially knowled, may have statement     -->
+<!-- with Sage, so pass block type              -->
 <!-- Simply process contents, could restict here -->
 <xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
+    <xsl:param name="block-type"/>
+
     <xsl:apply-templates select="*[not(self::proof)]" >
-        <xsl:with-param name="b-original" select="$b-original" />
+        <xsl:with-param name="b-original" select="$b-original"/>
+        <xsl:with-param name="block-type" select="$block-type"/>
     </xsl:apply-templates>
 </xsl:template>
 
@@ -3504,11 +3562,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Primary content of generic "body" template  -->
 <!-- Pass along b-original flag                  -->
+<!-- Potentially knowled, may have statement    -->
+<!-- with Sage, so pass block type              -->
 <!-- Simply process contents, could restict here -->
 <xsl:template match="proof" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
+    <xsl:param name="block-type"/>
+
     <xsl:apply-templates select="*" >
-        <xsl:with-param name="b-original" select="$b-original" />
+        <xsl:with-param name="b-original" select="$b-original"/>
+        <xsl:with-param name="block-type" select="$block-type"/>
     </xsl:apply-templates>
 </xsl:template>
 
@@ -3852,8 +3915,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 
 <xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|commentary|objectives|outcomes|&EXAMPLE-LIKE;|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|proof|case|fn|contributor|biblio|biblio/note" mode="body">
-    <xsl:param name="block-type" />
-    <xsl:param name="b-original" select="true()" />
+    <xsl:param name="b-original" select="true()"/>
+    <xsl:param name="block-type"/>
+
     <!-- prelude beforehand, when original -->
     <xsl:if test="$b-original">
         <xsl:apply-templates select="prelude">
@@ -3894,9 +3958,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:if test="$block-type = 'xref'">
                 <xsl:apply-templates select="." mode="heading-xref-knowl" />
             </xsl:if>
-            <!-- Then actual content, respecting b-original flag -->
+            <!-- Then actual content, respecting b-original flag  -->
+            <!-- Pass $block-type for Sage cells to know environs -->
             <xsl:apply-templates select="." mode="wrapped-content">
                 <xsl:with-param name="b-original" select="$b-original" />
+                <xsl:with-param name="block-type" select="$block-type" />
             </xsl:apply-templates>
         </xsl:element>
     </xsl:if>
@@ -7266,6 +7332,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Sage Cells -->
 <!-- TODO: make hidden autoeval cells link against sage-compute cells -->
 
+<!-- The block-type parameter is only received from, and sent to, the -->
+<!-- templates in the HTML conversion.  The purpose is to inform that -->
+<!-- conversion that the Sage cell is inside a born-hidden knowl      -->
+<!-- ($block-type = 'embed') and adjust the class name accordingly.   -->
+
 <!-- Never an @id , so just repeat -->
 <xsl:template match="sage" mode="duplicate">
     <xsl:apply-templates select="." />
@@ -7276,12 +7347,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- TODO: consider showing output in green span (?),    -->
 <!-- presently output is dropped as computable           -->
 <xsl:template name="sage-active-markup">
+    <xsl:param name="block-type"/>
     <xsl:param name="internal-id" />
     <xsl:param name="language-attribute" />
     <xsl:param name="in" />
     <xsl:param name="out" />
+    <xsl:param name="b-original"/>
+
     <xsl:element name="div">
         <xsl:attribute name="class">
+            <xsl:if test="$block-type = 'embed'">
+                <xsl:text>hidden-</xsl:text>
+            </xsl:if>
             <xsl:text>sagecell-</xsl:text>
             <xsl:if test="$language-attribute=''">
                 <xsl:text>sage</xsl:text>
@@ -7303,11 +7380,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- An abstract named template accepts input text   -->
 <!-- and provides the display class, so untouchable  -->
 <xsl:template name="sage-display-markup">
+    <xsl:param name="block-type"/>
     <xsl:param name="in" />
-    <div class="sage-display">
-    <script type="text/x-sage">
-        <xsl:value-of select="$in" />
-    </script>
+
+    <div>
+        <xsl:attribute name="class">
+            <xsl:if test="$block-type = 'embed'">
+                <xsl:text>hidden-</xsl:text>
+            </xsl:if>
+            <xsl:text>sage-display</xsl:text>
+        </xsl:attribute>
+        <script type="text/x-sage">
+            <xsl:value-of select="$in" />
+        </script>
     </div>
 </xsl:template>
 

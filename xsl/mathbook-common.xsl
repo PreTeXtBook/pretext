@@ -2151,7 +2151,10 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 <!-- This cell does respect @language         -->
 <!-- @copy deprecated  2017-12-21 -->
 <xsl:template match="sage[not(input) and not(output) and not(@type) and not(@copy)]">
+    <xsl:param name="block-type"/>
+
     <xsl:call-template name="sage-active-markup">
+        <xsl:with-param name="block-type" select="$block-type"/>
         <xsl:with-param name="internal-id">
             <xsl:apply-templates select="." mode="internal-id" />
         </xsl:with-param>
@@ -2171,7 +2174,10 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 <!-- We override this in LaTeX, since it is useless          -->
 <!-- (and we can't tell in the abstract wrapping template)   -->
 <xsl:template match="sage[@type='practice']">
+    <xsl:param name="block-type"/>
+
     <xsl:call-template name="sage-active-markup">
+        <xsl:with-param name="block-type" select="$block-type"/>
         <xsl:with-param name="internal-id">
             <xsl:apply-templates select="." mode="internal-id" />
         </xsl:with-param>
@@ -2197,6 +2203,8 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 <!-- We do not pass along any output, since this is silly        -->
 <!-- These cells are meant to be be incorrect or incomplete      -->
 <xsl:template match="sage[@type='display']">
+    <xsl:param name="block-type"/>
+
     <xsl:call-template name="sage-display-markup">
         <xsl:with-param name="internal-id">
             <xsl:apply-templates select="." mode="internal-id" />
@@ -2215,7 +2223,10 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 <!-- Type: "full" (the default)         -->
 <!-- Absent meeting any other condition -->
 <xsl:template match="sage|sage[@type='full']">
+    <xsl:param name="block-type"/>
+
     <xsl:call-template name="sage-active-markup">
+        <xsl:with-param name="block-type" select="$block-type"/>
         <xsl:with-param name="internal-id">
             <xsl:apply-templates select="." mode="internal-id" />
         </xsl:with-param>
