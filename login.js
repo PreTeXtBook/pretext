@@ -148,6 +148,7 @@ function validateLogin() {
     }
     console.log("logged_in", logged_in);
     if (logged_in) {
+        $("#theloginform").hide();
         document.getElementById('loginlogout').innerHTML = 'logout';
         loadScript('answer');
         loadScript('highlight');

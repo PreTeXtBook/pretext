@@ -511,8 +511,8 @@
             // We want to configure the offset from the top edge of the screen
             // to the bottom edge of the trigger
             var espyOptions = {};
-            var navbarHeight = self.$primaryNavbar.outerHeight();
-            var activeArea = self.$w.innerHeight() - navbarHeight;
+            var navbarHeight = (self.$primaryNavbar.outerHeight() || 0);
+            var activeArea = (self.$w.innerHeight() || 0) - navbarHeight;
 
             // Compute offset from top of screen
             espyOptions.offset = navbarHeight + settings.enterSectionTriggerTop;
@@ -526,13 +526,15 @@
             espyOptions.size = Math.max(espyOptions.size, 0);
 
             // the espy.configure() was there from the beginning, but gave an error that espy was not known
+            // so I added the next line --DF
     //        espy = new Espy(w, self.onSectionStateChange);
             espy.configure(espyOptions);
         };
 
         self.refreshEspy = function() {
             // the espy.reload() was there from the beginning, but gave an error that espy was not known
-    //        espy = new Espy(w, self.onSectionStateChange);
+            // so I added the next line --DF
+     //       espy = new Espy(w, self.onSectionStateChange);
             espy.reload();
         };
 
@@ -588,7 +590,7 @@
                     self.$toc.scrollTop() + itemTocTopOffset - scrollOffset;
 
                 var maxScrollTop =
-                    self.$toc.prop('scrollHeight') - self.$toc.innerHeight();
+                    self.$toc.prop('scrollHeight') - (self.$toc.innerHeight() || 0);
 
                 // Apply limits
                 targetScrollTop = Math.max(targetScrollTop,0);
@@ -1305,4 +1307,5 @@ window.addEventListener('DOMContentLoaded', function(){
     badge.src = "https://www.mathjax.org/badge/badge.gif";
     };
 });
+
 

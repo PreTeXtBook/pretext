@@ -43,15 +43,20 @@ function make_submit_button() {
 }
 
 function save_reading_questions() {
-    rq_data = {"user": uname, "pw": emanu, "pI": pageIdentifier, "type": "readingquestions", "rq": JSON.stringify(reading_questions_object)}
+    rq_data = {"action": "save", "user": uname, "pw": emanu, "pI": pageIdentifier, "type": "readingquestions", "rq": JSON.stringify(reading_questions_object)}
     $.ajax({
-    url: "https://aimath.org/cgi-bin/highlights.py",
+    url: "https://aimath.org/cgi-bin/u/highlights.py",
     type: "post",
     data: JSON.stringify(rq_data),
     dataType: "json",
-    success: function(response) {
-        alert(response);
-    }
+    success: function(data) {
+        console.log("something", data, "back from highlight");
+        alert(data);
+    },
+   error: function(errMsg) {
+      console.log("seems to be an error?",errMsg);
+      alert("Error\n" + errMsg);
+   }
 });
 
   console.log("just ajax sent", JSON.stringify(reading_questions_object));
@@ -79,8 +84,8 @@ if (reading_questions.length) {
   answer_css.type = "text/css";
   answer_css.id = "highlight_css";
   document.head.appendChild(answer_css);
-  var css_for_ans = '#rq_submit { background: #FDD; padding: 5px;}\n';
-  css_for_ans += '#rq_submit.submitted { background: #DFD}';
+  var css_for_ans = '#rq_submit { background: #FDD; padding: 3px 5px; border-radius: 0.5em}\n';
+  css_for_ans += '#rq_submit.submitted { background: #EFE; color: #BBB}';
   css_for_ans += '.rq_submit_wrapper { margin-top: 0.5em; float: right}';
   answer_css.innerHTML = css_for_ans;
 
@@ -97,6 +102,7 @@ if (reading_questions.length) {
   rq_answer_label +='</span>';
 
   var rq_submit_button = '<span';
+  rq_submit_button += ' class="submit"';
   rq_submit_button += ' id="rq_submit"';
   rq_submit_button += '>';
   rq_submit_button += 'Submit answers';
@@ -140,7 +146,9 @@ if (reading_questions.length) {
   
   
          var this_rq_controls = '<div id="' + this_rq_id_controls + '" class="input_controls hidecontrols" style="margin-bottom:-1.9em;">';
-         this_rq_controls += '<span class="action clear_item rq_delete">delete</span><span class="action save_item rq_edit">edit</span>';
+         this_rq_controls += '<span class="action clear_item rq_delete">delete</span>';
+         this_rq_controls += '<span class="action save_item rq_edit">edit</span>';
+         this_rq_controls += '<span class="action amhelp">how to write math</span>';
          this_rq_controls += '</div>'
   
          var this_rq_answer_and_controls = document.createElement('div');
@@ -303,8 +311,19 @@ if (reading_questions.length) {
   $('body').on('click','#rq_submit', function(){
     console.log("submitting rq answers");
     $('#rq_submit').addClass('submitted');
-    $('#rq_submit').innerHTML = "Resubmit answer";
+    document.getElementById('rq_submit').textContent = "Resubmit answers";
     save_reading_questions();
+  });
+
+  $('body').on('click','.amhelp', function(){
+     var amhelpmessage = "Write math formulas as AsciiMath inside backticks:\n`math goes here`.";
+     amhelpmessage += "           For example:\nThe Pythagorean theorem says `sin^2(x) + cos^2(x) = 1`,\n";
+     amhelpmessage += "and the quadratic formula is `x = (-b +- sqrt(b^2 - 4ac))/(2a)`. \n";
+     amhelpmessage += "Note the use of parentheses for grouping.\n";
+     amhelpmessage += "Visit http://asciimath.org for a list of AsciiMath commands.\n\n";
+     amhelpmessage += "You can also use LaTeX, with either slash-parentheses \\(...\\)\n";
+     amhelpmessage += "or dollar signs $...$ as delimeters for inline math.";
+     alert(amhelpmessage)
   });
 
   if(reading_questions_all_answered) {
