@@ -446,6 +446,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="$docinfo/document-id"/>
 </xsl:variable>
 
+<!-- This is used to build standalone pages.  Despite looking   -->
+<!-- like a property of the HTML conversion, it gets used in    -->
+<!-- the LaTeX conversion to form QR codes and it is discovered -->
+<!-- by the "extract-interactive.xsl" stylesheet, which only    -->
+<!-- imports this stylesheet.  So this needs to be a global     -->
+<!-- variable, defined here.                                    -->
+<!--                                                            -->
+<!-- Eventually a stringparam should preferentially override    -->
+<!-- this determination, so publishers can install the same     -->
+<!-- source on different servers.  It is in "docinfo" as a      -->
+<!-- convenience during development stages.                     -->
+<!-- NB: Presumed to not have a trailing slash                  -->
+<xsl:variable name="baseurl">
+    <xsl:value-of select="$docinfo/html/baseurl/@href"/>
+</xsl:variable>
+
 <!-- ########################### -->
 <!-- Exercise component switches -->
 <!-- ########################### -->
