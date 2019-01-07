@@ -726,6 +726,105 @@ def youtube_thumbnail(xml_source, xmlid_root, dest_dir):
 
 #####################################
 #
+#  Interactive preview screenshotting
+#
+#####################################
+
+def preview_images(xml_source, xmlid_root, dest_dir):
+    global config
+    import subprocess, shutil
+    import os
+    # import tempfile, os, os.path, subprocess, shutil
+    # import requests
+
+    suffix = 'png'
+
+    _verbose('creating interactive previews from {} for placement in {}'.format(xml_source, dest_dir))
+    dest_dir = sanitize_directory(dest_dir)
+
+    # see below, pageres-cli writes into current working directory
+    needs_moving = not( os.getcwd() == os.path.normpath(dest_dir) )
+
+    # url standalone page, id on iframe, filename to store
+    previews = (
+        ("http://mathbook.pugetsound.edu/examples/sample-article/html/interactive-d3-graph-layout.html",
+                    "interactive-d3-graph-layout", "interactive-d3-graph-layout-preview.png"),
+        ("http://mathbook.pugetsound.edu/examples/sample-article/html/interactive-d3-collision.html",
+                    "interactive-d3-collision", "interactive-d3-collision-preview.png"),
+        )
+
+    plat = get_platform()
+    if plat == "Windows":
+        dest_dir = break_windows_path(dest_dir)
+    xslt_executable = get_executable(config,  'xslt')
+    _debug("xslt executable: {}".format(xslt_executable))
+    if plat == "Windows":
+        extraction_xslt = '/'.join(mbx_xsl_dir, 'extract-interactive.xsl')
+    else:
+        extraction_xslt = os.path.join(mbx_xsl_dir, 'extract-interactive.xsl')
+    cmd = [xslt_executable,
+            '--xinclude',
+            '--stringparam',
+            'subtree',
+            xmlid_root,
+            extraction_xslt,
+            xml_source]
+    try:
+        interactive_list = subprocess.check_output(cmd)
+    except subprocess.CalledProcessError as e:
+        root_cause = str(e)
+        msg = 'xsltproc command failed, tried: "{}"\n'.format(' '.join(cmd))
+        raise ValueError(msg + root_cause)
+    # "run" an assignment for the list of problem numbers
+    interactives = eval(interactive_list.decode('ascii'))
+
+    # Cheating a bit, base URL is *always* first item
+    # Presumed to not have a trailing slash
+    # Once this is a publisher option, then the xsltproc
+    # call will need to accept the override as a stringparam
+    baseurl = interactives[0]
+
+    pageres_executable = get_executable(config,  'pageres')
+    _debug("pageres executable: {}".format(xslt_executable))
+    _debug("interactives identifiers: {}".format(interactives))
+
+    # Start after the leading base URL sneakiness
+    for preview in interactives[1:]:
+        input_page = baseurl + '/' +  preview + '.html'
+        selector_option = '--selector=#' + preview
+        # file suffix is provided by pageres
+        format_option = '--format=' + suffix
+        filename_option = '--filename=' + preview + '-preview'
+        filename = preview + '-preview.' + suffix
+
+        # pageres invocation
+        # Overwriting files prevents numbered versions (with spaces!)
+        # 3-second delay allows Javascript, etc to settle down
+        # --transparent, --crop do not seem very effective
+        # if (preview == "interactive-21") or (preview == "interactive-17")  or (preview == "interactive-19") or (preview == "interactive-20"):
+            # cmd=['ls']
+        # else:
+        cmd = [pageres_executable,
+        "-v",
+        "--overwrite",
+        '-d5',
+        '--transparent',
+        selector_option,
+        filename_option,
+        input_page
+       ]
+
+        _debug("pageres command: {}".format(cmd))
+
+        subprocess.call(cmd)
+        # 2018-04-27  CLI pageres only writes into current directory
+        # and it is an error to move a file onto itself, so we are careful
+        if needs_moving:
+            shutil.move(filename, dest_dir)
+
+
+#####################################
+#
 #  MyOpenMath static problem scraping
 #
 #####################################
@@ -1105,6 +1204,7 @@ def get_cli_arguments():
         ('latex-image', 'LaTeX pictures'),
         ('webwork', 'WeBWorK problems in authored, PG, url, and static representations'),
         ('youtube', 'Thumbnails for YouTube videos (JPEG only)'),
+        ('preview', 'Static preview images for interactives'),
         ('mom', 'MyOpenMath problem files, static versions'),
         ('all', 'Complete document (only SageNB format)'),
         ('tikz', 'tikz pictures (obsolete)'),
@@ -1322,6 +1422,8 @@ elif args.component == 'webwork':
     webwork_to_xml(xslt_executable, mbx_xsl_dir, args.xml_file, args.server, output_dir)
 elif args.component == 'youtube':
     youtube_thumbnail(args.xml_file, args.xmlid, output_dir)
+elif args.component == 'preview':
+    preview_images(args.xml_file, args.xmlid, output_dir)
 elif args.component == 'mom':
     mom_static_problems(args.xml_file, args.xmlid, output_dir)
 elif args.component == 'all':
