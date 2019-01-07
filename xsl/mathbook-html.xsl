@@ -7592,6 +7592,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The simplest possible example of this type -->
 <xsl:template match="interactive[@desmos]" mode="iframe-interactive">
     <iframe src="https://www.desmos.com/calculator/{@desmos}">
+        <xsl:attribute name="id">
+            <xsl:apply-templates select="." mode="internal-id"/>
+        </xsl:attribute>
         <xsl:apply-templates select="." mode="size-pixels-attributes" />
     </iframe>
 </xsl:template>
@@ -7605,6 +7608,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="interactive[@wolfram-cdf]" mode="iframe-interactive">
     <!-- Query string option: _embed=iframe will provide Wolfram footer -->
     <iframe src="https://www.wolframcloud.com/objects/{@wolfram-cdf}?_view=frameless">
+        <xsl:attribute name="id">
+            <xsl:apply-templates select="." mode="internal-id"/>
+        </xsl:attribute>
         <xsl:apply-templates select="." mode="size-pixels-attributes" />
     </iframe>
 </xsl:template>
@@ -7613,6 +7619,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Similar again, but with options fixed -->
 <xsl:template match="interactive[@geogebra]" mode="iframe-interactive">
     <iframe src="https://www.geogebra.org/material/iframe/id/{@geogebra}/width/800/height/450/border/888888/smb/false/stb/false/stbh/false/ai/false/asb/false/sri/false/rc/false/ld/false/sdz/false/ctl/false">
+        <xsl:attribute name="id">
+            <xsl:apply-templates select="." mode="internal-id"/>
+        </xsl:attribute>
         <xsl:apply-templates select="." mode="size-pixels-attributes" />
     </iframe>
 </xsl:template>
@@ -7646,16 +7655,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- TODO: box-sizing, etc does not seem to help with vertical scroll bars -->
     <xsl:variable name="full-url" select="concat($cp3d-endpoint, '/?', @calcplot3d)" />
     <iframe src="{$full-url}">
+        <xsl:attribute name="id">
+            <xsl:apply-templates select="." mode="internal-id"/>
+        </xsl:attribute>
         <xsl:apply-templates select="." mode="size-pixels-attributes" />
     </iframe>
 </xsl:template>
 
 <!-- For more complicated interactives, we just point to the page we generate -->
 <xsl:template match="interactive[@platform]" mode="iframe-interactive">
-    <xsl:variable name="pid">
-        <xsl:apply-templates select="." mode="perm-id" />
-    </xsl:variable>
-    <iframe id="{$pid}">
+    <iframe>
+        <xsl:attribute name="id">
+            <xsl:apply-templates select="." mode="internal-id"/>
+        </xsl:attribute>
         <xsl:apply-templates select="." mode="size-pixels-attributes" />
         <xsl:attribute name="src">
             <xsl:apply-templates select="." mode="iframe-filename" />
