@@ -6503,7 +6503,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ###################################### -->
 
 
-<xsl:template match="video|interactive[(@platform = 'html5') or (@platform = 'd3')]">
+<xsl:template match="video|interactive">
     <!-- scale to fit into a side-by-side -->
     <xsl:variable name="width-percentage">
         <xsl:choose>
@@ -6596,10 +6596,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- point to HTML-produced, and canonically-hosted, standalone page -->
 <!-- Eventually match on all interactives                            -->
-<!-- NB baseurl is likely to change, it should be a publisher option -->
+<!-- NB baseurl is not assumed to have a trailing slash              -->
 
-<xsl:template match="video[@source]|interactive[(@platform = 'html5') or (@platform = 'd3')]" mode="static-url">
-    <xsl:value-of select="$docinfo/html/baseurl/@href" />
+<xsl:template match="video[@source]|interactive" mode="static-url">
+    <xsl:value-of select="$baseurl"/>
     <xsl:text>/</xsl:text>
     <xsl:apply-templates select="." mode="standalone-filename" />
 </xsl:template>
@@ -6617,9 +6617,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="@end" />
     </xsl:if>
 </xsl:template>
-
-<!-- unimplemented is empty, check in QR production -->
-<xsl:template match="*" mode="static-url" />
 
 <!-- Static Images -->
 <!-- (1) @preview given in source -->
@@ -6659,7 +6656,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<xsl:template match="interactive[(@platform = 'html5') or (@platform = 'd3')]" mode="static-image">
+<xsl:template match="interactive" mode="static-image">
     <xsl:choose>
         <!-- has @preview -->
         <xsl:when test="@preview">
@@ -6668,13 +6665,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>}</xsl:text>
         </xsl:when>
         <!-- nothing specified, look for scraped via internal-id -->
+        <!-- Critical: coordinate with "extract-interactive.xsl" -->
         <xsl:otherwise>
-            <xsl:text>\includegraphics[width=0.80\linewidth,height=\qrsize,keepaspectratio]{</xsl:text>
-            <xsl:value-of select="$directory.images" />
-            <xsl:text>/</xsl:text>
-            <xsl:apply-templates select="." mode="internal-id" />
-            <xsl:text>.jpg</xsl:text>
-            <xsl:text>}</xsl:text>
+            <xsl:variable name="default-preview-image">
+                <xsl:value-of select="$directory.images" />
+                <xsl:text>/</xsl:text>
+                <xsl:apply-templates select="." mode="internal-id" />
+                <xsl:text>-preview.png</xsl:text>
+            </xsl:variable>
+            <xsl:text>\IfFileExists{</xsl:text>
+            <xsl:value-of select="$default-preview-image"/>
+            <xsl:text>}%&#xa;</xsl:text>
+            <xsl:text>{\includegraphics[width=0.80\linewidth,height=\qrsize,keepaspectratio]{</xsl:text>
+            <xsl:value-of select="$default-preview-image"/>
+            <xsl:text>}}%&#xa;</xsl:text>
+            <xsl:text>{\small{}Specify static image with \mono{@preview} attribute,\\Or create and provide automatic screenshot as \mono{</xsl:text>
+            <xsl:value-of select="$default-preview-image"/>
+            <xsl:text>} via the \mono{mbx} script}</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -6755,12 +6762,58 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<xsl:template match="interactive[(@platform = 'jsxgraph')]" mode="static-image">
-    <xsl:text>[NO PREVIEW]</xsl:text>
+<xsl:template match="interactive[@geogebra]" mode="static-caption">
+    <xsl:choose>
+        <!-- author-supplied override -->
+        <xsl:when test="caption">
+            <xsl:apply-templates select="caption" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>\mono{www.geogebra.org/material/iframe/id/</xsl:text>
+            <xsl:value-of select="@geogebra"/>
+            <xsl:text>}</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
-<xsl:template match="interactive[(@platform = 'jsxgraph') or (@platform = 'html5') or (@platform = 'd3')]" mode="static-caption">
-    <xsl:text>[CAPTION]</xsl:text>
+<xsl:template match="interactive[@desmos]" mode="static-caption">
+    <xsl:choose>
+        <!-- author-supplied override -->
+        <xsl:when test="caption">
+            <xsl:apply-templates select="caption" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>\mono{www.desmos.com/calculator/</xsl:text>
+            <xsl:value-of select="@desmos"/>
+            <xsl:text>}</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="interactive[@wolfram-cdf]" mode="static-caption">
+    <xsl:choose>
+        <!-- author-supplied override -->
+        <xsl:when test="caption">
+            <xsl:apply-templates select="caption" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>\mono{www.wolframcloud.com/objects/</xsl:text>
+            <xsl:value-of select="@wolfram-cdf"/>
+            <xsl:text>}</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Nothing automatic to say about non-server interactives -->
+<xsl:template match="interactive" mode="static-caption">
+    <xsl:choose>
+        <!-- author-supplied override -->
+        <xsl:when test="caption">
+            <xsl:apply-templates select="caption" />
+        </xsl:when>
+        <!-- nothing to say, empty is flag -->
+        <xsl:otherwise />
+    </xsl:choose>
 </xsl:template>
 
 <!-- ############ -->
@@ -7874,24 +7927,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
  -->    <xsl:text>{\mono{www.monroecc.edu/faculty/paulseeburger/calcnsf/CalcPlot3D}}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Temporary -->
-<xsl:template match="interactive">
-    <xsl:text>[INTERACTIVE]</xsl:text>
-</xsl:template>
-
-<!-- Static interactives -->
-<!-- Contents of "static" element, plus    -->
-<!-- a line of information below, per type -->
-<xsl:template match="interactive[@geogebra]|interactive[@platform='calcplot3d']|interactive[@platform='calcplot3d']">
-    <xsl:apply-templates select="static/*" />
-    <xsl:text>\centerline{</xsl:text>
-    <xsl:apply-templates select="." mode="info-text" />
-    <xsl:text>}&#xa;</xsl:text>
-</xsl:template>
-
 <!-- JSXGraph -->
 <xsl:template match="jsxgraph">
-    <xsl:text>\par\smallskip\centerline{A JSXGraph interactive demonstration goes here in interactive output.}\smallskip&#xa;</xsl:text>
+    <xsl:text>\par\smallskip\centerline{A deprecated JSXGraph interactive demonstration goes here in interactive output.}\smallskip&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Captions for Figures, Tables, Listings, Lists -->
