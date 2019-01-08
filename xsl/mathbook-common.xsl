@@ -8772,31 +8772,15 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- keyboard equivalents which will suffice in most conversions, -->
 <!-- so we implement default versions in U+00-U+7F.               -->
 
-<!--           -->
-<!-- XML, HTML -->
-<!--           -->
-
-<!-- & < > -->
-
-<!-- Ampersand -->
-<xsl:template name="ampersand-character">
-    <xsl:text>&amp;</xsl:text>
-</xsl:template>
 
 <!-- Less Than -->
 <xsl:template name="less-character">
     <xsl:text>&lt;</xsl:text>
 </xsl:template>
-<xsl:template match="less">
-    <xsl:call-template name="less-character"/>
-</xsl:template>
 
 <!-- Greater Than -->
 <xsl:template name="greater-character">
     <xsl:text>&gt;</xsl:text>
-</xsl:template>
-<xsl:template match="greater">
-    <xsl:call-template name="greater-character"/>
 </xsl:template>
 
 <!--       -->
@@ -8823,6 +8807,11 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Circumflex  -->
 <xsl:template name="circumflex-character">
     <xsl:text>^</xsl:text>
+</xsl:template>
+
+<!-- Ampersand -->
+<xsl:template name="ampersand-character">
+    <xsl:text>&amp;</xsl:text>
 </xsl:template>
 
 <!-- Underscore -->
@@ -8869,7 +8858,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
      <xsl:text>[[[</xsl:text>
      <xsl:value-of select="$char-name"/>
      <xsl:text>]]]</xsl:text>
- </xsl:template>
+</xsl:template>
 
 
 
@@ -8879,9 +8868,6 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:call-template name="warn-unimplemented-character">
         <xsl:with-param name="char-name" select="'asterisk'"/>
     </xsl:call-template>
-</xsl:template>
-<xsl:template match="asterisk">
-    <xsl:call-template name="asterisk-character"/>
 </xsl:template>
 
 <!-- Left Single Quote -->
@@ -8930,18 +8916,12 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:with-param name="char-name" select="'lbracket'"/>
     </xsl:call-template>
 </xsl:template>
-<xsl:template match="lbracket">
-    <xsl:call-template name="lbracket-character"/>
-</xsl:template>
 
 <!-- Right Bracket -->
 <xsl:template name="rbracket-character">
     <xsl:call-template name="warn-unimplemented-character">
         <xsl:with-param name="char-name" select="'rbracket'"/>
     </xsl:call-template>
-</xsl:template>
-<xsl:template match="rbracket">
-    <xsl:call-template name="rbracket-character"/>
 </xsl:template>
 
 <!-- Left Double Bracket -->
@@ -9067,9 +9047,6 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:with-param name="char-name" select="'slash'"/>
     </xsl:call-template>
 </xsl:template>
-<xsl:template match="slash">
-    <xsl:call-template name="slash-character"/>
-</xsl:template>
 
 <!-- Solidus -->
 <!-- Fraction bar, not as steep as a forward slash -->
@@ -9088,9 +9065,6 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:call-template name="warn-unimplemented-character">
         <xsl:with-param name="char-name" select="'backtick'"/>
     </xsl:call-template>
-</xsl:template>
-<xsl:template match="backtick">
-    <xsl:call-template name="backtick-character"/>
 </xsl:template>
 
 <!-- Copyright -->
@@ -9222,18 +9196,6 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:call-template name="lsq-character"/>
     <xsl:apply-templates />
     <xsl:call-template name="rsq-character"/>
-</xsl:template>
-
-<xsl:template match="braces">
-    <xsl:call-template name="lbrace-character"/>
-    <xsl:apply-templates />
-    <xsl:call-template name="rbrace-character"/>
-</xsl:template>
-
-<xsl:template match="brackets">
-    <xsl:call-template name="lbracket-character"/>
-    <xsl:apply-templates />
-    <xsl:call-template name="rbracket-character"/>
 </xsl:template>
 
 <xsl:template match="dblbrackets">
@@ -10053,6 +10015,72 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="date-string" select="'2019-02-06'" />
         <xsl:with-param name="message" select="'the &quot;backslash&quot; element is no longer necessary, simply replace with a bare &quot;\&quot; character'"/>
     </xsl:call-template>
+    <!--                           -->
+    <!-- Nine unnecessary elements -->
+    <!--                           -->
+    <!--  -->
+    <!-- 2019-02-06  less gone -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//less" />
+        <xsl:with-param name="date-string" select="'2019-02-06'" />
+        <xsl:with-param name="message" select="'the &quot;less&quot; element is no longer necessary, simply replace with a bare &quot;&lt;&quot; character (properly escaped, i.e. &quot;&amp;lt;&quot;)'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2019-02-06  greater gone -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//greater" />
+        <xsl:with-param name="date-string" select="'2019-02-06'" />
+        <xsl:with-param name="message" select="'the &quot;greater&quot; element is no longer necessary, simply replace with a bare &quot;&gt;&quot; character (possibly escaped, i.e. &quot;&amp;gt;&quot;)'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2019-02-06  lbracket gone -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//lbracket" />
+        <xsl:with-param name="date-string" select="'2019-02-06'" />
+        <xsl:with-param name="message" select="'the &quot;lbracket&quot; element is no longer necessary, simply replace with a bare &quot;[&quot; character'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2019-02-06  rbracket gone -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//rbracket" />
+        <xsl:with-param name="date-string" select="'2019-02-06'" />
+        <xsl:with-param name="message" select="'the &quot;rbracket&quot; element is no longer necessary, simply replace with a bare &quot;]&quot; character'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2019-02-06  asterisk gone -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//asterisk" />
+        <xsl:with-param name="date-string" select="'2019-02-06'" />
+        <xsl:with-param name="message" select="'the &quot;asterisk&quot; element is no longer necessary, simply replace with a bare &quot;*&quot; character'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2019-02-06  slash gone -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//slash" />
+        <xsl:with-param name="date-string" select="'2019-02-06'" />
+        <xsl:with-param name="message" select="'the &quot;slash&quot; element is no longer necessary, simply replace with a bare &quot;/&quot; character'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2019-02-06  backtick gone -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//backtick" />
+        <xsl:with-param name="date-string" select="'2019-02-06'" />
+        <xsl:with-param name="message" select="'the &quot;backtick&quot; element is no longer necessary, simply replace with a bare &quot;`&quot; character'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2019-02-06  braces gone -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//braces" />
+        <xsl:with-param name="date-string" select="'2019-02-06'" />
+        <xsl:with-param name="message" select="'the &quot;braces&quot; element is no longer necessary, simply replace with bare &quot;{&quot; and &quot;}&quot; characters'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2019-02-06  brackets gone -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//brackets" />
+        <xsl:with-param name="date-string" select="'2019-02-06'" />
+        <xsl:with-param name="message" select="'the &quot;brackets&quot; element is no longer necessary, simply replace with bare &quot;[&quot; and &quot;]&quot; characters'"/>
+    </xsl:call-template>
 </xsl:template>
 
 <!-- Miscellaneous -->
@@ -10241,6 +10269,42 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 </xsl:template>
 <xsl:template match="backslash">
     <xsl:call-template name="backslash-character"/>
+</xsl:template>
+
+<!-- Nine unnecessary elements -->
+<!-- Deprecated 2019-02-06     -->
+<!-- <, >, [, ], *, /, `,      -->
+<!--   braces and brackets     -->
+<xsl:template match="less">
+    <xsl:call-template name="less-character"/>
+</xsl:template>
+<xsl:template match="greater">
+    <xsl:call-template name="greater-character"/>
+</xsl:template>
+<xsl:template match="lbracket">
+    <xsl:call-template name="lbracket-character"/>
+</xsl:template>
+<xsl:template match="rbracket">
+    <xsl:call-template name="rbracket-character"/>
+</xsl:template>
+<xsl:template match="asterisk">
+    <xsl:call-template name="asterisk-character"/>
+</xsl:template>
+<xsl:template match="slash">
+    <xsl:call-template name="slash-character"/>
+</xsl:template>
+<xsl:template match="backtick">
+    <xsl:call-template name="backtick-character"/>
+</xsl:template>
+<xsl:template match="braces">
+    <xsl:call-template name="lbrace-character"/>
+    <xsl:apply-templates />
+    <xsl:call-template name="rbrace-character"/>
+</xsl:template>
+<xsl:template match="brackets">
+    <xsl:call-template name="lbracket-character"/>
+    <xsl:apply-templates />
+    <xsl:call-template name="rbracket-character"/>
 </xsl:template>
 
 <!-- ############################## -->

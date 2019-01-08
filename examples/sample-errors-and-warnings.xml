@@ -151,6 +151,9 @@ systems.
             <!-- # $ % ^ & _ { } ~ \  -->
             <p><latex/>'s ten reserved characters once each had an empty element of its own: <hash/> <dollar/> <percent/> <circumflex/> <ampersand/> <underscore/> <lbrace/> <rbrace/> <tilde/> <backslash/>.</p>
 
+            <!-- <, >, [, ], *, /, `, braces and brackets  -->
+            <p>And similarly, nine other elements were made redundant:  <less/> <greater/> <lbracket/> <rbracket/> <asterisk/> <slash/> <backtick/> <braces>braces</braces> <brackets>brackets</brackets>.</p>
+
             <p>Tables once looked like this, but now are really different.</p>
 
              <table xml:id="table-euler1">
