@@ -7328,11 +7328,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\textrangle{}</xsl:text>
 </xsl:template>
 
-<!-- At -->
-<xsl:template name="at-character">
-    <xsl:text>@</xsl:text>
-</xsl:template>
-
 <!-- Vertical Bar -->
 <!-- Bringhurst: a "pipe" is a broken bar -->
 <!-- Exists as \textbrokenbar             -->
@@ -10051,10 +10046,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="backtick-character"/>
 </xsl:variable>
 
-<xsl:variable name="at-replacement">
-    <xsl:call-template name="at-character"/>
-</xsl:variable>
-
 <xsl:variable name="bar-replacement">
     <xsl:call-template name="bar-character"/>
 </xsl:variable>
@@ -10103,8 +10094,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="less-fixed"     select="str:replace($rbrace-fixed,    '&lt;', $less-replacement)"/>
     <xsl:variable name="greater-fixed"  select="str:replace($less-fixed,      '&gt;', $greater-replacement)"/>
     <xsl:variable name="backtick-fixed" select="str:replace($greater-fixed,   '`',    $backtick-replacement)"/>
-    <xsl:variable name="at-fixed"       select="str:replace($backtick-fixed, '@',     $at-replacement)"/>
-    <xsl:variable name="bar-fixed"      select="str:replace($at-fixed,       '|',     $bar-replacement)"/>
+    <xsl:variable name="bar-fixed"      select="str:replace($backtick-fixed,  '|',    $bar-replacement)"/>
 
     <!-- We disrupt certain "TeX ligatures" - combinations of keyboard -->
     <!-- characters which result in a single glyph in output           -->

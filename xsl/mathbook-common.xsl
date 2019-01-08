@@ -9062,25 +9062,6 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:call-template name="backtick-character"/>
 </xsl:template>
 
-<!-- At -->
-<!-- at symbol, circled a -->
-<xsl:template name="at-character">
-    <xsl:call-template name="warn-unimplemented-character">
-        <xsl:with-param name="char-name" select="'at'"/>
-    </xsl:call-template>
-</xsl:template>
-<!-- not implemented as an empty element -->
-
-<!-- Bar -->
-<!-- vertical bar                         -->
-<!-- Bringhurst: a "pipe" is a broken bar -->
-<xsl:template name="bar-character">
-    <xsl:call-template name="warn-unimplemented-character">
-        <xsl:with-param name="char-name" select="'bar'"/>
-    </xsl:call-template>
-</xsl:template>
-<!-- not implemented as an empty element -->
-
 <!-- Copyright -->
 <!-- Bringhurst: on baseline (i.e. not superscript) -->
 <xsl:template name="copyright-character">
