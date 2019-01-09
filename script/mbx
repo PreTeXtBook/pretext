@@ -482,7 +482,7 @@ def webwork_to_xml(xslt_exec, ptx_xsl_dir, xml_source, server_params, dest_dir):
             if file_empty:
                 raise ValueError(file_empty_msg.format(problem_identifier))
             if no_compile:
-                raise ValueError(no_compile_msg.format(problem_identifier, seed[problem], pg[problem]))
+                raise ValueError(no_compile_msg.format(problem_identifier, seed[problem], response.text))
             if bad_xml:
                 raise ValueError(bad_xml_msg.format(problem_identifier, seed[problem], response.text))
 
