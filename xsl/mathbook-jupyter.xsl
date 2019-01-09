@@ -536,7 +536,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\\</xsl:text>
 </xsl:template>
 
-<!-- Asterisk, implemented as Unicode  -->
+<!-- Asterisk  -->
+<xsl:template name="asterisk-character">
+    <xsl:text>\*</xsl:text>
+</xsl:template>
 
 <!-- Left Bracket -->
 <xsl:template name="lbracket-character">
@@ -617,8 +620,9 @@ TODO: (overall)
     <xsl:variable name="hash-fixed"       select="str:replace($rbrace-fixed,    '#',  '\#')"/>
     <xsl:variable name="dollar-fixed"     select="str:replace($hash-fixed,      '$',  '\$')"/>
     <xsl:variable name="underscore-fixed" select="str:replace($dollar-fixed,    '_',  '\_')"/>
+    <xsl:variable name="asterisk-fixed"   select="str:replace($underscore-fixed,'*',  '\*')"/>
 
-    <xsl:value-of select="$underscore-fixed"/>
+    <xsl:value-of select="$asterisk-fixed"/>
 </xsl:template>
 
 <!-- ########################## -->

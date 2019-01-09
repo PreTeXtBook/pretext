@@ -10042,6 +10042,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="backtick-fixed" select="str:replace($greater-fixed,   '`',    '\textasciigrave{}')"/>
     <xsl:variable name="bar-fixed"      select="str:replace($backtick-fixed,  '|',    '\textbar{}')"/>
     <xsl:variable name="slash-fixed"    select="str:replace($bar-fixed,       '/',    '\slash{}')"/>
+    <xsl:variable name="asterisk-fixed" select="str:replace($slash-fixed,     '*',    '\textasteriskcentered{}')"/>
 
     <!-- We disrupt certain "TeX ligatures" - combinations of keyboard -->
     <!-- characters which result in a single glyph in output           -->
@@ -10050,7 +10051,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- An even number of hyphens will earn the same number of disrupting {} -->
     <!-- An odd number of hyphens will earn one less disrupting {} -->
     <!-- In particular, a single hyphen gets none -->
-    <xsl:variable name="hyphen-fixed"    select="str:replace($slash-fixed, $double-hyphen, $double-hyphen-replacement)"/>
+    <xsl:variable name="hyphen-fixed"    select="str:replace($asterisk-fixed, $double-hyphen, $double-hyphen-replacement)"/>
 
     <!-- Apostrophes -->
     <!-- Should not be combined in pairs to become a single right -->

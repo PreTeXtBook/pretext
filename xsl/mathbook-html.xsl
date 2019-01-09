@@ -6946,12 +6946,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Backslash -->
 
 <!-- Asterisk -->
-<!-- Centered as a character, not an exponent                    -->
-<!-- Unicode Character 'ASTERISK OPERATOR' (U+2217)              -->
-<!-- See raised asterisk for other options:                      -->
-<!-- http://www.fileformat.info/info/unicode/char/002a/index.htm -->
+<!-- Was once: Unicode Character 'ASTERISK OPERATOR' (U+2217)  -->
+<!-- which is not quite right.  Now identical to a plain       -->
+<!-- ASCII version, and we hope fonts do not place it too high -->
 <xsl:template name="asterisk-character">
-    <xsl:text>&#x2217;</xsl:text>
+    <xsl:text>*</xsl:text>
 </xsl:template>
 
 <!-- Left Single Quote -->
