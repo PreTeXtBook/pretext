@@ -604,46 +604,19 @@ TODO: (overall)
 <!-- have effect.                                              -->
 <!--                                                           -->
 <!-- Our emphasis originally is on escaping characters that    -->
-<!-- LaTeX has hijacked for special purposes.  First we define -->
-<!-- some variables globally, so it is only necessary once.    -->
-
-<!-- XML: & < > -->
-
-<!-- LaTeX: # $ % ^ & _ { } ~ \ -->
-
-<xsl:variable name="hash-replacement">
-    <xsl:call-template name="hash-character"/>
-</xsl:variable>
-
-<xsl:variable name="backslash-replacement">
-    <xsl:call-template name="backslash-character"/>
-</xsl:variable>
-
-<xsl:variable name="lbrace-replacement">
-    <xsl:call-template name="lbrace-character"/>
-</xsl:variable>
-
-<xsl:variable name="rbrace-replacement">
-    <xsl:call-template name="rbrace-character"/>
-</xsl:variable>
-
-<xsl:variable name="dollar-replacement">
-    <xsl:call-template name="dollar-character"/>
-</xsl:variable>
-
-<xsl:variable name="underscore-replacement">
-    <xsl:call-template name="underscore-character"/>
-</xsl:variable>
+<!-- Markdown has hijacked for special purposes.               -->
 
 <xsl:template name="text-processing">
     <xsl:param name="text"/>
+    <!-- Needs backtick, it seems -->
+
     <!-- Backslash first, then clear to add more -->
-    <xsl:variable name="backslash-fixed"  select="str:replace($text,            '\',  $backslash-replacement)"/>
-    <xsl:variable name="lbrace-fixed"     select="str:replace($backslash-fixed, '{',  $lbrace-replacement)"/>
-    <xsl:variable name="rbrace-fixed"     select="str:replace($lbrace-fixed,    '}',  $rbrace-replacement)"/>
-    <xsl:variable name="hash-fixed"       select="str:replace($rbrace-fixed,    '#',  $hash-replacement)"/>
-    <xsl:variable name="dollar-fixed"     select="str:replace($hash-fixed,      '$',  $dollar-replacement)"/>
-    <xsl:variable name="underscore-fixed" select="str:replace($dollar-fixed,    '_',  $underscore-replacement)"/>
+    <xsl:variable name="backslash-fixed"  select="str:replace($text,            '\',  '\\')"/>
+    <xsl:variable name="lbrace-fixed"     select="str:replace($backslash-fixed, '{',  '\{')"/>
+    <xsl:variable name="rbrace-fixed"     select="str:replace($lbrace-fixed,    '}',  '\}')"/>
+    <xsl:variable name="hash-fixed"       select="str:replace($rbrace-fixed,    '#',  '\#')"/>
+    <xsl:variable name="dollar-fixed"     select="str:replace($hash-fixed,      '$',  '\$')"/>
+    <xsl:variable name="underscore-fixed" select="str:replace($dollar-fixed,    '_',  '\_')"/>
 
     <xsl:value-of select="$underscore-fixed"/>
 </xsl:template>
