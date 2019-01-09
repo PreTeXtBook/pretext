@@ -1692,38 +1692,7 @@
 <!-- These are characters which PGML gives special meaning,    -->
 <!-- and should be escaped to prevent accidents.               -->
 
-<xsl:variable name="asterisk-replacement">
-    <xsl:call-template name="asterisk-character"/>
-</xsl:variable>
-
-<xsl:variable name="backslash-replacement">
-    <xsl:call-template name="backslash-character"/>
-</xsl:variable>
-
-<xsl:variable name="lbrace-replacement">
-    <xsl:call-template name="lbrace-character"/>
-</xsl:variable>
-
-<xsl:variable name="rbrace-replacement">
-    <xsl:call-template name="rbrace-character"/>
-</xsl:variable>
-
-<xsl:variable name="lbracket-replacement">
-    <xsl:call-template name="lbracket-character"/>
-</xsl:variable>
-
-<xsl:variable name="rbracket-replacement">
-    <xsl:call-template name="rbracket-character"/>
-</xsl:variable>
-
-<xsl:variable name="underscore-replacement">
-    <xsl:call-template name="underscore-character"/>
-</xsl:variable>
-
-<xsl:variable name="hash-replacement">
-    <xsl:call-template name="hash-character"/>
-</xsl:variable>
-
+<!-- Necessary to prevent XML quote confusion -->
 <xsl:variable name="apostrophe">
     <xsl:text>'</xsl:text>
 </xsl:variable>
@@ -1742,13 +1711,13 @@
     <!-- (as of 2018-12-09)                                                -->
 
     <!-- Backslash first, since more will be introduced in other replacements -->
-    <xsl:variable name="backslash-fixed" select="str:replace($text,            '\', $backslash-replacement)"/>
-    <xsl:variable name="asterisk-fixed"  select="str:replace($backslash-fixed, '*', $asterisk-replacement)"/>
-    <xsl:variable name="hash-fixed"      select="str:replace($asterisk-fixed,  '#', $hash-replacement)"/>
-    <xsl:variable name="lbrace-fixed"    select="str:replace($hash-fixed,      '{', $lbrace-replacement)"/>
-    <xsl:variable name="rbrace-fixed"    select="str:replace($lbrace-fixed,    '}', $rbrace-replacement)"/>
-    <xsl:variable name="lbracket-fixed"  select="str:replace($rbrace-fixed,    '[', $lbracket-replacement)"/>
-    <xsl:variable name="rbracket-fixed"  select="str:replace($lbracket-fixed,  ']', $rbracket-replacement)"/>
+    <xsl:variable name="backslash-fixed" select="str:replace($text,            '\', '\\')"/>
+    <xsl:variable name="asterisk-fixed"  select="str:replace($backslash-fixed, '*', '\*')"/>
+    <xsl:variable name="hash-fixed"      select="str:replace($asterisk-fixed,  '#', '\#')"/>
+    <xsl:variable name="lbrace-fixed"    select="str:replace($hash-fixed,      '{', '\{')"/>
+    <xsl:variable name="rbrace-fixed"    select="str:replace($lbrace-fixed,    '}', '\}')"/>
+    <xsl:variable name="lbracket-fixed"  select="str:replace($rbrace-fixed,    '[', '\[')"/>
+    <xsl:variable name="rbracket-fixed"  select="str:replace($lbracket-fixed,  ']', '\]')"/>
 
     <!-- We translate textual apostrophes to the escape sequence [$APOS] -->
     <xsl:variable name="apostrophe-fixed"  select="str:replace($rbracket-fixed, $apostrophe, '[$APOS]')"/>
@@ -1757,7 +1726,7 @@
     <xsl:variable name="centerline-fixed" select="str:replace($apostrophe-fixed, '&gt;&gt; ', '\&gt;\&gt;')"/>
 
     <!-- Break up any possibility of paired underscores for italics (overkill) -->
-    <xsl:variable name="italicization-fixed" select="str:replace($centerline-fixed, '_', $underscore-replacement)"/>
+    <xsl:variable name="italicization-fixed" select="str:replace($centerline-fixed, '_', '\_')"/>
 
     <!-- Break up horizontal rule from three equals or three hyphens -->
     <!-- We escape the *middle* symbol, as a minimal disruption      -->
