@@ -714,8 +714,8 @@
                 <xsl:when test="$b-verbose">
                     <xsl:text>  "contextFiniteSolutionSets.pl",&#xa;</xsl:text>
                 </xsl:when>
-                    <xsl:text>"contextFiniteSolutionSets.pl",</xsl:text>
                 <xsl:otherwise>
+                    <xsl:text>"contextFiniteSolutionSets.pl",</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:if>
