@@ -2028,7 +2028,7 @@ the xsltproc executable.
             </subsection>
 
             <subsection>
-                <title><latex/> Characters and Ligatures</title>
+                <title><latex/> Characters, Ligatures, and More</title>
 
                 <p>This section is just for testing, and the more you know about <latex/>, the more we would encourage you to <em>not</em> to read this.  Look to the Author's Guide for the <em>right</em> way to author your source.</p>
 
@@ -2047,6 +2047,10 @@ the xsltproc executable.
                 <p><rq/><rq/><rq/><rq/><rq/><rq/><rq/><rq/><rq/><rq/><rq/><rq/><rq/><rq/><rq/>.</p>
 
                 <p>Runs of backticks (accent grave) should not become smart left double quotes:  ` (one), `` (two), ``` (three), ```` (four), ````` (five), `````` (six), ``````` (seven).</p>
+
+                <p>The next paragraph has a long run of words separated/joined by the keyboard forward-slash character.  With this input, <latex/> will not line-break at the slash, nor will it hypenate anywhere.  <pretext/>  automatically provides an improved slash, which will line-break, as you should see below in <latex/> output.  There is a bad right margin, but that is due to the absurdity of this test.  This sort of problem should be no better or worse for the use of this character.  Further refinements (zero-width space) and packages can be used to get hyphenation.  <init>HTML</init> will line-break rationally with no extra help.  Remember the <tage>solidus</tage> character for super-simple text fractions like 7<solidus/>32 (which will <em>not</em> line-break), and math elements or SI unit markup for technical work.</p>
+
+                <p>A/test/of/some/short/words/that/go/off/the/end/of/a/line/A/test/of/some/short/words/that/go/off/the/end/of/a/line/A/test/of/some/short/words/that/go/off/the/end/of/a/line/A/test/of/some/short/words/that/go/off/the/end/of/a/line/A/test/of/some/short/words/that/go/off/the/end/of/a/line.</p>
             </subsection>
 
             <subsection>

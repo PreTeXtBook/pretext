@@ -7067,7 +7067,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Slash -->
 <!-- Forward slash, or virgule (see solidus) -->
 <xsl:template name="slash-character">
-    <xsl:text>&#x2f;</xsl:text>
+    <xsl:text>/</xsl:text>
 </xsl:template>
 
 <!-- Solidus -->
