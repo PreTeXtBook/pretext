@@ -9994,63 +9994,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="temp-left-brace"  select="'[x[UxDbNWiRqGnV.]x]'" />
 <xsl:variable name="temp-right-brace" select="'[x[ohQiMJjEdf0jQ]x]'" />
 
-<xsl:variable name="ampersand-replacement">
-    <xsl:call-template name="ampersand-character"/>
-</xsl:variable>
-
-<xsl:variable name="less-replacement">
-    <xsl:call-template name="less-character"/>
-</xsl:variable>
-
-<xsl:variable name="greater-replacement">
-    <xsl:call-template name="greater-character"/>
-</xsl:variable>
-
-<xsl:variable name="hash-replacement">
-    <xsl:call-template name="hash-character"/>
-</xsl:variable>
-
-<xsl:variable name="backslash-replacement">
-    <xsl:call-template name="backslash-character"/>
-</xsl:variable>
-
-<xsl:variable name="lbrace-replacement">
-    <xsl:call-template name="lbrace-character"/>
-</xsl:variable>
-
-<xsl:variable name="rbrace-replacement">
-    <xsl:call-template name="rbrace-character"/>
-</xsl:variable>
-
-<xsl:variable name="dollar-replacement">
-    <xsl:call-template name="dollar-character"/>
-</xsl:variable>
-
-<xsl:variable name="percent-replacement">
-    <xsl:call-template name="percent-character"/>
-</xsl:variable>
-
-<xsl:variable name="circumflex-replacement">
-    <xsl:call-template name="circumflex-character"/>
-</xsl:variable>
-
-<xsl:variable name="underscore-replacement">
-    <xsl:call-template name="underscore-character"/>
-</xsl:variable>
-
-<xsl:variable name="tilde-replacement">
-    <xsl:call-template name="tilde-character"/>
-</xsl:variable>
-
-<xsl:variable name="backtick-replacement">
-    <xsl:call-template name="backtick-character"/>
-</xsl:variable>
-
-<xsl:variable name="bar-replacement">
-    <xsl:call-template name="bar-character"/>
-</xsl:variable>
-
-<!-- Following for disruption of "TeX ligatures" -->
+<!-- Following for disruption of "TeX ligatures"           -->
+<!-- Second two are necessary to avoid XML quote confusion -->
 <xsl:variable name="double-hyphen">
     <text>--</text>
 </xsl:variable>
@@ -10078,23 +10023,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="lbrace-temped"    select="str:replace($text,             '{',     $temp-left-brace)"/>
     <xsl:variable name="rbrace-temped"    select="str:replace($lbrace-temped,    '}',     $temp-right-brace)"/>
     <!-- Eight other LaTeX characters -->
-    <xsl:variable name="backslash-fixed"  select="str:replace($rbrace-temped,    '\',     $backslash-replacement)"/>
-    <xsl:variable name="amp-fixed"        select="str:replace($backslash-fixed,  '&amp;', $ampersand-replacement)"/>
-    <xsl:variable name="hash-fixed"       select="str:replace($amp-fixed,        '#',     $hash-replacement)"/>
-    <xsl:variable name="dollar-fixed"     select="str:replace($hash-fixed,       '$',     $dollar-replacement)"/>
-    <xsl:variable name="percent-fixed"    select="str:replace($dollar-fixed,     '%',     $percent-replacement)"/>
-    <xsl:variable name="circumflex-fixed" select="str:replace($percent-fixed,    '^',     $circumflex-replacement)"/>
-    <xsl:variable name="underscore-fixed" select="str:replace($circumflex-fixed, '_',     $underscore-replacement)"/>
-    <xsl:variable name="tilde-fixed"      select="str:replace($underscore-fixed, '~',     $tilde-replacement)"/>
+    <xsl:variable name="backslash-fixed"  select="str:replace($rbrace-temped,    '\',     '\textbackslash{}')"/>
+    <xsl:variable name="amp-fixed"        select="str:replace($backslash-fixed,  '&amp;', '\&amp;')"/>
+    <xsl:variable name="hash-fixed"       select="str:replace($amp-fixed,        '#',     '\#')"/>
+    <xsl:variable name="dollar-fixed"     select="str:replace($hash-fixed,       '$',     '\textdollar{}')"/>
+    <xsl:variable name="percent-fixed"    select="str:replace($dollar-fixed,     '%',     '\%')"/>
+    <xsl:variable name="circumflex-fixed" select="str:replace($percent-fixed,    '^',     '\textasciicircum{}')"/>
+    <xsl:variable name="underscore-fixed" select="str:replace($circumflex-fixed, '_',     '\textunderscore{}')"/>
+    <xsl:variable name="tilde-fixed"      select="str:replace($underscore-fixed, '~',     '\textasciitilde{}')"/>
     <!-- TeX grouping characters, now two marked versions fixed -->
-    <xsl:variable name="lbrace-fixed"     select="str:replace($tilde-fixed,      $temp-left-brace, $lbrace-replacement)"/>
-    <xsl:variable name="rbrace-fixed"     select="str:replace($lbrace-fixed,     $temp-right-brace, $rbrace-replacement)"/>
+    <xsl:variable name="lbrace-fixed"     select="str:replace($tilde-fixed,      $temp-left-brace, '\textbraceleft{}')"/>
+    <xsl:variable name="rbrace-fixed"     select="str:replace($lbrace-fixed,     $temp-right-brace, '\textbraceright{}')"/>
 
-    <!-- Unclear if these are necessary or optional -->
-    <xsl:variable name="less-fixed"     select="str:replace($rbrace-fixed,    '&lt;', $less-replacement)"/>
-    <xsl:variable name="greater-fixed"  select="str:replace($less-fixed,      '&gt;', $greater-replacement)"/>
-    <xsl:variable name="backtick-fixed" select="str:replace($greater-fixed,   '`',    $backtick-replacement)"/>
-    <xsl:variable name="bar-fixed"      select="str:replace($backtick-fixed,  '|',    $bar-replacement)"/>
+    <!-- These are characters improved by textcomp versions -->
+    <xsl:variable name="less-fixed"     select="str:replace($rbrace-fixed,    '&lt;', '\textless{}')"/>
+    <xsl:variable name="greater-fixed"  select="str:replace($less-fixed,      '&gt;', '\textgreater{}')"/>
+    <xsl:variable name="backtick-fixed" select="str:replace($greater-fixed,   '`',    '\textasciigrave{}')"/>
+    <xsl:variable name="bar-fixed"      select="str:replace($backtick-fixed,  '|',    '\textbar{}')"/>
 
     <!-- We disrupt certain "TeX ligatures" - combinations of keyboard -->
     <!-- characters which result in a single glyph in output           -->
