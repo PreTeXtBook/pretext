@@ -10077,7 +10077,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Paraguayan guarani -->
     <xsl:variable name="guarani-fixed" select="str:replace($apostrophe-fixed, '&#x20b2;', '\textguarani')"/>
 
-    <xsl:value-of select="$guarani-fixed"/>
+    <!-- <xsl:value-of select="$guarani-fixed"/> --> 
+
+    <xsl:variable name="double-space" select="str:replace($guarani-fixed, '.  ', '[TWOTWOTWO]')"/>
+    <xsl:variable name="single-space" select="str:replace($double-space,  '. ', '&#xbf;')"/>
+    <xsl:variable name="mark-double"  select="str:replace($single-space,  '[TWOTWOTWO]', '.&#xb8;&#xb8;')"/>
+    <xsl:value-of select="$mark-double" />
+
 </xsl:template>
 
 
