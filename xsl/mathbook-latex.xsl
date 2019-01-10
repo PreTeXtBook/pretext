@@ -9991,9 +9991,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- LaTeX has hijacked for special purposes.  First we define -->
 <!-- some variables globally, so it is only necessary once.    -->
 
-<xsl:variable name="temp-left-brace"  select="'[x[UxDbNWiRqGnV.]x]'" />
-<xsl:variable name="temp-right-brace" select="'[x[ohQiMJjEdf0jQ]x]'" />
-
 <!-- Following for disruption of "TeX ligatures"           -->
 <!-- Second two are necessary to avoid XML quote confusion -->
 <xsl:variable name="double-hyphen">
@@ -10012,32 +10009,40 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template name="text-processing">
     <xsl:param name="text"/>
-    <!-- Strategy: braces first, then backslash is OK, then rest. -->
-    <!-- Cannot do backslash alone.  A brace replacement can have -->
-    <!-- an ending {}, so it becomes circular to try to do both.  -->
+    <!-- LaTeX's 10 reserved characters:  # $ % ^ & _ { } ~ \          -->
+    <!-- We allow these in source, but must *always* escape them       -->
+    <!--                                                               -->
+    <!-- Strategy: replacements for backslash and braces use all       -->
+    <!-- three characters, so it can be circular to just plow through  -->
+    <!-- them.  We replace the backslash, then do replacements for the -->
+    <!-- braces.  But we leave off the ending empty-group protection.  -->
+    <!-- A second pass will never accidentally match remaining source  -->
+    <!-- text due to the backslash replacements, so we safely place    -->
+    <!-- the groups as pairs of braces.                                -->
+    <!--                                                               -->
+    <!-- This involves just one more search/replace than a previous    -->
+    <!-- strategy that used a risky "unique string" strategy.          -->
+    <!-- (Discussion referenced in "escape-text-to-latex" template)    -->
 
-    <!-- LaTeX's 10 reserved characters:  # $ % ^ & _ { } ~ \    -->
-    <!-- We allow these in source, but must *always* escape them -->
+    <xsl:variable name="bs-one" select="str:replace($text,   '\', '\textbackslash')"/>
+    <xsl:variable name="lb-one" select="str:replace($bs-one, '{', '\textbraceleft')"/>
+    <xsl:variable name="rb-one" select="str:replace($lb-one, '}', '\textbraceright')"/>
 
-    <!-- TeX grouping characters, temporarily marked -->
-    <xsl:variable name="lbrace-temped"    select="str:replace($text,             '{',     $temp-left-brace)"/>
-    <xsl:variable name="rbrace-temped"    select="str:replace($lbrace-temped,    '}',     $temp-right-brace)"/>
-    <!-- Eight other LaTeX characters -->
-    <xsl:variable name="backslash-fixed"  select="str:replace($rbrace-temped,    '\',     '\textbackslash{}')"/>
-    <xsl:variable name="amp-fixed"        select="str:replace($backslash-fixed,  '&amp;', '\&amp;')"/>
+    <xsl:variable name="bs-two" select="str:replace($rb-one, '\textbackslash',  '\textbackslash{}')"/>
+    <xsl:variable name="lb-two" select="str:replace($bs-two, '\textbraceleft',  '\textbraceleft{}')"/>
+    <xsl:variable name="rb-two" select="str:replace($lb-two, '\textbraceright', '\textbraceright{}')"/>
+
+    <xsl:variable name="amp-fixed"        select="str:replace($rb-two,           '&amp;', '\&amp;')"/>
     <xsl:variable name="hash-fixed"       select="str:replace($amp-fixed,        '#',     '\#')"/>
     <xsl:variable name="dollar-fixed"     select="str:replace($hash-fixed,       '$',     '\textdollar{}')"/>
     <xsl:variable name="percent-fixed"    select="str:replace($dollar-fixed,     '%',     '\%')"/>
     <xsl:variable name="circumflex-fixed" select="str:replace($percent-fixed,    '^',     '\textasciicircum{}')"/>
     <xsl:variable name="underscore-fixed" select="str:replace($circumflex-fixed, '_',     '\textunderscore{}')"/>
     <xsl:variable name="tilde-fixed"      select="str:replace($underscore-fixed, '~',     '\textasciitilde{}')"/>
-    <!-- TeX grouping characters, now two marked versions fixed -->
-    <xsl:variable name="lbrace-fixed"     select="str:replace($tilde-fixed,      $temp-left-brace, '\textbraceleft{}')"/>
-    <xsl:variable name="rbrace-fixed"     select="str:replace($lbrace-fixed,     $temp-right-brace, '\textbraceright{}')"/>
 
     <!-- These are characters improved by LaTeX versions (mostly from textcomp)                 -->
     <!-- \slash is important since it allows line-breaking, contrary to a bare "forward "slash" -->
-    <xsl:variable name="less-fixed"     select="str:replace($rbrace-fixed,    '&lt;', '\textless{}')"/>
+    <xsl:variable name="less-fixed"     select="str:replace($tilde-fixed,    '&lt;', '\textless{}')"/>
     <xsl:variable name="greater-fixed"  select="str:replace($less-fixed,      '&gt;', '\textgreater{}')"/>
     <xsl:variable name="backtick-fixed" select="str:replace($greater-fixed,   '`',    '\textasciigrave{}')"/>
     <xsl:variable name="bar-fixed"      select="str:replace($backtick-fixed,  '|',    '\textbar{}')"/>
@@ -10104,31 +10109,36 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="$sans-quote" />
 </xsl:template>
 
+<!-- Necessary for next template, defined globally -->
+<xsl:variable name="sq">
+    <xsl:text>'</xsl:text>
+</xsl:variable>
+<xsl:variable name="dq">
+    <xsl:text>"</xsl:text>
+</xsl:variable>
+
 <!-- Author's Inline Verbatim to Escaped LaTeX -->
-<!-- 10 wicked LaTeX characters:   & % $ # _ { } ~ ^ \.        -->
-<!-- Plus single quote, double quote, and backtick.            -->
-<!-- \, {, } all need replacement, and also occur in some      -->
-<!-- replacements.  So order, and some care, is necessary.     -->
-<!-- In particular, backslash and groupings can get circular,  -->
-<!-- so we use an unlikely marker generated by "mkpasswd" to   -->
-<!-- manage replacements.  Generally this is a cleaner, prior  -->
-<!-- to wrapping in our \mono macro, implemented with \texttt. -->
-<!-- http://tex.stackexchange.com/questions/34580/             -->
+<!-- 10 wicked LaTeX characters:   & % $ # _ { } ~ ^ \.    -->
+<!-- Plus single quote, double quote, and backtick.        -->
+<!-- \, {, } all need replacement, and also occur in some  -->
+<!-- replacements.  So order, and some care, is necessary. -->
+<!-- Generally this is a "cleaner" template , prior  to    -->
+<!--wrapping in our \mono macro, implemented with \texttt. -->
+<!-- http://tex.stackexchange.com/questions/34580/         -->
 <xsl:template name="escape-text-to-latex">
     <xsl:param    name="text" />
 
-    <xsl:variable name="sq">
-        <xsl:text>'</xsl:text>
-    </xsl:variable>
-    <xsl:variable name="dq">
-        <xsl:text>"</xsl:text>
-    </xsl:variable>
-    <xsl:variable name="temp-backslash" select="'[[TlWvKovNykSRI]]'" />
+    <!-- See "text-processing" for discussion of a very similar strategy -->
 
-    <xsl:variable name="mark-slash" select="str:replace($text,        '\',     $temp-backslash)" />
-    <xsl:variable name="sans-open"  select="str:replace($mark-slash,  '{',     '\{'      )" />
-    <xsl:variable name="sans-close" select="str:replace($sans-open,   '}',     '\}'      )" />
-    <xsl:variable name="sans-amp"   select="str:replace($sans-close,  '&amp;', '\&amp;'  )" />
+    <xsl:variable name="bs-one" select="str:replace($text,   '\', '\textbackslash')"/>
+    <xsl:variable name="lb-one" select="str:replace($bs-one, '{', '\textbraceleft')"/>
+    <xsl:variable name="rb-one" select="str:replace($lb-one, '}', '\textbraceright')"/>
+
+    <xsl:variable name="bs-two" select="str:replace($rb-one, '\textbackslash',  '\textbackslash{}')"/>
+    <xsl:variable name="lb-two" select="str:replace($bs-two, '\textbraceleft',  '\{')"/>
+    <xsl:variable name="rb-two" select="str:replace($lb-two, '\textbraceright', '\}')"/>
+
+    <xsl:variable name="sans-amp"   select="str:replace($rb-two,      '&amp;', '\&amp;'  )" />
     <xsl:variable name="sans-hash"  select="str:replace($sans-amp,    '#',     '\#'      )" />
     <xsl:variable name="sans-per"   select="str:replace($sans-hash,   '%',     '\%'      )" />
     <xsl:variable name="sans-tilde" select="str:replace($sans-per,    '~',     '\textasciitilde{}')" />
@@ -10137,8 +10147,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="sans-caret" select="str:replace($sans-under,  '^',     '\textasciicircum{}')" />
     <xsl:variable name="sans-quote" select="str:replace($sans-caret,  $sq,     '\textquotesingle{}')" />
     <xsl:variable name="sans-dblqt" select="str:replace($sans-quote,  $dq,     '\textquotedbl{}')" />
-    <xsl:variable name="sans-tick"  select="str:replace($sans-dblqt,  '`',     '\textasciigrave{}')" />
-    <xsl:value-of select="str:replace($sans-tick, $temp-backslash, '\textbackslash{}')" />
+    <xsl:value-of select="str:replace($sans-dblqt,  '`',     '\textasciigrave{}')" />
 </xsl:template>
 
 <!-- Escape Console Text to Latex -->
@@ -10148,12 +10157,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- \textbf{} for the bolding of user input.            -->
 <xsl:template name="escape-console-to-latex">
     <xsl:param    name="text" />
-    <xsl:variable name="temp-backslash" select="'[[TlWvKovNykSRI]]'" />
 
-    <xsl:variable name="mark-slash" select="str:replace($text,       '\', $temp-backslash   )" />
-    <xsl:variable name="sans-left"  select="str:replace($mark-slash, '{', '\{'              )" />
-    <xsl:variable name="sans-right" select="str:replace($sans-left,  '}', '\}'              )" />
-    <xsl:value-of select="str:replace($sans-right, $temp-backslash, '\textbackslash{}')" />
+    <xsl:variable name="bs-one" select="str:replace($text,   '\', '\textbackslash')"/>
+    <xsl:variable name="lb-one" select="str:replace($bs-one, '{', '\textbraceleft')"/>
+    <xsl:variable name="rb-one" select="str:replace($lb-one, '}', '\textbraceright')"/>
+
+    <xsl:variable name="bs-two" select="str:replace($rb-one, '\textbackslash',  '\textbackslash{}')"/>
+    <xsl:variable name="lb-two" select="str:replace($bs-two, '\textbraceleft',  '\{')"/>
+    <xsl:value-of select="str:replace($lb-two, '\textbraceright', '\}')"/>
 </xsl:template>
 
 <!-- Miscellaneous -->

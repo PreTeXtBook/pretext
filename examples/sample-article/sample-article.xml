@@ -2034,7 +2034,7 @@ the xsltproc executable.
 
                 <p>The ten reserved characters, directly in the source: # $ % ^ &amp; _ { } ~ \.  And again: X#X$X%X^X&amp;X_X{X}X~X\X, but smashed up tight to intermediate characters.  In a verbatim presentation: <c># $ % ^ &amp; _ { } ~ \</c> and <c>X#X$X%X^X&amp;X_X{X}X~X\X</c>.</p>
 
-                <p>We also disrupt certain constructions from <latex/>.  Attempting to sneak-in any traditional macro for the purposes of <latex/>-only output, such as, say a \newpage, will fail since the leading backslash will be caught and converted to <c>\textbackslash</c>.  (See?  It just happened twice.)</p>
+                <p>We also disrupt certain constructions from <latex/>.  Attempting to sneak-in any traditional macro for the purposes of <latex/>-only output, such as, say a \newpage, will fail since the leading backslash will be caught and converted to <c>\textbackslash</c>.  (See?  It just happened twice.)  For technical reasons we want to particularly test \textbackslash, \textbraceleft, and \textbraceright.</p>
 
                 <p>Four <q><tex/> ligatures</q>, <c>--</c>, <c>---</c>, <c>``</c>, and <c>''</c>, authored in running text, --, ---, ``, ''.  It may be hard to tell that the two consecutive apostrophes have not coalesced into a curly left smart quote, but see below, the spacing is subtely different.</p>
 
