@@ -127,7 +127,7 @@ function validateLogin() {
     console.log('window.location.hostname ' + window.location.hostname);
     if ((typeof guest_access !== 'undefined') && guest_access && (un == guest_name) && (pw == the_password_guest)) {
         console.log("setting the guest ut_cookie");
-        createCookie('ut_cookie',un,0.125);
+        createCookie('ut_cookie',un,1);
         logged_in = true;
         console.log("logged in as guest", logged_in);
     }

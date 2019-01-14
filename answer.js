@@ -63,6 +63,7 @@ function save_reading_questions() {
 }
 
 // no point in handling reading questions if there are not any
+
 if (reading_questions.length) {
 
   // retrieve the existing reading questions, if they exist
@@ -75,7 +76,9 @@ if (reading_questions.length) {
       reading_questions_object = {}
   }
 
-  if (Object.keys(reading_questions_object).length == reading_questions.length) {
+  if (Object.keys(reading_questions_object).length >= reading_questions.length) {
+    console.log("Object.keys(reading_questions_object)",Object.keys(reading_questions_object));
+    console.log("reading_questions", reading_questions);
       console.log("all reading questions have previously been answered");
       reading_questions_all_answered = true;
   }
@@ -117,13 +120,13 @@ if (reading_questions.length) {
  //     var existing_content = localStorage.getObject(rq_answer_id);
       var existing_content = reading_questions_object[rq_answer_id];
   
-      if (reading_question.lastElementChild.tagName === "P") {
+      if (reading_question.lastElementChild.tagName === "X") {
           console.log("ends in a p");
           reading_question.lastElementChild.innerHTML += rq_answer_label;
       } else {
-         var this_answer_link = document.createElement('div');
-         this_answer_link.innerHTML = rq_answer_label;
-         reading_question.insertAdjacentElement("afterend", this_answer_link);
+ //        var this_answer_link = document.createElement('div');
+ //        this_answer_link.innerHTML = rq_answer_label;
+ //        reading_question.insertAdjacentElement("afterend", this_answer_link);
       }
       if (existing_content) {
          $('#'+reading_question_id).find(".readingquestion_make_answer").addClass("hidecontrols");
@@ -145,7 +148,7 @@ if (reading_questions.length) {
          hidden_answer_div += '</div>';
   
   
-         var this_rq_controls = '<div id="' + this_rq_id_controls + '" class="input_controls hidecontrols" style="margin-bottom:-1.9em;">';
+         var this_rq_controls = '<div id="' + this_rq_id_controls + '" class="input_controls hidecontrols">';
          this_rq_controls += '<span class="action clear_item rq_delete">delete</span>';
          this_rq_controls += '<span class="action save_item rq_edit">edit</span>';
          this_rq_controls += '<span class="action amhelp">how to write math</span>';
@@ -158,17 +161,27 @@ if (reading_questions.length) {
          $('#'+reading_question_id).append(this_rq_answer_and_controls);
        //  this.parentNode.insertAdjacentElement("afterend", this_rq_answer_and_controls);
   
+          /* typeset the math in the reading questions answers */
+          MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+  
+      }  else {
+//          reading_question.lastElementChild.innerHTML += rq_answer_label;
+
+         var this_answer_link = document.createElement('div');
+         this_answer_link.innerHTML = rq_answer_label;
+         reading_question.insertAdjacentElement("afterend", this_answer_link);
       }
   
   }
-  /* typeset the math in the reading questions answers */
-  MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+//  /* typeset the math in the reading questions answers */
+//  MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
   
   /* make a new blank area to answer a question */
   $('.readingquestion_make_answer').mousedown(function(e){
     console.log(".readingquestion_make_answer");
     $(this).addClass("hidecontrols");
-    var this_rq_id = this.parentNode.parentNode.id;
+ //   var this_rq_id = this.parentNode.parentNode.id;
+    var this_rq_id = this.parentNode.previousSibling.id;
     var this_rq_id_text = this_rq_id + "_text";
     var this_rq_id_controls = this_rq_id + "_controls";
     console.log(".rq", this_rq_id);
@@ -180,7 +193,9 @@ if (reading_questions.length) {
     answer_textarea += '</textarea>';
   
     var this_rq_controls = '<div id="' + this_rq_id_controls + '" class="input_controls" style="margin-bottom:-1.9em;">';
-    this_rq_controls += '<span class="action clear_item rq_delete">delete</span> <span class="action save_item rq_save">save</span>';
+    this_rq_controls += '<span class="action clear_item rq_delete">delete</span>';
+    this_rq_controls += '<span class="action save_item rq_save">save</span>';
+    this_rq_controls += '<span class="action amhelp">how to write math</span>';
     this_rq_controls += '</div>'
   
     var this_rq_answer_and_controls = document.createElement('div');
@@ -195,6 +210,14 @@ if (reading_questions.length) {
     var this_textarea = document.getElementById(this_rq_id_text);
     this_textarea.addEventListener("keypress", function() {
   //     if(this_textarea.scrollTop != 0){
+          console.log("this_textarea.scrollHeight", this_textarea.scrollHeight, "this_textarea.scrollTop", this_textarea.scrollTop);
+          console.log("this_textarea.clientHeight", this_textarea.clientHeight);
+          this_textarea.overflow = "scroll";
+          console.log("this_textarea.scrollHeight", this_textarea.scrollHeight, "this_textarea.scrollTop", this_textarea.scrollTop);
+          console.log("this_textarea.clientHeight", this_textarea.clientHeight);
+          this_textarea.overflow = "hidden";
+          console.log("this_textarea.scrollHeight", this_textarea.scrollHeight, "this_textarea.scrollTop", this_textarea.scrollTop);
+          console.log("this_textarea.getBoundingClientRect()", this_textarea.getBoundingClientRect());
           this_textarea.style.height = this_textarea.scrollHeight + "px";
   //     }
        }, false);
@@ -208,11 +231,14 @@ if (reading_questions.length) {
     var this_rq_ans = this.parentNode.previousSibling;
     console.log(".rq_save", this_rq_id);
     var this_rq_text = this_rq_ans.value;
-    this_rq_text = this_rq_text.trim();
+//    this_rq_text = this_rq_text.trim();  // some chrome on windows had trouble with trim
+    this_rq_text = $.trim(this_rq_text);   // jQuery trim
   // we have the contents of the answer, so save it to local storage
     reading_questions_object[this_rq_id] = this_rq_text;
     localStorage.setObject(reading_questions_object_id, reading_questions_object);
-    if (Object.keys(reading_questions_object).length == reading_questions.length) {
+    console.log("Object.keys(reading_questions_object)",Object.keys(reading_questions_object));
+    console.log("reading_questions", reading_questions);
+    if (Object.keys(reading_questions_object).length >= reading_questions.length && uname != "guest") {
         console.log("all reading questions have been answered");
         reading_questions_all_answered = true;
         make_submit_button();
@@ -316,17 +342,18 @@ if (reading_questions.length) {
   });
 
   $('body').on('click','.amhelp', function(){
-     var amhelpmessage = "Write math formulas as AsciiMath inside backticks:\n`math goes here`.";
-     amhelpmessage += "           For example:\nThe Pythagorean theorem says `sin^2(x) + cos^2(x) = 1`,\n";
-     amhelpmessage += "and the quadratic formula is `x = (-b +- sqrt(b^2 - 4ac))/(2a)`. \n";
+     var amhelpmessage = "Write math formulas as AsciiMath inside `backticks`.\n";
+     amhelpmessage += "For example:\nThe Pythagorean theorem says `sin^2(x) + cos^2(x) = 1`,\n";
+     amhelpmessage += "The quadratic formula is `x = (-b +- sqrt(b^2 - 4ac))/(2a)`. \n";
      amhelpmessage += "Note the use of parentheses for grouping.\n";
      amhelpmessage += "Visit http://asciimath.org for a list of AsciiMath commands.\n\n";
      amhelpmessage += "You can also use LaTeX, with either slash-parentheses \\(...\\)\n";
-     amhelpmessage += "or dollar signs $...$ as delimeters for inline math.";
+     amhelpmessage += "or dollar signs $...$ as delimiters for inline math.";
      alert(amhelpmessage)
   });
 
-  if(reading_questions_all_answered) {
+  if(reading_questions_all_answered && uname != "guest") {
         make_submit_button();
   }
 }
+
