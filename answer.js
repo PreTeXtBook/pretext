@@ -177,8 +177,8 @@ if (reading_questions.length) {
 //  MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
   
   /* make a new blank area to answer a question */
-  $('.readingquestion_make_answer').mousedown(function(e){
-    console.log(".readingquestion_make_answer");
+  $('.readingquestion_make_answer.student').mousedown(function(e){
+    console.log(".readingquestion_make_answer student");
     $(this).addClass("hidecontrols");
  //   var this_rq_id = this.parentNode.parentNode.id;
     var this_rq_id = this.parentNode.previousSibling.id;
@@ -223,7 +223,11 @@ if (reading_questions.length) {
        }, false);
   
   });
-  
+
+  $('.readingquestion_make_answer.instructor').mousedown(function(e){
+    console.log(".readingquestion_make_answer instructor");
+  });
+
   /* save a reading question */
   $('body').on('click','.rq_save', function(){
     console.log(".rq_save");

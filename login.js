@@ -156,7 +156,7 @@ function validateLogin() {
             loadScript('trails');
         }
     }
-    if (logged_in && uname.length == 5 && isnum = /^\d+$/.test(uname)) {
+    if (logged_in && /^\d+$/.test(uname) && ( (uname.length == 5 || uname.length == 8 && /^\d+00$/.test(uname)) )) {
         role = 'instructor'
     }
 
@@ -191,7 +191,7 @@ else {
 var ut_id = readCookie('ut_cookie');
 uname = ut_id;
 
-if (logged_in && uname.length == 5 && isnum = /^\d+$/.test(uname)) {
+if (logged_in && /^\d+$/.test(uname) && ( (uname.length == 5 || uname.length == 8 && /^\d+00$/.test(uname)) )) {
     role = 'instructor'
 }
 
