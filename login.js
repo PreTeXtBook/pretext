@@ -156,6 +156,10 @@ function validateLogin() {
             loadScript('trails');
         }
     }
+    if (logged_in && uname.length == 5 && isnum = /^\d+$/.test(uname)) {
+        role = 'instructor'
+    }
+
     return logged_in
   }
 
@@ -186,6 +190,10 @@ else {
 
 var ut_id = readCookie('ut_cookie');
 uname = ut_id;
+
+if (logged_in && uname.length == 5 && isnum = /^\d+$/.test(uname)) {
+    role = 'instructor'
+}
 
 var pageIdentifier = "";
 

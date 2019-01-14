@@ -120,14 +120,14 @@ if (reading_questions.length) {
  //     var existing_content = localStorage.getObject(rq_answer_id);
       var existing_content = reading_questions_object[rq_answer_id];
   
-      if (reading_question.lastElementChild.tagName === "X") {
-          console.log("ends in a p");
-          reading_question.lastElementChild.innerHTML += rq_answer_label;
-      } else {
- //        var this_answer_link = document.createElement('div');
- //        this_answer_link.innerHTML = rq_answer_label;
- //        reading_question.insertAdjacentElement("afterend", this_answer_link);
-      }
+//      if (reading_question.lastElementChild.tagName === "X") {
+//          console.log("ends in a p");
+//          reading_question.lastElementChild.innerHTML += rq_answer_label;
+//      } else {
+// //        var this_answer_link = document.createElement('div');
+// //        this_answer_link.innerHTML = rq_answer_label;
+// //        reading_question.insertAdjacentElement("afterend", this_answer_link);
+//      }
       if (existing_content) {
          $('#'+reading_question_id).find(".readingquestion_make_answer").addClass("hidecontrols");
   
