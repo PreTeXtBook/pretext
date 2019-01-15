@@ -158,8 +158,9 @@ if (reading_questions.length) {
          this_rq_answer_and_controls.setAttribute('style', 'width:80%; margin-left:auto; margin-right:auto; margin-top:0.5em;');
          this_rq_answer_and_controls.setAttribute('class', 'rq_answer');
          this_rq_answer_and_controls.innerHTML = hidden_answer_div + answer_div + this_rq_controls;
-         $('#'+reading_question_id).append(this_rq_answer_and_controls);
+ //////        $('#'+reading_question_id).append(this_rq_answer_and_controls);
        //  this.parentNode.insertAdjacentElement("afterend", this_rq_answer_and_controls);
+         $('#'+reading_question_id).insertAdjacentElement("afterend", this_rq_answer_and_controls);
   
           /* typeset the math in the reading questions answers */
           MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
@@ -169,6 +170,7 @@ if (reading_questions.length) {
 
          var this_answer_link = document.createElement('div');
          this_answer_link.innerHTML = rq_answer_label;
+         console.log("inserting afterend of",reading_question);
          reading_question.insertAdjacentElement("afterend", this_answer_link);
       }
   
