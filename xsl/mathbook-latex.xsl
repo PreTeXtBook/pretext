@@ -3752,7 +3752,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- At location, we just drop a page marker -->
 <xsl:template match="notation">
     <xsl:apply-templates select="." mode="label" />
-    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Deccription column is "p" to enable word-wrapping  -->
