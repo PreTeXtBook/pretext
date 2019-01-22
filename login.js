@@ -113,6 +113,29 @@ function removeLogin() {
 var uname = "";
 var emanu = "";
 
+function check_role() {
+    var_role_data = {"action": "check", "user": uname, "pw": emanu, "type": "instructor", "instId": uname}
+    var role_key = "";
+    $.ajax({
+      url: "https://aimath.org/cgi-bin/u/highlights.py",
+      type: "post",
+      data: JSON.stringify(var_role_data),
+      dataType: "json",
+      async: false,
+      success: function(data) {
+          console.log("something", data, "back from highlight");
+          role_key = data
+      },
+      error: function(errMsg) {
+        console.log("seems to be an error?",errMsg);
+//        alert("Error X2\n" + errMsg);
+      }
+    });
+
+  console.log("done checking role", role_key);
+  return role_key
+}
+
 function validateLogin() {
     var logged_in = false;
     var un = document.loginform.uname.value;
@@ -120,9 +143,11 @@ function validateLogin() {
     uname = un;
     var pw = document.loginform.psw.value;
     emanu = pw;
+    console.log("xuname", uname, "yemanu", emanu);
     var guest_name = "guest";
     var the_password_guest = "guest";
     var the_un_enc = hash_of_string(un);
+    console.log("un", un, "the_un_enc", "y"+the_un_enc+"y", "pw", "x"+pw+"x", "pw == the_un_enc", pw == the_un_enc);
     var the_url_enc = hash_of_string(window.location.hostname);
     console.log('window.location.hostname ' + window.location.hostname);
     if ((typeof guest_access !== 'undefined') && guest_access && (un == guest_name) && (pw == the_password_guest)) {
@@ -156,10 +181,18 @@ function validateLogin() {
             loadScript('trails');
         }
     }
-    if (logged_in && /^\d+$/.test(uname) && ( (uname.length == 5 || uname.length == 8 && /^\d+00$/.test(uname)) )) {
+    var role_key = check_role();
+    console.log("role_key", role_key);
+    if (role_key) {
+        console.log("another instructor", role_key);
         role = 'instructor'
     }
+//    if (logged_in && /^\d+$/.test(uname) && ( (uname.length == 5 || uname.length == 8 && /^\d+00$/.test(uname)) )) {
+//        console.log("an instructor");
+//        role = 'instructor'
+//    }
 
+    console.log("role", role);
     return logged_in
   }
 
@@ -189,11 +222,10 @@ else {
 */
 
 var ut_id = readCookie('ut_cookie');
-uname = ut_id;
+uname = ut_id || "";
 
-if (logged_in && /^\d+$/.test(uname) && ( (uname.length == 5 || uname.length == 8 && /^\d+00$/.test(uname)) )) {
-    role = 'instructor'
-}
+console.log("uname", uname);
+
 
 var pageIdentifier = "";
 
@@ -214,8 +246,13 @@ if (pageIdentifier) {
     console.log("found "+ut_id);
     $("#theloginform").hide();
 
-/*    dataurlbase = dataurlbase.concat("ut_id").concat("=").concat(ut_id).concat("&");
-*/
+ //   if (/^\d+$/.test(uname) && ( (uname.length == 5 || uname.length == 8 && /^\d+00$/.test(uname)) )) {
+    var role_key = check_role();
+    console.log("the role_key", role_key);
+    if (role_key) {
+        console.log("another instructor", role_key);
+        role = 'instructor'
+    }
     document.getElementById('loginlogout').className = 'logout';
     document.getElementById('loginlogout').innerHTML = 'logout';
     console.log("done hiding "+ut_id);
@@ -238,6 +275,7 @@ if (pageIdentifier) {
 } else {
     console.log("login not enabled because document not identified")
 }
+    console.log("the role", role);
 });
 
 /*

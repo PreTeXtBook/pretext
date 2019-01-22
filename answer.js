@@ -1,5 +1,6 @@
 
 function escapeHTML(text) {
+    if (!text) { return "" }
     the_ans = text;
     the_ans = the_ans.replace(/&/g, "&amp;");
     the_ans = the_ans.replace(/<([a-zA-Z])/g, '< $1');
@@ -7,6 +8,7 @@ function escapeHTML(text) {
     return the_ans
 }
 function uNescapeHTML(text) {
+    if (!text) { return "" }
     the_ans = text;
     the_ans = the_ans.replace(/&lt; /g, "<");
     the_ans = the_ans.replace(/&lt;/g, "<");
@@ -28,6 +30,8 @@ function dollars_to_slashparen(text) {
 
 var reading_questions = document.querySelectorAll("section.reading-questions article.exercise-like");
 
+var reading_answers = {};
+
 console.log('reading_questions.length', reading_questions.length);
 
 function make_submit_button() {
@@ -45,19 +49,19 @@ function make_submit_button() {
 function save_reading_questions() {
     rq_data = {"action": "save", "user": uname, "pw": emanu, "pI": pageIdentifier, "type": "readingquestions", "rq": JSON.stringify(reading_questions_object)}
     $.ajax({
-    url: "https://aimath.org/cgi-bin/u/highlights.py",
-    type: "post",
-    data: JSON.stringify(rq_data),
-    dataType: "json",
-    success: function(data) {
-        console.log("something", data, "back from highlight");
-        alert(data);
-    },
-   error: function(errMsg) {
-      console.log("seems to be an error?",errMsg);
-      alert("Error\n" + errMsg);
-   }
-});
+      url: "https://aimath.org/cgi-bin/u/highlights.py",
+      type: "post",
+      data: JSON.stringify(rq_data),
+      dataType: "json",
+      success: function(data) {
+          console.log("something", data, "back from highlight");
+          alert(data);
+      },
+      error: function(errMsg) {
+        console.log("seems to be an error?",errMsg);
+        alert("Error\n" + errMsg);
+      }
+    });
 
   console.log("just ajax sent", JSON.stringify(reading_questions_object));
 }
@@ -98,7 +102,7 @@ if (reading_questions.length) {
   rq_answer_label += ' style="margin-left:1em; font-size:80%; color:#a0a;"';
   rq_answer_label += '>';
   if (role == "instructor") {
-      rq_answer_label += 'Responses';
+      rq_answer_label += 'Responses&rarr;';
   } else {
       rq_answer_label += 'My answer&rarr;';
   }
@@ -128,7 +132,7 @@ if (reading_questions.length) {
 // //        this_answer_link.innerHTML = rq_answer_label;
 // //        reading_question.insertAdjacentElement("afterend", this_answer_link);
 //      }
-      if (existing_content) {
+      if (existing_content && role == "student") {
          $('#'+reading_question_id).find(".readingquestion_make_answer").addClass("hidecontrols");
   
          var this_rq_id_text = reading_question_id + "_text";
@@ -158,9 +162,8 @@ if (reading_questions.length) {
          this_rq_answer_and_controls.setAttribute('style', 'width:80%; margin-left:auto; margin-right:auto; margin-top:0.5em;');
          this_rq_answer_and_controls.setAttribute('class', 'rq_answer');
          this_rq_answer_and_controls.innerHTML = hidden_answer_div + answer_div + this_rq_controls;
- //////        $('#'+reading_question_id).append(this_rq_answer_and_controls);
+         $('#'+reading_question_id).append(this_rq_answer_and_controls);
        //  this.parentNode.insertAdjacentElement("afterend", this_rq_answer_and_controls);
-         $('#'+reading_question_id).insertAdjacentElement("afterend", this_rq_answer_and_controls);
   
           /* typeset the math in the reading questions answers */
           MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
@@ -227,8 +230,83 @@ if (reading_questions.length) {
   });
 
   $('.readingquestion_make_answer.instructor').mousedown(function(e){
-    console.log(".readingquestion_make_answer instructor");
+    console.log(".readingquestion_make_answer instructor", "instId", uname, "pI", pageIdentifier);
+    if (jQuery.isEmptyObject(reading_answers) || this.classList.contains("reload")) {
+        rq_data = {"action": "retrieve", "instId": uname, "pw": emanu, "pI": pageIdentifier, "type": "readingquestions"};
+  //    myjson = {"action": "retrieve", "type": "readingquestions", "instId": "100002000", "pI": "beezer-FCLA___FPm"}
+
+        $.ajax({
+          url: "https://aimath.org/cgi-bin/u/highlights.py",
+          type: "post",
+          data: JSON.stringify(rq_data),
+          dataType: "json",
+          async: false,
+          success: function(data) {
+            reading_answers = data;  
+ //           console.log("something", data, "back from highlight");
+ //           alert(data);
+          },
+          error: function(errMsg) {
+            console.log("seems to be an error?",errMsg);
+            alert("Error\n" + errMsg);
+          }
+        });
+   }
+   var this_rq_id = this.parentNode.previousSibling.id;
+   console.log("this_rq_id", this_rq_id);
+   var compiled_answers = "";
+   var title_of_this_section = $("section > h2 > .title").html();
+   title_of_this_section = title_of_this_section.replace(/ /g, "%20");
+   title_of_this_section = title_of_this_section.replace(/\?/g, "");
+   var number_of_this_rq = 1 + $("#" + this_rq_id).index(".exercise-like");
+//   console.log("first title_of_this_section", title_of_this_section);
+//   console.log("first title_of_this_section.html()", title_of_this_section.html());
+//   console.log("second title_of_this_section[0]", title_of_this_section[0]);
+   for(var j=0; j < reading_answers.length; ++j) {
+       var this_answer_all = reading_answers[j];
+       var this_student_id = this_answer_all[0];
+       var these_specific_answers = JSON.parse(this_answer_all[1]);
+       console.log("this_answer_all[2]", this_answer_all[2]);
+       var this_submitted_time = JSON.parse(this_answer_all[2]);
+ //      var this_submitted_time = this_answer_all[2];
+       var this_specific_answer = these_specific_answers[this_rq_id + "_text"];
+       console.log("this_answer_all",this_answer_all);
+       console.log("j",j,"this_specific_answer", this_specific_answer);
+       console.log("this_specific_time", this_submitted_time);
+       this_specific_answer = dollars_to_slashparen(escapeHTML(this_specific_answer))
+       if (!this_specific_answer) {
+           this_specific_answer = "no answer submitted";
+           compiled_answers += '<div class="one_answer noanswer">';
+       } else {
+           compiled_answers += '<div class="one_answer">';
+       }
+       if (this_student_id.indexOf('@') > -1) {
+            this_student_id = '<a href="mailto:' + this_student_id + '@aimath.org?Subject=RQ' + number_of_this_rq + '%20of%20' + title_of_this_section +'">' + this_student_id + '</a>';
+       }
+       compiled_answers += '<div class="s_id">' + this_student_id + '</div>';
+       compiled_answers += '<div class="rq_sub_time">' + this_submitted_time + '</div>';
+       compiled_answers += '<div class="s_ans has_am">' + this_specific_answer + '</div>';
+       compiled_answers += '</div>\n';
+       console.log(j, "j", these_specific_answers)
+   }
+   // if the answers are being reloaded, remove the previous answers
+   $("#" + this_rq_id + "_ans").remove();
+   var answers_to_this_question = document.createElement('div');
+   answers_to_this_question.setAttribute('class', 'compiled_answers');
+   answers_to_this_question.setAttribute('id', this_rq_id + "_ans");
+
+//         this_rq_answer_and_controls.setAttribute('style', 'width:80%; margin-left:auto; margin-right:auto; margin-top:0.5em;');
+//         this_rq_answer_and_controls.setAttribute('class', 'rq_answer');
+   answers_to_this_question.innerHTML = compiled_answers;
+   $('#'+this_rq_id).append(answers_to_this_question);
+//   this.parentNode.remove();
+   this.innerHTML = "Reload responses";
+   $(this).addClass("reload");
+   MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+       //  this.parentNode.insertAdjacentElement("afterend", this_rq_answe
+
   });
+
 
   /* save a reading question */
   $('body').on('click','.rq_save', function(){
@@ -244,7 +322,7 @@ if (reading_questions.length) {
     localStorage.setObject(reading_questions_object_id, reading_questions_object);
     console.log("Object.keys(reading_questions_object)",Object.keys(reading_questions_object));
     console.log("reading_questions", reading_questions);
-    if (Object.keys(reading_questions_object).length >= reading_questions.length && uname != "guest") {
+    if (Object.keys(reading_questions_object).length >= reading_questions.length && uname != "guest" && role=="student") {
         console.log("all reading questions have been answered");
         reading_questions_all_answered = true;
         make_submit_button();
@@ -358,7 +436,7 @@ if (reading_questions.length) {
      alert(amhelpmessage)
   });
 
-  if(reading_questions_all_answered && uname != "guest") {
+  if(reading_questions_all_answered && uname != "guest" && role=="student") {
         make_submit_button();
   }
 }
