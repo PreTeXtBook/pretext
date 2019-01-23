@@ -3823,61 +3823,67 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- and then can create an appropriate size for a heading (without -->
 <!-- needing to deal with specialized divisions possibly appearing  -->
 <!-- at most any level).                                            -->
+<!-- "book" and "article" need to be in the match so this template  -->
+<!-- is defined for those top-level (whole document) cases, even if -->
+<!-- $b-has-heading will always be "false" in these situations.     -->
 <!-- TODO: this could be an xparse environment, perhaps -->
 <!-- with a key indicating fontsize or division level   -->
-<xsl:template match="chapter|section|subsection|subsubsection|exercises|worksheet|reading-questions" mode="division-in-solutions">
+<xsl:template match="book|article|chapter|section|subsection|subsubsection|exercises|worksheet|reading-questions" mode="division-in-solutions">
     <xsl:param name="scope" />
+    <xsl:param name="b-has-heading"/>
     <xsl:param name="content" />
+    <!-- Usually we create an automatic heading,  -->
+    <!-- but not at the root division -->
+    <xsl:if test="$b-has-heading">
+        <xsl:variable name="font-size">
+            <xsl:choose>
+                <!-- backmatter placement gets appendix like chapter -->
+                <xsl:when test="$scope/self::book">
+                    <xsl:text>\Large</xsl:text>
+                </xsl:when>
+                <!-- backmatter placement gets appendix like section -->
+                <xsl:when test="$scope/self::article">
+                    <xsl:text>\large</xsl:text>
+                </xsl:when>
+                <!-- divisional placement is one level less -->
+                <xsl:when test="$scope/self::chapter">
+                    <xsl:text>\Large</xsl:text>
+                </xsl:when>
+                <xsl:when test="$scope/self::section">
+                    <xsl:text>\large</xsl:text>
+                </xsl:when>
+                <xsl:when test="$scope/self::subsection">
+                    <xsl:text>\normalsize</xsl:text>
+                </xsl:when>
+                <xsl:when test="$scope/self::subsubsection">
+                    <xsl:text>\normalsize</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>PTX:BUG:     "solutions" division title does not have a font size</xsl:message>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
 
-    <xsl:variable name="font-size">
-        <xsl:choose>
-            <!-- backmatter placement gets appendix like chapter -->
-            <xsl:when test="$scope/self::book">
-                <xsl:text>\Large</xsl:text>
-            </xsl:when>
-            <!-- backmatter placement gets appendix like section -->
-            <xsl:when test="$scope/self::article">
-                <xsl:text>\large</xsl:text>
-            </xsl:when>
-            <!-- divisional placement is one level less -->
-            <xsl:when test="$scope/self::chapter">
-                <xsl:text>\Large</xsl:text>
-            </xsl:when>
-            <xsl:when test="$scope/self::section">
-                <xsl:text>\large</xsl:text>
-            </xsl:when>
-            <xsl:when test="$scope/self::subsection">
-                <xsl:text>\normalsize</xsl:text>
-            </xsl:when>
-            <xsl:when test="$scope/self::subsubsection">
-                <xsl:text>\normalsize</xsl:text>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:message>PTX:BUG:     "solutions" division title does not have a font size</xsl:message>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
+        <!-- Does the current division get a number at birth? -->
+        <xsl:variable name="is-structured">
+            <xsl:apply-templates select="parent::*" mode="is-structured-division"/>
+        </xsl:variable>
+        <xsl:variable name="b-is-structured" select="$is-structured = 'true'"/>
 
-    <!-- Does the current division get a number at birth? -->
-    <xsl:variable name="is-structured">
-        <xsl:apply-templates select="parent::*" mode="is-structured-division"/>
-    </xsl:variable>
-    <xsl:variable name="b-is-structured" select="$is-structured = 'true'"/>
-
-    <!-- LaTeX heading, possibly with hard-coded number -->
-    <xsl:text>\par\smallskip&#xa;\noindent\textbf{</xsl:text>
-    <xsl:value-of select="$font-size" />
-    <!-- A structured division has numbered subdivisions              -->
-    <!-- Otherwise "exercises" do not display their number at "birth" -->
-    <xsl:if test="$b-is-structured">
-        <xsl:text>{}</xsl:text>
-        <xsl:apply-templates select="." mode="number" />
-        <xsl:text>\space</xsl:text>
+        <!-- LaTeX heading, possibly with hard-coded number -->
+        <xsl:text>\par\smallskip&#xa;\noindent\textbf{</xsl:text>
+        <xsl:value-of select="$font-size" />
+        <!-- A structured division has numbered subdivisions              -->
+        <!-- Otherwise "exercises" do not display their number at "birth" -->
+        <xsl:if test="$b-is-structured">
+            <xsl:text>{}</xsl:text>
+            <xsl:apply-templates select="." mode="number" />
+            <xsl:text>\space</xsl:text>
+        </xsl:if>
+        <xsl:text>\textperiodcentered\space{}</xsl:text>
+        <xsl:apply-templates select="." mode="title-full" />
+        <xsl:text>}&#xa;\par\smallskip&#xa;</xsl:text>
     </xsl:if>
-    <xsl:text>\textperiodcentered\space{}</xsl:text>
-    <xsl:apply-templates select="." mode="title-full" />
-    <xsl:text>}&#xa;\par\smallskip&#xa;</xsl:text>
-
     <xsl:copy-of select="$content" />
 </xsl:template>
 

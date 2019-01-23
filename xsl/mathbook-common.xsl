@@ -6741,8 +6741,6 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- The division is one-off (not knowled), so we treat the            -->
 <!-- introduction and conclusion as original                           -->
 <xsl:template match="solutions" mode="solutions">
-    <!-- Look up a level, skipping backmatter -->
-    <xsl:variable name="scope" select="ancestor::*[not(self::backmatter)][1]" />
 
     <!-- A "solutions" division may exist in the main matter  -->
     <!-- or the back matter.  When we generate a solution, we -->
@@ -6762,30 +6760,80 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:apply-templates select="introduction">
         <xsl:with-param name="b-original" select="true()" />
     </xsl:apply-templates>
+    <!-- We call the solutions-generator one of two ways, either by     -->
+    <!-- looking up a level, to the parent (jumping over "backmatter")  -->
+    <!-- or by respecting a @scope attribute that specifies the parent. -->
+    <!-- The "call" is identical, only the @select is different.        -->
+    <!-- (Maybe there is a better way to use just one call?)            -->
 
-    <xsl:apply-templates select="$scope" mode="solutions-generator">
-        <xsl:with-param name="purpose" select="$purpose" />
-        <xsl:with-param name="b-inline-statement"     select="contains(@inline,     'statement')" />
-        <xsl:with-param name="b-inline-hint"          select="contains(@inline,     'hint')"      />
-        <xsl:with-param name="b-inline-answer"        select="contains(@inline,     'answer')"    />
-        <xsl:with-param name="b-inline-solution"      select="contains(@inline,     'solution')"  />
-        <xsl:with-param name="b-divisional-statement" select="contains(@divisional, 'statement')" />
-        <xsl:with-param name="b-divisional-hint"      select="contains(@divisional, 'hint')"      />
-        <xsl:with-param name="b-divisional-answer"    select="contains(@divisional, 'answer')"    />
-        <xsl:with-param name="b-divisional-solution"  select="contains(@divisional, 'solution')"  />
-        <xsl:with-param name="b-worksheet-statement"  select="contains(@worksheet,  'statement')" />
-        <xsl:with-param name="b-worksheet-hint"       select="contains(@worksheet,  'hint')"      />
-        <xsl:with-param name="b-worksheet-answer"     select="contains(@worksheet,  'answer')"    />
-        <xsl:with-param name="b-worksheet-solution"   select="contains(@worksheet,  'solution')"  />
-        <xsl:with-param name="b-reading-statement"    select="contains(@reading,    'statement')" />
-        <xsl:with-param name="b-reading-hint"         select="contains(@reading,    'hint')"      />
-        <xsl:with-param name="b-reading-answer"       select="contains(@reading,    'answer')"    />
-        <xsl:with-param name="b-reading-solution"     select="contains(@reading,    'solution')"  />
-        <xsl:with-param name="b-project-statement"    select="contains(@project,    'statement')" />
-        <xsl:with-param name="b-project-hint"         select="contains(@project,    'hint')"      />
-        <xsl:with-param name="b-project-answer"       select="contains(@project,    'answer')"    />
-        <xsl:with-param name="b-project-solution"     select="contains(@project,    'solution')"  />
-    </xsl:apply-templates>
+    <xsl:choose>
+        <xsl:when test="@scope">
+            <!-- First check that the scope is reasonable, i.e. it -->
+            <!-- exists and is one of the elements defined for the -->
+            <!-- "solutions-generator" template                    -->
+            <xsl:variable name="scope" select="id(@scope)"/>
+
+            <xsl:if test="not(exsl:node-set($scope))">
+                <xsl:message>PTX:WARNING: unresolved @scope ("<xsl:value-of select="@scope"/>") for a &lt;solutions&gt; division</xsl:message>
+                <xsl:apply-templates select="." mode="location-report" />
+            </xsl:if>
+            <xsl:if test="not($scope/self::book|$scope/self::article|$scope/self::chapter|$scope/self::section|$scope/self::subsection|$scope/self::subsubsection)">
+                <xsl:message>PTX:ERROR: the @scope ("<xsl:value-of select="@scope"/>") of a &lt;solutions&gt; division is not a supported division.  If you think your attempt is reasonable, please make a feature request.  Results now will be unpredictable</xsl:message>
+                <xsl:apply-templates select="." mode="location-report" />
+            </xsl:if>
+
+            <xsl:apply-templates select="$scope" mode="solutions-generator">
+                <xsl:with-param name="purpose" select="$purpose" />
+                <xsl:with-param name="b-inline-statement"     select="contains(@inline,     'statement')" />
+                <xsl:with-param name="b-inline-hint"          select="contains(@inline,     'hint')"      />
+                <xsl:with-param name="b-inline-answer"        select="contains(@inline,     'answer')"    />
+                <xsl:with-param name="b-inline-solution"      select="contains(@inline,     'solution')"  />
+                <xsl:with-param name="b-divisional-statement" select="contains(@divisional, 'statement')" />
+                <xsl:with-param name="b-divisional-hint"      select="contains(@divisional, 'hint')"      />
+                <xsl:with-param name="b-divisional-answer"    select="contains(@divisional, 'answer')"    />
+                <xsl:with-param name="b-divisional-solution"  select="contains(@divisional, 'solution')"  />
+                <xsl:with-param name="b-worksheet-statement"  select="contains(@worksheet,  'statement')" />
+                <xsl:with-param name="b-worksheet-hint"       select="contains(@worksheet,  'hint')"      />
+                <xsl:with-param name="b-worksheet-answer"     select="contains(@worksheet,  'answer')"    />
+                <xsl:with-param name="b-worksheet-solution"   select="contains(@worksheet,  'solution')"  />
+                <xsl:with-param name="b-reading-statement"    select="contains(@reading,    'statement')" />
+                <xsl:with-param name="b-reading-hint"         select="contains(@reading,    'hint')"      />
+                <xsl:with-param name="b-reading-answer"       select="contains(@reading,    'answer')"    />
+                <xsl:with-param name="b-reading-solution"     select="contains(@reading,    'solution')"  />
+                <xsl:with-param name="b-project-statement"    select="contains(@project,    'statement')" />
+                <xsl:with-param name="b-project-hint"         select="contains(@project,    'hint')"      />
+                <xsl:with-param name="b-project-answer"       select="contains(@project,    'answer')"    />
+                <xsl:with-param name="b-project-solution"     select="contains(@project,    'solution')"  />
+            </xsl:apply-templates>
+        </xsl:when>
+        <xsl:otherwise>
+            <!-- the default scope, first ancestor -->
+            <xsl:apply-templates select="ancestor::*[not(self::backmatter)][1]" mode="solutions-generator">
+                <xsl:with-param name="purpose" select="$purpose" />
+                <xsl:with-param name="b-inline-statement"     select="contains(@inline,     'statement')" />
+                <xsl:with-param name="b-inline-hint"          select="contains(@inline,     'hint')"      />
+                <xsl:with-param name="b-inline-answer"        select="contains(@inline,     'answer')"    />
+                <xsl:with-param name="b-inline-solution"      select="contains(@inline,     'solution')"  />
+                <xsl:with-param name="b-divisional-statement" select="contains(@divisional, 'statement')" />
+                <xsl:with-param name="b-divisional-hint"      select="contains(@divisional, 'hint')"      />
+                <xsl:with-param name="b-divisional-answer"    select="contains(@divisional, 'answer')"    />
+                <xsl:with-param name="b-divisional-solution"  select="contains(@divisional, 'solution')"  />
+                <xsl:with-param name="b-worksheet-statement"  select="contains(@worksheet,  'statement')" />
+                <xsl:with-param name="b-worksheet-hint"       select="contains(@worksheet,  'hint')"      />
+                <xsl:with-param name="b-worksheet-answer"     select="contains(@worksheet,  'answer')"    />
+                <xsl:with-param name="b-worksheet-solution"   select="contains(@worksheet,  'solution')"  />
+                <xsl:with-param name="b-reading-statement"    select="contains(@reading,    'statement')" />
+                <xsl:with-param name="b-reading-hint"         select="contains(@reading,    'hint')"      />
+                <xsl:with-param name="b-reading-answer"       select="contains(@reading,    'answer')"    />
+                <xsl:with-param name="b-reading-solution"     select="contains(@reading,    'solution')"  />
+                <xsl:with-param name="b-project-statement"    select="contains(@project,    'statement')" />
+                <xsl:with-param name="b-project-hint"         select="contains(@project,    'hint')"      />
+                <xsl:with-param name="b-project-answer"       select="contains(@project,    'answer')"    />
+                <xsl:with-param name="b-project-solution"     select="contains(@project,    'solution')"  />
+            </xsl:apply-templates>
+        </xsl:otherwise>
+    </xsl:choose>
+
 
     <xsl:apply-templates select="conclusion">
         <xsl:with-param name="b-original" select="true()" />
@@ -6823,9 +6871,10 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <!-- will be via the "division-in-solutions" template               -->
     <xsl:variable name="scope" select="." />
 
-    <!-- consider each possible division, below the context      -->
-    <!-- Only output heading and content if there is any content -->
-    <xsl:for-each select=".//part|.//chapter|.//section|.//subsection|.//subsubsection|.//exercises|.//worksheet|.//reading-questions">
+    <!-- consider each possible division, below the context        -->
+    <!-- including the context, which may contain inline exercises -->
+    <!-- Only output heading and content if there is any content   -->
+    <xsl:for-each select=".|.//part|.//chapter|.//section|.//subsection|.//subsubsection|.//exercises|.//worksheet|.//reading-questions">
         <!-- See if division has *any* content, at any depth, in light of switches. -->
         <!-- Traditional divisions expect many switches, while specialized          -->
         <!-- divisions expect a limited subset                                      -->
@@ -6855,6 +6904,13 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         </xsl:variable>
 
         <xsl:if test="not($dry-run = '')">
+            <!-- The root division does not generate a heading, we let the -->
+            <!-- author title the solutions division however they like.    -->
+            <!-- So we need to recognize when the $scope matches the       -->
+            <!-- context of the "for-each", which is first in the          -->
+            <!-- for-each/@select surrounding this chunk                   -->
+            <xsl:variable name="b-has-heading" select="count($scope|.) = 2"/>
+
             <!-- We call the only real abstract template, it simply        -->
             <!-- provides the correct wrapping for a division appearing    -->
             <!-- to aid in organizing a collection of solutions.           -->
@@ -6872,6 +6928,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <!-- in order to generate accurate labels based on position    -->
             <xsl:apply-templates select="." mode="division-in-solutions">
                 <xsl:with-param name="scope" select="$scope" />
+                <xsl:with-param name="b-has-heading" select="$b-has-heading"/>
                 <xsl:with-param name="content">
 
                     <xsl:for-each select="exercise|exercisegroup|&PROJECT-LIKE;|paragraphs/exercise|self::worksheet//exercise">

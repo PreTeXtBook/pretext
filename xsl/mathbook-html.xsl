@@ -979,16 +979,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Solutions Divisions, Content Generation -->
 <!-- ####################################### -->
 
-<xsl:template match="chapter|section|subsection|subsubsection|exercises|worksheet|reading-questions" mode="division-in-solutions">
+<!-- "book" and "article" need to be in the match so this template  -->
+<!-- is defined for those top-level (whole document) cases, even if -->
+<!-- $b-has-heading will always be "false" in these situations.     -->
+<xsl:template match="book|article|chapter|section|subsection|subsubsection|exercises|worksheet|reading-questions" mode="division-in-solutions">
     <xsl:param name="scope" /> <!-- ignored -->
+    <xsl:param name="b-has-heading"/>
     <xsl:param name="content" />
 
-    <!-- as a duplicate generated content, no HTML id -->
-    <section class="{local-name(.)}">
-        <xsl:apply-templates select="." mode="section-header" />
-        <!-- we don't do an "author-byline" here in duplication -->
-        <xsl:copy-of select="$content" />
-    </section>
+    <!-- Usually we create an automatic heading, -->
+    <!-- but not at the root division            -->
+    <xsl:choose>
+        <xsl:when test="$b-has-heading">
+            <!-- as a duplicate of generated content, no HTML id -->
+            <section class="{local-name(.)}">
+                <xsl:apply-templates select="." mode="section-header" />
+                <!-- we don't do an "author-byline" here in duplication -->
+                <xsl:copy-of select="$content" />
+            </section>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:copy-of select="$content" />
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- ############### -->
