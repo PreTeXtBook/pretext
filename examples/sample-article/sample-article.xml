@@ -7456,7 +7456,7 @@ the xsltproc executable.
                 <list-of elements="theorem" scope="section" />
             </subsection>
 
-            <subsection>
+            <subsection xml:id="subsection-with-an-exercise">
                 <title>A Title with ] a Right Bracket</title>
 
                 <p><latex /> has trouble with brackets that end up inside optional arguments, so this subsection title is only a check on the defense against that.  And now an <tag>exercise</tag> with a title that could really be a problem.</p>
@@ -7471,9 +7471,30 @@ the xsltproc executable.
                         <p>A faux hint to get this exercise to migrate into a <tag>solutions</tag>.</p>
                     </hint>
                 </exercise>
-
-
             </subsection>
+
+            <subsection>
+                <title>Just an Exercise</title>
+
+                <exercise>
+                    <title>An Extraneous Exercise</title>
+
+                    <statement>
+                        <p>This exercise is here just as a test of the <tag>solutions</tag> division coming next.  So it is serving a purpose, even if it is not apparent.</p>
+                    </statement>
+                    <hint>
+                        <p>A hint, so this exercise looks identical in structure to the one in the previous subsection.</p>
+                    </hint>
+                </exercise>
+            </subsection>
+
+            <solutions inline="hint" scope="subsection-with-an-exercise">
+                <introduction>
+                    <p>This is a <tag>solutions</tag> division, which will be a peer of the other <tag>subsection</tag> in this <tag>section</tag>. The default behavior is to look to the parent division (a <tag>section</tag> here) and collect all the hints, answers, and solutions from every <tag>exercise</tag> (and friends) inside this containing division.  (There are just two, similar inline <tag>exercise</tag>.)</p>
+
+                    <p>But instead of the default, we employ a <attr>scope</attr> attribute to <em>define</em> the parent division of the exercises whose solutions will be shown.  In this example we specify the  <tag>subsection</tag> that is two back, the one which tests brackets in titles.</p>
+                </introduction>
+            </solutions>
         </section>
 
         <section>
