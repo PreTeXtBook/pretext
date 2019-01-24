@@ -461,8 +461,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text> </xsl:text>
             </xsl:if>
             <!-- title is required on structural elements -->
-            <span>
-                <xsl:apply-templates select="." mode="title-attributes" />
+            <span class="title">
                 <xsl:apply-templates select="." mode="title-short" />
             </span>
         </a>
@@ -580,8 +579,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="number" />
     </span>
     <xsl:text> </xsl:text>
-    <span>
-        <xsl:apply-templates select="." mode="title-attributes" />
+    <span class="title">
         <xsl:apply-templates select="." mode="title-full" />
     </span>
 </xsl:template>
@@ -615,8 +613,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
     </span>
     <xsl:text> </xsl:text>
-    <span>
-        <xsl:apply-templates select="." mode="title-attributes" />
+    <span class="title">
         <xsl:apply-templates select="." mode="title-full" />
     </span>
 </xsl:template>
@@ -693,8 +690,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- This is all within a .frontmatter class for CSS       -->
 <xsl:template match="titlepage">
     <h1 class="heading">
-        <span>
-            <xsl:apply-templates select="." mode="title-attributes" />
+        <span class="title">
             <xsl:apply-templates select="parent::frontmatter/parent::*" mode="title-full" />
         </span>
         <xsl:if test="parent::frontmatter/parent::*/subtitle">
@@ -1035,8 +1031,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="number" />
         </span>
         <xsl:text> </xsl:text>
-        <span>
-            <xsl:apply-templates select="." mode="title-attributes" />
+        <span class="title">
             <xsl:apply-templates select="." mode="title-full" />
         </span>
     </h1>
@@ -1058,9 +1053,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="." mode="number" />
             </xsl:with-param>
         </xsl:apply-templates>
-        <!-- title plain, separated -->
+        <!-- title plain, separated             -->
+        <!-- xref version, no additional period -->
         <xsl:text> </xsl:text>
-        <xsl:apply-templates select="." mode="title-full" />
+        <xsl:apply-templates select="." mode="title-xref"/>
     </div>
 </xsl:template>
 
@@ -1621,22 +1617,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- leave actual line-breaking to the laTeX conversion.     -->
 <xsl:variable name="title-separator" select="' '"/>
 
-<!-- Titles get variable CSS to control punctuation -->
-<!-- select on parent, checks title as child        -->
-<xsl:template match="*" mode="title-attributes">
-    <!-- true, false, or if no title, then empty -->
-    <xsl:variable name="has-punctuation">
-        <xsl:apply-templates select="title" mode="has-punctuation" />
-    </xsl:variable>
-    <xsl:attribute name="class">
-        <xsl:text>title</xsl:text>
-        <!-- if punctuated, add a class to this effect -->
-        <xsl:if test="$has-punctuation = 'true'">
-            <xsl:text> punctuated</xsl:text>
-        </xsl:if>
-    </xsl:attribute>
-</xsl:template>
-
 <!-- These are convenience methods for frequently-used headings -->
 
 <!-- h6, type name, number (if exists), title (if exists) -->
@@ -1657,8 +1637,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
         <xsl:if test="title">
             <xsl:text> </xsl:text>
-            <span>
-                <xsl:apply-templates select="." mode="title-attributes" />
+            <span class="title">
                 <xsl:apply-templates select="." mode="title-full" />
             </span>
         </xsl:if>
@@ -1680,8 +1659,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </span>
         <xsl:text> </xsl:text>
         <xsl:if test="title">
-            <span>
-                <xsl:apply-templates select="." mode="title-attributes" />
+            <span class="title">
                 <xsl:apply-templates select="." mode="title-full" />
             </span>
         </xsl:if>
@@ -1697,8 +1675,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </span>
         <xsl:text> </xsl:text>
         <xsl:if test="title">
-            <span>
-                <xsl:apply-templates select="." mode="title-attributes" />
+            <span class="title">
                 <xsl:apply-templates select="." mode="title-full" />
             </span>
         </xsl:if>
@@ -1718,8 +1695,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </span>
         <xsl:text> </xsl:text>
         <xsl:if test="title">
-            <span>
-                <xsl:apply-templates select="." mode="title-attributes" />
+            <span class="title">
                 <xsl:apply-templates select="." mode="title-full" />
             </span>
         </xsl:if>
@@ -1749,8 +1725,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- codenumber is implicit via placement -->
         <xsl:if test="title">
         <xsl:text> </xsl:text>
-            <span>
-                <xsl:apply-templates select="." mode="title-attributes" />
+            <span class="title">
                 <xsl:apply-templates select="." mode="title-full" />
             </span>
         </xsl:if>
@@ -1776,8 +1751,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="*" mode="heading-title">
     <xsl:if test="title/*|title/text()">
         <h6 class="heading">
-            <span>
-                <xsl:apply-templates select="." mode="title-attributes" />
+            <span class="title">
                 <xsl:apply-templates select="." mode="title-full" />
             </span>
         </h6>
@@ -1791,8 +1765,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="*" mode="heading-title-paragraphs">
     <xsl:if test="title/*|title/text()">
         <h5 class="heading">
-            <span>
-                <xsl:apply-templates select="." mode="title-attributes" />
+            <span class="title">
                 <xsl:apply-templates select="." mode="title-full" />
             </span>
         </h5>
@@ -1820,8 +1793,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:if test="title">
         <xsl:text> </xsl:text>
-        <span>
-            <xsl:apply-templates select="." mode="title-attributes" />
+        <span class="title">
             <xsl:apply-templates select="." mode="title-full" />
         </span>
     </xsl:if>
@@ -5592,8 +5564,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                         <xsl:attribute name="href">
                                             <xsl:apply-templates select="$document-root" mode="containing-filename" />
                                         </xsl:attribute>
-                                        <span>
-                                            <xsl:apply-templates select="." mode="title-attributes" />
+                                        <span class="title">
                                             <!-- Do not use shorttitle in masthead,  -->
                                             <!-- which is much like cover of a book  -->
                                             <xsl:apply-templates select="$document-root" mode="title-simple" />
@@ -8328,8 +8299,7 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
                                     <xsl:attribute name="href">
                                         <xsl:apply-templates select="$document-root" mode="containing-filename" />
                                     </xsl:attribute>
-                                    <span>
-                                        <xsl:apply-templates select="." mode="title-attributes" />
+                                    <span class="title">
                                         <!-- Do not use shorttitle in masthead,  -->
                                         <!-- which is much like cover of a book  -->
                                         <xsl:apply-templates select="$document-root" mode="title-simple" />
@@ -9120,8 +9090,7 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
                             </span>
                             <xsl:text> </xsl:text>
                         </xsl:if>
-                        <span>
-                            <xsl:apply-templates select="." mode="title-attributes" />
+                        <span class="title">
                             <xsl:apply-templates select="." mode="title-short" />
                         </span>
                     </xsl:element>
@@ -9806,8 +9775,7 @@ var scJsHost = (("https:" == document.location.protocol) ? "https://secure." : "
                     <xsl:apply-templates select="." mode="number" />
                 </span>
                 <xsl:text> </xsl:text>
-                <span>
-                    <xsl:apply-templates select="." mode="title-attributes" />
+                <span class="title">
                     <xsl:apply-templates select="." mode="title-full" />
                 </span>
             </h1>
@@ -9836,8 +9804,7 @@ var scJsHost = (("https:" == document.location.protocol) ? "https://secure." : "
             </span>
             <xsl:text> </xsl:text>
             <xsl:if test="title">
-                <span>
-                    <xsl:apply-templates select="." mode="title-attributes" />
+                <span class="title">
                     <xsl:apply-templates select="." mode="title-full" />
                 </span>
             </xsl:if>
