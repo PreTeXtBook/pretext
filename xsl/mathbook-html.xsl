@@ -1817,17 +1817,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- DTD will catch wrong values -->
             <xsl:otherwise />
         </xsl:choose>
-        <xsl:choose>
-            <xsl:when test="title">
-                <xsl:apply-templates select="." mode="title-full" />
-                <xsl:text>.&#xa0;</xsl:text>
-            </xsl:when>
-            <!-- no title, no direction, default to "Case." -->
-            <xsl:when test="not(@direction)">
-                <xsl:apply-templates select="." mode="type-name"/>
-                <xsl:text>.&#xa0;</xsl:text>
-            </xsl:when>
-        </xsl:choose>
+        <!-- If there is a title, the following will produce it. If -->
+        <!-- no title, and we don't have a direction already, the   -->
+        <!-- following will produce a default title, eg "Case."     -->
+        <xsl:if test="boolean(title) or not(@direction)">
+            <xsl:apply-templates select="." mode="title-full" />
+        </xsl:if>
     </h6>
 </xsl:template>
 
