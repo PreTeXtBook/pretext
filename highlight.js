@@ -8,13 +8,15 @@ css_for_hl += '#hlmenu { position: absolute; top: 300px; left: 200px;}\n';
 css_for_hl += '#hlmenu { padding: 8px; background: #FFF; }\n';
 css_for_hl += '#hlmenu { box-shadow: 8px 10px 5px #888; border: 1px solid #aaa;}\n';
 css_for_hl += '#hlmenu .hldelete { background: #fdd; }';
+css_for_hl += '#hlmenu .hlcopy { background: #ddf; }';
 css_for_hl += '#hlmenu > div { padding: 4px; font-size: 90%}';
 highlight_css.innerHTML = css_for_hl;
 
 hlmenu = document.createElement('div');
 hlmenu.id = "hlmenu";
 hlmenu.style.display = "none";
-hlmenu_contents = '<div class="hldelete" data-hlid="">delete highlight</div>\n';
+hlmenu_contents = '<div class="hlcopy" data-hlid="">copy to clipboard</div>\n';
+hlmenu_contents += '<div class="hldelete" data-hlid="">delete highlight</div>\n';
 hlmenu_contents += '<div class="dismiss">dismiss menu</div>';
 hlmenu.innerHTML = hlmenu_contents;
 document.body.appendChild(hlmenu);
@@ -262,6 +264,7 @@ $('body').on('click','.hl', function(e){  // id on a highlight looks like parent
   document.getElementById("hlmenu").style.top = (y - 10 + $(window).scrollTop()) + 'px';
   document.getElementById("hlmenu").style.left = (x + 20) + 'px';
   document.getElementById("hlmenu").style.display = 'block';
+  document.getElementsByClassName("hlcopy")[0].setAttribute("data-hlid", this.id);
   document.getElementsByClassName("hldelete")[0].setAttribute("data-hlid", this.id);
 //  tooltipSpan.style.left = (x + 20) + 'px';
 
@@ -299,6 +302,37 @@ $('body').on('click','.hl', function(e){  // id on a highlight looks like parent
 //  $(this).replaceWith(this.innerHTML);
 //  document.getElementById(parent_id).normalize();  // because a previous step creates adjacent text nodes
 
+});
+
+//from https://techoverflow.net/2018/03/30/copying-strings-to-the-clipboard-using-pure-javascript/
+function copyStringToClipboard (str) {
+   // Create new element
+   var el = document.createElement('textarea');
+   // Set value (string to be copied)
+   el.value = str;
+   // Set non-editable to avoid focus and move outside of view
+   el.setAttribute('readonly', '');
+   el.style = {position: 'absolute', left: '-9999px'};
+   document.body.appendChild(el);
+   // Select text inside element
+   el.select();
+   // Copy text to clipboard
+   document.execCommand('copy');
+   // Remove temporary element
+   document.body.removeChild(el);
+}
+
+$('body').on('click','.hlcopy', function(e){
+
+    var hl_to_copy_id = this.getAttribute("data-hlid");
+    console.log("copying highlight", hl_to_copy_id);
+    hl_to_copy = document.getElementById(hl_to_copy_id);
+    the_highlight = hl_to_copy.innerHTML;
+    copyStringToClipboard(the_highlight);
+//    console.log("hl_to_copy",hl_to_copy,"the_highlight", the_highlight);
+//    hl_to_copy.focus();
+//    document.execCommand('copy'); 
+    document.getElementById("hlmenu").style.display = 'none';
 });
 
 $('body').on('click','.hldelete', function(e){
