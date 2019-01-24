@@ -1657,8 +1657,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <span class="codenumber">
             <xsl:apply-templates select="." mode="number" />
         </span>
-        <xsl:text> </xsl:text>
         <xsl:if test="title">
+            <xsl:text> </xsl:text>
             <span class="title">
                 <xsl:apply-templates select="." mode="title-full" />
             </span>
@@ -1673,8 +1673,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <span class="codenumber">
             <xsl:apply-templates select="." mode="serial-number" />
         </span>
-        <xsl:text> </xsl:text>
         <xsl:if test="title">
+            <xsl:text> </xsl:text>
             <span class="title">
                 <xsl:apply-templates select="." mode="title-full" />
             </span>
@@ -1693,8 +1693,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <span class="codenumber">
             <xsl:apply-templates select="." mode="serial-number" />
         </span>
-        <xsl:text> </xsl:text>
         <xsl:if test="title">
+            <xsl:text> </xsl:text>
             <span class="title">
                 <xsl:apply-templates select="." mode="title-full" />
             </span>
@@ -1724,7 +1724,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </span>
         <!-- codenumber is implicit via placement -->
         <xsl:if test="title">
-        <xsl:text> </xsl:text>
+            <xsl:text> </xsl:text>
             <span class="title">
                 <xsl:apply-templates select="." mode="title-full" />
             </span>
