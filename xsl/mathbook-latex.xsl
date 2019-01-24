@@ -3944,10 +3944,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="number" />
         </xsl:with-param>
     </xsl:apply-templates>
-    <!-- title plain, separated -->
+    <!-- title plain, separated             -->
+    <!-- xref version, no additional period -->
     <xsl:text>&amp;</xsl:text>
     <xsl:text> </xsl:text>
-    <xsl:apply-templates select="." mode="title-full" />
+    <xsl:apply-templates select="." mode="title-xref"/>
     <xsl:text>\\&#xa;</xsl:text>
 </xsl:template>
 
@@ -4362,7 +4363,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="article/introduction|chapter/introduction|section/introduction|subsection/introduction|appendix/introduction|exercises/introduction|solutions/introduction|worksheet/introduction|reading-questions/introduction|glossary/introduction|references/introduction">
     <xsl:text>\begin{introduction}</xsl:text>
     <xsl:text>{</xsl:text>
-    <xsl:apply-templates select="." mode="title-punctuated" />
+    <xsl:apply-templates select="." mode="title-full" />
     <xsl:text>}</xsl:text>
     <xsl:text>%&#xa;</xsl:text>
     <xsl:apply-templates/>
@@ -4372,7 +4373,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="article/conclusion|chapter/conclusion|section/conclusion|subsection/conclusion|appendix/conclusion|exercises/conclusion|solutions/conclusion|worksheet/conclusion|reading-questions/conclusion|glossary/conclusion|references/conclusion">
     <xsl:text>\begin{conclusion}</xsl:text>
     <xsl:text>{</xsl:text>
-    <xsl:apply-templates select="." mode="title-punctuated" />
+    <xsl:apply-templates select="." mode="title-full" />
     <xsl:text>}</xsl:text>
     <xsl:text>%&#xa;</xsl:text>
     <xsl:apply-templates/>
@@ -4434,7 +4435,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Warn about paragraph deprecation -->
     <xsl:text>\begin{paragraphs}</xsl:text>
     <xsl:text>{</xsl:text>
-    <xsl:apply-templates select="." mode="title-punctuated" />
+    <xsl:apply-templates select="." mode="title-full" />
     <xsl:text>}</xsl:text>
     <xsl:text>{</xsl:text>
     <xsl:apply-templates select="." mode="internal-id" />
@@ -4468,36 +4469,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Examples have no structure, or have statement and solution -->
 <!-- Exercises have hints, answers and solutions                -->
 
-<!-- A full title, with a period at the end.  Only necessary -->
-<!-- for LaTeX, since HTML does this via CSS.  Similar to    -->
-<!-- "-title-full" template living in "-common"              -->
-<xsl:template match="*" mode="title-punctuated">
-    <xsl:variable name="default-exists">
-        <xsl:apply-templates select="." mode="has-default-title" />
-    </xsl:variable>
-    <xsl:choose>
-        <xsl:when test="title">
-            <!-- since selecting on "title" just gets killed -->
-            <!-- use node() matching text nodes and elements -->
-            <xsl:apply-templates select="title/node()" />
-            <!-- see if a closing period is necessary -->
-            <xsl:variable name="has-punctuation">
-                <xsl:apply-templates select="title" mode="has-punctuation" />
-            </xsl:variable>
-            <xsl:if test="$has-punctuation = 'false'">
-                <xsl:text>.</xsl:text>
-            </xsl:if>
-        </xsl:when>
-        <!-- use default title, which always needs punctuation -->
-        <xsl:when test="$default-exists='true'">
-            <xsl:apply-templates select="." mode="type-name"/>
-            <xsl:text>.</xsl:text>
-        </xsl:when>
-        <!-- return empty if there is no title, no default -->
-        <xsl:otherwise/>
-    </xsl:choose>
-</xsl:template>
-
 <!-- Environments/blocks implemented with tcolorbox          -->
 <!-- expect certain arguments.  This template provides them. -->
 <!--                                                         -->
@@ -4514,7 +4485,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- N.B.: "objectives", "outcomes" need to use this         -->
 <xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&ASIDE-LIKE;|exercise[boolean(&INLINE-EXERCISE-FILTER;)]|commentary|assemblage" mode="block-options">
     <xsl:text>{</xsl:text>
-    <xsl:apply-templates select="." mode="title-punctuated"/>
+    <xsl:apply-templates select="." mode="title-full"/>
     <xsl:text>}</xsl:text>
     <xsl:if test="&THEOREM-FILTER; or &AXIOM-FILTER;">
         <xsl:text>{</xsl:text>
@@ -4563,7 +4534,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- we just use the "title-full" template, with protection -->
     <xsl:text>{</xsl:text>
     <xsl:if test="title">
-        <xsl:apply-templates select="." mode="title-punctuated"/>
+        <xsl:apply-templates select="." mode="title-full"/>
     </xsl:if>
     <xsl:text>}</xsl:text>
     <xsl:text>{</xsl:text>
@@ -4594,7 +4565,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- optional title -->
     <xsl:text>{</xsl:text>
     <xsl:if test="title">
-        <xsl:apply-templates select="." mode="title-punctuated" />
+        <xsl:apply-templates select="." mode="title-full" />
     </xsl:if>
     <xsl:text>}</xsl:text>
     <!-- label -->
@@ -4750,7 +4721,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="number" />
         <xsl:text>}</xsl:text>
         <xsl:text>{</xsl:text>
-        <xsl:apply-templates select="." mode="title-punctuated"/>
+        <xsl:apply-templates select="." mode="title-full"/>
         <xsl:text>}</xsl:text>
         <!-- label of the exercise, to link back to it -->
         <xsl:text>{</xsl:text>
@@ -4876,7 +4847,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="serial-number" />
     <xsl:text>}</xsl:text>
     <xsl:text>{</xsl:text>
-    <xsl:apply-templates select="." mode="title-punctuated"/>
+    <xsl:apply-templates select="." mode="title-full"/>
     <xsl:text>}</xsl:text>
     <!-- workspace fraction, only if given, else blank -->
     <!-- worksheets only now, eventually exams?        -->
@@ -5019,7 +4990,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="number" />
         <xsl:text>}</xsl:text>
         <xsl:text>{</xsl:text>
-        <xsl:apply-templates select="." mode="title-punctuated"/>
+        <xsl:apply-templates select="." mode="title-full"/>
         <xsl:text>}</xsl:text>
         <!-- label of the exercise, to link back to it -->
         <xsl:text>{</xsl:text>
@@ -5693,7 +5664,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="number" />
         <xsl:text>}</xsl:text>
         <xsl:text>{</xsl:text>
-        <xsl:apply-templates select="." mode="title-punctuated"/>
+        <xsl:apply-templates select="." mode="title-full"/>
         <xsl:text>}</xsl:text>
         <!-- label of the project, to link back to it -->
         <xsl:text>{</xsl:text>
@@ -9886,7 +9857,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="defined-term">
     <xsl:text>\begin{definedterm}</xsl:text>
     <xsl:text>{</xsl:text>
-    <xsl:apply-templates select="." mode="title-punctuated"/>
+    <xsl:apply-templates select="." mode="title-full"/>
     <xsl:text>}</xsl:text>
     <xsl:text>{</xsl:text>
     <xsl:apply-templates select="." mode="internal-id"/>

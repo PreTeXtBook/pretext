@@ -3642,7 +3642,10 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 
 <!-- NB: these templates return a property of the title's parent -->
 
-<xsl:template match="*" mode="title-full">
+<!-- This has much of the logic of producing a title, but lacks any  -->
+<!-- additional punctuation, so is useful for titles employed places  -->
+<!-- other than immediately adjacent to the content they describe. -->
+<xsl:template match="*" mode="title-xref">
     <xsl:variable name="default-exists">
         <xsl:apply-templates select="." mode="has-default-title" />
     </xsl:variable>
@@ -3662,6 +3665,29 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <!-- otherwise empty -->
         <xsl:otherwise />
     </xsl:choose>
+</xsl:template>
+
+<xsl:template match="*" mode="title-full">
+    <!-- first, the punctuation-less version -->
+    <xsl:apply-templates select="." mode="title-xref"/>
+    <!-- Should we add punctuation?                       -->
+    <!--   1. Should not have any already,                -->
+    <!--   2. Or should be a default version,             -->
+    <!--   3. Plus should be a situation where we want it -->
+
+    <!-- with no title present, first variable is an empty string -->
+    <xsl:variable name="has-punctuation">
+        <xsl:apply-templates select="title" mode="has-punctuation"/>
+    </xsl:variable>
+    <xsl:variable name="default-exists">
+        <xsl:apply-templates select="." mode="has-default-title" />
+    </xsl:variable>
+    <xsl:variable name="wants-period">
+        <xsl:apply-templates select="." mode="title-wants-punctuation"/>
+    </xsl:variable>
+    <xsl:if test="(($has-punctuation = 'false') or ($default-exists = 'true')) and ($wants-period = 'true')">
+        <xsl:text>.</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <!-- This template does elective sanitization of a title, which  -->
@@ -3783,6 +3809,28 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:variable name="last-char" select="substring($all-text, string-length($all-text))" />
     <!-- title should not be empty, but if so, the contains() alone is true -->
     <xsl:value-of select="$last-char and contains($title-ending-punctuation, $last-char)" />
+</xsl:template>
+
+<!-- Some titles should have periods supplied by PTX, mostly   -->
+<!-- "smaller" objects like "example" and not "larger" objects -->
+<!-- like "chapter".  We create a template to signal this, for -->
+<!-- consistency across conversions, and so that it can be     -->
+<!-- consciously obverridden as part of styling work.  In      -->
+<!-- pieces simply so it is more readable.                     -->
+<!-- Blocks -->
+<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&ASIDE-LIKE;|exercise|commentary|assemblage" mode="title-wants-punctuation">
+    <xsl:value-of select="true()"/>
+</xsl:template>
+<!-- Miscellaneous -->
+<xsl:template match="paragraphs|proof|case|defined-term" mode="title-wants-punctuation">
+    <xsl:value-of select="true()"/>
+</xsl:template>
+<!-- Introductions and Conclusions -->
+<xsl:template match="article/introduction|chapter/introduction|section/introduction|subsection/introduction|appendix/introduction|exercises/introduction|solutions/introduction|worksheet/introduction|reading-questions/introduction|glossary/introduction|references/introduction|article/conclusion|chapter/conclusion|section/conclusion|subsection/conclusion|appendix/conclusion|exercises/conclusion|solutions/conclusion|worksheet/conclusion|reading-questions/conclusion|glossary/conclusion|references/conclusion" mode="title-wants-punctuation">
+    <xsl:value-of select="true()"/>
+</xsl:template>
+<xsl:template match="*" mode="title-wants-punctuation">
+    <xsl:value-of select="false()"/>
 </xsl:template>
 
 <xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;" mode="creator-full">
@@ -8326,7 +8374,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                     <xsl:copy-of select="$custom-text" />
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:apply-templates select="$target" mode="title-full" />
+                    <xsl:apply-templates select="$target" mode="title-xref"/>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:when>
