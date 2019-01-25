@@ -1,4 +1,5 @@
 
+/*
 highlight_css = document.createElement('style');
 highlight_css.type = "text/css";
 highlight_css.id = "highlight_css";
@@ -8,9 +9,13 @@ css_for_hl += '#hlmenu { position: absolute; top: 300px; left: 200px;}\n';
 css_for_hl += '#hlmenu { padding: 8px; background: #FFF; }\n';
 css_for_hl += '#hlmenu { box-shadow: 8px 10px 5px #888; border: 1px solid #aaa;}\n';
 css_for_hl += '#hlmenu .hldelete { background: #fdd; }';
+css_for_hl += '#hlmenu .hldelete:hover { background: #fbb; }';
 css_for_hl += '#hlmenu .hlcopy { background: #ddf; }';
+css_for_hl += '#hlmenu .hlcopy:hover { background: #bbf; }';
+css_for_hl += '#hlmenu .dismiss:hover { background: #ff9; }';
 css_for_hl += '#hlmenu > div { padding: 4px; font-size: 90%}';
 highlight_css.innerHTML = css_for_hl;
+*/
 
 hlmenu = document.createElement('div');
 hlmenu.id = "hlmenu";
