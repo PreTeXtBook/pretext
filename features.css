@@ -100,6 +100,7 @@
     position: absolute;
     right: 10px;
     top: 10px;
+    cursor: pointer;
 }
 .login-link > * {
     visibility: hidden;
@@ -119,7 +120,7 @@
     background: #ffd;
 }
 
-.addcontent, .action {
+.addcontent, .action, .submit {
     cursor: pointer;
 }
 
@@ -130,6 +131,9 @@
 .action + .action {
     margin-left: 0.25em;
 }
+.action + .amhelp {
+    margin-left: 8.25em;
+}
 
 .input_controls {
     font-family: sans-serif;
@@ -138,8 +142,11 @@
     background: #fff;
     padding-left: 0.5em;
     padding-bottom: 1ex;
-    margin-top: 5px;
-
+    margin-top: -0.1em;
+    margin-bottom: -1.6em;
+}
+textarea + .input_controls {
+    margin-top: 0;
 }
 .input_controls .action {
     border: 1px solid #aaa;
@@ -163,7 +170,66 @@
     font-family: "Lucida Console", Monaco, monospace;
     white-space: pre-wrap;
     margin-top: 0.5em;
+    margin-bottom: -0.5em;
 }
 article.exercise-like textarea {
         font-family: "Lucida Console", Monaco, monospace;
+        resize: vertical;
 }
+.compiled_answers {
+    border: 0.7em solid #dfd;
+    border-top: 0.35em;
+    margin-top: 1em;
+}
+.s_id {
+    font-size: 80%;
+    padding-top: 0.4em;
+    padding-left: 0.5em;
+    display: inline;
+}
+.rq_sub_time {
+    font-size: 70%;
+    padding-top: 0.5em;
+    padding-right: 0.5em;
+    float: right;
+    display: inline;
+}
+.s_ans {
+    font-family: "Lucida Console", Monaco, monospace;
+    white-space: pre-wrap;
+    width: 480px;
+    margin-left: 3em;
+    padding-bottom: 0.5em;
+}
+.noanswer .s_ans {
+    font-style: italic;
+    font-size: 80%;
+    margin-left: 4em;
+}
+.one_answer:nth-of-type(odd) {
+    background: #dfd;
+}
+
+/*
+ *
+ * highlights
+ *
+ */
+
+#hlmenu {
+    z-index: 1000;
+}
+#hlmenu *:hover {
+    cursor: pointer;
+}
+
+span.hl { background: yellow; }
+#hlmenu { position: absolute; top: 300px; left: 200px;}
+#hlmenu { padding: 8px; background: #FFF; }
+#hlmenu { box-shadow: 8px 10px 5px #888; border: 1px solid #aaa;}
+#hlmenu .hldelete { background: #fdd; }
+#hlmenu .hldelete:hover { background: #fbb; }
+#hlmenu .hlcopy { background: #ddf; }
+#hlmenu .hlcopy:hover { background: #bbf; }
+#hlmenu .dismiss:hover { background: #ff9; }
+#hlmenu > div { padding: 4px; font-size: 90%}
