@@ -35,7 +35,12 @@ if (!all_highlights) {
 }
 
 console.log("all_highlights.keys()", Object.keys(all_highlights));
-display_all_highlights(all_highlights, Object.keys(all_highlights), 0);
+console.log("waiting for MathJax");
+MathJax.Hub.Register.StartupHook("End",function () {
+   // need to wait for MathJax, because MathJax changes the number of nodes in a paragraph
+    console.log("MathJax is done");
+    display_all_highlights(all_highlights, Object.keys(all_highlights), 0);
+});
 
 
 /*
@@ -63,6 +68,7 @@ function index_of_child(child) {
 }
 
 function increment_id(list_of_things_with_ids) {  // assume ids are of the form xxxxNN with N a digit and x a non-digit
+    console.log("incrementing id on", list_of_things_with_ids);
     if (list_of_things_with_ids.length == 0) {
         return 0
     }
@@ -103,8 +109,10 @@ async function display_one_highlight(parent_id, hl) {
             var st_offset = hl['start_offset'];
             var end_node_ind = hl['end_nn'];
             var end_offset = hl['end_offset'];
+            console.log("st_node_ind", st_node_ind, "st_offset", st_offset, "end_node_ind", end_node_ind, "end_offset", end_offset);
             // other error checks: same parent
-            if (st_offset < 0 || st_offset > the_parent.childNodes[st_node_ind].textContent.length || end_offset < 0 || end_offset > the_parent.childNodes[end_node_ind].textContent.length) {
+            if (st_offset < 0 || st_node_ind > the_parent.childNodes.length || end_node_ind > the_parent.childNodes.length || st_offset > the_parent.childNodes[st_node_ind].textContent.length || end_offset < 0 || end_offset > the_parent.childNodes[end_node_ind].textContent.length) {
+                console.log("highlight data inconsistent with paragraph structure that contains", the_parent.childNodes.length, "nodes");
                 return
             }
 
@@ -147,6 +155,7 @@ async function display_all_highlights(every_highlight, hl_p_keys, i) {
 $("p[id], li[id]").on("mouseup",
   function() {
     var this_selection = window.getSelection();
+    console.log("UUUUUUUUUUUUUUUUUUUUUUUUUUU");
     console.log("selection", this_selection, "as string", this_selection.toString(), "length", this_selection.toString().length);
       if(this_selection.toString().length >= 3) {
         console.log("this_selection", this_selection);
@@ -183,6 +192,7 @@ $("p[id], li[id]").on("mouseup",
         console.log("starting_parent.childNodes[0]", starting_parent.childNodes[0]);
         ending_node = this_selection.getRangeAt(num_selected_ranges-1);
         ending_node_container = ending_node.endContainer;
+        console.log("ending_node", ending_node, "ending_node_container", ending_node_container);
         ending_node_number = index_of_child(ending_node_container);
         ending_node_offset = ending_node.endOffset;
         console.log("selection starts at character number", starting_node.startOffset, "in node number", index_of_child(starting_node), "of node", starting_node.startContainer, "within", starting_node.startContainer.parentNode,"which is", starting_node);
@@ -219,6 +229,7 @@ $("p[id], li[id]").on("mouseup",
                           "end_nn": ending_node_number,
                           "end_offset": ending_node_offset};
         if (starting_parent_id in all_highlights) {
+            console.log("the starting_parent_id", starting_parent_id, "is already in all_highlights", all_highlights);
             new_id = increment_id(all_highlights[starting_parent_id]);
             this_highlight['id'] = new_id;
             all_highlights[starting_parent_id].push(this_highlight)
@@ -400,12 +411,14 @@ $('body').on('click','.hldelete', function(e){
                 new_highlights.push(one_highlight)
             }
         } else {  // hl occurs after, but maybe not physically after
+            console.log('the_hl_to_delete["start_nn"]', the_hl_to_delete["start_nn"], 'one_highlight["start_nn"]', one_highlight["start_nn"]);
             if (node_counter[one_highlight["id"]] < node_counter[hl_to_del_id]) {
+                console.log("case 0");
                 new_highlights.push(one_highlight)
             } else if (node_counter[one_highlight["id"]] == node_counter[hl_to_del_id]) {
                 console.log("ERROR, we shoudl be past this point!");
                 continue
-            } else if (one_highlight["start_nn"] == the_hl_to_delete["end_nn"] + 2){
+            } else if (one_highlight["start_nn"] == the_hl_to_delete["start_nn"] + 2){
                 console.log("offset match with", one_highlight);
                 previous_highlight = one_highlight;
                 previous_highlight['start_nn'] += -2 + node_increment;
@@ -422,7 +435,12 @@ $('body').on('click','.hldelete', function(e){
             }
         }
     }
-    all_highlights[parent_id] = new_highlights;
+    console.log("the new_highlights", new_highlights, "parent_id", parent_id);
+    if (new_highlights.length > 0) {
+        all_highlights[parent_id] = new_highlights
+    }  else {
+        delete all_highlights[parent_id]
+    }
     
     localStorage.setObject("all_highlights", all_highlights);
 
