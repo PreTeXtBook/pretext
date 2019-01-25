@@ -1696,10 +1696,10 @@
     <xsl:variable name="rbracket-fixed"  select="str:replace($lbracket-fixed,  ']', '\]')"/>
 
     <!-- We translate textual apostrophes to the escape sequence [$APOS] -->
-    <xsl:variable name="apostrophe-fixed"  select="str:replace($rbracket-fixed, $apostrophe, '[$APOS]')"/>
+    <!-- <xsl:variable name="apostrophe-fixed"  select="str:replace($rbracket-fixed, $apostrophe, '[$APOS]')"/> -->
 
     <!-- Break up right justify AND center line -->
-    <xsl:variable name="centerline-fixed" select="str:replace($apostrophe-fixed, '&gt;&gt; ', '\&gt;\&gt;')"/>
+    <xsl:variable name="centerline-fixed" select="str:replace($rbracket-fixed, '&gt;&gt; ', '\&gt;\&gt;')"/>
 
     <!-- Break up any possibility of paired underscores for italics (overkill) -->
     <xsl:variable name="italicization-fixed" select="str:replace($centerline-fixed, '_', '\_')"/>
