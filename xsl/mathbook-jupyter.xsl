@@ -682,6 +682,40 @@ TODO: (overall)
     <xsl:text>&lt;/code&gt;</xsl:text>
 </xsl:template>
 
+<!-- #### -->
+<!-- URLs -->
+<!-- #### -->
+
+<!-- We encode some characters in href attributes, here   -->
+<!-- just for the Jupyter conversion, as an override of   -->
+<!-- part of the serialization.  This could instead be    -->
+<!-- sanitization of the "url"element, in the general     -->
+<!-- HTML conversion or here for just Jupyter.  So        -->
+<!-- eventually this could migrate to another location    -->
+<!-- in the pipeline.                                     -->
+<!--                                                      -->
+<!-- The problem seems to be characters, used in pairs,   -->
+<!-- to delimit text for Markdown or MathJax:  underscore -->
+<!-- is italics, asterisk is emphasis, and dollar signs   -->
+<!-- delimit math.  This is a hunch based on similar      -->
+<!-- experiences with inline verbatim text.  But here we  -->
+<!-- are fortunate to be able to encode the dollar sign.  -->
+<xsl:template match="@href" mode="serialize">
+    <!-- sanitize value first -->
+    <xsl:variable name="text">
+        <xsl:value-of select="."/>
+    </xsl:variable>
+    <xsl:variable name="underscore-fixed" select="str:replace($text,             '_',  '%5F')"/>
+    <xsl:variable name="asterisk-fixed"   select="str:replace($underscore-fixed, '*',  '%2A')"/>
+    <xsl:variable name="dollar-fixed"     select="str:replace($asterisk-fixed,   '$',  '%24')"/>
+    <!-- construct new attribute, spacing, name, value -->
+    <xsl:text> </xsl:text>
+    <xsl:value-of select="name()"/>
+    <xsl:text>="</xsl:text>
+    <xsl:value-of select="$dollar-fixed"/>
+    <xsl:text>"</xsl:text>
+</xsl:template>
+
 <!-- ########################## -->
 <!-- Intermediate Pseudo-Markup -->
 <!-- ########################## -->
