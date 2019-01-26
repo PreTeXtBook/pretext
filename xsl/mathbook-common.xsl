@@ -3004,6 +3004,14 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 <!-- the JSON format of a Jupyter notebook.  Identical to -->
 <!-- https://stackoverflow.com/questions/6696382 at       -->
 <!-- comment https://stackoverflow.com/a/15783514         -->
+<!--                                                      -->
+<!-- Comment on original solution says:  "The above       -->
+<!-- serializer templates do not handle e.g. attributes,  -->
+<!-- namespaces, or reserved characters in text nodes..." -->
+<!-- This serves our purposes, but perhaps needs          -->
+<!-- improvements to be fully general.                    -->
+<!-- (See https://stackoverflow.com/a/6698849)            -->
+
 
 <xsl:template match="*" mode="serialize">
     <xsl:text>&lt;</xsl:text>
