@@ -581,8 +581,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--
 TODO: (overall)
 
-1.  Interfere with left-angle bracket to make elements not evaporate in serialization.
-    For verbatim items, apply-imports into a variable, then search/replace to escaped versions
+1.  DONE: Interfere with left-angle bracket to make elements not evaporate in serialization.
 2.  DONE: Escape $ so that pairs do not go MathJax on us.
 3.  DONE: Do we need to protect a hash?  So not interpreted as a title?  Underscores, too.
 4.  Update CSS, use add-on, make an output version to parse as text.
@@ -634,6 +633,53 @@ TODO: (overall)
     <xsl:variable name="environment-fixed" select="str:replace($inline-fixed,   '\\end\{', '&lt;span&gt;\\end\{&lt;/span&gt;' )"/>
 
     <xsl:value-of select="$environment-fixed"/>
+</xsl:template>
+
+<!-- ############### -->
+<!-- Inline Verbatim -->
+<!-- ############### -->
+
+<!-- Jupyter does a very good (but incomplete) job with inline -->
+<!-- verbatim text, requiring little care by authors.  But a   -->
+<!-- few gotchas need adjustment.  So we override.             -->
+<xsl:template match="c">
+    <!-- grab content literally -->
+    <xsl:variable name="text">
+        <xsl:value-of select="."/>
+    </xsl:variable>
+
+    <!-- We wrap verbatim inline text with an HTML "code" element. -->
+    <!-- When there are to in close proximity (same paragraph)     -->
+    <!-- certain characters can pair up (as Markdown, or MathJax,  -->
+    <!-- delimiters?) and wreak havoc.  But escaped versions seem  -->
+    <!-- to perform well in all cases, so we make these            -->
+    <!-- replacements first.                                       -->
+    <xsl:variable name="backtick-fixed"   select="str:replace($text,           '`',  '\`' )"/>
+    <xsl:variable name="asterisk-fixed"   select="str:replace($backtick-fixed, '*',  '\*' )"/>
+    <xsl:variable name="underscore-fixed" select="str:replace($asterisk-fixed, '_',  '\_' )"/>
+
+    <!-- Jupyter notebook is careful about XML special characters, -->
+    <!-- but if you want to write about the escaped versions, they -->
+    <!-- just get converted to the real thing.  So in these five   -->
+    <!-- very special situations we escape the leading ampersand   -->
+    <!-- and whatever conversion is happening is satiated.         -->
+    <xsl:variable name="escaped-ampersand-fixed"    select="str:replace($underscore-fixed,           '&amp;amp;',  '&amp;amp;amp;' )"/>
+    <xsl:variable name="escaped-leftbracket-fixed"  select="str:replace($escaped-ampersand-fixed,    '&amp;lt;',   '&amp;amp;lt;' )"/>
+    <xsl:variable name="escaped-rightbracket-fixed" select="str:replace($escaped-leftbracket-fixed,  '&amp;gt;',   '&amp;amp;gt;' )"/>
+    <xsl:variable name="escaped-apostrophe-fixed"   select="str:replace($escaped-rightbracket-fixed, '&amp;apos;', '&amp;amp;apos;' )"/>
+    <xsl:variable name="escaped-quote-fixed"        select="str:replace($escaped-apostrophe-fixed,   '&amp;quot;', '&amp;amp;quot;' )"/>
+
+    <!-- If you want to write about elements (like in the Author's     -->
+    <!-- Guide!) then you cannot have elements/tags sitting unaltered  -->
+    <!-- in verbatim text, since they now look like interior HTML.     -->
+    <!-- So we disrupt the leading left-bracket with an escaped        -->
+    <!-- version and let that convert to the character.                -->
+    <xsl:variable name="leftbracket-fixed" select="str:replace($escaped-quote-fixed, '&lt;', '&amp;lt;' )"/>
+
+    <!-- We enclose with PreTeXt's HTML, serializing by hand -->
+    <xsl:text>&lt;code class="code-inline tex2jax_ignore"&gt;</xsl:text>
+        <xsl:value-of select="$leftbracket-fixed"/>
+    <xsl:text>&lt;/code&gt;</xsl:text>
 </xsl:template>
 
 <!-- ########################## -->
