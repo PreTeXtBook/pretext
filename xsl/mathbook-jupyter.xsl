@@ -622,7 +622,18 @@ TODO: (overall)
     <xsl:variable name="asterisk-fixed"   select="str:replace($underscore-fixed,'*',  '\*')"/>
     <xsl:variable name="backtick-fixed"   select="str:replace($asterisk-fixed,  '`',  '\`')"/>
 
-    <xsl:value-of select="$backtick-fixed"/>
+    <!-- We disrupt accidental MathJax formulations in running text.  MathJax     -->
+    <!-- needs both begin *and* end markers, enclosed in a single HTML element,   -->
+    <!-- before it will start injecting itself onto the page.  We leave a begin   -->
+    <!-- marker alone, but disrupt an end marker with a superfluous minimal span. -->
+    <!-- This is advice from David Cervone, JMM Baltimore, 2019-01-18.            -->
+    <!-- Note: we serialize the necessary HTML by hand, and the brace and         -->
+    <!-- backslash used in matching the leading portion of a LaTeX environment    -->
+    <!-- were both escaped above.                                                 -->
+    <xsl:variable name="inline-fixed"      select="str:replace($backtick-fixed, '\)',      '&lt;span&gt;\)&lt;/span&gt;' )"/>
+    <xsl:variable name="environment-fixed" select="str:replace($inline-fixed,   '\\end\{', '&lt;span&gt;\\end\{&lt;/span&gt;' )"/>
+
+    <xsl:value-of select="$environment-fixed"/>
 </xsl:template>
 
 <!-- ########################## -->
