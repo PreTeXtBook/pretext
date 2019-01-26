@@ -1955,7 +1955,7 @@ the xsltproc executable.
 
                     <p><c>ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%-._~:/?#[]@!$&amp;'()*+,;=</c></p>
 
-                    <p><url href="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%-._~:/?#[]@!$&amp;'()*+,;=">ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%-._~:/?#[]@!$&amp;'()*+,;=</url></p>
+                    <p><url href="http://example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%-._~:/?#[]@!$&amp;'()*+,;=">http://example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%-._~:/?#[]@!$&amp;'()*+,;=</url></p>
 
                 </blockquote>
 
@@ -1968,10 +1968,10 @@ the xsltproc executable.
                 <p>When a <c>url</c> has no content, then its <c>href</c> attribute is displayed as the text, automatically in a typewriter font.</p>
 
                 <blockquote>
-                    <p><url href="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%-._~:/?#[]@!$&amp;'()*+,;="></url></p>
+                    <p><url href="http://example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%-._~:/?#[]@!$&amp;'()*+,;="></url></p>
                 </blockquote>
 
-                <p>We are not fans of footnotes, they are totally unstructured.<fn><url href="https://en.wikipedia.org/wiki/Carleson%27s_theorem">Carleson's Theorem</url></fn>  A URL in a footnote migrates around, and so care must be taken.<fn><url href="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%-._~:/?#[]@!$&amp;'()*+,;="><c>ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%-._~:/?#[]@!$&amp;'()*+,;=</c></url></fn>  This paragraph has two footnotes, one with a real URL from Jesse Oldroyd, another with a fake URL from the above suite (the fourth one).  For good measure, we repeat the URL found in the first footnote: <url href="https://en.wikipedia.org/wiki/Carleson%27s_theorem">Carleson's Theorem</url>.  And we include a no-content version of the same link:  <url href="https://en.wikipedia.org/wiki/Carleson%27s_theorem" />.</p>
+                <p>We are not fans of footnotes, they are totally unstructured.<fn><url href="https://en.wikipedia.org/wiki/Carleson%27s_theorem">Carleson's Theorem</url></fn>  A URL in a footnote migrates around, and so care must be taken.<fn><url href="http://example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%-._~:/?#[]@!$&amp;'()*+,;="><c>http://example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%-._~:/?#[]@!$&amp;'()*+,;=</c></url></fn>  This paragraph has two footnotes, one with a real URL from Jesse Oldroyd, another with a fake URL from the above suite (the fourth one).  For good measure, we repeat the URL found in the first footnote: <url href="https://en.wikipedia.org/wiki/Carleson%27s_theorem">Carleson's Theorem</url>.  And we include a no-content version of the same link:  <url href="https://en.wikipedia.org/wiki/Carleson%27s_theorem" />.</p>
             </subsection>
 
 
@@ -4043,14 +4043,14 @@ the xsltproc executable.
 
                     <row>
                         <cell>2</cell>
-                        <cell halign="left"><url href="09az%-._~:/?#[]@!$&amp;'()*+,;=">09az%-._~:/?#[]@!$&amp;'()*+,;=</url></cell>
-                        <cell><url href="09az%-._~:/?#[]@!$&amp;'()*+,;=">09az%-._~:/?#[]@!$&amp;'()*+,;=</url></cell>
+                        <cell halign="left"><url href="http://example.com/09az%-._~:/?#[]@!$&amp;'()*+,;=">http://example.com/09az%-._~:/?#[]@!$&amp;'()*+,;=</url></cell>
+                        <cell><url href="http://example.com/09az%-._~:/?#[]@!$&amp;'()*+,;=">http://example.com/09az%-._~:/?#[]@!$&amp;'()*+,;=</url></cell>
                     </row>
 
                     <row>
                         <cell>3</cell>
-                        <cell halign="left"><url href="09az%-._~:/?#[]@!$&amp;'()*+,;="></url></cell>
-                        <cell><url href="09az%-._~:/?#[]@!$&amp;'()*+,;="></url></cell>
+                        <cell halign="left"><url href="http://example.com/09az%-._~:/?#[]@!$&amp;'()*+,;="></url></cell>
+                        <cell><url href="http://example.com/09az%-._~:/?#[]@!$&amp;'()*+,;="></url></cell>
                     </row>
                 </tabular>
             </table>
