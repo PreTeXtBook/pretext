@@ -611,7 +611,6 @@ TODO: (overall)
 
 <xsl:template name="text-processing">
     <xsl:param name="text"/>
-    <!-- Needs backtick, it seems -->
 
     <!-- Backslash first, then clear to add more -->
     <xsl:variable name="backslash-fixed"  select="str:replace($text,            '\',  '\\')"/>
@@ -621,8 +620,9 @@ TODO: (overall)
     <xsl:variable name="dollar-fixed"     select="str:replace($hash-fixed,      '$',  '\$')"/>
     <xsl:variable name="underscore-fixed" select="str:replace($dollar-fixed,    '_',  '\_')"/>
     <xsl:variable name="asterisk-fixed"   select="str:replace($underscore-fixed,'*',  '\*')"/>
+    <xsl:variable name="backtick-fixed"   select="str:replace($asterisk-fixed,  '`',  '\`')"/>
 
-    <xsl:value-of select="$asterisk-fixed"/>
+    <xsl:value-of select="$backtick-fixed"/>
 </xsl:template>
 
 <!-- ########################## -->

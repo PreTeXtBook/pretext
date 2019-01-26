@@ -1656,7 +1656,7 @@ the xsltproc executable.
             </subsection>
         </section>
 
-        <section>
+        <section xml:id="text-in-paragraphs">
             <title>Entering Text in Paragraphs, Titles, Captions</title>
             <shorttitle>Text in Paragraphs</shorttitle>
 
@@ -2043,7 +2043,7 @@ the xsltproc executable.
                 <p>''''''''''''''''''''''''''''''.</p>
                 <p><rq/><rq/><rq/><rq/><rq/><rq/><rq/><rq/><rq/><rq/><rq/><rq/><rq/><rq/><rq/>.</p>
 
-                <p>Runs of backticks (accent grave) should not become smart left double quotes:  ` (one), `` (two), ``` (three), ```` (four), ````` (five), `````` (six), ``````` (seven).</p>
+                <p>Runs of backticks (accent grave) should not become smart left double quotes when the output is processed by <latex/>:  ` (one), `` (two), ``` (three), ```` (four), ````` (five), `````` (six), ``````` (seven).  Furthermore, in a context where Markdown syntax is recognized as well (<eg/> a Jupyter notebook), paired backticks should <em>not</em> produce `inline verbatim text`.</p>
 
                 <p>The next paragraph has a long run of words separated/joined by the keyboard forward-slash character.  With this input, <latex/> will not line-break at the slash, nor will it hypenate anywhere.  <pretext/>  automatically provides an improved slash, which will line-break, as you should see below in <latex/> output.  There is a bad right margin, but that is due to the absurdity of this test.  This sort of problem should be no better or worse for the use of this character.  Further refinements (zero-width space) and packages can be used to get hyphenation.  <init>HTML</init> will line-break rationally with no extra help.  Remember the <tage>solidus</tage> character for super-simple text fractions like 7<solidus/>32 (which will <em>not</em> line-break), and math elements or SI unit markup for technical work.</p>
 
