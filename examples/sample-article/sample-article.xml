@@ -678,7 +678,31 @@ the xsltproc executable.
                     <sage>
                         <input>2+2</input>
                     </sage>
+
+                    <p>We test a Sage cell inside a knowl, which should set the value of a variable that will be available to subsequent cells.</p>
+
+                    <sage>
+                        <input>
+                        a = 6
+                        a
+                        </input>
+                    </sage>
+
+                    <sage>
+                        <input>
+                        b = a + 10
+                        b
+                        </input>
+                    </sage>
                 </example>
+
+                <p>This next Sage cell will not execute properly unless the knowl immediately prior is opened and cells there are executed.</p>
+
+                <sage>
+                    <input>
+                    a + b
+                    </input>
+                </sage>
 
                 <p>We cross-reference the example just prior, <xref ref="example-mysterious" text="type-global" />, to test the simple Sage cell that will now be part of a cross-reference knowl (an external file).</p>
 
