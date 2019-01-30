@@ -152,4 +152,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
+<xsl:template match="&THEOREM-LIKE;">
+    <xsl:apply-templates select="." mode="type-name"/>
+    <xsl:text> </xsl:text>
+    <xsl:apply-templates select="." mode="number"/>
+    <xsl:if test="title">
+        <xsl:text> </xsl:text>
+        <xsl:apply-templates select="." mode="title-full"/>
+    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates select="statement|proof"/>
+</xsl:template>
+
+<xsl:template match="proof">
+    <xsl:apply-templates select="." mode="type-name"/>
+    <xsl:text>.&#xa;</xsl:text>
+    <xsl:apply-templates/>
+</xsl:template>
+
 </xsl:stylesheet>
