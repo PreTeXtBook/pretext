@@ -255,13 +255,130 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="title-full"/>
     </xsl:if>
     <xsl:text>&#xa;</xsl:text>
-    <xsl:apply-templates select="statement|proof"/>
+    <xsl:choose>
+        <xsl:when test="statement">
+            <xsl:apply-templates select="statement"/>
+            <xsl:apply-templates select="proof"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="*[self::proof]"/>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
+<!-- General-purpose container, we  -->
+<!-- do not enforce possibilities -->
+<xsl:template match="statement">
+    <!-- structured -->
+    <xsl:apply-templates select="*"/>
+</xsl:template>
+
+<!-- THEOREM-LIKE only -->
 <xsl:template match="proof">
     <xsl:apply-templates select="." mode="type-name"/>
     <xsl:text>.&#xa;</xsl:text>
+    <!-- structured -->
+    <xsl:apply-templates select="*"/>
+</xsl:template>
+
+<!-- ######### -->
+<!-- Exercises -->
+<!-- ######### -->
+
+<xsl:template match="exercise">
+    <!-- space with a blank line if not -->
+    <!-- first in a structured element  -->
+    <!-- barring metadata-ish           -->
+    <xsl:if test="preceding-sibling::*[not(self::title)]">
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:apply-templates select="." mode="serial-number"/>
+    <xsl:text>.</xsl:text>
+    <xsl:if test="title">
+        <xsl:text> (</xsl:text>
+        <xsl:apply-templates select="." mode="title-full"/>
+        <xsl:text>)</xsl:text>
+    </xsl:if>
+    <xsl:text> </xsl:text>
+    <xsl:choose>
+        <xsl:when test="statement">
+            <xsl:apply-templates select="statement"/>
+            <xsl:apply-templates select="hint|answer|solution"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="*[self::hint|self::answer|self::solution]"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="hint|answer|solution">
+    <xsl:apply-templates select="." mode="type-name"/>
+    <xsl:variable name="the-number">
+        <xsl:apply-templates select="." mode="non-singleton-number" />
+    </xsl:variable>
+    <!-- An empty value means element is a singleton -->
+    <!-- else the serial number comes through        -->
+    <xsl:if test="not($the-number = '')">
+        <xsl:text> </xsl:text>
+        <xsl:apply-templates select="." mode="serial-number" />
+    </xsl:if>
+    <xsl:text>. </xsl:text>
     <xsl:apply-templates/>
+    <!-- not needed if structured -->
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
+<!-- ############### -->
+<!-- Captioned Items -->
+<!-- ############### -->
+
+<xsl:template match="figure">
+    <!-- space with a blank line if not -->
+    <!-- first in a structured element  -->
+    <!-- barring metadata-ish           -->
+    <xsl:if test="preceding-sibling::*[not(self::title)]">
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:apply-templates select="." mode="type-name"/>
+    <xsl:text> </xsl:text>
+    <xsl:apply-templates select="." mode="number"/>
+    <xsl:text>: </xsl:text>
+    <xsl:apply-templates select="caption"/>
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="caption">
+    <!-- mixed-content -->
+    <xsl:apply-templates/>
+</xsl:template>
+
+<!-- ##### -->
+<!-- Lists -->
+<!-- ##### -->
+
+<xsl:template match="ul|ol|dl">
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates select="li"/>
+</xsl:template>
+
+<xsl:template match="ol/li">
+    <xsl:apply-templates select="." mode="serial-number"/>
+    <xsl:text>. </xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="ul/li">
+    <xsl:text>* </xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="dl/li">
+    <xsl:apply-templates select="." mode="title-full"/>
+    <xsl:text> </xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 </xsl:stylesheet>
