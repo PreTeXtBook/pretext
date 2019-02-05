@@ -80,8 +80,42 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="sage-active-markup"/>
 <xsl:template name="sage-display-markup"/>
 
-<!-- TODO: implement titles/headings for divisions, -->
-<!-- with two blank lines prior?                    -->
+<!-- ######### -->
+<!-- Divisions -->
+<!-- ######### -->
+
+<xsl:template match="part|chapter|section|subsection|subsubsection|exercises|reading-questions|worksheet|glossary|references|solutions">
+    <!-- empty line prior -->
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates select="." mode="type-name"/>
+    <xsl:text> </xsl:text>
+    <xsl:apply-templates select="." mode="number"/>
+    <!-- Title is required (or default is supplied) -->
+    <xsl:text> </xsl:text>
+    <xsl:apply-templates select="." mode="title-full"/>
+    <xsl:text>&#xa;</xsl:text>
+    <!-- metadata-ish, eg "title", should be killed by default -->
+    <xsl:apply-templates/>
+</xsl:template>
+
+<!-- ################ -->
+<!-- Cross-References -->
+<!-- ################ -->
+
+<!-- Nothing fancy (like in LaTeX conversion) for  -->
+<!-- the number of the target of a cross-reference -->
+<xsl:template match="*" mode="xref-number">
+    <xsl:apply-templates select="." mode="number"/>
+</xsl:template>
+
+<!-- No good way to link/direct to target, so we just   -->
+<!-- parrot the text produced typically for a clickable -->
+<xsl:template match="xref" mode="xref-link">
+    <xsl:param name="target"/>
+    <xsl:param name="content"/>
+
+    <xsl:value-of select="$content"/>
+</xsl:template>
 
 <!-- Characters -->
 
