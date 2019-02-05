@@ -179,10 +179,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="p">
-    <!-- space with a blank line -->
-    <xsl:text>&#xa;</xsl:text>
+    <!-- space with a blank line if not -->
+    <!-- first in a structured element  -->
+    <!-- barring metadata-ish           -->
+    <xsl:if test="preceding-sibling::*[not(self::title)]">
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
+    <!-- mixed-content -->
     <xsl:apply-templates/>
-    <!-- end at newline -->
+    <!-- end onto a newline -->
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
