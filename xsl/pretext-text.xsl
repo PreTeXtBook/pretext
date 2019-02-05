@@ -191,7 +191,62 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
+<!-- ############ -->
+<!-- Environments -->
+<!-- ############ -->
+
+<xsl:template match="&REMARK-LIKE;">
+    <!-- space with a blank line if not -->
+    <!-- first in a structured element  -->
+    <!-- barring metadata-ish           -->
+    <xsl:if test="preceding-sibling::*[not(self::title)]">
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:apply-templates select="." mode="type-name"/>
+    <xsl:text> </xsl:text>
+    <xsl:apply-templates select="." mode="number"/>
+    <xsl:if test="title">
+        <xsl:text> </xsl:text>
+        <xsl:apply-templates select="." mode="title-full"/>
+    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
+    <!-- structured -->
+    <xsl:apply-templates select="*"/>
+</xsl:template>
+
+<xsl:template match="&EXAMPLE-LIKE;">
+    <!-- space with a blank line if not -->
+    <!-- first in a structured element  -->
+    <!-- barring metadata-ish           -->
+    <xsl:if test="preceding-sibling::*[not(self::title)]">
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:apply-templates select="." mode="type-name"/>
+    <xsl:text> </xsl:text>
+    <xsl:apply-templates select="." mode="number"/>
+    <xsl:if test="title">
+        <xsl:text> </xsl:text>
+        <xsl:apply-templates select="." mode="title-full"/>
+    </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:choose>
+        <xsl:when test="statement">
+            <xsl:apply-templates select="statement"/>
+            <xsl:apply-templates select="hint|answer|solution"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="*[self::hint|self::answer|self::solution]"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <xsl:template match="&THEOREM-LIKE;">
+    <!-- space with a blank line if not -->
+    <!-- first in a structured element  -->
+    <!-- barring metadata-ish           -->
+    <xsl:if test="preceding-sibling::*[not(self::title)]">
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
     <xsl:apply-templates select="." mode="type-name"/>
     <xsl:text> </xsl:text>
     <xsl:apply-templates select="." mode="number"/>
