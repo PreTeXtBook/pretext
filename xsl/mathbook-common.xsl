@@ -10169,4 +10169,18 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <xsl:template match="paragraph" />
 
 
+<!-- Sometimes this template is useful to see which    -->
+<!-- templates are not implemented at all in some new  -->
+<!-- (basic) conversion building just on this -common. -->
+<!-- Maybe "dead-ending" is preferable (remove the     -->
+<!-- apply-templates) and/or maybe a lower priority    -->
+<!-- will work better.                                 -->
+
+<!--
+<xsl:template match="*" priority="0">
+    <xsl:message>[<xsl:value-of select="local-name(.)"/>]</xsl:message>
+    <xsl:apply-templates/>
+</xsl:template>
+-->
+
 </xsl:stylesheet>
