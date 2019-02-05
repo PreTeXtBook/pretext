@@ -50,8 +50,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- conversion.  But obviously, there are many PreTeXt constructions    -->
 <!-- which cannot be realized in text.                                   -->
 <!--                                                                     -->
-<!-- Goal is to make it so *no* conversion needs to import  -->
-<!-- "mathbook-common.xsl" since some foundational conversion will.      -->
+<!-- Goal is to make it so *no* conversion imports "mathbook-common.xsl" -->
+<!-- since some foundational conversion (such as this one) can be the    -->
+<!-- basis of the conversion and will import the foundationa one instead.-->
 <!--                                                                     -->
 <!-- Initial work might be to implement certain characters as 7-bit      -->
 <!-- ASCII and as Unicode, under the control of a switch.  For example,  -->
