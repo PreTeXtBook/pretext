@@ -360,36 +360,12 @@
 
         <p>Fundamentally <pretext /> allows for conversion to other markup languages, such as <latex /> or <init>HTML</init>, and of course <init>XML</init> is a syntax for designing a markup vocabulary.  As such, certain characters traditionally found on keyboards have been co-opted for special purposes.  And once you actually want one of those special characters, you need an escape character to indicate a <q>normal</q> use.  For these reasons, certain characters have empty elements to represent them.</p>
 
-        <p>Special characters for <init>XML</init> are the ampersand, less than, greater than, single quote and double quote: <c>&amp;</c>, <c>&lt;</c>, <c>&gt;</c>, <c>'</c>, <c>"</c>.  The ampersand is the escape character for <init>XML</init>.  In practice, the first two characters are the most important, since processing of your <init>XML</init> will be confused by any attempt to use them directly.  So in regular text (not mathematics, not verbatim), always use the following.</p>
-
-        <fragment xml:id="xml-character">
-        Character =
-            element ampersand {empty} |
-            element less {empty} |
-            element greater {empty}
-        </fragment>
-
-        <p><latex />, which is a powerful intermediate markup language for creating <init>PDF</init> or print output, has more special characters than most markup languages.  While you could use keyboard or Unicode equivalents, the utility of your source will be maximized by religiously using these instead.  And these are mandatory if you do plan to use a conversion to <latex /> or <tex />.  The ampersand is on this list, but has been defined above, while the backslash is the escape character.</p>
-
-        <!-- # $ % & ~ _ ^ \ { } -->
-
-        <fragment xml:id="latex-character">
-        Character |=
-            element hash {empty} |
-            element dollar {empty} |
-            element percent {empty} |
-            element tilde {empty} |
-            element underscore {empty} |
-            element circumflex {empty} |
-            element backslash {empty} |
-            element lbrace {empty} |
-            element rbrace {empty}
-        </fragment>
+        <p>Special characters for <init>XML</init> are the ampersand, less than, greater than, single quote and double quote: <c>&amp;</c>, <c>&lt;</c>, <c>&gt;</c>, <c>'</c>, <c>"</c>.  The ampersand is the escape character for <init>XML</init>.  In practice, the first two characters are the most important, since processing of your <init>XML</init> will be confused by any attempt to use them directly.  So in regular text (not mathematics, not verbatim), always use the the escaped versions:  <c>&amp;amp;</c>, <c>&amp;lt;</c>, and perhaps <c>&amp;gt;</c>.</p>
 
         <p>See below for elements that can be used to form groupings with left and right delimiters.  For example, a simple quotation should use a left double quote and a right double quote, and these characters should look different (so-called <term>smart</term> quotes).  Notice that a keyboard only has a single <term>dumb</term> quote.  If you need these characters in isolation (<ie />, not in pairs), these are the best way to ensure you get what you want in all possible conversions.  Note that left and right braces (<q>curly brackets</q>) are previously defined with the <latex /> characters.</p>
 
         <fragment xml:id="delimiter-character">
-        Character |=
+        Character =
             element lsq {empty} |
             element rsq {empty} |
             element rq {empty} |
@@ -428,9 +404,6 @@
         <fragment xml:id="exotic-character">
         Character |=
             element ellipsis {empty} |
-            element asterisk {empty} |
-            element backtick {empty} |
-            element slash {empty} |
             element midpoint {empty} |
             element swungdash {empty} |
             element permille {empty} |
@@ -488,8 +461,6 @@
         </fragment>
 
         <fragment xml:id="character">
-            <fragment ref="xml-character" />
-            <fragment ref="latex-character" />
             <fragment ref="dash-character" />
             <fragment ref="fillin-character" />
             <fragment ref="delimiter-character" />
@@ -565,9 +536,7 @@
         Group |=
             element q {TextLong} |
             element sq {TextLong} |
-            element braces {TextLong} |
             element angles {TextLong} |
-            element brackets {TextLong} |
             element dblbrackets {TextLong}
         </fragment>
 
@@ -1341,7 +1310,7 @@
     <section>
         <title>Images and Graphics</title>
 
-        <p>Raster, and described by languages, plus 100<percent /> duplicates.  The <webwork /> variant is quite different.</p>
+        <p>Raster, and described by languages, plus 100% duplicates.  The <webwork /> variant is quite different.</p>
 
         <p>Note: the <c>ImageCode</c> pattern allows an <attr>xml:id</attr> attribute since it is used to construct a filename.</p>
 

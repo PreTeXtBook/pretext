@@ -1286,9 +1286,7 @@
         Group |=
             element q {TextLong} |
             element sq {TextLong} |
-            element braces {TextLong} |
             element angles {TextLong} |
-            element brackets {TextLong} |
             element dblbrackets {TextLong}
         
             
@@ -1365,24 +1363,6 @@
         
         
             
-        Character =
-            element ampersand {empty} |
-            element less {empty} |
-            element greater {empty}
-        
-            
-        Character |=
-            element hash {empty} |
-            element dollar {empty} |
-            element percent {empty} |
-            element tilde {empty} |
-            element underscore {empty} |
-            element circumflex {empty} |
-            element backslash {empty} |
-            element lbrace {empty} |
-            element rbrace {empty}
-        
-            
         Character |=
             element nbsp {empty} |
             element ndash {empty} |
@@ -1394,7 +1374,7 @@
             FillIn
         
             
-        Character |=
+        Character =
             element lsq {empty} |
             element rsq {empty} |
             element rq {empty} |
@@ -1408,9 +1388,6 @@
             
         Character |=
             element ellipsis {empty} |
-            element asterisk {empty} |
-            element backtick {empty} |
-            element slash {empty} |
             element midpoint {empty} |
             element swungdash {empty} |
             element permille {empty} |

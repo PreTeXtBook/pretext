@@ -2877,13 +2877,7 @@
       <element name="sq">
         <ref name="TextLong"/>
       </element>
-      <element name="braces">
-        <ref name="TextLong"/>
-      </element>
       <element name="angles">
-        <ref name="TextLong"/>
-      </element>
-      <element name="brackets">
         <ref name="TextLong"/>
       </element>
       <element name="dblbrackets">
@@ -3057,50 +3051,6 @@
       </zeroOrMore>
     </element>
   </define>
-  <define name="Character">
-    <choice>
-      <element name="ampersand">
-        <empty/>
-      </element>
-      <element name="less">
-        <empty/>
-      </element>
-      <element name="greater">
-        <empty/>
-      </element>
-    </choice>
-  </define>
-  <define name="Character" combine="choice">
-    <choice>
-      <element name="hash">
-        <empty/>
-      </element>
-      <element name="dollar">
-        <empty/>
-      </element>
-      <element name="percent">
-        <empty/>
-      </element>
-      <element name="tilde">
-        <empty/>
-      </element>
-      <element name="underscore">
-        <empty/>
-      </element>
-      <element name="circumflex">
-        <empty/>
-      </element>
-      <element name="backslash">
-        <empty/>
-      </element>
-      <element name="lbrace">
-        <empty/>
-      </element>
-      <element name="rbrace">
-        <empty/>
-      </element>
-    </choice>
-  </define>
   <define name="Character" combine="choice">
     <choice>
       <element name="nbsp">
@@ -3127,7 +3077,7 @@
   <define name="Character" combine="choice">
     <ref name="FillIn"/>
   </define>
-  <define name="Character" combine="choice">
+  <define name="Character">
     <choice>
       <element name="lsq">
         <empty/>
@@ -3156,15 +3106,6 @@
   <define name="Character" combine="choice">
     <choice>
       <element name="ellipsis">
-        <empty/>
-      </element>
-      <element name="asterisk">
-        <empty/>
-      </element>
-      <element name="backtick">
-        <empty/>
-      </element>
-      <element name="slash">
         <empty/>
       </element>
       <element name="midpoint">
