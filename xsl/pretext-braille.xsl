@@ -96,4 +96,29 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </html>
 </xsl:template>
 
+<!-- ################### -->
+<!-- Display Mathematics -->
+<!-- ################### -->
+
+
+<!-- Less is more -->
+<xsl:template match="me|men|md|mdn" mode="display-math-wrapper">
+    <xsl:param name="content" />
+    <xsl:copy-of select="$content" />
+</xsl:template>
+
+<xsl:template name="display-math-visual-blank-line"/>
+
+<!-- We do not look forward for clause-ending         -->
+<!-- punctuation, since we do not want punctuation    -->
+<!-- to be part of the translation to Nemeth Braille. -->
+<xsl:template match="*" mode="get-clause-punctuation"/>
+
+<!-- Then we xerox $text, effectively *not* removing  -->
+<!-- any punctuation.                                 -->
+<xsl:template name="drop-clause-punctuation">
+    <xsl:param name="text" />
+    <xsl:value-of select="$text" />
+</xsl:template>
+
 </xsl:stylesheet>
