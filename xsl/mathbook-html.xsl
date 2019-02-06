@@ -1621,30 +1621,38 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- h6, type name, number (if exists), title (if exists) -->
 <!-- REMARK-LIKE, COMPUTATION-LIKE, DEFINITION-LIKE, SOLUTION-LIKE, objectives (xref-content), outcomes (xref-content), EXAMPLE-LIKE, PROJECT-LIKE, exercise (inline), task (xref-content), fn (xref-content), biblio/note (xref-content)-->
+<!-- E.g. Corollary 4.1 (Leibniz, Newton).  The fundamental theorem of calculus. -->
 <xsl:template match="*" mode="heading-full">
     <h6 class="heading">
         <span class="type">
-            <xsl:apply-templates select="." mode="type-name" />
+            <xsl:apply-templates select="." mode="type-name"/>
         </span>
+        <!--  -->
         <xsl:variable name="the-number">
             <xsl:apply-templates select="." mode="number" />
         </xsl:variable>
         <xsl:if test="not($the-number='')">
             <xsl:text> </xsl:text>
             <span class="codenumber">
-                <xsl:value-of select="$the-number" />
+                <xsl:value-of select="$the-number"/>
             </span>
         </xsl:if>
-        <xsl:if test="title">
-            <xsl:text> </xsl:text>
-            <span class="title">
-                <xsl:apply-templates select="." mode="title-full" />
-            </span>
-        </xsl:if>
+        <!--  -->
         <xsl:if test="creator and (&THEOREM-FILTER; or &AXIOM-FILTER;)">
             <xsl:text> </xsl:text>
             <span class="creator">
-                <xsl:apply-templates select="." mode="creator-full" />
+                <xsl:text>(</xsl:text>
+                <xsl:apply-templates select="." mode="creator-full"/>
+                <xsl:text>)</xsl:text>
+            </span>
+        </xsl:if>
+        <!-- A period now, no matter which of 4 combinations we have above-->
+        <xsl:text>.</xsl:text>
+        <!-- A title carries its own punctuation -->
+        <xsl:if test="title">
+            <xsl:text> </xsl:text>
+            <span class="title">
+                <xsl:apply-templates select="." mode="title-full"/>
             </span>
         </xsl:if>
     </h6>
@@ -1656,6 +1664,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <h6 class="heading">
         <span class="codenumber">
             <xsl:apply-templates select="." mode="number" />
+            <xsl:text>.</xsl:text>
         </span>
         <xsl:if test="title">
             <xsl:text> </xsl:text>
@@ -1672,6 +1681,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <h6 class="heading">
         <span class="codenumber">
             <xsl:apply-templates select="." mode="serial-number" />
+            <xsl:text>.</xsl:text>
         </span>
         <xsl:if test="title">
             <xsl:text> </xsl:text>
@@ -1692,6 +1702,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text> </xsl:text>
         <span class="codenumber">
             <xsl:apply-templates select="." mode="serial-number" />
+            <xsl:text>.</xsl:text>
         </span>
         <xsl:if test="title">
             <xsl:text> </xsl:text>
@@ -1716,11 +1727,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- h6, type name, no number (even if exists), title (if exists)              -->
 <!-- eg, objectives is one-per-subdivison, max, so no need to display at birth -->
+<!-- NB: rather specific to "objectives" and "outcomes", careful               -->
 <!-- objectives and outcomes (when born) -->
 <xsl:template match="*" mode="heading-full-implicit-number">
     <h6 class="heading">
         <span class="type">
             <xsl:apply-templates select="." mode="type-name" />
+            <xsl:if test="title">
+                <xsl:text>:</xsl:text>
+            </xsl:if>
         </span>
         <!-- codenumber is implicit via placement -->
         <xsl:if test="title">
@@ -1733,12 +1748,35 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Not normally titled, but knowl content gives some indication -->
-<!-- blockquote, exercisegroup, proof, defined term -->
+<!-- NB: no punctuation, intended only for xref knowl content     -->
+<!-- blockquote, exercisegroup, defined term -->
 <xsl:template match="*" mode="heading-type">
     <h6 class="heading">
         <span class="type">
             <xsl:apply-templates select="." mode="type-name" />
         </span>
+    </h6>
+</xsl:template>
+
+<!-- A title or the type, with a period -->
+<!-- proof is the only known case       -->
+<xsl:template match="*" mode="heading-no-number">
+    <h6 class="heading">
+        <xsl:choose>
+            <xsl:when test="title">
+                <!-- comes with punctuation -->
+                <span class="title">
+                    <xsl:apply-templates select="." mode="title-full"/>
+                </span>
+            </xsl:when>
+            <xsl:otherwise>
+                <!-- supply a period -->
+                <span class="type">
+                    <xsl:apply-templates select="." mode="type-name" />
+                    <xsl:text>.</xsl:text>
+                </span>
+            </xsl:otherwise>
+        </xsl:choose>
     </h6>
 </xsl:template>
 
@@ -3516,14 +3554,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- When born use this heading -->
 <!-- Optionally titled          -->
 <xsl:template match="proof" mode="heading-birth">
-    <xsl:choose>
-        <xsl:when test="title">
-            <xsl:apply-templates select="." mode="heading-title" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:apply-templates select="." mode="heading-type" />
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="." mode="heading-no-number"/>
 </xsl:template>
 
 <!-- Heading for interior of xref-knowl content -->
