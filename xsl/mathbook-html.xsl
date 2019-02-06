@@ -9599,7 +9599,7 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
 <!-- The "one-css" template is defined elsewhere -->
 <xsl:template name="css">
     <link href="{$html.css.server}/mathbook/stylesheets/{$html.css.file}" rel="stylesheet" type="text/css" />
-    <link href="https://aimath.org/mathbook/mathbook-add-on2.css" rel="stylesheet" type="text/css" />
+    <link href="https://aimath.org/mathbook/mathbook-add-on3.css" rel="stylesheet" type="text/css" />
     <!-- If extra CSS is specified, then unpack multiple CSS files -->
     <!-- The prepared list (extra blank space) will cause failure  -->
     <!-- if $html.css.extra is empty (i.e. not specified)          -->
