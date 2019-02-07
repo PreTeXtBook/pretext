@@ -121,4 +121,22 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="$text" />
 </xsl:template>
 
+<!-- ################ -->
+<!-- Cross-References -->
+<!-- ################ -->
+
+<!-- This is just a device for LaTeX conversion -->
+<xsl:template match="*" mode="xref-number">
+    <xsl:apply-templates select="." mode="number"/>
+</xsl:template>
+
+<!-- Nothing much to be done, we just -->
+<!-- xerox the text representation    -->
+<xsl:template match="*" mode="xref-link">
+    <xsl:param name="target" />
+    <xsl:param name="content" />
+
+    <xsl:copy-of select="$content"/>
+</xsl:template>
+
 </xsl:stylesheet>
