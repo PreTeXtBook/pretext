@@ -139,4 +139,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:copy-of select="$content"/>
 </xsl:template>
 
+<!-- ########## -->
+<!-- Quotations -->
+<!-- ########## -->
+
+<!-- liblouis recognizes the single/double, left/right -->
+<!-- smart quotes so we just let wander in from the    -->
+<!-- standard HTML conversion, covering the elements:  -->
+<!--                                                   -->
+<!--   Characters: "lq", "rq", "lsq", "rsq"            -->
+<!--   Grouping: "q", "sq"                             -->
+
 </xsl:stylesheet>
