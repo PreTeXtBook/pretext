@@ -1225,6 +1225,7 @@ the xsltproc executable.
 
         <section permid="Bcd">
             <title>Some Facts and Figures</title>
+            <idx>footnotes</idx>
 
             <!-- This is not implemented
             This Sage code will be (a) hidden and (b) automatically executed
