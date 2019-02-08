@@ -4983,6 +4983,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- element providing the overall caption             -->
 <!-- The serial number is a sub-number, (a), (b), (c), -->
 <!-- *Always* with the parenthetical formatting        -->
+<!-- Debatable if parentheses should come from here    -->
 
 
 <!-- In this case the structure number is the          -->

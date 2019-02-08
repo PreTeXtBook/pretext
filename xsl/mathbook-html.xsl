@@ -2551,6 +2551,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text> </xsl:text>
                     <span class="codenumber">
                         <xsl:apply-templates select="." mode="number"/>
+                        <xsl:text>.</xsl:text>
                     </span>
                     <xsl:text> </xsl:text>
                     <xsl:apply-templates select="." mode="title-full" />
@@ -6301,6 +6302,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text> </xsl:text>
         <span class="codenumber">
             <xsl:apply-templates select="parent::*" mode="number"/>
+            <xsl:text>.</xsl:text>
         </span>
         <xsl:text> </xsl:text>
         <xsl:apply-templates />
@@ -6323,7 +6325,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="right-margin" select="$right-margin" />
             </xsl:call-template>
         </xsl:if>
-        <!-- no heading info in subcaption -->
+        <!-- no type info at start of a subcaption    -->
+        <!-- parentheses come with the number (maybe  -->
+        <!-- they shouldn't?), but in any event, do   -->
+        <!-- not add a period onto subcaption numbers -->
         <span class="codenumber">
             <xsl:apply-templates select="parent::*" mode="serial-number"/>
         </span>
