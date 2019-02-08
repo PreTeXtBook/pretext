@@ -142,6 +142,7 @@
 
             <paragraphs>
                 <title><tag>fn</tag>, footnotes</title>
+                <idx>footnotes</idx>
                 <p>A footnote can be inserted in a paragraph and a mark will be left behind.  Where the content of the footnote goes depends on the capabilities of the output format.  Because a footnote allows you to begin a new piece of text <em>anywhere</em>, it can be difficult to handle technically.  For this reason it is banned from places like titles and its possible content is limited (for openers, no paragraphs).</p>
 
                 <p>A footnote is the farthest thing from structured writing that we can think of.  It can go anywhere.  Resist the temptation to use it, and your writing will improve.  We frequently entertain the thought of making footnotes impossible in <pretext />.  See the <tag>aside</tag> element for a possible alternative.</p>
