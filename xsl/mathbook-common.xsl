@@ -7355,6 +7355,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Poetry Utilities -->
 <!-- ################ -->
 
+<!-- These inherit from their containers,    -->
+<!-- which is why "poem" has a default value -->
+
 <xsl:template match="poem|poem/author|stanza|stanza/line" mode="poem-indent">
     <xsl:choose>
         <xsl:when test="@indent">

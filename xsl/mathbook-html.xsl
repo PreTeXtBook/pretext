@@ -1875,7 +1875,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- this.  Likely replace use of this template        -->
 <!-- by the template "heading-title" above             -->
 <xsl:template match="poem" mode="heading-poem">
-    <div class="poemtitle" style="font-weight: bold; text-align: center; font-size: 120%">
+    <div class="title">
         <xsl:apply-templates select="." mode="title-full"/>
     </div>
 </xsl:template>
@@ -1993,13 +1993,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:attribute name="id">
                     <xsl:apply-templates select="." mode="perm-id" />
                 </xsl:attribute>
-                <!-- this horrible hack should go away once better CSS is in place -->
-                <!-- likely this particular version never gets used                -->
-                <xsl:if test="self::poem">
-                    <xsl:attribute name="style">
-                        <xsl:text>display: table; width: auto; max-width: 90%; margin: 0 auto;</xsl:text>
-                    </xsl:attribute>
-                </xsl:if>
                 <xsl:apply-templates select="." mode="hidden-knowl-link">
                     <xsl:with-param name="placement" select="$placement"/>
                 </xsl:apply-templates>
@@ -2035,13 +2028,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:attribute name="class">
                     <xsl:apply-templates select="." mode="body-css-class" />
                 </xsl:attribute>
-                <!-- this horrible hack should go away once better CSS is in place -->
-                <!-- likely this particular version never gets used                -->
-                <xsl:if test="self::poem">
-                    <xsl:attribute name="style">
-                        <xsl:text>display: table; width: auto; max-width: 90%; margin: 0 auto;</xsl:text>
-                    </xsl:attribute>
-                </xsl:if>
                 <xsl:apply-templates select="." mode="duplicate-hidden-knowl-link" />
             </xsl:element>
         </xsl:when>
@@ -2393,26 +2379,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- https://github.com/BooksHTML/mathbook-assets/issues/65 -->
 
 <xsl:template match="poem/author">
-    <xsl:variable name="alignment">
-        <xsl:apply-templates select="." mode="poem-halign"/>
-    </xsl:variable>
-    <xsl:element name="div">
+    <div>
         <xsl:attribute name="class">
-            <xsl:text>poemauthor</xsl:text>
-            <xsl:value-of select="$alignment" />
-        </xsl:attribute>
-        <xsl:attribute name="style">
-            <xsl:text>font-style: italic; padding-bottom: 20px; text-align: </xsl:text>
-            <xsl:value-of select="$alignment" />
+            <xsl:text>author</xsl:text>
+            <xsl:text> </xsl:text>
+            <xsl:apply-templates select="." mode="poem-halign"/>
         </xsl:attribute>
         <xsl:apply-templates/>
-    </xsl:element>
+    </div>
 </xsl:template>
 
 <xsl:template match="stanza">
-    <div class="stanza" style="padding-bottom: 20px">
+    <div class="stanza">
         <xsl:if test="title">
-            <div class="stanzatitle" style="font-weight: bold; text-align: center">
+            <div class="title">
                 <xsl:apply-templates select="." mode="title-full"/>
             </div>
         </xsl:if>
@@ -2427,29 +2407,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="indentation">
         <xsl:apply-templates select="." mode="poem-indent"/>
     </xsl:variable>
-    <xsl:element name="div">
+    <div>
         <xsl:attribute name="class">
             <xsl:text>poemline</xsl:text>
-            <xsl:value-of select="$alignment" />
+            <xsl:apply-templates select="." mode="poem-halign"/>
         </xsl:attribute>
-        <xsl:attribute name="style">
-            <!-- Hanging indentation for overly long lines -->
-            <xsl:text>margin-left: 4em; text-indent: -4em; </xsl:text>
-            <xsl:text>text-align: </xsl:text>
-            <xsl:value-of select="$alignment" />
-        </xsl:attribute>
-        <xsl:if test="$alignment='left'"><!-- Left Alignment: Indent from Left -->
+        <!-- Left Alignment: Indent from Left -->
+        <xsl:if test="$alignment='left'">
             <xsl:call-template name="poem-line-indenting">
-                <xsl:with-param name="count"><xsl:value-of select="$indentation"/></xsl:with-param>
+                <xsl:with-param name="count" select="$indentation"/>
             </xsl:call-template>
         </xsl:if>
-        <xsl:apply-templates/><!-- Center Alignment: Ignore Indentation -->
-        <xsl:if test="$alignment='right'"><!-- Right Alignment: Indent from Right -->
+        <!-- Center Alignment: Ignore Indentation -->
+        <xsl:apply-templates/>
+        <!-- Right Alignment: Indent from Right -->
+        <xsl:if test="$alignment='right'">
             <xsl:call-template name="poem-line-indenting">
-                <xsl:with-param name="count"><xsl:value-of select="$indentation"/></xsl:with-param>
+                <xsl:with-param name="count" select="$indentation"/>
             </xsl:call-template>
         </xsl:if>
-    </xsl:element>
+    </div>
 </xsl:template>
 
 <xsl:template name="poem-line-indenting">
@@ -2457,7 +2434,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <xsl:when test="(0 >= $count)"/>
         <xsl:otherwise>
-            <span class="tab" style="margin-left: 2em"></span>
+            <span class="tab"/>
             <xsl:call-template name="poem-line-indenting">
                 <xsl:with-param name="count" select="$count - 1"/>
             </xsl:call-template>
@@ -3961,12 +3938,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:apply-templates select="." mode="perm-id" />
                 </xsl:attribute>
             </xsl:if>
-            <!-- this horrible hack should go away once better CSS is in place -->
-            <xsl:if test="self::poem">
-                <xsl:attribute name="style">
-                    <xsl:text>display: table; width: auto; max-width: 90%; margin: 0 auto;</xsl:text>
-                </xsl:attribute>
-            </xsl:if>
             <!-- If visible, heading interior to article -->
             <xsl:if test="$block-type = 'visible'">
                 <xsl:apply-templates select="." mode="heading-birth" />
@@ -5262,7 +5233,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- duplicate the title, which is handled specially   -->
 <!-- max-width is at 100%, not 90%                     -->
 <xsl:template match="poem" mode="panel-html-box">
-    <div class="poem" style="display: table; width: auto; max-width: 100%; margin: 0 auto;">
+    <div class="poem">
         <xsl:apply-templates select="stanza"/>
         <xsl:apply-templates select="author"/>
     </div>
