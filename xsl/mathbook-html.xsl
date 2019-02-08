@@ -9027,7 +9027,9 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
     <div id="sidebar-left" class="sidebar" role="navigation">
         <div class="sidebar-content">
             <nav id="toc">
+              <ul>
                  <xsl:apply-templates select="." mode="toc-items" />
+              </ul>
             </nav>
             <div class="extras">
                 <nav>
@@ -9101,7 +9103,7 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
                     <xsl:apply-templates select="." mode="perm-id" />
                 </xsl:variable>
                 <!-- The link itself -->
-                <h2 class="{$class}">
+                <li class="{$class}">
                     <xsl:element name="a">
                         <xsl:attribute name="href">
                             <xsl:value-of select="$outer-url" />
@@ -9120,7 +9122,6 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
                             <xsl:apply-templates select="." mode="title-short" />
                         </span>
                     </xsl:element>
-                </h2>
                 <!-- Any "part" or "backmatter" displayed as top-level items     -->
                 <!-- have children that are also considered as top-level items,  -->
                 <!-- so we do not examine the children of "part" or "backmatter" -->
@@ -9169,6 +9170,7 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
                         </ul>
                     </xsl:if>
                 </xsl:if>  <!-- end $toc-level > 1 -->
+                </li>
             </xsl:if>  <!-- end structural, level 1 -->
         </xsl:for-each>
     </xsl:if>
