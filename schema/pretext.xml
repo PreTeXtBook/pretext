@@ -19,6 +19,31 @@
             <p>Junk</p>
         </frontmatter>
 
+    <introduction>
+        <p>This is a literate programming version of the <init>RELAX-NG</init> schema for <pretext/>.  As such, it is used to generate the <init>RELAX-NG</init> compact syntax version (<c>pretext.rnc</c>) and other versions are derived from the compact version with standard tools.</p>
+
+        <p>We intend this to be helpful, for both authors and developers.  It is essentially a contract between the two.  If an author's source validates against the schema, then a developer's code should render the content accurately, or warn about why it cannot.  That said, it is still a work in progress.<ul>
+            <li>New features are not added until they are reasonably stable.  Validating the sample article can be a good way to see what these are.</li>
+            <li>Even for stable features, the schema will sometimes lag behind the code.</li>
+            <li>There will be other inaccuracies here, so reports or pull requests are welcome.</li>
+        </ul></p>
+
+        <p>The <init>RELAX-NG</init> syntax is built on <term>patterns</term>, which describe how <init>XML</init> elements and attributes may be combined.  It begins with a <c>start</c> pattern.  Patterns separated by commas must appear in that order.  Elements separated by a vertical bar represent a choice.  Parentheses are used for grouping.  Braces are basic syntax, reminiscent of the syntax for Java.  An equals sign is assignment and <c>|=</c> is a continuation of an assignment.  Finally, optional and/or multiple occurences can be specified with modifiers:<dl>
+            <li>
+                <title><c>?</c></title>
+                <p>Zero or one.  Optional, at most one.</p>
+            </li>
+            <li>
+                <title><c>*</c></title>
+                <p>Zero or more.  Optional, with no limit.</p>
+            </li>
+            <li>
+                <title><c>+</c></title>
+                <p>One or more.  Required, with no limit.</p>
+            </li>
+        </dl></p>
+    </introduction>
+
     <section>
         <title>Gross Structure</title>
 
