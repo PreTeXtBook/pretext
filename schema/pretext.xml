@@ -5,21 +5,16 @@
 <!-- * = zero or more   -->
 <!-- + = one or more    -->
 
-<mathbook>
+<pretext>
 
     <docinfo>
         <cross-references text="type-global" />
     </docinfo>
 
-    <!--
-    The article element is top-level for anything short of a book.
-    There is a book element, which is not demonstrated here.
-    The "xml:id" attribute will be used for the filename of the
-    HTML output.
-    -->
     <article xml:id="pretext">
-        <title>MathBook XML RELAX-NG Schema</title>
+        <title>PreTeXt RELAX-NG Schema</title>
 
+        <!-- necessary to get title to appear/ -->
         <frontmatter>
             <p>Junk</p>
         </frontmatter>
@@ -27,7 +22,7 @@
     <section>
         <title>Gross Structure</title>
 
-        <p>A MathBook XML document is always a single <c>mathbook</c> element below the root.  There are two divisions, a <c>docinfo</c>, which is a database of sorts about the document, along with a sibling element that indicates the type of the document and contains all the content.</p>
+        <p>A <pretext/> document is always a single <c>mathbook</c> element below the root.  There are two divisions, a <c>docinfo</c>, which is a database of sorts about the document, along with a sibling element that indicates the type of the document and contains all the content.  (2019-02-08:  the root element may be <tag>pretext</tag>, and eventually <tag>mathbook</tag> will be deprecated.)</p>
 
         <fragment xml:id="gross-structure">
         start =
@@ -372,7 +367,7 @@
             element lq {empty}
         </fragment>
 
-        <p>A space is a space.  But sometimes you want a space between two associated items which will not get split across two lines (<eg /> Chapter<nbsp />23).  An element will create a <term>non-breaking space</term> using the right technique for the conversion at hand.</p>
+        <p>A space is a space.  But sometimes you want a space between two associated items which will not get split across two lines (<eg/>, Chapter<nbsp />23).  An element will create a <term>non-breaking space</term> using the right technique for the conversion at hand.</p>
 
         <p>There is a variety of dashes of various lengths.  Use the keyboard character for a <term>hyphen</term>, use an <term>ndash</term> to seperate a range of numbers or dates, and use an <term>mdash</term> as punctuation within a sentence to isolate a clause.  These are implemented differently for different conversions, so their use is strongly encouraged.</p>
 
@@ -1585,7 +1580,13 @@
                 (attribute name {text},
                 attribute evaluator {text}?,
                 attribute width {text}?,
-                attribute category {"angle" | "decimal" | "exponent" | "formula" | "fraction" | "inequality" | "integer" | "interval" | "logarithm" | "limit" | "number" | "point" | "syntax" | "quantity" | "vector"}?,
+                attribute category {
+                                    "angle" | "decimal" | "exponent"
+                                  | "formula" | "fraction" | "inequality"
+                                  | "integer" | "interval" | "logarithm"
+                                  | "limit" | "number" | "point"
+                                  | "syntax" | "quantity" | "vector"
+                                  }?,
                 attribute form {"popup"|"buttons"|"none"}?) |
                 (attribute form {"essay"},
                 attribute width {text}?)
@@ -2152,5 +2153,12 @@
         </fragment>
     </section>
 
+    <backmatter>
+        <index>
+            <title>Index</title>
+            <index-list />
+        </index>
+    </backmatter>
+
     </article>
-</mathbook>
+</pretext>

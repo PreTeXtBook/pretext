@@ -48,13 +48,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- and we process it with the chunking template called below              -->
 <!-- Note that "docinfo" is at the same level and not structural, so killed -->
 <xsl:template match="/">
-    <xsl:apply-templates select="mathbook" mode="generic-warnings" />
-    <xsl:apply-templates select="mathbook" mode="deprecation-warnings" />
-    <xsl:apply-templates select="mathbook" />
+    <xsl:apply-templates select="$root" mode="generic-warnings" />
+    <xsl:apply-templates select="$root" mode="deprecation-warnings" />
+    <xsl:apply-templates select="$root" />
 </xsl:template>
 
 <!-- Locate roots by the filename attribute -->
-<xsl:template match="mathbook">
+<xsl:template match="mathbook|pretext">
     <xsl:apply-templates select="//fragment[@filename]" />
 </xsl:template>
 
