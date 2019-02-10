@@ -1943,7 +1943,8 @@
                     <li>Find some moderately complicated mathematics, such as in the <q>Mathematics</q> section of the sample article, or your own project, or the sample from MathJax copied below.</li>
                     <li>Bring up the context menu on that display (a mouse right-click for most).</li>
                     <li>Turn on the <c>Accessibility > Explorer > Activate</c> menu item.  The page will reload, and the <c>Explorer</c> menu item will earn many more menu items.  This setting is reasonably sticky, so you should not have to do this repeatedly.  Having this on will incur some processing time as part of each page load, so you may want to turn it off later.</li>
-                    <li>Turn on the <c>Accessibility > Explorer > Subtitles</c> menu item.</li>
+                    <li>Turn on the <c>Accessibility > Explorer > Speech Output</c> menu item.</li>
+                    <li>Turn on the <c>Accessibility > Explorer > Subtitles</c> menu item.  (If <c>Subtitles</c> is <q>greyed out</q>, try toggling <c>Speech Output</c>.)</li>
                     <li><c>TAB</c> until some mathematics is given focus (a discrete border appears).</li>
                     <li><c>SHIFT-SPACE</c> will activate exploration of the mathematics with the Explorer.  A subtitle, with an aural rendering of the mathematics, will appear below the display.</li>
                     <li>You can navigate (explore) the expression tree with the up, down, left, and right arrow keys.  The subtitles will change as you do this.</li>
