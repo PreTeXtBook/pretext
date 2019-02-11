@@ -3237,7 +3237,7 @@ and condider having this replace line 3338 of the general code (which uses .head
     max-width: 90%;
 }
 
-.pretext-content .poem > .title {
+.pretext-content .poem > .heading > .title {
     font-weight: bold;
     text-align: center;
     font-size: 120%;
@@ -3257,9 +3257,10 @@ and condider having this replace line 3338 of the general code (which uses .head
     text-align: right;
 }
 
-.pretext-content .poem .stanza > .title {
+.pretext-content .poem .stanza > .heading > .title {
     font-weight: bold;
     text-align: center;
+    font-size: 110%;
 }
 .pretext-content .poem .stanza + .stanza {
     margin-top: 1em;
