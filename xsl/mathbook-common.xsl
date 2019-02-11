@@ -1268,7 +1268,7 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 <!-- to define a user variable as empty, and then supply defaults -->
 <!-- to an internal variable.                                     -->
 
-<xsl:variable name="html.js.server" select="''"/>
+<xsl:variable name="html.css.file" select="''"/>
 
 <!-- The old (incomplete) methods for duplicating components of -->
 <!-- exercises have been deprecated as of 2018-11-07.  We keep  -->
@@ -9954,14 +9954,6 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'the &quot;solution-list&quot; element has been deprecated, please switch to using the improved &quot;solutions&quot; division in your back matter (and elsewhere)'" />
     </xsl:call-template>
     <!--  -->
-    <!-- 2018-07-27  transitional  html.js.server  removed -->
-    <!-- Still exists in "Variable Bad Bank" for use here  -->
-    <xsl:call-template name="parameter-deprecation-message">
-        <xsl:with-param name="date-string" select="'2018-07-27'" />
-        <xsl:with-param name="message" select="'the transitional  html.js.server  parameter has been removed'" />
-            <xsl:with-param name="incorrect-use" select="($html.js.server != '')" />
-    </xsl:call-template>
-    <!--  -->
     <!-- 2018-09-26  appendix subdivision confusion resolved -->
     <xsl:call-template name="deprecation-message">
         <xsl:with-param name="occurrences" select="$root/article/backmatter/appendix/section" />
@@ -10129,6 +10121,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="occurrences" select="$document-root//brackets" />
         <xsl:with-param name="date-string" select="'2019-02-06'" />
         <xsl:with-param name="message" select="'the &quot;brackets&quot; element is no longer necessary, simply replace with bare &quot;[&quot; and &quot;]&quot; characters'"/>
+    </xsl:call-template>
+    <!-- 2019-02-10  obsolete  html.css.file  removed -->
+    <!-- Still exists in "Variable Bad Bank" for use here  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2019-02-10'" />
+        <xsl:with-param name="message" select="'the obsolete  html.css.file  parameter has been removed, please use html.css.colorfile to choose a color scheme'" />
+            <xsl:with-param name="incorrect-use" select="($html.css.file != '')" />
     </xsl:call-template>
 </xsl:template>
 
