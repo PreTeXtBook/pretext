@@ -239,4 +239,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--   Characters: "lq", "rq", "lsq", "rsq"            -->
 <!--   Grouping: "q", "sq"                             -->
 
+<!-- ###### -->
+<!-- Images -->
+<!-- ###### -->
+
+<!-- We leave a placeholder for images, temporarily -->
+<xsl:template match="image">
+    <xsl:text>[image]</xsl:text>
+</xsl:template>
+
 </xsl:stylesheet>
