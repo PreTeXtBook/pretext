@@ -1388,7 +1388,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <!-- knowl or traditional hyperlink     -->
                         <!-- mutually exclusive by construction -->
                         <xsl:if test="knowl">
-                            <xsl:attribute name="knowl">
+                            <xsl:attribute name="data-knowl">
                                 <xsl:value-of select="knowl" />
                             </xsl:attribute>
                         </xsl:if>
@@ -2062,13 +2062,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     <xsl:element name="a">
         <!-- empty, indicates content *not* in a file -->
-        <xsl:attribute name="knowl" />
+        <xsl:attribute name="data-knowl" />
         <!-- id-ref class means content is in div referenced by id -->
         <xsl:attribute name="class">
             <xsl:text>id-ref</xsl:text>
         </xsl:attribute>
         <!-- and the id via a template for consistency -->
-        <xsl:attribute name="refid">
+        <xsl:attribute name="data-refid">
             <xsl:apply-templates select="." mode="hidden-knowl-id" />
         </xsl:attribute>
         <!-- the object could be the target of an in-context link, and     -->
@@ -2122,7 +2122,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The link for a duplicate hidden knowl -->
 <xsl:template match="*" mode="duplicate-hidden-knowl-link">
     <xsl:element name="a">
-        <xsl:attribute name="knowl">
+        <xsl:attribute name="data-knowl">
             <xsl:apply-templates select="." mode="hidden-knowl-filename" />
         </xsl:attribute>
         <!-- add HTML title attribute to the link -->
@@ -6427,7 +6427,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:choose>
                     <xsl:when test="$knowl='true'">
                         <!-- build a modern knowl -->
-                        <xsl:attribute name="knowl">
+                        <xsl:attribute name="data-knowl">
                             <xsl:apply-templates select="$target" mode="xref-knowl-filename" />
                         </xsl:attribute>
                     </xsl:when>
@@ -8279,7 +8279,7 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
             <!-- favicon -->
             <xsl:call-template name="favicon"/>
             <!-- jquery used by sage, webwork, knowls -->
-            <xsl:call-template name="jquery-sagecell" />
+            <xsl:call-template name="sagecell-code" />
             <xsl:call-template name="mathjax" />
             <!-- webwork's iframeResizer needs to come before sage -->
             <xsl:if test="$document-root//webwork-reps">
@@ -8387,7 +8387,7 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
             <meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" />
 
             <!-- jquery used by sage, webwork, knowls -->
-            <xsl:call-template name="jquery-sagecell" />
+            <xsl:call-template name="sagecell-code" />
             <xsl:call-template name="mathjax" />
             <!-- webwork's iframeResizer needs to come before sage -->
             <xsl:if test="$document-root//webwork-reps">
@@ -9328,7 +9328,7 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
 <!-- We never know if a Sage cell might be inside a knowl, -->
 <!-- so we load the relevant JavaScript onto every page if -->
 <!-- a cell occurs *anywhere* in the entire document       -->
-<xsl:template name="jquery-sagecell">
+<xsl:template name="sagecell-code">
     <xsl:if test="$document-root//sage">
         <script src="https://sagecell.sagemath.org/embedded_sagecell.js"></script>
     </xsl:if>
