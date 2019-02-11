@@ -9959,7 +9959,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="date-string" select="'2018-07-10'" />
         <xsl:with-param name="message" select="'the obsolete  html.css.file  parameter has been removed, please use html.css.colorfile to choose a color scheme'" />
             <xsl:with-param name="incorrect-use" select="($html.css.file != '')" />
-</xsl:call-template>
+    </xsl:call-template>
     <!--  -->
     <!-- 2018-09-26  appendix subdivision confusion resolved -->
     <xsl:call-template name="deprecation-message">

@@ -9602,7 +9602,6 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
 <xsl:template name="css">
     <link href="{$html.css.server}/css/{$html.css.version}/pretext.css" rel="stylesheet" type="text/css" />
     <link href="{$html.css.server}/css/{$html.css.version}/pretext_add_on.css" rel="stylesheet" type="text/css" />
-    <link href="{$html.css.server}/css/{$html.css.version}/{$html.css.colorfile}" rel="stylesheet" type="text/css" />
     <link href="{$html.css.server}/css/{$html.css.version}/toc.css" rel="stylesheet" type="text/css" />
     <link href="{$html.css.server}/css/{$html.css.version}/{$html.css.colorfile}" rel="stylesheet" type="text/css" />
     <link href="{$html.css.server}/css/{$html.css.version}/setcolors.css" rel="stylesheet" type="text/css" />
