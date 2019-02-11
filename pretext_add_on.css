@@ -3088,32 +3088,6 @@ http://mathbook.pugetsound.edu/examples/sample-article/html/interesting-corollar
     padding-bottom: 5px;
 }
 
-/* to enable hovering over aside-like */
-/* div.page, main.main, body.mathbook-article, */
-/* omitted, because that was a misguided way to handle asides 
-**
-**
-body.mathbook-book, body.mathbook-article, .pretext-content section.chapter, .pretext-content section.introduction, .pretext-content section.conclusion, .pretext-content section.section, .pretext-content section.subsection, .pretext-content section.subsubsection, .pretext-content article, #content.pretext-content {
-    pointer-events: none;
-}
-html nav, html header, .pretext-content article.aside-like, .pretext-content *,
-body.mathbook-book .MathJax_Menu, body.mathbook-article .MathJax_Menu {
-    pointer-events: auto;
-}
-.pretext-content ol, .pretext-content ul {
-    pointer-events: none;
-}
-.pretext-content ol li, .pretext-content ul li {
-    pointer-events: auto;
-}
-div, span, button,
-.pretext-content div, .pretext-content span, .pretext-content button {
-    pointer-events: auto;
-}
-**
-**
-*/
-
 /* used when knowl content is hidden in the page */
 .pretext-content .hidden-content, .mathbook-book .hidden-content, .hidden-content {
     display: none;
@@ -3244,53 +3218,64 @@ and condider having this replace line 3338 of the general code (which uses .head
     .has-sidebar-left.mathbook-loaded.sidebar-left-open .page .main #content { margin-top:0 }
     .has-sidebar-left.mathbook-loaded.sidebar-left-open .page .main #content.pretext-content section { margin-top:1em }
     .has-sidebar-left.mathbook-loaded.sidebar-left-open .page .main #content.pretext-content section .heading { margin-top:0 }
-/*
-    .has-sidebar-left.mathbook-loaded.sidebar-left-open .page .main {
-        font-size: 0.85em;
-    }
-*/
 }
-
-/*
-.has-sidebar-left.mathbook-loaded.sidebar-left-open .page .main { margin-left:0px; left:auto; }
-*/
-
-/* Colors for the above
-.pretext-content .summary-links a, .pretext-content .summary-links a:link, .pretext-content .summary-links a:visited {
-  color: #20477b;
-}
-
-.pretext-content .summary-links a:hover {
-  color: white;
-  background: #20477b;
-}
-
-.pretext-content .summary-links a .codenumber {
-  color: #707070;
-
-*/
-
-/* COLORS */
-
-/* delete the first one of both as obsolete */
-/*
-.pretext-content a.xref,
-.pretext-content a.internal {
-    color: #900;
-}
-.pretext-content a.url,
-.pretext-content a.external {
-    color: #22a;
-}
-*/
-
-/*
-To delete when moving to pretextbook.org:
-
-all .hidden-knowl-wrapper
-*/
 
 .ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-draggable.ui-resizable {
     left: 0 !important;
     top: 0 !important;
 }
+
+/* style for poems */
+
+.pretext-content .poem {
+    display: table;
+    margin-top: 1.5em !important;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 0;
+    width: auto;
+    max-width: 90%;
+}
+
+.pretext-content .poem > .title {
+    font-weight: bold;
+    text-align: center;
+    font-size: 120%;
+}
+
+.pretext-content .poem .author {
+    font-style: italic;
+    margin-top: 1em;
+}
+.pretext-content .poem .author.left {
+    text-align: left;
+}
+.pretext-content .poem .author.center {
+    text-align: center;
+}
+.pretext-content .poem .author.right {
+    text-align: right;
+}
+
+.pretext-content .poem .stanza > .title {
+    font-weight: bold;
+    text-align: center;
+}
+.pretext-content .poem .stanza + .stanza {
+    margin-top: 1em;
+}
+
+.pretext-content .poem .poemlineleft {
+    margin-left: 4em;
+    text-indent: -4em;
+}
+.pretext-content .poem .poemlinecenter {
+    text-align: center;
+}
+.pretext-content .poem .poemlineright {
+    text-align: right;
+}
+.pretext-content .poem .tab {
+    margin-left: 2em;
+}
+
