@@ -4068,7 +4068,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="heading-type" />
 </xsl:template>
 
-<!-- Paragraphs, without lists within -->
+<!-- Paragraphs, without lists within   -->
+<!-- Coordinate with simplified version -->
+<!-- in the conversion to Braille       -->
 <xsl:template match="p" mode="body">
     <xsl:param name="block-type" />
     <xsl:param name="b-original" select="true()" />

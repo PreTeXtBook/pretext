@@ -140,6 +140,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- ########## -->
+<!-- Paragraphs -->
+<!-- ########## -->
+
+<!-- We do not worry about lists, display math, or code -->
+<!-- displays which PreTeXt requires inside paragraphs. -->
+<!-- Following will create non-validating HTML, but     -->
+<!-- hopefully our tools will not care.                 -->
+<xsl:template match="p" mode="body">
+    <p>
+        <xsl:apply-templates/>
+    </p>
+</xsl:template>
+
+<!-- ########## -->
 <!-- Quotations -->
 <!-- ########## -->
 
