@@ -689,11 +689,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Other divisions (eg, colophon, preface) will follow   -->
 <!-- This is all within a .frontmatter class for CSS       -->
 <xsl:template match="titlepage">
+    <xsl:variable name="b-has-subtitle" select="parent::frontmatter/parent::*/subtitle"/>
     <h1 class="heading">
         <span class="title">
             <xsl:apply-templates select="parent::frontmatter/parent::*" mode="title-full" />
+            <xsl:if test="$b-has-subtitle">
+                <xsl:text>:</xsl:text>
+            </xsl:if>
         </span>
-        <xsl:if test="parent::frontmatter/parent::*/subtitle">
+        <xsl:if test="$b-has-subtitle">
+            <xsl:text> </xsl:text>
             <span class="subtitle">
                 <xsl:apply-templates select="parent::frontmatter/parent::*" mode="subtitle" />
             </span>
@@ -5591,12 +5596,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                         <xsl:attribute name="href">
                                             <xsl:apply-templates select="$document-root" mode="containing-filename" />
                                         </xsl:attribute>
+                                        <xsl:variable name="b-has-subtitle" select="boolean($document-root/subtitle)"/>
                                         <span class="title">
                                             <!-- Do not use shorttitle in masthead,  -->
                                             <!-- which is much like cover of a book  -->
                                             <xsl:apply-templates select="$document-root" mode="title-simple" />
+                                            <xsl:if test="$b-has-subtitle">
+                                                <xsl:text>:</xsl:text>
+                                            </xsl:if>
                                         </span>
-                                        <xsl:if test="normalize-space($document-root/subtitle)">
+                                        <xsl:if test="$b-has-subtitle">
+                                            <xsl:text> </xsl:text>
                                             <span class="subtitle">
                                                 <xsl:apply-templates select="$document-root" mode="subtitle" />
                                             </span>
@@ -8330,12 +8340,17 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
                                     <xsl:attribute name="href">
                                         <xsl:apply-templates select="$document-root" mode="containing-filename" />
                                     </xsl:attribute>
+                                    <xsl:variable name="b-has-subtitle" select="boolean($document-root/subtitle)"/>
                                     <span class="title">
                                         <!-- Do not use shorttitle in masthead,  -->
                                         <!-- which is much like cover of a book  -->
                                         <xsl:apply-templates select="$document-root" mode="title-simple" />
+                                        <xsl:if test="$b-has-subtitle">
+                                            <xsl:text>:</xsl:text>
+                                        </xsl:if>
                                     </span>
-                                    <xsl:if test="normalize-space($document-root/subtitle)">
+                                    <xsl:if test="$b-has-subtitle">
+                                        <xsl:text> </xsl:text>
                                         <span class="subtitle">
                                             <xsl:apply-templates select="$document-root" mode="subtitle" />
                                         </span>
