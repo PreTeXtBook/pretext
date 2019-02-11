@@ -1,0 +1,85 @@
+
+/* This file assigns the main colors, using variables that
+   have been set previously. */
+
+#masthead #title-container > .heading, #masthead .title-container > .heading,#masthead #title-container > .heading a:link, #masthead #title-container > .heading a:visited, #masthead .title-container > .heading a:link, #masthead .title-container > .heading a:visited, #masthead #title-container > .heading a:hover, #masthead #title-container > .heading a:focus, #masthead .title-container > .heading a:hover, #masthead .title-container > .heading a:focus, #masthead #logo-link:empty:hover:before, #masthead .logo-link:empty:hover:before, #masthead #byline a:hover, #masthead #byline a:focus, #masthead .byline a:hover, #masthead .byline a:focus {
+  color: #2a5ea4;
+  color: var(--documenttitle);
+}
+
+#masthead #title-container > .heading a:active, #masthead .title-container > .heading a:active, #masthead #logo-link:empty:active:before, #masthead .logo-link:empty:active:before, #masthead #byline a:active, #masthead .byline a:active {
+  color: #932c1c;
+  color: var(--bodytitle);
+}
+#toc > ul > li > a, #toc > ul > li > a:link, #toc > ul > li > a:visited {
+  color: #505050;
+  color: var(--chaptertoctext);
+  background: #dbf5ff;
+  background: var(--chaptertoc);
+  border-color: #afc2e5;
+  border-color: var(--tocborder);
+}
+
+#toc ul li ul a, #toc ul li ul a:link, #toc ul li ul a:visited {
+  color: #404040;
+  color: var(--sectiontoctext);
+  background: #ffffff;
+  background: var(--sectiontoc);
+}
+
+#toc ul li a.active {
+  color: #404040;
+  color: var(--chaptertoctextactive);
+  background: #fae5b6;
+  background: var(--chaptertocactive);
+  border-color: #d7b772;
+  border-color: var(--highlighttocborder);
+}
+#toc ul li ul a.active {
+  color: #404040;
+  color: var(--sectiontoctextactive);
+  background: #fae5b6;
+  background: var(--sectiontocactive);
+  border-color: #d7b772;
+  border-color: var(--highlighttocborder);
+}
+
+#toc ul li a:hover {
+  color: #321a0c;
+  color: var(--highlighttoctext);
+  background: #fac793;
+  background: var(--highlighttoc);
+  border-color: #ec704b;
+  border-color: var(--highlighttocborder);
+}
+#toc ul li ul a:hover {
+  color: #321a0c;
+  color: var(--highlighttoctext);
+  background: #fac793;
+  background: var(--highlighttoc);
+  border-color: #ec704b;
+  border-color: var(--highlighttocborder);
+}
+
+.sidebar-content .extras a:hover {
+  border-top: 1px solid var(--highlighttocborder);
+}
+.mathbook-content .summary-links a, .mathbook-content .summary-links a:link, .mathbook-content .summary-links a:visited {
+  color: #20477b;
+}
+.mathbook-content .summary-links a:hover, .mathbook-content .summary-links a:focus {
+  background: #20477b;
+  color: #ffffff;
+}
+.mathbook-content .summary-links a:active {
+  background: #2a5ea4;
+  color: #ffffff;
+}
+
+.pretext-content [data-knowl], .pretext-content [data-knowl]:hover, .pretext-content [data-knowl]:active, .pretext-content [data-knowl].active {
+    color: var(--bodytitle);
+}
+.pretext-content [data-knowl]:hover, .pretext-content [data-knowl]:active, .pretext-content [data-knowl].active {
+    background: var(--bodyverylight);
+}
+
