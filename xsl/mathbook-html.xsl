@@ -1869,17 +1869,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </h6>
 </xsl:template>
 
-<!-- Heading (title) of a "poem" -->
-<!-- This is a hack, which should go away whence there -->
-<!-- is CSS for the class .poem which will surround    -->
-<!-- this.  Likely replace use of this template        -->
-<!-- by the template "heading-title" above             -->
-<xsl:template match="poem" mode="heading-poem">
-    <div class="title">
-        <xsl:apply-templates select="." mode="title-full"/>
-    </div>
-</xsl:template>
-
 
 <!-- ######################## -->
 <!-- Block Production, Knowls -->
@@ -2338,9 +2327,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Overall enclosing element -->
-<!-- TODO: consider this being an article? -->
 <xsl:template match="poem" mode="body-element">
-    <xsl:text>div</xsl:text>
+    <xsl:text>article</xsl:text>
 </xsl:template>
 
 <!-- And its CSS class -->
@@ -2353,12 +2341,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- When born use this heading -->
 <xsl:template match="poem" mode="heading-birth">
-    <xsl:apply-templates select="." mode="heading-poem" />
+    <xsl:apply-templates select="." mode="heading-title" />
 </xsl:template>
 
 <!-- Heading for interior of xref-knowl content -->
 <xsl:template match="poem" mode="heading-xref-knowl">
-    <xsl:apply-templates select="." mode="heading-poem" />
+    <xsl:apply-templates select="." mode="heading-title" />
 </xsl:template>
 
 <!-- Primary content of generic "body" template   -->
@@ -2391,11 +2379,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="stanza">
     <div class="stanza">
-        <xsl:if test="title">
-            <div class="title">
-                <xsl:apply-templates select="." mode="title-full"/>
-            </div>
-        </xsl:if>
+        <xsl:apply-templates select="." mode="heading-title"/>
         <xsl:apply-templates select="line"/>
     </div>
 </xsl:template>
@@ -2409,7 +2393,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <div>
         <xsl:attribute name="class">
-            <xsl:text>poemline</xsl:text>
+            <xsl:text>line</xsl:text>
+            <xsl:text> </xsl:text>
             <xsl:apply-templates select="." mode="poem-halign"/>
         </xsl:attribute>
         <!-- Left Alignment: Indent from Left -->
