@@ -135,13 +135,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- or to specify the particular CSS file, which may have   -->
 <!-- different color schemes.  The defaults should work      -->
 <!-- fine and will not need changes on initial or casual use -->
-<!-- #0 to #5 on mathbook-modern for different color schemes -->
-<!-- We just like #3 as the default                          -->
-<!-- N.B.:  This scheme is transitional and may change             -->
-<!-- N.B.:  without warning and without any deprecation indicators -->
-<!-- 2018-07-27:  html.js.server  stringparam removed with no fallback -->
-<xsl:param name="html.css.server" select="'https://aimath.org'" />
-<xsl:param name="html.css.file"   select="'mathbook-3.css'" />
+<!-- Files with name colors_*.css set the colors.            -->
+<!-- colors_default is similar to the old mathbook-3.css     -->
+<xsl:param name="html.css.server" select="'https://pretextbook.org'" />
+<xsl:param name="html.css.version" select="'0.2'" />
+<xsl:param name="html.js.server" select="'https://pretextbook.org'" />
+<xsl:param name="html.js.version" select="'0.1'" />
+<xsl:param name="html.css.colorfile"   select="'colors_default.css'" />
 <!-- A space-separated list of CSS URLs (points to servers or local files) -->
 <xsl:param name="html.css.extra"  select="''" />
 
@@ -4065,7 +4065,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- as indicated by $initial, we do not produce an empty paragraph -->
     <!-- NB: this means first display must check for no predecessor,    -->
     <!-- and react accordingly to employ the real paragraph's id.  See  -->
-    <!-- the modal "insert-paragraph-id" jsut below, and its employment -->
+    <!-- the modal "insert-paragraph-id" just below, and its employment -->
     <!--                                                                -->
     <!-- all interesting nodes of paragraph, before first display       -->
     <xsl:variable name="initial" select="$displays[1]/preceding-sibling::*|$displays[1]/preceding-sibling::text()" />
@@ -5618,7 +5618,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <!-- With sidebars killed, this stuff is extraneous     -->
                     <!-- <xsl:apply-templates select="." mode="sidebars" /> -->
                     <main class="main">
-                        <div id="content" class="mathbook-content">
+                        <div id="content" class="pretext-content">
                             <!-- This is content passed in as a parameter -->
                             <xsl:copy-of select="$content" />
                           </div>
@@ -6402,7 +6402,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$content" />
         </xsl:when>
         <!-- 2nd exceptional case, xref in mrow of display math  -->
-        <!-- Requires http://aimath.org/mathbook/mathjaxknowl.js -->
+        <!-- Requires https://pretextbook.org/js/lib/mathjaxknowl.js -->
         <!-- loaded as a MathJax extension for knowls to render  -->
         <xsl:when test="parent::mrow">
             <!-- MathJax expects similar constructions, variation is here -->
@@ -7490,7 +7490,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template name="login-header">
-    <link href="https://pretextbook.org/css/0.1/features.css" rel="stylesheet" type="text/css"/>
+    <link href="{$html.css.server}/css/{$html.css.version}/features.css" rel="stylesheet" type="text/css"/>
     <script>
        <xsl:text>var logged_in = false;&#xa;</xsl:text>
        <xsl:text>var role = 'student';&#xa;</xsl:text>
@@ -7501,7 +7501,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template name="login-footer">
     <div class="login-link"><span id="loginlogout" class="login">login</span></div>
-    <script src="https://pretextbook.org/js/0.1/login.js"></script>
+    <script src="{$html.js.server}/js/{$html.js.version}/login.js"></script>
 </xsl:template>
 
 <!-- Console Session -->
@@ -7718,7 +7718,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- load header libraries (for all "slate") -->
                 <xsl:apply-templates select="." mode="header-libraries" />
             </head>
-            <body class="mathbook-content">
+            <body class="pretext-content">
                 <!-- potential document-id per-page -->
                 <xsl:call-template name="document-id"/>
                 <div>
@@ -8356,7 +8356,7 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
                 <xsl:apply-templates select="." mode="sidebars" />
                 <!-- HTML5 main will be a "main" landmark automatically -->
                 <main class="main">
-                    <div id="content" class="mathbook-content">
+                    <div id="content" class="pretext-content">
                         <xsl:copy-of select="$content" />
                     </div>
                 </main>
@@ -9270,7 +9270,7 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
         <xsl:text>    jax: ["input/AsciiMath"],&#xa;</xsl:text>
         <xsl:text>    extensions: ["asciimath2jax.js"],&#xa;</xsl:text>
         <xsl:text>    TeX: {&#xa;</xsl:text>
-        <xsl:text>        extensions: ["extpfeil.js", "autobold.js", "https://aimath.org/mathbook/mathjaxknowl.js", ],&#xa;</xsl:text>
+        <xsl:text>        extensions: ["extpfeil.js", "autobold.js", "https://pretextbook.org/js/lib/mathjaxknowl.js", ],&#xa;</xsl:text>
         <xsl:text>        // scrolling to fragment identifiers is controlled by other Javascript&#xa;</xsl:text>
         <xsl:text>        positionToHash: false,&#xa;</xsl:text>
         <xsl:text>        equationNumbers: { autoNumber: "none", useLabelIds: true, },&#xa;</xsl:text>
@@ -9329,7 +9329,6 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
 <!-- so we load the relevant JavaScript onto every page if -->
 <!-- a cell occurs *anywhere* in the entire document       -->
 <xsl:template name="jquery-sagecell">
-    <script src="https://sagecell.sagemath.org/static/jquery.min.js"></script>
     <xsl:if test="$document-root//sage">
         <script src="https://sagecell.sagemath.org/embedded_sagecell.js"></script>
     </xsl:if>
@@ -9539,7 +9538,7 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
 
 <!-- Knowl header -->
 <xsl:template name="knowl">
-<script src="https://aimath.org/knowl.js"></script>
+<script src="{$html.js.server}/js/lib/knowl.js"></script>
 </xsl:template>
 
 <!-- Header information for favicon -->
@@ -9554,9 +9553,10 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
 <!-- Mathbook Javascript header -->
 <xsl:template name="mathbook-js">
     <!-- condition first on toc present? -->
-    <script src="https://aimath.org/mathbook/js/lib/jquery.sticky.js" ></script>
-    <script src="https://aimath.org/mathbook/js/lib/jquery.espy.min.js"></script>
-    <script src="https://pretextbook.org/js/0.1/pretext.js"></script>
+    <script src="{$html.js.server}/js/lib/jquery.min.js"></script>
+    <script src="{$html.js.server}/js/lib/jquery.sticky.js" ></script>
+    <script src="{$html.js.server}/js/lib/jquery.espy.min.js"></script>
+    <script src="{$html.js.server}/js/{$html.js.version}/pretext.js"></script>
 </xsl:template>
 
 <!-- Font header -->
@@ -9605,8 +9605,11 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
 <!-- CSS header -->
 <!-- The "one-css" template is defined elsewhere -->
 <xsl:template name="css">
-    <link href="{$html.css.server}/mathbook/stylesheets/{$html.css.file}" rel="stylesheet" type="text/css" />
-    <link href="https://aimath.org/mathbook/mathbook-add-on3.css" rel="stylesheet" type="text/css" />
+    <link href="{$html.css.server}/css/{$html.css.version}/pretext.css" rel="stylesheet" type="text/css" />
+    <link href="{$html.css.server}/css/{$html.css.version}/pretext_add_on.css" rel="stylesheet" type="text/css" />
+    <link href="{$html.css.server}/css/{$html.css.version}/toc.css" rel="stylesheet" type="text/css" />
+    <link href="{$html.css.server}/css/{$html.css.version}/{$html.css.colorfile}" rel="stylesheet" type="text/css" />
+    <link href="{$html.css.server}/css/{$html.css.version}/setcolors.css" rel="stylesheet" type="text/css" />
     <!-- If extra CSS is specified, then unpack multiple CSS files -->
     <!-- The prepared list (extra blank space) will cause failure  -->
     <!-- if $html.css.extra is empty (i.e. not specified)          -->
