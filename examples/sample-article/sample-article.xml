@@ -1923,8 +1923,10 @@ the xsltproc executable.
                          <row>
                             <cell><c>menu</c></cell><cell><icon name="menu"/></cell>
                             <cell><c>wrench</c></cell><cell><icon name="wrench"/></cell>
+                            <cell/><cell/>
                             <!-- <cell><c></c></cell><cell><icon name=""/></cell> -->
                         </row>
+                        <!-- Keep rows full (w/ empty cells) to please HTML validator -->
 
                     </tabular>
                 </table>
