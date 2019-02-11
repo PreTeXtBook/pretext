@@ -328,10 +328,7 @@ so that we can set our own later */
   main knowls style
 */
 
-/*
-[knowl], [knowl]:hover, [knowl].active {
-*/
-[knowl] {
+[data-knowl] {
     display: inline;
     position: relative;
     cursor: pointer;
@@ -353,7 +350,7 @@ so that we can set our own later */
     transition-duration: 0ms;
 }
 
-[knowl]:hover, [knowl]:active, [knowl].active {
+[data-knowl]:hover, [data-knowl]:active, [data-knowl].active {
     color: #8a1200;
     background: #ffedeb;
 /*
@@ -362,7 +359,7 @@ so that we can set our own later */
     border-bottom: none;
 }
 
-[knowl]::after, [knowl]:hover::after, [knowl].active::after {
+[data-knowl]::after, [data-knowl]:hover::after, [data-knowl].active::after {
     content: "";
     position: absolute;
     top: 0;
@@ -374,7 +371,7 @@ so that we can set our own later */
     transition-duration: 0ms;
     z-index: 0;
 }
-article > [knowl]::after, article > [knowl]:hover::after, article > [knowl].active::after {
+article > [data-knowl]::after, article > [data-knowl]:hover::after, article > [data-knowl].active::after {
     content: "";
     position: absolute;
     top: 0;
@@ -877,13 +874,6 @@ body > a.assistive:focus {
     background-color: rgb(205,205,255)
 }
 
-/* does this apply anywhere? */
-
-/*
-*[knowl] {
-  border-bottom: 1px dotted #00a;
-}
-*/
 
 #toc h2 + h2 {
     margin-top: 0.3em;
@@ -1341,7 +1331,7 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
  * look bad, like the hint here:
  * SAFurtherReading.html
 */
-.pretext-content .knowl-output .knowl-content {
+.pretext-content .knowl-output .knowl-content > *:last-child::not(.incontext) {
     margin-bottom: 0.5em;
 }
 
@@ -1514,11 +1504,11 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
 }
 */
 
-.pretext-content .indexitem [knowl], .pretext-content .subindexitem [knowl], .pretext-content .indexitem [knowl]:hover {
+.pretext-content .indexitem [data-knowl], .pretext-content .subindexitem [data-knowl], .pretext-content .indexitem [data-knowl]:hover {
     padding-right: 2px;
     padding-left: 2px;
 }
-.pretext-content .indexknowl [knowl]:hover, .pretext-content .indexknowl .active[knowl] {
+.pretext-content .indexknowl [data-knowl]:hover, .pretext-content .indexknowl .active[data-knowl] {
     margin-left: 2em;
 }
 
@@ -1676,24 +1666,6 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
     border-bottom: inherit;
     border-bottom-color: inherit;
 }
-
-/*
-.pretext-content .autoterm [knowl]:hover {
-    background: inherit;
-    border-bottom: inherit;
-}
-
-.pretext-content .autoterm [knowl]:hover {
-    background: #eebbff;
-    border-bottom: 1px dotted red;
-}
-*/
-
-/*
-.pretext-content .autoterm .active[knowl] {
-    background: inherit;
-}
-*/
 
 .pretext-content .autoterm [knowl]:hover {
     background: #ffddff;
@@ -1907,7 +1879,7 @@ from Jiří Lebl */
     z-index: 1;
     background: #fff;
 }
-.pretext-content .hidden-knowl-wrapper [knowl]::after, .pretext-content .hidden-knowl-wrapper [knowl]:hover::after, .pretext-content .hidden-knowl-wrapper .active[knowl]::after {
+.pretext-content .hidden-knowl-wrapper [data-knowl]::after, .pretext-content .hidden-knowl-wrapper [data-knowl]:hover::after, .pretext-content .hidden-knowl-wrapper .active[data-knowl]::after {
     right: 7px;
 }
 
@@ -2272,7 +2244,7 @@ from Jiří Lebl */
     animation-duration: 3s;
     animation-iteration-count: 1;
 }
-.pretext-content .solutions > a[knowl]::after {
+.pretext-content .solutions > a[data-knowl]::after {
     left: 12px;
 }
 @keyframes solutiontriangle {
@@ -2435,15 +2407,15 @@ code.inline {
 }
 
 /* sup knowls are used for footnotes */
-sup [knowl] {
+sup [data-knowl] {
     padding: 0px 0px 0px 3px;
 }
 
-sup .active[knowl] {
+sup .active[data-knowl] {
     padding: 0px 0px 0px 3px;
 }
 
-sup [knowl]:hover {
+sup [data-knowl]:hover {
     padding: 0px 0px 0px 3px;
 }
 
@@ -3038,7 +3010,7 @@ body.sidebar-left-closed .searchwrapper {
 }
 
 /* sort of a hack for proof knows in theorem knowls */
-.pretext-content div.knowl .posterior a[knowl]:first-child {
+.pretext-content div.knowl .posterior a[data-knowl]:first-child {
     padding: 0;
 }
 
