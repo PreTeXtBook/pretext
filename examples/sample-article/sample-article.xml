@@ -1948,7 +1948,7 @@ the xsltproc executable.
             <subsection xml:id="section-urls">
                 <title>URLs, such as <url href="http://example.com" /></title>
 
-                <p>An internet <init>URL</init><idx><h>URLs</h></idx> can contain a limited subset of keyboard characters.  So we include a long <init>URL</init> for testing:  <url href="http://www.pcc.edu/enroll/registration/dropping.html#withdraw">www.pcc.edu/enroll/registration/dropping.html#withdraw</url>.  Notice in the source that you <em>do not</em> put any tags inside the <c>href</c> attribute, but you may need to provide XML escape sequences, see <xref ref="subsection-xml-escape"/>).  Here is a totally bogus <init>URL</init>, which contains every possible legal character, so if this fails to convert there is some problematic character.  Three versions: one with the content as normal text, one with the characters as verbatim text, and then as a <init>URL</init> with the same string of characters as the address and the clickable, viewable part.</p>
+                <p>An internet <init>URL</init><idx><h>URLs</h></idx> can contain a limited subset of keyboard characters.  So we include a long <init>URL</init> for testing:  <url href="http://www.pcc.edu/enroll/registration/dropping.html#withdraw">www.pcc.edu/enroll/registration/dropping.html#withdraw</url>.  Notice in the source that you <em>do not</em> put any tags inside the <c>href</c> attribute, but you may need to provide XML escape sequences, see <xref ref="subsection-xml-escape"/>).  Here is a totally bogus <init>URL</init>, which contains every possible legal character, so if this fails to convert there is some problematic character.  In order to test the use of a percent sign (<c>%</c>) in a URL, we follow it by two hex digits, specifically, <c>58</c>, which is a way to represent the character <c>X</c> in a <init>URL</init>.  Three versions: one with the content as normal text, one with the characters as verbatim text, and then as a <init>URL</init> with the same string of characters as the address and the clickable, viewable part.</p>
 
                 <blockquote>
 
@@ -1956,7 +1956,7 @@ the xsltproc executable.
 
                     <p><c>ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%-._~:/?#[]@!$&amp;'()*+,;=</c></p>
 
-                    <p><url href="http://example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%-._~:/?#[]@!$&amp;'()*+,;=">http://example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%-._~:/?#[]@!$&amp;'()*+,;=</url></p>
+                    <p><url href="http://example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%58-._~:/?#[]@!$&amp;'()*+,;=">http://example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%58-._~:/?#[]@!$&amp;'()*+,;=</url></p>
 
                 </blockquote>
 
@@ -1969,10 +1969,10 @@ the xsltproc executable.
                 <p>When a <c>url</c> has no content, then its <c>href</c> attribute is displayed as the text, automatically in a typewriter font.</p>
 
                 <blockquote>
-                    <p><url href="http://example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%-._~:/?#[]@!$&amp;'()*+,;="></url></p>
+                    <p><url href="http://example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%58-._~:/?#[]@!$&amp;'()*+,;="></url></p>
                 </blockquote>
 
-                <p>We are not fans of footnotes, they are totally unstructured.<fn><url href="https://en.wikipedia.org/wiki/Carleson%27s_theorem">Carleson's Theorem</url></fn>  A URL in a footnote migrates around, and so care must be taken.<fn><url href="http://example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%-._~:/?#[]@!$&amp;'()*+,;="><c>http://example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%-._~:/?#[]@!$&amp;'()*+,;=</c></url></fn>  This paragraph has two footnotes, one with a real URL from Jesse Oldroyd, another with a fake URL from the above suite (the fourth one).  For good measure, we repeat the URL found in the first footnote: <url href="https://en.wikipedia.org/wiki/Carleson%27s_theorem">Carleson's Theorem</url>.  And we include a no-content version of the same link:  <url href="https://en.wikipedia.org/wiki/Carleson%27s_theorem" />.</p>
+                <p>We are not fans of footnotes, they are totally unstructured.<fn><url href="https://en.wikipedia.org/wiki/Carleson%27s_theorem">Carleson's Theorem</url></fn>  A URL in a footnote migrates around, and so care must be taken.<fn><url href="http://example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%58-._~:/?#[]@!$&amp;'()*+,;="><c>http://example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%58-._~:/?#[]@!$&amp;'()*+,;=</c></url></fn>  This paragraph has two footnotes, one with a real URL from Jesse Oldroyd, another with a fake URL from the above suite (the fourth one).  For good measure, we repeat the URL found in the first footnote: <url href="https://en.wikipedia.org/wiki/Carleson%27s_theorem">Carleson's Theorem</url>.  And we include a no-content version of the same link:  <url href="https://en.wikipedia.org/wiki/Carleson%27s_theorem" />.</p>
             </subsection>
 
 
@@ -4043,7 +4043,7 @@ the xsltproc executable.
                 </sidebyside>
             </figure>
 
-            <p>Tables are formed in <latex /> output with copious use of the <c>\multicolumn</c> macro to override more global alignment settings, and to spread the content of one cell across several columns.  However, sometimes <latex />'s special characters have behaved badly in this situation.  So the table below, two items per row, is just designed for <latex /> testing.  But of course, it should still render fine in other formats.  The three test cases are from <xref ref="section-urls" />, but without 50 alphabetic characters and 8 digits, which should not be problems in this context.  The first column's entries are <em>forced</em> to be wrapped in a <c>\multicolumn</c> by specifying their horizontal alignment.  The second column's entries <em>will not</em> be wrapped in a <c>\multicolumn</c>.So the two columns will look identical, other than the first having a left alignment, and the second has the default center alignment.  (This table is known to render poorly in a Jupyter notebook.  The cause is four dollar signs present in rows 1 and 3, and is explained in <xref ref="subsection-jupyter-dollars" text="type-global"/>.)</p>
+            <p>Tables are formed in <latex /> output with copious use of the <c>\multicolumn</c> macro to override more global alignment settings, and to spread the content of one cell across several columns.  However, sometimes <latex />'s special characters have behaved badly in this situation.  So the table below, two items per row, is just designed for <latex /> testing.  But of course, it should still render fine in other formats.  The three test cases are from <xref ref="section-urls" />, but without 50 alphabetic characters and 8 digits, which should not be problems in this context.  In order to test the use of a percent sign (<c>%</c>) in a URL, we follow it by two hex digits, specifically, <c>58</c>, which is a way to represent the character <c>X</c> in a <init>URL</init>.  The first column's entries are <em>forced</em> to be wrapped in a <c>\multicolumn</c> by specifying their horizontal alignment.  The second column's entries <em>will not</em> be wrapped in a <c>\multicolumn</c>.So the two columns will look identical, other than the first having a left alignment, and the second has the default center alignment.  (This table is known to render poorly in a Jupyter notebook.  The cause is four dollar signs present in rows 1 and 3, and is explained in <xref ref="subsection-jupyter-dollars" text="type-global"/>.)</p>
 
             <table xml:id="table-latex-problems">
                 <caption>Problematic Table Cells for <latex /></caption>
@@ -4056,14 +4056,14 @@ the xsltproc executable.
 
                     <row>
                         <cell>2</cell>
-                        <cell halign="left"><url href="http://example.com/09az%-._~:/?#[]@!$&amp;'()*+,;=">http://example.com/09az%-._~:/?#[]@!$&amp;'()*+,;=</url></cell>
-                        <cell><url href="http://example.com/09az%-._~:/?#[]@!$&amp;'()*+,;=">http://example.com/09az%-._~:/?#[]@!$&amp;'()*+,;=</url></cell>
+                        <cell halign="left"><url href="http://example.com/09az%58-._~:/?#[]@!$&amp;'()*+,;=">http://example.com/09az%58-._~:/?#[]@!$&amp;'()*+,;=</url></cell>
+                        <cell><url href="http://example.com/09az%58-._~:/?#[]@!$&amp;'()*+,;=">http://example.com/09az%58-._~:/?#[]@!$&amp;'()*+,;=</url></cell>
                     </row>
 
                     <row>
                         <cell>3</cell>
-                        <cell halign="left"><url href="http://example.com/09az%-._~:/?#[]@!$&amp;'()*+,;="></url></cell>
-                        <cell><url href="http://example.com/09az%-._~:/?#[]@!$&amp;'()*+,;="></url></cell>
+                        <cell halign="left"><url href="http://example.com/09az%58-._~:/?#[]@!$&amp;'()*+,;="></url></cell>
+                        <cell><url href="http://example.com/09az%58-._~:/?#[]@!$&amp;'()*+,;="></url></cell>
                     </row>
                 </tabular>
             </table>
