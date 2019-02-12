@@ -21,9 +21,9 @@
         <p><c>mbx</c> is a Python script, so you will need to have the Python interpreter on your system.  At a command-line (in a terminal or console), you can run<cd>
             <cline>mbx -h</cline>
         </cd> to get a summary of the commands.  Some of the processing may take a long time, or you may experience trouble.  There are two switches to enable more verbose output in your terminal or console.<cd>
-            <cline>mbx -v</cline>
+            <cline>mbx -v [command arguments]</cline>
         </cd>will provide progress indicators, while <cd>
-            <cline>mbx -vv</cline>
+            <cline>mbx -vv [command arguments]</cline>
         </cd>will provide progress indicators along with additional information that will help you or a fellow author to discern where a problem lies.  Please <em>include all of this output</em> if you are asking for help, and do not assume you know exactly which part is relevant.</p>
     </section>
 
@@ -78,7 +78,7 @@
     <section xml:id="mbx-helpers">
         <title>Configuring External Helper Programs</title>
 
-        <p>Our main processor, <c>xsltproc</c><idx><c>xsltproc</c></idx>, is not a general-purpose compiler, and does not <q>call</q> external programs.  That is the primary purpose of the <c>mbx</c> script.  You will see a configuration file, <c>script/mbx.cfg</c>, as part of the distribution.  Read the comments at the top of this file, but foremost, realize that you are not meant to edit this file.  It is a template, and any changes you make will be overwritten with an original version when you update.  Instead, make a copy and place it as <c>mathbook/user/mbx.cfg</c>.  The script will look for this copy first, then fallback to the generic version.</p>
+        <p>Our main processor, <c>xsltproc</c><idx><c>xsltproc</c></idx>, is not a general-purpose compiler, and does not <q>call</q> external programs.  That is the primary purpose of the <c>mbx</c> script.  You will see a configuration file, <c>script/mbx.cfg</c>, as part of the distribution.  Read the comments at the top of this file, but foremost, realize that you are not meant to edit this file.  It is a template, and any changes you make will be overwritten with an original version when you update.  Instead, make a copy and place it as <c>mathbook/user/mbx.cfg</c> (for instance, if you are in the <c>mathbook</c> directory, then the commands <c>mkdir user</c> and <c>cp script/mbx.cfg user/</c> would be appropriate).  The script will look for this copy first, then fallback to the generic version.</p>
 
         <p>The entries of this file are the names of executable files that perform certain tasks as part of the script's functions.  If it seems that certain helper programs are not being found, you can provide full path names, and that may solve the problem.</p>
     </section>

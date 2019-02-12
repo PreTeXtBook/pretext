@@ -737,7 +737,7 @@ body > a.assistive:focus {
 .collectedworks .work .title {
 }
 
-/* see http://mathbook.pugetsound.edu/examples/sample-book/html/references-1.html */
+/* see http://pretextbook.org/examples/sample-book/html/references-1.html */
 .bibitem + .bibentry {
     display: inline-block;
     width: 90%;
@@ -2441,7 +2441,7 @@ article.example-like > *:last-child::after {
     margin-bottom: 0;
 }
 */
-/* List 12.3 at http://mathbook.pugetsound.edu/examples/sample-article/html/section-12.html
+/* List 12.3 at http://pretextbook.org/examples/sample-article/html/section-12.html
  [[put somethign here]]
 article.example-like + .posterior {
     margin-top: -0.75em;
@@ -2811,7 +2811,7 @@ ul.cols2 > li, ol.cols2 > li {
     margin-top: 0;
 }
 
-/* http://mathbook.pugetsound.edu/beta/contibutor-list-20161130/preface-2.html
+/* http://pretextbook.org/beta/contibutor-list-20161130/preface-2.html
  * */
 
 .contributor .contributor-name {
@@ -2964,7 +2964,7 @@ div.knowl .posterior a[knowl]:first-child {
 
 /*
 nested tasks. see
-http://mathbook.pugetsound.edu/examples/sample-article/html/interesting-corollary.html
+http://pretextbook.org/examples/sample-article/html/interesting-corollary.html
 */
 
 .exercise-like > .exercise-like {

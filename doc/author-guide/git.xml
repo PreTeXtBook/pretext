@@ -10,7 +10,7 @@
 <appendix xml:id="git">
     <title>Revision Control: git</title>
 
-     <p>Authoring a textbook without revision control is like driving without a seat belt.  Sooner or later, you will wish you had used it.  git is a popular program for revision control for software projects, and works quite well with <pretext />, though not perfectly.  Notes here are designed to help.  For more on git itself, in the context of authoring a book, see <url href="http://mathbook.pugetsound.edu/gfa/html/">Git for Authors</url>, by Robert Beezer and David Farmer at <c>mathbook.pugetsound.edu/gfa/html</c>.</p>
+     <p>Authoring a textbook without revision control is like driving without a seat belt.  Sooner or later, you will wish you had used it.  git is a popular program for revision control for software projects, and works quite well with <pretext />, though not perfectly.  Notes here are designed to help.  For more on git itself, in the context of authoring a book, see <url href="https://pretextbook.org/gfa/html/">Git for Authors</url>, by Robert Beezer and David Farmer at <c>pretextbook.org/gfa/html</c>.</p>
 
      <paragraphs>
         <title>Word Wrap</title>

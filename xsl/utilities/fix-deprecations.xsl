@@ -34,6 +34,157 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Deprecations that can be fixed with a transformation -->
 <!-- In reverse chronological order, with dates           -->
 
+<!-- 2019-02-06 Nine unnecessary elements     -->
+<!-- <, >, [, ], *, /, `, braces and brackets -->
+<xsl:template match="less">
+    <xsl:text>&lt;</xsl:text>
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2019-02-06</xsl:with-param>
+        <xsl:with-param name="message">Replacing &lt;less/&gt; with &quot;&lt;&quot;</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+<xsl:template match="greater">
+    <xsl:text>&gt;</xsl:text>
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2019-02-06</xsl:with-param>
+        <xsl:with-param name="message">Replacing &lt;greater/&gt; with &quot;&gt;&quot;</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+<xsl:template match="lbracket">
+    <xsl:text>[</xsl:text>
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2019-02-06</xsl:with-param>
+        <xsl:with-param name="message">Replacing &lt;lbracket/&gt; with &quot;[&quot;</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+<xsl:template match="rbracket">
+    <xsl:text>]</xsl:text>
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2019-02-06</xsl:with-param>
+        <xsl:with-param name="message">Replacing &lt;rbracket/&gt; with &quot;]&quot;</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+<xsl:template match="asterisk">
+    <xsl:text>*</xsl:text>
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2019-02-06</xsl:with-param>
+        <xsl:with-param name="message">Replacing &lt;asterisk/&gt; with &quot;*&quot;</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+<xsl:template match="slash">
+    <xsl:text>/</xsl:text>
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2019-02-06</xsl:with-param>
+        <xsl:with-param name="message">Replacing &lt;slash/&gt; with &quot;/&quot;</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+<xsl:template match="backtick">
+    <xsl:text>`</xsl:text>
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2019-02-06</xsl:with-param>
+        <xsl:with-param name="message">Replacing &lt;backtick/&gt; with &quot;`&quot;</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+<xsl:template match="braces">
+    <xsl:text>{</xsl:text>
+        <xsl:apply-templates select="@* | node()" />
+    <xsl:text>}</xsl:text>
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2019-02-06</xsl:with-param>
+        <xsl:with-param name="message">Replacing &lt;braces&gt; by {...}</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+<xsl:template match="brackets">
+    <xsl:text>[</xsl:text>
+        <xsl:apply-templates select="@* | node()" />
+    <xsl:text>]</xsl:text>
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2019-02-06</xsl:with-param>
+        <xsl:with-param name="message">Replacing &lt;brackets&gt; by [...]</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
+<!-- 2019-02-06 LaTeX's 10 reserved characters: # $ % ^ & _ { } ~ \ -->
+<xsl:template match="hash">
+    <xsl:text>#</xsl:text>
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2019-02-06</xsl:with-param>
+        <xsl:with-param name="message">Replacing &lt;hash/&gt; with &quot;#&quot;</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+<xsl:template match="dollar">
+    <xsl:text>$</xsl:text>
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2019-02-06</xsl:with-param>
+        <xsl:with-param name="message">Replacing &lt;dollar/&gt; with &quot;$&quot;</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+<xsl:template match="percent">
+    <xsl:text>%</xsl:text>
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2019-02-06</xsl:with-param>
+        <xsl:with-param name="message">Replacing &lt;percent/&gt; with &quot;%&quot;</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+<xsl:template match="circumflex">
+    <xsl:text>^</xsl:text>
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2019-02-06</xsl:with-param>
+        <xsl:with-param name="message">Replacing &lt;circumflex/&gt; with &quot;^&quot;</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+<xsl:template match="ampersand">
+    <xsl:text>&amp;</xsl:text>
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2019-02-06</xsl:with-param>
+        <xsl:with-param name="message">Replacing &lt;ampersand/&gt; with &quot;&amp;&quot;</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+<xsl:template match="underscore">
+    <xsl:text>_</xsl:text>
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2019-02-06</xsl:with-param>
+        <xsl:with-param name="message">Replacing &lt;underscore/&gt; with &quot;_&quot;</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+<xsl:template match="lbrace">
+    <xsl:text>{</xsl:text>
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2019-02-06</xsl:with-param>
+        <xsl:with-param name="message">Replacing &lt;lbrace/&gt; with &quot;{&quot;</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+<xsl:template match="rbrace">
+    <xsl:text>}</xsl:text>
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2019-02-06</xsl:with-param>
+        <xsl:with-param name="message">Replacing &lt;rbrace/&gt; with &quot;}&quot;</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+<xsl:template match="tilde">
+    <xsl:text>~</xsl:text>
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2019-02-06</xsl:with-param>
+        <xsl:with-param name="message">Replacing &lt;tilde/&gt; with &quot;~&quot;</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+<xsl:template match="backslash">
+    <xsl:text>\</xsl:text>
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2019-02-06</xsl:with-param>
+        <xsl:with-param name="message">Replacing &lt;backslash/&gt; with &quot;\&quot;</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
+<!-- 2018-12-30  circa shortened to ca -->
+<xsl:template match="circa">
+    <ca/>
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2018-12-30</xsl:with-param>
+        <xsl:with-param name="message">Replacing &lt;circa/&gt; by &lt;ca/&gt;</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
 <!-- 2018-05-02  sidebyside paragraphs to stack, preserve title -->
 <xsl:template match="sidebyside/paragraphs">
     <stack>

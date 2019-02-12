@@ -36,7 +36,7 @@ Ignore any warnings, they are part of testing the warning system.
 
 To see images in your results, copy the examples/images directory
 so that your working directory has the images subdirectory.  See
-the  mathbook.pugetsound.edu  website for information on installing
+the  pretextbook.org  website for information on installing
 the xsltproc executable.
 -->
 
@@ -64,7 +64,7 @@ the xsltproc executable.
         16th Century Art Book Cover, 176x240 pixels, Public Domain, due to age
         http://commons.wikimedia.org/wiki/File:Book_Cover_-_Google_Art_Project.jpg
         -->
-        <brandlogo url="http://mathbook.pugetsound.edu" source="images/book-cover-google-art-project.jpg" />
+        <brandlogo url="https://pretextbook.org" source="images/book-cover-google-art-project.jpg" />
         <!--
         LaTeX packages that are also implemented as MathJax extensions
         may be specified here and any macros they have in common may be
@@ -121,10 +121,28 @@ the xsltproc executable.
         Sage worksheet production.)
         -->
         <initialism>SA</initialism>
+        <!-- For various purposes, it is helpful to have a unique identifier    -->
+        <!-- for your entire document.  As of 2019-01-02 this will be used as   -->
+        <!-- the HTML id attribute on the body element of *every* page created  -->
+        <!-- by the HTML conversion.                                            -->
+        <!--                                                                    -->
+        <!--   * Start with a letter                                            -->
+        <!--   * No strange characters, just 52 Latin letters, and 10 digits    -->
+        <!--   * No spaces                                                      -->
+        <!--   * Use only a hyphen (-) to separate words                        -->
+        <!--                                                                    -->
+        <!-- Make it so there is a reasonable expectation of being unique.      -->
+        <!-- "my-book" is a poor choice, "beezer-first-course-linear-algebra"   -->
+        <!-- is better.  And maybe something in-between is best: "beezer-FCLA". -->
+        <document-id>pretext-SA</document-id>
         <!-- Items peculiar to an HTML output -->
         <html>
             <!-- Expects favicon/favicon-32x32.png, and favicon/favicon-16x16.png -->
             <favicon/>
+            <!-- There does not need to be a trailing / on the URL             -->
+            <!-- NB Eventually a publisher option will exist to overrule this, -->
+            <!-- so a given source can be installed more than one place        -->
+            <baseurl href="https://pretextbook.org/examples/sample-article/html" />
         </html>
         <!--
         With a <feedback> element, in the HTML version, you get a button
@@ -165,12 +183,6 @@ the xsltproc executable.
                 <cx>008832104071767086392:j6aknlqevbm</cx>
             </google>
         </search>
-
-        <!-- There does not need to be a trailing / on the URL -->
-        <!-- NB This is likely to change, it should be a publisher option -->
-        <html>
-            <baseurl href="http://mathbook.pugetsound.edu/examples/sample-article/html" />
-        </html>
 
         <!-- Images in HTML output may carry a discreet list of links    -->
         <!-- to "archival" versions of images in a variety of formats.   -->
@@ -286,7 +298,7 @@ the xsltproc executable.
             example near the discussion of Asymptote.
             -->
 
-            <p>We consider definite integrals of functions <m>f(x)</m>.  For example, <me>\definiteintegral{0}{2}{\sin^2(x)}{x}</me>.  This is also a demonstration of the capabilities of <url href="http://mathbook.pugetsound.edu"><pretext /></url>.<notation>
+            <p>We consider definite integrals of functions <m>f(x)</m>.  For example, <me>\definiteintegral{0}{2}{\sin^2(x)}{x}</me>.  This is also a demonstration of the capabilities of <url href="https://pretextbook.org"><pretext /></url>.<notation>
                 <usage>\int_a^b\,f(x)\,dx</usage>
                 <description>definite integral of <m>f(x)</m></description>
             </notation></p>
@@ -468,7 +480,7 @@ the xsltproc executable.
             </sage>
 
             <!-- keep R index entry, collides with sortby attribute elsewhere -->
-            <p>Sage, and by extension, the Sage Cell Server, can interpret several languages.  The next example has code in the <c>R</c> language,<idx><h>R</h></idx> a popular open source language for statistics.  As an author, you add the attribute <c>language="r"</c> to your <c>sage</c> element.  (The default language is Sage, so you do not need to indicate that repeatedly.)  Note that a language like <c>R</c> likes to use a <q>less than</q> character, the second most-dangerous special character in XML.  You need to escape it by writing <c>&amp;lt;</c> as we have done in the source for this example.  (See the discussion and summary in <xref ref="subsection-reserved-characters" text="type-global" />.)</p>
+            <p>Sage, and by extension, the Sage Cell Server, can interpret several languages.  The next example has code in the <c>R</c> language,<idx><h>R</h></idx> a popular open source language for statistics.  As an author, you add the attribute <c>language="r"</c> to your <c>sage</c> element.  (The default language is Sage, so you do not need to indicate that repeatedly.)  Note that a language like <c>R</c> likes to use a <q>less than</q> character, &lt;, special character in XML.  You need to escape it by writing <c>&amp;lt;</c> as we have done in the source for this example.  (See the discussion in <xref ref="subsection-xml-escape" text="type-global"/>.)</p>
 
             <p>As a reader you learn that the <q>Evaluate</q> button for a pre-loaded Sage cell will indicate the language in use.</p>
 
@@ -486,21 +498,19 @@ the xsltproc executable.
 
             <p>The Sage Cell Server supports the following languages:  <c>sage</c>, <c>gap</c>, <c>gp</c>, <c>html</c>, <c>maxima</c>, <c>octave</c>, <c>python</c>, <c>r</c>, and <c>singular</c>.</p>
 
-            <p>Here is another <c>R</c> cell.  Unfortunately, it seems Sage's <c>doctest</c> facility cannot be used easily with code from other languages.  In the source for this example, we have employed a <c>CDATA</c> element to protect all the characters from the XML processor.</p>
+            <p>Here is another <c>R</c> cell.  Unfortunately, it seems Sage's <c>doctest</c> facility cannot be used easily with code from other languages.  In the source for this example, we have employed the <init>XML</init> escape sequence, <c>&amp;lt;</c> several times (see <xref ref="subsection-xml-escape" text="type-global"/>).</p>
 
             <sage language="r">
                 <input>
-                <![CDATA[
-                age <- c(25, 30, 56)
-                gender <- c("male", "female", "male")
-                weight <- c(160, 110, 220)
-                mydata <- data.frame(age,gender,weight)
+                age &lt;- c(25, 30, 56)
+                gender &lt;- c("male", "female", "male")
+                weight &lt;- c(160, 110, 220)
+                mydata &lt;- data.frame(age,gender,weight)
                 summary(mydata)
                 cor(mydata$age,mydata$weight)
                 mean(mydata$age)
                 sd(mydata$age)
                 plot(mydata$age,mydata$weight)
-                ]]>
                 </input>
             </sage>
 
@@ -508,7 +518,7 @@ the xsltproc executable.
 
             <sage type="practice" />
 
-            <p>On the other hand a <c>&lt;sage&gt;</c> element with no content will also create an empty Sage cell for the reader's use, but now it will be specific to a particular language and linked to others of the same language.  Run the <c>R</c> cell above that defines the variable <c>ruth</c> and then try typing <c>summary(ruth)</c> in the cell below.  (The linking seems a bit buggy, as it repeats the boxplot in the output, as of 2016-06-13).</p>
+            <p>On the other hand a <tag>sage</tag> element with no content will also create an empty Sage cell for the reader's use, but now it will be specific to a particular language and linked to others of the same language.  Run the <c>R</c> cell above that defines the variable <c>ruth</c> and then try typing <c>summary(ruth)</c> in the cell below.  (The linking seems a bit buggy, as it repeats the boxplot in the output, as of 2016-06-13).</p>
 
             <sage language="r" />
 
@@ -617,7 +627,7 @@ the xsltproc executable.
                     </proof>
                     <proof>
                         <title>Alternate Proof</title>
-                        <p>You can have multiple proofs, and they can have titles which replace the word <q>Proof</q> as a heading.  Here we just exercise displayed math with no automatic numbering, and an elective number on the middle equation.  For <latex /> output, with no number on the third line, the tombstone is placed on that line.<md>
+                        <p>You can have multiple proofs, and they can have titles which replace the word <q>Proof</q> as a heading.  Here we just exercise displayed math with no automatic numbering, and an elective number on the middle equation.<md>
                             <mrow>\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}&amp;=\frac{d}{dx}\left(F(x)-F(a)\right)</mrow>
                             <mrow number="yes">&amp;=\frac{d}{dx}F(x)-\frac{d}{dx}F(a)</mrow>
                             <mrow>&amp;=f(x)-0 = f(x)</mrow>
@@ -672,15 +682,18 @@ the xsltproc executable.
 
                             <p>If you like, you can have both indications.</p>
                         </case>
+
+                        <case xml:id="empty-case">
+                            <p>No direction, no title, then just a generic title.</p>
+                        </case>
                     </proof>
                     <proof>
                         <title>Exciting Proof!</title>
                         <p>We test here that punctuation at the end of the title of a proof is handled correctly.</p>
                     </proof>
                     <proof>
-                        <title>Really Long Titles for Proofs Could Fail to Line-Break in a Print Version and Extend Far Into the Right Margin and so Portions Will Never Be Visible to Anybody, All Due to a Known Bug in LaTeX</title>
-                        <p>We incorporate extra code to compensate, provided by the <latex /> package authors, <circa/> September<nbsp />2017.  This could be used to test if the bug is fixed, by commenting out the relevant code that redefines the <c>proof</c> environment.</p>
-                        <p>We seem to have uncovered a different bug, we suspect the fact that the title ends in a wide letter is resulting a failure to recognize the period we have supplied, somehow.</p>
+                        <title>Exact Proof</title>
+                        <p>This proof should fill exactly three lines (as of defaults in place 2018-12-31) and so the tombstone/Halmos should be on a fourth line, and then <em>flush right</em>. xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx xxx.</p>
                     </proof>
                 </claim>
             </subsection>
@@ -736,7 +749,7 @@ the xsltproc executable.
                     <question xml:id="sample-question">
                         <title>An Example of a Question</title>
                         <statement>
-                            <p>Any kind of question can be marked as such with <c>&lt;question&gt;</c>.  Or similarly, as a <c>&lt;problem&gt;</c>.  They behave identically to <c>example</c>s, such as the one preceding and are numbered along with theorems, examples. etc.</p>
+                            <p>Any kind of question can be marked as such with <tag>question</tag>.  Or similarly, as a <tag>problem</tag>.  They behave identically to <c>example</c>s, such as the one preceding and are numbered along with theorems, examples. etc.</p>
                         </statement>
                         <solution>
                             <p>You can have a solution. Or several, even if you don't ask a question.</p>
@@ -770,12 +783,12 @@ the xsltproc executable.
                         <statement>
                             <p>
                                Just for testing math in knowls,
-                               and also extra whitespace in a <c>&lt;p&gt;</c>.
+                               and also extra whitespace in a <tag>p</tag>.
                             </p>
                         </statement>
                     </example>
 
-                    <p>There are many different blocks you can employ, and they mostly behave the same way.  A <c>&lt;project&gt;</c><idx><h>project</h></idx> is very similar to a <c>&lt;question&gt;</c><idx><h>question</h></idx> or <c>&lt;problem&gt;</c><idx><h>problem</h></idx></p>
+                    <p>There are many different blocks you can employ, and they mostly behave the same way.  A <tag>project</tag><idx><h>project</h></idx> is very similar to a <tag>question</tag><idx><h>question</h></idx> or <tag>problem</tag><idx><h>problem</h></idx></p>
 
                     <project>
                         <title>Start Exploring <pretext /></title>
@@ -790,9 +803,9 @@ the xsltproc executable.
                         <title>Exploring Explorations</title>
 
                         <statement>
-                            <p>This is an <c>&lt;exploration&gt;</c>.<idx><h>exploration</h></idx>  Other similar possibilities are <c>&lt;project&gt;</c><idx><h>project</h></idx>, <c>&lt;activity&gt;</c><idx><h>activity</h></idx>, <c>&lt;task&gt;</c><idx><h>task</h></idx>, and <c>&lt;investigation&gt;</c><idx><h>investigation</h></idx>.</p>
+                            <p>This is an <tag>exploration</tag>.<idx><h>exploration</h></idx>  Other similar possibilities are <tag>project</tag><idx><h>project</h></idx>, <tag>activity</tag><idx><h>activity</h></idx>, <tag>task</tag><idx><h>task</h></idx>, and <tag>investigation</tag><idx><h>investigation</h></idx>.</p>
 
-                            <p>Note that projects, activities, explorations, tasks and investigations <em>share</em> the independent numbering scheme, so it is really only intended you use one of these.  If you want a variant of the name (<eg /> <q>Directed Activity</q>) you can use the <c>&lt;rename&gt;</c><idx><h>rename an environment</h></idx> facility (<xref ref="rename-facility" text="type-global" />).</p>
+                            <p>Note that projects, activities, explorations, tasks and investigations <em>share</em> the independent numbering scheme, so it is really only intended you use one of these.  If you want a variant of the name (<eg /> <q>Directed Activity</q>) you can use the <tag>rename</tag><idx><h>rename an environment</h></idx> facility (<xref ref="rename-facility" text="type-global" />).</p>
                         </statement>
 
                         <solution>
@@ -808,7 +821,7 @@ the xsltproc executable.
                         </prelude>
 
                         <statement>
-                            <p>Another variant of these project-like items is to possibly include a <c>&lt;hint&gt;</c> and an <c>&lt;answer&gt;</c> before the <c>&lt;solution&gt;</c>.</p>
+                            <p>Another variant of these project-like items is to possibly include a <tag>hint</tag> and an <tag>answer</tag> before the <tag>solution</tag>.</p>
                         </statement>
 
                         <hint>
@@ -831,7 +844,7 @@ the xsltproc executable.
                     <note xml:id="note-remark">
                         <title>A Note on Remarks</title>
 
-                        <p><c>&lt;remark&gt;</c>, <c>&lt;convention&gt;</c>, <c>&lt;note&gt;</c>, <c>&lt;observation&gt;</c> and <c>&lt;warning&gt;</c> are designed to hold very simple contents, with no additional structure (no proofs, no solutions, <etc />).</p>
+                        <p><tag>remark</tag>, <tag>convention</tag>, <tag>note</tag>, <tag>observation</tag> and <tag>warning</tag> are designed to hold very simple contents, with no additional structure (no proofs, no solutions, <etc />).</p>
 
                         <p>But they do carry a title and a number, can be the target of a cross-reference, and may be optionally knowlized in HTML with the <c>html.knowl.remark</c> processing switch.</p>
                     </note>
@@ -840,7 +853,7 @@ the xsltproc executable.
                         <title>An Aside</title>
                         <idx>aside</idx>
 
-                        <p>An <c>&lt;aside&gt;</c> is similar to a remark, but is not as critical to the narrative.  It is not numbered, and so requires a title.  It can be the target of a cross-reference.  They are meant to be short, and so are not knowlized at their first appearance.  If the content is appropriate, these can be marked as <c>&lt;historical&gt;</c> or <c>&lt;biographical&gt;</c>, though longer items should use subdivisions (<eg /> sections, subsections) instead.</p>
+                        <p>An <tag>aside</tag> is similar to a remark, but is not as critical to the narrative.  It is not numbered, and so requires a title.  It can be the target of a cross-reference.  They are meant to be short, and so are not knowlized at their first appearance.  If the content is appropriate, these can be marked as <tag>historical</tag> or <tag>biographical</tag>, though longer items should use subdivisions (<eg /> sections, subsections) instead.</p>
                     </aside>
 
                     <project permid="aBc" xml:id="project-structured">
@@ -971,8 +984,8 @@ the xsltproc executable.
                         <solution>
                             <p>This solution will migrate to a list of solutions in the backmatter.  We include a <c>sidebyside</c> as a test.</p>
                             <sidebyside permid="dEf" width="30%">
-                                <p>This is a skinny paragraph which should be just 30<percent /> of the width.</p>
-                                <p>And another skinny paragraph which should also be just 30<percent /> of the width.</p>
+                                <p>This is a skinny paragraph which should be just 30% of the width.</p>
+                                <p>And another skinny paragraph which should also be just 30% of the width.</p>
                             </sidebyside>
                         </solution>
                     </exercise>
@@ -981,19 +994,38 @@ the xsltproc executable.
                 <reading-questions>
                     <introduction>
                         <p>A set of reading questions may have an <tag>introduction</tag>, perhaps for preparatory explanation.</p>
+                        <p>If a student has logged in to the HTML version,
+                           then they can `answer the reading` questions directly in the book.
+                           Inline math LaTeX can be entered using
+                           <c>$</c>...<c>$</c> or <c>\(</c>...<c>\)</c> delimiters,
+                           and inline AsciiMath using backticks <c>`</c>...<c>`</c> as delimiters.
+                           Here are some `gratuitous backticks` to check that AsciiMath is only
+                           active in the answers to reading questions.
+                        </p>
                     </introduction>
 
                     <exercise xml:id="first-reading">
-                        <statement>
-                            <p>This is a <term>reading question</term> that you might have a student read prior to a class session, based on reading part of the book.</p>
-                        </statement>
-                        <answer>
-                            <p>Which might help make the classroom session improve.</p>
-                        </answer>
+                      <p>
+                        This is a <term>reading question</term> that you might have a student answer prior to a class session,
+                        based on reading part of the book.
+                        A quick glance before class can help you tailor class time to the specific needs of your students.
+                        The perfect reading question will reveal whether the student has read and understood the material,
+                        and will be difficult to answer if they have not.
+                        What do you think of that?
+                      </p>
                     </exercise>
 
                     <exercise>
-                        <p>And a second one, with a cross-reference to the first, as a check on numbering: <xref ref="first-reading" text="type-global"/>.</p>
+                      <p>
+                        And a second one, with a cross-reference to the first,
+                        as a check on numbering:
+                        <xref ref="first-reading" text="type-global"/>.
+                        Reading questions are allowed to have answers,
+                        but providing answers misses the point of a reading question,
+                        and the answer knowl interacts poorly with the mechanism used to
+                        allow students to answer directly in the book.
+                        Do you think the schema should ban answers to reading questions?
+                      </p>
                     </exercise>
 
                     <conclusion>
@@ -1051,7 +1083,7 @@ the xsltproc executable.
                     </statement>
                 </principle>
 
-                <p>More precisely, <c>&lt;theorem&gt;</c>, <c>&lt;corollary&gt;</c>, <c>&lt;lemma&gt;</c>, <c>&lt;algorithm&gt;</c>, <c>&lt;proposition&gt;</c>, <c>&lt;claim&gt;</c>, <c>&lt;fact&gt;</c>, and <c>&lt;identity&gt;</c>, all behave exactly the same, requiring a statement (as a sequence of paragraphs) followed by an optional proof, and may have an optional title.  The elements <c>&lt;axiom&gt;</c>, <c>&lt;conjecture&gt;</c>, <c>&lt;principle&gt;</c>, <c>&lt;heuristic&gt;</c>, <c>&lt;hypothesis&gt;</c>, and <c>&lt;assumption&gt;</c> are functionally the same, barring a proof (since they would never have one!).  Definitions are an exception, as it is natural to place <c>&lt;notation&gt;</c> within<mdash />see the source for Definition<nbsp /><xref ref="definition-indefinite-integral" /> for an example.</p>
+                <p>More precisely, <tag>theorem</tag>, <tag>corollary</tag>, <tag>lemma</tag>, <tag>algorithm</tag>, <tag>proposition</tag>, <tag>claim</tag>, <tag>fact</tag>, and <tag>identity</tag>, all behave exactly the same, requiring a statement (as a sequence of paragraphs) followed by an optional proof, and may have an optional title.  The elements <tag>axiom</tag>, <tag>conjecture</tag>, <tag>principle</tag>, <tag>heuristic</tag>, <tag>hypothesis</tag>, and <tag>assumption</tag> are functionally the same, barring a proof (since they would never have one!).  Definitions are an exception, as it is natural to place <tag>notation</tag> within<mdash />see the source for Definition<nbsp /><xref ref="definition-indefinite-integral" /> for an example.</p>
             </subsection>
 
             <subsection>
@@ -1081,7 +1113,7 @@ the xsltproc executable.
                 <assemblage permid="Ghi" xml:id="assemblage-basics">
                     <title>Assemblages: Collections and Summaries</title>
 
-                    <p>An <c>&lt;assemblage&gt;</c> is a collection, or summary, that does not have much structure to it.  So you are limited to paragraphs and friends (<c>p</c>, <c>blockquote</c>, <c>pre</c>) and side-by-sides that do not contain captioned items (<c>sidebyside</c>, <c>sbsgroup</c>).  The intent is that contents are not numbered, so cannot be cross-referenced individually, and so also do not become knowls.  You may place <c>&lt;image&gt;</c>, <c>&lt;tabular&gt;</c>, and <c>&lt;program&gt;</c> inside a <c>&lt;sidebyside&gt;</c>, in addition to other objects that do not have captions.  Note that <c>p</c> may by extension contain lists (<c>ol</c>, <c>ul</c>, <c>dl</c>).  Despite limited structure, the presentation should draw attention to it, because the contents should be seen as more important in some way.  It should be <q>highlighted</q> in some manner.  If you need to connect the entire assemblage with material elsewhere, you can do that with the usual <c>xref/xml:id</c> mechanism.<idx><h>assemblage</h></idx></p>
+                    <p>An <tag>assemblage</tag> is a collection, or summary, that does not have much structure to it.  So you are limited to paragraphs and friends (<c>p</c>, <c>blockquote</c>, <c>pre</c>) and side-by-sides that do not contain captioned items (<c>sidebyside</c>, <c>sbsgroup</c>).  The intent is that contents are not numbered, so cannot be cross-referenced individually, and so also do not become knowls.  You may place <tag>image</tag>, <tag>tabular</tag>, and <tag>program</tag> inside a <tag>sidebyside</tag>, in addition to other objects that do not have captions.  Note that <c>p</c> may by extension contain lists (<c>ol</c>, <c>ul</c>, <c>dl</c>).  Despite limited structure, the presentation should draw attention to it, because the contents should be seen as more important in some way.  It should be <q>highlighted</q> in some manner.  If you need to connect the entire assemblage with material elsewhere, you can do that with the usual <c>xref/xml:id</c> mechanism.<idx><h>assemblage</h></idx></p>
 
                     <p>What have we seen so far in this (disorganized) sample?<ul>
                         <li><p>Theorems, definitions and corollaries. (<xref ref="section-fundamental-theorem" text="type-global" />)</p></li>
@@ -1116,7 +1148,7 @@ the xsltproc executable.
                 <introduction>
                     <title>An Introductory Introduction</title>
 
-                    <p>Any subdivision may have a sequence of paragraphs within an <c>&lt;introduction&gt;</c> that precedes subsequent further subdivisions.  You are reading one now.  They are always leaves of the document structure, so are rendered on some pages that reference the following subdivisions.</p>
+                    <p>Any subdivision may have a sequence of paragraphs within an <tag>introduction</tag> that precedes subsequent further subdivisions.  You are reading one now.  They are always leaves of the document structure, so are rendered on some pages that reference the following subdivisions.</p>
 
                     <p>An introduction or conclusion is an extremely restrictive container with simple presentation.  A title is optional (and probably not advisable).  Content is meant to be short and unstructured, in particular, nothing that can be numbered is allowed.  If this feels <em>too</em> restrictive, then place your content in an initial numbered subdivision and perhaps title it <q>Introduction</q>.  Or make your entire subdivion unstructured and place whatever you want into it.</p>
 
@@ -1136,7 +1168,7 @@ the xsltproc executable.
                 </subsubsection>
 
                 <conclusion>
-                    <p>Entirely analogous to introductions are conclusions.  Any subdivision may have a sequence of paragraphs within a <c>&lt;conclusion&gt;</c> that follows previous further subdivisions.  You are reading one now.  They are always leaves of the document structure, so are rendered on some pages that reference the preceding subdivisions.</p>
+                    <p>Entirely analogous to introductions are conclusions.  Any subdivision may have a sequence of paragraphs within a <tag>conclusion</tag> that follows previous further subdivisions.  You are reading one now.  They are always leaves of the document structure, so are rendered on some pages that reference the preceding subdivisions.</p>
 
                    <p>This concludes this conclusion (and this subsection and this section).</p>
                 </conclusion>
@@ -1145,11 +1177,11 @@ the xsltproc executable.
             <subsection xml:id="subsection-paragraph-markup">
                 <title>Some Paragraph-Level Markup</title>
 
-                <p>Text within a paragraph may be <em>emphasized</em><idx><h>em</h><h>emphasis</h></idx><idx><h>styling words</h><h>em</h></idx><idx><h>styling words</h><h>emphasis</h></idx> with <c>&lt;em&gt;</c> or if you want to take it to the next level you can identify the text as an <alert>alert</alert><idx>alert</idx><idx><h>styling words</h><h>alert</h></idx> with <c>&lt;alert&gt;</c>.</p>
+                <p>Text within a paragraph may be <em>emphasized</em><idx><h>em</h><h>emphasis</h></idx><idx><h>styling words</h><h>em</h></idx><idx><h>styling words</h><h>emphasis</h></idx> with <tag>em</tag> or if you want to take it to the next level you can identify the text as an <alert>alert</alert><idx>alert</idx><idx><h>styling words</h><h>alert</h></idx> with <tag>alert</tag>.</p>
 
-                <p>Similarly, within a paragraph, you can identify edits between versions as <insert>inserted text that has been added</insert><idx><h>styling words</h><h>insert</h></idx> with <c>&lt;insert&gt;</c> or as <delete>deleted text that has been removed</delete><idx><h>styling words</h><h>delete</h></idx> with <c>&lt;delete&gt;</c>.  Note that these identified edits are slightly different than <stale>stale text that you want to retain, but which is no longer relevant</stale><idx><h>styling words</h><h>stale</h></idx>, which is accomplished with <c>&lt;stale&gt;</c>.  The original request for stale text came from an instructor with an online list of student topics for presentations, and as students claimed topics they were marked as no longer available for other students.</p>
+                <p>Similarly, within a paragraph, you can identify edits between versions as <insert>inserted text that has been added</insert><idx><h>styling words</h><h>insert</h></idx> with <tag>insert</tag> or as <delete>deleted text that has been removed</delete><idx><h>styling words</h><h>delete</h></idx> with <tag>delete</tag>.  Note that these identified edits are slightly different than <stale>stale text that you want to retain, but which is no longer relevant</stale><idx><h>styling words</h><h>stale</h></idx>, which is accomplished with <tag>stale</tag>.  The original request for stale text came from an instructor with an online list of student topics for presentations, and as students claimed topics they were marked as no longer available for other students.</p>
 
-                <p>If you need a <q>fill-in blank</q>, like this<fillin />, it can be obtained with an empty <c>&lt;fillin&gt;</c> element that defaults to roughly a 10-character width.  You can use the <c>&lt;characters&gt;</c> attribute to make the rule longer or shorter, such as a 40-character blank: <fillin characters="40" />.  The character count is approximate, based on typical character widths within a proportional font carrying English language text.  Adjust to suit, or request a language-specific adjustment if it is critical.</p>
+                <p>If you need a <q>fill-in blank</q>, like this<fillin />, it can be obtained with an empty <tag>fillin</tag> element that defaults to roughly a 10-character width.  You can use the <tag>characters</tag> attribute to make the rule longer or shorter, such as a 40-character blank: <fillin characters="40" />.  The character count is approximate, based on typical character widths within a proportional font carrying English language text.  Adjust to suit, or request a language-specific adjustment if it is critical.</p>
 
                 <p>Long after we started this mess, we added <pretext /> tags to mark up tags and attributes.  The elements are: <tag>tag</tag>, <tag>tage</tag>, <tag>attr</tag>.  Examples of how these render are (respectively): <tag>section</tag>, <tage>hash</tage>, <attr>width</attr>.  Perhaps this document will make greater use of these tags.</p>
             </subsection>
@@ -1193,6 +1225,7 @@ the xsltproc executable.
 
         <section permid="Bcd">
             <title>Some Facts and Figures</title>
+            <idx>footnotes</idx>
 
             <!-- This is not implemented
             This Sage code will be (a) hidden and (b) automatically executed
@@ -1207,7 +1240,7 @@ the xsltproc executable.
             </sage>
             -->
 
-            <p>Because of the Fundamental Theorem, for every derivative we know, there is an antiderivative we might find useful.  Because of the Fundamental Theorem of Calculus, we recycle the <q><m>\int</m></q> symbol as notation for an antiderivative.<ul cols="2">
+            <p>Because of the Fundamental Theorem<fn>First test footnote</fn>, for every derivative we know, there is an antiderivative we might find useful.  Because of the Fundamental Theorem of Calculus<fn>Second test footnote</fn>, we recycle the <q><m>\int</m></q> symbol as notation for an antiderivative.<ul cols="2">
                 <li>
                     <p>Derivatives<ol label="(a)">
                         <li><m>\frac{d}{dx}x^n = nx^{n-1}</m></li>
@@ -1224,7 +1257,7 @@ the xsltproc executable.
             </ul></p>
 
             <remark>
-                <p>You can gain a greater understanding of derivatives by studying the graphs of functions with their derivatives.  Can you discern the derivative<ndash />antiderivative relationship in Figure<nbsp /><xref ref="figure-function-derivative" />?</p>
+                <p>You can<fn>Third test footnote</fn> gain a greater understanding of derivatives by studying the graphs of functions with their derivatives.  Can<fn>Fourth test footnote</fn> you discern the derivative<ndash />antiderivative<fn>Fifth test footnote</fn> relationship in Figure<nbsp /><xref ref="figure-function-derivative" />?</p>
             </remark>
 
             <!--
@@ -1243,7 +1276,7 @@ the xsltproc executable.
                 </image>
             </figure>
 
-            <p>Lists can have multiple columns.  With <init>HTML</init> items displayed in row-major order (horizontally first) and with <latex /> items are displayed in column-major order (vertically first).  When one order, or the other, becomes workable in both variants, maybe we will be consistent in presentation.  (Note that with just one row, it makes no difference.)  We used it above for the two items<mdash />derivatives and integrals<mdash />where each item was a list of its own.  Here are two more examples, one with short snippets and lots of columns, the other with lots of text in paragraphs.<idx xml:id="index-start-multicolumn" finish="index-finish-multicolumn"><h>list</h><h>multicolumn</h></idx><ol cols="5">
+            <p>Lists<fn>Sixth test footnote</fn> can have multiple columns.  With <init>HTML</init> items displayed in row-major order (horizontally first) and<fn>Seventh test footnote</fn> with <latex /> items are displayed in column-major order (vertically first).  When one order, or the other, becomes workable in both variants, maybe we will be consistent in presentation.  (Note that with just one row, it makes no difference.)  We used it above for the two items<mdash />derivatives and integrals<mdash />where each item was a list of its own.  Here are two more examples, one with short snippets and lots of columns, the other with lots of text in paragraphs.<idx xml:id="index-start-multicolumn" finish="index-finish-multicolumn"><h>list</h><h>multicolumn</h></idx><ol cols="5">
                 <li><p>Red</p></li>
                 <li><p>Blue</p></li>
                 <li><p>Green</p></li>
@@ -1310,10 +1343,10 @@ the xsltproc executable.
 
             <todo>Move index-finish marker back once it is allowed other places</todo>
 
-            <p><idx xml:id="index-finish-multicolumn" start="index-start-multicolumn" />The multi-row displayed mathematics in the proof of the Fundamental Theorem had equations aligned on the equals signs via the <ampersand /> character.  Sometimes you don't want that.  Here is an example with some differential equations, with each equation centered and unnumbered,<md>
+            <p><idx xml:id="index-finish-multicolumn" start="index-start-multicolumn" />The multi-row displayed mathematics in the proof of the Fundamental Theorem had equations aligned on the equals signs via the &amp; character.  Sometimes you don't want that.  Here is an example with some differential equations, with each equation centered and unnumbered,<md>
                 <mrow>{\mathcal L}(y')(s) = s {\mathcal L}(y)(s) - y(0) = s Y(s) - y(0)</mrow>
                 <mrow>{\mathcal L}(y'')(s) = s^2 {\mathcal L}(y)(s) - sy(0) - y'(0)= s^2 Y(s) - sy(0) - y'(0)</mrow>
-            </md>.<notation><usage>\rho</usage><description>this symbol could be used for lots of things, but we are just trying to make a super-long description to get it to wrap within the column where it belongs, which is sometimes set to a fixed width to accomodate really complicated explanations</description></notation></p>
+            </md>.<notation><usage>\rho</usage><description>this symbol could be used for lots of things, but we are just trying to make a super-long description to get it to wrap within the column where it belongs, which is sometimes set to a fixed width to accomodate really complicated explanations</description></notation>We test referencing notation here, placed <em>before</em> the sentence-ending period and right after some inline mathematics<mdash/>for <m>\mathbb{Z}_n</m><notation><usage>\mathbb{Z}_n</usage><description>(ring of) integers modulo <m>n</m></description></notation>.</p>
 
             <p><latex /> has a device where you can interrupt a sequence of equations with a small amout of text and preserve the equation alignment on either side.  Here are two tests of that device, with aligned equations and non-aligned equations.  Study the source to see use and differences.  (The math does not make sense.)</p>
 
@@ -1404,7 +1437,7 @@ the xsltproc executable.
                     <mrow>\frac{dy}{dt} = x^3 - y.</mrow>
                 </md></p>
 
-                <p>An ampersand is used, in two ways, to describe positioning several equations per line, organized in columns.  We suggest in <xref ref="subsection-reserved-characters" text="type-global" /> that the pre-defined <latex /> macro <c>\amp</c> is the safest way to specify these.  The second, fourth, sixth, <ellipsis /> ampersands separate columns, and the spacing between columns will be provided automatically.  The first, third, fifth, <ellipsis /> ampersands are alignment points for the equations in each column.  Typically this is placed just prior to a binary operator, such as an equal sign (<c>\amp = </c>), or for a column of explanations or commentary, just prior to the <c>\text{}</c> macro.  Note that this scenario suggests always having an odd number of ampersands in each <c>mrow</c>.  In the example below, alignment is on the equals sign in the first two columns, and provides left-justification to the explanations in the third column.  N.B.: the use below of the <c>\text{}</c> macro does not include mathematics within its argument.  Doing so may yield unpredictable results depending on your choice of delimiters for the mathematics (and using an <c>m</c> tag will be ineffective).<md>
+                <p>An ampersand is used, in two ways, to describe positioning several equations per line, organized in columns.  We have created the pre-defined <latex/> macro <c>\amp</c> as one way specify these, but the escape sequence <c>&amp;amp;</c> may be used also.  The second, fourth, sixth, <ellipsis /> ampersands separate columns, and the spacing between columns will be provided automatically.  The first, third, fifth, <ellipsis /> ampersands are alignment points for the equations in each column.  Typically this is placed just prior to a binary operator, such as an equal sign (<c>\amp = </c>), or for a column of explanations or commentary, just prior to the <c>\text{}</c> macro.  Note that this scenario suggests always having an odd number of ampersands in each <c>mrow</c>.  In the example below, alignment is on the equals sign in the first two columns, and provides left-justification to the explanations in the third column.  N.B.: the use below of the <c>\text{}</c> macro does not include mathematics within its argument.  Doing so may yield unpredictable results depending on your choice of delimiters for the mathematics (and using an <c>m</c> tag will be ineffective).<md>
                     <mrow>\frac{dx}{dt} \amp = x^2 - 4x - y + 4 \amp \frac{dy}{dt} \amp = x^3 - y          \amp\amp x, y\text{ version}</mrow>
                     <mrow>\frac{dw}{dt} \amp = z^3 - w          \amp \frac{dz}{dt} \amp = z^2 - 4z - w + 4 \amp\amp z, w\text{ version}</mrow>
                 </md></p>
@@ -1597,7 +1630,7 @@ the xsltproc executable.
 
                 <p>The following example is a good stress-test of using the <c>\text{}</c> macro to achieve certain effects.  Note the Unicode left and right smart quotes.  This a contribution from Alex Jordan as part of his work on <pubtitle>APEX Calculus</pubtitle>.<md>
                     <mrow>y \rightarrow \frac{\sin(0) }{0} \rightarrow {{\text{“}}\atop{}}\frac{0}{0}{{\text{”}}\atop{}}\text{.}</mrow>
-                </md>And another one from Alex.  Note the use of the <c>\mathord{}</c> and <c>\mathrel{}</c> macros to control spacing around the mathematical symbols.  Examine the source to see how the quotation marks have been authored with <init>XML</init> syntax for Unicode characters.<md>
+                </md>And another one from Alex.  Note the use of the <c>\mathord{}</c> and <c>\mathrel{}</c> macros to control spacing around the mathematical symbols.  Examine the source to see how the quotation marks have been authored with <init>XML</init> syntax for Unicode characters, since we do not allow most markup inside mathematics.<md>
                     <mrow>\zeta(1)=\sum_{n=1}^{\infty}\frac{1}{n}\mathrel{\text{ &#x201c;}\mathord{=}{\text{&#x201d; }}}\prod_{p}\left(\frac{1}{1-1/p}\right)=\prod_{p}\left(\frac{1}{1-p^{-1}}\right)</mrow>
                 </md></p>
 
@@ -1624,229 +1657,44 @@ the xsltproc executable.
             </subsection>
         </section>
 
-        <section>
-            <title>Special, Reserved, and Escape Characters</title>
+        <section xml:id="text-in-paragraphs">
+            <title>Entering Text in Paragraphs, Titles, Captions</title>
+            <shorttitle>Text in Paragraphs</shorttitle>
 
-            <subsection xml:id="subsection-reserved-characters">
-                <title>Reserved Characters</title>
+            <introduction>
+                <p><init>XML</init>, and therefore <pretext/>, is a markup language.  But by and large, what you type into your source will be what you see in your output.  So there is not much to say.  Except that <xref ref="subsection-xml-escape" text="type-global"/> eventually will be essential.  However we do test various tricky situations here (which have technical explanations we avoid).  See the Author's Guide for a superior treatment of the topics addressed here.</p>
+            </introduction>
 
-                <p>One of the goals of <pretext /> is to relieve an author of managing the numerous conflicts when mixing languages that use different characters for special purposes.  But, of course, XML has its own special characters.</p>
+            <subsection xml:id="subsection-xml-escape">
+                <title>Special <init>XML</init> characters</title>
 
-                <p>Everybody wants the ampersand, it is the most-dangerous character.  It is <em>the</em> escape character for XML, and <latex /> uses it to organize tables and arrays, and for aligning equations.  Consistently use the element <c>&lt;ampersand /&gt;</c> to make a literal ampersand in normal text, such as in <q>A<ampersand />P.</q>  In mathematics, and other places where you are using <latex /> syntax, use the pre-defined <c>\amp</c> macro.  For code listings and other verbatim text, use the escaped XML entity <c>&amp;amp;</c>.</p>
+                <p>One of the goals of <pretext/> is to relieve an author of managing the numerous conflicts when mixing languages that use different characters for special purposes.  But, of course, <init>XML</init> has its own special characters.</p>
 
-                <p>The left angle bracket (<c>&lt;</c>) is the second most-dangerous character in your source, since it looks to the XML processor like the start of a new XML element.  The right angle bracket (<c>&gt;</c>) is less dangerous, but for symmetry we treat it the same as the left.  Consistently use the elements <c>&lt;less /&gt;</c> and <c>&lt;greater /&gt;</c> to make left and right angle brackets in normal text.  In mathematics, and other places where you are using <latex /> syntax, use the pre-defined <c>\lt</c> and <c>\gt</c> macros.  For code listings and other verbatim text, use the XML entities <c>&amp;lt;</c> and <c>&amp;gt;</c>.</p>
+                <p>If you type a <q>less-than</q> symbol in your source, the <init>XML</init> processor thinks you are starting an opening, or closing, tag.  So how do you get a less-than sign into your source so that it survives into your output, like this: &lt;<nbsp/>?  You use an <term>escaped version</term>.  Type literally, the four characters <c>&amp;lt;</c> in your source.  Then the <init>XML</init> processor will know you want the character and will not mistake it for a tag.  But now we want to get an ampersand into our source like: &amp;.  How?  Another escaped version of a character, literally the five characters <c>&amp;amp;</c>.</p>
 
-                <p>Sage defines generators of algebraic structures with a syntax that might remind one of common notation for all <q>combinations</q> of some generators.  It is non-standard Python, but is instead pre-parsed by Sage.  No matter, at issue here is the left angle bracket used to specify generators.  Here is an example, which can be doctested by Sage to verify the example behaves correctly.  Look at the source to see how the generator syntax is created with the XML entities.</p>
-
-                <sage>
-                    <input>
-                    P.&lt;t&gt; = ZZ[]
-                    P
-                    </input>
-                    <output>Univariate Polynomial Ring in t over Integer Ring</output>
-                </sage>
-
-                <p>There is an alternate Sage syntax, which avoids the angle brackets.</p>
-
-                <sage>
-                    <input>
-                    R = ZZ['u']
-                    u = R.gen(0)
-                    (u, R)
-                    </input>
-                    <output>(u, Univariate Polynomial Ring in u over Integer Ring)</output>
-                </sage>
-
-                <p>Ampersands and angle brackets are likely to be necessary in source code, such as Sage code (think generators of field extensions) or TikZ code (think arrowheads), and in matrices (think separating entries).  If you have a big matrix, or a huge chunk of TikZ code, you can protect it all at once from the XML processor by wrapping it in <q><c>&lt;![CDATA[</c><nbsp /><nbsp /><nbsp /><c>]]&gt;</c>.</q>  It should be possible to write without ever using the <q>CDATA</q> mechanism, but it might get tedious in places to use the supplied macros or XML entities.</p>
-
-                <p>The other XML reserved characters are the quotation marks, single and double, <c>'</c> and <c>"</c>.  Their use is only constrained in attributes and so do not present a problem elsewhere.  Here are the three XML reserved characters rendered as normal text, see the source to see how they were authored.</p>
-
-                <p><ampersand /><nbsp /><nbsp />
-                <less /><nbsp /><nbsp />
-                <greater /><nbsp /><nbsp /></p>
-
-                <p>We test the three <latex /> macros for these characters with a pair of aligned equations:<md>
-                    <mrow>a^2 + b^2\amp\lt c^2</mrow>
-                    <mrow>c^2\amp\gt a^2 + b^2</mrow>
-                </md></p>
-
-                <p>So as a summary of how to avoid conflicts with XML's reserved characters, we have the following.  (The exclamation on the third entry is just a test and does not mean anything special here.)<dl>
-                    <li>
-                        <title><q>Normal</q> Text</title>
-                        <p>Use <c>&lt;ampersand /&gt;</c>, <c>&lt;less /&gt;</c>, <c>&lt;greater /&gt;</c>.</p>
-                    </li>
-                    <li xml:id="reserved-characters-mathematics">
-                        <title>Mathematics</title>
-                        <p>Within <c>m</c>, <c>me</c>, <c>men</c>, and <c>mrow</c> elements, use <c>\amp</c>, <c>\lt</c>, <c>\gt</c>.  Or use <c>CDATA</c> to enclose a large chunk of <latex /> with many of these characters.</p>
-                    </li>
-                    <li xml:id="reserved-characters-verbatim">
-                        <title>Verbatim, Code!</title>
-                        <p>Within verbatim text (<c>c</c>, <c>cd</c>, and <c>pre</c> elements), Sage code, program listings, and console sessions, use the XML entitites <c>&amp;amp;</c>, <c>&amp;lt;</c>, <c>&amp;gt;</c> to get exactly the characters desired.</p>
-                    </li>
-                </dl></p>
-
-                <p>It might be instructive to see how the paragraphs above about escape characters were written without inadvertently using an escape character improperly.</p>
-
-
-
-                <p>There are a handful of characters that might render just fine in HTML, but <latex /> reserves them for special purposes.  So if they appear unadorned in your source, they will wreak havoc with the <latex /> processing.  And if you escape them with backslashes to migrate to the <latex /> output, then you will see those backslashes in your HTML.  And the backslash is the escape character for Markdown and JSON.  You can't win.  Thus, you need to be aware of these symbols and use the provided <pretext /> elements for each in order to get the right behavior in each type of output.  Here are the outputs, look at the source of this document to see the input elements.</p>
-
-                <!-- Carriage returns are unwise, but this is impossible to read otherwise -->
-                <p><hash /><nbsp /><nbsp />
-                <dollar /><nbsp /><nbsp />
-                <percent /><nbsp /><nbsp />
-                <circumflex /><nbsp /><nbsp />
-                <ampersand /><nbsp /><nbsp />
-                <underscore /><nbsp /><nbsp />
-                <lbrace /><nbsp /><nbsp />
-                <rbrace /><nbsp /><nbsp />
-                <tilde /><nbsp /><nbsp />
-                <backslash /><nbsp /><nbsp />
-                <asterisk /><nbsp /><nbsp /></p>
-
-                <p>(2010-10-09)  Experimental code is in place to make much of the preceding unnecessary.  In particular, it should be possible to use the folowing  characters straight from your keyboard, and without an <init>XML</init> element.  But remember, the three special <init>XML</init> characters need to actually be authored using the escaped versions.</p>
-
-                <p>&amp; &lt; &gt; # $ % ^ _ { } ~ \</p>
-            </subsection>
-
-            <subsection>
-                <title>Pseudo-Characters and Constructions</title>
-
-                <p>There are a few  common abbreviations of Latin phrases that can be achieved in HTML one way, and in <latex /> with a slightly different mechanism.  These are due to <latex />'s treatment of a period (full stop), depending on its surroundings.  So not reserved characters, but just divergent treatment.  Using these will lead to the best quality in all your outputs.  See Will Robertson's informative and arcane <url href="http://latex-alive.tumblr.com/post/827168808/correct-punctuation-spaces">blog post</url> on the topic if you want the full story for the treatment of a full stop in <latex />.</p>
-
-                <sidebyside>
-                    <tabular>
-                        <row><cell>Tag</cell><cell>Realization</cell><cell>Meaning</cell></row>
-                        <!--  -->
-                        <row><cell><c>ad</c></cell>    <cell><ad/>    </cell><cell><foreign>anno Domini</foreign>, in the year of the Lord</cell>      </row>
-                        <row><cell><c>am</c></cell>    <cell><am/>    </cell><cell><foreign>ante meridiem</foreign>, before midday</cell>              </row>
-                        <row><cell><c>bc</c></cell>    <cell><bc/>    </cell><cell>English, before Christ</cell>                                       </row>
-                        <row><cell><c>circa</c></cell> <cell><circa/> </cell><cell><foreign>circa</foreign>, about</cell>                              </row>
-                        <row><cell><c>eg</c></cell>    <cell><eg/>    </cell><cell><foreign>exempli gratia</foreign>, for example</cell>               </row>
-                        <row><cell><c>etal</c></cell>  <cell><etal/>  </cell><cell><foreign>et alia</foreign>, and others</cell>                       </row>
-                        <row><cell><c>etc</c></cell>   <cell><etc/>   </cell><cell><foreign>et caetera</foreign>, and the rest</cell>                  </row>
-                        <row><cell><c>ie</c></cell>    <cell><ie/>    </cell><cell><foreign>id est</foreign>, in other words</cell>                    </row>
-                        <row><cell><c>nb</c></cell>    <cell><nb/>    </cell><cell><foreign>nota bene</foreign>, note well</cell>                      </row>
-                        <row><cell><c>pm</c></cell>    <cell><pm/>    </cell><cell><foreign>post meridiem</foreign>, after midday</cell>               </row>
-                        <row><cell><c>ps</c></cell>    <cell><ps/>    </cell><cell><foreign>post scriptum</foreign>, after what has been written</cell></row>
-                        <row><cell><c>vs</c></cell>    <cell><vs/>    </cell><cell><foreign>versus</foreign>, against</cell>                           </row>
-                        <row><cell><c>viz</c></cell>   <cell><viz/>   </cell><cell><foreign>videlicet</foreign>, namely</cell>                         </row>
-                    </tabular>
-                </sidebyside>
-
-                <p>There are a few other characters and marks that get special treatment.  Some do not appear on your keyboard, such as the symbol for copright (and similar business or legal marks in common use).  Then there are some characters that do not appear on your keyboard but frequently a keyboard character is used as a substitute.  For example, a fraction bar and a forward slash (<c>solidus</c> and <c>slash</c>, respectively) have slightly different slopes.  Also, compare a <c>tilde</c> and a <c>swungdash</c>.  You can fake a <c>midpoint</c> in <latex /> by going to math mode, but the midpoint is really a text character.  A <c>backtick</c> is a keyboard character that is really a modifier of other characters, grave accent.  But it might be needed in a text situation, and is a special character for Markdown syntax, used in Jupyter notebooks, for example.  Again, outputs here, see the source for inputs.  Using these uniformly will lead to the best quality in all your outputs, though some of these are very infrequent, or the distinctions are not always that important.</p>
-
-                <!-- Carriage returns are unwise, but this is impossible to read otherwise -->
-                <p><copyright /><nbsp /><nbsp />
-                <registered /><nbsp /><nbsp />
-                <trademark /><nbsp /><nbsp />
-                <ellipsis /><nbsp /><nbsp />
-                <backtick /><nbsp /><nbsp />
-                <midpoint /><nbsp /><nbsp />
-                <swungdash /><nbsp /><nbsp />
-                <permille /><nbsp /><nbsp />
-                <pilcrow /><nbsp /><nbsp />
-                <section-mark /><nbsp /><nbsp />
-                <times /><nbsp /><nbsp />
-                <slash /><nbsp /><nbsp />
-                <solidus /></p>
-
-                <p>We also distinguish between abbreviations (<abbr>vs.</abbr>), acronyms (<acro>SCUBA</acro>) and initialisms (<init>XML</init>).  This is a test of the text version of a multiplication symbol: 2<nbsp /><times /><nbsp />4.</p>
-
-                <p>An <term>em dash</term> is the long dash used much like parentheses (not an <term>en dash</term> used to denote a range, such as a range of page numbers).  It should not have spaces around it, but some style guides allow for a <em>thin</em> space, which<mdash />we test right now.  The command line stringparam <c>emdash.space</c> can be set to <c>none</c> or <c>thin</c> to control this.</p>
-            </subsection>
-
-            <subsection xml:id="subsection-icons-in-text">
-                <title>Icons in Text</title>
-
-                <p>A limited supply of icons can be used when explaining how to use some computer application.  The empty element is <tage>icon</tage> and the attribute is <attr>name</attr>.</p>
-
-                <p>We sprinkle <icon name="gear"/> a few into a few sentences <icon name="wrench"/> to check baselines <icon name="file-save"/> and font sizing.  We sprinkle <icon name="gear"/> a few into a few sentences <icon name="wrench"/> to check baselines <icon name="file-save"/> and font sizing.  We sprinkle <icon name="gear"/> a few into a few sentences <icon name="wrench"/> to check baselines <icon name="file-save"/> and font sizing.  We sprinkle <icon name="gear"/> a few into a few sentences <icon name="wrench"/> to check baselines <icon name="file-save"/> and font sizing.</p>
-
-                <table>
-                    <caption>User-Interface Icons</caption>
-
-                    <tabular>
-                        <col/>
-                        <col halign="center" right="medium"/>
-                        <col/>
-                        <col halign="center" right="medium"/>
-                        <col/>
-                        <col halign="center"/>
-                        <row bottom="medium">
-                            <cell>Name</cell><cell>Icon</cell>
-                            <cell>Name</cell><cell>Icon</cell>
-                            <cell>Name</cell><cell>Icon</cell>
-                        </row>
-                        <row>
-                            <cell><c>arrow-down</c></cell><cell><icon name="arrow-down"/></cell>
-                            <cell><c>arrow-left</c></cell><cell><icon name="arrow-left"/></cell>
-                            <cell><c>arrow-right</c></cell><cell><icon name="arrow-right"/></cell>
-                        </row>
-                        <row>
-                            <cell><c>arrow-up</c></cell><cell><icon name="arrow-up"/></cell>
-                            <cell><c>file-save</c></cell><cell><icon name="file-save"/></cell>
-                            <cell><c>gear</c></cell><cell><icon name="gear"/></cell>
-                        </row>
-                         <row>
-                            <cell><c>menu</c></cell><cell><icon name="menu"/></cell>
-                            <cell><c>wrench</c></cell><cell><icon name="wrench"/></cell>
-                            <!-- <cell><c></c></cell><cell><icon name=""/></cell> -->
-                        </row>
-
-                    </tabular>
-                </table>
-
-                <p>Nominations of new icons must<ul>
-                    <li>Have a Unicode character representation.</li>
-                    <li>Be in the <init>HTML/CSS/JS</init> Font Awesome catalog.</li>
-                    <li>Be in the <latex/> <c>fontawesome</c> package.</li>
-                    <li>Have a reasonably semantic <pretext/> name.</li>
-                </ul>Please supply all this information, including the official Unicode name, with your request.  Better yet, form a pull request.</p>
-
-            </subsection>
-
-            <subsection xml:id="section-urls">
-                <title>URLs, such as <url href="http://example.com" /></title>
-
-                <p>An internet <init>URL</init><idx><h>URLs</h></idx> can very well contain some of the characters that <latex /> needs to escape.  But the packages we use for embedded links should be smart about this.  So we include a long <init>URL</init> for testing <latex /> output, with one reserved character, though maybe someday it will become stale and we need to change it out:  <url href="http://www.pcc.edu/enroll/registration/dropping.html#withdraw">www.pcc.edu/enroll/registration/dropping.html<hash />withdraw</url>.  Notice in the source that you <em>cannot</em> put a tag inside the <c>href</c> attribute, and do need to use an element within the content (unless you like to wrap the content in a <c>c</c> element).  Here is a totally bogus <init>URL</init>, which contains every possible legal character, so if this fails to convert there is some problematic character.  Four combinations: with the content as normal text versus with the characters as verbatim text, and as a <init>URL</init> versus not.</p>
+                <p>Otherwise, keys on your keyboard, even international versions, should be fine in your source and behave as expected.  <init>WYTIWYG</init> = What You Type Is What You Get.  So the principal concession to using <init>XML</init> markup is the following very simple rule.</p>
 
                 <blockquote>
-
-                    <p>ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789<percent />-.<underscore /><tilde />:/?<hash />[]@!<dollar /><ampersand />'()*+,;=</p>
-
-                    <p><c>ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%-._~:/?#[]@!$&amp;'()*+,;=</c></p>
-
-                    <p><url href="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%-._~:/?#[]@!$&amp;'()*+,;=">ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789<percent />-.<underscore /><tilde />:/?<hash />[]@!<dollar /><ampersand />'()*+,;=</url></p>
-
-                    <p><url href="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%-._~:/?#[]@!$&amp;'()*+,;="><c>ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%-._~:/?#[]@!$&amp;'()*+,;=</c></url></p>
+                    <p>Rather than pressing the &lt; and &amp; keys on your keyboard, instead always enter the escape sequences <c>&amp;lt;</c> and <c>&amp;amp;</c> as replacements.</p>
                 </blockquote>
 
-                <p>The source of the four above examples can be instructive.<ul>
-                    <li><p>Four ampersands need to be authored as <c>&amp;amp;</c>: two <c>href</c> attributes and two strings of verbatim text.</p></li>
+                <p>Simple.  And it will work in <q>running text,</q> verbatim text (like when authoring the content of <tag>c</tag> or <tag>pre</tag> elements), and mixed into <latex/> syntax to desribe mathematical expressions.  <init>XML</init> has three other escape sequences <c>&amp;gt;</c>, <c>&amp;apos;</c>, and <c>&amp;quot;</c>, for the characters &gt;, &apos;, and &quot; (respectively).  But they seem largely unnecessary for authoring in PreTeXt, as we now demonstrate by typing them directly from our keyboard into our source: &gt;, &apos;, and &quot;.</p>
 
-                    <li><p>Two ampersands are authored as <c>&lt;ampersand /&gt;</c>: two strings of normal text.</p></li>
-                </ul></p>
-
-                <p>When a <c>url</c> has no content, then its <c>href</c> attribute is displayed as the text, automatically in a typewriter font.</p>
-
-                <blockquote>
-                    <p><url href="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%-._~:/?#[]@!$&amp;'()*+,;="></url></p>
-                </blockquote>
-
-                <p>We are not fans of footnotes, they are totally unstructured<fn><url href="https://en.wikipedia.org/wiki/Carleson%27s_theorem">Carleson's Theorem</url></fn>.  A URL in a footnote migrates around, and so care must be taken with special characters, such as the percent and hash<fn><url href="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%-._~:/?#[]@!$&amp;'()*+,;="><c>ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%-._~:/?#[]@!$&amp;'()*+,;=</c></url></fn>.  This paragraph has two footnotes, one with a real URL from Jesse Oldroyd, another with a fake URL from the above suite (the fourth one).  For good measure, we repeat the URL found in the first footnote: <url href="https://en.wikipedia.org/wiki/Carleson%27s_theorem">Carleson's Theorem</url>.  And we include a no-content version of the same link:  <url href="https://en.wikipedia.org/wiki/Carleson%27s_theorem" />.</p>
+                <exercise>
+                    <p>How was <c>&amp;amp;</c> authored?  Work it out, and then check the source here for the answer.</p>
+                </exercise>
             </subsection>
 
             <subsection>
                 <title>Quotations</title>
 
-                <p>The <c>q</c><idx><h>quotations</h></idx> tag will provide beginning and ending double quotations, while the <c>sq</c> tag will behave similarly but provide single quotes.</p>
+                <p>The <tag>q</tag><idx><h>quotations</h></idx> tag will provide beginning and ending double quotations, while the <tag>sq</tag> tag will behave similarly but provide single quotes.  Given the complexity of quotations, the different symbols used in different languages, and the over-simplified versions provided on keyboards, it is necessary to use markup.</p>
 
                 <p><q>The roots of education are bitter, but the fruit is sweet.</q> (Aristotle)</p>
 
                 <p><sq>It is always wise to look ahead, but difficult to look further than you can see.</sq> (Winston Churchill)</p>
 
-                <p>A large quote can be accomodated with the <c>blockquote</c> tag, which can carry within itself an <c>attribution</c> element.</p>
+                <p>A large quote can be accomodated with the <tag>blockquote</tag> tag, which can carry within itself an <tag>attribution</tag> element.</p>
 
                 <blockquote xml:id="blockquote-seuss">
                     <p>The problem with writing a book in verse is, to be successful, it has to sound like you knocked it off on a rainy Friday afternoon. It has to sound easy. When you can do it, it helps tremendously because it's a thing that forces kids to read on. You have this unconsummated feeling if you stop.</p>
@@ -1884,8 +1732,251 @@ the xsltproc executable.
             <subsection>
                 <title>Groupings</title>
 
-                <p>It is possible to make some other groupings like quotations, such as <braces>some <em>emphasized text</em> grouped within braces</braces>, or <brackets>a <pubtitle>Book Title</pubtitle> inside brackets</brackets>, an <articletitle>Article Title</articletitle>, <angles>some <foreign>foreign words</foreign> inside angle brackets</angles>, or <dblbrackets>just a bit of text within double brackets</dblbrackets>.  Some of these are used extensively by scholars who study texts to note various restorations or deletions.  Note that the <c>foreign</c> element may have a <c>xml:lang</c> attribute.</p>
+                <p>It is possible to make some other groupings like quotations, such as {some <em>emphasized text</em> grouped within braces}, or [a <pubtitle>Book Title</pubtitle> inside brackets], an <articletitle>Article Title</articletitle>, <angles>some <foreign>foreign words</foreign> inside angle brackets</angles>, or <dblbrackets>just a bit of text within double brackets</dblbrackets>.  Some of these are used extensively by scholars who study texts to note various restorations or deletions.  Note that the <tag>foreign</tag> element may have a <c>xml:lang</c> attribute.</p>
+
+                <p>Note that the angle brackets, <langle/> and <rangle/>, are <em>not</em> the keyboard characters, &lt; and &gt;.  Your best bet is to use the provided <tag>angles</tag> element when constructing a balanced pair.  Similarly, <tag>dblbrackets</tag> is provided to make the double-bracket characters easily available, since they are likely not on your keyboard.</p>
             </subsection>
+
+            <subsection>
+                <title>Characters, Symbols, and Constructions</title>
+
+                <p>Some keyboard characters are ambiguous.  Is the character <c>'</c> an apostrophe or a right single quote?  We presume the former, ', and provide markup as an alternative for the latter (described above).  Is <c>/</c> used to separate words, or to form a fraction?  We presume the former, /, and provide <tage>solidus</tage>, <solidus/>, for the latter.  We test some other characters straight from our US keyboard (with two being escape sequences).</p>
+
+                <p>~ ` ! @ # $ % ^ &amp; * ( ) _ - + = [ ] { } | \ ; : ' " , &lt; . > ? /</p>
+
+                <p>And again  as verbatim text.</p>
+
+                <p><c>~ ` ! @ # $ % ^ &amp; * ( ) _ - + = [ ] { } | \ ; : ' " , &lt; . > ? /</c></p>
+
+                <p>Note that for a long time <pretext/> had empty elements for many of these characters, as a consequence of naïveté.  So you might see <tage>dollar</tage>, <tage>ampersand</tage>, or others in old source.  They will be deprecated and will raise warnings.</p>
+
+                <p>Now, when a character is nowhere to be found on your keyboard, we provide conveniences as markup.  Here we test many of these.  Read the Author's Guide for tags and more detail.</p>
+
+                <!-- Carriage returns are unwise, but this is impossible to read otherwise -->
+                <p><copyright /><nbsp /><nbsp />
+                <phonomark/><nbsp /><nbsp />
+                <copyleft /><nbsp /><nbsp />
+                <registered /><nbsp /><nbsp />
+                <trademark /><nbsp /><nbsp />
+                <servicemark /><nbsp /><nbsp />
+                <ellipsis /><nbsp /><nbsp />
+                <midpoint /><nbsp /><nbsp />
+                <swungdash /><nbsp /><nbsp />
+                <permille /><nbsp /><nbsp />
+                <pilcrow /><nbsp /><nbsp />
+                <section-mark /><nbsp /><nbsp />
+                <times /><nbsp /><nbsp />
+                <solidus /></p>
+
+                <p>There are a few  common abbreviations of Latin phrases that can be achieved in HTML one way, and in <latex /> with a slightly different mechanism.  These are due to <latex />'s treatment of a period (full stop), depending on its surroundings.  So not reserved characters, but just divergent treatment.  Using these will lead to the best quality in all your outputs.  See Will Robertson's informative and arcane <url href="http://latex-alive.tumblr.com/post/827168808/correct-punctuation-spaces">blog post</url> on the topic if you want the full story for the treatment of a full stop in <latex />.</p>
+
+                <sidebyside>
+                    <tabular>
+                        <row><cell>Tag</cell><cell>Realization</cell><cell>Meaning</cell></row>
+                        <!--  -->
+                        <row><cell><c>ad</c></cell>    <cell><ad/>    </cell><cell><foreign>anno Domini</foreign>, in the year of the Lord</cell>      </row>
+                        <row><cell><c>am</c></cell>    <cell><am/>    </cell><cell><foreign>ante meridiem</foreign>, before midday</cell>              </row>
+                        <row><cell><c>bc</c></cell>    <cell><bc/>    </cell><cell>English, before Christ</cell>                                       </row>
+                        <row><cell><c>ca</c></cell>    <cell><ca/>    </cell><cell><foreign>circa</foreign>, about</cell>                              </row>
+                        <row><cell><c>eg</c></cell>    <cell><eg/>    </cell><cell><foreign>exempli gratia</foreign>, for example</cell>               </row>
+                        <row><cell><c>etal</c></cell>  <cell><etal/>  </cell><cell><foreign>et alia</foreign>, and others</cell>                       </row>
+                        <row><cell><c>etc</c></cell>   <cell><etc/>   </cell><cell><foreign>et caetera</foreign>, and the rest</cell>                  </row>
+                        <row><cell><c>ie</c></cell>    <cell><ie/>    </cell><cell><foreign>id est</foreign>, in other words</cell>                    </row>
+                        <row><cell><c>nb</c></cell>    <cell><nb/>    </cell><cell><foreign>nota bene</foreign>, note well</cell>                      </row>
+                        <row><cell><c>pm</c></cell>    <cell><pm/>    </cell><cell><foreign>post meridiem</foreign>, after midday</cell>               </row>
+                        <row><cell><c>ps</c></cell>    <cell><ps/>    </cell><cell><foreign>post scriptum</foreign>, after what has been written</cell></row>
+                        <row><cell><c>vs</c></cell>    <cell><vs/>    </cell><cell><foreign>versus</foreign>, against</cell>                           </row>
+                        <row><cell><c>viz</c></cell>   <cell><viz/>   </cell><cell><foreign>videlicet</foreign>, namely</cell>                         </row>
+                    </tabular>
+                </sidebyside>                <!-- 47.266898N -122.596464W, then 505.3 feet to mean tideline -->
+
+                <p>We also distinguish between abbreviations (<abbr>vs.</abbr>), acronyms (<acro>SCUBA</acro>) and initialisms (<init>XML</init>).  This is a test of the text version of a multiplication symbol: 2<nbsp /><times /><nbsp />4.</p>
+
+                <p>Simple coordinates with degrees, minutes, seconds, or temperature, or distance in feet and inches.  <q>We parked the car at 36<degree/>16<prime/>0.83<dblprime/>N, 122<degree/>35<prime/>47.27<dblprime/>W, and since it was 93<degree/>F, we walked 505<prime/>3.6<dblprime/> so we could swim in the bay.</q></p>
+
+                <p>An <term>em dash</term> is the long dash used much like parentheses (not an <term>en dash</term> used to denote a range, such as a range of page numbers).  It should not have spaces around it, but some style guides allow for a <em>thin</em> space, which<mdash />we test right now.  The command line stringparam <c>emdash.space</c> can be set to <c>none</c> or <c>thin</c> to control this.</p>
+            </subsection>
+
+            <subsection>
+                <title>Currency</title>
+
+                <p>For best results, be certain the right Unicode characters are in your source.  If you only need a certain symbol rarely, you can enter it in your source via its Unicode number.  For example, to obtain a peso, type <c>&amp;#x20B1;</c>.  This table has been tested with our default fonts, and should be fine for <init>HTML</init> output.  Please report any difficulties with different <latex/> fonts, as there are extra measures we can take to make these more robust.  (We've already done this for the Paraguayan guaraní.)</p>
+                <table>
+                    <caption>Supported Currency</caption>
+                    <tabular>
+                        <row bottom="medium">
+                            <cell>Sign</cell>
+                            <cell>Unicode</cell>
+                            <cell>Name</cell>
+                        </row>
+                        <row>
+                            <cell>&#x0024;</cell>
+                            <cell><c>U+0024</c></cell>
+                            <cell>dollar</cell>
+                        </row>
+                        <row>
+                            <cell>&#x00a2;</cell>
+                            <cell><c>U+00A2</c></cell>
+                            <cell>cent</cell>
+                        </row>
+                        <row>
+                            <cell>&#x00a3;</cell>
+                            <cell><c>U+00A3</c></cell>
+                            <cell>sterling</cell>
+                        </row>
+                        <row>
+                            <cell>&#x00a4;</cell>
+                            <cell><c>U+00A4</c></cell>
+                            <cell>currency</cell>
+                        </row>
+                        <row>
+                            <cell>&#x00a5;</cell>
+                            <cell><c>U+00A5</c></cell>
+                            <cell>yen</cell>
+                        </row>
+                        <row>
+                            <cell>&#x0192;</cell>
+                            <cell><c>U+0192</c></cell>
+                            <cell>florin</cell>
+                        </row>
+                        <row>
+                            <cell>&#x0e3f;</cell>
+                            <cell><c>U+0E3F</c></cell>
+                            <cell>baht</cell>
+                        </row>
+                        <row>
+                            <cell>&#x20a1;</cell>
+                            <cell><c>U+20A1</c></cell>
+                            <cell>colon</cell>
+                        </row>
+                        <row>
+                            <cell>&#x20a4;</cell>
+                            <cell><c>U+20A4</c></cell>
+                            <cell>lira</cell>
+                        </row>
+                        <row>
+                            <cell>&#x20a6;</cell>
+                            <cell><c>U+20A6</c></cell>
+                            <cell>naira</cell>
+                        </row>
+                        <row>
+                            <cell>&#x20a9;</cell>
+                            <cell><c>U+20A9</c></cell>
+                            <cell>won</cell>
+                        </row>
+                        <row>
+                            <cell>&#x20ab;</cell>
+                            <cell><c>U+20AB</c></cell>
+                            <cell>dong</cell>
+                        </row>
+                        <row>
+                            <cell>&#x20ac;</cell>
+                            <cell><c>U+20AC</c></cell>
+                            <cell>euro</cell>
+                        </row>
+                        <row>
+                            <cell>&#x20b1;</cell>
+                            <cell><c>U+20B1</c></cell>
+                            <cell>peso</cell>
+                        </row>
+                        <row>
+                            <cell>&#x20b2;</cell>
+                            <cell><c>U+20B2</c></cell>
+                            <cell>guarani</cell>
+                        </row>
+                    </tabular>
+                </table>
+            </subsection>
+
+            <subsection xml:id="subsection-icons-in-text">
+                <title>Icons in Text</title>
+
+                <p>A limited supply of icons can be used when explaining how to use some computer application.  The empty element is <tage>icon</tage> and the attribute is <attr>name</attr>.</p>
+
+                <p>We sprinkle <icon name="gear"/> a few into a few sentences <icon name="wrench"/> to check baselines <icon name="file-save"/> and font sizing.  We sprinkle <icon name="gear"/> a few into a few sentences <icon name="wrench"/> to check baselines <icon name="file-save"/> and font sizing.  We sprinkle <icon name="gear"/> a few into a few sentences <icon name="wrench"/> to check baselines <icon name="file-save"/> and font sizing.  We sprinkle <icon name="gear"/> a few into a few sentences <icon name="wrench"/> to check baselines <icon name="file-save"/> and font sizing.</p>
+
+                <table>
+                    <caption>User-Interface Icons</caption>
+
+                    <tabular>
+                        <col/>
+                        <col halign="center" right="medium"/>
+                        <col/>
+                        <col halign="center" right="medium"/>
+                        <col/>
+                        <col halign="center"/>
+                        <row bottom="medium">
+                            <cell>Name</cell><cell>Icon</cell>
+                            <cell>Name</cell><cell>Icon</cell>
+                            <cell>Name</cell><cell>Icon</cell>
+                        </row>
+                        <row>
+                            <cell><c>arrow-down</c></cell><cell><icon name="arrow-down"/></cell>
+                            <cell><c>arrow-left</c></cell><cell><icon name="arrow-left"/></cell>
+                            <cell><c>arrow-right</c></cell><cell><icon name="arrow-right"/></cell>
+                        </row>
+                        <row>
+                            <cell><c>arrow-up</c></cell><cell><icon name="arrow-up"/></cell>
+                            <cell><c>file-save</c></cell><cell><icon name="file-save"/></cell>
+                            <cell><c>gear</c></cell><cell><icon name="gear"/></cell>
+                        </row>
+                         <row>
+                            <cell><c>menu</c></cell><cell><icon name="menu"/></cell>
+                            <cell><c>wrench</c></cell><cell><icon name="wrench"/></cell>
+                            <cell/><cell/>
+                            <!-- <cell><c></c></cell><cell><icon name=""/></cell> -->
+                        </row>
+                        <!-- Keep rows full (w/ empty cells) to please HTML validator -->
+
+                    </tabular>
+                </table>
+
+                <p>Nominations of new icons must<ul>
+                    <li>Have a Unicode character representation.</li>
+                    <li>Be in the <init>HTML/CSS/JS</init> Font Awesome catalog.</li>
+                    <li>Be in the <latex/> <c>fontawesome</c> package.</li>
+                    <li>Have a reasonably semantic <pretext/> name.</li>
+                </ul>Please supply all this information, including the official Unicode name, with your request.  Better yet, form a pull request.</p>
+
+                <warning>
+                    <title>Icons, <c>xelatex</c>, and Fonts</title>
+
+                    <p>When processing a <latex/> file with <c>xelatex</c> the FontAwesome icons are expected to be in a <em>system</em> font whose name is <c>FontAwesome</c>.  This is not a filename, and installing the <latex/> <c>fontawesome</c> package into your <latex/> installation does not mean you have made this font available as a <em>system</em> font.</p>
+
+                    <p>The Publisher's Guide contains some discussion about installing fonts into a system, as part of the documentation of creating a <latex/> style.</p>
+                </warning>
+            </subsection>
+
+            <subsection xml:id="section-urls">
+                <title>URLs, such as <url href="http://example.com" /></title>
+
+                <p>An internet <init>URL</init><idx><h>URLs</h></idx> can contain a limited subset of keyboard characters.  So we include a long <init>URL</init> for testing:  <url href="http://www.pcc.edu/enroll/registration/dropping.html#withdraw">www.pcc.edu/enroll/registration/dropping.html#withdraw</url>.  Notice in the source that you <em>do not</em> put any tags inside the <c>href</c> attribute, but you may need to provide XML escape sequences, see <xref ref="subsection-xml-escape"/>).  Here is a totally bogus <init>URL</init>, which contains every possible legal character, so if this fails to convert there is some problematic character.  In order to test the use of a percent sign (<c>%</c>) in a URL, we follow it by two hex digits, specifically, <c>58</c>, which is a way to represent the character <c>X</c> in a <init>URL</init>.  Three versions: one with the content as normal text, one with the characters as verbatim text, and then as a <init>URL</init> with the same string of characters as the address and the clickable, viewable part.</p>
+
+                <blockquote>
+
+                    <p>ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%-._~:/?#[]@!$&amp;'()*+,;=</p>
+
+                    <p><c>ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%-._~:/?#[]@!$&amp;'()*+,;=</c></p>
+
+                    <p><url href="http://example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%58-._~:/?#[]@!$&amp;'()*+,;=">http://example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%58-._~:/?#[]@!$&amp;'()*+,;=</url></p>
+
+                </blockquote>
+
+                <p>The source of the four above examples can be instructive.<ul>
+                    <li><p>Four ampersands need to be authored as <c>&amp;amp;</c>: two <c>href</c> attributes and two strings of verbatim text.</p></li>
+
+                    <li><p>Two ampersands are authored as <tag>ampersand /</tag>: two strings of normal text.</p></li>
+                </ul></p>
+
+                <p>When a <c>url</c> has no content, then its <c>href</c> attribute is displayed as the text, automatically in a typewriter font.</p>
+
+                <blockquote>
+                    <p><url href="http://example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%58-._~:/?#[]@!$&amp;'()*+,;="></url></p>
+                </blockquote>
+
+                <p>We are not fans of footnotes, they are totally unstructured.<fn><url href="https://en.wikipedia.org/wiki/Carleson%27s_theorem">Carleson's Theorem</url></fn>  A URL in a footnote migrates around, and so care must be taken.<fn><url href="http://example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%58-._~:/?#[]@!$&amp;'()*+,;="><c>http://example.com/ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789%58-._~:/?#[]@!$&amp;'()*+,;=</c></url></fn>  This paragraph has two footnotes, one with a real URL from Jesse Oldroyd, another with a fake URL from the above suite (the fourth one).  For good measure, we repeat the URL found in the first footnote: <url href="https://en.wikipedia.org/wiki/Carleson%27s_theorem">Carleson's Theorem</url>.  And we include a no-content version of the same link:  <url href="https://en.wikipedia.org/wiki/Carleson%27s_theorem" />.</p>
+            </subsection>
+
 
             <subsection>
                 <title>Biological Names</title>
@@ -1904,6 +1995,89 @@ the xsltproc executable.
                 <p>You can test the migration of the <latex /> special characters in this section title by requesting a 2-deep Table of Contents with <c> --stringparam toc.level 2</c>.</p>
             </subsection>
 
+            <subsection xml:id="subsection-special-situations">
+                <title>Special Situations</title>
+
+                <p>Sage defines a nice syntax for generators of algebraic structures, but we must remember to use an escape sequence for the &lt; symbol (see <xref ref="subsection-xml-escape" text="type-global"/>).</p>
+
+                <sage>
+                    <input>
+                    P.&lt;t> = ZZ[]
+                    P
+                    </input>
+                    <output>Univariate Polynomial Ring in t over Integer Ring</output>
+                </sage>
+
+                <p>There is an alternate Sage syntax, which avoids the less-than and greater symbols.</p>
+
+                <sage>
+                    <input>
+                    R = ZZ['u']
+                    u = R.gen(0)
+                    (u, R)
+                    </input>
+                    <output>(u, Univariate Polynomial Ring in u over Integer Ring)</output>
+                </sage>
+
+                <p>Ampersands, less-than, and greater symbols are likely to be necessary in source code, such as Sage code (think generators of field extensions) or TikZ code (think arrowheads), and in matrices (think separating entries).  If you have a big matrix, or a huge chunk of TikZ code, you can protect it all at once from the XML processor by wrapping it in <c>&lt;![CDATA[</c><nbsp/><nbsp/><nbsp/><c>]]&gt;</c>.  It should be possible to write without ever using the <q>CDATA</q> mechanism, but it might get tedious in places to use the supplied macros or <init>XML</init> escape sequences.  This construction is often mis-understood as a solution better remedied by reading <xref ref="subsection-xml-escape" text="type-global"/> again.</p>
+
+                <p>We test the three pre-defined <latex /> macros for &amp;, &lt;, and &gt; with a pair of aligned equations:<md>
+                    <mrow>a^2 + b^2\amp\lt c^2</mrow>
+                    <mrow>c^2\amp\gt a^2 + b^2</mrow>
+                </md></p>
+            </subsection>
+
+            <subsection xml:id="subsection-jupyter-dollars">
+                <title>Jupyter Notebook, Markdown, MathJax, Delimiters</title>
+
+                <p>A Jupyter notebook allows a mix of <init>HTML</init> (our logistical preference for a conversion) and Markown (another set of special characters and their escaped versions).  Certain pairs of delimiters, when appearing in consecutive <init>HTML</init> <tag>code</tag> elements require extraordinary care.  But the one nut we cannot crack is pairs of dollar signs.  So the next paragraph is known to render badly in a Jupyter notebook, but should otherwise be a bit boring.</p>
+
+                <p><c>$</c> and <c>$</c></p>
+            </subsection>
+
+            <subsection>
+                <title><latex/> Characters, Ligatures, and More</title>
+
+                <p>This section is just for testing, and the more you know about <latex/>, the more we would encourage you to <em>not</em> to read this.  Look to the Author's Guide for the <em>right</em> way to author your source.</p>
+
+                <p>The ten reserved characters, directly in the source: # $ % ^ &amp; _ { } ~ \.  And again: X#X$X%X^X&amp;X_X{X}X~X\X, but smashed up tight to intermediate characters.</p>
+
+                <p>In a verbatim presentation: <c># $ % ^ &amp; _ { } ~ \</c>.</p>
+
+                <p>And <c>X#X$X%X^X&amp;X_X{X}X~X\X</c>.  (These verbatim versions are authored in different paragraphs to work around the Jupyter notebook bug described above.)</p>
+
+                <p>We also disrupt certain constructions from <latex/>.  Attempting to sneak-in any traditional macro for the purposes of <latex/>-only output, such as, say a \newpage, will fail since the leading backslash will be caught and converted to <c>\textbackslash</c>.  (See?  It just happened twice.)  For technical reasons we want to particularly test \textbackslash, \textbraceleft, and \textbraceright.</p>
+
+                <p>Four <q><tex/> ligatures</q>, <c>--</c>, <c>---</c>, <c>``</c>, and <c>''</c>, authored in running text, --, ---, ``, ''.  It may be hard to tell that the two consecutive apostrophes have not coalesced into a curly left smart quote, but see below, the spacing is subtely different.</p>
+
+                <p>We want the double quote mark from your keyboard, <c>"</c>, to not morph into some other character: "<nbsp/>.</p>
+
+                <p>More testing: runs of hyphens.  Such as: - (one), -- (two), --- (three), ---- (four), ----- (five), ------ (six), ------- (seven).  Use the empty elements <tage>ndash</tage> and <tage>mdash</tage> for the longer dashes/hyphens.</p>
+
+                <p>Runs of apostrophes should not become smart right double quotes:  ' (one), '' (two), ''' (three), '''' (four), ''''' (five), '''''' (six), ''''''' (seven).    You might want to cut-and-paste these into a text file to convince yourself there are the right number of characters.  Here are two smart right double quotes, separated by a non-breaking space, for visual comparison: <rq/><nbsp/><rq/>.  Or 30 apostrophes on a line of their own (longer) followed by 15 smart right double quotes (shorter).</p>
+                <p>''''''''''''''''''''''''''''''.</p>
+                <p><rq/><rq/><rq/><rq/><rq/><rq/><rq/><rq/><rq/><rq/><rq/><rq/><rq/><rq/><rq/>.</p>
+
+                <p>Runs of backticks (accent grave) should not become smart left double quotes when the output is processed by <latex/>:  ` (one), `` (two), ``` (three), ```` (four), ````` (five), `````` (six), ``````` (seven).  Furthermore, in a context where Markdown syntax is recognized as well (<eg/> a Jupyter notebook), paired backticks should <em>not</em> produce `inline verbatim text`.</p>
+
+                <p>The next paragraph has a long run of words separated/joined by the keyboard forward-slash character.  With this input, <latex/> will not line-break at the slash, nor will it hypenate anywhere.  <pretext/>  automatically provides an improved slash, which will line-break, as you should see below in <latex/> output.  There is a bad right margin, but that is due to the absurdity of this test.  This sort of problem should be no better or worse for the use of this character.  Further refinements (zero-width space) and packages can be used to get hyphenation.  <init>HTML</init> will line-break rationally with no extra help.  Remember the <tage>solidus</tage> character for super-simple text fractions like 7<solidus/>32 (which will <em>not</em> line-break), and math elements or SI unit markup for technical work.</p>
+
+                <p>A/test/of/some/short/words/that/go/off/the/end/of/a/line/A/test/of/some/short/words/that/go/off/the/end/of/a/line/A/test/of/some/short/words/that/go/off/the/end/of/a/line/A/test/of/some/short/words/that/go/off/the/end/of/a/line/A/test/of/some/short/words/that/go/off/the/end/of/a/line.</p>
+            </subsection>
+
+            <subsection>
+                <title><init>HTML</init> and accidental mathematics</title>
+
+                <p>We render mathematics in web pages with the fantastic MathJax Javascript library.  Simplifying just a bit, it recognizes <latex/> syntax within a page, takes control of that text, and replaces it wth nice fonts and formatting.  Now, if you write about <latex/> you might well have some mathematics in your examples.  Best practice would be to use verbatim text for that, and we mark off such text as being off-limits to MathJax.</p>
+
+                <p>But if you are writing running text, then you can (accidentally) author some text which MathJax recognizes and converts to something (unintended).  And if you are doing this intentionally, then you have ignored <pretext/> markup for mathematics, and are missing out on some features.</p>
+
+                <p>A few tests that we can prevent any accidents.</p>
+
+                <p>Inline mathematics: \(x^2\).</p>
+
+                <p>Display mathematics: \begin{align}x^2+y^2=z^2\end{align}</p>
+            </subsection>
         </section>
 
         <section xml:id="graphics">
@@ -1918,7 +2092,7 @@ the xsltproc executable.
                 <idx><latex /> image</idx>
                 <idx><h>image</h><h><latex /> image</h></idx>
 
-                <p>There are several graphics engine packages that a <latex /> document can employ. Code from these packages renders diagrams automatically as part of normal processing of <latex /> files.  For HTML output the <c>mbx</c> script produces SVG versions of the pictures.  The script can also produce standalone TEX source files, PDFs, PNGs, and EPSs. The packages should be loaded in <c>docinfo/latex-image-preamble</c>, which is also where global package settings should be made. As mentioned in Subsection <xref ref="subsection-reserved-characters"/>, if any ampersands occur in your <latex /> code you should use the <c>\amp</c> macro. These first examples are from the <url href="http://www.texample.net/tikz/examples/">TeXample.net</url> site.</p>
+                <p>There are several graphics engine packages that a <latex /> document can employ. Code from these packages renders diagrams automatically as part of normal processing of <latex /> files.  For HTML output the <c>mbx</c> script produces SVG versions of the pictures.  The script can also produce standalone TEX source files, PDFs, PNGs, and EPSs. The packages should be loaded in <c>docinfo/latex-image-preamble</c>, which is also where global package settings should be made. If any ampersands occur in your <latex/> code you should use the <c>\amp</c> macro pre-defined by <pretext/>. These first examples are from the <url href="http://www.texample.net/tikz/examples/">TeXample.net</url> site.</p>
 
                 <!-- http://www.texample.net/media/tikz/examples/TEX/noise-shaper.tex -->
                 <figure xml:id="figure-tikz-electronics">
@@ -2168,7 +2342,7 @@ the xsltproc executable.
                     </image>
                 </figure>
 
-                <p>PSTricks is a <latex /> package for drawing diagrams and pictures, dating back to the days before <init>PDF</init>, when PostScript (<init>PS</init>) was king.  Given its history, it does not seem to work easily with the <c>pdflatex</c> engine.  But it will work easily with the <c>xelatex</c> engine.  We try to keep this present sample document workable with both engines, so we have presented an example of the use of PSTricks in the xelatex-exclusive sample document where we test obscure fonts and characters.  So your best bet is to look there.<idx>PSTricks</idx></p>
+                <p>PSTricks is a <latex /> package for drawing diagrams and pictures, dating back to the days before <init>PDF</init>, when PostScript (<init>PS</init>) was king.  Given its history, it does not seem to work easily with the <c>pdflatex</c> engine.  But it will work easily with the <c>xelatex</c> engine.  We try to keep this present sample document workable with both engines, so we have presented an example of the use of PSTricks in the <c>xelatex</c>-exclusive sample document where we test obscure fonts and characters.  So your best bet is to look there.<idx>PSTricks</idx></p>
 
                 <p>There are suggestions online that <cd>\usepackage[pdf]{pstricks}</cd>along with <cd>pdflatex --shell-escape *.tex</cd> is workable.  We could not make it happen, and a <q>shell escape</q> can be a dangerous security hole.  That said, updates to this approach are welcome.</p>
             </subsection>
@@ -2176,7 +2350,7 @@ the xsltproc executable.
             <subsection>
                 <title>Placing Images without a Caption</title>
 
-                <p>To place an image without a caption, use the <c>&lt;sidebyside&gt;</c> layout element, containing just a single <c>&lt;image&gt;</c>.  There is no way to add a caption, and the item will not be numbered.  You cannot cross-reference it, nor will it appear in a knowl in HTML output.  You will get a bit of vertical separation for the transitions to/from horizontal layout.  Use <c>margins=auto</c> on the <c>&lt;sidebyside&gt;</c> to center the image<mdash />this should become the default behavior.  A variety of other elements may be placed in a similar manner.  See Section<nbsp /><xref ref="section-side-by-side" /> to learn more about the <c>&lt;sidebyside&gt;</c> layout element.</p>
+                <p>To place an image without a caption, use the <tag>sidebyside</tag> layout element, containing just a single <tag>image</tag>.  There is no way to add a caption, and the item will not be numbered.  You cannot cross-reference it, nor will it appear in a knowl in HTML output.  You will get a bit of vertical separation for the transitions to/from horizontal layout.  Use <c>margins=auto</c> on the <tag>sidebyside</tag> to center the image<mdash />this should become the default behavior.  A variety of other elements may be placed in a similar manner.  See Section<nbsp /><xref ref="section-side-by-side" /> to learn more about the <tag>sidebyside</tag> layout element.</p>
 
                 <sidebyside width="30%" margins="auto">
                     <image xml:id="cross-square" source="images/cross-square.png"/>
@@ -2447,7 +2621,7 @@ the xsltproc executable.
                     <image source="images/cross-square.png" width="30%" />
                 </figure>
 
-                <p>If you have a figure generated from source code (such as in TikZ) you can place the code into a file and <c>xinclude</c> it twice.  The <c>mbx</c> script will make two copies if you include the source twice, but with different names (generated from the different <c>@xml:id</c>).  Furthermore, with the <c>@parse</c> attribute on the <c>xinclude</c> element set to <c>text</c> you are absolved from escaping the dangerous XML characters (ampersand, angle brackets) and definitely have no need for the <c>CDATA</c> mechanism.  We demonstrate this with the sample book, since it is all set up with the <c>xinclude</c> mechanism.  See the two plots of the 8-th roots of unity in the complex numbers section of the chapter on cyclic groups.</p>
+                <p>If you have a figure generated from source code (such as in TikZ) you can place the code into a file and <c>xinclude</c> it twice.  The <c>mbx</c> script will make two copies if you include the source twice, but with different names (generated from the different <c>@xml:id</c>).  Furthermore, with the <c>@parse</c> attribute on the <c>xinclude</c> element set to <c>text</c> you are absolved from escaping the dangerous XML characters (see <xref ref="subsection-xml-escape" text="type-global"/>) and definitely have no need for the often mis-understood <c>CDATA</c> mechanism.  We demonstrate this with the sample book, since it is all set up with the <c>xinclude</c> mechanism.  See the two plots of the 8-th roots of unity in the complex numbers section of the chapter on cyclic groups.</p>
             </subsection>
 
             <subsection>
@@ -2518,7 +2692,7 @@ the xsltproc executable.
                 <p>A caption could be as substantial as a paragraph, here we test out one such example.</p>
 
                 <figure xml:id="figure-long-caption">
-                    <caption>A caption can be a whole paragraph with lots of technical details, and maybe a hyperlink to something external, such as <url href="http://mathbook.pugetsound.edu"><c>mathbook.pugetsound.edu</c></url>.  There could be some inline mathematics, such as <m>x^2 + y^2 = c^2</m>.  Would a knowl open here?  Recursively?  Let's see: <xref ref="figure-long-caption" />.  Display mathematics, side-by-sides, theorems, and lots of other things should be banned.  Footnotes sound like a bad idea.  Strange characters should be fine: <section-mark />.</caption>
+                    <caption>A caption can be a whole paragraph with lots of technical details, and maybe a hyperlink to something external, such as <url href="https://pretextbook.org"><c>pretextbook.org</c></url>.  There could be some inline mathematics, such as <m>x^2 + y^2 = c^2</m>.  Would a knowl open here?  Recursively?  Let's see: <xref ref="figure-long-caption" />.  Display mathematics, side-by-sides, theorems, and lots of other things should be banned.  Footnotes sound like a bad idea.  Strange characters should be fine: <section-mark />.</caption>
 
                     <image source="images/cross-square.png" width="20%" />
                 </figure>
@@ -2663,7 +2837,7 @@ the xsltproc executable.
                 </exercisegroup>
 
                 <exercisegroup cols="4">
-                    <introduction><p>An <c>&lt;exercisegroup&gt;</c> can have a <c>cols</c> attribute taking a value from 2<ndash />6. Exercises will progress by row, in so many columns. On a small screen, the HTML exercises may reorganize into fewer columns.</p></introduction>
+                    <introduction><p>An <tag>exercisegroup</tag> can have a <c>cols</c> attribute taking a value from 2<ndash />6. Exercises will progress by row, in so many columns. On a small screen, the HTML exercises may reorganize into fewer columns.</p></introduction>
                     <exercise>
                         <statement><p><m>1+2</m></p></statement>
                     </exercise>
@@ -2984,7 +3158,7 @@ the xsltproc executable.
                 <idx><h>description list</h></idx><idx><h>list</h><h>description</h></idx>
                 has a short term or phrase that is prominent, followed by a short description.  It is modeled on the lists of similar structure in both <latex /> and HTML.  It makes for a nice medium-weight way to define terms, somewhere in-between the <c>term</c> tag which just makes a term prominent in a sentence, and a <c>definition</c>, which is set off, has a heading, a number, and a title.  Do not try to manage the separation between the title and the description by employing punctuation (but you can include a question-mark or exclamation-point if necessary).  For example, do not include a colon to the end of the title.  This example is from Bob Plantz.
                 <dl>
-                    <li>
+                    <li xml:id="cpu-definition">
                         <title>Central Processing Unit (CPU)</title>
                         <p>Controls most of the activities of the computer, performs the arithmetic and logical operations, and contains a small amount of very fast memory.</p>
                     </li>
@@ -2999,9 +3173,9 @@ the xsltproc executable.
                         <p>Communicates with the outside world and with mass storage devices (<eg />, disks).</p>
                     </li>
 
-                    <li>
-                        <title>Bus</title>
-                        <p>A communication pathway with a protocol specifying exactly how the pathway is used.</p>
+                    <li xml:id="bus-definition">
+                        <title>Bus!</title>
+                        <p>A communication pathway with a protocol specifying exactly how the pathway is used. (The punctuation is just for testing.)</p>
                     </li>
                 </dl></p>
 
@@ -3544,7 +3718,7 @@ the xsltproc executable.
             </table>
 
 
-            <p>For a table without a caption, create a <c>&lt;tabular&gt;</c> and place it inside a <c>&lt;sidebyside&gt;</c>.  This will allow control over the horizontal placment, but without a caption, there is no number, and the tabular cannot be cross-referenced.</p>
+            <p>For a table without a caption, create a <tag>tabular</tag> and place it inside a <tag>sidebyside</tag>.  This will allow control over the horizontal placment, but without a caption, there is no number, and the tabular cannot be cross-referenced.</p>
 
             <sidebyside>
                 <tabular top="medium"><row bottom="medium" left="minor"><cell right="minor">One</cell></row></tabular>
@@ -3702,7 +3876,7 @@ the xsltproc executable.
                 </tabular>
             </table>
 
-            <p>Table cells with a fixed width where text wraps are known as <q>paragraph cells</q>. A cell will be created as a paragraph cell if and only if it has <c>&lt;p&gt;</c> children. And such cells should <em>only</em> have <c>&lt;p&gt;</c> children. The width of a paragraph cell is determined by a <c>width</c> attribute on the corresponding <c>&lt;col&gt;</c> (as a percentage). If no <c>width</c> is specified (or there isn't even a <c>&lt;col&gt;</c> in the first place) then <c>xsltproc</c> will abort. If the column has a non-paragraph cell with contents that are wider than the paragraph cells, results will be undesirable. There is presently no implementation for a paragraph cell that has a <c>colspan</c> greater than <m>1</m>, although cells with <c>colspan</c> greater than <m>1</m> that are above or below a paragraph cell will behave. Setting <c>width</c> on a <c>&lt;col&gt;</c> that has no paragraph cells may produce unexpected results. A <c>valign</c> for the parent <c>&lt;row&gt;</c> (or the ambient <c>&lt;tabular&gt;</c>) can control vertical alignment (top, middle, or bottom). A paragraph cell's <c>halign</c> attribute (left, center, right, or justify) controls how the text is justfied. Cells inherit <c>halign</c> from <c>&lt;row&gt;</c>, <c>&lt;col&gt;</c>, and <c>&lt;tabular&gt;</c> in that order of preference. In a non-paragraph cell where <c>halign='justify'</c>, the horizontal alignment will match the behavior of <c>halign='left'</c>.</p>
+            <p>Table cells with a fixed width where text wraps are known as <q>paragraph cells</q>. A cell will be created as a paragraph cell if and only if it has <tag>p</tag> children. And such cells should <em>only</em> have <tag>p</tag> children. The width of a paragraph cell is determined by a <c>width</c> attribute on the corresponding <tag>col</tag> (as a percentage). If no <c>width</c> is specified (or there isn't even a <tag>col</tag> in the first place) then <c>xsltproc</c> will abort. If the column has a non-paragraph cell with contents that are wider than the paragraph cells, results will be undesirable. There is presently no implementation for a paragraph cell that has a <c>colspan</c> greater than <m>1</m>, although cells with <c>colspan</c> greater than <m>1</m> that are above or below a paragraph cell will behave. Setting <c>width</c> on a <tag>col</tag> that has no paragraph cells may produce unexpected results. A <c>valign</c> for the parent <tag>row</tag> (or the ambient <tag>tabular</tag>) can control vertical alignment (top, middle, or bottom). A paragraph cell's <c>halign</c> attribute (left, center, right, or justify) controls how the text is justfied. Cells inherit <c>halign</c> from <tag>row</tag>, <tag>col</tag>, and <tag>tabular</tag> in that order of preference. In a non-paragraph cell where <c>halign='justify'</c>, the horizontal alignment will match the behavior of <c>halign='left'</c>.</p>
 
             <table xml:id="table-time-units">
                 <caption>Time Units</caption>
@@ -3739,7 +3913,7 @@ the xsltproc executable.
                 </tabular>
             </table>
 
-            <p>Table cells can have multiline content using <c>&lt;line&gt;</c> elements. This is not the same thing as a paragraph cell<mdash />line breaking will happen precisely where the author tells it to. A <c>&lt;line&gt;</c> will not break, even on a narrow screen. If a cell uses a <c>&lt;line&gt;</c>, it must only use a sequence of <c>&lt;line&gt;</c>s and no other content. As with paragraph cells, you can use a <c>valign</c> attribute for the row.</p>
+            <p>Table cells can have multiline content using <tag>line</tag> elements. This is not the same thing as a paragraph cell<mdash />line breaking will happen precisely where the author tells it to. A <tag>line</tag> will not break, even on a narrow screen. If a cell uses a <tag>line</tag>, it must only use a sequence of <tag>line</tag>s and no other content. As with paragraph cells, you can use a <c>valign</c> attribute for the row.</p>
 
             <table xml:id="table-multiline-cells">
                 <caption><abbr>Dr.</abbr> Seuss lines</caption>
@@ -3767,7 +3941,7 @@ the xsltproc executable.
                 </tabular>
             </table>
 
-            <p>This is a table torture test with many combinations of <c>halign</c>, <c>valign</c>, <c>colspan</c>, <c>&lt;p&gt;</c> children, and <c>&lt;line&gt;</c> children.</p>
+            <p>This is a table torture test with many combinations of <c>halign</c>, <c>valign</c>, <c>colspan</c>, <tag>p</tag> children, and <tag>line</tag> children.</p>
 
             <table>
                 <caption>Table Torture Test</caption>
@@ -3844,7 +4018,7 @@ the xsltproc executable.
                 </tabular>
             </table>
 
-            <p>And now a <c>&lt;sidebyside&gt;</c> with a <c>&lt;table&gt;</c> and a <c>&lt;tabular&gt;</c> to check that width is scaled appropriately. See <xref ref="section-side-by-side">Section</xref> to learn about <c>&lt;sidebyside&gt;</c>s.</p>
+            <p>And now a <tag>sidebyside</tag> with a <tag>table</tag> and a <tag>tabular</tag> to check that width is scaled appropriately. See <xref ref="section-side-by-side">Section</xref> to learn about <tag>sidebyside</tag>s.</p>
 
             <figure xml:id="table-consitution-text">
                 <caption>Some text from the US Constitution</caption>
@@ -3855,7 +4029,7 @@ the xsltproc executable.
                         <row>
                             <cell>A1.S1</cell>
                             <cell><p>All legislative Powers herein granted shall be vested in a Congress of the United States, which shall consist of a Senate and House of Representatives.</p>
-                                  <p>Should be 50<percent /> of 45<percent /> except perhaps on small screens.</p></cell>
+                                  <p>Should be 50% of 45% except perhaps on small screens.</p></cell>
                         </row>
                     </tabular>
 
@@ -3865,45 +4039,33 @@ the xsltproc executable.
                         <row>
                             <cell>A1.S2.C1</cell>
                             <cell><p>The House of Representatives shall be composed of Members chosen every second Year by the People of the several States, and the Electors in each State shall have the Qualifications requisite for Electors of the most numerous Branch of the State Legislature.</p>
-                                  <p>Should be 50<percent /> of 55<percent /> except perhaps on small screens.</p></cell>
+                                  <p>Should be 50% of 55% except perhaps on small screens.</p></cell>
                         </row>
                     </tabular>
                 </sidebyside>
             </figure>
 
-            <p>Tables are formed in <latex /> output with copious use of the <c>\multicolumn</c> macro to override more global alignment settings, and to spread the content of one cell across several columns.  However, sometimes <latex />'s special characters have behaved badly in this situation.  So the table below, two items per row, is just designed for <latex /> testing.  But of course, it should still render fine in other formats.  The five test cases are from <xref ref="section-urls" />, but without 50 alphabetic characters and 8 digits, which should not be problems in this context.  The first column's entries are <em>forced</em> to be wrapped in a <c>\multicolumn</c> by specifying their horizontal alignment.  The second column's entries <em>should not</em> be wrapped in a <c>\multicolumn</c>.</p>
+            <p>Tables are formed in <latex /> output with copious use of the <c>\multicolumn</c> macro to override more global alignment settings, and to spread the content of one cell across several columns.  However, sometimes <latex />'s special characters have behaved badly in this situation.  So the table below, two items per row, is just designed for <latex /> testing.  But of course, it should still render fine in other formats.  The three test cases are from <xref ref="section-urls" />, but without 50 alphabetic characters and 8 digits, which should not be problems in this context.  In order to test the use of a percent sign (<c>%</c>) in a URL, we follow it by two hex digits, specifically, <c>58</c>, which is a way to represent the character <c>X</c> in a <init>URL</init>.  The first column's entries are <em>forced</em> to be wrapped in a <c>\multicolumn</c> by specifying their horizontal alignment.  The second column's entries <em>will not</em> be wrapped in a <c>\multicolumn</c>.So the two columns will look identical, other than the first having a left alignment, and the second has the default center alignment.  (This table is known to render poorly in a Jupyter notebook.  The cause is four dollar signs present in rows 1 and 3, and is explained in <xref ref="subsection-jupyter-dollars" text="type-global"/>.)</p>
 
             <table xml:id="table-latex-problems">
-                <caption>Problematic Cells for <latex /></caption>
+                <caption>Problematic Table Cells for <latex /></caption>
                 <tabular halign="center" top="medium" left="medium" bottom="medium" right="medium">
                     <row>
                         <cell>1</cell>
-                        <cell halign="left">09az<percent />-.<underscore /><tilde />:/?<hash />[]@!<dollar /><ampersand />'()*+,;=</cell>
-                        <cell>09az<percent />-.<underscore /><tilde />:/?<hash />[]@!<dollar /><ampersand />'()*+,;=</cell>
-                    </row>
-
-                    <row>
-                        <cell>2</cell>
                         <cell halign="left"><c>09az%-._~:/?#[]@!$&amp;'()*+,;=</c></cell>
                         <cell><c>09az%-._~:/?#[]@!$&amp;'()*+,;=</c></cell>
                     </row>
 
                     <row>
+                        <cell>2</cell>
+                        <cell halign="left"><url href="http://example.com/09az%58-._~:/?#[]@!$&amp;'()*+,;=">http://example.com/09az%58-._~:/?#[]@!$&amp;'()*+,;=</url></cell>
+                        <cell><url href="http://example.com/09az%58-._~:/?#[]@!$&amp;'()*+,;=">http://example.com/09az%58-._~:/?#[]@!$&amp;'()*+,;=</url></cell>
+                    </row>
+
+                    <row>
                         <cell>3</cell>
-                        <cell halign="left"><url href="09az%-._~:/?#[]@!$&amp;'()*+,;=">09az<percent />-.<underscore /><tilde />:/?<hash />[]@!<dollar /><ampersand />'()*+,;=</url></cell>
-                        <cell><url href="09az%-._~:/?#[]@!$&amp;'()*+,;=">09az<percent />-.<underscore /><tilde />:/?<hash />[]@!<dollar /><ampersand />'()*+,;=</url></cell>
-                    </row>
-
-                    <row>
-                        <cell>4</cell>
-                        <cell halign="left"><url href="09az%-._~:/?#[]@!$&amp;'()*+,;="><c>09az%-._~:/?#[]@!$&amp;'()*+,;=</c></url></cell>
-                        <cell><url href="09az%-._~:/?#[]@!$&amp;'()*+,;="><c>09az%-._~:/?#[]@!$&amp;'()*+,;=</c></url></cell>
-                    </row>
-
-                    <row>
-                        <cell>5</cell>
-                        <cell halign="left"><url href="09az%-._~:/?#[]@!$&amp;'()*+,;="></url></cell>
-                        <cell><url href="09az%-._~:/?#[]@!$&amp;'()*+,;="></url></cell>
+                        <cell halign="left"><url href="http://example.com/09az%58-._~:/?#[]@!$&amp;'()*+,;="></url></cell>
+                        <cell><url href="http://example.com/09az%58-._~:/?#[]@!$&amp;'()*+,;="></url></cell>
                     </row>
                 </tabular>
             </table>
@@ -3911,7 +4073,11 @@ the xsltproc executable.
         </section>
 
         <section xml:id="section-interactive-authored">
-            <title>Interactive Elements, Authored</title>
+            <title>
+                <line>Interactive Elements</line>
+                <line>Authored in Javascript</line>
+            </title>
+            <shorttitle>Interactive Elements, Authored</shorttitle>
             <idx><h>interactive elements</h><h>authored</h></idx>
             <idx><h>embedded interactive elements</h><h>authored</h></idx>
 
@@ -4080,6 +4246,10 @@ the xsltproc executable.
 
                 <p>Entirely similar to using an HTML5 <c>canvas</c> element (<xref ref="interactive-html5-canvas" />), it is possible to control an <init>SVG</init> element with Javascript.  This example is from Mark McClure.</p>
 
+                <p>Look carefully at the source and rendering of this example as <init>HTML</init>.  The change in <m>x</m>, denoted here as <m>h</m>, is reported when the <q>Show secant line</q> option is ticked.  The <m>h</m> is being rendered as mathematics by the Javascript MathJax library.  However, this cannot be accomplished with <c>$...$</c> nor by <c>\(...\)</c>, but instead by using <tag>script</tag> tags that MathJax recognizes.  So the employment of MathJax here is accomplished with<cd>
+                    <cline>&lt;script type="math/tex">h = &lt;/script></cline>
+                </cd></p>
+
                 <figure xml:id="figure-interactive-slopes">
                     <caption>Tangent and secant slopes</caption>
                     <interactive xml:id="interactive-slopes" platform="javascript" width="100%" aspect="6:8" source="https://code.jquery.com/jquery-1.11.3.min.js https://d3js.org/d3.v3.min.js https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.2.1/math.min.js code/mcclure/slope.js" css="code/mcclure/slope.css">
@@ -4125,7 +4295,7 @@ the xsltproc executable.
                                         <tr><td><input id="h_slider" type="range" min="-0.5" max="0.5" step="0.01" /></td></tr>
                                     </table></td>
                                     <td><table>
-                                        <tr><td class="dimit" style="text-align: left;">\(h = \) <span id="h_value_display"></span></td></tr>
+                                        <tr><td class="dimit" style="text-align: left;"><script type="math/tex">h = </script> <span id="h_value_display"></span></td></tr>
                                         <tr><td class="dimit" style="text-align: left;">secant slope = <span id="secant_value_display"></span></td></tr>
                                         <tr><td style="text-align: left;">tangent slope = <span id="tangent_value_display"></span></td></tr>
                                     </table></td>
@@ -4155,7 +4325,7 @@ the xsltproc executable.
 
                 <p>Place Javascript inside a file that is specified with the <attr>source</attr> attribute of the <tag>interactive</tag> element.  Then just be certain that <attr>xml:id</attr> of the <tag>interactive</tag> element is passed as the <init>HTML</init> <c>id</c> in an (early) call to JSXGraph's <c>initBoard()</c> method.</p>
 
-                <p>The plot below is the curve <m>r=a+b\theta</m> in polar coordinates, for <m>0\leq\theta\leq 8\pi</m>.  It may be manipulated with the sliders to control the shape of the curve.  Point <m>A</m> is contrained to the curve, but may be dragged to a new location. At <m>A</m> the tangent line and normal line are plotted as dashed red lines.  Use the controls in the lower left to adjust the viewing window.  This <url href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Archimedean_spiral">example</url> is taken from the JSXGraph <url href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Category:Examples">example wiki</url>.  The code could be written in 7 lines.  Width is 80<percent /> and aspect ratio is 4:3.</p>
+                <p>The plot below is the curve <m>r=a+b\theta</m> in polar coordinates, for <m>0\leq\theta\leq 8\pi</m>.  It may be manipulated with the sliders to control the shape of the curve.  Point <m>A</m> is contrained to the curve, but may be dragged to a new location. At <m>A</m> the tangent line and normal line are plotted as dashed red lines.  Use the controls in the lower left to adjust the viewing window.  This <url href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Archimedean_spiral">example</url> is taken from the JSXGraph <url href="http://jsxgraph.uni-bayreuth.de/wiki/index.php/Category:Examples">example wiki</url>.  The code could be written in 7 lines.  Width is 80% and aspect ratio is 4:3.</p>
 
                 <figure>
                     <caption>The Archimedian Spiral <m>r = a + b\theta</m>, <m>0\leq\theta\leq 8\pi</m></caption>
@@ -4171,7 +4341,7 @@ the xsltproc executable.
 
                 <p>Here is a more elaborate example, from the <url href="http://jsxgraph.uni-bayreuth.de/showcase/">JSXGraph Showcase</url>, titled <url href="http://jsxgraph.uni-bayreuth.de/showcase/infinity.html">Infinity</url>.</p>
 
-                <p>There are two active sliders to control the shape and shading of the graphic, and hovering the mouse near one of the edges will highlight the entirety of one of the 30 quadrangles.  Finally, each of the four red corners may be dragged to a new location.  Code is 47 lines.  Width is 60<percent /> and aspect ratio is the default, 1:1, <ie /> a square.</p>
+                <p>There are two active sliders to control the shape and shading of the graphic, and hovering the mouse near one of the edges will highlight the entirety of one of the 30 quadrangles.  Finally, each of the four red corners may be dragged to a new location.  Code is 47 lines.  Width is 60% and aspect ratio is the default, 1:1, <ie /> a square.</p>
 
                 <figure>
                     <caption>Infinity, from the JSXGraph Showcase</caption>
@@ -4351,7 +4521,7 @@ the xsltproc executable.
 
                 <figure>
                     <caption>Right Triangle Paradox</caption>
-                    <interactive geogebra="KGn2d4Qd" width="70%" aspect="9:5">
+                    <interactive xml:id="geogebra-right-triangle" geogebra="KGn2d4Qd" width="70%" aspect="9:5">
                         <static>
                             <image source="images/right-triangle-paradox.png" />
                         </static>
@@ -4371,7 +4541,7 @@ the xsltproc executable.
 
                 <figure>
                     <caption>Graph of <m>ln(x^2+5)-3</m></caption>
-                    <interactive desmos="ttox1bvxku" width="60%" aspect="2:3">
+                    <interactive xml:id="desmos-natural-log" desmos="ttox1bvxku" width="60%" aspect="2:3">
                         <static>
                             <image source="images/desmos-graph.png" width="60%"/>
                         </static>
@@ -4387,21 +4557,23 @@ the xsltproc executable.
 
                 <p>CalcPlot3D is a Javascript application for creating, visualizing, and understanding plots of 3D surfaces.  So it would be an ideal companion to a book on multivariate calculus, but should be useful in other courses of study.</p>
 
-                <p>To use it, find find the <url href="http://www.monroecc.edu/faculty/paulseeburger/calcnsf/CalcPlot3D/">online app version</url> at<cd>http://www.monroecc.edu/faculty/paulseeburger/calcnsf/CalcPlot3D/</cd>Create a plot and adjust the image to a viewpoint and scale you like.  Then, click the menu icon in the upper-left and choose <c>File</c>.  From here you can save a <init>PNG</init> image for the static version, but you also want to select <c>Encode View in URL</c>.  Now your browser address bar is filled with a query string (<em>all</em> the stuff <em>after</em> the question-mark) that has all the information necessary to reproduce your plot (and view).  Copy everything after the first question-mark to the <c>interactive/code</c> element.  Be sure to replace any ampersands by <c>&amp;amp;</c> (see the Author's Guide for more about certain characters in <init>URL</init>s).  Examine the source for the examples below to see how they are authored.</p>
+                <p>To use it, find the <url href="http://www.monroecc.edu/faculty/paulseeburger/calcnsf/CalcPlot3D/">online app version</url> at<cd>http://www.monroecc.edu/faculty/paulseeburger/calcnsf/CalcPlot3D/</cd>Create a plot and adjust the image to a viewpoint and scale you like.  Then, click the menu icon in the upper-left and choose <c>File</c>.  From here you can save a <init>PNG</init> image for the static version, but you also want to select <c>Encode View in URL</c>.  Now your browser address bar is filled with a query string (<em>all</em> the stuff <em>after</em> the question-mark) that has all the information necessary to reproduce your plot (and view).  Copy everything after the first question-mark to the <c>interactive/code</c> element.  Be sure to replace any ampersands by <c>&amp;amp;</c> (see the Author's Guide for more about certain characters in <init>URL</init>s).  Examine the source for the examples below to see how they are authored.</p>
 
-                <figure>
+                <p>In <xref ref="figure-intersecting-planes" text="type-global"/> grab the image with your mouse and rotate it in various directions.  Then while the image has focus, press the <c>3</c> key (short for <q>3-D</q>), to get a 3D view, which will require some red-blue 3D glasses to fully appreciate.  Press the key again to return to a regular view.</p>
+
+                <figure xml:id="figure-intersecting-planes">
                     <caption>Intersection of two planes (minimal embedding)</caption>
-                    <interactive calcplot3d="type=implicit;equation=2x-y+z~0;cubes=16;visible=true;xmin=-2;xmax=2;ymin=-2;ymax=2;zmin=-2;zmax=2;alpha=-1;format=constant;constcol=rgb(61,133,198)&amp;type=parametric;parametric=2;x=-(u+v)/2;y=(u-v)/2;z=v;visible=true;umin=-3;umax=3;usteps=30;vmin=-2;vmax=2;vsteps=15;alpha=193;format=constant;constcol=rgb(255,161,114)&amp;type=text;text=x%20%2B%20y%20%2B%20z%20~%200;visible=true;point=(.5,-2.5,2.1);color=rgb(0,0,0);font=Times%20New%20Roman;fontsize=14pt;bold=false;italic=false;fontmath=true;align=Upper-right&amp;type=text;text=2x%20-%20y%20%2B%20z%20~%200;visible=true;point=(2,2.2,-1.25);color=rgb(0,0,0);font=Times%20New%20Roman;fontsize=14pt;bold=false;italic=false;fontmath=true;align=Upper-right&amp;type=window;hsrmode=0;anaglyph=-1;center=7.006292692220367,5.09036960455127,4.999999999999999,1;focus=0,0,0,1;up=-0.3290568564833397,-0.23907380036690282,0.9135454576426009,1;transparent=true;alpha=140;edgeson=false;faceson=true;showbox=false;showaxes=true;showticks=true;perspective=true;centerxpercent=0.5;centerypercent=0.5;rotationsteps=30;autospin=true;xygrid=false;yzgrid=false;xzgrid=false;gridsonbox=true;gridplanes=false;gridcolor=rgb(128,128,128);xmin=-2;xmax=2;ymin=-2;ymax=2;zmin=-2;zmax=2;xscale=1;yscale=1;zscale=1;zcmin=-4;zcmax=4;zoom=0.655294;xscalefactor=1;yscalefactor=1;zscalefactor=1" variant="minimal" width="80%"/>
+                    <interactive xml:id="calcplot3d-intersection-planes" calcplot3d="type=implicit;equation=2x-y+z~0;cubes=16;visible=true;xmin=-2;xmax=2;ymin=-2;ymax=2;zmin=-2;zmax=2;alpha=-1;format=constant;constcol=rgb(61,133,198)&amp;type=parametric;parametric=2;x=-(u+v)/2;y=(u-v)/2;z=v;visible=true;umin=-3;umax=3;usteps=30;vmin=-2;vmax=2;vsteps=15;alpha=193;format=constant;constcol=rgb(255,161,114)&amp;type=text;text=x%20%2B%20y%20%2B%20z%20~%200;visible=true;point=(.5,-2.5,2.1);color=rgb(0,0,0);font=Times%20New%20Roman;fontsize=14pt;bold=false;italic=false;fontmath=true;align=Upper-right&amp;type=text;text=2x%20-%20y%20%2B%20z%20~%200;visible=true;point=(2,2.2,-1.25);color=rgb(0,0,0);font=Times%20New%20Roman;fontsize=14pt;bold=false;italic=false;fontmath=true;align=Upper-right&amp;type=window;hsrmode=0;anaglyph=-1;center=7.006292692220367,5.09036960455127,4.999999999999999,1;focus=0,0,0,1;up=-0.3290568564833397,-0.23907380036690282,0.9135454576426009,1;transparent=true;alpha=140;edgeson=false;faceson=true;showbox=false;showaxes=true;showticks=true;perspective=true;centerxpercent=0.5;centerypercent=0.5;rotationsteps=30;autospin=true;xygrid=false;yzgrid=false;xzgrid=false;gridsonbox=true;gridplanes=false;gridcolor=rgb(128,128,128);xmin=-2;xmax=2;ymin=-2;ymax=2;zmin=-2;zmax=2;xscale=1;yscale=1;zscale=1;zcmin=-4;zcmax=4;zoom=0.655294;xscalefactor=1;yscalefactor=1;zscalefactor=1" variant="minimal" width="80%"/>
                 </figure>
 
                 <figure>
                     <caption>Probability wavefunction with contours (includes controls)</caption>
-                    <interactive calcplot3d="type=jaxlabel;position=middle;math=%255Cpsi_%257Bn_x%252Cn_y%257D(x%252Cy);textonly=false&amp;type=z;z=sin(api*x)sin(bpi*y);visible=true;umin=0;umax=1;vmin=0;vmax=1;grid=50;format=normal;alpha=200;constcol=rgb(255,0,0);view=0;contourcolor=rgb(255,0,0);contourplot=true;showcontourplot=true;firstvalue=-1;stepsize=0.2;numlevels=11;xnum=75;ynum=75;show2d=false;hidesurface=false;hidelabels=false;showprojections=false;surfacecontours=true;projectioncolor=rgba(51,153,0,1);showxygrid=false;showxygridonbox=false&amp;type=slider;slider=a;value=1;steps=2;pmin=1;pmax=3;repeat=true;bounce=true;waittime=40;careful=true;noanimate=true;name=n_x&amp;type=slider;slider=b;value=1;steps=2;pmin=1;pmax=3;repeat=true;bounce=true;waittime=40;careful=true;noanimate=true;name=n_y&amp;type=text;text=0;visible=true;point=(0,0,0);color=rgb(0,0,0);font=Times%20New%20Roman;fontsize=15pt;bold=true;italic=false;fontmath=true;align=Center-left&amp;type=text;text=L;visible=true;point=(1,-0.025,0);color=rgb(0,0,0);font=Times%20New%20Roman;fontsize=14pt;bold=true;italic=false;fontmath=true;align=Center&amp;type=text;text=L;visible=true;point=(-0.05,1,0);color=rgb(0,0,0);font=Times%20New%20Roman;fontsize=14pt;bold=true;italic=false;fontmath=true;align=Center&amp;type=text;text=x;visible=true;point=(0.5,-0.07,0);color=rgb(0,0,0);font=Times%20New%20Roman;fontsize=14pt;bold=true;italic=false;fontmath=true;align=Center&amp;type=text;text=y;visible=true;point=(-0.08,0.5,0);color=rgb(0,0,0);font=Times%20New%20Roman;fontsize=14pt;bold=true;italic=false;fontmath=true;align=Center&amp;type=window;hsrmode=3;anaglyph=-1;center=-7.447051206708178,-2.790794355991455,3.71998429905919,1;focus=0.5,0.5,0.5,1;up=0.39804763218685024,0.14521777837291014,0.9057979241281567,1;transparent=true;alpha=140;twoviews=false;unlinkviews=false;axisextension=0;xaxislabel=%20;yaxislabel=%20;zaxislabel=%20;edgeson=false;faceson=true;showbox=false;showaxes=false;showticks=false;perspective=true;centerxpercent=0.5;centerypercent=0.4;rotationsteps=30;autospin=true;xygrid=false;yzgrid=false;xzgrid=false;gridsonbox=false;gridplanes=true;gridcolor=rgb(128,128,128);xmin=0;xmax=1;ymin=0;ymax=1;zmin=0;zmax=1;xscale=1;yscale=1;zscale=1;zcmin=-4;zcmax=4;zoom=3.543529;xscalefactor=1;yscalefactor=1;zscalefactor=0.5;hidexysliders=true;hidetracevalue=true" variant="controls" width="95%" aspect="1:2" />
+                    <interactive xml:id="calcplot3d-probability-wavefunction" calcplot3d="type=jaxlabel;position=middle;math=%255Cpsi_%257Bn_x%252Cn_y%257D(x%252Cy);textonly=false&amp;type=z;z=sin(api*x)sin(bpi*y);visible=true;umin=0;umax=1;vmin=0;vmax=1;grid=50;format=normal;alpha=200;constcol=rgb(255,0,0);view=0;contourcolor=rgb(255,0,0);contourplot=true;showcontourplot=true;firstvalue=-1;stepsize=0.2;numlevels=11;xnum=75;ynum=75;show2d=false;hidesurface=false;hidelabels=false;showprojections=false;surfacecontours=true;projectioncolor=rgba(51,153,0,1);showxygrid=false;showxygridonbox=false&amp;type=slider;slider=a;value=1;steps=2;pmin=1;pmax=3;repeat=true;bounce=true;waittime=40;careful=true;noanimate=true;name=n_x&amp;type=slider;slider=b;value=1;steps=2;pmin=1;pmax=3;repeat=true;bounce=true;waittime=40;careful=true;noanimate=true;name=n_y&amp;type=text;text=0;visible=true;point=(0,0,0);color=rgb(0,0,0);font=Times%20New%20Roman;fontsize=15pt;bold=true;italic=false;fontmath=true;align=Center-left&amp;type=text;text=L;visible=true;point=(1,-0.025,0);color=rgb(0,0,0);font=Times%20New%20Roman;fontsize=14pt;bold=true;italic=false;fontmath=true;align=Center&amp;type=text;text=L;visible=true;point=(-0.05,1,0);color=rgb(0,0,0);font=Times%20New%20Roman;fontsize=14pt;bold=true;italic=false;fontmath=true;align=Center&amp;type=text;text=x;visible=true;point=(0.5,-0.07,0);color=rgb(0,0,0);font=Times%20New%20Roman;fontsize=14pt;bold=true;italic=false;fontmath=true;align=Center&amp;type=text;text=y;visible=true;point=(-0.08,0.5,0);color=rgb(0,0,0);font=Times%20New%20Roman;fontsize=14pt;bold=true;italic=false;fontmath=true;align=Center&amp;type=window;hsrmode=3;anaglyph=-1;center=-7.447051206708178,-2.790794355991455,3.71998429905919,1;focus=0.5,0.5,0.5,1;up=0.39804763218685024,0.14521777837291014,0.9057979241281567,1;transparent=true;alpha=140;twoviews=false;unlinkviews=false;axisextension=0;xaxislabel=%20;yaxislabel=%20;zaxislabel=%20;edgeson=false;faceson=true;showbox=false;showaxes=false;showticks=false;perspective=true;centerxpercent=0.5;centerypercent=0.4;rotationsteps=30;autospin=true;xygrid=false;yzgrid=false;xzgrid=false;gridsonbox=false;gridplanes=true;gridcolor=rgb(128,128,128);xmin=0;xmax=1;ymin=0;ymax=1;zmin=0;zmax=1;xscale=1;yscale=1;zscale=1;zcmin=-4;zcmax=4;zoom=3.543529;xscalefactor=1;yscalefactor=1;zscalefactor=0.5;hidexysliders=true;hidetracevalue=true" variant="controls" width="95%" aspect="1:2" />
                 </figure>
 
                 <figure>
-                    <caption>Plot of <m>f(x,y)=\dfrac{1}{y-x^2}</m> on <m>[-2,2]\times[-2,2] (full application)</m></caption>
-                    <interactive calcplot3d="type=z;z=1/(y-x^2);visible=true;umin=-2;umax=2;vmin=-2;vmax=2;grid=30;format=normal;alpha=-1;constcol=rgb(255,0,0);contourcolor=red&amp;type=window;hsrmode=3;anaglyph=-1;center=5.529712854135209,7.349875454071844,3.9244880634856956,1;focus=0,0,0,1;up=-0.26875302682986874,-0.2884991397174344,0.9189886054528014,1;transparent=true;alpha=140;edgeson=true;faceson=true;showbox=true;showaxes=true;showticks=true;perspective=true;centerxpercent=0.5;centerypercent=0.5;rotationsteps=30;autospin=true;xygrid=false;yzgrid=false;xzgrid=false;gridsonbox=true;gridplanes=false;gridcolor=rgb(128,128,128);xmin=-2;xmax=2;ymin=-2;ymax=2;zmin=-4;zmax=4;xscale=1;yscale=1;zscale=1;zcmin=-4;zcmax=4;zoom=0.468667;xscalefactor=1;yscalefactor=1;zscalefactor=1" variant="application" width="95%" aspect="10:13">
+                    <caption>Plot of <m>f(x,y)=\dfrac{1}{y-x^2}</m> on <m>[-2,2]\times[-2,2]</m> (full application)</caption>
+                    <interactive xml:id="calcplot3d-full-application" calcplot3d="type=z;z=1/(y-x^2);visible=true;umin=-2;umax=2;vmin=-2;vmax=2;grid=30;format=normal;alpha=-1;constcol=rgb(255,0,0);contourcolor=red&amp;type=window;hsrmode=3;anaglyph=-1;center=5.529712854135209,7.349875454071844,3.9244880634856956,1;focus=0,0,0,1;up=-0.26875302682986874,-0.2884991397174344,0.9189886054528014,1;transparent=true;alpha=140;edgeson=true;faceson=true;showbox=true;showaxes=true;showticks=true;perspective=true;centerxpercent=0.5;centerypercent=0.5;rotationsteps=30;autospin=true;xygrid=false;yzgrid=false;xzgrid=false;gridsonbox=true;gridplanes=false;gridcolor=rgb(128,128,128);xmin=-2;xmax=2;ymin=-2;ymax=2;zmin=-4;zmax=4;xscale=1;yscale=1;zscale=1;zcmin=-4;zcmax=4;zoom=0.468667;xscalefactor=1;yscalefactor=1;zscalefactor=1" variant="application" width="95%" aspect="10:13">
                         <static>
                             <image source="images/calcplot3d.png" width="45%"/>
                         </static>
@@ -4423,12 +4595,12 @@ the xsltproc executable.
 
                 <figure xml:id="wolfram-cdf-sine-curve">
                     <caption>Variable Sine Curve</caption>
-                    <interactive wolfram-cdf="fe1be5c3-d105-43d0-bf4b-9f2eb1028b84" width="80%" aspect="1:1" />
+                    <interactive xml:id="wolfram-sine-curve" wolfram-cdf="fe1be5c3-d105-43d0-bf4b-9f2eb1028b84" width="80%" aspect="1:1" />
                 </figure>
 
                 <figure xml:id="wolfram-cdf-cellular-automata">
                     <caption>Cellular Automata</caption>
-                    <interactive wolfram-cdf="9fa2acff-c809-4b7f-a73b-c59ace36affc" width="80%" aspect="1:1" />
+                    <interactive xml:id="wolfram-cellular-automata" wolfram-cdf="9fa2acff-c809-4b7f-a73b-c59ace36affc" width="80%" aspect="1:1" />
                 </figure>
             </subsection>
         </section>
@@ -4461,7 +4633,7 @@ the xsltproc executable.
                 <video source="images/ups-visitor-guide-360" width="80%" preview="generic" />
             </figure>
 
-            <p>You can use a very similar construction to point to a video hosted somewhere on the Internet, just use a complete <init>URL</init> for the <tag>source</tag> attribute.  Note that if the URL has a query string (parameters following a question-mark), then any ampersands (<ampersand />) will need to be escaped, so as to not confuse the <init>XML</init> processor (<ie /> use <c>&amp;amp</c>).  Also, the question-mark character needs to <em>not</em> be <init>URL</init>-encoded (<c>%3F</c>), so presumably ed it to be the character.  Here are two examples, the second one uses the <attr>start</attr> and <attr>stop</attr> attributes to limit the video to just the time between the 16-second and 30-second locations.</p>
+            <p>You can use a very similar construction to point to a video hosted somewhere on the Internet, just use a complete <init>URL</init> for the <tag>source</tag> attribute.  Note that if the URL has a query string (parameters following a question-mark), then any ampersands (&amp;) will need to be escaped, so as to not confuse the <init>XML</init> processor (<ie /> use <c>&amp;amp</c>).  Also, the question-mark character needs to <em>not</em> be <init>URL</init>-encoded (<c>%3F</c>), so presumably edit the <init>URL</init> to be the character.  Here are two examples, the second one uses the <attr>start</attr> and <attr>stop</attr> attributes to limit the video to just the time between the 16-second and 30-second locations.</p>
 
             <figure>
                 <caption>Sintel (Trailer @480p), <url href="https://durian.blender.org/" /></caption>
@@ -4496,7 +4668,7 @@ the xsltproc executable.
                 <video xml:id="drone-flight-clip" youtube="VsHMjWORFvI" start="54" end="72" />
             </figure>
 
-            <p>Videos may be placed <q>standalone</q> in a <c>&lt;sidebyside&gt;</c>, but are designed mostly on the assumption that they are wrapped in a <c>figure</c> with a <c>title</c> (which is distinct from a <c>caption</c>).  This video comes with a deafult poster featuring Robert Plant.  We've replaced it with Jimmy Page.</p>
+            <p>Videos may be placed <q>standalone</q> in a <tag>sidebyside</tag>, but are designed mostly on the assumption that they are wrapped in a <c>figure</c> with a <c>title</c> (which is distinct from a <c>caption</c>).  This video comes with a deafult poster featuring Robert Plant.  We've replaced it with Jimmy Page.</p>
 
             <figure>
                 <title>Kashmir (Live), Led Zeppelin</title>
@@ -4650,7 +4822,7 @@ the xsltproc executable.
         <section xml:id="section-cross-referencing">
             <title>Cross-Referencing</title>
 
-            <p>Cross-references<idx>cross-reference</idx> are easy, since that is a key reason for having a highly structured document.  Here is a useful feature if you elect to use it.  Any <c>&lt;xref&gt;</c> will <q>know</q> what it points to, so you can let it provide the <q>naming</q> part of the cross-reference text.  You can turn this on globally with the command-line parameter <c>autoname</c><idx><h>autoname</h></idx> set to <c>'yes'</c>.  If you do that, you will see most of the names in this document doubled, since the names are written into the source already in most places outside of this section.  Try it and see: use <c>--stringparam autoname 'yes'</c> as an argument to <c>xsltproc</c>.</p>
+            <p>Cross-references<idx>cross-reference</idx> are easy, since that is a key reason for having a highly structured document.  Here is a useful feature if you elect to use it.  Any <tag>xref</tag> will <q>know</q> what it points to, so you can let it provide the <q>naming</q> part of the cross-reference text.  You can turn this on globally with the command-line parameter <c>autoname</c><idx><h>autoname</h></idx> set to <c>'yes'</c>.  If you do that, you will see most of the names in this document doubled, since the names are written into the source already in most places outside of this section.  Try it and see: use <c>--stringparam autoname 'yes'</c> as an argument to <c>xsltproc</c>.</p>
 
             <p>Moreover, the names themselves will change with the use of the one language dependent file.  And another bonus is that with an autoname, you automatically get a <em>non-breaking</em> space between the name and the reference.  The autoname switch makes no sense for <q>provisional</q> cross-references, since there is no information about what they point to.</p>
 
@@ -4709,8 +4881,8 @@ the xsltproc executable.
                 <li><p>Same item in ordered list, but contained in an unordered list, now with a cross-reference by <c>title</c> with a content override: <xref ref="target-no-number" text="title">No Number List Item</xref></p></li>
                 <li><p>Several examples of hybrid cross-references to list items within a named list can be found in, and adjacent to, <xref ref="list-to-reference" text="type-global" />.</p></li>
                 <li><p>An assemblage, which never has a number.  A cross-reference now requires content in the <c>xref</c> element, with <c>text='title'</c>: <xref ref="assemblage-basics" text="title">text to xref an assemblage</xref></p></li>
-                <li><p>A cross-reference to a list item in a description list, which has a title, but never a number: <xref ref="reserved-characters-mathematics" text="title" />.  Note that you need to include the attribute <c>text="title"</c> even if that is obvious from the situation.  This requirement may be relaxed in a future refactoring of the cross-reference system.</p></li>
-                <li><p>A very similar cross-reference to the previous one, but testing how final punctuation of titles is handled: <xref ref="reserved-characters-verbatim" text="title" />.</p></li>
+                <li><p>A cross-reference to a list item in a description list, which has a title, but never a number: <xref ref="cpu-definition" text="title" />.  Note that you need to include the attribute <c>text="title"</c> even if that is obvious from the situation.  This requirement may be relaxed in a future refactoring of the cross-reference system.</p></li>
+                <li><p>A very similar cross-reference to the previous one, but testing how final punctuation of titles is handled: <xref ref="bus-definition" text="title" />.</p></li>
                 <li><p>A cross-reference to a <q>paragraphs</q> subdivision, which never has a number (so comments above about description list items and titles applies here too): <xref ref="hierarchy-structure" text="title" /></p></li>
                 <li><p>A case within the proof of <xref ref="claim-with-cases" text="type-global" />: <xref ref="inductive-step" text="title" /></p></li>
                 <li><p>A cross-reference to a description list item with a title containing math: <xref ref="description-list-math-title" text="title" /></p></li>
@@ -4775,38 +4947,38 @@ the xsltproc executable.
             <title>Internationalization</title>
             <idx>internationalization</idx>
 
-            <p>Supporting a multitude of possible characters, across many languages and across many output formats can be a challenge.  One of our goals is to make this easier for authors.  Fortunately, the Unicode standard has led to improvements from the 7-bit ASCII standard of old.</p>
+            <p>Supporting a multitude of possible characters, across many languages and across many output formats can be a challenge.  One of our goals is to make this much easier for authors.  Fortunately, the Unicode standard has led to improvements from the 7-bit ASCII standard of old.</p>
 
             <paragraphs>
                 <title>Unicode Characters for HTML Output</title>
 
                 <p>First, we discuss HTML output.  If you include Unicode<idx>Unicode</idx> characters in your <pretext /> source, they should survive just fine <foreign xml:lang="fr-FR">en route</foreign> to a web browser or e-reader.  Here are the caveats for HTML output:<ul>
-                    <li><p>So that you can continue to get the best results with print and PDF output, use available empty elements for special characters, even if targeting HTML output, before resorting to a Unicode character.  For example, use <c>&lt;times /&gt;</c> for a small <q>multiplication sign</q> in text before resorting to the Unicode character <c>U+00D7</c>.</p></li>
+                    <li><p>So that you can continue to get the best results with print and PDF output, use available empty elements for obscure characters, even if targeting HTML output, before resorting to a Unicode character.  For example, use <tage>copyright</tage> for the copyright symbol in text before resorting to the Unicode character <c>U+00A9</c>.  It is a bit more work, but you will get better results with other conversions, even if you initially are only fascinated by <init>HTML</init>.</p></li>
 
-                    <li><p>How you actually enter Unicode characters into your source file is dependent on your editor and operating system, and is therefore outside the scope of our documentation.  You can cut/paste characters and text from the source of our examples for initial testing and experimentation.</p></li>
+                    <li><p>How you actually enter Unicode characters into your source file is dependent on your editor and operating system, and is therefore outside the scope of our documentation.  You can cut-and-paste characters and text from the source of our examples for initial testing and experimentation.</p></li>
 
-                    <li><p>Always, always identify your source as having Unicode characters by including the incantation <c>&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</c> as the first line of your source file. (You <em>may</em> be able to accurately cut/paste this text here.  But if the copy has non-standard characters in it, go back to the top of this source file for a copy.)</p></li>
+                    <li><p>Always, always identify your source as having Unicode characters by including the incantation <tag>?xml version="1.0" encoding="UTF-8" ?</tag> as the first line of your source file. (You <em>may</em> be able to accurately cut-and-paste this version here.  But if the copy has non-standard characters in it, go back to the top of this source file for a copy.)</p></li>
 
                     <li><p>Alan Wood’s <url href="http://www.alanwood.net/unicode/unicode_samples.html">Unicode Resources</url> has a plethora of samples of various groups of Unicode characters.  If you, or your readers, are <q>missing</q> characters in a web browser, this is a good place to start testing the local setup.</p></li>
                 </ul></p>
             </paragraphs>
 
             <paragraphs>
-                <title>Characters in <latex />, PDF, print</title>
+                <title>Characters in <latex/>, PDF, print</title>
 
-                <p>The situation for <latex /> is much more complicated, since <tex /> pre-dates Unicode's widespread adoption.</p>
+                <p>The situation for <latex/> is a bit more complicated, since <tex/> pre-dates Unicode's widespread adoption.</p>
 
-                <p>This sample article is intended to work well, out-of-the-box, for authors just starting with <pretext />.  So we only include here examples that we know are likely to convert to PDF without any errors.  For more extensive examples and experiments, we provide the sample document <c>examples/fonts/fonts-and-characters.xml</c>, so be aware of that example as you look to see what is possible.</p>
+                <p>This sample article is intended to work well, out-of-the-box, for authors just starting with <pretext/>.  So we only include here examples that we know are likely to convert to <init>PDF</init> without any errors.  For more extensive examples and experiments, we provide the sample document <c>examples/fonts/fonts-and-characters.xml</c>, so be aware of that example as you look to see what is possible.</p>
 
-                <p>Similarly, you should be able to process this sample article successfully with various <latex /> engines.  We test regularly with <c>pdflatex</c> and <c>xelatex</c> and provide online sample PDF output of this document processed by <c>pdflatex</c>.  In principle, you should be able to use <c>latex</c> (to produce a DVI), and possibly other (unsupported) engines, such as <c>lualatex</c>.</p>
+                <p>Similarly, you should be able to process this sample article successfully with various <latex/> engines.  We test regularly with <c>pdflatex</c> and <c>xelatex</c> and provide online sample PDF output of this document processed by <c>pdflatex</c>.  In principle, you should be able to use <c>latex</c> (to produce a DVI), and possibly other (unsupported) engines, such as <c>lualatex</c>.</p>
 
-                <p>Once you get beyond the Latin alphabet, with accents common in Western Europe and the Western Hemisphere, you will almost assuredly need to restrict your attention to producing PDF output with the <c>xelatex</c> engine.  This is discussed and tested in <c>examples/fonts/fonts-and-characters.xml</c>.</p>
+                <p>Once you get beyond the Latin alphabet, with accents common in Western Europe and the Western Hemisphere, you will almost assuredly need to restrict your attention to producing <init>PDF</init> output with the <c>xelatex</c> engine.  This is discussed and tested in <c>examples/fonts/fonts-and-characters.xml</c>.</p>
             </paragraphs>
 
             <paragraphs>
                 <title>Basic Latin, <c>U+0000</c><ndash /><c>U+007F</c></title>
 
-                <p>Unicode uses multiple 8-bit bytes to represent characters, and these are typically expressed in hexadecimal (base 16) notation.  Using just a single byte, we can get 256 values, and the first 128 (hex <c>00</c> to <c>7F</c>) are the <q>usual</q> Latin characters with some values used as control codes.  These 95 characters are the most basic, and should all render using <c>pdflatex</c> or <c>xelatex</c> with no special setup (and HTML).  <c>U+0000</c> to <c>U+001F</c> are control codes and not used here.  <c>U+007F</c> is also a control code and so is excluded, while <c>U+0020</c> is a space, so appears invisible in the table.  In the source we have also replaced reserved <latex /> characters by their <pretext /> equivalent empty elements.</p>
+                <p>Unicode uses multiple 8-bit bytes to represent characters, and these are typically expressed in hexadecimal (base 16) notation.  Using just a single byte, we can get 256 values, and the first 128 (hex <c>00</c> to <c>7F</c>) are the <q>usual</q> Latin characters with some values used as control codes.  These 95 characters are the most basic, and will all render using <c>pdflatex</c> or <c>xelatex</c> with no special setup (and will render easily in HTML).  <c>U+0000</c> to <c>U+001F</c> are control codes and not used here.  <c>U+007F</c> is also a control code and so is excluded, while <c>U+0020</c> is a space, so appears invisible in the table.  In the source we have authored each character by its escaped version using its Unicode number (in hexadecimal).  So, for example, capital-B is authored as <c>&amp;#x0042;</c>.</p>
 
                 <!-- ex &#x0000; - &#x001F; controls -->
                 <!-- ex &#x007F; control             -->
@@ -4832,18 +5004,18 @@ the xsltproc executable.
                     <cell><c>D</c></cell>
                     <cell><c>E</c></cell>
                     <cell><c>F</c></cell></row>
-                    <row><cell><c>002_</c></cell><cell>&#x0020;</cell><cell>&#x0021;</cell><cell>&#x0022;</cell><cell><hash /></cell><cell><dollar /></cell><cell><percent /></cell><cell><ampersand /></cell><cell>&#x0027;</cell>
+                    <row><cell><c>002_</c></cell><cell>&#x0020;</cell><cell>&#x0021;</cell><cell>&#x0022;</cell><cell>&#x0023;</cell><cell>&#x0024;</cell><cell>&#x0025;</cell><cell>&#x0026;</cell><cell>&#x0027;</cell>
                                                  <cell>&#x0028;</cell><cell>&#x0029;</cell><cell>&#x002A;</cell><cell>&#x002B;</cell><cell>&#x002C;</cell><cell>&#x002D;</cell><cell>&#x002E;</cell><cell>&#x002F;</cell></row>
                     <row><cell><c>003_</c></cell><cell>&#x0030;</cell><cell>&#x0031;</cell><cell>&#x0032;</cell><cell>&#x0033;</cell><cell>&#x0034;</cell><cell>&#x0035;</cell><cell>&#x0036;</cell><cell>&#x0037;</cell>
-                                                 <cell>&#x0038;</cell><cell>&#x0039;</cell><cell>&#x003A;</cell><cell>&#x003B;</cell><cell><less /></cell><cell>&#x003D;</cell><cell><greater /></cell><cell>&#x003F;</cell></row>
+                                                 <cell>&#x0038;</cell><cell>&#x0039;</cell><cell>&#x003A;</cell><cell>&#x003B;</cell><cell>&#x003C;</cell><cell>&#x003D;</cell><cell>&#x003E;</cell><cell>&#x003F;</cell></row>
                     <row><cell><c>004_</c></cell><cell>&#x0040;</cell><cell>&#x0041;</cell><cell>&#x0042;</cell><cell>&#x0043;</cell><cell>&#x0044;</cell><cell>&#x0045;</cell><cell>&#x0046;</cell><cell>&#x0047;</cell>
                                                  <cell>&#x0048;</cell><cell>&#x0049;</cell><cell>&#x004A;</cell><cell>&#x004B;</cell><cell>&#x004C;</cell><cell>&#x004D;</cell><cell>&#x004E;</cell><cell>&#x004F;</cell></row>
                     <row><cell><c>005_</c></cell><cell>&#x0050;</cell><cell>&#x0051;</cell><cell>&#x0052;</cell><cell>&#x0053;</cell><cell>&#x0054;</cell><cell>&#x0055;</cell><cell>&#x0056;</cell><cell>&#x0057;</cell>
-                                                 <cell>&#x0058;</cell><cell>&#x0059;</cell><cell>&#x005A;</cell><cell>&#x005B;</cell><cell><backslash /></cell><cell>&#x005D;</cell><cell><circumflex /></cell><cell><underscore /></cell></row>
+                                                 <cell>&#x0058;</cell><cell>&#x0059;</cell><cell>&#x005A;</cell><cell>&#x005B;</cell><cell>&#x005C;</cell><cell>&#x005D;</cell><cell>&#x005E;</cell><cell>&#x005F;</cell></row>
                     <row><cell><c>006_</c></cell><cell>&#x0060;</cell><cell>&#x0061;</cell><cell>&#x0062;</cell><cell>&#x0063;</cell><cell>&#x0064;</cell><cell>&#x0065;</cell><cell>&#x0066;</cell><cell>&#x0067;</cell>
                                                  <cell>&#x0068;</cell><cell>&#x0069;</cell><cell>&#x006A;</cell><cell>&#x006B;</cell><cell>&#x006C;</cell><cell>&#x006D;</cell><cell>&#x006E;</cell><cell>&#x006F;</cell></row>
                     <row><cell><c>007_</c></cell><cell>&#x0070;</cell><cell>&#x0071;</cell><cell>&#x0072;</cell><cell>&#x0073;</cell><cell>&#x0074;</cell><cell>&#x0075;</cell><cell>&#x0076;</cell><cell>&#x0077;</cell>
-                                                 <cell>&#x0078;</cell><cell>&#x0079;</cell><cell>&#x007A;</cell><cell><lbrace /></cell><cell>&#x007C;</cell><cell><rbrace /></cell><cell><tilde /></cell><cell>        </cell></row>
+                                                 <cell>&#x0078;</cell><cell>&#x0079;</cell><cell>&#x007A;</cell><cell>&#x007B;</cell><cell>&#x007C;</cell><cell>&#x007D;</cell><cell>&#x007E;</cell><cell>        </cell></row>
                     </tabular>
                 </table>
             </paragraphs>
@@ -4851,7 +5023,7 @@ the xsltproc executable.
             <paragraphs>
                 <title>Latin-1 Supplement, <c>U+0080</c><ndash /><c>U+00FF</c></title>
 
-                <p>Now we are interested in the next 128 possible bytes,  (hex <c>80</c> to <c>FF</c>).  The first 32 are again control codes and <c>U+00A0</c> is a non-breaking space, so is invisible, while <c>U+00AD</c> is a soft hyphen (which we have not implemented and so is excluded).  We have taken care to see that the remainder will render using <c>pdflatex</c> or <c>xelatex</c> with no special setup (and HTML).</p>
+                <p>Now we are interested in the next 128 possible bytes,  (hex <c>80</c> to <c>FF</c>).  The first 32 are again control codes and <c>U+00A0</c> is a non-breaking space, so is invisible, while <c>U+00AD</c> is a soft hyphen (which we have not implemented and so is excluded).  We have taken care to see that the remainder will render using <c>pdflatex</c> or <c>xelatex</c> with no special setup (and HTML).  In the source we have authored each character by its escaped version using its Unicode number (in hexadecimal).  So, for example, a copyright symbol is authored as <c>&amp;#x00A9;</c>.</p>
 
                 <!-- ex &#x0080; - &#x009F; controls -->
                 <!-- ex &#x00A0; non-breaking space  -->
@@ -4876,7 +5048,7 @@ the xsltproc executable.
                     <cell><c>D</c></cell>
                     <cell><c>E</c></cell>
                     <cell><c>F</c></cell></row>
-                    <row><cell><c>00A_</c></cell><cell><nbsp /></cell><cell>&#x00A1;</cell><cell>&#x00A2;</cell><cell>&#x00A3;</cell><cell>&#x00A4;</cell><cell>&#x00A5;</cell><cell>&#x00A6;</cell><cell>&#x00A7;</cell>
+                    <row><cell><c>00A_</c></cell><cell>&#x00A0;</cell><cell>&#x00A1;</cell><cell>&#x00A2;</cell><cell>&#x00A3;</cell><cell>&#x00A4;</cell><cell>&#x00A5;</cell><cell>&#x00A6;</cell><cell>&#x00A7;</cell>
                                                  <cell>&#x00A8;</cell><cell>&#x00A9;</cell><cell>&#x00AA;</cell><cell>&#x00AB;</cell><cell>&#x00AC;</cell><cell>        </cell><cell>&#x00AE;</cell><cell>&#x00AF;</cell></row>
                     <row><cell><c>00B_</c></cell><cell>&#x00B0;</cell><cell>&#x00B1;</cell><cell>&#x00B2;</cell><cell>&#x00B3;</cell><cell>&#x00B4;</cell><cell>&#x00B5;</cell><cell>&#x00B6;</cell><cell>&#x00B7;</cell>
                                                  <cell>&#x00B8;</cell><cell>&#x00B9;</cell><cell>&#x00BA;</cell><cell>&#x00BB;</cell><cell>&#x00BC;</cell><cell>&#x00BD;</cell><cell>&#x00BE;</cell><cell>&#x00BF;</cell></row>
@@ -4961,8 +5133,8 @@ the xsltproc executable.
                         <cell><c>D</c></cell>
                         <cell><c>E</c></cell>
                         <cell><c>F</c></cell></row>
-                        <row><cell><c>00A_</c></cell><cell>        </cell><cell><c>&#x00A1;</c></cell><cell><c>&#x00A2;</c></cell><cell><c>&#x00A3;</c></cell><cell><c>&#x00A4;</c></cell><cell><c>&#x00A5;</c></cell><cell><c>&#x00A6;</c></cell><cell><c>&#x00A7;</c></cell>
-                                                     <cell><c>&#x00A8;</c></cell><cell><c>&#x00A9;</c></cell><cell><c>&#x00AA;</c></cell><cell><c>&#x00AB;</c></cell><cell><c>&#x00AC;</c></cell><cell>        </cell><cell><c>&#x00AE;</c></cell><cell><c>&#x00AF;</c></cell></row>
+                        <row><cell><c>00A_</c></cell><cell>               </cell><cell><c>&#x00A1;</c></cell><cell><c>&#x00A2;</c></cell><cell><c>&#x00A3;</c></cell><cell><c>&#x00A4;</c></cell><cell><c>&#x00A5;</c></cell><cell><c>&#x00A6;</c></cell><cell><c>&#x00A7;</c></cell>
+                                                     <cell><c>&#x00A8;</c></cell><cell><c>&#x00A9;</c></cell><cell><c>&#x00AA;</c></cell><cell><c>&#x00AB;</c></cell><cell><c>&#x00AC;</c></cell><cell>               </cell><cell><c>&#x00AE;</c></cell><cell><c>&#x00AF;</c></cell></row>
                         <row><cell><c>00B_</c></cell><cell><c>&#x00B0;</c></cell><cell><c>&#x00B1;</c></cell><cell><c>&#x00B2;</c></cell><cell><c>&#x00B3;</c></cell><cell><c>&#x00B4;</c></cell><cell><c>&#x00B5;</c></cell><cell><c>&#x00B6;</c></cell><cell><c>&#x00B7;</c></cell>
                                                      <cell><c>&#x00B8;</c></cell><cell><c>&#x00B9;</c></cell><cell><c>&#x00BA;</c></cell><cell><c>&#x00BB;</c></cell><cell><c>&#x00BC;</c></cell><cell><c>&#x00BD;</c></cell><cell><c>&#x00BE;</c></cell><cell><c>&#x00BF;</c></cell></row>
                         <row><cell><c>00C_</c></cell><cell><c>&#x00C0;</c></cell><cell><c>&#x00C1;</c></cell><cell><c>&#x00C2;</c></cell><cell><c>&#x00C3;</c></cell><cell><c>&#x00C4;</c></cell><cell><c>&#x00C5;</c></cell><cell><c>&#x00C6;</c></cell><cell><c>&#x00C7;</c></cell>
@@ -5079,7 +5251,7 @@ the xsltproc executable.
 
             <p><c>If you write a very long snippet of inline code (i.e. within a &lt;c&gt; element) it can impinge on the right margin, since very long words will not hypenate, unless you have a dash/hypen.  Such as when you use words like pneumonoultramicroscopicsilicovolcanoconiosis, parastratiosphecomyia stratiosphecomyioides, floccinaucinihilipilification, or subdermatoglyphic.  For output in LaTeX we get line-breaking, and perhaps word-spacing, but we do not get hyphenation and the font is fixed-width.  So not always perfect.  Consider other options like &lt;cd&gt; or &lt;pre&gt; below.</c></p>
 
-            <p>An intermediate type of verbatim text can be accomplished with the <c>&lt;cd&gt;</c> tag, short for <q>code display.</q>  It allows for larger chunks of verbatim text to show up in the middle of a paragraph, but with some vertical space above and below, and centered between the margins.  It can be<cd>authored as a single line</cd>or if you wish to have multiple lines<cd>
+            <p>An intermediate type of verbatim text can be accomplished with the <tag>cd</tag> tag, short for <q>code display.</q>  It allows for larger chunks of verbatim text to show up in the middle of a paragraph, but with some vertical space above and below, and centered between the margins.  It can be<cd>authored as a single line</cd>or if you wish to have multiple lines<cd>
                 <cline>there is the &lt;cline&gt; tag</cline>
                 <cline>meant to model the line tag</cline>
                 <cline>and short for "code line"</cline>
@@ -5087,11 +5259,11 @@ the xsltproc executable.
                 <cline>use a single cline</cline>
             </cd>if you like to have your source closely model the visual look of the output.</p>
 
-            <p>The <c>&lt;pre&gt;</c> tag is meant for use outside of paragraphs, but is otherwise very similar.  The source may also be structured as a sequence of <c>&lt;cline&gt;</c> as in the next example, recycling content from above.</p>
+            <p>The <tag>pre</tag> tag is meant for use outside of paragraphs, but is otherwise very similar.  The source may also be structured as a sequence of <tag>cline</tag> as in the next example, recycling content from above.</p>
 
             <pre>
                 <cline>If you write a very long snippet of inline code (i.e. within</cline>
-                <cline>a &lt;c&gt; element)i t can impinge on the right margin, since</cline>
+                <cline>a &lt;c&gt; element) it can impinge on the right margin, since</cline>
                 <cline>very long words will not hypenate, unless you have a dash/hypen.</cline>
                 <cline>Such as when you use words like</cline>
                 <cline>pneumonoultramicroscopicsilicovolcanoconiosis,</cline>
@@ -5143,7 +5315,7 @@ the xsltproc executable.
                 </program>
             </sidebyside>
 
-            <p>You can write made-up pseudo-code, but you might explain to a reader what your symbols all mean.  This routine takes the <m>m\times n</m> marix <m>A</m> to reduced row-echelon form.  Note that with no language specified, there is no special formatting or use of color.  Note in the source the use of escaped characters for the four angle brackets.</p>
+            <p>You can write made-up pseudo-code, but you might explain to a reader what your symbols all mean.  This routine takes the <m>m\times n</m> marix <m>A</m> to reduced row-echelon form.  Note that with no language specified, there is no special formatting or use of color.  Note in the source the use of escaped characters for the three less-than symbols.</p>
 
             <sidebyside margins="5%">
                 <program>
@@ -5158,7 +5330,7 @@ the xsltproc executable.
                            r := r+1
                            swap rows i and r of A (row op 1)
                            scale A[r,j] to a leading 1 (row op 2)
-                           for k := 1 to m, k &lt;&gt; r
+                           for k := 1 to m, k &lt;> r
                                make A[k,j] zero (row op 3, employing row r)
                     output r and A
                     </input>
@@ -5192,7 +5364,7 @@ the xsltproc executable.
             <algorithm xml:id="algorithm-sieve-eratosthenes">
                 <title>Sieve of Eratosthenes</title>
                 <statement>
-                    <p>On input of a positive integer <c>n</c> this algorithm will compute all the prime numbers up to, and including, <c>n</c>.  It was named for Eratosthenes of Cyrene (<circa /> 276 BC<ndash /><circa /> 195/194 BC) by Nicomachus (<circa /> 60<ndash /><circa /> 120 CE) in <pubtitle>Introduction to Arithmetic</pubtitle>. (<url href="http://en.wikipedia.org/wiki/Sieve_of_Eratosthenes">Wikipedia</url>, 2015)<ol>
+                    <p>On input of a positive integer <c>n</c> this algorithm will compute all the prime numbers up to, and including, <c>n</c>.  It was named for Eratosthenes of Cyrene (<ca/> 276 BC<ndash /><ca /> 195/194 BC) by Nicomachus (<ca /> 60<ndash /><ca /> 120 CE) in <pubtitle>Introduction to Arithmetic</pubtitle>. (<url href="http://en.wikipedia.org/wiki/Sieve_of_Eratosthenes">Wikipedia</url>, 2015)<ol>
                         <li>Input: <c>n</c></li>
                         <li>Form the list of all integers from <c>2</c> to <c>n</c></li>
                         <li>Set <c>p = 2</c></li>
@@ -5242,7 +5414,7 @@ the xsltproc executable.
                 </console>
             </listing>
 
-            <p>Here is the plain version, placed inside a <c>sidebyside</c> for layout control.  We simply place a small margin on the left (at 4<percent />).</p>
+            <p>Here is the plain version, placed inside a <c>sidebyside</c> for layout control.  We simply place a small margin on the left (at 4%).</p>
 
             <sidebyside margins="4%">
                 <console>
@@ -5278,9 +5450,9 @@ the xsltproc executable.
                 </console>
             </listing>
 
-            <p>Notice in the HTML version of the above example that when you highlight all, or a portion, of the listing for a cut<ampersand />paste that the prompts are not included.</p>
+            <p>Notice in the HTML version of the above example that when you highlight all, or a portion, of the listing for a cut-and-paste that the prompts are not included.</p>
 
-            <p>The next listing is just absurdity, to check special characters from <latex />, and some Latin-1 characters.  We test each in a prompt, input, and output.</p>
+            <p>The next listing is just absurdity, to check characters from <latex /> that are otherwise employed by the code supporting consoles, and some Latin-1 characters.  We test each in a prompt, input, and output.</p>
 
             <listing>
                 <caption>Console Session: problematic <latex /> characters</caption>
@@ -5449,7 +5621,12 @@ the xsltproc executable.
             <title>Units of Measure</title>
 
             <p>Units of measure can be given xml treatment too with the <c>quantity</c> element. In <latex />, the <c>siunitx</c><idx><h>siunitx package</h></idx><idx><h>package</h><h>siunitx</h></idx><idx><h>units</h></idx> package is loaded to achive unit handling. Since that package only offers SI units, some other common units will be added by MBX in the preamble. In HTML, the capabilities of <c>siunitx</c> are simulated, weakly. Note that at present, you should not attempt to use the <c>quantity</c> element within a math environment.</p>
-            <p>The value of gravitational constant <m>g</m> is <quantity><mag>9.8</mag><unit base="meter"/><per base="second" exp="2"/></quantity>. Force is measured in <quantity><unit prefix="kilo" base="gram"/><unit base="meter"/><per base="second" exp="2"/></quantity>, also known as one <quantity><unit base="newton"/></quantity>. A quantity with rather ridiculous units is <quantity><mag>23</mag><unit prefix='micro' base='hectare' exp='23'/><per base='degreeCelsius'/><per base='second' exp='2'/></quantity>. One <quantity><unit base="hertz"/></quantity> is the same as <quantity><per base='second'/></quantity>. You can have a unitless quantity, like <quantity><mag>42</mag></quantity>, which may help with consistency between such numbers and units in the <latex /> output. Some non-SI units are available, such as the absurd <quantity><unit base="degreeFahrenheit"/><unit base="foot"/><unit base="pound"/><per base="gallon"/></quantity>.  The <latex /> command <c>\pi</c> is recognized within <c>mag</c> in conversions to HTML, which is consistent with the behavior with a conversion to <latex />, for example there are <quantity><mag>2\pi</mag><unit base="radian"/></quantity> in a full circle.</p>
+            <p>The value of gravitational constant <m>g</m> is <quantity><mag>9.8</mag><unit base="meter"/><per base="second" exp="2"/></quantity>. Force is measured in <quantity><unit prefix="kilo" base="gram"/><unit base="meter"/><per base="second" exp="2"/></quantity>, also known as one <quantity><unit base="newton"/></quantity>. A quantity with rather ridiculous units is <quantity><mag>23</mag><unit prefix='micro' base='hectare' exp='23'/><per base='degreeCelsius'/><per base='second' exp='2'/></quantity>. One <quantity><unit base="hertz"/></quantity> is the same as <quantity><per base='second'/></quantity>. You can have a unitless quantity, like <quantity><mag>42</mag></quantity>, which may help with consistency between such numbers and units in the <latex /> output. Some non-SI units are available, such as the absurd <quantity><unit base="degreeFahrenheit"/><unit base="foot"/><unit base="pound"/><per base="gallon"/></quantity>.  The <latex /> command <c>\pi</c> is recognized within <c>mag</c> in conversions to HTML, which is consistent with the behavior with a conversion to <latex />, for example there are
+            <quantity>
+                <mag>2\pi</mag>
+                <unit base="radian"/>
+            </quantity>
+            in a full circle.</p>
 
             <p>For a full list of the allowed units and prefixes, see <c>mathbook-units.xsl</c>. If you have a need for more units, they need to be added to <c>mathbook-units.xsl</c> in the section that deals with units which are not part of <c>siunitx</c> by default.  Note that the <c>mag</c> element should come first, followed by the <c>unit</c> element, followed by the <c>per</c> element.</p>
 
@@ -5461,9 +5638,9 @@ the xsltproc executable.
             <introduction>
                 <title>Introduction</title>
 
-                <p>The flow of a page is almost universally top-to-bottom.  But at times you would like to go <em>across</em> a page, perhaps to compare items (identical content in two different languages), or to make good use of a page real estate by grouping several small items together (<eg /> images).  So the <c>&lt;sidebyside&gt;</c> tag is strictly a layout device, though it does convey some meaning by grouping certain objects together. A variety of different objects can be put side-by-side using the <c>sidebyside</c> element.  Specifically, <c>figure</c>, <c>image</c>, <c>tabular</c>, <c>p</c>, <c>ol</c>, <c>ul</c>, <c>dl</c>, <c>pre</c>, <c>poem</c>, and more.  The individual components of a <c>&lt;sidebyside&gt;</c> are generically called <term>panels</term><idx>panels</idx>.</p>
+                <p>The flow of a page is almost universally top-to-bottom.  But at times you would like to go <em>across</em> a page, perhaps to compare items (identical content in two different languages), or to make good use of a page real estate by grouping several small items together (<eg /> images).  So the <tag>sidebyside</tag> tag is strictly a layout device, though it does convey some meaning by grouping certain objects together. A variety of different objects can be put side-by-side using the <c>sidebyside</c> element.  Specifically, <c>figure</c>, <c>image</c>, <c>tabular</c>, <c>p</c>, <c>ol</c>, <c>ul</c>, <c>dl</c>, <c>pre</c>, <c>poem</c>, and more.  The individual components of a <tag>sidebyside</tag> are generically called <term>panels</term><idx>panels</idx>.</p>
 
-                <p>As a layout device, the <c>&lt;sidebyside&gt;</c> does not allow a <c>&lt;caption&gt;</c>, is never numbered, and therefore cannot be cross-referenced.  You may cross-reference whatever element holds the <c>&lt;sidebyside&gt;</c>, and many of the panels may be cross-referenced individually.</p>
+                <p>As a layout device, the <tag>sidebyside</tag> does not allow a <tag>caption</tag>, is never numbered, and therefore cannot be cross-referenced.  You may cross-reference whatever element holds the <tag>sidebyside</tag>, and many of the panels may be cross-referenced individually.</p>
 
                 <p>As a first example, we have two single paragraphs, laid out with different widths, and slight margins on each side.  The widths have been chosen experimentally to get roughly identical heights for the two paragraphs of varying length.</p>
 
@@ -5479,7 +5656,7 @@ the xsltproc executable.
 
                 <p>Figures, or other captioned items such as tables or listings, can be placed side-by-side using the <c>sidebyside</c> element.  The figures will be captioned and numbered as if they were part of the vertical flow of the document.  For example, see <xref ref="regular-figure" text="type-global"/> and <xref ref="another-regular-figure" text="type-global"/></p>
 
-                <p>However, if the <c>&lt;sidebyside&gt;</c> is placed inside another <c>&lt;figure&gt;</c>, then the outer figure gets an overall caption and a <q>regular</q> number, while the captions of the interior items will be labelled as (a), (b), (c), etc; for example, see the subfigures in <xref ref="fig-sidebyside-global" text="type-global"/>. You can also cross-reference the subfigures individually, for example: <xref ref="fig-sidebyside-subfigure" text="type-global"/>.</p>
+                <p>However, if the <tag>sidebyside</tag> is placed inside another <tag>figure</tag>, then the outer figure gets an overall caption and a <q>regular</q> number, while the captions of the interior items will be labelled as (a), (b), (c), etc; for example, see the subfigures in <xref ref="fig-sidebyside-global" text="type-global"/>. You can also cross-reference the subfigures individually, for example: <xref ref="fig-sidebyside-subfigure" text="type-global"/>.</p>
 
                 <p>The <c>sidebyside</c> tag can have an attribute <c>widths</c> that specifies a percentage width of the page for each panel of the layout.  There are automatic margins by default, and any remaining width is divided evenly to space out the panels.  When the <c>margins</c> attribute is given as <c>auto</c>, or in the default case, the margins provided each equal half of the inter-panel space.</p>
 
@@ -5505,11 +5682,11 @@ the xsltproc executable.
                     <caption>Side-by-Side, with figures as children, margin set to zero</caption>
                     <sidebyside widths="50% 25%" margins="0%">
                         <figure>
-                            <caption>width=50<percent/></caption>
+                            <caption>width=50%</caption>
                             <image source="images/cross-square.png"/>
                         </figure>
                         <figure>
-                            <caption>width=25<percent/></caption>
+                            <caption>width=25%</caption>
                             <image source="images/cross-square.png"/>
                         </figure>
                     </sidebyside>
@@ -5559,7 +5736,7 @@ the xsltproc executable.
                     <image source="images/cross-square.png"/>
                 </sidebyside>
 
-                <p>Now we fine-tune with different widths (which add up to 100<percent />).  The five imgages have been given different vertical alignments, <c>top middle bottom top middle</c> via the <c>valigns</c> attribute.</p>
+                <p>Now we fine-tune with different widths (which add up to 100%).  The five imgages have been given different vertical alignments, <c>top middle bottom top middle</c> via the <c>valigns</c> attribute.</p>
 
                 <sidebyside widths="10% 30% 20% 20% 20%" margins="0%" valigns="top middle bottom top middle">
                     <image source="images/cross-square.png"/>
@@ -5569,7 +5746,7 @@ the xsltproc executable.
                     <image source="images/cross-square.png"/>
                 </sidebyside>
 
-                <p>If you want an overall caption to a group of images, but no sub-captions on your images, that is also straightforward.  This example has no attributes specified.  The overall <c>&lt;figure&gt;</c> may be cross-referenced, as <xref ref="figure-double-image" text="type-global" /></p>
+                <p>If you want an overall caption to a group of images, but no sub-captions on your images, that is also straightforward.  This example has no attributes specified.  The overall <tag>figure</tag> may be cross-referenced, as <xref ref="figure-double-image" text="type-global" /></p>
 
                 <figure xml:id="figure-double-image">
                     <caption>Two equally-spaced (identical) images</caption>
@@ -5618,7 +5795,7 @@ the xsltproc executable.
 
                 <image source="images/cross-square.png" width="10%" margins="25% 65%"/>
 
-                <p>You might wish to place a single image flush-left, or flush-right.  You can specify the <c>margins</c> attribute as a pair of percentages for different left and right margins.  The following are laid out with two margins, with a 0<percent /> left margin and right margin (respectively). </p>
+                <p>You might wish to place a single image flush-left, or flush-right.  You can specify the <c>margins</c> attribute as a pair of percentages for different left and right margins.  The following are laid out with two margins, with a 0% left margin and right margin (respectively). </p>
 
                 <sidebyside width="10%" margins="0% 90%">
                     <image source="images/cross-square.png"/>
@@ -5628,9 +5805,9 @@ the xsltproc executable.
                     <image source="images/cross-square.png"/>
                 </sidebyside>
 
-                <p>Results will be incorrect for the latter if the widths of the left margin and the panel do not add to 100<percent />.  In general, in the case of a single panel, the left margin, right margin, and panel width should all add up to 100<percent />.</p>
+                <p>Results will be incorrect for the latter if the widths of the left margin and the panel do not add to 100%.  In general, in the case of a single panel, the left margin, right margin, and panel width should all add up to 100%.</p>
 
-                <p>Of course, asymmetric margins may be used with several panels.  The following is designed to leave a 25<percent /> gap between the two panels.</p>
+                <p>Of course, asymmetric margins may be used with several panels.  The following is designed to leave a 25% gap between the two panels.</p>
 
                 <sidebyside width="10%" margins="45% 10%">
                     <image source="images/cross-square.png"/>
@@ -5739,7 +5916,7 @@ the xsltproc executable.
                     <image source="images/led-zeppelin-kashmir.jpg" archive="jpg" />
                 </sidebyside>
 
-                <p>Here are two TikZ images, authored side-by-side.  The first has had its geometric portions of the original scaled down to 75<percent />, with the effect of increasing the text, relatively, so the application in a side-by-side panel with 25<percent /> width has legible text.  We caption only the second panel, which has no text adjustments.  From <url href="http://www.texample.net/tikz/examples/">TeXample.net</url>.</p>
+                <p>Here are two TikZ images, authored side-by-side.  The first has had its geometric portions of the original scaled down to 75%, with the effect of increasing the text, relatively, so the application in a side-by-side panel with 25% width has legible text.  We caption only the second panel, which has no text adjustments.  From <url href="http://www.texample.net/tikz/examples/">TeXample.net</url>.</p>
 
                 <sidebyside widths="25% 25% 35%" margins="auto">
                     <!-- http://www.texample.net/tikz/examples/venn/ -->
@@ -5797,7 +5974,7 @@ the xsltproc executable.
                     <caption>Side-by-Side, with tables as children</caption>
                     <sidebyside widths="50% 25%">
                         <table xml:id="table-sidebyside-subtable">
-                            <caption>width=50<percent/></caption>
+                            <caption>width=50%</caption>
                             <tabular top="minor" left="minor" halign="center">
                                 <col right="medium"/>
                                 <col right="major"/>
@@ -5818,7 +5995,7 @@ the xsltproc executable.
                             </tabular>
                         </table>
                         <table>
-                            <caption>width=25<percent/></caption>
+                            <caption>width=25%</caption>
                             <tabular top="minor" left="minor" halign="center">
                                 <col right="medium"/>
                                 <col right="major"/>
@@ -5890,7 +6067,7 @@ the xsltproc executable.
                 </figure>
 
                 <!-- the "Tables" content interior to the xref will override any autonaming -->
-                <p>If you put two <c>table</c> elements side-by-side without an enclosing <c>&lt;figure&gt;</c>, then they will use regular numbering; see <xref first="table-regular-fig1" last="table-regular-fig3">Tables</xref>.</p>
+                <p>If you put two <c>table</c> elements side-by-side without an enclosing <tag>figure</tag>, then they will use regular numbering; see <xref first="table-regular-fig1" last="table-regular-fig3">Tables</xref>.</p>
 
                 <sidebyside>
                     <table xml:id="table-regular-fig1">
@@ -6069,7 +6246,7 @@ the xsltproc executable.
             <subsection>
                 <title>Tabular Next to Each Other</title>
 
-                <p>Four <c>tabular</c> elements inside a single <c>&lt;sidebyside&gt;</c> will result in no captions at all.</p>
+                <p>Four <c>tabular</c> elements inside a single <tag>sidebyside</tag> will result in no captions at all.</p>
 
                 <sidebyside>
                     <tabular top="minor" left="minor" halign="center">
@@ -6194,7 +6371,7 @@ the xsltproc executable.
                     </sidebyside>
                 </figure>
 
-                <p>We also need to test a <c>sidebyside</c> in a list.  The widths are now relative to the space given over to an indented item.  Here we nest and nest and nest and nest to get a big, obvious indentation, and then include an image at 100<percent /> width and no margin.  In your mind's eye, or with a ruler, check that the image spans all the way over to the right margin.<ol>
+                <p>We also need to test a <c>sidebyside</c> in a list.  The widths are now relative to the space given over to an indented item.  Here we nest and nest and nest and nest to get a big, obvious indentation, and then include an image at 100% width and no margin.  In your mind's eye, or with a ruler, check that the image spans all the way over to the right margin.<ol>
                     <li><p>This is<ol>
                         <li><p>a very<ol>
                             <li><p>wide<ol>
@@ -6470,7 +6647,7 @@ the xsltproc executable.
             <subsection xml:id="subsection-sbsgroup">
                 <title>Side-By-Side Groups</title>
 
-                <p>A <q>side-by-side group,</q> <c>&lt;sbsgroup&gt;</c>, is still in development.  (Notably, subcaptions do not behave as expected.)  It is a sequence of <c>sidebyside</c>, which may conceivably use the same margins, widths and vertical alignments for each horizontal run of panels.  Attributes on the <c>sbsgroup</c> are global to the group's enclosed <c>sidebyside</c>, and will be used by each contained <c>sidebyside</c>.  If attributes are present on an individual <c>sidebyside</c>, they override the global values.  The next two examples demonstrate some of this behavior, in a limited way.</p>
+                <p>A <q>side-by-side group,</q> <tag>sbsgroup</tag>, is still in development.  (Notably, subcaptions do not behave as expected.)  It is a sequence of <c>sidebyside</c>, which may conceivably use the same margins, widths and vertical alignments for each horizontal run of panels.  Attributes on the <c>sbsgroup</c> are global to the group's enclosed <c>sidebyside</c>, and will be used by each contained <c>sidebyside</c>.  If attributes are present on an individual <c>sidebyside</c>, they override the global values.  The next two examples demonstrate some of this behavior, in a limited way.</p>
 
                 <figure>
                     <caption>Overall SBS Group</caption>
@@ -6595,7 +6772,7 @@ the xsltproc executable.
 
                 <p>The main rationale for <c>sbsgroup</c> is to layout a grid of items, and by placing the layout parameters on the <c>sbsgroup</c> element, the items can line up across <c>sidebyside</c> and subcaptioning can run across the whole group.  So, for example, if you have images to compare by placing in a grid, then making them all the same size, or of the same aspect ratio, can help with the overall consistency.</p>
 
-                <p>This example has three <c>sidebyside</c>, each with four <c>figure</c> containing an identical <c>image</c>.  Since the images are identical and the <c>width</c> is set to 20<percent /> they should all line up nicely with little effort.  Since the default for margins is automatic, the remaining 20<percent /> of the overall width will be used for three inter-panel spaces of 5<percent /> and two margins of 2.5<percent /> each.  Note the numbering of these as independent figures.  We have left the captions empty for reasons of space, but you could add more information.  Note that in print, a page break is allowed between any two of the <c>sidebyside</c> and cannot be suppressed.</p>
+                <p>This example has three <c>sidebyside</c>, each with four <c>figure</c> containing an identical <c>image</c>.  Since the images are identical and the <c>width</c> is set to 20% they should all line up nicely with little effort.  Since the default for margins is automatic, the remaining 20% of the overall width will be used for three inter-panel spaces of 5% and two margins of 2.5% each.  Note the numbering of these as independent figures.  We have left the captions empty for reasons of space, but you could add more information.  Note that in print, a page break is allowed between any two of the <c>sidebyside</c> and cannot be suppressed.</p>
 
                 <sbsgroup width="20%">
                     <sidebyside>
@@ -6837,7 +7014,7 @@ the xsltproc executable.
         <section>
             <title>Side-by-Side Gallery</title>
 
-            <p>This subsection attempts to survey all the possible items that can be placed into a <c>sidebyside</c> element, in various combinations.  While intended to be exhaustive across contents, it does not test all possibilities, and is not meant to be instructive (see <xref ref="section-side-by-side" text="type-global" /> for that). The layout is identical for each <c>sidebyside</c>, 5<percent /> margins, panel widths of 40<percent /> and 45<percent />, leaving 5<percent /> for the space between the panels.  The vertical alignment is left at the default, <c>top</c>.</p>
+            <p>This subsection attempts to survey all the possible items that can be placed into a <c>sidebyside</c> element, in various combinations.  While intended to be exhaustive across contents, it does not test all possibilities, and is not meant to be instructive (see <xref ref="section-side-by-side" text="type-global" /> for that). The layout is identical for each <c>sidebyside</c>, 5% margins, panel widths of 40% and 45%, leaving 5% for the space between the panels.  The vertical alignment is left at the default, <c>top</c>.</p>
 
             <p>We begin with <q>simpler</q> atomic items.  If necessary, comments follow each.</p>
 
@@ -7294,24 +7471,45 @@ the xsltproc executable.
                 <list-of elements="theorem" scope="section" />
             </subsection>
 
-            <subsection>
+            <subsection xml:id="subsection-with-an-exercise">
                 <title>A Title with ] a Right Bracket</title>
 
                 <p><latex /> has trouble with brackets that end up inside optional arguments, so this subsection title is only a check on the defense against that.  And now an <tag>exercise</tag> with a title that could really be a problem.</p>
 
                 <exercise xml:id="exercise-difficult-title">
-                    <title>A Right Brace <rbrace /> and a Right Bracket]</title>
+                    <title>A Right Brace } and a Right Bracket]</title>
 
                     <statement>
-                        <p>The right brace is obtained with an empty element, <tage>rbrace</tage>, and the right bracket is simply the character, <c>]</c>.  Both are used by <latex/> as grouping characters, so need to be handled with care in titles.</p>
+                        <p>The right brace is is used as a grouping character in <latex/> so this is just a test of its behavior in titles.</p>
                     </statement>
                     <hint>
                         <p>A faux hint to get this exercise to migrate into a <tag>solutions</tag>.</p>
                     </hint>
                 </exercise>
-
-
             </subsection>
+
+            <subsection>
+                <title>Just an Exercise</title>
+
+                <exercise>
+                    <title>An Extraneous Exercise</title>
+
+                    <statement>
+                        <p>This exercise is here just as a test of the <tag>solutions</tag> division coming next.  So it is serving a purpose, even if it is not apparent.</p>
+                    </statement>
+                    <hint>
+                        <p>A hint, so this exercise looks identical in structure to the one in the previous subsection.</p>
+                    </hint>
+                </exercise>
+            </subsection>
+
+            <solutions inline="hint" scope="subsection-with-an-exercise">
+                <introduction>
+                    <p>This is a <tag>solutions</tag> division, which will be a peer of the other <tag>subsection</tag> in this <tag>section</tag>. The default behavior is to look to the parent division (a <tag>section</tag> here) and collect all the hints, answers, and solutions from every <tag>exercise</tag> (and friends) inside this containing division.  (There are just two, similar inline <tag>exercise</tag>.)</p>
+
+                    <p>But instead of the default, we employ a <attr>scope</attr> attribute to <em>define</em> the parent division of the exercises whose solutions will be shown.  In this example we specify the  <tag>subsection</tag> that is two back, the one which tests brackets in titles.</p>
+                </introduction>
+            </solutions>
         </section>
 
         <section>
@@ -8313,7 +8511,7 @@ the xsltproc executable.
             <appendix>
                 <title>Index</title>
 
-                <p>There is an index manufactured at the end of the back matter.  So we are talking about it here, rather than within the index, which is an impossibility.  It contains some sample entries, and is not meant to be comprehensive.  Look at the source of this XML file, searching on <c>&lt;idx&gt;</c>, to see how they are written.  They may be placed inside of a a variety of structures, and their location greatly influences the cross-references produced in the HTML version of the index.</p>
+                <p>There is an index manufactured at the end of the back matter.  So we are talking about it here, rather than within the index, which is an impossibility.  It contains some sample entries, and is not meant to be comprehensive.  Look at the source of this XML file, searching on <tag>idx</tag>, to see how they are written.  They may be placed inside of a a variety of structures, and their location greatly influences the cross-references produced in the HTML version of the index.</p>
 
                 <p>The <latex /> version of the index is more traditional, using page numbers to reference locations.  A newer package is used to create the index, and so there is no extra intermediate step required to process the index.  The one downside of this convenience is that index entries may not be placed in the back colophon (which is the only subdivision that may follow the index).</p>
 

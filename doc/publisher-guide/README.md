@@ -1,7 +1,7 @@
 PreTeXt Publisher's Guide
 =========================
 
-PDF and HTML versions of this guide are available at the [PreTeXt](http://mathbook.pugetsound.edu) site in the Documentation area.
+PDF and HTML versions of this guide are available at the [PreTeXt](https://pretextbook.org) site in the Documentation area.
 
 If you wish to build from source, possibly as part of contributing improvements, follow these steps:
 

@@ -137,6 +137,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text/>
 </xsl:template>
 
+<!-- "proof" -->
+<!-- Changes: Bold upright font, abnormally large spacing after title, no tombstone. -->
+<!-- bwminimalstyle is part of the mathbook-latex.xsl file, uncertain                -->
+<!-- if we are committed to making it universally available to be used               -->
+<!-- like this by style writers.                                                     -->
+<xsl:template match="proof" mode="tcb-style">
+    <xsl:text>bwminimalstyle, fonttitle=\normalfont\bfseries, attach title to upper, after title={\qquad}&#xa;</xsl:text>
+</xsl:template>
+
 <!-- "objectives", "outcomes" -->
 <!-- Green and ugly, plus identical, via the dual match -->
 <xsl:template match="objectives|outcomes" mode="tcb-style">
@@ -258,14 +267,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     }</xsl:text>
 </xsl:template>
 
-<!-- This is cribbed from Section 8 of "titleps.pdf" (2016-03-15) -->
+<!-- This is based from Section 8 of "titleps.pdf" (2016-03-15) -->
+<!-- Modified to include \ifthechapter and \ifthesection -->
 <xsl:template match="book" mode="titleps-headings">
     <xsl:text>[\small\sffamily]{
     \sethead[\textbf{\thepage}]
-    [\textsl{\chaptertitle}]
-    [\toptitlemarks\thesection--\bottitlemarks\thesection]
-    {\toptitlemarks\thesection--\bottitlemarks\thesection]}
-    {\textsl{\sectiontitle}}
+    [\ifthechapter{\textsl{Chapter \thechapter: \chaptertitle}}{\textsl{\chaptertitle}}]
+    [\ifthesection{\toptitlemarks\thesection--\bottitlemarks\thesection}{}]
+    {\ifthesection{\toptitlemarks\thesection--\bottitlemarks\thesection}{}}
+    {\ifthesection{\textsl{\sectiontitle}}{\chaptertitle}}
     {\textbf{\thepage}}
     \setfoot[foot/even/headings/book][][]
     {foot/odd or one-sided/headings/book}{}{}
@@ -289,6 +299,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- You can comment it out, and let base definition execute  -->
 <xsl:template match="article" mode="titleps-global-style">
     <xsl:text>plain</xsl:text>
+</xsl:template>
+
+<!-- The Iwona font is just chosen from the LaTeX Font      -->
+<!-- Catalogue as a font with math support.  It is an       -->
+<!-- alternative to the Kurier fonts and part of the        -->
+<!-- GUST font project.                                     -->
+<!-- http://www.gust.org.pl/projects/e-foundry/kurier-iwona -->
+<!--                                                        -->
+<!-- Seems to be missing U+0060, "accent grave"             -->
+<!-- Seems to be missing U+00B4, "accent acute"             -->
+<!-- Seems to be missing superior numbers (1, 2, 3)         -->
+<xsl:template name="font-pdflatex-style">
+    <xsl:text>\usepackage[math]{iwona}&#xa;</xsl:text>
+    <xsl:text>\usepackage[T1]{fontenc}&#xa;</xsl:text>
 </xsl:template>
 
 </xsl:stylesheet>

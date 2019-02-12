@@ -93,7 +93,7 @@
   </define>
   <define name="Part">
     <element name="part">
-      <ref name="MetaDataTitle"/>
+      <ref name="MetaDataShortTitle"/>
       <oneOrMore>
         <ref name="Chapter"/>
       </oneOrMore>
@@ -101,7 +101,7 @@
   </define>
   <define name="Chapter">
     <element name="chapter">
-      <ref name="MetaDataTitle"/>
+      <ref name="MetaDataShortTitle"/>
       <zeroOrMore>
         <ref name="AuthorByline"/>
       </zeroOrMore>
@@ -155,7 +155,7 @@
   </define>
   <define name="Section">
     <element name="section">
-      <ref name="MetaDataTitle"/>
+      <ref name="MetaDataShortTitle"/>
       <zeroOrMore>
         <ref name="AuthorByline"/>
       </zeroOrMore>
@@ -209,7 +209,7 @@
   </define>
   <define name="Subsection">
     <element name="subsection">
-      <ref name="MetaDataTitle"/>
+      <ref name="MetaDataShortTitle"/>
       <zeroOrMore>
         <ref name="AuthorByline"/>
       </zeroOrMore>
@@ -263,7 +263,7 @@
   </define>
   <define name="Subsubsection">
     <element name="subsubsection">
-      <ref name="MetaDataTitle"/>
+      <ref name="MetaDataShortTitle"/>
       <zeroOrMore>
         <ref name="AuthorByline"/>
       </zeroOrMore>
@@ -293,7 +293,7 @@
   </define>
   <define name="ArticleAppendix">
     <element name="appendix">
-      <ref name="MetaDataTitle"/>
+      <ref name="MetaDataShortTitle"/>
       <zeroOrMore>
         <ref name="AuthorByline"/>
       </zeroOrMore>
@@ -327,7 +327,7 @@
   </define>
   <define name="BookAppendix">
     <element name="appendix">
-      <ref name="MetaDataTitle"/>
+      <ref name="MetaDataShortTitle"/>
       <zeroOrMore>
         <ref name="AuthorByline"/>
       </zeroOrMore>
@@ -361,7 +361,7 @@
   </define>
   <define name="IndexDivision">
     <element name="index">
-      <ref name="MetaDataTitleOptional"/>
+      <ref name="MetaDataShortTitleOptional"/>
       <ref name="IndexList"/>
     </element>
   </define>
@@ -726,7 +726,7 @@
   </define>
   <define name="Exercises">
     <element name="exercises">
-      <ref name="MetaDataTitleOptional"/>
+      <ref name="MetaDataShortTitleOptional"/>
       <optional>
         <ref name="IntroductionDivision"/>
       </optional>
@@ -744,7 +744,7 @@
   </define>
   <define name="Solutions">
     <element name="solutions">
-      <ref name="MetaDataTitleOptional"/>
+      <ref name="MetaDataShortTitleOptional"/>
       <optional>
         <attribute name="inline"/>
       </optional>
@@ -764,7 +764,7 @@
   </define>
   <define name="References">
     <element name="references">
-      <ref name="MetaDataTitleOptional"/>
+      <ref name="MetaDataShortTitleOptional"/>
       <optional>
         <ref name="IntroductionDivision"/>
       </optional>
@@ -2321,6 +2321,11 @@
       <ref name="TextLong"/>
     </element>
   </define>
+  <define name="ShortTitle">
+    <element name="shorttitle">
+      <ref name="TextShort"/>
+    </element>
+  </define>
   <define name="Creator">
     <element name="creator">
       <ref name="TextShort"/>
@@ -2361,6 +2366,27 @@
       <ref name="Index"/>
     </zeroOrMore>
   </define>
+  <define name="MetaDataShortTitle">
+    <optional>
+      <ref name="UniqueID"/>
+    </optional>
+    <optional>
+      <ref name="PermanentID"/>
+    </optional>
+    <optional>
+      <ref name="XMLBase"/>
+    </optional>
+    <optional>
+      <ref name="XMLLang"/>
+    </optional>
+    <ref name="Title"/>
+    <optional>
+      <ref name="ShortTitle"/>
+    </optional>
+    <zeroOrMore>
+      <ref name="Index"/>
+    </zeroOrMore>
+  </define>
   <define name="MetaDataSubtitle">
     <optional>
       <ref name="UniqueID"/>
@@ -2377,6 +2403,9 @@
     <ref name="Title"/>
     <optional>
       <ref name="Subtitle"/>
+    </optional>
+    <optional>
+      <ref name="ShortTitle"/>
     </optional>
     <zeroOrMore>
       <ref name="Index"/>
@@ -2397,6 +2426,29 @@
     </optional>
     <optional>
       <ref name="Title"/>
+    </optional>
+    <zeroOrMore>
+      <ref name="Index"/>
+    </zeroOrMore>
+  </define>
+  <define name="MetaDataShortTitleOptional">
+    <optional>
+      <ref name="UniqueID"/>
+    </optional>
+    <optional>
+      <ref name="PermanentID"/>
+    </optional>
+    <optional>
+      <ref name="XMLBase"/>
+    </optional>
+    <optional>
+      <ref name="XMLLang"/>
+    </optional>
+    <optional>
+      <ref name="Title"/>
+      <optional>
+        <ref name="ShortTitle"/>
+      </optional>
     </optional>
     <zeroOrMore>
       <ref name="Index"/>
@@ -2825,13 +2877,7 @@
       <element name="sq">
         <ref name="TextLong"/>
       </element>
-      <element name="braces">
-        <ref name="TextLong"/>
-      </element>
       <element name="angles">
-        <ref name="TextLong"/>
-      </element>
-      <element name="brackets">
         <ref name="TextLong"/>
       </element>
       <element name="dblbrackets">
@@ -3005,50 +3051,6 @@
       </zeroOrMore>
     </element>
   </define>
-  <define name="Character">
-    <choice>
-      <element name="ampersand">
-        <empty/>
-      </element>
-      <element name="less">
-        <empty/>
-      </element>
-      <element name="greater">
-        <empty/>
-      </element>
-    </choice>
-  </define>
-  <define name="Character" combine="choice">
-    <choice>
-      <element name="hash">
-        <empty/>
-      </element>
-      <element name="dollar">
-        <empty/>
-      </element>
-      <element name="percent">
-        <empty/>
-      </element>
-      <element name="tilde">
-        <empty/>
-      </element>
-      <element name="underscore">
-        <empty/>
-      </element>
-      <element name="circumflex">
-        <empty/>
-      </element>
-      <element name="backslash">
-        <empty/>
-      </element>
-      <element name="lbrace">
-        <empty/>
-      </element>
-      <element name="rbrace">
-        <empty/>
-      </element>
-    </choice>
-  </define>
   <define name="Character" combine="choice">
     <choice>
       <element name="nbsp">
@@ -3075,7 +3077,7 @@
   <define name="Character" combine="choice">
     <ref name="FillIn"/>
   </define>
-  <define name="Character" combine="choice">
+  <define name="Character">
     <choice>
       <element name="lsq">
         <empty/>
@@ -3104,15 +3106,6 @@
   <define name="Character" combine="choice">
     <choice>
       <element name="ellipsis">
-        <empty/>
-      </element>
-      <element name="asterisk">
-        <empty/>
-      </element>
-      <element name="backtick">
-        <empty/>
-      </element>
-      <element name="slash">
         <empty/>
       </element>
       <element name="midpoint">

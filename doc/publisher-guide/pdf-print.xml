@@ -13,7 +13,7 @@
     <p>
         <idx><h>PDF</h><h>electronic</h></idx>
         <idx><h>PDF</h><h>print</h></idx>
-        The stylesheet <c>mathbook-latex.xsl</c> can produce two very similar outputs.  Each is a file in <latex/> syntax, which can be converted to a <init>PDF</init> with a <latex/> executable (<q>engine</q>).  However, there are two purposes for such a <init>PDF</init>.  The first is a document which is meant to be read on a screen.  We call this an <term>electronic <init>PDF</init></term>.  The second is meant to be printed as a physical book, so it would be the file you provide to a copy shop, campus bookstore, or print-on-demand service (see <xref ref="print-on-demand"/>).  We call this a <term>print <init>PDF</init></term>.
+        The stylesheet <c>mathbook-latex.xsl</c> can produce two very similar outputs.  Each is a file in <latex/> syntax, which can be converted to a <init>PDF</init> with a <latex/> executable (<q>engine</q>).  However, there are two purposes for such a <init>PDF</init>.  The first is a document which is meant to be read on a screen.  We call this an <term>electronic PDF</term>.  The second is meant to be printed as a physical book, so it would be the file you provide to a copy shop, campus bookstore, or print-on-demand service (see <xref ref="print-on-demand"/>).  We call this a <term>print PDF</term>.
     </p>
 
     <p>As an illustration of the difference, an electronic <init>PDF</init> will contain cross-references that are active, and colored to be obvious to the reader.  For the print <init>PDF</init> the same cross-reference will be black and inactive.</p>
@@ -67,9 +67,27 @@
     </paragraphs>
 
     <paragraphs>
+        <title>Footnotes</title>
+
+        <p>Footnotes are the farthest thing imaginable from structured authoring.  You can put them anywhere, and conceivably they can contain anything.  But they do work great in <init>HTML</init> presentations as knowls.  However, we do not let the tail wag the dog, and so have to make some <em>compromises</em> for footnotes output in print formats.<ul>
+            <li>As of 2019-01-04 we are fairly restrictive about content.  No paragraphs, more like a few sentences, max.  If you have more content, consider the <tag>aside</tag> element, and send feature requests for that.</li>
+            <li>Many blocks, such as <tag>example</tag> and <tag>remark</tag>, are implemented with the <latex/> <c>tcolorbox</c> package, to make styling and layout much more capable and reliable.  But footnotes get trapped within these boxes and render at the end of the box (not the bottom of the page) and have a different scheme for the marks (letters, not numbers).  We have mitigated much of this behavior, but the cost is that these footnotes are delayed until the box finishes.  So if you have a 4-page example, and use a footnote early, it may appear at the bottom of a page that is 3 or 4 pages away.</li>
+            <li>Another consequence of the above is that hyperlinks in electronic <init>PDF</init>s, from the mark to the text, need to be disabled (they will never work within a <c>tcolorbox</c>).  Cross-references to a footmark's text will still be active in an electronic <init>PDF</init>.</li>
+        </ul></p>
+    </paragraphs>
+
+    <paragraphs>
         <title>Watermarks</title>
 
         <p>You can add a watermark to your <ini>PDF</ini> which will render as large, light grey text, at an angle across teh page.  Use <c>latex.watermark</c> to set the text (avoid obscure characters or symbols, and do not use any <init>XML</init> markup).  Use <c>latex.watermark.scale</c> to adjust for long or short text.  The <latex/>-only <q>\\</q> will survive in the text to create multiple lines of text.  Submit a feature request if this is not flexible enough to meet a special need.</p>
+    </paragraphs>
+
+    <paragraphs xml:id="latex-cover-images">
+        <title>Cover Images</title>
+
+        <p>The <c>docinfo/covers</c> element may be used to specify the filenames (with relative paths) of a front-cover image and a back-cover image via the <attr>front</attr> and <attr>back</attr> attributes.  The image must be a single-page <init>PDF</init>, and it will be scaled to fit an entire page.  So it is your responsibility to supply an image which has the correct aspect ratio and sufficient resolution.  These are only supported for the <latex/> conversion.</p>
+
+        <p>This is meant to help you create a professional electronic <init>PDF</init>.  A print-on-demand service (<xref ref="print-on-demand"/>) will likely want a standalone image (possibly with the front and back, plus a spine, all rolled into one <term>wrap</term> image).  So build your <em>real</em> cover images (<xref ref="cover-design"/>), and then modify them for this use.</p>
     </paragraphs>
 
     <paragraphs>

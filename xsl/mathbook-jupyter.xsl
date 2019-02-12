@@ -284,7 +284,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>%%html&#xa;</xsl:text>
             <!-- for offline testing -->
             <!-- <xsl:text>&lt;link href="./mathbook-content.css" rel="stylesheet" type="text/css" /&gt;&#xa;</xsl:text> -->
-            <xsl:text>&lt;link href="http://mathbook.pugetsound.edu/beta/mathbook-content.css" rel="stylesheet" type="text/css" /&gt;&#xa;</xsl:text>
+            <xsl:text>&lt;link href="https://pretextbook.org/beta/mathbook-content.css" rel="stylesheet" type="text/css" /&gt;&#xa;</xsl:text>
             <xsl:text>&lt;link href="https://aimath.org/mathbook/mathbook-add-on.css" rel="stylesheet" type="text/css" /&gt;&#xa;</xsl:text>
             <!-- A bad hack since "subtitle" is in masthead code, better CSS should take care of this -->
             <xsl:if test="$document-root/subtitle">
@@ -501,7 +501,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- two used for financial reasons, they will be         -->
 <!-- interpreted incorrectly.  But they can be escaped.   -->
 <!-- Not a Markdown element, but critical so here anyway. -->
-<!-- So authors should use the "dollar" element.          -->
 <xsl:template name="dollar-character">
     <xsl:text>\$</xsl:text>
 </xsl:template>
@@ -536,7 +535,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\\</xsl:text>
 </xsl:template>
 
-<!-- Asterisk, implemented as Unicode  -->
+<!-- Asterisk  -->
+<xsl:template name="asterisk-character">
+    <xsl:text>\*</xsl:text>
+</xsl:template>
 
 <!-- Left Bracket -->
 <xsl:template name="lbracket-character">
@@ -578,8 +580,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--
 TODO: (overall)
 
-1.  Interfere with left-angle bracket to make elements not evaporate in serialization.
-    For verbatim items, apply-imports into a variable, then search/replace to escaped versions
+1.  DONE: Interfere with left-angle bracket to make elements not evaporate in serialization.
 2.  DONE: Escape $ so that pairs do not go MathJax on us.
 3.  DONE: Do we need to protect a hash?  So not interpreted as a title?  Underscores, too.
 4.  Update CSS, use add-on, make an output version to parse as text.
@@ -604,48 +605,114 @@ TODO: (overall)
 <!-- have effect.                                              -->
 <!--                                                           -->
 <!-- Our emphasis originally is on escaping characters that    -->
-<!-- LaTeX has hijacked for special purposes.  First we define -->
-<!-- some variables globally, so it is only necessary once.    -->
-
-<!-- XML: & < > -->
-
-<!-- LaTeX: # $ % ^ & _ { } ~ \ -->
-
-<xsl:variable name="hash-replacement">
-    <xsl:call-template name="hash-character"/>
-</xsl:variable>
-
-<xsl:variable name="backslash-replacement">
-    <xsl:call-template name="backslash-character"/>
-</xsl:variable>
-
-<xsl:variable name="lbrace-replacement">
-    <xsl:call-template name="lbrace-character"/>
-</xsl:variable>
-
-<xsl:variable name="rbrace-replacement">
-    <xsl:call-template name="rbrace-character"/>
-</xsl:variable>
-
-<xsl:variable name="dollar-replacement">
-    <xsl:call-template name="dollar-character"/>
-</xsl:variable>
-
-<xsl:variable name="underscore-replacement">
-    <xsl:call-template name="underscore-character"/>
-</xsl:variable>
+<!-- Markdown has hijacked for special purposes.               -->
 
 <xsl:template name="text-processing">
     <xsl:param name="text"/>
-    <!-- Backslash first, then clear to add more -->
-    <xsl:variable name="backslash-fixed"  select="str:replace($text,            '\',  $backslash-replacement)"/>
-    <xsl:variable name="lbrace-fixed"     select="str:replace($backslash-fixed, '{',  $lbrace-replacement)"/>
-    <xsl:variable name="rbrace-fixed"     select="str:replace($lbrace-fixed,    '}',  $rbrace-replacement)"/>
-    <xsl:variable name="hash-fixed"       select="str:replace($rbrace-fixed,    '#',  $hash-replacement)"/>
-    <xsl:variable name="dollar-fixed"     select="str:replace($hash-fixed,      '$',  $dollar-replacement)"/>
-    <xsl:variable name="underscore-fixed" select="str:replace($dollar-fixed,    '_',  $underscore-replacement)"/>
 
-    <xsl:value-of select="$underscore-fixed"/>
+    <!-- Backslash first, then clear to add more -->
+    <xsl:variable name="backslash-fixed"  select="str:replace($text,            '\',  '\\')"/>
+    <xsl:variable name="lbrace-fixed"     select="str:replace($backslash-fixed, '{',  '\{')"/>
+    <xsl:variable name="rbrace-fixed"     select="str:replace($lbrace-fixed,    '}',  '\}')"/>
+    <xsl:variable name="hash-fixed"       select="str:replace($rbrace-fixed,    '#',  '\#')"/>
+    <xsl:variable name="dollar-fixed"     select="str:replace($hash-fixed,      '$',  '\$')"/>
+    <xsl:variable name="underscore-fixed" select="str:replace($dollar-fixed,    '_',  '\_')"/>
+    <xsl:variable name="asterisk-fixed"   select="str:replace($underscore-fixed,'*',  '\*')"/>
+    <xsl:variable name="backtick-fixed"   select="str:replace($asterisk-fixed,  '`',  '\`')"/>
+
+    <!-- We disrupt accidental MathJax formulations in running text.  MathJax     -->
+    <!-- needs both begin *and* end markers, enclosed in a single HTML element,   -->
+    <!-- before it will start injecting itself onto the page.  We leave a begin   -->
+    <!-- marker alone, but disrupt an end marker with a superfluous minimal span. -->
+    <!-- This is advice from David Cervone, JMM Baltimore, 2019-01-18.            -->
+    <!-- Note: we serialize the necessary HTML by hand, and the brace and         -->
+    <!-- backslash used in matching the leading portion of a LaTeX environment    -->
+    <!-- were both escaped above.                                                 -->
+    <xsl:variable name="inline-fixed"      select="str:replace($backtick-fixed, '\)',      '&lt;span&gt;\)&lt;/span&gt;' )"/>
+    <xsl:variable name="environment-fixed" select="str:replace($inline-fixed,   '\\end\{', '&lt;span&gt;\\end\{&lt;/span&gt;' )"/>
+
+    <xsl:value-of select="$environment-fixed"/>
+</xsl:template>
+
+<!-- ############### -->
+<!-- Inline Verbatim -->
+<!-- ############### -->
+
+<!-- Jupyter does a very good (but incomplete) job with inline -->
+<!-- verbatim text, requiring little care by authors.  But a   -->
+<!-- few gotchas need adjustment.  So we override.             -->
+<xsl:template match="c">
+    <!-- grab content literally -->
+    <xsl:variable name="text">
+        <xsl:value-of select="."/>
+    </xsl:variable>
+
+    <!-- We wrap verbatim inline text with an HTML "code" element. -->
+    <!-- When there are to in close proximity (same paragraph)     -->
+    <!-- certain characters can pair up (as Markdown, or MathJax,  -->
+    <!-- delimiters?) and wreak havoc.  But escaped versions seem  -->
+    <!-- to perform well in all cases, so we make these            -->
+    <!-- replacements first.                                       -->
+    <xsl:variable name="backtick-fixed"   select="str:replace($text,           '`',  '\`' )"/>
+    <xsl:variable name="asterisk-fixed"   select="str:replace($backtick-fixed, '*',  '\*' )"/>
+    <xsl:variable name="underscore-fixed" select="str:replace($asterisk-fixed, '_',  '\_' )"/>
+
+    <!-- Jupyter notebook is careful about XML special characters, -->
+    <!-- but if you want to write about the escaped versions, they -->
+    <!-- just get converted to the real thing.  So in these five   -->
+    <!-- very special situations we escape the leading ampersand   -->
+    <!-- and whatever conversion is happening is satiated.         -->
+    <xsl:variable name="escaped-ampersand-fixed"    select="str:replace($underscore-fixed,           '&amp;amp;',  '&amp;amp;amp;' )"/>
+    <xsl:variable name="escaped-leftbracket-fixed"  select="str:replace($escaped-ampersand-fixed,    '&amp;lt;',   '&amp;amp;lt;' )"/>
+    <xsl:variable name="escaped-rightbracket-fixed" select="str:replace($escaped-leftbracket-fixed,  '&amp;gt;',   '&amp;amp;gt;' )"/>
+    <xsl:variable name="escaped-apostrophe-fixed"   select="str:replace($escaped-rightbracket-fixed, '&amp;apos;', '&amp;amp;apos;' )"/>
+    <xsl:variable name="escaped-quote-fixed"        select="str:replace($escaped-apostrophe-fixed,   '&amp;quot;', '&amp;amp;quot;' )"/>
+
+    <!-- If you want to write about elements (like in the Author's     -->
+    <!-- Guide!) then you cannot have elements/tags sitting unaltered  -->
+    <!-- in verbatim text, since they now look like interior HTML.     -->
+    <!-- So we disrupt the leading left-bracket with an escaped        -->
+    <!-- version and let that convert to the character.                -->
+    <xsl:variable name="leftbracket-fixed" select="str:replace($escaped-quote-fixed, '&lt;', '&amp;lt;' )"/>
+
+    <!-- We enclose with PreTeXt's HTML, serializing by hand -->
+    <xsl:text>&lt;code class="code-inline tex2jax_ignore"&gt;</xsl:text>
+        <xsl:value-of select="$leftbracket-fixed"/>
+    <xsl:text>&lt;/code&gt;</xsl:text>
+</xsl:template>
+
+<!-- #### -->
+<!-- URLs -->
+<!-- #### -->
+
+<!-- We encode some characters in href attributes, here   -->
+<!-- just for the Jupyter conversion, as an override of   -->
+<!-- part of the serialization.  This could instead be    -->
+<!-- sanitization of the "url"element, in the general     -->
+<!-- HTML conversion or here for just Jupyter.  So        -->
+<!-- eventually this could migrate to another location    -->
+<!-- in the pipeline.                                     -->
+<!--                                                      -->
+<!-- The problem seems to be characters, used in pairs,   -->
+<!-- to delimit text for Markdown or MathJax:  underscore -->
+<!-- is italics, asterisk is emphasis, and dollar signs   -->
+<!-- delimit math.  This is a hunch based on similar      -->
+<!-- experiences with inline verbatim text.  But here we  -->
+<!-- are fortunate to be able to encode the dollar sign.  -->
+<xsl:template match="@href" mode="serialize">
+    <!-- sanitize value first -->
+    <xsl:variable name="text">
+        <xsl:value-of select="."/>
+    </xsl:variable>
+    <xsl:variable name="underscore-fixed" select="str:replace($text,             '_',  '%5F')"/>
+    <xsl:variable name="asterisk-fixed"   select="str:replace($underscore-fixed, '*',  '%2A')"/>
+    <xsl:variable name="dollar-fixed"     select="str:replace($asterisk-fixed,   '$',  '%24')"/>
+    <!-- construct new attribute, spacing, name, value -->
+    <xsl:text> </xsl:text>
+    <xsl:value-of select="name()"/>
+    <xsl:text>="</xsl:text>
+    <xsl:value-of select="$dollar-fixed"/>
+    <xsl:text>"</xsl:text>
 </xsl:template>
 
 <!-- ########################## -->

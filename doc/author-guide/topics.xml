@@ -24,12 +24,10 @@
 
             <p>The following subsections together contain allowed, or encouraged, markup within a paragraph.  Many of these may be used in captions and titles, but some of the more complicated constructions (which appear later here) cannot be used in captions or titles.</p>
 
-            <p>Note that some of this may appear to be overkill, and if you choose not to use it, you may even have success for a while with one of the output formats.  But if you wish to ever produce multiple outputs, then the following is necessary.  For example, a plain octothorpe (hash), <hash />, will migrate just fine to <init>HTML</init> output, but will cause fatal errors in <latex /> output, and can also cause problems in output formats that employ Markdown.  <init>JSON</init> is another component of some output formats which can be problematic.</p>
-
-            <p>We will say it again.  <pretext /> is a markup language, and our various output formats (<latex />, <init>HTML</init>, <init>EPUB</init>, Jupyter notebooks) in turn employ markup languages.  These use different escape characters and give different characters special meanings.  Our job is to insulate you from this variety, but it requires that you use markup in places where you might <q>normally</q> just press a key on your keyboard.  The descriptions below will contain more specific information.</p>
-
             <!-- Rutter, "Web Typography", "em dash", "en dash" (no hyphen) -->
-            <p>One more comment: typewriters, computer keyboards, and the <acro>ASCII</acro> character set limit the full range of characters that typographers and printers have used historically.  A case in point is the hyphen, which is a single key on a keyboard.  However, there are at least three common dashes of differing lengths (hyphen, en dash, and em dash), and in the context of mathematics or a computer program, the hyphen might be the binary operation of subtraction or the unary operation of negation.  <pretext /> will help you navigate this complexity, but you will want to use keyboard characters or markup appropriately.  So if you care about communicating clearly, and making your writing easy for a reader to use, absorb the details that follow and the philosophy they implement.</p>
+            <p>One more comment: typewriters, computer keyboards, and the <acro>ASCII</acro> character set have together conspired to limit the full range of characters that typographers and printers have used historically.  A case in point is the hyphen, which is a single key on a keyboard.  However, there are at least three common dashes of differing lengths (hyphen, en dash, and em dash), and in the context of mathematics or a computer program, the hyphen might be the binary operation of subtraction or the unary operation of negation.  Another example is the <q>upright</q>, or <q>dumb</q>, quote mark that is a single key on a keyboard, while careful typography will employ <q>smart</q>, or <q>curly</q>, quote marks that have left and right variants.  (Sometimes called <q>66</q> and <q>99</q> based on their shape.)  <pretext /> will help you navigate this complexity, but you will want to use keyboard characters or markup appropriately.  So if you care about communicating clearly, and making your writing easy for a reader to use, absorb the details that follow and the philosophy they implement.</p>
+
+            <p>We will say it again.  <pretext /> is a markup language, and our various output formats (<latex />, <init>HTML</init>, <init>EPUB</init>, Jupyter notebooks) in turn employ markup languages.  These use different escape characters and give different characters special meanings.  Our job is to insulate you from this variety, so you can concentrate on authoring you <em>ideas</em>.</p>
 
             <p>We begin with some simple <q>grouping</q> elements which contain several excellent examples of the importance and utility of careful markup.  There is a plethora of empty tags for individual characters, and these are very important (see <xref ref="topic-character-elements" />).  We defer them to the end of this section, since they are not as instructive, but do not think this means they are an afterthought.  They can be extremely critical for successful conversions.  Also do not miss <xref ref="practice-careful-markup" /> in the conclusion of this section.</p>
         </introduction>
@@ -57,27 +55,17 @@
 
             <paragraphs>
                 <title><tag>q</tag>, quotes, <q>group</q></title>
-                <p>This is the first of several grouping tags, using characters with left and right variants (see the individual characters in isolation above), and some of the most common markup in your writing.  Presentation uses double quote marks that are <term>smart quotes</term>, meaning that they look different in their opening and closing variants.  With output based on HTML, you may use your keyboard's double quote mark instead and get acceptable output, but your <latex /> will look wrong (plus you will look like you are a beginner with <latex />) and outputs based on JSON will be <em>totally broken</em>.  Futhermore, if you use the <tag>q</tag> your HTML output will look better (typographically) than if you do not use it.  (See <tag>blockquote</tag> for extensive runs of quoted text that can stand alone, and which can carry an attribution.)</p>
+                <p>This is the first of several grouping tags, using characters with left and right variants, and some of the most common markup in your writing.  Presentation uses double quote marks that are <term>smart quotes</term>, meaning that they look different in their opening and closing variants.  (See <tag>blockquote</tag> for extensive runs of quoted text that can stand alone, and which can carry an attribution.)</p>
             </paragraphs>
 
             <paragraphs>
                 <title><tag>sq</tag>, single quotes, <sq>group</sq></title>
-                <p>Perhaps less-often used than <tag>q</tag>, so a couple more characters to type.  Presentation is paired single-quotes, opening and closing.  Read the discussion above about double-quotes if you have not already, this tag is entirely similar.</p>
-            </paragraphs>
-
-            <paragraphs>
-                <title><tag>braces</tag>, braces, <abbr>aka</abbr> curly brackets, <braces>group</braces></title>
-                <p>Left and right braces to enclose a phrase.  This is not for creating a set in mathematics, use the appropriate mathematics tag and syntax for that.</p>
+                <p>Perhaps less-often used than <tag>q</tag>, so a couple more characters to type.  Presentation is paired single-quotes, opening and closing.</p>
             </paragraphs>
 
             <paragraphs>
                 <title><tag>angles</tag>, angle brackets, <angles>group</angles></title>
-                <p>Left and right angle brackets to enclose a phrase.  This is not for creating a set of generators in mathematics, use the appropriate mathematics tag and syntax for that.  Note also that the characters used here are distinct from the inequalities, <tag>less</tag> and <tag>greater</tag> (<less /> and <greater />).</p>
-            </paragraphs>
-
-            <paragraphs>
-                <title><tag>brackets</tag>, square brackets, <brackets>group</brackets></title>
-                <p>Left and right square brackets to enclose a phrase.  This is not for grouping expressions in mathematics, use the appropriate mathematics tag and syntax for that.</p>
+                <p>Left and right angle brackets to enclose a phrase.  This is not for creating a set of generators in mathematics, use the appropriate mathematics tag and syntax for that.  Note also that the characters used here are definitely distinct from the inequality symbols, &lt; and &gt;.</p>
             </paragraphs>
 
             <paragraphs>
@@ -154,9 +142,10 @@
 
             <paragraphs>
                 <title><tag>fn</tag>, footnotes</title>
+                <idx>footnotes</idx>
                 <p>A footnote can be inserted in a paragraph and a mark will be left behind.  Where the content of the footnote goes depends on the capabilities of the output format.  Because a footnote allows you to begin a new piece of text <em>anywhere</em>, it can be difficult to handle technically.  For this reason it is banned from places like titles and its possible content is limited (for openers, no paragraphs).</p>
 
-                <p>A footnote is the farthest thing from structured writing that we can think of.  It can go anywhere.  Resist the temptation to use it, and your writing will improve.  We frequently entertain the thought of making footnotes impossible in <pretext />.  See the <tag>aside</tag> for a possible alternative.</p>
+                <p>A footnote is the farthest thing from structured writing that we can think of.  It can go anywhere.  Resist the temptation to use it, and your writing will improve.  We frequently entertain the thought of making footnotes impossible in <pretext />.  See the <tag>aside</tag> element for a possible alternative.</p>
             </paragraphs>
 
             <!-- Inline mathematics -->
@@ -256,6 +245,9 @@
         <subsection xml:id="topic-character-elements">
             <title>Characters in Paragraphs</title>
 
+            <!-- Unambiguous:  ~, !, @, #, $, %, ^, (, ), _, [, ], {, }, \, |, :, ;, and , -->
+            <!-- Exceptional:  <, & -->
+
             <!-- fragment names, and their elements, from schema source
             dash-character:       nbsp, ndash, mdash
             xml-character:        ampersand, less, greater
@@ -272,156 +264,319 @@
             music-character:      (deferred to its own section)
             -->
 
-            <!-- Some easy, non-scary ones for openers -->
+            <introduction>
+                <p>Some keyboard characters are unambiguous, for example, the percent sign, %.  Other keyboard characters are poor replacements for several different characters.  Is a slash, /, being used to separate information/ideas, or is it a <term>solidus</term> being used to form a fraction such as 3<solidus/>4?  Other characters, such as per-mille, <permille/>, are not present on keyboards at all.  We organize this section according to these types of distinctions.</p>
+            </introduction>
 
-            <paragraphs>
-                <title><tage>nbsp</tage>, non-breaking space</title>
-                <p>A space, but which ties two words together and discourages a line break when formatted, such as <c>Summer&lt;nbsp /&gt;1967</c>.  This can also be used to discourage a period in an abbreviation from being interpreted as the end of a sentence, such as <c>C.R.&lt;nbsp /&gt;Darwin</c>.</p>
-            </paragraphs>
+            <subsubsection>
+                <title>Unambiguous Keyboard Characters</title>
 
-            <paragraphs>
-                <title><tage>ndash</tage>, <ndash />, en dash</title>
-                <p>A dash, the width of a lowercase <sq>n</sq>, or exactly half the width of the em dash.  This is typically used to express a range, such as <c>1955&lt;ndash /&gt;1975</c>, with no intervening spaces.  It is often expressed as two hyphens when typed.  Bringhurst suggests an ndash surrounded by spaces <ndash /> thusly <ndash /> when setting off phrases.</p>
-            </paragraphs>
+                <p>The keyboard characters `, ~, !, @, #, $, %, ^, *, (, ), _, [, ], {, }, \, |, :, ;, and , are entered as-is and are only rendered one way.  Easy.</p>
 
-            <paragraphs>
-                <title><tage>mdash</tage>, <mdash />, em dash</title>
-                <p>A dash, the width of a lowercase <sq>m</sq>, or twice the width of the en dash.  This is typically used to express a secondary part of a phrase, much like the use of a semi-colon or parentheses.</p>
-            </paragraphs>
+                <p>Of course, the fifty-two Latin letters, and ten decimal digits, are also in this category.  If you have an international, or bilingual, or country-specific keyboard, then common accented versions of Latin letters (as used in Europe and the Western Hemisphere) may also be used directly from your keyboard.</p>
+            </subsubsection>
 
-            <!-- XML: &, <, > -->
+            <subsubsection>
+                <title>Exceptional Keyboard Characters</title>
 
-            <paragraphs>
-                <title><tage>ampersand</tage>, <ampersand /></title>
-                <p>This is the symbol often read as <q>and</q>, a stylised contraction of <q>et</q>.  Be careful, ampersands in mathematics and in verbatim text (code) are implemented differently.  This version is for use with <q>normal</q> text.  This is the escape character for <init>XML</init> and has special meanings in <latex />.</p>
+                <p><init>XML</init> is a <term>markup language</term>, which in part means that some keyboard characters are co-opted to signal the start of markup.  For <init>XML</init> this character is the less-than symbol, &lt;.  It signals the start of a <term>tag</term>, and then an opening tag ends with a greater-than symbol, &gt;, while a closing tag has an extra / right after the &lt;.</p>
 
-                <p><em>ALWAYS</em> use this empty element in normal text, or no processing of any kind will succeed.  Review <xref ref="overview-special-characters" /> for use within mathematics or verbatim text.  See also <xref ref="mathematics-xml-characters" /> and the introduction to <xref ref="topic-verbatim-literal" />.</p>
-            </paragraphs>
+                <p>This begs the question:  if a &lt; is used in our <init>XML</init> source to signal the start of a tag, then how did we get one to appear here in this sentence without mistakenly starting a tag?  Once a markup language gives some characters special meanings, then there needs to be an <term>escape character</term>.  For <init>XML</init> the escape character is the ampersand, &amp;.  So to author the &lt; and &gt; symbols, we type <term>escaped</term> versions: <c>&amp;lt;</c> and <c>&amp;gt;</c>.</p>
 
-            <paragraphs>
-                <title><tage>less</tage>, <tage>greater</tage>, <less />, <greater />, less than, greater than</title>
-                <p>If you need these symbols in <q>normal</q> text (which should be unlikely), this is the way to get them. A bare <sq><less /></sq> will totally confuse the <init>XML</init> processor, since, as you know now they have a special mening in <init>XML</init> syntax.  Mathematics and verbatim text have their own variants.  Note that these are the keyboard characters commonly used for inequalities in text, and are different from the grouping characters <tage>langle</tage> and <tage>rangle</tage> discussed below.</p>
+                <p>I hear you now say, <q>But now we just took the &amp; out of the running and gave it a special meaning.  How do we get an ampersand?</q>  Easy, use the escaped version:  <c>&amp;amp;</c>.</p>
 
-                <p><em>ALWAYS</em> use these empty elements in normal text, or no processing of any kind will succeed.  Review <xref ref="overview-special-characters" /> for use within mathematics or verbatim text.  See also <xref ref="mathematics-xml-characters" /> and the introduction to <xref ref="topic-verbatim-literal" />.</p>
-            </paragraphs>
+                <p>So the short answer is: never, ever type the &lt; or &amp; keyboard characters in isolation.  The very beginning of the processing of <init>XML</init> (<ie/> <pretext/>) will fail fatally on these characters.  Instead, always use the sequences <c>&amp;lt;</c> and  <c>&amp;amp;</c> and then very early the <init>XML</init> processing will convert them to characters, <em>without</em> interpreting them as signals for aspects of the markup.</p>
 
-            <!-- Latex: # $ % & ~ _ ^ \ { } -->
+                <p>It does not seem necessary to author &gt; as <c>&amp;gt;</c>, though there is no real harm in doing so.  The two other characters with escaped versions are the single and double quotes, <c>&apos;</c> and <c>&quot;</c>, which have escaped version of <c>&amp;apos;</c> and <c>&amp;quot;</c> (respectively).  These are only necessary for attribute values, and we have been careful to design <pretext/> so that they are not necessary.</p>
 
-            <paragraphs>
-                <title><tage>hash</tage>, <hash />, octothorpe, numeral sign, pound avoirdupois, hash</title>
-                <p>This character has special meaning in <latex />, and in Markdown, so consistently using this empty element for normal text is critical for successful conversion to popular outputs, and so is a good practice.</p>
-            </paragraphs>
+                <remark>
+                    <title>Excessive Escaped Characters</title>
 
-            <paragraphs>
-                <title><tage>dollar</tage>, <dollar />, dollar sign</title>
-                <p>This character has special meaning in <latex /> syntax for mathematics, so consistently using this empty element for normal text is critical for successful conversion to every output, and so should be used <em>ALWAYS</em>.</p>
-            </paragraphs>
+                    <p>If you know another markup language, such as <tex/>, <latex/>, Markdown, <init>JSON</init>, or <init>PGML</init>, think about how many characters have been given special meanings, and the subsequent necessity to use escaped versions.  And if you want to write about computer languages, realize that each such language also gives certain keyboard characters special meanings.</p>
 
-            <paragraphs>
-                <title><tage>percent</tage>, <percent />, percent, per centum</title>
-                <p>This character has special meaning in <latex />, so consistently using this empty element for normal text is critical for successful conversion to popular outputs, and so is a good practice.</p>
-            </paragraphs>
+                    <p><init>XML</init> only has five exceptional characters, and in your daily use, <pretext/> really only requires you to be aware of two, the minimum necessary for a markup language.</p>
+                </remark>
+            </subsubsection>
 
-            <paragraphs>
-                <title><tage>circumflex</tage>, <circumflex />, circumflex, caret</title>
-                <p>This character has special meaning in <latex />, so consistently using this empty element for normal text is critical for successful conversion to popular outputs, and so is a good practice.</p>
-            </paragraphs>
+            <subsubsection>
+                <title>Ambiguous Keyboard Characters</title>
 
-            <paragraphs>
-                <title><tage>underscore</tage>, <underscore />, underscore</title>
-                <p>This character has special meaning in <latex />, and in Markdown, so consistently using this empty element for normal text is critical for successful conversion to popular outputs, and so is a good practice.</p>
-            </paragraphs>
+                <p>Some keyboard characters have a primary interpretation, and are imitations of other typographic characters.  Your output will be of higher quality if you understand these distinctions and employ the proper variant.</p>
 
-            <paragraphs>
-                <title><tage>lbrace</tage>, <tage>rbrace</tage>, <lbrace />, <rbrace />, left brace, right brace</title>
-                <p>These characters have special meaning in <latex />, and in <init>JSON</init>, so consistently using these empty elements for normal text is critical for successful conversion to popular outputs, and so is a good practice.</p>
-            </paragraphs>
+                <!-- / forward slash, solidus        -->
+                <!-- ' apostrophe, rsq               -->
+                <!-- ` backtick,  lsq                -->
+                <!-- . period, sentence/abbreviation -->
+                <!-- - hyphen, see ...........       -->
+                <!-- ~ tilde, swungdash              -->
+                <!-- " do not use, lq, rq            -->
 
-            <paragraphs>
-                <title><tage>tilde</tage>, <tilde />, tilde</title>
-                <p>This character has special meaning in <latex />, so consistently using this empty element for normal text is critical for successful conversion to popular outputs, and so is a good practice.</p>
-            </paragraphs>
+                <table>
+                    <caption>Ambiguous Keyboard Characters and Alternatives</caption>
+                    <tabular>
+                        <row bottom="medium">
+                            <cell>Keyboard</cell>
+                            <cell>Primary</cell>
+                            <cell>Notes</cell>
+                        </row>
+                        <row>
+                            <cell><c>/</c></cell>
+                            <cell>(forward) slash</cell>
+                            <cell><tage>solidus</tage> is a fraction bar, <solidus/></cell>
+                        </row>
+                        <row>
+                            <cell><c>'</c></cell>
+                            <cell>apostrophe</cell>
+                            <cell><tage>rsq</tage> is a right single quote, <rsq/></cell>
+                        </row>
+                        <row>
+                            <cell><c>`</c></cell>
+                            <cell>backtick</cell>
+                            <cell><tage>lsq</tage> is a right single quote, <lsq/></cell>
+                        </row>
+                        <row>
+                            <cell><c>.</c></cell>
+                            <cell>period</cell>
+                            <cell>abbreviations <em>and</em> end-of-sentence</cell>
+                        </row>
+                        <row>
+                            <cell><c>-</c></cell>
+                            <cell>hyphen</cell>
+                            <cell>See dashes, and arithmetic</cell>
+                        </row>
+                        <row>
+                            <cell><c>"</c></cell>
+                            <cell>upright double quote</cell>
+                            <cell><tage>lq</tage> is <lq/>, <tage>rq</tage> is <rq/></cell>
+                        </row>
+                    </tabular>
+                </table>
 
-            <paragraphs>
-                <title><tage>backslash</tage>, <backslash />, backslash</title>
-                <p>This is the escape character for <latex />, Markdown, <em>and</em> <init>JSON</init>! So consistently using this empty element for normal text is critical for successful conversion to almost every popular output, and so is recommended <em>ALWAYS</em>.</p>
-            </paragraphs>
+                <p>Note that the four quote marks (left/right, single/double) are meant for the actual characters.  Always use the grouping constructions described above (<ie/> <tag>q</tag> and <tag>sq</tag>) when grouping a phrase with quote marks.  Note, too, that there is never a good reason to use the keyboard quote character (<c>"</c>) unless you are creating some sort of verbatim text, such as a program listing or describing literal keyboard input.</p>
 
-            <!-- Delimiters, single braces above, brackets are OK as ASCII characters -->
+                <p>When creating print or <init>PDF</init> via <latex/> a period may get different trailing space depending on location and context, generally being its use in abbreviations or to conclude a sentence.  We do not yet have this dual-use under control.</p>
+            </subsubsection>
 
-            <paragraphs>
-                <title><tage>lq</tage>, <tage>rq</tage>, <lq />, <rq />, left and right double-quotes</title>
-                <p>These are the characters in isolation.  If you are using them in pairs, see the <tag>q</tag> tag below for a matched pair.  Note that <latex /> syntax expresses quote marks in a very complicated way, and typographically a left quote mark is different from a right quote mark, so it is never good practice to use the keyboard versions.</p>
-            </paragraphs>
+            <subsubsection>
+                <title>Extraordinary Characters</title>
 
-            <paragraphs>
-                <title><tage>lsq</tage>, <tage>rsq</tage>, <lsq />, <rsq />, left and right single-quotes</title>
-                <p>These are the characters in isolation.  If you are using them in pairs, see the <tag>q</tag> tag below for a matched pair.  Note that <latex /> syntax expresses quote marks in a very complicated way, and typographically a left quote mark is different from a right quote mark, so it is never good practice to use the keyboard versions.  In particular, note that the <tage>lsq</tage> character is not the same as the <q>backtick</q> of various markup languages.</p>
-            </paragraphs>
+                <p>Some characters or symbols are typically not available on a keyboard, so we provide empty elements.  Many of these may be entered directly into your source as Unicode characters, and they will do well in your <init>HTML</init> output.  However these may fail entirely if you creat print or <init>PDF</init> via <latex/> using the <c>pdflatex</c> engine.  Furthermore, even for <init>HTML</init> output there may be several Unicode characters that are very similar.</p>
 
-            <!-- More exotic characters not from a keyboard -->
+                <p>So again, for the best quality output be aware of these elements and use them.  Please suggest additions if you do not find what you need and are resorting to Unicode characters.</p>
 
-            <paragraphs>
-                <title><tage>ellipsis</tage>, <ellipsis />, ellipsis</title>
-                <p>Typically three low dots with no intervening space, to indicate a continuation.  This will always perform better than three consecutive periods.</p>
-            </paragraphs>
+                <paragraphs>
+                    <title><tage>ellipsis</tage>, <ellipsis />, ellipsis</title>
+                    <p>Typically three low dots with no intervening space, to indicate a continuation.  This will always perform better than three consecutive periods.</p>
+                </paragraphs>
 
-            <paragraphs>
-                <title><tage>asterisk</tage>, <asterisk />, asterisk, star</title>
-                <p>This is the character, and not the raised mark used to indicate a footnote or endnote. It has a special meaning in Markdown.</p>
-            </paragraphs>
+                <paragraphs>
+                    <title><tage>midpoint</tage>, <midpoint />, midpoint</title>
+                    <p>A small centered (vertically) dot, which can be used to separate pieces of information, especially in displayed text (<ie /> outside of paragraphs).  Not to be confused with a bullet preceding a list item, or multiplication in mathematics.</p>
+                </paragraphs>
 
-            <paragraphs>
-                <title><tage>backtick</tage>, <backtick />, backtick, accent grave</title>
-                <p>This is the keyboard character that looks like a left single quote.  It is not a quote mark (use <tag>lsq</tag> for that character).  It is often used to modify other characters, as an accent.  But that is not the use of this empty element either.  This is the keyboard character, which is sometimes used in other markup languages.  So, again, you could do fine pressing the key, but <latex /> might turn it into a left quote mark, and it might cause confusion when Markdown is employed.</p>
-            </paragraphs>
+                <paragraphs>
+                    <title><tage>swungdash</tage>, <swungdash />, swung dash</title>
+                    <p>Another decorative separator, not to be confused with the keyboard tilde character since it is wider and thicker.</p>
+                </paragraphs>
 
-            <paragraphs>
-                <title><tage>slash</tage>, <slash />, slash, forward slash</title>
-                <p>This is the character used to separate words<slash />information<slash />text.  It is not to be confused with the <tage>solidus</tage> (or virgule) used to form a fraction in normal text.  You should be able to reliably use the keyboard character <c>/</c> instead.  We include the markup version if making the distinction is important for your project.</p>
-            </paragraphs>
+                <paragraphs>
+                    <title><tage>permille</tage>, <permille />, per mille</title>
+                    <p>Like per cent, but now a number expressed as its product with <m>1000</m> (rather than with <m>100</m>).</p>
+                </paragraphs>
 
-            <paragraphs>
-                <title><tage>midpoint</tage>, <midpoint />, midpoint</title>
-                <p>A small centered (vertically) dot, which can be used to separate pieces of information, especially in displayed text (<ie /> outside of paragraphs).  Not to be confused with a bullet preceding a list item, or multiplication in mathematics.</p>
-            </paragraphs>
+                <paragraphs>
+                    <title><tage>pilcrow</tage>, <pilcrow />, pilcrow, paragraph mark</title>
+                    <p>Mark used historically to indicate the start of an internal paragraph, and in a more modern use, to indicate a permalink.</p>
+                </paragraphs>
 
-            <paragraphs>
-                <title><tage>swungdash</tage>, <swungdash />, swung dash</title>
-                <p>Another decorative separator, not to be confused with the keyboard tilde character.</p>
-            </paragraphs>
+                <paragraphs>
+                    <title><tage>section-mark</tage>, <section-mark />, section mark</title>
+                    <p>Used to prefix the number of a section, or other division.  (So the word section is being used generically here.)</p>
+                </paragraphs>
 
-            <paragraphs>
-                <title><tage>permille</tage>, <permille />, per mille</title>
-                <p>Like per cent, but now a number expressed as its product with <m>1000</m> (rather than with <m>100</m>).</p>
-            </paragraphs>
+                <paragraphs>
+                    <title><tage>copyright</tage>, <copyright />, copyright</title>
+                    <p>The symbol used in publishing, legal, or business contexts.  For a <pretext /> project, copyright information can be specified within the <tag>colophon</tag> portion of the <tag>frontmatter</tag>.</p>
+                </paragraphs>
 
-            <paragraphs>
-                <title><tage>pilcrow</tage>, <pilcrow />, pilcrow, paragraph mark</title>
-                <p>Mark used historically to indicate the start of an internal paragraph, and in a more modern use, to indicate a permalink.</p>
-            </paragraphs>
+                <paragraphs>
+                    <title><tage>trademark</tage>, <trademark />, trademark</title>
+                    <p>The symbol used in legal or business contexts.</p>
+                </paragraphs>
 
-            <paragraphs>
-                <title><tage>section-mark</tage>, <section-mark />, section mark</title>
-                <p>Used to prefix the number of a section, or other division.  (So the word section is being used generically here.)</p>
-            </paragraphs>
+                <paragraphs>
+                    <title><tage>registered</tage>, <registered />, registered</title>
+                    <p>The symbol used in legal or business contexts.</p>
+                </paragraphs>
 
-            <paragraphs>
-                <title><tage>copyright</tage>, <copyright />, copyright</title>
-                <p>The symbol used in publishing, legal, or business contexts.  For a <pretext /> project, copyright information can be specified within the <tag>colophon</tag> portion of the <tag>frontmatter</tag>.</p>
-            </paragraphs>
+                <table>
+                    <caption>Extraordinary Characters and Their Empty Elements</caption>
+                    <tabular>
+                        <row bottom="medium">
+                            <cell>Character</cell>
+                            <cell>Name</cell>
+                            <cell>Element</cell>
+                        </row>
+                        <row>
+                            <cell><ellipsis/></cell>
+                            <cell>ellipsis</cell>
+                            <cell><tage>ellipsis</tage></cell>
+                        </row>
 
-            <paragraphs>
-                <title><tage>trademark</tage>, <trademark />, trademark</title>
-                <p>The symbol used in legal or business contexts.</p>
-            </paragraphs>
+                        <row>
+                            <cell><midpoint/></cell>
+                            <cell>midpoint</cell>
+                            <cell><tage>midpoint</tage></cell>
+                        </row>
 
-            <paragraphs>
-                <title><tage>registered</tage>, <registered />, registered</title>
-                <p>The symbol used in legal or business contexts.</p>
-            </paragraphs>
+                        <row>
+                            <cell><swungdash/></cell>
+                            <cell>swung dash</cell>
+                            <cell><tage>swungdash</tage></cell>
+                        </row>
 
-            <!-- Generators -->
+                        <row>
+                            <cell><permille/></cell>
+                            <cell>per-mille</cell>
+                            <cell><tage>permille</tage></cell>
+                        </row>
+
+                        <row>
+                            <cell><pilcrow/></cell>
+                            <cell>pilcrow</cell>
+                            <cell><tage>pilcrow</tage></cell>
+                        </row>
+
+                        <row>
+                            <cell><section-mark/></cell>
+                            <cell>section-mark</cell>
+                            <cell><tage>section-mark</tage></cell>
+                        </row>
+
+                        <row>
+                            <cell><copyright/></cell>
+                            <cell>copyright</cell>
+                            <cell><tage>copyright</tage></cell>
+                        </row>
+
+                        <row>
+                            <cell><trademark/></cell>
+                            <cell>trademark</cell>
+                            <cell><tage>trademark</tage></cell>
+                        </row>
+
+                        <row>
+                            <cell><registered/></cell>
+                            <cell>registered</cell>
+                            <cell><tage>registered</tage></cell>
+                        </row>
+                    </tabular>
+                </table>
+            </subsubsection>
+
+            <subsubsection>
+                <title>Accented Characters</title>
+
+                <p>The second 128 Unicode characters (hex <c>80</c> to <c>FF</c>) contain many of the most frequently-used accented characters in Western languages, along with niceties such as the German <foreign>eszett</foreign>, &#xDF;, or the Scandinavian <foreign>æsc</foreign>, &#xE6;, an a-e ligature.  Like the fifty-two Latin letters (part of the <em>first</em> 128 Unicode characters), these may be used as-is.  They may be present on your keyboard, or you may need to learn keyboard shortcuts or specifics of your operating system to enter them as Unicode characters.  In a pinch, you can often cut-and-paste a few characters from web pages.</p>
+
+                <p>This table is indexed by the Unicode number, in hexadecinal notation.  The first 32 of the 128 (<c>U+0080</c><ndash/><c>U+009F</c>) are control codes and <c>U+00A0</c> is a non-breaking space, so is invisible, while <c>U+00AD</c> is a soft hyphen (which we have not implemented and so is excluded).</p>
+
+                <!-- ex &#x0080; - &#x009F; controls -->
+                <!-- ex &#x00A0; non-breaking space  -->
+                <!-- ex &#x00AD; soft hyphen         -->
+                <table>
+                    <caption>Latin-1 Supplement, Unicode <c>U+00A0</c><ndash/><c>U+00FF</c></caption>
+                <tabular>
+                    <row><cell />
+                    <cell><c>0</c></cell>
+                    <cell><c>1</c></cell>
+                    <cell><c>2</c></cell>
+                    <cell><c>3</c></cell>
+                    <cell><c>4</c></cell>
+                    <cell><c>5</c></cell>
+                    <cell><c>6</c></cell>
+                    <cell><c>7</c></cell>
+                    <cell><c>8</c></cell>
+                    <cell><c>9</c></cell>
+                    <cell><c>A</c></cell>
+                    <cell><c>B</c></cell>
+                    <cell><c>C</c></cell>
+                    <cell><c>D</c></cell>
+                    <cell><c>E</c></cell>
+                    <cell><c>F</c></cell></row>
+                    <row><cell><c>00A_</c></cell><cell><nbsp /></cell><cell>&#x00A1;</cell><cell>&#x00A2;</cell><cell>&#x00A3;</cell><cell>&#x00A4;</cell><cell>&#x00A5;</cell><cell>&#x00A6;</cell><cell>&#x00A7;</cell>
+                                                 <cell>&#x00A8;</cell><cell>&#x00A9;</cell><cell>&#x00AA;</cell><cell>&#x00AB;</cell><cell>&#x00AC;</cell><cell>        </cell><cell>&#x00AE;</cell><cell>&#x00AF;</cell></row>
+                    <row><cell><c>00B_</c></cell><cell>&#x00B0;</cell><cell>&#x00B1;</cell><cell>&#x00B2;</cell><cell>&#x00B3;</cell><cell>&#x00B4;</cell><cell>&#x00B5;</cell><cell>&#x00B6;</cell><cell>&#x00B7;</cell>
+                                                 <cell>&#x00B8;</cell><cell>&#x00B9;</cell><cell>&#x00BA;</cell><cell>&#x00BB;</cell><cell>&#x00BC;</cell><cell>&#x00BD;</cell><cell>&#x00BE;</cell><cell>&#x00BF;</cell></row>
+                    <row><cell><c>00C_</c></cell><cell>&#x00C0;</cell><cell>&#x00C1;</cell><cell>&#x00C2;</cell><cell>&#x00C3;</cell><cell>&#x00C4;</cell><cell>&#x00C5;</cell><cell>&#x00C6;</cell><cell>&#x00C7;</cell>
+                                                 <cell>&#x00C8;</cell><cell>&#x00C9;</cell><cell>&#x00CA;</cell><cell>&#x00CB;</cell><cell>&#x00CC;</cell><cell>&#x00CD;</cell><cell>&#x00CE;</cell><cell>&#x00CF;</cell></row>
+                    <row><cell><c>00D_</c></cell><cell>&#x00D0;</cell><cell>&#x00D1;</cell><cell>&#x00D2;</cell><cell>&#x00D3;</cell><cell>&#x00D4;</cell><cell>&#x00D5;</cell><cell>&#x00D6;</cell><cell>&#x00D7;</cell>
+                                                 <cell>&#x00D8;</cell><cell>&#x00D9;</cell><cell>&#x00DA;</cell><cell>&#x00DB;</cell><cell>&#x00DC;</cell><cell>&#x00DD;</cell><cell>&#x00DE;</cell><cell>&#x00DF;</cell></row>
+                    <row><cell><c>00E_</c></cell><cell>&#x00E0;</cell><cell>&#x00E1;</cell><cell>&#x00E2;</cell><cell>&#x00E3;</cell><cell>&#x00E4;</cell><cell>&#x00E5;</cell><cell>&#x00E6;</cell><cell>&#x00E7;</cell>
+                                                 <cell>&#x00E8;</cell><cell>&#x00E9;</cell><cell>&#x00EA;</cell><cell>&#x00EB;</cell><cell>&#x00EC;</cell><cell>&#x00ED;</cell><cell>&#x00EE;</cell><cell>&#x00EF;</cell></row>
+                    <row><cell><c>00F_</c></cell><cell>&#x00F0;</cell><cell>&#x00F1;</cell><cell>&#x00F2;</cell><cell>&#x00F3;</cell><cell>&#x00F4;</cell><cell>&#x00F5;</cell><cell>&#x00F6;</cell><cell>&#x00F7;</cell>
+                                                 <cell>&#x00F8;</cell><cell>&#x00F9;</cell><cell>&#x00FA;</cell><cell>&#x00FB;</cell><cell>&#x00FC;</cell><cell>&#x00FD;</cell><cell>&#x00FE;</cell><cell>&#x00FF;</cell></row>
+                    </tabular>
+                </table>
+            </subsubsection>
+
+            <subsubsection>
+                <title>Arithmetic</title>
+
+                <p>If you are writing about technical subjects, then you will want to avail yourself of <pretext/>'s extensive support for mathematics.  Otherwise, you may wish to write <em>really simple</em> arithmetic within sentences without extra formatting.  Notice that there is no provision for preventing line-breaks in the midst of these expressions.</p>
+
+                <paragraphs>
+                    <title><tage>times</tage>, <times />, times, multiplication</title>
+                    <p>For simple arithmetic expressions in text, this symbol may be used.  Or it may be used to specify dimensions, as in <q>I bought a 2<times />4 at the lumber yard.</q></p>
+                </paragraphs>
+
+                <paragraphs>
+                    <title><tage>solidus</tage>, <solidus />, solidus, virgule, fraction bar</title>
+                    <p>For simple arithmetic expressions in text, this symbol may be used to form a fraction.  It shoulds appear to have a significantly shallower slope than the forward slash, <slash />.</p>
+                </paragraphs>
+
+                <p>So we have <tage>times</tage> and <tage>solidus</tage> and will implement &#xb1; and &#xf7; and then provide examples.</p>
+                <!-- 
+                http://gcp.fcaglp.unlp.edu.ar/_media/integrantes:psantamaria:latex:textcomp.pdf
+                + regular
+                - negative
+                - subtract \textminus
+                <times/>  \texttimes
+                <solidus/> \textfractionsolidus
+                <division/> F7 \textdiv 
+                <plusminus/>
+                -->
+            </subsubsection>
+
+            <subsubsection>
+                <title>Separators</title>
+
+                <paragraphs>
+                    <title><tage>ndash</tage>, <ndash />, en dash</title>
+                    <p>A dash, the width of a lowercase <sq>n</sq>, or exactly half the width of the em dash.  This is typically used to express a range, such as <c>1955&lt;ndash /&gt;1975</c>, with no intervening spaces.  It is often expressed as two hyphens when typed.  Bringhurst suggests an ndash surrounded by spaces <ndash /> thusly <ndash /> when setting off phrases.</p>
+                </paragraphs>
+
+                <paragraphs>
+                    <title><tage>mdash</tage>, <mdash />, em dash</title>
+                    <p>A dash, the width of a lowercase <sq>m</sq>, or twice the width of the en dash.  This is typically used to express a secondary part of a phrase, much like the use of a semi-colon or parentheses.</p>
+                </paragraphs>
+
+                <paragraphs>
+                    <title><tage>nbsp</tage>, non-breaking space</title>
+                    <p>A space, but which ties two words together and discourages a line break when formatted, such as <c>Summer&lt;nbsp /&gt;1967</c>.  This can also be used to discourage a period in an abbreviation from being interpreted as the end of a sentence, such as <c>C.R.&lt;nbsp /&gt;Darwin</c>.</p>
+                </paragraphs>
+
+                <paragraphs>
+                    <title><tage>midpoint</tage>, <tage>swungdash</tage>, <midpoint/>, <swungdash/>, midpoint, swung dash</title>
+                    <p>These can be used<midpoint/>as more decorative<swungdash/>separators.</p>
+                </paragraphs>
+            </subsubsection>
+        </subsection>
+
+        <subsection>
+            <title>Other Markup in Paragraphs</title>
+
+                <!-- <title>Generators</title> -->
 
             <paragraphs>
                 <title><tage>today</tage>, <tage>timeofday</tage>, <today />, <timeofday /></title>
@@ -434,7 +589,12 @@
             </paragraphs>
 
             <paragraphs>
-                <title><tage>ie</tage>, <tage>eg</tage>, <tage>circa</tage>, <tag>versus</tag>, <tage>etc</tage>, <ie />, <eg />, <circa />, <vs />, <etc /></title>
+                <title><tage>fillin</tage>, <fillin characters="5" />, fill-in blank</title>
+                <p>A <q>fill in the blank</q> blank.  While meant for use with normal text, it may also be used within mathematics contexts.  The <attr>characters</attr> attribute may be used to hint at how long the line will be, should the default value of 10 be too long or too short.  Here we have set <attr>characters</attr> to the value <c>5</c>.</p>
+            </paragraphs>
+
+            <paragraphs>
+                <title><tage>ie</tage>, <tage>eg</tage>, <tage>ca</tage>, <tage>vs</tage>, <tage>etc</tage>, <ie />, <eg />, <ca />, <vs />, <etc /></title>
                 <p>A small collection of frequently-used Latin abbreviations, with attempts to handle the tricky periods wisely in <latex /> output.  Strictly speaking <bc /> is not Latin, but we include it for completeness.  Tags are always lowercase, no punctuation, usually two letters.</p>
                 <sidebyside>
                     <tabular>
@@ -443,7 +603,7 @@
                         <row><cell><c>ad</c></cell>    <cell><ad/>    </cell><cell><foreign>anno Domini</foreign>, in the year of the Lord</cell>      </row>
                         <row><cell><c>am</c></cell>    <cell><am/>    </cell><cell><foreign>ante meridiem</foreign>, before midday</cell>              </row>
                         <row><cell><c>bc</c></cell>    <cell><bc/>    </cell><cell>English, before Christ</cell>                                       </row>
-                        <row><cell><c>circa</c></cell> <cell><circa/> </cell><cell><foreign>circa</foreign>, about</cell>                              </row>
+                        <row><cell><c>ca</c></cell>    <cell><ca/>    </cell><cell><foreign>circa</foreign>, about</cell>                              </row>
                         <row><cell><c>eg</c></cell>    <cell><eg/>    </cell><cell><foreign>exempli gratia</foreign>, for example</cell>               </row>
                         <row><cell><c>etal</c></cell>  <cell><etal/>  </cell><cell><foreign>et alia</foreign>, and others</cell>                       </row>
                         <row><cell><c>etc</c></cell>   <cell><etc/>   </cell><cell><foreign>et caetera</foreign>, and the rest</cell>                  </row>
@@ -455,25 +615,6 @@
                         <row><cell><c>viz</c></cell>   <cell><viz/>   </cell><cell><foreign>videlicet</foreign>, namely</cell>                         </row>
                     </tabular>
                 </sidebyside>
-            </paragraphs>
-
-            <!-- Fill-in Blank -->
-
-            <paragraphs>
-                <title><tage>fillin</tage>, <fillin characters="5" />, fill-in blank</title>
-                <p>A <q>fill in the blank</q> blank.  While meant for use with normal text, it may also be used within mathematics contexts.  The <attr>characters</attr> attribute may be used to hint at how long the line will be, should the default value of 10 be too long or too short.  Here we have set <attr>characters</attr> to the value <c>5</c>.</p>
-            </paragraphs>
-
-            <!-- Arithmetic -->
-
-            <paragraphs>
-                <title><tage>times</tage>, <times />, times, multiplication</title>
-                <p>For simple arithmetic expressions in text, this symbol may be used.  Or it may be used to specify dimensions, as in <q>I bought a 2<times />4 at the lumber yard.</q></p>
-            </paragraphs>
-
-            <paragraphs>
-                <title><tage>solidus</tage>, <solidus />, solidus, virgule, fraction bar</title>
-                <p>For simple arithmetic expressions in text, this symbol may be used to form a fraction.  It shoulds appear to have a significantly shallower slope than the forward slash, <slash />.</p>
             </paragraphs>
 
             <paragraphs>
@@ -492,7 +633,7 @@
             <note xml:id="practice-careful-markup">
                 <title>Understand the Importance of Careful Markup</title>
 
-                <p>There is a lot of detailed information in this section.  Much of it is critically important, some is superfluous.  If you are new to thinking in terms of markup (rather than <acro>WYSIWYG</acro> tools), it might be overwhelming, a lot to digest, and hard to separate the wheat from the chaff.  Careful here means using the necessary markup, not using it for other purposes different than its intent (<term>tag abuse</term>), planning ahead for different output formats, but not becoming a slave to over-doing it.</p>
+                <p>There is a lot of detailed information in this section.  Much of it is critically important.  If you are new to thinking in terms of markup (rather than <acro>WYSIWYG</acro> tools), it might be overwhelming, a lot to digest, and hard to separate the wheat from the chaff.  Careful here means using the necessary markup, not using it for other purposes different than its intent (<term>tag abuse</term>), planning ahead for different output formats, but not becoming a slave to over-doing it.</p>
 
                 <p>So come back here often for a re-read.  And keep in mind that <pretext /> is designed around principles (<xref ref="list-principles" />), and that it is markup (<xref ref="principle-markup" />) which enables multiple outputs (<xref ref="principle-multiple-outputs" />) and effective and beautiful online versions (<xref ref="principle-web-versions"/>).</p>
             </note>
@@ -1802,7 +1943,8 @@
                     <li>Find some moderately complicated mathematics, such as in the <q>Mathematics</q> section of the sample article, or your own project, or the sample from MathJax copied below.</li>
                     <li>Bring up the context menu on that display (a mouse right-click for most).</li>
                     <li>Turn on the <c>Accessibility > Explorer > Activate</c> menu item.  The page will reload, and the <c>Explorer</c> menu item will earn many more menu items.  This setting is reasonably sticky, so you should not have to do this repeatedly.  Having this on will incur some processing time as part of each page load, so you may want to turn it off later.</li>
-                    <li>Turn on the <c>Accessibility > Explorer > Subtitles</c> menu item.</li>
+                    <li>Turn on the <c>Accessibility > Explorer > Speech Output</c> menu item.</li>
+                    <li>Turn on the <c>Accessibility > Explorer > Subtitles</c> menu item.  (If <c>Subtitles</c> is <q>greyed out</q>, try toggling <c>Speech Output</c>.)</li>
                     <li><c>TAB</c> until some mathematics is given focus (a discrete border appears).</li>
                     <li><c>SHIFT-SPACE</c> will activate exploration of the mathematics with the Explorer.  A subtitle, with an aural rendering of the mathematics, will appear below the display.</li>
                     <li>You can navigate (explore) the expression tree with the up, down, left, and right arrow keys.  The subtitles will change as you do this.</li>

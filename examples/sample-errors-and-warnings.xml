@@ -140,13 +140,19 @@ systems.
         <section>
             <title>Miscellaneous</title>
 
-            <p>A circumflex should still be obtainable with <c>circum</c>: <circum/>.</p>
+            <p>A circumflex should still be obtainable with <c>circum</c>: <circum/>. And <circa/> is now <ca/>.</p>
 
             <paragraph>
                 <title>Groups of paragraphs</title>
 
                 <p>There has always been a sort of odd mini-sectioning element, called <c>paragraph</c> orignally since that is what it is in <latex/>, but now better named as <c>paragraphs</c>.</p>
             </paragraph>
+
+            <!-- # $ % ^ & _ { } ~ \  -->
+            <p><latex/>'s ten reserved characters once each had an empty element of its own: <hash/> <dollar/> <percent/> <circumflex/> <ampersand/> <underscore/> <lbrace/> <rbrace/> <tilde/> <backslash/>.</p>
+
+            <!-- <, >, [, ], *, /, `, braces and brackets  -->
+            <p>And similarly, nine other elements were made redundant:  <less/> <greater/> <lbracket/> <rbracket/> <asterisk/> <slash/> <backtick/> <braces>braces</braces> <brackets>brackets</brackets>.</p>
 
             <p>Tables once looked like this, but now are really different.</p>
 

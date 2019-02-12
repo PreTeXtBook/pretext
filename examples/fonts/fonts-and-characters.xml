@@ -45,12 +45,12 @@ and apply  xelatex  to  "fonts-and-characters.tex"  in the current working direc
     </docinfo>
 
     <article xml:id="fonts-and-characters">
-        <title>Characters, Fonts, and Languages in MathBook XML</title>
+        <title>Characters, Fonts, and Languages in <pretext/></title>
 
         <section xml:id="introduction">
             <title>Introduction</title>
 
-            <p>This is a sample MathBook XML document to demonstrate and test different fonts used for different languages.  For PDF output, and best results, process with <c>xelatex</c> (or <c>lualatex</c>, unsupported).  If processed with <c>pdflatex</c>,  be prepared for errors, and maybe try running with the command-line option <c>-interaction batchmode</c> or <c>-interaction nonstopmode</c>.  Commentary here, and in the original source file, should help you track down what might be missing in your system if the <c>xelatex</c> results are not satisfactory.  You can also compare PDF output with the HTML output, which should work well for many different characters tested here.</p>
+            <p>This is a sample <pretext/> document to demonstrate and test different fonts used for different languages.  For PDF output, and best results, process with <c>xelatex</c> (or <c>lualatex</c>, unsupported).  If processed with <c>pdflatex</c>,  be prepared for errors, and maybe try running with the command-line option <c>-interaction batchmode</c> or <c>-interaction nonstopmode</c>.  Commentary here, and in the original source file, should help you track down what might be missing in your system if the <c>xelatex</c> results are not satisfactory.  You can also compare PDF output with the HTML output, which should work well for many different characters tested here.</p>
 
             <p><ol>
                 <li>Your source XML file should always have <cd>&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</cd> as the first line of the file to specify that your file contains Unicode characters.</li>
@@ -236,7 +236,7 @@ and apply  xelatex  to  "fonts-and-characters.tex"  in the current working direc
 
                     <ul>
                         <li>Modern Greek (monotonic), Italic: <foreign xml:lang="el">Μπορώ να φάω σπασμένα γυαλιά χωρίς να πάθω τίποτα.</foreign></li>
-                        <li>Modern Greek (polytonic), Italic: <foreign xml:lang="el">Μπορῶ νὰ φάω σπασμένα γυαλιὰ χωρὶς νὰ πάθω τίποτα.</foreign></li>
+                        <!-- <li>Modern Greek (polytonic), Italic: <foreign xml:lang="el">Μπορῶ νὰ φάω σπασμένα γυαλιὰ χωρὶς νὰ πάθω τίποτα.</foreign></li> -->
                         <li>Korean, Italic: <foreign xml:lang="ko-KR">나는 유리를 먹을 수 있어요. 그래도 아프지 않아요</foreign></li>
                         <li>Hungarian, Italic: <foreign xml:lang="hu-HU">Meg tudom enni az üveget, nem lesz tőle bajom.</foreign></li>
                         <li>Russian, Italic: <foreign xml:lang="ru-RU">Я могу есть стекло, оно мне не вредит.</foreign></li>
@@ -255,10 +255,22 @@ and apply  xelatex  to  "fonts-and-characters.tex"  in the current working direc
 
             <p>We place various blocks of Unicode characters here to determine the minimum configuration necessary to make them render.  Alan Wood’s <url href="http://www.alanwood.net/unicode/unicode_samples.html">Unicode Resources</url> site has been helpful in formulating these tests.</p>
 
+            <!-- 2019-01-01 Claimed support, (default) Latin Modern fonts -->
+            <!-- "Supported Unicode Blocks"                               -->
+            <!--   0x0000 - 0x00FF ANSI                                   -->
+            <!--   0x0080 - 0x00FF Latin Supplement and C1 Controls       -->
+            <!--   0x0100 - 0x017F Latin Extended-A                       -->
+            <!--   0x1E00 - 0x1EFF Latin Extended Additional              -->
+
+
             <paragraphs>
                 <title>Basic Latin, <c>U+0000</c><ndash /><c>U+007F</c></title>
 
-                <p>These 95 characters are the most basic, and should all render using <c>xelatex</c> with no special setup.  <c>U+0000</c> to <c>U+001F</c> are control codes and not used here.  <c>U+007F</c> is also a control code and so is excluded.  We have also replaced reserved <latex /> characters by their MathBook XML equivalent empty elements</p>
+                <p>These 95 characters are the most basic, and will all render using <c>xelatex</c> with no special setup.  <c>U+0000</c> to <c>U+001F</c> are control codes and not used here.  <c>U+007F</c> is also a control code and so is excluded.  In the source we have authored each character by its escaped version using its Unicode number (in hexadecimal).  So, for example, capital-B is authored as <c>&amp;#x0042;</c>.</p>
+
+                <!-- ex &#x0000; - &#x001F; controls -->
+                <!-- ex &#x007F; control             -->
+                <!-- ex &#x0020; space, not visible  -->
 
                 <table>
                     <caption>Basic Latin, Regular</caption>
@@ -280,18 +292,18 @@ and apply  xelatex  to  "fonts-and-characters.tex"  in the current working direc
                     <cell><c>D</c></cell>
                     <cell><c>E</c></cell>
                     <cell><c>F</c></cell></row>
-                    <row><cell><c>002_</c></cell><cell>&#x0020;</cell><cell>&#x0021;</cell><cell>&#x0022;</cell><cell><hash /></cell><cell><dollar /></cell><cell><percent /></cell><cell><ampersand /></cell><cell>&#x0027;</cell>
+                    <row><cell><c>002_</c></cell><cell>&#x0020;</cell><cell>&#x0021;</cell><cell>&#x0022;</cell><cell>&#x0023;</cell><cell>&#x0024;</cell><cell>&#x0025;</cell><cell>&#x0026;</cell><cell>&#x0027;</cell>
                                                  <cell>&#x0028;</cell><cell>&#x0029;</cell><cell>&#x002A;</cell><cell>&#x002B;</cell><cell>&#x002C;</cell><cell>&#x002D;</cell><cell>&#x002E;</cell><cell>&#x002F;</cell></row>
                     <row><cell><c>003_</c></cell><cell>&#x0030;</cell><cell>&#x0031;</cell><cell>&#x0032;</cell><cell>&#x0033;</cell><cell>&#x0034;</cell><cell>&#x0035;</cell><cell>&#x0036;</cell><cell>&#x0037;</cell>
-                                                 <cell>&#x0038;</cell><cell>&#x0039;</cell><cell>&#x003A;</cell><cell>&#x003B;</cell><cell><less /></cell><cell>&#x003D;</cell><cell><greater /></cell><cell>&#x003F;</cell></row>
+                                                 <cell>&#x0038;</cell><cell>&#x0039;</cell><cell>&#x003A;</cell><cell>&#x003B;</cell><cell>&#x003C;</cell><cell>&#x003D;</cell><cell>&#x003E;</cell><cell>&#x003F;</cell></row>
                     <row><cell><c>004_</c></cell><cell>&#x0040;</cell><cell>&#x0041;</cell><cell>&#x0042;</cell><cell>&#x0043;</cell><cell>&#x0044;</cell><cell>&#x0045;</cell><cell>&#x0046;</cell><cell>&#x0047;</cell>
                                                  <cell>&#x0048;</cell><cell>&#x0049;</cell><cell>&#x004A;</cell><cell>&#x004B;</cell><cell>&#x004C;</cell><cell>&#x004D;</cell><cell>&#x004E;</cell><cell>&#x004F;</cell></row>
                     <row><cell><c>005_</c></cell><cell>&#x0050;</cell><cell>&#x0051;</cell><cell>&#x0052;</cell><cell>&#x0053;</cell><cell>&#x0054;</cell><cell>&#x0055;</cell><cell>&#x0056;</cell><cell>&#x0057;</cell>
-                                                 <cell>&#x0058;</cell><cell>&#x0059;</cell><cell>&#x005A;</cell><cell>&#x005B;</cell><cell><backslash /></cell><cell>&#x005D;</cell><cell><circumflex /></cell><cell><underscore /></cell></row>
+                                                 <cell>&#x0058;</cell><cell>&#x0059;</cell><cell>&#x005A;</cell><cell>&#x005B;</cell><cell>&#x005C;</cell><cell>&#x005D;</cell><cell>&#x005E;</cell><cell>&#x005F;</cell></row>
                     <row><cell><c>006_</c></cell><cell>&#x0060;</cell><cell>&#x0061;</cell><cell>&#x0062;</cell><cell>&#x0063;</cell><cell>&#x0064;</cell><cell>&#x0065;</cell><cell>&#x0066;</cell><cell>&#x0067;</cell>
                                                  <cell>&#x0068;</cell><cell>&#x0069;</cell><cell>&#x006A;</cell><cell>&#x006B;</cell><cell>&#x006C;</cell><cell>&#x006D;</cell><cell>&#x006E;</cell><cell>&#x006F;</cell></row>
                     <row><cell><c>007_</c></cell><cell>&#x0070;</cell><cell>&#x0071;</cell><cell>&#x0072;</cell><cell>&#x0073;</cell><cell>&#x0074;</cell><cell>&#x0075;</cell><cell>&#x0076;</cell><cell>&#x0077;</cell>
-                                                 <cell>&#x0078;</cell><cell>&#x0079;</cell><cell>&#x007A;</cell><cell><lbrace /></cell><cell>&#x007C;</cell><cell><rbrace /></cell><cell><tilde /></cell><cell>        </cell></row>
+                                                 <cell>&#x0078;</cell><cell>&#x0079;</cell><cell>&#x007A;</cell><cell>&#x007B;</cell><cell>&#x007C;</cell><cell>&#x007D;</cell><cell>&#x007E;</cell><cell>        </cell></row>
                     </tabular>
                 </table>
             </paragraphs>
@@ -339,14 +351,14 @@ and apply  xelatex  to  "fonts-and-characters.tex"  in the current working direc
                 </table>
                 <p>Note that the single and double quotes are upright and dumb, not curly and smart: <c>" ' " ' " '</c>.  The zero is distinguished from the capital <q>oh</q>: <c>0 O 0 O 0 O</c>.  And the numeral one is slightly different from the lower-case <q>ell</q>: <c>1 l 1 l 1 l</c>.  The hyphen should be short and not expanded into some other kind of dash: <c>- - -</c>.  These characters should all cut/paste out of a PDF into a text editor with no conversion to other characters.</p>
 
-                <p>Note also that we have entered <em>all</em> these characters into the source with the <c>&amp;#x00NN;</c> XML notation, but needed to <q>protect</q> the question mark, since we use it in the <latex /> verbatim routine to mark the beginning and end.</p>
+                <p>Note also that we have again entered <em>all</em> these characters into the source with the <c>&amp;#x00NN;</c> XML notation.</p>
 
             </paragraphs>
 
             <paragraphs>
                 <title>Latin-1 Supplement, <c>U+0080</c><ndash /><c>U+00FF</c></title>
 
-                <p>These 94 characters should all render using either <c>pdflatex</c> or <c>xelatex</c> with no special setup.  <c>U+0080</c> to <c>U+009F</c> are control codes and not used here.  <c>U+00A0</c> (non-breaking space) and <c>U+00AD</c> (soft hyphen) are also excluded.</p>
+                <p>These 94 characters will all render using either <c>pdflatex</c> or <c>xelatex</c> with no special setup.  <c>U+0080</c> to <c>U+009F</c> are control codes and not used here.  <c>U+00A0</c> (non-breaking space) and <c>U+00AD</c> (soft hyphen) are also excluded.  In the source we have authored each character by its escaped version using its Unicode number (in hexadecimal).  So, for example, a copyright symbol is authored as <c>&amp;#x00A9;</c>.</p>
 
                 <!-- ex &#x0080; - &#x009F; controls -->
                 <!-- ex &#x00A0; non-breaking space  -->
@@ -371,7 +383,7 @@ and apply  xelatex  to  "fonts-and-characters.tex"  in the current working direc
                     <cell><c>D</c></cell>
                     <cell><c>E</c></cell>
                     <cell><c>F</c></cell></row>
-                    <row><cell><c>00A_</c></cell><cell><nbsp /></cell><cell>&#x00A1;</cell><cell>&#x00A2;</cell><cell>&#x00A3;</cell><cell>&#x00A4;</cell><cell>&#x00A5;</cell><cell>&#x00A6;</cell><cell>&#x00A7;</cell>
+                    <row><cell><c>00A_</c></cell><cell>&#x00A0;</cell><cell>&#x00A1;</cell><cell>&#x00A2;</cell><cell>&#x00A3;</cell><cell>&#x00A4;</cell><cell>&#x00A5;</cell><cell>&#x00A6;</cell><cell>&#x00A7;</cell>
                                                  <cell>&#x00A8;</cell><cell>&#x00A9;</cell><cell>&#x00AA;</cell><cell>&#x00AB;</cell><cell>&#x00AC;</cell><cell>        </cell><cell>&#x00AE;</cell><cell>&#x00AF;</cell></row>
                     <row><cell><c>00B_</c></cell><cell>&#x00B0;</cell><cell>&#x00B1;</cell><cell>&#x00B2;</cell><cell>&#x00B3;</cell><cell>&#x00B4;</cell><cell>&#x00B5;</cell><cell>&#x00B6;</cell><cell>&#x00B7;</cell>
                                                  <cell>&#x00B8;</cell><cell>&#x00B9;</cell><cell>&#x00BA;</cell><cell>&#x00BB;</cell><cell>&#x00BC;</cell><cell>&#x00BD;</cell><cell>&#x00BE;</cell><cell>&#x00BF;</cell></row>
@@ -415,8 +427,8 @@ and apply  xelatex  to  "fonts-and-characters.tex"  in the current working direc
                         <cell><c>D</c></cell>
                         <cell><c>E</c></cell>
                         <cell><c>F</c></cell></row>
-                        <row><cell><c>00A_</c></cell><cell>        </cell><cell><c>&#x00A1;</c></cell><cell><c>&#x00A2;</c></cell><cell><c>&#x00A3;</c></cell><cell><c>&#x00A4;</c></cell><cell><c>&#x00A5;</c></cell><cell><c>&#x00A6;</c></cell><cell><c>&#x00A7;</c></cell>
-                                                     <cell><c>&#x00A8;</c></cell><cell><c>&#x00A9;</c></cell><cell><c>&#x00AA;</c></cell><cell><c>&#x00AB;</c></cell><cell><c>&#x00AC;</c></cell><cell>        </cell><cell><c>&#x00AE;</c></cell><cell><c>&#x00AF;</c></cell></row>
+                        <row><cell><c>00A_</c></cell><cell><c>&#x00A0;</c></cell><cell><c>&#x00A1;</c></cell><cell><c>&#x00A2;</c></cell><cell><c>&#x00A3;</c></cell><cell><c>&#x00A4;</c></cell><cell><c>&#x00A5;</c></cell><cell><c>&#x00A6;</c></cell><cell><c>&#x00A7;</c></cell>
+                                                     <cell><c>&#x00A8;</c></cell><cell><c>&#x00A9;</c></cell><cell><c>&#x00AA;</c></cell><cell><c>&#x00AB;</c></cell><cell><c>&#x00AC;</c></cell><cell>               </cell><cell><c>&#x00AE;</c></cell><cell><c>&#x00AF;</c></cell></row>
                         <row><cell><c>00B_</c></cell><cell><c>&#x00B0;</c></cell><cell><c>&#x00B1;</c></cell><cell><c>&#x00B2;</c></cell><cell><c>&#x00B3;</c></cell><cell><c>&#x00B4;</c></cell><cell><c>&#x00B5;</c></cell><cell><c>&#x00B6;</c></cell><cell><c>&#x00B7;</c></cell>
                                                      <cell><c>&#x00B8;</c></cell><cell><c>&#x00B9;</c></cell><cell><c>&#x00BA;</c></cell><cell><c>&#x00BB;</c></cell><cell><c>&#x00BC;</c></cell><cell><c>&#x00BD;</c></cell><cell><c>&#x00BE;</c></cell><cell><c>&#x00BF;</c></cell></row>
                         <row><cell><c>00C_</c></cell><cell><c>&#x00C0;</c></cell><cell><c>&#x00C1;</c></cell><cell><c>&#x00C2;</c></cell><cell><c>&#x00C3;</c></cell><cell><c>&#x00C4;</c></cell><cell><c>&#x00C5;</c></cell><cell><c>&#x00C6;</c></cell><cell><c>&#x00C7;</c></cell>
@@ -434,7 +446,7 @@ and apply  xelatex  to  "fonts-and-characters.tex"  in the current working direc
             <paragraphs>
                 <title>Latin Extended-A, <c>U+0100</c><ndash /><c>U+017F</c></title>
 
-                <p>Good success rendering with <c>xelatex</c> and no extra setup.  About 25<percent /> of these are missing when rendered with <c>pdflatex</c>.</p>
+                <p>Good success rendering with <c>xelatex</c> and no extra setup, subject to glyphs actually being available in whatever font you use.  Our default font is Latin Modern.  About 25<percent /> of these are missing when rendered with <c>pdflatex</c>.</p>
 
                 <table>
                     <caption>Latin Extended-A</caption>
@@ -475,7 +487,7 @@ and apply  xelatex  to  "fonts-and-characters.tex"  in the current working direc
                     </tabular>
                 </table>
 
-                <p>Rendered with <c>xelatex</c> and no special setup, I seem to be missing only four characters:<ul>
+                <p>Rendered with <c>xelatex</c> and no special setup, with default latin Modern fonts, we seem to be missing only four characters:<ul>
                     <li><c>U+0138</c> (LATIN SMALL LETTER KRA, Greenlandic, removed 1973)</li>
                     <li><c>U+0149</c> (LATIN SMALL LETTER N PRECEDED BY APOSTROPHE,  Afrikaans, deprecated as of Unicode version 5.2.0)</li>
                     <li><c>U+0166</c> (LATIN CAPITAL LETTER T WITH STROKE, Northern Sámi alphabet, used in northern parts of Norway, Sweden and Finland)</li>
@@ -486,7 +498,7 @@ and apply  xelatex  to  "fonts-and-characters.tex"  in the current working direc
             <paragraphs>
                 <title>Latin Extended-B, <c>U+0180</c><ndash /><c>U+024F</c></title>
 
-                <p>Rendering with <c>xelatex</c> and no extra setup, maybe 50<percent /> missing, and some constructions of accents are clearly wrong.  Almost none of these appear when rendered with <c>pdflatex</c>. (When processed with <c>lualatex</c> the incorrectly accented characters are not even visible.)</p>
+                <p>Rendering with <c>xelatex</c> and no extra setup, with default latin Modern fonts, maybe 50<percent /> missing, and some constructions of accents are clearly wrong.  Almost none of these appear when rendered with <c>pdflatex</c>. (When processed with <c>lualatex</c> the incorrectly accented characters are not even visible, but we have not learned much about using fonts in LuaTeX.)  Latin Modern does not claim to support any of this range.</p>
 
                 <table>
                     <caption>Latin Extended-B</caption>
@@ -536,50 +548,66 @@ and apply  xelatex  to  "fonts-and-characters.tex"  in the current working direc
                 </table>
             </paragraphs>
 
-            <p>This table is left-over and will be redone, perhaps.</p>
+            <paragraphs>
+                <title>Latin Extended Additional, <c>U+1E00</c><ndash /><c>U+1EFF</c></title>
 
-            <table xml:id="table-unicode-samples">
-                <caption>Sample Unicode Characters</caption>
-                <tabular top="major">
-                    <row bottom="minor"><cell>Name</cell><cell>Range</cell><cell>Samples</cell><cell>LaTeX</cell></row>
-                    <row>
-                        <cell>Latin Extended-A</cell>
-                        <cell><c>U+0100</c> <ndash /> <c>U+017F</c></cell>
-                        <cell>Ą ą Ĳ ĳ</cell>
-                        <cell>TeXLive</cell>
-                    </row>
-                    <row>
-                        <cell>Latin Extended Additional</cell>
-                        <cell><c>U+1E00</c> <ndash /> <c>U+1EFF</c></cell>
-                        <cell>Ḁ Ẁ Ặ ỳ</cell>
-                        <cell><m>\approx</m>TeXLive</cell>
-                    </row>
-                    <row>
-                        <cell>Cyrillic</cell>
-                        <cell><c>U+0400</c> <ndash /> <c>U+04FF</c></cell>
-                        <cell>Љ Щ щ Ӄ</cell>
-                        <cell>polyglossia</cell>
-                    </row>
-                    <row>
-                        <cell>Arabic</cell>
-                        <cell><c>U+0600</c> <ndash /> <c>U+06FF</c></cell>
-                        <cell>؟ ب حٍ ۳</cell>
-                        <cell>polyglossia</cell>
-                    </row>
-                    <row>
-                        <cell>General Punctuation</cell>
-                        <cell><c>U+2000</c> <ndash /> <c>U+206F</c></cell>
-                        <cell>— “ ‰ ※</cell>
-                        <cell>TeXLive</cell>
-                    </row>
-                    <row>
-                        <cell>Letterlike Symbols</cell>
-                        <cell><c>U+2100</c> <ndash /> <c>U+214F</c></cell>
-                        <cell>℀ ℃ № ™</cell>
-                        <cell><m>\approx</m>TeXLive</cell>
-                    </row>
-                </tabular>
-            </table>
+                <p>Latin Modern, our default font, supports this range of 256 characters, which includes 90 Vietnamese characters.  Their documentation shows about 140 characters rendered correctly, which seems to jibe with the examples here that render properly.</p>
+
+                <table>
+                    <caption>Latin Extended Additional</caption>
+                <tabular>
+                    <row><cell />
+                    <cell><c>0</c></cell>
+                    <cell><c>1</c></cell>
+                    <cell><c>2</c></cell>
+                    <cell><c>3</c></cell>
+                    <cell><c>4</c></cell>
+                    <cell><c>5</c></cell>
+                    <cell><c>6</c></cell>
+                    <cell><c>7</c></cell>
+                    <cell><c>8</c></cell>
+                    <cell><c>9</c></cell>
+                    <cell><c>A</c></cell>
+                    <cell><c>B</c></cell>
+                    <cell><c>C</c></cell>
+                    <cell><c>D</c></cell>
+                    <cell><c>E</c></cell>
+                    <cell><c>F</c></cell></row>
+                    <row><cell><c>1E0_</c></cell><cell>&#x1E00;</cell><cell>&#x1E01;</cell><cell>&#x1E02;</cell><cell>&#x1E03;</cell><cell>&#x1E04;</cell><cell>&#x1E05;</cell><cell>&#x1E06;</cell><cell>&#x1E07;</cell>
+                                                 <cell>&#x1E08;</cell><cell>&#x1E09;</cell><cell>&#x1E0A;</cell><cell>&#x1E0B;</cell><cell>&#x1E0C;</cell><cell>&#x1E0D;</cell><cell>&#x1E0E;</cell><cell>&#x1E0F;</cell></row>
+                    <row><cell><c>1E1_</c></cell><cell>&#x1E10;</cell><cell>&#x1E11;</cell><cell>&#x1E12;</cell><cell>&#x1E13;</cell><cell>&#x1E14;</cell><cell>&#x1E15;</cell><cell>&#x1E16;</cell><cell>&#x1E17;</cell>
+                                                 <cell>&#x1E18;</cell><cell>&#x1E19;</cell><cell>&#x1E1A;</cell><cell>&#x1E1B;</cell><cell>&#x1E1C;</cell><cell>&#x1E1D;</cell><cell>&#x1E1E;</cell><cell>&#x1E1F;</cell></row>
+                    <row><cell><c>1E2_</c></cell><cell>&#x1E20;</cell><cell>&#x1E21;</cell><cell>&#x1E22;</cell><cell>&#x1E23;</cell><cell>&#x1E24;</cell><cell>&#x1E25;</cell><cell>&#x1E26;</cell><cell>&#x1E27;</cell>
+                                                 <cell>&#x1E28;</cell><cell>&#x1E29;</cell><cell>&#x1E2A;</cell><cell>&#x1E2B;</cell><cell>&#x1E2C;</cell><cell>&#x1E2D;</cell><cell>&#x1E2E;</cell><cell>&#x1E2F;</cell></row>
+                    <row><cell><c>1E3_</c></cell><cell>&#x1E30;</cell><cell>&#x1E31;</cell><cell>&#x1E32;</cell><cell>&#x1E33;</cell><cell>&#x1E34;</cell><cell>&#x1E35;</cell><cell>&#x1E36;</cell><cell>&#x1E37;</cell>
+                                                 <cell>&#x1E38;</cell><cell>&#x1E39;</cell><cell>&#x1E3A;</cell><cell>&#x1E3B;</cell><cell>&#x1E3C;</cell><cell>&#x1E3D;</cell><cell>&#x1E3E;</cell><cell>&#x1E3F;</cell></row>
+                    <row><cell><c>1E4_</c></cell><cell>&#x1E40;</cell><cell>&#x1E41;</cell><cell>&#x1E42;</cell><cell>&#x1E43;</cell><cell>&#x1E44;</cell><cell>&#x1E45;</cell><cell>&#x1E46;</cell><cell>&#x1E47;</cell>
+                                                 <cell>&#x1E48;</cell><cell>&#x1E49;</cell><cell>&#x1E4A;</cell><cell>&#x1E4B;</cell><cell>&#x1E4C;</cell><cell>&#x1E4D;</cell><cell>&#x1E4E;</cell><cell>&#x1E4F;</cell></row>
+                    <row><cell><c>1E5_</c></cell><cell>&#x1E50;</cell><cell>&#x1E51;</cell><cell>&#x1E52;</cell><cell>&#x1E53;</cell><cell>&#x1E54;</cell><cell>&#x1E55;</cell><cell>&#x1E56;</cell><cell>&#x1E57;</cell>
+                                                 <cell>&#x1E58;</cell><cell>&#x1E59;</cell><cell>&#x1E5A;</cell><cell>&#x1E5B;</cell><cell>&#x1E5C;</cell><cell>&#x1E5D;</cell><cell>&#x1E5E;</cell><cell>&#x1E5F;</cell></row>
+                    <row><cell><c>1E6_</c></cell><cell>&#x1E60;</cell><cell>&#x1E61;</cell><cell>&#x1E62;</cell><cell>&#x1E63;</cell><cell>&#x1E64;</cell><cell>&#x1E65;</cell><cell>&#x1E66;</cell><cell>&#x1E67;</cell>
+                                                 <cell>&#x1E68;</cell><cell>&#x1E69;</cell><cell>&#x1E6A;</cell><cell>&#x1E6B;</cell><cell>&#x1E6C;</cell><cell>&#x1E6D;</cell><cell>&#x1E6E;</cell><cell>&#x1E6F;</cell></row>
+                    <row><cell><c>1E7_</c></cell><cell>&#x1E70;</cell><cell>&#x1E71;</cell><cell>&#x1E72;</cell><cell>&#x1E73;</cell><cell>&#x1E74;</cell><cell>&#x1E75;</cell><cell>&#x1E76;</cell><cell>&#x1E77;</cell>
+                                                 <cell>&#x1E78;</cell><cell>&#x1E79;</cell><cell>&#x1E7A;</cell><cell>&#x1E7B;</cell><cell>&#x1E7C;</cell><cell>&#x1E7D;</cell><cell>&#x1E7E;</cell><cell>&#x1E7F;</cell></row>
+                    <row><cell><c>1E8_</c></cell><cell>&#x1E80;</cell><cell>&#x1E81;</cell><cell>&#x1E82;</cell><cell>&#x1E83;</cell><cell>&#x1E84;</cell><cell>&#x1E85;</cell><cell>&#x1E86;</cell><cell>&#x1E87;</cell>
+                                                 <cell>&#x1E88;</cell><cell>&#x1E89;</cell><cell>&#x1E8A;</cell><cell>&#x1E8B;</cell><cell>&#x1E8C;</cell><cell>&#x1E8D;</cell><cell>&#x1E8E;</cell><cell>&#x1E8F;</cell></row>
+                    <row><cell><c>1E9_</c></cell><cell>&#x1E90;</cell><cell>&#x1E91;</cell><cell>&#x1E92;</cell><cell>&#x1E93;</cell><cell>&#x1E94;</cell><cell>&#x1E95;</cell><cell>&#x1E96;</cell><cell>&#x1E97;</cell>
+                                                 <cell>&#x1E98;</cell><cell>&#x1E99;</cell><cell>&#x1E9A;</cell><cell>&#x1E9B;</cell><cell>&#x1E9C;</cell><cell>&#x1E9D;</cell><cell>&#x1E9E;</cell><cell>&#x1E9F;</cell></row>
+                    <row><cell><c>1EA_</c></cell><cell>&#x1EA0;</cell><cell>&#x1EA1;</cell><cell>&#x1EA2;</cell><cell>&#x1EA3;</cell><cell>&#x1EA4;</cell><cell>&#x1EA5;</cell><cell>&#x1EA6;</cell><cell>&#x1EA7;</cell>
+                                                 <cell>&#x1EA8;</cell><cell>&#x1EA9;</cell><cell>&#x1EAA;</cell><cell>&#x1EAB;</cell><cell>&#x1EAC;</cell><cell>&#x1EAD;</cell><cell>&#x1EAE;</cell><cell>&#x1EAF;</cell></row>
+                    <row><cell><c>1EB_</c></cell><cell>&#x1EB0;</cell><cell>&#x1EB1;</cell><cell>&#x1EB2;</cell><cell>&#x1EB3;</cell><cell>&#x1EB4;</cell><cell>&#x1EB5;</cell><cell>&#x1EB6;</cell><cell>&#x1EB7;</cell>
+                                                 <cell>&#x1EB8;</cell><cell>&#x1EB9;</cell><cell>&#x1EBA;</cell><cell>&#x1EBB;</cell><cell>&#x1EBC;</cell><cell>&#x1EBD;</cell><cell>&#x1EBE;</cell><cell>&#x1EBF;</cell></row>
+                    <row><cell><c>1EC_</c></cell><cell>&#x1EC0;</cell><cell>&#x1EC1;</cell><cell>&#x1EC2;</cell><cell>&#x1EC3;</cell><cell>&#x1EC4;</cell><cell>&#x1EC5;</cell><cell>&#x1EC6;</cell><cell>&#x1EC7;</cell>
+                                                 <cell>&#x1EC8;</cell><cell>&#x1EC9;</cell><cell>&#x1ECA;</cell><cell>&#x1ECB;</cell><cell>&#x1ECC;</cell><cell>&#x1ECD;</cell><cell>&#x1ECE;</cell><cell>&#x1ECF;</cell></row>
+                    <row><cell><c>1ED_</c></cell><cell>&#x1ED0;</cell><cell>&#x1ED1;</cell><cell>&#x1ED2;</cell><cell>&#x1ED3;</cell><cell>&#x1ED4;</cell><cell>&#x1ED5;</cell><cell>&#x1ED6;</cell><cell>&#x1ED7;</cell>
+                                                 <cell>&#x1ED8;</cell><cell>&#x1ED9;</cell><cell>&#x1EDA;</cell><cell>&#x1EDB;</cell><cell>&#x1EDC;</cell><cell>&#x1EDD;</cell><cell>&#x1EDE;</cell><cell>&#x1EDF;</cell></row>
+                    <row><cell><c>1EE_</c></cell><cell>&#x1EE0;</cell><cell>&#x1EE1;</cell><cell>&#x1EE2;</cell><cell>&#x1EE3;</cell><cell>&#x1EE4;</cell><cell>&#x1EE5;</cell><cell>&#x1EE6;</cell><cell>&#x1EE7;</cell>
+                                                 <cell>&#x1EE8;</cell><cell>&#x1EE9;</cell><cell>&#x1EEA;</cell><cell>&#x1EEB;</cell><cell>&#x1EEC;</cell><cell>&#x1EED;</cell><cell>&#x1EEE;</cell><cell>&#x1EEF;</cell></row>
+                    <row><cell><c>1EF_</c></cell><cell>&#x1EF0;</cell><cell>&#x1EF1;</cell><cell>&#x1EF2;</cell><cell>&#x1EF3;</cell><cell>&#x1EF4;</cell><cell>&#x1EF5;</cell><cell>&#x1EF6;</cell><cell>&#x1EF7;</cell>
+                                                 <cell>&#x1EF8;</cell><cell>&#x1EF9;</cell><cell>&#x1EFA;</cell><cell>&#x1EFB;</cell><cell>&#x1EFC;</cell><cell>&#x1EFD;</cell><cell>&#x1EFE;</cell><cell>&#x1EFF;</cell></row>
+                    </tabular>
+                </table>
+            </paragraphs>
         </section>
 
         <section>

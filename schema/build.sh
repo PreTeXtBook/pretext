@@ -41,7 +41,7 @@ declare MB=${HOME}/mathbook/mathbook
 # DocFlex installation
 declare DFH=/opt/docflex/docflex-xml-1.12
 # DocFlex output directory
-declare DFOUTDIR=${HOME}/mathbook/website/mathbook.pugetsound.edu/doc/schema
+declare DFOUTDIR=${HOME}/mathbook/website/pretextbook.org/doc/schema
 # Java root to locate executables
 # (if not set by system: uncomment and set)
 # declare JAVA_HOME=
