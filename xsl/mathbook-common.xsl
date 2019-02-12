@@ -7075,6 +7075,10 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- 4. name="list-of-end"                           -->
 <!-- hook for end of list                            -->
 
+<!-- NB: possible improvements -->
+<!-- 1.  Get $subroot via @ref and work with element, not a string            -->
+<!-- 2.  Somehow abandon user strings sooner, so less reliant on local-name() -->
+
 <xsl:template match="list-of">
     <!-- Ring-fence terms so matches are not mistaken substrings -->
     <xsl:variable name="elements">
@@ -7122,31 +7126,48 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:variable name="subroot" select="ancestor-or-self::*[local-name() = $scope]" />
     <!-- variable behavior set, now setup -->
     <xsl:call-template name="list-of-begin" />
-    <!-- traverse entire document tree, stopping at desired headers or elements -->
-    <!-- <xsl:for-each select="/mathbook/article//*|/mathbook/book//*"> -->
-    <xsl:for-each select="$subroot//*">
-        <!-- write a division header, perhaps              -->
-        <!-- check if desired, check if empty and unwanted -->
-        <xsl:if test="contains($divisions, concat(concat('|', name(.)), '|'))">
-            <xsl:choose>
-                <xsl:when test="$empty='no'">
-                    <!-- probe subtree, even if we found empty super-tree earlier -->
-                    <xsl:variable name="all-elements" select=".//*[contains($elements, concat(concat('|', name(.)), '|'))]" />
-                    <xsl:if test="$all-elements">
-                        <xsl:apply-templates select="." mode="list-of-header" />
-                    </xsl:if>
-                </xsl:when>
-                <xsl:when test="$empty='yes'">
-                    <xsl:apply-templates select="." mode="list-of-header" />
-                </xsl:when>
-            </xsl:choose>
-        </xsl:if>
-        <!-- if a desired element, write out summary/link -->
-        <xsl:if test="contains($elements, concat(concat('|', name(.)), '|'))='true'">
-            <xsl:apply-templates select="." mode="list-of-element" />
-        </xsl:if>
-    </xsl:for-each>
+    <!-- recursive procedure, starting from indicated scope -->
+    <xsl:apply-templates select="$subroot" mode="list-of-content">
+        <xsl:with-param name="elements" select="$elements"/>
+        <xsl:with-param name="divisions" select="$divisions"/>
+        <xsl:with-param name="empty" select="$empty"/>
+    </xsl:apply-templates>
     <xsl:call-template name="list-of-end" />
+</xsl:template>
+
+<xsl:template match="*" mode="list-of-content">
+    <xsl:param name="elements"/>
+    <xsl:param name="divisions"/>
+    <xsl:param name="empty"/>
+
+    <!-- write a division header, perhaps              -->
+    <!-- check if desired, check if empty and unwanted -->
+    <xsl:if test="contains($divisions, concat(concat('|', local-name(.)), '|'))">
+        <xsl:choose>
+            <xsl:when test="$empty='no'">
+                <!-- probe subtree, even if we found empty super-tree earlier -->
+                <xsl:variable name="all-elements" select=".//*[contains($elements, concat(concat('|', local-name(.)), '|'))]" />
+                <xsl:if test="$all-elements">
+                    <xsl:apply-templates select="." mode="list-of-header" />
+                </xsl:if>
+            </xsl:when>
+            <xsl:when test="$empty='yes'">
+                <xsl:apply-templates select="." mode="list-of-header" />
+            </xsl:when>
+        </xsl:choose>
+    </xsl:if>
+    <!-- if a desired element, write out summary/link -->
+    <xsl:if test="contains($elements, concat(concat('|', local-name(.)), '|'))='true'">
+        <xsl:apply-templates select="." mode="list-of-element" />
+    </xsl:if>
+    <!-- recurse into children -->
+    <xsl:if test="*">
+        <xsl:apply-templates select="*" mode="list-of-content">
+            <xsl:with-param name="elements" select="$elements"/>
+            <xsl:with-param name="divisions" select="$divisions"/>
+            <xsl:with-param name="empty" select="$empty"/>
+        </xsl:apply-templates>
+    </xsl:if>
 </xsl:template>
 
 <!-- Stub implementations, with warnings -->
