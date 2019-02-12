@@ -1370,7 +1370,9 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
     display: inline-block;
 }
 
-.pretext-content section .heading {
+.pretext-content section > .heading,
+.pretext-content section section > .heading,
+.pretext-content section section section > .heading {
   display: inline-block;
 }
 .pretext-content section .heading + a.permalink {
@@ -3225,11 +3227,30 @@ and condider having this replace line 3338 of the general code (which uses .head
     top: 0 !important;
 }
 
+/* move to the color file(s) and figure out next comment */
+/* delete the first one of both as obsolete */
+.pretext-content a.xref,
+.pretext-content a.internal {
+    color: #900;
+}
+.pretext-content a.xref:hover,
+.pretext-content a.internal:hover {
+    background-color: #ddf;
+}
+.pretext-content a.url,
+.pretext-content a.external {
+    color: #22a;
+}
+.pretext-content a.url:hover,
+.pretext-content a.external:hover {
+    background-color: #ffd;
+}
+
 /* style for poems */
 
 .pretext-content .poem {
     display: table;
-    margin-top: 1.5em !important;
+    margin-top: 1.5em;
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 0;
@@ -3237,15 +3258,22 @@ and condider having this replace line 3338 of the general code (which uses .head
     max-width: 90%;
 }
 
+.pretext-content .poem > .heading {
+    display: block;
+    text-align: center;
+}
+.pretext-content section article.poem > .heading::after {
+    content: "";
+}
 .pretext-content .poem > .heading > .title {
     font-weight: bold;
-    text-align: center;
-    font-size: 120%;
+    font-size: 1.2em;
+    line-height: 1.2em;
 }
 
 .pretext-content .poem .author {
     font-style: italic;
-    margin-top: 1em;
+    margin-top: 0.75em;
 }
 .pretext-content .poem .author.left {
     text-align: left;
@@ -3257,23 +3285,31 @@ and condider having this replace line 3338 of the general code (which uses .head
     text-align: right;
 }
 
-.pretext-content .poem .stanza > .heading > .title {
-    font-weight: bold;
+.pretext-content .poem .stanza > .heading {
     text-align: center;
-    font-size: 110%;
+    font-weight: bold;
+    font-size: 1em;
+    line-height: 1em;
 }
 .pretext-content .poem .stanza + .stanza {
     margin-top: 1em;
 }
+.pretext-content .poem .heading + .stanza {
+    margin-top: 0.2em;
+}
+.pretext-content .poem .heading + .line, {
+    margin-top: 0.2em;
+}
 
-.pretext-content .poem .poemlineleft {
+.pretext-content .poem .line.left {
+    text-align: left;
     margin-left: 4em;
     text-indent: -4em;
 }
-.pretext-content .poem .poemlinecenter {
+.pretext-content .poem .line.center {
     text-align: center;
 }
-.pretext-content .poem .poemlineright {
+.pretext-content .poem .line.right {
     text-align: right;
 }
 .pretext-content .poem .tab {
