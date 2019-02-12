@@ -71,10 +71,51 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>This is a short paragraph to introduce the article (but it is not the abstract).  It is optional, in case it would be preferable to have the first section be titled an <q>Introduction.</q></p>
         </introduction>
 
-        <section xml:id="section-textual">
-            <title>Just Some Text</title>
+        
+            <section xml:id="introde_section" number="0.2">
+                <title>Introduction to differential equations</title>
 
-            <p>Now a single paragraph inside a titled section of the article.</p>
+            <introduction>
+            <p><em>Note: more than 1 lecture, §1.1 in <xref ref="biblio-EP"/>,
+            chapter 1 in <xref ref="biblio-BD"/></em></p>
+            </introduction>
+
+
+            <subsection number="0.2.1">
+            <title>Differential equations</title>
+            <p>
+            The laws of physics are generally written down as differential
+            equations.  Therefore, all of science and engineering use
+            differential equations to some degree.  Understanding
+            differential equations is essential to understanding almost anything you will
+            study in your science and engineering classes.
+            You can think of mathematics as the language of science, and
+            differential equations are one of the most important parts of this
+            language as far as science and engineering are concerned.  As an analogy,
+            suppose all your classes from now on were given in Swahili.  
+            It would be important to first learn Swahili, or you would have a very
+            tough time getting a good grade in your classes.
+            </p>
+            <p>
+            You saw many
+            differential equations already without perhaps knowing about it.
+            And you even solved simple
+            differential equations when you took calculus.
+            Let us see an example you may not have seen:
+            <men xml:id="eq1" number="1">
+            \frac{dx}{dt} + x = 2 \cos t .
+            </men>
+            Here <m>x</m> is the <em>dependent variable<idx>dependent variable</idx></em> and <m>t</m> is the
+            <em>independent variable<idx>independent variable</idx></em>.
+            Equation <xref ref="eq1"/>
+            is a basic example of a <em>differential equation<idx>differential equation</idx></em>.  In fact, it
+            is an example of a <em>first order differential equation<idx>first order differential equation</idx></em>, since
+            it involves only the first derivative of the dependent variable.  This 
+            equation arises from Newton's law of cooling where the ambient
+            temperature oscillates with time.
+            </p>
+            </subsection>
+
         </section>
 
         <section xml:id="section-interesting">
