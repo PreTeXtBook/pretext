@@ -6404,7 +6404,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </xsl:attribute>
                         <!-- use a class to identify an internal link -->
                         <xsl:attribute name="class">
-                            <xsl:text>xref</xsl:text>
+                            <xsl:text>internal</xsl:text>
                         </xsl:attribute>
                     </xsl:otherwise>
                 </xsl:choose>
@@ -6809,7 +6809,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:otherwise>
             <!-- class name identifies an external link -->
-            <a class="url" href="{@href}" target="_blank">
+            <a class="external" href="{@href}" target="_blank">
                 <xsl:copy-of select="$visible-text" />
             </a>
         </xsl:otherwise>
