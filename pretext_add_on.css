@@ -3250,7 +3250,7 @@ and condider having this replace line 3338 of the general code (which uses .head
 
 .pretext-content .poem {
     display: table;
-    margin-top: 1.5em !important;
+    margin-top: 1.5em;
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 0;
