@@ -36,7 +36,8 @@ so that we can set our own later */
     margin-bottom: 0;
     line-height: 1.35;
 }
-.pretext-content td > p:first-child {
+.pretext-content td > p:first-child,
+.pretext-content .solution > p:first-child {
     margin-top: 0;
 }
 .pretext-content p.intertext {
@@ -68,6 +69,9 @@ so that we can set our own later */
 .pretext-content section article + article,
 .pretext-content section .posterior + article {
     margin-top: 1.75em;
+}
+.pretext-content section article > .introduction + article {
+    margin-top: 1em;
 }
 .pretext-content article + .hidden-knowl-wrapper {
     margin-top: 1em;
@@ -1356,7 +1360,7 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
  * look bad, like the hint here:
  * SAFurtherReading.html
 */
-.pretext-content .knowl-output .knowl-content > *:last-child::not(.incontext) {
+.pretext-content .knowl-output .knowl-content > *:last-child:not(.incontext) {
     margin-bottom: 0.5em;
 }
 
@@ -2248,12 +2252,6 @@ from Jiří Lebl */
     margin-left: 0.2em;
     font-size: 90%;
 }
-/* .pretext-content .solutions .solution .title:last-child::before {
-    content: "(";
-}
-.pretext-content .solutions .solution .title:last-child::after {
-    content: ")";
-}  */
 
 /* When the knowl is a Hint, Answer, or Solution, put a little
    triangle in front of it */
@@ -2464,86 +2462,9 @@ sup [data-knowl]:hover {
     width: 2.5em;
 }
 
-/*
-.pretext-content article.example-like > *:last-child {
-    margin-bottom: 0;
-}
-.pretext-content article.example-like > *:last-child::after {
-    margin-bottom: 0;
-}
-*/
-/* List 12.3 at http://mathbook.pugetsound.edu/examples/sample-article/html/section-12.html
- [[put somethign here]]
-.pretext-content article.example-like + .posterior {
-    margin-top: -0.75em;
-}
- */
-
-/*
-.pretext-content article.proof > *:last-child {
-    margin-bottom: 0;
-}
-.pretext-content article.proof > *:last-child::after {
-    margin-bottom: 0;
-}
-
-.pretext-content article.definition-like *:last-child {
-    margin-bottom: 0;
-}
-.pretext-content article.definition-like *:last-child::after {
-    margin-bottom: 0;
-}
-*/
-
 .pretext-content .objectives {
     margin-bottom: 1.25em;
 }
-
-/* article.objectives .heading .type + .codenumber:before,
-article.outcomes .heading .type + .codenumber:before
- {
-    content: " ";
-}
-article.objectives .heading .type + .title:before,
-article.outcomes .heading .type + .title:before {
-    content: ":\2002";
-}
-article.objectives .heading .codenumber + .title:before,
-article.outcomes .heading .codenumber + .title:before {
-    content: ":\2002";
-}
-
-article.list .heading .type + .codenumber:before {
-    content: " ";
-}
-article.list .heading .type + .title:before {
-    content: ":\2002";
-}
-article.list .heading .codenumber + .title:before {
-    content: ":\2002";
-}  */
-
-/* Since there can be p which are nearby but not siblings,
-   let's put background and (but not box shadow) on everything */
-
-/* see start of file
-.pretext-content p, .pretext-content .heading {
-    background: #fff;
-}
-*/
-
-/*
-  OLD VERSION: see new version above
-
-.pretext-content .aside-like ~ *:not(.aside-like) p, .pretext-content .aside-like ~ *:not(.aside-like) .heading {
-    background: #fff;
-    box-shadow: 3em 0 0 0 #fff;
-}
-.pretext-content .aside-like ~ *:not(.aside-like) .knowl-output p {
-    background: inherit;
-    box-shadow: none;
-}
-*/
 
 /* next selector first part of the following is due to the mistake of
    putting paragraph spacing in the margin-bottom 
@@ -3041,7 +2962,7 @@ http://mathbook.pugetsound.edu/examples/sample-article/html/interesting-corollar
 .pretext-content .exercise-like > .exercise-like {
     margin-left: 40px;
 }
-.pretext-content .exercise-like > .exercise-like p {
+.pretext-content .exercise-like > .exercise-like > p {
     margin-top: 1.25em;
 /*    margin-bottom: 0.25em; */
 }
