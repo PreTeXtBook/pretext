@@ -9853,6 +9853,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:for-each>
 </xsl:template>
 
+<!-- Very nearly a no-op, but necessary for HTML -->
+<xsl:template match="glossary/terms">
+    <xsl:apply-templates select="defined-term"/>
+</xsl:template>
+
 <!-- Defined Terms, in a Glossary -->
 <xsl:template match="defined-term">
     <xsl:text>\begin{definedterm}</xsl:text>

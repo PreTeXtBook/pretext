@@ -1038,15 +1038,17 @@ the xsltproc executable.
                         <p>A glossary may have an <tag>introduction</tag>, perhaps with some explanation.</p>
                     </introduction>
 
-                    <defined-term>
-                        <title>bar</title>
-                        <p>A part of <term>foobar</term>.  See <xref ref="foobar-defined" text="title"/>.</p>
-                    </defined-term>
+                    <terms>
+                        <defined-term>
+                            <title>bar</title>
+                            <p>A part of <term>foobar</term>.  See <xref ref="foobar-defined" text="title"/>.</p>
+                        </defined-term>
 
-                    <defined-term xml:id="foobar-defined">
-                        <title>foobar</title>
-                        <p>A synonym for the acronym <acro>FUBAR</acro>.</p>
-                    </defined-term>
+                        <defined-term xml:id="foobar-defined">
+                            <title>foobar</title>
+                            <p>A synonym for the acronym <acro>FUBAR</acro>.</p>
+                        </defined-term>
+                    </terms>
 
                     <conclusion>
                         <p>And for symmetry, a <tag>conclusion</tag>.</p>

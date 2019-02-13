@@ -415,15 +415,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="self::solutions">
                 <xsl:apply-templates select="." mode="solutions" />
             </xsl:when>
-            <!-- a glossary is like a big list, and we need  -->
-            <!-- to handle it in an exceptional manner -->
-            <xsl:when test="self::glossary">
-                <xsl:apply-templates select="introduction"/>
-                <dl class="glossary">
-                    <xsl:apply-templates select="defined-term"/>
-                </dl>
-                <xsl:apply-templates select="conclusion"/>
-            </xsl:when>
             <xsl:otherwise>
                 <xsl:apply-templates select="*" />
             </xsl:otherwise>
@@ -1087,6 +1078,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- into environment manufacture       -->
 <xsl:template match="contributors">
     <xsl:apply-templates select="contributor" />
+</xsl:template>
+
+<!-- ######## -->
+<!-- Glossary -->
+<!-- ######## -->
+
+<!-- A glossary has an introduction and conclusion, then -->
+<!-- "defined-term" inside a "term" element. Here we     -->
+<!-- implement a basic definition for "term", but this   -->
+<!-- could be the place to get fancy and segment the     -->
+<!-- entries with spacing by letter, or similar.         -->
+<xsl:template match="glossary/terms">
+    <dl class="glossary">
+        <xsl:apply-templates select="defined-term"/>
+    </dl>
 </xsl:template>
 
 <!-- ############## -->
