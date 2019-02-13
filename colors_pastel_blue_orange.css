@@ -1,0 +1,23 @@
+
+/* Pastel color scheme by Nathan Wintersgill */
+
+:root {
+  --documenttitle: #2a5ea4;
+  --bodytitle: #932c1c;
+  --bodyverylight: #ffdfcf;
+
+  --chaptertoc: #dbf5ff;
+  --chaptertoctext: #444444;
+  --chaptertocactive: #fae5b6;
+  --chaptertoctextactive: #303030;
+  --sectiontoc: #ffffff;
+  --sectiontoctext: #404040;
+  --sectiontocactive: #fae5b6;
+  --sectiontoctextactive: #202020;
+  --tocborder: #afc2e5;
+
+  --highlighttoc: #fac793;
+  --highlighttoctext: #321a0c;
+  --highlighttocborder: #ec704b;
+}
+
