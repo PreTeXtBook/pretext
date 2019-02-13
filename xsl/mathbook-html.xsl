@@ -6753,6 +6753,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:value-of select="5 * $characters div 11" />
                     <xsl:text>em;</xsl:text>
                 </xsl:attribute>
+                <xsl:attribute name="role">
+                    <xsl:text>img</xsl:text>
+                </xsl:attribute>
+                <xsl:attribute name="aria-label">
+                    <xsl:value-of select="$characters" />
+                    <xsl:text>-character blank</xsl:text>
+                </xsl:attribute>
             </xsl:element>
         </xsl:otherwise>
     </xsl:choose>
