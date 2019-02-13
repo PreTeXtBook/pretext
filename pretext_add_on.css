@@ -1274,6 +1274,19 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
     border-left: none;
 }
 
+.pretext-content table tr td img {
+    max-width: 200px;
+    margin-right: 30px;
+}
+
+.pretext-content table.notation-list tr th {
+    text-align: left;
+}
+.pretext-content table.notation-list tr td {
+    text-align:left;
+    vertical-align:top;
+}
+
 .pretext-content table tr td p + p {
     margin-top: 1em;
 }
@@ -2293,15 +2306,6 @@ body, html body { background: #fff; }
 
 .pretext-content img:not(.cs) {
     max-width: 550px;
-}
-
-.pretext-content table tr td img {
-    max-width: 200px;
-    margin-right: 30px;
-}
-
-.pretext-content table tr td.lines {
-    	white-space: nowrap;
 }
 
 figure img {
