@@ -405,8 +405,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <section class="{local-name(.)}" id="{$pid}">
         <xsl:apply-templates select="." mode="section-header" />
         <xsl:apply-templates select="." mode="author-byline"/>
-        <!-- the main content of a division is created here    -->
-        <!-- a "solutions" is exceptional as generated content -->
+        <!-- Most divisions are a simple list of elements to be       -->
+        <!-- processed in document order, once we handle metadata     -->
+        <!-- properly, and also kill it so it is not caught up here.  -->
+        <!-- One exception: the "solutions" division has no children, -->
+        <!-- it just gets built (via a modal template so it does not  -->
+        <!-- come back through here).                                 -->
         <xsl:choose>
             <xsl:when test="self::solutions">
                 <xsl:apply-templates select="." mode="solutions" />
