@@ -1093,6 +1093,8 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
     padding-bottom: 2px;
     padding-left: 5px;
     padding-right: 5px;
+}
+.pretext-content table tr td {
     font-size: 90%;
 }
 
@@ -1290,8 +1292,10 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
     text-align:left;
     vertical-align:top;
 }
-.pretext-content table.notation-list tr th + th,
-.pretext-content table.notation-list tr td + td {
+.pretext-content table.notation-list tr th {
+    margin-left: 1.5em;
+}
+.pretext-content table.notation-list tr td {
     margin-left: 1em;
 }
 
