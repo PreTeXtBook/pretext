@@ -10146,12 +10146,21 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="date-string" select="'2019-02-06'" />
         <xsl:with-param name="message" select="'the &quot;brackets&quot; element is no longer necessary, simply replace with bare &quot;[&quot; and &quot;]&quot; characters'"/>
     </xsl:call-template>
+    <!--  -->
     <!-- 2019-02-10  obsolete  html.css.file  removed -->
     <!-- Still exists in "Variable Bad Bank" for use here  -->
     <xsl:call-template name="parameter-deprecation-message">
         <xsl:with-param name="date-string" select="'2019-02-10'" />
         <xsl:with-param name="message" select="'the obsolete  html.css.file  parameter has been removed, please use html.css.colorfile to choose a color scheme'" />
             <xsl:with-param name="incorrect-use" select="($html.css.file != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2019-02-12  "terms" necessary to structure a "glossary"     -->
+    <!-- Never in the schema, but a warning here as a public service -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//glossary[not(terms)]" />
+        <xsl:with-param name="date-string" select="'2019-02-12'" />
+        <xsl:with-param name="message" select="'a &quot;glossary&quot; needs to have its &quot;defined-term&quot; structured within a &quot;terms&quot;'"/>
     </xsl:call-template>
 </xsl:template>
 
