@@ -901,19 +901,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- populate with all the notation entries, -->
 <!-- in order of appearance                  -->
 <xsl:template match="notation-list">
-    <table>
+    <table class="notation-list">
         <tr>
-            <th style="text-align:left;">
+            <th>
                 <xsl:call-template name="type-name">
                     <xsl:with-param name="string-id" select="'symbol'" />
                 </xsl:call-template>
             </th>
-            <th style="text-align:left;">
+            <th>
                 <xsl:call-template name="type-name">
                     <xsl:with-param name="string-id" select="'description'" />
                 </xsl:call-template>
             </th>
-            <th style="text-align:left;">
+            <th>
                 <xsl:call-template name="type-name">
                     <xsl:with-param name="string-id" select="'location'" />
                 </xsl:call-template>
@@ -928,17 +928,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Create a cross-reference to enclosing content -->
 <xsl:template match="notation" mode="backmatter">
     <tr>
-        <td style="text-align:left; vertical-align:top;">
+        <td>
             <xsl:call-template name="begin-inline-math" />
             <!-- "usage" should be raw latex, so -->
             <!-- should avoid text processing    -->
             <xsl:value-of select="usage" />
             <xsl:call-template name="end-inline-math" />
         </td>
-        <td style="text-align:left; vertical-align:top;">
+        <td>
             <xsl:apply-templates select="description" />
         </td>
-        <td style="text-align:left; vertical-align:top;">
+        <td>
             <xsl:apply-templates select="." mode="enclosure-xref" />
         </td>
     </tr>
