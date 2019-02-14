@@ -5536,8 +5536,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- Only purpose of this page is YouTube video -->
                 <!-- A hook could go here for some extras       -->
                 <!-- ########################################## -->
-                <xsl:call-template name="knowl" />
                 <xsl:call-template name="mathbook-js" />
+                <xsl:call-template name="knowl" />
                 <xsl:call-template name="fonts" />
                 <xsl:call-template name="css" />
                 <xsl:call-template name="font-awesome" />
@@ -8276,8 +8276,8 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
                 <xsl:call-template name="goggle-code-prettifier" />
             </xsl:if>
             <xsl:call-template name="google-search-box-js" />
-            <xsl:call-template name="knowl" />
             <xsl:call-template name="mathbook-js" />
+            <xsl:call-template name="knowl" />
             <xsl:call-template name="fonts" />
             <xsl:call-template name="hypothesis-annotation" />
             <xsl:call-template name="geogebra" />
