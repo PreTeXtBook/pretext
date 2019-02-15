@@ -18,10 +18,29 @@ const mj = mjnode.typeset;
 const render = async (node) => {
   let mathinput = node.outerHTML;
   const result = await mj({
+    // stock  mathjax-node  options
+    //
+    // next one is necessary, not clear why
     math: mathinput,
+    // how math lives on input page
     format: 'MathML',
-    svg: true
+    // output as an SVG representation
+    // braille in  math/svg/title  element near start
+    svg: true,
+    // semantic enrichmant will be ignored anyway
+    enrich: false,
+    //
+    // sre  options
+    // if not true, no speech output
+    speakText: true,
+    // options for Speech Rule Engine
+    // as a list, but with implicit pairs
+    // becomes a key-value object
+    // domain = default, locale = nemeth
+    sre: ['domain', 'default', 'locale', 'nemeth'],
   });
+  // result.* member must match output type
+  // or we get "undefined" in output file
   node.innerHTML = result.svg
 };
 
