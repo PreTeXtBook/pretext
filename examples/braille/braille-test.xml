@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--********************************************************************
+Copyright 2013 Robert A. Beezer
+
+This file is part of PreTeXt.
+
+PreTeXt is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+PreTeXt is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+
+<pretext>
+
+    <docinfo/>
+
+    <article xml:id="braille-test">
+        <title>A Test Article</title>
+
+        <p>This is a <pretext/> article designed to test conversions to Braille without too much extraneous material.  The title above should be <q>A Test Article</q>.</p>
+
+        <theorem xml:id="pythagorean-theorem">
+            <title>The Pythagorean Theorem</title>
+
+            <p>For a right triangle with side lengths <m>a, b, c</m>, where the side of length <m>c</m> is opposite the right angle, we have<me>a^2 + b^2 = c^2</me>.</p>
+        </theorem>
+
+        <p>The concluding period of the statement of the theorem will be absorbed into the displayed mathematics in a print version.  For Braille, we want the period to remain detached, so it is rendered as literary text and not with Nemeth Braille.</p>
+
+        <p><pretext/> encourages cross-references, so we now reference the previous result: <xref ref="pythagorean-theorem"/>.  While the <c>liblouis</c> library seems to be able to reference <q>endnotes</q>, there does not appear to be a mechanism for general cross-references.</p>
+
+        <paragraphs>
+            <title>Quotations</title>
+        
+            <p>It seems that <c>liblouis</c> converts Unicode quote marks into opening and closing variants, and recognizes double versus single.  Patterns are 2-3-6 and 3-5-6 for the double quote marks, with a shift/capital indicator for the single versions.  Two tests from Alex Jordan, where we just employ our standard conversion to <q>smart</q> Unicode variants and we let <c>liblouis</c> do the rest. <q>Life is about making an impact, not making an income.</q> <sq>Whatever the mind of man can conceive and believe, it can achieve.</sq>  Here we test individual words:  <q>double</q> and <q>single</q>.  And the four relevant characters isolated inside parentheses:  (<lq/>), (<rq/>), (<lsq/>), (<rsq/>).</p>
+
+            <p>Now we try a block quotation from Dr.<nbsp/>Seuss.  We have done nothing extra to try to get the attribution correct yet, though it appears to convert the quotation dash into a hyphen (good).  Just now, when using his name, we put a non-breaking space between the abbreciation for Doctor and his surname, as we might commonly do in light of other conversions' behavior.  It seems to have become nothing special (which is also good).</p>
+
+            <blockquote xml:id="blockquote-seuss">
+                <p>The problem with writing a book in verse is, to be successful, it has to sound like you knocked it off on a rainy Friday afternoon. It has to sound easy. When you can do it, it helps tremendously because it's a thing that forces kids to read on. You have this unconsummated feeling if you stop.</p>
+                <attribution>Dr. Seuss</attribution>
+            </blockquote>
+        </paragraphs>
+
+    </article>
+</pretext>
