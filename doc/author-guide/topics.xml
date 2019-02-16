@@ -532,7 +532,7 @@
 
                 <paragraphs>
                     <title><tage>solidus</tage>, <solidus />, solidus, virgule, fraction bar</title>
-                    <p>For simple arithmetic expressions in text, this symbol may be used to form a fraction.  It shoulds appear to have a significantly shallower slope than the forward slash, <slash />.</p>
+                    <p>For simple arithmetic expressions in text, this symbol may be used to form a fraction.  It shoulds appear to have a significantly shallower slope than the forward slash, /.</p>
                 </paragraphs>
 
                 <p>So we have <tage>times</tage> and <tage>solidus</tage> and will implement &#xb1; and &#xf7; and then provide examples.</p>
@@ -665,7 +665,7 @@
             <p>The tags described here contain <em>only raw characters</em>.  By that we typically mean the first 128 characters of the <acro>ASCII</acro> code.  Unicode characters are likely to migrate to HTML output just fine, but results for <latex /> output will be variable.  The restriction to character data has two consequences.  First, any markup mistakenly included will have its content silently ignored and dropped.  Second, you need to observe the rules on special characters and escaped characters for <init>XML</init> for literal text, which are mercifully simple.</p>
 
             <blockquote>
-                <p>In your source, use <c>&amp;amp;</c> for an <ampersand />, and use <c>&amp;lt;</c> and <c>&amp;gt;</c> for <less /> and <greater />.  Otherwise, every other <acro>ASCII</acro> character will render faithfully across all possible formats.</p>
+                <p>In your source, use <c>&amp;amp;</c> for an &amp;, and use <c>&amp;lt;</c> and <c>&amp;gt;</c> for &lt; and &gt;.  Otherwise, every other <acro>ASCII</acro> character will render faithfully across all possible formats.</p>
             </blockquote>
         </introduction>
 
@@ -1520,7 +1520,7 @@
             <![CDATA[<image source="images/crocodiles.png" width="50%" />]]>
             </pre>
 
-            <p>Typically you would wrap this in a <tag>figure</tag> that might have an <attr>xml:id</attr> attribute for cross-references, with or without a caption.  There is no <attr>height</attr> attribute, so the aspect ratio of your image is your responsibility outside of <pretext />.  The <attr>width</attr> attribute is a percentage of the available width of the text (outside of a <tag>sidebyside</tag> panel).  Default width is typically 90<percent />.</p>
+            <p>Typically you would wrap this in a <tag>figure</tag> that might have an <attr>xml:id</attr> attribute for cross-references, with or without a caption.  There is no <attr>height</attr> attribute, so the aspect ratio of your image is your responsibility outside of <pretext />.  The <attr>width</attr> attribute is a percentage of the available width of the text (outside of a <tag>sidebyside</tag> panel).  Default width is typically 90%.</p>
 
             <p>You may also provide a <tag>description</tag> which will aid accessibility for electronic formats.  Keep such readers in mind and provide as much description as possible.  Keep the markup simple, since this will typically migrate to an HTML attribute that cannot contain any structure.  Be careful to avoid double-quotes.  For example,</p>
 
@@ -1611,7 +1611,7 @@
 
         <p>Instead of placing a <attr>width</attr> attribute on each item, instead place this on the <tag>sidebyside</tag> element.  A single <attr>width</attr> will use the same value for each panel.  For different widths, use the plural form <attr>widths</attr> and provide a space-separated list of percentages.  The default is to give each panel the same width, and as large as possible, which will result in no gap between panels.</p>
 
-        <p>The margins can be specified with the <attr>margins</attr> attribute, which if given as a single percentage will be used for both the left and right sides.  You may also specify asymmetric left and right margins with two percentages, separated by a space, in the same attribute.  An additional option is to use the value <c>auto</c> which will set each margin to half of the (common) space between panels.  This is also the default.  In the case of a single panel, the left margin, right margin, and panel width should all add up to 100<percent />.</p>
+        <p>The margins can be specified with the <attr>margins</attr> attribute, which if given as a single percentage will be used for both the left and right sides.  You may also specify asymmetric left and right margins with two percentages, separated by a space, in the same attribute.  An additional option is to use the value <c>auto</c> which will set each margin to half of the (common) space between panels.  This is also the default.  In the case of a single panel, the left margin, right margin, and panel width should all add up to 100%.</p>
 
         <p>Once the widths and margins are known, any additional available width is used to create a common distance separating panels.  (Which is not possible when there is just a single panel.)</p>
 
@@ -1619,9 +1619,9 @@
 
         <p>We could give lots of examples, but instead it might be best to just experiment.  Error-checking is very robust, so it is hard to get it too wrong.  OK, we will do just one to help explain.  Suppose a <tag>sidebyside</tag> contains three panels and has layout parameters given by<cd>
             <cline>&lt;sidebyside widths="20% 40% 25%" margins="auto" valign="middle"&gt;</cline>
-        </cd>Then there will be 15<percent /> of the width left to space out the panels.  The two gaps are each 5<percent /> of the width, and the remaining 5<percent /> is split between the margins at 2.5<percent /> each.  And the vertical midlines of each panel are all aligned.</p>
+        </cd>Then there will be 15% of the width left to space out the panels.  The two gaps are each 5% of the width, and the remaining 5% is split between the margins at 2.5% each.  And the vertical midlines of each panel are all aligned.</p>
 
-        <p>For a single panel with no attributes, the panel will occupy 100<percent /> of the width.  A single panel with a specified width will get equal (auto) margins, resulting in a centered panel.</p>
+        <p>For a single panel with no attributes, the panel will occupy 100% of the width.  A single panel with a specified width will get equal (auto) margins, resulting in a centered panel.</p>
 
         <p>Captioned items<idx><h>side-by-side panel</h><h>panel</h><h>captioned item</h></idx> as panels deserve special mention.  These will continue to be numbered consecutively, with one exception.  If you place a <tag>sidebyside</tag> inside of a <tag>figure</tag>, then the <tag>figure</tag> will be numbered, and the captioned items inside the <tag>sidebyside</tag> will be <term>sub-captioned</term><idx><h>side-by-side panel</h><h>panel</h><h>sub-captioned item</h></idx>.  In other words, the second captioned panel of a <tag>sidebyside</tag> inside Figure 5.2 would be referenced as Figure 5.2.b.</p>
 
@@ -1683,7 +1683,7 @@
             <title>Characters in <init>URL</init>s</title>
             <idx><h>URL</h><h>query string</h></idx>
 
-            <p>A <init>URL</init> can have a <term>query string</term>, which has a list of parameters following a question-mark.  The parameters are separated by ampersands (<ampersand />), which will need to be escaped, so as to not confuse the <init>XML</init> processor.  So use <c>&amp;amp;</c> anywhere the ampersand <em>character</em> is necessary, such as a <attr>source</attr> attribute, or a monospace version of a <init>URL</init> achieved with a <tag>c</tag> element.  Also, the question-mark character should <em>not</em> be <init>URL</init>-encoded (<c>%3F</c>) (despite advice just given above), so if necessary edit it to be the actual character.  General advice about special characters in <init>XML</init> source can be found in <xref ref="overview-special-characters"/>.</p>
+            <p>A <init>URL</init> can have a <term>query string</term>, which has a list of parameters following a question-mark.  The parameters are separated by ampersands (&amp;), which will need to be escaped, so as to not confuse the <init>XML</init> processor.  So use <c>&amp;amp;</c> anywhere the ampersand <em>character</em> is necessary, such as a <attr>source</attr> attribute, or a monospace version of a <init>URL</init> achieved with a <tag>c</tag> element.  Also, the question-mark character should <em>not</em> be <init>URL</init>-encoded (<c>%3F</c>) (despite advice just given above), so if necessary edit it to be the actual character.  General advice about special characters in <init>XML</init> source can be found in <xref ref="overview-special-characters"/>.</p>
         </subsection>
 
         <subsection xml:id="topic-external-data-file">
@@ -1754,7 +1754,7 @@
                 </li>
                 <li>
                     <title><c>popout</c></title>
-                    <p>Play in new window or tab, at 150<percent /> width.</p>
+                    <p>Play in new window or tab, at 150% width.</p>
                 </li>
                 <li>
                     <title><c>select</c></title>

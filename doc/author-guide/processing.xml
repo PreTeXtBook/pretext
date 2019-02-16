@@ -163,7 +163,7 @@
             <li><p>Attributes will likely be re-ordered, with normalized spacing between them.</p></li>
             <li><p>Empty elements will have any spaces removed from the end of the tag.</p></li>
             <li><p>Elements with no content may be written with a single empty tag.</p></li>
-            <li><p><abbr>CDATA</abbr> sections will be converted to text acceptable to the <init>XML</init> parser.  In other words, the <abbr>CDATA</abbr> wrapper will be removed and dangerous characters (<ampersand />, <less />, <greater />) will be replaced by equivalent entities (such as <c>&amp;amp;</c>).  If you have many matrices expressed in <latex /> and wrapped in a <abbr>CDATA</abbr>, this might be a big change.</p></li>
+            <li><p><abbr>CDATA</abbr> sections will be converted to text acceptable to the <init>XML</init> parser.  In other words, the <abbr>CDATA</abbr> wrapper will be removed and dangerous characters (&amp;, &lt;, &gt;) will be replaced by equivalent entities (such as <c>&amp;amp;</c>).  If you have many matrices expressed in <latex /> and wrapped in a <abbr>CDATA</abbr>, this might be a big change.</p></li>
             <li><p>The output files will be labeled as having <c>UTF-8</c> encoding.</p></li>
             <li><p>It could be necessary to run this conversion more than once if deprecations build on one another.  In other words, we do not update specific conversions, but rely on regular use to keep source up-to-date.</p></li>
             <li><p>It should be safe to run this conversion repeatedly, even after new deprecations are added.  In fact, it is encouraged.</p></li>
