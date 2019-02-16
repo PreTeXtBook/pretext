@@ -79,7 +79,7 @@
     <paragraphs>
         <title>Watermarks</title>
 
-        <p>You can add a watermark to your <ini>PDF</ini> which will render as large, light grey text, at an angle across teh page.  Use <c>latex.watermark</c> to set the text (avoid obscure characters or symbols, and do not use any <init>XML</init> markup).  Use <c>latex.watermark.scale</c> to adjust for long or short text.  The <latex/>-only <q>\\</q> will survive in the text to create multiple lines of text.  Submit a feature request if this is not flexible enough to meet a special need.</p>
+        <p>You can add a watermark to your <init>PDF</init> which will render as large, light grey text, at an angle across teh page.  Use <c>latex.watermark</c> to set the text (avoid obscure characters or symbols, and do not use any <init>XML</init> markup).  Use <c>latex.watermark.scale</c> to adjust for long or short text.  The <latex/>-only <q>\\</q> will survive in the text to create multiple lines of text.  Submit a feature request if this is not flexible enough to meet a special need.</p>
     </paragraphs>
 
     <paragraphs xml:id="latex-cover-images">
