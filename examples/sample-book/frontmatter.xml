@@ -130,7 +130,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <p>I would also like to thank Steve Quigley, Marnie Pommett, Cathie Griffin, Kelle Karshick, and the rest of the staff at PWS Publishing for their guidance throughout this project. It has been a pleasure to work with them.</p>
 
         <!-- Added NSF support statement.  TWJ 8/9/2012 -->
-        <p>Robert Beezer encouraged me to make <em>Abstract Algebra: Theory and Applications</em> available as an open source textbook, a decision that I have never regretted.  With his assistance, the book has been rewritten in PreTeXt (<url href="https://pretextbook.org">https://pretextbook.org</url>), making it possible to quickly output print, web, PDF versions and more from the same source.  The open source version of this book has received support from the National Science Foundation (Award <hash />DUE-1020957).</p>
+        <p>Robert Beezer encouraged me to make <em>Abstract Algebra: Theory and Applications</em> available as an open source textbook, a decision that I have never regretted.  With his assistance, the book has been rewritten in PreTeXt (<url href="https://pretextbook.org">https://pretextbook.org</url>), making it possible to quickly output print, web, PDF versions and more from the same source.  The open source version of this book has received support from the National Science Foundation (Award #DUE-1020957).</p>
 
     </acknowledgement>
 
