@@ -6898,10 +6898,31 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 </xsl:template>
 
 
-<!-- Context is the scope (root of subtree examined)      -->
-<!-- Cannot locate a "solutions" division inside a "part" -->
-<xsl:template match="book|article|chapter|section|subsection|subsubsection" mode="solutions-generator">
+<!-- Solutions Generator -->
+
+<!-- Context is the originally the scope (root of subtree examined)      -->
+<!-- and is meant to be a "traditional" division, as expressed in        -->
+<!-- the schema.  However, on recusion context can be any division       -->
+<!-- containing exercises, such as "worksheet".  We do not allow a       -->
+<!-- "solutions" division to live inside a "part", so in the default     -->
+<!-- use a part is not the context.  This is all to explain that         -->
+<!-- the match is more expansive than first use, in practice.            -->
+<!--                                                                     -->
+<!-- On first call, the placing division should have a descriptive       -->
+<!-- title from the author, such as "Solutions to Chapter Exercises",    -->
+<!-- when placed at the level of a section (and assuming default scope). -->
+<!-- So the "b-has-heading" should default to false, *and should not     -->
+<!-- be overridden*.  Recursive calls will set this variable to true,    -->
+<!-- and then there will be sectioning of the solutions.                 -->
+<!--                                                                     -->
+<!-- Similarly, "scope" is set to the context on first call, then        -->
+<!-- replicated/preserved/remembered in recursive calls, so do not       -->
+<!-- pass in a different value.                                          -->
+
+<xsl:template match="book|article|part|chapter|section|subsection|subsubsection|exercises|worksheet|reading-questions" mode="solutions-generator">
     <xsl:param name="purpose"/>
+    <xsl:param name="b-has-heading" select="false()"/>
+    <xsl:param name="scope" select="."/>
     <xsl:param name="b-inline-statement"     />
     <xsl:param name="b-inline-hint"          />
     <xsl:param name="b-inline-answer"        />
@@ -6923,15 +6944,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:param name="b-project-answer"       />
     <xsl:param name="b-project-solution"     />
 
-    <!-- We need to save off the the main context before the "for-each" -->
-    <!-- context change, in order to decide how "big" division headings -->
-    <!-- will be via the "division-in-solutions" template               -->
-    <xsl:variable name="scope" select="." />
-
-    <!-- consider each possible division, below the context        -->
-    <!-- including the context, which may contain inline exercises -->
-    <!-- Only output heading and content if there is any content   -->
-    <xsl:for-each select=".|.//part|.//chapter|.//section|.//subsection|.//subsubsection|.//exercises|.//worksheet|.//reading-questions">
+    <!-- for-each was here -->
         <!-- See if division has *any* content, at any depth, in light of switches. -->
         <!-- Traditional divisions expect many switches, while specialized          -->
         <!-- divisions expect a limited subset                                      -->
@@ -6961,13 +6974,6 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         </xsl:variable>
 
         <xsl:if test="not($dry-run = '')">
-            <!-- The root division does not generate a heading, we let the -->
-            <!-- author title the solutions division however they like.    -->
-            <!-- So we need to recognize when the $scope matches the       -->
-            <!-- context of the "for-each", which is first in the          -->
-            <!-- for-each/@select surrounding this chunk                   -->
-            <xsl:variable name="b-has-heading" select="count($scope|.) = 2"/>
-
             <!-- We call the only real abstract template, it simply        -->
             <!-- provides the correct wrapping for a division appearing    -->
             <!-- to aid in organizing a collection of solutions.           -->
@@ -7049,7 +7055,36 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                 </xsl:with-param>
             </xsl:apply-templates>
         </xsl:if>
-    </xsl:for-each>
+    <!-- for-each ended here -->
+    <!-- recurse into (sub)divisions which can contain exercises     -->
+    <!-- On every recursion (not initial call) we request a heading  -->
+    <!-- and we pass in the scope of original call for help deciding -->
+    <!-- the level of headings given surroundings                    -->
+    <xsl:apply-templates select="book|article|part|chapter|section|subsection|subsubsection|exercises|worksheet|reading-questions" mode="solutions-generator">
+        <xsl:with-param name="purpose" select="$purpose" />
+        <xsl:with-param name="b-has-heading" select="true()" />
+        <xsl:with-param name="scope" select="$scope" />
+        <xsl:with-param name="b-inline-statement"     select="$b-inline-statement" />
+        <xsl:with-param name="b-inline-answer"        select="$b-inline-answer" />
+        <xsl:with-param name="b-inline-hint"          select="$b-inline-hint" />
+        <xsl:with-param name="b-inline-solution"      select="$b-inline-solution" />
+        <xsl:with-param name="b-divisional-statement" select="$b-divisional-statement" />
+        <xsl:with-param name="b-divisional-answer"    select="$b-divisional-answer" />
+        <xsl:with-param name="b-divisional-hint"      select="$b-divisional-hint" />
+        <xsl:with-param name="b-divisional-solution"  select="$b-divisional-solution" />
+        <xsl:with-param name="b-worksheet-statement"  select="$b-worksheet-statement" />
+        <xsl:with-param name="b-worksheet-answer"     select="$b-worksheet-answer" />
+        <xsl:with-param name="b-worksheet-hint"       select="$b-worksheet-hint" />
+        <xsl:with-param name="b-worksheet-solution"   select="$b-worksheet-solution" />
+        <xsl:with-param name="b-reading-statement"    select="$b-reading-statement" />
+        <xsl:with-param name="b-reading-answer"       select="$b-reading-answer" />
+        <xsl:with-param name="b-reading-hint"         select="$b-reading-hint" />
+        <xsl:with-param name="b-reading-solution"     select="$b-worksheet-solution" />
+        <xsl:with-param name="b-project-statement"    select="$b-project-statement" />
+        <xsl:with-param name="b-project-answer"       select="$b-project-answer" />
+        <xsl:with-param name="b-project-hint"         select="$b-project-hint" />
+        <xsl:with-param name="b-project-solution"     select="$b-project-solution" />
+    </xsl:apply-templates>
 </xsl:template>
 
 
