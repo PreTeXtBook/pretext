@@ -6744,23 +6744,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>em}}</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:element name="span">
-                <xsl:attribute name="class">
-                    <xsl:text>fillin</xsl:text>
+            <span class="fillin" role="img">
+                <xsl:attribute name="aria-label">
+                    <xsl:value-of select="$characters" />
+                    <xsl:text>-character blank</xsl:text>
                 </xsl:attribute>
                 <xsl:attribute name="style">
                     <xsl:text>width: </xsl:text>
                     <xsl:value-of select="5 * $characters div 11" />
                     <xsl:text>em;</xsl:text>
                 </xsl:attribute>
-                <xsl:attribute name="role">
-                    <xsl:text>img</xsl:text>
-                </xsl:attribute>
-                <xsl:attribute name="aria-label">
-                    <xsl:value-of select="$characters" />
-                    <xsl:text>-character blank</xsl:text>
-                </xsl:attribute>
-            </xsl:element>
+            </span>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
