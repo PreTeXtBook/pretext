@@ -281,7 +281,7 @@ if (reading_questions.length) {
            compiled_answers += '<div class="one_answer">';
        }
        if (this_student_id.indexOf('@') > -1) {
-            this_student_id = '<a href="mailto:' + this_student_id + '@aimath.org?Subject=RQ' + number_of_this_rq + '%20of%20' + title_of_this_section +'">' + this_student_id + '</a>';
+            this_student_id = '<a href="mailto:' + this_student_id + '?Subject=RQ' + number_of_this_rq + '%20of%20' + title_of_this_section +'">' + this_student_id + '</a>';
        }
        compiled_answers += '<div class="s_id">' + this_student_id + '</div>';
        compiled_answers += '<div class="rq_sub_time">' + this_submitted_time + '</div>';
