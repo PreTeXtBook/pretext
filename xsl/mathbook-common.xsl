@@ -3553,7 +3553,11 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:apply-templates select="." mode="file-wrap">
         <xsl:with-param name="page-type" select="'complete'" />
         <xsl:with-param name="content">
-            <xsl:apply-templates select="." />
+            <xsl:apply-templates select=".">
+                <!-- the level of the object in the context on the page, -->
+                <!-- here "2" since there is an "h1" in the masthead     -->
+                <xsl:with-param name="heading-level" select="2"/>
+            </xsl:apply-templates>
         </xsl:with-param>
     </xsl:apply-templates>
 </xsl:template>
@@ -3563,7 +3567,11 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:apply-templates select="." mode="file-wrap">
         <xsl:with-param name="page-type" select="'summary'" />
         <xsl:with-param name="content">
-            <xsl:apply-templates select="." mode="summary" />
+            <xsl:apply-templates select="." mode="summary">
+                <!-- the level of the object in the context on the page, -->
+                <!-- here "2" since there is an "h1" in the masthead     -->
+                <xsl:with-param name="heading-level" select="2"/>
+            </xsl:apply-templates>
         </xsl:with-param>
     </xsl:apply-templates>
 </xsl:template>
@@ -6798,6 +6806,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- The division is one-off (not knowled), so we treat the            -->
 <!-- introduction and conclusion as original                           -->
 <xsl:template match="solutions" mode="solutions">
+    <xsl:param name="heading-level"/>
 
     <!-- A "solutions" division may exist in the main matter  -->
     <!-- or the back matter.  When we generate a solution, we -->
@@ -6841,6 +6850,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 
             <xsl:apply-templates select="$scope" mode="solutions-generator">
                 <xsl:with-param name="purpose" select="$purpose" />
+                <xsl:with-param name="heading-level" select="$heading-level"/>
                 <xsl:with-param name="b-inline-statement"     select="contains(@inline,     'statement')" />
                 <xsl:with-param name="b-inline-hint"          select="contains(@inline,     'hint')"      />
                 <xsl:with-param name="b-inline-answer"        select="contains(@inline,     'answer')"    />
@@ -6867,6 +6877,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <!-- the default scope, first ancestor -->
             <xsl:apply-templates select="ancestor::*[not(self::backmatter)][1]" mode="solutions-generator">
                 <xsl:with-param name="purpose" select="$purpose" />
+                <xsl:with-param name="heading-level" select="$heading-level"/>
                 <xsl:with-param name="b-inline-statement"     select="contains(@inline,     'statement')" />
                 <xsl:with-param name="b-inline-hint"          select="contains(@inline,     'hint')"      />
                 <xsl:with-param name="b-inline-answer"        select="contains(@inline,     'answer')"    />
@@ -6921,6 +6932,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 
 <xsl:template match="book|article|part|chapter|section|subsection|subsubsection|exercises|worksheet|reading-questions" mode="solutions-generator">
     <xsl:param name="purpose"/>
+    <xsl:param name="heading-level"/>
     <xsl:param name="b-has-heading" select="false()"/>
     <xsl:param name="scope" select="."/>
     <xsl:param name="b-inline-statement"     />
@@ -6988,8 +7000,11 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <!-- laid out via "sidebyside".                                -->
         <!-- The purpose is sent to the modal "solutions" templates    -->
         <!-- in order to generate accurate labels based on position    -->
+        <!-- The "heading-level" is the same as the originating        -->
+        <!-- "solutions" division on the first call here               -->
         <xsl:apply-templates select="." mode="division-in-solutions">
             <xsl:with-param name="scope" select="$scope" />
+            <xsl:with-param name="heading-level" select="$heading-level"/>
             <xsl:with-param name="b-has-heading" select="$b-has-heading"/>
             <xsl:with-param name="content">
 
@@ -7057,9 +7072,11 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <!-- recurse into (sub)divisions which can contain exercises     -->
     <!-- On every recursion (not initial call) we request a heading  -->
     <!-- and we pass in the scope of original call for help deciding -->
-    <!-- the level of headings given surroundings                    -->
+    <!-- the level of headings given surroundings.                   -->
+    <!-- This is recurrence, so increment $heading-level.            -->
     <xsl:apply-templates select="book|article|part|chapter|section|subsection|subsubsection|exercises|worksheet|reading-questions" mode="solutions-generator">
         <xsl:with-param name="purpose" select="$purpose" />
+        <xsl:with-param name="heading-level" select="$heading-level + 1"/>
         <xsl:with-param name="b-has-heading" select="true()" />
         <xsl:with-param name="scope" select="$scope" />
         <xsl:with-param name="b-inline-statement"     select="$b-inline-statement" />
@@ -7113,6 +7130,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- 2.  Somehow abandon user strings sooner, so less reliant on local-name() -->
 
 <xsl:template match="list-of">
+    <xsl:param name="heading-level"/>
+
     <!-- Ring-fence terms so matches are not mistaken substrings -->
     <xsl:variable name="elements">
         <xsl:text>|</xsl:text>
@@ -7161,6 +7180,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:call-template name="list-of-begin" />
     <!-- recursive procedure, starting from indicated scope -->
     <xsl:apply-templates select="$subroot" mode="list-of-content">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
         <xsl:with-param name="elements" select="$elements"/>
         <xsl:with-param name="divisions" select="$divisions"/>
         <xsl:with-param name="empty" select="$empty"/>
@@ -7169,6 +7189,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 </xsl:template>
 
 <xsl:template match="*" mode="list-of-content">
+    <xsl:param name="heading-level"/>
     <xsl:param name="elements"/>
     <xsl:param name="divisions"/>
     <xsl:param name="empty"/>
@@ -7181,11 +7202,15 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                 <!-- probe subtree, even if we found empty super-tree earlier -->
                 <xsl:variable name="all-elements" select=".//*[contains($elements, concat(concat('|', local-name(.)), '|'))]" />
                 <xsl:if test="$all-elements">
-                    <xsl:apply-templates select="." mode="list-of-header" />
+                    <xsl:apply-templates select="." mode="list-of-header">
+                        <xsl:with-param name="heading-level" select="$heading-level"/>
+                    </xsl:apply-templates>
                 </xsl:if>
             </xsl:when>
             <xsl:when test="$empty='yes'">
-                <xsl:apply-templates select="." mode="list-of-header" />
+                <xsl:apply-templates select="." mode="list-of-header">
+                    <xsl:with-param name="heading-level" select="$heading-level"/>
+                </xsl:apply-templates>
             </xsl:when>
         </xsl:choose>
     </xsl:if>
@@ -7194,8 +7219,10 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:apply-templates select="." mode="list-of-element" />
     </xsl:if>
     <!-- recurse into children -->
+    <!-- increment heading-level, correct right now for divisions -->
     <xsl:if test="*">
         <xsl:apply-templates select="*" mode="list-of-content">
+            <xsl:with-param name="heading-level" select="$heading-level + 1"/>
             <xsl:with-param name="elements" select="$elements"/>
             <xsl:with-param name="divisions" select="$divisions"/>
             <xsl:with-param name="empty" select="$empty"/>

@@ -394,8 +394,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- sometimes null, and even if not, the "hX" elements do not now  -->
 <!-- have natural id on them (we could manufacture such a thing).   -->
 
-<!-- Default template for content of a complete page -->
+<!-- Default template for content of a structural  -->
+<!-- division, which could be an entire page's     -->
+<!-- worth, or just a subdivision withing a page   -->
+<!-- Increment $heading-level within this template -->
 <xsl:template match="&STRUCTURAL;">
+    <xsl:param name="heading-level"/>
+
     <!-- location info for debugging efforts -->
     <xsl:apply-templates select="." mode="debug-location" />
     <!-- Heading, div for this structural subdivision -->
@@ -403,7 +408,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="perm-id" />
     </xsl:variable>
     <section class="{local-name(.)}" id="{$pid}">
-        <xsl:apply-templates select="." mode="section-header" />
+        <xsl:apply-templates select="." mode="section-header">
+            <xsl:with-param name="heading-level" select="$heading-level"/>
+        </xsl:apply-templates>
         <xsl:apply-templates select="." mode="author-byline"/>
         <!-- Most divisions are a simple list of elements to be       -->
         <!-- processed in document order, once we handle metadata     -->
@@ -413,10 +420,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- come back through here).                                 -->
         <xsl:choose>
             <xsl:when test="self::solutions">
-                <xsl:apply-templates select="." mode="solutions" />
+                <!-- this is not recurrence, do not increment heading-level -->
+                <xsl:apply-templates select="." mode="solutions">
+                    <xsl:with-param name="heading-level" select="$heading-level"/>
+                </xsl:apply-templates>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:apply-templates select="*" />
+                <!-- this is usually recurrence, so increment heading-level, -->
+                <!-- but "book" and "article" have an h1  masthead, so if    -->
+                <!-- this is the context, we just pass along the level of    -->
+                <!-- "2" which is supplied by the chunking templates         -->
+                <xsl:variable name="next-level">
+                    <xsl:choose>
+                        <xsl:when test="self::book or self::article">
+                            <xsl:value-of select="$heading-level"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="$heading-level + 1"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:variable>
+                <xsl:apply-templates select="*">
+                    <xsl:with-param name="heading-level" select="$next-level"/>
+                </xsl:apply-templates>
             </xsl:otherwise>
         </xsl:choose>
     </section>
@@ -426,7 +452,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Introduction (etc.) and conclusion realized as -->
 <!-- normal, then links to subsidiary divisions     -->
 <!-- occur between, as a group of button/hyperlinks -->
+<!-- heading-level of parent should come in as 1,   -->
+<!-- so then passed to "section-header" as 2.       -->
+<!-- Always.                                        -->
 <xsl:template match="&STRUCTURAL;" mode="summary">
+    <xsl:param name="heading-level"/>
+
     <!-- location info for debugging efforts -->
     <xsl:apply-templates select="." mode="debug-location" />
     <!-- Heading, div for this structural subdivision -->
@@ -434,7 +465,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="perm-id" />
     </xsl:variable>
     <section class="{local-name(.)}" id="{$pid}">
-        <xsl:apply-templates select="." mode="section-header" />
+        <xsl:apply-templates select="." mode="section-header">
+            <xsl:with-param name="heading-level" select="$heading-level"/>
+        </xsl:apply-templates>
         <xsl:apply-templates select="." mode="author-byline"/>
         <xsl:apply-templates select="objectives|introduction|titlepage|abstract" />
         <nav class="summary-links">
@@ -485,45 +518,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- heading followed by its subsidiary elements -->
 <!-- hit with templates.  This is the header.    -->
 <!-- Only "chapter" ever gets shown generically  -->
-<!-- Subdivisions have titles, or not            -->
-<!-- and other parts have default titles         -->
+<!-- Subdivisions have titles, or default titles -->
 <xsl:template match="*" mode="section-header">
-    <!-- The "division-name" template accomodates non-standard -->
-    <!-- divisions like "exercises", "references", divisional  -->
-    <!-- "introduction" and "conclusion", and "appendix".      -->
-    <!-- Result is strict part -> subsubsection hierachy.      -->
-    <!-- Find it in mathbook-common.xsl                        -->
-    <!-- NB: this should go away once we count hN levels from  -->
-    <!-- the root of an HTML page, then "division-name" may    -->
-    <!-- become a pure-LaTeX temnplate                         -->
-    <xsl:variable name="normalized-division-name">
-        <xsl:apply-templates select="." mode="division-name" />
+    <xsl:param name="heading-level"/>
+
+    <xsl:variable name="html-heading">
+        <xsl:apply-templates select="." mode="html-heading">
+            <xsl:with-param name="heading-level" select="$heading-level"/>
+        </xsl:apply-templates>
     </xsl:variable>
-    <xsl:variable name="heading-level">
-        <xsl:choose>
-            <xsl:when test="$normalized-division-name = 'part'">
-                <xsl:text>h1</xsl:text>
-            </xsl:when>
-            <xsl:when test="$normalized-division-name = 'chapter'">
-                <xsl:text>h1</xsl:text>
-            </xsl:when>
-            <xsl:when test="$normalized-division-name = 'section'">
-                <xsl:text>h2</xsl:text>
-            </xsl:when>
-            <xsl:when test="$normalized-division-name = 'subsection'">
-                <xsl:text>h3</xsl:text>
-            </xsl:when>
-            <xsl:when test="$normalized-division-name = 'subsubsection'">
-                <xsl:text>h4</xsl:text>
-            </xsl:when>
-            <xsl:when test="$normalized-division-name = 'paragraph'">
-                <xsl:text>h5</xsl:text>
-            </xsl:when>
-            <!-- any bug will be exposed by "division-name" template -->
-            <xsl:otherwise />
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:element name="{$heading-level}">
+    <xsl:element name="{$html-heading}">
         <xsl:attribute name="class">
             <xsl:choose>
                 <xsl:when test="self::chapter">
@@ -695,7 +699,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- This is all within a .frontmatter class for CSS       -->
 <xsl:template match="titlepage">
     <xsl:variable name="b-has-subtitle" select="parent::frontmatter/parent::*/subtitle"/>
-    <h1 class="heading">
+    <h2 class="heading">
         <span class="title">
             <xsl:apply-templates select="parent::frontmatter/parent::*" mode="title-full" />
             <xsl:if test="$b-has-subtitle">
@@ -708,7 +712,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="parent::frontmatter/parent::*" mode="subtitle" />
             </span>
         </xsl:if>
-    </h1>
+    </h2>
     <!-- We list authors and editors in document order -->
     <xsl:apply-templates select="author|editor" mode="full-info"/>
     <!-- A credit is subsidiary, so follows -->
@@ -988,8 +992,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "book" and "article" need to be in the match so this template  -->
 <!-- is defined for those top-level (whole document) cases, even if -->
 <!-- $b-has-heading will always be "false" in these situations.     -->
-<xsl:template match="book|article|chapter|section|subsection|subsubsection|exercises|worksheet|reading-questions" mode="division-in-solutions">
+<xsl:template match="book|article|part|chapter|section|subsection|subsubsection|exercises|worksheet|reading-questions" mode="division-in-solutions">
     <xsl:param name="scope" /> <!-- ignored -->
+    <xsl:param name="heading-level"/>
     <xsl:param name="b-has-heading"/>
     <xsl:param name="content" />
 
@@ -999,7 +1004,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$b-has-heading">
             <!-- as a duplicate of generated content, no HTML id -->
             <section class="{local-name(.)}">
-                <xsl:apply-templates select="." mode="section-header" />
+                <xsl:apply-templates select="." mode="section-header">
+                    <xsl:with-param name="heading-level" select="$heading-level"/>
+                </xsl:apply-templates>
                 <!-- we don't do an "author-byline" here in duplication -->
                 <xsl:copy-of select="$content" />
             </section>
@@ -1028,9 +1035,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Amalgamation of "section-header" and "header-content" -->
 <!--   (1) No author credit                                -->
 <!--   (2) No permalink                                    -->
+<!-- TODO: maybe a stock template could do a better job with this? -->
 <xsl:template match="*" mode="list-of-header">
-    <h1 class="heading">
-         <xsl:attribute name="title">
+    <xsl:param name="heading-level"/>
+
+    <xsl:variable name="heading-level">
+        <xsl:apply-templates select="." mode="html-heading">
+            <xsl:with-param name="heading-level" select="$heading-level"/>
+        </xsl:apply-templates>
+    </xsl:variable>
+
+    <xsl:element name="{$heading-level}">
+        <xsl:attribute name="class">
+            <xsl:text>heading</xsl:text>
+        </xsl:attribute>
+        <xsl:attribute name="title">
             <xsl:apply-templates select="." mode="tooltip-text" />
         </xsl:attribute>
         <span class="type">
@@ -1044,7 +1063,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <span class="title">
             <xsl:apply-templates select="." mode="title-full" />
         </span>
-    </h1>
+    </xsl:element>
 </xsl:template>
 
 <!-- Entries in list-of's -->
@@ -1641,6 +1660,47 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- zoomable and reflowable, we just insert spaces and      -->
 <!-- leave actual line-breaking to the laTeX conversion.     -->
 <xsl:variable name="title-separator" select="' '"/>
+
+<!-- This template manufactures HTML "headings", the "hN" elements.   -->
+<!-- We do not style based on these elements, but a screen-reader     -->
+<!-- or offline (no CSS) environment will use these profitably.       -->
+<!-- So it is important for the elements to be in a logical           -->
+<!-- progression corresponding to "section" and "article" nodes       -->
+<!-- of the HTML tree.                                                -->
+<!--                                                                  -->
+<!-- We set the "heading-level" to "2" when chunking is initiated,    -->
+<!-- since we expect the masthead/banner to contain an "h1".          -->
+<!-- Whenever a template processes its children, we increment the     -->
+<!-- variable as we pass it down, so a template receives the correct  -->
+<!-- level (and before it ever gets here, since we have consciously   -->
+<!-- chosen *not* to increment here).                                 -->
+<!--                                                                  -->
+<!-- There is no h7, so we need to just settle for h6, I guess.       -->
+<!-- TODO: address h7 when "article" get careful headings             -->
+<xsl:template match="*" mode="html-heading">
+    <xsl:param name="heading-level"/>
+
+    <!-- Debugging code, preserve temporarily, just for divisions now -->
+    <!-- Turn on "CHUNK: and "INTER:" debugging in -common templates  -->
+    <!-- <xsl:message> -->
+        <!-- <xsl:text>  </xsl:text><xsl:value-of select="$heading-level"/> -->
+        <!-- <xsl:text> : </xsl:text><xsl:value-of select="local-name(.)"/><xsl:text> : </xsl:text><xsl:apply-templates select="." mode="long-name"/> -->
+    <!-- </xsl:message> -->
+
+    <!-- simple -->
+    <xsl:text>h</xsl:text>
+    <xsl:choose>
+        <xsl:when test="$heading-level &lt; 7">
+            <xsl:value-of select="$heading-level"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <!-- TODO: Report excessive heading here, as informational item           -->
+            <!-- Perhaps include advice: chunk more, author with shallower divisions, -->
+            <!-- use less comprehensive solutions nested at depth                     -->
+            <xsl:text>6</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
 
 <!-- These are convenience methods for frequently-used headings -->
 
