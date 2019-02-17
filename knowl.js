@@ -17,14 +17,14 @@
  *
  * 4/11/2012 Modified by David Guichard to allow inline knowl code.
  * Sample use:
- *      This is an <a knowl="" class="internal" 
+ *      This is an <a data-knowl="" class="internal" 
  *      value="Hello World!">inline knowl.</a>
  */
 
 /*  8/14/14  Modified by David Farmer to allow knowl content to be
  *  taken from the element with a given id.
  *
- * The syntax is <a knowl="" class="id-ref" refid="proofSS">Proof</a>
+ * The syntax is <a data-knowl="" class="id-ref" data-refid="proofSS">Proof</a>
  */
  
 /* javascript code for the knowl features 
@@ -38,9 +38,9 @@ var knowl_focus_stack = [];
  
 function knowl_click_handler($el) {
   // the knowl attribute holds the id of the knowl
-  var knowl_id = $el.attr("knowl");
+  var knowl_id = $el.attr("data-knowl");
   // the uid is necessary if we want to reference the same content several times
-  var uid = $el.attr("knowl-uid");
+  var uid = $el.attr("data-knowl-uid");
   var output_id = '#knowl-output-' + uid; 
   var $output_id = $(output_id);
   // create the element for the content, insert it after the one where the 
@@ -145,7 +145,7 @@ function knowl_click_handler($el) {
 //    } else if ($el.attr("class") == 'id-ref') {
     } else if ($el.hasClass('id-ref')) {
      //get content from element with the given id
-      $output.html($("#".concat($el.attr("refid"))).html());
+      $output.html($("#".concat($el.attr("data-refid"))).html());
     } else {
     // Get code from server.
     $output.load(knowl_id,
@@ -200,25 +200,25 @@ function knowl_click_handler($el) {
         document.getElementById(thisknowlid).focus();
         knowl_focus_stack_uid.push(uid);
         knowl_focus_stack.push($el);
-        $("a[knowl]").attr("href", "");
+        $("a[data-knowl]").attr("href", "");
         }]);
 // if this is before the MathJax, big problems
 $(".knowl-output .hidden-sagecell-sage").attr("class", "sagecell-sage");
 sagecell.makeSagecell({inputLocation: ".sagecell-sage"});
       }
   }
-} //~~ end click handler for *[knowl] elements
+} //~~ end click handler for *[data-knowl] elements
 
 /** register a click handler for each element with the knowl attribute 
  * @see jquery's doc about 'live'! the handler function does the 
  *  download/show/hide magic. also add a unique ID, 
  *  necessary when the same reference is used several times. */
 $(function() {
-    $("body").on("click", "*[knowl]", function(evt) {
+    $("body").on("click", "*[data-knowl]", function(evt) {
       evt.preventDefault();
       var $knowl = $(this);
-      if(!$knowl.attr("knowl-uid")) {
-        $knowl.attr("knowl-uid", knowl_id_counter);
+      if(!$knowl.attr("data-knowl-uid")) {
+        $knowl.attr("data-knowl-uid", knowl_id_counter);
         knowl_id_counter++;
       }
       knowl_click_handler($knowl, evt);
@@ -229,7 +229,7 @@ $(function() {
 // change from jQuery 3
 // $(window).load(function() {
 $(window).on("load", function() {
-   $("a[knowl]").attr("href", "");
+   $("a[data-knowl]").attr("href", "");
 });
 
 //window.onload = function() {
