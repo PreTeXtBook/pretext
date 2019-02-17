@@ -289,7 +289,9 @@ so that we can set our own later */
 /*
  * Contents of articles
  */
-.pretext-content section article .heading + p {
+.pretext-content section article > .heading + p,
+.pretext-content section article > .heading + .introduction,
+.pretext-content section article > .heading + .introduction > p:first-child {
     display: inline;
 }
 /*
@@ -521,6 +523,7 @@ supplied by the general .type:after for headings
 .pretext-content article.theorem-like,
 .pretext-content article.definition-like,
 .pretext-content article.example-like,
+.pretext-content article.project-like,
 .pretext-content article.objectives,
 .pretext-content article.outcomes,
 .pretext-content article.remark-like {
@@ -530,9 +533,10 @@ supplied by the general .type:after for headings
 
 .pretext-content article.theorem-like::after,
 .pretext-content article.definition-like::after,
+.pretext-content article.example-like::after,
+.pretext-content article.project-like::after,
 .pretext-content article.objectives::after,
 .pretext-content article.outcomes::after,
-.pretext-content article.example-like::after,
 .pretext-content article.remark-like::after {
     content:'';
     border-bottom: 1px solid #569;
@@ -541,6 +545,13 @@ supplied by the general .type:after for headings
     margin-left: -0.4em;
     padding-top: 0.25em;
     width: 1.5em;
+}
+/* projects get a dotted L */
+.pretext-content article.project-like {
+    border-left: 1px dotted #569;
+}
+.pretext-content article.project-like::after {
+    border-bottom: 1px dotted #569;
 }
 
 /* commentary gets a thicker red L */
@@ -564,6 +575,7 @@ supplied by the general .type:after for headings
 .pretext-content .knowl-content > article.theorem-like,
 .pretext-content .knowl-content > article.definition-like,
 .pretext-content .knowl-content > article.example-like,
+.pretext-content .knowl-content > article.project-like,
 .pretext-content .knowl-content > article.objectives,
 .pretext-content .knowl-content > article.outcomes,
 .pretext-content .knowl-content > article.remark-like {
@@ -573,6 +585,7 @@ supplied by the general .type:after for headings
 .pretext-content .knowl-content > article.theorem-like::after,
 .pretext-content .knowl-content > article.definition-like::after,
 .pretext-content .knowl-content > article.example-like::after,
+.pretext-content .knowl-content > article.project-like::after,
 .pretext-content .knowl-content > article.objectives::after,
 .pretext-content .knowl-content > article.outcomes::after,
 .pretext-content .knowl-content > article.remark-like::after {

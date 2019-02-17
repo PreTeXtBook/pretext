@@ -325,10 +325,6 @@
    * See http://stackoverflow.com/a/199319/1599617
    */
 }
-/* line 36, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
-#primary-navbar .button:focus::-moz-focus-inner, #primary-navbar-sticky-wrapper .button:focus::-moz-focus-inner {
-  border: 0;
-}
 /* line 215, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
 #primary-navbar .button:active, #primary-navbar .button.active, #primary-navbar-sticky-wrapper .button:active, #primary-navbar-sticky-wrapper .button.active {
   box-shadow: rgba(0, 0, 0, 0.5) 0 2px 5px inset;
@@ -1287,10 +1283,6 @@
    * See http://stackoverflow.com/a/199319/1599617
    */
 }
-/* line 36, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
-.pretext-content .summary-links a:focus::-moz-focus-inner {
-  border: 0;
-}
 /* line 42, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_content-ui.scss */
 .pretext-content .summary-links a {
   font-family: "PT Serif", "Times New Roman", Times, serif;
@@ -1316,13 +1308,19 @@
   color: rgba(255, 255, 255, 0.8);
 }
 /* line 85, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_content-ui.scss */
+/*
 .pretext-content .sagecell .ui-button.ui-state-default, .pretext-content .sagecell .ui-button.ui-state-hover, .pretext-content .sagecell .ui-button.ui-state-active, .pretext-content .sagecell .ui-button.ui-state-focus, .pretext-content .sagecell .ui-button.ui-corner-all {
+*/
+.pretext-content .sagecell_evalButton {
   font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 16px;
   padding: 0 0.65em;
 }
 /* line 136, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
+/*
 .pretext-content .sagecell .ui-button.ui-state-default, .pretext-content .sagecell .ui-button.ui-state-hover, .pretext-content .sagecell .ui-button.ui-state-active, .pretext-content .sagecell .ui-button.ui-state-focus, .pretext-content .sagecell .ui-button.ui-corner-all {
+*/
+.pretext-content .sagecell_evalButton {
   cursor: pointer;
   display: inline-block;
   vertical-align: middle;
@@ -1339,9 +1337,11 @@
   border-style: solid;
   font-weight: bold;
   border-radius: 3px;
+/*
   color: #383838;
   border-color: #c4c4c4;
   background-image: linear-gradient(#ebebeb, #c4c4c4);
+*/
 }
 /* line 51, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
 /*
@@ -1357,11 +1357,29 @@
 }
 */
 /* line 141, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
+/*
 .pretext-content .sagecell .ui-button.ui-state-default:hover, .pretext-content .sagecell .ui-button.ui-state-default:focus, .pretext-content .sagecell .ui-button.ui-state-default.hover, .pretext-content .sagecell .ui-button.ui-state-default.focus, .pretext-content .sagecell .ui-button.ui-state-hover:hover, .pretext-content .sagecell .ui-button.ui-state-hover:focus, .pretext-content .sagecell .ui-button.ui-state-hover.hover, .pretext-content .sagecell .ui-button.ui-state-hover.focus, .pretext-content .sagecell .ui-button.ui-state-active:hover, .pretext-content .sagecell .ui-button.ui-state-active:focus, .pretext-content .sagecell .ui-button.ui-state-active.hover, .pretext-content .sagecell .ui-button.ui-state-active.focus, .pretext-content .sagecell .ui-button.ui-state-focus:hover, .pretext-content .sagecell .ui-button.ui-state-focus:focus, .pretext-content .sagecell .ui-button.ui-state-focus.hover, .pretext-content .sagecell .ui-button.ui-state-focus.focus, .pretext-content .sagecell .ui-button.ui-corner-all:hover, .pretext-content .sagecell .ui-button.ui-corner-all:focus, .pretext-content .sagecell .ui-button.ui-corner-all.hover, .pretext-content .sagecell .ui-button.ui-corner-all.focus {
   color: #383838;
   background-image: linear-gradient(#f7f7f7, #ababab);
   border-color: #c4c4c4;
 }
+*/
+.pretext-content .sagecell_evalButton {
+  color: #383838;
+  background-image: linear-gradient(#f7f7f7, #bbbbbb);
+  border-color: #c4c4c4;
+}
+.pretext-content .sagecell_evalButton:hover {
+  color: #181868;
+  background-image: linear-gradient(#bbbbbb, #f7f7f7);
+}
+.pretext-content .sagecell_evalButton:focus,
+.pretext-content .sagecell_evalButton:active {
+  color: #20160b;
+  background-image: linear-gradient(#ff6852, #ffd7d1);
+  border-color: #ff2822;
+}
+
 /* line 145, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
 /*
 .pretext-content .sagecell .ui-button.ui-state-default:active, .pretext-content .sagecell .ui-button.ui-state-default.active, .pretext-content .sagecell .ui-button.ui-state-hover:active, .pretext-content .sagecell .ui-button.ui-state-hover.active, .pretext-content .sagecell .ui-button.ui-state-active:active, .pretext-content .sagecell .ui-button.ui-state-active.active, .pretext-content .sagecell .ui-button.ui-state-focus:active, .pretext-content .sagecell .ui-button.ui-state-focus.active, .pretext-content .sagecell .ui-button.ui-corner-all:active, .pretext-content .sagecell .ui-button.ui-corner-all.active {
