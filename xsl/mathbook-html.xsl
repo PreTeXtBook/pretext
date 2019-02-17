@@ -155,6 +155,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A space-separated list of CSS URLs (points to servers or local files) -->
 <xsl:param name="html.css.extra"  select="''" />
 
+<!-- Calculator -->
+<!-- Possible values are geogebra-classic, geogebra-graphing -->
+<!-- geogebra-geometry, geogebra-3d                          -->
+<!-- Default is empty, meaning the calculator is not wanted. -->
+<xsl:param name="html.calculator" select="''" />
+<xsl:variable name="b-has-calculator" select="not($html.calculator = '')" />
+
 <!-- Annotation -->
 <xsl:param name="html.annotation" select="''" />
 <xsl:variable name="b-activate-hypothesis" select="boolean($html.annotation='hypothesis')" />
@@ -8439,7 +8446,10 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
                         <xsl:copy-of select="$content" />
                     </div>
                 </main>
+                <!-- Overlaid extras, such as a calculator -->
+                <xsl:apply-templates select="." mode="overlays" />
             </div>
+
             <xsl:apply-templates select="$docinfo/analytics" />
             <xsl:call-template name="pytutor-footer" />
             <xsl:call-template name="login-footer" />
@@ -9132,6 +9142,69 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
         </aside> -->
 </xsl:template>
 
+<!-- Overlays -->
+<!-- For example, a graphing calculator tool       -->
+<xsl:template match="*" mode="overlays">
+    <xsl:apply-templates select="." mode="calculator" />
+</xsl:template>
+
+<xsl:template match="*" mode="calculator">
+    <xsl:if test="$b-has-calculator and contains($html.calculator,'geogebra')">
+        <!-- <style>
+            .geogebra-container {
+                position: fixed;
+                bottom: 20px;
+                right: 10px;
+                width: 320px;
+                height: 600px;
+            }
+        </style> -->
+        <div id="geogebra-container" class="geogebra-container">
+            <div id="geogebra-calculator"></div>
+        </div>
+        <script>
+            <xsl:text>
+            <!-- Here is where we could initialize some things to customize the display.                    -->
+            <!-- But the customization should be different depending on classic, graphing, geometry, or 3d. -->
+            <!-- For instance geometry probably does not benefit from showing the grid.                     -->
+            <!-- If this is not in use, no need to set "appletOnLoad" further below.                        -->
+            <!-- var onLoad = function(applet) {
+                applet.setAxisLabels(1,'x','y','z');
+                applet.setGridVisible(1,true);
+                applet.showFullscreenButton(true);
+            }; -->
+            var ggbApp = new GGBApplet({"appName": "</xsl:text>
+            <xsl:value-of select="substring-after($html.calculator,'-')"/>
+            <xsl:text>", </xsl:text>
+            <!-- width and height are required parameters                   -->
+            <!-- All the rest is customizing some things away from defaults -->
+            <!-- (or maybe in some cases explicitly using the defaults)     -->
+            <!-- The last parameters have to do with scaling. This combination allows the 320x600 applet to scale up -->
+            <!-- to the size of the geogebra-container (class) div. The applet will only scale proportionately. With -->
+            <!-- the setup below, only the width can constrain it.                                                   -->
+            <xsl:text>
+                "width": 320,
+                "height": 600,
+                "showToolBar": true,
+                "showAlgebraInput": true,
+                "perspective": "G/A",
+                "algebraInputPosition": "bottom",
+                <!-- "appletOnLoad": onLoad, -->
+                "showFullscreenButton": true,
+                "scaleContainerClass": "geogebra-container",
+                "allowUpscale": true,
+                "autoHeight": true,
+                "disableAutoScale": false},
+            true);
+            window.addEventListener("load", function() {
+                ggbApp.inject('geogebra-calculator');
+            });
+            </xsl:text>
+        </script>
+    </xsl:if>
+</xsl:template>
+
+
 <!-- Table of Contents Contents (Items) -->
 <!-- Includes "active" class for enclosing outer node              -->
 <!-- Node set equality and subset based on unions of subtrees, see -->
@@ -9665,10 +9738,9 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
 </xsl:template>
 
 <!-- GeoGebra -->
-<!-- The JS necessary to load the "App", which can -->
-<!-- then be loaded with base64 or XML versions    -->
+<!-- The JS necessary to load the "App" for a generic calculator -->
 <xsl:template name="geogebra">
-    <xsl:if test="$b-has-geogebra">
+    <xsl:if test="$b-has-calculator and contains($html.calculator,'geogebra')">
         <script src="https://cdn.geogebra.org/apps/deployggb.js"></script>
     </xsl:if>
 </xsl:template>
