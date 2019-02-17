@@ -3,20 +3,13 @@
  *******************************************************************************
  * The main front-end controller for PreTeXt documents.
  *
- * Homepage: http://mathbook.pugetsound.edu
- * Issue Tracker: https://github.com/BooksHTML/mathbook-assets/issues
- * Repository: https://github.com/BooksHTML/mathbook-assets
+ * Homepage: pretextbook.org
+ * Repository: https://github.com/PreTeXtBook/JS_core
  *
  * Authors: Michael DuBois, David Farmer, Rob Beezer
  *
  *******************************************************************************
  */
-
-/*  document.write is deprecated for scripts
-if(typeof MathJax == 'undefined' ) {
-    document.write('<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML-full"></script>')
-}
-*/
 
 /* load MathJax if not already loaded */
 /* omitted in version 0.1
