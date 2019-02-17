@@ -12,6 +12,31 @@
  *******************************************************************************
  */
 
+/*  document.write is deprecated for scripts
+if(typeof MathJax == 'undefined' ) {
+    document.write('<script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML-full"></script>')
+}
+*/
+
+/* load MathJax if not already loaded */
+/* omitted in version 0.1
+if(typeof MathJax == 'undefined' ) {
+    (function(d, script) {
+       script = d.createElement('script');
+       script.type = 'text/javascript';
+       script.async = true;
+       script.onload = function() {
+        // remote script has loaded
+       };
+       script.onerror = function(){
+        // something went wrong
+       }
+       script.src = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML-full';
+       d.getElementsByTagName('head')[0].appendChild(script);
+      }(document));
+}
+*/
+
 /* global MathJax, jQuery */
 // Leading semicolon safeguards against errors in script concatenation
 // Pass dependencies into this closure from the bottom of the file
@@ -397,9 +422,12 @@
       // I am disabling the TOC scrolling because changes in jQuery 3 are
       // incompatible with Espy and I have not been able to figure out
       // how to fix it.  David Farmer 1/1/19
-   //         self.initializeSectionTracking();
-   //         self.scrollToSection(hashOnLoad.substr(1));
-   //         self.$body.addClass(settings.sectionTrackingLoadedClass);
+      // Update 1/28/19  The first and 3rd are okay now, because of a
+      // fix starting at line 104 of the espy code.
+      // still not sure what is up with the 2nd one
+            self.initializeSectionTracking();
+  //          self.scrollToSection(hashOnLoad.substr(1));
+            self.$body.addClass(settings.sectionTrackingLoadedClass);
 
             // TODO expand knowl from hash if there's a match?
         };
