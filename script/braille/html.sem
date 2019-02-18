@@ -29,7 +29,6 @@ no head
 document html
 no a
 para p
-heading1 title
 list li
 table table
 no param
