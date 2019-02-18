@@ -15,7 +15,6 @@
 # You must edit this file as explained in the documentation to get
 # proper output.
 notranslate ntr
-trnote trnote
 contentsheader contentshere
 no hr
 no body
@@ -29,8 +28,6 @@ no head
 document html
 no a
 para p
-list li
-table table
 no param
 pagenum pagenum
 no div
@@ -304,7 +301,6 @@ no a,shape
 no a,shape,rect
 no a,target
 no a,target,_blank
-quotation blockquote
 no br,class
 no br,class,newline
 no center
@@ -340,9 +336,6 @@ no span,class,titlemark
 no table,class
 no table,class,equation
 no td,class,eq-no
-titlepage titlepage
-dedication dedication
-attribution attribution
 no list
 italicx emp
 no attrib
@@ -350,7 +343,6 @@ no meta,name,generator
 no mo,class,MathClass-op
 no mo,class,MathClass-open
 no mo,class,MathClass-bin
-boxline boxline 7
 no base
 no var
 para dd
