@@ -1,0 +1,11 @@
+# liblouis semantic file for PreTeXt-generated HTML
+#
+# History:
+#   2019-02-17: Initiated
+
+# mathjax puts braille Unicode characters into the 
+# "title" element of an SVG, PreTeXt does not otherwise 
+# use a "title" element.  The Unicode characters become 
+# their ASCII Braille equivalents it seems
+
+# Routine elements with uncontroversial semantics
