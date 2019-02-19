@@ -315,6 +315,10 @@ if (reading_questions.length) {
     var this_rq_ans = this.parentNode.previousSibling;
     console.log(".rq_save", this_rq_id);
     var this_rq_text = this_rq_ans.value;
+    if ( /[^\x00-\x7F]/.test(this_rq_text)) {
+        this_rq_text = this_rq_text.replace(/[^\x00-\x7F]/g, "XX");
+        alert("Illegal characters in answer have been replaced by XX");
+    }
 //    this_rq_text = this_rq_text.trim();  // some chrome on windows had trouble with trim
     this_rq_text = $.trim(this_rq_text);   // jQuery trim
   // we have the contents of the answer, so save it to local storage
