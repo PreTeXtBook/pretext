@@ -1252,6 +1252,7 @@ window.addEventListener("load",function(event) {
         e = p_no_id[n];
         if (e.hasAttribute('id')) {
             console.log(e, "was id'd in a previosu round");
+            continue
         }
         console.log("\n                    XXXXXXXXX  p with no id", e);
         prev_p = $(e).prevAll("p");
