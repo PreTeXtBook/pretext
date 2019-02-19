@@ -157,18 +157,17 @@ $("p[id], li[id]").on("click", function(e) {
 
         if(clicks === 1) {
 
+          if (e.target.classList.contains("hl")) {
+              modifyhighlight(e);
+              clicks = 0;
+          } else {
             timer = setTimeout(function() {
-
-                console.log("e.target", e.target, "k", e.target.classList.contains("hl"));
-                if (e.target.classList.contains("hl")) {
-                    modifyhighlight(e)
-                  //  alert("clicked a highlight")
-                } else {
-                    newhighlight()
-         //           alert("Single Click");  //perform single-click action    
-                }
+                newhighlight()
                 clicks = 0;             //after action performed, reset counter
             }, DELAY);
+
+          }
+
 
         } else if (clicks === 2) {
             timer2 = setTimeout(function() {
