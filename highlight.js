@@ -151,9 +151,39 @@ async function display_all_highlights(every_highlight, hl_p_keys, i) {
     return;
 }
 
+var DELAY = 500, clicks = 0, timer = null;
+$("p[id], li[id]").on("click", function(e) {
+            clicks++;  //count clicks
 
-$("p[id], li[id]").on("mouseup",
-  function() {
+        if(clicks === 1) {
+
+          if (e.target.classList.contains("hl")) {
+              modifyhighlight(e);
+              clicks = 0;
+          } else {
+            timer = setTimeout(function() {
+                newhighlight()
+                clicks = 0;             //after action performed, reset counter
+            }, DELAY);
+
+          }
+
+
+        } else if (clicks === 2) {
+            timer2 = setTimeout(function() {
+                clearTimeout(timer);
+       //         alert("Double Click");
+                clicks = 0;
+            }, DELAY/2);
+        } else {
+            clearTimeout(timer);    //prevent single-click action
+            clearTimeout(timer2);    //prevent double-click action
+     //       alert("Triple Click");  //perform triple-click action
+            clicks = 0;             //after action performed, reset counter
+        }
+});
+
+function newhighlight() {
     var this_selection = window.getSelection();
     console.log("UUUUUUUUUUUUUUUUUUUUUUUUUUU");
     console.log("selection", this_selection, "as string", this_selection.toString(), "length", this_selection.toString().length);
@@ -257,7 +287,9 @@ $.ajax({
         return "";
 
     } 
-}); 
+
+}
+//    }); 
 
 
 /*
@@ -271,28 +303,33 @@ $('body').on('mouseleave','.rq_answer', function(){
 });
 */
 
-$('body').on('click','.hl', function(e){  // id on a highlight looks like parentid-hlN with N=1,2,3,...,9
+/*
+$('aaaaaaaabody').on('click','.hl', function(e){  // id on a highlight looks like parentid-hlN with N=1,2,3,...,9
   console.log("clicked hl", this.id);
+*/
 
+function modifyhighlight(e) {
+  this_hl = e.target;
+  console.log("clicked hl", this_hl.id);
 
   var x = e.clientX, y = e.clientY;
   console.log("x", x, "y", y);
   document.getElementById("hlmenu").style.top = (y - 10 + $(window).scrollTop()) + 'px';
   document.getElementById("hlmenu").style.left = (x + 20) + 'px';
   document.getElementById("hlmenu").style.display = 'block';
-  document.getElementsByClassName("hlcopy")[0].setAttribute("data-hlid", this.id);
-  document.getElementsByClassName("hldelete")[0].setAttribute("data-hlid", this.id);
+  document.getElementsByClassName("hlcopy")[0].setAttribute("data-hlid", this_hl.id);
+  document.getElementsByClassName("hldelete")[0].setAttribute("data-hlid", this_hl.id);
 //  tooltipSpan.style.left = (x + 20) + 'px';
 
-  var parent_id = this.id.replace(/^(.*)-[^\-]*$/, "$1");
-  var number_of_this_highlight = this.id.slice(-1);
+  var parent_id = this_hl.id.replace(/^(.*)-[^\-]*$/, "$1");
+  var number_of_this_highlight = this_hl.id.slice(-1);
   var these_highlights = all_highlights[parent_id];
   var this_highlight = these_highlights[number_of_this_highlight-1];
   console.log("parent id", parent_id, "nunber",number_of_this_highlight);
-  var num_child_nodes = this.childNodes.length;
-  console.log("which has", this.childNodes.length, "child nodes");
+  var num_child_nodes = this_hl.childNodes.length;
+  console.log("which has", this_hl.childNodes.length, "child nodes");
   for (var i=0; i < num_child_nodes; ++i) {
-      console.log(i, "node is", this.childNodes[i])
+      console.log(i, "node is", this_hl.childNodes[i])
   }
   console.log("highlights on this item",all_highlights[parent_id], "of which we clicked", these_highlights[number_of_this_highlight - 1],
 "number", number_of_this_highlight, "out of", these_highlights.length );
@@ -300,25 +337,17 @@ $('body').on('click','.hl', function(e){  // id on a highlight looks like parent
       console.log("highilght", i, "is", these_highlights[i])
   }
   console.log("this one starts at", this_highlight["start_nn"], "and ends at", this_highlight["end_nn"]);
-  console.log("$(this)", $(this)); 
-  console.log("$(this).contents", $(this).text()); 
-  console.log("this.innerHTML", this.innerHTML);
-//  $(this).removeClass("hl");
-  if (this.childNodes.length == 1) {   //highlight contains only text
-      if (this.previousSibling.nodeType == 3 && this.nextSibling.nodeType == 3) {  // prev and next are also text
-          console.log("this", this, "this.previousSibling", this.previousSibling, "type", this.previousSibling.nodeType);
+  console.log("$(this_hl)", $(this_hl));
+  console.log("$(this_hl).contents", $(this_hl).text());
+  console.log("this_hl.innerHTML", this_hl.innerHTML);
+
+  if (this_hl.childNodes.length == 1) {   //highlight contains only text
+      if (this_hl.previousSibling.nodeType == 3 && this_hl.nextSibling.nodeType == 3) {  // prev and next are also text
+          console.log("this_hl", this_hl, "this_hl.previousSibling", this_hl.previousSibling, "type", this_hl.previousSibling.nodeType);
       }
   }
 
-
-
-
-
-
-//  $(this).replaceWith(this.innerHTML);
-//  document.getElementById(parent_id).normalize();  // because a previous step creates adjacent text nodes
-
-});
+}
 
 //from https://techoverflow.net/2018/03/30/copying-strings-to-the-clipboard-using-pure-javascript/
 function copyStringToClipboard (str) {

@@ -1207,48 +1207,78 @@ if(typeof MathJax == 'undefined' ) {
 
 //window.onload = function() {
 window.addEventListener("load",function(event) {
-  $(".aside-like").click(function(){
-     $(this).toggleClass("front");
+    $(".aside-like").click(function(){
+       $(this).toggleClass("front");
     });
 /* if you click a knowl in an aside, the 'front' stays the
    same because it toggles twice.  A more elegant solution is welcome */
-  $(".aside-like a").click(function(){
-     $(this).closest(".aside-like").toggleClass("front");
+    $(".aside-like a").click(function(){
+       $(this).closest(".aside-like").toggleClass("front");
     });
 
 /* temporary, so that aside-like knowls open in the body of the document */
 /* later the addafter will be inserted by PTX? */
-  $("a").each(function() {
+    $("a").each(function() {
     if($(this).parents('.aside-like').length) {
         $(this).attr("addafter", "#" + $(this).closest('.aside-like').attr('id') );
         $(this).closest('.aside-like').attr("tabindex", "0");
     }
 });
 
-/* click an image to see a big version */
-/* $('body').on('click','img:not(.draw_on_me):not(.mag_popup)', function(){
-*/
-$('body').on('click','.sbspanel > img:not(.draw_on_me):not(.mag_popup), figure > img:not(.draw_on_me):not(.mag_popup)', function(){
-  var img_big = document.createElement('div');
-  img_big.setAttribute('style', 'background:#fff;');
-  img_big.setAttribute('class', 'mag_popup_container');
-  img_big.innerHTML = '<img src="' + $(this).attr("src") + '" style="width:100%" class="mag_popup"/>';
+    /* click an image to see a big version */
+    $('body').on('click','.sbspanel > img:not(.draw_on_me):not(.mag_popup), figure > img:not(.draw_on_me):not(.mag_popup)', function(){
+        var img_big = document.createElement('div');
+        img_big.setAttribute('style', 'background:#fff;');
+        img_big.setAttribute('class', 'mag_popup_container');
+        img_big.innerHTML = '<img src="' + $(this).attr("src") + '" style="width:100%" class="mag_popup"/>';
  // place_to_put_big_img = $(this).parents(".sbsrow, figure, li").last();
-  place_to_put_big_img = $(this).parents(".sbsrow, figure, li, .cols2 article:nth-of-type(2n)").last();
+        place_to_put_big_img = $(this).parents(".sbsrow, figure, li, .cols2 article:nth-of-type(2n)").last();
   // for .cols2, the even ones have to go inside the previous odd one
-  if (place_to_put_big_img.prop("tagName") == "ARTICLE") {
-      place_to_put_big_img = place_to_put_big_img.prev().children().first();
-  }
-  $(img_big).insertBefore(place_to_put_big_img);
-}
-);
-/* click the big image to make it go away */
-$('body').on('click','img.mag_popup', function(){
-  this.parentNode.remove();
-}
-);
+        if (place_to_put_big_img.prop("tagName") == "ARTICLE") {
+           place_to_put_big_img = place_to_put_big_img.prev().children().first();
+        }
+        $(img_big).insertBefore(place_to_put_big_img);
+    });
 
+    /* click the big image to make it go away */
+    $('body').on('click','img.mag_popup', function(){
+        this.parentNode.remove();
+    });
 
+    /* add ids to p that have none */
+    p_no_id = document.querySelectorAll('.main p:not([id])');
+//    p_no_id.forEach(function(e){
+    for (var n=p_no_id.length - 1; n >= 0; --n) {
+        e = p_no_id[n];
+        if (e.hasAttribute('id')) {
+            console.log(e, "was id'd in a previosu round");
+            continue
+        }
+        console.log("\n                    XXXXXXXXX  p with no id", e);
+        prev_p = $(e).prevAll("p");
+        console.log("prev_p", prev_p, "xx", prev_p[0].id);
+        var parts_found = 1;
+        var parts_to_id = [e];
+        for (var i=0; i < prev_p.length; ++i) {
+            this_previous = prev_p[i];
+            console.log("i", i, "this_previous", this_previous, "id", this_previous.id, "???", this_previous.hasAttribute('id'))
+            if (!this_previous.hasAttribute('id')) {
+                parts_to_id.unshift(this_previous)
+            }
+            else {
+                base_id = this_previous.id;
+                console.log("base_id", base_id);
+                console.log("ready to add id to", parts_to_id);
+                for (var j=0; j < parts_to_id.length; ++j) {
+                    ++parts_found;
+                    var next_id = base_id + "-part" + parts_found.toString();
+                    console.log("parts_found", parts_found, "next_id", next_id);
+                    parts_to_id[j].setAttribute("id", next_id);
+                }
+                break // because we found the id that is the base for the missing ids
+            }
+        }
+    }
 },
 false);
 
@@ -1280,11 +1310,11 @@ window.addEventListener("load",function(event) {
                    console.log("no open knowls being tracked");
                    break;
                 }
-            break;                      
-        }                   
-};              
+            break;
+        }
+};
 },
-false);      
+false);
 
 
 
