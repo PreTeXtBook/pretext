@@ -64,7 +64,6 @@
 
         <p><c>letter</c> and <c>memo</c> elements are not documented.</p>
 
-        <todo>Accomodate subtitles more thoroughly?</todo>
         <fragment xml:id="document-types">
         Article =
             element article {
@@ -287,7 +286,7 @@
             element exercises {
                 MetaDataShortTitleOptional,
                 IntroductionDivision?,
-                (ToDo | Exercise | ExerciseGroup)+,
+                (Exercise | ExerciseGroup)+,
                 ConclusionDivision?
             }
         Solutions =
@@ -674,7 +673,7 @@
     <section>
         <title>Blocks</title>
 
-        <p>A <term>text block</term> is very similar to a paragraph.  It can be an actual paragraph, a sequence of paragraphs enclosed as a block quote (with attribution, perhaps), or a large chunk of unformatted text presented typically in a monospace font.  A <c>todo</c> is text that is never printed in your output, unless you explicitly request that it be printed or inventoried.  You can put it anywhere you might put a paragraph, as a peer, but do not use it within a paragraph (or other places where you are authoring text, it can gum up processing).</p>
+        <p>A <term>text block</term> is very similar to a paragraph.  It can be an actual paragraph, a sequence of paragraphs enclosed as a block quote (with attribution, perhaps), or a large chunk of unformatted text presented typically in a monospace font.</p>
 
         <p>A <term>statement block</term> is used in statements.  What are those?  Theorems have statements, exercises have statements, questions have statements.  Some of these blocks with statements also have proofs, hints, and solutions.  In statements, and their peers, we include text blocks, captioned items, asides, side-by-side layouts, and Sage computations, but exclude many of the numbered and titled division blocks.  The <c>NoCaption</c> variant prohibits all numbered items, but allows placement of items like <c>image</c>.  It also does not include <c>Sage</c>.</p>
 
@@ -686,7 +685,7 @@
 
         <fragment xml:id="block">
         BlockText =
-            Paragraph | BlockQuote | Preformatted | ToDo
+            Paragraph | BlockQuote | Preformatted
         BlockStatementNoCaption =
             BlockText | Aside |
             SideBySideNoCaption | SideBySideGroupNoCaption
@@ -1762,7 +1761,6 @@
         <p>Provisional items, with uncertain futures.</p>
 
         <fragment xml:id="miscellaneous">
-        ToDo = element todo {text}
         </fragment>
     </section>
 
