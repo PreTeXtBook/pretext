@@ -39,6 +39,7 @@ if(typeof MathJax == 'undefined' ) {
     // Define our class on the window object under the Mathbook namespace
     var Mathbook = function(options) {
 
+        var tocscroll_timer = null, tocDELAY = 500;  // to make ToC scrolling less jittery
         var defaults = {
 
             loadingClass: "mathbook-loading",
@@ -121,7 +122,7 @@ if(typeof MathJax == 'undefined' ) {
 
             autoScrollDuration: 400, // ms
             // linear feels mechanical, but we don't want to load jquery.ui.easing
-            autoScrollEasing: "linear",
+            autoScrollEasing: "swing",
 
             // SIDEBAR SETTINGS
             //-----------------
@@ -617,11 +618,20 @@ if(typeof MathJax == 'undefined' ) {
                 targetScrollTop = Math.max(targetScrollTop,0);
                 targetScrollTop = Math.min(targetScrollTop, maxScrollTop);
 
-                self.$toc.animate({
+
+                // When you scroll quickly down the page, the ToC scrolling can become jittery.
+                // So, we don't scroll until things have settled down
+                clearTimeout(tocscroll_timer);
+                tocscroll_timer = setTimeout(function() {
+
+                    self.$toc.animate({
                         scrollTop: targetScrollTop
                     },
                     duration,
                     settings.autoScrollEasing);
+
+                }, tocDELAY);
+
             }
         };
 
