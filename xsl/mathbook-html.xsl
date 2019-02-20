@@ -440,7 +440,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:variable>
-                <xsl:apply-templates select="*">
+                <xsl:apply-templates>
                     <xsl:with-param name="heading-level" select="$next-level"/>
                 </xsl:apply-templates>
             </xsl:otherwise>
@@ -875,7 +875,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <span> </span>
             </h6>
         </xsl:if>
-        <xsl:apply-templates  select="*">
+        <xsl:apply-templates>
             <xsl:with-param name="b-original" select="$b-original" />
         </xsl:apply-templates>
     </section>
@@ -2243,7 +2243,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="block-type"/>
 
-    <xsl:apply-templates select="*" >
+    <xsl:apply-templates>
         <xsl:with-param name="b-original" select="$b-original"/>
         <xsl:with-param name="block-type" select="$block-type"/>
     </xsl:apply-templates>
@@ -2292,7 +2292,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="block-type"/>
 
-    <xsl:apply-templates select="*" >
+    <xsl:apply-templates>
         <xsl:with-param name="b-original" select="$b-original"/>
         <xsl:with-param name="block-type" select="$block-type"/>
     </xsl:apply-templates>
@@ -2341,7 +2341,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="block-type"/>
 
-    <xsl:apply-templates select="*" >
+    <xsl:apply-templates>
         <xsl:with-param name="b-original" select="$b-original"/>
         <xsl:with-param name="block-type" select="$block-type"/>
     </xsl:apply-templates>
@@ -2388,7 +2388,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="block-type"/>
 
-    <xsl:apply-templates select="*" >
+    <xsl:apply-templates>
         <xsl:with-param name="b-original" select="$b-original"/>
         <xsl:with-param name="block-type" select="$block-type"/>
     </xsl:apply-templates>
@@ -2578,14 +2578,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="self::figure or self::table or self::listing">
             <!-- could we just kill captions as metadata?             -->
             <!-- and make a modal template to process them as needed? -->
-            <xsl:apply-templates select="*[not(self::caption)]">
+            <xsl:apply-templates select="node()[not(self::caption)]">
                 <xsl:with-param name="b-original" select="$b-original" />
             </xsl:apply-templates>
             <xsl:apply-templates select="caption" />
         </xsl:when>
         <xsl:when test="self::list">
             <div class="named-list-content">
-                <xsl:apply-templates select="*[not(self::caption)]">
+                <xsl:apply-templates select="node()[not(self::caption)]">
                     <xsl:with-param name="b-original" select="$b-original" />
                 </xsl:apply-templates>
             </div>
@@ -2690,7 +2690,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Simply process contents, could restrict here -->
 <xsl:template match="blockquote" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
-    <xsl:apply-templates select="*" >
+    <xsl:apply-templates>
         <xsl:with-param name="b-original" select="$b-original" />
     </xsl:apply-templates>
 </xsl:template>
@@ -2732,7 +2732,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Simply process contents, could restrict here -->
 <xsl:template match="paragraphs" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
-    <xsl:apply-templates select="*" >
+    <xsl:apply-templates>
         <xsl:with-param name="b-original" select="$b-original" />
     </xsl:apply-templates>
 </xsl:template>
@@ -3451,7 +3451,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="block-type"/>
 
-    <xsl:apply-templates select="*" >
+    <xsl:apply-templates>
         <xsl:with-param name="b-original" select="$b-original"/>
         <xsl:with-param name="block-type" select="$block-type"/>
     </xsl:apply-templates>
@@ -3501,7 +3501,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:otherwise>
             <!-- no explicit "statement", so all content is the statement -->
             <xsl:if test="$b-has-statement">
-                <xsl:apply-templates select="*">
+                <xsl:apply-templates>
                     <xsl:with-param name="b-original" select="$b-original" />
                     <xsl:with-param name="block-type" select="$block-type"/>
                 </xsl:apply-templates>
@@ -3559,7 +3559,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="block-type"/>
 
-    <xsl:apply-templates select="*[not(self::proof)]" >
+    <xsl:apply-templates select="node()[not(self::proof)]" >
         <xsl:with-param name="b-original" select="$b-original"/>
         <xsl:with-param name="block-type" select="$block-type"/>
     </xsl:apply-templates>
@@ -3628,7 +3628,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="block-type"/>
 
-    <xsl:apply-templates select="*" >
+    <xsl:apply-templates>
         <xsl:with-param name="b-original" select="$b-original"/>
         <xsl:with-param name="block-type" select="$block-type"/>
     </xsl:apply-templates>
@@ -3672,7 +3672,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Simply process contents, could restrict here -->
 <xsl:template match="case" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
-    <xsl:apply-templates select="*" >
+    <xsl:apply-templates>
         <xsl:with-param name="b-original" select="$b-original" />
     </xsl:apply-templates>
 </xsl:template>
@@ -3728,7 +3728,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Schema is TextLong, so need to process mixed -->
 <xsl:template match="fn" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
-    <xsl:apply-templates select="*|text()" >
+    <xsl:apply-templates>
         <xsl:with-param name="b-original" select="$b-original" />
     </xsl:apply-templates>
 </xsl:template>
@@ -3838,7 +3838,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- "title" of item is replicated in heading -->
                 <xsl:apply-templates select="." mode="heading-xref-knowl" />
                 <!-- a run of paragraphs, conceivably, title is killed -->
-                <xsl:apply-templates select="*">
+                <xsl:apply-templates>
                     <xsl:with-param name="b-original" select="$b-original" />
                 </xsl:apply-templates>
             </article>
@@ -4084,7 +4084,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="." mode="perm-id" />
             </xsl:attribute>
         </xsl:if>
-        <xsl:apply-templates select="*|text()">
+        <xsl:apply-templates>
             <xsl:with-param name="b-original" select="$b-original" />
         </xsl:apply-templates>
     </p>
@@ -4288,7 +4288,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- "title" of item is replicated in heading -->
                 <xsl:apply-templates select="." mode="heading-xref-knowl" />
                 <!-- a run of paragraphs, conceivably, title is killed -->
-                <xsl:apply-templates select="*">
+                <xsl:apply-templates>
                     <xsl:with-param name="b-original" select="$b-original" />
                 </xsl:apply-templates>
             </article>
@@ -4556,7 +4556,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <span> </span>
             </h6>
         </xsl:if>
-        <xsl:apply-templates select="*">
+        <xsl:apply-templates>
             <xsl:with-param name="b-original" select="$b-original" />
         </xsl:apply-templates>
     </xsl:element>
@@ -4566,7 +4566,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Very simple containiers, to help with movement, use -->
 <xsl:template match="prelude|interlude|postlude">
     <xsl:param name="b-original" select="true()" />
-    <xsl:apply-templates select="*">
+    <xsl:apply-templates>
         <xsl:with-param name="b-original" select="$b-original" />
     </xsl:apply-templates>
 </xsl:template>
@@ -5335,7 +5335,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="figure" mode="panel-html-box">
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="width" select="''" />
-    <xsl:apply-templates select="*[not(&METADATA-FILTER;)][1]" mode="panel-html-box">
+    <xsl:apply-templates select="node()[not(&METADATA-FILTER;)][1]" mode="panel-html-box">
         <xsl:with-param name="b-original" select="$b-original" />
         <xsl:with-param name="width" select="$width" />
     </xsl:apply-templates>
@@ -5344,7 +5344,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="table" mode="panel-html-box">
     <xsl:param name="width" />
     <xsl:param name="b-original" select="true()" />
-    <xsl:apply-templates select="*[not(&METADATA-FILTER;)][1]" mode="panel-html-box" >
+    <xsl:apply-templates select="node()[not(&METADATA-FILTER;)][1]" mode="panel-html-box" >
         <xsl:with-param name="b-original" select="$b-original" />
         <xsl:with-param name="width" select="$width"/>
     </xsl:apply-templates>
@@ -5352,7 +5352,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="listing" mode="panel-html-box">
     <xsl:param name="b-original" select="true()" />
-    <xsl:apply-templates select="*[not(&METADATA-FILTER;)][1]" mode="panel-html-box">
+    <xsl:apply-templates select="node()[not(&METADATA-FILTER;)][1]" mode="panel-html-box">
         <xsl:with-param name="b-original" select="$b-original" />
     </xsl:apply-templates>
 </xsl:template>
