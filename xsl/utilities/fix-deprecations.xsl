@@ -34,6 +34,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Deprecations that can be fixed with a transformation -->
 <!-- In reverse chronological order, with dates           -->
 
+<!-- 2019-02-10  todo element replaced by a prefixed XML comment -->
+<xsl:template match="todo">
+    <xsl:comment>
+        <xsl:text> </xsl:text>
+        <xsl:text>ToDo: </xsl:text>
+        <xsl:apply-templates/>
+        <xsl:text> </xsl:text>
+    </xsl:comment>
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2019-02-10</xsl:with-param>
+        <xsl:with-param name="message">Replacing a &lt;todo&gt; with a prefixed XML comment</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
 <!-- 2019-02-06 Nine unnecessary elements     -->
 <!-- <, >, [, ], *, /, `, braces and brackets -->
 <xsl:template match="less">

@@ -10224,6 +10224,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="date-string" select="'2019-02-12'" />
         <xsl:with-param name="message" select="'a &quot;glossary&quot; needs to have its &quot;defined-term&quot; structured within a &quot;terms&quot;'"/>
     </xsl:call-template>
+    <!--  -->
+    <!-- 2019-02-20  "todo" items now in comments -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//todo" />
+        <xsl:with-param name="date-string" select="'2019-02-20'" />
+        <xsl:with-param name="message" select="'a &quot;todo&quot; element is no longer effective.  Reeplace with an XML comment whose first four non-whitespace characters spell &quot;todo&quot; (with no spaces)'"/>
+    </xsl:call-template>
 </xsl:template>
 
 <!-- Miscellaneous -->
