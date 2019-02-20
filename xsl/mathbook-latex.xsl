@@ -3275,7 +3275,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>}\space\space</xsl:text>
     </xsl:if>
     <xsl:text>&#xa;</xsl:text>
-    <xsl:apply-templates select="*" />
+    <xsl:apply-templates/>
     <!-- drop a par, for next bio, or for big vspace -->
     <xsl:text>\par&#xa;</xsl:text>
 </xsl:template>
@@ -3403,7 +3403,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- DTD: does the next line presume <frontmatter> is required? -->
     <xsl:text>\frontmatter&#xa;</xsl:text>
     <xsl:call-template name="front-cover"/>
-    <xsl:apply-templates select="*[not(self::colophon or self::biography)]" />
+    <xsl:apply-templates select="node()[not(self::colophon or self::biography)]" />
     <xsl:text>%% begin: table of contents&#xa;</xsl:text>
     <xsl:if test="$latex-toc-level > -1">
         <xsl:text>%% Adjust Table of Contents&#xa;</xsl:text>
@@ -3495,7 +3495,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
     <xsl:text>}&#xa;</xsl:text>
-    <xsl:apply-templates select="*" />
+    <xsl:apply-templates/>
 </xsl:template>
 
 <!-- Dedication page is very plain, with a blank obverse     -->
@@ -4122,7 +4122,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="solutions" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:apply-templates select="*"/>
+            <xsl:apply-templates/>
         </xsl:otherwise>
     </xsl:choose>
     <xsl:apply-templates select="." mode="latex-division-footing" />
@@ -4385,7 +4385,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- And then there is a resetting of the carriage. An introduction preceding a   -->
 <!-- webwork needs an additional \par at the end (if there even was an intro)     -->
 <xsl:template match="introduction[following-sibling::webwork-reps]">
-    <xsl:apply-templates select="*" />
+    <xsl:apply-templates/>
     <xsl:text>\par\medskip&#xa;</xsl:text>
 </xsl:template>
 
@@ -4393,7 +4393,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- To stand apart, a medskip and noindent    -->
 <xsl:template match="conclusion[preceding-sibling::webwork-reps]">
     <xsl:text>\par\medskip\noindent </xsl:text>
-    <xsl:apply-templates select="*" />
+    <xsl:apply-templates/>
     <xsl:text>\par&#xa;</xsl:text>
 </xsl:template>
 
@@ -4418,14 +4418,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Simple containier for blocks with structured contents -->
 <!-- Consumers are responsible for surrounding breaks      -->
 <xsl:template match="statement">
-    <xsl:apply-templates select="*" />
+    <xsl:apply-templates/>
 </xsl:template>
 
 <!-- Prelude, Interlude, Postlude -->
 <!-- Very simple containiers, to help with movement, use -->
 <xsl:template match="prelude|interlude|postlude">
     <xsl:text>\par&#xa;</xsl:text>
-    <xsl:apply-templates select="*" />
+    <xsl:apply-templates/>
 </xsl:template>
 
 
@@ -4512,7 +4512,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%&#xa;</xsl:text>
     <!-- statement is required now, to be relaxed in DTD      -->
     <!-- explicitly ignore proof and pickup just for theorems -->
-    <xsl:apply-templates select="*[not(self::proof)]" />
+    <xsl:apply-templates select="node()[not(self::proof)]" />
     <xsl:text>\end{</xsl:text>
         <xsl:value-of select="local-name(.)" />
     <xsl:text>}&#xa;</xsl:text>
@@ -4541,7 +4541,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="internal-id" />
     <xsl:text>}</xsl:text>
     <xsl:text>&#xa;</xsl:text>
-    <xsl:apply-templates select="*" />
+    <xsl:apply-templates/>
     <xsl:text>\end{proofptx}&#xa;</xsl:text>
 </xsl:template>
 
@@ -5162,7 +5162,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:otherwise>
             <!-- no explicit "statement", so all content is the statement -->
             <xsl:if test="$b-has-statement">
-                <xsl:apply-templates select="*">
+                <xsl:apply-templates>
                     <xsl:with-param name="b-original" select="$b-original" />
                 </xsl:apply-templates>
                 <!-- no separator, since no trailing components -->
@@ -5572,7 +5572,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- unstructured, just a bare statement          -->
         <!-- no need to avoid dangerous misunderstandings -->
         <xsl:otherwise>
-            <xsl:apply-templates select="*"/>
+            <xsl:apply-templates/>
         </xsl:otherwise>
     </xsl:choose>
     <xsl:text>\end{</xsl:text>
@@ -5934,7 +5934,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="list">
     <xsl:text>\begin{namedlist}&#xa;</xsl:text>
     <xsl:text>\begin{namedlistcontent}&#xa;</xsl:text>
-    <xsl:apply-templates select="*[not(self::caption)]"/>
+    <xsl:apply-templates select="node()[not(self::caption)]"/>
     <xsl:text>\end{namedlistcontent}&#xa;</xsl:text>
     <xsl:apply-templates select="." mode="pop-footnote-text"/>
     <!-- Titled/environment version deprecated 2017-08-25   -->
@@ -7963,7 +7963,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:text>\begin{figure}&#xa;</xsl:text>
     <xsl:text>\centering&#xa;</xsl:text>
-    <xsl:apply-templates select="*[not(self::caption)]"/>
+    <xsl:apply-templates select="node()[not(self::caption)]"/>
     <xsl:apply-templates select="caption" />
     <xsl:text>\end{figure}&#xa;</xsl:text>
 </xsl:template>
@@ -7979,7 +7979,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:call-template name="leave-vertical-mode" />
     </xsl:if>
     <xsl:text>\begin{listing}&#xa;</xsl:text>
-    <xsl:apply-templates select="*[not(self::caption)]"/>
+    <xsl:apply-templates select="node()[not(self::caption)]"/>
     <xsl:text>\par&#xa;</xsl:text>
     <xsl:apply-templates select="caption" />
     <xsl:text>\end{listing}&#xa;</xsl:text>
@@ -8159,7 +8159,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Deprecated within sidebyside, 2018-05-02 -->
 <!-- "title" should be killed anyway -->
 <xsl:template match="paragraphs" mode="panel-latex-box">
-    <xsl:apply-templates select="*[not(self::title)]" />
+    <xsl:apply-templates select="node()[not(self::title)]" />
 </xsl:template>
 
 <!-- TODO: trash left, top margins (accomodated already) -->
@@ -8193,7 +8193,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- figure, table, listing will contain one item    -->
 <xsl:template match="figure|table|listing" mode="panel-latex-box">
-    <xsl:apply-templates select="*[not(&METADATA-FILTER;)][1]" mode="panel-latex-box" />
+    <xsl:apply-templates select="node()[not(&METADATA-FILTER;)][1]" mode="panel-latex-box" />
 </xsl:template>
 
 <!-- list will have introduction, <list>, conclusion -->
@@ -8456,7 +8456,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:text>\begin{table}&#xa;</xsl:text>
     <xsl:text>\centering&#xa;</xsl:text>
-    <xsl:apply-templates select="*[not(self::caption)]" />
+    <xsl:apply-templates select="node()[not(self::caption)]" />
     <xsl:apply-templates select="caption" />
     <xsl:text>\end{table}&#xa;</xsl:text>
 </xsl:template>
