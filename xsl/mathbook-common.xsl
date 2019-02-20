@@ -142,11 +142,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="project.answer" select="''" />
 <xsl:param name="project.solution" select="''" />
 
-<!-- Author tools are for drafts, mostly "todo" items                 -->
-<!-- and "provisional" citations and cross-references                 -->
-<!-- Default is to hide todo's, inline provisionals                   -->
-<!-- Otherwise ('yes'), todo's in red paragraphs, provisionals in red -->
-<xsl:param name="author-tools" select="'no'" />
+<!-- Author tools are for drafts, mostly "todo" items  -->
+<!-- and "provisional" citations and cross-references  -->
+<!-- Default is to hide todo's, inline provisionals    -->
+<!-- Otherwise ('yes'), todo's show in red paragraphs, -->
+<!-- provisional cross-references show in red          -->
+<xsl:param name="author.tools" select="''" />
+<!-- The dashed version is deprecated 2019-02-10,      -->
+<!-- but we still recognize it.  Move to variable bad  -->
+<!-- bank once killed.                                 -->
+<xsl:param name="author-tools" select="''" />
 <!-- The autoname parameter is deprecated (2017-07-25) -->
 <!-- Replace with docinfo/cross-references/@text       -->
 <xsl:param name="autoname" select="''" />
@@ -462,6 +467,32 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB: Presumed to not have a trailing slash                  -->
 <xsl:variable name="baseurl">
     <xsl:value-of select="$docinfo/html/baseurl/@href"/>
+</xsl:variable>
+
+<!-- The new version can return to the generic version  -->
+<!-- once we kill the dashed version for author use.    -->
+<xsl:variable name="author-tools-new">
+    <xsl:choose>
+        <!-- respect old switch, if set properly -->
+        <!-- but don't error check or anything   -->
+        <xsl:when test="$author-tools = 'yes'">
+            <xsl:text>yes</xsl:text>
+        </xsl:when>
+        <xsl:when test="$author-tools = 'no'">
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <xsl:when test="$author.tools = 'yes'">
+            <xsl:text>yes</xsl:text>
+        </xsl:when>
+        <xsl:when test="$author.tools = 'no'">
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <!-- could error-check not-empty here -->
+        <!-- default is "no"                  -->
+        <xsl:otherwise>
+            <xsl:text>no</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:variable>
 
 <!-- ########################### -->

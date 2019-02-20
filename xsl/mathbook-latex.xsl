@@ -1962,7 +1962,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$document-root/backmatter/index-part | $document-root//index-list">
         <!-- See http://tex.blogoverflow.com/2012/09/dont-forget-to-run-makeindex/ for "imakeidx" usage -->
         <xsl:text>%% Support for index creation&#xa;</xsl:text>
-        <xsl:if test="$author-tools='no'">
+        <xsl:if test="$author-tools-new = 'no'">
             <xsl:text>%% imakeidx package does not require extra pass (as with makeidx)&#xa;</xsl:text>
             <xsl:text>%% Title of the "Index" section set via a keyword&#xa;</xsl:text>
             <xsl:text>%% Language support for the "see" and "see also" phrases&#xa;</xsl:text>
@@ -1983,7 +1983,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
         </xsl:if>
-        <xsl:if test="$author-tools='yes'">
+        <xsl:if test="$author-tools-new = 'yes'">
             <xsl:text>%% author-tools = 'yes' activates marginal notes about index&#xa;</xsl:text>
             <xsl:text>%% and supresses the actual creation of the index itself&#xa;</xsl:text>
             <xsl:text>\usepackage{showidx}&#xa;</xsl:text>
@@ -2059,7 +2059,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="$latex.watermark.scale" />
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="$author-tools='yes'" >
+    <xsl:if test="$author-tools-new = 'yes'" >
         <xsl:text>%% Collected author tools options (author-tools='yes')&#xa;</xsl:text>
         <xsl:text>%% others need to be elsewhere, these are simply package additions&#xa;</xsl:text>
         <xsl:text>\usepackage{showkeys}&#xa;</xsl:text>
@@ -10226,7 +10226,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="inline-warning">
     <xsl:param name="warning" />
     <!-- Color for author tools version -->
-    <xsl:if test="$author-tools='yes'" >
+    <xsl:if test="$author-tools-new = 'yes'" >
         <xsl:text>\textcolor{red}</xsl:text>
     </xsl:if>
     <xsl:text>{</xsl:text>
@@ -10241,7 +10241,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Marginpar's from http://www.f.kth.se/~ante/latex.php -->
 <xsl:template name="margin-warning">
     <xsl:param name="warning" />
-    <xsl:if test="$author-tools='yes'" >
+    <xsl:if test="$author-tools-new = 'yes'" >
         <xsl:text>\marginpar[\raggedleft\footnotesize\textcolor{red}{</xsl:text>
         <xsl:value-of select="$warning" />
         <xsl:text>}]{\raggedright\footnotesize\textcolor{red}{</xsl:text>

@@ -9811,7 +9811,7 @@ var scJsHost = (("https:" == document.location.protocol) ? "https://secure." : "
     <xsl:param name="warning" />
     <xsl:element name="span">
         <!-- Color for author tools version -->
-        <xsl:if test="$author-tools='yes'" >
+        <xsl:if test="$author-tools-new = 'yes'" >
             <xsl:attribute name="style">color:red</xsl:attribute>
         </xsl:if>
         <xsl:text>(((</xsl:text>
@@ -9825,7 +9825,7 @@ var scJsHost = (("https:" == document.location.protocol) ? "https://secure." : "
 <!-- http://www.sitepoint.com/web-foundations/floating-clearing-css/ -->
 <xsl:template name="margin-warning">
     <xsl:param name="warning" />
-    <xsl:if test="$author-tools='yes'" >
+    <xsl:if test="$author-tools-new = 'yes'" >
         <xsl:element name="span">
             <xsl:attribute name="style">color:red;float:right;width:20em;margin-right:-25em;</xsl:attribute>
             <xsl:value-of select="$warning" />
