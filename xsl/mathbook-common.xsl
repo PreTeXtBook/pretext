@@ -10232,14 +10232,18 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- so we explicitly kill it here.                  -->
 <xsl:template match="pagebreak"/>
 
-<!-- ToDo's are silent unless requested           -->
-<!-- as part of an author's report, then marginal -->
-<xsl:template match="todo">
+<!-- ToDo's are silent unless requested as part of an -->
+<!-- author's report, then marginal.  They exist in   -->
+<!-- source as prefixed comments, and that prefix     -->
+<!-- suffices as part of the output                   -->
+<xsl:template match="comment()[translate(substring(normalize-space(string(.)), 1, 4), &UPPERCASE;, &LOWERCASE;) = 'todo']">
     <xsl:call-template name="margin-warning">
         <xsl:with-param name="warning">
-            <xsl:apply-templates select="." mode="type-name" />
-            <xsl:text>: </xsl:text>
-            <xsl:apply-templates />
+            <xsl:call-template name="strip-leading-whitespace">
+                <xsl:with-param name="text">
+                    <xsl:value-of select="."/>
+                </xsl:with-param>
+            </xsl:call-template>
         </xsl:with-param>
     </xsl:call-template>
 </xsl:template>
@@ -10456,6 +10460,9 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 
 <!-- 2017-07-16  killed, from 2015-03-13 deprecation -->
 <xsl:template match="paragraph" />
+
+<!-- 2019-02-20  deprecated and killed simultaneously -->
+<xsl:template match="todo"/>
 
 
 <!-- Sometimes this template is useful to see which    -->
