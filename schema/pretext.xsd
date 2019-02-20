@@ -339,7 +339,7 @@
               <xs:complexType mixed="true">
                 <xs:choice>
                   <xs:group ref="TextSimple"/>
-                  <xs:group maxOccurs="unbounded" ref="Line"/>
+                  <xs:group maxOccurs="unbounded" ref="ShortLine"/>
                 </xs:choice>
               </xs:complexType>
             </xs:element>
@@ -347,7 +347,7 @@
               <xs:complexType mixed="true">
                 <xs:choice>
                   <xs:group ref="TextSimple"/>
-                  <xs:group maxOccurs="unbounded" ref="Line"/>
+                  <xs:group maxOccurs="unbounded" ref="ShortLine"/>
                 </xs:choice>
               </xs:complexType>
             </xs:element>
@@ -371,7 +371,7 @@
           <xs:complexType mixed="true">
             <xs:choice>
               <xs:group ref="TextSimple"/>
-              <xs:group maxOccurs="unbounded" ref="Line"/>
+              <xs:group maxOccurs="unbounded" ref="ShortLine"/>
             </xs:choice>
           </xs:complexType>
         </xs:element>
@@ -379,7 +379,7 @@
           <xs:complexType mixed="true">
             <xs:choice>
               <xs:group ref="TextSimple"/>
-              <xs:group maxOccurs="unbounded" ref="Line"/>
+              <xs:group maxOccurs="unbounded" ref="ShortLine"/>
             </xs:choice>
           </xs:complexType>
         </xs:element>
@@ -917,11 +917,20 @@
       <xs:attributeGroup ref="MetaDataTitleOptional"/>
     </xs:complexType>
   </xs:element>
-  <xs:group name="Line">
+  <xs:group name="ShortLine">
     <xs:sequence>
       <xs:element name="line">
         <xs:complexType mixed="true">
           <xs:group ref="TextShort"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="LongLine">
+    <xs:sequence>
+      <xs:element name="line">
+        <xs:complexType mixed="true">
+          <xs:group ref="TextLong"/>
         </xs:complexType>
       </xs:element>
     </xs:sequence>
@@ -1583,7 +1592,7 @@
     <xs:complexType mixed="true">
       <xs:choice>
         <xs:group ref="TextLong"/>
-        <xs:group maxOccurs="unbounded" ref="Line"/>
+        <xs:group maxOccurs="unbounded" ref="LongLine"/>
         <xs:group maxOccurs="unbounded" ref="Paragraph"/>
       </xs:choice>
       <xs:attribute name="halign">
@@ -2117,8 +2126,8 @@
   <xs:element name="attribution">
     <xs:complexType mixed="true">
       <xs:choice>
-        <xs:group ref="TextShort"/>
-        <xs:group maxOccurs="unbounded" ref="Line"/>
+        <xs:group ref="TextLong"/>
+        <xs:group maxOccurs="unbounded" ref="LongLine"/>
       </xs:choice>
     </xs:complexType>
   </xs:element>

@@ -880,8 +880,10 @@
                 Paragraph+,
                 Attribution?
             }
-        Line =
+        ShortLine =
             element line {TextShort}
+        LongLine =
+            element line {TextLong}
         </fragment>
     </section>
 
@@ -1210,7 +1212,7 @@
                 attribute colspan {text}?,
                 (
                     TextLong |
-                    Line+ |
+                    LongLine+ |
                     Paragraph+
                 )
             }
@@ -1658,7 +1660,7 @@
         <fragment xml:id="attribution">
         Attribution =
             element attribution {
-                (TextShort | Line+)
+                (TextLong | LongLine+)
             }
         </fragment>
 
@@ -1818,15 +1820,15 @@
         Author =
             element author {
                 element personname {TextSimple},
-                element department {TextSimple | Line+}?,
-                element institution {TextSimple | Line+}?,
+                element department {TextSimple | ShortLine+}?,
+                element institution {TextSimple | ShortLine+}?,
                 element email {text}?
             }
         Editor =
             element editor {
                 element personname {TextSimple},
-                element department {TextSimple | Line+}?,
-                element institution {TextSimple | Line+}?,
+                element department {TextSimple | ShortLine+}?,
+                element institution {TextSimple | ShortLine+}?,
                 element email {text}?
             }
         Credit =
