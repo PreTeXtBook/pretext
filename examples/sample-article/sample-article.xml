@@ -3930,6 +3930,7 @@ the xsltproc executable.
                         <cell>
                              <line>I am the Lorax.</line>
                              <line>I speak for the trees.</line>
+                             <line>Self-referential: <xref ref="table-multiline-cells" text="type-global"/></line>
                         </cell>
                         <cell>
                              <line>Look at me!</line>
