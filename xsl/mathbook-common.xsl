@@ -227,7 +227,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:strip-space elements="exercise hint answer solution" />
 <!-- The next three are containers -->
 <xsl:strip-space elements="prelude interlude postlude" />
-<xsl:strip-space elements="blockquote" />
+<xsl:strip-space elements="aside blockquote" />
 <xsl:strip-space elements="list terms" />
 <xsl:strip-space elements="sage program console task" />
 <xsl:strip-space elements="exercisegroup" />
