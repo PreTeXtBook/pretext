@@ -10262,6 +10262,14 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="date-string" select="'2019-02-20'" />
         <xsl:with-param name="message" select="'a &quot;todo&quot; element is no longer effective.  Reeplace with an XML comment whose first four non-whitespace characters spell &quot;todo&quot; (with no spaces)'"/>
     </xsl:call-template>
+    <!--  -->
+    <!-- 2019-02-20  replace author-tools with author.tools              -->
+    <!-- Still exists and is respected, move to Variable Bad Bank later  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2019-02-20'" />
+        <xsl:with-param name="message" select="'the  author-tools  parameter has been replaced by the functionally equivalent  author.tools'" />
+            <xsl:with-param name="incorrect-use" select="not($author-tools = '')"/>
+    </xsl:call-template>
 </xsl:template>
 
 <!-- Miscellaneous -->
