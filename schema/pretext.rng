@@ -732,7 +732,6 @@
       </optional>
       <oneOrMore>
         <choice>
-          <ref name="ToDo"/>
           <ref name="Exercise"/>
           <ref name="ExerciseGroup"/>
         </choice>
@@ -781,7 +780,6 @@
       <ref name="Paragraph"/>
       <ref name="BlockQuote"/>
       <ref name="Preformatted"/>
-      <ref name="ToDo"/>
     </choice>
   </define>
   <define name="BlockStatementNoCaption">
@@ -2293,11 +2291,6 @@
           <ref name="SideBySideNoCaption"/>
         </choice>
       </oneOrMore>
-    </element>
-  </define>
-  <define name="ToDo">
-    <element name="todo">
-      <text/>
     </element>
   </define>
   <define name="Attribution">

@@ -664,7 +664,6 @@
           <xs:sequence>
             <xs:group minOccurs="0" ref="IntroductionDivision"/>
             <xs:choice maxOccurs="unbounded">
-              <xs:element ref="todo"/>
               <xs:element ref="exercise"/>
               <xs:element ref="exercisegroup"/>
             </xs:choice>
@@ -707,7 +706,6 @@
       <xs:group ref="Paragraph"/>
       <xs:element ref="blockquote"/>
       <xs:element ref="pre"/>
-      <xs:element ref="todo"/>
     </xs:choice>
   </xs:group>
   <xs:group name="BlockStatementNoCaption">
@@ -2122,7 +2120,6 @@
       </xs:element>
     </xs:sequence>
   </xs:group>
-  <xs:element name="todo" type="xs:string"/>
   <xs:element name="attribution">
     <xs:complexType mixed="true">
       <xs:choice>

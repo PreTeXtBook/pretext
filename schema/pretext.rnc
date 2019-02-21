@@ -326,7 +326,7 @@
             element exercises {
                 MetaDataShortTitleOptional,
                 IntroductionDivision?,
-                (ToDo | Exercise | ExerciseGroup)+,
+                (Exercise | ExerciseGroup)+,
                 ConclusionDivision?
             }
         Solutions =
@@ -348,7 +348,7 @@
         
         
         BlockText =
-            Paragraph | BlockQuote | Preformatted | ToDo
+            Paragraph | BlockQuote | Preformatted
         BlockStatementNoCaption =
             BlockText | Aside |
             SideBySideNoCaption | SideBySideGroupNoCaption
@@ -1034,7 +1034,6 @@
             }
         
         
-        ToDo = element todo {text}
         
         
         
