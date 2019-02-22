@@ -6283,10 +6283,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </xsl:choose>
                 </xsl:attribute>
             </xsl:if>
-            <!-- process the actual contents -->
-            <xsl:apply-templates select="$the-cell">
-                <xsl:with-param name="b-original" select="$b-original" />
-            </xsl:apply-templates>
+            <!-- process the actual contents           -->
+            <!-- condition on indicators of structure  -->
+            <!-- All "line", all "p", or mixed content -->
+            <!-- TODO: is it important to pass $b-original -->
+            <!-- flag into template for "line" elements?   -->
+            <xsl:choose>
+                <xsl:when test="$the-cell/line">
+                    <xsl:apply-templates select="$the-cell/line"/>
+                </xsl:when>
+                <xsl:when test="$the-cell/p">
+                    <xsl:apply-templates select="$the-cell/p">
+                        <xsl:with-param name="b-original" select="$b-original"/>
+                    </xsl:apply-templates>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates select="$the-cell">
+                        <xsl:with-param name="b-original" select="$b-original"/>
+                    </xsl:apply-templates>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:element>
         <!-- recurse forward, perhaps to an empty cell -->
         <xsl:call-template name="row-cells">
@@ -6300,11 +6316,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- we bail out of recursion with no action taken -->
 </xsl:template>
 
-<xsl:template match="tabular//line">
-    <xsl:apply-templates />
+<!-- Perhaps this could be consolidated     -->
+<!-- with other uses of the "line" element? -->
+<xsl:template match="tabular/row/cell/line">
+    <xsl:apply-templates/>
     <!-- is there a next line to separate? -->
     <xsl:if test="following-sibling::line">
-        <br />
+        <br/>
     </xsl:if>
 </xsl:template>
 
