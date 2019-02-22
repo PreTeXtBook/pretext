@@ -6640,8 +6640,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- superfluous.  So we provide a hierarchy of templates to       -->
 <!-- determine if structure and content yield output.              -->
 
-<!-- authored exercise, terminal (leaf) tasks -->
-<xsl:template match="exercise|task[not(task)]" mode="dry-run">
+<!-- authored exercise, terminal (leaf) tasks, webwork stage -->
+<xsl:template match="exercise|task[not(task)]|stage" mode="dry-run">
     <xsl:param name="b-has-statement" />
     <xsl:param name="b-has-hint" />
     <xsl:param name="b-has-answer" />
@@ -6656,6 +6656,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         </xsl:when>
         <!-- effective squash just for LaTeX -->
         <xsl:when test="myopenmath" />
+        <!-- everything else, including a "stage" of a webwork problem -->
         <xsl:otherwise>
             <xsl:if test="$b-has-statement or ($b-has-hint and hint) or ($b-has-answer and answer) or ($b-has-solution and solution)">
                 <xsl:text>X</xsl:text>

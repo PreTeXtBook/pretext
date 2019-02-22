@@ -4619,15 +4619,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <!-- condition on how statement, hint, answer, solution are presented -->
     <xsl:choose>
-        <!-- webwork, structured with "stage" matches first -->
+        <!-- webwork, structured with "stage" matches first  -->
+        <!-- Above provides infrastructure for the exercise, -->
+        <!-- we pass the stage on to a WW-specific template  -->
+        <!-- since each stage may have hints, answers, and   -->
+        <!-- solutions.                                      -->
         <xsl:when test="webwork-reps/static/stage">
-            <!-- Needs this fix, but requires more care                                              -->
-            <!-- <xsl:apply-templates select="webwork-reps/static/stage" mode="exercise-components"> -->
             <xsl:apply-templates select="webwork-reps/static/stage">
                 <xsl:with-param name="b-original" select="true()" />
                 <xsl:with-param name="b-has-statement" select="true()" />
                 <xsl:with-param name="b-has-hint"      select="$b-has-inline-hint" />
-                <!-- 2018-09-21: WW answers may become available -->
                 <xsl:with-param name="b-has-answer"    select="$b-has-inline-answer" />
                 <xsl:with-param name="b-has-solution"  select="$b-has-inline-solution" />
             </xsl:apply-templates>
@@ -4736,15 +4737,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- condition on how statement, hint, answer, solution are presented -->
         <xsl:choose>
             <!-- webwork, structured with "stage" matches first -->
+            <!-- Above provides infrastructure for the exercise, -->
+            <!-- we pass the stage on to a WW-specific template  -->
+            <!-- since each stage may have hints, answers, and   -->
+            <!-- solutions.                                      -->
             <xsl:when test="webwork-reps/static/stage">
-                <!-- Needs this fix, but requires more care                                              -->
-                <!-- <xsl:apply-templates select="webwork-reps/static/stage" mode="exercise-components"> -->
-                <xsl:apply-templates select="webwork-reps/static/stage">
+                <xsl:apply-templates select="webwork-reps/static/stage" mode="solutions">
                     <xsl:with-param name="b-original" select="false()" />
                     <xsl:with-param name="purpose" select="$purpose" />
                     <xsl:with-param name="b-has-statement" select="$b-has-statement" />
                     <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
-                    <!-- 2018-09-21: WW answers may become available -->
                     <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
                     <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
                 </xsl:apply-templates>
@@ -4868,19 +4870,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- condition on how statement, hint, answer, solution are presented -->
     <xsl:choose>
         <!-- webwork, structured with "stage" matches first -->
-        <!-- Someplace, something like  -->
-        <!-- \par\medskip\noindent% -->
-        <!-- \textbf{Part 2.}\quad  -->
-        <!-- needs to happen for each stage in a solution -->
-        <!-- maybe based on a dry-run -->
+        <!-- Above provides infrastructure for the exercise, -->
+        <!-- we pass the stage on to a WW-specific template  -->
+        <!-- since each stage may have hints, answers, and   -->
+        <!-- solutions.                                      -->
         <xsl:when test="webwork-reps/static/stage">
-            <!-- Needs this fix, but requires more care                                              -->
-            <!-- <xsl:apply-templates select="webwork-reps/static/stage" mode="exercise-components"> -->
             <xsl:apply-templates select="webwork-reps/static/stage">
                 <xsl:with-param name="b-original" select="true()" />
                 <xsl:with-param name="b-has-statement" select="$b-has-statement" />
                 <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
-                <!-- 2018-09-21: WW answers may become available -->
                 <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
                 <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
             </xsl:apply-templates>
@@ -5006,15 +5004,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- condition on how statement, hint, answer, solution are presented -->
         <xsl:choose>
             <!-- webwork, structured with "stage" matches first -->
+            <!-- Above provides infrastructure for the exercise, -->
+            <!-- we pass the stage on to a WW-specific template  -->
+            <!-- since each stage may have hints, answers, and   -->
+            <!-- solutions.                                      -->
             <xsl:when test="webwork-reps/static/stage">
-                <!-- Needs this fix, but requires more care                                              -->
-                <!-- <xsl:apply-templates select="webwork-reps/static/stage" mode="exercise-components"> -->
-                <xsl:apply-templates select="webwork-reps/static/stage">
+                <xsl:apply-templates select="webwork-reps/static/stage" mode="solutions">
                     <xsl:with-param name="b-original" select="false()" />
                     <xsl:with-param name="purpose" select="$purpose" />
                     <xsl:with-param name="b-has-statement" select="$b-has-statement" />
                     <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
-                    <!-- 2018-09-21: WW answers may become available -->
                     <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
                     <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
                 </xsl:apply-templates>
@@ -5438,10 +5437,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- by a WW server.  These may not be part of an author's source -->
 <!-- and so is not part of the PTX schema.                        -->
 
-<!-- A WW stage is a division of a problem.  Online, it requires  -->
-<!-- a reader to complete a stage before moving on to the next    -->
+<!-- A WW "stage" is a division of a problem.  It requires a      -->
+<!-- reader to complete a stage before moving on to the next      -->
 <!-- stage.  We realize each stage in print as a "Part", which    -->
-<!-- has a statement and optionally, hints and solutions.         -->
+<!-- has a statement and optionally, hints, answers and solutions.-->
 
 <!-- Fail if WeBWorK extraction and merging has not been done -->
 <xsl:template match="webwork[node()|@*]">
@@ -5458,8 +5457,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="not(preceding-sibling::stage)">
         <text>\leavevmode\par\noindent%&#xa;</text>
     </xsl:if>
-    <!-- TOD: internationalize "Part" -->
-    <xsl:text>\textbf{Part </xsl:text>
+    <!-- e.g., Part 2. -->
+    <xsl:text>\textbf{</xsl:text>
+    <xsl:call-template name="type-name">
+        <xsl:with-param name="string-id" select="'part'" />
+    </xsl:call-template>
+    <xsl:text> </xsl:text>
     <xsl:apply-templates select="." mode="serial-number" />
     <xsl:text>.}\quad </xsl:text>
     <xsl:apply-templates select="." mode="exercise-components">
@@ -5471,6 +5474,52 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:apply-templates>
     <xsl:if test="following-sibling::stage">
         <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="webwork-reps/static/stage" mode="solutions">
+    <xsl:param name="b-original"/>
+    <xsl:param name="purpose"/>
+    <xsl:param name="b-has-statement"/>
+    <xsl:param name="b-has-hint"/>
+    <xsl:param name="b-has-answer"/>
+    <xsl:param name="b-has-solution"/>
+
+    <!-- When we subset exercises for solutions, an entire -->
+    <!-- "stage" can become empty.  So we do a dry-run     -->
+    <!-- and if there is no content at all we bail out.    -->
+     <xsl:variable name="dry-run">
+        <xsl:apply-templates select="." mode="dry-run">
+            <xsl:with-param name="b-has-statement" select="$b-has-statement" />
+            <xsl:with-param name="b-has-hint" select="$b-has-hint" />
+            <xsl:with-param name="b-has-answer" select="$b-has-answer" />
+            <xsl:with-param name="b-has-solution" select="$b-has-solution" />
+        </xsl:apply-templates>
+    </xsl:variable>
+
+    <xsl:if test="not($dry-run = '')">
+        <xsl:if test="not(preceding-sibling::stage)">
+            <text>\leavevmode\par\noindent%&#xa;</text>
+        </xsl:if>
+        <!-- e.g., Part 2. -->
+        <xsl:text>\textbf{</xsl:text>
+        <xsl:call-template name="type-name">
+            <xsl:with-param name="string-id" select="'part'" />
+        </xsl:call-template>
+        <xsl:text> </xsl:text>
+        <xsl:apply-templates select="." mode="serial-number" />
+        <xsl:text>.}\quad </xsl:text>
+        <xsl:apply-templates select="." mode="exercise-components">
+            <xsl:with-param name="b-original" select="$b-original"/>
+            <xsl:with-param name="purpose" select="$purpose"/>
+            <xsl:with-param name="b-has-statement" select="$b-has-statement"/>
+            <xsl:with-param name="b-has-hint" select="$b-has-hint"/>
+            <xsl:with-param name="b-has-answer" select="$b-has-answer"/>
+            <xsl:with-param name="b-has-solution" select="$b-has-solution"/>
+        </xsl:apply-templates>
+        <xsl:if test="following-sibling::stage">
+            <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
+        </xsl:if>
     </xsl:if>
 </xsl:template>
 
