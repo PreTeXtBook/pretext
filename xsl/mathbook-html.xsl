@@ -140,7 +140,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="html.css.server" select="'https://pretextbook.org'" />
 <xsl:param name="html.css.version" select="'0.2'" />
 <xsl:param name="html.js.server" select="'https://pretextbook.org'" />
-<xsl:param name="html.js.version" select="'0.1'" />
+<xsl:param name="html.js.version" select="'0.11'" />
 <xsl:param name="html.css.colorfile" select="''" />
 <xsl:variable name="html-css-colorfile">
     <xsl:choose>
@@ -7577,6 +7577,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
        <xsl:text>var role = 'student';&#xa;</xsl:text>
        <xsl:text>var guest_access = true;&#xa;</xsl:text>
        <xsl:text>var login_required = false;&#xa;</xsl:text>
+       <xsl:text>var js_version = </xsl:text><xsl:value-of select='$html.js.version'/><xsl:text>;&#xa;</xsl:text>
     </script>
 </xsl:template>
 
@@ -8931,6 +8932,11 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
     </xsl:choose>
 </xsl:template>
 
+<xsl:template match="*" mode="calculator-toggle">
+    <div id="calculator-toggle" class="toolbar-item button toggle" title="Show calculator">Calc</div>
+</xsl:template>
+
+
 <!-- Compact Buttons -->
 <!-- These get smashed consecutively into a single "tool-bar" -->
 <xsl:template match="*" mode="compact-buttons">
@@ -9038,6 +9044,10 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
                                     <xsl:apply-templates select="." mode="index-button" />
                                 </xsl:otherwise>
                             </xsl:choose>
+                            <!-- Button to show/hide the calculator -->
+                            <xsl:if test="$b-has-calculator">
+                                <xsl:apply-templates select="." mode="calculator-toggle" />
+                            </xsl:if>
                             <!-- Span to encase Prev/Up/Next buttons and float right    -->
                             <!-- Each button gets an id for keypress recognition/action -->
                             <xsl:element name="span">
@@ -9150,16 +9160,7 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
 
 <xsl:template match="*" mode="calculator">
     <xsl:if test="$b-has-calculator and contains($html.calculator,'geogebra')">
-        <!-- <style>
-            .geogebra-container {
-                position: fixed;
-                bottom: 20px;
-                right: 10px;
-                width: 320px;
-                height: 600px;
-            }
-        </style> -->
-        <div id="geogebra-container" class="geogebra-container">
+        <div id="calculator-container" class="calculator-container" style="display: none">
             <div id="geogebra-calculator"></div>
         </div>
         <script>
@@ -9179,26 +9180,25 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
             <!-- width and height are required parameters                   -->
             <!-- All the rest is customizing some things away from defaults -->
             <!-- (or maybe in some cases explicitly using the defaults)     -->
-            <!-- The last parameters have to do with scaling. This combination allows the 320x600 applet to scale up -->
-            <!-- to the size of the geogebra-container (class) div. The applet will only scale proportionately. With -->
-            <!-- the setup below, only the width can constrain it.                                                   -->
+            <!-- The last parameters have to do with scaling. This combination allows the 330x600 applet -->
+            <!-- to scale up or down to the width of the contining div with class calculator-container.  -->
+            <!-- The applet's height will scale proportionately.                                         -->
             <xsl:text>
-                "width": 320,
+                "width": 330,
                 "height": 600,
                 "showToolBar": true,
                 "showAlgebraInput": true,
                 "perspective": "G/A",
                 "algebraInputPosition": "bottom",
                 <!-- "appletOnLoad": onLoad, -->
-                "showFullscreenButton": true,
-                "scaleContainerClass": "geogebra-container",
+                "scaleContainerClass": "calculator-container",
                 "allowUpscale": true,
                 "autoHeight": true,
                 "disableAutoScale": false},
             true);
-            window.addEventListener("load", function() {
-                ggbApp.inject('geogebra-calculator');
-            });
+            <!--   The calculator is created by                    -->
+            <!--   ggbApp.inject('geogebra-calculator');           -->
+            <!--   which is inserted by code in pretext_add_on.js  -->
             </xsl:text>
         </script>
     </xsl:if>
@@ -9709,6 +9709,7 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
     <script src="{$html.js.server}/js/lib/jquery.sticky.js" ></script>
     <script src="{$html.js.server}/js/lib/jquery.espy.min.js"></script>
     <script src="{$html.js.server}/js/{$html.js.version}/pretext.js"></script>
+    <script src="{$html.js.server}/js/{$html.js.version}/pretext_add_on.js"></script>
 </xsl:template>
 
 <!-- Font header -->
