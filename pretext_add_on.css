@@ -720,6 +720,31 @@ body > a.assistive:focus {
 #masthead.smallbuttons #primary-navbar .next-button::after {
     width: 25px;
 }
+/*
+#masthead.smallbuttons #primary-navbar .navbar-top-buttons .toolbar-divisor-3 #calculator-toggle {
+    width: 70px;
+    text-align: center;
+    border-right: 1px solid #bababa;
+}
+*/
+
+#masthead.smallbuttons #primary-navbar .navbar-top-buttons .toolbar-divisor-3 .button.toggle {
+    width: 60px;
+    text-align: center;
+    border-radius: 20px;
+    margin-left: 5px;
+    border: 2px solid #66f;
+    line-height: 25px;
+    margin-top: 3px;
+    background-color: #eef;
+}
+#masthead.smallbuttons #primary-navbar .navbar-top-buttons .toolbar-divisor-3 .button.toggle.open {
+    background: #fee;
+/*
+    background-image: linear-gradient(163deg, transparent 0%, transparent 47%, #f66 47%, #f66 , #f66 53%, transparent 53%, transparent 100%);
+*/
+    border: 2px solid #f66;
+}
 
 #masthead.smallbuttons #primary-navbar .threebuttons {
     float: right;
@@ -3266,3 +3291,26 @@ and condider having this replace line 3338 of the general code (which uses .head
     margin-left: 2em;
 }
 
+/* GeoGebra calculator */
+
+#calculator-container {
+    position: fixed;
+    bottom: 5px;
+    right: 5px;
+    width: 320px;
+    width: 250px;
+    height: 600px;
+    height: 460px;
+}
+@media screen and (max-width: 800px) {
+    #calculator-container {
+         bottom: 50px !important;
+    }
+}
+
+.toolBPanel {
+    overflow: hidden !important;
+}
+.toolBPanel:hover {
+    overflow: auto !important;
+}
