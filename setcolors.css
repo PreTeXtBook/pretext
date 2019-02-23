@@ -80,6 +80,36 @@
     color: var(--bodytitle);
 }
 .pretext-content [data-knowl]:hover, .pretext-content [data-knowl]:active, .pretext-content [data-knowl].active {
-    background: var(--bodyverylight);
+    background: var(--bodytitlehighlight);
 }
+
+/* next two groups concern accessibility, so check when making changes */
+.pretext-content a.internal {
+    color: var(--bodytitle);
+}
+.pretext-content a.external {
+    color: var(--bodysubtitle);
+}
+.pretext-content a.internal:hover, .pretext-content a.internal:hover *,
+.pretext-content a.internal:focus, .pretext-content a.internal:focus * {
+    background-color: var(--bodytitlehighlight);
+}
+.pretext-content a.external:hover, .pretext-content a.external:hover *,
+.pretext-content a.external:focus, .pretext-content a.external:focus * {
+    background-color: var(--bodysubtitlehighlight);
+}
+
+.pretext-content .assemblage-like {
+    border: 2px solid var(--assemblageborder);
+    background: var(--assemblagebackground);
+}
+
+.knowl-output {
+    border: 10px solid var(--knowlborder);
+    background: var(--knowlbackground);
+}
+.knowl-footer {
+    background: var(--knowlborder);
+}
+
 

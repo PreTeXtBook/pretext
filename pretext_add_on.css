@@ -396,7 +396,7 @@ article > [data-knowl]::after, article > [data-knowl]:hover::after, article > [d
    color: red;
    border-bottom: 0;
 }
-.knowl-output {
+.XXknowl-output {
     background: #f5f5ff;
     border-top: 10px solid #ddf;
     border-left: 10px solid #ddf;
@@ -407,19 +407,29 @@ article > [data-knowl]::after, article > [data-knowl]:hover::after, article > [d
     border-bottom-right-radius: 10px;
     border-top-right-radius: 10px;
     display: none;
-    display: none;
     padding: 0px;
     margin-top: 10px;
 /*
     margin-bottom: 0px;
 */
     margin-right: 0px;
-
 }
+.knowl-output {
+    background: #f5f5ff;
+    border: 10px solid #ddf;
+    border-radius: 10px;
+    display: none;
+    padding: 0;
+    margin-top: 10px;
+}
+
+
+/*
 .knowl-output .knowl-output, .knowl-output .knowl-output.loading {
     margin-left: 0;
     margin-right: 0;
 }
+*/
 .knowl-output .knowl-output {
     border-width: 6px;
     background: #fffff5;
@@ -429,10 +439,11 @@ article > [data-knowl]::after, article > [data-knowl]:hover::after, article > [d
     margin-right: -7px;
 }
 .knowl-output .knowl-output .knowl-output {
-    background: #fff5fe;
+    background: #f0f0ff;
+    background: #fff5ff;
 }
 .knowl-output .knowl-output .knowl-output .knowl-output {
-    background: #ffffff;
+    background: #fafffa;
 }
 .knowl-footer {
   position: relative;
@@ -2184,6 +2195,9 @@ from Jiří Lebl */
     margin-left: 0;
     margin-right: 0;
 }
+.pretext-content a .code-inline {
+    background: #f6f6f6;
+}
 
 .pretext-content .sagecell_sessionOutput pre {
     font-family: 'Inconsolata', monospace;
@@ -3219,6 +3233,13 @@ and condider having this replace line 3338 of the general code (which uses .head
 .pretext-content a.url:hover,
 .pretext-content a.external:hover {
     background-color: #ffd;
+}
+
+.pretext-content a.internal:hover,
+.pretext-content a.external:hover,
+.pretext-content a.internal:focus,
+.pretext-content a.external:focus {
+    text-decoration: underline;
 }
 
 /* style for poems */

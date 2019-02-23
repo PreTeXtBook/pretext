@@ -1,12 +1,13 @@
 
 /*
- There are four main choices that define a color scheme in the
+ There are five main choices that define a color scheme in the
  HTML output of PreTeXt:
  1) A dark color for the title on each page
  2) A dark color for highlighted words in the body
+ 3) A dark color for other highlighted words in the body
 
- In the CSS those are called 'documenttitle' and 'bodytitle'.
- Often those are equal.
+ In the CSS those are called 'documenttitle', 'bodytitle',
+ and 'bodysubtitle'.
 
  The other two choices appear in the ToC.
 
@@ -37,8 +38,15 @@
 
 :root {
   --documenttitle: #932919;
-  --bodytitle: #932919;
-  --bodyverylight: #ffdfcf;
+  --bodytitle: #A62E1C;  /* often a darker version of documenttitle  */
+  --bodysubtitle: #2B5F82;  /* can be the same as bodytitle  */
+  --bodytitlehighlight: #e0e9ff;  /* light, and contrasting to bodytitle  */
+  --bodysubtitlehighlight: #fce5e4;  /* light, and contrasting to bodysubtitle  */
+     /*
+       The bodytitle and bodysubtitle colors must have at least a 3:1 contrast
+       ratio with black, and at least 5:1 ratio with with the corresponding highlight.
+       (The second condition will guarantee an adequate contrast with white.)
+     */
 
   --chaptertoc: #3572a0;
   --chaptertoctext: white;
@@ -53,5 +61,11 @@
   --highlighttoc: #671d12;
   --highlighttoctext: white;
   --highlighttocborder: var(--chaptertoc);
+
+  --assemblageborder: #5B2F82;
+  --assemblagebackground: #f5f8ff;
+
+  --knowlborder: #e0e9ff;
+  --knowlbackground: var(--assemblagebackground);
 }
 
