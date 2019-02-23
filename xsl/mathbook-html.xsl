@@ -1514,10 +1514,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- the commentary if they are being displayed anyway,  -->
 <!-- since we may not want the content to bleed through  -->
 <!-- into a knowl posted publicly                        -->
+<!-- TEMPORARY: var/li is a WeBWorK popup or radio button, -->
+<!-- which is not a cross-reference target (it originates  -->
+<!-- in PG-code), and an error results when the header in  -->
+<!-- the knowl content tries to compute a number           -->
 <xsl:template match="commentary" mode="xref-as-knowl">
     <xsl:value-of select="$b-commentary" />
 </xsl:template>
-<xsl:template match="fn|p|blockquote|biblio|biblio/note|defined-term|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|poem|assemblage|paragraphs|objectives|outcomes|exercise|hint|answer|solution|exercisegroup|men|mrow|li|contributor" mode="xref-as-knowl">
+<xsl:template match="fn|p|blockquote|biblio|biblio/note|defined-term|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|poem|assemblage|paragraphs|objectives|outcomes|exercise|hint|answer|solution|exercisegroup|men|mrow|li[not(parent::var)]|contributor" mode="xref-as-knowl">
     <xsl:value-of select="true()" />
 </xsl:template>
 
