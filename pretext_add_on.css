@@ -275,16 +275,6 @@ so that we can set our own later */
     display: inline;
 }
 
-/*  .pretext-content .heading > .type + .codenumber::before {
-    content: " ";
-}
-.pretext-content section .heading > .codenumber:not(:empty) + .title::before {
-    content: " \2009";
-}
-.pretext-content section.appendix > .heading > .codenumber:not(:empty)::after {
-    content: ". \2009";
-}  */
-
 
 /*
  * Contents of articles
@@ -321,14 +311,6 @@ so that we can set our own later */
     font-style: italic;
     font-weight: normal;
 }
-/* .pretext-content .hiddenproof > a > .heading > .type::after {
-    content: ".";
-}  */
-/*
-.pretext-content .hiddenproof > a > .heading:after {
-    content: ".";
-}
-*/
 
 /*
   main knowls style
@@ -396,24 +378,6 @@ article > [data-knowl]::after, article > [data-knowl]:hover::after, article > [d
    color: red;
    border-bottom: 0;
 }
-.XXknowl-output {
-    background: #f5f5ff;
-    border-top: 10px solid #ddf;
-    border-left: 10px solid #ddf;
-    border-right: 10px solid #ddf;
-    border-bottom: 10px solid #ddf;
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
-    border-top-right-radius: 10px;
-    display: none;
-    padding: 0px;
-    margin-top: 10px;
-/*
-    margin-bottom: 0px;
-*/
-    margin-right: 0px;
-}
 .knowl-output {
     background: #f5f5ff;
     border: 10px solid #ddf;
@@ -423,13 +387,6 @@ article > [data-knowl]::after, article > [data-knowl]:hover::after, article > [d
     margin-top: 10px;
 }
 
-
-/*
-.knowl-output .knowl-output, .knowl-output .knowl-output.loading {
-    margin-left: 0;
-    margin-right: 0;
-}
-*/
 .knowl-output .knowl-output {
     border-width: 6px;
     background: #fffff5;
@@ -439,7 +396,6 @@ article > [data-knowl]::after, article > [data-knowl]:hover::after, article > [d
     margin-right: -7px;
 }
 .knowl-output .knowl-output .knowl-output {
-    background: #f0f0ff;
     background: #fff5ff;
 }
 .knowl-output .knowl-output .knowl-output .knowl-output {
@@ -676,12 +632,6 @@ body > a.assistive:focus {
     border-right: 1px solid #bababa;
 }
 
-/*
- * .navbar #primary-navbar {
- *     background: #fafafa;
- *         border-bottom: none;
- *         }
- *         */
 #masthead.smallbuttons #primary-navbar .navbar-top-buttons {
     border-bottom: 1px solid #bababa;
 }
@@ -949,10 +899,6 @@ h2:last-child {
     display: inline;
 }
 
-/* .pretext-content .paragraphs .heading .title:not(:empty):after {
-    content: ".\2002";
-} */
-
 .pretext-content .paragraphs .heading + p {
     display: inline;
 }
@@ -980,10 +926,6 @@ h2:last-child {
     font-weight: 700;
 }
 
-/* .pretext-content .paragraphs p .title:after {
-    content: ".\2002";
-} */
-
 .pretext-content .paragraphs p .heading {
     display: inline;
 }
@@ -991,12 +933,6 @@ h2:last-child {
 .pretext-content section .paragraphs .heading {
     margin-top: 0;
 }
-
-/*
-.pretext-content section .paragraphs {
-    margin-top: 0em;
-}
-*/
 
 .pretext-content section .paragraphs + .paragraphs {
     margin-top: 3em;
@@ -1010,10 +946,6 @@ h2:last-child {
     display: inline-block;
     margin: 0;
 }
-
-/* .pretext-content .sidebyside > figure:after {
-     content:'';
-} */
 
 .pretext-content .sidebyside figcaption {
     padding-left: 1em; 
@@ -1049,19 +981,6 @@ h2:last-child {
     vertical-align: middle;
 }
 
-/*
-.pretext-content .sidebyside {
-    margin-bottom: 0;
-}
-.pretext-content .sidebyside p:only-child {
-    margin-bottom: 0;
-}
-.pretext-content .sidebyside p:last-child {
-    margin-bottom: 0;
-}
-*/
-
-
 .pretext-content .sidebyside .sbsrow .sbsheader {
     margin-top: 0;
 }
@@ -1087,11 +1006,6 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
     display: flex;
     justify-content: space-between;
 }
-/*
-.pretext-content .sbsrow:last-child {
-    padding-bottom: 1em;
-}
-*/
 
 /* Components of three types of "sbsrow" */
 
@@ -1379,12 +1293,6 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
     display: inline;
 }
 
-/*
-.pretext-content .hiddenproof > .heading::after {
-    content: "."
-}
-*/
-
 .apretext-content figure.figure-like {
     overflow: auto;
 }
@@ -1472,21 +1380,10 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
     color: #a32;
 }
 
-/*
-.pretext-content .heading a.permalink:hover:after {
-    opacity: 1;
-}
-*/
-
 .pretext-content .heading a.permalink:focus {
     opacity: 1;
     color: #a32;
 }
-/*
-.pretext-content .heading a.permalink:focus:after {
-    opacity: 1;
-}
-*/
 
 .mininav {
     float: left;
@@ -1497,8 +1394,6 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
     margin-left: 1.5ex;
     margin-top: 0.2ex;
     padding-top: 0;
-/*    display: inline;
- *      *    */
     float: left;
     line-height: 0.95;
 }
@@ -1578,12 +1473,6 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
     font-size: 90%;
 }
 
-/*
-.pretext-content .indexitem a {
-    font-size: 90%;
-}
-*/
-
 .pretext-content .indexitem [data-knowl], .pretext-content .subindexitem [data-knowl], .pretext-content .indexitem [data-knowl]:hover {
     padding-right: 2px;
     padding-left: 2px;
@@ -1599,28 +1488,9 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
     font-size: 95%;
 }
 
-/*
-.pretext-content .indexletter {
-    margin-top: 1em;
-    font-size: 170%;
-    font-weight: bold;
-}
-*/
 .pretext-content .indexletter {
     margin-top: 1.5em;
 }
-
-/*
-.pretext-content .indexknowl + .indexknowl{
-    margin-left: 1em;
-}
-*/
-
-/*
-.pretext-content section #hk-exercise-essay article {
-    display: inline;
-}
-*/
 
 .pretext-content .hidden-knowl-wrapper .heading {
     display: inline;
@@ -1628,14 +1498,6 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
 .pretext-content .heading + .hidden-knowl-wrapper {
     display: inline;
 }
-/*
-.pretext-content article .hidden-knowl-wrapper:first-of-type {
-    display: inline;
-}
-.pretext-content article .hidden-knowl-wrapper {
-    margin-top: 1em;
-}
-*/
 
 .pretext-content .cols2 .knowl-output, .pretext-content .cols3 .knowl-output, .pretext-content .cols4 .knowl-output, .pretext-content .cols5 .knowl-output, .pretext-content .cols5 .knowl-output {
     width: 100%;
@@ -1983,12 +1845,6 @@ from Jiří Lebl */
 .pretext-content .latex-logo .E {vertical-align:-.5ex; text-transform: uppercase;
          margin-left: -.18em; margin-right: -.12em; }
 
-/*
-.pretext-content .posterior {
-    margin-bottom: 1.25em;
-}
-*/
-
 .pretext-content .fillin {
     display: inline-block;
     border-bottom-style: solid;
@@ -2022,31 +1878,9 @@ from Jiří Lebl */
 .pretext-content .exercisegroup .hidden-knowl-wrapper {
     margin: 0;
 }
-/*
-.pretext-content .exercisegroup .exercise-like .heading + p:after {
-    margin: 0;
-}
-.pretext-content .exercisegroup .introduction .heading + p:last-child {
-    margin-bottom: 0.5em;
-}
-*/
 .pretext-content .exercisegroup article + article {
     margin-top: 1em;
 }
-
-/*
-.pretext-content .exercises .exercise-like figcaption .heading {
-    font-weight: bold;
-    font-size: inherit;
-}
-*/
-/* for titles on APEX WW exercises, but should make sense for other exercises */
-/*
-.pretext-content .exercises .exercise-like > .heading {
-    font-weight: normal;
-    font-size: inherit;
-}
-*/
 
 /* http://spot.pcc.edu/math/APEXCalculus/sec_interp_deriv.html */
 .pretext-content .exercisegroup > article,
@@ -2075,22 +1909,9 @@ from Jiří Lebl */
     margin-top: 1em;
 }
 
-/*
-.pretext-content .exercisegroup article.exercise-like:not(:first-child) {
-    margin-top: 0em;
-}
-*/
-
 .pretext-content .exercisegroup > .conclusion {
     margin-left: 1.5em;
 }
-
-/*
-.pretext-content .exercise-like .hint {
-    display: block;
-    margin-top: -0.75em;
-}
-*/
 
 .pretext-content .exercise-like .introduction {
     display: inline;
@@ -2104,9 +1925,6 @@ from Jiří Lebl */
 .pretext-content .exercise-like .introduction::after {
     content: "";
     display: block;
-/*
-    margin-bottom: 0.25em;
-*/
 }
 .pretext-content .exercise-like .conclusion::before {
     content: "";
@@ -2114,16 +1932,6 @@ from Jiří Lebl */
     margin-top: 0.25em;
 }
 
-
-/*
-.pretext-content .example-like .hint {
-}
-*/
-/*
-.example-like, .exercise-like {
-  margin: 1.25em 0;
-}
-*/
 
 /* if hints and solutions are in .posterior, then
  * some of the above styling does not apply */
@@ -2157,12 +1965,6 @@ from Jiří Lebl */
     display: block;
 }
 
-/*
-.pretext-content .exercisegroup .exercisegroup-exercises article.exercise-like {
-    margin-top: 0;
-}
-*/
-
 .pretext-content .exercisegroup .cols1 > article.exercise-like {flex-basis: calc(100% - 2em);}
 .pretext-content .exercisegroup .cols2 > article.exercise-like {flex-basis: calc(50% - 2em);}
 .pretext-content .exercisegroup .cols3 > article.exercise-like {flex-basis: calc(33.33% - 2em);}
@@ -2178,8 +1980,6 @@ from Jiří Lebl */
 }
 .pretext-content .code-inline {
     font-size: 1em;
-/*    line-height: 1.38889em;
-*/
     white-space: nowrap;
     color: inherit;
     background: #eeeeee;
@@ -2229,54 +2029,6 @@ from Jiří Lebl */
 .pretext-content .poem {
     margin-top: 1.5em;
 }
-
-/* when hidden in a knowl, don't need the space at the end */
-/* .pretext-content article > a > .heading > .title:not(.punctuated):last-child::after {
-    content: ".";
-}  */
-
-/* .pretext-content section > article > .heading .type:last-child::after,
-.pretext-content section > article > .heading .codenumber:last-child::after,
-.pretext-content section > article > .heading .title:not(:empty):not(.punctuated):last-child::after {
-    content: ".\2009 ";
-}
-.pretext-content .aside-like > .heading .type:last-child::after,
-.pretext-content .aside-like > .heading .codenumber:last-child::after,
-.pretext-content .aside-like > .heading .title:not(:empty):not(.punctuated):last-child::after {
-    content: ":\2009 ";
-}
-
-.pretext-content article > .heading .creator:before {
-    content: "(";
-}
-.pretext-content article > .heading .creator:after {
-    content: ").\2009 ";
-}
-
-.pretext-content .aside-like > .heading .title:empty::after {
-    content: "";
-}
-
-.pretext-content a article > .heading .codenumber:not(:empty)::after {
-    content: ": \2009";
-}
-
-.pretext-content .hiddenproof > .heading .type:after, .pretext-content .hiddenproof > header > .heading .type:after {
-  content: "";
-} */
-
-/*
-.pretext-content section > .exercisegroup .exercisegroup-exercises > .exercise-like > .heading .codenumber:not(:empty):after {
-*/
-
-/* .pretext-content section .exercise-like > .heading .codenumber:not(:empty):after {
-    content: ".\2009 ";
-} */
-/*
-.pretext-content .exercise-like > .heading .codenumber:not(:empty):after {
-    content: "\2005";
-}
-*/
 
 .pretext-content .objectives > .heading,
 .pretext-content .outcomes > .heading {
@@ -2613,14 +2365,6 @@ sup [data-knowl]:hover {
     margin-right: 3em;
 }
 
-/* for + ul p see http://physics.thomasmore.edu/ConnectedPhysics/ss-NII.html */
-/*  subsumed by general background at start
-.pretext-content .aside-like + p, .pretext-content .aside-like + ul p, .pretext-content .aside-like + ol p{
-    background: #fff;
-    box-shadow: 2em 0 1em 0.0em #fff;
-}
-*/
-
 /* on sufficiently large screens, there is enough of a margin to see part of the aside */
 
 @media screen and (min-width: 943px) {
@@ -2669,34 +2413,11 @@ sup [data-knowl]:hover {
 }
 }
 
-/* on a narrow screen, collapsed asides should only be one line tall */
-/* was too hard to see/poke
-@media screen and (max-width: 480px) {
-.pretext-content .aside-like {
-    margin-top: -1.25em;
-}
-.pretext-content .example-like .aside-like {
-    margin-top: -1em;
-  }
-.pretext-content .aside-like + *{
-    margin-top: 1.5em !important;
-}
-.pretext-content .aside-like + article, .pretext-content .aside-like + ul, .pretext-content .aside-like + ol {
-    margin-top: 2.5em !important;
-}
-}
-*/
-
 .pretext-content .aside-like:hover:after, .pretext-content .aside-like:focus:after {
     top: 3em;
     height: auto;
     background-image : none;
 }
-/* redundant
-.pretext-content .aside-like.front:hover:after, .pretext-content .aside-like.front:focus:after {
-    background-image: none;
-}
-*/
 
 .pretext-content .aside-like:hover, .pretext-content .aside-like:focus {
     color: inherit;
@@ -2740,20 +2461,12 @@ sup [data-knowl]:hover {
 .pretext-content ol > li {
     padding-left: 0.25em;
 }
-/*
-.pretext-content ol.cols2 > li { width: calc(49% - 0.25em) !important; }
-*/
 .pretext-content ol.cols2 > li, .pretext-content ul.cols2 > li { width: calc(49% - 1.75em)}
 .pretext-content ol.cols3 > li, .pretext-content ul.cols3 > li { width: calc(33% - 1.25em)}
 .pretext-content ol.cols4 > li, .pretext-content ul.cols4 > li { width: calc(24.5% - 1.25em)}
 .pretext-content ol.cols5 > li, .pretext-content ul.cols5 > li { width: calc(19.5% - 0.75em)}
 .pretext-content ol.cols6 > li, .pretext-content ul.cols6 > li { width: calc(16.3% - 0.5em)}
 /* sample-article sec 5 */
-/*
-.pretext-content ul.cols2 > li p, .pretext-content ol.cols2 > li p {
-   padding-right: 0.5em;
-}
-*/
 .pretext-content ul.cols2 > li, .pretext-content ol.cols2 > li {
    padding-right: 1.5em;
 }
@@ -2809,26 +2522,12 @@ sup [data-knowl]:hover {
     margin-top: 1em;
     padding-left: 0.5em;
 }
-/* The !important is to over-ride legacy inline widths */
-/*
-.pretext-content .exercise-like > .cols2 > li { width: calc(49% - 0.5em)}
-.pretext-content .exercise-like > .cols3 > li { width: calc(33% - 0.5em)}
-.pretext-content .exercise-like > .cols4 > li { width: calc(24.5% - 0.5em)}
-.pretext-content .exercise-like > .cols5 > li { width: calc(19.5% - 0.5em)}
-.pretext-content .exercise-like > .cols6 > li { width: calc(16.3% - 0.5em)}
-*/
 
 .pretext-content .exercise-like > .cols2 > li { width: calc(49% - 2.5em)}
 .pretext-content .exercise-like > .cols3 > li { width: calc(33% - 2.5em)}
 .pretext-content .exercise-like > .cols4 > li { width: calc(24.5% - 2.5em)}
 .pretext-content .exercise-like > .cols5 > li { width: calc(19.5% - 2.5em)}
 .pretext-content .exercise-like > .cols6 > li { width: calc(16.3% - 2.5em)}
-
-/*
-.pretext-content .exercisegroup .cols2 > article > ol > li:first-child {
-    margin-top: 0;
-}
-*/
 
 /* because .colsN uses float, the margin-top of the folowing
 element is ignored */
@@ -2897,9 +2596,6 @@ body.sidebar-left-closed .searchwrapper {
 body.sidebar-left-open .searchwrapper {
     top: 74px;
 }
-
-/* bottom: 0;
- *  * */
 
 body.sidebar-left-closed .searchwrapper {
     top: 74px;
@@ -3018,11 +2714,6 @@ http://mathbook.pugetsound.edu/examples/sample-article/html/interesting-corollar
     margin-top: 1.25em;
 /*    margin-bottom: 0.25em; */
 }
-/*
-.pretext-content .exercise-like > .exercise-like > .heading + p::after {
-    margin-bottom: 0.25em;
-}
-*/
 .pretext-content .example-like > .heading + .introduction {
     display: inline;
 }
@@ -3031,26 +2722,7 @@ http://mathbook.pugetsound.edu/examples/sample-article/html/interesting-corollar
 }
 .pretext-content .example-like > .exercise-like > p {
     margin-top: 1.25em;
-/*    margin-bottom: 0.25em;  */
 }
-/*
-.pretext-content .example-like > .exercise-like > .heading + p::after {
-    margin-bottom: 0.25em;
-}
-*/
-
-/* not sure about these two.  there may be bad side-effects */
-/*
-.pretext-content .example-like p {
-    margin-top: 1.25em;
-}
-.pretext-content .example-like ol, .pretext-content .example-like ul {
-    margin-top: 1.25em;
-}
-.pretext-content .example-like > .heading + p::after {
-    margin-bottom: 0.25em;
-}
-*/
 
 /* end of nested tasks */
 
@@ -3143,9 +2815,6 @@ and condider having this replace line 3338 of the general code (which uses .head
   line-height: 1.25em;
   padding: 0.41667em 0.83333em;
   margin-top: 0.20833em;
-/*
-  margin-bottom: 0;
-*/
   border-radius: 3px;
   padding-right: 2.06667em;
 }
@@ -3165,8 +2834,6 @@ and condider having this replace line 3338 of the general code (which uses .head
   border-left: 0.4em solid #c9c9c9;
 }
 .pretext-content .summary-links a, .pretext-content .summary-links a:link, .pretext-content .summary-links a:visited {
-/*  color: #20477b; */
-/*  background: #f0f0f0; */
   cursor: pointer;
 }
 .pretext-content .summary-links a:hover:after {
@@ -3186,7 +2853,6 @@ and condider having this replace line 3338 of the general code (which uses .head
   }
 }
 .pretext-content .summary-links a .codenumber {
-/*  color: #707070; */
   margin-right: 0.41667em;
 }
 
