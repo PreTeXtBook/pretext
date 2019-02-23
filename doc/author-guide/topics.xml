@@ -1927,17 +1927,17 @@
         <idx>accessibilty</idx>
         <idx>web accessibilty</idx>
 
-        <p>Continuing our discussion from <xref ref="overview-accessibility" /> we begin by listing features of our conversion to <init>HTML</init> which happen automatically.<dl width="narrow">
+        <p>Continuing our discussion from <xref ref="overview-accessibility" /> we begin by listing features of our conversion to <init>HTML</init> which happen automatically.  These come in part from the recommendations at the <url href="https://www.w3.org/WAI/standards-guidelines/wcag/">Web Content Accessibility Guidelines</url><fn><c>www.w3.org/WAI/standards-guidelines/wcag/</c></fn> of the Web Accessibility Initiative.<dl width="narrow">
             <li>
                 <title>HTML</title>
-                <p>Wherever possible we supply <init>HTML</init> elements and attributes that will be interpreted sensibly by a screen reader in the absence of the visual styling provided by <init>CSS</init>.  This means we are cognizant of the role of headings (<c>h1</c> through <c>h6</c>), provide HTML that passes validation checks, and so on.  Employing attributes from the <url href="https://www.w3.org/WAI/standards-guidelines/aria/">Accessible Rich Internet Applications</url> suite of web standards (<init>ARIA</init>) at <c>www.w3.org/WAI/</c> will go a long way to improving accessibility.  This work is in-progress as of 2018-05-31.</p>
+                <p>Wherever possible we supply <init>HTML</init> elements and attributes that will be interpreted sensibly by a screen reader in the absence of the visual styling provided by <init>CSS</init>.  This means we are cognizant of the role of headings (<c>h1</c> through <c>h6</c>), provide HTML that passes validation checks, and so on.  Employing attributes from the <url href="https://www.w3.org/WAI/standards-guidelines/aria/">Accessible Rich Internet Applications</url><fn><c>www.w3.org/WAI/standards-guidelines/aria/</c></fn> suite of web standards (<init>ARIA</init>) will go a long way to improving accessibility.  This work is in-progress as of 2018-05-31.</p>
             </li>
 
             <li>
                 <title>Mathematics</title>
                 <idx><h>accessibility</h><h>mathematics</h></idx>
                 <idx><h>web accessibility</h><h>mathematics</h></idx>
-                <p>MathJax (<url href="https://www.mathjax.org/"><c>mathjax.org</c></url>) is the JavaScript library we use to render mathematics within the <init>HTML</init> output.  It provides extensive capabilities for screen readers to render the mathematics audibly, and by default your project's output is configured to take advantage of these features.  We refer the reader to the MathJax documentation of <url href="http://docs.mathjax.org/en/latest/misc/accessibility-features.html">Accessibility Features</url> at <c>docs.mathjax.org</c> for details.  But here is a simple experiment you can do yourself right now to simulate how a blind reader could experience mathematics with the combination of <pretext />, MathJax, and a screen reader.<ol>
+                <p>MathJax (<url href="https://www.mathjax.org/"><c>mathjax.org</c></url>) is the JavaScript library we use to render mathematics within the <init>HTML</init> output.  It provides extensive capabilities for screen readers to render the mathematics audibly, and by default your project's output is configured to take advantage of these features.  We refer the reader to the MathJax documentation of <url href="http://docs.mathjax.org/en/latest/misc/accessibility-features.html">Accessibility Features</url><fn><c>docs.mathjax.org/en/latest/misc/accessibility-features.html</c></fn> for details.  But here is a simple experiment you can do yourself right now to simulate how a blind reader could experience mathematics with the combination of <pretext />, MathJax, and a screen reader.<ol>
                     <li>Find some moderately complicated mathematics, such as in the <q>Mathematics</q> section of the sample article, or your own project, or the sample from MathJax copied below.</li>
                     <li>Bring up the context menu on that display (a mouse right-click for most).</li>
                     <li>Turn on the <c>Accessibility > Explorer > Activate</c> menu item.  The page will reload, and the <c>Explorer</c> menu item will earn many more menu items.  This setting is reasonably sticky, so you should not have to do this repeatedly.  Having this on will incur some processing time as part of each page load, so you may want to turn it off later.</li>
@@ -1961,6 +1961,11 @@
                 <p>Repeatedly pressing the <c>Tab</c> key will move a reader from one location to the next in a web document.  Since your Table of Contents in the left sidebar is a series of many links, a reader will need to tab through <em>all</em> of these to eventually reach the interesting content on a page.</p>
 
                 <p>However, we support a common device.  The first link on every page is hidden from all readers, but an initial <c>Tab</c> will present a link labeled <c>Skip to Main Content</c> which when executed will take the reader past the Table of Contents and to the start of the content at the top of the page.</p>
+            </li>
+
+            <li>
+                <title>Links</title>
+                <p>Hyperlinks have colors, styles (such as underlining), and effects (such as mouse hover) which are consistent with <init>WCAG</init> recommendations.  Rather than being underlined by default, we instead use high-contrast color choices.</p>
             </li>
 
             <li>
@@ -1991,6 +1996,13 @@
                 </cd>would cause the clickable portion to be something like <q>Theorem 5.16</q>, whereas<cd>
                     <cline>&lt;xref ref="theorem-FTC" text="global" /&gt;</cline>
                 </cd>would then cause the clickable portion to be simply the much shorter <q>5.16</q>.  Of course, you can set a default style for your entire document, so it is not necessary to continually provide the <attr>text</attr> attribute.</p>
+            </li>
+
+            <li>
+                <title>Link Text</title>
+                <p>Default link text, such as <q>Theorem 4.15</q> has been chosen to be informative.  But for internal links (<tag>xref</tag>) or external links (<tag>url</tag>) you can choose alternative content for the clickable portion of the text.  Think carefully about your choices here and try to avoid text like <q>here</q> or <q>click here.</q>  For a <tag>url</tag>, the default content is the <attr>href</attr>, which can always be improved by providing content.</p>
+
+                <p>Here is a device which we now use more frequently.  Despite our aversion to footnotes, create a <tag>url</tag> element and provide meaningful content, such as the title of the web page you are referencing.  Then immediately afterwards add a footnote (<tag>fn</tag>) which contains only the actual <init>URL</init>, perhaps wrapped in a <tag>c</tag> element.  Since this is mostly meant for print, it is safe to drop things like the <c>https://</c> protocol specification and therefore <em>not</em> make it active (for a second time).  This is in use within this section.</p>
             </li>
         </dl></p>
 
