@@ -11,6 +11,36 @@
  *******************************************************************************
  */
 
+/*
+console.log("thisbrowser.userAgent", window.navigator.userAgent);
+*/
+
+/* scrollbar width from https://stackoverflow.com/questions/13382516/getting-scroll-bar-width-using-javascript */
+function getScrollbarWidth() {
+    var outer = document.createElement("div");
+    outer.style.visibility = "hidden";
+    outer.style.width = "100px";
+    outer.style.msOverflowStyle = "scrollbar"; // needed for WinJS apps
+
+    document.body.appendChild(outer);
+
+    var widthNoScroll = outer.offsetWidth;
+    // force scrollbars
+    outer.style.overflow = "scroll";
+
+    // add innerdiv
+    var inner = document.createElement("div");
+    inner.style.width = "100%";
+    outer.appendChild(inner);        
+
+    var widthWithScroll = inner.offsetWidth;
+
+    // remove divs
+    outer.parentNode.removeChild(outer);
+
+    return widthNoScroll - widthWithScroll;
+}
+
 window.addEventListener("load",function(event) {
     $(".aside-like").click(function(){
        $(this).toggleClass("front");
@@ -91,7 +121,12 @@ false);
 window.addEventListener("load",function(event) {
 
    /* scrolling on GG plot shodl scale, not move browser body */
-     var scrollWidth = 15;  //currently correct for FF, Ch, and Saf, but would be better to calculate
+//     var scrollWidth = 15;  //currently correct for FF, Ch, and Saf, but would be better to calculate
+     var scrollWidth = getScrollbarWidth();
+     if ( (navigator.userAgent.match(/Mozilla/i) != null) ) {
+         scrollWidth += 0.5
+     }
+     console.log("scrollWidth", scrollWidth);
      calcoffsetR = 5;
      calcoffsetB = 5;
      $('body').on('mouseover','#geogebra-calculator canvas', function(){
