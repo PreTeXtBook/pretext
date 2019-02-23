@@ -94,11 +94,11 @@ function login_form(mode="login") {
 }
 
 function loadScript(script) {
-  if (typeof version === 'undefined') { version = '0.1' }
+  if (typeof js_version === 'undefined') { js_version = '0.1' }
   var newscript = document.createElement('script');
   newscript.type = 'text/javascript';
   newscript.async = true;
-  newscript.src = 'https://pretextbook.org/js/' + version + '/' + script + '.js';
+  newscript.src = 'https://pretextbook.org/js/' + js_version + '/' + script + '.js';
   var allscripts = document.getElementsByTagName('script');
   var s = allscripts[allscripts.length - 1];
   console.log('s',s);
