@@ -1428,7 +1428,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- TODO: split into two more when, otherwise as error? -->
                 <xsl:otherwise>
                     <xsl:text> </xsl:text>
-                    <xsl:element name="a">
+                    <a>
                         <!-- knowl or traditional hyperlink     -->
                         <!-- mutually exclusive by construction -->
                         <xsl:if test="knowl">
@@ -1437,13 +1437,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             </xsl:attribute>
                         </xsl:if>
                         <xsl:if test="hyperlink">
+                            <xsl:attribute name="class">
+                                <xsl:text>internal</xsl:text>
+                            </xsl:attribute>
                             <xsl:attribute name="href">
                                 <xsl:value-of select="hyperlink" />
                             </xsl:attribute>
                         </xsl:if>
                         <!-- content: replace with localized short-names -->
                         <xsl:value-of select="typename" />
-                    </xsl:element>
+                    </a>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:for-each>
