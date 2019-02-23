@@ -5332,8 +5332,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:message terminate="yes">MBX:ERROR: invalid value <xsl:value-of select="@cols" /> for cols attribute of exercisegroup</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
-    <!-- an exercisegroup can only appear in an "exercises" division, -->
-    <!-- Switches on "exercise" will control component visibility     -->
+    <!-- an exercisegroup can only appear in an "exercises" division,    -->
+    <!-- the template for exercises//exercise will consult switches for  -->
+    <!-- visibility of components when born (not doing "solutions" here) -->
     <xsl:apply-templates select="exercise"/>
     <xsl:choose>
         <xsl:when test="not(@cols) or (@cols = 1)">
