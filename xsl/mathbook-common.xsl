@@ -4210,11 +4210,20 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:param name="string-id" />
     <xsl:variable name="translation">
         <xsl:choose>
-            <!-- First look in docinfo for document-specific rename -->
-            <xsl:when test="$docinfo/rename[@element=$string-id and @lang=$document-language]">
-                <xsl:apply-templates select="$docinfo/rename[@element=$string-id and @lang=$document-language]" />
+            <!-- First, look in docinfo for document-specific rename with correct language -->
+            <xsl:when test="$docinfo/rename[@element=$string-id and @xml:lang=$document-language]">
+                <xsl:apply-templates select="$docinfo/rename[@element=$string-id and @xml:lang=$document-language]"/>
             </xsl:when>
-            <!-- default to a lookup from the localization file's nodes -->
+            <!-- Second, look in docinfo for document-specific rename with correct language, -->
+            <!-- but with @lang attribute which was deprecated on 2019-02-23                 -->
+            <xsl:when test="$docinfo/rename[@element=$string-id and @lang=$document-language]">
+                <xsl:apply-templates select="$docinfo/rename[@element=$string-id and @lang=$document-language]"/>
+            </xsl:when>
+            <!-- Third, look in docinfo for document-specific rename, but now explicitly language-agnostic -->
+            <xsl:when test="$docinfo/rename[@element=$string-id and not(@lang) and not(@xml:lang)]">
+                <xsl:apply-templates select="$docinfo/rename[@element=$string-id and not(@lang) and not(@xml:lang)]"/>
+            </xsl:when>
+            <!-- Finally, default to a lookup from the localization file's nodes -->
             <xsl:otherwise>
                 <xsl:for-each select="$translation-nodes">
                     <xsl:value-of select="key('localization-key', concat($document-language,$string-id) )"/>
@@ -4223,7 +4232,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         </xsl:choose>
     </xsl:variable>
     <xsl:choose>
-        <xsl:when test="$translation!=''"><xsl:value-of select="$translation" /></xsl:when>
+        <xsl:when test="$translation!=''">
+            <xsl:value-of select="$translation" />
+        </xsl:when>
         <xsl:otherwise>
             <xsl:text>[</xsl:text>
             <xsl:value-of select="$string-id" />
