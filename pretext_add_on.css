@@ -2796,6 +2796,27 @@ and condider having this replace line 3338 of the general code (which uses .head
     display: none;
 }
 
+.pretext-content .summary-links a {
+  color: #671d12;
+  background: #f0f0f0;
+  text-decoration: none;
+  cursor: pointer;
+}
+.pretext-content .summary-links a:hover, .pretext-content .summary-links a:focus {
+  color: white;
+  background: #671d12;
+}
+.pretext-content .summary-links a .codenumber {
+  color: #303030;
+  margin-right: 0.41667em;
+}
+
+.pretext-content .summary-links a:hover .codenumber, .pretext-content .summary-links a:focus .codenumber {
+  color: #f0f0f0;
+}
+
+
+
 .pretext-content .summary-links {
     margin-top: 4em;
 }

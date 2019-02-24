@@ -1237,19 +1237,22 @@
   border-bottom: 0.4em solid transparent;
   border-left: 0.4em solid #c9c9c9;
 }
-/* line 438, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
+
+/*
 .pretext-content .summary-links a, .pretext-content .summary-links a:link, .pretext-content .summary-links a:visited {
   color: #671d12;
   background: #f0f0f0;
   text-decoration: none;
   cursor: pointer;
 }
-/* line 445, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
+
 .pretext-content .summary-links a:hover, .pretext-content .summary-links a:focus {
   color: white;
   background: #671d12;
   text-decoration: none;
 }
+
+*/
 /* line 450, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
 .pretext-content .summary-links a:hover:after, .pretext-content .summary-links a:focus:after {
   width: 0;
@@ -1294,19 +1297,17 @@
     line-height: 1.25em;
   }
 }
-/* line 56, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_content-ui.scss */
+
+/*
 .pretext-content .summary-links a .codenumber {
   color: #707070;
   margin-right: 0.41667em;
 }
-/* line 62, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_content-ui.scss */
+
 .pretext-content .summary-links a:hover .codenumber, .pretext-content .summary-links a:focus .codenumber {
   color: rgba(255, 255, 255, 0.8);
 }
-/* line 68, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_content-ui.scss */
-.pretext-content .summary-links a:active .codenumber {
-  color: rgba(255, 255, 255, 0.8);
-}
+*/
 /* line 85, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_content-ui.scss */
 /*
 .pretext-content .sagecell .ui-button.ui-state-default, .pretext-content .sagecell .ui-button.ui-state-hover, .pretext-content .sagecell .ui-button.ui-state-active, .pretext-content .sagecell .ui-button.ui-state-focus, .pretext-content .sagecell .ui-button.ui-corner-all {

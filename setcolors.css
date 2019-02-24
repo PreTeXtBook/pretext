@@ -14,8 +14,8 @@
 #toc > ul > li > a, #toc > ul > li > a:link, #toc > ul > li > a:visited {
   color: #505050;
   color: var(--chaptertoctext);
-  background: #dbf5ff;
-  background: var(--chaptertoc);
+  background-color: #dbf5ff;
+  background-color: var(--chaptertoc);
   border-color: #afc2e5;
   border-color: var(--tocborder);
 }
@@ -23,23 +23,23 @@
 #toc ul li ul a, #toc ul li ul a:link, #toc ul li ul a:visited {
   color: #404040;
   color: var(--sectiontoctext);
-  background: #ffffff;
-  background: var(--sectiontoc);
+  background-color: #ffffff;
+  background-color: var(--sectiontoc);
 }
 
 #toc ul li a.active {
   color: #404040;
   color: var(--chaptertoctextactive);
-  background: #fae5b6;
-  background: var(--chaptertocactive);
+  background-color: #fae5b6;
+  background-color: var(--chaptertocactive);
   border-color: #d7b772;
   border-color: var(--highlighttocborder);
 }
 #toc ul li ul a.active {
   color: #404040;
   color: var(--sectiontoctextactive);
-  background: #fae5b6;
-  background: var(--sectiontocactive);
+  background-color: #fae5b6;
+  background-color: var(--sectiontocactive);
   border-color: #d7b772;
   border-color: var(--highlighttocborder);
 }
@@ -47,16 +47,16 @@
 #toc ul li a:hover {
   color: #321a0c;
   color: var(--highlighttoctext);
-  background: #fac793;
-  background: var(--highlighttoc);
+  background-color: #fac793;
+  background-color: var(--highlighttoc);
   border-color: #ec704b;
   border-color: var(--highlighttocborder);
 }
 #toc ul li ul a:hover {
   color: #321a0c;
   color: var(--highlighttoctext);
-  background: #fac793;
-  background: var(--highlighttoc);
+  background-color: #fac793;
+  background-color: var(--highlighttoc);
   border-color: #ec704b;
   border-color: var(--highlighttocborder);
 }
@@ -64,23 +64,20 @@
 .sidebar-content .extras a:hover {
   border-top: 1px solid var(--highlighttocborder);
 }
-.mathbook-content .summary-links a, .mathbook-content .summary-links a:link, .mathbook-content .summary-links a:visited {
-  color: #20477b;
+
+.pretext-content .summary-links a {
+  color: var(--sectiontoctext);
 }
-.mathbook-content .summary-links a:hover, .mathbook-content .summary-links a:focus {
-  background: #20477b;
-  color: #ffffff;
-}
-.mathbook-content .summary-links a:active {
-  background: #2a5ea4;
-  color: #ffffff;
+.pretext-content .summary-links a:hover, .pretext-content .summary-links a:focus {
+  color: var(--highlighttoctext);
+  background: var(--highlighttoc);
 }
 
 .pretext-content [data-knowl], .pretext-content [data-knowl]:hover, .pretext-content [data-knowl]:active, .pretext-content [data-knowl].active {
     color: var(--bodytitle);
 }
 .pretext-content [data-knowl]:hover, .pretext-content [data-knowl]:active, .pretext-content [data-knowl].active {
-    background: var(--bodytitlehighlight);
+    background-color: var(--bodytitlehighlight);
 }
 
 /* next two groups concern accessibility, so check when making changes */
@@ -100,16 +97,16 @@
 }
 
 .pretext-content .assemblage-like {
-    border: 2px solid var(--assemblageborder);
-    background: var(--assemblagebackground);
+    border-color: var(--assemblageborder);
+    background-color: var(--assemblagebackground);
 }
 
 .knowl-output {
-    border: 10px solid var(--knowlborder);
-    background: var(--knowlbackground);
+    border-color: var(--knowlborder);
+    background-color: var(--knowlbackground);
 }
 .knowl-footer {
-    background: var(--knowlborder);
+    background-color: var(--knowlborder);
 }
 
 
