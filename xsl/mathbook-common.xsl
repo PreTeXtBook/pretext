@@ -8353,7 +8353,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:when test="$b-is-equation-target">
             <xsl:if test="$b-has-content">
                 <xsl:copy-of select="$custom-text" />
-                <xsl:call-template name="nbsp-character"/>
+                <xsl:apply-templates select="." mode="xref-text-separator"/>
             </xsl:if>
             <xsl:text>(</xsl:text>
             <xsl:apply-templates select="$target" mode="xref-number">
@@ -8374,7 +8374,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:when test="$text-style = 'global'">
             <xsl:if test="$b-has-content">
                 <xsl:copy-of select="$custom-text" />
-                <xsl:call-template name="nbsp-character"/>
+                <xsl:apply-templates select="." mode="xref-text-separator"/>
             </xsl:if>
             <xsl:apply-templates select="$target" mode="xref-number">
                 <xsl:with-param name="xref" select="." />
@@ -8384,7 +8384,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:when test="$text-style = 'local'">
             <xsl:if test="$b-has-content">
                 <xsl:copy-of select="$custom-text" />
-                <xsl:call-template name="nbsp-character"/>
+                <xsl:apply-templates select="." mode="xref-text-separator"/>
             </xsl:if>
             <xsl:apply-templates select="$target" mode="serial-number" />
         </xsl:when>
@@ -8393,7 +8393,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                 <!-- content override of type-prefix -->
                 <xsl:when test="$b-has-content">
                     <xsl:copy-of select="$custom-text" />
-                    <xsl:call-template name="nbsp-character"/>
+                    <xsl:apply-templates select="." mode="xref-text-separator"/>
                     <xsl:apply-templates select="$target" mode="xref-number">
                         <xsl:with-param name="xref" select="." />
                     </xsl:apply-templates>
@@ -8401,7 +8401,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                 <!-- usual, default case -->
                 <xsl:otherwise>
                     <xsl:apply-templates select="$target" mode="type-name" />
-                    <xsl:call-template name="nbsp-character"/>
+                    <xsl:apply-templates select="." mode="xref-text-separator"/>
                     <xsl:apply-templates select="$target" mode="xref-number">
                         <xsl:with-param name="xref" select="." />
                     </xsl:apply-templates>
@@ -8413,13 +8413,13 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                 <!-- content override of type-prefix -->
                 <xsl:when test="$b-has-content">
                     <xsl:copy-of select="$custom-text" />
-                    <xsl:call-template name="nbsp-character"/>
+                    <xsl:apply-templates select="." mode="xref-text-separator"/>
                     <xsl:apply-templates select="$target" mode="serial-number" />
                 </xsl:when>
                 <!-- usual, default case -->
                 <xsl:otherwise>
                     <xsl:apply-templates select="$target" mode="type-name" />
-                    <xsl:call-template name="nbsp-character"/>
+                    <xsl:apply-templates select="." mode="xref-text-separator"/>
                     <xsl:apply-templates select="$target" mode="serial-number" />
                 </xsl:otherwise>
             </xsl:choose>
@@ -8440,7 +8440,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <!-- type-local first, no matter what    -->
             <!-- for each of the two phrase styles   -->
             <xsl:apply-templates select="$target" mode="type-name" />
-            <xsl:call-template name="nbsp-character"/>
+            <xsl:apply-templates select="." mode="xref-text-separator"/>
             <xsl:apply-templates select="$target" mode="serial-number" />
             <!-- climb up tree to find highest matching structure numbers -->
             <!-- we pass through the two styles so reaction can occur     -->
@@ -8463,12 +8463,12 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                 <!-- or addtion to plain number      -->
                 <xsl:when test="$b-has-content">
                     <xsl:copy-of select="$custom-text" />
-                    <xsl:call-template name="nbsp-character"/>
+                    <xsl:apply-templates select="." mode="xref-text-separator"/>
                 </xsl:when>
                 <!-- no override, use type as prefix -->
                 <xsl:when test="$text-style = 'type-hybrid'">
                     <xsl:apply-templates select="$target" mode="type-name" />
-                    <xsl:call-template name="nbsp-character"/>
+                    <xsl:apply-templates select="." mode="xref-text-separator"/>
                 </xsl:when>
                 <!-- just a plain number, do nothing at all -->
                 <xsl:otherwise />
@@ -8499,6 +8499,23 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         </xsl:when>
         <xsl:otherwise>
             <xsl:message>MBX:BUG:  NO XREF TEXT GENERATED</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- "xref text" like "Theorem 4.5" benefits from a non-breaking   -->
+<!-- space to keep the pieces together and discourage line-breaks  -->
+<!-- in the middle.  This is less relevant when used as a "reason" -->
+<!-- inside of display mathematics *and* it does not play nicely   -->
+<!-- with WeBWorK's PGML, so this template handles the necessary   -->
+<!-- exception for "xref" immediately inside of an "mrow".         -->
+<xsl:template match="xref" mode="xref-text-separator">
+    <xsl:choose>
+        <xsl:when test="parent::mrow">
+            <xsl:text> </xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:call-template name="nbsp-character"/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
