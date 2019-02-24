@@ -37,6 +37,11 @@ systems.
 -->
 <mathbook>
 
+    <docinfo>
+        <!-- rename/lang  replaced by  rename/@xml:lang -->
+        <rename element="proposition" lang="en-US">Conundrum</rename>
+    </docinfo>
+
     <article xml:id="errors-and-warnings">
         <title>Errors and Warnings in MathBook XML</title>
 

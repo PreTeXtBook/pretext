@@ -10299,6 +10299,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'the  author-tools  parameter has been replaced by the functionally equivalent  author.tools'" />
             <xsl:with-param name="incorrect-use" select="not($author-tools = '')"/>
     </xsl:call-template>
+    <!--  -->
+    <!-- 2019-02-23  "rename/@lang" replaced by (optional) rename/@xml:lang -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$docinfo//rename[@lang]" />
+        <xsl:with-param name="date-string" select="'2019-02-20'" />
+        <xsl:with-param name="message" select="'the &quot;@lang&quot; attribute of &quot;rename&quot; has been replaced by &quot;@xml:lang&quot;, and is now optional if your document only uses one language'"/>
+    </xsl:call-template>
 </xsl:template>
 
 <!-- Miscellaneous -->
