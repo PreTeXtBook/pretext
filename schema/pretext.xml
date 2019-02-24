@@ -2036,13 +2036,13 @@
             }
         </fragment>
 
-        <p>Some elements can be renamed.  This should be a rare event.</p>
+        <p>Some elements can be renamed.  This should be a rare event.  Since the content of this element can (optionally) be specified in  different languages, the <attr>xml:lang</attr> attribute is appropriate.<fn><url href="https://www.w3.org/International/questions/qa-when-xmllang"/></fn></p>
 
         <fragment xml:id="rename">
         Configuration |=
             element rename {
                 attribute element {text},
-                attribute lang {text},
+                attribute xml:lang {text},
                 text
             }
         </fragment>
