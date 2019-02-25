@@ -8448,8 +8448,6 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
                         <xsl:copy-of select="$content" />
                     </div>
                 </main>
-                <!-- Overlaid extras, such as a calculator -->
-                <xsl:apply-templates select="." mode="overlays" />
             </div>
 
             <xsl:apply-templates select="$docinfo/analytics" />
@@ -8934,7 +8932,7 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
 </xsl:template>
 
 <xsl:template match="*" mode="calculator-toggle">
-    <div id="calculator-toggle" class="toolbar-item button toggle" title="Show calculator">Calc</div>
+    <button id="calculator-toggle" class="toolbar-item button toggle" title="Show calculator" aria-expanded="false" aria-controls="calculator-container">Calc</button>
 </xsl:template>
 
 
@@ -9048,6 +9046,7 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
                             <!-- Button to show/hide the calculator -->
                             <xsl:if test="$b-has-calculator">
                                 <xsl:apply-templates select="." mode="calculator-toggle" />
+                                <xsl:apply-templates select="." mode="calculator" />
                             </xsl:if>
                             <!-- Span to encase Prev/Up/Next buttons and float right    -->
                             <!-- Each button gets an id for keypress recognition/action -->
@@ -9144,15 +9143,9 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
         </aside> -->
 </xsl:template>
 
-<!-- Overlays -->
-<!-- For example, a graphing calculator tool       -->
-<xsl:template match="*" mode="overlays">
-    <xsl:apply-templates select="." mode="calculator" />
-</xsl:template>
-
 <xsl:template match="*" mode="calculator">
-    <xsl:if test="$b-has-calculator and contains($html.calculator,'geogebra')">
-        <div id="calculator-container" class="calculator-container" style="display: none">
+    <xsl:if test="contains($html.calculator,'geogebra')">
+        <div id="calculator-container" class="calculator-container" style="display: none; z-index:100;">
             <div id="geogebra-calculator"></div>
         </div>
         <script>
