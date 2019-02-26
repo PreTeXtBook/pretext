@@ -7573,11 +7573,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="login-header">
     <link href="{$html.css.server}/css/{$html.css.version}/features.css" rel="stylesheet" type="text/css"/>
     <script>
-       <xsl:text>var logged_in = false;&#xa;</xsl:text>
-       <xsl:text>var role = 'student';&#xa;</xsl:text>
-       <xsl:text>var guest_access = true;&#xa;</xsl:text>
-       <xsl:text>var login_required = false;&#xa;</xsl:text>
-       <xsl:text>var js_version = </xsl:text><xsl:value-of select='$html.js.version'/><xsl:text>;&#xa;</xsl:text>
+        <xsl:text>var logged_in = false;&#xa;</xsl:text>
+        <xsl:text>var role = 'student';&#xa;</xsl:text>
+        <xsl:text>var guest_access = true;&#xa;</xsl:text>
+        <xsl:text>var login_required = false;&#xa;</xsl:text>
+        <xsl:text>var js_version = </xsl:text>
+        <xsl:value-of select='$html.js.version'/>
+        <xsl:text>;&#xa;</xsl:text>
     </script>
 </xsl:template>
 
@@ -8931,7 +8933,7 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
     </xsl:choose>
 </xsl:template>
 
-<xsl:template match="*" mode="calculator-toggle">
+<xsl:template name="calculator-toggle">
     <button id="calculator-toggle" class="toolbar-item button toggle" title="Show calculator" aria-expanded="false" aria-controls="calculator-container">Calc</button>
 </xsl:template>
 
@@ -9045,8 +9047,8 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
                             </xsl:choose>
                             <!-- Button to show/hide the calculator -->
                             <xsl:if test="$b-has-calculator">
-                                <xsl:apply-templates select="." mode="calculator-toggle" />
-                                <xsl:apply-templates select="." mode="calculator" />
+                                <xsl:call-template name="calculator-toggle" />
+                                <xsl:call-template name="calculator" />
                             </xsl:if>
                             <!-- Span to encase Prev/Up/Next buttons and float right    -->
                             <!-- Each button gets an id for keypress recognition/action -->
@@ -9143,13 +9145,13 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
         </aside> -->
 </xsl:template>
 
-<xsl:template match="*" mode="calculator">
+<xsl:template name="calculator">
     <xsl:if test="contains($html.calculator,'geogebra')">
         <div id="calculator-container" class="calculator-container" style="display: none; z-index:100;">
             <div id="geogebra-calculator"></div>
         </div>
         <script>
-            <xsl:text>
+            <xsl:text>&#xa;</xsl:text>
             <!-- Here is where we could initialize some things to customize the display.                    -->
             <!-- But the customization should be different depending on classic, graphing, geometry, or 3d. -->
             <!-- For instance geometry probably does not benefit from showing the grid.                     -->
@@ -9159,32 +9161,30 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
                 applet.setGridVisible(1,true);
                 applet.showFullscreenButton(true);
             }; -->
-            var ggbApp = new GGBApplet({"appName": "</xsl:text>
+            <xsl:text>var ggbApp = new GGBApplet({"appName": "</xsl:text>
             <xsl:value-of select="substring-after($html.calculator,'-')"/>
-            <xsl:text>", </xsl:text>
+            <xsl:text>",&#xa;</xsl:text>
             <!-- width and height are required parameters                   -->
             <!-- All the rest is customizing some things away from defaults -->
             <!-- (or maybe in some cases explicitly using the defaults)     -->
             <!-- The last parameters have to do with scaling. This combination allows the 330x600 applet -->
             <!-- to scale up or down to the width of the contining div with class calculator-container.  -->
             <!-- The applet's height will scale proportionately.                                         -->
-            <xsl:text>
-                "width": 330,
-                "height": 600,
-                "showToolBar": true,
-                "showAlgebraInput": true,
-                "perspective": "G/A",
-                "algebraInputPosition": "bottom",
-                <!-- "appletOnLoad": onLoad, -->
-                "scaleContainerClass": "calculator-container",
-                "allowUpscale": true,
-                "autoHeight": true,
-                "disableAutoScale": false},
-            true);
+            <xsl:text>    "width": 330,&#xa;</xsl:text>
+            <xsl:text>    "height": 600,&#xa;</xsl:text>
+            <xsl:text>    "showToolBar": true,&#xa;</xsl:text>
+            <xsl:text>    "showAlgebraInput": true,&#xa;</xsl:text>
+            <xsl:text>    "perspective": "G/A",&#xa;</xsl:text>
+            <xsl:text>    "algebraInputPosition": "bottom",&#xa;</xsl:text>
+            <!--          "appletOnLoad": onLoad, -->
+            <xsl:text>    "scaleContainerClass": "calculator-container",&#xa;</xsl:text>
+            <xsl:text>    "allowUpscale": true,&#xa;</xsl:text>
+            <xsl:text>    "autoHeight": true,&#xa;</xsl:text>
+            <xsl:text>    "disableAutoScale": false},&#xa;</xsl:text>
+            <xsl:text>true);&#xa;</xsl:text>
             <!--   The calculator is created by                    -->
             <!--   ggbApp.inject('geogebra-calculator');           -->
             <!--   which is inserted by code in pretext_add_on.js  -->
-            </xsl:text>
         </script>
     </xsl:if>
 </xsl:template>
