@@ -9055,12 +9055,8 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
                         </div>
                     </xsl:when>
                 </xsl:choose>
-                <!-- right sidebar, not used currently -->
-                <button class="sidebar-right-toggle-button button active">
-                    <xsl:call-template name="type-name">
-                        <xsl:with-param name="string-id" select="'annotations'" />
-                    </xsl:call-template>
-                </button>
+                <!-- Annotations button was once here, see GitHub issue -->
+                <!-- https://github.com/rbeezer/mathbook/issues/1010    -->
             </div>
             <!-- Bottom buttons, for mobile UI -->
             <xsl:element name="div">
@@ -9089,14 +9085,9 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
                     <xsl:apply-templates select="." mode="up-button" />
                 </xsl:if>
                 <xsl:apply-templates select="." mode="next-button" />
-                <!-- unused, increment the toolbar-divisor-4/5 above -->
-                <!--
-                <button class="sidebar-right-toggle-button button toolbar-item active">
-                    <xsl:call-template name="type-name">
-                        <xsl:with-param name="string-id" select="'annotations'" />
-                    </xsl:call-template>
-                </button>
-                -->
+                <!-- Annotations button was once here, see GitHub issue -->
+                <!-- https://github.com/rbeezer/mathbook/issues/1010    -->
+                <!-- increment the toolbar-divisor-4/5 if it returns    -->
              </xsl:element>
         </div>
     </nav>
