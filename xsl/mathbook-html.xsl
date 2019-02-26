@@ -5637,10 +5637,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <xsl:call-template name="brand-logo" />
                             <div class="title-container">
                                 <h1 class="heading">
-                                    <xsl:element name="a">
-                                        <xsl:attribute name="href">
-                                            <xsl:apply-templates select="$document-root" mode="containing-filename" />
-                                        </xsl:attribute>
+                                    <xsl:variable name="root-filename">
+                                        <xsl:apply-templates select="$document-root" mode="containing-filename" />
+                                    </xsl:variable>
+                                    <a href="{$root-filename}">
                                         <xsl:variable name="b-has-subtitle" select="boolean($document-root/subtitle)"/>
                                         <span class="title">
                                             <!-- Do not use shorttitle in masthead,  -->
@@ -5656,7 +5656,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                                 <xsl:apply-templates select="$document-root" mode="subtitle" />
                                             </span>
                                         </xsl:if>
-                                    </xsl:element>
+                                    </a>
                                 </h1>
                                 <!-- Serial list of authors/editors -->
                                 <p class="byline">
@@ -8400,10 +8400,10 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
                         <xsl:call-template name="brand-logo" />
                         <div class="title-container">
                             <h1 class="heading">
-                                <xsl:element name="a">
-                                    <xsl:attribute name="href">
-                                        <xsl:apply-templates select="$document-root" mode="containing-filename" />
-                                    </xsl:attribute>
+                                <xsl:variable name="root-filename">
+                                    <xsl:apply-templates select="$document-root" mode="containing-filename" />
+                                </xsl:variable>
+                                <a href="{$root-filename}">
                                     <xsl:variable name="b-has-subtitle" select="boolean($document-root/subtitle)"/>
                                     <span class="title">
                                         <!-- Do not use shorttitle in masthead,  -->
@@ -8419,7 +8419,7 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
                                             <xsl:apply-templates select="$document-root" mode="subtitle" />
                                         </span>
                                     </xsl:if>
-                                </xsl:element>
+                                </a>
                             </h1>
                             <!-- Serial list of authors/editors -->
                             <p class="byline">
