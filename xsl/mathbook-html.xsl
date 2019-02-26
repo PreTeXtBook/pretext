@@ -8396,7 +8396,6 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
             <header id="masthead" class="smallbuttons">
                 <div class="banner">
                     <div class="container">
-                        <xsl:call-template name="google-search-box" />
                         <xsl:call-template name="brand-logo" />
                         <div class="title-container">
                             <h1 class="heading">
@@ -8427,6 +8426,8 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
                                 <xsl:apply-templates select="$document-root/frontmatter/titlepage/editor" mode="name-list"/>
                             </p>
                         </div>  <!-- title-container -->
+                        <!-- accessibility suggests relative ordering of next items -->
+                        <xsl:call-template name="google-search-box" />
                     </div>  <!-- container -->
                 </div>  <!-- banner -->
             <xsl:apply-templates select="." mode="primary-navigation" />
