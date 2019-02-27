@@ -435,6 +435,15 @@ the xsltproc executable.
             <idx><c>verbatim text</c>, use sortby</idx>
             <!-- keep this, collides with real "R" entry elsewhere -->
             <idx sortby="R"><m>\rho</m><ndash />fibers</idx>
+            <!-- test identical text, but variant upper- and lower-case  -->
+            <!-- each appears later in a paragraph, to test them sorting -->
+            <!-- into place to form just three index entries (each with  -->
+            <!-- two cross-references)                                   -->
+            <idx>Cayley graph</idx><idx>cayley graph</idx><idx>CAYLEY GRAPH</idx>
+            <!-- identical @sortby, identical content, should consolidate, -->
+            <!-- so an index entry here plus later, in a paragraph, after  -->
+            <!-- some other index entry                                    -->
+            <idx><h sortby="x"><m>x</m> as a variable</h></idx>
 
             <p>Sage can compute definite integrals.  The output contains the approximate numerical value of the definite integral, followed by an upper bound  of the error in the approximation.</p>
 
@@ -444,14 +453,14 @@ the xsltproc executable.
                 <output>(1.189200623826982, 1.320277913471315e-14)</output>
             </sage>
 
-            <p>Given the Fundamental Theorem, we would find the antiderivative useful.</p>
+            <p>Given the Fundamental Theorem, we would find the antiderivative useful.<idx>Cayley graph</idx><idx><h sortby="x"><m>x</m> as a variable</h></idx></p>
 
             <sage>
                 <input>integral(sin(x)^2, x)</input>
                 <output>1/2*x - 1/4*sin(2*x)</output>
             </sage>
 
-            <p>The same command can be used to employ the antiderivative in the application of the Fundamental Theorem.  Notice that the answer is <em>exact</em> and any further manipulation is likely to be simply producing a numerical approximation.</p>
+            <p>The same command can be used to employ the antiderivative in the application of the Fundamental Theorem.  Notice that the answer is <em>exact</em> and any further manipulation is likely to be simply producing a numerical approximation.<idx>cayley graph</idx></p>
 
             <!-- The "full" type is the default, it is used here only for testing purposes -->
             <sage type="full">
@@ -459,7 +468,7 @@ the xsltproc executable.
                 <output>-1/4*sin(4) + 1</output>
             </sage>
 
-            <p>There are integrals you really do not want to evaluate, or you do not want your reader to evaluate.  A Sage cell can be configured for display purposes only<mdash />you can look but you cannot touch.</p>
+            <p>There are integrals you really do not want to evaluate, or you do not want your reader to evaluate.  A Sage cell can be configured for display purposes only<mdash />you can look but you cannot touch.<idx>CAYLEY GRAPH</idx></p>
 
             <sage type="display">
                 <input>integral(e^(x^2), x)</input>
