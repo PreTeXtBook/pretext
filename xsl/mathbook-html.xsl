@@ -895,10 +895,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Back Colophon -->
 <!-- Nothing special, so just process similarly to front -->
 
-<xsl:template match="index-list">
-    <xsl:call-template name="print-index" />
-</xsl:template>
-
 <!--               -->
 <!-- Notation List -->
 <!--               -->
@@ -1125,7 +1121,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Index Creation -->
 <!-- ############## -->
 
-<!-- "print-index":                                          -->
+<!-- "index-list":                                           -->
 <!--     build a sorted list of every "index" in text        -->
 <!-- "group-by-letter":                                      -->
 <!--     accumale common first-letter entries,               -->
@@ -1134,7 +1130,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--     consolidate/accumulate entries with common heading  -->
 <!-- "knowl-list":                                           -->
 <!--     output the cross-references                         -->
-<xsl:template name="print-index">
+<xsl:template match="index-list">
+    <!-- Save-off the "index-list" as context for placement of      -->
+    <!-- eventual xref/cross-references, since we use a for-each    -->
+    <!-- and context changes.  Not strictly necessary, but correct. -->
+    <xsl:variable name="the-index-list" select="."/>
     <!-- <index> with single mixed-content heading -->
     <!-- or replacement <idx> as mixed-content     -->
     <!-- start attribute is actual end of a        -->
@@ -1165,9 +1165,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- plus two more empty keys -->
                 <key><text /></key>
                 <key><text /></key>
-                <!-- write/preserve info about the location's surroundings -->
-                <!-- as "knowl" and "typename" temporary elements          -->
-                <xsl:apply-templates select="." mode="index-enclosure" />
+                <!-- Create the full cross-reference and save now, since      -->
+                <!-- context will be lost later.  Save in a "cross-reference" -->
+                <!-- element.  We use the context of the index itself as the  -->
+                <!-- location where the cross-reference is placed.  The       -->
+                <!-- location of the "idx" is the start of a search for the   -->
+                <!-- enclosing element.                                       -->
+                <cross-reference>
+                    <xsl:apply-templates select="$the-index-list" mode="index-enclosure">
+                        <xsl:with-param name="enclosure" select="."/>
+                    </xsl:apply-templates>
+                </cross-reference>
             </index>
         </xsl:for-each>
     </xsl:variable>
@@ -1231,10 +1239,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:if test="(main and not(sub[2]))">
                     <key><xsl:text /></key>
                 </xsl:if>
-                <!-- write/preserve info about the location's surroundings -->
-                <!-- context will be lost as RTF is converted, so grab it  -->
-                <!-- as "knowl" and "typename" temporary elements          -->
-                <xsl:apply-templates select="." mode="index-enclosure" />
+                <!-- Create the full cross-reference and save now, since      -->
+                <!-- context will be lost later.  Save in a "cross-reference" -->
+                <!-- element.  We use the context of the index itself as the  -->
+                <!-- location where the cross-reference is placed.  The       -->
+                <!-- location of the "idx" is the start of a search for the   -->
+                <!-- enclosing element.                                       -->
+                <cross-reference>
+                    <xsl:apply-templates select="$the-index-list" mode="index-enclosure">
+                        <xsl:with-param name="enclosure" select="."/>
+                    </xsl:apply-templates>
+                </cross-reference>
                 <!-- there is at most one "see" or "seealso" total -->
                 <!-- these replace the knowls, so perhaps condition here -->
                 <xsl:for-each select="see">
@@ -1438,25 +1453,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- TODO: split into two more when, otherwise as error? -->
                 <xsl:otherwise>
                     <xsl:text> </xsl:text>
-                    <a>
-                        <!-- knowl or traditional hyperlink     -->
-                        <!-- mutually exclusive by construction -->
-                        <xsl:if test="knowl">
-                            <xsl:attribute name="data-knowl">
-                                <xsl:value-of select="knowl" />
-                            </xsl:attribute>
-                        </xsl:if>
-                        <xsl:if test="hyperlink">
-                            <xsl:attribute name="class">
-                                <xsl:text>internal</xsl:text>
-                            </xsl:attribute>
-                            <xsl:attribute name="href">
-                                <xsl:value-of select="hyperlink" />
-                            </xsl:attribute>
-                        </xsl:if>
-                        <!-- content: replace with localized short-names -->
-                        <xsl:value-of select="typename" />
-                    </a>
+                    <xsl:copy-of select="cross-reference/node()"/>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:for-each>
@@ -1464,41 +1461,37 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Climb the tree looking for an enclosing structure of        -->
-<!-- interest and preserve the knowl-url, plus clickable text    -->
+<!-- interest.  Create cross-reference.                          -->
 <!-- One notable case: paragraph must be "top-level", just below -->
 <!-- a structural document node                                  -->
 <!-- Recursion always halts, since "mathbook" is structural      -->
 <!-- TODO: save knowl or section link                            -->
-<xsl:template match="*" mode="index-enclosure">
+<xsl:template match="index-list" mode="index-enclosure">
+    <xsl:param name="enclosure"/>
+
     <xsl:variable name="structural">
-        <xsl:apply-templates select="." mode="is-structural" />
+        <xsl:apply-templates select="$enclosure" mode="is-structural"/>
     </xsl:variable>
     <xsl:variable name="block">
-        <xsl:apply-templates select="." mode="is-block" />
+        <xsl:apply-templates select="$enclosure" mode="is-block"/>
     </xsl:variable>
     <xsl:choose>
         <!-- found a structural parent first           -->
         <!-- collect a url for a traditional hyperlink -->
-        <xsl:when test="$structural='true'">
-            <hyperlink>
-                <xsl:apply-templates select="." mode="url" />
-            </hyperlink>
-            <typename>
-                <xsl:apply-templates select="." mode="type-name" />
-            </typename>
-        </xsl:when>
-        <!-- found a block parent     -->
-        <!-- collect a knowl filename -->
-        <xsl:when test="$block='true'">
-            <knowl>
-                <xsl:apply-templates select="." mode="xref-knowl-filename" />
-            </knowl>
-            <typename>
-                <xsl:apply-templates select="." mode="type-name" />
-            </typename>
+        <xsl:when test="($structural = 'true') or ($block = 'true')">
+            <xsl:apply-templates select="." mode="xref-link">
+                <xsl:with-param name="target" select="$enclosure"/>
+                <xsl:with-param name="content">
+                    <xsl:apply-templates select="$enclosure" mode="type-name"/>
+                </xsl:with-param>
+            </xsl:apply-templates>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:apply-templates select="parent::*" mode="index-enclosure" />
+            <!-- Recurse.  The "index-list" gets passed along unchanged,     -->
+            <!-- as the context for location of the eventual cross-reference -->
+            <xsl:apply-templates select="." mode="index-enclosure">
+                <xsl:with-param name="enclosure" select="$enclosure/parent::*"/>
+            </xsl:apply-templates>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
