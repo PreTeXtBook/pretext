@@ -129,7 +129,7 @@
     <section xml:id="processing-images-mbx">
         <title>Images and the <c>mbx</c> Script</title>
 
-        <p>We believe it is important to preserve a record of how diagrams and other graphics are produced.  This can be easy when a graphics language is employed to describe the graphical elements, rather than creating a bit-mapped image with some other interface.  So we have <tag>asymptote</tag>, <tag>latex-image-code</tag>, and <tag>sageplot</tag> for elements holding code to produce diagrams or images<idx>image</idx>.</p>
+        <p>We believe it is important to preserve a record of how diagrams and other graphics are produced.  This can be easy when a graphics language is employed to describe the graphical elements, rather than creating a bit-mapped image with some other interface.  So we have <tag>asymptote</tag>, <tag>latex-image</tag>, and <tag>sageplot</tag> for elements holding code to produce diagrams or images<idx>image</idx>.</p>
 
         <p>The upside to this is that small edits to the code can easily accomplish minor changes or corrections necessary for the images.  The <latex /> macros provided by an author can be used in the text <em>and</em> in a diagram, leading to greater consistency between the two.  Finally, starting from source, we can do the best possible job of producing image formats that are compatible with the document output formats and which scale smoothly in PDFs and in web browsers.</p>
 
