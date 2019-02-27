@@ -1162,9 +1162,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </xsl:otherwise>
                     </xsl:choose>
                 </key>
-                <!-- plus two more empty keys -->
-                <key><text /></key>
-                <key><text /></key>
+                <!-- plus two more empty text, key pairs -->
+                <text/><key/>
+                <text/><key/>
                 <!-- Create the full cross-reference and save now, since      -->
                 <!-- context will be lost later.  Save in a "cross-reference" -->
                 <!-- element.  We use the context of the index itself as the  -->
@@ -1226,18 +1226,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </link>
                     </xsl:if>
                 </xsl:for-each>
-                <!-- add empty strings in additional "missing" keys -->
+                <!-- add additional empty text, key pairs -->
+                <!-- so there are always three            -->
                 <xsl:if test="(count(h) = 1) or (count(h) = 2)">
-                    <key><xsl:text /></key>
+                    <text/><key/>
                 </xsl:if>
                 <xsl:if test="count(h) = 1">
-                    <key><xsl:text /></key>
+                    <text/><key/>
                 </xsl:if>
                 <xsl:if test="(main and not(sub[1]))">
-                    <key><xsl:text /></key>
+                    <text/><key/>
                 </xsl:if>
                 <xsl:if test="(main and not(sub[2]))">
-                    <key><xsl:text /></key>
+                    <text/><key/>
                 </xsl:if>
                 <!-- Create the full cross-reference and save now, since      -->
                 <!-- context will be lost later.  Save in a "cross-reference" -->
