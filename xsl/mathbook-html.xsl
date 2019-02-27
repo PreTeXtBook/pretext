@@ -1266,13 +1266,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </index>
         </xsl:for-each>
     </xsl:variable>
-    <!-- sort now that info from document tree ordering is recorded -->
-    <!-- perhaps one big variable/RTF once deprecation takes place  -->
+    <!-- Sort, now that info from document tree ordering is recorded     -->
+    <!-- perhaps one big variable/RTF once deprecation takes place.      -->
+    <!-- Keys, normalized to lowercase, or @sortby attributes, are the   -->
+    <!-- primary key for sorting, but if we have index entries that just -->
+    <!-- differ by upper- or lower-case distinctions, we need to have    -->
+    <!-- identical variants sort next to each other so they get grouped  -->
+    <!-- as one entry with multiple cross-references, so we sort on the  -->
+    <!-- actual text as well. -->
     <xsl:variable name="sorted-index">
         <xsl:for-each select="exsl:node-set($unstructured-index)/*|exsl:node-set($structured-index)/*">
             <xsl:sort select="./key[1]" />
+            <xsl:sort select="./text[1]"/>
             <xsl:sort select="./key[2]" />
+            <xsl:sort select="./text[2]"/>
             <xsl:sort select="./key[3]" />
+            <xsl:sort select="./text[3]"/>
             <xsl:sort select="./link" />
             <xsl:copy-of select="." />
         </xsl:for-each>
@@ -1339,7 +1348,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:variable name="new-heading-group" select="$heading-group|."/>
         <xsl:choose>
             <!-- same heading, accumulate and iterate -->
-            <xsl:when test="($next-index/key[1] = ./key[1]) and ($next-index/key[2] = ./key[2]) and ($next-index/key[3] = ./key[3])">
+            <xsl:when test="($next-index/text[1] = ./text[1]) and ($next-index/text[2] = ./text[2]) and ($next-index/text[3] = ./text[3])">
                 <xsl:apply-templates select="$next-index" mode="group-by-heading">
                     <xsl:with-param name="heading-group" select="$new-heading-group" />
                     <xsl:with-param name="letter-group" select="$letter-group"/>
@@ -1371,11 +1380,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="pattern" select="$heading-group[1]" />
     <xsl:variable name="pred" select="$pattern/preceding-sibling::index[1]" />
     <!-- booleans for analysis of format of heading, xrefs -->
-    <xsl:variable name="match1" select="($pred/key[1] = $pattern/key[1]) and $pred" />
-    <xsl:variable name="match2" select="($pred/key[2] = $pattern/key[2]) and $pred" />
-    <xsl:variable name="match3" select="($pred/key[3] = $pattern/key[3]) and $pred" />
-    <xsl:variable name="empty2" select="boolean($pattern/key[2] = '')" />
-    <xsl:variable name="empty3" select="boolean($pattern/key[3] = '')" />
+    <xsl:variable name="match1" select="($pred/text[1] = $pattern/text[1]) and $pred" />
+    <xsl:variable name="match2" select="($pred/text[2] = $pattern/text[2]) and $pred" />
+    <xsl:variable name="match3" select="($pred/text[3] = $pattern/text[3]) and $pred" />
+    <xsl:variable name="empty2" select="boolean($pattern/text[2] = '')" />
+    <xsl:variable name="empty3" select="boolean($pattern/text[3] = '')" />
     <!-- write an "indexitem", "subindexitem", "subsubindexitem" as     -->
     <!-- necessary to identify chnages in headings, without duplicating -->
     <!-- headings from prior entries. Add xref when keys go blank       -->
