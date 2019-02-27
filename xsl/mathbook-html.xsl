@@ -1143,7 +1143,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="unstructured-index">
         <xsl:for-each select="//index[not(main) and not(@start) and not(index-list) and (not(ancestor::commentary) or $b-commentary)] | $document-root//idx[not(h) and not(@start) and (not(ancestor::commentary) or $b-commentary)]">
             <xsl:variable name="content">
-                <xsl:apply-templates select="*|text()" />
+                <xsl:apply-templates/>
             </xsl:variable>
             <index>
                 <!-- text, key-value for single index heading -->
@@ -1178,7 +1178,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <index>
                 <xsl:for-each select="main|sub|h">
                     <xsl:variable name="content">
-                        <xsl:apply-templates select="*|text()" />
+                        <xsl:apply-templates/>
                     </xsl:variable>
                     <text>
                         <xsl:copy-of select="$content" />
@@ -1239,12 +1239,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- these replace the knowls, so perhaps condition here -->
                 <xsl:for-each select="see">
                     <see>
-                        <xsl:apply-templates select="*|text()" />
+                        <xsl:apply-templates/>
                     </see>
                 </xsl:for-each>
                 <xsl:for-each select="seealso">
                     <seealso>
-                        <xsl:apply-templates select="*|text()" />
+                        <xsl:apply-templates/>
                     </seealso>
                 </xsl:for-each>
             </index>
@@ -1263,22 +1263,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <!-- ship start of a node-set to be grouped by letter   -->
     <!-- conversion to node-set is necessary for subsequent -->
-    <xsl:apply-templates select="exsl:node-set($sorted-index)/*[1]" mode="group-by-letter">
+    <xsl:apply-templates select="exsl:node-set($sorted-index)/index[1]" mode="group-by-letter">
         <xsl:with-param name="letter-group" select="/.." />
     </xsl:apply-templates>
 </xsl:template>
 
 <!-- Accumulate index entries with a common first letter   -->
 <!-- in $letter-group and then pass to grouping by heading -->
-<xsl:template match="*" mode="group-by-letter">
+<xsl:template match="index" mode="group-by-letter">
     <!-- Empty node list from parent of root node -->
-    <xsl:param name="letter-group" select="/.."/>
+    <xsl:param name="letter-group"/>
+
     <!-- look ahead at next index entry -->
-    <xsl:variable name="next-index" select="following-sibling::*[1]" />
+    <xsl:variable name="next-index" select="following-sibling::index[1]"/>
     <!-- check if we have run out all of the index entries -->
     <xsl:if test=".">
         <!-- always accumulate context node in node-list (first, or $next-index inspected) -->
-        <xsl:variable name="new-letter-group" select="$letter-group | ." />
+        <xsl:variable name="new-letter-group" select="$letter-group|."/>
         <xsl:choose>
             <!-- next index item has same lead letter, so iterate -->
             <xsl:when test="substring($next-index/key[1], 1, 1) = substring(key[1], 1,1)">
@@ -1310,15 +1311,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Accumulate index entries with identical heading -->
 <!-- quit accumulating when next entry differs       -->
 <!-- Output heading, xrefs, before restarting        -->
-<xsl:template match="*" mode="group-by-heading">
+<xsl:template match="index" mode="group-by-heading">
     <!-- Empty node list from parent of root node -->
-    <xsl:param name="heading-group" select="/.."/>
-    <xsl:param name="letter-group" select="/.."/>
+    <xsl:param name="heading-group"/>
+    <xsl:param name="letter-group"/>
+
     <!-- look ahead at next index entry -->
-    <xsl:variable name="next-index" select="following-sibling::*[1]" />
+    <xsl:variable name="next-index" select="following-sibling::index[1]"/>
     <!-- check if context node is still in the letter-group -->
-    <xsl:if test="count(. | $letter-group) = count($letter-group)">
-        <xsl:variable name="new-heading-group" select="$heading-group | ." />
+    <xsl:if test="count(.|$letter-group) = count($letter-group)">
+        <xsl:variable name="new-heading-group" select="$heading-group|."/>
         <xsl:choose>
             <!-- same heading, accumulate and iterate -->
             <xsl:when test="($next-index/key[1] = ./key[1]) and ($next-index/key[2] = ./key[2]) and ($next-index/key[3] = ./key[3])">
@@ -1349,8 +1351,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- match, do not write an empty heading.    -->
 <xsl:template name="output-one-heading">
     <xsl:param name="heading-group" />
+
     <xsl:variable name="pattern" select="$heading-group[1]" />
-    <xsl:variable name="pred" select="$pattern/preceding-sibling::*[1]" />
+    <xsl:variable name="pred" select="$pattern/preceding-sibling::index[1]" />
     <!-- booleans for analysis of format of heading, xrefs -->
     <xsl:variable name="match1" select="($pred/key[1] = $pattern/key[1]) and $pred" />
     <xsl:variable name="match2" select="($pred/key[2] = $pattern/key[2]) and $pred" />
