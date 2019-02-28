@@ -165,16 +165,14 @@ the xsltproc executable.
 
         You can make a document-specific, global override.  Here we
         decide we have no need for any "proposition"s and repurpose
-        that environment in US English as a "Conundrum."
+        that environment as a "Conundrum."
 
-        The specification of a language is optional, if you do
-        not have a multilingual project.
-
-        See the localization file for more on language codes, and realize
-        that US English is the default if there is no "lang" attribute
-        given on the document.
+        The specification of a language is optional, if you do not
+        have a multilingual project.  Otherwise you can supply an
+        @xml:lang attribute so the rename only applies for a specific
+        language.  See the localization file for more on language codes.
         -->
-        <!-- <rename element="proposition" xml:lang="en-US">Conundrum</rename> -->
+        <rename element="proposition">Conundrum</rename>
 
         <!-- Various third-party add-ons need some sort of token     -->
         <!-- Using an element here serves two purposes               -->
@@ -7595,7 +7593,7 @@ the xsltproc executable.
 
                 <p><q>Names</q><idx>name</idx> for various parts of a document are determined exactly once for each language, ensuring consistency and saving you the bother of always typing them in.</p>
 
-                <p>However, you may want to have <q>Conundrum</q>s<idx><h>conundrum</h><h>repurposed from proposition</h></idx> in your document and you have no use for any <q>Proposition</q>s.  So you can repurpose the <c>proposition</c> tag to render a different name.  Or you might have a Lab Manual and want to rename <c>subsection</c> as <q>Activity</q>.  See the <c>docinfo</c> portion of this sample article to see how this is done, in concert with the example below.  Note that you may provide versions for different languages, and that the <attr>lang</attr> attribute here is just slightly different than the general <attr>@xml:lang</attr> attribute.</p>
+                <p>However, you may want to have <q>Conundrum</q>s<idx><h>conundrum</h><h>repurposed from proposition</h></idx> in your document and you have no use for any <q>Proposition</q>s.  So you can repurpose the <c>proposition</c> tag to render a different name.  Or you might have a Lab Manual and want to rename <c>subsection</c> as <q>Activity</q>.  See the <c>docinfo</c> portion of this sample article to see how this is done, in concert with the example below.  Note that you may provide versions for different languages by specifying a <attr>xml:lang</attr> attribute.</p>
 
                 <proposition xml:id="proposition-as-conundrum">
                     <creator>Smith</creator>
