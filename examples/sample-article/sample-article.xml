@@ -4473,41 +4473,99 @@ the xsltproc executable.
             <subsection>
                 <title>Geogebra</title>
 
-                <p>Better than using the server version of Geogebra might be designing your own material, retaining your copyright, and using one of Geogebra's <q>Apps</q> to embed the material in your document.  (But note, use of the App comes with licensing restrictions.)  <pretext /> will handle the technical details for you.<ol>
-                    <li>Use Geogebra to make a material.  Maybe you need to install a desktop program that allows you to do this.  Then export, or otherwise discover the <q>base64-encoded</q> version which may be identified by <c>ggb</c>.  See the source of this page for examples of what this looks like.</li>
-                    <li>Mimic the source of the examples below.</li>
-                    <li>Long-run it will be better to park these strings in files (in a <c>code</c> subdirectory?) and <tag>xi:include</tag> them with the <attr>parse</attr> attribute set to <c>text</c>.  But we do not want to impede a newcomer's quickstart with the problematic <c>-xinclude</c> switch.</li>
+                <p>To embed a GeoGebra applet as-is from GeoGebra's Classroom Resources site (by material ID), see <xref ref="subsection-geogebra-server" text="type-global"/>. To design your own applet (either from scratch, or modifying something that already exists in one of those three forms) you may use one of Geogebra's <q>Apps</q> to embed the material in your document. (But note, use of the App comes with licensing restrictions.) <pretext /> will handle most of the technical details for you.</p>
+
+                <p>Do one of the following:<ol>
+                    <li>Identify a material ID from GeoGebra's Classroom Resources site. You might even make the material yourself on that site.</li>
+                    <li>Obtain a <c>.ggb</c> file from GeoGebra. You might construct something on a desktop installation of GeoGebra and save it. If you have a base64-encoded string for a GeoGebra applet, but you don't have a <c>.ggb</c> file, you can decode the string and save the result. For example, at <url href="https://www.opinionatedgeek.com/codecs/base64decoder">www.opinionatedgeek.com/codecs/base64decoder</url>.</li>
+                    <li>Obtain a base64 encoded string for a GeoGebra applet. You might first open a <c>.ggb</c> file in a desktop installation of GeoGebra, and push ctrl-shift-B (command-shift-B on a Mac) and then the string will be in your clipboard.</li>
+                    <li>None of the above, with the intention to make an applet from scratch.</li>
                 </ol></p>
 
-                <p>The sliders on the next applet seem to be at fixed locations.  Make it too skinny and you will never see them, rendering the material useless.  However the window will pan (drag with a mouse) and zoom (scroll wheel of a mouse), so you can adjust that way.</p>
+                <p>Then mimic the examples that follow, using GeoGebra API commands documented at <url href="https://wiki.geogebra.org/en/Reference:GeoGebra_Apps_API">wiki.geogebra.org/en/Reference:GeoGebra_Apps_API</url>, but do not include the <c>ggbApplet.</c> or <c>applet.</c> used in examples to prefix the functions<emdash/>that part of the code will be provided automatically by <pretext/>.</p>
+
+                <p>Jack Green created an applet on the Classroom Resources site with ID <c>D4s2v4ft</c>, which you may view at <url href="https://www.geogebra.org/m/D4s2v4ft">geogebra.org/m/D4s2v4ft</url>. Suppose you would like to use this in your project, but change something about it. We will change something trivial, making the <m>y</m>-axis ticks be separated <m>5</m> apart instead of <m>10</m> apart. We also decide we want a different aspect ratio and overall width. One gotcha: the original applet is loaded and then <pretext/> uses <attr>width</attr> and <attr>aspect</attr> attributes to resize the viewing window using the top left corner as an anchor. This does not rescale axes and that may leave you with important elements missing from the viewing window. So here we reset the viewing window to return to values that are in the original. Lastly, we disable zooming, which is not helpful for this applet. To do each of these things, we rely on the GeoGebra API manual at <url href="https://wiki.geogebra.org/en/Reference:GeoGebra_Apps_API">wiki.geogebra.org/en/Reference:GeoGebra_Apps_API</url>. It is important to use one command per line.</p>
 
                 <figure>
-                    <caption>GeoGebra: astroids (from Dave Rosoff)</caption>
+                    <caption>GeoGebra: modified material ID</caption>
+                    <interactive xml:id="geogebra-train-distance" platform="geogebra" width="75%" aspect="2:1">
+                        <slate xml:id="train-distance" surface="geogebra" material="D4s2v4ft" aspect="2:1">
+                            setAxisSteps(1, 1, 5, 1);
+                            setCoordSystem(-0.7, 8, -6, 56);
+                            enableShiftDragZoom(false);
+                        </slate>
+                    </interactive>
+                </figure>
+
+                <p>The same can be done with a <c>.ggb</c> file. Here we use two provided by David Rosoff, and one provided by Tevian Dray. The path to the file needs to be relative. We modify David's applet in a few ways. Remove the modifications to see the original.</p>
+
+                <figure>
+                    <caption>GeoGebra: modified from <c>.ggb</c> file</caption>
                     <interactive xml:id="geogebra-astroid" platform="geogebra" width="100%" aspect="4:3">
-                        <slate xml:id="astroid" surface="geogebra" source="code/rosoff/astroid.ggb" aspect="4:3" />
+                        <slate xml:id="astroid" surface="geogebra" source="code/rosoff/astroid.ggb" aspect="4:3">
+                            setCoordSystem(-6, 10, -6, 6);
+                            setLabelVisible("b", false);
+                            setLabelVisible("c", false);
+                            setLabelVisible("d", false);
+                            setAxisLabels(1,"x","y","z");
+                            evalCommand("r = Slider(1,4,0.1)");
+                            showResetIcon(true);
+                        </slate>
                     </interactive>
                 </figure>
-
-                <p>Now the controls are in the upper-left corner, so we can more easily make the window a little smaller.  Pan and zoom to put the action where you can see it better.</p>
 
                 <figure>
-                    <caption>GeoGebra: cycloids (from Dave Rosoff)</caption>
-                    <interactive xml:id="geogebra-cycloid" platform="geogebra" width="75%" aspect="3:4">
-                        <slate xml:id="cycloid" surface="geogebra" source="code/rosoff/epi-hypocycloids-default.ggb" aspect="3:4"/>
+                    <caption>GeoGebra: modified from <c>.ggb</c> file</caption>
+                    <interactive xml:id="geogebra-cycloid" platform="geogebra" width="100%" aspect="2:1">
+                        <slate xml:id="cycloid" surface="geogebra" source="code/rosoff/epi-hypocycloids-default.ggb" aspect="2:1">
+                            setCoordSystem(-15,5,-5,5);
+                            setAnimating("θ", true);
+                        </slate>
                     </interactive>
                 </figure>
 
-                <p>You will need to zoom out a bit, and then pan over some, to see all the pieces of the next GeoGebra material.</p>
+                <p>In this one provided by Tevian Dray, we make no modifications (except for those imposed by the scaling). You will need to zoom out a bit, and then pan over some, to see all the pieces.</p>
 
                 <figure>
                     <caption>GeoGebra: a constructive <q>proof</q> that SAS congruence holds in Euclidean geometry (from Tevian Dray)</caption>
                     <interactive xml:id="geogebra-SAS" platform="geogebra" width="100%" aspect="1:1">
-                        <slate xml:id="SAS" surface="geogebra" source="code/dray/SAS.ggb" />
+                        <slate xml:id="SAS" surface="geogebra" source="code/dray/SAS.ggb" aspect="1:1"/>
                         <instructions>
                             <p>Drag some of the points and some of the circles to change them, and watch the remainder react.</p>
                         </instructions>
                     </interactive>
                 </figure>
+
+                <p>You could also use a base64-encoded string of the <c>.ggb</c> file. You might come across such a string somewhere, or you might generate one by opening a <c>.ggb</c> file in a desktop installation of GeoGebra, and pushing ctrl-shift-B (command-shift-B on a Mac) to get the string in your clipboard. If you do this, you could use a <attr>base64</attr> attribute in place of the <attr>source</attr> attribute in the previous example. We don't do that here because such a string is generally over 5000 characters long and we are keeping the sample article source a bit cleaner.</p>
+
+                <p>Lastly, you may just wish to build something from scratch using GeoGebra API. Note that for accessibilty reasons, some objects are rendered unselectable with the <c>setFixed</c> command. Perhaps this should have been done with the previous examples, but that is more difficult when you do not know all of their names.</p>
+
+                <figure>
+                    <caption>GeoGebra: from scratch</caption>
+                    <interactive xml:id="geogebra-seed-head" platform="geogebra" width="50%" aspect="1:1">
+                        <slate xml:id="seed-head" surface="geogebra" aspect="1:1">
+                            setPerspective("G");
+                            setRounding("3s");
+                            setCoordSystem(-1,1,-1,1);
+                            setGridVisible(false);
+                            setAxesVisible(false, false);
+                            evalCommand("f(x)=If(x>0,sqrt(x),0)");
+                            setVisible("f", false);
+                            evalCommand("T=20");
+                            evalCommand("t=Slider(0,T)");
+                            setAnimating("t", true);
+                            evalCommand("v=Vector((cos(t),sin(t)))");
+                            evalCommand("r=Slider(0,1)");
+                            evalCommand("r=(sqrt(5)-1)/2");
+                            evalCommand("r=Slider(0,1,0.001)");
+                            evalCommand("N=Min(100,floor(T/r))");
+                            evalCommand("Seeds = Sequence(f(t - n r) / sqrt(T) (cos(n r 2 pi), sin(n r 2 pi)), n, 0, N)");
+                            setFixed("v", false, false);
+                            setFixed("Seeds", false, false);
+                        </slate>
+                    </interactive>
+                </figure>
+
             </subsection>
         </section>
 
@@ -4525,7 +4583,7 @@ the xsltproc executable.
                 <p>(2018-06-22) Almost everything in this section is under active development and not stable yet.  Feel free to experiment and make suggestions and requests.  This page takes a while to completely load, so be patient.</p>
             </introduction>
 
-            <subsection>
+            <subsection xml:id="subsection-geogebra-server">
                 <title>GeoGebra</title>
                 <idx><h>Geogebra</h><h>server</h></idx>
                 <idx><h>Geogebra</h><h>material</h></idx>
