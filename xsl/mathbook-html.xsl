@@ -1149,106 +1149,103 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- start attribute is actual end of a        -->
     <!-- "page range", goodies at @finish          -->
     <!-- "commentary" is elective, so condition    -->
-    <xsl:variable name="unstructured-index">
-        <xsl:for-each select="//index[not(main) and not(@start) and not(index-list) and (not(ancestor::commentary) or $b-commentary)] | $document-root//idx[not(h) and not(@start) and (not(ancestor::commentary) or $b-commentary)]">
-            <xsl:variable name="content">
-                <xsl:apply-templates/>
-            </xsl:variable>
+    <xsl:variable name="index-items">
+        <!-- index entries, don't want end of a "page range" -->
+        <!-- "commentary" is elective, so process, or not    -->
+        <!-- latter half of @select is deprecated usage      -->
+        <!-- new style is index/index-list for the division, -->
+        <!-- we don't want that picked up in the deprecated  -->
+        <!-- "index" used for the entries                    -->
+        <xsl:for-each select="$document-root//idx[not(@start) and (not(ancestor::commentary) or $b-commentary)] | //index[not(index-list) and not(@start) and (not(ancestor::commentary) or $b-commentary)]">
             <index>
-                <!-- text, key-value for single index heading -->
-                <text>
-                    <xsl:copy-of select="$content" />
-                </text>
-                <key>
-                    <xsl:choose>
-                        <!-- salt prevents accidental key collisions -->
-                        <xsl:when test="@sortby">
-                            <xsl:value-of select="translate(@sortby, &UPPERCASE;, &LOWERCASE;)" />
-                            <xsl:value-of select="generate-id(.)" />
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:value-of select="translate($content, &UPPERCASE;, &LOWERCASE;)" />
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </key>
-                <!-- plus two more empty text, key pairs -->
-                <text/><key/>
-                <text/><key/>
-                <!-- Create the full cross-reference and save now, since      -->
-                <!-- context will be lost later.  Save in a "cross-reference" -->
-                <!-- element.  We use the context of the index itself as the  -->
-                <!-- location where the cross-reference is placed.  The       -->
-                <!-- location of the "idx" is the start of a search for the   -->
-                <!-- enclosing element.                                       -->
-                <cross-reference>
-                    <xsl:apply-templates select="$the-index-list" mode="index-enclosure">
-                        <xsl:with-param name="enclosure" select="."/>
-                    </xsl:apply-templates>
-                </cross-reference>
-            </index>
-        </xsl:for-each>
-    </xsl:variable>
-    <!-- index entries with structure, cant't be end of a "page range" -->
-    <!-- "commentary" is elective, so process, or not                  -->
-    <xsl:variable name="structured-index">
-        <xsl:for-each select="//index[main and not(@start) and (not(ancestor::commentary) or $b-commentary)] | $document-root//idx[h and not(@start) and (not(ancestor::commentary) or $b-commentary)]">
-            <index>
-                <xsl:for-each select="main|sub|h">
-                    <xsl:variable name="content">
-                        <xsl:apply-templates/>
-                    </xsl:variable>
-                    <text>
-                        <xsl:copy-of select="$content" />
-                    </text>
-                    <key>
-                        <xsl:choose>
-                            <!-- salt prevents accidental key collisions -->
-                            <xsl:when test="@sortby">
-                                <xsl:value-of select="translate(@sortby, &UPPERCASE;, &LOWERCASE;)" />
-                                <xsl:value-of select="generate-id(.)" />
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:value-of select="translate($content, &UPPERCASE;, &LOWERCASE;)" />
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </key>
-                    <!-- if terminal, enhance final sort key -->
-                    <!-- link type for final sort preference -->
-                    <!-- this mimics LaTeX's ordering        -->
-                    <!--   0 - has "see also"                -->
-                    <!--   1 - has "see"                     -->
-                    <!--   2 - is knowl/hyperlink reference  -->
-                    <!-- condition on last level of headings -->
-                    <xsl:if test="not(following-sibling::*[self::sub]) and not(following-sibling::*[self::h])">
-                        <link>
+                <xsl:choose>
+                    <!-- simple mixed-content first, no structure -->
+                    <!-- one text-key pair, two more empty        -->
+                    <!-- "main" as indicator is deprecated        -->
+                    <xsl:when test="not(main) and not(h)">
+                        <xsl:variable name="content">
+                            <xsl:apply-templates/>
+                        </xsl:variable>
+                        <!-- text, key-value for single index heading -->
+                        <text>
+                            <xsl:copy-of select="$content" />
+                        </text>
+                        <key>
                             <xsl:choose>
-                                <xsl:when test="../seealso">
-                                    <xsl:text>0</xsl:text>
-                                </xsl:when>
-                                <xsl:when test="../see">
-                                    <xsl:text>1</xsl:text>
+                                <!-- salt prevents accidental key collisions -->
+                                <xsl:when test="@sortby">
+                                    <xsl:value-of select="translate(@sortby, &UPPERCASE;, &LOWERCASE;)" />
+                                    <xsl:value-of select="generate-id(.)" />
                                 </xsl:when>
                                 <xsl:otherwise>
-                                    <xsl:text>2</xsl:text>
+                                    <xsl:value-of select="translate($content, &UPPERCASE;, &LOWERCASE;)" />
                                 </xsl:otherwise>
                             </xsl:choose>
-                        </link>
-                    </xsl:if>
-                </xsl:for-each>
-                <!-- add additional empty text, key pairs -->
-                <!-- so there are always three            -->
-                <xsl:if test="(count(h) = 1) or (count(h) = 2)">
-                    <text/><key/>
-                </xsl:if>
-                <xsl:if test="count(h) = 1">
-                    <text/><key/>
-                </xsl:if>
-                <xsl:if test="(main and not(sub[1]))">
-                    <text/><key/>
-                </xsl:if>
-                <xsl:if test="(main and not(sub[2]))">
-                    <text/><key/>
-                </xsl:if>
+                        </key>
+                        <!-- plus two more empty text, key pairs -->
+                        <text/><key/>
+                        <text/><key/>
+                    </xsl:when>
+                    <!-- structured index entry, multiple text-key pairs -->
+                    <!-- "main" as indicator is deprecated               -->
+                    <xsl:when test="main or h">
+                        <!-- "h" occur in order, main-sub-sub deprecated -->
+                        <xsl:for-each select="main|sub|h">
+                            <xsl:variable name="content">
+                                <xsl:apply-templates/>
+                            </xsl:variable>
+                            <text>
+                                <xsl:copy-of select="$content" />
+                            </text>
+                            <key>
+                                <xsl:choose>
+                                    <!-- salt prevents accidental key collisions -->
+                                    <xsl:when test="@sortby">
+                                        <xsl:value-of select="translate(@sortby, &UPPERCASE;, &LOWERCASE;)" />
+                                        <xsl:value-of select="generate-id(.)" />
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:value-of select="translate($content, &UPPERCASE;, &LOWERCASE;)" />
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </key>
+                        </xsl:for-each>
+                        <!-- add additional empty text, key pairs -->
+                        <!-- so there are always three            -->
+                        <xsl:if test="(count(h) = 1) or (count(h) = 2)">
+                            <text/><key/>
+                        </xsl:if>
+                        <xsl:if test="count(h) = 1">
+                            <text/><key/>
+                        </xsl:if>
+                        <xsl:if test="(main and not(sub[1]))">
+                            <text/><key/>
+                        </xsl:if>
+                        <xsl:if test="(main and not(sub[2]))">
+                            <text/><key/>
+                        </xsl:if>
+                        <!-- final sort key will prioritize  -->
+                        <!-- this mimics LaTeX's ordering    -->
+                        <!--   0 - has "see also"            -->
+                        <!--   1 - has "see"                 -->
+                        <!--   2 - is usual index reference  -->
+                        <xsl:if test="not(following-sibling::*[self::sub]) and not(following-sibling::*[self::h])">
+                            <link>
+                                <xsl:choose>
+                                    <xsl:when test="seealso">
+                                        <xsl:text>0</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test="see">
+                                        <xsl:text>1</xsl:text>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:text>2</xsl:text>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </link>
+                        </xsl:if>
+                    </xsl:when>
+                </xsl:choose>
                 <!-- Create the full cross-reference and save now, since      -->
                 <!-- context will be lost later.  Save in a "cross-reference" -->
                 <!-- element.  We use the context of the index itself as the  -->
@@ -1284,7 +1281,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- as one entry with multiple cross-references, so we sort on the  -->
     <!-- actual text as well. -->
     <xsl:variable name="sorted-index">
-        <xsl:for-each select="exsl:node-set($unstructured-index)/*|exsl:node-set($structured-index)/*">
+        <xsl:for-each select="exsl:node-set($index-items)/*">
             <xsl:sort select="./key[1]" />
             <xsl:sort select="./text[1]"/>
             <xsl:sort select="./key[2]" />
