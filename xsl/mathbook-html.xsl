@@ -7969,43 +7969,99 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="internal-id-no-dash" />
         <xsl:text>_params</xsl:text>
     </xsl:variable>
+    <!-- And a Javascript identifier for the onload function -->
+    <xsl:variable name="applet-onload">
+        <xsl:apply-templates select="." mode="internal-id-no-dash" />
+        <xsl:text>_onload</xsl:text>
+    </xsl:variable>
+    <!-- And a Javascript identifier for the onload function argument -->
+    <!-- not strictly necessary, but clarifies HTML                   -->
+    <xsl:variable name="applet-onload-argument">
+        <xsl:apply-templates select="." mode="internal-id-no-dash" />
+        <xsl:text>_applet</xsl:text>
+    </xsl:variable>
     <!-- And an HTML unique identifier -->
     <xsl:variable name="applet-container">
         <xsl:apply-templates select="." mode="internal-id" />
         <xsl:text>-container</xsl:text>
     </xsl:variable>
-    <!-- Javascript API for loading from a base64 string                   -->
-    <!-- Crib from page source at second link, with modifications          -->
-    <!-- Multiple instances:  https://stackoverflow.com/questions/9434     -->
-    <!-- https://wiki.geogebra.org/en/Reference:GeoGebra_Apps_API          -->
-    <!-- http://dev.geogebra.org/examples/html/example-api-save-state.html -->
-    <!-- Parameter reference:                                              -->
-    <!-- https://wiki.geogebra.org/en/Reference:GeoGebra_App_Parameters    -->
+    <!-- Javascript API for loading GeoGebra                               -->
     <script>
-<xsl:text>
-var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
-        "width":</xsl:text><xsl:value-of select="$width" /><xsl:text>,
-        "height":</xsl:text><xsl:value-of select="$height" /><xsl:text>,
-        "showToolBar":true,
-        "borderColor":null,
-        "showMenuBar":false,
-        "showAlgebraInput":false,
-        "customToolbar":"0 || 1",
-        "showResetIcon":true,
-        "enableLabelDrags":false,
-        "enableShiftDragZoom":true,
-        "enableRightClick":false,
-        "capturingThreshold":null,
-        "showToolBarHelp":true,
-        "errorDialogsActive":true,
-        "useBrowserForJS":false,
-        "playButton":false,
-        "filename":"</xsl:text><xsl:value-of select="@source" /><xsl:text>"};&#xa;</xsl:text>
-        <!-- "ggbBase64":"</xsl:text><xsl:value-of select="....." /><xsl:text>"};&#xa;</xsl:text> -->
+        <!-- API commands, as text() nodes in the slate. Manual at:   -->
+        <!-- https://wiki.geogebra.org/en/Reference:GeoGebra_Apps_API -->
+        <!-- In PTX source, use the commands one per line, as in:     -->
+        <!-- setCoordSystem(0, 20, 0, 10);                            -->
+        <!-- enableShiftDragZoom(false);                              -->
+        <xsl:if test="text()">
+            <xsl:text>var </xsl:text>
+            <xsl:value-of select="$applet-onload" />
+            <xsl:text> = function(</xsl:text>
+            <xsl:value-of select="$applet-onload-argument" />
+            <xsl:text>) {&#xa;</xsl:text>
+            <xsl:call-template name="prepend-string">
+                <xsl:with-param name="text">
+                    <xsl:call-template name="sanitize-text">
+                        <xsl:with-param name="text" select="." />
+                    </xsl:call-template>
+                </xsl:with-param>
+                <!-- period below is Javascript syntax for methods -->
+                <xsl:with-param name="pad" select="concat($applet-onload-argument,'.')" />
+            </xsl:call-template>
+            <xsl:text>};&#xa;</xsl:text>
+        </xsl:if>
+        <!-- Parameter reference:                                              -->
+        <!-- https://wiki.geogebra.org/en/Reference:GeoGebra_App_Parameters    -->
+        <!-- We leave most parameters as their default value. In most cases,   -->
+        <!-- an author could use API commands to alter these settings.         -->
+        <xsl:text>var </xsl:text>
+        <xsl:value-of select="$applet-parameters" />
+        <xsl:text> = {&#xa;</xsl:text>
+        <!-- Prioritize local over remote -->
+        <xsl:choose>
+            <xsl:when test="@base64">
+                <xsl:text>ggbBase64:"</xsl:text>
+                <xsl:value-of select="@base64" />
+                <xsl:text>",&#xa;</xsl:text>
+            </xsl:when>
+            <xsl:when test="@source">
+                <xsl:text>filename:"</xsl:text>
+                <xsl:value-of select="@source" />
+                <xsl:text>",&#xa;</xsl:text>
+            </xsl:when>
+            <xsl:when test="@material">
+                <xsl:text>material_id:"</xsl:text>
+                <xsl:value-of select="@material" />
+                <xsl:text>",&#xa;</xsl:text>
+            </xsl:when>
+            <xsl:when test="@geogebra">
+                <xsl:message>PTX Warning:  "geogebra" attribute on "slate" element is deprecated; use "material" attribute</xsl:message>
+                <xsl:text>material_id:"</xsl:text>
+                <xsl:value-of select="@geogebra" />
+                <xsl:text>",&#xa;</xsl:text>
+            </xsl:when>
+        </xsl:choose>
+        <xsl:text>width:</xsl:text><xsl:value-of select="$width" />
+        <xsl:text>,&#xa;</xsl:text>
+        <xsl:text>height:</xsl:text><xsl:value-of select="$height" />
+        <xsl:text>,&#xa;</xsl:text>
+        <xsl:if test="text()">
+            <xsl:text>appletOnLoad:</xsl:text>
+            <xsl:value-of select="$applet-onload" />
+        </xsl:if>
+        <xsl:text>};&#xa;</xsl:text>
 
-    <xsl:text>var </xsl:text><xsl:value-of select="$applet-name" /><xsl:text> = new GGBApplet(</xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text>, '5.0');&#xa;</xsl:text>
+        <xsl:text>var </xsl:text>
+            <xsl:value-of select="$applet-name" />
+        <xsl:text> = new GGBApplet(</xsl:text>
+            <xsl:value-of select="$applet-parameters" />
+        <xsl:text>, true);&#xa;</xsl:text>
 
-    <xsl:text>window.onload = function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject('</xsl:text><xsl:value-of select="$applet-container" /><xsl:text>'); }&#xa;</xsl:text>
+        <!-- inject the applet into the div below -->
+        <xsl:text>window.onload = function() { </xsl:text>
+        <xsl:value-of select="$applet-name" />
+        <xsl:text>.inject('</xsl:text>
+        <xsl:value-of select="$applet-container" />
+        <xsl:text>'); }&#xa;</xsl:text>
     </script>
     <!-- build a container div with the right shape -->
     <div class="geogebra-applet" id="{$applet-container}">
