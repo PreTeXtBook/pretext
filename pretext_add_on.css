@@ -1450,17 +1450,21 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
 .pretext-content .indexknowl a {
     margin-left: 2em;
 }
+/*
 .pretext-content .indexitem i,
 .pretext-content .subindexitem i,
 .pretext-content .subsubindexitem i {
     margin-left: 1em;
     margin-right: 0.25em;
 }
+*/
 
 /* temporary, to over-ride the misguided .indexitem i  above */
+/*
 .pretext-content b i {
     margin: 0 !important;
 }
+*/
 
 .pretext-content .indexitem .see,
 .pretext-content .subindexitem .see,
@@ -2274,7 +2278,8 @@ sup [data-knowl]:hover {
    putting paragraph spacing in the margin-bottom 
    Redo when we fix that error */
 .pretext-content .aside-like {
-    margin-top: -1.25em;
+ /*   margin-top: -1.25em;
+*/
     position: absolute;
     margin-left: 45%;
     z-index: -10;
@@ -3003,11 +3008,16 @@ and condider having this replace line 3338 of the general code (which uses .head
 
 #calculator-container {
     position: fixed;
+    z-index: 100;
     bottom: 5px;
     right: 5px;
+/*
     width: 320px;
-    width: 250px;
+*/
+    width: 253px;
+/*
     height: 600px;
+*/
     height: 460px;
 }
 @media screen and (max-width: 800px) {

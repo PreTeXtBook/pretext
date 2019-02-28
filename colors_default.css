@@ -50,15 +50,15 @@
 
   --chaptertoc: #3572a0;
   --chaptertoctext: white;
-  --chaptertocactive: #932919;
+  --chaptertocactive: #932919;   /* often the same as documenttitle */
   --chaptertoctextactive: white;
   --sectiontoc: #ffffff;
   --sectiontoctext: #662211;
-  --sectiontocactive: #932919;
+  --sectiontocactive: #932919;   /* often the same as documenttitle */
   --sectiontoctextactive: white;
   --tocborder: #185f65;
 
-  --highlighttoc: #671d12;
+  --highlighttoc: #671d12;   /* often a dark version of documenttitle */
   --highlighttoctext: white;
   --highlighttocborder: var(--chaptertoc);
 
