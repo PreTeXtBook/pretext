@@ -167,7 +167,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='jump-to'><xsl:text>Spring na</xsl:text></localization>
     <!-- Parts of the Index -->
     <localization string-id='index'><xsl:text>Indeks</xsl:text></localization>
-    <localization string-id='see'><xsl:text>sien</xsl:text></localization>
+    <localization string-id='see'><xsl:text>Sien</xsl:text></localization>
     <localization string-id='also'><xsl:text>sien ook</xsl:text></localization>
     <!-- Notation List headings/foot -->
     <localization string-id='symbol'><xsl:text>Simbool</xsl:text></localization>

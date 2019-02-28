@@ -184,7 +184,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='jump-to'><xsl:text>Jump to:</xsl:text></localization>
     <!-- Parts of the Index -->
     <localization string-id='index'><xsl:text>Index</xsl:text></localization>
-    <localization string-id='see'><xsl:text>see</xsl:text></localization>
+    <localization string-id='see'><xsl:text>See</xsl:text></localization>
     <localization string-id='also'><xsl:text>see also</xsl:text></localization>
     <!-- Notation List headings/foot -->
     <localization string-id='symbol'><xsl:text>Symbol</xsl:text></localization>

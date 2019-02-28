@@ -1288,6 +1288,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:sort select="./text[2]"/>
             <xsl:sort select="./key[3]" />
             <xsl:sort select="./text[3]"/>
+            <xsl:sort select="./see"/>
             <xsl:sort select="./link" />
             <xsl:copy-of select="." />
         </xsl:for-each>
@@ -1438,23 +1439,88 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Place all the cross-references in the div -->
 <!-- for the final (sub)item in its own span.  -->
 <!-- N.B. Some commas may not be correct here  -->
+
+<!-- One-time, global variables provide index terms -->
+<!-- Localization file should provide upper-case versions -->
+<xsl:variable name="upper-see">
+    <xsl:call-template name="type-name">
+        <xsl:with-param name="string-id" select="'see'" />
+    </xsl:call-template>
+</xsl:variable>
+
+<xsl:variable name="lower-see">
+    <xsl:variable name="upper">
+        <xsl:call-template name="type-name">
+            <xsl:with-param name="string-id" select="'see'" />
+        </xsl:call-template>
+    </xsl:variable>
+    <xsl:value-of select="translate(substring($upper, 1, 1), &UPPERCASE;, &LOWERCASE;)"/>
+    <xsl:value-of select="substring($upper, 2)"/>
+</xsl:variable>
+
+<!-- Chicago Manual of Style, 15th edition, 18.14 - 18.22       -->
+<!-- "see", following main entry, 18.16                         -->
+<!--    Period after entry                                      -->
+<!--    "See" capitalized (assumed from localization file)      -->
+<!--     multiple: alphabetical order, semicolon separator      -->
+<!-- "see", following a subentry, 18.17                         -->
+<!--    Space after entry                                       -->
+<!--    "see" lower case                                        -->
+<!--    wrapped in parentheses                                  -->
 <xsl:template name="knowl-list">
     <xsl:param name="heading-group" />
+
+    <!-- Some formatting depends on presence of subentries -->
+    <xsl:variable name="b-has-subentry" select="not(text[2] = '')"/>
     <!-- range through node-list, making cross-references -->
     <!-- Use a comma after the heading, then prefix each  -->
     <!-- cross-reference with a space as separators       -->
     <span class="indexknowl">
-        <xsl:text>,</xsl:text>
+        <xsl:choose>
+            <xsl:when test="$heading-group/see and not($b-has-subentry)">
+                <xsl:text>. </xsl:text>
+            </xsl:when>
+            <!-- no punctuation, will earn parentheses -->
+            <xsl:when test="$heading-group/see and $b-has-subentry">
+                <xsl:text> </xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>,</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+        <!-- course over the "index" in the group -->
         <xsl:for-each select="$heading-group">
             <xsl:choose>
                 <xsl:when test="see">
-                    <xsl:text> </xsl:text>
-                    <em class="see">
-                        <xsl:call-template name="type-name">
-                            <xsl:with-param name="string-id" select="'see'" />
-                        </xsl:call-template>
-                    </em>
+                    <xsl:if test="position() = 1">
+                        <xsl:if test="$b-has-subentry">
+                            <xsl:text>(</xsl:text>
+                        </xsl:if>
+                        <em class="see">
+                            <xsl:choose>
+                                <xsl:when test="$b-has-subentry">
+                                    <xsl:value-of select="$lower-see"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:value-of select="$upper-see"/>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </em>
+                    </xsl:if>
+                    <!-- just a space after "see", before first  -->
+                    <!-- semi-colon before second and subsequent -->
+                    <xsl:choose>
+                        <xsl:when test="position() = 1">
+                            <xsl:text> </xsl:text>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:text>; </xsl:text>
+                        </xsl:otherwise>
+                    </xsl:choose>
                     <xsl:copy-of select="see/node()" />
+                    <xsl:if test="$b-has-subentry and (position() = last())">
+                        <xsl:text>)</xsl:text>
+                    </xsl:if>
                 </xsl:when>
                 <xsl:when test="seealso">
                     <xsl:text> </xsl:text>

@@ -175,7 +175,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <localization string-id='jump-to'><xsl:text>Jump to:</xsl:text></localization> -->
     <!-- Parts of the Index -->
     <localization string-id='index'><xsl:text>Índice</xsl:text></localization>
-    <localization string-id='see'><xsl:text>veja</xsl:text></localization>
+    <localization string-id='see'><xsl:text>Veja</xsl:text></localization>
     <localization string-id='also'><xsl:text>veja também</xsl:text></localization>
     <!-- Translation needed for Brazilian Portugese -->
     <!-- Notation List headings/foot -->
