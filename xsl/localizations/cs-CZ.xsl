@@ -168,7 +168,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Parts of the Index -->
     <localization string-id='index'><xsl:text>Rejstřík</xsl:text></localization>
     <localization string-id='see'><xsl:text>Viz</xsl:text></localization>
-    <localization string-id='also'><xsl:text>viz také</xsl:text></localization>
+    <localization string-id='also'><xsl:text>Viz také</xsl:text></localization>
     <!-- Notation List headings/foot -->
     <localization string-id='symbol'><xsl:text>Symbol</xsl:text></localization>
     <localization string-id='description'><xsl:text>Popis</xsl:text></localization>

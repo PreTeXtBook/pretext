@@ -1233,13 +1233,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <link>
                                 <xsl:choose>
                                     <xsl:when test="seealso">
-                                        <xsl:text>0</xsl:text>
+                                        <xsl:text>2</xsl:text>
                                     </xsl:when>
                                     <xsl:when test="see">
                                         <xsl:text>1</xsl:text>
                                     </xsl:when>
                                     <xsl:otherwise>
-                                        <xsl:text>2</xsl:text>
+                                        <xsl:text>0</xsl:text>
                                     </xsl:otherwise>
                                 </xsl:choose>
                             </link>
@@ -1252,23 +1252,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- location where the cross-reference is placed.  The       -->
                 <!-- location of the "idx" is the start of a search for the   -->
                 <!-- enclosing element.                                       -->
-                <cross-reference>
-                    <xsl:apply-templates select="$the-index-list" mode="index-enclosure">
-                        <xsl:with-param name="enclosure" select="."/>
-                    </xsl:apply-templates>
-                </cross-reference>
-                <!-- there is at most one "see" or "seealso" total -->
-                <!-- these replace the knowls, so perhaps condition here -->
-                <xsl:for-each select="see">
-                    <see>
-                        <xsl:apply-templates/>
-                    </see>
-                </xsl:for-each>
-                <xsl:for-each select="seealso">
-                    <seealso>
-                        <xsl:apply-templates/>
-                    </seealso>
-                </xsl:for-each>
+                <xsl:choose>
+                    <xsl:when test="see">
+                        <see>
+                            <xsl:apply-templates select="see"/>
+                        </see>
+                    </xsl:when>
+                    <xsl:when test="seealso">
+                        <seealso>
+                            <xsl:apply-templates select="seealso"/>
+                        </seealso>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <cross-reference>
+                            <xsl:apply-templates select="$the-index-list" mode="index-enclosure">
+                                <xsl:with-param name="enclosure" select="."/>
+                            </xsl:apply-templates>
+                        </cross-reference>
+                    </xsl:otherwise>
+                </xsl:choose>
             </index>
         </xsl:for-each>
     </xsl:variable>
@@ -1288,8 +1290,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:sort select="./text[2]"/>
             <xsl:sort select="./key[3]" />
             <xsl:sort select="./text[3]"/>
-            <xsl:sort select="./see"/>
             <xsl:sort select="./link" />
+            <xsl:sort select="./see"/>
+            <xsl:sort select="./seealso"/>
             <xsl:copy-of select="." />
         </xsl:for-each>
     </xsl:variable>
@@ -1458,12 +1461,36 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="substring($upper, 2)"/>
 </xsl:variable>
 
+<xsl:variable name="upper-seealso">
+    <xsl:call-template name="type-name">
+        <xsl:with-param name="string-id" select="'also'" />
+    </xsl:call-template>
+</xsl:variable>
+
+<xsl:variable name="lower-seealso">
+    <xsl:variable name="upper">
+        <xsl:call-template name="type-name">
+            <xsl:with-param name="string-id" select="'also'" />
+        </xsl:call-template>
+    </xsl:variable>
+    <xsl:value-of select="translate(substring($upper, 1, 1), &UPPERCASE;, &LOWERCASE;)"/>
+    <xsl:value-of select="substring($upper, 2)"/>
+</xsl:variable>
+
 <!-- Chicago Manual of Style, 15th edition, 18.14 - 18.22       -->
 <!-- "see", following main entry, 18.16                         -->
 <!--    Period after entry                                      -->
 <!--    "See" capitalized (assumed from localization file)      -->
 <!--     multiple: alphabetical order, semicolon separator      -->
 <!-- "see", following a subentry, 18.17                         -->
+<!--    Space after entry                                       -->
+<!--    "see" lower case                                        -->
+<!--    wrapped in parentheses                                  -->
+<!-- "see also", following main entry, 18.19                    -->
+<!--    Period after entry                                      -->
+<!--    "See" capitalized (assumed from localization file)      -->
+<!--     multiple: alphabetical order, semicolon separator      -->
+<!-- "see", following a subentry, 18.19                         -->
 <!--    Space after entry                                       -->
 <!--    "see" lower case                                        -->
 <!--    wrapped in parentheses                                  -->
@@ -1484,6 +1511,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="$heading-group/see and $b-has-subentry">
                 <xsl:text> </xsl:text>
             </xsl:when>
+            <!-- cross-reference, w/ or w/out see also -->
             <xsl:otherwise>
                 <xsl:text>,</xsl:text>
             </xsl:otherwise>
@@ -1491,6 +1519,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- course over the "index" in the group -->
         <xsl:for-each select="$heading-group">
             <xsl:choose>
+                <!--  -->
+                <xsl:when test="cross-reference">
+                    <xsl:text> </xsl:text>
+                    <xsl:copy-of select="cross-reference/node()"/>
+                </xsl:when>
+                <!--  -->
                 <xsl:when test="see">
                     <xsl:if test="position() = 1">
                         <xsl:if test="$b-has-subentry">
@@ -1522,21 +1556,35 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:text>)</xsl:text>
                     </xsl:if>
                 </xsl:when>
+                <!--  -->
                 <xsl:when test="seealso">
+                    <xsl:choose>
+                        <xsl:when test="preceding-sibling::index[1]/cross-reference">
+                            <xsl:choose>
+                                <xsl:when test="$b-has-subentry">
+                                    <xsl:text> (</xsl:text>
+                                    <em class="seealso">
+                                        <xsl:value-of select="$lower-seealso"/>
+                                    </em>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:text>. </xsl:text>
+                                    <em class="seealso">
+                                        <xsl:value-of select="$upper-seealso"/>
+                                    </em>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:text>;</xsl:text>
+                        </xsl:otherwise>
+                    </xsl:choose>
                     <xsl:text> </xsl:text>
-                    <em class="see">
-                        <xsl:call-template name="type-name">
-                            <xsl:with-param name="string-id" select="'also'" />
-                        </xsl:call-template>
-                    </em>
-                    <xsl:copy-of select="seealso/node()" />
+                    <xsl:copy-of select="seealso/node()"/>
+                    <xsl:if test="(position() = last()) and $b-has-subentry">
+                        <xsl:text>)</xsl:text>
+                    </xsl:if>
                 </xsl:when>
-                <!-- else a real content reference, knowl or hyperlink -->
-                <!-- TODO: split into two more when, otherwise as error? -->
-                <xsl:otherwise>
-                    <xsl:text> </xsl:text>
-                    <xsl:copy-of select="cross-reference/node()"/>
-                </xsl:otherwise>
             </xsl:choose>
         </xsl:for-each>
     </span>
