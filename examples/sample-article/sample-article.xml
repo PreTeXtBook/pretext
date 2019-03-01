@@ -412,16 +412,27 @@ the xsltproc executable.
             <idx><h>Sage</h><h>integration</h><h>numerical</h></idx>
             <idx><h>numerical</h><see>Sage integration</see></idx>
             <idx><h>numerical</h><see>Sage</see></idx>
+            <!-- index entry, plus a seealso for additional -->
+            <idx>numerics</idx>
             <idx><h>numerics</h><seealso>Sage</seealso></idx>
-            <idx><h>numerical integration</h><h>Sage</h><h>cell</h></idx>
             <idx><h>numerical integration</h><h>Sage</h><h>cell</h><see>Sage</see></idx>
             <!-- Index testing, at most one see/seealso per index -->
-            <idx><h>A</h></idx>
             <idx><h>A</h><see>F</see></idx>
             <idx><h>A</h><see>G</see></idx>
-            <idx><h>A</h><seealso>H</seealso></idx>
-            <idx><h>A</h><h>B</h><seealso>C</seealso></idx>
-            <idx><h>A</h><h>B</h><h>C</h><see>D</see></idx>
+            <idx><h>A</h><see>H</see></idx>
+            <idx><h>A</h><h>B</h></idx>
+            <idx><h>A</h><h>B</h><h>C</h></idx>
+            <idx><h>A</h><h>B</h><h>C</h><seealso>D</seealso></idx>
+            <idx><h>A</h><h>B</h><h>C</h><seealso>A</seealso></idx>
+            <!--  -->
+            <!-- Index testing, at most one see/seealso per index -->
+            <idx><h>X</h></idx>
+            <idx><h>X</h><seealso>F</seealso></idx>
+            <idx><h>X</h><seealso>G</seealso></idx>
+            <idx><h>X</h><seealso>H</seealso></idx>
+            <idx><h>X</h><h>Y</h></idx>
+            <idx><h>X</h><h>Y</h><h>Z</h><see>D</see></idx>
+            <idx><h>X</h><h>Y</h><h>Z</h><see>A</see></idx>
             <!--  -->
             <!-- Index testing, fancy variant -->
             <idx>mixed-content <em>emphasized</em></idx>
