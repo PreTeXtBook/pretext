@@ -8179,6 +8179,29 @@ the xsltproc executable.
                             <caption>A figure in an <tag>exercise</tag> in an <em>unstructured</em> division to test that it is numbered as if the containing <tag>exercises</tag> is not present</caption>
                             <image xml:id="cross-square-unstructured" width="10%" source="images/cross-square.png"/>
                         </figure>
+                        <figure>
+                            <caption>A side-by-side in a figure in an <tag>exercise</tag> in an <em>unstructured</em> division to test that it is numbered as if the containing <tag>exercises</tag> is not present and to test the numbering of the panels in a solutions manual</caption>
+                            <sidebyside margins="5%" width="10%">
+                                <figure>
+                                    <caption>First Panel, subcaptioned</caption>
+                                    <image xml:id="cross-square-unstructured-panel-B1" source="images/cross-square.png"/>
+                                </figure>
+                                <figure>
+                                    <caption>Second Panel, subcaptioned</caption>
+                                    <image xml:id="cross-square-unstructured-panel-B2" source="images/cross-square.png"/>
+                                </figure>
+                            </sidebyside>
+                        </figure>
+                        <sidebyside margins="5%" width="10%">
+                            <figure>
+                                <caption>First Panel, not subcaptioned</caption>
+                                <image xml:id="cross-square-unstructured-panel-A1" source="images/cross-square.png"/>
+                            </figure>
+                            <figure>
+                                <caption>Second Panel, not subcaptioned</caption>
+                                <image xml:id="cross-square-unstructured-panel-A2" source="images/cross-square.png"/>
+                            </figure>
+                        </sidebyside>
                     </statement>
                 </exercise>
 
