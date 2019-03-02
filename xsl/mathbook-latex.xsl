@@ -7955,6 +7955,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Captions for Figures, Tables, Listings, Lists -->
 <!-- xml:id is on parent, but LaTeX generates number with caption -->
+<!-- NB: until we have a general (internal) switch to hard-code   -->
+<!-- *all* numbers, these two templates were copied (2019-03-01)  -->
+<!-- into the "solutions manual" conversion, and edited.  So      -->
+<!-- they should be kept in-sync.                                 -->
 <xsl:template match="caption">
     <xsl:choose>
       <xsl:when test="parent::table/parent::sidebyside">

@@ -206,7 +206,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- point to much of the content with hyperlinks   -->
 <!-- But we do have the full context as we process, -->
 <!-- so we can get numbers for cross-references     -->
-<!-- and *hard-code* them into the LaTeX              -->
+<!-- and *hard-code* them into the LaTeX            -->
 
 <!-- We don't dither about possibly using a \ref{} and  -->
 <!-- just produce numbers.  These might lack the "part" -->
@@ -219,6 +219,54 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="*" mode="xref-link">
     <xsl:param name="content" select="'MISSING LINK CONTENT'"/>
     <xsl:value-of select="$content" />
+</xsl:template>
+
+<!-- Exercise numbers are always hard-coded at birth, given -->
+<!-- complications of numbering, placement, duplication     -->
+
+<!-- Captioned items are permitted in exercises.  We need   -->
+<!-- to hard-code their numbers.  Following is an edited    -->
+<!-- duplication of the code in the LaTeX conversion, which -->
+<!-- needs to be kept in-sync.  Ideally a LaTeX (internal)  -->
+<!-- switch would make these changes.                       -->
+
+<!-- Captions for Figures, Tables, Listings, Lists -->
+<!-- xml:id is on parent, but LaTeX generates number with caption -->
+<xsl:template match="caption">
+    <xsl:choose>
+      <xsl:when test="parent::table/parent::sidebyside">
+            <xsl:text>\captionof*{table}{</xsl:text>
+      </xsl:when>
+      <xsl:when test="parent::figure/parent::sidebyside">
+            <xsl:text>\captionof*{figure}{</xsl:text>
+      </xsl:when>
+      <xsl:when test="parent::listing">
+            <xsl:text>\captionof*{listingcap}{</xsl:text>
+        </xsl:when>
+      <xsl:when test="parent::list">
+            <xsl:text>\captionof*{namedlistcap}{</xsl:text>
+        </xsl:when>
+      <xsl:otherwise>
+          <xsl:text>\caption*{</xsl:text>
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>\textbf{</xsl:text>
+    <xsl:apply-templates select="parent::*" mode="type-name"/>
+    <xsl:text> </xsl:text>
+    <xsl:apply-templates select="parent::*" mode="number"/>
+    <xsl:text>:} </xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>}&#xa;</xsl:text>
+</xsl:template>
+
+<!-- Subcaptions showup in side-by-side -->
+<xsl:template match="caption" mode="subcaption">
+    <xsl:text>\subcaption*{</xsl:text>
+    <xsl:text>\textbf{</xsl:text>
+    <xsl:apply-templates select="parent::*" mode="serial-number"/>
+    <xsl:text>} </xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
 </xsl:stylesheet>
