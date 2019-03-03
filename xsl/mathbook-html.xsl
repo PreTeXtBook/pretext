@@ -1387,6 +1387,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="output-one-heading">
     <xsl:param name="heading-group" />
 
+    <xsl:if test="$heading-group/see and $heading-group/cross-reference">
+        <xsl:message>PTX:WARNING: an index entry should not have both a locator and a "see" reference.  Results may be unpredictable.  Perhaps you meant to employ a "seealso" reference?  Heading is: "<xsl:value-of select="text[1]"/>; <xsl:value-of select="text[2]"/>; <xsl:value-of select="text[3]"/>"</xsl:message>
+    </xsl:if>
+    <xsl:if test="$heading-group/seealso and not($heading-group/cross-reference)">
+        <xsl:message>PTX:WARNING: an index entry should not have a "seealso" reference without also having a locator.  Results may be unpredictable.  Perhaps you meant to employ a "see" reference?  Heading is: "<xsl:value-of select="text[1]"/>; <xsl:value-of select="text[2]"/>; <xsl:value-of select="text[3]"/>"</xsl:message>
+    </xsl:if>
+
     <xsl:variable name="pattern" select="$heading-group[1]" />
     <xsl:variable name="pred" select="$pattern/preceding-sibling::index[1]" />
     <!-- booleans for analysis of format of heading, xrefs -->
