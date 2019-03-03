@@ -206,13 +206,13 @@
             <paragraphs>
                 <title><tag>idx</tag>, index target</title>
 
-                <p>This indicates that the containing structure (theorem, example, etc.), or top-level paragraph, should be the <em>target</em> of an entry of the index (a special sort of cross-reference).  See <xref ref="overview-index-notation" /> and <xref ref="topic-index" /> for general details.</p>
+                <p>This indicates that the containing structure (theorem, example, etc.), or top-level paragraph, should be the <em>target</em> of an entry of the index (a special sort of cross-reference).  See <xref ref="overview-index-notation"/> and <xref ref="topic-index"/> for general details.</p>
             </paragraphs>
 
             <paragraphs>
                 <title><tag>notation</tag>, index target</title>
 
-                <p>This indicates that the containing definition, or top-level paragraph, should be the <em>target</em> of an entry of the list of notation (a special sort of cross-reference).  See <xref ref="overview-index-notation" /> and <xref ref="topic-index" /> for general details.</p>
+                <p>This indicates that the containing definition, or top-level paragraph, should be the <em>target</em> of an entry of the list of notation (a special sort of cross-reference).  See <xref ref="overview-index-notation"/> and <xref ref="topic-notation"/> for general details.</p>
             </paragraphs>
         </subsection>
 
@@ -1640,11 +1640,30 @@
     </section>
 
     <section xml:id="topic-index">
-        <title>(*) Index</title>
+        <title>Index</title>
 
-        <!-- Reprise: <title>Bully Pulpit: Index Headings</title> -->
+        <p>Continuing our basic discussion from <xref ref="overview-index-notation"/>, we discuss some details of making and using index entries.  We follow recommendations from the <pubtitle>Chicago Manual of Style</pubtitle> (<acro>CMOS</acro>), specifically Chapter 18 of the 15th Edition.</p>
 
-        <p>TODO</p>
+        <note>
+            <title>Capitalization of Index Entries</title>
+
+            <p>The headings (entries) of an index are authored entirely in lower-case, unless it is a proper noun (name, place, <etc/>) which would normally be capitalized in the middle of a sentence.  We are not able to provide any enforcement of this advice, nor any assistance.  It is the author's responsibility to provide quality source material in this regard.  We do sort entries so that an entry with an initial capital letter arrives at the right location in the index.</p>
+        </note>
+
+        <p><em>Where</em> you place an <tag>idx</tag> entry is critical.  With <latex/> output, you will get the traditional page number as a locator in your index.  With <init>HTML</init> output we can be more careful.  We will look to see which sort of structure contains the <tag>idx</tag>.  Maybe it is an <tag>example</tag> or a <tag>subsection</tag>.  If so, the index will contain a locator that is a knowl of the example, or a link to the subsection.  The distinction is the size of the object, we do not knowl divisions.  The exception is a paragraph (<tag>p</tag>) that is a child of a division, and then the locator is a knowl of the entire paragraph.  Remember that a knowl contains an <q>in-context</q> link which can take the reader to the original location of the content in the knowl.</p>
+
+        <p>A lot happens in a <pretext/> paragraph, especially when producing <init>HTML</init>.  Sometimes an <tag>idx</tag> can get in the way.  Our recommendation is to put <tag>idx</tag> entries <em>between</em> sentences, and not at the start or end of the paragraph.  They can be authored with each on their own line.  If you do not need the specificity of a paragraph, then locate the appropriate structure and author the <tag>idx</tag> right after the <tag>title</tag> (or where one would be).</p>
+
+        <p>A <term>cross-reference</term> in an index is a pointer to another index entry.
+            <idx><h>cross-reference</h><h>index</h></idx>
+            <idx><h>index</h><h>cross-reference</h></idx>
+        These are rendered as <q>See</q> and <q>See also.</q>  You can add <tag>see</tag> and <tag>seealso</tag> elements within an <tag>idx</tag>, so long as it is structured with <tag>h</tag>.  Then it is placed after the last <tag>h</tag>.  A <q>see</q> cross-reference is a direct pointer to another entry in the index.  It cannot have a locator as well.  When you build the <init>HTML</init> output, we will recognize this situation and produce a warning.  A <q>see also</q> cross-reference is an additional pointer, and so it must have a locator to go with it (you will author two <tag>idx</tag> with identical headings, the first without a <tag>seealso</tag> to create the locator, the second with the <tag>seealso</tag> to create the cross-reference.  Again, when you build the <init>HTML</init> output, we will recognize a <tag>seealso</tag> without a locator and produce a warning.</p>
+
+        <p>Follow these directions and <pretext/> will format cross-references for you, in the style suggested by the <acro>CMOS</acro> for <init>HTML</init> output, and according to <latex/>'s style for print and <init>PDF</init>.</p>
+
+        <p>(2019-03-04) We have consciously not said anything specific about what to place inside a <tag>see</tag> or <tag>seealso</tag> element.  At this writing, you need to supply the text.  Of course, this is error-prone and you will need to consult <acro>CMOS</acro> for formatting guidance.  But we have plans to do this the <pretext/> way.  First, the <c>ref/xml:id</c> mechanism will be used to automatically create the correct text for the cross-reference, both content and format.  Second, these will become live links in electronic formats.</p>
+
+        <p>Certain index entries do not sort very well, especially entries that begin with mathematical notation.  Our first advice is to avoid this situation, but sometimes it is necessary.  The <attr>sortby</attr> attribute on an <tag>h</tag> element can contain simple text that will be used to override the content shown to the reader during the sorting of the index.</p>
     </section>
 
     <section xml:id="topic-notation">
