@@ -1133,29 +1133,44 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "index-list":                                           -->
 <!--     build a sorted list of every "index" in text        -->
 <!-- "group-by-letter":                                      -->
-<!--     accumale common first-letter entries,               -->
+<!--     accumulate common first-letter entries,             -->
 <!--     send to their own div for spacing, "jump to" device -->
 <!-- "group-by-heading":                                     -->
 <!--     consolidate/accumulate entries with common heading  -->
 <!-- "knowl-list":                                           -->
-<!--     output the cross-references                         -->
+<!--     output the locators, see, see also                  -->
 <xsl:template match="index-list">
-    <!-- Save-off the "index-list" as context for placement of      -->
-    <!-- eventual xref/cross-references, since we use a for-each    -->
-    <!-- and context changes.  Not strictly necessary, but correct. -->
+    <!-- Save-off the "index-list" as context for placement  -->
+    <!-- of eventual xref/cross-references, since we use a   -->
+    <!-- for-each and context changes.  Not strictly         -->
+    <!-- necessary, but correct.                             -->
     <xsl:variable name="the-index-list" select="."/>
-    <!-- <index> with single mixed-content heading -->
-    <!-- or replacement <idx> as mixed-content     -->
-    <!-- start attribute is actual end of a        -->
-    <!-- "page range", goodies at @finish          -->
-    <!-- "commentary" is elective, so condition    -->
+    <!-- "idx" as mixed content (replaces "index").          -->
+    <!-- Or, "idx" structured with up to three "h"           -->
+    <!-- (replaces index/[main,sub,sub]).                    -->
+    <!-- Start attribute is actual end of a "page            -->
+    <!-- range", goodies at @finish.                         -->
+    <!-- "commentary" is elective, so process, or not        -->
+    <!-- NB: latter half of @select is deprecated usage      -->
+    <!-- new style is index/index-list for the division,     -->
+    <!-- we don't want that picked up in the deprecated      -->
+    <!-- "index" used for the entries                        -->
+
+    <!-- "index-items" is an internal structure, so very     -->
+    <!-- predictable.  Looks like:                           -->
+    <!--                                                     -->
+    <!-- text/key: always three pairs, some may be empty.    -->
+    <!-- "text" is author's heading and will be output at    -->
+    <!-- the end, "key" is a sanitized version for sorting,  -->
+    <!-- and could be an entire replacement if the @sortby   -->
+    <!-- attribute is used.                                  -->
+    <!--                                                     -->
+    <!-- locator-type: used to identify a "traditional" page -->
+    <!-- locator which points back to a place in the text,   -->
+    <!-- versus a "see" or "see also" entry.  Only used for  -->
+    <!-- sorting, and really only used to be sure a "see"    -->
+    <!-- *follows* the page locator.                         -->
     <xsl:variable name="index-items">
-        <!-- index entries, don't want end of a "page range" -->
-        <!-- "commentary" is elective, so process, or not    -->
-        <!-- latter half of @select is deprecated usage      -->
-        <!-- new style is index/index-list for the division, -->
-        <!-- we don't want that picked up in the deprecated  -->
-        <!-- "index" used for the entries                    -->
         <xsl:for-each select="$document-root//idx[not(@start) and (not(ancestor::commentary) or $b-commentary)] | //index[not(index-list) and not(@start) and (not(ancestor::commentary) or $b-commentary)]">
             <index>
                 <xsl:choose>
@@ -1230,7 +1245,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <!--   1 - has "see"                 -->
                         <!--   2 - is usual index reference  -->
                         <xsl:if test="not(following-sibling::*[self::sub]) and not(following-sibling::*[self::h])">
-                            <link>
+                            <locator-type>
                                 <xsl:choose>
                                     <xsl:when test="seealso">
                                         <xsl:text>2</xsl:text>
@@ -1242,16 +1257,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                         <xsl:text>0</xsl:text>
                                     </xsl:otherwise>
                                 </xsl:choose>
-                            </link>
+                            </locator-type>
                         </xsl:if>
                     </xsl:when>
                 </xsl:choose>
-                <!-- Create the full cross-reference and save now, since      -->
-                <!-- context will be lost later.  Save in a "cross-reference" -->
+                <!-- Create the full locator and save now, since context will -->
+                <!-- be lost later.  Save a page locator in "cross-reference" -->
                 <!-- element.  We use the context of the index itself as the  -->
                 <!-- location where the cross-reference is placed.  The       -->
                 <!-- location of the "idx" is the start of a search for the   -->
-                <!-- enclosing element.                                       -->
+                <!-- enclosing element.  See and "see also" take precedence.  -->
                 <xsl:choose>
                     <xsl:when test="see">
                         <see>
@@ -1275,13 +1290,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:for-each>
     </xsl:variable>
     <!-- Sort, now that info from document tree ordering is recorded     -->
-    <!-- perhaps one big variable/RTF once deprecation takes place.      -->
     <!-- Keys, normalized to lowercase, or @sortby attributes, are the   -->
     <!-- primary key for sorting, but if we have index entries that just -->
     <!-- differ by upper- or lower-case distinctions, we need to have    -->
     <!-- identical variants sort next to each other so they get grouped  -->
-    <!-- as one entry with multiple cross-references, so we sort on the  -->
-    <!-- actual text as well. -->
+    <!-- as one entry with multiple cross-references, so we sort         -->
+    <!-- secondarily on the actual text as well.  The page locators were -->
+    <!-- built in document order and so should remain that way after the -->
+    <!-- sort and so be output in order of appearance.                   -->
     <xsl:variable name="sorted-index">
         <xsl:for-each select="exsl:node-set($index-items)/*">
             <xsl:sort select="./key[1]" />
@@ -1290,7 +1306,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:sort select="./text[2]"/>
             <xsl:sort select="./key[3]" />
             <xsl:sort select="./text[3]"/>
-            <xsl:sort select="./link" />
+            <xsl:sort select="./locator-type" />
             <xsl:sort select="./see"/>
             <xsl:sort select="./seealso"/>
             <xsl:copy-of select="." />
@@ -1303,8 +1319,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:apply-templates>
 </xsl:template>
 
-<!-- Accumulate index entries with a common first letter   -->
-<!-- in $letter-group and then pass to grouping by heading -->
+<!-- Accumulate index entries with a common first letter    -->
+<!-- in first heading, based on key[1], into $letter-group. -->
+<!-- When a look-ahead sees the initial letter changing,    -->
+<!-- send the group off to be formatted as a letter-group   -->
+<!-- and further organize by heading.                       -->
 <xsl:template match="index" mode="group-by-letter">
     <!-- Empty node list from parent of root node -->
     <xsl:param name="letter-group"/>
@@ -1343,9 +1362,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- Accumulate index entries with identical heading -->
-<!-- quit accumulating when next entry differs       -->
-<!-- Output heading, xrefs, before restarting        -->
+<!-- Accumulate index entries with identical headings - their    -->
+<!-- exact text, not anything related to the keys.  Quit         -->
+<!-- accumulating when look-ahead shows next entry differs.      -->
+<!-- Output the (3-part) heading and locators before restarting. -->
 <xsl:template match="index" mode="group-by-heading">
     <!-- Empty node list from parent of root node -->
     <xsl:param name="heading-group"/>
@@ -1364,7 +1384,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:with-param name="letter-group" select="$letter-group"/>
                 </xsl:apply-templates>
             </xsl:when>
-            <!-- some key differs in next index entry,  -->
+            <!-- some text differs in next index entry, -->
             <!-- write and restart heading accumulation -->
             <xsl:otherwise>
                 <xsl:call-template name="output-one-heading">
@@ -1404,7 +1424,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="empty3" select="boolean($pattern/text[3] = '')" />
     <!-- write an "indexitem", "subindexitem", "subsubindexitem" as     -->
     <!-- necessary to identify chnages in headings, without duplicating -->
-    <!-- headings from prior entries. Add xref when keys go blank       -->
+    <!-- headings from prior entries. Add locators when texts go blank  -->
     <!--  -->
     <!-- first key differs from predecessor, or leads letter group -->
     <xsl:if test="not($match1)">
@@ -1446,9 +1466,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- Place all the cross-references in the div -->
-<!-- for the final (sub)item in its own span.  -->
-<!-- N.B. Some commas may not be correct here  -->
+<!-- Place all the locators into the div for -->
+<!-- the final (sub)item in its own span.    -->
 
 <!-- One-time, global variables provide index terms -->
 <!-- Localization file should provide upper-case versions -->
@@ -1484,23 +1503,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="substring($upper, 2)"/>
 </xsl:variable>
 
-<!-- Chicago Manual of Style, 15th edition, 18.14 - 18.22       -->
-<!-- "see", following main entry, 18.16                         -->
-<!--    Period after entry                                      -->
-<!--    "See" capitalized (assumed from localization file)      -->
-<!--     multiple: alphabetical order, semicolon separator      -->
-<!-- "see", following a subentry, 18.17                         -->
-<!--    Space after entry                                       -->
-<!--    "see" lower case                                        -->
-<!--    wrapped in parentheses                                  -->
-<!-- "see also", following main entry, 18.19                    -->
-<!--    Period after entry                                      -->
-<!--    "See" capitalized (assumed from localization file)      -->
-<!--     multiple: alphabetical order, semicolon separator      -->
-<!-- "see", following a subentry, 18.19                         -->
-<!--    Space after entry                                       -->
-<!--    "see" lower case                                        -->
-<!--    wrapped in parentheses                                  -->
+<!-- Chicago Manual of Style, 15th edition, 18.14 - 18.22  -->
+<!-- "see", following main entry, 18.16                    -->
+<!--    Period after entry                                 -->
+<!--    "See" capitalized (assumed from localization file) -->
+<!--     multiple: alphabetical order, semicolon separator -->
+<!-- "see", following a subentry, 18.17                    -->
+<!--    Space after entry                                  -->
+<!--    "see" lower case                                   -->
+<!--    wrapped in parentheses                             -->
+<!-- "see also", following main entry, 18.19               -->
+<!--    Period after entry                                 -->
+<!--    "See" capitalized (assumed from localization file) -->
+<!--     multiple: alphabetical order, semicolon separator -->
+<!-- "see", following a subentry, 18.19                    -->
+<!--    Space after entry                                  -->
+<!--    "see" lower case                                   -->
+<!--    wrapped in parentheses                             -->
+<!-- generic references, 18.22                             -->
+<!--   TODO: use content of "see" and "seealso"            -->
 <xsl:template name="knowl-list">
     <xsl:param name="heading-group" />
 
