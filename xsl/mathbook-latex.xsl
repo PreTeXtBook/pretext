@@ -62,8 +62,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Non-empty string makes it happen    -->
 <!-- Scale works well for "CONFIDENTIAL" -->
 <!-- or  for "DRAFT YYYY/MM/DD"          -->
+<!-- These are deprecated in favor of watermark.text and watermark.scale -->
+<!-- which are now managed in common. These still "work" for now.        -->
 <xsl:param name="latex.watermark" select="''"/>
-<xsl:param name="latex.watermark.scale" select="2.0"/>
+<xsl:variable name="b-latex-watermark" select="not($latex.watermark = '')" />
+<xsl:param name="latex.watermark.scale" select="''"/>
+<xsl:variable name="latex-watermark-scale">
+    <xsl:choose>
+        <xsl:when test="not($latex.watermark.scale = '')">
+            <xsl:value-of select="$latex.watermark.scale"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>2.0</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
 <!--  -->
 <!-- Author's Tools                                            -->
 <!-- Set the author-tools parameter to 'yes'                   -->
@@ -2050,13 +2063,33 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- (above shaded/colored "tcolorbox").  But on 2018-10-24,      -->
     <!-- xwatermark was at v1.5.2d, 2012-10-23, and draftwatermark    -->
     <!-- was at v1.2, 2015-02-19.                                     -->
-    <xsl:if test="$latex.watermark">
+    <!-- latex.watermark and latex.watermark.scale are deprecated,    -->
+    <!-- but effort is made here so they still work for now           -->
+    <xsl:if test="$b-watermark or $b-latex-watermark">
         <xsl:text>\usepackage{draftwatermark}&#xa;</xsl:text>
         <xsl:text>\SetWatermarkText{</xsl:text>
-        <xsl:value-of select="$latex.watermark" />
+        <xsl:choose>
+            <xsl:when test="$b-watermark">
+                <xsl:value-of select="$watermark.text" />
+            </xsl:when>
+            <xsl:when test="$b-latex-watermark">
+                <xsl:value-of select="$latex.watermark" />
+            </xsl:when>
+            <!-- Logically, should never reach this point.  -->
+            <xsl:otherwise/>
+        </xsl:choose>
         <xsl:text>}&#xa;</xsl:text>
         <xsl:text>\SetWatermarkScale{</xsl:text>
-        <xsl:value-of select="$latex.watermark.scale" />
+        <xsl:choose>
+            <xsl:when test="$b-watermark">
+                <xsl:value-of select="$watermark.scale" />
+            </xsl:when>
+            <xsl:when test="$b-latex-watermark">
+                <xsl:value-of select="$latex-watermark-scale" />
+            </xsl:when>
+            <!-- Logically, should never reach this point.  -->
+            <xsl:otherwise/>
+        </xsl:choose>
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$author-tools-new = 'yes'" >

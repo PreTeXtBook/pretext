@@ -419,6 +419,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="heading-level" select="$heading-level"/>
         </xsl:apply-templates>
         <xsl:apply-templates select="." mode="author-byline"/>
+        <!-- If there is watermark text, we print it here in an assistive p -->
+        <!-- so that it is the first thing read by a screen-reader user.    -->
+        <xsl:if test="$b-watermark and $heading-level = 2">
+            <p class="watermark">
+                <xsl:text>Watermark text: </xsl:text>
+                <xsl:value-of select="$watermark.text"/>
+                <xsl:text></xsl:text>
+            </p>
+        </xsl:if>
         <!-- Most divisions are a simple list of elements to be       -->
         <!-- processed in document order, once we handle metadata     -->
         <!-- properly, and also kill it so it is not caught up here.  -->
@@ -5725,6 +5734,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%2014%2096%2068%22%20style%3D%22cursor%3Apointer%3B%22%20preserveAspectRatio%3D%22none%22%3E%3Cpath%20fill%3D%22%23e62117%22%20d%3D%22M94.98%2C28.84c0%2C0-0.94-6.6-3.81-9.5c-3.64-3.81-7.72-3.83-9.59-4.05c-13.4-0.97-33.52-0.85-33.52-0.85s-20.12-0.12-33.52%2C0.85c-1.87%2C0.22-5.95%2C0.24-9.59%2C4.05c-2.87%2C2.9-3.81%2C9.5-3.81%2C9.5S0.18%2C36.58%2C0%2C44.33v7.26c0.18%2C7.75%2C1.14%2C15.49%2C1.14%2C15.49s0.93%2C6.6%2C3.81%2C9.5c3.64%2C3.81%2C8.43%2C3.69%2C10.56%2C4.09c7.53%2C0.72%2C31.7%2C0.89%2C32.54%2C0.9c0.01%2C0%2C20.14%2C0.03%2C33.54-0.94c1.87-0.22%2C5.95-0.24%2C9.59-4.05c2.87-2.9%2C3.81-9.5%2C3.81-9.5s0.96-7.75%2C1.02-15.49v-7.26C95.94%2C36.58%2C94.98%2C28.84%2C94.98%2C28.84z%20M38.28%2C61.41v-27l25.74%2C13.5L38.28%2C61.41z%22%2F%3E%3C%2Fsvg%3E</xsl:text>
 </xsl:variable>
 
+<!-- LaTeX watermark uses default 5cm font which is then scaled by watermark.scale -->
+<!-- We copy that here. We also copy the 45 degree angle.                          -->
+<!-- Color rgb(204,204,204) matches LaTeX 80% grayscale.                           -->
+<xsl:variable name="watermark-css">
+    <xsl:variable name="watermark-svg">
+        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="600" width="600">
+            <text x="50%" y="50%" text-anchor="middle" transform="rotate(-45,300,300)" fill="rgb(204,204,204)" style="font-family:sans-serif; font-size:{5*$watermark.scale}cm;">
+                <xsl:value-of select="$watermark.text"/>
+            </text>
+        </svg>
+    </xsl:variable>
+    <xsl:text>background-image:url('data:image/svg+xml;utf8,</xsl:text>
+    <xsl:apply-templates select="exsl:node-set($watermark-svg)" mode="serialize" />
+    <xsl:text>');</xsl:text>
+</xsl:variable>
+
 <!-- create a "video" element for author-hosted   -->
 <!-- dimensions and autoplay as parameters        -->
 <!-- Normally $preview is true, and not passed in -->
@@ -8509,6 +8534,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- HTML5 main will be a "main" landmark automatically -->
                 <main class="main">
                     <div id="content" class="pretext-content">
+                        <xsl:if test="$b-watermark">
+                            <xsl:attribute name="style">
+                                <xsl:value-of select="$watermark-css" />
+                            </xsl:attribute>
+                        </xsl:if>
                         <xsl:copy-of select="$content" />
                     </div>
                 </main>

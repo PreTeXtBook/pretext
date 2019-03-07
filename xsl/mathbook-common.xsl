@@ -1175,6 +1175,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- very temporary, just for testing -->
 <xsl:param name="debug.exercises.forward" select="''"/>
 
+<!-- text for a watermark that is centered, -->
+<!-- running at a 45 degree angle           -->
+<xsl:param name="watermark.text" select="''" />
+<xsl:variable name="b-watermark" select="not($watermark.text = '')" />
+
+<!-- watermark uses a 5cm font, which can be scaled                     -->
+<!-- and scaling by 0.5 makes "CONFIDENTIAL" fit well in 600 pixel HTML -->
+<!-- and in the default body width for LaTeX                            -->
+<xsl:param name="watermark.scale" select="'0.5'" />
+
+
+
 <!-- Commentary is meant for an enhanced edition, -->
 <!-- like an "Instructor's Manual".  A publisher  -->
 <!-- will need to consciously elect "yes".        -->
@@ -1324,6 +1336,22 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 <xsl:param name="task.text.hint" select="''" />
 <xsl:param name="task.text.answer" select="''" />
 <xsl:param name="task.text.solution" select="''" />
+
+<!-- These are deprecated in favor of watermark.text and watermark.scale -->
+<!-- which are now managed in common. These still "work" for now.        -->
+<xsl:param name="latex.watermark" select="''"/>
+<xsl:variable name="b-latex-watermark" select="not($latex.watermark = '')" />
+<xsl:param name="latex.watermark.scale" select="''"/>
+<xsl:variable name="latex-watermark-scale">
+    <xsl:choose>
+        <xsl:when test="not($latex.watermark.scale = '')">
+            <xsl:value-of select="$latex.watermark.scale"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>2.0</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
 
 <!-- ############## -->
 <!-- Entry Template -->
@@ -3051,6 +3079,7 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 <xsl:template match="*" mode="serialize">
     <xsl:text>&lt;</xsl:text>
     <xsl:value-of select="name()"/>
+    <xsl:apply-templates select="." mode="serialize-namespace" />
     <xsl:apply-templates select="@*" mode="serialize" />
     <xsl:choose>
         <xsl:when test="node()">
@@ -3073,6 +3102,28 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
     <xsl:value-of select="."/>
     <xsl:text>"</xsl:text>
 </xsl:template>
+
+<!-- A namespace "attribute" is not really an attribute, and not captured by @* above.   -->
+<!-- There seems to be no way to separate an element's actual namespaces from those that -->
+<!-- are explicitly written where the element was created. Here, we loop through all the -->
+<!-- element's namespaces, discarding some that can be safley assumed to not be in the   -->
+<!-- original element declaration. And then serialize what is left.                      -->
+<xsl:template match="*" mode="serialize-namespace">
+    <xsl:for-each select="./namespace::*">
+        <!-- test taken from http://lenzconsulting.com/namespace-normalizer/normalize-namespaces.xsl -->
+        <xsl:if test="name()!='xml' and not(.=../preceding::*/namespace::* or .=ancestor::*[position()>1]/namespace::*)">
+            <xsl:text> xmlns</xsl:text>
+            <xsl:if test="not(name(current())='')">
+                <xsl:text>:</xsl:text>
+                <xsl:value-of select="name(current())"/>
+            </xsl:if>
+            <xsl:text>="</xsl:text>
+            <xsl:value-of select="current()"/>
+            <xsl:text>"</xsl:text>
+        </xsl:if>
+    </xsl:for-each>
+</xsl:template>
+
 
 <xsl:template match="text()" mode="serialize">
     <xsl:value-of select="."/>
@@ -10307,6 +10358,22 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="occurrences" select="$docinfo//rename[@lang]" />
         <xsl:with-param name="date-string" select="'2019-02-20'" />
         <xsl:with-param name="message" select="'the &quot;@lang&quot; attribute of &quot;rename&quot; has been replaced by &quot;@xml:lang&quot;, and is now optional if your document only uses one language'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2019-03-07  replace latex.watermark with watermark.text         -->
+    <!-- Still exists and is respected, move to Variable Bad Bank later  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2019-03-07'" />
+        <xsl:with-param name="message" select="'the  latex.watermark  parameter has been replaced by  watermark.text  which is effective in HTML as well as LaTeX'" />
+            <xsl:with-param name="incorrect-use" select="($latex.watermark != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2019-03-07  replace latex.watermark.scale with watermark.scale  -->
+    <!-- Still exists and is respected, move to Variable Bad Bank later  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2019-03-07'" />
+        <xsl:with-param name="message" select="'the  latex.watermark.scale  parameter has been replaced by  watermark.scale  which is effective in HTML as well as LaTeX'" />
+            <xsl:with-param name="incorrect-use" select="($latex.watermark.scale != '')" />
     </xsl:call-template>
     <!--  -->
     <!-- 2019-04-02  "mathbook" replaced by "pretext" -->
