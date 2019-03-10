@@ -3146,7 +3146,7 @@
   <xs:element name="rename">
     <xs:complexType mixed="true">
       <xs:attribute name="element" use="required"/>
-      <xs:attribute ref="xml:lang" use="required"/>
+      <xs:attribute ref="xml:lang"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="images">

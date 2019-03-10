@@ -3364,7 +3364,9 @@
   <define name="Configuration" combine="choice">
     <element name="rename">
       <attribute name="element"/>
-      <attribute name="xml:lang"/>
+      <optional>
+        <attribute name="xml:lang"/>
+      </optional>
       <text/>
     </element>
   </define>

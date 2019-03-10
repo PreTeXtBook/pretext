@@ -2042,7 +2042,7 @@
         Configuration |=
             element rename {
                 attribute element {text},
-                attribute xml:lang {text},
+                attribute xml:lang {text}?,
                 text
             }
         </fragment>
