@@ -142,11 +142,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="project.answer" select="''" />
 <xsl:param name="project.solution" select="''" />
 
-<!-- Author tools are for drafts, mostly "todo" items                 -->
-<!-- and "provisional" citations and cross-references                 -->
-<!-- Default is to hide todo's, inline provisionals                   -->
-<!-- Otherwise ('yes'), todo's in red paragraphs, provisionals in red -->
-<xsl:param name="author-tools" select="'no'" />
+<!-- Author tools are for drafts, mostly "todo" items  -->
+<!-- and "provisional" citations and cross-references  -->
+<!-- Default is to hide todo's, inline provisionals    -->
+<!-- Otherwise ('yes'), todo's show in red paragraphs, -->
+<!-- provisional cross-references show in red          -->
+<xsl:param name="author.tools" select="''" />
+<!-- The dashed version is deprecated 2019-02-10,      -->
+<!-- but we still recognize it.  Move to variable bad  -->
+<!-- bank once killed.                                 -->
+<xsl:param name="author-tools" select="''" />
 <!-- The autoname parameter is deprecated (2017-07-25) -->
 <!-- Replace with docinfo/cross-references/@text       -->
 <xsl:param name="autoname" select="''" />
@@ -225,8 +230,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- project|activity|exploration|investigation -->
 <xsl:strip-space elements="project activity exploration investigation" />
 <xsl:strip-space elements="exercise hint answer solution" />
-<xsl:strip-space elements="blockquote" />
-<xsl:strip-space elements="list" />
+<!-- The next three are containers -->
+<xsl:strip-space elements="prelude interlude postlude" />
+<xsl:strip-space elements="aside blockquote" />
+<xsl:strip-space elements="list terms" />
 <xsl:strip-space elements="sage program console task" />
 <xsl:strip-space elements="exercisegroup" />
 <xsl:strip-space elements="ul ol dl defined-term" />
@@ -460,6 +467,32 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB: Presumed to not have a trailing slash                  -->
 <xsl:variable name="baseurl">
     <xsl:value-of select="$docinfo/html/baseurl/@href"/>
+</xsl:variable>
+
+<!-- The new version can return to the generic version  -->
+<!-- once we kill the dashed version for author use.    -->
+<xsl:variable name="author-tools-new">
+    <xsl:choose>
+        <!-- respect old switch, if set properly -->
+        <!-- but don't error check or anything   -->
+        <xsl:when test="$author-tools = 'yes'">
+            <xsl:text>yes</xsl:text>
+        </xsl:when>
+        <xsl:when test="$author-tools = 'no'">
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <xsl:when test="$author.tools = 'yes'">
+            <xsl:text>yes</xsl:text>
+        </xsl:when>
+        <xsl:when test="$author.tools = 'no'">
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <!-- could error-check not-empty here -->
+        <!-- default is "no"                  -->
+        <xsl:otherwise>
+            <xsl:text>no</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:variable>
 
 <!-- ########################### -->
@@ -2631,7 +2664,6 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 <!-- Prepending Strings -->
 <!-- Add  count  copies of the string  pad  to  each line of  text -->
 <!-- Presumes  text  has a newline character at the very end       -->
-<!-- Note: this is not in use and has seen only limited testing    -->
 <xsl:template name="prepend-string">
     <xsl:param name="text" />
     <xsl:param name="pad" />
@@ -3553,7 +3585,11 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:apply-templates select="." mode="file-wrap">
         <xsl:with-param name="page-type" select="'complete'" />
         <xsl:with-param name="content">
-            <xsl:apply-templates select="." />
+            <xsl:apply-templates select=".">
+                <!-- the level of the object in the context on the page, -->
+                <!-- here "2" since there is an "h1" in the masthead     -->
+                <xsl:with-param name="heading-level" select="2"/>
+            </xsl:apply-templates>
         </xsl:with-param>
     </xsl:apply-templates>
 </xsl:template>
@@ -3563,7 +3599,11 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:apply-templates select="." mode="file-wrap">
         <xsl:with-param name="page-type" select="'summary'" />
         <xsl:with-param name="content">
-            <xsl:apply-templates select="." mode="summary" />
+            <xsl:apply-templates select="." mode="summary">
+                <!-- the level of the object in the context on the page, -->
+                <!-- here "2" since there is an "h1" in the masthead     -->
+                <xsl:with-param name="heading-level" select="2"/>
+            </xsl:apply-templates>
         </xsl:with-param>
     </xsl:apply-templates>
 </xsl:template>
@@ -4169,11 +4209,20 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:param name="string-id" />
     <xsl:variable name="translation">
         <xsl:choose>
-            <!-- First look in docinfo for document-specific rename -->
-            <xsl:when test="$docinfo/rename[@element=$string-id and @lang=$document-language]">
-                <xsl:apply-templates select="$docinfo/rename[@element=$string-id and @lang=$document-language]" />
+            <!-- First, look in docinfo for document-specific rename with correct language -->
+            <xsl:when test="$docinfo/rename[@element=$string-id and @xml:lang=$document-language]">
+                <xsl:apply-templates select="$docinfo/rename[@element=$string-id and @xml:lang=$document-language]"/>
             </xsl:when>
-            <!-- default to a lookup from the localization file's nodes -->
+            <!-- Second, look in docinfo for document-specific rename with correct language, -->
+            <!-- but with @lang attribute which was deprecated on 2019-02-23                 -->
+            <xsl:when test="$docinfo/rename[@element=$string-id and @lang=$document-language]">
+                <xsl:apply-templates select="$docinfo/rename[@element=$string-id and @lang=$document-language]"/>
+            </xsl:when>
+            <!-- Third, look in docinfo for document-specific rename, but now explicitly language-agnostic -->
+            <xsl:when test="$docinfo/rename[@element=$string-id and not(@lang) and not(@xml:lang)]">
+                <xsl:apply-templates select="$docinfo/rename[@element=$string-id and not(@lang) and not(@xml:lang)]"/>
+            </xsl:when>
+            <!-- Finally, default to a lookup from the localization file's nodes -->
             <xsl:otherwise>
                 <xsl:for-each select="$translation-nodes">
                     <xsl:value-of select="key('localization-key', concat($document-language,$string-id) )"/>
@@ -4182,7 +4231,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         </xsl:choose>
     </xsl:variable>
     <xsl:choose>
-        <xsl:when test="$translation!=''"><xsl:value-of select="$translation" /></xsl:when>
+        <xsl:when test="$translation!=''">
+            <xsl:value-of select="$translation" />
+        </xsl:when>
         <xsl:otherwise>
             <xsl:text>[</xsl:text>
             <xsl:value-of select="$string-id" />
@@ -6599,8 +6650,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- superfluous.  So we provide a hierarchy of templates to       -->
 <!-- determine if structure and content yield output.              -->
 
-<!-- authored exercise, terminal (leaf) tasks -->
-<xsl:template match="exercise|task[not(task)]" mode="dry-run">
+<!-- authored exercise, terminal (leaf) tasks, webwork stage -->
+<xsl:template match="exercise|task[not(task)]|stage" mode="dry-run">
     <xsl:param name="b-has-statement" />
     <xsl:param name="b-has-hint" />
     <xsl:param name="b-has-answer" />
@@ -6615,6 +6666,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         </xsl:when>
         <!-- effective squash just for LaTeX -->
         <xsl:when test="myopenmath" />
+        <!-- everything else, including a "stage" of a webwork problem -->
         <xsl:otherwise>
             <xsl:if test="$b-has-statement or ($b-has-hint and hint) or ($b-has-answer and answer) or ($b-has-solution and solution)">
                 <xsl:text>X</xsl:text>
@@ -6798,6 +6850,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- The division is one-off (not knowled), so we treat the            -->
 <!-- introduction and conclusion as original                           -->
 <xsl:template match="solutions" mode="solutions">
+    <xsl:param name="heading-level"/>
 
     <!-- A "solutions" division may exist in the main matter  -->
     <!-- or the back matter.  When we generate a solution, we -->
@@ -6841,6 +6894,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 
             <xsl:apply-templates select="$scope" mode="solutions-generator">
                 <xsl:with-param name="purpose" select="$purpose" />
+                <xsl:with-param name="heading-level" select="$heading-level"/>
                 <xsl:with-param name="b-inline-statement"     select="contains(@inline,     'statement')" />
                 <xsl:with-param name="b-inline-hint"          select="contains(@inline,     'hint')"      />
                 <xsl:with-param name="b-inline-answer"        select="contains(@inline,     'answer')"    />
@@ -6867,6 +6921,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <!-- the default scope, first ancestor -->
             <xsl:apply-templates select="ancestor::*[not(self::backmatter)][1]" mode="solutions-generator">
                 <xsl:with-param name="purpose" select="$purpose" />
+                <xsl:with-param name="heading-level" select="$heading-level"/>
                 <xsl:with-param name="b-inline-statement"     select="contains(@inline,     'statement')" />
                 <xsl:with-param name="b-inline-hint"          select="contains(@inline,     'hint')"      />
                 <xsl:with-param name="b-inline-answer"        select="contains(@inline,     'answer')"    />
@@ -6898,10 +6953,32 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 </xsl:template>
 
 
-<!-- Context is the scope (root of subtree examined)      -->
-<!-- Cannot locate a "solutions" division inside a "part" -->
-<xsl:template match="book|article|chapter|section|subsection|subsubsection" mode="solutions-generator">
+<!-- Solutions Generator -->
+
+<!-- Context is the originally the scope (root of subtree examined)      -->
+<!-- and is meant to be a "traditional" division, as expressed in        -->
+<!-- the schema.  However, on recusion context can be any division       -->
+<!-- containing exercises, such as "worksheet".  We do not allow a       -->
+<!-- "solutions" division to live inside a "part", so in the default     -->
+<!-- use a part is not the context.  This is all to explain that         -->
+<!-- the match is more expansive than first use, in practice.            -->
+<!--                                                                     -->
+<!-- On first call, the placing division should have a descriptive       -->
+<!-- title from the author, such as "Solutions to Chapter Exercises",    -->
+<!-- when placed at the level of a section (and assuming default scope). -->
+<!-- So the "b-has-heading" should default to false, *and should not     -->
+<!-- be overridden*.  Recursive calls will set this variable to true,    -->
+<!-- and then there will be sectioning of the solutions.                 -->
+<!--                                                                     -->
+<!-- Similarly, "scope" is set to the context on first call, then        -->
+<!-- replicated/preserved/remembered in recursive calls, so do not       -->
+<!-- pass in a different value.                                          -->
+
+<xsl:template match="book|article|part|chapter|section|subsection|subsubsection|exercises|worksheet|reading-questions" mode="solutions-generator">
     <xsl:param name="purpose"/>
+    <xsl:param name="heading-level"/>
+    <xsl:param name="b-has-heading" select="false()"/>
+    <xsl:param name="scope" select="."/>
     <xsl:param name="b-inline-statement"     />
     <xsl:param name="b-inline-hint"          />
     <xsl:param name="b-inline-answer"        />
@@ -6923,133 +7000,150 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:param name="b-project-answer"       />
     <xsl:param name="b-project-solution"     />
 
-    <!-- We need to save off the the main context before the "for-each" -->
-    <!-- context change, in order to decide how "big" division headings -->
-    <!-- will be via the "division-in-solutions" template               -->
-    <xsl:variable name="scope" select="." />
+    <!-- See if division has *any* content, at any depth, in light of switches. -->
+    <!-- Traditional divisions expect many switches, while specialized          -->
+    <!-- divisions expect a limited subset                                      -->
+    <xsl:variable name="dry-run">
+        <xsl:apply-templates select="." mode="dry-run">
+            <xsl:with-param name="b-inline-statement"     select="$b-inline-statement" />
+            <xsl:with-param name="b-inline-answer"        select="$b-inline-answer" />
+            <xsl:with-param name="b-inline-hint"          select="$b-inline-hint" />
+            <xsl:with-param name="b-inline-solution"      select="$b-inline-solution" />
+            <xsl:with-param name="b-divisional-statement" select="$b-divisional-statement" />
+            <xsl:with-param name="b-divisional-answer"    select="$b-divisional-answer" />
+            <xsl:with-param name="b-divisional-hint"      select="$b-divisional-hint" />
+            <xsl:with-param name="b-divisional-solution"  select="$b-divisional-solution" />
+            <xsl:with-param name="b-worksheet-statement"  select="$b-worksheet-statement" />
+            <xsl:with-param name="b-worksheet-answer"     select="$b-worksheet-answer" />
+            <xsl:with-param name="b-worksheet-hint"       select="$b-worksheet-hint" />
+            <xsl:with-param name="b-worksheet-solution"   select="$b-worksheet-solution" />
+            <xsl:with-param name="b-reading-statement"    select="$b-reading-statement" />
+            <xsl:with-param name="b-reading-answer"       select="$b-reading-answer" />
+            <xsl:with-param name="b-reading-hint"         select="$b-reading-hint" />
+            <xsl:with-param name="b-reading-solution"     select="$b-worksheet-solution" />
+            <xsl:with-param name="b-project-statement"    select="$b-project-statement" />
+            <xsl:with-param name="b-project-answer"       select="$b-project-answer" />
+            <xsl:with-param name="b-project-hint"         select="$b-project-hint" />
+            <xsl:with-param name="b-project-solution"     select="$b-project-solution" />
+        </xsl:apply-templates>
+    </xsl:variable>
 
-    <!-- consider each possible division, below the context        -->
-    <!-- including the context, which may contain inline exercises -->
-    <!-- Only output heading and content if there is any content   -->
-    <xsl:for-each select=".|.//part|.//chapter|.//section|.//subsection|.//subsubsection|.//exercises|.//worksheet|.//reading-questions">
-        <!-- See if division has *any* content, at any depth, in light of switches. -->
-        <!-- Traditional divisions expect many switches, while specialized          -->
-        <!-- divisions expect a limited subset                                      -->
-        <xsl:variable name="dry-run">
-            <xsl:apply-templates select="." mode="dry-run">
-                <xsl:with-param name="b-inline-statement"     select="$b-inline-statement" />
-                <xsl:with-param name="b-inline-answer"        select="$b-inline-answer" />
-                <xsl:with-param name="b-inline-hint"          select="$b-inline-hint" />
-                <xsl:with-param name="b-inline-solution"      select="$b-inline-solution" />
-                <xsl:with-param name="b-divisional-statement" select="$b-divisional-statement" />
-                <xsl:with-param name="b-divisional-answer"    select="$b-divisional-answer" />
-                <xsl:with-param name="b-divisional-hint"      select="$b-divisional-hint" />
-                <xsl:with-param name="b-divisional-solution"  select="$b-divisional-solution" />
-                <xsl:with-param name="b-worksheet-statement"  select="$b-worksheet-statement" />
-                <xsl:with-param name="b-worksheet-answer"     select="$b-worksheet-answer" />
-                <xsl:with-param name="b-worksheet-hint"       select="$b-worksheet-hint" />
-                <xsl:with-param name="b-worksheet-solution"   select="$b-worksheet-solution" />
-                <xsl:with-param name="b-reading-statement"    select="$b-reading-statement" />
-                <xsl:with-param name="b-reading-answer"       select="$b-reading-answer" />
-                <xsl:with-param name="b-reading-hint"         select="$b-reading-hint" />
-                <xsl:with-param name="b-reading-solution"     select="$b-worksheet-solution" />
-                <xsl:with-param name="b-project-statement"    select="$b-project-statement" />
-                <xsl:with-param name="b-project-answer"       select="$b-project-answer" />
-                <xsl:with-param name="b-project-hint"         select="$b-project-hint" />
-                <xsl:with-param name="b-project-solution"     select="$b-project-solution" />
-            </xsl:apply-templates>
-        </xsl:variable>
+    <xsl:if test="not($dry-run = '')">
+        <!-- We call the only real abstract template, it simply        -->
+        <!-- provides the correct wrapping for a division appearing    -->
+        <!-- to aid in organizing a collection of solutions.           -->
+        <!--                                                           -->
+        <!-- Context is a division: traditional, or specialized.       -->
+        <!-- We want all "exercise" and "project", in document order,  -->
+        <!-- without descending into subdivisions.  We handle          -->
+        <!-- "exercisegroup" specially, since it has "statement"       -->
+        <!-- characteristics.  In a traditional division, an inline    -->
+        <!-- exercise can be inside a "paragraphs".  If we divide an   -->
+        <!-- "exercises" division, we will need to explicitly burrow   -->
+        <!-- down into it.  Finally, a "worksheet" can have "exercise" -->
+        <!-- laid out via "sidebyside".                                -->
+        <!-- The purpose is sent to the modal "solutions" templates    -->
+        <!-- in order to generate accurate labels based on position    -->
+        <!-- The "heading-level" is the same as the originating        -->
+        <!-- "solutions" division on the first call here               -->
+        <xsl:apply-templates select="." mode="division-in-solutions">
+            <xsl:with-param name="scope" select="$scope" />
+            <xsl:with-param name="heading-level" select="$heading-level"/>
+            <xsl:with-param name="b-has-heading" select="$b-has-heading"/>
+            <xsl:with-param name="content">
 
-        <xsl:if test="not($dry-run = '')">
-            <!-- The root division does not generate a heading, we let the -->
-            <!-- author title the solutions division however they like.    -->
-            <!-- So we need to recognize when the $scope matches the       -->
-            <!-- context of the "for-each", which is first in the          -->
-            <!-- for-each/@select surrounding this chunk                   -->
-            <xsl:variable name="b-has-heading" select="count($scope|.) = 2"/>
-
-            <!-- We call the only real abstract template, it simply        -->
-            <!-- provides the correct wrapping for a division appearing    -->
-            <!-- to aid in organizing a collection of solutions.           -->
-            <!--                                                           -->
-            <!-- Context is a division: traditional, or specialized.       -->
-            <!-- We want all "exercise" and "project", in document order,  -->
-            <!-- without descending into subdivisions.  We handle          -->
-            <!-- "exercisegroup" specially, since it has "statement"       -->
-            <!-- characteristics.  In a traditional division, an inline    -->
-            <!-- exercise can be inside a "paragraphs".  If we divide an   -->
-            <!-- "exercises" division, we will need to explicitly burrow   -->
-            <!-- down into it.  Finally, a "worksheet" can have "exercise" -->
-            <!-- laid out via "sidebyside".                                -->
-            <!-- The purpose is sent to the modal "solutions" templates    -->
-            <!-- in order to generate accurate labels based on position    -->
-            <xsl:apply-templates select="." mode="division-in-solutions">
-                <xsl:with-param name="scope" select="$scope" />
-                <xsl:with-param name="b-has-heading" select="$b-has-heading"/>
-                <xsl:with-param name="content">
-
-                    <xsl:for-each select="exercise|exercisegroup|&PROJECT-LIKE;|paragraphs/exercise|self::worksheet//exercise">
-                         <xsl:choose>
-                            <xsl:when test="self::exercise and boolean(&INLINE-EXERCISE-FILTER;)">
-                                <xsl:apply-templates select="." mode="solutions">
-                                    <xsl:with-param name="purpose" select="$purpose" />
-                                    <xsl:with-param name="b-has-statement" select="$b-inline-statement" />
-                                    <xsl:with-param name="b-has-answer"    select="$b-inline-answer" />
-                                    <xsl:with-param name="b-has-hint"      select="$b-inline-hint" />
-                                    <xsl:with-param name="b-has-solution"  select="$b-inline-solution" />
-                                </xsl:apply-templates>
-                            </xsl:when>
-                            <xsl:when test="self::exercisegroup">
-                                <xsl:apply-templates select="." mode="solutions">
-                                    <xsl:with-param name="purpose" select="$purpose"/>
-                                    <xsl:with-param name="b-has-statement" select="$b-divisional-statement" />
-                                    <xsl:with-param name="b-has-answer"    select="$b-divisional-answer" />
-                                    <xsl:with-param name="b-has-hint"      select="$b-divisional-hint" />
-                                    <xsl:with-param name="b-has-solution"  select="$b-divisional-solution" />
-                                </xsl:apply-templates>
-                            </xsl:when>
-                            <xsl:when test="self::exercise and ancestor::exercises">
-                                <xsl:apply-templates select="." mode="solutions">
-                                    <xsl:with-param name="purpose" select="$purpose"/>
-                                    <xsl:with-param name="b-has-statement" select="$b-divisional-statement" />
-                                    <xsl:with-param name="b-has-answer"    select="$b-divisional-answer" />
-                                    <xsl:with-param name="b-has-hint"      select="$b-divisional-hint" />
-                                    <xsl:with-param name="b-has-solution"  select="$b-divisional-solution" />
-                                </xsl:apply-templates>
-                            </xsl:when>
-                            <xsl:when test="self::exercise and ancestor::worksheet">
-                                <xsl:apply-templates select="." mode="solutions">
-                                    <xsl:with-param name="purpose" select="$purpose"/>
-                                    <xsl:with-param name="b-has-statement" select="$b-worksheet-statement" />
-                                    <xsl:with-param name="b-has-answer"    select="$b-worksheet-answer" />
-                                    <xsl:with-param name="b-has-hint"      select="$b-worksheet-hint" />
-                                    <xsl:with-param name="b-has-solution"  select="$b-worksheet-solution" />
-                                </xsl:apply-templates>
-                            </xsl:when>
-                            <xsl:when test="self::exercise and ancestor::reading-questions">
-                                <xsl:apply-templates select="." mode="solutions">
-                                    <xsl:with-param name="purpose" select="$purpose"/>
-                                    <xsl:with-param name="b-has-statement" select="$b-reading-statement" />
-                                    <xsl:with-param name="b-has-answer"    select="$b-reading-answer" />
-                                    <xsl:with-param name="b-has-hint"      select="$b-reading-hint" />
-                                    <xsl:with-param name="b-has-solution"  select="$b-reading-solution" />
-                                </xsl:apply-templates>
-                            </xsl:when>
-                            <xsl:when test="&PROJECT-FILTER;">
-                                <xsl:apply-templates select="." mode="solutions">
-                                    <xsl:with-param name="purpose" select="$purpose"/>
-                                    <xsl:with-param name="b-has-statement" select="$b-project-statement" />
-                                    <xsl:with-param name="b-has-answer"    select="$b-project-answer" />
-                                    <xsl:with-param name="b-has-hint"      select="$b-project-hint" />
-                                    <xsl:with-param name="b-has-solution"  select="$b-project-solution" />
-                                </xsl:apply-templates>
-                            </xsl:when>
-                        </xsl:choose>
-                    </xsl:for-each>
-                </xsl:with-param>
-            </xsl:apply-templates>
-        </xsl:if>
-    </xsl:for-each>
+                <xsl:for-each select="exercise|exercisegroup|&PROJECT-LIKE;|paragraphs/exercise|self::worksheet//exercise">
+                     <xsl:choose>
+                        <xsl:when test="self::exercise and boolean(&INLINE-EXERCISE-FILTER;)">
+                            <xsl:apply-templates select="." mode="solutions">
+                                <xsl:with-param name="purpose" select="$purpose" />
+                                <xsl:with-param name="b-has-statement" select="$b-inline-statement" />
+                                <xsl:with-param name="b-has-answer"    select="$b-inline-answer" />
+                                <xsl:with-param name="b-has-hint"      select="$b-inline-hint" />
+                                <xsl:with-param name="b-has-solution"  select="$b-inline-solution" />
+                            </xsl:apply-templates>
+                        </xsl:when>
+                        <xsl:when test="self::exercisegroup">
+                            <xsl:apply-templates select="." mode="solutions">
+                                <xsl:with-param name="purpose" select="$purpose"/>
+                                <xsl:with-param name="b-has-statement" select="$b-divisional-statement" />
+                                <xsl:with-param name="b-has-answer"    select="$b-divisional-answer" />
+                                <xsl:with-param name="b-has-hint"      select="$b-divisional-hint" />
+                                <xsl:with-param name="b-has-solution"  select="$b-divisional-solution" />
+                            </xsl:apply-templates>
+                        </xsl:when>
+                        <xsl:when test="self::exercise and ancestor::exercises">
+                            <xsl:apply-templates select="." mode="solutions">
+                                <xsl:with-param name="purpose" select="$purpose"/>
+                                <xsl:with-param name="b-has-statement" select="$b-divisional-statement" />
+                                <xsl:with-param name="b-has-answer"    select="$b-divisional-answer" />
+                                <xsl:with-param name="b-has-hint"      select="$b-divisional-hint" />
+                                <xsl:with-param name="b-has-solution"  select="$b-divisional-solution" />
+                            </xsl:apply-templates>
+                        </xsl:when>
+                        <xsl:when test="self::exercise and ancestor::worksheet">
+                            <xsl:apply-templates select="." mode="solutions">
+                                <xsl:with-param name="purpose" select="$purpose"/>
+                                <xsl:with-param name="b-has-statement" select="$b-worksheet-statement" />
+                                <xsl:with-param name="b-has-answer"    select="$b-worksheet-answer" />
+                                <xsl:with-param name="b-has-hint"      select="$b-worksheet-hint" />
+                                <xsl:with-param name="b-has-solution"  select="$b-worksheet-solution" />
+                            </xsl:apply-templates>
+                        </xsl:when>
+                        <xsl:when test="self::exercise and ancestor::reading-questions">
+                            <xsl:apply-templates select="." mode="solutions">
+                                <xsl:with-param name="purpose" select="$purpose"/>
+                                <xsl:with-param name="b-has-statement" select="$b-reading-statement" />
+                                <xsl:with-param name="b-has-answer"    select="$b-reading-answer" />
+                                <xsl:with-param name="b-has-hint"      select="$b-reading-hint" />
+                                <xsl:with-param name="b-has-solution"  select="$b-reading-solution" />
+                            </xsl:apply-templates>
+                        </xsl:when>
+                        <xsl:when test="&PROJECT-FILTER;">
+                            <xsl:apply-templates select="." mode="solutions">
+                                <xsl:with-param name="purpose" select="$purpose"/>
+                                <xsl:with-param name="b-has-statement" select="$b-project-statement" />
+                                <xsl:with-param name="b-has-answer"    select="$b-project-answer" />
+                                <xsl:with-param name="b-has-hint"      select="$b-project-hint" />
+                                <xsl:with-param name="b-has-solution"  select="$b-project-solution" />
+                            </xsl:apply-templates>
+                        </xsl:when>
+                    </xsl:choose>
+                </xsl:for-each>
+            </xsl:with-param>
+        </xsl:apply-templates>
+    </xsl:if>
+    <!-- recurse into (sub)divisions which can contain exercises     -->
+    <!-- On every recursion (not initial call) we request a heading  -->
+    <!-- and we pass in the scope of original call for help deciding -->
+    <!-- the level of headings given surroundings.                   -->
+    <!-- This is recurrence, so increment $heading-level.            -->
+    <xsl:apply-templates select="book|article|part|chapter|section|subsection|subsubsection|exercises|worksheet|reading-questions" mode="solutions-generator">
+        <xsl:with-param name="purpose" select="$purpose" />
+        <xsl:with-param name="heading-level" select="$heading-level + 1"/>
+        <xsl:with-param name="b-has-heading" select="true()" />
+        <xsl:with-param name="scope" select="$scope" />
+        <xsl:with-param name="b-inline-statement"     select="$b-inline-statement" />
+        <xsl:with-param name="b-inline-answer"        select="$b-inline-answer" />
+        <xsl:with-param name="b-inline-hint"          select="$b-inline-hint" />
+        <xsl:with-param name="b-inline-solution"      select="$b-inline-solution" />
+        <xsl:with-param name="b-divisional-statement" select="$b-divisional-statement" />
+        <xsl:with-param name="b-divisional-answer"    select="$b-divisional-answer" />
+        <xsl:with-param name="b-divisional-hint"      select="$b-divisional-hint" />
+        <xsl:with-param name="b-divisional-solution"  select="$b-divisional-solution" />
+        <xsl:with-param name="b-worksheet-statement"  select="$b-worksheet-statement" />
+        <xsl:with-param name="b-worksheet-answer"     select="$b-worksheet-answer" />
+        <xsl:with-param name="b-worksheet-hint"       select="$b-worksheet-hint" />
+        <xsl:with-param name="b-worksheet-solution"   select="$b-worksheet-solution" />
+        <xsl:with-param name="b-reading-statement"    select="$b-reading-statement" />
+        <xsl:with-param name="b-reading-answer"       select="$b-reading-answer" />
+        <xsl:with-param name="b-reading-hint"         select="$b-reading-hint" />
+        <xsl:with-param name="b-reading-solution"     select="$b-worksheet-solution" />
+        <xsl:with-param name="b-project-statement"    select="$b-project-statement" />
+        <xsl:with-param name="b-project-answer"       select="$b-project-answer" />
+        <xsl:with-param name="b-project-hint"         select="$b-project-hint" />
+        <xsl:with-param name="b-project-solution"     select="$b-project-solution" />
+    </xsl:apply-templates>
 </xsl:template>
 
 
@@ -7075,7 +7169,13 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- 4. name="list-of-end"                           -->
 <!-- hook for end of list                            -->
 
+<!-- NB: possible improvements -->
+<!-- 1.  Get $subroot via @ref and work with element, not a string            -->
+<!-- 2.  Somehow abandon user strings sooner, so less reliant on local-name() -->
+
 <xsl:template match="list-of">
+    <xsl:param name="heading-level"/>
+
     <!-- Ring-fence terms so matches are not mistaken substrings -->
     <xsl:variable name="elements">
         <xsl:text>|</xsl:text>
@@ -7122,31 +7222,56 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:variable name="subroot" select="ancestor-or-self::*[local-name() = $scope]" />
     <!-- variable behavior set, now setup -->
     <xsl:call-template name="list-of-begin" />
-    <!-- traverse entire document tree, stopping at desired headers or elements -->
-    <!-- <xsl:for-each select="/mathbook/article//*|/mathbook/book//*"> -->
-    <xsl:for-each select="$subroot//*">
-        <!-- write a division header, perhaps              -->
-        <!-- check if desired, check if empty and unwanted -->
-        <xsl:if test="contains($divisions, concat(concat('|', name(.)), '|'))">
-            <xsl:choose>
-                <xsl:when test="$empty='no'">
-                    <!-- probe subtree, even if we found empty super-tree earlier -->
-                    <xsl:variable name="all-elements" select=".//*[contains($elements, concat(concat('|', name(.)), '|'))]" />
-                    <xsl:if test="$all-elements">
-                        <xsl:apply-templates select="." mode="list-of-header" />
-                    </xsl:if>
-                </xsl:when>
-                <xsl:when test="$empty='yes'">
-                    <xsl:apply-templates select="." mode="list-of-header" />
-                </xsl:when>
-            </xsl:choose>
-        </xsl:if>
-        <!-- if a desired element, write out summary/link -->
-        <xsl:if test="contains($elements, concat(concat('|', name(.)), '|'))='true'">
-            <xsl:apply-templates select="." mode="list-of-element" />
-        </xsl:if>
-    </xsl:for-each>
+    <!-- recursive procedure, starting from indicated scope -->
+    <xsl:apply-templates select="$subroot" mode="list-of-content">
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+        <xsl:with-param name="elements" select="$elements"/>
+        <xsl:with-param name="divisions" select="$divisions"/>
+        <xsl:with-param name="empty" select="$empty"/>
+    </xsl:apply-templates>
     <xsl:call-template name="list-of-end" />
+</xsl:template>
+
+<xsl:template match="*" mode="list-of-content">
+    <xsl:param name="heading-level"/>
+    <xsl:param name="elements"/>
+    <xsl:param name="divisions"/>
+    <xsl:param name="empty"/>
+
+    <!-- write a division header, perhaps              -->
+    <!-- check if desired, check if empty and unwanted -->
+    <xsl:if test="contains($divisions, concat(concat('|', local-name(.)), '|'))">
+        <xsl:choose>
+            <xsl:when test="$empty='no'">
+                <!-- probe subtree, even if we found empty super-tree earlier -->
+                <xsl:variable name="all-elements" select=".//*[contains($elements, concat(concat('|', local-name(.)), '|'))]" />
+                <xsl:if test="$all-elements">
+                    <xsl:apply-templates select="." mode="list-of-header">
+                        <xsl:with-param name="heading-level" select="$heading-level"/>
+                    </xsl:apply-templates>
+                </xsl:if>
+            </xsl:when>
+            <xsl:when test="$empty='yes'">
+                <xsl:apply-templates select="." mode="list-of-header">
+                    <xsl:with-param name="heading-level" select="$heading-level"/>
+                </xsl:apply-templates>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:if>
+    <!-- if a desired element, write out summary/link -->
+    <xsl:if test="contains($elements, concat(concat('|', local-name(.)), '|'))='true'">
+        <xsl:apply-templates select="." mode="list-of-element" />
+    </xsl:if>
+    <!-- recurse into children -->
+    <!-- increment heading-level, correct right now for divisions -->
+    <xsl:if test="*">
+        <xsl:apply-templates select="*" mode="list-of-content">
+            <xsl:with-param name="heading-level" select="$heading-level + 1"/>
+            <xsl:with-param name="elements" select="$elements"/>
+            <xsl:with-param name="divisions" select="$divisions"/>
+            <xsl:with-param name="empty" select="$empty"/>
+        </xsl:apply-templates>
+    </xsl:if>
 </xsl:template>
 
 <!-- Stub implementations, with warnings -->
@@ -8238,7 +8363,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:when test="$b-is-equation-target">
             <xsl:if test="$b-has-content">
                 <xsl:copy-of select="$custom-text" />
-                <xsl:call-template name="nbsp-character"/>
+                <xsl:apply-templates select="." mode="xref-text-separator"/>
             </xsl:if>
             <xsl:text>(</xsl:text>
             <xsl:apply-templates select="$target" mode="xref-number">
@@ -8259,7 +8384,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:when test="$text-style = 'global'">
             <xsl:if test="$b-has-content">
                 <xsl:copy-of select="$custom-text" />
-                <xsl:call-template name="nbsp-character"/>
+                <xsl:apply-templates select="." mode="xref-text-separator"/>
             </xsl:if>
             <xsl:apply-templates select="$target" mode="xref-number">
                 <xsl:with-param name="xref" select="." />
@@ -8269,7 +8394,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:when test="$text-style = 'local'">
             <xsl:if test="$b-has-content">
                 <xsl:copy-of select="$custom-text" />
-                <xsl:call-template name="nbsp-character"/>
+                <xsl:apply-templates select="." mode="xref-text-separator"/>
             </xsl:if>
             <xsl:apply-templates select="$target" mode="serial-number" />
         </xsl:when>
@@ -8278,7 +8403,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                 <!-- content override of type-prefix -->
                 <xsl:when test="$b-has-content">
                     <xsl:copy-of select="$custom-text" />
-                    <xsl:call-template name="nbsp-character"/>
+                    <xsl:apply-templates select="." mode="xref-text-separator"/>
                     <xsl:apply-templates select="$target" mode="xref-number">
                         <xsl:with-param name="xref" select="." />
                     </xsl:apply-templates>
@@ -8286,7 +8411,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                 <!-- usual, default case -->
                 <xsl:otherwise>
                     <xsl:apply-templates select="$target" mode="type-name" />
-                    <xsl:call-template name="nbsp-character"/>
+                    <xsl:apply-templates select="." mode="xref-text-separator"/>
                     <xsl:apply-templates select="$target" mode="xref-number">
                         <xsl:with-param name="xref" select="." />
                     </xsl:apply-templates>
@@ -8298,13 +8423,13 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                 <!-- content override of type-prefix -->
                 <xsl:when test="$b-has-content">
                     <xsl:copy-of select="$custom-text" />
-                    <xsl:call-template name="nbsp-character"/>
+                    <xsl:apply-templates select="." mode="xref-text-separator"/>
                     <xsl:apply-templates select="$target" mode="serial-number" />
                 </xsl:when>
                 <!-- usual, default case -->
                 <xsl:otherwise>
                     <xsl:apply-templates select="$target" mode="type-name" />
-                    <xsl:call-template name="nbsp-character"/>
+                    <xsl:apply-templates select="." mode="xref-text-separator"/>
                     <xsl:apply-templates select="$target" mode="serial-number" />
                 </xsl:otherwise>
             </xsl:choose>
@@ -8325,7 +8450,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <!-- type-local first, no matter what    -->
             <!-- for each of the two phrase styles   -->
             <xsl:apply-templates select="$target" mode="type-name" />
-            <xsl:call-template name="nbsp-character"/>
+            <xsl:apply-templates select="." mode="xref-text-separator"/>
             <xsl:apply-templates select="$target" mode="serial-number" />
             <!-- climb up tree to find highest matching structure numbers -->
             <!-- we pass through the two styles so reaction can occur     -->
@@ -8348,12 +8473,12 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                 <!-- or addtion to plain number      -->
                 <xsl:when test="$b-has-content">
                     <xsl:copy-of select="$custom-text" />
-                    <xsl:call-template name="nbsp-character"/>
+                    <xsl:apply-templates select="." mode="xref-text-separator"/>
                 </xsl:when>
                 <!-- no override, use type as prefix -->
                 <xsl:when test="$text-style = 'type-hybrid'">
                     <xsl:apply-templates select="$target" mode="type-name" />
-                    <xsl:call-template name="nbsp-character"/>
+                    <xsl:apply-templates select="." mode="xref-text-separator"/>
                 </xsl:when>
                 <!-- just a plain number, do nothing at all -->
                 <xsl:otherwise />
@@ -8384,6 +8509,23 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         </xsl:when>
         <xsl:otherwise>
             <xsl:message>MBX:BUG:  NO XREF TEXT GENERATED</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- "xref text" like "Theorem 4.5" benefits from a non-breaking   -->
+<!-- space to keep the pieces together and discourage line-breaks  -->
+<!-- in the middle.  This is less relevant when used as a "reason" -->
+<!-- inside of display mathematics *and* it does not play nicely   -->
+<!-- with WeBWorK's PGML, so this template handles the necessary   -->
+<!-- exception for "xref" immediately inside of an "mrow".         -->
+<xsl:template match="xref" mode="xref-text-separator">
+    <xsl:choose>
+        <xsl:when test="parent::mrow">
+            <xsl:text> </xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:call-template name="nbsp-character"/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -10125,12 +10267,43 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="date-string" select="'2019-02-06'" />
         <xsl:with-param name="message" select="'the &quot;brackets&quot; element is no longer necessary, simply replace with bare &quot;[&quot; and &quot;]&quot; characters'"/>
     </xsl:call-template>
+    <!--  -->
     <!-- 2019-02-10  obsolete  html.css.file  removed -->
     <!-- Still exists in "Variable Bad Bank" for use here  -->
     <xsl:call-template name="parameter-deprecation-message">
         <xsl:with-param name="date-string" select="'2019-02-10'" />
         <xsl:with-param name="message" select="'the obsolete  html.css.file  parameter has been removed, please use html.css.colorfile to choose a color scheme'" />
             <xsl:with-param name="incorrect-use" select="($html.css.file != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2019-02-12  "terms" necessary to structure a "glossary"     -->
+    <!-- Never in the schema, but a warning here as a public service -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//glossary[not(terms)]" />
+        <xsl:with-param name="date-string" select="'2019-02-12'" />
+        <xsl:with-param name="message" select="'a &quot;glossary&quot; needs to have its &quot;defined-term&quot; structured within a &quot;terms&quot;'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2019-02-20  "todo" items now in comments -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//todo" />
+        <xsl:with-param name="date-string" select="'2019-02-20'" />
+        <xsl:with-param name="message" select="'a &quot;todo&quot; element is no longer effective.  Reeplace with an XML comment whose first four non-whitespace characters spell &quot;todo&quot; (with no spaces)'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2019-02-20  replace author-tools with author.tools              -->
+    <!-- Still exists and is respected, move to Variable Bad Bank later  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2019-02-20'" />
+        <xsl:with-param name="message" select="'the  author-tools  parameter has been replaced by the functionally equivalent  author.tools'" />
+            <xsl:with-param name="incorrect-use" select="not($author-tools = '')"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2019-02-23  "rename/@lang" replaced by (optional) rename/@xml:lang -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$docinfo//rename[@lang]" />
+        <xsl:with-param name="date-string" select="'2019-02-20'" />
+        <xsl:with-param name="message" select="'the &quot;@lang&quot; attribute of &quot;rename&quot; has been replaced by &quot;@xml:lang&quot;, and is now optional if your document only uses one language'"/>
     </xsl:call-template>
 </xsl:template>
 
@@ -10140,14 +10313,18 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- so we explicitly kill it here.                  -->
 <xsl:template match="pagebreak"/>
 
-<!-- ToDo's are silent unless requested           -->
-<!-- as part of an author's report, then marginal -->
-<xsl:template match="todo">
+<!-- ToDo's are silent unless requested as part of an -->
+<!-- author's report, then marginal.  They exist in   -->
+<!-- source as prefixed comments, and that prefix     -->
+<!-- suffices as part of the output                   -->
+<xsl:template match="comment()[translate(substring(normalize-space(string(.)), 1, 4), &UPPERCASE;, &LOWERCASE;) = 'todo']">
     <xsl:call-template name="margin-warning">
         <xsl:with-param name="warning">
-            <xsl:apply-templates select="." mode="type-name" />
-            <xsl:text>: </xsl:text>
-            <xsl:apply-templates />
+            <xsl:call-template name="strip-leading-whitespace">
+                <xsl:with-param name="text">
+                    <xsl:value-of select="."/>
+                </xsl:with-param>
+            </xsl:call-template>
         </xsl:with-param>
     </xsl:call-template>
 </xsl:template>
@@ -10364,6 +10541,9 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 
 <!-- 2017-07-16  killed, from 2015-03-13 deprecation -->
 <xsl:template match="paragraph" />
+
+<!-- 2019-02-20  deprecated and killed simultaneously -->
+<xsl:template match="todo"/>
 
 
 <!-- Sometimes this template is useful to see which    -->

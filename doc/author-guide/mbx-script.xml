@@ -30,7 +30,7 @@
     <section xml:id="mbx-example-use">
         <title>Example Use</title>
 
-        <p>Here is a typical example of using <c>mbx</c>.  You have several (or many!) diagrams and figures in your <pretext /> source, all authored in the TikZ language, and so packaged up within <tag>latex-image-code</tag> elements.  Your <latex />/<init>PDF</init> output looks beautiful, since <pretext /> simply inserts the TikZ code into the right place in the generated <c>*.tex</c> file, and you have done this several times until your figures look just right.</p>
+        <p>Here is a typical example of using <c>mbx</c>.  You have several (or many!) diagrams and figures in your <pretext /> source, all authored in the TikZ language, and so packaged up within <tag>latex-image</tag> elements.  Your <latex />/<init>PDF</init> output looks beautiful, since <pretext /> simply inserts the TikZ code into the right place in the generated <c>*.tex</c> file, and you have done this several times until your figures look just right.</p>
 
         <p>Now you need to generate the <init>SVG</init> versions of your images that will accompany your <init>HTML</init> version of your book and provide nice scalable graphics. This is exactly the sort of chore the <c>mbx</c> script was designed for.  You might run<cd>
             <cline>mbx -vv -c latex-image -f svg -d ~/books/aota/images ~/books/aota/animals.xml</cline>
@@ -49,7 +49,7 @@
         <p>Some notes:<ul>
             <li>If you have modularized your source across more than one <init>XML</init> file, then be sure to provide your <q>top-level</q> or <q>master</q> file as the final argument to the script, just like you would for an invocation of <c>xsltproc</c>.  It is important to understand that your source is one huge <q>source tree</q> and your file-by-file modularization is never respected or recognized in any way.  In particular, use of the <c>xinclude</c> mechanism is handled by the script, and you should not apply the script to each of your source files individually.  If image production (or some other task) takes a long time, see <xref ref="restrict-mbx-scope" /> for a way to have the script restrict its action to only a portion of your project.</li>
 
-            <li>Certain arguments that are filenames require a full (not relative) path to locate the right objects.  In the example above, you can see the source file requires this (where the shell in use here will expand the <tilde /> to the user's home directory).  The <c>-d</c> flag does not require a full path, and so can be specified relative to the current working directory.</li>
+            <li>Certain arguments that are filenames require a full (not relative) path to locate the right objects.  In the example above, you can see the source file requires this (where the shell in use here will expand the ~ to the user's home directory).  The <c>-d</c> flag does not require a full path, and so can be specified relative to the current working directory.</li>
 
             <li>Do not place the script, or configuration files, anywhere else (except as recommended for your personal copy of the configuration file).  The locations are important for locating other files, such as the stylesheets used to isolate parts of your project for processing.</li>
 
@@ -60,7 +60,7 @@
     <section xml:id="debugging-mbx-image-generation">
         <title>Debugging Image Generation</title>
 
-        <p>A principal use of the <c>mbx</c> script is to isolate source code from <c>latex-image-code</c> sections, package them up as proper <c>*.tex</c> files, run <latex /> to make cropped <init>PDF</init> versions, and then convert these to other formats such as <init>SVG</init> or <init>PNG</init>.</p>
+        <p>A principal use of the <c>mbx</c> script is to isolate source code from <tag>latex-image</tag> sections, package them up as proper <c>*.tex</c> files, run <latex /> to make cropped <init>PDF</init> versions, and then convert these to other formats such as <init>SVG</init> or <init>PNG</init>.</p>
 
         <p>Much of this activity happens in a temporary directory.  If you use the <c>-vv</c> switch described above, then one of the messages early in the output describing the initialization will be the name of this directory.  Looking to see what files end up there, and what those files contain, is often useful in determining the step where this toolchain fails, and maybe even why.</p>
 

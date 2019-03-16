@@ -36,7 +36,7 @@
 
         <p>Once you have divisions, what do you put into them?  Most likely, paragraphs<idx>paragraph</idx>.  We use long, exact names for tags that are used infrequently, like <tag>subsubsection</tag>.  But for frequently used elements, we use abbreviated tags, often identical to names used in <init>HTML</init>.  So a paragraph is delimited by simply the <tag>p</tag> tag.</p>
 
-        <p>Lots of things can happen in paragraphs, some things can <em>only</em> happen in a paragraph, and some things are <em>banned</em> in paragraphs.  Inside a paragraph, you can emphasize some text (<tag>em</tag>), you can quote some text (<tag>q</tag>), you can mark a phrase as being from another language (<tag>foreign</tag>), and much more.  You can use special characters like an ampersand (<ampersand />, <tage>ampersand</tage>) or an octothorpe, aka <q>hash tag</q> (<hash />, <tage>hash</tage>).  You must put a list inside a paragraph, and all mathematics (<xref ref="overview-math" />) will occur inside a paragraph.  You cannot put a <tag>table</tag> or a <tag>figure</tag> in a paragraph, and many other structured components are prohibited in paragraphs.</p>
+        <p>Lots of things can happen in paragraphs, some things can <em>only</em> happen in a paragraph, and some things are <em>banned</em> in paragraphs.  Inside a paragraph, you can emphasize some text (<tag>em</tag>), you can quote some text (<tag>q</tag>), you can mark a phrase as being from another language (<tag>foreign</tag>), and much more.  You can use almost any character your keyboard can produce, but need to be careful with the three <init>XML</init> special characters: ampersand (&amp;), less than (&lt;), and rarely, greater than (&gt;).  (See <xref ref="overview-special-characters"/>.) You must put a list inside a paragraph, and all mathematics (<xref ref="overview-math" />) will occur inside a paragraph.  You cannot put a <tag>table</tag> or a <tag>figure</tag> in a paragraph, and many other structured components are prohibited in paragraphs.</p>
 
         <p>Paragraphs are also used as part of the structure of other parts of your document.  For example, a <tag>remark</tag> could be composed of several <tag>p</tag>.  As you get started with <pretext />, remember that much of your actual writing will occur inside of a <tag>p</tag> and you will have a collection of tags you can use there to express your meaning to your readers.</p>
 
@@ -194,34 +194,12 @@
 
         <p>An advantage of XML syntax is that very few characters are reserved for the language's use, and thus very few characters need to be escaped.  Of course, there is always the need to escape the escape character.</p>
 
-        <p>The escape character for XML is the ampersand, <ampersand />.  The other dangerous character is the left angle bracket, the <q>less than,</q> <less />.  Mostly to be symmetric, we also handle the right angle bracket, the <q>greater than,</q> <greater />, similarly.  Single and double quotation marks are used to delimit attributes, so are part of the XML specification, but do not present difficulties in narrative text.</p>
+        <p>The escape character for XML is the ampersand, &amp;.  The other dangerous character is the left angle bracket, the <q>less than,</q> &lt;.  Mostly to be symmetric, we also handle the right angle bracket, the <q>greater than,</q> &gt;, similarly.  Single and double quotation marks are used to delimit attributes, so are part of the XML specification, but do not present difficulties in narrative text.</p>
 
-        <p>In normal writing, always use the empty elements <tage>ampersand</tage>, <tage>less</tage>, and <tage>greater</tage>.  Inside of mathematics elements, or code for images written in <latex />, always use the pre-defined macros, <c>\amp</c>, <c>\lt</c>, <c>\gt</c>.  In verbatim text (such as programs) always use the XML entities <c>&amp;amp;</c>, <c>&amp;lt;</c>, <c>&amp;gt;</c>.</p>
+        <p>These three characters are interpreted by the <init>XML</init> processor very early in the analysis of your source.  So they need to be authored specially via the <term>XML entitites</term>: <c>&amp;amp;</c>, <c>&amp;lt;</c>, <c>&amp;gt;</c>.  In practice, the last is rarely necessary.  So really just two characters to type carefully or exceptionally.</p>
 
-        <p>If you consistently follow the rules in the previous paragraph you will avoid a descent into escape-character hell and avoid a lot of head-scratching.  In particular, you should have no need of the <c>&lt;![CDATA[</c><nbsp /><c>]]&gt;</c> mechanism of XML, so just forget we even mentioned it.</p>
+        <p>If you consistently follow the prescription in the previous paragraph you will avoid a descent into escape-character hell and avoid a lot of head-scratching.  In particular, you should have no need of the <c>&lt;![CDATA[</c><nbsp /><c>]]&gt;</c> mechanism of XML, so just forget we even mentioned it.</p>
 
-        <p>Print and PDF output is generated via <latex />, which has a good many special characters.  So to preserve conversion to this format, you should consistently use provided empty elements for these characters.  Here are the characters and their corresponding elements.</p>
-
-        <table>
-            <!-- <title><latex />'s Reserved Characters</title> -->
-            <caption><latex />'s reserved characters and their elements</caption>
-            <idx>reserved characters (<latex />)</idx>
-
-            <tabular>
-                <row><cell><hash /></cell><cell><tage>hash</tage></cell></row>
-                <row><cell><dollar /></cell><cell><tage>dollar</tage></cell></row>
-                <row><cell><percent /></cell><cell><tage>percent</tage></cell></row>
-                <row><cell><circumflex /></cell><cell><tage>circumflex</tage></cell></row>
-                <row><cell><ampersand /></cell><cell><tage>ampersand</tage></cell></row>
-                <row><cell><underscore /></cell><cell><tage>underscore</tage></cell></row>
-                <row><cell><lbrace /></cell><cell><tage>lbrace</tage></cell></row>
-                <row><cell><rbrace /></cell><cell><tage>rbrace</tage></cell></row>
-                <row><cell><tilde /></cell><cell><tage>tilde</tage></cell></row>
-                <row><cell><backslash /></cell><cell><tage>backslash</tage></cell></row>
-            </tabular>
-        </table>
-
-        <p>There are some other empty elements, which are conveniences for certain characters, or sequences of characters, that are difficult or unusual in <latex /> and also somewhat obscure as Unicode characters.  Two examples are the copyright symbol, <copyright />, and constructions like the abbreviation <q><eg /></q> for <foreign>exempli gratia</foreign>.  We will document these later.</p>
     </section>
 
     <section xml:id="overview-verbatim-literal">

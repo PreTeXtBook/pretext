@@ -532,7 +532,7 @@
 
                 <paragraphs>
                     <title><tage>solidus</tage>, <solidus />, solidus, virgule, fraction bar</title>
-                    <p>For simple arithmetic expressions in text, this symbol may be used to form a fraction.  It shoulds appear to have a significantly shallower slope than the forward slash, <slash />.</p>
+                    <p>For simple arithmetic expressions in text, this symbol may be used to form a fraction.  It shoulds appear to have a significantly shallower slope than the forward slash, /.</p>
                 </paragraphs>
 
                 <p>So we have <tage>times</tage> and <tage>solidus</tage> and will implement &#xb1; and &#xf7; and then provide examples.</p>
@@ -665,7 +665,7 @@
             <p>The tags described here contain <em>only raw characters</em>.  By that we typically mean the first 128 characters of the <acro>ASCII</acro> code.  Unicode characters are likely to migrate to HTML output just fine, but results for <latex /> output will be variable.  The restriction to character data has two consequences.  First, any markup mistakenly included will have its content silently ignored and dropped.  Second, you need to observe the rules on special characters and escaped characters for <init>XML</init> for literal text, which are mercifully simple.</p>
 
             <blockquote>
-                <p>In your source, use <c>&amp;amp;</c> for an <ampersand />, and use <c>&amp;lt;</c> and <c>&amp;gt;</c> for <less /> and <greater />.  Otherwise, every other <acro>ASCII</acro> character will render faithfully across all possible formats.</p>
+                <p>In your source, use <c>&amp;amp;</c> for an &amp;, and use <c>&amp;lt;</c> and <c>&amp;gt;</c> for &lt; and &gt;.  Otherwise, every other <acro>ASCII</acro> character will render faithfully across all possible formats.</p>
             </blockquote>
         </introduction>
 
@@ -1520,7 +1520,7 @@
             <![CDATA[<image source="images/crocodiles.png" width="50%" />]]>
             </pre>
 
-            <p>Typically you would wrap this in a <tag>figure</tag> that might have an <attr>xml:id</attr> attribute for cross-references, with or without a caption.  There is no <attr>height</attr> attribute, so the aspect ratio of your image is your responsibility outside of <pretext />.  The <attr>width</attr> attribute is a percentage of the available width of the text (outside of a <tag>sidebyside</tag> panel).  Default width is typically 90<percent />.</p>
+            <p>Typically you would wrap this in a <tag>figure</tag> that might have an <attr>xml:id</attr> attribute for cross-references, with or without a caption.  There is no <attr>height</attr> attribute, so the aspect ratio of your image is your responsibility outside of <pretext />.  The <attr>width</attr> attribute is a percentage of the available width of the text (outside of a <tag>sidebyside</tag> panel).  Default width is typically 90%.</p>
 
             <p>You may also provide a <tag>description</tag> which will aid accessibility for electronic formats.  Keep such readers in mind and provide as much description as possible.  Keep the markup simple, since this will typically migrate to an HTML attribute that cannot contain any structure.  Be careful to avoid double-quotes.  For example,</p>
 
@@ -1611,7 +1611,7 @@
 
         <p>Instead of placing a <attr>width</attr> attribute on each item, instead place this on the <tag>sidebyside</tag> element.  A single <attr>width</attr> will use the same value for each panel.  For different widths, use the plural form <attr>widths</attr> and provide a space-separated list of percentages.  The default is to give each panel the same width, and as large as possible, which will result in no gap between panels.</p>
 
-        <p>The margins can be specified with the <attr>margins</attr> attribute, which if given as a single percentage will be used for both the left and right sides.  You may also specify asymmetric left and right margins with two percentages, separated by a space, in the same attribute.  An additional option is to use the value <c>auto</c> which will set each margin to half of the (common) space between panels.  This is also the default.  In the case of a single panel, the left margin, right margin, and panel width should all add up to 100<percent />.</p>
+        <p>The margins can be specified with the <attr>margins</attr> attribute, which if given as a single percentage will be used for both the left and right sides.  You may also specify asymmetric left and right margins with two percentages, separated by a space, in the same attribute.  An additional option is to use the value <c>auto</c> which will set each margin to half of the (common) space between panels.  This is also the default.  In the case of a single panel, the left margin, right margin, and panel width should all add up to 100%.</p>
 
         <p>Once the widths and margins are known, any additional available width is used to create a common distance separating panels.  (Which is not possible when there is just a single panel.)</p>
 
@@ -1619,9 +1619,9 @@
 
         <p>We could give lots of examples, but instead it might be best to just experiment.  Error-checking is very robust, so it is hard to get it too wrong.  OK, we will do just one to help explain.  Suppose a <tag>sidebyside</tag> contains three panels and has layout parameters given by<cd>
             <cline>&lt;sidebyside widths="20% 40% 25%" margins="auto" valign="middle"&gt;</cline>
-        </cd>Then there will be 15<percent /> of the width left to space out the panels.  The two gaps are each 5<percent /> of the width, and the remaining 5<percent /> is split between the margins at 2.5<percent /> each.  And the vertical midlines of each panel are all aligned.</p>
+        </cd>Then there will be 15% of the width left to space out the panels.  The two gaps are each 5% of the width, and the remaining 5% is split between the margins at 2.5% each.  And the vertical midlines of each panel are all aligned.</p>
 
-        <p>For a single panel with no attributes, the panel will occupy 100<percent /> of the width.  A single panel with a specified width will get equal (auto) margins, resulting in a centered panel.</p>
+        <p>For a single panel with no attributes, the panel will occupy 100% of the width.  A single panel with a specified width will get equal (auto) margins, resulting in a centered panel.</p>
 
         <p>Captioned items<idx><h>side-by-side panel</h><h>panel</h><h>captioned item</h></idx> as panels deserve special mention.  These will continue to be numbered consecutively, with one exception.  If you place a <tag>sidebyside</tag> inside of a <tag>figure</tag>, then the <tag>figure</tag> will be numbered, and the captioned items inside the <tag>sidebyside</tag> will be <term>sub-captioned</term><idx><h>side-by-side panel</h><h>panel</h><h>sub-captioned item</h></idx>.  In other words, the second captioned panel of a <tag>sidebyside</tag> inside Figure 5.2 would be referenced as Figure 5.2.b.</p>
 
@@ -1683,7 +1683,7 @@
             <title>Characters in <init>URL</init>s</title>
             <idx><h>URL</h><h>query string</h></idx>
 
-            <p>A <init>URL</init> can have a <term>query string</term>, which has a list of parameters following a question-mark.  The parameters are separated by ampersands (<ampersand />), which will need to be escaped, so as to not confuse the <init>XML</init> processor.  So use <c>&amp;amp;</c> anywhere the ampersand <em>character</em> is necessary, such as a <attr>source</attr> attribute, or a monospace version of a <init>URL</init> achieved with a <tag>c</tag> element.  Also, the question-mark character should <em>not</em> be <init>URL</init>-encoded (<c>%3F</c>) (despite advice just given above), so if necessary edit it to be the actual character.  General advice about special characters in <init>XML</init> source can be found in <xref ref="overview-special-characters"/>.</p>
+            <p>A <init>URL</init> can have a <term>query string</term>, which has a list of parameters following a question-mark.  The parameters are separated by ampersands (&amp;), which will need to be escaped, so as to not confuse the <init>XML</init> processor.  So use <c>&amp;amp;</c> anywhere the ampersand <em>character</em> is necessary, such as a <attr>source</attr> attribute, or a monospace version of a <init>URL</init> achieved with a <tag>c</tag> element.  Also, the question-mark character should <em>not</em> be <init>URL</init>-encoded (<c>%3F</c>) (despite advice just given above), so if necessary edit it to be the actual character.  General advice about special characters in <init>XML</init> source can be found in <xref ref="overview-special-characters"/>.</p>
         </subsection>
 
         <subsection xml:id="topic-external-data-file">
@@ -1754,7 +1754,7 @@
                 </li>
                 <li>
                     <title><c>popout</c></title>
-                    <p>Play in new window or tab, at 150<percent /> width.</p>
+                    <p>Play in new window or tab, at 150% width.</p>
                 </li>
                 <li>
                     <title><c>select</c></title>
@@ -1859,9 +1859,7 @@
                 <li><p>Unicode characters have standardized names.  You can find these, and more information, including font support, at the Unicode section of <url href="http://www.fileformat.info/info/unicode/">FileFormat.info</url>, <c>www.fileformat.info/info/unicode/</c>.  If you are struggling to find a specific character, then using this site's name in a search will often quickly locate what you need.  Be sure to experiment with the test pages there for browser and font support (including checking your local configuration).</p></li>
 
                 <li>
-                    <p><alert>Warning</alert>: do not use Unicode characters as a way to get mathematical symbols (that is delegated to our use of <latex /> syntax).  And do not use Unicode when we have provided an empty element for a character, especially when that character may be used in a markup syntax for some output, such as <latex />, <init>HTML</init>, <init>JSON</init>, Markdown, <ellipsis /></p>
-
-                    <p>For example, if you put many naked hash symbols (<hash />) in your source, then you will get nice <init>HTML</init>, but when you try to get print from a PDF from <latex /> you will have a train wreck on your hands when you compile the <latex />.  Instead, be sure to always use the provided <c>&lt;hash /&gt;</c> element.  <em>Always</em>.  Other empty elements are conveniences, which spare you from looking up Unicode numbers and make your source more readable, rather than a necessity to avoid special characters.  An example is <c>&lt;times /&gt;</c>, for use outside of a strictly mathematical setting:  <q>I bought a 2<times />4 at the lumberyard.</q></p>
+                    <p><alert>Warning</alert>: do not use Unicode characters as a way to get mathematical symbols (that is delegated to our use of <latex /> syntax).  And do not use Unicode when we have provided an empty element for a character.  These empty elements are conveniences, which spare you from looking up Unicode numbers and make your source more readable.  We also sometimes fine-tune these characters in ways that are not possible if you embed them as Unicode.  An example is <c>&lt;times /&gt;</c>, for use outside of a strictly mathematical setting:  <q>I bought a 2<times />4 at the lumberyard.</q></p>
                 </li>
             </ul></p>
         </introduction>
@@ -1897,11 +1895,11 @@
 
         <p>The <c>xinclude</c> mechanism automatically introduces a <attr>xml:base</attr> attribute, which we need to account for in the RELAX-NG schema (<xref ref="schema" />).  So we limit which <pretext /> elements may be the root element of an included file.  The rough, general rule is that if an element <em>can</em> have a title, then it can be the root element of an included file.  So in particular each of the divisions (<tag>chapter</tag>, <tag>section</tag>, <etc />) is a candidate.</p>
 
-        <p>One special exception to this restriction is the use of text files, containing absolutely no markup at all.  Two good examples are the <tag>input</tag> child of a <tag>program</tag> or the <tag>latex-image-code</tag> element used to describe an <tag>image</tag> by source code that <latex /> understands.</p>
+        <p>One special exception to this restriction is the use of text files, containing absolutely no markup at all.  Two good examples are the <tag>input</tag> child of a <tag>program</tag> or the <tag>latex-image</tag> element used to describe an <tag>image</tag> by source code that <latex /> understands.</p>
 
         <p>In both cases you can put the text content of these elements in a separate file, use the <attr>href</attr> attribute of <tag>xi:include</tag> to point to the file, and then the twist is to set the <attr>parse</attr> attribute to the value <c>text</c>.  This has two general benefits.  First, you now <em>cannot</em> have any <init>XML</init> in the file, so you do not have to have a single root element for the file (and so the schema imposes no restrictions).  Second, you do not need to escape any problematic characters like ampersands and angle brackets (<xref ref="topic-verbatim-literal" />), nor use the misunderstood <c>CDATA</c> mechanism.</p>
 
-        <p>Additionally, in the case of <tag>latex-image-code</tag> you can park unsightly code away in files so you do not have to look at it, or you can create a small driver <latex /> program to test each one, or even better, you may want to use the same image more than once (maybe in different figures?) and can just include it repeatedly, while only ever editing the single copy.</p>
+        <p>Additionally, in the case of <tag>latex-image</tag> you can park unsightly code away in files so you do not have to look at it, or you can create a small driver <latex /> program to test each one, or even better, you may want to use the same image more than once (maybe in different figures?) and can just include it repeatedly, while only ever editing the single copy.</p>
 
         <p>Finally, the <tag>input</tag> and <tag>output</tag> children of <tag>program</tag>, <tag>sage</tag>, and <tag>console</tag> are also candidates for this device.  In particular, you may want to have the code for a program in its own file where you can test it easily with an interpreter or compiler.  There is one gotcha.  If you were to put a newline between <tag>input</tag> and <tag>xi:include</tag> there is the very real potential of unwanted whitespace bleeding into your <pretext /> output.  Our suggested remedy uses an example from Bob Plantz.  Convert</p>
 
@@ -1929,17 +1927,17 @@
         <idx>accessibilty</idx>
         <idx>web accessibilty</idx>
 
-        <p>Continuing our discussion from <xref ref="overview-accessibility" /> we begin by listing features of our conversion to <init>HTML</init> which happen automatically.<dl width="narrow">
+        <p>Continuing our discussion from <xref ref="overview-accessibility" /> we begin by listing features of our conversion to <init>HTML</init> which happen automatically.  These come in part from the recommendations at the <url href="https://www.w3.org/WAI/standards-guidelines/wcag/">Web Content Accessibility Guidelines</url><fn><c>www.w3.org/WAI/standards-guidelines/wcag/</c></fn> of the Web Accessibility Initiative.<dl width="narrow">
             <li>
                 <title>HTML</title>
-                <p>Wherever possible we supply <init>HTML</init> elements and attributes that will be interpreted sensibly by a screen reader in the absence of the visual styling provided by <init>CSS</init>.  This means we are cognizant of the role of headings (<c>h1</c> through <c>h6</c>), provide HTML that passes validation checks, and so on.  Employing attributes from the <url href="https://www.w3.org/WAI/standards-guidelines/aria/">Accessible Rich Internet Applications</url> suite of web standards (<init>ARIA</init>) at <c>www.w3.org/WAI/</c> will go a long way to improving accessibility.  This work is in-progress as of 2018-05-31.</p>
+                <p>Wherever possible we supply <init>HTML</init> elements and attributes that will be interpreted sensibly by a screen reader in the absence of the visual styling provided by <init>CSS</init>.  This means we are cognizant of the role of headings (<c>h1</c> through <c>h6</c>), provide HTML that passes validation checks, and so on.  Employing attributes from the <url href="https://www.w3.org/WAI/standards-guidelines/aria/">Accessible Rich Internet Applications</url><fn><c>www.w3.org/WAI/standards-guidelines/aria/</c></fn> suite of web standards (<init>ARIA</init>) will go a long way to improving accessibility.  This work is in-progress as of 2018-05-31.</p>
             </li>
 
             <li>
                 <title>Mathematics</title>
                 <idx><h>accessibility</h><h>mathematics</h></idx>
                 <idx><h>web accessibility</h><h>mathematics</h></idx>
-                <p>MathJax (<url href="https://www.mathjax.org/"><c>mathjax.org</c></url>) is the JavaScript library we use to render mathematics within the <init>HTML</init> output.  It provides extensive capabilities for screen readers to render the mathematics audibly, and by default your project's output is configured to take advantage of these features.  We refer the reader to the MathJax documentation of <url href="http://docs.mathjax.org/en/latest/misc/accessibility-features.html">Accessibility Features</url> at <c>docs.mathjax.org</c> for details.  But here is a simple experiment you can do yourself right now to simulate how a blind reader could experience mathematics with the combination of <pretext />, MathJax, and a screen reader.<ol>
+                <p>MathJax (<url href="https://www.mathjax.org/"><c>mathjax.org</c></url>) is the JavaScript library we use to render mathematics within the <init>HTML</init> output.  It provides extensive capabilities for screen readers to render the mathematics audibly, and by default your project's output is configured to take advantage of these features.  We refer the reader to the MathJax documentation of <url href="http://docs.mathjax.org/en/latest/misc/accessibility-features.html">Accessibility Features</url><fn><c>docs.mathjax.org/en/latest/misc/accessibility-features.html</c></fn> for details.  But here is a simple experiment you can do yourself right now to simulate how a blind reader could experience mathematics with the combination of <pretext />, MathJax, and a screen reader.<ol>
                     <li>Find some moderately complicated mathematics, such as in the <q>Mathematics</q> section of the sample article, or your own project, or the sample from MathJax copied below.</li>
                     <li>Bring up the context menu on that display (a mouse right-click for most).</li>
                     <li>Turn on the <c>Accessibility > Explorer > Activate</c> menu item.  The page will reload, and the <c>Explorer</c> menu item will earn many more menu items.  This setting is reasonably sticky, so you should not have to do this repeatedly.  Having this on will incur some processing time as part of each page load, so you may want to turn it off later.</li>
@@ -1963,6 +1961,11 @@
                 <p>Repeatedly pressing the <c>Tab</c> key will move a reader from one location to the next in a web document.  Since your Table of Contents in the left sidebar is a series of many links, a reader will need to tab through <em>all</em> of these to eventually reach the interesting content on a page.</p>
 
                 <p>However, we support a common device.  The first link on every page is hidden from all readers, but an initial <c>Tab</c> will present a link labeled <c>Skip to Main Content</c> which when executed will take the reader past the Table of Contents and to the start of the content at the top of the page.</p>
+            </li>
+
+            <li>
+                <title>Links</title>
+                <p>Hyperlinks have colors, styles (such as underlining), and effects (such as mouse hover) which are consistent with <init>WCAG</init> recommendations.  Rather than being underlined by default, we instead use high-contrast color choices.</p>
             </li>
 
             <li>
@@ -1993,6 +1996,13 @@
                 </cd>would cause the clickable portion to be something like <q>Theorem 5.16</q>, whereas<cd>
                     <cline>&lt;xref ref="theorem-FTC" text="global" /&gt;</cline>
                 </cd>would then cause the clickable portion to be simply the much shorter <q>5.16</q>.  Of course, you can set a default style for your entire document, so it is not necessary to continually provide the <attr>text</attr> attribute.</p>
+            </li>
+
+            <li>
+                <title>Link Text</title>
+                <p>Default link text, such as <q>Theorem 4.15</q> has been chosen to be informative.  But for internal links (<tag>xref</tag>) or external links (<tag>url</tag>) you can choose alternative content for the clickable portion of the text.  Think carefully about your choices here and try to avoid text like <q>here</q> or <q>click here.</q>  For a <tag>url</tag>, the default content is the <attr>href</attr>, which can always be improved by providing content.</p>
+
+                <p>Here is a device which we now use more frequently.  Despite our aversion to footnotes, create a <tag>url</tag> element and provide meaningful content, such as the title of the web page you are referencing.  Then immediately afterwards add a footnote (<tag>fn</tag>) which contains only the actual <init>URL</init>, perhaps wrapped in a <tag>c</tag> element.  Since this is mostly meant for print, it is safe to drop things like the <c>https://</c> protocol specification and therefore <em>not</em> make it active (for a second time).  This is in use within this section.</p>
             </li>
         </dl></p>
 

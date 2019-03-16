@@ -29,7 +29,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace" >
 
-<xsl:import href="../mathbook-common.xsl" />
+<!-- Uses "strip-leading-whitespace" and more -->
+<xsl:import href="../mathbook-common.xsl"/>
 
 <!-- ASCII output intended, consistent with -common -->
 <xsl:output method="text" />
@@ -38,8 +39,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- looking for things to do                            -->
 <!-- http://stackoverflow.com/questions/3776333/         -->
 <!-- stripping-all-elements-except-one-in-xml-using-xslt -->
-<xsl:template match="@*|node()">
-    <xsl:apply-templates select="@*|node()"/>
+<xsl:template match="@*|node()|comment()">
+    <xsl:apply-templates select="@*|node()|comment()"/>
 </xsl:template>
 
 <!-- ############## -->
@@ -56,7 +57,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;**************************************&#xa;</xsl:text>
     <xsl:apply-templates select="." mode="long-name" />
     <xsl:text>&#xa;**************************************&#xa;</xsl:text>
-    <xsl:apply-templates select="*[not(self::subtitle)]"/>
+    <xsl:apply-templates select="*[not(self::subtitle)]|comment()"/>
 </xsl:template>
 
 <!-- Kill titles as metadata, but restore behavior on nodes to   -->
@@ -68,16 +69,29 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Looking for todo's and provisional citations, cross-references -->
 <!-- May need to abandon counting if conditions get more complex    -->
-<xsl:template match="todo">
-    <xsl:number level="any" count="todo|xref[@provisional]"/>
-    <xsl:text>. </xsl:text>
-    <xsl:value-of select="." />
+
+<!-- This template comes close to doing the right thing, -->
+<!-- but is off by one (or more) in strange ways, so we  -->
+<!-- are not numbering the reported items                -->
+<xsl:template match="xref|comment()" mode="overall-number">
+    <xsl:number level="any" count="xref[@provisional]|comment()[translate(substring(normalize-space(string(.)), 1, 4), &UPPERCASE;, &LOWERCASE;) = 'todo']"/>
+</xsl:template>
+
+<xsl:template match="comment()[translate(substring(normalize-space(string(.)), 1, 4), &UPPERCASE;, &LOWERCASE;) = 'todo']">
+    <!-- <xsl:apply-templates select="." mode="overall-number"/> -->
+    <!-- <xsl:text>. </xsl:text> -->
+    <xsl:call-template name="strip-leading-whitespace">
+        <xsl:with-param name="text">
+            <xsl:value-of select="."/>
+        </xsl:with-param>
+    </xsl:call-template>
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="xref[@provisional]">
-    <xsl:number level="any" count="todo|xref[@provisional]"/>
-    <xsl:text>. xref: </xsl:text>
+    <!-- <xsl:apply-templates select="." mode="overall-number"/> -->
+    <!-- <xsl:text>.</xsl:text> -->
+    <xsl:text>xref: </xsl:text>
     <xsl:value-of select="@provisional" />
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>

@@ -1962,7 +1962,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$document-root/backmatter/index-part | $document-root//index-list">
         <!-- See http://tex.blogoverflow.com/2012/09/dont-forget-to-run-makeindex/ for "imakeidx" usage -->
         <xsl:text>%% Support for index creation&#xa;</xsl:text>
-        <xsl:if test="$author-tools='no'">
+        <xsl:if test="$author-tools-new = 'no'">
             <xsl:text>%% imakeidx package does not require extra pass (as with makeidx)&#xa;</xsl:text>
             <xsl:text>%% Title of the "Index" section set via a keyword&#xa;</xsl:text>
             <xsl:text>%% Language support for the "see" and "see also" phrases&#xa;</xsl:text>
@@ -1983,7 +1983,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
         </xsl:if>
-        <xsl:if test="$author-tools='yes'">
+        <xsl:if test="$author-tools-new = 'yes'">
             <xsl:text>%% author-tools = 'yes' activates marginal notes about index&#xa;</xsl:text>
             <xsl:text>%% and supresses the actual creation of the index itself&#xa;</xsl:text>
             <xsl:text>\usepackage{showidx}&#xa;</xsl:text>
@@ -2059,7 +2059,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="$latex.watermark.scale" />
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="$author-tools='yes'" >
+    <xsl:if test="$author-tools-new = 'yes'" >
         <xsl:text>%% Collected author tools options (author-tools='yes')&#xa;</xsl:text>
         <xsl:text>%% others need to be elsewhere, these are simply package additions&#xa;</xsl:text>
         <xsl:text>\usepackage{showkeys}&#xa;</xsl:text>
@@ -3275,7 +3275,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>}\space\space</xsl:text>
     </xsl:if>
     <xsl:text>&#xa;</xsl:text>
-    <xsl:apply-templates select="*" />
+    <xsl:apply-templates/>
     <!-- drop a par, for next bio, or for big vspace -->
     <xsl:text>\par&#xa;</xsl:text>
 </xsl:template>
@@ -3403,7 +3403,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- DTD: does the next line presume <frontmatter> is required? -->
     <xsl:text>\frontmatter&#xa;</xsl:text>
     <xsl:call-template name="front-cover"/>
-    <xsl:apply-templates select="*[not(self::colophon or self::biography)]" />
+    <xsl:apply-templates select="node()[not(self::colophon or self::biography)]" />
     <xsl:text>%% begin: table of contents&#xa;</xsl:text>
     <xsl:if test="$latex-toc-level > -1">
         <xsl:text>%% Adjust Table of Contents&#xa;</xsl:text>
@@ -3495,7 +3495,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
     <xsl:text>}&#xa;</xsl:text>
-    <xsl:apply-templates select="*" />
+    <xsl:apply-templates/>
 </xsl:template>
 
 <!-- Dedication page is very plain, with a blank obverse     -->
@@ -4122,7 +4122,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="solutions" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:apply-templates select="*"/>
+            <xsl:apply-templates/>
         </xsl:otherwise>
     </xsl:choose>
     <xsl:apply-templates select="." mode="latex-division-footing" />
@@ -4385,7 +4385,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- And then there is a resetting of the carriage. An introduction preceding a   -->
 <!-- webwork needs an additional \par at the end (if there even was an intro)     -->
 <xsl:template match="introduction[following-sibling::webwork-reps]">
-    <xsl:apply-templates select="*" />
+    <xsl:apply-templates/>
     <xsl:text>\par\medskip&#xa;</xsl:text>
 </xsl:template>
 
@@ -4393,7 +4393,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- To stand apart, a medskip and noindent    -->
 <xsl:template match="conclusion[preceding-sibling::webwork-reps]">
     <xsl:text>\par\medskip\noindent </xsl:text>
-    <xsl:apply-templates select="*" />
+    <xsl:apply-templates/>
     <xsl:text>\par&#xa;</xsl:text>
 </xsl:template>
 
@@ -4418,14 +4418,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Simple containier for blocks with structured contents -->
 <!-- Consumers are responsible for surrounding breaks      -->
 <xsl:template match="statement">
-    <xsl:apply-templates select="*" />
+    <xsl:apply-templates/>
 </xsl:template>
 
 <!-- Prelude, Interlude, Postlude -->
 <!-- Very simple containiers, to help with movement, use -->
 <xsl:template match="prelude|interlude|postlude">
     <xsl:text>\par&#xa;</xsl:text>
-    <xsl:apply-templates select="*" />
+    <xsl:apply-templates/>
 </xsl:template>
 
 
@@ -4512,7 +4512,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%&#xa;</xsl:text>
     <!-- statement is required now, to be relaxed in DTD      -->
     <!-- explicitly ignore proof and pickup just for theorems -->
-    <xsl:apply-templates select="*[not(self::proof)]" />
+    <xsl:apply-templates select="node()[not(self::proof)]" />
     <xsl:text>\end{</xsl:text>
         <xsl:value-of select="local-name(.)" />
     <xsl:text>}&#xa;</xsl:text>
@@ -4541,7 +4541,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="internal-id" />
     <xsl:text>}</xsl:text>
     <xsl:text>&#xa;</xsl:text>
-    <xsl:apply-templates select="*" />
+    <xsl:apply-templates/>
     <xsl:text>\end{proofptx}&#xa;</xsl:text>
 </xsl:template>
 
@@ -4619,15 +4619,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <!-- condition on how statement, hint, answer, solution are presented -->
     <xsl:choose>
-        <!-- webwork, structured with "stage" matches first -->
+        <!-- webwork, structured with "stage" matches first  -->
+        <!-- Above provides infrastructure for the exercise, -->
+        <!-- we pass the stage on to a WW-specific template  -->
+        <!-- since each stage may have hints, answers, and   -->
+        <!-- solutions.                                      -->
         <xsl:when test="webwork-reps/static/stage">
-            <!-- Needs this fix, but requires more care                                              -->
-            <!-- <xsl:apply-templates select="webwork-reps/static/stage" mode="exercise-components"> -->
             <xsl:apply-templates select="webwork-reps/static/stage">
                 <xsl:with-param name="b-original" select="true()" />
                 <xsl:with-param name="b-has-statement" select="true()" />
                 <xsl:with-param name="b-has-hint"      select="$b-has-inline-hint" />
-                <!-- 2018-09-21: WW answers may become available -->
                 <xsl:with-param name="b-has-answer"    select="$b-has-inline-answer" />
                 <xsl:with-param name="b-has-solution"  select="$b-has-inline-solution" />
             </xsl:apply-templates>
@@ -4736,15 +4737,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- condition on how statement, hint, answer, solution are presented -->
         <xsl:choose>
             <!-- webwork, structured with "stage" matches first -->
+            <!-- Above provides infrastructure for the exercise, -->
+            <!-- we pass the stage on to a WW-specific template  -->
+            <!-- since each stage may have hints, answers, and   -->
+            <!-- solutions.                                      -->
             <xsl:when test="webwork-reps/static/stage">
-                <!-- Needs this fix, but requires more care                                              -->
-                <!-- <xsl:apply-templates select="webwork-reps/static/stage" mode="exercise-components"> -->
-                <xsl:apply-templates select="webwork-reps/static/stage">
+                <xsl:apply-templates select="webwork-reps/static/stage" mode="solutions">
                     <xsl:with-param name="b-original" select="false()" />
                     <xsl:with-param name="purpose" select="$purpose" />
                     <xsl:with-param name="b-has-statement" select="$b-has-statement" />
                     <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
-                    <!-- 2018-09-21: WW answers may become available -->
                     <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
                     <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
                 </xsl:apply-templates>
@@ -4868,19 +4870,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- condition on how statement, hint, answer, solution are presented -->
     <xsl:choose>
         <!-- webwork, structured with "stage" matches first -->
-        <!-- Someplace, something like  -->
-        <!-- \par\medskip\noindent% -->
-        <!-- \textbf{Part 2.}\quad  -->
-        <!-- needs to happen for each stage in a solution -->
-        <!-- maybe based on a dry-run -->
+        <!-- Above provides infrastructure for the exercise, -->
+        <!-- we pass the stage on to a WW-specific template  -->
+        <!-- since each stage may have hints, answers, and   -->
+        <!-- solutions.                                      -->
         <xsl:when test="webwork-reps/static/stage">
-            <!-- Needs this fix, but requires more care                                              -->
-            <!-- <xsl:apply-templates select="webwork-reps/static/stage" mode="exercise-components"> -->
             <xsl:apply-templates select="webwork-reps/static/stage">
                 <xsl:with-param name="b-original" select="true()" />
                 <xsl:with-param name="b-has-statement" select="$b-has-statement" />
                 <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
-                <!-- 2018-09-21: WW answers may become available -->
                 <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
                 <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
             </xsl:apply-templates>
@@ -5006,15 +5004,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- condition on how statement, hint, answer, solution are presented -->
         <xsl:choose>
             <!-- webwork, structured with "stage" matches first -->
+            <!-- Above provides infrastructure for the exercise, -->
+            <!-- we pass the stage on to a WW-specific template  -->
+            <!-- since each stage may have hints, answers, and   -->
+            <!-- solutions.                                      -->
             <xsl:when test="webwork-reps/static/stage">
-                <!-- Needs this fix, but requires more care                                              -->
-                <!-- <xsl:apply-templates select="webwork-reps/static/stage" mode="exercise-components"> -->
-                <xsl:apply-templates select="webwork-reps/static/stage">
+                <xsl:apply-templates select="webwork-reps/static/stage" mode="solutions">
                     <xsl:with-param name="b-original" select="false()" />
                     <xsl:with-param name="purpose" select="$purpose" />
                     <xsl:with-param name="b-has-statement" select="$b-has-statement" />
                     <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
-                    <!-- 2018-09-21: WW answers may become available -->
                     <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
                     <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
                 </xsl:apply-templates>
@@ -5162,7 +5161,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:otherwise>
             <!-- no explicit "statement", so all content is the statement -->
             <xsl:if test="$b-has-statement">
-                <xsl:apply-templates select="*">
+                <xsl:apply-templates>
                     <xsl:with-param name="b-original" select="$b-original" />
                 </xsl:apply-templates>
                 <!-- no separator, since no trailing components -->
@@ -5333,8 +5332,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:message terminate="yes">MBX:ERROR: invalid value <xsl:value-of select="@cols" /> for cols attribute of exercisegroup</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
-    <!-- an exercisegroup can only appear in an "exercises" division, -->
-    <!-- Switches on "exercise" will control component visibility     -->
+    <!-- an exercisegroup can only appear in an "exercises" division,    -->
+    <!-- the template for exercises//exercise will consult switches for  -->
+    <!-- visibility of components when born (not doing "solutions" here) -->
     <xsl:apply-templates select="exercise"/>
     <xsl:choose>
         <xsl:when test="not(@cols) or (@cols = 1)">
@@ -5438,10 +5438,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- by a WW server.  These may not be part of an author's source -->
 <!-- and so is not part of the PTX schema.                        -->
 
-<!-- A WW stage is a division of a problem.  Online, it requires  -->
-<!-- a reader to complete a stage before moving on to the next    -->
+<!-- A WW "stage" is a division of a problem.  It requires a      -->
+<!-- reader to complete a stage before moving on to the next      -->
 <!-- stage.  We realize each stage in print as a "Part", which    -->
-<!-- has a statement and optionally, hints and solutions.         -->
+<!-- has a statement and optionally, hints, answers and solutions.-->
 
 <!-- Fail if WeBWorK extraction and merging has not been done -->
 <xsl:template match="webwork[node()|@*]">
@@ -5458,8 +5458,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="not(preceding-sibling::stage)">
         <text>\leavevmode\par\noindent%&#xa;</text>
     </xsl:if>
-    <!-- TOD: internationalize "Part" -->
-    <xsl:text>\textbf{Part </xsl:text>
+    <!-- e.g., Part 2. -->
+    <xsl:text>\textbf{</xsl:text>
+    <xsl:call-template name="type-name">
+        <xsl:with-param name="string-id" select="'part'" />
+    </xsl:call-template>
+    <xsl:text> </xsl:text>
     <xsl:apply-templates select="." mode="serial-number" />
     <xsl:text>.}\quad </xsl:text>
     <xsl:apply-templates select="." mode="exercise-components">
@@ -5471,6 +5475,52 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:apply-templates>
     <xsl:if test="following-sibling::stage">
         <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="webwork-reps/static/stage" mode="solutions">
+    <xsl:param name="b-original"/>
+    <xsl:param name="purpose"/>
+    <xsl:param name="b-has-statement"/>
+    <xsl:param name="b-has-hint"/>
+    <xsl:param name="b-has-answer"/>
+    <xsl:param name="b-has-solution"/>
+
+    <!-- When we subset exercises for solutions, an entire -->
+    <!-- "stage" can become empty.  So we do a dry-run     -->
+    <!-- and if there is no content at all we bail out.    -->
+     <xsl:variable name="dry-run">
+        <xsl:apply-templates select="." mode="dry-run">
+            <xsl:with-param name="b-has-statement" select="$b-has-statement" />
+            <xsl:with-param name="b-has-hint" select="$b-has-hint" />
+            <xsl:with-param name="b-has-answer" select="$b-has-answer" />
+            <xsl:with-param name="b-has-solution" select="$b-has-solution" />
+        </xsl:apply-templates>
+    </xsl:variable>
+
+    <xsl:if test="not($dry-run = '')">
+        <xsl:if test="not(preceding-sibling::stage)">
+            <text>\leavevmode\par\noindent%&#xa;</text>
+        </xsl:if>
+        <!-- e.g., Part 2. -->
+        <xsl:text>\textbf{</xsl:text>
+        <xsl:call-template name="type-name">
+            <xsl:with-param name="string-id" select="'part'" />
+        </xsl:call-template>
+        <xsl:text> </xsl:text>
+        <xsl:apply-templates select="." mode="serial-number" />
+        <xsl:text>.}\quad </xsl:text>
+        <xsl:apply-templates select="." mode="exercise-components">
+            <xsl:with-param name="b-original" select="$b-original"/>
+            <xsl:with-param name="purpose" select="$purpose"/>
+            <xsl:with-param name="b-has-statement" select="$b-has-statement"/>
+            <xsl:with-param name="b-has-hint" select="$b-has-hint"/>
+            <xsl:with-param name="b-has-answer" select="$b-has-answer"/>
+            <xsl:with-param name="b-has-solution" select="$b-has-solution"/>
+        </xsl:apply-templates>
+        <xsl:if test="following-sibling::stage">
+            <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
+        </xsl:if>
     </xsl:if>
 </xsl:template>
 
@@ -5572,7 +5622,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- unstructured, just a bare statement          -->
         <!-- no need to avoid dangerous misunderstandings -->
         <xsl:otherwise>
-            <xsl:apply-templates select="*"/>
+            <xsl:apply-templates/>
         </xsl:otherwise>
     </xsl:choose>
     <xsl:text>\end{</xsl:text>
@@ -5934,7 +5984,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="list">
     <xsl:text>\begin{namedlist}&#xa;</xsl:text>
     <xsl:text>\begin{namedlistcontent}&#xa;</xsl:text>
-    <xsl:apply-templates select="*[not(self::caption)]"/>
+    <xsl:apply-templates select="node()[not(self::caption)]"/>
     <xsl:text>\end{namedlistcontent}&#xa;</xsl:text>
     <xsl:apply-templates select="." mode="pop-footnote-text"/>
     <!-- Titled/environment version deprecated 2017-08-25   -->
@@ -7905,6 +7955,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Captions for Figures, Tables, Listings, Lists -->
 <!-- xml:id is on parent, but LaTeX generates number with caption -->
+<!-- NB: until we have a general (internal) switch to hard-code   -->
+<!-- *all* numbers, these two templates were copied (2019-03-01)  -->
+<!-- into the "solutions manual" conversion, and edited.  So      -->
+<!-- they should be kept in-sync.                                 -->
 <xsl:template match="caption">
     <xsl:choose>
       <xsl:when test="parent::table/parent::sidebyside">
@@ -7963,7 +8017,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:text>\begin{figure}&#xa;</xsl:text>
     <xsl:text>\centering&#xa;</xsl:text>
-    <xsl:apply-templates select="*[not(self::caption)]"/>
+    <xsl:apply-templates select="node()[not(self::caption)]"/>
     <xsl:apply-templates select="caption" />
     <xsl:text>\end{figure}&#xa;</xsl:text>
 </xsl:template>
@@ -7979,7 +8033,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:call-template name="leave-vertical-mode" />
     </xsl:if>
     <xsl:text>\begin{listing}&#xa;</xsl:text>
-    <xsl:apply-templates select="*[not(self::caption)]"/>
+    <xsl:apply-templates select="node()[not(self::caption)]"/>
     <xsl:text>\par&#xa;</xsl:text>
     <xsl:apply-templates select="caption" />
     <xsl:text>\end{listing}&#xa;</xsl:text>
@@ -8159,7 +8213,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Deprecated within sidebyside, 2018-05-02 -->
 <!-- "title" should be killed anyway -->
 <xsl:template match="paragraphs" mode="panel-latex-box">
-    <xsl:apply-templates select="*[not(self::title)]" />
+    <xsl:apply-templates select="node()[not(self::title)]" />
 </xsl:template>
 
 <!-- TODO: trash left, top margins (accomodated already) -->
@@ -8193,7 +8247,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- figure, table, listing will contain one item    -->
 <xsl:template match="figure|table|listing" mode="panel-latex-box">
-    <xsl:apply-templates select="*[not(&METADATA-FILTER;)][1]" mode="panel-latex-box" />
+    <xsl:apply-templates select="node()[not(&METADATA-FILTER;)][1]" mode="panel-latex-box" />
 </xsl:template>
 
 <!-- list will have introduction, <list>, conclusion -->
@@ -8456,7 +8510,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:text>\begin{table}&#xa;</xsl:text>
     <xsl:text>\centering&#xa;</xsl:text>
-    <xsl:apply-templates select="*[not(self::caption)]" />
+    <xsl:apply-templates select="node()[not(self::caption)]" />
     <xsl:apply-templates select="caption" />
     <xsl:text>\end{table}&#xa;</xsl:text>
 </xsl:template>
@@ -9853,6 +9907,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:for-each>
 </xsl:template>
 
+<!-- Very nearly a no-op, but necessary for HTML -->
+<xsl:template match="glossary/terms">
+    <xsl:apply-templates select="defined-term"/>
+</xsl:template>
+
 <!-- Defined Terms, in a Glossary -->
 <xsl:template match="defined-term">
     <xsl:text>\begin{definedterm}</xsl:text>
@@ -10221,7 +10280,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="inline-warning">
     <xsl:param name="warning" />
     <!-- Color for author tools version -->
-    <xsl:if test="$author-tools='yes'" >
+    <xsl:if test="$author-tools-new = 'yes'" >
         <xsl:text>\textcolor{red}</xsl:text>
     </xsl:if>
     <xsl:text>{</xsl:text>
@@ -10236,7 +10295,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Marginpar's from http://www.f.kth.se/~ante/latex.php -->
 <xsl:template name="margin-warning">
     <xsl:param name="warning" />
-    <xsl:if test="$author-tools='yes'" >
+    <xsl:if test="$author-tools-new = 'yes'" >
         <xsl:text>\marginpar[\raggedleft\footnotesize\textcolor{red}{</xsl:text>
         <xsl:value-of select="$warning" />
         <xsl:text>}]{\raggedright\footnotesize\textcolor{red}{</xsl:text>

@@ -28,9 +28,9 @@
 
         <li>
             <title>Price</title>
-            <p>You may choose to sell at your cost, or you may wish to make a profit on each sale.  (Note: as copyright-holder you can do this, no matter what license you have chosen, review <xref ref="open-licenses" />).  A 450-page hardcover book might be sold by a print-on-demand manufacturer to an online bookstore, including some profit for the manufacturer, for <dollar />23.  If you, as author, want <dollar />5 profit, and the online bookstore wants <dollar />7 for fulfillment, shipping, and profit, the cost to your reader is now <dollar />35.  In order for the online bookstore to give the appearance of discounting your book to <dollar />35, you may need to declare a suggested retail price of <dollar />49.95.  So pricing takes a bit of thought.  Or guesswork, since the discounting algorithm is not public.</p>
+            <p>You may choose to sell at your cost, or you may wish to make a profit on each sale.  (Note: as copyright-holder you can do this, no matter what license you have chosen, review <xref ref="open-licenses" />).  A 450-page hardcover book might be sold by a print-on-demand manufacturer to an online bookstore, including some profit for the manufacturer, for $23.  If you, as author, want $5 profit, and the online bookstore wants $7 for fulfillment, shipping, and profit, the cost to your reader is now $35.  In order for the online bookstore to give the appearance of discounting your book to $35, you may need to declare a suggested retail price of $49.95.  So pricing takes a bit of thought.  Or guesswork, since the discounting algorithm is not public.</p>
 
-            <p>Note in the above scenario, the print-on-demand manufacturer may sell you, the  publisher, small quantities at a better price, such as ten copies for <dollar />170, shipping included.</p>
+            <p>Note in the above scenario, the print-on-demand manufacturer may sell you, the  publisher, small quantities at a better price, such as ten copies for $170, shipping included.</p>
         </li>
 
         <li>
@@ -74,7 +74,7 @@
         <li>
             <title>Nook Press</title>
             <idx>Nook Press</idx>
-            <p>Nook Press is a service of Barnes <ampersand /> Noble, and books appear only through their online store.  We have no additional information, so direct experiences would be a welcome addition.  (2018-03-06)</p>
+            <p>Nook Press is a service of Barnes &amp; Noble, and books appear only through their online store.  We have no additional information, so direct experiences would be a welcome addition.  (2018-03-06)</p>
         </li>
 
     </dl></p>

@@ -140,10 +140,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="html.css.server" select="'https://pretextbook.org'" />
 <xsl:param name="html.css.version" select="'0.2'" />
 <xsl:param name="html.js.server" select="'https://pretextbook.org'" />
-<xsl:param name="html.js.version" select="'0.1'" />
-<xsl:param name="html.css.colorfile"   select="'colors_default.css'" />
+<xsl:param name="html.js.version" select="'0.11'" />
+<xsl:param name="html.css.colorfile" select="''" />
+<xsl:variable name="html-css-colorfile">
+    <xsl:choose>
+        <xsl:when test="$html.css.colorfile = ''">
+            <xsl:text>colors_default.css</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="$html.css.colorfile"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
 <!-- A space-separated list of CSS URLs (points to servers or local files) -->
 <xsl:param name="html.css.extra"  select="''" />
+
+<!-- Calculator -->
+<!-- Possible values are geogebra-classic, geogebra-graphing -->
+<!-- geogebra-geometry, geogebra-3d                          -->
+<!-- Default is empty, meaning the calculator is not wanted. -->
+<xsl:param name="html.calculator" select="''" />
+<xsl:variable name="b-has-calculator" select="not($html.calculator = '')" />
 
 <!-- Annotation -->
 <xsl:param name="html.annotation" select="''" />
@@ -384,8 +401,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- sometimes null, and even if not, the "hX" elements do not now  -->
 <!-- have natural id on them (we could manufacture such a thing).   -->
 
-<!-- Default template for content of a complete page -->
+<!-- Default template for content of a structural  -->
+<!-- division, which could be an entire page's     -->
+<!-- worth, or just a subdivision withing a page   -->
+<!-- Increment $heading-level within this template -->
 <xsl:template match="&STRUCTURAL;">
+    <xsl:param name="heading-level"/>
+
     <!-- location info for debugging efforts -->
     <xsl:apply-templates select="." mode="debug-location" />
     <!-- Heading, div for this structural subdivision -->
@@ -393,25 +415,41 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="perm-id" />
     </xsl:variable>
     <section class="{local-name(.)}" id="{$pid}">
-        <xsl:apply-templates select="." mode="section-header" />
+        <xsl:apply-templates select="." mode="section-header">
+            <xsl:with-param name="heading-level" select="$heading-level"/>
+        </xsl:apply-templates>
         <xsl:apply-templates select="." mode="author-byline"/>
-        <!-- the main content of a division is created here    -->
-        <!-- a "solutions" is exceptional as generated content -->
+        <!-- Most divisions are a simple list of elements to be       -->
+        <!-- processed in document order, once we handle metadata     -->
+        <!-- properly, and also kill it so it is not caught up here.  -->
+        <!-- One exception: the "solutions" division has no children, -->
+        <!-- it just gets built (via a modal template so it does not  -->
+        <!-- come back through here).                                 -->
         <xsl:choose>
             <xsl:when test="self::solutions">
-                <xsl:apply-templates select="." mode="solutions" />
-            </xsl:when>
-            <!-- a glossary is like a big list, and we need  -->
-            <!-- to handle it in an exceptional manner -->
-            <xsl:when test="self::glossary">
-                <xsl:apply-templates select="introduction"/>
-                <dl class="glossary">
-                    <xsl:apply-templates select="defined-term"/>
-                </dl>
-                <xsl:apply-templates select="conclusion"/>
+                <!-- this is not recurrence, do not increment heading-level -->
+                <xsl:apply-templates select="." mode="solutions">
+                    <xsl:with-param name="heading-level" select="$heading-level"/>
+                </xsl:apply-templates>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:apply-templates select="*" />
+                <!-- this is usually recurrence, so increment heading-level, -->
+                <!-- but "book" and "article" have an h1  masthead, so if    -->
+                <!-- this is the context, we just pass along the level of    -->
+                <!-- "2" which is supplied by the chunking templates         -->
+                <xsl:variable name="next-level">
+                    <xsl:choose>
+                        <xsl:when test="self::book or self::article">
+                            <xsl:value-of select="$heading-level"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:value-of select="$heading-level + 1"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:variable>
+                <xsl:apply-templates>
+                    <xsl:with-param name="heading-level" select="$next-level"/>
+                </xsl:apply-templates>
             </xsl:otherwise>
         </xsl:choose>
     </section>
@@ -421,7 +459,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Introduction (etc.) and conclusion realized as -->
 <!-- normal, then links to subsidiary divisions     -->
 <!-- occur between, as a group of button/hyperlinks -->
+<!-- heading-level of parent should come in as 1,   -->
+<!-- so then passed to "section-header" as 2.       -->
+<!-- Always.                                        -->
 <xsl:template match="&STRUCTURAL;" mode="summary">
+    <xsl:param name="heading-level"/>
+
     <!-- location info for debugging efforts -->
     <xsl:apply-templates select="." mode="debug-location" />
     <!-- Heading, div for this structural subdivision -->
@@ -429,7 +472,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="perm-id" />
     </xsl:variable>
     <section class="{local-name(.)}" id="{$pid}">
-        <xsl:apply-templates select="." mode="section-header" />
+        <xsl:apply-templates select="." mode="section-header">
+            <xsl:with-param name="heading-level" select="$heading-level"/>
+        </xsl:apply-templates>
         <xsl:apply-templates select="." mode="author-byline"/>
         <xsl:apply-templates select="objectives|introduction|titlepage|abstract" />
         <nav class="summary-links">
@@ -480,45 +525,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- heading followed by its subsidiary elements -->
 <!-- hit with templates.  This is the header.    -->
 <!-- Only "chapter" ever gets shown generically  -->
-<!-- Subdivisions have titles, or not            -->
-<!-- and other parts have default titles         -->
+<!-- Subdivisions have titles, or default titles -->
 <xsl:template match="*" mode="section-header">
-    <!-- The "division-name" template accomodates non-standard -->
-    <!-- divisions like "exercises", "references", divisional  -->
-    <!-- "introduction" and "conclusion", and "appendix".      -->
-    <!-- Result is strict part -> subsubsection hierachy.      -->
-    <!-- Find it in mathbook-common.xsl                        -->
-    <!-- NB: this should go away once we count hN levels from  -->
-    <!-- the root of an HTML page, then "division-name" may    -->
-    <!-- become a pure-LaTeX temnplate                         -->
-    <xsl:variable name="normalized-division-name">
-        <xsl:apply-templates select="." mode="division-name" />
+    <xsl:param name="heading-level"/>
+
+    <xsl:variable name="html-heading">
+        <xsl:apply-templates select="." mode="html-heading">
+            <xsl:with-param name="heading-level" select="$heading-level"/>
+        </xsl:apply-templates>
     </xsl:variable>
-    <xsl:variable name="heading-level">
-        <xsl:choose>
-            <xsl:when test="$normalized-division-name = 'part'">
-                <xsl:text>h1</xsl:text>
-            </xsl:when>
-            <xsl:when test="$normalized-division-name = 'chapter'">
-                <xsl:text>h1</xsl:text>
-            </xsl:when>
-            <xsl:when test="$normalized-division-name = 'section'">
-                <xsl:text>h2</xsl:text>
-            </xsl:when>
-            <xsl:when test="$normalized-division-name = 'subsection'">
-                <xsl:text>h3</xsl:text>
-            </xsl:when>
-            <xsl:when test="$normalized-division-name = 'subsubsection'">
-                <xsl:text>h4</xsl:text>
-            </xsl:when>
-            <xsl:when test="$normalized-division-name = 'paragraph'">
-                <xsl:text>h5</xsl:text>
-            </xsl:when>
-            <!-- any bug will be exposed by "division-name" template -->
-            <xsl:otherwise />
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:element name="{$heading-level}">
+    <xsl:element name="{$html-heading}">
         <xsl:attribute name="class">
             <xsl:choose>
                 <xsl:when test="self::chapter">
@@ -690,7 +706,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- This is all within a .frontmatter class for CSS       -->
 <xsl:template match="titlepage">
     <xsl:variable name="b-has-subtitle" select="parent::frontmatter/parent::*/subtitle"/>
-    <h1 class="heading">
+    <h2 class="heading">
         <span class="title">
             <xsl:apply-templates select="parent::frontmatter/parent::*" mode="title-full" />
             <xsl:if test="$b-has-subtitle">
@@ -703,7 +719,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="parent::frontmatter/parent::*" mode="subtitle" />
             </span>
         </xsl:if>
-    </h1>
+    </h2>
     <!-- We list authors and editors in document order -->
     <xsl:apply-templates select="author|editor" mode="full-info"/>
     <!-- A credit is subsidiary, so follows -->
@@ -866,7 +882,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <span> </span>
             </h6>
         </xsl:if>
-        <xsl:apply-templates  select="*">
+        <xsl:apply-templates>
             <xsl:with-param name="b-original" select="$b-original" />
         </xsl:apply-templates>
     </section>
@@ -878,10 +894,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Back Colophon -->
 <!-- Nothing special, so just process similarly to front -->
-
-<xsl:template match="index-list">
-    <xsl:call-template name="print-index" />
-</xsl:template>
 
 <!--               -->
 <!-- Notation List -->
@@ -896,19 +908,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- populate with all the notation entries, -->
 <!-- in order of appearance                  -->
 <xsl:template match="notation-list">
-    <table>
+    <table class="notation-list">
         <tr>
-            <th style="text-align:left;">
+            <th>
                 <xsl:call-template name="type-name">
                     <xsl:with-param name="string-id" select="'symbol'" />
                 </xsl:call-template>
             </th>
-            <th style="text-align:left;">
+            <th>
                 <xsl:call-template name="type-name">
                     <xsl:with-param name="string-id" select="'description'" />
                 </xsl:call-template>
             </th>
-            <th style="text-align:left;">
+            <th>
                 <xsl:call-template name="type-name">
                     <xsl:with-param name="string-id" select="'location'" />
                 </xsl:call-template>
@@ -923,17 +935,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Create a cross-reference to enclosing content -->
 <xsl:template match="notation" mode="backmatter">
     <tr>
-        <td style="text-align:left; vertical-align:top;">
+        <td>
             <xsl:call-template name="begin-inline-math" />
             <!-- "usage" should be raw latex, so -->
             <!-- should avoid text processing    -->
             <xsl:value-of select="usage" />
             <xsl:call-template name="end-inline-math" />
         </td>
-        <td style="text-align:left; vertical-align:top;">
+        <td>
             <xsl:apply-templates select="description" />
         </td>
-        <td style="text-align:left; vertical-align:top;">
+        <td>
             <xsl:apply-templates select="." mode="enclosure-xref" />
         </td>
     </tr>
@@ -983,8 +995,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "book" and "article" need to be in the match so this template  -->
 <!-- is defined for those top-level (whole document) cases, even if -->
 <!-- $b-has-heading will always be "false" in these situations.     -->
-<xsl:template match="book|article|chapter|section|subsection|subsubsection|exercises|worksheet|reading-questions" mode="division-in-solutions">
+<xsl:template match="book|article|part|chapter|section|subsection|subsubsection|exercises|worksheet|reading-questions" mode="division-in-solutions">
     <xsl:param name="scope" /> <!-- ignored -->
+    <xsl:param name="heading-level"/>
     <xsl:param name="b-has-heading"/>
     <xsl:param name="content" />
 
@@ -994,7 +1007,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$b-has-heading">
             <!-- as a duplicate of generated content, no HTML id -->
             <section class="{local-name(.)}">
-                <xsl:apply-templates select="." mode="section-header" />
+                <xsl:apply-templates select="." mode="section-header">
+                    <xsl:with-param name="heading-level" select="$heading-level"/>
+                </xsl:apply-templates>
                 <!-- we don't do an "author-byline" here in duplication -->
                 <xsl:copy-of select="$content" />
             </section>
@@ -1023,9 +1038,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Amalgamation of "section-header" and "header-content" -->
 <!--   (1) No author credit                                -->
 <!--   (2) No permalink                                    -->
+<!-- TODO: maybe a stock template could do a better job with this? -->
 <xsl:template match="*" mode="list-of-header">
-    <h1 class="heading">
-         <xsl:attribute name="title">
+    <xsl:param name="heading-level"/>
+
+    <xsl:variable name="heading-level">
+        <xsl:apply-templates select="." mode="html-heading">
+            <xsl:with-param name="heading-level" select="$heading-level"/>
+        </xsl:apply-templates>
+    </xsl:variable>
+
+    <xsl:element name="{$heading-level}">
+        <xsl:attribute name="class">
+            <xsl:text>heading</xsl:text>
+        </xsl:attribute>
+        <xsl:attribute name="title">
             <xsl:apply-templates select="." mode="tooltip-text" />
         </xsl:attribute>
         <span class="type">
@@ -1039,7 +1066,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <span class="title">
             <xsl:apply-templates select="." mode="title-full" />
         </span>
-    </h1>
+    </xsl:element>
 </xsl:template>
 
 <!-- Entries in list-of's -->
@@ -1075,11 +1102,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="contributor" />
 </xsl:template>
 
+<!-- ######## -->
+<!-- Glossary -->
+<!-- ######## -->
+
+<!-- A glossary has an introduction and conclusion, then -->
+<!-- "defined-term" inside a "term" element. Here we     -->
+<!-- implement a basic definition for "term", but this   -->
+<!-- could be the place to get fancy and segment the     -->
+<!-- entries with spacing by letter, or similar.         -->
+<xsl:template match="glossary/terms">
+    <dl class="glossary">
+        <xsl:apply-templates select="defined-term"/>
+    </dl>
+</xsl:template>
+
 <!-- ############## -->
 <!-- Index Creation -->
 <!-- ############## -->
 
-<!-- "print-index":                                          -->
+<!-- "index-list":                                           -->
 <!--     build a sorted list of every "index" in text        -->
 <!-- "group-by-letter":                                      -->
 <!--     accumale common first-letter entries,               -->
@@ -1088,7 +1130,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--     consolidate/accumulate entries with common heading  -->
 <!-- "knowl-list":                                           -->
 <!--     output the cross-references                         -->
-<xsl:template name="print-index">
+<xsl:template match="index-list">
+    <!-- Save-off the "index-list" as context for placement of      -->
+    <!-- eventual xref/cross-references, since we use a for-each    -->
+    <!-- and context changes.  Not strictly necessary, but correct. -->
+    <xsl:variable name="the-index-list" select="."/>
     <!-- <index> with single mixed-content heading -->
     <!-- or replacement <idx> as mixed-content     -->
     <!-- start attribute is actual end of a        -->
@@ -1097,7 +1143,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="unstructured-index">
         <xsl:for-each select="//index[not(main) and not(@start) and not(index-list) and (not(ancestor::commentary) or $b-commentary)] | $document-root//idx[not(h) and not(@start) and (not(ancestor::commentary) or $b-commentary)]">
             <xsl:variable name="content">
-                <xsl:apply-templates select="*|text()" />
+                <xsl:apply-templates/>
             </xsl:variable>
             <index>
                 <!-- text, key-value for single index heading -->
@@ -1116,12 +1162,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </xsl:otherwise>
                     </xsl:choose>
                 </key>
-                <!-- plus two more empty keys -->
-                <key><text /></key>
-                <key><text /></key>
-                <!-- write/preserve info about the location's surroundings -->
-                <!-- as "knowl" and "typename" temporary elements          -->
-                <xsl:apply-templates select="." mode="index-enclosure" />
+                <!-- plus two more empty text, key pairs -->
+                <text/><key/>
+                <text/><key/>
+                <!-- Create the full cross-reference and save now, since      -->
+                <!-- context will be lost later.  Save in a "cross-reference" -->
+                <!-- element.  We use the context of the index itself as the  -->
+                <!-- location where the cross-reference is placed.  The       -->
+                <!-- location of the "idx" is the start of a search for the   -->
+                <!-- enclosing element.                                       -->
+                <cross-reference>
+                    <xsl:apply-templates select="$the-index-list" mode="index-enclosure">
+                        <xsl:with-param name="enclosure" select="."/>
+                    </xsl:apply-templates>
+                </cross-reference>
             </index>
         </xsl:for-each>
     </xsl:variable>
@@ -1132,7 +1186,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <index>
                 <xsl:for-each select="main|sub|h">
                     <xsl:variable name="content">
-                        <xsl:apply-templates select="*|text()" />
+                        <xsl:apply-templates/>
                     </xsl:variable>
                     <text>
                         <xsl:copy-of select="$content" />
@@ -1172,67 +1226,85 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </link>
                     </xsl:if>
                 </xsl:for-each>
-                <!-- add empty strings in additional "missing" keys -->
+                <!-- add additional empty text, key pairs -->
+                <!-- so there are always three            -->
                 <xsl:if test="(count(h) = 1) or (count(h) = 2)">
-                    <key><xsl:text /></key>
+                    <text/><key/>
                 </xsl:if>
                 <xsl:if test="count(h) = 1">
-                    <key><xsl:text /></key>
+                    <text/><key/>
                 </xsl:if>
                 <xsl:if test="(main and not(sub[1]))">
-                    <key><xsl:text /></key>
+                    <text/><key/>
                 </xsl:if>
                 <xsl:if test="(main and not(sub[2]))">
-                    <key><xsl:text /></key>
+                    <text/><key/>
                 </xsl:if>
-                <!-- write/preserve info about the location's surroundings -->
-                <!-- context will be lost as RTF is converted, so grab it  -->
-                <!-- as "knowl" and "typename" temporary elements          -->
-                <xsl:apply-templates select="." mode="index-enclosure" />
+                <!-- Create the full cross-reference and save now, since      -->
+                <!-- context will be lost later.  Save in a "cross-reference" -->
+                <!-- element.  We use the context of the index itself as the  -->
+                <!-- location where the cross-reference is placed.  The       -->
+                <!-- location of the "idx" is the start of a search for the   -->
+                <!-- enclosing element.                                       -->
+                <cross-reference>
+                    <xsl:apply-templates select="$the-index-list" mode="index-enclosure">
+                        <xsl:with-param name="enclosure" select="."/>
+                    </xsl:apply-templates>
+                </cross-reference>
                 <!-- there is at most one "see" or "seealso" total -->
                 <!-- these replace the knowls, so perhaps condition here -->
                 <xsl:for-each select="see">
                     <see>
-                        <xsl:apply-templates select="*|text()" />
+                        <xsl:apply-templates/>
                     </see>
                 </xsl:for-each>
                 <xsl:for-each select="seealso">
                     <seealso>
-                        <xsl:apply-templates select="*|text()" />
+                        <xsl:apply-templates/>
                     </seealso>
                 </xsl:for-each>
             </index>
         </xsl:for-each>
     </xsl:variable>
-    <!-- sort now that info from document tree ordering is recorded -->
-    <!-- perhaps one big variable/RTF once deprecation takes place  -->
+    <!-- Sort, now that info from document tree ordering is recorded     -->
+    <!-- perhaps one big variable/RTF once deprecation takes place.      -->
+    <!-- Keys, normalized to lowercase, or @sortby attributes, are the   -->
+    <!-- primary key for sorting, but if we have index entries that just -->
+    <!-- differ by upper- or lower-case distinctions, we need to have    -->
+    <!-- identical variants sort next to each other so they get grouped  -->
+    <!-- as one entry with multiple cross-references, so we sort on the  -->
+    <!-- actual text as well. -->
     <xsl:variable name="sorted-index">
         <xsl:for-each select="exsl:node-set($unstructured-index)/*|exsl:node-set($structured-index)/*">
             <xsl:sort select="./key[1]" />
+            <xsl:sort select="./text[1]"/>
             <xsl:sort select="./key[2]" />
+            <xsl:sort select="./text[2]"/>
             <xsl:sort select="./key[3]" />
+            <xsl:sort select="./text[3]"/>
             <xsl:sort select="./link" />
             <xsl:copy-of select="." />
         </xsl:for-each>
     </xsl:variable>
     <!-- ship start of a node-set to be grouped by letter   -->
     <!-- conversion to node-set is necessary for subsequent -->
-    <xsl:apply-templates select="exsl:node-set($sorted-index)/*[1]" mode="group-by-letter">
+    <xsl:apply-templates select="exsl:node-set($sorted-index)/index[1]" mode="group-by-letter">
         <xsl:with-param name="letter-group" select="/.." />
     </xsl:apply-templates>
 </xsl:template>
 
 <!-- Accumulate index entries with a common first letter   -->
 <!-- in $letter-group and then pass to grouping by heading -->
-<xsl:template match="*" mode="group-by-letter">
+<xsl:template match="index" mode="group-by-letter">
     <!-- Empty node list from parent of root node -->
-    <xsl:param name="letter-group" select="/.."/>
+    <xsl:param name="letter-group"/>
+
     <!-- look ahead at next index entry -->
-    <xsl:variable name="next-index" select="following-sibling::*[1]" />
+    <xsl:variable name="next-index" select="following-sibling::index[1]"/>
     <!-- check if we have run out all of the index entries -->
     <xsl:if test=".">
         <!-- always accumulate context node in node-list (first, or $next-index inspected) -->
-        <xsl:variable name="new-letter-group" select="$letter-group | ." />
+        <xsl:variable name="new-letter-group" select="$letter-group|."/>
         <xsl:choose>
             <!-- next index item has same lead letter, so iterate -->
             <xsl:when test="substring($next-index/key[1], 1, 1) = substring(key[1], 1,1)">
@@ -1264,18 +1336,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Accumulate index entries with identical heading -->
 <!-- quit accumulating when next entry differs       -->
 <!-- Output heading, xrefs, before restarting        -->
-<xsl:template match="*" mode="group-by-heading">
+<xsl:template match="index" mode="group-by-heading">
     <!-- Empty node list from parent of root node -->
-    <xsl:param name="heading-group" select="/.."/>
-    <xsl:param name="letter-group" select="/.."/>
+    <xsl:param name="heading-group"/>
+    <xsl:param name="letter-group"/>
+
     <!-- look ahead at next index entry -->
-    <xsl:variable name="next-index" select="following-sibling::*[1]" />
+    <xsl:variable name="next-index" select="following-sibling::index[1]"/>
     <!-- check if context node is still in the letter-group -->
-    <xsl:if test="count(. | $letter-group) = count($letter-group)">
-        <xsl:variable name="new-heading-group" select="$heading-group | ." />
+    <xsl:if test="count(.|$letter-group) = count($letter-group)">
+        <xsl:variable name="new-heading-group" select="$heading-group|."/>
         <xsl:choose>
             <!-- same heading, accumulate and iterate -->
-            <xsl:when test="($next-index/key[1] = ./key[1]) and ($next-index/key[2] = ./key[2]) and ($next-index/key[3] = ./key[3])">
+            <xsl:when test="($next-index/text[1] = ./text[1]) and ($next-index/text[2] = ./text[2]) and ($next-index/text[3] = ./text[3])">
                 <xsl:apply-templates select="$next-index" mode="group-by-heading">
                     <xsl:with-param name="heading-group" select="$new-heading-group" />
                     <xsl:with-param name="letter-group" select="$letter-group"/>
@@ -1303,14 +1376,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- match, do not write an empty heading.    -->
 <xsl:template name="output-one-heading">
     <xsl:param name="heading-group" />
+
     <xsl:variable name="pattern" select="$heading-group[1]" />
-    <xsl:variable name="pred" select="$pattern/preceding-sibling::*[1]" />
+    <xsl:variable name="pred" select="$pattern/preceding-sibling::index[1]" />
     <!-- booleans for analysis of format of heading, xrefs -->
-    <xsl:variable name="match1" select="($pred/key[1] = $pattern/key[1]) and $pred" />
-    <xsl:variable name="match2" select="($pred/key[2] = $pattern/key[2]) and $pred" />
-    <xsl:variable name="match3" select="($pred/key[3] = $pattern/key[3]) and $pred" />
-    <xsl:variable name="empty2" select="boolean($pattern/key[2] = '')" />
-    <xsl:variable name="empty3" select="boolean($pattern/key[3] = '')" />
+    <xsl:variable name="match1" select="($pred/text[1] = $pattern/text[1]) and $pred" />
+    <xsl:variable name="match2" select="($pred/text[2] = $pattern/text[2]) and $pred" />
+    <xsl:variable name="match3" select="($pred/text[3] = $pattern/text[3]) and $pred" />
+    <xsl:variable name="empty2" select="boolean($pattern/text[2] = '')" />
+    <xsl:variable name="empty3" select="boolean($pattern/text[3] = '')" />
     <!-- write an "indexitem", "subindexitem", "subsubindexitem" as     -->
     <!-- necessary to identify chnages in headings, without duplicating -->
     <!-- headings from prior entries. Add xref when keys go blank       -->
@@ -1389,22 +1463,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- TODO: split into two more when, otherwise as error? -->
                 <xsl:otherwise>
                     <xsl:text> </xsl:text>
-                    <xsl:element name="a">
-                        <!-- knowl or traditional hyperlink     -->
-                        <!-- mutually exclusive by construction -->
-                        <xsl:if test="knowl">
-                            <xsl:attribute name="data-knowl">
-                                <xsl:value-of select="knowl" />
-                            </xsl:attribute>
-                        </xsl:if>
-                        <xsl:if test="hyperlink">
-                            <xsl:attribute name="href">
-                                <xsl:value-of select="hyperlink" />
-                            </xsl:attribute>
-                        </xsl:if>
-                        <!-- content: replace with localized short-names -->
-                        <xsl:value-of select="typename" />
-                    </xsl:element>
+                    <xsl:copy-of select="cross-reference/node()"/>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:for-each>
@@ -1412,41 +1471,37 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Climb the tree looking for an enclosing structure of        -->
-<!-- interest and preserve the knowl-url, plus clickable text    -->
+<!-- interest.  Create cross-reference.                          -->
 <!-- One notable case: paragraph must be "top-level", just below -->
 <!-- a structural document node                                  -->
 <!-- Recursion always halts, since "mathbook" is structural      -->
 <!-- TODO: save knowl or section link                            -->
-<xsl:template match="*" mode="index-enclosure">
+<xsl:template match="index-list" mode="index-enclosure">
+    <xsl:param name="enclosure"/>
+
     <xsl:variable name="structural">
-        <xsl:apply-templates select="." mode="is-structural" />
+        <xsl:apply-templates select="$enclosure" mode="is-structural"/>
     </xsl:variable>
     <xsl:variable name="block">
-        <xsl:apply-templates select="." mode="is-block" />
+        <xsl:apply-templates select="$enclosure" mode="is-block"/>
     </xsl:variable>
     <xsl:choose>
         <!-- found a structural parent first           -->
         <!-- collect a url for a traditional hyperlink -->
-        <xsl:when test="$structural='true'">
-            <hyperlink>
-                <xsl:apply-templates select="." mode="url" />
-            </hyperlink>
-            <typename>
-                <xsl:apply-templates select="." mode="type-name" />
-            </typename>
-        </xsl:when>
-        <!-- found a block parent     -->
-        <!-- collect a knowl filename -->
-        <xsl:when test="$block='true'">
-            <knowl>
-                <xsl:apply-templates select="." mode="xref-knowl-filename" />
-            </knowl>
-            <typename>
-                <xsl:apply-templates select="." mode="type-name" />
-            </typename>
+        <xsl:when test="($structural = 'true') or ($block = 'true')">
+            <xsl:apply-templates select="." mode="xref-link">
+                <xsl:with-param name="target" select="$enclosure"/>
+                <xsl:with-param name="content">
+                    <xsl:apply-templates select="$enclosure" mode="type-name"/>
+                </xsl:with-param>
+            </xsl:apply-templates>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:apply-templates select="parent::*" mode="index-enclosure" />
+            <!-- Recurse.  The "index-list" gets passed along unchanged,     -->
+            <!-- as the context for location of the eventual cross-reference -->
+            <xsl:apply-templates select="." mode="index-enclosure">
+                <xsl:with-param name="enclosure" select="$enclosure/parent::*"/>
+            </xsl:apply-templates>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -1475,10 +1530,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- the commentary if they are being displayed anyway,  -->
 <!-- since we may not want the content to bleed through  -->
 <!-- into a knowl posted publicly                        -->
+<!-- TEMPORARY: var/li is a WeBWorK popup or radio button, -->
+<!-- which is not a cross-reference target (it originates  -->
+<!-- in PG-code), and an error results when the header in  -->
+<!-- the knowl content tries to compute a number           -->
 <xsl:template match="commentary" mode="xref-as-knowl">
     <xsl:value-of select="$b-commentary" />
 </xsl:template>
-<xsl:template match="fn|p|blockquote|biblio|biblio/note|defined-term|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|poem|assemblage|paragraphs|objectives|outcomes|exercise|hint|answer|solution|exercisegroup|men|mrow|li|contributor" mode="xref-as-knowl">
+<xsl:template match="fn|p|blockquote|biblio|biblio/note|defined-term|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&THEOREM-LIKE;|proof|case|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&ASIDE-LIKE;|poem|assemblage|paragraphs|objectives|outcomes|exercise|hint|answer|solution|exercisegroup|men|mrow|li[not(parent::var)]|contributor" mode="xref-as-knowl">
     <xsl:value-of select="true()" />
 </xsl:template>
 
@@ -1621,6 +1680,47 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- zoomable and reflowable, we just insert spaces and      -->
 <!-- leave actual line-breaking to the laTeX conversion.     -->
 <xsl:variable name="title-separator" select="' '"/>
+
+<!-- This template manufactures HTML "headings", the "hN" elements.   -->
+<!-- We do not style based on these elements, but a screen-reader     -->
+<!-- or offline (no CSS) environment will use these profitably.       -->
+<!-- So it is important for the elements to be in a logical           -->
+<!-- progression corresponding to "section" and "article" nodes       -->
+<!-- of the HTML tree.                                                -->
+<!--                                                                  -->
+<!-- We set the "heading-level" to "2" when chunking is initiated,    -->
+<!-- since we expect the masthead/banner to contain an "h1".          -->
+<!-- Whenever a template processes its children, we increment the     -->
+<!-- variable as we pass it down, so a template receives the correct  -->
+<!-- level (and before it ever gets here, since we have consciously   -->
+<!-- chosen *not* to increment here).                                 -->
+<!--                                                                  -->
+<!-- There is no h7, so we need to just settle for h6, I guess.       -->
+<!-- TODO: address h7 when "article" get careful headings             -->
+<xsl:template match="*" mode="html-heading">
+    <xsl:param name="heading-level"/>
+
+    <!-- Debugging code, preserve temporarily, just for divisions now -->
+    <!-- Turn on "CHUNK: and "INTER:" debugging in -common templates  -->
+    <!-- <xsl:message> -->
+        <!-- <xsl:text>  </xsl:text><xsl:value-of select="$heading-level"/> -->
+        <!-- <xsl:text> : </xsl:text><xsl:value-of select="local-name(.)"/><xsl:text> : </xsl:text><xsl:apply-templates select="." mode="long-name"/> -->
+    <!-- </xsl:message> -->
+
+    <!-- simple -->
+    <xsl:text>h</xsl:text>
+    <xsl:choose>
+        <xsl:when test="$heading-level &lt; 7">
+            <xsl:value-of select="$heading-level"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <!-- TODO: Report excessive heading here, as informational item           -->
+            <!-- Perhaps include advice: chunk more, author with shallower divisions, -->
+            <!-- use less comprehensive solutions nested at depth                     -->
+            <xsl:text>6</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
 
 <!-- These are convenience methods for frequently-used headings -->
 
@@ -2163,7 +2263,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="block-type"/>
 
-    <xsl:apply-templates select="*" >
+    <xsl:apply-templates>
         <xsl:with-param name="b-original" select="$b-original"/>
         <xsl:with-param name="block-type" select="$block-type"/>
     </xsl:apply-templates>
@@ -2212,7 +2312,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="block-type"/>
 
-    <xsl:apply-templates select="*" >
+    <xsl:apply-templates>
         <xsl:with-param name="b-original" select="$b-original"/>
         <xsl:with-param name="block-type" select="$block-type"/>
     </xsl:apply-templates>
@@ -2261,7 +2361,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="block-type"/>
 
-    <xsl:apply-templates select="*" >
+    <xsl:apply-templates>
         <xsl:with-param name="b-original" select="$b-original"/>
         <xsl:with-param name="block-type" select="$block-type"/>
     </xsl:apply-templates>
@@ -2308,7 +2408,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="block-type"/>
 
-    <xsl:apply-templates select="*" >
+    <xsl:apply-templates>
         <xsl:with-param name="b-original" select="$b-original"/>
         <xsl:with-param name="block-type" select="$block-type"/>
     </xsl:apply-templates>
@@ -2498,14 +2598,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="self::figure or self::table or self::listing">
             <!-- could we just kill captions as metadata?             -->
             <!-- and make a modal template to process them as needed? -->
-            <xsl:apply-templates select="*[not(self::caption)]">
+            <xsl:apply-templates select="node()[not(self::caption)]">
                 <xsl:with-param name="b-original" select="$b-original" />
             </xsl:apply-templates>
             <xsl:apply-templates select="caption" />
         </xsl:when>
         <xsl:when test="self::list">
             <div class="named-list-content">
-                <xsl:apply-templates select="*[not(self::caption)]">
+                <xsl:apply-templates select="node()[not(self::caption)]">
                     <xsl:with-param name="b-original" select="$b-original" />
                 </xsl:apply-templates>
             </div>
@@ -2610,7 +2710,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Simply process contents, could restrict here -->
 <xsl:template match="blockquote" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
-    <xsl:apply-templates select="*" >
+    <xsl:apply-templates>
         <xsl:with-param name="b-original" select="$b-original" />
     </xsl:apply-templates>
 </xsl:template>
@@ -2652,7 +2752,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Simply process contents, could restrict here -->
 <xsl:template match="paragraphs" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
-    <xsl:apply-templates select="*" >
+    <xsl:apply-templates>
         <xsl:with-param name="b-original" select="$b-original" />
     </xsl:apply-templates>
 </xsl:template>
@@ -3102,7 +3202,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- And its CSS class -->
 <xsl:template match="&PROJECT-LIKE;" mode="body-css-class">
-    <xsl:text>example-like</xsl:text>
+    <xsl:text>project-like</xsl:text>
 </xsl:template>
 
 <!-- When born hidden, block-level -->
@@ -3169,7 +3269,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
 
     <xsl:if test="not($dry-run = '')">
-        <article class="example-like">
+        <article class="project-like">
             <xsl:apply-templates select="." mode="heading-birth" />
 
             <xsl:choose>
@@ -3371,7 +3471,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="block-type"/>
 
-    <xsl:apply-templates select="*" >
+    <xsl:apply-templates>
         <xsl:with-param name="b-original" select="$b-original"/>
         <xsl:with-param name="block-type" select="$block-type"/>
     </xsl:apply-templates>
@@ -3421,7 +3521,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:otherwise>
             <!-- no explicit "statement", so all content is the statement -->
             <xsl:if test="$b-has-statement">
-                <xsl:apply-templates select="*">
+                <xsl:apply-templates>
                     <xsl:with-param name="b-original" select="$b-original" />
                     <xsl:with-param name="block-type" select="$block-type"/>
                 </xsl:apply-templates>
@@ -3479,7 +3579,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="block-type"/>
 
-    <xsl:apply-templates select="*[not(self::proof)]" >
+    <xsl:apply-templates select="node()[not(self::proof)]" >
         <xsl:with-param name="b-original" select="$b-original"/>
         <xsl:with-param name="block-type" select="$block-type"/>
     </xsl:apply-templates>
@@ -3548,7 +3648,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="block-type"/>
 
-    <xsl:apply-templates select="*" >
+    <xsl:apply-templates>
         <xsl:with-param name="b-original" select="$b-original"/>
         <xsl:with-param name="block-type" select="$block-type"/>
     </xsl:apply-templates>
@@ -3592,7 +3692,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Simply process contents, could restrict here -->
 <xsl:template match="case" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
-    <xsl:apply-templates select="*" >
+    <xsl:apply-templates>
         <xsl:with-param name="b-original" select="$b-original" />
     </xsl:apply-templates>
 </xsl:template>
@@ -3648,7 +3748,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Schema is TextLong, so need to process mixed -->
 <xsl:template match="fn" mode="wrapped-content">
     <xsl:param name="b-original" select="true()" />
-    <xsl:apply-templates select="*|text()" >
+    <xsl:apply-templates>
         <xsl:with-param name="b-original" select="$b-original" />
     </xsl:apply-templates>
 </xsl:template>
@@ -3758,7 +3858,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- "title" of item is replicated in heading -->
                 <xsl:apply-templates select="." mode="heading-xref-knowl" />
                 <!-- a run of paragraphs, conceivably, title is killed -->
-                <xsl:apply-templates select="*">
+                <xsl:apply-templates>
                     <xsl:with-param name="b-original" select="$b-original" />
                 </xsl:apply-templates>
             </article>
@@ -3988,7 +4088,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="heading-type" />
 </xsl:template>
 
-<!-- Paragraphs, without lists within -->
+<!-- Paragraphs, without lists within   -->
+<!-- Coordinate with simplified version -->
+<!-- in the conversion to Braille       -->
 <xsl:template match="p" mode="body">
     <xsl:param name="block-type" />
     <xsl:param name="b-original" select="true()" />
@@ -4002,7 +4104,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="." mode="perm-id" />
             </xsl:attribute>
         </xsl:if>
-        <xsl:apply-templates select="*|text()">
+        <xsl:apply-templates>
             <xsl:with-param name="b-original" select="$b-original" />
         </xsl:apply-templates>
     </p>
@@ -4206,7 +4308,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- "title" of item is replicated in heading -->
                 <xsl:apply-templates select="." mode="heading-xref-knowl" />
                 <!-- a run of paragraphs, conceivably, title is killed -->
-                <xsl:apply-templates select="*">
+                <xsl:apply-templates>
                     <xsl:with-param name="b-original" select="$b-original" />
                 </xsl:apply-templates>
             </article>
@@ -4474,7 +4576,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <span> </span>
             </h6>
         </xsl:if>
-        <xsl:apply-templates select="*">
+        <xsl:apply-templates>
             <xsl:with-param name="b-original" select="$b-original" />
         </xsl:apply-templates>
     </xsl:element>
@@ -4484,7 +4586,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Very simple containiers, to help with movement, use -->
 <xsl:template match="prelude|interlude|postlude">
     <xsl:param name="b-original" select="true()" />
-    <xsl:apply-templates select="*">
+    <xsl:apply-templates>
         <xsl:with-param name="b-original" select="$b-original" />
     </xsl:apply-templates>
 </xsl:template>
@@ -5253,7 +5355,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="figure" mode="panel-html-box">
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="width" select="''" />
-    <xsl:apply-templates select="*[not(&METADATA-FILTER;)][1]" mode="panel-html-box">
+    <xsl:apply-templates select="node()[not(&METADATA-FILTER;)][1]" mode="panel-html-box">
         <xsl:with-param name="b-original" select="$b-original" />
         <xsl:with-param name="width" select="$width" />
     </xsl:apply-templates>
@@ -5262,7 +5364,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="table" mode="panel-html-box">
     <xsl:param name="width" />
     <xsl:param name="b-original" select="true()" />
-    <xsl:apply-templates select="*[not(&METADATA-FILTER;)][1]" mode="panel-html-box" >
+    <xsl:apply-templates select="node()[not(&METADATA-FILTER;)][1]" mode="panel-html-box" >
         <xsl:with-param name="b-original" select="$b-original" />
         <xsl:with-param name="width" select="$width"/>
     </xsl:apply-templates>
@@ -5270,7 +5372,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="listing" mode="panel-html-box">
     <xsl:param name="b-original" select="true()" />
-    <xsl:apply-templates select="*[not(&METADATA-FILTER;)][1]" mode="panel-html-box">
+    <xsl:apply-templates select="node()[not(&METADATA-FILTER;)][1]" mode="panel-html-box">
         <xsl:with-param name="b-original" select="$b-original" />
     </xsl:apply-templates>
 </xsl:template>
@@ -5516,8 +5618,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- Only purpose of this page is YouTube video -->
                 <!-- A hook could go here for some extras       -->
                 <!-- ########################################## -->
-                <xsl:call-template name="knowl" />
                 <xsl:call-template name="mathbook-js" />
+                <xsl:call-template name="knowl" />
                 <xsl:call-template name="fonts" />
                 <xsl:call-template name="css" />
                 <xsl:call-template name="font-awesome" />
@@ -5548,10 +5650,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <xsl:call-template name="brand-logo" />
                             <div class="title-container">
                                 <h1 class="heading">
-                                    <xsl:element name="a">
-                                        <xsl:attribute name="href">
-                                            <xsl:apply-templates select="$document-root" mode="containing-filename" />
-                                        </xsl:attribute>
+                                    <xsl:variable name="root-filename">
+                                        <xsl:apply-templates select="$document-root" mode="containing-filename" />
+                                    </xsl:variable>
+                                    <a href="{$root-filename}">
                                         <xsl:variable name="b-has-subtitle" select="boolean($document-root/subtitle)"/>
                                         <span class="title">
                                             <!-- Do not use shorttitle in masthead,  -->
@@ -5567,7 +5669,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                                 <xsl:apply-templates select="$document-root" mode="subtitle" />
                                             </span>
                                         </xsl:if>
-                                    </xsl:element>
+                                    </a>
                                 </h1>
                                 <!-- Serial list of authors/editors -->
                                 <p class="byline">
@@ -6201,10 +6303,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </xsl:choose>
                 </xsl:attribute>
             </xsl:if>
-            <!-- process the actual contents -->
-            <xsl:apply-templates select="$the-cell">
-                <xsl:with-param name="b-original" select="$b-original" />
-            </xsl:apply-templates>
+            <!-- process the actual contents           -->
+            <!-- condition on indicators of structure  -->
+            <!-- All "line", all "p", or mixed content -->
+            <!-- TODO: is it important to pass $b-original -->
+            <!-- flag into template for "line" elements?   -->
+            <xsl:choose>
+                <xsl:when test="$the-cell/line">
+                    <xsl:apply-templates select="$the-cell/line"/>
+                </xsl:when>
+                <xsl:when test="$the-cell/p">
+                    <xsl:apply-templates select="$the-cell/p">
+                        <xsl:with-param name="b-original" select="$b-original"/>
+                    </xsl:apply-templates>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates select="$the-cell">
+                        <xsl:with-param name="b-original" select="$b-original"/>
+                    </xsl:apply-templates>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:element>
         <!-- recurse forward, perhaps to an empty cell -->
         <xsl:call-template name="row-cells">
@@ -6218,11 +6336,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- we bail out of recursion with no action taken -->
 </xsl:template>
 
-<xsl:template match="tabular//line">
-    <xsl:apply-templates />
+<!-- Perhaps this could be consolidated     -->
+<!-- with other uses of the "line" element? -->
+<xsl:template match="tabular/row/cell/line">
+    <xsl:apply-templates/>
     <!-- is there a next line to separate? -->
     <xsl:if test="following-sibling::line">
-        <br />
+        <br/>
     </xsl:if>
 </xsl:template>
 
@@ -6404,7 +6524,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </xsl:attribute>
                         <!-- use a class to identify an internal link -->
                         <xsl:attribute name="class">
-                            <xsl:text>xref</xsl:text>
+                            <xsl:text>internal</xsl:text>
                         </xsl:attribute>
                     </xsl:otherwise>
                 </xsl:choose>
@@ -6724,16 +6844,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>em}}</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:element name="span">
-                <xsl:attribute name="class">
-                    <xsl:text>fillin</xsl:text>
+            <span class="fillin" role="img">
+                <xsl:attribute name="aria-label">
+                    <xsl:value-of select="$characters" />
+                    <xsl:text>-character blank</xsl:text>
                 </xsl:attribute>
                 <xsl:attribute name="style">
                     <xsl:text>width: </xsl:text>
                     <xsl:value-of select="5 * $characters div 11" />
                     <xsl:text>em;</xsl:text>
                 </xsl:attribute>
-            </xsl:element>
+            </span>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -6809,7 +6930,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:otherwise>
             <!-- class name identifies an external link -->
-            <a class="url" href="{@href}" target="_blank">
+            <a class="external" href="{@href}" target="_blank">
                 <xsl:copy-of select="$visible-text" />
             </a>
         </xsl:otherwise>
@@ -7458,10 +7579,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="login-header">
     <link href="{$html.css.server}/css/{$html.css.version}/features.css" rel="stylesheet" type="text/css"/>
     <script>
-       <xsl:text>var logged_in = false;&#xa;</xsl:text>
-       <xsl:text>var role = 'student';&#xa;</xsl:text>
-       <xsl:text>var guest_access = true;&#xa;</xsl:text>
-       <xsl:text>var login_required = false;&#xa;</xsl:text>
+        <xsl:text>var logged_in = false;&#xa;</xsl:text>
+        <xsl:text>var role = 'student';&#xa;</xsl:text>
+        <xsl:text>var guest_access = true;&#xa;</xsl:text>
+        <xsl:text>var login_required = false;&#xa;</xsl:text>
+        <xsl:text>var js_version = </xsl:text>
+        <xsl:value-of select='$html.js.version'/>
+        <xsl:text>;&#xa;</xsl:text>
     </script>
 </xsl:template>
 
@@ -7845,43 +7969,99 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="internal-id-no-dash" />
         <xsl:text>_params</xsl:text>
     </xsl:variable>
+    <!-- And a Javascript identifier for the onload function -->
+    <xsl:variable name="applet-onload">
+        <xsl:apply-templates select="." mode="internal-id-no-dash" />
+        <xsl:text>_onload</xsl:text>
+    </xsl:variable>
+    <!-- And a Javascript identifier for the onload function argument -->
+    <!-- not strictly necessary, but clarifies HTML                   -->
+    <xsl:variable name="applet-onload-argument">
+        <xsl:apply-templates select="." mode="internal-id-no-dash" />
+        <xsl:text>_applet</xsl:text>
+    </xsl:variable>
     <!-- And an HTML unique identifier -->
     <xsl:variable name="applet-container">
         <xsl:apply-templates select="." mode="internal-id" />
         <xsl:text>-container</xsl:text>
     </xsl:variable>
-    <!-- Javascript API for loading from a base64 string                   -->
-    <!-- Crib from page source at second link, with modifications          -->
-    <!-- Multiple instances:  https://stackoverflow.com/questions/9434     -->
-    <!-- https://wiki.geogebra.org/en/Reference:GeoGebra_Apps_API          -->
-    <!-- http://dev.geogebra.org/examples/html/example-api-save-state.html -->
-    <!-- Parameter reference:                                              -->
-    <!-- https://wiki.geogebra.org/en/Reference:GeoGebra_App_Parameters    -->
+    <!-- Javascript API for loading GeoGebra                               -->
     <script>
-<xsl:text>
-var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
-        "width":</xsl:text><xsl:value-of select="$width" /><xsl:text>,
-        "height":</xsl:text><xsl:value-of select="$height" /><xsl:text>,
-        "showToolBar":true,
-        "borderColor":null,
-        "showMenuBar":false,
-        "showAlgebraInput":false,
-        "customToolbar":"0 || 1",
-        "showResetIcon":true,
-        "enableLabelDrags":false,
-        "enableShiftDragZoom":true,
-        "enableRightClick":false,
-        "capturingThreshold":null,
-        "showToolBarHelp":true,
-        "errorDialogsActive":true,
-        "useBrowserForJS":false,
-        "playButton":false,
-        "filename":"</xsl:text><xsl:value-of select="@source" /><xsl:text>"};&#xa;</xsl:text>
-        <!-- "ggbBase64":"</xsl:text><xsl:value-of select="....." /><xsl:text>"};&#xa;</xsl:text> -->
+        <!-- API commands, as text() nodes in the slate. Manual at:   -->
+        <!-- https://wiki.geogebra.org/en/Reference:GeoGebra_Apps_API -->
+        <!-- In PTX source, use the commands one per line, as in:     -->
+        <!-- setCoordSystem(0, 20, 0, 10);                            -->
+        <!-- enableShiftDragZoom(false);                              -->
+        <xsl:if test="text()">
+            <xsl:text>var </xsl:text>
+            <xsl:value-of select="$applet-onload" />
+            <xsl:text> = function(</xsl:text>
+            <xsl:value-of select="$applet-onload-argument" />
+            <xsl:text>) {&#xa;</xsl:text>
+            <xsl:call-template name="prepend-string">
+                <xsl:with-param name="text">
+                    <xsl:call-template name="sanitize-text">
+                        <xsl:with-param name="text" select="." />
+                    </xsl:call-template>
+                </xsl:with-param>
+                <!-- period below is Javascript syntax for methods -->
+                <xsl:with-param name="pad" select="concat($applet-onload-argument,'.')" />
+            </xsl:call-template>
+            <xsl:text>};&#xa;</xsl:text>
+        </xsl:if>
+        <!-- Parameter reference:                                              -->
+        <!-- https://wiki.geogebra.org/en/Reference:GeoGebra_App_Parameters    -->
+        <!-- We leave most parameters as their default value. In most cases,   -->
+        <!-- an author could use API commands to alter these settings.         -->
+        <xsl:text>var </xsl:text>
+        <xsl:value-of select="$applet-parameters" />
+        <xsl:text> = {&#xa;</xsl:text>
+        <!-- Prioritize local over remote -->
+        <xsl:choose>
+            <xsl:when test="@base64">
+                <xsl:text>ggbBase64:"</xsl:text>
+                <xsl:value-of select="@base64" />
+                <xsl:text>",&#xa;</xsl:text>
+            </xsl:when>
+            <xsl:when test="@source">
+                <xsl:text>filename:"</xsl:text>
+                <xsl:value-of select="@source" />
+                <xsl:text>",&#xa;</xsl:text>
+            </xsl:when>
+            <xsl:when test="@material">
+                <xsl:text>material_id:"</xsl:text>
+                <xsl:value-of select="@material" />
+                <xsl:text>",&#xa;</xsl:text>
+            </xsl:when>
+            <xsl:when test="@geogebra">
+                <xsl:message>PTX Warning:  "geogebra" attribute on "slate" element is deprecated; use "material" attribute</xsl:message>
+                <xsl:text>material_id:"</xsl:text>
+                <xsl:value-of select="@geogebra" />
+                <xsl:text>",&#xa;</xsl:text>
+            </xsl:when>
+        </xsl:choose>
+        <xsl:text>width:</xsl:text><xsl:value-of select="$width" />
+        <xsl:text>,&#xa;</xsl:text>
+        <xsl:text>height:</xsl:text><xsl:value-of select="$height" />
+        <xsl:text>,&#xa;</xsl:text>
+        <xsl:if test="text()">
+            <xsl:text>appletOnLoad:</xsl:text>
+            <xsl:value-of select="$applet-onload" />
+        </xsl:if>
+        <xsl:text>};&#xa;</xsl:text>
 
-    <xsl:text>var </xsl:text><xsl:value-of select="$applet-name" /><xsl:text> = new GGBApplet(</xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text>, '5.0');&#xa;</xsl:text>
+        <xsl:text>var </xsl:text>
+            <xsl:value-of select="$applet-name" />
+        <xsl:text> = new GGBApplet(</xsl:text>
+            <xsl:value-of select="$applet-parameters" />
+        <xsl:text>, true);&#xa;</xsl:text>
 
-    <xsl:text>window.onload = function() { </xsl:text><xsl:value-of select="$applet-name" /><xsl:text>.inject('</xsl:text><xsl:value-of select="$applet-container" /><xsl:text>'); }&#xa;</xsl:text>
+        <!-- inject the applet into the div below -->
+        <xsl:text>window.onload = function() { </xsl:text>
+        <xsl:value-of select="$applet-name" />
+        <xsl:text>.inject('</xsl:text>
+        <xsl:value-of select="$applet-container" />
+        <xsl:text>'); }&#xa;</xsl:text>
     </script>
     <!-- build a container div with the right shape -->
     <div class="geogebra-applet" id="{$applet-container}">
@@ -8256,8 +8436,8 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
                 <xsl:call-template name="goggle-code-prettifier" />
             </xsl:if>
             <xsl:call-template name="google-search-box-js" />
-            <xsl:call-template name="knowl" />
             <xsl:call-template name="mathbook-js" />
+            <xsl:call-template name="knowl" />
             <xsl:call-template name="fonts" />
             <xsl:call-template name="hypothesis-annotation" />
             <xsl:call-template name="geogebra" />
@@ -8288,14 +8468,13 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
             <header id="masthead" class="smallbuttons">
                 <div class="banner">
                     <div class="container">
-                        <xsl:call-template name="google-search-box" />
                         <xsl:call-template name="brand-logo" />
                         <div class="title-container">
                             <h1 class="heading">
-                                <xsl:element name="a">
-                                    <xsl:attribute name="href">
-                                        <xsl:apply-templates select="$document-root" mode="containing-filename" />
-                                    </xsl:attribute>
+                                <xsl:variable name="root-filename">
+                                    <xsl:apply-templates select="$document-root" mode="containing-filename" />
+                                </xsl:variable>
+                                <a href="{$root-filename}">
                                     <xsl:variable name="b-has-subtitle" select="boolean($document-root/subtitle)"/>
                                     <span class="title">
                                         <!-- Do not use shorttitle in masthead,  -->
@@ -8311,7 +8490,7 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
                                             <xsl:apply-templates select="$document-root" mode="subtitle" />
                                         </span>
                                     </xsl:if>
-                                </xsl:element>
+                                </a>
                             </h1>
                             <!-- Serial list of authors/editors -->
                             <p class="byline">
@@ -8319,6 +8498,8 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
                                 <xsl:apply-templates select="$document-root/frontmatter/titlepage/editor" mode="name-list"/>
                             </p>
                         </div>  <!-- title-container -->
+                        <!-- accessibility suggests relative ordering of next items -->
+                        <xsl:call-template name="google-search-box" />
                     </div>  <!-- container -->
                 </div>  <!-- banner -->
             <xsl:apply-templates select="." mode="primary-navigation" />
@@ -8332,6 +8513,7 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
                     </div>
                 </main>
             </div>
+
             <xsl:apply-templates select="$docinfo/analytics" />
             <xsl:call-template name="pytutor-footer" />
             <xsl:call-template name="login-footer" />
@@ -8813,6 +8995,11 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
     </xsl:choose>
 </xsl:template>
 
+<xsl:template name="calculator-toggle">
+    <button id="calculator-toggle" class="toolbar-item button toggle" title="Show calculator" aria-expanded="false" aria-controls="calculator-container">Calc</button>
+</xsl:template>
+
+
 <!-- Compact Buttons -->
 <!-- These get smashed consecutively into a single "tool-bar" -->
 <xsl:template match="*" mode="compact-buttons">
@@ -8920,6 +9107,11 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
                                     <xsl:apply-templates select="." mode="index-button" />
                                 </xsl:otherwise>
                             </xsl:choose>
+                            <!-- Button to show/hide the calculator -->
+                            <xsl:if test="$b-has-calculator">
+                                <xsl:call-template name="calculator-toggle" />
+                                <xsl:call-template name="calculator" />
+                            </xsl:if>
                             <!-- Span to encase Prev/Up/Next buttons and float right    -->
                             <!-- Each button gets an id for keypress recognition/action -->
                             <xsl:element name="span">
@@ -8946,12 +9138,8 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
                         </div>
                     </xsl:when>
                 </xsl:choose>
-                <!-- right sidebar, not used currently -->
-                <button class="sidebar-right-toggle-button button active">
-                    <xsl:call-template name="type-name">
-                        <xsl:with-param name="string-id" select="'annotations'" />
-                    </xsl:call-template>
-                </button>
+                <!-- Annotations button was once here, see GitHub issue -->
+                <!-- https://github.com/rbeezer/mathbook/issues/1010    -->
             </div>
             <!-- Bottom buttons, for mobile UI -->
             <xsl:element name="div">
@@ -8980,14 +9168,9 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
                     <xsl:apply-templates select="." mode="up-button" />
                 </xsl:if>
                 <xsl:apply-templates select="." mode="next-button" />
-                <!-- unused, increment the toolbar-divisor-4/5 above -->
-                <!--
-                <button class="sidebar-right-toggle-button button toolbar-item active">
-                    <xsl:call-template name="type-name">
-                        <xsl:with-param name="string-id" select="'annotations'" />
-                    </xsl:call-template>
-                </button>
-                -->
+                <!-- Annotations button was once here, see GitHub issue -->
+                <!-- https://github.com/rbeezer/mathbook/issues/1010    -->
+                <!-- increment the toolbar-divisor-4/5 if it returns    -->
              </xsl:element>
         </div>
     </nav>
@@ -9023,6 +9206,51 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
             <div class="sidebar-content">Mock right sidebar content</div>
         </aside> -->
 </xsl:template>
+
+<xsl:template name="calculator">
+    <xsl:if test="contains($html.calculator,'geogebra')">
+        <div id="calculator-container" class="calculator-container" style="display: none; z-index:100;">
+            <div id="geogebra-calculator"></div>
+        </div>
+        <script>
+            <xsl:text>&#xa;</xsl:text>
+            <!-- Here is where we could initialize some things to customize the display.                    -->
+            <!-- But the customization should be different depending on classic, graphing, geometry, or 3d. -->
+            <!-- For instance geometry probably does not benefit from showing the grid.                     -->
+            <!-- If this is not in use, no need to set "appletOnLoad" further below.                        -->
+            <!-- var onLoad = function(applet) {
+                applet.setAxisLabels(1,'x','y','z');
+                applet.setGridVisible(1,true);
+                applet.showFullscreenButton(true);
+            }; -->
+            <xsl:text>var ggbApp = new GGBApplet({"appName": "</xsl:text>
+            <xsl:value-of select="substring-after($html.calculator,'-')"/>
+            <xsl:text>",&#xa;</xsl:text>
+            <!-- width and height are required parameters                   -->
+            <!-- All the rest is customizing some things away from defaults -->
+            <!-- (or maybe in some cases explicitly using the defaults)     -->
+            <!-- The last parameters have to do with scaling. This combination allows the 330x600 applet -->
+            <!-- to scale up or down to the width of the contining div with class calculator-container.  -->
+            <!-- The applet's height will scale proportionately.                                         -->
+            <xsl:text>    "width": 330,&#xa;</xsl:text>
+            <xsl:text>    "height": 600,&#xa;</xsl:text>
+            <xsl:text>    "showToolBar": true,&#xa;</xsl:text>
+            <xsl:text>    "showAlgebraInput": true,&#xa;</xsl:text>
+            <xsl:text>    "perspective": "G/A",&#xa;</xsl:text>
+            <xsl:text>    "algebraInputPosition": "bottom",&#xa;</xsl:text>
+            <!--          "appletOnLoad": onLoad, -->
+            <xsl:text>    "scaleContainerClass": "calculator-container",&#xa;</xsl:text>
+            <xsl:text>    "allowUpscale": true,&#xa;</xsl:text>
+            <xsl:text>    "autoHeight": true,&#xa;</xsl:text>
+            <xsl:text>    "disableAutoScale": false},&#xa;</xsl:text>
+            <xsl:text>true);&#xa;</xsl:text>
+            <!--   The calculator is created by                    -->
+            <!--   ggbApp.inject('geogebra-calculator');           -->
+            <!--   which is inserted by code in pretext_add_on.js  -->
+        </script>
+    </xsl:if>
+</xsl:template>
+
 
 <!-- Table of Contents Contents (Items) -->
 <!-- Includes "active" class for enclosing outer node              -->
@@ -9528,6 +9756,7 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
     <script src="{$html.js.server}/js/lib/jquery.sticky.js" ></script>
     <script src="{$html.js.server}/js/lib/jquery.espy.min.js"></script>
     <script src="{$html.js.server}/js/{$html.js.version}/pretext.js"></script>
+    <script src="{$html.js.server}/js/{$html.js.version}/pretext_add_on.js"></script>
 </xsl:template>
 
 <!-- Font header -->
@@ -9557,10 +9786,9 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
 </xsl:template>
 
 <!-- GeoGebra -->
-<!-- The JS necessary to load the "App", which can -->
-<!-- then be loaded with base64 or XML versions    -->
+<!-- The JS necessary to load the "App" for a generic calculator -->
 <xsl:template name="geogebra">
-    <xsl:if test="$b-has-geogebra">
+    <xsl:if test="$b-has-calculator and contains($html.calculator,'geogebra')">
         <script src="https://cdn.geogebra.org/apps/deployggb.js"></script>
     </xsl:if>
 </xsl:template>
@@ -9579,7 +9807,7 @@ var </xsl:text><xsl:value-of select="$applet-parameters" /><xsl:text> = {
     <link href="{$html.css.server}/css/{$html.css.version}/pretext.css" rel="stylesheet" type="text/css" />
     <link href="{$html.css.server}/css/{$html.css.version}/pretext_add_on.css" rel="stylesheet" type="text/css" />
     <link href="{$html.css.server}/css/{$html.css.version}/toc.css" rel="stylesheet" type="text/css" />
-    <link href="{$html.css.server}/css/{$html.css.version}/{$html.css.colorfile}" rel="stylesheet" type="text/css" />
+    <link href="{$html.css.server}/css/{$html.css.version}/{$html-css-colorfile}" rel="stylesheet" type="text/css" />
     <link href="{$html.css.server}/css/{$html.css.version}/setcolors.css" rel="stylesheet" type="text/css" />
     <!-- If extra CSS is specified, then unpack multiple CSS files -->
     <!-- The prepared list (extra blank space) will cause failure  -->
@@ -9728,7 +9956,7 @@ var scJsHost = (("https:" == document.location.protocol) ? "https://secure." : "
     <xsl:param name="warning" />
     <xsl:element name="span">
         <!-- Color for author tools version -->
-        <xsl:if test="$author-tools='yes'" >
+        <xsl:if test="$author-tools-new = 'yes'" >
             <xsl:attribute name="style">color:red</xsl:attribute>
         </xsl:if>
         <xsl:text>(((</xsl:text>
@@ -9742,7 +9970,7 @@ var scJsHost = (("https:" == document.location.protocol) ? "https://secure." : "
 <!-- http://www.sitepoint.com/web-foundations/floating-clearing-css/ -->
 <xsl:template name="margin-warning">
     <xsl:param name="warning" />
-    <xsl:if test="$author-tools='yes'" >
+    <xsl:if test="$author-tools-new = 'yes'" >
         <xsl:element name="span">
             <xsl:attribute name="style">color:red;float:right;width:20em;margin-right:-25em;</xsl:attribute>
             <xsl:value-of select="$warning" />

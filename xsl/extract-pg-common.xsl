@@ -370,9 +370,11 @@
         </xsl:variable>
         <xsl:if test="$macros != ''">
             <xsl:text>loadMacros("PCCmacros.pl");&#xa;</xsl:text>
-            <xsl:text>TEXT(KeyboardInstructions(q@\(</xsl:text>
+            <!-- @ character is unlikely to appear in latex macro definitions, -->
+            <!-- so it makes a good delimiter, better than single quote.       -->
+            <xsl:text>TEXT(MODES(PTX=>'',HTML=>q@&lt;div style="display:none;">\(</xsl:text>
             <xsl:value-of select="$macros" />
-            <xsl:text>\)@));&#xa;</xsl:text>
+            <xsl:text>\)&lt;/div>@));&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
     <xsl:if test="$b-verbose">
@@ -1284,7 +1286,7 @@
     <xsl:if test="ancestor::ul|ancestor::ol">
         <xsl:call-template name="potential-list-indent" />
     </xsl:if>
-    <xsl:apply-templates select="text()|var" />
+    <xsl:apply-templates select="text()|var|xref" />
     <xsl:if test="not(following-sibling::*[self::mrow or self::intertext])">
         <!-- look ahead to absorb immediate clause-ending punctuation -->
         <!-- pass the enclosing environment (md) as the context       -->

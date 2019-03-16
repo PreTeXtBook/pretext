@@ -434,7 +434,7 @@
           <choice>
             <ref name="TextSimple"/>
             <oneOrMore>
-              <ref name="Line"/>
+              <ref name="ShortLine"/>
             </oneOrMore>
           </choice>
         </element>
@@ -444,7 +444,7 @@
           <choice>
             <ref name="TextSimple"/>
             <oneOrMore>
-              <ref name="Line"/>
+              <ref name="ShortLine"/>
             </oneOrMore>
           </choice>
         </element>
@@ -466,7 +466,7 @@
           <choice>
             <ref name="TextSimple"/>
             <oneOrMore>
-              <ref name="Line"/>
+              <ref name="ShortLine"/>
             </oneOrMore>
           </choice>
         </element>
@@ -476,7 +476,7 @@
           <choice>
             <ref name="TextSimple"/>
             <oneOrMore>
-              <ref name="Line"/>
+              <ref name="ShortLine"/>
             </oneOrMore>
           </choice>
         </element>
@@ -732,7 +732,6 @@
       </optional>
       <oneOrMore>
         <choice>
-          <ref name="ToDo"/>
           <ref name="Exercise"/>
           <ref name="ExerciseGroup"/>
         </choice>
@@ -781,7 +780,6 @@
       <ref name="Paragraph"/>
       <ref name="BlockQuote"/>
       <ref name="Preformatted"/>
-      <ref name="ToDo"/>
     </choice>
   </define>
   <define name="BlockStatementNoCaption">
@@ -967,9 +965,14 @@
       </optional>
     </element>
   </define>
-  <define name="Line">
+  <define name="ShortLine">
     <element name="line">
       <ref name="TextShort"/>
+    </element>
+  </define>
+  <define name="LongLine">
+    <element name="line">
+      <ref name="TextLong"/>
     </element>
   </define>
   <define name="CodeLine">
@@ -1709,7 +1712,7 @@
       <choice>
         <ref name="TextLong"/>
         <oneOrMore>
-          <ref name="Line"/>
+          <ref name="LongLine"/>
         </oneOrMore>
         <oneOrMore>
           <ref name="Paragraph"/>
@@ -2290,17 +2293,12 @@
       </oneOrMore>
     </element>
   </define>
-  <define name="ToDo">
-    <element name="todo">
-      <text/>
-    </element>
-  </define>
   <define name="Attribution">
     <element name="attribution">
       <choice>
-        <ref name="TextShort"/>
+        <ref name="TextLong"/>
         <oneOrMore>
-          <ref name="Line"/>
+          <ref name="LongLine"/>
         </oneOrMore>
       </choice>
     </element>
@@ -3366,7 +3364,9 @@
   <define name="Configuration" combine="choice">
     <element name="rename">
       <attribute name="element"/>
-      <attribute name="lang"/>
+      <optional>
+        <attribute name="xml:lang"/>
+      </optional>
       <text/>
     </element>
   </define>

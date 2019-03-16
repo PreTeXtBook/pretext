@@ -202,15 +202,15 @@
         Author =
             element author {
                 element personname {TextSimple},
-                element department {TextSimple | Line+}?,
-                element institution {TextSimple | Line+}?,
+                element department {TextSimple | ShortLine+}?,
+                element institution {TextSimple | ShortLine+}?,
                 element email {text}?
             }
         Editor =
             element editor {
                 element personname {TextSimple},
-                element department {TextSimple | Line+}?,
-                element institution {TextSimple | Line+}?,
+                element department {TextSimple | ShortLine+}?,
+                element institution {TextSimple | ShortLine+}?,
                 element email {text}?
             }
         Credit =
@@ -326,7 +326,7 @@
             element exercises {
                 MetaDataShortTitleOptional,
                 IntroductionDivision?,
-                (ToDo | Exercise | ExerciseGroup)+,
+                (Exercise | ExerciseGroup)+,
                 ConclusionDivision?
             }
         Solutions =
@@ -348,7 +348,7 @@
         
         
         BlockText =
-            Paragraph | BlockQuote | Preformatted | ToDo
+            Paragraph | BlockQuote | Preformatted
         BlockStatementNoCaption =
             BlockText | Aside |
             SideBySideNoCaption | SideBySideGroupNoCaption
@@ -437,8 +437,10 @@
                 Paragraph+,
                 Attribution?
             }
-        Line =
+        ShortLine =
             element line {TextShort}
+        LongLine =
+            element line {TextLong}
         
         
         CodeLine =
@@ -789,7 +791,7 @@
                 attribute colspan {text}?,
                 (
                     TextLong |
-                    Line+ |
+                    LongLine+ |
                     Paragraph+
                 )
             }
@@ -1001,7 +1003,13 @@
                 (attribute name {text},
                 attribute evaluator {text}?,
                 attribute width {text}?,
-                attribute category {"angle" | "decimal" | "exponent" | "formula" | "fraction" | "inequality" | "integer" | "interval" | "logarithm" | "limit" | "number" | "point" | "syntax" | "quantity" | "vector"}?,
+                attribute category {
+                                    "angle" | "decimal" | "exponent"
+                                  | "formula" | "fraction" | "inequality"
+                                  | "integer" | "interval" | "logarithm"
+                                  | "limit" | "number" | "point"
+                                  | "syntax" | "quantity" | "vector"
+                                  }?,
                 attribute form {"popup"|"buttons"|"none"}?) |
                 (attribute form {"essay"},
                 attribute width {text}?)
@@ -1026,7 +1034,6 @@
             }
         
         
-        ToDo = element todo {text}
         
         
         
@@ -1034,7 +1041,7 @@
         
         Attribution =
             element attribution {
-                (TextShort | Line+)
+                (TextLong | LongLine+)
             }
         
         
@@ -1505,7 +1512,7 @@
         Configuration |=
             element rename {
                 attribute element {text},
-                attribute lang {text},
+                attribute xml:lang {text}?,
                 text
             }
         

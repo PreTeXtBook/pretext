@@ -165,13 +165,14 @@ the xsltproc executable.
 
         You can make a document-specific, global override.  Here we
         decide we have no need for any "proposition"s and repurpose
-        that environment in US English as a "Conundrum."
+        that environment as a "Conundrum."
 
-        See the localization file for more on language codes, and realize
-        that US English is the default if there is no "lang" attribute
-        given on the document.
+        The specification of a language is optional, if you do not
+        have a multilingual project.  Otherwise you can supply an
+        @xml:lang attribute so the rename only applies for a specific
+        language.  See the localization file for more on language codes.
         -->
-        <rename element="proposition" lang="en-US">Conundrum</rename>
+        <rename element="proposition">Conundrum</rename>
 
         <!-- Various third-party add-ons need some sort of token     -->
         <!-- Using an element here serves two purposes               -->
@@ -365,9 +366,9 @@ the xsltproc executable.
 
             <p>When we are writing we do not always know what we want to cite, or just where subsequent material will end up.  For example, we might want a citation to <xref provisional="some textbook about the FTC" /> or we might want to reference a later<nbsp /><xref provisional="chapter about DiffEq's, and an_underscore" />.</p>
 
-            <p>We can also embed <q>todo</q>s in the source, and selectively display them, so you may not see the one here in the output you are looking at now.  Or maybe you do see it?</p>
+            <p>We can also embed <q>todo</q>s in the source by making an <init>XML</init> comment that begins with the four characters <c>todo</c>, and selectively display them, so you may not see the one here in the output you are looking at now.  Or maybe you do see it?</p>
 
-<todo>Talk more about author's tools, such as todo's</todo>
+            <!-- todo: Talk more about author's tools, such as todo's -->
 
             <p>Because a definite integral can be computed using an antiderivative, we have the following definition.</p>
 
@@ -432,6 +433,15 @@ the xsltproc executable.
             <idx><c>verbatim text</c>, use sortby</idx>
             <!-- keep this, collides with real "R" entry elsewhere -->
             <idx sortby="R"><m>\rho</m><ndash />fibers</idx>
+            <!-- test identical text, but variant upper- and lower-case  -->
+            <!-- each appears later in a paragraph, to test them sorting -->
+            <!-- into place to form just three index entries (each with  -->
+            <!-- two cross-references)                                   -->
+            <idx>Cayley graph</idx><idx>cayley graph</idx><idx>CAYLEY GRAPH</idx>
+            <!-- identical @sortby, identical content, should consolidate, -->
+            <!-- so an index entry here plus later, in a paragraph, after  -->
+            <!-- some other index entry                                    -->
+            <idx><h sortby="x"><m>x</m> as a variable</h></idx>
 
             <p>Sage can compute definite integrals.  The output contains the approximate numerical value of the definite integral, followed by an upper bound  of the error in the approximation.</p>
 
@@ -441,14 +451,14 @@ the xsltproc executable.
                 <output>(1.189200623826982, 1.320277913471315e-14)</output>
             </sage>
 
-            <p>Given the Fundamental Theorem, we would find the antiderivative useful.</p>
+            <p>Given the Fundamental Theorem, we would find the antiderivative useful.<idx>Cayley graph</idx><idx><h sortby="x"><m>x</m> as a variable</h></idx></p>
 
             <sage>
                 <input>integral(sin(x)^2, x)</input>
                 <output>1/2*x - 1/4*sin(2*x)</output>
             </sage>
 
-            <p>The same command can be used to employ the antiderivative in the application of the Fundamental Theorem.  Notice that the answer is <em>exact</em> and any further manipulation is likely to be simply producing a numerical approximation.</p>
+            <p>The same command can be used to employ the antiderivative in the application of the Fundamental Theorem.  Notice that the answer is <em>exact</em> and any further manipulation is likely to be simply producing a numerical approximation.<idx>cayley graph</idx></p>
 
             <!-- The "full" type is the default, it is used here only for testing purposes -->
             <sage type="full">
@@ -456,7 +466,7 @@ the xsltproc executable.
                 <output>-1/4*sin(4) + 1</output>
             </sage>
 
-            <p>There are integrals you really do not want to evaluate, or you do not want your reader to evaluate.  A Sage cell can be configured for display purposes only<mdash />you can look but you cannot touch.</p>
+            <p>There are integrals you really do not want to evaluate, or you do not want your reader to evaluate.  A Sage cell can be configured for display purposes only<mdash />you can look but you cannot touch.<idx>CAYLEY GRAPH</idx></p>
 
             <sage type="display">
                 <input>integral(e^(x^2), x)</input>
@@ -610,7 +620,7 @@ the xsltproc executable.
             <subsection xml:id="subsection-second-FTC">
                 <title>Second Version of <acro>FTC</acro></title>
 
-                <todo>Should equation references come with parentheses?</todo>
+                <!-- ToDo: Should equation references come with parentheses? -->
 
                 <corollary permid="ghI" xml:id="corollary-FTC-derivative">
                     <creator>Leibniz, Newton</creator>
@@ -995,7 +1005,7 @@ the xsltproc executable.
                     <introduction>
                         <p>A set of reading questions may have an <tag>introduction</tag>, perhaps for preparatory explanation.</p>
                         <p>If a student has logged in to the HTML version,
-                           then they can `answer the reading` questions directly in the book.
+                           then they can answer the reading questions directly in the book.
                            Inline math LaTeX can be entered using
                            <c>$</c>...<c>$</c> or <c>\(</c>...<c>\)</c> delimiters,
                            and inline AsciiMath using backticks <c>`</c>...<c>`</c> as delimiters.
@@ -1038,15 +1048,17 @@ the xsltproc executable.
                         <p>A glossary may have an <tag>introduction</tag>, perhaps with some explanation.</p>
                     </introduction>
 
-                    <defined-term>
-                        <title>bar</title>
-                        <p>A part of <term>foobar</term>.  See <xref ref="foobar-defined" text="title"/>.</p>
-                    </defined-term>
+                    <terms>
+                        <defined-term>
+                            <title>bar</title>
+                            <p>A part of <term>foobar</term>.  See <xref ref="foobar-defined" text="title"/>.</p>
+                        </defined-term>
 
-                    <defined-term xml:id="foobar-defined">
-                        <title>foobar</title>
-                        <p>A synonym for the acronym <acro>FUBAR</acro>.</p>
-                    </defined-term>
+                        <defined-term xml:id="foobar-defined">
+                            <title>foobar</title>
+                            <p>A synonym for the acronym <acro>FUBAR</acro>.</p>
+                        </defined-term>
+                    </terms>
 
                     <conclusion>
                         <p>And for symmetry, a <tag>conclusion</tag>.</p>
@@ -1184,6 +1196,8 @@ the xsltproc executable.
                 <p>If you need a <q>fill-in blank</q>, like this<fillin />, it can be obtained with an empty <tag>fillin</tag> element that defaults to roughly a 10-character width.  You can use the <tag>characters</tag> attribute to make the rule longer or shorter, such as a 40-character blank: <fillin characters="40" />.  The character count is approximate, based on typical character widths within a proportional font carrying English language text.  Adjust to suit, or request a language-specific adjustment if it is critical.</p>
 
                 <p>Long after we started this mess, we added <pretext /> tags to mark up tags and attributes.  The elements are: <tag>tag</tag>, <tag>tage</tag>, <tag>attr</tag>.  Examples of how these render are (respectively): <tag>section</tag>, <tage>hash</tage>, <attr>width</attr>.  Perhaps this document will make greater use of these tags.</p>
+
+                <p>We supply two incomplete cross-references for testing purposes only: <xref provisional="a first incomplete cross-reference"/>, <xref provisional="a second incomplete cross-reference"/>.</p>
             </subsection>
 
             <conclusion>
@@ -1341,7 +1355,7 @@ the xsltproc executable.
         <section>
             <title>Some Advanced Ideas</title>
 
-            <todo>Move index-finish marker back once it is allowed other places</todo>
+            <!-- TODO: Move index-finish marker back once it is allowed other places -->
 
             <p><idx xml:id="index-finish-multicolumn" start="index-start-multicolumn" />The multi-row displayed mathematics in the proof of the Fundamental Theorem had equations aligned on the equals signs via the &amp; character.  Sometimes you don't want that.  Here is an example with some differential equations, with each equation centered and unnumbered,<md>
                 <mrow>{\mathcal L}(y')(s) = s {\mathcal L}(y)(s) - y(0) = s Y(s) - y(0)</mrow>
@@ -1949,7 +1963,8 @@ the xsltproc executable.
 
             <subsection xml:id="section-urls">
                 <title>URLs, such as <url href="http://example.com" /></title>
-
+                        <idx><h>link</h><h>external, url</h></idx>
+                        <idx><h>reference</h><h>external, url</h></idx>
                 <p>An internet <init>URL</init><idx><h>URLs</h></idx> can contain a limited subset of keyboard characters.  So we include a long <init>URL</init> for testing:  <url href="http://www.pcc.edu/enroll/registration/dropping.html#withdraw">www.pcc.edu/enroll/registration/dropping.html#withdraw</url>.  Notice in the source that you <em>do not</em> put any tags inside the <c>href</c> attribute, but you may need to provide XML escape sequences, see <xref ref="subsection-xml-escape"/>).  Here is a totally bogus <init>URL</init>, which contains every possible legal character, so if this fails to convert there is some problematic character.  In order to test the use of a percent sign (<c>%</c>) in a URL, we follow it by two hex digits, specifically, <c>58</c>, which is a way to represent the character <c>X</c> in a <init>URL</init>.  Three versions: one with the content as normal text, one with the characters as verbatim text, and then as a <init>URL</init> with the same string of characters as the address and the clickable, viewable part.</p>
 
                 <blockquote>
@@ -3928,6 +3943,7 @@ the xsltproc executable.
                         <cell>
                              <line>I am the Lorax.</line>
                              <line>I speak for the trees.</line>
+                             <line>Self-referential: <xref ref="table-multiline-cells" text="type-global"/></line>
                         </cell>
                         <cell>
                              <line>Look at me!</line>
@@ -4456,41 +4472,99 @@ the xsltproc executable.
             <subsection>
                 <title>Geogebra</title>
 
-                <p>Better than using the server version of Geogebra might be designing your own material, retaining your copyright, and using one of Geogebra's <q>Apps</q> to embed the material in your document.  (But note, use of the App comes with licensing restrictions.)  <pretext /> will handle the technical details for you.<ol>
-                    <li>Use Geogebra to make a material.  Maybe you need to install a desktop program that allows you to do this.  Then export, or otherwise discover the <q>base64-encoded</q> version which may be identified by <c>ggb</c>.  See the source of this page for examples of what this looks like.</li>
-                    <li>Mimic the source of the examples below.</li>
-                    <li>Long-run it will be better to park these strings in files (in a <c>code</c> subdirectory?) and <tag>xi:include</tag> them with the <attr>parse</attr> attribute set to <c>text</c>.  But we do not want to impede a newcomer's quickstart with the problematic <c>-xinclude</c> switch.</li>
+                <p>To embed a GeoGebra applet as-is from GeoGebra's Classroom Resources site (by material ID), see <xref ref="subsection-geogebra-server" text="type-global"/>. To design your own applet (either from scratch, or modifying something that already exists in one of those three forms) you may use one of Geogebra's <q>Apps</q> to embed the material in your document. (But note, use of the App comes with licensing restrictions.) <pretext /> will handle most of the technical details for you.</p>
+
+                <p>Do one of the following:<ol>
+                    <li>Identify a material ID from GeoGebra's Classroom Resources site. You might even make the material yourself on that site.</li>
+                    <li>Obtain a <c>.ggb</c> file from GeoGebra. You might construct something on a desktop installation of GeoGebra and save it. If you have a base64-encoded string for a GeoGebra applet, but you don't have a <c>.ggb</c> file, you can decode the string and save the result. For example, at <url href="https://www.opinionatedgeek.com/codecs/base64decoder">www.opinionatedgeek.com/codecs/base64decoder</url>.</li>
+                    <li>Obtain a base64 encoded string for a GeoGebra applet. You might first open a <c>.ggb</c> file in a desktop installation of GeoGebra, and push ctrl-shift-B (command-shift-B on a Mac) and then the string will be in your clipboard.</li>
+                    <li>None of the above, with the intention to make an applet from scratch.</li>
                 </ol></p>
 
-                <p>The sliders on the next applet seem to be at fixed locations.  Make it too skinny and you will never see them, rendering the material useless.  However the window will pan (drag with a mouse) and zoom (scroll wheel of a mouse), so you can adjust that way.</p>
+                <p>Then mimic the examples that follow, using GeoGebra API commands documented at <url href="https://wiki.geogebra.org/en/Reference:GeoGebra_Apps_API">wiki.geogebra.org/en/Reference:GeoGebra_Apps_API</url>, but do not include the <c>ggbApplet.</c> or <c>applet.</c> used in examples to prefix the functions<emdash/>that part of the code will be provided automatically by <pretext/>.</p>
+
+                <p>Jack Green created an applet on the Classroom Resources site with ID <c>D4s2v4ft</c>, which you may view at <url href="https://www.geogebra.org/m/D4s2v4ft">geogebra.org/m/D4s2v4ft</url>. Suppose you would like to use this in your project, but change something about it. We will change something trivial, making the <m>y</m>-axis ticks be separated <m>5</m> apart instead of <m>10</m> apart. We also decide we want a different aspect ratio and overall width. One gotcha: the original applet is loaded and then <pretext/> uses <attr>width</attr> and <attr>aspect</attr> attributes to resize the viewing window using the top left corner as an anchor. This does not rescale axes and that may leave you with important elements missing from the viewing window. So here we reset the viewing window to return to values that are in the original. Lastly, we disable zooming, which is not helpful for this applet. To do each of these things, we rely on the GeoGebra API manual at <url href="https://wiki.geogebra.org/en/Reference:GeoGebra_Apps_API">wiki.geogebra.org/en/Reference:GeoGebra_Apps_API</url>. It is important to use one command per line.</p>
 
                 <figure>
-                    <caption>GeoGebra: astroids (from Dave Rosoff)</caption>
+                    <caption>GeoGebra: modified material ID</caption>
+                    <interactive xml:id="geogebra-train-distance" platform="geogebra" width="75%" aspect="2:1">
+                        <slate xml:id="train-distance" surface="geogebra" material="D4s2v4ft" aspect="2:1">
+                            setAxisSteps(1, 1, 5, 1);
+                            setCoordSystem(-0.7, 8, -6, 56);
+                            enableShiftDragZoom(false);
+                        </slate>
+                    </interactive>
+                </figure>
+
+                <p>The same can be done with a <c>.ggb</c> file. Here we use two provided by David Rosoff, and one provided by Tevian Dray. The path to the file needs to be relative. We modify David's applet in a few ways. Remove the modifications to see the original.</p>
+
+                <figure>
+                    <caption>GeoGebra: modified from <c>.ggb</c> file</caption>
                     <interactive xml:id="geogebra-astroid" platform="geogebra" width="100%" aspect="4:3">
-                        <slate xml:id="astroid" surface="geogebra" source="code/rosoff/astroid.ggb" aspect="4:3" />
+                        <slate xml:id="astroid" surface="geogebra" source="code/rosoff/astroid.ggb" aspect="4:3">
+                            setCoordSystem(-6, 10, -6, 6);
+                            setLabelVisible("b", false);
+                            setLabelVisible("c", false);
+                            setLabelVisible("d", false);
+                            setAxisLabels(1,"x","y","z");
+                            evalCommand("r = Slider(1,4,0.1)");
+                            showResetIcon(true);
+                        </slate>
                     </interactive>
                 </figure>
-
-                <p>Now the controls are in the upper-left corner, so we can more easily make the window a little smaller.  Pan and zoom to put the action where you can see it better.</p>
 
                 <figure>
-                    <caption>GeoGebra: cycloids (from Dave Rosoff)</caption>
-                    <interactive xml:id="geogebra-cycloid" platform="geogebra" width="75%" aspect="3:4">
-                        <slate xml:id="cycloid" surface="geogebra" source="code/rosoff/epi-hypocycloids-default.ggb" aspect="3:4"/>
+                    <caption>GeoGebra: modified from <c>.ggb</c> file</caption>
+                    <interactive xml:id="geogebra-cycloid" platform="geogebra" width="100%" aspect="2:1">
+                        <slate xml:id="cycloid" surface="geogebra" source="code/rosoff/epi-hypocycloids-default.ggb" aspect="2:1">
+                            setCoordSystem(-15,5,-5,5);
+                            setAnimating("θ", true);
+                        </slate>
                     </interactive>
                 </figure>
 
-                <p>You will need to zoom out a bit, and then pan over some, to see all the pieces of the next GeoGebra material.</p>
+                <p>In this one provided by Tevian Dray, we make no modifications (except for those imposed by the scaling). You will need to zoom out a bit, and then pan over some, to see all the pieces.</p>
 
                 <figure>
                     <caption>GeoGebra: a constructive <q>proof</q> that SAS congruence holds in Euclidean geometry (from Tevian Dray)</caption>
                     <interactive xml:id="geogebra-SAS" platform="geogebra" width="100%" aspect="1:1">
-                        <slate xml:id="SAS" surface="geogebra" source="code/dray/SAS.ggb" />
+                        <slate xml:id="SAS" surface="geogebra" source="code/dray/SAS.ggb" aspect="1:1"/>
                         <instructions>
                             <p>Drag some of the points and some of the circles to change them, and watch the remainder react.</p>
                         </instructions>
                     </interactive>
                 </figure>
+
+                <p>You could also use a base64-encoded string of the <c>.ggb</c> file. You might come across such a string somewhere, or you might generate one by opening a <c>.ggb</c> file in a desktop installation of GeoGebra, and pushing ctrl-shift-B (command-shift-B on a Mac) to get the string in your clipboard. If you do this, you could use a <attr>base64</attr> attribute in place of the <attr>source</attr> attribute in the previous example. We don't do that here because such a string is generally over 5000 characters long and we are keeping the sample article source a bit cleaner.</p>
+
+                <p>Lastly, you may just wish to build something from scratch using GeoGebra API. Note that for accessibilty reasons, some objects are rendered unselectable with the <c>setFixed</c> command. Perhaps this should have been done with the previous examples, but that is more difficult when you do not know all of their names.</p>
+
+                <figure>
+                    <caption>GeoGebra: from scratch</caption>
+                    <interactive xml:id="geogebra-seed-head" platform="geogebra" width="50%" aspect="1:1">
+                        <slate xml:id="seed-head" surface="geogebra" aspect="1:1">
+                            setPerspective("G");
+                            setRounding("3s");
+                            setCoordSystem(-1,1,-1,1);
+                            setGridVisible(false);
+                            setAxesVisible(false, false);
+                            evalCommand("f(x)=If(x>0,sqrt(x),0)");
+                            setVisible("f", false);
+                            evalCommand("T=20");
+                            evalCommand("t=Slider(0,T)");
+                            setAnimating("t", true);
+                            evalCommand("v=Vector((cos(t),sin(t)))");
+                            evalCommand("r=Slider(0,1)");
+                            evalCommand("r=(sqrt(5)-1)/2");
+                            evalCommand("r=Slider(0,1,0.001)");
+                            evalCommand("N=Min(100,floor(T/r))");
+                            evalCommand("Seeds = Sequence(f(t - n r) / sqrt(T) (cos(n r 2 pi), sin(n r 2 pi)), n, 0, N)");
+                            setFixed("v", false, false);
+                            setFixed("Seeds", false, false);
+                        </slate>
+                    </interactive>
+                </figure>
+
             </subsection>
         </section>
 
@@ -4508,7 +4582,7 @@ the xsltproc executable.
                 <p>(2018-06-22) Almost everything in this section is under active development and not stable yet.  Feel free to experiment and make suggestions and requests.  This page takes a while to completely load, so be patient.</p>
             </introduction>
 
-            <subsection>
+            <subsection xml:id="subsection-geogebra-server">
                 <title>GeoGebra</title>
                 <idx><h>Geogebra</h><h>server</h></idx>
                 <idx><h>Geogebra</h><h>material</h></idx>
@@ -4619,7 +4693,10 @@ the xsltproc executable.
                 <video source="images/ups-visitor-guide-360" width="80%" preview="images/ups-promo-frame-one.jpg" />
             </figure>
 
-            <p>You can replace the <q>preview</q> image of a video with one of your own making.  <init>HTML</init> refers to this as the <term>poster</term>, presumably because it advertises the video.  The image you make should be of the same quality as the video, and with the same aspect-ratio, and is presumably one of the frames of the video.  So a screenshot is the likely avenue.  (Maybe we will have advice on how to do this easily, or see <url href="https://github.com/rbeezer/mathbook/issues/853" />.)  On the <tag>video</tag> tag, include a <attr>preview</attr> attribute which is the name of an image file, including a relative path.  (JPEG or PNG formats are best.  JPEG may be smaller for video screenshots, while PNG is lossless and so may work better for diagrams.)</p>
+            <p>You can replace the <q>preview</q> image of a video with one of your own making.  <init>HTML</init> refers to this as the <term>poster</term>, presumably because it advertises the video.  The image you make should be of the same quality as the video, and with the same aspect-ratio, and is presumably one of the frames of the video.  So a screenshot is the likely avenue.  (Maybe we will have advice on how to do this easily, or see <url href="https://github.com/rbeezer/mathbook/issues/853" />.)
+        <idx><h>link</h><h>external, url</h></idx>
+        <idx><h>reference</h><h>external, url</h></idx>
+        On the <tag>video</tag> tag, include a <attr>preview</attr> attribute which is the name of an image file, including a relative path.  (JPEG or PNG formats are best.  JPEG may be smaller for video screenshots, while PNG is lossless and so may work better for diagrams.)</p>
 
             <figure>
                 <caption>University of Puget Sound Promotional Video</caption>
@@ -4870,7 +4947,9 @@ the xsltproc executable.
                 <li><p>Solution: An autonamed portion of an exercise: <xref ref="solution-antiderivative" text="type-global" /></p></li>
                 <li><p>Parts of a complicated exercise: <xref ref="exercise-complicated-second-hint" text="type-global" /> <xref ref="exercise-complicated-first-answer" text="type-global" /></p></li>
                 <li><p>A subsidary part of an exercise: <xref ref="exercise-one-two-one" /></p></li>
-                <li><p>Three cross-references to individual exercises, but due to their location, they should have different <q>type names</q> in the cross-reference: in an <tag>exercises</tag> division, <xref ref="duplicate-divisional"  text="type-global"/>; in the narrative, <xref ref="exercise-essay"  text="type-global"/>; and in a <tag>worksheet</tag>, <xref ref="exercise-vector-addition"  text="type-global"/>.</p></li>
+                <li><p>
+                       <idx><h>knowl</h><h>nested</h></idx>
+                   Three cross-references to individual exercises, but due to their location, they should have different <q>type names</q> in the cross-reference: in an <tag>exercises</tag> division, <xref ref="duplicate-divisional"  text="type-global"/>; in the narrative, <xref ref="exercise-essay"  text="type-global"/>; and in a <tag>worksheet</tag>, <xref ref="exercise-vector-addition"  text="type-global"/>.</p></li>
                 <li><p>An item buried in nested ordered lists: <xref ref="list-two-two-two-three" text="type-global"/></p></li>
                 <li><p>List item as knowls in HTML, including nested lists: <xref ref="list-two" />, <xref ref="list-two-two-two" text="type-global" /></p></li>
                 <li><p>A titled list: <xref ref="list-colors-rainbow" /></p></li>
@@ -4933,7 +5012,7 @@ the xsltproc executable.
 
 
 
-            <p>The <c>url</c><idx>url</idx> element may be used to link to a data file, either externally, or internally, if you want to make such an object available to a reader.  A good example use case is a spreadsheet that might be part of an exercise, or contain data relevant to some discussion.  First let us suppose the data resides somewhere on the Internet, then just use the complete address.  Here is one from Microsoft: <url href="http://go.microsoft.com/fwlink/?LinkID=521962">Sample Excel Spreadsheet</url>.</p>
+            <p>The <c>url</c><idx>url</idx> element may be used to link to a data file, either externally, or internally, if you want to make such an object available to a reader.<idx><h>reference</h><h>external</h></idx>  A good example use case is a spreadsheet that might be part of an exercise, or contain data relevant to some discussion.  First let us suppose the data resides somewhere on the Internet, then just use the complete address.  Here is one from Microsoft: <url href="http://go.microsoft.com/fwlink/?LinkID=521962">Sample Excel Spreadsheet</url>.</p>
 
             <p>For a link like the previous one, you might want to provide advice appropriate for your audience about using a context menu to download a file, or how to configure helper/viewer applications.</p>
 
@@ -7520,7 +7599,10 @@ the xsltproc executable.
 
                 <p><q>Names</q><idx>name</idx> for various parts of a document are determined exactly once for each language, ensuring consistency and saving you the bother of always typing them in.</p>
 
-                <p>However, you may want to have <q>Conundrum</q>s<idx><h>conundrum</h><h>repurposed from proposition</h></idx> in your document and you have no use for any <q>Proposition</q>s.  So you can repurpose the <c>proposition</c> tag to render a different name.  Or you might have a Lab Manual and want to rename <c>subsection</c> as <q>Activity</q>.  See the <c>docinfo</c> portion of this sample article to see how this is done, in concert with the example below.  Note that you may provide versions for different languages, and that the <attr>lang</attr> attribute here is just slightly different than the general <attr>@xml:lang</attr> attribute.</p>
+                <p>However, you may want to have <q>Conundrum</q>s<idx><h>conundrum</h><h>repurposed from proposition</h></idx> in your document and you have no use for any <q>Proposition</q>s.
+                    <idx><h>conundrum</h><h>repurposed from proposition</h></idx>
+                    <idx><h>rename an environment</h><h>conundrum</h></idx>
+                So you can repurpose the <c>proposition</c> tag to render a different name.  Or you might have a Lab Manual and want to rename <c>subsection</c> as <q>Activity</q>.  See the <c>docinfo</c> portion of this sample article to see how this is done, in concert with the example below.  Note that you may provide versions for different languages by specifying a <attr>xml:lang</attr> attribute.</p>
 
                 <proposition xml:id="proposition-as-conundrum">
                     <creator>Smith</creator>
@@ -8097,6 +8179,29 @@ the xsltproc executable.
                             <caption>A figure in an <tag>exercise</tag> in an <em>unstructured</em> division to test that it is numbered as if the containing <tag>exercises</tag> is not present</caption>
                             <image xml:id="cross-square-unstructured" width="10%" source="images/cross-square.png"/>
                         </figure>
+                        <figure>
+                            <caption>A side-by-side in a figure in an <tag>exercise</tag> in an <em>unstructured</em> division to test that it is numbered as if the containing <tag>exercises</tag> is not present and to test the numbering of the panels in a solutions manual</caption>
+                            <sidebyside margins="5%" width="10%">
+                                <figure>
+                                    <caption>First Panel, subcaptioned</caption>
+                                    <image xml:id="cross-square-unstructured-panel-B1" source="images/cross-square.png"/>
+                                </figure>
+                                <figure>
+                                    <caption>Second Panel, subcaptioned</caption>
+                                    <image xml:id="cross-square-unstructured-panel-B2" source="images/cross-square.png"/>
+                                </figure>
+                            </sidebyside>
+                        </figure>
+                        <sidebyside margins="5%" width="10%">
+                            <figure>
+                                <caption>First Panel, not subcaptioned</caption>
+                                <image xml:id="cross-square-unstructured-panel-A1" source="images/cross-square.png"/>
+                            </figure>
+                            <figure>
+                                <caption>Second Panel, not subcaptioned</caption>
+                                <image xml:id="cross-square-unstructured-panel-A2" source="images/cross-square.png"/>
+                            </figure>
+                        </sidebyside>
                     </statement>
                 </exercise>
 
@@ -8464,8 +8569,15 @@ the xsltproc executable.
 
             <appendix>
                 <title>Notation</title>
-                <p>This is some notation introduced in the article.</p>
+                <p>This is some notation introduced in the article.  <pretext/> allows the <q>notation list</q> generator anywhere, so we have this paragraph to test spacing above and below the table.  We'll say that again.</p>
+
+                <p>This is some notation introduced in the article.  <pretext/> allows the <q>notation list</q> generator anywhere, so we have this paragraph to test spacing above and below the table.  We'll say that again.</p>
+
                 <notation-list />
+
+                <p>This is some notation introduced in the article.  <pretext/> allows the <q>notation list</q> generator anywhere, so we have this paragraph to test spacing above and below the table.  We'll say that again.</p>
+
+                <p>This is some notation introduced in the article.  <pretext/> allows the <q>notation list</q> generator anywhere, so we have this paragraph to test spacing above and below the table.  We'll say that again.</p>
             </appendix>
 
             <solutions xml:id="solutions-backmatter" inline="hint solution answer" divisional="hint solution answer" project="answer" worksheet="hint" reading="answer">

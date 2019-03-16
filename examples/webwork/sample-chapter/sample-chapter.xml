@@ -263,8 +263,8 @@
                     </statement>
 
                     <solution>
-                        <p>We <em>add</em> the exponents as follows:<md>
-                            <mrow><var name="$expression" />&amp;=x^{<var name="$a" />+<var name="$b" />}</mrow>
+                        <p>We <em>add</em> the exponents as follows, while including a gratuitous reference to the quadratic formula:<md>
+                            <mrow><var name="$expression" />&amp;=x^{<var name="$a" />+<var name="$b" />}&amp;<xref ref="theorem-quadratic-formula" text="type-global"/></mrow>
                             <mrow>&amp;=x^{<var name="$c" />}</mrow>
                         </md></p>
                     </solution>

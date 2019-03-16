@@ -30,6 +30,11 @@ The bare minimum, about as little as you can do and still be valid MathBook XML.
 Several examples of how to author WeBWorK online homework problems within a MathBook XML book.  See the `Makefile` for guidance on how to build the examples.  (2016-02-20)
 
 
+### Braille (`braille/`)
+
+A fairly simple document to test the conversion of principal elements of a document into Braille.  (2019-02-17)
+
+
 ### Humanities in Action (`humanities/`)
 
 Various exhibits of material authored in MathBook XML which might be of more interest to Humanities scholars.  Initiated by Jahrme Risner during his Summer 2016 undergraduate research project.  (2016-07-10)

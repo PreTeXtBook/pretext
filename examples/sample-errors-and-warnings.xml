@@ -37,6 +37,11 @@ systems.
 -->
 <mathbook>
 
+    <docinfo>
+        <!-- rename/lang  replaced by  rename/@xml:lang -->
+        <rename element="proposition" lang="en-US">Conundrum</rename>
+    </docinfo>
+
     <article xml:id="errors-and-warnings">
         <title>Errors and Warnings in MathBook XML</title>
 
@@ -78,6 +83,8 @@ systems.
             <p>A cross-reference to a range with incompatible targets (article and section):  <xref first="errors-and-warnings" last="introduction-id" />.</p>
 
             <p>A cross-reference to a range where the two targets are in the wrong order, so generates a warning:  <xref first="section-images" last="introduction-id" />.</p>
+
+            <todo>A <tag>todo</tag> element now becomes a prefixed XML comment.</todo>
         </section>
 
         <section>

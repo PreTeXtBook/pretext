@@ -62,7 +62,7 @@ declare CLASS_PATH=${DFH}/lib/xml-apis.jar:${DFH}/lib/xercesImpl.jar:${DFH}/lib/
 # ******************
 
 # PreTeXt extraction of RELAX-NG compact schema
-xsltproc ${MBXSL}/mathbook-litprog.xsl pretext.xml
+xsltproc ${MBXSL}/pretext-litprog.xsl pretext.xml
 
 # System trang conversion to RELAX-NG XML schema
 trang -I rnc -O rng pretext.rnc pretext.rng
