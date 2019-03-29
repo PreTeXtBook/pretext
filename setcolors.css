@@ -96,6 +96,10 @@
     background-color: var(--bodysubtitlehighlight);
 }
 
+.pretext-content .playvideo {
+    background-color: var(--videoplay);
+}
+
 .pretext-content .assemblage-like {
     border-color: var(--assemblageborder);
     background-color: var(--assemblagebackground);

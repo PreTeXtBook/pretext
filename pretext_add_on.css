@@ -1336,6 +1336,9 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
 .pretext-content section .videolink a:link {
     background-size: 0;
 }
+.pretext-content .playvideo {
+    cursor: pointer;
+}
 
 .pretext-content .exercise-like ol li table {
     margin-bottom: 0.5em;
@@ -1472,6 +1475,13 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
     margin-left: 1em;
     margin-right: 0.5em;
 }
+.pretext-content .indexitem .seealso,
+.pretext-content .subindexitem .seealso,
+.pretext-content .subsubindexitem .seealso {
+    margin-left: 1em;
+    margin-right: 0.5em;
+}
+
 
 .pretext-content .indexitem .indexknowl {
     font-size: 90%;
@@ -1621,7 +1631,7 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
     border-top-right-radius: 0;
 }
 
-.has-sidebar-left #primary-navbar-sticky-wrapper .navbar-top-buttons .toolbar, .has-sidebar-left #primary-navbar .navbar-top-buttons .toolbar {
+.has-sidebar-left #primary-navbar-sticky-wrapper .navbar-top-buttons .toolbar, .has-sidebar-left #primary-navbar .navbar-top-buttons > .toolbar {
      border-right: 0;
 }
 
@@ -2010,6 +2020,15 @@ from Jiří Lebl */
 .pretext-content .sagecell {
     margin-bottom: 1.25em;
 }
+/*
+.pretext-content .sagecell .CodeMirror-fullscreen {
+    z-index: 400;
+    top: 300px;
+    padding-top: 50px;
+    margin-top: 100px;
+    height: inherit;
+}
+*/
 
 .pretext-content .assemblage-like {
     border: solid 2px #1100AA;

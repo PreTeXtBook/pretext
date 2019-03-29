@@ -852,8 +852,8 @@
 #primary-navbar .navbar-top-buttons, #primary-navbar-sticky-wrapper .navbar-top-buttons {
   display: block;
 }
-/* line 372, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_primary-navbar.scss */
-.has-sidebar-left #primary-navbar .navbar-top-buttons .toolbar, .has-sidebar-left #primary-navbar-sticky-wrapper .navbar-top-buttons .toolbar {
+/* The ">" because the GeoGebra calculator has a .toolbar */
+.has-sidebar-left #primary-navbar .navbar-top-buttons > .toolbar, .has-sidebar-left #primary-navbar-sticky-wrapper .navbar-top-buttons > .toolbar {
   margin-left: 240px;
   border-right: 1px solid #bababa;
 }
