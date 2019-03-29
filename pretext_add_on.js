@@ -118,13 +118,20 @@ window.addEventListener("load",function(event) {
 false);
 
 /* for the GeoGebra calculator */
+
+function pretext_geogebra_calculator_onload() {
+    $("#calculator-toggle").focus();
+    var inputfield = $("input.gwt-SuggestBox.TextField")[0];
+    console.log("inputfield", inputfield);
+    inputfield.focus();
+}
 window.addEventListener("load",function(event) {
 
-   /* scrolling on GG plot shodl scale, not move browser body */
+   /* scrolling on GG plot should scale, not move browser body */
 //     var scrollWidth = 15;  //currently correct for FF, Ch, and Saf, but would be better to calculate
      var scrollWidth = getScrollbarWidth();
      if ( (navigator.userAgent.match(/Mozilla/i) != null) ) {
-         scrollWidth += 0.5
+        // scrollWidth += 0.5
      }
      console.log("scrollWidth", scrollWidth);
      calcoffsetR = 5;
@@ -148,21 +155,43 @@ window.addEventListener("load",function(event) {
              $('#calculator-container').css('display', 'block');
              $('#calculator-toggle').addClass('open');
              $('#calculator-toggle').attr('title', 'Hide calculator');
+             $('#calculator-toggle').attr('aria-expanded', 'true');
              create_calc_script = document.getElementById("create_ggb_calc");
              if (!create_calc_script) {
                  var ggbscript = document.createElement("script"); 
                  ggbscript.id = "create_ggb_calc";
                  ggbscript.innerHTML = "ggbApp.inject('geogebra-calculator')";
                  document.body.appendChild(ggbscript);
+//                 setTimeout( function() {
+//                     $("#calculator-toggle").focus();
+//                     var inputfield = $("input.gwt-SuggestBox.TextField")[0];
+//                     console.log("inputfield", inputfield);
+//                     inputfield.focus();
+//                 }, 4000);
+             } else {
+                 pretext_geogebra_calculator_onload();
+//                 var inputfield = $("input.gwt-SuggestBox.TextField")[0];
+//                 console.log("inputfield", inputfield);
+//                 inputfield.focus();
              }
          } else {
              $('#calculator-container').css('display', 'none');
              $('#calculator-toggle').removeClass('open');
              $('#calculator-toggle').attr('title', 'Show calculator');
+             $('#calculator-toggle').attr('aria-expanded', 'false');
          }
      });
 });
 
+/*
+window.addEventListener("load",function(event) {
+//    setTimeout( function() {
+       console.log("changein play color");
+       $('figure > div.onclick > svg > path').attr('fill', '#0000aa');
+       $('path').attr('fill', '#0000aa')
+//    }, 5000)
+});
+*/
 
 window.addEventListener("load",function(event) {
     document.onkeyup = function(event)
@@ -188,6 +217,7 @@ window.addEventListener("load",function(event) {
                    most_recently_opened = knowl_focus_stack.pop();
                    knowl_focus_stack_uid.pop();
                    most_recently_opened.focus();
+                   console.log("moved back one knowl");
                 } else {
                    console.log("no open knowls being tracked");
                    break;
@@ -198,6 +228,11 @@ window.addEventListener("load",function(event) {
 },
 false);
 
+/*
+window.setInterval(function(){
+    console.log('$(":focus")', $(":focus"));
+}, 5000);
+*/
 /*
 window.onload = function()
 {
