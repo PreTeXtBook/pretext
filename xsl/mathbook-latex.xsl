@@ -2075,8 +2075,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="$b-latex-watermark">
                 <xsl:value-of select="$latex.watermark" />
             </xsl:when>
-            <!-- Logically, should never reach this point.  -->
-            <xsl:otherwise/>
         </xsl:choose>
         <xsl:text>}&#xa;</xsl:text>
         <xsl:text>\SetWatermarkScale{</xsl:text>
@@ -2087,8 +2085,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="$b-latex-watermark">
                 <xsl:value-of select="$latex-watermark-scale" />
             </xsl:when>
-            <!-- Logically, should never reach this point.  -->
-            <xsl:otherwise/>
         </xsl:choose>
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>

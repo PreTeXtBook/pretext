@@ -1185,8 +1185,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- and in the default body width for LaTeX                            -->
 <xsl:param name="watermark.scale" select="'0.5'" />
 
-
-
 <!-- Commentary is meant for an enhanced edition, -->
 <!-- like an "Instructor's Manual".  A publisher  -->
 <!-- will need to consciously elect "yes".        -->
@@ -1339,6 +1337,7 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 
 <!-- These are deprecated in favor of watermark.text and watermark.scale -->
 <!-- which are now managed in common. These still "work" for now.        -->
+<!-- The default scaling factor of 2.0 is historical.                    -->
 <xsl:param name="latex.watermark" select="''"/>
 <xsl:variable name="b-latex-watermark" select="not($latex.watermark = '')" />
 <xsl:param name="latex.watermark.scale" select="''"/>
@@ -3123,7 +3122,6 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
         </xsl:if>
     </xsl:for-each>
 </xsl:template>
-
 
 <xsl:template match="text()" mode="serialize">
     <xsl:value-of select="."/>

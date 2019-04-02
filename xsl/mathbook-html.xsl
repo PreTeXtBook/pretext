@@ -5737,14 +5737,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- LaTeX watermark uses default 5cm font which is then scaled by watermark.scale -->
 <!-- We copy that here. We also copy the 45 degree angle.                          -->
 <!-- Color rgb(204,204,204) matches LaTeX 80% grayscale.                           -->
+<xsl:variable name="watermark-svg">
+    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="600" width="600">
+        <text x="50%" y="50%" text-anchor="middle" transform="rotate(-45,300,300)" fill="rgb(204,204,204)" style="font-family:sans-serif; font-size:{5*$watermark.scale}cm;">
+            <xsl:value-of select="$watermark.text"/>
+        </text>
+    </svg>
+</xsl:variable>
+
 <xsl:variable name="watermark-css">
-    <xsl:variable name="watermark-svg">
-        <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="600" width="600">
-            <text x="50%" y="50%" text-anchor="middle" transform="rotate(-45,300,300)" fill="rgb(204,204,204)" style="font-family:sans-serif; font-size:{5*$watermark.scale}cm;">
-                <xsl:value-of select="$watermark.text"/>
-            </text>
-        </svg>
-    </xsl:variable>
     <xsl:text>background-image:url('data:image/svg+xml;utf8,</xsl:text>
     <xsl:apply-templates select="exsl:node-set($watermark-svg)" mode="serialize" />
     <xsl:text>');</xsl:text>
