@@ -575,8 +575,14 @@
             MetaDataTitleOptional,
             (
                 (BlockStatement+) |
-                (Prelude?, Statement, Hint*, Answer*, Solution*, Postlude?) |
-                (Prelude?, IntroductionStatement?, Task+, ConclusionStatement?, Postlude?)
+                (
+                   Prelude?,
+                   (
+                      (Statement, Hint*, Answer*, Solution*) |
+                      (IntroductionStatement?, Task+, ConclusionStatement?)
+                   ),
+                   Postlude?
+                )
             )
         Project =
             element activity {ProjectLike}

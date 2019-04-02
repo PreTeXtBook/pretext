@@ -1196,17 +1196,19 @@
         <xs:group maxOccurs="unbounded" ref="BlockStatement"/>
         <xs:sequence>
           <xs:element minOccurs="0" ref="prelude"/>
-          <xs:group ref="Statement"/>
-          <xs:group minOccurs="0" maxOccurs="unbounded" ref="Hint"/>
-          <xs:element minOccurs="0" maxOccurs="unbounded" ref="answer"/>
-          <xs:group minOccurs="0" maxOccurs="unbounded" ref="Solution"/>
-          <xs:element minOccurs="0" ref="postlude"/>
-        </xs:sequence>
-        <xs:sequence>
-          <xs:element minOccurs="0" ref="prelude"/>
-          <xs:group minOccurs="0" ref="IntroductionStatement"/>
-          <xs:element maxOccurs="unbounded" ref="task"/>
-          <xs:group minOccurs="0" ref="ConclusionStatement"/>
+          <xs:choice>
+            <xs:sequence>
+              <xs:group ref="Statement"/>
+              <xs:group minOccurs="0" maxOccurs="unbounded" ref="Hint"/>
+              <xs:element minOccurs="0" maxOccurs="unbounded" ref="answer"/>
+              <xs:group minOccurs="0" maxOccurs="unbounded" ref="Solution"/>
+            </xs:sequence>
+            <xs:sequence>
+              <xs:group minOccurs="0" ref="IntroductionStatement"/>
+              <xs:element maxOccurs="unbounded" ref="task"/>
+              <xs:group minOccurs="0" ref="ConclusionStatement"/>
+            </xs:sequence>
+          </xs:choice>
           <xs:element minOccurs="0" ref="postlude"/>
         </xs:sequence>
       </xs:choice>

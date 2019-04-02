@@ -1285,33 +1285,31 @@
         <optional>
           <ref name="Prelude"/>
         </optional>
-        <ref name="Statement"/>
-        <zeroOrMore>
-          <ref name="Hint"/>
-        </zeroOrMore>
-        <zeroOrMore>
-          <ref name="Answer"/>
-        </zeroOrMore>
-        <zeroOrMore>
-          <ref name="Solution"/>
-        </zeroOrMore>
-        <optional>
-          <ref name="Postlude"/>
-        </optional>
-      </group>
-      <group>
-        <optional>
-          <ref name="Prelude"/>
-        </optional>
-        <optional>
-          <ref name="IntroductionStatement"/>
-        </optional>
-        <oneOrMore>
-          <ref name="Task"/>
-        </oneOrMore>
-        <optional>
-          <ref name="ConclusionStatement"/>
-        </optional>
+        <choice>
+          <group>
+            <ref name="Statement"/>
+            <zeroOrMore>
+              <ref name="Hint"/>
+            </zeroOrMore>
+            <zeroOrMore>
+              <ref name="Answer"/>
+            </zeroOrMore>
+            <zeroOrMore>
+              <ref name="Solution"/>
+            </zeroOrMore>
+          </group>
+          <group>
+            <optional>
+              <ref name="IntroductionStatement"/>
+            </optional>
+            <oneOrMore>
+              <ref name="Task"/>
+            </oneOrMore>
+            <optional>
+              <ref name="ConclusionStatement"/>
+            </optional>
+          </group>
+        </choice>
         <optional>
           <ref name="Postlude"/>
         </optional>
