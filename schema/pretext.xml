@@ -51,7 +51,7 @@
 
         <fragment xml:id="gross-structure">
         start =
-            element mathbook {
+            element pretext {
                 XMLLang?,
                 DocInfo?,
                 (Book | Article | Letter | Memorandum)
