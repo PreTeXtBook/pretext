@@ -1,17 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!--   This file is part of the PreTeXt Showcase article      -->
-<!--                                                          -->
-<!-- Copyright (©) 2019  The PreTeXt Organization             -->
-<!-- See the README file for contributing guidelines.         -->
+<!-- This file is part of the PreTeXt Showcase article. -->
+<!--                                                    -->
+<!-- Copyright (©) 2019 The PreTeXt Organization.       -->
+<!-- See the README file for contributing guidelines.   -->
 
 <pretext xmlns:xi="http://www.w3.org/2001/XInclude">
 
   <docinfo>
     <brandlogo url="https://pretextbook.org" source="images/ptx-logo.png" />
 
+    <images>
+      <archive>eps pdf png svg tex</archive>
+    </images>
+
     <macros>
     </macros>
+
+    <latex-image-preamble>
+      \usepackage{tikz}
+      \usepackage{pgfplots}
+      \usepackage{pstricks}
+      \usepackage{phaistos}
+      \usepackage{xcolor}
+    </latex-image-preamble>
 
     <initialism>PTXSC</initialism>
 
@@ -49,6 +61,9 @@
         </p>
       </abstract>
     </frontmatter>
+
+    <xi:include href="latex-image.ptx" />
+
   </article>
 
 </pretext>
