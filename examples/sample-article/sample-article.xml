@@ -8595,6 +8595,17 @@ the xsltproc executable.
                 </conclusion>
             </solutions>
 
+            <solutions inline="hint solution answer" divisional="hint solution" scope="exercises-section-multiple">
+                <title>Solutions to a Single Exercises Division</title>
+                <idx><h>solutions</h><h>for one group of exercises</h></idx>
+
+                <introduction>
+                    <p>Sometimes you may want the solutions to exercises within a single <tag>exercises</tag> division (or similar, like a <tag>worksheet</tag>).  Default behavior in this situation can produce two titles, when just one would be sufficient.  Here we have used the <attr>scope</attr> attribute to point to a specific <tag>exercises</tag>, and provided a (single) very specific <tag>title</tag>.</p>
+                </introduction>
+
+                <!-- content will happen here automatically -->
+            </solutions>
+
             <appendix xml:id="appendix-results">
                 <title>List of Results</title>
 
