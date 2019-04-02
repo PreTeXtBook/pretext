@@ -4006,8 +4006,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:variable>
     <xsl:variable name="layout" select="exsl:node-set($rtf-layout)" />
     <xsl:choose>
-        <xsl:when test="parent::figure">
-            <xsl:variable name="panel-number" select="count(parent::figure/preceding-sibling::*) + 1" />
+        <xsl:when test="parent::figure or parent::stack">
+            <xsl:variable name="panel-number" select="count(parent::*/preceding-sibling::*) + 1" />
             <xsl:value-of select="$layout/width[$panel-number]" />
         </xsl:when>
         <xsl:otherwise>
