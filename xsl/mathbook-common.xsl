@@ -975,6 +975,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- This is of interest by itself, or the root of content searches -->
 <!-- And docinfo is the other child                                 -->
 <!-- These help prevent searching the wrong half                    -->
+<!-- 2019-04-02: "mathbook" deprecated.  It still appears in        -->
+<!-- multiple locations, even if the definitions below help         -->
+<!-- isolate its use here.                                          -->
 <xsl:variable name="root" select="/mathbook|/pretext" />
 <xsl:variable name="docinfo" select="$root/docinfo" />
 <xsl:variable name="document-root" select="$root/*[not(self::docinfo)]" />
@@ -10304,6 +10307,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="occurrences" select="$docinfo//rename[@lang]" />
         <xsl:with-param name="date-string" select="'2019-02-20'" />
         <xsl:with-param name="message" select="'the &quot;@lang&quot; attribute of &quot;rename&quot; has been replaced by &quot;@xml:lang&quot;, and is now optional if your document only uses one language'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2019-04-02  "mathbook" replaced by "pretext" -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="/mathbook" />
+        <xsl:with-param name="date-string" select="'2019-04-02'" />
+        <xsl:with-param name="message" select="'the &quot;mathbook&quot; top-level element has been replaced by the functionally equivalent &quot;pretext&quot;'"/>
     </xsl:call-template>
 </xsl:template>
 
