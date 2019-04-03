@@ -37,8 +37,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--                                                                          -->
 <!-- 6.  Experiment with other available conversions                          -->
 
-<mathbook>
+<pretext>
     <article xml:id="hello-world">
        <p>Hello, World!</p>
     </article>
-</mathbook>
+</pretext>

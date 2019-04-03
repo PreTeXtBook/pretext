@@ -35,7 +35,7 @@ test specific errors or warnings, and/or to test
 improvements to the error/warning/deprecation
 systems.
 -->
-<mathbook>
+<pretext>
 
     <docinfo>
         <!-- rename/lang  replaced by  rename/@xml:lang -->
@@ -532,4 +532,4 @@ systems.
         </section>
     </article>
 
-</mathbook>
+</pretext>

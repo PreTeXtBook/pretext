@@ -24,9 +24,9 @@
 <!-- like a chapter of a book.  So it has several sections, -->
 <!-- each with mathematical content and WeBWorK problems.   -->
 
-<mathbook>
+<pretext>
     <!-- Other languages can be used to internationalize parts of a document -->
-    <!-- <mathbook xml:lang="pt-BR"> -->
+    <!-- <pretext xml:lang="pt-BR"> -->
 
     <!-- "docinfo" is like metadata, it is necessary technical -->
     <!-- information which a reader mostly will never see. -->
@@ -1909,4 +1909,4 @@
             </solutions>
         </backmatter>
     </article>
-</mathbook>
+</pretext>

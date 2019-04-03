@@ -99,7 +99,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>A <term>set</term> is a well-defined collection of objects; that is, it is defined in such a manner that we can determine for any given object <m>x</m> whether or not <m>x</m> belongs to the set.  The objects that belong to a set are called its <term>elements</term> or <term>members</term>. We will denote sets by capital letters, such as <m>A</m> or <m>X</m>; if <m>a</m> is an element of the set <m>A</m>, we write <m>a \in A</m>.
             <notation><usage>a \in A</usage><description><m>a</m> is in the set <m>A</m></description></notation></p>
 
-            <todo>Make notation table</todo>
+            <!-- ToDo: Make notation table -->
 
             <p>A set is usually specified either by listing all of its elements inside a pair of braces or by stating the property that determines whether or not an object <m>x</m> belongs to the set. We might write
                 <me>X = \{ x_1, x_2, \ldots, x_n \}</me>

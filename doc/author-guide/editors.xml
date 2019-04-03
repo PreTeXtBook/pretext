@@ -16,9 +16,7 @@
 
     <section xml:id="section-sublime-text">
         <title>Sublime Text</title>
-        <author>
-            <personname>Dave Rosoff</personname>
-        </author>
+        <author>Dave Rosoff</author>
 
         <introduction>
             <p>Sublime Text is a fast cross-platform editor with thousands of user-contributed packages implemented in its Python <init>API</init>. It is not free or open-source, although most of the user-contributed packages are both. Development is active as of June<nbsp />2016.</p>

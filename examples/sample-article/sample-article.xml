@@ -43,11 +43,11 @@ the xsltproc executable.
 <!-- Overall element for a Mathbook XML document; mandatory, always  -->
 <!-- Experiment with the "xml:lang" attribute to see localization    -->
 <!-- changes, the  xsl/localizations  directory has more information -->
-<mathbook>
-<!-- <mathbook xml:lang="pt-BR"> -->
-<!-- <mathbook xml:lang="fr-FR"> -->
-<!-- <mathbook xml:lang="cs-CZ"> -->
-<!-- <mathbook xml:lang="af-ZA"> -->
+<pretext>
+<!-- <pretext xml:lang="pt-BR"> -->
+<!-- <pretext xml:lang="fr-FR"> -->
+<!-- <pretext xml:lang="cs-CZ"> -->
+<!-- <pretext xml:lang="af-ZA"> -->
 
     <!--
     "docinfo" is like metadata, it is necessary technical
@@ -8701,4 +8701,4 @@ the xsltproc executable.
             </colophon>
         </backmatter>
     </article>
-</mathbook>
+</pretext>

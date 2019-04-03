@@ -33,7 +33,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--                                                                                   -->
 <!-- Look in current working directory for "john-public-job.tex" (see below)           -->
 
-<mathbook>
+<pretext>
     <!-- The docinfo element is like metadata, it mostly      -->
     <!-- migrates various places, or gets used multiple times -->
     <docinfo>
@@ -104,4 +104,4 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     </letter>
 
-</mathbook>
+</pretext>

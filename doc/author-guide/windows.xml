@@ -9,9 +9,7 @@
 
 <appendix xml:id="windows-install-notes">
   <title>Windows Installation Notes</title>
-  <author>
-    <personname>Dave Rosoff</personname>
-  </author>
+  <author>Dave Rosoff</author>
 
   <introduction>
     <p>This appendix explains the best known way to install the <pretext /> toolchain in a Windows environment, rather than a Unix-flavored operating system (such as Linux and Apple's <init>OS X</init>). It has been tested on Windows 7, 8, and 10. We assume that none of the listed tools or equivalents have been previously installed. That may complicate matters. This is especially true if you use Cygwin, or if you have already installed Python on your machine. <pretext /> compatibility with existing Python installations is addressed elsewhere in this document (<xref provisional="python-mbx-compatibility" />).</p>

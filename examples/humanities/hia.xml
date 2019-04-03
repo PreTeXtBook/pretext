@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mathbook xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en-US">
+<pretext xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en-US">
     <!-- May need lilyglyphs.sty from Debian/Ubuntu texlive-music -->
     <docinfo>
         <!-- this is the default, but supresses a warning -->
@@ -22,4 +22,4 @@
         <xi:include href="poetry.xml"/>
         <xi:include href="music.xml"/>
     </book>
-</mathbook>
+</pretext>

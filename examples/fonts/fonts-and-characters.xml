@@ -33,7 +33,7 @@ and apply  xelatex  to  "fonts-and-characters.tex"  in the current working direc
 (pdflatex *will not* give satisfactory results)
 -->
 
-<mathbook>
+<pretext>
 
     <docinfo>
         <!-- Graphics requiring a  xelatex  engine are included        -->
@@ -646,4 +646,4 @@ and apply  xelatex  to  "fonts-and-characters.tex"  in the current working direc
             </subsection>
         </section>
     </article>
-</mathbook>
+</pretext>
