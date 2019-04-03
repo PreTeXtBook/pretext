@@ -2734,7 +2734,7 @@
         <xs:element ref="ad"/>
         <xs:element ref="am"/>
         <xs:element ref="bc"/>
-        <xs:element ref="circa"/>
+        <xs:element ref="ca"/>
         <xs:element ref="eg"/>
         <xs:element ref="etal"/>
         <xs:element ref="etc"/>
@@ -2769,7 +2769,7 @@
   <xs:element name="bc">
     <xs:complexType/>
   </xs:element>
-  <xs:element name="circa">
+  <xs:element name="ca">
     <xs:complexType/>
   </xs:element>
   <xs:element name="eg">
