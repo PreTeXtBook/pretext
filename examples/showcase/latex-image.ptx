@@ -200,9 +200,9 @@
         </latex-image>
       </image>
 
-      <image>
+      <image xml:id="image-parametrized-surface">
         <!-- plot by Alex Jordan -->
-        <description xml:id="image-parametrized-surface">
+        <description>
           a 3D partial plot of the surface defined by r(u,v) = (u + v, u^2, v^2)
         </description>
         <latex-image>

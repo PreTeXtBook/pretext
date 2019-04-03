@@ -1,0 +1,59 @@
+\documentclass[12pt]{article}
+\usepackage{geometry}
+\geometry{letterpaper,total={408pt,9.0in}}
+%% Custom Page Layout Adjustments (use latex.geometry)
+\usepackage{amsmath,amssymb}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{pstricks}
+\usepackage{phaistos}
+\usepackage{xcolor}
+\ifdefined\tikzset
+\tikzset{ampersand replacement = \amp}
+\fi
+
+\newcommand{\lt}{<}
+\newcommand{\gt}{>}
+\newcommand{\amp}{&}
+\begin{document}
+\pagestyle{empty}
+\begin{tikzpicture}
+  \begin{axis}[
+    compat=1.9,
+    x={(-0.2cm,-0.1cm)},
+    y={(.375cm,0.0cm)},
+    z={(0cm,0.375cm)},
+    xlabel={},
+    ylabel={},
+    zlabel={},
+    xmin = -4, xmax = 4,
+    ymin = -4, ymax = 4.5,
+    zmin = -4, zmax = 4.5,
+    xtick = {10},
+    ytick = {10},
+    ztick = {10},
+    samples = 10,
+    samples y = 10,
+    axis lines = center,
+  ]
+    \addplot3[surf, shader = faceted interp, domain = -2:0, y domain = -2:0,] ({x+y}, {x^2}, {y^2});
+    \addplot3[<->, domain = -2:2, samples y= 0] ({-1+x}, {1^2}, {x^2});
+    \addplot3[<->>, domain = -2:2, samples y= 0] ({-1.5+x}, {x^2}, {1.5^2});
+    \addplot3[surf, shader = faceted interp, domain = 0:2, y domain = -2:0,] ({x+y}, {x^2}, {y^2});
+    \addplot3[<->, domain = -2:2, samples y= 0] ({1.2+x}, {1.2^2}, {x^2});
+    \addplot3[surf, shader = faceted interp, domain = -2:0, y domain = 0:2,] ({x+y}, {x^2}, {y^2});
+    \addplot3[<->, domain = 0:2, samples y= 0] ({-1+x}, {1^2}, {x^2});
+    \addplot3[<->>, domain = -2:2, samples y= 0] ({0.9+x}, {x^2}, {0.9^2});
+    \addplot3[surf, shader = faceted interp, domain = 0:2, y domain = -2:0,] ({(x+y)*(abs(x^2-y^2)/(x^2-y^2)+1)/2}, {x^2}, {y^2*(abs(x^2-y^2)/(x^2-y^2)+1)/2 + x^2*(abs(y^2-x^2)/(y^2-x^2)+1)/2});
+    \addplot3[->>, domain = 1.5:2, samples y= 0] ({-1.5+x}, {x^2}, {1.5^2});
+    \addplot3[surf, shader = faceted interp, domain = 0:2, y domain = 0:2,] ({x+y}, {x^2}, {y^2});
+    \addplot3[->>, domain = 0.1:2, samples y= 0] ({0.9+x}, {x^2}, {0.9^2});
+    \addplot3[<->>, domain = -2:2, samples y= 0] ({2+x}, {x^2}, {2^2});
+    \addplot3[<->>, domain = -2:2, samples y= 0] ({-2+x}, {x^2}, {2^2});
+    \addplot3[<->, domain = -2:2, samples y= 0] ({2+x}, {2^2}, {x^2});
+    \addplot3[<->, domain = -2:2, samples y= 0] ({-2+x}, {2^2}, {x^2});
+    \addplot3[->, domain = 0:2, samples y= 0] ({1.2+x}, {1.2^2}, {x^2});
+    \addplot3[mark=none] coordinates {(0, 1, -2)} node {$r(u,v)=(u+v,u^2,v^2)$};
+  \end{axis}
+\end{tikzpicture}
+\end{document}
