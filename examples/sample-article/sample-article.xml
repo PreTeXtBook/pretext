@@ -3914,8 +3914,8 @@ the xsltproc executable.
                     <row valign="top" bottom="medium">
                         <cell>Unit</cell>
                         <cell>Stands For</cell>
-                        <cell >Defininion</cell>
-                        <cell >Roughly</cell>
+                        <cell>Definition</cell>
+                        <cell>Roughly</cell>
                     </row>
                     <row valign="top" bottom="minor">
                         <cell><quantity><unit base="second"/></quantity></cell>
