@@ -35,4 +35,23 @@
             </ul></p>
         </li>
     </ol>Now you are set, and control distribution of your scholarly publication.  If you are bothered by the thought of having expenses while you make your work freely available to the world, then consider generating some modest income.  For example, sell Google ads against your pages.  (Why should <em>this</em> disturb anybody?  I don't get it.)  Or roll a small royalty into the print-on-demand version, see <xref ref="print-on-demand" />.</p>
+
+    <p>There are a few practical details to think about.  Eventually others will link to your book, and you will also release updates.  First, think about creating a simple high-level directory that will be stable, short, easy to type, and easy to remember.  Controlling your domain name (above) is the first step.  Then consider that you may also distribute a <init>PDF</init> version, and you may someday write a second book.  So, for example, your <init>URL</init> might look like:</p>
+
+    <pre>
+    https://platypus.mammal-institute.org/aota/html
+    https://platypus.mammal-institute.org/aota/aota.pdf
+    </pre>
+
+    <p>For the first <init>URL</init>, the <c>html</c> directory would contain all of the <pretext/> <init>HTML</init> output, and especially, an <c>index.html</c> file which most any web server will serve up when the <init>URL</init> ends with a directory.  <pretext/> has tools to help you with creating the <c>index.html</c> file.</p>
+
+    <p>An improvement on the above is to have stable generic <init>URL</init>s for the current version, and dated, or versioned, <init>URL</init>s for older versions you may wish to keep in place (as a record, or for instructors who want to stick with an old version).  It is a bit more work to maintain, but will lessen the frequency that an old version of your work is promoted as the last word.</p>
+
+    <pre>
+    https://platypus.mammal-institute.org/aota/latest
+    https://platypus.mammal-institute.org/aota/aota.pdf
+    https://platypus.mammal-institute.org/aota/html-2017-08-15
+    https://platypus.mammal-institute.org/aota/aota-2017-08-15.pdf
+    </pre>
+
 </chapter>
