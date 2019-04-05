@@ -1556,7 +1556,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:when test="see">
                     <xsl:if test="position() = 1">
                         <xsl:if test="$b-has-subentry">
-                            <xsl:text>(</xsl:text>
+                            <!-- 2019-04-04 Temporarily suppress parentheses -->
+                            <!-- <xsl:text>(</xsl:text> -->
                         </xsl:if>
                         <em class="see">
                             <xsl:choose>
@@ -1581,7 +1582,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </xsl:choose>
                     <xsl:copy-of select="see/node()" />
                     <xsl:if test="$b-has-subentry and (position() = last())">
-                        <xsl:text>)</xsl:text>
+                        <!-- 2019-04-04 Temporarily suppress parentheses -->
+                        <!-- <xsl:text>)</xsl:text> -->
                     </xsl:if>
                 </xsl:when>
                 <!--  -->
@@ -1590,7 +1592,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:when test="preceding-sibling::index[1]/cross-reference">
                             <xsl:choose>
                                 <xsl:when test="$b-has-subentry">
-                                    <xsl:text> (</xsl:text>
+                                    <xsl:text> </xsl:text>
+                                    <!-- 2019-04-04 Temporarily suppress parentheses -->
+                                    <!-- <xsl:text>(</xsl:text> -->
                                     <em class="seealso">
                                         <xsl:value-of select="$lower-seealso"/>
                                     </em>
@@ -1610,7 +1614,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text> </xsl:text>
                     <xsl:copy-of select="seealso/node()"/>
                     <xsl:if test="(position() = last()) and $b-has-subentry">
-                        <xsl:text>)</xsl:text>
+                        <!-- 2019-04-04 Temporarily suppress parentheses -->
+                        <!-- <xsl:text>)</xsl:text> -->
                     </xsl:if>
                 </xsl:when>
             </xsl:choose>
