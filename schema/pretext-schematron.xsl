@@ -39,7 +39,7 @@
 <!--SCHEMA METADATA-->
 <axsl:template match="/">
 ** Begin checking PreTeXt Schematron rules      **
-<axsl:apply-templates select="/" mode="M0"/><axsl:apply-templates select="/" mode="M1"/><axsl:apply-templates select="/" mode="M2"/><axsl:apply-templates select="/" mode="M3"/><axsl:apply-templates select="/" mode="M4"/>** Finished checking PreTeXt Schematron rules   **
+<axsl:apply-templates select="/" mode="M0"/><axsl:apply-templates select="/" mode="M1"/><axsl:apply-templates select="/" mode="M2"/><axsl:apply-templates select="/" mode="M3"/><axsl:apply-templates select="/" mode="M4"/><axsl:apply-templates select="/" mode="M5"/>** Finished checking PreTeXt Schematron rules   **
 
 </axsl:template>
 
@@ -149,4 +149,70 @@ Explanation:       an &lt;xref&gt; within an &lt;author&gt; must point to a &lt;
                 <axsl:text/><axsl:value-of select="concat('&quot; (on a &lt;', local-name(ancestor::*[@xml:id][1]), '&gt;)')"/><axsl:text/>
         <axsl:text/>
 - - - - - - - - -
-</axsl:otherwise></axsl:choose><axsl:apply-templates select="@*|*|comment()|processing-instruction()" mode="M4"/></axsl:template><axsl:template match="text()" priority="-1" mode="M4"/><axsl:template match="@*|node()" priority="-2" mode="M4"><axsl:apply-templates select="@*|*|comment()|processing-instruction()" mode="M4"/></axsl:template></axsl:stylesheet>
+</axsl:otherwise></axsl:choose><axsl:apply-templates select="@*|*|comment()|processing-instruction()" mode="M4"/></axsl:template><axsl:template match="text()" priority="-1" mode="M4"/><axsl:template match="@*|node()" priority="-2" mode="M4"><axsl:apply-templates select="@*|*|comment()|processing-instruction()" mode="M4"/></axsl:template>
+
+<!--PATTERN -->
+
+
+	<!--RULE -->
+<axsl:template match="webwork//tabular" priority="1000" mode="M5">
+
+		<!--REPORT -->
+<axsl:if test="col/@top">Location:         <axsl:apply-templates select="." mode="schematron-get-full-path"/>
+Condition:         col/@top
+Explanation:       column-specific top border attributes are not implemented for the output of a WeBWorK PG table produced by WeBWorK's hardcopy production engine <axsl:text/>
+            <axsl:text/><axsl:value-of select="'&#10;Enclosing Title:    &quot;'"/><axsl:text/>
+            <axsl:text/><axsl:value-of select="ancestor::*[title][1]/title"/><axsl:text/>
+            <axsl:text/><axsl:value-of select="concat('&quot; (on a &lt;', local-name(ancestor::*[title][1]), '&gt;)')"/><axsl:text/>
+        <axsl:text/> <axsl:text/>
+                <axsl:text/><axsl:value-of select="'&#10;Enclosing xml:id: &quot;'"/><axsl:text/>
+                <axsl:text/><axsl:value-of select="ancestor::*[@xml:id][1]/@xml:id"/><axsl:text/>
+                <axsl:text/><axsl:value-of select="concat('&quot; (on a &lt;', local-name(ancestor::*[@xml:id][1]), '&gt;)')"/><axsl:text/>
+        <axsl:text/>
+- - - - - - - - -
+</axsl:if>
+
+		<!--REPORT -->
+<axsl:if test="cell/@bottom">Location:         <axsl:apply-templates select="." mode="schematron-get-full-path"/>
+Condition:         cell/@bottom
+Explanation:       cell-specific bottom border attributes are not implemented for the output of a WeBWorK PG table produced by WeBWorK's hardcopy production engine <axsl:text/>
+            <axsl:text/><axsl:value-of select="'&#10;Enclosing Title:    &quot;'"/><axsl:text/>
+            <axsl:text/><axsl:value-of select="ancestor::*[title][1]/title"/><axsl:text/>
+            <axsl:text/><axsl:value-of select="concat('&quot; (on a &lt;', local-name(ancestor::*[title][1]), '&gt;)')"/><axsl:text/>
+        <axsl:text/> <axsl:text/>
+                <axsl:text/><axsl:value-of select="'&#10;Enclosing xml:id: &quot;'"/><axsl:text/>
+                <axsl:text/><axsl:value-of select="ancestor::*[@xml:id][1]/@xml:id"/><axsl:text/>
+                <axsl:text/><axsl:value-of select="concat('&quot; (on a &lt;', local-name(ancestor::*[@xml:id][1]), '&gt;)')"/><axsl:text/>
+        <axsl:text/>
+- - - - - - - - -
+</axsl:if>
+
+		<!--REPORT -->
+<axsl:if test="//*[@top='major' or @bottom='major' or @left='major' or @right='major']">Location:         <axsl:apply-templates select="." mode="schematron-get-full-path"/>
+Condition:         //*[@top='major' or @bottom='major' or @left='major' or @right='major']
+Explanation:       'major' table rule attributes will be handled as 'minor' in the output of a WeBWorK PG table produced by WeBWorK's hardcopy production engine <axsl:text/>
+            <axsl:text/><axsl:value-of select="'&#10;Enclosing Title:    &quot;'"/><axsl:text/>
+            <axsl:text/><axsl:value-of select="ancestor::*[title][1]/title"/><axsl:text/>
+            <axsl:text/><axsl:value-of select="concat('&quot; (on a &lt;', local-name(ancestor::*[title][1]), '&gt;)')"/><axsl:text/>
+        <axsl:text/> <axsl:text/>
+                <axsl:text/><axsl:value-of select="'&#10;Enclosing xml:id: &quot;'"/><axsl:text/>
+                <axsl:text/><axsl:value-of select="ancestor::*[@xml:id][1]/@xml:id"/><axsl:text/>
+                <axsl:text/><axsl:value-of select="concat('&quot; (on a &lt;', local-name(ancestor::*[@xml:id][1]), '&gt;)')"/><axsl:text/>
+        <axsl:text/>
+- - - - - - - - -
+</axsl:if>
+
+		<!--REPORT -->
+<axsl:if test="//*[@top='medium' or @bottom='medium' or @left='medium' or @right='medium']">Location:         <axsl:apply-templates select="." mode="schematron-get-full-path"/>
+Condition:         //*[@top='medium' or @bottom='medium' or @left='medium' or @right='medium']
+Explanation:       'medium' table rule attributes will be handled as 'minor' in the output of a WeBWorK PG table produced by WeBWorK's hardcopy production engine <axsl:text/>
+            <axsl:text/><axsl:value-of select="'&#10;Enclosing Title:    &quot;'"/><axsl:text/>
+            <axsl:text/><axsl:value-of select="ancestor::*[title][1]/title"/><axsl:text/>
+            <axsl:text/><axsl:value-of select="concat('&quot; (on a &lt;', local-name(ancestor::*[title][1]), '&gt;)')"/><axsl:text/>
+        <axsl:text/> <axsl:text/>
+                <axsl:text/><axsl:value-of select="'&#10;Enclosing xml:id: &quot;'"/><axsl:text/>
+                <axsl:text/><axsl:value-of select="ancestor::*[@xml:id][1]/@xml:id"/><axsl:text/>
+                <axsl:text/><axsl:value-of select="concat('&quot; (on a &lt;', local-name(ancestor::*[@xml:id][1]), '&gt;)')"/><axsl:text/>
+        <axsl:text/>
+- - - - - - - - -
+</axsl:if><axsl:apply-templates select="@*|*|comment()|processing-instruction()" mode="M5"/></axsl:template><axsl:template match="text()" priority="-1" mode="M5"/><axsl:template match="@*|node()" priority="-2" mode="M5"><axsl:apply-templates select="@*|*|comment()|processing-instruction()" mode="M5"/></axsl:template></axsl:stylesheet>

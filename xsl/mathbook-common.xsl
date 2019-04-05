@@ -9607,7 +9607,6 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:apply-templates select="." mode="literate-programming-warning" />
     <xsl:apply-templates select="." mode="xinclude-warnings" />
     <xsl:apply-templates select="." mode="xmlid-warning" />
-    <xsl:apply-templates select="." mode="webwork-warnings" />
     <xsl:apply-templates select="." mode="text-element-warning" />
     <xsl:apply-templates select="." mode="subdivision-structure-warning" />
 </xsl:template>
@@ -9679,50 +9678,6 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     </xsl:for-each>
 </xsl:template>
 
-<!-- We warn about WeBWorK table details that ultimately may not be respected -->
-<!-- if a problem is archived to .pg, and then that file is used on a WeBWorK -->
-<!-- server, and then WeBWorK's print copy mechanism is used to make a pdf    -->
-<xsl:template match="mathbook|pretext" mode="webwork-warnings">
-    <xsl:variable name="coltop" select="//webwork//tabular/col/@top" />
-    <xsl:variable name="cellbottom" select="//webwork//tabular/cell/@bottom" />
-    <xsl:variable name="medium-major" select="//webwork//tabular//*[@top='medium' or @top='major' or @bottom='medium' or @bottom='major' or @left='medium' or @left='major' or @right='medium' or @right='major']" />
-    <xsl:if test="$coltop">
-        <xsl:message>
-            <xsl:text>MBX:WARNING:   </xsl:text>
-            <xsl:text>column-specific top border attributes are not implemented for the output of a WeBWorK PG table produced by WeBWorK's hardcopy production engine (</xsl:text>
-            <xsl:value-of select="count($coltop)" />
-            <xsl:text> time</xsl:text>
-            <xsl:if test="count($coltop) > 1">
-                <xsl:text>s</xsl:text>
-            </xsl:if>
-            <xsl:text>)</xsl:text>
-        </xsl:message>
-    </xsl:if>
-    <xsl:if test="$cellbottom">
-        <xsl:message>
-            <xsl:text>MBX:WARNING:   </xsl:text>
-            <xsl:text>cell-specific bottom border attributes are not implemented for the output of a WeBWorK PG table produced by WeBWorK's hardcopy production engine (</xsl:text>
-            <xsl:value-of select="count($cellbottom)" />
-            <xsl:text> time</xsl:text>
-            <xsl:if test="count($cellbottom) > 1">
-                <xsl:text>s</xsl:text>
-            </xsl:if>
-            <xsl:text>)</xsl:text>
-        </xsl:message>
-    </xsl:if>
-    <xsl:if test="$medium-major">
-        <xsl:message>
-            <xsl:text>MBX:WARNING:   </xsl:text>
-            <xsl:text>'medium' and 'major' table rule attributes will be handled as 'minor' in the output of a WeBWorK PG table produced by WeBWorK's hardcopy production engine (</xsl:text>
-            <xsl:value-of select="count($medium-major)" />
-            <xsl:text> time</xsl:text>
-            <xsl:if test="count($medium-major) > 1">
-                <xsl:text>s</xsl:text>
-            </xsl:if>
-            <xsl:text>)</xsl:text>
-        </xsl:message>
-    </xsl:if>
-</xsl:template>
 
 <!-- Elements should never happen like this, so we     -->
 <!-- can match on them and offer pretty good advice    -->
