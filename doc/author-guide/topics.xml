@@ -2032,6 +2032,8 @@
             <li>ChromeVox, <url href="http://www.chromevox.com/"><c>www.chromevox.com</c></url>, ChromeOS, free from Google</li>
             <li><acro>JAWS</acro>, <url href="https://www.freedomscientific.com/Products/Blindness/JAWS"><c>www.freedomscientific.com</c></url>, Windows, commercial</li>
         </ul></p>
+
+        <p>Much of the technical work for accessibility is accomplished by <pretext/> developers.  But authors have responsibilities, too.  So testing can be part of your workflow.  One free tool is <url href="https://www.deque.com/axe/">axe</url><fn><c>www.deque.com/axe/</c></fn> from <url href="https://www.deque.com">Deque Systems</url><fn><c>www.deque.com</c></fn>.</p>
     </section>
 
     <!--
