@@ -12,6 +12,7 @@
 
     <xi:include href="welcome.xml" />
     <xi:include href="faq.xml" />
+    <xi:include href="glossary.xml" />
     <!-- collect references to each Best Practice note -->
     <appendix xml:id="best-practices">
         <title>Best Practices</title>
