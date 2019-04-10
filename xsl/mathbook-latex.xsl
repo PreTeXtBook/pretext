@@ -262,6 +262,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- override it to be true.                                   -->
 <xsl:variable name="b-needs-solution-styles" select="false()"/>
 
+<!-- Experiment with different float options for figures and tables  -->
+<!-- This switch is not supported and may be removed at any time     -->
+<xsl:variable name="debug.float" select="'H'"/>
+
 <!-- ############## -->
 <!-- Entry Template -->
 <!-- ############## -->
@@ -1446,7 +1450,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- A bare image is implemented as a caption-less figure  -->
         <xsl:if test="$document-root//figure or $document-root//image or $b-number-figure-distinct">
             <xsl:text>%% Adjust stock figure environment so that it no longer floats&#xa;</xsl:text>
-            <xsl:text>\SetupFloatingEnvironment{figure}{fileext=lof,placement={H},within=</xsl:text>
+            <xsl:text>\SetupFloatingEnvironment{figure}{fileext=lof,placement={</xsl:text>
+            <xsl:value-of select="$debug.float"/>
+            <xsl:text>},within=</xsl:text>
             <xsl:choose>
                 <xsl:when test="$figure-levels = 0">
                     <xsl:text>none</xsl:text>
@@ -1472,7 +1478,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
         <xsl:if test="$document-root//table">
             <xsl:text>%% Adjust stock table environment so that it no longer floats&#xa;</xsl:text>
-            <xsl:text>\SetupFloatingEnvironment{table}{fileext=lot,placement={H},within=</xsl:text>
+            <xsl:text>\SetupFloatingEnvironment{table}{fileext=lot,placement={</xsl:text>
+            <xsl:value-of select="$debug.float"/>
+            <xsl:text>},within=</xsl:text>
             <xsl:choose>
                 <xsl:when test="$figure-levels = 0">
                     <xsl:text>none</xsl:text>
