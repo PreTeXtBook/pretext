@@ -282,15 +282,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- We will have just one of the following -->
-<!-- and totally ignore docinfo             -->
+<!-- four types, and totally ignore docinfo -->
 <xsl:template match="/mathbook|/pretext">
-    <xsl:variable name="filename">
-        <xsl:apply-templates select="article|book|letter|memo" mode="internal-id" />
-        <xsl:text>.tex</xsl:text>
-    </xsl:variable>
-    <exsl:document href="{$filename}" method="text">
-        <xsl:apply-templates select="article|book|letter|memo"/>
-    </exsl:document>
+    <xsl:apply-templates select="article|book|letter|memo"/>
 </xsl:template>
 
 <!-- TODO: combine article, book, letter, templates -->
