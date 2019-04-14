@@ -46,4 +46,29 @@
             </cd>will provide a softer look.  The default colors are contained in <c>colors_default.css</c>.  It is easy to inspect and compare these files to see what is involved in designing a color theme.  In particular, <c>colors_default.css</c> contains documentation on how to design a theme.</p>
         </subsection>
     </section>
+
+    <section>
+        <title>Analytics</title>
+        <index>analytics</index>
+
+        <p><pretext/> makes it as easy as possible to have services provide data about visitors to the <init>HTML</init> version of your book.  We support <url hef="https://analytics.google.com/analytics/web/">Google Analytics</url><fn><c>analytics.google.com/analytics/web/</c></fn> and <url hef="https://statcounter.com/">StatCounter</url><fn><c>statcounter.com/</c></fn>.</p>
+
+        <p>In each case, use is similar.  Begin at the service's site and follow their instructions for enabling data collection for your book's site.  We will not document those instructions here.  When completed, you can request (or will be shown) sample Javascript code to add to pages on your site.  Except, <pretext/> is going to do that part for you.  You only need to provide the unique identifiers used by the service that identify your project.  Because these sign-ups are dependent on your site, this is a publisher activity, and hence configured with command-line parameters (<xref ref="processing-parameters"/>).</p>
+
+        <p>StatCounter uses two identifiers, a <c>project</c> ID and a <c>security</c> code.  You can find them in your <q>Project Config</q> under <q>Settings</q>.  Or the code provided will contain lines such as<cd>
+            <cline>var sc_project=11538430;</cline>
+            <cline>var sc_invisible=1;</cline>
+            <cline>var sc_security="72e1390a";</cline>
+        </cd>In which case you would use two command-line switches:<cd>
+            <cline>-stringparam html.statcounter.project 11538430</cline>
+            <cline>-stringparam html.statcounter.security 72e1390a</cline>
+        </cd></p>
+
+        <p>Google Analytics comes in two flavors, Classic and Universal.  You will be given a single ID, which Google calls a tracking ID, which may also be called a property ID.  An example looks like <c>UA-6836004-1</c>.  In this case, you would use just one of the following two examples on your <c>xsltproc</c> command-line,<cd>
+            <cline>-stringparam html.google-classic UA-6836004-1</cline>
+            <cline>-stringparam html.google-universal UA-6836004-1</cline>
+        </cd></p>
+
+        <p>We would be happy to provide support for additional major services.  Just make a feature request.</p>
+    </section>
 </chapter>

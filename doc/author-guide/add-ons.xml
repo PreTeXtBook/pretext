@@ -14,11 +14,6 @@
         <p>Some features of the <init>HTML</init> version of a document rely on third-party services.  Once an author configures them, then <pretext /> will do the rest for you.  This chapter provides guidance on the configuration processes. </p>
     </introduction>
 
-    <section xml:id="add-on-analytics">
-        <title>(*) Analytics</title>
-        <p></p>
-    </section>
-
     <section xml:id="add-on-search">
         <title>Search</title>
 
