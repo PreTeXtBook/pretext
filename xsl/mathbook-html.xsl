@@ -321,9 +321,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- HTML files as output -->
 <xsl:variable name="file-extension" select="'.html'" />
 
-<!-- A boolean variable for Google Custom Search Engine add-on -->
-<xsl:variable name="b-google-cse" select="boolean($docinfo/search/google)" />
-
 <!-- "presentation" mode is experimental, target        -->
 <!-- is in-class presentation of a textbook             -->
 <!--   (1) clickable mathematics (MathJax) at 300% zoom -->
@@ -340,6 +337,93 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:text>raggedright</xsl:text>
 </xsl:variable>
+
+<!-- ID settings for various services -->
+<!-- These are publisher items that may vary for a fork,     -->
+<!-- and which should not be a concern while editing, and    -->
+<!-- which should not run with source.  Deprecated "docinfo" -->
+<!-- options are respected for now.                          -->
+<xsl:param name="html.statcounter.project" select="''"/>
+<xsl:param name="html.statcounter.security" select="''"/>
+<xsl:param name="html.google-classic" select="''"/>
+<xsl:param name="html.google-universal" select="''"/>
+<xsl:param name="html.google-search" select="''"/>
+
+<xsl:variable name="statcounter-project">
+    <xsl:choose>
+        <xsl:when test="not($html.statcounter.project = '')">
+            <xsl:value-of select="$html.statcounter.project"/>
+        </xsl:when>
+        <xsl:when test="$docinfo/analytics/statcounter/project">
+            <xsl:value-of select="$docinfo/analytics/statcounter/project"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="statcounter-security">
+    <xsl:choose>
+        <xsl:when test="not($html.statcounter.security = '')">
+            <xsl:value-of select="$html.statcounter.security"/>
+        </xsl:when>
+        <xsl:when test="$docinfo/analytics/statcounter/security">
+            <xsl:value-of select="$docinfo/analytics/statcounter/security"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="google-classic-tracking">
+    <xsl:choose>
+        <xsl:when test="not($html.google-classic = '')">
+            <xsl:value-of select="$html.google-classic"/>
+        </xsl:when>
+        <xsl:when test="$docinfo/analytics/google">
+            <xsl:value-of select="$docinfo/analytics/google/tracking"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="google-universal-tracking">
+    <xsl:choose>
+        <xsl:when test="not($html.google-universal = '')">
+            <xsl:value-of select="$html.google-universal"/>
+        </xsl:when>
+        <xsl:when test="$docinfo/analytics/google-universal">
+            <xsl:value-of select="$docinfo/analytics/google-universal/@tracking"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="google-search-cx">
+    <xsl:choose>
+        <xsl:when test="not($html.google-search = '')">
+            <xsl:value-of select="$html.google-search"/>
+        </xsl:when>
+        <xsl:when test="$docinfo/search/google/cx">
+            <xsl:value-of select="$docinfo/search/google/cx"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- And boolean variables for the presence of these services -->
+<xsl:variable name="b-statcounter" select="not($statcounter-project = '')" />
+<xsl:variable name="b-google-classic" select="not($google-classic-tracking = '')" />
+<xsl:variable name="b-google-universal" select="not($google-universal-tracking = '')" />
+<xsl:variable name="b-google-cse" select="not($google-search-cx = '')" />
 
 
 <!-- ############## -->
@@ -5845,7 +5929,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                           </div>
                     </main>
                 </div>
-                <xsl:apply-templates select="$docinfo/analytics" />
+                <!-- analytics services, if requested -->
+                <xsl:call-template name="statcounter"/>
+                <xsl:call-template name="google-classic"/>
+                <xsl:call-template name="google-universal"/>
                 <!-- <xsl:call-template name="pytutor-footer" /> -->
             </body>
         </html>
@@ -8689,7 +8776,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </main>
             </div>
 
-            <xsl:apply-templates select="$docinfo/analytics" />
+            <!-- analytics services, if requested -->
+            <xsl:call-template name="statcounter"/>
+            <xsl:call-template name="google-classic"/>
+            <xsl:call-template name="google-universal"/>
             <xsl:call-template name="pytutor-footer" />
             <xsl:call-template name="login-footer" />
         </body>
@@ -8735,7 +8825,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- potential document-id per-page -->
             <xsl:call-template name="document-id"/>
             <xsl:copy-of select="$content" />
-            <xsl:apply-templates select="$docinfo/analytics" />
+            <!-- analytics services, if requested -->
+            <xsl:call-template name="statcounter"/>
+            <xsl:call-template name="google-classic"/>
+            <xsl:call-template name="google-universal"/>
         </body>
     </html>
     </exsl:document>
@@ -9885,7 +9978,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:element name="script">
             <xsl:text>(function() {&#xa;</xsl:text>
             <xsl:text>  var cx = '</xsl:text>
-            <xsl:value-of select="$docinfo/search/google/cx" />
+            <xsl:value-of select="$google-search-cx" />
             <xsl:text>';&#xa;</xsl:text>
             <xsl:text>  var gcse = document.createElement('script');&#xa;</xsl:text>
             <xsl:text>  gcse.type = 'text/javascript';&#xa;</xsl:text>
@@ -10055,63 +10148,83 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Google Analytics                     -->
 <!-- "Classic", not compared to Universal -->
-<xsl:template match="google">
-<xsl:comment>Start: Google code</xsl:comment>
-<script>
-var _gaq = _gaq || [];
-_gaq.push(['_setAccount', '<xsl:value-of select="./tracking" />']);
-_gaq.push(['_trackPageview']);
-
-(function() {
-var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'https://www') + '.google-analytics.com/ga.js';
-var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();
-</script>
-<xsl:comment>End: Google code</xsl:comment>
+<xsl:template name="google-classic">
+    <xsl:if test="$b-google-classic">
+        <xsl:comment>Start: Google Classic code</xsl:comment>
+        <xsl:text>&#xa;</xsl:text>
+        <script>
+            <xsl:text>&#xa;</xsl:text>
+            <xsl:text>var _gaq = _gaq || [];&#xa;</xsl:text>
+            <xsl:text>_gaq.push(['_setAccount', '</xsl:text>
+            <xsl:value-of select="$google-classic-tracking" />
+            <xsl:text>']);&#xa;</xsl:text>
+            <xsl:text>_gaq.push(['_trackPageview']);&#xa;</xsl:text>
+            <xsl:text>(function() {&#xa;</xsl:text>
+            <xsl:text>var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;&#xa;</xsl:text>
+            <xsl:text>ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'https://www') + '.google-analytics.com/ga.js';&#xa;</xsl:text>
+            <xsl:text>var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);&#xa;</xsl:text>
+            <xsl:text>})();&#xa;</xsl:text>
+        </script>
+        <xsl:text>&#xa;</xsl:text>
+        <xsl:comment>End: Google Classic code</xsl:comment>
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
 </xsl:template>
 
-<xsl:template match="google-universal">
-    <xsl:comment>Start: Google Universal code</xsl:comment>
-    <script>
-        <xsl:text>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){&#xa;</xsl:text>
-        <xsl:text>(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),&#xa;</xsl:text>
-        <xsl:text>m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)&#xa;</xsl:text>
-        <xsl:text>})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');&#xa;</xsl:text>
-        <xsl:text>ga('create', '</xsl:text>
-            <xsl:value-of select="@tracking" />
-        <xsl:text>', 'auto');&#xa;</xsl:text>
-        <xsl:text>ga('send', 'pageview');&#xa;</xsl:text>
-    </script>
-    <xsl:comment>End: Google Universal code</xsl:comment>
+<xsl:template name="google-universal">
+    <xsl:if test="$b-google-universal">
+        <xsl:comment>Start: Google Universal code</xsl:comment>
+        <xsl:text>&#xa;</xsl:text>
+        <script>
+            <xsl:text>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){&#xa;</xsl:text>
+            <xsl:text>(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),&#xa;</xsl:text>
+            <xsl:text>m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)&#xa;</xsl:text>
+            <xsl:text>})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');&#xa;</xsl:text>
+            <xsl:text>ga('create', '</xsl:text>
+            <xsl:value-of select="$google-universal-tracking" />
+            <xsl:text>', 'auto');&#xa;</xsl:text>
+            <xsl:text>ga('send', 'pageview');&#xa;</xsl:text>
+        </script>
+        <xsl:text>&#xa;</xsl:text>
+        <xsl:comment>End: Google Universal code</xsl:comment>
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <!-- StatCounter                                -->
 <!-- Set sc_invisible to 1                      -->
 <!-- In noscript URL, final 1 is an edit from 0 -->
-<xsl:template match="statcounter">
-<xsl:comment>Start: StatCounter code</xsl:comment>
-<script>
-var sc_project=<xsl:value-of select="project" />;
-var sc_invisible=1;
-var sc_security="<xsl:value-of select="security" />";
-var scJsHost = (("https:" == document.location.protocol) ? "https://secure." : "https://www.");
-<![CDATA[document.write("<sc"+"ript src='" + scJsHost+ "statcounter.com/counter/counter.js'></"+"script>");]]>
-</script>
-<xsl:variable name="noscript_url">
-    <xsl:text>https://c.statcounter.com/</xsl:text>
-    <xsl:value-of select="project" />
-    <xsl:text>/0/</xsl:text>
-    <xsl:value-of select="security" />
-    <xsl:text>/1/</xsl:text>
-</xsl:variable>
-<noscript>
-<div class="statcounter">
-<a title="web analytics" href="https://statcounter.com/" target="_blank">
-<img class="statcounter" src="{$noscript_url}" alt="web analytics" /></a>
-</div>
-</noscript>
-<xsl:comment>End: StatCounter code</xsl:comment>
+<xsl:template name="statcounter">
+    <xsl:if test="$b-statcounter">
+        <xsl:variable name="noscript_url">
+            <xsl:text>https://c.statcounter.com/</xsl:text>
+            <xsl:value-of select="$statcounter-project" />
+            <xsl:text>/0/</xsl:text>
+            <xsl:value-of select="$statcounter-security" />
+            <xsl:text>/1/</xsl:text>
+        </xsl:variable>
+        <xsl:comment>Start: StatCounter code</xsl:comment>
+        <script>
+        <xsl:text>&#xa;</xsl:text>
+        <xsl:text>var sc_project=</xsl:text>
+        <xsl:value-of select="$statcounter-project" />
+        <xsl:text>;&#xa;</xsl:text>
+        <xsl:text>var sc_invisible=1;&#xa;</xsl:text>
+        <xsl:text>var sc_security="</xsl:text>
+        <xsl:value-of select="$statcounter-security" />
+        <xsl:text>";&#xa;</xsl:text>
+        <xsl:text>var scJsHost = (("https:" == document.location.protocol) ? "https://secure." : "https://www.");&#xa;</xsl:text>
+        <xsl:text>document.write("&lt;sc"+"ript src='" + scJsHost+ "statcounter.com/counter/counter.js'&gt;&lt;/"+"script&gt;");&#xa;</xsl:text>
+        </script>
+        <noscript>
+        <div class="statcounter">
+        <a title="web analytics" href="https://statcounter.com/" target="_blank">
+        <img class="statcounter" src="{$noscript_url}" alt="web analytics" /></a>
+        </div>
+        </noscript>
+        <xsl:comment>End: StatCounter code</xsl:comment>
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <!-- Miscellaneous -->
