@@ -10335,6 +10335,20 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="date-string" select="'2019-04-02'" />
         <xsl:with-param name="message" select="'the &quot;mathbook&quot; top-level element has been replaced by the functionally equivalent &quot;pretext&quot;'"/>
     </xsl:call-template>
+    <!--  -->
+    <!-- 2019-04-14  analytics ID are now a publisher option -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$docinfo/analytics" />
+        <xsl:with-param name="date-string" select="'2019-04-14'" />
+        <xsl:with-param name="message" select="'site-specific ID for HTML analytics services (Statcounter, Google) provided within &quot;docinfo/analytics&quot; are now options supplied by publishers as command-line options.  See the Publishers Guide for specifics.'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2019-04-14  Google search ID is now a publisher option -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$docinfo/search" />
+        <xsl:with-param name="date-string" select="'2019-04-14'" />
+        <xsl:with-param name="message" select="'site-specific ID for HTML search services (Google) provided within &quot;docinfo/search&quot; is now an option supplied by publishers as a command-line option.  See the Publishers Guide for specifics.'"/>
+    </xsl:call-template>
 </xsl:template>
 
 <!-- Miscellaneous -->
