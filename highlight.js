@@ -184,11 +184,11 @@ $("p[id], li[id]").on("click", function(e) {
 });
 
 function save_highlights() {
-    rq_data = {"action": "save", "user": uname, "pw": emanu, "bookID": bodyID, "type": "highlights", "hl": JSON.stringify(all_highlights)}
+    hl_data = {"action": "save", "user": uname, "pw": emanu, "bookID": bodyID, "type": "highlights", "hl": JSON.stringify(all_highlights)}
     $.ajax({
       url: "https://aimath.org/cgi-bin/u/highlights.py",
       type: "post",
-      data: JSON.stringify(rq_data),
+      data: JSON.stringify(hl_data),
       dataType: "json",
       success: function(data) {
           console.log("something", data, "back from highlight");
