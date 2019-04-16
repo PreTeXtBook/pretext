@@ -183,6 +183,26 @@ $("p[id], li[id]").on("click", function(e) {
         }
 });
 
+function save_highlights() {
+    rq_data = {"action": "save", "user": uname, "pw": emanu, "pI": pageIdentifier, "type": "highlights", "rq": JSON.stringify(all_highlights)}
+    $.ajax({
+      url: "https://aimath.org/cgi-bin/u/highlights.py",
+      type: "post",
+      data: JSON.stringify(rq_data),
+      dataType: "json",
+      success: function(data) {
+          console.log("something", data, "back from highlight");
+      //    alert(data);
+      },
+      error: function(errMsg) {
+        console.log("seems to be an error?",errMsg);
+   //     alert("Error\n" + errMsg);
+      }
+    });
+
+  console.log("just ajax sent", JSON.stringify(reading_questions_object));
+}
+
 function newhighlight() {
     var this_selection = window.getSelection();
     console.log("UUUUUUUUUUUUUUUUUUUUUUUUUUU");
@@ -270,43 +290,14 @@ function newhighlight() {
         display_one_highlight(starting_parent_id, this_highlight);
         localStorage.setObject("all_highlights", all_highlights);
 
-/*
-$.ajax({
-    url: "https://aimath.org/cgi-bin/highlights.py",
-    type: "post",
-    data: JSON.stringify(all_highlights),
-    dataType: "json",
-    success: function(response) {
-        alert(response);
-    }
-});
-
-  console.log("just ajax sent", JSON.stringify(all_highlights));
-*/
+        if (uname != "guest" && role=="student") {
+            console.log("saving highlights");
+            save_highlights();
+        }
         console.log("all_highlights", all_highlights);
         return "";
-
     } 
-
 }
-//    }); 
-
-
-/*
-$('body').on('mouseover','.rq_answer', function(){
-  $(this).children().last().removeClass("hidecontrols");
-  $(this).attr('z-index', '2000');
-});
-$('body').on('mouseleave','.rq_answer', function(){
-  $(this).children().last().addClass("hidecontrols");
-  $(this).attr('z-index', '');
-});
-*/
-
-/*
-$('aaaaaaaabody').on('click','.hl', function(e){  // id on a highlight looks like parentid-hlN with N=1,2,3,...,9
-  console.log("clicked hl", this.id);
-*/
 
 function modifyhighlight(e) {
   this_hl = e.target;
