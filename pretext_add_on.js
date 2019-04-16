@@ -61,7 +61,7 @@ window.addEventListener("load",function(event) {
 });
 
     /* click an image to see a big version */
-    $('body').on('click','.sbspanel > img:not(.draw_on_me):not(.mag_popup), figure > img:not(.draw_on_me):not(.mag_popup)', function(){
+    $('body').on('click','.sbspanel > img:not(.draw_on_me):not(.mag_popup), figure > img:not(.draw_on_me):not(.mag_popup), figure > div > img:not(.draw_on_me):not(.mag_popup)', function(){
         var img_big = document.createElement('div');
         img_big.setAttribute('style', 'background:#fff;');
         img_big.setAttribute('class', 'mag_popup_container');
