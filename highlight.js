@@ -184,7 +184,7 @@ $("p[id], li[id]").on("click", function(e) {
 });
 
 function save_highlights() {
-    rq_data = {"action": "save", "user": uname, "pw": emanu, "pI": pageIdentifier, "type": "highlights", "rq": JSON.stringify(all_highlights)}
+    rq_data = {"action": "save", "user": uname, "pw": emanu, "bookID": bodyID, "type": "highlights", "hl": JSON.stringify(all_highlights)}
     $.ajax({
       url: "https://aimath.org/cgi-bin/u/highlights.py",
       type: "post",

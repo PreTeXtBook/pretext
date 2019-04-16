@@ -232,7 +232,7 @@ var pageIdentifier = "";
 
 window.addEventListener('load', function(){
     console.log("checking login", ut_id);
-var bodyID = document.getElementsByTagName('body')[0].id;
+bodyID = document.getElementsByTagName('body')[0].id;
 console.log("bodyID", bodyID);
 if (bodyID) {
     var secID = document.getElementsByTagName('section')[0].id;
