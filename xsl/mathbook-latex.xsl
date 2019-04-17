@@ -8330,7 +8330,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Items that normally could go inline within a paragraph -->
 <!-- without any spacing will be preceded by a \par         -->
 <xsl:template match="stack" mode="panel-latex-box">
-    <xsl:for-each select="tabular|image|p|pre|ol|ul|dl|video|interactive|program|console|exercise">
+    <xsl:for-each select="tabular|image|p|pre|ol|ul|dl|video|interactive|stack|program|console|exercise">
         <xsl:if test="preceding-sibling::* and (self::image or self::tabular)">
             <xsl:text>\par&#xa;</xsl:text>
         </xsl:if>

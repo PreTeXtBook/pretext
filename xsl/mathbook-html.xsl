@@ -5541,7 +5541,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- routines all the same.                                 -->
 <xsl:template match="stack" mode="panel-html-box">
     <xsl:param name="b-original" select="true()" />
-    <xsl:apply-templates select="tabular|image|p|pre|ol|ul|dl|video|interactive|program|console|exercise" mode="panel-html-box">
+    <xsl:apply-templates select="tabular|image|p|pre|ol|ul|dl|video|interactive|slate|program|console|exercise" mode="panel-html-box">
         <xsl:with-param name="b-original" select="$b-original" />
     </xsl:apply-templates>
 </xsl:template>
