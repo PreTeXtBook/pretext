@@ -3268,7 +3268,7 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
     <!-- (only?), in addition to first and last nodes     -->
     <xsl:choose>
         <!-- pass through if assuming strict adherence to whitespace policy -->
-        <xsl:when test="$whitespace='strict'">
+        <xsl:when test="$whitespace-style = 'strict'">
             <xsl:value-of select="$text-processed" />
         </xsl:when>
         <!-- We must "apply-templates" to math bits in order    -->
@@ -3281,7 +3281,7 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
         <!-- manipulate leading, trailing, intermediate whitespace under flexible policy -->
         <!-- if only text node inside parent, all three transformations may apply        -->
         <!-- Note: space after clause-punctuation will not be deleted here               -->
-        <xsl:when test="$whitespace='flexible'">
+        <xsl:when test="$whitespace-style = 'flexible'">
             <xsl:variable name="original" select="$text-processed" />
             <xsl:variable name="front-cleaned">
                 <xsl:choose>
