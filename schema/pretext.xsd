@@ -3108,10 +3108,6 @@
       <xs:element ref="rename"/>
       <xs:element ref="images"/>
       <xs:element ref="author-biographies"/>
-      <xs:choice>
-        <xs:element ref="search"/>
-        <xs:element ref="analytics"/>
-      </xs:choice>
       <xs:element ref="numbering"/>
     </xs:choice>
   </xs:group>
@@ -3174,44 +3170,6 @@
       </xs:attribute>
     </xs:complexType>
   </xs:element>
-  <xs:element name="search">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element name="google">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element ref="cx"/>
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="cx" type="xs:string"/>
-  <xs:element name="analytics">
-    <xs:complexType>
-      <xs:choice maxOccurs="unbounded">
-        <xs:element name="google">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element ref="tracking"/>
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:element ref="statcounter"/>
-      </xs:choice>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="tracking" type="xs:string"/>
-  <xs:element name="statcounter">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element name="project" type="xs:string"/>
-        <xs:element ref="security"/>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="security" type="xs:string"/>
   <xs:element name="numbering">
     <xs:complexType>
       <xs:sequence>

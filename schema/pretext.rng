@@ -3391,36 +3391,6 @@
     </element>
   </define>
   <define name="Configuration" combine="choice">
-    <choice>
-      <element name="search">
-        <element name="google">
-          <element name="cx">
-            <text/>
-          </element>
-        </element>
-      </element>
-      <element name="analytics">
-        <oneOrMore>
-          <choice>
-            <element name="google">
-              <element name="tracking">
-                <text/>
-              </element>
-            </element>
-            <element name="statcounter">
-              <element name="project">
-                <text/>
-              </element>
-              <element name="security">
-                <text/>
-              </element>
-            </element>
-          </choice>
-        </oneOrMore>
-      </element>
-    </choice>
-  </define>
-  <define name="Configuration" combine="choice">
     <element name="numbering">
       <optional>
         <element name="division">

@@ -1538,26 +1538,6 @@
             }
         
         
-        Configuration |=
-            element search {
-                element google {
-                    element cx {text}
-                }
-            }
-        |
-            element analytics {
-                (
-                    element google {
-                        element tracking {text}
-                    }
-                |
-                    element statcounter {
-                        element project {text},
-                        element security {text}
-                    }
-                )+
-            }
-        
         
         Configuration |=
             element numbering {

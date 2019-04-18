@@ -2074,30 +2074,6 @@
             }
         </fragment>
 
-        <p>Analytics can be built into electronic versions by providing identifying account information.</p>
-
-        <fragment xml:id="addins">
-        Configuration |=
-            element search {
-                element google {
-                    element cx {text}
-                }
-            }
-        |
-            element analytics {
-                (
-                    element google {
-                        element tracking {text}
-                    }
-                |
-                    element statcounter {
-                        element project {text},
-                        element security {text}
-                    }
-                )+
-            }
-        </fragment>
-
         <p>Many aspects of numbering are configurable.  These choices affect the numbers printed, and so are an author's decision, and hence run with the source.</p>
 
         <fragment xml:id="numbering">
