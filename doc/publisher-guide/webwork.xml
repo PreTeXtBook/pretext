@@ -166,7 +166,7 @@
             <sidebyside>
                 <console>
                     <prompt>$ </prompt>
-                    <input>xsltproc mathbook-latex.xsl merge.ptx</input>
+                    <input>xsltproc -o mybook.tex mathbook-latex.xsl merge.ptx</input>
                 </console>
             </sidebyside>
             <p>You may need to specify paths to <c>mathbook-latex.xsl</c> and <c>merge.ptx</c>.</p>
