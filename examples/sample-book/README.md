@@ -11,10 +11,10 @@ It is meant to illustrate
 To build and test, use a scratch directory like `/tmp/sb`:
 
 1. PREP:  `/tmp/sb$ cp -av /path/to/mathbook/examples/sample-book/* .`
-2. HTML:  `/tmp/sb$ xsltproc --xinclude /path/to/mathbook/xsl/mathbook-html.xsl sample-book.xml`
-3. LaTeX: `/tmp/sb$ xsltproc --xinclude /path/to/mathbook/xsl/mathbook-latex.xsl sample-book.xml`
+2. HTML:  `/tmp/sb$ xsltproc -xinclude /path/to/mathbook/xsl/mathbook-html.xsl sample-book.xml`
+3. LaTeX: `/tmp/sb$ xsltproc -o sample-book.tex -xinclude /path/to/mathbook/xsl/mathbook-latex.xsl sample-book.xml`
 
-Look for `sample-book.tex` and `sample-book.html` for futher processing or viewing.  Note that these filenames come from the xml:id on the book element, not from the filename of the master XML file.
+Look for `sample-book.tex` and `sample-book.html` for futher processing or viewing.  Note that the HTML filename come from the xml:id on the book element, not from the filename of the master XML file.
 
 Notes:
 

@@ -27,9 +27,9 @@ xsltproc /path/to/mathbook/xsl/mathbook-html.xsl /path/to/mathbook/examples/font
 then find  "fonts-and-characters.html"  in the current working directory
 and use a web browser to view.  For PDF/print, issue:
 
-xsltproc /path/to/mathbook/xsl/mathbook-latex.xsl /path/to/mathbook/examples/fonts-and-characters.xml
+xsltproc -o fonts.tex /path/to/mathbook/xsl/mathbook-latex.xsl /path/to/mathbook/examples/fonts-and-characters.xml
 
-and apply  xelatex  to  "fonts-and-characters.tex"  in the current working directory.
+and apply  xelatex  to  "fonts.tex"  in the current working directory.
 (pdflatex *will not* give satisfactory results)
 -->
 
