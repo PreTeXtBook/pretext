@@ -4190,7 +4190,26 @@ the xsltproc executable.
                         </instructions>
                     </interactive>
                 </figure>
+                
+                <p>The following example was contributed by Rick Roesler. The <tag>figure</tag> is comprised of four <tag>stack</tag> elements within a <tag>sidebyside</tag>. By varying the time in the top box, the reader can observe the displacement, velocity, and acceleration of a ball thrown upward with an initial velocity of 30 m/s.</p>
 
+                <figure>
+                    <caption>1-Dimensional Kinematics.</caption>
+                    <interactive xml:id="kinematics" platform="jsxgraph" aspect="6:7" source="code/roesler/kinematics.js" preview="images/kinematics.png">
+                        <sidebyside width="70%" margins="5%">
+                            <stack>
+                                <slate xml:id="box_t" surface="jsxboard" aspect="6:1" />
+                                <slate xml:id="box_s" surface="jsxboard" aspect="6:3" />
+                                <slate xml:id="box_v" surface="jsxboard" aspect="6:3" />
+                                <slate xml:id="box_a" surface="jsxboard" aspect="6:3" />
+                            </stack>
+                        </sidebyside>
+                        <instructions>
+                            <p>Use the time slider in the top panel to vary the time from 0 sec to 6 sec. Observe how the displacement, velocity, and acceleration vary with time.</p>
+                        </instructions>
+                    </interactive>
+                </figure>
+            
             </subsection>
 
             <subsection>
