@@ -1361,7 +1361,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\setlength{\extrarowheight}{0.2ex}&#xa;</xsl:text>
         <xsl:text>%% Define variable thickness horizontal rules, full and partial&#xa;</xsl:text>
         <xsl:text>%% Thicknesses are 0.03, 0.05, 0.08 in the  booktabs  package&#xa;</xsl:text>
-        <xsl:text>\makeatletter&#xa;</xsl:text>
         <!-- http://tex.stackexchange.com/questions/119153/table-with-different-rule-widths -->
         <xsl:text>\newcommand{\hrulethin}  {\noalign{\hrule height 0.04em}}&#xa;</xsl:text>
         <xsl:text>\newcommand{\hrulemedium}{\noalign{\hrule height 0.07em}}&#xa;</xsl:text>
@@ -1392,7 +1391,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\newcolumntype{A}{!{\vrule width 0.04em}}&#xa;</xsl:text>
         <xsl:text>\newcolumntype{B}{!{\vrule width 0.07em}}&#xa;</xsl:text>
         <xsl:text>\newcolumntype{C}{!{\vrule width 0.11em}}&#xa;</xsl:text>
-        <xsl:text>\makeatother&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="//cell/line">
         <xsl:text>\newcommand{\tablecelllines}[3]%&#xa;</xsl:text>
