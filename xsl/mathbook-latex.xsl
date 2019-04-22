@@ -1602,14 +1602,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
     </xsl:if>
     <!-- Numbering Footnotes -->
-    <xsl:if test="($numbering-footnotes != 0) and //fn">
+    <xsl:if test="$document-root//fn">
         <xsl:text>%% Footnote Numbering&#xa;</xsl:text>
-        <xsl:text>%% We reset the footnote counter, as given by numbering.footnotes.level&#xa;</xsl:text>
-        <xsl:text>\makeatletter\@addtoreset{footnote}{</xsl:text>
-        <xsl:call-template name="level-to-name">
-            <xsl:with-param name="level" select="$numbering-footnotes" />
-        </xsl:call-template>
-        <xsl:text>}\makeatother&#xa;</xsl:text>
+        <xsl:text>%% Specified by numbering.footnotes.level&#xa;</xsl:text>
+        <xsl:if test="$b-is-book">
+            <xsl:text>%% Undo counter reset by chapter for a book&#xa;</xsl:text>
+            <xsl:text>\counterwithout{footnote}{chapter}&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:choose>
+            <xsl:when test="$numbering-footnotes = 0">
+                <xsl:text>%% Global numbering, since numbering.footnotes.level = 0&#xa;</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>\counterwithin*{footnote}{</xsl:text>
+                <xsl:call-template name="level-to-name">
+                    <xsl:with-param name="level" select="$numbering-footnotes" />
+                </xsl:call-template>
+                <xsl:text>}&#xa;</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:if>
     <!-- Interactives -->
     <xsl:if test="$document-root//video|$document-root//interactive">
