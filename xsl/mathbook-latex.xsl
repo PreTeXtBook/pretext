@@ -471,6 +471,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% See:  https://tug.org/TUGboat/tb36-3/tb114ltnews22.pdf&#xa;</xsl:text>
     <xsl:text>%% and read "Fewer fragile commands" in distribution's  latexchanges.pdf&#xa;</xsl:text>
     <xsl:text>\IfFileExists{latexrelease.sty}{}{\usepackage{fixltx2e}}&#xa;</xsl:text>
+    <xsl:if test="$document-root//fn or $document-root//part">
+        <xsl:text>%% Footnote counters and part/chapter counters are manipulated&#xa;</xsl:text>
+        <xsl:text>%% April 2018: package now integrated into the kernel&#xa;</xsl:text>
+        <xsl:text>%% From chngcntr 1.1a it should detect defintions in LaTeX kernel&#xa;</xsl:text>
+        <xsl:text>\usepackage{chngcntr}&#xa;</xsl:text>
+        <xsl:if test="$parts = 'structural'">  <!-- implies book/part -->
+            <xsl:text>%% Structural chapter numbers reset within parts&#xa;</xsl:text>
+            <xsl:text>%% Starred form will not prefix part number&#xa;</xsl:text>
+            <xsl:text>\counterwithin*{chapter}{part}&#xa;</xsl:text>
+        </xsl:if>
+    </xsl:if>
     <!-- Determine height of text block, assumes US letterpaper (11in height) -->
     <!-- Could react to document type, paper, margin specs                    -->
     <xsl:variable name="text-height">
@@ -2052,14 +2063,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- http://tex.stackexchange.com/questions/44088/when-do-i-need-to-invoke-phantomsection -->
     <xsl:text>%% If you manually remove hyperref, leave in this next command&#xa;</xsl:text>
     <xsl:text>\providecommand\phantomsection{}&#xa;</xsl:text>
-    <!-- Later comment advises @addtoreset *after* hyperref -->
-    <!-- https://tex.stackexchange.com/questions/35782      -->
-    <xsl:if test="$parts = 'structural'">  <!-- implies book/part -->
-        <xsl:text>%% Structural chapter numbers reset within parts&#xa;</xsl:text>
-        <xsl:text>\makeatletter&#xa;</xsl:text>
-        <xsl:text>\@addtoreset{chapter}{part}&#xa;</xsl:text>
-        <xsl:text>\makeatother&#xa;</xsl:text>
-    </xsl:if>
     <!-- The "xwatermark" package has way more options, including the -->
     <!-- possibility of putting the watermark onto the foreground     -->
     <!-- (above shaded/colored "tcolorbox").  But on 2018-10-24,      -->
