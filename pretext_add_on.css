@@ -904,11 +904,13 @@ h2:last-child {
 }
 
 /* obsolete once paragraph spacing refactored */
+/*
 .pretext-content .paragraphs .heading + p:after {
     content: "";
     display: block;
     margin-bottom: 1.25em;
 }
+*/
 /*
 .pretext-content .paragraphs p:last-child::after {
     margin-bottom: 0;
@@ -3063,7 +3065,24 @@ main p.newstuff {
     border-right: 6px solid #6f6;
     background:  #dfd;
 }
+main li.newstuff {
+    border-right: 6px solid #66f;
+    background:  #eef;
+}
+main li.newstuff p.newstuff {
+    border-right: none;
+    background: inherit;
+}
 main article.newstuff {
     border-right: 6px solid #ff6;
     background:  #ffd;
 }
+main section.newstuff {
+    border-right: 10px solid #f6f;
+}
+main a[data-knowl].newstuff {
+    border: 1px solid #f33;
+    background: #fdd;
+}
+
+
