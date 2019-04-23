@@ -183,6 +183,21 @@ window.addEventListener("load",function(event) {
      });
 });
 
+window.addEventListener("load",function(event) {
+       if(window.location.href.includes("/preview/")) {
+           console.log("            found preview", window.location.href);
+           $("main p[id], main article[id]").each(function() {
+               var thisid = $(this).attr('id');
+               if( (thisid.length > 3 && !thisid.includes("-part")) || thisid.startsWith("p-")) {
+                 $( this ).addClass("newstuff");
+                 console.log("           found new", this)
+               }
+           })
+       } else {
+           console.log("not preview", window.location.href);
+       }
+});
+
 /*
 window.addEventListener("load",function(event) {
 //    setTimeout( function() {
