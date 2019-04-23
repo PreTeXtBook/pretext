@@ -1040,7 +1040,11 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
 }
 
 
-
+/*  good for table, bad for image
+.pretext-content .sidebyside {
+    overflow-x: scroll;
+}
+*/
 
 .pretext-content p + table {
     margin-top: 1em;
@@ -2203,7 +2207,8 @@ figure figcaption.wrap {
 }
 
 .pretext-content .sbspanel > img:not(.draw_on_me):not(.mag_popup),
-.pretext-content figure > img:not(.draw_on_me):not(.mag_popup) {
+.pretext-content figure > img:not(.draw_on_me):not(.mag_popup),
+.pretext-content figure > div > img:not(.draw_on_me):not(.mag_popup) {
     cursor: zoom-in;
 }
 .pretext-content img.mag_popup {
@@ -2673,7 +2678,7 @@ body.sidebar-left-closed .searchwrapper {
 .pretext-content .image-archive {
     margin-left: auto;
     margin-right: auto;
-    margin-bottom: auto;
+    margin-bottom: 0;  /* was auto */
     margin-top: 0.75em;
     padding-bottom: 0.25em;
     text-align: center;
@@ -3050,4 +3055,15 @@ and condider having this replace line 3338 of the general code (which uses .head
 }
 .toolBPanel:hover {
     overflow: auto !important;
+}
+
+/* Preview of annual edition */
+
+main p.newstuff {
+    border-right: 6px solid #6f6;
+    background:  #dfd;
+}
+main article.newstuff {
+    border-right: 6px solid #ff6;
+    background:  #ffd;
 }
