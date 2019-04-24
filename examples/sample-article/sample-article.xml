@@ -4195,7 +4195,7 @@ the xsltproc executable.
 
                 <figure>
                     <caption>1-Dimensional Kinematics</caption>
-                    <interactive xml:id="kinematics" platform="jsxgraph" aspect="6:7" source="code/roesler/kinematics.js" preview="images/kinematics.png">
+                    <interactive xml:id="kinematics" platform="jsxgraph" aspect="6:7" source="code/roesler/kinematics.js">
                         <sidebyside width="70%" margins="5%">
                             <stack>
                                 <slate xml:id="box_t" surface="jsxboard" aspect="6:1" />
@@ -4207,6 +4207,9 @@ the xsltproc executable.
                         <instructions>
                             <p>Use the time slider in the top panel to vary the time from 0 sec to 6 sec. Observe how the displacement, velocity, and acceleration vary with time.</p>
                         </instructions>
+                        <static>
+                            <image source="images/kinematics.png" width="60%"/>
+                        </static>
                     </interactive>
                 </figure>
 
@@ -4625,11 +4628,7 @@ the xsltproc executable.
 
                 <figure>
                     <caption>Right Triangle Paradox</caption>
-                    <interactive xml:id="geogebra-right-triangle" geogebra="KGn2d4Qd" width="70%" aspect="9:5">
-                        <static>
-                            <image source="images/right-triangle-paradox.png" />
-                        </static>
-                    </interactive>
+                    <interactive xml:id="geogebra-right-triangle" geogebra="KGn2d4Qd" width="70%" aspect="9:5"/>
                 </figure>
 
                 <p>Note that materials hosted at <c>geogebra.org</c> have a non-standard, non-commercial license you must agree to before you can download them as source code.  Perhaps you must forfeit your copyright when you upload a material?  We have not investigated this thoroughly.</p>
@@ -4645,11 +4644,7 @@ the xsltproc executable.
 
                 <figure>
                     <caption>Graph of <m>ln(x^2+5)-3</m></caption>
-                    <interactive xml:id="desmos-natural-log" desmos="ttox1bvxku" width="60%" aspect="2:3">
-                        <static>
-                            <image source="images/desmos-graph.png" width="60%"/>
-                        </static>
-                    </interactive>
+                    <interactive xml:id="desmos-natural-log" desmos="ttox1bvxku" width="60%" aspect="2:3"/>
                 </figure>
 
                 <p>Note that Desmos has extensive <pubtitle>Terms of Service</pubtitle> which include restrictions on commercial uses.</p>
@@ -4677,11 +4672,7 @@ the xsltproc executable.
 
                 <figure>
                     <caption>Plot of <m>f(x,y)=\dfrac{1}{y-x^2}</m> on <m>[-2,2]\times[-2,2]</m> (full application)</caption>
-                    <interactive xml:id="calcplot3d-full-application" calcplot3d="type=z;z=1/(y-x^2);visible=true;umin=-2;umax=2;vmin=-2;vmax=2;grid=30;format=normal;alpha=-1;constcol=rgb(255,0,0);contourcolor=red&amp;type=window;hsrmode=3;anaglyph=-1;center=5.529712854135209,7.349875454071844,3.9244880634856956,1;focus=0,0,0,1;up=-0.26875302682986874,-0.2884991397174344,0.9189886054528014,1;transparent=true;alpha=140;edgeson=true;faceson=true;showbox=true;showaxes=true;showticks=true;perspective=true;centerxpercent=0.5;centerypercent=0.5;rotationsteps=30;autospin=true;xygrid=false;yzgrid=false;xzgrid=false;gridsonbox=true;gridplanes=false;gridcolor=rgb(128,128,128);xmin=-2;xmax=2;ymin=-2;ymax=2;zmin=-4;zmax=4;xscale=1;yscale=1;zscale=1;zcmin=-4;zcmax=4;zoom=0.468667;xscalefactor=1;yscalefactor=1;zscalefactor=1" variant="application" width="95%" aspect="10:13">
-                        <static>
-                            <image source="images/calcplot3d.png" width="45%"/>
-                        </static>
-                    </interactive>
+                    <interactive xml:id="calcplot3d-full-application" calcplot3d="type=z;z=1/(y-x^2);visible=true;umin=-2;umax=2;vmin=-2;vmax=2;grid=30;format=normal;alpha=-1;constcol=rgb(255,0,0);contourcolor=red&amp;type=window;hsrmode=3;anaglyph=-1;center=5.529712854135209,7.349875454071844,3.9244880634856956,1;focus=0,0,0,1;up=-0.26875302682986874,-0.2884991397174344,0.9189886054528014,1;transparent=true;alpha=140;edgeson=true;faceson=true;showbox=true;showaxes=true;showticks=true;perspective=true;centerxpercent=0.5;centerypercent=0.5;rotationsteps=30;autospin=true;xygrid=false;yzgrid=false;xzgrid=false;gridsonbox=true;gridplanes=false;gridcolor=rgb(128,128,128);xmin=-2;xmax=2;ymin=-2;ymax=2;zmin=-4;zmax=4;xscale=1;yscale=1;zscale=1;zcmin=-4;zcmax=4;zoom=0.468667;xscalefactor=1;yscalefactor=1;zscalefactor=1" variant="application" width="95%" aspect="10:13"/>
                 </figure>
             </subsection>
 

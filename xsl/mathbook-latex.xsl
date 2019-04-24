@@ -6629,6 +6629,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{tcbraster}%&#xa;</xsl:text>
 </xsl:template>
 
+<!-- Should an author provide an alternate version of the -->
+<!-- static representation of an interactive, we want to  -->
+<!-- use it above all other possibilities.                -->
+<!-- For now we process the "static" indiscriminantly     -->
+<!-- NB: this might require an explicit priority          -->
+<xsl:template match="interactive[static]">
+    <xsl:apply-templates select="static"/>
+</xsl:template>
+
 <!-- Input a URL, get back LaTeX to construct a URL              -->
 <!-- The macro \qrsize is set elsewhere (ie not here)            -->
 <!-- By loading hyperref, we automatically get a version         -->
