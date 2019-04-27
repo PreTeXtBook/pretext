@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--   This file is part of the documentation of PreTeXt      -->
+<!--                                                          -->
+<!--      PreTeXt Author's Guide                              -->
+<!--                                                          -->
+<!-- Copyright (C) 2013-2017  Robert A. Beezer, David Farmer  -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<backmatter xml:id="backmatter" xmlns:xi="http://www.w3.org/2001/XInclude">
+    <title>Appendices</title>
+
+    <xi:include href="faq.xml" />
+    <xi:include href="pretext-principles.xml" />
+    <xi:include href="gfdl-mathbook.xml" />
+
+</backmatter>
