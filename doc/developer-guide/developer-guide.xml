@@ -19,6 +19,7 @@
         <title><pretext /> Developer's Guide</title>
 
         <xi:include href="frontmatter.xml" />
+        <xi:include href="git.xml" />
         <xi:include href="backmatter.xml" />
 
     </book>

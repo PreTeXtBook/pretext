@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--   This file is part of the documentation of PreTeXt      -->
+<!--                                                          -->
+<!--        PreTeXt Developer's Guide                         -->
+<!--                                                          -->
+<!-- Copyright (C) 2019-2019                                  -->
+<!-- Robert A. Beezer, David Farmer, Alex Jordan              -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<chapter xml:id="git">
+    <title>Git</title>
+
+    <section>
+        <title>Getting Started</title>
+
+        <p>Todo: preliminary list as of 2019-04-26:<ul>
+            <li>Install git.</li>
+            <li>Learn to use git at command-line, front-ends will ruin your life.</li>
+            <li>GitHub is not git, but we use it to advantage.  Explain the difference.</li>
+            <li>Point to Git for Authors.</li>
+        </ul></p>
+    </section>
+
+    <section>
+        <title>Commit Messages</title>
+
+        <p>Commit messages are a critical tool when locating and reviewing changes to the project.  In a way, they are like an index of a book.  We take great care to have useful and concise commit messages, and to this end, we are likely to edit yours.  But you can help by doing some simple things, so we do not have to.<ul>
+            <li>Begin with a capital letter.</li>
+            <li>Do not end with a period.</li>
+            <li>Do not repeat information available by examining the commit itself.  Bad: <q>Changes in foo.xsl</q></li>
+            <li>No longer than roughly 60 to 70 characters, and never onto multiple lines.</li>
+            <li>You can find lots of advice about phrasing commit messages with action words, or in ways that describe how the code will be different.  These make for good reading, but we do not adhere slavishly to any one formulation.</li>
+            <li>For whatever reason, we isolate and prefix messages with <q>Author's Guide:<nbsp/></q>, <q>Publisher's Guide:<nbsp/></q>, <q>Developer's Guide:<nbsp/></q>, and <q>Schema:<nbsp/></q>.</li>
+            <li>For pull requests we will append <q><nbsp/>(PR #nnnn)</q>. You can try to predict this in advance of creating your PR.  (This provides a permanent record somewhat independent of GitHub, and GitHub will utilize this number.)  </li>
+        </ul></p>
+    </section>
+
+</chapter>
