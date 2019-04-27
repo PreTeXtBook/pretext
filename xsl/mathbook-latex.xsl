@@ -473,9 +473,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\IfFileExists{latexrelease.sty}{}{\usepackage{fixltx2e}}&#xa;</xsl:text>
     <xsl:if test="$document-root//fn or $document-root//part">
         <xsl:text>%% Footnote counters and part/chapter counters are manipulated&#xa;</xsl:text>
-        <xsl:text>%% April 2018: package now integrated into the kernel&#xa;</xsl:text>
-        <xsl:text>%% From chngcntr 1.1a it should detect defintions in LaTeX kernel&#xa;</xsl:text>
-        <xsl:text>\usepackage{chngcntr}&#xa;</xsl:text>
+        <xsl:text>%% April 2018:  chngcntr  commands now integrated into the kernel,&#xa;</xsl:text>
+        <xsl:text>%% but circa 2018/2019 the package would still try to redefine them,&#xa;</xsl:text>
+        <xsl:text>%% so we need to do the work of loading conditionally for old kernels.&#xa;</xsl:text>
+        <xsl:text>%% From version 1.1a,  chngcntr  should detect defintions made by LaTeX kernel.&#xa;</xsl:text>
+        <xsl:text>\ifdefined\counterwithin&#xa;</xsl:text>
+        <xsl:text>\else&#xa;</xsl:text>
+        <xsl:text>    \usepackage{chngcntr}&#xa;</xsl:text>
+        <xsl:text>\fi&#xa;</xsl:text>
         <xsl:if test="$parts = 'structural'">  <!-- implies book/part -->
             <xsl:text>%% Structural chapter numbers reset within parts&#xa;</xsl:text>
             <xsl:text>%% Starred form will not prefix part number&#xa;</xsl:text>
