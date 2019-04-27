@@ -1951,7 +1951,6 @@
                 <title>HTML</title>
                 <p>Wherever possible we supply <init>HTML</init> elements and attributes that will be interpreted sensibly by a screen reader in the absence of the visual styling provided by <init>CSS</init>.  This means we are cognizant of the role of headings (<c>h1</c> through <c>h6</c>), provide HTML that passes validation checks, and so on.  Employing attributes from the <url href="https://www.w3.org/WAI/standards-guidelines/aria/">Accessible Rich Internet Applications</url><fn><c>www.w3.org/WAI/standards-guidelines/aria/</c></fn> suite of web standards (<init>ARIA</init>) will go a long way to improving accessibility.  This work is in-progress as of 2018-05-31.</p>
             </li>
-
             <li>
                 <title>Mathematics</title>
                 <idx><h>accessibility</h><h>mathematics</h></idx>
@@ -2034,6 +2033,17 @@
         </ul></p>
 
         <p>Much of the technical work for accessibility is accomplished by <pretext/> developers.  But authors have responsibilities, too.  So testing can be part of your workflow.  One free tool is <url href="https://www.deque.com/axe/">axe</url><fn><c>www.deque.com/axe/</c></fn> from <url href="https://www.deque.com">Deque Systems</url><fn><c>www.deque.com</c></fn>.</p>
+
+        <p>We have concentrated on making <init>HTML</init> output accessible, since that seems the most natural and best supported.  But we are aware of efforts for other formats.<dl>
+            <li>
+                <title>PDF/<latex/></title>
+                <p>A <init>PDF</init> may not lend itself naturally to providing an accessible format.  But there have been efforts.  The <url href="https://tug.org/twg/accessibility/"><tex/> Users Group on PDF Accessibility and PDF Standards</url><fn><c>tug.org/twg/accessibility/</c></fn> is an excellent resource to start with.  There is also a <url href="https://github.com/rbeezer/mathbook/issues/1046"><pretext/> issue #1046</url><fn><c>github.com/rbeezer/mathbook/issues/1046</c></fn>.</p>
+            </li>
+            <li>
+                <title>EPUB</title>
+                <p>The International Digital Publishing Forum has information on <url href="http://idpf.org/a11y">EPUB Accessibility</url><fn><c>idpf.org/a11y</c></fn>.</p>
+            </li>
+        </dl></p>
     </section>
 
     <!--
