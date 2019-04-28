@@ -2,16 +2,15 @@
 
 <!--   This file is part of the documentation of PreTeXt      -->
 <!--                                                          -->
-<!--      PreTeXt Author's Guide                              -->
+<!--        PreTeXt Developer's Guide                         -->
 <!--                                                          -->
-<!-- Copyright (C) 2013-2017  Robert A. Beezer, David Farmer  -->
+<!-- Copyright (C) 2019-2019                                  -->
+<!-- Robert A. Beezer, David Farmer, Alex Jordan              -->
 <!-- See the file COPYING for copying conditions.             -->
 
 <backmatter xml:id="backmatter" xmlns:xi="http://www.w3.org/2001/XInclude">
     <title>Appendices</title>
 
-    <xi:include href="faq.xml" />
-    <xi:include href="pretext-principles.xml" />
     <xi:include href="gfdl-mathbook.xml" />
 
 </backmatter>
