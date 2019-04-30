@@ -65,6 +65,28 @@
     <xi:include href="mathematics.ptx" />
     <xi:include href="latex-image.ptx" />
 
+    <backmatter>
+      <index>
+        <title>Index</title>
+
+        <introduction>
+          <p>
+            Entries are alphabetized word-by-word, not letter-by-letter.
+            Topics indexed are <pretext/> features, not any actual content.
+          </p>
+        </introduction>
+
+        <index-list />
+      </index>
+
+      <colophon>
+        <p>
+          This article was authored in, and produced with, <pretext/>.
+          It is typeset with the Latin Modern font.
+        </p>
+      </colophon>
+    </backmatter>
+
   </article>
 
 </pretext>

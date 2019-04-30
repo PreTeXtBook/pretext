@@ -16,6 +16,8 @@
       until the very end. Suppose that we have an equation <m>ax^2+bx+c=0</m>,
       where <m>a\neq0</m>. Since <m>4a</m> is also not equal to <m>0</m>,
       we may multiply each side of the equation by <m>4a</m> and not lose any information:
+      <idx><h>mathematics</h><h>intertext</h></idx>
+      <idx><h>mathematics</h><h>aligned equations</h></idx>
       <md>
         <mrow>4a^2x^2+4abx+4ac\amp=0</mrow>
         <intertext>Subtract <m>4ac</m> from each side:</intertext>
@@ -37,6 +39,7 @@
     <title>Some Amusing Identities</title>
 
     <p>These equations are amusing, although maybe only to mathematicians. Largely taken from <url href="https://math.stackexchange.com/questions/505367/surprising-identities-equations">math.stackexchange.com</url><fn><c>math.stackexchange.com/questions/505367/surprising-identities-equations</c></fn>.
+    <idx><h>mathematics</h><h>displayed equations</h></idx>
       <me>
         \sqrt[\sqrt{2}]{2}=\sqrt{2}^{\sqrt{2}}
       </me>

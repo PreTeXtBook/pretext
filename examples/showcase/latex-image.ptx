@@ -11,6 +11,7 @@
 
   <figure>
     <caption><c>tikz</c> Examples</caption>
+    <idx><h>image</h><h>TikZ source</h></idx>
     <sidebyside margins="0%" widths="41% 53%" valign="bottom">
       <image xml:id="image-building-parabola">
         <!-- diagram from ORCCA by Ross Kouzes and Alex Jordan -->
@@ -83,6 +84,7 @@
 
   <figure>
     <caption><c>pgfplots</c> Examples</caption>
+    <idx><h>image</h><h><c>pgfplots</c> source</h></idx>
     <sidebyside margins="0%" widths="47% 47%" valign="bottom">
       <image xml:id="image-implicitly-defined-curve">
         <!-- plot from CLM by Alex Jordan -->
@@ -253,6 +255,7 @@
   <figure>
     <!-- images taken from a calculus classroom project by Alex Jordan -->
     <caption><c>pstricks</c> Examples</caption>
+    <idx><h>image</h><h><c>pstricks</c> source</h></idx>
     <sidebyside margins="0%" widths="47% 47%" valign="top">
       <image xml:id="image-raindrop-refraction-and-reflection">
         <description>
