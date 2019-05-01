@@ -17,7 +17,9 @@ declare EPUBSCRIPT=${MB}/examples/epub
 # mathjax-node-page paths
 # requires installation, see
 # https://github.com/pkra/mathjax-node-page
-declare MJNODE=/opt/node_modules/mathjax-node-page
+# RAB: 2019-05-01 in ~/node_modules; to update
+#      ~$ npm install mathjax-node-page
+declare MJNODE=/home/rob/node_modules/mathjax-node-page
 
 # Working areas
 # DEBUG saves post-xsltproc, pre-mathjax-node
