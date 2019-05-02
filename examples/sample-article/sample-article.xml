@@ -4196,7 +4196,7 @@ the xsltproc executable.
                 <figure>
                     <caption>1-Dimensional Kinematics</caption>
                     <interactive xml:id="kinematics" platform="jsxgraph" aspect="6:7" source="code/roesler/kinematics.js">
-                        <sidebyside width="70%" margins="5%">
+                        <sidebyside width="70%" margins="15%">
                             <stack>
                                 <slate xml:id="box_t" surface="jsxboard" aspect="6:1" />
                                 <slate xml:id="box_s" surface="jsxboard" aspect="6:3" />
