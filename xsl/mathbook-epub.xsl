@@ -145,7 +145,10 @@
     <!-- do not create faux <!DOCTYPE html> here -->
     <!-- NB:  If we add  xmlns="http://www.w3.org/1999/xhtml"  to <html> here, -->
     <!-- then we get plenty of top-level-ish  xmlns="" which do not validate   -->
-    <exsl:document href="{$file}" method="xml" encoding="UTF-8" indent="yes">
+    <!-- Any XML declaration seems to get scrubbed by the MathJax processing   -->
+    <!-- (converted to a comment), so we explicitly suppress it here, and in   -->
+    <!-- other exsl:document uses.                                             -->
+    <exsl:document href="{$file}" method="xml" omit-xml-declaration="yes" encoding="UTF-8" indent="yes">
         <html>
             <head>
                 <xsl:text>&#xa;</xsl:text> <!-- a little formatting help -->
@@ -212,7 +215,7 @@
     <!-- Do not use "doctype-system" here                            -->
     <!-- Automatically writes XML header at version 1.0, no encoding -->
     <!-- Points to OPF metadata file (in two variables)              -->
-    <exsl:document href="META-INF/container.xml" method="xml" indent="yes">
+    <exsl:document href="META-INF/container.xml" method="xml" omit-xml-declaration="yes" indent="yes">
         <container version="1.0" xmlns="urn:oasis:names:tc:opendocument:xmlns:container">
           <rootfiles>
             <rootfile full-path="{$content-dir}/{$package-file}" media-type="application/oebps-package+xml" />
@@ -230,7 +233,7 @@
     <!-- Must be XML, UTF-8/16            -->
     <!-- Required on package: version, id -->
     <!-- Trying with no encoding, Gitden rejects? -->
-    <exsl:document href="{$content-dir}/{$package-file}" method="xml" indent="yes">
+    <exsl:document href="{$content-dir}/{$package-file}" method="xml" omit-xml-declaration="yes" indent="yes">
         <package xmlns="http://www.idpf.org/2007/opf"
                  unique-identifier="{$uid-string}" version="3.0">
             <xsl:call-template name="package-metadata" />
@@ -387,7 +390,7 @@
 <!-- ############# -->
 
 <xsl:template match="frontmatter" mode="epub">
-    <exsl:document href="{$content-dir}/{$xhtml-dir}/cover.xhtml" method="xml" encoding="UTF-8" indent="yes">
+    <exsl:document href="{$content-dir}/{$xhtml-dir}/cover.xhtml" method="xml" omit-xml-declaration="yes" encoding="UTF-8" indent="yes">
         <html xmlns="http://www.w3.org/1999/xhtml">
             <head></head>
             <body>
@@ -395,7 +398,7 @@
             </body>
         </html>
     </exsl:document>
-    <exsl:document href="{$content-dir}/{$xhtml-dir}/title-page.xhtml" method="xml" encoding="UTF-8" indent="yes">
+    <exsl:document href="{$content-dir}/{$xhtml-dir}/title-page.xhtml" method="xml" omit-xml-declaration="yes" encoding="UTF-8" indent="yes">
         <html xmlns="http://www.w3.org/1999/xhtml">
             <head></head>
             <body>
@@ -414,7 +417,7 @@
             </body>
         </html>
     </exsl:document>
-    <exsl:document href="{$content-dir}/{$xhtml-dir}/table-contents.xhtml" method="xml" encoding="UTF-8" indent="yes">
+    <exsl:document href="{$content-dir}/{$xhtml-dir}/table-contents.xhtml" method="xml" omit-xml-declaration="yes" encoding="UTF-8" indent="yes">
         <html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
             <head>
                 <meta charset="utf-8"/>
