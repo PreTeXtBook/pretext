@@ -392,7 +392,13 @@
 <xsl:template match="frontmatter" mode="epub">
     <exsl:document href="{$content-dir}/{$xhtml-dir}/cover.xhtml" method="xml" omit-xml-declaration="yes" encoding="UTF-8" indent="yes">
         <html xmlns="http://www.w3.org/1999/xhtml">
-            <head></head>
+            <!-- head element should not be empty -->
+            <head>
+                <meta charset="utf-8"/>
+                <title>
+                    <xsl:apply-templates select="$document-root" mode="title-full"/>
+                </title>
+            </head>
             <body>
                 <img src="images/cover.png" />
             </body>
@@ -400,7 +406,13 @@
     </exsl:document>
     <exsl:document href="{$content-dir}/{$xhtml-dir}/title-page.xhtml" method="xml" omit-xml-declaration="yes" encoding="UTF-8" indent="yes">
         <html xmlns="http://www.w3.org/1999/xhtml">
-            <head></head>
+            <!-- head element should not be empty -->
+            <head>
+                <meta charset="utf-8"/>
+                <title>
+                    <xsl:apply-templates select="$document-root" mode="title-full"/>
+                </title>
+            </head>
             <body>
                 <h1>
                     <xsl:apply-templates select="$document-root" mode="title-full" />
