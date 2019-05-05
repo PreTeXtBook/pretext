@@ -78,7 +78,7 @@ cd ${EPUBOUT}
 xsltproc --xinclude  ${MBXSL}/mathbook-epub.xsl ${SRCMASTER}
 
 # fixup file header to make obviously XHTML
-declare GLOBIGNORE="${EPUBOUT}/EPUB/xhtml/cover.xhtml:${EPUBOUT}/EPUB/xhtml/title-page.xhtml:${EPUBOUT}/EPUB/xhtml/table-contents.xhtml"
+declare GLOBIGNORE="${EPUBOUT}/EPUB/xhtml/cover-page.xhtml:${EPUBOUT}/EPUB/xhtml/title-page.xhtml:${EPUBOUT}/EPUB/xhtml/table-contents.xhtml"
 for f in ${EPUBOUT}/EPUB/xhtml/*.xhtml; do
     sed -i -f ${EPUBSCRIPT}/mbx-epub-xhtml-header.sed $f
 done
@@ -91,7 +91,7 @@ cp -a ${EPUBSCRIPT}/pretext-epub.css ${EPUBOUT}/EPUB/css
 # copy to temp, replace math, fixup with sed
 # TODO: place content files someplace for processing, deletion
 cd ${MJNODE}
-declare GLOBIGNORE="${EPUBOUT}/EPUB/xhtml/cover.xhtml:${EPUBOUT}/EPUB/xhtml/title-page.xhtml:${EPUBOUT}/EPUB/xhtml/table-contents.xhtml"
+declare GLOBIGNORE="${EPUBOUT}/EPUB/xhtml/cover-page.xhtml:${EPUBOUT}/EPUB/xhtml/title-page.xhtml:${EPUBOUT}/EPUB/xhtml/table-contents.xhtml"
 for f in ${EPUBOUT}/EPUB/xhtml/*.xhtml; do
     echo "Working on" $f
     mv $f $f.temp;

@@ -300,7 +300,7 @@
 <xsl:template name="package-manifest">
     <manifest xmlns="http://www.idpf.org/2007/opf">
         <item id="css" href="{$css-dir}/pretext-epub.css" media-type="text/css"/>
-        <item id="cover" href="{$xhtml-dir}/cover.xhtml" media-type="application/xhtml+xml"/>
+        <item id="cover-page" href="{$xhtml-dir}/cover-page.xhtml" media-type="application/xhtml+xml"/>
         <item id="title-page" href="{$xhtml-dir}/title-page.xhtml" media-type="application/xhtml+xml"/>
         <item id="table-contents" href="{$xhtml-dir}/table-contents.xhtml" properties="nav" media-type="application/xhtml+xml"/>
         <item id="cover-image" href="{$xhtml-dir}/images/cover.png" properties="cover-image" media-type="image/png"/>
@@ -359,7 +359,7 @@
 <!-- Each must reference an id in the manifest   -->
 <xsl:template name="package-spine">
     <spine xmlns="http://www.idpf.org/2007/opf">
-        <itemref idref="cover" linear="yes" />
+        <itemref idref="cover-page" linear="yes" />
         <itemref idref="title-page" linear="yes"/>
         <itemref idref="table-contents" linear="yes"/>
         <xsl:apply-templates select="$document-root" mode="spine" />
@@ -390,7 +390,7 @@
 <!-- ############# -->
 
 <xsl:template match="frontmatter" mode="epub">
-    <exsl:document href="{$content-dir}/{$xhtml-dir}/cover.xhtml" method="xml" omit-xml-declaration="yes" encoding="UTF-8" indent="yes">
+    <exsl:document href="{$content-dir}/{$xhtml-dir}/cover-page.xhtml" method="xml" omit-xml-declaration="yes" encoding="UTF-8" indent="yes">
         <html xmlns="http://www.w3.org/1999/xhtml">
             <!-- head element should not be empty -->
             <head>
@@ -400,7 +400,11 @@
                 </title>
             </head>
             <body>
-                <img src="images/cover.png" />
+                <!-- https://www.opticalauthoring.com/inside-the-epub-format-the-cover-image/   -->
+                <!-- says the "figure" is necessary, and does not seem to hurt (CSS could style)-->
+                <figure>
+                    <img src="images/cover.png" />
+                </figure>
             </body>
         </html>
     </exsl:document>
