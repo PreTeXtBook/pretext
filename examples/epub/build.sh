@@ -111,6 +111,10 @@ unset GLOBIGNORE
 # TODO: We really should only include the images we put
 # in the manifest
 rm ${EPUBOUT}/EPUB/xhtml/images/*.pdf
+# This image list is being produced, but not consulted
+# In any event, we need to remove it before it ends up in the zip file
+rm ${EPUBOUT}/xhtml/image-list.txt
+rmdir ${EPUBOUT}/xhtml
 
 # Back to usual default directory
 # zip with  mimetype  first

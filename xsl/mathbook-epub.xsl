@@ -321,7 +321,7 @@
 <!-- recurse into contents for image files, etc    -->
 <!-- See "Core Media Type Resources"               -->
 <!-- Add to spine identically                      -->
-<xsl:template match="frontmatter|colophon|acknowledgements|preface|chapter|appendix|index|section|exercises|references" mode="manifest">
+<xsl:template match="frontmatter|colophon|acknowledgement|preface|chapter|appendix|index|section|exercises|references|solutions" mode="manifest">
     <!-- Annotate manifest entries -->
     <xsl:comment>
         <xsl:apply-templates select="." mode="long-name" />
@@ -351,6 +351,7 @@
             <xsl:text>application/xhtml+xml</xsl:text>
         </xsl:attribute>
     </xsl:element>
+    <!-- recurse, eg from chapter down into a section -->
     <xsl:apply-templates select="*" mode="manifest" />
 </xsl:template>
 
@@ -372,7 +373,7 @@
 </xsl:template>
 
 <!-- Simplest scenario is spine matches manifest, all with @linear="yes" -->
-<xsl:template match="frontmatter|colophon|acknowledgements|preface|chapter|appendix|index|section|exercises|references" mode="spine">
+<xsl:template match="frontmatter|colophon|acknowledgement|preface|chapter|appendix|index|section|exercises|references|solutions" mode="spine">
     <xsl:element name="itemref" xmlns="http://www.idpf.org/2007/opf">
         <xsl:attribute name="idref">
             <xsl:apply-templates select="." mode="internal-id" />
