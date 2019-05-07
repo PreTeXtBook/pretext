@@ -135,7 +135,7 @@
                 <title><tag>taxon</tag>, scientific names, <taxon>Escherichia coli</taxon></title>
                 <p>This element may surround a full scientific name, resulting in presentation in italics.  There are subelements <tag>genus</tag> and <tag>species</tag> which may be used to delineate those components.</p>
 
-                <p>A <attr>ncbi</attr> attribute on <tag>taxon</tag> accepts an identiier from the <url href="https://www.ncbi.nlm.nih.gov/">National Center for Biotechnology Information</url>.  Feature requests for ways to make this more useful are welcome.</p>
+                <p>A <attr>ncbi</attr> attribute on <tag>taxon</tag> accepts an identifier from the <url href="https://www.ncbi.nlm.nih.gov/">National Center for Biotechnology Information</url>.  Feature requests for ways to make this more useful are welcome.</p>
             </paragraphs>
 
             <!-- Footnotes -->
@@ -360,7 +360,7 @@
             <subsubsection>
                 <title>Extraordinary Characters</title>
 
-                <p>Some characters or symbols are typically not available on a keyboard, so we provide empty elements.  Many of these may be entered directly into your source as Unicode characters, and they will do well in your <init>HTML</init> output.  However these may fail entirely if you create print or <init>PDF</init> via <latex/> using the <c>pdflatex</c> engine.  Furthermore, even for <init>HTML</init> output there may be several Unicode characters that are very similar.</p>
+                <p>Some characters or symbols are typically not available on a keyboard, so we provide empty elements.  Many of these may be entered directly into your source as Unicode characters, and they will do well in your <init>HTML</init> output.  However, these may fail entirely if you create print or <init>PDF</init> via <latex/> using the <c>pdflatex</c> engine.  Furthermore, even for <init>HTML</init> output there may be several Unicode characters that are very similar.</p>
 
                 <p>So again, for the best quality output be aware of these elements and use them.  Please suggest additions if you do not find what you need and are resorting to Unicode characters.</p>
 
@@ -479,7 +479,7 @@
 
                 <p>The second 128 Unicode characters (hex <c>80</c> to <c>FF</c>) contain many of the most frequently-used accented characters in Western languages, along with niceties such as the German <foreign>eszett</foreign>, &#xDF;, or the Scandinavian <foreign>æsc</foreign>, &#xE6;, an a-e ligature.  Like the fifty-two Latin letters (part of the <em>first</em> 128 Unicode characters), these may be used as-is.  They may be present on your keyboard, or you may need to learn keyboard shortcuts or specifics of your operating system to enter them as Unicode characters.  In a pinch, you can often cut-and-paste a few characters from web pages.</p>
 
-                <p>This table is indexed by the Unicode number, in hexadecinal notation.  The first 32 of the 128 (<c>U+0080</c><ndash/><c>U+009F</c>) are control codes and <c>U+00A0</c> is a non-breaking space, so is invisible, while <c>U+00AD</c> is a soft hyphen (which we have not implemented and so is excluded).</p>
+                <p>This table is indexed by the Unicode number, in hexadecimal notation.  The first 32 of the 128 (<c>U+0080</c><ndash/><c>U+009F</c>) are control codes and <c>U+00A0</c> is a non-breaking space, so is invisible, while <c>U+00AD</c> is a soft hyphen (which we have not implemented and so is excluded).</p>
 
                 <!-- ex &#x0080; - &#x009F; controls -->
                 <!-- ex &#x00A0; non-breaking space  -->
@@ -625,7 +625,7 @@
             <paragraphs>
                 <!-- <title>music notation</title> -->
                 <title><doublesharp/>, <sharp/>, <natural/>, <flat/>, <doubleflat/>, music notation</title>
-                <p>Notes, chords, and other notation may appear within sentences as part of a dicussion.  See <xref ref="topic-music" /> for detailed descriptions of the relevant elements.</p>
+                <p>Notes, chords, and other notation may appear within sentences as part of a discussion.  See <xref ref="topic-music" /> for detailed descriptions of the relevant elements.</p>
             </paragraphs>
         </subsection>
 
@@ -1140,7 +1140,7 @@
         <subsection>
             <title>Extras</title>
 
-            <p>There are two existing additional options, which we might want to remove some day for technical reasons.  Macros from the <c>extpfeil</c> extensible arrows package are availble by default, and an <c>\sfrac{}{}</c> macro is available for appealing inline <q>slanted fractions.</q></p>
+            <p>There are two existing additional options, which we might want to remove some day for technical reasons.  Macros from the <c>extpfeil</c> extensible arrows package are available by default, and an <c>\sfrac{}{}</c> macro is available for appealing inline <q>slanted fractions.</q></p>
         </subsection>
     </section>
 
@@ -1704,7 +1704,7 @@
      </p>
 
      <p>An index may start with a <term>headnote</term> giving advice about using the index.
-        Typically not necessary unless the index has some unusual features.
+        Typically a headnote is not necessary unless the index has some unusual features.
      </p>
 
 </paragraphs>
@@ -1728,7 +1728,7 @@
       </p>
 
       <p>Topics should be indexed in multiple ways.  If a term is defined, you should also think
-         of other words the reader might search for it.  For example, you may define <q>limit point</q>
+         of other words the reader might search for.  For example, you may define <q>limit point</q>
          and consistently use only that term, but an index entry for <q>accumulation point</q> with a
          <q><em>see</em> limit point</q> locator would be appropriate.
 </p>
@@ -1771,7 +1771,7 @@
         any subject there are topics which are addressed repeatedly.  This should be
         reflected in the structure of the index.  For example, in a group theory textbook
         there should be several entries under <q>group, examples</q>.  In an introductory
-        calculus book the index should help the reader locate the derivative of a many
+        calculus book the index should help the reader locate the derivative of many
         different elementary functions.
         </p>
 
