@@ -3,9 +3,23 @@
 # History:
 #   2019-02-17: Initiated
 
+# [LUPM] Liblouisutdml User's and Programmer's Manual
+
+###########################################
+# Braille versions of math from MathJax/SRE
+###########################################
+
 # mathjax puts braille Unicode characters into the 
 # "title" element of an SVG, PreTeXt does not otherwise 
 # use a "title" element.  The Unicode characters become 
-# their ASCII Braille equivalents it seems
+# their ASCII Braille equivalents (it seems)
 
+
+#################################################
 # Routine elements with uncontroversial semantics
+#################################################
+
+# PTX uses <br/> for lines of structures like address
+# blocks of multi-line quote attributions
+softreturn br
+
