@@ -16,11 +16,7 @@
 # proper output.
 no hr
 no body
-softreturn br
-heading1 h1
-italicx em
 skip style
-italicx strong
 no ol
 no head
 document html
@@ -31,7 +27,6 @@ pagenum pagenum
 no div
 no span
 no link
-heading2 h2
 no img
 no td
 no tr
@@ -97,16 +92,13 @@ no p,class,right
 no span,class,math-inline-normal
 code pre
 no meta
-no h1,align
 no meta,content
 no meta,name
 no meta,name,description
-no h1,align,center
 no meta,name,keywords
 no font
 no b
 no small
-no h3
 no sub
 no font,size
 no td,align
@@ -128,7 +120,6 @@ no mprescripts
 no math,id
 no mo,minsize
 no math,smilref
-no h1,class
 no p,id
 no caption,title
 no table,id
@@ -163,7 +154,6 @@ no div,class,doctitle
 no div,class,frontmatter
 no param,name,SRC
 no html,lang,en
-no h1,class,title
 no meta,scheme,DOI
 no meta,name,dc:Format
 no a,class,nava
@@ -171,12 +161,7 @@ no a,shape
 no a,shape,rect
 no a,target
 no a,target,_blank
-no br,class
-no br,class,newline
 no center
-no h3,class
-heading4 h4
-no h4,class
 no link,href,http://purl.org/DC/elements/1.0/
 no link,href,root.css
 no link,rel,schema.DC
@@ -200,7 +185,6 @@ no table,class
 no table,class,equation
 no td,class,eq-no
 no list
-italicx emp
 no attrib
 no meta,name,generator
 no mo,class,MathClass-op
@@ -211,7 +195,6 @@ no var
 para dd
 no dl
 para dt
-heading4 h5
 compbrl code
 no base,href
 no hr,title
@@ -221,7 +204,6 @@ no tr,valign,baseline
 no samp
 no th
 no dd,id
-no h2,id
 no table,summary
 no li,id
 no ol,id
@@ -230,15 +212,12 @@ no ul,class
 no ul,id
 no dt,id
 no samp,id
-no h1,id
-no h3,id
 no ul,class,pl
 no base
 no var
 para dd
 para dl
 no dt
-no h5
 code code
 no base,href
 no hr,title
@@ -248,7 +227,6 @@ no tr,valign,baseline
 no samp
 no th
 no dd,id
-no h2,id
 no table,summary
 no li,id
 no ol,id
@@ -257,8 +235,6 @@ no ul,class
 no ul,id
 no dt,id
 no samp,id
-no h1,id
-no h3,id
 no ul,class,pl
 no form
 no input
@@ -338,14 +314,11 @@ no li,class,ibm-first
 no option,selected,selected
 no select,class,input-local
 no body,link
-no h3,align
 no body,vlink
 no body,alink
 no body,bgcolor
 no body,text
-no h2,align
 no font,face
-no h3,align,center
 no acronym
 code cdata-section
 no dfn
@@ -356,9 +329,7 @@ no ol,start
 no small,class
 no link,title
 no a,rel
-no h2,class
 no div,align
-no h2,class,unnumbered
 no a,rel,next
 no div,align,right
 no link,title,Top
@@ -379,7 +350,6 @@ no table,rules,groups
 no tr,class,hline
 no table,class,tabular
 no td,class,td11
-no h2,class
 no colgroup,id
 no tr,style
 no td,style

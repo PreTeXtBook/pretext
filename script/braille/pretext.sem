@@ -23,3 +23,24 @@
 # blocks of multi-line quote attributions
 softreturn br
 
+# Headings have styles, "headingX", which can be given
+# in the  pretext-liblouis.cfg  configuration file
+# LUPM, 3.4.10, 2019-05-08, suggest 10 levels (use classes?)
+heading1 h1
+heading2 h2
+heading3 h3
+heading4 h4
+heading5 h5
+heading6 h6
+
+
+##################
+Distinguished Text
+##################
+
+# PTX em => HTML em.emphasis
+# PTX alert => HTML em.alert
+italicx em
+
+# PTX foreign => HTML i.foreign
+italicx i,class,foreign
