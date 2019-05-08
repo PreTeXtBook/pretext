@@ -10,8 +10,8 @@
 #  2019-02-14  Integrate mathjax-node-sre
 
 # Usage:
-# PreTeX::  $1
-# Output:   ${SCRATCH}/final.brf
+# PreTeX source:    $1
+# Output BRF file:  ${SCRATCH}/final.brf
 
 # Script Prerequisites
 #   install -d to make directories
@@ -52,8 +52,11 @@ echo "Apply mjpage conversion, to convert LaTeX to MathML"
 ${NODE}/mathjax-node-page/bin/mjpage --speech false --format TeX --output MML < ${SCRATCH}/html-latex.html > ${SCRATCH}/html-mml.html
 
 # MathJax is making HTML, and JSDOM below does not like 
-# the entity &nbsp; (we should be able to obsolete this step) 
+# the entity &nbsp; (we should be able to obsolete this step)
+# <br/> used for "lined" environments, like an address
+# block suffer a similar fate
 sed -i -e "s/\&nbsp;/\&#xa;/g" ${SCRATCH}/html-mml.html
+sed -i -e "s/<br>/<br\/>/g"    ${SCRATCH}/html-mml.html
 
 # This custom Javascript is provided by Peter Krautzberger, 
 # of the MathJax project, and is edited for our purposes.  
