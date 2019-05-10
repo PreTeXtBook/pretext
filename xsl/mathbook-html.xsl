@@ -643,14 +643,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="permalink" />
 </xsl:template>
 
-<!-- THIS NEXT BIT IS ONLY FOR HTML AND SHOULD NOT BE       -->
-<!-- TAKEN SERIOUSLY, BE SURE TO REMOVE IT WHEN THE         -->
-<!-- "division-name" TEMPLATE MIGRATES FROM COMMON TO LATEX -->
-<xsl:template match="colophon|biography|dedication" mode="division-name">
-    <xsl:text>chapter</xsl:text>
-</xsl:template>
-
-
 <!-- Add an author's names, if present   -->
 <!-- TODO: make match more restrictive?  -->
 <xsl:template match="&STRUCTURAL;" mode="author-byline">
@@ -701,7 +693,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <span class="type">
         <xsl:call-template name="type-name">
             <xsl:with-param name="string-id">
-                <xsl:apply-templates select="." mode="division-name" />
+                <xsl:value-of select="local-name(.)" />
             </xsl:with-param>
         </xsl:call-template>
     </span>
