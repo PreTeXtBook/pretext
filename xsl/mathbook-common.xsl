@@ -1462,6 +1462,7 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 <!-- Input:  a relative level, ie counted from document root -->
 <!-- Output:  the LaTeX name (or close), HTML element        -->
 <!-- NB:  this is a named template, independent of context   -->
+<!-- NB: (2019-05-09) This could go to the -latex conversion -->
 <xsl:template name="level-to-name">
     <xsl:param name="level" />
     <xsl:variable name="normalized-level" select="$level + $root-level" />
