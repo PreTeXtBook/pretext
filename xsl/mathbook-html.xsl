@@ -875,15 +875,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="line" />
 </xsl:template>
 
-<!-- Sneak in dedication line element here as well -->
-<xsl:template match="department/line|institution/line|dedication/p/line">
-    <xsl:apply-templates />
-    <!-- is there a next line to separate? -->
-    <xsl:if test="following-sibling::*">
-        <br />
-    </xsl:if>
-</xsl:template>
-
 <!-- Front Colophon -->
 <!-- Licenses, ISBN, Cover Designer, etc -->
 <!-- We process pieces, in document order -->
@@ -6601,17 +6592,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- we bail out of recursion with no action taken -->
 </xsl:template>
 
-<!-- Perhaps this could be consolidated     -->
-<!-- with other uses of the "line" element? -->
-<xsl:template match="tabular/row/cell/line">
-    <xsl:apply-templates/>
-    <!-- is there a next line to separate? -->
-    <xsl:if test="following-sibling::line">
-        <br/>
-    </xsl:if>
-</xsl:template>
-
-
 <!-- ############################ -->
 <!-- Table construction utilities -->
 <!-- ############################ -->
@@ -6934,6 +6914,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- https://github.com/BooksHTML/mathbook-assets/issues/64 -->
 
 <!-- Single line, mixed-content          -->
+<!-- Or structured by "line" elements    -->
 <!-- Quotation dash if within blockquote -->
 <!-- Unicode Character 'HORIZONTAL BAR' aka 'QUOTATION DASH' -->
 <xsl:template match="attribution">
@@ -6941,27 +6922,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="parent::blockquote">
             <xsl:text>&#x2015;</xsl:text>
         </xsl:if>
-        <xsl:apply-templates />
+        <xsl:choose>
+            <xsl:when test="line">
+                <xsl:apply-templates select="line" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates />
+            </xsl:otherwise>
+        </xsl:choose>
     </cite>
-</xsl:template>
-
-<!-- Multiple lines, structured by lines -->
-<xsl:template match="attribution[line]">
-    <cite class="attribution">
-        <xsl:apply-templates select="line" />
-    </cite>
-</xsl:template>
-
-<!-- General line of an attribution -->
-<xsl:template match="attribution/line">
-    <xsl:if test="parent::attribution/parent::blockquote and not(preceding-sibling::*)">
-        <xsl:text>&#x2015;</xsl:text>
-    </xsl:if>
-    <xsl:apply-templates />
-    <!-- is there a next line to separate? -->
-    <xsl:if test="following-sibling::*">
-        <br />
-    </xsl:if>
 </xsl:template>
 
 <!-- Defined terms (bold, typically) -->

@@ -1397,7 +1397,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\newcolumntype{B}{!{\vrule width 0.07em}}&#xa;</xsl:text>
         <xsl:text>\newcolumntype{C}{!{\vrule width 0.11em}}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="//cell/line">
+    <xsl:if test="$document-root//cell/line">
         <xsl:text>\newcommand{\tablecelllines}[3]%&#xa;</xsl:text>
         <xsl:text>{\begin{tabular}[#2]{@{}#1@{}}#3\end{tabular}}&#xa;</xsl:text>
     </xsl:if>
@@ -3457,15 +3457,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="line" />
 </xsl:template>
 
-<xsl:template match="department/line|institution/line">
-    <xsl:apply-templates />
-    <!-- is there a next line to separate? -->
-    <xsl:if test="following-sibling::*">
-        <xsl:text>\\&#xa;</xsl:text>
-    </xsl:if>
-</xsl:template>
-
-
 <!-- ###################### -->
 <!-- Front Matter, Articles -->
 <!-- ###################### -->
@@ -3641,6 +3632,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- are centered on a page of their own         -->
 <!-- The center environment provides good        -->
 <!-- vertical break between multiple instances   -->
+<!-- Each "p" may be structured by "line"        -->
 <!-- The p[1] elsewhere is the default,          -->
 <!-- hence we use the priority mechanism (>0.5)  -->
 <xsl:template match="dedication/p|dedication/p[1]" priority="1">
@@ -3648,17 +3640,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates />
     <xsl:text>%&#xa;</xsl:text>
     <xsl:text>\end{center}&#xa;</xsl:text>
-</xsl:template>
-
-<!-- General line of a dedication -->
-<xsl:template match="dedication/p/line">
-    <xsl:apply-templates />
-    <!-- is there a next line to separate? -->
-    <xsl:if test="following-sibling::*">
-        <xsl:text>\\</xsl:text>
-    </xsl:if>
-    <!-- always format source visually -->
-    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <!-- ##################### -->
@@ -7062,6 +7043,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- TODO: make a rule for quotation-dash?          -->
 
 <!-- Single line, mixed-content                     -->
+<!-- Or structured by "line" elements               -->
 <!-- Quotation dash if within blockquote            -->
 <!-- A table, pushed right, with left-justification -->
 <xsl:template match="attribution">
@@ -7070,33 +7052,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="parent::blockquote">
         <xsl:call-template name="mdash-character"/>
     </xsl:if>
-    <xsl:apply-templates />
+    <xsl:choose>
+        <xsl:when test="line">
+            <xsl:apply-templates select="line" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates />
+        </xsl:otherwise>
+    </xsl:choose>
     <xsl:text>&#xa;</xsl:text>
     <xsl:text>\end{tabular}\\\par&#xa;</xsl:text>
 </xsl:template>
-
-<!-- Multiple lines, structured by lines -->
-<xsl:template match="attribution[line]">
-    <xsl:text>\nopagebreak\par%&#xa;</xsl:text>
-    <xsl:text>\hfill\begin{tabular}{l@{}}&#xa;</xsl:text>
-    <xsl:apply-templates select="line" />
-    <xsl:text>\end{tabular}\\\par&#xa;</xsl:text>
-</xsl:template>
-
-<!-- General line of an attribution -->
-<xsl:template match="attribution/line">
-    <xsl:if test="parent::attribution/parent::blockquote and not(preceding-sibling::*)">
-        <xsl:call-template name="mdash-character"/>
-    </xsl:if>
-    <xsl:apply-templates />
-    <!-- is there a next line to separate? -->
-    <xsl:if test="following-sibling::*">
-        <xsl:text>\\</xsl:text>
-    </xsl:if>
-    <!-- always format source visually -->
-    <xsl:text>&#xa;</xsl:text>
-</xsl:template>
-
 
 <!-- Emphasis -->
 <xsl:template match="em">
@@ -9414,15 +9380,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
-
-<xsl:template match="cell/line">
-    <xsl:apply-templates />
-    <!-- is there a next line to separate? -->
-    <xsl:if test="following-sibling::*">
-        <xsl:text>\\&#xa;</xsl:text>
-    </xsl:if>
-</xsl:template>
-
 
 <!-- ########################### -->
 <!-- Labels and Cross-References -->
