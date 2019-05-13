@@ -11,7 +11,7 @@
         
         Article =
             element article {
-                MetaDataSubtitle,
+                MetaDataLinedSubtitle,
                 ArticleFrontMatter?,
                 (
                     (
@@ -33,7 +33,7 @@
         Book =
             ## Here is what a book looks like.
             element book {
-                MetaDataSubtitle,
+                MetaDataLinedSubtitle,
                 BookFrontMatter?,
                 (Part+ | Chapter+ ),
                 BookBackMatter?
@@ -46,11 +46,11 @@
         
         Part =
             element part {
-                MetaDataShortTitle, Chapter+
+                MetaDataLinedTitle, Chapter+
             }
         Chapter =
             element chapter {
-                MetaDataShortTitle,
+                MetaDataLinedTitle,
                 AuthorByline*,
                 Objectives?,
                 (
@@ -74,7 +74,7 @@
             }
         Section =
             element section {
-                MetaDataShortTitle,
+                MetaDataLinedTitle,
                 AuthorByline*,
                 Objectives?,
                 (
@@ -1057,8 +1057,12 @@
             attribute permid {text}
         Title =
             element title {TextLong}
+        LinedTitle =
+            element title {LongLine+}
         Subtitle =
             element subtitle {TextLong}
+        LinedSubtitle =
+            element subtitle {LongLine+}
         ShortTitle =
             element shorttitle {TextShort}
         Creator =
@@ -1084,6 +1088,14 @@
             Title,
             ShortTitle?,
             Index*
+        MetaDataLinedTitle =
+            UniqueID?,
+            PermanentID?,
+            XMLBase?,
+            XMLLang?,
+            (Title | LinedTitle),
+            ShortTitle?,
+            Index*
         MetaDataSubtitle =
             UniqueID?,
             PermanentID?,
@@ -1091,6 +1103,15 @@
             XMLLang?,
             Title,
             Subtitle?,
+            ShortTitle?,
+            Index*
+        MetaDataLinedSubtitle =
+            UniqueID?,
+            PermanentID?,
+            XMLBase?,
+            XMLLang?,
+            (Title | LinedTitle),
+            (Subtitle | LinedSubtitle)?,
             ShortTitle?,
             Index*
         MetaDataTitleOptional =

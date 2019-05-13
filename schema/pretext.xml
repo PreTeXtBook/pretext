@@ -67,7 +67,7 @@
         <fragment xml:id="document-types">
         Article =
             element article {
-                MetaDataSubtitle,
+                MetaDataLinedSubtitle,
                 ArticleFrontMatter?,
                 (
                     (
@@ -89,7 +89,7 @@
         Book =
             ## Here is what a book looks like.
             element book {
-                MetaDataSubtitle,
+                MetaDataLinedSubtitle,
                 BookFrontMatter?,
                 (Part+ | Chapter+ ),
                 BookBackMatter?
@@ -113,11 +113,11 @@
         <fragment xml:id="divisions">
         Part =
             element part {
-                MetaDataShortTitle, Chapter+
+                MetaDataLinedTitle, Chapter+
             }
         Chapter =
             element chapter {
-                MetaDataShortTitle,
+                MetaDataLinedTitle,
                 AuthorByline*,
                 Objectives?,
                 (
@@ -141,7 +141,7 @@
             }
         Section =
             element section {
-                MetaDataShortTitle,
+                MetaDataLinedTitle,
                 AuthorByline*,
                 Objectives?,
                 (
@@ -1678,8 +1678,10 @@
             <li>The <c>xinclude</c> mechanism inserts a <c>@xml:base</c> attribute on the root element of an included file.  So we allow this attribute on any element that allows a title.</li>
             <li>These are not unordered specifications since they contain several attributes, and we enforce a <c>title</c>, <c>subtitle</c>, <tag>shorttitle</tag>, <c>creator</c>, <c>caption</c>, <c>idx</c> order.</li>
             <li><c>MetaDataTarget</c> is for items that are targets of cross-references, but without even optional titles.  Since they will be knowled, they can appear in an index.  But without the potential to be titled, we do not set them up as possible root elements of a file to <c>xinclude</c>.</li>
-            <li><c>MetaDataTitle</c> has a required <tag>title</tag>, and allows an optional <tag>shorttitle</tag>.</li>
+            <li><c>MetaDataTitle</c> has a required <tag>title</tag>.</li>
+            <li><c>MetaDataShortTitle</c> has a required <tag>title</tag>, and allows an optional <tag>shorttitle</tag>.</li>
             <li><c>MetaDataSubtitle</c> implicitly has a required <tag>title</tag>, and allows optional <tag>subtitle</tag> and <tag>shorttitle</tag>.</li>
+            <li><c>MetaDataLinedTitle</c> and <c>MetaDataLinedSubtitle</c> are variants of the <c>Short</c> or <c>Subtitle</c> versions for use on larger divisions with <tag>line</tag> elements used to suggest line breaks in titles.</li>
             <li><c>MetaDataCaption</c> implicitly has an optional title.</li>
             <li>Titles may contain external references (<c>url</c>) or internal cross-references (<c>xref</c>), but implementers need not make them active (<ie />, they maybe text only), since titles are prone to migrating to other locations.</li>
         </ul></p>
@@ -1691,8 +1693,12 @@
             attribute permid {text}
         Title =
             element title {TextLong}
+        LinedTitle =
+            element title {LongLine+}
         Subtitle =
             element subtitle {TextLong}
+        LinedSubtitle =
+            element subtitle {LongLine+}
         ShortTitle =
             element shorttitle {TextShort}
         Creator =
@@ -1718,6 +1724,14 @@
             Title,
             ShortTitle?,
             Index*
+        MetaDataLinedTitle =
+            UniqueID?,
+            PermanentID?,
+            XMLBase?,
+            XMLLang?,
+            (Title | LinedTitle),
+            ShortTitle?,
+            Index*
         MetaDataSubtitle =
             UniqueID?,
             PermanentID?,
@@ -1725,6 +1739,15 @@
             XMLLang?,
             Title,
             Subtitle?,
+            ShortTitle?,
+            Index*
+        MetaDataLinedSubtitle =
+            UniqueID?,
+            PermanentID?,
+            XMLBase?,
+            XMLLang?,
+            (Title | LinedTitle),
+            (Subtitle | LinedSubtitle)?,
             ShortTitle?,
             Index*
         MetaDataTitleOptional =
