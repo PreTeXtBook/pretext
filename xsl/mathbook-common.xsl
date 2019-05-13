@@ -7457,6 +7457,50 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:choose>
 </xsl:template>
 
+<!-- ################### -->
+<!-- Structured by Lines -->
+<!-- ################### -->
+
+<!-- Some items, such as an address or an attribution,          -->
+<!-- can be formatted like a poem, as a sequence of lines,      -->
+<!-- without really being able to say just why or how in        -->
+<!-- advance via markup.  So the schema will allow an element   -->
+<!-- to be a simple, single line of text, OR a sequence of      -->
+<!-- "line" elements (only), each "line" being the same simple  -->
+<!-- text.  Generally, all we need is an abstract separator for -->
+<!-- the first n-1 lines.  What happens after the last line     -->
+<!-- should be in agreement with the single line version.       -->
+
+
+<!-- Allowed to be structured, and handled abstractly -->
+<!--   * department (author, editor, etc.)            -->
+<!--   * institution (author, editor, etc.)           -->
+<!--   * dedication/p                                 -->
+<!--   * attribution                                  -->
+<!--   * cell (tabular/row/cell/line)                 -->
+<!--                                                  -->
+<!-- Specialized, handled specifically (ie not here)  -->
+<!--   * poem/stanza/line                             -->
+<!--   * letter/frontmatter/to/line (from) (LaTeX)    -->
+<!--   * memo/frontmatter/to/line (from) (LaTeX)      -->
+
+<!-- The markup, and visual source necessary for the  -->
+<!-- end of each line, default indicates a problem    -->
+<!-- Needs an override for each conversion            -->
+<xsl:template name="line-separator">
+    <xsl:text>[LINESEP]</xsl:text>
+</xsl:template>
+
+<!-- Explicitly assumes a sequence of "line" -->
+<xsl:template match="line">
+    <xsl:apply-templates />
+    <!-- is there a next line to separate? -->
+    <xsl:if test="following-sibling::line">
+        <xsl:call-template name="line-separator"/>
+    </xsl:if>
+</xsl:template>
+
+
 <!-- ################ -->
 <!-- Poetry Utilities -->
 <!-- ################ -->

@@ -9836,9 +9836,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!--        -->
+<!-- ################### -->
+<!-- Structured by Lines -->
+<!-- ################### -->
+
+<!-- The LaTeX-specific line separator for use by  -->
+<!-- the abstract template for a "line" elent used -->
+<!-- to (optionally) structure certain elements.   -->
+
+<xsl:template name="line-separator">
+    <xsl:text>\\&#xa;</xsl:text>
+</xsl:template>
+
+<!-- ###### -->
 <!-- Poetry -->
-<!--        -->
+<!-- ###### -->
 
 <xsl:template match="poem">
     <xsl:text>\begin{poem}</xsl:text>
