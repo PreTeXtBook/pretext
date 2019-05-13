@@ -3868,9 +3868,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 
 <xsl:variable name="title-separator" select="'[TITLESEP]'"/>
 
-<!-- Books:    title, subtitle, titles of parts, titles of chapters -->
-<!-- Articles: title, subtitle, titles of sections                  -->
-<xsl:template match="book/title/line|book/subtitle/line|book/part/title/line|book/part/chapter/title/line|book/chapter/title/line|article/title/line|article/subtitle/line|article/section/title/line">
+<!-- Books:    overall title and subtitle, titles of parts, chapters and sections -->
+<!-- Articles: overall title and subtitle, titles of sections                     -->
+<xsl:template match="book/title/line|book/subtitle/line|book/part/title/line|book/part/chapter/title/line|book/chapter/title/line|book/part/chapter/section/title/line|book/chapter/section/title/line|article/title/line|article/subtitle/line|article/section/title/line">
     <xsl:param name="separator"/>
 
     <xsl:apply-templates/>
