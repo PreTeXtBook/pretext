@@ -959,8 +959,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\newcommand{\forwardimplication}{($\Rightarrow$)}&#xa;</xsl:text>
         <xsl:text>\newcommand{\backwardimplication}{($\Leftarrow$)}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:text>%% Subdivision Numbering, Chapters, Sections, Subsections, etc&#xa;</xsl:text>
-    <xsl:text>%% Subdivision numbers may be turned off at some level ("depth")&#xa;</xsl:text>
+    <xsl:text>%% Division Numbering: Chapters, Sections, Subsections, etc&#xa;</xsl:text>
+    <xsl:text>%% Division numbers may be turned off at some level ("depth")&#xa;</xsl:text>
     <xsl:text>%% A section *always* has depth 1, contrary to us counting from the document root&#xa;</xsl:text>
     <xsl:text>%% The latex default is 3.  If a larger number is present here, then&#xa;</xsl:text>
     <xsl:text>%% removing this command may make some cross-references ambiguous&#xa;</xsl:text>

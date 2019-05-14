@@ -380,8 +380,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
-<!-- User-supplied Numbering for Maximum Level    -->
-<!-- Respect switch, or provide sensible defaults -->
+<!-- User-supplied Numbering for Maximum Level     -->
+<!-- Respect switch, or provide sensible defaults  -->
+<!-- NB: level number counts the number of         -->
+<!-- separators (periods) present once qualified   -->
+<!-- with a numbered item contained within         -->
+<!-- NB: If we were to allow multiple (hence       -->
+<!-- numbered) specialized divisions of a          -->
+<!-- "subsubsection", then the non-zero maximums   -->
+<!-- below would go up by 1                        -->
+<!--   article/section: s.ss.sss => 3              -->
+<!--   book:            c.s.ss.sss => 4            -->
+<!--   book/part:       p.c.s.ss.sss => 5          -->
 <xsl:variable name="numbering-maxlevel">
     <xsl:variable name="max-feasible">
         <xsl:choose>
