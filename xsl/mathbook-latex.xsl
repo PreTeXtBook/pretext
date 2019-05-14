@@ -830,20 +830,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="environment"/>
     </xsl:for-each>
     <xsl:text>%%&#xa;</xsl:text>
-    <xsl:text>%% Styles for the traditional LaTeX divisions&#xa;</xsl:text>
-    <!-- Create five title styles, part to subsubsection -->
-    <!-- "titlesec" works on a level basis,              -->
-    <!-- so we just build all five named styles          -->
-    <!-- A specialized division of a subsubsection would -->
-    <!-- require a "paragraph" style.  We are using the  -->
-    <!-- LaTeX "subparagraph" traditional division for a -->
-    <!-- PTX "paragraphs", but perhaps we can fake that, -->
-    <!-- since we don't allow it to be styled.           -->
+    <xsl:text>%% Styles for six traditional LaTeX divisions&#xa;</xsl:text>
+    <!-- Create six title styles, part to paragraph     -->
+    <!-- NB: paragraph is like a "subsubsubsection"     -->
+    <!-- "titlesec" works on a level basis, so          -->
+    <!-- we just build all six named styles             -->
+    <!-- N.B.: we are using the LaTeX "subparagraph"    -->
+    <!-- traditional division for a PTX "paragraphs",   -->
+    <!-- but perhaps we can fake that with a tcolorbox, -->
+    <!-- since we don't allow it to be styled.          -->
     <xsl:call-template name="titlesec-part-style"/>
     <xsl:call-template name="titlesec-chapter-style"/>
     <xsl:call-template name="titlesec-section-style"/>
     <xsl:call-template name="titlesec-subsection-style"/>
     <xsl:call-template name="titlesec-subsubsection-style"/>
+    <xsl:call-template name="titlesec-paragraph-style"/>
     <xsl:text>%%&#xa;</xsl:text>
     <xsl:text>%% Semantic Macros&#xa;</xsl:text>
     <xsl:text>%% To preserve meaning in a LaTeX file&#xa;</xsl:text>
@@ -3067,6 +3068,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>{\normalfont\normalsize\bfseries}{}{0pt}{#1}&#xa;</xsl:text>
     <xsl:text>[{\normalsize\authorsptx}]&#xa;</xsl:text>
     <xsl:text>\titlespacing*{\subsubsection}{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}&#xa;</xsl:text>
+</xsl:template>
+
+<!-- We stick with LaTeX names for the hierarchy, so "paragraph" is next. -->
+<!-- This will be used for single (hence numberless only) specialized     -->
+<!-- divisions (e.g. "exercises") contained within a PTX subsubsection.   -->
+<xsl:template name="titlesec-paragraph-style">
+    <xsl:text>\titleformat{\paragraph}[hang]&#xa;</xsl:text>
+    <xsl:text>{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{#1}&#xa;</xsl:text>
+    <xsl:text>[{\small\authorsptx}]&#xa;</xsl:text>
+    <xsl:text>\titleformat{name=\paragraph,numberless}[block]&#xa;</xsl:text>
+    <xsl:text>{\normalfont\normalsize\bfseries}{}{0pt}{#1}&#xa;</xsl:text>
+    <xsl:text>[{\normalsize\authorsptx}]&#xa;</xsl:text>
+    <xsl:text>\titlespacing*{\paragraph}{0pt}{3.25ex plus 1ex minus .2ex}{1.5em}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- ############################ -->

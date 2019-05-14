@@ -1195,6 +1195,11 @@ the xsltproc executable.
                                 <p>A mock exercise to appease validation.</p>
                             </statement>
                         </exercise>
+                        <exercise>
+                            <statement>
+                                <p>And a second to help with formatting the division heading.</p>
+                            </statement>
+                        </exercise>
                     </exercises>
                 </subsubsection>
 
