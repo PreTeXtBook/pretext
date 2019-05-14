@@ -96,6 +96,14 @@
         <p>The <tag>fillin</tag> element can be rendered as a line near the baseline of the current line of text, or as a complete rectangle (<q>box</q>).  Set <c>latex.fillin.style</c> to the values <c>underline</c> or <c>box</c>.</p>
     </paragraphs>
 
+    <paragraphs xml:id="latex-index-style">
+        <title>Index Style</title>
+
+        <p>The <pubtitle>Author's Guide</pubtitle> explains how to create an index.  The realization of the index is under the influence of the <latex/> <c>imakeidx</c> package, which results in certain stylistic choices, such as a two-column format.  It also means that any options supported by this package could be easily implemented as the result of a feature request.</p>
+
+        <p>Also, there can be significant differences between how <pretext/> implements the index for <init>HTML</init> and how the <c>imakeidx</c> package creates an index for <latex/>.  See <xref ref="online-index-style"/> and <xref ref="indexing-guide"/>.</p>
+    </paragraphs>
+
     <paragraphs>
         <title>Experimentation</title>
 

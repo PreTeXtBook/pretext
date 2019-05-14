@@ -31,6 +31,24 @@
 
     </section>
 
+    <section xml:id="online-index-style">
+        <title>Index Style</title>
+
+        <p>The <pubtitle>Author's Guide</pubtitle> explains how to create an index.  The realization of the index for online output is implemented within <pretext/>.  We have made certain stylistic choices, in addition to taking advantage of certain features of the online format.<ul>
+            <li>A one-column format.</li>
+            <li>Indented subheadings (not run-in).</li>
+            <li>Maximum two levels of subheadings.</li>
+            <li>Word-by-word sort order on headings.</li>
+            <li>Locators for divisions are hyperlinks.</li>
+            <li>Locators for smaller units are knowls.</li>
+            <li><q>Page ranges</q> use the initial location.</li>
+            <li>No running heads (yet).</li>
+            <li>A <term>headnote</term> can be accomplished with an <tag>introduction</tag>.</li>
+        </ul>Some of these choices would be easy to adjust or extend as the result of a feature request.</p>
+
+        <p>Also, there can be significant differences between how <pretext/> implements the index for <init>HTML</init> and how the <c>imakeidx</c> package creates an index for <latex/>.  See <xref ref="latex-index-style"/> and <xref ref="indexing-guide"/>.</p>
+    </section>
+
     <section>
         <title>Styling</title>
 
