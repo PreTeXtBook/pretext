@@ -7046,12 +7046,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Or structured by "line" elements               -->
 <!-- Quotation dash if within blockquote            -->
 <!-- A table, pushed right, with left-justification -->
+<!-- TODO: CMOS says blockquote-attribution goes in -->
+<!-- parentheses (see 5e, 11.81), while this style  -->
+<!-- is for chapter epigraphs (see 5e, 1.39, 11.40) -->
 <xsl:template match="attribution">
     <xsl:text>\nopagebreak\par%&#xa;</xsl:text>
-    <xsl:text>\hfill\begin{tabular}{l@{}}&#xa;</xsl:text>
+    <xsl:text>\hfill</xsl:text>
     <xsl:if test="parent::blockquote">
         <xsl:call-template name="mdash-character"/>
+        <!-- remove the left-side column spacing -->
+        <xsl:text>{\setlength{\tabcolsep}{0pt}</xsl:text>
     </xsl:if>
+    <xsl:text>\begin{tabular}[t]{l@{}}&#xa;</xsl:text>
     <xsl:choose>
         <xsl:when test="line">
             <xsl:apply-templates select="line" />
@@ -7061,7 +7067,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
     <xsl:text>&#xa;</xsl:text>
-    <xsl:text>\end{tabular}\\\par&#xa;</xsl:text>
+    <xsl:text>\end{tabular}</xsl:text>
+    <!-- end group with table spacing change -->
+    <xsl:if test="parent::blockquote">
+        <xsl:text>}</xsl:text>
+    </xsl:if>
+    <xsl:text>\\\par&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Emphasis -->
