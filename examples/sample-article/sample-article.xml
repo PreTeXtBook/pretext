@@ -563,6 +563,21 @@ the xsltproc executable.
 
             <p>Sage output can sometimes be quite long, though this has improved with some changes in Sage's output routines.  Output code should be included primarily for doctesting purposes, and in this use, you may break at almost whitespace character and the doctesting framework will adjust accordingly.  You may wish to show sample output in a static format, like a PDF, so you can consider formatting your output to fit the width constraints of that medium.  Or you may even adjust exactly what is output, to keep it from being too verbose.  Sage doctesting also allows for a wild-card style syntax which allows you to skip over huge chunks of meaningless or unpredictable output, such as tracebacks on error messages.</p>
 
+            <p>This paragraph is just a placeholder.  It has handful of index entries, all starting with the letters <q>gas</q>, taken from <pubtitle>Indexing for Editors and Authors: A Practical Guide to Understanding Indexes</pubtitle> by Leise, Mertes, and Badgett.  The intent is to test letter-by-letter versus word-by-word sorting of index entries.  We use a word-by-word order, resulting in:<ol>
+                <li>gas</li>
+                <li>gas masks</li>
+                <li>gas production</li>
+                <li>gas works</li>
+                <li>gasoline</li>
+                <li>gastritis</li>
+            </ol>
+            <idx>gasoline</idx>
+            <idx>gas works</idx>
+            <idx>gas</idx>
+            <idx>gas masks</idx>
+            <idx>gas production</idx>
+            <idx>gastritis</idx>
+            </p>
 
             <paragraphs>
                 <title>Titled Sage Cells</title>
