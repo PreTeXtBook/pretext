@@ -8,7 +8,9 @@
 <!-- See the file COPYING for copying conditions.             -->
 
 <chapter xml:id="epub">
-    <title>(*) Conversion to EPUB</title>
+    <title>Conversion to EPUB</title>
 
-        <p>TODO</p>
+        <p>As of 2019-05-14 there is a conversion process that creates an <init>EPUB</init> version, though it is still experimental.  This is useful as on offline version, which is superior to a <init>PDF</init> in some ways, such as font face and font size being controlled by the software in an e-reader device.  However, it is inferior to the online version (<xref ref="online-html"/>), since many interactive features cannot function within the <init>EPUB</init> version.</p>
+
+        <p>We use offline MathJax tools to convert mathematics into <init>SVG</init> images.  Otherwise the <init>EPUB</init> version is similar to the <init>HTML</init> version.  Look in the <c>examples</c> directory for a conversion script that will explain more of the details.  We plan to continue to improve this conversion.</p>
 </chapter>
