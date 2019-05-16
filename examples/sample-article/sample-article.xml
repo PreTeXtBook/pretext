@@ -4633,6 +4633,19 @@ the xsltproc executable.
                 </figure>
 
             </subsection>
+
+            <subsection>
+                <title>threejs</title>
+
+                <p>An example using the <c>threejs</c> 3D Javascript library.  This is <url href="https://threejs.org/examples/#webgl_geometry_extrude_splines">one of the project's examples</url><fn><c>https://threejs.org/examples/#webgl_geometry_extrude_splines</c></fn>, licensed with an MIT License, with minimal modifications.  We get several of the necessary libraries from the <c>threejs.org</c> site.</p>
+
+                <figure>
+                    <caption><c>three.js</c> webgl_geometry_extrude_splines example</caption>
+                    <interactive xml:id="interactive-threejs-splines" platform="javascript" width="75%" aspect="1:1" preview="images/threejs-splines.png" source="https://threejs.org/build/three.js https://threejs.org/examples/js/controls/OrbitControls.js https://threejs.org/examples/js/CurveExtras.js https://threejs.org/examples/js/libs/stats.min.js https://threejs.org/examples/js/libs/dat.gui.min.js code/threejs/splines.js">
+                        <slate xml:id="threejs-splines" surface="div" aspect="1:1" />
+                    </interactive>
+                </figure>
+            </subsection>
         </section>
 
         <section xml:id="section-interactive-server">
