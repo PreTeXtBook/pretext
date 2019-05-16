@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--   This file is part of the documentation of PreTeXt      -->
+<!--                                                          -->
+<!--      PreTeXt Author's Guide                              -->
+<!--                                                          -->
+<!-- Copyright (C) 2013-2018  Robert A. Beezer                -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<glossary xml:id="glossary">
+    <!-- Let title internationalize itself -->
+
+    <terms>
+        <defined-term>
+            <title>GeoGebra</title>
+            <p>A tool orginally designed for constructing demonstrations of Euclidean geometry.</p>
+        </defined-term>
+
+        <defined-term>
+            <title><latex/></title>
+            <p>A markup language used for books and papers with lots of mathematics, which is built on <tex/>.  <pretext/> uses <latex/> as an intermediate format to produce <init>PDF</init> and print output.</p>
+        </defined-term>
+
+        <defined-term>
+            <title>MBX</title>
+            <p><pretext/> was once known as <q>MathBook XML</q>, and this was a common abbreviation.  So this likely appears in some historical reference.</p>
+        </defined-term>
+
+        <defined-term>
+            <title>Sage</title>
+            <p>An open source system for a wide range of symbolic and numerical mathematical computations.</p>
+        </defined-term>
+
+        <defined-term>
+            <title>XML</title>
+            <p>eXstensible Markup Language<mdash/>the base syntax for the <pretext/> language.  The angle brackets, matching begin and end tags, nesting tags hierarchically, and attributes.  <init>HTML</init> is another markup language that uses XML syntax.</p>
+        </defined-term>
+
+        <defined-term>
+            <title>XSL</title>
+            <p>eXstensible Stylesheet Language<mdash/>the language <pretext/>'s stylesheets use to describe conversions.</p>
+        </defined-term>
+
+    </terms>
+
+
+<!-- 
+        <defined-term>
+            <title></title>
+            <p></p>
+        </defined-term>
+
+ -->
+
+</glossary>
+
+

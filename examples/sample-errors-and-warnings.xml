@@ -35,7 +35,7 @@ test specific errors or warnings, and/or to test
 improvements to the error/warning/deprecation
 systems.
 -->
-<mathbook>
+<pretext>
 
     <docinfo>
         <!-- rename/lang  replaced by  rename/@xml:lang -->
@@ -64,6 +64,12 @@ systems.
         <section filebase="obsolete-way-to-introduce-filename-strings">
             <title>Introduction</title>
             <p>A sample paragraph.</p>
+            <!-- these index entries should prompt warnings -->
+            <!-- a "see" must not have a page locator       -->
+            <idx><h>ACK</h></idx>
+            <idx><h>ACK</h><see>Yuck</see></idx>
+            <!-- a "seealso" needs to have a page locator -->
+            <idx><h>SND</h><seealso>Yuck</seealso></idx>
         </section>
 
         <section>
@@ -530,6 +536,14 @@ systems.
                     </solution>
             </exercise>
         </section>
+
+        <backmatter>
+            <!-- need an index to provoke error warnings above -->
+            <index>
+                <title>Index</title>
+                <index-list />
+            </index>
+        </backmatter>
     </article>
 
-</mathbook>
+</pretext>

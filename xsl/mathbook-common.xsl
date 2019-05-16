@@ -380,8 +380,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
-<!-- User-supplied Numbering for Maximum Level    -->
-<!-- Respect switch, or provide sensible defaults -->
+<!-- User-supplied Numbering for Maximum Level     -->
+<!-- Respect switch, or provide sensible defaults  -->
+<!-- NB: level number counts the number of         -->
+<!-- separators (periods) present once qualified   -->
+<!-- with a numbered item contained within         -->
+<!-- NB: If we were to allow multiple (hence       -->
+<!-- numbered) specialized divisions of a          -->
+<!-- "subsubsection", then the non-zero maximums   -->
+<!-- below would go up by 1                        -->
+<!--   article/section: s.ss.sss => 3              -->
+<!--   book:            c.s.ss.sss => 4            -->
+<!--   book/part:       p.c.s.ss.sss => 5          -->
 <xsl:variable name="numbering-maxlevel">
     <xsl:variable name="max-feasible">
         <xsl:choose>
@@ -975,6 +985,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- This is of interest by itself, or the root of content searches -->
 <!-- And docinfo is the other child                                 -->
 <!-- These help prevent searching the wrong half                    -->
+<!-- 2019-04-02: "mathbook" deprecated.  It still appears in        -->
+<!-- multiple locations, even if the definitions below help         -->
+<!-- isolate its use here.                                          -->
 <xsl:variable name="root" select="/mathbook|/pretext" />
 <xsl:variable name="docinfo" select="$root/docinfo" />
 <xsl:variable name="document-root" select="$root/*[not(self::docinfo)]" />
@@ -1172,6 +1185,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- very temporary, just for testing -->
 <xsl:param name="debug.exercises.forward" select="''"/>
 
+<!-- text for a watermark that is centered, -->
+<!-- running at a 45 degree angle           -->
+<xsl:param name="watermark.text" select="''" />
+<xsl:variable name="b-watermark" select="not($watermark.text = '')" />
+
+<!-- watermark uses a 5cm font, which can be scaled                     -->
+<!-- and scaling by 0.5 makes "CONFIDENTIAL" fit well in 600 pixel HTML -->
+<!-- and in the default body width for LaTeX                            -->
+<xsl:param name="watermark.scale" select="'0.5'" />
+
 <!-- Commentary is meant for an enhanced edition, -->
 <!-- like an "Instructor's Manual".  A publisher  -->
 <!-- will need to consciously elect "yes".        -->
@@ -1322,6 +1345,23 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 <xsl:param name="task.text.answer" select="''" />
 <xsl:param name="task.text.solution" select="''" />
 
+<!-- These are deprecated in favor of watermark.text and watermark.scale -->
+<!-- which are now managed in common. These still "work" for now.        -->
+<!-- The default scaling factor of 2.0 is historical.                    -->
+<xsl:param name="latex.watermark" select="''"/>
+<xsl:variable name="b-latex-watermark" select="not($latex.watermark = '')" />
+<xsl:param name="latex.watermark.scale" select="''"/>
+<xsl:variable name="latex-watermark-scale">
+    <xsl:choose>
+        <xsl:when test="not($latex.watermark.scale = '')">
+            <xsl:value-of select="$latex.watermark.scale"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>2.0</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
 <!-- ############## -->
 <!-- Entry Template -->
 <!-- ############## -->
@@ -1432,6 +1472,7 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 <!-- Input:  a relative level, ie counted from document root -->
 <!-- Output:  the LaTeX name (or close), HTML element        -->
 <!-- NB:  this is a named template, independent of context   -->
+<!-- NB: (2019-05-09) This could go to the -latex conversion -->
 <xsl:template name="level-to-name">
     <xsl:param name="level" />
     <xsl:variable name="normalized-level" select="$level + $root-level" />
@@ -1445,78 +1486,6 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
             <xsl:message>MBX:ERROR: Level computation is out-of-bounds (input as <xsl:value-of select="$level" />, normalized to <xsl:value-of select="$normalized-level" />)</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
-</xsl:template>
-
-<!-- PTX Divisions to LaTeX Divisions -->
-
-<!-- PTX has a variety of divisions not native to LaTeX, so normally -->
-<!-- an author would have to engineer/design these themselves.  We   -->
-<!-- do something similar and implement them using the stock LaTeX   -->
-<!-- divisons.  This is the dictionary which maps PreTeXt division   -->
-<!-- elements to stock LaTeX division environments.                  -->
-<!-- NB: we formerly did this using the "level" template and the     -->
-<!-- "level-to-name" templates, which we should consider obsoleting, -->
-<!-- simplifying, or consolidating.                                  -->
-<!-- NB: move this to the -latex XSL once it is removed from -html   -->
-<xsl:template match="part|chapter|section|subsection|subsubsection" mode="division-name">
-    <xsl:value-of select="local-name(.)"/>
-</xsl:template>
-
-<!-- Front matter divisions are only in book, and always at chapter level -->
-<xsl:template match="acknowledgement|foreword|preface" mode="division-name">
-    <xsl:text>chapter</xsl:text>
-</xsl:template>
-
-<!-- Some divisions can appear at multiple levels (eg, exercises) -->
-<!-- Divisions in the back matter vary between books and articles -->
-<!--     Book:    children of backmatter -> chapter               -->
-<!--     Article: children of backmatter -> section               -->
-<xsl:template match="exercises|solutions|worksheet|reading-questions|references|glossary|appendix|index" mode="division-name">
-    <xsl:choose>
-        <xsl:when test="parent::article">
-            <xsl:text>section</xsl:text>
-        </xsl:when>
-        <xsl:when test="parent::chapter">
-            <xsl:text>section</xsl:text>
-        </xsl:when>
-        <xsl:when test="parent::section">
-            <xsl:text>subsection</xsl:text>
-        </xsl:when>
-        <xsl:when test="parent::subsection">
-            <xsl:text>subsubsection</xsl:text>
-        </xsl:when>
-        <xsl:when test="parent::subsubsection">
-            <xsl:text>paragraph</xsl:text>
-        </xsl:when>
-        <!-- children of backmatter (appendix, solutions, reference, index) -->
-        <!-- in book/article are at chapter/section level                   -->
-        <xsl:when test="parent::backmatter">
-            <xsl:choose>
-                <xsl:when test="ancestor::book">
-                    <xsl:text>chapter</xsl:text>
-                </xsl:when>
-                <xsl:when test="ancestor::article">
-                    <xsl:text>section</xsl:text>
-                </xsl:when>
-            </xsl:choose>
-        </xsl:when>
-        <!-- appendix in book/article is at chapter/section level -->
-        <!-- so descendants (exercises, solutions) down one level -->
-        <xsl:when test="parent::appendix">
-            <xsl:choose>
-                <xsl:when test="ancestor::book">
-                    <xsl:text>section</xsl:text>
-                </xsl:when>
-                <xsl:when test="ancestor::article">
-                    <xsl:text>subsection</xsl:text>
-                </xsl:when>
-            </xsl:choose>
-        </xsl:when>
-    </xsl:choose>
-</xsl:template>
-
-<xsl:template match="*" mode="division-name">
-    <xsl:message>MBX:BUG: Asking for the name of an element (<xsl:value-of select="local-name(.)" />) that is not a division</xsl:message>
 </xsl:template>
 
 <!-- LaTex Native Levels -->
@@ -3048,6 +3017,7 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 <xsl:template match="*" mode="serialize">
     <xsl:text>&lt;</xsl:text>
     <xsl:value-of select="name()"/>
+    <xsl:apply-templates select="." mode="serialize-namespace" />
     <xsl:apply-templates select="@*" mode="serialize" />
     <xsl:choose>
         <xsl:when test="node()">
@@ -3069,6 +3039,27 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
     <xsl:text>="</xsl:text>
     <xsl:value-of select="."/>
     <xsl:text>"</xsl:text>
+</xsl:template>
+
+<!-- A namespace "attribute" is not really an attribute, and not captured by @* above.   -->
+<!-- There seems to be no way to separate an element's actual namespaces from those that -->
+<!-- are explicitly written where the element was created. Here, we loop through all the -->
+<!-- element's namespaces, discarding some that can be safley assumed to not be in the   -->
+<!-- original element declaration. And then serialize what is left.                      -->
+<xsl:template match="*" mode="serialize-namespace">
+    <xsl:for-each select="./namespace::*">
+        <!-- test taken from http://lenzconsulting.com/namespace-normalizer/normalize-namespaces.xsl -->
+        <xsl:if test="name()!='xml' and not(.=../preceding::*/namespace::* or .=ancestor::*[position()>1]/namespace::*)">
+            <xsl:text> xmlns</xsl:text>
+            <xsl:if test="not(name(current())='')">
+                <xsl:text>:</xsl:text>
+                <xsl:value-of select="name(current())"/>
+            </xsl:if>
+            <xsl:text>="</xsl:text>
+            <xsl:value-of select="current()"/>
+            <xsl:text>"</xsl:text>
+        </xsl:if>
+    </xsl:for-each>
 </xsl:template>
 
 <xsl:template match="text()" mode="serialize">
@@ -3216,7 +3207,7 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
     <!-- (only?), in addition to first and last nodes     -->
     <xsl:choose>
         <!-- pass through if assuming strict adherence to whitespace policy -->
-        <xsl:when test="$whitespace='strict'">
+        <xsl:when test="$whitespace-style = 'strict'">
             <xsl:value-of select="$text-processed" />
         </xsl:when>
         <!-- We must "apply-templates" to math bits in order    -->
@@ -3229,7 +3220,7 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
         <!-- manipulate leading, trailing, intermediate whitespace under flexible policy -->
         <!-- if only text node inside parent, all three transformations may apply        -->
         <!-- Note: space after clause-punctuation will not be deleted here               -->
-        <xsl:when test="$whitespace='flexible'">
+        <xsl:when test="$whitespace-style = 'flexible'">
             <xsl:variable name="original" select="$text-processed" />
             <xsl:variable name="front-cleaned">
                 <xsl:choose>
@@ -3887,9 +3878,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 
 <xsl:variable name="title-separator" select="'[TITLESEP]'"/>
 
-<!-- Books:    title, subtitle, titles of parts, titles of chapters -->
-<!-- Articles: title, subtitle, titles of sections                  -->
-<xsl:template match="book/title/line|book/subtitle/line|book/part/title/line|book/part/chapter/title/line|book/chapter/title/line|article/title/line|article/subtitle/line|article/section/title/line">
+<!-- Books:    overall title and subtitle, titles of parts, chapters and sections -->
+<!-- Articles: overall title and subtitle, titles of sections                     -->
+<xsl:template match="book/title/line|book/subtitle/line|book/part/title/line|book/part/chapter/title/line|book/chapter/title/line|book/part/chapter/section/title/line|book/chapter/section/title/line|article/title/line|article/subtitle/line|article/section/title/line">
     <xsl:param name="separator"/>
 
     <xsl:apply-templates/>
@@ -4003,8 +3994,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:variable>
     <xsl:variable name="layout" select="exsl:node-set($rtf-layout)" />
     <xsl:choose>
-        <xsl:when test="parent::figure">
-            <xsl:variable name="panel-number" select="count(parent::figure/preceding-sibling::*) + 1" />
+        <xsl:when test="parent::figure or parent::stack">
+            <xsl:variable name="panel-number" select="count(parent::*/preceding-sibling::*) + 1" />
             <xsl:value-of select="$layout/width[$panel-number]" />
         </xsl:when>
         <xsl:otherwise>
@@ -6887,7 +6878,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                 <xsl:message>PTX:WARNING: unresolved @scope ("<xsl:value-of select="@scope"/>") for a &lt;solutions&gt; division</xsl:message>
                 <xsl:apply-templates select="." mode="location-report" />
             </xsl:if>
-            <xsl:if test="not($scope/self::book|$scope/self::article|$scope/self::chapter|$scope/self::section|$scope/self::subsection|$scope/self::subsubsection)">
+            <xsl:if test="not($scope/self::book|$scope/self::article|$scope/self::chapter|$scope/self::section|$scope/self::subsection|$scope/self::subsubsection|$scope/self::exercises|$scope/self::worksheet|$scope/self::reading-questions)">
                 <xsl:message>PTX:ERROR: the @scope ("<xsl:value-of select="@scope"/>") of a &lt;solutions&gt; division is not a supported division.  If you think your attempt is reasonable, please make a feature request.  Results now will be unpredictable</xsl:message>
                 <xsl:apply-templates select="." mode="location-report" />
             </xsl:if>
@@ -7475,6 +7466,50 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
+
+<!-- ################### -->
+<!-- Structured by Lines -->
+<!-- ################### -->
+
+<!-- Some items, such as an address or an attribution,          -->
+<!-- can be formatted like a poem, as a sequence of lines,      -->
+<!-- without really being able to say just why or how in        -->
+<!-- advance via markup.  So the schema will allow an element   -->
+<!-- to be a simple, single line of text, OR a sequence of      -->
+<!-- "line" elements (only), each "line" being the same simple  -->
+<!-- text.  Generally, all we need is an abstract separator for -->
+<!-- the first n-1 lines.  What happens after the last line     -->
+<!-- should be in agreement with the single line version.       -->
+
+
+<!-- Allowed to be structured, and handled abstractly -->
+<!--   * department (author, editor, etc.)            -->
+<!--   * institution (author, editor, etc.)           -->
+<!--   * dedication/p                                 -->
+<!--   * attribution                                  -->
+<!--   * cell (tabular/row/cell/line)                 -->
+<!--                                                  -->
+<!-- Specialized, handled specifically (ie not here)  -->
+<!--   * poem/stanza/line                             -->
+<!--   * letter/frontmatter/to/line (from) (LaTeX)    -->
+<!--   * memo/frontmatter/to/line (from) (LaTeX)      -->
+
+<!-- The markup, and visual source necessary for the  -->
+<!-- end of each line, default indicates a problem    -->
+<!-- Needs an override for each conversion            -->
+<xsl:template name="line-separator">
+    <xsl:text>[LINESEP]</xsl:text>
+</xsl:template>
+
+<!-- Explicitly assumes a sequence of "line" -->
+<xsl:template match="line">
+    <xsl:apply-templates />
+    <!-- is there a next line to separate? -->
+    <xsl:if test="following-sibling::line">
+        <xsl:call-template name="line-separator"/>
+    </xsl:if>
+</xsl:template>
+
 
 <!-- ################ -->
 <!-- Poetry Utilities -->
@@ -9555,7 +9590,6 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:apply-templates select="." mode="literate-programming-warning" />
     <xsl:apply-templates select="." mode="xinclude-warnings" />
     <xsl:apply-templates select="." mode="xmlid-warning" />
-    <xsl:apply-templates select="." mode="webwork-warnings" />
     <xsl:apply-templates select="." mode="text-element-warning" />
     <xsl:apply-templates select="." mode="subdivision-structure-warning" />
 </xsl:template>
@@ -9627,50 +9661,6 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     </xsl:for-each>
 </xsl:template>
 
-<!-- We warn about WeBWorK table details that ultimately may not be respected -->
-<!-- if a problem is archived to .pg, and then that file is used on a WeBWorK -->
-<!-- server, and then WeBWorK's print copy mechanism is used to make a pdf    -->
-<xsl:template match="mathbook|pretext" mode="webwork-warnings">
-    <xsl:variable name="coltop" select="//webwork//tabular/col/@top" />
-    <xsl:variable name="cellbottom" select="//webwork//tabular/cell/@bottom" />
-    <xsl:variable name="medium-major" select="//webwork//tabular//*[@top='medium' or @top='major' or @bottom='medium' or @bottom='major' or @left='medium' or @left='major' or @right='medium' or @right='major']" />
-    <xsl:if test="$coltop">
-        <xsl:message>
-            <xsl:text>MBX:WARNING:   </xsl:text>
-            <xsl:text>column-specific top border attributes are not implemented for the output of a WeBWorK PG table produced by WeBWorK's hardcopy production engine (</xsl:text>
-            <xsl:value-of select="count($coltop)" />
-            <xsl:text> time</xsl:text>
-            <xsl:if test="count($coltop) > 1">
-                <xsl:text>s</xsl:text>
-            </xsl:if>
-            <xsl:text>)</xsl:text>
-        </xsl:message>
-    </xsl:if>
-    <xsl:if test="$cellbottom">
-        <xsl:message>
-            <xsl:text>MBX:WARNING:   </xsl:text>
-            <xsl:text>cell-specific bottom border attributes are not implemented for the output of a WeBWorK PG table produced by WeBWorK's hardcopy production engine (</xsl:text>
-            <xsl:value-of select="count($cellbottom)" />
-            <xsl:text> time</xsl:text>
-            <xsl:if test="count($cellbottom) > 1">
-                <xsl:text>s</xsl:text>
-            </xsl:if>
-            <xsl:text>)</xsl:text>
-        </xsl:message>
-    </xsl:if>
-    <xsl:if test="$medium-major">
-        <xsl:message>
-            <xsl:text>MBX:WARNING:   </xsl:text>
-            <xsl:text>'medium' and 'major' table rule attributes will be handled as 'minor' in the output of a WeBWorK PG table produced by WeBWorK's hardcopy production engine (</xsl:text>
-            <xsl:value-of select="count($medium-major)" />
-            <xsl:text> time</xsl:text>
-            <xsl:if test="count($medium-major) > 1">
-                <xsl:text>s</xsl:text>
-            </xsl:if>
-            <xsl:text>)</xsl:text>
-        </xsl:message>
-    </xsl:if>
-</xsl:template>
 
 <!-- Elements should never happen like this, so we     -->
 <!-- can match on them and offer pretty good advice    -->
@@ -10288,7 +10278,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:call-template name="deprecation-message">
         <xsl:with-param name="occurrences" select="$document-root//todo" />
         <xsl:with-param name="date-string" select="'2019-02-20'" />
-        <xsl:with-param name="message" select="'a &quot;todo&quot; element is no longer effective.  Reeplace with an XML comment whose first four non-whitespace characters spell &quot;todo&quot; (with no spaces)'"/>
+        <xsl:with-param name="message" select="'a &quot;todo&quot; element is no longer effective.  Replace with an XML comment whose first four non-whitespace characters spell &quot;todo&quot; (with no spaces)'"/>
     </xsl:call-template>
     <!--  -->
     <!-- 2019-02-20  replace author-tools with author.tools              -->
@@ -10304,6 +10294,43 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="occurrences" select="$docinfo//rename[@lang]" />
         <xsl:with-param name="date-string" select="'2019-02-20'" />
         <xsl:with-param name="message" select="'the &quot;@lang&quot; attribute of &quot;rename&quot; has been replaced by &quot;@xml:lang&quot;, and is now optional if your document only uses one language'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2019-03-07  replace latex.watermark with watermark.text         -->
+    <!-- Still exists and is respected, move to Variable Bad Bank later  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2019-03-07'" />
+        <xsl:with-param name="message" select="'the  latex.watermark  parameter has been replaced by  watermark.text  which is effective in HTML as well as LaTeX'" />
+            <xsl:with-param name="incorrect-use" select="($latex.watermark != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2019-03-07  replace latex.watermark.scale with watermark.scale  -->
+    <!-- Still exists and is respected, move to Variable Bad Bank later  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2019-03-07'" />
+        <xsl:with-param name="message" select="'the  latex.watermark.scale  parameter has been replaced by  watermark.scale  which is effective in HTML as well as LaTeX'" />
+            <xsl:with-param name="incorrect-use" select="($latex.watermark.scale != '')" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2019-04-02  "mathbook" replaced by "pretext" -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="/mathbook" />
+        <xsl:with-param name="date-string" select="'2019-04-02'" />
+        <xsl:with-param name="message" select="'the &quot;mathbook&quot; top-level element has been replaced by the functionally equivalent &quot;pretext&quot;'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2019-04-14  analytics ID are now a publisher option -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$docinfo/analytics" />
+        <xsl:with-param name="date-string" select="'2019-04-14'" />
+        <xsl:with-param name="message" select="'site-specific ID for HTML analytics services (Statcounter, Google) provided within &quot;docinfo/analytics&quot; are now options supplied by publishers as command-line options.  See the Publishers Guide for specifics.'"/>
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2019-04-14  Google search ID is now a publisher option -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$docinfo/search" />
+        <xsl:with-param name="date-string" select="'2019-04-14'" />
+        <xsl:with-param name="message" select="'site-specific ID for HTML search services (Google) provided within &quot;docinfo/search&quot; is now an option supplied by publishers as a command-line option.  See the Publishers Guide for specifics.'"/>
     </xsl:call-template>
 </xsl:template>
 

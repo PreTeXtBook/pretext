@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <grammar xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
   <start>
-    <element name="mathbook">
+    <element name="pretext">
       <optional>
         <ref name="XMLLang"/>
       </optional>
@@ -18,7 +18,7 @@
   </start>
   <define name="Article">
     <element name="article">
-      <ref name="MetaDataSubtitle"/>
+      <ref name="MetaDataLinedSubtitle"/>
       <optional>
         <ref name="ArticleFrontMatter"/>
       </optional>
@@ -64,7 +64,7 @@
   <define name="Book">
     <element name="book">
       <a:documentation>Here is what a book looks like.</a:documentation>
-      <ref name="MetaDataSubtitle"/>
+      <ref name="MetaDataLinedSubtitle"/>
       <optional>
         <ref name="BookFrontMatter"/>
       </optional>
@@ -93,7 +93,7 @@
   </define>
   <define name="Part">
     <element name="part">
-      <ref name="MetaDataShortTitle"/>
+      <ref name="MetaDataLinedTitle"/>
       <oneOrMore>
         <ref name="Chapter"/>
       </oneOrMore>
@@ -101,7 +101,7 @@
   </define>
   <define name="Chapter">
     <element name="chapter">
-      <ref name="MetaDataShortTitle"/>
+      <ref name="MetaDataLinedTitle"/>
       <zeroOrMore>
         <ref name="AuthorByline"/>
       </zeroOrMore>
@@ -155,7 +155,7 @@
   </define>
   <define name="Section">
     <element name="section">
-      <ref name="MetaDataShortTitle"/>
+      <ref name="MetaDataLinedTitle"/>
       <zeroOrMore>
         <ref name="AuthorByline"/>
       </zeroOrMore>
@@ -1285,33 +1285,31 @@
         <optional>
           <ref name="Prelude"/>
         </optional>
-        <ref name="Statement"/>
-        <zeroOrMore>
-          <ref name="Hint"/>
-        </zeroOrMore>
-        <zeroOrMore>
-          <ref name="Answer"/>
-        </zeroOrMore>
-        <zeroOrMore>
-          <ref name="Solution"/>
-        </zeroOrMore>
-        <optional>
-          <ref name="Postlude"/>
-        </optional>
-      </group>
-      <group>
-        <optional>
-          <ref name="Prelude"/>
-        </optional>
-        <optional>
-          <ref name="IntroductionStatement"/>
-        </optional>
-        <oneOrMore>
-          <ref name="Task"/>
-        </oneOrMore>
-        <optional>
-          <ref name="ConclusionStatement"/>
-        </optional>
+        <choice>
+          <group>
+            <ref name="Statement"/>
+            <zeroOrMore>
+              <ref name="Hint"/>
+            </zeroOrMore>
+            <zeroOrMore>
+              <ref name="Answer"/>
+            </zeroOrMore>
+            <zeroOrMore>
+              <ref name="Solution"/>
+            </zeroOrMore>
+          </group>
+          <group>
+            <optional>
+              <ref name="IntroductionStatement"/>
+            </optional>
+            <oneOrMore>
+              <ref name="Task"/>
+            </oneOrMore>
+            <optional>
+              <ref name="ConclusionStatement"/>
+            </optional>
+          </group>
+        </choice>
         <optional>
           <ref name="Postlude"/>
         </optional>
@@ -2314,9 +2312,23 @@
       <ref name="TextLong"/>
     </element>
   </define>
+  <define name="LinedTitle">
+    <element name="title">
+      <oneOrMore>
+        <ref name="LongLine"/>
+      </oneOrMore>
+    </element>
+  </define>
   <define name="Subtitle">
     <element name="subtitle">
       <ref name="TextLong"/>
+    </element>
+  </define>
+  <define name="LinedSubtitle">
+    <element name="subtitle">
+      <oneOrMore>
+        <ref name="LongLine"/>
+      </oneOrMore>
     </element>
   </define>
   <define name="ShortTitle">
@@ -2385,6 +2397,30 @@
       <ref name="Index"/>
     </zeroOrMore>
   </define>
+  <define name="MetaDataLinedTitle">
+    <optional>
+      <ref name="UniqueID"/>
+    </optional>
+    <optional>
+      <ref name="PermanentID"/>
+    </optional>
+    <optional>
+      <ref name="XMLBase"/>
+    </optional>
+    <optional>
+      <ref name="XMLLang"/>
+    </optional>
+    <choice>
+      <ref name="Title"/>
+      <ref name="LinedTitle"/>
+    </choice>
+    <optional>
+      <ref name="ShortTitle"/>
+    </optional>
+    <zeroOrMore>
+      <ref name="Index"/>
+    </zeroOrMore>
+  </define>
   <define name="MetaDataSubtitle">
     <optional>
       <ref name="UniqueID"/>
@@ -2401,6 +2437,36 @@
     <ref name="Title"/>
     <optional>
       <ref name="Subtitle"/>
+    </optional>
+    <optional>
+      <ref name="ShortTitle"/>
+    </optional>
+    <zeroOrMore>
+      <ref name="Index"/>
+    </zeroOrMore>
+  </define>
+  <define name="MetaDataLinedSubtitle">
+    <optional>
+      <ref name="UniqueID"/>
+    </optional>
+    <optional>
+      <ref name="PermanentID"/>
+    </optional>
+    <optional>
+      <ref name="XMLBase"/>
+    </optional>
+    <optional>
+      <ref name="XMLLang"/>
+    </optional>
+    <choice>
+      <ref name="Title"/>
+      <ref name="LinedTitle"/>
+    </choice>
+    <optional>
+      <choice>
+        <ref name="Subtitle"/>
+        <ref name="LinedSubtitle"/>
+      </choice>
     </optional>
     <optional>
       <ref name="ShortTitle"/>
@@ -2987,7 +3053,7 @@
       <element name="bc">
         <empty/>
       </element>
-      <element name="circa">
+      <element name="ca">
         <empty/>
       </element>
       <element name="eg">
@@ -3391,36 +3457,6 @@
         </choice>
       </attribute>
     </element>
-  </define>
-  <define name="Configuration" combine="choice">
-    <choice>
-      <element name="search">
-        <element name="google">
-          <element name="cx">
-            <text/>
-          </element>
-        </element>
-      </element>
-      <element name="analytics">
-        <oneOrMore>
-          <choice>
-            <element name="google">
-              <element name="tracking">
-                <text/>
-              </element>
-            </element>
-            <element name="statcounter">
-              <element name="project">
-                <text/>
-              </element>
-              <element name="security">
-                <text/>
-              </element>
-            </element>
-          </choice>
-        </oneOrMore>
-      </element>
-    </choice>
   </define>
   <define name="Configuration" combine="choice">
     <element name="numbering">

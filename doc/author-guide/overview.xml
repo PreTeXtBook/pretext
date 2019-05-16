@@ -19,7 +19,7 @@
 
         <p>A <pretext /> document is a nested sequence of <term>structural divisions</term><idx>structural division</idx>.  For a book, these would go <tag>part</tag>, <tag>chapter</tag>, <tag>section</tag>, <tag>subsection</tag>, and <tag>subsubsection</tag>.  Using <tag>part</tag> is optional, but a book must always use <tag>chapter</tag> (or else it is not a book!).  No skipping over divisions.  For example, you cannot divide a <tag>section</tag> directly into several <tag>subsubsection</tag>s without an intervening <tag>subsection</tag>.</p>
 
-        <p>An <tag>article</tag> starts divisions from <tag>section</tag>, though it may choose to have no divisions at all.  <tag>paragraphs</tag> are exceptional.  They lack a full set of features, but can be used to divide anything, in books or in articles, though they are always terminal since you cannot divide them further.  You will have noticed that we prefer the generic term <term>division</term><idx><h>division</h><see>structural division</see></idx> (rather than <q>section</q>) since a <tag>section</tag> is a very particular division.</p>
+        <p>An <tag>article</tag> starts divisions from <tag>section</tag>, though it may choose to have no divisions at all.  <tag>paragraphs</tag> are exceptional.  They lack a full set of features, but can be used to divide anything, in books or in articles, though they are always terminal since you cannot divide them further.  You will have noticed that we prefer the generic term <term>division</term><idx><h>division</h><seealso>structural division</seealso></idx> (rather than <q>section</q>) since a <tag>section</tag> is a very particular division.</p>
 
         <p>A division may be unstructured, in which case you fill it with paragraphs and lists and figures and theorems and so on.  But if you choose to structure a division it must look like an optional <tag>introduction</tag>, followed by multiple divisions of the next finer granularity, with an optional <tag>conclusion</tag>.  Either version may have a single <tag>exercises</tag> division at the end.  The structured version may have more than one <tag>exercises</tag>.  Finally, there may be a single <tag>references</tag> within a division.</p>
 
@@ -75,6 +75,8 @@
 
         <p>A key design decision is that mathematical symbols, expressions and equations are authored using <latex /> syntax.  More precisely, we support the symbols and constructions provided by <url href="https://www.mathjax.org/">MathJax</url>, which quite closely follows the <c>amsmath</c> package maintained by the American Mathematical Society.  Neither you nor I want to write <url href="https://en.wikipedia.org/wiki/MathML">MathML</url> by hand!</p>
 
+        <p>The symbols and macros supported by MathJax can be found at their <url href="http://docs.mathjax.org/en/latest/tex.html#supported-latex-commands">Supported <latex/> commands</url><fn><c>docs.mathjax.org/en/latest/tex.html#supported-latex-commands</c></fn> documentation.  Look here to see which parts of <latex/> may be used in your mathematical expressions.</p>
+
         <p>For <term>inline</term> mathematics<idx><h>mathematics</h><h>inline mathematics</h></idx>, use the short <tag>m</tag> tag within a <tag>p</tag> (or within a <tag>title</tag> or <tag>caption</tag>).  For example, <c>&lt;m&gt;\alpha^2 + \beta^4&lt;/m&gt;</c> will do what you expect, in print and in electronic outputs.  To get a single equation, centered, with some vertical separation before and after, use the <tag>me</tag> tag (<q>math equation</q>) in the same way within a <tag>p</tag>, but do not try using it within a <tag>title</tag>.  For example, <c>&lt;me&gt;\rho = \alpha^2 + \beta^4&lt;/me&gt;</c>.  If you want your equation numbered, switch to the <tag>men</tag> tag (<c>n</c> = <q>numbered</q>).</p>
 
         <p>There is a way to incorporate your own (simple) custom <latex /> macros within mathematics (only).  They will be effective in your print and electronic outputs, and can be employed in graphics languages like <c>tikz</c> and Asymptote.  You can also author multi-line <term>display mathematics</term><idx><h>mathematics</h><h>display mathematics</h></idx> using the <tag>md</tag> tag surrounding a sequence of <tag>mrow</tag> elements (or the <tag>mdn</tag> variant for numbered equations).  We defer the details to <xref ref="topic-mathematics" />.</p>
@@ -99,9 +101,9 @@
 
         <p>Ordered lists (numbered)<idx><h>list</h><h>ordered list</h></idx>, unordered lists (bullets)<idx><h>list</h><h>unordered list</h></idx> and description lists (defined terms)<idx><h>list</h><h>description list</h></idx> are all supported, and syntax generally follows HTML.  Lists usually live within a paragraph (<tag>p</tag>), though there are limited exceptions.  Their structure is given by the <tag>ol</tag>, <tag>ul</tag>, <tag>dl</tag> tags (respectively).  These can specify a variety of options for the labels via attributes, as described in <xref ref="topic-lists" />.</p>
 
-        <p>List items, for any of the three types, are delimited with the <tag>li</tag> tag.  What is different from <init>HTML</init> is that the contents of a list item may be structured, with paragraphs (<tag>p</tag>) being the most likely.  So to nest lists you begin a paragraph in a list item of the outer list, then begin the inner list within that paragraph.  But a simple list item may be authored just like you were authoring within a paragraph, much like writing sentences elsewhere.  For a description list, the list item must contain a <tag>title</tag>, which will become the text that is being described (the lable of the list item).  Then the rest of the list item must be structured, say with paragraphs.  A description list cannot be contained within another list.</p>
+        <p>List items, for any of the three types, are delimited with the <tag>li</tag> tag.  What is different from <init>HTML</init> is that the contents of a list item may be structured, with paragraphs (<tag>p</tag>) being the most likely.  So to nest lists you begin a paragraph in a list item of the outer list, then begin the inner list within that paragraph.  But a simple list item may be authored just like you were authoring within a paragraph, much like writing sentences elsewhere.  For a description list, the list item must contain a <tag>title</tag>, which will become the text that is being described (the label of the list item).  Then the rest of the list item must be structured, say with paragraphs.  A description list cannot be contained within another list.</p>
 
-        <p>Lists are more complicated than they appear, so be sure to read the details at <xref ref="topic-lists" /> before you start designing rweally involved lists.</p>
+        <p>Lists are more complicated than they appear, so be sure to read the details at <xref ref="topic-lists" /> before you start designing really involved lists.</p>
     </section>
 
     <section xml:id="overview-exercises">
@@ -196,7 +198,7 @@
 
         <p>The escape character for XML is the ampersand, &amp;.  The other dangerous character is the left angle bracket, the <q>less than,</q> &lt;.  Mostly to be symmetric, we also handle the right angle bracket, the <q>greater than,</q> &gt;, similarly.  Single and double quotation marks are used to delimit attributes, so are part of the XML specification, but do not present difficulties in narrative text.</p>
 
-        <p>These three characters are interpreted by the <init>XML</init> processor very early in the analysis of your source.  So they need to be authored specially via the <term>XML entitites</term>: <c>&amp;amp;</c>, <c>&amp;lt;</c>, <c>&amp;gt;</c>.  In practice, the last is rarely necessary.  So really just two characters to type carefully or exceptionally.</p>
+        <p>These three characters are interpreted by the <init>XML</init> processor very early in the analysis of your source.  So they need to be authored specially via the <term>XML entities</term>: <c>&amp;amp;</c>, <c>&amp;lt;</c>, <c>&amp;gt;</c>.  In practice, the last is rarely necessary.  So really just two characters to type carefully or exceptionally.</p>
 
         <p>If you consistently follow the prescription in the previous paragraph you will avoid a descent into escape-character hell and avoid a lot of head-scratching.  In particular, you should have no need of the <c>&lt;![CDATA[</c><nbsp /><c>]]&gt;</c> mechanism of XML, so just forget we even mentioned it.</p>
 
@@ -250,7 +252,7 @@
         <title>Front Matter</title>
         <idx>front matter</idx>
 
-        <p>In the beginning of your <tag>book</tag> or <tag>article</tag> you can have a <tag>frontmatter</tag><idx>front matter</idx> element that contains various items that would precede your first <tag>chapter</tag> or <tag>section</tag> (respectively).  Possibilities include <tag>titlepage</tag>, <tag>colophon</tag>, <tag>biography</tag>, <tag>abstract</tag>, <tag>dedication</tag>, <tag>acknowledgement</tag>, <tag>foreword</tag>, and <tag>preface</tag>.  Some of these may be duplicated (<eg /> several prefaces for multiple editions), many of these items are restricted to books (<eg /> a foreword), and some items are restricted to articles (<eg /> an abstract).  The DTD (<xref provisional="dtd-info" />) will help you place them in the right order in your source.  See <xref ref="topic-front-back-matter" /> for details.</p>
+        <p>In the beginning of your <tag>book</tag> or <tag>article</tag> you can have a <tag>frontmatter</tag><idx>front matter</idx> element that contains various items that would precede your first <tag>chapter</tag> or <tag>section</tag> (respectively).  Possibilities include <tag>titlepage</tag>, <tag>colophon</tag>, <tag>biography</tag>, <tag>abstract</tag>, <tag>dedication</tag>, <tag>acknowledgment</tag>, <tag>foreword</tag>, and <tag>preface</tag>.  Some of these may be duplicated (<eg /> several prefaces for multiple editions), many of these items are restricted to books (<eg /> a foreword), and some items are restricted to articles (<eg /> an abstract).  The DTD (<xref provisional="dtd-info" />) will help you place them in the right order in your source.  See <xref ref="topic-front-back-matter" /> for details.</p>
 
     </section>
 
@@ -267,11 +269,17 @@
         <idx>list of notation</idx>
         <idx><h>notation list</h><see>list of notation</see></idx>
 
-        <p>Construction of an index<idx>index</idx> and a list of notation is accomplished by placing information into your text in the appropriate places in the right way.</p>
+        <p>Construction of an index<idx>index</idx> and a list of notation<idx>notation</idx> is accomplished by placing information into your text in the appropriate places in the right way.</p>
 
-        <p>The <tag>idx</tag> tags denote an index entry<idx><h>index</h><h>index entry</h></idx>.  These should be placed within the element that they describe.  By this we mean that an <tag>idx</tag> element can be placed within a <tag>theorem</tag> to refer to just that theorem, or it might be placed within a <tag>subsection</tag> to refer to that subsection.  In this way, electronic versions of your work can have an index that is more informative than a traditional index that uses just page numbers. Note that the text contained within the <tag>idx</tag> tags does not actually appear in the article<mdash />it only serves to mark the location the index entry points to. You can have several levels of headings by structuring your <tag>idx</tag> element with up to three <tag>h</tag> tags.  Alternatively, after the first use of an <tag>h</tag> element, you can use <tag>see</tag> or <tag>seealso</tag> to denote a <q>see</q> or <q>see also</q> in the index entry, respectively.</p>
+        <p>The <tag>idx</tag> tags denote an index entry<idx><h>index</h><h>index entry</h></idx>.  These should be placed within the element that they describe.  By this we mean that an <tag>idx</tag> element can be placed within a <tag>theorem</tag> to refer to just that theorem, or it might be placed within a <tag>subsection</tag> to refer to that subsection.  When you do this, a natural place to place the <tag>idx</tag> is right after the <tag>title</tag> and similar metadata.  In this way, electronic versions of your work can have an index that is more informative than a traditional index that uses just page numbers, since it will be apparent while reading and using the index just what type of object the entry refers to.  (See the end of this Guide in an electronic format for an example, <xref ref="the-index" text="title"/>).  Note that the text contained within the <tag>idx</tag> tags does not actually appear in the article<mdash />it only serves to mark the location the index entry points to. You can have several levels of headings by structuring your <tag>idx</tag> element with up to three <tag>h</tag> tags (<q>h</q> for <q>heading</q>).  Additionally, you can use <tag>see</tag> or <tag>seealso</tag> for cross-references within the index.</p>
 
-        <p>A similar device is used to create a list of notation<idx>list of notation</idx> for a technical (mathematical) work.  Place a <tag>notation</tag> element as close as possible to the place where notation is first introduced.  If you use the <tag>definition</tag> tag for your definitions, then this is a very natural place to also introduce notation.  Inside of <tag>notation</tag> use the <tag>usage</tag> tag to include a short example of the notation in use.  This will be treated as mathematics, so imagine that it will be wrapped in an <tag>m</tag> tag and use <latex /> syntax.  The <tag>description</tag> tag should contain a very short description in words of what the notation is for.  So <q>center of a group</q> would be a good description to accompany the usage <q><m>Z(G)</m>.</q></p>
+<p>See <xref ref="topic-index"/> for more details and the finer points of creating index entries.</p>
+
+        <p>A similar device is used to create a list of notation for a technical (mathematical) work.
+            <idx>list of notation</idx>
+            <idx><h>notation</h><h>list of</h></idx>
+        Place a <tag>notation</tag> element as close as possible to the place where notation is first introduced.  If you use the <tag>definition</tag> tag for your definitions, then this is a very natural place to also introduce notation.  Inside of <tag>notation</tag> use the <tag>usage</tag> tag to include a short example of the notation in use.  This will be treated as mathematics, so imagine that it will be wrapped in an <tag>m</tag> tag and use <latex/> syntax.  The <tag>description</tag> tag should contain a very short description in words of what the notation is for.  So <q>center of a group</q> would be a good description to accompany the usage <q><m>Z(G)</m>.</q></p>
+
     </section>
 
     <section xml:id="overview-webwork">
@@ -321,8 +329,8 @@
 
     <section xml:id="overview-accessibility">
         <title>Accessibility</title>
-        <idx>accessibilty</idx>
-        <idx>web accessibilty</idx>
+        <idx>accessibility</idx>
+        <idx>web accessibility</idx>
 
 
         <p>The <url href="https://www.w3.org/standards/webdesign/accessibility">Web Accessibility Initiative</url> at <init>W3C</init> (<c>www.w3.org</c>) says:</p>

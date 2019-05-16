@@ -27,13 +27,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- (5) pdflatex is superior for graphics formats -->
 <!-- (6) xelatex is superior for Unicode support   -->
 
-<!-- Copy sample letterhead graphic to the directory where you will compile LaTeX      -->
-<!--                                                                                   -->
-<!-- $ xsltproc /path/to/mathbook/xsl/mathbook-latex.xsl /path/to/this-source-file.xml -->
-<!--                                                                                   -->
-<!-- Look in current working directory for "john-public-job.tex" (see below)           -->
+<!-- Copy sample letterhead graphic to the directory where you will compile LaTeX -->
+<!--                                                                              -->
+<!-- $ xsltproc -o letter.tex                                                     -->
+<!--      /path/to/mathbook/xsl/mathbook-latex.xsl  /path/to/this-source-file.xml -->
+<!--                                                                              -->
+<!-- Look in current working directory for "letter.tex"                           -->
 
-<mathbook>
+<pretext>
     <!-- The docinfo element is like metadata, it mostly      -->
     <!-- migrates various places, or gets used multiple times -->
     <docinfo>
@@ -104,4 +105,4 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     </letter>
 
-</mathbook>
+</pretext>

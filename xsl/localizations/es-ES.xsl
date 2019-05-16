@@ -175,8 +175,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <localization string-id='jump-to'><xsl:text>Jump to:</xsl:text></localization> -->
     <!-- Parts of the Index -->
     <localization string-id='index'><xsl:text>Índice alfabético</xsl:text></localization>
-    <localization string-id='see'><xsl:text>véase</xsl:text></localization>
-    <localization string-id='also'><xsl:text>véase también</xsl:text></localization>
+    <localization string-id='see'><xsl:text>Véase</xsl:text></localization>
+    <localization string-id='also'><xsl:text>Véase también</xsl:text></localization>
     <!-- Translation needed for Spain Spanish -->
     <!-- Notation List headings/foot -->
     <!-- <localization string-id='symbol'><xsl:text>Symbol</xsl:text></localization> -->

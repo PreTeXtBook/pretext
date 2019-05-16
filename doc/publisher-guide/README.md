@@ -7,10 +7,10 @@ If you wish to build from source, possibly as part of contributing improvements,
 
 1.  To build LaTeX for input to `pdflatex`:
         cd /path/to/mathbook
-        xsltproc --xinclude xsl/mathbook-latex.xsl doc/publisher-guide/publisher-guide.xml
+        xsltproc -o publisher-guide.tex -xinclude xsl/mathbook-latex.xsl doc/publisher-guide/publisher-guide.xml
 1.  And for HTML output:
         cd /path/to/mathbook
-        xsltproc --xinclude xsl/mathbook-html.xsl doc/publisher-guide/publisher-guide.xml
+        xsltproc -xinclude xsl/mathbook-html.xsl doc/publisher-guide/publisher-guide.xml
 1.  You might prefer to set your default directory to someplace outside the MathBook XML distribution and include full paths to the XSL and XML files in the `xsltproc` command, so your output is not mixed in with your source.
 
 If you are contributing new material, note that there are three important elements in use.  Please make use of them in your contribution.

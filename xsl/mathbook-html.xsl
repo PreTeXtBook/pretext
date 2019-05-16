@@ -321,9 +321,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- HTML files as output -->
 <xsl:variable name="file-extension" select="'.html'" />
 
-<!-- A boolean variable for Google Custom Search Engine add-on -->
-<xsl:variable name="b-google-cse" select="boolean($docinfo/search/google)" />
-
 <!-- "presentation" mode is experimental, target        -->
 <!-- is in-class presentation of a textbook             -->
 <!--   (1) clickable mathematics (MathJax) at 300% zoom -->
@@ -340,6 +337,93 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:text>raggedright</xsl:text>
 </xsl:variable>
+
+<!-- ID settings for various services -->
+<!-- These are publisher items that may vary for a fork,     -->
+<!-- and which should not be a concern while editing, and    -->
+<!-- which should not run with source.  Deprecated "docinfo" -->
+<!-- options are respected for now.                          -->
+<xsl:param name="html.statcounter.project" select="''"/>
+<xsl:param name="html.statcounter.security" select="''"/>
+<xsl:param name="html.google-classic" select="''"/>
+<xsl:param name="html.google-universal" select="''"/>
+<xsl:param name="html.google-search" select="''"/>
+
+<xsl:variable name="statcounter-project">
+    <xsl:choose>
+        <xsl:when test="not($html.statcounter.project = '')">
+            <xsl:value-of select="$html.statcounter.project"/>
+        </xsl:when>
+        <xsl:when test="$docinfo/analytics/statcounter/project">
+            <xsl:value-of select="$docinfo/analytics/statcounter/project"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="statcounter-security">
+    <xsl:choose>
+        <xsl:when test="not($html.statcounter.security = '')">
+            <xsl:value-of select="$html.statcounter.security"/>
+        </xsl:when>
+        <xsl:when test="$docinfo/analytics/statcounter/security">
+            <xsl:value-of select="$docinfo/analytics/statcounter/security"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="google-classic-tracking">
+    <xsl:choose>
+        <xsl:when test="not($html.google-classic = '')">
+            <xsl:value-of select="$html.google-classic"/>
+        </xsl:when>
+        <xsl:when test="$docinfo/analytics/google">
+            <xsl:value-of select="$docinfo/analytics/google/tracking"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="google-universal-tracking">
+    <xsl:choose>
+        <xsl:when test="not($html.google-universal = '')">
+            <xsl:value-of select="$html.google-universal"/>
+        </xsl:when>
+        <xsl:when test="$docinfo/analytics/google-universal">
+            <xsl:value-of select="$docinfo/analytics/google-universal/@tracking"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="google-search-cx">
+    <xsl:choose>
+        <xsl:when test="not($html.google-search = '')">
+            <xsl:value-of select="$html.google-search"/>
+        </xsl:when>
+        <xsl:when test="$docinfo/search/google/cx">
+            <xsl:value-of select="$docinfo/search/google/cx"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- And boolean variables for the presence of these services -->
+<xsl:variable name="b-statcounter" select="not($statcounter-project = '')" />
+<xsl:variable name="b-google-classic" select="not($google-classic-tracking = '')" />
+<xsl:variable name="b-google-universal" select="not($google-universal-tracking = '')" />
+<xsl:variable name="b-google-cse" select="not($google-search-cx = '')" />
 
 
 <!-- ############## -->
@@ -419,6 +503,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="heading-level" select="$heading-level"/>
         </xsl:apply-templates>
         <xsl:apply-templates select="." mode="author-byline"/>
+        <!-- If there is watermark text, we print it here in an assistive p -->
+        <!-- so that it is the first thing read by a screen-reader user.    -->
+        <xsl:if test="$b-watermark and $heading-level = 2">
+            <p class="watermark">
+                <xsl:text>Watermark text: </xsl:text>
+                <xsl:value-of select="$watermark.text"/>
+                <xsl:text></xsl:text>
+            </p>
+        </xsl:if>
         <!-- Most divisions are a simple list of elements to be       -->
         <!-- processed in document order, once we handle metadata     -->
         <!-- properly, and also kill it so it is not caught up here.  -->
@@ -550,14 +643,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="permalink" />
 </xsl:template>
 
-<!-- THIS NEXT BIT IS ONLY FOR HTML AND SHOULD NOT BE       -->
-<!-- TAKEN SERIOUSLY, BE SURE TO REMOVE IT WHEN THE         -->
-<!-- "division-name" TEMPLATE MIGRATES FROM COMMON TO LATEX -->
-<xsl:template match="colophon|biography|dedication" mode="division-name">
-    <xsl:text>chapter</xsl:text>
-</xsl:template>
-
-
 <!-- Add an author's names, if present   -->
 <!-- TODO: make match more restrictive?  -->
 <xsl:template match="&STRUCTURAL;" mode="author-byline">
@@ -608,7 +693,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <span class="type">
         <xsl:call-template name="type-name">
             <xsl:with-param name="string-id">
-                <xsl:apply-templates select="." mode="division-name" />
+                <xsl:value-of select="local-name(.)" />
             </xsl:with-param>
         </xsl:call-template>
     </span>
@@ -788,15 +873,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="department[line]|institution[line]">
     <xsl:apply-templates select="line" />
-</xsl:template>
-
-<!-- Sneak in dedication line element here as well -->
-<xsl:template match="department/line|institution/line|dedication/p/line">
-    <xsl:apply-templates />
-    <!-- is there a next line to separate? -->
-    <xsl:if test="following-sibling::*">
-        <br />
-    </xsl:if>
 </xsl:template>
 
 <!-- Front Colophon -->
@@ -1124,165 +1200,182 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "index-list":                                           -->
 <!--     build a sorted list of every "index" in text        -->
 <!-- "group-by-letter":                                      -->
-<!--     accumale common first-letter entries,               -->
+<!--     accumulate common first-letter entries,             -->
 <!--     send to their own div for spacing, "jump to" device -->
 <!-- "group-by-heading":                                     -->
 <!--     consolidate/accumulate entries with common heading  -->
 <!-- "knowl-list":                                           -->
-<!--     output the cross-references                         -->
+<!--     output the locators, see, see also                  -->
 <xsl:template match="index-list">
-    <!-- Save-off the "index-list" as context for placement of      -->
-    <!-- eventual xref/cross-references, since we use a for-each    -->
-    <!-- and context changes.  Not strictly necessary, but correct. -->
+    <!-- Save-off the "index-list" as context for placement  -->
+    <!-- of eventual xref/cross-references, since we use a   -->
+    <!-- for-each and context changes.  Not strictly         -->
+    <!-- necessary, but correct.                             -->
     <xsl:variable name="the-index-list" select="."/>
-    <!-- <index> with single mixed-content heading -->
-    <!-- or replacement <idx> as mixed-content     -->
-    <!-- start attribute is actual end of a        -->
-    <!-- "page range", goodies at @finish          -->
-    <!-- "commentary" is elective, so condition    -->
-    <xsl:variable name="unstructured-index">
-        <xsl:for-each select="//index[not(main) and not(@start) and not(index-list) and (not(ancestor::commentary) or $b-commentary)] | $document-root//idx[not(h) and not(@start) and (not(ancestor::commentary) or $b-commentary)]">
-            <xsl:variable name="content">
-                <xsl:apply-templates/>
-            </xsl:variable>
+    <!-- "idx" as mixed content (replaces "index").          -->
+    <!-- Or, "idx" structured with up to three "h"           -->
+    <!-- (replaces index/[main,sub,sub]).                    -->
+    <!-- Start attribute is actual end of a "page            -->
+    <!-- range", goodies at @finish.                         -->
+    <!-- "commentary" is elective, so process, or not        -->
+    <!-- NB: latter half of @select is deprecated usage      -->
+    <!-- new style is index/index-list for the division,     -->
+    <!-- we don't want that picked up in the deprecated      -->
+    <!-- "index" used for the entries                        -->
+
+    <!-- "index-items" is an internal structure, so very     -->
+    <!-- predictable.  Looks like:                           -->
+    <!--                                                     -->
+    <!-- text/key: always three pairs, some may be empty.    -->
+    <!-- "text" is author's heading and will be output at    -->
+    <!-- the end, "key" is a sanitized version for sorting,  -->
+    <!-- and could be an entire replacement if the @sortby   -->
+    <!-- attribute is used.                                  -->
+    <!--                                                     -->
+    <!-- locator-type: used to identify a "traditional" page -->
+    <!-- locator which points back to a place in the text,   -->
+    <!-- versus a "see" or "see also" entry.  Only used for  -->
+    <!-- sorting, and really only used to be sure a "see"    -->
+    <!-- *follows* the page locator.                         -->
+    <xsl:variable name="index-items">
+        <xsl:for-each select="$document-root//idx[not(@start) and (not(ancestor::commentary) or $b-commentary)] | //index[not(index-list) and not(@start) and (not(ancestor::commentary) or $b-commentary)]">
             <index>
-                <!-- text, key-value for single index heading -->
-                <text>
-                    <xsl:copy-of select="$content" />
-                </text>
-                <key>
-                    <xsl:choose>
-                        <!-- salt prevents accidental key collisions -->
-                        <xsl:when test="@sortby">
-                            <xsl:value-of select="translate(@sortby, &UPPERCASE;, &LOWERCASE;)" />
-                            <xsl:value-of select="generate-id(.)" />
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:value-of select="translate($content, &UPPERCASE;, &LOWERCASE;)" />
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </key>
-                <!-- plus two more empty text, key pairs -->
-                <text/><key/>
-                <text/><key/>
-                <!-- Create the full cross-reference and save now, since      -->
-                <!-- context will be lost later.  Save in a "cross-reference" -->
-                <!-- element.  We use the context of the index itself as the  -->
-                <!-- location where the cross-reference is placed.  The       -->
-                <!-- location of the "idx" is the start of a search for the   -->
-                <!-- enclosing element.                                       -->
-                <cross-reference>
-                    <xsl:apply-templates select="$the-index-list" mode="index-enclosure">
-                        <xsl:with-param name="enclosure" select="."/>
-                    </xsl:apply-templates>
-                </cross-reference>
-            </index>
-        </xsl:for-each>
-    </xsl:variable>
-    <!-- index entries with structure, cant't be end of a "page range" -->
-    <!-- "commentary" is elective, so process, or not                  -->
-    <xsl:variable name="structured-index">
-        <xsl:for-each select="//index[main and not(@start) and (not(ancestor::commentary) or $b-commentary)] | $document-root//idx[h and not(@start) and (not(ancestor::commentary) or $b-commentary)]">
-            <index>
-                <xsl:for-each select="main|sub|h">
-                    <xsl:variable name="content">
-                        <xsl:apply-templates/>
-                    </xsl:variable>
-                    <text>
-                        <xsl:copy-of select="$content" />
-                    </text>
-                    <key>
-                        <xsl:choose>
-                            <!-- salt prevents accidental key collisions -->
-                            <xsl:when test="@sortby">
-                                <xsl:value-of select="translate(@sortby, &UPPERCASE;, &LOWERCASE;)" />
-                                <xsl:value-of select="generate-id(.)" />
-                            </xsl:when>
-                            <xsl:otherwise>
-                                <xsl:value-of select="translate($content, &UPPERCASE;, &LOWERCASE;)" />
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </key>
-                    <!-- if terminal, enhance final sort key -->
-                    <!-- link type for final sort preference -->
-                    <!-- this mimics LaTeX's ordering        -->
-                    <!--   0 - has "see also"                -->
-                    <!--   1 - has "see"                     -->
-                    <!--   2 - is knowl/hyperlink reference  -->
-                    <!-- condition on last level of headings -->
-                    <xsl:if test="not(following-sibling::*[self::sub]) and not(following-sibling::*[self::h])">
-                        <link>
+                <xsl:choose>
+                    <!-- simple mixed-content first, no structure -->
+                    <!-- one text-key pair, two more empty        -->
+                    <!-- "main" as indicator is deprecated        -->
+                    <xsl:when test="not(main) and not(h)">
+                        <xsl:variable name="content">
+                            <xsl:apply-templates/>
+                        </xsl:variable>
+                        <!-- text, key-value for single index heading -->
+                        <text>
+                            <xsl:copy-of select="$content" />
+                        </text>
+                        <key>
                             <xsl:choose>
-                                <xsl:when test="../seealso">
-                                    <xsl:text>0</xsl:text>
-                                </xsl:when>
-                                <xsl:when test="../see">
-                                    <xsl:text>1</xsl:text>
+                                <!-- salt prevents accidental key collisions -->
+                                <xsl:when test="@sortby">
+                                    <xsl:value-of select="translate(@sortby, &UPPERCASE;, &LOWERCASE;)" />
+                                    <xsl:value-of select="generate-id(.)" />
                                 </xsl:when>
                                 <xsl:otherwise>
-                                    <xsl:text>2</xsl:text>
+                                    <xsl:value-of select="translate($content, &UPPERCASE;, &LOWERCASE;)" />
                                 </xsl:otherwise>
                             </xsl:choose>
-                        </link>
-                    </xsl:if>
-                </xsl:for-each>
-                <!-- add additional empty text, key pairs -->
-                <!-- so there are always three            -->
-                <xsl:if test="(count(h) = 1) or (count(h) = 2)">
-                    <text/><key/>
-                </xsl:if>
-                <xsl:if test="count(h) = 1">
-                    <text/><key/>
-                </xsl:if>
-                <xsl:if test="(main and not(sub[1]))">
-                    <text/><key/>
-                </xsl:if>
-                <xsl:if test="(main and not(sub[2]))">
-                    <text/><key/>
-                </xsl:if>
-                <!-- Create the full cross-reference and save now, since      -->
-                <!-- context will be lost later.  Save in a "cross-reference" -->
+                        </key>
+                        <!-- plus two more empty text, key pairs -->
+                        <text/><key/>
+                        <text/><key/>
+                    </xsl:when>
+                    <!-- structured index entry, multiple text-key pairs -->
+                    <!-- "main" as indicator is deprecated               -->
+                    <xsl:when test="main or h">
+                        <!-- "h" occur in order, main-sub-sub deprecated -->
+                        <xsl:for-each select="main|sub|h">
+                            <xsl:variable name="content">
+                                <xsl:apply-templates/>
+                            </xsl:variable>
+                            <text>
+                                <xsl:copy-of select="$content" />
+                            </text>
+                            <key>
+                                <xsl:choose>
+                                    <!-- salt prevents accidental key collisions -->
+                                    <xsl:when test="@sortby">
+                                        <xsl:value-of select="translate(@sortby, &UPPERCASE;, &LOWERCASE;)" />
+                                        <xsl:value-of select="generate-id(.)" />
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:value-of select="translate($content, &UPPERCASE;, &LOWERCASE;)" />
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </key>
+                        </xsl:for-each>
+                        <!-- add additional empty text, key pairs -->
+                        <!-- so there are always three            -->
+                        <xsl:if test="(count(h) = 1) or (count(h) = 2)">
+                            <text/><key/>
+                        </xsl:if>
+                        <xsl:if test="count(h) = 1">
+                            <text/><key/>
+                        </xsl:if>
+                        <xsl:if test="(main and not(sub[1]))">
+                            <text/><key/>
+                        </xsl:if>
+                        <xsl:if test="(main and not(sub[2]))">
+                            <text/><key/>
+                        </xsl:if>
+                        <!-- final sort key will prioritize  -->
+                        <!-- this mimics LaTeX's ordering    -->
+                        <!--   0 - has "see also"            -->
+                        <!--   1 - has "see"                 -->
+                        <!--   2 - is usual index reference  -->
+                        <xsl:if test="not(following-sibling::*[self::sub]) and not(following-sibling::*[self::h])">
+                            <locator-type>
+                                <xsl:choose>
+                                    <xsl:when test="seealso">
+                                        <xsl:text>2</xsl:text>
+                                    </xsl:when>
+                                    <xsl:when test="see">
+                                        <xsl:text>1</xsl:text>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:text>0</xsl:text>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </locator-type>
+                        </xsl:if>
+                    </xsl:when>
+                </xsl:choose>
+                <!-- Create the full locator and save now, since context will -->
+                <!-- be lost later.  Save a page locator in "cross-reference" -->
                 <!-- element.  We use the context of the index itself as the  -->
                 <!-- location where the cross-reference is placed.  The       -->
                 <!-- location of the "idx" is the start of a search for the   -->
-                <!-- enclosing element.                                       -->
-                <cross-reference>
-                    <xsl:apply-templates select="$the-index-list" mode="index-enclosure">
-                        <xsl:with-param name="enclosure" select="."/>
-                    </xsl:apply-templates>
-                </cross-reference>
-                <!-- there is at most one "see" or "seealso" total -->
-                <!-- these replace the knowls, so perhaps condition here -->
-                <xsl:for-each select="see">
-                    <see>
-                        <xsl:apply-templates/>
-                    </see>
-                </xsl:for-each>
-                <xsl:for-each select="seealso">
-                    <seealso>
-                        <xsl:apply-templates/>
-                    </seealso>
-                </xsl:for-each>
+                <!-- enclosing element.  See and "see also" take precedence.  -->
+                <xsl:choose>
+                    <xsl:when test="see">
+                        <see>
+                            <xsl:apply-templates select="see"/>
+                        </see>
+                    </xsl:when>
+                    <xsl:when test="seealso">
+                        <seealso>
+                            <xsl:apply-templates select="seealso"/>
+                        </seealso>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <cross-reference>
+                            <xsl:apply-templates select="$the-index-list" mode="index-enclosure">
+                                <xsl:with-param name="enclosure" select="."/>
+                            </xsl:apply-templates>
+                        </cross-reference>
+                    </xsl:otherwise>
+                </xsl:choose>
             </index>
         </xsl:for-each>
     </xsl:variable>
     <!-- Sort, now that info from document tree ordering is recorded     -->
-    <!-- perhaps one big variable/RTF once deprecation takes place.      -->
     <!-- Keys, normalized to lowercase, or @sortby attributes, are the   -->
     <!-- primary key for sorting, but if we have index entries that just -->
     <!-- differ by upper- or lower-case distinctions, we need to have    -->
     <!-- identical variants sort next to each other so they get grouped  -->
-    <!-- as one entry with multiple cross-references, so we sort on the  -->
-    <!-- actual text as well. -->
+    <!-- as one entry with multiple cross-references, so we sort         -->
+    <!-- secondarily on the actual text as well.  The page locators were -->
+    <!-- built in document order and so should remain that way after the -->
+    <!-- sort and so be output in order of appearance.                   -->
     <xsl:variable name="sorted-index">
-        <xsl:for-each select="exsl:node-set($unstructured-index)/*|exsl:node-set($structured-index)/*">
+        <xsl:for-each select="exsl:node-set($index-items)/*">
             <xsl:sort select="./key[1]" />
             <xsl:sort select="./text[1]"/>
             <xsl:sort select="./key[2]" />
             <xsl:sort select="./text[2]"/>
             <xsl:sort select="./key[3]" />
             <xsl:sort select="./text[3]"/>
-            <xsl:sort select="./link" />
+            <xsl:sort select="./locator-type" />
+            <xsl:sort select="./see"/>
+            <xsl:sort select="./seealso"/>
             <xsl:copy-of select="." />
         </xsl:for-each>
     </xsl:variable>
@@ -1293,8 +1386,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:apply-templates>
 </xsl:template>
 
-<!-- Accumulate index entries with a common first letter   -->
-<!-- in $letter-group and then pass to grouping by heading -->
+<!-- Accumulate index entries with a common first letter    -->
+<!-- in first heading, based on key[1], into $letter-group. -->
+<!-- When a look-ahead sees the initial letter changing,    -->
+<!-- send the group off to be formatted as a letter-group   -->
+<!-- and further organize by heading.                       -->
 <xsl:template match="index" mode="group-by-letter">
     <!-- Empty node list from parent of root node -->
     <xsl:param name="letter-group"/>
@@ -1333,9 +1429,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- Accumulate index entries with identical heading -->
-<!-- quit accumulating when next entry differs       -->
-<!-- Output heading, xrefs, before restarting        -->
+<!-- Accumulate index entries with identical headings - their    -->
+<!-- exact text, not anything related to the keys.  Quit         -->
+<!-- accumulating when look-ahead shows next entry differs.      -->
+<!-- Output the (3-part) heading and locators before restarting. -->
 <xsl:template match="index" mode="group-by-heading">
     <!-- Empty node list from parent of root node -->
     <xsl:param name="heading-group"/>
@@ -1354,7 +1451,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:with-param name="letter-group" select="$letter-group"/>
                 </xsl:apply-templates>
             </xsl:when>
-            <!-- some key differs in next index entry,  -->
+            <!-- some text differs in next index entry, -->
             <!-- write and restart heading accumulation -->
             <xsl:otherwise>
                 <xsl:call-template name="output-one-heading">
@@ -1377,6 +1474,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="output-one-heading">
     <xsl:param name="heading-group" />
 
+    <xsl:if test="$heading-group/see and $heading-group/cross-reference">
+        <xsl:message>PTX:WARNING: an index entry should not have both a locator and a "see" reference.  Results may be unpredictable.  Perhaps you meant to employ a "seealso" reference?  Heading is: "<xsl:value-of select="text[1]"/>; <xsl:value-of select="text[2]"/>; <xsl:value-of select="text[3]"/>"</xsl:message>
+    </xsl:if>
+    <xsl:if test="$heading-group/seealso and not($heading-group/cross-reference)">
+        <xsl:message>PTX:WARNING: an index entry should not have a "seealso" reference without also having a locator.  Results may be unpredictable.  Perhaps you meant to employ a "see" reference?  Heading is: "<xsl:value-of select="text[1]"/>; <xsl:value-of select="text[2]"/>; <xsl:value-of select="text[3]"/>"</xsl:message>
+    </xsl:if>
+
     <xsl:variable name="pattern" select="$heading-group[1]" />
     <xsl:variable name="pred" select="$pattern/preceding-sibling::index[1]" />
     <!-- booleans for analysis of format of heading, xrefs -->
@@ -1387,7 +1491,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="empty3" select="boolean($pattern/text[3] = '')" />
     <!-- write an "indexitem", "subindexitem", "subsubindexitem" as     -->
     <!-- necessary to identify chnages in headings, without duplicating -->
-    <!-- headings from prior entries. Add xref when keys go blank       -->
+    <!-- headings from prior entries. Add locators when texts go blank  -->
     <!--  -->
     <!-- first key differs from predecessor, or leads letter group -->
     <xsl:if test="not($match1)">
@@ -1429,42 +1533,158 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- Place all the cross-references in the div -->
-<!-- for the final (sub)item in its own span.  -->
-<!-- N.B. Some commas may not be correct here  -->
+<!-- Place all the locators into the div for -->
+<!-- the final (sub)item in its own span.    -->
+
+<!-- One-time, global variables provide index terms -->
+<!-- Localization file should provide upper-case versions -->
+<xsl:variable name="upper-see">
+    <xsl:call-template name="type-name">
+        <xsl:with-param name="string-id" select="'see'" />
+    </xsl:call-template>
+</xsl:variable>
+
+<xsl:variable name="lower-see">
+    <xsl:variable name="upper">
+        <xsl:call-template name="type-name">
+            <xsl:with-param name="string-id" select="'see'" />
+        </xsl:call-template>
+    </xsl:variable>
+    <xsl:value-of select="translate(substring($upper, 1, 1), &UPPERCASE;, &LOWERCASE;)"/>
+    <xsl:value-of select="substring($upper, 2)"/>
+</xsl:variable>
+
+<xsl:variable name="upper-seealso">
+    <xsl:call-template name="type-name">
+        <xsl:with-param name="string-id" select="'also'" />
+    </xsl:call-template>
+</xsl:variable>
+
+<xsl:variable name="lower-seealso">
+    <xsl:variable name="upper">
+        <xsl:call-template name="type-name">
+            <xsl:with-param name="string-id" select="'also'" />
+        </xsl:call-template>
+    </xsl:variable>
+    <xsl:value-of select="translate(substring($upper, 1, 1), &UPPERCASE;, &LOWERCASE;)"/>
+    <xsl:value-of select="substring($upper, 2)"/>
+</xsl:variable>
+
+<!-- Chicago Manual of Style, 15th edition, 18.14 - 18.22  -->
+<!-- "see", following main entry, 18.16                    -->
+<!--    Period after entry                                 -->
+<!--    "See" capitalized (assumed from localization file) -->
+<!--     multiple: alphabetical order, semicolon separator -->
+<!-- "see", following a subentry, 18.17                    -->
+<!--    Space after entry                                  -->
+<!--    "see" lower case                                   -->
+<!--    wrapped in parentheses                             -->
+<!-- "see also", following main entry, 18.19               -->
+<!--    Period after entry                                 -->
+<!--    "See" capitalized (assumed from localization file) -->
+<!--     multiple: alphabetical order, semicolon separator -->
+<!-- "see", following a subentry, 18.19                    -->
+<!--    Space after entry                                  -->
+<!--    "see" lower case                                   -->
+<!--    wrapped in parentheses                             -->
+<!-- generic references, 18.22                             -->
+<!--   TODO: use content of "see" and "seealso"            -->
 <xsl:template name="knowl-list">
     <xsl:param name="heading-group" />
+
+    <!-- Some formatting depends on presence of subentries -->
+    <xsl:variable name="b-has-subentry" select="not(text[2] = '')"/>
     <!-- range through node-list, making cross-references -->
     <!-- Use a comma after the heading, then prefix each  -->
     <!-- cross-reference with a space as separators       -->
     <span class="indexknowl">
-        <xsl:text>,</xsl:text>
+        <xsl:choose>
+            <xsl:when test="$heading-group/see and not($b-has-subentry)">
+                <xsl:text>. </xsl:text>
+            </xsl:when>
+            <!-- no punctuation, will earn parentheses -->
+            <xsl:when test="$heading-group/see and $b-has-subentry">
+                <xsl:text> </xsl:text>
+            </xsl:when>
+            <!-- cross-reference, w/ or w/out see also -->
+            <xsl:otherwise>
+                <xsl:text>,</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+        <!-- course over the "index" in the group -->
         <xsl:for-each select="$heading-group">
             <xsl:choose>
-                <xsl:when test="see">
-                    <xsl:text> </xsl:text>
-                    <em class="see">
-                        <xsl:call-template name="type-name">
-                            <xsl:with-param name="string-id" select="'see'" />
-                        </xsl:call-template>
-                    </em>
-                    <xsl:copy-of select="see/node()" />
-                </xsl:when>
-                <xsl:when test="seealso">
-                    <xsl:text> </xsl:text>
-                    <em class="see">
-                        <xsl:call-template name="type-name">
-                            <xsl:with-param name="string-id" select="'also'" />
-                        </xsl:call-template>
-                    </em>
-                    <xsl:copy-of select="seealso/node()" />
-                </xsl:when>
-                <!-- else a real content reference, knowl or hyperlink -->
-                <!-- TODO: split into two more when, otherwise as error? -->
-                <xsl:otherwise>
+                <!--  -->
+                <xsl:when test="cross-reference">
                     <xsl:text> </xsl:text>
                     <xsl:copy-of select="cross-reference/node()"/>
-                </xsl:otherwise>
+                </xsl:when>
+                <!--  -->
+                <xsl:when test="see">
+                    <xsl:if test="position() = 1">
+                        <xsl:if test="$b-has-subentry">
+                            <!-- 2019-04-04 Temporarily suppress parentheses -->
+                            <!-- <xsl:text>(</xsl:text> -->
+                        </xsl:if>
+                        <em class="see">
+                            <xsl:choose>
+                                <xsl:when test="$b-has-subentry">
+                                    <xsl:value-of select="$lower-see"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:value-of select="$upper-see"/>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </em>
+                    </xsl:if>
+                    <!-- just a space after "see", before first  -->
+                    <!-- semi-colon before second and subsequent -->
+                    <xsl:choose>
+                        <xsl:when test="position() = 1">
+                            <xsl:text> </xsl:text>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:text>; </xsl:text>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                    <xsl:copy-of select="see/node()" />
+                    <xsl:if test="$b-has-subentry and (position() = last())">
+                        <!-- 2019-04-04 Temporarily suppress parentheses -->
+                        <!-- <xsl:text>)</xsl:text> -->
+                    </xsl:if>
+                </xsl:when>
+                <!--  -->
+                <xsl:when test="seealso">
+                    <xsl:choose>
+                        <xsl:when test="preceding-sibling::index[1]/cross-reference">
+                            <xsl:choose>
+                                <xsl:when test="$b-has-subentry">
+                                    <xsl:text> </xsl:text>
+                                    <!-- 2019-04-04 Temporarily suppress parentheses -->
+                                    <!-- <xsl:text>(</xsl:text> -->
+                                    <em class="seealso">
+                                        <xsl:value-of select="$lower-seealso"/>
+                                    </em>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:text>. </xsl:text>
+                                    <em class="seealso">
+                                        <xsl:value-of select="$upper-seealso"/>
+                                    </em>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:text>;</xsl:text>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                    <xsl:text> </xsl:text>
+                    <xsl:copy-of select="seealso/node()"/>
+                    <xsl:if test="(position() = last()) and $b-has-subentry">
+                        <!-- 2019-04-04 Temporarily suppress parentheses -->
+                        <!-- <xsl:text>)</xsl:text> -->
+                    </xsl:if>
+                </xsl:when>
             </xsl:choose>
         </xsl:for-each>
     </span>
@@ -2462,6 +2682,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="b-original" select="$b-original" />
     </xsl:apply-templates>
 </xsl:template>
+
+<!-- ################### -->
+<!-- Structured by Lines -->
+<!-- ################### -->
+
+<!-- The HTML-specific line separator for use by   -->
+<!-- the abstract template for a "line" elent used -->
+<!-- to (optionally) structure certain elements.   -->
+
+<xsl:template name="line-separator">
+    <br/>
+</xsl:template>
+
+<!-- ###### -->
+<!-- Poetry -->
+<!-- ###### -->
 
 <!-- TODO: Address GitHub issues regarding poetry output:   -->
 <!-- https://github.com/BooksHTML/mathbook-assets/issues/65 -->
@@ -5388,7 +5624,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- routines all the same.                                 -->
 <xsl:template match="stack" mode="panel-html-box">
     <xsl:param name="b-original" select="true()" />
-    <xsl:apply-templates select="tabular|image|p|pre|ol|ul|dl|video|interactive|program|console|exercise" mode="panel-html-box">
+    <xsl:apply-templates select="tabular|image|p|pre|ol|ul|dl|video|interactive|slate|program|console|exercise" mode="panel-html-box">
         <xsl:with-param name="b-original" select="$b-original" />
     </xsl:apply-templates>
 </xsl:template>
@@ -5692,7 +5928,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                           </div>
                     </main>
                 </div>
-                <xsl:apply-templates select="$docinfo/analytics" />
+                <!-- analytics services, if requested -->
+                <xsl:call-template name="statcounter"/>
+                <xsl:call-template name="google-classic"/>
+                <xsl:call-template name="google-universal"/>
                 <!-- <xsl:call-template name="pytutor-footer" /> -->
             </body>
         </html>
@@ -5723,6 +5962,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- of the HTML5 video/@poster attribute (and other places?)      -->
 <xsl:variable name="generic-preview-svg-data-uri">
     <xsl:text>data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%2014%2096%2068%22%20style%3D%22cursor%3Apointer%3B%22%20preserveAspectRatio%3D%22none%22%3E%3Cpath%20fill%3D%22%23e62117%22%20d%3D%22M94.98%2C28.84c0%2C0-0.94-6.6-3.81-9.5c-3.64-3.81-7.72-3.83-9.59-4.05c-13.4-0.97-33.52-0.85-33.52-0.85s-20.12-0.12-33.52%2C0.85c-1.87%2C0.22-5.95%2C0.24-9.59%2C4.05c-2.87%2C2.9-3.81%2C9.5-3.81%2C9.5S0.18%2C36.58%2C0%2C44.33v7.26c0.18%2C7.75%2C1.14%2C15.49%2C1.14%2C15.49s0.93%2C6.6%2C3.81%2C9.5c3.64%2C3.81%2C8.43%2C3.69%2C10.56%2C4.09c7.53%2C0.72%2C31.7%2C0.89%2C32.54%2C0.9c0.01%2C0%2C20.14%2C0.03%2C33.54-0.94c1.87-0.22%2C5.95-0.24%2C9.59-4.05c2.87-2.9%2C3.81-9.5%2C3.81-9.5s0.96-7.75%2C1.02-15.49v-7.26C95.94%2C36.58%2C94.98%2C28.84%2C94.98%2C28.84z%20M38.28%2C61.41v-27l25.74%2C13.5L38.28%2C61.41z%22%2F%3E%3C%2Fsvg%3E</xsl:text>
+</xsl:variable>
+
+<!-- LaTeX watermark uses default 5cm font which is then scaled by watermark.scale -->
+<!-- We copy that here. We also copy the 45 degree angle.                          -->
+<!-- Color rgb(204,204,204) matches LaTeX 80% grayscale.                           -->
+<xsl:variable name="watermark-svg">
+    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="600" width="600">
+        <text x="50%" y="50%" text-anchor="middle" transform="rotate(-45,300,300)" fill="rgb(204,204,204)" style="font-family:sans-serif; font-size:{5*$watermark.scale}cm;">
+            <xsl:value-of select="$watermark.text"/>
+        </text>
+    </svg>
+</xsl:variable>
+
+<xsl:variable name="watermark-css">
+    <xsl:text>background-image:url('data:image/svg+xml;utf8,</xsl:text>
+    <xsl:apply-templates select="exsl:node-set($watermark-svg)" mode="serialize" />
+    <xsl:text>');</xsl:text>
 </xsl:variable>
 
 <!-- create a "video" element for author-hosted   -->
@@ -6336,17 +6592,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- we bail out of recursion with no action taken -->
 </xsl:template>
 
-<!-- Perhaps this could be consolidated     -->
-<!-- with other uses of the "line" element? -->
-<xsl:template match="tabular/row/cell/line">
-    <xsl:apply-templates/>
-    <!-- is there a next line to separate? -->
-    <xsl:if test="following-sibling::line">
-        <br/>
-    </xsl:if>
-</xsl:template>
-
-
 <!-- ############################ -->
 <!-- Table construction utilities -->
 <!-- ############################ -->
@@ -6669,6 +6914,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- https://github.com/BooksHTML/mathbook-assets/issues/64 -->
 
 <!-- Single line, mixed-content          -->
+<!-- Or structured by "line" elements    -->
 <!-- Quotation dash if within blockquote -->
 <!-- Unicode Character 'HORIZONTAL BAR' aka 'QUOTATION DASH' -->
 <xsl:template match="attribution">
@@ -6676,27 +6922,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="parent::blockquote">
             <xsl:text>&#x2015;</xsl:text>
         </xsl:if>
-        <xsl:apply-templates />
+        <xsl:choose>
+            <xsl:when test="line">
+                <xsl:apply-templates select="line" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates />
+            </xsl:otherwise>
+        </xsl:choose>
     </cite>
-</xsl:template>
-
-<!-- Multiple lines, structured by lines -->
-<xsl:template match="attribution[line]">
-    <cite class="attribution">
-        <xsl:apply-templates select="line" />
-    </cite>
-</xsl:template>
-
-<!-- General line of an attribution -->
-<xsl:template match="attribution/line">
-    <xsl:if test="parent::attribution/parent::blockquote and not(preceding-sibling::*)">
-        <xsl:text>&#x2015;</xsl:text>
-    </xsl:if>
-    <xsl:apply-templates />
-    <!-- is there a next line to separate? -->
-    <xsl:if test="following-sibling::*">
-        <br />
-    </xsl:if>
 </xsl:template>
 
 <!-- Defined terms (bold, typically) -->
@@ -8509,12 +8743,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- HTML5 main will be a "main" landmark automatically -->
                 <main class="main">
                     <div id="content" class="pretext-content">
+                        <xsl:if test="$b-watermark">
+                            <xsl:attribute name="style">
+                                <xsl:value-of select="$watermark-css" />
+                            </xsl:attribute>
+                        </xsl:if>
                         <xsl:copy-of select="$content" />
                     </div>
                 </main>
             </div>
 
-            <xsl:apply-templates select="$docinfo/analytics" />
+            <!-- analytics services, if requested -->
+            <xsl:call-template name="statcounter"/>
+            <xsl:call-template name="google-classic"/>
+            <xsl:call-template name="google-universal"/>
             <xsl:call-template name="pytutor-footer" />
             <xsl:call-template name="login-footer" />
         </body>
@@ -8560,7 +8802,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- potential document-id per-page -->
             <xsl:call-template name="document-id"/>
             <xsl:copy-of select="$content" />
-            <xsl:apply-templates select="$docinfo/analytics" />
+            <!-- analytics services, if requested -->
+            <xsl:call-template name="statcounter"/>
+            <xsl:call-template name="google-classic"/>
+            <xsl:call-template name="google-universal"/>
         </body>
     </html>
     </exsl:document>
@@ -9710,7 +9955,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:element name="script">
             <xsl:text>(function() {&#xa;</xsl:text>
             <xsl:text>  var cx = '</xsl:text>
-            <xsl:value-of select="$docinfo/search/google/cx" />
+            <xsl:value-of select="$google-search-cx" />
             <xsl:text>';&#xa;</xsl:text>
             <xsl:text>  var gcse = document.createElement('script');&#xa;</xsl:text>
             <xsl:text>  gcse.type = 'text/javascript';&#xa;</xsl:text>
@@ -9880,63 +10125,83 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Google Analytics                     -->
 <!-- "Classic", not compared to Universal -->
-<xsl:template match="google">
-<xsl:comment>Start: Google code</xsl:comment>
-<script>
-var _gaq = _gaq || [];
-_gaq.push(['_setAccount', '<xsl:value-of select="./tracking" />']);
-_gaq.push(['_trackPageview']);
-
-(function() {
-var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'https://www') + '.google-analytics.com/ga.js';
-var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();
-</script>
-<xsl:comment>End: Google code</xsl:comment>
+<xsl:template name="google-classic">
+    <xsl:if test="$b-google-classic">
+        <xsl:comment>Start: Google Classic code</xsl:comment>
+        <xsl:text>&#xa;</xsl:text>
+        <script>
+            <xsl:text>&#xa;</xsl:text>
+            <xsl:text>var _gaq = _gaq || [];&#xa;</xsl:text>
+            <xsl:text>_gaq.push(['_setAccount', '</xsl:text>
+            <xsl:value-of select="$google-classic-tracking" />
+            <xsl:text>']);&#xa;</xsl:text>
+            <xsl:text>_gaq.push(['_trackPageview']);&#xa;</xsl:text>
+            <xsl:text>(function() {&#xa;</xsl:text>
+            <xsl:text>var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;&#xa;</xsl:text>
+            <xsl:text>ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'https://www') + '.google-analytics.com/ga.js';&#xa;</xsl:text>
+            <xsl:text>var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);&#xa;</xsl:text>
+            <xsl:text>})();&#xa;</xsl:text>
+        </script>
+        <xsl:text>&#xa;</xsl:text>
+        <xsl:comment>End: Google Classic code</xsl:comment>
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
 </xsl:template>
 
-<xsl:template match="google-universal">
-    <xsl:comment>Start: Google Universal code</xsl:comment>
-    <script>
-        <xsl:text>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){&#xa;</xsl:text>
-        <xsl:text>(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),&#xa;</xsl:text>
-        <xsl:text>m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)&#xa;</xsl:text>
-        <xsl:text>})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');&#xa;</xsl:text>
-        <xsl:text>ga('create', '</xsl:text>
-            <xsl:value-of select="@tracking" />
-        <xsl:text>', 'auto');&#xa;</xsl:text>
-        <xsl:text>ga('send', 'pageview');&#xa;</xsl:text>
-    </script>
-    <xsl:comment>End: Google Universal code</xsl:comment>
+<xsl:template name="google-universal">
+    <xsl:if test="$b-google-universal">
+        <xsl:comment>Start: Google Universal code</xsl:comment>
+        <xsl:text>&#xa;</xsl:text>
+        <script>
+            <xsl:text>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){&#xa;</xsl:text>
+            <xsl:text>(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),&#xa;</xsl:text>
+            <xsl:text>m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)&#xa;</xsl:text>
+            <xsl:text>})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');&#xa;</xsl:text>
+            <xsl:text>ga('create', '</xsl:text>
+            <xsl:value-of select="$google-universal-tracking" />
+            <xsl:text>', 'auto');&#xa;</xsl:text>
+            <xsl:text>ga('send', 'pageview');&#xa;</xsl:text>
+        </script>
+        <xsl:text>&#xa;</xsl:text>
+        <xsl:comment>End: Google Universal code</xsl:comment>
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <!-- StatCounter                                -->
 <!-- Set sc_invisible to 1                      -->
 <!-- In noscript URL, final 1 is an edit from 0 -->
-<xsl:template match="statcounter">
-<xsl:comment>Start: StatCounter code</xsl:comment>
-<script>
-var sc_project=<xsl:value-of select="project" />;
-var sc_invisible=1;
-var sc_security="<xsl:value-of select="security" />";
-var scJsHost = (("https:" == document.location.protocol) ? "https://secure." : "https://www.");
-<![CDATA[document.write("<sc"+"ript src='" + scJsHost+ "statcounter.com/counter/counter.js'></"+"script>");]]>
-</script>
-<xsl:variable name="noscript_url">
-    <xsl:text>https://c.statcounter.com/</xsl:text>
-    <xsl:value-of select="project" />
-    <xsl:text>/0/</xsl:text>
-    <xsl:value-of select="security" />
-    <xsl:text>/1/</xsl:text>
-</xsl:variable>
-<noscript>
-<div class="statcounter">
-<a title="web analytics" href="https://statcounter.com/" target="_blank">
-<img class="statcounter" src="{$noscript_url}" alt="web analytics" /></a>
-</div>
-</noscript>
-<xsl:comment>End: StatCounter code</xsl:comment>
+<xsl:template name="statcounter">
+    <xsl:if test="$b-statcounter">
+        <xsl:variable name="noscript_url">
+            <xsl:text>https://c.statcounter.com/</xsl:text>
+            <xsl:value-of select="$statcounter-project" />
+            <xsl:text>/0/</xsl:text>
+            <xsl:value-of select="$statcounter-security" />
+            <xsl:text>/1/</xsl:text>
+        </xsl:variable>
+        <xsl:comment>Start: StatCounter code</xsl:comment>
+        <script>
+        <xsl:text>&#xa;</xsl:text>
+        <xsl:text>var sc_project=</xsl:text>
+        <xsl:value-of select="$statcounter-project" />
+        <xsl:text>;&#xa;</xsl:text>
+        <xsl:text>var sc_invisible=1;&#xa;</xsl:text>
+        <xsl:text>var sc_security="</xsl:text>
+        <xsl:value-of select="$statcounter-security" />
+        <xsl:text>";&#xa;</xsl:text>
+        <xsl:text>var scJsHost = (("https:" == document.location.protocol) ? "https://secure." : "https://www.");&#xa;</xsl:text>
+        <xsl:text>document.write("&lt;sc"+"ript src='" + scJsHost+ "statcounter.com/counter/counter.js'&gt;&lt;/"+"script&gt;");&#xa;</xsl:text>
+        </script>
+        <noscript>
+        <div class="statcounter">
+        <a title="web analytics" href="https://statcounter.com/" target="_blank">
+        <img class="statcounter" src="{$noscript_url}" alt="web analytics" /></a>
+        </div>
+        </noscript>
+        <xsl:comment>End: StatCounter code</xsl:comment>
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <!-- Miscellaneous -->

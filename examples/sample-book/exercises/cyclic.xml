@@ -421,7 +421,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </statement>
     </exercise>
 
-    <todo>Fix references to torsion subgroup</todo>
+    <!-- TODO: Fix references to torsion subgroup -->
 
     <exercise number="31">
         <statement>

@@ -19,7 +19,7 @@ You should have received a copy of the GNU General Public License
 along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************-->
 
-<mathbook>
+<pretext>
 
     <docinfo>
         <macros>
@@ -186,4 +186,4 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </chapter>
 
     </book>
-</mathbook>
+</pretext>

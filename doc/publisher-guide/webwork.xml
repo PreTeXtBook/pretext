@@ -166,7 +166,7 @@
             <sidebyside>
                 <console>
                     <prompt>$ </prompt>
-                    <input>xsltproc mathbook-latex.xsl merge.ptx</input>
+                    <input>xsltproc -o mybook.tex mathbook-latex.xsl merge.ptx</input>
                 </console>
             </sidebyside>
             <p>You may need to specify paths to <c>mathbook-latex.xsl</c> and <c>merge.ptx</c>.</p>
@@ -194,6 +194,20 @@
 
             <p>This creates a folder named after your book title, which has a folder tree with all of the <c>.pg</c> and <c>.def</c> files laid out according to your chunk level. You can compress this folder and upload it into an active <webwork/> course where you may then assign the sets to your students (and modify, as you like).</p>
         </subsection>
+    </section>
+
+    <section>
+        <title>Unachievable Conversions</title>
+
+        <p>By authoring <webwork/> problems within <pretext/> you do not need to learn all the ins and outs of the <init>PGML</init> markup language and can concentrate on simply becoming proficient with <pretext/>.  However, there are a few <pretext/> constructions which are not achievable in a <webwork/> problem, simply because the two markup languages are different.  We list exceptions here, and also try to use source-checking tools to alert you to any differences.<ul>
+            <li>
+                <p>Certain aspects of specifying borders of a <pretext/> <tag>tabular</tag> are not realizable in a <init>PGML</init> table.  Specifically,<ul>
+                    <li>Specifying column-specific top border attributes are not implemented.</li>
+                    <li>Cell-specific bottom border attributes are not implemented.</li>
+                    <li><c>medium</c> and <c>major</c> table rule-thichness attributes will be handled as if they were <c>minor</c>.</li>
+                </ul></p>
+            </li>
+        </ul></p>
     </section>
 
 </chapter>

@@ -27,7 +27,7 @@ xsltproc /path/to/mathbook/xsl/mathbook-html.xsl /path/to/mathbook/examples/samp
 then find  "derivatives.html"  in the current working directory
 and use a web browser to view.  For PDF/print, issue:
 
-xsltproc /path/to/mathbook/xsl/mathbook-latex.xsl /path/to/mathbook/examples/sample-article.xml
+xsltproc -o derivatives.tex /path/to/mathbook/xsl/mathbook-latex.xsl /path/to/mathbook/examples/sample-article.xml
 
 and apply  pdflatex  or  xelatex  to  "derivatives.tex"  in
 the current working directory.
@@ -43,11 +43,11 @@ the xsltproc executable.
 <!-- Overall element for a Mathbook XML document; mandatory, always  -->
 <!-- Experiment with the "xml:lang" attribute to see localization    -->
 <!-- changes, the  xsl/localizations  directory has more information -->
-<mathbook>
-<!-- <mathbook xml:lang="pt-BR"> -->
-<!-- <mathbook xml:lang="fr-FR"> -->
-<!-- <mathbook xml:lang="cs-CZ"> -->
-<!-- <mathbook xml:lang="af-ZA"> -->
+<pretext>
+<!-- <pretext xml:lang="pt-BR"> -->
+<!-- <pretext xml:lang="fr-FR"> -->
+<!-- <pretext xml:lang="cs-CZ"> -->
+<!-- <pretext xml:lang="af-ZA"> -->
 
     <!--
     "docinfo" is like metadata, it is necessary technical
@@ -412,16 +412,27 @@ the xsltproc executable.
             <idx><h>Sage</h><h>integration</h><h>numerical</h></idx>
             <idx><h>numerical</h><see>Sage integration</see></idx>
             <idx><h>numerical</h><see>Sage</see></idx>
+            <!-- index entry, plus a seealso for additional -->
+            <idx>numerics</idx>
             <idx><h>numerics</h><seealso>Sage</seealso></idx>
-            <idx><h>numerical integration</h><h>Sage</h><h>cell</h></idx>
             <idx><h>numerical integration</h><h>Sage</h><h>cell</h><see>Sage</see></idx>
             <!-- Index testing, at most one see/seealso per index -->
-            <idx><h>A</h></idx>
             <idx><h>A</h><see>F</see></idx>
             <idx><h>A</h><see>G</see></idx>
-            <idx><h>A</h><seealso>H</seealso></idx>
-            <idx><h>A</h><h>B</h><seealso>C</seealso></idx>
-            <idx><h>A</h><h>B</h><h>C</h><see>D</see></idx>
+            <idx><h>A</h><see>H</see></idx>
+            <idx><h>A</h><h>B</h></idx>
+            <idx><h>A</h><h>B</h><h>C</h></idx>
+            <idx><h>A</h><h>B</h><h>C</h><seealso>D</seealso></idx>
+            <idx><h>A</h><h>B</h><h>C</h><seealso>A</seealso></idx>
+            <!--  -->
+            <!-- Index testing, at most one see/seealso per index -->
+            <idx><h>X</h></idx>
+            <idx><h>X</h><seealso>F</seealso></idx>
+            <idx><h>X</h><seealso>G</seealso></idx>
+            <idx><h>X</h><seealso>H</seealso></idx>
+            <idx><h>X</h><h>Y</h></idx>
+            <idx><h>X</h><h>Y</h><h>Z</h><see>D</see></idx>
+            <idx><h>X</h><h>Y</h><h>Z</h><see>A</see></idx>
             <!--  -->
             <!-- Index testing, fancy variant -->
             <idx>mixed-content <em>emphasized</em></idx>
@@ -552,6 +563,21 @@ the xsltproc executable.
 
             <p>Sage output can sometimes be quite long, though this has improved with some changes in Sage's output routines.  Output code should be included primarily for doctesting purposes, and in this use, you may break at almost whitespace character and the doctesting framework will adjust accordingly.  You may wish to show sample output in a static format, like a PDF, so you can consider formatting your output to fit the width constraints of that medium.  Or you may even adjust exactly what is output, to keep it from being too verbose.  Sage doctesting also allows for a wild-card style syntax which allows you to skip over huge chunks of meaningless or unpredictable output, such as tracebacks on error messages.</p>
 
+            <p>This paragraph is just a placeholder.  It has handful of index entries, all starting with the letters <q>gas</q>, taken from <pubtitle>Indexing for Editors and Authors: A Practical Guide to Understanding Indexes</pubtitle> by Leise, Mertes, and Badgett.  The intent is to test letter-by-letter versus word-by-word sorting of index entries.  We use a word-by-word order, resulting in:<ol>
+                <li>gas</li>
+                <li>gas masks</li>
+                <li>gas production</li>
+                <li>gas works</li>
+                <li>gasoline</li>
+                <li>gastritis</li>
+            </ol>
+            <idx>gasoline</idx>
+            <idx>gas works</idx>
+            <idx>gas</idx>
+            <idx>gas masks</idx>
+            <idx>gas production</idx>
+            <idx>gastritis</idx>
+            </p>
 
             <paragraphs>
                 <title>Titled Sage Cells</title>
@@ -1175,6 +1201,25 @@ the xsltproc executable.
 
                 <subsubsection>
                     <title>Test Two</title>
+
+                    <p>An intervening subsection section which contains an <tag>exercises</tag> division which must at the level of a Subsubsubsection.</p>
+
+                    <exercises>
+                        <exercise>
+                            <statement>
+                                <p>A mock exercise to appease validation.</p>
+                            </statement>
+                        </exercise>
+                        <exercise>
+                            <statement>
+                                <p>And a second to help with formatting the division heading.</p>
+                            </statement>
+                        </exercise>
+                    </exercises>
+                </subsubsection>
+
+                <subsubsection>
+                    <title>Test Three</title>
 
                     <p>An intervening subsubsection just before a conclusion.</p>
                 </subsubsection>
@@ -3903,8 +3948,8 @@ the xsltproc executable.
                     <row valign="top" bottom="medium">
                         <cell>Unit</cell>
                         <cell>Stands For</cell>
-                        <cell >Defininion</cell>
-                        <cell >Roughly</cell>
+                        <cell>Definition</cell>
+                        <cell>Roughly</cell>
                     </row>
                     <row valign="top" bottom="minor">
                         <cell><quantity><unit base="second"/></quantity></cell>
@@ -4177,6 +4222,28 @@ the xsltproc executable.
                         <instructions>
                             <p>Parameters <m>a</m>, <m>b</m>, <m>d</m>, and <m>e</m>, form a <m>2\times 2</m> matrix <m>A</m>, while <m>c</m> and <m>f</m> form a vector <m>\vec{b}</m>.  The two views of Woody shows the effect of the mapping <me>\vec{x}\mapsto A\vec{x} + \vec{b}</me>.</p>
                         </instructions>
+                    </interactive>
+                </figure>
+
+                <p>The following example was contributed by Rick Roesler. The <tag>figure</tag> is comprised of four <tag>stack</tag> elements within a <tag>sidebyside</tag>. By varying the time in the top box, the reader can observe the displacement, velocity, and acceleration of a ball thrown upward with an initial velocity of 30 m/s.</p>
+
+                <figure>
+                    <caption>1-Dimensional Kinematics</caption>
+                    <interactive xml:id="kinematics" platform="jsxgraph" aspect="6:7" source="code/roesler/kinematics.js">
+                        <sidebyside width="70%" margins="15%">
+                            <stack>
+                                <slate xml:id="box_t" surface="jsxboard" aspect="6:1" />
+                                <slate xml:id="box_s" surface="jsxboard" aspect="6:3" />
+                                <slate xml:id="box_v" surface="jsxboard" aspect="6:3" />
+                                <slate xml:id="box_a" surface="jsxboard" aspect="6:3" />
+                            </stack>
+                        </sidebyside>
+                        <instructions>
+                            <p>Use the time slider in the top panel to vary the time from 0 sec to 6 sec. Observe how the displacement, velocity, and acceleration vary with time.</p>
+                        </instructions>
+                        <static>
+                            <image source="images/kinematics.png" width="60%"/>
+                        </static>
                     </interactive>
                 </figure>
 
@@ -4566,6 +4633,19 @@ the xsltproc executable.
                 </figure>
 
             </subsection>
+
+            <subsection>
+                <title>threejs</title>
+
+                <p>An example using the <c>threejs</c> 3D Javascript library.  This is <url href="https://threejs.org/examples/#webgl_geometry_extrude_splines">one of the project's examples</url><fn><c>https://threejs.org/examples/#webgl_geometry_extrude_splines</c></fn>, licensed with an MIT License, with minimal modifications.  We get several of the necessary libraries from the <c>threejs.org</c> site.</p>
+
+                <figure>
+                    <caption><c>three.js</c> webgl_geometry_extrude_splines example</caption>
+                    <interactive xml:id="interactive-threejs-splines" platform="javascript" width="75%" aspect="1:1" preview="images/threejs-splines.png" source="https://threejs.org/build/three.js https://threejs.org/examples/js/controls/OrbitControls.js https://threejs.org/examples/js/CurveExtras.js https://threejs.org/examples/js/libs/stats.min.js https://threejs.org/examples/js/libs/dat.gui.min.js code/threejs/splines.js">
+                        <slate xml:id="threejs-splines" surface="div" aspect="1:1" />
+                    </interactive>
+                </figure>
+            </subsection>
         </section>
 
         <section xml:id="section-interactive-server">
@@ -4595,11 +4675,7 @@ the xsltproc executable.
 
                 <figure>
                     <caption>Right Triangle Paradox</caption>
-                    <interactive xml:id="geogebra-right-triangle" geogebra="KGn2d4Qd" width="70%" aspect="9:5">
-                        <static>
-                            <image source="images/right-triangle-paradox.png" />
-                        </static>
-                    </interactive>
+                    <interactive xml:id="geogebra-right-triangle" geogebra="KGn2d4Qd" width="70%" aspect="9:5"/>
                 </figure>
 
                 <p>Note that materials hosted at <c>geogebra.org</c> have a non-standard, non-commercial license you must agree to before you can download them as source code.  Perhaps you must forfeit your copyright when you upload a material?  We have not investigated this thoroughly.</p>
@@ -4615,11 +4691,7 @@ the xsltproc executable.
 
                 <figure>
                     <caption>Graph of <m>ln(x^2+5)-3</m></caption>
-                    <interactive xml:id="desmos-natural-log" desmos="ttox1bvxku" width="60%" aspect="2:3">
-                        <static>
-                            <image source="images/desmos-graph.png" width="60%"/>
-                        </static>
-                    </interactive>
+                    <interactive xml:id="desmos-natural-log" desmos="ttox1bvxku" width="60%" aspect="2:3"/>
                 </figure>
 
                 <p>Note that Desmos has extensive <pubtitle>Terms of Service</pubtitle> which include restrictions on commercial uses.</p>
@@ -4647,11 +4719,7 @@ the xsltproc executable.
 
                 <figure>
                     <caption>Plot of <m>f(x,y)=\dfrac{1}{y-x^2}</m> on <m>[-2,2]\times[-2,2]</m> (full application)</caption>
-                    <interactive xml:id="calcplot3d-full-application" calcplot3d="type=z;z=1/(y-x^2);visible=true;umin=-2;umax=2;vmin=-2;vmax=2;grid=30;format=normal;alpha=-1;constcol=rgb(255,0,0);contourcolor=red&amp;type=window;hsrmode=3;anaglyph=-1;center=5.529712854135209,7.349875454071844,3.9244880634856956,1;focus=0,0,0,1;up=-0.26875302682986874,-0.2884991397174344,0.9189886054528014,1;transparent=true;alpha=140;edgeson=true;faceson=true;showbox=true;showaxes=true;showticks=true;perspective=true;centerxpercent=0.5;centerypercent=0.5;rotationsteps=30;autospin=true;xygrid=false;yzgrid=false;xzgrid=false;gridsonbox=true;gridplanes=false;gridcolor=rgb(128,128,128);xmin=-2;xmax=2;ymin=-2;ymax=2;zmin=-4;zmax=4;xscale=1;yscale=1;zscale=1;zcmin=-4;zcmax=4;zoom=0.468667;xscalefactor=1;yscalefactor=1;zscalefactor=1" variant="application" width="95%" aspect="10:13">
-                        <static>
-                            <image source="images/calcplot3d.png" width="45%"/>
-                        </static>
-                    </interactive>
+                    <interactive xml:id="calcplot3d-full-application" calcplot3d="type=z;z=1/(y-x^2);visible=true;umin=-2;umax=2;vmin=-2;vmax=2;grid=30;format=normal;alpha=-1;constcol=rgb(255,0,0);contourcolor=red&amp;type=window;hsrmode=3;anaglyph=-1;center=5.529712854135209,7.349875454071844,3.9244880634856956,1;focus=0,0,0,1;up=-0.26875302682986874,-0.2884991397174344,0.9189886054528014,1;transparent=true;alpha=140;edgeson=true;faceson=true;showbox=true;showaxes=true;showticks=true;perspective=true;centerxpercent=0.5;centerypercent=0.5;rotationsteps=30;autospin=true;xygrid=false;yzgrid=false;xzgrid=false;gridsonbox=true;gridplanes=false;gridcolor=rgb(128,128,128);xmin=-2;xmax=2;ymin=-2;ymax=2;zmin=-4;zmax=4;xscale=1;yscale=1;zscale=1;zcmin=-4;zcmax=4;zoom=0.468667;xscalefactor=1;yscalefactor=1;zscalefactor=1" variant="application" width="95%" aspect="10:13"/>
                 </figure>
             </subsection>
 
@@ -8595,6 +8663,17 @@ the xsltproc executable.
                 </conclusion>
             </solutions>
 
+            <solutions inline="hint solution answer" divisional="hint solution" scope="exercises-section-multiple">
+                <title>Solutions to a Single Exercises Division</title>
+                <idx><h>solutions</h><h>for one group of exercises</h></idx>
+
+                <introduction>
+                    <p>Sometimes you may want the solutions to exercises within a single <tag>exercises</tag> division (or similar, like a <tag>worksheet</tag>).  Default behavior in this situation can produce two titles, when just one would be sufficient.  Here we have used the <attr>scope</attr> attribute to point to a specific <tag>exercises</tag>, and provided a (single) very specific <tag>title</tag>.</p>
+                </introduction>
+
+                <!-- content will happen here automatically -->
+            </solutions>
+
             <appendix xml:id="appendix-results">
                 <title>List of Results</title>
 
@@ -8690,4 +8769,4 @@ the xsltproc executable.
             </colophon>
         </backmatter>
     </article>
-</mathbook>
+</pretext>

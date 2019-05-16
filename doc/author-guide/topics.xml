@@ -77,9 +77,9 @@
 
             <paragraphs>
                 <title><tag>em</tag>, emphasis, <em>important</em></title>
-                <p>Use this element to surround characters in a phrase that is to be emhasized.  This will typically be rendered in italics, though this choice is left to the implementation of a particular conversion.  See also, <tag>alert</tag>.</p>
+                <p>Use this element to surround characters in a phrase that is to be emphasized.  This will typically be rendered in italics, though this choice is left to the implementation of a particular conversion.  See also, <tag>alert</tag>.</p>
 
-                <p>If you are new to using a markup language, this is a place to stop and think.  As a <pretext /> author you are never able to say, <q>I want this text to appear in italics.</q>  Rather, you specify that certain text has a certain purpose or meaning.  Emphasis is a way of <em>calling attention</em> to a portion of a sentence or paragraph.  A font change (to italic) is a common and effective device.  But a particular format might have a better, or different, way to achive this.  Perhaps in an electronic format, the letters are animated and dance up and down.  (Just kidding.  But you may be reminded of frequent blinking text in the early days of web design, supported by a non-standard <tag>blink</tag> element.)  Seriously, now would be a good time to review <xref ref="philosophy" />.</p>
+                <p>If you are new to using a markup language, this is a place to stop and think.  As a <pretext /> author you are never able to say, <q>I want this text to appear in italics.</q>  Rather, you specify that certain text has a certain purpose or meaning.  Emphasis is a way of <em>calling attention</em> to a portion of a sentence or paragraph.  A font change (to italic) is a common and effective device.  But a particular format might have a better, or different, way to achieve this.  Perhaps in an electronic format, the letters are animated and dance up and down.  (Just kidding.  But you may be reminded of frequent blinking text in the early days of web design, supported by a non-standard <tag>blink</tag> element.)  Seriously, now would be a good time to review <xref ref="philosophy" />.</p>
             </paragraphs>
 
             <paragraphs>
@@ -110,7 +110,7 @@
 
             <paragraphs>
                 <title><tag>abbr</tag>, <tag>init</tag>, <tag>acro</tag>, abbreviation, initialism, acronym, <abbr>Mr.</abbr>, <init>XML</init>, <acro>SCUBA</acro></title>
-                <p>An abbreviation is a condensed or shortened version of some word or phrase, such as <abbr>Mr.</abbr> for <q>Mister.</q>  Converters should take care with periods (full stop) inside an <tag>abbr</tag> as distinguished from the end of a sentence (which may not always be clear given the absence of a tag delimiting sentences).  An initialism is an abbreviation read as a sequence of letters, often the first letter of words in a phrase, such as <init>HTML</init> for <q>HyperText Markup Language.</q>  An acronym is much like an initialism, but the letters are read as a pronouncable word (which sometimes actually enters the language as a word, such as <q>radar</q> which began as RAdio Detection And Ranging).  An example is <acro>SCUBA</acro> which stands for <q>Self-Contained Underwater Breathing Apparatus.</q>  Initialisms and acronyms may be presented in a small-capitals font or as regular capitals reduced in size.</p>
+                <p>An abbreviation is a condensed or shortened version of some word or phrase, such as <abbr>Mr.</abbr> for <q>Mister.</q>  Converters should take care with periods (full stop) inside an <tag>abbr</tag> as distinguished from the end of a sentence (which may not always be clear given the absence of a tag delimiting sentences).  An initialism is an abbreviation read as a sequence of letters, often the first letter of words in a phrase, such as <init>HTML</init> for <q>HyperText Markup Language.</q>  An acronym is much like an initialism, but the letters are read as a pronounceable word (which sometimes actually enters the language as a word, such as <q>radar</q> which began as RAdio Detection And Ranging).  An example is <acro>SCUBA</acro> which stands for <q>Self-Contained Underwater Breathing Apparatus.</q>  Initialisms and acronyms may be presented in a small-capitals font or as regular capitals reduced in size.</p>
             </paragraphs>
 
             <!-- Editing group -->
@@ -135,7 +135,7 @@
                 <title><tag>taxon</tag>, scientific names, <taxon>Escherichia coli</taxon></title>
                 <p>This element may surround a full scientific name, resulting in presentation in italics.  There are subelements <tag>genus</tag> and <tag>species</tag> which may be used to delineate those components.</p>
 
-                <p>A <attr>ncbi</attr> attribute on <tag>taxon</tag> accepts an identiier from the <url href="https://www.ncbi.nlm.nih.gov/">National Center for Biotechnology Information</url>.  Feature requests for ways to make this more useful are welcome.</p>
+                <p>A <attr>ncbi</attr> attribute on <tag>taxon</tag> accepts an identifier from the <url href="https://www.ncbi.nlm.nih.gov/">National Center for Biotechnology Information</url>.  Feature requests for ways to make this more useful are welcome.</p>
             </paragraphs>
 
             <!-- Footnotes -->
@@ -183,7 +183,7 @@
                 <title><tag>url</tag>, linking external resources</title>
                 <p>This is a cross-reference <em>to</em> some item separate and distinct for your document.</p>
 
-                <p>A Uniform Resource Locator (<init>URL</init>) is, loosely speaking, an Internet address for some item.  Presentation depends on the capabilites of the output format to serve the resource.  There is a mandatory atrribute, <attr>href</attr>, that contains the full <init>URL</init>, including a protocol (such as <c>http://</c>).  Used as an empty tag, the visual text will be the exact contents of the <attr>href</attr> attribute.  So, <url href="http://www.example.com" /> can be achieved with
+                <p>A Uniform Resource Locator (<init>URL</init>) is, loosely speaking, an Internet address for some item.  Presentation depends on the capabilities of the output format to serve the resource.  There is a mandatory attribute, <attr>href</attr>, that contains the full <init>URL</init>, including a protocol (such as <c>http://</c>).  Used as an empty tag, the visual text will be the exact contents of the <attr>href</attr> attribute.  So, <url href="http://www.example.com" /> can be achieved with
                     <cd>&lt;url href="http://www.example.com"/&gt;</cd>
                 </p>
 
@@ -206,13 +206,13 @@
             <paragraphs>
                 <title><tag>idx</tag>, index target</title>
 
-                <p>This indicates that the containing structure (theorem, example, etc.), or top-level paragraph, should be the <em>target</em> of an entry of the index (a special sort of cross-reference).  See <xref ref="overview-index-notation" /> and <xref ref="topic-index" /> for general details.</p>
+                <p>This indicates that the containing structure (theorem, example, etc.), or top-level paragraph, should be the <em>target</em> of an entry of the index (a special sort of cross-reference).  See <xref ref="overview-index-notation"/> and <xref ref="topic-index"/> for general details.</p>
             </paragraphs>
 
             <paragraphs>
                 <title><tag>notation</tag>, index target</title>
 
-                <p>This indicates that the containing definition, or top-level paragraph, should be the <em>target</em> of an entry of the list of notation (a special sort of cross-reference).  See <xref ref="overview-index-notation" /> and <xref ref="topic-index" /> for general details.</p>
+                <p>This indicates that the containing definition, or top-level paragraph, should be the <em>target</em> of an entry of the list of notation (a special sort of cross-reference).  See <xref ref="overview-index-notation"/> and <xref ref="topic-notation"/> for general details.</p>
             </paragraphs>
         </subsection>
 
@@ -360,7 +360,7 @@
             <subsubsection>
                 <title>Extraordinary Characters</title>
 
-                <p>Some characters or symbols are typically not available on a keyboard, so we provide empty elements.  Many of these may be entered directly into your source as Unicode characters, and they will do well in your <init>HTML</init> output.  However these may fail entirely if you creat print or <init>PDF</init> via <latex/> using the <c>pdflatex</c> engine.  Furthermore, even for <init>HTML</init> output there may be several Unicode characters that are very similar.</p>
+                <p>Some characters or symbols are typically not available on a keyboard, so we provide empty elements.  Many of these may be entered directly into your source as Unicode characters, and they will do well in your <init>HTML</init> output.  However, these may fail entirely if you create print or <init>PDF</init> via <latex/> using the <c>pdflatex</c> engine.  Furthermore, even for <init>HTML</init> output there may be several Unicode characters that are very similar.</p>
 
                 <p>So again, for the best quality output be aware of these elements and use them.  Please suggest additions if you do not find what you need and are resorting to Unicode characters.</p>
 
@@ -479,7 +479,7 @@
 
                 <p>The second 128 Unicode characters (hex <c>80</c> to <c>FF</c>) contain many of the most frequently-used accented characters in Western languages, along with niceties such as the German <foreign>eszett</foreign>, &#xDF;, or the Scandinavian <foreign>æsc</foreign>, &#xE6;, an a-e ligature.  Like the fifty-two Latin letters (part of the <em>first</em> 128 Unicode characters), these may be used as-is.  They may be present on your keyboard, or you may need to learn keyboard shortcuts or specifics of your operating system to enter them as Unicode characters.  In a pinch, you can often cut-and-paste a few characters from web pages.</p>
 
-                <p>This table is indexed by the Unicode number, in hexadecinal notation.  The first 32 of the 128 (<c>U+0080</c><ndash/><c>U+009F</c>) are control codes and <c>U+00A0</c> is a non-breaking space, so is invisible, while <c>U+00AD</c> is a soft hyphen (which we have not implemented and so is excluded).</p>
+                <p>This table is indexed by the Unicode number, in hexadecimal notation.  The first 32 of the 128 (<c>U+0080</c><ndash/><c>U+009F</c>) are control codes and <c>U+00A0</c> is a non-breaking space, so is invisible, while <c>U+00AD</c> is a soft hyphen (which we have not implemented and so is excluded).</p>
 
                 <!-- ex &#x0080; - &#x009F; controls -->
                 <!-- ex &#x00A0; non-breaking space  -->
@@ -532,7 +532,7 @@
 
                 <paragraphs>
                     <title><tage>solidus</tage>, <solidus />, solidus, virgule, fraction bar</title>
-                    <p>For simple arithmetic expressions in text, this symbol may be used to form a fraction.  It shoulds appear to have a significantly shallower slope than the forward slash, /.</p>
+                    <p>For simple arithmetic expressions in text, this symbol may be used to form a fraction.  It should appear to have a significantly shallower slope than the forward slash, /.</p>
                 </paragraphs>
 
                 <p>So we have <tage>times</tage> and <tage>solidus</tage> and will implement &#xb1; and &#xf7; and then provide examples.</p>
@@ -625,7 +625,7 @@
             <paragraphs>
                 <!-- <title>music notation</title> -->
                 <title><doublesharp/>, <sharp/>, <natural/>, <flat/>, <doubleflat/>, music notation</title>
-                <p>Notes, chords, and other notation may appear within sentences as part of a dicussion.  See <xref ref="topic-music" /> for detailed descriptions of the relevant elements.</p>
+                <p>Notes, chords, and other notation may appear within sentences as part of a discussion.  See <xref ref="topic-music" /> for detailed descriptions of the relevant elements.</p>
             </paragraphs>
         </subsection>
 
@@ -684,7 +684,7 @@
 
             <p>You have two options in use.  You may author inline with the rest of a sentence, with no extra newlines or whitespace before, after, or within the content.  The result will be a single displayed line.</p>
 
-            <p>Or you may structure the content using one, or more, of the <tag>cline</tag> tag, which is meant to be similar to the <tag>line</tag> tag used elsewhere.  You should still take care to not place any extra whitespace before or after the <tag>cd</tag> element, but inbetween the <tag>cline</tag> you may use as much visual formatting of your source as you wish, especially if you like your source to mirror your output.</p>
+            <p>Or you may structure the content using one, or more, of the <tag>cline</tag> tag, which is meant to be similar to the <tag>line</tag> tag used elsewhere.  You should still take care to not place any extra whitespace before or after the <tag>cd</tag> element, but in between the <tag>cline</tag> you may use as much visual formatting of your source as you wish, especially if you like your source to mirror your output.</p>
         </subsection>
 
         <subsection xml:id="block-verbatim-text">
@@ -844,7 +844,7 @@
                 <li>The <attr>ref</attr> attribute may be a list of <attr>xml:id</attr>, separated by commas or by spaces.  Then you will get back a list of cross-references.  This is meant for a list of citations, producing a look like [5, 9, 22], but it makes no restriction to this case.  Use it generally, but it is unlikely to get any more capable.  If you want a different list, just use multiple <tag>xref</tag> and format as you desire.</li>
             </ul></p>
 
-            <p>You can create many different combinations with the text options and the variants.  Here is one example.  You want to say <xref first="start-here" last="schema" text="global">Chapters</xref>.  As a range you use the variant with two references. You would get <q>Chapter</q> out front automatically with the <c>type-global</c> scheme, but a plural form makes more sense.  So you use that text as an override.  We could use either <c>type-global</c> or <c>global</c> to get the same text, and possibly <c>type-hybrid</c> depending on teh place where you built the cross-reference.  So possibly, one of these schemes might be your document-wide setting and you do not need to specify it now.  Here is what we just used:<cd>
+            <p>You can create many different combinations with the text options and the variants.  Here is one example.  You want to say <xref first="start-here" last="schema" text="global">Chapters</xref>.  As a range you use the variant with two references. You would get <q>Chapter</q> out front automatically with the <c>type-global</c> scheme, but a plural form makes more sense.  So you use that text as an override.  We could use either <c>type-global</c> or <c>global</c> to get the same text, and possibly <c>type-hybrid</c> depending on the place where you built the cross-reference.  So possibly, one of these schemes might be your document-wide setting and you do not need to specify it now.  Here is what we just used:<cd>
                 <cline>&lt;xref first="start-here" last="schema" text="global"&gt;Chapters&lt;/xref&gt;</cline>
             </cd></p>
 
@@ -962,7 +962,7 @@
                 </tabular>
             </table>
 
-            <p>The <c>hybrid</c> options employ a different definition of when the distance between a cross-reference and its target is close enough that the number can be shortend, without becoming ambiguous.  When an <tag>xref</tag> and its target are part of the same <tag>list</tag>, then the common part of the number derived from the <tag>list</tag> is not needed.  To illustrate we need to make a small <tag>list</tag> with cross-references contained within.</p>
+            <p>The <c>hybrid</c> options employ a different definition of when the distance between a cross-reference and its target is close enough that the number can be shortened, without becoming ambiguous.  When an <tag>xref</tag> and its target are part of the same <tag>list</tag>, then the common part of the number derived from the <tag>list</tag> is not needed.  To illustrate we need to make a small <tag>list</tag> with cross-references contained within.</p>
 
             <list>
                 <caption>Small test</caption>
@@ -1002,7 +1002,7 @@
 
         <p>A division <em>must</em> contain a <tag>title</tag>, and may contain one or more index entries (see <xref ref="topic-index" />), which should appear before anything else.  Any division may be unstructured, with just a sequence of <term>top-level content</term><idx>top-level content</idx> such as paragraphs, figures, lists, theorems, <etc />  Or a division may be structured, and in this case it must follow a prescribed pattern.  There may be a single, optional <tag>introduction</tag>, filled with top-level content, followed by a sequence of at least one of the appropriate divisions, ending with a single, optional <tag>conclusion</tag>, filled with top-level content.  It is an error to begin with a run of top-level content inside a division and then begin to use divisions.  (The solution is to make the initial content an <tag>introduction</tag> and/or one or several divisions.)</p>
 
-        <p>There are exceptions to the above.  For one, <tag>paragraphs</tag> is an anomalous division, as a sort of lightweight sectioning command.  It may appear in any division, at any location within a division, it may not be divided further (it is a leaf of the document tree), it never gets a number, and its title is formatted in a subsidiary way.  I especially like to use this in a two- or three-page <tag>article</tag> that has no other divisions at all.  Typical presentation has the title in bold, without much change in font size (if at all), inline with the first paragraph, and perhaps a bit of vertical space as it begins and ends.  Despite the name, it may contain more than just paragaphs, so may contain any top-level-content that would go in any other division.</p>
+        <p>There are exceptions to the above.  For one, <tag>paragraphs</tag> is an anomalous division, as a sort of lightweight sectioning command.  It may appear in any division, at any location within a division, it may not be divided further (it is a leaf of the document tree), it never gets a number, and its title is formatted in a subsidiary way.  I especially like to use this in a two- or three-page <tag>article</tag> that has no other divisions at all.  Typical presentation has the title in bold, without much change in font size (if at all), inline with the first paragraph, and perhaps a bit of vertical space as it begins and ends.  Despite the name, it may contain more than just paragraphs, so may contain any top-level-content that would go in any other division.</p>
 
         <p>Two other anomalous divisions are <tag>exercises</tag> and <tag>references</tag>.  These can be placed as a final component of any division from <tag>chapter</tag> on down.  So for example, an <tag>exercises</tag> could be a peer of several <tag>section</tag>s, contained within a structured <tag>chapter</tag>, and in this case would behave similar to the other <tag>section</tag>s.  Or an unstructured <tag>chapter</tag> may have a sequence of paragraphs, figures, examples, and the like, and conclude with a single <tag>exercises</tag>.  Detail on allowed content and behavior are in <xref ref="topic-exercises" /> and <xref ref="topic-references" />, respectively.</p>
     </section>
@@ -1012,7 +1012,7 @@
         <idx>mathematics</idx>
 
         <introduction>
-            <p>As mentioned in the overview, <xref ref="overview-math" />, we use <latex /> syntax for mathematics.  In order to allow for quality display in <init>HTML</init>, and other electronic formats, this limits us to the subsset of <latex /> supported by the very capable <url href="https://www.mathjax.org/">MathJax</url> Javascript library.  Generally this looks like the <c>amsmath</c><idx><c>amsmath</c></idx> package maintained by the American Mathematical Society at their <url href="http://www.ams.org/publications/authors/tex/amslatex">AMS-LaTeX page</url>.  For a complete and precise list of what MathJax supports, see the <url href="http://docs.mathjax.org/en/latest/tex.html#supported-latex-commands">MathJax Supported LaTeX commands</url> page.</p>
+            <p>As mentioned in the overview, <xref ref="overview-math" />, we use <latex /> syntax for mathematics.  In order to allow for quality display in <init>HTML</init>, and other electronic formats, this limits us to the subset of <latex /> supported by the very capable <url href="https://www.mathjax.org/">MathJax</url> Javascript library.  Generally this looks like the <c>amsmath</c><idx><c>amsmath</c></idx> package maintained by the American Mathematical Society at their <url href="http://www.ams.org/publications/authors/tex/amslatex">AMS-LaTeX page</url>.  For a complete and precise list of what MathJax supports, see the <url href="http://docs.mathjax.org/en/latest/tex.html#supported-latex-commands">MathJax Supported LaTeX commands</url> page.</p>
         </introduction>
 
         <subsection>
@@ -1140,7 +1140,7 @@
         <subsection>
             <title>Extras</title>
 
-            <p>There are two existing additional options, which we might want to remove some day for technical reasons.  Macros from the <c>extpfeil</c> extensible arrows package are availble by default, and an <c>\sfrac{}{}</c> macro is available for appealing inline <q>slanted fractions.</q></p>
+            <p>There are two existing additional options, which we might want to remove some day for technical reasons.  Macros from the <c>extpfeil</c> extensible arrows package are available by default, and an <c>\sfrac{}{}</c> macro is available for appealing inline <q>slanted fractions.</q></p>
         </subsection>
     </section>
 
@@ -1150,7 +1150,7 @@
         <idx><h>list</h><h>label</h></idx>
 
         <introduction>
-            <p>A <term>list</term> is an unusual construction, even if everybody knows exactly what one is.  We view the list itself as a containier of various chunks of text, while those chunks of text are the <term>list items</term>.  Each item has a <term>label</term> to identify it (which is quite different from how <latex /> uses the term <q>label</q>).</p>
+            <p>A <term>list</term> is an unusual construction, even if everybody knows exactly what one is.  We view the list itself as a container of various chunks of text, while those chunks of text are the <term>list items</term>.  Each item has a <term>label</term> to identify it (which is quite different from how <latex /> uses the term <q>label</q>).</p>
 
             <p>Markup and processing is complicated by the possibility of a list item containing a list, resulting in <term>nested lists</term>.  We simplify this problem by <em>requiring</em> that a list appear within a paragraph (<tag>p</tag>), see <xref ref="topic-structure-in-paragraph" />.  One of the three exceptions is the possibility to put a list into a block that earns a caption and a number, using the <tag>list</tag> element, see <xref ref="topic-named-list" />.</p>
 
@@ -1176,7 +1176,7 @@
 
             <p>For a description list, you author each label as part of each list item, as discussed below in the discussion of list items.</p>
 
-            <p>If you want to change how an ordered list is labeled, then you use the <attr>label</attr> attribute on the <tag>ol</tag>, whose value is a <term>format code</term>.  This string contains one of five codes (a single character), which may be surrounded by other characters, excluding the five codes.  For example <c>label="(A)"</c> will produce uppercase letters wrapped in parentheses:  (A), (B), (C), <ellipsis />.  The extra formatting works well in a conversion to <latex />, but is not possible technically in a conversion to <init>HTML</init>, so it should be considered decorative, and not relied upon for meaning.  The formating does not carry through to the numbers of list items in cross-references.</p>
+            <p>If you want to change how an ordered list is labeled, then you use the <attr>label</attr> attribute on the <tag>ol</tag>, whose value is a <term>format code</term>.  This string contains one of five codes (a single character), which may be surrounded by other characters, excluding the five codes.  For example <c>label="(A)"</c> will produce uppercase letters wrapped in parentheses:  (A), (B), (C), <ellipsis />.  The extra formatting works well in a conversion to <latex />, but is not possible technically in a conversion to <init>HTML</init>, so it should be considered decorative, and not relied upon for meaning.  The formatting does not carry through to the numbers of list items in cross-references.</p>
 
             <p>If you want to change how an unordered list is labeled, then you use the <attr>label</attr> attribute on the <tag>ul</tag>, whose value is a <term>format code</term>.  This string contains one of three codes in the table below.  Then every item of the list will have that symbol as its label.</p>
 
@@ -1462,7 +1462,7 @@
 
             <p>If <tag>solutions</tag> is a child of <tag>backmatter</tag>, then an appendix will be generated, and covering <tag>exercise</tag> from the entire <tag>book</tag> or <tag>article</tag>.  If <tag>solutions</tag> is a child of a division, then a new subdivision is created and the scope is all <tag>exercise</tag> for the division.  So, for example, a <tag>solutions</tag> placed inside a <tag>chapter</tag> will render as a division that looks like a <tag>section</tag> and will include components of all the exercises (at any level) contained within the <tag>chapter</tag>.</p>
 
-            <p>An author filters the types of exercises, and their components, through attributes of the <tag>soutions</tag> element.  For example<cd>
+            <p>An author filters the types of exercises, and their components, through attributes of the <tag>solutions</tag> element.  For example<cd>
                 <cline>reading="hint answer"</cline>
             </cd>would cause every <tag>exercise</tag> within each <tag>reading-questions</tag> to have its <tag>hint</tag> and <tag>answer</tag> displayed, but not its <tag>statement</tag> nor its <tag>solution</tag>.  These are the attribute names and the possible values.</p>
 
@@ -1512,7 +1512,7 @@
         <subsection xml:id="topic-images-raster">
             <title>Raster Images</title>
 
-            <p>A <term>raster image</term><idx>raster image</idx><idx><h>image</h><h>raster image</h></idx> is an image described pixel-by-pixel, with different colors and intensities.  Photographs are good examples.  Common formats are Portable Network Graphics (PNG) and Joint Photographic Experts Group (JPEG, JPG), which will both work with <c>pdflatex</c> and modern browsers.  JPEG are a good choice for photographics since they are compressed on the assumption they will be viewed by a human, while PNG is a lossless format and good for line art, diagrams and similar images (if you do not have vector graphics versions, see below).</p>
+            <p>A <term>raster image</term><idx>raster image</idx><idx><h>image</h><h>raster image</h></idx> is an image described pixel-by-pixel, with different colors and intensities.  Photographs are good examples.  Common formats are Portable Network Graphics (PNG) and Joint Photographic Experts Group (JPEG, JPG), which will both work with <c>pdflatex</c> and modern browsers.  JPEG are a good choice for photographs since they are compressed on the assumption they will be viewed by a human, while PNG is a lossless format and good for line art, diagrams and similar images (if you do not have vector graphics versions, see below).</p>
 
             <p>To use these images, you simply provide the filename, with a relative path.  A subdirectory such as <c>images</c> is a good choice for a place to put them.  It is your responsibility to place these images where the <latex /> output will find them or where the HTML output will find them.  The XML would look like:</p>
 
@@ -1552,7 +1552,7 @@
         <subsection xml:id="topic-images-source">
             <title>(*) Images Described by Source Code</title>
 
-            <p>To be written once elements and tags solidfy, see sample article for examples.</p>
+            <p>To be written once elements and tags solidify, see sample article for examples.</p>
         </subsection>
 
         <subsection xml:id="topic-images-archive">
@@ -1640,12 +1640,157 @@
     </section>
 
     <section xml:id="topic-index">
-        <title>(*) Index</title>
+        <title>Index</title>
 
-        <!-- Reprise: <title>Bully Pulpit: Index Headings</title> -->
+        <p>Continuing our basic discussion from <xref ref="overview-index-notation"/>, we discuss some details of making and using index entries.  We follow recommendations from the <pubtitle>Chicago Manual of Style</pubtitle> (<acro>CMOS</acro>), specifically Chapter 18 of the 15th Edition.</p>
 
-        <p>TODO</p>
+        <note>
+            <title>Capitalization of Index Entries</title>
+
+            <p>The headings (entries) of an index are authored entirely in lower-case, unless it is a proper noun (name, place, <etc/>) which would normally be capitalized in the middle of a sentence.  We are not able to provide any enforcement of this advice, nor any assistance.  It is the author's responsibility to provide quality source material in this regard.  We do sort entries so that an entry with an initial capital letter arrives at the right location in the index.</p>
+        </note>
+
+        <p><em>Where</em> you place an <tag>idx</tag> entry is critical.  With <latex/> output, you will get the traditional page number as a locator in your index.  With <init>HTML</init> output we can be more careful.  We will look to see which sort of structure contains the <tag>idx</tag>.  Maybe it is an <tag>example</tag> or a <tag>subsection</tag>.  If so, the index will contain a locator that is a knowl of the example, or a link to the subsection.  The distinction is the size of the object, we do not knowl divisions.  The exception is a paragraph (<tag>p</tag>) that is a child of a division, and then the locator is a knowl of the entire paragraph.  Remember that a knowl contains an <q>in-context</q> link which can take the reader to the original location of the content in the knowl.</p>
+
+        <p>A lot happens in a <pretext/> paragraph, especially when producing <init>HTML</init>.  Sometimes an <tag>idx</tag> can get in the way.  Our recommendation is to put <tag>idx</tag> entries <em>between</em> sentences, and not at the start or end of the paragraph.  They can be authored with each on their own line.  If you do not need the specificity of a paragraph, then locate the appropriate structure and author the <tag>idx</tag> right after the <tag>title</tag> (or where one would be).</p>
+
+        <p>A <term>cross-reference</term> in an index is a pointer to another index entry.
+            <idx><h>cross-reference</h><h>index</h></idx>
+            <idx><h>index</h><h>cross-reference</h></idx>
+        These are rendered as <q>See</q> and <q>See also.</q>  You can add <tag>see</tag> and <tag>seealso</tag> elements within an <tag>idx</tag>, so long as it is structured with <tag>h</tag>.  Then it is placed after the last <tag>h</tag>.  A <q>see</q> cross-reference is a direct pointer to another entry in the index.  It cannot have a locator as well.  When you build the <init>HTML</init> output, we will recognize this situation and produce a warning.  A <q>see also</q> cross-reference is an additional pointer, and so it must have a locator to go with it (you will author two <tag>idx</tag> with identical headings, the first without a <tag>seealso</tag> to create the locator, the second with the <tag>seealso</tag> to create the cross-reference.  Again, when you build the <init>HTML</init> output, we will recognize a <tag>seealso</tag> without a locator and produce a warning.</p>
+
+        <p>Follow these directions and <pretext/> will format cross-references for you, in the style suggested by the <acro>CMOS</acro> for <init>HTML</init> output, and according to <latex/>'s style for print and <init>PDF</init>.</p>
+
+        <p>(2019-03-04) We have consciously not said anything specific about what to place inside a <tag>see</tag> or <tag>seealso</tag> element.  At this writing, you need to supply the text.  Of course, this is error-prone and you will need to consult <acro>CMOS</acro> for formatting guidance.  But we have plans to do this the <pretext/> way.  First, the <c>ref/xml:id</c> mechanism will be used to automatically create the correct text for the cross-reference, both content and format.  Second, these will become live links in electronic formats.</p>
+
+        <p>Certain index entries do not sort very well, especially entries that begin with mathematical notation.  Our first advice is to avoid this situation, but sometimes it is necessary.  The <attr>sortby</attr> attribute on an <tag>h</tag> element can contain simple text that will be used to override the content shown to the reader during the sorting of the index.</p>
+
+      <section xml:id="topic-index-advice"><title>Advice on Indexing</title>
+        <idx><h>index</h><h>advice on</h></idx>
+
+        <p>Indexing is a job for a skilled professional, and most authors produce poor indexes.
+           The tips in this section will help you avoid the most common pitfalls.
+        </p>
+
+      <paragraphs><title>Terminology</title>
+      <p>The basic element of an index is an <term>entry</term>, which consists of
+         a piece of information and its <term>locator</term>.  For example:
+         </p>
+         <pre>
+             normal subgroup,  37
+
+         </pre>
+         <p>
+         is an entry indicating that information about <q>normal subgroup</q>
+         can be found on page 37.
+         Indexes are (usually) organized alphabetically, with a
+         <term>main heading</term>
+         aligned with the left margin, and progressively indented <term>subheading</term>s below
+         the main heading.
+     </p>
+
+     <p>Often it is desirable to place the same locator under more than one heading,
+        known as <term>double posting</term>.  For example, a desirable addition to the
+        sample entry above is
+        </p>
+        <pre>
+        subgroup,  28
+           normal,  37 .
+        </pre>
+        <p>
+        An alternative to double posting is <term>cross referencing</term>, using
+        <em>see</em> and <em>see also</em>.  Typically cross references are used to
+        avoid repeating a large number of entries, or to direct the reader to related topics.
+     </p>
+
+     <p>An index may start with a <term>headnote</term> giving advice about using the index.
+        Typically a headnote is not necessary unless the index has some unusual features.
+     </p>
+
+</paragraphs>
+
+      <paragraphs><title>Basic principles</title>
+      <p>The purpose of an index is to point the reader to information.
+         Point to, not repeat.
+         For example, acronyms should be indexed at the location where they are defined,
+         not at every place they appear, and it is not necessary to define the acronym within the index.
+         People and places should be indexed when information is given about them,
+         not every time they are mentioned.
+      </p>
+
+      <p>A good index has multiple ways to find the same information.  Being redundant is desirable,
+         because it increases the chance the reader finds what they seek in the first place they look.
+      </p>
+
+      <p>Indexing is best done after the text has been written.  Adding index entries while writing
+         the text may seem to be a labor-saving device, but if you are not an experienced indexer,
+         those entries will only be a small fraction of the final index.
+      </p>
+
+      <p>Topics should be indexed in multiple ways.  If a term is defined, you should also think
+         of other words the reader might search for.  For example, you may define <q>limit point</q>
+         and consistently use only that term, but an index entry for <q>accumulation point</q> with a
+         <q><em>see</em> limit point</q> locator would be appropriate.
+</p>
+     <p>Use <term>disambiguation</term> to distinguish identical terms with different meanings.
+        For example
+        </p>
+        <pre>
+            isomorphism (of groups),  55
+            isomorphism (of rings),  123
+        </pre>
+        <p>
+        Both of those entries should also be double posted under the main headings of <q>group</q>
+        and <q>ring</q>, respectively.  No disambiguation is needed for those entries.
+     </p>
+</paragraphs>
+
+      <paragraphs><title>Common pitfalls</title>
+        <p>Sometimes it takes less than one second to determine that an index is poor.
+           If a quick glance reveals that the index consists mostly of main headings
+           with very few subheadings, then few readers will find it to be useful.
+           Double posting, which may mean more than literally two entries with the same locator,
+           will help readers find what they are looking for.  Most of those entries will
+           be in subheadings.
+        </p>
+
+        <p>Another instantly recognizable problem is too many locators in one entry.  This entry
+        </p>
+        <pre>
+            asymptote,  37, 48
+        </pre>
+        <p>
+        is probably fine.  But once you have three or more locators in an entry, then
+        your index may be improved by adding some subheadings.  If the locators in the above
+        example refer separately to <q>horizontal</q> and <q>vertical</q>, then probably two subheadings
+        would be more useful than two undifferentiated locators in one entry.
+        </p>
+
+        <p>A third problem which can be seen at a glance if you know what to look for,
+        is the absence of any main headings with a large number of subheadings.  On almost
+        any subject there are topics which are addressed repeatedly.  This should be
+        reflected in the structure of the index.  For example, in a group theory textbook
+        there should be several entries under <q>group, examples</q>.  In an introductory
+        calculus book the index should help the reader locate the derivative of many
+        different elementary functions.
+        </p>
+
+        <p>It is not helpful for locators to point to a
+        section or subsection: in print/PDF it points to the starting page of the section,
+        and in HTML the link will highlight the entire section.
+        At the start of writing a section on the <q>quotient rule</q>
+        it may be tempting to immediately put an index entry.  But keep in mind that someone
+        looking up that term is in search of specific information.  It is unlikely that
+        their intention is to learn that topic from scratch.  By pointing to a specific
+        paragraph, theorem, or definition, most readers will immediately see what they
+        are looking for.  And if they were looking for more general information, then at
+        least they are in the correct section.
+        </p>
+      </paragraphs>
+
+      </section>
     </section>
+
 
     <section xml:id="topic-notation">
         <title>(*) Notation</title>
@@ -1710,7 +1855,7 @@
 
             <p><pretext /> supports videos you own and distribute with your source, videos shared openly on the Internet via stable <init>URL</init>s, and videos available on YouTube.  Go straight to to the end of this section to see how easy it is to incorporate a YouTube video.</p>
 
-            <p>HTML5 web browsers are able to play video files in threee formats, summarized in the following table.</p>
+            <p>HTML5 web browsers are able to play video files in three formats, summarized in the following table.</p>
 
             <table xml:id="table-video-formats">
                 <caption>HTML5 video formats</caption>
@@ -1932,7 +2077,6 @@
                 <title>HTML</title>
                 <p>Wherever possible we supply <init>HTML</init> elements and attributes that will be interpreted sensibly by a screen reader in the absence of the visual styling provided by <init>CSS</init>.  This means we are cognizant of the role of headings (<c>h1</c> through <c>h6</c>), provide HTML that passes validation checks, and so on.  Employing attributes from the <url href="https://www.w3.org/WAI/standards-guidelines/aria/">Accessible Rich Internet Applications</url><fn><c>www.w3.org/WAI/standards-guidelines/aria/</c></fn> suite of web standards (<init>ARIA</init>) will go a long way to improving accessibility.  This work is in-progress as of 2018-05-31.</p>
             </li>
-
             <li>
                 <title>Mathematics</title>
                 <idx><h>accessibility</h><h>mathematics</h></idx>
@@ -2013,6 +2157,19 @@
             <li>ChromeVox, <url href="http://www.chromevox.com/"><c>www.chromevox.com</c></url>, ChromeOS, free from Google</li>
             <li><acro>JAWS</acro>, <url href="https://www.freedomscientific.com/Products/Blindness/JAWS"><c>www.freedomscientific.com</c></url>, Windows, commercial</li>
         </ul></p>
+
+        <p>Much of the technical work for accessibility is accomplished by <pretext/> developers.  But authors have responsibilities, too.  So testing can be part of your workflow.  One free tool is <url href="https://www.deque.com/axe/">axe</url><fn><c>www.deque.com/axe/</c></fn> from <url href="https://www.deque.com">Deque Systems</url><fn><c>www.deque.com</c></fn>.</p>
+
+        <p>We have concentrated on making <init>HTML</init> output accessible, since that seems the most natural and best supported.  But we are aware of efforts for other formats.<dl>
+            <li>
+                <title>PDF/<latex/></title>
+                <p>A <init>PDF</init> may not lend itself naturally to providing an accessible format.  But there have been efforts.  The <url href="https://tug.org/twg/accessibility/"><tex/> Users Group on PDF Accessibility and PDF Standards</url><fn><c>tug.org/twg/accessibility/</c></fn> is an excellent resource to start with.  There is also a <url href="https://github.com/rbeezer/mathbook/issues/1046"><pretext/> issue #1046</url><fn><c>github.com/rbeezer/mathbook/issues/1046</c></fn>.</p>
+            </li>
+            <li>
+                <title>EPUB</title>
+                <p>The International Digital Publishing Forum has information on <url href="http://idpf.org/a11y">EPUB Accessibility</url><fn><c>idpf.org/a11y</c></fn>.</p>
+            </li>
+        </dl></p>
     </section>
 
     <!--

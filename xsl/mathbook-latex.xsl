@@ -62,8 +62,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Non-empty string makes it happen    -->
 <!-- Scale works well for "CONFIDENTIAL" -->
 <!-- or  for "DRAFT YYYY/MM/DD"          -->
+<!-- These are deprecated in favor of watermark.text and watermark.scale -->
+<!-- which are now managed in common. These still "work" for now.        -->
 <xsl:param name="latex.watermark" select="''"/>
-<xsl:param name="latex.watermark.scale" select="2.0"/>
+<xsl:variable name="b-latex-watermark" select="not($latex.watermark = '')" />
+<xsl:param name="latex.watermark.scale" select="''"/>
+<xsl:variable name="latex-watermark-scale">
+    <xsl:choose>
+        <xsl:when test="not($latex.watermark.scale = '')">
+            <xsl:value-of select="$latex.watermark.scale"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>2.0</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
 <!--  -->
 <!-- Author's Tools                                            -->
 <!-- Set the author-tools parameter to 'yes'                   -->
@@ -249,6 +262,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- override it to be true.                                   -->
 <xsl:variable name="b-needs-solution-styles" select="false()"/>
 
+<!-- Experiment with different float options for figures and tables  -->
+<!-- This switch is not supported and may be removed at any time     -->
+<xsl:variable name="debug.float" select="'H'"/>
+
 <!-- ############## -->
 <!-- Entry Template -->
 <!-- ############## -->
@@ -265,15 +282,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- We will have just one of the following -->
-<!-- and totally ignore docinfo             -->
+<!-- four types, and totally ignore docinfo -->
 <xsl:template match="/mathbook|/pretext">
-    <xsl:variable name="filename">
-        <xsl:apply-templates select="article|book|letter|memo" mode="internal-id" />
-        <xsl:text>.tex</xsl:text>
-    </xsl:variable>
-    <exsl:document href="{$filename}" method="text">
-        <xsl:apply-templates select="article|book|letter|memo"/>
-    </exsl:document>
+    <xsl:apply-templates select="article|book|letter|memo"/>
 </xsl:template>
 
 <!-- TODO: combine article, book, letter, templates -->
@@ -460,6 +471,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% See:  https://tug.org/TUGboat/tb36-3/tb114ltnews22.pdf&#xa;</xsl:text>
     <xsl:text>%% and read "Fewer fragile commands" in distribution's  latexchanges.pdf&#xa;</xsl:text>
     <xsl:text>\IfFileExists{latexrelease.sty}{}{\usepackage{fixltx2e}}&#xa;</xsl:text>
+    <xsl:if test="$document-root//fn or $document-root//part">
+        <xsl:text>%% Footnote counters and part/chapter counters are manipulated&#xa;</xsl:text>
+        <xsl:text>%% April 2018:  chngcntr  commands now integrated into the kernel,&#xa;</xsl:text>
+        <xsl:text>%% but circa 2018/2019 the package would still try to redefine them,&#xa;</xsl:text>
+        <xsl:text>%% so we need to do the work of loading conditionally for old kernels.&#xa;</xsl:text>
+        <xsl:text>%% From version 1.1a,  chngcntr  should detect defintions made by LaTeX kernel.&#xa;</xsl:text>
+        <xsl:text>\ifdefined\counterwithin&#xa;</xsl:text>
+        <xsl:text>\else&#xa;</xsl:text>
+        <xsl:text>    \usepackage{chngcntr}&#xa;</xsl:text>
+        <xsl:text>\fi&#xa;</xsl:text>
+        <xsl:if test="$parts = 'structural'">  <!-- implies book/part -->
+            <xsl:text>%% Structural chapter numbers reset within parts&#xa;</xsl:text>
+            <xsl:text>%% Starred form will not prefix part number&#xa;</xsl:text>
+            <xsl:text>\counterwithin*{chapter}{part}&#xa;</xsl:text>
+        </xsl:if>
+    </xsl:if>
     <!-- Determine height of text block, assumes US letterpaper (11in height) -->
     <!-- Could react to document type, paper, margin specs                    -->
     <xsl:variable name="text-height">
@@ -803,20 +830,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="environment"/>
     </xsl:for-each>
     <xsl:text>%%&#xa;</xsl:text>
-    <xsl:text>%% Styles for the traditional LaTeX divisions&#xa;</xsl:text>
-    <!-- Create five title styles, part to subsubsection -->
-    <!-- "titlesec" works on a level basis,              -->
-    <!-- so we just build all five named styles          -->
-    <!-- A specialized division of a subsubsection would -->
-    <!-- require a "paragraph" style.  We are using the  -->
-    <!-- LaTeX "subparagraph" traditional division for a -->
-    <!-- PTX "paragraphs", but perhaps we can fake that, -->
-    <!-- since we don't allow it to be styled.           -->
+    <xsl:text>%% Styles for six traditional LaTeX divisions&#xa;</xsl:text>
+    <!-- Create six title styles, part to paragraph     -->
+    <!-- NB: paragraph is like a "subsubsubsection"     -->
+    <!-- "titlesec" works on a level basis, so          -->
+    <!-- we just build all six named styles             -->
+    <!-- N.B.: we are using the LaTeX "subparagraph"    -->
+    <!-- traditional division for a PTX "paragraphs",   -->
+    <!-- but perhaps we can fake that with a tcolorbox, -->
+    <!-- since we don't allow it to be styled.          -->
     <xsl:call-template name="titlesec-part-style"/>
     <xsl:call-template name="titlesec-chapter-style"/>
     <xsl:call-template name="titlesec-section-style"/>
     <xsl:call-template name="titlesec-subsection-style"/>
     <xsl:call-template name="titlesec-subsubsection-style"/>
+    <xsl:call-template name="titlesec-paragraph-style"/>
     <xsl:text>%%&#xa;</xsl:text>
     <xsl:text>%% Semantic Macros&#xa;</xsl:text>
     <xsl:text>%% To preserve meaning in a LaTeX file&#xa;</xsl:text>
@@ -932,8 +960,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\newcommand{\forwardimplication}{($\Rightarrow$)}&#xa;</xsl:text>
         <xsl:text>\newcommand{\backwardimplication}{($\Leftarrow$)}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:text>%% Subdivision Numbering, Chapters, Sections, Subsections, etc&#xa;</xsl:text>
-    <xsl:text>%% Subdivision numbers may be turned off at some level ("depth")&#xa;</xsl:text>
+    <xsl:text>%% Division Numbering: Chapters, Sections, Subsections, etc&#xa;</xsl:text>
+    <xsl:text>%% Division numbers may be turned off at some level ("depth")&#xa;</xsl:text>
     <xsl:text>%% A section *always* has depth 1, contrary to us counting from the document root&#xa;</xsl:text>
     <xsl:text>%% The latex default is 3.  If a larger number is present here, then&#xa;</xsl:text>
     <xsl:text>%% removing this command may make some cross-references ambiguous&#xa;</xsl:text>
@@ -1339,7 +1367,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\setlength{\extrarowheight}{0.2ex}&#xa;</xsl:text>
         <xsl:text>%% Define variable thickness horizontal rules, full and partial&#xa;</xsl:text>
         <xsl:text>%% Thicknesses are 0.03, 0.05, 0.08 in the  booktabs  package&#xa;</xsl:text>
-        <xsl:text>\makeatletter&#xa;</xsl:text>
         <!-- http://tex.stackexchange.com/questions/119153/table-with-different-rule-widths -->
         <xsl:text>\newcommand{\hrulethin}  {\noalign{\hrule height 0.04em}}&#xa;</xsl:text>
         <xsl:text>\newcommand{\hrulemedium}{\noalign{\hrule height 0.07em}}&#xa;</xsl:text>
@@ -1370,9 +1397,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\newcolumntype{A}{!{\vrule width 0.04em}}&#xa;</xsl:text>
         <xsl:text>\newcolumntype{B}{!{\vrule width 0.07em}}&#xa;</xsl:text>
         <xsl:text>\newcolumntype{C}{!{\vrule width 0.11em}}&#xa;</xsl:text>
-        <xsl:text>\makeatother&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="//cell/line">
+    <xsl:if test="$document-root//cell/line">
         <xsl:text>\newcommand{\tablecelllines}[3]%&#xa;</xsl:text>
         <xsl:text>{\begin{tabular}[#2]{@{}#1@{}}#3\end{tabular}}&#xa;</xsl:text>
     </xsl:if>
@@ -1433,7 +1459,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- A bare image is implemented as a caption-less figure  -->
         <xsl:if test="$document-root//figure or $document-root//image or $b-number-figure-distinct">
             <xsl:text>%% Adjust stock figure environment so that it no longer floats&#xa;</xsl:text>
-            <xsl:text>\SetupFloatingEnvironment{figure}{fileext=lof,placement={H},within=</xsl:text>
+            <xsl:text>\SetupFloatingEnvironment{figure}{fileext=lof,placement={</xsl:text>
+            <xsl:value-of select="$debug.float"/>
+            <xsl:text>},within=</xsl:text>
             <xsl:choose>
                 <xsl:when test="$figure-levels = 0">
                     <xsl:text>none</xsl:text>
@@ -1459,7 +1487,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
         <xsl:if test="$document-root//table">
             <xsl:text>%% Adjust stock table environment so that it no longer floats&#xa;</xsl:text>
-            <xsl:text>\SetupFloatingEnvironment{table}{fileext=lot,placement={H},within=</xsl:text>
+            <xsl:text>\SetupFloatingEnvironment{table}{fileext=lot,placement={</xsl:text>
+            <xsl:value-of select="$debug.float"/>
+            <xsl:text>},within=</xsl:text>
             <xsl:choose>
                 <xsl:when test="$figure-levels = 0">
                     <xsl:text>none</xsl:text>
@@ -1576,14 +1606,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
     </xsl:if>
     <!-- Numbering Footnotes -->
-    <xsl:if test="($numbering-footnotes != 0) and //fn">
+    <xsl:if test="$document-root//fn">
         <xsl:text>%% Footnote Numbering&#xa;</xsl:text>
-        <xsl:text>%% We reset the footnote counter, as given by numbering.footnotes.level&#xa;</xsl:text>
-        <xsl:text>\makeatletter\@addtoreset{footnote}{</xsl:text>
-        <xsl:call-template name="level-to-name">
-            <xsl:with-param name="level" select="$numbering-footnotes" />
-        </xsl:call-template>
-        <xsl:text>}\makeatother&#xa;</xsl:text>
+        <xsl:text>%% Specified by numbering.footnotes.level&#xa;</xsl:text>
+        <xsl:if test="$b-is-book">
+            <xsl:text>%% Undo counter reset by chapter for a book&#xa;</xsl:text>
+            <xsl:text>\counterwithout{footnote}{chapter}&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:choose>
+            <xsl:when test="$numbering-footnotes = 0">
+                <xsl:text>%% Global numbering, since numbering.footnotes.level = 0&#xa;</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>\counterwithin*{footnote}{</xsl:text>
+                <xsl:call-template name="level-to-name">
+                    <xsl:with-param name="level" select="$numbering-footnotes" />
+                </xsl:call-template>
+                <xsl:text>}&#xa;</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:if>
     <!-- Interactives -->
     <xsl:if test="$document-root//video|$document-root//interactive">
@@ -2037,26 +2078,34 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- http://tex.stackexchange.com/questions/44088/when-do-i-need-to-invoke-phantomsection -->
     <xsl:text>%% If you manually remove hyperref, leave in this next command&#xa;</xsl:text>
     <xsl:text>\providecommand\phantomsection{}&#xa;</xsl:text>
-    <!-- Later comment advises @addtoreset *after* hyperref -->
-    <!-- https://tex.stackexchange.com/questions/35782      -->
-    <xsl:if test="$parts = 'structural'">  <!-- implies book/part -->
-        <xsl:text>%% Structural chapter numbers reset within parts&#xa;</xsl:text>
-        <xsl:text>\makeatletter&#xa;</xsl:text>
-        <xsl:text>\@addtoreset{chapter}{part}&#xa;</xsl:text>
-        <xsl:text>\makeatother&#xa;</xsl:text>
-    </xsl:if>
     <!-- The "xwatermark" package has way more options, including the -->
     <!-- possibility of putting the watermark onto the foreground     -->
     <!-- (above shaded/colored "tcolorbox").  But on 2018-10-24,      -->
     <!-- xwatermark was at v1.5.2d, 2012-10-23, and draftwatermark    -->
     <!-- was at v1.2, 2015-02-19.                                     -->
-    <xsl:if test="$latex.watermark">
+    <!-- latex.watermark and latex.watermark.scale are deprecated,    -->
+    <!-- but effort is made here so they still work for now           -->
+    <xsl:if test="$b-watermark or $b-latex-watermark">
         <xsl:text>\usepackage{draftwatermark}&#xa;</xsl:text>
         <xsl:text>\SetWatermarkText{</xsl:text>
-        <xsl:value-of select="$latex.watermark" />
+        <xsl:choose>
+            <xsl:when test="$b-watermark">
+                <xsl:value-of select="$watermark.text" />
+            </xsl:when>
+            <xsl:when test="$b-latex-watermark">
+                <xsl:value-of select="$latex.watermark" />
+            </xsl:when>
+        </xsl:choose>
         <xsl:text>}&#xa;</xsl:text>
         <xsl:text>\SetWatermarkScale{</xsl:text>
-        <xsl:value-of select="$latex.watermark.scale" />
+        <xsl:choose>
+            <xsl:when test="$b-watermark">
+                <xsl:value-of select="$watermark.scale" />
+            </xsl:when>
+            <xsl:when test="$b-latex-watermark">
+                <xsl:value-of select="$latex-watermark-scale" />
+            </xsl:when>
+        </xsl:choose>
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$author-tools-new = 'yes'" >
@@ -2216,6 +2265,77 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="$docinfo/covers/@back"/>
         <xsl:text>}%&#xa;</xsl:text>
     </xsl:if>
+</xsl:template>
+
+<!-- PTX Divisions to LaTeX Divisions -->
+
+<!-- PTX has a variety of divisions not native to LaTeX, so normally -->
+<!-- an author would have to engineer/design these themselves.  We   -->
+<!-- do something similar and implement them using the stock LaTeX   -->
+<!-- divisons.  This is the dictionary which maps PreTeXt division   -->
+<!-- elements to stock LaTeX division environments.                  -->
+<!-- NB: we formerly did this using the "level" template and the     -->
+<!-- "level-to-name" templates, which we should consider obsoleting, -->
+<!-- simplifying, or consolidating.                                  -->
+<xsl:template match="part|chapter|section|subsection|subsubsection" mode="division-name">
+    <xsl:value-of select="local-name(.)"/>
+</xsl:template>
+
+<!-- Front matter divisions are only in book, and always at chapter level -->
+<xsl:template match="acknowledgement|foreword|preface" mode="division-name">
+    <xsl:text>chapter</xsl:text>
+</xsl:template>
+
+<!-- Some divisions can appear at multiple levels (eg, exercises) -->
+<!-- Divisions in the back matter vary between books and articles -->
+<!--     Book:    children of backmatter -> chapter               -->
+<!--     Article: children of backmatter -> section               -->
+<xsl:template match="exercises|solutions|worksheet|reading-questions|references|glossary|appendix|index" mode="division-name">
+    <xsl:choose>
+        <xsl:when test="parent::article">
+            <xsl:text>section</xsl:text>
+        </xsl:when>
+        <xsl:when test="parent::chapter">
+            <xsl:text>section</xsl:text>
+        </xsl:when>
+        <xsl:when test="parent::section">
+            <xsl:text>subsection</xsl:text>
+        </xsl:when>
+        <xsl:when test="parent::subsection">
+            <xsl:text>subsubsection</xsl:text>
+        </xsl:when>
+        <xsl:when test="parent::subsubsection">
+            <xsl:text>paragraph</xsl:text>
+        </xsl:when>
+        <!-- children of backmatter (appendix, solutions, reference, index) -->
+        <!-- in book/article are at chapter/section level                   -->
+        <xsl:when test="parent::backmatter">
+            <xsl:choose>
+                <xsl:when test="ancestor::book">
+                    <xsl:text>chapter</xsl:text>
+                </xsl:when>
+                <xsl:when test="ancestor::article">
+                    <xsl:text>section</xsl:text>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:when>
+        <!-- appendix in book/article is at chapter/section level -->
+        <!-- so descendants (exercises, solutions) down one level -->
+        <xsl:when test="parent::appendix">
+            <xsl:choose>
+                <xsl:when test="ancestor::book">
+                    <xsl:text>section</xsl:text>
+                </xsl:when>
+                <xsl:when test="ancestor::article">
+                    <xsl:text>subsection</xsl:text>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:when>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="*" mode="division-name">
+    <xsl:message>MBX:BUG: Asking for the name of an element (<xsl:value-of select="local-name(.)" />) that is not a division</xsl:message>
 </xsl:template>
 
 <!-- ####################### -->
@@ -2950,6 +3070,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\titlespacing*{\subsubsection}{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}&#xa;</xsl:text>
 </xsl:template>
 
+<!-- We stick with LaTeX names for the hierarchy, so "paragraph" is next. -->
+<!-- This will be used for single (hence numberless only) specialized     -->
+<!-- divisions (e.g. "exercises") contained within a PTX subsubsection.   -->
+<xsl:template name="titlesec-paragraph-style">
+    <xsl:text>\titleformat{\paragraph}[hang]&#xa;</xsl:text>
+    <xsl:text>{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{#1}&#xa;</xsl:text>
+    <xsl:text>[{\small\authorsptx}]&#xa;</xsl:text>
+    <xsl:text>\titleformat{name=\paragraph,numberless}[block]&#xa;</xsl:text>
+    <xsl:text>{\normalfont\normalsize\bfseries}{}{0pt}{#1}&#xa;</xsl:text>
+    <xsl:text>[{\normalsize\authorsptx}]&#xa;</xsl:text>
+    <xsl:text>\titlespacing*{\paragraph}{0pt}{3.25ex plus 1ex minus .2ex}{1.5em}&#xa;</xsl:text>
+</xsl:template>
+
 <!-- ############################ -->
 <!-- Page Styles, Headers/Footers -->
 <!-- ############################ -->
@@ -3338,15 +3471,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="line" />
 </xsl:template>
 
-<xsl:template match="department/line|institution/line">
-    <xsl:apply-templates />
-    <!-- is there a next line to separate? -->
-    <xsl:if test="following-sibling::*">
-        <xsl:text>\\&#xa;</xsl:text>
-    </xsl:if>
-</xsl:template>
-
-
 <!-- ###################### -->
 <!-- Front Matter, Articles -->
 <!-- ###################### -->
@@ -3522,6 +3646,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- are centered on a page of their own         -->
 <!-- The center environment provides good        -->
 <!-- vertical break between multiple instances   -->
+<!-- Each "p" may be structured by "line"        -->
 <!-- The p[1] elsewhere is the default,          -->
 <!-- hence we use the priority mechanism (>0.5)  -->
 <xsl:template match="dedication/p|dedication/p[1]" priority="1">
@@ -3529,17 +3654,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates />
     <xsl:text>%&#xa;</xsl:text>
     <xsl:text>\end{center}&#xa;</xsl:text>
-</xsl:template>
-
-<!-- General line of a dedication -->
-<xsl:template match="dedication/p/line">
-    <xsl:apply-templates />
-    <!-- is there a next line to separate? -->
-    <xsl:if test="following-sibling::*">
-        <xsl:text>\\</xsl:text>
-    </xsl:if>
-    <!-- always format source visually -->
-    <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <!-- ##################### -->
@@ -6586,6 +6700,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{tcbraster}%&#xa;</xsl:text>
 </xsl:template>
 
+<!-- Should an author provide an alternate version of the -->
+<!-- static representation of an interactive, we want to  -->
+<!-- use it above all other possibilities.                -->
+<!-- For now we process the "static" indiscriminantly     -->
+<!-- NB: this might require an explicit priority          -->
+<xsl:template match="interactive[static]">
+    <xsl:apply-templates select="static"/>
+</xsl:template>
+
 <!-- Input a URL, get back LaTeX to construct a URL              -->
 <!-- The macro \qrsize is set elsewhere (ie not here)            -->
 <!-- By loading hyperref, we automatically get a version         -->
@@ -6934,41 +7057,37 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- TODO: make a rule for quotation-dash?          -->
 
 <!-- Single line, mixed-content                     -->
+<!-- Or structured by "line" elements               -->
 <!-- Quotation dash if within blockquote            -->
 <!-- A table, pushed right, with left-justification -->
+<!-- TODO: CMOS says blockquote-attribution goes in -->
+<!-- parentheses (see 5e, 11.81), while this style  -->
+<!-- is for chapter epigraphs (see 5e, 1.39, 11.40) -->
 <xsl:template match="attribution">
     <xsl:text>\nopagebreak\par%&#xa;</xsl:text>
-    <xsl:text>\hfill\begin{tabular}{l@{}}&#xa;</xsl:text>
+    <xsl:text>\hfill</xsl:text>
     <xsl:if test="parent::blockquote">
         <xsl:call-template name="mdash-character"/>
+        <!-- remove the left-side column spacing -->
+        <xsl:text>{\setlength{\tabcolsep}{0pt}</xsl:text>
     </xsl:if>
-    <xsl:apply-templates />
+    <xsl:text>\begin{tabular}[t]{l@{}}&#xa;</xsl:text>
+    <xsl:choose>
+        <xsl:when test="line">
+            <xsl:apply-templates select="line" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates />
+        </xsl:otherwise>
+    </xsl:choose>
     <xsl:text>&#xa;</xsl:text>
-    <xsl:text>\end{tabular}\\\par&#xa;</xsl:text>
-</xsl:template>
-
-<!-- Multiple lines, structured by lines -->
-<xsl:template match="attribution[line]">
-    <xsl:text>\nopagebreak\par%&#xa;</xsl:text>
-    <xsl:text>\hfill\begin{tabular}{l@{}}&#xa;</xsl:text>
-    <xsl:apply-templates select="line" />
-    <xsl:text>\end{tabular}\\\par&#xa;</xsl:text>
-</xsl:template>
-
-<!-- General line of an attribution -->
-<xsl:template match="attribution/line">
-    <xsl:if test="parent::attribution/parent::blockquote and not(preceding-sibling::*)">
-        <xsl:call-template name="mdash-character"/>
+    <xsl:text>\end{tabular}</xsl:text>
+    <!-- end group with table spacing change -->
+    <xsl:if test="parent::blockquote">
+        <xsl:text>}</xsl:text>
     </xsl:if>
-    <xsl:apply-templates />
-    <!-- is there a next line to separate? -->
-    <xsl:if test="following-sibling::*">
-        <xsl:text>\\</xsl:text>
-    </xsl:if>
-    <!-- always format source visually -->
-    <xsl:text>&#xa;</xsl:text>
+    <xsl:text>\\\par&#xa;</xsl:text>
 </xsl:template>
-
 
 <!-- Emphasis -->
 <xsl:template match="em">
@@ -8293,7 +8412,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Items that normally could go inline within a paragraph -->
 <!-- without any spacing will be preceded by a \par         -->
 <xsl:template match="stack" mode="panel-latex-box">
-    <xsl:for-each select="tabular|image|p|pre|ol|ul|dl|video|interactive|program|console|exercise">
+    <xsl:for-each select="tabular|image|p|pre|ol|ul|dl|video|interactive|stack|program|console|exercise">
         <xsl:if test="preceding-sibling::* and (self::image or self::tabular)">
             <xsl:text>\par&#xa;</xsl:text>
         </xsl:if>
@@ -9287,15 +9406,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<xsl:template match="cell/line">
-    <xsl:apply-templates />
-    <!-- is there a next line to separate? -->
-    <xsl:if test="following-sibling::*">
-        <xsl:text>\\&#xa;</xsl:text>
-    </xsl:if>
-</xsl:template>
-
-
 <!-- ########################### -->
 <!-- Labels and Cross-References -->
 <!-- ########################### -->
@@ -9708,9 +9818,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!--        -->
+<!-- ################### -->
+<!-- Structured by Lines -->
+<!-- ################### -->
+
+<!-- The LaTeX-specific line separator for use by  -->
+<!-- the abstract template for a "line" elent used -->
+<!-- to (optionally) structure certain elements.   -->
+
+<xsl:template name="line-separator">
+    <xsl:text>\\&#xa;</xsl:text>
+</xsl:template>
+
+<!-- ###### -->
 <!-- Poetry -->
-<!--        -->
+<!-- ###### -->
 
 <xsl:template match="poem">
     <xsl:text>\begin{poem}</xsl:text>

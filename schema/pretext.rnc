@@ -2,7 +2,7 @@
         grammar {
         
         start =
-            element mathbook {
+            element pretext {
                 XMLLang?,
                 DocInfo?,
                 (Book | Article | Letter | Memorandum)
@@ -11,7 +11,7 @@
         
         Article =
             element article {
-                MetaDataSubtitle,
+                MetaDataLinedSubtitle,
                 ArticleFrontMatter?,
                 (
                     (
@@ -33,7 +33,7 @@
         Book =
             ## Here is what a book looks like.
             element book {
-                MetaDataSubtitle,
+                MetaDataLinedSubtitle,
                 BookFrontMatter?,
                 (Part+ | Chapter+ ),
                 BookBackMatter?
@@ -46,11 +46,11 @@
         
         Part =
             element part {
-                MetaDataShortTitle, Chapter+
+                MetaDataLinedTitle, Chapter+
             }
         Chapter =
             element chapter {
-                MetaDataShortTitle,
+                MetaDataLinedTitle,
                 AuthorByline*,
                 Objectives?,
                 (
@@ -74,7 +74,7 @@
             }
         Section =
             element section {
-                MetaDataShortTitle,
+                MetaDataLinedTitle,
                 AuthorByline*,
                 Objectives?,
                 (
@@ -575,8 +575,14 @@
             MetaDataTitleOptional,
             (
                 (BlockStatement+) |
-                (Prelude?, Statement, Hint*, Answer*, Solution*, Postlude?) |
-                (Prelude?, IntroductionStatement?, Task+, ConclusionStatement?, Postlude?)
+                (
+                   Prelude?,
+                   (
+                      (Statement, Hint*, Answer*, Solution*) |
+                      (IntroductionStatement?, Task+, ConclusionStatement?)
+                   ),
+                   Postlude?
+                )
             )
         Project =
             element activity {ProjectLike}
@@ -1051,8 +1057,12 @@
             attribute permid {text}
         Title =
             element title {TextLong}
+        LinedTitle =
+            element title {LongLine+}
         Subtitle =
             element subtitle {TextLong}
+        LinedSubtitle =
+            element subtitle {LongLine+}
         ShortTitle =
             element shorttitle {TextShort}
         Creator =
@@ -1078,6 +1088,14 @@
             Title,
             ShortTitle?,
             Index*
+        MetaDataLinedTitle =
+            UniqueID?,
+            PermanentID?,
+            XMLBase?,
+            XMLLang?,
+            (Title | LinedTitle),
+            ShortTitle?,
+            Index*
         MetaDataSubtitle =
             UniqueID?,
             PermanentID?,
@@ -1085,6 +1103,15 @@
             XMLLang?,
             Title,
             Subtitle?,
+            ShortTitle?,
+            Index*
+        MetaDataLinedSubtitle =
+            UniqueID?,
+            PermanentID?,
+            XMLBase?,
+            XMLLang?,
+            (Title | LinedTitle),
+            (Subtitle | LinedSubtitle)?,
             ShortTitle?,
             Index*
         MetaDataTitleOptional =
@@ -1345,7 +1372,7 @@
             element ad {empty} |
             element am {empty} |
             element bc {empty} |
-            element circa {empty} |
+            element ca {empty} |
             element eg {empty} |
             element etal {empty} |
             element etc {empty} |
@@ -1531,26 +1558,6 @@
                 attribute length {"short" | "long"}
             }
         
-        
-        Configuration |=
-            element search {
-                element google {
-                    element cx {text}
-                }
-            }
-        |
-            element analytics {
-                (
-                    element google {
-                        element tracking {text}
-                    }
-                |
-                    element statcounter {
-                        element project {text},
-                        element security {text}
-                    }
-                )+
-            }
         
         
         Configuration |=

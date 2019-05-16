@@ -39,3 +39,5 @@ LaTeX and then developed using standard LaTeX tools.
 interaction of authors, publishers, scholars, instructors,
 students, and readers, with each group having its own needs
 and goals.
+11. PreTeXt recognizes the inherent value in producing material
+that is accessible to everyone.

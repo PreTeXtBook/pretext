@@ -145,7 +145,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </statement>
     </exercise>
 
-<todo>Check references to Heisenberg group</todo>
+    <!-- todo: Check references to Heisenberg group -->
 
     <exercise number="10">
         <statement>
@@ -478,7 +478,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </statement>
     </exercise>
 
-<todo>Move the old Exercise 50 to struct.xml</todo>
+    <!-- Todo: Move the old Exercise 50 to struct.xml -->
 
     <!--
     <exercise number="50">

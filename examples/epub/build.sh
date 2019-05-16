@@ -17,7 +17,9 @@ declare EPUBSCRIPT=${MB}/examples/epub
 # mathjax-node-page paths
 # requires installation, see
 # https://github.com/pkra/mathjax-node-page
-declare MJNODE=/opt/node_modules/mathjax-node-page
+# RAB: 2019-05-01 in ~/node_modules; to update
+#      ~$ npm install mathjax-node-page
+declare MJNODE=/home/rob/node_modules/mathjax-node-page
 
 # Working areas
 # DEBUG saves post-xsltproc, pre-mathjax-node
@@ -76,7 +78,7 @@ cd ${EPUBOUT}
 xsltproc --xinclude  ${MBXSL}/mathbook-epub.xsl ${SRCMASTER}
 
 # fixup file header to make obviously XHTML
-declare GLOBIGNORE="${EPUBOUT}/EPUB/xhtml/cover.xhtml:${EPUBOUT}/EPUB/xhtml/title-page.xhtml:${EPUBOUT}/EPUB/xhtml/table-contents.xhtml"
+declare GLOBIGNORE="${EPUBOUT}/EPUB/xhtml/cover-page.xhtml:${EPUBOUT}/EPUB/xhtml/title-page.xhtml:${EPUBOUT}/EPUB/xhtml/table-contents.xhtml"
 for f in ${EPUBOUT}/EPUB/xhtml/*.xhtml; do
     sed -i -f ${EPUBSCRIPT}/mbx-epub-xhtml-header.sed $f
 done
@@ -89,7 +91,7 @@ cp -a ${EPUBSCRIPT}/pretext-epub.css ${EPUBOUT}/EPUB/css
 # copy to temp, replace math, fixup with sed
 # TODO: place content files someplace for processing, deletion
 cd ${MJNODE}
-declare GLOBIGNORE="${EPUBOUT}/EPUB/xhtml/cover.xhtml:${EPUBOUT}/EPUB/xhtml/title-page.xhtml:${EPUBOUT}/EPUB/xhtml/table-contents.xhtml"
+declare GLOBIGNORE="${EPUBOUT}/EPUB/xhtml/cover-page.xhtml:${EPUBOUT}/EPUB/xhtml/title-page.xhtml:${EPUBOUT}/EPUB/xhtml/table-contents.xhtml"
 for f in ${EPUBOUT}/EPUB/xhtml/*.xhtml; do
     echo "Working on" $f
     mv $f $f.temp;
@@ -109,6 +111,10 @@ unset GLOBIGNORE
 # TODO: We really should only include the images we put
 # in the manifest
 rm ${EPUBOUT}/EPUB/xhtml/images/*.pdf
+# This image list is being produced, but not consulted
+# In any event, we need to remove it before it ends up in the zip file
+rm ${EPUBOUT}/xhtml/image-list.txt
+rmdir ${EPUBOUT}/xhtml
 
 # Back to usual default directory
 # zip with  mimetype  first

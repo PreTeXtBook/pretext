@@ -156,9 +156,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='index-part'><xsl:text>Index</xsl:text></localization>
     <localization string-id='jump-to'><xsl:text>Aller à :</xsl:text></localization>
     <!-- Parts of the Index -->
-    <localization string-id='index'><xsl:text>Index</xsl:text></localization> <!--see latex mechanism-->
-    <localization string-id='see'><xsl:text>Visiter</xsl:text></localization> <!--see latex mechanism-->
-    <localization string-id='also'><xsl:text>Voir Aussi</xsl:text></localization> <!--see latex mechanism-->
+    <localization string-id='index'><xsl:text>Index</xsl:text></localization>
+    <localization string-id='see'><xsl:text>Visiter</xsl:text></localization>
+    <localization string-id='also'><xsl:text>Voir Aussi</xsl:text></localization>
     <!-- Navigation Interface elements -->
     <!-- Assistive "skip to content" link -->
     <localization string-id='skip-to-content'><xsl:text>Sauter</xsl:text></localization>

@@ -87,8 +87,8 @@
         <sidebyside>
             <console>
                 <prompt>$ </prompt>
-                <input>xsltproc --stringparam latex.font.size "20pt"</input>
-                <input>   /path/to/xsl/mathbook-latex.xsl ~/books/aota/animals.xml</input>
+                <input>xsltproc -o animals.tex --stringparam latex.font.size "20pt"</input>
+                <input>  /path/to/xsl/mathbook-latex.xsl ~/books/aota/animals.xml</input>
             </console>
         </sidebyside>
 

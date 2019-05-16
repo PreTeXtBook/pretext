@@ -7,7 +7,7 @@
 <!-- Copyright (C) 2013-2017  Robert A. Beezer, David Farmer  -->
 <!-- See the file COPYING for copying conditions.             -->
 
-<mathbook xmlns:xi="http://www.w3.org/2001/XInclude">
+<pretext xmlns:xi="http://www.w3.org/2001/XInclude">
 
     <docinfo>
         <!-- this is the default, but supresses a warning -->
@@ -43,4 +43,4 @@
 
     </book>
 
-</mathbook>
+</pretext>
