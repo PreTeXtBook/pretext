@@ -2568,6 +2568,48 @@ the xsltproc executable.
             </subsection>
 
             <subsection>
+                <title>Asymptote + threejs 3D</title>
+
+                <p>At this writing (2019-05-16) the Asymptote project plans to soon produce output that is interactive via the Javascript library <c>threejs</c> (see <xref ref="figure-threejs-splines" text="type-global"/>).  The following sneak-peek is courtesy of John Bowman, and uses the <tag>interactive</tag> framework (see <xref ref="section-interactive-authored" text="type-global"/>).  (In particular, the static PDF version is likely to have an option to withhold the QR code?)  We will endeavor to make it even more straight-forward for authors to employ.</p>
+
+                <figure>
+                    <caption>Asymptote Bezier patch</caption>
+                    <interactive xml:id="interactive-asymptote-threejs" platform="javascript" width="80%" aspect="1:1" preview="images/asymptote-bezier-patch.png" source="http://www.math.ualberta.ca/~bowman/gl-matrix-min-2.3.2.js https://cdn.rawgit.com/humbletim/glm-js/31fd034b/build/glm-js.min.js https://code.jquery.com/jquery-3.3.1.min.js http://www.math.ualberta.ca/~bowman/extlibs/pako.js http://www.math.ualberta.ca/~bowman/src/v3d.js http://www.math.ualberta.ca/~bowman/src/arcball.js http://www.math.ualberta.ca/~bowman/data.js http://www.math.ualberta.ca/~bowman/src/gl.js code/asymptote/bezier-patch.js">
+
+                        <slate xml:id="bezierpatch" surface="canvas" aspect="1:1"/>
+
+                        <!-- Holds "script" tags of a very special type (threejs shaders) -->
+                        <!-- So we use zero height, and have HTML contents                -->
+                        <slate surface="html" aspect="1:0">
+                           <script id="shader-fs" type="x-shader/x-fragment">
+                                precision mediump float;
+                                varying vec4 vColor;
+                                void main(void)
+                                {
+                                    gl_FragColor=vColor;
+                                }
+                            </script>
+
+                            <script id="shader-vs" type="x-shader/x-vertex">
+                                attribute vec3 aVertexPosition;
+                                attribute vec4 aVertexColor;
+
+                                uniform mat4 uMMatrix;
+                                uniform mat4 uPMatrix;
+                                uniform mat4 uVMatrix;
+
+                                varying vec4 vColor;
+                                void main(void)
+                                {
+                                    gl_Position=uPMatrix*uVMatrix*uMMatrix*vec4(aVertexPosition,1.0);
+                                    vColor=aVertexColor;
+                                }
+                            </script>
+                        </slate>
+                    </interactive>
+                </figure>
+            </subsection>
+            <subsection>
                 <title>Sage Plots</title>
                 <idx><h>Sage plots</h></idx>
 
@@ -4639,7 +4681,7 @@ the xsltproc executable.
 
                 <p>An example using the <c>threejs</c> 3D Javascript library.  This is <url href="https://threejs.org/examples/#webgl_geometry_extrude_splines">one of the project's examples</url><fn><c>https://threejs.org/examples/#webgl_geometry_extrude_splines</c></fn>, licensed with an MIT License, with minimal modifications.  We get several of the necessary libraries from the <c>threejs.org</c> site.</p>
 
-                <figure>
+                <figure xml:id="figure-threejs-splines">
                     <caption><c>three.js</c> webgl_geometry_extrude_splines example</caption>
                     <interactive xml:id="interactive-threejs-splines" platform="javascript" width="75%" aspect="1:1" preview="images/threejs-splines.png" source="https://threejs.org/build/three.js https://threejs.org/examples/js/controls/OrbitControls.js https://threejs.org/examples/js/CurveExtras.js https://threejs.org/examples/js/libs/stats.min.js https://threejs.org/examples/js/libs/dat.gui.min.js code/threejs/splines.js">
                         <slate xml:id="threejs-splines" surface="div" aspect="1:1" />
