@@ -196,6 +196,7 @@ function init() {
     // stats
 
     // RAB, 2019-05-15, trash stats window
+    // requires  https://threejs.org/examples/js/libs/stats.min.js
     //stats = new Stats();
     //container.appendChild( stats.dom );
 
