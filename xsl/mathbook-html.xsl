@@ -6106,21 +6106,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
-<!-- You Tube -->
+<!-- You Tube, Vimeo -->
 <!-- Better sizing would require CSS classes (16:9, 4:3?)                      -->
 <!-- https://css-tricks.com/NetMag/FluidWidthVideo/Article-FluidWidthVideo.php -->
 
-<!-- Configurable options, we are considering academic uses -->
+<!-- Configurable options, we are considering academic uses                       -->
 <!-- https://developers.google.com/youtube/player_parameters#Manual_IFrame_Embeds -->
-<!-- hl parameter for language seems superfluous, user settings override       -->
-<!-- something to do with cross-domain scripting security? -->
-<!-- <xsl:text>&amp;origin=http://example.com</xsl:text>   -->
-<!-- start/end time parameters -->
+<!-- hl parameter for language seems superfluous, user settings override          -->
+<!-- something to do with cross-domain scripting security?                        -->
+<!-- <xsl:text>&amp;origin=http://example.com</xsl:text>                          -->
+<!-- start/end time parameters                                                    -->
 
-<!-- create iframe home for YouTube video         -->
-<!-- dimensions and autoplay as parameters        -->
-<!-- Normally $preview is true, and not passed in -->
-<!-- 'false' is an override for standalone pages  -->
+<!-- create iframe embedded video                     -->
+<!-- dimensions and autoplay as parameters            -->
+<!-- Normally $preview is true, and not passed in     -->
+<!-- 'false' is an override for standalone pages      -->
+<!-- Templates, on a per-service basis, supply a URL, -->
+<!-- and any attributes on the "iframe" element which -->
+<!-- are not shared                                   -->
 <xsl:template match="video[@youtube|@youtubeplaylist]" mode="video-embed">
     <xsl:param name="width" select="''" />
     <xsl:param name="height" select="''" />
@@ -6131,23 +6134,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="perm-id" />
     </xsl:variable>
     <xsl:variable name="source-url">
-        <xsl:apply-templates select="." mode="youtube-embed-url">
+        <xsl:apply-templates select="." mode="video-embed-url">
             <xsl:with-param name="autoplay" select="$autoplay" />
         </xsl:apply-templates>
     </xsl:variable>
-    <!-- Following is inaccurate, the @select should be 'true' -->
-    <!-- But the YouTube autoplay won't wait for the poster    -->
-    <!-- to be withdrawn, so two clicks are needed             -->
-    <!-- We have two (equal) URLs to preserve logic, should    -->
-    <!-- there be a better way to fake the HTML5 @poster       -->
     <xsl:variable name="source-url-autoplay-on">
-        <xsl:apply-templates select="." mode="youtube-embed-url">
-            <xsl:with-param name="autoplay" select="'false'" />
+        <xsl:apply-templates select="." mode="video-embed-url">
+            <xsl:with-param name="autoplay">
+                <xsl:choose>
+                    <!-- the YouTube autoplay won't wait for the poster -->
+                    <!-- to be withdrawn, so two clicks are needed,     -->
+                    <!-- perhaps this is true of *all* services?        -->
+                    <xsl:when test="@youtube|@youtubeplaylist">
+                        <xsl:text>false</xsl:text>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:text>true</xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:with-param>
         </xsl:apply-templates>
     </xsl:variable>
-    <!-- allowfullscreen is an iframe parameter, -->
-    <!-- not a YouTube embed parameter, but it's -->
-    <!-- use enables the "full screen" button    -->
+    <!-- allowfullscreen is an iframe parameter,   -->
+    <!-- not a video-embedding parameter, but it's -->
+    <!-- use enables the "full screen" button      -->
     <!-- http://w3c.github.io/test-results/html51/implementation-report.html -->
     <xsl:choose>
         <xsl:when test="($preview = 'true') and @preview and not(@preview = 'default')">
@@ -6169,26 +6179,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <div class="hidden-content">
                 <!-- Hidden content in here                   -->
                 <!-- Turn autoplay on, else two clicks needed -->
-                <iframe id="{$pid}"
-                        width="{$width}"
-                        height="{$height}"
-                        allowfullscreen=""
-                        src="{$source-url-autoplay-on}" />
+                <iframe id="{$pid}" width="{$width}" height="{$height}" allowfullscreen=""
+                        src="{$source-url-autoplay-on}">
+                    <xsl:apply-templates select="." mode="video-iframe-attributes">
+                        <xsl:with-param name="autoplay" select="'true'"/>
+                    </xsl:apply-templates>
+                </iframe>
             </div>
         </xsl:when>
         <xsl:otherwise>
-            <iframe id="{$pid}"
-                    width="{$width}"
-                    height="{$height}"
-                    allowfullscreen=""
-                    src="{$source-url}" />
+            <iframe id="{$pid}" width="{$width}" height="{$height}" allowfullscreen=""
+                    src="{$source-url}">
+                <xsl:apply-templates select="." mode="video-iframe-attributes">
+                    <xsl:with-param name="autoplay" select="$autoplay"/>
+                </xsl:apply-templates>
+            </iframe>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 
-<!-- Creates a YouTube URL for embedding, typically in an iframe -->
-<!-- autoplay for popout, otherwise not                          -->
-<xsl:template match="video[@youtube|@youtubeplaylist]" mode="youtube-embed-url">
+<!-- Creates a YouTube URL for embedding for use in an iframe -->
+<!-- Autoplay option is conveyed in the URL query options     -->
+<!-- Autoplay is for popout, otherwise not                    -->
+<xsl:template match="video[@youtube|@youtubeplaylist]" mode="video-embed-url">
     <xsl:param name="autoplay" select="'false'" />
     <xsl:variable name="youtube">
         <xsl:choose>
@@ -6241,6 +6254,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>&amp;autoplay=1</xsl:text>
     </xsl:if>
 </xsl:template>
+
+<!-- For a YouTube video, no YT-specific options come in the attributes -->
+<xsl:template match="video[@youtube|@youtubeplaylist]" mode="video-iframe-attributes"/>
 
 <!-- ############ -->
 <!-- Music Scores -->
