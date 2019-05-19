@@ -6124,7 +6124,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Templates, on a per-service basis, supply a URL, -->
 <!-- and any attributes on the "iframe" element which -->
 <!-- are not shared                                   -->
-<xsl:template match="video[@youtube|@youtubeplaylist]" mode="video-embed">
+<xsl:template match="video[@youtube|@youtubeplaylist|@vimeo]" mode="video-embed">
     <xsl:param name="width" select="''" />
     <xsl:param name="height" select="''" />
     <xsl:param name="preview" select="'true'" />
@@ -6257,6 +6257,35 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- For a YouTube video, no YT-specific options come in the attributes -->
 <xsl:template match="video[@youtube|@youtubeplaylist]" mode="video-iframe-attributes"/>
+
+<!-- Creates a Vimeo URL for embedding, typically in an iframe  -->
+<xsl:template match="video[@vimeo]" mode="video-embed-url">
+    <xsl:param name="autoplay" select="'false'" />
+    <xsl:text>https://player.vimeo.com/video/</xsl:text>
+    <xsl:value-of select="@vimeo"/>
+    <xsl:text>?color=ffffff</xsl:text>
+    <!-- use &amp; separator for remaining options -->
+    <!-- default autoplay is 0, don't -->
+    <xsl:if test="$autoplay = 'true'">
+        <xsl:text>&amp;autoplay=1</xsl:text>
+    </xsl:if>
+</xsl:template>
+
+<!-- These are additional attributes on the "iframe" which seem specific to Vimeo -->
+<!-- N.B. the autoplay seems ineffective                                          -->
+<xsl:template match="video[@vimeo]" mode="video-iframe-attributes">
+    <xsl:param name="autoplay" select="'false'" />
+
+    <xsl:attribute name="frameborder">
+        <xsl:text>0</xsl:text>
+    </xsl:attribute>
+    <xsl:attribute name="allow">
+        <xsl:if test="$autoplay = 'true'">
+            <xsl:text>autoplay; </xsl:text>
+        </xsl:if>
+        <xsl:text>fullscreen</xsl:text>
+    </xsl:attribute>
+</xsl:template>
 
 <!-- ############ -->
 <!-- Music Scores -->
