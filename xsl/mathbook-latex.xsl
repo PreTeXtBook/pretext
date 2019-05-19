@@ -6767,6 +6767,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<!-- Vimeo view URL -->
+<xsl:template match="video[@vimeo]" mode="static-url">
+    <xsl:text>https://vimeo.com/</xsl:text>
+    <xsl:value-of select="@vimeo"/>
+</xsl:template>
+
 <!-- Static Images -->
 <!-- (1) @preview given in source -->
 <!-- (2) scraped image, name via internal-id -->
@@ -6881,6 +6887,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="exsl:node-set($visual-url)/*" />
         </xsl:otherwise>
     </xsl:choose>
+</xsl:template>
+
+<xsl:template match="video[@vimeo]" mode="static-caption">
+    <xsl:variable name="visual-url">
+        <c>
+            <xsl:text>vimeo.com/</xsl:text>
+            <xsl:value-of select="@vimeo"/>
+        </c>
+    </xsl:variable>
+    <xsl:apply-templates select="exsl:node-set($visual-url)/*"/>
 </xsl:template>
 
 <xsl:template match="video[@youtube|@youtubeplaylist]" mode="youtube-view-url">
