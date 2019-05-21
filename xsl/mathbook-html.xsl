@@ -7768,9 +7768,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- output text, then wraps it for the Sage Cell Server -->
 <!-- TODO: consider showing output in green span (?),    -->
 <!-- presently output is dropped as computable           -->
-<xsl:template name="sage-active-markup">
+<xsl:template match="sage" mode="sage-active-markup">
     <xsl:param name="block-type"/>
-    <xsl:param name="internal-id" />
     <xsl:param name="language-attribute" />
     <xsl:param name="in" />
     <xsl:param name="out" />
@@ -7788,7 +7787,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$language-attribute" />
         </xsl:attribute>
         <xsl:attribute name="id">
-            <xsl:value-of select="$internal-id" />
+            <xsl:apply-templates select="." mode="html-id"/>
         </xsl:attribute>
         <xsl:element name="script">
             <xsl:attribute name="type">

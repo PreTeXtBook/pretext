@@ -7879,7 +7879,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- So conceivably, this template can do nothing (ie an empty cell) -->
 <!-- As a named template, the context is a calling sage element,     -->
 <!-- this could be reworked and many of the parameters inferred      -->
-<xsl:template name="sage-active-markup">
+<xsl:template match="sage" mode="sage-active-markup">
     <xsl:param name="in" />
     <xsl:param name="out" />
     <!-- Surrounding box gets clobbered if it is the first -->

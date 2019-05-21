@@ -81,7 +81,7 @@
 <!-- hence readable, but clued in that it was not the "real" blue output  -->
 <!-- Sage cell output goes in <script> element, xsltproc leaves "<" alone -->
 <!-- Here xsltproc tries to escape them, so we explicitly prevent that    -->
-<xsl:template name="sage-active-markup">
+<xsl:template match="sage" mode="sage-active-markup">
     <xsl:param name="in" />
     <xsl:param name="out" />
     <xsl:text>&#xa;{{{&#xa;</xsl:text>

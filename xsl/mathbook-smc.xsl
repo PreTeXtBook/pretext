@@ -191,7 +191,7 @@
 
 <!-- Most Sage options are implemented in  xsl/mathbook-common.xsl -->
 <!-- We just output the input code, with no XHTML protections      -->
-<xsl:template name="sage-active-markup">
+<xsl:template match="sage" mode="sage-active-markup">
     <xsl:param name="in" />
     <xsl:value-of select="$in" disable-output-escaping="yes" />
 </xsl:template>

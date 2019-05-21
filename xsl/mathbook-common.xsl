@@ -2194,18 +2194,15 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 <xsl:template match="sage[not(input) and not(output) and not(@type) and not(@copy)]">
     <xsl:param name="block-type"/>
 
-    <xsl:call-template name="sage-active-markup">
+    <xsl:apply-templates select="." mode="sage-active-markup">
         <xsl:with-param name="block-type" select="$block-type"/>
-        <xsl:with-param name="internal-id">
-            <xsl:apply-templates select="." mode="internal-id" />
-        </xsl:with-param>
         <!-- OK to send empty string, implementation reacts -->
         <xsl:with-param name="language-attribute">
             <xsl:value-of select="@language" />
         </xsl:with-param>
         <xsl:with-param name="in" select="''"/>
         <xsl:with-param name="out" select="''" />
-    </xsl:call-template>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Type: "invisible"; to doctest, but never show to a reader -->
@@ -2217,17 +2214,14 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 <xsl:template match="sage[@type='practice']">
     <xsl:param name="block-type"/>
 
-    <xsl:call-template name="sage-active-markup">
+    <xsl:apply-templates select="." mode="sage-active-markup">
         <xsl:with-param name="block-type" select="$block-type"/>
-        <xsl:with-param name="internal-id">
-            <xsl:apply-templates select="." mode="internal-id" />
-        </xsl:with-param>
         <xsl:with-param name="language-attribute">
             <xsl:value-of select="'practice'" />
         </xsl:with-param>
         <xsl:with-param name="in" select="'# Practice area (not linked for Sage Cell use)&#xa;'"/>
         <xsl:with-param name="out" select="''" />
-    </xsl:call-template>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- @copy deprecated  2017-12-21 -->
@@ -2247,9 +2241,6 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
     <xsl:param name="block-type"/>
 
     <xsl:call-template name="sage-display-markup">
-        <xsl:with-param name="internal-id">
-            <xsl:apply-templates select="." mode="internal-id" />
-        </xsl:with-param>
         <xsl:with-param name="language-attribute">
             <xsl:value-of select="'display'" />
         </xsl:with-param>
@@ -2266,11 +2257,8 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 <xsl:template match="sage|sage[@type='full']">
     <xsl:param name="block-type"/>
 
-    <xsl:call-template name="sage-active-markup">
+    <xsl:apply-templates select="." mode="sage-active-markup">
         <xsl:with-param name="block-type" select="$block-type"/>
-        <xsl:with-param name="internal-id">
-            <xsl:apply-templates select="." mode="internal-id" />
-        </xsl:with-param>
         <!-- OK to send empty string, implementation reacts -->
         <xsl:with-param name="language-attribute">
             <xsl:value-of select="@language" />
@@ -2287,7 +2275,7 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
                 </xsl:call-template>
             </xsl:if>
         </xsl:with-param>
-    </xsl:call-template>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Console Session -->

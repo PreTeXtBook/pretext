@@ -462,7 +462,7 @@
 
 <!-- An abstract named template accepts input text and   -->
 <!-- output text, then wraps it for the Sage Cell Server -->
-<xsl:template name="sage-active-markup">
+<xsl:template match="sage" mode="sage-active-markup">
     <xsl:param name="in" />
     <xsl:param name="out" />
     <xsl:if test="$in!=''">
