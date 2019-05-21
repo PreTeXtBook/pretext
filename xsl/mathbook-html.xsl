@@ -495,10 +495,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- location info for debugging efforts -->
     <xsl:apply-templates select="." mode="debug-location" />
     <!-- Heading, div for this structural subdivision -->
-    <xsl:variable name="pid">
-        <xsl:apply-templates select="." mode="perm-id" />
+    <xsl:variable name="hid">
+        <xsl:apply-templates select="." mode="html-id" />
     </xsl:variable>
-    <section class="{local-name(.)}" id="{$pid}">
+    <section class="{local-name(.)}" id="{$hid}">
         <xsl:apply-templates select="." mode="section-header">
             <xsl:with-param name="heading-level" select="$heading-level"/>
         </xsl:apply-templates>
@@ -561,10 +561,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- location info for debugging efforts -->
     <xsl:apply-templates select="." mode="debug-location" />
     <!-- Heading, div for this structural subdivision -->
-    <xsl:variable name="pid">
-        <xsl:apply-templates select="." mode="perm-id" />
+    <xsl:variable name="hid">
+        <xsl:apply-templates select="." mode="html-id" />
     </xsl:variable>
-    <section class="{local-name(.)}" id="{$pid}">
+    <section class="{local-name(.)}" id="{$hid}">
         <xsl:apply-templates select="." mode="section-header">
             <xsl:with-param name="heading-level" select="$heading-level"/>
         </xsl:apply-templates>
@@ -949,7 +949,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:attribute>
         <xsl:if test="$b-original">
             <xsl:attribute name="id">
-                <xsl:apply-templates select="." mode="perm-id" />
+                <xsl:apply-templates select="." mode="html-id" />
             </xsl:attribute>
         </xsl:if>
         <xsl:if test="title">
@@ -2300,7 +2300,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:attribute>
                 <!-- HTML id is best on element surrounding born-hidden knowl anchor -->
                 <xsl:attribute name="id">
-                    <xsl:apply-templates select="." mode="perm-id" />
+                    <xsl:apply-templates select="." mode="html-id" />
                 </xsl:attribute>
                 <xsl:apply-templates select="." mode="hidden-knowl-link">
                     <xsl:with-param name="placement" select="$placement"/>
@@ -2353,7 +2353,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ensures consistency of the common, linking id.  -->
 <xsl:template match="*" mode="hidden-knowl-id">
     <xsl:text>hk-</xsl:text>  <!-- "hidden-knowl" -->
-    <xsl:apply-templates select="." mode="perm-id" />
+    <xsl:apply-templates select="." mode="html-id" />
 </xsl:template>
 
 <!-- The link portion of a hidden-knowl -->
@@ -2376,7 +2376,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- in the 'block' case, it is on the surrounding element         -->
         <xsl:if test="$placement = 'inline'">
             <xsl:attribute name="id">
-                <xsl:apply-templates select="." mode="perm-id" />
+                <xsl:apply-templates select="." mode="html-id" />
             </xsl:attribute>
         </xsl:if>
         <!-- marked-up knowl text link *inside* of knowl anchor to be effective -->
@@ -4104,7 +4104,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- label original -->
                 <xsl:if test="$b-original">
                     <xsl:attribute name="id">
-                        <xsl:apply-templates select="." mode="perm-id" />
+                        <xsl:apply-templates select="." mode="html-id" />
                     </xsl:attribute>
                 </xsl:if>
                 <xsl:apply-templates select="." mode="title-full" />
@@ -4256,7 +4256,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- Then id goes onto the knowl text, so locatable -->
             <xsl:if test="$b-original and not($block-type = 'embed')">
                 <xsl:attribute name="id">
-                    <xsl:apply-templates select="." mode="perm-id" />
+                    <xsl:apply-templates select="." mode="html-id" />
                 </xsl:attribute>
             </xsl:if>
             <!-- If visible, heading interior to article -->
@@ -4337,7 +4337,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- label original -->
         <xsl:if test="$b-original">
             <xsl:attribute name="id">
-                <xsl:apply-templates select="." mode="perm-id" />
+                <xsl:apply-templates select="." mode="html-id" />
             </xsl:attribute>
         </xsl:if>
         <xsl:apply-templates>
@@ -4379,7 +4379,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <p>
             <xsl:if test="$b-original">
                 <xsl:attribute name="id">
-                    <xsl:apply-templates select="." mode="perm-id" />
+                    <xsl:apply-templates select="." mode="html-id" />
                 </xsl:attribute>
             </xsl:if>
             <xsl:copy-of select="$initial-content" />
@@ -4455,7 +4455,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:variable>
         <xsl:if test="$leading-content = ''">
             <xsl:attribute name="id">
-                <xsl:apply-templates select="parent::p" mode="perm-id" />
+                <xsl:apply-templates select="parent::p" mode="html-id" />
             </xsl:attribute>
         </xsl:if>
     </xsl:if>
@@ -4522,7 +4522,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- label original -->
                 <xsl:if test="$b-original">
                     <xsl:attribute name="id">
-                        <xsl:apply-templates select="." mode="perm-id" />
+                        <xsl:apply-templates select="." mode="html-id" />
                     </xsl:attribute>
                 </xsl:if>
                 <xsl:apply-templates>
@@ -4554,7 +4554,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- label original -->
                 <xsl:if test="$b-original">
                     <xsl:attribute name="id">
-                        <xsl:apply-templates select="." mode="perm-id" />
+                        <xsl:apply-templates select="." mode="html-id" />
                     </xsl:attribute>
                 </xsl:if>
                 <xsl:apply-templates select="." mode="title-full" />
@@ -4667,7 +4667,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-original" />
     <xsl:if test="$b-original and @xml:id">
         <xsl:text>\label{</xsl:text>
-        <xsl:apply-templates select="." mode="internal-id" />
+        <xsl:apply-templates select="." mode="html-id" />
         <xsl:text>}</xsl:text>
     </xsl:if>
     <xsl:text>\tag{</xsl:text>
@@ -4679,7 +4679,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-original" />
     <xsl:if test="$b-original and @xml:id">
         <xsl:text>\label{</xsl:text>
-        <xsl:apply-templates select="." mode="internal-id" />
+        <xsl:apply-templates select="." mode="html-id" />
         <xsl:text>}</xsl:text>
     </xsl:if>
     <xsl:text>\tag{</xsl:text>
@@ -4803,7 +4803,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:attribute>
         <xsl:if test="$b-original">
             <xsl:attribute name="id">
-                <xsl:apply-templates select="." mode="perm-id" />
+                <xsl:apply-templates select="." mode="html-id" />
             </xsl:attribute>
         </xsl:if>
         <xsl:if test="title">
@@ -5270,7 +5270,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- TODO: investigate necessity of id incorporation here? -->
         <xsl:if test="self::list and $b-original">
             <xsl:attribute name="id">
-                <xsl:apply-templates select="." mode="perm-id" />
+                <xsl:apply-templates select="." mode="html-id" />
             </xsl:attribute>
         </xsl:if>
         <xsl:attribute name="style">
@@ -6012,7 +6012,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- we need to build the element, since @autoplay is optional -->
     <xsl:element name="video">
         <xsl:attribute name="id">
-            <xsl:apply-templates select="." mode="perm-id"/>
+            <xsl:apply-templates select="." mode="html-id"/>
         </xsl:attribute>
         <xsl:attribute name="width">
             <xsl:value-of select="$width" />
@@ -6130,8 +6130,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="preview" select="'true'" />
     <xsl:param name="autoplay" select="'false'" />
 
-    <xsl:variable name="pid">
-        <xsl:apply-templates select="." mode="perm-id" />
+    <xsl:variable name="hid">
+        <xsl:apply-templates select="." mode="html-id" />
     </xsl:variable>
     <xsl:variable name="source-url">
         <xsl:apply-templates select="." mode="video-embed-url">
@@ -6179,7 +6179,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <div class="hidden-content">
                 <!-- Hidden content in here                   -->
                 <!-- Turn autoplay on, else two clicks needed -->
-                <iframe id="{$pid}" width="{$width}" height="{$height}" allowfullscreen=""
+                <iframe id="{$hid}" width="{$width}" height="{$height}" allowfullscreen=""
                         src="{$source-url-autoplay-on}">
                     <xsl:apply-templates select="." mode="video-iframe-attributes">
                         <xsl:with-param name="autoplay" select="'true'"/>
@@ -6188,7 +6188,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </div>
         </xsl:when>
         <xsl:otherwise>
-            <iframe id="{$pid}" width="{$width}" height="{$height}" allowfullscreen=""
+            <iframe id="{$hid}" width="{$width}" height="{$height}" allowfullscreen=""
                     src="{$source-url}">
                 <xsl:apply-templates select="." mode="video-iframe-attributes">
                     <xsl:with-param name="autoplay" select="$autoplay"/>
@@ -6829,10 +6829,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- A URL is needed various places, but perhaps a cross-reference -->
-<!-- to material larger than a knowl is the most typical use.      -->
-<!-- This is strictly an HTML item.                                -->
-<!-- A containing filename, plus an optional fragment identifier.  -->
+<!-- A URL is needed various places, such as                     -->
+<!--   1. xref to material larger than a knowl, e.g. a "chapter" -->
+<!--   2. "in-context" link in xref-knowls                       -->
+<!--   3. summary-page links                                     -->
+<!--   4. many navigation devices, e.g. ToC, prev/next buttons   -->
+<!-- This is strictly an HTML construction.                      -->
+<!-- A containing filename, plus possibly a fragment identifier. -->
 <xsl:template match="*" mode="url">
     <xsl:variable name="intermediate">
         <xsl:apply-templates select="." mode="is-intermediate" />
@@ -6848,9 +6851,48 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="self::men|self::mrow">
             <xsl:text>mjx-eqn-</xsl:text>
         </xsl:if>
-        <xsl:apply-templates select="." mode="perm-id" />
+        <xsl:apply-templates select="." mode="html-id" />
     </xsl:if>
 </xsl:template>
+
+<!-- The @id attribute of an HTML element is critical.      -->
+<!--                                                        -->
+<!--   1.  Use the assigned/managed @permid so that changes -->
+<!--       between editions can be shown in HTML versions   -->
+<!--   2.  Author-provided @xml:id is reasonably stable     -->
+<!--   3.  We manufacture a guaranteed-unique string        -->
+<!--                                                        -->
+<!-- Every HTML @id produced should use this template, so   -->
+<!--                                                        -->
+<!--   A.  URL template above has correct fragments         -->
+<!--   B.  The permid-edition scheme is effective           -->
+<xsl:template match="*" mode="html-id">
+    <xsl:choose>
+        <xsl:when test="@permid">
+            <xsl:value-of select="@permid"/>
+        </xsl:when>
+        <xsl:when test="@xml:id">
+            <xsl:value-of select="@xml:id"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="local-name(.)"/>
+            <xsl:text>-</xsl:text>
+            <!-- 2015-09: slow version matches previous "internal-id" -->
+            <!-- use for third (automatic) construction               -->
+            <xsl:choose>
+                <xsl:when test="$b-fast-ids">
+                    <!-- xsltproc produces non-numeric prefix "idm" -->
+                    <xsl:value-of select="substring(generate-id(.), 4)"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:number from="book|article|letter|memo" level="any"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+
 
 <!-- ######## -->
 <!-- SI Units -->
@@ -7814,19 +7856,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- where a reader can interactively step through the program -->
 <xsl:template match="program[@interactive='pythontutor']">
     <!-- check that the language is Python? -->
-    <xsl:variable name="pid">
-        <xsl:apply-templates select="." mode="perm-id" />
+    <xsl:variable name="hid">
+        <xsl:apply-templates select="." mode="html-id" />
     </xsl:variable>
     <xsl:element name="div">
         <xsl:attribute name="class">
             <xsl:text>pytutorVisualizer</xsl:text>
         </xsl:attribute>
         <xsl:attribute name="id">
-            <xsl:value-of select="$pid" />
+            <xsl:value-of select="$hid" />
         </xsl:attribute>
         <xsl:attribute name="data-tracefile">
             <xsl:text>pytutor/</xsl:text>
-            <xsl:value-of select="$pid" />
+            <xsl:value-of select="$hid" />
             <xsl:text>.json</xsl:text>
         </xsl:attribute>
         <xsl:attribute name="data-params">
@@ -9594,7 +9636,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </xsl:choose>
                 </xsl:variable>
                 <xsl:variable name="outer-pid">
-                    <xsl:apply-templates select="." mode="perm-id" />
+                    <xsl:apply-templates select="." mode="html-id" />
                 </xsl:variable>
                 <!-- The link itself -->
                 <li class="{$class}">
@@ -9636,7 +9678,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                     <xsl:apply-templates select="." mode="url" />
                                 </xsl:variable>
                                 <xsl:variable name="inner-pid">
-                                    <xsl:apply-templates select="." mode="perm-id" />
+                                    <xsl:apply-templates select="." mode="html-id" />
                                 </xsl:variable>
                                 <li>
                                     <xsl:element name="a">
