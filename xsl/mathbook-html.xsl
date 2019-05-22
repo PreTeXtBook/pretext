@@ -425,6 +425,35 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="b-google-universal" select="not($google-universal-tracking = '')" />
 <xsl:variable name="b-google-cse" select="not($google-search-cx = '')" />
 
+<!-- ############### -->
+<!-- Source Analysis -->
+<!-- ############### -->
+
+<!-- We check certain aspects of the source and record the results   -->
+<!-- in boolean ($b-has-*) variables or as particular nodes high up  -->
+<!-- in the structure ($document-root).  Scans here in -html should  -->
+<!-- help streamline the construction of the HTML page "head" by     -->
+<!-- computing properties that will be used in the "head" of every   -->
+<!-- page of every chunk. checked more than once. While technically  -->
+<!-- generally part of constructing the head, there is no real harm  -->
+<!-- in making these global variables.  Short, simple, and universal -->
+<!-- properties are determined in -common. These may duplicate       -->
+<!-- variables in disjoint conversions.                              -->
+
+<xsl:variable name="b-has-icon"         select="boolean($document-root//icon)"/>
+<xsl:variable name="b-has-webwork-reps" select="boolean($document-root//webwork-reps)"/>
+<xsl:variable name="b-has-program"      select="boolean($document-root//program)"/>
+<xsl:variable name="b-has-sage"         select="boolean($document-root//sage)"/>
+<xsl:variable name="b-has-sfrac"        select="boolean($document-root//m[contains(text(),'sfrac')] or $document-root//md[contains(text(),'sfrac')] or $document-root//me[contains(text(),'sfrac')] or $document-root//mrow[contains(text(),'sfrac')])"/>
+<xsl:variable name="b-has-geogebra"     select="boolean($document-root//interactive[@platform='geogebra'])"/>
+<!-- 2018-04-06:  jsxgraph deprecated -->
+<xsl:variable name="b-has-jsxgraph"     select="boolean($document-root//jsxgraph)"/>
+<xsl:variable name="b-has-pytutor"      select="boolean($document-root//program[@interactive='pythontutor'])"/>
+<!-- Every page has an index button, with a link to the index -->
+<!-- Here we assume there is at most one                      -->
+<!-- (The old style of specifying an index is deprecated)     -->
+<xsl:variable name="the-index"          select="($document-root//index-part|$document-root//index[index-list])[1]"/>
+
 
 <!-- ############## -->
 <!-- Entry Template -->
@@ -5840,8 +5869,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <head>
                 <title>
                     <!-- Leading with initials is useful for small tabs -->
-                    <xsl:if test="//docinfo/initialism">
-                        <xsl:apply-templates select="//docinfo/initialism" />
+                    <xsl:if test="$docinfo/initialism">
+                        <xsl:apply-templates select="$docinfo/initialism" />
                         <xsl:text> </xsl:text>
                     </xsl:if>
                 <xsl:apply-templates select="." mode="title-short" />
@@ -7897,13 +7926,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Bits of Javascript for the top and bottom of the web page -->
 <xsl:template name="pytutor-header">
-    <xsl:if test="$document-root//program[@interactive='pythontutor']">
+    <xsl:if test="$b-has-pytutor">
         <script src="http://pythontutor.com/build/pytutor-embed.bundle.js?cc25af72af"></script>
     </xsl:if>
 </xsl:template>
 
 <xsl:template name="pytutor-footer">
-    <xsl:if test="$document-root//program[@interactive='pythontutor']">
+    <xsl:if test="$b-has-pytutor">
         <script>createAllVisualizersFromHtmlAttrs();</script>
     </xsl:if>
 </xsl:template>
@@ -8551,8 +8580,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "webwork-reps" element is present                            -->
 <!-- TODO: should also depend on whether all are presented as static -->
 <xsl:template name="webwork">
-    <link href="{$webwork-server}/webwork2_files/js/apps/MathView/mathview.css" rel="stylesheet" />
-    <script src="{$webwork-server}/webwork2_files/js/vendor/iframe-resizer/js/iframeResizer.min.js"></script>
+    <xsl:if test="$b-has-webwork-reps">
+        <link href="{$webwork-server}/webwork2_files/js/apps/MathView/mathview.css" rel="stylesheet" />
+        <script src="{$webwork-server}/webwork2_files/js/vendor/iframe-resizer/js/iframeResizer.min.js"></script>
+    </xsl:if>
 </xsl:template>
 
 <!-- Fail if WeBWorK extraction and merging has not been done -->
@@ -8744,8 +8775,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <head>
             <title>
                 <!-- Leading with initials is useful for small tabs -->
-                <xsl:if test="//docinfo/initialism">
-                    <xsl:apply-templates select="//docinfo/initialism" />
+                <xsl:if test="$docinfo/initialism">
+                    <xsl:apply-templates select="$docinfo/initialism" />
                     <xsl:text> </xsl:text>
                 </xsl:if>
             <xsl:apply-templates select="." mode="title-short" />
@@ -8759,13 +8790,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="sagecell-code" />
             <xsl:call-template name="mathjax" />
             <!-- webwork's iframeResizer needs to come before sage -->
-            <xsl:if test="$document-root//webwork-reps">
-                <xsl:call-template name="webwork" />
-            </xsl:if>
+            <xsl:call-template name="webwork" />
             <xsl:apply-templates select="." mode="sagecell" />
-            <xsl:if test="$document-root//program">
-                <xsl:call-template name="goggle-code-prettifier" />
-            </xsl:if>
+            <xsl:call-template name="goggle-code-prettifier" />
             <xsl:call-template name="google-search-box-js" />
             <xsl:call-template name="mathbook-js" />
             <xsl:call-template name="knowl" />
@@ -8883,9 +8910,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="sagecell-code" />
             <xsl:call-template name="mathjax" />
             <!-- webwork's iframeResizer needs to come before sage -->
-            <xsl:if test="$document-root//webwork-reps">
-                <xsl:call-template name="webwork" />
-            </xsl:if>
+            <xsl:call-template name="webwork" />
             <xsl:apply-templates select="." mode="sagecell" />
             <xsl:call-template name="knowl" />
             <xsl:call-template name="fonts" />
@@ -9180,12 +9205,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- We assume 0 or 1 "index-part" present -->
 <xsl:template match="*" mode="index-button">
-    <xsl:variable name="indices" select="$document-root//index-part | $document-root//index[index-list]" />
-    <xsl:if test="$indices">
+    <xsl:if test="$the-index">
         <xsl:variable name="url">
-            <xsl:apply-templates select="$indices[1]" mode="url" />
+            <xsl:apply-templates select="$the-index" mode="url" />
         </xsl:variable>
         <xsl:element name="a">
             <xsl:attribute name="class">
@@ -9839,7 +9862,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- close of MathJax.Hub.Config -->
         <xsl:text>});&#xa;</xsl:text>
         <!-- optional beveled fraction support -->
-        <xsl:if test="//m[contains(text(),'sfrac')] or //md[contains(text(),'sfrac')] or //me[contains(text(),'sfrac')] or //mrow[contains(text(),'sfrac')]">
+        <xsl:if test="$b-has-sfrac">
             <xsl:text>/* support for the sfrac command in MathJax (Beveled fraction) */&#xa;</xsl:text>
             <xsl:text>/* see: https://github.com/mathjax/MathJax-docs/wiki/Beveled-fraction-like-sfrac,-nicefrac-bfrac */&#xa;</xsl:text>
             <xsl:text>MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {&#xa;</xsl:text>
@@ -9871,7 +9894,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- so we load the relevant JavaScript onto every page if -->
 <!-- a cell occurs *anywhere* in the entire document       -->
 <xsl:template name="sagecell-code">
-    <xsl:if test="$document-root//sage">
+    <xsl:if test="$b-has-sage">
         <script src="https://sagecell.sagemath.org/embedded_sagecell.js"></script>
     </xsl:if>
 </xsl:template>
@@ -10043,7 +10066,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Program Listings from Google -->
 <!--   ?skin=sunburst  on end of src URL gives black terminal look -->
 <xsl:template name="goggle-code-prettifier">
-    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+    <xsl:if test="$b-has-program">
+        <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+    </xsl:if>
 </xsl:template>
 
 <!-- JS setup for a Google Custom Search Engine box -->
@@ -10169,7 +10194,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Treated as characters, these could show up often, -->
 <!-- so load into every possible HTML page instance    -->
 <xsl:template name="font-awesome">
-    <xsl:if test="$document-root//icon">
+    <xsl:if test="$b-has-icon">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"/>
     </xsl:if>
 </xsl:template>

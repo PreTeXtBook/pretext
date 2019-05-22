@@ -120,6 +120,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="latex.console.begin-char" select="''" />
 <xsl:param name="latex.console.end-char" select="''" />
 
+
+<!-- ############### -->
+<!-- Source Analysis -->
+<!-- ############### -->
+
+<!-- We check certain aspects of the source and record the results   -->
+<!-- in boolean ($b-has-*) variables or as particular nodes high     -->
+<!-- up in the structure ($document-root).  Scans here in -latex     -->
+<!-- should help streamline the construction of the preamble by      -->
+<!-- computing properties that will be checked more than once.       -->
+<!-- While technically generally part of constructing the preamble,  -->
+<!-- there is no real harm in making these global variables.  Short, -->
+<!-- simple, and universal properties are determined in -common.     -->
+<!-- These may duplicate variables in disjoint conversions.          -->
+
+<xsl:variable name="b-has-icon"         select="boolean($document-root//icon)" />
+<xsl:variable name="b-has-webwork-reps" select="boolean($document-root//webwork-reps)" />
+<xsl:variable name="b-has-program"      select="boolean($document-root//program)" />
+<xsl:variable name="b-has-sage"         select="boolean($document-root//sage)" />
+<xsl:variable name="b-has-sfrac"        select="boolean($document-root//m[contains(text(),'sfrac')] or $document-root//md[contains(text(),'sfrac')] or $document-root//me[contains(text(),'sfrac')] or $document-root//mrow[contains(text(),'sfrac')])" />
+
+
 <!-- ######### -->
 <!-- Variables -->
 <!-- ######### -->
@@ -532,7 +554,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% fontspec will make Latin Modern (lmodern) the default font&#xa;</xsl:text>
     <!-- http://tex.stackexchange.com/questions/115321/how-to-optimize-latin-modern-font-with-xelatex -->
     <xsl:text>\usepackage{fontspec}&#xa;</xsl:text>
-    <xsl:if test="$document-root//icon">
+    <xsl:if test="$b-has-icon">
         <xsl:text>%% Icons being used, so xelatex needs a system font&#xa;</xsl:text>
         <xsl:text>%% This can only be determined at compile-time&#xa;</xsl:text>
         <xsl:text>\IfFontExistsTF{FontAwesome}{}{\GenericError{}{"FontAwesome" font is not installed as a system font}{Consult the PreTeXt Author's Guide (or sample article) for help with the icon fonts.}{}}&#xa;</xsl:text>
@@ -634,7 +656,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% end: font setup and configuration for use with pdflatex&#xa;</xsl:text>
     <xsl:text>%% end: pdflatex-specific configuration&#xa;</xsl:text>
     <xsl:text>}&#xa;</xsl:text>
-    <xsl:if test="$document-root//c or $document-root//cd or $document-root//pre or $document-root//program or $document-root//console or $document-root//sage or $document-root//tag or $document-root//tage or $document-root//attr">
+    <xsl:if test="$b-has-program or $b-has-sage or $document-root//c or $document-root//cd or $document-root//pre or $document-root//console or $document-root//tag or $document-root//tage or $document-root//attr">
         <xsl:text>%% Monospace font: Inconsolata (zi4)&#xa;</xsl:text>
         <xsl:text>%% Sponsored by TUG: http://levien.com/type/myfonts/inconsolata.html&#xa;</xsl:text>
         <xsl:text>%% See package documentation for excellent instructions&#xa;</xsl:text>
@@ -685,7 +707,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% allow more columns to a matrix&#xa;</xsl:text>
     <xsl:text>%% can make this even bigger by overriding with  latex.preamble.late  processing option&#xa;</xsl:text>
     <xsl:text>\setcounter{MaxMatrixCols}{30}&#xa;</xsl:text>
-    <xsl:if test="//m[contains(text(),'sfrac')] or //md[contains(text(),'sfrac')] or //me[contains(text(),'sfrac')] or //mrow[contains(text(),'sfrac')]">
+    <xsl:if test="$b-has-sfrac">
         <xsl:text>%% xfrac package for 'beveled fractions': http://tex.stackexchange.com/questions/3372/how-do-i-typeset-arbitrary-fractions-like-the-standard-symbol-for-5-%C2%BD&#xa;</xsl:text>
         <xsl:text>\usepackage{xfrac}&#xa;</xsl:text>
     </xsl:if>
@@ -1671,7 +1693,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         \end{tikzpicture}
         }&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="$document-root//icon">
+    <xsl:if test="$b-has-icon">
         <xsl:text>%% Font Awesome icons in a LaTeX package&#xa;</xsl:text>
         <xsl:text>\usepackage{fontawesome}&#xa;</xsl:text>
     </xsl:if>
@@ -1731,7 +1753,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Bitstream Vera Font names within: https://github.com/timfel/texmf/blob/master/fonts/map/vtex/bera.ali -->
     <!-- Coloring listings: http://tex.stackexchange.com/questions/18376/beautiful-listing-for-csharp -->
     <!-- Song and Dance for font changes: http://jevopi.blogspot.com/2010/03/nicely-formatted-listings-in-latex-with.html -->
-     <xsl:if test="$document-root//sage or $document-root//program">
+     <xsl:if test="$b-has-program or $b-has-sage">
         <xsl:text>%% Program listing support: for listings, programs, and Sage code&#xa;</xsl:text>
         <xsl:text>\usepackage{listings}&#xa;</xsl:text>
         <xsl:text>%% We define the listings font style to be the default "ttfamily"&#xa;</xsl:text>
@@ -1850,7 +1872,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% end: pdflatex-specific listings configuration&#xa;</xsl:text>
         <xsl:text>}&#xa;</xsl:text>
         <xsl:text>%% End of generic listing adjustments&#xa;</xsl:text>
-        <xsl:if test="$document-root//program">
+        <xsl:if test="$b-has-program">
             <xsl:text>%% Program listings via the listings package&#xa;</xsl:text>
             <xsl:text>%% Line breaking, language per instance, frames, boxes&#xa;</xsl:text>
             <xsl:text>%% First a universal color scheme for parts of any language&#xa;</xsl:text>
@@ -1888,7 +1910,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>  {\lstset{style=programstyle,#1}}&#xa;</xsl:text>
             <xsl:text>  {}&#xa;</xsl:text>
         </xsl:if>
-        <xsl:if test="$document-root//sage">
+        <xsl:if test="$b-has-sage">
             <xsl:text>%% Sage's blue is 50%, we go way lighter (blue!05 would work)&#xa;</xsl:text>
             <xsl:text>\definecolor{sageblue}{rgb}{0.95,0.95,1}&#xa;</xsl:text>
             <xsl:text>%% Sage input, listings package: Python syntax, boxed, colored, line breaking&#xa;</xsl:text>
@@ -1957,12 +1979,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Multiple column, column-major lists&#xa;</xsl:text>
         <xsl:text>\usepackage{multicol}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="$document-root//ol or $document-root//ul or $document-root//dl or $document-root//task or $document-root//references or $document-root//webwork-reps">
+    <xsl:if test="$document-root//ol or $document-root//ul or $document-root//dl or $document-root//task or $document-root//references or $b-has-webwork-reps">
         <xsl:text>%% More flexible list management, esp. for references&#xa;</xsl:text>
         <xsl:text>%% But also for specifying labels (i.e. custom order) on nested lists&#xa;</xsl:text>
         <xsl:text>\usepackage</xsl:text>
-        <xsl:if test="//webwork-reps/static//statement//var[@form='checkboxes' or @form='popup']">
-            <xsl:text>[inline]</xsl:text>
+        <xsl:if test="$b-has-webwork-reps">
+            <xsl:if test="//webwork-reps/static//statement//var[@form='checkboxes' or @form='popup']">
+                <xsl:text>[inline]</xsl:text>
+            </xsl:if>
         </xsl:if>
         <xsl:text>{enumitem}&#xa;</xsl:text>
         <xsl:if test="$document-root//references">
@@ -5674,6 +5698,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!--     \ocircle (wasysym), \circledcirc (amssymb),           -->
         <!--     \textopenbullet, \textbigcircle (textcomp)            -->
         <!-- To adjust in preamble, test on:                           -->
+        <!-- $b-has-webwork-reps, then on                              -->
         <!-- $document-root//webwork-reps/static//var[@form='buttons'] -->
         <xsl:when test="@form='buttons'" >
             <xsl:text>\par&#xa;</xsl:text>

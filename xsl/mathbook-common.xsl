@@ -979,6 +979,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
               select="($entered-project-solution = 'yes') or ($entered-project-solution = '')" />
 
 
+<!-- ############### -->
+<!-- Source Analysis -->
+<!-- ############### -->
+
+<!-- We check certain aspects of the source and record the results  -->
+<!-- in boolean ($b-has-*) variables or as particular nodes high    -->
+<!-- up in the structure ($document-root).  Scans here in -common   -->
+<!-- should be short and definite (no searching paths with "//"!),  -->
+<!-- and universally useful, largely conveniences for consistency.  -->
+<!-- Remember that many basic templates are shared out of this      -->
+<!-- file for often very simple conversions (e.g. extractions)      -->
+<!-- so excessive setup is an unnecessary drain on processing time. -->
+
 <!-- The main "mathbook" element only has two possible children     -->
 <!-- Or the main element could be "pretext" after name change       -->
 <!-- One is "docinfo", the other is "book", "article", etc.         -->
@@ -992,14 +1005,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="docinfo" select="$root/docinfo" />
 <xsl:variable name="document-root" select="$root/*[not(self::docinfo)]" />
 
-<!-- Source Analysis -->
-<!-- Some boolean variables ("b-*") for -->
-<!-- the presence of certain elements -->
-<xsl:variable name="b-has-geogebra" select="boolean($document-root//interactive[@platform='geogebra'])" />
-<xsl:variable name="b-has-jsxgraph" select="boolean($document-root//jsxgraph)" />
 <!-- "book" and "article" are sometimes different, esp. for LaTeX -->
 <xsl:variable name="b-is-book"    select="$document-root/self::book" />
 <xsl:variable name="b-is-article" select="$document-root/self::article" />
+
 
 <!-- Some groups of elements are counted distinct -->
 <!-- from other blocks.  A configuration element  -->
@@ -4320,6 +4329,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 
 <!-- Check once if "index" is available -->
 <!-- for use on the root element        -->
+<!-- This scan may go away with a new approach to an "index.html" file -->
 <xsl:variable name="b-index-is-available" select="not(//@xml:id[.='index'])" />
 
 <!-- These strings are used for items an author must manage              -->
@@ -9636,7 +9646,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- Unique UI id's added 2017-09-25 as fatal error -->
 <xsl:template match="mathbook|pretext" mode="xmlid-warning">
     <xsl:variable name="xmlid-characters" select="concat('-_', &SIMPLECHAR;)" />
-    <xsl:for-each select="//@xml:id">
+    <xsl:for-each select="$document-root//@xml:id">
         <xsl:if test="not(translate(., $xmlid-characters, '') = '')">
             <xsl:message>
                 <xsl:text>MBX:WARNING:    </xsl:text>
@@ -9699,7 +9709,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- material belongs in an introduction (or is for a conclusion). -->
 <!-- This test is not exhaustive, but will catch most cases.       -->
 <xsl:template match="mathbook|pretext" mode="subdivision-structure-warning">
-    <xsl:for-each select=".//chapter">
+    <xsl:for-each select="./book/chapter">
         <xsl:if test="p and section">
             <xsl:message>
                 <xsl:text>MBX:WARNING: </xsl:text>
@@ -9708,7 +9718,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
             <xsl:apply-templates select="." mode="location-report" />
         </xsl:if>
     </xsl:for-each>
-    <xsl:for-each select=".//section">
+    <xsl:for-each select="./article/section|./book/chapter/section">
         <xsl:if test="p and subsection">
             <xsl:message>
                 <xsl:text>MBX:WARNING: </xsl:text>
@@ -9717,7 +9727,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
             <xsl:apply-templates select="." mode="location-report" />
         </xsl:if>
     </xsl:for-each>
-    <xsl:for-each select=".//subsection">
+    <xsl:for-each select="./article/section/subsection|./book/chapter/section/subsection">
         <xsl:if test="p and subsubsection">
             <xsl:message>
                 <xsl:text>MBX:WARNING: </xsl:text>
