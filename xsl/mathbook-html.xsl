@@ -1879,13 +1879,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The file extension is *.html so recognized as OK by Moodle, etc -->
 <xsl:template match="*" mode="xref-knowl-filename">
     <xsl:text>./knowl/</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="visible-id" />
     <xsl:text>.html</xsl:text>
 </xsl:template>
 
 <xsl:template match="*" mode="hidden-knowl-filename">
     <xsl:text>./knowl/</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="visible-id" />
     <xsl:text>-hidden.html</xsl:text>
 </xsl:template>
 
@@ -5023,7 +5023,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="base-pathname">
         <xsl:value-of select="$directory.images" />
         <xsl:text>/</xsl:text>
-        <xsl:apply-templates select="." mode="internal-id" />
+        <xsl:apply-templates select="." mode="visible-id" />
     </xsl:variable>
     <xsl:call-template name="svg-wrapper">
         <xsl:with-param name="svg-filename" select="concat($base-pathname, '.svg')" />
@@ -5651,7 +5651,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="data">
             <xsl:value-of select="$directory.images" />
             <xsl:text>/</xsl:text>
-            <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:apply-templates select="." mode="visible-id" />
             <xsl:text>.svg</xsl:text>
         </xsl:attribute>
         <p style="margin:auto">&lt;&lt;Your browser is unable to render this SVG image&gt;&gt;</p>
@@ -5667,7 +5667,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="data">
             <xsl:value-of select="$directory.images" />
             <xsl:text>/</xsl:text>
-            <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:apply-templates select="." mode="visible-id" />
             <xsl:text>.svg</xsl:text>
         </xsl:attribute>
         <p style="margin:auto">&lt;&lt;Your browser is unable to render this SVG image&gt;&gt;</p>
@@ -5683,14 +5683,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="data">
             <xsl:value-of select="$directory.images" />
             <xsl:text>/</xsl:text>
-            <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:apply-templates select="." mode="visible-id" />
             <xsl:text>.svg</xsl:text>
         </xsl:attribute>
         <xsl:element name="img">
             <xsl:attribute name="src">
                 <xsl:value-of select="$directory.images" />
                 <xsl:text>/</xsl:text>
-                <xsl:apply-templates select="." mode="internal-id" />
+                <xsl:apply-templates select="." mode="visible-id" />
                 <xsl:text>.png</xsl:text>
             </xsl:attribute>
         </xsl:element>
@@ -5730,9 +5730,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Always build a standalone page, PDF links to these -->
     <xsl:apply-templates select="." mode="video-standalone-page" />
 
-    <!-- standalone page name uses internal-id of the video -->
+    <!-- standalone page name uses visible-id of the video -->
     <xsl:variable name="int-id">
-        <xsl:apply-templates select="." mode="internal-id" />
+        <xsl:apply-templates select="." mode="visible-id" />
     </xsl:variable>
     <xsl:choose>
         <xsl:when test="@play-at = 'popout'">
@@ -5816,7 +5816,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Use this to ensure consistency -->
 <xsl:template match="*" mode="iframe-filename">
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="visible-id" />
     <xsl:text>-if.html</xsl:text>
 </xsl:template>
 
@@ -6892,6 +6892,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
+<!-- We manufacture Javascript variables sometimes using            -->
+<!-- this id to keep them unique, but a dash (encouraged in PTX)    -->
+<!-- is banned in Javascript, so we make a "no-dash" version,       -->
+<!-- by replacing a hyphen by a double-underscore.                  -->
+<!-- NB: This runs some non-zero probability of breaking uniqueness -->
+<xsl:template match="*" mode="visible-id-no-dash">
+    <xsl:variable name="the-id">
+        <xsl:apply-templates select="." mode="visible-id" />
+    </xsl:variable>
+    <xsl:value-of select="str:replace($the-id, '-', '__')" />
+</xsl:template>
+
 
 
 <!-- ######## -->
@@ -7740,7 +7752,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Demonstrations -->
 <!-- A simple page with no constraints -->
 <xsl:template match="demonstration">
-    <xsl:variable name="url"><xsl:apply-templates select="." mode="internal-id" />.html</xsl:variable>
+    <xsl:variable name="url"><xsl:apply-templates select="." mode="visible-id" />.html</xsl:variable>
     <a href="{$url}" target="_blank" class="link">
         <xsl:apply-templates select="." mode="title-full" />
     </a>
@@ -8012,13 +8024,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- An iframe has @width, @height attributes,  -->
 <!-- specified in pixels                        -->
 
+<!-- Every "interactive" is realized as an -->
+<!-- "iframe", so the HTML iframe/@id is   -->
+<!-- derived from the "interactive"        -->
+<xsl:template match="interactive" mode="iframe-id">
+    <xsl:attribute name="id">
+        <xsl:apply-templates select="." mode="visible-id"/>
+    </xsl:attribute>
+</xsl:template>
+
 <!-- Desmos -->
 <!-- The simplest possible example of this type -->
 <xsl:template match="interactive[@desmos]" mode="iframe-interactive">
     <iframe src="https://www.desmos.com/calculator/{@desmos}">
-        <xsl:attribute name="id">
-            <xsl:apply-templates select="." mode="internal-id"/>
-        </xsl:attribute>
+        <xsl:apply-templates select="." mode="iframe-id"/>
         <xsl:apply-templates select="." mode="size-pixels-attributes" />
     </iframe>
 </xsl:template>
@@ -8032,9 +8051,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="interactive[@wolfram-cdf]" mode="iframe-interactive">
     <!-- Query string option: _embed=iframe will provide Wolfram footer -->
     <iframe src="https://www.wolframcloud.com/objects/{@wolfram-cdf}?_view=frameless">
-        <xsl:attribute name="id">
-            <xsl:apply-templates select="." mode="internal-id"/>
-        </xsl:attribute>
+        <xsl:apply-templates select="." mode="iframe-id"/>
         <xsl:apply-templates select="." mode="size-pixels-attributes" />
     </iframe>
 </xsl:template>
@@ -8043,9 +8060,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Similar again, but with options fixed -->
 <xsl:template match="interactive[@geogebra]" mode="iframe-interactive">
     <iframe src="https://www.geogebra.org/material/iframe/id/{@geogebra}/width/800/height/450/border/888888/smb/false/stb/false/stbh/false/ai/false/asb/false/sri/false/rc/false/ld/false/sdz/false/ctl/false">
-        <xsl:attribute name="id">
-            <xsl:apply-templates select="." mode="internal-id"/>
-        </xsl:attribute>
+        <xsl:apply-templates select="." mode="iframe-id"/>
         <xsl:apply-templates select="." mode="size-pixels-attributes" />
     </iframe>
 </xsl:template>
@@ -8079,9 +8094,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- TODO: box-sizing, etc does not seem to help with vertical scroll bars -->
     <xsl:variable name="full-url" select="concat($cp3d-endpoint, '/?', @calcplot3d)" />
     <iframe src="{$full-url}">
-        <xsl:attribute name="id">
-            <xsl:apply-templates select="." mode="internal-id"/>
-        </xsl:attribute>
+        <xsl:apply-templates select="." mode="iframe-id"/>
         <xsl:apply-templates select="." mode="size-pixels-attributes" />
     </iframe>
 </xsl:template>
@@ -8089,9 +8102,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- For more complicated interactives, we just point to the page we generate -->
 <xsl:template match="interactive[@platform]" mode="iframe-interactive">
     <iframe>
-        <xsl:attribute name="id">
-            <xsl:apply-templates select="." mode="internal-id"/>
-        </xsl:attribute>
+        <xsl:apply-templates select="." mode="iframe-id"/>
         <xsl:apply-templates select="." mode="size-pixels-attributes" />
         <xsl:attribute name="src">
             <xsl:apply-templates select="." mode="iframe-filename" />
@@ -8282,27 +8293,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <!-- We need a Javascript identifier to name the applet -->
     <xsl:variable name="applet-name">
-        <xsl:apply-templates select="." mode="internal-id-no-dash" />
+        <xsl:apply-templates select="." mode="visible-id-no-dash" />
     </xsl:variable>
     <!-- And a Javascript identifier for the parameters -->
     <xsl:variable name="applet-parameters">
-        <xsl:apply-templates select="." mode="internal-id-no-dash" />
+        <xsl:apply-templates select="." mode="visible-id-no-dash" />
         <xsl:text>_params</xsl:text>
     </xsl:variable>
     <!-- And a Javascript identifier for the onload function -->
     <xsl:variable name="applet-onload">
-        <xsl:apply-templates select="." mode="internal-id-no-dash" />
+        <xsl:apply-templates select="." mode="visible-id-no-dash" />
         <xsl:text>_onload</xsl:text>
     </xsl:variable>
     <!-- And a Javascript identifier for the onload function argument -->
     <!-- not strictly necessary, but clarifies HTML                   -->
     <xsl:variable name="applet-onload-argument">
-        <xsl:apply-templates select="." mode="internal-id-no-dash" />
+        <xsl:apply-templates select="." mode="visible-id-no-dash" />
         <xsl:text>_applet</xsl:text>
     </xsl:variable>
     <!-- And an HTML unique identifier -->
     <xsl:variable name="applet-container">
-        <xsl:apply-templates select="." mode="internal-id" />
+        <xsl:apply-templates select="." mode="visible-id" />
         <xsl:text>-container</xsl:text>
     </xsl:variable>
     <!-- Javascript API for loading GeoGebra                               -->
@@ -8506,7 +8517,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- the div to hold the JSX output -->
     <xsl:element name="div">
         <xsl:attribute name="id">
-            <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:apply-templates select="." mode="visible-id" />
         </xsl:attribute>
         <xsl:attribute name="class">
             <xsl:text>jxgbox</xsl:text>
@@ -8857,7 +8868,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="*" mode="simple-file-wrap">
     <xsl:param name="content" />
     <xsl:variable name="filename">
-        <xsl:apply-templates select="." mode="internal-id" />
+        <!-- do not use "containing-filename" may be different -->
+        <xsl:apply-templates select="." mode="visible-id" />
         <text>.html</text>
     </xsl:variable>
     <exsl:document href="{$filename}" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
@@ -10377,7 +10389,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="hint or answer or solution">
         <!-- Lead with the problem number and some space -->
         <xsl:variable name="xref">
-            <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:apply-templates select="." mode="visible-id" />
         </xsl:variable>
         <article class="exercise-like" id="{$xref}">
             <h6 class="heading hidden-type">

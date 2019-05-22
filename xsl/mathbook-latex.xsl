@@ -6775,7 +6775,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Static Images -->
 <!-- (1) @preview given in source -->
-<!-- (2) scraped image, name via internal-id -->
+<!-- (2) scraped image, name via visual-id -->
 <!-- https://tex.stackexchange.com/questions/47245/ -->
 <!-- set-a-maximum-width-and-height-for-an-image    -->
 <xsl:template match="video" mode="static-image">
@@ -6799,12 +6799,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="@youtubeplaylist">
             <xsl:text>\resizebox{!}{\qrsize}{\genericpreview}</xsl:text>
         </xsl:when>
-        <!-- nothing specified, look for scraped via internal-id -->
+        <!-- nothing specified, look for scraped via visual-id -->
         <xsl:otherwise>
             <xsl:text>\includegraphics[width=0.80\linewidth,height=\qrsize,keepaspectratio]{</xsl:text>
             <xsl:value-of select="$directory.images" />
             <xsl:text>/</xsl:text>
-            <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:apply-templates select="." mode="visible-id" />
             <xsl:text>.jpg</xsl:text>
             <xsl:text>}</xsl:text>
         </xsl:otherwise>
@@ -6819,13 +6819,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="@preview" />
             <xsl:text>}</xsl:text>
         </xsl:when>
-        <!-- nothing specified, look for scraped via internal-id -->
+        <!-- nothing specified, look for scraped via visual-id -->
         <!-- Critical: coordinate with "extract-interactive.xsl" -->
         <xsl:otherwise>
             <xsl:variable name="default-preview-image">
                 <xsl:value-of select="$directory.images" />
                 <xsl:text>/</xsl:text>
-                <xsl:apply-templates select="." mode="internal-id" />
+                <xsl:apply-templates select="." mode="visible-id" />
                 <xsl:text>-preview.png</xsl:text>
             </xsl:variable>
             <xsl:text>\IfFileExists{</xsl:text>
@@ -8499,7 +8499,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="get-width-fraction" />
     <xsl:text>\linewidth]</xsl:text>
     <xsl:text>{</xsl:text>
-    <xsl:apply-templates select="@source" mode="internal-id" />
+    <xsl:apply-templates select="@source" mode="visible-id" />
     <xsl:if test="not($extension)">
         <xsl:text>.pdf&#xa;</xsl:text>
     </xsl:if>
@@ -8515,7 +8515,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>{</xsl:text>
     <xsl:value-of select="$directory.images" />
     <xsl:text>/</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="visible-id" />
     <xsl:text>.pdf}&#xa;</xsl:text>
 </xsl:template>
 
@@ -8526,7 +8526,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\IfFileExists{</xsl:text>
     <xsl:value-of select="$directory.images" />
     <xsl:text>/</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="visible-id" />
     <xsl:text>.pdf}%&#xa;</xsl:text>
     <xsl:text>{\includegraphics[width=</xsl:text>
     <xsl:apply-templates select="." mode="get-width-fraction" />
@@ -8534,7 +8534,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>{</xsl:text>
     <xsl:value-of select="$directory.images" />
     <xsl:text>/</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="visible-id" />
     <xsl:text>.pdf}}%&#xa;</xsl:text>
     <xsl:text>{\includegraphics[width=</xsl:text>
     <xsl:apply-templates select="." mode="get-width-fraction" />
@@ -8542,7 +8542,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>{</xsl:text>
     <xsl:value-of select="$directory.images" />
     <xsl:text>/</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="visible-id" />
     <xsl:text>.png}}&#xa;</xsl:text>
 </xsl:template>
 
@@ -8602,7 +8602,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\includegraphics[width=0.80\textwidth]{</xsl:text>
     <xsl:value-of select="$directory.images" />
     <xsl:text>/</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="visible-id" />
     <xsl:text>.pdf}&#xa;</xsl:text>
 </xsl:template>
 <!-- 2015/02/08: Deprecated, still functional but not maintained -->
@@ -8612,17 +8612,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\IfFileExists{</xsl:text>
     <xsl:value-of select="$directory.images" />
     <xsl:text>/</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="visible-id" />
     <xsl:text>.pdf}%&#xa;</xsl:text>
     <xsl:text>{\includegraphics[width=0.80\textwidth]{</xsl:text>
     <xsl:value-of select="$directory.images" />
     <xsl:text>/</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="visible-id" />
     <xsl:text>.pdf}}%&#xa;</xsl:text>
     <xsl:text>{\includegraphics[width=0.80\textwidth]{</xsl:text>
     <xsl:value-of select="$directory.images" />
     <xsl:text>/</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="visible-id" />
     <xsl:text>.png}}&#xa;</xsl:text>
 </xsl:template>
 <!-- ################################## -->

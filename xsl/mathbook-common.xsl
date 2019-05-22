@@ -3635,7 +3635,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:variable>
     <xsl:choose>
         <xsl:when test="$intermediate='true' or $chunk='true'">
-            <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:apply-templates select="." mode="visible-id" />
             <xsl:value-of select="$file-extension" />
         </xsl:when>
         <!-- Halts since "mathbook" element will be chunk (or earlier) -->
@@ -4103,11 +4103,11 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- these pages as the basis for scraping preview images.  So we  -->
 <!-- place a template here to achieve consistency across uses.     -->
 <xsl:template match="video|interactive" mode="standalone-filename">
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="visible-id" />
     <xsl:text>.html</xsl:text>
 </xsl:template>
 <xsl:template match="*" mode="standalone-filename">
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="visible-id" />
     <xsl:text>-ERROR-no-standalone-filename.html</xsl:text>
 </xsl:template>
 
@@ -4311,12 +4311,12 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 
 
 <!-- ########### -->
-<!-- Identifiers        -->
+<!-- Identifiers -->
 <!-- ########### -->
 
-<!--                     -->
-<!-- Internal Identifier -->
-<!--                     -->
+<!--                    -->
+<!-- Visible Identifier -->
+<!--                    -->
 
 <!-- Check once if "index" is available -->
 <!-- for use on the root element        -->
@@ -4351,10 +4351,58 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:choose>
 </xsl:template>
 
+<!-- These strings are used for items an author must manage              -->
+<!-- (image files) or that a reader will interact with (shared URLs)     -->
+<!-- Fast version (as of 2019-05) prefers                                -->
+<!--   1.  @xml:id - authored (with meaning), 100% author-controlled     -->
+<!--   2.  @permid - highly stable, controlled via edition management    -->
+<!--   3.  auto    - fast, unique per build, but unstable between builds -->
+<!-- Since items like filenames and URLs are sometimes shared across     -->
+<!-- conversions (or extractions) this template is in -common            -->
+<xsl:template match="*" mode="visible-id">
+    <xsl:choose>
+        <!-- 2019-05: more efficient replacement -->
+        <!-- version of previous internal-id     -->
+        <xsl:when test="$b-fast-ids">
+            <xsl:choose>
+                <xsl:when test="@xml:id">
+                    <xsl:value-of select="@xml:id" />
+                </xsl:when>
+                <xsl:when test="@permid">
+                    <xsl:value-of select="local-name(.)" />
+                    <xsl:text>-</xsl:text>
+                    <xsl:value-of select="@perm-id" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="local-name(.)" />
+                    <xsl:text>-</xsl:text>
+                    <!-- xsltproc produces non-numeric prefix "idm" -->
+                    <xsl:value-of select="substring(generate-id(.), 4)"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- 2019-05: following matches the slow       -->
+        <!-- internal-id previously in use exclusively -->
+        <xsl:otherwise>
+            <xsl:choose>
+                <xsl:when test="@xml:id">
+                    <xsl:value-of select="@xml:id" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="local-name(.)" />
+                    <xsl:text>-</xsl:text>
+                    <xsl:number from="book|article|letter|memo" level="any" />
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- Override for document root node,          -->
 <!-- slide in "index" as preferential default, -->
 <!-- presuming it is not in use anywhere else  -->
-<xsl:template match="/mathbook/*[not(self::docinfo)]|/pretext/*[not(self::docinfo)]" mode="internal-id">
+<!-- NB: no fast version, so never uses @permid -->
+<xsl:template match="/mathbook/*[not(self::docinfo)]|/pretext/*[not(self::docinfo)]" mode="visible-id">
     <xsl:choose>
         <xsl:when test="@xml:id">
             <xsl:value-of select="@xml:id" />
@@ -4368,18 +4416,6 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <xsl:number level="any" />
         </xsl:otherwise>
     </xsl:choose>
-</xsl:template>
-
-<!-- We manufacture Javascript variables sometimes using            -->
-<!-- this id to keep them unique, but a dash (encouraged in PTX)    -->
-<!-- is banned in Javascript, so we make a "no-only" version,     -->
-<!-- by replacing a hyphen by a double-underscore.                  -->
-<!-- NB: This runs some non-zero probability of breaking uniqueness -->
-<xsl:template match="*" mode="internal-id-no-dash">
-    <xsl:variable name="the-id">
-        <xsl:apply-templates select="." mode="internal-id" />
-    </xsl:variable>
-    <xsl:value-of select="str:replace($the-id, '-', '__')" />
 </xsl:template>
 
 <!--            -->
