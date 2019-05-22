@@ -295,7 +295,7 @@
     <xsl:text>'</xsl:text>
     <xsl:value-of select="$directory.images" />
     <xsl:text>/</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="visual-id" />
     <xsl:text>.svg</xsl:text>
     <xsl:text>', </xsl:text>
 </xsl:template>

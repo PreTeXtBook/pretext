@@ -4322,35 +4322,6 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- for use on the root element        -->
 <xsl:variable name="b-index-is-available" select="not(//@xml:id[.='index'])" />
 
-<!-- A *unique* text identifier for any element    -->
-<!-- NB: only count from root of content portion   -->
-<!-- (not duplicates that might appear in docinfo) -->
-<!-- Uses:                                      -->
-<!--   HTML: filenames (pages and knowls)       -->
-<!--   HTML: anchors for references into pages  -->
-<!--   LaTeX: labels, ie cross-references       -->
-<!-- Format:                                          -->
-<!--   the content (text) of an xml:id if provided    -->
-<!--   otherwise, elementname-serialnumber (doc-wide) -->
-<!-- MathJax:                                                   -->
-<!--   Can manufacture an HTML id= for equations, so            -->
-<!--   we configure MathJax to use the TeX \label contents      -->
-<!--   which we must be sure to provide via this routine here   -->
-<!--   Then our URL/anchor scheme will point to the right place -->
-<!--   So this is applied to men and (numbered) mrow elements    -->
-<xsl:template match="*" mode="internal-id">
-    <xsl:choose>
-        <xsl:when test="@xml:id">
-            <xsl:value-of select="@xml:id" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:value-of select="local-name(.)" />
-            <xsl:text>-</xsl:text>
-            <xsl:number from="book|article|letter|memo" level="any" />
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
 <!-- These strings are used for items an author must manage              -->
 <!-- (image files) or that a reader will interact with (shared URLs)     -->
 <!-- Fast version (as of 2019-05) prefers                                -->
