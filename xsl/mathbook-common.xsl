@@ -1008,6 +1008,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "book" and "article" are sometimes different, esp. for LaTeX -->
 <xsl:variable name="b-is-book"    select="$document-root/self::book" />
 <xsl:variable name="b-is-article" select="$document-root/self::article" />
+<!-- w/, w/o parts induces variants -->
+<xsl:variable name="b-has-parts" select="boolean($root/book/part)" />
 
 
 <!-- Some groups of elements are counted distinct -->
@@ -1424,26 +1426,80 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 <!-- Input: an element that is a division of some kind -->
 <!-- Output: its relative level, eg "book" is 0        -->
 <!-- Front and back matter are faux divisions, so we   -->
-<!-- filter them out.  The overarching XML root (not   -->
-<!-- the special root node) is simply subtracted from  -->
-<!-- the count.                                        -->
-<!-- Appendices of a part'ed book need an additional   -->
-<!-- level added to become a \chapter in LaTeX and     -->
-<!-- thus realized as an appendix                      -->
-<xsl:template match="*" mode="level">
-    <xsl:variable name="hierarchy" select="ancestor-or-self::*[not(self::backmatter or self::frontmatter)]" />
+<!-- filter them out.                                  -->
+
+
+<!--
+Schematic of levels of divisions
+*  "preface" has 4 peers, eg, "dedication"
+*  "appendix" has two peers, "index" and "colophon"
+*  specialized divisions, e.g "references" can go numerous places
+
+Article, "section" at level 1
+||         0            ||    1     ||     2      ||      3        ||
+||          frontmatter ||          ||            ||               ||
+|| article              || section  || subsection || subsubsection ||
+||          backmatter  || appendix || subsection || subsubsection ||
+
+
+Book (no parts), "section" at level 2
+||        0         ||    1     ||    2     ||     3      ||      4        ||
+||      frontmatter || preface  ||          ||            ||               ||
+|| book             || chapter  || section  || subsection || subsubsection ||
+||      backmatter  || appendix || section  || subsection || subsubsection ||
+
+
+Book (with parts), "section" at level 3
+||  0   ||     1       ||    2     ||    3     ||     4      ||      5        ||
+||      || frontmatter || preface  ||          ||            ||               ||
+|| book || part        || chapter  || section  || subsection || subsubsection ||
+||      || backmatter  || appendix || section  || subsection || subsubsection ||
+-->
+
+ <!-- Specific top-level divisions -->
+<!-- article/frontmatter, article/backmatter are faux divisions, but   -->
+<!-- will function as a terminating condition in recursive count below -->
+<xsl:template match="book|article|letter|memo|article/frontmatter|article/backmatter" mode="level">
+    <xsl:value-of select="0"/>
+</xsl:template>
+
+<!-- A book/part will divide the mainmatter, so a "chapter" is at -->
+<!-- level 2, so we also put the faux divisions at level 1 in the -->
+<!-- case of parts, to again terminate recursive count            -->
+<xsl:template match="book/part|book/frontmatter|book/backmatter" mode="level">
     <xsl:choose>
-        <xsl:when test="ancestor-or-self::appendix and $document-root//part">
-            <xsl:value-of select="count($hierarchy) - 2 + 1" />
-        </xsl:when>
-        <xsl:when test="self::solutions and parent::backmatter and $document-root//part">
-            <xsl:value-of select="count($hierarchy) - 2 + 1" />
+        <xsl:when test="$b-has-parts">
+            <xsl:value-of select="1"/>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:value-of select="count($hierarchy) - 2" />
+            <xsl:value-of select="0"/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
+
+<!-- Remaining divisions will follow a strict progression from their    -->
+<!-- parents.  We have front matter divisions of a book first, which    -->
+<!-- will have the same level as a chapter, then traditional divisions, -->
+<!-- which may structure a chapter of a book, section of an article,    -->
+<!-- or an appendix (structured as a chapter in a book or a sections    -->
+<!-- in an article).  Then follows specialized divisions of the back    -->
+<!-- matter, which are peers of an appendix.  Finally we have the       -->
+<!-- "specialized divisions" of PreTeXt, which can be descendants of    -->
+<!-- chapters of books, sections of articles, or in the case of         -->
+<!-- solutions or references, children of an appendix.                  -->
+
+<xsl:template match="colophon|biography|dedication|acknowledgement|preface|chapter|section|subsection|subsubsection|appendix|index|colophon|exercises|reading-questions|references|solutions|glossary|worksheet" mode="level">
+    <xsl:variable name="level-above">
+        <xsl:apply-templates select="parent::*" mode="level"/>
+    </xsl:variable>
+    <xsl:value-of select="$level-above + 1"/>
+</xsl:template>
+
+<xsl:template match="*" mode="level">
+    <xsl:message>PTX:BUG:   an element ("<xsl:value-of select="local-name(.)"/>") does not know its level</xsl:message>
+    <xsl:apply-templates select="." mode="location-report" />
+</xsl:template>
+
 
 <!-- Enclosing Level -->
 <!-- For any element, work up the tree to a structural -->
