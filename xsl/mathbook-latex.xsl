@@ -1655,7 +1655,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
     </xsl:if>
     <!-- Interactives -->
-    <xsl:if test="$document-root//video|$document-root//interactive">
+    <xsl:if test="$document-root//audio|$document-root//video|$document-root//interactive">
         <xsl:text>%% QR Code Support&#xa;</xsl:text>
         <xsl:text>%% Videos and other interactives&#xa;</xsl:text>
         <xsl:text>\usepackage{qrcode}&#xa;</xsl:text>
@@ -6674,7 +6674,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ###################################### -->
 
 
-<xsl:template match="video|interactive">
+<xsl:template match="audio|video|interactive">
     <!-- scale to fit into a side-by-side -->
     <xsl:variable name="width-percentage">
         <xsl:choose>
@@ -6778,7 +6778,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Eventually match on all interactives                            -->
 <!-- NB baseurl is not assumed to have a trailing slash              -->
 
-<xsl:template match="video[@source]|interactive" mode="static-url">
+<xsl:template match="audio[@source]|video[@source]|interactive" mode="static-url">
     <xsl:value-of select="$baseurl"/>
     <xsl:text>/</xsl:text>
     <xsl:apply-templates select="." mode="standalone-filename" />
@@ -6809,6 +6809,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- (2) scraped image, name via visible-id -->
 <!-- https://tex.stackexchange.com/questions/47245/ -->
 <!-- set-a-maximum-width-and-height-for-an-image    -->
+
+<!-- needs work -->
+<xsl:template match="audio" mode="static-image"/>
+
 <xsl:template match="video" mode="static-image">
     <xsl:choose>
         <!-- has @preview, and is 'generic' -->
@@ -6872,7 +6876,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<xsl:template match="video[@source]" mode="static-caption">
+<xsl:template match="audio[@source]|video[@source]" mode="static-caption">
     <xsl:choose>
         <!-- author-supplied override -->
         <xsl:when test="caption">

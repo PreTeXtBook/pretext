@@ -4790,6 +4790,20 @@ the xsltproc executable.
             </subsection>
         </section>
 
+        <section xml:id="section-audio">
+            <title>Audio</title>
+
+            <p>2019-05-24: this is preliminary, and mostly based on the code for <tag>video</tag> so read the next section and mimic the style from there.  But use an <tag>audio</tag> element and have the <attr>source</attr> attribute point to an OGG, MP3, or WAV file.  Plus, a <attr>height</attr> attribute will be ignored.</p>
+
+            <p>We have not entirely decided how to handle the static version present in a PDF.</p>
+
+            <figure>
+                <caption>MP3 Piano Trill (<c>www.kozco.com/tech/soundtests.html</c>)</caption>
+                <audio xml:id="audio-piano-trill" source="http://www.kozco.com/tech/piano2-CoolEdit.mp3" width="80%"/>
+            </figure>
+
+        </section>
+
         <section xml:id="section-video">
             <title>Video</title>
 

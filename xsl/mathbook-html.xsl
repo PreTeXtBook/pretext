@@ -5745,7 +5745,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Three previews: default, generic, author-constructed -->
 <!-- Three embeddings: embed, popout, select              -->
 
-<xsl:template match="video">
+<xsl:template match="audio|video">
     <!-- collect and process size information from author -->
     <xsl:variable name="width">
         <xsl:apply-templates select="." mode="get-width-pixels" />
@@ -5818,7 +5818,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Formerly a "pop-out" page, now a "standalone" page     -->
 <!-- Has autoplay on since a reader has elected to go there -->
 <!-- TODO: override preview, since it just plays, pass 'default -->
-<xsl:template match="video" mode="video-standalone-page">
+<xsl:template match="audio|video" mode="video-standalone-page">
     <xsl:variable name="aspect-ratio">
         <xsl:apply-templates select="." mode="get-aspect-ratio">
             <xsl:with-param name="default-aspect" select="'16:9'" />
@@ -5832,6 +5832,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="content">
             <!-- display preview, and enable autoplay  -->
             <!-- since reader has elected this page    -->
+            <!-- audio: height parameter is ignored    -->
             <xsl:apply-templates select="." mode="video-embed">
                 <xsl:with-param name="width"  select="$ptx-content-width" />
                 <xsl:with-param name="height" select="$ptx-content-height" />
@@ -6010,6 +6011,97 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>');</xsl:text>
 </xsl:variable>
 
+<!-- NB: here, and elesewhere, references -->
+<!-- to "video" should become "media"     -->
+<xsl:template match="audio[@source]" mode="video-embed">
+    <xsl:param name="width" select="''" />
+    <xsl:param name="height" select="''" />
+    <xsl:param name="preview" select="'true'" />
+    <xsl:param name="autoplay" select="'false'" />
+
+    <xsl:element name="audio">
+        <xsl:attribute name="id">
+            <xsl:apply-templates select="." mode="html-id"/>
+        </xsl:attribute>
+        <!-- seems necessary to style the controls, since it        -->
+        <!-- has no notion of height and width, like video does     -->
+        <!-- caller supplies width in pixels, we assume full height -->
+        <!-- migrate block and height properties to CSS             -->
+        <xsl:attribute name="style">
+            <xsl:text>width:</xsl:text>
+            <xsl:value-of select="$width" />
+            <xsl:text>px;</xsl:text>
+            <xsl:text>height:100%;display:block;margin:auto;</xsl:text>
+        </xsl:attribute>
+        <!-- empty forms work as boolean switches -->
+        <xsl:attribute name="controls" />
+        <xsl:if test="$autoplay = 'true'">
+            <xsl:attribute name="autoplay" />
+        </xsl:if>
+        <!-- @poster, or equivalent does not seem trivial -->
+        <!-- Construct the HTML5 source URL(s)                  -->
+        <!-- If this gets refactored, it could be best to form  -->
+        <!-- base, extension, query, fragment strings/variables -->
+        <!-- First, grab extension of source URL in PTX @source -->
+        <xsl:variable name="extension">
+            <xsl:call-template name="file-extension">
+                <xsl:with-param name="filename" select="@source" />
+            </xsl:call-template>
+        </xsl:variable>
+        <!-- "source" elements, children of HTML5 audio -->
+        <!-- no extension suggests hosting has multiple -->
+        <!-- versions for browser to sort through       -->
+        <!-- More open formats first!  ;-)              -->
+        <xsl:if test="$extension = '' or $extension = 'oog'">
+            <xsl:element name="source">
+                <xsl:attribute name="src">
+                    <xsl:value-of select="@source"/>
+                    <!-- augment no-extension form -->
+                    <xsl:if test="$extension = ''">
+                        <xsl:text>.ogg</xsl:text>
+                    </xsl:if>
+                    <xsl:apply-templates select="." mode="temporal-fragment"/>
+                </xsl:attribute>
+                <xsl:attribute name="type">
+                    <xsl:text>audio/ogg</xsl:text>
+                </xsl:attribute>
+            </xsl:element>
+        </xsl:if>
+        <xsl:if test="$extension = '' or $extension = 'mp3'">
+            <xsl:element name="source">
+                <xsl:attribute name="src">
+                    <xsl:value-of select="@source"/>
+                    <!-- augment no-extension form -->
+                    <xsl:if test="$extension = ''">
+                        <xsl:text>.mp3</xsl:text>
+                    </xsl:if>
+                    <xsl:apply-templates select="." mode="temporal-fragment"/>
+                </xsl:attribute>
+                <xsl:attribute name="type">
+                    <xsl:text>audio/mp3</xsl:text>
+                </xsl:attribute>
+            </xsl:element>
+        </xsl:if>
+        <xsl:if test="$extension = '' or $extension = 'wav'">
+            <xsl:element name="source">
+                <xsl:attribute name="src">
+                    <xsl:value-of select="@source"/>
+                    <!-- augment no-extension form -->
+                    <xsl:if test="$extension = ''">
+                        <xsl:text>.wav</xsl:text>
+                    </xsl:if>
+                    <xsl:apply-templates select="." mode="temporal-fragment"/>
+                </xsl:attribute>
+                <xsl:attribute name="type">
+                    <xsl:text>audio/wav</xsl:text>
+                </xsl:attribute>
+            </xsl:element>
+        </xsl:if>
+        <!-- failure to perform -->
+        <xsl:text>Your browser does not support the &lt;audio&gt; tag.</xsl:text>
+    </xsl:element>
+</xsl:template>
+
 <!-- create a "video" element for author-hosted   -->
 <!-- dimensions and autoplay as parameters        -->
 <!-- Normally $preview is true, and not passed in -->
@@ -6020,24 +6112,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="preview" select="'true'" />
     <xsl:param name="autoplay" select="'false'" />
 
-    <!-- start/end times (read both, see 4.1, 4.2.1 at w3.org)    -->
-    <!-- Media Fragment URI: https://www.w3.org/TR/media-frags/   -->
-    <!-- Javascript: https://stackoverflow.com/questions/11212715 -->
-    <!-- variable is possibly empty, so no harm using that later  -->
-    <!-- This portion of URL should follow any query string       -->
-    <xsl:variable name="temporal-fragment">
-        <xsl:if test="@start or @end">
-            <xsl:text>#t=</xsl:text>
-        </xsl:if>
-        <xsl:if test="@start">
-            <xsl:value-of select="@start" />
-        </xsl:if>
-        <!-- can lead with comma, implies 0,xx -->
-        <xsl:if test="@end">
-            <xsl:text>,</xsl:text>
-            <xsl:value-of select="@end" />
-        </xsl:if>
-    </xsl:variable>
     <!-- we need to build the element, since @autoplay is optional -->
     <xsl:element name="video">
         <xsl:attribute name="id">
@@ -6093,7 +6167,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:if test="$extension = ''">
                         <xsl:text>.ogg</xsl:text>
                     </xsl:if>
-                    <xsl:value-of select="$temporal-fragment" />
+                    <xsl:apply-templates select="." mode="temporal-fragment"/>
                 </xsl:attribute>
                 <xsl:attribute name="type">
                     <xsl:text>video/ogg</xsl:text>
@@ -6108,7 +6182,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:if test="$extension = ''">
                         <xsl:text>.webm</xsl:text>
                     </xsl:if>
-                    <xsl:value-of select="$temporal-fragment" />
+                    <xsl:apply-templates select="." mode="temporal-fragment"/>
                 </xsl:attribute>
                 <xsl:attribute name="type">
                     <xsl:text>video/webm</xsl:text>
@@ -6123,7 +6197,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:if test="$extension = ''">
                         <xsl:text>.mp4</xsl:text>
                     </xsl:if>
-                    <xsl:value-of select="$temporal-fragment" />
+                    <xsl:apply-templates select="." mode="temporal-fragment"/>
                 </xsl:attribute>
                 <xsl:attribute name="type">
                     <xsl:text>video/mp4</xsl:text>
@@ -6133,6 +6207,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- failure to perform -->
         <xsl:text>Your browser does not support the &lt;video&gt; tag.</xsl:text>
     </xsl:element>
+</xsl:template>
+
+<!-- HTML5 Media Fragment URI (shared for audio, video)       -->
+<!-- start/end times (read both, see 4.1, 4.2.1 at w3.org)    -->
+<!-- Media Fragment URI: https://www.w3.org/TR/media-frags/   -->
+<!-- Javascript: https://stackoverflow.com/questions/11212715 -->
+<!-- return is possibly empty, so no harm using that later    -->
+<!-- This portion of URL should follow any query string       -->
+<xsl:template match="audio|video" mode="temporal-fragment">
+    <xsl:if test="@start or @end">
+        <xsl:text>#t=</xsl:text>
+    </xsl:if>
+    <xsl:if test="@start">
+        <xsl:value-of select="@start" />
+    </xsl:if>
+    <!-- can lead with comma, implies 0,xx -->
+    <xsl:if test="@end">
+        <xsl:text>,</xsl:text>
+        <xsl:value-of select="@end" />
+    </xsl:if>
 </xsl:template>
 
 <!-- You Tube, Vimeo -->
