@@ -6800,7 +6800,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Static Images -->
 <!-- (1) @preview given in source -->
-<!-- (2) scraped image, name via visual-id -->
+<!-- (2) scraped image, name via visible-id -->
 <!-- https://tex.stackexchange.com/questions/47245/ -->
 <!-- set-a-maximum-width-and-height-for-an-image    -->
 <xsl:template match="video" mode="static-image">
@@ -6824,7 +6824,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="@youtubeplaylist">
             <xsl:text>\resizebox{!}{\qrsize}{\genericpreview}</xsl:text>
         </xsl:when>
-        <!-- nothing specified, look for scraped via visual-id -->
+        <!-- nothing specified, look for scraped via visible-id -->
         <xsl:otherwise>
             <xsl:text>\includegraphics[width=0.80\linewidth,height=\qrsize,keepaspectratio]{</xsl:text>
             <xsl:value-of select="$directory.images" />
@@ -6844,7 +6844,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="@preview" />
             <xsl:text>}</xsl:text>
         </xsl:when>
-        <!-- nothing specified, look for scraped via visual-id -->
+        <!-- nothing specified, look for scraped via visible-id -->
         <!-- Critical: coordinate with "extract-interactive.xsl" -->
         <xsl:otherwise>
             <xsl:variable name="default-preview-image">

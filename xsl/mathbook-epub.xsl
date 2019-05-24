@@ -518,7 +518,7 @@
         <xsl:when test="latex-image|latex-image-code|sageplot|asymptote">
             <xsl:value-of select="$directory.images" />
             <xsl:text>/</xsl:text>
-            <xsl:apply-templates select="." mode="visual-id" />
+            <xsl:apply-templates select="." mode="visible-id" />
             <xsl:text>.svg</xsl:text>
         </xsl:when>
         <xsl:otherwise>
