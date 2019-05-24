@@ -1696,6 +1696,7 @@ the xsltproc executable.
                 <p>Generally, you cannot use any <init>XML</init> elements inside of the mathematics elements.  An exception is the <c>xref</c> element which you might want to use to provide justifications for the steps of a derivation.  Here is a visual example that is mathematically meaningless,<md>
                     <mrow>A&amp;=B+C&amp;&amp;<xref ref="corollary-FTC-derivative" text="type-global" /></mrow>
                     <mrow>&amp;=D+E&amp;&amp;<xref ref="theorem-FTC" text="title" /></mrow>
+                    <mrow>&amp;=F+G&amp;&amp;<xref ref="theorem-number-01" text="title">A nice result</xref></mrow>
                 </md>.</p>
             </subsection>
 
