@@ -1371,14 +1371,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- See numbering-equations variable being set in mathbook-common.xsl         -->
     <!-- With number="yes|no" on mrow, we must allow for the possibility of an md  -->
     <!-- variant having numbers (we could be more careful, but it is not critical) -->
+    <!-- NB: global numbering is level 0 and "level-to-name" is (a) incorrect,     -->
+    <!-- and (b) not useful (\numberwithin will fail)                              -->
+    <!-- NB: perhaps the chngcntr package should/could be used here                -->
     <xsl:if test="//men|//mdn|//md">
         <xsl:text>%% Equation Numbering&#xa;</xsl:text>
         <xsl:text>%% Controlled by  numbering.equations.level  processing parameter&#xa;</xsl:text>
-        <xsl:text>\numberwithin{equation}{</xsl:text>
-        <xsl:call-template name="level-to-name">
-            <xsl:with-param name="level" select="$numbering-equations" />
-        </xsl:call-template>
-        <xsl:text>}&#xa;</xsl:text>
+        <xsl:text>%% No adjustment here implies document-wide numbering&#xa;</xsl:text>
+        <xsl:if test="not($numbering-equations = 0)">
+            <xsl:text>\numberwithin{equation}{</xsl:text>
+            <xsl:call-template name="level-to-name">
+                <xsl:with-param name="level" select="$numbering-equations" />
+            </xsl:call-template>
+            <xsl:text>}&#xa;</xsl:text>
+        </xsl:if>
     </xsl:if>
     <!-- Tables -->
     <xsl:if test="//tabular">
