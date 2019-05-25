@@ -1,16 +1,16 @@
 #!/bin/bash
 #
 # ********************************************************************
-# Copyright 2017 Robert A. Beezer
+# Copyright 2017-2019 Robert A. Beezer
 #
-# This file is part of MathBook XML.
+# This file is part of PreTeXt.
 #
-# MathBook XML is free software: you can redistribute it and/or modify
+# PreTeXt is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 2 or version 3 of the
 # License (at your option).
 #
-# MathBook XML is distributed in the hope that it will be useful,
+# PreTeXt is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
@@ -25,6 +25,7 @@
 #
 #  2017-06-19  Initiated
 #  2017-07-21  For release
+#  2019-05-24  Updates as DocFlex becomes FlexDoc (and v1.12.3)
 
 #  This is designed for use in distributing derived products
 #  from the PreTeXt schema.  So make a copy and adjust paths
@@ -38,10 +39,11 @@ shopt -s -o nounset
 
 # PreTeXt distribution
 declare MB=${HOME}/mathbook/mathbook
-# DocFlex installation
-declare DFH=/opt/docflex/docflex-xml-1.12
+# FlexDoc installation
+declare FDH=/opt/flexdoc/flexdoc-xml-1.12.3
+
 # DocFlex output directory
-declare DFOUTDIR=${HOME}/mathbook/website/pretextbook.org/doc/schema
+declare FDOUTDIR=${HOME}/mathbook/website/pretextbook.org/doc/schema
 # Java root to locate executables
 # (if not set by system: uncomment and set)
 # declare JAVA_HOME=
@@ -55,7 +57,7 @@ declare MBXSL=${MB}/xsl
 # Java particulars for documentation generation
 # Quotes to protect spaces (use on filenames?)
 declare JAVA_OPTIONS="-Xms512m -Xmx1024m"
-declare CLASS_PATH=${DFH}/lib/xml-apis.jar:${DFH}/lib/xercesImpl.jar:${DFH}/lib/resolver.jar:${DFH}/lib/docflex-xml.jar
+declare CLASS_PATH="${FDH}/lib/xml-apis.jar:${FDH}/lib/xercesImpl.jar:${FDH}/lib/resolver.jar:${FDH}/lib/flexdoc-xml.jar"
 
 # ******************
 # Grammar generation
@@ -96,9 +98,9 @@ xsltproc ${MB}/schema/iso_schematron_cli.xsl ${MB}/schema/pretext.sch > ${MB}/sc
 #  v1.12 config now in bin directory
 #  v1.12 requires Oracle Java (ie OpenJDK lacks "javafx")
 
-${JAVA_HOME}/bin/java ${JAVA_OPTIONS} -cp ${CLASS_PATH} com.docflex.xml.Generator \
-    -docflexconfig ${DFH}/bin/linux/docflex.config -quiet \
-    -nodialog -launchviewer=false -d ${DFOUTDIR} pretext.xsd
+${JAVA_HOME}/bin/java ${JAVA_OPTIONS} -cp ${CLASS_PATH} xyz.flexdoc.xml.Generator \
+    -flexdocconfig ${FDH}/bin/linux/flexdoc.config -quiet \
+    -nodialog -launchviewer=false -d ${FDOUTDIR} pretext.xsd
 
 # exit cleanly
 exit 0
