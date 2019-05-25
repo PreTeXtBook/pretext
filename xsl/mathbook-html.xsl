@@ -6019,6 +6019,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="preview" select="'true'" />
     <xsl:param name="autoplay" select="'false'" />
 
+    <!-- $width is in pixels for video @width attribute,   -->
+    <!-- but for the audio element we seem to need to      -->
+    <!-- use CSS, so we revert back to the percentage. (!) -->
+    <!-- Seems to work great on skinny screens             -->
+    <xsl:variable name="width-percentage">
+        <xsl:value-of select="round(($width div $design-width)*100)"/>
+    </xsl:variable>
+
     <xsl:element name="audio">
         <xsl:attribute name="id">
             <xsl:apply-templates select="." mode="html-id"/>
@@ -6029,8 +6037,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- migrate block and height properties to CSS             -->
         <xsl:attribute name="style">
             <xsl:text>width:</xsl:text>
-            <xsl:value-of select="$width" />
-            <xsl:text>px;</xsl:text>
+            <xsl:value-of select="$width-percentage" />
+            <xsl:text>%;</xsl:text>
             <xsl:text>height:100%;display:block;margin:auto;</xsl:text>
         </xsl:attribute>
         <!-- empty forms work as boolean switches -->
