@@ -39,7 +39,7 @@
 /* Colors formerly in mathbook-4.css */
 
 :root {
-  --documenttitle: #2a52a4;
+  --documenttitle: #2a5ea4;
   --bodytitle: #2B5F82; 
   --bodysubtitle: #A62E1C;
   --bodytitlehighlight: #e0e9ff;  /* light, and contrasting to bodytitle  */
@@ -50,7 +50,7 @@
        (The second condition will guarantee an adequate contrast with white.)
      */
 
-  --chaptertoc: #484848;
+  --chaptertoc: #525252;
   --chaptertoctext: white;
   --chaptertocactive: var(--documenttitle);   /* often the same as documenttitle */
   --chaptertoctextactive: white;
