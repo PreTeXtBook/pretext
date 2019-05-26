@@ -42,8 +42,8 @@
   --documenttitle: #2a52a4;
   --bodytitle: #2B5F82; 
   --bodysubtitle: #A62E1C;
-  --bodytitlehighlight: #8a1200;
-  --bodysubtitlehighlight: #fce5e4;
+  --bodytitlehighlight: #e0e9ff;  /* light, and contrasting to bodytitle  */
+  --bodysubtitlehighlight: #fce5e4;  /* light, and contrasting to bodysubtitle  */
      /*
        The bodytitle and bodysubtitle colors must have at least a 3:1 contrast
        ratio with black, and at least 5:1 ratio with with the corresponding highlight.
