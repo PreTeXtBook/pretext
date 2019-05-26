@@ -50,7 +50,7 @@
        (The second condition will guarantee an adequate contrast with white.)
      */
 
-  --chaptertoc: #434343;
+  --chaptertoc: #484848;
   --chaptertoctext: white;
   --chaptertocactive: var(--documenttitle);   /* often the same as documenttitle */
   --chaptertoctextactive: white;
