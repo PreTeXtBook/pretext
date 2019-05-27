@@ -40,9 +40,9 @@
 
 :root {
   --documenttitle: #944921;
-  --bodytitle: #2B5F82; 
+  --bodytitle: #932c10; 
   --bodysubtitle: #A62E1C;
-  --bodytitlehighlight: #9c2310;  /* light, and contrasting to bodytitle  */
+  --bodytitlehighlight: #9c83d0;  /* light, and contrasting to bodytitle  */
   --bodysubtitlehighlight: #fce5e4;  /* light, and contrasting to bodysubtitle  */
      /*
        The bodytitle and bodysubtitle colors must have at least a 3:1 contrast
