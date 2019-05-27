@@ -40,9 +40,9 @@
 
 :root {
   --documenttitle: #9e0c0f;
-  --bodytitle: #2B5F82; 
+  --bodytitle: #8e0a0c; 
   --bodysubtitle: #A62E1C;
-  --bodytitlehighlight: #e0e9ff;  /* light, and contrasting to bodytitle  */
+  --bodytitlehighlight: #d9ffe9;  /* light, and contrasting to bodytitle  */
   --bodysubtitlehighlight: #fce5e4;  /* light, and contrasting to bodysubtitle  */
      /*
        The bodytitle and bodysubtitle colors must have at least a 3:1 contrast
@@ -55,7 +55,7 @@
   --chaptertocactive: var(--documenttitle);   /* often the same as documenttitle */
   --chaptertoctextactive: white;
   --sectiontoc: white;   /* can also write it as #ffffff  */
-  --sectiontoctext: #20477b;
+  --sectiontoctext: #6f080b;
   --sectiontocactive: var(--documenttitle);   /* often the same as documenttitle */
   --sectiontoctextactive: white;
   --tocborder: #152f53;
