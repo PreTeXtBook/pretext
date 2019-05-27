@@ -42,7 +42,7 @@
   --documenttitle: #944921;
   --bodytitle: #932c10; 
   --bodysubtitle: #A62E1C;
-  --bodytitlehighlight: #bcb3f0;  /* light, and contrasting to bodytitle  */
+  --bodytitlehighlight: #dcd3f0;  /* light, and contrasting to bodytitle  */
   --bodysubtitlehighlight: #fce5e4;  /* light, and contrasting to bodysubtitle  */
      /*
        The bodytitle and bodysubtitle colors must have at least a 3:1 contrast
