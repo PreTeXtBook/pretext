@@ -1238,21 +1238,6 @@
   border-left: 0.4em solid #c9c9c9;
 }
 
-/*
-.pretext-content .summary-links a, .pretext-content .summary-links a:link, .pretext-content .summary-links a:visited {
-  color: #671d12;
-  background: #f0f0f0;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.pretext-content .summary-links a:hover, .pretext-content .summary-links a:focus {
-  color: white;
-  background: #671d12;
-  text-decoration: none;
-}
-
-*/
 /* line 450, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
 .pretext-content .summary-links a:hover:after, .pretext-content .summary-links a:focus:after {
   width: 0;
@@ -1298,29 +1283,11 @@
   }
 }
 
-/*
-.pretext-content .summary-links a .codenumber {
-  color: #707070;
-  margin-right: 0.41667em;
-}
-
-.pretext-content .summary-links a:hover .codenumber, .pretext-content .summary-links a:focus .codenumber {
-  color: rgba(255, 255, 255, 0.8);
-}
-*/
-/* line 85, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_content-ui.scss */
-/*
-.pretext-content .sagecell .ui-button.ui-state-default, .pretext-content .sagecell .ui-button.ui-state-hover, .pretext-content .sagecell .ui-button.ui-state-active, .pretext-content .sagecell .ui-button.ui-state-focus, .pretext-content .sagecell .ui-button.ui-corner-all {
-*/
 .pretext-content .sagecell_evalButton {
   font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 16px;
   padding: 0 0.65em;
 }
-/* line 136, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
-/*
-.pretext-content .sagecell .ui-button.ui-state-default, .pretext-content .sagecell .ui-button.ui-state-hover, .pretext-content .sagecell .ui-button.ui-state-active, .pretext-content .sagecell .ui-button.ui-state-focus, .pretext-content .sagecell .ui-button.ui-corner-all {
-*/
 .pretext-content .sagecell_evalButton {
   cursor: pointer;
   display: inline-block;
@@ -1338,33 +1305,7 @@
   border-style: solid;
   font-weight: bold;
   border-radius: 3px;
-/*
-  color: #383838;
-  border-color: #c4c4c4;
-  background-image: linear-gradient(#ebebeb, #c4c4c4);
-*/
 }
-/* line 51, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
-/*
-.pretext-content .sagecell .ui-button.ui-state-default:focus, .pretext-content .sagecell .ui-button.ui-state-hover:focus, .pretext-content .sagecell .ui-button.ui-state-active:focus, .pretext-content .sagecell .ui-button.ui-state-focus:focus, .pretext-content .sagecell .ui-button.ui-corner-all:focus {
-  outline: thin dotted #333;
-  outline-offset: -2px;
-}
-*/
-/* line 36, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
-/*
-.pretext-content .sagecell .ui-button.ui-state-default:focus::-moz-focus-inner, .pretext-content .sagecell .ui-button.ui-state-hover:focus::-moz-focus-inner, .pretext-content .sagecell .ui-button.ui-state-active:focus::-moz-focus-inner, .pretext-content .sagecell .ui-button.ui-state-focus:focus::-moz-focus-inner, .pretext-content .sagecell .ui-button.ui-corner-all:focus::-moz-focus-inner {
-  border: 0;
-}
-*/
-/* line 141, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
-/*
-.pretext-content .sagecell .ui-button.ui-state-default:hover, .pretext-content .sagecell .ui-button.ui-state-default:focus, .pretext-content .sagecell .ui-button.ui-state-default.hover, .pretext-content .sagecell .ui-button.ui-state-default.focus, .pretext-content .sagecell .ui-button.ui-state-hover:hover, .pretext-content .sagecell .ui-button.ui-state-hover:focus, .pretext-content .sagecell .ui-button.ui-state-hover.hover, .pretext-content .sagecell .ui-button.ui-state-hover.focus, .pretext-content .sagecell .ui-button.ui-state-active:hover, .pretext-content .sagecell .ui-button.ui-state-active:focus, .pretext-content .sagecell .ui-button.ui-state-active.hover, .pretext-content .sagecell .ui-button.ui-state-active.focus, .pretext-content .sagecell .ui-button.ui-state-focus:hover, .pretext-content .sagecell .ui-button.ui-state-focus:focus, .pretext-content .sagecell .ui-button.ui-state-focus.hover, .pretext-content .sagecell .ui-button.ui-state-focus.focus, .pretext-content .sagecell .ui-button.ui-corner-all:hover, .pretext-content .sagecell .ui-button.ui-corner-all:focus, .pretext-content .sagecell .ui-button.ui-corner-all.hover, .pretext-content .sagecell .ui-button.ui-corner-all.focus {
-  color: #383838;
-  background-image: linear-gradient(#f7f7f7, #ababab);
-  border-color: #c4c4c4;
-}
-*/
 .pretext-content .sagecell_evalButton {
   color: #383838;
   background-image: linear-gradient(#f7f7f7, #bbbbbb);
@@ -1381,44 +1322,6 @@
   border-color: #ff2822;
 }
 
-/* line 145, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
-/*
-.pretext-content .sagecell .ui-button.ui-state-default:active, .pretext-content .sagecell .ui-button.ui-state-default.active, .pretext-content .sagecell .ui-button.ui-state-hover:active, .pretext-content .sagecell .ui-button.ui-state-hover.active, .pretext-content .sagecell .ui-button.ui-state-active:active, .pretext-content .sagecell .ui-button.ui-state-active.active, .pretext-content .sagecell .ui-button.ui-state-focus:active, .pretext-content .sagecell .ui-button.ui-state-focus.active, .pretext-content .sagecell .ui-button.ui-corner-all:active, .pretext-content .sagecell .ui-button.ui-corner-all.active {
-  color: #60160b;
-  background-image: linear-gradient(#ff6852, #ffd7d1);
-  border-color: #ff6852;
-}
-*/
-/* line 215, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
-/*
-.pretext-content .sagecell .ui-button.ui-state-default:active:active, .pretext-content .sagecell .ui-button.ui-state-default:active.active, .pretext-content .sagecell .ui-button.ui-state-default.active:active, .pretext-content .sagecell .ui-button.ui-state-default.active.active, .pretext-content .sagecell .ui-button.ui-state-hover:active:active, .pretext-content .sagecell .ui-button.ui-state-hover:active.active, .pretext-content .sagecell .ui-button.ui-state-hover.active:active, .pretext-content .sagecell .ui-button.ui-state-hover.active.active, .pretext-content .sagecell .ui-button.ui-state-active:active:active, .pretext-content .sagecell .ui-button.ui-state-active:active.active, .pretext-content .sagecell .ui-button.ui-state-active.active:active, .pretext-content .sagecell .ui-button.ui-state-active.active.active, .pretext-content .sagecell .ui-button.ui-state-focus:active:active, .pretext-content .sagecell .ui-button.ui-state-focus:active.active, .pretext-content .sagecell .ui-button.ui-state-focus.active:active, .pretext-content .sagecell .ui-button.ui-state-focus.active.active, .pretext-content .sagecell .ui-button.ui-corner-all:active:active, .pretext-content .sagecell .ui-button.ui-corner-all:active.active, .pretext-content .sagecell .ui-button.ui-corner-all.active:active, .pretext-content .sagecell .ui-button.ui-corner-all.active.active {
-  box-shadow: rgba(0, 0, 0, 0.5) 0 2px 5px inset;
-}
-*/
-/* line 150, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
-/*
-.pretext-content .sagecell .ui-button.ui-state-default.disabled, .pretext-content .sagecell .ui-button.ui-state-default.disabled:hover, .pretext-content .sagecell .ui-button.ui-state-default.disabled.hover, .pretext-content .sagecell .ui-button.ui-state-default.disabled:focus, .pretext-content .sagecell .ui-button.ui-state-default.disabled.focus, .pretext-content .sagecell .ui-button.ui-state-default.disabled:active, .pretext-content .sagecell .ui-button.ui-state-default.disabled.active, .pretext-content .sagecell .ui-button.ui-state-default[disabled], .pretext-content .sagecell .ui-button.ui-state-default[disabled]:hover, .pretext-content .sagecell .ui-button.ui-state-default[disabled].hover, .pretext-content .sagecell .ui-button.ui-state-default[disabled]:focus, .pretext-content .sagecell .ui-button.ui-state-default[disabled].focus, .pretext-content .sagecell .ui-button.ui-state-default[disabled]:active, .pretext-content .sagecell .ui-button.ui-state-default[disabled].active, .pretext-content .sagecell .ui-button.ui-state-hover.disabled, .pretext-content .sagecell .ui-button.ui-state-hover.disabled:hover, .pretext-content .sagecell .ui-button.ui-state-hover.disabled.hover, .pretext-content .sagecell .ui-button.ui-state-hover.disabled:focus, .pretext-content .sagecell .ui-button.ui-state-hover.disabled.focus, .pretext-content .sagecell .ui-button.ui-state-hover.disabled:active, .pretext-content .sagecell .ui-button.ui-state-hover.disabled.active, .pretext-content .sagecell .ui-button.ui-state-hover[disabled], .pretext-content .sagecell .ui-button.ui-state-hover[disabled]:hover, .pretext-content .sagecell .ui-button.ui-state-hover[disabled].hover, .pretext-content .sagecell .ui-button.ui-state-hover[disabled]:focus, .pretext-content .sagecell .ui-button.ui-state-hover[disabled].focus, .pretext-content .sagecell .ui-button.ui-state-hover[disabled]:active, .pretext-content .sagecell .ui-button.ui-state-hover[disabled].active, .pretext-content .sagecell .ui-button.ui-state-active.disabled, .pretext-content .sagecell .ui-button.ui-state-active.disabled:hover, .pretext-content .sagecell .ui-button.ui-state-active.disabled.hover, .pretext-content .sagecell .ui-button.ui-state-active.disabled:focus, .pretext-content .sagecell .ui-button.ui-state-active.disabled.focus, .pretext-content .sagecell .ui-button.ui-state-active.disabled:active, .pretext-content .sagecell .ui-button.ui-state-active.disabled.active, .pretext-content .sagecell .ui-button.ui-state-active[disabled], .pretext-content .sagecell .ui-button.ui-state-active[disabled]:hover, .pretext-content .sagecell .ui-button.ui-state-active[disabled].hover, .pretext-content .sagecell .ui-button.ui-state-active[disabled]:focus, .pretext-content .sagecell .ui-button.ui-state-active[disabled].focus, .pretext-content .sagecell .ui-button.ui-state-active[disabled]:active, .pretext-content .sagecell .ui-button.ui-state-active[disabled].active, .pretext-content .sagecell .ui-button.ui-state-focus.disabled, .pretext-content .sagecell .ui-button.ui-state-focus.disabled:hover, .pretext-content .sagecell .ui-button.ui-state-focus.disabled.hover, .pretext-content .sagecell .ui-button.ui-state-focus.disabled:focus, .pretext-content .sagecell .ui-button.ui-state-focus.disabled.focus, .pretext-content .sagecell .ui-button.ui-state-focus.disabled:active, .pretext-content .sagecell .ui-button.ui-state-focus.disabled.active, .pretext-content .sagecell .ui-button.ui-state-focus[disabled], .pretext-content .sagecell .ui-button.ui-state-focus[disabled]:hover, .pretext-content .sagecell .ui-button.ui-state-focus[disabled].hover, .pretext-content .sagecell .ui-button.ui-state-focus[disabled]:focus, .pretext-content .sagecell .ui-button.ui-state-focus[disabled].focus, .pretext-content .sagecell .ui-button.ui-state-focus[disabled]:active, .pretext-content .sagecell .ui-button.ui-state-focus[disabled].active, .pretext-content .sagecell .ui-button.ui-corner-all.disabled, .pretext-content .sagecell .ui-button.ui-corner-all.disabled:hover, .pretext-content .sagecell .ui-button.ui-corner-all.disabled.hover, .pretext-content .sagecell .ui-button.ui-corner-all.disabled:focus, .pretext-content .sagecell .ui-button.ui-corner-all.disabled.focus, .pretext-content .sagecell .ui-button.ui-corner-all.disabled:active, .pretext-content .sagecell .ui-button.ui-corner-all.disabled.active, .pretext-content .sagecell .ui-button.ui-corner-all[disabled], .pretext-content .sagecell .ui-button.ui-corner-all[disabled]:hover, .pretext-content .sagecell .ui-button.ui-corner-all[disabled].hover, .pretext-content .sagecell .ui-button.ui-corner-all[disabled]:focus, .pretext-content .sagecell .ui-button.ui-corner-all[disabled].focus, .pretext-content .sagecell .ui-button.ui-corner-all[disabled]:active, .pretext-content .sagecell .ui-button.ui-corner-all[disabled].active {
-  color: #383838;
-  border-color: #c4c4c4;
-  background-image: linear-gradient(#ebebeb, #c4c4c4);
-  opacity: .5;
-  cursor: default;
-}
-*/
-/* line 215, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_buttons.scss */
-/*
-.pretext-content .sagecell .ui-button.ui-state-default:active, .pretext-content .sagecell .ui-button.ui-state-default.active, .pretext-content .sagecell .ui-button.ui-state-hover:active, .pretext-content .sagecell .ui-button.ui-state-hover.active, .pretext-content .sagecell .ui-button.ui-state-active:active, .pretext-content .sagecell .ui-button.ui-state-active.active, .pretext-content .sagecell .ui-button.ui-state-focus:active, .pretext-content .sagecell .ui-button.ui-state-focus.active, .pretext-content .sagecell .ui-button.ui-corner-all:active, .pretext-content .sagecell .ui-button.ui-corner-all.active {
-  box-shadow: rgba(0, 0, 0, 0.5) 0 2px 5px inset;
-}
-*/
-/* line 94, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_content-ui.scss */
-/*
-.pretext-content .sagecell .ui-button.ui-button-text-only .ui-button-text {
-  padding: 0;
-  line-height: 1.69;
-}
-*/
-/* line 100, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_content-ui.scss */
 .pretext-content .sagecell .sagecell_editor {
   margin-bottom: 8px;
 }
@@ -1428,7 +1331,6 @@
  * when there is a toc.
  * To override, we must add body specificity.
  */
-/* line 8, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_mathjax.scss */
 body.has-sidebar-left.sidebar-left-open #MathJax_Message {
   left: 248px;
 }
@@ -1436,7 +1338,6 @@ body.has-sidebar-left.sidebar-left-open #MathJax_Message {
 /* Restyle MathJax loading message.
  * To override, must add body specificity.
  */
-/* line 15, ../../../../../MathBook/mathbook-assets/scss/ui/partials/_mathjax.scss */
 body #MathJax_Message {
   background: #fffbfa;
   color: #932919;
@@ -1497,21 +1398,6 @@ body #MathJax_Message {
     overflow-x: auto;
     overflow-y: hidden;
   }
-}
-
-
-/* line 25, ../../../../../MathBook/mathbook-assets/scss/ui/lib_extensions/_ionicons-font.scss */
-/* check if this is actually used */
-.ion {
-  display: inline-block;
-  font-family: "Open Sans";
-  speak: none;
-  font-style: normal;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  text-rendering: auto;
-  line-height: 1;
 }
 
 /*******************************************************************************
