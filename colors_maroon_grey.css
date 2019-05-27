@@ -2,10 +2,10 @@
 /* Colors for UPS */
 
 :root {
-  --documenttitle: #66000;
+  --documenttitle: #660000;
   --bodytitle: #8e0a0c; 
   --bodysubtitle: #A62E1C;
-  --bodytitlehighlight: #d9ffe9;  /* light, and contrasting to bodytitle  */
+  --bodytitlehighlight: #eeeff3;  /* light, and contrasting to bodytitle  */
   --bodysubtitlehighlight: #fce5e4;  /* light, and contrasting to bodysubtitle  */
      /*
        The bodytitle and bodysubtitle colors must have at least a 3:1 contrast
