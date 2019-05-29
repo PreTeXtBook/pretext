@@ -142,8 +142,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="html.js.server" select="'https://pretextbook.org'" />
 <xsl:param name="html.js.version" select="'0.11'" />
 <xsl:param name="html.css.colorfile" select="''" />
+<!-- A temporary variable for testing -->
+<xsl:param name="debug.colors" select="''"/>
+
 <xsl:variable name="html-css-colorfile">
     <xsl:choose>
+        <!-- 2019-05-29: override with new files, no error-checking    -->
+        <!-- if not used, then previous scheme is employed identically -->
+        <xsl:when test="not($debug.colors = '')">
+            <xsl:text>colors_</xsl:text>
+            <xsl:value-of select="$debug.colors"/>
+            <xsl:text>.css</xsl:text>
+        </xsl:when>
         <xsl:when test="$html.css.colorfile = ''">
             <xsl:text>colors_default.css</xsl:text>
         </xsl:when>
