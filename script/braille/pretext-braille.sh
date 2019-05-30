@@ -21,7 +21,7 @@
 #       needs: mathjax-node
 #   sed (temporary?)
 #   mathjax-node-sre (via npm, supports JS script)
-#       needs: speech-rules-engine
+#       needs: speech-rule-engine
 #   liblouis (we use the Ubuntu package)
 
 
@@ -76,4 +76,4 @@ node ${SCRIPT}/mjpage-sre.js ${SCRATCH}/html-mml.html ${SCRATCH}/html-braille.ht
 # elements semantically
 # TODO: get  basename  of $1 and use that
 echo "Apply liblouis conversion to produce BRF file"
-file2brl -f ${SCRIPT}/pretext-liblouis.cfg ${SCRATCH}/html-braille.html ${SCRATCH}/final.brf
+file2brl -f ${SCRIPT}/pretext-liblouis.cfg ${SCRATCH}/html-braille.html ${SCRATCH}/final.brf 2> ${SCRATCH}/liblouis-debug.txt
