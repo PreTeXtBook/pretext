@@ -710,6 +710,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- a "codenumber," and a "title."  We format these       -->
 <!-- consistently here with a modal template.  We can hide -->
 <!-- components with classes on the enclosing "heading"    -->
+<!-- NB: this is overridden in the conversion to Braille,  -->
+<!-- to center chapter numbers above titles (and appendix, -->
+<!-- preface, etc), so coordinate with those templates.    -->
 <xsl:template match="*" mode="header-content">
     <span class="type">
         <xsl:apply-templates select="." mode="type-name" />
@@ -7205,6 +7208,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Emphasis -->
+<!-- NB: See override in Braille conversion -->
 <xsl:template match="em">
     <em class="emphasis">
         <xsl:apply-templates />
@@ -7751,6 +7755,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </span>
 </xsl:template>
 
+<!-- NB: this is overidden in the Braille conversion to  -->
+<!-- supply enclosing double-quotation marks.  Perhaps  -->
+<!-- this should be default behavior, rather than  -->
+<!-- letting CSS do it. -->
 <xsl:template match="articletitle">
     <span class="articletitle">
         <xsl:apply-templates />

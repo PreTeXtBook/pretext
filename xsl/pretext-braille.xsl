@@ -96,6 +96,80 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </html>
 </xsl:template>
 
+<!-- ######### -->
+<!-- Divisions -->
+<!-- ######### -->
+
+<!-- We override the content of titles of divisions that are -->
+<!-- peers of chapters in books (only).  A line break after  -->
+<!-- the number will result in a centered number over a  -->
+<!-- centered title via a liblouis style on HTML "h2" elements. -->
+
+<!-- Numbered, chapter-level headings, two lines to HTML -->
+<xsl:template match="chapter|appendix" mode="header-content">
+    <span class="type">
+        <xsl:apply-templates select="." mode="type-name" />
+    </span>
+    <xsl:text> </xsl:text>
+    <span class="codenumber">
+        <xsl:apply-templates select="." mode="number" />
+    </span>
+    <br/>
+    <span class="title">
+        <xsl:apply-templates select="." mode="title-full" />
+    </span>
+</xsl:template>
+
+<!-- Unnumbered, chapter-level headings, just title text -->
+<xsl:template match="preface|acknowledgement|biography|foreword|dedication|solutions[parent::backmatter]|references[parent::backmatter]|index|colophon" mode="header-content">
+    <span class="title">
+        <xsl:apply-templates select="." mode="title-full" />
+    </span>
+</xsl:template>
+
+
+<!-- Environments-->
+
+<!-- Born-hidden behavior is generally configurable, -->
+<!-- but we do not want any automatic or configured, -->
+<!-- knowlization to take place.  Ever.              -->
+<!-- Checklist:  implemented environments            -->
+<!-- Definitions                                     -->
+<!-- Examples                                        -->
+<xsl:template match="&DEFINITION-LIKE;|&EXAMPLE-LIKE;" mode="is-hidden">
+    <xsl:text>no</xsl:text>
+</xsl:template>
+
+
+<!-- ###################### -->
+<!-- Paragraph-Level Markup -->
+<!-- ###################### -->
+
+<!-- Stock HTML uses a span.articletitle -->
+<!-- We supply Unicode quotation marks   -->
+<xsl:template match="articletitle">
+    <xsl:text>&#x201C;</xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>&#x201D;</xsl:text>
+</xsl:template>
+
+<!-- We replace fancy Unicode double bracket characters  -->
+<!-- with two plain ASCII double brackets with overrides -->
+<!-- of the character definitions.                       -->
+
+<!-- Left Double Bracket -->
+<!-- nee MATHEMATICAL LEFT WHITE SQUARE BRACKET, &#x27e6; -->
+<xsl:template name="ldblbracket-character">
+    <xsl:text>[[</xsl:text>
+</xsl:template>
+
+<!-- Right Double Bracket -->
+<!-- nee MATHEMATICAL RIGHT WHITE SQUARE BRACKET, &#x27e7; -->
+<xsl:template name="rdblbracket-character">
+    <xsl:text>]]</xsl:text>
+</xsl:template>
+
+
 <!-- ########### -->
 <!-- Mathematics -->
 <!-- ########### -->
@@ -238,6 +312,32 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--                                                   -->
 <!--   Characters: "lq", "rq", "lsq", "rsq"            -->
 <!--   Grouping: "q", "sq"                             -->
+
+<!-- http://www.dotlessbraille.org/aposquote.htm -->
+
+<!-- ##### -->
+<!-- Lists -->
+<!-- ##### -->
+
+<!-- Preliminary: be sure to notate HTML with regard to override -->
+<!-- here.  Template will help locate for subsequent work.       -->
+<!-- <xsl:template match="ol/li|ul/li|var/li" mode="body">       -->
+
+<xsl:template match="ol/li" mode="body">
+    <li>
+        <xsl:apply-templates select="." mode="item-number"/>
+        <xsl:text>. </xsl:text>
+        <xsl:apply-templates/>
+    </li>
+</xsl:template>
+
+<xsl:template match="ul/li" mode="body">
+    <li>
+        <xsl:text>* </xsl:text>
+        <xsl:apply-templates/>
+    </li>
+</xsl:template>
+
 
 <!-- ###### -->
 <!-- Images -->
