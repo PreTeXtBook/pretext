@@ -2,6 +2,7 @@
 #
 # History:
 #   2019-02-17: Initiated
+#   2019-05-30: No longer extends stock "html.sem"
 
 # [LUPM] Liblouisutdml User's and Programmer's Manual
 
