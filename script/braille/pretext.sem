@@ -14,6 +14,22 @@
 # use a "title" element.  The Unicode characters become 
 # their ASCII Braille equivalents (it seems)
 
+####################
+# Document structure
+####################
+
+# We explicity kill the <head>, which is empty anyway,
+# and note that the <body> contains the document
+# We should not ever see <script> or <style>, but
+# we could choose to kill them here as well
+skip head
+document body
+
+############
+# Paragraphs
+############
+para p
+
 
 #################################################
 # Routine elements with uncontroversial semantics
@@ -94,6 +110,16 @@ list li
 list tr \*;
 generic td \*;\s
 
+##############
+# Holding Tank
+##############
+
+# These are copied from the stock liblouis "html.sem"
+# file, waiting to be employed, modified, or removed
+
+htmllink a,href
+htmltarget a,name
+code pre
 
 
 

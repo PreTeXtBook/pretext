@@ -6,6 +6,7 @@
 #
 # History:
 #   2019-02-17: Copied
+#   2019-05-30: Emptied, deleted
 
 # This file was produced by liblouisxml and is considered part of
 # the code. See the file copyright-notice for permissions and
@@ -14,12 +15,3 @@
 
 # You must edit this file as explained in the documentation to get
 # proper output.
-no body
-skip style
-no head
-document html
-para p
-htmllink a,href
-htmltarget a,name
-code pre
-skip script
