@@ -437,6 +437,79 @@ article > [data-knowl]::after, article > [data-knowl]:hover::after, article > [d
     margin-top: 0;
 }
 
+/* sort of a hack for proof knows in theorem knowls */
+.pretext-content div.knowl .posterior a[data-knowl]:first-child {
+    padding: 0;
+}
+
+
+/* show wide equation overflow even when no scroll bars,
+from Jiří Lebl */
+.pretext-content .MJXc-display, .pretext-content .knowl-output .knowl-output .knowl-output .knowl-output .MJXc-display ,
+.pretext-content pre.prettyprint,
+.pretext-content pre.plainprint {
+    background-image: linear-gradient(to right, white, white), linear-gradient(to right, white, white), linear-gradient(to right, rgba(0,0,0,.25), rgba(255,255,255,0)), linear-gradient(to left, rgba(0,0,0,.25), rgba(255,255,255,0));
+    background-position: left center, right center, left center, right center;
+    background-repeat: no-repeat;
+    background-color: inherit;
+    background-size: 20px 100%, 20px 100%, 10px 100%, 10px 100%;
+    background-attachment: local, local, scroll, scroll;
+}
+.pretext-content .knowl-output .MJXc-display {
+    background-image: none;
+    background-image: linear-gradient(to right, #f5f5ff, #f5f5ff), linear-gradient(to right, #f5f5ff, #f5f5ff), linear-gradient(to right, rgba(0,0,0,.25), rgba(243,243,255,0)), linear-gradient(to left, rgba(0,0,0,.25), rgba(243,243,255,0));
+}
+.pretext-content .assemblage-like .MJXc-display {
+    background-image: none;
+    background-image: linear-gradient(to right, #f4f4fe, #f4f4fe), linear-gradient(to right, #f4f4fe, #f4f4fe), linear-gradient(to right, rgba(0,0,0,.25), rgba(242,242,254,0)), linear-gradient(to left, rgba(0,0,0,.25), rgba(242,242,254,0));
+}
+
+
+.pretext-content .knowl-output .knowl-output .MJXc-display {
+    background-image: none;
+    background-image: linear-gradient(to right, #fffff5, #fffff5), linear-gradient(to right, #fffff5, #fffff5), linear-gradient(to right, rgba(0,0,0,.25), rgba(255,255,243,0)), linear-gradient(to left, rgba(0,0,0,.25), rgba(255,255,243,0));
+}
+.pretext-content .knowl-output .knowl-output .knowl-output .MJXc-display {
+    background-image: none;
+    background-image: linear-gradient(to right, #fff5fe, #fff5fe), linear-gradient(to right, #fff5fe, #fff5fe), linear-gradient(to right, rgba(0,0,0,.25), rgba(255,243,254,0)), linear-gradient(to left, rgba(0,0,0,.25), rgba(255,243,254,0));
+}
+
+
+
+/* not sure where this was being used, but it made short knowls
+ * look bad, like the hint here:
+ * SAFurtherReading.html
+*/
+.pretext-content .knowl-output .knowl-content > *:last-child:not(.incontext) {
+    margin-bottom: 0.5em;
+}
+
+/* No Greg's L in knowls, to save space */
+
+.pretext-content .knowl-content > article.theorem-like,
+.pretext-content .knowl-content > article.definition-like,
+.pretext-content .knowl-content > article.example-like,
+.pretext-content .knowl-content > article.project-like,
+.pretext-content .knowl-content > article.objectives,
+.pretext-content .knowl-content > article.outcomes,
+.pretext-content .knowl-content > article.remark-like {
+    padding-left: 0;
+    border-left: none;
+}
+.pretext-content .knowl-content > article.theorem-like::after,
+.pretext-content .knowl-content > article.definition-like::after,
+.pretext-content .knowl-content > article.example-like::after,
+.pretext-content .knowl-content > article.project-like::after,
+.pretext-content .knowl-content > article.objectives::after,
+.pretext-content .knowl-content > article.outcomes::after,
+.pretext-content .knowl-content > article.remark-like::after {
+    content: '';
+    border-bottom: none;
+    margin: 0;
+    padding: 0;
+    width: 0;
+}
+
 /*
 Greg's L
 
@@ -535,32 +608,6 @@ supplied by the general .type:after for headings
     margin-left: -0.6em;
     padding-top: 0.25em;
     width: 1.5em;
-}
-
-/* No Greg's L in knowls, to save space */
-
-.pretext-content .knowl-content > article.theorem-like,
-.pretext-content .knowl-content > article.definition-like,
-.pretext-content .knowl-content > article.example-like,
-.pretext-content .knowl-content > article.project-like,
-.pretext-content .knowl-content > article.objectives,
-.pretext-content .knowl-content > article.outcomes,
-.pretext-content .knowl-content > article.remark-like {
-    padding-left: 0;
-    border-left: none;
-}
-.pretext-content .knowl-content > article.theorem-like::after,
-.pretext-content .knowl-content > article.definition-like::after,
-.pretext-content .knowl-content > article.example-like::after,
-.pretext-content .knowl-content > article.project-like::after,
-.pretext-content .knowl-content > article.objectives::after,
-.pretext-content .knowl-content > article.outcomes::after,
-.pretext-content .knowl-content > article.remark-like::after {
-    content: '';
-    border-bottom: none;
-    margin: 0;
-    padding: 0;
-    width: 0;
 }
 
 .pretext-content section p.credit + p.credit {
@@ -1319,14 +1366,6 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
     overflow: hidden;
 }
 
-/* not sure where this was being used, but it made short knowls
- * look bad, like the hint here:
- * SAFurtherReading.html
-*/
-.pretext-content .knowl-output .knowl-content > *:last-child:not(.incontext) {
-    margin-bottom: 0.5em;
-}
-
 /*
 .pretext-content tt {
     font-size: 1.4em;
@@ -1399,6 +1438,9 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
     padding-top: 0.7ex;
     padding-left: 1ex;
 }
+
+/* the index at the back of the book */
+
 .indexnav {
     margin-left: 1.5ex;
     margin-top: 0.2ex;
@@ -1459,21 +1501,6 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
 .pretext-content .indexknowl a {
     margin-left: 2em;
 }
-/*
-.pretext-content .indexitem i,
-.pretext-content .subindexitem i,
-.pretext-content .subsubindexitem i {
-    margin-left: 1em;
-    margin-right: 0.25em;
-}
-*/
-
-/* temporary, to over-ride the misguided .indexitem i  above */
-/*
-.pretext-content b i {
-    margin: 0 !important;
-}
-*/
 
 .pretext-content .indexitem .see,
 .pretext-content .subindexitem .see,
@@ -1511,6 +1538,8 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
 .pretext-content .indexletter {
     margin-top: 1.5em;
 }
+
+/* end index */
 
 .pretext-content .hidden-knowl-wrapper .heading {
     display: inline;
@@ -1614,11 +1643,6 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
            opacity: 1; }
 }
 
-/*
-.pretext-content .autoterm {
-    display: inline;
-}
-*/
 
 .pretext-content .autoterm [knowl], .pretext-content .autoterm [knowl]:after {
     font-weight: inherit;
@@ -1767,40 +1791,6 @@ a.mjx-svg-href  {
 }
 }
 
-/* o show wide equation overflow even when no scroll bars,
-from Jiří Lebl */
-/*
-.MJXc-display, .figure-like {
-*/
-.pretext-content .MJXc-display, .pretext-content .knowl-output .knowl-output .knowl-output .knowl-output .MJXc-display ,
-.pretext-content pre.prettyprint,
-.pretext-content pre.plainprint {
-    background-image: linear-gradient(to right, white, white), linear-gradient(to right, white, white), linear-gradient(to right, rgba(0,0,0,.25), rgba(255,255,255,0)), linear-gradient(to left, rgba(0,0,0,.25), rgba(255,255,255,0));
-    background-position: left center, right center, left center, right center;
-    background-repeat: no-repeat;
-    background-color: inherit;
-    background-size: 20px 100%, 20px 100%, 10px 100%, 10px 100%;
-    background-attachment: local, local, scroll, scroll;
-}
-.pretext-content .knowl-output .MJXc-display {
-    background-image: none;
-    background-image: linear-gradient(to right, #f5f5ff, #f5f5ff), linear-gradient(to right, #f5f5ff, #f5f5ff), linear-gradient(to right, rgba(0,0,0,.25), rgba(243,243,255,0)), linear-gradient(to left, rgba(0,0,0,.25), rgba(243,243,255,0));
-}
-.pretext-content .assemblage-like .MJXc-display {
-    background-image: none;
-    background-image: linear-gradient(to right, #f4f4fe, #f4f4fe), linear-gradient(to right, #f4f4fe, #f4f4fe), linear-gradient(to right, rgba(0,0,0,.25), rgba(242,242,254,0)), linear-gradient(to left, rgba(0,0,0,.25), rgba(242,242,254,0));
-}
-
-
-.pretext-content .knowl-output .knowl-output .MJXc-display {
-    background-image: none;
-    background-image: linear-gradient(to right, #fffff5, #fffff5), linear-gradient(to right, #fffff5, #fffff5), linear-gradient(to right, rgba(0,0,0,.25), rgba(255,255,243,0)), linear-gradient(to left, rgba(0,0,0,.25), rgba(255,255,243,0));
-}
-.pretext-content .knowl-output .knowl-output .knowl-output .MJXc-display {
-    background-image: none;
-    background-image: linear-gradient(to right, #fff5fe, #fff5fe), linear-gradient(to right, #fff5fe, #fff5fe), linear-gradient(to right, rgba(0,0,0,.25), rgba(255,243,254,0)), linear-gradient(to left, rgba(0,0,0,.25), rgba(255,243,254,0));
-}
-
 
 /*  http://sites.wcsu.edu/mbxml/OER_Linear_Alg/glossary.html
    to fix the extra margin on top of the next term when
@@ -1826,16 +1816,6 @@ from Jiří Lebl */
     color: inherit;
 }
 
-/* to allow big math in knowl links */
-/*
-.pretext-content .hidden-knowl-wrapper a .mjx-chtml {
-*/
-/* main page of sample book */
-/*
-.pretext-content a .mjx-chtml {
-    background: inherit;
-}
-*/
 /* Example 4.8 of sample article (compare main page of sample book (4^{th} edition)`*/
 .pretext-content a .heading .mjx-chtml {
     z-index: 1;
@@ -2268,12 +2248,6 @@ sup .active[data-knowl] {
 sup [data-knowl]:hover {
     padding: 0px 0px 0px 3px;
 }
-
-/*
-.pretext-content .proof > .heading:after {
-    content: ".";
-}
-*/
 
 .pretext-content pre.prettyprint,
 .pretext-content pre.plainprint {
@@ -2717,21 +2691,11 @@ body.sidebar-left-closed .searchwrapper {
     font-size: larger;
     vertical-align: -0.15ex;
 }
-/* temporary for Mitch Keller.  delete at end of 2017 */
-.pretext-content div.knowl .posterior div a:first-child {
-    font-style: italic;
-}
 /* temporary for Geogebra development: replace with a more
   restrictive selector for articles */
 .pretext-content article.notranslate {
     margin-top: 0;
 }
-
-/* sort of a hack for proof knows in theorem knowls */
-.pretext-content div.knowl .posterior a[data-knowl]:first-child {
-    padding: 0;
-}
-
 
 /*
 nested tasks. see
