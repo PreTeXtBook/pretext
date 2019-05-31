@@ -53,7 +53,7 @@
   --chaptertocactive: var(--documenttitle);   /* often the same as documenttitle */
   --chaptertoctextactive: white;
   --sectiontoc: white;   /* can also write it as #ffffff  */
-  --sectiontoctext: #20602f;
+  --sectiontoctext: #00326b;
   --sectiontocactive: var(--documenttitle);   /* often the same as documenttitle */
   --sectiontoctextactive: white;
   --tocborder: #152f53;
