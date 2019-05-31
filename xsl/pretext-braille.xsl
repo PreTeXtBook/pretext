@@ -140,6 +140,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>no</xsl:text>
 </xsl:template>
 
+<!-- ################ -->
+<!-- Subsidiary Items -->
+<!-- ################ -->
+
+<!-- These tend to "hang" off other structures and/or are routinely -->
+<!-- rendered as knowls.  So we turn off automatic knowlization     -->
+<xsl:template match="&SOLUTION-LIKE;" mode="is-hidden">
+    <xsl:text>no</xsl:text>
+</xsl:template>
 
 <!-- ###################### -->
 <!-- Paragraph-Level Markup -->
