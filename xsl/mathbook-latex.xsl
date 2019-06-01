@@ -1386,6 +1386,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>}&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
+    <xsl:if test="$document-root//image">
+        <xsl:text>%% "tcolorbox" environment for a single image, occupying entire \linewidth&#xa;</xsl:text>
+        <xsl:text>%% arguments are left-margin, width, right-margin, as multiples of&#xa;</xsl:text>
+        <xsl:text>%% \linewidth, and are guaranteed to be positive and sum to 1.0&#xa;</xsl:text>
+        <xsl:text>\tcbset{ imagestyle/.style={bwminimalstyle} }&#xa;</xsl:text>
+        <xsl:text>\NewTColorBox{image}{mmm}{imagestyle,left skip=#1\linewidth,width=#2\linewidth}&#xa;</xsl:text>
+    </xsl:if>
     <!-- Tables -->
     <xsl:if test="//tabular">
         <xsl:text>%% For improved tables&#xa;</xsl:text>
@@ -8493,30 +8500,57 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="$layout/width div 100" />
 </xsl:template>
 
+<!-- IN-PROGRESS: Following versions match naked images, and any image -->
+<!-- inside a sidebyside, leaving only figure/image to use preceding   -->
+<!-- (variable) value.  Once every image is inside a tcolorbox, then   -->
+<!-- the contained image will have the width of the box, set as        -->
+<!-- 1\linewidth (i.e. \linewidth).  Then this/these templates         -->
+<!-- can be removed.                                                   -->
+
 <!-- Anyway that an image is buried in a side-by-side control passes to  -->
 <!-- the sbs layout and the linewidth of the resulting tcolorboxes is restricted -->
 <xsl:template match="image[ancestor::sidebyside]" mode="get-width-fraction">
     <xsl:value-of select="'1'"/>
 </xsl:template>
 
+<!-- A "naked" image is going into a width-controlled tcolorbox -->
+<xsl:template match="image[not(parent::figure or parent::sidebyside or parent::stack)]" mode="get-width-fraction">
+    <xsl:value-of select="'1'"/>
+</xsl:template>
+
+<!-- naked images into a tcolorbox -->
+<!-- IN-PROGRESS: non-sidebyside images should all be done this way -->
+<!-- in other words, figure/image[not(ancestor::sidebyside)] -->
 <xsl:template match="image[not(parent::figure or parent::sidebyside or parent::stack)]" priority="50">
     <xsl:variable name="rtf-layout">
         <xsl:apply-templates select="." mode="layout-parameters" />
     </xsl:variable>
     <xsl:variable name="layout" select="exsl:node-set($rtf-layout)" />
-    <xsl:text>\begin{figure}</xsl:text>
+    <xsl:text>\begin{image}</xsl:text>
+    <xsl:text>{</xsl:text>
+    <xsl:value-of select="$layout/left-margin div 100"/>
+    <xsl:text>}</xsl:text>
+    <xsl:text>{</xsl:text>
+    <xsl:value-of select="$layout/width div 100"/>
+    <xsl:text>}</xsl:text>
+    <xsl:text>{</xsl:text>
+    <xsl:value-of select="$layout/right-margin div 100"/>
+    <xsl:text>}%&#xa;</xsl:text>
+    <!-- Eventually, any tikz-type image should be resized into a     -->
+    <!-- tcolorbox, so this conditional should just migrate to the    -->
+    <!-- image-inclusion template, which recognizes the type of image -->
+    <!-- See also the inclusion into a sidebyside panel               -->
     <xsl:choose>
-        <xsl:when test="$layout/centered = 'true'">
-            <xsl:text>\centering</xsl:text>
+        <xsl:when test="latex-image|latex-image-code">
+            <xsl:text>\resizebox{\linewidth}{!}{%&#xa;</xsl:text>
+            <xsl:apply-templates select="." mode="image-inclusion"/>
+            <xsl:text>}%&#xa;</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:text>\hspace*{</xsl:text>
-            <xsl:value-of select="$layout/left-margin div 100" />
-            <xsl:text>\linewidth}</xsl:text>
+            <xsl:apply-templates select="." mode="image-inclusion" />
         </xsl:otherwise>
     </xsl:choose>
-    <xsl:apply-templates select="." mode="image-inclusion" />
-    <xsl:text>\end{figure}</xsl:text>
+    <xsl:text>\end{image}%&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template match="image[parent::figure and not(ancestor::sidebyside)]" priority="100">
