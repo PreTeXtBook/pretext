@@ -2145,15 +2145,35 @@ the xsltproc executable.
             <title>Graphics</title>
 
             <introduction>
-                <p>Mathbook XML supports several languages for describing diagrams and pictures with human-readable source code (<ie /> plain text), rather than using a <q>paint</q> program.  Any <latex /> macros used in the rest of your document may be employed in the <latex/>-standalone or Asymptote diagrams (with Sage graphics coming next?).</p>
+                <p>In addition to including images created externally (e.g. photographs),  <pretext/> supports several languages for describing diagrams and pictures with human-readable source code (<ie /> plain text), rather than using a <q>paint</q> program.  This section describes the various methods for incorporationg, or generating, graphis, images or diagrams.</p>
             </introduction>
 
             <subsection>
-                <title><latex /> images</title>
-                <idx><latex /> image</idx>
-                <idx><h>image</h><h><latex /> image</h></idx>
+                <title>Images from External Sources</title>
 
-                <p>There are several graphics engine packages that a <latex /> document can employ. Code from these packages renders diagrams automatically as part of normal processing of <latex /> files.  For HTML output the <c>mbx</c> script produces SVG versions of the pictures.  The script can also produce standalone TEX source files, PDFs, PNGs, and EPSs. The packages should be loaded in <c>docinfo/latex-image-preamble</c>, which is also where global package settings should be made. If any ampersands occur in your <latex/> code you should use the <c>\amp</c> macro pre-defined by <pretext/>. These first examples are from the <url href="http://www.texample.net/tikz/examples/">TeXample.net</url> site.</p>
+                <p>If you have raster images (photographs, etc.) then they are specified with complete filenames, as above in Figure<nbsp /><xref ref="figure-function-derivative"/> or just below.</p>
+
+                <figure>
+                    <caption>New Zealand Landscape, <url href="https://commons.wikimedia.org/wiki/File:NZ_Landscape_from_the_van.jpg"><c>https://commons.wikimedia.org/wiki/File:NZ_Landscape_from_the_van.jpg</c></url>, CC-BY-SA-2.0</caption>
+                    <image source="images/nz-landscape.jpg" width="80%"/>
+                </figure>
+
+                <p>If you have existing images that are vector graphics, then PDF format works best for <latex/> output and SVG format works best for HTML.  The utility <c>pdf2svg</c> works well for converting PDF to SVG.  In this case, specify your source as a filename, but leave off the file extension, and the appropriate version will be used for the current output format.</p>
+
+                <p>The image below is provided from a PDF file in <latex/> output, and was converted to an SVG for use with the HTML output.  It has been explicitly scaled to a width of 65% of the text width.</p>
+
+                <figure xml:id="figure-complete-graph">
+                    <caption>Complete graph on <m>16</m> vertices, from <c>www.texample.net</c></caption>
+                    <image source="images/complete-graph" width="65%"/>
+                </figure>
+            </subsection>
+
+            <subsection>
+                <title><latex/> images</title>
+                <idx><latex/> image</idx>
+                <idx><h>image</h><h><latex/> image</h></idx>
+
+                <p>There are several graphics engine packages that a <latex/> document can employ. Code from these packages renders diagrams automatically as part of normal processing of <latex/> files.  For HTML output the <c>mbx</c> script produces SVG versions of the pictures.  The script can also produce standalone <tex/> source files, PDFs, PNGs, and EPSs. The packages should be loaded in <c>docinfo/latex-image-preamble</c>, which is also where global package settings should be made. If any ampersands occur in your <latex/> code you should use the <c>\amp</c> macro pre-defined by <pretext/>. These first examples are from the <url href="http://www.texample.net/tikz/examples/">TeXample.net</url> site.  Note that any <latex /> macros used in the rest of your document may be employed in the <latex/>-standalone or Asymptote diagrams (with this feature coming to Sage graphics next?).</p>
 
                 <!-- http://www.texample.net/media/tikz/examples/TEX/noise-shaper.tex -->
                 <figure xml:id="figure-tikz-electronics">
@@ -2406,17 +2426,6 @@ the xsltproc executable.
                 <p>PSTricks is a <latex /> package for drawing diagrams and pictures, dating back to the days before <init>PDF</init>, when PostScript (<init>PS</init>) was king.  Given its history, it does not seem to work easily with the <c>pdflatex</c> engine.  But it will work easily with the <c>xelatex</c> engine.  We try to keep this present sample document workable with both engines, so we have presented an example of the use of PSTricks in the <c>xelatex</c>-exclusive sample document where we test obscure fonts and characters.  So your best bet is to look there.<idx>PSTricks</idx></p>
 
                 <p>There are suggestions online that <cd>\usepackage[pdf]{pstricks}</cd>along with <cd>pdflatex --shell-escape *.tex</cd> is workable.  We could not make it happen, and a <q>shell escape</q> can be a dangerous security hole.  That said, updates to this approach are welcome.</p>
-            </subsection>
-
-            <subsection>
-                <title>Placing Images without a Caption</title>
-
-                <p>To place an image without a caption, use the <tag>sidebyside</tag> layout element, containing just a single <tag>image</tag>.  There is no way to add a caption, and the item will not be numbered.  You cannot cross-reference it, nor will it appear in a knowl in HTML output.  You will get a bit of vertical separation for the transitions to/from horizontal layout.  Use <c>margins=auto</c> on the <tag>sidebyside</tag> to center the image<mdash />this should become the default behavior.  A variety of other elements may be placed in a similar manner.  See Section<nbsp /><xref ref="section-side-by-side" /> to learn more about the <tag>sidebyside</tag> layout element.</p>
-
-                <sidebyside width="30%" margins="auto">
-                    <image xml:id="cross-square" source="images/cross-square.png"/>
-                </sidebyside>
-
             </subsection>
 
             <subsection>
@@ -2702,22 +2711,9 @@ the xsltproc executable.
             </subsection>
 
             <subsection>
-                <title>Images from External Sources</title>
-
-                <p>If you have raster images (photographs, etc) then they are specified with complete filenames, as above in Figure<nbsp /><xref ref="figure-function-derivative" />.  If you have existing images that are vector graphics, then PDF format works best for <latex /> output and SVG format works best for HTML.  The utility <c>pdf2svg</c> works well for converting PDF to SVG.  In this case, specify your source as a filenmae, but leave off the file extension, and the appropriate version will be used for the current output format.</p>
-
-                <p>The image below is provided from a PDF file for the <latex /> output, and was converted to an SVG for use with th HTML output.</p>
-
-                <figure xml:id="figure-complete-graph">
-                    <caption>Complete graph on <m>16</m> vertices, from <c>www.texample.net</c></caption>
-                    <image source="images/complete-graph" width="65%"/>
-                </figure>
-            </subsection>
-
-            <subsection>
                 <title>Copies of Images</title>
 
-                <p>Sometimes you want to use the same image more than once.  For a raster image, you can just point to it again.  You are free to wrap it in a <c>figure</c> or <c>sidebyside</c> and change the caption.  It will get a new number as a new figure, and you will need to assign a unique <c>@xml:id</c> attribute.  Maybe appending <c>-copy-2</c>, or similar, will be helpful.</p>
+                <p>Sometimes you want to use the same image more than once.  For a raster image, you can just point to it again.  You are free to wrap it in a <c>figure</c> and thus change the caption.  It will get a new number as a new figure, and you will need to assign a unique <attr>xml:id</attr> attribute.  Maybe appending <c>-copy-2</c>, or similar, to the <attr>xml:id</attr> will be helpful.</p>
 
                 <figure xml:id="figure-raster-image-copy">
                     <caption>Copy of raster image, in a figure, so now numbered and captioned</caption>
@@ -2725,6 +2721,195 @@ the xsltproc executable.
                 </figure>
 
                 <p>If you have a figure generated from source code (such as in TikZ) you can place the code into a file and <c>xinclude</c> it twice.  The <c>mbx</c> script will make two copies if you include the source twice, but with different names (generated from the different <c>@xml:id</c>).  Furthermore, with the <c>@parse</c> attribute on the <c>xinclude</c> element set to <c>text</c> you are absolved from escaping the dangerous XML characters (see <xref ref="subsection-xml-escape" text="type-global"/>) and definitely have no need for the often mis-understood <c>CDATA</c> mechanism.  We demonstrate this with the sample book, since it is all set up with the <c>xinclude</c> mechanism.  See the two plots of the 8-th roots of unity in the complex numbers section of the chapter on cyclic groups.</p>
+            </subsection>
+
+            <subsection>
+                <title>Caption Testing</title>
+
+                <p>A caption could be as substantial as a paragraph, here we test out one such example.</p>
+
+                <figure xml:id="figure-long-caption">
+                    <caption>A caption can be a whole paragraph with lots of technical details, and maybe a hyperlink to something external, such as <url href="https://pretextbook.org"><c>pretextbook.org</c></url>.  There could be some inline mathematics, such as <m>x^2 + y^2 = c^2</m>.  Would a knowl open here?  Recursively?  Let's see: <xref ref="figure-long-caption" />.  Display mathematics, side-by-sides, theorems, and lots of other things should be banned.  Footnotes sound like a bad idea.  Strange characters should be fine: <section-mark />.</caption>
+
+                    <image source="images/cross-square.png" width="20%" />
+                </figure>
+            </subsection>
+
+            <subsection xml:id="captionless-images">
+                <title>Captionless Images</title>
+
+                <p>We strongly suggest placing images within a <tag>figure</tag>, as we have done above, so that you can reference them, and use the (required) <tag>caption</tag> to explain what they are.  However there are places, such as a <tag>preface</tag>, where numbered itmes are not permitted.  So you might want a solo image there.  Or maybe graphics are an illustration of sorts, and a numbered figure feels like overkill.  Or it is part of an <tag>exercise</tag> or <tag>proof</tag> of a <tag>theorem</tag>. But notice that you cannot then use this image as the target of a cross-reference, so you may need to refer to some enclosing container.</p>
+
+                <p>The image can be scaled by specifying the <attr>width</attr> as a percentage, including the percent-sign (%).  The height is scaled to preserve the aspect ratio.  There is no facility to change the height, it is your responsibility to manage the aspect ratio independently.  The <attr>margins</attr> can be given as a pair of percentages, separated by a space.  The <attr>width</attr> defaults to 100%, while <attr>margins</attr> defaults to the value <c>auto</c>, which will center the image.  Missing values are computed sensibly, and there is robust error-checking.  The layout control here is a subset of what is available for the more elaborate <tag>sidebyside</tag> element, see <xref ref="section-side-by-side" text="type-global"/>.</p>
+
+                <p>Two simple examples. The first has width <c>10%</c> and so defaults to being centered, and the second has width <c>10%</c> and left margin of <c>25%</c>.</p>
+
+                <image source="images/cross-square.png" width="10%"/>
+
+                <p>A paragraph, just to show where the first stops and the second ends.</p>
+
+                <image source="images/cross-square.png" width="10%" margins="25% 65%"/>
+
+                <p>You might wish to place a single image flush-left, or flush-right.  You can specify the <c>margins</c> attribute as a pair of percentages for different left and right margins.  The following are laid out with two margins, with a 0% left margin and right margin (respectively). </p>
+
+                <image source="images/cross-square.png" width="10%" margins="0% 90%"/>
+
+                <image source="images/cross-square.png" width="10%" margins="90% 0%"/>
+
+                <p>We place two images right above one another, to test spacing of consecutive images (provided they stay on the same page!).</p>
+
+                <image source="images/cross-square.png" width="10%" margins="10% 80%"/>
+
+                <image source="images/cross-square.png" width="10%" margins="10% 80%"/>
+
+                <paragraphs>
+                    <title>Testing (2019-06-02)</title>
+
+                    <p>All the images above are specified by filenames.  We need to test how various options behave when incorporated into the (new) implementation for images, being introduced with solo images.</p>
+
+                    <p>A <c>tikz</c> image recycled from above, now 40% width, with 40% left margin, 20% right margin.</p>
+
+                    <image xml:id="tikz-cone-solo" width="40%" margins="40% 20%">
+                        <latex-image>
+                        <!-- CDATA prevents certain LaTeX code from being interpreted as xml -->
+                        <![CDATA[\begin{tikzpicture}[join=round]
+                        \tikzstyle{conefill} = [fill=blue!20,fill opacity=0.8]
+                        \tikzstyle{ann} = [fill=white,font=\footnotesize,inner sep=1pt]
+                        \tikzstyle{ghostfill} = [fill=white]
+                             \tikzstyle{ghostdraw} = [draw=black!50]
+                        \filldraw[conefill](-.775,1.922)--(-1.162,.283)--(-.274,.5)
+                                            --(-.183,2.067)--cycle;
+                        \filldraw[conefill](-.183,2.067)--(-.274,.5)--(.775,.424)
+                                            --(.516,2.016)--cycle;
+                        \filldraw[conefill](.516,2.016)--(.775,.424)--(1.369,.1)
+                                            --(.913,1.8)--cycle;
+                        \filldraw[conefill](-.913,1.667)--(-1.369,-.1)--(-1.162,.283)
+                                            --(-.775,1.922)--cycle;
+                        \draw(1.461,.107)--(1.734,.127);
+                        \draw[arrows=<->](1.643,1.853)--(1.643,.12);
+                        \filldraw[conefill](.913,1.8)--(1.369,.1)--(1.162,-.283)
+                                            --(.775,1.545)--cycle;
+                        \draw[arrows=->,line width=.4pt](.274,-.5)--(0,0)--(0,2.86);
+                        \draw[arrows=-,line width=.4pt](0,0)--(-1.369,-.1);
+                        \draw[arrows=->,line width=.4pt](-1.369,-.1)--(-2.1,-.153);
+                        \filldraw[conefill](-.516,1.45)--(-.775,-.424)--(-1.369,-.1)
+                                            --(-.913,1.667)--cycle;
+                        \draw(-1.369,.073)--(-1.369,2.76);
+                        \draw(1.004,1.807)--(1.734,1.86);
+                        \filldraw[conefill](.775,1.545)--(1.162,-.283)--(.274,-.5)
+                                            --(.183,1.4)--cycle;
+                        \draw[arrows=<->](0,2.34)--(-.913,2.273);
+                        \draw(-.913,1.84)--(-.913,2.447);
+                        \draw[arrows=<->](0,2.687)--(-1.369,2.587);
+                        \filldraw[conefill](.183,1.4)--(.274,-.5)--(-.775,-.424)
+                                            --(-.516,1.45)--cycle;
+                        \draw[arrows=<-,line width=.4pt](.42,-.767)--(.274,-.5);
+                        \node[ann] at (-.456,2.307) {$r_0$};
+                        \node[ann] at (-.685,2.637) {$r_1$};
+                        \node[ann] at (1.643,.987) {$h$};
+                        \path (.42,-.767) node[below] {$x$}
+                            (0,2.86) node[above] {$y$}
+                            (-2.1,-.153) node[left] {$z$};
+                        % Second version of the cone
+                        \begin{scope}[xshift=3.5cm]
+                        \filldraw[ghostdraw,ghostfill](-.775,1.922)--(-1.162,.283)--(-.274,.5)
+                                                       --(-.183,2.067)--cycle;
+                        \filldraw[ghostdraw,ghostfill](-.183,2.067)--(-.274,.5)--(.775,.424)
+                                                       --(.516,2.016)--cycle;
+                        \filldraw[ghostdraw,ghostfill](.516,2.016)--(.775,.424)--(1.369,.1)
+                                                       --(.913,1.8)--cycle;
+                        \filldraw[ghostdraw,ghostfill](-.913,1.667)--(-1.369,-.1)--(-1.162,.283)
+                                                       --(-.775,1.922)--cycle;
+                        \filldraw[ghostdraw,ghostfill](.913,1.8)--(1.369,.1)--(1.162,-.283)
+                                                       --(.775,1.545)--cycle;
+                        \filldraw[ghostdraw,ghostfill](-.516,1.45)--(-.775,-.424)--(-1.369,-.1)
+                                                       --(-.913,1.667)--cycle;
+                        \filldraw[ghostdraw,ghostfill](.775,1.545)--(1.162,-.283)--(.274,-.5)
+                                                       --(.183,1.4)--cycle;
+                        \filldraw[fill=red,fill opacity=0.5](-.516,1.45)--(-.775,-.424)--(.274,-.5)
+                                                             --(.183,1.4)--cycle;
+                        \fill(-.775,-.424) circle (2pt);
+                        \fill(.274,-.5) circle (2pt);
+                        \fill(-.516,1.45) circle (2pt);
+                        \fill(.183,1.4) circle (2pt);
+                        \path[font=\footnotesize]
+                                (.913,1.8) node[right] {$i\hbox{$=$}0$}
+                                (1.369,.1) node[right] {$i\hbox{$=$}1$};
+                        \path[font=\footnotesize]
+                                (-.645,.513) node[left] {$j$}
+                                (.228,.45) node[right] {$j\hbox{$+$}1$};
+                        \draw (-.209,.482)+(-60:.25) [yscale=1.3,->] arc(-60:240:.25);
+                        \fill[black,font=\footnotesize]
+                                        (-.516,1.45) node [above] {$P_{00}$}
+                                        (-.775,-.424) node [below] {$P_{10}$}
+                                        (.183,1.4) node [above] {$P_{01}$}
+                                        (.274,-.5) node [below] {$P_{11}$};
+                        \end{scope}
+                        \end{tikzpicture}]]>
+                        </latex-image>
+                    </image>
+
+                    <p>A <c>pgfplot</c> image recycled from above, now 20% width, with 40% left margin, 40% right margin, and no longer legible.</p>
+
+                    <image xml:id="pgfplots-data-demo-solo" width="20%" margins="40% 40%">
+                        <latex-image>
+                        <!-- CDATA prevents certain LaTeX code from being interpreted as xml -->
+                        <![CDATA[\tikzset{%
+                        }
+                        \begin{tikzpicture}
+                        \begin{axis}[
+                            xmin=0,xmax=100,ymin=-20,ymax=100,
+                            ytick={-20,0,...,100},
+                            xlabel={time (ms)},
+                            ylabel={potential (V)},
+                        ]
+                        \addplot[blue] table {data/hodgkin-huxley-data.dat};
+                        \end{axis}
+                        \end{tikzpicture}]]>
+                        </latex-image>
+                    </image>
+
+
+                    <p>An Asymptote image, with zero layout control, so 100% width.</p>
+
+                    <image xml:id="asymptote-lever-solo">
+                        <description>Moments on a lever</description>
+                        <asymptote>
+                        size(200,0);
+
+                        pair z0=(0,0);
+                        pair z1=(2,0);
+                        pair z2=(5,0);
+                        pair zf=z1+0.75*(z2-z1);
+
+                        draw(z1--z2);
+                        dot(z1,red+0.15cm);
+                        dot(z2,darkgreen+0.3cm);
+                        label("$m$",z1,1.2N,red);
+                        label("$M$",z2,1.5N,darkgreen);
+                        label("$\hat{\ }$",zf,0.2*S,fontsize(24pt)+blue);
+
+                        pair s=-0.2*I;
+                        draw("$x$",z0+s--z1+s,N,red,Arrows,Bars,PenMargins);
+
+                        s=-0.5*I;
+                        draw("$\bar{x}$",z0+s--zf+s,blue,Arrows,Bars,PenMargins);
+
+                        s=-0.95*I;
+                        draw("$X$",z0+s--z2+s,darkgreen,Arrows,Bars,PenMargins);
+                        </asymptote>
+                    </image>
+
+                    <p>A Sage example, pushed to the right margin.</p>
+
+                    <image xml:id="sageplot-parabola-solo" width="30%" margins="70% 0%">
+                        <description>A standard parabola on the interval [-2,4]</description>
+                        <sageplot>
+                        f(x) = x^2
+                        plot(f, (x, -2, 4), color='green', thickness=3)
+                        </sageplot>
+                    </image>
+                </paragraphs>
             </subsection>
 
             <subsection>
@@ -2787,18 +2972,6 @@ the xsltproc executable.
                 </sidebyside>
 
                 <p>In the early stages of a writing project, it may be best not to track provisional image files built with <c>mbx</c> under version control, and just regenerate them periodically (see the <c>-r</c> option for <c>mbx</c>).  As a project matures, then it makes sense to put stable files under version control for collaborators and others.  In every case, managing graphics files (and other aspects of production), is much more pleasurable with a script (shell, Makefile, etc.)</p>
-            </subsection>
-
-            <subsection>
-                <title>Caption Testing</title>
-
-                <p>A caption could be as substantial as a paragraph, here we test out one such example.</p>
-
-                <figure xml:id="figure-long-caption">
-                    <caption>A caption can be a whole paragraph with lots of technical details, and maybe a hyperlink to something external, such as <url href="https://pretextbook.org"><c>pretextbook.org</c></url>.  There could be some inline mathematics, such as <m>x^2 + y^2 = c^2</m>.  Would a knowl open here?  Recursively?  Let's see: <xref ref="figure-long-caption" />.  Display mathematics, side-by-sides, theorems, and lots of other things should be banned.  Footnotes sound like a bad idea.  Strange characters should be fine: <section-mark />.</caption>
-
-                    <image source="images/cross-square.png" width="20%" />
-                </figure>
             </subsection>
         </section>
 
@@ -6007,38 +6180,6 @@ the xsltproc executable.
                         </row>
                     </tabular>
                 </table>
-            </subsection>
-
-            <subsection>
-                <title>A Single Captionless Image</title>
-
-                <p>Sometimes you may want to include a single <c>image</c> or <c>table</c> in an example or exercise without a caption.   This formerly required a <c>sidebyside</c>, but here we are testing a more direct markup. The first has width <c>10%</c>, and the second has width <c>10%</c> and left margin of <c>25%</c>.</p>
-
-                <image source="images/cross-square.png" width="10%"/>
-
-                <p>A paragraph, just to show where the first stops and the second ends.</p>
-
-                <image source="images/cross-square.png" width="10%" margins="25% 65%"/>
-
-                <p>You might wish to place a single image flush-left, or flush-right.  You can specify the <c>margins</c> attribute as a pair of percentages for different left and right margins.  The following are laid out with two margins, with a 0% left margin and right margin (respectively). </p>
-
-                <sidebyside width="10%" margins="0% 90%">
-                    <image source="images/cross-square.png"/>
-                </sidebyside>
-
-                <sidebyside width="10%" margins="90% 0%">
-                    <image source="images/cross-square.png"/>
-                </sidebyside>
-
-                <p>Results will be incorrect for the latter if the widths of the left margin and the panel do not add to 100%.  In general, in the case of a single panel, the left margin, right margin, and panel width should all add up to 100%.</p>
-
-                <p>Of course, asymmetric margins may be used with several panels.  The following is designed to leave a 25% gap between the two panels.</p>
-
-                <sidebyside width="10%" margins="45% 10%">
-                    <image source="images/cross-square.png"/>
-                    <image source="images/cross-square.png"/>
-                </sidebyside>
-
             </subsection>
 
             <subsection>
