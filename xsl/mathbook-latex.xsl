@@ -6151,6 +6151,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:apply-templates select="caption" />
     <xsl:text>\end{namedlist}&#xa;</xsl:text>
+    <xsl:apply-templates select="." mode="pop-footnote-text"/>
 </xsl:template>
 
 <!-- Paragraphs -->
@@ -8197,6 +8198,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="node()[not(self::caption)]"/>
     <xsl:apply-templates select="caption" />
     <xsl:text>\end{figure}&#xa;</xsl:text>
+    <xsl:apply-templates select="." mode="pop-footnote-text"/>
 </xsl:template>
 
 <!-- Listings -->
@@ -8214,6 +8216,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\par&#xa;</xsl:text>
     <xsl:apply-templates select="caption" />
     <xsl:text>\end{listing}&#xa;</xsl:text>
+    <xsl:apply-templates select="." mode="pop-footnote-text"/>
 </xsl:template>
 
 
@@ -8717,6 +8720,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="node()[not(self::caption)]" />
     <xsl:apply-templates select="caption" />
     <xsl:text>\end{table}&#xa;</xsl:text>
+    <xsl:apply-templates select="." mode="pop-footnote-text"/>
 </xsl:template>
 
 <!-- A tabular layout -->
@@ -10094,14 +10098,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Footnotes -->
 <!-- For blocks implemented as "tcolorbox" we need to manage -->
-<!-- footnotes more carefully.  At the location, we just     -->
+<!-- footnotes more carefully.  Also for captions since they -->
+<!-- migrate to list of figures.  At the location, we just   -->
 <!-- drop a mark, with no text.  Testing with the "footmisc" -->
 <!-- package, and its "\mpfootnotemark" alternative works    -->
 <!-- worse than simple default LaTeX (though the numbers     -->
 <!-- could be hard-coded if necessary).                      -->
 <xsl:template match="fn">
     <xsl:choose>
-        <xsl:when test="ancestor::*[&ASIDE-FILTER; or &THEOREM-FILTER; or &AXIOM-FILTER;  or &DEFINITION-FILTER; or &REMARK-FILTER; or &COMPUTATION-FILTER; or &EXAMPLE-FILTER; or &PROJECT-FILTER; or self::list or self::sidebyside or self::defined-term or self::objectives or self::outcomes or self::colophon/parent::backmatter or self::assemblage or self::exercise]">
+        <xsl:when test="ancestor::*[&ASIDE-FILTER; or &THEOREM-FILTER; or &AXIOM-FILTER;  or &DEFINITION-FILTER; or &REMARK-FILTER; or &COMPUTATION-FILTER; or &EXAMPLE-FILTER; or &PROJECT-FILTER; or &FIGURE-FILTER; or self::list or self::sidebyside or self::defined-term or self::objectives or self::outcomes or self::colophon/parent::backmatter or self::assemblage or self::exercise]">
+            <!-- a footnote in the text of a caption will migrate to -->
+            <!-- the auxiliary file for use in the "list of figures" -->
+            <!-- and there is some confusion of braces and the use   -->
+            <!-- of \footnote and \footnotemark, hence a \protect    -->
+            <!-- https://tex.stackexchange.com/questions/10181       -->
+            <xsl:if test="ancestor::*[&FIGURE-FILTER;]">
+                <xsl:text>\protect</xsl:text>
+            </xsl:if>
             <xsl:text>\footnotemark{}</xsl:text>
         </xsl:when>
         <xsl:otherwise>
@@ -10120,7 +10133,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- by an intervening "tcolorbox".  The template should be placed -->
 <!-- immediately after the "\end{}" of affected environments.      -->
 <!-- It will format as one footnote text per output line.          -->
-<xsl:template match="&ASIDE-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|list|sidebyside|defined-term|objectives|outcomes|backmatter/colophon|assemblage|exercise" mode="pop-footnote-text">
+<xsl:template match="&ASIDE-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&FIGURE-LIKE;|list|sidebyside|defined-term|objectives|outcomes|backmatter/colophon|assemblage|exercise" mode="pop-footnote-text">
     <xsl:for-each select=".//fn">
         <xsl:text>\footnotetext[</xsl:text>
         <xsl:apply-templates select="." mode="serial-number"/>

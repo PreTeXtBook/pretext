@@ -2154,7 +2154,7 @@ the xsltproc executable.
                 <p>If you have raster images (photographs, etc.) then they are specified with complete filenames, as above in Figure<nbsp /><xref ref="figure-function-derivative"/> or just below.</p>
 
                 <figure>
-                    <caption>New Zealand Landscape, <url href="https://commons.wikimedia.org/wiki/File:NZ_Landscape_from_the_van.jpg"><c>https://commons.wikimedia.org/wiki/File:NZ_Landscape_from_the_van.jpg</c></url>, CC-BY-SA-2.0</caption>
+                    <caption>New Zealand Landscape, <url href="https://commons.wikimedia.org/wiki/File:NZ_Landscape_from_the_van.jpg"><c>commons.wikimedia.org</c></url><fn><c>https://commons.wikimedia.org/wiki/File:NZ_Landscape_from_the_van.jpg</c></fn>, CC-BY-SA-2.0</caption>
                     <image source="images/nz-landscape.jpg" width="80%"/>
                 </figure>
 
