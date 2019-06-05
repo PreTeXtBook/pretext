@@ -593,7 +593,13 @@ def webwork_to_xml(xslt_exec, ptx_xsl_dir, xml_source, server_params, dest_dir):
             # By reversing the string, we can just target first match
             reverse = static[problem][::-1]
             parts = re.split(r"(\n>tnemetats/<|\n>tnih/<)",reverse, 1)
-            static[problem] = parts[2][::-1] + parts[1][::-1] + answer + parts[0][::-1]
+            try:
+                static[problem] = parts[2][::-1] + parts[1][::-1] + answer + parts[0][::-1]
+            except:
+                msg = "PTX:WARNING: It appears that {} is missing <statement>. "
+                msg = msg + "Continuing, but extraction likely not valid PTX."
+                print(msg.format(problem))
+                static[problem] = parts[0][::-1] + answer
 
         # nice to know what seed was used
         static[problem] = static[problem].replace('<static', '<static seed="' + seed[problem] + '"')
