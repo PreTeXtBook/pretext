@@ -463,19 +463,24 @@ def webwork_to_xml(xslt_exec, ptx_xsl_dir, xml_source, server_params, dest_dir):
         file_empty = 'ERROR:  This problem file was empty!' in response.text
         no_compile = 'ERROR caught by Translator while processing problem file:' in response.text
         bad_xml = False
+        no_statement = False
         try:
             from xml.etree import ElementTree
         except ImportError:
             msg = 'failed to import ElementTree from xml.etree'
             raise ValueError(msg)
         try:
-            x = ElementTree.fromstring(response.text.encode('utf-8'))
+            problem_root = ElementTree.fromstring(response.text.encode('utf-8'))
         except:
             bad_xml = True
+        if not bad_xml:
+            if problem_root.find('statement') is None:
+                no_statement = True
 
         file_empty_msg = "PTX:ERROR:  WeBWorK problem {} was empty\n"
         no_compile_msg = "PTX:ERROR:  WeBWorK problem {} with seed {} did not compile  \n{}\n"
         bad_xml_msg = "PTX:ERROR:  WeBWorK problem {} with seed {} does not return valid XML  \n  It may not be PTX compatible  \n{}\n"
+        no_statement_msg = "PTX:ERROR:  WeBWorK problem {} with seed {} does not have a statement tag \n  Maybe it uses something other than BEGIN_TEXT or BEGIN_PGML to print the statement in its PG code \n{}\n"
 
         # If we are aborting upon recoverable errors...
         if args.abort:
@@ -485,6 +490,8 @@ def webwork_to_xml(xslt_exec, ptx_xsl_dir, xml_source, server_params, dest_dir):
                 raise ValueError(no_compile_msg.format(problem_identifier, seed[problem], response.text))
             if bad_xml:
                 raise ValueError(bad_xml_msg.format(problem_identifier, seed[problem], response.text))
+            if no_statement:
+                raise ValueError(no_statement_msg.format(problem_identifier, seed[problem], response.text))
 
         # When a PG Math Object is a text string that has to be rendered in a math environment,
         # it is wrapped like this: \verb\x85string\x85.
@@ -523,7 +530,7 @@ def webwork_to_xml(xslt_exec, ptx_xsl_dir, xml_source, server_params, dest_dir):
                 response_text += item
 
         # Now if we are not aborting upon recoverable errors
-        if not file_empty and not no_compile and not bad_xml:
+        if not file_empty and not no_compile and not bad_xml and not no_statement:
             # add to dictionary
             static[problem] = response_text
             # strip out actual PTX code between markers
@@ -544,6 +551,9 @@ def webwork_to_xml(xslt_exec, ptx_xsl_dir, xml_source, server_params, dest_dir):
         elif bad_xml:
             print(bad_xml_msg.format(problem_identifier, seed[problem],'  Use -a to halt with returned content'))
             static[problem] = "<static failure='xml'>\n<statement>\n  <p>\n    " + bad_xml_msg.format(problem_identifier, seed[problem],'    Use -a to halt with returned content') + "  </p>\n</statement>\n</static>"
+        elif no_statement:
+            print(no_statement_msg.format(problem_identifier, seed[problem],'  Use -a to halt with returned content'))
+            static[problem] = "<static failure='xml'>\n<statement>\n  <p>\n    " + no_statement_msg.format(problem_identifier, seed[problem],'    Use -a to halt with returned content') + "  </p>\n</statement>\n</static>"
 
         # if authored has a title, copy it here
         if origin[problem] == 'ptx':
@@ -656,7 +666,9 @@ def webwork_to_xml(xslt_exec, ptx_xsl_dir, xml_source, server_params, dest_dir):
         # Write urls for interactive version
         for hint in ['yes','no']:
             for solution in ['yes','no']:
-                # If problem fails because it is empty, did not compile, or made bad XML, replace with these shells
+                hintsol = 'hint_' + hint + '_solution_' + solution
+                url_tag = '    <server-url hint="{}" solution="{}">{}?courseID={}&amp;userID={}&amp;password={}&amp;course_password={}&amp;answersSubmitted=0&amp;displayMode=MathJax&amp;outputformat=simple&amp;problemSeed={}&amp;{}</server-url>\n\n'
+                # If problem fails because it is empty, did not compile, made bad XML, or had no statement tag, replace with these shells
                 # base64 encoder/decoder at https://www.base64decode.org/, but note '%3D' needs to become '='
                 if file_empty:
                     source_selector = 'problemSource='
@@ -670,10 +682,12 @@ def webwork_to_xml(xslt_exec, ptx_xsl_dir, xml_source, server_params, dest_dir):
                     source_selector = 'problemSource='
                     # WeBWorK Problem Did Not Generate Valid XML
                     source_value='RE9DVU1FTlQoKTsKbG9hZE1hY3JvcygiUEdzdGFuZGFyZC5wbCIsIlBHTUwucGwiLCJQR2NvdXJzZS5wbCIsKTtURVhUKGJlZ2lucHJvYmxlbSgpKTtDb250ZXh0KCdOdW1lcmljJyk7CgpCRUdJTl9QR01MCldlQldvcksgUHJvYmxlbSBEaWQgTm90IEdlbmVyYXRlIFZhbGlkIFhNTAoKRU5EX1BHTUwKCkVORERPQ1VNRU5UKCk7'
+                elif no_statement:
+                    source_selector = 'problemSource='
+                    # WeBWorK Problem Did Not Have a `statement` tag
+                    source_value='RE9DVU1FTlQoKTsKbG9hZE1hY3JvcygiUEdzdGFuZGFyZC5wbCIsIlBHTUwucGwiLCJQR2NvdXJzZS5wbCIsKTtURVhUKGJlZ2lucHJvYmxlbSgpKTtDb250ZXh0KCdOdW1lcmljJyk7CgpCRUdJTl9QR01MCldlQldvcksgUHJvYmxlbSBEaWQgTm90IEhhdmUgYSBbfHN0YXRlbWVudHxdKiBUYWcKCkVORF9QR01MCgpFTkRET0NVTUVOVCgpOw%3D%3D'
                 else:
                     source_selector = 'problemSource=' if (origin[problem]=='ptx') else 'sourceFilePath='
-                    url_tag = '    <server-url hint="{}" solution="{}">{}?courseID={}&amp;userID={}&amp;password={}&amp;course_password={}&amp;answersSubmitted=0&amp;displayMode=MathJax&amp;outputformat=simple&amp;problemSeed={}&amp;{}</server-url>\n\n'
-                    hintsol = 'hint_' + hint + '_solution_' + solution
                     if PY3:
                         source_value = urllib.parse.quote_plus(pgbase64[hintsol][problem]) if (origin[problem]=='ptx') else source[problem]
                     else:
@@ -701,6 +715,8 @@ def webwork_to_xml(xslt_exec, ptx_xsl_dir, xml_source, server_params, dest_dir):
                     formatted_pg = re.sub(re.compile('^', re.MULTILINE),'      ',pg_shell.format(no_compile_msg.format(problem_identifier, seed[problem], 'Use -a to halt with full PG if PTX-sourced')))
                 elif bad_xml:
                     formatted_pg = re.sub(re.compile('^', re.MULTILINE),'      ',pg_shell.format(bad_xml_msg.format(problem_identifier, seed[problem], 'Use -a to halt with returned content')))
+                elif no_statement:
+                    formatted_pg = re.sub(re.compile('^', re.MULTILINE),'      ',pg_shell.format(no_statement_msg.format(problem_identifier, seed[problem], 'Use -a to halt with returned content')))
                 else:
                     formatted_pg = re.sub(re.compile('^', re.MULTILINE),'      ',pg[problem])
                 # opportunity to cut out extra blank lines
