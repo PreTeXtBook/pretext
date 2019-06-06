@@ -8,10 +8,10 @@
 <!-- See the file COPYING for copying conditions.             -->
 
 <appendix xml:id="editors">
-    <title>(*) Text Editors</title>
+    <title>Text Editors, Spell Check</title>
 
     <introduction>
-        <p>This appendix has information about using various text editors efficiently with MathBook <init>XML</init> source.  The choice of an editor that suits you is a big part of being a productive author.  Despite not being open source, we are partial to Sublime Text, due to its unlimited trial period, reasonable licensing (cost and terms), range of features, and cross-platform support.  So we lead with Sublime Text, but also include Emacs and XML Copy Editor.  A summary table of schema-aware editors can be found at <xref ref="editors-supporting-schema" />.</p>
+        <p>This appendix has information about using various text editors efficiently with <pretext/> source, along with suggestions for spell-checking.  The choice of an editor that suits you is a big part of being a productive author.  Despite not being open source, we are partial to Sublime Text, due to its unlimited trial period, reasonable licensing (cost and terms), range of features, community support (plug-ins), and cross-platform support (Linux, Mac, and Windows).  So we lead with Sublime Text, but also include Emacs and XML Copy Editor.  A summary table of schema-aware editors can be found at <xref ref="editors-supporting-schema" />.</p>
     </introduction>
 
     <section xml:id="section-sublime-text">
@@ -251,10 +251,68 @@
         </subsection>
     </section>
 
+    <section xml:id="aspell">
+        <title>Aspell</title> <!-- lowercase "s" -->
+
+        <p>Aspell is a spell-checker that you can easily configure to skip every piece of text used as a name of an <init>XML</init> element, and to skip <pretext/> elements that are likely to contain text that is not really made up of words and sentences.  For example, the element <tag>chapter</tag> might not be flagged by some mainstream spell checkers, but most likely the element <tage>mdash</tage> will be flagged by every spell checker, including the default configuration of Aspell.  And your <tag>m</tag> elements are full of <latex/>, not words.  Unfortunately, Aspell will not follow your <c>xi:xinclude</c> directives, so you need to run it against each of your files if you have modularized your source.  A command-line invocation would like like:<cd>
+            <cline>aspell -c ~/aota/src/fish.xml</cline>
+        </cd></p>
+
+        <p>Installation on Linux should be straightforward through your distribution's package manager.  On a Mac, the executable, and a dictionary for your language, can be installed easily via MacPorts (<xref provisional="macports"/>).  Recent improvements on Windows (ca. 2019-06-06) perhaps imply that <init>WSL</init> or the Ubuntu Linux install may provide an easy avenue.  Please report steps that result in a successful Windows installation, so we can include them here.</p>
+
+        <p>Configuration is achieved via a <q>hidden</q> file at the top of your home directory, namely <c>.aspell.conf</c>.  A Mac will try to keep you away from hidden files, which are the ones whose name begins with a period.  Let SublimeText give you an assist here.  In <xref ref="aspell-configuration"/> we show a first run at a useful configuration file.  You <em>definitely</em> want to add the <init>SGML</init> filter, since this is what tells Aspell that you are working on <init>XML</init> files<fn><init>SGML</init> is the precursor of <init>XML</init>.</fn>, so that all element names, attributes, etc. will not be checked.  The remainder is a suggested list of <pretext/> elements to skip.  Suggestions for additions are welcome here.</p>
+
+        <listing xml:id="aspell-configuration">
+            <caption>Aspell Configuration File</caption>
+
+            <program>
+                <input>
+                add-filter sgml
+
+                # elements with lots of code
+                # but not "pre", since it is like a "p"
+                add-sgml-skip c
+                add-sgml-skip cd
+                add-sgml-skip program
+                add-sgml-skip console
+                add-sgml-skip sage
+
+                # image formats
+                add-sgml-skip latex-image
+                add-sgml-skip asymptote
+                add-sgml-skip sageplot
+
+                # elements that display XML elements
+                add-sgml-skip tag
+                add-sgml-skip tage
+                add-sgml-skip attr
+
+                # initialisms and friends
+                add-sgml-skip init
+                add-sgml-skip acro
+                add-sgml-skip abbr
+
+                # math (latex)
+                add-sgml-skip m
+                add-sgml-skip me
+                add-sgml-skip men
+                add-sgml-skip md
+                add-sgml-skip mdn
+                add-sgml-skip usage # in "notation"
+
+                # not really content, by and large
+                add-sgml-skip docinfo
+                </input>
+            </program>
+        </listing>
+
+        <p>You can run Aspell in a sort of batch, non-interactive mode by adding the <c>-a</c> switch and then providing your source on standard input and directing results from standard output.  But I do not find it very useful.</p>
+    </section>
+
     <section xml:id="emacs">
         <title>emacs</title>
 
-        <p>Jason Underdown reports on 2016-05-12 that emacs' <url href="https://www.gnu.org/software/emacs/manual/html_mono/nxml-mode.html">nXML mode</url> (<c>www.gnu.org/software/emacs/manual/html_mono/nxml-mode.html</c>) works well with a <acro>RELAX-NG</acro> schema.  While we work on building a hand-crafted <acro>RELAX-NG</acro> schema, you can use the <url href="http://www.thaiopensource.com/relaxng/trang.html">trang</url> (<c>www.thaiopensource.com/relaxng/trang.html</c>) tool to convert the <pretext /> <init>DTD</init> to a <acro>RELAX-NG</acro> schema.</p>
+        <p>Jason Underdown reports on 2016-05-12 that emacs' <url href="https://www.gnu.org/software/emacs/manual/html_mono/nxml-mode.html">nXML mode</url><fn><c>www.gnu.org/software/emacs/manual/html_mono/nxml-mode.html</c></fn> works well with a <acro>RELAX-NG</acro> schema.  While we work on building a hand-crafted <acro>RELAX-NG</acro> schema, you can use the <url href="http://www.thaiopensource.com/relaxng/trang.html">trang</url><fn><c>www.thaiopensource.com/relaxng/trang.html</c></fn> tool to convert the <pretext /> <init>DTD</init> to a <acro>RELAX-NG</acro> schema.</p>
 
         <blockquote>
             <p>You simply put your cursor at any point in the document, start a new tag with <c>&lt;</c> and then call the <c>completion-at-point</c> function (I bound it to the key-chord: <c>C-&lt;return&gt;</c>) to get a list of possible completions. Or you can start typing a few characters to narrow the list of possibilities. It will also let you know if the element you are trying to insert is invalid.</p>
@@ -265,7 +323,7 @@
     <section xml:id="xmlcopyeditor">
         <title>XML Copy Editor</title>
 
-        <p>Michael Doob reports on 2017-02-03 that <url href="http://xml-copy-editor.sourceforge.net/">XML Copy Editor</url> (<c>xml-copy-editor.sourceforge.net</c>) works well, in particular on Windows.  This is an open source program, for Windows and a variety of popular Linux distributions, that supports both <init>DTD</init> and <acro>RELAX-NG</acro> schemas.  It is less of a general programmer's editor and more like dedicated tools for working strictly with <init>XML</init> documents.</p>
+        <p>Michael Doob reports on 2017-02-03 that <url href="http://xml-copy-editor.sourceforge.net/">XML Copy Editor</url><fn><c>xml-copy-editor.sourceforge.net</c></fn> works well, in particular on Windows.  This is an open source program, for Windows and a variety of popular Linux distributions, that supports both <init>DTD</init> and <acro>RELAX-NG</acro> schemas.  It is less of a general programmer's editor and more like dedicated tools for working strictly with <init>XML</init> documents.</p>
     </section>
 
     <section xml:id="vi">
