@@ -1642,153 +1642,212 @@
     <section xml:id="topic-index">
         <title>Index</title>
 
-        <p>Continuing our basic discussion from <xref ref="overview-index-notation"/>, we discuss some details of making and using index entries.  We follow recommendations from the <pubtitle>Chicago Manual of Style</pubtitle> (<acro>CMOS</acro>), specifically Chapter 18 of the 15th Edition.</p>
+        <introduction>
+            <p>Continuing our basic discussion from <xref ref="overview-index-notation"/>, we discuss some details of making and using index entries.  We will begin with how you <em>procedurally</em> author an index entry with <pretext/> syntax, and then move to general principles about how to use these constructions to create an effective index.  So these two subsections are intimately linked.</p>
+        </introduction>
 
-        <note>
-            <title>Capitalization of Index Entries</title>
+        <subsection>
+            <title>Syntax and Placement of Index Entries</title>
 
-            <p>The headings (entries) of an index are authored entirely in lower-case, unless it is a proper noun (name, place, <etc/>) which would normally be capitalized in the middle of a sentence.  We are not able to provide any enforcement of this advice, nor any assistance.  It is the author's responsibility to provide quality source material in this regard.  We do sort entries so that an entry with an initial capital letter arrives at the right location in the index.</p>
-        </note>
+            <note>
+                <title>Capitalization of Index Entries</title>
 
-        <p><em>Where</em> you place an <tag>idx</tag> entry is critical.  With <latex/> output, you will get the traditional page number as a locator in your index.  With <init>HTML</init> output we can be more careful.  We will look to see which sort of structure contains the <tag>idx</tag>.  Maybe it is an <tag>example</tag> or a <tag>subsection</tag>.  If so, the index will contain a locator that is a knowl of the example, or a link to the subsection.  The distinction is the size of the object, we do not knowl divisions.  The exception is a paragraph (<tag>p</tag>) that is a child of a division, and then the locator is a knowl of the entire paragraph.  Remember that a knowl contains an <q>in-context</q> link which can take the reader to the original location of the content in the knowl.</p>
+                <p>The headings (entries) of an index are authored entirely in lower-case, unless it is a proper noun (name, place, <etc/>) which would normally be capitalized in the middle of a sentence.  We are not able to provide any enforcement of this advice, nor any assistance.  It is the author's responsibility to provide quality source material in this regard.  We do sort entries so that an entry with an initial capital letter arrives at the right location in the index.</p>
+            </note>
 
-        <p>A lot happens in a <pretext/> paragraph, especially when producing <init>HTML</init>.  Sometimes an <tag>idx</tag> can get in the way.  Our recommendation is to put <tag>idx</tag> entries <em>between</em> sentences, and not at the start or end of the paragraph.  They can be authored with each on their own line.  If you do not need the specificity of a paragraph, then locate the appropriate structure and author the <tag>idx</tag> right after the <tag>title</tag> (or where one would be).</p>
+            <p><em>Where</em> you place an <tag>idx</tag> entry is critical.  With <latex/> output, you will get the traditional page number as a locator in your index.  With <init>HTML</init> output we can be more careful.  We will look to see which sort of structure contains the <tag>idx</tag>.  Maybe it is an <tag>example</tag> or a <tag>subsection</tag>.  If so, the index will contain a locator that is a knowl of the example, or a link to the subsection.  The distinction is the size of the object, we do not knowl divisions.  The exception is a paragraph (<tag>p</tag>) that is a child of a division, and then the locator is a knowl of the entire paragraph.  Remember that a knowl contains an <q>in-context</q> link which can take the reader to the original location of the content in the knowl.</p>
 
-        <p>A <term>cross-reference</term> in an index is a pointer to another index entry.
-            <idx><h>cross-reference</h><h>index</h></idx>
-            <idx><h>index</h><h>cross-reference</h></idx>
-        These are rendered as <q>See</q> and <q>See also.</q>  You can add <tag>see</tag> and <tag>seealso</tag> elements within an <tag>idx</tag>, so long as it is structured with <tag>h</tag>.  Then it is placed after the last <tag>h</tag>.  A <q>see</q> cross-reference is a direct pointer to another entry in the index.  It cannot have a locator as well.  When you build the <init>HTML</init> output, we will recognize this situation and produce a warning.  A <q>see also</q> cross-reference is an additional pointer, and so it must have a locator to go with it (you will author two <tag>idx</tag> with identical headings, the first without a <tag>seealso</tag> to create the locator, the second with the <tag>seealso</tag> to create the cross-reference.  Again, when you build the <init>HTML</init> output, we will recognize a <tag>seealso</tag> without a locator and produce a warning.</p>
+            <p>A lot happens in a <pretext/> paragraph, especially when producing <init>HTML</init>.  Sometimes an <tag>idx</tag> can get in the way.  Our recommendation is to put <tag>idx</tag> entries <em>between</em> sentences, and not at the start or end of the paragraph.  They can be authored with each on their own line.  If you do not need the specificity of a paragraph, then locate the appropriate structure and author the <tag>idx</tag> right after the <tag>title</tag> (or where one would be).</p>
 
-        <p>Follow these directions and <pretext/> will format cross-references for you, in the style suggested by the <acro>CMOS</acro> for <init>HTML</init> output, and according to <latex/>'s style for print and <init>PDF</init>.</p>
+            <p>A <term>cross-reference</term> in an index is a pointer to another index entry.
+                <idx><h>cross-reference</h><h>index</h></idx>
+                <idx><h>index</h><h>cross-reference</h></idx>
+            These are rendered as <q>See</q> and <q>See also.</q>  You can add <tag>see</tag> and <tag>seealso</tag> elements within an <tag>idx</tag>, so long as it is structured with <tag>h</tag>.  Then it is placed after the last <tag>h</tag>.  A <q>see</q> cross-reference is a direct pointer to another entry in the index.  It cannot have a locator as well.  When you build the <init>HTML</init> output, we will recognize this situation and produce a warning.  A <q>see also</q> cross-reference is an additional pointer, and so it must have a locator to go with it (you will author two <tag>idx</tag> with identical headings, the first without a <tag>seealso</tag> to create the locator, the second with the <tag>seealso</tag> to create the cross-reference.  Again, when you build the <init>HTML</init> output, we will recognize a <tag>seealso</tag> without a locator and produce a warning.</p>
 
-        <p>(2019-03-04) We have consciously not said anything specific about what to place inside a <tag>see</tag> or <tag>seealso</tag> element.  At this writing, you need to supply the text.  Of course, this is error-prone and you will need to consult <acro>CMOS</acro> for formatting guidance.  But we have plans to do this the <pretext/> way.  First, the <c>ref/xml:id</c> mechanism will be used to automatically create the correct text for the cross-reference, both content and format.  Second, these will become live links in electronic formats.</p>
+            <p>Follow these directions and <pretext/> will format cross-references for you, in the style suggested by the <pubtitle>Chicago Manual of Style</pubtitle> (<acro>CMOS</acro>) for <init>HTML</init> output, and according to <latex/>'s style for print and <init>PDF</init>.</p>
 
-        <p>Certain index entries do not sort very well, especially entries that begin with mathematical notation.  Our first advice is to avoid this situation, but sometimes it is necessary.  The <attr>sortby</attr> attribute on an <tag>h</tag> element can contain simple text that will be used to override the content shown to the reader during the sorting of the index.</p>
+            <p>(2019-03-04) We have consciously not said anything specific about what to place inside a <tag>see</tag> or <tag>seealso</tag> element.  At this writing, you need to supply the text.  Of course, this is error-prone and you will need to consult <acro>CMOS</acro> for formatting guidance.  But we have plans to do this the <pretext/> way.  First, the <c>ref/xml:id</c> mechanism will be used to automatically create the correct text for the cross-reference, both content and format.  Second, these will become live links in electronic formats.</p>
 
-      <section xml:id="topic-index-advice"><title>Advice on Indexing</title>
-        <idx><h>index</h><h>advice on</h></idx>
+            <p>Certain index entries do not sort very well, especially entries that begin with mathematical notation.  Our first advice is to avoid this situation, but sometimes it is necessary.  The <attr>sortby</attr> attribute on an <tag>h</tag> element can contain simple text that will be used to override the content shown to the reader during the sorting of the index.</p>
+        </subsection>
 
-        <p>Indexing is a job for a skilled professional, and most authors produce poor indexes.
-           The tips in this section will help you avoid the most common pitfalls.
-        </p>
+        <subsection xml:id="topic-index-advice">
+            <title>Advice on Indexing</title>
+            <idx><h>index</h><h>advice on</h></idx>
 
-      <paragraphs><title>Terminology</title>
-      <p>The basic element of an index is an <term>entry</term>, which consists of
-         a piece of information and its <term>locator</term>.  For example:
-         </p>
-         <pre>
-             normal subgroup,  37
+            <p>
+              An index is a navigational aid for your readers (and you).
+              We do not assume that a reader remembers where anything is,
+              nor that the Table of Contents is a replacement for part of the index.
+              Some readers of the index may not have even read your book yet,
+              and are looking to get a feel for the range of topics as part of the decision of whether or not to read your book at all,
+              or if it will be useful to have.
+              It should be comprehensive, including everything substantive.</p>
 
-         </pre>
-         <p>
-         is an entry indicating that information about <q>normal subgroup</q>
-         can be found on page 37.
-         Indexes are (usually) organized alphabetically, with a
-         <term>main heading</term>
-         aligned with the left margin, and progressively indented <term>subheading</term>s below
-         the main heading.
-     </p>
+            <p>
+              Indexing is a job for a skilled professional, and most authors produce poor indexes.
+              The tips in this section will help you avoid the most common pitfalls.
+              We follow recommendations from the <pubtitle>Chicago Manual of Style</pubtitle>
+              (specifically Chapter 18, 15th Edition),
+              <pubtitle>Indexing for Editors and Authors: A Practical Guide to Understanding Indexes</pubtitle>
+              <xref ref="indexing-guide"/>,
+              and Pilar Wyman of <url href="http://www.wymanindexing.com/">Wyman Indexing</url><fn><c>www.wymanindexing.com</c></fn>.
+            </p>
 
-     <p>Often it is desirable to place the same locator under more than one heading,
-        known as <term>double posting</term>.  For example, a desirable addition to the
-        sample entry above is
-        </p>
-        <pre>
-        subgroup,  28
-           normal,  37 .
-        </pre>
-        <p>
-        An alternative to double posting is <term>cross referencing</term>, using
-        <em>see</em> and <em>see also</em>.  Typically cross references are used to
-        avoid repeating a large number of entries, or to direct the reader to related topics.
-     </p>
+            <paragraphs><title>Terminology</title>
+              <p>The basic element of an index is an <term>entry</term>, which consists of
+                 a piece of information and its <term>locator</term>.  For example:
+                 </p>
+                 <pre>
+                     normal subgroup,  37
+                 </pre>
+                 <p>
+                 is an entry indicating that information about <q>normal subgroup</q>
+                 can be found on page 37.
+                 Indexes are (usually) organized alphabetically, with a
+                 <term>main heading</term>
+                 aligned with the left margin, and progressively indented <term>subheading</term>s below
+                 the main heading.
+              </p>
 
-     <p>An index may start with a <term>headnote</term> giving advice about using the index.
-        Typically a headnote is not necessary unless the index has some unusual features.
-     </p>
+              <p>Often it is desirable to place the same locator under more than one heading,
+                known as <term>double posting</term>.  For example, a desirable addition to the
+                sample entry above is
+                </p>
+                <pre>
+                subgroup,  28
+                   normal,  37 .
+                </pre>
+                <p>
+                An alternative to double posting is <term>cross referencing</term>, using
+                <em>see</em> and <em>see also</em>.  Typically cross references are used to
+                avoid repeating a large number of entries, or to direct the reader to related topics.
+              </p>
 
-</paragraphs>
+              <p>An index may start with a <term>headnote</term> giving advice about using the index.
+                Typically a headnote is not necessary unless the index has some unusual features.
+              </p>
+            </paragraphs>
 
-      <paragraphs><title>Basic principles</title>
-      <p>The purpose of an index is to point the reader to information.
-         Point to, not repeat.
-         For example, acronyms should be indexed at the location where they are defined,
-         not at every place they appear, and it is not necessary to define the acronym within the index.
-         People and places should be indexed when information is given about them,
-         not every time they are mentioned.
-      </p>
+            <paragraphs><title>Basic principles</title>
+              <p>The purpose of an index is to point the reader to information.
+                 Point to, not repeat.
+                 For example, acronyms should be indexed at the location where they are defined,
+                 not at every place they appear, and it is not necessary to define the acronym within the index.
+                 People and places should be indexed when information is given about them,
+                 not every time they are mentioned.
+              </p>
 
-      <p>A good index has multiple ways to find the same information.  Being redundant is desirable,
-         because it increases the chance the reader finds what they seek in the first place they look.
-      </p>
+              <p>A good index has multiple ways to find the same information.  Being redundant is desirable,
+                 because it increases the chance the reader finds what they seek in the first place they look.
+              </p>
 
-      <p>Indexing is best done after the text has been written.  Adding index entries while writing
-         the text may seem to be a labor-saving device, but if you are not an experienced indexer,
-         those entries will only be a small fraction of the final index.
-      </p>
+              <p>Indexing is best done after the text has been written.  Adding index entries while writing
+                 the text may seem to be a labor-saving device, but if you are not an experienced indexer,
+                 those entries will only be a small fraction of the final index.
+              </p>
 
-      <p>Topics should be indexed in multiple ways.  If a term is defined, you should also think
-         of other words the reader might search for.  For example, you may define <q>limit point</q>
-         and consistently use only that term, but an index entry for <q>accumulation point</q> with a
-         <q><em>see</em> limit point</q> locator would be appropriate.
-</p>
-     <p>Use <term>disambiguation</term> to distinguish identical terms with different meanings.
-        For example
-        </p>
-        <pre>
-            isomorphism (of groups),  55
-            isomorphism (of rings),  123
-        </pre>
-        <p>
-        Both of those entries should also be double posted under the main headings of <q>group</q>
-        and <q>ring</q>, respectively.  No disambiguation is needed for those entries.
-     </p>
-</paragraphs>
+              <p>Topics should be indexed in multiple ways.  If a term is defined, you should also think
+                 of other words the reader might search for.  For example, you may define <q>limit point</q>
+                 and consistently use only that term, but an index entry for <q>accumulation point</q> with a
+                 <q><em>see</em> limit point</q> locator would be appropriate.
+              </p>
+              <p>Use <term>disambiguation</term> to distinguish identical terms with different meanings.
+                For example
+                </p>
+                <pre>
+                    isomorphism (of groups),  55
+                    isomorphism (of rings),  123
+                </pre>
+                <p>
+                Both of those entries should also be double posted under the main headings of <q>group</q>
+                and <q>ring</q>, respectively.  No disambiguation is needed for those entries.
+              </p>
+              <p>
+                Singular or plural forms of nouns should reflect the language in the text.
+                So if a chapter is titled <articletitle>Mammals</articletitle>,
+                then use a heading <c>mammals</c>.
+                And if the chapter is titled <articletitle>The Mammal Class</articletitle>,
+                then use a heading <c>mammal</c>.
+              </p>
+              <p>
+                An index is typically as long as 5% of the main text.
+                With many figures, or other structures creating additional whitespace,
+                the percentage may be lower.  If your primary output is online,
+                length may not be an issue.  For print, there are strategies for pruning an index.
+              </p>
+              <p>
+                Once you have finished the text, and then finished the index,
+                it is time for a thorough review of the index.
+                There will be places for consolidation, often due to using variants of particular words.
+                You may wish to remove subheadings which all appear within the range given in the heading.
+                For example,
+              </p>
+              <pre>
+                fish, 204-212
+                   bass, 208-209
+                   salmon, 210
+                   trout, 207
+              </pre>
+              <p>
+                could have all of its subheadings removed, especially if space is an issue.
+              </p>
+            </paragraphs>
 
-      <paragraphs><title>Common pitfalls</title>
-        <p>Sometimes it takes less than one second to determine that an index is poor.
-           If a quick glance reveals that the index consists mostly of main headings
-           with very few subheadings, then few readers will find it to be useful.
-           Double posting, which may mean more than literally two entries with the same locator,
-           will help readers find what they are looking for.  Most of those entries will
-           be in subheadings.
-        </p>
+            <paragraphs><title>Common pitfalls</title>
+              <p>Sometimes it takes less than one second to determine that an index is poor.
+                 If a quick glance reveals that the index consists mostly of main headings
+                 with very few subheadings, then few readers will find it to be useful.
+                 Double posting, which may mean more than literally two entries with the same locator,
+                 will help readers find what they are looking for.  Most of those entries will
+                 be in subheadings.
+              </p>
 
-        <p>Another instantly recognizable problem is too many locators in one entry.  This entry
-        </p>
-        <pre>
-            asymptote,  37, 48
-        </pre>
-        <p>
-        is probably fine.  But once you have three or more locators in an entry, then
-        your index may be improved by adding some subheadings.  If the locators in the above
-        example refer separately to <q>horizontal</q> and <q>vertical</q>, then probably two subheadings
-        would be more useful than two undifferentiated locators in one entry.
-        </p>
+              <p>Another instantly recognizable problem is too many locators in one entry.  This entry
+              </p>
+              <pre>
+                  asymptote,  37, 48
+              </pre>
+              <p>
+              is probably fine.  But once you have three or more locators in an entry, then
+              your index may be improved by adding some subheadings.  If the locators in the above
+              example refer separately to <q>horizontal</q> and <q>vertical</q>, then probably two subheadings
+              would be more useful than two undifferentiated locators in one entry.
+              </p>
 
-        <p>A third problem which can be seen at a glance if you know what to look for,
-        is the absence of any main headings with a large number of subheadings.  On almost
-        any subject there are topics which are addressed repeatedly.  This should be
-        reflected in the structure of the index.  For example, in a group theory textbook
-        there should be several entries under <q>group, examples</q>.  In an introductory
-        calculus book the index should help the reader locate the derivative of many
-        different elementary functions.
-        </p>
+              <p>An additional problem which can be seen at a glance if you know what to look for,
+              is the absence of any main headings with a large number of subheadings.  On almost
+              any subject there are topics which are addressed repeatedly.  This should be
+              reflected in the structure of the index.  For example, in a group theory textbook
+              there should be several entries under <q>group, examples</q>.  In an introductory
+              calculus book the index should help the reader locate the derivative of many
+              different elementary functions.
+              </p>
 
-        <p>It is not helpful for locators to point to a
-        section or subsection: in print/PDF it points to the starting page of the section,
-        and in HTML the link will highlight the entire section.
-        At the start of writing a section on the <q>quotient rule</q>
-        it may be tempting to immediately put an index entry.  But keep in mind that someone
-        looking up that term is in search of specific information.  It is unlikely that
-        their intention is to learn that topic from scratch.  By pointing to a specific
-        paragraph, theorem, or definition, most readers will immediately see what they
-        are looking for.  And if they were looking for more general information, then at
-        least they are in the correct section.
-        </p>
-      </paragraphs>
+              <p>
+                Index headings should be nouns, not adjectives.  An adjective may be important,
+                and you should use it, but it should not be the entire content of a heading
+                since it is not an idea by itself.  But it may be a subheading. For example,
+                suppose you have a paragraph on <q>highland sheep.</q>
+                Then <em>both</em> of the following should appear in your index, 
+                since a reader might consult both locations.
+              </p>
+              <pre>
+                highland sheep, 45
+              </pre>
+              <pre>
+                sheep
+                   highland, 45
+              </pre>
 
-      </section>
+
+<!-- Discuss pointing to entire section/chapter -->
+
+<!-- singular plural -->
+
+
+            </paragraphs>
+        </subsection>
     </section>
 
 
