@@ -553,7 +553,7 @@ def webwork_to_xml(xslt_exec, ptx_xsl_dir, xml_source, server_params, dest_dir):
             static[problem] = "<static failure='xml'>\n<statement>\n  <p>\n    " + bad_xml_msg.format(problem_identifier, seed[problem],'    Use -a to halt with returned content') + "  </p>\n</statement>\n</static>"
         elif no_statement:
             print(no_statement_msg.format(problem_identifier, seed[problem],'  Use -a to halt with returned content'))
-            static[problem] = "<static failure='xml'>\n<statement>\n  <p>\n    " + no_statement_msg.format(problem_identifier, seed[problem],'    Use -a to halt with returned content') + "  </p>\n</statement>\n</static>"
+            static[problem] = "<static failure='statement'>\n<statement>\n  <p>\n    " + no_statement_msg.format(problem_identifier, seed[problem],'    Use -a to halt with returned content') + "  </p>\n</statement>\n</static>"
 
         # if authored has a title, copy it here
         if origin[problem] == 'ptx':
