@@ -8336,6 +8336,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{sbsheading}%&#xa;</xsl:text>
 </xsl:template>
 
+<!-- TEMPORARY -->
+<!-- Progessively killing titles as they migrate into panel-panel -->
+<xsl:template match="poem" mode="panel-heading">
+    <xsl:param name="width" />
+    <xsl:text>\begin{sbsheading}{</xsl:text>
+    <xsl:value-of select="substring-before($width,'%') div 100" />
+    <xsl:text>}</xsl:text>
+    <xsl:text>\end{sbsheading}%&#xa;</xsl:text>
+</xsl:template>
+
 
 <xsl:template match="*" mode="panel-panel">
     <xsl:param name="width" />
@@ -8472,7 +8482,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Implement modal "panel-latex-box" for allowed elements -->
 
-<xsl:template match="p|pre" mode="panel-latex-box">
+<xsl:template match="p|pre|ol|ul|dl|program|console|exercise|poem|video|audio|interactive" mode="panel-latex-box">
     <xsl:apply-templates select="." />
 </xsl:template>
 
@@ -8481,25 +8491,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "title" should be killed anyway -->
 <xsl:template match="paragraphs" mode="panel-latex-box">
     <xsl:apply-templates select="node()[not(self::title)]" />
-</xsl:template>
-
-<!-- TODO: trash left, top margins (accomodated already) -->
-<xsl:template match="ol|ul|dl" mode="panel-latex-box">
-    <xsl:apply-templates select="." />
-</xsl:template>
-
-<xsl:template match="program|console" mode="panel-latex-box">
-    <xsl:apply-templates select="." />
-</xsl:template>
-
-<!-- Much like main "poem" template, but sans title -->
-<xsl:template match="poem" mode="panel-latex-box">
-    <xsl:text>\begin{poem}</xsl:text>
-    <xsl:apply-templates select="." mode="label" />
-    <xsl:text>&#xa;</xsl:text>
-    <xsl:apply-templates select="stanza"/>
-    <xsl:apply-templates select="author" />
-    <xsl:text>\end{poem}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- TODO: tighten up gaps, margins? -->
@@ -8513,11 +8504,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- figure, table, listing will contain one item    -->
+<!-- This is skipping captions, intentionally        -->
 <xsl:template match="figure|table|listing" mode="panel-latex-box">
     <xsl:apply-templates select="node()[not(&METADATA-FILTER;)][1]" mode="panel-latex-box" />
 </xsl:template>
 
 <!-- list will have introduction, <list>, conclusion -->
+<!-- This is skipping a caption, intentionally       -->
+<!-- This is skipping index entries, unintentionally -->
 <xsl:template match="list" mode="panel-latex-box">
     <xsl:apply-templates select="introduction" />
     <xsl:apply-templates select="ol|ul|dl" mode="panel-latex-box" />
@@ -8537,23 +8531,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="image-inclusion"/>
     <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
-
-<!-- Default print representation is a tcbraster,       -->
-<!-- which must be stuffed in an intervening tcolorbox, -->
-<!-- which we make invisible with the "blankest" option -->
-<!-- TODO: condition on no "static" -->
-<xsl:template match="video|interactive" mode="panel-latex-box">
-    <xsl:text>\begin{tcolorbox}[blankest]&#xa;</xsl:text>
-        <xsl:apply-templates select="." />
-    <xsl:text>\end{tcolorbox}&#xa;</xsl:text>
-</xsl:template>
-
-<!-- A worksheet/exercise is a tcolorbox and -->
-<!-- so slots into the tcbraster nicely      -->
-<xsl:template match="exercise" mode="panel-latex-box">
-        <xsl:apply-templates select="." />
-</xsl:template>
-
 
 <!-- Since stackable items do not carry titles or captions, -->
 <!-- their "panel-latex-box" templates do the right thing   -->

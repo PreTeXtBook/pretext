@@ -6390,7 +6390,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
      <xsl:variable name="panels" select="*[not(&METADATA-FILTER;)]" />
 
      <!-- compute necessity of headings (titles) and captions here -->
-     <xsl:variable name="has-headings" select="boolean($panels[title])" />
+     <!-- (2019-06-12)  No titles are migrating to headings, so we totally kill this -->
+     <!-- construction always as we move from  3 x n  to  2 x n  en route to  1 x n  -->
+     <xsl:variable name="has-headings" select="false()" />
      <xsl:variable name="has-captions" select="boolean($panels[caption])" />
      <xsl:if test="$sbsdebug">
         <xsl:message>HH: <xsl:value-of select="$has-headings" /> :HH</xsl:message>
