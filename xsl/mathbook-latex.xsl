@@ -8482,7 +8482,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Implement modal "panel-latex-box" for allowed elements -->
 
-<xsl:template match="p|pre|ol|ul|dl|program|console|exercise|poem|video|audio|interactive" mode="panel-latex-box">
+<xsl:template match="p|pre|ol|ul|dl|program|console|exercise|poem|video|audio|interactive|image" mode="panel-latex-box">
     <xsl:apply-templates select="." />
 </xsl:template>
 
@@ -8516,20 +8516,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="introduction" />
     <xsl:apply-templates select="ol|ul|dl" mode="panel-latex-box" />
     <xsl:apply-templates select="conclusion" />
-</xsl:template>
-
-<!-- The image "knows" how to size itself for a panel   -->
-<!-- Baseline is automatically at the bottom of the box -->
-<xsl:template match="image" mode="panel-latex-box">
-    <xsl:apply-templates select="." mode="image-inclusion"/>
-</xsl:template>
-
-<!-- With raw LaTeX code, we use a \resizebox from the      -->
-<!-- graphicx package to scale the image to the panel width -->
-<xsl:template match="image[latex-image-code]|image[latex-image]" mode="panel-latex-box">
-    <xsl:text>\resizebox{\linewidth}{!}{</xsl:text>
-    <xsl:apply-templates select="." mode="image-inclusion"/>
-    <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Since stackable items do not carry titles or captions, -->
@@ -8588,7 +8574,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- naked images into a tcolorbox -->
 <!-- IN-PROGRESS: non-sidebyside images should all be done this way -->
 <!-- in other words, figure/image[not(ancestor::sidebyside)] -->
-<xsl:template match="image[not(parent::figure or parent::sidebyside or parent::stack)]" priority="50">
+<xsl:template match="image[not(ancestor::sidebyside or parent::figure)]">
     <xsl:variable name="rtf-layout">
         <xsl:apply-templates select="." mode="layout-parameters" />
     </xsl:variable>
@@ -8603,24 +8589,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>{</xsl:text>
     <xsl:value-of select="$layout/right-margin div 100"/>
     <xsl:text>}%&#xa;</xsl:text>
-    <!-- Eventually, any tikz-type image should be resized into a     -->
-    <!-- tcolorbox, so this conditional should just migrate to the    -->
-    <!-- image-inclusion template, which recognizes the type of image -->
-    <!-- See also the inclusion into a sidebyside panel               -->
-    <xsl:choose>
-        <xsl:when test="latex-image|latex-image-code">
-            <xsl:text>\resizebox{\linewidth}{!}{%&#xa;</xsl:text>
-            <xsl:apply-templates select="." mode="image-inclusion"/>
-            <xsl:text>}%&#xa;</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:apply-templates select="." mode="image-inclusion" />
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="." mode="image-inclusion" />
     <xsl:text>\end{image}%&#xa;</xsl:text>
 </xsl:template>
 
-<xsl:template match="image[parent::figure and not(ancestor::sidebyside)]" priority="100">
+<xsl:template match="image[ancestor::sidebyside or parent::figure]">
     <xsl:apply-templates select="." mode="image-inclusion" />
 </xsl:template>
 
@@ -8687,12 +8660,33 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- See "latex-image-preamble" for critical parts    -->
 <!-- Side-By-Side scaling happens there, could be here -->
 <xsl:template match="image[latex-image-code]|image[latex-image]" mode="image-inclusion">
-    <!-- outer braces rein in the scope of any local graphics settings -->
-    <xsl:text>{&#xa;</xsl:text>
-    <xsl:call-template name="sanitize-text">
-        <xsl:with-param name="text" select="latex-image-code|latex-image" />
-    </xsl:call-template>
-    <xsl:text>}&#xa;</xsl:text>
+    <!-- tikz images go into a tcolorbox where \linewidth is reset. -->
+    <!-- For a "naked" image we need to provide the resizing        -->
+    <!-- Eventually we will provide it when included in a figure,   -->
+    <!-- or maybe it migrates to one of the two "image" (non-modal) -->
+    <!-- templates above, we'll see                                 -->
+    <!-- NB two "choose" could just set wrappings, so we would      -->
+    <!-- consolidate the text creation                              -->
+    <xsl:choose>
+        <!-- grouping reins in the scope of any local graphics settings -->
+        <!-- NB: figures, with tikz, outside of sidebyside, need     -->
+        <!-- changes to accomodate resizing to fit requested layouts -->
+        <xsl:when test="parent::figure and not(ancestor::sidebyside)">
+            <xsl:text>{&#xa;</xsl:text>
+            <xsl:call-template name="sanitize-text">
+                <xsl:with-param name="text" select="latex-image-code|latex-image" />
+            </xsl:call-template>
+            <xsl:text>}&#xa;</xsl:text>
+        </xsl:when>
+        <!-- grouping reins in the scope of any local graphics settings -->
+        <xsl:otherwise>
+            <xsl:text>\resizebox{\linewidth}{!}{%&#xa;</xsl:text>
+            <xsl:call-template name="sanitize-text">
+                <xsl:with-param name="text" select="latex-image-code|latex-image" />
+            </xsl:call-template>
+            <xsl:text>}%&#xa;</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- EXPERIMENTAL -->

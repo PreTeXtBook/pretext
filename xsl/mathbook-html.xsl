@@ -5566,7 +5566,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Implement modal "panel-html-box" for various MBX elements -->
 <!-- Called in generic -panel                                  -->
 
-<xsl:template match="p|pre|ol|ul|dl|program|console|poem|video|audio|interactive|slate|exercise" mode="panel-html-box">
+<xsl:template match="p|pre|ol|ul|dl|program|console|poem|video|audio|interactive|slate|exercise|image" mode="panel-html-box">
     <xsl:param name="b-original" select="true()" />
     <xsl:apply-templates select=".">
         <xsl:with-param name="b-original" select="$b-original" />
@@ -5600,13 +5600,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="b-original" select="$b-original" />
         <xsl:with-param name="ambient-relative-width" select="$width"/>
     </xsl:apply-templates>
-</xsl:template>
-
-<!-- An image "knows" how to look outward         -->
-<!-- for side-by-side layout, or other width      -->
-<!-- specification so we do nothing extraordinary -->
-<xsl:template match="image" mode="panel-html-box">
-    <xsl:apply-templates select="." mode="image-inclusion"/>
 </xsl:template>
 
 <!-- A figure or table is just a container to hold a -->
