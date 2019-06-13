@@ -2888,6 +2888,9 @@ and condider having this replace line 3338 of the general code (which uses .head
         box-shadow:none;
         padding: 0;
     }
+    body .page .main {
+        margin-left:0;
+    }
     .has-sidebar-left.mathbook-loaded.sidebar-left-open .page .main #content { margin-top:0 }
     .has-sidebar-left.mathbook-loaded.sidebar-left-open .page .main #content.pretext-content section { margin-top:1em }
     .has-sidebar-left.mathbook-loaded.sidebar-left-open .page .main #content.pretext-content section .heading { margin-top:0 }
