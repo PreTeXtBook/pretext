@@ -14,10 +14,10 @@
         <p>
             <idx><h>PDF</h><h>electronic</h></idx>
             <idx><h>PDF</h><h>print</h></idx>
-            The stylesheet <c>mathbook-latex.xsl</c> can produce two very similar outputs.  Each is a file in <latex/> syntax, which can be converted to a <init>PDF</init> with a <latex/> executable (<q>engine</q>).  However, there are two purposes for such a <init>PDF</init>.  The first is a document which is meant to be read on a screen.  We call this an <term>electronic PDF</term>.  The second is meant to be printed as a physical book, so it would be the file you provide to a copy shop, campus bookstore, or print-on-demand service (see <xref ref="print-on-demand"/>).  We call this a <term>print PDF</term>.
+            The stylesheet <c>mathbook-latex.xsl</c> can produce two very similar outputs.  Each is a file in <latex/> syntax, which can be converted to a <init>PDF</init> with a <latex/> executable (<q>engine</q>).  However, there are two purposes for such a <init>PDF</init>.  The first is a document which is meant to be read on a screen.  We call this an <term>electronic PDF</term>.  The second is meant to be printed as a physical book, so it would be the file you provide to a copy shop, campus bookstore, or print-on-demand service (see <xref ref="print-on-demand"/>).  We call this a <term>print PDF</term>.  As you read this, keep in mind that that <latex/> conversion is really two-converters-in-one.
         </p>
 
-        <p>As an illustration of the difference, an electronic <init>PDF</init> will contain cross-references that are active, and colored to be obvious to the reader.  For the print <init>PDF</init> the same cross-reference will be black and inactive.</p>
+        <p>As an illustration of the difference, an electronic <init>PDF</init> will contain cross-references that are active, and colored to be obvious to the reader.  For the print <init>PDF</init> the same cross-reference will be black, inactive, and by default contain the page number of the target.</p>
 
         <p>The <c>latex.print</c> switch controls the selection of the two output modes of this single stylesheet.  The default is <c>no</c> for the electronic version, and <c>yes</c> will change to the print version.  In this chapter, we describe both of these two, slightly dissimilar, conversions together.</p>
     </introduction>
@@ -54,6 +54,20 @@
             <li>Use aspect ratio to compute an overall height (about 6.5 inches)</li>
             <li>Subtract quarter-inch top and bottom margins to obtain text height</li>
         </ol>Then you can provide the <c>geometry</c> package the overall size as the <c>papersize</c> and the text width and text height as the <c>total</c> size of the body, resulting in equal (tight) margins all around, and good use of limited screen real estate.  These parameters create a <init>PDF</init> that is very legible on a larger smart phone, and for fine detail, rotating the device to landscape works well.  Really.</p>
+    </section>
+
+    <section>
+        <title>Cross-References</title>
+
+        <p>In an electronic <init>PDF</init>, cross-references will be hyperlinks that take the reader to the target.  Color is used to make them visible, in addition to whatever indication a <init>PDF</init> viewer will provide on hover.  The parameter <c>latex.pageref</c> is by default <c>no</c> in this case, but may be set to <c>yes</c> to include the page number of the target in the cross-reference.</p>
+
+        <p>In a print <init>PDF</init>, cross-references will not be active hyperlinks and will be the same color as the adjoining text.  The parameter <c>latex.pageref</c> is by default <c>yes</c> in this case, but may be set to <c>no</c> to not include the page number of the target in the cross-reference.</p>
+    </section>
+
+    <section>
+        <title>Page Number Fidelity</title>
+
+        <p>If you use a print <init>PDF</init> to produce a physical book, the page numbers may be important to you and your readers.  Thus, you may desire that an electronic <init>PDF</init> have faithful page numbers.  You may have noticed from the discussion about page numbers in cross-references that because the default behavior puts page numbers in the print <init>PDF</init>, and not in the electronic <init>PDF</init>, content will not always appear on the same page for the two conversions.  The solution is simple<mdash/>use <c>latex.pageref</c> to have the two conversions behave identically in this regard.</p>
     </section>
 
     <section>
@@ -158,6 +172,11 @@
                     <cell><c>text.alignment</c></cell>
                     <cell><c>justify</c></cell>
                     <cell><c>raggedright</c>, <c>justify</c></cell>
+                </row>
+                <row>
+                    <cell><c>latex.pageref</c></cell>
+                    <cell>Depends</cell>
+                    <cell><c>yes</c>, <c>no</c></cell>
                 </row>
                 <row>
                     <cell><c>latex.watermark</c></cell>
