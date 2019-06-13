@@ -2888,8 +2888,11 @@ and condider having this replace line 3338 of the general code (which uses .head
         box-shadow:none;
         padding: 0;
     }
-    body .page .main {
+/*    .has-sidebar-left.mathbook-loading.sidebar-left-open .page > .main,
+*/
+    .has-sidebar-left.mathbook-loaded.sidebar-left-open .page > .main {
         margin-left:0;
+        padding: 0;
     }
     .has-sidebar-left.mathbook-loaded.sidebar-left-open .page .main #content { margin-top:0 }
     .has-sidebar-left.mathbook-loaded.sidebar-left-open .page .main #content.pretext-content section { margin-top:1em }
