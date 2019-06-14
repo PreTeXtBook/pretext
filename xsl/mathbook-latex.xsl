@@ -706,6 +706,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$b-has-program or $b-has-sage or $document-root//c or $document-root//cd or $document-root//pre or $document-root//console or $document-root//tag or $document-root//tage or $document-root//attr">
         <xsl:text>%% Monospace font: Inconsolata (zi4)&#xa;</xsl:text>
         <xsl:text>%% Sponsored by TUG: http://levien.com/type/myfonts/inconsolata.html&#xa;</xsl:text>
+        <xsl:text>%% Loaded for documents with intentional objects requiring monospace&#xa;</xsl:text>
         <xsl:text>%% See package documentation for excellent instructions&#xa;</xsl:text>
         <xsl:text>%% One caveat, seem to need full file name to locate OTF files&#xa;</xsl:text>
         <xsl:text>%% Loads the "upquote" package as needed, so we don't have to&#xa;</xsl:text>
@@ -736,11 +737,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- <xsl:text>\usepackage[mono,extrasp=0em]{zi4}&#xa;</xsl:text> -->
         <xsl:text>%% end: pdflatex-specific monospace font&#xa;</xsl:text>
         <xsl:text>}&#xa;</xsl:text>
-        <!-- https://tex.stackexchange.com/questions/2790/when-should-one-use-verb-and-when-texttt/235917 -->
-        <xsl:if test="$document-root//c or $document-root//tag or $document-root//tage or $document-root//attr">
-            <xsl:text>%% \mono macro for content of "c" element, and XML parts&#xa;</xsl:text>
-            <xsl:text>\newcommand{\mono}[1]{\texttt{#1}}&#xa;</xsl:text>
-        </xsl:if>
     </xsl:if>
     <xsl:text>%% Symbols, align environment, bracket-matrix&#xa;</xsl:text>
     <xsl:text>\usepackage{amsmath}&#xa;</xsl:text>
@@ -917,7 +913,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%%&#xa;</xsl:text>
     <xsl:text>%% Semantic Macros&#xa;</xsl:text>
     <xsl:text>%% To preserve meaning in a LaTeX file&#xa;</xsl:text>
-    <xsl:text>%% Only defined here if required in this document&#xa;</xsl:text>
+    <xsl:text>%%&#xa;</xsl:text>
+    <xsl:text>%% \mono macro for content of "c", "cd", "tag", etc elements&#xa;</xsl:text>
+    <xsl:text>%% Also used automatically in other constructions&#xa;</xsl:text>
+    <xsl:text>%% Simply an alias for \texttt&#xa;</xsl:text>
+    <xsl:text>%% Always defined, even if there is no need, or if a specific tt font is not loaded&#xa;</xsl:text>
+    <xsl:text>\newcommand{\mono}[1]{\texttt{#1}}&#xa;</xsl:text>
+    <xsl:text>%%&#xa;</xsl:text>
+    <xsl:text>%% Following semantic macros are only defined here if their&#xa;</xsl:text>
+    <xsl:text>%% use is required only in this specific document&#xa;</xsl:text>
+    <xsl:text>%%&#xa;</xsl:text>
     <xsl:variable name="one-line-reps" select="
         ($document-root//abbr)[1]|
         ($document-root//acro)[1]|
@@ -4232,7 +4237,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:if>
         </xsl:if>
         <xsl:if test="email">
-            <xsl:text>\texttt{</xsl:text>
+            <!-- switch to node-set with "c" if characters need escaping -->
+            <xsl:text>\mono{</xsl:text>
             <xsl:apply-templates select="email" />
             <xsl:text>}</xsl:text>
         </xsl:if>
@@ -7120,7 +7126,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- https://musescore.org/user/{usernumber}/scores/{scorenumber}/embed -->
 <!-- into an iframe with width and height (todo)                        -->
 <xsl:template match="score[@musescoreuser and @musescore]">
-    <xsl:text>[\texttt{\nolinkurl{https://musescore.org/user/</xsl:text>
+    <xsl:text>[\mono{\nolinkurl{https://musescore.org/user/</xsl:text>
     <xsl:value-of select="@musescoreuser" />
     <xsl:text>/scores/</xsl:text>
     <xsl:value-of select="@musescore" />
@@ -7363,6 +7369,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- choose a macro, font change, or active link -->
     <xsl:choose>
         <xsl:when test="ancestor::title|ancestor::subtitle">
+            <!-- switch to node-set with "c" if characters need escaping -->
             <xsl:text>\mono{</xsl:text>
         </xsl:when>
         <xsl:otherwise>
@@ -10265,22 +10272,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- filename fragments are the top of their trees, but -->
         <!-- can have an @xml:id so they can be referenced      -->
         <xsl:when test="@filename">
-            <xsl:text>\par\medskip\noindent\textbf{Begin File:} \texttt{</xsl:text>
+            <!-- switch to node-set with "c" if characters need escaping -->
+            <xsl:text>\par\medskip\noindent\textbf{Begin File:} \mono{</xsl:text>
             <xsl:value-of select="@filename" />
             <xsl:text>}</xsl:text>
-            <xsl:text>\index{file root!\texttt{</xsl:text>
+            <xsl:text>\index{file root!\mono{</xsl:text>
             <xsl:value-of select="@filename" />
             <xsl:text>}}</xsl:text>
         </xsl:when>
         <!-- other fragments are known by their xml:id strings -->
         <xsl:when test="@xml:id">
-            <xsl:text>\par\medskip\noindent\textbf{Fragment:} \texttt{</xsl:text>
+            <!-- switch to node-set with "c" if characters need escaping -->
+            <xsl:text>\par\medskip\noindent\textbf{Fragment:} \mono{</xsl:text>
             <xsl:value-of select="@xml:id" />
             <xsl:text>}</xsl:text>
             <!-- sortby first, @ separator, then tt version -->
             <xsl:text>\index{</xsl:text>
             <xsl:value-of select="@xml:id" />
-            <xsl:text>@\texttt{</xsl:text>
+            <xsl:text>@\mono{</xsl:text>
             <xsl:value-of select="@xml:id" />
             <xsl:text>}}</xsl:text>
         </xsl:when>
@@ -10296,6 +10305,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- convert fragment pointer to text -->
 <!-- in monospace font                -->
 <xsl:template match="fragment[@ref]">
+    <!-- switch to node-set with "c" if characters need escaping -->
     <xsl:text>\mono{</xsl:text>
     <xsl:text>&lt;code: </xsl:text>
     <xsl:value-of select="@ref" />
