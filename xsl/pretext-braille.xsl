@@ -154,14 +154,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Paragraph-Level Markup -->
 <!-- ###################### -->
 
-<!-- Stock HTML uses a span.articletitle -->
-<!-- We supply Unicode quotation marks   -->
-<xsl:template match="articletitle">
-    <xsl:text>&#x201C;</xsl:text>
-    <xsl:apply-templates/>
-    <xsl:text>&#x201D;</xsl:text>
-</xsl:template>
-
 <!-- We replace fancy Unicode double bracket characters  -->
 <!-- with two plain ASCII double brackets with overrides -->
 <!-- of the character definitions.                       -->

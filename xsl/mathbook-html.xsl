@@ -7734,13 +7734,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </span>
 </xsl:template>
 
-<!-- NB: this is overidden in the Braille conversion to  -->
-<!-- supply enclosing double-quotation marks.  Perhaps  -->
-<!-- this should be default behavior, rather than  -->
-<!-- letting CSS do it. -->
+<!-- We provide the quotation marks explicitly, along       -->
+<!-- with a span for any additional styling.  The quotation -->
+<!-- marks are necessary for accessibility, e.g., they are  -->
+<!-- critical in the Braille conversion.                    -->
 <xsl:template match="articletitle">
     <span class="articletitle">
-        <xsl:apply-templates />
+        <xsl:call-template name="lq-character"/>
+        <xsl:apply-templates/>
+        <xsl:call-template name="rq-character"/>
     </span>
 </xsl:template>
 

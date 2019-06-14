@@ -7972,9 +7972,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="articletitle">
-    <xsl:text>``</xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>''</xsl:text>
+    <xsl:call-template name="lq-character"/>
+    <xsl:apply-templates/>
+    <xsl:call-template name="rq-character"/>
 </xsl:template>
 
 <!-- ################## -->
