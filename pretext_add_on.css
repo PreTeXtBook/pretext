@@ -67,6 +67,7 @@ so that we can set our own later */
     margin-top: 1.25em;
 }
 .pretext-content section article + article,
+.pretext-content section p + article,
 .pretext-content section .posterior + article {
     margin-top: 1.75em;
 }
