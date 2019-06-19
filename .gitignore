@@ -1,2 +1,5 @@
 user/*
 examples/webwork/Makefile.paths
+doc/basics-reference/Makefile.paths
+doc/basics-reference/output
+doc/basics-reference/schemas.xml
