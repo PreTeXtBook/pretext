@@ -58,6 +58,16 @@ declare OUTFILE=sampler.epub
 
 # removal of detritus (clear $SCRATCH by hand before execution)
 
+# sed -i is different depending on if you have BSD sed (macOS)
+# or GNU sed (Linux and Windows Subystem for Linux)
+# To deal with this, we see which is in use and define a function called
+# sed_i that we invoke rather than plain sed.
+# https://unix.stackexchange.com/questions/92895/how-can-i-achieve-portability-with-sed-i-in-place-editing
+case $(sed --help 2>&1) in
+  *GNU*) sed_i () { sed -i "$@"; };;
+  *) sed_i () { sed -i '' "$@"; };;
+esac
+
 # create directory structure
 install -d ${EPUBOUT} ${EPUBOUT}/EPUB/xhtml ${EPUBOUT}/EPUB/xhtml/images
 install -d ${EPUBOUT}/EPUB/css
@@ -70,7 +80,7 @@ install -d ${DEBUG}
 cp -a ${SRC}/images ${EPUBOUT}/EPUB/xhtml
 mv ${EPUBOUT}/EPUB/xhtml/images/${COVERIMAGE} ${EPUBOUT}/EPUB/xhtml/images/cover.png
 for f in ${EPUBOUT}/EPUB/xhtml/images/*.svg; do 
-    sed -i -f ${EPUBSCRIPT}/mbx-epub-images.sed $f
+    sed_i -f ${EPUBSCRIPT}/mbx-epub-images.sed $f
 done
 
 # make files via xsltproc, into existing directory structure
@@ -80,7 +90,7 @@ xsltproc --xinclude  ${MBXSL}/mathbook-epub.xsl ${SRCMASTER}
 # fixup file header to make obviously XHTML
 declare GLOBIGNORE="${EPUBOUT}/EPUB/xhtml/cover-page.xhtml:${EPUBOUT}/EPUB/xhtml/title-page.xhtml:${EPUBOUT}/EPUB/xhtml/table-contents.xhtml"
 for f in ${EPUBOUT}/EPUB/xhtml/*.xhtml; do
-    sed -i -f ${EPUBSCRIPT}/mbx-epub-xhtml-header.sed $f
+    sed_i -f ${EPUBSCRIPT}/mbx-epub-xhtml-header.sed $f
 done
 unset GLOBIGNORE
 
@@ -100,7 +110,7 @@ for f in ${EPUBOUT}/EPUB/xhtml/*.xhtml; do
     # rm $f.temp;
     mv $f.temp ${DEBUG};
     cp -a $f ${DEBUG};
-    sed -i -f ${EPUBSCRIPT}/mbx-epub.sed $f;
+    sed_i -f ${EPUBSCRIPT}/mbx-epub.sed $f;
 done
 unset GLOBIGNORE
 
