@@ -71,7 +71,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- First, basename for the file (Sage input, image output)   -->
     <!-- Second, the (unique) name of the graphics object in Sage  -->
     <xsl:variable name="filebase">
-        <xsl:apply-templates select=".." mode="internal-id" />
+        <xsl:apply-templates select=".." mode="visible-id" />
     </xsl:variable>
     <xsl:variable name="plot-name">
         <xsl:text>plot_</xsl:text>
@@ -136,7 +136,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- First, basename for the file (Sage input, image output)   -->
     <!-- Second, the (unique) name of the graphics object in Sage  -->
     <xsl:variable name="filebase">
-        <xsl:apply-templates select="." mode="internal-id" />
+        <xsl:apply-templates select="." mode="visible-id" />
     </xsl:variable>
     <xsl:variable name="plot-name">
         <xsl:text>plot_</xsl:text>

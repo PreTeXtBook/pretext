@@ -35,9 +35,14 @@
 <!-- for filtering nodes, eg *[&STRUCTURAL-FILTER;], *[not(&STRUCTURAL-FILTER;)] -->
 <!ENTITY STRUCTURAL-FILTER "self::book or self::article or self::letter or self::memo or self::frontmatter or self::part or self::chapter or self::appendix or self::index[index-list] or self::index-part or self::preface or self::acknowledgement or self::biography or self::foreword or self::dedication or self::colophon or self::section or self::subsection or self::subsubsection or self::exercises or self::worksheet or self::reading-questions or self::solutions or self::references or self::glossary or self::backmatter">
 
+<!-- NB: (2019-06-12)  Only the two metadata "filters" seem to          -->
+<!-- be in use, so only those are being maintained.  grep'ing on        -->
+<!-- METADATA v. METADATA-FILTER, and applying "wc" makes this evident. -->
+<!-- (Include this comment in count!)                                   -->
+
 <!-- typical items in blocks that get special treatment -->
 <!ENTITY METADATA "title|subtitle|caption|index">
-<!ENTITY METADATA-FILTER "self::title or self::subtitle or self::caption or self::index">
+<!ENTITY METADATA-FILTER "self::title or self::subtitle or self::caption or self::idx or self::index[not(index-list)]">
 
 <!-- Subdivisions and runs of paragraphs (like in a proof)  -->
 <!-- contain "invisible" items that get killed  and then    -->

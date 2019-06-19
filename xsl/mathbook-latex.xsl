@@ -101,6 +101,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Any color options go to black and white, as possible -->
 <xsl:param name="latex.print" select="'no'"/>
 <!--  -->
+<!-- Page Numbers in cross-references -->
+<xsl:param name="latex.pageref" select="''"/>
+<!--  -->
 <!-- Sidedness -->
 <xsl:param name="latex.sides" select="''"/>
 <!--  -->
@@ -119,6 +122,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="latex.console.macro-char" select="''" />
 <xsl:param name="latex.console.begin-char" select="''" />
 <xsl:param name="latex.console.end-char" select="''" />
+
+
+<!-- ############### -->
+<!-- Source Analysis -->
+<!-- ############### -->
+
+<!-- We check certain aspects of the source and record the results   -->
+<!-- in boolean ($b-has-*) variables or as particular nodes high     -->
+<!-- up in the structure ($document-root).  Scans here in -latex     -->
+<!-- should help streamline the construction of the preamble by      -->
+<!-- computing properties that will be checked more than once.       -->
+<!-- While technically generally part of constructing the preamble,  -->
+<!-- there is no real harm in making these global variables.  Short, -->
+<!-- simple, and universal properties are determined in -common.     -->
+<!-- These may duplicate variables in disjoint conversions.          -->
+
+<xsl:variable name="b-has-icon"         select="boolean($document-root//icon)" />
+<xsl:variable name="b-has-webwork-reps" select="boolean($document-root//webwork-reps)" />
+<xsl:variable name="b-has-program"      select="boolean($document-root//program)" />
+<xsl:variable name="b-has-sage"         select="boolean($document-root//sage)" />
+<xsl:variable name="b-has-sfrac"        select="boolean($document-root//m[contains(text(),'sfrac')] or $document-root//md[contains(text(),'sfrac')] or $document-root//me[contains(text(),'sfrac')] or $document-root//mrow[contains(text(),'sfrac')])" />
+
 
 <!-- ######### -->
 <!-- Variables -->
@@ -255,6 +280,38 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!-- Including page numbers in cross-references defaults to      -->
+<!-- 'yes' for an electronic PDF and to 'no' for a print PDF,    -->
+<!-- and of course can be switched away from the default at will -->
+<!-- NB: upgrade the latex.print variable to something like this -->
+<xsl:variable name="pagerefs-option">
+    <xsl:choose>
+        <!-- electronic PDF -->
+        <xsl:when test="$latex.print = 'no'">
+            <xsl:choose>
+                <xsl:when test="$latex.pageref = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:when test="($latex.pageref = 'no') or ($latex.pageref = '')">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:when>
+        <!-- print PDF -->
+        <xsl:when test="$latex.print = 'yes'">
+            <xsl:choose>
+                <xsl:when test="$latex.pageref = 'no'">
+                    <xsl:text>no</xsl:text>
+                </xsl:when>
+                <xsl:when test="($latex.pageref = 'yes') or ($latex.pageref = '')">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:when>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="b-pageref" select="$pagerefs-option = 'yes'"/>
+
 <!-- Conversions, like creating a solutions manual, may need   -->
 <!-- LaTeX styles for the solutions to exercises, even if the  -->
 <!-- source never has a "solutions" element.  So this variable -->
@@ -317,14 +374,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <xsl:when test="$b-has-toc">
             <xsl:text>%% Target for xref to top-level element is ToC&#xa;</xsl:text>
-            <xsl:text>\addtocontents{toc}{\protect\hypertarget{</xsl:text>
-            <xsl:apply-templates select="." mode="internal-id" />
-            <xsl:text>}{}}&#xa;</xsl:text>
+            <xsl:text>\addtocontents{toc}{</xsl:text>
+            <xsl:if test="$b-pageref">
+                <xsl:text>\protect\label{</xsl:text>
+                <xsl:apply-templates select="." mode="latex-id" />
+                <xsl:text>}</xsl:text>
+            </xsl:if>
+            <xsl:text>\protect\hypertarget{</xsl:text>
+            <xsl:apply-templates select="." mode="latex-id" />
+            <xsl:text>}{}</xsl:text>
+            <xsl:text>}&#xa;</xsl:text>
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>%% Target for xref to top-level element is document start&#xa;</xsl:text>
+            <xsl:if test="$b-pageref">
+                <xsl:text>\label{</xsl:text>
+                <xsl:apply-templates select="." mode="latex-id" />
+                <xsl:text>}</xsl:text>
+            </xsl:if>
             <xsl:text>\hypertarget{</xsl:text>
-            <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:apply-templates select="." mode="latex-id" />
             <xsl:text>}{}&#xa;</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
@@ -532,7 +601,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% fontspec will make Latin Modern (lmodern) the default font&#xa;</xsl:text>
     <!-- http://tex.stackexchange.com/questions/115321/how-to-optimize-latin-modern-font-with-xelatex -->
     <xsl:text>\usepackage{fontspec}&#xa;</xsl:text>
-    <xsl:if test="$document-root//icon">
+    <xsl:if test="$b-has-icon">
         <xsl:text>%% Icons being used, so xelatex needs a system font&#xa;</xsl:text>
         <xsl:text>%% This can only be determined at compile-time&#xa;</xsl:text>
         <xsl:text>\IfFontExistsTF{FontAwesome}{}{\GenericError{}{"FontAwesome" font is not installed as a system font}{Consult the PreTeXt Author's Guide (or sample article) for help with the icon fonts.}{}}&#xa;</xsl:text>
@@ -634,9 +703,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% end: font setup and configuration for use with pdflatex&#xa;</xsl:text>
     <xsl:text>%% end: pdflatex-specific configuration&#xa;</xsl:text>
     <xsl:text>}&#xa;</xsl:text>
-    <xsl:if test="$document-root//c or $document-root//cd or $document-root//pre or $document-root//program or $document-root//console or $document-root//sage or $document-root//tag or $document-root//tage or $document-root//attr">
+    <xsl:if test="$b-has-program or $b-has-sage or $document-root//c or $document-root//cd or $document-root//pre or $document-root//console or $document-root//tag or $document-root//tage or $document-root//attr">
         <xsl:text>%% Monospace font: Inconsolata (zi4)&#xa;</xsl:text>
         <xsl:text>%% Sponsored by TUG: http://levien.com/type/myfonts/inconsolata.html&#xa;</xsl:text>
+        <xsl:text>%% Loaded for documents with intentional objects requiring monospace&#xa;</xsl:text>
         <xsl:text>%% See package documentation for excellent instructions&#xa;</xsl:text>
         <xsl:text>%% One caveat, seem to need full file name to locate OTF files&#xa;</xsl:text>
         <xsl:text>%% Loads the "upquote" package as needed, so we don't have to&#xa;</xsl:text>
@@ -667,11 +737,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- <xsl:text>\usepackage[mono,extrasp=0em]{zi4}&#xa;</xsl:text> -->
         <xsl:text>%% end: pdflatex-specific monospace font&#xa;</xsl:text>
         <xsl:text>}&#xa;</xsl:text>
-        <!-- https://tex.stackexchange.com/questions/2790/when-should-one-use-verb-and-when-texttt/235917 -->
-        <xsl:if test="$document-root//c or $document-root//tag or $document-root//tage or $document-root//attr">
-            <xsl:text>%% \mono macro for content of "c" element, and XML parts&#xa;</xsl:text>
-            <xsl:text>\newcommand{\mono}[1]{\texttt{#1}}&#xa;</xsl:text>
-        </xsl:if>
     </xsl:if>
     <xsl:text>%% Symbols, align environment, bracket-matrix&#xa;</xsl:text>
     <xsl:text>\usepackage{amsmath}&#xa;</xsl:text>
@@ -685,7 +750,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% allow more columns to a matrix&#xa;</xsl:text>
     <xsl:text>%% can make this even bigger by overriding with  latex.preamble.late  processing option&#xa;</xsl:text>
     <xsl:text>\setcounter{MaxMatrixCols}{30}&#xa;</xsl:text>
-    <xsl:if test="//m[contains(text(),'sfrac')] or //md[contains(text(),'sfrac')] or //me[contains(text(),'sfrac')] or //mrow[contains(text(),'sfrac')]">
+    <xsl:if test="$b-has-sfrac">
         <xsl:text>%% xfrac package for 'beveled fractions': http://tex.stackexchange.com/questions/3372/how-do-i-typeset-arbitrary-fractions-like-the-standard-symbol-for-5-%C2%BD&#xa;</xsl:text>
         <xsl:text>\usepackage{xfrac}&#xa;</xsl:text>
     </xsl:if>
@@ -848,7 +913,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%%&#xa;</xsl:text>
     <xsl:text>%% Semantic Macros&#xa;</xsl:text>
     <xsl:text>%% To preserve meaning in a LaTeX file&#xa;</xsl:text>
-    <xsl:text>%% Only defined here if required in this document&#xa;</xsl:text>
+    <xsl:text>%%&#xa;</xsl:text>
+    <xsl:text>%% \mono macro for content of "c", "cd", "tag", etc elements&#xa;</xsl:text>
+    <xsl:text>%% Also used automatically in other constructions&#xa;</xsl:text>
+    <xsl:text>%% Simply an alias for \texttt&#xa;</xsl:text>
+    <xsl:text>%% Always defined, even if there is no need, or if a specific tt font is not loaded&#xa;</xsl:text>
+    <xsl:text>\newcommand{\mono}[1]{\texttt{#1}}&#xa;</xsl:text>
+    <xsl:text>%%&#xa;</xsl:text>
+    <xsl:text>%% Following semantic macros are only defined here if their&#xa;</xsl:text>
+    <xsl:text>%% use is required only in this specific document&#xa;</xsl:text>
+    <xsl:text>%%&#xa;</xsl:text>
     <xsl:variable name="one-line-reps" select="
         ($document-root//abbr)[1]|
         ($document-root//acro)[1]|
@@ -1266,7 +1340,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Division exercises, not in exercise group&#xa;</xsl:text>
         <xsl:text>\tcbset{ divisionexercisestyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, left=5ex, breakable, parbox=false } }&#xa;</xsl:text>
         <xsl:text>\newtcolorbox{divisionexercise}[4]</xsl:text>
-        <xsl:text>{divisionexercisestyle, before title={\hspace{-5ex}\makebox[5ex][l]{#1.}}, title={\notblank{#2}{#2\space}{}}, phantom={\hypertarget{#4}{}}, after={\notblank{#3}{\newline\rule{\workspacestrutwidth}{#3\textheight}\newline}{}}}&#xa;</xsl:text>
+        <xsl:text>{divisionexercisestyle, before title={\hspace{-5ex}\makebox[5ex][l]{#1.}}, title={\notblank{#2}{#2\space}{}}, phantom={</xsl:text>
+        <xsl:if test="$b-pageref">
+            <xsl:text>\label{#4}</xsl:text>
+        </xsl:if>
+        <xsl:text>\hypertarget{#4}{}}, after={\notblank{#3}{\newline\rule{\workspacestrutwidth}{#3\textheight}\newline}{}}}&#xa;</xsl:text>
     </xsl:if>
     <!-- Division Exercise, Exercise Group -->
     <!-- The exercise itself carries the indentation, hence we can use breakable -->
@@ -1275,7 +1353,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Division exercises, in exercise group, no columns&#xa;</xsl:text>
         <xsl:text>\tcbset{ divisionexerciseegstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, left=5ex, left skip=\egindent, breakable, parbox=false } }&#xa;</xsl:text>
         <xsl:text>\newtcolorbox{divisionexerciseeg}[4]</xsl:text>
-        <xsl:text>{divisionexerciseegstyle, before title={\hspace{-5ex}\makebox[5ex][l]{#1.}}, title={\notblank{#2}{#2\space}{}}, phantom={\hypertarget{#4}{}}, after={\notblank{#3}{\newline\rule{\workspacestrutwidth}{#3\textheight}\newline}{}}}&#xa;</xsl:text>
+        <xsl:text>{divisionexerciseegstyle, before title={\hspace{-5ex}\makebox[5ex][l]{#1.}}, title={\notblank{#2}{#2\space}{}}, phantom={</xsl:text>
+        <xsl:if test="$b-pageref">
+            <xsl:text>\label{#4}</xsl:text>
+        </xsl:if>
+        <xsl:text>\hypertarget{#4}{}}, after={\notblank{#3}{\newline\rule{\workspacestrutwidth}{#3\textheight}\newline}{}}}&#xa;</xsl:text>
     </xsl:if>
     <!-- Division Exercise, Exercise Group, Columnar -->
     <!-- Explicity unbreakable, to behave in multicolumn tcbraster -->
@@ -1283,7 +1365,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Division exercises, in exercise group with columns&#xa;</xsl:text>
         <xsl:text>\tcbset{ divisionexerciseegcolstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, left=5ex, halign=flush left, unbreakable, parbox=false } }&#xa;</xsl:text>
         <xsl:text>\newtcolorbox{divisionexerciseegcol}[4]</xsl:text>
-        <xsl:text>{divisionexerciseegcolstyle, before title={\hspace{-5ex}\makebox[5ex][l]{#1.}}, title={\notblank{#2}{#2\space}{}}, phantom={\hypertarget{#4}{}}, after={\notblank{#3}{\newline\rule{\workspacestrutwidth}{#3\textheight}\newline}{}}}&#xa;</xsl:text>
+        <xsl:text>{divisionexerciseegcolstyle, before title={\hspace{-5ex}\makebox[5ex][l]{#1.}}, title={\notblank{#2}{#2\space}{}}, phantom={</xsl:text>
+        <xsl:if test="$b-pageref">
+            <xsl:text>\label{#4}</xsl:text>
+        </xsl:if>
+        <xsl:text>\hypertarget{#4}{}}, after={\notblank{#3}{\newline\rule{\workspacestrutwidth}{#3\textheight}\newline}{}}}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$document-root//exercise[@workspace]">
         <xsl:text>%% Worksheet exercises may have workspaces&#xa;</xsl:text>
@@ -1349,14 +1435,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- See numbering-equations variable being set in mathbook-common.xsl         -->
     <!-- With number="yes|no" on mrow, we must allow for the possibility of an md  -->
     <!-- variant having numbers (we could be more careful, but it is not critical) -->
+    <!-- NB: global numbering is level 0 and "level-to-name" is (a) incorrect,     -->
+    <!-- and (b) not useful (\numberwithin will fail)                              -->
+    <!-- NB: perhaps the chngcntr package should/could be used here                -->
     <xsl:if test="//men|//mdn|//md">
         <xsl:text>%% Equation Numbering&#xa;</xsl:text>
         <xsl:text>%% Controlled by  numbering.equations.level  processing parameter&#xa;</xsl:text>
-        <xsl:text>\numberwithin{equation}{</xsl:text>
-        <xsl:call-template name="level-to-name">
-            <xsl:with-param name="level" select="$numbering-equations" />
-        </xsl:call-template>
-        <xsl:text>}&#xa;</xsl:text>
+        <xsl:text>%% No adjustment here implies document-wide numbering&#xa;</xsl:text>
+        <xsl:if test="not($numbering-equations = 0)">
+            <xsl:text>\numberwithin{equation}{</xsl:text>
+            <xsl:call-template name="level-to-name">
+                <xsl:with-param name="level" select="$numbering-equations" />
+            </xsl:call-template>
+            <xsl:text>}&#xa;</xsl:text>
+        </xsl:if>
+    </xsl:if>
+    <xsl:if test="$document-root//image">
+        <xsl:text>%% "tcolorbox" environment for a single image, occupying entire \linewidth&#xa;</xsl:text>
+        <xsl:text>%% arguments are left-margin, width, right-margin, as multiples of&#xa;</xsl:text>
+        <xsl:text>%% \linewidth, and are guaranteed to be positive and sum to 1.0&#xa;</xsl:text>
+        <xsl:text>\tcbset{ imagestyle/.style={bwminimalstyle} }&#xa;</xsl:text>
+        <xsl:text>\NewTColorBox{image}{mmm}{imagestyle,left skip=#1\linewidth,width=#2\linewidth}&#xa;</xsl:text>
     </xsl:if>
     <!-- Tables -->
     <xsl:if test="//tabular">
@@ -1627,7 +1726,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
     </xsl:if>
     <!-- Interactives -->
-    <xsl:if test="$document-root//video|$document-root//interactive">
+    <xsl:if test="$document-root//audio|$document-root//video|$document-root//interactive">
         <xsl:text>%% QR Code Support&#xa;</xsl:text>
         <xsl:text>%% Videos and other interactives&#xa;</xsl:text>
         <xsl:text>\usepackage{qrcode}&#xa;</xsl:text>
@@ -1671,7 +1770,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         \end{tikzpicture}
         }&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="$document-root//icon">
+    <xsl:if test="$b-has-icon">
         <xsl:text>%% Font Awesome icons in a LaTeX package&#xa;</xsl:text>
         <xsl:text>\usepackage{fontawesome}&#xa;</xsl:text>
     </xsl:if>
@@ -1731,7 +1830,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Bitstream Vera Font names within: https://github.com/timfel/texmf/blob/master/fonts/map/vtex/bera.ali -->
     <!-- Coloring listings: http://tex.stackexchange.com/questions/18376/beautiful-listing-for-csharp -->
     <!-- Song and Dance for font changes: http://jevopi.blogspot.com/2010/03/nicely-formatted-listings-in-latex-with.html -->
-     <xsl:if test="$document-root//sage or $document-root//program">
+     <xsl:if test="$b-has-program or $b-has-sage">
         <xsl:text>%% Program listing support: for listings, programs, and Sage code&#xa;</xsl:text>
         <xsl:text>\usepackage{listings}&#xa;</xsl:text>
         <xsl:text>%% We define the listings font style to be the default "ttfamily"&#xa;</xsl:text>
@@ -1850,7 +1949,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% end: pdflatex-specific listings configuration&#xa;</xsl:text>
         <xsl:text>}&#xa;</xsl:text>
         <xsl:text>%% End of generic listing adjustments&#xa;</xsl:text>
-        <xsl:if test="$document-root//program">
+        <xsl:if test="$b-has-program">
             <xsl:text>%% Program listings via the listings package&#xa;</xsl:text>
             <xsl:text>%% Line breaking, language per instance, frames, boxes&#xa;</xsl:text>
             <xsl:text>%% First a universal color scheme for parts of any language&#xa;</xsl:text>
@@ -1888,7 +1987,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>  {\lstset{style=programstyle,#1}}&#xa;</xsl:text>
             <xsl:text>  {}&#xa;</xsl:text>
         </xsl:if>
-        <xsl:if test="$document-root//sage">
+        <xsl:if test="$b-has-sage">
             <xsl:text>%% Sage's blue is 50%, we go way lighter (blue!05 would work)&#xa;</xsl:text>
             <xsl:text>\definecolor{sageblue}{rgb}{0.95,0.95,1}&#xa;</xsl:text>
             <xsl:text>%% Sage input, listings package: Python syntax, boxed, colored, line breaking&#xa;</xsl:text>
@@ -1957,12 +2056,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Multiple column, column-major lists&#xa;</xsl:text>
         <xsl:text>\usepackage{multicol}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="$document-root//ol or $document-root//ul or $document-root//dl or $document-root//task or $document-root//references or $document-root//webwork-reps">
+    <xsl:if test="$document-root//ol or $document-root//ul or $document-root//dl or $document-root//task or $document-root//references or $b-has-webwork-reps">
         <xsl:text>%% More flexible list management, esp. for references&#xa;</xsl:text>
         <xsl:text>%% But also for specifying labels (i.e. custom order) on nested lists&#xa;</xsl:text>
         <xsl:text>\usepackage</xsl:text>
-        <xsl:if test="//webwork-reps/static//statement//var[@form='checkboxes' or @form='popup']">
-            <xsl:text>[inline]</xsl:text>
+        <xsl:if test="$b-has-webwork-reps">
+            <xsl:if test="//webwork-reps/static//statement//var[@form='checkboxes' or @form='popup']">
+                <xsl:text>[inline]</xsl:text>
+            </xsl:if>
         </xsl:if>
         <xsl:text>{enumitem}&#xa;</xsl:text>
         <xsl:if test="$document-root//references">
@@ -2577,7 +2678,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>} }&#xa;</xsl:text>
     <xsl:text>\newtcolorbox{proofptx}[2]{title={\notblank{#1}{#1}{</xsl:text>
     <xsl:apply-templates select="." mode="type-name"/>
-    <xsl:text>.}}, phantom={\hypertarget{#2}{}}, breakable, parbox=false, proofstyle }&#xa;</xsl:text>
+    <xsl:text>.}}, phantom={</xsl:text>
+    <xsl:if test="$b-pageref">
+        <xsl:text>\label{#2}</xsl:text>
+    </xsl:if>
+    <xsl:text>\hypertarget{#2}{}}, breakable, parbox=false, proofstyle }&#xa;</xsl:text>
 </xsl:template>
 
 <!-- "case" (of a proof) -->
@@ -2589,7 +2694,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\NewDocumentEnvironment{case}{mmm}&#xa;</xsl:text>
     <xsl:text>{\par\medskip\noindent\notblank{#1}{#1\space{}}{}\textit{\notblank{#2}{#2\space{}}{}\notblank{#1#2}{}{</xsl:text>
     <xsl:apply-templates select="." mode="type-name"/>
-    <xsl:text>.\space{}}}\hypertarget{#3}{}}{}&#xa;</xsl:text>
+    <xsl:text>.\space{}}}</xsl:text>
+    <xsl:if test="$b-pageref">
+        <xsl:text>\label{#3}</xsl:text>
+    </xsl:if>
+    <xsl:text>\hypertarget{#3}{}}{}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- "objectives" -->
@@ -2623,7 +2732,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>} }&#xa;</xsl:text>
     <xsl:text>\newtcolorbox{backcolophon}[1]{title={</xsl:text>
     <xsl:apply-templates select="." mode="type-name"/>
-    <xsl:text>}, phantom={\hypertarget{#1}{}}, breakable, parbox=false, backcolophonstyle}&#xa;</xsl:text>
+    <xsl:text>}, phantom={</xsl:text>
+    <xsl:if test="$b-pageref">
+        <xsl:text>\label{#1}</xsl:text>
+    </xsl:if>
+    <xsl:text>\hypertarget{#1}{}}, breakable, parbox=false, backcolophonstyle}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- "assemblage" -->
@@ -2674,7 +2787,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\titleformat{\subparagraph}[runin]{\normalfont\normalsize\bfseries}{\thesubparagraph}{1em}{#1}&#xa;</xsl:text>
     <xsl:text>\titlespacing*{\subparagraph}{0pt}{3.25ex plus 1ex minus .2ex}{1em}&#xa;</xsl:text>
     <xsl:text>\NewDocumentEnvironment{paragraphs}{mm}&#xa;</xsl:text>
-    <xsl:text>{\subparagraph*{#1}\hypertarget{#2}{}}{}&#xa;</xsl:text>
+    <xsl:text>{\subparagraph*{#1}</xsl:text>
+    <xsl:if test="$b-pageref">
+        <xsl:text>\label{#2}</xsl:text>
+    </xsl:if>
+    <xsl:text>\hypertarget{#2}{}}{}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- ASIDE-LIKE: "aside", "historical", "biographical" -->
@@ -3238,14 +3355,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <xsl:when test="$b-has-toc">
             <xsl:text>%% Target for xref to top-level element is ToC&#xa;</xsl:text>
-            <xsl:text>\addtocontents{toc}{\protect\hypertarget{</xsl:text>
-            <xsl:apply-templates select="." mode="internal-id" />
-            <xsl:text>}{}}&#xa;</xsl:text>
+            <xsl:text>\addtocontents{toc}{</xsl:text>
+            <xsl:if test="$b-pageref">
+                <xsl:text>\protect\label{</xsl:text>
+                <xsl:apply-templates select="." mode="latex-id" />
+                <xsl:text>}</xsl:text>
+            </xsl:if>
+            <xsl:text>\protect\hypertarget{</xsl:text>
+            <xsl:apply-templates select="." mode="latex-id" />
+            <xsl:text>}{}</xsl:text>
+            <xsl:text>}&#xa;</xsl:text>
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>%% Target for xref to top-level element is document start&#xa;</xsl:text>
+            <xsl:if test="$b-pageref">
+                <xsl:text>\label{</xsl:text>
+                <xsl:apply-templates select="." mode="latex-id" />
+                <xsl:text>}</xsl:text>
+            </xsl:if>
             <xsl:text>\hypertarget{</xsl:text>
-            <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:apply-templates select="." mode="latex-id" />
             <xsl:text>}{}&#xa;</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
@@ -3819,7 +3948,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\vspace*{\stretch{1}}&#xa;</xsl:text>
     <xsl:text>\begin{backcolophon}</xsl:text>
     <xsl:text>{</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="latex-id" />
     <xsl:text>}</xsl:text>
     <xsl:text>%&#xa;</xsl:text>
     <xsl:apply-templates/>
@@ -3832,7 +3961,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="article/backmatter/colophon">
     <xsl:text>\begin{backcolophon}</xsl:text>
     <xsl:text>{</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="latex-id" />
     <xsl:text>}</xsl:text>
     <xsl:text>%&#xa;</xsl:text>
     <xsl:apply-templates/>
@@ -3924,7 +4053,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="description" />
     <xsl:text>&amp;</xsl:text>
     <xsl:text>\pageref{</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="latex-id" />
     <xsl:text>}</xsl:text>
     <xsl:text>\\&#xa;</xsl:text>
 </xsl:template>
@@ -4108,7 +4237,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:if>
         </xsl:if>
         <xsl:if test="email">
-            <xsl:text>\texttt{</xsl:text>
+            <!-- switch to node-set with "c" if characters need escaping -->
+            <xsl:text>\mono{</xsl:text>
             <xsl:apply-templates select="email" />
             <xsl:text>}</xsl:text>
         </xsl:if>
@@ -4304,7 +4434,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <xsl:text>An epigraph here\\with two lines\\-Rob</xsl:text> -->
     <xsl:text>}</xsl:text>
     <xsl:text>{</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="latex-id" />
     <xsl:text>}</xsl:text>
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
@@ -4346,7 +4476,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- subtitle here -->
     <xsl:text>}</xsl:text>
     <xsl:text>{</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="latex-id" />
     <xsl:text>}</xsl:text>
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
@@ -4552,7 +4682,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="title-full" />
     <xsl:text>}</xsl:text>
     <xsl:text>{</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="latex-id" />
     <xsl:text>}</xsl:text>
     <xsl:text>%&#xa;</xsl:text>
     <xsl:apply-templates/>
@@ -4587,14 +4717,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- expect certain arguments.  This template provides them. -->
 <!--                                                         -->
 <!-- 1.  title, with punctuation as needed                   -->
-<!-- 2.  the "internal-id", which suffices for               -->
+<!-- 2.  the "latex-id", which suffices for                  -->
 <!--     the LaTeX label/ref mechanism                       -->
 <!--                                                         -->
 <!-- Or, for THEOREM-LIKE and AXIOM-LIKE,                    -->
 <!--                                                         -->
 <!-- 1.  title, right now we add punctuation as needed       -->
 <!-- 2.  a list of creator(s)                                -->
-<!-- 3.  the "internal-id", which suffices for               -->
+<!-- 3.  the "latex-id", which suffices for                  -->
 <!--     the LaTeX label/ref mechanism                       -->
 <!-- N.B.: "objectives", "outcomes" need to use this         -->
 <xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&ASIDE-LIKE;|exercise[boolean(&INLINE-EXERCISE-FILTER;)]|commentary|assemblage" mode="block-options">
@@ -4606,9 +4736,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="creator-full" />
         <xsl:text>}</xsl:text>
     </xsl:if>
-    <!-- internal-id destined for tcolorbox  phantomlabel=  option -->
+    <!-- latex-id destined for tcolorbox  phantomlabel=  option -->
     <xsl:text>{</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id"/>
+    <xsl:apply-templates select="." mode="latex-id"/>
     <xsl:text>}</xsl:text>
 </xsl:template>
 
@@ -4652,7 +4782,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:text>}</xsl:text>
     <xsl:text>{</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="latex-id" />
     <xsl:text>}</xsl:text>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates/>
@@ -4684,7 +4814,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
     <!-- label -->
     <xsl:text>{</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="latex-id" />
     <xsl:text>}</xsl:text>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates/>
@@ -4840,7 +4970,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>}</xsl:text>
         <!-- label of the exercise, to link back to it -->
         <xsl:text>{</xsl:text>
-        <xsl:apply-templates select="." mode="internal-id"/>
+        <xsl:apply-templates select="." mode="latex-id"/>
         <xsl:text>}</xsl:text>
         <xsl:text>&#xa;</xsl:text>
         <!-- Allow a webwork or myopenmath exercise to introduce/connect    -->
@@ -4973,7 +5103,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:text>}</xsl:text>
     <xsl:text>{</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id"/>
+    <xsl:apply-templates select="." mode="latex-id"/>
     <xsl:text>}</xsl:text>
     <xsl:text>%&#xa;</xsl:text>
     <!-- Allow a webwork or myopenmath exercise to introduce/connect    -->
@@ -5106,7 +5236,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>}</xsl:text>
         <!-- label of the exercise, to link back to it -->
         <xsl:text>{</xsl:text>
-        <xsl:apply-templates select="." mode="internal-id"/>
+        <xsl:apply-templates select="." mode="latex-id"/>
         <xsl:text>}</xsl:text>
         <!-- no workspace fraction in a solution -->
         <xsl:text>%&#xa;</xsl:text>
@@ -5226,7 +5356,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <xsl:when test="count(.|$solutions-mainmatter) = count($solutions-mainmatter)">
                                 <xsl:text>\space</xsl:text>
                                 <xsl:text>\hyperlink{</xsl:text>
-                                <xsl:apply-templates select="." mode="internal-id-duplicate">
+                                <xsl:apply-templates select="." mode="latex-id-duplicate">
                                     <xsl:with-param name="suffix" select="'main'"/>
                                 </xsl:apply-templates>
                                 <xsl:text>}{[</xsl:text>
@@ -5236,7 +5366,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <xsl:when test="count(.|$solutions-backmatter) = count($solutions-backmatter)">
                                 <xsl:text>\space</xsl:text>
                                 <xsl:text>\hyperlink{</xsl:text>
-                                <xsl:apply-templates select="." mode="internal-id-duplicate">
+                                <xsl:apply-templates select="." mode="latex-id-duplicate">
                                     <xsl:with-param name="suffix" select="'back'"/>
                                 </xsl:apply-templates>
                                 <xsl:text>}{[</xsl:text>
@@ -5388,14 +5518,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- suffix to the label.                                -->
         <xsl:when test="$purpose = 'mainmatter'">
             <xsl:text>\hypertarget{</xsl:text>
-            <xsl:apply-templates select="." mode="internal-id-duplicate">
+            <xsl:apply-templates select="." mode="latex-id-duplicate">
                 <xsl:with-param name="suffix" select="'main'"/>
             </xsl:apply-templates>
             <xsl:text>}</xsl:text>
         </xsl:when>
         <xsl:when test="$purpose = 'backmatter'">
             <xsl:text>\hypertarget{</xsl:text>
-            <xsl:apply-templates select="." mode="internal-id-duplicate">
+            <xsl:apply-templates select="." mode="latex-id-duplicate">
                 <xsl:with-param name="suffix" select="'back'"/>
             </xsl:apply-templates>
             <xsl:text>}</xsl:text>
@@ -5674,6 +5804,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!--     \ocircle (wasysym), \circledcirc (amssymb),           -->
         <!--     \textopenbullet, \textbigcircle (textcomp)            -->
         <!-- To adjust in preamble, test on:                           -->
+        <!-- $b-has-webwork-reps, then on                              -->
         <!-- $document-root//webwork-reps/static//var[@form='buttons'] -->
         <xsl:when test="@form='buttons'" >
             <xsl:text>\par&#xa;</xsl:text>
@@ -5832,7 +5963,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>}</xsl:text>
         <!-- label of the project, to link back to it -->
         <xsl:text>{</xsl:text>
-        <xsl:apply-templates select="." mode="internal-id"/>
+        <xsl:apply-templates select="." mode="latex-id"/>
         <xsl:text>}</xsl:text>
         <xsl:text>%&#xa;</xsl:text>
         <xsl:choose>
@@ -6082,7 +6213,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:text>}</xsl:text>
     <xsl:text>{</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id"/>
+    <xsl:apply-templates select="." mode="latex-id"/>
     <xsl:text>}</xsl:text>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates select="introduction" />
@@ -6113,6 +6244,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:apply-templates select="caption" />
     <xsl:text>\end{namedlist}&#xa;</xsl:text>
+    <xsl:apply-templates select="." mode="pop-footnote-text"/>
 </xsl:template>
 
 <!-- Paragraphs -->
@@ -6643,7 +6775,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ###################################### -->
 
 
-<xsl:template match="video|interactive">
+<xsl:template match="audio|video|interactive">
     <!-- scale to fit into a side-by-side -->
     <xsl:variable name="width-percentage">
         <xsl:choose>
@@ -6747,7 +6879,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Eventually match on all interactives                            -->
 <!-- NB baseurl is not assumed to have a trailing slash              -->
 
-<xsl:template match="video[@source]|interactive" mode="static-url">
+<xsl:template match="audio[@source]|video[@source]|interactive" mode="static-url">
     <xsl:value-of select="$baseurl"/>
     <xsl:text>/</xsl:text>
     <xsl:apply-templates select="." mode="standalone-filename" />
@@ -6767,11 +6899,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<!-- Vimeo view URL -->
+<xsl:template match="video[@vimeo]" mode="static-url">
+    <xsl:text>https://vimeo.com/</xsl:text>
+    <xsl:value-of select="@vimeo"/>
+</xsl:template>
+
 <!-- Static Images -->
 <!-- (1) @preview given in source -->
-<!-- (2) scraped image, name via internal-id -->
+<!-- (2) scraped image, name via visible-id -->
 <!-- https://tex.stackexchange.com/questions/47245/ -->
 <!-- set-a-maximum-width-and-height-for-an-image    -->
+
+<!-- needs work -->
+<xsl:template match="audio" mode="static-image"/>
+
 <xsl:template match="video" mode="static-image">
     <xsl:choose>
         <!-- has @preview, and is 'generic' -->
@@ -6793,12 +6935,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="@youtubeplaylist">
             <xsl:text>\resizebox{!}{\qrsize}{\genericpreview}</xsl:text>
         </xsl:when>
-        <!-- nothing specified, look for scraped via internal-id -->
+        <!-- nothing specified, look for scraped via visible-id -->
         <xsl:otherwise>
             <xsl:text>\includegraphics[width=0.80\linewidth,height=\qrsize,keepaspectratio]{</xsl:text>
             <xsl:value-of select="$directory.images" />
             <xsl:text>/</xsl:text>
-            <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:apply-templates select="." mode="visible-id" />
             <xsl:text>.jpg</xsl:text>
             <xsl:text>}</xsl:text>
         </xsl:otherwise>
@@ -6813,13 +6955,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="@preview" />
             <xsl:text>}</xsl:text>
         </xsl:when>
-        <!-- nothing specified, look for scraped via internal-id -->
+        <!-- nothing specified, look for scraped via visible-id -->
         <!-- Critical: coordinate with "extract-interactive.xsl" -->
         <xsl:otherwise>
             <xsl:variable name="default-preview-image">
                 <xsl:value-of select="$directory.images" />
                 <xsl:text>/</xsl:text>
-                <xsl:apply-templates select="." mode="internal-id" />
+                <xsl:apply-templates select="." mode="visible-id" />
                 <xsl:text>-preview.png</xsl:text>
             </xsl:variable>
             <xsl:text>\IfFileExists{</xsl:text>
@@ -6835,7 +6977,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<xsl:template match="video[@source]" mode="static-caption">
+<xsl:template match="audio[@source]|video[@source]" mode="static-caption">
     <xsl:choose>
         <!-- author-supplied override -->
         <xsl:when test="caption">
@@ -6881,6 +7023,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="exsl:node-set($visual-url)/*" />
         </xsl:otherwise>
     </xsl:choose>
+</xsl:template>
+
+<xsl:template match="video[@vimeo]" mode="static-caption">
+    <xsl:variable name="visual-url">
+        <c>
+            <xsl:text>vimeo.com/</xsl:text>
+            <xsl:value-of select="@vimeo"/>
+        </c>
+    </xsl:variable>
+    <xsl:apply-templates select="exsl:node-set($visual-url)/*"/>
 </xsl:template>
 
 <xsl:template match="video[@youtube|@youtubeplaylist]" mode="youtube-view-url">
@@ -6974,7 +7126,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- https://musescore.org/user/{usernumber}/scores/{scorenumber}/embed -->
 <!-- into an iframe with width and height (todo)                        -->
 <xsl:template match="score[@musescoreuser and @musescore]">
-    <xsl:text>[\texttt{\nolinkurl{https://musescore.org/user/</xsl:text>
+    <xsl:text>[\mono{\nolinkurl{https://musescore.org/user/</xsl:text>
     <xsl:value-of select="@musescoreuser" />
     <xsl:text>/scores/</xsl:text>
     <xsl:value-of select="@musescore" />
@@ -7217,6 +7369,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- choose a macro, font change, or active link -->
     <xsl:choose>
         <xsl:when test="ancestor::title|ancestor::subtitle">
+            <!-- switch to node-set with "c" if characters need escaping -->
             <xsl:text>\mono{</xsl:text>
         </xsl:when>
         <xsl:otherwise>
@@ -7819,9 +7972,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="articletitle">
-    <xsl:text>``</xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>''</xsl:text>
+    <xsl:call-template name="lq-character"/>
+    <xsl:apply-templates/>
+    <xsl:call-template name="rq-character"/>
 </xsl:template>
 
 <!-- ################## -->
@@ -7863,7 +8016,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- So conceivably, this template can do nothing (ie an empty cell) -->
 <!-- As a named template, the context is a calling sage element,     -->
 <!-- this could be reworked and many of the parameters inferred      -->
-<xsl:template name="sage-active-markup">
+<xsl:template match="sage" mode="sage-active-markup">
     <xsl:param name="in" />
     <xsl:param name="out" />
     <!-- Surrounding box gets clobbered if it is the first -->
@@ -8139,6 +8292,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="node()[not(self::caption)]"/>
     <xsl:apply-templates select="caption" />
     <xsl:text>\end{figure}&#xa;</xsl:text>
+    <xsl:apply-templates select="." mode="pop-footnote-text"/>
 </xsl:template>
 
 <!-- Listings -->
@@ -8156,6 +8310,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\par&#xa;</xsl:text>
     <xsl:apply-templates select="caption" />
     <xsl:text>\end{listing}&#xa;</xsl:text>
+    <xsl:apply-templates select="." mode="pop-footnote-text"/>
 </xsl:template>
 
 
@@ -8185,6 +8340,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="title">
         <xsl:apply-templates select="." mode="title-full" />
     </xsl:if>
+    <xsl:text>\end{sbsheading}%&#xa;</xsl:text>
+</xsl:template>
+
+<!-- TEMPORARY -->
+<!-- Progessively killing titles as they migrate into panel-panel -->
+<xsl:template match="poem" mode="panel-heading">
+    <xsl:param name="width" />
+    <xsl:text>\begin{sbsheading}{</xsl:text>
+    <xsl:value-of select="substring-before($width,'%') div 100" />
+    <xsl:text>}</xsl:text>
     <xsl:text>\end{sbsheading}%&#xa;</xsl:text>
 </xsl:template>
 
@@ -8324,7 +8489,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Implement modal "panel-latex-box" for allowed elements -->
 
-<xsl:template match="p|pre" mode="panel-latex-box">
+<xsl:template match="p|pre|ol|ul|dl|program|console|exercise|poem|video|audio|interactive|image" mode="panel-latex-box">
     <xsl:apply-templates select="." />
 </xsl:template>
 
@@ -8333,25 +8498,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "title" should be killed anyway -->
 <xsl:template match="paragraphs" mode="panel-latex-box">
     <xsl:apply-templates select="node()[not(self::title)]" />
-</xsl:template>
-
-<!-- TODO: trash left, top margins (accomodated already) -->
-<xsl:template match="ol|ul|dl" mode="panel-latex-box">
-    <xsl:apply-templates select="." />
-</xsl:template>
-
-<xsl:template match="program|console" mode="panel-latex-box">
-    <xsl:apply-templates select="." />
-</xsl:template>
-
-<!-- Much like main "poem" template, but sans title -->
-<xsl:template match="poem" mode="panel-latex-box">
-    <xsl:text>\begin{poem}</xsl:text>
-    <xsl:apply-templates select="." mode="label" />
-    <xsl:text>&#xa;</xsl:text>
-    <xsl:apply-templates select="stanza"/>
-    <xsl:apply-templates select="author" />
-    <xsl:text>\end{poem}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- TODO: tighten up gaps, margins? -->
@@ -8365,47 +8511,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- figure, table, listing will contain one item    -->
+<!-- This is skipping captions, intentionally        -->
 <xsl:template match="figure|table|listing" mode="panel-latex-box">
     <xsl:apply-templates select="node()[not(&METADATA-FILTER;)][1]" mode="panel-latex-box" />
 </xsl:template>
 
 <!-- list will have introduction, <list>, conclusion -->
+<!-- This is skipping a caption, intentionally       -->
+<!-- This is skipping index entries, unintentionally -->
 <xsl:template match="list" mode="panel-latex-box">
     <xsl:apply-templates select="introduction" />
     <xsl:apply-templates select="ol|ul|dl" mode="panel-latex-box" />
     <xsl:apply-templates select="conclusion" />
 </xsl:template>
-
-<!-- The image "knows" how to size itself for a panel   -->
-<!-- Baseline is automatically at the bottom of the box -->
-<xsl:template match="image" mode="panel-latex-box">
-    <xsl:apply-templates select="." mode="image-inclusion"/>
-</xsl:template>
-
-<!-- With raw LaTeX code, we use a \resizebox from the      -->
-<!-- graphicx package to scale the image to the panel width -->
-<xsl:template match="image[latex-image-code]|image[latex-image]" mode="panel-latex-box">
-    <xsl:text>\resizebox{\linewidth}{!}{</xsl:text>
-    <xsl:apply-templates select="." mode="image-inclusion"/>
-    <xsl:text>}&#xa;</xsl:text>
-</xsl:template>
-
-<!-- Default print representation is a tcbraster,       -->
-<!-- which must be stuffed in an intervening tcolorbox, -->
-<!-- which we make invisible with the "blankest" option -->
-<!-- TODO: condition on no "static" -->
-<xsl:template match="video|interactive" mode="panel-latex-box">
-    <xsl:text>\begin{tcolorbox}[blankest]&#xa;</xsl:text>
-        <xsl:apply-templates select="." />
-    <xsl:text>\end{tcolorbox}&#xa;</xsl:text>
-</xsl:template>
-
-<!-- A worksheet/exercise is a tcolorbox and -->
-<!-- so slots into the tcbraster nicely      -->
-<xsl:template match="exercise" mode="panel-latex-box">
-        <xsl:apply-templates select="." />
-</xsl:template>
-
 
 <!-- Since stackable items do not carry titles or captions, -->
 <!-- their "panel-latex-box" templates do the right thing   -->
@@ -8442,33 +8560,47 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="$layout/width div 100" />
 </xsl:template>
 
+<!-- IN-PROGRESS: Following versions match naked images, and any image -->
+<!-- inside a sidebyside, leaving only figure/image to use preceding   -->
+<!-- (variable) value.  Once every image is inside a tcolorbox, then   -->
+<!-- the contained image will have the width of the box, set as        -->
+<!-- 1\linewidth (i.e. \linewidth).  Then this/these templates         -->
+<!-- can be removed.                                                   -->
+
 <!-- Anyway that an image is buried in a side-by-side control passes to  -->
 <!-- the sbs layout and the linewidth of the resulting tcolorboxes is restricted -->
 <xsl:template match="image[ancestor::sidebyside]" mode="get-width-fraction">
     <xsl:value-of select="'1'"/>
 </xsl:template>
 
-<xsl:template match="image[not(parent::figure or parent::sidebyside or parent::stack)]" priority="50">
+<!-- A "naked" image is going into a width-controlled tcolorbox -->
+<xsl:template match="image[not(parent::figure or parent::sidebyside or parent::stack)]" mode="get-width-fraction">
+    <xsl:value-of select="'1'"/>
+</xsl:template>
+
+<!-- naked images into a tcolorbox -->
+<!-- IN-PROGRESS: non-sidebyside images should all be done this way -->
+<!-- in other words, figure/image[not(ancestor::sidebyside)] -->
+<xsl:template match="image[not(ancestor::sidebyside or parent::figure)]">
     <xsl:variable name="rtf-layout">
         <xsl:apply-templates select="." mode="layout-parameters" />
     </xsl:variable>
     <xsl:variable name="layout" select="exsl:node-set($rtf-layout)" />
-    <xsl:text>\begin{figure}</xsl:text>
-    <xsl:choose>
-        <xsl:when test="$layout/centered = 'true'">
-            <xsl:text>\centering</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>\hspace*{</xsl:text>
-            <xsl:value-of select="$layout/left-margin div 100" />
-            <xsl:text>\linewidth}</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:text>\begin{image}</xsl:text>
+    <xsl:text>{</xsl:text>
+    <xsl:value-of select="$layout/left-margin div 100"/>
+    <xsl:text>}</xsl:text>
+    <xsl:text>{</xsl:text>
+    <xsl:value-of select="$layout/width div 100"/>
+    <xsl:text>}</xsl:text>
+    <xsl:text>{</xsl:text>
+    <xsl:value-of select="$layout/right-margin div 100"/>
+    <xsl:text>}%&#xa;</xsl:text>
     <xsl:apply-templates select="." mode="image-inclusion" />
-    <xsl:text>\end{figure}</xsl:text>
+    <xsl:text>\end{image}%&#xa;</xsl:text>
 </xsl:template>
 
-<xsl:template match="image[parent::figure and not(ancestor::sidebyside)]" priority="100">
+<xsl:template match="image[ancestor::sidebyside or parent::figure]">
     <xsl:apply-templates select="." mode="image-inclusion" />
 </xsl:template>
 
@@ -8483,7 +8615,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="get-width-fraction" />
     <xsl:text>\linewidth]</xsl:text>
     <xsl:text>{</xsl:text>
-    <xsl:apply-templates select="@source" mode="internal-id" />
+    <xsl:apply-templates select="@source" mode="visible-id" />
     <xsl:if test="not($extension)">
         <xsl:text>.pdf&#xa;</xsl:text>
     </xsl:if>
@@ -8499,7 +8631,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>{</xsl:text>
     <xsl:value-of select="$directory.images" />
     <xsl:text>/</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="visible-id" />
     <xsl:text>.pdf}&#xa;</xsl:text>
 </xsl:template>
 
@@ -8510,7 +8642,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\IfFileExists{</xsl:text>
     <xsl:value-of select="$directory.images" />
     <xsl:text>/</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="visible-id" />
     <xsl:text>.pdf}%&#xa;</xsl:text>
     <xsl:text>{\includegraphics[width=</xsl:text>
     <xsl:apply-templates select="." mode="get-width-fraction" />
@@ -8518,7 +8650,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>{</xsl:text>
     <xsl:value-of select="$directory.images" />
     <xsl:text>/</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="visible-id" />
     <xsl:text>.pdf}}%&#xa;</xsl:text>
     <xsl:text>{\includegraphics[width=</xsl:text>
     <xsl:apply-templates select="." mode="get-width-fraction" />
@@ -8526,7 +8658,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>{</xsl:text>
     <xsl:value-of select="$directory.images" />
     <xsl:text>/</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="visible-id" />
     <xsl:text>.png}}&#xa;</xsl:text>
 </xsl:template>
 
@@ -8535,12 +8667,33 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- See "latex-image-preamble" for critical parts    -->
 <!-- Side-By-Side scaling happens there, could be here -->
 <xsl:template match="image[latex-image-code]|image[latex-image]" mode="image-inclusion">
-    <!-- outer braces rein in the scope of any local graphics settings -->
-    <xsl:text>{&#xa;</xsl:text>
-    <xsl:call-template name="sanitize-text">
-        <xsl:with-param name="text" select="latex-image-code|latex-image" />
-    </xsl:call-template>
-    <xsl:text>}&#xa;</xsl:text>
+    <!-- tikz images go into a tcolorbox where \linewidth is reset. -->
+    <!-- For a "naked" image we need to provide the resizing        -->
+    <!-- Eventually we will provide it when included in a figure,   -->
+    <!-- or maybe it migrates to one of the two "image" (non-modal) -->
+    <!-- templates above, we'll see                                 -->
+    <!-- NB two "choose" could just set wrappings, so we would      -->
+    <!-- consolidate the text creation                              -->
+    <xsl:choose>
+        <!-- grouping reins in the scope of any local graphics settings -->
+        <!-- NB: figures, with tikz, outside of sidebyside, need     -->
+        <!-- changes to accomodate resizing to fit requested layouts -->
+        <xsl:when test="parent::figure and not(ancestor::sidebyside)">
+            <xsl:text>{&#xa;</xsl:text>
+            <xsl:call-template name="sanitize-text">
+                <xsl:with-param name="text" select="latex-image-code|latex-image" />
+            </xsl:call-template>
+            <xsl:text>}&#xa;</xsl:text>
+        </xsl:when>
+        <!-- grouping reins in the scope of any local graphics settings -->
+        <xsl:otherwise>
+            <xsl:text>\resizebox{\linewidth}{!}{%&#xa;</xsl:text>
+            <xsl:call-template name="sanitize-text">
+                <xsl:with-param name="text" select="latex-image-code|latex-image" />
+            </xsl:call-template>
+            <xsl:text>}%&#xa;</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- EXPERIMENTAL -->
@@ -8586,7 +8739,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\includegraphics[width=0.80\textwidth]{</xsl:text>
     <xsl:value-of select="$directory.images" />
     <xsl:text>/</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="visible-id" />
     <xsl:text>.pdf}&#xa;</xsl:text>
 </xsl:template>
 <!-- 2015/02/08: Deprecated, still functional but not maintained -->
@@ -8596,17 +8749,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\IfFileExists{</xsl:text>
     <xsl:value-of select="$directory.images" />
     <xsl:text>/</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="visible-id" />
     <xsl:text>.pdf}%&#xa;</xsl:text>
     <xsl:text>{\includegraphics[width=0.80\textwidth]{</xsl:text>
     <xsl:value-of select="$directory.images" />
     <xsl:text>/</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="visible-id" />
     <xsl:text>.pdf}}%&#xa;</xsl:text>
     <xsl:text>{\includegraphics[width=0.80\textwidth]{</xsl:text>
     <xsl:value-of select="$directory.images" />
     <xsl:text>/</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="visible-id" />
     <xsl:text>.png}}&#xa;</xsl:text>
 </xsl:template>
 <!-- ################################## -->
@@ -8632,6 +8785,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="node()[not(self::caption)]" />
     <xsl:apply-templates select="caption" />
     <xsl:text>\end{table}&#xa;</xsl:text>
+    <xsl:apply-templates select="." mode="pop-footnote-text"/>
 </xsl:template>
 
 <!-- A tabular layout -->
@@ -9424,7 +9578,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- \naturally, then ref{} will generate that number.  In order to make an -->
 <!-- \electronic PDF, we use the  hyperref  package, and specifically, the  -->
 <!-- \hyperref[]{} command.  The string that associates these comes from    -->
-<!-- \our "internal-id" template, often the @xml:id.  Example:              -->
+<!-- \our "latex-id" template, often the @xml:id.  Example:                 -->
 <!--                                                                        -->
 <!--   \begin{theorem}\label{foo}                                           -->
 <!--                                                                        -->
@@ -9440,7 +9594,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- whose number is that of its containing division.  Some items are not   -->
 <!-- numbered at all, like a "preface".  Here we use \hypertarget{}{} as    -->
 <!-- the marker, and \hyperlink{}{} with custom text (title, hard-coded     -->
-<!-- number, etc) as the visual, clickable link.  The "internal-id" is used -->
+<!-- number, etc) as the visual, clickable link.  The "latex-id" is used -->
 <!-- as before to link the two commands.  The second argument of            -->
 <!-- \hypertarget can be text, but we uniformly leave it empty (a \null     -->
 <!-- target text was unnecessary and visible, 2015-12-12).  Example:        -->
@@ -9454,6 +9608,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- inactive via \hypersetup{draft}).                                      -->
 <!--                                                                        -->
 <!-- Note: footnotes, "fn" are exceptional, see notes below                 -->
+
+<!-- ################## -->
+<!-- Unique Identifiers -->
+<!-- ################## -->
+
+<!-- This produces unique strings that are internal to the  -->
+<!-- LaTeX (intermediate) file.  Since neither author nor   -->
+<!-- reader will ever see these, they can be as fast and as -->
+<!-- wild as necessary.  These are employed with            -->
+<!-- \label{}, \ref{}, \cite{}, \pageref{}, \eqref{}, etc.  -->
+<!-- We can change this at will, with no adverse effects    -->
+<xsl:template match="*" mode="latex-id">
+    <xsl:value-of select="local-name(.)" />
+    <xsl:text>-</xsl:text>
+    <!-- xsltproc produces non-numeric prefix "idm" -->
+    <xsl:value-of select="substring(generate-id(.), 4)"/>
+</xsl:template>
+
 
 <!-- ################################ -->
 <!-- Labels (cross-reference targets) -->
@@ -9504,12 +9676,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <xsl:when test="$xref-as-ref = 'true'">
             <xsl:text>\label{</xsl:text>
-            <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:apply-templates select="." mode="latex-id" />
             <xsl:text>}</xsl:text>
         </xsl:when>
+        <!-- Objects cross-referenced outside of LaTeX's usual     -->
+        <!-- scheme need a \hypertarget, but for page numbers      -->
+        <!-- in cross-references, we need a traditional label.     -->
         <xsl:otherwise>
+            <xsl:if test="$b-pageref">
+                <xsl:text>\label{</xsl:text>
+                <xsl:apply-templates select="." mode="latex-id" />
+                <xsl:text>}{}</xsl:text>
+            </xsl:if>
             <xsl:text>\hypertarget{</xsl:text>
-            <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:apply-templates select="." mode="latex-id" />
             <xsl:text>}{}</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
@@ -9521,9 +9701,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- version of an exercise to point to solutions elsewhere.           -->
 <!-- The suffix is general-purpose, but is intended now to be          -->
 <!-- "main" or "back", depending on where the solution is located.     -->
-<xsl:template match="hint|answer|solution" mode="internal-id-duplicate">
+<xsl:template match="hint|answer|solution" mode="latex-id-duplicate">
     <xsl:param name="suffix" select="'bad-suffix'"/>
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="latex-id" />
     <xsl:text>-</xsl:text>
     <xsl:value-of select="$suffix"/>
 </xsl:template>
@@ -9571,7 +9751,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- task always gets a number, but we have to avoid recursion -->
     <!-- that would result by just getting a \ref from xref-number -->
     <xsl:text>\ref{</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="latex-id" />
     <xsl:text>}</xsl:text>
 </xsl:template>
 
@@ -9580,7 +9760,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- with symbols not numbers                           -->
 <xsl:template match="mrow[@tag]" mode="xref-number">
     <xsl:text>\ref{</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="latex-id" />
     <xsl:text>}</xsl:text>
 </xsl:template>
 
@@ -9683,13 +9863,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- if so, append prefix with separator -->
             <xsl:if test="$needs-part-prefix = 'true'">
                 <xsl:text>\ref{</xsl:text>
-                <xsl:apply-templates select="ancestor::part" mode="internal-id" />
+                <xsl:apply-templates select="ancestor::part" mode="latex-id" />
                 <xsl:text>}</xsl:text>
                 <xsl:text>.</xsl:text>
             </xsl:if>
             <!-- and always, a representation for the text of the xref -->
             <xsl:text>\ref{</xsl:text>
-            <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:apply-templates select="." mode="latex-id" />
             <xsl:text>}</xsl:text>
         </xsl:when>
         <xsl:otherwise>
@@ -9729,19 +9909,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="ancestor::title|ancestor::subtitle">
             <xsl:variable name="active-ref">
                 <xsl:text>\ref{</xsl:text>
-                <xsl:apply-templates select="$target" mode="internal-id" />
+                <xsl:apply-templates select="$target" mode="latex-id" />
                 <xsl:text>}</xsl:text>
             </xsl:variable>
             <xsl:variable name="inactive-ref">
                 <xsl:text>\ref*{</xsl:text>
-                <xsl:apply-templates select="$target" mode="internal-id" />
+                <xsl:apply-templates select="$target" mode="latex-id" />
                 <xsl:text>}</xsl:text>
             </xsl:variable>
             <xsl:value-of select="str:replace($content, $active-ref, $inactive-ref)" />
         </xsl:when>
         <xsl:when test="$xref-as-ref='true'">
             <xsl:text>\hyperref[</xsl:text>
-            <xsl:apply-templates select="$target" mode="internal-id" />
+            <xsl:apply-templates select="$target" mode="latex-id" />
             <xsl:text>]</xsl:text>
             <xsl:text>{</xsl:text>
             <xsl:value-of select="$content" />
@@ -9749,10 +9929,33 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>\hyperlink{</xsl:text>
-            <xsl:apply-templates select="$target" mode="internal-id" />
+            <xsl:apply-templates select="$target" mode="latex-id" />
             <xsl:text>}</xsl:text>
             <xsl:text>{</xsl:text>
             <xsl:value-of select="$content" />
+            <xsl:text>}</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="xref" mode="latex-page-number">
+    <xsl:param name="target"/>
+
+    <xsl:choose>
+        <!-- looks bad when bibliographic number gets wrapped in [] -->
+        <!-- and the number should suffice on its own               -->
+        <xsl:when test="$target/self::biblio"/>
+        <!-- and trailing a () for an equation number is overkill -->
+        <xsl:when test="$target/self::mrow|$target/self::men"/>
+        <!-- and it is really bad for an xref inside a title -->
+        <xsl:when test="ancestor::title"/>
+        <!-- off by default electronic PDF, -->
+        <!-- or on by default for print PDF -->
+        <xsl:when test="not($b-pageref)"/>
+        <!-- OK, requested and helps, let's add it -->
+        <xsl:otherwise>
+            <xsl:text>, p.\,\pageref{</xsl:text>
+            <xsl:apply-templates select="$target" mode="latex-id"/>
             <xsl:text>}</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
@@ -9991,14 +10194,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Footnotes -->
 <!-- For blocks implemented as "tcolorbox" we need to manage -->
-<!-- footnotes more carefully.  At the location, we just     -->
+<!-- footnotes more carefully.  Also for captions since they -->
+<!-- migrate to list of figures.  At the location, we just   -->
 <!-- drop a mark, with no text.  Testing with the "footmisc" -->
 <!-- package, and its "\mpfootnotemark" alternative works    -->
 <!-- worse than simple default LaTeX (though the numbers     -->
 <!-- could be hard-coded if necessary).                      -->
 <xsl:template match="fn">
     <xsl:choose>
-        <xsl:when test="ancestor::*[&ASIDE-FILTER; or &THEOREM-FILTER; or &AXIOM-FILTER;  or &DEFINITION-FILTER; or &REMARK-FILTER; or &COMPUTATION-FILTER; or &EXAMPLE-FILTER; or &PROJECT-FILTER; or self::list or self::sidebyside or self::defined-term or self::objectives or self::outcomes or self::colophon/parent::backmatter or self::assemblage or self::exercise]">
+        <xsl:when test="ancestor::*[&ASIDE-FILTER; or &THEOREM-FILTER; or &AXIOM-FILTER;  or &DEFINITION-FILTER; or &REMARK-FILTER; or &COMPUTATION-FILTER; or &EXAMPLE-FILTER; or &PROJECT-FILTER; or &FIGURE-FILTER; or self::list or self::sidebyside or self::defined-term or self::objectives or self::outcomes or self::colophon/parent::backmatter or self::assemblage or self::exercise]">
+            <!-- a footnote in the text of a caption will migrate to -->
+            <!-- the auxiliary file for use in the "list of figures" -->
+            <!-- and there is some confusion of braces and the use   -->
+            <!-- of \footnote and \footnotemark, hence a \protect    -->
+            <!-- https://tex.stackexchange.com/questions/10181       -->
+            <xsl:if test="ancestor::*[&FIGURE-FILTER;]">
+                <xsl:text>\protect</xsl:text>
+            </xsl:if>
             <xsl:text>\footnotemark{}</xsl:text>
         </xsl:when>
         <xsl:otherwise>
@@ -10017,7 +10229,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- by an intervening "tcolorbox".  The template should be placed -->
 <!-- immediately after the "\end{}" of affected environments.      -->
 <!-- It will format as one footnote text per output line.          -->
-<xsl:template match="&ASIDE-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|list|sidebyside|defined-term|objectives|outcomes|backmatter/colophon|assemblage|exercise" mode="pop-footnote-text">
+<xsl:template match="&ASIDE-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&FIGURE-LIKE;|list|sidebyside|defined-term|objectives|outcomes|backmatter/colophon|assemblage|exercise" mode="pop-footnote-text">
     <xsl:for-each select=".//fn">
         <xsl:text>\footnotetext[</xsl:text>
         <xsl:apply-templates select="." mode="serial-number"/>
@@ -10041,7 +10253,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="title-full"/>
     <xsl:text>}</xsl:text>
     <xsl:text>{</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id"/>
+    <xsl:apply-templates select="." mode="latex-id"/>
     <xsl:text>}</xsl:text>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates/>
@@ -10060,22 +10272,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- filename fragments are the top of their trees, but -->
         <!-- can have an @xml:id so they can be referenced      -->
         <xsl:when test="@filename">
-            <xsl:text>\par\medskip\noindent\textbf{Begin File:} \texttt{</xsl:text>
+            <!-- switch to node-set with "c" if characters need escaping -->
+            <xsl:text>\par\medskip\noindent\textbf{Begin File:} \mono{</xsl:text>
             <xsl:value-of select="@filename" />
             <xsl:text>}</xsl:text>
-            <xsl:text>\index{file root!\texttt{</xsl:text>
+            <xsl:text>\index{file root!\mono{</xsl:text>
             <xsl:value-of select="@filename" />
             <xsl:text>}}</xsl:text>
         </xsl:when>
         <!-- other fragments are known by their xml:id strings -->
         <xsl:when test="@xml:id">
-            <xsl:text>\par\medskip\noindent\textbf{Fragment:} \texttt{</xsl:text>
+            <!-- switch to node-set with "c" if characters need escaping -->
+            <xsl:text>\par\medskip\noindent\textbf{Fragment:} \mono{</xsl:text>
             <xsl:value-of select="@xml:id" />
             <xsl:text>}</xsl:text>
             <!-- sortby first, @ separator, then tt version -->
             <xsl:text>\index{</xsl:text>
             <xsl:value-of select="@xml:id" />
-            <xsl:text>@\texttt{</xsl:text>
+            <xsl:text>@\mono{</xsl:text>
             <xsl:value-of select="@xml:id" />
             <xsl:text>}}</xsl:text>
         </xsl:when>
@@ -10091,11 +10305,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- convert fragment pointer to text -->
 <!-- in monospace font                -->
 <xsl:template match="fragment[@ref]">
+    <!-- switch to node-set with "c" if characters need escaping -->
     <xsl:text>\mono{</xsl:text>
     <xsl:text>&lt;code: </xsl:text>
     <xsl:value-of select="@ref" />
     <xsl:text>\space\space\pageref{</xsl:text>
-    <xsl:apply-templates select="id(@ref)" mode="internal-id"/>
+    <xsl:apply-templates select="id(@ref)" mode="latex-id"/>
     <xsl:text>}</xsl:text>
     <xsl:text>&gt;</xsl:text>
     <xsl:text>}</xsl:text>
@@ -10140,7 +10355,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>]</xsl:text>
     <!-- "key" for cross-referencing -->
     <xsl:text>{</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id"/>
+    <xsl:apply-templates select="." mode="latex-id"/>
     <xsl:text>}</xsl:text>
     <xsl:apply-templates select="." mode="label" />
     <xsl:apply-templates />

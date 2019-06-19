@@ -69,7 +69,7 @@
         <xsl:message terminate="yes">PTX:ERROR   You must specify the location of the webwork extraction using the "webwork.extraction" command line stringparam.  Use the mbx script and webwork component to collect these files from a WeBWorK server. Quitting...</xsl:message>
     </xsl:if>
     <xsl:variable name="ww-id">
-        <xsl:apply-templates select="." mode="internal-id" />
+        <xsl:apply-templates select="." mode="visible-id" />
     </xsl:variable>
     <xsl:copy-of select="document($webwork.extraction)/webwork-extraction/webwork-reps[@ww-id=$ww-id]" />
 </xsl:template>

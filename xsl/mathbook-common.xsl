@@ -979,6 +979,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
               select="($entered-project-solution = 'yes') or ($entered-project-solution = '')" />
 
 
+<!-- ############### -->
+<!-- Source Analysis -->
+<!-- ############### -->
+
+<!-- We check certain aspects of the source and record the results  -->
+<!-- in boolean ($b-has-*) variables or as particular nodes high    -->
+<!-- up in the structure ($document-root).  Scans here in -common   -->
+<!-- should be short and definite (no searching paths with "//"!),  -->
+<!-- and universally useful, largely conveniences for consistency.  -->
+<!-- Remember that many basic templates are shared out of this      -->
+<!-- file for often very simple conversions (e.g. extractions)      -->
+<!-- so excessive setup is an unnecessary drain on processing time. -->
+
 <!-- The main "mathbook" element only has two possible children     -->
 <!-- Or the main element could be "pretext" after name change       -->
 <!-- One is "docinfo", the other is "book", "article", etc.         -->
@@ -992,14 +1005,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="docinfo" select="$root/docinfo" />
 <xsl:variable name="document-root" select="$root/*[not(self::docinfo)]" />
 
-<!-- Source Analysis -->
-<!-- Some boolean variables ("b-*") for -->
-<!-- the presence of certain elements -->
-<xsl:variable name="b-has-geogebra" select="boolean($document-root//interactive[@platform='geogebra'])" />
-<xsl:variable name="b-has-jsxgraph" select="boolean($document-root//jsxgraph)" />
 <!-- "book" and "article" are sometimes different, esp. for LaTeX -->
 <xsl:variable name="b-is-book"    select="$document-root/self::book" />
 <xsl:variable name="b-is-article" select="$document-root/self::article" />
+<!-- w/, w/o parts induces variants -->
+<xsl:variable name="b-has-parts" select="boolean($root/book/part)" />
+
 
 <!-- Some groups of elements are counted distinct -->
 <!-- from other blocks.  A configuration element  -->
@@ -1106,6 +1117,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
+
+<!-- 2019-05: this is a switch to transition from slow, more-stable -->
+<!-- identication strings to fast, less-stable strings.             -->
+<!--   1.  Default should switch to make transition                 -->
+<!--   2.  Switch should be deprecated and slow code abandoned      -->
+<!-- To change default from old-slow-style                          -->
+<!--   1.  move match on empty to "no" result                       -->
+<!--   2.  flip otherwise clause                                    -->
+<xsl:param name="oldids" select="''"/>
+<xsl:variable name="oldstyle">
+    <xsl:choose>
+        <xsl:when test="($oldids = '') or ($oldids = 'yes')">
+            <xsl:text>yes</xsl:text>
+        </xsl:when>
+        <xsl:when test="$oldids = 'no'">
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>yes</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<xsl:variable name="b-fast-ids" select="$oldstyle = 'no'"/>
 
 <!-- We preserve action of the "autoname" parameter         -->
 <!-- But originally the default was "no", and now is        -->
@@ -1392,26 +1426,80 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 <!-- Input: an element that is a division of some kind -->
 <!-- Output: its relative level, eg "book" is 0        -->
 <!-- Front and back matter are faux divisions, so we   -->
-<!-- filter them out.  The overarching XML root (not   -->
-<!-- the special root node) is simply subtracted from  -->
-<!-- the count.                                        -->
-<!-- Appendices of a part'ed book need an additional   -->
-<!-- level added to become a \chapter in LaTeX and     -->
-<!-- thus realized as an appendix                      -->
-<xsl:template match="*" mode="level">
-    <xsl:variable name="hierarchy" select="ancestor-or-self::*[not(self::backmatter or self::frontmatter)]" />
+<!-- filter them out.                                  -->
+
+
+<!--
+Schematic of levels of divisions
+*  "preface" has 4 peers, eg, "dedication"
+*  "appendix" has two peers, "index" and "colophon"
+*  specialized divisions, e.g "references" can go numerous places
+
+Article, "section" at level 1
+||         0            ||    1     ||     2      ||      3        ||
+||          frontmatter ||          ||            ||               ||
+|| article              || section  || subsection || subsubsection ||
+||          backmatter  || appendix || subsection || subsubsection ||
+
+
+Book (no parts), "section" at level 2
+||        0         ||    1     ||    2     ||     3      ||      4        ||
+||      frontmatter || preface  ||          ||            ||               ||
+|| book             || chapter  || section  || subsection || subsubsection ||
+||      backmatter  || appendix || section  || subsection || subsubsection ||
+
+
+Book (with parts), "section" at level 3
+||  0   ||     1       ||    2     ||    3     ||     4      ||      5        ||
+||      || frontmatter || preface  ||          ||            ||               ||
+|| book || part        || chapter  || section  || subsection || subsubsection ||
+||      || backmatter  || appendix || section  || subsection || subsubsection ||
+-->
+
+ <!-- Specific top-level divisions -->
+<!-- article/frontmatter, article/backmatter are faux divisions, but   -->
+<!-- will function as a terminating condition in recursive count below -->
+<xsl:template match="book|article|letter|memo|article/frontmatter|article/backmatter" mode="level">
+    <xsl:value-of select="0"/>
+</xsl:template>
+
+<!-- A book/part will divide the mainmatter, so a "chapter" is at -->
+<!-- level 2, so we also put the faux divisions at level 1 in the -->
+<!-- case of parts, to again terminate recursive count            -->
+<xsl:template match="book/part|book/frontmatter|book/backmatter" mode="level">
     <xsl:choose>
-        <xsl:when test="ancestor-or-self::appendix and $document-root//part">
-            <xsl:value-of select="count($hierarchy) - 2 + 1" />
-        </xsl:when>
-        <xsl:when test="self::solutions and parent::backmatter and $document-root//part">
-            <xsl:value-of select="count($hierarchy) - 2 + 1" />
+        <xsl:when test="$b-has-parts">
+            <xsl:value-of select="1"/>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:value-of select="count($hierarchy) - 2" />
+            <xsl:value-of select="0"/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
+
+<!-- Remaining divisions will follow a strict progression from their    -->
+<!-- parents.  We have front matter divisions of a book first, which    -->
+<!-- will have the same level as a chapter, then traditional divisions, -->
+<!-- which may structure a chapter of a book, section of an article,    -->
+<!-- or an appendix (structured as a chapter in a book or a sections    -->
+<!-- in an article).  Then follows specialized divisions of the back    -->
+<!-- matter, which are peers of an appendix.  Finally we have the       -->
+<!-- "specialized divisions" of PreTeXt, which can be descendants of    -->
+<!-- chapters of books, sections of articles, or in the case of         -->
+<!-- solutions or references, children of an appendix.                  -->
+
+<xsl:template match="colophon|biography|dedication|acknowledgement|preface|chapter|section|subsection|subsubsection|appendix|index|colophon|exercises|reading-questions|references|solutions|glossary|worksheet" mode="level">
+    <xsl:variable name="level-above">
+        <xsl:apply-templates select="parent::*" mode="level"/>
+    </xsl:variable>
+    <xsl:value-of select="$level-above + 1"/>
+</xsl:template>
+
+<xsl:template match="*" mode="level">
+    <xsl:message>PTX:BUG:   an element ("<xsl:value-of select="local-name(.)"/>") does not know its level</xsl:message>
+    <xsl:apply-templates select="." mode="location-report" />
+</xsl:template>
+
 
 <!-- Enclosing Level -->
 <!-- For any element, work up the tree to a structural -->
@@ -2171,18 +2259,15 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 <xsl:template match="sage[not(input) and not(output) and not(@type) and not(@copy)]">
     <xsl:param name="block-type"/>
 
-    <xsl:call-template name="sage-active-markup">
+    <xsl:apply-templates select="." mode="sage-active-markup">
         <xsl:with-param name="block-type" select="$block-type"/>
-        <xsl:with-param name="internal-id">
-            <xsl:apply-templates select="." mode="internal-id" />
-        </xsl:with-param>
         <!-- OK to send empty string, implementation reacts -->
         <xsl:with-param name="language-attribute">
             <xsl:value-of select="@language" />
         </xsl:with-param>
         <xsl:with-param name="in" select="''"/>
         <xsl:with-param name="out" select="''" />
-    </xsl:call-template>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Type: "invisible"; to doctest, but never show to a reader -->
@@ -2194,17 +2279,14 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 <xsl:template match="sage[@type='practice']">
     <xsl:param name="block-type"/>
 
-    <xsl:call-template name="sage-active-markup">
+    <xsl:apply-templates select="." mode="sage-active-markup">
         <xsl:with-param name="block-type" select="$block-type"/>
-        <xsl:with-param name="internal-id">
-            <xsl:apply-templates select="." mode="internal-id" />
-        </xsl:with-param>
         <xsl:with-param name="language-attribute">
             <xsl:value-of select="'practice'" />
         </xsl:with-param>
         <xsl:with-param name="in" select="'# Practice area (not linked for Sage Cell use)&#xa;'"/>
         <xsl:with-param name="out" select="''" />
-    </xsl:call-template>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- @copy deprecated  2017-12-21 -->
@@ -2224,9 +2306,6 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
     <xsl:param name="block-type"/>
 
     <xsl:call-template name="sage-display-markup">
-        <xsl:with-param name="internal-id">
-            <xsl:apply-templates select="." mode="internal-id" />
-        </xsl:with-param>
         <xsl:with-param name="language-attribute">
             <xsl:value-of select="'display'" />
         </xsl:with-param>
@@ -2243,11 +2322,8 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 <xsl:template match="sage|sage[@type='full']">
     <xsl:param name="block-type"/>
 
-    <xsl:call-template name="sage-active-markup">
+    <xsl:apply-templates select="." mode="sage-active-markup">
         <xsl:with-param name="block-type" select="$block-type"/>
-        <xsl:with-param name="internal-id">
-            <xsl:apply-templates select="." mode="internal-id" />
-        </xsl:with-param>
         <!-- OK to send empty string, implementation reacts -->
         <xsl:with-param name="language-attribute">
             <xsl:value-of select="@language" />
@@ -2264,7 +2340,7 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
                 </xsl:call-template>
             </xsl:if>
         </xsl:with-param>
-    </xsl:call-template>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Console Session -->
@@ -3624,7 +3700,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:variable>
     <xsl:choose>
         <xsl:when test="$intermediate='true' or $chunk='true'">
-            <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:apply-templates select="." mode="visible-id" />
             <xsl:value-of select="$file-extension" />
         </xsl:when>
         <!-- Halts since "mathbook" element will be chunk (or earlier) -->
@@ -3906,9 +3982,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:choose>
 </xsl:template>
 
-<!-- ############################# -->
-<!-- Widths of Images, Videos, Etc -->
-<!-- ############################# -->
+<!-- #################################### -->
+<!-- Widths of Images, Audio, Videos, Etc -->
+<!-- #################################### -->
 
 <!-- Because we allow width settings as consequences of sidebyside     -->
 <!-- layout parameters, we need to "reach up" and get these widths     -->
@@ -3923,10 +3999,10 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!--   2.  in a sidebyside directly, or a figure in a sidebyside.         -->
 <!--       These widths come from the layout, and are converter dependent -->
 <!--                                                                      -->
-<!-- Entirely similar for jsxgraph and video but we do                    -->
+<!-- Entirely similar for jsxgraph, audio and video but we do             -->
 <!-- not consult default *image* width in docinfo                         -->
 
-<xsl:template match="image[not(ancestor::sidebyside)]|video[not(ancestor::sidebyside)]|jsxgraph[not(ancestor::sidebyside)]|interactive[not(ancestor::sidebyside)]|slate[not(ancestor::sidebyside)]" mode="get-width-percentage">
+<xsl:template match="image[not(ancestor::sidebyside)]|audio[not(ancestor::sidebyside)]|video[not(ancestor::sidebyside)]|jsxgraph[not(ancestor::sidebyside)]|interactive[not(ancestor::sidebyside)]|slate[not(ancestor::sidebyside)]" mode="get-width-percentage">
     <!-- find it first -->
     <xsl:variable name="raw-width">
         <xsl:choose>
@@ -3984,7 +4060,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Widths from sidebyside layouts have been error-checked as input    -->
 
 <!-- occurs in a figure, not contained in a sidebyside -->
-<xsl:template match="video[ancestor::sidebyside]|jsxgraph[ancestor::sidebyside]|interactive[ancestor::sidebyside]|slate[ancestor::sidebyside]" mode="get-width-percentage">
+<xsl:template match="audio[ancestor::sidebyside]|video[ancestor::sidebyside]|jsxgraph[ancestor::sidebyside]|interactive[ancestor::sidebyside]|slate[ancestor::sidebyside]" mode="get-width-percentage">
     <!-- in a side-by-side, get layout, locate in layout -->
     <!-- and get width.  The layout-parameters template  -->
     <!-- will analyze an enclosing sbsgroup              -->
@@ -4010,7 +4086,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Input:  "width:height", or decimal width/height -->
 <!-- Return: real number as fraction width/height    -->
 <!-- Totally blank means nothing could be determined -->
-<xsl:template match="slate|interactive|jsxgraph|video" mode="get-aspect-ratio">
+<xsl:template match="slate|interactive|jsxgraph|audio|video" mode="get-aspect-ratio">
     <xsl:param name="default-aspect" select="''" />
 
     <!-- look to element first, then to supplied default          -->
@@ -4058,7 +4134,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 
 <!-- Pixels are an HTML thing, but we may need these numbers -->
 <!-- elsewhere, and these are are pure text templates        -->
-<xsl:template match="slate|video|interactive" mode="get-width-pixels">
+<xsl:template match="slate|audio|video|interactive" mode="get-width-pixels">
     <xsl:variable name="width-percent">
         <xsl:apply-templates select="." mode="get-width-percentage" />
     </xsl:variable>
@@ -4069,7 +4145,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 </xsl:template>
 
 <!-- Square by default, when asked.  Can override -->
-<xsl:template match="slate|video|interactive" mode="get-height-pixels">
+<xsl:template match="slate|audio|video|interactive" mode="get-height-pixels">
     <xsl:param name="default-aspect" select="'1:1'" />
 
     <xsl:variable name="width-percent">
@@ -4091,12 +4167,12 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- links to these pages (eg, via QR codes).  And we might use    -->
 <!-- these pages as the basis for scraping preview images.  So we  -->
 <!-- place a template here to achieve consistency across uses.     -->
-<xsl:template match="video|interactive" mode="standalone-filename">
-    <xsl:apply-templates select="." mode="internal-id" />
+<xsl:template match="audio|video|interactive" mode="standalone-filename">
+    <xsl:apply-templates select="." mode="visible-id" />
     <xsl:text>.html</xsl:text>
 </xsl:template>
 <xsl:template match="*" mode="standalone-filename">
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="visible-id" />
     <xsl:text>-ERROR-no-standalone-filename.html</xsl:text>
 </xsl:template>
 
@@ -4300,58 +4376,61 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 
 
 <!-- ########### -->
-<!-- Identifiers        -->
+<!-- Identifiers -->
 <!-- ########### -->
 
-<!--                     -->
-<!-- Internal Identifier -->
-<!--                     -->
+<!--                    -->
+<!-- Visible Identifier -->
+<!--                    -->
 
 <!-- Check once if "index" is available -->
 <!-- for use on the root element        -->
+<!-- This scan may go away with a new approach to an "index.html" file -->
 <xsl:variable name="b-index-is-available" select="not(//@xml:id[.='index'])" />
 
-<!-- A *unique* text identifier for any element    -->
-<!-- NB: only count from root of content portion   -->
-<!-- (not duplicates that might appear in docinfo) -->
-<!-- Uses:                                      -->
-<!--   HTML: filenames (pages and knowls)       -->
-<!--   HTML: anchors for references into pages  -->
-<!--   LaTeX: labels, ie cross-references       -->
-<!-- Format:                                          -->
-<!--   the content (text) of an xml:id if provided    -->
-<!--   otherwise, elementname-serialnumber (doc-wide) -->
-<!-- MathJax:                                                   -->
-<!--   Can manufacture an HTML id= for equations, so            -->
-<!--   we configure MathJax to use the TeX \label contents      -->
-<!--   which we must be sure to provide via this routine here   -->
-<!--   Then our URL/anchor scheme will point to the right place -->
-<!--   So this is applied to men and (numbered) mrow elements    -->
-<xsl:template match="*" mode="internal-id">
+<!-- These strings are used for items an author must manage              -->
+<!-- (image files) or that a reader will interact with (shared URLs)     -->
+<!-- Fast version (as of 2019-05) prefers                                -->
+<!--   1.  @xml:id - authored (with meaning), 100% author-controlled     -->
+<!--   2.  @permid - highly stable, controlled via edition management    -->
+<!--   3.  auto    - fast, unique per build, but unstable between builds -->
+<!-- Since items like filenames and URLs are sometimes shared across     -->
+<!-- conversions (or extractions) this template is in -common            -->
+<xsl:template match="*" mode="visible-id">
     <xsl:choose>
-        <xsl:when test="@xml:id">
-            <xsl:value-of select="@xml:id" />
+        <!-- 2019-05: more efficient replacement -->
+        <!-- version of previous internal-id     -->
+        <xsl:when test="$b-fast-ids">
+            <xsl:choose>
+                <xsl:when test="@xml:id">
+                    <xsl:value-of select="@xml:id" />
+                </xsl:when>
+                <xsl:when test="@permid">
+                    <xsl:value-of select="local-name(.)" />
+                    <xsl:text>-</xsl:text>
+                    <xsl:value-of select="@perm-id" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="local-name(.)" />
+                    <xsl:text>-</xsl:text>
+                    <!-- xsltproc produces non-numeric prefix "idm" -->
+                    <xsl:value-of select="substring(generate-id(.), 4)"/>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:when>
+        <!-- 2019-05: following matches the slow       -->
+        <!-- internal-id previously in use exclusively -->
         <xsl:otherwise>
-            <xsl:value-of select="local-name(.)" />
-            <xsl:text>-</xsl:text>
-            <xsl:number from="book|article|letter|memo" level="any" />
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-<xsl:template match="*" mode="perm-id">
-    <xsl:choose>
-        <xsl:when test="@permid">
-            <xsl:value-of select="@permid"/>
-        </xsl:when>
-        <xsl:when test="@xml:id">
-            <xsl:value-of select="@xml:id"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:value-of select="local-name(.)"/>
-            <xsl:text>-</xsl:text>
-            <xsl:number from="book|article|letter|memo" level="any"/>
+            <xsl:choose>
+                <xsl:when test="@xml:id">
+                    <xsl:value-of select="@xml:id" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="local-name(.)" />
+                    <xsl:text>-</xsl:text>
+                    <xsl:number from="book|article|letter|memo" level="any" />
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -4359,7 +4438,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Override for document root node,          -->
 <!-- slide in "index" as preferential default, -->
 <!-- presuming it is not in use anywhere else  -->
-<xsl:template match="/mathbook/*[not(self::docinfo)]|/pretext/*[not(self::docinfo)]" mode="internal-id">
+<!-- NB: no fast version, so never uses @permid -->
+<xsl:template match="/mathbook/*[not(self::docinfo)]|/pretext/*[not(self::docinfo)]" mode="visible-id">
     <xsl:choose>
         <xsl:when test="@xml:id">
             <xsl:value-of select="@xml:id" />
@@ -4373,18 +4453,6 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <xsl:number level="any" />
         </xsl:otherwise>
     </xsl:choose>
-</xsl:template>
-
-<!-- We manufacture Javascript variables sometimes using            -->
-<!-- this id to keep them unique, but a dash (encouraged in PTX)    -->
-<!-- is banned in Javascript, so we make a "no-only" version,     -->
-<!-- by replacing a hyphen by a double-underscore.                  -->
-<!-- NB: This runs some non-zero probability of breaking uniqueness -->
-<xsl:template match="*" mode="internal-id-no-dash">
-    <xsl:variable name="the-id">
-        <xsl:apply-templates select="." mode="internal-id" />
-    </xsl:variable>
-    <xsl:value-of select="str:replace($the-id, '-', '__')" />
 </xsl:template>
 
 <!--            -->
@@ -6322,7 +6390,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
      <xsl:variable name="panels" select="*[not(&METADATA-FILTER;)]" />
 
      <!-- compute necessity of headings (titles) and captions here -->
-     <xsl:variable name="has-headings" select="boolean($panels[title])" />
+     <!-- (2019-06-12)  No titles are migrating to headings, so we totally kill this -->
+     <!-- construction always as we move from  3 x n  to  2 x n  en route to  1 x n  -->
+     <xsl:variable name="has-headings" select="false()" />
      <xsl:variable name="has-captions" select="boolean($panels[caption])" />
      <xsl:if test="$sbsdebug">
         <xsl:message>HH: <xsl:value-of select="$has-headings" /> :HH</xsl:message>
@@ -8546,6 +8616,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <xsl:message>MBX:BUG:  NO XREF TEXT GENERATED</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
+    <xsl:apply-templates select="." mode="latex-page-number">
+        <xsl:with-param name="target" select="$target"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- "xref text" like "Theorem 4.5" benefits from a non-breaking   -->
@@ -8564,6 +8637,11 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
+
+<!-- This is a hook to add page numbers to the end of the    -->
+<!-- xref text in LaTeX output via a \pageref{}, optionally. -->
+<!-- Default for this hook is to do nothing.                 -->
+<xsl:template match="xref" mode="latex-page-number"/>
 
 
 <!-- ###################### -->
@@ -9634,7 +9712,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- Unique UI id's added 2017-09-25 as fatal error -->
 <xsl:template match="mathbook|pretext" mode="xmlid-warning">
     <xsl:variable name="xmlid-characters" select="concat('-_', &SIMPLECHAR;)" />
-    <xsl:for-each select="//@xml:id">
+    <xsl:for-each select="$document-root//@xml:id">
         <xsl:if test="not(translate(., $xmlid-characters, '') = '')">
             <xsl:message>
                 <xsl:text>MBX:WARNING:    </xsl:text>
@@ -9697,7 +9775,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- material belongs in an introduction (or is for a conclusion). -->
 <!-- This test is not exhaustive, but will catch most cases.       -->
 <xsl:template match="mathbook|pretext" mode="subdivision-structure-warning">
-    <xsl:for-each select=".//chapter">
+    <xsl:for-each select="./book/chapter">
         <xsl:if test="p and section">
             <xsl:message>
                 <xsl:text>MBX:WARNING: </xsl:text>
@@ -9706,7 +9784,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
             <xsl:apply-templates select="." mode="location-report" />
         </xsl:if>
     </xsl:for-each>
-    <xsl:for-each select=".//section">
+    <xsl:for-each select="./article/section|./book/chapter/section">
         <xsl:if test="p and subsection">
             <xsl:message>
                 <xsl:text>MBX:WARNING: </xsl:text>
@@ -9715,7 +9793,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
             <xsl:apply-templates select="." mode="location-report" />
         </xsl:if>
     </xsl:for-each>
-    <xsl:for-each select=".//subsection">
+    <xsl:for-each select="./article/section/subsection|./book/chapter/section/subsection">
         <xsl:if test="p and subsubsection">
             <xsl:message>
                 <xsl:text>MBX:WARNING: </xsl:text>

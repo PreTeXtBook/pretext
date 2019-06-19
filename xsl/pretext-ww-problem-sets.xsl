@@ -332,7 +332,7 @@
         </xsl:text><xsl:choose><xsl:when test="//frontmatter/colophon/website"><xsl:text>
         TEXT(MODES(
             TeX =>"\noindent This assignment contains exercises from </xsl:text><xsl:apply-templates select="." mode="type-name" /><xsl:text> </xsl:text><xsl:apply-templates select="." mode="number" /><xsl:text> of </xsl:text><xsl:apply-templates select="$document-root"  mode="title-simple" /><xsl:text>.",
-            HTML=>"This assignment contains exercises from ".htmlLink(qq!</xsl:text><xsl:apply-templates select="//frontmatter/colophon/website/address" /><xsl:text>/</xsl:text><xsl:apply-templates select="." mode="internal-id" /><xsl:text>.html!,"</xsl:text><xsl:apply-templates select="." mode="type-name" /><xsl:text> </xsl:text><xsl:apply-templates select="." mode="number" /><xsl:text>")." of </xsl:text><xsl:apply-templates select="$document-root"  mode="title-simple" /><xsl:text>."
+            HTML=>"This assignment contains exercises from ".htmlLink(qq!</xsl:text><xsl:apply-templates select="//frontmatter/colophon/website/address" /><xsl:text>/</xsl:text><xsl:apply-templates select="." mode="visible-id" /><xsl:text>.html!,"</xsl:text><xsl:apply-templates select="." mode="type-name" /><xsl:text> </xsl:text><xsl:apply-templates select="." mode="number" /><xsl:text>")." of </xsl:text><xsl:apply-templates select="$document-root"  mode="title-simple" /><xsl:text>."
         ));
         </xsl:text></xsl:when><xsl:otherwise><xsl:text>
         TEXT("This assignment contains exercises from </xsl:text><xsl:apply-templates select="." mode="type-name" /><xsl:text> </xsl:text><xsl:apply-templates select="." mode="number" /><xsl:text> of </xsl:text><xsl:apply-templates select="$document-root"  mode="title-simple" /><xsl:text>.");

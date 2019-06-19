@@ -77,7 +77,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- TEMPORARY: defined to stop errors, need stubs in -common -->
 <xsl:template name="inline-warning"/>
 <xsl:template name="margin-warning"/>
-<xsl:template name="sage-active-markup"/>
+<xsl:template match="sage" mode="sage-active-markup"/>
 <xsl:template name="sage-display-markup"/>
 
 <!-- ######### -->

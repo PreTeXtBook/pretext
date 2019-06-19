@@ -182,10 +182,10 @@
     <!-- location info for debugging efforts -->
     <xsl:apply-templates select="." mode="debug-location" />
     <!-- Heading, div for this structural subdivision -->
-    <xsl:variable name="ident">
-        <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:variable name="hid">
+        <xsl:apply-templates select="." mode="html-id" />
     </xsl:variable>
-    <section class="{local-name(.)}" id="{$ident}">
+    <section class="{local-name(.)}" id="{$hid}">
         <xsl:apply-templates select="." mode="section-header" />
         <xsl:apply-templates select="author|objectives|introduction|titlepage|abstract" />
         <!-- deleted "nav" and summary links here -->
@@ -329,7 +329,7 @@
     <!-- one  item  element per chapter -->
     <xsl:element name="item" xmlns="http://www.idpf.org/2007/opf">
         <xsl:attribute name="id">
-            <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:apply-templates select="." mode="html-id" />
         </xsl:attribute>
         <!-- properties are iff, so validator complains if extra -->
         <!-- condition on math presence for svg/mathml property  -->
@@ -376,7 +376,7 @@
 <xsl:template match="frontmatter|colophon|acknowledgement|preface|chapter|appendix|index|section|exercises|references|solutions" mode="spine">
     <xsl:element name="itemref" xmlns="http://www.idpf.org/2007/opf">
         <xsl:attribute name="idref">
-            <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:apply-templates select="." mode="html-id" />
         </xsl:attribute>
         <xsl:attribute name="linear">
             <xsl:text>yes</xsl:text>
@@ -462,7 +462,7 @@
 
 <!-- An abstract named template accepts input text and   -->
 <!-- output text, then wraps it for the Sage Cell Server -->
-<xsl:template name="sage-active-markup">
+<xsl:template match="sage" mode="sage-active-markup">
     <xsl:param name="in" />
     <xsl:param name="out" />
     <xsl:if test="$in!=''">
@@ -518,7 +518,7 @@
         <xsl:when test="latex-image|latex-image-code|sageplot|asymptote">
             <xsl:value-of select="$directory.images" />
             <xsl:text>/</xsl:text>
-            <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:apply-templates select="." mode="visible-id" />
             <xsl:text>.svg</xsl:text>
         </xsl:when>
         <xsl:otherwise>
@@ -556,7 +556,7 @@
     <xsl:element name="item" xmlns="http://www.idpf.org/2007/opf">
         <!-- internal id of the image -->
         <xsl:attribute name="id">
-            <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:apply-templates select="." mode="html-id" />
         </xsl:attribute>
         <!-- filename, or tack on .svg for vector graphics -->
         <xsl:attribute name="href">
@@ -620,17 +620,17 @@
 <!-- to get desired behavior from e-reader system -->
 <!-- http://www.pigsgourdsandwikis.com/2012/05/creating-pop-up-footnotes-in-epub-3-and.html -->
 <xsl:template match="fn">
-    <xsl:variable name="int-id">
-        <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:variable name="hid">
+        <xsl:apply-templates select="." mode="html-id" />
     </xsl:variable>
     <!-- drop cross-reference, super-scripted, spaced -->
     <xsl:element name="sup">
-        <a epub:type="noteref" href="#{$int-id}">
+        <a epub:type="noteref" href="#{$hid}">
             <xsl:apply-templates select="." mode="serial-number" />
         </a>
     </xsl:element>
     <!-- content to an "aside", should automatically be hidden -->
-    <aside epub:type="footnote" id="{$int-id}">
+    <aside epub:type="footnote" id="{$hid}">
         <!-- process as mixed-content, don't yet allow paragraphs -->
         <xsl:apply-templates select="*|text()" />
     </aside>

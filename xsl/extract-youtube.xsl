@@ -58,7 +58,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>('</xsl:text>
     <xsl:value-of select="$first-video-id" />
     <xsl:text>', '</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="visible-id" />
     <xsl:text>'), </xsl:text>
 </xsl:template>
 

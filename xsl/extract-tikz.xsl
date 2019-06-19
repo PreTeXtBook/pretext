@@ -51,7 +51,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- http://tex.stackexchange.com/questions/51757/how-can-i-use-tikz-to-make-standalone-graphics -->
 <xsl:template match="image/tikz">
     <xsl:variable name="filebase">
-        <xsl:apply-templates select=".." mode="internal-id" />
+        <xsl:apply-templates select=".." mode="visible-id" />
     </xsl:variable>
     <exsl:document href="{$scratch}/{$filebase}.tex" method="text">
         <xsl:text>\documentclass[12pt,border=2pt]{standalone}&#xa;</xsl:text>
@@ -72,7 +72,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 2015/02/08: Deprecated, still functional but not maintained -->
 <xsl:template match="tikz">
     <xsl:variable name="filebase">
-        <xsl:apply-templates select="." mode="internal-id" />
+        <xsl:apply-templates select="." mode="visible-id" />
     </xsl:variable>
     <exsl:document href="{$scratch}/{$filebase}.tex" method="text">
         <xsl:text>\documentclass[12pt,border=2pt]{standalone}&#xa;</xsl:text>

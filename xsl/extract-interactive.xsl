@@ -54,12 +54,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>]</xsl:text>
 </xsl:template>
 
-<!-- "internal-id" of each interactive -->
+<!-- "visible-id" of each interactive -->
 <!-- Simple, just list of strings      -->
 <!-- @preview indicates custom image   -->
 <xsl:template match="interactive[not(@preview)]">
     <xsl:text>'</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="visible-id" />
     <xsl:text>', </xsl:text>
 </xsl:template>
 

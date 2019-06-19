@@ -142,8 +142,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="html.js.server" select="'https://pretextbook.org'" />
 <xsl:param name="html.js.version" select="'0.11'" />
 <xsl:param name="html.css.colorfile" select="''" />
+<!-- A temporary variable for testing -->
+<xsl:param name="debug.colors" select="''"/>
+
 <xsl:variable name="html-css-colorfile">
     <xsl:choose>
+        <!-- 2019-05-29: override with new files, no error-checking    -->
+        <!-- if not used, then previous scheme is employed identically -->
+        <xsl:when test="not($debug.colors = '')">
+            <xsl:text>colors_</xsl:text>
+            <xsl:value-of select="$debug.colors"/>
+            <xsl:text>.css</xsl:text>
+        </xsl:when>
         <xsl:when test="$html.css.colorfile = ''">
             <xsl:text>colors_default.css</xsl:text>
         </xsl:when>
@@ -425,6 +435,35 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="b-google-universal" select="not($google-universal-tracking = '')" />
 <xsl:variable name="b-google-cse" select="not($google-search-cx = '')" />
 
+<!-- ############### -->
+<!-- Source Analysis -->
+<!-- ############### -->
+
+<!-- We check certain aspects of the source and record the results   -->
+<!-- in boolean ($b-has-*) variables or as particular nodes high up  -->
+<!-- in the structure ($document-root).  Scans here in -html should  -->
+<!-- help streamline the construction of the HTML page "head" by     -->
+<!-- computing properties that will be used in the "head" of every   -->
+<!-- page of every chunk. checked more than once. While technically  -->
+<!-- generally part of constructing the head, there is no real harm  -->
+<!-- in making these global variables.  Short, simple, and universal -->
+<!-- properties are determined in -common. These may duplicate       -->
+<!-- variables in disjoint conversions.                              -->
+
+<xsl:variable name="b-has-icon"         select="boolean($document-root//icon)"/>
+<xsl:variable name="b-has-webwork-reps" select="boolean($document-root//webwork-reps)"/>
+<xsl:variable name="b-has-program"      select="boolean($document-root//program)"/>
+<xsl:variable name="b-has-sage"         select="boolean($document-root//sage)"/>
+<xsl:variable name="b-has-sfrac"        select="boolean($document-root//m[contains(text(),'sfrac')] or $document-root//md[contains(text(),'sfrac')] or $document-root//me[contains(text(),'sfrac')] or $document-root//mrow[contains(text(),'sfrac')])"/>
+<xsl:variable name="b-has-geogebra"     select="boolean($document-root//interactive[@platform='geogebra'])"/>
+<!-- 2018-04-06:  jsxgraph deprecated -->
+<xsl:variable name="b-has-jsxgraph"     select="boolean($document-root//jsxgraph)"/>
+<xsl:variable name="b-has-pytutor"      select="boolean($document-root//program[@interactive='pythontutor'])"/>
+<!-- Every page has an index button, with a link to the index -->
+<!-- Here we assume there is at most one                      -->
+<!-- (The old style of specifying an index is deprecated)     -->
+<xsl:variable name="the-index"          select="($document-root//index-part|$document-root//index[index-list])[1]"/>
+
 
 <!-- ############## -->
 <!-- Entry Template -->
@@ -495,10 +534,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- location info for debugging efforts -->
     <xsl:apply-templates select="." mode="debug-location" />
     <!-- Heading, div for this structural subdivision -->
-    <xsl:variable name="pid">
-        <xsl:apply-templates select="." mode="perm-id" />
+    <xsl:variable name="hid">
+        <xsl:apply-templates select="." mode="html-id" />
     </xsl:variable>
-    <section class="{local-name(.)}" id="{$pid}">
+    <section class="{local-name(.)}" id="{$hid}">
         <xsl:apply-templates select="." mode="section-header">
             <xsl:with-param name="heading-level" select="$heading-level"/>
         </xsl:apply-templates>
@@ -561,10 +600,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- location info for debugging efforts -->
     <xsl:apply-templates select="." mode="debug-location" />
     <!-- Heading, div for this structural subdivision -->
-    <xsl:variable name="pid">
-        <xsl:apply-templates select="." mode="perm-id" />
+    <xsl:variable name="hid">
+        <xsl:apply-templates select="." mode="html-id" />
     </xsl:variable>
-    <section class="{local-name(.)}" id="{$pid}">
+    <section class="{local-name(.)}" id="{$hid}">
         <xsl:apply-templates select="." mode="section-header">
             <xsl:with-param name="heading-level" select="$heading-level"/>
         </xsl:apply-templates>
@@ -671,6 +710,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- a "codenumber," and a "title."  We format these       -->
 <!-- consistently here with a modal template.  We can hide -->
 <!-- components with classes on the enclosing "heading"    -->
+<!-- NB: this is overridden in the conversion to Braille,  -->
+<!-- to center chapter numbers above titles (and appendix, -->
+<!-- preface, etc), so coordinate with those templates.    -->
 <xsl:template match="*" mode="header-content">
     <span class="type">
         <xsl:apply-templates select="." mode="type-name" />
@@ -949,7 +991,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:attribute>
         <xsl:if test="$b-original">
             <xsl:attribute name="id">
-                <xsl:apply-templates select="." mode="perm-id" />
+                <xsl:apply-templates select="." mode="html-id" />
             </xsl:attribute>
         </xsl:if>
         <xsl:if test="title">
@@ -1879,13 +1921,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The file extension is *.html so recognized as OK by Moodle, etc -->
 <xsl:template match="*" mode="xref-knowl-filename">
     <xsl:text>./knowl/</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="visible-id" />
     <xsl:text>.html</xsl:text>
 </xsl:template>
 
 <xsl:template match="*" mode="hidden-knowl-filename">
     <xsl:text>./knowl/</xsl:text>
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="visible-id" />
     <xsl:text>-hidden.html</xsl:text>
 </xsl:template>
 
@@ -2300,7 +2342,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:attribute>
                 <!-- HTML id is best on element surrounding born-hidden knowl anchor -->
                 <xsl:attribute name="id">
-                    <xsl:apply-templates select="." mode="perm-id" />
+                    <xsl:apply-templates select="." mode="html-id" />
                 </xsl:attribute>
                 <xsl:apply-templates select="." mode="hidden-knowl-link">
                     <xsl:with-param name="placement" select="$placement"/>
@@ -2353,7 +2395,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ensures consistency of the common, linking id.  -->
 <xsl:template match="*" mode="hidden-knowl-id">
     <xsl:text>hk-</xsl:text>  <!-- "hidden-knowl" -->
-    <xsl:apply-templates select="." mode="perm-id" />
+    <xsl:apply-templates select="." mode="html-id" />
 </xsl:template>
 
 <!-- The link portion of a hidden-knowl -->
@@ -2376,7 +2418,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- in the 'block' case, it is on the surrounding element         -->
         <xsl:if test="$placement = 'inline'">
             <xsl:attribute name="id">
-                <xsl:apply-templates select="." mode="perm-id" />
+                <xsl:apply-templates select="." mode="html-id" />
             </xsl:attribute>
         </xsl:if>
         <!-- marked-up knowl text link *inside* of knowl anchor to be effective -->
@@ -4104,7 +4146,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- label original -->
                 <xsl:if test="$b-original">
                     <xsl:attribute name="id">
-                        <xsl:apply-templates select="." mode="perm-id" />
+                        <xsl:apply-templates select="." mode="html-id" />
                     </xsl:attribute>
                 </xsl:if>
                 <xsl:apply-templates select="." mode="title-full" />
@@ -4256,7 +4298,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- Then id goes onto the knowl text, so locatable -->
             <xsl:if test="$b-original and not($block-type = 'embed')">
                 <xsl:attribute name="id">
-                    <xsl:apply-templates select="." mode="perm-id" />
+                    <xsl:apply-templates select="." mode="html-id" />
                 </xsl:attribute>
             </xsl:if>
             <!-- If visible, heading interior to article -->
@@ -4337,7 +4379,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- label original -->
         <xsl:if test="$b-original">
             <xsl:attribute name="id">
-                <xsl:apply-templates select="." mode="perm-id" />
+                <xsl:apply-templates select="." mode="html-id" />
             </xsl:attribute>
         </xsl:if>
         <xsl:apply-templates>
@@ -4379,7 +4421,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <p>
             <xsl:if test="$b-original">
                 <xsl:attribute name="id">
-                    <xsl:apply-templates select="." mode="perm-id" />
+                    <xsl:apply-templates select="." mode="html-id" />
                 </xsl:attribute>
             </xsl:if>
             <xsl:copy-of select="$initial-content" />
@@ -4455,7 +4497,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:variable>
         <xsl:if test="$leading-content = ''">
             <xsl:attribute name="id">
-                <xsl:apply-templates select="parent::p" mode="perm-id" />
+                <xsl:apply-templates select="parent::p" mode="html-id" />
             </xsl:attribute>
         </xsl:if>
     </xsl:if>
@@ -4522,7 +4564,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- label original -->
                 <xsl:if test="$b-original">
                     <xsl:attribute name="id">
-                        <xsl:apply-templates select="." mode="perm-id" />
+                        <xsl:apply-templates select="." mode="html-id" />
                     </xsl:attribute>
                 </xsl:if>
                 <xsl:apply-templates>
@@ -4554,7 +4596,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- label original -->
                 <xsl:if test="$b-original">
                     <xsl:attribute name="id">
-                        <xsl:apply-templates select="." mode="perm-id" />
+                        <xsl:apply-templates select="." mode="html-id" />
                     </xsl:attribute>
                 </xsl:if>
                 <xsl:apply-templates select="." mode="title-full" />
@@ -4667,7 +4709,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-original" />
     <xsl:if test="$b-original and @xml:id">
         <xsl:text>\label{</xsl:text>
-        <xsl:apply-templates select="." mode="internal-id" />
+        <xsl:apply-templates select="." mode="html-id" />
         <xsl:text>}</xsl:text>
     </xsl:if>
     <xsl:text>\tag{</xsl:text>
@@ -4679,7 +4721,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-original" />
     <xsl:if test="$b-original and @xml:id">
         <xsl:text>\label{</xsl:text>
-        <xsl:apply-templates select="." mode="internal-id" />
+        <xsl:apply-templates select="." mode="html-id" />
         <xsl:text>}</xsl:text>
     </xsl:if>
     <xsl:text>\tag{</xsl:text>
@@ -4803,7 +4845,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:attribute>
         <xsl:if test="$b-original">
             <xsl:attribute name="id">
-                <xsl:apply-templates select="." mode="perm-id" />
+                <xsl:apply-templates select="." mode="html-id" />
             </xsl:attribute>
         </xsl:if>
         <xsl:if test="title">
@@ -5023,7 +5065,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="base-pathname">
         <xsl:value-of select="$directory.images" />
         <xsl:text>/</xsl:text>
-        <xsl:apply-templates select="." mode="internal-id" />
+        <xsl:apply-templates select="." mode="visible-id" />
     </xsl:variable>
     <xsl:call-template name="svg-wrapper">
         <xsl:with-param name="svg-filename" select="concat($base-pathname, '.svg')" />
@@ -5248,6 +5290,35 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
+<!-- TEMPORARY -->
+<!-- Progessively killing titles as they migrate into panel-panel -->
+<xsl:template match="poem" mode="panel-heading">
+    <xsl:param name="width" />
+    <xsl:param name="left-margin" />
+    <xsl:param name="right-margin" />
+    <xsl:element name="h6">
+        <xsl:attribute name="class">
+            <xsl:text>sbsheader</xsl:text>
+        </xsl:attribute>
+        <xsl:attribute name="style">
+            <xsl:text>width:</xsl:text>
+            <xsl:call-template name="relative-width">
+                <xsl:with-param name="width" select="$width" />
+                <xsl:with-param name="left-margin"  select="$left-margin" />
+                <xsl:with-param name="right-margin" select="$right-margin" />
+            </xsl:call-template>
+            <xsl:text>;</xsl:text>
+            <xsl:if test="$sbsdebug">
+                <xsl:text>box-sizing: border-box;</xsl:text>
+                <xsl:text>-moz-box-sizing: border-box;</xsl:text>
+                <xsl:text>-webkit-box-sizing: border-box;</xsl:text>
+                <xsl:text>border: 2px solid yellow;</xsl:text>
+            </xsl:if>
+        </xsl:attribute>
+    </xsl:element>
+</xsl:template>
+
+
 <!-- generic "panel-panel" template            -->
 <!-- makes a "sbspanel" div of specified width -->
 <!-- calls modal "panel-html-box" for contents -->
@@ -5270,7 +5341,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- TODO: investigate necessity of id incorporation here? -->
         <xsl:if test="self::list and $b-original">
             <xsl:attribute name="id">
-                <xsl:apply-templates select="." mode="perm-id" />
+                <xsl:apply-templates select="." mode="html-id" />
             </xsl:attribute>
         </xsl:if>
         <xsl:attribute name="style">
@@ -5495,7 +5566,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Implement modal "panel-html-box" for various MBX elements -->
 <!-- Called in generic -panel                                  -->
 
-<xsl:template match="p|pre" mode="panel-html-box">
+<xsl:template match="p|pre|ol|ul|dl|program|console|poem|video|audio|interactive|slate|exercise|image" mode="panel-html-box">
     <xsl:param name="b-original" select="true()" />
     <xsl:apply-templates select=".">
         <xsl:with-param name="b-original" select="$b-original" />
@@ -5506,27 +5577,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="paragraphs" mode="panel-html-box">
     <xsl:param name="b-original" select="true()" />
     <xsl:apply-templates select="p|blockquote">
-        <xsl:with-param name="b-original" select="$b-original" />
-    </xsl:apply-templates>
-</xsl:template>
-
-<xsl:template match="ol|ul|dl" mode="panel-html-box">
-    <xsl:param name="b-original" select="true()" />
-    <xsl:apply-templates select=".">
-        <xsl:with-param name="b-original" select="$b-original" />
-    </xsl:apply-templates>
-</xsl:template>
-
-<xsl:template match="program|console" mode="panel-html-box">
-    <xsl:param name="b-original" select="true()" />
-    <xsl:apply-templates select=".">
-        <xsl:with-param name="b-original" select="$b-original" />
-    </xsl:apply-templates>
-</xsl:template>
-
-<xsl:template match="interactive|slate" mode="panel-html-box">
-    <xsl:param name="b-original" select="true()" />
-    <xsl:apply-templates select=".">
         <xsl:with-param name="b-original" select="$b-original" />
     </xsl:apply-templates>
 </xsl:template>
@@ -5550,35 +5600,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="b-original" select="$b-original" />
         <xsl:with-param name="ambient-relative-width" select="$width"/>
     </xsl:apply-templates>
-</xsl:template>
-
-<!-- This matches the "regular" template, but does not -->
-<!-- duplicate the title, which is handled specially   -->
-<!-- max-width is at 100%, not 90%                     -->
-<xsl:template match="poem" mode="panel-html-box">
-    <div class="poem">
-        <xsl:apply-templates select="stanza"/>
-        <xsl:apply-templates select="author"/>
-    </div>
-</xsl:template>
-
-<!-- A worksheet/exercise slots into the div nicely -->
-<xsl:template match="exercise" mode="panel-html-box">
-    <xsl:apply-templates select="." />
-</xsl:template>
-
-<!-- An image "knows" how to look outward         -->
-<!-- for side-by-side layout, or other width      -->
-<!-- specification so we do nothing extraordinary -->
-<xsl:template match="image" mode="panel-html-box">
-    <xsl:apply-templates select="." mode="image-inclusion"/>
-</xsl:template>
-
-<!-- An video "knows" how to look outward         -->
-<!-- for side-by-side layout, or other width      -->
-<!-- specification so we do nothing extraordinary -->
-<xsl:template match="video" mode="panel-html-box">
-    <xsl:apply-templates select="." />
 </xsl:template>
 
 <!-- A figure or table is just a container to hold a -->
@@ -5651,7 +5672,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="data">
             <xsl:value-of select="$directory.images" />
             <xsl:text>/</xsl:text>
-            <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:apply-templates select="." mode="visible-id" />
             <xsl:text>.svg</xsl:text>
         </xsl:attribute>
         <p style="margin:auto">&lt;&lt;Your browser is unable to render this SVG image&gt;&gt;</p>
@@ -5667,7 +5688,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="data">
             <xsl:value-of select="$directory.images" />
             <xsl:text>/</xsl:text>
-            <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:apply-templates select="." mode="visible-id" />
             <xsl:text>.svg</xsl:text>
         </xsl:attribute>
         <p style="margin:auto">&lt;&lt;Your browser is unable to render this SVG image&gt;&gt;</p>
@@ -5683,14 +5704,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="data">
             <xsl:value-of select="$directory.images" />
             <xsl:text>/</xsl:text>
-            <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:apply-templates select="." mode="visible-id" />
             <xsl:text>.svg</xsl:text>
         </xsl:attribute>
         <xsl:element name="img">
             <xsl:attribute name="src">
                 <xsl:value-of select="$directory.images" />
                 <xsl:text>/</xsl:text>
-                <xsl:apply-templates select="." mode="internal-id" />
+                <xsl:apply-templates select="." mode="visible-id" />
                 <xsl:text>.png</xsl:text>
             </xsl:attribute>
         </xsl:element>
@@ -5716,7 +5737,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Three previews: default, generic, author-constructed -->
 <!-- Three embeddings: embed, popout, select              -->
 
-<xsl:template match="video">
+<xsl:template match="audio|video">
     <!-- collect and process size information from author -->
     <xsl:variable name="width">
         <xsl:apply-templates select="." mode="get-width-pixels" />
@@ -5730,9 +5751,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Always build a standalone page, PDF links to these -->
     <xsl:apply-templates select="." mode="video-standalone-page" />
 
-    <!-- standalone page name uses internal-id of the video -->
+    <!-- standalone page name uses visible-id of the video -->
     <xsl:variable name="int-id">
-        <xsl:apply-templates select="." mode="internal-id" />
+        <xsl:apply-templates select="." mode="visible-id" />
     </xsl:variable>
     <xsl:choose>
         <xsl:when test="@play-at = 'popout'">
@@ -5789,7 +5810,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Formerly a "pop-out" page, now a "standalone" page     -->
 <!-- Has autoplay on since a reader has elected to go there -->
 <!-- TODO: override preview, since it just plays, pass 'default -->
-<xsl:template match="video" mode="video-standalone-page">
+<xsl:template match="audio|video" mode="video-standalone-page">
     <xsl:variable name="aspect-ratio">
         <xsl:apply-templates select="." mode="get-aspect-ratio">
             <xsl:with-param name="default-aspect" select="'16:9'" />
@@ -5803,6 +5824,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="content">
             <!-- display preview, and enable autoplay  -->
             <!-- since reader has elected this page    -->
+            <!-- audio: height parameter is ignored    -->
             <xsl:apply-templates select="." mode="video-embed">
                 <xsl:with-param name="width"  select="$ptx-content-width" />
                 <xsl:with-param name="height" select="$ptx-content-height" />
@@ -5816,7 +5838,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Use this to ensure consistency -->
 <xsl:template match="*" mode="iframe-filename">
-    <xsl:apply-templates select="." mode="internal-id" />
+    <xsl:apply-templates select="." mode="visible-id" />
     <xsl:text>-if.html</xsl:text>
 </xsl:template>
 
@@ -5840,8 +5862,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <head>
                 <title>
                     <!-- Leading with initials is useful for small tabs -->
-                    <xsl:if test="//docinfo/initialism">
-                        <xsl:apply-templates select="//docinfo/initialism" />
+                    <xsl:if test="$docinfo/initialism">
+                        <xsl:apply-templates select="$docinfo/initialism" />
                         <xsl:text> </xsl:text>
                     </xsl:if>
                 <xsl:apply-templates select="." mode="title-short" />
@@ -5981,6 +6003,105 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>');</xsl:text>
 </xsl:variable>
 
+<!-- NB: here, and elesewhere, references -->
+<!-- to "video" should become "media"     -->
+<xsl:template match="audio[@source]" mode="video-embed">
+    <xsl:param name="width" select="''" />
+    <xsl:param name="height" select="''" />
+    <xsl:param name="preview" select="'true'" />
+    <xsl:param name="autoplay" select="'false'" />
+
+    <!-- $width is in pixels for video @width attribute,   -->
+    <!-- but for the audio element we seem to need to      -->
+    <!-- use CSS, so we revert back to the percentage. (!) -->
+    <!-- Seems to work great on skinny screens             -->
+    <xsl:variable name="width-percentage">
+        <xsl:value-of select="round(($width div $design-width)*100)"/>
+    </xsl:variable>
+
+    <xsl:element name="audio">
+        <xsl:attribute name="id">
+            <xsl:apply-templates select="." mode="html-id"/>
+        </xsl:attribute>
+        <!-- seems necessary to style the controls, since it        -->
+        <!-- has no notion of height and width, like video does     -->
+        <!-- caller supplies width in pixels, we assume full height -->
+        <!-- migrate block and height properties to CSS             -->
+        <xsl:attribute name="style">
+            <xsl:text>width:</xsl:text>
+            <xsl:value-of select="$width-percentage" />
+            <xsl:text>%;</xsl:text>
+            <xsl:text>height:100%;display:block;margin:auto;</xsl:text>
+        </xsl:attribute>
+        <!-- empty forms work as boolean switches -->
+        <xsl:attribute name="controls" />
+        <xsl:if test="$autoplay = 'true'">
+            <xsl:attribute name="autoplay" />
+        </xsl:if>
+        <!-- @poster, or equivalent does not seem trivial -->
+        <!-- Construct the HTML5 source URL(s)                  -->
+        <!-- If this gets refactored, it could be best to form  -->
+        <!-- base, extension, query, fragment strings/variables -->
+        <!-- First, grab extension of source URL in PTX @source -->
+        <xsl:variable name="extension">
+            <xsl:call-template name="file-extension">
+                <xsl:with-param name="filename" select="@source" />
+            </xsl:call-template>
+        </xsl:variable>
+        <!-- "source" elements, children of HTML5 audio -->
+        <!-- no extension suggests hosting has multiple -->
+        <!-- versions for browser to sort through       -->
+        <!-- More open formats first!  ;-)              -->
+        <xsl:if test="$extension = '' or $extension = 'oog'">
+            <xsl:element name="source">
+                <xsl:attribute name="src">
+                    <xsl:value-of select="@source"/>
+                    <!-- augment no-extension form -->
+                    <xsl:if test="$extension = ''">
+                        <xsl:text>.ogg</xsl:text>
+                    </xsl:if>
+                    <xsl:apply-templates select="." mode="temporal-fragment"/>
+                </xsl:attribute>
+                <xsl:attribute name="type">
+                    <xsl:text>audio/ogg</xsl:text>
+                </xsl:attribute>
+            </xsl:element>
+        </xsl:if>
+        <xsl:if test="$extension = '' or $extension = 'mp3'">
+            <xsl:element name="source">
+                <xsl:attribute name="src">
+                    <xsl:value-of select="@source"/>
+                    <!-- augment no-extension form -->
+                    <xsl:if test="$extension = ''">
+                        <xsl:text>.mp3</xsl:text>
+                    </xsl:if>
+                    <xsl:apply-templates select="." mode="temporal-fragment"/>
+                </xsl:attribute>
+                <xsl:attribute name="type">
+                    <xsl:text>audio/mp3</xsl:text>
+                </xsl:attribute>
+            </xsl:element>
+        </xsl:if>
+        <xsl:if test="$extension = '' or $extension = 'wav'">
+            <xsl:element name="source">
+                <xsl:attribute name="src">
+                    <xsl:value-of select="@source"/>
+                    <!-- augment no-extension form -->
+                    <xsl:if test="$extension = ''">
+                        <xsl:text>.wav</xsl:text>
+                    </xsl:if>
+                    <xsl:apply-templates select="." mode="temporal-fragment"/>
+                </xsl:attribute>
+                <xsl:attribute name="type">
+                    <xsl:text>audio/wav</xsl:text>
+                </xsl:attribute>
+            </xsl:element>
+        </xsl:if>
+        <!-- failure to perform -->
+        <xsl:text>Your browser does not support the &lt;audio&gt; tag.</xsl:text>
+    </xsl:element>
+</xsl:template>
+
 <!-- create a "video" element for author-hosted   -->
 <!-- dimensions and autoplay as parameters        -->
 <!-- Normally $preview is true, and not passed in -->
@@ -5991,28 +6112,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="preview" select="'true'" />
     <xsl:param name="autoplay" select="'false'" />
 
-    <!-- start/end times (read both, see 4.1, 4.2.1 at w3.org)    -->
-    <!-- Media Fragment URI: https://www.w3.org/TR/media-frags/   -->
-    <!-- Javascript: https://stackoverflow.com/questions/11212715 -->
-    <!-- variable is possibly empty, so no harm using that later  -->
-    <!-- This portion of URL should follow any query string       -->
-    <xsl:variable name="temporal-fragment">
-        <xsl:if test="@start or @end">
-            <xsl:text>#t=</xsl:text>
-        </xsl:if>
-        <xsl:if test="@start">
-            <xsl:value-of select="@start" />
-        </xsl:if>
-        <!-- can lead with comma, implies 0,xx -->
-        <xsl:if test="@end">
-            <xsl:text>,</xsl:text>
-            <xsl:value-of select="@end" />
-        </xsl:if>
-    </xsl:variable>
     <!-- we need to build the element, since @autoplay is optional -->
     <xsl:element name="video">
         <xsl:attribute name="id">
-            <xsl:apply-templates select="." mode="perm-id"/>
+            <xsl:apply-templates select="." mode="html-id"/>
         </xsl:attribute>
         <xsl:attribute name="width">
             <xsl:value-of select="$width" />
@@ -6064,7 +6167,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:if test="$extension = ''">
                         <xsl:text>.ogg</xsl:text>
                     </xsl:if>
-                    <xsl:value-of select="$temporal-fragment" />
+                    <xsl:apply-templates select="." mode="temporal-fragment"/>
                 </xsl:attribute>
                 <xsl:attribute name="type">
                     <xsl:text>video/ogg</xsl:text>
@@ -6079,7 +6182,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:if test="$extension = ''">
                         <xsl:text>.webm</xsl:text>
                     </xsl:if>
-                    <xsl:value-of select="$temporal-fragment" />
+                    <xsl:apply-templates select="." mode="temporal-fragment"/>
                 </xsl:attribute>
                 <xsl:attribute name="type">
                     <xsl:text>video/webm</xsl:text>
@@ -6094,7 +6197,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:if test="$extension = ''">
                         <xsl:text>.mp4</xsl:text>
                     </xsl:if>
-                    <xsl:value-of select="$temporal-fragment" />
+                    <xsl:apply-templates select="." mode="temporal-fragment"/>
                 </xsl:attribute>
                 <xsl:attribute name="type">
                     <xsl:text>video/mp4</xsl:text>
@@ -6106,48 +6209,78 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
-<!-- You Tube -->
+<!-- HTML5 Media Fragment URI (shared for audio, video)       -->
+<!-- start/end times (read both, see 4.1, 4.2.1 at w3.org)    -->
+<!-- Media Fragment URI: https://www.w3.org/TR/media-frags/   -->
+<!-- Javascript: https://stackoverflow.com/questions/11212715 -->
+<!-- return is possibly empty, so no harm using that later    -->
+<!-- This portion of URL should follow any query string       -->
+<xsl:template match="audio|video" mode="temporal-fragment">
+    <xsl:if test="@start or @end">
+        <xsl:text>#t=</xsl:text>
+    </xsl:if>
+    <xsl:if test="@start">
+        <xsl:value-of select="@start" />
+    </xsl:if>
+    <!-- can lead with comma, implies 0,xx -->
+    <xsl:if test="@end">
+        <xsl:text>,</xsl:text>
+        <xsl:value-of select="@end" />
+    </xsl:if>
+</xsl:template>
+
+<!-- You Tube, Vimeo -->
 <!-- Better sizing would require CSS classes (16:9, 4:3?)                      -->
 <!-- https://css-tricks.com/NetMag/FluidWidthVideo/Article-FluidWidthVideo.php -->
 
-<!-- Configurable options, we are considering academic uses -->
+<!-- Configurable options, we are considering academic uses                       -->
 <!-- https://developers.google.com/youtube/player_parameters#Manual_IFrame_Embeds -->
-<!-- hl parameter for language seems superfluous, user settings override       -->
-<!-- something to do with cross-domain scripting security? -->
-<!-- <xsl:text>&amp;origin=http://example.com</xsl:text>   -->
-<!-- start/end time parameters -->
+<!-- hl parameter for language seems superfluous, user settings override          -->
+<!-- something to do with cross-domain scripting security?                        -->
+<!-- <xsl:text>&amp;origin=http://example.com</xsl:text>                          -->
+<!-- start/end time parameters                                                    -->
 
-<!-- create iframe home for YouTube video         -->
-<!-- dimensions and autoplay as parameters        -->
-<!-- Normally $preview is true, and not passed in -->
-<!-- 'false' is an override for standalone pages  -->
-<xsl:template match="video[@youtube|@youtubeplaylist]" mode="video-embed">
+<!-- create iframe embedded video                     -->
+<!-- dimensions and autoplay as parameters            -->
+<!-- Normally $preview is true, and not passed in     -->
+<!-- 'false' is an override for standalone pages      -->
+<!-- Templates, on a per-service basis, supply a URL, -->
+<!-- and any attributes on the "iframe" element which -->
+<!-- are not shared                                   -->
+<xsl:template match="video[@youtube|@youtubeplaylist|@vimeo]" mode="video-embed">
     <xsl:param name="width" select="''" />
     <xsl:param name="height" select="''" />
     <xsl:param name="preview" select="'true'" />
     <xsl:param name="autoplay" select="'false'" />
 
-    <xsl:variable name="pid">
-        <xsl:apply-templates select="." mode="perm-id" />
+    <xsl:variable name="hid">
+        <xsl:apply-templates select="." mode="html-id" />
     </xsl:variable>
     <xsl:variable name="source-url">
-        <xsl:apply-templates select="." mode="youtube-embed-url">
+        <xsl:apply-templates select="." mode="video-embed-url">
             <xsl:with-param name="autoplay" select="$autoplay" />
         </xsl:apply-templates>
     </xsl:variable>
-    <!-- Following is inaccurate, the @select should be 'true' -->
-    <!-- But the YouTube autoplay won't wait for the poster    -->
-    <!-- to be withdrawn, so two clicks are needed             -->
-    <!-- We have two (equal) URLs to preserve logic, should    -->
-    <!-- there be a better way to fake the HTML5 @poster       -->
     <xsl:variable name="source-url-autoplay-on">
-        <xsl:apply-templates select="." mode="youtube-embed-url">
-            <xsl:with-param name="autoplay" select="'false'" />
+        <xsl:apply-templates select="." mode="video-embed-url">
+            <xsl:with-param name="autoplay">
+                <xsl:choose>
+                    <!-- the YouTube autoplay won't wait for the poster -->
+                    <!-- to be withdrawn, so two clicks are needed,     -->
+                    <!-- perhaps this is true of *all* services?        -->
+                    <xsl:when test="@youtube|@youtubeplaylist">
+                        <xsl:text>false</xsl:text>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:text>true</xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:with-param>
         </xsl:apply-templates>
     </xsl:variable>
-    <!-- allowfullscreen is an iframe parameter, -->
-    <!-- not a YouTube embed parameter, but it's -->
-    <!-- use enables the "full screen" button    -->
+    <!-- allowfullscreen is an iframe parameter,   -->
+    <!-- not a video-embedding parameter, but it's -->
+    <!-- use enables the "full screen" button      -->
     <!-- http://w3c.github.io/test-results/html51/implementation-report.html -->
     <xsl:choose>
         <xsl:when test="($preview = 'true') and @preview and not(@preview = 'default')">
@@ -6169,26 +6302,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <div class="hidden-content">
                 <!-- Hidden content in here                   -->
                 <!-- Turn autoplay on, else two clicks needed -->
-                <iframe id="{$pid}"
-                        width="{$width}"
-                        height="{$height}"
-                        allowfullscreen=""
-                        src="{$source-url-autoplay-on}" />
+                <iframe id="{$hid}" width="{$width}" height="{$height}" allowfullscreen=""
+                        src="{$source-url-autoplay-on}">
+                    <xsl:apply-templates select="." mode="video-iframe-attributes">
+                        <xsl:with-param name="autoplay" select="'true'"/>
+                    </xsl:apply-templates>
+                </iframe>
             </div>
         </xsl:when>
         <xsl:otherwise>
-            <iframe id="{$pid}"
-                    width="{$width}"
-                    height="{$height}"
-                    allowfullscreen=""
-                    src="{$source-url}" />
+            <iframe id="{$hid}" width="{$width}" height="{$height}" allowfullscreen=""
+                    src="{$source-url}">
+                <xsl:apply-templates select="." mode="video-iframe-attributes">
+                    <xsl:with-param name="autoplay" select="$autoplay"/>
+                </xsl:apply-templates>
+            </iframe>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 
-<!-- Creates a YouTube URL for embedding, typically in an iframe -->
-<!-- autoplay for popout, otherwise not                          -->
-<xsl:template match="video[@youtube|@youtubeplaylist]" mode="youtube-embed-url">
+<!-- Creates a YouTube URL for embedding for use in an iframe -->
+<!-- Autoplay option is conveyed in the URL query options     -->
+<!-- Autoplay is for popout, otherwise not                    -->
+<xsl:template match="video[@youtube|@youtubeplaylist]" mode="video-embed-url">
     <xsl:param name="autoplay" select="'false'" />
     <xsl:variable name="youtube">
         <xsl:choose>
@@ -6240,6 +6376,38 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$autoplay = 'true'">
         <xsl:text>&amp;autoplay=1</xsl:text>
     </xsl:if>
+</xsl:template>
+
+<!-- For a YouTube video, no YT-specific options come in the attributes -->
+<xsl:template match="video[@youtube|@youtubeplaylist]" mode="video-iframe-attributes"/>
+
+<!-- Creates a Vimeo URL for embedding, typically in an iframe  -->
+<xsl:template match="video[@vimeo]" mode="video-embed-url">
+    <xsl:param name="autoplay" select="'false'" />
+    <xsl:text>https://player.vimeo.com/video/</xsl:text>
+    <xsl:value-of select="@vimeo"/>
+    <xsl:text>?color=ffffff</xsl:text>
+    <!-- use &amp; separator for remaining options -->
+    <!-- default autoplay is 0, don't -->
+    <xsl:if test="$autoplay = 'true'">
+        <xsl:text>&amp;autoplay=1</xsl:text>
+    </xsl:if>
+</xsl:template>
+
+<!-- These are additional attributes on the "iframe" which seem specific to Vimeo -->
+<!-- N.B. the autoplay seems ineffective                                          -->
+<xsl:template match="video[@vimeo]" mode="video-iframe-attributes">
+    <xsl:param name="autoplay" select="'false'" />
+
+    <xsl:attribute name="frameborder">
+        <xsl:text>0</xsl:text>
+    </xsl:attribute>
+    <xsl:attribute name="allow">
+        <xsl:if test="$autoplay = 'true'">
+            <xsl:text>autoplay; </xsl:text>
+        </xsl:if>
+        <xsl:text>fullscreen</xsl:text>
+    </xsl:attribute>
 </xsl:template>
 
 <!-- ############ -->
@@ -6784,10 +6952,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- A URL is needed various places, but perhaps a cross-reference -->
-<!-- to material larger than a knowl is the most typical use.      -->
-<!-- This is strictly an HTML item.                                -->
-<!-- A containing filename, plus an optional fragment identifier.  -->
+<!-- A URL is needed various places, such as                     -->
+<!--   1. xref to material larger than a knowl, e.g. a "chapter" -->
+<!--   2. "in-context" link in xref-knowls                       -->
+<!--   3. summary-page links                                     -->
+<!--   4. many navigation devices, e.g. ToC, prev/next buttons   -->
+<!-- This is strictly an HTML construction.                      -->
+<!-- A containing filename, plus possibly a fragment identifier. -->
 <xsl:template match="*" mode="url">
     <xsl:variable name="intermediate">
         <xsl:apply-templates select="." mode="is-intermediate" />
@@ -6803,9 +6974,60 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="self::men|self::mrow">
             <xsl:text>mjx-eqn-</xsl:text>
         </xsl:if>
-        <xsl:apply-templates select="." mode="perm-id" />
+        <xsl:apply-templates select="." mode="html-id" />
     </xsl:if>
 </xsl:template>
+
+<!-- The @id attribute of an HTML element is critical.      -->
+<!--                                                        -->
+<!--   1.  Use the assigned/managed @permid so that changes -->
+<!--       between editions can be shown in HTML versions   -->
+<!--   2.  Author-provided @xml:id is reasonably stable     -->
+<!--   3.  We manufacture a guaranteed-unique string        -->
+<!--                                                        -->
+<!-- Every HTML @id produced should use this template, so   -->
+<!--                                                        -->
+<!--   A.  URL template above has correct fragments         -->
+<!--   B.  The permid-edition scheme is effective           -->
+<xsl:template match="*" mode="html-id">
+    <xsl:choose>
+        <xsl:when test="@permid">
+            <xsl:value-of select="@permid"/>
+        </xsl:when>
+        <xsl:when test="@xml:id">
+            <xsl:value-of select="@xml:id"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:value-of select="local-name(.)"/>
+            <xsl:text>-</xsl:text>
+            <!-- 2015-09: slow version matches previous "internal-id" -->
+            <!-- use for third (automatic) construction               -->
+            <xsl:choose>
+                <xsl:when test="$b-fast-ids">
+                    <!-- xsltproc produces non-numeric prefix "idm" -->
+                    <xsl:value-of select="substring(generate-id(.), 4)"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:number from="book|article|letter|memo" level="any"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- We manufacture Javascript variables sometimes using            -->
+<!-- this id to keep them unique, but a dash (encouraged in PTX)    -->
+<!-- is banned in Javascript, so we make a "no-dash" version,       -->
+<!-- by replacing a hyphen by a double-underscore.                  -->
+<!-- NB: This runs some non-zero probability of breaking uniqueness -->
+<xsl:template match="*" mode="visible-id-no-dash">
+    <xsl:variable name="the-id">
+        <xsl:apply-templates select="." mode="visible-id" />
+    </xsl:variable>
+    <xsl:value-of select="str:replace($the-id, '-', '__')" />
+</xsl:template>
+
+
 
 <!-- ######## -->
 <!-- SI Units -->
@@ -6965,6 +7187,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Emphasis -->
+<!-- NB: See override in Braille conversion -->
 <xsl:template match="em">
     <em class="emphasis">
         <xsl:apply-templates />
@@ -7511,9 +7734,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </span>
 </xsl:template>
 
+<!-- We provide the quotation marks explicitly, along       -->
+<!-- with a span for any additional styling.  The quotation -->
+<!-- marks are necessary for accessibility, e.g., they are  -->
+<!-- critical in the Braille conversion.                    -->
 <xsl:template match="articletitle">
     <span class="articletitle">
-        <xsl:apply-templates />
+        <xsl:call-template name="lq-character"/>
+        <xsl:apply-templates/>
+        <xsl:call-template name="rq-character"/>
     </span>
 </xsl:template>
 
@@ -7653,7 +7882,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Demonstrations -->
 <!-- A simple page with no constraints -->
 <xsl:template match="demonstration">
-    <xsl:variable name="url"><xsl:apply-templates select="." mode="internal-id" />.html</xsl:variable>
+    <xsl:variable name="url"><xsl:apply-templates select="." mode="visible-id" />.html</xsl:variable>
     <a href="{$url}" target="_blank" class="link">
         <xsl:apply-templates select="." mode="title-full" />
     </a>
@@ -7681,9 +7910,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- output text, then wraps it for the Sage Cell Server -->
 <!-- TODO: consider showing output in green span (?),    -->
 <!-- presently output is dropped as computable           -->
-<xsl:template name="sage-active-markup">
+<xsl:template match="sage" mode="sage-active-markup">
     <xsl:param name="block-type"/>
-    <xsl:param name="internal-id" />
     <xsl:param name="language-attribute" />
     <xsl:param name="in" />
     <xsl:param name="out" />
@@ -7701,7 +7929,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$language-attribute" />
         </xsl:attribute>
         <xsl:attribute name="id">
-            <xsl:value-of select="$internal-id" />
+            <xsl:apply-templates select="." mode="html-id"/>
         </xsl:attribute>
         <xsl:element name="script">
             <xsl:attribute name="type">
@@ -7769,19 +7997,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- where a reader can interactively step through the program -->
 <xsl:template match="program[@interactive='pythontutor']">
     <!-- check that the language is Python? -->
-    <xsl:variable name="pid">
-        <xsl:apply-templates select="." mode="perm-id" />
+    <xsl:variable name="hid">
+        <xsl:apply-templates select="." mode="html-id" />
     </xsl:variable>
     <xsl:element name="div">
         <xsl:attribute name="class">
             <xsl:text>pytutorVisualizer</xsl:text>
         </xsl:attribute>
         <xsl:attribute name="id">
-            <xsl:value-of select="$pid" />
+            <xsl:value-of select="$hid" />
         </xsl:attribute>
         <xsl:attribute name="data-tracefile">
             <xsl:text>pytutor/</xsl:text>
-            <xsl:value-of select="$pid" />
+            <xsl:value-of select="$hid" />
             <xsl:text>.json</xsl:text>
         </xsl:attribute>
         <xsl:attribute name="data-params">
@@ -7799,13 +8027,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Bits of Javascript for the top and bottom of the web page -->
 <xsl:template name="pytutor-header">
-    <xsl:if test="$document-root//program[@interactive='pythontutor']">
+    <xsl:if test="$b-has-pytutor">
         <script src="http://pythontutor.com/build/pytutor-embed.bundle.js?cc25af72af"></script>
     </xsl:if>
 </xsl:template>
 
 <xsl:template name="pytutor-footer">
-    <xsl:if test="$document-root//program[@interactive='pythontutor']">
+    <xsl:if test="$b-has-pytutor">
         <script>createAllVisualizersFromHtmlAttrs();</script>
     </xsl:if>
 </xsl:template>
@@ -7926,13 +8154,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- An iframe has @width, @height attributes,  -->
 <!-- specified in pixels                        -->
 
+<!-- Every "interactive" is realized as an -->
+<!-- "iframe", so the HTML iframe/@id is   -->
+<!-- derived from the "interactive"        -->
+<xsl:template match="interactive" mode="iframe-id">
+    <xsl:attribute name="id">
+        <xsl:apply-templates select="." mode="visible-id"/>
+    </xsl:attribute>
+</xsl:template>
+
 <!-- Desmos -->
 <!-- The simplest possible example of this type -->
 <xsl:template match="interactive[@desmos]" mode="iframe-interactive">
     <iframe src="https://www.desmos.com/calculator/{@desmos}">
-        <xsl:attribute name="id">
-            <xsl:apply-templates select="." mode="internal-id"/>
-        </xsl:attribute>
+        <xsl:apply-templates select="." mode="iframe-id"/>
         <xsl:apply-templates select="." mode="size-pixels-attributes" />
     </iframe>
 </xsl:template>
@@ -7946,9 +8181,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="interactive[@wolfram-cdf]" mode="iframe-interactive">
     <!-- Query string option: _embed=iframe will provide Wolfram footer -->
     <iframe src="https://www.wolframcloud.com/objects/{@wolfram-cdf}?_view=frameless">
-        <xsl:attribute name="id">
-            <xsl:apply-templates select="." mode="internal-id"/>
-        </xsl:attribute>
+        <xsl:apply-templates select="." mode="iframe-id"/>
         <xsl:apply-templates select="." mode="size-pixels-attributes" />
     </iframe>
 </xsl:template>
@@ -7957,9 +8190,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Similar again, but with options fixed -->
 <xsl:template match="interactive[@geogebra]" mode="iframe-interactive">
     <iframe src="https://www.geogebra.org/material/iframe/id/{@geogebra}/width/800/height/450/border/888888/smb/false/stb/false/stbh/false/ai/false/asb/false/sri/false/rc/false/ld/false/sdz/false/ctl/false">
-        <xsl:attribute name="id">
-            <xsl:apply-templates select="." mode="internal-id"/>
-        </xsl:attribute>
+        <xsl:apply-templates select="." mode="iframe-id"/>
         <xsl:apply-templates select="." mode="size-pixels-attributes" />
     </iframe>
 </xsl:template>
@@ -7993,9 +8224,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- TODO: box-sizing, etc does not seem to help with vertical scroll bars -->
     <xsl:variable name="full-url" select="concat($cp3d-endpoint, '/?', @calcplot3d)" />
     <iframe src="{$full-url}">
-        <xsl:attribute name="id">
-            <xsl:apply-templates select="." mode="internal-id"/>
-        </xsl:attribute>
+        <xsl:apply-templates select="." mode="iframe-id"/>
         <xsl:apply-templates select="." mode="size-pixels-attributes" />
     </iframe>
 </xsl:template>
@@ -8003,9 +8232,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- For more complicated interactives, we just point to the page we generate -->
 <xsl:template match="interactive[@platform]" mode="iframe-interactive">
     <iframe>
-        <xsl:attribute name="id">
-            <xsl:apply-templates select="." mode="internal-id"/>
-        </xsl:attribute>
+        <xsl:apply-templates select="." mode="iframe-id"/>
         <xsl:apply-templates select="." mode="size-pixels-attributes" />
         <xsl:attribute name="src">
             <xsl:apply-templates select="." mode="iframe-filename" />
@@ -8196,27 +8423,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <!-- We need a Javascript identifier to name the applet -->
     <xsl:variable name="applet-name">
-        <xsl:apply-templates select="." mode="internal-id-no-dash" />
+        <xsl:apply-templates select="." mode="visible-id-no-dash" />
     </xsl:variable>
     <!-- And a Javascript identifier for the parameters -->
     <xsl:variable name="applet-parameters">
-        <xsl:apply-templates select="." mode="internal-id-no-dash" />
+        <xsl:apply-templates select="." mode="visible-id-no-dash" />
         <xsl:text>_params</xsl:text>
     </xsl:variable>
     <!-- And a Javascript identifier for the onload function -->
     <xsl:variable name="applet-onload">
-        <xsl:apply-templates select="." mode="internal-id-no-dash" />
+        <xsl:apply-templates select="." mode="visible-id-no-dash" />
         <xsl:text>_onload</xsl:text>
     </xsl:variable>
     <!-- And a Javascript identifier for the onload function argument -->
     <!-- not strictly necessary, but clarifies HTML                   -->
     <xsl:variable name="applet-onload-argument">
-        <xsl:apply-templates select="." mode="internal-id-no-dash" />
+        <xsl:apply-templates select="." mode="visible-id-no-dash" />
         <xsl:text>_applet</xsl:text>
     </xsl:variable>
     <!-- And an HTML unique identifier -->
     <xsl:variable name="applet-container">
-        <xsl:apply-templates select="." mode="internal-id" />
+        <xsl:apply-templates select="." mode="visible-id" />
         <xsl:text>-container</xsl:text>
     </xsl:variable>
     <!-- Javascript API for loading GeoGebra                               -->
@@ -8420,7 +8647,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- the div to hold the JSX output -->
     <xsl:element name="div">
         <xsl:attribute name="id">
-            <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:apply-templates select="." mode="visible-id" />
         </xsl:attribute>
         <xsl:attribute name="class">
             <xsl:text>jxgbox</xsl:text>
@@ -8454,8 +8681,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "webwork-reps" element is present                            -->
 <!-- TODO: should also depend on whether all are presented as static -->
 <xsl:template name="webwork">
-    <link href="{$webwork-server}/webwork2_files/js/apps/MathView/mathview.css" rel="stylesheet" />
-    <script src="{$webwork-server}/webwork2_files/js/vendor/iframe-resizer/js/iframeResizer.min.js"></script>
+    <xsl:if test="$b-has-webwork-reps">
+        <link href="{$webwork-server}/webwork2_files/js/apps/MathView/mathview.css" rel="stylesheet" />
+        <script src="{$webwork-server}/webwork2_files/js/vendor/iframe-resizer/js/iframeResizer.min.js"></script>
+    </xsl:if>
 </xsl:template>
 
 <!-- Fail if WeBWorK extraction and merging has not been done -->
@@ -8647,8 +8876,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <head>
             <title>
                 <!-- Leading with initials is useful for small tabs -->
-                <xsl:if test="//docinfo/initialism">
-                    <xsl:apply-templates select="//docinfo/initialism" />
+                <xsl:if test="$docinfo/initialism">
+                    <xsl:apply-templates select="$docinfo/initialism" />
                     <xsl:text> </xsl:text>
                 </xsl:if>
             <xsl:apply-templates select="." mode="title-short" />
@@ -8662,13 +8891,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="sagecell-code" />
             <xsl:call-template name="mathjax" />
             <!-- webwork's iframeResizer needs to come before sage -->
-            <xsl:if test="$document-root//webwork-reps">
-                <xsl:call-template name="webwork" />
-            </xsl:if>
+            <xsl:call-template name="webwork" />
             <xsl:apply-templates select="." mode="sagecell" />
-            <xsl:if test="$document-root//program">
-                <xsl:call-template name="goggle-code-prettifier" />
-            </xsl:if>
+            <xsl:call-template name="goggle-code-prettifier" />
             <xsl:call-template name="google-search-box-js" />
             <xsl:call-template name="mathbook-js" />
             <xsl:call-template name="knowl" />
@@ -8771,7 +8996,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="*" mode="simple-file-wrap">
     <xsl:param name="content" />
     <xsl:variable name="filename">
-        <xsl:apply-templates select="." mode="internal-id" />
+        <!-- do not use "containing-filename" may be different -->
+        <xsl:apply-templates select="." mode="visible-id" />
         <text>.html</text>
     </xsl:variable>
     <exsl:document href="{$filename}" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
@@ -8785,9 +9011,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="sagecell-code" />
             <xsl:call-template name="mathjax" />
             <!-- webwork's iframeResizer needs to come before sage -->
-            <xsl:if test="$document-root//webwork-reps">
-                <xsl:call-template name="webwork" />
-            </xsl:if>
+            <xsl:call-template name="webwork" />
             <xsl:apply-templates select="." mode="sagecell" />
             <xsl:call-template name="knowl" />
             <xsl:call-template name="fonts" />
@@ -9082,12 +9306,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- We assume 0 or 1 "index-part" present -->
 <xsl:template match="*" mode="index-button">
-    <xsl:variable name="indices" select="$document-root//index-part | $document-root//index[index-list]" />
-    <xsl:if test="$indices">
+    <xsl:if test="$the-index">
         <xsl:variable name="url">
-            <xsl:apply-templates select="$indices[1]" mode="url" />
+            <xsl:apply-templates select="$the-index" mode="url" />
         </xsl:variable>
         <xsl:element name="a">
             <xsl:attribute name="class">
@@ -9549,7 +9771,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </xsl:choose>
                 </xsl:variable>
                 <xsl:variable name="outer-pid">
-                    <xsl:apply-templates select="." mode="perm-id" />
+                    <xsl:apply-templates select="." mode="html-id" />
                 </xsl:variable>
                 <!-- The link itself -->
                 <li class="{$class}">
@@ -9591,7 +9813,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                     <xsl:apply-templates select="." mode="url" />
                                 </xsl:variable>
                                 <xsl:variable name="inner-pid">
-                                    <xsl:apply-templates select="." mode="perm-id" />
+                                    <xsl:apply-templates select="." mode="html-id" />
                                 </xsl:variable>
                                 <li>
                                     <xsl:element name="a">
@@ -9741,7 +9963,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- close of MathJax.Hub.Config -->
         <xsl:text>});&#xa;</xsl:text>
         <!-- optional beveled fraction support -->
-        <xsl:if test="//m[contains(text(),'sfrac')] or //md[contains(text(),'sfrac')] or //me[contains(text(),'sfrac')] or //mrow[contains(text(),'sfrac')]">
+        <xsl:if test="$b-has-sfrac">
             <xsl:text>/* support for the sfrac command in MathJax (Beveled fraction) */&#xa;</xsl:text>
             <xsl:text>/* see: https://github.com/mathjax/MathJax-docs/wiki/Beveled-fraction-like-sfrac,-nicefrac-bfrac */&#xa;</xsl:text>
             <xsl:text>MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {&#xa;</xsl:text>
@@ -9773,7 +9995,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- so we load the relevant JavaScript onto every page if -->
 <!-- a cell occurs *anywhere* in the entire document       -->
 <xsl:template name="sagecell-code">
-    <xsl:if test="$document-root//sage">
+    <xsl:if test="$b-has-sage">
         <script src="https://sagecell.sagemath.org/embedded_sagecell.js"></script>
     </xsl:if>
 </xsl:template>
@@ -9945,7 +10167,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Program Listings from Google -->
 <!--   ?skin=sunburst  on end of src URL gives black terminal look -->
 <xsl:template name="goggle-code-prettifier">
-    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+    <xsl:if test="$b-has-program">
+        <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+    </xsl:if>
 </xsl:template>
 
 <!-- JS setup for a Google Custom Search Engine box -->
@@ -10071,7 +10295,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Treated as characters, these could show up often, -->
 <!-- so load into every possible HTML page instance    -->
 <xsl:template name="font-awesome">
-    <xsl:if test="$document-root//icon">
+    <xsl:if test="$b-has-icon">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"/>
     </xsl:if>
 </xsl:template>
@@ -10291,7 +10515,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="hint or answer or solution">
         <!-- Lead with the problem number and some space -->
         <xsl:variable name="xref">
-            <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:apply-templates select="." mode="visible-id" />
         </xsl:variable>
         <article class="exercise-like" id="{$xref}">
             <h6 class="heading hidden-type">

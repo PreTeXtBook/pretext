@@ -31,7 +31,7 @@
 <!-- single XML file called webwork-extraction.xml with various            -->
 <!-- representations of each webwork.                                      -->
 
-<!-- Each dictionary uses the webworks' internal-ids as keys. There are    -->
+<!-- Each dictionary uses the webworks' visible-ids as keys. There are      -->
 <!-- dictionaries for obtaining PG designed for use in PTX output modes:   -->
 <!-- 5. with hints and solutions (if present)                              -->
 <!-- 6. with hints (if present) but no solutions                           -->
@@ -104,9 +104,9 @@
 </xsl:template>
 
 <xsl:template match="webwork[statement|stage]" mode="dictionaries">
-    <!-- Define values for the internal-id as key -->
+    <!-- Define values for the visible-id as key -->
     <xsl:variable name="problem">
-        <xsl:apply-templates select="." mode="internal-id" />
+        <xsl:apply-templates select="." mode="visible-id" />
     </xsl:variable>
 
     <xsl:text>pgptx['hint_no_solution_no']["</xsl:text>

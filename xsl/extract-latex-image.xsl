@@ -103,7 +103,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- latex graphics to standalone file        -->
 <xsl:template match="image/latex-image-code|image/latex-image">
     <xsl:variable name="filebase">
-        <xsl:apply-templates select=".." mode="internal-id" />
+        <xsl:apply-templates select=".." mode="visible-id" />
     </xsl:variable>
     <exsl:document href="{$scratch}/{$filebase}.tex" method="text">
         <xsl:text>\documentclass[</xsl:text>
