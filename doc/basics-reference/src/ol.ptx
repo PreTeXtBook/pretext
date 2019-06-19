@@ -1,0 +1,6 @@
+<p>
+    <ol>
+        <li>First item.</li>
+        <li><p>Second item, showing can wrap content with <c>p</c>.</p></li>
+    </ol>
+</p>
