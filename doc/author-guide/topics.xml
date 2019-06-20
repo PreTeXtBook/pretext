@@ -1670,7 +1670,7 @@
 
             <p>(2019-03-04) We have consciously not said anything specific about what to place inside a <tag>see</tag> or <tag>seealso</tag> element.  At this writing, you need to supply the text.  Of course, this is error-prone and you will need to consult <acro>CMOS</acro> for formatting guidance.  But we have plans to do this the <pretext/> way.  First, the <c>ref/xml:id</c> mechanism will be used to automatically create the correct text for the cross-reference, both content and format.  Second, these will become live links in electronic formats.</p>
 
-            <p>Certain index entries do not sort very well, especially entries that begin with mathematical notation.  Our first advice is to avoid this situation, but sometimes it is necessary.  The <attr>sortby</attr> attribute on an <tag>h</tag> element can contain simple text that will be used to override the content shown to the reader during the sorting of the index.</p>
+            <p>Certain index entries do not sort very well, especially entries that begin with mathematical notation.  Our first advice is to avoid this situation, but sometimes it is necessary.  The <attr>sortby</attr> attribute on an <tag>h</tag> element (or on an unstructured <tag>idx</tag> element) can contain simple text that will be used to override the content shown to the reader during the sorting of the index.</p>
         </subsection>
 
         <subsection xml:id="topic-index-advice">
