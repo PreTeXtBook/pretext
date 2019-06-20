@@ -8501,6 +8501,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>",&#xa;</xsl:text>
             </xsl:when>
         </xsl:choose>
+        <xsl:text>preventFocus:true,&#xa;</xsl:text>
         <xsl:text>width:</xsl:text><xsl:value-of select="$width" />
         <xsl:text>,&#xa;</xsl:text>
         <xsl:text>height:</xsl:text><xsl:value-of select="$height" />
