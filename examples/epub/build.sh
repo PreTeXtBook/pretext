@@ -86,8 +86,8 @@ install -d ${EPUBOUT}/EPUB/xhtml/images
 INPUT="${EPUBOUT}/xhtml/image-list.txt"
 while IFS= read -r LINE
 do
-    SVGFILE=${LINE//[$'\t\r\n']}
-    cp -a ${SRC}/${SVGFILE} ${EPUBOUT}/EPUB/xhtml/${SVGFILE}
+    IMGFILE=${LINE//[$'\t\r\n']}
+    cp -a ${SRC}/${IMGFILE} ${EPUBOUT}/EPUB/xhtml/${IMGFILE}
 done < "$INPUT"
 # make sure the image list doesn't get bundled in the EPUB
 rm ${EPUBOUT}/xhtml/image-list.txt #${EPUBOUT}
