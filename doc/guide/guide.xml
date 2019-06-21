@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--   This file is part of the documentation of PreTeXt      -->
+<!--                                                          -->
+<!--    <pretext /> Guide                                     -->
+<!--                                                          -->
+<!-- Copyright (C) 2013-2019  Robert A. Beezer                -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<pretext xmlns:xi="http://www.w3.org/2001/XInclude">
+
+    <docinfo>
+        <!-- this is the default, but supresses a warning -->
+        <cross-references text="type-global"/>
+        <search>
+            <google>
+                <cx>008832104071767086392:woji51c1uko</cx>
+            </google>
+        </search>
+        <rename element="note" xml:lang="en-US">Best Practice</rename>
+        <!-- a demonstration in Basic Reference -->
+        <rename element="algorithm" xml:lang="en-US">Porism</rename>
+        <latex-image-preamble>
+            \usepackage{tikz}
+        </latex-image-preamble>
+        <!-- There does not need to be a trailing / on the URL -->
+        <!-- NB This is likely to change, it should be a publisher option -->
+        <html>
+            <baseurl href="https://pretextbook.org/doc/guide/html"/>
+        </html>
+
+    </docinfo>
+
+
+    <book xml:id="pretext-guide">
+        <title>The <pretext /> Guide</title>
+
+        <xi:include href="../author-guide/frontmatter.xml"/>
+
+        <part>
+            <title>Introduction</title>
+
+            <xi:include href="../author-guide/start-here.xml"/>
+            <xi:include href="../author-guide/quickstart-example.xml"/>
+        </part>
+
+        <part>
+            <title>Author's Guide</title>
+
+            <xi:include href="../author-guide/overview.xml"/>
+            <xi:include href="../author-guide/processing.xml"/>
+            <xi:include href="../author-guide/schema.xml"/>
+            <xi:include href="../author-guide/topics.xml"/>
+            <xi:include href="../author-guide/advice.xml"/>
+            <xi:include href="../author-guide/mbx-script.xml"/>
+            <xi:include href="../author-guide/webwork.xml"/>
+        </part>
+
+        <xi:include href="../basics-reference/src/ptx-basics-reference.ptx"/>
+
+        <part>
+            <title>Publisher's Guide</title>
+
+            <xi:include href="../publisher-guide/production.xml"/>
+            <xi:include href="../publisher-guide/open-licenses.xml"/>
+            <xi:include href="../publisher-guide/conversions.xml"/>
+            <xi:include href="../publisher-guide/online-html.xml"/>
+            <xi:include href="../publisher-guide/pdf-print.xml"/>
+            <xi:include href="../publisher-guide/epub.xml"/>
+            <xi:include href="../publisher-guide/jupyter-notebook.xml"/>
+            <xi:include href="../publisher-guide/instructor-version.xml"/>
+            <xi:include href="../publisher-guide/ancillaries.xml"/>
+            <xi:include href="../publisher-guide/webwork.xml"/>
+            <xi:include href="../publisher-guide/web-hosting.xml"/>
+            <xi:include href="../publisher-guide/latex-styling.xml"/>
+            <xi:include href="../publisher-guide/cover-design.xml"/>
+            <xi:include href="../publisher-guide/print-on-demand.xml"/>
+
+        </part>
+
+        <part>
+            <title>Developer's Guide</title>
+
+            <xi:include href="../developer-guide/git.xml"/>
+        </part>
+
+
+        <backmatter xml:id="backmatter" xmlns:xi="http://www.w3.org/2001/XInclude">
+            <title>Appendices</title>
+
+            <xi:include href="../author-guide/welcome.xml"/>
+            <xi:include href="../author-guide/faq.xml"/>
+            <xi:include href="../author-guide/glossary.xml"/>
+            <!-- collect references to each Best Practice note -->
+            <appendix xml:id="best-practices">
+                <title>Best Practices</title>
+                <list-of elements="note"/>
+            </appendix>
+            <xi:include href="../author-guide/latex-conversion.xml"/>
+            <xi:include href="../author-guide/editors.xml"/>
+            <xi:include href="../author-guide/schema-install.xml"/>
+            <xi:include href="../author-guide/git.xml"/>
+            <xi:include href="../author-guide/windows.xml"/>
+            <xi:include href="../author-guide/windows-wsl.xml"/>
+            <xi:include href="../author-guide/vagrant.xml"/>
+
+            <xi:include href="../publisher-guide/faq.xml"/>
+            <xi:include href="../publisher-guide/pretext-principles.xml"/>
+            <xi:include href="../publisher-guide/gfdl-mathbook.xml"/>
+
+            <appendix>
+                <title>Example List of Notation</title>
+                <notation-list />
+            </appendix>
+
+            <xi:include href="../author-guide/gfdl-mathbook.xml"/>
+            <references>
+                <biblio type="raw" xml:id="indexing-guide">Fred Leise, Kate Mertes, Nan Badgett, <title>Indexing for Editors and Authors: A Practical Guide to Understanding Indexes</title>, American Society of Indexers, 2008</biblio>
+            </references>
+
+            <index xml:id="the-index">
+                <title>Index</title>
+                <index-list />
+            </index>
+
+        </backmatter>
+
+
+    </book>
+</pretext>

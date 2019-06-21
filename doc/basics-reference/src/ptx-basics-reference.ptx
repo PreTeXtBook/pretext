@@ -1,60 +1,6 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<part  xmlns:xi="http://www.w3.org/2001/XInclude">
+    <title><pretext/> Basics Reference</title>
 
-<!--********************************************************************
-Copyright 2018-2019 Mitchel T. Keller
-
-This file is part of The PreTeXt Basics Reference (The PBR).
-
-Permission is granted to copy, distribute and/or modify this document
-under the terms of the GNU Free Documentation License, Version 1.3
-or any later version published by the Free Software Foundation; with
-no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.
-A copy of the license is included in the section entitled “GNU Free
-Documentation License”.
-
-You should have received a copy of the GNU Free Documentation License
-along with The PBR.  If not, see <http://www.gnu.org/licenses/>.
-*********************************************************************-->
-
- <pretext xmlns:xi="http://www.w3.org/2001/XInclude">
-     <docinfo>
-         <cross-references text="type-global" />
-         <latex-image-preamble>
-             \usepackage{tikz}
-         </latex-image-preamble>
-         <rename element="algorithm">Porism</rename>
-     </docinfo>
-    <book xml:id="basics-ref">
-        <title><pretext /> Basics Reference</title>
-
-        <frontmatter>
-            <titlepage>
-                <author>
-                    <personname>Mitchel T. Keller</personname>
-                    <institution>Morningside College</institution>
-                </author>
-                <date>June 2019</date>
-            </titlepage>
-            <colophon>
-                <copyright>
-                    <year>2018-2019</year>
-                    <holder>Mitchel T. Keller</holder>
-                    <shortlicense>
-                        Permission is granted to copy, distribute and/or modify
-                        this document under the terms of the GNU Free
-                        Documentation License, Version 1.3 or any later version
-                        published by the Free Software Foundation; with no
-                        Invariant Sections, no Front-Cover Texts, and no Back-Cover
-                        Texts.  A copy of the license is included in the section entitled
-                        <q>GNU Free Documentation License</q>.
-                    </shortlicense>
-                </copyright>
-            </colophon>
-
-            <preface>
-                <p>This document provides a quick overview of the minimal syntax for a variety of key <pretext /> features. Unlike the sample article, which is designed to demonstrate and stress test all aspects of <pretext />, this guide will illustrate only the key elements of some of the most universally-used features of the language. In many cases, in addition to features not discussed, there are may be alternative structures that are not given here.</p>
-            </preface>
-        </frontmatter>
         <chapter xml:id="ch-about">
             <title>About this reference</title>
             <p>This <pubtitle><pretext /> Basic Reference</pubtitle> is meant to supplement the <pretext /> documentation maintained as part of the official repository. Here you will find the <em>basics</em> of the most important and commonly used <pretext /> tags. In most instances, this will be exhibited by showing a <pretext /> code listing followed immediately by the exact output that code produces. (In some cases, such as with the code that produces a section, it is not practical to do this.) Wherever possible, the sample code and its output are accompanied by a link to the official <pretext /> documentation (typically the <pubtitle><pretext /> Author's Guide</pubtitle>).
@@ -680,13 +626,4 @@ along with The PBR.  If not, see <http://www.gnu.org/licenses/>.
             <title>Modular source</title>
             <p>Once a project gets big, you may find yourself wishing to break your source into multiple files. This is well documented in the <url href="https://pretextbook.org/doc/author-guide/html/processing-modular.html"><pubtitle><pretext /> Author's Guide</pubtitle></url>, so we refer you there for more details.</p>
         </chapter>
-        <backmatter>
-            <appendix>
-                <title>List of Notation</title>
-                <notation-list />
-            </appendix>
-            <xi:include href="gfdl-pretext.xml" />
-        <index><index-list/></index></backmatter>
-    </book>
-
-</pretext>
+</part>
