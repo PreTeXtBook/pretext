@@ -3992,9 +3992,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Notation List -->
 <!--               -->
 
-<!-- At location, we just drop a page marker -->
+<!-- At location, we just drop a marker to get the page number -->
 <xsl:template match="notation">
     <xsl:apply-templates select="." mode="label" />
+    <!-- do not introduce anymore whitespace into a "p" than there   -->
+    <!-- already is, but do format these one-per-line outside of "p" -->
+    <xsl:if test="not(ancestor::p)">
+        <xsl:text>%&#xa;</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <!-- Deccription column is "p" to enable word-wrapping  -->
