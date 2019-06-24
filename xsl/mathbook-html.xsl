@@ -8229,6 +8229,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </iframe>
 </xsl:template>
 
+
 <!-- For more complicated interactives, we just point to the page we generate -->
 <xsl:template match="interactive[@platform]" mode="iframe-interactive">
     <iframe>
@@ -8411,6 +8412,52 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:call-template>
       </script>
     </div>
+</xsl:template>
+
+<xsl:template match="slate[@surface = 'jessiecode']">
+  <!-- size of the window, to be passed as a parameter -->
+  <xsl:variable name="width">
+      <xsl:apply-templates select="." mode="get-width-pixels" />
+  </xsl:variable>
+  <xsl:variable name="height">
+      <xsl:apply-templates select="." mode="get-height-pixels" />
+  </xsl:variable>
+  <!-- the div that jsxgraph will take over -->
+  <xsl:element name="div">
+      <xsl:attribute name="id">
+          <xsl:apply-templates select="." mode="visible-id" />
+      </xsl:attribute>
+      <xsl:attribute name="class">
+          <xsl:text>jxgbox</xsl:text>
+      </xsl:attribute>
+      <xsl:attribute name="style">
+          <xsl:text>width:</xsl:text>
+          <xsl:value-of select="$width" />
+          <xsl:text>px; height:</xsl:text>
+          <xsl:value-of select="$height" />
+          <xsl:text>px;</xsl:text>
+      </xsl:attribute>
+  </xsl:element>
+  <!-- Add a script wrapper to parse using JSXGraph -->
+  <xsl:element name="script">
+      <xsl:attribute name="type">
+          <xsl:text>text/javascript</xsl:text>
+      </xsl:attribute>
+      <xsl:text>(function() { &#xa;let board = JXG.JSXGraph.initBoard('</xsl:text>
+      <xsl:apply-templates select="." mode="visible-id" />
+      <xsl:text>', {boundingbox: [-5, 5, 5, -5], keepaspectratio:true});&#xa;</xsl:text>
+      <xsl:text>board.jc = new JXG.JessieCode();&#xa;</xsl:text>
+      <xsl:text>board.jc.use(board);&#xa;</xsl:text>
+      <xsl:text>board.suspendUpdate();&#xa;</xsl:text>
+      <xsl:text>board.jc.parse(`</xsl:text>
+      <xsl:if test="text()">
+          <xsl:call-template name="sanitize-text">
+              <xsl:with-param name="text" select="." />
+          </xsl:call-template>
+      </xsl:if>
+      <xsl:text>`);&#xa;</xsl:text>
+      <xsl:text>board.unsuspendUpdate();&#xa;})();</xsl:text>
+  </xsl:element>
 </xsl:template>
 
 <xsl:template match="slate[@surface='geogebra']">
