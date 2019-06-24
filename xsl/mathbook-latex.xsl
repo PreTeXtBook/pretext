@@ -4798,7 +4798,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Three arguments: direction arrow, title, label -->
 <!-- The environment combines and styles            -->
 <xsl:template match="case">
-    <xsl:text>\begin{case}&#xa;</xsl:text>
+    <xsl:text>\begin{case}</xsl:text>
     <xsl:text>{</xsl:text>
     <!-- optional direction, given by attribute -->
     <xsl:choose>
@@ -5543,7 +5543,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
     <!-- some distance to actual content -->
-    <xsl:text>\quad%&#xa;</xsl:text>
+    <xsl:text>\quad{}</xsl:text>
 </xsl:template>
 
 <xsl:template name="exercise-component-separator">
@@ -6128,7 +6128,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>[(</xsl:text>
         <xsl:apply-templates select="." mode="list-number" />
         <xsl:text>)]</xsl:text>
-        <xsl:text> </xsl:text>
         <!-- no label since duplicating -->
         <!-- more structured versions first -->
         <xsl:choose>
