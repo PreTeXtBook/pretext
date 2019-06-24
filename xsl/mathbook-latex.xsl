@@ -5564,7 +5564,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="title-full" />
         <xsl:text>}\space\space</xsl:text>
     </xsl:if>
-    <xsl:apply-templates select="." mode="label" />
+    <xsl:if test="@xml:id">
+        <xsl:apply-templates select="." mode="label"/>
+    </xsl:if>
     <xsl:text>%&#xa;</xsl:text>
     <xsl:apply-templates select="introduction" />
     <xsl:choose>
@@ -6039,10 +6041,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
         <xsl:text>]&#xa;</xsl:text>
     </xsl:if>
-    <!-- always a list item, note space -->
+    <!-- always a list item -->
     <xsl:text>\item</xsl:text>
-    <xsl:apply-templates select="." mode="label" />
-    <xsl:text> </xsl:text>
+    <!-- \label{} will separate content, if   -->
+    <!-- employed, else we use an empty group -->
+    <xsl:choose>
+        <xsl:when test="@xml:id">
+            <xsl:apply-templates select="." mode="label" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>{}</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
     <!-- more structured versions first -->
     <xsl:choose>
         <xsl:when test="task">
@@ -6271,8 +6281,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="preceding-sibling::*[not(&SUBDIVISION-METADATA-FILTER;)][1][self::p or self::paragraphs or self::commentary or self::sidebyside]">
         <xsl:text>\par&#xa;</xsl:text>
     </xsl:if>
-    <xsl:apply-templates select="." mode="label" />
-    <xsl:text>%&#xa;</xsl:text>
+    <!-- we can't cross-reference here without an @xml:id -->
+    <!-- place it on a line of its own just prior to guts -->
+    <xsl:if test="@xml:id">
+        <xsl:apply-templates select="." mode="label" />
+        <xsl:text>%&#xa;</xsl:text>
+    </xsl:if>
     <xsl:apply-templates />
     <xsl:text>%&#xa;</xsl:text>
 </xsl:template>
@@ -6760,9 +6774,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Keep the tests here in sync with DTD.              -->
 
 <!-- In an ordered list, an item can be a target -->
+<!-- but only if it has an @xml:id to use        -->
 <xsl:template match="ol/li">
     <xsl:text>\item</xsl:text>
-    <xsl:apply-templates select="." mode="label" />
+    <!-- \label{} will separate content, if   -->
+    <!-- employed, else we use an empty group -->
+    <xsl:choose>
+        <xsl:when test="@xml:id">
+            <xsl:apply-templates select="." mode="label" />
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>{}</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
     <xsl:apply-templates />
     <xsl:if test="not(p)">
         <xsl:text>%&#xa;</xsl:text>
@@ -6779,13 +6803,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- Description lists get title as additional argument -->
+<!-- Description lists always have title as additional -->
+<!-- argument In a description list, an item can be a  -->
+<!-- target but only if it has an @xml:id to use       -->
 <xsl:template match="dl/li">
     <xsl:text>\item[{</xsl:text>
     <xsl:apply-templates select="." mode="title-full" />
     <xsl:text>}]</xsl:text>
-    <!-- label will protect content, so no {} -->
-    <xsl:apply-templates select="." mode="label" />
+    <xsl:if test="@xml:id">
+        <xsl:apply-templates select="." mode="label" />
+    </xsl:if>
+    <!-- title or label will protect -->
+    <!-- content, so no {} ever      -->
     <xsl:apply-templates />
 </xsl:template>
 
@@ -7211,8 +7240,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- TODO: <quote> element for inline -->
 <xsl:template match="blockquote">
     <xsl:text>\begin{quote}</xsl:text>
-    <xsl:apply-templates select="." mode="label" />
-    <xsl:text>&#xa;</xsl:text>
+    <xsl:if test="@xml:id">
+        <xsl:apply-templates select="." mode="label"/>
+    </xsl:if>
+    <xsl:text>%&#xa;</xsl:text>
     <xsl:apply-templates />
     <xsl:text>\end{quote}&#xa;</xsl:text>
 </xsl:template>
@@ -10058,8 +10089,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="poem">
     <xsl:text>\begin{poem}</xsl:text>
-    <xsl:apply-templates select="." mode="label" />
-    <xsl:text>&#xa;</xsl:text>
+    <xsl:if test="@xml:id">
+        <xsl:apply-templates select="." mode="label"/>
+    </xsl:if>
+    <xsl:text>%&#xa;</xsl:text>
     <xsl:text>\poemTitle{</xsl:text>
     <xsl:apply-templates select="." mode="title-full" />
     <xsl:text>}&#xa;</xsl:text>
@@ -10431,8 +10464,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--   We first close off the citation itself -->
 <xsl:template match="biblio/note">
     <xsl:text>\par</xsl:text>
-    <xsl:apply-templates select="." mode="label" />
-    <xsl:text>&#xa;</xsl:text>
+    <xsl:if test="@xml:id">
+        <xsl:apply-templates select="." mode="label"/>
+    </xsl:if>
+    <xsl:text>%&#xa;</xsl:text>
     <xsl:apply-templates />
 </xsl:template>
 
