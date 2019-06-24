@@ -9666,14 +9666,41 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- This produces unique strings that are internal to the  -->
 <!-- LaTeX (intermediate) file.  Since neither author nor   -->
 <!-- reader will ever see these, they can be as fast and as -->
-<!-- wild as necessary.  These are employed with            -->
+<!-- wild as necessary.  But for mature works, likely with  -->
+<!-- @permid on many relevant objects, or many @xml:id      -->
+<!-- provided for URLs in HTML, these can be predictable    -->
+<!-- across runs (and therefore help with tweaking the LaTeX-->
+<!-- output under revision control) These are employed with -->
 <!-- \label{}, \ref{}, \cite{}, \pageref{}, \eqref{}, etc.  -->
 <!-- We can change this at will, with no adverse effects    -->
+<!-- NB: colons are banned from PTX @xml:id, and will not   -->
+<!-- appear in @permid, though we could use dashes instead  -->
+<!-- without getting duplicates.  The prefixes guarantee    -->
+<!-- that the three uniqueness schemes do not overlap.      -->
 <xsl:template match="*" mode="latex-id">
-    <xsl:value-of select="local-name(.)" />
-    <xsl:text>-</xsl:text>
-    <!-- xsltproc produces non-numeric prefix "idm" -->
-    <xsl:value-of select="substring(generate-id(.), 4)"/>
+    <xsl:choose>
+        <!-- xml:id may be more recognizable -->
+        <xsl:when test="@xml:id">
+            <xsl:text>x:</xsl:text>
+            <xsl:value-of select="local-name(.)"/>
+            <xsl:text>:</xsl:text>
+            <xsl:value-of select="@xml:id"/>
+        </xsl:when>
+        <!-- permid may be pervasive -->
+        <xsl:when test="@permid">
+            <xsl:text>p:</xsl:text>
+            <xsl:value-of select="local-name(.)"/>
+            <xsl:text>:</xsl:text>
+            <xsl:value-of select="@permid"/>
+        </xsl:when>
+        <!-- anything else we think of is too slow -->
+        <xsl:otherwise>
+            <xsl:text>g:</xsl:text>
+            <xsl:value-of select="local-name(.)"/>
+            <xsl:text>:</xsl:text>
+            <xsl:value-of select="generate-id(.)"/>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 
