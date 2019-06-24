@@ -8229,7 +8229,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </iframe>
 </xsl:template>
 
-
 <!-- For more complicated interactives, we just point to the page we generate -->
 <xsl:template match="interactive[@platform]" mode="iframe-interactive">
     <iframe>
