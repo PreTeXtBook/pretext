@@ -4900,7 +4900,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 </xsl:template>
 
 <!-- Atomic inline exercise serial number -->
-<xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|exercise|&FIGURE-LIKE;" mode="atomic-exercise-serial-number">
+<xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|exercise|&FIGURE-LIKE;" mode="atomic-exercise-serial-number">
     <xsl:variable name="subtree-level">
         <xsl:apply-templates select="." mode="absolute-subtree-level">
             <xsl:with-param name="numbering-items" select="$numbering-theorems" />
@@ -9710,6 +9710,8 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- 10 digits, hyphen/dash, underscore     -->
 <!-- TODO: Added 2016-10-29, make into a fatal error later -->
 <!-- Unique UI id's added 2017-09-25 as fatal error -->
+<!-- NB: internal IDs for LaTeX use colons with @xml:id,  -->
+<!-- but this may not be necessary to achieve uniqueness  -->
 <xsl:template match="mathbook|pretext" mode="xmlid-warning">
     <xsl:variable name="xmlid-characters" select="concat('-_', &SIMPLECHAR;)" />
     <xsl:for-each select="$document-root//@xml:id">

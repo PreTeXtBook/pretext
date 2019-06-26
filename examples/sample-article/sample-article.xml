@@ -2651,6 +2651,18 @@ the xsltproc executable.
                     </image>
                 </figure>
 
+                <p>Sage code comprised of just a single line was once mishandled, leading to <em>no ouput</em>.  From Jean-Sébastien Turcotte we have the example that revealed the problem.</p>
+
+                <figure xml:id="figure-sage-exosagevec1">
+                    <caption>Les vecteurs <m>\vec{u}</m> et <m>\vec{v}</m></caption>
+                    <image width="25%" xml:id="sageplot-exosagevec1">
+                        <description>Les vecteurs <m>\vec{u}</m> et <m>\vec{v}</m>sont tracés tel que demandé, respectivement en rouge et en bleu.</description>
+                        <sageplot>
+                        plot(vector([-1,2]),color='red')+plot(vector([2,1]),color='blue')
+                        </sageplot>
+                    </image>
+                </figure>
+
                 <p>The following examples are from the <url href="http://www.sagemath.org/tour-graphics.html">Sage Tour</url>.  We package them into a <c>sidebyside</c> layout element, see <xref ref="section-side-by-side" text="type-global" />.</p>
 
                 <sidebyside width="40%" margins="auto">

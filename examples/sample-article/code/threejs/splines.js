@@ -275,7 +275,8 @@ function animate() {
     requestAnimationFrame( animate );
 
     render();
-    stats.update();
+    // DBW, 2019-06-20, stats window was removed, don't update
+    //stats.update();
 
 }
 

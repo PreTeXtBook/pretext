@@ -9759,16 +9759,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:apply-templates select="." mode="url"/>
                </xsl:variable>
                <!-- text of anchor's class, active if a match, otherwise plain -->
-               <!-- Based on node-set union size                               -->
+               <!-- Based on node-set union size, "part" is for styling        -->
                <xsl:variable name="class">
-                    <xsl:choose>
-                        <xsl:when test="count($this-page-node|$outer-node) = 1" >
-                            <xsl:text>link active</xsl:text>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:text>link</xsl:text>
-                        </xsl:otherwise>
-                    </xsl:choose>
+                    <xsl:text>link</xsl:text>
+                    <xsl:if test="self::part">
+                        <xsl:text> part</xsl:text>
+                    </xsl:if>
+                    <xsl:if test="count($this-page-node|$outer-node) = 1" >
+                        <xsl:text> active</xsl:text>
+                    </xsl:if>
                 </xsl:variable>
                 <xsl:variable name="outer-pid">
                     <xsl:apply-templates select="." mode="html-id" />

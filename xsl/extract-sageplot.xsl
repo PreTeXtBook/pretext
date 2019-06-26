@@ -48,21 +48,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 2015/02/08: Deprecated, still functional but not maintained -->
 <xsl:template match="image/sageplot">
     <!-- has one trailing newline, which we ignore later (?) -->
-    <xsl:variable name="plot-code">
+    <xsl:variable name="plot-code-sanitary">
         <xsl:call-template name="sanitize-text">
             <xsl:with-param name="text" select="." />
         </xsl:call-template>
     </xsl:variable>
-    <!-- split on last newline -->
+    <!-- remove the trailing newline provided by sanitization -->
+    <xsl:variable name="plot-code-trimmed" select="substring($plot-code-sanitary,1,string-length($plot-code-sanitary)-1)"/>
+    <!-- conditionally provide a breakpoint for single-line source -->
+    <xsl:variable name="plot-code">
+        <xsl:if test="not(contains($plot-code-trimmed, '&#xa;'))">
+            <xsl:text>&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:value-of select="$plot-code-trimmed"/>
+    </xsl:variable>
+    <!-- split on last newline, which is first character for single-line source -->
     <xsl:variable name="preamble">
         <xsl:call-template name="substring-before-last">
-            <xsl:with-param name="input" select="substring($plot-code,0,string-length($plot-code))" />
+            <xsl:with-param name="input" select="$plot-code"/>
             <xsl:with-param name="substr" select="'&#xa;'" />
         </xsl:call-template>
     </xsl:variable>
     <xsl:variable name="plotcmd">
         <xsl:call-template name="substring-after-last">
-            <xsl:with-param name="input" select="substring($plot-code,0,string-length($plot-code))" />
+            <xsl:with-param name="input" select="$plot-code"/>
             <xsl:with-param name="substr" select="'&#xa;'" />
         </xsl:call-template>
     </xsl:variable>
