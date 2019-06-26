@@ -62,11 +62,17 @@
 }
 
 #toc ul li.part a {
-    background-color: var(--documenttitle);
+    color: #222222;
+    background-color: var(--bodytitlehighlight);
     margin-top: 15px;
     padding-top: 6px;
     padding-bottom: 6px;
     font-size: 110%;
+    border-bottom: none;
+}
+#toc ul li.part a:hover {
+    color: #ffffff;
+    background-color: var(--highlighttoc);
 }
 
 .sidebar-content .extras a:hover {
