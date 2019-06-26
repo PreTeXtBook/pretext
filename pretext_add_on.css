@@ -895,12 +895,9 @@ body > a.assistive:focus {
     content: "\2002";
 }
 
-/*
-.pretext-content figcaption .codenumber:last-child:after {
-    display: inline;
-    content: "\2002";
-} 
-*/
+.pretext-content figcaption code.code-inline {
+    white-space: pre;
+}
 
 /* should be .emphasis instead of em */
 .pretext-content .definition-like p > em {
