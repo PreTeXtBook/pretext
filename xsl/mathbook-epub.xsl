@@ -103,14 +103,14 @@
 <!-- ############## -->
 
 <!-- Deprecation warnings are universal analysis of source and parameters   -->
-<!-- There is always a "document root" directly under the mathbook element, -->
+<!-- There is always a "document root" directly under the root element,     -->
 <!-- and we process it with the chunking template called below              -->
 <!-- Note that "docinfo" is at the same level and not structural, so killed -->
 <xsl:template match="/">
     <xsl:call-template name="banner-warning">
         <xsl:with-param name="warning">EPUB conversion is experimental and not supported.  In particular,&#xa;the XSL conversion alone is not sufficient to create an EPUB.&#xa;See mathbook/examples/epub/build.sh for more information.</xsl:with-param>
     </xsl:call-template>
-    <xsl:apply-templates select="mathbook" mode="deprecation-warnings" />
+    <xsl:apply-templates select="pretext|mathbook" mode="deprecation-warnings" />
     <xsl:call-template name="setup" />
     <xsl:call-template name="build-image-list" />
     <xsl:call-template name="package-document" />
@@ -120,7 +120,7 @@
 <!-- First, we use the frontmatter element to trigger various necessary files     -->
 <!-- We process structural nodes via chunking routine in  xsl/mathbook-common.xsl -->
 <!-- This in turn calls specific modal templates defined elsewhere in this file   -->
-<xsl:template match="mathbook">
+<xsl:template match="pretext|mathbook">
     <xsl:apply-templates select="//frontmatter" mode="epub" />
     <xsl:apply-templates mode="chunking" />
 </xsl:template>
