@@ -30,22 +30,18 @@
 <xsl:param name="html.knowl.proof" select="'no'" />
 <xsl:param name="html.knowl.definition" select="'no'" />
 <xsl:param name="html.knowl.example" select="'no'" />
+<xsl:param name="html.knowl.project" select="'no'" />
+<xsl:param name="html.knowl.task" select="'no'" />
+<xsl:param name="html.knowl.list" select="'no'" />
 <xsl:param name="html.knowl.remark" select="'no'" />
+<xsl:param name="html.knowl.objectives" select="'no'" />
+<xsl:param name="html.knowl.outcomes" select="'no'" />
 <xsl:param name="html.knowl.figure" select="'no'" />
 <xsl:param name="html.knowl.table" select="'no'" />
-<xsl:param name="html.knowl.exercise" select="'no'" />
-
-<!-- Hints, solutions, etc are typically knowled   -->
-<!-- We temporarily kill them all as a convenience -->
-<xsl:param name="exercise.text.statement" select="'yes'" />
-<xsl:param name="exercise.text.hint" select="'no'" />
-<xsl:param name="exercise.text.answer" select="'no'" />
-<xsl:param name="exercise.text.solution" select="'no'" />
-<!-- Second, an exercise in a solutions list in backmatter.-->
-<xsl:param name="exercise.backmatter.statement" select="'no'" />
-<xsl:param name="exercise.backmatter.hint" select="'no'" />
-<xsl:param name="exercise.backmatter.answer" select="'no'" />
-<xsl:param name="exercise.backmatter.solution" select="'no'" />
+<xsl:param name="html.knowl.listing" select="'no'" />
+<xsl:param name="html.knowl.exercise.inline" select="'no'" />
+<xsl:param name="html.knowl.exercise.sectional" select="'no'" />
+<xsl:param name="html.knowl.exercise.worksheet" select="'no'" />
 
 <!-- We turn off permalinks on divisions, etc. -->
 <xsl:param name="html.permalink"  select="'none'" />
@@ -634,6 +630,16 @@
         <!-- process as mixed-content, don't yet allow paragraphs -->
         <xsl:apply-templates select="*|text()" />
     </aside>
+</xsl:template>
+
+<!-- ################ -->
+<!-- Subsidiary Items -->
+<!-- ################ -->
+
+<!-- These tend to "hang" off other structures and/or are routinely -->
+<!-- rendered as knowls.  So we turn off automatic knowlization     -->
+<xsl:template match="&SOLUTION-LIKE;" mode="is-hidden">
+    <xsl:text>false</xsl:text>
 </xsl:template>
 
 <!-- ##### -->
