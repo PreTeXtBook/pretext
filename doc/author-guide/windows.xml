@@ -345,6 +345,71 @@
     </conclusion>
   </section>
 
+  <section xml:id="section-jing">
+    <title>Installing jing</title>
+    <p>
+      The <c>jing</c> utility for schema validation can be installed in Windows.
+      To install, first make sure Java is installed on your machine.
+      You can either install the official Oracle JDK from
+      <url href="https://www.oracle.com/technetwork/java/javase/downloads/index.html" />
+      or, if you prefer an open license, <url href="https://jdk.java.net/12/" />.
+      Download the <c>.zip</c> file, and extract to a folder such as <c>C:\Java</c>.
+      (Avoid installing to the Program Files folder due to the space in the folder name.)
+    </p>
+
+    <p>
+      Next, follow the installation instructions in <xref ref="jing-trang" />,
+      ignoring the <c>BUILD FAILED</c> message. You will almost certainly want
+      to copy the file <c>xercesImpl.jar</c> from the <c>lib.</c> folder into <c>build</c>.
+    </p>
+
+    <p>
+      If you are using Git Bash for processing, you may want to set up a command shortcut
+      to avoid the rather lengthy command given in <xref ref="jing-trang" />, especially
+      if you have modularized source. Before proceeding, make sure that you have configured
+      your Windows environment variables to include a path to Java.
+      For example, if you installed JDK 12.0.1 in <c>C:\Java</c> you will want the path
+      <c>C:\Java\jdk-12.0.1\bin</c>.
+    </p>
+
+    <p>
+      As suggested in <xref ref="jing-trang" />, you can set up a command in <c>.bashrc</c>.
+      Git Bash on Windows requires a <c>.bash-profile</c> to load <c>.bashrc</c>.
+      Open Git Bash and change to your user directory: <c>cd /c/Users/your.name</c>.
+      Windows does not like file names beginning with a period, so if they do not already
+      exist, you'll need to create them in Git Bash. Do <c>touch .bash-profile</c> and
+      <c>touch .bashrc</c> to create the files. Use your favorite text editor to add the line
+      <cd>
+        <cline>if [ -f ~/.bashrc ]; then . ~/.bashrc; fi</cline>
+      </cd>
+      to <c>.bashrc</c>
+    </p>
+
+    <p>
+      You can then create the <c>ptx-check</c> command as in <xref ref="jing-trang" />.
+      Absolute paths are recommended. Using the Git Bash syntax for Windows paths,
+      your definition in <c>.bashrc</c> will look something like the following:
+      <cd>
+        <cline>ptx-check() {</cline>
+        <cline>  java\</cline>
+        <cline>    -classpath /c/jing-trang/build\</cline>
+        <cline>    -Dorg.apache.xerces.xni.parser.XMLParserConfiguration=</cline>
+        <cline>      org.apache.xerces.parsers.XIncludeParserConfiguration\</cline>
+        <cline>    -jar /c/jing-trang/build/jing.jar\</cline>
+        <cline>    /c/PreTeXt/mathbook/schema/pretext.rng "$1"</cline>
+        <cline>}</cline>
+      </cd>
+      The above assumes that <c>jing-trang</c> is installed at <c>C:\jing-trang</c>
+      and that PreTeXt has been cloned at <c>C:\PreTeXt\mathbook</c>.
+      Adjust your paths as needed. You can now run validation from Git Bash using
+      <cd>
+        <cline>ptx-check ~/path/to/project/index.ptx > jing_report.txt</cline>
+      </cd>
+      and the <c>jing_report.txt</c> file will be created in your working directory.
+    </p>
+
+  </section>
+
   <section xml:id="whats-missing">
     <title>What's Missing</title>
     <p>Development of a Windows-compatible <c>mbx</c> script (<xref ref="mbx-script" />) is mostly complete. If you need help with <c>mbx</c>, contact Dave Rosoff. There are still a few use cases that haven't been tested, mostly those to do with Asymptote.</p>
