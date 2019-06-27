@@ -294,6 +294,14 @@
 <!--    Required: media-type, critical (see PNG/JPG for cover) -->
 <!-- Exactly one item has the "nav" property                   -->
 <xsl:template name="package-manifest">
+    <!-- cruise all objects within source via modal template -->
+    <!-- relevant objects report themselves and then recurse -->
+    <!-- create as a legitimate node-set for post-filtering  -->
+    <xsl:variable name="discovery">
+        <xsl:apply-templates select="$document-root" mode="manifest"/>
+    </xsl:variable>
+    <xsl:variable name="discovery-manifest" select="exsl:node-set($discovery)"/>
+    <!-- start "manifest" with one-off items -->
     <manifest xmlns="http://www.idpf.org/2007/opf">
         <item id="css" href="{$css-dir}/pretext-epub.css" media-type="text/css"/>
         <item id="cover-page" href="{$xhtml-dir}/cover-page.xhtml" media-type="application/xhtml+xml"/>
@@ -301,7 +309,14 @@
         <item id="table-contents" href="{$xhtml-dir}/table-contents.xhtml" properties="nav" media-type="application/xhtml+xml"/>
         <item id="cover-image" href="{$xhtml-dir}/images/cover.png" properties="cover-image" media-type="image/png"/>
         <!-- <item id="cover-image" href="{$xhtml-dir}/images/cover.jpg" properties="cover-image" media-type="image/jpeg"/> -->
-        <xsl:apply-templates select="$document-root" mode="manifest" />
+
+        <!-- cruise found objects, including comments we generate to help debug       -->
+        <!-- NB: * could be just "item", but we generally want all elements           -->
+        <!-- Strategy: compare @href of each candidate item with the @href of each    -->
+        <!-- preceding item, and only copy into the result tree if the @href is "new" -->
+        <xsl:for-each select="($discovery-manifest/*|$discovery-manifest/comment())[not(@href = preceding::*/@href)]">
+            <xsl:copy-of select="."/>
+        </xsl:for-each>
     </manifest>
 </xsl:template>
 
