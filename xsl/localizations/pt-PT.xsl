@@ -77,7 +77,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='conclusion'><xsl:text>Conclusão</xsl:text></localization>
     <localization string-id='exercises'><xsl:text>Exercícios</xsl:text></localization>
     <!-- <localization string-id='worksheet'><xsl:text>Worksheet</xsl:text></localization> -->
+    <!-- <localization string-id='reading-questions'><xsl:text>Reading Questions</xsl:text></localization> -->
     <!-- <localization string-id='solutions'><xsl:text>Solutions</xsl:text></localization> -->
+    <!-- <localization string-id='glossary'><xsl:text>Glossary</xsl:text></localization> -->
     <localization string-id='references'><xsl:text>Referências</xsl:text></localization>
     <localization string-id='backmatter'><xsl:text>Pós Texto</xsl:text></localization>
     <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
@@ -131,6 +133,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Translations needed for Portugal Portugese -->
     <!-- <localization string-id='list'><xsl:text>List</xsl:text></localization> -->
     <!-- <localization string-id='li'><xsl:text>Item</xsl:text></localization> -->
+    <!-- A term (word) defined in a glossary -->
+    <!-- <localization string-id='defined-term'><xsl:text>Term</xsl:text></localization> -->
     <!-- A regular paragraph, not the old sectioning structure -->
     <localization string-id='p'><xsl:text>Parágrafo</xsl:text></localization>
     <!-- <localization string-id='blockquote'><xsl:text>Quotation</xsl:text></localization> -->
@@ -140,6 +144,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- See en-US file for distinctions here, do not repeat previous translation -->
     <!-- <localization string-id='inlineexercise'><xsl:text>Checkpoint</xsl:text></localization> -->
     <!-- <localization string-id='worksheetexercise'><xsl:text>Worksheet Exercise</xsl:text></localization> -->
+    <!-- <localization string-id='readingquestion'><xsl:text>Reading Question</xsl:text></localization> -->
     <localization string-id='webwork'><xsl:text>WeBWorK</xsl:text></localization>
     <localization string-id='hint'><xsl:text>Dica</xsl:text></localization>
     <localization string-id='answer'><xsl:text>Resposta</xsl:text></localization>
@@ -171,8 +176,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <localization string-id='jump-to'><xsl:text>Jump to:</xsl:text></localization> -->
     <!-- Parts of the Index -->
     <localization string-id='index'><xsl:text>Índice Remissivo</xsl:text></localization>
-    <localization string-id='see'><xsl:text>veja</xsl:text></localization>
-    <localization string-id='also'><xsl:text>veja também</xsl:text></localization>
+    <localization string-id='see'><xsl:text>Veja</xsl:text></localization>
+    <localization string-id='also'><xsl:text>Veja também</xsl:text></localization>
     <!-- Notation List headings/foot -->
     <localization string-id='symbol'><xsl:text>Símbolo</xsl:text></localization>
     <localization string-id='description'><xsl:text>Descrição</xsl:text></localization>

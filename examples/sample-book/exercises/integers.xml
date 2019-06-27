@@ -169,7 +169,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </statement>
     </exercise>
 
-<todo>Check references to the Fibonacci numbers</todo>
+    <!-- Todo: Check references to the Fibonacci numbers -->
 
     <exercise number="17">
         <title>Fibonacci Numbers</title>

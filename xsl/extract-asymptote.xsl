@@ -45,7 +45,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Prepend document's macros, otherwise no changes -->
 <xsl:template match="image/asymptote">
     <xsl:variable name="filebase">
-        <xsl:apply-templates select=".." mode="internal-id" />
+        <xsl:apply-templates select=".." mode="visible-id" />
     </xsl:variable>
     <exsl:document href="{$scratch}/{$filebase}.asy" method="text">
         <xsl:text>texpreamble("&#xa;</xsl:text>
@@ -61,7 +61,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 2015/02/08: Deprecated, still functional but not maintained -->
 <xsl:template match="asymptote">
     <xsl:variable name="filebase">
-        <xsl:apply-templates select="." mode="internal-id" />
+        <xsl:apply-templates select="." mode="visible-id" />
     </xsl:variable>
     <exsl:document href="{$scratch}/{$filebase}.asy" method="text">
         <xsl:text>texpreamble("&#xa;</xsl:text>

@@ -48,7 +48,7 @@
 
         <p>The schema is born within a <pretext /> document, <c>schema/pretext.xml</c>, where surrounding text provides documentation and guidance on implementation.  The literate programming support in <pretext /> (see <xref provisional="literate programming documentation" />) is used to produce a file, <c>schema/pretext.rnc</c>, which is a <acro>RELAX-NG</acro> specification in compact syntax.  As the literate programming support improves from 2017-07-21, <init>HTML</init> and <init>PDF</init> versions will be made available on the <pretext /> website as documentation.  We provide some guidance below on reading the compact syntax.</p>
 
-        <p>The compact syntax is a faithful representation of the more verbose <init>XML</init> syntax.  And vice-versa, so it is possible to translate back-and-forth between the two syntaxes.  In practice, we convert the compact version to the <init>XML</init> version, producing a file <c>schema/pretext.rng</c>.  Some tools require this latter (100<percent /> equivalent) version.  We perform this conversion with <c>trang</c><idx><c>trang</c></idx>, an open source program written by James Clark, one of the authors of <acro>RELAX-NG</acro>.  (<c>trang</c> stands for <q>TRAnslator for relax NG</q>.)  The compact syntax is often indicated as <init>RNC</init> and the <init>XML</init> syntax is often indicated as <init>RNG</init>.</p>
+        <p>The compact syntax is a faithful representation of the more verbose <init>XML</init> syntax.  And vice-versa, so it is possible to translate back-and-forth between the two syntaxes.  In practice, we convert the compact version to the <init>XML</init> version, producing a file <c>schema/pretext.rng</c>.  Some tools require this latter (100% equivalent) version.  We perform this conversion with <c>trang</c><idx><c>trang</c></idx>, an open source program written by James Clark, one of the authors of <acro>RELAX-NG</acro>.  (<c>trang</c> stands for <q>TRAnslator for relax NG</q>.)  The compact syntax is often indicated as <init>RNC</init> and the <init>XML</init> syntax is often indicated as <init>RNG</init>.</p>
         <!-- acronym suggested at bottom of: http://www.thaiopensource.com/relaxng/convert-to-xsd-talk.html -->
 
         <p><init>XSD</init><idx>XSD</idx> (<init>XML</init> Schema Definition), from the World Wide Web Consortium (<init>W3C</init>), is an alternative to the <acro>RELAX-NG</acro> syntax.  It cannot express as many situations as the <acro>RELAX-NG</acro> syntax, but we have created the <pretext /> schema in a way that <c>trang</c> can convert to an <init>XSD</init> specification without introducing any more-permissive <q>approximations.</q>  But the <init>XSD</init> version seems to have a few small inaccuracies, and in particular should not be used for validation.  That said, <c>schema/pretext.xsd</c> may be useful for tools (<eg /> editors) that require it.</p>
@@ -70,16 +70,16 @@
 
             <tabular>
                 <!--  -->
-                <row><cell>element foo <lbrace /> <rbrace /></cell>
+                <row><cell>element foo { }</cell>
                 <cell>Define <tag>foo</tag> and children</cell></row>
                 <!--  -->
-                <row><cell>attribute bar <lbrace /> <rbrace /></cell>
+                <row><cell>attribute bar { }</cell>
                 <cell>Define <attr>bar</attr> and values</cell></row>
                 <!--  -->
                 <row><cell>text</cell>
                 <cell>Sequence of characters (any length)</cell></row>
                 <!--  -->
-                <row><cell>mixed <lbrace /> <rbrace /></cell>
+                <row><cell>mixed { }</cell>
                 <cell>Mixed-content, characters interleaved in pattern</cell></row>
                 <!--  -->
                 <row><cell></cell>
@@ -100,7 +100,7 @@
                 <row><cell>|</cell>
                 <cell>Choice</cell></row>
                 <!--  -->
-                <row><cell><ampersand /></cell>
+                <row><cell>&amp;</cell>
                 <cell>Sequence, any order</cell></row>
                 <!--  -->
                 <row><cell>(  )</cell>
@@ -132,7 +132,7 @@
     <section xml:id="schema-browser">
         <title>Schema Browser</title>
 
-        <p>We use the DocFlex/XML <url href="http://www.filigris.com/docflex-xml/xsddoc/">XML Schema Documentation Generator</url><idx>DocFlex/XML XML schema documentation generator</idx> to automatically produce hyperlinked documentation of the schema as part of the online documentation at the <pretext /> website, located at <url href="http://mathbook.pugetsound.edu/doc/schema/"><c>mathbook.pugetsound.edu/doc/schema/</c></url>.  Because this is produced from the <init>XSD</init> version of the schema, it will reproduce the small inaccuracies mentioned above.  But it is still a very convenient and informative way to explore the schema, or use it for reference.   If you know of a similar tool of the same quality, but which documents <acro>RELAX-NG</acro> schema, a report would be greatly appreciated.</p>
+        <p>We use the excellent <url href="http://www.flexdoc.xyz/flexdoc-xml/xsddoc/">FlexDoc/XML - XSDDoc (XML Schema Documentation Generator)</url><fn><c>www.flexdoc.xyz/flexdoc-xml/xsddoc/</c></fn><idx>FlexDoc/XML/XML XML schema documentation generator</idx> from <url href="http://www.filigris.com/">Filigris Works</url><fn><c>www.filigris.com</c></fn> to automatically produce hyperlinked documentation of the schema as part of the online documentation at the <pretext /> website, located at <url href="https://pretextbook.org/doc/schema/"><c>pretextbook.org/doc/schema/</c></url>.  Because this is produced from the <init>XSD</init> version of the schema, it will reproduce the small inaccuracies mentioned above.  But it is still a very convenient and informative way to explore the schema, or use it for reference.   If you know of a similar tool of the same quality, but which documents <acro>RELAX-NG</acro> schema, a report would be greatly appreciated.</p>
 
         <p>Do not be intimidated by the list of roughly 300 elements in the left navigation panel.  Many are configuration options, many are special-purpose, and many you will never use.  (Someday we will do lexical analysis on a substantial range of <pretext /> texts to see just which elements do get used most frequently).  Instead, scroll down to the 70 or so <q>Element Groups</q>.  These are thematic bundles of related elements, named to help you locate them later.  The right panel will list the elements near the top as part of the <q>Complex Content Model.</q>  Just below you will see the <q>Known Usage Locations</q> which list places every element in the group may appear.  Similarly, if you explore a particular element, you can see the pattern describing the attributes and elements allowed as children, and lists of the possible parents.</p>
 

@@ -7,7 +7,7 @@ GPL License.
 
 *Be sure* to checkout the dev branch, master is currently a fiction.
 
-Quickstart instructions at project website:  [mathbook.pugetsound.edu](http://mathbook.pugetsound.edu)
+Quickstart instructions at project website:  [pretextbook.org](https://pretextbook.org)
 
 Help and development discussions:
 * Support forum/mailing-list: [pretext-support](https://groups.google.com/forum/#!forum/pretext-support)
@@ -39,3 +39,5 @@ LaTeX and then developed using standard LaTeX tools.
 interaction of authors, publishers, scholars, instructors,
 students, and readers, with each group having its own needs
 and goals.
+11. PreTeXt recognizes the inherent value in producing material
+that is accessible to everyone.

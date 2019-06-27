@@ -87,10 +87,10 @@
     <!-- Heading, div for subdivision that is this page -->
     <xsl:apply-templates select="." mode="smc-html-cell">
         <xsl:with-param name="content">
-            <xsl:variable name="ident">
-                <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:variable name="hid">
+                <xsl:apply-templates select="." mode="html-id" />
             </xsl:variable>
-            <section class="{local-name(.)}" id="{$ident}">
+            <section class="{local-name(.)}" id="{$hid}">
                 <xsl:apply-templates select="." mode="section-header" />
             </section>
         </xsl:with-param>
@@ -134,10 +134,10 @@
     <!-- Subdivision heading, as its own HTML cell -->
     <xsl:apply-templates select="." mode="smc-html-cell">
         <xsl:with-param name="content">
-            <xsl:variable name="ident">
-                <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:variable name="hid">
+                <xsl:apply-templates select="." mode="html-id" />
             </xsl:variable>
-            <section class="{local-name(.)}" id="{$ident}">
+            <section class="{local-name(.)}" id="{$hid}">
                 <xsl:apply-templates select="." mode="section-header" />
             </section>
         </xsl:with-param>
@@ -153,10 +153,10 @@
 <xsl:template match="introduction|conclusion" mode="smc-cell">
     <xsl:apply-templates select="." mode="smc-html-cell">
         <xsl:with-param name="content">
-            <xsl:variable name="ident">
-                <xsl:apply-templates select="." mode="internal-id" />
+            <xsl:variable name="hid">
+                <xsl:apply-templates select="." mode="html-id" />
             </xsl:variable>
-            <article class="{local-name(.)}" id="{$ident}">
+            <article class="{local-name(.)}" id="{$hid}">
                 <h5 class="heading">
                     <xsl:apply-templates select="." mode="title-full" />
                     <span> </span>
@@ -191,7 +191,7 @@
 
 <!-- Most Sage options are implemented in  xsl/mathbook-common.xsl -->
 <!-- We just output the input code, with no XHTML protections      -->
-<xsl:template name="sage-active-markup">
+<xsl:template match="sage" mode="sage-active-markup">
     <xsl:param name="in" />
     <xsl:value-of select="$in" disable-output-escaping="yes" />
 </xsl:template>

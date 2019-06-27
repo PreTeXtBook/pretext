@@ -87,8 +87,8 @@
         <sidebyside>
             <console>
                 <prompt>$ </prompt>
-                <input>xsltproc --stringparam latex.font.size "20pt"</input>
-                <input>   /path/to/xsl/mathbook-latex.xsl ~/books/aota/animals.xml</input>
+                <input>xsltproc -o animals.tex --stringparam latex.font.size "20pt"</input>
+                <input>  /path/to/xsl/mathbook-latex.xsl ~/books/aota/animals.xml</input>
             </console>
         </sidebyside>
 
@@ -129,7 +129,7 @@
     <section xml:id="processing-images-mbx">
         <title>Images and the <c>mbx</c> Script</title>
 
-        <p>We believe it is important to preserve a record of how diagrams and other graphics are produced.  This can be easy when a graphics language is employed to describe the graphical elements, rather than creating a bit-mapped image with some other interface.  So we have <tag>asymptote</tag>, <tag>latex-image-code</tag>, and <tag>sageplot</tag> for elements holding code to produce diagrams or images<idx>image</idx>.</p>
+        <p>We believe it is important to preserve a record of how diagrams and other graphics are produced.  This can be easy when a graphics language is employed to describe the graphical elements, rather than creating a bit-mapped image with some other interface.  So we have <tag>asymptote</tag>, <tag>latex-image</tag>, and <tag>sageplot</tag> for elements holding code to produce diagrams or images<idx>image</idx>.</p>
 
         <p>The upside to this is that small edits to the code can easily accomplish minor changes or corrections necessary for the images.  The <latex /> macros provided by an author can be used in the text <em>and</em> in a diagram, leading to greater consistency between the two.  Finally, starting from source, we can do the best possible job of producing image formats that are compatible with the document output formats and which scale smoothly in PDFs and in web browsers.</p>
 
@@ -138,7 +138,26 @@
         <p>This script has a variety of options, so we document it fully in <xref ref="mbx-script" />.</p>
     </section>
 
-    <section xml:id="topic-updating-source">
+    <section xml:id="processing-author-tools">
+        <title>Author Tools</title>
+        <idx>author tools</idx>
+
+        <p>While your writing project is getting underway, you may want to go in several directions at once.  We have two devices, and three reports, which can help you manage this.</p>
+
+        <p>You may want to make a forward-reference to some future, not-yet-written material.  So you can go<cd>
+            <cline>&lt;xref provisional="a reminder of future material"/&gt;</cline>
+        </cd>in your source.  In your output, you will get a temporary place-holder of sorts.</p>
+
+        <p>Comments in the source code of a computer program, labeled <c>TODO</c>, is a common device to help a programmer remember tasks that need to be completed.  You can use a similar device in your <pretext/> source.  Use an XML comment, delimited by <c>&lt;!--</c> and <c>--&gt;</c>, and make the first four non-blank characters spell <c>todo</c>, using any combination of lower- and upper-case you like.  Your Author's Report (next) will look even better if you follow that with a colon and a space, but this is not required.  So, for example, go<cd>
+             <cline>&lt;!-- ToDo: include a section on salamanders and their life-cycle --&gt;</cline>
+        </cd>  As an XML comment, you can place this anywhere.  Contents need to be plain characters, no XML will be active here.  Remember to escape the two XML characters, and also be aware that <c>--</c> is banned in comments outside of the delimiters.</p>
+
+        <p>The <c>authors-report.xsl</c> stylesheet, found in the <c>xsl/utilities</c> directory will report all of the provisional cross-references and all of the properly prefixed todo-comments.  Apply it just like you would any of the other stylesheets achieving more complicated conversions (<xref ref="processing-basic"/>).  The report is organized by all of the divisions in use in your project.  It is meant to be simple in appearance, just text.</p>
+
+        <p>Use the <c>author.tools</c><idx><c>author.tools</c></idx> parameter set equal to <c>yes</c> and your <latex/> and <init>HTML</init> output will be annotated.  (See <xref ref="processing-stringparam"/> for more on parameters.)  Provisional cross-references and todo-comments will be visible and highlighted, and in particular, the <latex/> output will display an abundance of extra information (maybe too much).  The <latex />-specific parameter <c>latex.draft</c> set to <c>yes</c> will automatically activate the previous features, in addition to a few others appropriate to the printed page.  The intent here is to make a rough draft, for an author or collaborator only, reporting as much as possible that is incomplete, pending, or hidden, in the usual output.</p>
+    </section>
+
+    <section xml:id="processing-updating-source">
         <title>Keeping Your Source Up-to-Date</title>
 
         <p>Once in a while it becomes necessary to adjust how the <pretext /> vocabulary is arranged, which involves adding or removing elements or attributes, or changing their behavior.  When elements or attributes are removed, or their relationships with other elements change, we say that certain items or behaviors are <term>deprecated</term><idx>deprecated</idx>.  Fortunately, we can often automate the changes.</p>
@@ -163,7 +182,7 @@
             <li><p>Attributes will likely be re-ordered, with normalized spacing between them.</p></li>
             <li><p>Empty elements will have any spaces removed from the end of the tag.</p></li>
             <li><p>Elements with no content may be written with a single empty tag.</p></li>
-            <li><p><abbr>CDATA</abbr> sections will be converted to text acceptable to the <init>XML</init> parser.  In other words, the <abbr>CDATA</abbr> wrapper will be removed and dangerous characters (<ampersand />, <less />, <greater />) will be replaced by equivalent entities (such as <c>&amp;amp;</c>).  If you have many matrices expressed in <latex /> and wrapped in a <abbr>CDATA</abbr>, this might be a big change.</p></li>
+            <li><p><abbr>CDATA</abbr> sections will be converted to text acceptable to the <init>XML</init> parser.  In other words, the <abbr>CDATA</abbr> wrapper will be removed and dangerous characters (&amp;, &lt;, &gt;) will be replaced by equivalent entities (such as <c>&amp;amp;</c>).  If you have many matrices expressed in <latex /> and wrapped in a <abbr>CDATA</abbr>, this might be a big change.</p></li>
             <li><p>The output files will be labeled as having <c>UTF-8</c> encoding.</p></li>
             <li><p>It could be necessary to run this conversion more than once if deprecations build on one another.  In other words, we do not update specific conversions, but rely on regular use to keep source up-to-date.</p></li>
             <li><p>It should be safe to run this conversion repeatedly, even after new deprecations are added.  In fact, it is encouraged.</p></li>
@@ -283,14 +302,6 @@
         <p>We have many years' experience testing hundreds of non-trivial Sage examples from textbooks, for linear algebra and abstract algebra.  Roughly every six months, we discover ten to twenty examples that fail.  Frequently the failures are trivial (usually output gets re-ordered), but some are significant changes in behavior that leads us to re-word surrounding guidance in the text, and in a few cases the failures have exposed bugs introduced into Sage.  It has been relatively easy to do this maintenance on a regular basis, and if it had not been done, the accumulated errors would be enough to greatly degrade confidence in the accuracy of the examples.</p>
 
         <p>Exact details for this process can be found in <xref ref="topic-doctest-sage" />.  Note that Sage is really just a huge Python library, so it might be possible to test pure Python code with this facility, but we have not tested this at all.  Similar support for other languages can be considered if requested for use in a serious project.</p>
-    </section>
-
-    <section xml:id="processing-author-tools">
-        <title>Author Tools</title>
-
-        <p>The general stringparam <c>author-tools</c><idx><c>author-tools</c></idx> may be set to <c>yes</c> to activate special handling of the <tag>todo</tag> element, the <attr>provisional</attr> attribute of an <tag>xref</tag> element, and notation and index entries.  The <latex />-specific stringparam <c>latex.draft</c> set to <c>yes</c> will automatically activate the previous features, in addition to a few others appropriate to the printed page.  We have an XSL stylesheet that dumps every <tag>todo</tag> and every <attr>provisional</attr> attribute to the screen as a simply-formatted text report, but it is not public now.</p>
-
-        <p>The intent here is to make a rough draft, for an author or collaborator only, reporting as much as possible that is incomplete, pending or hidden in the usual output.  But none of this is carefully supported.  Requests for improvements, and overall comments, from working authors are invited.  They will help to make this feature more useful for everybody.</p>
     </section>
 
     <section xml:id="topic-build-in-cocalc">

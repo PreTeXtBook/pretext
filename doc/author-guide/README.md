@@ -1,16 +1,16 @@
 PreTeXt Author's Guide
 ======================
 
-PDF and HTML versions of this guide are available at the [PreTeXt](http://mathbook.pugetsound.edu) site in the Documentation area.
+PDF and HTML versions of this guide are available at the [PreTeXt](https://pretextbook.org) site in the Documentation area.
 
 If you wish to build from source, possibly as part of contributing improvements, follow these steps:
 
 1.  To build LaTeX for input to `pdflatex`:
         cd /path/to/mathbook
-        xsltproc --xinclude xsl/mathbook-latex.xsl doc/author-guide/author-guide.xml
+        xsltproc -xinclude -o author-guide.tex xsl/mathbook-latex.xsl doc/author-guide/author-guide.xml
 1.  And for HTML output:
         cd /path/to/mathbook
-        xsltproc --xinclude xsl/mathbook-html.xsl doc/author-guide/author-guide.xml
+        xsltproc -xinclude xsl/mathbook-html.xsl doc/author-guide/author-guide.xml
 1.  You might prefer to set your default directory to someplace outside the MathBook XML distribution and include full paths to the XSL and XML files in the `xsltproc` command, so your output is not mixed in with your source.
 
 If you are contributing new material, note that there are three important elements in use.  Please make use of them in your contribution.

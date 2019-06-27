@@ -7,7 +7,7 @@
 <!-- Copyright (C) 2013-2017  Robert A. Beezer, David Farmer  -->
 <!-- See the file COPYING for copying conditions.             -->
 
-<mathbook xmlns:xi="http://www.w3.org/2001/XInclude">
+<pretext xmlns:xi="http://www.w3.org/2001/XInclude">
 
     <docinfo>
         <!-- this is the default, but supresses a warning -->
@@ -28,12 +28,13 @@
         <xi:include href="production.xml" />
         <xi:include href="open-licenses.xml" />
         <xi:include href="conversions.xml" />
-        <xi:include href="electronic-pdf.xml" />
         <xi:include href="online-html.xml" />
-        <xi:include href="print-pdf.xml" />
+        <xi:include href="pdf-print.xml" />
         <xi:include href="epub.xml" />
         <xi:include href="jupyter-notebook.xml" />
         <xi:include href="instructor-version.xml" />
+        <xi:include href="ancillaries.xml" />
+        <xi:include href="webwork.xml" />
         <xi:include href="web-hosting.xml" />
         <xi:include href="latex-styling.xml" />
         <xi:include href="cover-design.xml" />
@@ -42,4 +43,4 @@
 
     </book>
 
-</mathbook>
+</pretext>

@@ -10,5 +10,7 @@
 <chapter xml:id="cover-design">
     <title>(*) Cover Design</title>
 
-    <p>Rationale (promotion).  Procedures for print-on-demand (generally).  Tools (Illustrator, GIMP, Inkscape).  <pretext /> support.  ISBN placement.  Capable students can do design for you.</p>
+    <p>Notes: Rationale (promotion).  Procedures for print-on-demand (generally).  Tools (Illustrator, GIMP, Inkscape). ISBN placement.  Capable students can do design for you.</p>
+
+    <p>Covers can be modified for use in an electronic <init>PDF</init> produced from the <latex/> conversion, see <xref ref="latex-cover-images"/>.</p>
 </chapter>

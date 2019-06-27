@@ -178,7 +178,7 @@ body > a.assistive:focus {
     margin-right: 1em;
 }
 
-/* see http://mathbook.pugetsound.edu/examples/sample-book/html/references-1.html */
+/* see http://pretextbook.org/examples/sample-book/html/references-1.html */
 .mathbook-content .bibitem + .bibentry {
     display: inline-block;
     width: 90%;
@@ -1866,7 +1866,7 @@ article.example-like:after {
 .mathbook-content article.example-like > *:last-child::after {
     margin-bottom: 0;
 }
-/* List 12.3 at http://mathbook.pugetsound.edu/examples/sample-article/html/section-12.html
+/* List 12.3 at http://pretextbook.org/examples/sample-article/html/section-12.html
  [[put somethign here]]
  */
 .mathbook-content article.example-like + .posterior {
@@ -2296,7 +2296,7 @@ a > article.example-like:after {
     margin-left: 0.5em;
 }
 
-/* http://mathbook.pugetsound.edu/beta/contibutor-list-20161130/preface-2.html
+/* http://pretextbook.org/beta/contibutor-list-20161130/preface-2.html
  * */
 
 .mathbook-content .contributor .contributor-name {
@@ -2444,7 +2444,7 @@ body.sidebar-left-closed .searchwrapper {
 
 /*
 nested tasks. see
-http://mathbook.pugetsound.edu/examples/sample-article/html/interesting-corollary.html
+http://pretextbook.org/examples/sample-article/html/interesting-corollary.html
 */
 
 .mathbook-content .exercise-like > .exercise-like {

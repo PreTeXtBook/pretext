@@ -2,12 +2,12 @@
 
 <!--   This file is part of the documentation of PreTeXt      -->
 <!--                                                          -->
-<!--    <pretext /> User's Guide                             -->
+<!--    <pretext /> Author's Guide                            -->
 <!--                                                          -->
 <!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
 <!-- See the file COPYING for copying conditions.             -->
 
-<mathbook xmlns:xi="http://www.w3.org/2001/XInclude">
+<pretext xmlns:xi="http://www.w3.org/2001/XInclude">
 
     <docinfo>
         <!-- this is the default, but supresses a warning -->
@@ -17,11 +17,11 @@
                 <cx>008832104071767086392:woji51c1uko</cx>
             </google>
         </search>
-        <rename element="note" lang="en-US">Best Practice</rename>
+        <rename element="note" xml:lang="en-US">Best Practice</rename>
         <!-- There does not need to be a trailing / on the URL -->
         <!-- NB This is likely to change, it should be a publisher option -->
         <html>
-            <baseurl href="http://mathbook.pugetsound.edu/doc/author-guide/html" />
+            <baseurl href="https://pretextbook.org/doc/author-guide/html" />
         </html>
 
 
@@ -37,7 +37,6 @@
         <xi:include href="processing.xml" />
         <xi:include href="schema.xml" />
         <xi:include href="topics.xml" />
-        <xi:include href="add-ons.xml" />
         <xi:include href="advice.xml" />
         <xi:include href="mbx-script.xml" />
         <xi:include href="webwork.xml" />
@@ -45,4 +44,4 @@
 
     </book>
 
-</mathbook>
+</pretext>

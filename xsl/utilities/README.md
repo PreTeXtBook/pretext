@@ -13,5 +13,11 @@ $ xsltproc /path/to/xsl/utilities/fix-deprecations.xsl -stringparam fix all /pat
 
 $ diff /path/to/examples/sample-errors-and-warnings.xml new-sample.xml
 ```
-
 (Updated: 2017-07-04)
+
+
+## Author Report
+
+`author-report.xsl` is a very simple stylesheet which will produce a text version of items in your source that could benefit from your attention.  This is different than validating your PreTeXt source against the schema, but is part of using automated tools to ensure healthy source material.
+
+(Updated: 2018-12-09)

@@ -50,7 +50,7 @@
             <p>
               The instructions above are for Python<nbsp/>2.  For Python<nbsp />3,
               as well as further discussion, see the
-              <url href="http://mathbook.pugetsound.edu/doc/author-guide/html/processing-testing-html.html">Author's Guide</url>.
+              <url href="https://pretextbook.org/doc/author-guide/html/processing-testing-html.html">Author's Guide</url>.
             </p>
         </li>
 
@@ -207,7 +207,7 @@
             <title>I have great output, so why does validation produce hundreds of errors?</title>
             <p>Success with a tool like <c>xsltproc</c>, in terms of no errors and great-looking output, does not mean your source is correct.  <init>XSLT</init> processing can be forgiving, and many invalid constructions just work, and look great.  But that is no guaranteee this situation will continue, or the same happy accidents occur for a conversion to a different output format.</p>
 
-            <p>We do raise some errors during processing with <c>xsltproc</c>, but error-checking your input is a job for a validator, so in theory we should not ever produce any errors during a conversion.  So strive for having 100<percent /> valid <pretext /> source, not simply great-looking results.  See <xref ref="schema" /> and <xref ref="schema-install" />.</p>
+            <p>We do raise some errors during processing with <c>xsltproc</c>, but error-checking your input is a job for a validator, so in theory we should not ever produce any errors during a conversion.  So strive for having 100% valid <pretext /> source, not simply great-looking results.  See <xref ref="schema" /> and <xref ref="schema-install" />.</p>
         </li>
 
         <li>

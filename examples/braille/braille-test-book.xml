@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--********************************************************************
+Copyright 2019 Robert A. Beezer
+
+This file is part of PreTeXt.
+
+PreTeXt is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+PreTeXt is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+
+<pretext>
+
+    <docinfo/>
+
+    <book>
+        <title>A Test Book</title>
+
+        <frontmatter>
+            <titlepage>
+                <author>
+                    <personname>Robert A. Beezer</personname>
+                    <department>Department of Mathematics and Computer Science</department>
+                    <institution>University of Puget Sound</institution>
+                    <email>beezer@pugetsound.edu</email>
+                </author>
+
+                <date><today /></date>
+            </titlepage>
+
+            <preface>
+                <p>This is a <pretext/> book designed to test conversions to Braille without too much extraneous material.  We will describe here what should have been apparent in the front matter.  This will be expanded as we get more and more parts of the book under control.  The title of the entire book is <q>A Test Book</q> and the author is <q>Robert A. Beezer</q>.  The date will change, but should be something recent.</p>
+
+                <p>Note: 2019-05-27, this next paragraph is wrong, the preface is being formatted like a section.  Problem is understood, but a fix has wide implications, so has not been attempted. </p>
+
+                <p>This preface should have formatting similar to a chapter, which is described carefully in <xref ref="chapter-divisions"/>.  The one difference is that a preface is not numbered, so there will be just a title, centered, followed by a blank line.  We can give a preface a title, such as <articletitle>Preface to the Second Edition</articletitle>, but here we have let <pretext/> provide a default title.</p>
+            </preface>
+
+            <!-- colophon later -->
+        </frontmatter>
+
+        <chapter xml:id="chapter-divisions">
+            <title>Divisions: A Chapter Heading</title>
+
+            <introduction>
+                <p>We test headings of divisions.  Chapter, Section, Subdivision, Subsubdivision.  Each will have a title, and each will be structured as a <pretext/> <q>introduction</q> followed by a single subdivision.  This is the introduction to the chapter.  In Braille, it will start a new page, have the word <q>Chapter</q>, followed by a number on a centered line all by itself, followed by a line with the text of the title, and then a blank line will separate the first line of content.</p>
+
+                <p>The word <q>Chapter</q> is supplied automatically in the language of the book (French, Portugese, etc.).  But it could be ommitted if the formatting (page break, etc.) is enough to indicate a new chapter.</p>
+            </introduction>
+
+            <section>
+                <title>A Section Heading</title>
+
+                <introduction>
+                    <p>The introduction to the section with some extra text to run onto a new line of the BRF output that may not be indented.</p>
+
+                    <p>Sections, subsections, and subsubsections (which all follow) have a blank line prior, indentation of four spaces, then the word for the division (e.g. <q>subsection</q>) followed by a number.  Content begins on the next line, typically indented two spaces because a paragraph starts there.</p>
+
+                    <p>The word for the division could be omitted if we thought the hierachical number was enough to let the reader know how deep they are in the divisions.  In other words, <q>5.6.2</q> must be the number of a subsection, so writing <q>Subsection</q> could be considered redundant.  Most <pretext/> conversions only use <q>Chapter</q> in these situations.</p>
+                </introduction>
+
+                <subsection>
+                    <title>A Subsection Heading</title>
+
+                    <introduction>
+                        <p>The introduction to the subsection with some extra text to run onto a new line of the BRF output that may not be indented.</p>
+                    </introduction>
+
+                    <subsubsection>
+                        <title>A Subsubsection Heading</title>
+
+                        <p>The subsubsection is terminal, so this is the actual content of the division, rather than an introduction to a further division.</p>
+
+                        <p>However, any division may contain a <pretext/> construct called a <q>paragraphs</q>.  It has a title and some content, and cannot be subdivided.  We test one next.</p>
+
+                        <paragraphs>
+                            <title>A Paragraphs Heading</title>
+
+                            <p>(2019-05-27:  Have not attempted to make the title in <q>run-in</q> style yet, but it should be do-able.)  The content of a lightweight, terminal, <q>pargraphs</q> division with some extra text to run onto a new line of the BRF output that may not be indented.</p>
+                        </paragraphs>
+                    </subsubsection>
+                </subsection>
+            </section>
+        </chapter>
+
+        <chapter>
+            <title>Literary Text</title>
+
+            <introduction>
+                <p>In this chapter we test widespread (i.e. not mathematical) constructions which would appear in a typical paragraph.</p>
+            </introduction>
+
+            <section>
+                <title>Distinguished Text</title>
+
+                <p>Portions of text are often distinguished, using vehicles like font changes, enclosing quotation marks, underlining, and/or color.  Within <pretext/> we have semantic markup, so we are free to translate to forms that work better via Braille.  Properly, this should be a list, but we have not tested those yet.  So we will put each example into a paragraph of its own for now.  One distinguished word or phrase per sentence, one sentence at the start of the paragraph, followed by comments.</p>
+
+                <p>We emphasize the word <em>emphasis</em>.</p>
+
+                <p>An <alert>alert</alert> is more imperative, like a warning.  Default presentation is bold-italic, but we have not figured out how to make liblouis react correctly to nesting the two.  Perhaps we need to creat a new liblouis style.  For now, just plain bold is an acceptable presentation for this element.</p>
+
+                <p>A <term>definition</term> mid-sentence is terminology.</p>
+
+                <p>We used <q>enclosing double quotes</q> earlier, since we knew they behaved properly.</p>
+
+                <p>Maybe <sq>enclosing single quotes</sq> are not so useful, but still necessary.  Apparently an apostrophe and a single right quote are a real problem for Braille translation (and this problem is not limited to Braille).  I think I can have <pretext/> output the Unicode dot patterns and then liblouis will create the right ASCII character for the BRF file.  Can you tell me the exact dot patterns for an opening (left) single quote and a (closing) right single quote?  This may be a place where <pretext/> can shine.</p>
+
+                <p>We employ a <c>heavyweight monospace font</c> for literal text, especially in technical situations.  Right now, we do not distinguish this text.  However, see the liblouis documentation for compbrl and changeTable to perhaps get <q>Computer Braille</q> for inline code.</p>
+
+                <p>A <foreign>phrase from a foreign language</foreign> is usually distinguished.</p>
+
+                <p>The title of this publication is <pubtitle>A Test Book</pubtitle>.</p>
+
+                <p>A shorter document might be referenced as a <articletitle>A Test Article</articletitle>.</p>
+
+                <p>Esoteric: text can be grouped in <angles>angle brackets</angles>.</p>
+
+                <p>Esoteric: text can be grouped in <dblbrackets>double brackets</dblbrackets>.  Now simply two brackets repeated.</p>
+
+                <p>There is much more to check, but above is a good start on common constructions.  In the <pretext/> schema chase through the <q>TextLong</q> definition to find more.</p>
+            </section>
+        </chapter>
+
+        <chapter>
+            <title>Environments, Blocks</title>
+
+            <p><pretext/> has many chunks of text with a heading and a number.  We can proably decide to do this in a way that makes sense for mathematics texts.  Theorems are more complicated, since they have associated proofs.  We will start simple with a defintion and an example, and iterate to more types and more complicated structures.</p>
+
+            <p>The <q>box lines</q> are configured and provided by liblouis.  I have intentionally used a different character for the top line versus the bottom line.  These characters can change, and if you suggested dot patterns I may be able to configure those choices.  The blank line before each seems to be non-negotiable.  Of course, we do not need to have either line at all<mdash/>the start is obvious from the heading.  But the conclusion needs some sort of device to not have it run into <q>regular</q> text following.</p>
+
+            <definition>
+                <title>Right Triangle</title>
+
+                <statement>
+                    <p>A <term>right triangle</term> has one of its three angles subtending a quarter of a circle.</p>
+                    <p>And this second paragraph is part of the definition.</p>
+                </statement>
+            </definition>
+
+            <p>This faux paragraph is not part of the definition nor of the example, so we particularly want the reader to not think it is part of the preceding definition.</p>
+
+            <example>
+                <statement>
+                    <p>This is an example of an example.  We did not include a title (as we did for the definition) to test this option.</p>
+                    <p>A second paragraph of the example.  Eventually we will add a hint, and maybe two different solutions.  Perhaps each starting on a new line with text like <q>Hint</q> or <q>Hint:</q>.  Advice welcome.</p>
+                </statement>
+            </example>
+
+            <p>Final paragraph of the chapter on environments and blocks.</p>
+        </chapter>
+
+        <chapter>
+            <title>Lists</title>
+
+            <p>These lists can have more complicated items (structured with paragraphs), and lists can be nested.  We start simple.</p>
+
+            <p>A super-simple ordered list, which <pretext/> requires to be authored inside a paragraph.<ol>
+                <li>Create a perpendicular bisector.</li>
+                <li>Mark off distance <m>a</m>. And we write some more that should become an indented second line.</li>
+                <li>Create a circle of radius <m>b</m> centered at <m>a</m>.</li>
+            </ol>And this sentence finishes the paragraph holding the ordered list.</p>
+
+            <p>A super-simple unordered list, which <pretext/> requires to be authored inside a paragraph.  I have used an asterisk as the marker for the start of each list item.  Perhaps it is not necessary (given indentation?) or you may want to suggest a different character (via a dot pattern?).<ul>
+                <li>Copy lengths.</li>
+                <li>Bisect segments.</li>
+                <li>Create arcs.</li>
+            </ul>And this sentence finishes the paragraph holding the unordered list.</p>
+
+            <p>TODO: list items structured with paragraphs, nested lists, description lists.</p>
+
+        </chapter>
+
+        <chapter>
+            <title>Tables</title>
+
+            <p>A table of names of colors, with a title (a coming change in <pretext/>), with two rows and three columns.  Note: the title is not being displayed yet.</p>
+
+            <table>
+                <title>Some Colors</title>
+                <tabular>
+                    <row>
+                        <cell>Red</cell>
+                        <cell>Green</cell>
+                        <cell>Yellow</cell>
+                    </row>
+                    <row>
+                        <cell>Blue</cell>
+                        <cell>White</cell>
+                        <cell>Pink</cell>
+                    </row>
+                </tabular>
+            </table>
+
+            <p>Lots more to do here: a table row that exceeds the 40-character width and multi-column cells.  See how an upcoming <pretext/> implementation of a title on a table behaves here.</p>
+
+        </chapter>
+
+        <chapter>
+            <title>MISCELLANEOUS - DO NOT REVIEW</title>
+
+            <theorem xml:id="pythagorean-theorem">
+                <title>The Pythagorean Theorem</title>
+
+                <p>For a right triangle with side lengths <m>a, b, c</m>, where the side of length <m>c</m> is opposite the right angle, we have<me>a^2 + b^2 = c^2</me>.</p>
+            </theorem>
+
+            <p>The concluding period of the statement of the theorem will be absorbed into the displayed mathematics in a print version.  For Braille, we want the period to remain detached, so it is rendered as literary text and not with Nemeth Braille.</p>
+
+            <p><pretext/> encourages cross-references, so we now reference the previous result: <xref ref="pythagorean-theorem"/>.  While the <c>liblouis</c> library seems to be able to reference <q>endnotes</q>, there does not appear to be a mechanism for general cross-references.</p>
+
+            <paragraphs>
+                <title>Quotations</title>
+
+                <p>It seems that <c>liblouis</c> converts Unicode quote marks into opening and closing variants, and recognizes double versus single.  Patterns are 2-3-6 and 3-5-6 for the double quote marks, with a shift/capital indicator for the single versions.  Two tests from Alex Jordan, where we just employ our standard conversion to <q>smart</q> Unicode variants and we let <c>liblouis</c> do the rest. <q>Life is about making an impact, not making an income.</q> <sq>Whatever the mind of man can conceive and believe, it can achieve.</sq>  Here we test individual words:  <q>double</q> and <q>single</q>.  And the four relevant characters isolated inside parentheses:  (<lq/>), (<rq/>), (<lsq/>), (<rsq/>).</p>
+
+                <p>Now we try a block quotation from Dr.<nbsp/>Seuss.  We have done nothing extra to try to get the attribution correct yet, though it appears to convert the quotation dash into a hyphen (good).  Just now, when using his name, we put a non-breaking space between the abbreciation for Doctor and his surname, as we might commonly do in light of other conversions' behavior.  It seems to have become nothing special (which is also good).</p>
+
+                <blockquote xml:id="blockquote-seuss">
+                    <p>The problem with writing a book in verse is, to be successful, it has to sound like you knocked it off on a rainy Friday afternoon. It has to sound easy. When you can do it, it helps tremendously because it's a thing that forces kids to read on. You have this unconsummated feeling if you stop.</p>
+                    <attribution>Dr. Seuss</attribution>
+                </blockquote>
+            </paragraphs>
+
+        </chapter>
+    </book>
+
+</pretext>

@@ -93,6 +93,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </s:rule>
     </s:pattern>
 
+    <!-- WeBWorK cannot handle all the flexibility of a PreTeXt tabular -->
+    <s:pattern>
+        <s:rule context="webwork//tabular">
+            <s:report test="col/@top" diagnostics="enclosing-title enclosing-id">column-specific top border attributes are not implemented for the output of a WeBWorK PG table produced by WeBWorK's hardcopy production engine</s:report>
+            <s:report test="cell/@bottom" diagnostics="enclosing-title enclosing-id">cell-specific bottom border attributes are not implemented for the output of a WeBWorK PG table produced by WeBWorK's hardcopy production engine</s:report>
+            <s:report test="//*[@top='major' or @bottom='major' or @left='major' or @right='major']" diagnostics="enclosing-title enclosing-id">'major' table rule attributes will be handled as 'minor' in the output of a WeBWorK PG table produced by WeBWorK's hardcopy production engine</s:report>
+            <s:report test="//*[@top='medium' or @bottom='medium' or @left='medium' or @right='medium']" diagnostics="enclosing-title enclosing-id">'medium' table rule attributes will be handled as 'minor' in the output of a WeBWorK PG table produced by WeBWorK's hardcopy production engine</s:report>
+        </s:rule>
+    </s:pattern>
+
+
     <s:diagnostics>
         <s:diagnostic id="enclosing-title" xml:space="default">
             <s:value-of select="'&#xa;Enclosing Title:    &quot;'"/>

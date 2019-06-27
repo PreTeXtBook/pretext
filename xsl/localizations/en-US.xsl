@@ -65,6 +65,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='memo'><xsl:text>Memo</xsl:text></localization>
     <localization string-id='presentation'><xsl:text>Presentation</xsl:text></localization>
     <!-- Parts of a document -->
+    <!-- "part" will also be used for a "stage" of a WeBWorK problem -->
     <localization string-id='frontmatter'><xsl:text>Front Matter</xsl:text></localization>
     <localization string-id='part'><xsl:text>Part</xsl:text></localization>
     <localization string-id='chapter'><xsl:text>Chapter</xsl:text></localization>
@@ -76,7 +77,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='conclusion'><xsl:text>Conclusion</xsl:text></localization>
     <localization string-id='exercises'><xsl:text>Exercises</xsl:text></localization>
     <localization string-id='worksheet'><xsl:text>Worksheet</xsl:text></localization>
+    <localization string-id='reading-questions'><xsl:text>Reading Questions</xsl:text></localization>
     <localization string-id='solutions'><xsl:text>Solutions</xsl:text></localization>
+    <localization string-id='glossary'><xsl:text>Glossary</xsl:text></localization>
     <localization string-id='references'><xsl:text>References</xsl:text></localization>
     <localization string-id='backmatter'><xsl:text>Back Matter</xsl:text></localization>
     <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
@@ -127,6 +130,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Lists and their items -->
     <localization string-id='list'><xsl:text>List</xsl:text></localization>
     <localization string-id='li'><xsl:text>Item</xsl:text></localization>
+    <!-- A term (word) defined in a glossary -->
+    <localization string-id='defined-term'><xsl:text>Term</xsl:text></localization>
     <!-- A regular paragraph, not the old sectioning structure -->
     <localization string-id='p'><xsl:text>Paragraph</xsl:text></localization>
     <localization string-id='blockquote'><xsl:text>Quotation</xsl:text></localization>
@@ -136,6 +141,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- An "exercise" whose parent is a division (chapter, section, etc) we       -->
     <!-- call an "inline exercise" and the string employed is 'inlineexercise'.    -->
     <!-- And an "exercise" in a "worksheet" is a 'worksheetexercise'.              -->
+    <!-- And an "exercise" in a "reading-questions" is a 'readingquestion'.         -->
     <!-- It is important to use different translations so that a text with         -->
     <!-- different types of exercises do not have ambiguous cross-references       -->
     <!-- (there is an example of this at the start of one of the later             -->
@@ -150,6 +156,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='divisionalexercise'><xsl:text>Exercise</xsl:text></localization>
     <localization string-id='inlineexercise'><xsl:text>Checkpoint</xsl:text></localization>
     <localization string-id='worksheetexercise'><xsl:text>Worksheet Exercise</xsl:text></localization>
+    <localization string-id='readingquestion'><xsl:text>Reading Question</xsl:text></localization>
     <localization string-id='webwork'><xsl:text>WeBWorK</xsl:text></localization>
     <localization string-id='hint'><xsl:text>Hint</xsl:text></localization>
     <localization string-id='answer'><xsl:text>Answer</xsl:text></localization>
@@ -177,8 +184,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='jump-to'><xsl:text>Jump to:</xsl:text></localization>
     <!-- Parts of the Index -->
     <localization string-id='index'><xsl:text>Index</xsl:text></localization>
-    <localization string-id='see'><xsl:text>see</xsl:text></localization>
-    <localization string-id='also'><xsl:text>see also</xsl:text></localization>
+    <localization string-id='see'><xsl:text>See</xsl:text></localization>
+    <localization string-id='also'><xsl:text>See also</xsl:text></localization>
     <!-- Notation List headings/foot -->
     <localization string-id='symbol'><xsl:text>Symbol</xsl:text></localization>
     <localization string-id='description'><xsl:text>Description</xsl:text></localization>

@@ -24,9 +24,9 @@
 <!-- like a chapter of a book.  So it has several sections, -->
 <!-- each with mathematical content and WeBWorK problems.   -->
 
-<mathbook>
+<pretext>
     <!-- Other languages can be used to internationalize parts of a document -->
-    <!-- <mathbook xml:lang="pt-BR"> -->
+    <!-- <pretext xml:lang="pt-BR"> -->
 
     <!-- "docinfo" is like metadata, it is necessary technical -->
     <!-- information which a reader mostly will never see. -->
@@ -111,7 +111,7 @@
                 <p>This is a sample article to demonstrate integrating <webwork /> homework problems into content authored with <pretext />.  While technically an example of <pretext />'s <c>article</c> format, it is intended to closely resemble a chapter of a <pretext /> <c>book</c> that is divided into sections.</p>
                 <p>This work was funded with grants from <url href="http://openoregon.org/">OpenOregon</url> and the <url href="http://pugetsound.edu">University of Puget Sound</url>.</p>
                 <p>Rob Beezer (University of Puget Sound) and Alex Jordan (Portland Community College) worked on the <pretext /> enhancements that make this possible. Mike Gage (Univeristy of Rochester), Geoff Goehle (Western Carolina University), and Alex Jordan made this possible by enhancing the <webwork /> end, and generally maintaining <webwork /> software.</p>
-                <p>This article assumes a mild familiarity with both <url href="http://mathbook.pugetsound.edu/"><pretext /></url> and <url href="http://webwork.maa.org/wiki/Main_Page"><webwork /></url>. For more information about either project, follow the links.</p>
+                <p>This article assumes a mild familiarity with both <url href="https://pretextbook.org/"><pretext /></url> and <url href="http://webwork.maa.org/wiki/Main_Page"><webwork /></url>. For more information about either project, follow the links.</p>
             </abstract>
 
         </frontmatter>
@@ -263,8 +263,8 @@
                     </statement>
 
                     <solution>
-                        <p>We <em>add</em> the exponents as follows:<md>
-                            <mrow><var name="$expression" />&amp;=x^{<var name="$a" />+<var name="$b" />}</mrow>
+                        <p>We <em>add</em> the exponents as follows, while including a gratuitous reference to the quadratic formula:<md>
+                            <mrow><var name="$expression" />&amp;=x^{<var name="$a" />+<var name="$b" />}&amp;<xref ref="theorem-quadratic-formula" text="type-global"/></mrow>
                             <mrow>&amp;=x^{<var name="$c" />}</mrow>
                         </md></p>
                     </solution>
@@ -321,7 +321,7 @@
                     </statement>
                 </webwork>
                 <conclusion>
-                    <p>For more about problems that do not require any randomization, see the <url href="http://mathbook.pugetsound.edu/documentation.html">PTX Author Guide</url>.</p>
+                    <p>For more about problems that do not require any randomization, see the <url href="https://pretextbook.org/documentation.html">PTX Author Guide</url>.</p>
                 </conclusion>
             </exercise>
 
@@ -564,9 +564,9 @@
         </section>
 
         <section>
-            <title>PGML Formatting Calisthenics</title>
+            <title>PGML Formatting and Verbatim Calisthenics</title>
 
-            <p>This section has one exercise, designed to test various PGML formatting rules in an exercise with no purpose. Consult the source to see how the special characters and formatting are realized.</p>
+            <p>This section is designed to test various PGML formatting rules and verbatim content returned in answer hashes. Consult the source to see how the special characters and formatting are realized.</p>
 
             <exercise xml:id="ww-PGML-format">
                 <title>PGML Formatting</title>
@@ -575,26 +575,120 @@
                     <statement>
                         <p>Smart double quotes: <q>Life is about making an impact, not making an income.</q></p>
                         <p>Smart single quotes: <sq>Whatever the mind of man can conceive and believe, it can achieve.</sq></p>
+                        <p>Regular apostrophes: My siblings' mother's daughter isn't my daughter's siblings' mother.</p>
                         <p>Emphasis: <em>very important</em></p>
                         <p>Alert: <alert>do not</alert> do it</p>
-                        <p>Verbatim: code, <c>with special characters: a * , a \, and a #</c></p>
+                        <p>Braces: <braces>text that looks like a set</braces></p>
                         <!-- uncomment next to test, will not activate generally in sample document -->
                         <!-- <p>Verbatim: code, <c>with banned substring: [|</c></p>                -->
                         <pre>
                             Some pre-formatted text
                                         with an indented line
                         and an out-dented line
+                        This should not be altered *a problem*
+                        And this [$NDASH]* should not be an en-dash
                         </pre>
 
-                        <p>Some of <latex />'s special characters:</p>
-                        <p><hash /> <dollar /> <percent /> <circumflex /> <ampersand /> <underscore /> <lbrace /> <rbrace /> <tilde />  <backslash /></p>
+                        <p>
+                            Here is some inline <c>code with special characters &amp; &lt; &gt; " ' # $ % ^ _ { } ~ \ * [ ]</c>,
+                            and here is some <cd>single-line display code with special characters &amp; &lt; &gt; " ' # $ % ^ _ { } ~ \ * [ ]</cd>
+                            and here is some
+                            <cd>
+                                <cline>multi-line display</cline>
+                                <cline>code with special characters &amp; &lt; &gt; " ' # $ % ^ _ { } ~ \ * [ ]</cline>
+                            </cd>
+                        </p>
 
-                        <p>Some characters that need special handling for PG conversion to HTML or <latex />:</p>
+                        <p>Some raw characters, XML/HTML:    &amp; &lt; &gt; " '</p>
+                        <p>Some raw characters, <latex/>:    # $ % ^ &amp; _ { } ~ \</p>
+                        <p>Some raw characters, PGML:        \ * # { } [ ]</p>
+
+                        <p>Some characters that need special handling for PGML conversion to HTML or <latex />:</p>
 
                         <p>A non<nbsp />breaking space (invisble where a hyphen should be)</p>
                         <p>An ndash<ndash />right here.</p>
                         <p>An mdash<mdash />right here.</p>
 
+                        <p>Some constructions in <q>normal</q> text, which need to be manipulated, lest they get interpreted as PGML markup:</p>
+
+                        <p>&gt;&gt; This should not be a centered line &lt;&lt;</p>
+
+                        <p>&gt;&gt; Nor a right-justified line, either</p>
+
+                        <p>We should not get _a phrase in italics_ in the midst of this sentence.</p>
+
+                        <p>Brackets, unpaired; ] with content between [</p>
+
+                        <p>Brackets, paired, in PGML constructions; [$NDASH]*, [___]{$answer}</p>
+
+                        <p>### This should not be a level 3 heading</p>
+
+                        <p>===   Not a horizontal rule from three equal signs</p>
+                        <p>==    Not a horizontal rule from two equal signs</p>
+                        <p>===== Not a horizontal rule from five equal signs</p>
+                        <p>---   Not a horizontal rule from three hyphens</p>
+                        <p>--    Not a horizontal rule from two hyphens</p>
+                        <p>----- Not a horizontal rule from five hyphens</p>
+
+                        <p>+ Not an unordered list item</p>
+                        <p>- Not an unordered list item</p>
+
+                    </statement>
+                </webwork>
+            </exercise>
+
+            <p>Here we make MathObject String answers to see how they turn out in answer elements.</p>
+
+            <exercise>
+                <webwork>
+                    <setup>
+                        <pg-code>
+                            $xmlchars = q(&lt;>&amp;'";);
+                            $latex0 = '#%&amp;&lt;>\^_`|~';
+                            $latex1 = '${}';
+                            $alphanumeric = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+                            $otherchars = '!()*+,-./:=?@[]';
+                            Context()->strings->add($xmlchars=>{});
+                            Context()->strings->add($latex0=>{});
+                            Context()->strings->add($latex1=>{});
+                            Context()->strings->add($alphanumeric=>{});
+                            Context()->strings->add($otherchars=>{});
+                            $xmlcharsMO = String($xmlchars);
+                            $latex0MO = String($latex0);
+                            $latex1MO = String($latex1);
+                            $alphanumericMO = String($alphanumeric);
+                            $othercharsMO = String($otherchars);
+                        </pg-code>
+                    </setup>
+                    <statement>
+                        <p><ol>
+                            <li>
+                                <p>Special characters used by XML, character escaping: <var name="$xmlchars" /></p>
+                                <p>Now as a MathObject: <var name="$xmlcharsMO" /></p>
+                                <p><var name="$xmlchars" width="6" /></p>
+                            </li>
+                            <li>
+                                <p>Special characters used by LaTeX, where LaTeX <c>\text</c> and MathJax <c>\text</c> disagree: <var name="$latex0" /></p>
+                                <p>Now as a MathObject: <var name="$latex0MO" /></p>
+                                <p><var name="$latex0" width="11" /></p>
+                            </li>
+                            <li>
+                                <p>Special characters used by LaTeX, where LaTeX <c>\text</c> and MathJax <c>\text</c> can agree: <var name="$latex1" /></p>
+                                <p>Now as a MathObject: <var name="$latex1MO" /></p>
+                                <p><var name="$latex1" width="3" /></p>
+                            </li>
+                            <li>
+                                <p>Alphanumeric characters: <var name="$alphanumeric" /></p>
+                                <p>Now as a MathObject: <var name="$alphanumericMO" /></p>
+                                <p><var name="$alphanumeric" width="62" /></p>
+                            </li>
+                            <li>
+                                <p>Other characters: <var name="$otherchars" /></p>
+                                <p>Now as a MathObject: <var name="$othercharsMO" /></p>
+                                <p><var name="$otherchars" width="15" /></p>
+                            </li>
+                        </ol></p>
+                        <p>In answers, because of <latex/> and MathJax divergence, the first two should come out in verbatim. (And so should any string containing even one of those characters.) The latter three should come out in regular text.</p>
                     </statement>
                 </webwork>
             </exercise>
@@ -645,8 +739,7 @@
                         <pg-code>
                             $theorem = RadioButtons(
                               ["The Quadratic Formula","The Fundamental Theorem of Calculus","The Fundamental Theorem of Arithmetic","None of these"],
-                              "The Fundamental Theorem of Calculus", # correct answer
-                              last => ["None of these"], # can be a list
+                              1, # index of correct answer; could also just be the correct answer
                             );
                         </pg-code>
                     </setup>
@@ -937,16 +1030,9 @@
 
                     <setup>
                         <pg-code>
-                            $color1 = PopUp(
-                                ["?","Red","Blue","Green"],
-                                "Blue",
-                            );
+                            $color1 = PopUp(["?","Red","Blue","Green"], 2);
 
-                            $color2 = RadioButtons(
-                              ["Red","Blue","Green","None of these"],
-                              "Blue", # correct answer
-                              last => ["None of these"], # can be a list
-                            );
+                            $color2 = RadioButtons(["Red","Blue","Green","None of these"], 1);
 
                         </pg-code>
                      <!-- include below in pg-code once checkboxes implemented
@@ -982,6 +1068,23 @@
                     </solution>
 
                 </webwork>
+            </exercise>
+
+            <exercise>
+                <webwork>
+                    <setup>
+                        <pg-code>
+                              $expressions = RadioButtons(['\(x\)','\(x^2\)','\(2^x\)'], 2);
+                        </pg-code>
+                    </setup>
+                    <statement>
+                        <p>There is math in each option for this question. Which expression is not a polynomial? <var name="$expressions" form="buttons"/></p>
+                    </statement>
+                    <solution>
+                        <p>The answer is <var name="$expressions"/>.</p>
+                    </solution>
+                </webwork>
+
             </exercise>
 
             <exercise>
@@ -1806,4 +1909,4 @@
             </solutions>
         </backmatter>
     </article>
-</mathbook>
+</pretext>

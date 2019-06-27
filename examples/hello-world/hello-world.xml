@@ -19,26 +19,26 @@ You should have received a copy of the GNU General Public License
 along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************-->
 
-<!-- This is an absolute bare minumum example of MathBook XML.                -->
-<!-- For a small, but more informative example, see the                       -->
-<!-- "minimal" example in examples/minimal.  To use:                          -->
-<!--                                                                          -->
-<!-- 1.  Use  git  to clone MathBook XML onto your local machine              -->
-<!--                                                                          -->
-<!-- 2.  Possibly checkout the  dev  branch                                   -->
-<!--                                                                          -->
-<!-- 3.  Check that  xsltproc  is installed                                   -->
-<!--                                                                          -->
-<!-- 4.  xsltproc /path/to/xsl/mathbook-html.xsl /path/to/hello-world.xml     -->
-<!-- Locate  hello-world.html  in default directory and view in a web browser -->
-<!--                                                                          -->
-<!-- 5.  xsltproc /path/to/xsl/mathbook-latex.xsl /path/to/hello-world.xml    -->
-<!-- Locate  hello-world.tex  in default directory and process with pdflatex  -->
-<!--                                                                          -->
-<!-- 6.  Experiment with other available conversions                          -->
+<!-- This is an absolute bare minumum example of MathBook XML.                          -->
+<!-- For a small, but more informative example, see the                                 -->
+<!-- "minimal" example in examples/minimal.  To use:                                    -->
+<!--                                                                                    -->
+<!-- 1.  Use  git  to clone MathBook XML onto your local machine                        -->
+<!--                                                                                    -->
+<!-- 2.  Possibly checkout the  dev  branch                                             -->
+<!--                                                                                    -->
+<!-- 3.  Check that  xsltproc  is installed                                             -->
+<!--                                                                                    -->
+<!-- 4.  xsltproc /path/to/xsl/mathbook-html.xsl /path/to/hello-world.xml               -->
+<!-- Locate  hello-world.html  in default directory and view in a web browser           -->
+<!--                                                                                    -->
+<!-- 5.  xsltproc -o hello.tex /path/to/xsl/mathbook-latex.xsl /path/to/hello-world.xml -->
+<!-- Locate  hello.tex  in default directory and process with pdflatex                  -->
+<!--                                                                                    -->
+<!-- 6.  Experiment with other available conversions                                    -->
 
-<mathbook>
+<pretext>
     <article xml:id="hello-world">
        <p>Hello, World!</p>
     </article>
-</mathbook>
+</pretext>

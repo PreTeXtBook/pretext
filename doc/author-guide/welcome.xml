@@ -10,13 +10,13 @@
 <appendix xml:id="welcome">
     <title>Welcome to the <pretext/> Community</title>
 
-    <intoduction>
+    <introduction>
         <p>Thank-you for your interest in <pretext/>, and welcome!  This appendix is meant to answer some questions you may have about how this open-source project is organized, how you can get help, and how you can contribute back.</p>
 
         <p><pretext/> is not <latex/> and it is not Word.  Some <q>features</q> of those languages are intentionally missing, but more importantly, the mind-set expected of authors is completely different. One of the most important distinctions is that <pretext/> treats the author, the publisher, and the reader (which might be an instructor) as separate entities<mdash/>even when those are all the same person.</p>
 
         <p>Newcomers to <pretext/> should focus on the author role. Make sure the structure of your book is marked-up properly. If something looks wrong in your output, assume it is a problem with the source markup.  If the source is correct but the output does not look as you wish, leave that as a problem for the publisher, to be addressed <em>after</em> you have finished writing the content.</p>
-    </intoduction>
+    </introduction>
 
     <section xml:id="help-and-support">
         <title>Help and Support</title>
@@ -48,7 +48,7 @@
     <section xml:id="contributing">
         <title>Contributing</title>
 
-        <p>As a project that is licensed openly, we welcome contributions.  And this does not necessarily mean you need to learn our primary language, <init>XSL</init>.  For ideas, find the issues on GitHub that have the label <c>contributor project</c>.  As one example, it would be very helpful if a member of the community would create and maintain a Wikipedia page.  That is a skill that is very distinct from the other skills used to create and maintain other parts of the project.  See <url href="https://github.com/rbeezer/mathbook/issues/207">Issue <hash />207</url>.</p>
+        <p>As a project that is licensed openly, we welcome contributions.  And this does not necessarily mean you need to learn our primary language, <init>XSL</init>.  For ideas, find the issues on GitHub that have the label <c>contributor project</c>.  As one example, it would be very helpful if a member of the community would create and maintain a Wikipedia page.  That is a skill that is very distinct from the other skills used to create and maintain other parts of the project.  See <url href="https://github.com/rbeezer/mathbook/issues/207">Issue #207</url>.</p>
 
         <p>The documentation is authored in <pretext />, so you know how to create additions, clean-up obsolete parts, and fix typos.  If you know <c>git</c> and GitHub, then a pull request (on a new branch!) is a very economical way for us to manage contributions.  Even if you do not know GitHub, we can easily accept files written in <pretext/> that contain changes to the documentation.  (Send them to us by email, or post as attachments.)</p>
 

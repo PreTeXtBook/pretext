@@ -22,7 +22,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- To process this file do                                                                      -->
 <!--                                                                                              -->
 <!-- (1) LaTeX/PDF:                                                                               -->
-<!--     xsltproc mathbook/xsl/mathbook-latex.xsl minimal.xml                                     -->
+<!--     xsltproc -o minimal.tex mathbook/xsl/mathbook-latex.xsl minimal.xml                      -->
 <!--     pdflatex minimal.tex                                                                     -->
 <!--     xelatex minimal.tex                                                                      -->
 <!--                                                                                              -->
@@ -40,7 +40,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--     xsltproc -X-stringparam chunk.level 0 mathbook/xsl/mathbook-sage-doctest.xsl minimal.xml -->
 <!--     <read further instructions in> minimal.py                                                -->
 
- <mathbook>
+<pretext>
 
     <docinfo>
         <macros>
@@ -106,4 +106,4 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     </article>
 
-</mathbook>
+</pretext>

@@ -1,0 +1,130 @@
+# liblouis semantic file for PreTeXt-generated HTML
+#
+# History:
+#   2019-02-17: Initiated
+#   2019-05-30: No longer extends stock "html.sem"
+
+# [LUPM] Liblouisutdml User's and Programmer's Manual
+
+###########################################
+# Braille versions of math from MathJax/SRE
+###########################################
+
+# mathjax puts braille Unicode characters into the 
+# "title" element of an SVG, PreTeXt does not otherwise 
+# use a "title" element.  The Unicode characters become 
+# their ASCII Braille equivalents (it seems)
+
+####################
+# Document structure
+####################
+
+# We explicity kill the <head>, which is empty anyway,
+# and note that the <body> contains the document
+# We should not ever see <script> or <style>, but
+# we could choose to kill them here as well
+skip head
+document body
+
+############
+# Paragraphs
+############
+para p
+
+
+#################################################
+# Routine elements with uncontroversial semantics
+#################################################
+
+# PTX uses <br/> for lines of structures like address
+# blocks of multi-line quote attributions
+softreturn br
+
+# Headings have styles, "headingX", which are given
+# in the  pretext-liblouis.cfg  configuration file
+# LUPM, 3.4.10, 2019-05-08, suggest 10 levels (use classes?)
+heading1 h1
+heading2 h2
+heading3 h3
+heading4 h4
+heading5 h5
+heading6 h6
+
+
+####################
+# Distinguished Text
+####################
+
+# PTX em => HTML em.emphasis
+italicx em,class,emphasis
+
+# PTX pubtitle => HTML span.booktitle
+italicx span,class,booktitle
+
+# PTX foreign => HTML i.foreign
+italicx i,class,foreign
+
+# PTX term => HTML dfn.terminology
+boldx dfn,class,terminology
+
+# Cannot seem to blend bold + italic
+# PTX alert => HTML em.alert
+boldx em,class,alert
+
+
+########
+# Blocks
+########
+
+# liblouis will insert runs of identical characters
+# across the width of the text, just prior, and just
+# after, to create a "box".  Style is set in the
+# configuration file, while the PreTeXt HTML which
+# will receive this treatment is given here
+
+boxline article,class,definition-like
+boxline article,class,example-like
+
+
+#######
+# Lists
+#######
+
+# liblouis ignores the character of a list (ordered, unordered,
+# description) and simply formats the list items.  Of course, we
+# know the numbers of an item an an ordered list, so we provide
+# that explcitly/hard-coded within the XSL conversion to HTML.
+# The "no" directives may be unnecssary, but are here for clarity.
+
+no ol
+no ul
+list li
+
+########
+# Tables
+########
+
+# your liblouis table must also contain the following line
+#   noback always ;\s; 0
+
+
+list tr \*;
+generic td \*;\s
+
+##############
+# Holding Tank
+##############
+
+# These are copied from the stock liblouis "html.sem"
+# file, waiting to be employed, modified, or removed
+
+htmllink a,href
+htmltarget a,name
+code pre
+
+
+
+
+# Necessary to have a newline following
+# last directive, or it is not processed
+

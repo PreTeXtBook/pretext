@@ -43,7 +43,7 @@
 
             <li><c>&lt;timesignature top="5" bottom="24"/&gt;</c>: <timesignature top="5" bottom="24"/></li>
             <li><c>&lt;timesignature top="3+2+3" bottom="8"/&gt;</c>: <timesignature top="3+2+3" bottom="8"/></li>
-            <li><c>&lt;timesignature top="5" bottom="8"/&gt;&lt;ampersand/&gt;&lt;timesignature top="3" bottom="8"/&gt;</c>: <timesignature top="5" bottom="8"/><ampersand/><timesignature top="3" bottom="8"/></li>
+            <li><c>&lt;timesignature top="5" bottom="8"/&gt;&lt;ampersand/&gt;&lt;timesignature top="3" bottom="8"/&gt;</c>: <timesignature top="5" bottom="8"/>&amp;<timesignature top="3" bottom="8"/></li>
         </ul></p>
     </section>
     <section xml:id="notes">

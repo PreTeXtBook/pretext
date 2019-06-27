@@ -39,62 +39,234 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Intend output for rendering by pdflatex -->
 <xsl:output method="text" />
 
+<!-- These variables are interpreted in mathbook-common.xsl and  -->
+<!-- so may be used/set in a custom XSL stylesheet for a         -->
+<!-- project's solution manual.                                  -->
+<!--                                                             -->
+<!-- exercise.inline.statement                                   -->
+<!-- exercise.inline.hint                                        -->
+<!-- exercise.inline.answer                                      -->
+<!-- exercise.inline.solution                                    -->
+<!-- exercise.divisional.statement                               -->
+<!-- exercise.divisional.hint                                    -->
+<!-- exercise.divisional.answer                                  -->
+<!-- exercise.divisional.solution                                -->
+<!-- exercise.worksheet.statement                                -->
+<!-- exercise.worksheet.hint                                     -->
+<!-- exercise.worksheet.answer                                   -->
+<!-- exercise.worksheet.solution                                 -->
+<!-- exercise.reading.statement                                  -->
+<!-- exercise.reading.hint                                       -->
+<!-- exercise.reading.answer                                     -->
+<!-- exercise.reading.solution                                   -->
+<!-- project.statement                                           -->
+<!-- project.hint                                                -->
+<!-- project.answer                                              -->
+<!-- project.solution                                            -->
+<!--                                                             -->
+<!-- The second set of variables are internal, and are derived   -->
+<!-- from the above via careful routines in mathbook-common.xsl. -->
+<!--                                                             -->
+<!-- b-has-inline-statement                                      -->
+<!-- b-has-inline-hint                                           -->
+<!-- b-has-inline-answer                                         -->
+<!-- b-has-inline-solution                                       -->
+<!-- b-has-divisional-statement                                  -->
+<!-- b-has-divisional-hint                                       -->
+<!-- b-has-divisional-answer                                     -->
+<!-- b-has-divisional-solution                                   -->
+<!-- b-has-worksheet-statement                                   -->
+<!-- b-has-worksheet-hint                                        -->
+<!-- b-has-worksheet-answer                                      -->
+<!-- b-has-worksheet-solution                                    -->
+<!-- b-has-reading-statement                                     -->
+<!-- b-has-reading-hint                                          -->
+<!-- b-has-reading-answer                                        -->
+<!-- b-has-reading-solution                                      -->
+<!-- b-has-project-statement                                     -->
+<!-- b-has-project-hint                                          -->
+<!-- b-has-project-answer                                        -->
+<!-- b-has-project-solution                                      -->
+
+<!-- Conceived as a "print only" PDF, this is also necessary    -->
+<!-- to keep links (such as a solution number linking back to   -->
+<!-- the original) from being seen/interpreted as actual links. -->
+<xsl:param name="latex.print" select="'yes'"/>
+
+<!-- We have a switch for just this situation, to force -->
+<!-- (overrule) the auto-detetion of the necessity for  -->
+<!-- LaTeX styles for the solutions to exercises.       -->
+<!-- See  mathbook-latex.xsl  for more explanation.     -->
+<xsl:variable name="b-needs-solution-styles" select="true()"/>
+
 <!-- For a "book" we replace the first chapter by a call to the        -->
 <!-- solutions generator.  So we burrow into parts to get at chapters. -->
 
-<xsl:template match="part|chapter|backmatter/solutions" />
+<xsl:template match="part|chapter|section|backmatter/solutions" />
 
 <xsl:template match="part[1]">
     <xsl:apply-templates select="chapter[1]" />
 </xsl:template>
 
-<xsl:template match="chapter[1]">
+<!-- provoke the "solutions-generator" at the first sign of main matter content -->
+<xsl:template match="chapter[1]|article/section[1]">
     <xsl:apply-templates select="$document-root" mode="solutions-generator">
-        <xsl:with-param name="b-inline-statement"     select="false()" />
-        <xsl:with-param name="b-inline-hint"          select="true()"  />
-        <xsl:with-param name="b-inline-answer"        select="true()"  />
-        <xsl:with-param name="b-inline-solution"      select="true()"  />
-        <xsl:with-param name="b-divisional-statement" select="false()" />
-        <xsl:with-param name="b-divisional-hint"      select="true()"  />
-        <xsl:with-param name="b-divisional-answer"    select="true()"  />
-        <xsl:with-param name="b-divisional-solution"  select="true()"  />
-        <xsl:with-param name="b-project-statement"    select="false()" />
-        <xsl:with-param name="b-project-hint"         select="true()"  />
-        <xsl:with-param name="b-project-answer"       select="true()"  />
-        <xsl:with-param name="b-project-solution"     select="true()"  />
+        <xsl:with-param name="purpose" select="'solutionmanual'" />
+        <xsl:with-param name="b-inline-statement"     select="$b-has-inline-statement" />
+        <xsl:with-param name="b-inline-hint"          select="$b-has-inline-hint"  />
+        <xsl:with-param name="b-inline-answer"        select="$b-has-inline-answer"  />
+        <xsl:with-param name="b-inline-solution"      select="$b-has-inline-solution"  />
+        <xsl:with-param name="b-divisional-statement" select="$b-has-divisional-statement" />
+        <xsl:with-param name="b-divisional-hint"      select="$b-has-divisional-hint"  />
+        <xsl:with-param name="b-divisional-answer"    select="$b-has-divisional-answer"  />
+        <xsl:with-param name="b-divisional-solution"  select="$b-has-divisional-solution"  />
+        <xsl:with-param name="b-worksheet-statement"  select="$b-has-worksheet-statement" />
+        <xsl:with-param name="b-worksheet-hint"       select="$b-has-worksheet-hint"  />
+        <xsl:with-param name="b-worksheet-answer"     select="$b-has-worksheet-answer"  />
+        <xsl:with-param name="b-worksheet-solution"   select="$b-has-worksheet-solution"  />
+        <xsl:with-param name="b-reading-statement"    select="$b-has-reading-statement" />
+        <xsl:with-param name="b-reading-hint"         select="$b-has-reading-hint"  />
+        <xsl:with-param name="b-reading-answer"       select="$b-has-reading-answer"  />
+        <xsl:with-param name="b-reading-solution"     select="$b-has-reading-solution"  />
+        <xsl:with-param name="b-project-statement"    select="$b-has-project-statement" />
+        <xsl:with-param name="b-project-hint"         select="$b-has-project-hint"  />
+        <xsl:with-param name="b-project-answer"       select="$b-has-project-answer"  />
+        <xsl:with-param name="b-project-solution"     select="$b-has-project-solution"  />
     </xsl:apply-templates>
 </xsl:template>
 
+<!-- Hard-code numbers into titles -->
 <xsl:template match="part|chapter|section|subsection|subsubsection|exercises" mode="division-in-solutions">
     <xsl:param name="scope" />
     <xsl:param name="content" />
+
+    <xsl:variable name="the-number">
+        <xsl:apply-templates select="." mode="number" />
+    </xsl:variable>
+    <xsl:variable name="original-title">
+        <!-- no trailing space if no number -->
+        <xsl:if test="not($the-number = '')">
+            <xsl:value-of select="$the-number" />
+            <xsl:text> </xsl:text>
+        </xsl:if>
+        <xsl:apply-templates select="." mode="title-full" />
+    </xsl:variable>
+    <xsl:variable name="moving-title">
+        <!-- no trailing space if no number -->
+        <xsl:if test="not($the-number = '')">
+            <xsl:value-of select="$the-number" />
+            <xsl:text> </xsl:text>
+        </xsl:if>
+        <xsl:apply-templates select="." mode="title-simple" />
+    </xsl:variable>
 
     <!-- LaTeX heading with hard-coded number -->
     <xsl:text>\</xsl:text>
     <xsl:apply-templates select="." mode="division-name" />
     <xsl:text>*{</xsl:text>
-    <!-- control the numbering, i.e. hard-coded -->
-    <xsl:variable name="the-number">
-        <xsl:apply-templates select="." mode="number" />
-    </xsl:variable>
-    <!-- no trailing space if no number -->
-    <xsl:if test="not($the-number = '')">
-        <xsl:value-of select="$the-number" />
-        <xsl:text> </xsl:text>
-    </xsl:if>
-    <xsl:apply-templates select="." mode="title-full" />
+    <xsl:value-of select="$original-title"/>
     <xsl:text>}&#xa;</xsl:text>
     <!-- An entry for the ToC, since we hard-code numbers -->
     <!-- These mainmatter divisions should always have a number -->
     <xsl:text>\addcontentsline{toc}{</xsl:text>
     <xsl:apply-templates select="." mode="division-name" />
     <xsl:text>}{</xsl:text>
-    <xsl:value-of select="$the-number" />
-    <xsl:text> </xsl:text>
-    <xsl:apply-templates select="." mode="title-simple" />
+    <xsl:value-of select="$moving-title"/>
     <xsl:text>}&#xa;</xsl:text>
+    <!-- Explicit marks, since divisions are the starred form -->
+    <xsl:choose>
+        <xsl:when test="self::chapter">
+            <xsl:text>\chaptermark{</xsl:text>
+            <xsl:value-of select="$moving-title"/>
+            <xsl:text>}&#xa;</xsl:text>
+        </xsl:when>
+        <!-- "section", "exercises", "worksheet", at section-level, etc. -->
+        <xsl:when test="parent::chapter">
+            <xsl:text>\sectionmark{</xsl:text>
+            <xsl:value-of select="$moving-title"/>
+            <xsl:text>}&#xa;</xsl:text>
+        </xsl:when>
+    </xsl:choose>
 
     <xsl:copy-of select="$content" />
+</xsl:template>
+
+<!-- Page headers + Chapter/Section XYZ Title      -->
+<!-- \sethead[even-left][even-center][even-right]  -->
+<!--         {odd-left}{odd-center}{odd-right}     -->
+<xsl:template match="book" mode="titleps-headings">
+    <xsl:text>{&#xa;</xsl:text>
+    <xsl:text>\sethead[\thepage][][\textsl{\chaptertitle}]&#xa;</xsl:text>
+    <xsl:text>{\textsl{\sectiontitle}}{}{\thepage}&#xa;</xsl:text>
+    <xsl:text>}&#xa;</xsl:text>
+</xsl:template>
+
+<!-- Hard-Coded Numbers -->
+<!-- As a subset of full content, we can't          -->
+<!-- point to much of the content with hyperlinks   -->
+<!-- But we do have the full context as we process, -->
+<!-- so we can get numbers for cross-references     -->
+<!-- and *hard-code* them into the LaTeX            -->
+
+<!-- We don't dither about possibly using a \ref{} and  -->
+<!-- just produce numbers.  These might lack the "part" -->
+<xsl:template match="*" mode="xref-number">
+  <xsl:apply-templates select="." mode="number" />
+</xsl:template>
+
+<!-- The actual link is not a \hyperlink nor a    -->
+<!-- hyperref, but instead is just plain 'ol text -->
+<xsl:template match="*" mode="xref-link">
+    <xsl:param name="content" select="'MISSING LINK CONTENT'"/>
+    <xsl:value-of select="$content" />
+</xsl:template>
+
+<!-- Exercise numbers are always hard-coded at birth, given -->
+<!-- complications of numbering, placement, duplication     -->
+
+<!-- Captioned items are permitted in exercises.  We need   -->
+<!-- to hard-code their numbers.  Following is an edited    -->
+<!-- duplication of the code in the LaTeX conversion, which -->
+<!-- needs to be kept in-sync.  Ideally a LaTeX (internal)  -->
+<!-- switch would make these changes.                       -->
+
+<!-- Captions for Figures, Tables, Listings, Lists -->
+<!-- xml:id is on parent, but LaTeX generates number with caption -->
+<xsl:template match="caption">
+    <xsl:choose>
+      <xsl:when test="parent::table/parent::sidebyside">
+            <xsl:text>\captionof*{table}{</xsl:text>
+      </xsl:when>
+      <xsl:when test="parent::figure/parent::sidebyside">
+            <xsl:text>\captionof*{figure}{</xsl:text>
+      </xsl:when>
+      <xsl:when test="parent::listing">
+            <xsl:text>\captionof*{listingcap}{</xsl:text>
+        </xsl:when>
+      <xsl:when test="parent::list">
+            <xsl:text>\captionof*{namedlistcap}{</xsl:text>
+        </xsl:when>
+      <xsl:otherwise>
+          <xsl:text>\caption*{</xsl:text>
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>\textbf{</xsl:text>
+    <xsl:apply-templates select="parent::*" mode="type-name"/>
+    <xsl:text> </xsl:text>
+    <xsl:apply-templates select="parent::*" mode="number"/>
+    <xsl:text>:} </xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>}&#xa;</xsl:text>
+</xsl:template>
+
+<!-- Subcaptions showup in side-by-side -->
+<xsl:template match="caption" mode="subcaption">
+    <xsl:text>\subcaption*{</xsl:text>
+    <xsl:text>\textbf{</xsl:text>
+    <xsl:apply-templates select="parent::*" mode="serial-number"/>
+    <xsl:text>} </xsl:text>
+    <xsl:apply-templates />
+    <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 
 </xsl:stylesheet>

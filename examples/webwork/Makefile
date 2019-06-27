@@ -128,7 +128,7 @@ sample-chapter-pdf:
 	-rm $(PDFOUT)/images/*
 	cp -a $(WWOUT)/*.png $(PDFOUT)/images
 	cd $(PDFOUT); \
-	xsltproc $(MBXSL)/mathbook-latex.xsl $(SCRATCH)/sample-chapter-merge.ptx; \
+	xsltproc -o sample-ww-chapter.tex $(MBXSL)/mathbook-latex.xsl $(SCRATCH)/sample-chapter-merge.ptx; \
 	xelatex sample-ww-chapter.tex; \
 	xelatex sample-ww-chapter.tex; \
 
@@ -139,7 +139,7 @@ mini-pdf:
 	-rm $(PDFOUT)/images/*
 	cp -a $(WWOUT)/*.png $(PDFOUT)/images
 	cd $(PDFOUT); \
-	xsltproc $(MBXSL)/mathbook-latex.xsl $(SCRATCH)/mini-merge.ptx; \
+	xsltproc -o webwork-mini.tex $(MBXSL)/mathbook-latex.xsl $(SCRATCH)/mini-merge.ptx; \
 	xelatex webwork-mini.tex; \
 	xelatex webwork-mini.tex; \
 

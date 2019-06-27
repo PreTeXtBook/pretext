@@ -9,9 +9,7 @@
 
 <appendix xml:id="windows-install-notes">
   <title>Windows Installation Notes</title>
-  <author>
-    <personname>Dave Rosoff</personname>
-  </author>
+  <author>Dave Rosoff</author>
 
   <introduction>
     <p>This appendix explains the best known way to install the <pretext /> toolchain in a Windows environment, rather than a Unix-flavored operating system (such as Linux and Apple's <init>OS X</init>). It has been tested on Windows 7, 8, and 10. We assume that none of the listed tools or equivalents have been previously installed. That may complicate matters. This is especially true if you use Cygwin, or if you have already installed Python on your machine. <pretext /> compatibility with existing Python installations is addressed elsewhere in this document (<xref provisional="python-mbx-compatibility" />).</p>
@@ -240,7 +238,7 @@
 
   <section xml:id="installing-imagemagick">
     <title>Installing ImageMagick</title>
-    <p>Visit the <url href="http://www.imagemagick.org/script/binary-releases.php">ImageMagick downloads page</url> and grab a binary. If you have a 64-bit Windows installation (<xref ref="do-i-have-64-bit-windows" />), use the recommended version. If you have a 32-bit installation, find the version whose filename is obtained from that of the recommended version by substituting <c>x86</c> for <c>x64</c>. For example, if the recommended version's filename is:</p>
+    <p>Visit the <url href="https://imagemagick.org/script/download.php#windows">ImageMagick downloads page</url> and grab a binary. If you have a 64-bit Windows installation (<xref ref="do-i-have-64-bit-windows" />), use the recommended version. If you have a 32-bit installation, find the version whose filename is obtained from that of the recommended version by substituting <c>x86</c> for <c>x64</c>. For example, if the recommended version's filename is:</p>
     <pre>ImageMagick-7.0.1-6-Q16-x64-dll.exe</pre>
     <p>then a good choice for a 32-bit Windows would be</p>
     <pre>ImageMagick-7.0.1-6-Q16-x86-dll.exe</pre>
@@ -350,7 +348,10 @@
   <section xml:id="whats-missing">
     <title>What's Missing</title>
     <p>Development of a Windows-compatible <c>mbx</c> script (<xref ref="mbx-script" />) is mostly complete. If you need help with <c>mbx</c>, contact Dave Rosoff. There are still a few use cases that haven't been tested, mostly those to do with Asymptote.</p>
-    <p>At present, it only seems to be possible to install Sage on Windows by way of the Windows Subsystem for Linux, available only in Windows 10.</p>
+    <p>A Windows installer for Sage is available from several mirrors at
+      <url href="http://www.sagemath.org/download-windows.html" />.
+      The installer provides Sage Math, the Sage Math Shell,
+      and the Sage Math Notebook (Jupyter).</p>
   </section>
 
   <conclusion>

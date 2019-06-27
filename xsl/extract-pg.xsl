@@ -31,7 +31,7 @@
 <!-- single XML file called webwork-extraction.xml with various            -->
 <!-- representations of each webwork.                                      -->
 
-<!-- Each dictionary uses the webworks' internal-ids as keys. There are    -->
+<!-- Each dictionary uses the webworks' visible-ids as keys. There are      -->
 <!-- dictionaries for obtaining:                                           -->
 <!-- 1. a 'ptx'|'server' flag (is it authored in PTX or on the server?)    -->
 <!-- 2. a seed for randomization (with a default explicitly declared)      -->
@@ -98,9 +98,9 @@
 </xsl:template>
 
 <xsl:template match="webwork[statement|stage]" mode="dictionaries">
-    <!-- Define values for the internal-id as key -->
+    <!-- Define values for the visible-id as key -->
     <xsl:variable name="problem">
-        <xsl:apply-templates select="." mode="internal-id" />
+        <xsl:apply-templates select="." mode="visible-id" />
     </xsl:variable>
 
     <xsl:text>origin["</xsl:text>
@@ -129,9 +129,9 @@
 </xsl:template>
 
 <xsl:template match="webwork[@source]" mode="dictionaries">
-    <!-- Define values for the internal-id as key -->
+    <!-- Define values for the visible-id as key -->
     <xsl:variable name="problem">
-        <xsl:apply-templates select="." mode="internal-id" />
+        <xsl:apply-templates select="." mode="visible-id" />
     </xsl:variable>
 
     <xsl:text>origin["</xsl:text>

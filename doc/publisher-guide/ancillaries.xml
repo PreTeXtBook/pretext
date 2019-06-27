@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--   This file is part of the documentation of PreTeXt      -->
+<!--                                                          -->
+<!--      PreTeXt Publisher's Guide                           -->
+<!--                                                          -->
+<!-- Copyright (C) 2013-2017  Robert A. Beezer, David Farmer  -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<chapter xml:id="ancillaries">
+    <title>Ancillaries</title>
+
+    <introduction>
+        <p>Similar to an Instructor's Version, for a textbook, or other work, a publisher might wish to provide ancillary documents with additional, or repackaged, material.</p>
+    </introduction>
+
+    <section xml:id="solution-manual">
+        <title>Solution Manual</title>
+
+        <p>An author may include a <tag>hint</tag>, <tag>answer</tag>, and/or <tag>solution</tag> as part of each <tag>exercise</tag> or <tag>project</tag>.  Some of these may be designed for the reader, while some may designed for the instructor.  A separate conversion is available to make a <init>PDF</init> containing just these items.</p>
+
+        <p>In the usual way, execute<cd>
+            <cline>xsltproc pretext-solution-manual-latex.xsl fauna.xml</cline>
+        </cd>with suitable paths in front of the stylesheet and the source file.  The result will be a file like <c>fauna.tex</c>, which can be processed with a <latex/> engine such as <c>pdflatex</c>.  By default, the result will include <em>all</em> <tag>statement</tag>, <tag>hint</tag>, <tag>answer</tag>, and <tag>solution</tag> for <em>every</em> <tag>exercise</tag> or <tag>project</tag> anywhere in your <tag>book</tag>.  Note that this conversion is explicitly designed only for <tag>book</tag>, so send a request for support for an <tag>article</tag>.  Division headings (<tag>chapter</tag>, <tag>section</tag>, <ellipsis/>) will be present, if and only if they have content.  Page headers will help locate chapters and sections.  Exercise numbers will be complete, to make it easier to locate individual problems.  In other words, Exercise 3 from Exercises 5.6 will be labeled as 5.6.3, not just 3, as in the original text.</p>
+
+        <p>Any cross-reference that exists inside a solution will be honored and displayed faithfully.  By that, we mean that if the author includes an <tag>xref</tag> as part of a solution to, say, Theorem 10.6, then that cross-reference will be rendered visibly as <q>Theorem 10.6</q> in the solution manual.  However, it will not be live (clickable) since the target (the <tag>theorem</tag> itself) is not part of the solution manual.  We have not, and do not expect to, determine if a cross-reference points to part of another exercise which is visible in the remainder of the solution manual and then elect to make it live/clickable.  In other words, all cross-references are static, even if there is the possibility to be more dynamic for a select few.  If this is a severe shortcoming, consider producing an Instructor's Version (<xref ref="instructor-version"/>), enhanced with additional solutions, where all cross-references are live, and targets are more likely to be available.</p>
+
+        <p>A set of switches allows a publisher to control including <tag>statement</tag>, <tag>hint</tag>, <tag>answer</tag>, or <tag>solution</tag><ndash/>for inline exercises, divisional exercises, worksheet exercises, reading questions, projects, and tasks within a project.  So there is a total of <m>4\times 5 = 20</m> yes/no switches, for <m>2^{20} = 1\,048\,576</m> supported scenarios.  Find these switches documented as comments early on in the stylesheet.  The <latex/> preamble is the same as for the full document, so besides being excessive, it should support any of the <latex/> styling options.  You will likely want to place these switches, and any customizations, into a thin <init>XSL</init> file (read about customizations in the Author's Guide).</p>
+
+        <p>In practice, you will discover that the conversion will reproduce all of your <tag>frontmatter</tag> and <tag>backmatter</tag> <em>exactly</em> as if it was part of the entire text itself.  The reason for this is that you may actually want a little bit of front matter, perhaps some back matter, and maybe a new title page that makes it clear that you have created a solution manual.  Best practice would be to have each of your chapters in its own file, and incorporated into your document via a master file using the <tag>xi:include</tag> mechanism.  (Read about modularity in the Author's Guide if this is new to you.)  So make a new <q>master</q> file for the solution manual, maybe with a new title, a new preface, and acknowledgements of any help creating exercises and solutions.  Be sure to include <em>all</em> of the main matter, even if you know some parts may not have any <tag>exercise</tag>.  You want numbering to be correct for your cross-references and this means having all the content available to be counted, even if it is not visible in the end product.  This new master file is really the only overhead involved in getting a quality, reliable solution manual together.</p>
+
+        <p>The philosophy behind this conversion is that a publisher may wish to create a <em>different</em> range of solutions for instructors, for limited distribution in ways that students are unlikely to find.  Thus, we have tried to produce a <em>functional</em> document by default, without too much attention to making a <em>beautiful</em> document.  Of course, improvements and suggestions are always welcome, though here the priority will be ease-of-use.</p>
+
+        <paragraphs>
+            <title>Digression</title>
+
+            <p>This conversion illustrates some advantages of including all the content of your project in one source document, and then selecting a subset of that content for different audiences. The advantage of authoring <tag>hint</tag>, <tag>answer</tag>, and <tag>solution</tag> in close proximity to the <tag>statement</tag> should mean a higher probability that changes to one part of an exercise will be reflected in the other parts.  And with standard processing tools, and provided switches, an author and publisher can easily decide which parts to show, and when.</p>
+
+            <p>By including all of your project's content in one monolithic source document, it is possible to confidently reference supporting parts of the main text via cross-references from solutions.  When a new edition is released, any variations in numbering will automatically be reflected in a new solution manual, created with no additional editing or proofreading.</p>
+        </paragraphs>
+    </section>
+
+    <section xml:id="private-solutions">
+        <title>Private Solutions</title>
+
+        <p>Suppose an author distributes a textbook with an open license, and so makes the <pretext/> source available publicly (perhaps as a condition of the license).  Perhaps the author also intends <tag>hint</tag> provided with <tag>exercise</tag> to assist students, and having them available as knowls in <init>HTML</init> output is a great way to make them easily available, but not immediately visible.  But the author has also written some, or many, <tag>solution</tag> for the <tag>exercise</tag>, but these are only meant for instructors, and not for students.  See the discussion at <xref ref="instructor-solutions"/> for more background.</p>
+
+        <p>One approach is to distribute an Instructor Version or Solution Manual only on request, and only as a PDF.  The ability to provide a watermark on every page (via switches in the <latex/> conversion) allows you to include a personalized message such as <cd>Issued to Charles Darwin.  Do Not Copy.</cd>It would be a trivial technical exercise to remove this, but perhaps the moral imperative (in an extra <tag>preface</tag> as well?) would dissuade most from distributing further?</p>
+
+        <p>But what about publicly available source code?  After several unsatisfactory experiments, we have arrived at the following <em>solution</em>.  Again it involves an intermediate understanding of the revision control software, git.  And again, this is an outline.<ul>
+            <li>Create a private repository for authors, and other trusted contributors.  In other words, if shared, read access is controlled via passwords or something similar.</li>
+            <li>Create a branch off of <c>master</c> called <c>solutions</c>.</li>
+            <li>Do all editing of private material, and only editing of private material, as commits to this branch.  So a typical commit might just be <tag>solution</tag> elements inside existing <tag>exercise</tag>.  Any script or master file for producing a solution manual might also be part of this branch.</li>
+            <li>Do all authoring in this private repository, mostly as commits on <c>master</c>.</li>
+            <li>Periodically, while the <c>solutions</c> branch is checked out, merge <c>master</c> to bring in new changes to the main content.</li>
+            <li>Never ever merge <c>solutions</c> into <c>master</c>.  In other words, <c>solutions</c> is a long-lived branch which never dies and is never merged into another branch. (Never rebase this branch if you have collaborators sharing the private repository.)</li>
+            <li>Push and pull both <c>master</c> and <c>solutions</c> to and from the private repository by setting up tracking branches.</li>
+            <li>Create a public repository which is a strict duplicate of the <c>master</c> branch.  Periodically push the <c>master</c> branch of the private repository to the <c>master</c> branch of the public repository.  Only.  Its only purpose is for the next item.  Use commands or a setup which makes it impossible to accidentally push <c>solutions</c> to this public repository.</li>
+            <li>The commits in the public repository will be <em>identical</em> to those on <c>master</c> in the private repository.  So anyone can clone or fork this repository and make pull requests, which authors can apply and mange via the private repository.  But solutions will never be part of the interaction with this repository.</li>
+        </ul></p>
+    </section>
+</chapter>

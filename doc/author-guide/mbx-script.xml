@@ -21,16 +21,16 @@
         <p><c>mbx</c> is a Python script, so you will need to have the Python interpreter on your system.  At a command-line (in a terminal or console), you can run<cd>
             <cline>mbx -h</cline>
         </cd> to get a summary of the commands.  Some of the processing may take a long time, or you may experience trouble.  There are two switches to enable more verbose output in your terminal or console.<cd>
-            <cline>mbx -v</cline>
+            <cline>mbx -v [command arguments]</cline>
         </cd>will provide progress indicators, while <cd>
-            <cline>mbx -vv</cline>
+            <cline>mbx -vv [command arguments]</cline>
         </cd>will provide progress indicators along with additional information that will help you or a fellow author to discern where a problem lies.  Please <em>include all of this output</em> if you are asking for help, and do not assume you know exactly which part is relevant.</p>
     </section>
 
     <section xml:id="mbx-example-use">
         <title>Example Use</title>
 
-        <p>Here is a typical example of using <c>mbx</c>.  You have several (or many!) diagrams and figures in your <pretext /> source, all authored in the TikZ language, and so packaged up within <tag>latex-image-code</tag> elements.  Your <latex />/<init>PDF</init> output looks beautiful, since <pretext /> simply inserts the TikZ code into the right place in the generated <c>*.tex</c> file, and you have done this several times until your figures look just right.</p>
+        <p>Here is a typical example of using <c>mbx</c>.  You have several (or many!) diagrams and figures in your <pretext /> source, all authored in the TikZ language, and so packaged up within <tag>latex-image</tag> elements.  Your <latex />/<init>PDF</init> output looks beautiful, since <pretext /> simply inserts the TikZ code into the right place in the generated <c>*.tex</c> file, and you have done this several times until your figures look just right.</p>
 
         <p>Now you need to generate the <init>SVG</init> versions of your images that will accompany your <init>HTML</init> version of your book and provide nice scalable graphics. This is exactly the sort of chore the <c>mbx</c> script was designed for.  You might run<cd>
             <cline>mbx -vv -c latex-image -f svg -d ~/books/aota/images ~/books/aota/animals.xml</cline>
@@ -49,7 +49,7 @@
         <p>Some notes:<ul>
             <li>If you have modularized your source across more than one <init>XML</init> file, then be sure to provide your <q>top-level</q> or <q>master</q> file as the final argument to the script, just like you would for an invocation of <c>xsltproc</c>.  It is important to understand that your source is one huge <q>source tree</q> and your file-by-file modularization is never respected or recognized in any way.  In particular, use of the <c>xinclude</c> mechanism is handled by the script, and you should not apply the script to each of your source files individually.  If image production (or some other task) takes a long time, see <xref ref="restrict-mbx-scope" /> for a way to have the script restrict its action to only a portion of your project.</li>
 
-            <li>Certain arguments that are filenames require a full (not relative) path to locate the right objects.  In the example above, you can see the source file requires this (where the shell in use here will expand the <tilde /> to the user's home directory).  The <c>-d</c> flag does not require a full path, and so can be specified relative to the current working directory.</li>
+            <li>Certain arguments that are filenames require a full (not relative) path to locate the right objects.  In the example above, you can see the source file requires this (where the shell in use here will expand the ~ to the user's home directory).  The <c>-d</c> flag does not require a full path, and so can be specified relative to the current working directory.</li>
 
             <li>Do not place the script, or configuration files, anywhere else (except as recommended for your personal copy of the configuration file).  The locations are important for locating other files, such as the stylesheets used to isolate parts of your project for processing.</li>
 
@@ -60,7 +60,7 @@
     <section xml:id="debugging-mbx-image-generation">
         <title>Debugging Image Generation</title>
 
-        <p>A principal use of the <c>mbx</c> script is to isolate source code from <c>latex-image-code</c> sections, package them up as proper <c>*.tex</c> files, run <latex /> to make cropped <init>PDF</init> versions, and then convert these to other formats such as <init>SVG</init> or <init>PNG</init>.</p>
+        <p>A principal use of the <c>mbx</c> script is to isolate source code from <tag>latex-image</tag> sections, package them up as proper <c>*.tex</c> files, run <latex /> to make cropped <init>PDF</init> versions, and then convert these to other formats such as <init>SVG</init> or <init>PNG</init>.</p>
 
         <p>Much of this activity happens in a temporary directory.  If you use the <c>-vv</c> switch described above, then one of the messages early in the output describing the initialization will be the name of this directory.  Looking to see what files end up there, and what those files contain, is often useful in determining the step where this toolchain fails, and maybe even why.</p>
 
@@ -78,7 +78,7 @@
     <section xml:id="mbx-helpers">
         <title>Configuring External Helper Programs</title>
 
-        <p>Our main processor, <c>xsltproc</c><idx><c>xsltproc</c></idx>, is not a general-purpose compiler, and does not <q>call</q> external programs.  That is the primary purpose of the <c>mbx</c> script.  You will see a configuration file, <c>script/mbx.cfg</c>, as part of the distribution.  Read the comments at the top of this file, but foremost, realize that you are not meant to edit this file.  It is a template, and any changes you make will be overwritten with an original version when you update.  Instead, make a copy and place it as <c>mathbook/user/mbx.cfg</c>.  The script will look for this copy first, then fallback to the generic version.</p>
+        <p>Our main processor, <c>xsltproc</c><idx><c>xsltproc</c></idx>, is not a general-purpose compiler, and does not <q>call</q> external programs.  That is the primary purpose of the <c>mbx</c> script.  You will see a configuration file, <c>script/mbx.cfg</c>, as part of the distribution.  Read the comments at the top of this file, but foremost, realize that you are not meant to edit this file.  It is a template, and any changes you make will be overwritten with an original version when you update.  Instead, make a copy and place it as <c>mathbook/user/mbx.cfg</c> (for instance, if you are in the <c>mathbook</c> directory, then the commands <c>mkdir user</c> and <c>cp script/mbx.cfg user/</c> would be appropriate).  The script will look for this copy first, then fallback to the generic version.</p>
 
         <p>The entries of this file are the names of executable files that perform certain tasks as part of the script's functions.  If it seems that certain helper programs are not being found, you can provide full path names, and that may solve the problem.</p>
     </section>
@@ -97,7 +97,7 @@
         <p>Again, the command <c>mbx -h</c> will remind you of the various options for the script.  The followinng is a brief summary, in general terms, of what is possible.<dl width="narrow">
             <li>
                 <title><latex /> Graphics</title>
-                <p><latex /> has a variety of languages for specifying images, such as xypic, pgfplots, and TikZ.  By including the necessary pacakges or setup commands in <c>docinfo/latex-preamble</c>, these can all be generated at once, in the manner of the example earlier.</p>
+                <p><latex /> has a variety of languages for specifying images, such as xypic, pgfplots, and TikZ.  By including the necessary packages or setup commands in <c>docinfo/latex-preamble</c>, these can all be generated at once, in the manner of the example earlier.</p>
             </li>
 
             <li>
