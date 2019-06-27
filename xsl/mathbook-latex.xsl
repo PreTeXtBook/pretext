@@ -8563,7 +8563,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- figure, table, listing will contain one item    -->
 <!-- This is skipping captions, intentionally        -->
 <xsl:template match="figure|table|listing" mode="panel-latex-box">
-    <xsl:apply-templates select="node()[not(&METADATA-FILTER;)][1]" mode="panel-latex-box" />
+    <xsl:apply-templates select="*[not(&METADATA-FILTER;)][1]" mode="panel-latex-box" />
 </xsl:template>
 
 <!-- list will have introduction, <list>, conclusion -->

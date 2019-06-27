@@ -5612,7 +5612,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="figure" mode="panel-html-box">
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="width" select="''" />
-    <xsl:apply-templates select="node()[not(&METADATA-FILTER;)][1]" mode="panel-html-box">
+    <xsl:apply-templates select="*[not(&METADATA-FILTER;)][1]" mode="panel-html-box">
         <xsl:with-param name="b-original" select="$b-original" />
         <xsl:with-param name="width" select="$width" />
     </xsl:apply-templates>
@@ -5621,7 +5621,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="table" mode="panel-html-box">
     <xsl:param name="width" />
     <xsl:param name="b-original" select="true()" />
-    <xsl:apply-templates select="node()[not(&METADATA-FILTER;)][1]" mode="panel-html-box" >
+    <xsl:apply-templates select="*[not(&METADATA-FILTER;)][1]" mode="panel-html-box" >
         <xsl:with-param name="b-original" select="$b-original" />
         <xsl:with-param name="width" select="$width"/>
     </xsl:apply-templates>
@@ -5629,7 +5629,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="listing" mode="panel-html-box">
     <xsl:param name="b-original" select="true()" />
-    <xsl:apply-templates select="node()[not(&METADATA-FILTER;)][1]" mode="panel-html-box">
+    <xsl:apply-templates select="*[not(&METADATA-FILTER;)][1]" mode="panel-html-box">
         <xsl:with-param name="b-original" select="$b-original" />
     </xsl:apply-templates>
 </xsl:template>
