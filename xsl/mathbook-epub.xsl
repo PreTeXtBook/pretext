@@ -314,6 +314,10 @@
         <!-- NB: * could be just "item", but we generally want all elements           -->
         <!-- Strategy: compare @href of each candidate item with the @href of each    -->
         <!-- preceding item, and only copy into the result tree if the @href is "new" -->
+        <!-- Duplication removal inspired by:                                         -->
+        <!-- XSLT Cookbook, 2nd Edition, Copyright 2006, O'Reilly Media, Inc.         -->
+        <!-- Recipe 5.1, Ignoring Duplicate Elements                                  -->
+        <!-- www.oreilly.com/library/view/xslt-cookbook/0596003722/ch04s03.html       -->
         <xsl:for-each select="($discovery-manifest/*|$discovery-manifest/comment())[not(@href = preceding::*/@href)]">
             <xsl:copy-of select="."/>
         </xsl:for-each>
