@@ -30,22 +30,18 @@
 <xsl:param name="html.knowl.proof" select="'no'" />
 <xsl:param name="html.knowl.definition" select="'no'" />
 <xsl:param name="html.knowl.example" select="'no'" />
+<xsl:param name="html.knowl.project" select="'no'" />
+<xsl:param name="html.knowl.task" select="'no'" />
+<xsl:param name="html.knowl.list" select="'no'" />
 <xsl:param name="html.knowl.remark" select="'no'" />
+<xsl:param name="html.knowl.objectives" select="'no'" />
+<xsl:param name="html.knowl.outcomes" select="'no'" />
 <xsl:param name="html.knowl.figure" select="'no'" />
 <xsl:param name="html.knowl.table" select="'no'" />
-<xsl:param name="html.knowl.exercise" select="'no'" />
-
-<!-- Hints, solutions, etc are typically knowled   -->
-<!-- We temporarily kill them all as a convenience -->
-<xsl:param name="exercise.text.statement" select="'yes'" />
-<xsl:param name="exercise.text.hint" select="'no'" />
-<xsl:param name="exercise.text.answer" select="'no'" />
-<xsl:param name="exercise.text.solution" select="'no'" />
-<!-- Second, an exercise in a solutions list in backmatter.-->
-<xsl:param name="exercise.backmatter.statement" select="'no'" />
-<xsl:param name="exercise.backmatter.hint" select="'no'" />
-<xsl:param name="exercise.backmatter.answer" select="'no'" />
-<xsl:param name="exercise.backmatter.solution" select="'no'" />
+<xsl:param name="html.knowl.listing" select="'no'" />
+<xsl:param name="html.knowl.exercise.inline" select="'no'" />
+<xsl:param name="html.knowl.exercise.sectional" select="'no'" />
+<xsl:param name="html.knowl.exercise.worksheet" select="'no'" />
 
 <!-- We turn off permalinks on divisions, etc. -->
 <xsl:param name="html.permalink"  select="'none'" />
@@ -103,14 +99,14 @@
 <!-- ############## -->
 
 <!-- Deprecation warnings are universal analysis of source and parameters   -->
-<!-- There is always a "document root" directly under the mathbook element, -->
+<!-- There is always a "document root" directly under the root element,     -->
 <!-- and we process it with the chunking template called below              -->
 <!-- Note that "docinfo" is at the same level and not structural, so killed -->
 <xsl:template match="/">
     <xsl:call-template name="banner-warning">
         <xsl:with-param name="warning">EPUB conversion is experimental and not supported.  In particular,&#xa;the XSL conversion alone is not sufficient to create an EPUB.&#xa;See mathbook/examples/epub/build.sh for more information.</xsl:with-param>
     </xsl:call-template>
-    <xsl:apply-templates select="mathbook" mode="deprecation-warnings" />
+    <xsl:apply-templates select="pretext|mathbook" mode="deprecation-warnings" />
     <xsl:call-template name="setup" />
     <xsl:call-template name="build-image-list" />
     <xsl:call-template name="package-document" />
@@ -120,7 +116,7 @@
 <!-- First, we use the frontmatter element to trigger various necessary files     -->
 <!-- We process structural nodes via chunking routine in  xsl/mathbook-common.xsl -->
 <!-- This in turn calls specific modal templates defined elsewhere in this file   -->
-<xsl:template match="mathbook">
+<xsl:template match="pretext|mathbook">
     <xsl:apply-templates select="//frontmatter" mode="epub" />
     <xsl:apply-templates mode="chunking" />
 </xsl:template>
@@ -298,6 +294,14 @@
 <!--    Required: media-type, critical (see PNG/JPG for cover) -->
 <!-- Exactly one item has the "nav" property                   -->
 <xsl:template name="package-manifest">
+    <!-- cruise all objects within source via modal template -->
+    <!-- relevant objects report themselves and then recurse -->
+    <!-- create as a legitimate node-set for post-filtering  -->
+    <xsl:variable name="discovery">
+        <xsl:apply-templates select="$document-root" mode="manifest"/>
+    </xsl:variable>
+    <xsl:variable name="discovery-manifest" select="exsl:node-set($discovery)"/>
+    <!-- start "manifest" with one-off items -->
     <manifest xmlns="http://www.idpf.org/2007/opf">
         <item id="css" href="{$css-dir}/pretext-epub.css" media-type="text/css"/>
         <item id="cover-page" href="{$xhtml-dir}/cover-page.xhtml" media-type="application/xhtml+xml"/>
@@ -305,7 +309,18 @@
         <item id="table-contents" href="{$xhtml-dir}/table-contents.xhtml" properties="nav" media-type="application/xhtml+xml"/>
         <item id="cover-image" href="{$xhtml-dir}/images/cover.png" properties="cover-image" media-type="image/png"/>
         <!-- <item id="cover-image" href="{$xhtml-dir}/images/cover.jpg" properties="cover-image" media-type="image/jpeg"/> -->
-        <xsl:apply-templates select="$document-root" mode="manifest" />
+
+        <!-- cruise found objects, including comments we generate to help debug       -->
+        <!-- NB: * could be just "item", but we generally want all elements           -->
+        <!-- Strategy: compare @href of each candidate item with the @href of each    -->
+        <!-- preceding item, and only copy into the result tree if the @href is "new" -->
+        <!-- Duplication removal inspired by:                                         -->
+        <!-- XSLT Cookbook, 2nd Edition, Copyright 2006, O'Reilly Media, Inc.         -->
+        <!-- Recipe 5.1, Ignoring Duplicate Elements                                  -->
+        <!-- www.oreilly.com/library/view/xslt-cookbook/0596003722/ch04s03.html       -->
+        <xsl:for-each select="($discovery-manifest/*|$discovery-manifest/comment())[not(@href = preceding::*/@href)]">
+            <xsl:copy-of select="."/>
+        </xsl:for-each>
     </manifest>
 </xsl:template>
 
@@ -321,7 +336,7 @@
 <!-- recurse into contents for image files, etc    -->
 <!-- See "Core Media Type Resources"               -->
 <!-- Add to spine identically                      -->
-<xsl:template match="frontmatter|colophon|acknowledgement|preface|chapter|appendix|index|section|exercises|references|solutions" mode="manifest">
+<xsl:template match="frontmatter|colophon|acknowledgement|preface|biography|chapter|appendix|index|section|exercises|references|solutions" mode="manifest">
     <!-- Annotate manifest entries -->
     <xsl:comment>
         <xsl:apply-templates select="." mode="long-name" />
@@ -373,7 +388,7 @@
 </xsl:template>
 
 <!-- Simplest scenario is spine matches manifest, all with @linear="yes" -->
-<xsl:template match="frontmatter|colophon|acknowledgement|preface|chapter|appendix|index|section|exercises|references|solutions" mode="spine">
+<xsl:template match="frontmatter|colophon|acknowledgement|preface|biography|chapter|appendix|index|section|exercises|references|solutions" mode="spine">
     <xsl:element name="itemref" xmlns="http://www.idpf.org/2007/opf">
         <xsl:attribute name="idref">
             <xsl:apply-templates select="." mode="html-id" />
@@ -634,6 +649,16 @@
         <!-- process as mixed-content, don't yet allow paragraphs -->
         <xsl:apply-templates select="*|text()" />
     </aside>
+</xsl:template>
+
+<!-- ################ -->
+<!-- Subsidiary Items -->
+<!-- ################ -->
+
+<!-- These tend to "hang" off other structures and/or are routinely -->
+<!-- rendered as knowls.  So we turn off automatic knowlization     -->
+<xsl:template match="&SOLUTION-LIKE;" mode="is-hidden">
+    <xsl:text>false</xsl:text>
 </xsl:template>
 
 <!-- ##### -->

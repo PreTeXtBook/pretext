@@ -6097,6 +6097,7 @@ the xsltproc executable.
                         </figure>
                         <figure>
                             <caption>width=25%</caption>
+                            <!-- a comment in a location like this once revealed a bug -->
                             <image source="images/cross-square.png"/>
                         </figure>
                     </sidebyside>

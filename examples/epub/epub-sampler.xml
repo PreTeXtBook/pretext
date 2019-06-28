@@ -99,7 +99,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <caption>TikZ Electronics Diagram</caption>
                 <image xml:id="tikz-electronics">
                     <description>A pile of electronic components wired together</description>
-                    <latex-image-code>
+                    <latex-image>
                     <!-- CDATA prevents certain LaTeX code from being interpreted as xml -->
                     <![CDATA[\tikzset{%
                       block/.style    = {draw, thick, rectangle, minimum height = 3em,
@@ -178,10 +178,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         \draw [color=gray,thick](-0.5,-9) rectangle (12.5,-5);
                         \node at (-0.5,-9) [below=5mm, right=0mm] {\textsc{second-order noise shaper}};
                     \end{tikzpicture}]]>
-                    </latex-image-code>
+                    </latex-image>
                 </image>
             </figure>
-            <p><q>There</q></p>
+
+            <p>We repeat an image created from an external file, because the EPUB format only wants the file noted once.</p>
+
+            <image source="images/complete-graph" width="70%"/>
+
+            <p>We like to put <init>URL</init>s into footnotes, especially for formats like this where they may not be active.  This output is from <url href="https://pretextbook.org"><pretext/></url><fn><c>pretextbook.org</c></fn>.</p>
+
+            <exercise>
+                <statement>
+                    <p>A sample exercise, where a <tag>hint</tag> and a <tag>solution</tag> should be visible (rather than in a knowl).</p>
+                </statement>
+                <hint>
+                    <p>Just a little help.</p>
+                </hint>
+                <solution>
+                    <p>The whole story with all the details.</p>
+                </solution>
+            </exercise>
 
         </chapter>
 
