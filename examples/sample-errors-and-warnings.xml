@@ -535,6 +535,66 @@ systems.
                         <p>The missing number is <var name="$x"/>.</p>
                     </solution>
             </exercise>
+
+                <figure>
+                    <caption>Two named lists</caption>
+                    <sidebyside widths="30% 60%" valign="top">
+                        <list>
+                            <caption>Sea Life</caption>
+                            <title>Employed, so Caption is commented</title>
+                            <introduction>
+                                <p>Dr. Seuss again.</p>
+                            </introduction>
+                            <ul>
+                                <li>One fish</li>
+                                <li>Two fish</li>
+                                <li>Red fish</li>
+                                <li>Blue fish</li>
+                            </ul>
+                        </list>
+                        <list xml:id="color-list-as-panel">
+                            <caption>Color Shades</caption>
+                            <idx><h>colors</h><h>shades</h></idx>
+                            <ol>
+                                <li><p>Blue<ol>
+                                    <li>Light</li>
+                                    <li>Navy</li>
+                                    <li>Royal</li>
+                                </ol></p></li>
+                                <li><p>Red<ol>
+                                    <li>Maroon</li>
+                                    <li>Pink</li>
+                                    <li>Shocking</li>
+                                </ol></p></li>
+                            </ol>
+                            <conclusion>
+                                <p>This ends our example.</p>
+                            </conclusion>
+                        </list>
+                    </sidebyside>
+                </figure>
+
+                <table>
+                    <caption>Supported Currency</caption>
+                    <tabular>
+                        <row bottom="medium">
+                            <cell>Sign</cell>
+                            <cell>Unicode</cell>
+                            <cell>Name</cell>
+                        </row>
+                        <row>
+                            <cell>&#x0024;</cell>
+                            <cell><c>U+0024</c></cell>
+                            <cell>dollar</cell>
+                        </row>
+                        <row>
+                            <cell>&#x00a2;</cell>
+                            <cell><c>U+00A2</c></cell>
+                            <cell>cent</cell>
+                        </row>
+                    </tabular>
+                </table>
+
         </section>
 
         <backmatter>

@@ -1458,7 +1458,7 @@
         </choice>
       </element>
       <element name="table">
-        <ref name="MetaDataCaption"/>
+        <ref name="MetaDataShortTitle"/>
         <ref name="Tabular"/>
       </element>
       <element name="listing">
@@ -1469,7 +1469,7 @@
         </choice>
       </element>
       <element name="list">
-        <ref name="MetaDataCaption"/>
+        <ref name="MetaDataShortTitle"/>
         <optional>
           <ref name="IntroductionText"/>
         </optional>
