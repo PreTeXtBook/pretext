@@ -6407,20 +6407,10 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:message>~~~~~~~~~~~~~~~~~~~~</xsl:message>
      -->
 
-    <!-- Metadata banned, roughly 2017-07, now pure container  -->
-    <!-- Retain filter for backward compatibility              -->
-     <xsl:variable name="panels" select="*[not(&METADATA-FILTER;)]" />
+    <!-- "paragraphs" deprecated within sidebyside, 2018-05-02 -->
+    <!-- jsxgraph deprecated?  Check                           -->
 
-     <!-- compute necessity of headings (titles) and captions here -->
-     <!-- (2019-06-12)  No titles are migrating to headings, so we totally kill this -->
-     <!-- construction always as we move from  3 x n  to  2 x n  en route to  1 x n  -->
-     <xsl:variable name="has-headings" select="false()" />
-     <xsl:variable name="has-captions" select="boolean($panels[caption])" />
-     <xsl:if test="$sbsdebug">
-        <xsl:message>HH: <xsl:value-of select="$has-headings" /> :HH</xsl:message>
-        <xsl:message>HC: <xsl:value-of select="$has-captions" /> :HC</xsl:message>
-        <xsl:message>----</xsl:message>
-    </xsl:if>
+     <xsl:variable name="panels" select="p|pre|ol|ul|dl|program|console|poem|audio|video|interactive|slate|exercise|image|figure|table|listing|list|tabular|stack|jsxgraph|paragraphs" />
 
     <!-- We build up lists of various parts of a panel      -->
     <!-- It has setup (LaTeX), headings (titles), panels,   -->
@@ -6434,18 +6424,6 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <!-- template to be arranged                            -->
     <!-- TODO: Instead we could pass the $layout to the four,    -->
     <!-- and infer the $panel-number in the receiving templates. -->
-
-    <xsl:variable name="headings">
-        <xsl:for-each select="$panels">
-            <!-- context is now a particular panel -->
-            <xsl:variable name="panel-number" select="count(preceding-sibling::*) + 1" />
-                <xsl:apply-templates select="." mode="panel-heading">
-                    <xsl:with-param name="width" select="$layout/width[$panel-number]" />
-                    <xsl:with-param name="left-margin" select="$layout/left-margin" />
-                    <xsl:with-param name="right-margin" select="$layout/right-margin" />
-                </xsl:apply-templates>
-        </xsl:for-each>
-    </xsl:variable>
 
     <xsl:variable name="panel-panels">
         <xsl:for-each select="$panels">
@@ -6461,28 +6439,12 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         </xsl:for-each>
     </xsl:variable>
 
-    <xsl:variable name="captions">
-        <xsl:for-each select="$panels">
-            <!-- context is now a particular panel -->
-            <xsl:variable name="panel-number" select="count(preceding-sibling::*) + 1" />
-            <xsl:apply-templates select="." mode="panel-caption">
-                <xsl:with-param name="width" select="$layout/width[$panel-number]" />
-                <xsl:with-param name="left-margin" select="$layout/left-margin" />
-                <xsl:with-param name="right-margin" select="$layout/right-margin" />
-            </xsl:apply-templates>
-        </xsl:for-each>
-    </xsl:variable>
-
     <!-- now collect components into output wrappers -->
     <xsl:apply-templates select="." mode="compose-panels">
         <xsl:with-param name="b-original" select="$b-original" />
 
         <xsl:with-param name="layout" select="$layout" />
-        <xsl:with-param name="has-headings" select="$has-headings" />
-        <xsl:with-param name="has-captions" select="$has-captions" />
-        <xsl:with-param name="headings" select="$headings" />
         <xsl:with-param name="panels" select="$panel-panels" />
-        <xsl:with-param name="captions" select="$captions" />
     </xsl:apply-templates>
 </xsl:template>
 
@@ -6511,6 +6473,22 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:if>
 
     <xsl:apply-templates select="sidebyside" />
+</xsl:template>
+
+<!-- Since stackable items do not carry titles or captions,   -->
+<!-- their templates do the right thing.  Items that normally -->
+<!-- could go nline within a paragraph without any spacing    -->
+<!-- will be preceded by a \par in their LaTeX representation -->
+<!-- to get them onto a line of their own                     -->
+<!-- 2019-06-28: parameters only consumed by HTML templates   -->
+<xsl:template match="sidebyside/stack">
+    <xsl:param name="b-original" select="true()" />
+    <xsl:param name="width" />
+
+    <xsl:apply-templates select="tabular|image|p|pre|ol|ul|dl|audio|video|interactive|slate|program|console|exercise">
+        <xsl:with-param name="b-original" select="$b-original" />
+        <xsl:with-param name="width" select="$width"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- This is an abstract stub for HTML production,     -->

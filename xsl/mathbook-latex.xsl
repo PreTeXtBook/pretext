@@ -8397,32 +8397,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- without a page -break, via the LaTeX                 -->
 <!-- \nopagebreak=\nopagebreak[4] command                 -->
 
-<!-- If an object carries a title, we add it to the -->
-<!-- row of titles across the top of the table      -->
-<!-- Bold, but not with a font-size increase, since -->
-<!-- width is constrained for panels                -->
-<xsl:template match="*" mode="panel-heading">
-    <xsl:param name="width" />
-    <xsl:text>\begin{sbsheading}{</xsl:text>
-    <xsl:value-of select="substring-before($width,'%') div 100" />
-    <xsl:text>}</xsl:text>
-    <xsl:if test="title">
-        <xsl:apply-templates select="." mode="title-full" />
-    </xsl:if>
-    <xsl:text>\end{sbsheading}%&#xa;</xsl:text>
-</xsl:template>
-
-<!-- TEMPORARY -->
-<!-- Progessively killing titles as they migrate into panel-panel -->
-<xsl:template match="poem" mode="panel-heading">
-    <xsl:param name="width" />
-    <xsl:text>\begin{sbsheading}{</xsl:text>
-    <xsl:value-of select="substring-before($width,'%') div 100" />
-    <xsl:text>}</xsl:text>
-    <xsl:text>\end{sbsheading}%&#xa;</xsl:text>
-</xsl:template>
-
-
 <xsl:template match="*" mode="panel-panel">
     <xsl:param name="width" />
     <xsl:param name="valign" />
@@ -8443,59 +8417,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
     </xsl:choose>
     <xsl:text>%&#xa;</xsl:text>
-    <xsl:apply-templates select="." mode="panel-latex-box" />
+    <!-- Realize each panel's object -->
+    <xsl:apply-templates select="."/>
     <xsl:text>\end{sbspanel}%&#xa;</xsl:text>
 </xsl:template>
 
-
-<xsl:template match="*" mode="panel-caption">
-    <xsl:param name="width" />
-    <xsl:text>\begin{sbscaption}{</xsl:text>
-    <xsl:value-of select="substring-before($width,'%') div 100" />
-    <xsl:text>}%&#xa;</xsl:text>
-    <xsl:choose>
-        <!-- Exceptional situation for backward-compatibility -->
-        <!-- Titled/environment version deprecated 2017-08-25 -->
-        <xsl:when test="self::list and title and not(caption)">
-            <xsl:choose>
-                <xsl:when test="parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure">
-                    <xsl:text>\subcaption{</xsl:text>
-                    <xsl:apply-templates select="." mode="title-full" />
-                    <xsl:apply-templates select="parent::*" mode="label" />
-                    <xsl:text>}&#xa;</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:text>\captionof{namedlist}{</xsl:text>
-                    <xsl:apply-templates select="." mode="title-full" />
-                    <xsl:apply-templates select="parent::*" mode="label" />
-                    <xsl:text>}&#xa;</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:when>
-        <!-- subcaptioned -->
-        <xsl:when test="parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure">
-            <xsl:apply-templates select="caption" mode="subcaption" />
-        </xsl:when>
-        <!-- not subcaptioned, so regular caption -->
-        <xsl:when test="self::figure or self::table or self::listing or self::list">
-            <xsl:apply-templates select="caption" />
-        </xsl:when>
-        <!-- fill space -->
-        <xsl:otherwise />
-    </xsl:choose>
-    <xsl:text>\end{sbscaption}%&#xa;</xsl:text>
-</xsl:template>
 
 <!-- We take in all three rows of a LaTeX    -->
 <!-- table and package them up appropriately -->
 <xsl:template match="sidebyside" mode="compose-panels">
     <xsl:param name="layout" />
-    <xsl:param name="has-headings" />
-    <xsl:param name="has-captions" />
-    <xsl:param name="setup" />
-    <xsl:param name="headings" />
     <xsl:param name="panels" />
-    <xsl:param name="captions" />
 
     <xsl:variable name="number-panels" select="$layout/number-panels" />
     <xsl:variable name="left-margin" select="$layout/left-margin" />
@@ -8525,95 +8457,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}{</xsl:text>
     <xsl:value-of select="substring-before($space-width, '%') div 100" />
     <xsl:text>}%&#xa;</xsl:text>
-    <!-- If the sidebyside is inside a figure, the floating -->
-    <!-- environment keeps it from page breaking, otherwise -->
-    <!-- we need to add in the necessary discouragement     -->
-    <!-- Headings (titles) are "all or nothing"             -->
-
-    <xsl:if test="$has-headings">
-        <xsl:value-of select="$headings" />
-        <xsl:if test="not(ancestor::figure)">
-            <xsl:text>\nopagebreak%&#xa;</xsl:text>
-        </xsl:if>
-    </xsl:if>
     <!-- The main event -->
     <xsl:value-of select="$panels" />
-    <!-- Captions are "all or nothing"       -->
-    <!-- We try to keep them attached to the -->
-    <!-- panels with a firm "no-page-break"  -->
-    <xsl:if test="$has-captions">
-        <xsl:if test="not(ancestor::figure)">
-            <xsl:text>\nopagebreak%&#xa;</xsl:text>
-        </xsl:if>
-        <xsl:value-of select="$captions" />
-    </xsl:if>
     <xsl:text>\end{sidebyside}%&#xa;</xsl:text>
     <xsl:apply-templates select="." mode="pop-footnote-text"/>
 </xsl:template>
-
-
-<!-- ############################ -->
-<!-- Object by Object LaTeX Boxes -->
-<!-- ############################ -->
-
-<!-- Implement modal "panel-latex-box" for allowed elements -->
-
-<xsl:template match="p|pre|ol|ul|dl|program|console|exercise|poem|video|audio|interactive|image" mode="panel-latex-box">
-    <xsl:apply-templates select="." />
-</xsl:template>
-
-<!-- Will be obsolete, instead stack "p" with no title -->
-<!-- Deprecated within sidebyside, 2018-05-02 -->
-<!-- "title" should be killed anyway -->
-<xsl:template match="paragraphs" mode="panel-latex-box">
-    <xsl:apply-templates select="node()[not(self::title)]" />
-</xsl:template>
-
-<!-- TODO: tighten up gaps, margins? -->
-<xsl:template match="tabular" mode="panel-latex-box">
-    <!-- \centering needs a closing \par within a      -->
-    <!-- defensive group if it is to be effective      -->
-    <!-- https://tex.stackexchange.com/questions/23650 -->
-    <xsl:text>{\centering%&#xa;</xsl:text>
-    <xsl:apply-templates select="." />
-    <xsl:text>\par}&#xa;</xsl:text>
-</xsl:template>
-
-<!-- figure, table, listing will contain one item    -->
-<!-- This is skipping captions, intentionally        -->
-<xsl:template match="figure|table|listing" mode="panel-latex-box">
-    <xsl:apply-templates select="*[not(&METADATA-FILTER;)][1]" mode="panel-latex-box" />
-</xsl:template>
-
-<!-- list will have introduction, <list>, conclusion -->
-<!-- This is skipping a caption, intentionally       -->
-<!-- This is skipping index entries, unintentionally -->
-<xsl:template match="list" mode="panel-latex-box">
-    <xsl:apply-templates select="introduction" />
-    <xsl:apply-templates select="ol|ul|dl" mode="panel-latex-box" />
-    <xsl:apply-templates select="conclusion" />
-</xsl:template>
-
-<!-- Since stackable items do not carry titles or captions, -->
-<!-- their "panel-latex-box" templates do the right thing   -->
-<!-- Items that normally could go inline within a paragraph -->
-<!-- without any spacing will be preceded by a \par         -->
-<xsl:template match="stack" mode="panel-latex-box">
-    <xsl:for-each select="tabular|image|p|pre|ol|ul|dl|video|interactive|stack|program|console|exercise">
-        <xsl:if test="preceding-sibling::* and (self::image or self::tabular)">
-            <xsl:text>\par&#xa;</xsl:text>
-        </xsl:if>
-        <xsl:apply-templates select="." mode="panel-latex-box" />
-    </xsl:for-each>
-</xsl:template>
-
-<!-- Just temporary markers of unimplemented stuff -->
-<xsl:template match="*" mode="panel-latex-box">
-    <xsl:text>\parbox{70pt}{[</xsl:text>
-    <xsl:value-of select="local-name(.)" />
-    <xsl:text>]}</xsl:text>
-</xsl:template>
-
 
 <!-- ###### -->
 <!-- Images -->
@@ -8670,6 +8518,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="image[ancestor::sidebyside or parent::figure]">
+    <!-- get a newline if inside a "stack" -->
+    <xsl:if test="parent::stack and preceding-sibling::*">
+        <xsl:text>\par&#xa;</xsl:text>
+    </xsl:if>
     <xsl:apply-templates select="." mode="image-inclusion" />
 </xsl:template>
 
