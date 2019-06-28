@@ -3766,6 +3766,12 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:when test="title">
             <xsl:apply-templates select="title/*|title/text()" />
         </xsl:when>
+        <!-- A "table" and a "list" once had "caption", so provide this -->
+        <!-- content for backward-compatibility, and just safely call   -->
+        <!-- "title-full" on these objects                              -->
+        <xsl:when test="(self::table or self::list) and caption">
+            <xsl:apply-templates select="caption/*|caption/text()"/>
+        </xsl:when>
         <xsl:when test="$default-exists='true'">
             <xsl:apply-templates select="." mode="type-name" />
         </xsl:when>
@@ -3962,6 +3968,22 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:apply-templates/>
     <xsl:if test="following-sibling::line">
         <xsl:value-of select="$separator"/>
+    </xsl:if>
+</xsl:template>
+
+
+<!-- ######## -->
+<!-- Captions -->
+<!-- ######## -->
+
+<!-- Captions are similar to titles.  They should be -->
+<!-- killed as metadata and requested when needed.   -->
+
+<xsl:template match="caption"/>
+
+<xsl:template match="figure|listing" mode="caption-full">
+    <xsl:if test="caption">
+        <xsl:apply-templates select="caption/*|caption/text()"/>
     </xsl:if>
 </xsl:template>
 
