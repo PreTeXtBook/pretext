@@ -46,6 +46,10 @@
 #toc > ul > li:not(:first-child) {
     margin-top: 0.3em;
 }
+/* But not at the start of a part */
+#toc > ul > li.part + li {
+    margin-top: 0;
+}
 /* Removes underlines from links in toc */
 #toc ul li a, #toc ul li a:link, #toc ul li a:visited, #toc ul li a:hover, #toc ul li a:active {
     text-decoration: none;
