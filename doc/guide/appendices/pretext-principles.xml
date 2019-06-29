@@ -10,8 +10,8 @@
 <appendix xml:id="pretext-principles" xmlns:xi="http://www.w3.org/2001/XInclude">
     <title><pretext /> Principles</title>
 
-     <p>The development of <pretext /> is guided by a list of principles, which appear early in the Author's Guide.  We duplicate them here so we can reference them as motivation for various decisions described here.</p>
+     <p>The development of <pretext /> is guided by a list of principles, which appear early in the Guide.  We duplicate them here so we can reference them as motivation for various decisions described here.</p>
 
-     <xi:include href="principles.xml" />
+     <xi:include href="../common/principles.xml" />
 
 </appendix>

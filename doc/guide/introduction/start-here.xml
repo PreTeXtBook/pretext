@@ -30,7 +30,7 @@
 
             <p>The creation, design, development and maintenance of <pretext /> is guided by the following list of principles.  They may not be fully understood on a first reading, but should be useful as you become more familiar with authoring texts with <pretext /> and should amplify some of the previous discussion.</p>
 
-            <xi:include href="principles.xml" />
+            <xi:include href="../common/principles.xml" />
         </paragraphs>
     </section>
 
