@@ -52,7 +52,7 @@
         <p>We describe the Creative Commons (<init>CC</init>) licenses first, since they have various options, which are a convenient way to compartmentalize and describe the features of other open licenses.  They are known by abbreviations, so a license might be shortened to something like just <c>CC BY-SA</c>.</p>
 
         <list>
-            <caption>Creative Commons Options</caption>
+            <title>Creative Commons Options</title>
             <dl>
                 <li>
                     <title>Creative Commons, <c>CC</c></title>

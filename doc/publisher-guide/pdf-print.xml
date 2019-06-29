@@ -140,7 +140,7 @@
         <p>The following switches can be provided on the command-line, or perhaps more conveniently in a simple <init>XSL</init> file.  See <xref ref="processing-parameters"/> for more detail.</p>
 
         <table>
-            <caption>Options for <latex/> Conversion</caption>
+            <title>Options for <latex/> Conversion</title>
 
             <tabular>
                 <row bottom="medium">

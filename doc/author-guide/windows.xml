@@ -33,7 +33,7 @@
       <title>Initial Windows setup</title>
       <p>It is easier to see what is happening if your Windows file browser is not set up to hide file extensions from you. Disable the <q>hide file extensions</q> behavior before proceeding. In Windows 7/8, this can be done through the Control Panel. In Windows 10, there is a checkbox somewhere in the ribbon for it.</p>
       <list xml:id="initial-windows-setup-steps">
-        <caption>Initial Windows Setup</caption>
+        <title>Initial Windows Setup</title>
         <ul>
           <li>
             <p>On Windows 7 or 8:<ol>
@@ -101,7 +101,7 @@
 
       <p>This is the most annoying part of the installation. Obtain four zip archives from <url href="ftp://ftp.zlatkovic.com/libxml/"> Igor Zlatkovic's FTP site</url> that hosts the most recent Libxml binaries for Windows. At the time of this writing, the 64-bit binaries were considered experimental. I have had no trouble using the 32-bit binaries on my 64-bit Windows 7 system, so I suggest that all MBX users download the most recent 32-bit version of the following libraries:</p>
       <list xml:id="list-zip-files-xsltproc">
-        <caption><c>xsltproc</c> Zip Files</caption>
+        <title><c>xsltproc</c> Zip Files</title>
         <ol>
           <li><p><c>iconv</c> (filename something like <c>iconv-1.9.2.win32.zip</c>)</p></li>
           <li><p><c>libxml2</c> (filename something like <c>libxml2-2.7.8.win32.zip</c>)</p></li>
@@ -112,7 +112,7 @@
       <p>We only need a handful of files from these archives. So the simplest thing is to leave them in your Downloads folder and grab what we need. Create a new folder <c>C:\xsltproc</c> (it can be anywhere, as long as it's a new location). We'll call this location <c>&lt;xsltproc&gt;</c> in case you named your folder something different.</p>
       <p>Extract the following files from the four zip archives you downloaded above into <c>&lt;xsltproc&gt;</c>:</p>
       <list xml:id="list-extracted-files-from-zips-xsltproc">
-        <caption><c>xsltproc</c> Extracted Zip Files</caption>
+        <title><c>xsltproc</c> Extracted Zip Files</title>
         <ol>
           <li>
             <p>From <c>iconv-*.win32.zip</c>:<ol>
@@ -145,7 +145,7 @@
       <title>Change PATH environment variable</title>
       <p><em>Note: if you prefer not to meddle with this, it can be avoided</em>.  Now, we need to make sure your system can find these files when we need them.</p>
       <list xml:id="steps-change-path-environment-variable-xsltproc">
-        <caption>Path Environment Variable for <c>xsltproc</c></caption>
+        <title>Path Environment Variable for <c>xsltproc</c></title>
         <ol>
           <li>
             <p>Open the Start menu and start typing <q>Edit the system environment variables</q>. Select this option when it becomes visible.</p>
@@ -193,7 +193,7 @@
     <subsection xml:id="install-git">
       <title>Steps to install git</title>
       <list xml:id="steps-install-git">
-        <caption>git Installation</caption>
+        <title>git Installation</title>
         <ol>
           <li>
             <p>Visit the official <c>git</c> <url href="https://git-scm.com/download/win">download page</url> (download starts automatically) and obtain the latest binary for your system.</p>
@@ -243,7 +243,7 @@
     <p>then a good choice for a 32-bit Windows would be</p>
     <pre>ImageMagick-7.0.1-6-Q16-x86-dll.exe</pre>
     <list xml:id="installing-imagemagick-steps">
-      <caption>imagemagick Installation</caption>
+      <title>imagemagick Installation</title>
       <ol>
         <li>
           <p>Run the installer from your download location.</p>
@@ -274,7 +274,7 @@
       <title>Change PATH environment variable</title>
       <p>The <c>pdfcrop</c> utility needs to be told which Ghostscript command to use. We need to add the file <c>gswin64c.exe</c> to the Windows PATH. This is similar to what is done above, in <xref ref="change-path-environment-variable-xsltproc" />.</p>
       <list xml:id="steps-change-path-environment-variable-ghostscript">
-        <caption>Path Environment Variable for <c>ghostscript</c></caption>
+        <title>Path Environment Variable for <c>ghostscript</c></title>
         <ol>
           <li>
             <p>Open the Start menu and start typing <q>Edit the system environment variables</q>. Select this option when it becomes visible.</p>
@@ -314,7 +314,7 @@
       <title>Change PATH environment variable</title>
       <p>We need to add the <c>pdf2svg</c> program to the Windows PATH. This is similar to what is done above, in <xref ref="change-path-environment-variable-xsltproc" /> and <xref ref="change-path-environment-variable-ghostscript" />.</p>
       <list xml:id="steps-change-path-environment-variable-pdf2svg">
-        <caption>Path Environment Variable for <c>pdf2svg</c></caption>
+        <title>Path Environment Variable for <c>pdf2svg</c></title>
         <ol>
           <li>
             <p>Open the Start menu and start typing <q>Edit the system environment variables</q>. Select this option when it becomes visible.</p>

@@ -39,7 +39,7 @@
         <p>This is an incomplete list of the primary packages we employ, and their general purpose.  They, and their documentation, can be easily found at the <url href="https://ctan.org/">Comprehensive <tex/> Archive Network</url>, aka <init>CTAN</init>.</p>
 
         <table>
-            <caption>Principal <latex/> packages used for styles</caption>
+            <title>Principal <latex/> packages used for styles</title>
 
             <tabular>
                 <row>

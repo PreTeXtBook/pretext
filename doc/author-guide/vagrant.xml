@@ -20,7 +20,7 @@
     <paragraphs>
         <title>Installation</title>
         <list>
-            <caption>Steps to install</caption>
+            <title>Steps to install</title>
             <ol>
                 <li><url href="https://www.virtualbox.org/wiki/Downloads">Download</url> and install Virtualbox</li>
                 <li><url href="https://www.vagrantup.com/downloads.html">Download</url> and install Vagrant</li>

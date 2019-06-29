@@ -107,7 +107,7 @@
         <p>Besides being useful for search facilities, setting up a search engine might be a good way to alert Google of something newly available, and initiate your book's rise up the search results rankings.</p>
 
         <list>
-            <caption>Configuring Google Custom Search</caption>
+            <title>Configuring Google Custom Search</title>
 
             <ol>
                 <li><p>Create an account with Google (GMail, YouTube, <etc />) and make sure you are signed in.</p></li>
@@ -131,7 +131,7 @@
         </list>
 
         <list>
-            <caption>Configuring <pretext/> for Google Search</caption>
+            <title>Configuring <pretext/> for Google Search</title>
 
             <ol>
                 <li><p>The <c>Search engine ID</c> you saved from above is referenced in Google's code as a <c>cx</c> number.  An example looks like <c>002673997130187229905:qjo2y0jplyu</c>.  In this case, you would use on your <c>xsltproc</c> command-line,<cd>

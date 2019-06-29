@@ -66,7 +66,7 @@
         <p>The compact syntax might remind you of Java or C++ syntax.  We do not provide a tutorial here, but do provide some hints on the various delimiters and special symbols, which may make it fairly easy to see your way through to the meaning.  The fundamental object of the schema is a <term>pattern</term><idx>pattern</idx>, and <term>named patterns</term><idx>named pattern</idx><idx><h>pattern</h><h>named pattern</h></idx> can be reused in order to reuse common patterns<idx>common pattern</idx><idx><h>pattern</h><h>common pattern</h></idx> and modularize the description.  One approach to validation is to remove portions of your source that match required patterns until only optional material remains.  Notice that if you were to chase your way through substituting the named patterns with their employment, you would have a single (large) pattern which every possible <pretext /> document would match, and by definition an <init>XML</init> document that does not match is not <pretext />.  (OK, that is a slight exaggeration, see <xref ref="schematron" />.)</p>
 
         <table>
-            <caption><acro>RELAX-NG</acro> Compact Syntax Summary</caption>
+            <title><acro>RELAX-NG</acro> Compact Syntax Summary</title>
 
             <tabular>
                 <!--  -->
@@ -147,7 +147,7 @@
         <p>We collect summary information about editors that make use of schema.  See <xref ref="editors" /> for more specific information, links, <etc />.</p>
 
         <table>
-            <caption>Schema Support in Editors</caption>
+            <title>Schema Support in Editors</title>
 
             <tabular>
                 <!--  -->

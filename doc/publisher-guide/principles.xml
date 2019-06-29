@@ -15,7 +15,7 @@
 <!-- Also: sync edits with main README.md file.        -->
 
 <list xml:id="list-principles">
-    <caption><pretext /> Principles</caption>
+    <title><pretext /> Principles</title>
 
     <ol>
         <li xml:id="principle-markup"><pretext /> is a markup language that captures the structure of textbooks and research papers.</li>

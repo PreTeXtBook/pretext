@@ -312,7 +312,7 @@
                 <!-- " do not use, lq, rq            -->
 
                 <table>
-                    <caption>Ambiguous Keyboard Characters and Alternatives</caption>
+                    <title>Ambiguous Keyboard Characters and Alternatives</title>
                     <tabular>
                         <row bottom="medium">
                             <cell>Keyboard</cell>
@@ -410,7 +410,7 @@
                 </paragraphs>
 
                 <table>
-                    <caption>Extraordinary Characters and Their Empty Elements</caption>
+                    <title>Extraordinary Characters and Their Empty Elements</title>
                     <tabular>
                         <row bottom="medium">
                             <cell>Character</cell>
@@ -485,7 +485,7 @@
                 <!-- ex &#x00A0; non-breaking space  -->
                 <!-- ex &#x00AD; soft hyphen         -->
                 <table>
-                    <caption>Latin-1 Supplement, Unicode <c>U+00A0</c><ndash/><c>U+00FF</c></caption>
+                    <title>Latin-1 Supplement, Unicode <c>U+00A0</c><ndash/><c>U+00FF</c></title>
                 <tabular>
                     <row><cell />
                     <cell><c>0</c></cell>
@@ -729,7 +729,7 @@
             <p>By default, a cross-reference will visually be text like Theorem 5.2.  Depending on your output format, it may have various devices to help you locate that theorem.  Maybe a page number, or it is a hyperlink, or the whole theorem is the content of a knowl.  You can change the default look of cross-references by setting the <attr>text</attr> attribute in <c>docinfo/cross-references</c>.  But you can also change the visual appearance of a cross-reference on a case-by-case basis.  Add a <attr>text</attr> attribute to your <tage>xref</tage> element to override the document-wide setting.  The first column of this table lists the possible attribute values, either document-wide, or on a per-cross-reference basis.  The second column has live cross-references to a section of an earlier chapter (that is far away).  The third column has live cross-references to another section of this chapter (which is close by).  For the fourth column, we have placed content (<q>Extra</q>) into the <tag>xref</tag> element as an override of, or addition to, some of the text for the cross-references of the preceding column.  Study the table and then read some more explanation following.  Note that <c>type-global</c> is the default.</p>
 
             <table>
-                <caption>Cross-reference visual text styles</caption>
+                <title>Cross-reference visual text styles</title>
                 <tabular>
                     <row bottom="major">
                         <cell><attr>text</attr></cell>
@@ -811,7 +811,7 @@
 
             <!-- expand and add links to the Preface to demo default titles -->
             <table xml:id="txo">
-                <caption>Cross-reference text overrides</caption>
+                <title>Cross-reference text overrides</title>
                 <tabular>
                     <row bottom="major">
                         <cell><attr>text</attr></cell>
@@ -888,7 +888,7 @@
             <p>The <c>local</c> option, discussed generally above, behaves differently for a cross-reference to a list item of an ordered list that is contained in a named list.  As seen in the table just below, the local portion of the number is the part that comes from the list item, without the part that comes from the location of the <tag>list</tag> block.</p>
 
             <table xml:id="table-xref-list-item">
-                <caption>Cross-references to list items, visual text styles</caption>
+                <title>Cross-references to list items, visual text styles</title>
                 <tabular>
                     <row bottom="major">
                         <cell><attr>text</attr></cell>
@@ -965,7 +965,7 @@
             <p>The <c>hybrid</c> options employ a different definition of when the distance between a cross-reference and its target is close enough that the number can be shortened, without becoming ambiguous.  When an <tag>xref</tag> and its target are part of the same <tag>list</tag>, then the common part of the number derived from the <tag>list</tag> is not needed.  To illustrate we need to make a small <tag>list</tag> with cross-references contained within.</p>
 
             <list>
-                <caption>Small test</caption>
+                <title>Small test</title>
                 <ol>
                     <li>(<c>type-global</c>)  Flowers are not <xref ref="nearby-item" text="type-global" />.</li>
                     <li>(<c>type-hybrid</c>)  Fish are not <xref ref="nearby-item" text="type-hybrid" />.</li>
@@ -1182,7 +1182,7 @@
 
             <sidebyside>
                 <table>
-                    <caption>Ordered List Labels</caption>
+                    <title>Ordered List Labels</title>
                     <tabular>
                         <row><cell>Code</cell><cell>Realization</cell></row>
                         <row><cell>1</cell><cell>Arabic numerals</cell></row>
@@ -1193,7 +1193,7 @@
                     </tabular>
                 </table>
                 <table>
-                    <caption>Unordered List Labels</caption>
+                    <title>Unordered List Labels</title>
                     <tabular>
                         <row><cell>Code</cell><cell>Realization</cell></row>
                         <row><cell>disc</cell><cell>Filled small circle, aka a bullet</cell></row>
@@ -1330,7 +1330,7 @@
                 <p>A named list, only to test cross-references.</p>
 
                 <list xml:id="named-list">
-                    <caption>A two-deep ordered list</caption>
+                    <title>A two-deep ordered list</title>
                     <ol label="A:">
                         <li>
                             <p>
@@ -1405,7 +1405,7 @@
             <p>A <tag>hint</tag> to an <tag>exercise</tag> renders nicely in a knowl, right below the exercise statement, as part of a conversion to <init>HTML</init>.  For a conversion to <latex/>/<init>PDF</init>/print, you might wish to display a hint, visibly, as part of the exercise, or you may wish to park the hint in a <pubtitle>Hints to Exercises</pubtitle> division in the back matter.  To control visibility of the components of exercises (and projects) there are fifteen switches you can use as string parameters on the command line, or in an extra <init>XSL</init> file.  Each takes values of <c>yes</c> or <c>no</c>.</p>
 
             <table>
-                <caption>Exercise Component Switches, Original Versions</caption>
+                <title>Exercise Component Switches, Original Versions</title>
 
                 <tabular>
                     <row>
@@ -1469,7 +1469,7 @@
             </cd>would cause every <tag>exercise</tag> within each <tag>reading-questions</tag> to have its <tag>hint</tag> and <tag>answer</tag> displayed, but not its <tag>statement</tag> nor its <tag>solution</tag>.  These are the attribute names and the possible values.</p>
 
             <table>
-                <caption>Attributes (left) and Values (right) for <tag>solutions</tag> element</caption>
+                <title>Attributes (left) and Values (right) for <tag>solutions</tag> element</title>
 
                 <tabular>
                     <row>
@@ -1919,7 +1919,7 @@
             <p>HTML5 web browsers are able to play video files in three formats, summarized in the following table.</p>
 
             <table xml:id="table-video-formats">
-                <caption>HTML5 video formats</caption>
+                <title>HTML5 video formats</title>
 
                 <tabular>
                     <row>
