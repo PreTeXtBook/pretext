@@ -7,7 +7,8 @@
 <!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
 <!-- See the file COPYING for copying conditions.             -->
 
-<frontmatter xml:id="index">
+
+<frontmatter xml:id="index" xmlns:xi="http://www.w3.org/2001/XInclude">
 
     <titlepage>
         <author>
@@ -45,24 +46,6 @@
         </copyright>
     </colophon>
 
-    <preface xml:id="preface">
-        <paragraphs>
-            <title>Author's Guide</title>
+    <xi:include href="preface.xml"/>
 
-            <p>This guide will help you <em>author</em> a <pretext /> document.  So it serves as a description of the <pretext /> <init>XML</init> vocabulary, along with the mechanics of creating the source and common output formats.  Note that this is different than <em>publishing</em> your document, which is described in the <pubtitle><pretext /> Publisher's Guide</pubtitle>.</p>
-        </paragraphs>
-
-        <paragraphs>
-            <title>Basic Reference</title>
-
-            <p>This document provides a quick overview of the minimal syntax for a variety of key <pretext /> features. Unlike the sample article, which is designed to demonstrate and stress test all aspects of <pretext />, this guide will illustrate only the key elements of some of the most universally-used features of the language. In many cases, in addition to features not discussed, there are may be alternative structures that are not given here.</p>
-        </paragraphs>
-
-        <paragraphs>
-            <title>Publisher's Guide</title>
-
-            <p>Even if you intend to distribute your document with an open license, and you are both author <em>and</em> publisher, it is still helpful and instructive to understand, and separate, the two different steps and roles.  So visit this part of the <pubtitle>Guide</pubtitle> to learn how you can present, distribute, and maintain what you have authored.</p>
-        </paragraphs>
-
-    </preface>
 </frontmatter>
