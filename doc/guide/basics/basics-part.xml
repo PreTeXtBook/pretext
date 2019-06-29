@@ -1,13 +1,13 @@
-<part  xmlns:xi="http://www.w3.org/2001/XInclude">
+<part xml:id="part-basics" xmlns:xi="http://www.w3.org/2001/XInclude">
     <title><pretext/> Basics Reference</title>
 
         <chapter xml:id="ch-about">
             <title>About this reference</title>
-            <p>This <pubtitle><pretext /> Basic Reference</pubtitle> is meant to supplement the <pretext /> documentation maintained as part of the official repository. Here you will find the <em>basics</em> of the most important and commonly used <pretext /> tags. In most instances, this will be exhibited by showing a <pretext /> code listing followed immediately by the exact output that code produces. (In some cases, such as with the code that produces a section, it is not practical to do this.) Wherever possible, the sample code and its output are accompanied by a link to the official <pretext /> documentation (typically the <pubtitle><pretext /> Author's Guide</pubtitle>).
+            <p>This <pubtitle><pretext /> Basic Reference</pubtitle> is meant to supplement the <pretext /> documentation maintained as part of the official repository. Here you will find the <em>basics</em> of the most important and commonly used <pretext /> tags. In most instances, this will be exhibited by showing a <pretext /> code listing followed immediately by the exact output that code produces. (In some cases, such as with the code that produces a section, it is not practical to do this.) Wherever possible, the sample code and its output are accompanied by cross-references to the <pubtitle>Author's Guide</pubtitle> in <xref ref="part-author"/>.
             </p>
             <p>There are some things that are considered beyond the scope of this reference:
             <ul>
-                <li>Many of the possible options that can be used with the different tags. This is a <em>basic</em> reference, and so we want to keep things simple. When you need a more advanced feature not discussed here, follow the link to the appropriate portion of the <pubtitle><pretext /> Author's Guide</pubtitle>.</li>
+                <li>Many of the possible options that can be used with the different tags. This is a <em>basic</em> reference, and so we want to keep things simple. When you need a more advanced feature not discussed here, follow the link to the appropriate portion of the <pubtitle>Author's Guide</pubtitle> (<xref ref="part-author"/>).</li>
                 <li>Instructions on using <c>xsltproc</c> to convert your <pretext /> <init>XML</init> to another format such as <init>HTML</init> or <latex />.</li>
                 <li>Instructions on using <webwork /> in <pretext />. (This reference does show the most basic of syntax for including a problem from the <webwork /> Open Problem Library. However, it assumes that you already have a project set up to compile correctly with <webwork /> problems, which is a more involved task than just running <c>xsltproc</c>.)</li>
             </ul></p>
@@ -20,7 +20,7 @@
             <idx>term</idx>
             <idx>formatting</idx>
             <idx>emphasis</idx>
-                The <url href="https://pretextbook.org/doc/author-guide/html/philosophy.html"><pretext /> Principles</url> begin with <q><pretext /> is a markup language that captures the structure of textbooks and research papers.</q> By a <term>markup language</term><idx>markup language</idx>, we mean that the syntax describes the <em>structure</em> of the document and not the presentation of the document. Thus, <pretext /> does not provide, for instance, a way to make text bold or italic or in a larger font.  If an author seeks a specific type of local typesetting, then they need to pause and think about the <em>reason</em> for that typesetting. Is the reason to emphasize a word or phrase? Is the reason to alert the reader to a common mistake? Is it to designate that a word is a new term being defined by the author? There are ways to mark up such structural ideas in <pretext />, and authors should conscientiously ensure that they use this markup.
+                The <pretext /> Principles (<xref ref="list-principles"/>) begin with <q><pretext /> is a markup language that captures the structure of textbooks and research papers</q> (<xref ref="principle-markup"/>). By a <term>markup language</term><idx>markup language</idx>, we mean that the syntax describes the <em>structure</em> of the document and not the presentation of the document. Thus, <pretext /> does not provide, for instance, a way to make text bold or italic or in a larger font.  If an author seeks a specific type of local typesetting, then they need to pause and think about the <em>reason</em> for that typesetting. Is the reason to emphasize a word or phrase? Is the reason to alert the reader to a common mistake? Is it to designate that a word is a new term being defined by the author? There are ways to mark up such structural ideas in <pretext />, and authors should conscientiously ensure that they use this markup.
             </p>
             <p>To illustrate some of the key structural markup that leads to formatting, we include the listing and paragraph below.</p>
             <listing xml:id="l-p">
@@ -385,7 +385,7 @@
 
         <chapter xml:id="ch-webwork">
             <title><webwork /> exercises</title>
-            <p>It is possible to embed <webwork /> exercises into a <pretext /> document. In the <init>HTML</init> version, readers can answer these exercises and find out if their answer is correct or incorrect. However, results of <webwork /> exercises cannot be recorded to your gradebook. There's some configuration required use <webwork />. Please see the <url href="https://pretextbook.org/doc/author-guide/html/webwork.html">relevant chapter of the <pubtitle><pretext /> Author's Guide</pubtitle></url> and the <url href="https://pretextbook.org/doc/publisher-guide/html/webwork.html">relevant chapter of the <pubtitle><pretext /> Publisher's Guide</pubtitle></url> for more details. As soon as you add <webwork /> exercises, compiling to produce any output format becomes a multistep process.
+            <p>It is possible to embed <webwork /> exercises into a <pretext /> document. In the <init>HTML</init> version, readers can answer these exercises and find out if their answer is correct or incorrect. However, results of <webwork /> exercises cannot be recorded to your gradebook. There's some configuration required use <webwork />. Please see <xref ref="webwork-author"/> and <xref ref="webwork-publisher"/> for more details. As soon as you add <webwork /> exercises, compiling to produce any output format becomes a multistep process.
             </p>
             <p>When a <webwork /> exercise lives on the server, the code takes one form.</p>
             <listing xml:id="l-webwork-opl">
@@ -396,7 +396,7 @@
             </listing>
             <p>The code in <xref ref="l-webwork-opl" /> produces the following output:</p>
             <xi:include href="webwork-opl.ptx" />
-            <p>It is also possible to code <webwork /> exercises directly in your <pretext /> source. This shows the most primitive sort of such exercise. The author guide goes into greater detail.</p>
+            <p>It is also possible to code <webwork /> exercises directly in your <pretext /> source. This shows the most primitive sort of such exercise. The section of the <pubtitle>Author's Guide</pubtitle> referenced above goes into greater detail (<xref ref="webwork-author"/>).</p>
             <listing xml:id="l-webwork-code">
                 <caption>A simple <webwork /> exercise coded in <pretext /> source</caption>
                 <program>
@@ -522,7 +522,7 @@
             <xi:include href="table.ptx" />
             <p>
                 <idx><h>column</h><h>of a table</h></idx>
-            See the <url href="https://pretextbook.org/doc/author-guide/html/topic-tabular.html"><pubtitle><pretext /> Author's Guide</pubtitle></url> for more information about how to make more complicated tables including formatting columns and vertical and horizontal rules.</p>
+            See <xref ref="topic-tabular"/> for more information about how to make more complicated tables including formatting columns and vertical and horizontal rules.</p>
         </chapter>
         <chapter xml:id="ch-sage">
             <title>SageMath content</title>
@@ -570,13 +570,13 @@
             </introduction>
             <section xml:id="s-xref">
                 <title>Cross references</title>
-                <p><pretext /> provides a robust set of features for internal cross referencing. If you're familiar with <latex />, the equivalent of <c>\label</c> is to use an <c>xml:id</c>. For example, the opening tag for this subsection is <c>&lt;subsection xml:id="s-xref"&gt;</c>. Instead of the <c>\ref</c> used by <latex />, we use <c>xref</c> in <pretext />. So we can type <c>&lt;xref ref="s-xref" /&gt;</c> to create a reference to this subsection: <xref ref="s-xref" />. There are lots of options to control what text and number appear when you use <c>xref</c>. The default is the <c>type-gobal</c> option, which produces something like <q>Subsection 3.3</q> or <q>Theorem 3.1.4</q>. The type is <q>Subsection</q> or <q>Theorem</q>, and the <em>global</em> number is 3.3 or 3.1.4. (Global is in contrast to local, which would be just 3 or 4, reespectively, for these examples.) The author's guide goes into greater detail about how to change settings for how cross references appear, which you can do for your entire document as well as for individual cross references that require different treatment.</p>
+                <p><pretext /> provides a robust set of features for internal cross referencing. If you're familiar with <latex />, the equivalent of <c>\label</c> is to use an <c>xml:id</c>. For example, the opening tag for this subsection is <c>&lt;subsection xml:id="s-xref"&gt;</c>. Instead of the <c>\ref</c> used by <latex />, we use <c>xref</c> in <pretext />. So we can type <c>&lt;xref ref="s-xref" /&gt;</c> to create a reference to this subsection: <xref ref="s-xref" />. There are lots of options to control what text and number appear when you use <c>xref</c>. The default is the <c>type-gobal</c> option, which produces something like <q>Subsection 3.3</q> or <q>Theorem 3.1.4</q>. The type is <q>Subsection</q> or <q>Theorem</q>, and the <em>global</em> number is 3.3 or 3.1.4. (Global is in contrast to local, which would be just 3 or 4, reespectively, for these examples.) The <pubtitle>Author's Guide</pubtitle> (<xref ref="topic-cross-referencing"/>) goes into greater detail about how to change settings for how cross references appear, which you can do for your entire document as well as for individual cross references that require different treatment.</p>
             </section>
             <section>
                 <title>External links</title>
                 <p>
                     If you want to provide a link to a resource outside of your project, you will want the <c>url</c> tag. The code <c>&lt;url href="https://pretextbook.org" /&gt;</c> produces <url href="https://pretextbook.org" />.</p>
-                <p>Extensive details are provided in the <url href="https://pretextbook.org/doc/author-guide/html/topic-url.html"><pubtitle><pretext /> Author's Guide</pubtitle></url>.
+                <p>Extensive details are provided in <xref ref="topic-url"/>.
                 </p>
             </section>
             <section xml:id="s-fn">
@@ -624,6 +624,6 @@
         </chapter>
         <chapter>
             <title>Modular source</title>
-            <p>Once a project gets big, you may find yourself wishing to break your source into multiple files. This is well documented in the <url href="https://pretextbook.org/doc/author-guide/html/processing-modular.html"><pubtitle><pretext /> Author's Guide</pubtitle></url>, so we refer you there for more details.</p>
+            <p>Once a project gets big, you may find yourself wishing to break your source into multiple files. This is well documented in the <xref ref="processing-modular"/>, so we refer you there for more details.</p>
         </chapter>
 </part>

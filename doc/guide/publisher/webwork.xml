@@ -7,7 +7,7 @@
 <!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
 <!-- See the file COPYING for copying conditions.             -->
 
-<chapter xml:id="webwork">
+<chapter xml:id="webwork-publisher">
   <title><webwork /> Exercises</title>
   <idx>
     <h><webwork/></h>

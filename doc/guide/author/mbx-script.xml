@@ -122,7 +122,7 @@
 
             <li>
                 <title><webwork /></title>
-                <p>Various conversions of <webwork /> problems are facilitated through communication with a <webwork /> server.  This server is specified as an argument to the <c>-s</c> option.  See <xref ref="webwork" /> for the details of this procedure.</p>
+                <p>Various conversions of <webwork /> problems are facilitated through communication with a <webwork /> server.  This server is specified as an argument to the <c>-s</c> option.  See <xref ref="webwork-author" /> for the details of this procedure.</p>
             </li>
         </dl></p>
     </section>
