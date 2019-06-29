@@ -3656,7 +3656,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- DTD: does the next line presume <frontmatter> is required? -->
     <xsl:text>\frontmatter&#xa;</xsl:text>
     <xsl:call-template name="front-cover"/>
-    <xsl:apply-templates select="node()[not(self::colophon or self::biography)]" />
+    <xsl:apply-templates select="*[not(self::colophon or self::biography)]" />
     <xsl:text>%% begin: table of contents&#xa;</xsl:text>
     <xsl:if test="$latex-toc-level > -1">
         <xsl:text>%% Adjust Table of Contents&#xa;</xsl:text>
@@ -4761,7 +4761,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%&#xa;</xsl:text>
     <!-- statement is required now, to be relaxed in DTD      -->
     <!-- explicitly ignore proof and pickup just for theorems -->
-    <xsl:apply-templates select="node()[not(self::proof)]" />
+    <!-- Locate first "proof", select only preceding:: ?      -->
+    <xsl:apply-templates select="*[not(self::proof)]" />
     <xsl:text>\end{</xsl:text>
         <xsl:value-of select="local-name(.)" />
     <xsl:text>}&#xa;</xsl:text>
@@ -6404,8 +6405,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <xsl:message>here</xsl:message> -->
     <xsl:variable name="enclosing-proof" select="ancestor::proof" />
     <xsl:if test="$enclosing-proof and not(self::mrow and parent::md and @number='yes') and not(self::mrow and parent::mdn and not(@number='no'))">
-        <xsl:variable name="proof-nodes" select="$enclosing-proof/descendant-or-self::node()[self::* or self::text()]" />
-        <xsl:variable name="trailing-nodes" select="./following::node()[self::* or self::text()]" />
+        <xsl:variable name="proof-nodes" select="$enclosing-proof/descendant-or-self::*|$enclosing-proof/descendant-or-self::text()" />
+        <xsl:variable name="trailing-nodes" select="following::*|following::text()" />
         <xsl:variable name="proof-remnants" select="$proof-nodes[count(.|$trailing-nodes) = count($trailing-nodes)]" />
         <xsl:choose>
             <xsl:when test="count($proof-remnants) = 0">
@@ -7883,7 +7884,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="(parent::q or parent::sq) and not(preceding-sibling::*) and not(preceding-sibling::text())">
             <xsl:text>{`}</xsl:text>
         </xsl:when>
-        <xsl:when test="child::node()[not(self::comment()) and not(self::processing-instruction())][1][self::q or self::sq]">
+        <xsl:when test="(*|text())[1][self::q or self::sq]">
             <xsl:text>{`}</xsl:text>
         </xsl:when>
         <xsl:otherwise>
@@ -7897,7 +7898,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="(parent::q or parent::sq) and not(following-sibling::*) and not(following-sibling::text())">
             <xsl:text>{'}</xsl:text>
         </xsl:when>
-        <xsl:when test="child::node()[not(self::comment()) and not(self::processing-instruction())][last()][self::q or self::sq]">
+        <xsl:when test="(*|text())[last()][self::q or self::sq]">
             <xsl:text>{'}</xsl:text>
         </xsl:when>
         <xsl:otherwise>
