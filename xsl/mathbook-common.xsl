@@ -9872,6 +9872,11 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <!-- 2014-06-25  xref once had cite as a variant -->
     <!-- 2015-01-28  once both circum and circumflex existed, circumflex won -->
     <!--  -->
+    <!-- These have been outright removed since they simply became confusing -->
+    <!-- 2017-07-05  top-level items that should have captions, but don't -->
+    <!-- 2017-07-05  sidebyside items that do not have captions, so ineffective -->
+    <!--  -->
+    <!--  -->
     <!-- 2015-02-08  naked tikz, asymptote, sageplot are banned    -->
     <!-- typically these would be in a figure, but not necessarily -->
     <xsl:call-template name="deprecation-message">
@@ -9963,20 +9968,6 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="occurrences" select="$document-root//hyphen" />
         <xsl:with-param name="date-string" select="'2017-02-05'" />
         <xsl:with-param name="message" select="'use the keyboard hyphen character as a direct replacement for &lt;hyphen/&gt;'" />
-    </xsl:call-template>
-    <!--  -->
-    <!-- 2017-07-05  top-level items that should have captions, but don't -->
-    <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurrences" select="$document-root//figure[not(caption) and not(parent::sidebyside)] | $document-root//table[not(caption) and not(parent::sidebyside) and not(ancestor::interactive)] | $document-root//listing[not(caption) and not(parent::sidebyside)]" />
-        <xsl:with-param name="date-string" select="'2017-07-05'" />
-        <xsl:with-param name="message" select="'a &lt;figure&gt;, &lt;table&gt;, or &lt;listing&gt; as a child of a division must contain a &lt;caption&gt; element.  A &lt;sidebyside&gt; can be used as a functional equivalent, or add a caption element (possibly with empty content) to replace with a numbered version.'" />
-    </xsl:call-template>
-    <!--  -->
-    <!-- 2017-07-05  sidebyside items that do not have captions, so ineffective -->
-    <xsl:call-template name="deprecation-message">
-        <xsl:with-param name="occurrences" select="$document-root//figure[not(caption) and parent::sidebyside] | $document-root//table[not(caption) and parent::sidebyside] | $document-root//listing[not(caption) and parent::sidebyside]" />
-        <xsl:with-param name="date-string" select="'2017-07-05'" />
-        <xsl:with-param name="message" select="'a &lt;figure&gt;, &lt;table&gt;, or &lt;listing&gt; as a child of a &lt;sidebyside&gt;, and without a &lt;caption&gt; element, is ineffective, redundant, and deprecated.  Remove the enclosing element, perhaps migrating an xml:id attribute to the contents.'" />
     </xsl:call-template>
     <!--  -->
     <!-- 2017-07-05  a sidebyside cannot have a caption -->
