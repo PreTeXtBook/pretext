@@ -8716,7 +8716,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Tabular Layout -->
 <!-- ############## -->
 
-<xsl:template match="tabular" name="tabular">
+<xsl:template match="tabular">
     <!-- Abort if tabular's cols have widths summing to over 100% -->
     <xsl:call-template name="cap-width-at-one-hundred-percent">
         <xsl:with-param name="nodeset" select="col/@width" />
