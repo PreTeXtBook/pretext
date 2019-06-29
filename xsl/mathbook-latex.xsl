@@ -6239,30 +6239,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="pop-footnote-text"/>
 </xsl:template>
 
-<!-- Named Lists -->
-<xsl:template match="list">
-    <xsl:variable name="b-subcaptioned" select="parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure"/>
-    <xsl:if test="not(parent::sidebyside)">
-        <xsl:text>\begin{namedlist}&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:if test="not($b-subcaptioned)">
-        <xsl:apply-templates select="." mode="title-caption"/>
-    </xsl:if>
-    <xsl:if test="not(parent::sidebyside)">
-        <xsl:text>\begin{namedlistcontent}&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:apply-templates select="*"/>
-    <xsl:if test="not(parent::sidebyside)">
-        <xsl:text>\end{namedlistcontent}&#xa;</xsl:text>
-        <xsl:text>\end{namedlist}&#xa;</xsl:text>
-    </xsl:if>
-    <!-- subcaption below the list -->
-    <xsl:if test="$b-subcaptioned">
-        <xsl:apply-templates select="." mode="title-caption"/>
-    </xsl:if>
-    <xsl:apply-templates select="." mode="pop-footnote-text"/>
-</xsl:template>
-
 <!-- Paragraphs -->
 <!-- \par *separates* paragraphs So look backward for          -->
 <!-- cases where a paragraph would have been the previous      -->
@@ -8360,6 +8336,31 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="pop-footnote-text"/>
 </xsl:template>
 
+<!-- Tables -->
+<!-- A table is like a figure, centered, captioned  -->
+<!-- The meat of the table is given by a tabular    -->
+<!-- element, which may be used outside of a table  -->
+<!-- Standard LaTeX table environment is redefined, -->
+<!-- see preamble comments for details              -->
+<xsl:template match="table">
+    <xsl:variable name="b-subcaptioned" select="parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure"/>
+    <xsl:if test="not(parent::sidebyside) and not(preceding-sibling::*[not(&SUBDIVISION-METADATA-FILTER;)])">
+        <xsl:call-template name="leave-vertical-mode" />
+    </xsl:if>
+    <xsl:if test="not(parent::sidebyside)">
+        <xsl:text>\begin{table}&#xa;</xsl:text>
+        <xsl:text>\centering&#xa;</xsl:text>
+    </xsl:if>
+    <!-- tabular will center itself when parent is a sidebyside -->
+    <xsl:apply-templates select="*[not(self::tabular)]" />
+    <xsl:apply-templates select="tabular" />
+    <xsl:apply-templates select="." mode="title-caption"/>
+    <xsl:if test="not(parent::sidebyside)">
+        <xsl:text>\end{table}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:apply-templates select="." mode="pop-footnote-text"/>
+</xsl:template>
+
 <!-- Listings -->
 <!-- Simple non-float environment            -->
 <!-- \captionof for numbering, style, etc    -->
@@ -8378,6 +8379,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="title-caption" />
     <xsl:if test="not(parent::sidebyside)">
         <xsl:text>\end{listing}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:apply-templates select="." mode="pop-footnote-text"/>
+</xsl:template>
+
+<!-- Named Lists -->
+<xsl:template match="list">
+    <xsl:variable name="b-subcaptioned" select="parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure"/>
+    <xsl:if test="not(parent::sidebyside)">
+        <xsl:text>\begin{namedlist}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="not($b-subcaptioned)">
+        <xsl:apply-templates select="." mode="title-caption"/>
+    </xsl:if>
+    <xsl:if test="not(parent::sidebyside)">
+        <xsl:text>\begin{namedlistcontent}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:apply-templates select="*"/>
+    <xsl:if test="not(parent::sidebyside)">
+        <xsl:text>\end{namedlistcontent}&#xa;</xsl:text>
+        <xsl:text>\end{namedlist}&#xa;</xsl:text>
+    </xsl:if>
+    <!-- subcaption below the list -->
+    <xsl:if test="$b-subcaptioned">
+        <xsl:apply-templates select="." mode="title-caption"/>
     </xsl:if>
     <xsl:apply-templates select="." mode="pop-footnote-text"/>
 </xsl:template>
@@ -8687,36 +8712,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Deprecated Graphics Code Templates -->
 <!-- ################################## -->
 
+<!-- ############## -->
+<!-- Tabular Layout -->
+<!-- ############## -->
 
-<!-- Tables -->
-
-<!-- Top-down organization -->
-
-<!-- A table is like a figure, centered, captioned  -->
-<!-- The meat of the table is given by a tabular    -->
-<!-- element, which may be used outside of a table  -->
-<!-- Standard LaTeX table environment is redefined, -->
-<!-- see preamble comments for details              -->
-<xsl:template match="table">
-    <xsl:variable name="b-subcaptioned" select="parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure"/>
-    <xsl:if test="not(parent::sidebyside) and not(preceding-sibling::*[not(&SUBDIVISION-METADATA-FILTER;)])">
-        <xsl:call-template name="leave-vertical-mode" />
-    </xsl:if>
-    <xsl:if test="not(parent::sidebyside)">
-        <xsl:text>\begin{table}&#xa;</xsl:text>
-        <xsl:text>\centering&#xa;</xsl:text>
-    </xsl:if>
-    <!-- tabular will center itself when parent is a sidebyside -->
-    <xsl:apply-templates select="*[not(self::tabular)]" />
-    <xsl:apply-templates select="tabular" />
-    <xsl:apply-templates select="." mode="title-caption"/>
-    <xsl:if test="not(parent::sidebyside)">
-        <xsl:text>\end{table}&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:apply-templates select="." mode="pop-footnote-text"/>
-</xsl:template>
-
-<!-- A tabular layout -->
 <xsl:template match="tabular" name="tabular">
     <!-- Abort if tabular's cols have widths summing to over 100% -->
     <xsl:call-template name="cap-width-at-one-hundred-percent">
