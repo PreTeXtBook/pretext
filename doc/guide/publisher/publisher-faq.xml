@@ -7,8 +7,8 @@
 <!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
 <!-- See the file COPYING for copying conditions.             -->
 
-<appendix xml:id="faq">
-    <title>FAQ: Frequently Asked Questions</title>
+<chapter xml:id="faq">
+    <title>Publisher FAQ: Frequently Asked Questions</title>
 
      <p>This is a list of answers to frequent questions, in no particular order.</p>
 
@@ -111,6 +111,4 @@
         </li>
     </dl></p>
 
-</appendix>
-
-
+</chapter>

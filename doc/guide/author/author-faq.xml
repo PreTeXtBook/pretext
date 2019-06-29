@@ -7,8 +7,8 @@
 <!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
 <!-- See the file COPYING for copying conditions.             -->
 
-<appendix xml:id="faq">
-    <title>FAQ: Frequently Asked Questions</title>
+<chapter xml:id="faq">
+    <title>Author FAQ: Frequently Asked Questions</title>
 
      <p>Technical questions first, followed by questions about markup.</p>
 
@@ -219,6 +219,4 @@
 
     </dl></p>
 
-</appendix>
-
-
+  </chapter>
