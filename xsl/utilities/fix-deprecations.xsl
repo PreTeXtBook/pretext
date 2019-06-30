@@ -34,6 +34,40 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Deprecations that can be fixed with a transformation -->
 <!-- In reverse chronological order, with dates           -->
 
+<!-- 2019-06-28  deprecate captioned lists to be titled lists -->
+<xsl:template match="list[title]/caption">
+    <xsl:comment>
+        <xsl:text>Commented list/caption: </xsl:text>
+        <xsl:apply-templates select="*|text()" />
+    </xsl:comment>
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2019-06-28</xsl:with-param>
+        <xsl:with-param name="message">Converting a &lt;list&gt;/&lt;caption&gt; to a source comment</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
+<!-- 2019-06-28  deprecate captioned lists to be titled lists -->
+<xsl:template match="list[not(title)]/caption">
+    <title>
+        <xsl:apply-templates select="@* | node()" />
+    </title>
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2019-06-28</xsl:with-param>
+        <xsl:with-param name="message">Converting a &lt;list&gt;/&lt;caption&gt; to a &lt;list&gt;/&lt;title&gt;</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
+<!-- 2019-06-28  deprecate captioned tables to be titled tables -->
+<xsl:template match="table/caption">
+    <title>
+        <xsl:apply-templates select="@* | node()" />
+    </title>
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2019-06-28</xsl:with-param>
+        <xsl:with-param name="message">Converting a &lt;table&gt;/&lt;caption&gt; to a &lt;table&gt;/&lt;title&gt;</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
 <!-- 2019-02-10  todo element replaced by a prefixed XML comment -->
 <xsl:template match="todo">
     <xsl:comment>
@@ -239,17 +273,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="deprecation-fix-report">
         <xsl:with-param name="date">2017-12-07</xsl:with-param>
         <xsl:with-param name="message">Removing &lt;@latexsep&gt; from a &lt;c&gt; or &lt;cd&gt; element</xsl:with-param>
-    </xsl:call-template>
-</xsl:template>
-
-<!-- 2017-08-25  deprecate named lists to be captioned lists -->
-<xsl:template match="list[not(caption)]/title">
-    <caption>
-        <xsl:apply-templates select="@* | node()" />
-    </caption>
-    <xsl:call-template name="deprecation-fix-report">
-        <xsl:with-param name="date">2017-08-25</xsl:with-param>
-        <xsl:with-param name="message">Converting a &lt;list&gt;/&lt;title&gt; to a &lt;list&gt;/&lt;caption&gt;</xsl:with-param>
     </xsl:call-template>
 </xsl:template>
 

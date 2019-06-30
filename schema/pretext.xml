@@ -1172,7 +1172,7 @@
             }
         |
             element table {
-                MetaDataCaption,
+                MetaDataShortTitle,
                 Tabular
             }
         |
@@ -1185,7 +1185,7 @@
             }
         |
             element list {
-                MetaDataCaption,
+                MetaDataShortTitle,
                 IntroductionText?,
                 List,
                 ConclusionText?

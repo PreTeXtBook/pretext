@@ -1346,7 +1346,7 @@
   <xs:element name="table">
     <xs:complexType>
       <xs:complexContent>
-        <xs:extension base="MetaDataCaption">
+        <xs:extension base="MetaDataShortTitle">
           <xs:sequence>
             <xs:element ref="tabular"/>
           </xs:sequence>
@@ -1369,7 +1369,7 @@
   <xs:element name="list">
     <xs:complexType>
       <xs:complexContent>
-        <xs:extension base="MetaDataCaption">
+        <xs:extension base="MetaDataShortTitle">
           <xs:sequence>
             <xs:group minOccurs="0" ref="IntroductionText"/>
             <xs:group ref="List"/>
