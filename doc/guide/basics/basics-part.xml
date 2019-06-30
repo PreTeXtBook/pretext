@@ -1,9 +1,9 @@
 <part xml:id="part-basics" xmlns:xi="http://www.w3.org/2001/XInclude">
-    <title><pretext/> Basics Reference</title>
+    <title>Basics Reference</title>
 
         <chapter xml:id="ch-about">
-            <title>About this reference</title>
-            <p>This <pubtitle><pretext /> Basic Reference</pubtitle> is meant to supplement the <pretext /> documentation maintained as part of the official repository. Here you will find the <em>basics</em> of the most important and commonly used <pretext /> tags. In most instances, this will be exhibited by showing a <pretext /> code listing followed immediately by the exact output that code produces. (In some cases, such as with the code that produces a section, it is not practical to do this.) Wherever possible, the sample code and its output are accompanied by cross-references to the <pubtitle>Author's Guide</pubtitle> in <xref ref="part-author"/>.
+            <title>About This Reference</title>
+            <p>This <pubtitle>Basic Reference</pubtitle> is meant to supplement the more formal documentation in other parts of <pubtitle>The Guide</pubtitle>. Here you will find the <em>basics</em> of the most important and commonly used <pretext/> elements. In most instances, this will be exhibited by showing a <pretext/> code listing followed immediately by the exact output that code produces. (In some cases, such as with the code that produces a section, it is not practical to do this.) Wherever possible, the sample code and its output are accompanied by cross-references to the <pubtitle>Author's Guide</pubtitle> in <xref ref="part-author"/>.
             </p>
             <p>There are some things that are considered beyond the scope of this reference:
             <ul>
@@ -13,7 +13,7 @@
             </ul></p>
         </chapter>
         <chapter xml:id="ch-basic-formatting">
-            <title>Basic formatting</title>
+            <title>Basic Formatting</title>
             <p><idx><h>bold</h><see>formatting</see></idx>
             <idx><h>italic</h><see>formatting</see></idx>
             <idx><h>font</h><see>formatting</see></idx>
@@ -167,7 +167,7 @@
             <idx><h>list</h><h>displayed in columns</h></idx>The value of this attribute must be an integer between 2 and 6 (inclusive).</p>
         </chapter>
         <chapter xml:id="ch-thm">
-            <title>Theorem-like elements</title>
+            <title>Theorem-Like Elements</title>
             <idx>theorem-like elements</idx>
             <p>
                 The tags <c>theorem</c>, <c>algorithm</c>, <c>claim</c>, <c>corollary</c>, <c>fact</c>, <c>identity</c>, <c>lemma</c>, and <c>proposition</c> have the same structure in <pretext />, so we will just illustrate <c>theorem</c> here.
@@ -215,7 +215,7 @@
         </chapter>
 
         <chapter xml:id="ch-examples">
-            <title>Typesetting examples</title>
+            <title>Example-Like Elements</title>
             <idx>example</idx>
             <idx><h>problem</h><see>example</see></idx>
             <idx><h>question</h><see>example</see></idx>
@@ -255,7 +255,7 @@
         </chapter>
 
         <chapter xml:id="ch-remark">
-            <title>Remark-like elements</title>
+            <title>Remark-Like Elements</title>
 			<idx>remark-like elements</idx>
             <p><pretext /> provides several simple tags that fall into the general category of a <q>remark</q> that one would like to be numbered. They are
 <c>convention</c>, <c>insight</c>, <c>note</c>, <c>observation</c>, <c>remark</c>, and <c>warning</c>. The content of these tags is very simple. They allow an optional title, optional <c>idx</c> tags, and then a mixture of <c>p</c>, <c>blockquote</c>, and <c>pre</c>.
@@ -279,7 +279,7 @@
 
         </chapter>
         <chapter xml:id="ch-project">
-            <title>Project-like elements</title>
+            <title>Project-Like Elements</title>
             <idx>project-like elements</idx>
             <p>There are four tags that <pretext /> considers to be <q>project-like</q>. They are <c>activity</c>, <c>exploration</c>, <c>investigation</c>, <c>project</c>.
             <idx>project</idx>
@@ -301,9 +301,7 @@
 
         </chapter>
         <chapter xml:id="ch-exercise">
-            <title>
-                Exercises
-            </title>
+            <title>Exercises</title>
             <idx>exercise</idx>
             <section>
                 <title>Inline exercises</title>
@@ -368,7 +366,7 @@
 
         </chapter>
         <chapter xml:id="ch-rename">
-            <title>Renaming elements</title>
+            <title>Renaming Elements</title>
             <p>The preceding sections have provided a lengthy list of <pretext /> tags that behave interchangeably. Perhaps you don't like one of their names. If your project will not involve any <c>algorithm</c>s, but you need another theorem-like tag whose name you would like to have rendered as <q>Porism</q>. To do this, you need to add a <c>rename</c> tag to the <c>docinfo</c> block of your code. For our example, the necessary code would be <c>&lt;rename element="algorithm"&gt;Porism&lt;/rename&gt;</c>. The <c>rename</c> tag generates a <em>global</em> change; it is not possible to rename a single instance of a tag or to define your own tags (without writings your own <init>XSLT</init> code.</p>
             <p>
                 We have included this <c>rename</c> code in this project's <c>docinfo</c>, and as such, we can do the following.
@@ -384,7 +382,7 @@
         </chapter>
 
         <chapter xml:id="ch-webwork">
-            <title><webwork /> exercises</title>
+            <title><webwork /> Exercises</title>
             <p>It is possible to embed <webwork /> exercises into a <pretext /> document. In the <init>HTML</init> version, readers can answer these exercises and find out if their answer is correct or incorrect. However, results of <webwork /> exercises cannot be recorded to your gradebook. There's some configuration required use <webwork />. Please see <xref ref="webwork-author"/> and <xref ref="webwork-publisher"/> for more details. As soon as you add <webwork /> exercises, compiling to produce any output format becomes a multistep process.
             </p>
             <p>When a <webwork /> exercise lives on the server, the code takes one form.</p>
@@ -407,7 +405,7 @@
             <xi:include href="webwork-code.ptx" />
         </chapter>
         <chapter xml:id="ch-fig">
-            <title>Figures and friends</title>
+            <title>Figures and Friends</title>
             <section xml:id="s-fig">
                 <title><c>figure</c></title>
                 <p>The gold standard for graphics to include in <pretext /> documents is, well, complicated. If you're only working with <init>HTML</init> output, then <init>SVG</init> is what you want. If you're producing <init>PDF</init> by using <latex />, then you'll also want <init>PDF</init> graphics files. Fortunately, it's not too hard to convert between these formats on the command line.<fn>Windows users have run into some problems in this area. Since conversion is a rare task, it may be easiest to do in a cloud environment like CoCalc.</fn> Just be sure to keep track of which file type is your master file and which file type is produced from the other. <init>PNG</init> is also supported by modern web browsers and <latex />, so that's a good option when vector graphic formats like <init>SVG</init> and <init>PDF</init> are not available or appropriate.
@@ -525,7 +523,7 @@
             See <xref ref="topic-tabular"/> for more information about how to make more complicated tables including formatting columns and vertical and horizontal rules.</p>
         </chapter>
         <chapter xml:id="ch-sage">
-            <title>SageMath content</title>
+            <title>SageMath Content</title>
             <section xml:id="s-sage-cell">
                 <title>SageMathCells</title>
                 <p>Including computational SageMath cells is pretty easy with <c>sage</c>, <c>input</c>, and <c>output</c>. The last tag is useful for producing a <init>PDF</init> that includes the result of the code's execution.</p>
@@ -564,7 +562,7 @@
             </section>
         </chapter>
         <chapter xml:id="ch-small">
-            <title>Small, but useful</title>
+            <title>Small, But Useful</title>
             <introduction>
                 <p>The topics in this section are not terribly structural or critical, but they fall in the category of <q>little things you want to do right from the outset</q>.</p>
             </introduction>
@@ -623,7 +621,7 @@
             </section>
         </chapter>
         <chapter>
-            <title>Modular source</title>
+            <title>Modular Source</title>
             <p>Once a project gets big, you may find yourself wishing to break your source into multiple files. This is well documented in the <xref ref="processing-modular"/>, so we refer you there for more details.</p>
         </chapter>
 </part>

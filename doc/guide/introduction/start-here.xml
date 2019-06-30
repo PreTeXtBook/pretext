@@ -7,8 +7,8 @@
 <!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
 <!-- See the file COPYING for copying conditions.             -->
 
-<chapter xml:id="start-here">
-    <title>Start Here</title>
+<chapter xml:id="starting">
+    <title>Starting</title>
 
     <introduction>
         <p>Welcome to the Author's Guide for <pretext />.  You are likely eager to get started, but familiarizing yourself with this chapter should save you a lot of time in the long run.  We will try to keep it short and at the end of early chapters we will guide you on where to go next.  Not everything we say here will make sense on your first reading, so come back after your first few trial runs.  When you are ready to seek further help, or ask questions, please read the <xref ref="welcome" text="title"/> in <xref ref="welcome"/>.</p>
@@ -115,11 +115,11 @@
     <section xml:id="start-next">
         <title>Where Next?</title>
 
-        <p>We will end each of the early chapters with suggestions on where to read next.</p>
+        <p>If you are impatient (sometimes a good quality!), then <xref ref="quickstart-example"/> should be next, where we show you how to construct and process a short example and then expand it slightly with several additions.</p>
 
-        <p>If you are impatient (sometimes a good quality!), then <xref ref="quickstart-example" /> should be next, where we construct and process a short example and then expand it slightly with several additions.</p>
+        <p>If you would like a general, high-level overview of features skip ahead to <xref ref="overview"/>.</p>
 
-        <p>If you would like a general, high-level overview of features skip ahead to <xref ref="overview" />.</p>
+        <p>In-depth, comprehensive use of features is in <xref ref="topics"/>.</p>
 
         <p>If you have an existing project authored in <latex/> you may be interested in the conversion process described in <xref ref="latex-conversion"/>.</p>
     </section>

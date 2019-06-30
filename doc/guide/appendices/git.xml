@@ -7,7 +7,7 @@
 <!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
 <!-- See the file COPYING for copying conditions.             -->
 
-<appendix xml:id="git">
+<appendix xml:id="git-author">
     <title>Revision Control: git</title>
 
      <p>Authoring a textbook without revision control is like driving without a seat belt.  Sooner or later, you will wish you had used it.  git is a popular program for revision control for software projects, and works quite well with <pretext />, though not perfectly.  Notes here are designed to help.  For more on git itself, in the context of authoring a book, see <url href="https://pretextbook.org/gfa/html/">Git for Authors</url>, by Robert Beezer and David Farmer at <c>pretextbook.org/gfa/html</c>.</p>

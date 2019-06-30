@@ -8,7 +8,7 @@
 <!-- See the file COPYING for copying conditions.             -->
 
 <chapter xml:id="topics">
-    <title>(*) Topics</title>
+    <title>Topics</title>
 
     <introduction>
         <p>This long chapter provides the main documentation for a variety of the features of <pretext />.  Some sections are just stubs and need to be written.  Requests for sections to prioritize are welcome, though some sections are waiting for features to stabilize.</p>
@@ -2232,13 +2232,4 @@
             </li>
         </dl></p>
     </section>
-
-    <!--
-    <section xml:id="topic-">
-        <title></title>
-
-    </section>
-
-   -->
-
 </chapter>

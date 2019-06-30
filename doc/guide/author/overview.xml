@@ -343,13 +343,4 @@
 
         <p>Since we are interested in helping authors produce documents with open licenses, and we concentrate on employing open standards for the <init>HTML</init> output we create, we are ideally positioned to help you easily create highly-accessible documents.  There are many technical features which happen automatically, and there are some features which we make available for your use as an author and which only an author can provide.  See <xref ref="topic-accessibility" /> for full details and ways you can make the <init>HTML</init> version of your document more accessible, and more useful for a wider audience.</p>
     </section>
-
-    <!--
-    <section xml:id="overview-">
-        <title>(*) </title>
-
-    </section>
-
-   -->
-
 </chapter>

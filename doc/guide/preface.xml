@@ -12,7 +12,7 @@
     <paragraphs>
         <title>Introduction</title>
 
-        <p>This part is the place to begin if you are new to <pretext/>.  <xref ref="start-here"/> is the introduction, overview, and philosophy.  Then <xref ref="quickstart-example"/> intends to get you started quickly by authoring a simple example and converting it to <init>HTML</init> and <init>PDF</init> output formats.</p>
+        <p>This part is the place to begin if you are new to <pretext/>.  <xref ref="starting"/> is the introduction, overview, and philosophy.  Then <xref ref="quickstart-example"/> intends to get you started quickly by authoring a simple example and converting it to <init>HTML</init> and <init>PDF</init> output formats.</p>
     </paragraphs>
 
     <paragraphs>

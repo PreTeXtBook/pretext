@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<!--   This file is part of the documentation of PreTeXt      -->
-<!--                                                          -->
-<!--      PreTeXt Author's Guide                              -->
-<!--                                                          -->
-<!-- Copyright (C) 2013-2016  Robert A. Beezer                -->
-<!-- See the file COPYING for copying conditions.             -->
+<!-- This file is part of the documentation of PreTeXt              -->
+<!--                                                                -->
+<!--         The PreTeXt Guide                                      -->
+<!--                                                                -->
+<!-- Copyright (C) 2013-2019                                        -->
+<!-- Robert A. Beezer, David Farmer, Alex Jordan, Mitchel T. Keller -->
+<!-- See the file COPYING for copying conditions.                   -->
 
 
 <frontmatter xml:id="index" xmlns:xi="http://www.w3.org/2001/XInclude">
@@ -26,8 +27,9 @@
 
         <author>
             <personname>Alex Jordan</personname>
+            <department>Department of Mathematics</department>
             <institution>Portland Community College</institution>
-            <email>farmer@aimath.org</email>
+            <email>alex.jordan@pcc.edu</email>
         </author>
 
         <author>
