@@ -224,9 +224,25 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We place the Nemeth open/close symbols via   -->
 <!-- import of the base HTML/LaTeX representation -->
 <xsl:template match="m">
-    <xsl:call-template name="open-nemeth"/>
-    <xsl:apply-imports/>
-    <xsl:call-template name="close-nemeth"/>
+    <!-- we look for very simple math (one-letter variable names) -->
+    <!-- so we process the content (which can have "xref", etc)   -->
+    <xsl:variable name="content">
+        <xsl:apply-templates select="*|text()"/>
+    </xsl:variable>
+    <xsl:choose>
+        <!-- one Latin letter -->
+        <xsl:when test="(string-length($content) = 1) and
+                        contains('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', $content)">
+            <i class="one-letter">
+                <xsl:value-of select="."/>
+            </i>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:call-template name="open-nemeth"/>
+            <xsl:apply-imports/>
+            <xsl:call-template name="close-nemeth"/>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- ################### -->

@@ -94,6 +94,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </chapter>
 
         <chapter>
+            <title>Mathematics</title>
+
+            <p>Our motivation is the automatic translation of texts in mathematics.  We will do serious testing of mathematics elsewhere, but will include some here as both demonstration and for testing.</p>
+
+            <p>The third sentence has some single-letter Latin variables, interspered with Greek variables and other simple inline math expressions.  The single-letter variables should be italicized.  We let <m>x</m> equal the value of <m>T</m>, but not <m>\theta</m> nor the value of <m>a+b</m>, but it could also be <m>\rho</m> or <m>g</m>.</p>
+
+        </chapter>
+
+        <chapter>
             <title>Literary Text</title>
 
             <introduction>
