@@ -129,7 +129,7 @@
             <p>There are two common types of lists: ordered and unordered.
             <idx><h>list</h><h>ordered</h></idx>
             <idx><h>ordered list</h></idx>
-            (There's also the description list. See the documentation for more information on it.) As in <init>HTML</init>, an ordered list is produced with <c>ol</c> and an unordered list with <c>ul</c>. The items of your list are structured inside <c>li</c> tags.
+            (There's also the description list. See <xref text="type-global" ref="overview-lists">the documentation</xref> for more information on it.) As in <init>HTML</init>, an ordered list is produced with <c>ol</c> and an unordered list with <c>ul</c>. The items of your list are structured inside <c>li</c> tags.
             </p>
             <listing xml:id="l-ol">
                 <caption>An ordered list</caption>
