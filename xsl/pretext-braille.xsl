@@ -96,6 +96,24 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </html>
 </xsl:template>
 
+<!-- The "frontmatter" and "backmatter" of the HTML version are possibly -->
+<!-- summary pages and need to step the heading level (h1-h6) for screen -->
+<!-- readers and accessibility.  But here we want to style items at      -->
+<!-- similar levels to be at the same HTML level so we can use liblouis' -->
+<!-- device for this.  So, for example, we want  book/preface/chapter    -->
+<!-- to be h2, not h3.  Solution: we don't need the frontmatter and      -->
+<!-- backmatter distinctions in Braille, so we simply recurse with a     -->
+<!-- pass-through of the heading level.  This is a very tiny subset of   -->
+<!-- the HTML template matching &STRUCTURAL;.                            -->
+<xsl:template match="frontmatter|backmatter">
+    <xsl:param name="heading-level"/>
+
+    <xsl:apply-templates>
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
+</xsl:template>
+
+
 <!-- ########## -->
 <!-- Title Page -->
 <!-- ########## -->

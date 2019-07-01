@@ -528,6 +528,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- division, which could be an entire page's     -->
 <!-- worth, or just a subdivision withing a page   -->
 <!-- Increment $heading-level within this template -->
+<!-- NB: Override in the Braille conversion for    -->
+<!-- just "frontmatter" and "backmatter" simply    -->
+<!-- to keep from stepping the heading level, so   -->
+<!-- the liblouis styling on h1-h6 is consistent   -->
 <xsl:template match="&STRUCTURAL;">
     <xsl:param name="heading-level"/>
 
