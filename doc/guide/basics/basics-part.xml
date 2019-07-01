@@ -66,6 +66,12 @@
                 <idx><c>p</c> tag</idx>
                 <p>One of the things you'll need to keep an eye out for is when things must be wrapped in <c>p</c> (paragraph) tags. Notice that <c>title</c> tags do not have their content wrapped in <c>p</c>, which places some limits on the sorts of things that can be contained in a title. If you find text disappearing or displaying strangely, the culprit is likely an unnecessary or or missing <c>p</c> tag. See the part of the documentation on validating your source for information on how to use some additional tools to see if your <pretext /> file is valid in terms of following the structural rules in the schema.</p>
             </paragraphs>
+            <paragraphs>
+                <title>Plan ahead for cross-referencing</title>
+                <p>
+                    One thing you may have already noticed is that each of the code listings above are properly labeled and referenced in the text as well; in the html version, you can even click on them to see them in a <sq>knowl</sq>.  See <xref ref="s-xref" /> for how to plan ahead so that you can do extensive cross-referencing yourself from the start.               
+		</p>
+            </paragraphs>
         </chapter>
         <chapter xml:id="ch-math">
             <title>Mathematics</title>
