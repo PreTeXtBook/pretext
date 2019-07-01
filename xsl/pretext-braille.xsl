@@ -154,21 +154,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Paragraph-Level Markup -->
 <!-- ###################### -->
 
-<!-- We replace fancy Unicode double bracket characters  -->
-<!-- with two plain ASCII double brackets with overrides -->
-<!-- of the character definitions.                       -->
+<!-- Certain PreTeXt elements create characters beyond the -->
+<!-- "usual" Unicode range of U+0000-U+00FF.  We defer the -->
+<!-- translation to the "pretext-symbol.dis" file which    -->
+<!-- liblouis  will consult for characters/code-points it  -->
+<!-- does not recognize.  We make notes here, but the file -->
+<!-- should be consulted for accurate information.         -->
 
-<!-- Left Double Bracket -->
-<!-- nee MATHEMATICAL LEFT WHITE SQUARE BRACKET, &#x27e6; -->
-<xsl:template name="ldblbracket-character">
-    <xsl:text>[[</xsl:text>
-</xsl:template>
-
-<!-- Right Double Bracket -->
-<!-- nee MATHEMATICAL RIGHT WHITE SQUARE BRACKET, &#x27e7; -->
-<xsl:template name="rdblbracket-character">
-    <xsl:text>]]</xsl:text>
-</xsl:template>
+<!-- PTX: ldblbracket, rdblbracket, dblbrackets     -->
+<!-- Unicode:                                       -->
+<!-- MATHEMATICAL LEFT WHITE SQUARE BRACKET, x27e6  -->
+<!-- MATHEMATICAL RIGHT WHITE SQUARE BRACKET, x27e7 -->
+<!-- Translation:  [[, ]]                           -->
 
 
 <!-- ########### -->
