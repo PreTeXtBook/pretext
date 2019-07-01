@@ -200,7 +200,20 @@
                     <cline>fc-list</cline>
                 </cd></p>
 
-                <p>On a Mac, Mitch Keller reports on 2019-01-02 that <q>I opened the directory on my hard drive containing the <init>OTF</init> file, double clicked on the font (opens the macOS application Font Book, which comes with the OS), and then clicked the <c>Install Font</c> button.</q></p>
+                <p>On a Mac, we have several reports for how to do this.
+                    <ul>
+                        <li>
+                            <p>Mitch Keller reports on 2019-01-02 that <q>I opened the directory on my hard drive containing the <init>OTF</init> file, double clicked on the font (opens the macOS application Font Book, which comes with the OS), and then clicked the <c>Install Font</c> button.</q></p>
+                        </li>
+                        <li>
+                            <p>Karl-Dieter Crisman reports on 2019-07-01 that <q>I was able to use some fonts already existing in TeXLive with a symbolic link to the Font Book, as suggested at <url href="https://apple.stackexchange.com/a/225824/189102">Ask Different</url><fn><c>apple.stackexchange.com/a/225824/189102</c></fn>:
+                            <cd>
+                                <cline>ln -s</cline>
+                                <cline>  /usr/local/texlive/2018/texmf-dist/fonts/opentype/public/lm/</cline>
+                                <cline>  '/Library/Fonts/Latin Modern'</cline>
+                            </cd>where 2018 indicates when I updated my TeXLive distribution.</q></p>
+                        </li>
+                    </ul></p>
            </paragraphs>
 
             <paragraphs>
