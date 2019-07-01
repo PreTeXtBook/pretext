@@ -435,4 +435,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>[image]</xsl:text>
 </xsl:template>
 
+
+<!-- #### -->
+<!-- Sage -->
+<!-- #### -->
+
+<!-- We leave a placeholder for Sage cells, temporarily -->
+<xsl:template match="sage">
+    <xsl:text>[sage cell]</xsl:text>
+    <br/>
+</xsl:template>
+
 </xsl:stylesheet>
