@@ -831,6 +831,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB: this could done with a "section-header" template? -->
 <!-- Other divisions (eg, colophon, preface) will follow   -->
 <!-- This is all within a .frontmatter class for CSS       -->
+<!-- NB: this is redefined with the same @match in the     -->
+<!-- Braille conversion, so keep these in-sync             -->
 <xsl:template match="titlepage">
     <xsl:variable name="b-has-subtitle" select="parent::frontmatter/parent::*/subtitle"/>
     <h2 class="heading">

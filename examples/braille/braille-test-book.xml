@@ -25,6 +25,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
     <book>
         <title>A Test Book</title>
+        <subtitle>Converting <pretext/> to Braille</subtitle>
 
         <frontmatter>
             <titlepage>
@@ -35,11 +36,23 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <email>beezer@pugetsound.edu</email>
                 </author>
 
+                <editor>
+                    <personname>Al Maneki</personname>
+                </editor>
+
+                <editor>
+                    <personname>Karen Herstein</personname>
+                </editor>
+
+                <colophon>
+                    <edition>Preliminary Edition, Summer 2019</edition>
+                </colophon>
+
                 <date><today /></date>
             </titlepage>
 
             <preface>
-                <p>This is a <pretext/> book designed to test conversions to Braille without too much extraneous material.  We will describe here what should have been apparent in the front matter.  This will be expanded as we get more and more parts of the book under control.  The title of the entire book is <q>A Test Book</q> and the author is <q>Robert A. Beezer</q>.  The date will change, but should be something recent.</p>
+                <p>This is a <pretext/> book designed to test conversions to Braille without too much extraneous material.  We will describe here what should have been apparent on the title page.  This will be expanded as we get more and more parts of the book under control.  The title of the entire book is <q>A Test Book</q> with the subtitle <q>Converting PreTeXt to Braille</q>.  The author is <q>Robert A. Beezer</q>, with editors <q>Al Maneki</q> and <q>Karen Herstein</q>.  The edition is <q>Preliminary Edition, Summer 2019</q>.  The date will change, but should be something recent.</p>
 
                 <p>Note: 2019-05-27, this next paragraph is wrong, the preface is being formatted like a section.  Problem is understood, but a fix has wide implications, so has not been attempted. </p>
 
