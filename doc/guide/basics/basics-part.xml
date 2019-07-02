@@ -195,8 +195,8 @@
     <p>
       For inline math,
       just wrap things in the <tag>m</tag> tag.
-          <idx><h>equation</h><h>in-line</h><h><pretext /> code</h></idx>
-          <idx><h><pretext /> code</h><h>in-line equation</h></idx>
+          <idx><h>equation</h><h>in-line</h><h><pretext /> code for</h></idx>
+          <idx><h><pretext /> code for</h><h>in-line equation</h></idx>
       For example, <m>a^2 + b^2 = c^2</m> is produced by <c>&lt;m&gt;a^2 + b^2 = c^2&lt;/m&gt;.</c> We get displayed equations via the <tag>me</tag> and <tag>men</tag> tags; the latter produces a numbered equation.
           <idx><h>mathematics</h><h>environments</h><h>displayed equation</h></idx>
           <idx><h>mathematics</h><h>environments</h><h>in-line equation</h></idx>
@@ -204,8 +204,8 @@
 
     <listing xml:id="l-me">
       <caption>Displayed equations</caption>
-      <idx><h><pretext /> code</h><h>displayed equation</h></idx>
-      <idx><h>equation</h><h>displayed</h><h><pretext /> code</h></idx>
+      <idx><h><pretext /> code for</h><h>displayed equation</h></idx>
+      <idx><h>equation</h><h>displayed</h><h><pretext /> code for</h></idx>
 <program>
 <input><xi:include href="me.ptx" parse="text"/></input>
 </program>
@@ -224,8 +224,8 @@
 
     <listing xml:id="l-md">
       <caption>Aligned equations</caption>
-      <idx><h><pretext /> code</h><h>aligned equations</h></idx>
-      <idx><h>equation</h><h>aligned</h><h><pretext /> code</h></idx>
+      <idx><h><pretext /> code for</h><h>aligned equations</h></idx>
+      <idx><h>equation</h><h>aligned</h><h><pretext /> code for</h></idx>
 <program>
 <input><xi:include href="md.ptx" parse="text"/></input>
 </program>
@@ -275,9 +275,9 @@
 
     <listing xml:id="l-ol">
       <caption>An ordered list</caption>
-      <idx><h>list</h><h>ordered</h><h><pretext /> code</h></idx>
-      <idx><h>ordered list</h><h><pretext /> code</h></idx>
-      <idx><h><pretext /> code</h><h>ordered list</h></idx>
+      <idx><h>list</h><h>ordered</h><h><pretext /> code for</h></idx>
+      <idx><h>ordered list</h><h><pretext /> code for</h></idx>
+      <idx><h><pretext /> code for</h><h>ordered list</h></idx>
 <program>
 <input><xi:include href="ol.ptx" parse="text"/></input>
 </program>
@@ -303,9 +303,9 @@
 
     <listing xml:id="l-ul">
       <caption>An unordered list</caption>
-      <idx><h>list</h><h>unordered</h><h><pretext /> code</h></idx>
-      <idx><h>unordered list</h><h><pretext /> code</h></idx>
-      <idx><h><pretext /> code</h><h>unordered list</h></idx>
+      <idx><h>list</h><h>unordered</h><h><pretext /> code for</h></idx>
+      <idx><h>unordered list</h><h><pretext /> code for</h></idx>
+      <idx><h><pretext /> code for</h><h>unordered list</h></idx>
 <program>
 <input><xi:include href="ul.ptx" parse="text"/></input>
 </program>
@@ -552,9 +552,9 @@
 
       <listing xml:id="l-exercise">
         <caption>An exercise</caption>
-        <idx><h>exercise</h><h><pretext /> code</h></idx>
-        <idx><h>inline exercise</h><h><pretext /> code</h></idx>
-        <idx><h><pretext /> code</h><h>exercise</h><h>inline</h></idx>
+        <idx><h>exercise</h><h><pretext /> code for</h></idx>
+        <idx><h>inline exercise</h><h><pretext /> code for</h></idx>
+        <idx><h><pretext /> code for</h><h>exercise</h><h>inline</h></idx>
 <program>
 <input><xi:include href="exercise.ptx" parse="text"/></input>
 </program>
@@ -600,8 +600,8 @@
 
       <listing xml:id="l-exercisegroup">
         <caption>Using an <tag>exercisegroup</tag>.</caption>
-        <idx><h>exercise group</h><h><pretext /> code</h></idx>
-        <idx><h><pretext /> code</h><h>exercise</h><h>group</h></idx>
+        <idx><h>exercise group</h><h><pretext /> code for</h></idx>
+        <idx><h><pretext /> code for</h><h>exercise</h><h>group</h></idx>
 <program>
 <input><xi:include href="exercisegroup.ptx" parse="text"/></input>
 </program>
