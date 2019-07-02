@@ -8465,7 +8465,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <xsl:apply-templates select="$target/personname" />
         </xsl:when>
         <!-- equation override -->
-        <xsl:when test="$b-is-equation-target">
+        <xsl:when test="$b-is-equation-target and $text-style != 'title'">
             <xsl:if test="$b-has-content">
                 <xsl:copy-of select="$custom-text" />
                 <xsl:apply-templates select="." mode="xref-text-separator"/>
