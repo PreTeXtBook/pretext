@@ -36,6 +36,7 @@ so that we can set our own later */
     margin-bottom: 0;
     line-height: 1.35;
 }
+.pretext-content .aside-like > p:first-child,
 .pretext-content td > p:first-child,
 .pretext-content .solution > p:first-child {
     margin-top: 0;
