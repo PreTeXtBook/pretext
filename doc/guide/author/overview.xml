@@ -201,6 +201,35 @@
         <p>These three characters are interpreted by the <init>XML</init> processor very early in the analysis of your source.  So they need to be authored specially via the <term>XML entities</term>: <c>&amp;amp;</c>, <c>&amp;lt;</c>, <c>&amp;gt;</c>.  In practice, the last is rarely necessary.  So really just two characters to type carefully or exceptionally.</p>
 
         <p>If you consistently follow the prescription in the previous paragraph you will avoid a descent into escape-character hell and avoid a lot of head-scratching.  In particular, you should have no need of the <c>&lt;![CDATA[</c><nbsp /><c>]]&gt;</c> mechanism of XML, so just forget we even mentioned it.</p>
+      
+      <table>
+        <title> Special Characters </title>
+        <tabular halign="left"> 
+          <row> <cell> To get this: </cell> <cell> Type this: </cell> </row> 
+          <row> <cell> &amp; </cell> <cell> <c> &amp;amp; </c> </cell> </row> 
+          <row> <cell> <copyright /> </cell> <cell> <tag> copyright/ </tag> </cell> </row> 
+          <row> <cell> <ellipsis /> </cell> <cell> <tag> ellipsis/ </tag> </cell> </row> 
+          <row> <cell> <fillin /> </cell> <cell> <tag> fillin/ </tag> </cell> </row> 
+          <row> <cell> <icon /> </cell> <cell> <tag> icon/ </tag> </cell> </row> 
+          <row> <cell> &lt; </cell> <cell> <c> &amp;lt; </c> </cell> </row> 
+          <row> <cell> <lq /> </cell> <cell> <tag> lq/ </tag> </cell> </row> 
+          <row> <cell> <lsq /> </cell> <cell> <tag> lsq/ </tag> </cell> </row> 
+          <row> <cell> <mdash /> </cell> <cell> <tag> mdash/ </tag> </cell> </row> 
+          <row> <cell> <midpoint /> </cell> <cell> <tag> midpoint/ </tag> </cell> </row> 
+          <row> <cell> <nbsp /> </cell> <cell> <tag> nbsp/ </tag> </cell> </row> 
+          <row> <cell> <ndash /> </cell> <cell> <tag> ndash/ </tag> </cell> </row> 
+          <row> <cell> <permille /> </cell> <cell> <tag> permille/ </tag> </cell> </row> 
+          <row> <cell> <pilcrow /> </cell> <cell> <tag> pilcrow/ </tag> </cell> </row> 
+          <row> <cell> <registered /> </cell> <cell> <tag> registered/ </tag> </cell> </row> 
+          <row> <cell> <rq /> </cell> <cell> <tag> rq/ </tag> </cell> </row> 
+          <row> <cell> <rsq /> </cell> <cell> <tag> rsq/ </tag> </cell> </row> 
+          <row> <cell> <section-mark /> </cell> <cell> <tag> section-mark/ </tag> </cell> </row> 
+          <row> <cell> <solidus /> </cell> <cell> <tag> solidus/ </tag> </cell> </row> 
+          <row> <cell> <swungdash /> </cell> <cell> <tag> swungdash/ </tag> </cell> </row> 
+          <row> <cell> <times /> </cell> <cell> <tag> times/ </tag> </cell> </row> 
+          <row> <cell> <trademark /> </cell> <cell> <tag> trademark/ </tag> </cell> </row> 
+        </tabular> 
+      </table>
 
     </section>
 
