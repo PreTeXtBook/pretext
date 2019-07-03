@@ -6721,33 +6721,34 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ######## -->
 
 <xsl:template match="quantity">
-    <!-- Unicode NARROW NO-BREAK SPACE -->
-    <xsl:variable name="thin-space" select="'&#x202f;'"/>
     <!-- Unicode FRACTION SLASH -->
     <xsl:variable name="fraction-slash" select="'&#x2044;'"/>
 
-    <xsl:apply-templates select="mag"/>
-    <!-- if not solo, add separation -->
-    <xsl:if test="mag and (unit or per)">
-        <xsl:value-of select="$thin-space"/>
-    </xsl:if>
-    <xsl:choose>
-        <xsl:when test="per">
-           <sup>
-                <xsl:if test="not(unit)">
-                    <xsl:text>1</xsl:text>
-                </xsl:if>
-                <xsl:apply-templates select="unit" />
-            </sup>
-            <xsl:value-of select="$fraction-slash"/>
-            <sub>
-                <xsl:apply-templates select="per" />
-            </sub>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:apply-templates select="unit"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <!-- span to prevent line breaks within the quantity -->
+    <span class="quantity">
+        <xsl:apply-templates select="mag"/>
+        <!-- if not solo, add separation -->
+        <xsl:if test="mag and (unit or per)">
+            <xsl:text> </xsl:text>
+        </xsl:if>
+        <xsl:choose>
+            <xsl:when test="per">
+               <sup>
+                    <xsl:if test="not(unit)">
+                        <xsl:text>1</xsl:text>
+                    </xsl:if>
+                    <xsl:apply-templates select="unit" />
+                </sup>
+                <xsl:value-of select="$fraction-slash"/>
+                <sub>
+                    <xsl:apply-templates select="per" />
+                </sub>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="unit"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </span>
     <!-- NB: no mag, no per, no unit implies no output -->
     <!-- (really should be caught in schema), but      -->
     <!-- no real harm in just doing nothing            -->
@@ -6774,12 +6775,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:key name="base-key" match="base" use="concat(../@name, @full)"/>
 
 <xsl:template match="unit|per">
-    <!-- Unicode NARROW NO-BREAK SPACE -->
-    <xsl:variable name="thin-space" select="'&#x202f;'"/>
+    <!-- Unicode MIDDLE-DOT -->
+    <xsl:variable name="inter-unit-product" select="'&#x00B7;'"/>
 
-    <!-- add internal spaces within a numerator or denominator of units -->
+    <!-- add non-breaking hyphen within a numerator or denominator of units -->
     <xsl:if test="(self::unit and preceding-sibling::unit) or (self::per and preceding-sibling::per)">
-        <xsl:value-of select="$thin-space"/>
+        <xsl:value-of select="$inter-unit-product"/>
     </xsl:if>
     <!-- prefix is optional -->
     <xsl:if test="@prefix">
