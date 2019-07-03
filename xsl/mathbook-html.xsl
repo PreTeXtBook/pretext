@@ -6763,6 +6763,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:call-template name="end-inline-math" />
     </xsl:variable>
     <xsl:value-of select="str:replace($mag,'\pi',string($math-pi))"/>
+    <xsl:call-template name="nbsp-character"/>
 </xsl:template>
 
 <!-- unit and per children of a quantity element    -->
@@ -6774,13 +6775,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:key name="base-key" match="base" use="concat(../@name, @full)"/>
 
 <xsl:template match="unit|per">
-    <!-- Unicode NARROW NO-BREAK SPACE -->
-    <xsl:variable name="thin-space" select="'&#x202f;'"/>
+    <!-- Unicode NON-BREAKING-HYPHEN -->
+    <xsl:variable name="non-breaking-hypen" select="'&#x2011;'"/>
 
-    <!-- add internal spaces within a numerator or denominator of units -->
+    <!-- add non-breaking hyphen within a numerator or denominator of units -->
     <xsl:if test="(self::unit and preceding-sibling::unit) or (self::per and preceding-sibling::per)">
-        <xsl:value-of select="$thin-space"/>
+      <xsl:value-of select="$non-breaking-hypen"/>
     </xsl:if>
+  
     <!-- prefix is optional -->
     <xsl:if test="@prefix">
         <xsl:variable name="prefix">
