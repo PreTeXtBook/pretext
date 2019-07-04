@@ -1972,6 +1972,18 @@ a.mjx-svg-href  {
 .pretext-content .exercisegroup .cols6 > article.exercise-like {flex-basis: calc(16.66% - 2em);}
 
 
+.pretext-content .unit,
+.pretext-content .quantity {
+    white-space: nowrap;
+    word-spacing: -0.25ex;
+}
+.pretext-content .unit sub,
+.pretext-content .unit sup,
+.pretext-content .quantity sub,
+.pretext-content .quantity sup {
+     word-spacing: normal;
+}
+
 .pretext-content .code-inline,
 .pretext-content .code-block,
 .pretext-content .console {
