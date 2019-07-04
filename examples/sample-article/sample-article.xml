@@ -486,7 +486,13 @@ the xsltproc executable.
 
             <p>You can give a Sage element a <c>doctest</c><idx>doctest</idx><idx><h>attributes</h><h>doctest</h></idx> attribute, whose value mirrors the optional hash tags used in Sage doctests.  Possible values are <c>random</c>, <c>long time</c>, <c>not implemented</c>, <c>not tested</c>, <c>known bug</c>, <c>absolute</c>, <c>relative</c>, and <c>optional</c>.  The values <c>absolute</c> and <c>relative</c> refer to floating-point tolerances for equality and require a second attribute <c>tolerance</c> to specify a floating point value.  The value <c>optional</c> refers to the test requiring that an optional Sage package be present.  The name of that package should be provided in the <c>package</c> attribute.</p>
 
-            <p>The next cell is marked in the source as <c>doctest="random"</c>, and so is specified as unpredictable and not tested.  But there is some <q>sample</q> output which will appear in the <latex /> version (and always be the same).</p>
+            <!-- The four index entries below once sorted/consolidated very poorly -->
+            <p>The next cell is marked in the source as <c>doctest="random"</c>, and so is specified as unpredictable and not tested.  But there is some <q>sample</q> output which will appear in the <latex /> version (and always be the same).
+            <idx>c</idx>
+            <idx><h sortby="c">A bug test, sorted as <q>c</q></h><h>b</h><h>c one</h></idx>
+            <idx><h sortby="c">A bug test, sorted as <q>c</q></h><h>x</h><h>c two</h></idx>
+            <idx><h sortby="c">A bug test, sorted as <q>c</q></h><h>b</h><h>c three</h></idx>
+            </p>
 
             <sage doctest="random">
                 <input>random()</input>
