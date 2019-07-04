@@ -1305,7 +1305,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                 <!-- salt prevents accidental key collisions -->
                                 <xsl:when test="@sortby">
                                     <xsl:value-of select="translate(@sortby, &UPPERCASE;, &LOWERCASE;)" />
-                                    <xsl:value-of select="generate-id(.)" />
                                 </xsl:when>
                                 <xsl:otherwise>
                                     <xsl:value-of select="translate($content, &UPPERCASE;, &LOWERCASE;)" />
@@ -1332,7 +1331,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                                     <!-- salt prevents accidental key collisions -->
                                     <xsl:when test="@sortby">
                                         <xsl:value-of select="translate(@sortby, &UPPERCASE;, &LOWERCASE;)" />
-                                        <xsl:value-of select="generate-id(.)" />
                                     </xsl:when>
                                     <xsl:otherwise>
                                         <xsl:value-of select="translate($content, &UPPERCASE;, &LOWERCASE;)" />
