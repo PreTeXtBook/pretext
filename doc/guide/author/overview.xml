@@ -240,7 +240,8 @@
     <section xml:id="overview-math-results">
         <title>Mathematical Results</title>
         <idx><h>mathematics</h><h>mathematical results</h></idx>
-
+        <idx><h>mathematics</h><h>mathematical results</h><seealso>theorem-like elements</seealso></idx>
+        
         <p>Definitions, theorems, corollaries, <etc /> are supported by the tags:  <tag>theorem</tag>, <tag>corollary</tag>, <tag>lemma</tag>, <tag>algorithm</tag>, <tag>proposition</tag>, <tag>claim</tag>, <tag>fact</tag>, <tag>definition</tag>, <tag>conjecture</tag>, <tag>axiom</tag>, and <tag>principle</tag>.  Each may have a <tag>title</tag> (strongly encouraged), and then contains a <tag>statement</tag> which is a sequence of paragraphs and other elements.  As appropriate, some of these elements (such as a <tag>lemma</tag>) may contain an optional <tag>proof</tag> (or several), while other elements may not have a <tag>proof</tag> (such as a <tag>conjecture</tag>).</p>
 
         <p>A <tag>definition</tag> is a natural place to define notation as well (see <xref ref="overview-index-notation" />), and to use the <tag>term</tag> tag to identify the terminology being defined.</p>
