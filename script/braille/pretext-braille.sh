@@ -15,6 +15,7 @@
 
 # Script Prerequisites
 #   install -d to make directories
+#   xsltproc (usually present on Linux, Mac OS)
 #   PreTeXt distribution, xsl/braille/pretext-braille.xsl
 #   node (on path)
 #   mathjax-node-page (via npm, provides mjpage)

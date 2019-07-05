@@ -25,6 +25,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
     <book>
         <title>A Test Book</title>
+        <subtitle>Converting <pretext/> to Braille</subtitle>
 
         <frontmatter>
             <titlepage>
@@ -35,13 +36,23 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <email>beezer@pugetsound.edu</email>
                 </author>
 
+                <editor>
+                    <personname>Al Maneki</personname>
+                </editor>
+
+                <editor>
+                    <personname>Karen Herstein</personname>
+                </editor>
+
+                <colophon>
+                    <edition>Preliminary Edition, Summer 2019</edition>
+                </colophon>
+
                 <date><today /></date>
             </titlepage>
 
             <preface>
-                <p>This is a <pretext/> book designed to test conversions to Braille without too much extraneous material.  We will describe here what should have been apparent in the front matter.  This will be expanded as we get more and more parts of the book under control.  The title of the entire book is <q>A Test Book</q> and the author is <q>Robert A. Beezer</q>.  The date will change, but should be something recent.</p>
-
-                <p>Note: 2019-05-27, this next paragraph is wrong, the preface is being formatted like a section.  Problem is understood, but a fix has wide implications, so has not been attempted. </p>
+                <p>This is a <pretext/> book designed to test conversions to Braille without too much extraneous material.  We will describe here what should have been apparent on the title page.  This will be expanded as we get more and more parts of the book under control.  The title of the entire book is <q>A Test Book</q> with the subtitle <q>Converting PreTeXt to Braille</q>.  The author is <q>Robert A. Beezer</q>, with editors <q>Al Maneki</q> and <q>Karen Herstein</q>.  The edition is <q>Preliminary Edition, Summer 2019</q>.  The date will change, but should be something recent.</p>
 
                 <p>This preface should have formatting similar to a chapter, which is described carefully in <xref ref="chapter-divisions"/>.  The one difference is that a preface is not numbered, so there will be just a title, centered, followed by a blank line.  We can give a preface a title, such as <articletitle>Preface to the Second Edition</articletitle>, but here we have let <pretext/> provide a default title.</p>
             </preface>
@@ -91,6 +102,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     </subsubsection>
                 </subsection>
             </section>
+        </chapter>
+
+        <chapter>
+            <title>Mathematics</title>
+
+            <p>Our motivation is the automatic translation of texts in mathematics.  We will do serious testing of mathematics elsewhere, but will include some here as both demonstration and for testing.</p>
+
+            <p>The third sentence has some single-letter Latin variables, interspered with Greek variables and other simple inline math expressions.  The single-letter variables should be italicized.  We let <m>x</m> equal the value of <m>T</m>, but not <m>\theta</m> nor the value of <m>a+b</m>, but it could also be <m>\rho</m> or <m>g</m>.</p>
+
         </chapter>
 
         <chapter>

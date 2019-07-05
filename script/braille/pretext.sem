@@ -71,6 +71,13 @@ boldx dfn,class,terminology
 # PTX alert => HTML em.alert
 boldx em,class,alert
 
+# Single-letter, Latin mathematics, such
+# as a variable "x" is not marked up with
+# Nemeth indicators, but instead gets an
+# HTML italics element ("i") with class
+# .one-letter, and so is converted to
+# Braille italics
+italicx i,class,one-letter
 
 ########
 # Blocks

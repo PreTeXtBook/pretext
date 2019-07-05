@@ -96,6 +96,79 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </html>
 </xsl:template>
 
+<!-- The "frontmatter" and "backmatter" of the HTML version are possibly -->
+<!-- summary pages and need to step the heading level (h1-h6) for screen -->
+<!-- readers and accessibility.  But here we want to style items at      -->
+<!-- similar levels to be at the same HTML level so we can use liblouis' -->
+<!-- device for this.  So, for example, we want  book/preface/chapter    -->
+<!-- to be h2, not h3.  Solution: we don't need the frontmatter and      -->
+<!-- backmatter distinctions in Braille, so we simply recurse with a     -->
+<!-- pass-through of the heading level.  This is a very tiny subset of   -->
+<!-- the HTML template matching &STRUCTURAL;.                            -->
+<xsl:template match="frontmatter|backmatter">
+    <xsl:param name="heading-level"/>
+
+    <xsl:apply-templates>
+        <xsl:with-param name="heading-level" select="$heading-level"/>
+    </xsl:apply-templates>
+</xsl:template>
+
+
+<!-- ########## -->
+<!-- Title Page -->
+<!-- ########## -->
+
+<!-- This has the same @match as in the HTML conversion,        -->
+<!-- so keep them in-sync.  Here we make adjustments:           -->
+<!--   * One big h1 for liblouis styling (centered, etc)        -->
+<!--   * No extra HTML, just line breaks                        -->
+<!--   * exchange the subtitle semicolon/space for a line break -->
+<!--   * dropped credit, and included edition                   -->
+<!-- See [BANA-2016, 1.8.1]                                     -->
+<xsl:template match="titlepage">
+    <xsl:variable name="b-has-subtitle" select="parent::frontmatter/parent::*/subtitle"/>
+    <h1 class="heading">
+        <xsl:apply-templates select="parent::frontmatter/parent::*" mode="title-full" />
+        <br/>
+        <xsl:if test="$b-has-subtitle">
+            <xsl:apply-templates select="parent::frontmatter/parent::*" mode="subtitle" />
+            <br/>
+        </xsl:if>
+        <!-- We list authors and editors in document order -->
+        <xsl:apply-templates select="author|editor" mode="full-info"/>
+        <!-- A credit is subsidiary, so follows -->
+        <!-- <xsl:apply-templates select="credit" /> -->
+        <xsl:if test="colophon/edition or date">
+            <br/> <!-- a small gap -->
+            <xsl:if test="colophon/edition">
+                <xsl:apply-templates select="colophon/edition"/>
+                <br/>
+            </xsl:if>
+            <xsl:if test="date">
+                <xsl:apply-templates select="date"/>
+                <br/>
+            </xsl:if>
+        </xsl:if>
+    </h1>
+</xsl:template>
+
+<xsl:template match="titlepage/author|titlepage/editor" mode="full-info">
+    <xsl:apply-templates select="personname"/>
+    <xsl:if test="self::editor">
+        <xsl:text> (Editor)</xsl:text>
+    </xsl:if>
+    <br/>
+    <xsl:if test="department">
+        <xsl:apply-templates select="department"/>
+        <br/>
+    </xsl:if>
+    <xsl:if test="institution">
+        <xsl:apply-templates select="institution"/>
+        <br/>
+    </xsl:if>
+</xsl:template>
+
+
 <!-- ######### -->
 <!-- Divisions -->
 <!-- ######### -->
@@ -154,21 +227,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Paragraph-Level Markup -->
 <!-- ###################### -->
 
-<!-- We replace fancy Unicode double bracket characters  -->
-<!-- with two plain ASCII double brackets with overrides -->
-<!-- of the character definitions.                       -->
+<!-- Certain PreTeXt elements create characters beyond the -->
+<!-- "usual" Unicode range of U+0000-U+00FF.  We defer the -->
+<!-- translation to the "pretext-symbol.dis" file which    -->
+<!-- liblouis  will consult for characters/code-points it  -->
+<!-- does not recognize.  We make notes here, but the file -->
+<!-- should be consulted for accurate information.         -->
 
-<!-- Left Double Bracket -->
-<!-- nee MATHEMATICAL LEFT WHITE SQUARE BRACKET, &#x27e6; -->
-<xsl:template name="ldblbracket-character">
-    <xsl:text>[[</xsl:text>
-</xsl:template>
-
-<!-- Right Double Bracket -->
-<!-- nee MATHEMATICAL RIGHT WHITE SQUARE BRACKET, &#x27e7; -->
-<xsl:template name="rdblbracket-character">
-    <xsl:text>]]</xsl:text>
-</xsl:template>
+<!-- PTX: ldblbracket, rdblbracket, dblbrackets     -->
+<!-- Unicode:                                       -->
+<!-- MATHEMATICAL LEFT WHITE SQUARE BRACKET, x27e6  -->
+<!-- MATHEMATICAL RIGHT WHITE SQUARE BRACKET, x27e7 -->
+<!-- Translation:  [[, ]]                           -->
 
 
 <!-- ########### -->
@@ -227,9 +297,25 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We place the Nemeth open/close symbols via   -->
 <!-- import of the base HTML/LaTeX representation -->
 <xsl:template match="m">
-    <xsl:call-template name="open-nemeth"/>
-    <xsl:apply-imports/>
-    <xsl:call-template name="close-nemeth"/>
+    <!-- we look for very simple math (one-letter variable names) -->
+    <!-- so we process the content (which can have "xref", etc)   -->
+    <xsl:variable name="content">
+        <xsl:apply-templates select="*|text()"/>
+    </xsl:variable>
+    <xsl:choose>
+        <!-- one Latin letter -->
+        <xsl:when test="(string-length($content) = 1) and
+                        contains('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', $content)">
+            <i class="one-letter">
+                <xsl:value-of select="."/>
+            </i>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:call-template name="open-nemeth"/>
+            <xsl:apply-imports/>
+            <xsl:call-template name="close-nemeth"/>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <!-- ################### -->
@@ -347,6 +433,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We leave a placeholder for images, temporarily -->
 <xsl:template match="image">
     <xsl:text>[image]</xsl:text>
+</xsl:template>
+
+
+<!-- #### -->
+<!-- Sage -->
+<!-- #### -->
+
+<!-- We leave a placeholder for Sage cells, temporarily -->
+<xsl:template match="sage">
+    <xsl:text>[sage cell]</xsl:text>
+    <br/>
 </xsl:template>
 
 </xsl:stylesheet>
