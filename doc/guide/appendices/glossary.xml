@@ -313,8 +313,8 @@
         </defined-term>
 
         <defined-term>
-                <idx>origin branch</idx>
-            <title>origin branch</title>
+                <idx>origin repository</idx>
+            <title>origin repository</title>
             <p>In git, the default name for the remote repository from which the local repository was cloned.</p>
         </defined-term>
 
@@ -378,7 +378,7 @@
         <defined-term>
                 <idx>pull request</idx>
             <title>pull request</title>
-            <p>In git, a suggestion that the changes to the files in one branched be merged into another branch
+            <p>In git, a suggestion that the changes to the files in one branch be merged into another branch
                (typically in another repository).</p>
         </defined-term>
 
@@ -489,8 +489,8 @@
         </defined-term>
 
         <defined-term>
-                <idx>upstream (git)</idx>
-            <title>upstream</title>
+                <idx>upstream repository (git)</idx>
+            <title>upstream repository</title>
             <p>In git, the usual name for the remote repository from which the local repository was originally forked.</p>
         </defined-term>
 
