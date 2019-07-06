@@ -1976,6 +1976,7 @@ a.mjx-svg-href  {
 .pretext-content .quantity {
     white-space: nowrap;
     word-spacing: -0.25ex;
+    margin-right: 0.125em;
 }
 .pretext-content .unit sub,
 .pretext-content .unit sup,
