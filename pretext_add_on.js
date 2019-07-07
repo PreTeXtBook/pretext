@@ -186,9 +186,9 @@ window.addEventListener("load",function(event) {
 window.addEventListener("load",function(event) {
        if(window.location.href.includes("/preview/")) {
            console.log("            found preview", window.location.href);
-           $("main p[id], main article[id]").each(function() {
+           $("main p[id], main article[id], main li[id], main section[id], main a[data-knowl]").each(function() {
                var thisid = $(this).attr('id');
-               if( (thisid.length > 3 && !thisid.includes("-part")) || thisid.startsWith("p-")) {
+               if( (thisid.length > 3 && !thisid.includes("-part") && !thisid.startsWith("fn-")) || thisid.startsWith("p-")) {
                  $( this ).addClass("newstuff");
                  console.log("           found new", this)
                }
