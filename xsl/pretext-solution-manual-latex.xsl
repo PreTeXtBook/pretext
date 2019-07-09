@@ -229,43 +229,53 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- duplication of the code in the LaTeX conversion, which -->
 <!-- needs to be kept in-sync.  Ideally a LaTeX (internal)  -->
 <!-- switch would make these changes.                       -->
+<!-- The "caption" macros are the starred variants, so that -->
+<!-- numbers are not automatically generated, and then the  -->
+<!-- actual text of the caption is manufactured entirely at -->
+<!-- the end of the template.                               -->
 
 <!-- Captions for Figures, Tables, Listings, Lists -->
 <!-- xml:id is on parent, but LaTeX generates number with caption -->
-<xsl:template match="caption">
+<xsl:template match="figure|listing|table|list" mode="title-caption">
+    <!-- construct appropriate command -->
     <xsl:choose>
-      <xsl:when test="parent::table/parent::sidebyside">
-            <xsl:text>\captionof*{table}{</xsl:text>
-      </xsl:when>
-      <xsl:when test="parent::figure/parent::sidebyside">
+        <xsl:when test="parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure">
+            <xsl:text>\subcaption*{</xsl:text>
+        </xsl:when>
+        <xsl:when test="self::figure/parent::sidebyside">
             <xsl:text>\captionof*{figure}{</xsl:text>
-      </xsl:when>
-      <xsl:when test="parent::listing">
+        </xsl:when>
+        <xsl:when test="self::table/parent::sidebyside">
+            <xsl:text>\captionof*{table}{</xsl:text>
+        </xsl:when>
+        <xsl:when test="self::listing">
             <xsl:text>\captionof*{listingcap}{</xsl:text>
         </xsl:when>
-      <xsl:when test="parent::list">
+        <xsl:when test="self::list">
             <xsl:text>\captionof*{namedlistcap}{</xsl:text>
         </xsl:when>
-      <xsl:otherwise>
-          <xsl:text>\caption*{</xsl:text>
-      </xsl:otherwise>
+        <xsl:otherwise>
+            <xsl:text>\caption*{</xsl:text>
+        </xsl:otherwise>
     </xsl:choose>
+    <!-- produce the actual content -->
     <xsl:text>\textbf{</xsl:text>
-    <xsl:apply-templates select="parent::*" mode="type-name"/>
+    <xsl:apply-templates select="." mode="type-name"/>
     <xsl:text> </xsl:text>
-    <xsl:apply-templates select="parent::*" mode="number"/>
+    <xsl:apply-templates select="." mode="number"/>
     <xsl:text>:} </xsl:text>
-    <xsl:apply-templates />
-    <xsl:text>}&#xa;</xsl:text>
-</xsl:template>
-
-<!-- Subcaptions showup in side-by-side -->
-<xsl:template match="caption" mode="subcaption">
-    <xsl:text>\subcaption*{</xsl:text>
-    <xsl:text>\textbf{</xsl:text>
-    <xsl:apply-templates select="parent::*" mode="serial-number"/>
-    <xsl:text>} </xsl:text>
-    <xsl:apply-templates />
+    <xsl:choose>
+        <xsl:when test="self::figure or self::listing">
+            <xsl:apply-templates select="." mode="caption-full"/>
+        </xsl:when>
+        <xsl:when test="self::table or self::list">
+            <xsl:apply-templates select="." mode="title-full"/>
+        </xsl:when>
+        <!-- never used? -->
+        <xsl:otherwise>
+            <xsl:apply-templates select="caption"/>
+        </xsl:otherwise>
+    </xsl:choose>
     <xsl:text>}&#xa;</xsl:text>
 </xsl:template>
 

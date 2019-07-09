@@ -8256,9 +8256,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Captions for Figures, Tables, Listings, Lists -->
-<!-- xml:id is on parent, but LaTeX generates number with caption -->
 <!-- NB: until we have a general (internal) switch to hard-code   -->
-<!-- *all* numbers, these two templates were copied (2019-03-01)  -->
+<!-- *all* numbers, this template was re-copied (2019-07-08)      -->
 <!-- into the "solutions manual" conversion, and edited.  So      -->
 <!-- they should be kept in-sync.                                 -->
 
