@@ -79,6 +79,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Output methods here are just pure text -->
 <xsl:output method="text" />
 
+<!-- A single command-line string parameter points to an XML file that      -->
+<!-- is structured to carry various options that a *publisher* might set.   -->
+<!-- Generally, these affect the *look* of the output, rather than the      -->
+<!-- actual *content* that appears on the page, i.e. the actual characters. -->
+<!-- We initialize with an empty node-set, then if not used, there is no    -->
+<!-- loading of the entire source all over again (which seems to be the     -->
+<!-- case with an empty string).  When set on the command-line, a string    -->
+<!-- value will be interpreted correctly. -->
+<xsl:param name="publisher" select="/.."/>
+
+<!-- NB: the second argument is simply a node, it causes $publisher -->
+<!-- to be interpreted relative to the location of the *current XML -->
+<!-- file* rather than the location of the *stylesheet*. The actual -->
+<!-- node does not seem so critical.                                -->
+<xsl:variable name="publication" select="document($publisher, .)/publication"/>
+
 <!-- Parameters to pass via xsltproc "stringparam" on command-line            -->
 <!-- Or make a thin customization layer and use 'select' to provide overrides -->
 <!-- These here are independent of the output format as well                  -->
