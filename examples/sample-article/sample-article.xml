@@ -3061,6 +3061,7 @@ the xsltproc executable.
                 <exercise xml:id="exercises-null-problem">
                     <statement>
                         <p>No problem here, but the next two are in an <q>exercise group</q> with an introduction and a conclusion, along with an optional title.  The two problems of the exercise group should be indented some to indicate the grouping.</p>
+                        <p>N.B. An <tag>exercisegroup</tag> is meant to hold a collection of (short) exercises with common, shared, instructions.  Do not use this structure to subdivide an <tag>exercises</tag> division, as you will eventually be disappointed.  Instead, use the available, but under development as of 2019-11-02, <tag>subexercises</tag>, which <em>requires</em> a <tag>title</tag>.</p>
                     </statement>
                 </exercise>
 
@@ -8980,6 +8981,84 @@ the xsltproc executable.
             </references>
         </section>
 
+        <exercises>
+            <title>Exercise Section, Structured</title>
+
+            <introduction>
+                <p>A collection of exercises, in a top-level <tag>exercises</tag> division, structured with <tag>subexercises</tag>.</p>
+            </introduction>
+
+            <subexercises>
+                <title>Easy Exercises</title>
+
+                <exercise>
+                    <title>Arithmetic</title>
+                    <statement>
+                        <p>Compute <m>3+4</m>.</p>
+                    </statement>
+                    <answer>
+                        <p><m>7</m></p>
+                    </answer>
+                </exercise>
+
+                <exercise>
+                    <title>Trigonometry</title>
+                    <statement>
+                        <p>Compute <m>\sin(\pi/4)</m>.</p>
+                    </statement>
+                </exercise>
+            </subexercises>
+
+            <subexercises>
+                <title>Hard Problems</title>
+
+                <exercise>
+                    <title>Number Theory</title>
+                    <statement>
+                        <p>Prove Fermat's Last Theorem.</p>
+                    </statement>
+                </exercise>
+
+                <exercise>
+                    <title>Millenial</title>
+                    <statement>
+                        <p>Find general solutions to the Navier-Stokes equation.</p>
+                    </statement>
+                </exercise>
+            </subexercises>
+
+            <subexercises>
+                <title>With an Exercise Group</title>
+
+                <exercisegroup>
+                    <introduction>
+                        <p>This is an exercise group, and this is its introduction.</p>
+                    </introduction>
+                    <exercise>
+                        <title>One</title>
+                        <statement>
+                            <p><m>6-5</m></p>
+                        </statement>
+                        <hint>
+                            <p>Subtract.</p>
+                        </hint>
+                    </exercise>
+                    <exercise>
+                        <title>Two</title>
+                        <statement>
+                            <p><m>1+1</m></p>
+                        </statement>
+                    </exercise>
+                </exercisegroup>
+
+                <exercise>
+                    <title>Outside exercisegroup, inside subexercises</title>
+                    <statement>
+                        <p>6+5</p>
+                    </statement>
+                </exercise>
+            </subexercises>
+        </exercises>
 
         <section xml:id="exercises-multiple">
             <title>Exercises, Multiple Subsections</title>

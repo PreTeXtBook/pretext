@@ -4631,6 +4631,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<!-- ############ -->
+<!-- Subexercises -->
+<!-- ############ -->
+
+<xsl:template match="subexercises">
+    <xsl:text>\paragraph{</xsl:text>
+    <xsl:apply-templates select="." mode="title-full"/>
+    <xsl:text>}%&#xa;</xsl:text>
+    <xsl:apply-templates select="idx|notation|introduction|exercisegroup|exercise|conclusion"/>
+</xsl:template>
+
 <!-- Introductions and Conclusions -->
 <!-- Simple containers, allowed before and after      -->
 <!-- explicit subdivisions, to introduce or summarize -->
@@ -5628,6 +5639,56 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="conclusion" />
     </xsl:if>
     <xsl:text>\par\medskip\noindent&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="subexercises" mode="solutions">
+    <xsl:param name="purpose"/>
+    <xsl:param name="b-has-statement" />
+    <xsl:param name="b-has-hint" />
+    <xsl:param name="b-has-answer" />
+    <xsl:param name="b-has-solution" />
+
+    <!-- When we subset exercises for solutions, an entire      -->
+    <!-- "subexercises" can become empty.  So we do a dry-run  -->
+    <!-- and if there is no content at all we bail out.         -->
+     <xsl:variable name="dry-run">
+        <xsl:apply-templates select="." mode="dry-run">
+            <xsl:with-param name="b-has-statement" select="$b-has-statement" />
+            <xsl:with-param name="b-has-hint" select="$b-has-hint" />
+            <xsl:with-param name="b-has-answer" select="$b-has-answer" />
+            <xsl:with-param name="b-has-solution" select="$b-has-solution" />
+        </xsl:apply-templates>
+    </xsl:variable>
+
+    <xsl:if test="not($dry-run = '')">
+        <xsl:if test="title">
+            <xsl:text>\paragraph</xsl:text>
+            <!-- keep optional title if LaTeX source is re-purposed -->
+            <xsl:text>[{</xsl:text>
+            <xsl:apply-templates select="." mode="title-short" />
+            <xsl:text>}]</xsl:text>
+            <xsl:text>{</xsl:text>
+            <xsl:apply-templates select="." mode="title-full" />
+            <xsl:text>}</xsl:text>
+            <!-- no label, as this is a duplicate              -->
+            <!-- no title, no heading, so only line-break here -->
+            <xsl:text>&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:if test="$b-has-statement">
+            <xsl:apply-templates select="introduction" />
+        </xsl:if>
+        <xsl:apply-templates select="exercise|exercisegroup" mode="solutions">
+            <xsl:with-param name="purpose" select="$purpose" />
+            <xsl:with-param name="b-has-statement" select="$b-has-statement" />
+            <xsl:with-param name="b-has-hint" select="$b-has-hint" />
+            <xsl:with-param name="b-has-answer" select="$b-has-answer" />
+            <xsl:with-param name="b-has-solution" select="$b-has-solution" />
+        </xsl:apply-templates>
+        <xsl:if test="$b-has-statement">
+            <xsl:apply-templates select="conclusion" />
+        </xsl:if>
+        <xsl:text>\par\medskip\noindent&#xa;</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <!-- Exercise Group (in solutions division) -->

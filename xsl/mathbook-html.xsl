@@ -2420,7 +2420,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- (7) TODO: "wrapped-content" called by "body" to separate code. -->
 
-<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|commentary|&GOAL-LIKE;|&EXAMPLE-LIKE;|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|proof|case|fn|contributor|biblio|biblio/note|defined-term|p|li|me|men|md|mdn">
+<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|commentary|&GOAL-LIKE;|&EXAMPLE-LIKE;|subexercises|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|proof|case|fn|contributor|biblio|biblio/note|defined-term|p|li|me|men|md|mdn">
     <xsl:param name="b-original" select="true()" />
     <xsl:variable name="hidden">
         <xsl:apply-templates select="." mode="is-hidden" />
@@ -3318,6 +3318,96 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:apply-templates>
 </xsl:template>
 
+
+<!-- Subexercises -->
+<!-- A pseudo-division, implemented more like an "exercisegroup" -->
+
+<!-- Never born-hidden, does not make sense -->
+<xsl:template match="subexercises" mode="is-hidden">
+    <xsl:text>false</xsl:text>
+</xsl:template>
+
+<!-- Overall enclosing element -->
+<!-- Natural HTML element      -->
+<xsl:template match="subexercises" mode="body-element">
+    <xsl:text>article</xsl:text>
+</xsl:template>
+
+<!-- And its CSS class -->
+<xsl:template match="subexercises" mode="body-css-class">
+    <xsl:text>subexercises</xsl:text>
+</xsl:template>
+
+<!-- Never born hidden -->
+<xsl:template match="subexercises" mode="hidden-knowl-placement"/>
+
+<!-- When born use this heading         -->
+<!-- Never hidden, never gets a heading -->
+<xsl:template match="subexercises" mode="heading-birth">
+    <xsl:apply-templates select="." mode="heading-title"/>
+</xsl:template>
+
+<!-- Heading for interior of xref-knowl content -->
+<!-- Not knowlizable, more like a division      -->
+<xsl:template match="subexercises" mode="heading-xref-knowl"/>
+
+<!-- Primary content of generic "body" template   -->
+<!-- Pass along b-original flag                   -->
+<!-- Simply process contents, could restrict here -->
+<!-- Mirror changes here into "solutions" below   -->
+<xsl:template match="subexercises" mode="wrapped-content">
+    <xsl:param name="b-original" select="true()"/>
+    <xsl:apply-templates select="introduction">
+        <xsl:with-param name="b-original" select="$b-original"/>
+    </xsl:apply-templates>
+    <xsl:apply-templates select="exercise|exercisegroup">
+        <xsl:with-param name="b-original" select="$b-original"/>
+    </xsl:apply-templates>
+    <xsl:apply-templates select="conclusion">
+        <xsl:with-param name="b-original" select="$b-original"/>
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- For solutions divisions, we mimic and reuse some of the above -->
+<xsl:template match="subexercises" mode="solutions">
+    <xsl:param name="b-has-statement" />
+    <xsl:param name="b-has-hint" />
+    <xsl:param name="b-has-answer" />
+    <xsl:param name="b-has-solution" />
+
+    <!-- we check for content, subject to selection of switches          -->
+    <!-- if there is no content, then we will not output anything at all -->
+     <xsl:variable name="dry-run">
+        <xsl:apply-templates select="." mode="dry-run">
+            <xsl:with-param name="b-has-statement" select="$b-has-statement" />
+            <xsl:with-param name="b-has-hint" select="$b-has-hint" />
+            <xsl:with-param name="b-has-answer" select="$b-has-answer" />
+            <xsl:with-param name="b-has-solution" select="$b-has-solution" />
+        </xsl:apply-templates>
+    </xsl:variable>
+
+    <xsl:if test="not($dry-run = '')">
+        <article class="subexercises">
+            <xsl:apply-templates select="." mode="heading-title"/>
+            <xsl:if test="$b-has-statement">
+                <xsl:apply-templates select="introduction">
+                    <xsl:with-param name="b-original" select="false()" />
+                </xsl:apply-templates>
+            </xsl:if>
+            <xsl:apply-templates select="exercise|exercisegroup" mode="solutions">
+                <xsl:with-param name="b-has-statement" select="$b-has-statement" />
+                <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
+                <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
+                <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
+            </xsl:apply-templates>
+            <xsl:if test="$b-has-statement">
+                <xsl:apply-templates select="conclusion">
+                    <xsl:with-param name="b-original" select="false()" />
+                </xsl:apply-templates>
+            </xsl:if>
+        </article>
+    </xsl:if>
+</xsl:template>
 
 <!-- Exercise Group -->
 <!-- A very simple block with just an enclosing div -->
@@ -4401,7 +4491,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- and top-down when components are also knowled.  -->
 
 
-<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|commentary|&GOAL-LIKE;|&EXAMPLE-LIKE;|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|proof|case|fn|contributor|biblio|biblio/note" mode="body">
+<xsl:template match="&REMARK-LIKE;|&COMPUTATION-LIKE;|&DEFINITION-LIKE;|&ASIDE-LIKE;|poem|&FIGURE-LIKE;|assemblage|blockquote|paragraphs|commentary|&GOAL-LIKE;|&EXAMPLE-LIKE;|subexercises|exercisegroup|exercise|&PROJECT-LIKE;|task|&SOLUTION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|proof|case|fn|contributor|biblio|biblio/note" mode="body">
     <xsl:param name="b-original" select="true()"/>
     <xsl:param name="block-type"/>
 

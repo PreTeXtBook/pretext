@@ -5340,6 +5340,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:apply-templates select="parent::*" mode="serial-number" />
 </xsl:template>
 
+<!-- A subexercises is meant to be minimal, and does not have a number -->
+<xsl:template match="subexercises" mode="serial-number"/>
+
 <!-- Multi-part WeBWorK problems have PTX elements        -->
 <!-- called "stage" which typically render as "Part..."   -->
 <!-- Their serial numbers are useful, there is no attempt -->
@@ -6850,6 +6853,27 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:apply-templates>
 </xsl:template>
 
+<!-- A "subexercises" potentially has an "introduction"    -->
+<!-- and "conclusion" as infrastructure, and can only      -->
+<!-- contain divisional "exercise" as varying items        -->
+<!-- in addition to possible "exercisegroup"               -->
+<!-- In a way, this is like an "exercisegroup", it has     -->
+<!-- content that is like a "statement", so a "dry-run" is -->
+<!-- checked before outputting its introduction/conclusion -->
+<xsl:template match="subexercises" mode="dry-run">
+    <xsl:param name="b-has-statement" />
+    <xsl:param name="b-has-hint" />
+    <xsl:param name="b-has-answer" />
+    <xsl:param name="b-has-solution" />
+
+    <xsl:apply-templates select="exercise|exercisegroup" mode="dry-run">
+        <xsl:with-param name="b-has-statement" select="$b-has-statement" />
+        <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
+        <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
+        <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
+    </xsl:apply-templates>
+</xsl:template>
+
 <!-- An "exercisegroup" potentially has an "introduction"  -->
 <!-- and "conclusion" as infrastructure, and can only      -->
 <!-- contain divisional "exercise" as varying items        -->
@@ -7213,7 +7237,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <xsl:with-param name="b-has-heading" select="$b-has-heading"/>
             <xsl:with-param name="content">
 
-                <xsl:for-each select="exercise|exercisegroup|&PROJECT-LIKE;|paragraphs/exercise|self::worksheet//exercise">
+                <xsl:for-each select="exercise|subexercises|exercisegroup|&PROJECT-LIKE;|paragraphs/exercise|self::worksheet//exercise">
                      <xsl:choose>
                         <xsl:when test="self::exercise and boolean(&INLINE-EXERCISE-FILTER;)">
                             <xsl:apply-templates select="." mode="solutions">
@@ -7224,7 +7248,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                                 <xsl:with-param name="b-has-solution"  select="$b-inline-solution" />
                             </xsl:apply-templates>
                         </xsl:when>
-                        <xsl:when test="self::exercisegroup">
+                        <xsl:when test="self::subexercises|self::exercisegroup">
                             <xsl:apply-templates select="." mode="solutions">
                                 <xsl:with-param name="purpose" select="$purpose"/>
                                 <xsl:with-param name="b-has-statement" select="$b-divisional-statement" />
