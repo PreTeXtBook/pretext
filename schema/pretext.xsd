@@ -1251,7 +1251,7 @@
   <xs:complexType name="RemarkLike">
     <xs:sequence>
       <xs:group ref="MetaDataTitleOptional"/>
-      <xs:group maxOccurs="unbounded" ref="BlockText"/>
+      <xs:group maxOccurs="unbounded" ref="BlockStatement"/>
     </xs:sequence>
     <xs:attributeGroup ref="MetaDataTitleOptional"/>
   </xs:complexType>

@@ -1368,7 +1368,7 @@
   <define name="RemarkLike">
     <ref name="MetaDataTitleOptional"/>
     <oneOrMore>
-      <ref name="BlockText"/>
+      <ref name="BlockStatement"/>
     </oneOrMore>
   </define>
   <define name="Remark">
