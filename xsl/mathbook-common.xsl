@@ -4421,11 +4421,6 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Visible Identifier -->
 <!--                    -->
 
-<!-- Check once if "index" is available -->
-<!-- for use on the root element        -->
-<!-- This scan may go away with a new approach to an "index.html" file -->
-<xsl:variable name="b-index-is-available" select="not(//@xml:id[.='index'])" />
-
 <!-- These strings are used for items an author must manage              -->
 <!-- (image files) or that a reader will interact with (shared URLs)     -->
 <!-- Fast version (as of 2019-05) prefers                                -->
@@ -4469,26 +4464,6 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                     <xsl:number from="book|article|letter|memo" level="any" />
                 </xsl:otherwise>
             </xsl:choose>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-<!-- Override for document root node,          -->
-<!-- slide in "index" as preferential default, -->
-<!-- presuming it is not in use anywhere else  -->
-<!-- NB: no fast version, so never uses @permid -->
-<xsl:template match="/mathbook/*[not(self::docinfo)]|/pretext/*[not(self::docinfo)]" mode="visible-id">
-    <xsl:choose>
-        <xsl:when test="@xml:id">
-            <xsl:value-of select="@xml:id" />
-        </xsl:when>
-        <xsl:when test="$b-index-is-available">
-            <xsl:text>index</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:value-of select="local-name(.)" />
-            <xsl:text>-</xsl:text>
-            <xsl:number level="any" />
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -10443,6 +10418,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="occurrences" select="$document-root//table[caption]" />
         <xsl:with-param name="date-string" select="'2019-06-28'" />
         <xsl:with-param name="message" select="'the &quot;table&quot; element needs a &quot;title&quot;, not a &quot;caption&quot;.  An existing &quot;caption&quot; will be used instead.  Both will display below the &quot;tabular&quot;'" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2019-07-10  @xml:id = 'index' deprecated in favor of publisher's @ref  -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//*[@xml:id = 'index']" />
+        <xsl:with-param name="date-string" select="'2019-07-10'" />
+        <xsl:with-param name="message" select="'an element should no longer have an @xml:id equal to &quot;index&quot; as a way to create an HTML index.html page.  See the Publishers Guides chapter on the HTML conversion for instructions.'" />
     </xsl:call-template>
 </xsl:template>
 
