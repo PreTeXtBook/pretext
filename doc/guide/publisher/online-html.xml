@@ -14,6 +14,28 @@
         <p>Similar to the case for <latex /> conversion (<xref ref="pdf-print"/>) there is a variety of command-line processing parameters available (<xref ref="processing-parameters" />).  Until we are ready to document these carefully, open <c>xsl/mathbook-html.xsl</c> and poke around to see what is available.</p>
     </introduction>
 
+    <section xml:id="html-publisher-options">
+        <title>HTML Publisher Options</title>
+
+        <paragraphs>
+            <title><c>index.html</c> Page</title>
+
+            <p>The conversion to <init>HTML</init> <em>always</em> creates a file named <c>index.html</c>.  We do this because if a reader requests the <init>URL</init><cd>
+                <cline>platypus.mammal-institute.org/aota/html</cline>
+            </cd>then most modern web servers will automatically return the page<cd>
+                <cline>platypus.mammal-institute.org/aota/html/index.html</cline>
+            </cd>So you can advertise the shorter version to potential readers.  What is in <c>index.html</c>?  Simple code to <term>redirect</term> to another one of your pages.  Which one?  Any one you like!</p>
+
+            <p>Within the <tag>publication</tag> element of your publisher file (<xref ref="publisher-file"/>) include an <tag>html</tag> element, with a child element <tag>index-page</tag> having an attribute <attr>ref</attr>.  The value must be the <attr>xml:id</attr> of a division which is rendered as an entire web page at the requested level of chunking.</p>
+
+            <p>For example, if a <tag>book</tag> is being chunked into <tag>chapter</tag>, and your source has<cd>
+                <cline>&lt;chapter xml:id="birds"&gt;</cline>
+            </cd>then you can set <c>ref="birds"</c> and the page for that chapter will be the default page for the shorter <init>URL</init>.  In practice, you probably really want a page that looks like the front matter or a Table of Contents.</p>
+
+            <p>The default is to first have <c>index.html</c> redirect to a page for the <tag>frontmatter</tag>, and if this is not possible, then it will redirect to a page for the top-level of your content.  If your document is short or simple, you may just have a single web page.  You do not need to distribute the <c>index.html</c> file and may just wish to use a concise and descriptive <attr>xml:id</attr> for your top-level element.</p>
+        </paragraphs>
+    </section>
+
     <section xml:id="knowled-content">
         <title>Knowled Content</title>
 
