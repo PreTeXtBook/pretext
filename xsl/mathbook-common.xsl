@@ -9754,6 +9754,16 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
                 <xsl:text>" is invalid since it will conflict with a unique HTML id in use by the user interface.  Please use a different string.  Quitting...</xsl:text>
             </xsl:message>
         </xsl:if>
+        <!-- index.html is built automatically, so preclude a clash -->
+        <!-- Not terminating until 2019-07-10 deprecation expires   -->
+        <xsl:if test=". = 'index'">
+            <xsl:message terminate='no'>
+                <xsl:text>MBX:ERROR:     </xsl:text>
+                <xsl:text>The @xml:id "</xsl:text>
+                <xsl:value-of select="."/>
+                <xsl:text>" is invalid since it will conflict with the construction of an automatic HTML "index.html" page.  Use some alternative for the real index - sorry.</xsl:text>
+            </xsl:message>
+        </xsl:if>
     </xsl:for-each>
 </xsl:template>
 
