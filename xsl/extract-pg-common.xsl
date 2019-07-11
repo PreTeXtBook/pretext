@@ -59,8 +59,21 @@
     </xsl:choose>
 </xsl:template>
 
-<!-- Marginal notes that common routines may call upon not implemented     -->
-<xsl:template name="margin-warning" />
+<!-- Inline warnings go into text, no matter what -->
+<xsl:template name="inline-warning">
+    <xsl:param name="warning" />
+    <xsl:text>(((</xsl:text>
+    <xsl:value-of select="$warning" />
+    <xsl:text>)))</xsl:text>
+</xsl:template>
+
+<!-- Marginal notes are only for author's report                     -->
+<xsl:template name="margin-warning">
+    <xsl:param name="warning" />
+    <xsl:if test="$author-tools-new = 'yes'" >
+        <xsl:value-of select="$warning" />
+    </xsl:if>
+</xsl:template>
 
 <!-- extract-pg.xsl documentation -->
 <!--#######################################################################-->
