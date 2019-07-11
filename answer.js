@@ -153,15 +153,17 @@ if (reading_questions.length) {
   
   
          var this_rq_controls = '<div id="' + this_rq_id_controls + '" class="input_controls hidecontrols">';
-         this_rq_controls += '<span class="action clear_item rq_delete">delete</span>';
-         this_rq_controls += '<span class="action save_item rq_edit">edit</span>';
-         this_rq_controls += '<span class="action amhelp">how to write math</span>';
+         this_rq_controls += '<span class="action clear_item rq_delete">XX</span>';
+ /*        this_rq_controls += '<span class="action save_item rq_edit">edit</span>';
+*/
+         this_rq_controls += '<span class="action amhelp">??</span>';
          this_rq_controls += '</div>'
   
          var this_rq_answer_and_controls = document.createElement('div');
          this_rq_answer_and_controls.setAttribute('style', 'width:80%; margin-left:auto; margin-right:auto; margin-top:0.5em;');
          this_rq_answer_and_controls.setAttribute('class', 'rq_answer');
          this_rq_answer_and_controls.innerHTML = hidden_answer_div + answer_div + this_rq_controls;
+         console.log("appending to ", reading_question_id);
          $('#'+reading_question_id).append(this_rq_answer_and_controls);
        //  this.parentNode.insertAdjacentElement("afterend", this_rq_answer_and_controls);
   
@@ -174,7 +176,8 @@ if (reading_questions.length) {
          var this_answer_link = document.createElement('div');
          this_answer_link.innerHTML = rq_answer_label;
          console.log("inserting afterend of",reading_question);
-         reading_question.insertAdjacentElement("afterend", this_answer_link);
+    //     reading_question.insertAdjacentElement("afterend", this_answer_link);
+         reading_question.append(this_answer_link);
       }
   
   }
@@ -186,11 +189,12 @@ if (reading_questions.length) {
     console.log(".readingquestion_make_answer student");
     $(this).addClass("hidecontrols");
  //   var this_rq_id = this.parentNode.parentNode.id;
-    var this_rq_id = this.parentNode.previousSibling.id;
+    var this_rq_id = this.parentNode.parentNode.id;
     var this_rq_id_text = this_rq_id + "_text";
     var this_rq_id_controls = this_rq_id + "_controls";
     console.log(".rq", this_rq_id);
     answer_textarea = '<textarea';
+    answer_textarea += ' class="rq_answer_text"'
     answer_textarea += ' id="' + this_rq_id_text + '"'
     answer_textarea += ' rows="' + '3' + '"';
     answer_textarea += ' style="width:100%; height: 63px;"';
@@ -198,9 +202,11 @@ if (reading_questions.length) {
     answer_textarea += '</textarea>';
   
     var this_rq_controls = '<div id="' + this_rq_id_controls + '" class="input_controls" style="margin-bottom:-1.9em;">';
-    this_rq_controls += '<span class="action clear_item rq_delete">delete</span>';
+    this_rq_controls += '<span class="action clear_item rq_delete">X</span>';
+/*
     this_rq_controls += '<span class="action save_item rq_save">save</span>';
-    this_rq_controls += '<span class="action amhelp">how to write math</span>';
+*/
+    this_rq_controls += '<span class="action amhelp">?</span>';
     this_rq_controls += '</div>'
   
     var this_rq_answer_and_controls = document.createElement('div');
@@ -215,14 +221,14 @@ if (reading_questions.length) {
     var this_textarea = document.getElementById(this_rq_id_text);
     this_textarea.addEventListener("keypress", function() {
   //     if(this_textarea.scrollTop != 0){
-          console.log("this_textarea.scrollHeight", this_textarea.scrollHeight, "this_textarea.scrollTop", this_textarea.scrollTop);
-          console.log("this_textarea.clientHeight", this_textarea.clientHeight);
+     //     console.log("this_textarea.scrollHeight", this_textarea.scrollHeight, "this_textarea.scrollTop", this_textarea.scrollTop);
+     //     console.log("this_textarea.clientHeight", this_textarea.clientHeight);
           this_textarea.overflow = "scroll";
-          console.log("this_textarea.scrollHeight", this_textarea.scrollHeight, "this_textarea.scrollTop", this_textarea.scrollTop);
-          console.log("this_textarea.clientHeight", this_textarea.clientHeight);
+     //     console.log("this_textarea.scrollHeight", this_textarea.scrollHeight, "this_textarea.scrollTop", this_textarea.scrollTop);
+     //     console.log("this_textarea.clientHeight", this_textarea.clientHeight);
           this_textarea.overflow = "hidden";
-          console.log("this_textarea.scrollHeight", this_textarea.scrollHeight, "this_textarea.scrollTop", this_textarea.scrollTop);
-          console.log("this_textarea.getBoundingClientRect()", this_textarea.getBoundingClientRect());
+     //     console.log("this_textarea.scrollHeight", this_textarea.scrollHeight, "this_textarea.scrollTop", this_textarea.scrollTop);
+     //     console.log("this_textarea.getBoundingClientRect()", this_textarea.getBoundingClientRect());
           this_textarea.style.height = this_textarea.scrollHeight + "px";
   //     }
        }, false);
@@ -309,12 +315,17 @@ if (reading_questions.length) {
 
 
   /* save a reading question */
-  $('body').on('click','.rq_save', function(){
-    console.log(".rq_save");
-    var this_rq_id = this.parentNode.previousSibling.id;
-    var this_rq_ans = this.parentNode.previousSibling;
-    console.log(".rq_save", this_rq_id);
-    var this_rq_text = this_rq_ans.value;
+/*  $('body').on('click','.rq_save', function(){
+*/
+  function save_one_reading_question(this_ans) {
+    console.log(".rq_save", this_ans.value);
+//    var this_rq_id = this_ans.parentNode.previousSibling.previousSibling.id;
+    var this_rq_id = this_ans.id;
+    console.log("this_rq_id", this_rq_id);
+    var this_rq_ans = this_ans; //.parentNode;
+    console.log("this_rq_ans", this_rq_ans);
+    var this_rq_text = this_ans.value;
+    console.log("this_rq_text", this_rq_text);
     if ( /[^\x00-\x7F]/.test(this_rq_text)) {
         this_rq_text = this_rq_text.replace(/[^\x00-\x7F]/g, "XX");
         alert("Illegal characters in answer have been replaced by XX");
@@ -346,51 +357,65 @@ if (reading_questions.length) {
   
   //and show it on the page
     var this_ans_static = document.createElement('div');
-    this_ans_static.setAttribute('id', this_rq_id);
+    this_ans_static.setAttribute('id', this_rq_id); // + "_text");
     this_ans_static.setAttribute('class', 'given_answer has_am');
     this_ans_static.innerHTML = dollars_to_slashparen(escapeHTML(this_rq_text)) + " "
     this_rq_ans.replaceWith(this_ans_static);
   
     MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
   
-    $(this).parent().addClass("hidecontrols");
+    console.log(" this_rq_ans",  this_rq_ans);
+
+    console.log("this_ans_static", this_ans_static);
   
-    $(this).parent().parent().addClass("rq_answer");
+    $(this_ans_static).parent().addClass("rq_answer");
+//    $(this_q).parent().parent().addClass("rq_answer");
   
+/*
     var edit_button = document.createElement('span');
     edit_button.setAttribute('class', "action edit_item rq_edit");
     edit_button.innerHTML = "edit";
     this.replaceWith(edit_button);
-  });
+*/
+  };
   
   /* edit an existing answer */
-  $('body').on('click','.rq_edit', function(){
-    console.log(".rq_edit");
-    var this_rq_id = this.parentNode.previousSibling.id;
-    var this_rq_ans = this.parentNode.previousSibling;
+  function edit_one_reading_question(this_ans) {
+//  $('body').on('click','.rq_edit', function(){
+    console.log(".rq_edit", this_ans);
+ //   var this_rq_id = this.parentNode.previousSibling.id;
+    var this_rq_id = this_ans.parentNode.parentNode.id;
+ //   var this_rq_ans = this.parentNode.previousSibling;
+    var this_rq_ans = this_ans;
     console.log(".rq_edit", this_rq_id);
+    console.log("this_rq_ans", this_rq_ans);
     var this_rq_text = this_rq_ans.innerHTML;
-    var this_rq_text_raw = uNescapeHTML(document.getElementById(this_rq_id + "_hidden").innerHTML);
+    console.log("looking for", this_rq_id + "_hidden");
+    var this_rq_text_raw = uNescapeHTML(document.getElementById(this_rq_id + "_text_hidden").innerHTML);
+    console.log("this_rq_text_raw",this_rq_text_raw);
   
      //this is copied from above.  need to eliminate repeated code
   
     var answer_textarea_editable = document.createElement('textarea');
-    answer_textarea_editable.setAttribute('id', this_rq_id);
+    answer_textarea_editable.setAttribute('id', this_rq_id + "_text");
+    answer_textarea_editable.setAttribute('class', 'rq_answer_text');
     answer_textarea_editable.setAttribute('rows', '3');
     answer_textarea_editable.setAttribute('style', 'width:100%; height: 44px;');
   
     this_rq_ans.replaceWith(answer_textarea_editable);
   
-    $(this).parent().removeClass("hidecontrols");
+//    $(this).parent().removeClass("hidecontrols");
+    $('#' + this_rq_id + "_controls").removeClass("hidecontrols");
   
     $(this).parent().parent().removeClass("rq_answer");
   
-    var save_button = document.createElement('span');
+/*    var save_button = document.createElement('span');
     save_button.setAttribute('class', "action edit_item rq_save");
     save_button.innerHTML = "save";
     this.replaceWith(save_button);
+*/
   
-    $('#' + this_rq_id).val(this_rq_text_raw);
+    $('#' + this_rq_id + "_text").val(this_rq_text_raw);
   
     answer_textarea_editable.style.height = answer_textarea_editable.scrollHeight + "px";
     answer_textarea_editable.addEventListener("keypress", function() {
@@ -398,15 +423,29 @@ if (reading_questions.length) {
           answer_textarea_editable.style.height = answer_textarea_editable.scrollHeight + "px";
   //     }
        }, false);
-  });
+  };
+
+
+/* handle saving when leaving an answer box, or editing an existing answer
+   when hovering over an existing answer */
   
-  $('body').on('mouseover','.rq_answer', function(){
-    $(this).children().last().removeClass("hidecontrols");
+  $('body').on('mouseover','.given_answer', function(){
+//    $(this).children().last().removeClass("hidecontrols");
+    edit_one_reading_question(this);
     $(this).attr('z-index', '2000');
   });
   $('body').on('mouseleave','.rq_answer', function(){
     $(this).children().last().addClass("hidecontrols");
     $(this).attr('z-index', '');
+  });
+  
+  $('body').on('mouseleave','textarea.rq_answer_text', function(){
+  /*  $(this).children().last().addClass("hidecontrols");
+*/
+    save_one_reading_question(this);
+    console.log("left answeer area");
+/*    $(this).attr('z-index', '');
+*/
   });
   
   $('body').on('click','.rq_delete', function(){
