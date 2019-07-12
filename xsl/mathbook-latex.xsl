@@ -2268,7 +2268,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Enviroments for side-by-side and components&#xa;</xsl:text>
         <xsl:text>%% Necessary to use \NewTColorBox for boxes of the panels&#xa;</xsl:text>
         <xsl:text>%% "newfloat" environment to squash page-breaks within a single sidebyside&#xa;</xsl:text>
-        <xsl:text>%% \leavevmode necessary when a side-by-side comes first, right after a heading&#xa;</xsl:text>
         <!-- Main side-by-side environment, given by xparse            -->
         <!-- raster equal height: boxes of same *row* have same height -->
         <!-- raster force size: false lets us control width            -->
@@ -5991,10 +5990,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- prelude?, introduction?, task+, conclusion?, postlude? -->
         <xsl:when test="task">
             <xsl:apply-templates select="introduction"/>
-            <!-- careful right after project heading -->
-            <xsl:if test="not(introduction)">
-                <xsl:call-template name="leave-vertical-mode" />
-            </xsl:if>
             <xsl:apply-templates select="task"/>
             <xsl:apply-templates select="conclusion"/>
         </xsl:when>
@@ -6064,11 +6059,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="task">
                 <xsl:if test="$b-has-statement">
                     <xsl:apply-templates select="introduction"/>
-                </xsl:if>
-                <!-- careful right after project heading if  -->
-                <!-- no content and a list will be following -->
-                <xsl:if test="not(introduction) or not($b-has-statement)">
-                    <xsl:call-template name="leave-vertical-mode" />
                 </xsl:if>
                 <xsl:apply-templates select="task" mode="solutions">
                     <xsl:with-param name="purpose" select="$purpose" />
@@ -6744,22 +6734,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Lists themselves -->
 <!-- If columns are specified, we        -->
 <!-- wrap in the multicolumn environment -->
-<!-- TODO: fewer \leavevmode might be possible.      -->
-<!-- Test for first node of "p", then test for the   -->
-<!-- "p" being first node of some sectioning element -->
-<!-- The \leavevmode seems to introduce too much     -->
-<!-- vertical space when an "objectives" has no      -->
-<!-- introduction, and its absence does not seem      -->
-<!-- to cause any problems.                           -->
 <xsl:template match="ol">
-    <xsl:choose>
-        <xsl:when test="not(ancestor::ol or ancestor::ul or ancestor::dl or parent::objectives or parent::outcomes)">
-            <xsl:call-template name="leave-vertical-mode" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>%&#xa;</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:text>%&#xa;</xsl:text>
     <xsl:if test="@cols">
         <xsl:text>\begin{multicols}{</xsl:text>
         <xsl:value-of select="@cols" />
@@ -6784,14 +6760,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- from LaTeX's so we write out a label  -->
 <!-- choice for each such list             -->
 <xsl:template match="ul">
-    <xsl:choose>
-        <xsl:when test="not(ancestor::ol or ancestor::ul or ancestor::dl or parent::objectives or parent::outcomes)">
-            <xsl:call-template name="leave-vertical-mode" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>%&#xa;</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:text>%&#xa;</xsl:text>
     <xsl:if test="@cols">
         <xsl:text>\begin{multicols}{</xsl:text>
         <xsl:value-of select="@cols" />
@@ -6808,14 +6777,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="dl">
-    <xsl:choose>
-        <xsl:when test="not(ancestor::ol or ancestor::ul or ancestor::dl or parent::objectives or parent::outcomes)">
-            <xsl:call-template name="leave-vertical-mode" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>%&#xa;</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:text>%&#xa;</xsl:text>
     <xsl:if test="@cols">
         <xsl:text>\begin{multicols}{</xsl:text>
         <xsl:value-of select="@cols" />
@@ -8540,16 +8502,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="left-margin" select="$layout/left-margin" />
     <xsl:variable name="right-margin" select="$layout/right-margin" />
     <xsl:variable name="space-width" select="$layout/space-width" />
-
-    <!-- If a side-by-side is first in a container, such as an   -->
-    <!-- "example", the layout appears *before* the "title",     -->
-    <!-- *unless* we leave "vmode".  As a "sbsgroup" is a series -->
-    <!-- of "sidebyside", we make the right adjustment there     -->
-    <!-- (and not here, where then *every* "sbsgroup" would      -->
-    <!-- earn protection.                                        -->
-    <xsl:if test="not(preceding-sibling::*) and not(parent::sbsgroup)">
-        <xsl:call-template name="leave-vertical-mode"/>
-    </xsl:if>
 
     <!-- TODO: Make "sidebyside" a 3-argument environment:          -->
     <!-- headings, panels, captions.  Then put "\nopagebreak"       -->

@@ -6455,14 +6455,6 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- that goes out to the enclosing group to get them  -->
 
 <xsl:template match="sbsgroup">
-    <!-- Leaving vertical mode is peculiar to LaTeX output.     -->
-    <!-- When we make the LaTeX version into a table of panels, -->
-    <!-- and not a succession of side-by-side, this workaround  -->
-    <!-- can be removed.                                        -->
-    <xsl:if test="not(preceding-sibling::*)">
-        <xsl:call-template name="leave-vertical-mode"/>
-    </xsl:if>
-
     <xsl:apply-templates select="sidebyside" />
 </xsl:template>
 
@@ -6481,12 +6473,6 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:with-param name="width" select="$width"/>
     </xsl:apply-templates>
 </xsl:template>
-
-<!-- This is an abstract stub for HTML production,     -->
-<!-- see note and first use in template for "sbsgroup" -->
-<!-- here in -common templates                         -->
-<xsl:template name="leave-vertical-mode"/>
-
 
 <!-- ############## -->
 <!-- List Utilities -->
