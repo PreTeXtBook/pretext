@@ -6755,6 +6755,42 @@ the xsltproc executable.
                     </sidebyside>
                 </figure>
 
+                <p>These same two lists can individually be the panels of a <tag>sidebyside</tag>, where vertical alignment on the <c>top</c> aligns the titles.</p>
+
+                <sidebyside widths="30% 60%" valign="top">
+                    <list>
+                        <caption>Sea Life</caption>
+                        <introduction>
+                            <p>Dr. Seuss again.</p>
+                        </introduction>
+                        <ul>
+                            <li>One fish</li>
+                            <li>Two fish</li>
+                            <li>Red fish</li>
+                            <li>Blue fish</li>
+                        </ul>
+                    </list>
+                    <list xml:id="color-list-as-panel-in-sbs">
+                        <caption>Color Shades</caption>
+                        <idx><h>colors</h><h>shades</h></idx>
+                        <ol>
+                            <li><p>Blue<ol>
+                                <li>Light</li>
+                                <li>Navy</li>
+                                <li>Royal</li>
+                            </ol></p></li>
+                            <li><p>Red<ol>
+                                <li>Maroon</li>
+                                <li>Pink</li>
+                                <li>Shocking</li>
+                            </ol></p></li>
+                        </ol>
+                        <conclusion>
+                            <p>This ends our example.</p>
+                        </conclusion>
+                    </list>
+                </sidebyside>
+
                 <p>We also need to test a <c>sidebyside</c> in a list.  The widths are now relative to the space given over to an indented item.  Here we nest and nest and nest and nest to get a big, obvious indentation, and then include an image at 100% width and no margin.  In your mind's eye, or with a ruler, check that the image spans all the way over to the right margin.<ol>
                     <li><p>This is<ol>
                         <li><p>a very<ol>
