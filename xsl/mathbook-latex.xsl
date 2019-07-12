@@ -2862,6 +2862,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
     </xsl:variable>
     <!-- levels of counters, empty is document-wide -->
+    <!-- TODO: this seems to not be used at all? -->
     <xsl:variable name="counter-division">
         <xsl:choose>
             <xsl:when test="&PROJECT-FILTER;">
