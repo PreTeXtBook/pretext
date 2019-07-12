@@ -8385,26 +8385,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Named Lists -->
+<!-- 2019-07-12 temporarily bifurcated for styling work -->
 <xsl:template match="list">
-    <xsl:variable name="b-subcaptioned" select="parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure"/>
-    <xsl:if test="not(parent::sidebyside)">
-        <xsl:text>\begin{namedlist}&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:if test="not($b-subcaptioned)">
-        <xsl:apply-templates select="." mode="title-caption"/>
-    </xsl:if>
-    <xsl:if test="not(parent::sidebyside)">
-        <xsl:text>\begin{namedlistcontent}&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:apply-templates select="*"/>
-    <xsl:if test="not(parent::sidebyside)">
-        <xsl:text>\end{namedlistcontent}&#xa;</xsl:text>
-        <xsl:text>\end{namedlist}&#xa;</xsl:text>
-    </xsl:if>
-    <!-- subcaption below the list -->
-    <xsl:if test="$b-subcaptioned">
-        <xsl:apply-templates select="." mode="title-caption"/>
-    </xsl:if>
+    <xsl:choose>
+        <xsl:when test="parent::sidebyside">
+            <xsl:variable name="b-subcaptioned" select="parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure"/>
+            <xsl:if test="not($b-subcaptioned)">
+                <xsl:apply-templates select="." mode="title-caption"/>
+            </xsl:if>
+            <xsl:apply-templates select="*"/>
+            <xsl:if test="$b-subcaptioned">
+                <xsl:apply-templates select="." mode="title-caption"/>
+            </xsl:if>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>\begin{namedlist}{</xsl:text>
+            <xsl:apply-templates select="." mode="title-full"/>
+            <xsl:text>}{</xsl:text>
+            <xsl:apply-templates select="." mode="latex-id"/>
+            <xsl:text>}&#xa;</xsl:text>
+            <xsl:apply-templates select="*"/>
+            <xsl:text>\end{namedlist}&#xa;</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
     <xsl:apply-templates select="." mode="pop-footnote-text"/>
 </xsl:template>
 
