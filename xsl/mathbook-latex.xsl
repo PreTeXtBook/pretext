@@ -8470,16 +8470,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Named Lists -->
 <!-- 2019-07-12 temporarily bifurcated for styling work -->
 <xsl:template match="list">
+    <xsl:variable name="b-subcaptioned" select="parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure"/>
     <xsl:choose>
-        <xsl:when test="parent::sidebyside">
-            <xsl:variable name="b-subcaptioned" select="parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure"/>
-            <xsl:if test="not($b-subcaptioned)">
-                <xsl:apply-templates select="." mode="title-caption"/>
-            </xsl:if>
+        <xsl:when test="$b-subcaptioned">
             <xsl:apply-templates select="*"/>
-            <xsl:if test="$b-subcaptioned">
-                <xsl:apply-templates select="." mode="title-caption"/>
-            </xsl:if>
+            <xsl:apply-templates select="." mode="title-caption"/>
         </xsl:when>
         <xsl:otherwise>
             <xsl:text>\begin{namedlist}{</xsl:text>
