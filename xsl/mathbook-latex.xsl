@@ -1200,6 +1200,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:for-each select="$aside-reps">
         <xsl:apply-templates select="." mode="environment"/>
     </xsl:for-each>
+    <!-- FIGURE-LIKE -->
+    <!-- 2019-07-12 just "list" now -->
+    <xsl:variable name="figure-reps" select="
+        ($document-root//list)[1]"/>
+    <xsl:if test="$figure-reps">
+        <xsl:text>%%&#xa;</xsl:text>
+        <xsl:text>%% tcolorbox, with styles, for FIGURE-LIKE&#xa;</xsl:text>
+        <xsl:text>%%&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:for-each select="$figure-reps">
+        <xsl:apply-templates select="." mode="environment"/>
+    </xsl:for-each>
     <!-- INTRODUCTION, CONCLUSION (divisional) -->
     <xsl:variable name="introduction-reps" select="
         ($root/article/introduction|$document-root//chapter/introduction|$document-root//section/introduction|$document-root//subsection/introduction|$document-root//appendix/introduction|$document-root//exercises/introduction|$document-root//solutions/introduction|$document-root//worksheet/introduction|$document-root//reading-questions/introduction|$document-root//glossary/introduction|$document-root//references/introduction)[1]|
@@ -1390,6 +1402,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- the sharp corners are meant to distinguis this -->
     <!-- from an assemblage, which as rounded corners   -->
     <xsl:if test="$document-root//list">
+        <!-- 2019-07-12 now only used in sidebyside -->
         <xsl:text>%% named list environment and style&#xa;</xsl:text>
         <xsl:text>\newtcolorbox{namedlistcontent}&#xa;</xsl:text>
         <xsl:text>  {breakable, parbox=false, skin=enhanced, sharp corners, colback=white, colframe=black,&#xa;</xsl:text>
@@ -1668,9 +1681,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\makeatother&#xa;</xsl:text>
         </xsl:if>
         <xsl:if test="$document-root//list">
-            <xsl:text>%% Create "named list" environment to hold lists with captions&#xa;</xsl:text>
-            <xsl:text>%% We do not use a floating environment, so list can page-break&#xa;</xsl:text>
-            <xsl:text>\newenvironment{namedlist}{\par\bigskip\noindent}{}&#xa;</xsl:text>
             <xsl:text>%% New caption type for numbering, style, etc.&#xa;</xsl:text>
             <xsl:text>\DeclareCaptionType[within=</xsl:text>
             <xsl:choose>
@@ -2952,6 +2962,72 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- end: options -->
 </xsl:template>
 
+<!-- FIGURE-LIKE: figure, table, listing, list -->
+<!-- 2019-07-12:  only "list" for openers      -->
+<xsl:template match="list" mode="environment">
+    <!-- An environment named "list" may conflict with LaTeX      -->
+    <!-- internals, though we could test if tcolorbox does better -->
+    <xsl:variable name="environment-name">
+        <xsl:choose>
+            <xsl:when test="self::list">
+                <xsl:text>namedlist</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="local-name(.)"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- counters may run as figure or theorem -->
+    <xsl:variable name="counter">
+        <xsl:choose>
+            <xsl:when test="self::list">
+                <xsl:text>namedlistcap</xsl:text>
+            </xsl:when>
+            <xsl:otherwise/>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:text>%% </xsl:text>
+    <!-- per-environment style -->
+    <xsl:value-of select="$environment-name"/>
+    <xsl:text>: 2-D display structure&#xa;</xsl:text>
+    <xsl:text>\tcbset{ </xsl:text>
+    <xsl:value-of select="$environment-name"/>
+    <xsl:text>style/.style={</xsl:text>
+    <xsl:apply-templates select="." mode="tcb-style"/>
+    <xsl:text>} }&#xa;</xsl:text>
+    <!-- create and configure the environment/tcolorbox -->
+    <xsl:text>\newtcolorbox</xsl:text>
+    <!-- numbering setup: * indicates existing, -->
+    <!-- already configured, LaTeX counter      -->
+    <xsl:text>[</xsl:text>
+    <xsl:text>use counter*=</xsl:text>
+    <xsl:value-of select="$counter"/>
+    <xsl:text>]</xsl:text>
+    <!-- environment's tcolorbox name, pair -->
+    <!-- with actual constructions in body  -->
+    <xsl:text>{</xsl:text>
+    <xsl:value-of select="$environment-name"/>
+    <xsl:text>}</xsl:text>
+    <!-- number of arguments -->
+    <xsl:text>[2]</xsl:text>
+    <!-- begin: options -->
+    <xsl:text>{</xsl:text>
+    <!-- begin: title construction -->
+    <xsl:text>title={{</xsl:text>
+    <xsl:apply-templates select="." mode="type-name"/>
+    <xsl:text>~\the</xsl:text>
+    <xsl:value-of select="$counter"/>
+    <xsl:text>\space#1</xsl:text>
+    <xsl:text>}}, </xsl:text>
+    <!-- end: title construction -->
+    <!-- label in argument 2 or argument 3 -->
+    <xsl:text>phantomlabel={#2}, </xsl:text>
+    <!-- always breakable -->
+    <xsl:text>breakable, parbox=false, </xsl:text>
+    <xsl:value-of select="$environment-name"/>
+    <xsl:text>style, }&#xa;</xsl:text>
+    <!-- end: options -->
+</xsl:template>
 
 <!-- ########################## -->
 <!-- LaTeX Styling via Preamble -->
@@ -3082,6 +3158,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="&EXAMPLE-LIKE;" mode="tcb-style">
     <xsl:text>bwminimalstyle, runintitlestyle, blockspacingstyle, after title={\space}, after upper={\space\space\hspace*{\stretch{1}}\(\square\)}, </xsl:text>
+</xsl:template>
+
+<!-- FIGURE-LIKE: "list" -->
+<!-- 2019-07-12: ad-hoc for now, perhaps becoming a named-style someday -->
+<xsl:template match="list" mode="tcb-style">
+    <xsl:text>blockspacingstyle, fonttitle=\normalfont\bfseries, colback=white, colbacktitle=white, coltitle=black, colframe=black, titlerule=-0.3pt, toprule at break=-0.3pt, bottomrule at break=-0.3pt, sharp corners</xsl:text>
 </xsl:template>
 
 <!-- This is mostly ad-hoc.  An assemblage is meant to be prominent,   -->
@@ -8406,7 +8488,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="latex-id"/>
             <xsl:text>}&#xa;</xsl:text>
             <xsl:apply-templates select="*"/>
-            <xsl:text>\end{namedlist}&#xa;</xsl:text>
+            <xsl:text>\end{namedlist}%&#xa;</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
     <xsl:apply-templates select="." mode="pop-footnote-text"/>
