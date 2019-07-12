@@ -77,7 +77,7 @@
 
         <p>This is typical and illustrates two important universal points.  First, <pretext/> puts surrounding infrastructure in place.  In this case the <c>geometry</c> package is loaded, and in an order that does not cause conflicts, plus the <c>\geometry{}</c> command itself is placed and output by <pretext/>.  As a style writer, you simply provide the package options you desire.  Second, <q>garbage in, garbage out.</q>  It is very easy to make a typo in your style, and have the <latex/> compilation fail.  This is why we assume you are comfortable with <latex/> compilation and debugging, and not every author should be a style writer.</p>
 
-        <p>Set the document font size first, for this will influence later choices.  The string parameter, <c>latex.font.size</c> (which has <c>pt</c> as part of the value) will set an optimal line width.  This line width should translate to about 75 characters per line, at the upper end of recommendations for an optimal width.  It will also match closely (but not exactly) to line lengths in <init>HTML</init> output.  You can look into teh <latex/> output before you experiment to see the value used when the stock <c>\geometry{}</c> command is issued.  You are certainly able to override this width, but read the next paragraph carefully.</p>
+        <p>Set the document font size first, for this will influence later choices.  The string parameter, <c>latex.font.size</c> (which has <c>pt</c> as part of the value) will set an optimal line width.  This line width should translate to about 75 characters per line, at the upper end of recommendations for an optimal width.  It will also match closely (but not exactly) to line lengths in <init>HTML</init> output.  You can look into the <latex/> output before you experiment to see the value used when the stock <c>\geometry{}</c> command is issued.  You are certainly able to override this width, but read the next paragraph carefully.</p>
 
         <p>This raises two important more universal points.  You should expect to repeatedly examine the <latex/> output as you develop a style.  And most important<mdash/>are you tempted to use a small font, and <em>increase</em> the line width so as to cram more material onto the page, so your book is shorter, and sells via print-on-demand for $7 rather than $8?  Then you misunderstood that there are time-tested recommendations for the optimal number of characters per line for human readers, and we just counseled you that <pretext/> is <em>already at the high end of these recommendations</em>.  You have a certain freedom as a style writer.  Use it responsibly.  Enhance the content provided by authors, don't degrade it.</p>
 
@@ -200,7 +200,20 @@
                     <cline>fc-list</cline>
                 </cd></p>
 
-                <p>On a Mac, Mitch Keller reports on 2019-01-02 that <q>I opened the directory on my hard drive containing the <init>OTF</init> file, double clicked on the font (opens the macOS application Font Book, which comes with the OS), and then clicked the <c>Install Font</c> button.</q></p>
+                <p>On a Mac, we have several reports for how to do this.
+                    <ul>
+                        <li>
+                            <p>Mitch Keller reports on 2019-01-02 that <q>I opened the directory on my hard drive containing the <init>OTF</init> file, double clicked on the font (opens the macOS application Font Book, which comes with the OS), and then clicked the <c>Install Font</c> button.</q></p>
+                        </li>
+                        <li>
+                            <p>Karl-Dieter Crisman reports on 2019-07-01 that <q>I was able to use some fonts already existing in TeXLive with a symbolic link to the Font Book, as suggested at <url href="https://apple.stackexchange.com/a/225824/189102">Ask Different</url><fn><c>apple.stackexchange.com/a/225824/189102</c></fn>:
+                            <cd>
+                                <cline>ln -s</cline>
+                                <cline>  /usr/local/texlive/2018/texmf-dist/fonts/opentype/public/lm/</cline>
+                                <cline>  '/Library/Fonts/Latin Modern'</cline>
+                            </cd>where 2018 indicates when I updated my TeXLive distribution.</q></p>
+                        </li>
+                    </ul></p>
            </paragraphs>
 
             <paragraphs>

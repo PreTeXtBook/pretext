@@ -79,6 +79,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Output methods here are just pure text -->
 <xsl:output method="text" />
 
+<!-- A single command-line string parameter points to an XML file that      -->
+<!-- is structured to carry various options that a *publisher* might set.   -->
+<!-- Generally, these affect the *look* of the output, rather than the      -->
+<!-- actual *content* that appears on the page, i.e. the actual characters. -->
+<!-- We initialize with an empty node-set, then if not used, there is no    -->
+<!-- loading of the entire source all over again (which seems to be the     -->
+<!-- case with an empty string).  When set on the command-line, a string    -->
+<!-- value will be interpreted correctly. -->
+<xsl:param name="publisher" select="/.."/>
+
+<!-- NB: the second argument is simply a node, it causes $publisher -->
+<!-- to be interpreted relative to the location of the *current XML -->
+<!-- file* rather than the location of the *stylesheet*. The actual -->
+<!-- node does not seem so critical.                                -->
+<xsl:variable name="publication" select="document($publisher, .)/publication"/>
+
 <!-- Parameters to pass via xsltproc "stringparam" on command-line            -->
 <!-- Or make a thin customization layer and use 'select' to provide overrides -->
 <!-- These here are independent of the output format as well                  -->
@@ -4405,11 +4421,6 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Visible Identifier -->
 <!--                    -->
 
-<!-- Check once if "index" is available -->
-<!-- for use on the root element        -->
-<!-- This scan may go away with a new approach to an "index.html" file -->
-<xsl:variable name="b-index-is-available" select="not(//@xml:id[.='index'])" />
-
 <!-- These strings are used for items an author must manage              -->
 <!-- (image files) or that a reader will interact with (shared URLs)     -->
 <!-- Fast version (as of 2019-05) prefers                                -->
@@ -4453,26 +4464,6 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                     <xsl:number from="book|article|letter|memo" level="any" />
                 </xsl:otherwise>
             </xsl:choose>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-<!-- Override for document root node,          -->
-<!-- slide in "index" as preferential default, -->
-<!-- presuming it is not in use anywhere else  -->
-<!-- NB: no fast version, so never uses @permid -->
-<xsl:template match="/mathbook/*[not(self::docinfo)]|/pretext/*[not(self::docinfo)]" mode="visible-id">
-    <xsl:choose>
-        <xsl:when test="@xml:id">
-            <xsl:value-of select="@xml:id" />
-        </xsl:when>
-        <xsl:when test="$b-index-is-available">
-            <xsl:text>index</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:value-of select="local-name(.)" />
-            <xsl:text>-</xsl:text>
-            <xsl:number level="any" />
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -9738,6 +9729,16 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
                 <xsl:text>" is invalid since it will conflict with a unique HTML id in use by the user interface.  Please use a different string.  Quitting...</xsl:text>
             </xsl:message>
         </xsl:if>
+        <!-- index.html is built automatically, so preclude a clash -->
+        <!-- Not terminating until 2019-07-10 deprecation expires   -->
+        <xsl:if test=". = 'index'">
+            <xsl:message terminate='no'>
+                <xsl:text>MBX:ERROR:     </xsl:text>
+                <xsl:text>The @xml:id "</xsl:text>
+                <xsl:value-of select="."/>
+                <xsl:text>" is invalid since it will conflict with the construction of an automatic HTML "index.html" page.  Use some alternative for the real index - sorry.</xsl:text>
+            </xsl:message>
+        </xsl:if>
     </xsl:for-each>
 </xsl:template>
 
@@ -10417,6 +10418,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="occurrences" select="$document-root//table[caption]" />
         <xsl:with-param name="date-string" select="'2019-06-28'" />
         <xsl:with-param name="message" select="'the &quot;table&quot; element needs a &quot;title&quot;, not a &quot;caption&quot;.  An existing &quot;caption&quot; will be used instead.  Both will display below the &quot;tabular&quot;'" />
+    </xsl:call-template>
+    <!--  -->
+    <!-- 2019-07-10  @xml:id = 'index' deprecated in favor of publisher's @ref  -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//*[@xml:id = 'index']" />
+        <xsl:with-param name="date-string" select="'2019-07-10'" />
+        <xsl:with-param name="message" select="'an element should no longer have an @xml:id equal to &quot;index&quot; as a way to create an HTML index.html page.  See the Publishers Guides chapter on the HTML conversion for instructions.'" />
     </xsl:call-template>
 </xsl:template>
 

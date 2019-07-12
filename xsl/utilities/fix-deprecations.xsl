@@ -397,7 +397,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- 2017-07-05:  convert top-level caption-less figure/table/listing to a side-by-side  -->
-<xsl:template match="figure[not(caption) and not(parent::sidebyside)] | table[not(caption) and not(parent::sidebyside)] | listing[not(caption) and not(parent::sidebyside)]">
+<!-- 2019-06-28:  removed fixes for tables, since they now have titles                   -->
+<xsl:template match="figure[not(caption) and not(parent::sidebyside)] | listing[not(caption) and not(parent::sidebyside)]">
     <sidebyside>
         <!-- migrate an image width attribute -->
         <xsl:if test="self::figure and image[@width]">
@@ -418,7 +419,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </image>
 </xsl:template>
 
-<xsl:template match="figure[not(caption) and parent::sidebyside] | table[not(caption) and parent::sidebyside] | listing[not(caption) and parent::sidebyside]">
+<xsl:template match="figure[not(caption) and parent::sidebyside] | listing[not(caption) and parent::sidebyside]">
     <xsl:if test="@xml:id">
         <xsl:comment>NOTE: @xml:id=<xsl:value-of select="@xml:id" /> from a &lt;<xsl:value-of select="local-name(.)" />&gt; was dropped while fixing deprecations.  The @xml:id may belong on an element just below, though it is unlikely a caption-less item was ever the target of a cross-reference.</xsl:comment>
     </xsl:if>

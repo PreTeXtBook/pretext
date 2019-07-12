@@ -63,6 +63,81 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:output method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat" />
 
+<!-- ##################### -->
+<!-- HTML-Specific Options -->
+<!-- ##################### -->
+
+<!-- The $publication variable comes from -common and is the result -->
+<!-- of a command-line string parameter pointing to an XML file of  -->
+<!-- various options.                                               -->
+
+<!-- HTML Index Page Redirect -->
+<!-- A generic "index.html" page will be built to redirect to an     -->
+<!-- existing page from the HTML build/chunking.  The default is the -->
+<!-- "frontmatter" page, if possible, otherwise the root page.       -->
+<!-- The variable $html-index-page will be the full name (*.html)    -->
+<!-- of a page guaranteed to be built by the chunking routines.      -->
+
+<xsl:variable name="html-index-page">
+    <!-- needs to be realized as a *string*, not a node -->
+    <xsl:variable name="entered-ref" select="string($publication/html/index-page/@ref)"/>
+    <xsl:variable name="sanitized-ref">
+        <xsl:choose>
+            <!-- signal no choice with empty string-->
+            <xsl:when test="$entered-ref = ''">
+                <xsl:text/>
+            </xsl:when>
+            <!-- bad choice, set to empty string -->
+            <xsl:when test="not(id($entered-ref))">
+                <xsl:message>PTX:WARNING:   the requested HTML index page cannot be constructed since "<xsl:value-of select="$entered-ref"/>" is not an @xml:id anywhere in the document.  Defaults will be used instead</xsl:message>
+                <xsl:text/>
+            </xsl:when>
+            <!-- now we have a node, is it the top of a page? -->
+            <xsl:otherwise>
+                <!-- true/false values if node creates a web page -->
+                <xsl:variable name="is-intermediate">
+                    <xsl:apply-templates select="id($entered-ref)" mode="is-intermediate"/>
+                </xsl:variable>
+                <xsl:variable name="is-chunk">
+                    <xsl:apply-templates select="id($entered-ref)" mode="is-chunk"/>
+                </xsl:variable>
+                <xsl:choose>
+                    <!-- really is a web-page -->
+                    <xsl:when test="($is-intermediate = 'true') or ($is-chunk = 'true')">
+                        <xsl:value-of select="$entered-ref"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:message>PTX:WARNING:   the requested HTML index page cannot be constructed since "<xsl:value-of select="$entered-ref"/>" is not a complete web page at the current chunking level (level <xsl:value-of select="$chunk-level"/>).  Defaults will be used instead</xsl:message>
+                        <xsl:text/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- now have a good @xml:id for an extant webpage, or        -->
+    <!-- empty string signals we need to choose sensible defaults -->
+    <xsl:choose>
+        <!-- publisher's choice survives -->
+        <xsl:when test="not($sanitized-ref = '')">
+            <xsl:apply-templates select="id($sanitized-ref)" mode="containing-filename"/>
+        </xsl:when>
+        <!-- now need to create defaults                        -->
+        <!-- the level of the frontmatter is a bit conflicted   -->
+        <!-- but it is a chunk iff there is any chunking at all -->
+        <xsl:when test="$document-root/frontmatter and ($chunk-level &gt; 0)">
+            <xsl:apply-templates select="$document-root/frontmatter" mode="containing-filename"/>
+        </xsl:when>
+        <!-- absolute last option is $document-root, *always* a webpage -->
+        <xsl:otherwise>
+            <xsl:apply-templates select="$document-root" mode="containing-filename"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- ################################################ -->
+<!-- Following is slated to migrate above, 2019-07-10 -->
+<!-- ################################################ -->
+
 <!-- Parameters -->
 <!-- Parameters to pass via xsltproc "stringparam" on command-line            -->
 <!-- Or make a thin customization layer and use 'select' to provide overrides -->
@@ -490,6 +565,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- This in turn calls specific modal templates defined elsewhere in this file     -->
 <!-- The xref-knowl templates run independently on content node of document tree    -->
 <xsl:template match="/mathbook|/pretext">
+    <xsl:call-template name="index-redirect-page"/>
     <xsl:apply-templates mode="chunking" />
     <xsl:apply-templates select="$document-root" mode="xref-knowl" />
 </xsl:template>
@@ -507,6 +583,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:message terminate="yes">
         <xsl:text>MBX:ERROR:  HTML conversion does not support the "memo" document type.  Quitting...</xsl:text>
     </xsl:message>
+</xsl:template>
+
+<!-- We build a simple, instantaneous, redirection page based on the    -->
+<!-- publisher html/index-page/@ref option.  We write it first, so if   -->
+<!-- the deprecated scheme is in place then it will overwrite this one. -->
+<!-- See https://css-tricks.com/redirect-web-page/ for alternatives     -->
+<xsl:template name="index-redirect-page">
+    <exsl:document href="index.html" method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat">
+        <html>
+            <xsl:text>&#xa;</xsl:text>
+            <xsl:call-template name="converter-blurb-html" />
+            <head>
+                <meta http-equiv="refresh" content="0; URL='{$html-index-page}'" />
+            </head>
+            <body/>
+        </html>
+    </exsl:document>
 </xsl:template>
 
 <!-- ################ -->
@@ -1302,10 +1395,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </text>
                         <key>
                             <xsl:choose>
-                                <!-- salt prevents accidental key collisions -->
                                 <xsl:when test="@sortby">
                                     <xsl:value-of select="translate(@sortby, &UPPERCASE;, &LOWERCASE;)" />
-                                    <xsl:value-of select="generate-id(.)" />
                                 </xsl:when>
                                 <xsl:otherwise>
                                     <xsl:value-of select="translate($content, &UPPERCASE;, &LOWERCASE;)" />
@@ -1329,10 +1420,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             </text>
                             <key>
                                 <xsl:choose>
-                                    <!-- salt prevents accidental key collisions -->
                                     <xsl:when test="@sortby">
                                         <xsl:value-of select="translate(@sortby, &UPPERCASE;, &LOWERCASE;)" />
-                                        <xsl:value-of select="generate-id(.)" />
                                     </xsl:when>
                                     <xsl:otherwise>
                                         <xsl:value-of select="translate($content, &UPPERCASE;, &LOWERCASE;)" />
@@ -6721,33 +6810,34 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ######## -->
 
 <xsl:template match="quantity">
-    <!-- Unicode NARROW NO-BREAK SPACE -->
-    <xsl:variable name="thin-space" select="'&#x202f;'"/>
     <!-- Unicode FRACTION SLASH -->
     <xsl:variable name="fraction-slash" select="'&#x2044;'"/>
 
-    <xsl:apply-templates select="mag"/>
-    <!-- if not solo, add separation -->
-    <xsl:if test="mag and (unit or per)">
-        <xsl:value-of select="$thin-space"/>
-    </xsl:if>
-    <xsl:choose>
-        <xsl:when test="per">
-           <sup>
-                <xsl:if test="not(unit)">
-                    <xsl:text>1</xsl:text>
-                </xsl:if>
-                <xsl:apply-templates select="unit" />
-            </sup>
-            <xsl:value-of select="$fraction-slash"/>
-            <sub>
-                <xsl:apply-templates select="per" />
-            </sub>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:apply-templates select="unit"/>
-        </xsl:otherwise>
-    </xsl:choose>
+    <!-- span to prevent line breaks within the quantity -->
+    <span class="quantity">
+        <xsl:apply-templates select="mag"/>
+        <!-- if not solo, add separation -->
+        <xsl:if test="mag and (unit or per)">
+            <xsl:text> </xsl:text>
+        </xsl:if>
+        <xsl:choose>
+            <xsl:when test="per">
+               <sup>
+                    <xsl:if test="not(unit)">
+                        <xsl:text>1</xsl:text>
+                    </xsl:if>
+                    <xsl:apply-templates select="unit" />
+                </sup>
+                <xsl:value-of select="$fraction-slash"/>
+                <sub>
+                    <xsl:apply-templates select="per" />
+                </sub>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="unit"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </span>
     <!-- NB: no mag, no per, no unit implies no output -->
     <!-- (really should be caught in schema), but      -->
     <!-- no real harm in just doing nothing            -->
@@ -6774,12 +6864,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:key name="base-key" match="base" use="concat(../@name, @full)"/>
 
 <xsl:template match="unit|per">
-    <!-- Unicode NARROW NO-BREAK SPACE -->
-    <xsl:variable name="thin-space" select="'&#x202f;'"/>
+    <!-- Unicode MIDDLE-DOT -->
+    <xsl:variable name="inter-unit-product" select="'&#x00B7;'"/>
 
-    <!-- add internal spaces within a numerator or denominator of units -->
+    <!-- add non-breaking hyphen within a numerator or denominator of units -->
     <xsl:if test="(self::unit and preceding-sibling::unit) or (self::per and preceding-sibling::per)">
-        <xsl:value-of select="$thin-space"/>
+        <xsl:value-of select="$inter-unit-product"/>
     </xsl:if>
     <!-- prefix is optional -->
     <xsl:if test="@prefix">

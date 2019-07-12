@@ -12,7 +12,7 @@
 
     <xi:include href="guideinfo.xml"/>
 
-    <book xml:id="pretext-guide">
+    <book xml:id="guide-toc">
         <title>The <pretext /> Guide</title>
 
         <!-- Front Matter -->

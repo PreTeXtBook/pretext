@@ -1,8 +1,8 @@
 <sage>
-    <input>
-        2+2
-    </input>
-    <output>
-        4
-    </output>
+<input>
+2+2
+</input>
+<output>
+4
+</output>
 </sage>

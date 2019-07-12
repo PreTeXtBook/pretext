@@ -77,10 +77,12 @@
         <p>We have devoted an entire chapter (<xref ref="schema" />) to amplifying this introduction and providing more details, such as where to find details on installing a validator.</p>
     </section>
 
-    <section xml:id="processing-stringparam">
-        <title>Customizations, String Parameters</title>
+    <section xml:id="processing-publisher-stringparam">
+        <title>Customizations, Publisher File, String Parameters</title>
 
-        <p>There are some aspects of your output that are entirely divorced from the actual content, and are presumably all about how that content is presented.  Two good examples are the size of the font used in <latex />/PDF/print output, and the granularity of web pages in HTML output (by this we mean, is each web page a whole chapter, a whole section, a whole subsection?).  Producing output with varying values of these parameters does absolutely nothing to change your content in any way, and so should not be a part of your source.  Thus we provide values for these parameters on the command-line <em>at processing time</em>.  They have become known as <term>stringparam</term><idx>stringparam</idx> for a soon-to-be obvious reason.</p>
+        <p>There are some aspects of your output that are entirely divorced from the actual content, and are presumably all about how that content is presented.  Two good examples are the size of the font used in <latex />/PDF/print output, and the granularity of web pages in HTML output (by this we mean, is each web page a whole chapter, a whole section, a whole subsection?).  Producing output with varying values of these parameters does absolutely nothing to change your content in any way, and so should not be a part of your source.</p>
+
+        <p>At this writing (2019-07-10) we have begun to transition between two different ways to accomplish this.  The new method is to create a <term>publisher file</term> that is an <init>XML</init> file that specifies options that are independent of your source material.  See <xref ref="publisher-file"/> in <xref ref="part-publisher"/> for details.  We continue to provide many of the values for these parameters on the command-line <em>at processing time</em>.  They have become known as <term>stringparam</term><idx>stringparam</idx> for a soon-to-be obvious reason.</p>
 
         <p>Suppose you want to make a large-font version of your textbook for a student who has limited vision.  Look inside the top of <c>xsl/mathbook-latex.xsl</c> and find the <c>latex.font.size</c> parameter.  The preceding comments in this file suggest <c>20pt</c> is the maximum supported.  So you would use a command-line like the following (possibly with <c>--xinclude</c>, <etc />).</p>
 
@@ -102,7 +104,7 @@
     <section xml:id="processing-thin-xsl">
         <title>Customizations, Thin XSL Stylesheets</title>
 
-        <p>Stringparams (<xref ref="processing-stringparam" />) are an easy way to effect global changes in the presentation of your writing.  But putting ten of them on every command-line gets old and cumbersome fast.</p>
+        <p>Stringparams (<xref ref="processing-publisher-stringparam"/>) are an easy way to effect global changes in the presentation of your writing.  But putting ten of them on every command-line gets old and cumbersome fast.</p>
 
         <p>You may also wish to customize your output in some stylistic way.  This might be especially true for <latex />/PDF/print output.  For example, you might wish to have every chapter heading of your book in a nice shade of light blue, with the title flush right to the margin, countered by a thick solid rule extending all the way right, to the edge of the paper.  Notice that this does not affect your content, it is strictly presentation.</p>
 
@@ -110,7 +112,7 @@
 
         <p>Instead, you can make a small XSL file<idx>thin XSL stylesheet</idx><idx><h>XSL stylesheet</h><seealso>thin XSL stylesheet</seealso></idx>, to use as input to <c>xsltproc</c>.  The first thing it should do is import the stock <pretext /> file for the type of output you want to create.  You can use an absolute path to the <pretext /> distribution (which will not be very portable), or utilize the <c>mathbook/user</c> directory and a relative path from there.  The easiest thing to put in this file is elements like
             <cd>&lt;xsl:param name="latex.font.size" select="'20pt'" /&gt;</cd>
-        which is functionally equivalent to our example in <xref ref="processing-stringparam" />.  Values given on the command-line supersede those given in an XSL file this way.</p>
+        which is functionally equivalent to our example in <xref ref="processing-publisher-stringparam"/>.  Values given on the command-line supersede those given in an XSL file this way.</p>
 
         <p>You can augment the <latex /> preamble with as much <latex /> code as you like in the following way.</p>
 
@@ -154,7 +156,7 @@
 
         <p>The <c>authors-report.xsl</c> stylesheet, found in the <c>xsl/utilities</c> directory will report all of the provisional cross-references and all of the properly prefixed todo-comments.  Apply it just like you would any of the other stylesheets achieving more complicated conversions (<xref ref="processing-basic"/>).  The report is organized by all of the divisions in use in your project.  It is meant to be simple in appearance, just text.</p>
 
-        <p>Use the <c>author.tools</c><idx><c>author.tools</c></idx> parameter set equal to <c>yes</c> and your <latex/> and <init>HTML</init> output will be annotated.  (See <xref ref="processing-stringparam"/> for more on parameters.)  Provisional cross-references and todo-comments will be visible and highlighted, and in particular, the <latex/> output will display an abundance of extra information (maybe too much).  The <latex />-specific parameter <c>latex.draft</c> set to <c>yes</c> will automatically activate the previous features, in addition to a few others appropriate to the printed page.  The intent here is to make a rough draft, for an author or collaborator only, reporting as much as possible that is incomplete, pending, or hidden, in the usual output.</p>
+        <p>Use the <c>author.tools</c><idx><c>author.tools</c></idx> parameter set equal to <c>yes</c> and your <latex/> and <init>HTML</init> output will be annotated.  (See <xref ref="processing-publisher-stringparam"/> for more on parameters.)  Provisional cross-references and todo-comments will be visible and highlighted, and in particular, the <latex/> output will display an abundance of extra information (maybe too much).  The <latex />-specific parameter <c>latex.draft</c> set to <c>yes</c> will automatically activate the previous features, in addition to a few others appropriate to the printed page.  The intent here is to make a rough draft, for an author or collaborator only, reporting as much as possible that is incomplete, pending, or hidden, in the usual output.</p>
     </section>
 
     <section xml:id="processing-updating-source">
@@ -176,7 +178,7 @@
         <p>One choice of the parameter will result in just <q>copying</q> your source file and making all the cosmetic source format changes (we refer to this here as <term>normalization</term><idx>normalization</idx>).  This might be a useful thing to do first, all by itself, either as a first step, or an exploratory experiment.  The other value of the parameter will actually make changes, and report some information about progress.</p>
 
         <p>Here are some notes:<ul>
-            <li><p>Be sure to experiment on copies of your source in a scratch directory.  Send your output to another directory.  When finished, use a <c>diff</c> tool to inspect the actual changes made.  You can record your eventual changes using revision-control (<xref ref="git" />).</p></li>
+            <li><p>Be sure to experiment on copies of your source in a scratch directory.  Send your output to another directory.  When finished, use a <c>diff</c> tool to inspect the actual changes made.  You can record your eventual changes using revision-control. (See <pubtitle><url ref="https://pretextbook.org/gfa/html/">Git for Authors</url></pubtitle>.)</p></li>
             <li><p>Do not enable <c>xinclude</c> processing or else your several files will all be merged into one as output and any modularity of your source will be lost.</p></li>
             <li><p>Every single bit of indentation and whitespace in your source will be preserved, except perhaps for some blank lines near the top of your source files, and limited exceptions noted below.</p></li>
             <li><p>Attributes will likely be re-ordered, with normalized spacing between them.</p></li>
@@ -227,7 +229,7 @@
             </console>
         </sidebyside>
 
-        <p>And as above, you can now compare the <c>normal</c> and <c>clean</c> directories to see actual changes.  If you are satisfied with the changes, you can copy the files in the <c>clean</c> directory back onto your source files.  If you are using revision-control (you are, aren't you?) then you can make a commit that holds these changes (<xref ref="git" />).  Or maybe even make two commits, one from the normalization step, and a second with the substantive changes.</p>
+        <p>And as above, you can now compare the <c>normal</c> and <c>clean</c> directories to see actual changes.  If you are satisfied with the changes, you can copy the files in the <c>clean</c> directory back onto your source files.  If you are using revision-control (you are, aren't you?) then you can make a commit that holds these changes. (See <pubtitle><url ref="https://pretextbook.org/gfa/html/">Git for Authors</url></pubtitle>.) Or maybe even make two commits, one from the normalization step, and a second with the substantive changes.</p>
     </section>
 
     <section xml:id="processing-file-management">

@@ -605,7 +605,7 @@
         
         RemarkLike =
             MetaDataTitleOptional,
-            BlockText+
+            BlockStatement+
         Remark =
             element remark {RemarkLike}
         |
