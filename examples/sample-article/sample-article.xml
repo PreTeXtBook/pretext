@@ -594,7 +594,7 @@ the xsltproc executable.
                     <output>1/2*x - 1/4*sin(2*x)</output>
                 </sage>
 
-                <p>You can place Sage cells inside of a <c>paragraphs</c> if you want to give them a title, but no numbers, <etc />  Their surrounding box sometimes gets clobbered in <latex  /> output if they are the first piece of content, so we test that here also.</p>
+                <p>You can place Sage cells inside of a <c>paragraphs</c> if you want to give them a title, but no numbers, <etc />  Their surrounding box sometimes gets clobbered in <latex/> output if they are the first piece of content, so we test that here also.  A defensive <c>\leavevmode</c> solves the problem.</p>
             </paragraphs>
         </section>
 
@@ -4114,6 +4114,33 @@ the xsltproc executable.
                     </row>
                 </tabular>
             </table>
+
+            <p>A list whose first item is a table.  In <latex/> output a <c>\leavevmode</c> is necessary to keep this organized (item number, <em>then</em> table as content).</p>
+
+            <p><ol><li>
+                <table>
+                    <caption>Table Alignment Example</caption>
+                    <tabular top="minor" left="minor" halign="center">
+                        <col right="medium"/>
+                        <col right="major"/>
+                        <col />
+                        <!--  -->
+                        <row bottom="medium">
+                            <cell colspan="2">1111, 2222</cell>
+                            <cell right="minor">3333</cell>
+                        </row>
+                        <row bottom="major">
+                            <cell>aaaa</cell>
+                            <cell colspan="2" right="medium">bbbb,cccc</cell>
+                        </row>
+                        <row>
+                            <cell bottom="minor">AAAA</cell>
+                            <cell bottom="medium">BBBB</cell>
+                            <cell bottom="major" right="major">CCCC</cell>
+                        </row>
+                    </tabular>
+                </table>
+            </li></ol></p>
 
             <example>
                 <title>Example Environment with Leading Table</title>
