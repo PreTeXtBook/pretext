@@ -305,7 +305,6 @@
     <manifest xmlns="http://www.idpf.org/2007/opf">
         <item id="css" href="{$css-dir}/pretext-epub.css" media-type="text/css"/>
         <item id="cover-page" href="{$xhtml-dir}/cover-page.xhtml" media-type="application/xhtml+xml"/>
-        <item id="title-page" href="{$xhtml-dir}/title-page.xhtml" media-type="application/xhtml+xml"/>
         <item id="table-contents" href="{$xhtml-dir}/table-contents.xhtml" properties="nav" media-type="application/xhtml+xml"/>
         <item id="cover-image" href="{$xhtml-dir}/images/cover.png" properties="cover-image" media-type="image/png"/>
         <!-- <item id="cover-image" href="{$xhtml-dir}/images/cover.jpg" properties="cover-image" media-type="image/jpeg"/> -->
@@ -375,9 +374,8 @@
 <!-- Each must reference an id in the manifest   -->
 <xsl:template name="package-spine">
     <spine xmlns="http://www.idpf.org/2007/opf">
-        <itemref idref="cover-page" linear="yes" />
-        <itemref idref="title-page" linear="yes"/>
         <itemref idref="table-contents" linear="yes"/>
+        <itemref idref="cover-page" linear="yes" />
         <xsl:apply-templates select="$document-root" mode="spine" />
     </spine>
 </xsl:template>
@@ -424,42 +422,45 @@
             </body>
         </html>
     </exsl:document>
-    <exsl:document href="{$content-dir}/{$xhtml-dir}/title-page.xhtml" method="xml" omit-xml-declaration="yes" encoding="UTF-8" indent="yes">
-        <html xmlns="http://www.w3.org/1999/xhtml">
-            <!-- head element should not be empty -->
-            <head>
-                <meta charset="utf-8"/>
-                <title>
-                    <xsl:apply-templates select="$document-root" mode="title-full"/>
-                </title>
-            </head>
-            <body>
-                <h1>
-                    <xsl:apply-templates select="$document-root" mode="title-full" />
-                    <xsl:if test="$document-root/subtitle">
-                        <br />
-                        <xsl:apply-templates select="$document-root" mode="subtitle" />
-                    </xsl:if>
-                </h1>
-                <h3>
-                    <xsl:apply-templates select="titlepage/author/personname" />
-                    <br />
-                    <xsl:apply-templates select="titlepage/author/institution" />
-                </h3>
-            </body>
-        </html>
-    </exsl:document>
     <exsl:document href="{$content-dir}/{$xhtml-dir}/table-contents.xhtml" method="xml" omit-xml-declaration="yes" encoding="UTF-8" indent="yes">
         <html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
             <head>
                 <meta charset="utf-8"/>
+                <link href="../{$css-dir}/pretext-epub.css" rel="stylesheet" type="text/css" />
             </head>
             <body epub:type="frontmatter">
                 <nav epub:type="toc" id="toc">
                     <h1>Table of Contents</h1>
                     <ol>
-                        <xsl:for-each select="$document-root/chapter|$document-root/backmatter/appendix|$document-root/backmatter/index">
+                        <xsl:for-each select="$document-root/chapter">
                             <li>
+                                <xsl:element name="a">
+                                    <xsl:attribute name="href">
+                                        <xsl:apply-templates select="." mode="containing-filename" />
+                                    </xsl:attribute>
+                                    <xsl:apply-templates select="." mode="title-simple" />
+                                </xsl:element>
+                            </li>
+                        </xsl:for-each>
+                        <xsl:if test="$document-root/backmatter/appendix">
+                            <li class="no-marker">
+                                <span>Appendices</span>
+                                <ol type="A">
+                                    <xsl:for-each select="$document-root/backmatter/appendix">
+                                        <li>
+                                            <xsl:element name="a">
+                                                <xsl:attribute name="href">
+                                                    <xsl:apply-templates select="." mode="containing-filename" />
+                                                </xsl:attribute>
+                                                <xsl:apply-templates select="." mode="title-simple" />
+                                            </xsl:element>
+                                        </li>
+                                    </xsl:for-each>
+                                </ol>
+                            </li>
+                        </xsl:if>
+                        <xsl:for-each select="$document-root/backmatter/index">
+                            <li class="no-marker">
                                 <xsl:element name="a">
                                     <xsl:attribute name="href">
                                         <xsl:apply-templates select="." mode="containing-filename" />
