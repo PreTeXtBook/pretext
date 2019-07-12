@@ -8481,7 +8481,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="title-full"/>
             <xsl:text>}{</xsl:text>
             <xsl:apply-templates select="." mode="latex-id"/>
-            <xsl:text>}&#xa;</xsl:text>
+            <xsl:text>}%&#xa;</xsl:text>
             <xsl:apply-templates select="*"/>
             <xsl:text>\end{namedlist}%&#xa;</xsl:text>
         </xsl:otherwise>
