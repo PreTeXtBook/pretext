@@ -382,7 +382,7 @@
       <cd>
         <cline>if [ -f ~/.bashrc ]; then . ~/.bashrc; fi</cline>
       </cd>
-      to <c>.bashrc</c>
+      to <c>.bash-profile</c>
     </p>
 
     <p>
