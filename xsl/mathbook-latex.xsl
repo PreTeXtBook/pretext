@@ -1999,26 +1999,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>  {}&#xa;</xsl:text>
         </xsl:if>
         <xsl:if test="$b-has-sage">
-            <xsl:text>%% Sage's blue is 50%, we go way lighter (blue!05 would work)&#xa;</xsl:text>
+            <xsl:text>%% The listings package as tcolorbox for Sage code&#xa;</xsl:text>
+            <xsl:text>%% We do as much styling as possible with tcolorbox, not listings&#xa;</xsl:text>
+            <xsl:text>%% Sage's blue is 50%, we go way lighter (blue!05 would also work)&#xa;</xsl:text>
+            <xsl:text>%% Note that we defuse listings' default "aboveskip" and "belowskip"&#xa;</xsl:text>
+            <!-- TODO: integrate into the LaTeX styling schemes -->
+            <!-- NB: the "listingsutf8 package is not a panacea, as it only        -->
+            <!-- cooperates with UTF-8 characters when code snippets are read      -->
+            <!-- in from external files.  We do condition on the LaTeX engines     -->
+            <!-- since (a) it is easy and (b) the tcolorbox documentation warns    -->
+            <!-- about not being careful.  NB: LuaTeX is not tested nor supported. -->
+            <!-- NB: rules "at break" need to come after "boxrule"                 -->
+            <xsl:text>\ifthenelse{\boolean{xetex} \or \boolean{luatex}}%&#xa;</xsl:text>
+            <xsl:text>  {\tcbuselibrary{listings}}%&#xa;</xsl:text>
+            <xsl:text>  {\tcbuselibrary{listingsutf8}}%&#xa;</xsl:text>
             <xsl:text>\definecolor{sageblue}{rgb}{0.95,0.95,1}&#xa;</xsl:text>
-            <xsl:text>%% Sage input, listings package: Python syntax, boxed, colored, line breaking&#xa;</xsl:text>
-            <xsl:text>%% To be flush with surrounding text's margins, set&#xa;</xsl:text>
-            <xsl:text>%% xmargins to be sum of framerule, framesep, and epsilon (~0.25pt)&#xa;</xsl:text>
-            <xsl:text>%% space between input/output comes from input style "belowskip",&#xa;</xsl:text>
-            <xsl:text>%% by giving output an aboveskip of zero&#xa;</xsl:text>
-            <xsl:text>\lstdefinestyle{sageinputstyle}{language=Python,breaklines=true,breakatwhitespace=true,%&#xa;</xsl:text>
-            <xsl:text>basicstyle=\small\ttfamily,columns=fixed,frame=single,backgroundcolor=\color{sageblue},%&#xa;</xsl:text>
-            <xsl:text>framerule=0.5pt,framesep=4pt,xleftmargin=4.75pt,xrightmargin=4.75pt}&#xa;</xsl:text>
-            <xsl:text>%% Sage output, similar, but not boxed, not colored&#xa;</xsl:text>
-            <xsl:text>\lstdefinestyle{sageoutputstyle}{language=Python,breaklines=true,%&#xa;</xsl:text>
-            <xsl:text>breakatwhitespace=true,basicstyle=\small\ttfamily,columns=fixed,aboveskip=0pt}&#xa;</xsl:text>
-            <xsl:text>%% The environments manufactured by the listings package&#xa;</xsl:text>
-            <xsl:text>\lstnewenvironment{sageinput}&#xa;</xsl:text>
-            <xsl:text>  {\lstset{style=sageinputstyle}}&#xa;</xsl:text>
-            <xsl:text>  {}&#xa;</xsl:text>
-            <xsl:text>\lstnewenvironment{sageoutput}&#xa;</xsl:text>
-            <xsl:text>  {\lstset{style=sageoutputstyle}}&#xa;</xsl:text>
-            <xsl:text>  {}&#xa;</xsl:text>
+            <xsl:text>\tcbset{ sagestyle/.style={left=0pt, right=0pt, top=0ex, bottom=0ex, middle=0pt, toptitle=0pt, bottomtitle=0pt,&#xa;</xsl:text>
+            <xsl:text>boxsep=4pt, listing only, fontupper=\small\ttfamily,&#xa;</xsl:text>
+            <xsl:text>breakable, parbox=false, &#xa;</xsl:text>
+            <xsl:text>listing options={language=Python,breaklines=true,breakatwhitespace=true, extendedchars=true, aboveskip=0pt, belowskip=0pt}} }&#xa;</xsl:text>
+            <xsl:text>\newtcblisting{sageinput}{sagestyle, colback=sageblue, sharp corners, boxrule=0.5pt, toprule at break=-0.3pt, bottomrule at break=-0.3pt, }&#xa;</xsl:text>
+            <xsl:text>\newtcblisting{sageoutput}{sagestyle, colback=white, frame empty, before skip=0pt, after skip=0pt, }&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
     <xsl:if test="$document-root//console or $document-root//pre or $document-root//cd or $document-root//fragment">
