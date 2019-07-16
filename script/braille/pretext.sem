@@ -79,6 +79,7 @@ boldx em,class,alert
 # Braille italics
 italicx i,class,one-letter
 
+
 ########
 # Blocks
 ########
@@ -116,12 +117,12 @@ listitem li
 # Tables
 ########
 
+list tr \*;
+generic td \*;\s
+
 # your liblouis table must also contain the following line
 #   noback always ;\s; 0
 
-
-list tr \*;
-generic td \*;\s
 
 ##############
 # Holding Tank

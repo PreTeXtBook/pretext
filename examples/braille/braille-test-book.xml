@@ -231,7 +231,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <chapter>
             <title>Tables</title>
 
-            <p>A table of names of colors, with a title (a coming change in <pretext/>), with two rows and three columns.  Note: the title is not being displayed yet.</p>
+            <p>A table of names of colors, with a title, with two rows and three columns.  Note: the title is not being displayed yet.</p>
 
             <table>
                 <title>Some Colors</title>
