@@ -1987,14 +1987,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>%% A style, both text behavior and decorations all at once&#xa;</xsl:text>
             <xsl:text>\lstdefinestyle{programstyle}{breaklines=true,breakatwhitespace=true,columns=fixed,frame=leftline,framesep=3ex, xleftmargin=3ex,&#xa;</xsl:text>
             <xsl:text>basicstyle=\small\ttfamily,identifierstyle=\color{identifiers},commentstyle=\color{comments},stringstyle=\color{strings},keywordstyle=\color{keywords}}&#xa;</xsl:text>
-            <xsl:text>%% The environments manufactured by the listings package&#xa;</xsl:text>
-            <xsl:text>%% Two environments, one full-width, the other boxed for side-by-sides&#xa;</xsl:text>
-            <xsl:text>%% "program" expects a language argument only&#xa;</xsl:text>
-            <xsl:text>%% "programbox" expects a language and a linewidth&#xa;</xsl:text>
+            <xsl:text>%% Environment manufactured by the listings package&#xa;</xsl:text>
+            <xsl:text>%% "program" expects a language argument&#xa;</xsl:text>
             <xsl:text>\lstnewenvironment{program}[1][]&#xa;</xsl:text>
-            <xsl:text>  {\lstset{style=programstyle,#1}}&#xa;</xsl:text>
-            <xsl:text>  {}&#xa;</xsl:text>
-            <xsl:text>\lstnewenvironment{programbox}[1][]&#xa;</xsl:text>
             <xsl:text>  {\lstset{style=programstyle,#1}}&#xa;</xsl:text>
             <xsl:text>  {}&#xa;</xsl:text>
         </xsl:if>
@@ -8138,15 +8133,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="listings-language" />
     </xsl:variable>
     <xsl:variable name="b-has-language" select="not($language = '')" />
-    <xsl:variable name="b-has-width" select="not($width = '')" />
-    <xsl:choose>
-        <xsl:when test="$b-has-width">
-            <xsl:text>\begin{programbox}</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>\begin{program}</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:text>\begin{program}</xsl:text>
     <xsl:text>[</xsl:text>
     <!-- inserted into "listing options", after style option -->
     <xsl:text>language=</xsl:text>
@@ -8159,23 +8146,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>none</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
-    <xsl:if test="$b-has-width">
-        <xsl:text>,linewidth=</xsl:text>
-        <xsl:value-of select="$width" />
-    </xsl:if>
     <xsl:text>]</xsl:text>
     <xsl:text>&#xa;</xsl:text>
     <xsl:call-template name="sanitize-text">
         <xsl:with-param name="text" select="input" />
     </xsl:call-template>
-    <xsl:choose>
-        <xsl:when test="$b-has-width">
-            <xsl:text>\end{programbox}</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>\end{program}</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:text>\end{program}</xsl:text>
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
