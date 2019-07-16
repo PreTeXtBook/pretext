@@ -3138,6 +3138,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="paragraphs" mode="hidden-knowl-placement" />
 
 <!-- When born use this heading -->
+<!-- NB: this is modified in the conversion to Braille -->
 <xsl:template match="paragraphs" mode="heading-birth">
     <xsl:apply-templates select="." mode="heading-title-paragraphs" />
 </xsl:template>

@@ -73,7 +73,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <title>A Section Heading</title>
 
                 <introduction>
-                    <p>The introduction to the section with some extra text to run onto a new line of the BRF output that may not be indented.</p>
+                    <p>The introduction to the section with some extra text to run onto a new line of the BRF output that may not be indented.   The heading of this subsection begins in cell-5, and is a block when occupying more that one line.  Since this sample book has 4 levels of divisions (chapter, section, sub section, subsubsection) this should have a centered heading.</p>
 
                     <p>Sections, subsections, and subsubsections (which all follow) have a blank line prior, indentation of four spaces, then the word for the division (e.g. <q>subsection</q>) followed by a number.  Content begins on the next line, typically indented two spaces because a paragraph starts there.</p>
 
@@ -84,20 +84,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <title>A Subsection Heading</title>
 
                     <introduction>
-                        <p>The introduction to the subsection with some extra text to run onto a new line of the BRF output that may not be indented.</p>
+                        <p>The introduction to the subsection with some extra text to run onto a new line of the BRF output that may not be indented.  The heading of this subsection begins in cell-7, and is a block when occupying more that one line.  Since this sample book has 4 levels of divisions (chapter, section, sub section, subsubsection) this should have a cell-5 heading.</p>
                     </introduction>
 
                     <subsubsection>
                         <title>A Subsubsection Heading</title>
 
-                        <p>The subsubsection is terminal, so this is the actual content of the division, rather than an introduction to a further division.</p>
+                        <p>The subsubsection is terminal, so this is the actual content of the division, rather than an introduction to a further division.  The heading of this subsection begins in cell-7.</p>
 
                         <p>However, any division may contain a <pretext/> construct called a <q>paragraphs</q>.  It has a title and some content, and cannot be subdivided.  We test one next.</p>
 
                         <paragraphs>
                             <title>A Paragraphs Heading</title>
 
-                            <p>(2019-05-27:  Have not attempted to make the title in <q>run-in</q> style yet, but it should be do-able.)  The content of a lightweight, terminal, <q>pargraphs</q> division with some extra text to run onto a new line of the BRF output that may not be indented.</p>
+                            <p>The <q>paragraphs</q> element is a lightweight division, which we realize with a run-in title, as illustrated here.  BANA transcription guide has examples suggesting this not be indented.  Examples are also not clear if a blank line just prior would be necessary or useful.</p>
+                            <p>This second paragraph tests that it is correct, since the first is exceptional.  Removing the indentation of the first paragraph may require a new <c>liblouis</c> style.</p>
                         </paragraphs>
                     </subsubsection>
                 </subsection>

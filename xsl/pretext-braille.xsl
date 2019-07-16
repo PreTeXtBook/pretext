@@ -200,6 +200,22 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </span>
 </xsl:template>
 
+<!-- A "paragraphs" element is a lightweignt division, which we  -->
+<!-- usually realize with a run-in title.  We need to force this -->
+<!-- for the HTML output, rather than letting CSS accomplish it. -->
+
+<!-- First, kill the independent heading/title element. -->
+<xsl:template match="paragraphs" mode="heading-title-paragraphs"/>
+
+<!-- Slide in the title, which includes punctuation -->
+<xsl:template match="paragraphs/p[1]" mode="body">
+    <p>
+        <xsl:apply-templates select="parent::paragraphs" mode="title-full"/>
+        <xsl:text> </xsl:text>
+        <xsl:apply-templates/>
+    </p>
+</xsl:template>
+
 
 <!-- Environments-->
 
@@ -379,15 +395,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Paragraphs -->
 <!-- ########## -->
 
-<!-- We do not worry about lists, display math, or code -->
-<!-- displays which PreTeXt requires inside paragraphs. -->
-<!-- Following will create non-validating HTML, but     -->
-<!-- hopefully our tools will not care.                 -->
-<xsl:template match="p" mode="body">
-    <p>
-        <xsl:apply-templates/>
-    </p>
-</xsl:template>
+<!-- We do not worry about lists, display math, or code  -->
+<!-- displays which PreTeXt requires inside paragraphs.  -->
+<!-- Especially since the pipeline corrects this anyway. -->
+<!-- NB: see p[1] modified in "paragraphs" elsewhere     -->
 
 <!-- ########## -->
 <!-- Quotations -->
