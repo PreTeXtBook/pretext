@@ -155,9 +155,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <chapter>
             <title>Environments, Blocks</title>
 
-            <p><pretext/> has many chunks of text with a heading and a number.  We can proably decide to do this in a way that makes sense for mathematics texts.  Theorems are more complicated, since they have associated proofs.  We will start simple with a defintion and an example, and iterate to more types and more complicated structures.</p>
+            <p><pretext/> has many chunks of text with a heading and a number.  I call them blocks, others call them environments.  They qualify as the <q>boxed material</q> of the BANA transcription guide.  Experiments here are the <pretext/> <q>definition</q> and <q>example</q>.  Theorems are more complicated, since they have associated proofs.  We will start simple and iterate to more types and more complicated structures.</p>
 
-            <p>The <q>box lines</q> are configured and provided by liblouis.  I have intentionally used a different character for the top line versus the bottom line.  These characters can change, and if you suggested dot patterns I may be able to configure those choices.  The blank line before each seems to be non-negotiable.  Of course, we do not need to have either line at all<mdash/>the start is obvious from the heading.  But the conclusion needs some sort of device to not have it run into <q>regular</q> text following.</p>
+            <p><c>liblouis</c> allows giving the characters to use for the top and bottom line, but is a bit vague.  BANA transcription guide clearly says dot patterns 2356 and 1245 for top and bottom respectively.  In 6-dot braille these appear to be the characters seven and capital-g, which is what I have put into the <c>liblouis</c> configuration.  But the BRF file seems to end up with the characters six and open-square-bracket.  So this is a place where I need to find out what actual dot patterns are being embossed for the top line and bottom line of the two blocks below.  (Note: the <c>liblouis</c> configuration for NIMAS uses seven and lower-g, but the latter produces special characters in the BRF, <c>x1b</c>, which could be correct.)</p>
+
+            <p>To get a blank line after the bottom line of the box, I had to use an un-documented style parameter.  The blank line after the content, and before the bottom line, strikes me as a bug.  No combination of parameters is making it go away.</p>
 
             <definition>
                 <title>Right Triangle</title>
