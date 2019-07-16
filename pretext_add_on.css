@@ -2378,7 +2378,6 @@ sup [data-knowl]:hover {
 
 .pretext-content .aside-like + *{
     margin-top: 3em !important;
-    box-shadow: 0 0 0.5em 0.2em #fff;
     margin-right: 3em;
 }
 
@@ -2411,7 +2410,6 @@ sup [data-knowl]:hover {
   .pretext-content .aside-like + * {
       margin-top: 1.25em !important;
   /*    background: none;  */
-      box-shadow: none;
       margin-right: 0;
   }
 
