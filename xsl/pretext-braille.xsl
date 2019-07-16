@@ -421,6 +421,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- here.  Template will help locate for subsequent work.       -->
 <!-- <xsl:template match="ol/li|ul/li|var/li" mode="body">       -->
 
+<xsl:template match="ol|ul|dl">
+    <xsl:copy>
+        <xsl:attribute name="class">
+            <xsl:text>outerlist</xsl:text>
+        </xsl:attribute>
+        <xsl:apply-templates select="li"/>
+    </xsl:copy>
+</xsl:template>
+
 <xsl:template match="ol/li" mode="body">
     <li>
         <xsl:apply-templates select="." mode="item-number"/>
@@ -430,9 +439,49 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="ul/li" mode="body">
+    <xsl:variable name="format-code">
+        <xsl:apply-templates select="parent::ul" mode="format-code"/>
+    </xsl:variable>
     <li>
-        <xsl:text>* </xsl:text>
+        <!-- the list label.  Unicode values are not critical, they are  -->
+        <!-- just signals for the liblouis translation into dot-patterns -->
+        <xsl:choose>
+            <!-- Unicode Character 'BULLET' (U+2022) -->
+            <xsl:when test="$format-code = 'disc'">
+                <xsl:text>&#x2022; </xsl:text>
+            </xsl:when>
+            <!-- Unicode Character 'WHITE CIRCLE' (U+25CB) -->
+            <xsl:when test="$format-code = 'circle'">
+                <xsl:text>&#x25cb; </xsl:text>
+            </xsl:when>
+            <!-- Unicode Character 'BLACK SQUARE' (U+25A0) -->
+            <xsl:when test="$format-code = 'square'">
+                <xsl:text>&#x25a0; </xsl:text>
+            </xsl:when>
+            <!-- a bad idea for Braille -->
+            <xsl:when test="$format-code = 'none'">
+                <xsl:text/>
+            </xsl:when>
+        </xsl:choose>
+        <!-- and the contents -->
         <xsl:apply-templates/>
+    </li>
+</xsl:template>
+
+<xsl:template match="dl">
+    <dl class="outerlist">
+        <xsl:apply-templates select="li"/>
+    </dl>
+</xsl:template>
+
+<xsl:template match="dl/li">
+    <li>
+        <xsl:apply-templates select="." mode="title-full"/>
+        <ul>
+            <li>
+                <xsl:apply-templates/>
+            </li>
+        </ul>
     </li>
 </xsl:template>
 

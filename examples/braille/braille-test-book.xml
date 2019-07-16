@@ -185,7 +185,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <chapter>
             <title>Lists</title>
 
-            <p>These lists can have more complicated items (structured with paragraphs), and lists can be nested.  We start simple.</p>
+            <p>These lists can have more complicated items (structured with paragraphs), and lists can be nested.  We start simple.  I cannot see a way to use <c>liblouis</c> styling to insert a blank line before and after a list, HTML empty <c>p</c> and <c>br</c> elements are not effective.</p>
 
             <p>A super-simple ordered list, which <pretext/> requires to be authored inside a paragraph.<ol>
                 <li>Create a perpendicular bisector.</li>
@@ -193,13 +193,38 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <li>Create a circle of radius <m>b</m> centered at <m>a</m>.</li>
             </ol>And this sentence finishes the paragraph holding the ordered list.</p>
 
-            <p>A super-simple unordered list, which <pretext/> requires to be authored inside a paragraph.  I have used an asterisk as the marker for the start of each list item.  Perhaps it is not necessary (given indentation?) or you may want to suggest a different character (via a dot pattern?).<ul>
+            <p>A super-simple unordered list, which <pretext/> requires to be authored inside a paragraph.  This defaults to a symbol known as a bullet or disc, which BANA transcription guide says is dot pattern 456-256.<ul>
                 <li>Copy lengths.</li>
                 <li>Bisect segments.</li>
                 <li>Create arcs.</li>
             </ul>And this sentence finishes the paragraph holding the unordered list.</p>
 
-            <p>TODO: list items structured with paragraphs, nested lists, description lists.</p>
+            <p>Two more unordered lists in this paragraph.  To make legitimate HTML, <pretext/> explodes the paragraph into three, we need to use styles to mark the lead paragraph for indentation, and mark the later ones to not have indentation.  This seems unavoidable as one step of the pipeline is doing this breakup anyway.  An unordered list with a circle as a marker (not a <em>filled</em> circle), BANA says a Grade 1 indicator first, so dot pattern 56-1246-123456:<ul label="circle">
+                <li>One with a circle</li>
+                <li>Two with a circle</li>
+                <li>Three with a circle</li>
+            </ul>Now with a solid (filled) square.  BANA says dot pattern 456-1246-3456-145:<ul label="square">
+                <li>One with a square</li>
+                <li>Two with a square</li>
+                <li>Three with a square</li>
+            </ul>This concludes the paragraph, which will be an apparent third paragraph.</p>
+
+            <p>A <pretext/> description list has a single word, or simple phrase, which then has a definition or an explanation, which may be several paragraphs.  Following the BANA transcription guide, we build the description list like a list of the terms, each with a nested one-item list within containing the descriptive text.<dl>
+                <li>
+                    <title>First Item</title>
+                    <p>This text is a description of the first item, what BANA calls an <q>annotated list</q>.  It appears to be indented too far, since it is a paragraph, which <c>liblouis</c> is styling with an indent.</p>
+                </li>
+                <li>
+                    <title>Second Item</title>
+                    <p>Describes second item.  So we need a <c>liblouis</c> style for an unindented paragraph.</p>
+                </li>
+                <li>
+                    <title>Third Item</title>
+                    <p>Describes third item.  The descriptions should probably work exactly opposite, with runover text indented.</p>
+                </li>
+            </dl></p>
+
+            <p>TODO: list items structured with paragraphs, nested lists.</p>
 
         </chapter>
 

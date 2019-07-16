@@ -19,6 +19,19 @@
 punctuation \x27e6 46-126-46-126
 punctuation \x27e7 46-345-46-345
 
+# List item markers: [BANA-2016, 8.6.2]
+# BANA "Hollow circle", Unicode "WHITE CIRCLE",
+# needs UEB Grade 1 indicator (56)
+# Unicode for unordered list markers;
+# a realistic fiction to allow translation here
+# Unicode Character 'BULLET' (U+2022)
+# Unicode Character 'WHITE CIRCLE' (U+25CB)
+# Unicode Character 'BLACK SQUARE' (U+25A0)
+
+punctuation \x2022 456-256
+punctuation \x25cb 56-1246-123456
+punctuation \x25a0 456-1246-3456-145
+
 
 # Necessary to have a newline following
 # last directive, or it is not processed

@@ -97,15 +97,20 @@ boxline article,class,example-like
 # Lists
 #######
 
-# liblouis ignores the character of a list (ordered, unordered,
-# description) and simply formats the list items.  Of course, we
-# know the numbers of an item an an ordered list, so we provide
-# that explcitly/hard-coded within the XSL conversion to HTML.
-# The "no" directives may be unnecssary, but are here for clarity.
-
+# There are lists and then there are list items.  We want
+# a simple list, or the outermost list of a set of nested
+# lists, to always have a blank line before and after, so
+# we give thos a style based on a class value, the others
+# just get dropped as pure containers.  There is only one
+# kind of list item.
+outerlist ol,class,outerlist
+outerlist ul,class,outerlist
+outerlist dl,class,outerlist
 no ol
 no ul
-list li
+no dl
+listitem li
+
 
 ########
 # Tables
