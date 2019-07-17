@@ -1843,7 +1843,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Song and Dance for font changes: http://jevopi.blogspot.com/2010/03/nicely-formatted-listings-in-latex-with.html -->
      <xsl:if test="$b-has-program or $b-has-sage">
         <xsl:text>%% Program listing support: for listings, programs, and Sage code&#xa;</xsl:text>
-        <xsl:text>\usepackage{listings}&#xa;</xsl:text>
+        <!-- NB: the "listingsutf8" package is not a panacea, as it only       -->
+        <!-- cooperates with UTF-8 characters when code snippets are read      -->
+        <!-- in from external files.  We do condition on the LaTeX engines     -->
+        <!-- since (a) it is easy and (b) the tcolorbox documentation warns    -->
+        <!-- about not being careful.  NB: LuaTeX is not tested nor supported. -->
+        <xsl:text>\ifthenelse{\boolean{xetex} \or \boolean{luatex}}%&#xa;</xsl:text>
+        <xsl:text>  {\tcbuselibrary{listings}}%&#xa;</xsl:text>
+        <xsl:text>  {\tcbuselibrary{listingsutf8}}%&#xa;</xsl:text>
         <xsl:text>%% We define the listings font style to be the default "ttfamily"&#xa;</xsl:text>
         <xsl:text>%% To fix hyphens/dashes rendered in PDF as fancy minus signs by listing&#xa;</xsl:text>
         <xsl:text>%% http://tex.stackexchange.com/questions/33185/listings-package-changes-hyphens-to-minus-signs&#xa;</xsl:text>
@@ -1961,8 +1968,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>}&#xa;</xsl:text>
         <xsl:text>%% End of generic listing adjustments&#xa;</xsl:text>
         <xsl:if test="$b-has-program">
-            <xsl:text>%% Program listings via the listings package&#xa;</xsl:text>
-            <xsl:text>%% Line breaking, language per instance, frames, boxes&#xa;</xsl:text>
+            <xsl:text>%% Program listings via new tcblisting environment&#xa;</xsl:text>
             <xsl:text>%% First a universal color scheme for parts of any language&#xa;</xsl:text>
             <xsl:if test="$latex.print='no'" >
                 <xsl:text>%% Colors match a subset of Google prettify "Default" style&#xa;</xsl:text>
@@ -1975,7 +1981,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:if>
             <xsl:if test="$latex.print='yes'" >
                 <xsl:text>%% All-black colors&#xa;</xsl:text>
-                <xsl:text>%% Set latex.print='no' to get colors&#xa;</xsl:text>
+                <xsl:text>%% Set latex.print='no' to get actual colors&#xa;</xsl:text>
                 <xsl:text>\definecolor{identifiers}{rgb}{0,0,0}&#xa;</xsl:text>
                 <xsl:text>\definecolor{comments}{rgb}{0,0,0}&#xa;</xsl:text>
                 <xsl:text>\definecolor{strings}{rgb}{0,0,0}&#xa;</xsl:text>
@@ -1984,14 +1990,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>%% We define a null language, free of any formatting or style&#xa;</xsl:text>
             <xsl:text>%% for use when a language is not supported, or pseudo-code&#xa;</xsl:text>
             <xsl:text>\lstdefinelanguage{none}{identifierstyle=,commentstyle=,stringstyle=,keywordstyle=}&#xa;</xsl:text>
-            <xsl:text>%% A style, both text behavior and decorations all at once&#xa;</xsl:text>
-            <xsl:text>\lstdefinestyle{programstyle}{breaklines=true,breakatwhitespace=true,columns=fixed,frame=leftline,framesep=3ex, xleftmargin=3ex,&#xa;</xsl:text>
-            <xsl:text>basicstyle=\small\ttfamily,identifierstyle=\color{identifiers},commentstyle=\color{comments},stringstyle=\color{strings},keywordstyle=\color{keywords}}&#xa;</xsl:text>
-            <xsl:text>%% Environment manufactured by the listings package&#xa;</xsl:text>
-            <xsl:text>%% "program" expects a language argument&#xa;</xsl:text>
-            <xsl:text>\lstnewenvironment{program}[1][]&#xa;</xsl:text>
-            <xsl:text>  {\lstset{style=programstyle,#1}}&#xa;</xsl:text>
-            <xsl:text>  {}&#xa;</xsl:text>
+            <xsl:text>%% Options passed to the listings package via tcolorbox&#xa;</xsl:text>
+            <xsl:text>\lstdefinestyle{programcodestyle}{identifierstyle=\color{identifiers},commentstyle=\color{comments},stringstyle=\color{strings},keywordstyle=\color{keywords}, breaklines=true, breakatwhitespace=true, columns=fixed, extendedchars=true, aboveskip=0pt, belowskip=0pt}&#xa;</xsl:text>
+            <!-- NB: rules "at break" need to come after "boxrule"                 -->
+            <xsl:text>\tcbset{ programboxstyle/.style={left=3ex, right=0pt, top=0ex, bottom=0ex, middle=0pt, toptitle=0pt, bottomtitle=0pt, boxsep=0pt,&#xa;</xsl:text>
+            <xsl:text>listing only, fontupper=\small\ttfamily,&#xa;</xsl:text>
+            <xsl:text>colback=white, sharp corners, boxrule=-0.3pt, leftrule=0.5pt, toprule at break=-0.3pt, bottomrule at break=-0.3pt,&#xa;</xsl:text>
+            <xsl:text>breakable, parbox=false,&#xa;</xsl:text>
+            <xsl:text>} }&#xa;</xsl:text>
+            <!--  -->
+            <xsl:text>\newtcblisting{program}[1]{programboxstyle, listing options={language=#1, style=programcodestyle}}&#xa;</xsl:text>
         </xsl:if>
         <xsl:if test="$b-has-sage">
             <xsl:text>%% The listings package as tcolorbox for Sage code&#xa;</xsl:text>
@@ -1999,15 +2007,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>%% Sage's blue is 50%, we go way lighter (blue!05 would also work)&#xa;</xsl:text>
             <xsl:text>%% Note that we defuse listings' default "aboveskip" and "belowskip"&#xa;</xsl:text>
             <!-- TODO: integrate into the LaTeX styling schemes -->
-            <!-- NB: the "listingsutf8 package is not a panacea, as it only        -->
-            <!-- cooperates with UTF-8 characters when code snippets are read      -->
-            <!-- in from external files.  We do condition on the LaTeX engines     -->
-            <!-- since (a) it is easy and (b) the tcolorbox documentation warns    -->
-            <!-- about not being careful.  NB: LuaTeX is not tested nor supported. -->
-            <!-- NB: rules "at break" need to come after "boxrule"                 -->
-            <xsl:text>\ifthenelse{\boolean{xetex} \or \boolean{luatex}}%&#xa;</xsl:text>
-            <xsl:text>  {\tcbuselibrary{listings}}%&#xa;</xsl:text>
-            <xsl:text>  {\tcbuselibrary{listingsutf8}}%&#xa;</xsl:text>
             <xsl:text>\definecolor{sageblue}{rgb}{0.95,0.95,1}&#xa;</xsl:text>
             <xsl:text>\tcbset{ sagestyle/.style={left=0pt, right=0pt, top=0ex, bottom=0ex, middle=0pt, toptitle=0pt, bottomtitle=0pt,&#xa;</xsl:text>
             <xsl:text>boxsep=4pt, listing only, fontupper=\small\ttfamily,&#xa;</xsl:text>
@@ -8134,9 +8133,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <xsl:variable name="b-has-language" select="not($language = '')" />
     <xsl:text>\begin{program}</xsl:text>
-    <xsl:text>[</xsl:text>
-    <!-- inserted into "listing options", after style option -->
-    <xsl:text>language=</xsl:text>
+    <xsl:text>{</xsl:text>
     <xsl:choose>
         <xsl:when test="$b-has-language">
             <xsl:value-of select="$language" />
@@ -8146,7 +8143,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>none</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
-    <xsl:text>]</xsl:text>
+    <xsl:text>}</xsl:text>
     <xsl:text>&#xa;</xsl:text>
     <xsl:call-template name="sanitize-text">
         <xsl:with-param name="text" select="input" />
