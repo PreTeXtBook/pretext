@@ -863,12 +863,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         ($document-root//subsubsection)[1]|
         ($root/book/backmatter/appendix|$root/article/backmatter/appendix)[1]|
         ($document-root//index)[1]|
-        ($document-root//chapter/exercises|$root/article/exercises)[1]|
-        ($document-root//section/exercises)[1]|
+        ($document-root//chapter/exercises|$root/book/backmatter/appendix/exercises|$root/article/exercises)[1]|
+        ($document-root//section/exercises|$root/article/backmatter/appendix/exercises)[1]|
         ($document-root//subsection/exercises)[1]|
         ($document-root//subsubsection/exercises)[1]|
         ($root/book/backmatter/solutions)[1]|
-        ($document-root//chapter/solutions|$root/article/backmatter/solutions)[1]|
+        ($document-root//chapter/solutions|$root/article/solutions|$root/article/backmatter/solutions)[1]|
         ($document-root//section/solutions)[1]|
         ($document-root//subsection/solutions)[1]|
         ($document-root//subsubsection/solutions)[1]|
@@ -886,7 +886,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         ($document-root//subsection/glossary)[1]|
         ($document-root//subsubsection/glossary)[1]|
         ($root/book/backmatter/references)[1]|
-        ($document-root//chapter/references|$root/article/backmatter/references|$root/book/backmatter/appendix/references)[1]|
+        ($document-root//chapter/references|$root/article/references|$root/article/backmatter/references|$root/book/backmatter/appendix/references)[1]|
         ($document-root//section/references|$root/article/backmatter/appendix/references)[1]|
         ($document-root//subsection/references)[1]|
         ($document-root//subsubsection/references)[1]"/>
