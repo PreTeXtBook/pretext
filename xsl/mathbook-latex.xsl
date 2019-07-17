@@ -1642,11 +1642,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- Caption formatting/style possibilities:          -->
         <!-- http://tex.stackexchange.com/questions/117531    -->
         <xsl:if test="$document-root//listing">
-            <xsl:text>%% Create "listing" environment to hold program listings&#xa;</xsl:text>
-            <xsl:text>%% The "lstlisting" environment defaults to allowing page-breaking,&#xa;</xsl:text>
-            <xsl:text>%% so we do not use a floating environment, which would break this&#xa;</xsl:text>
-            <!-- TODO: optionally force no-page-break with [float] on lstlisting? -->
-            <xsl:text>\newenvironment{listing}{\par\bigskip\noindent}{}&#xa;</xsl:text>
+            <xsl:text>%% Create "listing" environment to hold program listings and consoles&#xa;</xsl:text>
+            <!-- TODO: this could become purely semantic (no top space) once both "listing"  -->
+            <!-- and "console" are tcolorbox and can have their spacing styled               -->
+            <xsl:text>\NewDocumentEnvironment{listing}{}{\par\bigskip\noindent}{}&#xa;</xsl:text>
             <xsl:text>%% New caption type for numbering, style, etc.&#xa;</xsl:text>
             <xsl:text>\DeclareCaptionType[within=</xsl:text>
             <xsl:choose>
@@ -1664,6 +1663,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="string-id" select="'listing'" />
             </xsl:call-template>
             <xsl:text>]&#xa;</xsl:text>
+            <xsl:text>%% Following could be styled&#xa;</xsl:text>
             <xsl:text>\captionsetup[listingcap]{labelfont=bf,aboveskip=1.0ex,belowskip=\baselineskip}&#xa;</xsl:text>
             <!-- associate counter                  -->
             <!--   if independent, then with figure -->
