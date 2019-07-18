@@ -141,6 +141,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="b-has-icon"         select="boolean($document-root//icon)" />
 <xsl:variable name="b-has-webwork-reps" select="boolean($document-root//webwork-reps)" />
 <xsl:variable name="b-has-program"      select="boolean($document-root//program)" />
+<xsl:variable name="b-has-console"      select="boolean($document-root//console)" />
 <xsl:variable name="b-has-sage"         select="boolean($document-root//sage)" />
 <xsl:variable name="b-has-sfrac"        select="boolean($document-root//m[contains(text(),'sfrac')] or $document-root//md[contains(text(),'sfrac')] or $document-root//me[contains(text(),'sfrac')] or $document-root//mrow[contains(text(),'sfrac')])" />
 
@@ -703,7 +704,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% end: font setup and configuration for use with pdflatex&#xa;</xsl:text>
     <xsl:text>%% end: pdflatex-specific configuration&#xa;</xsl:text>
     <xsl:text>}&#xa;</xsl:text>
-    <xsl:if test="$b-has-program or $b-has-sage or $document-root//c or $document-root//cd or $document-root//pre or $document-root//console or $document-root//tag or $document-root//tage or $document-root//attr">
+    <xsl:if test="$b-has-program or $b-has-sage or $b-has-console or $document-root//c or $document-root//cd or $document-root//pre or $document-root//tag or $document-root//tage or $document-root//attr">
         <xsl:text>%% Monospace font: Inconsolata (zi4)&#xa;</xsl:text>
         <xsl:text>%% Sponsored by TUG: http://levien.com/type/myfonts/inconsolata.html&#xa;</xsl:text>
         <xsl:text>%% Loaded for documents with intentional objects requiring monospace&#xa;</xsl:text>
@@ -1841,8 +1842,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Bitstream Vera Font names within: https://github.com/timfel/texmf/blob/master/fonts/map/vtex/bera.ali -->
     <!-- Coloring listings: http://tex.stackexchange.com/questions/18376/beautiful-listing-for-csharp -->
     <!-- Song and Dance for font changes: http://jevopi.blogspot.com/2010/03/nicely-formatted-listings-in-latex-with.html -->
-     <xsl:if test="$b-has-program or $b-has-sage">
-        <xsl:text>%% Program listing support: for listings, programs, and Sage code&#xa;</xsl:text>
+     <xsl:if test="$b-has-program or $b-has-console or $b-has-sage">
+        <xsl:text>%% Program listing support: for listings, programs, consoles, and Sage code&#xa;</xsl:text>
         <!-- NB: the "listingsutf8" package is not a panacea, as it only       -->
         <!-- cooperates with UTF-8 characters when code snippets are read      -->
         <!-- in from external files.  We do condition on the LaTeX engines     -->
@@ -2001,6 +2002,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!--  -->
             <xsl:text>\newtcblisting{program}[1]{programboxstyle, listing options={language=#1, style=programcodestyle}}&#xa;</xsl:text>
         </xsl:if>
+        <xsl:if test="$document-root//console">
+            <xsl:text>%% Console session with prompt, input, output&#xa;</xsl:text>
+            <xsl:text>%% listings allows for escape sequences to enable LateX,&#xa;</xsl:text>
+            <xsl:text>%% so we bold the input commands via teh following macro&#xa;</xsl:text>
+            <xsl:text>\newcommand{\consoleinput}[1]{\textbf{#1}}&#xa;</xsl:text>
+            <!-- https://tex.stackexchange.com/questions/299401/bold-just-one-line-inside-of-lstlisting/299406 -->
+            <!-- Syntax highlighting is not so great for "language=bash" -->
+            <!-- Line-breaking off to match old behavior, prebreak option fails inside LaTeX for input -->
+            <xsl:text>\lstdefinestyle{consolecodestyle}{language=none, escapeinside={(*}{*)}, identifierstyle=, commentstyle=, stringstyle=, keywordstyle=, breaklines=false, breakatwhitespace=false, columns=fixed, extendedchars=true, aboveskip=0pt, belowskip=0pt}&#xa;</xsl:text>
+            <!--  -->
+            <xsl:text>\tcbset{ consoleboxstyle/.style={left=0pt, right=0pt, top=0ex, bottom=0ex, middle=0pt, toptitle=0pt, bottomtitle=0pt, boxsep=0pt,&#xa;</xsl:text>
+            <xsl:text>listing only, fontupper=\small\ttfamily,&#xa;</xsl:text>
+            <xsl:text>colback=white, boxrule=-0.3pt, toprule at break=-0.3pt, bottomrule at break=-0.3pt,&#xa;</xsl:text>
+            <xsl:text>breakable, parbox=false,&#xa;</xsl:text>
+            <xsl:text>} }&#xa;</xsl:text>
+            <!--  -->
+            <xsl:text>\newtcblisting{console}{consoleboxstyle, listing options={style=consolecodestyle}}&#xa;</xsl:text>
+       </xsl:if>
         <xsl:if test="$b-has-sage">
             <xsl:text>%% The listings package as tcolorbox for Sage code&#xa;</xsl:text>
             <xsl:text>%% We do as much styling as possible with tcolorbox, not listings&#xa;</xsl:text>
@@ -2016,7 +2035,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\newtcblisting{sageoutput}{sagestyle, colback=white, frame empty, before skip=0pt, after skip=0pt, }&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
-    <xsl:if test="$document-root//console or $document-root//pre or $document-root//cd or $document-root//fragment">
+    <xsl:if test="$document-root//pre or $document-root//cd or $document-root//fragment">
         <xsl:text>%% Fancy Verbatim for consoles, preformatted, code display, literate programming&#xa;</xsl:text>
         <xsl:text>\usepackage{fancyvrb}&#xa;</xsl:text>
         <xsl:if test="//pre">
@@ -2032,22 +2051,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\newenvironment{codedisplay}&#xa;</xsl:text>
             <xsl:text>{\VerbatimEnvironment\begin{center}\begin{lrbox}{\codedisplaybox}\begin{BVerbatim}}&#xa;</xsl:text>
             <xsl:text>{\end{BVerbatim}\end{lrbox}\usebox{\codedisplaybox}\end{center}}&#xa;</xsl:text>
-        </xsl:if>
-        <xsl:if test="$document-root//console">
-            <xsl:text>%% Console session with prompt, input, output&#xa;</xsl:text>
-            <xsl:text>%% Make a console environment from fancyvrb BVerbatim environment&#xa;</xsl:text>
-            <xsl:text>%% Specify usual escape, begin group, end group characters&#xa;</xsl:text>
-            <xsl:text>%% (boxed variant accepts optional boxwidth key, not used)&#xa;</xsl:text>
-            <xsl:text>%% (BVerbatim environment allows for line numbers, make feature request?)&#xa;</xsl:text>
-            <!-- "box verbatim" since could be used in a sidebyside panel, additional options are        -->
-            <!-- trivial: numbers=left, stepnumber=5 (can mimic in HTML with counting recursive routine) -->
-            <xsl:text>\DefineVerbatimEnvironment{console}{BVerbatim}{fontsize=\small,commandchars=\\\{\}}&#xa;</xsl:text>
-            <xsl:text>%% A semantic macro for the user input portion&#xa;</xsl:text>
-            <xsl:text>%% We define this in the traditional way,&#xa;</xsl:text>
-            <xsl:text>%% but may realize it with different LaTeX escape characters&#xa;</xsl:text>
-            <xsl:text>\newcommand{\consoleprompt}[1]{#1}&#xa;</xsl:text>
-            <xsl:text>\newcommand{\consoleinput}[1]{\textbf{#1}}&#xa;</xsl:text>
-            <xsl:text>\newcommand{\consoleoutput}[1]{#1}&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
     <xsl:if test="//tikz">
@@ -8154,10 +8157,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Console Session -->
 <!-- An interactive command-line session with a prompt, input and output -->
-<!-- The width parameter supports use in a sidebyside panel              -->
 <xsl:template match="console">
     <!-- ignore prompt, and pick it up in trailing input  -->
-    <!-- optional width override is supported by fancyvrb -->
     <xsl:text>\begin{console}&#xa;</xsl:text>
     <xsl:apply-templates select="input|output" />
     <xsl:text>\end{console}&#xa;</xsl:text>
@@ -8166,23 +8167,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- match immediately preceding, only if a prompt:                   -->
 <!-- https://www.oxygenxml.com/archives/xsl-list/199910/msg00541.html -->
 <xsl:template match="console/input">
-    <!-- Assumes prompt does not exceed one line -->
-    <!-- Wrap with semantic \consoleprompt macro -->
-    <xsl:text>\consoleprompt{</xsl:text>
-    <xsl:call-template name="escape-console-to-latex">
+    <!-- Prompt first, assumes does not exceed one line -->
+    <xsl:call-template name="escape-console-prompt-output">
         <xsl:with-param name="text"  select="preceding-sibling::*[1][self::prompt]"/>
     </xsl:call-template>
-    <xsl:text>}</xsl:text>
     <!-- sanitize left-margin, etc                    -->
     <!-- then employ \consoleinput macro on each line -->
     <xsl:call-template name="wrap-console-input">
         <xsl:with-param name="text">
             <xsl:call-template name="sanitize-text">
-                <xsl:with-param name="text">
-                    <xsl:call-template name="escape-console-to-latex">
-                        <xsl:with-param name="text"  select="."/>
-                    </xsl:call-template>
-                </xsl:with-param>
+                <xsl:with-param name="text" select="."/>
             </xsl:call-template>
         </xsl:with-param>
     </xsl:call-template>
@@ -8195,7 +8189,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="text">
             <xsl:call-template name="sanitize-text">
                 <xsl:with-param name="text">
-                    <xsl:call-template name="escape-console-to-latex">
+                    <xsl:call-template name="escape-console-prompt-output">
                         <xsl:with-param name="text"  select="."/>
                     </xsl:call-template>
                 </xsl:with-param>
@@ -8212,9 +8206,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <xsl:when test="$text=''" />
         <xsl:otherwise>
-            <xsl:text>\consoleinput{</xsl:text>
-            <xsl:value-of select="substring-before($text, '&#xa;')" />
-            <xsl:text>}&#xa;</xsl:text>
+            <xsl:text>(*\consoleinput{</xsl:text>
+                <xsl:call-template name="escape-console-input-to-latex">
+                    <xsl:with-param name="text">
+                        <xsl:value-of select="substring-before($text, '&#xa;')" />
+                    </xsl:with-param>
+                </xsl:call-template>
+            <xsl:text>}*)</xsl:text>
+            <xsl:text>&#xa;</xsl:text>
             <xsl:call-template name="wrap-console-input">
                 <xsl:with-param name="text" select="substring-after($text, '&#xa;')" />
             </xsl:call-template>
@@ -8222,15 +8221,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- Line-by-line, apply \consoleoutput macro defined in preamble -->
+<!-- Line-by-line  -->
 <xsl:template name="wrap-console-output">
     <xsl:param name="text" />
     <xsl:choose>
         <xsl:when test="$text=''" />
         <xsl:otherwise>
-            <xsl:text>\consoleoutput{</xsl:text>
             <xsl:value-of select="substring-before($text, '&#xa;')" />
-            <xsl:text>}&#xa;</xsl:text>
+            <xsl:text>&#xa;</xsl:text>
             <xsl:call-template name="wrap-console-output">
                 <xsl:with-param name="text" select="substring-after($text, '&#xa;')" />
             </xsl:call-template>
@@ -10576,21 +10574,45 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="str:replace($sans-dblqt,  '`',     '\textasciigrave{}')" />
 </xsl:template>
 
-<!-- Escape Console Text to Latex -->
-<!-- Similar to above, but fancyvrb BVerbatim only needs -->
-<!-- to avoid Latex escape (backslash), begin group ({), -->
-<!-- and end group (}) to permit LaTeX macros, such as   -->
-<!-- \textbf{} for the bolding of user input.            -->
-<xsl:template name="escape-console-to-latex">
-    <xsl:param    name="text" />
+<!-- Escape Console Input to Latex -->
+<!-- The entire input string is bolded, but now we have escaped     -->
+<!-- into LaTeX for the entire string.  So we need to               -->
+<!--   (1) Escape the usual problematic characters into their LaTeX -->
+<!--       text equivalents.                                        -->
+<!--   (2) Convert the "listings" escape sequence into something    -->
+<!--       isomorphic, but not equal, in LaTeX.  We do this by      -->
+<!--       adding an empty group to the escape sequences.           -->
+<xsl:template name="escape-console-input-to-latex">
+    <xsl:param name="text" />
 
-    <xsl:variable name="bs-one" select="str:replace($text,   '\', '\textbackslash')"/>
-    <xsl:variable name="lb-one" select="str:replace($bs-one, '{', '\textbraceleft')"/>
-    <xsl:variable name="rb-one" select="str:replace($lb-one, '}', '\textbraceright')"/>
+    <xsl:variable name="all-latex">
+        <xsl:call-template name="escape-text-to-latex">
+            <xsl:with-param name="text" select="$text"/>
+        </xsl:call-template>
+    </xsl:variable>
+    <!-- A trailing group seems necessary on the opening escape -->
+    <!-- sequence, otherwise a trailing spce goes missing.      -->
+    <!-- We add this to the closing sequence just in case.      -->
+    <xsl:variable name="left-escape"  select="str:replace($all-latex, '(*', '({}*{}' )"/>
+    <xsl:variable name="right-escape" select="str:replace($left-escape, '*)', '*{}){}' )"/>
+    <xsl:value-of select="$right-escape"/>
+</xsl:template>
 
-    <xsl:variable name="bs-two" select="str:replace($rb-one, '\textbackslash',  '\textbackslash{}')"/>
-    <xsl:variable name="lb-two" select="str:replace($bs-two, '\textbraceleft',  '\{')"/>
-    <xsl:value-of select="str:replace($lb-two, '\textbraceright', '\}')"/>
+<!-- Escape Console Text -->
+<!-- The prompt and output for a "console" are handled capably by the   -->
+<!-- "listings" package.  Except we need to break the escape characters -->
+<!-- we use to accomodate bold text for the input.  So...we escape into -->
+<!-- LaTeX mode, duplicate the desired sequence, and break it with an   -->
+<!-- empty group.  Presumably no additional empty groups are necessary. -->
+<!-- The usual three-step in necessary to not clobber earlier edits,    -->
+<!-- we did not figure out a clever way to avoid a "unique" string.     -->
+<xsl:template name="escape-console-prompt-output">
+    <xsl:param name="text" />
+
+    <xsl:variable name="left-escape-temp"  select="str:replace($text, '(*', 'XXvVY4DtfemxHkcXX' )"/>
+    <xsl:variable name="right-escape" select="str:replace($left-escape-temp, '*)', '(**{})*)' )"/>
+    <xsl:variable name="left-escape" select="str:replace($right-escape, 'XXvVY4DtfemxHkcXX', '(*({}**)' )"/>
+    <xsl:value-of select="$left-escape"/>
 </xsl:template>
 
 <!-- Miscellaneous -->

@@ -5895,7 +5895,7 @@ the xsltproc executable.
 
             <p>Notice in the HTML version of the above example that when you highlight all, or a portion, of the listing for a cut-and-paste that the prompts are not included.</p>
 
-            <p>The next listing is just absurdity, to check characters from <latex /> that are otherwise employed by the code supporting consoles, and some Latin-1 characters.  We test each in a prompt, input, and output.</p>
+            <p>The next listing is just absurdity, to check various characters from <latex /> that are otherwise employed by the code supporting consoles, and some Latin-1 characters.  We test each in a prompt, input, and output.  We use <c>(*</c> and <c>*)</c> as sequences used to escape embedded <latex/> commands, so we test those also.</p>
 
             <listing>
                 <caption>Console Session: problematic <latex /> characters</caption>
@@ -5911,6 +5911,18 @@ the xsltproc executable.
                     <prompt>An end group { here  </prompt>
                     <input>An end group } here</input>
                     <output>An end group } here</output>
+
+                    <prompt>An open escape sequence (* here  </prompt>
+                    <input>An open escape sequence (* here</input>
+                    <output>An open escape sequence (* here</output>
+
+                    <prompt>An end escape sequence *) here  </prompt>
+                    <input>An end escape sequence *) here</input>
+                    <output>An end escape sequence *) here</output>
+
+                    <prompt>Some quotation marks ` ' " here  </prompt>
+                    <input>Some quotation marks ` ' " here</input>
+                    <output>Some quotation marks ` ' " here</output>
 
                     <prompt>The rest &amp; % $ # _ ~ ^ of LaTeX  </prompt>
                     <input>The rest &amp; % $ # _ ~ ^ of LaTeX</input>
