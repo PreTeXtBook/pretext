@@ -6219,7 +6219,7 @@ the xsltproc executable.
                     <image source="images/cross-square.png"/>
                 </sidebyside>
 
-                <p>Now we fine-tune with different widths (which add up to 100%).  The five imgages have been given different vertical alignments, <c>top middle bottom top middle</c> via the <c>valigns</c> attribute.</p>
+                <p>Now we fine-tune with different widths (which add up to 100%).  The five images have been given different vertical alignments, <c>top middle bottom top middle</c> via the <c>valigns</c> attribute.</p>
 
                 <sidebyside widths="10% 30% 20% 20% 20%" margins="0%" valigns="top middle bottom top middle">
                     <image source="images/cross-square.png"/>
