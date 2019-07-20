@@ -128,6 +128,49 @@
         <p>There are a variety of things you can do generally, by overriding the imported XSL templates to change behavior, but such modifications are beyond the scope of this guide.</p>
     </section>
 
+    <section xml:id="processing-images-inkscape">
+        <title>Creating Images with Inkscape</title>
+        <idx>Inkscape</idx>
+        <idx><h>vector graphics</h><h>Inkscape</h></idx> 
+
+        <p>A strength of <pretext/> is the ability to create diagrams and images with editable source code, embedded alongside your other <pretext/> source material (<xref ref="topic-images-source"/>, <xref ref="processing-images-mbx"/>).  But sometimes you want, or need, to be more artistic.  <url href="https://inkscape.org/">Inkscape</url><fn><c>inkscape.org/</c></fn> is a great tool for creating images.  It ticks all the boxes: open source, mature, cross-platform, standards-compliant.  Bethany Llewellyn heped research Inkscape capabilities for this section.</p>
+
+        <p>Inkscape's native file format is Scalable Vector Graphics (<init>SVG</init>).  As the name suggests, this translates into excellent support for vector graphics.  (See <xref ref="topic-images-raster"/> and <xref ref="topic-images-vector"/> for the distinction.)  Why use Inkscape?<ul>
+            <li><init>SVG</init> files are small and scale smoothly when you zoom in on a web page.  So this format is our top choice for how images are realized in the <init>HTML</init> output.  They will also work well in formats based on <init>HTML</init>, such as <init>EPUB</init>.</li>
+            <li>The <init>SVG</init> format is how Inkscape works with images internally.  The file format it calls <q>Inkscape SVG</q> is valid <init>SVG</init>, along with additional information to make editing better and/or easier.  So any author may come back and easily edit an image saved in this format.</li>
+            <li>Inkscape will export easily and efficiently to Portable Document Format (<init>PDF</init>), another vector format.  This is our top choice for realizing images in <latex/> output, which will become print or <init>PDF</init> output.</li>
+            <li><init>SVG</init> is an <init>XML</init> format, just like <pretext/>.</li>
+        </ul></p>
+
+        <p>When would you use Inkscape?<ul>
+            <li>Your image is more free-form and artistic than what a source language like TikZ or Asymptote will provide, and you do not need to embed any mathematical symbols.</li>
+            <li>You do not want to learn some new source language (there <em>is</em> a significant learning curve for most of these).</li>
+            <li>You want to annotate screenshots (see <xref ref="list-annotate-screenshot"/>).</li>
+        </ul></p>
+
+        <p>Note that when you save an image as <init>SVG</init> from within Inkscape, you have two choices: <q>Plain SVG</q> and <q>Inkscape SVG</q>.  The latter contains additions to the former which make subsequent editing better and/or easier.  So, you can choose to use <q>Plain</q> as the format used for your <init>HTML</init> output, and it will be smaller and provide great performance.  But you can also make an <q>Inkscape</q> version of the same name, and distribute it with your source files in a different directory, so you and others can edit it easily later.</p>
+
+        <list xml:id="list-annotate-screenshot">
+            <title>Annotated Screenshot</title>
+
+            <introduction>
+                <p>Suppose you want to include a screenshot of some application, and point out some aspect of it.</p>
+            </introduction>
+
+            <ol>
+                <li>View the application on the highest-resolution monitor you can get your hands on.  Not a laptop and not a phone.</li>
+
+                <li>Zoom in, so the area of interest fills as much of the screen as possible.  You are trying to capture as many pixels as possible.</li>
+
+                <li>Use a screen-capture tool that allows you to save the result as Portable Network Graphics (<init>PNG</init>).  This is a lossless format, and you may be able to elect a high level of compression as part of the file-saving process.</li>
+
+                <li>The only raster format explicitly supported by Inkscape is <init>PNG</init>.  So you can import the screenshot into Inkscape, and use the tools there to add arrows, red ovals, etc. to highlight key parts of the image.</li>
+
+                <li>Save the result as <init>PNG</init>, since it already has a significant raster component, for use in <init>HTML</init> conversions.  And save again as <init>PDF</init> for use in print and <init>PDF</init> output.</li>
+            </ol>
+        </list>
+    </section>
+
     <section xml:id="processing-images-mbx">
         <title>Images and the <c>mbx</c> Script</title>
 
