@@ -2729,6 +2729,21 @@ the xsltproc executable.
             </subsection>
 
             <subsection>
+                <title>Inkscape Images</title>
+
+                <p><url href="https://inkscape.org/">Inkscape</url><fn><c>inkscape.org/</c></fn> is a great tool for creating images.  It ticks all the boxes: open source, mature, cross-platform, standards-compliant.  Read much more about it in The <pretext/> Guide.  In <init>HTML</init> output the two images below are both in <init>SVG</init> format.  The first is <q>pure</q> SVG, while the second has embedded information that makes it easier to edit in Inkscape.  You could view the source for this page in the <init>HTML</init> version, deduce the filename of the second image, download it, and manipulate it profitably with Inkscape.  Both files are quite small, but the first is half the size of the second.  In <init>PDF</init> the two images come from files that are identical, so nothing is being tested.  The <init>PDF</init> version is smaller still.</p>
+
+                <figure>
+                    <caption>Inkscape Stars, Plain SVG (left), Inkscape SVG (right), from Bethany Llewellyn</caption>
+                    <sidebyside width="25%">
+                        <image source="images/inkscape-stars-plain"/>
+                        <image source="images/inkscape-stars-native"/>
+                    </sidebyside>
+                </figure>
+
+            </subsection>
+
+            <subsection>
                 <title>Copies of Images</title>
 
                 <p>Sometimes you want to use the same image more than once.  For a raster image, you can just point to it again.  You are free to wrap it in a <c>figure</c> and thus change the caption.  It will get a new number as a new figure, and you will need to assign a unique <attr>xml:id</attr> attribute.  Maybe appending <c>-copy-2</c>, or similar, to the <attr>xml:id</attr> will be helpful.</p>
