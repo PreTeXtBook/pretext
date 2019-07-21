@@ -1,5 +1,24 @@
 <?xml version='1.0'?>
 
+<!--********************************************************************
+Copyright 2019 Andrew Rechnitzer, Steven Clontz, Robert A. Beezer
+
+This file is part of PreTeXt.
+
+PreTeXt is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+PreTeXt is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
@@ -9,11 +28,15 @@
 >
 
 
-<xsl:import href="../pretext/xsl/mathbook-html.xsl" />
+<xsl:import href="mathbook-html.xsl" />
 
 <xsl:output method="html" encoding="utf-8"/>
 
 <xsl:template match="pretext">
+    <xsl:call-template name="banner-warning">
+        <xsl:with-param name="warning">Conversion to reveal.js presentations/slideshows is experimental&#xa;Requests for additional specific constructions welcome&#xa;Additional PreTeXt elements are subject to change</xsl:with-param>
+    </xsl:call-template>
+    <!--  -->
   <xsl:apply-templates select="article" />
 </xsl:template>
 
