@@ -27,108 +27,141 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     extension-element-prefixes="exsl date"
 >
 
-
+<!-- Necessary to get some HTML constructions, -->
+<!-- but want to be sure to override the entry -->
+<!-- template to avoid chunking, etc.          -->
 <xsl:import href="mathbook-html.xsl" />
 
-<xsl:output method="html" encoding="utf-8"/>
+<!-- HTML5 format -->
+<xsl:output method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat"/>
 
-<xsl:template match="pretext">
+<!-- Anything but 'no' (e.g 'yes') will create    -->
+<!-- code assuming a local reveal.js installation -->
+<!-- NB: this should be nore robust!              -->
+<xsl:param name="local" select="'no'"/>
+
+<!-- String to prefix  reveal.js  resources -->
+<xsl:variable name="reveal-root">
+    <xsl:choose>
+        <xsl:when test="$local = 'no'">
+            <xsl:text>https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>.</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- We override the entry template, so as to avoid the "chunking"    -->
+<!-- procedure, since we are going to *always* produce one monolithic -->
+<!-- HTML file as the output/slideshow                                -->
+<xsl:template match="/">
+    <xsl:apply-templates select="pretext"/>
+</xsl:template>
+
+<xsl:template match="/pretext">
     <xsl:call-template name="banner-warning">
         <xsl:with-param name="warning">Conversion to reveal.js presentations/slideshows is experimental&#xa;Requests for additional specific constructions welcome&#xa;Additional PreTeXt elements are subject to change</xsl:with-param>
     </xsl:call-template>
     <!--  -->
-  <xsl:apply-templates select="article" />
-</xsl:template>
-
-<xsl:template match="article|book">
   <xsl:apply-templates select="slideshow" />
 </xsl:template>
 
-<xsl:template match="slideshow" mode="is-structural">
-    <xsl:value-of select="true()" />
-</xsl:template>
+<!-- Kill creation of the index page from the -html -->
+<!-- conversion (we just build one monolithic page) -->
+<xsl:variable name="html-index-page" select="/.."/>
 
-<xsl:variable name="chunk-level">
-    <xsl:text>0</xsl:text>
-</xsl:variable>
-
-
-<xsl:output method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat"/>
-
+<!-- Write the infrastructure for a page -->
 <xsl:template match="slideshow">
-	<html>
-	<head>
-	<title><xsl:apply-templates select="." mode="title-full" /></title>
-	<!-- metadata -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes"></meta>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0/css/reset.min.css" rel="stylesheet"></link>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0/css/reveal.min.css" rel="stylesheet"></link>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0/css/theme/simple.min.css" rel="stylesheet"></link>
+    <html>
+        <head>
+            <title>
+                <xsl:apply-templates select="." mode="title-simple" />
+            </title>
 
-  <!--  Some style changes from regular pretext-html -->
-  <style>
-    ul {
-      display: block !important;
-    }
-    .reveal img {
-      border: 0.5px !important;
-      border-radius: 2px 10px 2px;
-      padding: 4px;
-    }
-    .definition,.theorem,.activity {
-      border-width: 0.5px;
-      border-style: solid;
-      border-radius: 2px 10px 2px;
-      padding: 1%;
-      margin-bottom: 2em;
-    }
-    .definition {
-      background: #00608010;
-    }
-    .theorem {
-      background: #ff000010;
-    }
-    .proof {
-      background: #ffffff90;
-    }
-    .activity {
-      background: #60800010;
-    }
-  </style>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes"></meta>
 
-	</head>
+            <!-- load reveal.js resources             -->
+            <!-- NB: non-local gets minified versions -->
+            <xsl:choose>
+                <xsl:when test="$local = 'no'">
+                    <link href="{$reveal-root}/css/reset.min.css" rel="stylesheet"></link>
+                    <link href="{$reveal-root}/css/reveal.min.css" rel="stylesheet"></link>
+                    <link href="{$reveal-root}/css/theme/simple.min.css" rel="stylesheet"></link>
+                    <script src="{$reveal-root}/js/reveal.min.js"></script>
+                </xsl:when>
+                <xsl:otherwise>
+                    <link href="{$reveal-root}/css/reset.css" rel="stylesheet"></link>
+                    <link href="{$reveal-root}/css/reveal.css" rel="stylesheet"></link>
+                    <link href="{$reveal-root}/css/theme/simple.css" rel="stylesheet"></link>
+                    <script src="{$reveal-root}/js/reveal.js"></script>
+                </xsl:otherwise>
+            </xsl:choose>
 
-	<body>
-    <xsl:apply-templates select="/pretext/docinfo/macros"/>
+          <!--  Some style changes from regular pretext-html -->
+          <style>
+ul {
+  display: block !important;
+}
+.reveal img {
+  border: 0.5px !important;
+  border-radius: 2px 10px 2px;
+  padding: 4px;
+}
+.definition,.theorem,.activity {
+  border-width: 0.5px;
+  border-style: solid;
+  border-radius: 2px 10px 2px;
+  padding: 1%;
+  margin-bottom: 2em;
+}
+.definition {
+  background: #00608010;
+}
+.theorem {
+  background: #ff000010;
+}
+.proof {
+  background: #ffffff90;
+}
+.activity {
+  background: #60800010;
+}
+          </style>
 
-    <div class="reveal">
-      <div class="slides">
-      <xsl:apply-templates select="." mode="title-slide" />
-      <xsl:apply-templates select="section"/>
-    </div>
-  </div>
-	</body>
+        </head>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0/js/reveal.min.js"></script>
+        <body>
+            <!-- For mathematics/MathJax -->
+            <xsl:apply-templates select="/pretext/docinfo/macros"/>
 
-  <script>
-    Reveal.initialize({
-    				controls: false,
-    				progress: false,
-    				hash: true,
-    				transition: 'fade',
-            width: "80%",
-            height: "90%",
-    				dependencies: [
-              { src: 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0/plugin/math/math.min.js', async: true },
-              ]
-            });
-  </script>
+            <div class="reveal">
+                <div class="slides">
+                     <xsl:apply-templates select="frontmatter/titlepage" mode="title-slide"/>
+                    <xsl:apply-templates select="section|slide"/>
+                </div>
+            </div>
+        </body>
 
-	</html>
-
+        <script>
+Reveal.initialize({
+  controls: false,
+  progress: false,
+  center: false,
+  hash: true,
+  transition: 'fade',
+  width: "100%",
+  height: "100%",
+  margin: "0.025",
+  dependencies: [
+    { src: '<xsl:value-of select="$reveal-root"/>/plugin/math/math.min.js', async: true },
+    ]
+  });
+        </script>
+    </html>
 </xsl:template>
 
+<!-- Investigste named template "latex-macros" in -html -->
 <xsl:template match="pretext/docinfo/macros">
   <div style="display: none;">
     <xsl:call-template name="begin-inline-math"/>
@@ -137,40 +170,61 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
   </div>
 </xsl:template>
 
+<!-- A "section" contains multiple "slide", which we process,   -->
+<!-- but first we make a special slide announcing the "section" -->
 <xsl:template match="section">
-  <section>
+    <section>
+        <h1>
+          <xsl:apply-templates select="." mode="title-full"/>
+        </h1>
+    </section>
+    <!--  -->
     <xsl:apply-templates select="slide"/>
+</xsl:template>
+
+<xsl:template match="titlepage" mode="title-slide">
+    <section>
+        <!-- we assume an overall title exists -->
+        <h1>
+            <xsl:apply-templates select="/pretext/slideshow" mode="title-full" />
+        </h1>
+        <!-- subtitle would be optional, subsidary -->
+        <xsl:if test="/pretext/slideshow/subtitle">
+            <h2>
+                <xsl:apply-templates select="/pretext/slideshow" mode="subtitle" />
+            </h2>
+        </xsl:if>
+        <!-- optional "event" -->
+        <xsl:if test="event">
+            <h4>
+                <xsl:apply-templates select="event"/>
+            </h4>
+        </xsl:if>
+        <!-- optional "date" -->
+        <xsl:if test="date">
+            <h4>
+                <xsl:apply-templates select="date"/>
+            </h4>
+        </xsl:if>
+        <!-- we assume at least one author, these are in a table -->
+        <xsl:apply-templates select="." mode="author-list"/>
   </section>
 </xsl:template>
 
-<xsl:template match="slideshow" mode="title-slide">
-	<section>
-		<h1>
-      <xsl:apply-templates select="." mode="title-full" />
-    </h1>
-		<h2>
-      <xsl:apply-templates select="." mode="subtitle" />
-    </h2>
-
-    <xsl:apply-templates select="." mode="author-list"/>
-
-	</section>
-</xsl:template>
-
-<xsl:template match="slideshow" mode="author-list">
+<xsl:template match="titlepage" mode="author-list">
   <table>
   <tr>
-  <xsl:for-each select="frontmatter/titlepage/author">
+  <xsl:for-each select="author">
     <th align="center" style="border-bottom: 0px;"><xsl:value-of select="personname"/></th>
   </xsl:for-each>
 </tr>
   <tr>
-  <xsl:for-each select="frontmatter/titlepage/author">
+  <xsl:for-each select="author">
     <td align="center" style="border-bottom: 0px;"><xsl:value-of select="affiliation|institution"/></td>
   </xsl:for-each>
 </tr>
 <tr>
-  <xsl:for-each select="frontmatter/titlepage/author">
+  <xsl:for-each select="author">
     <td align="center"><xsl:apply-templates select="logo" /></td>
   </xsl:for-each>
   </tr>
@@ -178,19 +232,25 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="slide">
-	<section>
-		<h2>
-<xsl:if test="@source-number">
-  <xsl:value-of select="@source-label"/>
-  <xsl:text> </xsl:text>
-  <xsl:value-of select="@source-number"/>:
-</xsl:if>
-			<xsl:apply-templates select="." mode="title-full" />
-		</h2>
-		<div align="left">
-			<xsl:apply-templates/>
-		</div>
-	</section>
+    <section>
+          <h3>
+              <xsl:if test="@source-number">
+                <xsl:value-of select="@source-label"/>
+                <xsl:text> </xsl:text>
+                <xsl:value-of select="@source-number"/>:
+              </xsl:if>
+              <xsl:apply-templates select="." mode="title-full" />
+          </h3>
+          <div align="left">
+              <xsl:apply-templates/>
+          </div>
+      </section>
+</xsl:template>
+
+<xsl:template match="subslide">
+  <div class="fragment">
+    <xsl:apply-templates/>
+  </div>
 </xsl:template>
 
 <xsl:template match="ul">
@@ -243,41 +303,72 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
   </img>
 </xsl:template>
 
-<xsl:template match="sidebyside">
-<div style="display: table;">
-  <xsl:for-each select="*">
-    <div>
-      <xsl:if test="parent::*/@slide-step = 'true'">
-        <xsl:attribute name="class">
-          <xsl:text>fragment</xsl:text>
+<!-- Side-By-Side -->
+<!-- Built by implementing two abstract   -->
+<!-- templates from the -common templates -->
+
+<!-- Overall wrapper of a sidebyside  -->
+<xsl:template match="sidebyside" mode="compose-panels">
+    <xsl:param name="layout" />
+    <xsl:param name="panels" />
+
+    <xsl:variable name="left-margin"  select="$layout/left-margin" />
+    <xsl:variable name="right-margin" select="$layout/right-margin" />
+
+    <div style="display: table;">
+        <xsl:attribute name="style">
+            <xsl:text>display:table;</xsl:text>
+            <xsl:text>margin-left:</xsl:text>
+            <xsl:value-of select="$left-margin" />
+            <xsl:text>;</xsl:text>
+            <xsl:text>margin-right:</xsl:text>
+            <xsl:value-of select="$right-margin" />
+            <xsl:text>;</xsl:text>
         </xsl:attribute>
-      </xsl:if>
-
-      <xsl:attribute name="style">
-        <xsl:text>display:table-cell; vertical-align:top; width: </xsl:text>
-          <xsl:value-of select="../@width" />
-          <xsl:text>;</xsl:text>
-      </xsl:attribute>
-      <xsl:apply-templates select="."/>
+        <xsl:copy-of select="$panels" />
     </div>
-  </xsl:for-each>
-</div>
 </xsl:template>
 
-<xsl:template match="subslide">
-  <div class="fragment">
-    <xsl:apply-templates/>
-  </div>
+<!-- A single panel of the sidebyside -->
+<xsl:template match="*" mode="panel-panel">
+    <xsl:param name="width" />
+    <xsl:param name="left-margin" />
+    <xsl:param name="right-margin" />
+    <xsl:param name="valign" />
+
+    <xsl:element name="div">
+        <xsl:if test="parent::sidebyside/@slide-step = 'true'">
+          <xsl:attribute name="class">
+            <xsl:text>fragment</xsl:text>
+          </xsl:attribute>
+        </xsl:if>
+        <xsl:attribute name="style">
+            <xsl:text>display:table-cell;</xsl:text>
+            <xsl:text>width:</xsl:text>
+            <xsl:call-template name="relative-width">
+                <xsl:with-param name="width" select="$width" />
+                <xsl:with-param name="left-margin"  select="$left-margin" />
+                <xsl:with-param name="right-margin" select="$right-margin" />
+            </xsl:call-template>
+            <xsl:text>;</xsl:text>
+            <!-- top, middle, bottom -->
+            <xsl:text>vertical-align:</xsl:text>
+            <xsl:value-of select="$valign"/>
+            <xsl:text>;</xsl:text>
+        </xsl:attribute>
+        <!-- Realize each panel's object -->
+        <xsl:apply-templates select=".">
+            <xsl:with-param name="width" select="$width" />
+        </xsl:apply-templates>
+    </xsl:element>
 </xsl:template>
-
-
 
 <xsl:template match="definition" mode="type-name">
   <xsl:text>Definition</xsl:text>
 </xsl:template>
 <xsl:template match="definition">
   <div class="boxed definition">
-		<h3>
+    <h3>
       <xsl:apply-templates select="." mode="type-name" /> (<xsl:value-of select="@source-number"/>):
       <xsl:apply-templates select="." mode="title-full" />
     </h3>
@@ -300,8 +391,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 <xsl:template match="theorem|corollary|lemma|proposition">
   <div class="theorem">
-	<div>
-		<h3>
+  <div>
+    <h3>
       <xsl:choose>
       <xsl:when test="@source-number">
         <xsl:apply-templates select="." mode="type-name" /> (<xsl:value-of select="@source-number"/>):
@@ -313,7 +404,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
       <xsl:apply-templates select="." mode="title-full" />
     </h3>
       <xsl:apply-templates select="statement"/>
-	</div>
+  </div>
   <xsl:if test="proof">
   <div class="proof">
     <xsl:apply-templates select="proof"/>
@@ -333,7 +424,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 <xsl:template match="example|activity|note">
   <div class="activity">
-		<h3>
+    <h3>
       <xsl:apply-templates select="." mode="type-name" /> (<xsl:value-of select="@source-number"/>):
       <xsl:apply-templates select="." mode="title-full" />
     </h3>
@@ -346,12 +437,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 <xsl:template match="fact">
   <div class="definition">
-		<h3>
+    <h3>
       <xsl:apply-templates select="." mode="type-name" /> (<xsl:value-of select="@source-number"/>):
       <xsl:apply-templates select="." mode="title-full" />
     </h3>
       <xsl:apply-templates/>
-	</div>
+  </div>
 </xsl:template>
 
 <xsl:template match="xref">
