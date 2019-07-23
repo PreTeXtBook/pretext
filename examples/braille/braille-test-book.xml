@@ -54,7 +54,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <preface>
                 <p>This is a <pretext/> book designed to test conversions to Braille without too much extraneous material.  We will describe here what should have been apparent on the title page.  This will be expanded as we get more and more parts of the book under control.  The title of the entire book is <q>A Test Book</q> with the subtitle <q>Converting PreTeXt to Braille</q>.  The author is <q>Robert A. Beezer</q>, with editors <q>Al Maneki</q> and <q>Karen Herstein</q>.  The edition is <q>Preliminary Edition, Summer 2019</q>.  The date will change, but should be something recent.</p>
 
-                <p>This preface should have formatting similar to a chapter, which is described carefully in <xref ref="chapter-divisions"/>.  The one difference is that a preface is not numbered, so there will be just a title, centered, followed by a blank line.  We can give a preface a title, such as <articletitle>Preface to the Second Edition</articletitle>, but here we have let <pretext/> provide a default title.</p>
+                <p>This preface should have formatting similar to a chapter, which is described carefully in <xref ref="chapter-divisions"/>.  (The cross-reference to Chapter 1 should be realized very plain in print, and does not yet have any extra information in Braille.)  The one difference is that a preface is not numbered, so there will be just a title, centered, followed by a blank line.  We can give a preface a title, such as <articletitle>Preface to the Second Edition</articletitle>, but here we have let <pretext/> provide a default title.</p>
+
+                <p>Title pages of print and Braille will not always match.  BANA suggests a different set of items than what default <pretext/> uses.  Also, we do not yet producing a Table of Contents for Braille.  Later.</p>
             </preface>
 
             <!-- colophon later -->
@@ -111,6 +113,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <p>Our motivation is the automatic translation of texts in mathematics.  We will do serious testing of mathematics elsewhere, but will include some here as both demonstration and for testing.</p>
 
             <p>The third sentence has some single-letter Latin variables, interspersed with Greek variables and other simple inline math expressions.  The single-letter variables should be italicized.  We let <m>x</m> equal the value of <m>T</m>, but not <m>\theta</m> nor the value of <m>a+b</m>, but it could also be <m>\rho</m> or <m>g</m>.</p>
+
+            <p>For the previous line, <q>x</q> and <q>T</q>should be italicized (single Latin letter variable). <q>a+b</q> is meant to not be italicized (an expression).  <q>theta</q> and <q>rho</q> should not be italicized (Greek).  The last variable is a Latin <q>g</q>, not a Greek <q>gamma.</q>  So it should simply be italicized, since it is a lone Latin letter as math.</p>
 
         </chapter>
 
@@ -173,9 +177,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
             <p><pretext/> has many chunks of text with a heading and a number.  I call them blocks, others call them environments.  They qualify as the <q>boxed material</q> of the BANA transcription guide.  Experiments here are the <pretext/> <q>definition</q> and <q>example</q>.  Theorems are more complicated, since they have associated proofs.  We will start simple and iterate to more types and more complicated structures.</p>
 
-            <p><c>liblouis</c> allows giving the characters to use for the top and bottom line, but is a bit vague.  BANA transcription guide clearly says dot patterns 2356 and 1245 for top and bottom respectively.  In 6-dot braille these appear to be the characters seven and capital-g, which is what I have put into the <c>liblouis</c> configuration.  But the BRF file seems to end up with the characters six and open-square-bracket.  So this is a place where I need to find out what actual dot patterns are being embossed for the top line and bottom line of the two blocks below.  (Note: the <c>liblouis</c> configuration for NIMAS uses seven and lower-g, but the latter produces special characters in the BRF, <c>x1b</c>, which could be correct.)</p>
+            <p><c>liblouis</c> allows giving the characters to use for the top and bottom line, but is a bit vague.  BANA transcription guide clearly says dot patterns 2356 and 1245 for top and bottom respectively.  In 6-dot braille these appear to be the characters seven and capital-g, which is what I have put into the <c>liblouis</c> configuration.  But the BRF file seems to end up with the characters six and open-square-bracket.  So this is a place where I need to find out what actual dot patterns are being embossed for the top line and bottom line of the two blocks below.  (Note: the <c>liblouis</c> configuration for NIMAS uses seven and lowercase <q>g</q>, but the latter produces special characters in the BRF, <c>x1b</c>, which could be correct.)</p>
 
-            <p>To get a blank line after the bottom line of the box, I had to use an un-documented style parameter.  The blank line after the content, and before the bottom line, strikes me as a bug.  No combination of parameters is making it go away.</p>
+            <p>BANA is pretty clear about <q>boxed material</q>, and <c>liblouis</c> supports a style option called <q>boxline</q>.  It'll be contrary to BANA, and technically more unnatural to try to just use inline markers.  Yes, two blank lines, and two boxlines, will use more paper, but this sort of material is a key feature of PreTeXt material.  So for now, I'd lobby for following the BANA and liblouis recommendations.  (Yes, I know the paper is expensive!)</p>
+
+            <p>To get a blank line after the bottom line of the box, I had to use a style parameter.  The blank line after the content, and before the bottom line, strikes me as a bug.  No combination of parameters is making it go away.</p>
+
+            <p>I have put the headings of boxed material onto their own lines, which is different than print.  I think that is fine<mdash/>part of the PreTeXt philosophy is that different output formats will have different expressions of the content.  And it will be really difficult to meld the title with the first bit of content.</p>
 
             <definition>
                 <title>Right Triangle</title>
