@@ -117,11 +117,12 @@ listitem li
 # Tables
 ########
 
-list tr \*;
-generic td \*;\s
+# Table entries end with a semi-colon,
+# and a space to separate.
+# Table rows ends with a period.
 
-# your liblouis table must also contain the following line
-#   noback always ;\s; 0
+tablerow tr \*.
+generic td \*;\s
 
 
 ##############

@@ -229,26 +229,35 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <chapter>
             <title>Tables</title>
 
-            <p>A table of names of colors, with a title, with two rows and three columns.  Note: the title is not being displayed yet.</p>
+            <p>A table of names of colors, with a title, with three rows and five columns.  Designed to have runover lines.  The title is presently being displayed below, but can move to just prior.  Need to experiment with multi-column cells.</p>
 
+            <!-- https://digitalsynopsis.com/design/color-thesaurus-correct-names-of-shades/ -->
             <table>
                 <title>Some Colors</title>
                 <tabular>
                     <row>
                         <cell>Red</cell>
-                        <cell>Green</cell>
-                        <cell>Yellow</cell>
+                        <cell>Blood</cell>
+                        <cell>Mahogany</cell>
+                        <cell>Crimson</cell>
+                        <cell>Lipstick</cell>
+                    </row>
+                    <row>
+                        <cell>White</cell>
+                        <cell>Alabaster</cell>
+                        <cell>Chiffon</cell>
+                        <cell>Porcelain</cell>
+                        <cell>Parchment</cell>
                     </row>
                     <row>
                         <cell>Blue</cell>
-                        <cell>White</cell>
-                        <cell>Pink</cell>
+                        <cell>Admiral</cell>
+                        <cell>Cerulean</cell>
+                        <cell>Peacock</cell>
+                        <cell>Sapphire</cell>
                     </row>
                 </tabular>
             </table>
-
-            <p>Lots more to do here: a table row that exceeds the 40-character width and multi-column cells.  See how an upcoming <pretext/> implementation of a title on a table behaves here.</p>
-
         </chapter>
 
         <chapter>
