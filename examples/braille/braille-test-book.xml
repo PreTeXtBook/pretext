@@ -126,7 +126,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p>We emphasize the word <em>emphasis</em>.</p>
 
-                <p>An <alert>alert</alert> is more imperative, like a warning.  Default presentation is bold-italic, but we have not figured out how to make liblouis react correctly to nesting the two.  Perhaps we need to create a new liblouis style.  For now, just plain bold is an acceptable presentation for this element.</p>
+                <p>An <alert>alert</alert> is more imperative, like a warning.  Default presentation is bold-italic, but we have not figured out how to make liblouis react correctly to nesting the two.  Perhaps we need to create a new liblouis style.  Trying to make a new emphasis class was a failure.  Perhaps two HTML elements (bold, italic) will be better.  For now, just plain bold is an acceptable presentation for this element.</p>
 
                 <p>A <term>definition</term> mid-sentence is terminology.</p>
 
@@ -138,7 +138,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p>A <foreign>phrase from a foreign language</foreign> is usually distinguished.</p>
 
-                <p>The title of this publication is <pubtitle>A Test Book</pubtitle>.</p>
+                <p>The title of this publication is <pubtitle>A Test Book</pubtitle>.  It appears the italic indicators got confused between a single letter, two words, and a total of three items (so a phrase).  We'll try again: <pubtitle>Introduction to Calculus for Engineers</pubtitle>. Hmm, not perfect either.  OK, now <pubtitle>One Book Title</pubtitle>.  This one has me confused.  See lists below, where behavior is better.</p>
 
                 <p>A shorter document might be referenced as a <articletitle>A Test Article</articletitle>.</p>
 
@@ -147,6 +147,22 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <p>Esoteric: text can be grouped in <dblbrackets>double brackets</dblbrackets>.  Now simply two brackets repeated.</p>
 
                 <p>There is much more to check, but above is a good start on common constructions.  In the <pretext/> schema chase through the <q>TextLong</q> definition to find more.</p>
+
+                <p>Different indicators are used for emphasis of a letter, a word, or a phrase.  It appears a phrase is defined to be three words.  We test with the <tag>foreign</tag> element:<ul>
+                    <li>Single letter: <foreign>A</foreign></li>
+                    <li>Two words: <foreign>One Two</foreign></li>
+                    <li>Three words: <foreign>One Two Three</foreign></li>
+                    <li>Four words: <foreign>One Two Three Four</foreign></li>
+                    <li>Five words: <foreign>One Two Three Four Five</foreign></li>
+                </ul></p>
+
+                <p>NOw, all over again with the <tag>pubtitle</tag> element:<ul>
+                    <li>Single letter: <pubtitle>A</pubtitle></li>
+                    <li>Two words: <pubtitle>One Two</pubtitle></li>
+                    <li>Three words: <pubtitle>One Two Three</pubtitle></li>
+                    <li>Four words: <pubtitle>One Two Three Four</pubtitle></li>
+                    <li>Five words: <pubtitle>One Two Three Four Five</pubtitle></li>
+                </ul></p>
             </section>
         </chapter>
 
