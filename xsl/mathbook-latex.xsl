@@ -1859,6 +1859,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\lst@CCPutMacro\lst@ProcessOther {"2D}{\lst@ttfamily{-{}}{-{}}}&#xa;</xsl:text>
         <xsl:text>\@empty\z@\@empty&#xa;</xsl:text>
         <xsl:text>\makeatother&#xa;</xsl:text>
+        <xsl:text>%% We define a null language, free of any formatting or style&#xa;</xsl:text>
+        <xsl:text>%% for use when a language is not supported, or pseudo-code, or consoles&#xa;</xsl:text>
+        <xsl:text>%% Not necessary for Sage code, so in limited cases included unnecessarily&#xa;</xsl:text>
+        <xsl:text>\lstdefinelanguage{none}{identifierstyle=,commentstyle=,stringstyle=,keywordstyle=}&#xa;</xsl:text>
         <xsl:text>\ifthenelse{\boolean{xetex}}{}{%&#xa;</xsl:text>
         <xsl:text>%% begin: pdflatex-specific listings configuration&#xa;</xsl:text>
         <xsl:text>%% translate U+0080 - U+00F0 to their textmode LaTeX equivalents&#xa;</xsl:text>
@@ -1988,9 +1992,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>\definecolor{strings}{rgb}{0,0,0}&#xa;</xsl:text>
                 <xsl:text>\definecolor{keywords}{rgb}{0,0,0}&#xa;</xsl:text>
             </xsl:if>
-            <xsl:text>%% We define a null language, free of any formatting or style&#xa;</xsl:text>
-            <xsl:text>%% for use when a language is not supported, or pseudo-code&#xa;</xsl:text>
-            <xsl:text>\lstdefinelanguage{none}{identifierstyle=,commentstyle=,stringstyle=,keywordstyle=}&#xa;</xsl:text>
             <xsl:text>%% Options passed to the listings package via tcolorbox&#xa;</xsl:text>
             <xsl:text>\lstdefinestyle{programcodestyle}{identifierstyle=\color{identifiers},commentstyle=\color{comments},stringstyle=\color{strings},keywordstyle=\color{keywords}, breaklines=true, breakatwhitespace=true, columns=fixed, extendedchars=true, aboveskip=0pt, belowskip=0pt}&#xa;</xsl:text>
             <!-- NB: rules "at break" need to come after "boxrule"                 -->
