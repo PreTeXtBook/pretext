@@ -90,14 +90,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
                         <p>The subsubsection is terminal, so this is the actual content of the division, rather than an introduction to a further division.  The heading of this subsection begins in cell-7.</p>
 
-                        <p>However, any division may contain a <pretext/> construct called a <q>paragraphs</q>.  It has a title and some content, and cannot be subdivided.  We test one next.</p>
+                        <p>However, any division may contain a <pretext/> construct called a <q>paragraphs</q>.  It has a title and some content, and cannot be subdivided.  We test one next.  In print we use a run-in title, but that is hard to do with our tools.</p>
 
                         <paragraphs>
                             <title>A Paragraphs Heading</title>
 
-                            <p>The <q>paragraphs</q> element is a lightweight division, which we realize with a run-in title, as illustrated here.  BANA transcription guide has examples suggesting this not be indented.  Examples are also not clear if a blank line just prior would be necessary or useful.</p>
-                            <p>This second paragraph tests that it is correct, since the first is exceptional.  Removing the indentation of the first paragraph may require a new <c>liblouis</c> style.</p>
+                            <p>The <q>paragraphs</q> element is a lightweight division, which we realize much the same way as <q>blocks</q> elsewhere.  It is a <pretext/> invention, so no good precedent or guidance.</p>
+                            <p>This second paragraph tests that it is correct, since we want to see just which paragraphs are contained in this structure.</p>
                         </paragraphs>
+
+                        <p>This paragraph is part of the subsubsection, and not part of the <tag>paragraphs</tag> element so should clearly be outside.</p>
                     </subsubsection>
                 </subsection>
             </section>

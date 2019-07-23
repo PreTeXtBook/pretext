@@ -32,9 +32,9 @@ document body
 para p
 
 
-#################################################
-# Routine elements with uncontroversial semantics
-#################################################
+###################
+# Division Headings
+###################
 
 # PTX uses <br/> for lines of structures like address
 # blocks of multi-line quote attributions
@@ -49,6 +49,11 @@ heading2 div,class,centerpage
 heading3 div,class,center
 heading4 div,class,cell5
 heading5 div,class,cell7
+
+# "paragraphs" are an anomalous PTX invention.
+# Always terminal, can be anywhere.  We fashion
+# them with "box lines", identical to blocks
+boxline article,class,paragraphs
 
 
 ####################
