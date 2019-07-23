@@ -73,18 +73,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <title>A Section Heading</title>
 
                 <introduction>
-                    <p>The introduction to the section with some extra text to run onto a new line of the BRF output that may not be indented.   The heading of this subsection begins in cell-5, and is a block when occupying more that one line.  Since this sample book has 4 levels of divisions (chapter, section, sub section, subsubsection) this should have a centered heading.</p>
+                    <p>The introduction to the section with some extra text to run onto a new line of the BRF output that may not be indented.  Since this sample book has more than 3 levels of divisions (chapter, section, sub section, subsubsection) this should have a centered heading.</p>
 
-                    <p>Sections, subsections, and subsubsections (which all follow) have a blank line prior, indentation of four spaces, then the word for the division (e.g. <q>subsection</q>) followed by a number.  Content begins on the next line, typically indented two spaces because a paragraph starts there.</p>
-
-                    <p>The word for the division could be omitted if we thought the hierarchical number was enough to let the reader know how deep they are in the divisions.  In other words, <q>5.6.2</q> must be the number of a subsection, so writing <q>Subsection</q> could be considered redundant.  Most <pretext/> conversions only use <q>Chapter</q> in these situations.</p>
+                    <p>Most <pretext/> conversions supply the word <q>Chapter</q>, but omit words like <q>Section</q> and <q>Subsection</q>.  BANA says to follow the lead of print.  A hierarchical number will help also.</p>
                 </introduction>
 
                 <subsection>
                     <title>A Subsection Heading</title>
 
                     <introduction>
-                        <p>The introduction to the subsection with some extra text to run onto a new line of the BRF output that may not be indented.  The heading of this subsection begins in cell-7, and is a block when occupying more that one line.  Since this sample book has 4 levels of divisions (chapter, section, sub section, subsubsection) this should have a cell-5 heading.</p>
+                        <p>The introduction to the subsection with some extra text to run onto a new line of the BRF output that may not be indented.  The heading of this subsection begins in cell-5, and is a block when occupying more than one line.  Since this sample book has 4 levels of divisions (chapter, section, sub section, subsubsection) this should have a cell-5 heading.</p>
                     </introduction>
 
                     <subsubsection>

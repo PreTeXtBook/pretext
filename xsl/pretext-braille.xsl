@@ -49,6 +49,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- is not obvious, so we set this here         -->
 <xsl:param name="chunk.level" select="0"/>
 
+<!-- NB: This will need to be expanded with terms like //subsection/exercises -->
+<xsl:variable name="b-has-subsubsection" select="boolean($document-root//subsubsection)"/>
+
 <!-- ############## -->
 <!-- Entry Template -->
 <!-- ############## -->
@@ -127,7 +130,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- See [BANA-2016, 1.8.1]                                     -->
 <xsl:template match="titlepage">
     <xsl:variable name="b-has-subtitle" select="parent::frontmatter/parent::*/subtitle"/>
-    <h1 class="heading">
+    <div class="fullpage">
         <xsl:apply-templates select="parent::frontmatter/parent::*" mode="title-full" />
         <br/>
         <xsl:if test="$b-has-subtitle">
@@ -149,7 +152,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <br/>
             </xsl:if>
         </xsl:if>
-    </h1>
+    </div>
 </xsl:template>
 
 <xsl:template match="titlepage/author|titlepage/editor" mode="full-info">
@@ -173,10 +176,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Divisions -->
 <!-- ######### -->
 
-<!-- We override the content of titles of divisions that are -->
-<!-- peers of chapters in books (only).  A line break after  -->
-<!-- the number will result in a centered number over a  -->
-<!-- centered title via a liblouis style on HTML "h2" elements. -->
+<!-- We override the content of titles for divisions that    -->
+<!-- are peers of chapters (only for the case of a "book").  -->
+<!-- A line break after the number will result in a centered -->
+<!-- type/number over a centered title via a liblouis style  -->
+<!-- on a class that will indicate centering.                -->
 
 <!-- Numbered, chapter-level headings, two lines to HTML -->
 <xsl:template match="chapter|appendix" mode="header-content">
@@ -199,6 +203,82 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="title-full" />
     </span>
 </xsl:template>
+
+<!-- We override the "section-header" template to place classes   -->
+<!--                                                              -->
+<!--     fullpage centerpage center cell5 cell7                   -->
+<!--                                                              -->
+<!-- onto the header so liblouis can style it properly            -->
+<!-- This is greatly simplified, "hX" elements just become "div", -->
+<!-- which is all we need for the  liblouis  sematic action file  -->
+
+
+<xsl:template match="*" mode="section-header">
+    <div>
+        <xsl:attribute name="class">
+            <xsl:apply-templates select="." mode="division-class"/>
+        </xsl:attribute>
+        <xsl:apply-templates select="." mode="header-content" />
+    </div>
+</xsl:template>
+
+<!-- Verbatim from -html conversion read about it there -->
+<xsl:template match="book|article" mode="section-header" />
+
+<!-- Default is indeterminate (seacrch while debugging) -->
+<xsl:template match="*" mode="division-class">
+    <xsl:text>none</xsl:text>
+</xsl:template>
+
+<!-- Part is more like a title page -->
+<xsl:template match="part" mode="division-class">
+    <xsl:text>fullpage</xsl:text>
+</xsl:template>
+
+<!-- Chapters headings are always centered -->
+<xsl:template match="chapter" mode="division-class">
+    <xsl:text>centerpage</xsl:text>
+</xsl:template>
+
+<!-- Chapter-level headings are always centered -->
+<xsl:template match="preface|acknowledgement|biography|foreword|dedication|solutions[parent::backmatter]|references[parent::backmatter]|index|colophon" mode="division-class">
+    <xsl:text>centerpage</xsl:text>
+</xsl:template>
+
+<!-- Section and subsection is complicated, since it depends on -->
+<!-- the depth.  The boolean variable is true with a depth of 4 -->
+<!-- or greater, starting from "chapter".                       -->
+
+<xsl:template match="section" mode="division-class">
+    <xsl:choose>
+        <xsl:when test="$b-has-subsubsection">
+            <xsl:text>center</xsl:text>
+        </xsl:when>
+        <!-- terminal -->
+        <xsl:otherwise>
+            <xsl:text>cell5</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+
+<xsl:template match="subsection" mode="division-class">
+    <xsl:choose>
+        <xsl:when test="$b-has-subsubsection">
+            <xsl:text>cell5</xsl:text>
+        </xsl:when>
+        <!-- terminal -->
+        <xsl:otherwise>
+            <xsl:text>cell7</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- terminal always, according to schema -->
+<xsl:template match="subsubsection" mode="division-class">
+    <xsl:text>cell7</xsl:text>
+</xsl:template>
+
 
 <!-- A "paragraphs" element is a lightweignt division, which we  -->
 <!-- usually realize with a run-in title.  We need to force this -->

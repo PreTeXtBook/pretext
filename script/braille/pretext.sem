@@ -42,13 +42,13 @@ softreturn br
 
 # Headings have styles, "headingX", which are given
 # in the  pretext-liblouis.cfg  configuration file
-# LUPM, 3.4.10, 2019-05-08, suggest 10 levels (use classes?)
-heading1 h1
-heading2 h2
-heading3 h3
-heading4 h4
-heading5 h5
-heading6 h6
+# LUPM, 3.4.10, 2019-05-08, suggest 10 levels
+# We associate styles with CSS values
+heading1 div,class,fullpage
+heading2 div,class,centerpage
+heading3 div,class,center
+heading4 div,class,cell5
+heading5 div,class,cell7
 
 
 ####################
