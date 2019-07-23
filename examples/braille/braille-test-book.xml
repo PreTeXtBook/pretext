@@ -134,7 +134,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
                 <p>We used <q>enclosing double quotes</q> earlier, since we knew they behaved properly.</p>
 
-                <p>Maybe <sq>enclosing single quotes</sq> are not so useful, but still necessary.  Apparently an apostrophe and a single right quote are a real problem for Braille translation (and this problem is not limited to Braille).  I think I can have <pretext/> output the Unicode dot patterns and then liblouis will create the right ASCII character for the BRF file.  Can you tell me the exact dot patterns for an opening (left) single quote and a (closing) right single quote?  This may be a place where <pretext/> can shine.</p>
+                <p>An apostrophe and a single right quote are a real problem for Braille translation (and this problem is not limited to Braille).  Maybe <sq>enclosing single quotes</sq> are not so useful, but still necessary, and that construction was very tricky since the words ended with the letter <q>s</q> and <c>liblouis</c> thought it was a (non-Braille) contraction and really wanted to use an apostrophe.  A word like <sq>quote</sq> is easier it turns out.  This is a place where <pretext/> can shine.</p>
 
                 <p>We employ a <c>heavyweight monospace font</c> for literal text, especially in technical situations.  Right now, we do not distinguish this text.  However, see the liblouis documentation for compbrl and changeTable to perhaps get <q>Computer Braille</q> for inline code.</p>
 

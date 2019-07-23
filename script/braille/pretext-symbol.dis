@@ -51,6 +51,40 @@ punctuation \x25cb 56-1246-123456
 punctuation \x25a0 456-1246-3456-145
 
 
+# Single quote characters
+# Unicode Character 'LEFT SINGLE QUOTATION MARK' (U+2018)
+# Unicode Character 'RIGHT SINGLE QUOTATION MARK' (U+2019)
+# These are the characters the PreTeXt HTML produces
+# for single quotes, so we pick them up so as to use
+# the right dot patterns.  Otherwise an apostrophe
+# (U+0027) should be an apostrophe.
+# Dot patterns from Al Maneki, 2019-07-22
+
+# We need to define two characters for the "endword"
+# code to not raise errors, the open single quote
+# is just for good measure
+
+# From latinLetterDef8Dots.uti
+uplow Ss 2347,234
+
+# From en-ueb-chardefs.uti
+punctuation \x2018 6-236
+punctuation \x2019 6-356
+
+# Now for the main event.  The en-ueb-chardefs.uti table says
+#
+# "Unicode prefers \x2019 for apostrophe instead of \x27"
+#
+# We beg to differ.  Or more properly, PreTeXt reserves \x27 for
+# apostrophes and uses Unicode for single quote marks, exclusively.
+# The  liblouis  table tries to correct eight (non-Braille)
+# contractions built with \x2019.  The worst is possesive with a
+# plural (s'), which can bite us badly.  So we override that
+# attempt at correction.
+
+endword s\x2019 234-6-356
+
+
 # Now do the normal thing
 include en-ueb-g2.ctb
 
