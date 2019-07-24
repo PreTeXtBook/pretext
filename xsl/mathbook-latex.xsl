@@ -10211,16 +10211,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- by an intervening "tcolorbox".  The template should be placed -->
 <!-- immediately after the "\end{}" of affected environments.      -->
 <!-- It will format as one footnote text per output line.          -->
+<!--                                                               -->
+<!-- We need to pop all interior footnotes iff we are free of      -->
+<!-- enclosing blocks implemented with tcolorbox.  So this         -->
+<!-- template is called at the end of a template for a block,      -->
+<!-- but after the tcolorbox closes.  So we are in the clear when  -->
+<!-- no ancestors are implmented by tcolorbox.  Otherwise, we      -->
+<!-- "wait" and pop all interior footnotes later.                  -->
+<!-- NB: these templates could be improved with an entity          -->
 <xsl:template match="&ASIDE-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&FIGURE-LIKE;|list|sidebyside|defined-term|objectives|outcomes|backmatter/colophon|assemblage|exercise" mode="pop-footnote-text">
-    <xsl:for-each select=".//fn">
-        <xsl:text>\footnotetext[</xsl:text>
-        <xsl:apply-templates select="." mode="serial-number"/>
-        <xsl:text>]</xsl:text>
-        <xsl:text>{</xsl:text>
-        <xsl:apply-templates />
-        <xsl:apply-templates select="." mode="label" />
-        <xsl:text>}%&#xa;</xsl:text>
-    </xsl:for-each>
+    <xsl:if test="count(ancestor::*[&ASIDE-FILTER; or &THEOREM-FILTER; or &AXIOM-FILTER;  or &DEFINITION-FILTER; or &REMARK-FILTER; or &COMPUTATION-FILTER; or &EXAMPLE-FILTER; or &PROJECT-FILTER; or &FIGURE-FILTER; or self::list or self::sidebyside or self::defined-term or self::objectives or self::outcomes or self::colophon/parent::backmatter or self::assemblage or self::exercise]) = 0">
+        <xsl:for-each select=".//fn">
+            <xsl:text>\footnotetext[</xsl:text>
+            <xsl:apply-templates select="." mode="serial-number"/>
+            <xsl:text>]</xsl:text>
+            <xsl:text>{</xsl:text>
+            <xsl:apply-templates />
+            <xsl:apply-templates select="." mode="label" />
+            <xsl:text>}%&#xa;</xsl:text>
+        </xsl:for-each>
+    </xsl:if>
 </xsl:template>
 
 <!-- Very nearly a no-op, but necessary for HTML -->
