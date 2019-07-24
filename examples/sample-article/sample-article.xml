@@ -2179,7 +2179,7 @@ the xsltproc executable.
                     <p>Nested <c>tcolorbox</c> (in <latex/> conversion) need special care when footnotes are interior.</p>
 
                     <sidebyside margins="20% 30%">
-                        <p>A paragraph interior to a <c>sidebyside</c> with a footnote<fn>Interior footnote.</fn> buried inside the footnote.</p>
+                        <p>A paragraph interior to a <c>sidebyside</c> with a footnote<fn>Interior footnote.</fn> buried inside the paragraph.</p>
                     </sidebyside>
 
                     <p>The final paragraph of this remark, randomly placed, to test footnotes in <latex/> conversions.</p>
