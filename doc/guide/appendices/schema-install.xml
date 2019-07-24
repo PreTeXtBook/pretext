@@ -37,11 +37,11 @@
                     <p>Follow the instructions in the <c>readme.md</c> found at the top level of the <c>jing-trang</c> distribution, observing the following notes keyed to the four steps.  These helpful notes come courtesy of the experiences of Jahrme Risner, Mitch Keller, Bruce Yoshiwara, Ken Levasseur, and Jessica Sklar on a variety of operating systems.</p>
                     <p><ol>
                         <li>
-                            <p>It is necesssary to have a developer's version of <c>java</c> on your machine.  Try <c>which java</c> to see if one is already available.  Any output here might help in the next step.  References here to the <init>JDK</init> is the Java Development Kit.</p>
+                            <p>It is necesssary to have a developer's version of <c>java</c> on your machine.  Try <c>which java</c> to see if one is already available.  Any output here might help in the next step.  References here to the <init>JDK</init> is the Java Development Kit.  There are specific directions for MacOS (<xref ref="mac-os-java"/>) and Windows (<xref ref="section-jing"/>).</p>
                         </li>
 
                         <li>
-                            <p>You will need to have the <c>JAVA_HOME</c> environment variable set correctly.  You can try <c>echo ${JAVA_HOME}</c> in a console to see if it produces anything sensible and/or consistent with Step 1.  Ken Levasseur notes that on OSX you can go<cd>
+                            <p>You will need to have the <c>JAVA_HOME</c> environment variable set correctly.  You can try <c>echo ${JAVA_HOME}</c> in a Linux console to see if it produces anything sensible and/or consistent with Step 1.  Ken Levasseur notes that on MacOS you can go<cd>
                                 <cline>echo $(/usr/libexec/java_home)</cline>
                             </cd>and the output is what you set to the <c>JAVA_HOME</c> variable.</p>
                             <p>On Windows you may need to set Environmental Variables in the Windows System Properties GUI, both here and in Step 4.</p>
