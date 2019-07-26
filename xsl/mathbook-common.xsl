@@ -4385,6 +4385,30 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <iconinfo name="wrench"
               font-awesome="wrench"
               unicode="&#x1f527;"/> <!-- WRENCH -->
+    <iconinfo name="power"
+              font-awesome="power-off"
+              unicode="&#x23FB;"/> <!-- POWER SYMBOL -->
+    <iconinfo name="media-play"
+              font-awesome="play"
+              unicode="&#x25B6;"/> <!--BLACK RIGHT-POINTING TRIANGLE-->
+    <iconinfo name="media-pause"
+              font-awesome="pause"
+              unicode="&#x23F8;"/> <!-- DOUBLE VERTICAL BAR -->
+    <iconinfo name="media-stop"
+              font-awesome="stop"
+              unicode="&#x23F9;"/> <!-- BLACK SQUARE FOR STOP-->
+    <iconinfo name="media-fast-forward"
+              font-awesome="forward"
+              unicode="&#x23E9;"/> <!-- BLACK RIGHT-POINTING DOUBLE TRIANGLE -->
+    <iconinfo name="media-rewind"
+              font-awesome="backward"
+              unicode="&#x23EA;"/> <!-- BLACK LEFT-POINTING DOUBLE TRIANGLE--> 
+    <iconinfo name="media-skip-to-end"
+              font-awesome="fast-forward"
+              unicode="&#x23ED;"/> <!-- BLACK RIGHT-POINTING DOUBLE TRIANGLE WITH VERTICAL BAR--> 
+    <iconinfo name="media-skip-to-start"
+              font-awesome="fast-backward"
+              unicode="&#x23EE;"/> <!-- BLACK LEFT-POINTING DOUBLE TRIANGLE WITH VERTICAL BAR-->
 </xsl:variable>
 
 <!-- If read from a file via "document()" then   -->
