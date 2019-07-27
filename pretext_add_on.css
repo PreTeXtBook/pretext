@@ -188,17 +188,21 @@ so that we can set our own later */
 .pretext-content .frontmatter .author-info {
     font-size: 90%;
 }
-.pretext-content .frontmatter a[href^="mailto:"] {
-    font-size: 110%;
+/*
+.pretext-content a[href^="mailto:"] {
+    font-size: 120%;
 }
 .pretext-content a[href^="mailto:"] {
     font-style: normal;
     font-family: monospace;
 }
+*/
 /* look into where .preface and .frontmatter are used */
+/*
 .pretext-content .preface a[href^="mailto:"] {
     font-size: 110%;
 }
+*/
 
 
 .pretext-content article > .heading + p {
