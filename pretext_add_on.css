@@ -188,6 +188,9 @@ so that we can set our own later */
 .pretext-content .frontmatter .author-info {
     font-size: 90%;
 }
+.pretext-content a[href^="mailto:"] {
+    white-space: pre;
+}
 /*
 .pretext-content a[href^="mailto:"] {
     font-size: 120%;
