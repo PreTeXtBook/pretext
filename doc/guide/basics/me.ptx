@@ -1,5 +1,3 @@
-
-
 <p>
   <me>
     \frac{d}{dx} \int_1^x \frac{1}{t}\, dt = \frac{1}{x}
