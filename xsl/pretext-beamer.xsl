@@ -7,20 +7,20 @@
     xmlns:date="http://exslt.org/dates-and-times"
     extension-element-prefixes="exsl date"
 >
-<xsl:import href="../pretext/xsl/mathbook-latex.xsl" />
+<xsl:import href="./mathbook-latex.xsl" />
 
 <xsl:output method="text"/>
 
-<xsl:template match="pretext">
-  <xsl:apply-templates select="article" />
-</xsl:template>
-<xsl:template match="article|book">
-  <xsl:apply-templates select="slideshow" />
+<xsl:template match="/">
+    <xsl:call-template name="banner-warning">
+        <xsl:with-param name="warning">Conversion to Beamer presentations/slideshows is experimental and needs improvements&#xa;Requests for additional specific constructions welcome&#xa;Additional PreTeXt elements are subject to change</xsl:with-param>
+      </xsl:call-template>
+  <xsl:apply-templates select="pretext"/>
 </xsl:template>
 
-<xsl:variable name="chunk-level">
-    <xsl:text>0</xsl:text>
-</xsl:variable>
+<xsl:template match="/pretext">
+  <xsl:apply-templates select="slideshow" />
+</xsl:template>
 
 <xsl:template match="slideshow">
   <xsl:call-template name="preamble" />
