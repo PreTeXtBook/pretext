@@ -16,6 +16,7 @@ be converted to PDF, in print or electronic flavors.
 * `mathbook-epub.xsl` - conversion to EPUB, needs a supporting script.
 * `mathbook-jupyter.xsl` - conversion to Jupyter notebooks.
 * `pretext-revealjs.xsl` - conversion of slideshows to HTML.
+* `pretext-beamer.xsl` - conversion of slideshows to PDF.
 * `pretext-braille.xsl` - conversion to precursor of Braille output,
 requires significant further processing.
 * `mathbook-common.xsl` - base templates, and not useful in isolation.
