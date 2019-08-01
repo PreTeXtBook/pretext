@@ -2650,9 +2650,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$div-name"/>
             <xsl:text>}{#3}&#xa;</xsl:text>
         </xsl:when>
-        <!-- optional short title, real title -->
+        <!-- optional short title, and the real title  -->
+        <!-- NB: the short title (#3) needs a group to -->
+        <!-- protect a right square bracket "]" from   -->
+        <!-- prematurely ending the optional argument  -->
         <xsl:otherwise>
-            <xsl:text>[#3]{#1}%&#xa;</xsl:text>
+            <xsl:text>[{#3}]{#1}%&#xa;</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
     <xsl:text>\label{#6}%&#xa;</xsl:text>

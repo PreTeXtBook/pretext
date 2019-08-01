@@ -7971,6 +7971,21 @@ the xsltproc executable.
                         <p>A faux hint to get this exercise to migrate into a <tag>solutions</tag>.</p>
                     </hint>
                 </exercise>
+
+            </subsection>
+
+            <subsection>
+                <title>A Title with } a Right Brace</title>
+
+                <p>And now a right brace in a division title.</p>
+
+            </subsection>
+
+            <subsection>
+                <title>A Title with <m>a]b</m> a Math Right Bracket</title>
+
+                <p>And now a right bracket within math in a division title.</p>
+                <p>We do not test a right brace within math, since it should be escaped, as is normal <latex/> practice.</p>
             </subsection>
 
             <subsection>
