@@ -1725,7 +1725,8 @@ ul.circle {
     list-style-type: circle;
 }
 ol.no-marker,
-ul.no-marker {
+ul.no-marker,
+li.no-marker {
     list-style-type: none;
 }
 

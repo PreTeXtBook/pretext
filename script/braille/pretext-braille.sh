@@ -78,3 +78,7 @@ node ${SCRIPT}/mjpage-sre.js ${SCRATCH}/html-mml.html ${SCRATCH}/html-braille.ht
 # TODO: get  basename  of $1 and use that
 echo "Apply liblouis conversion to produce BRF file"
 file2brl -f ${SCRIPT}/pretext-liblouis.cfg ${SCRATCH}/html-braille.html ${SCRATCH}/final.brf 2> ${SCRATCH}/liblouis-debug.txt
+
+# This uses a Docker instance, but seems to only use the stock "preferences.cfg"
+# that ships with liblouis and so is totally ineffectual for our purposes
+# docker run --rm -i liblouis/liblouisutdml file2brl --config-file ${SCRIPT}/pretext-liblouis.cfg < ${SCRATCH}/html-braille.html > ${SCRATCH}/final.brf

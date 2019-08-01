@@ -109,6 +109,11 @@
 
             <p>A ligature is a combination of two characters into one, like a lower-case <q>f</q> followed closely by a lower-case <q>i</q> without a dot.  These can confuse a search.  Verbatim text sometimes ends up with <q>smart</q> quotes, where left and right versions are inverted.  This frustrates copying source code into an actual program.  And so on.  If you see problems like this with un-customized <init>PDF</init> output, we would like to hear about it.</p>
         </li>
+        <li>
+            <title>My LMS breaks my HTML.</title>
+            <p>Suppose your <init>HTML</init> output seems to work fine, but once you place it inside your university's Learning Management System (<init>LMS</init>) it no longer works very well.</p>
+            <p>A likely culprit is that your <init>LMS</init> is adding material to your files, ruining them in the process.</p>
+        </li>
     </dl></p>
 
 </chapter>

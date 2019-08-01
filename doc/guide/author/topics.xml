@@ -1549,12 +1549,44 @@
             </image>
             ]]>
             </pre>
+
+            <p>Vector graphics images can be created with source code in different languages (<xref ref="topic-images-source"/>) or with applications, such as Inkscape (<xref ref="processing-images-inkscape"/>).</p>
         </subsection>
 
         <subsection xml:id="topic-images-source">
             <title>(*) Images Described by Source Code</title>
 
             <p>To be written once elements and tags solidify, see sample article for examples.</p>
+        </subsection>
+
+        <subsection>
+            <title>Image Formats</title>
+
+            <note>
+                <title>Preferred Image Formats</title>
+
+                <p>The best formats for images, in order, are:<dl width="narrow">
+                    <li>
+                        <title>SVG</title>
+                        <p>Vector graphics format ideal for <init>HTML</init> output formats.  Scalable and compact.  Converts to other formats, such as <init>PDF</init>.</p>
+                    </li>
+
+                    <li>
+                        <title>PDF</title>
+                        <p>Vector graphics format ideal for print and <init>PDF</init> output formats.  Good tools exist to convert back-and-forth between <init>SVG</init> and <init>PDF</init>.</p>
+                    </li>
+
+                    <li>
+                        <title>PNG</title>
+                        <p>Lossless and compressible format for raster images.  May be used for both <init>HTML</init> and <init>PDF</init> outputs.</p>
+                    </li>
+
+                    <li>
+                        <title>JPEG</title>
+                        <p>Compressed lossy format which works well for photographs.  May be used for both <init>HTML</init> and <init>PDF</init> outputs.  <init>PNG</init> should be preferred when there is a choice, except in the case of a photograph.  Converting between these formats is unlikely to be an improvement.</p>
+                    </li>
+                </dl></p>
+            </note>
         </subsection>
 
         <subsection xml:id="topic-images-archive">

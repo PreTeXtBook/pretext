@@ -594,7 +594,7 @@ the xsltproc executable.
                     <output>1/2*x - 1/4*sin(2*x)</output>
                 </sage>
 
-                <p>You can place Sage cells inside of a <c>paragraphs</c> if you want to give them a title, but no numbers, <etc />  Their surrounding box sometimes gets clobbered in <latex  /> output if they are the first piece of content, so we test that here also.</p>
+                <p>You can place Sage cells inside of a <c>paragraphs</c> if you want to give them a title, but no numbers, <etc />  Their surrounding box sometimes gets clobbered in <latex/> output if they are the first piece of content, so we test that here also.  A defensive <c>\leavevmode</c> solves the problem.</p>
             </paragraphs>
         </section>
 
@@ -2172,6 +2172,18 @@ the xsltproc executable.
                     <caption>Complete graph on <m>16</m> vertices, from <c>www.texample.net</c></caption>
                     <image source="images/complete-graph" width="65%"/>
                 </figure>
+
+                <remark>
+                    <title>Footnote Buried</title>
+
+                    <p>Nested <c>tcolorbox</c> (in <latex/> conversion) need special care when footnotes are interior.</p>
+
+                    <sidebyside margins="20% 30%">
+                        <p>A paragraph interior to a <c>sidebyside</c> with a footnote<fn>Interior footnote.</fn> buried inside the paragraph.</p>
+                    </sidebyside>
+
+                    <p>The final paragraph of this remark, randomly placed, to test footnotes in <latex/> conversions.</p>
+                </remark>
             </subsection>
 
             <subsection>
@@ -2726,6 +2738,21 @@ the xsltproc executable.
                         </sageplot>
                     </image>
                 </figure>
+            </subsection>
+
+            <subsection>
+                <title>Inkscape Images</title>
+
+                <p><url href="https://inkscape.org/">Inkscape</url><fn><c>inkscape.org/</c></fn> is a great tool for creating images.  It ticks all the boxes: open source, mature, cross-platform, standards-compliant.  Read much more about it in The <pretext/> Guide.  In <init>HTML</init> output the two images below are both in <init>SVG</init> format.  The first is <q>pure</q> SVG, while the second has embedded information that makes it easier to edit in Inkscape.  You could view the source for this page in the <init>HTML</init> version, deduce the filename of the second image, download it, and manipulate it profitably with Inkscape.  Both files are quite small, but the first is half the size of the second.  In <init>PDF</init> the two images come from files that are identical, so nothing is being tested.  The <init>PDF</init> version is smaller still.</p>
+
+                <figure>
+                    <caption>Inkscape Stars, Plain SVG (left), Inkscape SVG (right), from Bethany Llewellyn</caption>
+                    <sidebyside width="25%">
+                        <image source="images/inkscape-stars-plain"/>
+                        <image source="images/inkscape-stars-native"/>
+                    </sidebyside>
+                </figure>
+
             </subsection>
 
             <subsection>
@@ -4114,6 +4141,33 @@ the xsltproc executable.
                     </row>
                 </tabular>
             </table>
+
+            <p>A list whose first item is a table.  In <latex/> output a <c>\leavevmode</c> is necessary to keep this organized (item number, <em>then</em> table as content).</p>
+
+            <p><ol><li>
+                <table>
+                    <caption>Table Alignment Example</caption>
+                    <tabular top="minor" left="minor" halign="center">
+                        <col right="medium"/>
+                        <col right="major"/>
+                        <col />
+                        <!--  -->
+                        <row bottom="medium">
+                            <cell colspan="2">1111, 2222</cell>
+                            <cell right="minor">3333</cell>
+                        </row>
+                        <row bottom="major">
+                            <cell>aaaa</cell>
+                            <cell colspan="2" right="medium">bbbb,cccc</cell>
+                        </row>
+                        <row>
+                            <cell bottom="minor">AAAA</cell>
+                            <cell bottom="medium">BBBB</cell>
+                            <cell bottom="major" right="major">CCCC</cell>
+                        </row>
+                    </tabular>
+                </table>
+            </li></ol></p>
 
             <example>
                 <title>Example Environment with Leading Table</title>
@@ -5868,7 +5922,7 @@ the xsltproc executable.
 
             <p>Notice in the HTML version of the above example that when you highlight all, or a portion, of the listing for a cut-and-paste that the prompts are not included.</p>
 
-            <p>The next listing is just absurdity, to check characters from <latex /> that are otherwise employed by the code supporting consoles, and some Latin-1 characters.  We test each in a prompt, input, and output.</p>
+            <p>The next listing is just absurdity, to check various characters from <latex /> that are otherwise employed by the code supporting consoles, and some Latin-1 characters.  We test each in a prompt, input, and output.  We use <c>(*</c> and <c>*)</c> as sequences used to escape embedded <latex/> commands, so we test those also.</p>
 
             <listing>
                 <caption>Console Session: problematic <latex /> characters</caption>
@@ -5884,6 +5938,18 @@ the xsltproc executable.
                     <prompt>An end group { here  </prompt>
                     <input>An end group } here</input>
                     <output>An end group } here</output>
+
+                    <prompt>An open escape sequence (* here  </prompt>
+                    <input>An open escape sequence (* here</input>
+                    <output>An open escape sequence (* here</output>
+
+                    <prompt>An end escape sequence *) here  </prompt>
+                    <input>An end escape sequence *) here</input>
+                    <output>An end escape sequence *) here</output>
+
+                    <prompt>Some quotation marks ` ' " here  </prompt>
+                    <input>Some quotation marks ` ' " here</input>
+                    <output>Some quotation marks ` ' " here</output>
 
                     <prompt>The rest &amp; % $ # _ ~ ^ of LaTeX  </prompt>
                     <input>The rest &amp; % $ # _ ~ ^ of LaTeX</input>
@@ -6754,6 +6820,42 @@ the xsltproc executable.
                         </list>
                     </sidebyside>
                 </figure>
+
+                <p>These same two lists can individually be the panels of a <tag>sidebyside</tag>, where vertical alignment on the <c>top</c> aligns the titles.</p>
+
+                <sidebyside widths="30% 60%" valign="top">
+                    <list>
+                        <caption>Sea Life</caption>
+                        <introduction>
+                            <p>Dr. Seuss again.</p>
+                        </introduction>
+                        <ul>
+                            <li>One fish</li>
+                            <li>Two fish</li>
+                            <li>Red fish</li>
+                            <li>Blue fish</li>
+                        </ul>
+                    </list>
+                    <list xml:id="color-list-as-panel-in-sbs">
+                        <caption>Color Shades</caption>
+                        <idx><h>colors</h><h>shades</h></idx>
+                        <ol>
+                            <li><p>Blue<ol>
+                                <li>Light</li>
+                                <li>Navy</li>
+                                <li>Royal</li>
+                            </ol></p></li>
+                            <li><p>Red<ol>
+                                <li>Maroon</li>
+                                <li>Pink</li>
+                                <li>Shocking</li>
+                            </ol></p></li>
+                        </ol>
+                        <conclusion>
+                            <p>This ends our example.</p>
+                        </conclusion>
+                    </list>
+                </sidebyside>
 
                 <p>We also need to test a <c>sidebyside</c> in a list.  The widths are now relative to the space given over to an indented item.  Here we nest and nest and nest and nest to get a big, obvious indentation, and then include an image at 100% width and no margin.  In your mind's eye, or with a ruler, check that the image spans all the way over to the right margin.<ol>
                     <li><p>This is<ol>

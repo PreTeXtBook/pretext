@@ -755,6 +755,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- hit with templates.  This is the header.    -->
 <!-- Only "chapter" ever gets shown generically  -->
 <!-- Subdivisions have titles, or default titles -->
+<!-- NB: this template is overridden for Braille -->
 <xsl:template match="*" mode="section-header">
     <xsl:param name="heading-level"/>
 
@@ -797,6 +798,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- provide a frontmatter/titlepage to provide   -->
 <!-- more specific information.  In either event, -->
 <!-- a typical section header is out of place.    -->
+<!-- NB: this is copied verbatim for Braille      -->
 <xsl:template match="book|article" mode="section-header" />
 
 <!-- ######## -->
@@ -3138,6 +3140,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="paragraphs" mode="hidden-knowl-placement" />
 
 <!-- When born use this heading -->
+<!-- NB: this is modified in the conversion to Braille -->
 <xsl:template match="paragraphs" mode="heading-birth">
     <xsl:apply-templates select="." mode="heading-title-paragraphs" />
 </xsl:template>

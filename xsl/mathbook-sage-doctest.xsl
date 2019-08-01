@@ -52,7 +52,7 @@
 <!-- routine in   xsl/mathbook-common.html           -->
 <!-- The default templates there do everything       -->
 <!-- we need once we have "file-wrap" modal template -->
-<xsl:template match="mathbook">
+<xsl:template match="mathbook|pretext">
     <xsl:apply-templates mode="chunking" />
 </xsl:template>
 

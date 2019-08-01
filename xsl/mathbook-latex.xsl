@@ -141,6 +141,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="b-has-icon"         select="boolean($document-root//icon)" />
 <xsl:variable name="b-has-webwork-reps" select="boolean($document-root//webwork-reps)" />
 <xsl:variable name="b-has-program"      select="boolean($document-root//program)" />
+<xsl:variable name="b-has-console"      select="boolean($document-root//console)" />
 <xsl:variable name="b-has-sage"         select="boolean($document-root//sage)" />
 <xsl:variable name="b-has-sfrac"        select="boolean($document-root//m[contains(text(),'sfrac')] or $document-root//md[contains(text(),'sfrac')] or $document-root//me[contains(text(),'sfrac')] or $document-root//mrow[contains(text(),'sfrac')])" />
 
@@ -703,7 +704,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% end: font setup and configuration for use with pdflatex&#xa;</xsl:text>
     <xsl:text>%% end: pdflatex-specific configuration&#xa;</xsl:text>
     <xsl:text>}&#xa;</xsl:text>
-    <xsl:if test="$b-has-program or $b-has-sage or $document-root//c or $document-root//cd or $document-root//pre or $document-root//console or $document-root//tag or $document-root//tage or $document-root//attr">
+    <xsl:if test="$b-has-program or $b-has-sage or $b-has-console or $document-root//c or $document-root//cd or $document-root//pre or $document-root//tag or $document-root//tage or $document-root//attr">
         <xsl:text>%% Monospace font: Inconsolata (zi4)&#xa;</xsl:text>
         <xsl:text>%% Sponsored by TUG: http://levien.com/type/myfonts/inconsolata.html&#xa;</xsl:text>
         <xsl:text>%% Loaded for documents with intentional objects requiring monospace&#xa;</xsl:text>
@@ -863,12 +864,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         ($document-root//subsubsection)[1]|
         ($root/book/backmatter/appendix|$root/article/backmatter/appendix)[1]|
         ($document-root//index)[1]|
-        ($document-root//chapter/exercises|$root/article/exercises)[1]|
-        ($document-root//section/exercises)[1]|
+        ($document-root//chapter/exercises|$root/book/backmatter/appendix/exercises|$root/article/exercises)[1]|
+        ($document-root//section/exercises|$root/article/backmatter/appendix/exercises)[1]|
         ($document-root//subsection/exercises)[1]|
         ($document-root//subsubsection/exercises)[1]|
         ($root/book/backmatter/solutions)[1]|
-        ($document-root//chapter/solutions|$root/article/backmatter/solutions)[1]|
+        ($document-root//chapter/solutions|$root/article/solutions|$root/article/backmatter/solutions)[1]|
         ($document-root//section/solutions)[1]|
         ($document-root//subsection/solutions)[1]|
         ($document-root//subsubsection/solutions)[1]|
@@ -886,7 +887,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         ($document-root//subsection/glossary)[1]|
         ($document-root//subsubsection/glossary)[1]|
         ($root/book/backmatter/references)[1]|
-        ($document-root//chapter/references|$root/article/backmatter/references|$root/book/backmatter/appendix/references)[1]|
+        ($document-root//chapter/references|$root/article/references|$root/article/backmatter/references|$root/book/backmatter/appendix/references)[1]|
         ($document-root//section/references|$root/article/backmatter/appendix/references)[1]|
         ($document-root//subsection/references)[1]|
         ($document-root//subsubsection/references)[1]"/>
@@ -1200,6 +1201,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:for-each select="$aside-reps">
         <xsl:apply-templates select="." mode="environment"/>
     </xsl:for-each>
+    <!-- FIGURE-LIKE -->
+    <!-- 2019-07-12 just "list" now -->
+    <xsl:variable name="figure-reps" select="
+        ($document-root//list)[1]"/>
+    <xsl:if test="$figure-reps">
+        <xsl:text>%%&#xa;</xsl:text>
+        <xsl:text>%% tcolorbox, with styles, for FIGURE-LIKE&#xa;</xsl:text>
+        <xsl:text>%%&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:for-each select="$figure-reps">
+        <xsl:apply-templates select="." mode="environment"/>
+    </xsl:for-each>
     <!-- INTRODUCTION, CONCLUSION (divisional) -->
     <xsl:variable name="introduction-reps" select="
         ($root/article/introduction|$document-root//chapter/introduction|$document-root//section/introduction|$document-root//subsection/introduction|$document-root//appendix/introduction|$document-root//exercises/introduction|$document-root//solutions/introduction|$document-root//worksheet/introduction|$document-root//reading-questions/introduction|$document-root//glossary/introduction|$document-root//references/introduction)[1]|
@@ -1390,6 +1403,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- the sharp corners are meant to distinguis this -->
     <!-- from an assemblage, which as rounded corners   -->
     <xsl:if test="$document-root//list">
+        <!-- 2019-07-12 now only used in sidebyside -->
         <xsl:text>%% named list environment and style&#xa;</xsl:text>
         <xsl:text>\newtcolorbox{namedlistcontent}&#xa;</xsl:text>
         <xsl:text>  {breakable, parbox=false, skin=enhanced, sharp corners, colback=white, colframe=black,&#xa;</xsl:text>
@@ -1629,11 +1643,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- Caption formatting/style possibilities:          -->
         <!-- http://tex.stackexchange.com/questions/117531    -->
         <xsl:if test="$document-root//listing">
-            <xsl:text>%% Create "listing" environment to hold program listings&#xa;</xsl:text>
-            <xsl:text>%% The "lstlisting" environment defaults to allowing page-breaking,&#xa;</xsl:text>
-            <xsl:text>%% so we do not use a floating environment, which would break this&#xa;</xsl:text>
-            <!-- TODO: optionally force no-page-break with [float] on lstlisting? -->
-            <xsl:text>\newenvironment{listing}{\par\bigskip\noindent}{}&#xa;</xsl:text>
+            <xsl:text>%% Create "listing" environment to hold program listings and consoles&#xa;</xsl:text>
+            <!-- TODO: this could become purely semantic (no top space) once both "listing"  -->
+            <!-- and "console" are tcolorbox and can have their spacing styled               -->
+            <xsl:text>\NewDocumentEnvironment{listing}{}{\par\bigskip\noindent}{}&#xa;</xsl:text>
             <xsl:text>%% New caption type for numbering, style, etc.&#xa;</xsl:text>
             <xsl:text>\DeclareCaptionType[within=</xsl:text>
             <xsl:choose>
@@ -1651,6 +1664,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="string-id" select="'listing'" />
             </xsl:call-template>
             <xsl:text>]&#xa;</xsl:text>
+            <xsl:text>%% Following could be styled&#xa;</xsl:text>
             <xsl:text>\captionsetup[listingcap]{labelfont=bf,aboveskip=1.0ex,belowskip=\baselineskip}&#xa;</xsl:text>
             <!-- associate counter                  -->
             <!--   if independent, then with figure -->
@@ -1668,9 +1682,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\makeatother&#xa;</xsl:text>
         </xsl:if>
         <xsl:if test="$document-root//list">
-            <xsl:text>%% Create "named list" environment to hold lists with captions&#xa;</xsl:text>
-            <xsl:text>%% We do not use a floating environment, so list can page-break&#xa;</xsl:text>
-            <xsl:text>\newenvironment{namedlist}{\par\bigskip\noindent}{}&#xa;</xsl:text>
             <xsl:text>%% New caption type for numbering, style, etc.&#xa;</xsl:text>
             <xsl:text>\DeclareCaptionType[within=</xsl:text>
             <xsl:choose>
@@ -1831,9 +1842,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Bitstream Vera Font names within: https://github.com/timfel/texmf/blob/master/fonts/map/vtex/bera.ali -->
     <!-- Coloring listings: http://tex.stackexchange.com/questions/18376/beautiful-listing-for-csharp -->
     <!-- Song and Dance for font changes: http://jevopi.blogspot.com/2010/03/nicely-formatted-listings-in-latex-with.html -->
-     <xsl:if test="$b-has-program or $b-has-sage">
-        <xsl:text>%% Program listing support: for listings, programs, and Sage code&#xa;</xsl:text>
-        <xsl:text>\usepackage{listings}&#xa;</xsl:text>
+     <xsl:if test="$b-has-program or $b-has-console or $b-has-sage">
+        <xsl:text>%% Program listing support: for listings, programs, consoles, and Sage code&#xa;</xsl:text>
+        <!-- NB: the "listingsutf8" package is not a panacea, as it only       -->
+        <!-- cooperates with UTF-8 characters when code snippets are read      -->
+        <!-- in from external files.  We do condition on the LaTeX engines     -->
+        <!-- since (a) it is easy and (b) the tcolorbox documentation warns    -->
+        <!-- about not being careful.  NB: LuaTeX is not tested nor supported. -->
+        <xsl:text>\ifthenelse{\boolean{xetex} \or \boolean{luatex}}%&#xa;</xsl:text>
+        <xsl:text>  {\tcbuselibrary{listings}}%&#xa;</xsl:text>
+        <xsl:text>  {\tcbuselibrary{listingsutf8}}%&#xa;</xsl:text>
         <xsl:text>%% We define the listings font style to be the default "ttfamily"&#xa;</xsl:text>
         <xsl:text>%% To fix hyphens/dashes rendered in PDF as fancy minus signs by listing&#xa;</xsl:text>
         <xsl:text>%% http://tex.stackexchange.com/questions/33185/listings-package-changes-hyphens-to-minus-signs&#xa;</xsl:text>
@@ -1841,6 +1859,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\lst@CCPutMacro\lst@ProcessOther {"2D}{\lst@ttfamily{-{}}{-{}}}&#xa;</xsl:text>
         <xsl:text>\@empty\z@\@empty&#xa;</xsl:text>
         <xsl:text>\makeatother&#xa;</xsl:text>
+        <xsl:text>%% We define a null language, free of any formatting or style&#xa;</xsl:text>
+        <xsl:text>%% for use when a language is not supported, or pseudo-code, or consoles&#xa;</xsl:text>
+        <xsl:text>%% Not necessary for Sage code, so in limited cases included unnecessarily&#xa;</xsl:text>
+        <xsl:text>\lstdefinelanguage{none}{identifierstyle=,commentstyle=,stringstyle=,keywordstyle=}&#xa;</xsl:text>
         <xsl:text>\ifthenelse{\boolean{xetex}}{}{%&#xa;</xsl:text>
         <xsl:text>%% begin: pdflatex-specific listings configuration&#xa;</xsl:text>
         <xsl:text>%% translate U+0080 - U+00F0 to their textmode LaTeX equivalents&#xa;</xsl:text>
@@ -1951,8 +1973,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>}&#xa;</xsl:text>
         <xsl:text>%% End of generic listing adjustments&#xa;</xsl:text>
         <xsl:if test="$b-has-program">
-            <xsl:text>%% Program listings via the listings package&#xa;</xsl:text>
-            <xsl:text>%% Line breaking, language per instance, frames, boxes&#xa;</xsl:text>
+            <xsl:text>%% Program listings via new tcblisting environment&#xa;</xsl:text>
             <xsl:text>%% First a universal color scheme for parts of any language&#xa;</xsl:text>
             <xsl:if test="$latex.print='no'" >
                 <xsl:text>%% Colors match a subset of Google prettify "Default" style&#xa;</xsl:text>
@@ -1965,53 +1986,57 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:if>
             <xsl:if test="$latex.print='yes'" >
                 <xsl:text>%% All-black colors&#xa;</xsl:text>
-                <xsl:text>%% Set latex.print='no' to get colors&#xa;</xsl:text>
+                <xsl:text>%% Set latex.print='no' to get actual colors&#xa;</xsl:text>
                 <xsl:text>\definecolor{identifiers}{rgb}{0,0,0}&#xa;</xsl:text>
                 <xsl:text>\definecolor{comments}{rgb}{0,0,0}&#xa;</xsl:text>
                 <xsl:text>\definecolor{strings}{rgb}{0,0,0}&#xa;</xsl:text>
                 <xsl:text>\definecolor{keywords}{rgb}{0,0,0}&#xa;</xsl:text>
             </xsl:if>
-            <xsl:text>%% We define a null language, free of any formatting or style&#xa;</xsl:text>
-            <xsl:text>%% for use when a language is not supported, or pseudo-code&#xa;</xsl:text>
-            <xsl:text>\lstdefinelanguage{none}{identifierstyle=,commentstyle=,stringstyle=,keywordstyle=}&#xa;</xsl:text>
-            <xsl:text>%% A style, both text behavior and decorations all at once&#xa;</xsl:text>
-            <xsl:text>\lstdefinestyle{programstyle}{breaklines=true,breakatwhitespace=true,columns=fixed,frame=leftline,framesep=3ex, xleftmargin=3ex,&#xa;</xsl:text>
-            <xsl:text>basicstyle=\small\ttfamily,identifierstyle=\color{identifiers},commentstyle=\color{comments},stringstyle=\color{strings},keywordstyle=\color{keywords}}&#xa;</xsl:text>
-            <xsl:text>%% The environments manufactured by the listings package&#xa;</xsl:text>
-            <xsl:text>%% Two environments, one full-width, the other boxed for side-by-sides&#xa;</xsl:text>
-            <xsl:text>%% "program" expects a language argument only&#xa;</xsl:text>
-            <xsl:text>%% "programbox" expects a language and a linewidth&#xa;</xsl:text>
-            <xsl:text>\lstnewenvironment{program}[1][]&#xa;</xsl:text>
-            <xsl:text>  {\lstset{style=programstyle,#1}}&#xa;</xsl:text>
-            <xsl:text>  {}&#xa;</xsl:text>
-            <xsl:text>\lstnewenvironment{programbox}[1][]&#xa;</xsl:text>
-            <xsl:text>  {\lstset{style=programstyle,#1}}&#xa;</xsl:text>
-            <xsl:text>  {}&#xa;</xsl:text>
+            <xsl:text>%% Options passed to the listings package via tcolorbox&#xa;</xsl:text>
+            <xsl:text>\lstdefinestyle{programcodestyle}{identifierstyle=\color{identifiers},commentstyle=\color{comments},stringstyle=\color{strings},keywordstyle=\color{keywords}, breaklines=true, breakatwhitespace=true, columns=fixed, extendedchars=true, aboveskip=0pt, belowskip=0pt}&#xa;</xsl:text>
+            <!-- NB: rules "at break" need to come after "boxrule"                 -->
+            <xsl:text>\tcbset{ programboxstyle/.style={left=3ex, right=0pt, top=0ex, bottom=0ex, middle=0pt, toptitle=0pt, bottomtitle=0pt, boxsep=0pt,&#xa;</xsl:text>
+            <xsl:text>listing only, fontupper=\small\ttfamily,&#xa;</xsl:text>
+            <xsl:text>colback=white, sharp corners, boxrule=-0.3pt, leftrule=0.5pt, toprule at break=-0.3pt, bottomrule at break=-0.3pt,&#xa;</xsl:text>
+            <xsl:text>breakable, parbox=false,&#xa;</xsl:text>
+            <xsl:text>} }&#xa;</xsl:text>
+            <!--  -->
+            <xsl:text>\newtcblisting{program}[1]{programboxstyle, listing options={language=#1, style=programcodestyle}}&#xa;</xsl:text>
         </xsl:if>
+        <xsl:if test="$document-root//console">
+            <xsl:text>%% Console session with prompt, input, output&#xa;</xsl:text>
+            <xsl:text>%% listings allows for escape sequences to enable LateX,&#xa;</xsl:text>
+            <xsl:text>%% so we bold the input commands via teh following macro&#xa;</xsl:text>
+            <xsl:text>\newcommand{\consoleinput}[1]{\textbf{#1}}&#xa;</xsl:text>
+            <!-- https://tex.stackexchange.com/questions/299401/bold-just-one-line-inside-of-lstlisting/299406 -->
+            <!-- Syntax highlighting is not so great for "language=bash" -->
+            <!-- Line-breaking off to match old behavior, prebreak option fails inside LaTeX for input -->
+            <xsl:text>\lstdefinestyle{consolecodestyle}{language=none, escapeinside={(*}{*)}, identifierstyle=, commentstyle=, stringstyle=, keywordstyle=, breaklines=false, breakatwhitespace=false, columns=fixed, extendedchars=true, aboveskip=0pt, belowskip=0pt}&#xa;</xsl:text>
+            <!--  -->
+            <xsl:text>\tcbset{ consoleboxstyle/.style={left=0pt, right=0pt, top=0ex, bottom=0ex, middle=0pt, toptitle=0pt, bottomtitle=0pt, boxsep=0pt,&#xa;</xsl:text>
+            <xsl:text>listing only, fontupper=\small\ttfamily,&#xa;</xsl:text>
+            <xsl:text>colback=white, boxrule=-0.3pt, toprule at break=-0.3pt, bottomrule at break=-0.3pt,&#xa;</xsl:text>
+            <xsl:text>breakable, parbox=false,&#xa;</xsl:text>
+            <xsl:text>} }&#xa;</xsl:text>
+            <!--  -->
+            <xsl:text>\newtcblisting{console}{consoleboxstyle, listing options={style=consolecodestyle}}&#xa;</xsl:text>
+       </xsl:if>
         <xsl:if test="$b-has-sage">
-            <xsl:text>%% Sage's blue is 50%, we go way lighter (blue!05 would work)&#xa;</xsl:text>
+            <xsl:text>%% The listings package as tcolorbox for Sage code&#xa;</xsl:text>
+            <xsl:text>%% We do as much styling as possible with tcolorbox, not listings&#xa;</xsl:text>
+            <xsl:text>%% Sage's blue is 50%, we go way lighter (blue!05 would also work)&#xa;</xsl:text>
+            <xsl:text>%% Note that we defuse listings' default "aboveskip" and "belowskip"&#xa;</xsl:text>
+            <!-- TODO: integrate into the LaTeX styling schemes -->
             <xsl:text>\definecolor{sageblue}{rgb}{0.95,0.95,1}&#xa;</xsl:text>
-            <xsl:text>%% Sage input, listings package: Python syntax, boxed, colored, line breaking&#xa;</xsl:text>
-            <xsl:text>%% To be flush with surrounding text's margins, set&#xa;</xsl:text>
-            <xsl:text>%% xmargins to be sum of framerule, framesep, and epsilon (~0.25pt)&#xa;</xsl:text>
-            <xsl:text>%% space between input/output comes from input style "belowskip",&#xa;</xsl:text>
-            <xsl:text>%% by giving output an aboveskip of zero&#xa;</xsl:text>
-            <xsl:text>\lstdefinestyle{sageinputstyle}{language=Python,breaklines=true,breakatwhitespace=true,%&#xa;</xsl:text>
-            <xsl:text>basicstyle=\small\ttfamily,columns=fixed,frame=single,backgroundcolor=\color{sageblue},%&#xa;</xsl:text>
-            <xsl:text>framerule=0.5pt,framesep=4pt,xleftmargin=4.75pt,xrightmargin=4.75pt}&#xa;</xsl:text>
-            <xsl:text>%% Sage output, similar, but not boxed, not colored&#xa;</xsl:text>
-            <xsl:text>\lstdefinestyle{sageoutputstyle}{language=Python,breaklines=true,%&#xa;</xsl:text>
-            <xsl:text>breakatwhitespace=true,basicstyle=\small\ttfamily,columns=fixed,aboveskip=0pt}&#xa;</xsl:text>
-            <xsl:text>%% The environments manufactured by the listings package&#xa;</xsl:text>
-            <xsl:text>\lstnewenvironment{sageinput}&#xa;</xsl:text>
-            <xsl:text>  {\lstset{style=sageinputstyle}}&#xa;</xsl:text>
-            <xsl:text>  {}&#xa;</xsl:text>
-            <xsl:text>\lstnewenvironment{sageoutput}&#xa;</xsl:text>
-            <xsl:text>  {\lstset{style=sageoutputstyle}}&#xa;</xsl:text>
-            <xsl:text>  {}&#xa;</xsl:text>
+            <xsl:text>\tcbset{ sagestyle/.style={left=0pt, right=0pt, top=0ex, bottom=0ex, middle=0pt, toptitle=0pt, bottomtitle=0pt,&#xa;</xsl:text>
+            <xsl:text>boxsep=4pt, listing only, fontupper=\small\ttfamily,&#xa;</xsl:text>
+            <xsl:text>breakable, parbox=false, &#xa;</xsl:text>
+            <xsl:text>listing options={language=Python,breaklines=true,breakatwhitespace=true, extendedchars=true, aboveskip=0pt, belowskip=0pt}} }&#xa;</xsl:text>
+            <xsl:text>\newtcblisting{sageinput}{sagestyle, colback=sageblue, sharp corners, boxrule=0.5pt, toprule at break=-0.3pt, bottomrule at break=-0.3pt, }&#xa;</xsl:text>
+            <xsl:text>\newtcblisting{sageoutput}{sagestyle, colback=white, frame empty, before skip=0pt, after skip=0pt, }&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
-    <xsl:if test="$document-root//console or $document-root//pre or $document-root//cd or $document-root//fragment">
+    <xsl:if test="$document-root//pre or $document-root//cd or $document-root//fragment">
         <xsl:text>%% Fancy Verbatim for consoles, preformatted, code display, literate programming&#xa;</xsl:text>
         <xsl:text>\usepackage{fancyvrb}&#xa;</xsl:text>
         <xsl:if test="//pre">
@@ -2027,22 +2052,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\newenvironment{codedisplay}&#xa;</xsl:text>
             <xsl:text>{\VerbatimEnvironment\begin{center}\begin{lrbox}{\codedisplaybox}\begin{BVerbatim}}&#xa;</xsl:text>
             <xsl:text>{\end{BVerbatim}\end{lrbox}\usebox{\codedisplaybox}\end{center}}&#xa;</xsl:text>
-        </xsl:if>
-        <xsl:if test="$document-root//console">
-            <xsl:text>%% Console session with prompt, input, output&#xa;</xsl:text>
-            <xsl:text>%% Make a console environment from fancyvrb BVerbatim environment&#xa;</xsl:text>
-            <xsl:text>%% Specify usual escape, begin group, end group characters&#xa;</xsl:text>
-            <xsl:text>%% (boxed variant accepts optional boxwidth key, not used)&#xa;</xsl:text>
-            <xsl:text>%% (BVerbatim environment allows for line numbers, make feature request?)&#xa;</xsl:text>
-            <!-- "box verbatim" since could be used in a sidebyside panel, additional options are        -->
-            <!-- trivial: numbers=left, stepnumber=5 (can mimic in HTML with counting recursive routine) -->
-            <xsl:text>\DefineVerbatimEnvironment{console}{BVerbatim}{fontsize=\small,commandchars=\\\{\}}&#xa;</xsl:text>
-            <xsl:text>%% A semantic macro for the user input portion&#xa;</xsl:text>
-            <xsl:text>%% We define this in the traditional way,&#xa;</xsl:text>
-            <xsl:text>%% but may realize it with different LaTeX escape characters&#xa;</xsl:text>
-            <xsl:text>\newcommand{\consoleprompt}[1]{#1}&#xa;</xsl:text>
-            <xsl:text>\newcommand{\consoleinput}[1]{\textbf{#1}}&#xa;</xsl:text>
-            <xsl:text>\newcommand{\consoleoutput}[1]{#1}&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
     <xsl:if test="//tikz">
@@ -2258,7 +2267,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Enviroments for side-by-side and components&#xa;</xsl:text>
         <xsl:text>%% Necessary to use \NewTColorBox for boxes of the panels&#xa;</xsl:text>
         <xsl:text>%% "newfloat" environment to squash page-breaks within a single sidebyside&#xa;</xsl:text>
-        <xsl:text>%% \leavevmode necessary when a side-by-side comes first, right after a heading&#xa;</xsl:text>
         <!-- Main side-by-side environment, given by xparse            -->
         <!-- raster equal height: boxes of same *row* have same height -->
         <!-- raster force size: false lets us control width            -->
@@ -2862,6 +2870,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
     </xsl:variable>
     <!-- levels of counters, empty is document-wide -->
+    <!-- TODO: this seems to not be used at all? -->
     <xsl:variable name="counter-division">
         <xsl:choose>
             <xsl:when test="&PROJECT-FILTER;">
@@ -2951,6 +2960,72 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- end: options -->
 </xsl:template>
 
+<!-- FIGURE-LIKE: figure, table, listing, list -->
+<!-- 2019-07-12:  only "list" for openers      -->
+<xsl:template match="list" mode="environment">
+    <!-- An environment named "list" may conflict with LaTeX      -->
+    <!-- internals, though we could test if tcolorbox does better -->
+    <xsl:variable name="environment-name">
+        <xsl:choose>
+            <xsl:when test="self::list">
+                <xsl:text>namedlist</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="local-name(.)"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- counters may run as figure or theorem -->
+    <xsl:variable name="counter">
+        <xsl:choose>
+            <xsl:when test="self::list">
+                <xsl:text>namedlistcap</xsl:text>
+            </xsl:when>
+            <xsl:otherwise/>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:text>%% </xsl:text>
+    <!-- per-environment style -->
+    <xsl:value-of select="$environment-name"/>
+    <xsl:text>: 2-D display structure&#xa;</xsl:text>
+    <xsl:text>\tcbset{ </xsl:text>
+    <xsl:value-of select="$environment-name"/>
+    <xsl:text>style/.style={</xsl:text>
+    <xsl:apply-templates select="." mode="tcb-style"/>
+    <xsl:text>} }&#xa;</xsl:text>
+    <!-- create and configure the environment/tcolorbox -->
+    <xsl:text>\newtcolorbox</xsl:text>
+    <!-- numbering setup: * indicates existing, -->
+    <!-- already configured, LaTeX counter      -->
+    <xsl:text>[</xsl:text>
+    <xsl:text>use counter*=</xsl:text>
+    <xsl:value-of select="$counter"/>
+    <xsl:text>]</xsl:text>
+    <!-- environment's tcolorbox name, pair -->
+    <!-- with actual constructions in body  -->
+    <xsl:text>{</xsl:text>
+    <xsl:value-of select="$environment-name"/>
+    <xsl:text>}</xsl:text>
+    <!-- number of arguments -->
+    <xsl:text>[2]</xsl:text>
+    <!-- begin: options -->
+    <xsl:text>{</xsl:text>
+    <!-- begin: title construction -->
+    <xsl:text>title={{</xsl:text>
+    <xsl:apply-templates select="." mode="type-name"/>
+    <xsl:text>~\the</xsl:text>
+    <xsl:value-of select="$counter"/>
+    <xsl:text>\space#1</xsl:text>
+    <xsl:text>}}, </xsl:text>
+    <!-- end: title construction -->
+    <!-- label in argument 2 or argument 3 -->
+    <xsl:text>phantomlabel={#2}, </xsl:text>
+    <!-- always breakable -->
+    <xsl:text>breakable, parbox=false, </xsl:text>
+    <xsl:value-of select="$environment-name"/>
+    <xsl:text>style, }&#xa;</xsl:text>
+    <!-- end: options -->
+</xsl:template>
 
 <!-- ########################## -->
 <!-- LaTeX Styling via Preamble -->
@@ -3081,6 +3156,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="&EXAMPLE-LIKE;" mode="tcb-style">
     <xsl:text>bwminimalstyle, runintitlestyle, blockspacingstyle, after title={\space}, after upper={\space\space\hspace*{\stretch{1}}\(\square\)}, </xsl:text>
+</xsl:template>
+
+<!-- FIGURE-LIKE: "list" -->
+<!-- 2019-07-12: ad-hoc for now, perhaps becoming a named-style someday -->
+<xsl:template match="list" mode="tcb-style">
+    <xsl:text>blockspacingstyle, fonttitle=\normalfont\bfseries, colback=white, colbacktitle=white, coltitle=black, colframe=black, titlerule=-0.3pt, toprule at break=-0.3pt, bottomrule at break=-0.3pt, sharp corners</xsl:text>
 </xsl:template>
 
 <!-- This is mostly ad-hoc.  An assemblage is meant to be prominent,   -->
@@ -5908,10 +5989,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- prelude?, introduction?, task+, conclusion?, postlude? -->
         <xsl:when test="task">
             <xsl:apply-templates select="introduction"/>
-            <!-- careful right after project heading -->
-            <xsl:if test="not(introduction)">
-                <xsl:call-template name="leave-vertical-mode" />
-            </xsl:if>
             <xsl:apply-templates select="task"/>
             <xsl:apply-templates select="conclusion"/>
         </xsl:when>
@@ -5981,11 +6058,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="task">
                 <xsl:if test="$b-has-statement">
                     <xsl:apply-templates select="introduction"/>
-                </xsl:if>
-                <!-- careful right after project heading if  -->
-                <!-- no content and a list will be following -->
-                <xsl:if test="not(introduction) or not($b-has-statement)">
-                    <xsl:call-template name="leave-vertical-mode" />
                 </xsl:if>
                 <xsl:apply-templates select="task" mode="solutions">
                     <xsl:with-param name="purpose" select="$purpose" />
@@ -6661,22 +6733,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Lists themselves -->
 <!-- If columns are specified, we        -->
 <!-- wrap in the multicolumn environment -->
-<!-- TODO: fewer \leavevmode might be possible.      -->
-<!-- Test for first node of "p", then test for the   -->
-<!-- "p" being first node of some sectioning element -->
-<!-- The \leavevmode seems to introduce too much     -->
-<!-- vertical space when an "objectives" has no      -->
-<!-- introduction, and its absence does not seem      -->
-<!-- to cause any problems.                           -->
 <xsl:template match="ol">
-    <xsl:choose>
-        <xsl:when test="not(ancestor::ol or ancestor::ul or ancestor::dl or parent::objectives or parent::outcomes)">
-            <xsl:call-template name="leave-vertical-mode" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>%&#xa;</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:text>%&#xa;</xsl:text>
     <xsl:if test="@cols">
         <xsl:text>\begin{multicols}{</xsl:text>
         <xsl:value-of select="@cols" />
@@ -6701,14 +6759,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- from LaTeX's so we write out a label  -->
 <!-- choice for each such list             -->
 <xsl:template match="ul">
-    <xsl:choose>
-        <xsl:when test="not(ancestor::ol or ancestor::ul or ancestor::dl or parent::objectives or parent::outcomes)">
-            <xsl:call-template name="leave-vertical-mode" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>%&#xa;</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:text>%&#xa;</xsl:text>
     <xsl:if test="@cols">
         <xsl:text>\begin{multicols}{</xsl:text>
         <xsl:value-of select="@cols" />
@@ -6725,14 +6776,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="dl">
-    <xsl:choose>
-        <xsl:when test="not(ancestor::ol or ancestor::ul or ancestor::dl or parent::objectives or parent::outcomes)">
-            <xsl:call-template name="leave-vertical-mode" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>%&#xa;</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:text>%&#xa;</xsl:text>
     <xsl:if test="@cols">
         <xsl:text>\begin{multicols}{</xsl:text>
         <xsl:value-of select="@cols" />
@@ -8092,18 +8136,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="listings-language" />
     </xsl:variable>
     <xsl:variable name="b-has-language" select="not($language = '')" />
-    <xsl:variable name="b-has-width" select="not($width = '')" />
-    <xsl:choose>
-        <xsl:when test="$b-has-width">
-            <xsl:text>\begin{programbox}</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>\begin{program}</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-    <xsl:text>[</xsl:text>
-    <!-- inserted into "listing options", after style option -->
-    <xsl:text>language=</xsl:text>
+    <xsl:text>\begin{program}</xsl:text>
+    <xsl:text>{</xsl:text>
     <xsl:choose>
         <xsl:when test="$b-has-language">
             <xsl:value-of select="$language" />
@@ -8113,32 +8147,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>none</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
-    <xsl:if test="$b-has-width">
-        <xsl:text>,linewidth=</xsl:text>
-        <xsl:value-of select="$width" />
-    </xsl:if>
-    <xsl:text>]</xsl:text>
+    <xsl:text>}</xsl:text>
     <xsl:text>&#xa;</xsl:text>
     <xsl:call-template name="sanitize-text">
         <xsl:with-param name="text" select="input" />
     </xsl:call-template>
-    <xsl:choose>
-        <xsl:when test="$b-has-width">
-            <xsl:text>\end{programbox}</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>\end{program}</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:text>\end{program}</xsl:text>
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Console Session -->
 <!-- An interactive command-line session with a prompt, input and output -->
-<!-- The width parameter supports use in a sidebyside panel              -->
 <xsl:template match="console">
     <!-- ignore prompt, and pick it up in trailing input  -->
-    <!-- optional width override is supported by fancyvrb -->
     <xsl:text>\begin{console}&#xa;</xsl:text>
     <xsl:apply-templates select="input|output" />
     <xsl:text>\end{console}&#xa;</xsl:text>
@@ -8147,23 +8168,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- match immediately preceding, only if a prompt:                   -->
 <!-- https://www.oxygenxml.com/archives/xsl-list/199910/msg00541.html -->
 <xsl:template match="console/input">
-    <!-- Assumes prompt does not exceed one line -->
-    <!-- Wrap with semantic \consoleprompt macro -->
-    <xsl:text>\consoleprompt{</xsl:text>
-    <xsl:call-template name="escape-console-to-latex">
+    <!-- Prompt first, assumes does not exceed one line -->
+    <xsl:call-template name="escape-console-prompt-output">
         <xsl:with-param name="text"  select="preceding-sibling::*[1][self::prompt]"/>
     </xsl:call-template>
-    <xsl:text>}</xsl:text>
     <!-- sanitize left-margin, etc                    -->
     <!-- then employ \consoleinput macro on each line -->
     <xsl:call-template name="wrap-console-input">
         <xsl:with-param name="text">
             <xsl:call-template name="sanitize-text">
-                <xsl:with-param name="text">
-                    <xsl:call-template name="escape-console-to-latex">
-                        <xsl:with-param name="text"  select="."/>
-                    </xsl:call-template>
-                </xsl:with-param>
+                <xsl:with-param name="text" select="."/>
             </xsl:call-template>
         </xsl:with-param>
     </xsl:call-template>
@@ -8176,7 +8190,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="text">
             <xsl:call-template name="sanitize-text">
                 <xsl:with-param name="text">
-                    <xsl:call-template name="escape-console-to-latex">
+                    <xsl:call-template name="escape-console-prompt-output">
                         <xsl:with-param name="text"  select="."/>
                     </xsl:call-template>
                 </xsl:with-param>
@@ -8193,9 +8207,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <xsl:when test="$text=''" />
         <xsl:otherwise>
-            <xsl:text>\consoleinput{</xsl:text>
-            <xsl:value-of select="substring-before($text, '&#xa;')" />
-            <xsl:text>}&#xa;</xsl:text>
+            <xsl:text>(*\consoleinput{</xsl:text>
+                <xsl:call-template name="escape-console-input-to-latex">
+                    <xsl:with-param name="text">
+                        <xsl:value-of select="substring-before($text, '&#xa;')" />
+                    </xsl:with-param>
+                </xsl:call-template>
+            <xsl:text>}*)</xsl:text>
+            <xsl:text>&#xa;</xsl:text>
             <xsl:call-template name="wrap-console-input">
                 <xsl:with-param name="text" select="substring-after($text, '&#xa;')" />
             </xsl:call-template>
@@ -8203,15 +8222,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- Line-by-line, apply \consoleoutput macro defined in preamble -->
+<!-- Line-by-line  -->
 <xsl:template name="wrap-console-output">
     <xsl:param name="text" />
     <xsl:choose>
         <xsl:when test="$text=''" />
         <xsl:otherwise>
-            <xsl:text>\consoleoutput{</xsl:text>
             <xsl:value-of select="substring-before($text, '&#xa;')" />
-            <xsl:text>}&#xa;</xsl:text>
+            <xsl:text>&#xa;</xsl:text>
             <xsl:call-template name="wrap-console-output">
                 <xsl:with-param name="text" select="substring-after($text, '&#xa;')" />
             </xsl:call-template>
@@ -8385,26 +8403,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Named Lists -->
+<!-- 2019-07-12 temporarily bifurcated for styling work -->
 <xsl:template match="list">
     <xsl:variable name="b-subcaptioned" select="parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure"/>
-    <xsl:if test="not(parent::sidebyside)">
-        <xsl:text>\begin{namedlist}&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:if test="not($b-subcaptioned)">
-        <xsl:apply-templates select="." mode="title-caption"/>
-    </xsl:if>
-    <xsl:if test="not(parent::sidebyside)">
-        <xsl:text>\begin{namedlistcontent}&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:apply-templates select="*"/>
-    <xsl:if test="not(parent::sidebyside)">
-        <xsl:text>\end{namedlistcontent}&#xa;</xsl:text>
-        <xsl:text>\end{namedlist}&#xa;</xsl:text>
-    </xsl:if>
-    <!-- subcaption below the list -->
-    <xsl:if test="$b-subcaptioned">
-        <xsl:apply-templates select="." mode="title-caption"/>
-    </xsl:if>
+    <xsl:choose>
+        <xsl:when test="$b-subcaptioned">
+            <xsl:apply-templates select="*"/>
+            <xsl:apply-templates select="." mode="title-caption"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>\begin{namedlist}{</xsl:text>
+            <xsl:apply-templates select="." mode="title-full"/>
+            <xsl:text>}{</xsl:text>
+            <xsl:apply-templates select="." mode="latex-id"/>
+            <xsl:text>}%&#xa;</xsl:text>
+            <xsl:apply-templates select="*"/>
+            <xsl:text>\end{namedlist}%&#xa;</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
     <xsl:apply-templates select="." mode="pop-footnote-text"/>
 </xsl:template>
 
@@ -8459,16 +8475,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="left-margin" select="$layout/left-margin" />
     <xsl:variable name="right-margin" select="$layout/right-margin" />
     <xsl:variable name="space-width" select="$layout/space-width" />
-
-    <!-- If a side-by-side is first in a container, such as an   -->
-    <!-- "example", the layout appears *before* the "title",     -->
-    <!-- *unless* we leave "vmode".  As a "sbsgroup" is a series -->
-    <!-- of "sidebyside", we make the right adjustment there     -->
-    <!-- (and not here, where then *every* "sbsgroup" would      -->
-    <!-- earn protection.                                        -->
-    <xsl:if test="not(preceding-sibling::*) and not(parent::sbsgroup)">
-        <xsl:call-template name="leave-vertical-mode"/>
-    </xsl:if>
 
     <!-- TODO: Make "sidebyside" a 3-argument environment:          -->
     <!-- headings, panels, captions.  Then put "\nopagebreak"       -->
@@ -10205,16 +10211,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- by an intervening "tcolorbox".  The template should be placed -->
 <!-- immediately after the "\end{}" of affected environments.      -->
 <!-- It will format as one footnote text per output line.          -->
+<!--                                                               -->
+<!-- We need to pop all interior footnotes iff we are free of      -->
+<!-- enclosing blocks implemented with tcolorbox.  So this         -->
+<!-- template is called at the end of a template for a block,      -->
+<!-- but after the tcolorbox closes.  So we are in the clear when  -->
+<!-- no ancestors are implmented by tcolorbox.  Otherwise, we      -->
+<!-- "wait" and pop all interior footnotes later.                  -->
+<!-- NB: these templates could be improved with an entity          -->
 <xsl:template match="&ASIDE-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&FIGURE-LIKE;|list|sidebyside|defined-term|objectives|outcomes|backmatter/colophon|assemblage|exercise" mode="pop-footnote-text">
-    <xsl:for-each select=".//fn">
-        <xsl:text>\footnotetext[</xsl:text>
-        <xsl:apply-templates select="." mode="serial-number"/>
-        <xsl:text>]</xsl:text>
-        <xsl:text>{</xsl:text>
-        <xsl:apply-templates />
-        <xsl:apply-templates select="." mode="label" />
-        <xsl:text>}%&#xa;</xsl:text>
-    </xsl:for-each>
+    <xsl:if test="count(ancestor::*[&ASIDE-FILTER; or &THEOREM-FILTER; or &AXIOM-FILTER;  or &DEFINITION-FILTER; or &REMARK-FILTER; or &COMPUTATION-FILTER; or &EXAMPLE-FILTER; or &PROJECT-FILTER; or &FIGURE-FILTER; or self::list or self::sidebyside or self::defined-term or self::objectives or self::outcomes or self::colophon/parent::backmatter or self::assemblage or self::exercise]) = 0">
+        <xsl:for-each select=".//fn">
+            <xsl:text>\footnotetext[</xsl:text>
+            <xsl:apply-templates select="." mode="serial-number"/>
+            <xsl:text>]</xsl:text>
+            <xsl:text>{</xsl:text>
+            <xsl:apply-templates />
+            <xsl:apply-templates select="." mode="label" />
+            <xsl:text>}%&#xa;</xsl:text>
+        </xsl:for-each>
+    </xsl:if>
 </xsl:template>
 
 <!-- Very nearly a no-op, but necessary for HTML -->
@@ -10569,21 +10585,45 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="str:replace($sans-dblqt,  '`',     '\textasciigrave{}')" />
 </xsl:template>
 
-<!-- Escape Console Text to Latex -->
-<!-- Similar to above, but fancyvrb BVerbatim only needs -->
-<!-- to avoid Latex escape (backslash), begin group ({), -->
-<!-- and end group (}) to permit LaTeX macros, such as   -->
-<!-- \textbf{} for the bolding of user input.            -->
-<xsl:template name="escape-console-to-latex">
-    <xsl:param    name="text" />
+<!-- Escape Console Input to Latex -->
+<!-- The entire input string is bolded, but now we have escaped     -->
+<!-- into LaTeX for the entire string.  So we need to               -->
+<!--   (1) Escape the usual problematic characters into their LaTeX -->
+<!--       text equivalents.                                        -->
+<!--   (2) Convert the "listings" escape sequence into something    -->
+<!--       isomorphic, but not equal, in LaTeX.  We do this by      -->
+<!--       adding an empty group to the escape sequences.           -->
+<xsl:template name="escape-console-input-to-latex">
+    <xsl:param name="text" />
 
-    <xsl:variable name="bs-one" select="str:replace($text,   '\', '\textbackslash')"/>
-    <xsl:variable name="lb-one" select="str:replace($bs-one, '{', '\textbraceleft')"/>
-    <xsl:variable name="rb-one" select="str:replace($lb-one, '}', '\textbraceright')"/>
+    <xsl:variable name="all-latex">
+        <xsl:call-template name="escape-text-to-latex">
+            <xsl:with-param name="text" select="$text"/>
+        </xsl:call-template>
+    </xsl:variable>
+    <!-- A trailing group seems necessary on the opening escape -->
+    <!-- sequence, otherwise a trailing spce goes missing.      -->
+    <!-- We add this to the closing sequence just in case.      -->
+    <xsl:variable name="left-escape"  select="str:replace($all-latex, '(*', '({}*{}' )"/>
+    <xsl:variable name="right-escape" select="str:replace($left-escape, '*)', '*{}){}' )"/>
+    <xsl:value-of select="$right-escape"/>
+</xsl:template>
 
-    <xsl:variable name="bs-two" select="str:replace($rb-one, '\textbackslash',  '\textbackslash{}')"/>
-    <xsl:variable name="lb-two" select="str:replace($bs-two, '\textbraceleft',  '\{')"/>
-    <xsl:value-of select="str:replace($lb-two, '\textbraceright', '\}')"/>
+<!-- Escape Console Text -->
+<!-- The prompt and output for a "console" are handled capably by the   -->
+<!-- "listings" package.  Except we need to break the escape characters -->
+<!-- we use to accomodate bold text for the input.  So...we escape into -->
+<!-- LaTeX mode, duplicate the desired sequence, and break it with an   -->
+<!-- empty group.  Presumably no additional empty groups are necessary. -->
+<!-- The usual three-step in necessary to not clobber earlier edits,    -->
+<!-- we did not figure out a clever way to avoid a "unique" string.     -->
+<xsl:template name="escape-console-prompt-output">
+    <xsl:param name="text" />
+
+    <xsl:variable name="left-escape-temp"  select="str:replace($text, '(*', 'XXvVY4DtfemxHkcXX' )"/>
+    <xsl:variable name="right-escape" select="str:replace($left-escape-temp, '*)', '(**{})*)' )"/>
+    <xsl:variable name="left-escape" select="str:replace($right-escape, 'XXvVY4DtfemxHkcXX', '(*({}**)' )"/>
+    <xsl:value-of select="$left-escape"/>
 </xsl:template>
 
 <!-- Miscellaneous -->
