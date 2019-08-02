@@ -5295,6 +5295,10 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!--   in the final number (after the serial number is appended)  -->
 <!-- NB: decorative parts may mean we need                        -->
 <!-- to exclude "part" from the ancestors?                        -->
+<!-- NB: for a book with parts, we include the "backmatter" in    -->
+<!-- the list of $nodes, to impersonate the "part" nodes when     -->
+<!-- working with the main matter.  Like a "part", we silently    -->
+<!-- drop it and decrement the level.                             -->
 
 <!-- BUG: we include specialized divisions here, which inherit -->
 <!-- their serial number from their parent.  The symptom is a  -->
@@ -5304,7 +5308,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- level when passed recursively.                            -->
 
 <xsl:template match="*" mode="multi-number">
-    <xsl:param name="nodes" select="ancestor::*[self::part or self::chapter or self::appendix or self::section or self::subsection or self::subsubsection or self::exercises or self::reading-questions or self::solutions or self::references or self::glossary or self::worksheet]"/>
+    <xsl:param name="nodes" select="ancestor::*[self::part or self::chapter or self::appendix or self::section or self::subsection or self::subsubsection or self::exercises or self::reading-questions or self::solutions or self::references or self::glossary or self::worksheet or self::backmatter[$b-has-parts]]"/>
     <xsl:param name="levels" />
     <xsl:param name="pad" />
 
@@ -5322,14 +5326,16 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:variable>
 
     <xsl:choose>
-        <!-- when the lead node is a part, we just drop it,   -->
-        <!-- and we decrement the level.  We may later devise -->
+        <!-- When the lead node is a part, we just drop it,   -->
+        <!-- and we decrement the level.  A lead node of      -->
+        <!-- backmatter will appear for a book with parts,    -->
+        <!-- which is dropped also.  We may later devise      -->
         <!-- an option with more part numbers, and we can     -->
         <!-- condition here to include the part number in the -->
         <!-- numbering scheme NB: this is *not* the serial    -->
         <!-- number, so for example, the summary page for     -->
         <!-- a part *will* have a number, and the right one   -->
-        <xsl:when test="$nodes[1][self::part]">
+        <xsl:when test="$nodes[1][self::part or self::backmatter]">
             <xsl:apply-templates select="." mode="multi-number">
                 <xsl:with-param name="nodes" select="$nodes[position() > 1]" />
                 <xsl:with-param name="levels" select="$levels - 1" />
