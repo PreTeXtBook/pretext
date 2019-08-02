@@ -2026,6 +2026,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>%% We do as much styling as possible with tcolorbox, not listings&#xa;</xsl:text>
             <xsl:text>%% Sage's blue is 50%, we go way lighter (blue!05 would also work)&#xa;</xsl:text>
             <xsl:text>%% Note that we defuse listings' default "aboveskip" and "belowskip"&#xa;</xsl:text>
+            <!-- NB: tcblisting "forgets" its colors as it breaks across pages, -->
+            <!-- and "frame empty" on the output is not sufficient.  So we set  -->
+            <!-- the frame color to white.                                      -->
+            <!-- See: https://tex.stackexchange.com/questions/240246/           -->
+            <!-- problem-with-tcblisting-at-page-break                          -->
             <!-- TODO: integrate into the LaTeX styling schemes -->
             <xsl:text>\definecolor{sageblue}{rgb}{0.95,0.95,1}&#xa;</xsl:text>
             <xsl:text>\tcbset{ sagestyle/.style={left=0pt, right=0pt, top=0ex, bottom=0ex, middle=0pt, toptitle=0pt, bottomtitle=0pt,&#xa;</xsl:text>
@@ -2033,7 +2038,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>breakable, parbox=false, &#xa;</xsl:text>
             <xsl:text>listing options={language=Python,breaklines=true,breakatwhitespace=true, extendedchars=true, aboveskip=0pt, belowskip=0pt}} }&#xa;</xsl:text>
             <xsl:text>\newtcblisting{sageinput}{sagestyle, colback=sageblue, sharp corners, boxrule=0.5pt, toprule at break=-0.3pt, bottomrule at break=-0.3pt, }&#xa;</xsl:text>
-            <xsl:text>\newtcblisting{sageoutput}{sagestyle, colback=white, frame empty, before skip=0pt, after skip=0pt, }&#xa;</xsl:text>
+            <xsl:text>\newtcblisting{sageoutput}{sagestyle, colback=white, colframe=white, frame empty, before skip=0pt, after skip=0pt, }&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
     <xsl:if test="$document-root//pre or $document-root//cd or $document-root//fragment">
