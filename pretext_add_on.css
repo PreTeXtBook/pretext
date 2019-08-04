@@ -2116,8 +2116,11 @@ a.mjx-svg-href  {
 
 body, html body { background: #fff; }
 
-.pretext-content figure {
+.pretext-content figure, .pretext-content .image-box {
     margin-top: 0.5em;
+}
+.pretext-content figure .image-box {
+    margin-top: 0;
 }
 .pretext-content article > figure:first-child {
     margin-top: 0;
@@ -2207,6 +2210,10 @@ figure figcaption.wrap {
     text-align: center;
 }
 
+/* In 0.2 all of the below are needed.  Possibly in a later version
+   only the .image-box > img is needed, because all img are in an image-box.
+*/
+.pretext-content .image-box > img:not(.draw_on_me):not(.mag_popup),
 .pretext-content .sbspanel > img:not(.draw_on_me):not(.mag_popup),
 .pretext-content figure > img:not(.draw_on_me):not(.mag_popup),
 .pretext-content figure > div > img:not(.draw_on_me):not(.mag_popup) {
