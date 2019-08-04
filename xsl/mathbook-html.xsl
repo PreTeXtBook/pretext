@@ -5093,14 +5093,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Images -->
 <!-- ###### -->
 
-
+<!-- A bare image, or an image in a PTX "figure" that is not part  -->
+<!-- of a panel of a "sidebyside", can be given horizontal layout  -->
+<!-- control.  This is placed on a constraining "div.image-box"    -->
+<!-- via the "@style" attribute.  The image simply "grows" to      -->
+<!-- fill this box horizontally, with necessary vertical dimension -->
+<!-- to preserve the aspect ratio.  This div is also used to       -->
+<!-- provide vertical spacing from its surroundings.               -->
 <xsl:template match="image[not(ancestor::sidebyside)]">
     <xsl:variable name="rtf-layout">
         <xsl:apply-templates select="." mode="layout-parameters" />
     </xsl:variable>
     <xsl:variable name="layout" select="exsl:node-set($rtf-layout)" />
-    <!-- div is constraint for contained image, needs CSS class name -->
-    <div>
+    <!-- div is constraint/positioning for contained image -->
+    <div class="image-box">
         <xsl:attribute name="style">
             <xsl:text>width: </xsl:text>
             <xsl:value-of select="$layout/width"/>
@@ -5111,12 +5117,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text> margin-right: </xsl:text>
             <xsl:value-of select="$layout/right-margin"/>
             <xsl:text>%;</xsl:text>
-            <!-- <xsl:text> margin-top: 0%; margin-bottom: 0; </xsl:text> -->
         </xsl:attribute>
         <xsl:apply-templates select="." mode="image-inclusion"/>
     </div>
 </xsl:template>
 
+<!-- The div for a panel of a sidebyside will provide  -->
+<!-- the constraint/positioning of the contained image -->
+<!-- If the panel is a PTX "figure" then there will be -->
+<!-- an intermediate HTML "figure" which will not      -->
+<!-- interfere with the panel's constraints            -->
 <xsl:template match="image[ancestor::sidebyside]">
     <xsl:apply-templates select="." mode="image-inclusion" />
 </xsl:template>
