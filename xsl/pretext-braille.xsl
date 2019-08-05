@@ -493,18 +493,26 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="parent::ul" mode="format-code"/>
     </xsl:variable>
     <li>
-        <!-- the list label.  Unicode values are not critical, they are  -->
-        <!-- just signals for the liblouis translation into dot-patterns -->
+        <!-- The list label.  The file  en-ueb-chardefs.uti        -->
+        <!-- associates these Unicode values with the indicated    -->
+        <!-- dot patterns.  This jibes with [BANA-2016, 8.6.2],    -->
+        <!-- which says the open circle needs a Grade 1 indicator. -->
+        <!-- The file  en-ueb-g2.ctb  lists  x25cb  and  x24a0  as -->
+        <!-- both being "contraction" and so needing a             -->
+        <!-- Grade 1 indicator.                                    -->
         <xsl:choose>
-            <!-- Unicode Character 'BULLET' (U+2022) -->
+            <!-- Unicode Character 'BULLET' (U+2022)       -->
+            <!-- Dot pattern: 456-256                      -->
             <xsl:when test="$format-code = 'disc'">
                 <xsl:text>&#x2022; </xsl:text>
             </xsl:when>
             <!-- Unicode Character 'WHITE CIRCLE' (U+25CB) -->
+            <!-- Dot pattern: 1246-123456                  -->
             <xsl:when test="$format-code = 'circle'">
                 <xsl:text>&#x25cb; </xsl:text>
             </xsl:when>
             <!-- Unicode Character 'BLACK SQUARE' (U+25A0) -->
+            <!-- Dot pattern: 456-1246-3456-145            -->
             <xsl:when test="$format-code = 'square'">
                 <xsl:text>&#x25a0; </xsl:text>
             </xsl:when>

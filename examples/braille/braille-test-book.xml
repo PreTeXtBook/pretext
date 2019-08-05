@@ -227,7 +227,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <li>One with a circle</li>
                 <li>Two with a circle</li>
                 <li>Three with a circle</li>
-            </ul>Now with a solid (filled) square.  BANA says dot pattern 456-1246-3456-145:<ul label="square">
+            </ul>Now with a solid (filled) square.  BANA says dot pattern 456-1246-3456-145, and the <c>liblouis</c> files clearly suggest a Grade 1 indicator here (dots 5-6?).  BANA suggests Grade 1 indicaor is not needed.  We can overrule <c>liblouis</c><mdash/>just a fiddle.<ul label="square">
                 <li>One with a square</li>
                 <li>Two with a square</li>
                 <li>Three with a square</li>
