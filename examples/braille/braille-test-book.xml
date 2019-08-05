@@ -233,18 +233,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <li>Three with a square</li>
             </ul>This concludes the paragraph, which will be an apparent third paragraph.</p>
 
-            <p>A <pretext/> description list has a single word, or simple phrase, which then has a definition or an explanation, which may be several paragraphs.  Following the BANA transcription guide, we build the description list like a list of the terms, each with a nested one-item list within containing the descriptive text.<dl>
+            <p>A <pretext/> description list has a single word, or simple phrase, which then has a definition or an explanation, which may be several paragraphs.  We render this much differently in HTML versus print, and also somewhat differently here in Braille.  Defined term is on a line of its own, in bold.  Then the actual description, which can be quite variable follows, and is indented to help convey the structure.<dl>
                 <li>
                     <title>First Item</title>
-                    <p>This text is a description of the first item, what BANA calls an <q>annotated list</q>.  It appears to be indented too far, since it is a paragraph, which <c>liblouis</c> is styling with an indent.</p>
+                    <p>This text is a description of the first item, whicn is a paragraph.</p>
                 </li>
                 <li>
                     <title>Second Item</title>
-                    <p>Describes second item.  So we need a <c>liblouis</c> style for an unindented paragraph.</p>
+                    <p>Describes second item.  In a paragraph for openers.</p>
+                    <p>This is a second paragraph, helping to describe the second item of the list.</p>
                 </li>
                 <li>
                     <title>Third Item</title>
-                    <p>Describes third item.  The descriptions should probably work exactly opposite, with runover text indented.</p>
+                    <p>Describes third item.  The descriptions are indented for each item to help keep the groupings together.</p>
                 </li>
             </dl></p>
 

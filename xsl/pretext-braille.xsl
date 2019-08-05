@@ -533,13 +533,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="dl/li">
-    <li>
-        <xsl:apply-templates select="." mode="title-full"/>
-        <ul>
-            <li>
-                <xsl:apply-templates/>
-            </li>
-        </ul>
+    <li class="description">
+        <b>
+            <xsl:apply-templates select="." mode="title-full"/>
+        </b>
+        <xsl:apply-templates/>
     </li>
 </xsl:template>
 

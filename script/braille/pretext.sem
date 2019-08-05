@@ -69,6 +69,11 @@ contentsheader div,data-braille,tableofcontents
 # Distinguished Text
 ####################
 
+# We sometimes bold a heading (such
+# as for a description list) and so
+# produce a "b" element
+boldx b
+
 # PTX em => HTML em.emphasis
 italicx em,class,emphasis
 
