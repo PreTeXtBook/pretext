@@ -377,9 +377,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </i>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:call-template name="open-nemeth"/>
             <xsl:apply-imports/>
-            <xsl:call-template name="close-nemeth"/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -403,9 +401,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="content" />
 
     <xsl:text>&#x20;</xsl:text>
-    <xsl:call-template name="open-nemeth"/>
     <xsl:copy-of select="$content" />
-    <xsl:call-template name="close-nemeth"/>
 </xsl:template>
 
 <!-- BANA Nemeth Guidance: "All other text, including -->

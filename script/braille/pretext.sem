@@ -98,6 +98,17 @@ boldx em,class,alert
 # Braille italics
 italicx i,class,one-letter
 
+########################
+# Nemeth Math Indicators
+########################
+
+# We write a "nemeth" tag as we produce Braille
+# with the Speech Rule Engine.  We wrap it with
+# the right indicators.  The spaces here are
+# "non-breaking", which  liblouis  respects,
+# and then converts to plain (x20) spaces.
+generic nemeth \x2838\x2829\x00a0,\x00a0\x2838\x2831
+
 
 ########
 # Blocks

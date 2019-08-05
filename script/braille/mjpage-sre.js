@@ -34,7 +34,7 @@ const render = async (node) => {
   // result.speech contains Nemeth Braille code for mathinput
   // This needs to be enclosed in some tags. I picked 'title';
   // we may want to come up with something like <nemeth>.
-  node.innerHTML = '<title>'+result.speech+'</title>';
+  node.innerHTML = '<nemeth>'+result.speech+'</nemeth>';
 };
 
 const main = async argv => {
