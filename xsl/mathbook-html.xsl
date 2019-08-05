@@ -4839,12 +4839,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:apply-templates>
 </xsl:template>
 
-<!-- Paragraphs, with displays within                   -->
-<!-- Later, so a higher priority match                  -->
-<!-- Lists and display math are HTML blocks             -->
-<!-- and so should not be within an HTML paragraph.     -->
-<!-- We bust them out, and put the id for the paragraph -->
-<!-- on the first one, even if empty.                   -->
+<!-- Paragraphs, with displays within                    -->
+<!-- Later, so a higher priority match                   -->
+<!-- Lists and display math are HTML blocks              -->
+<!-- and so should not be within an HTML paragraph.      -->
+<!-- We bust them out, and put the id for the paragraph  -->
+<!-- on the first one, even if empty.                    -->
+<!-- All but the first is p/@data-braille="continuation" -->
+<!-- so later HTML "p" can be styled for Braille as if   -->
+<!-- they are part of a logical PreTeXt paragraph        -->
 <xsl:template match="p[ol|ul|dl|me|men|md|mdn|cd]" mode="body">
     <xsl:param name="block-type" />
     <xsl:param name="b-original" select="true()" />
@@ -4904,7 +4907,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- XSLT 1.0: RTF is just a string if not converted to node set -->
                 <!-- This comparison might improve with a normalize-space()      -->
                 <xsl:if test="not($common-content = '')">
-                    <p>
+                    <p data-braille="continuation">
                         <xsl:copy-of select="$common-content" />
                     </p>
                 </xsl:if>
@@ -4919,7 +4922,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- XSLT 1.0: RTF is just a string if not converted to node set -->
                 <!-- This comparison might improve with a normalize-space()      -->
                 <xsl:if test="not($common-content = '')">
-                    <p>
+                    <p data-braille="continuation">
                         <xsl:copy-of select="$common-content" />
                     </p>
                 </xsl:if>

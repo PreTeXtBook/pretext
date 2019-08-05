@@ -29,8 +29,15 @@ document body
 ############
 # Paragraphs
 ############
-para p
 
+# PreTeXt logical paragraphs get exploded into multiple
+# HTML "p" to meet the requirements of HTML syntax.
+# The breaks are dictated by displays, such as lists
+# and mathematical displays.  We mark the "new", or
+# "subsequent", paragraphs as a continuation.  So for
+# Braille we do not indent these.
+para p
+paracont p,data-braille,continuation
 
 ###################
 # Division Headings
