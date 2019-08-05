@@ -154,10 +154,10 @@ if (reading_questions.length) {
   
   
          var this_rq_controls = '<div id="' + this_ques_id_controls + '" class="input_controls hidecontrols">';
-         this_rq_controls += '<span class="action clear_item rq_delete">XX</span>';
+         this_rq_controls += '<span class="action clear_item rq_delete">X</span>';
  /*        this_rq_controls += '<span class="action save_item rq_edit">edit</span>';
 */
-         this_rq_controls += '<span class="action amhelp">??</span>';
+         this_rq_controls += '<span class="action amhelp">?</span>';
          this_rq_controls += '</div>'
   
          var this_rq_answer_and_controls = document.createElement('div');
@@ -475,7 +475,7 @@ if (reading_questions.length) {
   
   $('body').on('click','.rq_delete', function(){
     console.log(".rq_delete");
-    var this_ques_id = this.parentNode.parentNode.id;
+    var this_ques_id = this.parentNode.parentNode.parentNode.id;
     console.log(".rq_delete", this_ques_id);
     $('#' + this_ques_id + "_controls").removeClass("hidecontrols");
 //and now put in controls
