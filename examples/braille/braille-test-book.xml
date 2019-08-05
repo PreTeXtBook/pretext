@@ -75,7 +75,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <title>A Section Heading</title>
 
                 <introduction>
-                    <p>The introduction to the section with some extra text to run onto a new line of the BRF output that may not be indented.  Since this sample book has more than 3 levels of divisions (chapter, section, sub section, subsubsection) this should have a centered heading.</p>
+                    <p>The introduction to the section with some extra text to run onto a new line of the BRF output that may not be indented.  Since this sample book has more than 3 levels of divisions (chapter, section, subsection, subsubsection) this should have a centered heading.</p>
 
                     <p>Most <pretext/> conversions supply the word <q>Chapter</q>, but omit words like <q>Section</q> and <q>Subsection</q>.  BANA says to follow the lead of print.  A hierarchical number will help also.</p>
                 </introduction>
@@ -90,7 +90,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <subsubsection>
                         <title>A Subsubsection Heading</title>
 
-                        <p>The subsubsection is terminal, so this is the actual content of the division, rather than an introduction to a further division.  The heading of this subsection begins in cell-7.</p>
+                        <p>The subsubsection is terminal, so this is the actual content of the division, rather than an introduction to a further division.  The heading of this subsubsection begins in cell-7.</p>
 
                         <p>However, any division may contain a <pretext/> construct called a <q>paragraphs</q>.  It has a title and some content, and cannot be subdivided.  We test one next.  In print we use a run-in title, but that is hard to do with our tools.</p>
 
@@ -114,7 +114,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
             <p>The third sentence has some single-letter Latin variables, interspersed with Greek variables and other simple inline math expressions.  The single-letter variables should be italicized.  We let <m>x</m> equal the value of <m>T</m>, but not <m>\theta</m> nor the value of <m>a+b</m>, but it could also be <m>\rho</m> or <m>g</m>.</p>
 
-            <p>For the previous line, <q>x</q> and <q>T</q>should be italicized (single Latin letter variable). <q>a+b</q> is meant to not be italicized (an expression).  <q>theta</q> and <q>rho</q> should not be italicized (Greek).  The last variable is a Latin <q>g</q>, not a Greek <q>gamma.</q>  So it should simply be italicized, since it is a lone Latin letter as math.</p>
+            <p>For the previous line, <q>x</q> and <q>T</q> should be italicized (single Latin letter variable). <q>a+b</q> is meant to not be italicized (an expression).  <q>theta</q> and <q>rho</q> should not be italicized (Greek).  The last variable is a Latin <q>g</q>, not a Greek <q>gamma.</q>  So it should simply be italicized, since it is a lone Latin letter as math.</p>
 
         </chapter>
 
@@ -162,7 +162,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <li>Five words: <foreign>One Two Three Four Five</foreign></li>
                 </ul></p>
 
-                <p>NOw, all over again with the <tag>pubtitle</tag> element:<ul>
+                <p>Now, all over again with the <tag>pubtitle</tag> element, which is normally used to italicize titles of publications:<ul>
                     <li>Single letter: <pubtitle>A</pubtitle></li>
                     <li>Two words: <pubtitle>One Two</pubtitle></li>
                     <li>Three words: <pubtitle>One Two Three</pubtitle></li>
