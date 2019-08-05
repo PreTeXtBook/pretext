@@ -2026,6 +2026,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>%% We do as much styling as possible with tcolorbox, not listings&#xa;</xsl:text>
             <xsl:text>%% Sage's blue is 50%, we go way lighter (blue!05 would also work)&#xa;</xsl:text>
             <xsl:text>%% Note that we defuse listings' default "aboveskip" and "belowskip"&#xa;</xsl:text>
+            <!-- NB: tcblisting "forgets" its colors as it breaks across pages, -->
+            <!-- and "frame empty" on the output is not sufficient.  So we set  -->
+            <!-- the frame color to white.                                      -->
+            <!-- See: https://tex.stackexchange.com/questions/240246/           -->
+            <!-- problem-with-tcblisting-at-page-break                          -->
             <!-- TODO: integrate into the LaTeX styling schemes -->
             <xsl:text>\definecolor{sageblue}{rgb}{0.95,0.95,1}&#xa;</xsl:text>
             <xsl:text>\tcbset{ sagestyle/.style={left=0pt, right=0pt, top=0ex, bottom=0ex, middle=0pt, toptitle=0pt, bottomtitle=0pt,&#xa;</xsl:text>
@@ -2033,7 +2038,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>breakable, parbox=false, &#xa;</xsl:text>
             <xsl:text>listing options={language=Python,breaklines=true,breakatwhitespace=true, extendedchars=true, aboveskip=0pt, belowskip=0pt}} }&#xa;</xsl:text>
             <xsl:text>\newtcblisting{sageinput}{sagestyle, colback=sageblue, sharp corners, boxrule=0.5pt, toprule at break=-0.3pt, bottomrule at break=-0.3pt, }&#xa;</xsl:text>
-            <xsl:text>\newtcblisting{sageoutput}{sagestyle, colback=white, frame empty, before skip=0pt, after skip=0pt, }&#xa;</xsl:text>
+            <xsl:text>\newtcblisting{sageoutput}{sagestyle, colback=white, colframe=white, frame empty, before skip=0pt, after skip=0pt, }&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
     <xsl:if test="$document-root//pre or $document-root//cd or $document-root//fragment">
@@ -2650,9 +2655,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$div-name"/>
             <xsl:text>}{#3}&#xa;</xsl:text>
         </xsl:when>
-        <!-- optional short title, real title -->
+        <!-- optional short title, and the real title  -->
+        <!-- NB: the short title (#3) needs a group to -->
+        <!-- protect a right square bracket "]" from   -->
+        <!-- prematurely ending the optional argument  -->
         <xsl:otherwise>
-            <xsl:text>[#3]{#1}%&#xa;</xsl:text>
+            <xsl:text>[{#3}]{#1}%&#xa;</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
     <xsl:text>\label{#6}%&#xa;</xsl:text>
@@ -3089,7 +3097,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- line. Presumably the line will stretch when the -->
 <!-- tombstone moves onto its own line.              -->
 <xsl:template match="proof" mode="tcb-style">
-    <xsl:text>bwminimalstyle, fonttitle=\normalfont\itshape, attach title to upper, after title={\space}, after upper={\space\space\hspace*{\stretch{1}}\(\blacksquare\)}&#xa;</xsl:text>
+    <xsl:text>bwminimalstyle, fonttitle=\normalfont\itshape, attach title to upper, after title={\space}, after upper={\space\space\hspace*{\stretch{1}}\(\blacksquare\)}, after={\par},&#xa;</xsl:text>
 </xsl:template>
 
 <!-- "objectives" -->
@@ -3143,6 +3151,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- environments.  But ideally, we would split out    -->
 <!-- this piece into a template for just theorems      -->
 <!-- and axioms.                                       -->
+<!-- tcolor box seem to begin in horizontal mode,      -->
+<!-- and need to return to vertical mode once          -->
+<!-- concluded (lest, e.g., consecutive boxes overlap).-->
+<!-- Use of "after={\par}" is the right fix.  See      -->
+<!-- https://tex.stackexchange.com/questions/235848/   -->
+<!-- how-to-leave-horizontal-mode                      -->
 <!-- DEFINITION-LIKE and EXAMPLE-LIKE are exceptional  -->
 <!-- in that markers are inserted with "after upper"   -->
 <!-- to indicate the end of the environment.           -->
@@ -3151,11 +3165,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="&DEFINITION-LIKE;" mode="tcb-style">
-    <xsl:text>bwminimalstyle, runintitlestyle, blockspacingstyle, after title={\space}, after upper={\space\space\hspace*{\stretch{1}}\(\lozenge\)}, </xsl:text>
+    <xsl:text>bwminimalstyle, runintitlestyle, blockspacingstyle, after title={\space}, after upper={\space\space\hspace*{\stretch{1}}\(\lozenge\)}, after={\par}, </xsl:text>
 </xsl:template>
 
 <xsl:template match="&EXAMPLE-LIKE;" mode="tcb-style">
-    <xsl:text>bwminimalstyle, runintitlestyle, blockspacingstyle, after title={\space}, after upper={\space\space\hspace*{\stretch{1}}\(\square\)}, </xsl:text>
+    <xsl:text>bwminimalstyle, runintitlestyle, blockspacingstyle, after title={\space}, after upper={\space\space\hspace*{\stretch{1}}\(\square\)}, after={\par}, </xsl:text>
 </xsl:template>
 
 <!-- FIGURE-LIKE: "list" -->

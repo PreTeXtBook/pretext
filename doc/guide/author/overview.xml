@@ -202,35 +202,160 @@
 
         <p>If you consistently follow the prescription in the previous paragraph you will avoid a descent into escape-character hell and avoid a lot of head-scratching.  In particular, you should have no need of the <c>&lt;![CDATA[</c><nbsp /><c>]]&gt;</c> mechanism of XML, so just forget we even mentioned it.</p>
 
-      <table>
-        <title>Special Characters</title>
-        <tabular halign="left">
-          <row bottom="medium">
-               <cell>To get this:</cell>       <cell>Type this:</cell></row>
-          <row><cell>&amp;</cell>              <cell><c>&amp;amp;</c></cell></row>
-          <row><cell><copyright/></cell>       <cell><tage>copyright</tage></cell></row>
-          <row><cell><ellipsis/></cell>        <cell><tage>ellipsis</tage></cell></row>
-          <row><cell><fillin/></cell>          <cell><tage>fillin</tage></cell></row>
-          <row><cell><icon name="gear"/></cell><cell><c>&lt;icon name="gear"/&gt;</c></cell></row>
-          <row><cell>&lt;</cell>               <cell><c>&amp;lt;</c></cell></row>
-          <row><cell><lq/></cell>              <cell><tage>lq</tage></cell></row>
-          <row><cell><lsq/></cell>             <cell><tage>lsq</tage></cell></row>
-          <row><cell><mdash/></cell>           <cell><tage>mdash</tage></cell></row>
-          <row><cell><midpoint/></cell>        <cell><tage>midpoint</tage></cell></row>
-          <row><cell><nbsp/></cell>            <cell><tage>nbsp</tage></cell></row>
-          <row><cell><ndash/></cell>           <cell><tage>ndash</tage></cell></row>
-          <row><cell><permille/></cell>        <cell><tage>permille</tage></cell></row>
-          <row><cell><pilcrow/></cell>         <cell><tage>pilcrow</tage></cell></row>
-          <row><cell><registered/></cell>      <cell><tage>registered</tage></cell></row>
-          <row><cell><rq/></cell>              <cell><tage>rq</tage></cell></row>
-          <row><cell><rsq/></cell>             <cell><tage>rsq</tage></cell></row>
-          <row><cell><section-mark/></cell>    <cell><tage>section-mark</tage></cell></row>
-          <row><cell><solidus/></cell>         <cell><tage>solidus</tage></cell></row>
-          <row><cell><swungdash/></cell>       <cell><tage>swungdash</tage></cell></row>
-          <row><cell><times/></cell>           <cell><tage>times</tage></cell></row>
-          <row><cell><trademark/></cell>       <cell><tage>trademark</tage></cell> </row>
-        </tabular>
-      </table>
+ <table>
+  <title>Special Characters</title>
+  <tabular halign="left">
+   <col halign="center"/>
+   <col halign="left" right="medium"/>
+   <col halign="center"/>
+   <col halign="left"/>
+   <row bottom="medium">
+    <cell>To get this:</cell>
+    <cell>Type this:</cell>
+    <cell>To get this:</cell>
+    <cell>Type this</cell>
+   </row>
+
+   <row>
+    <cell>&amp;</cell>
+    <cell><c>&amp;amp;</c></cell>
+    <cell><copyright/></cell>
+    <cell><tage>copyright</tage></cell>
+   </row>
+   <row>
+    <cell><ellipsis/></cell>
+    <cell><tage>ellipsis</tage></cell>
+    <cell><fillin/></cell>
+    <cell><tage>fillin</tage></cell>
+   </row>
+   <row>
+    <cell><icon name="gear"/></cell>
+    <cell><c>&lt;icon name="gear"/&gt;</c></cell>
+    <cell>&lt;</cell>
+    <cell><c>&amp;lt;</c></cell>
+   </row>
+   <row>
+    <cell><lq/></cell>
+    <cell><tage>lq</tage></cell>
+    <cell><lsq/></cell>
+    <cell><tage>lsq</tage></cell>
+   </row>
+   <row>
+    <cell><mdash/></cell>
+    <cell><tage>mdash</tage></cell>
+    <cell><midpoint/></cell>
+    <cell><tage>midpoint</tage></cell>
+   </row>
+   <row>
+    <cell><nbsp/></cell>
+    <cell><tage>nbsp</tage></cell>
+    <cell><ndash/></cell>
+    <cell><tage>ndash</tage></cell>
+   </row>
+   <row>
+    <cell><permille/></cell>
+    <cell><tage>permille</tage></cell>
+    <cell><pilcrow/></cell>
+    <cell><tage>pilcrow</tage></cell>
+   </row>
+   <row>
+    <cell><registered/></cell>
+    <cell><tage>registered</tage></cell>
+    <cell><rq/></cell>
+    <cell><tage>rq</tage></cell>
+   </row>
+   <row>
+    <cell><rsq/></cell>
+    <cell><tage>rsq</tage></cell>
+    <cell><section-mark/></cell>
+    <cell><tage>section-mark</tage></cell>
+   </row>
+   <row>
+    <cell><solidus/></cell>
+    <cell><tage>solidus</tage></cell>
+    <cell><swungdash/></cell>
+    <cell><tage>swungdash</tage></cell>
+   </row>
+   <row>
+    <cell><times/></cell>
+    <cell><tage>times</tage></cell>
+    <cell><trademark/></cell>
+    <cell><tage>trademark</tage></cell>
+   </row>
+  </tabular>
+ </table>
+
+
+ <table>
+  <title>User-Interface Icons available with <tage>icon</tage></title>
+  <tabular>
+
+   <col/>
+   <col halign="center" right="medium"/>
+   <col/>
+   <col halign="center" right="medium"/>
+   <col/>
+   <col halign="center"/>
+   <row bottom="medium">
+    <cell>Name</cell>
+    <cell>Icon</cell>
+    <cell>Name</cell>
+    <cell>Icon</cell>
+    <cell>Name</cell>
+    <cell>Icon</cell>
+   </row>
+   <row>
+    <cell><c>arrow-down</c></cell>
+    <cell><icon name="arrow-down"/></cell>
+    <cell><c>arrow-left</c></cell>
+    <cell><icon name="arrow-left"/></cell>
+    <cell><c>arrow-right</c></cell>
+    <cell><icon name="arrow-right"/></cell>
+   </row>
+   <row>
+    <cell><c>arrow-up</c></cell>
+    <cell><icon name="arrow-up"/></cell>
+    <cell><c>file-save</c></cell>
+    <cell><icon name="file-save"/></cell>
+    <cell><c>gear</c></cell>
+    <cell><icon name="gear"/></cell>
+   </row>
+   <row>
+    <cell><c>menu</c></cell>
+    <cell><icon name="menu"/></cell>
+    <cell><c>wrench</c></cell>
+    <cell><icon name="wrench"/></cell>
+    <cell><c>power</c></cell>
+    <cell><icon name="power"/></cell>
+   </row>
+   <row>
+    <cell><c>media-play</c></cell>
+    <cell><icon name="media-play"/></cell>
+    <cell><c>media-pause</c></cell>
+    <cell><icon name="media-pause"/></cell>
+    <cell><c>media-stop</c></cell>
+    <cell><icon name="media-stop"/></cell>
+   </row>
+   <row>
+    <cell><c>media-fast-forward</c></cell>
+    <cell><icon name="media-fast-forward"/></cell>
+    <cell><c>media-rewind</c></cell>
+    <cell><icon name="media-rewind"/></cell>
+    <cell><c>media-skip-to-end</c></cell>
+    <cell><icon name="media-skip-to-end"/></cell>
+   </row>
+   <row>
+    <cell><c>media-skip-to-start</c></cell>
+    <cell><icon name="media-skip-to-start"/></cell>
+    <cell/>
+    <cell/>
+    <cell/>
+    <cell/>
+   </row>
+   <!-- <cell><c></c></cell><cell><icon name=""/></cell> -->
+   <!-- Keep rows full (w/ empty cells) to please HTML validator -->
+  </tabular>
+ </table>
 
     </section>
 
