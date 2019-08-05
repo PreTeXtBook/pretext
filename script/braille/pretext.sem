@@ -137,6 +137,7 @@ listitem li
 
 tablerow tr \*.
 generic td \*;\s
+generic td,data-braille,last-cell \*
 
 
 ##############

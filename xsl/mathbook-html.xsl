@@ -6933,8 +6933,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:if test="not($the-cell/p)">
                     <xsl:text> lines</xsl:text>
                 </xsl:if>
-
             </xsl:attribute>
+            <xsl:if test="not($next-cell)">
+                <xsl:attribute name="data-braille">
+                    <xsl:text>last-cell</xsl:text>
+                </xsl:attribute>
+            </xsl:if>
             <xsl:if test="not($column-span = 1)">
                 <xsl:attribute name="colspan">
                     <xsl:value-of select="$column-span" />
