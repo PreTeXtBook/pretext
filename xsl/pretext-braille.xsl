@@ -153,6 +153,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:if>
         </xsl:if>
     </div>
+    <!-- A marker for generating the Table of Contents,      -->
+    <!-- content of the element is the title of the new page -->
+    <div data-braille="tableofcontents">
+        <xsl:call-template name="type-name">
+            <xsl:with-param name="string-id" select="'toc'" />
+        </xsl:call-template>
+    </div>
 </xsl:template>
 
 <xsl:template match="titlepage/author|titlepage/editor" mode="full-info">
@@ -176,26 +183,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Divisions -->
 <!-- ######### -->
 
-<!-- We override the content of titles for divisions that    -->
-<!-- are peers of chapters (only for the case of a "book").  -->
-<!-- A line break after the number will result in a centered -->
-<!-- type/number over a centered title via a liblouis style  -->
-<!-- on a class that will indicate centering.                -->
-
-<!-- Numbered, chapter-level headings, two lines to HTML -->
-<xsl:template match="chapter|appendix" mode="header-content">
-    <span class="type">
-        <xsl:apply-templates select="." mode="type-name" />
-    </span>
-    <xsl:text> </xsl:text>
-    <span class="codenumber">
-        <xsl:apply-templates select="." mode="number" />
-    </span>
-    <br/>
-    <span class="title">
-        <xsl:apply-templates select="." mode="title-full" />
-    </span>
-</xsl:template>
 
 <!-- Unnumbered, chapter-level headings, just title text -->
 <xsl:template match="preface|acknowledgement|biography|foreword|dedication|solutions[parent::backmatter]|references[parent::backmatter]|index|colophon" mode="header-content">

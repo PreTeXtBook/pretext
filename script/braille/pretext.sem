@@ -55,6 +55,15 @@ heading5 div,class,cell7
 # them with "box lines", identical to blocks
 boxline article,class,paragraphs
 
+###################
+# Table of Contents
+###################
+
+# The element given here will begin on a new page and
+# its content will be the first line of the table of contents
+
+contentsheader div,data-braille,tableofcontents
+
 
 ####################
 # Distinguished Text
