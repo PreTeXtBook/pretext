@@ -160,7 +160,7 @@ if (reading_questions.length) {
          this_rq_controls += '</div>'
   
          var this_rq_answer_and_controls = document.createElement('div');
-         this_rq_answer_and_controls.setAttribute('style', 'width:80%; margin-left:auto; margin-right:auto; margin-top:0.5em;');
+         this_rq_answer_and_controls.setAttribute('style', 'width:80%; padding-left:10%; padding-right:10%; margin-top:0.5em;');
          this_rq_answer_and_controls.setAttribute('class', 'rq_answer');
          this_rq_answer_and_controls.innerHTML = hidden_answer_div + answer_div + this_rq_controls;
          console.log("appending to ", reading_question_id);
@@ -210,7 +210,7 @@ if (reading_questions.length) {
     this_rq_controls += '</div>'
   
     var this_rq_answer_and_controls = document.createElement('div');
-    this_rq_answer_and_controls.setAttribute('style', 'width:80%; margin-left:auto; margin-right:auto; margin-top:0.5em;');
+    this_rq_answer_and_controls.setAttribute('style', 'width:80%; padding-left:10%; padding-right:10%; margin-top:0.5em;');
   
     this_rq_answer_and_controls.innerHTML = answer_textarea + this_rq_controls;
     this.parentNode.insertAdjacentElement("afterend", this_rq_answer_and_controls);
@@ -317,23 +317,24 @@ if (reading_questions.length) {
   /* save a reading question */
 /*  $('body').on('click','.rq_save', function(){
 */
-  function save_one_reading_question(this_ans) {
-    console.log(".rq_save", this_ans.value);
+  function save_one_reading_question(this_ans_id) {
+    this_ans_text_id = this_ans_id + "_text";
+    var this_ans_text = $("#" + this_ans_text_id);
+    console.log("the value:", this_ans_text.value);
 //    var this_rq_id = this_ans.parentNode.previousSibling.previousSibling.id;
-    var this_rq_id = this_ans.id;
-    console.log("this_rq_id", this_rq_id);
+ //   var this_rq_id = this_ans.id;
+    console.log("this_ans_id", this_ans_id);
     var this_rq_ans = this_ans; //.parentNode;
     console.log("this_rq_ans", this_rq_ans);
-    var this_rq_text = this_ans.value;
-    console.log("this_rq_text", this_rq_text);
-    if ( /[^\x00-\x7F]/.test(this_rq_text)) {
-        this_rq_text = this_rq_text.replace(/[^\x00-\x7F]/g, "XX");
+    var this_ans_text_value = this_ans_text.value;
+    console.log("this_rq_text", this_ans_text_value);
+    if ( /[^\x00-\x7F]/.test(this_ans_text_value)) {
+        this_ans_text_value = this_ans_text_value.replace(/[^\x00-\x7F]/g, "XX");
         alert("Illegal characters in answer have been replaced by XX");
     }
-//    this_rq_text = this_rq_text.trim();  // some chrome on windows had trouble with trim
-    this_rq_text = $.trim(this_rq_text);   // jQuery trim
+    this_ans_text_value = $.trim(this_ans_text_value);   // jQuery trim (some chrome on windows had trouble with trim)
   // we have the contents of the answer, so save it to local storage
-    reading_questions_object[this_rq_id] = this_rq_text;
+    reading_questions_object[this_ans_id] = this_ans_text_value;
     localStorage.setObject(reading_questions_object_id, reading_questions_object);
     console.log("Object.keys(reading_questions_object)",Object.keys(reading_questions_object));
     console.log("reading_questions", reading_questions);
@@ -344,7 +345,7 @@ if (reading_questions.length) {
     }
   
   // and save a copy hidden on the page
-    console.log("looking for", this_rq_id + "_hidden");
+    console.log("looking for", this_ans_id + "_hidden");
   // when the initial answer box is created, there is no hidden version
     if ( !document.getElementById(this_rq_id + "_hidden")) {
        var hidden_answer_div = document.createElement('div');
@@ -353,13 +354,13 @@ if (reading_questions.length) {
         hidden_answer_div.setAttribute('style', 'display: none');
         this_rq_ans.insertAdjacentElement("beforebegin", hidden_answer_div);
     }
-    document.getElementById(this_rq_id + "_hidden").innerHTML = escapeHTML(this_rq_text);
+    document.getElementById(this_rq_id + "_hidden").innerHTML = escapeHTML(this_ans_text_value);
   
   //and show it on the page
     var this_ans_static = document.createElement('div');
     this_ans_static.setAttribute('id', this_rq_id); // + "_text");
     this_ans_static.setAttribute('class', 'given_answer has_am');
-    this_ans_static.innerHTML = dollars_to_slashparen(escapeHTML(this_rq_text)) + " "
+    this_ans_static.innerHTML = dollars_to_slashparen(escapeHTML(this_ans_text_value)) + " "
     this_rq_ans.replaceWith(this_ans_static);
   
     MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
@@ -387,6 +388,7 @@ if (reading_questions.length) {
     var this_rq_id = this_ans.parentNode.parentNode.id;
  //   var this_rq_ans = this.parentNode.previousSibling;
     var this_rq_ans = this_ans;
+    var this_rq_ans_id = this_ans.id;
     console.log(".rq_edit", this_rq_id);
     console.log("this_rq_ans", this_rq_ans);
     var this_rq_text = this_rq_ans.innerHTML;
@@ -404,7 +406,9 @@ if (reading_questions.length) {
   
     this_rq_ans.replaceWith(answer_textarea_editable);
   
-//    $(this).parent().removeClass("hidecontrols");
+    console.log("this_ans is",this_ans);
+    $('#' + this_rq_ans_id).parent().addClass("editing");
+
     $('#' + this_rq_id + "_controls").removeClass("hidecontrols");
   
     $(this).parent().parent().removeClass("rq_answer");
@@ -434,12 +438,19 @@ if (reading_questions.length) {
     edit_one_reading_question(this);
     $(this).attr('z-index', '2000');
   });
-  $('body').on('mouseleave','.rq_answer', function(){
-    $(this).children().last().addClass("hidecontrols");
-    $(this).attr('z-index', '');
+  $('body').on('mouseleave','.rq_answer.editing', function(){
+//    $(this).children().last().addClass("hidecontrols");
+//    $(this).attr('z-index', '');
+  //  var this_rq = $(this).find(".given_answer");
+    var this_rq = $(this).find(".rq_answer_text");
+    console.log("this_rq iiiiiiii", this_rq);
+    console.log("this_rq iiiiiiii value", this_rq.value);
+    save_one_reading_question(this_rq.parentNode.id);
+    console.log("left answer area");
+    $(this).removeClass("editing");
   });
   
-  $('body').on('mouseleave','textarea.rq_answer_text', function(){
+  $('xxxxbody').on('mouseleave','textarea.rq_answer_text', function(){
   /*  $(this).children().last().addClass("hidecontrols");
 */
     save_one_reading_question(this);
@@ -452,7 +463,8 @@ if (reading_questions.length) {
     console.log(".rq_delete");
     var this_rq_id = this.parentNode.previousSibling.id;
     console.log(".rq_delete", this_rq_id);
-    $(this).parent().parent().prev().children(".readingquestion_make_answer").removeClass("hidecontrols");
+    $('#' + this_rq_id + "_controls").removeClass("hidecontrols");
+//    $(this).parent().parent().prev().children(".readingquestion_make_answer").removeClass("hidecontrols");
     $(this).parent().parent().remove();
     console.log("reading_questions_object", reading_questions_object);
     delete reading_questions_object[this_rq_id];

@@ -60,14 +60,14 @@ window.addEventListener("load",function(event) {
     }
 });
 
-    /* click an image to see a big version */
-    $('body').on('click','.sbspanel > img:not(.draw_on_me):not(.mag_popup), figure > img:not(.draw_on_me):not(.mag_popup), figure > div > img:not(.draw_on_me):not(.mag_popup)', function(){
+    /* click an image to magnify */
+    $('body').on('click','.image-box > img:not(.draw_on_me):not(.mag_popup), .sbspanel > img:not(.draw_on_me):not(.mag_popup), figure > img:not(.draw_on_me):not(.mag_popup), figure > div > img:not(.draw_on_me):not(.mag_popup)', function(){
         var img_big = document.createElement('div');
         img_big.setAttribute('style', 'background:#fff;');
         img_big.setAttribute('class', 'mag_popup_container');
         img_big.innerHTML = '<img src="' + $(this).attr("src") + '" style="width:100%" class="mag_popup"/>';
  // place_to_put_big_img = $(this).parents(".sbsrow, figure, li").last();
-        place_to_put_big_img = $(this).parents(".sbsrow, figure, li, .cols2 article:nth-of-type(2n)").last();
+        place_to_put_big_img = $(this).parents(".image-box, .sbsrow, figure, li, .cols2 article:nth-of-type(2n)").last();
   // for .cols2, the even ones have to go inside the previous odd one
         if (place_to_put_big_img.prop("tagName") == "ARTICLE") {
            place_to_put_big_img = place_to_put_big_img.prev().children().first();
