@@ -393,23 +393,34 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Display Mathematics -->
 <!-- ################### -->
 
-<!-- We add a space prior to displayed mathematics, -->
-<!-- since this will normally be accomplished by    -->
-<!-- the vertical space and not present in the      -->
-<!-- author's source.  Any arrangement of newlines  -->
-<!-- here is immaterial since HTML-processing will  -->
-<!-- not care.  If we want the Nemeth indicators to -->
-<!-- end, or begin, a line, we should add "br"      -->
-<!-- elements here.                                 -->
+
+<!-- For single-line math we preserve the  div.displaymath -->
+<!-- which we can use to initiate a new line via liblouis. -->
+<!-- We also append the tag.  None of this is much tested  -->
+<!-- for "md" and "mdn".                                   -->
 
 <xsl:template name="display-math-visual-blank-line"/>
 
+<!-- We add the tag *after* the produced LaTeX environment, but *before* the liblouis-controlled div.displaymath ends, so the tag is on the same line. -->
 <xsl:template match="me|men|md|mdn" mode="display-math-wrapper">
+    <xsl:param name="b-original" select="true()" />
     <xsl:param name="content" />
-
-    <xsl:text>&#x20;</xsl:text>
-    <xsl:copy-of select="$content" />
+    <div class="displaymath">
+        <xsl:apply-templates select="." mode="insert-paragraph-id" >
+            <xsl:with-param name="b-original" select="$b-original" />
+        </xsl:apply-templates>
+        <xsl:copy-of select="$content" />
+        <xsl:if test="self::men">
+            <xsl:text>&#x20;(</xsl:text>
+            <xsl:apply-templates select="." mode="number"/>
+            <xsl:text>)</xsl:text>
+        </xsl:if>
+    </div>
 </xsl:template>
+
+<!-- Tags for "men" are accomodated above, so we kill the -->
+<!-- usual LaTeX/MathJax routine which employs \tag{}     -->
+<xsl:template match="men" mode="tag"/>
 
 <!-- BANA Nemeth Guidance: "All other text, including -->
 <!-- punctuation that is logically associated with    -->

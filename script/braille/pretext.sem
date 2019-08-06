@@ -162,6 +162,11 @@ tablerow tr \*.
 generic td \*;\s
 generic td,data-braille,last-cell \*
 
+#############
+# Mathematics
+#############
+
+displaymath div,class,displaymath
 
 ##############
 # Holding Tank
