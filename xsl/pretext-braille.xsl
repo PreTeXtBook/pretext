@@ -289,6 +289,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>no</xsl:text>
 </xsl:template>
 
+<!-- We extend their headings with an additional colon. -->
+<!-- These render then like "Hint:" or "Hint 6:"        -->
+<xsl:template match="&SOLUTION-LIKE;" mode="heading-simple">
+    <xsl:apply-imports/>
+    <xsl:text>:</xsl:text>
+</xsl:template>
+
 <!-- ###################### -->
 <!-- Paragraph-Level Markup -->
 <!-- ###################### -->

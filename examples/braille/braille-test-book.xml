@@ -199,8 +199,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <example>
                 <statement>
                     <p>This is an example of an example.  We did not include a title (as we did for the definition) to test this option.</p>
-                    <p>A second paragraph of the example.  Eventually we will add a hint, and maybe two different solutions.  Perhaps each starting on a new line with text like <q>Hint</q> or <q>Hint:</q>.  Advice welcome.</p>
+                    <p>A second paragraph of the example.  Then we add a hint, and two different solutions.  Al suggests the colon.</p>
                 </statement>
+                <hint>
+                    <p>A small hint to get a student going in the right direction.  Not numbered, since it is the only one.</p>
+                    <p>A second paragraph of the hint to test formatting of a hint, answer or solution.</p>
+                </hint>
+                <solution>
+                    <p>A long complete solution.  Numbered as first.</p>
+                </solution>
+                <solution>
+                    <p>Another long complete solution.  Numbered as second.</p>
+                </solution>
             </example>
 
             <p>Final paragraph of the chapter on environments and blocks.</p>
