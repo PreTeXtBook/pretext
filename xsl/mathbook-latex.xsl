@@ -1045,33 +1045,42 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\setcounter{secnumdepth}{</xsl:text>
         <xsl:value-of select="$latex-numbering-maxlevel" />
     <xsl:text>}&#xa;</xsl:text>
-    <!-- Could condition following on existence of any amsthm environment -->
-    <xsl:text>%% begin: General AMS environment setup&#xa;</xsl:text>
-    <xsl:text>%% Environments built with amsthm package&#xa;</xsl:text>
-    <xsl:text>\usepackage{amsthm}&#xa;</xsl:text>
-    <xsl:text>%% Numbering for Theorems, Conjectures, Examples, Figures, etc&#xa;</xsl:text>
+    <xsl:text>%%&#xa;</xsl:text>
+    <xsl:text>%% AMS "proof" environment is no longer used, but we leave previously&#xa;</xsl:text>
+    <xsl:text>%% implemented \qedhere in place, should the LaTeX be recycled&#xa;</xsl:text>
+    <xsl:text>\newcommand{\qedhere}{\relax}&#xa;</xsl:text>
+    <!--  -->
+    <xsl:text>%%&#xa;</xsl:text>
+    <xsl:text>%% A faux tcolorbox whose only purpose is to provide common numbering&#xa;</xsl:text>
+    <xsl:text>%% facilities for most blocks (possibly not projects, 2D displays)&#xa;</xsl:text>
     <xsl:text>%% Controlled by  numbering.theorems.level  processing parameter&#xa;</xsl:text>
-    <xsl:text>%% Numbering: all theorem-like numbered consecutively&#xa;</xsl:text>
-    <xsl:text>%% i.e. Corollary 4.3 follows Theorem 4.2&#xa;</xsl:text>
-    <xsl:text>%% Always need some theorem environment to set base numbering scheme&#xa;</xsl:text>
-    <xsl:text>%% even if document has no theorems (but has other environments)&#xa;</xsl:text>
-    <!-- http://tex.stackexchange.com/questions/155710/understanding-the-arguments-in-newtheorem-e-g-newtheoremtheoremtheoremsec/155714#155714 -->
-    <xsl:text>%% Create a never-used style first, always&#xa;</xsl:text>
-    <xsl:text>%% simply to provide a global counter to use, namely "cthm"&#xa;</xsl:text>
-    <xsl:text>\newtheorem{cthm}{BadTheoremStringName}</xsl:text>
-    <!-- See numbering-theorems variable being set in mathbook-common.xsl -->
+    <xsl:text>\newtcolorbox[auto counter</xsl:text>
+    <!-- control the levels of the numbering -->
+    <!-- global (no periods) is the default  -->
     <xsl:if test="not($numbering-theorems = 0)">
-        <xsl:text>[</xsl:text>
+        <xsl:text>, number within=</xsl:text>
         <xsl:call-template name="level-to-name">
             <xsl:with-param name="level" select="$numbering-theorems" />
         </xsl:call-template>
-        <xsl:text>]&#xa;</xsl:text>
     </xsl:if>
-    <xsl:text>%% AMS "proof" environment is not used, but we leave previously&#xa;</xsl:text>
-    <xsl:text>%% implemented \qedhere in place, should the LaTeX be recycled&#xa;</xsl:text>
-    <xsl:text>\renewcommand{\qedhere}{\relax}&#xa;</xsl:text>
-    <xsl:text>%% end: General AMS environment setup&#xa;</xsl:text>
-    <!--  -->
+    <xsl:text>]{block}{}&#xa;</xsl:text>
+    <!-- should condition on $project-reps, but it is not defined yet -->
+    <xsl:if test="$b-number-project-distinct">
+        <xsl:text>%%&#xa;</xsl:text>
+        <xsl:text>%% This document is set to number PROJECT-LIKE on a separate numbering scheme&#xa;</xsl:text>
+        <xsl:text>%% So, a faux tcolorbox whose only purpose is to provide this numbering&#xa;</xsl:text>
+        <xsl:text>%% Controlled by  numbering.projects.level  processing parameter&#xa;</xsl:text>
+        <xsl:text>\newtcolorbox[auto counter</xsl:text>
+        <!-- control the levels of the numbering -->
+        <!-- global (no periods) is the default  -->
+        <xsl:if test="not($numbering-projects = 0)">
+            <xsl:text>, number within=</xsl:text>
+            <xsl:call-template name="level-to-name">
+                <xsl:with-param name="level" select="$numbering-projects" />
+            </xsl:call-template>
+        </xsl:if>
+        <xsl:text>]{project-distinct}{}&#xa;</xsl:text>
+    </xsl:if>
     <!-- Groups of environments/blocks -->
     <!-- Variables hold exactly one node of each type in use -->
     <!-- "environment" template constructs...environments -->
@@ -1254,26 +1263,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>%% tcolorbox, with style, for elected commentary&#xa;</xsl:text>
             <xsl:text>%%&#xa;</xsl:text>
             <xsl:apply-templates select="$instance" mode="environment"/>
-        </xsl:if>
-    </xsl:if>
-    <!--  -->
-    <!--  -->
-    <!--  -->
-    <xsl:if test="$project-reps">
-        <xsl:text>%% Numbering for Projects (independent of others)&#xa;</xsl:text>
-        <xsl:text>%% Controlled by  numbering.projects.level  processing parameter&#xa;</xsl:text>
-        <xsl:text>%% Always need a project environment to set base numbering scheme&#xa;</xsl:text>
-        <xsl:text>%% even if document has no projectss (but has other blocks)&#xa;</xsl:text>
-        <xsl:text>%% So "cpjt" environment produces "cpjt" counter&#xa;</xsl:text>
-        <!-- http://tex.stackexchange.com/questions/155710/understanding-the-arguments-in-newtheorem-e-g-newtheoremtheoremtheoremsec/155714#155714 -->
-        <xsl:text>\newtheorem{cpjt}{BadProjectNameString}</xsl:text>
-        <!-- See numbering-projects variable being set in mathbook-common.xsl -->
-        <xsl:if test="not($numbering-projects = 0)">
-            <xsl:text>[</xsl:text>
-            <xsl:call-template name="level-to-name">
-                <xsl:with-param name="level" select="$numbering-projects" />
-            </xsl:call-template>
-            <xsl:text>]&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
     <xsl:if test="$document-root//solutions or $b-needs-solution-styles">
@@ -1595,7 +1584,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:if test="not($b-number-figure-distinct)">
                 <xsl:text>%% http://tex.stackexchange.com/questions/16195&#xa;</xsl:text>
                 <xsl:text>\makeatletter&#xa;</xsl:text>
-                <xsl:text>\let\c@figure\c@cthm&#xa;</xsl:text>
+                <xsl:text>\let\c@figure\c@tcb@cnt@block&#xa;</xsl:text>
                 <xsl:text>\makeatother&#xa;</xsl:text>
             </xsl:if>
         </xsl:if>
@@ -1630,7 +1619,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text>\let\c@table\c@figure&#xa;</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:text>\let\c@table\c@cthm&#xa;</xsl:text>
+                    <xsl:text>\let\c@table\c@tcb@cnt@block&#xa;</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
             <xsl:text>\makeatother&#xa;</xsl:text>
@@ -1676,7 +1665,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text>\let\c@listingcap\c@figure&#xa;</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:text>\let\c@listingcap\c@cthm&#xa;</xsl:text>
+                    <xsl:text>\let\c@listingcap\c@tcb@cnt@block&#xa;</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
             <xsl:text>\makeatother&#xa;</xsl:text>
@@ -1710,7 +1699,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text>\let\c@namedlistcap\c@figure&#xa;</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:text>\let\c@namedlistcap\c@cthm&#xa;</xsl:text>
+                    <xsl:text>\let\c@namedlistcap\c@tcb@cnt@block&#xa;</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
             <xsl:text>\makeatother&#xa;</xsl:text>
@@ -2876,11 +2865,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- projects run on their own counter -->
     <xsl:variable name="counter">
         <xsl:choose>
-            <xsl:when test="&PROJECT-FILTER;">
-                <xsl:text>cpjt</xsl:text>
+            <xsl:when test="(&PROJECT-FILTER;) and $b-number-project-distinct">
+                <xsl:text>project-distinct</xsl:text>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:text>cthm</xsl:text>
+                <xsl:text>block</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
@@ -2895,10 +2884,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>} }&#xa;</xsl:text>
     <!-- create and configure the environment/tcolorbox -->
     <xsl:text>\newtcolorbox</xsl:text>
-    <!-- numbering setup: * indicates existing, -->
-    <!-- already configured, LaTeX counter      -->
+    <!-- run on a common, default, faux counter -->
     <xsl:text>[</xsl:text>
-    <xsl:text>use counter*=</xsl:text>
+    <xsl:text>use counter from=</xsl:text>
     <xsl:value-of select="$counter"/>
     <xsl:text>]</xsl:text>
     <!-- environment's tcolorbox name, pair -->
@@ -2920,8 +2908,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- begin: title construction -->
     <xsl:text>title={{</xsl:text>
     <xsl:apply-templates select="." mode="type-name"/>
-    <xsl:text>~\the</xsl:text>
-    <xsl:value-of select="$counter"/>
+    <xsl:text>~\thetcbcounter</xsl:text>
     <xsl:choose>
         <xsl:when test="&THEOREM-FILTER; or &AXIOM-FILTER;">
             <!-- first space of double space -->
