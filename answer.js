@@ -265,7 +265,8 @@ if (reading_questions.length) {
           }
         });
    }
-   var this_ques_id = this.parentNode.previousSibling.id;
+//   var this_ques_id = this.parentNode.previousSibling.id;
+   var this_ques_id = this.parentNode.parentNode.id;
    console.log("this_ques_id", this_ques_id);
    var compiled_answers = "";
    var title_of_this_section = $("section > h2 > .title").html();
@@ -279,9 +280,11 @@ if (reading_questions.length) {
        var this_answer_all = reading_answers[j];
        var this_student_id = this_answer_all[0];
        var these_specific_answers = JSON.parse(this_answer_all[1]);
+       console.log("these_specific_answers",  these_specific_answers);
        console.log("this_answer_all[2]", this_answer_all[2]);
        var this_submitted_time = JSON.parse(this_answer_all[2]);
  //      var this_submitted_time = this_answer_all[2];
+       console.log("looking for this answer:", this_ques_id + "_text");
        var this_specific_answer = these_specific_answers[this_ques_id + "_text"];
        console.log("this_answer_all",this_answer_all);
        console.log("j",j,"this_specific_answer", this_specific_answer);

@@ -66,7 +66,7 @@ function login_form(mode="login") {
   if (mode == 'logout') {
     the_form += '<form name="logoutform" class="modal-content animate" onSubmit="return removeLogin();" action="">';
     the_form += '<div class="container">\n';
-    the_form += '<button type="submit">Really logout</button>';
+    the_form += '<button type="submit">Yes, really logout</button>';
     the_form += '<div id="dontlogout">Stay logged in</div>'
     the_form += '</div>\n';
     the_form += '</form>\n';
@@ -94,7 +94,7 @@ function login_form(mode="login") {
 }
 
 function loadScript(script) {
-  if (typeof js_version === 'undefined') { js_version = '0.1' }
+  if (typeof js_version === 'undefined') { js_version = '0.12' }
   var newscript = document.createElement('script');
   newscript.type = 'text/javascript';
   newscript.async = true;
@@ -281,10 +281,4 @@ if (pageIdentifier) {
 }
     console.log("the role", role);
 });
-
-/*
-if (!logged_in && typeof login_required !== 'undefined' && login_required) {
-    login_form("login")
-}
-*/
 
