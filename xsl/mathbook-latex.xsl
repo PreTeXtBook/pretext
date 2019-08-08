@@ -1081,6 +1081,36 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
         <xsl:text>]{project-distinct}{}&#xa;</xsl:text>
     </xsl:if>
+    <xsl:if test="$b-number-exercise-distinct">
+        <xsl:text>%%&#xa;</xsl:text>
+        <xsl:text>%% This document is set to number inline exercises on a separate numbering scheme&#xa;</xsl:text>
+        <xsl:text>%% So, a faux tcolorbox whose only purpose is to provide this numbering&#xa;</xsl:text>
+        <xsl:text>\newtcolorbox[auto counter</xsl:text>
+        <!-- control the levels of the numbering -->
+        <!-- global (no periods) is the default  -->
+        <xsl:if test="not($numbering-exercises = 0)">
+            <xsl:text>, number within=</xsl:text>
+            <xsl:call-template name="level-to-name">
+                <xsl:with-param name="level" select="$numbering-exercises" />
+            </xsl:call-template>
+        </xsl:if>
+        <xsl:text>]{exercise-distinct}{}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="$b-number-figure-distinct">
+        <xsl:text>%%&#xa;</xsl:text>
+        <xsl:text>%% This document is set to number figure, table, list, listing on a separate numbering scheme&#xa;</xsl:text>
+        <xsl:text>%% So, a faux tcolorbox whose only purpose is to provide this numbering&#xa;</xsl:text>
+        <xsl:text>\newtcolorbox[auto counter</xsl:text>
+        <!-- control the levels of the numbering -->
+        <!-- global (no periods) is the default  -->
+        <xsl:if test="not($numbering-exercises = 0)">
+            <xsl:text>, number within=</xsl:text>
+            <xsl:call-template name="level-to-name">
+                <xsl:with-param name="level" select="$numbering-figures" />
+            </xsl:call-template>
+        </xsl:if>
+        <xsl:text>]{figure-distinct}{}&#xa;</xsl:text>
+    </xsl:if>
     <!-- Groups of environments/blocks -->
     <!-- Variables hold exactly one node of each type in use -->
     <!-- "environment" template constructs...environments -->
@@ -1549,7 +1579,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:variable name="figure-levels">
             <xsl:choose>
                 <xsl:when test="$b-number-figure-distinct">
-                    <xsl:value-of select="$docinfo/numbering/figures/@level" />
+                    <xsl:value-of select="$numbering-figures" />
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:value-of select="$numbering-theorems" />
@@ -2854,6 +2884,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- element name, but "exercise" does triple duty -->
     <xsl:variable name="environment-name">
         <xsl:choose>
+            <!-- TODO: filter is redundant, here and below, given match? -->
             <xsl:when test="self::exercise and boolean(&INLINE-EXERCISE-FILTER;)">
                 <xsl:text>inlineexercise</xsl:text>
             </xsl:when>
@@ -2862,11 +2893,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <!-- projects run on their own counter -->
+    <!-- projects and inline exercises sometimes run on their own counters -->
     <xsl:variable name="counter">
         <xsl:choose>
             <xsl:when test="(&PROJECT-FILTER;) and $b-number-project-distinct">
                 <xsl:text>project-distinct</xsl:text>
+            </xsl:when>
+            <xsl:when test="self::exercise and boolean(&INLINE-EXERCISE-FILTER;) and $b-number-exercise-distinct">
+                <xsl:text>exercise-distinct</xsl:text>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:text>block</xsl:text>
