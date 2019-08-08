@@ -2884,26 +2884,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <!-- levels of counters, empty is document-wide -->
-    <!-- TODO: this seems to not be used at all? -->
-    <xsl:variable name="counter-division">
-        <xsl:choose>
-            <xsl:when test="&PROJECT-FILTER;">
-                <xsl:if test="not($numbering-projects = 0)">
-                    <xsl:call-template name="level-to-name">
-                        <xsl:with-param name="level" select="$numbering-projects" />
-                    </xsl:call-template>
-                </xsl:if>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:if test="not($numbering-theorems = 0)">
-                    <xsl:call-template name="level-to-name">
-                        <xsl:with-param name="level" select="$numbering-theorems" />
-                    </xsl:call-template>
-                </xsl:if>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
     <xsl:text>%% </xsl:text>
     <!-- per-environment style -->
     <xsl:value-of select="$environment-name"/>
