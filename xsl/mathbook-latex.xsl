@@ -2508,6 +2508,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--    search on mode="xref-as-ref" for more          -->
 <!-- *  Traditional LaTeX labels are implemented with  -->
 <!--    tcolorbox "phantomlabel=" option               -->
+<!-- *  tcolor box seem to begin in horizontal mode,   -->
+<!--    and need to return to vertical mode once       -->
+<!--    concluded (lest, e.g., consecutive boxes       -->
+<!--    overlap). Use of "after={\par}" is the right   -->
+<!--    fix.  See                                      -->
+<!--    https://tex.stackexchange.com/questions/235848 -->
+<!--    /how-to-leave-horizontal-mode                  -->
 
 <!-- Style: -->
 <!-- Provide some comments for the LaTeX source, to aid     -->
@@ -2699,7 +2706,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$b-pageref">
         <xsl:text>\label{#2}</xsl:text>
     </xsl:if>
-    <xsl:text>\hypertarget{#2}{}}, breakable, parbox=false, proofstyle }&#xa;</xsl:text>
+    <xsl:text>\hypertarget{#2}{}}, breakable, parbox=false, after={\par}, proofstyle }&#xa;</xsl:text>
 </xsl:template>
 
 <!-- "case" (of a proof) -->
@@ -2958,7 +2965,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
     <!-- always breakable -->
-    <xsl:text>breakable, parbox=false, </xsl:text>
+    <xsl:text>breakable, parbox=false, after={\par}, </xsl:text>
     <!-- italic body (this should be set elsewhere) -->
     <xsl:if test="&THEOREM-FILTER; or &AXIOM-FILTER;">
         <xsl:text>fontupper=\itshape, </xsl:text>
@@ -3097,7 +3104,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- line. Presumably the line will stretch when the -->
 <!-- tombstone moves onto its own line.              -->
 <xsl:template match="proof" mode="tcb-style">
-    <xsl:text>bwminimalstyle, fonttitle=\normalfont\itshape, attach title to upper, after title={\space}, after upper={\space\space\hspace*{\stretch{1}}\(\blacksquare\)}, after={\par},&#xa;</xsl:text>
+    <xsl:text>bwminimalstyle, fonttitle=\normalfont\itshape, attach title to upper, after title={\space}, after upper={\space\space\hspace*{\stretch{1}}\(\blacksquare\)},&#xa;</xsl:text>
 </xsl:template>
 
 <!-- "objectives" -->
@@ -3151,12 +3158,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- environments.  But ideally, we would split out    -->
 <!-- this piece into a template for just theorems      -->
 <!-- and axioms.                                       -->
-<!-- tcolor box seem to begin in horizontal mode,      -->
-<!-- and need to return to vertical mode once          -->
-<!-- concluded (lest, e.g., consecutive boxes overlap).-->
-<!-- Use of "after={\par}" is the right fix.  See      -->
-<!-- https://tex.stackexchange.com/questions/235848/   -->
-<!-- how-to-leave-horizontal-mode                      -->
 <!-- DEFINITION-LIKE and EXAMPLE-LIKE are exceptional  -->
 <!-- in that markers are inserted with "after upper"   -->
 <!-- to indicate the end of the environment.           -->
@@ -3165,11 +3166,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="&DEFINITION-LIKE;" mode="tcb-style">
-    <xsl:text>bwminimalstyle, runintitlestyle, blockspacingstyle, after title={\space}, after upper={\space\space\hspace*{\stretch{1}}\(\lozenge\)}, after={\par}, </xsl:text>
+    <xsl:text>bwminimalstyle, runintitlestyle, blockspacingstyle, after title={\space}, after upper={\space\space\hspace*{\stretch{1}}\(\lozenge\)}, </xsl:text>
 </xsl:template>
 
 <xsl:template match="&EXAMPLE-LIKE;" mode="tcb-style">
-    <xsl:text>bwminimalstyle, runintitlestyle, blockspacingstyle, after title={\space}, after upper={\space\space\hspace*{\stretch{1}}\(\square\)}, after={\par}, </xsl:text>
+    <xsl:text>bwminimalstyle, runintitlestyle, blockspacingstyle, after title={\space}, after upper={\space\space\hspace*{\stretch{1}}\(\square\)}, </xsl:text>
 </xsl:template>
 
 <!-- FIGURE-LIKE: "list" -->
