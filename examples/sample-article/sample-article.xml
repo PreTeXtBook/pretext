@@ -6782,7 +6782,7 @@ the xsltproc executable.
             <subsection>
                 <title>Lists in Side-by-Sides</title>
 
-                <p>A <q>regular</q> list normally belongs in a <c>p</c> but it can be placed unadorned into a panel of a side-by-side, as demonstrated below in <xref ref="subsection-sbs-other-panels" text="type-global" />.  You can also put <q>named</q> lists into a panel, and then the title, introduction, conclusion, and caption will behave as expected, along with a number that might be used in a cross-reference (<xref ref="color-list-as-panel" text="global" />), or perhaps we might cross-reference by title, <xref ref="color-list-as-panel" text="title" />. (2019-06-12, this list has no title>, but will soon.)</p>
+                <p>A <q>regular</q> list normally belongs in a <c>p</c> but it can be placed unadorned into a panel of a side-by-side, as demonstrated below in <xref ref="subsection-sbs-other-panels" text="type-global" />.  You can also put <q>named</q> lists into a panel, and then the title, introduction, conclusion, and caption will behave as expected, along with a number that might be used in a cross-reference (<xref ref="color-list-as-panel" text="global" />), or perhaps we might cross-reference by title, <xref ref="color-list-as-panel" text="title" />.</p>
 
                 <figure>
                     <caption>Two named lists</caption>
@@ -7701,7 +7701,7 @@ the xsltproc executable.
                 </sidebyside>
             </figure>
 
-            <p>Now we have some more interactive elements</p>
+            <p>Now we have some more interactive elements.</p>
 
             <sidebyside  margins="5%" widths="40% 45%">
                 <!-- Hosted -->
