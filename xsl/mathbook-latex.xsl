@@ -8385,38 +8385,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Images -->
 <!-- ###### -->
 
-<!-- Get the layout, get the width, convert to real number decimal, -->
-<!-- so as to fill the width key on a LaTeX \includegraphics        -->
-<xsl:template match="image" mode="get-width-fraction">
-    <xsl:variable name="rtf-layout">
-        <xsl:apply-templates select="." mode="layout-parameters" />
-    </xsl:variable>
-    <xsl:variable name="layout" select="exsl:node-set($rtf-layout)" />
-    <xsl:value-of select="$layout/width div 100" />
-</xsl:template>
-
-<!-- IN-PROGRESS: Following versions match naked images, and any image -->
-<!-- inside a sidebyside, leaving only figure/image to use preceding   -->
-<!-- (variable) value.  Once every image is inside a tcolorbox, then   -->
-<!-- the contained image will have the width of the box, set as        -->
-<!-- 1\linewidth (i.e. \linewidth).  Then this/these templates         -->
-<!-- can be removed.                                                   -->
-
-<!-- Anyway that an image is buried in a side-by-side control passes to  -->
-<!-- the sbs layout and the linewidth of the resulting tcolorboxes is restricted -->
-<xsl:template match="image[ancestor::sidebyside]" mode="get-width-fraction">
-    <xsl:value-of select="'1'"/>
-</xsl:template>
-
-<!-- A "naked" image is going into a width-controlled tcolorbox -->
-<xsl:template match="image[not(parent::figure or parent::sidebyside or parent::stack)]" mode="get-width-fraction">
-    <xsl:value-of select="'1'"/>
-</xsl:template>
-
-<!-- naked images into a tcolorbox -->
-<!-- IN-PROGRESS: non-sidebyside images should all be done this way -->
-<!-- in other words, figure/image[not(ancestor::sidebyside)] -->
-<xsl:template match="image[not(ancestor::sidebyside or parent::figure)]">
+<!-- First: images in full-width contexts                   -->
+<!-- naked images go into a tcolorbox for layout control    -->
+<!-- figure/image (not in a sidebyside) into same tcolorbox -->
+<xsl:template match="image[not(ancestor::sidebyside)]">
     <xsl:variable name="rtf-layout">
         <xsl:apply-templates select="." mode="layout-parameters" />
     </xsl:variable>
@@ -8435,13 +8407,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{image}%&#xa;</xsl:text>
 </xsl:template>
 
-<xsl:template match="image[ancestor::sidebyside or parent::figure]">
+<!-- Second: images already constrained by side-by-side panels -->
+<xsl:template match="image[ancestor::sidebyside]">
     <!-- get a newline if inside a "stack" -->
     <xsl:if test="parent::stack and preceding-sibling::*">
         <xsl:text>\par&#xa;</xsl:text>
     </xsl:if>
     <xsl:apply-templates select="." mode="image-inclusion" />
 </xsl:template>
+
+<!-- Various versions of images have their width set to the         -->
+<!-- prevailing available width.  This is \linewidth when:          -->
+<!-- full text width is available, width is constrained (like in    -->
+<!-- a list item), or width is constrained by a side-by-side panel. -->
 
 <!-- With full source specified, default to PDF format -->
 <xsl:template match="image[@source]" mode="image-inclusion">
@@ -8450,9 +8428,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="filename" select="@source" />
         </xsl:call-template>
     </xsl:variable>
-    <xsl:text>\includegraphics[width=</xsl:text>
-    <xsl:apply-templates select="." mode="get-width-fraction" />
-    <xsl:text>\linewidth]</xsl:text>
+    <xsl:text>\includegraphics[width=\linewidth]</xsl:text>
     <xsl:text>{</xsl:text>
     <xsl:apply-templates select="@source" mode="visible-id" />
     <xsl:if test="not($extension)">
@@ -8464,9 +8440,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Asymptote graphics language  -->
 <!-- PDF's produced by mbx script -->
 <xsl:template match="image[asymptote]" mode="image-inclusion">
-    <xsl:text>\includegraphics[width=</xsl:text>
-    <xsl:apply-templates select="." mode="get-width-fraction" />
-    <xsl:text>\linewidth]</xsl:text>
+    <xsl:text>\includegraphics[width=\linewidth]</xsl:text>
     <xsl:text>{</xsl:text>
     <xsl:value-of select="$directory.images" />
     <xsl:text>/</xsl:text>
@@ -8483,17 +8457,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>/</xsl:text>
     <xsl:apply-templates select="." mode="visible-id" />
     <xsl:text>.pdf}%&#xa;</xsl:text>
-    <xsl:text>{\includegraphics[width=</xsl:text>
-    <xsl:apply-templates select="." mode="get-width-fraction" />
-    <xsl:text>\linewidth]</xsl:text>
+    <xsl:text>{\includegraphics[width=\linewidth]</xsl:text>
     <xsl:text>{</xsl:text>
     <xsl:value-of select="$directory.images" />
     <xsl:text>/</xsl:text>
     <xsl:apply-templates select="." mode="visible-id" />
     <xsl:text>.pdf}}%&#xa;</xsl:text>
-    <xsl:text>{\includegraphics[width=</xsl:text>
-    <xsl:apply-templates select="." mode="get-width-fraction" />
-    <xsl:text>\linewidth]</xsl:text>
+    <xsl:text>{\includegraphics[width=\linewidth]</xsl:text>
     <xsl:text>{</xsl:text>
     <xsl:value-of select="$directory.images" />
     <xsl:text>/</xsl:text>
@@ -8507,32 +8477,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Side-By-Side scaling happens there, could be here -->
 <xsl:template match="image[latex-image-code]|image[latex-image]" mode="image-inclusion">
     <!-- tikz images go into a tcolorbox where \linewidth is reset. -->
-    <!-- For a "naked" image we need to provide the resizing        -->
-    <!-- Eventually we will provide it when included in a figure,   -->
-    <!-- or maybe it migrates to one of the two "image" (non-modal) -->
-    <!-- templates above, we'll see                                 -->
-    <!-- NB two "choose" could just set wrappings, so we would      -->
-    <!-- consolidate the text creation                              -->
-    <xsl:choose>
-        <!-- grouping reins in the scope of any local graphics settings -->
-        <!-- NB: figures, with tikz, outside of sidebyside, need     -->
-        <!-- changes to accomodate resizing to fit requested layouts -->
-        <xsl:when test="parent::figure and not(ancestor::sidebyside)">
-            <xsl:text>{&#xa;</xsl:text>
-            <xsl:call-template name="sanitize-text">
-                <xsl:with-param name="text" select="latex-image-code|latex-image" />
-            </xsl:call-template>
-            <xsl:text>}&#xa;</xsl:text>
-        </xsl:when>
-        <!-- grouping reins in the scope of any local graphics settings -->
-        <xsl:otherwise>
-            <xsl:text>\resizebox{\linewidth}{!}{%&#xa;</xsl:text>
-            <xsl:call-template name="sanitize-text">
-                <xsl:with-param name="text" select="latex-image-code|latex-image" />
-            </xsl:call-template>
-            <xsl:text>}%&#xa;</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+    <!-- grouping reins in the scope of any local graphics settings -->
+    <!-- we resize what tikz produces, to fill a containing box     -->
+    <!-- changes to accomodate resizing to fit requested layouts -->
+    <xsl:text>\resizebox{\linewidth}{!}{%&#xa;</xsl:text>
+    <xsl:call-template name="sanitize-text">
+        <xsl:with-param name="text" select="latex-image-code|latex-image" />
+    </xsl:call-template>
+    <xsl:text>}%&#xa;</xsl:text>
 </xsl:template>
 
 <!-- EXPERIMENTAL -->
