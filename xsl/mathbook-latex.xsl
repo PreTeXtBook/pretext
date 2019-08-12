@@ -1277,10 +1277,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- (SUB)FIGURE-LIKE -->
     <!-- subcaptioned versions, if contained by overall figure -->
     <xsl:variable name="subfigure-reps" select="
-        ($document-root//figure/*/figure)[1]|
-        ($document-root//figure/*/table)[1]|
-        ($document-root//figure/*/listing)[1]|
-        ($document-root//figure/*/list)[1]"/>
+        ($document-root//figure/sidebyside/figure|$document-root//figure/sbsgroup/sidebyside/figure)[1]|
+        ($document-root//figure/sidebyside/table|$document-root//figure/sbsgroup/sidebyside/table)[1]|
+        ($document-root//figure/sidebyside/listing|$document-root//figure/sbsgroup/sidebyside/listing)[1]|
+        ($document-root//figure/sidebyside/list|$document-root//figure/sbsgroup/sidebyside/list)[1]"/>
     <xsl:if test="$subfigure-reps">
         <xsl:text>%%&#xa;</xsl:text>
         <xsl:text>%% tcolorbox, with styles, for (SUB)FIGURE-LIKE&#xa;</xsl:text>
@@ -2801,6 +2801,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="figure|table|listing|list" mode="environment">
+    <!-- could be more stringent, sidebyside in     -->
+    <!-- slot 1, ancestor figure is in slot 2 or 3: -->
+    <!--     figure/sidebyside/*                    -->
+    <!--     figure/sbsgroup/sidebyside/*           -->
     <xsl:variable name="b-subcaptioned" select="boolean(ancestor::*[self::figure])"/>
     <xsl:variable name="environment-name">
         <xsl:apply-templates select="." mode="environment-name"/>
