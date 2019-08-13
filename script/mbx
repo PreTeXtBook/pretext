@@ -474,7 +474,7 @@ def webwork_to_xml(xslt_exec, ptx_xsl_dir, xml_source, server_params, dest_dir):
         except:
             bad_xml = True
         if not bad_xml:
-            if problem_root.find('statement') is None:
+            if problem_root.find('.//statement') is None:
                 no_statement = True
 
         file_empty_msg = "PTX:ERROR:  WeBWorK problem {} was empty\n"
