@@ -8203,13 +8203,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\par\smallskip\centerline{A deprecated JSXGraph interactive demonstration goes here in interactive output.}\smallskip&#xa;</xsl:text>
 </xsl:template>
 
-
-<!-- Figures, Tables and Listings are floats                          -->
-<!-- We try to fix their location with the [H] specifier, but         -->
-<!-- if the first item of an AMS environment, they may float up       -->
-<!-- Seems LaTeX is stacking boxes vertically, and we need to go to   -->
-<!-- horizontal mode before doing these floating layout-type elements -->
-<!-- Necessary before a "lstlisting" environment with surrounding box -->
+<!-- We sometimes need to explicitly leave LaTeX's vertical mode.     -->
+<!-- But we try to be judicious about using this.  Overuse makes      -->
+<!-- for bad spacing.                                                 -->
 <!-- Explanation:  http://tex.stackexchange.com/questions/22852/      -->
 <!-- function-and-usage-of-leavevmode                                 -->
 <!--   "Use \leavevmode for all macros which could be used at         -->
