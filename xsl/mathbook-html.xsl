@@ -215,7 +215,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="html.css.server" select="'https://pretextbook.org'" />
 <xsl:param name="html.css.version" select="'0.2'" />
 <xsl:param name="html.js.server" select="'https://pretextbook.org'" />
-<xsl:param name="html.js.version" select="'0.11'" />
+<xsl:param name="html.js.version" select="'0.12'" />
 <xsl:param name="html.css.colorfile" select="''" />
 <!-- A temporary variable for testing -->
 <xsl:param name="debug.colors" select="''"/>
@@ -224,14 +224,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <!-- 2019-05-29: override with new files, no error-checking    -->
         <!-- if not used, then previous scheme is employed identically -->
+        <!-- 2019-08-12: this is current scheme, so used first. -->
+        <!-- To be replaced with publisher file option.         -->
         <xsl:when test="not($debug.colors = '')">
             <xsl:text>colors_</xsl:text>
             <xsl:value-of select="$debug.colors"/>
             <xsl:text>.css</xsl:text>
         </xsl:when>
+        <!-- 2019-08-12: this is the older scheme, so if nothing is -->
+        <!-- supplied for both switches, then we get new default    -->
         <xsl:when test="$html.css.colorfile = ''">
             <xsl:text>colors_default.css</xsl:text>
         </xsl:when>
+        <!-- 2019-08-12: nothing new in old switch, and something in -->
+        <!-- the old switch, then the old switch is employed         -->
         <xsl:otherwise>
             <xsl:value-of select="$html.css.colorfile"/>
         </xsl:otherwise>

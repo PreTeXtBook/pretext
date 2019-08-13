@@ -142,6 +142,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="b-has-webwork-reps" select="boolean($document-root//webwork-reps)" />
 <xsl:variable name="b-has-program"      select="boolean($document-root//program)" />
 <xsl:variable name="b-has-console"      select="boolean($document-root//console)" />
+<xsl:variable name="b-has-sidebyside"   select="boolean($document-root//sidebyside)" />
 <xsl:variable name="b-has-sage"         select="boolean($document-root//sage)" />
 <xsl:variable name="b-has-sfrac"        select="boolean($document-root//m[contains(text(),'sfrac')] or $document-root//md[contains(text(),'sfrac')] or $document-root//me[contains(text(),'sfrac')] or $document-root//mrow[contains(text(),'sfrac')])" />
 
@@ -158,6 +159,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- handler in xsl/mathbook-common.xsl to    -->
 <!-- not dress-up clause-ending punctuation   -->
 <xsl:variable name="latex-processing" select="'native'" />
+
+<!-- Not a parameter, a variable to override deliberately within a conversion -->
+<xsl:variable name="b-latex-hardcode-numbers" select="false()"/>
 
 <!-- We allow publishers to choose one-sided or two-sided -->
 <!-- "printing" though the default will vary with the     -->
@@ -319,10 +323,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- is set to false here, and an importing stylesheet can     -->
 <!-- override it to be true.                                   -->
 <xsl:variable name="b-needs-solution-styles" select="false()"/>
-
-<!-- Experiment with different float options for figures and tables  -->
-<!-- This switch is not supported and may be removed at any time     -->
-<xsl:variable name="debug.float" select="'H'"/>
 
 <!-- ############## -->
 <!-- Entry Template -->
@@ -541,6 +541,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% See:  https://tug.org/TUGboat/tb36-3/tb114ltnews22.pdf&#xa;</xsl:text>
     <xsl:text>%% and read "Fewer fragile commands" in distribution's  latexchanges.pdf&#xa;</xsl:text>
     <xsl:text>\IfFileExists{latexrelease.sty}{}{\usepackage{fixltx2e}}&#xa;</xsl:text>
+    <!-- could condition on "subfigure-reps" -->
+    <xsl:if test="$b-has-sidebyside">
+        <xsl:text>%% shorter subnumbers in some side-by-side require manipulations&#xa;</xsl:text>
+        <xsl:text>\usepackage{xstring}&#xa;</xsl:text>
+    </xsl:if>
     <xsl:if test="$document-root//fn or $document-root//part">
         <xsl:text>%% Footnote counters and part/chapter counters are manipulated&#xa;</xsl:text>
         <xsl:text>%% April 2018:  chngcntr  commands now integrated into the kernel,&#xa;</xsl:text>
@@ -1045,33 +1050,89 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\setcounter{secnumdepth}{</xsl:text>
         <xsl:value-of select="$latex-numbering-maxlevel" />
     <xsl:text>}&#xa;</xsl:text>
-    <!-- Could condition following on existence of any amsthm environment -->
-    <xsl:text>%% begin: General AMS environment setup&#xa;</xsl:text>
-    <xsl:text>%% Environments built with amsthm package&#xa;</xsl:text>
-    <xsl:text>\usepackage{amsthm}&#xa;</xsl:text>
-    <xsl:text>%% Numbering for Theorems, Conjectures, Examples, Figures, etc&#xa;</xsl:text>
+    <xsl:text>%%&#xa;</xsl:text>
+    <xsl:text>%% AMS "proof" environment is no longer used, but we leave previously&#xa;</xsl:text>
+    <xsl:text>%% implemented \qedhere in place, should the LaTeX be recycled&#xa;</xsl:text>
+    <xsl:text>\newcommand{\qedhere}{\relax}&#xa;</xsl:text>
+    <!--  -->
+    <xsl:text>%%&#xa;</xsl:text>
+    <xsl:text>%% A faux tcolorbox whose only purpose is to provide common numbering&#xa;</xsl:text>
+    <xsl:text>%% facilities for most blocks (possibly not projects, 2D displays)&#xa;</xsl:text>
     <xsl:text>%% Controlled by  numbering.theorems.level  processing parameter&#xa;</xsl:text>
-    <xsl:text>%% Numbering: all theorem-like numbered consecutively&#xa;</xsl:text>
-    <xsl:text>%% i.e. Corollary 4.3 follows Theorem 4.2&#xa;</xsl:text>
-    <xsl:text>%% Always need some theorem environment to set base numbering scheme&#xa;</xsl:text>
-    <xsl:text>%% even if document has no theorems (but has other environments)&#xa;</xsl:text>
-    <!-- http://tex.stackexchange.com/questions/155710/understanding-the-arguments-in-newtheorem-e-g-newtheoremtheoremtheoremsec/155714#155714 -->
-    <xsl:text>%% Create a never-used style first, always&#xa;</xsl:text>
-    <xsl:text>%% simply to provide a global counter to use, namely "cthm"&#xa;</xsl:text>
-    <xsl:text>\newtheorem{cthm}{BadTheoremStringName}</xsl:text>
-    <!-- See numbering-theorems variable being set in mathbook-common.xsl -->
+    <xsl:text>\newtcolorbox[auto counter</xsl:text>
+    <!-- control the levels of the numbering -->
+    <!-- global (no periods) is the default  -->
     <xsl:if test="not($numbering-theorems = 0)">
-        <xsl:text>[</xsl:text>
+        <xsl:text>, number within=</xsl:text>
         <xsl:call-template name="level-to-name">
             <xsl:with-param name="level" select="$numbering-theorems" />
         </xsl:call-template>
-        <xsl:text>]&#xa;</xsl:text>
     </xsl:if>
-    <xsl:text>%% AMS "proof" environment is not used, but we leave previously&#xa;</xsl:text>
-    <xsl:text>%% implemented \qedhere in place, should the LaTeX be recycled&#xa;</xsl:text>
-    <xsl:text>\renewcommand{\qedhere}{\relax}&#xa;</xsl:text>
-    <xsl:text>%% end: General AMS environment setup&#xa;</xsl:text>
-    <!--  -->
+    <xsl:text>]{block}{}&#xa;</xsl:text>
+    <!-- should condition on $project-reps, but it is not defined yet -->
+    <xsl:if test="$b-number-project-distinct">
+        <xsl:text>%%&#xa;</xsl:text>
+        <xsl:text>%% This document is set to number PROJECT-LIKE on a separate numbering scheme&#xa;</xsl:text>
+        <xsl:text>%% So, a faux tcolorbox whose only purpose is to provide this numbering&#xa;</xsl:text>
+        <xsl:text>%% Controlled by  numbering.projects.level  processing parameter&#xa;</xsl:text>
+        <xsl:text>\newtcolorbox[auto counter</xsl:text>
+        <!-- control the levels of the numbering -->
+        <!-- global (no periods) is the default  -->
+        <xsl:if test="not($numbering-projects = 0)">
+            <xsl:text>, number within=</xsl:text>
+            <xsl:call-template name="level-to-name">
+                <xsl:with-param name="level" select="$numbering-projects" />
+            </xsl:call-template>
+        </xsl:if>
+        <xsl:text>]{project-distinct}{}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="$b-number-exercise-distinct">
+        <xsl:text>%%&#xa;</xsl:text>
+        <xsl:text>%% This document is set to number inline exercises on a separate numbering scheme&#xa;</xsl:text>
+        <xsl:text>%% So, a faux tcolorbox whose only purpose is to provide this numbering&#xa;</xsl:text>
+        <xsl:text>\newtcolorbox[auto counter</xsl:text>
+        <!-- control the levels of the numbering -->
+        <!-- global (no periods) is the default  -->
+        <xsl:if test="not($numbering-exercises = 0)">
+            <xsl:text>, number within=</xsl:text>
+            <xsl:call-template name="level-to-name">
+                <xsl:with-param name="level" select="$numbering-exercises" />
+            </xsl:call-template>
+        </xsl:if>
+        <xsl:text>]{exercise-distinct}{}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="$b-number-figure-distinct">
+        <xsl:text>%%&#xa;</xsl:text>
+        <xsl:text>%% This document is set to number figure, table, list, listing on a separate numbering scheme&#xa;</xsl:text>
+        <xsl:text>%% So, a faux tcolorbox whose only purpose is to provide this numbering&#xa;</xsl:text>
+        <xsl:text>\newtcolorbox[auto counter</xsl:text>
+        <!-- control the levels of the numbering -->
+        <!-- global (no periods) is the default  -->
+        <xsl:if test="not($numbering-exercises = 0)">
+            <xsl:text>, number within=</xsl:text>
+            <xsl:call-template name="level-to-name">
+                <xsl:with-param name="level" select="$numbering-figures" />
+            </xsl:call-template>
+        </xsl:if>
+        <xsl:text>]{figure-distinct}{}&#xa;</xsl:text>
+    </xsl:if>
+    <!-- TODO: condition of figure/*/figure-like, or $subfigure-reps -->
+    <xsl:text>%% A faux tcolorbox whose only purpose is to provide common numbering&#xa;</xsl:text>
+    <xsl:text>%% facilities for 2D displays which are subnumbered as part of a "sidebyside"&#xa;</xsl:text>
+    <xsl:text>\newtcolorbox[auto counter</xsl:text>
+    <!-- control the levels of the numbering -->
+    <!-- global (no periods) is the default  -->
+    <xsl:text>, number within=</xsl:text>
+    <xsl:choose>
+        <xsl:when test="$b-number-figure-distinct">
+            <xsl:text>tcb@cnt@figure-distinct</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>tcb@cnt@block</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>, number freestyle={\noexpand\thetcb@cnt@block(\noexpand\alph{\tcbcounter})}</xsl:text>
+    <xsl:text>]{subdisplay}{}&#xa;</xsl:text>
     <!-- Groups of environments/blocks -->
     <!-- Variables hold exactly one node of each type in use -->
     <!-- "environment" template constructs...environments -->
@@ -1202,8 +1263,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="environment"/>
     </xsl:for-each>
     <!-- FIGURE-LIKE -->
-    <!-- 2019-07-12 just "list" now -->
+    <!-- subcaptioned are separate -->
     <xsl:variable name="figure-reps" select="
+        ($document-root//figure)[1]|
+        ($document-root//table)[1]|
+        ($document-root//listing)[1]|
         ($document-root//list)[1]"/>
     <xsl:if test="$figure-reps">
         <xsl:text>%%&#xa;</xsl:text>
@@ -1211,6 +1275,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%%&#xa;</xsl:text>
     </xsl:if>
     <xsl:for-each select="$figure-reps">
+        <xsl:apply-templates select="." mode="environment"/>
+    </xsl:for-each>
+    <!-- (SUB)FIGURE-LIKE -->
+    <!-- subcaptioned versions, if contained by overall figure -->
+    <xsl:variable name="subfigure-reps" select="
+        ($document-root//figure/sidebyside/figure|$document-root//figure/sbsgroup/sidebyside/figure)[1]|
+        ($document-root//figure/sidebyside/table|$document-root//figure/sbsgroup/sidebyside/table)[1]|
+        ($document-root//figure/sidebyside/listing|$document-root//figure/sbsgroup/sidebyside/listing)[1]|
+        ($document-root//figure/sidebyside/list|$document-root//figure/sbsgroup/sidebyside/list)[1]"/>
+    <xsl:if test="$subfigure-reps">
+        <xsl:text>%%&#xa;</xsl:text>
+        <xsl:text>%% tcolorbox, with styles, for (SUB)FIGURE-LIKE&#xa;</xsl:text>
+        <xsl:text>%%&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:for-each select="$subfigure-reps">
         <xsl:apply-templates select="." mode="environment"/>
     </xsl:for-each>
     <!-- INTRODUCTION, CONCLUSION (divisional) -->
@@ -1254,26 +1333,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>%% tcolorbox, with style, for elected commentary&#xa;</xsl:text>
             <xsl:text>%%&#xa;</xsl:text>
             <xsl:apply-templates select="$instance" mode="environment"/>
-        </xsl:if>
-    </xsl:if>
-    <!--  -->
-    <!--  -->
-    <!--  -->
-    <xsl:if test="$project-reps">
-        <xsl:text>%% Numbering for Projects (independent of others)&#xa;</xsl:text>
-        <xsl:text>%% Controlled by  numbering.projects.level  processing parameter&#xa;</xsl:text>
-        <xsl:text>%% Always need a project environment to set base numbering scheme&#xa;</xsl:text>
-        <xsl:text>%% even if document has no projectss (but has other blocks)&#xa;</xsl:text>
-        <xsl:text>%% So "cpjt" environment produces "cpjt" counter&#xa;</xsl:text>
-        <!-- http://tex.stackexchange.com/questions/155710/understanding-the-arguments-in-newtheorem-e-g-newtheoremtheoremtheoremsec/155714#155714 -->
-        <xsl:text>\newtheorem{cpjt}{BadProjectNameString}</xsl:text>
-        <!-- See numbering-projects variable being set in mathbook-common.xsl -->
-        <xsl:if test="not($numbering-projects = 0)">
-            <xsl:text>[</xsl:text>
-            <xsl:call-template name="level-to-name">
-                <xsl:with-param name="level" select="$numbering-projects" />
-            </xsl:call-template>
-            <xsl:text>]&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
     <xsl:if test="$document-root//solutions or $b-needs-solution-styles">
@@ -1399,19 +1458,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:if>
-    <!-- miscellaneous, not categorized yet             -->
-    <!-- the sharp corners are meant to distinguis this -->
-    <!-- from an assemblage, which as rounded corners   -->
-    <xsl:if test="$document-root//list">
-        <!-- 2019-07-12 now only used in sidebyside -->
-        <xsl:text>%% named list environment and style&#xa;</xsl:text>
-        <xsl:text>\newtcolorbox{namedlistcontent}&#xa;</xsl:text>
-        <xsl:text>  {breakable, parbox=false, skin=enhanced, sharp corners, colback=white, colframe=black,&#xa;</xsl:text>
-        <xsl:text>   boxrule=0.15ex, left skip=3ex, right skip=3ex}&#xa;</xsl:text>
-    </xsl:if>
     <!-- Localize various standard names in use         -->
     <!-- Many environments addressed upon creation above -->
-    <!-- Figure and Table addressed elsewhere           -->
     <!-- Index, table of contents done elsewhere        -->
     <!-- http://www.tex.ac.uk/FAQ-fixnam.html           -->
     <!-- http://tex.stackexchange.com/questions/62020/how-to-change-the-word-proof-in-the-proof-environment -->
@@ -1515,206 +1563,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$document-root//cell/line">
         <xsl:text>\newcommand{\tablecelllines}[3]%&#xa;</xsl:text>
         <xsl:text>{\begin{tabular}[#2]{@{}#1@{}}#3\end{tabular}}&#xa;</xsl:text>
-    </xsl:if>
-    <!-- Float package allows for placment [H]ere                    -->
-    <!-- Numbering happens along with theorem counter above,         -->
-    <!-- but could be done with caption package hook, see both       -->
-    <!-- New names are necessary to make "within" numbering possible -->
-    <!-- http://tex.stackexchange.com/questions/127914/custom-counter-steps-twice-when-invoked-from-caption-using-caption-package -->
-    <!-- http://tex.stackexchange.com/questions/160207/side-effect-of-caption-package-with-custom-counter                         -->
-    <!-- NB: sidebyside is to make a fixed floating enviroment, it should be replaced -->
-    <xsl:if test="$document-root//figure | $document-root//image | $document-root//table | $document-root//listing | $document-root//list | $document-root//sidebyside">
-        <xsl:text>%% Figures, Tables, Listings, Named Lists, Floats&#xa;</xsl:text>
-        <xsl:text>%% The [H]ere option of the float package fixes floats in-place,&#xa;</xsl:text>
-        <xsl:text>%% in deference to web usage, where floats are totally irrelevant&#xa;</xsl:text>
-        <xsl:text>%% You can remove some of this setup, to restore standard LaTeX behavior&#xa;</xsl:text>
-        <xsl:text>%% HOWEVER, numbering of figures/tables AND theorems/examples/remarks, etc&#xa;</xsl:text>
-        <xsl:text>%% may de-synchronize with the numbering in the HTML version&#xa;</xsl:text>
-        <xsl:text>%% You can remove the "placement={H}" option to allow flotation and&#xa;</xsl:text>
-        <xsl:text>%% preserve numbering, BUT the numbering may then appear "out-of-order"&#xa;</xsl:text>
-        <xsl:text>%% Floating environments: http://tex.stackexchange.com/questions/95631/&#xa;</xsl:text>
-        <!-- Float package defines the "H" specifier                       -->
-        <!-- TODO: could conditionally load  float  for tables and figures -->
-        <xsl:text>\usepackage{float}&#xa;</xsl:text>
-        <!-- newfloat  package has \SetupFloatingEnvironment                -->
-        <!-- \DeclareCaptionType is an undocumented command,                -->
-        <!-- available in the  caption  package, by the same author         -->
-        <!-- and also in the  subcaption  package, again by the same author -->
-        <!-- See comment by this author, Axel Sommerfeldt in                -->
-        <!-- https://tex.stackexchange.com/questions/115193/                -->
-        <!-- (continuous-numbering-of-custom-float-with-caption-package)    -->
-        <!-- capt-of  sounds appealing, but then can't bold-face labels (?) -->
-        <xsl:text>\usepackage{newfloat}&#xa;</xsl:text>
-        <xsl:text>\usepackage{caption}</xsl:text>
-        <!-- First, captioned items subsidiary to a captioned figure -->
-        <!-- Seem to be bold face without extra effort               -->
-        <xsl:if test="$document-root//figure/sidebyside/*[caption] | $document-root//figure/sbsgroup/sidebyside/*[caption]">
-            <xsl:text>%% Captioned items inside side-by-side within captioned figure&#xa;</xsl:text>
-            <xsl:text>\usepackage{subcaption}&#xa;</xsl:text>
-            <xsl:text>\captionsetup[subfigure]{labelformat=simple}&#xa;</xsl:text>
-            <xsl:text>\renewcommand\thesubfigure{(\alph{subfigure})}&#xa;</xsl:text>
-        </xsl:if>
-        <!-- if figures are numbered distinct from theorems, -->
-        <!-- then we need to inquire about its level         -->
-        <!-- $numbering-theorems from mathbook-common.xsl    -->
-        <xsl:variable name="figure-levels">
-            <xsl:choose>
-                <xsl:when test="$b-number-figure-distinct">
-                    <xsl:value-of select="$docinfo/numbering/figures/@level" />
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:value-of select="$numbering-theorems" />
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:variable>
-        <!-- The "figure" counter is the lead for captioned items, -->
-        <!-- so if these are distinct, we make this environment    -->
-        <!-- just to make the counter, even if not explicitly used -->
-        <!-- A bare image is implemented as a caption-less figure  -->
-        <xsl:if test="$document-root//figure or $document-root//image or $b-number-figure-distinct">
-            <xsl:text>%% Adjust stock figure environment so that it no longer floats&#xa;</xsl:text>
-            <xsl:text>\SetupFloatingEnvironment{figure}{fileext=lof,placement={</xsl:text>
-            <xsl:value-of select="$debug.float"/>
-            <xsl:text>},within=</xsl:text>
-            <xsl:choose>
-                <xsl:when test="$figure-levels = 0">
-                    <xsl:text>none</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:call-template name="level-to-name">
-                        <xsl:with-param name="level" select="$figure-levels" />
-                    </xsl:call-template>
-                </xsl:otherwise>
-            </xsl:choose>
-            <xsl:text>,name=</xsl:text>
-            <xsl:call-template name="type-name">
-                    <xsl:with-param name="string-id" select="'figure'" />
-            </xsl:call-template>
-            <xsl:text>}&#xa;</xsl:text>
-            <xsl:text>\captionsetup[figure]{labelfont=bf,justification=raggedright}&#xa;</xsl:text>
-            <xsl:if test="not($b-number-figure-distinct)">
-                <xsl:text>%% http://tex.stackexchange.com/questions/16195&#xa;</xsl:text>
-                <xsl:text>\makeatletter&#xa;</xsl:text>
-                <xsl:text>\let\c@figure\c@cthm&#xa;</xsl:text>
-                <xsl:text>\makeatother&#xa;</xsl:text>
-            </xsl:if>
-        </xsl:if>
-        <xsl:if test="$document-root//table">
-            <xsl:text>%% Adjust stock table environment so that it no longer floats&#xa;</xsl:text>
-            <xsl:text>\SetupFloatingEnvironment{table}{fileext=lot,placement={</xsl:text>
-            <xsl:value-of select="$debug.float"/>
-            <xsl:text>},within=</xsl:text>
-            <xsl:choose>
-                <xsl:when test="$figure-levels = 0">
-                    <xsl:text>none</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:call-template name="level-to-name">
-                        <xsl:with-param name="level" select="$figure-levels" />
-                    </xsl:call-template>
-                </xsl:otherwise>
-            </xsl:choose>
-            <xsl:text>,name=</xsl:text>
-            <xsl:call-template name="type-name">
-                <xsl:with-param name="string-id" select="'table'" />
-            </xsl:call-template>
-            <xsl:text>}&#xa;</xsl:text>
-            <xsl:text>\captionsetup[table]{labelfont=bf}&#xa;</xsl:text>
-            <!-- associate counter                  -->
-            <!--   if independent, then with figure -->
-            <!--   if grouped, then with theorem    -->
-            <xsl:text>%% http://tex.stackexchange.com/questions/16195&#xa;</xsl:text>
-            <xsl:text>\makeatletter&#xa;</xsl:text>
-            <xsl:choose>
-                <xsl:when test="$b-number-figure-distinct">
-                    <xsl:text>\let\c@table\c@figure&#xa;</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:text>\let\c@table\c@cthm&#xa;</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-            <xsl:text>\makeatother&#xa;</xsl:text>
-        </xsl:if>
-        <!-- Listings do not float yet have semantic captions -->
-        <!-- New environment, new captiontype:                -->
-        <!-- http://tex.stackexchange.com/questions/7210      -->
-        <!-- Within numbering argument:                       -->
-        <!-- http://tex.stackexchange.com/questions/115193    -->
-        <!-- Caption formatting/style possibilities:          -->
-        <!-- http://tex.stackexchange.com/questions/117531    -->
-        <xsl:if test="$document-root//listing">
-            <xsl:text>%% Create "listing" environment to hold program listings and consoles&#xa;</xsl:text>
-            <!-- TODO: this could become purely semantic (no top space) once both "listing"  -->
-            <!-- and "console" are tcolorbox and can have their spacing styled               -->
-            <xsl:text>\NewDocumentEnvironment{listing}{}{\par\bigskip\noindent}{}&#xa;</xsl:text>
-            <xsl:text>%% New caption type for numbering, style, etc.&#xa;</xsl:text>
-            <xsl:text>\DeclareCaptionType[within=</xsl:text>
-            <xsl:choose>
-                <xsl:when test="$figure-levels = 0">
-                    <xsl:text>none</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:call-template name="level-to-name">
-                        <xsl:with-param name="level" select="$figure-levels" />
-                    </xsl:call-template>
-                </xsl:otherwise>
-            </xsl:choose>
-            <xsl:text>]{listingcap}[</xsl:text>
-            <xsl:call-template name="type-name">
-                <xsl:with-param name="string-id" select="'listing'" />
-            </xsl:call-template>
-            <xsl:text>]&#xa;</xsl:text>
-            <xsl:text>%% Following could be styled&#xa;</xsl:text>
-            <xsl:text>\captionsetup[listingcap]{labelfont=bf,aboveskip=1.0ex,belowskip=\baselineskip}&#xa;</xsl:text>
-            <!-- associate counter                  -->
-            <!--   if independent, then with figure -->
-            <!--   if grouped, then with theorem    -->
-            <xsl:text>%% http://tex.stackexchange.com/questions/16195&#xa;</xsl:text>
-            <xsl:text>\makeatletter&#xa;</xsl:text>
-            <xsl:choose>
-                <xsl:when test="$b-number-figure-distinct">
-                    <xsl:text>\let\c@listingcap\c@figure&#xa;</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:text>\let\c@listingcap\c@cthm&#xa;</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-            <xsl:text>\makeatother&#xa;</xsl:text>
-        </xsl:if>
-        <xsl:if test="$document-root//list">
-            <xsl:text>%% New caption type for numbering, style, etc.&#xa;</xsl:text>
-            <xsl:text>\DeclareCaptionType[within=</xsl:text>
-            <xsl:choose>
-                <xsl:when test="$figure-levels = 0">
-                    <xsl:text>none</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:call-template name="level-to-name">
-                        <xsl:with-param name="level" select="$figure-levels" />
-                    </xsl:call-template>
-                </xsl:otherwise>
-            </xsl:choose>
-            <xsl:text>]{namedlistcap}[</xsl:text>
-            <xsl:call-template name="type-name">
-                <xsl:with-param name="string-id" select="'list'" />
-            </xsl:call-template>
-            <xsl:text>]&#xa;</xsl:text>
-            <xsl:text>\captionsetup[namedlistcap]{labelfont=bf,aboveskip=1.0ex,belowskip=\baselineskip}&#xa;</xsl:text>
-            <!-- associate counter                  -->
-            <!--   if independent, then with figure -->
-            <!--   if grouped, then with theorem    -->
-            <xsl:text>%% http://tex.stackexchange.com/questions/16195&#xa;</xsl:text>
-            <xsl:text>\makeatletter&#xa;</xsl:text>
-            <xsl:choose>
-                <xsl:when test="$b-number-figure-distinct">
-                    <xsl:text>\let\c@namedlistcap\c@figure&#xa;</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:text>\let\c@namedlistcap\c@cthm&#xa;</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-            <xsl:text>\makeatother&#xa;</xsl:text>
-        </xsl:if>
     </xsl:if>
     <!-- Numbering Footnotes -->
     <xsl:if test="$document-root//fn">
@@ -1994,8 +1842,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:if>
             <xsl:text>%% Options passed to the listings package via tcolorbox&#xa;</xsl:text>
             <xsl:text>\lstdefinestyle{programcodestyle}{identifierstyle=\color{identifiers},commentstyle=\color{comments},stringstyle=\color{strings},keywordstyle=\color{keywords}, breaklines=true, breakatwhitespace=true, columns=fixed, extendedchars=true, aboveskip=0pt, belowskip=0pt}&#xa;</xsl:text>
-            <!-- NB: rules "at break" need to come after "boxrule"                 -->
-            <xsl:text>\tcbset{ programboxstyle/.style={left=3ex, right=0pt, top=0ex, bottom=0ex, middle=0pt, toptitle=0pt, bottomtitle=0pt, boxsep=0pt,&#xa;</xsl:text>
+            <!-- We want a "program" to be able to break across pages    -->
+            <!-- Trying "enforce breakable" for a long listing inside of -->
+            <!-- a "listing" just led to a "mess of shattered boxes" so  -->
+            <!-- simply advise that a "listing" is not breakable.        -->
+            <!-- NB: rules "at break" need to come after "boxrule"       -->
+            <xsl:text>\tcbset{ programboxstyle/.style={left=3ex, right=0pt, top=0ex, bottom=0ex, middle=0pt, toptitle=0pt, bottomtitle=0pt, boxsep=0pt, &#xa;</xsl:text>
             <xsl:text>listing only, fontupper=\small\ttfamily,&#xa;</xsl:text>
             <xsl:text>colback=white, sharp corners, boxrule=-0.3pt, leftrule=0.5pt, toprule at break=-0.3pt, bottomrule at break=-0.3pt,&#xa;</xsl:text>
             <xsl:text>breakable, parbox=false,&#xa;</xsl:text>
@@ -2255,18 +2107,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>%% tcolorbox styles for *DEBUGGING* sidebyside layout&#xa;</xsl:text>
                 <xsl:text>%% "tight" -> 0.4pt border, pink background&#xa;</xsl:text>
                 <xsl:text>\tcbset{ sbsstyle/.style={raster equal height=rows,raster force size=false} }&#xa;</xsl:text>
-                <xsl:text>\tcbset{ sbsheadingstyle/.style={size=tight,halign=center,fontupper=\bfseries,colback=pink} }&#xa;</xsl:text>
                 <xsl:text>\tcbset{ sbspanelstyle/.style={size=tight,colback=pink} }&#xa;</xsl:text>
-                <xsl:text>\tcbset{ sbscaptionstyle/.style={size=tight,halign=center,colback=pink} }&#xa;</xsl:text>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:text>%% tcolorbox styles for sidebyside layout&#xa;</xsl:text>
                 <!-- "frame empty" is needed to counteract very faint outlines in some PDF viewers -->
                 <!-- framecol=white is inadvisable, "frame hidden" is ineffective for default skin -->
-                <xsl:text>\tcbset{ sbsstyle/.style={raster equal height=rows,raster force size=false} }&#xa;</xsl:text>
-                <xsl:text>\tcbset{ sbsheadingstyle/.style={bwminimalstyle, halign=center, fontupper=\bfseries} }&#xa;</xsl:text>
+                <xsl:text>\tcbset{ sbsstyle/.style={raster before skip={2.0ex plus 0.5ex}, raster equal height=rows, raster force size=false} }&#xa;</xsl:text>
                 <xsl:text>\tcbset{ sbspanelstyle/.style={bwminimalstyle} }&#xa;</xsl:text>
-                <xsl:text>\tcbset{ sbscaptionstyle/.style={bwminimalstyle, halign=center} }&#xa;</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
         <xsl:text>%% Enviroments for side-by-side and components&#xa;</xsl:text>
@@ -2284,10 +2132,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>    [sbsstyle,raster columns=#1,&#xa;</xsl:text>
         <xsl:text>    raster left skip=#2\linewidth,raster right skip=#3\linewidth,raster column skip=#4\linewidth]}&#xa;</xsl:text>
         <xsl:text>  {\end{tcbraster}}&#xa;</xsl:text>
-        <xsl:text>%% "tcolorbox" environments for three components of a panel&#xa;</xsl:text>
-        <xsl:text>\NewTColorBox{sbsheading}{m}{sbsheadingstyle,width=#1\linewidth}&#xa;</xsl:text>
+        <xsl:text>%% "tcolorbox" environment for a panel of sidebyside&#xa;</xsl:text>
         <xsl:text>\NewTColorBox{sbspanel}{mO{top}}{sbspanelstyle,width=#1\linewidth,valign=#2}&#xa;</xsl:text>
-        <xsl:text>\NewTColorBox{sbscaption}{m}{sbscaptionstyle,width=#1\linewidth}&#xa;</xsl:text>
     </xsl:if>
     <!-- We could use contains() on the 5 types of arrows  -->
     <!-- to really defend against this problematic package -->
@@ -2508,6 +2354,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--    search on mode="xref-as-ref" for more          -->
 <!-- *  Traditional LaTeX labels are implemented with  -->
 <!--    tcolorbox "phantomlabel=" option               -->
+<!-- *  tcolor box seem to begin in horizontal mode,   -->
+<!--    and need to return to vertical mode once       -->
+<!--    concluded (lest, e.g., consecutive boxes       -->
+<!--    overlap). Use of "after={\par}" is the right   -->
+<!--    fix.  See                                      -->
+<!--    https://tex.stackexchange.com/questions/235848 -->
+<!--    /how-to-leave-horizontal-mode                  -->
 
 <!-- Style: -->
 <!-- Provide some comments for the LaTeX source, to aid     -->
@@ -2699,7 +2552,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$b-pageref">
         <xsl:text>\label{#2}</xsl:text>
     </xsl:if>
-    <xsl:text>\hypertarget{#2}{}}, breakable, parbox=false, proofstyle }&#xa;</xsl:text>
+    <xsl:text>\hypertarget{#2}{}}, breakable, parbox=false, after={\par}, proofstyle }&#xa;</xsl:text>
 </xsl:template>
 
 <!-- "case" (of a proof) -->
@@ -2858,6 +2711,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- element name, but "exercise" does triple duty -->
     <xsl:variable name="environment-name">
         <xsl:choose>
+            <!-- TODO: filter is redundant, here and below, given match? -->
             <xsl:when test="self::exercise and boolean(&INLINE-EXERCISE-FILTER;)">
                 <xsl:text>inlineexercise</xsl:text>
             </xsl:when>
@@ -2866,34 +2720,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <!-- projects run on their own counter -->
+    <!-- projects and inline exercises sometimes run on their own counters -->
     <xsl:variable name="counter">
         <xsl:choose>
-            <xsl:when test="&PROJECT-FILTER;">
-                <xsl:text>cpjt</xsl:text>
+            <xsl:when test="(&PROJECT-FILTER;) and $b-number-project-distinct">
+                <xsl:text>project-distinct</xsl:text>
+            </xsl:when>
+            <xsl:when test="self::exercise and boolean(&INLINE-EXERCISE-FILTER;) and $b-number-exercise-distinct">
+                <xsl:text>exercise-distinct</xsl:text>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:text>cthm</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <!-- levels of counters, empty is document-wide -->
-    <!-- TODO: this seems to not be used at all? -->
-    <xsl:variable name="counter-division">
-        <xsl:choose>
-            <xsl:when test="&PROJECT-FILTER;">
-                <xsl:if test="not($numbering-projects = 0)">
-                    <xsl:call-template name="level-to-name">
-                        <xsl:with-param name="level" select="$numbering-projects" />
-                    </xsl:call-template>
-                </xsl:if>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:if test="not($numbering-theorems = 0)">
-                    <xsl:call-template name="level-to-name">
-                        <xsl:with-param name="level" select="$numbering-theorems" />
-                    </xsl:call-template>
-                </xsl:if>
+                <xsl:text>block</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
@@ -2908,10 +2745,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>} }&#xa;</xsl:text>
     <!-- create and configure the environment/tcolorbox -->
     <xsl:text>\newtcolorbox</xsl:text>
-    <!-- numbering setup: * indicates existing, -->
-    <!-- already configured, LaTeX counter      -->
+    <!-- run on a common, default, faux counter -->
     <xsl:text>[</xsl:text>
-    <xsl:text>use counter*=</xsl:text>
+    <xsl:text>use counter from=</xsl:text>
     <xsl:value-of select="$counter"/>
     <xsl:text>]</xsl:text>
     <!-- environment's tcolorbox name, pair -->
@@ -2933,8 +2769,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- begin: title construction -->
     <xsl:text>title={{</xsl:text>
     <xsl:apply-templates select="." mode="type-name"/>
-    <xsl:text>~\the</xsl:text>
-    <xsl:value-of select="$counter"/>
+    <xsl:text>~\thetcbcounter</xsl:text>
     <xsl:choose>
         <xsl:when test="&THEOREM-FILTER; or &AXIOM-FILTER;">
             <!-- first space of double space -->
@@ -2958,7 +2793,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
     <!-- always breakable -->
-    <xsl:text>breakable, parbox=false, </xsl:text>
+    <xsl:text>breakable, parbox=false, after={\par}, </xsl:text>
     <!-- italic body (this should be set elsewhere) -->
     <xsl:if test="&THEOREM-FILTER; or &AXIOM-FILTER;">
         <xsl:text>fontupper=\itshape, </xsl:text>
@@ -2968,28 +2803,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- end: options -->
 </xsl:template>
 
-<!-- FIGURE-LIKE: figure, table, listing, list -->
-<!-- 2019-07-12:  only "list" for openers      -->
-<xsl:template match="list" mode="environment">
-    <!-- An environment named "list" may conflict with LaTeX      -->
-    <!-- internals, though we could test if tcolorbox does better -->
+<xsl:template match="figure|table|listing|list" mode="environment">
+    <!-- could be more stringent, sidebyside in     -->
+    <!-- slot 1, ancestor figure is in slot 2 or 3: -->
+    <!--     figure/sidebyside/*                    -->
+    <!--     figure/sbsgroup/sidebyside/*           -->
+    <xsl:variable name="b-subcaptioned" select="boolean(ancestor::*[self::figure])"/>
     <xsl:variable name="environment-name">
-        <xsl:choose>
-            <xsl:when test="self::list">
-                <xsl:text>namedlist</xsl:text>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:value-of select="local-name(.)"/>
-            </xsl:otherwise>
-        </xsl:choose>
+        <xsl:apply-templates select="." mode="environment-name"/>
     </xsl:variable>
-    <!-- counters may run as figure or theorem -->
+    <!-- counters may run as subcaptions, independently, or with blocks -->
     <xsl:variable name="counter">
         <xsl:choose>
-            <xsl:when test="self::list">
-                <xsl:text>namedlistcap</xsl:text>
+            <xsl:when test="$b-subcaptioned">
+                <xsl:text>subdisplay</xsl:text>
             </xsl:when>
-            <xsl:otherwise/>
+            <xsl:when test="$b-number-figure-distinct">
+                <xsl:text>figure-distinct</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>block</xsl:text>
+            </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
     <xsl:text>%% </xsl:text>
@@ -3003,10 +2837,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>} }&#xa;</xsl:text>
     <!-- create and configure the environment/tcolorbox -->
     <xsl:text>\newtcolorbox</xsl:text>
-    <!-- numbering setup: * indicates existing, -->
-    <!-- already configured, LaTeX counter      -->
     <xsl:text>[</xsl:text>
-    <xsl:text>use counter*=</xsl:text>
+    <xsl:text>use counter from=</xsl:text>
     <xsl:value-of select="$counter"/>
     <xsl:text>]</xsl:text>
     <!-- environment's tcolorbox name, pair -->
@@ -3015,21 +2847,89 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="$environment-name"/>
     <xsl:text>}</xsl:text>
     <!-- number of arguments -->
-    <xsl:text>[2]</xsl:text>
+    <xsl:text>[3]</xsl:text>
     <!-- begin: options -->
     <xsl:text>{</xsl:text>
-    <!-- begin: title construction -->
-    <xsl:text>title={{</xsl:text>
-    <xsl:apply-templates select="." mode="type-name"/>
-    <xsl:text>~\the</xsl:text>
-    <xsl:value-of select="$counter"/>
-    <xsl:text>\space#1</xsl:text>
-    <xsl:text>}}, </xsl:text>
-    <!-- end: title construction -->
-    <!-- label in argument 2 or argument 3 -->
+    <!-- begin: title/caption construction -->
+    <xsl:choose>
+        <!-- Subcaptions of 2D displays within panels of a figure/sidebyside   -->
+        <!-- \thetcbcounter comes from subdisplay, looks like 25.3(b),         -->
+        <!-- and this is what will render in a cross-reference via \label/\ref -->
+        <!-- The enclosing figure is numbered from block or figure-distinct.   -->
+        <!-- We us the "xstring" package to strip out this number (e.g. 25.3)  -->
+        <!-- and leave just the sub-numbering (e.g, (b)).                      -->
+        <!-- NB: parameter #3 is a hardcoded number supplied by the -common    -->
+        <!-- routines, since it gets massaged to (a), (b), (c), etc. and this  -->
+        <!-- part is independent of the structure number, it will be right     -->
+        <!-- even if the LaTeX source is a subset (we can't optionally include -->
+        <!-- panels of a "sidebyside").  Short answer, we ignore #3 in this    -->
+        <!-- case.  Always.                                                    -->
+        <xsl:when test="$b-subcaptioned">
+            <xsl:text>lower separated=false, </xsl:text>
+            <xsl:text>before lower={{</xsl:text>
+            <xsl:choose>
+                <xsl:when test="$b-number-figure-distinct">
+                    <xsl:text>\textbf{\StrSubstitute{\thetcbcounter}{\thetcb@cnt@figure-distinct}{}}</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>\textbf{\StrSubstitute{\thetcbcounter}{\thetcb@cnt@block}{}}</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+            <xsl:text>\space#1</xsl:text>
+            <xsl:text>}}, </xsl:text>
+        </xsl:when>
+        <!-- Only the type-number is bolded, caption in #1 is plain text -->
+        <xsl:when test="self::figure|self::listing">
+            <xsl:text>lower separated=false, </xsl:text>
+            <xsl:text>before lower={{</xsl:text>
+            <xsl:text>\textbf{</xsl:text>
+            <xsl:apply-templates select="." mode="type-name"/>
+            <xsl:text>~</xsl:text>
+            <xsl:choose>
+                <xsl:when test="$b-latex-hardcode-numbers">
+                    <xsl:text>#3</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>\thetcbcounter</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+            <xsl:text>}</xsl:text>
+            <xsl:text>\space#1</xsl:text>
+            <xsl:text>}}, </xsl:text>
+        </xsl:when>
+        <!-- Only the type-number is bolded here, caption in #1 is bold text -->
+        <xsl:when test="self::table|self::list">
+            <xsl:text>title={{</xsl:text>
+            <xsl:text>\textbf{</xsl:text>
+            <xsl:apply-templates select="." mode="type-name"/>
+            <xsl:text>~</xsl:text>
+            <xsl:choose>
+                <xsl:when test="$b-latex-hardcode-numbers">
+                    <xsl:text>#3</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>\thetcbcounter</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+            <xsl:text>}</xsl:text>
+            <xsl:text>\space#1</xsl:text>
+            <xsl:text>}}, </xsl:text>
+        </xsl:when>
+    </xsl:choose>
+    <!-- end: title/caption construction -->
+    <!-- label in argument 2             -->
     <xsl:text>phantomlabel={#2}, </xsl:text>
-    <!-- always breakable -->
-    <xsl:text>breakable, parbox=false, </xsl:text>
+    <!-- always unbreakable, except for "list"           -->
+    <!-- list will be unbreakable once inside sidebyside -->
+    <xsl:choose>
+        <xsl:when test="self::list">
+            <xsl:text>breakable, </xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>unbreakable, </xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>parbox=false, </xsl:text>
     <xsl:value-of select="$environment-name"/>
     <xsl:text>style, }&#xa;</xsl:text>
     <!-- end: options -->
@@ -3097,7 +2997,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- line. Presumably the line will stretch when the -->
 <!-- tombstone moves onto its own line.              -->
 <xsl:template match="proof" mode="tcb-style">
-    <xsl:text>bwminimalstyle, fonttitle=\normalfont\itshape, attach title to upper, after title={\space}, after upper={\space\space\hspace*{\stretch{1}}\(\blacksquare\)}, after={\par},&#xa;</xsl:text>
+    <xsl:text>bwminimalstyle, fonttitle=\normalfont\itshape, attach title to upper, after title={\space}, after upper={\space\space\hspace*{\stretch{1}}\(\blacksquare\)},&#xa;</xsl:text>
 </xsl:template>
 
 <!-- "objectives" -->
@@ -3151,12 +3051,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- environments.  But ideally, we would split out    -->
 <!-- this piece into a template for just theorems      -->
 <!-- and axioms.                                       -->
-<!-- tcolor box seem to begin in horizontal mode,      -->
-<!-- and need to return to vertical mode once          -->
-<!-- concluded (lest, e.g., consecutive boxes overlap).-->
-<!-- Use of "after={\par}" is the right fix.  See      -->
-<!-- https://tex.stackexchange.com/questions/235848/   -->
-<!-- how-to-leave-horizontal-mode                      -->
 <!-- DEFINITION-LIKE and EXAMPLE-LIKE are exceptional  -->
 <!-- in that markers are inserted with "after upper"   -->
 <!-- to indicate the end of the environment.           -->
@@ -3165,17 +3059,39 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="&DEFINITION-LIKE;" mode="tcb-style">
-    <xsl:text>bwminimalstyle, runintitlestyle, blockspacingstyle, after title={\space}, after upper={\space\space\hspace*{\stretch{1}}\(\lozenge\)}, after={\par}, </xsl:text>
+    <xsl:text>bwminimalstyle, runintitlestyle, blockspacingstyle, after title={\space}, after upper={\space\space\hspace*{\stretch{1}}\(\lozenge\)}, </xsl:text>
 </xsl:template>
 
 <xsl:template match="&EXAMPLE-LIKE;" mode="tcb-style">
-    <xsl:text>bwminimalstyle, runintitlestyle, blockspacingstyle, after title={\space}, after upper={\space\space\hspace*{\stretch{1}}\(\square\)}, after={\par}, </xsl:text>
+    <xsl:text>bwminimalstyle, runintitlestyle, blockspacingstyle, after title={\space}, after upper={\space\space\hspace*{\stretch{1}}\(\square\)}, </xsl:text>
 </xsl:template>
 
-<!-- FIGURE-LIKE: "list" -->
-<!-- 2019-07-12: ad-hoc for now, perhaps becoming a named-style someday -->
+<!-- FIGURE-LIKE: -->
+<!-- 2019-08-08: ad-hoc for now, named-styles will evolve      -->
+<!-- "figure" and listing" are very similar (captions)         -->
+<!-- "table" and "list" are very similar (titles)              -->
+<!-- NB: these will be used for "plain" 2D displays and for    -->
+<!-- when these are the panels of a "sidebyside".  So within   -->
+<!-- environments we bold titles (table and list) as produced, -->
+<!-- and do not bold captions as produced.  This way titles    -->
+<!-- that migrate to the lower part when subcaptioned will be  -->
+<!-- bold.  So we also bold type names and numbers as          -->
+<!-- produced. Net result is that we do not apply font weights -->
+<!-- to titles via styles.                                     -->
+<!-- NB: there could be 4 more styles, conditioning all 8 on   -->
+<!-- "ancestor::*[self::figure]" (or "not()") to manage the    -->
+<!-- panels of a subcaptioned sidebyside.                      -->
+<xsl:template match="figure|listing" mode="tcb-style">
+    <xsl:text>bwminimalstyle, middle=1ex, blockspacingstyle, </xsl:text>
+</xsl:template>
+
+<xsl:template match="table" mode="tcb-style">
+    <xsl:text>bwminimalstyle, middle=1ex, blockspacingstyle, coltitle=black, bottomtitle=2ex, titlerule=-0.3pt</xsl:text>
+</xsl:template>
+
+<!-- "list" contents are breakable, so we rub out annoying faint lines -->
 <xsl:template match="list" mode="tcb-style">
-    <xsl:text>blockspacingstyle, fonttitle=\normalfont\bfseries, colback=white, colbacktitle=white, coltitle=black, colframe=black, titlerule=-0.3pt, toprule at break=-0.3pt, bottomrule at break=-0.3pt, sharp corners</xsl:text>
+    <xsl:text>middle=1ex, blockspacingstyle, colback=white, colbacktitle=white, coltitle=black, colframe=black, titlerule=-0.3pt, toprule at break=-0.3pt, bottomrule at break=-0.3pt, sharp corners</xsl:text>
 </xsl:template>
 
 <!-- This is mostly ad-hoc.  An assemblage is meant to be prominent,   -->
@@ -8287,57 +8203,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\par\smallskip\centerline{A deprecated JSXGraph interactive demonstration goes here in interactive output.}\smallskip&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Captions for Figures, Tables, Listings, Lists -->
-<!-- NB: until we have a general (internal) switch to hard-code   -->
-<!-- *all* numbers, this template was re-copied (2019-07-08)      -->
-<!-- into the "solutions manual" conversion, and edited.  So      -->
-<!-- they should be kept in-sync.                                 -->
-
-<xsl:template match="figure|listing|table|list" mode="title-caption">
-    <!-- construct appropriate command -->
-    <xsl:choose>
-        <xsl:when test="parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure">
-            <xsl:text>\subcaption{</xsl:text>
-        </xsl:when>
-        <xsl:when test="self::figure/parent::sidebyside">
-            <xsl:text>\captionof{figure}{</xsl:text>
-        </xsl:when>
-        <xsl:when test="self::table/parent::sidebyside">
-            <xsl:text>\captionof{table}{</xsl:text>
-        </xsl:when>
-        <xsl:when test="self::listing">
-            <xsl:text>\captionof{listingcap}{</xsl:text>
-        </xsl:when>
-        <xsl:when test="self::list">
-            <xsl:text>\captionof{namedlistcap}{</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>\caption{</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-    <!-- get the actual content -->
-    <xsl:choose>
-        <xsl:when test="self::figure or self::listing">
-            <xsl:apply-templates select="." mode="caption-full"/>
-        </xsl:when>
-        <xsl:when test="self::table or self::list">
-            <xsl:apply-templates select="." mode="title-full"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:apply-templates select="caption"/>
-        </xsl:otherwise>
-    </xsl:choose>
-    <!-- mark it and finish -->
-    <xsl:apply-templates select="." mode="label" />
-    <xsl:text>}&#xa;</xsl:text>
-</xsl:template>
-
-<!-- Figures, Tables and Listings are floats                          -->
-<!-- We try to fix their location with the [H] specifier, but         -->
-<!-- if the first item of an AMS environment, they may float up       -->
-<!-- Seems LaTeX is stacking boxes vertically, and we need to go to   -->
-<!-- horizontal mode before doing these floating layout-type elements -->
-<!-- Necessary before a "lstlisting" environment with surrounding box -->
+<!-- We sometimes need to explicitly leave LaTeX's vertical mode.     -->
+<!-- But we try to be judicious about using this.  Overuse makes      -->
+<!-- for bad spacing.                                                 -->
 <!-- Explanation:  http://tex.stackexchange.com/questions/22852/      -->
 <!-- function-and-usage-of-leavevmode                                 -->
 <!--   "Use \leavevmode for all macros which could be used at         -->
@@ -8350,91 +8218,80 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\leavevmode%&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Figures -->
-<!-- Standard LaTeX figure environment redefined, see preamble comments -->
-<xsl:template match="figure">
-    <xsl:variable name="b-subcaptioned" select="parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure"/>
-    <xsl:if test="not(parent::sidebyside) and not(preceding-sibling::*[not(&SUBDIVISION-METADATA-FILTER;)])">
-        <xsl:call-template name="leave-vertical-mode" />
+<xsl:template match="figure|table|list|listing" mode="environment-name">
+    <!-- subfigures, etc -->
+    <xsl:if test="ancestor::*[self::figure]">
+        <xsl:text>sub</xsl:text>
     </xsl:if>
-    <xsl:if test="not(parent::sidebyside)">
-        <xsl:text>\begin{figure}&#xa;</xsl:text>
+    <xsl:value-of select="local-name(.)"/>
+    <!-- too many LaTeX names to clash with -->
+    <xsl:text>ptx</xsl:text>
+</xsl:template>
+
+<!-- Figures, Listings -->
+<!-- 0: enviroment name may be prefixed with "sub" -->
+<!-- 1: caption text                               -->
+<!-- 2: standard identifier for cross-references   -->
+<!-- 3: empty, or a hard-coded number from -common -->
+<xsl:template match="figure|listing">
+    <xsl:text>\begin{</xsl:text>
+    <xsl:apply-templates select="." mode="environment-name"/>
+    <xsl:text>}{</xsl:text>
+    <xsl:apply-templates select="." mode="caption-full"/>
+    <xsl:text>}{</xsl:text>
+    <xsl:apply-templates select="." mode="latex-id"/>
+    <xsl:text>}{</xsl:text>
+    <xsl:if test="$b-latex-hardcode-numbers">
+        <xsl:apply-templates select="." mode="number"/>
+    </xsl:if>
+    <xsl:text>}%&#xa;</xsl:text>
+    <!-- images have margins and widths, so centering not needed -->
+    <!-- Eventually everything in a figure should control itself -->
+    <!-- or be flush left (or so)                                -->
+    <xsl:if test="self::figure and not(image)">
         <xsl:text>\centering&#xa;</xsl:text>
     </xsl:if>
+    <!-- TODO: process meta-data, then restrict contents -->
+    <!-- multiple, program|console                       -->
     <xsl:apply-templates select="*"/>
-    <xsl:apply-templates select="." mode="title-caption"/>
-    <xsl:if test="not(parent::sidebyside)">
-        <xsl:text>\end{figure}&#xa;</xsl:text>
-    </xsl:if>
+    <!-- reserve space for the caption -->
+    <xsl:text>\tcblower&#xa;</xsl:text>
+    <xsl:text>\end{</xsl:text>
+    <xsl:apply-templates select="." mode="environment-name"/>
+    <xsl:text>}%&#xa;</xsl:text>
     <xsl:apply-templates select="." mode="pop-footnote-text"/>
 </xsl:template>
 
-<!-- Tables -->
-<!-- A table is like a figure, centered, captioned  -->
-<!-- The meat of the table is given by a tabular    -->
-<!-- element, which may be used outside of a table  -->
-<!-- Standard LaTeX table environment is redefined, -->
-<!-- see preamble comments for details              -->
-<xsl:template match="table">
-    <xsl:variable name="b-subcaptioned" select="parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure"/>
-    <xsl:if test="not(parent::sidebyside) and not(preceding-sibling::*[not(&SUBDIVISION-METADATA-FILTER;)])">
-        <xsl:call-template name="leave-vertical-mode" />
+<!-- Tables, (Named) Lists -->
+<!-- 0: enviroment name may be prefixed with "sub"  -->
+<!-- 1: title text, bolded here, not in environment -->
+<!-- 2: standard identifier for cross-references    -->
+<!-- 3: empty, or a hard-coded number from -common  -->
+<xsl:template match="table|list">
+    <xsl:text>\begin{</xsl:text>
+    <xsl:apply-templates select="." mode="environment-name"/>
+    <xsl:text>}{</xsl:text>
+    <xsl:text>\textbf{</xsl:text>
+    <xsl:apply-templates select="." mode="title-full"/>
+    <xsl:text>}</xsl:text>
+    <xsl:text>}{</xsl:text>
+    <xsl:apply-templates select="." mode="latex-id"/>
+    <xsl:text>}{</xsl:text>
+    <xsl:if test="$b-latex-hardcode-numbers">
+        <xsl:apply-templates select="." mode="number"/>
     </xsl:if>
-    <xsl:if test="not(parent::sidebyside)">
-        <xsl:text>\begin{table}&#xa;</xsl:text>
-        <xsl:text>\centering&#xa;</xsl:text>
-    </xsl:if>
-    <!-- tabular will center itself when parent is a sidebyside -->
-    <xsl:apply-templates select="*[not(self::tabular)]" />
-    <xsl:apply-templates select="tabular" />
-    <xsl:apply-templates select="." mode="title-caption"/>
-    <xsl:if test="not(parent::sidebyside)">
-        <xsl:text>\end{table}&#xa;</xsl:text>
-    </xsl:if>
-    <xsl:apply-templates select="." mode="pop-footnote-text"/>
-</xsl:template>
-
-<!-- Listings -->
-<!-- Simple non-float environment            -->
-<!-- \captionof for numbering, style, etc    -->
-<!-- not centering the interior environments -->
-<!-- since it is not straightforward, maybe  -->
-<!-- requires a savebox and a minipage       -->
-<xsl:template match="listing">
-    <xsl:if test="not(parent::sidebyside) and not(preceding-sibling::*[not(&SUBDIVISION-METADATA-FILTER;)])">
-        <xsl:call-template name="leave-vertical-mode" />
-    </xsl:if>
-    <xsl:if test="not(parent::sidebyside)">
-        <xsl:text>\begin{listing}&#xa;</xsl:text>
-    </xsl:if>
+    <xsl:text>}%&#xa;</xsl:text>
+    <!-- TODO: process meta-data, then restrict contents -->
+    <!-- tabular, introduction|list|conclusion           -->
+    <xsl:text>\centering&#xa;</xsl:text>
     <xsl:apply-templates select="*"/>
-    <xsl:text>\par&#xa;</xsl:text>
-    <xsl:apply-templates select="." mode="title-caption" />
-    <xsl:if test="not(parent::sidebyside)">
-        <xsl:text>\end{listing}&#xa;</xsl:text>
+    <!-- subcaption always goes in lower part -->
+    <xsl:if test="ancestor::*[self::figure]">
+        <xsl:text>\tcblower&#xa;</xsl:text>
     </xsl:if>
-    <xsl:apply-templates select="." mode="pop-footnote-text"/>
-</xsl:template>
-
-<!-- Named Lists -->
-<!-- 2019-07-12 temporarily bifurcated for styling work -->
-<xsl:template match="list">
-    <xsl:variable name="b-subcaptioned" select="parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure"/>
-    <xsl:choose>
-        <xsl:when test="$b-subcaptioned">
-            <xsl:apply-templates select="*"/>
-            <xsl:apply-templates select="." mode="title-caption"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>\begin{namedlist}{</xsl:text>
-            <xsl:apply-templates select="." mode="title-full"/>
-            <xsl:text>}{</xsl:text>
-            <xsl:apply-templates select="." mode="latex-id"/>
-            <xsl:text>}%&#xa;</xsl:text>
-            <xsl:apply-templates select="*"/>
-            <xsl:text>\end{namedlist}%&#xa;</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:text>\end{</xsl:text>
+    <xsl:apply-templates select="." mode="environment-name"/>
+    <xsl:text>}%&#xa;</xsl:text>
     <xsl:apply-templates select="." mode="pop-footnote-text"/>
 </xsl:template>
 
@@ -8513,38 +8370,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Images -->
 <!-- ###### -->
 
-<!-- Get the layout, get the width, convert to real number decimal, -->
-<!-- so as to fill the width key on a LaTeX \includegraphics        -->
-<xsl:template match="image" mode="get-width-fraction">
-    <xsl:variable name="rtf-layout">
-        <xsl:apply-templates select="." mode="layout-parameters" />
-    </xsl:variable>
-    <xsl:variable name="layout" select="exsl:node-set($rtf-layout)" />
-    <xsl:value-of select="$layout/width div 100" />
-</xsl:template>
-
-<!-- IN-PROGRESS: Following versions match naked images, and any image -->
-<!-- inside a sidebyside, leaving only figure/image to use preceding   -->
-<!-- (variable) value.  Once every image is inside a tcolorbox, then   -->
-<!-- the contained image will have the width of the box, set as        -->
-<!-- 1\linewidth (i.e. \linewidth).  Then this/these templates         -->
-<!-- can be removed.                                                   -->
-
-<!-- Anyway that an image is buried in a side-by-side control passes to  -->
-<!-- the sbs layout and the linewidth of the resulting tcolorboxes is restricted -->
-<xsl:template match="image[ancestor::sidebyside]" mode="get-width-fraction">
-    <xsl:value-of select="'1'"/>
-</xsl:template>
-
-<!-- A "naked" image is going into a width-controlled tcolorbox -->
-<xsl:template match="image[not(parent::figure or parent::sidebyside or parent::stack)]" mode="get-width-fraction">
-    <xsl:value-of select="'1'"/>
-</xsl:template>
-
-<!-- naked images into a tcolorbox -->
-<!-- IN-PROGRESS: non-sidebyside images should all be done this way -->
-<!-- in other words, figure/image[not(ancestor::sidebyside)] -->
-<xsl:template match="image[not(ancestor::sidebyside or parent::figure)]">
+<!-- First: images in full-width contexts                   -->
+<!-- naked images go into a tcolorbox for layout control    -->
+<!-- figure/image (not in a sidebyside) into same tcolorbox -->
+<xsl:template match="image[not(ancestor::sidebyside)]">
     <xsl:variable name="rtf-layout">
         <xsl:apply-templates select="." mode="layout-parameters" />
     </xsl:variable>
@@ -8563,13 +8392,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{image}%&#xa;</xsl:text>
 </xsl:template>
 
-<xsl:template match="image[ancestor::sidebyside or parent::figure]">
+<!-- Second: images already constrained by side-by-side panels -->
+<xsl:template match="image[ancestor::sidebyside]">
     <!-- get a newline if inside a "stack" -->
     <xsl:if test="parent::stack and preceding-sibling::*">
         <xsl:text>\par&#xa;</xsl:text>
     </xsl:if>
     <xsl:apply-templates select="." mode="image-inclusion" />
 </xsl:template>
+
+<!-- Various versions of images have their width set to the         -->
+<!-- prevailing available width.  This is \linewidth when:          -->
+<!-- full text width is available, width is constrained (like in    -->
+<!-- a list item), or width is constrained by a side-by-side panel. -->
 
 <!-- With full source specified, default to PDF format -->
 <xsl:template match="image[@source]" mode="image-inclusion">
@@ -8578,9 +8413,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="filename" select="@source" />
         </xsl:call-template>
     </xsl:variable>
-    <xsl:text>\includegraphics[width=</xsl:text>
-    <xsl:apply-templates select="." mode="get-width-fraction" />
-    <xsl:text>\linewidth]</xsl:text>
+    <xsl:text>\includegraphics[width=\linewidth]</xsl:text>
     <xsl:text>{</xsl:text>
     <xsl:apply-templates select="@source" mode="visible-id" />
     <xsl:if test="not($extension)">
@@ -8592,9 +8425,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Asymptote graphics language  -->
 <!-- PDF's produced by mbx script -->
 <xsl:template match="image[asymptote]" mode="image-inclusion">
-    <xsl:text>\includegraphics[width=</xsl:text>
-    <xsl:apply-templates select="." mode="get-width-fraction" />
-    <xsl:text>\linewidth]</xsl:text>
+    <xsl:text>\includegraphics[width=\linewidth]</xsl:text>
     <xsl:text>{</xsl:text>
     <xsl:value-of select="$directory.images" />
     <xsl:text>/</xsl:text>
@@ -8611,17 +8442,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>/</xsl:text>
     <xsl:apply-templates select="." mode="visible-id" />
     <xsl:text>.pdf}%&#xa;</xsl:text>
-    <xsl:text>{\includegraphics[width=</xsl:text>
-    <xsl:apply-templates select="." mode="get-width-fraction" />
-    <xsl:text>\linewidth]</xsl:text>
+    <xsl:text>{\includegraphics[width=\linewidth]</xsl:text>
     <xsl:text>{</xsl:text>
     <xsl:value-of select="$directory.images" />
     <xsl:text>/</xsl:text>
     <xsl:apply-templates select="." mode="visible-id" />
     <xsl:text>.pdf}}%&#xa;</xsl:text>
-    <xsl:text>{\includegraphics[width=</xsl:text>
-    <xsl:apply-templates select="." mode="get-width-fraction" />
-    <xsl:text>\linewidth]</xsl:text>
+    <xsl:text>{\includegraphics[width=\linewidth]</xsl:text>
     <xsl:text>{</xsl:text>
     <xsl:value-of select="$directory.images" />
     <xsl:text>/</xsl:text>
@@ -8635,32 +8462,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Side-By-Side scaling happens there, could be here -->
 <xsl:template match="image[latex-image-code]|image[latex-image]" mode="image-inclusion">
     <!-- tikz images go into a tcolorbox where \linewidth is reset. -->
-    <!-- For a "naked" image we need to provide the resizing        -->
-    <!-- Eventually we will provide it when included in a figure,   -->
-    <!-- or maybe it migrates to one of the two "image" (non-modal) -->
-    <!-- templates above, we'll see                                 -->
-    <!-- NB two "choose" could just set wrappings, so we would      -->
-    <!-- consolidate the text creation                              -->
-    <xsl:choose>
-        <!-- grouping reins in the scope of any local graphics settings -->
-        <!-- NB: figures, with tikz, outside of sidebyside, need     -->
-        <!-- changes to accomodate resizing to fit requested layouts -->
-        <xsl:when test="parent::figure and not(ancestor::sidebyside)">
-            <xsl:text>{&#xa;</xsl:text>
-            <xsl:call-template name="sanitize-text">
-                <xsl:with-param name="text" select="latex-image-code|latex-image" />
-            </xsl:call-template>
-            <xsl:text>}&#xa;</xsl:text>
-        </xsl:when>
-        <!-- grouping reins in the scope of any local graphics settings -->
-        <xsl:otherwise>
-            <xsl:text>\resizebox{\linewidth}{!}{%&#xa;</xsl:text>
-            <xsl:call-template name="sanitize-text">
-                <xsl:with-param name="text" select="latex-image-code|latex-image" />
-            </xsl:call-template>
-            <xsl:text>}%&#xa;</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+    <!-- grouping reins in the scope of any local graphics settings -->
+    <!-- we resize what tikz produces, to fill a containing box     -->
+    <!-- changes to accomodate resizing to fit requested layouts -->
+    <xsl:text>\resizebox{\linewidth}{!}{%&#xa;</xsl:text>
+    <xsl:call-template name="sanitize-text">
+        <xsl:with-param name="text" select="latex-image-code|latex-image" />
+    </xsl:call-template>
+    <xsl:text>}%&#xa;</xsl:text>
 </xsl:template>
 
 <!-- EXPERIMENTAL -->

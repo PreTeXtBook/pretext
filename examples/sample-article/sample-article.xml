@@ -6219,7 +6219,7 @@ the xsltproc executable.
                     <image source="images/cross-square.png"/>
                 </sidebyside>
 
-                <p>Now we fine-tune with different widths (which add up to 100%).  The five imgages have been given different vertical alignments, <c>top middle bottom top middle</c> via the <c>valigns</c> attribute.</p>
+                <p>Now we fine-tune with different widths (which add up to 100%).  The five images have been given different vertical alignments, <c>top middle bottom top middle</c> via the <c>valigns</c> attribute.</p>
 
                 <sidebyside widths="10% 30% 20% 20% 20%" margins="0%" valigns="top middle bottom top middle">
                     <image source="images/cross-square.png"/>
@@ -6782,7 +6782,7 @@ the xsltproc executable.
             <subsection>
                 <title>Lists in Side-by-Sides</title>
 
-                <p>A <q>regular</q> list normally belongs in a <c>p</c> but it can be placed unadorned into a panel of a side-by-side, as demonstrated below in <xref ref="subsection-sbs-other-panels" text="type-global" />.  You can also put <q>named</q> lists into a panel, and then the title, introduction, conclusion, and caption will behave as expected, along with a number that might be used in a cross-reference (<xref ref="color-list-as-panel" text="global" />), or perhaps we might cross-reference by title, <xref ref="color-list-as-panel" text="title" />. (2019-06-12, this list has no title>, but will soon.)</p>
+                <p>A <q>regular</q> list normally belongs in a <c>p</c> but it can be placed unadorned into a panel of a side-by-side, as demonstrated below in <xref ref="subsection-sbs-other-panels" text="type-global" />.  You can also put <q>named</q> lists into a panel, and then the title, introduction, conclusion, and caption will behave as expected, along with a number that might be used in a cross-reference (<xref ref="color-list-as-panel" text="global" />), or perhaps we might cross-reference by title, <xref ref="color-list-as-panel" text="title" />.</p>
 
                 <figure>
                     <caption>Two named lists</caption>
@@ -7701,7 +7701,7 @@ the xsltproc executable.
                 </sidebyside>
             </figure>
 
-            <p>Now we have some more interactive elements</p>
+            <p>Now we have some more interactive elements.</p>
 
             <sidebyside  margins="5%" widths="40% 45%">
                 <!-- Hosted -->
@@ -7774,6 +7774,93 @@ the xsltproc executable.
             </poem>
 
         </section>
+
+        <section xml:id="atomic-items">
+            <title>Atomic Objects</title>
+
+            <introduction>
+                <p>Some <pretext/> objects are relatively indivisable and are used as components of other structures.  We call them <term>atomic</term>, even if the term is not perfect.  A good example is <tag>image</tag> (next, <xref ref="atomic-image"/>).  This section is arranged according to these objects and tests the various ways they can be employed.</p>
+
+                <p>We frequently include some nonsense text inside short intervening paragraphs to test spacing and establish margins.</p>
+            </introduction>
+
+            <!-- Vivamus in congue massa. Morbi condimentum ac magna at accumsan. Vestibulum ac augue eu lorem semper gravida. Nulla pharetra imperdiet elit, in sodales nibh blandit ultricies. Maecenas efficitur ac felis ut pharetra. Quisque finibus augue sit amet facilisis fringilla. Aenean faucibus augue tellus, et sollicitudin tortor finibus non. Maecenas semper dolor quis diam placerat, iaculis sollicitudin augue finibus. Vestibulum facilisis ligula lectus, ac tristique nisl aliquet non. Quisque ornare felis arcu. Vivamus suscipit diam eget mi cursus viverra.  -->
+
+            <subsection xml:id="atomic-image">
+                <title><tag>image</tag></title>
+
+                <p>An <tag>image</tag> can be placed in five different ways:<ol>
+                    <li>all by itself, as a peer of <tag>p</tag> typically, with layout control,</li>
+                    <li>inside a <tag>figure</tag>, earning a number and caption,</li>
+                    <li>inside a <tag>sidebyside</tag>, with size and layout configured,</li>
+                    <li>inside a <tag>figure</tag> inside a <tag>sidebyside</tag>, with size and layout configured, with a number and caption, and</li>
+                    <li>inside a <tag>figure</tag> inside a <tag>sidebyside</tag> inside a <tag>figure</tag>, with size and layout configured, with a number and caption, but now sub-numbered ((a), (b), (c),<ellipsis/>).</li>
+                </ol>Examples of each, and more.</p>
+
+                <p>All by itsef, with no layout specified, so showing the default size and placement.  Vivamus in congue massa. Morbi condimentum ac magna at accumsan. Vestibulum ac augue eu lorem semper gravida.</p>
+
+                <image source="images/nz-landscape.jpg"/>
+
+                <p>Width set at 40%, so equal margins and thus centered.  Aenean faucibus augue tellus, et sollicitudin tortor finibus non. Maecenas semper dolor quis diam placerat, iaculis sollicitudin augue finibus. Vestibulum facilisis ligula lectus, ac tristique nisl aliquet non.</p>
+
+                <image source="images/nz-landscape.jpg" width="40%"/>
+
+                <p>Asymmetric margins of 20% and 40% given, implying 40% width, equal to previous instance.  Vivamus suscipit diam eget mi cursus viverra.</p>
+
+                <image source="images/nz-landscape.jpg" margins="20% 40%"/>
+
+                <p>As a plain component of a <tag>sidebyside</tag>.  Widths here are 20% and 30%, margins and gaps are automatic, default alignment on top edges.  Nulla pharetra imperdiet elit, in sodales nibh blandit ultricies. Maecenas efficitur ac felis ut pharetra.</p>
+
+                <sidebyside widths="20% 30%">
+                    <image source="images/nz-landscape.jpg"/>
+                    <image source="images/nz-landscape.jpg"/>
+                </sidebyside>
+
+                <p>Inside a <tag>figure</tag> with no adjustments, so default behavior.  Note how a <tag>figure</tag> occupies the entire width of the page, so then does the caption.</p>
+
+                <figure>
+                    <caption>New Zealand Landscape</caption>
+                    <image source="images/nz-landscape.jpg"/>
+                </figure>
+
+                <p>Inside a <tag>figure</tag> with asymmetric (large) margins of 30% and 60%.  Quisque finibus augue sit amet facilisis fringilla. Aenean faucibus augue tellus, et sollicitudin tortor finibus non.</p>
+
+                <figure>
+                    <caption>New Zealand Landscape</caption>
+                    <image source="images/nz-landscape.jpg" margins="30% 60%"/>
+                </figure>
+
+                <p>Inside figures inside a <tag>sidebyside</tag>.  Same widths as previous <tag>sidebyside</tag> but alignment on bottoms of the panels, to partially align captions.  Note how the captions are constrained in width by the width of the panels of the side-by-side.</p>
+
+                <sidebyside widths="20% 30%" valign="bottom">
+                    <figure>
+                        <caption>NZ Landscape</caption>
+                        <image source="images/nz-landscape.jpg"/>
+                    </figure>
+                    <figure>
+                        <caption>New Zealand Terrascape</caption>
+                        <image source="images/nz-landscape.jpg"/>
+                    </figure>
+                </sidebyside>
+
+                <p>Identical code to previous example, but now wrapped in an overall <tag>figure</tag>, which has its own caption and number, leaving the interior figures to be sub-numbered.  Cross-references use the full number: <xref ref="nz-land" text="type-global"/>.</p>
+
+                <figure>
+                    <caption>Amalgamation of Scapes</caption>
+                    <sidebyside widths="20% 30%" valign="bottom">
+                        <figure>
+                            <caption>NZ Landscape</caption>
+                            <image source="images/nz-landscape.jpg"/>
+                        </figure>
+                        <figure xml:id="nz-land">
+                            <caption>New Zealand Terrascape</caption>
+                            <image source="images/nz-landscape.jpg"/>
+                        </figure>
+                    </sidebyside>
+                </figure>
+            </subsection>
+        </section>
+
 
         <section xml:id="advanced-numbering">
             <title>Advanced Numbering</title>

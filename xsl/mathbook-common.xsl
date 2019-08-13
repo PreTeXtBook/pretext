@@ -341,6 +341,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- User-supplied Numbering for Projects, etc    -->
 <!-- Respect switch, or provide sensible defaults -->
 <!-- PROJECT-LIKE -->
+<!-- NB: this should become elective, more like the      -->
+<!-- schemes below for inline exercises and figure-like. -->
 <xsl:variable name="numbering-projects">
     <xsl:choose>
         <xsl:when test="$numbering.projects.level != ''">
@@ -356,6 +358,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:message>MBX:ERROR: Theorem numbering level not determined</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
+</xsl:variable>
+
+<!-- Inline Exercises can optionally run on their own numbering scheme -->
+<!-- This is set (temporarily) in docinfo, which will change           -->
+<!-- We do no special error-checking here since this will change       -->
+<!-- The variable will be empty if not set                             -->
+<xsl:variable name="numbering-exercises">
+    <xsl:value-of select="$docinfo/numbering/exercises/@level"/>
+</xsl:variable>
+
+<!-- Figure-Like can optionally run on their own numbering scheme      -->
+<!-- This is set (temporarily) in docinfo, which will change           -->
+<!-- We do no special error-checking here since this will change       -->
+<!-- The variable will be empty if not set                             -->
+<xsl:variable name="numbering-figures">
+    <xsl:value-of select="$docinfo/numbering/figures/@level"/>
 </xsl:variable>
 
 <!-- User-supplied Numbering for Equations    -->
@@ -1034,8 +1052,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="b-number-figure-distinct" select="boolean($docinfo/numbering/figures)" />
 <!-- project historical default, switch it -->
 <xsl:variable name="b-number-project-distinct" select="true()" />
-<!-- exercise historical default -->
-<xsl:variable name="b-number-exercise-distinct" select="false()" />
+<!-- historically false -->
+<xsl:variable name="b-number-exercise-distinct" select="boolean($docinfo/numbering/exercises)" />
 
 <!-- Status quo, for no-part books and articles is "absent".     -->
 <!-- The "structural" option will change numbers and numbering   -->
@@ -4837,9 +4855,18 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Atomic project serial number -->
 <xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&FIGURE-LIKE;|exercise" mode="atomic-project-serial-number">
     <xsl:variable name="subtree-level">
-        <xsl:apply-templates select="." mode="absolute-subtree-level">
-            <xsl:with-param name="numbering-items" select="$numbering-projects" />
-        </xsl:apply-templates>
+        <xsl:choose>
+            <xsl:when test="$b-number-project-distinct">
+                <xsl:apply-templates select="." mode="absolute-subtree-level">
+                    <xsl:with-param name="numbering-items" select="$numbering-projects" />
+                </xsl:apply-templates>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="." mode="absolute-subtree-level">
+                    <xsl:with-param name="numbering-items" select="$numbering-theorems" />
+                </xsl:apply-templates>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:variable>
     <xsl:choose>
         <xsl:when test="$subtree-level=-1">
@@ -4877,7 +4904,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:choose>
             <xsl:when test="$b-number-figure-distinct">
                 <xsl:apply-templates select="." mode="absolute-subtree-level">
-                    <xsl:with-param name="numbering-items" select="$docinfo/numbering/figures/@level" />
+                    <xsl:with-param name="numbering-items" select="$numbering-figures" />
                 </xsl:apply-templates>
             </xsl:when>
             <xsl:otherwise>
@@ -4939,9 +4966,18 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Atomic inline exercise serial number -->
 <xsl:template match="&DEFINITION-LIKE;|&THEOREM-LIKE;|&AXIOM-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|exercise|&FIGURE-LIKE;" mode="atomic-exercise-serial-number">
     <xsl:variable name="subtree-level">
-        <xsl:apply-templates select="." mode="absolute-subtree-level">
-            <xsl:with-param name="numbering-items" select="$numbering-theorems" />
-        </xsl:apply-templates>
+        <xsl:choose>
+            <xsl:when test="$b-number-exercise-distinct">
+                <xsl:apply-templates select="." mode="absolute-subtree-level">
+                    <xsl:with-param name="numbering-items" select="$numbering-exercises" />
+                </xsl:apply-templates>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="." mode="absolute-subtree-level">
+                    <xsl:with-param name="numbering-items" select="$numbering-theorems" />
+                </xsl:apply-templates>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:variable>
     <xsl:choose>
         <xsl:when test="$subtree-level=-1">
@@ -5466,10 +5502,21 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:with-param name="pad" select="'yes'" />
     </xsl:apply-templates>
 </xsl:template>
-<!-- PROJECT-LIKE is independent, under control of $numbering-projects -->
+<!-- PROJECT-LIKE is now independent, under control of $numbering-projects -->
+<!-- But all ready to become elective -->
 <xsl:template match="&PROJECT-LIKE;"  mode="structure-number">
+    <xsl:variable name="project-levels">
+        <xsl:choose>
+            <xsl:when test="$b-number-project-distinct">
+                <xsl:value-of select="$numbering-projects" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$numbering-theorems" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
     <xsl:apply-templates select="." mode="multi-number">
-        <xsl:with-param name="levels" select="$numbering-projects" />
+        <xsl:with-param name="levels" select="$project-levels" />
         <xsl:with-param name="pad" select="'yes'" />
     </xsl:apply-templates>
 </xsl:template>
@@ -5479,7 +5526,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:variable name="figure-levels">
         <xsl:choose>
             <xsl:when test="$b-number-figure-distinct">
-                <xsl:value-of select="$docinfo/numbering/figures/@level" />
+                <xsl:value-of select="$numbering-figures" />
             </xsl:when>
             <xsl:otherwise>
                 <xsl:value-of select="$numbering-theorems" />
@@ -5514,8 +5561,18 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Structure Numbers: Inline Exercises -->
 <!-- Follows the theorem/figure/etc scheme (can't poll parent) -->
 <xsl:template match="exercise[boolean(&INLINE-EXERCISE-FILTER;)]" mode="structure-number">
+    <xsl:variable name="equation-levels">
+        <xsl:choose>
+            <xsl:when test="$b-number-exercise-distinct">
+                <xsl:value-of select="$numbering-exercises" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$numbering-theorems" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
     <xsl:apply-templates select="." mode="multi-number">
-        <xsl:with-param name="levels" select="$numbering-theorems" />
+        <xsl:with-param name="levels" select="$equation-levels" />
         <xsl:with-param name="pad" select="'yes'" />
     </xsl:apply-templates>
 </xsl:template>
