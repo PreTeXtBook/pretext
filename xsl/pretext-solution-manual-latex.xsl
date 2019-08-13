@@ -92,6 +92,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- to keep links (such as a solution number linking back to   -->
 <!-- the original) from being seen/interpreted as actual links. -->
 <xsl:param name="latex.print" select="'yes'"/>
+<!-- There are not even labels for page numbers, beside -->
+<!-- the fact that they don't make much sense           -->
+<xsl:param name="latex.pageref" select="'no'"/>
 
 <!-- We have a switch for just this situation, to force -->
 <!-- (overrule) the auto-detetion of the necessity for  -->
