@@ -160,6 +160,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- not dress-up clause-ending punctuation   -->
 <xsl:variable name="latex-processing" select="'native'" />
 
+<!-- Not a parameter, a variable to override deliberately within a conversion -->
+<xsl:variable name="b-latex-hardcode-numbers" select="false()"/>
+
 <!-- We allow publishers to choose one-sided or two-sided -->
 <!-- "printing" though the default will vary with the     -->
 <!-- electronic/print dichotomy                           -->
@@ -2844,7 +2847,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="$environment-name"/>
     <xsl:text>}</xsl:text>
     <!-- number of arguments -->
-    <xsl:text>[2]</xsl:text>
+    <xsl:text>[3]</xsl:text>
     <!-- begin: options -->
     <xsl:text>{</xsl:text>
     <!-- begin: title/caption construction -->
@@ -2855,6 +2858,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- The enclosing figure is numbered from block or figure-distinct.   -->
         <!-- We us the "xstring" package to strip out this number (e.g. 25.3)  -->
         <!-- and leave just the sub-numbering (e.g, (b)).                      -->
+        <!-- NB: parameter #3 is a hardcoded number supplied by the -common    -->
+        <!-- routines, since it gets massaged to (a), (b), (c), etc. and this  -->
+        <!-- part is independent of the structure number, it will be right     -->
+        <!-- even if the LaTeX source is a subset (we can't optionally include -->
+        <!-- panels of a "sidebyside").  Short answer, we ignore #3 in this    -->
+        <!-- case.  Always.                                                    -->
         <xsl:when test="$b-subcaptioned">
             <xsl:text>lower separated=false, </xsl:text>
             <xsl:text>before lower={{</xsl:text>
@@ -2875,7 +2884,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>before lower={{</xsl:text>
             <xsl:text>\textbf{</xsl:text>
             <xsl:apply-templates select="." mode="type-name"/>
-            <xsl:text>~\thetcbcounter</xsl:text>
+            <xsl:text>~</xsl:text>
+            <xsl:choose>
+                <xsl:when test="$b-latex-hardcode-numbers">
+                    <xsl:text>#3</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>\thetcbcounter</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
             <xsl:text>}</xsl:text>
             <xsl:text>\space#1</xsl:text>
             <xsl:text>}}, </xsl:text>
@@ -2885,7 +2902,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>title={{</xsl:text>
             <xsl:text>\textbf{</xsl:text>
             <xsl:apply-templates select="." mode="type-name"/>
-            <xsl:text>~\thetcbcounter</xsl:text>
+            <xsl:text>~</xsl:text>
+            <xsl:choose>
+                <xsl:when test="$b-latex-hardcode-numbers">
+                    <xsl:text>#3</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>\thetcbcounter</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
             <xsl:text>}</xsl:text>
             <xsl:text>\space#1</xsl:text>
             <xsl:text>}}, </xsl:text>
@@ -8255,6 +8280,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 0: enviroment name may be prefixed with "sub" -->
 <!-- 1: caption text                               -->
 <!-- 2: standard identifier for cross-references   -->
+<!-- 3: empty, or a hard-coded number from -common -->
 <xsl:template match="figure|listing">
     <xsl:text>\begin{</xsl:text>
     <xsl:apply-templates select="." mode="environment-name"/>
@@ -8262,6 +8288,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="caption-full"/>
     <xsl:text>}{</xsl:text>
     <xsl:apply-templates select="." mode="latex-id"/>
+    <xsl:text>}{</xsl:text>
+    <xsl:if test="$b-latex-hardcode-numbers">
+        <xsl:apply-templates select="." mode="number"/>
+    </xsl:if>
     <xsl:text>}%&#xa;</xsl:text>
     <!-- images have margins and widths, so centering not needed -->
     <!-- Eventually everything in a figure should control itself -->
@@ -8284,6 +8314,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 0: enviroment name may be prefixed with "sub"  -->
 <!-- 1: title text, bolded here, not in environment -->
 <!-- 2: standard identifier for cross-references    -->
+<!-- 3: empty, or a hard-coded number from -common  -->
 <xsl:template match="table|list">
     <xsl:text>\begin{</xsl:text>
     <xsl:apply-templates select="." mode="environment-name"/>
@@ -8293,6 +8324,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
     <xsl:text>}{</xsl:text>
     <xsl:apply-templates select="." mode="latex-id"/>
+    <xsl:text>}{</xsl:text>
+    <xsl:if test="$b-latex-hardcode-numbers">
+        <xsl:apply-templates select="." mode="number"/>
+    </xsl:if>
     <xsl:text>}%&#xa;</xsl:text>
     <!-- TODO: process meta-data, then restrict contents -->
     <!-- tabular, introduction|list|conclusion           -->
