@@ -8203,50 +8203,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\par\smallskip\centerline{A deprecated JSXGraph interactive demonstration goes here in interactive output.}\smallskip&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Captions for Figures, Tables, Listings, Lists -->
-<!-- NB: until we have a general (internal) switch to hard-code   -->
-<!-- *all* numbers, this template was re-copied (2019-07-08)      -->
-<!-- into the "solutions manual" conversion, and edited.  So      -->
-<!-- they should be kept in-sync.                                 -->
-
-<xsl:template match="figure|listing|table|list" mode="title-caption-busted">
-    <!-- construct appropriate command -->
-    <xsl:choose>
-        <xsl:when test="parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure">
-            <xsl:text>\subcaption{</xsl:text>
-        </xsl:when>
-        <xsl:when test="self::figure/parent::sidebyside">
-            <xsl:text>\captionof{figure}{</xsl:text>
-        </xsl:when>
-        <xsl:when test="self::table/parent::sidebyside">
-            <xsl:text>\captionof{table}{</xsl:text>
-        </xsl:when>
-        <xsl:when test="self::listing">
-            <xsl:text>\captionof{listingcap}{</xsl:text>
-        </xsl:when>
-        <xsl:when test="self::list">
-            <xsl:text>\captionof{namedlistcap}{</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>\caption{</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-    <!-- get the actual content -->
-    <xsl:choose>
-        <xsl:when test="self::figure or self::listing">
-            <xsl:apply-templates select="." mode="caption-full"/>
-        </xsl:when>
-        <xsl:when test="self::table or self::list">
-            <xsl:apply-templates select="." mode="title-full"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:apply-templates select="caption"/>
-        </xsl:otherwise>
-    </xsl:choose>
-    <!-- mark it and finish -->
-    <xsl:apply-templates select="." mode="label" />
-    <xsl:text>}&#xa;</xsl:text>
-</xsl:template>
 
 <!-- Figures, Tables and Listings are floats                          -->
 <!-- We try to fix their location with the [H] specifier, but         -->
