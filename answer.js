@@ -198,7 +198,7 @@ if (reading_questions.length) {
     answer_textarea += ' class="rq_answer_text"'
     answer_textarea += ' id="' + this_ques_id_text + '_input"'
     answer_textarea += ' rows="' + '3' + '"';
-    answer_textarea += ' style="width:100%; height: 63px;"';
+    answer_textarea += ' style="width:95%; height: 63px;"';
     answer_textarea += '>';
     answer_textarea += '</textarea>';
   
@@ -421,7 +421,7 @@ if (reading_questions.length) {
     answer_textarea_editable.setAttribute('id', this_ques_id_text + "_input");
     answer_textarea_editable.setAttribute('class', 'rq_answer_text');
     answer_textarea_editable.setAttribute('rows', '3');
-    answer_textarea_editable.setAttribute('style', 'width:100%; height: 44px;');
+    answer_textarea_editable.setAttribute('style', 'width:95%; height: 44px;');
   
     this_rq_ans.replaceWith(answer_textarea_editable);
   

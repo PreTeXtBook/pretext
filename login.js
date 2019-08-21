@@ -153,7 +153,7 @@ function validateLogin() {
     console.log('window.location.hostname ' + window.location.hostname);
     if ((typeof guest_access !== 'undefined') && guest_access && (un == guest_name) && (pw == the_password_guest)) {
         console.log("setting the guest ut_cookie");
-        createCookie('ut_cookie',un,1);
+        createCookie('ut_cookie',un,0.25);
         logged_in = true;
         console.log("logged in as guest", logged_in);
     }
@@ -164,7 +164,7 @@ function validateLogin() {
     }
     else if (pw == the_url_enc) {
         console.log("setting the url ut_cookie");
-        createCookie('ut_cookie',un,1);
+        createCookie('ut_cookie',un,0.25);
         logged_in = true;
     }
     else {
@@ -175,7 +175,7 @@ function validateLogin() {
     console.log("logged_in", logged_in);
     if (logged_in) {
         $("#theloginform").hide();
-        document.getElementById('loginlogout').innerHTML = 'logout';
+        document.getElementById('loginlogout').innerHTML = 'logout' + ' ' + un;
         loadScript('answer');
         loadScript('highlight');
         if ((typeof trails !== 'undefined') && trails) {
@@ -255,7 +255,7 @@ if (pageIdentifier) {
         role = 'instructor'
     }
     document.getElementById('loginlogout').className = 'logout';
-    document.getElementById('loginlogout').innerHTML = 'logout';
+    document.getElementById('loginlogout').innerHTML = 'logout' + ' ' + ut_id;
     console.log("done hiding "+ut_id);
     loadScript('answer');
     loadScript('highlight');
