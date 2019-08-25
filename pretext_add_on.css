@@ -873,12 +873,20 @@ body > a.assistive:focus {
 }
 
 .pretext-content figcaption {
-    margin-top: 10px;
+    margin-top: 0.6em;
     margin-left: auto;
     margin-right: auto;
 /*  Commenting this out because the initial letter of some captions were cut off
     text-indent: -30px;
 */
+}
+
+.pretext-content figure.table-like figcaption:first-child {
+    font-style: oblique;
+}
+.pretext-content figure.table-like figcaption:first-child .type,
+.pretext-content figure.table-like figcaption:first-child .codenumber {
+    font-style: normal;
 }
 
 .pretext-content section figcaption .codenumber,
@@ -905,6 +913,17 @@ body > a.assistive:focus {
 
 .pretext-content figcaption code.code-inline {
     white-space: pre;
+}
+
+.pretext-content figure > figcaption:first-child {
+    margin-top: 1.5em;
+}
+
+.pretext-content figcaption + .named-list-content {
+    margin-top: 0.6em;
+}
+.pretext-content figcaption + .named-list-content > .introduction > p:first-child {
+    margin-top: 0;
 }
 
 /* should be .emphasis instead of em */
@@ -1358,6 +1377,10 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
 .pretext-content figure.figure-like {
     margin-left: auto;
     margin-right: auto;
+}
+.pretext-content figure.table-like {
+    margin-left: 30px;
+    margin-right: 30px;
 }
 .pretext-content p + figure.figure-like > table {
     margin-top: 1em;
