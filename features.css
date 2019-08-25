@@ -130,6 +130,15 @@
     background: #ffd;
 }
 
+#rq_submit {
+    padding: 3px 5px;
+    border-radius: 0.5em;
+}
+#rq_submit.submitted {
+    background: #EFE;
+    color: #BBB;
+}
+
 .addcontent, .action, .submit {
     cursor: pointer;
 }
@@ -196,8 +205,9 @@ textarea {
     white-space: pre-wrap;
     margin-top: 0.5em;
     margin-bottom: -0.5em;
+    min-height: 2.72em;
 }
-article.exercise-like textarea.rq_answer_text {
+textarea.rq_answer_text {
         font-family: "Lucida Console", Monaco, monospace;
         resize: vertical;
         font-size: inherit;
