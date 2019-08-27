@@ -37,7 +37,7 @@ function dollars_to_slashparen(text) {
     Try to do all operations by id, and not by carrying objects around.
 */
 
-var reading_questions = document.querySelectorAll("section.reading-questions article.exercise-like");
+var reading_questions = document.querySelectorAll("section.reading-questions article.exercise-like, #boelkins-ACS .main #content > section:first-of-type > section:first-of-type > .project-like li");
 
 var reading_answers = {};
 
