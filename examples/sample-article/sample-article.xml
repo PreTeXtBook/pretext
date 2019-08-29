@@ -3472,7 +3472,7 @@ the xsltproc executable.
             </subsection>
 
             <subsection xml:id="test-second">
-              <title>A second test, containing the testing added to the Sample Article</title>
+              <title>List items containing only inline math</title>
 
               <assemblage xml:id="math-list-test">
                   <title>Testing list items containing only math</title>
