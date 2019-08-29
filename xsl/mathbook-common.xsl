@@ -1685,7 +1685,7 @@ Book (with parts), "section" at level 3
           <!-- wrap tightly in math delimiters -->
           <xsl:call-template name="begin-inline-math" />
           <xsl:if test="(count($the-list-item/*)=1) and ($actual-text = '')">
-            <xsl:text>\displaystyle</xsl:text>
+            <xsl:text>\displaystyle </xsl:text>
           </xsl:if>
           <!-- we clean whitespace that is irrelevant to LaTeX so that we -->
           <!--   (1) avoid LaTeX compilation errors                       -->
