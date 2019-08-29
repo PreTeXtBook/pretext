@@ -773,7 +773,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:element name="{$html-heading}">
         <xsl:attribute name="class">
             <xsl:choose>
-                <xsl:when test="self::chapter">
+                <xsl:when test="self::chapter and $numbering.maximum.level!='0'">
                     <xsl:text>heading</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
