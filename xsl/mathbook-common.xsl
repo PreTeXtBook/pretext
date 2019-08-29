@@ -37,7 +37,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Identify as a stylesheet -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
-    xmlns:xml="http://www.w3.org/XML/1998/namespace" 
+    xmlns:xml="http://www.w3.org/XML/1998/namespace"
     xmlns:date="http://exslt.org/dates-and-times"
     xmlns:exsl="http://exslt.org/common"
     xmlns:str="http://exslt.org/strings"
@@ -1673,19 +1673,47 @@ Book (with parts), "section" at level 3
         <!-- for LaTeX we override to be a no-op, since not necessary   -->
         <xsl:apply-templates select="." mode="get-clause-punctuation" />
     </xsl:variable>
-    <!-- wrap tightly in math delimiters -->
-    <xsl:call-template name="begin-inline-math" />
-    <!-- we clean whitespace that is irrelevant to LaTeX so that we -->
-    <!--   (1) avoid LaTeX compilation errors                       -->
-    <!--   (2) avoid spurious blank lines leading to new paragraphs -->
-    <!--   (3) provide human-readable source of high quality        -->
-    <!-- sanitize-latex template does not provide a final newline   -->
-    <!-- and we do not add one here either, since it is inline math -->
-    <!-- MathJax is more tolerant, but readability is still useful  -->
-    <xsl:call-template name="sanitize-latex">
-        <xsl:with-param name="text" select="$raw-latex" />
-    </xsl:call-template>
-    <xsl:call-template name="end-inline-math" />
+    <!-- adding automatic displaystyle when math is the only thing in a list item -->
+    <xsl:variable name="the-list-item" select="parent::li"/>
+    <xsl:choose>
+      <xsl:when test="$the-list-item">
+        <xsl:variable name="actual-text">
+          <xsl:for-each select="$the-list-item/text()">
+            <xsl:value-of select="normalize-space(.)"/>
+          </xsl:for-each>
+        </xsl:variable>
+          <!-- wrap tightly in math delimiters -->
+          <xsl:call-template name="begin-inline-math" />
+          <xsl:if test="(count($the-list-item/*)=1) and ($actual-text = '')">
+            <xsl:text>\displaystyle</xsl:text>
+          </xsl:if>
+          <!-- we clean whitespace that is irrelevant to LaTeX so that we -->
+          <!--   (1) avoid LaTeX compilation errors                       -->
+          <!--   (2) avoid spurious blank lines leading to new paragraphs -->
+          <!--   (3) provide human-readable source of high quality        -->
+          <!-- sanitize-latex template does not provide a final newline   -->
+          <!-- and we do not add one here either, since it is inline math -->
+          <!-- MathJax is more tolerant, but readability is still useful  -->
+          <xsl:call-template name="sanitize-latex">
+              <xsl:with-param name="text" select="$raw-latex" />
+          </xsl:call-template>
+          <xsl:call-template name="end-inline-math" />
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="begin-inline-math" />
+        <!-- we clean whitespace that is irrelevant to LaTeX so that we -->
+        <!--   (1) avoid LaTeX compilation errors                       -->
+        <!--   (2) avoid spurious blank lines leading to new paragraphs -->
+        <!--   (3) provide human-readable source of high quality        -->
+        <!-- sanitize-latex template does not provide a final newline   -->
+        <!-- and we do not add one here either, since it is inline math -->
+        <!-- MathJax is more tolerant, but readability is still useful  -->
+        <xsl:call-template name="sanitize-latex">
+            <xsl:with-param name="text" select="$raw-latex" />
+        </xsl:call-template>
+        <xsl:call-template name="end-inline-math" />
+      </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <xsl:template name="begin-inline-math">
@@ -6454,7 +6482,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 
     <!-- local names of objects? -->
     <!-- below useful for debugging, worth keeping for a while, 2017-07 -->
-    <!-- 
+    <!--
     <xsl:message>N:<xsl:value-of select="$layout/number-panels" />:N</xsl:message>
     <xsl:message>
         <xsl:text>VA:</xsl:text>
