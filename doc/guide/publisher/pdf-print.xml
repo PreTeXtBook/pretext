@@ -35,7 +35,7 @@
 
         <p>A print <init>PDF</init> will default to page layout appropriate for a document printed two-sided, which makes the most sense for a document that may be sent to a print-on-demand service or printed on a printer that will print on both sides of a sheet of paper.</p>
 
-        <p>These defaults may be overridden with the <c>latex.sided</c> switch with values <c>one</c> and <c>two</c>.</p>
+        <p>These defaults may be overridden with the <c>latex.sides</c> switch with values <c>one</c> and <c>two</c>.</p>
 
         <p>One-sided layout will default to symmetric left/right margins, and page headers with the page numbers <em>always</em> placed in the upper-right corner as part of default page headers.  There will be no blank pages between chapters of a book.</p>
 
