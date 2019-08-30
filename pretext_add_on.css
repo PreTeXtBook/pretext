@@ -1894,6 +1894,9 @@ a.mjx-svg-href  {
 .pretext-content .exercisegroup article.exercise-like p {
     margin-top: 0.5em;
 }
+.pretext-content .exercisegroup article.exercise-like .solution p:first-child {
+    margin-top: -3px;  /* because of the 10px (instread of 7) on the .knowl-content */
+}
 .pretext-content .exercisegroup article.exercise-like li > p:first-child {
     margin-top: 0;
 }
