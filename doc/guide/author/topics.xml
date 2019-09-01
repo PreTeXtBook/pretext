@@ -1568,7 +1568,19 @@
         <subsection xml:id="topic-images-source">
             <title>(*) Images Described by Source Code</title>
 
-            <p>To be written once elements and tags solidify, see sample article for examples.</p>
+            <introduction>
+                <p>To be written once elements and tags solidify, see sample article for examples.</p>
+            </introduction>
+
+            <subsubsection>
+                <title>(*) Asymptote</title>
+
+                <p>Two temporary notes:<ol>
+                    <li>The <c>mbx</c> script will run the Asymptote executable with the <c>-norpc</c> switch.  So <q>rotatable</q> 3D images rendered by the proprietary viewer, Adobe Acrobat, are not created.</li>
+
+                    <li>The <c>mbx</c> script can request the Asymptote executable to create <init>SVG</init> images supplying the <c>-svg</c> switch.  These may be unsuitable, especially for 3D images.  An alternative is to produce <init>PDF</init> images and use a utility like <c>pdf2svg</c> to convert to <init>SVG</init>.</li>
+                </ol></p>
+            </subsubsection>
         </subsection>
 
         <subsection>
