@@ -1651,7 +1651,7 @@ Book (with parts), "section" at level 3
 <!--       then look for leading punctuation, and        -->
 <!--       bring into math with \text() wrapper          -->
 
-<xsl:template match= "m">
+<xsl:template match="m">
     <!-- Build a textual version of the latex,  -->
     <!-- applying the rare templates allowed,   -->
     <!-- save for minor manipulation later.     -->
@@ -1673,47 +1673,47 @@ Book (with parts), "section" at level 3
         <!-- for LaTeX we override to be a no-op, since not necessary   -->
         <xsl:apply-templates select="." mode="get-clause-punctuation" />
     </xsl:variable>
-    <!-- adding automatic displaystyle when math is the only thing in a list item -->
+    <!-- If the current context "m" is a child of an "li" we -->
+    <!-- contemplate injecting a \displaystyle, if *the "m"  -->
+    <!-- is the only content of the "li"*.  So we first      -->
+    <!-- obtain a parent "li" (or come away empty-handed)    -->
     <xsl:variable name="the-list-item" select="parent::li"/>
-    <xsl:choose>
-      <xsl:when test="$the-list-item">
-        <xsl:variable name="actual-text">
-          <xsl:for-each select="$the-list-item/text()">
-            <xsl:value-of select="normalize-space(.)"/>
-          </xsl:for-each>
-        </xsl:variable>
-          <!-- wrap tightly in math delimiters -->
-          <xsl:call-template name="begin-inline-math" />
-          <xsl:if test="(count($the-list-item/*)=1) and ($actual-text = '')">
-            <xsl:text>\displaystyle </xsl:text>
-          </xsl:if>
-          <!-- we clean whitespace that is irrelevant to LaTeX so that we -->
-          <!--   (1) avoid LaTeX compilation errors                       -->
-          <!--   (2) avoid spurious blank lines leading to new paragraphs -->
-          <!--   (3) provide human-readable source of high quality        -->
-          <!-- sanitize-latex template does not provide a final newline   -->
-          <!-- and we do not add one here either, since it is inline math -->
-          <!-- MathJax is more tolerant, but readability is still useful  -->
-          <xsl:call-template name="sanitize-latex">
-              <xsl:with-param name="text" select="$raw-latex" />
-          </xsl:call-template>
-          <xsl:call-template name="end-inline-math" />
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:call-template name="begin-inline-math" />
-        <!-- we clean whitespace that is irrelevant to LaTeX so that we -->
-        <!--   (1) avoid LaTeX compilation errors                       -->
-        <!--   (2) avoid spurious blank lines leading to new paragraphs -->
-        <!--   (3) provide human-readable source of high quality        -->
-        <!-- sanitize-latex template does not provide a final newline   -->
-        <!-- and we do not add one here either, since it is inline math -->
-        <!-- MathJax is more tolerant, but readability is still useful  -->
-        <xsl:call-template name="sanitize-latex">
-            <xsl:with-param name="text" select="$raw-latex" />
-        </xsl:call-template>
-        <xsl:call-template name="end-inline-math" />
-      </xsl:otherwise>
-    </xsl:choose>
+    <!-- If we have inline math directly inside a list item  -->
+    <!-- (i.e., no intervening "p") then we can check to see -->
+    <!-- if there are any non-whitespace text() nodes.       -->
+    <!-- Otherwise (i.e. not a child of an "li"), this       -->
+    <!-- variable will an empty string.                      -->
+    <xsl:variable name="actual-text">
+        <xsl:if test="$the-list-item">
+            <xsl:for-each select="$the-list-item/text()">
+                <xsl:value-of select="normalize-space(.)"/>
+            </xsl:for-each>
+        </xsl:if>
+    </xsl:variable>
+    <!-- wrap tightly in math delimiters -->
+    <xsl:call-template name="begin-inline-math" />
+    <!-- (1) If $the-list-item is empty, the next test fails.       -->
+    <!-- (2) If there is a parent "li", the test will fail if       -->
+    <!--     there are other elements besides the single "m".       -->
+    <!-- (3) If there is any significant text() the test will fail. -->
+    <!--                                                            -->
+    <!-- So we improve the appearance of a lone "m" inside an "li". -->
+    <!-- Authors who do not like this can wrap the content of the   -->
+    <!-- "li" in a "p" to squelch the behavior.                     -->
+    <xsl:if test="(count($the-list-item/*) = 1) and ($actual-text = '')">
+      <xsl:text>\displaystyle </xsl:text>
+    </xsl:if>
+    <!-- we clean whitespace that is irrelevant to LaTeX so that we -->
+    <!--   (1) avoid LaTeX compilation errors                       -->
+    <!--   (2) avoid spurious blank lines leading to new paragraphs -->
+    <!--   (3) provide human-readable source of high quality        -->
+    <!-- sanitize-latex template does not provide a final newline   -->
+    <!-- and we do not add one here either, since it is inline math -->
+    <!-- MathJax is more tolerant, but readability is still useful  -->
+    <xsl:call-template name="sanitize-latex">
+        <xsl:with-param name="text" select="$raw-latex" />
+    </xsl:call-template>
+    <xsl:call-template name="end-inline-math" />
 </xsl:template>
 
 <xsl:template name="begin-inline-math">
