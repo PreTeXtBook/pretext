@@ -1673,19 +1673,47 @@ Book (with parts), "section" at level 3
         <!-- for LaTeX we override to be a no-op, since not necessary   -->
         <xsl:apply-templates select="." mode="get-clause-punctuation" />
     </xsl:variable>
-    <!-- wrap tightly in math delimiters -->
-    <xsl:call-template name="begin-inline-math" />
-    <!-- we clean whitespace that is irrelevant to LaTeX so that we -->
-    <!--   (1) avoid LaTeX compilation errors                       -->
-    <!--   (2) avoid spurious blank lines leading to new paragraphs -->
-    <!--   (3) provide human-readable source of high quality        -->
-    <!-- sanitize-latex template does not provide a final newline   -->
-    <!-- and we do not add one here either, since it is inline math -->
-    <!-- MathJax is more tolerant, but readability is still useful  -->
-    <xsl:call-template name="sanitize-latex">
-        <xsl:with-param name="text" select="$raw-latex" />
-    </xsl:call-template>
-    <xsl:call-template name="end-inline-math" />
+    <!-- adding automatic displaystyle when math is the only thing in a list item -->
+    <xsl:variable name="the-list-item" select="parent::li"/>
+    <xsl:choose>
+      <xsl:when test="$the-list-item">
+        <xsl:variable name="actual-text">
+          <xsl:for-each select="$the-list-item/text()">
+            <xsl:value-of select="normalize-space(.)"/>
+          </xsl:for-each>
+        </xsl:variable>
+          <!-- wrap tightly in math delimiters -->
+          <xsl:call-template name="begin-inline-math" />
+          <xsl:if test="(count($the-list-item/*)=1) and ($actual-text = '')">
+            <xsl:text>\displaystyle </xsl:text>
+          </xsl:if>
+          <!-- we clean whitespace that is irrelevant to LaTeX so that we -->
+          <!--   (1) avoid LaTeX compilation errors                       -->
+          <!--   (2) avoid spurious blank lines leading to new paragraphs -->
+          <!--   (3) provide human-readable source of high quality        -->
+          <!-- sanitize-latex template does not provide a final newline   -->
+          <!-- and we do not add one here either, since it is inline math -->
+          <!-- MathJax is more tolerant, but readability is still useful  -->
+          <xsl:call-template name="sanitize-latex">
+              <xsl:with-param name="text" select="$raw-latex" />
+          </xsl:call-template>
+          <xsl:call-template name="end-inline-math" />
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="begin-inline-math" />
+        <!-- we clean whitespace that is irrelevant to LaTeX so that we -->
+        <!--   (1) avoid LaTeX compilation errors                       -->
+        <!--   (2) avoid spurious blank lines leading to new paragraphs -->
+        <!--   (3) provide human-readable source of high quality        -->
+        <!-- sanitize-latex template does not provide a final newline   -->
+        <!-- and we do not add one here either, since it is inline math -->
+        <!-- MathJax is more tolerant, but readability is still useful  -->
+        <xsl:call-template name="sanitize-latex">
+            <xsl:with-param name="text" select="$raw-latex" />
+        </xsl:call-template>
+        <xsl:call-template name="end-inline-math" />
+      </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <xsl:template name="begin-inline-math">
