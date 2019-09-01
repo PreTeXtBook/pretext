@@ -1129,6 +1129,16 @@
             <p>Here is a technical subtlety that will demonstrate some of the inner machinery of <pretext /> and our conversions.  In your work, locate a theorem that has some numbered display mathematics (<c>mdn</c>) which is at the end of a sentence, and which you have authored as described above.  In <init>HTML</init> output, test a cross-reference (<c>xref</c>) to the theorem and you will see the period for the end of the sentence at the end of the display, where it should be.  Now test a cross-reference (<c>xref</c>) to one of the numbered equations.  First, the knowl will contain the entire display, to provide context, but it also will not contain the period, since the rest of the sentence is not in the knowl and so the period is not necessary.</p>
         </subsection>
 
+        <subsection xml:id="math-list-items">
+            <title>Lists of Mathematical Expressions</title>
+
+            <p>It is common to make lists of expressions, equations, or identities.  Think of the definitions of trigonometric functions, a collection of antiderivatives, or a compendium of generating functions.</p>
+
+            <p>In these situations, author a list item, <tag>li</tag>, within an <tag>ol</tag> or <tag>ul</tag>, by using <em>only</em> the necessary <tag>m</tag> element.  Do not use an intervening <tag>p</tag>, and do not include any adjacent text.  Whitespace is OK.  Then <pretext/> will add <latex/>'s <c>\displaystyle</c> command to improve the visual appearance of the mathematics, and so you do not need to.</p>
+
+            <p>If you prefer to not have this behavior, insert an intervening <tag>p</tag>, and output will be identical, but without the <c>\displaystyle</c>.</p>
+        </subsection>
+
         <subsection>
             <title>Additional Packages</title>
 
@@ -1222,6 +1232,8 @@
             <p>Other items may be interspersed among the paragraphs of a list item, such as a chunk of verbatim text delimited by a <tag>pre</tag> tag.  But anything with a number, such as a <tag>figure</tag> or <tag>remark</tag> is banned, in part because the consequences for numbering and organization become too complicated.  Imagine a remark, and a paragraph of the remark has a list.  Fine so far.  But if the items of that list can again contain remarks, the possibilities become endless.  You can use a <tag>sidebyside</tag> in a structured list item, which can in turn hold an <tag>image</tag>, <tag>tabular</tag>, or similar.  But you cannot place items in a such a <tag>sidebyside</tag> that are numbered, so a <tag>figure</tag> or <tag>table</tag> is not possible.  A general rule is no numbered components in a list item.  Computational components, such as <tag>sage</tag> are also banned from list items due to the difficulty of converting them into electronic computational notebooks with a relatively flat structure.</p>
 
             <p>A list item of a description list must have a <tag>title</tag> element, to provide the text of the label.  Now that the list item has some structure, the remainder must also be structured, typically with some paragraphs, as discussed above.  In other words, the earlier option of employing an <tag>li</tag> element just like a <tag>p</tag> element is not available in a description list.  Further, given the complexity of presenting a description list, it can <em>only be a top-level list</em>.  It can contain the two other types nested within its list items.</p>
+
+            <p>Note that a list item holding <em>only</em> an <tag>m</tag> element will get special treatment.  See <xref ref="math-list-items"/>.</p>
         </subsection>
 
         <subsection xml:id="topic-list-item-target">
