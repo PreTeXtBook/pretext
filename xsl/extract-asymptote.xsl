@@ -48,6 +48,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select=".." mode="visible-id" />
     </xsl:variable>
     <exsl:document href="{$scratch}/{$filebase}.asy" method="text">
+        <xsl:text>usepackage("amsmath");&#xa;</xsl:text>
         <xsl:text>texpreamble("&#xa;</xsl:text>
         <xsl:value-of select="$latex-macros" />
         <xsl:text>");&#xa;&#xa;</xsl:text>

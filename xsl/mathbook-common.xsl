@@ -37,7 +37,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Identify as a stylesheet -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
-    xmlns:xml="http://www.w3.org/XML/1998/namespace" 
+    xmlns:xml="http://www.w3.org/XML/1998/namespace"
     xmlns:date="http://exslt.org/dates-and-times"
     xmlns:exsl="http://exslt.org/common"
     xmlns:str="http://exslt.org/strings"
@@ -1651,7 +1651,7 @@ Book (with parts), "section" at level 3
 <!--       then look for leading punctuation, and        -->
 <!--       bring into math with \text() wrapper          -->
 
-<xsl:template match= "m">
+<xsl:template match="m">
     <!-- Build a textual version of the latex,  -->
     <!-- applying the rare templates allowed,   -->
     <!-- save for minor manipulation later.     -->
@@ -1673,8 +1673,36 @@ Book (with parts), "section" at level 3
         <!-- for LaTeX we override to be a no-op, since not necessary   -->
         <xsl:apply-templates select="." mode="get-clause-punctuation" />
     </xsl:variable>
+    <!-- If the current context "m" is a child of an "li" we -->
+    <!-- contemplate injecting a \displaystyle, if *the "m"  -->
+    <!-- is the only content of the "li"*.  So we first      -->
+    <!-- obtain a parent "li" (or come away empty-handed)    -->
+    <xsl:variable name="the-list-item" select="parent::li"/>
+    <!-- If we have inline math directly inside a list item  -->
+    <!-- (i.e., no intervening "p") then we can check to see -->
+    <!-- if there are any non-whitespace text() nodes.       -->
+    <!-- Otherwise (i.e. not a child of an "li"), this       -->
+    <!-- variable will an empty string.                      -->
+    <xsl:variable name="actual-text">
+        <xsl:if test="$the-list-item">
+            <xsl:for-each select="$the-list-item/text()">
+                <xsl:value-of select="normalize-space(.)"/>
+            </xsl:for-each>
+        </xsl:if>
+    </xsl:variable>
     <!-- wrap tightly in math delimiters -->
     <xsl:call-template name="begin-inline-math" />
+    <!-- (1) If $the-list-item is empty, the next test fails.       -->
+    <!-- (2) If there is a parent "li", the test will fail if       -->
+    <!--     there are other elements besides the single "m".       -->
+    <!-- (3) If there is any significant text() the test will fail. -->
+    <!--                                                            -->
+    <!-- So we improve the appearance of a lone "m" inside an "li". -->
+    <!-- Authors who do not like this can wrap the content of the   -->
+    <!-- "li" in a "p" to squelch the behavior.                     -->
+    <xsl:if test="(count($the-list-item/*) = 1) and ($actual-text = '')">
+      <xsl:text>\displaystyle </xsl:text>
+    </xsl:if>
     <!-- we clean whitespace that is irrelevant to LaTeX so that we -->
     <!--   (1) avoid LaTeX compilation errors                       -->
     <!--   (2) avoid spurious blank lines leading to new paragraphs -->
@@ -3501,17 +3529,19 @@ Book (with parts), "section" at level 3
 <!-- There are two models for most of the divisions (part -->
 <!-- through subsubsection, plus appendix).  One has      -->
 <!-- subdivisions, and possibly multiple "exercises", or  -->
-<!-- other specialized subdivisions.  The other has no    -->
-<!-- subdivisions, and then at most one of each type of   -->
-<!-- specialized subdivision, which inherit numbers from  -->
-<!-- their parent division. This is the test, which is    -->
-<!-- very similar to "is-leaf" above.                     -->
+<!-- other specialized subdivisions.  (Namely             -->
+<!-- "worksheet", "exercises", "solutions", and not       -->
+<!-- "references", "glossary", nor "reading-questions".)  -->
+<!-- The other has no subdivisions, and then at most one  -->
+<!-- of each type of specialized subdivision, which       -->
+<!-- inherit numbers from their parent division. This is  -->
+<!-- the test, which is very similar to "is-leaf" above.  -->
 <!--                                                      -->
 <!-- A "part" must have chapters, so will always return   -->
 <!-- 'true' and for a 'subsubsection' there are no more   -->
 <!-- subdivisions to employ and so will return empty.     -->
 <xsl:template match="book|article|part|chapter|appendix|section|subsection|subsubsection" mode="is-structured-division">
-    <xsl:if test="chapter|section|subsection|subsubsection">
+    <xsl:if test="chapter|section|subsection|subsubsection|worksheet|exercises|solutions">
         <xsl:text>true</xsl:text>
     </xsl:if>
 </xsl:template>
@@ -6454,7 +6484,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 
     <!-- local names of objects? -->
     <!-- below useful for debugging, worth keeping for a while, 2017-07 -->
-    <!-- 
+    <!--
     <xsl:message>N:<xsl:value-of select="$layout/number-panels" />:N</xsl:message>
     <xsl:message>
         <xsl:text>VA:</xsl:text>

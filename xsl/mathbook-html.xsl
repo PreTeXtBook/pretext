@@ -773,9 +773,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:element name="{$html-heading}">
         <xsl:attribute name="class">
             <xsl:choose>
-                <xsl:when test="self::chapter">
+                <xsl:when test="self::chapter and ($numbering-maxlevel > 0)">
                     <xsl:text>heading</xsl:text>
                 </xsl:when>
+                <!-- hide "Chapter" when numbers are killed -->
                 <xsl:otherwise>
                     <xsl:text>heading hide-type</xsl:text>
                 </xsl:otherwise>

@@ -3471,6 +3471,169 @@ the xsltproc executable.
                 <p>And a paragraph after that list so that spacing can be checked.</p>
             </subsection>
 
+            <subsection xml:id="test-second">
+              <title>List items containing only inline math</title>
+
+              <assemblage xml:id="math-list-test">
+                  <title>Testing list items containing only math</title>
+
+                  <p>
+                    There are many places where it makes sense to have a list of mathematical terms,
+                    or possibly equations.
+                    For example, one might wish to provide a list of derivative formulas.
+                    With such lists, the author may wish to have display mathematics,
+                    but almost certainly they don't want it centered.
+                    One can work around this by using the <latex/> <c>\displaystyle</c> command.
+                    However, it would be nice if a list item containing only math used display mode by default.
+                  </p>
+
+                  <p>
+                      <ol>
+                          <li>
+                              <p>
+                                  A list item containing some text in a paragraph,
+                                  as well as some inline math: <m>\int_a^b x^2\,dx = \frac{x^3}{3}</m>.
+                              </p>
+                          </li>
+                          <li>A list item with text and math <m>\int_a^b x^2\,dx</m>, not in a paragraph.</li>
+                          <li>
+                              <m>\frac{d}{dx}\tan(x) = \sec^2(x) = \frac{1}{\cos^2(x)}</m>
+                          </li>
+
+                          <li><m>\sum_{i=0}^n r^i = \frac{1-r^{n+1}}{1-r}</m></li>
+                      </ol>
+                      <idx><h><m>\int f(x)\,dx</m></h></idx>
+                      <idx><h>math in lists <m>\frac{d}{dx}(\sin(x))=\cos(x)</m></h></idx>
+                  </p>
+
+
+                  <p>
+                      Now, a <c>p</c> that isn't in a list,
+                      followed by a list that's in a <c>p</c>.
+                  </p>
+
+                  <p>
+                      <ul>
+                          <li>
+                              <p>
+                                  <m>\sum_{n=1}^\infty\frac{1}{n^2}=\frac{\pi^2}{6}</m>
+                                  A list item starting with some math,
+                                  followed by text, all in a <c>p</c>
+                              </p>
+                          </li>
+
+                          <li><m>\frac{a}{b}\div \frac{c}{d} = \frac{ad}{bc}</m></li>
+
+                          <li>
+                              <m>
+                                  \tan\theta = \frac{\sin\theta}{\cos\theta}
+                              </m>
+                          </li>
+                      </ul>
+                  </p>
+
+              </assemblage>
+
+              <p>
+                  The above assemblage had some lists in it, just to see what will happen.
+                  While we're at it, we might try adding lists that are in a <c>list</c>.
+              </p>
+
+              <list>
+                  <title>A list of items, some of which contain math</title>
+                  <ol>
+                      <li>
+                          <p>
+                              A first list item, containing some text.
+                              The next list item will contain only math,
+                              with the <c>m</c> tag inline with the <c>li</c> tag.
+                          </p>
+                      </li>
+                      <li>A list item with text and math <m>\int_a^b x^2\,dx</m>, not in a paragraph.</li>
+                      <li><m>\int_a^b f'(x)\, dx = f(b)-f(a)</m></li>
+
+                      <li>
+                          <p>
+                              The next two list items will contain, respectively,
+                              a list item containing only math, where the math is on a new line,
+                              then the same again, but with two new lines,
+                              and a list item containing math within a <c>p</c>,
+                              first inline, and then after a line break.
+                          </p>
+                      </li>
+
+                      <li>
+                          <m>\frac{d}{dx}\sec^{-1}(x) = \frac{1}{x\sqrt{x^2-1}}</m>
+                      </li>
+
+                      <li>
+                          <m>\frac{d}{dx}\sec^{-1}(x) = \frac{1}{x\sqrt{x^2-1}}</m>
+                      </li>
+
+                      <li><p><m>\frac{d}{dx}\sec^{-1}(x) = \frac{1}{x\sqrt{x^2-1}}</m></p></li>
+
+                      <li>
+                          <p>
+                              <m>\frac{d}{dx}\sec^{-1}(x) = \frac{1}{x\sqrt{x^2-1}}</m>
+                          </p>
+                      </li>
+                  </ol>
+              </list>
+
+              <p>
+                  And now, a list in a paragraph.
+              </p>
+
+              <p>
+                  <ul>
+                      <li>
+                          <p>
+                              A paragraph that begins with text, then some math:
+                              <m>\sum_{n=1}^\infty\frac{1}{n^2}=\frac{\pi^2}{6}</m>
+                              And now some more text. The next two list items contain:
+                              <ol>
+                                  <li>
+                                      <p>
+                                          Math only, inline.
+                                      </p>
+                                  </li>
+
+                                  <li>
+                                      <p>
+                                          Math only, with a newline.
+                                      </p>
+                                  </li>
+
+                                  <li>
+                                      <p>
+                                          Math only, but in a paragraph.
+                                          Also the next item on this list has math,
+                                          just to see what happens in a nested list.
+                                      </p>
+                                  </li>
+
+                                  <li><m>\int_a^x \frac{d}{dt}f(t)\,dt = f(x)-f(a)</m></li>
+                              </ol>
+                          </p>
+                      </li>
+
+                      <li><m>\frac{a}{b}\div \frac{c}{d} = \frac{ad}{bc}</m></li>
+
+                      <li>
+                          <m>
+                              \tan\theta = \frac{\sin\theta}{\cos\theta}
+                          </m>
+                      </li>
+
+                      <li>
+                          <p>
+                              <m>\frac{a}{b}\gt \sum_{i=3}^{76}\frac{x^2}{y^2}</m>
+                          </p>
+                      </li>
+                  </ul>
+              </p>
+            </subsection>
+
             <subsection>
                 <title>Description Lists</title>
 
