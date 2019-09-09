@@ -167,7 +167,7 @@
         <idx>figure</idx>
         <idx>table</idx>
 
-        <p>Figures and tables have outer structures, <tag>figure</tag><idx>figure</idx> and <tag>table</tag><idx>table</idx> which can contain a <tag>title</tag> (for cross-references, such as in a list of figures) and a <tag>caption</tag>.  The presence of a <tag>caption</tag> generates a number for the figure or table.  These outer structures also generate some vertical separation between surrounding elements.</p>
+        <p>Figures and tables are outer structures, <tag>figure</tag><idx>figure</idx> and <tag>table</tag><idx>table</idx>. A <tag>table</tag> has a <tag>title</tag> and a <tag>figure</tag> has a <tag>caption</tag>.</p>
 
         <p>A <tag>table</tag> may only contain a <tag>tabular</tag>, which is the structure containing the rows and columns of a table.  Details can be found in <xref ref="topic-tabular" />.</p>
 

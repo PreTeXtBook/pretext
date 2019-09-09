@@ -1270,9 +1270,9 @@
 
             <p>As mentioned above, it is not possible to have a list be the target of a cross-reference.  Should an entire list be <em>so important</em> that you need to point to it from elsewhere, then make it a <term>named list</term> by wrapping it in the <tag>list</tag> tag.</p>
 
-            <p>This element can begin with an optional <tag>introduction</tag>, then has a single, required list, which may be any of the three types.  It concludes with an optional <tag>conclusion</tag>.  It can have an <attr>xml:id</attr> attribute, which in a way is the whole <foreign xml:lang="fr-FR">raison d'être</foreign> for this construction.  It will be numbered when rendered, and so also requires a <tag>caption</tag>.  You may give it an optional <tag>title</tag>, even if implementation is spotty presently (2018-03-28).  (You did say it was important, no?)  You might think of it as a specialized <tag>figure</tag>, it is entirely similar.</p>
+            <p>This element can begin with an optional <tag>introduction</tag>, then has a single, required list, which may be any of the three types.  It concludes with an optional <tag>conclusion</tag>.  It can have an <attr>xml:id</attr> attribute, which in a way is the whole <foreign xml:lang="fr-FR">raison d'être</foreign> for this construction.  It will be numbered when rendered, and so also requires a <tag>title</tag>.  You might think of this as similar to a <tag>table</tag><mdash/>bits of information organized spatially.</p>
 
-            <p>Since this element associates a number, caption, and title, to an entire list, we call it a <q>named list</q>.  What should we call a list that is authored within a paragraph and cannot be the target of a cross-reference?  We call it an <term>anonymous list</term> when we want to make the distinction.</p>
+            <p>Since this element associates a number, title, to an entire list, we call it a <q>named list</q>.  What should we call a list that is authored within a paragraph and cannot be the target of a cross-reference?  We call it an <term>anonymous list</term> when we want to make the distinction.</p>
         </subsection>
 
         <subsection>
