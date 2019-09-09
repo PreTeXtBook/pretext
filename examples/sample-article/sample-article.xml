@@ -3690,7 +3690,7 @@ the xsltproc executable.
                 <p>A list can be wrapped with a <tag>list</tag> element, so that it earns a number, can be given a title and have an introduction and conclusion.  Cross-references to individual list items get a bit involved as they are prefixed with the number of the list and then the number of the item, so conceivably you could get a number like <c>4.5.3:2.a.ii</c>.  The colon is used to indicate the transition from the number of the list within divisions and the numbers coming from the list hierarchy, since it has two small dots.</p>
 
                 <list xml:id="list-colors-rainbow">
-                    <caption>Colors of the Rainbow</caption>
+                    <title>Colors of the Rainbow</title>
 
                     <introduction>
                         <p>Because the colors are always in the same order, an ordered list is natural here.  The colors change continuously, but are often divided up into large ranges that human perception can easily distinguish.</p>
@@ -3715,7 +3715,7 @@ the xsltproc executable.
                  <p>This next list is used for testing cross-references to it.  See <xref ref="section-cross-referencing" text="type-global" />.</p>
 
                 <list xml:id="list-to-reference">
-                    <caption>A named list of targets</caption>
+                    <title>A named list of targets</title>
                     <introduction>
                         <p>This is the introduction to this named list, which references an item within, via the hybrid <attr>text</attr> attribute:  <xref ref="target-item" text="type-hybrid" />.</p>
                     </introduction>
@@ -6951,7 +6951,7 @@ the xsltproc executable.
                     <caption>Two named lists</caption>
                     <sidebyside widths="30% 60%" valign="top">
                         <list>
-                            <caption>Sea Life</caption>
+                            <title>Sea Life</title>
                             <introduction>
                                 <p>Dr. Seuss again.</p>
                             </introduction>
@@ -6963,7 +6963,7 @@ the xsltproc executable.
                             </ul>
                         </list>
                         <list xml:id="color-list-as-panel">
-                            <caption>Color Shades</caption>
+                            <title>Color Shades</title>
                             <idx><h>colors</h><h>shades</h></idx>
                             <ol>
                                 <li><p>Blue<ol>
@@ -6988,7 +6988,7 @@ the xsltproc executable.
 
                 <sidebyside widths="30% 60%" valign="top">
                     <list>
-                        <caption>Sea Life</caption>
+                        <title>Sea Life</title>
                         <introduction>
                             <p>Dr. Seuss again.</p>
                         </introduction>
@@ -7000,7 +7000,7 @@ the xsltproc executable.
                         </ul>
                     </list>
                     <list xml:id="color-list-as-panel-in-sbs">
-                        <caption>Color Shades</caption>
+                        <title>Color Shades</title>
                         <idx><h>colors</h><h>shades</h></idx>
                         <ol>
                             <li><p>Blue<ol>
@@ -7845,7 +7845,7 @@ the xsltproc executable.
                         </program>
                     </listing>
                     <list>
-                        <caption>Colors Again</caption>
+                        <title>Colors Again</title>
                         <introduction>
                             <p>We have named list of colors.</p>
                         </introduction>
