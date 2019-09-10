@@ -12,23 +12,23 @@
  The other two choices appear in the ToC.
 
  Either:
- 3) A dark color for each chapter background
- 4) A dark color for the current section background
+ 4) A dark color for each chapter background
+ 5) A dark color for the current section background
  (Often the ToC section background equals documenttitle.
 
  Or:
- 3') A light color for each chapter background
- 4') A light color for the current section background
+ 4') A light color for each chapter background
+ 5') A light color for the current section background
 
  In the CSS those are called 'chaptertoc' and 'sectiontoc',
  respectively.
 
- With 3) and 4) you need white letters to go on the dark
- background, and with 3') and 4') you need dark letters
+ With 4) and 5) you need white letters to go on the dark
+ background, and with 4') and 5') you need dark letters
  on the light background.  Set the color of those letters
  with 'chaptertoctext'.
 
- In addition to the above four choices, you need to 
+ In addition to the above choices, you need to 
  choose a contrasting shade of each color, to be used
  for highlighting, borders, etc.
 
