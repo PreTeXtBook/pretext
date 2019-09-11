@@ -946,6 +946,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% Used for inline definitions of terms&#xa;</xsl:text>
         <xsl:text>\newcommand{\terminology}[1]{\textbf{#1}}&#xa;</xsl:text>
     </xsl:if>
+    <!-- 2018-02-05: "booktitle" deprecated -->
+    <xsl:if test="$document-root//pubtitle|$document-root//booktitle">
+        <xsl:text>%% Titles of longer works (e.g. books, versus articles)&#xa;</xsl:text>
+        <xsl:text>\newcommand{\pubtitle}[1]{\textsl{#1}}&#xa;</xsl:text>
+    </xsl:if>
     <!-- http://tex.stackexchange.com/questions/23711/strikethrough-text -->
     <!-- http://tex.stackexchange.com/questions/287599/thickness-for-sout-strikethrough-command-from-ulem-package -->
     <xsl:if test="$document-root//insert or $document-root//delete or $document-root//stale">
@@ -7969,8 +7974,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- and other freestanding works are italicized; titles -->
 <!-- of articles, chapters, and other shorter works      -->
 <!-- are set in roman and enclosed in quotation marks.   -->
+<!-- \pubtitle is a semantic macro defined only if       -->
+<!-- "pubtitle" or "booktitle" is employed.  Adjust if   -->
+<!-- deprecation is removed.                             -->
 <xsl:template match="pubtitle|booktitle">
-    <xsl:text>\textsl{</xsl:text>
+    <xsl:text>\pubtitle{</xsl:text>
     <xsl:apply-templates />
     <xsl:text>}</xsl:text>
 </xsl:template>

@@ -35,10 +35,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- HTML5 format -->
 <xsl:output method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat"/>
 
+<!-- Switches -->
+<!-- These switches should be in the publisher file,  -->
+<!-- with more robust error-checking, once stabilized -->
+
 <!-- Anything but 'no' (e.g 'yes') will create    -->
 <!-- code assuming a local reveal.js installation -->
 <!-- NB: this should be nore robust!              -->
 <xsl:param name="local" select="'no'"/>
+
+<!-- If desired CSS file is css/theme/solarized.css -->
+<!-- then set "theme" parameter to "solarized".     -->
+<!-- Default CSS/theme is css/theme/simple.css      -->
+<xsl:param name="theme" select="'simple'"/>
 
 <!-- String to prefix  reveal.js  resources -->
 <xsl:variable name="reveal-root">
@@ -87,13 +96,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:when test="$local = 'no'">
                     <link href="{$reveal-root}/css/reset.min.css" rel="stylesheet"></link>
                     <link href="{$reveal-root}/css/reveal.min.css" rel="stylesheet"></link>
-                    <link href="{$reveal-root}/css/theme/simple.min.css" rel="stylesheet"></link>
+                    <link href="{$reveal-root}/css/theme/{$theme}.min.css" rel="stylesheet"></link>
                     <script src="{$reveal-root}/js/reveal.min.js"></script>
                 </xsl:when>
                 <xsl:otherwise>
                     <link href="{$reveal-root}/css/reset.css" rel="stylesheet"></link>
                     <link href="{$reveal-root}/css/reveal.css" rel="stylesheet"></link>
-                    <link href="{$reveal-root}/css/theme/simple.css" rel="stylesheet"></link>
+                    <link href="{$reveal-root}/css/theme/{$theme}.css" rel="stylesheet"></link>
                     <script src="{$reveal-root}/js/reveal.js"></script>
                 </xsl:otherwise>
             </xsl:choose>

@@ -25,7 +25,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--                                               -->
 <!-- Copyright (C) 1997-2014  Thomas W. Judson     -->
 
-<frontmatter xml:id="sample-book" xmlns:xi="http://www.w3.org/2001/XInclude">
+<frontmatter xml:id="frontmatter" xmlns:xi="http://www.w3.org/2001/XInclude">
 
     <titlepage>
 

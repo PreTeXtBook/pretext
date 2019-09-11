@@ -238,13 +238,9 @@ the xsltproc executable.
         here the title material should precede a table of contents.
         They differ from "docinfo" items in that they will be *content*
         that a reader will actually see.
-
-        The xml:id string is used to form a filename for a webpage.
-        Setting this one to "index" makes for a good default page
-        when you host your project on a server.
         -->
 
-        <frontmatter xml:id="index">
+        <frontmatter xml:id="frontmatter">
             <!--
             Items typically on the main title page of a book,
             but here as an article they are handled more compactly
@@ -1434,7 +1430,7 @@ the xsltproc executable.
             <p>Tables can get quite complex.  Simple ones are simpler, such as this example of numerical computations for Euler's method.</p>
 
             <table xml:id="table-euler1">
-                <caption>Euler's approximation for Duffing's Equation with <m>h = 0.2</m></caption>
+                <title>Euler's approximation for Duffing's Equation with <m>h = 0.2</m></title>
                 <tabular top="major" halign="center">
                     <row bottom="minor">
                         <cell><m>i</m></cell>
@@ -1868,7 +1864,7 @@ the xsltproc executable.
 
                 <p>For best results, be certain the right Unicode characters are in your source.  If you only need a certain symbol rarely, you can enter it in your source via its Unicode number.  For example, to obtain a peso, type <c>&amp;#x20B1;</c>.  This table has been tested with our default fonts, and should be fine for <init>HTML</init> output.  Please report any difficulties with different <latex/> fonts, as there are extra measures we can take to make these more robust.  (We've already done this for the Paraguayan guaraní.)</p>
                 <table>
-                    <caption>Supported Currency</caption>
+                    <title>Supported Currency</title>
                     <tabular>
                         <row bottom="medium">
                             <cell>Sign</cell>
@@ -1962,7 +1958,7 @@ the xsltproc executable.
                 <p>We sprinkle <icon name="gear"/> a few into a few sentences <icon name="wrench"/> to check baselines <icon name="file-save"/> and font sizing.  We sprinkle <icon name="gear"/> a few into a few sentences <icon name="wrench"/> to check baselines <icon name="file-save"/> and font sizing.  We sprinkle <icon name="gear"/> a few into a few sentences <icon name="wrench"/> to check baselines <icon name="file-save"/> and font sizing.  We sprinkle <icon name="gear"/> a few into a few sentences <icon name="wrench"/> to check baselines <icon name="file-save"/> and font sizing.</p>
 
                 <table>
-                    <caption>User-Interface Icons</caption>
+                    <title>User-Interface Icons</title>
 
                     <tabular>
                         <col/>
@@ -3690,7 +3686,7 @@ the xsltproc executable.
                 <p>A list can be wrapped with a <tag>list</tag> element, so that it earns a number, can be given a title and have an introduction and conclusion.  Cross-references to individual list items get a bit involved as they are prefixed with the number of the list and then the number of the item, so conceivably you could get a number like <c>4.5.3:2.a.ii</c>.  The colon is used to indicate the transition from the number of the list within divisions and the numbers coming from the list hierarchy, since it has two small dots.</p>
 
                 <list xml:id="list-colors-rainbow">
-                    <caption>Colors of the Rainbow</caption>
+                    <title>Colors of the Rainbow</title>
 
                     <introduction>
                         <p>Because the colors are always in the same order, an ordered list is natural here.  The colors change continuously, but are often divided up into large ranges that human perception can easily distinguish.</p>
@@ -3715,7 +3711,7 @@ the xsltproc executable.
                  <p>This next list is used for testing cross-references to it.  See <xref ref="section-cross-referencing" text="type-global" />.</p>
 
                 <list xml:id="list-to-reference">
-                    <caption>A named list of targets</caption>
+                    <title>A named list of targets</title>
                     <introduction>
                         <p>This is the introduction to this named list, which references an item within, via the hybrid <attr>text</attr> attribute:  <xref ref="target-item" text="type-hybrid" />.</p>
                     </introduction>
@@ -3817,7 +3813,7 @@ the xsltproc executable.
                 <exercise>
                     <statement>
                         <table>
-                            <caption>Table Alignment Example</caption>
+                            <title>Table Alignment Example</title>
                             <tabular top="minor" left="minor" halign="center">
                                 <col right="medium"/>
                                 <col right="major"/>
@@ -3872,7 +3868,7 @@ the xsltproc executable.
             <p>A very minimal table, hence with left-justified cells, no borders.  We do wrap the tabular element in a table element to get centering, numbering and a caption.</p>
 
             <table>
-                <caption>Some Colors</caption>
+                <title>Some Colors</title>
                 <tabular>
                     <row>
                         <cell>Red</cell>
@@ -3892,7 +3888,7 @@ the xsltproc executable.
             <p>Tables can be used many ways.  We describe long division of polynomials by using vertical and horizontal borders on individual entries of a table.  The division lines are slightly thicker than the subtraction lines.  This is a good example of the typical abuse of tables for horizontal and vertical layout.  Also indicative of this abuse is that it might make more sense to call this a <q>Figure,</q> not a <q>Table</q>.</p>
 
             <table>
-                <caption>Polynomial Long Division</caption>
+                <title>Polynomial Long Division</title>
                 <tabular halign="right">
                     <row>
                         <cell></cell>
@@ -3966,7 +3962,7 @@ the xsltproc executable.
             <p>Where the body of the table below has an entry, it means the attribute may be used on the element, and affects the range of the tabular described by the element.  Employment of an attribute on elements to the right in the table will supersede use on elements to the left.  Generally, every cell has right and bottom borders, but only cells at the left side of the table have a left border and only cells across the top have a top border.  Only one cell has four borders.</p>
 
             <table>
-                <caption>Tabular Elements and Attributes (p = planned)</caption>
+                <title>Tabular Elements and Attributes (p = planned)</title>
                 <tabular top="major" halign="center">
                     <col halign="left" />
                     <col />
@@ -4111,7 +4107,7 @@ the xsltproc executable.
             <!-- Default matches HTML and LaTEX, left. -->
             <!-- We set this table's default to right. -->
             <table>
-                <caption>Horizontal Alignment Example</caption>
+                <title>Horizontal Alignment Example</title>
                 <tabular halign="right">
                     <col />
                     <col />
@@ -4155,7 +4151,7 @@ the xsltproc executable.
             <p>Example from above, but now with horizontal rules, plus an extra row to test the bottom border.  See the source for comments.</p>
 
             <table>
-                <caption>Horizontal Rules Example</caption>
+                <title>Horizontal Rules Example</title>
                 <tabular bottom="minor" top="major" halign="right">
                     <col top="minor"/>
                     <col />
@@ -4211,7 +4207,7 @@ the xsltproc executable.
             <p>Same example as before, but now with vertical rules.  See the source for comments.</p>
 
             <table>
-                <caption>Vertical Rules Example</caption>
+                <title>Vertical Rules Example</title>
                 <tabular bottom="minor" top="major" left="major" right="medium"  halign="right">
                     <col top="minor"/>
                     <col />
@@ -4258,7 +4254,7 @@ the xsltproc executable.
             </table>
 
             <table>
-                <caption>Progressively Thicker Rules Example</caption>
+                <title>Progressively Thicker Rules Example</title>
                 <tabular top="minor" left="minor" halign="center">
                     <col right="medium"/>
                     <col right="major"/>
@@ -4283,7 +4279,7 @@ the xsltproc executable.
             </table>
 
             <table>
-                <caption>Column Span Example</caption>
+                <title>Column Span Example</title>
                 <tabular top="minor" left="minor" halign="center">
                     <col right="medium"/>
                     <col right="major"/>
@@ -4309,7 +4305,7 @@ the xsltproc executable.
 
             <p><ol><li>
                 <table>
-                    <caption>Table Alignment Example</caption>
+                    <title>Table Alignment Example</title>
                     <tabular top="minor" left="minor" halign="center">
                         <col right="medium"/>
                         <col right="major"/>
@@ -4337,7 +4333,7 @@ the xsltproc executable.
 
                 <!-- Requires many right="minor" since no col attributes are used -->
                 <table>
-                    <caption>Column Spans, No <c>col</c> Elements, Nine Columns</caption>
+                    <title>Column Spans, No <c>col</c> Elements, Nine Columns</title>
                     <tabular >
                         <!--  -->
                         <row left="minor">
@@ -4379,7 +4375,7 @@ the xsltproc executable.
             <p>A bare minimum table (one row with one cell) to test edge cases:</p>
 
             <table xml:id="table-minimal">
-                <caption>One entry table</caption>
+                <title>One entry table</title>
                 <tabular top="medium">
                     <row bottom="medium" left="minor">
                         <cell right="minor">One</cell>
@@ -4390,7 +4386,7 @@ the xsltproc executable.
             <p>Table cells with a fixed width where text wraps are known as <q>paragraph cells</q>. A cell will be created as a paragraph cell if and only if it has <tag>p</tag> children. And such cells should <em>only</em> have <tag>p</tag> children. The width of a paragraph cell is determined by a <c>width</c> attribute on the corresponding <tag>col</tag> (as a percentage). If no <c>width</c> is specified (or there isn't even a <tag>col</tag> in the first place) then <c>xsltproc</c> will abort. If the column has a non-paragraph cell with contents that are wider than the paragraph cells, results will be undesirable. There is presently no implementation for a paragraph cell that has a <c>colspan</c> greater than <m>1</m>, although cells with <c>colspan</c> greater than <m>1</m> that are above or below a paragraph cell will behave. Setting <c>width</c> on a <tag>col</tag> that has no paragraph cells may produce unexpected results. A <c>valign</c> for the parent <tag>row</tag> (or the ambient <tag>tabular</tag>) can control vertical alignment (top, middle, or bottom). A paragraph cell's <c>halign</c> attribute (left, center, right, or justify) controls how the text is justfied. Cells inherit <c>halign</c> from <tag>row</tag>, <tag>col</tag>, and <tag>tabular</tag> in that order of preference. In a non-paragraph cell where <c>halign='justify'</c>, the horizontal alignment will match the behavior of <c>halign='left'</c>.</p>
 
             <table xml:id="table-time-units">
-                <caption>Time Units</caption>
+                <title>Time Units</title>
                 <tabular top="major">
                     <col />
                     <col />
@@ -4427,7 +4423,7 @@ the xsltproc executable.
             <p>Table cells can have multiline content using <tag>line</tag> elements. This is not the same thing as a paragraph cell<mdash />line breaking will happen precisely where the author tells it to. A <tag>line</tag> will not break, even on a narrow screen. If a cell uses a <tag>line</tag>, it must only use a sequence of <tag>line</tag>s and no other content. As with paragraph cells, you can use a <c>valign</c> attribute for the row.</p>
 
             <table xml:id="table-multiline-cells">
-                <caption><abbr>Dr.</abbr> Seuss lines</caption>
+                <title><abbr>Dr.</abbr> Seuss lines</title>
                 <tabular top="medium" left="medium" bottom="medium" right="medium">
                     <row valign="bottom">
                         <cell>
@@ -4456,7 +4452,7 @@ the xsltproc executable.
             <p>This is a table torture test with many combinations of <c>halign</c>, <c>valign</c>, <c>colspan</c>, <tag>p</tag> children, and <tag>line</tag> children.</p>
 
             <table>
-                <caption>Table Torture Test</caption>
+                <title>Table Torture Test</title>
                 <tabular top="minor" bottom="minor" right="minor" left="minor">
                     <col />
                     <col width="10%" />
@@ -4560,7 +4556,7 @@ the xsltproc executable.
             <p>Tables are formed in <latex /> output with copious use of the <c>\multicolumn</c> macro to override more global alignment settings, and to spread the content of one cell across several columns.  However, sometimes <latex />'s special characters have behaved badly in this situation.  So the table below, two items per row, is just designed for <latex /> testing.  But of course, it should still render fine in other formats.  The three test cases are from <xref ref="section-urls" />, but without 50 alphabetic characters and 8 digits, which should not be problems in this context.  In order to test the use of a percent sign (<c>%</c>) in a URL, we follow it by two hex digits, specifically, <c>58</c>, which is a way to represent the character <c>X</c> in a <init>URL</init>.  The first column's entries are <em>forced</em> to be wrapped in a <c>\multicolumn</c> by specifying their horizontal alignment.  The second column's entries <em>will not</em> be wrapped in a <c>\multicolumn</c>.So the two columns will look identical, other than the first having a left alignment, and the second has the default center alignment.  (This table is known to render poorly in a Jupyter notebook.  The cause is four dollar signs present in rows 1 and 3, and is explained in <xref ref="subsection-jupyter-dollars" text="type-global"/>.)</p>
 
             <table xml:id="table-latex-problems">
-                <caption>Problematic Table Cells for <latex /></caption>
+                <title>Problematic Table Cells for <latex /></title>
                 <tabular halign="center" top="medium" left="medium" bottom="medium" right="medium">
                     <row>
                         <cell>1</cell>
@@ -5618,7 +5614,7 @@ the xsltproc executable.
                 <!-- ex &#x0020; space, not visible  -->
 
                 <table>
-                    <caption>Basic Latin, Regular</caption>
+                    <title>Basic Latin, Regular</title>
                 <tabular>
                     <row><cell />
                     <cell><c>0</c></cell>
@@ -5662,7 +5658,7 @@ the xsltproc executable.
                 <!-- ex &#x00A0; non-breaking space  -->
                 <!-- ex &#x00AD; soft hyphen         -->
                 <table>
-                    <caption>Latin-1 Supplement, Regular</caption>
+                    <title>Latin-1 Supplement, Regular</title>
                 <tabular>
                     <row><cell />
                     <cell><c>0</c></cell>
@@ -5705,7 +5701,7 @@ the xsltproc executable.
                 <!-- ex &#x0000; - &#x001F; controls -->
                 <!-- ex &#x007F; control             -->
                 <table>
-                    <caption>Basic Latin, Monospace</caption>
+                    <title>Basic Latin, Monospace</title>
                     <tabular>
                         <row><cell />
                         <cell><c>0</c></cell>
@@ -5747,7 +5743,7 @@ the xsltproc executable.
                 <!-- ex &#x00A0; non-breaking space  -->
                 <!-- ex &#x00AD; soft hyphen         -->
                 <table>
-                    <caption>Latin-1 Supplement, Monospace</caption>
+                    <title>Latin-1 Supplement, Monospace</title>
                     <tabular>
                         <row><cell />
                         <cell><c>0</c></cell>
@@ -5835,7 +5831,7 @@ the xsltproc executable.
 
             <sidebyside>
                 <table>
-                    <caption>Alignment Test</caption>
+                    <title>Alignment Test</title>
                     <tabular>
                         <row><cell><c>0123456789</c></cell></row>
                         <row><cell><c>9876543210</c></cell></row>
@@ -6409,7 +6405,7 @@ the xsltproc executable.
                 <p>We have now seen at least one example of each of the four most common constructions involving <c>sidebyside</c>.  Working from the exterior inward, we can go <c>figure</c>, <c>sidebyside</c>, <c>figure</c>, <c>X</c>, where <c>X</c> is some atomic (unnumbered) item we might use elsewhere in a <pretext /> document, the inner <c>figure</c> may be repeated with different objects <c>X</c>, and the <c>figure</c>s have captions.  Each <c>figure</c> is independently optional, leading to the four combinations in this table.  Note this applies to any captioned item used inside the <c>sidebyside</c>, but a <c>figure</c> is the most flexible.</p>
 
                 <table>
-                    <caption><c>sidebyside</c> and <c>figure</c> interactions</caption>
+                    <title><c>sidebyside</c> and <c>figure</c> interactions</title>
                     <tabular>
                         <row bottom="major">
                             <cell>Outer Figure</cell><cell>Inner Figure</cell><cell>Effect</cell>
@@ -6588,7 +6584,7 @@ the xsltproc executable.
                     <caption>Side-by-Side, with tables as children</caption>
                     <sidebyside widths="50% 25%">
                         <table xml:id="table-sidebyside-subtable">
-                            <caption>width=50%</caption>
+                            <title>width=50%</title>
                             <tabular top="minor" left="minor" halign="center">
                                 <col right="medium"/>
                                 <col right="major"/>
@@ -6609,7 +6605,7 @@ the xsltproc executable.
                             </tabular>
                         </table>
                         <table>
-                            <caption>width=25%</caption>
+                            <title>width=25%</title>
                             <tabular top="minor" left="minor" halign="center">
                                 <col right="medium"/>
                                 <col right="major"/>
@@ -6636,7 +6632,7 @@ the xsltproc executable.
                     <caption>Widths can be calculated automatically</caption>
                     <sidebyside>
                         <table>
-                            <caption></caption>
+                            <title>Table with automatic widths</title>
                             <tabular top="minor" left="minor" halign="center">
                                 <col right="medium"/>
                                 <col right="major"/>
@@ -6657,7 +6653,7 @@ the xsltproc executable.
                             </tabular>
                         </table>
                         <table>
-                            <caption></caption>
+                            <title>Table with automatic widths</title>
                             <tabular top="minor" left="minor" halign="center">
                                 <col right="medium"/>
                                 <col right="major"/>
@@ -6685,7 +6681,7 @@ the xsltproc executable.
 
                 <sidebyside>
                     <table xml:id="table-regular-fig1">
-                        <caption></caption>
+                        <title></title>
                         <tabular top="minor" left="minor" halign="center">
                             <col right="medium"/>
                             <col right="major"/>
@@ -6706,7 +6702,7 @@ the xsltproc executable.
                         </tabular>
                     </table>
                     <table xml:id="table-regular-fig2">
-                        <caption></caption>
+                        <title></title>
                         <tabular top="minor" left="minor" halign="center">
                             <col right="medium"/>
                             <col right="major"/>
@@ -6727,7 +6723,7 @@ the xsltproc executable.
                         </tabular>
                     </table>
                     <table xml:id="table-regular-fig3">
-                        <caption></caption>
+                        <title></title>
                         <tabular top="minor" left="minor" halign="center">
                             <col right="medium"/>
                             <col right="major"/>
@@ -6758,7 +6754,7 @@ the xsltproc executable.
 
                 <sidebyside>
                     <table xml:id="table-next-figure">
-                        <caption>Table next to a Figure</caption>
+                        <title>Table next to a Figure</title>
                         <tabular top="minor" left="minor" halign="center">
                             <col right="medium"/>
                             <col right="major"/>
@@ -6789,7 +6785,7 @@ the xsltproc executable.
                     <caption>Figure and Table, with overall caption, hence sub-captioned</caption>
                     <sidebyside>
                         <table xml:id="table-next-figure-sublabeled">
-                            <caption>Table next to a Figure</caption>
+                            <title>Table next to a Figure</title>
                             <tabular top="minor" left="minor" halign="center">
                                 <col right="medium"/>
                                 <col right="major"/>
@@ -6825,7 +6821,7 @@ the xsltproc executable.
 
                 <sidebyside widths="50% 20% 20%" valigns="top top middle">
                     <table>
-                        <caption>Table next to text</caption>
+                        <title>Table next to text</title>
                         <tabular top="minor" left="minor" halign="center">
                             <col right="medium"/>
                             <col right="major"/>
@@ -6951,7 +6947,7 @@ the xsltproc executable.
                     <caption>Two named lists</caption>
                     <sidebyside widths="30% 60%" valign="top">
                         <list>
-                            <caption>Sea Life</caption>
+                            <title>Sea Life</title>
                             <introduction>
                                 <p>Dr. Seuss again.</p>
                             </introduction>
@@ -6963,7 +6959,7 @@ the xsltproc executable.
                             </ul>
                         </list>
                         <list xml:id="color-list-as-panel">
-                            <caption>Color Shades</caption>
+                            <title>Color Shades</title>
                             <idx><h>colors</h><h>shades</h></idx>
                             <ol>
                                 <li><p>Blue<ol>
@@ -6988,7 +6984,7 @@ the xsltproc executable.
 
                 <sidebyside widths="30% 60%" valign="top">
                     <list>
-                        <caption>Sea Life</caption>
+                        <title>Sea Life</title>
                         <introduction>
                             <p>Dr. Seuss again.</p>
                         </introduction>
@@ -7000,7 +6996,7 @@ the xsltproc executable.
                         </ul>
                     </list>
                     <list xml:id="color-list-as-panel-in-sbs">
-                        <caption>Color Shades</caption>
+                        <title>Color Shades</title>
                         <idx><h>colors</h><h>shades</h></idx>
                         <ol>
                             <li><p>Blue<ol>
@@ -7812,7 +7808,7 @@ the xsltproc executable.
                         <image source="images/cross-rectangle.png" />
                     </figure>
                     <table>
-                        <caption>Classifying Organisms</caption>
+                        <title>Classifying Organisms</title>
                         <tabular>
                             <row bottom="major">
                                  <cell>Organism</cell><cell>Classification</cell>
@@ -7845,7 +7841,7 @@ the xsltproc executable.
                         </program>
                     </listing>
                     <list>
-                        <caption>Colors Again</caption>
+                        <title>Colors Again</title>
                         <introduction>
                             <p>We have named list of colors.</p>
                         </introduction>
@@ -8647,7 +8643,7 @@ the xsltproc executable.
                         <p>A traffic engineer counts the hourly flow of cars into and out of this network at the entrances.  They get (EB = East Bound; WB = West Bound): </p>
 
                         <table>
-                            <caption> Estimated hourly traffic flow for the road network.</caption>
+                            <title>Estimated hourly traffic flow for the road network</title>
                             <tabular>
                                 <row>
                                     <cell>
