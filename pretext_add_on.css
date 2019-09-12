@@ -471,8 +471,11 @@ from Jiří Lebl */
     background-image: linear-gradient(to right, var(--knowlbackground), var(--knowlbackground)), linear-gradient(to right, var(--knowlbackground), var(--knowlbackground)), linear-gradient(to right, rgba(0,0,0,.25), var(--knowlbackground)), linear-gradient(to left, rgba(0,0,0,.25), var(--knowlbackground));
 }
 .pretext-content .assemblage-like .MJXc-display {
+/*
     background-image: none;
     background-image: linear-gradient(to right, #f4f4fe, #f4f4fe), linear-gradient(to right, #f4f4fe, #f4f4fe), linear-gradient(to right, rgba(0,0,0,.25), rgba(242,242,254,0)), linear-gradient(to left, rgba(0,0,0,.25), rgba(242,242,254,0));
+*/
+    background-image: linear-gradient(to right, var(--assemblagebackground), var(--assemblagebackground)), linear-gradient(to right, var(--assemblagebackground), var(--assemblagebackground)), linear-gradient(to right, rgba(0,0,0,.25), var(--assemblagebackground)), linear-gradient(to left, rgba(0,0,0,.25), var(--assemblagebackground));
 }
 
 
