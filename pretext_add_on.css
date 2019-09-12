@@ -465,8 +465,10 @@ from Jiří Lebl */
     background-attachment: local, local, scroll, scroll;
 }
 .pretext-content .knowl-output .MJXc-display {
-    background-image: none;
+/*    background-image: none;
     background-image: linear-gradient(to right, #f5f5ff, #f5f5ff), linear-gradient(to right, #f5f5ff, #f5f5ff), linear-gradient(to right, rgba(0,0,0,.25), rgba(243,243,255,0)), linear-gradient(to left, rgba(0,0,0,.25), rgba(243,243,255,0));
+*/
+    background-image: linear-gradient(to right, var(--knowlbackground), var(--knowlbackground)), linear-gradient(to right, var(--knowlbackground), var(--knowlbackground)), linear-gradient(to right, rgba(0,0,0,.25), var(--knowlbackground)), linear-gradient(to left, rgba(0,0,0,.25), var(--knowlbackground));
 }
 .pretext-content .assemblage-like .MJXc-display {
     background-image: none;
@@ -2142,12 +2144,6 @@ a.mjx-svg-href  {
 
 body, html body { background: #fff; }
 
-.pretext-content figure, .pretext-content .image-box {
-    margin-top: 0.5em;
-}
-.pretext-content figure .image-box {
-    margin-top: 0;
-}
 .pretext-content article > figure:first-child {
     margin-top: 0;
 }
@@ -2176,7 +2172,7 @@ body, html body { background: #fff; }
 }
 
 .pretext-content img:not(.cs) {
-    max-width: 550px;
+    max-width: 650px;
 }
 
 figure img {
@@ -2234,6 +2230,17 @@ figure figcaption.wrap {
     margin: 10px;
     font-size: 100%;
     text-align: center;
+}
+
+.pretext-content figure, .pretext-content .image-box {
+    margin-top: 0.5em;
+}
+.pretext-content figure .image-box {
+    margin-top: 0;
+}
+.pretext-content .image-box img,  /* See sample article Graphics section */
+.pretext-content .sbspanel img {
+    width: 100%;
 }
 
 /* In 0.2 all of the below are needed.  Possibly in a later version
