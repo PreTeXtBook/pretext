@@ -76,7 +76,7 @@
         <title>Integrating <webwork /> into Textbooks</title>
         <subtitle>Sample Exercises</subtitle>
 
-        <frontmatter xml:id="index">
+        <frontmatter xml:id="frontmatter">
 
             <!-- Items typically at the top of the first page of an article -->
             <titlepage>
@@ -189,7 +189,7 @@
                 <title>Controlling Randomness</title>
 
                 <introduction>
-                    <p>You can code your problem with randomization, but then use a specific <c>seed</c> and <webwork />'s <c>$envir{problemSeed}</c> to override that randomization for the purposes of the version that will appear in HTML and print putput.</p>
+                    <p>You can code your problem with randomization, but then use a specific <c>seed</c> and <webwork />'s <c>$envir{problemSeed}</c> to override that randomization for the purposes of the version that will appear in HTML and print output.</p>
                 </introduction>
 
                 <webwork xml:id="integer-addition-with-control-seed" seed="1">
@@ -578,7 +578,7 @@
                         <p>Regular apostrophes: My siblings' mother's daughter isn't my daughter's siblings' mother.</p>
                         <p>Emphasis: <em>very important</em></p>
                         <p>Alert: <alert>do not</alert> do it</p>
-                        <p>Braces: <braces>text that looks like a set</braces></p>
+                        <p>Braces: {text that looks like a set}</p>
                         <!-- uncomment next to test, will not activate generally in sample document -->
                         <!-- <p>Verbatim: code, <c>with banned substring: [|</c></p>                -->
                         <pre>
