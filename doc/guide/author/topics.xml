@@ -2331,6 +2331,7 @@ Following is a somewhat minimal working example.
       &lt;/titlepage&gt;
     &lt;/frontmatter&gt;
     &lt;section&gt;
+      &lt;title&gt;Title of Section&lt;/title&gt;
       &lt;slide&gt;
         &lt;title&gt;PDX &lt;m&gt;\iff&lt;/m&gt; PTX&lt;/title&gt;
         &lt;ul&gt;
