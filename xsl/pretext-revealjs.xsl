@@ -183,12 +183,14 @@ Reveal.initialize({
 <!-- but first we make a special slide announcing the "section" -->
 <xsl:template match="section">
     <section>
-        <h1>
-          <xsl:apply-templates select="." mode="title-full"/>
-        </h1>
+        <section>
+            <h1>
+                <xsl:apply-templates select="." mode="title-full"/>
+            </h1>
+        </section>
+        <xsl:apply-templates select="slide"/>
     </section>
     <!--  -->
-    <xsl:apply-templates select="slide"/>
 </xsl:template>
 
 <xsl:template match="titlepage" mode="title-slide">
