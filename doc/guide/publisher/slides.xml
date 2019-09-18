@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<chapter xml:id="publisher-slides">
+    <idx>slides</idx>
+    <title>Conversion to Slides</title>
+    <introduction>
+        <p>
+As discussed in <xref ref="overview-slides"/> and <xref ref="topic-slides"/>,
+support is available for authoring slideshows in <pretext/>. Currently, slideshows
+must be authored explicitly, but we hope to eventually support annotating
+books and articles to export appropriate content as slides.
+        </p>
+    </introduction>
+    <section xml:id="publisher-revealjs">
+        <title>Reveal.js</title>
+        <p>
+Run this to produce a Reveal.js slideshow:<cd>
+<cline>xsltproc --xinclude -o path/to/output/slides.html</cline>
+<cline>  path/to/pretext/xsl/pretext-revealjs.xsl path/to/source/slides.xml</cline>
+</cd>
+       </p>
+        <p>
+Two string parameters (see <xref ref="processing-parameters"/>) are available.
+        </p>
+        <ul>
+            <li>
+Insert <c>-stringparam local yes</c> to have the resulting HTML use a local
+installation of Reveal.js rather than the <init>CDN</init> installation used by default.
+In particular, you will need to make sure Reveal.js's <c>css</c> and
+<c>js</c> folders are located in the same folder that the resulting HTML
+is served from.
+            </li>
+            <li>
+Insert <c>-stringparam theme {theme-name}</c> to choose a theme besides
+the default of <c>simple</c>. For example, to use the theme located at
+<c>css/theme/solarized.css</c>, replace <c>{theme name}</c> with <c>solarized</c>.
+            </li>
+        </ul>
+    </section>
+    <section xml:id="publisher-beamer">
+        <title>Beamer <latex/></title>
+        <p>
+Run this to produce a Beamer <latex/> slideshow:<cd>
+<cline>xsltproc --xinclude -o path/to/output/slides.tex</cline>
+<cline>  path/to/pretext/xsl/pretext-beamer.xsl path/to/source/slides.xml</cline>
+</cd>
+        </p>
+        <p>
+Of course, you should then run e.g. <c>pdflatex slides.tex</c> to produce a PDF.
+        </p>
+    </section>
+</chapter>
