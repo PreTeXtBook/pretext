@@ -499,4 +499,21 @@
 
         <p>Since we are interested in helping authors produce documents with open licenses, and we concentrate on employing open standards for the <init>HTML</init> output we create, we are ideally positioned to help you easily create highly-accessible documents.  There are many technical features which happen automatically, and there are some features which we make available for your use as an author and which only an author can provide.  See <xref ref="topic-accessibility" /> for full details and ways you can make the <init>HTML</init> version of your document more accessible, and more useful for a wider audience.</p>
     </section>
+    <section xml:id="overview-slides">
+      <title>Slides</title>
+      <idx>slides</idx>
+      <p>
+In addition to articles and books, support for authoring slideshows is also available,
+but is experimental (so tags and attributes are subject to change).
+      </p>
+      <p>
+Currently, support for producing <url href="https://revealjs.com">Reveal.js</url>
+and <url href="https://en.wikipedia.org/wiki/Beamer_(LaTeX)">Beamer <m>\LaTeX{}</m></url>
+slideshows is available. Details on authoring may be found in <xref ref="topic-slides" />.
+      </p>
+      <p>
+Also, future support for annotating PreTeXt books and articles to export PreTeXt slides
+is in the works, but not yet available.
+      </p>
+    </section>
 </chapter>

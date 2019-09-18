@@ -2288,4 +2288,77 @@
             </li>
         </dl></p>
     </section>
+    <section xml:id="topic-slides">
+        <title>Slides</title>
+        <idx>slides</idx>
+        <p>
+Slideshows may be authored in PreTeXt by using the following tags.
+        </p>
+        <ul>
+          <li>
+<c>slideshow</c> replaces the usual <c>article</c> or <c>book</c> tag to
+let PreTeXt know you are authoring a set of slides. As usual, you may then
+define your <c>title</c>, <c>subtitle</c>, and <c>frontmatter</c>.
+          </li>
+          <li>
+Similar to articles, your content should be organized into several
+<c>section</c>s.
+          </li>
+          <li>
+And within each section, a <c>slide</c> represents a full screen of information.
+Within a slide, you may author PreTeXt content as usual, such as paragraphs
+(<c>p</c>), lists (<c>ul</c>), and so on. 
+          </li>
+        </ul>
+        <p>
+Following is a somewhat minimal working example.
+        </p>
+      <pre>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;pretext&gt;
+  &lt;slideshow&gt;
+    &lt;title&gt;Hello World!&lt;/title&gt;
+    &lt;subtitle&gt;Sample PreTeXt slides&lt;/subtitle&gt;
+    &lt;frontmatter&gt;
+      &lt;titlepage&gt;
+        &lt;author&gt;
+          &lt;personname&gt;Your Name&lt;/personname&gt;
+          &lt;affiliation&gt;Your School&lt;/affiliation&gt;
+          &lt;logo&gt;&lt;image source="path/to/your/image.png"/&gt;&lt;/logo&gt;
+        &lt;/author&gt;
+        &lt;event&gt;PreTeXt Workshop 20XX&lt;/event&gt;
+        &lt;date&gt;Month 20XX&lt;/date&gt;
+      &lt;/titlepage&gt;
+    &lt;/frontmatter&gt;
+    &lt;section&gt;
+      &lt;slide&gt;
+        &lt;title&gt;PDX &lt;m&gt;\iff&lt;/m&gt; PTX&lt;/title&gt;
+        &lt;ul&gt;
+          &lt;li&gt;&lt;p&gt;One item&lt;/p&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;p&gt;Another item&lt;/p&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;p&gt;
+            A really long item which is really far too long to be an 
+            item in a talk. Points should really be only a single line 
+            unless they are really important.
+          &lt;/p&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/slide&gt;
+      &lt;slide&gt;
+        &lt;title&gt;A second slide here&lt;/title&gt;
+        &lt;p&gt;
+          Words and stuff
+        &lt;/p&gt;
+        &lt;p&gt;
+          &lt;ul slide-step="true"&gt;
+            &lt;li&gt;&lt;p&gt;First thing&lt;/p&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;p&gt;Second thing&lt;/p&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;p&gt;Third thing&lt;/p&gt;&lt;/li&gt;
+          &lt;/ul&gt;
+        &lt;/p&gt;
+      &lt;/slide&gt;
+    &lt;/section&gt;
+  &lt;/slideshow&gt;
+&lt;/pretext&gt;
+      </pre>
+    </section>
 </chapter>
