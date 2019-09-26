@@ -11,39 +11,36 @@
       <statement>
         <p>
           First exercise.
-          The <c>statement</c> is mandatory.
           <idx><h sortby="statement"><tag>statement</tag></h><h sortby="of an exercise">of an <tag>exercise</tag></h></idx>
           <idx><h sortby="exercise"><tag>exercise</tag></h><h sortby="statement"><tag>statement</tag></h></idx>
           You can add all the usual bells and whistles after,
           but we'll keep it short here.
+          (The <tag>statement</tag> is mandatory if you add any of
+          <tag>hint</tag>, <tag>answer</tag>, or <tag>solution</tag>
+          as a child of an <tag>exercise</tag>,
+          but otherwise may be omitted.)
         </p>
       </statement>
     </exercise>
 
     <exercise>
-      <statement>
-        <p>
-          Second exercise.
-        </p>
-      </statement>
+      <p>
+        Second exercise.
+      </p>
     </exercise>
 
     <exercise>
-      <statement>
-        <p>
-          Third exercise.
-        </p>
-      </statement>
+      <p>
+        Third exercise.
+      </p>
     </exercise>
 
   </exercisegroup>
 
   <exercise>
-    <statement>
-      <p>
-        This <c>exercise</c> is not inside the <c>exercisegroup</c>.
-      </p>
-    </statement>
+    <p>
+      This <tag>exercise</tag> is not inside the <tag>exercisegroup</tag>.
+    </p>
   </exercise>
 
 </exercises>

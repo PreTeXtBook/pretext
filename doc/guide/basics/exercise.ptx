@@ -1,7 +1,10 @@
 <exercise>
   <statement>
     <p>
-      The <c>statement</c> is mandatory.
+      The <tag>statement</tag> is mandatory when any of
+      <tag>hint</tag>, <tag>answer</tag>, or <tag>solution</tag>
+      is included as a child of <tag>exercise</tag>,
+      otherwise it may be omitted.
     </p>
   </statement>
   <hint>
