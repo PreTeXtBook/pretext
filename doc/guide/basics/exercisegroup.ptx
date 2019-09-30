@@ -15,23 +15,34 @@
           <idx><h sortby="exercise"><tag>exercise</tag></h><h sortby="statement"><tag>statement</tag></h></idx>
           You can add all the usual bells and whistles after,
           but we'll keep it short here.
-          (The <tag>statement</tag> is mandatory if you add any of
+          (The <tag>statement</tag> may be omitted if none of
           <tag>hint</tag>, <tag>answer</tag>, or <tag>solution</tag>
-          as a child of an <tag>exercise</tag>,
-          but otherwise may be omitted.)
+          are present as a child of the <tag>exercise</tag>.)
         </p>
       </statement>
     </exercise>
 
     <exercise>
-      <p>
-        Second exercise.
-      </p>
+      <statement>
+        <p>
+          Second exercise.
+        </p>
+      </statement>
+      <hint>
+        <p>
+          The <tag>statement</tag> for this exercise is necessary because we
+          have included at least one of
+          <tag>hint</tag>, <tag>answer</tag>, or <tag>solution</tag>
+          (namely, <tag>hint</tag>).
+        </p>
+      </hint>
     </exercise>
 
     <exercise>
       <p>
         Third exercise.
+        (No <tag>statement</tag> necessary here because no
+        <tag>hint</tag>, <tag>answer</tag>, or <tag>solution</tag>.)
       </p>
     </exercise>
 
