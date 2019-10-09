@@ -3713,7 +3713,7 @@ the xsltproc executable.
                 <list xml:id="list-to-reference">
                     <title>A named list of targets</title>
                     <introduction>
-                        <p>This is the introduction to this named list, which references an item within, via the hybrid <attr>text</attr> attribute:  <xref ref="target-item" text="type-hybrid" />.</p>
+                        <p>This is the introduction to this named list, which references an item within, via the hybrid <attr>text</attr> attribute:  <xref ref="target-item" text="type-hybrid" />.  At one time this paragraph was inadvertently centered<mdash/>that bug has been fixed.</p>
                     </introduction>
                     <ol label="A">
                         <li>
