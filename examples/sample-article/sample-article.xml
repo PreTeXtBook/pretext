@@ -2605,7 +2605,7 @@ the xsltproc executable.
                         <!-- Holds "script" tags of a very special type (threejs shaders) -->
                         <!-- So we use zero height, and have HTML contents                -->
                         <slate surface="html" aspect="1:0">
-                           <script id="shader-fs" type="x-shader/x-fragment">
+                           <script id="shader-fs" type="x-shader/x-fragment" xmlns="http://www.w3.org/1999/xhtml">
                                 precision mediump float;
                                 varying vec4 vColor;
                                 void main(void)
@@ -2614,7 +2614,7 @@ the xsltproc executable.
                                 }
                             </script>
 
-                            <script id="shader-vs" type="x-shader/x-vertex">
+                            <script id="shader-vs" type="x-shader/x-vertex" xmlns="http://www.w3.org/1999/xhtml">
                                 attribute vec3 aVertexPosition;
                                 attribute vec4 aVertexColor;
 
@@ -4659,10 +4659,10 @@ the xsltproc executable.
                             </sidebyside>
                             <sidebyside width="25%" margins="25% 25%">
                                 <slate surface="html" aspect="3:1">
-                                    <button type="button" id="compose">Compose</button>
+                                    <button type="button" id="compose" xmlns="http://www.w3.org/1999/xhtml">Compose</button>
                                 </slate>
                                 <slate surface="html" aspect="3:1">
-                                    <button type="button" id="reset">Reset</button>
+                                    <button type="button" id="reset" xmlns="http://www.w3.org/1999/xhtml">Reset</button>
                                 </slate>
                             </sidebyside>
                         </sbsgroup>
@@ -4671,6 +4671,16 @@ the xsltproc executable.
                         </instructions>
                     </interactive>
                 </figure>
+
+                <warning>
+                    <p>If your <tag>interactive</tag> employs a <tag>slate</tag> with a <attr>surface</attr> attribute whose value is <c>html</c>, then you are advised to augment each top-level (<init>HTML</init>) element within the <tag>slate</tag> with the attribute:<cd>
+                        <cline>xmlns="http://www.w3.org/1999/xhtml"</cline>
+                    </cd>This will identify <em>all</em> of the elements within the <tag>slate</tag> as <init>HTML</init> elements and not as <pretext/> elements.  The danger is that elements with the same name in both languages, such as <tag>li</tag> and <tag>table</tag>, will be mis-identified.  This could be harmless, but could also create chaos, such as disrupting numbering of <pretext/> elements.</p>
+
+                    <p>See the source code of this document for examples:  <xref ref="figure-animation" text="type-global"/> <xref ref="figure-interactive-slopes" text="type-global"/>, <xref ref="figure-piecewise" text="type-global"/>.</p>
+
+                    <p>Note that the <init>HTML</init> that is output can vary slightly from your source in small, harmless ways, such as empty (self-closing) elements being output with both an opening and a closing tag.  Please report any significant discrepancies.</p>
+                </warning>
 
                 <p>The following example was contributed by Rick Roesler. The <tag>figure</tag> is comprised of four <tag>stack</tag> elements within a <tag>sidebyside</tag>. By varying the time in the top box, the reader can observe the displacement, velocity, and acceleration of a ball thrown upward with an initial velocity of 30 m/s.</p>
 
@@ -4785,19 +4795,19 @@ the xsltproc executable.
                     <interactive xml:id="interactive-slopes" platform="javascript" width="100%" aspect="6:8" source="https://code.jquery.com/jquery-1.11.3.min.js https://d3js.org/d3.v3.min.js https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.2.1/math.min.js code/mcclure/slope.js" css="code/mcclure/slope.css">
                         <!-- intro text, plus curve radio buttons -->
                         <slate xml:id="function-list" surface="html" aspect="6:2">
-                            <div class="p">
+                            <div class="p" xmlns="http://www.w3.org/1999/xhtml">
                             Calculus consists of those problems in mathematics that can be solved with the
                             following basic approach:
                             </div>
-                            <div class="em_display">
+                            <div class="em_display" xmlns="http://www.w3.org/1999/xhtml">
                             Approximate and take a limit!
                             </div>
-                            <div class="p">
+                            <div class="p" xmlns="http://www.w3.org/1999/xhtml">
                             The simplest, standard, geometric example of this process is the approximation
                             of the slope of a tangent line with a secant line.
                             Here's an illustration of this basic idea.
                             </div>
-                            <div id="function_list" style="text-align: center">
+                            <div id="function_list" style="text-align: center" xmlns="http://www.w3.org/1999/xhtml">
                                 Choose \(f\):
                                 <span class="function_radio_container" style="padding-left: 10px">
                                     <input type="radio" class="radio" name="function" value="f1" id="f1" />
@@ -4817,7 +4827,7 @@ the xsltproc executable.
                         <slate xml:id="the_graph" surface="svg" aspect="6:4"/>
                         <!-- slopes and secant line checkbox -->
                         <slate xml:id="info-container" surface="html" aspect="6:2">
-                            <div id="h_info_container">
+                            <div id="h_info_container" xmlns="http://www.w3.org/1999/xhtml">
                             <table>
                                 <tr>
                                     <td><table>
@@ -4904,7 +4914,7 @@ the xsltproc executable.
 
                 <p>Finally, a piecewise function you can control, with traces of the domain values and range values in two other JSXGraph boards.  Boards and <init>HTML</init> buttons have been laid out using the <c>sidebyside</c> layout element.</p>
 
-                <figure>
+                <figure xml:id="figure-piecewise">
                     <caption>Piecewise Function</caption>
 
                     <!-- Aspect ratio should be 20:7, the ":8" is to avoid extra scroll bars -->
@@ -4918,10 +4928,10 @@ the xsltproc executable.
                             <!-- buttons should have aspect 6:1, if we could set it -->
                             <sidebyside widths="30% 30%" margins="20%">
                                 <slate surface="html">
-                                    <input type="button" value="Animate" onkeypress="animate_p3(s_p3,75,100);" onclick="animate_p3(s_p3,75,100);" style="font-size:16px; width:100%"/>
+                                    <input type="button" value="Animate" onkeypress="animate_p3(s_p3,75,100);" onclick="animate_p3(s_p3,75,100);" style="font-size:16px; width:100%" xmlns="http://www.w3.org/1999/xhtml"/>
                                 </slate>
                                 <slate surface="html">
-                                    <input type="button" value="Clear Traces" onkeypress="clearTraces_p3();" onclick="clearTraces_p3();" style="font-size:16px; width:100%"/>
+                                    <input type="button" value="Clear Traces" onkeypress="clearTraces_p3();" onclick="clearTraces_p3();" style="font-size:16px; width:100%" xmlns="http://www.w3.org/1999/xhtml"/>
                                 </slate>
                             </sidebyside>
                         </sbsgroup>
