@@ -651,6 +651,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- it on in the dedicated stylesheet for conversion to braille.   -->
 <xsl:variable name="b-braille" select="false()"/>
 
+<!-- Temporary, undocumented, and experimental -->
+<!-- all = old-style, necessary = new-style -->
+<xsl:param name="debug.knowl-production" select="'all'"/>
+<!-- edit above! -->
+<xsl:variable name="b-knowls-new" select="not($debug.knowl-production = 'all')"/>
+
 <!-- ############### -->
 <!-- Source Analysis -->
 <!-- ############### -->
@@ -708,7 +714,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="/mathbook|/pretext">
     <xsl:call-template name="index-redirect-page"/>
     <xsl:apply-templates mode="chunking" />
-    <xsl:apply-templates select="$document-root" mode="xref-knowl" />
+    <xsl:if test="$b-knowls-new">
+        <xsl:apply-templates select="." mode="make-efficient-knowls"/>
+    </xsl:if>
+    <xsl:if test="not($b-knowls-new)">
+        <xsl:apply-templates select="$document-root" mode="xref-knowl-old"/>
+    </xsl:if>
 </xsl:template>
 
 <!-- However, some MBX document types do not have    -->
@@ -1985,6 +1996,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- a structural document node                                  -->
 <!-- Recursion always halts, since "mathbook" is structural      -->
 <!-- TODO: save knowl or section link                            -->
+<!-- We create content of "xref-knowl" if it is a block.         -->
+<!-- TODO: identify index targets consistently in "make-efficient-knowls" -->
+<!-- template, presumably parents of "idx" that are knowlable.            -->
 <xsl:template match="index-list" mode="index-enclosure">
     <xsl:param name="enclosure"/>
 
@@ -2004,6 +2018,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:apply-templates select="$enclosure" mode="type-name"/>
                 </xsl:with-param>
             </xsl:apply-templates>
+            <xsl:if test="$block = 'true'">
+                <xsl:apply-templates select="$enclosure" mode="xref-knowl"/>
+            </xsl:if>
         </xsl:when>
         <xsl:otherwise>
             <!-- Recurse.  The "index-list" gets passed along unchanged,     -->
@@ -2022,7 +2039,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Many elements are candidates for cross-references     -->
 <!-- and many of those are nicely implemented as knowls.   -->
 <!-- We traverse the entire document tree with a modal     -->
-<!-- "xref-knowl" template.  When it encounters an element -->
+<!-- "xref-knowl-old" template.  When it encounters an element -->
 <!-- that needs a cross-reference target as a knowl file,  -->
 <!-- that file is built and the tree traversal continues.  -->
 <!--                                                       -->
@@ -2055,7 +2072,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- mrow is only ever an "xref" knowl, and has enclosing content    -->
 <!-- These are "top-level" starting places for this process,         -->
 <!-- assuming divisions are never knowled                            -->
-<xsl:template match="*" mode="xref-knowl">
+<!-- NB: when this leaves, search for two uses in code comments -->
+<xsl:template match="*" mode="xref-knowl-old">
     <xsl:variable name="knowlizable">
         <xsl:apply-templates select="." mode="xref-as-knowl" />
     </xsl:variable>
@@ -2076,7 +2094,108 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <!-- recurse into contents, as we may just        -->
     <!-- "skip over" some containers, such as an "ol" -->
-    <xsl:apply-templates select="*" mode="xref-knowl" />
+    <xsl:apply-templates select="*" mode="xref-knowl-old" />
+</xsl:template>
+
+<xsl:template match="*" mode="make-efficient-knowls">
+    <xsl:variable name="xref-ids">
+        <xsl:for-each select="$document-root//xref">
+            <xsl:choose>
+                <!-- ignore, no-op -->
+                <xsl:when test="@provisional"/>
+                <!-- just use @first, clean-up spaces -->
+                <xsl:when test="@first and @last">
+                    <xid>
+                        <xsl:value-of select="normalize-space(@first)"/>
+                    </xid>
+                </xsl:when>
+                <!-- a space-separated or comma-separated list -->
+                <!-- to bust up and wrap many times in "xid"   -->
+                <xsl:when test="@ref and (contains(normalize-space(@ref), ' ') or contains(@ref, ','))">
+                    <xsl:variable name="clean-list" select="concat(normalize-space(translate(@ref, ',', ' ')), ' ')"/>
+                    <xsl:call-template name="split-ref-list">
+                        <xsl:with-param name="list" select="$clean-list"/>
+                    </xsl:call-template>
+                </xsl:when>
+                <!-- clean-up reference as a courtesy -->
+                <xsl:when test="@ref">
+                    <xid>
+                        <xsl:value-of select="normalize-space(@ref)"/>
+                    </xid>
+                </xsl:when>
+                <!-- could error-check here -->
+                <xsl:otherwise/>
+            </xsl:choose>
+            <!-- TODO: cruise "idx" to get references to parents -->
+        </xsl:for-each>
+    </xsl:variable>
+    <xsl:variable name="id-nodes" select="exsl:node-set($xref-ids)"/>
+
+    <!-- might work better if sorted first -->
+    <xsl:variable name="unique-ids-rtf">
+        <xsl:for-each select="$id-nodes/xid[not(. = preceding::*/.)]">
+            <xsl:copy-of select="."/>
+        </xsl:for-each>
+    </xsl:variable>
+    <xsl:variable name="unique-ids" select="exsl:node-set($unique-ids-rtf)"/>
+
+    <xsl:for-each select="$unique-ids/xid">
+        <!-- context change coming, so save off the actual id string -->
+        <xsl:variable name="the-id" select="."/>
+        <!-- for-each only loops over one item, but changes context, -->
+        <!-- so the id() function is checking against the right document -->
+        <xsl:for-each select="$document-root">
+            <xsl:variable name="target" select="id($the-id)"/>
+            <xsl:variable name="is-knowl">
+                <xsl:apply-templates select="$target" mode="xref-as-knowl"/>
+            </xsl:variable>
+            <xsl:if test="$is-knowl = 'true'">
+                <xsl:apply-templates select="$target" mode="xref-knowl"/>
+            </xsl:if>
+        </xsl:for-each>
+    </xsl:for-each>
+</xsl:template>
+
+<!-- Decompose a string of references into elements for id  -->
+<!-- rtf above.  Note: each token has a space following it  -->
+<xsl:template name="split-ref-list">
+    <xsl:param name="list"/>
+
+    <xsl:choose>
+        <!-- final space causes recursion with -->
+        <!-- totally empty list, so halt       -->
+        <xsl:when test="$list = ''"/>
+        <xsl:otherwise>
+            <xid>
+                <xsl:value-of select="substring-before($list, ' ')"/>
+            </xid>
+            <xsl:call-template name="split-ref-list">
+                <xsl:with-param name="list" select="substring-after($list, ' ')"/>
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- Context is an object that is the target of a cross-reference    -->
+<!-- ("xref") and is known/checked to be implemented as a knowl.     -->
+<!-- We cruise children for the necessity of hidden content which we -->
+<!-- impersonate with a file knowl that looks like a hidden knowl.   -->
+<xsl:template match="*" mode="xref-knowl">
+    <xsl:apply-templates select="." mode="manufacture-knowl">
+        <xsl:with-param name="knowl-type" select="'xref'"/>
+    </xsl:apply-templates>
+    <!-- Cruise children, note this is a context switch         -->
+    <!-- Looking for born-hidden knowls in "xref" knowl content -->
+    <xsl:for-each select=".//*">
+        <xsl:variable name="hidden">
+            <xsl:apply-templates select="." mode="is-hidden"/>
+        </xsl:variable>
+        <xsl:if test="$hidden = 'true'">
+            <xsl:apply-templates select="." mode="manufacture-knowl">
+                <xsl:with-param name="knowl-type" select="'hidden'"/>
+            </xsl:apply-templates>
+        </xsl:if>
+    </xsl:for-each>
 </xsl:template>
 
 <!-- Build one, or two, files for knowl content -->
@@ -2563,7 +2682,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Original, born hidden.  The element knows if it should be hidden on the page in an embedded knowl via the modal "is-hidden" template.  So a link is written on the page, and the main content is written onto the page as a hidden, embedded knowl.  The "b-original" flag (set to true) is passed through to templates for the children. -->
 
-<!-- Duplicates.  Duplicated versions, sans identification, are created by an extra, specialized, traversal of the entire document tree with the "xref-knowl" modal templates.  When an element is first encountered the infrastructure for an external file is constructed and the modal "body" template of the element is called with the "b-original" flag set to false.  The content of the knowl should have an overall header, explaining what it is, since it is a target of the cross-reference.  Now the body template will pass along the "b-original" flag set to false, indicating the production mode should be duplication.  For a block that is born hidden, we build an additional external knowl that duplicates it, so without identification, without an overall header, and without an in-context link.  -->
+<!-- Duplicates.  Duplicated versions, sans identification, are created by an extra, specialized, traversal of the entire document tree with the "xref-knowl-old" modal templates.  When an element is first encountered the infrastructure for an external file is constructed and the modal "body" template of the element is called with the "b-original" flag set to false.  The content of the knowl should have an overall header, explaining what it is, since it is a target of the cross-reference.  Now the body template will pass along the "b-original" flag set to false, indicating the production mode should be duplication.  For a block that is born hidden, we build an additional external knowl that duplicates it, so without identification, without an overall header, and without an in-context link.  -->
 
 <!-- Child elements born visible will be written into knowl files without identification.  Child elements born hidden will write a knowl link into the page, pointing to the duplicated (hidden) version.  -->
 
@@ -5313,6 +5432,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="environment-fixed" select="str:replace($inline-fixed, '\begin{', '\&#x200b;begin{' )"/>
 
     <xsl:value-of select="$environment-fixed"/>
+</xsl:template>
+
+<!-- We cruise knowled content for necessity of hidden knowls -->
+<xsl:template match="*" mode="is-hidden">
+    <xsl:text>false</xsl:text>
 </xsl:template>
 
 <!-- ############################# -->
