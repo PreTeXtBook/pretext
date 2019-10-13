@@ -4679,7 +4679,7 @@ the xsltproc executable.
 
                     <p>See the source code of this document for examples:  <xref ref="figure-animation" text="type-global"/> <xref ref="figure-interactive-slopes" text="type-global"/>, <xref ref="figure-piecewise" text="type-global"/>.</p>
 
-                    <p>Note that the <init>HTML</init> that is output can vary slightly from your source in small, harmless ways, such as empty (self-closing) elements being output with both an opening and a closing tag.  Please report any significant discrepancies.</p>
+                    <p>Note that the <init>HTML</init> that is output can vary slightly from your source in small, harmless ways, such as empty (self-closing) elements being output with both an opening and a closing tag.  Please report any significant discrepancies.  Soon this requirement will be enforced in the code.</p>
                 </warning>
 
                 <p>The following example was contributed by Rick Roesler. The <tag>figure</tag> is comprised of four <tag>stack</tag> elements within a <tag>sidebyside</tag>. By varying the time in the top box, the reader can observe the displacement, velocity, and acceleration of a ball thrown upward with an initial velocity of 30 m/s.</p>
