@@ -7851,6 +7851,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="login-footer">
     <div class="login-link"><span id="loginlogout" class="login">login</span></div>
     <script src="{$html.js.server}/js/{$html.js.version}/login.js"></script>
+    <!-- A CSS file that is read in last, for development only, possibly temporary. -->
+    <link href="developer.css" rel="stylesheet" type="text/css"/>
 </xsl:template>
 
 <!-- Console Session -->
