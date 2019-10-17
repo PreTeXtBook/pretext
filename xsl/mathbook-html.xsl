@@ -10086,6 +10086,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:with-param>
         </xsl:call-template>
     </xsl:if>
+    <!-- For testing purposes, make a "developer.css" possible and always available -->
+    <xsl:comment> 2019-10-12: Temporary - CSS file for experiments with styling </xsl:comment>
+    <link href="developer.css" rel="stylesheet" type="text/css" />
 </xsl:template>
 
 <!-- Treated as characters, these could show up often, -->

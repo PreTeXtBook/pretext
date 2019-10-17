@@ -8289,9 +8289,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="number"/>
     </xsl:if>
     <xsl:text>}%&#xa;</xsl:text>
+    <!-- A "list" has an introduction/conclusion, with a       -->
+    <!-- list of some type in-between, and these will all      -->
+    <!-- automatically word-wrap to fill the available width.  -->
+    <!-- A "tabular" on the other hand, will have fixed-width, -->
+    <!-- so needs to be explicitly centered.                   -->
+    <!-- Note: centering seems to also happen (additionally)   -->
+    <!-- for a "tabular" inside a sidebyside panel.            -->
+    <xsl:if test="self::table">
+        <xsl:text>\centering&#xa;</xsl:text>
+    </xsl:if>
     <!-- TODO: process meta-data, then restrict contents -->
     <!-- tabular, introduction|list|conclusion           -->
-    <xsl:text>\centering&#xa;</xsl:text>
     <xsl:apply-templates select="*"/>
     <!-- subcaption always goes in lower part -->
     <xsl:if test="ancestor::*[self::figure]">
