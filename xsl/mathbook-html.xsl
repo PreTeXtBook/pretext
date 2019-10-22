@@ -5240,20 +5240,33 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="visible-id" />
     </xsl:variable>
     <xsl:variable name="svg-filename" select="concat($base-pathname, '.svg')" />
-    <xsl:element name="img">
-        <!-- source file attribute for img element, the SVG image -->
-        <xsl:attribute name="src">
-            <xsl:value-of select="$svg-filename" />
+    <xsl:variable name="html-filename" select="concat($base-pathname, '.html')" />
+
+    <object data="{$html-filename}">
+        <xsl:attribute name="width">
+            <xsl:apply-templates select="." mode="get-width-pixels" />
         </xsl:attribute>
-        <!-- replace with a CSS class -->
-        <xsl:attribute name="style">
-            <xsl:text>width: 100%; height: auto;</xsl:text>
+        <xsl:attribute name="height">
+            <xsl:apply-templates select="." mode="get-height-pixels">
+                <xsl:with-param name="default-aspect" select="'1:1'" />
+            </xsl:apply-templates>
         </xsl:attribute>
-        <!-- alt attribute for accessibility -->
-        <xsl:attribute name="alt">
-            <xsl:apply-templates select="description" />
-        </xsl:attribute>
-    </xsl:element>
+        <!-- fallback to SVG -->
+        <xsl:element name="img">
+            <!-- source file attribute for img element, the SVG image -->
+            <xsl:attribute name="src">
+                <xsl:value-of select="$svg-filename" />
+            </xsl:attribute>
+            <!-- replace with a CSS class -->
+            <xsl:attribute name="style">
+                <xsl:text>width: 100%; height: auto;</xsl:text>
+            </xsl:attribute>
+            <!-- alt attribute for accessibility -->
+            <xsl:attribute name="alt">
+                <xsl:apply-templates select="description" />
+            </xsl:attribute>
+        </xsl:element>
+    </object>
     <!-- possibly annotate with archive links -->
     <xsl:apply-templates select="." mode="archive">
         <xsl:with-param name="base-pathname" select="$base-pathname" />

@@ -4129,6 +4129,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Any way that an image gets placed in a sidebyside -->
 <!-- panel it should have a relative size filling that -->
 <!-- panel, so this is easy, just 100% all the time    -->
+<!-- Exception: asymptote WebGL needs actual pixels    -->
 <xsl:template match="image[ancestor::sidebyside]" mode="get-width-percentage">
     <xsl:text>100%</xsl:text>
 </xsl:template>
@@ -4146,7 +4147,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Widths from sidebyside layouts have been error-checked as input    -->
 
 <!-- occurs in a figure, not contained in a sidebyside -->
-<xsl:template match="audio[ancestor::sidebyside]|video[ancestor::sidebyside]|jsxgraph[ancestor::sidebyside]|interactive[ancestor::sidebyside]|slate[ancestor::sidebyside]" mode="get-width-percentage">
+<xsl:template match="audio[ancestor::sidebyside]|video[ancestor::sidebyside]|jsxgraph[ancestor::sidebyside]|interactive[ancestor::sidebyside]|slate[ancestor::sidebyside]|image[asymptote and ancestor::sidebyside]" mode="get-width-percentage">
     <!-- in a side-by-side, get layout, locate in layout -->
     <!-- and get width.  The layout-parameters template  -->
     <!-- will analyze an enclosing sbsgroup              -->
@@ -4172,14 +4173,19 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Input:  "width:height", or decimal width/height -->
 <!-- Return: real number as fraction width/height    -->
 <!-- Totally blank means nothing could be determined -->
-<xsl:template match="slate|interactive|jsxgraph|audio|video" mode="get-aspect-ratio">
+<xsl:template match="slate|interactive|jsxgraph|audio|video|image[asymptote]" mode="get-aspect-ratio">
     <xsl:param name="default-aspect" select="''" />
 
     <!-- look to element first, then to supplied default          -->
     <!-- this could be empty (default default), then return empty -->
     <xsl:variable name="the-aspect">
         <xsl:choose>
-            <xsl:when test="@aspect">
+            <!-- The aspect ratio is a property of an       -->
+            <!-- interactive Asymptote WebGL version, only. -->
+            <xsl:when test="self::image and asymptote/@aspect">
+                <xsl:value-of select="asymptote/@aspect" />
+            </xsl:when>
+            <xsl:when test="not(self::image) and @aspect">
                 <xsl:value-of select="@aspect" />
             </xsl:when>
             <xsl:otherwise>
@@ -4220,7 +4226,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 
 <!-- Pixels are an HTML thing, but we may need these numbers -->
 <!-- elsewhere, and these are are pure text templates        -->
-<xsl:template match="slate|audio|video|interactive" mode="get-width-pixels">
+<xsl:template match="slate|audio|video|interactive|image[asymptote]" mode="get-width-pixels">
     <xsl:variable name="width-percent">
         <xsl:apply-templates select="." mode="get-width-percentage" />
     </xsl:variable>
@@ -4231,7 +4237,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 </xsl:template>
 
 <!-- Square by default, when asked.  Can override -->
-<xsl:template match="slate|audio|video|interactive" mode="get-height-pixels">
+<xsl:template match="slate|audio|video|interactive|image[asymptote]" mode="get-height-pixels">
     <xsl:param name="default-aspect" select="'1:1'" />
 
     <xsl:variable name="width-percent">
