@@ -2672,7 +2672,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- And its CSS class -->
 <xsl:template match="&REMARK-LIKE;" mode="body-css-class">
-    <xsl:text>remark-like</xsl:text>
+    <xsl:value-of select="local-name()"/>
+    <xsl:text> remark-like</xsl:text>
 </xsl:template>
 
 <!-- When born hidden, block-level -->
@@ -2721,7 +2722,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- And its CSS class -->
 <xsl:template match="&COMPUTATION-LIKE;" mode="body-css-class">
-    <xsl:text>remark-like</xsl:text>
+    <xsl:value-of select="local-name()"/>
+    <xsl:text> computation-like</xsl:text>
 </xsl:template>
 
 <!-- When born hidden, block-level -->
@@ -2770,7 +2772,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- And its CSS class -->
 <xsl:template match="&DEFINITION-LIKE;" mode="body-css-class">
-    <xsl:text>definition-like</xsl:text>
+    <xsl:value-of select="local-name()"/>
+    <xsl:text> definition-like</xsl:text>
 </xsl:template>
 
 <!-- When born hidden, block-level -->
@@ -2819,7 +2822,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- And its CSS class -->
 <xsl:template match="&ASIDE-LIKE;" mode="body-css-class">
-    <xsl:text>aside-like</xsl:text>
+    <xsl:value-of select="local-name()"/>
+    <xsl:text> aside-like</xsl:text>
 </xsl:template>
 
 <!-- Never born hidden -->
@@ -2869,7 +2873,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- And its CSS class -->
 <xsl:template match="poem" mode="body-css-class">
-    <xsl:text>poem</xsl:text>
+    <xsl:value-of select="local-name()"/>
 </xsl:template>
 
 <!-- Never born hidden -->
@@ -3017,12 +3021,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- And its CSS class -->
 <xsl:template match="figure|listing|table" mode="body-css-class">
-    <xsl:text>figure-like</xsl:text>
+    <xsl:value-of select="local-name()"/>
+    <xsl:text> figure-like</xsl:text>
 </xsl:template>
 <!-- a table of data will use this class when -->
 <!-- the title is placed above the tabular    -->
 <xsl:template match="list" mode="body-css-class">
-    <xsl:text>table-like</xsl:text>
+    <xsl:value-of select="local-name()"/>
+    <xsl:text> table-like</xsl:text>
 </xsl:template>
 
 <!-- When born hidden, block-level -->
@@ -3096,7 +3102,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- And its CSS class -->
 <xsl:template match="assemblage" mode="body-css-class">
-    <xsl:text>assemblage-like</xsl:text>
+    <xsl:value-of select="local-name()"/>
+    <xsl:text> assemblage-like</xsl:text>
 </xsl:template>
 
 <!-- Never born hidden -->
@@ -3141,7 +3148,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- And its CSS class -->
 <xsl:template match="blockquote" mode="body-css-class">
-    <xsl:text>blockquote</xsl:text>
+    <xsl:value-of select="local-name()"/>
 </xsl:template>
 
 <!-- Never born hidden -->
@@ -3182,7 +3189,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- And its CSS class -->
 <xsl:template match="paragraphs" mode="body-css-class">
-    <xsl:text>paragraphs</xsl:text>
+    <xsl:value-of select="local-name()"/>
 </xsl:template>
 
 <!-- Never born hidden -->
@@ -3224,7 +3231,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- And its CSS class -->
 <xsl:template match="commentary" mode="body-css-class">
-    <xsl:text>commentary</xsl:text>
+    <xsl:value-of select="local-name()"/>
 </xsl:template>
 
 <!-- Not born hidden -->
@@ -3272,6 +3279,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- And its CSS class -->
 <xsl:template match="&GOAL-LIKE;" mode="body-css-class">
     <xsl:value-of select="local-name()"/>
+    <xsl:text> goal-like</xsl:text>
 </xsl:template>
 
 <!-- When born hidden, block-level -->
@@ -3323,7 +3331,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- And its CSS class -->
 <xsl:template match="&EXAMPLE-LIKE;" mode="body-css-class">
-    <xsl:text>example-like</xsl:text>
+    <xsl:value-of select="local-name()"/>
+    <xsl:text> example-like</xsl:text>
 </xsl:template>
 
 <!-- When born hidden, block-level -->
@@ -3377,7 +3386,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- And its CSS class -->
 <xsl:template match="subexercises" mode="body-css-class">
-    <xsl:text>subexercises</xsl:text>
+    <xsl:value-of select="local-name()"/>
 </xsl:template>
 
 <!-- Never born hidden -->
@@ -3467,7 +3476,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- And its CSS class -->
 <xsl:template match="exercisegroup" mode="body-css-class">
-    <xsl:text>exercisegroup</xsl:text>
+    <xsl:value-of select="local-name()"/>
 </xsl:template>
 
 <!-- Never born hidden -->
@@ -3587,7 +3596,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- And its CSS class -->
 <xsl:template match="exercise" mode="body-css-class">
-    <xsl:text>exercise-like</xsl:text>
+    <xsl:value-of select="local-name()"/>
+    <xsl:text> exercise-like</xsl:text>
 </xsl:template>
 
 <!-- When born hidden, block-level -->
@@ -3741,7 +3751,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- And its CSS class -->
 <xsl:template match="&PROJECT-LIKE;" mode="body-css-class">
-    <xsl:text>project-like</xsl:text>
+    <xsl:value-of select="local-name()"/>
+    <xsl:text> project-like</xsl:text>
 </xsl:template>
 
 <!-- When born hidden, block-level -->
@@ -3861,7 +3872,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- And its CSS class -->
 <xsl:template match="task" mode="body-css-class">
-    <xsl:text>exercise-like</xsl:text>
+    <xsl:value-of select="local-name()"/>
+    <xsl:text> exercise-like</xsl:text>
 </xsl:template>
 
 <!-- When born hidden, inline-level -->
@@ -3983,7 +3995,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- And its CSS class -->
 <xsl:template match="&SOLUTION-LIKE;" mode="body-css-class">
-    <xsl:text>solution</xsl:text>
+    <xsl:value-of select="local-name()"/>
+    <xsl:text> solution-like</xsl:text>
 </xsl:template>
 
 <!-- When born hidden, inline-level -->
@@ -4091,7 +4104,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- And its CSS class -->
 <xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;" mode="body-css-class">
-    <xsl:text>theorem-like</xsl:text>
+    <xsl:value-of select="local-name()"/>
+    <xsl:text> theorem-like</xsl:text>
 </xsl:template>
 
 <!-- When born hidden, block-level -->
@@ -4211,7 +4225,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- And its CSS class -->
 <xsl:template match="case" mode="body-css-class">
-    <xsl:text>case</xsl:text>
+    <xsl:value-of select="local-name()"/>
 </xsl:template>
 
 <!-- Never born hidden -->
@@ -4257,7 +4271,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- And its CSS class -->
 <xsl:template match="fn" mode="body-css-class">
-    <xsl:text>footnote</xsl:text>
+    <xsl:value-of select="local-name()"/>
 </xsl:template>
 
 <!-- When born hidden, inline-level -->
@@ -4308,7 +4322,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- And its CSS class -->
 <xsl:template match="contributor" mode="body-css-class">
-    <xsl:text>contributor</xsl:text>
+    <xsl:value-of select="local-name()"/>
 </xsl:template>
 
 <!-- Never born hidden -->
@@ -4372,7 +4386,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- And its CSS class -->
 <xsl:template match="defined-term" mode="body-css-class">
-    <xsl:text>defined-term</xsl:text>
+    <xsl:value-of select="local-name()"/>
 </xsl:template>
 
 <!-- Never born hidden -->
@@ -4392,7 +4406,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-original" select="true()" />
     <xsl:choose>
         <xsl:when test="$block-type = 'xref'">
-            <article class="listitem">
+            <article class="li">
                 <!-- "title" of item is replicated in heading -->
                 <xsl:apply-templates select="." mode="heading-xref-knowl" />
                 <!-- a run of paragraphs, conceivably, title is killed -->
@@ -4492,7 +4506,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- And its CSS class -->
 <!-- This is a temporary hack, which should go away -->
 <xsl:template match="biblio/note" mode="body-css-class">
-    <xsl:text>solution</xsl:text>
+    <xsl:text>solution-like</xsl:text>
 </xsl:template>
 
 <!-- When born hidden, inline-level -->
@@ -4793,7 +4807,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- not yet supported, change this? -->
 <xsl:template match="li" mode="body-css-class">
-    <xsl:text>listitem</xsl:text>
+    <xsl:text>li</xsl:text>
 </xsl:template>
 
 <!-- Never born hidden -->
@@ -4824,7 +4838,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-original" select="true()" />
     <xsl:choose>
         <xsl:when test="$block-type = 'xref'">
-            <article class="listitem">
+            <article class="li">
                 <xsl:apply-templates select="." mode="heading-xref-knowl" />
                 <xsl:apply-templates>
                     <xsl:with-param name="b-original" select="$b-original" />
@@ -4854,7 +4868,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-original" select="true()" />
     <xsl:choose>
         <xsl:when test="$block-type = 'xref'">
-            <article class="listitem">
+            <article class="li">
                 <!-- "title" of item is replicated in heading -->
                 <xsl:apply-templates select="." mode="heading-xref-knowl" />
                 <!-- a run of paragraphs, conceivably, title is killed -->
