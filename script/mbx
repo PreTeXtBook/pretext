@@ -368,9 +368,8 @@ def webwork_to_xml(xslt_exec, ptx_xsl_dir, xml_source, server_params, dest_dir):
     # begin writing single .xml file with all webwork representations
     include_file_name = os.path.join(dest_dir, "webwork-extraction.xml")
     try:
-        include_file = open(include_file_name, 'w')
-        include_file.write('<?xml version="1.0" encoding="UTF-8" ?>\n<webwork-extraction>\n')
-        include_file.close()
+         with open(include_file_name, 'w') as include_file:
+            include_file.write('<?xml version="1.0" encoding="UTF-8" ?>\n<webwork-extraction>\n')
     except Exception as e:
         root_cause = str(e)
         msg = "There was a problem writing a problem to the file: {}\n"
@@ -381,7 +380,7 @@ def webwork_to_xml(xslt_exec, ptx_xsl_dir, xml_source, server_params, dest_dir):
 
         # It is more convenient to identify server problems by file path,
         # and PTX problems by internal ID
-        problem_identifier = problem if (origin[problem]=='ptx') else source[problem]
+        problem_identifier = problem if (origin[problem] == 'ptx') else source[problem]
 
         #remove outer webwork tag (and attributes) from authored source
         if origin[problem] == 'ptx':
@@ -389,10 +388,9 @@ def webwork_to_xml(xslt_exec, ptx_xsl_dir, xml_source, server_params, dest_dir):
 
         #use "webwork-reps" as parent tag for the various representations of a problem
         try:
-            include_file = open(include_file_name, 'a')
-            webwork_reps = '  <webwork-reps xml:id="extracted-{}" ww-id="{}">\n'
-            include_file.write(webwork_reps.format(problem,problem))
-            include_file.close()
+            with open(include_file_name, 'a') as include_file:
+                webwork_reps = '  <webwork-reps xml:id="extracted-{}" ww-id="{}">\n'
+                include_file.write(webwork_reps.format(problem,problem))
         except Exception as e:
             root_cause = str(e)
             msg = "There was a problem writing a problem to the file: {}\n"
@@ -418,10 +416,9 @@ def webwork_to_xml(xslt_exec, ptx_xsl_dir, xml_source, server_params, dest_dir):
         # First write authored
         if origin[problem] == 'ptx':
             try:
-                include_file = open(include_file_name, 'a')
-                authored_tag = '    <authored>\n{}\n    </authored>\n\n'
-                include_file.write(authored_tag.format(re.sub(re.compile('^', re.MULTILINE),'      ',source[problem])))
-                include_file.close()
+                with open(include_file_name, 'a') as include_file:
+                    authored_tag = '    <authored>\n{}\n    </authored>\n\n'
+                    include_file.write(authored_tag.format(re.sub(re.compile('^(?=.)', re.MULTILINE),'      ',source[problem])))
             except Exception as e:
                 root_cause = str(e)
                 msg = "There was a problem writing the authored source of {} to the file: {}\n"
@@ -452,59 +449,34 @@ def webwork_to_xml(xslt_exec, ptx_xsl_dir, xml_source, server_params, dest_dir):
 
         # Ready, go out on the wire
         try:
-            response = session.get(wwurl, params=server_params, verify=False)
+            response = session.get(wwurl, params=server_params)
         except requests.exceptions.RequestException as e:
             root_cause = str(e)
             msg = "There was a problem collecting a problem,\n Server: {}\nRequest Parameters: {}\n"
             raise ValueError(msg.format(wwurl, server_params) + root_cause)
 
-        # Check for errors with PG processing
-        # First, get booleans file_empty, no_compile, and bad_xml
-        file_empty = 'ERROR:  This problem file was empty!' in response.text
-        no_compile = 'ERROR caught by Translator while processing problem file:' in response.text
-        bad_xml = False
-        no_statement = False
-        try:
-            from xml.etree import ElementTree
-        except ImportError:
-            msg = 'failed to import ElementTree from xml.etree'
-            raise ValueError(msg)
-        try:
-            problem_root = ElementTree.fromstring(response.text.encode('utf-8'))
-        except:
-            bad_xml = True
-        if not bad_xml:
-            if problem_root.find('.//statement') is None:
-                no_statement = True
-
-        file_empty_msg = "PTX:ERROR:  WeBWorK problem {} was empty\n"
-        no_compile_msg = "PTX:ERROR:  WeBWorK problem {} with seed {} did not compile  \n{}\n"
-        bad_xml_msg = "PTX:ERROR:  WeBWorK problem {} with seed {} does not return valid XML  \n  It may not be PTX compatible  \n{}\n"
-        no_statement_msg = "PTX:ERROR:  WeBWorK problem {} with seed {} does not have a statement tag \n  Maybe it uses something other than BEGIN_TEXT or BEGIN_PGML to print the statement in its PG code \n{}\n"
-
-        # If we are aborting upon recoverable errors...
-        if args.abort:
-            if file_empty:
-                raise ValueError(file_empty_msg.format(problem_identifier))
-            if no_compile:
-                raise ValueError(no_compile_msg.format(problem_identifier, seed[problem], response.text))
-            if bad_xml:
-                raise ValueError(bad_xml_msg.format(problem_identifier, seed[problem], response.text))
-            if no_statement:
-                raise ValueError(no_statement_msg.format(problem_identifier, seed[problem], response.text))
-
         # When a PG Math Object is a text string that has to be rendered in a math environment,
-        # it is wrapped like this: \verb\x85string\x85.
-        # The first thing we want to do is replace all instances with \text{string}.
-        # But \text does not behave equivalently in tex and MathJax.
-        # Certain characters _need_ to be escaped in TeX, but must _not_ be escaped in MathJax.
-        # So we only make the change after checking that none of the dangerous characters are present.
+        # depending on the string's content and the version of WeBworK, it can come back as:
 
-        verbatim_split = re.split(r'(\\verb\x85.*?\x85)', response.text)
+        # \text{string}            only when the string is built solely from -A-Za-z0-9 ,.;:+=?()[]
+        # \verb\x85string\x85      version 2.14 and earlier
+        # \verb\x1Fstring\x1F      certain develop branches between 2.14 and 2.15, and WW HTML output for 2.15+
+        # {\verb\rstring\r}        WW PTX (and TeX) output starting with 2.15, hopefully stable
+
+        # We would like to replace all instances with \text{string},
+        # but in addition to character escaping issues, \text does not behave equally in TeX and MathJax.
+        # Certain characters _need_ to be escaped in TeX, but must _not_ be escaped in MathJax.
+        # So we make the change after checking that none of the dangerous characters are present,
+        # and otherwise leave \verb in place. But we replace the delimiter with the first available
+        # "normal" character.
+        # \r would be valid XML, but too unpredictable in translations
+        # something like \x85 would be vald XML, but may not be OK in some translations
+
+        verbatim_split = re.split(r'(\\verb\x85.*?\x85|\\verb\x1F.*?\x1F|\\verb\r.*?\r)', response.text)
         response_text = ''
         for item in verbatim_split:
-            if re.compile(r'(\\verb\x85.*?\x85)').match(item):
-                verbatim_content = re.findall(r'\\verb\x85(.*?)\x85', item)[0]
+            if re.match(r'^\\verb(\x85|\x1F|\r).*?\1$', item):
+                (original_delimiter, verbatim_content) = re.search(r'\\verb(\x85|\x1F|\r)(.*?)\1', item).group(1,2)
                 if set(['#', '%', '&', '<', '>', '\\', '^', '_', '`', '|', '~']).intersection(set(list(verbatim_content))):
                     index = 33
                     while index < 127:
@@ -519,7 +491,7 @@ def webwork_to_xml(xslt_exec, ptx_xsl_dir, xml_source, server_params, dest_dir):
                         print('PTX:WARNING: Could not find delimiter for verbatim expression')
                         return '!Could not find delimiter for verbatim expression.!'
                     else:
-                        response_text += item.replace(u'\x85', chr(index))
+                        response_text += item.replace(original_delimiter, chr(index))
                 else:
                     # These three characters are escaped in both TeX and MathJax
                     text_content = verbatim_content.replace('$', '\\$')
@@ -529,8 +501,68 @@ def webwork_to_xml(xslt_exec, ptx_xsl_dir, xml_source, server_params, dest_dir):
             else:
                 response_text += item
 
-        # Now if we are not aborting upon recoverable errors
-        if not file_empty and not no_compile and not bad_xml and not no_statement:
+        # Check for errors with PG processing
+        # Get booleans signaling badness: file_empty, no_compile, bad_xml, no_statement
+        file_empty = 'ERROR:  This problem file was empty!' in response_text
+        no_compile = 'ERROR caught by Translator while processing problem file:' in response_text
+        bad_xml = False
+        no_statement = False
+        try:
+            from xml.etree import ElementTree
+        except ImportError:
+            msg = 'failed to import ElementTree from xml.etree'
+            raise ValueError(msg)
+        try:
+            problem_root = ElementTree.fromstring(response_text)
+        except:
+            bad_xml = True
+        if not bad_xml:
+            if problem_root.find('.//statement') is None:
+                no_statement = True
+        badness = file_empty or no_compile or bad_xml or no_statement
+
+        # Custom responses for each type of badness
+        # message for terminal log
+        # tip reminding about -a (abort) option
+        # value for @failure attribute in static element
+        # base64 for a shell PG problem that simply indicates there was an issue and says what the issue was
+        if file_empty:
+            badness_msg = "PTX:ERROR:  WeBWorK problem {} was empty\n"
+            badness_tip = ''
+            badness_type = 'empty'
+            badness_base64 = 'RE9DVU1FTlQoKTsKbG9hZE1hY3JvcygiUEdzdGFuZGFyZC5wbCIsIlBHTUwucGwiLCJQR2NvdXJzZS5wbCIsKTtURVhUKGJlZ2lucHJvYmxlbSgpKTtDb250ZXh0KCdOdW1lcmljJyk7CgpCRUdJTl9QR01MCldlQldvcksgUHJvYmxlbSBGaWxlIFdhcyBFbXB0eQoKRU5EX1BHTUwKCkVORERPQ1VNRU5UKCk7'
+        elif no_compile:
+            badness_msg = "PTX:ERROR:  WeBWorK problem {} with seed {} did not compile  \n{}\n"
+            badness_tip = '  Use -a to halt with full PG and returned content' if (origin[problem] == 'ptx') else '  Use -a to halt with returned content'
+            badness_type = 'compile'
+            badness_base64 = 'RE9DVU1FTlQoKTsKbG9hZE1hY3JvcygiUEdzdGFuZGFyZC5wbCIsIlBHTUwucGwiLCJQR2NvdXJzZS5wbCIsKTtURVhUKGJlZ2lucHJvYmxlbSgpKTtDb250ZXh0KCdOdW1lcmljJyk7CgpCRUdJTl9QR01MCldlQldvcksgUHJvYmxlbSBEaWQgTm90IENvbXBpbGUKCkVORF9QR01MCgpFTkRET0NVTUVOVCgpOw%3D%3D'
+        elif bad_xml:
+            badness_msg = "PTX:ERROR:  WeBWorK problem {} with seed {} does not return valid XML  \n  It may not be PTX compatible  \n{}\n"
+            badness_tip = '  Use -a to halt with returned content'
+            badness_type = 'xml'
+            badness_base64 = 'RE9DVU1FTlQoKTsKbG9hZE1hY3JvcygiUEdzdGFuZGFyZC5wbCIsIlBHTUwucGwiLCJQR2NvdXJzZS5wbCIsKTtURVhUKGJlZ2lucHJvYmxlbSgpKTtDb250ZXh0KCdOdW1lcmljJyk7CgpCRUdJTl9QR01MCldlQldvcksgUHJvYmxlbSBEaWQgTm90IEdlbmVyYXRlIFZhbGlkIFhNTAoKRU5EX1BHTUwKCkVORERPQ1VNRU5UKCk7'
+        elif no_statement:
+            badness_msg = "PTX:ERROR:  WeBWorK problem {} with seed {} does not have a statement tag \n  Maybe it uses something other than BEGIN_TEXT or BEGIN_PGML to print the statement in its PG code \n{}\n"
+            badness_tip = '  Use -a to halt with returned content'
+            badness_type = 'statement'
+            badness_base64 = 'RE9DVU1FTlQoKTsKbG9hZE1hY3JvcygiUEdzdGFuZGFyZC5wbCIsIlBHTUwucGwiLCJQR2NvdXJzZS5wbCIsKTtURVhUKGJlZ2lucHJvYmxlbSgpKTtDb250ZXh0KCdOdW1lcmljJyk7CgpCRUdJTl9QR01MCldlQldvcksgUHJvYmxlbSBEaWQgTm90IEhhdmUgYSBbfHN0YXRlbWVudHxdKiBUYWcKCkVORF9QR01MCgpFTkRET0NVTUVOVCgpOw%3D%3D'
+
+        # If we are aborting upon recoverable errors...
+        if args.abort:
+            if badness:
+                debugging_help = response_text
+                if origin[problem] == 'ptx' and no_compile:
+                    debugging_help += "\n" + pg[problem]
+                raise ValueError(badness_msg.format(problem_identifier, seed[problem], debugging_help))
+
+        # If there is "badness"...
+        # Build 'shell' problems to indicate failures
+        if badness:
+            print(badness_msg.format(problem_identifier, seed[problem], badness_tip))
+            static_skeleton = "<static failure='{}'>\n<statement>\n  <p>\n    {}  </p>\n</statement>\n</static>\n"
+            static[problem] = static_skeleton.format(badness_type, badness_msg.format(problem_identifier, seed[problem], badness_tip))
+
+        else:
             # add to dictionary
             static[problem] = response_text
             # strip out actual PTX code between markers
@@ -541,28 +573,12 @@ def webwork_to_xml(xslt_exec, ptx_xsl_dir, xml_source, server_params, dest_dir):
             # change element from webwork to static and indent
             static[problem] = static[problem].replace('<webwork>', '<static>')
             static[problem] = static[problem].replace('</webwork>', '</static>')
-        # Build 'shell' problems to indicate failures
-        elif file_empty:
-            print(file_empty_msg.format(problem_identifier))
-            static[problem] = "<static failure='empty'>\n<statement>\n  <p>\n    " + file_empty_msg.format(problem_identifier) + "  </p>\n</statement>\n</static>\n"
-        elif no_compile:
-            print(no_compile_msg.format(problem_identifier, seed[problem], '  Use -a to halt with full PG if PTX-sourced'))
-            static[problem] = "<static failure='compile'>\n<statement>\n  <p>\n    " + no_compile_msg.format(problem_identifier, seed[problem], '    Use -a to halt with full PG if PTX-sourced') + "  </p>\n</statement>\n</static>\n"
-        elif bad_xml:
-            print(bad_xml_msg.format(problem_identifier, seed[problem],'  Use -a to halt with returned content'))
-            static[problem] = "<static failure='xml'>\n<statement>\n  <p>\n    " + bad_xml_msg.format(problem_identifier, seed[problem],'    Use -a to halt with returned content') + "  </p>\n</statement>\n</static>"
-        elif no_statement:
-            print(no_statement_msg.format(problem_identifier, seed[problem],'  Use -a to halt with returned content'))
-            static[problem] = "<static failure='statement'>\n<statement>\n  <p>\n    " + no_statement_msg.format(problem_identifier, seed[problem],'    Use -a to halt with returned content') + "  </p>\n</statement>\n</static>"
 
         # if authored has a title, copy it here
         if origin[problem] == 'ptx':
-            title_pattern = re.compile(r'(<title>.*<\/title>)')
-            title = None
-            title = re.search(title_pattern, source[problem])
+            title = re.search(r'(<title>.*<\/title>)', source[problem])
             if title:
-                title = title.group(1)
-                static[problem] = static[problem].replace('<static>\n','<static>\n' + title + '\n\n')
+                static[problem] = static[problem].replace('<static>\n','<static>\n' + title.group(1) + '\n\n')
 
         # Convert answerhashes XML to a sequence of answer elements
         # This is crude text operation on the XML
@@ -582,19 +598,17 @@ def webwork_to_xml(xslt_exec, ptx_xsl_dir, xml_source, server_params, dest_dir):
                 except:
                     correct_ans_latex_string = ''
 
-                if correct_ans_latex_string != '' or correct_ans != '':
+                if correct_ans_latex_string or correct_ans:
                     answer += "<answer>\n  <p>"
-                    if correct_ans_latex_string == '':
+                    if not correct_ans_latex_string:
                         answer += correct_ans
                     else:
                         answer += '<m>' + correct_ans_latex_string + '</m>'
                     answer += "</p>\n</answer>\n"
 
             # Now we need to cut out the answerhashes that came from the server.
-            beforehashes = re.compile('<answerhashes>').split(static[problem])
-            beforehashes = beforehashes[0]
-            afterhashes = re.compile('</answerhashes>').split(static[problem])
-            afterhashes = afterhashes[1]
+            beforehashes = re.compile('<answerhashes>').split(static[problem])[0]
+            afterhashes = re.compile('</answerhashes>').split(static[problem])[1]
             static[problem] = beforehashes + afterhashes
 
             # We don't just replace it with the answer we just built. To be
@@ -613,7 +627,9 @@ def webwork_to_xml(xslt_exec, ptx_xsl_dir, xml_source, server_params, dest_dir):
             static[problem] = static[problem].replace('<static', '<static source="' + source[problem] + '"')
 
         # adjust indentation
-        static[problem] = re.sub(re.compile('^', re.MULTILINE),'      ',static[problem]).replace('  <static','<static').replace('  </static','</static')
+        static[problem] = re.sub(re.compile('^(?=.)', re.MULTILINE),'      ',static[problem]).replace('  <static','<static').replace('  </static','</static')
+        # remove excess blank lines that come at the end from the server
+        static[problem] = re.sub(re.compile('\n+( *</static>)', re.MULTILINE),r"\n\1",static[problem])
 
         # need to loop through content looking for images with pattern:
         #
@@ -638,16 +654,15 @@ def webwork_to_xml(xslt_exec, ptx_xsl_dir, xml_source, server_params, dest_dir):
             # download actual image files
             # http://stackoverflow.com/questions/13137817/how-to-download-image-using-requests
             try:
-                response = session.get(image_url, verify=False)
+                response = session.get(image_url)
             except requests.exceptions.RequestException as e:
                 root_cause = str(e)
                 msg = "There was a problem downloading an image file,\n URL: {}\n"
                 raise ValueError(msg.format(image_url) + root_cause)
             # and save the image itself
             try:
-                image_file = open(os.path.join(dest_dir, ptx_filename), 'wb')
-                image_file.write(response.content)
-                image_file.close()
+                with open(os.path.join(dest_dir, ptx_filename), 'wb') as image_file:
+                    image_file.write(response.content)
             except Exception as e:
                 root_cause = str(e)
                 msg = "There was a problem saving an image file,\n Filename: {}\n"
@@ -655,9 +670,8 @@ def webwork_to_xml(xslt_exec, ptx_xsl_dir, xml_source, server_params, dest_dir):
 
         # place static content
         try:
-            include_file = open(include_file_name, 'a')
-            include_file.write(static[problem] + '\n')
-            include_file.close()
+            with open(include_file_name, 'ab') as include_file:
+                include_file.write(static[problem] + '\n')
         except Exception as e:
             root_cause = str(e)
             msg = "There was a problem writing a problem to the file: {}\n"
@@ -668,35 +682,20 @@ def webwork_to_xml(xslt_exec, ptx_xsl_dir, xml_source, server_params, dest_dir):
             for solution in ['yes','no']:
                 hintsol = 'hint_' + hint + '_solution_' + solution
                 url_tag = '    <server-url hint="{}" solution="{}">{}?courseID={}&amp;userID={}&amp;password={}&amp;course_password={}&amp;answersSubmitted=0&amp;displayMode=MathJax&amp;outputformat=simple&amp;problemSeed={}&amp;{}</server-url>\n\n'
-                # If problem fails because it is empty, did not compile, made bad XML, or had no statement tag, replace with these shells
-                # base64 encoder/decoder at https://www.base64decode.org/, but note '%3D' needs to become '='
-                if file_empty:
-                    source_selector = 'problemSource='
-                    # WeBWorK Problem File Was Empty
-                    source_value = 'RE9DVU1FTlQoKTsKbG9hZE1hY3JvcygiUEdzdGFuZGFyZC5wbCIsIlBHTUwucGwiLCJQR2NvdXJzZS5wbCIsKTtURVhUKGJlZ2lucHJvYmxlbSgpKTtDb250ZXh0KCdOdW1lcmljJyk7CgpCRUdJTl9QR01MCldlQldvcksgUHJvYmxlbSBGaWxlIFdhcyBFbXB0eQoKRU5EX1BHTUwKCkVORERPQ1VNRU5UKCk7'
-                elif no_compile:
-                    source_selector = 'problemSource='
-                    # WeBWorK Problem Did Not Compile
-                    source_value = 'RE9DVU1FTlQoKTsKbG9hZE1hY3JvcygiUEdzdGFuZGFyZC5wbCIsIlBHTUwucGwiLCJQR2NvdXJzZS5wbCIsKTtURVhUKGJlZ2lucHJvYmxlbSgpKTtDb250ZXh0KCdOdW1lcmljJyk7CgpCRUdJTl9QR01MCldlQldvcksgUHJvYmxlbSBEaWQgTm90IENvbXBpbGUKCkVORF9QR01MCgpFTkRET0NVTUVOVCgpOw%3D%3D'
-                elif bad_xml:
-                    source_selector = 'problemSource='
-                    # WeBWorK Problem Did Not Generate Valid XML
-                    source_value='RE9DVU1FTlQoKTsKbG9hZE1hY3JvcygiUEdzdGFuZGFyZC5wbCIsIlBHTUwucGwiLCJQR2NvdXJzZS5wbCIsKTtURVhUKGJlZ2lucHJvYmxlbSgpKTtDb250ZXh0KCdOdW1lcmljJyk7CgpCRUdJTl9QR01MCldlQldvcksgUHJvYmxlbSBEaWQgTm90IEdlbmVyYXRlIFZhbGlkIFhNTAoKRU5EX1BHTUwKCkVORERPQ1VNRU5UKCk7'
-                elif no_statement:
-                    source_selector = 'problemSource='
-                    # WeBWorK Problem Did Not Have a `statement` tag
-                    source_value='RE9DVU1FTlQoKTsKbG9hZE1hY3JvcygiUEdzdGFuZGFyZC5wbCIsIlBHTUwucGwiLCJQR2NvdXJzZS5wbCIsKTtURVhUKGJlZ2lucHJvYmxlbSgpKTtDb250ZXh0KCdOdW1lcmljJyk7CgpCRUdJTl9QR01MCldlQldvcksgUHJvYmxlbSBEaWQgTm90IEhhdmUgYSBbfHN0YXRlbWVudHxdKiBUYWcKCkVORF9QR01MCgpFTkRET0NVTUVOVCgpOw%3D%3D'
+                source_selector = 'problemSource=' if (badness or origin[problem] == 'ptx') else 'sourceFilePath='
+                if badness:
+                    source_value = badness_base64
                 else:
-                    source_selector = 'problemSource=' if (origin[problem]=='ptx') else 'sourceFilePath='
-                    if PY3:
-                        source_value = urllib.parse.quote_plus(pgbase64[hintsol][problem]) if (origin[problem]=='ptx') else source[problem]
+                    if origin[problem] == 'server':
+                        source_value = source[problem]
+                    elif PY3:
+                        source_value = urllib.parse.quote_plus(pgbase64[hintsol][problem])
                     else:
-                        source_value = urllib.quote_plus(pgbase64[hintsol][problem]) if (origin[problem]=='ptx') else source[problem]
+                        source_value = urllib.quote_plus(pgbase64[hintsol][problem])
                 source_query = source_selector + source_value
                 try:
-                    include_file = open(include_file_name, 'a')
-                    include_file.write(url_tag.format(hint,solution,wwurl,courseID,userID,password,course_password,seed[problem],source_query))
-                    include_file.close()
+                    with open(include_file_name, 'a') as include_file:
+                        include_file.write(url_tag.format(hint,solution,wwurl,courseID,userID,password,course_password,seed[problem],source_query))
                 except Exception as e:
                     root_cause = str(e)
                     msg = "There was a problem writing URLs for {} to the file: {}\n"
@@ -704,35 +703,26 @@ def webwork_to_xml(xslt_exec, ptx_xsl_dir, xml_source, server_params, dest_dir):
 
         # Write PG. For server problems, just include source as attribute and close pg tag
         if origin[problem] == 'ptx':
+            pg_tag = '    <pg>\n{}\n    </pg>\n\n'
+            if badness:
+                formatted_pg = pg_shell.format(badness_msg.format(problem_identifier, seed[problem], badness_tip))
+            else:
+                formatted_pg = pg[problem]
+            # opportunity to cut out extra blank lines
+            formatted_pg = re.sub(re.compile(r"(\n *\n)( *\n)*", re.MULTILINE),r"\n\n",formatted_pg)
+
             try:
-                include_file = open(include_file_name, 'a')
-                pg_tag = '    <pg>\n{}\n    </pg>\n\n'
-                # for problems that fail
-                pg_shell = "DOCUMENT();\nloadMacros('PGstandard.pl','PGML.pl','PGcourse.pl');\nTEXT(beginproblem());\nBEGIN_PGML\n{}END_PGML\nENDDOCUMENT();"
-                if file_empty:
-                    formatted_pg = re.sub(re.compile('^', re.MULTILINE),'      ',pg_shell.format(file_empty_msg.format(problem_identifier)))
-                elif no_compile:
-                    formatted_pg = re.sub(re.compile('^', re.MULTILINE),'      ',pg_shell.format(no_compile_msg.format(problem_identifier, seed[problem], 'Use -a to halt with full PG if PTX-sourced')))
-                elif bad_xml:
-                    formatted_pg = re.sub(re.compile('^', re.MULTILINE),'      ',pg_shell.format(bad_xml_msg.format(problem_identifier, seed[problem], 'Use -a to halt with returned content')))
-                elif no_statement:
-                    formatted_pg = re.sub(re.compile('^', re.MULTILINE),'      ',pg_shell.format(no_statement_msg.format(problem_identifier, seed[problem], 'Use -a to halt with returned content')))
-                else:
-                    formatted_pg = re.sub(re.compile('^', re.MULTILINE),'      ',pg[problem])
-                # opportunity to cut out extra blank lines
-                formatted_pg = re.sub(re.compile(r"(\n *\n)( *\n)*", re.MULTILINE),r"\1",formatted_pg)
-                include_file.write(pg_tag.format(formatted_pg))
-                include_file.close()
+                with open(include_file_name, 'a') as include_file:
+                    include_file.write(pg_tag.format(formatted_pg))
             except Exception as e:
                 root_cause = str(e)
                 msg = "There was a problem writing the PG for {} to the file: {}\n"
                 raise ValueError(msg.format(problem_identifier, include_file_name) + root_cause)
         elif origin[problem] == 'server':
             try:
-                include_file = open(include_file_name, 'a')
-                pg_tag = '    <pg source="{}" />\n\n'
-                include_file.write(pg_tag.format(source[problem]))
-                include_file.close()
+                with open(include_file_name, 'a') as include_file:
+                    pg_tag = '    <pg source="{}" />\n\n'
+                    include_file.write(pg_tag.format(source[problem]))
             except Exception as e:
                 root_cause = str(e)
                 msg = "There was a problem writing the PG for {} to the file: {}\n"
@@ -740,9 +730,8 @@ def webwork_to_xml(xslt_exec, ptx_xsl_dir, xml_source, server_params, dest_dir):
 
         # close webwork-reps tag
         try:
-            include_file = open(include_file_name, 'a')
-            include_file.write('  </webwork-reps>\n\n')
-            include_file.close()
+            with open(include_file_name, 'a') as include_file:
+                include_file.write('  </webwork-reps>\n\n')
         except Exception as e:
             root_cause = str(e)
             msg = "There was a problem writing a problem to the file: {}\n"
@@ -750,9 +739,8 @@ def webwork_to_xml(xslt_exec, ptx_xsl_dir, xml_source, server_params, dest_dir):
 
     # close webwork-extraction tag and finish
     try:
-        include_file = open(include_file_name, 'a')
-        include_file.write('</webwork-extraction>')
-        include_file.close()
+        with open(include_file_name, 'a') as include_file:
+            include_file.write('</webwork-extraction>')
     except Exception as e:
         root_cause = str(e)
         msg = "There was a problem writing a problem to the file: {}\n"

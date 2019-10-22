@@ -2531,7 +2531,7 @@ the xsltproc executable.
 
                 <figure xml:id="figure-asymptote-latex-macro">
                     <caption>Aymptote Lever, plus Integral</caption>
-                    <image xml:id="asymptote-lever-integral">
+                    <image xml:id="asymptote-lever-integral" width="80%">
                         <asymptote>
                         size(200,0);
 
@@ -2591,48 +2591,64 @@ the xsltproc executable.
                 </figure>
             </subsection>
 
-            <subsection>
-                <title>Asymptote + threejs 3D</title>
+            <subsection xml:id="graphics-asymptote-webgl">
+                <title>Asymptote + WebGL</title>
 
-                <p>At this writing (2019-05-16) the Asymptote project plans to soon produce output that is interactive via the Javascript library <c>threejs</c> (see <xref ref="figure-threejs-splines" text="type-global"/>).  The following sneak-peek is courtesy of John Bowman, and uses the <tag>interactive</tag> framework (see <xref ref="section-interactive-authored" text="type-global"/>).  (In particular, the static PDF version is likely to have an option to withhold the QR code?)  We will endeavor to make it even more straight-forward for authors to employ.</p>
+                <p>Asymptote can create an <init>HTML</init> file that is an interactive version of a 3D shape.  At this writing (2019-10-21) we do not have support via the <c>mbx</c> script for producing these files, so you are on your own in the early going.  The other distinction is that the author needs to provide the aspect ratio of the figure, and this should be placed on the <tag>asymptote</tag> element (not on the <tag>image</tag> element).  <xref ref="figure-asymptote-workcone" text="type-global"/> is from the <url href="http://asymptote.sourceforge.net/gallery/3Dwebgl/">Asymptote Gallery</url><fn><c>http://asymptote.sourceforge.net/gallery/3Dwebgl/</c></fn>.</p>
 
-                <figure>
-                    <caption>Asymptote Bezier patch</caption>
-                    <interactive xml:id="interactive-asymptote-threejs" platform="javascript" width="80%" aspect="1:1" preview="images/asymptote-bezier-patch.png" source="http://www.math.ualberta.ca/~bowman/gl-matrix-min-2.3.2.js https://cdn.rawgit.com/humbletim/glm-js/31fd034b/build/glm-js.min.js https://code.jquery.com/jquery-3.3.1.min.js http://www.math.ualberta.ca/~bowman/extlibs/pako.js http://www.math.ualberta.ca/~bowman/src/v3d.js http://www.math.ualberta.ca/~bowman/src/arcball.js http://www.math.ualberta.ca/~bowman/data.js http://www.math.ualberta.ca/~bowman/src/gl.js code/asymptote/bezier-patch.js">
 
-                        <slate xml:id="bezierpatch" surface="canvas" aspect="1:1"/>
+                <figure xml:id="figure-asymptote-workcone">
+                    <caption>Work Cone (Asymptote Interactive 3D Image)</caption>
+                    <image xml:id="asymptote-workcone" width="50%">
+                        <!-- aspect ratio from canvas in produced HTML -->
+                        <asymptote aspect="139:151">
+                        import solids;
+                        size(0,150);
+                        currentprojection=orthographic(0,-30,5);
 
-                        <!-- Holds "script" tags of a very special type (threejs shaders) -->
-                        <!-- So we use zero height, and have HTML contents                -->
-                        <slate surface="html" aspect="1:0">
-                           <script id="shader-fs" type="x-shader/x-fragment" xmlns="http://www.w3.org/1999/xhtml">
-                                precision mediump float;
-                                varying vec4 vColor;
-                                void main(void)
-                                {
-                                    gl_FragColor=vColor;
-                                }
-                            </script>
+                        real r=4;
+                        real h=10;
+                        real s=8;
+                        real x=r*s/h;
 
-                            <script id="shader-vs" type="x-shader/x-vertex" xmlns="http://www.w3.org/1999/xhtml">
-                                attribute vec3 aVertexPosition;
-                                attribute vec4 aVertexColor;
+                        real sr=5;
+                        real xr=r*sr/h;
 
-                                uniform mat4 uMMatrix;
-                                uniform mat4 uPMatrix;
-                                uniform mat4 uVMatrix;
+                        real s1=sr-0.1;
+                        real x1=r*s1/h;
 
-                                varying vec4 vColor;
-                                void main(void)
-                                {
-                                    gl_Position=uPMatrix*uVMatrix*uMMatrix*vec4(aVertexPosition,1.0);
-                                    vColor=aVertexColor;
-                                }
-                            </script>
-                        </slate>
-                    </interactive>
+                        real s2=sr+0.2;
+                        real x2=r*s2/h;
+
+                        render render=render(compression=0,merge=true);
+
+                        path3 p=(0,0,0)--(x,0,s);
+                        revolution a=revolution(p,Z);
+                        draw(surface(a,4),lightblue+opacity(0.5),render);
+
+                        path3 q=(x,0,s)--(r,0,h);
+                        revolution b=revolution(q,Z);
+                        draw(surface(b),white+opacity(0.5),render);
+
+                        draw((-r-1,0,0)--(r+1,0,0));
+                        draw((0,0,0)--(0,0,h+1),dashed);
+
+                        path3 w=(x1,0,s1)--(x2,0,s2)--(0,0,s2);
+                        revolution b=revolution(w,Z);
+                        draw(surface(b),blue+opacity(0.5),render);
+                        draw(circle((0,0,s2),x2));
+                        draw(circle((0,0,s1),x1));
+
+                        draw("$x$",(xr,0,0)--(xr,0,sr),red,Arrow3,PenMargin3);
+                        draw("$r$",(0,0,sr)--(xr,0,sr),N,red);
+                        draw((string) r,(0,0,h)--(r,0,h),N,red);
+                        draw((string) h,(r,0,0)--(r,0,h),red,Arrow3,PenMargin3);
+                        draw((string) s,(-x,0,0)--(-x,0,s),W,red,Arrow3,Bar3,PenMargin3);
+                        </asymptote>
+                    </image>
                 </figure>
             </subsection>
+
             <subsection>
                 <title>Sage Plots</title>
                 <idx><h>Sage plots</h></idx>
