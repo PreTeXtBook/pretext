@@ -22,10 +22,22 @@
 
             <p><c>jing</c> is our recommendation for <acro>RELAX-NG</acro> validation by authors, and works very well.</p>
 
-            <p><c>jing</c> and <c>trang</c> are packaged (separately) for Debian/Ubuntu Linux.  Reports of other similarly easy installations for other operating systems, to be included here, are especially welcome.  We have employed the Debian/Ubuntu versions and also versions built from source (next).</p>
+            <p><c>jing</c> and <c>trang</c> are packaged (separately) for Debian/Ubuntu Linux, see <xref ref="jing-ubuntu"/>.  Reports of other similarly easy installations for other operating systems, to be included here, are especially welcome.  We have employed the Debian/Ubuntu versions and also versions built from source, see <xref ref="jing-from-source"/>.</p>
         </introduction>
 
-        <subsection>
+        <subsection xml:id="jing-ubuntu">
+            <title><c>jing</c> on Ubuntu and CoCalc</title>
+
+            <p><url href="https://cocalc.com/">CoCalc</url><fn><c>cocalc.com</c></fn> runs Ubuntu when you create a terminal window.  The necessary Ubuntu Linux (Debian) package is also named <c>jing</c> and is installed as part of the CoCalc setup.  So on Ubuntu, you need to install this package, and on CoCalc you will need to copy over the <c>schema/pretext.rng</c> version of the schema.  If you have a CoCalc subscription, it would be even better if you made a clone of the PreTeXt repository, so it would be trivial to update and always have the latest version of the schema in your CoCalc account.</p>
+
+            <p>Now it is straightforward to execute <c>jing</c>:<cd>
+                <cline>jing /path/to/pretext.rng aota.xml</cline>
+            </cd></p>
+
+            <p>Presumably something similar to the above will work for any Linux distribution that has packages for <c>jing</c>.</p>
+        </subsection>
+
+        <subsection xml:id="jing-from-source">
             <title>Install <c>jing</c> from Source</title>
 
             <p>If you cannot install this tool easily as part of your system, you can still follow the notes below to build from source.  Many authors have done this successfully.  Installation notes for <c>jing</c> and <c>trang</c> follow.
