@@ -42,9 +42,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>size=minimal, attach title to upper, after title={\space}, fonttitle=\bfseries, coltitle=black, colback=green</xsl:text>
 </xsl:template>
 
-<!-- "objectives", "outcomes" -->
-<!-- Default tcb, identically -->
-<xsl:template match="objectives|outcomes" mode="tcb-style">
+<!-- "objectives", "outcomes",etc. -->
+<!-- Default tcb, identically      -->
+<xsl:template match="&GOAL-LIKE;" mode="tcb-style">
     <xsl:text/>
 </xsl:template>
 

@@ -173,7 +173,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- NB: Use toc from above for both headings and navigation sidebar-->
     <localization string-id='annotations'><xsl:text>Annotations</xsl:text></localization> <!--does not get printed -->
     <localization string-id='feedback'><xsl:text>Commentaires</xsl:text></localization>  <!--e.g., in case there is a link for feedback.  Will appear in HTML.-->
-    <localization string-id='authored'><xsl:text>Rédigé</xsl:text></localization> <!--e.g., authored in MBX.  Will appear in HTML.-->
+    <localization string-id='authored'><xsl:text>Rédigé avec PreTeXt</xsl:text></localization> <!--e.g., authored in MBX.  Will appear in HTML.-->
     <!-- Parts of memos and letters -->
     <localization string-id='to'><xsl:text>À</xsl:text></localization>
     <localization string-id='from'><xsl:text>De</xsl:text></localization>

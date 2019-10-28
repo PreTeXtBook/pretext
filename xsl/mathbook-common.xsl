@@ -5334,9 +5334,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Defined terms, in a "glossary", are known by their title  -->
 <xsl:template match="defined-term" mode="serial-number"/>
 
-<!-- Objectives and outcomes are one-per-subdivision, -->
+<!-- GOAL-LIKE are one-per-subdivision,               -->
 <!-- and so get their serial number from their parent -->
-<xsl:template match="objectives|outcomes" mode="serial-number">
+<xsl:template match="&GOAL-LIKE;" mode="serial-number">
     <xsl:apply-templates select="parent::*" mode="serial-number" />
 </xsl:template>
 
@@ -5701,10 +5701,10 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:apply-templates select="ancestor::*[not(self::task)][1]" mode="number" />
 </xsl:template>
 
-<!-- Structure Numbers: Objectives -->
+<!-- Structure Numbers: GOAL-LIKE -->
 <!-- Objectives are one-per-subdivision, and so   -->
 <!-- get their structure number from their parent -->
-<xsl:template match="objectives|outcomes" mode="structure-number">
+<xsl:template match="&GOAL-LIKE;" mode="structure-number">
     <xsl:apply-templates select="parent::*" mode="structure-number" />
 </xsl:template>
 

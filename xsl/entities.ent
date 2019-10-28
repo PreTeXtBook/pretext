@@ -96,6 +96,11 @@
 <!ENTITY PROJECT-LIKE "project|activity|exploration|investigation">
 <!ENTITY PROJECT-FILTER "self::project or self::activity or self::exploration or self::investigation">
 
+<!-- blocks with meta-information in lists -->
+<!-- TODO: add in "standards", "goals"     -->
+<!ENTITY GOAL-LIKE "objectives|outcomes">
+<!ENTITY GOAL-FILTER "self::objectives or self::outcomes">
+
 <!-- displays with captions -->
 <!ENTITY FIGURE-LIKE "figure|table|listing|list">
 <!ENTITY FIGURE-FILTER "self::figure or self::table or self::listing or self::list">
