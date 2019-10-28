@@ -205,7 +205,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- NB: Use toc from above for both headings and navigation sidebar-->
     <localization string-id='annotations'><xsl:text>Annotations</xsl:text></localization>
     <localization string-id='feedback'><xsl:text>Feedback</xsl:text></localization>
-    <localization string-id='authored'><xsl:text>Authored in</xsl:text></localization>
+    <!-- This phrase should suggest that PreTeXt is the source -->
+    <!-- language that makes a particular output possible      -->
+    <localization string-id='authored'><xsl:text>Authored in PreTeXt</xsl:text></localization>
     <!-- Parts of memos and letters -->
     <localization string-id='to'><xsl:text>To</xsl:text></localization>
     <localization string-id='from'><xsl:text>From</xsl:text></localization>

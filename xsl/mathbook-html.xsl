@@ -9707,8 +9707,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:call-template name="type-name">
             <xsl:with-param name="string-id" select="'authored'" />
         </xsl:call-template>
-        <xsl:text> </xsl:text>
-        <xsl:text>PreTeXt</xsl:text>
     </a>
 </xsl:template>
 
