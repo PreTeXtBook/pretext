@@ -10,13 +10,29 @@
 <appendix xml:id="windows-subsystem-linux">
     <title>Windows Subsystem for Linux</title>
 
-    <p>With Windows 10 you can install the <term>Windows Subsystem for Linux</term> (<init>WSL</init>).  This is basically Ubuntu Linux (one of the most popular versions of Linux) integrated into Windows 10 in a way that command-line Linux programs can be executed easily.  News and announcements can be fouund at <url href="https://msdn.microsoft.com/commandline/wsl/about" /> (<c>msdn.microsoft.com/commandline/wsl/about</c>).  Michael Doob reports on 2017-06-02 that this works quite well for the programs necessary to author with <pretext />, and provides the following help.</p>
+    <p>
+    The <term>Windows Subsystem for Linux</term> (<init>WSL</init>)
+    may be installed on computers running Windows 10.  
+    Several distributions of Linux are available.
+    We will use  Ubuntu as an example; working with other distributions is quite similar.
+    The latest news and announcements about <init>WSL</init> may be found at
+    <url href="https://msdn.microsoft.com/commandline/wsl/about" />.
+    </p>
+
+    <aside>
+	<title> What is my OS build?</title>
+	<p>
+	An easy way to find your OS Build:
+	Hold down the Windows key and R key simultaneously.
+	Enter <c>winver.exe</c> in the resulting new window.
+	The next window that opens will have the OS Build in small type near the top.
+        </p>
+    </aside>
 
     <paragraphs>
         <title>Installing WSL</title>
         <p>
-        If you have the <q>Anniversary Edition</q> of Windows 10
-        (later than August 2016),
+	    If you have Windows 10 with OS Build greater than 16215 (August 2016),
         then installing <init>WSL</init> is not difficult. Just follow the
         (reasonably straightforward) instructions given by Microsoft at the address
         <url href="https://msdn.microsoft.com/en-us/commandline/wsl/install_guide" />.
@@ -68,7 +84,7 @@
         </p>
         <p>
         Run <c>sudo apt-get update</c> followed
-        by <c>sudo apt-get upgrade</c> with a new system to bring it
+        by <c>sudo apt-get upgrade</c> with a newly system to bring it
         up to date. It is a good idea to repeat this frequently to have
         the latest software on your computer.
         </p>
@@ -78,20 +94,14 @@
         <title>Installing software</title>
         <p>
         The default configuration of <init>WSL</init> does not have the software needed
-        for creating documents with <pretext/>. There are a few commands to be run
-        before you can get started.
-        <ul>
-        <li><p>
-        The program <term>git</term> is used to download the <pretext/> software
-        onto your local computer. It is installed with the command
-        <c>sudo apt-get install git</c>.
-        </p></li>
-        <li><p>
+	for creating documents with <pretext/>. 
+        </p>
+        <p>
         The program <term>xsltproc</term> is used to create your readable documents.
         It is installed with the command <c>sudo apt-get install xsltproc</c>.
-        </p></li>
-        </ul>
-        After these are installed, you are ready to set up <pretext/>.
+        </p>
+	<p>
+	You are now ready to set up <pretext/>.
         </p>
     </paragraphs>
 
@@ -137,11 +147,11 @@
             the following text:
             <cd>
             &lt;?xml version="1.0" encoding="UTF-8" ?&gt;
-            &lt;mathbook&gt;
+            &lt;pretext&gt;
                 &lt;article xml:id="hw"&gt;
                 &lt;p&gt;Hello, World!&lt;/p&gt;
                 &lt;/article&gt;
-            &lt;/mathbook&gt;
+            &lt;/pretext&gt;
             </cd></p>
         </li>
         <li><p>
@@ -150,14 +160,8 @@
             Upon completion, your should have a file called <c>hw.html</c>.
         </p></li>
         <li><p>
-            Now the tricky part: you want to view the <c>hw.html</c> file in a browser,
-            but the usual Windows programs cannot see the files created within
-            <init>WSL</init>. So we have to copy them to a place where they are
-            visible. Fortunately, this is pretty easy to do. To put <c>hw.html</c> on
-            your desktop, use the command
-            <c>cp hw.html /mnt/c/Users/username/Desktop</c>
-            (note that <q>username</q> must be replaced by your Windows user name).
-            Once the file is on the desktop, a double click will open it in a browser.
+            You now want to view the <c>hw.html</c> file in a browser,
+	    This is done with the command <c>explorer.exe hw.html</c>.
         </p></li>
         </ol>
         The <c>edit-xsltproc-view</c> cycle just given may seem daunting at first blush.
