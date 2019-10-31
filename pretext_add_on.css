@@ -1928,6 +1928,21 @@ a.mjx-svg-href  {
 .pretext-content .exercisegroup > .conclusion {
     margin-left: 0;
 }
+.pretext-content .exercisegroup > .introduction {
+    margin-top: 1.25em;
+}
+.pretext-content .exercisegroup > .introduction > p:first-child::before {
+    content: '\25a0';
+   // font-size: 70%;
+    color: #06a;
+    position: relative;
+    top: -1px;
+    right: 3px;
+}
+
+.pretext-content .exercisegroup > .introduction > p:first-child {
+    margin-top: 0;
+}
 
 .pretext-content .exercisegroup article + .hidden-knowl-wrapper {
     margin-left: 4em;
@@ -2544,12 +2559,7 @@ sup [data-knowl]:hover {
     margin-top: 0.5em;
 }
 
-/* sample article, 11.3 More Exercises */
-.pretext-content .exercisegroup-exercises.cols2 > article.exercise-like,
-.pretext-content .exercisegroup-exercises.cols3 > article.exercise-like,
-.pretext-content .exercisegroup-exercises.cols4 > article.exercise-like,
-.pretext-content .exercisegroup-exercises.cols5 > article.exercise-like,
-.pretext-content .exercisegroup-exercises.cols6 > article.exercise-like {
+.pretext-content .exercisegroup-exercises > article.exercise-like {
     margin-top: 1em;
 }
 
