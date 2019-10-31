@@ -35,6 +35,9 @@
             </cd></p>
 
             <p>Presumably something similar to the above will work for any Linux distribution that has packages for <c>jing</c>.</p>
+
+            <!-- warning about using single source also in "from source" section -->
+            <p>Note that if you have modularized your source files (see <xref ref="processing-modular"/>), you only need to provide the master file as an argument to <c>jing</c>, just like when you use <c>xsltproc</c>.  In particular, the subsidiary files are certain to fail validation since they do not have a <tag>pretext</tag> root element.</p>
         </subsection>
 
         <subsection xml:id="jing-from-source">
@@ -91,6 +94,7 @@
 
             <p>Now you are ready to use <c>jing</c> to validate a <pretext /> document.  Note that the commands below require the <init>XML</init> version of the schema, which is the non-compact version.  Also, these are the commands if you build <c>jing-trang</c> from source.  If you install a system-supplied version, then consult the <c>man</c> pages, or similar, for syntax which is likely much easier and direct.</p>
 
+            <!-- warning about using single source also in "ubuntu/cocalc" version -->
             <p>For a document contained in a single file, run (with suitable working directory and path prefixes).<cd>
                 <cline>java -jar jing-trang/build/jing.jar pretext.rng my-book.xml</cline>
             </cd>For a document modularized across several files using the <c>xinclude</c> mechanism, issue as one single command line (again, with suitable working directory and path prefixes).  This presumes you have moved or symlinked the <c>lib/xercesImpl.jar</c> file into the <c>build</c> directory.  Do not leave any spaces around the equals-sign, we have split that line there for readability, so the <c>-D</c> option should not have any spaces in its argument.<cd>
