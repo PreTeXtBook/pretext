@@ -1932,12 +1932,12 @@ a.mjx-svg-href  {
     margin-top: 1.25em;
 }
 .pretext-content .exercisegroup > .introduction > p:first-child::before {
-    content: '\25a0';
+    content: '\25a0\2009';
    // font-size: 70%;
     color: #06a;
     position: relative;
     top: -1px;
-    right: 3px;
+    right: 1px;
 }
 
 .pretext-content .exercisegroup > .introduction > p:first-child {
