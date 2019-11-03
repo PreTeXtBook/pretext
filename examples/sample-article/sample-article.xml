@@ -3309,10 +3309,10 @@ the xsltproc executable.
 
                 <p><ol>
                     <li>First.</li>
-                    <li>Second.</li>
+                    <li>Second<fn>Footnote in an unstructured list item</fn>.</li>
                     <li>Third.</li>
                 </ol><ul>
-                    <li><p>Red</p></li>
+                    <li><p>Red<fn>One of our favorite colors</fn></p></li>
                     <li><p>Green</p></li>
                     <li><p>Yellow</p></li>
                     <li><p>Purple</p></li>
@@ -6980,7 +6980,7 @@ the xsltproc executable.
                             </introduction>
                             <ul>
                                 <li>One fish</li>
-                                <li>Two fish</li>
+                                <li>Two fish<fn>Not fishes</fn></li>
                                 <li>Red fish</li>
                                 <li>Blue fish</li>
                             </ul>
@@ -6989,7 +6989,7 @@ the xsltproc executable.
                             <title>Color Shades</title>
                             <idx><h>colors</h><h>shades</h></idx>
                             <ol>
-                                <li><p>Blue<ol>
+                                <li><p>Blue<fn>in many shades</fn><ol>
                                     <li>Light</li>
                                     <li>Navy</li>
                                     <li>Royal</li>
@@ -7016,7 +7016,7 @@ the xsltproc executable.
                             <p>Dr. Seuss again.</p>
                         </introduction>
                         <ul>
-                            <li>One fish</li>
+                            <li>One fish<fn>No more fishes</fn></li>
                             <li>Two fish</li>
                             <li>Red fish</li>
                             <li>Blue fish</li>
@@ -7031,7 +7031,7 @@ the xsltproc executable.
                                 <li>Navy</li>
                                 <li>Royal</li>
                             </ol></p></li>
-                            <li><p>Red<ol>
+                            <li><p>Red<fn>a really nice color</fn><ol>
                                 <li>Maroon</li>
                                 <li>Pink</li>
                                 <li>Shocking</li>
