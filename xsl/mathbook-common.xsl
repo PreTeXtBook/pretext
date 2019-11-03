@@ -4045,9 +4045,17 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 
 <xsl:template match="caption"/>
 
+<!-- A caption can have a footnote, thus HTML will create    -->
+<!-- a knowl, and we need to distinguish between original    -->
+<!-- and duplicate scenarios.  For other conversions, the    -->
+<!-- "b-original" parameter should just be silently ignored. -->
 <xsl:template match="figure|listing" mode="caption-full">
+    <xsl:param name="b-original" select="true()"/>
+
     <xsl:if test="caption">
-        <xsl:apply-templates select="caption/*|caption/text()"/>
+        <xsl:apply-templates select="caption/*|caption/text()">
+            <xsl:with-param name="b-original" select="$b-original"/>
+        </xsl:apply-templates>
     </xsl:if>
 </xsl:template>
 

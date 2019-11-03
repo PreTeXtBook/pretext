@@ -2130,6 +2130,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="figure|listing|table|list" mode="figure-caption">
+    <xsl:param name="b-original"/>
+
     <xsl:variable name="b-subcaptioned" select="parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure"/>
     <figcaption>
         <!-- A normal caption, or a subcaption -->
@@ -2152,8 +2154,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:choose>
         <xsl:text> </xsl:text>
         <xsl:choose>
+            <!-- a caption can have a footnote, hence a -->
+            <!-- knowl, hence original or duplicate     -->
             <xsl:when test="self::figure or self::listing">
-                <xsl:apply-templates select="." mode="caption-full"/>
+                <xsl:apply-templates select="." mode="caption-full">
+                    <xsl:with-param name="b-original" select="$b-original"/>
+                </xsl:apply-templates>
             </xsl:when>
             <xsl:when test="self::table or self::list">
                 <xsl:apply-templates select="." mode="title-full"/>
@@ -3019,12 +3025,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="*">
                 <xsl:with-param name="b-original" select="$b-original" />
             </xsl:apply-templates>
-            <xsl:apply-templates select="." mode="figure-caption"/>
+            <xsl:apply-templates select="." mode="figure-caption">
+                <xsl:with-param name="b-original" select="$b-original"/>
+            </xsl:apply-templates>
         </xsl:when>
         <!-- "title" at the top, subcaption at the bottom -->
         <xsl:when test="self::list">
             <xsl:if test="not($b-subcaptioned)">
-                <xsl:apply-templates select="." mode="figure-caption"/>
+                <xsl:apply-templates select="." mode="figure-caption">
+                    <xsl:with-param name="b-original" select="$b-original"/>
+                </xsl:apply-templates>
             </xsl:if>
             <div class="named-list-content">
                 <xsl:apply-templates select="introduction|ol|ul|dl|conclusion">
@@ -3032,7 +3042,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:apply-templates>
             </div>
             <xsl:if test="$b-subcaptioned">
-                <xsl:apply-templates select="." mode="figure-caption"/>
+                <xsl:apply-templates select="." mode="figure-caption">
+                    <xsl:with-param name="b-original" select="$b-original"/>
+                </xsl:apply-templates>
             </xsl:if>
         </xsl:when>
     </xsl:choose>
