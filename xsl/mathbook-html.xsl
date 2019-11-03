@@ -2503,9 +2503,43 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
     <!-- Second: the content of the knowl, to be revealed/parsed later -->
-    <xsl:apply-templates select="." mode="hidden-knowl-content">
+    <!-- Exception: born-hidden content is always in a "div", so an    -->
+    <!-- intra-paragraph knowl (e.g. a footnote) needs to be placed    -->
+    <!-- outside of HTML structures (e.g. a "p"), so we skip it here.  -->
+    <!-- But see "pop-footnote-text" modal template.                   -->
+    <xsl:apply-templates select="self::*[not(self::fn)]" mode="hidden-knowl-content">
         <xsl:with-param name="b-original" select="$b-original" />
     </xsl:apply-templates>
+</xsl:template>
+
+<!-- We need to relocate the hidden knowls for footnotes, since they live  -->
+<!-- in a "div" for the knowl mechanism, but are typically placed inside   -->
+<!-- HTML elements that do not allow div's as children (e.g. "p").  In     -->
+<!-- order to not pop prematurely, we look to ancestors that may also need -->
+<!-- this treatment.  So these elements are *any* element that could have  -->
+<!-- an "fn" buried down at some (arbitrary) level.                        -->
+<!--                                                                       -->
+<!-- Every element match'ed here should have a call to pop the footnote    -->
+<!-- text, *outside* of the creation of its outermost element, typically   -->
+<!-- afterwards.                                                           -->
+<!--                                                                       -->
+<!-- Footnote text only needs to be relocated when the surrounding element -->
+<!-- is the original version, for duplicates, a born-hidden knowl within   -->
+<!-- is impersonated with knowl content located in an external file.  So   -->
+<!-- this template is a no-op for duplicates.                              -->
+
+<xsl:template match="p|figure|listing|ol|ul|dl" mode="pop-footnote-text">
+    <xsl:param name="b-original"/>
+
+    <xsl:if test="$b-original">
+        <xsl:if test="count(ancestor::*[self::p|self::figure|self::listing|self::ol|self::ul|self::dl]) = 0">
+            <xsl:for-each select=".//fn">
+                <xsl:apply-templates select="."  mode="hidden-knowl-content">
+                    <xsl:with-param name="b-original" select="$b-original"/>
+                </xsl:apply-templates>
+            </xsl:for-each>
+        </xsl:if>
+    </xsl:if>
 </xsl:template>
 
 <!-- An external file knowl, impersonating a hidden knowl -->
@@ -2573,36 +2607,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- The content portion of a hidden knowl -->
 <!-- *Always* as div.hidden-content"       -->
-<!-- TODO: exception is a footnote until we  -->
-<!-- move out of the interior of a paragraph -->
 <xsl:template match="*" mode="hidden-knowl-content">
     <xsl:param name="b-original" select="true()" />
-    <xsl:variable name="hidden-content-type">
-        <xsl:choose>
-            <xsl:when test="self::fn">
-                <xsl:text>span</xsl:text>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>div</xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:element name="{$hidden-content-type}">
+
+    <!-- .hidden-content is CSS for display: none           -->
+    <!-- Stop MathJax from processing contents on page load -->
+    <div class="hidden-content tex2jax_ignore">
         <!-- different id, for use by the knowl mechanism -->
         <xsl:attribute name="id">
             <xsl:apply-templates select="." mode="hidden-knowl-id" />
-        </xsl:attribute>
-        <!-- .hidden-content is CSS for display: none           -->
-        <!-- Stop MathJax from processing contents on page load -->
-        <xsl:attribute name="class">
-            <xsl:text>hidden-content tex2jax_ignore</xsl:text>
         </xsl:attribute>
         <!-- should the b-original flag always be true() here -->
         <xsl:apply-templates select="." mode="body">
             <xsl:with-param name="block-type" select="'embed'" />
             <xsl:with-param name="b-original" select="$b-original" />
         </xsl:apply-templates>
-    </xsl:element>
+    </div>
 </xsl:template>
 
 <!-- The link for a duplicate hidden knowl -->
@@ -4548,6 +4568,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:with-param name="block-type" select="$block-type" />
             </xsl:apply-templates>
         </xsl:element>
+        <!-- collect elements which can have footnotes within -->
+        <xsl:apply-templates select="self::figure|self::listing" mode="pop-footnote-text">
+            <xsl:with-param name="b-original" select="$b-original"/>
+        </xsl:apply-templates>
     </xsl:if>
     <!-- Extraordinary: proofs are not displayed within their    -->
     <!-- parent theorem, but as a sibling, following.  It might  -->
@@ -4618,6 +4642,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="b-original" select="$b-original" />
         </xsl:apply-templates>
     </p>
+    <!-- Single HTML paragraphs is done, place footnote content(s) here -->
+    <xsl:apply-templates select="." mode="pop-footnote-text">
+        <xsl:with-param name="b-original" select="$b-original"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- Paragraphs, with displays within                   -->
@@ -4707,6 +4735,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:for-each>
+    <!-- All HTML paragraphs are done, place footnote content(s) here -->
+    <xsl:apply-templates select="." mode="pop-footnote-text">
+        <xsl:with-param name="b-original" select="$b-original"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- We drop an empty "leading paragraph" above.  Whatever     -->
@@ -5167,6 +5199,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="b-original" select="$b-original" />
         </xsl:apply-templates>
     </xsl:element>
+    <xsl:apply-templates select="." mode="pop-footnote-text">
+        <xsl:with-param name="b-original" select="$b-original"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- We let CSS react to narrow titles for dl -->
@@ -5193,6 +5228,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="b-original" select="$b-original" />
         </xsl:apply-templates>
     </dl>
+    <xsl:apply-templates select="." mode="pop-footnote-text">
+        <xsl:with-param name="b-original" select="$b-original"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- ###### -->
