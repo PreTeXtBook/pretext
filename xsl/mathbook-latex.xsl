@@ -595,7 +595,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% LuaTeX is not explicitly supported, but we do accept additions from knowledgeable users&#xa;</xsl:text>
     <xsl:text>%% The conditional below provides  pdflatex  specific configuration last&#xa;</xsl:text>
     <xsl:text>%% The following provides engine-specific capabilities&#xa;</xsl:text>
-    <xsl:text>%% Generally, xelatex is necessary non-Western fonts&#xa;</xsl:text>
+    <xsl:text>%% Generally, xelatex is necessary for non-Western fonts&#xa;</xsl:text>
     <xsl:text>\ifthenelse{\boolean{xetex} \or \boolean{luatex}}{%&#xa;</xsl:text>
     <xsl:text>%% begin: xelatex and lualatex-specific configuration&#xa;</xsl:text>
     <xsl:text>\ifxetex\usepackage{xltxtra}\fi&#xa;</xsl:text>
@@ -604,9 +604,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% fontspec package provides extensive control of system fonts,&#xa;</xsl:text>
     <xsl:text>%% meaning *.otf (OpenType), and apparently *.ttf (TrueType)&#xa;</xsl:text>
     <xsl:text>%% that live *outside* your TeX/MF tree, and are controlled by your *system*&#xa;</xsl:text>
-    <xsl:text>%% fontspec will make Latin Modern (lmodern) the default font&#xa;</xsl:text>
-    <!-- http://tex.stackexchange.com/questions/115321/how-to-optimize-latin-modern-font-with-xelatex -->
+    <xsl:text>%% (it is possible that a TeX distribution will place fonts in a system location)&#xa;</xsl:text>
     <xsl:text>\usepackage{fontspec}&#xa;</xsl:text>
+    <!-- http://tex.stackexchange.com/questions/115321/how-to-optimize-latin-modern-font-with-xelatex -->
+    <xsl:text>%% fontspec will make Latin Modern (lmodern) the default font&#xa;</xsl:text>
+    <xsl:text>%% but we define various font family commands using a vanilla version,&#xa;</xsl:text>
+    <xsl:text>%% with the intention of letting a style override these choices&#xa;</xsl:text>
+    <xsl:text>%% \setmainfont can be re-issued, and \renewfontfamily can redefine others&#xa;</xsl:text>
+    <xsl:text>\setmainfont{Latin Modern Roman}&#xa;</xsl:text>
+    <xsl:text>\newfontfamily{\divisionfont}{Latin Modern Roman}&#xa;</xsl:text>
+    <xsl:text>\newfontfamily{\tabularfont}{Latin Modern Roman}&#xa;</xsl:text>
+    <xsl:text>%% begin: font information supplied by "font-xelatex-style" template&#xa;</xsl:text>
+    <xsl:call-template name="font-xelatex-style"/>
+    <xsl:text>%% end: font information supplied by "font-xelatex-style" template&#xa;</xsl:text>
     <xsl:if test="$b-has-icon">
         <xsl:text>%% Icons being used, so xelatex needs a system font&#xa;</xsl:text>
         <xsl:text>%% This can only be determined at compile-time&#xa;</xsl:text>
@@ -705,7 +715,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\usepackage[utf8]{inputenc}&#xa;</xsl:text>
     <xsl:text>%% PreTeXt will create a UTF-8 encoded file&#xa;</xsl:text>
     <xsl:text>%% begin: font setup and configuration for use with pdflatex&#xa;</xsl:text>
+    <xsl:text>%% Portions of a document, are, or may, be affected by font-changing commands&#xa;</xsl:text>
+    <xsl:text>%% These are more robust when using  xelatex  but may be employed with  pdflatex&#xa;</xsl:text>
+    <xsl:text>%% The following definitons are meant to be re-defined in a style with \renewcommand&#xa;</xsl:text>
+    <xsl:text>\newcommand{\divisionfont}{\relax}&#xa;</xsl:text>
+    <xsl:text>\newcommand{\tabularfont}{\relax}&#xa;</xsl:text>
+    <xsl:text>%% begin: font information supplied by "font-pdflatex-style" template&#xa;</xsl:text>
     <xsl:call-template name="font-pdflatex-style"/>
+    <xsl:text>%% begin: font information supplied by "font-pdflatex-style" template&#xa;</xsl:text>
     <xsl:text>%% end: font setup and configuration for use with pdflatex&#xa;</xsl:text>
     <xsl:text>%% end: pdflatex-specific configuration&#xa;</xsl:text>
     <xsl:text>}&#xa;</xsl:text>
@@ -3174,10 +3191,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A multiline title should be fine in a "display" shape -->
 <xsl:template name="titlesec-chapter-style">
     <xsl:text>\titleformat{\chapter}[display]&#xa;</xsl:text>
-    <xsl:text>{\normalfont\huge\bfseries}{\divisionnameptx\space\thechapter}{20pt}{\Huge#1}&#xa;</xsl:text>
+    <xsl:text>{\divisionfont\huge\bfseries}{\divisionnameptx\space\thechapter}{20pt}{\Huge#1}&#xa;</xsl:text>
     <xsl:text>[{\Large\authorsptx}]&#xa;</xsl:text>
     <xsl:text>\titleformat{name=\chapter,numberless}[display]&#xa;</xsl:text>
-    <xsl:text>{\normalfont\huge\bfseries}{}{0pt}{#1}&#xa;</xsl:text>
+    <xsl:text>{\divisionfont\huge\bfseries}{}{0pt}{#1}&#xa;</xsl:text>
     <xsl:text>[{\Large\authorsptx}]&#xa;</xsl:text>
     <xsl:text>\titlespacing*{\chapter}{0pt}{50pt}{40pt}&#xa;</xsl:text>
 </xsl:template>
@@ -3186,30 +3203,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- section-level items in the back matter         -->
 <xsl:template name="titlesec-section-style">
     <xsl:text>\titleformat{\section}[hang]&#xa;</xsl:text>
-    <xsl:text>{\normalfont\Large\bfseries}{\thesection}{1ex}{#1}&#xa;</xsl:text>
+    <xsl:text>{\divisionfont\Large\bfseries}{\thesection}{1ex}{#1}&#xa;</xsl:text>
     <xsl:text>[{\large\authorsptx}]&#xa;</xsl:text>
     <xsl:text>\titleformat{name=\section,numberless}[block]&#xa;</xsl:text>
-    <xsl:text>{\normalfont\Large\bfseries}{}{0pt}{#1}&#xa;</xsl:text>
+    <xsl:text>{\divisionfont\Large\bfseries}{}{0pt}{#1}&#xa;</xsl:text>
     <xsl:text>[{\large\authorsptx}]&#xa;</xsl:text>
     <xsl:text>\titlespacing*{\section}{0pt}{3.5ex plus 1ex minus .2ex}{2.3ex plus .2ex}&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template name="titlesec-subsection-style">
     <xsl:text>\titleformat{\subsection}[hang]&#xa;</xsl:text>
-    <xsl:text>{\normalfont\large\bfseries}{\thesubsection}{1ex}{#1}&#xa;</xsl:text>
+    <xsl:text>{\divisionfont\large\bfseries}{\thesubsection}{1ex}{#1}&#xa;</xsl:text>
     <xsl:text>[{\normalsize\authorsptx}]&#xa;</xsl:text>
     <xsl:text>\titleformat{name=\subsection,numberless}[block]&#xa;</xsl:text>
-    <xsl:text>{\normalfont\large\bfseries}{}{0pt}{#1}&#xa;</xsl:text>
+    <xsl:text>{\divisionfont\large\bfseries}{}{0pt}{#1}&#xa;</xsl:text>
     <xsl:text>[{\normalsize\authorsptx}]&#xa;</xsl:text>
     <xsl:text>\titlespacing*{\subsection}{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}&#xa;</xsl:text>
 </xsl:template>
 
 <xsl:template name="titlesec-subsubsection-style">
     <xsl:text>\titleformat{\subsubsection}[hang]&#xa;</xsl:text>
-    <xsl:text>{\normalfont\normalsize\bfseries}{\thesubsubsection}{1em}{#1}&#xa;</xsl:text>
+    <xsl:text>{\divisionfont\normalsize\bfseries}{\thesubsubsection}{1em}{#1}&#xa;</xsl:text>
     <xsl:text>[{\small\authorsptx}]&#xa;</xsl:text>
     <xsl:text>\titleformat{name=\subsubsection,numberless}[block]&#xa;</xsl:text>
-    <xsl:text>{\normalfont\normalsize\bfseries}{}{0pt}{#1}&#xa;</xsl:text>
+    <xsl:text>{\divisionfont\normalsize\bfseries}{}{0pt}{#1}&#xa;</xsl:text>
     <xsl:text>[{\normalsize\authorsptx}]&#xa;</xsl:text>
     <xsl:text>\titlespacing*{\subsubsection}{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}&#xa;</xsl:text>
 </xsl:template>
@@ -3219,10 +3236,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- divisions (e.g. "exercises") contained within a PTX subsubsection.   -->
 <xsl:template name="titlesec-paragraph-style">
     <xsl:text>\titleformat{\paragraph}[hang]&#xa;</xsl:text>
-    <xsl:text>{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{#1}&#xa;</xsl:text>
+    <xsl:text>{\divisionfont\normalsize\bfseries}{\theparagraph}{1em}{#1}&#xa;</xsl:text>
     <xsl:text>[{\small\authorsptx}]&#xa;</xsl:text>
     <xsl:text>\titleformat{name=\paragraph,numberless}[block]&#xa;</xsl:text>
-    <xsl:text>{\normalfont\normalsize\bfseries}{}{0pt}{#1}&#xa;</xsl:text>
+    <xsl:text>{\divisionfont\normalsize\bfseries}{}{0pt}{#1}&#xa;</xsl:text>
     <xsl:text>[{\normalsize\authorsptx}]&#xa;</xsl:text>
     <xsl:text>\titlespacing*{\paragraph}{0pt}{3.25ex plus 1ex minus .2ex}{1.5em}&#xa;</xsl:text>
 </xsl:template>
@@ -3285,9 +3302,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--   "Missing character:" for further clues.                        -->
 
 <xsl:template name="font-pdflatex-style">
+    <!-- This is the default Latin Modern font/package -->
     <xsl:text>\usepackage{lmodern}&#xa;</xsl:text>
     <xsl:text>\usepackage[T1]{fontenc}&#xa;</xsl:text>
 </xsl:template>
+
+<xsl:template name="font-xelatex-style">
+    <!-- <xsl:text>\setmainfont{Latin Modern Roman}[Numbers=OldStyle]&#xa;</xsl:text> -->
+    <!-- <xsl:text>\newfontfamily{\divisionfont}{Latin Modern Roman}[Numbers=Lining]&#xa;</xsl:text> -->
+    <!-- <xsl:text>\newfontfamily{\tabularfont}{Latin Modern Roman}[Numbers={Monospaced,Lining}]&#xa;</xsl:text> -->
+</xsl:template>
+
 
 <!-- ################## -->
 <!-- End: LaTeX Styling -->
@@ -8719,6 +8744,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Build latex column specification                         -->
     <!--   vertical borders (left side, right side, three widths) -->
     <!--   horizontal alignment (left, center, right)             -->
+    <xsl:text>{\tabularfont%&#xa;</xsl:text>
     <xsl:text>\begin{tabular}{</xsl:text>
     <!-- start with left vertical border -->
     <xsl:call-template name="vrule-specification">
@@ -8816,7 +8842,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:apply-templates>
     <!-- mandatory finish, exclusive of any final row specifications -->
     <xsl:text>\end{tabular}&#xa;</xsl:text>
-    <!-- finish grouping for centering in sidebyside panel -->
+    <!-- finish grouping for tabular font -->
+    <xsl:text>}%&#xa;</xsl:text>
     <xsl:if test="ancestor::sidebyside">
         <xsl:text>\par}&#xa;</xsl:text>
     </xsl:if>
