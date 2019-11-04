@@ -2586,6 +2586,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- id-ref class means content is in div referenced by id -->
         <xsl:attribute name="class">
             <xsl:text>id-ref</xsl:text>
+            <!-- Exceptional: for styling purposes -->
+            <xsl:if test="self::fn">
+                <xsl:text> fn-knowl</xsl:text>
+            </xsl:if>
         </xsl:attribute>
         <!-- and the id via a template for consistency -->
         <xsl:attribute name="data-refid">
@@ -2628,6 +2632,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The link for a duplicate hidden knowl -->
 <xsl:template match="*" mode="duplicate-hidden-knowl-link">
     <xsl:element name="a">
+        <!-- Exceptional: for styling purposes -->
+        <xsl:if test="self::fn">
+            <xsl:attribute name="class">
+                <xsl:text>fn-knowl</xsl:text>
+            </xsl:attribute>
+        </xsl:if>
         <xsl:attribute name="data-knowl">
             <xsl:apply-templates select="." mode="hidden-knowl-filename" />
         </xsl:attribute>
@@ -4241,10 +4251,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Overall enclosing element -->
-<!-- TODO: this is wrong, but necessary while the content of      -->
-<!-- the footnote is placed within the paragraph at its location. -->
 <xsl:template match="fn" mode="body-element">
-    <xsl:text>span</xsl:text>
+    <xsl:text>div</xsl:text>
 </xsl:template>
 
 <!-- And its CSS class -->
