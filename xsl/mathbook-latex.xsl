@@ -613,6 +613,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% \setmainfont can be re-issued, and \renewfontfamily can redefine others&#xa;</xsl:text>
     <xsl:text>\setmainfont{Latin Modern Roman}&#xa;</xsl:text>
     <xsl:text>\newfontfamily{\divisionfont}{Latin Modern Roman}&#xa;</xsl:text>
+    <xsl:text>\newfontfamily{\contentsfont}{Latin Modern Roman}&#xa;</xsl:text>
     <xsl:text>\newfontfamily{\tabularfont}{Latin Modern Roman}&#xa;</xsl:text>
     <xsl:text>%% begin: font information supplied by "font-xelatex-style" template&#xa;</xsl:text>
     <xsl:call-template name="font-xelatex-style"/>
@@ -719,6 +720,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% These are more robust when using  xelatex  but may be employed with  pdflatex&#xa;</xsl:text>
     <xsl:text>%% The following definitons are meant to be re-defined in a style with \renewcommand&#xa;</xsl:text>
     <xsl:text>\newcommand{\divisionfont}{\relax}&#xa;</xsl:text>
+    <xsl:text>\newcommand{\contentsfont}{\relax}&#xa;</xsl:text>
     <xsl:text>\newcommand{\tabularfont}{\relax}&#xa;</xsl:text>
     <xsl:text>%% begin: font information supplied by "font-pdflatex-style" template&#xa;</xsl:text>
     <xsl:call-template name="font-pdflatex-style"/>
@@ -806,8 +808,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- "pagestyles" option is equivalent to loading the           -->
     <!-- "titleps" package and have it execute cooperatively        -->
     <xsl:text>%% titlesec package, loading "titleps" package cooperatively&#xa;</xsl:text>
-    <xsl:text>%% See code comments about the necessity and purpose of "explicit" option&#xa;</xsl:text>
-    <xsl:text>\usepackage[explicit, pagestyles]{titlesec}&#xa;</xsl:text>
+    <xsl:text>%% See code comments about the necessity and purpose of "explicit" option.&#xa;</xsl:text>
+    <xsl:text>%% The "newparttoc" option causes a consistent entry for parts in the ToC &#xa;</xsl:text>
+    <xsl:text>%% file, but it is only effective if there is a \titleformat for \part.&#xa;</xsl:text>
+    <xsl:text>%% "pagestyles" loads the  titleps  package cooperatively.&#xa;</xsl:text>
+    <xsl:text>\usepackage[explicit, newparttoc, pagestyles]{titlesec}&#xa;</xsl:text>
+    <xsl:text>%% The companion titletoc package for the ToC.&#xa;</xsl:text>
+    <xsl:text>\usepackage{titletoc}&#xa;</xsl:text>
     <!-- Necessary fix for chapter/appendix transition              -->
     <!-- From titleps package author, 2013 post                     -->
     <!-- https://tex.stackexchange.com/questions/117222/            -->
@@ -933,6 +940,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="titlesec-subsection-style"/>
     <xsl:call-template name="titlesec-subsubsection-style"/>
     <xsl:call-template name="titlesec-paragraph-style"/>
+    <xsl:text>%%&#xa;</xsl:text>
+    <xsl:text>%% Styles for five traditional LaTeX divisions&#xa;</xsl:text>
+    <!-- Create five title styles, part to subsubsection -->
+    <xsl:call-template name="titletoc-part-style"/>
+    <xsl:call-template name="titletoc-chapter-style"/>
+    <xsl:call-template name="titletoc-section-style"/>
+    <xsl:call-template name="titletoc-subsection-style"/>
+    <xsl:call-template name="titletoc-subsubsection-style"/>
     <xsl:text>%%&#xa;</xsl:text>
     <xsl:text>%% Semantic Macros&#xa;</xsl:text>
     <xsl:text>%% To preserve meaning in a LaTeX file&#xa;</xsl:text>
@@ -3184,8 +3199,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB: \\ works better than \newline in a \centering       -->
 <xsl:variable name="title-separator" select="'\\'"/>
 
-<!-- Not implemented/explored -->
-<xsl:template name="titlesec-part-style"/>
+<!-- This is adapted from the chapter format, and   -->
+<!-- could be simpler than desired, specifically    -->
+<!--   * no "number-less" version                   -->
+<!--   * no \titlespacing needed for full page      -->
+<!--   * author placement is untested               -->
+<!--   * otherwise, jut a bit grander, and centered -->
+<!-- There must be a  \titleformat{\part}  to get   -->
+<!-- consistent entries in the ToC files            -->
+<xsl:template name="titlesec-part-style">
+    <xsl:text>\titleformat{\part}[display]&#xa;</xsl:text>
+    <xsl:text>{\divisionfont\Huge\bfseries\centering}{\divisionnameptx\space\thepart}{30pt}{\Huge#1}&#xa;</xsl:text>
+    <xsl:text>[{\Large\centering\authorsptx}]&#xa;</xsl:text>
+</xsl:template>
 
 <!-- Note the use of "\divisionnameptx" macro              -->
 <!-- A multiline title should be fine in a "display" shape -->
@@ -3243,6 +3269,61 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>[{\normalsize\authorsptx}]&#xa;</xsl:text>
     <xsl:text>\titlespacing*{\paragraph}{0pt}{3.25ex plus 1ex minus .2ex}{1.5em}&#xa;</xsl:text>
 </xsl:template>
+
+<!-- ################# -->
+<!-- Table of Contents -->
+<!-- ################# -->
+
+<!-- Like division headings, the entries of the Table of -->
+<!-- Contents can be styled on a per-division basis      -->
+
+<!-- As normally written into LaTeX's *.toc file, the Roman     -->
+<!-- number/label is tightly bound to the title and so it       -->
+<!-- would be  the "number-less" argument in control.  Instead, -->
+<!-- we load the  titlesec  package with the "newparttoc"       -->
+<!-- option and get ToC entries that use LaTeX's "\numberline"  -->
+<!-- macro, and so look to  titlesec  as numbered divisions.    -->
+<!-- Hence the formatting here is the numbered argument.        -->
+<!--                                                            -->
+<!-- We drop page numbers for the parts as being redundant,     -->
+<!-- since there *must* be a chapter starting on the next page. -->
+<xsl:template name="titletoc-part-style">
+    <xsl:text>\titlecontents{part}%&#xa;</xsl:text>
+    <xsl:text>[0pt]{\contentsmargin{0em}\addvspace{1pc}\contentsfont\bfseries}%&#xa;</xsl:text>
+    <xsl:text>{\Large\thecontentslabel\enspace}{\Large}%&#xa;</xsl:text>
+    <xsl:text>{}%&#xa;</xsl:text>
+    <xsl:text>[\addvspace{.5pc}]%&#xa;</xsl:text>
+</xsl:template>
+
+<!-- This should be mostly self-explanatory -->
+<xsl:template name="titletoc-chapter-style">
+    <xsl:text>\titlecontents{chapter}%&#xa;</xsl:text>
+    <xsl:text>[0pt]{\contentsmargin{0em}\addvspace{1pc}\contentsfont\bfseries}%&#xa;</xsl:text>
+    <xsl:text>{\large\thecontentslabel\enspace}{\large}%&#xa;</xsl:text>
+    <xsl:text>{\hfill\bfseries\thecontentspage}%&#xa;</xsl:text>
+    <xsl:text>[\addvspace{.5pc}]%&#xa;</xsl:text>
+</xsl:template>
+
+<!-- The indent, and space for the number/label are straight  -->
+<!-- from the  titletoc  documentation, which says they match -->
+<!-- the LaTeX  book  class                                   -->
+<xsl:template name="titletoc-section-style">
+    <xsl:text>\dottedcontents{section}[3.8em]{\contentsfont}{2.3em}{1pc}%&#xa;</xsl:text>
+</xsl:template>
+
+<!-- The indent, and space for the number/label are straight  -->
+<!-- from the  titletoc  documentation, which says they match -->
+<!-- the LaTeX  book  class                                   -->
+<xsl:template name="titletoc-subsection-style">
+    <xsl:text>\dottedcontents{subsection}[6.1em]{\contentsfont}{3.2em}{1pc}%&#xa;</xsl:text>
+</xsl:template>
+
+<!-- Each successive indent is increased by the maximum width -->
+<!-- of the preceding label, so we just continue that pattern -->
+<xsl:template name="titletoc-subsubsection-style">
+    <xsl:text>\dottedcontents{subsubsection}[9.3em]{\contentsfont}{4.3em}{1pc}%&#xa;</xsl:text>
+</xsl:template>
+
 
 <!-- ############################ -->
 <!-- Page Styles, Headers/Footers -->
@@ -3307,9 +3388,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\usepackage[T1]{fontenc}&#xa;</xsl:text>
 </xsl:template>
 
+<!-- Experiment with different fonts: e.g., TeX Gyre Schola, Latin Modern Sans -->
 <xsl:template name="font-xelatex-style">
     <!-- <xsl:text>\setmainfont{Latin Modern Roman}[Numbers=OldStyle]&#xa;</xsl:text> -->
     <!-- <xsl:text>\newfontfamily{\divisionfont}{Latin Modern Roman}[Numbers=Lining]&#xa;</xsl:text> -->
+    <!-- <xsl:text>\newfontfamily{\contentsfont}{Latin Modern Roman}[Numbers=Lining]&#xa;</xsl:text> -->
     <!-- <xsl:text>\newfontfamily{\tabularfont}{Latin Modern Roman}[Numbers={Monospaced,Lining}]&#xa;</xsl:text> -->
 </xsl:template>
 
@@ -3406,6 +3489,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- immediately, or first in ToC         -->
     <xsl:choose>
         <xsl:when test="$b-has-toc">
+            <!-- N.B.  A font change command for the entire ToC -->
+            <!-- could be inserted here with something like     -->
+            <!--   \addtocontents{toc}{\protect\contentsfont}   -->
+            <!-- but I wanted to document it in place and could -->
+            <!-- not determine how to add a comment into the    -->
+            <!-- *.toc file.  Perhaps best to just employ the   -->
+            <!-- font in the  titletoc  style templates anyway. -->
             <xsl:text>%% Target for xref to top-level element is ToC&#xa;</xsl:text>
             <xsl:text>\addtocontents{toc}{</xsl:text>
             <xsl:if test="$b-pageref">
