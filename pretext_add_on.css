@@ -368,6 +368,7 @@ so that we can set our own later */
     transition-duration: 0ms;
     z-index: 0;
 }
+/* is the next only for a proof or other content that is only a knowl? */
 article > [data-knowl]::after, article > [data-knowl]:hover::after, article > [data-knowl].active::after {
     content: "";
     position: absolute;
@@ -382,6 +383,14 @@ article > [data-knowl]::after, article > [data-knowl]:hover::after, article > [d
     z-index: 0;
 }
 
+[data-knowl].fn-knowl {
+    padding-left: 0;
+    padding-right: 0;
+    margin-right: 2px;
+}
+[data-knowl].fn-knowl::after {
+    bottom: 7px;
+}
 
 .knowl-error {
    color: red;
@@ -2314,6 +2323,7 @@ code.inline {
 }
 
 /* sup knowls are used for footnotes */
+/* the next 2 are obsolete, because (in PTX HTML) the structure is now a(sup), not sup(a) */
 sup [data-knowl] {
     padding: 0px 0px 0px 3px;
 }
