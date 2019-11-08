@@ -1897,12 +1897,20 @@ a.mjx-svg-href  {
 }
 
 .pretext-content .exercisegroup {
+    padding-top: 1.25em;
     margin-bottom: 1.0em;
 }
 .pretext-content section .exercisegroup > .heading {
     font-size: 1.10em;
     line-height: 1.05em;
     margin-top: 0.75em;
+    display: inline;
+}
+.pretext-content section .exercisegroup > .heading + .introduction {
+    display: inline;
+}
+.pretext-content section .exercisegroup > .heading + .introduction > p:first-child {
+    display: inline;
 }
 
 .pretext-content .exercisegroup article.exercise-like p {
@@ -1939,6 +1947,7 @@ a.mjx-svg-href  {
 }
 .pretext-content .exercisegroup > .introduction {
     margin-top: 1.25em;
+    margin-top: 0;
 }
 .pretext-content .exercisegroup > .introduction > p:first-child::before {
     content: '\25a0\2009';
@@ -1947,6 +1956,9 @@ a.mjx-svg-href  {
     position: relative;
     top: -1px;
     right: 1px;
+}
+.pretext-content .exercisegroup > .heading + .introduction > p:first-child::before {
+    content: '\2003';
 }
 
 .pretext-content .exercisegroup > .introduction > p:first-child {
