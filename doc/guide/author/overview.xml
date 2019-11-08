@@ -509,7 +509,8 @@ but is experimental (so tags and attributes are subject to change).
       <p>
 Currently, support for producing <url href="https://revealjs.com">Reveal.js</url>
 and <url href="https://en.wikipedia.org/wiki/Beamer_(LaTeX)">Beamer <m>\LaTeX{}</m></url>
-slideshows is available. Details on authoring may be found in <xref ref="topic-slides" />.
+slideshows is available. Details on authoring may be found in <xref ref="topic-slides" />,
+and publishing details are in <xref ref="publisher-slides" />.
       </p>
       <p>
 Also, future support for annotating PreTeXt books and articles to export PreTeXt slides
