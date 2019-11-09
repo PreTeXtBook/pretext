@@ -189,7 +189,7 @@
                 <title>Controlling Randomness</title>
 
                 <introduction>
-                    <p>You can code your problem with randomization, but then use a specific <c>seed</c> and <webwork />'s <c>$envir{problemSeed}</c> to override that randomization for the purposes of the version that will appear in HTML and print putput.</p>
+                    <p>You can code your problem with randomization, but then use a specific <c>seed</c> and <webwork />'s <c>$envir{problemSeed}</c> to override that randomization for the purposes of the version that will appear in HTML and print output.</p>
                 </introduction>
 
                 <webwork xml:id="integer-addition-with-control-seed" seed="1">
