@@ -1465,7 +1465,7 @@ the xsltproc executable.
             <title>Mathematics</title>
 
             <introduction>
-                <p>To be able to create both <latex /> and HTML output (plus variations), we rely on MathJax, which in turn supports an extensive subset of the mathematical symbols normally available.  The AMSMath symbol set is a good approximation.  For a complete list, see the <url href="http://docs.mathjax.org/en/latest/tex.html#supported-latex-commands">MathJax Supported LaTeX commands</url>.  We load the <c>AMSsymbols</c> library and the library for extensible arrows, <c>extpfeil</c>.</p>
+                <p>To be able to create both <latex /> and HTML output (plus variations), we rely on MathJax, which in turn supports an extensive subset of the mathematical symbols normally available.  The AMSMath symbol set is a good approximation.  The <pretext/> Guide has a link to the complete list of macros supported by MathJax.  We load the <c>AMSsymbols</c> library and the library for extensible arrows, <c>extpfeil</c>.</p>
             </introduction>
 
 
