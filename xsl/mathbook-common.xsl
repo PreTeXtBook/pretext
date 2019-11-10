@@ -3355,6 +3355,13 @@ Book (with parts), "section" at level 3
         <xsl:when test="parent::*[self::m|self::me|self::men|self::mrow]">
             <xsl:value-of select="$text-processed" />
         </xsl:when>
+        <!-- If a pure-whitespace text node is bracketed on both sides by -->
+        <!-- index or notation elements, then almost certainly the space  -->
+        <!-- is for source-formatting clarity and not significant for the -->
+        <!-- content.  In particular, in LaTeX output the macros left     -->
+        <!-- behind prevent consolidation of this whitespace and can lead -->
+        <!-- to significant runs of abnormal whitespace in the output.    -->
+        <xsl:when test="normalize-space($text-processed) = '' and preceding-sibling::node()[1][self::idx|self::notation] and following-sibling::node()[1][self::idx|self::notation]"/>
         <!-- manipulate leading, trailing, intermediate whitespace under flexible policy -->
         <!-- if only text node inside parent, all three transformations may apply        -->
         <!-- Note: space after clause-punctuation will not be deleted here               -->
