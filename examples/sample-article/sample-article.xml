@@ -2011,7 +2011,7 @@ the xsltproc executable.
 
                     <p>When processing a <latex/> file with <c>xelatex</c> the FontAwesome icons are expected to be in a <em>system</em> font whose name is <c>FontAwesome</c>.  This is not a filename, and installing the <latex/> <c>fontawesome</c> package into your <latex/> installation does not mean you have made this font available as a <em>system</em> font.</p>
 
-                    <p>The Publisher's Guide contains some discussion about installing fonts into a system, as part of the documentation of creating a <latex/> style.</p>
+                    <p>The Publisher's Guide contains some discussion about installing fonts into a system, as part of the documentation of creating a <latex/> style, and has particular warnings about only using the <latex/> <c>fontawesome</c> package as a vehicle for installing and accessing these fonts.</p>
                 </warning>
             </subsection>
 

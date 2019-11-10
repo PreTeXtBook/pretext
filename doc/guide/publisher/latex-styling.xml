@@ -146,6 +146,7 @@
         <p>There is only one mode, but it can handle a variety of <pretext/> elements in the <attr>match</attr>.  The text produced by the template will be supplied in a named <c>tcolorbox</c> style via a <c>\tcbset{}</c> command.  It is marginally more complicated than that.  <pretext/> will manage certain aspects of creating a <c>tcolorbox</c>, such as forming the <c>tcolorbox</c> <c>title</c> to be a string like <q>Example 4.5 The Chain Rule.</q>, or just <q>Example 4.6</q> when an author does not include a <pretext/> <tag>title</tag>.  As a style writer, you can change the font, color and placement of that string, but not the use of the type-name, the number, the title, or their order.  The text of your template is additive, meaning it is in addition to what the stock <pretext/> conversion provides.  Your options come last, so will be new and effective, or will replace what the base conversion to <latex/> does.  So in the example above, the base conversion to <latex/> has <c>colback=white</c> (rather than the default gray!), and this will be overridden since pink will come later.</p>
     </section>
 
+    <!-- Provide an id, and cross-reference from font awesome material in pdf-print.xml -->
     <section>
         <title>Fonts</title>
 
