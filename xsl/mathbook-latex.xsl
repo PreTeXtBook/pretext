@@ -615,10 +615,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% We then define various font family commands using a vanilla version,&#xa;</xsl:text>
     <xsl:text>%% with the intention of letting a style override these choices&#xa;</xsl:text>
     <xsl:text>%% \setmainfont can be re-issued, and \renewfontfamily can redefine others&#xa;</xsl:text>
-    <!-- We do not attempt bold small caps in division headings (nor ToC) -->
-    <xsl:text>\setmainfont{Latin Modern Roman}[SmallCapsFont={Latin Modern Roman Caps}]&#xa;</xsl:text>
+    <!-- We do not attempt bold small caps in division headings (nor ToC, nor page style) -->
+    <xsl:text>\setmainfont{Latin Modern Roman}[SmallCapsFont={Latin Modern Roman Caps}, SlantedFont={Latin Modern Roman Slanted}]&#xa;</xsl:text>
     <xsl:text>\newfontfamily{\divisionfont}{Latin Modern Roman}&#xa;</xsl:text>
     <xsl:text>\newfontfamily{\contentsfont}{Latin Modern Roman}&#xa;</xsl:text>
+    <xsl:text>\newfontfamily{\pagefont}{Latin Modern Roman}[SlantedFont={Latin Modern Roman Slanted}]&#xa;</xsl:text>
     <xsl:text>\newfontfamily{\tabularfont}{Latin Modern Roman}[SmallCapsFont={Latin Modern Roman Caps}]&#xa;</xsl:text>
     <xsl:text>%% begin: font information supplied by "font-xelatex-style" template&#xa;</xsl:text>
     <xsl:call-template name="font-xelatex-style"/>
@@ -728,6 +729,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% The following definitons are meant to be re-defined in a style with \renewcommand&#xa;</xsl:text>
     <xsl:text>\newcommand{\divisionfont}{\relax}&#xa;</xsl:text>
     <xsl:text>\newcommand{\contentsfont}{\relax}&#xa;</xsl:text>
+    <xsl:text>\newcommand{\pagefont}{\relax}&#xa;</xsl:text>
     <xsl:text>\newcommand{\tabularfont}{\relax}&#xa;</xsl:text>
     <xsl:text>%% begin: font information supplied by "font-pdflatex-style" template&#xa;</xsl:text>
     <xsl:call-template name="font-pdflatex-style"/>
@@ -830,47 +832,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- https://tex.stackexchange.com/questions/319581/   issue-   -->
     <!-- with-titlesec-section-styles-and-appendix-in-article-class -->
     <xsl:if test="$b-is-book">
+        <xsl:text>%% Fixes a bug with transition from chapters to appendices in a "book"&#xa;</xsl:text>
+        <xsl:text>%% See generating XSL code for more details about necessity&#xa;</xsl:text>
         <xsl:text>\newtitlemark{\chaptertitlename}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:variable name="empty-pagestyle">
-        <xsl:apply-templates select="$document-root" mode="titleps-empty"/>
-    </xsl:variable>
-    <xsl:if test="not($empty-pagestyle = '')">
-        <xsl:text>\renewpagestyle{empty}</xsl:text>
-        <xsl:value-of select="$empty-pagestyle"/>
-        <xsl:text>&#xa;</xsl:text>
-    </xsl:if>
-    <!--  -->
-    <xsl:variable name="plain-pagestyle">
-        <xsl:apply-templates select="$document-root" mode="titleps-plain"/>
-    </xsl:variable>
-    <xsl:if test="not($plain-pagestyle = '')">
-        <xsl:text>\renewpagestyle{plain}</xsl:text>
-        <xsl:value-of select="$plain-pagestyle"/>
-        <xsl:text>&#xa;</xsl:text>
-    </xsl:if>
-    <!--  -->
-    <xsl:variable name="headings-pagestyle">
-        <xsl:apply-templates select="$document-root" mode="titleps-headings"/>
-    </xsl:variable>
-    <xsl:if test="not($headings-pagestyle = '')">
-        <xsl:text>\renewpagestyle{headings}</xsl:text>
-        <xsl:value-of select="$headings-pagestyle"/>
-        <xsl:text>&#xa;</xsl:text>
-    </xsl:if>
-    <!--  -->
-    <xsl:variable name="global-pagestyle">
-        <xsl:apply-templates select="$document-root" mode="titleps-global-style"/>
-    </xsl:variable>
-    <xsl:if test="$global-pagestyle = ''">
-        <xsl:message>PTX:ERROR: The "titleps-global-style" template should *never* produce empty text.  LaTeX compilation will definitely fail.</xsl:message>
-    </xsl:if>
-    <xsl:text>%% Set global/default page style for document due&#xa;</xsl:text>
-    <xsl:text>%% to potential re-definitions after documentclass&#xa;</xsl:text>
-    <xsl:text>\pagestyle{</xsl:text>
-    <xsl:value-of select="$global-pagestyle"/>
-    <xsl:text>}&#xa;</xsl:text>
-    <!--  -->
+    <xsl:text>%% begin: customizations of page styles via the modal "titleps-style" template&#xa;</xsl:text>
+    <xsl:text>%% Designed to use commands from the LaTeX "titleps" package&#xa;</xsl:text>
+    <xsl:apply-templates select="$document-root" mode="titleps-style"/>
+    <xsl:text>%% end: customizations of page styles via the modal "titleps-style" template&#xa;</xsl:text>
     <xsl:text>%%&#xa;</xsl:text>
     <!--  -->
     <xsl:text>%% Create globally-available macros to be provided for style writers&#xa;</xsl:text>
@@ -3337,22 +3306,60 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Page Styles, Headers/Footers -->
 <!-- ############################ -->
 
-<!-- This is all default LaTeX                                        -->
-<!-- TODO: See titleps.pdf in the "titlesec" package for definitions  -->
-<!-- similar to stock LaTeX but without the all-caps look.  Implement -->
-<!-- this when the default style is changed.                          -->
-<xsl:template match="book|article|letter|memo" mode="titleps-empty"/>
-<xsl:template match="book|article|letter|memo" mode="titleps-plain"/>
-<xsl:template match="book|article|letter|memo" mode="titleps-headings"/>
+<!-- These definitions are just default LaTeX.  Why?  To insert the    -->
+<!-- \pagefont font-change command into just the right places          -->
+<!-- (later we can add color).                                         -->
+<!--                                                                   -->
+<!-- In more general use, make new page styles, or renew the "empty",  -->
+<!-- "plain", "headings", and/or "myheadings" styles.  *Always* finish -->
+<!-- by declaring a \pagestyle to be in effect.  But note, LaTeX will  -->
+<!-- automagically decide some pages are plain or some are empty.  And -->
+<!-- if you adjust "headings" or "myheadings" by doing something like  -->
+<!-- changing a font, you might want to also change "plain" so that    -->
+<!-- the (presumably) simple numbers or other information will be in   -->
+<!-- a matching font.                                                  -->
 
-<!-- Seems to be necessary to issue a "\pagestyle" for the main style -->
-<!-- when it gets "renew'ed".  These are the defaults.  Do not ever   -->
-<!-- override these to be empty, or their employment will fail.       -->
-<xsl:template match="book" mode="titleps-global-style">
-    <xsl:text>headings</xsl:text>
+<!-- N.B. This would be a natural place for \geometry{} commands       -->
+<!-- N.B. We use an XSL variable to make the LaTeX output specific to  -->
+<!-- one-sided or two-sided output.  Conceivably this *could* be done  -->
+<!-- with a LaTeX conditional (at the cost of extraneous code)         -->
+<!-- NB: the \ifthechapter conditional stops a "Chapter 0"             -->
+<!-- appearing in the front matter                                     -->
+<!-- NB: titlesec (not titleps) provides \chaptertitlename so that the -->
+<!-- LaTeX \chaptername and \appendixname (which we internationalize)  -->
+<!-- are used in the right places                                      -->
+<!-- N.B. Investigate the "textcase" package for a more capable        -->
+<!-- "\MakeTextUppercase" (or similar)                                 -->
+<!-- TODO: redefine article, memo, letter correctly                    -->
+<xsl:template match="book" mode="titleps-style">
+    <xsl:text>%% Plain pages should have the same font for page numbers&#xa;</xsl:text>
+    <xsl:text>\renewpagestyle{plain}{%&#xa;</xsl:text>
+    <xsl:text>\setfoot{}{\pagefont\thepage}{}%&#xa;</xsl:text>
+    <xsl:text>}%&#xa;</xsl:text>
+    <xsl:choose>
+        <xsl:when test="$latex-sides = 'one'">
+            <!-- Every "regular" page has number top right -->
+            <!-- CHAPTER 8. TITLE                      234 -->
+            <xsl:text>%% Single pages as in default LaTeX&#xa;</xsl:text>
+            <xsl:text>\renewpagestyle{headings}{%&#xa;</xsl:text>
+            <xsl:text>\sethead{\pagefont\slshape\MakeUppercase{\ifthechapter{\chaptertitlename\space\thechapter.\space}{}\chaptertitle}}{}{\pagefont\thepage}%&#xa;</xsl:text>
+            <xsl:text>}%&#xa;</xsl:text>
+        </xsl:when>
+        <xsl:when test="$latex-sides = 'two'">
+            <!-- Two-page spread:  (Section empty if not in use)           -->
+            <!-- 234       CHAPTER 8. TITLE || SECTION 8.4 TITLE       235 -->
+            <xsl:text>%% Two-page spread as in default LaTeX&#xa;</xsl:text>
+            <xsl:text>\renewpagestyle{headings}{%&#xa;</xsl:text>
+            <xsl:text>\sethead%&#xa;</xsl:text>
+            <xsl:text>[\pagefont\thepage}][][\pagefont\slshape\MakeUppercase{\ifthechapter{\chaptertitlename\space\thechapter.\space}{}\chaptertitle}]%&#xa;</xsl:text>
+            <xsl:text>{\pagefont\slshape\MakeUppercase{\ifthesection{\sectiontitlename\space\thesection.\space\sectiontitle}{}}}{}{\pagefont\thepage}}%&#xa;</xsl:text>
+        </xsl:when>
+    </xsl:choose>
+    <xsl:text>\pagestyle{headings}&#xa;</xsl:text>
 </xsl:template>
-<xsl:template match="article|letter|memo" mode="titleps-global-style">
-    <xsl:text>plain</xsl:text>
+
+<xsl:template match="article|letter|memo" mode="titleps-style">
+    <xsl:text>\pagestyle{plain}&#xa;</xsl:text>
 </xsl:template>
 
 
