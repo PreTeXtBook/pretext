@@ -336,6 +336,14 @@
         <p>You may also be able to configure your <c>hosts</c> file so that this webserver looks like it lives somewhere else.  Clues at <url href="https://bowerwebsolutions.com/how-to-edit-your-local-host-file-for-testing-web-sites/"><c>bowerwebsolutions.com</c></url>.</p>
     </section>
 
+    <section xml:id="processing-testing-html-globally">
+        <title>Testing <init>HTML</init> Output Globally</title>
+
+        <p>Just like testing files locally can sometimes be misleading, testing on your own server can sometimes be misleading.  For example, on some university campuses, frequently accessed content (your textbook!) can be cached.  So when you update your files, it might not look like anything has changed.  An easy, free, quick solution is to place your <init>HTML</init> temporarily at <url href="https://app.netlify.com/drop">Netlify Drop</url><fn><c>https://app.netlify.com/drop</c></fn> as a double-check on the source of any problems.</p>
+
+        <p>This can also be a great solution if you do not have a server setup and want help from the <pretext/> community with your <init>HTML</init> output.  (See <xref ref="github-issues"/>.)</p>
+    </section>
+
     <section xml:id="processing-doctest-sage">
         <title>Doctesting Sage Code</title>
 
