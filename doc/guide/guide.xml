@@ -59,6 +59,7 @@
             <xi:include href="publisher/ancillaries.xml"/>
             <xi:include href="publisher/webwork.xml"/>
             <xi:include href="publisher/web-hosting.xml"/>
+            <xi:include href="publisher/latex-fonts.xml"/>
             <xi:include href="publisher/latex-styling.xml"/>
             <xi:include href="publisher/cover-design.xml"/>
             <xi:include href="publisher/print-on-demand.xml"/>
