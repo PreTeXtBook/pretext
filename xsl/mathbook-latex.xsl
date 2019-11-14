@@ -607,8 +607,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% (it is possible that a TeX distribution will place fonts in a system location)&#xa;</xsl:text>
     <xsl:text>\usepackage{fontspec}&#xa;</xsl:text>
     <!-- http://tex.stackexchange.com/questions/115321/how-to-optimize-latin-modern-font-with-xelatex -->
-    <xsl:text>%% fontspec will make Latin Modern (lmodern) the default font&#xa;</xsl:text>
-    <xsl:text>%% but we define various font family commands using a vanilla version,&#xa;</xsl:text>
+    <xsl:text>%% We use Latin Modern (lmodern) as the default font&#xa;</xsl:text>
+    <xsl:text>%% So we check that it is available as a system font&#xa;</xsl:text>
+    <xsl:call-template name="xelatex-font-check">
+        <xsl:with-param name="font-name" select="'Latin Modern Roman'"/>
+    </xsl:call-template>
+    <xsl:text>%% We then define various font family commands using a vanilla version,&#xa;</xsl:text>
     <xsl:text>%% with the intention of letting a style override these choices&#xa;</xsl:text>
     <xsl:text>%% \setmainfont can be re-issued, and \renewfontfamily can redefine others&#xa;</xsl:text>
     <xsl:text>\setmainfont{Latin Modern Roman}&#xa;</xsl:text>
@@ -621,7 +625,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$b-has-icon">
         <xsl:text>%% Icons being used, so xelatex needs a system font&#xa;</xsl:text>
         <xsl:text>%% This can only be determined at compile-time&#xa;</xsl:text>
-        <xsl:text>\IfFontExistsTF{FontAwesome}{}{\GenericError{}{"FontAwesome" font is not installed as a system font}{Consult the PreTeXt Author's Guide (or sample article) for help with the icon fonts.}{}}&#xa;</xsl:text>
+        <xsl:call-template name="xelatex-font-check">
+            <xsl:with-param name="font-name" select="'FontAwesome'"/>
+        </xsl:call-template>
     </xsl:if>
     <xsl:text>%% &#xa;</xsl:text>
     <!-- language tags appear in docinfo in renames, so be careful -->
@@ -10652,6 +10658,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="right-escape" select="str:replace($left-escape-temp, '*)', '(**{})*)' )"/>
     <xsl:variable name="left-escape" select="str:replace($right-escape, 'XXvVY4DtfemxHkcXX', '(*({}**)' )"/>
     <xsl:value-of select="$left-escape"/>
+</xsl:template>
+
+<!-- Issue check and warning, under xelatex engine, -->
+<!-- for a font missing from a system               -->
+<xsl:template name="xelatex-font-check">
+    <xsl:param name="font-name"/>
+
+    <xsl:text>\IfFontExistsTF{</xsl:text>
+    <xsl:value-of select="$font-name"/>
+    <xsl:text>}{}{\GenericError{}{The font "</xsl:text>
+    <xsl:value-of select="$font-name"/>
+    <xsl:text>" requested by PreTeXt output is not available as a system font}{Consult the PreTeXt Guide for help with LaTeX fonts.}{}}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Miscellaneous -->
