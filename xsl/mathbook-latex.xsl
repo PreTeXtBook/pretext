@@ -615,10 +615,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% We then define various font family commands using a vanilla version,&#xa;</xsl:text>
     <xsl:text>%% with the intention of letting a style override these choices&#xa;</xsl:text>
     <xsl:text>%% \setmainfont can be re-issued, and \renewfontfamily can redefine others&#xa;</xsl:text>
-    <xsl:text>\setmainfont{Latin Modern Roman}&#xa;</xsl:text>
+    <!-- We do not attempt bold small caps in division headings (nor ToC) -->
+    <xsl:text>\setmainfont{Latin Modern Roman}[SmallCapsFont={Latin Modern Roman Caps}]&#xa;</xsl:text>
     <xsl:text>\newfontfamily{\divisionfont}{Latin Modern Roman}&#xa;</xsl:text>
     <xsl:text>\newfontfamily{\contentsfont}{Latin Modern Roman}&#xa;</xsl:text>
-    <xsl:text>\newfontfamily{\tabularfont}{Latin Modern Roman}&#xa;</xsl:text>
+    <xsl:text>\newfontfamily{\tabularfont}{Latin Modern Roman}[SmallCapsFont={Latin Modern Roman Caps}]&#xa;</xsl:text>
     <xsl:text>%% begin: font information supplied by "font-xelatex-style" template&#xa;</xsl:text>
     <xsl:call-template name="font-xelatex-style"/>
     <xsl:text>%% end: font information supplied by "font-xelatex-style" template&#xa;</xsl:text>
@@ -3014,6 +3015,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- lower-casing macro:  ("force-all-small-caps") at           -->
 <!-- http://tex.stackexchange.com/questions/114592/             -->
 <xsl:template match="abbr|acro|init" mode="tex-macro-style">
+    <!-- <xsl:text>{\scshape #1}</xsl:text> -->
     <xsl:text>\textsc{\MakeLowercase{#1}}</xsl:text>
 </xsl:template>
 
