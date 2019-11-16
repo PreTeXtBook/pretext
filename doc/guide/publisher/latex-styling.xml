@@ -87,15 +87,15 @@
     <section xml:id="style-headers-footers">
         <title>Headers and Footers</title>
 
-        <p>The <c>titleps</c> package cooperates with <q>traditional</q> <latex/> divisions, such as <c>\chapter</c> and <c>\section</c>, and the <c>titlesec</c> package, to pick up the titles of divisions automatically and migrate them to headers and footers on a page.  The <c>ps</c> is short for <q>page style</q>, and the documentation is a <init>PDF</init> file <em>within</em> the distribution for the <c>titlesec</c> package.  Primarily, we let <latex/> manage the selection of its page styles: <c>empty</c>, <c>plain</c>, and <c>headings</c>.  (The <latex/> <c>myheadings</c> page style is ignored.)  <pretext/> does some management in the front matter.  As a style writer it is not your concern where these styles are employed, but you do influence what information they contain and were it is placed on a page.</p>
+        <p>The <c>titleps</c> package cooperates with <q>traditional</q> <latex/> divisions, such as <c>\chapter</c> and <c>\section</c>, and the <c>titlesec</c> package, to pick up the titles of divisions automatically and migrate them to headers and footers on a page.  The <c>ps</c> is short for <q>page style</q>, and the documentation is a <init>PDF</init> file <em>within</em> the distribution for the <c>titlesec</c> package.  Primarily, we let <latex/> manage the selection of its page styles for various pages of an overall document: <c>empty</c>, <c>plain</c>, <c>headings</c>, and <c>myheadings</c>.  <pretext/> does some management in the front matter.  As a style writer it is not your concern where these styles are employed, but you do influence what information they contain and were it is placed on a page.</p>
 
         <p>Add an <tag>xsl:template</tag> to your stylesheet that begins with<cd>
-            <cline>&lt;xsl:template match="article" mode="titleps-plain"&gt;</cline>
-        </cd>This would then set a style for a <c>plain</c> page within an <tag>article</tag>.  Perhaps just a page number centered in the footer?  The text produced by this template (see <xref ref="style-xsl-101"/>) will then be placed immediately after a <c>titlesec</c> command in the preamble to renew the page style.  More precisely, immediately after<cd>
-            <cline>\renewpagestyle{plain}</cline>
-        </cd>Note that this means the first and last characters of the text produced are a <tex/> group ({,}).</p>
+            <cline>&lt;xsl:template match="book" mode="titleps-style"&gt;</cline>
+        </cd>This would then set a collection of commands from the <c>titleps</c> package for a <tag>book</tag>, which will be placed in the correct place in the <latex/> preamble.   (See <xref ref="style-xsl-101"/>.)  You can <c>renew</c> existing page styles or create <c>new</c> pagestyles.  However you should always make your last line a declaration of the overall page style, for example,<cd>
+            <cline>\pagestyle{headings}</cline>
+        </cd>  Note that a book may use the empty and plain styles for some pages, so you may need to renew those styles to be harmonious with other changes you have made.</p>
 
-        <p>The definition of this template will override (replace) the definition given in any imported stylesheet.  You can replace the value of the <attr>match</attr> attribute with <c>book</c> to make your style apply to a <pretext/> <tag>book</tag>.  If your style will be used for both books and articles, and you want the <c>plain</c> style to be identical for both, you can expand the <attr>match</attr> attribute to have the value <c>article|book</c>.  To have different <c>plain</c> styles for a book versus an article, make two separate templates.</p>
+        <p>The definition of this template will override (replace) the definition given in any imported stylesheet.  You can replace the value of the <attr>match</attr> attribute with <c>article</c> to make your style apply to a <pretext/> <tag>article</tag>.  If your style will be used for both books and articles, and you want the style to be identical for both, you can expand the <attr>match</attr> attribute to have the value <c>article|book</c>.  To have different styles for a book versus an article, make two separate templates.</p>
 
         <p>The <c>titleps</c> package allows at least twelve options per page style:  even-numbered page versus odd-numbered page with two-sided printing; left, center, right; header or footer.  There are semi-automatic customizable rules, variable widths allowing hanging styles, choices of marks (division at page-start versus division at page-end versus new-division-mid-page, including combinations at the same time), and more.  Note that the <latex/> system of <c>\markleft</c> and <c>\markboth</c> has been abandonded.  (Did I hear you say, <q>Good riddance!</q>?)</p>
 
@@ -103,13 +103,10 @@
           Some care must be taken with using <c>\thechapter</c> to get the chapter number, since strange things happen in the frontmatter and backmatter, where chapters are numberless.   One solution is to use <c>\ifthechapter{}{}</c> which allows you to control the behavior dependent on whether there is a current chapter number.  For example, if you wanted the center of the even-numbered pages to contain <q>Chapter 3: Derivatives</q> you would use
             <cd>\sethead[][\ifthechapter{Chapter \thechapter: }{}\chaptertitle][]{}{}{}</cd>
           which would then just put <q>Index</q> in the index, and nothing at all in the preface.
-        </p>
-
-        <p>
           A similar approach could be used to deal with section numbers and titles in the case that the introduction of a chapter is multiple pages, using <c>\ifthesection{}{}</c>.
         </p>
 
-        <p>2019-09-30: we have not tested one-sided versus two-sided very rigoursly.  Please report problems.</p>
+        <p>Note also that the macro <c>\chaptertitlename</c> will resolve to <c>Chapter</c> or <c>Appendix</c> as necessary.</p>
     </section>
 
     <section>
