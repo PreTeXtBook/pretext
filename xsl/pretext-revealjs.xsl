@@ -276,6 +276,13 @@ Reveal.initialize({
   </ol>
 </xsl:template>
 
+<xsl:template match="dl">
+  <dl>
+    <xsl:apply-templates select="li"/>
+  </dl>
+</xsl:template>
+
+
 <xsl:template match="li">
   <li>
     <xsl:if test="parent::*/@slide-step = 'true'">
@@ -287,6 +294,14 @@ Reveal.initialize({
   </li>
 </xsl:template>
 
+<xsl:template match="dl/li">
+  <dt>
+    <xsl:apply-templates select="." mode="title-full"/>
+  </dt>
+  <dd>
+    <xsl:apply-templates select="*[not(title)]"/>
+  </dd>
+</xsl:template>
 
 <xsl:template match="p">
   <p>
