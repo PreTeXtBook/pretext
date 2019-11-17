@@ -283,24 +283,38 @@ Reveal.initialize({
 </xsl:template>
 
 
-<xsl:template match="li">
+<xsl:template match="ul/li|ol/li">
   <li>
     <xsl:if test="parent::*/@slide-step = 'true'">
       <xsl:attribute name="class">
         <xsl:text>fragment</xsl:text>
       </xsl:attribute>
     </xsl:if>
+    <!-- content may be structured, or not -->
     <xsl:apply-templates/>
   </li>
 </xsl:template>
 
+<!-- We group dt/dd pairs in a div so that fragments work properly -->
+<!-- Yes, this seems to be legitimate HTML structure               -->
+<!-- https://www.stefanjudis.com/today-i-learned/                  -->
+<!-- divs-are-valid-elements-inside-of-a-definition-list/          -->
 <xsl:template match="dl/li">
-  <dt>
-    <xsl:apply-templates select="." mode="title-full"/>
-  </dt>
-  <dd>
-    <xsl:apply-templates select="*[not(title)]"/>
-  </dd>
+  <div>
+    <xsl:if test="parent::*/@slide-step = 'true'">
+      <xsl:attribute name="class">
+        <xsl:text>fragment</xsl:text>
+      </xsl:attribute>
+    </xsl:if>
+    <dt>
+      <xsl:apply-templates select="." mode="title-full"/>
+    </dt>
+    <dd>
+      <!-- assumes content part is structured -->
+      <!-- title gets killed on-sight         -->
+      <xsl:apply-templates select="*"/>
+    </dd>
+  </div>
 </xsl:template>
 
 <xsl:template match="p">
