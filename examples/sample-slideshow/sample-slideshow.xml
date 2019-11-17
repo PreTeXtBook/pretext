@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--********************************************************************
+Copyright 2019 Robert A. Beezer
+
+This file is part of PreTeXt.
+
+PreTeXt is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+PreTeXt is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+<pretext>
+
+    <slideshow>
+        <title>PreTeXt</title>
+        <subtitle>A Slideshow</subtitle>
+
+        <frontmatter>
+            <titlepage>
+                <author>
+                    <personname>Robert A. Beezer</personname>
+                    <institution>University of Puget Sound</institution>
+                </author>
+                <event>At a Test Conference</event>
+                <date><today/></date>
+            </titlepage>
+        </frontmatter>
+
+        <section>
+            <title>Explanation</title>
+
+            <slide>
+                <title>What This Is</title>
+
+                <p>This is a <pretext/> <c>slideshow</c> designed mostly for testing new features.  As of 2019-11-16 it is only initiated, and not comprehensive.  If you improve a feature, please add examples here.</p>
+            </slide>
+        </section>
+
+        <section>
+            <title>Lists</title>
+
+
+            <slide>
+                <title>Ordered Lists, All At Once</title>
+
+                <p><ol>
+                    <li>Two conversions: print-on-demand, electronic <init>PDF</init></li>
+                    <li>Extensive use of the <c>tcolorbox</c> package (CSS-like)</li>
+                    <li>Evolving styling/themes (Andrew Rechnitzer, David Farmer)</li>
+                </ol></p>
+            </slide>
+
+
+            <slide>
+                <title>Ordered Lists, With Pauses</title>
+
+                <p><ol slide-step="true">
+                    <li>Two conversions: print-on-demand, electronic <init>PDF</init></li>
+                    <li>Extensive use of the <c>tcolorbox</c> package (CSS-like)</li>
+                    <li>Evolving styling/themes (Andrew Rechnitzer, David Farmer)</li>
+                </ol></p>
+            </slide>
+
+
+            <slide>
+                <title>Unordered Lists, All At Once</title>
+
+                <p><ul>
+                    <li><p>XML syntax is a nested hierarchy (a tree)<ul>
+                        <li><tag>foo</tag><ellipsis/><tag>/foo</tag></li>
+                        <li><tage>bar</tage></li>
+                        <li><c>&lt;baz qux="corge"&gt;</c></li>
+                    </ul></p></li>
+                    <li>Does not have to be <em>UGLY</em>!</li>
+                    <li><pretext/> is <q>author-friendly</q> (Principle #2)</li>
+                </ul></p>
+            </slide>
+
+
+            <slide>
+                <title>Unordered Lists, With Pause</title>
+
+                <!-- Pauses in interior list only acts oddly -->
+                <p><ul slide-step="true">
+                    <li><p>XML syntax is a nested hierarchy (a tree)<ul slide-step="true">
+                        <li><tag>foo</tag><ellipsis/><tag>/foo</tag></li>
+                        <li><tage>bar</tage></li>
+                        <li><c>&lt;baz qux="corge"&gt;</c></li>
+                    </ul></p></li>
+                    <li>Does not have to be <em>UGLY</em>!</li>
+                    <li><pretext/> is <q>author-friendly</q> (Principle #2)</li>
+                </ul></p>
+            </slide>
+        </section>
+    </slideshow>
+</pretext>
