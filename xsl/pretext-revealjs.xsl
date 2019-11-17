@@ -285,7 +285,7 @@ Reveal.initialize({
 
 <xsl:template match="ul/li|ol/li">
   <li>
-    <xsl:if test="parent::*/@slide-step = 'true'">
+    <xsl:if test="parent::*/@pause = 'yes'">
       <xsl:attribute name="class">
         <xsl:text>fragment</xsl:text>
       </xsl:attribute>
@@ -301,7 +301,7 @@ Reveal.initialize({
 <!-- divs-are-valid-elements-inside-of-a-definition-list/          -->
 <xsl:template match="dl/li">
   <div>
-    <xsl:if test="parent::*/@slide-step = 'true'">
+    <xsl:if test="parent::*/@pause = 'yes'">
       <xsl:attribute name="class">
         <xsl:text>fragment</xsl:text>
       </xsl:attribute>
@@ -319,7 +319,7 @@ Reveal.initialize({
 
 <xsl:template match="p">
   <p>
-    <xsl:if test="@slide-step = 'true'">
+    <xsl:if test="@pause = 'yes'">
       <xsl:attribute name="class">
         <xsl:text>fragment</xsl:text>
       </xsl:attribute>
@@ -334,7 +334,7 @@ Reveal.initialize({
     <xsl:attribute name="src">
         <xsl:value-of select="@source" />
     </xsl:attribute>
-    <xsl:if test="@slide-step = 'true'">
+    <xsl:if test="@pause = 'yes'">
       <xsl:attribute name="class">
         <xsl:text>fragment</xsl:text>
       </xsl:attribute>
@@ -377,7 +377,7 @@ Reveal.initialize({
     <xsl:param name="valign" />
 
     <xsl:element name="div">
-        <xsl:if test="parent::sidebyside/@slide-step = 'true'">
+        <xsl:if test="parent::sidebyside/@pause = 'yes'">
           <xsl:attribute name="class">
             <xsl:text>fragment</xsl:text>
           </xsl:attribute>

@@ -63,7 +63,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <slide>
                 <title>Ordered Lists, With Pauses</title>
 
-                <p><ol slide-step="true">
+                <p><ol pause="yes">
                     <li>Two conversions: print-on-demand, electronic <init>PDF</init></li>
                     <li>Extensive use of the <c>tcolorbox</c> package (CSS-like)</li>
                     <li>Evolving styling/themes (Andrew Rechnitzer, David Farmer)</li>
@@ -90,8 +90,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <title>Unordered Lists, With Pause</title>
 
                 <!-- Pauses in interior list only acts oddly -->
-                <p><ul slide-step="true">
-                    <li><p>XML syntax is a nested hierarchy (a tree)<ul slide-step="true">
+                <p><ul pause="yes">
+                    <li><p>XML syntax is a nested hierarchy (a tree)<ul pause="yes">
                         <li><tag>foo</tag><ellipsis/><tag>/foo</tag></li>
                         <li><tage>bar</tage></li>
                         <li><c>&lt;baz qux="corge"&gt;</c></li>
@@ -131,7 +131,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <slide>
                 <title>Description Lists, With Pauses</title>
 
-                <p><dl slide-step="true">
+                <p><dl pause="yes">
                     <li>
                         <title>Central Processing Unit (CPU)</title>
                         <p>Controls most of the activities of the computer, performs the arithmetic and logical operations, and contains a small amount of very fast memory.</p>
