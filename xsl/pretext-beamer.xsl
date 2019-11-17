@@ -100,18 +100,18 @@
 
 <xsl:template match="p">
   <xsl:text>&#xa;</xsl:text>
-    <xsl:if test="@slide-step = 'true'">
+    <xsl:if test="@pause = 'yes'">
         <xsl:text>\pause &#xa;</xsl:text>
     </xsl:if>
     <xsl:apply-templates/>
 </xsl:template>
 
 <xsl:template match="ul">
-  <xsl:if test="@slide-step = 'true'">
+  <xsl:if test="@pause = 'yes'">
     <xsl:text>\pause &#xa;</xsl:text>
   </xsl:if>
   <xsl:text>\begin{itemize}</xsl:text>
-  <xsl:if test="@slide-step = 'true'">
+  <xsl:if test="@pause = 'yes'">
     <xsl:text>[&lt;+-&gt;]</xsl:text>
   </xsl:if>
   <xsl:apply-templates/>
@@ -119,11 +119,11 @@
 </xsl:template>
 
 <xsl:template match="ol">
-  <xsl:if test="@slide-step = 'true'">
+  <xsl:if test="@pause = 'yes'">
     <xsl:text>\pause &#xa;</xsl:text>
   </xsl:if>
   <xsl:text>\begin{enumerate}</xsl:text>
-  <xsl:if test="@slide-step = 'true'">
+  <xsl:if test="@pause = 'yes'">
     <xsl:text>[&lt;+-&gt;]</xsl:text>
   </xsl:if>
   <xsl:apply-templates/>
@@ -150,7 +150,7 @@
   </xsl:variable>
 
   <xsl:for-each select="*">
-    <xsl:if test="parent::*/@slide-step = 'true'">
+    <xsl:if test="parent::*/@pause = 'yes'">
       <xsl:text>\pause &#xa;</xsl:text>
     </xsl:if>
     <xsl:text>\begin{tcolorbox}[valign=top, width=</xsl:text>
