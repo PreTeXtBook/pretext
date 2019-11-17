@@ -100,6 +100,59 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <li><pretext/> is <q>author-friendly</q> (Principle #2)</li>
                 </ul></p>
             </slide>
+
+
+            <slide>
+                <title>Description Lists, All At Once</title>
+
+                <p><dl>
+                    <li>
+                        <title>Central Processing Unit (CPU)</title>
+                        <p>Controls most of the activities of the computer, performs the arithmetic and logical operations, and contains a small amount of very fast memory.</p>
+                    </li>
+
+                    <li>
+                        <title>Memory</title>
+                        <p>Provides storage for the instructions for the CPU and the data they manipulate.</p>
+                    </li>
+
+                    <li>
+                        <title>Input/Output (I/O)</title>
+                        <p>Communicates with the outside world and with mass storage devices (e.g., disks).</p>
+                    </li>
+
+                    <li>
+                        <title>Bus!</title>
+                        <p>A communication pathway with a protocol specifying exactly how the pathway is used. (The punctuation is just for testing.)</p>
+                    </li>
+                </dl></p>
+            </slide>
+
+            <slide>
+                <title>Description Lists, With Pauses</title>
+
+                <p><dl slide-step="true">
+                    <li>
+                        <title>Central Processing Unit (CPU)</title>
+                        <p>Controls most of the activities of the computer, performs the arithmetic and logical operations, and contains a small amount of very fast memory.</p>
+                    </li>
+
+                    <li>
+                        <title>Memory</title>
+                        <p>Provides storage for the instructions for the CPU and the data they manipulate.</p>
+                    </li>
+
+                    <li>
+                        <title>Input/Output (I/O)</title>
+                        <p>Communicates with the outside world and with mass storage devices (e.g., disks).</p>
+                    </li>
+
+                    <li>
+                        <title>Bus!</title>
+                        <p>A communication pathway with a protocol specifying exactly how the pathway is used. (The punctuation is just for testing.)</p>
+                    </li>
+                </dl></p>
+            </slide>
         </section>
     </slideshow>
 </pretext>
