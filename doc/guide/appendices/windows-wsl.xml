@@ -134,6 +134,7 @@
         <p>
         Several editors come with <init>WSL</init> by default including
         <init>nano</init>, <init>pico</init>, <init>vi</init>,  and <init>vim</init>.
+	In addition, editing is possible using <init>notebook.exe</init>.
         Here are the steps to follow:
         <ol>
         <li>
