@@ -946,6 +946,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:for-each select="$one-line-reps">
         <xsl:apply-templates select="." mode="tex-macro"/>
     </xsl:for-each>
+    <xsl:if test="$document-root//kbd">
+        <xsl:text>%% Used to (simplistically) simulate keys from a keyboard&#xa;</xsl:text>
+        <xsl:text>\newcommand{\kbd}[1]</xsl:text>
+        <xsl:text>{\setlength{\fboxsep}{0.25ex}</xsl:text>
+        <xsl:text>\fbox{\mono{#1}}}</xsl:text>
+    </xsl:if>
     <xsl:if test="$document-root//alert">
         <xsl:text>%% Used for warnings, typically bold and italic&#xa;</xsl:text>
         <xsl:text>\newcommand{\alert}[1]{\textbf{\textit{#1}}}&#xa;</xsl:text>
@@ -8137,6 +8143,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:call-template>
         </xsl:otherwise>
     </xsl:choose>
+</xsl:template>
+
+
+<!-- ############## -->
+<!-- Keyboard Input -->
+<!-- ############## -->
+
+<xsl:template match="kbd">
+    <xsl:text>\kbd{</xsl:text>
+    <xsl:value-of select="."/>
+    <xsl:text>}</xsl:text>
 </xsl:template>
 
 

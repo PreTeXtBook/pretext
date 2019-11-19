@@ -7674,6 +7674,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
+<!-- ############## -->
+<!-- Keyboard Input -->
+<!-- ############## -->
+
+<xsl:template match="kbd">
+    <kbd class="kbd">
+        <xsl:value-of select="."/>
+    </kbd>
+</xsl:template>
+
 
 <!-- ################ -->
 <!-- Biological Names -->

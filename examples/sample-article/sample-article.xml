@@ -2015,6 +2015,12 @@ the xsltproc executable.
                 </warning>
             </subsection>
 
+            <subsection xml:id="subsection-keyboard">
+                <title>Keyboard Keys</title>
+
+                <p>Your text can include specialized text meant to look like a key on the keyboard of a calculator or other device.  So you can go <kbd>A</kbd> <kbd>b</kbd> <kbd>Enter</kbd> <kbd>&lt;</kbd> or <kbd>F1</kbd>.  Or maybe a sequence as: <kbd>Tab</kbd> &gt; <kbd>Ctrl</kbd> &gt; <kbd>T</kbd>.  Use the <tag>kbd</tag> element, with the label of the key as content.  A bit crude, as of 2019-11-18, but can be improved if some specialty fonts were employed.</p>
+            </subsection>
+
             <subsection xml:id="section-urls">
                 <title>URLs, such as <url href="http://example.com" /></title>
                         <idx><h>link</h><h>external, url</h></idx>
