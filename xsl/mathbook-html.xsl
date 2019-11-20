@@ -213,7 +213,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Files with name colors_*.css set the colors.            -->
 <!-- colors_default is similar to the old mathbook-3.css     -->
 <xsl:param name="html.css.server" select="'https://pretextbook.org'" />
-<xsl:param name="html.css.version" select="'0.2'" />
+<xsl:param name="html.css.version" select="'0.31'" />
 <xsl:param name="html.js.server" select="'https://pretextbook.org'" />
 <xsl:param name="html.js.version" select="'0.12'" />
 <xsl:param name="html.css.colorfile" select="''" />
@@ -10255,7 +10255,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="css">
     <link href="{$html.css.server}/css/{$html.css.version}/pretext.css" rel="stylesheet" type="text/css" />
     <link href="{$html.css.server}/css/{$html.css.version}/pretext_add_on.css" rel="stylesheet" type="text/css" />
-    <link href="{$html.css.server}/css/{$html.css.version}/toc.css" rel="stylesheet" type="text/css" />
+    <link href="{$html.css.server}/css/{$html.css.version}/banner_default.css" rel="stylesheet" type="text/css" />
+    <link href="{$html.css.server}/css/{$html.css.version}/toc_default.css" rel="stylesheet" type="text/css" />
+    <link href="{$html.css.server}/css/{$html.css.version}/knowls_default.css" rel="stylesheet" type="text/css" />
+    <link href="{$html.css.server}/css/{$html.css.version}/style_default.css" rel="stylesheet" type="text/css" />
     <link href="{$html.css.server}/css/{$html.css.version}/{$html-css-colorfile}" rel="stylesheet" type="text/css" />
     <link href="{$html.css.server}/css/{$html.css.version}/setcolors.css" rel="stylesheet" type="text/css" />
     <!-- If extra CSS is specified, then unpack multiple CSS files -->
