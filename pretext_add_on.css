@@ -1709,6 +1709,19 @@ a.mjx-svg-href  {
     background: #f6f6f6;
 }
 
+.pretext-content .kbd {
+    background: #f1f1f1;
+    border: 1px solid #dddddd;
+    border-radius: 3px;
+    padding: 1px 2px 0 2px;
+    vertical-align: 0.1em;
+    font-size: 110%;
+    line-height: 1;
+    box-shadow: 2px 2px grey;
+    display: inline-block;
+    margin-right: 3px;
+}
+
 .pretext-content .sagecell_sessionOutput pre {
     font-family: 'Inconsolata', monospace;
 }
