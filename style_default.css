@@ -32,7 +32,8 @@
 .pretext-content article.project-like,
 .pretext-content article.objectives,
 .pretext-content article.outcomes,
-.pretext-content article.remark-like {
+.pretext-content article.remark-like,
+.pretext-content article.computation-like {
     padding-left: 0.4em;
     border-left: 1px solid #569;
 }
@@ -43,7 +44,8 @@
 .pretext-content article.project-like::after,
 .pretext-content article.objectives::after,
 .pretext-content article.outcomes::after,
-.pretext-content article.remark-like::after {
+.pretext-content article.remark-like::after,
+.pretext-content article.computation-like::after {
     content:'';
     border-bottom: 1px solid #569;
     display: block;
