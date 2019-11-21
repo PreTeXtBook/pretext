@@ -114,6 +114,10 @@
     background-color: var(--videoplay);
 }
 
+.pretext-content .goal-like {
+  border-color: var(--chaptertoc);
+}
+
 .pretext-content .assemblage-like {
     border-color: var(--assemblageborder);
     background-color: var(--assemblagebackground);

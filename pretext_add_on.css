@@ -299,9 +299,6 @@ so that we can set our own later */
     display: inline !important;
 }
 */
-.pretext-content section article.assemblage-like .heading + p {
-    display: block;
-}
 .pretext-content section article.theorem-like p,
 .pretext-content section article.theorem-like li {
     font-style: italic;
@@ -320,146 +317,6 @@ so that we can set our own later */
     font-style: italic;
     font-weight: normal;
 }
-
-/*
-  main knowls style
-*/
-
-[data-knowl] {
-    display: inline;
-    position: relative;
-    cursor: pointer;
-    color: #9c2310;
-    padding: 0px 2px 0px 2px;
-    margin: 0;
-    text-decoration: none;
-    margin-bottom: 1px;
-/*
-    margin-bottom: 0;
-*/
-    font-weight: 500;
-    white-space: nowrap;
-    border-bottom: none;
-    border-top-left-radius: 3px;
-    border-top-right-radius: 3px;
-    user-select: none;
-    transition-property: background-color;
-    transition-duration: 0ms;
-}
-
-[data-knowl]:hover, [data-knowl]:active, [data-knowl].active {
-    color: #8a1200;
-    background: #ffedeb;
-/*
-    margin-bottom: 0;
-*/
-    border-bottom: none;
-}
-
-[data-knowl]::after, [data-knowl]:hover::after, [data-knowl].active::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    bottom: 1px;
-    right: 2.4px;
-    left: 2.4px;
-    border-bottom: 1px dotted #9c2310;
-    transition-property: left, right;
-    transition-duration: 0ms;
-    z-index: 0;
-}
-/* is the next only for a proof or other content that is only a knowl? */
-article > [data-knowl]::after, article > [data-knowl]:hover::after, article > [data-knowl].active::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    bottom: 1px;
-    right: 8.4px;
-    right: 0.6em;
-    left: 2.4px;
-    border-bottom: 1px dotted #9c2310;
-    transition-property: left, right;
-    transition-duration: 0ms;
-    z-index: 0;
-}
-
-[data-knowl].fn-knowl {
-    padding-left: 0;
-    padding-right: 0;
-    margin-right: 2px;
-}
-[data-knowl].fn-knowl::after {
-    bottom: 7px;
-}
-
-.knowl-error {
-   color: red;
-   border-bottom: 0;
-}
-.knowl-output {
-    background: #f5f5ff;
-    border: 10px solid #ddf;
-    border-radius: 10px;
-    display: none;
-    padding: 0;
-    margin-top: 10px;
-}
-
-.knowl-output .knowl-output {
-    border-width: 6px;
-    background: #fffff5;
-    border-radius: 4px;
-    margin-bottom: -3px;
-    margin-left: -7px;
-    margin-right: -7px;
-}
-.knowl-output .knowl-output .knowl-output {
-    background: #fff5ff;
-}
-.knowl-output .knowl-output .knowl-output .knowl-output {
-    background: #fafffa;
-}
-.knowl-footer {
-  position: relative;
-  bottom: -9px;
-  font-size: x-small;
-  background: #ddf;
-  color: grey;
-  padding: 0 0 0 12px;
-  margin:  -10px 0 0 0;
-}
-.knowl-footer a {
-  color: #006;
-}
-.knowl-footer a:hover {
-  background: none;
-  color: #88f;
-}
-/* .knowl-footer:after {
-    content: "\2002";
-} */
-
-.knowl-output .knowl-output .knowl-footer {
-  bottom: -5px;
-  margin:  -5px 0 0 0;
-}
-
-.knowl-output + .knowl-output {
-    margin-top: 0;
-}
-.knowl-content {
-    padding: 10px;
-    padding-bottom: 7px;
-}
-.knowl-content > *:first-child {
-    margin-top: 0;
-}
-
-/* sort of a hack for proof knows in theorem knowls */
-.pretext-content div.knowl .posterior a[data-knowl]:first-child {
-    padding: 0;
-}
-
 
 /* show wide equation overflow even when no scroll bars,
 from Jiří Lebl */
@@ -507,131 +364,7 @@ from Jiří Lebl */
     margin-bottom: 0.5em;
 }
 
-/* No Greg's L in knowls, to save space */
 
-.pretext-content .knowl-content > article.theorem-like,
-.pretext-content .knowl-content > article.definition-like,
-.pretext-content .knowl-content > article.example-like,
-.pretext-content .knowl-content > article.project-like,
-.pretext-content .knowl-content > article.objectives,
-.pretext-content .knowl-content > article.outcomes,
-.pretext-content .knowl-content > article.remark-like {
-    padding-left: 0;
-    border-left: none;
-}
-.pretext-content .knowl-content > article.theorem-like::after,
-.pretext-content .knowl-content > article.definition-like::after,
-.pretext-content .knowl-content > article.example-like::after,
-.pretext-content .knowl-content > article.project-like::after,
-.pretext-content .knowl-content > article.objectives::after,
-.pretext-content .knowl-content > article.outcomes::after,
-.pretext-content .knowl-content > article.remark-like::after {
-    content: '';
-    border-bottom: none;
-    margin: 0;
-    padding: 0;
-    width: 0;
-}
-
-/*
-Greg's L
-
-The not(:first-child) is primarily for the case of a knowl that
-contains only a theorem or definition.
-
-In good writing, can a section start with a Theorem?
-(apparently I think not)
-
-*/
-
-.pretext-content .proof > .heading {
-  font-style: italic;
-  font-weight: normal;
-  /* It helps to have a little bit of extra space after proof */
-  margin-right: 0.75em;
-}
-
-/* 
-supplied by the general .type:after for headings
-.pretext-content .proof > .heading:after {
-  content: ". ";
-}
-*/
-
-.pretext-content .proof {
-  border-right: 1px solid #666;
-  padding-right: 0.625em;
-  margin-right: -0.725em;
-}
-.pretext-content .proof:after {
-  content: '';
-  border-bottom: 1px solid #666;
-  display: block;
-  margin-left: auto;
-  margin-right: -0.625em;
-  /* so the corner of the L meets */
-  width: 1.5em;
-  padding-bottom: 0.25em;
-}
-
-.pretext-content .proof .proof {
-  margin-right: -0.2em;
-  border-right: 1.5px solid #ddd;
-}
-.pretext-content .proof .proof:after {
-  border-bottom: 1.5px solid #ddd;
-  width: 1em;
-}
-
-.pretext-content article.theorem-like,
-.pretext-content article.definition-like,
-.pretext-content article.example-like,
-.pretext-content article.project-like,
-.pretext-content article.objectives,
-.pretext-content article.outcomes,
-.pretext-content article.remark-like {
-    padding-left: 0.4em;
-    border-left: 1px solid #569;
-}
-
-.pretext-content article.theorem-like::after,
-.pretext-content article.definition-like::after,
-.pretext-content article.example-like::after,
-.pretext-content article.project-like::after,
-.pretext-content article.objectives::after,
-.pretext-content article.outcomes::after,
-.pretext-content article.remark-like::after {
-    content:'';
-    border-bottom: 1px solid #569;
-    display: block;
-    margin-right: auto;
-    margin-left: -0.4em;
-    padding-top: 0.25em;
-    width: 1.5em;
-}
-/* projects get a dotted L */
-.pretext-content article.project-like {
-    border-left: 1px dotted #569;
-}
-.pretext-content article.project-like::after {
-    border-bottom: 1px dotted #569;
-}
-
-/* commentary gets a thicker red L */
-
-.pretext-content article.commentary {
-    padding-left: 0.6em;
-    border-left: 3px solid #c33;
-}
-.pretext-content article.commentary::after {
-    content:'';
-    border-bottom: 3px solid #c33;
-    display: block;
-    margin-right: auto;
-    margin-left: -0.6em;
-    padding-top: 0.25em;
-    width: 1.5em;
-}
 
 .pretext-content section p.credit + p.credit {
     margin-top: 0.25em;
@@ -671,118 +404,6 @@ body > a.assistive:focus {
 	background:#BF1722;
 	outline:0;	
     transition: top .1s ease-in, background .5s linear;
-}
-
-
-#masthead .banner {
-    border-bottom: 1px solid #d4d4d4;
-    border-top: 1px solid transparent;
-    overflow: hidden;
-    padding-top: 0.625em;
-    padding-bottom: 1.125em;
-}
-
-/* newer, small top nav buttons */
-#masthead.smallbuttons #primary-navbar .navbar-top-buttons .toolbar-align-right .toolbar-item-middle {
-    float: left;
-    padding: 3px 6px 3px 6px;
-    margin: 4px 10px 0px 10px;
-    margin: 4px 10px 0px 195px;
-    border: 1px solid #800;
-    background-color: #ffe5e5;
-    font-size: 90%;
-}
-
-#masthead.smallbuttons #primary-navbar .navbar-top-buttons .toolbar-align-right .toolbar-item-middle a {
-    color: #024;
-}
-
-#masthead.smallbuttons {
-    max-width: 904px;
-    border-right: 1px solid #bababa;
-}
-
-#masthead.smallbuttons #primary-navbar .navbar-top-buttons {
-    border-bottom: 1px solid #bababa;
-}
-#masthead.smallbuttons .banner {
-    border-bottom: none;
-}
-
-#masthead.smallbuttons #primary-navbar .navbar-top-buttons .toolbar-divisor-3 .button {
-    border-top: 1px solid #bababa;
-}
-
-#masthead.smallbuttons #primary-navbar .navbar-top-buttons .toolbar-divisor-3 {
-    background-color: #fafafa;
-}
-#masthead.smallbuttons #primary-navbar .navbar-top-buttons .toolbar-divisor-3 .index-button {
-    width: 70px;
-    text-align: center;
-    border-right: 1px solid #bababa;
-}
-#masthead.smallbuttons #primary-navbar .navbar-top-buttons .toolbar-divisor-3 .up-button {
-    width: 60px;
-    float: right;
-    border-right: 1px solid #bababa;
-}
-#masthead.smallbuttons #primary-navbar .navbar-top-buttons .toolbar-divisor-3 .up-button:before {
-    text-align: left;
-    width: 20px;
-}
-#masthead.smallbuttons #primary-navbar .navbar-top-buttons .toolbar-divisor-3 .previous-button.toolbar-item {
-    width: 70px;
-    border-right: none;
-    float: right;
-}
-/* extra .toolbar-item to overrive mathbook-add-on */
-#masthead.smallbuttons #primary-navbar .navbar-top-buttons .toolbar-divisor-3 .previous-button.toolbar-item {
-    border-left: 1px solid #bababa;
-    padding-right: 3px;
-}
-#masthead.smallbuttons #primary-navbar .navbar-top-buttons .toolbar-divisor-3 .next-button {
-    width: 70px;
-    float: right;
-    border-right: 1px solid #bababa;
-}
-#masthead.smallbuttons #primary-navbar .previous-button::before {
-    width: 27px;
-}
-#masthead.smallbuttons #primary-navbar .next-button::after {
-    width: 25px;
-}
-/*
-#masthead.smallbuttons #primary-navbar .navbar-top-buttons .toolbar-divisor-3 #calculator-toggle {
-    width: 70px;
-    text-align: center;
-    border-right: 1px solid #bababa;
-}
-*/
-
-#masthead.smallbuttons #primary-navbar .navbar-top-buttons .toolbar-divisor-3 .button.toggle {
-    width: 60px;
-    text-align: center;
-    border-radius: 20px;
-    margin-left: 5px;
-    border: 2px solid #66f;
-    line-height: 25px;
-    margin-top: 3px;
-    background-color: #eef;
-}
-#masthead.smallbuttons #primary-navbar .navbar-top-buttons .toolbar-divisor-3 .button.toggle.open {
-    background: #fee;
-/*
-    background-image: linear-gradient(163deg, transparent 0%, transparent 47%, #f66 47%, #f66 , #f66 53%, transparent 53%, transparent 100%);
-*/
-    border: 2px solid #f66;
-}
-
-#masthead.smallbuttons #primary-navbar .threebuttons {
-    float: right;
-}
-
-#masthead.smallbuttons #primary-navbar .navbar-top-buttons .toolbar-divisor-3 .threebuttons .next-button, #masthead.smallbuttons #primary-navbar .navbar-top-buttons .toolbar-divisor-3 .threebuttons .up-button, #masthead.smallbuttons #primary-navbar .navbar-top-buttons .toolbar-divisor-3 .threebuttons .previous-button {
-    float: left;
 }
 
 .collectedworks .knowl-output {
@@ -2085,6 +1706,19 @@ a.mjx-svg-href  {
     background: #f6f6f6;
 }
 
+.pretext-content .kbdkey {
+    background: #f1f1f1;
+    border: 1px solid #dddddd;
+    border-radius: 3px;
+    padding: 1px 2px 0 2px;
+    vertical-align: 0.1em;
+    font-size: 110%;
+    line-height: 1;
+    box-shadow: 2px 2px grey;
+    display: inline-block;
+    margin-right: 3px;
+}
+
 .pretext-content .sagecell_sessionOutput pre {
     font-family: 'Inconsolata', monospace;
 }
@@ -2101,21 +1735,6 @@ a.mjx-svg-href  {
     height: inherit;
 }
 */
-
-.pretext-content .assemblage-like {
-    border: solid 2px #1100AA;
-    border-radius: 12px;
-    padding: 10px;
-    background-color: #f4f4fe;
-}
-
-.pretext-content .assemblage-like .heading {
-    margin-top: 0;
-}
-
-.pretext-content .assemblage-like + .sidebyside {
-    margin-top: 1.25em;
-}
 
 .pretext-content .booktitle {
     font-style: oblique;
@@ -2176,6 +1795,12 @@ a.mjx-svg-href  {
     to {content: '\25bc';}
 }
 
+.pretext-content section.solutions {
+    margin-top: 3em;
+    padding-left: 1em;
+    font-size: 90%;
+    border-left: 1em solid #eeeeee;
+}
 
 /* these were taken from the local add-on.css.
  * need to check if the are needed.
@@ -2332,20 +1957,6 @@ div.quote {
 code.inline {
     background: none;
     border: none;
-}
-
-/* sup knowls are used for footnotes */
-/* the next 2 are obsolete, because (in PTX HTML) the structure is now a(sup), not sup(a) */
-sup [data-knowl] {
-    padding: 0px 0px 0px 3px;
-}
-
-sup .active[data-knowl] {
-    padding: 0px 0px 0px 3px;
-}
-
-sup [data-knowl]:hover {
-    padding: 0px 0px 0px 3px;
 }
 
 .pretext-content pre.prettyprint,
