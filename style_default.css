@@ -93,10 +93,8 @@
 }
 
 .pretext-content .goal-like {
-  background-color: white;
-  border: solid 3px var(--chaptertoc);
-  padding: 10px;
-  padding: 0.6em;
+  border: solid 3px #999999;
+  padding: 0.7em;
   margin-bottom: 1em;
 }
 
