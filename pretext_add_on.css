@@ -1709,7 +1709,7 @@ a.mjx-svg-href  {
     background: #f6f6f6;
 }
 
-.pretext-content .kbd {
+.pretext-content .kbdkey {  /* delete the first selector after 11/22/19 */
     background: #f1f1f1;
     border: 1px solid #dddddd;
     border-radius: 3px;
