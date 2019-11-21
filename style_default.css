@@ -82,6 +82,24 @@
     margin-bottom: 1.25em;
 }
 
+.pretext-content .assemblage-like {
+    border: solid 2px #1100AA;
+    border-radius: 12px;
+    padding: 10px;
+    background-color: #f4f4fe;
+}
+
+.pretext-content .assemblage-like .heading {
+    margin-top: 0;
+}
+
+.pretext-content .assemblage-like + .sidebyside {
+    margin-top: 1.25em;
+}
+.pretext-content section article.assemblage-like .heading + p {
+    display: block;
+}
+
 /* next selector first part of the following is due to the mistake of
    putting paragraph spacing in the margin-bottom 
    Redo when we fix that error */
