@@ -30,8 +30,6 @@
 .pretext-content article.definition-like,
 .pretext-content article.example-like,
 .pretext-content article.project-like,
-.pretext-content article.objectives,
-.pretext-content article.outcomes,
 .pretext-content article.remark-like,
 .pretext-content article.computation-like {
     padding-left: 0.4em;
@@ -42,8 +40,6 @@
 .pretext-content article.definition-like::after,
 .pretext-content article.example-like::after,
 .pretext-content article.project-like::after,
-.pretext-content article.objectives::after,
-.pretext-content article.outcomes::after,
 .pretext-content article.remark-like::after,
 .pretext-content article.computation-like::after {
     content:'';
@@ -78,10 +74,6 @@
     width: 1.5em;
 }
 
-.pretext-content .objectives {
-    margin-bottom: 1.25em;
-}
-
 .pretext-content .assemblage-like {
     border: solid 2px #1100AA;
     border-radius: 12px;
@@ -99,6 +91,33 @@
 .pretext-content section article.assemblage-like .heading + p {
     display: block;
 }
+
+.pretext-content .goal-like {
+  background-color: white;
+  border: solid 3px var(--chaptertoc);
+  padding: 10px;
+  padding: 0.6em;
+  margin-bottom: 1em;
+}
+
+.pretext-content .goal-like .heading {
+  margin-top: -1.5em;
+  background-color: white;
+  display: table;
+  padding: 5px 1em;
+  margin-left: 5px;
+  font-style: italic;
+  font-size: 120%;
+}
+
+.pretext-content .goal-like .codenumber {
+  display:none;
+}
+
+.pretext-content .goal-like .heading::after {
+  display:none;
+}
+
 
 /* next selector first part of the following is due to the mistake of
    putting paragraph spacing in the margin-bottom 
