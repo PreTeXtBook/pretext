@@ -27,28 +27,40 @@
 
 }
 
-
-.pretext-content .assemblage-like {
-  border-radius: 3px;
-  margin-bottom: 1em;
-}
-
-.pretext-content .assemblage-like .heading{
-    margin-top: -1.25em;
-    background-color: #bfd5ec;
-    display: table;
-    padding: 5px 10px;
-}
-
-.pretext-content .assemblage-like .MJXc-display {
-    background-image: none;
-    background-image: linear-gradient(to right, #e9eff5, #e9eff5), linear-gradient(to right, #e9eff5, #e9eff5), linear-gradient(to right, rgba(0,0,0,.25), rgba(242,242,254,0)), linear-gradient(to left, rgba(0,0,0,.25), rgba(242,242,254,0));
-}
-
 /* Remove Greg-L on assemblage and everything else */
-/* maybe obsolete onse the styles are separated */
+/*
 .pretext-content article.theorem-like::after, .pretext-content article.definition-like::after, .pretext-content article.example-like::after, .pretext-content article.project-like::after, .pretext-content article.objectives::after, .pretext-content article.outcomes::after, .pretext-content article.remark-like::after {
   border-bottom: none;
+}
+*/
+
+.pretext-content .assemblage-like, .pretext-content .theorem-like.theorem {
+    margin-top: 2.25em;
+    background-color: #e9eff5;
+    border: 2px solid #bfd5ec;
+    padding: 1em;
+    border-radius: 3px;
+    margin-bottom: 1em;
+  
+}
+
+.pretext-content .assemblage-like .heading, .pretext-content .theorem-like.theorem .heading {
+    margin-top: -1.75em;
+    margin-left: -0.5em;
+    background-color: #e9eff5;
+    background-color: #bfd5ec;
+    display: table;
+    padding: 0.25em 0.4em;
+}
+.pretext-content .assemblage-like .heading::after, .pretext-content .theorem-like.theorem .heading::after {
+    content: "";
+}
+.pretext-content .assemblage-like .heading + p, .pretext-content .theorem-like.theorem .heading + p {
+    display: block;
+}
+
+.pretext-content .assemblage-like .MJXc-display, .pretext-content .theorem-like.theorem .MJXc-display {
+    background-image: linear-gradient(to right, #e9eff5, #e9eff5), linear-gradient(to right, #e9eff5, #e9eff5), linear-gradient(to right, rgba(0,0,0,.25), rgba(242,242,254,0)), linear-gradient(to left, rgba(0,0,0,.25), rgba(242,242,254,0));
 }
 
 article[id*='investigation'], .pretext-content .objectives {
@@ -85,37 +97,47 @@ article[id*='example'] {
   /* margin-left: 1ex; */
 }
 
-.pretext-content section article.example-like {
+.pretext-content section article.example-like.example,
+.pretext-content section article.project-like.project,
+.pretext-content section article.project-like.exploration {
     padding-left: 0.8em;
     padding-bottom: 0.5em;
     border-left: 0.1em solid #3b0082;
     border-bottom: 0.1em solid #3b0082;
 }
 
-.pretext-content section article.example-like > .heading {
-/*
-.pretext-content section article.example-like > a .heading,
-.pretext-content section section article.example-like > a .heading,
-.pretext-content .abstract > .heading {
-*/
-/*
-    font-size: 1.125em;
-    line-height: 1.125em;
-    margin-top: 0;
-*/
-
+.pretext-content section article.example-like.example > .heading,
+.pretext-content section article.project-like.project > .heading,
+.pretext-content section article.project-like.exploration > .heading {
     display: inline-block;
     padding: 0.3em 0.5em;
-    background: #3b0082;
-    color: #fff;
     margin-left: -0.7em;
 }
-.pretext-content section article.example-like > .heading::after {
+.pretext-content section article.example-like.example > .heading,
+.pretext-content section article.project-like.project > .heading {
+    background: #3b0082;
+    color: #fff;
+}
+.pretext-content section article.project-like.exploration > .heading {
+    background: #fff;
+    color: #3b0082;
+    border: 0.1em solid #3b0082;   /* maybe no border-left? */
+    margin-left: -0.8em;
+}
+
+
+.pretext-content section article.example-like.example > .heading::after,
+.pretext-content section article.project-like.project > .heading::after,
+.pretext-content section article.project-like.exploration > .heading::after {
     content: "";
 }
 
-.pretext-content section article.example-like > .heading + p,
-.pretext-content section article.example-like > .heading + .introduction {
+.pretext-content section article.example-like.example > .heading + p,
+.pretext-content section article.example-like.example > .heading + .introduction,
+.pretext-content section article.project-like.project > .heading + p,
+.pretext-content section article.project-like.project > .heading + .introduction,
+.pretext-content section article.project-like.exploration > .heading + p,
+.pretext-content section article.project-like.exploration > .heading + .introduction {
     display: block;
     padding-top: 0.3em;
 }
@@ -151,10 +173,6 @@ article.proof {
   border-bottom: none;
   margin-top: -1em;
 }
-
-/* article.example-like:after {
-  border-bottom: none !important;
-} */
 
 article.theorem-like {
     padding-left: 0.4em;
