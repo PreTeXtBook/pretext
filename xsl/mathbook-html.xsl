@@ -7679,7 +7679,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ############## -->
 
 <xsl:template match="kbd">
-    <kbd class="kbd">
+    <kbd class="kbdkey">
         <xsl:value-of select="."/>
     </kbd>
 </xsl:template>
