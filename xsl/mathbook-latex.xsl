@@ -949,7 +949,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="$document-root//kbd">
         <xsl:text>%% Used to (simplistically) simulate keys from a keyboard&#xa;</xsl:text>
         <xsl:text>\newcommand{\kbd}[1]</xsl:text>
-        <xsl:text>{\tikz[baseline=(A.base)]{\node[draw,rectangle,rounded corners,thick,scale=1.0] (A) at (0,0) {\tiny\textsf{#1}}}}</xsl:text>
+        <xsl:text>{\tikz[baseline=(A.base)]{\node[draw,rectangle,rounded corners,thick,scale=1.0] (A) at (0,0) {\textsf{#1}}}}</xsl:text>
     </xsl:if>
     <xsl:if test="$document-root//alert">
         <xsl:text>%% Used for warnings, typically bold and italic&#xa;</xsl:text>
