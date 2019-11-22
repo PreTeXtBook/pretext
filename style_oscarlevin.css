@@ -39,17 +39,27 @@
 
 .pretext-content .assemblage-like,
 .pretext-content .theorem-like.theorem,
+.pretext-content .theorem-like.corollary,
 .pretext-content .theorem-like.principle {
     margin-top: 2.25em;
-    background-color: var(--assemblagebackground);
-    border: 2px solid var(--assemblageborder);
     padding: 1em;
     border-radius: 3px;
     margin-bottom: 1em;
 }
+.pretext-content .assemblage-like,
+.pretext-content .theorem-like.theorem,
+.pretext-content .theorem-like.principle {
+    background-color: var(--assemblagebackground);
+    border: 2px solid var(--assemblageborder);
+}
+.pretext-content .theorem-like.corollary {
+    background-color: var(--bodytitlehighlight);
+    border: 2px solid var(--bodysubtitle);
+}
 
 .pretext-content .assemblage-like .heading,
 .pretext-content .theorem-like.theorem .heading,
+.pretext-content .theorem-like.corollary .heading,
 .pretext-content .theorem-like.principle .heading {
     margin-top: -1.75em;
     margin-left: -0.5em;
@@ -60,6 +70,10 @@
 .pretext-content .theorem-like.theorem .heading {
     background-color: var(--assemblagedarkborder);
     color: #fff;
+}
+.pretext-content .theorem-like.corollary .heading {
+    background-color: var(--bodysubtitlehighlight);
+    border: 2px solid var(--bodysubtitle);
 }
 .pretext-content .theorem-like.principle .heading {
     background-color: var(--assemblageborder);
@@ -80,13 +94,21 @@
 .pretext-content .theorem-like.theorem .MJXc-display {
     background-image: linear-gradient(to right, #e9eff5, #e9eff5), linear-gradient(to right, #e9eff5, #e9eff5), linear-gradient(to right, rgba(0,0,0,.25), rgba(242,242,254,0)), linear-gradient(to left, rgba(0,0,0,.25), rgba(242,242,254,0));
 }
+.pretext-content .theorem-like.corollary .MJXc-display {
+    background-image: linear-gradient(to right, var(--bodytitlehighlight), var(--bodytitlehighlight)), linear-gradient(to right, var(--bodytitlehighlight), var(--bodytitlehighlight)), linear-gradient(to right, rgba(0,0,0,.25), rgba(242,242,254,0)), linear-gradient(to left, rgba(0,0,0,.25), rgba(242,242,254,0));
+}
 
 .pretext-content .goal-like {
   background-color: white;
-  border: solid 3px var(--bodytitle);
   border-radius: 0.7em;
   padding: 0.7em;
   margin-bottom: 1em;
+}
+.pretext-content .goal-like.objectives {
+  border: solid 3px var(--bodysubtitle);
+}
+.pretext-content .goal-like.outcomes {
+  border: solid 3px var(--bodytitle);
 }
 
 .pretext-content .goal-like .heading {
@@ -166,6 +188,7 @@ article[id*='example'] {
 .pretext-content section article.project-like.exploration > .heading {
     background: #fff;
     color: #3b0082;
+    color: var(--assemblagedarkborder);
     margin-left: -0.8em;
 }
 .pretext-content section article.project-like.activity > .heading {
@@ -190,6 +213,37 @@ article[id*='example'] {
     display: block;
     padding-top: 0.3em;
 }
+
+/* remark-like notes get a dotted Greg's L */
+.pretext-content .remark-like.note {
+    padding-left: 0.5em;
+    border-left: 1px dotted #569;
+}
+.pretext-content .remark-like.note::after {
+    content:'';
+    border-bottom: 1px dotted #569;
+    display: block;
+    margin-right: auto;
+    margin-left: -0.5em;
+    padding-top: 0.25em;
+    width: 1.5em;
+}
+/* theorem-like claims get a slightly wide solid Greg's L in the subtitle color */
+.pretext-content .theorem-like.claim {
+    padding-left: 0.5em;
+    border-left: 2px solid var(--bodysubtitle);
+}
+.pretext-content .theorem-like.claim::after {
+    content:'';
+    border-bottom: 2px solid var(--bodysubtitle);
+    display: block;
+    margin-right: auto;
+    margin-left: -0.5em;
+    padding-top: 0.25em;
+    width: 1.5em;
+}
+
+
 
 /* where does this appear? */
 .posterior {
