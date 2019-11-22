@@ -63,8 +63,9 @@
   --highlighttocborder: var(--chaptertoc);
 
   --videoplay: var(--bodytitle);
-  --assemblageborder: #5B2F82;
   --assemblagebackground: #f5f8ff;
+  --assemblageborder: #5B2F82;
+  --assemblagedarkborder: #472664;
 
   --knowlborder: var(--bodytitlehighlight);
   --knowlbackground: var(--assemblagebackground);
