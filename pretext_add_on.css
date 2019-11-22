@@ -293,6 +293,12 @@ so that we can set our own later */
 .pretext-content section article > .heading + .introduction > p:first-child {
     display: inline;
 }
+/* when a list is the only thing in an environment with a border,
+   there is too much space to the left */
+.pretext-content section article > .heading + ol,
+.pretext-content section article > .heading + ul {
+    padding-left: 1.5em;
+}
 /*
 .pretext-content section article .heading + p .mjx-chtml,
 .pretext-content section article .heading + p .mjx-math {
