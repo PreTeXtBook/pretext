@@ -64,7 +64,10 @@
 
   --videoplay: var(--bodytitle);
   --assemblagebackground: #f5f8ff;
+  --assemblagebackground: #F0EAF6;
   --assemblageborder: #5B2F82;
+  --assemblageborder: #B793D7;
+  --assemblageborder: #CAAEE0;
   --assemblagedarkborder: #472664;
 
   --knowlborder: var(--bodytitlehighlight);
