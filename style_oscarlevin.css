@@ -1,3 +1,5 @@
+
+/*
 :root {
   --documenttitle: #395E66;
   --bodytitle: #A62E1C;
@@ -26,6 +28,7 @@
   --knowlbackground: #f5f8ff;
 
 }
+*/
 
 /* Remove Greg-L on assemblage and everything else */
 /*
@@ -36,8 +39,12 @@
 
 .pretext-content .assemblage-like, .pretext-content .theorem-like.theorem {
     margin-top: 2.25em;
+/*
     background-color: #e9eff5;
     border: 2px solid #bfd5ec;
+*/
+    background-color: var(--assemblagebackground);
+    border: 2px solid var(--assemblageborder);
     padding: 1em;
     border-radius: 3px;
     margin-bottom: 1em;
@@ -47,8 +54,11 @@
 .pretext-content .assemblage-like .heading, .pretext-content .theorem-like.theorem .heading {
     margin-top: -1.75em;
     margin-left: -0.5em;
+/*
     background-color: #e9eff5;
-    background-color: #bfd5ec;
+*/
+    background-color: var(--assemblagedarkborder);
+    color: #fff;
     display: table;
     padding: 0.25em 0.4em;
 }
@@ -63,15 +73,24 @@
     background-image: linear-gradient(to right, #e9eff5, #e9eff5), linear-gradient(to right, #e9eff5, #e9eff5), linear-gradient(to right, rgba(0,0,0,.25), rgba(242,242,254,0)), linear-gradient(to left, rgba(0,0,0,.25), rgba(242,242,254,0));
 }
 
-article[id*='investigation'], .pretext-content .objectives {
+/*
+article[id*='investigation'],
+*/
+.pretext-content .goal-like {
   background-color: white;
+/*
   border: solid 3px #395E66;
-  border-radius: 10px;
-  padding: 10px;
+*/
+  border: solid 3px var(--bodytitle);
+  border-radius: 0.7em;
+  padding: 0.7em;
   margin-bottom: 1em;
 }
 
-article[id*='investigation'] .heading, .pretext-content .objectives .heading {
+/*
+article[id*='investigation'] .heading,
+*/
+.pretext-content .goal-like .heading {
   margin-top: -1.5em;
   background-color: white;
   display: table;
@@ -81,21 +100,29 @@ article[id*='investigation'] .heading, .pretext-content .objectives .heading {
   font-size: 120%;
 }
 
-article[id*='investigation'] .codenumber, .pretext-content .objectives .codenumber {
+/*
+article[id*='investigation'] .codenumber,
+*/
+.pretext-content .goal-like .codenumber {
   display:none;
 }
 
-article[id*='investigation'] .heading::after, .pretext-content .objectives .heading::after {
+/*
+article[id*='investigation'] .heading::after,
+*/
+.pretext-content .goal-like .heading::after {
   display:none;
 }
 
+/*
 article[id*='example'] {
   border-left: solid 1pt #395E66;
   border-bottom: solid 1pt #d1d1d1;
   padding-left: 1ex;
   padding-bottom: 0.5ex;
-  /* margin-left: 1ex; */
 }
+*/
+  /* margin-left: 1ex; */
 
 .pretext-content section article.example-like.example,
 .pretext-content section article.project-like.project,
