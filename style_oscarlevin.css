@@ -37,59 +37,58 @@
 }
 */
 
-.pretext-content .assemblage-like, .pretext-content .theorem-like.theorem {
+.pretext-content .assemblage-like,
+.pretext-content .theorem-like.theorem,
+.pretext-content .theorem-like.principle {
     margin-top: 2.25em;
-/*
-    background-color: #e9eff5;
-    border: 2px solid #bfd5ec;
-*/
     background-color: var(--assemblagebackground);
     border: 2px solid var(--assemblageborder);
     padding: 1em;
     border-radius: 3px;
     margin-bottom: 1em;
-  
 }
 
-.pretext-content .assemblage-like .heading, .pretext-content .theorem-like.theorem .heading {
+.pretext-content .assemblage-like .heading,
+.pretext-content .theorem-like.theorem .heading,
+.pretext-content .theorem-like.principle .heading {
     margin-top: -1.75em;
     margin-left: -0.5em;
-/*
-    background-color: #e9eff5;
-*/
-    background-color: var(--assemblagedarkborder);
-    color: #fff;
     display: table;
     padding: 0.25em 0.4em;
 }
-.pretext-content .assemblage-like .heading::after, .pretext-content .theorem-like.theorem .heading::after {
+.pretext-content .assemblage-like .heading,
+.pretext-content .theorem-like.theorem .heading {
+    background-color: var(--assemblagedarkborder);
+    color: #fff;
+}
+.pretext-content .theorem-like.principle .heading {
+    background-color: var(--assemblageborder);
+}
+
+.pretext-content .assemblage-like .heading::after,
+.pretext-content .theorem-like.theorem .heading::after,
+.pretext-content .theorem-like.principle .heading::after {
     content: "";
 }
-.pretext-content .assemblage-like .heading + p, .pretext-content .theorem-like.theorem .heading + p {
+.pretext-content .assemblage-like .heading + p,
+.pretext-content .theorem-like.theorem .heading + p,
+.pretext-content .theorem-like.principle .heading + p {
     display: block;
 }
 
-.pretext-content .assemblage-like .MJXc-display, .pretext-content .theorem-like.theorem .MJXc-display {
+.pretext-content .assemblage-like .MJXc-display,
+.pretext-content .theorem-like.theorem .MJXc-display {
     background-image: linear-gradient(to right, #e9eff5, #e9eff5), linear-gradient(to right, #e9eff5, #e9eff5), linear-gradient(to right, rgba(0,0,0,.25), rgba(242,242,254,0)), linear-gradient(to left, rgba(0,0,0,.25), rgba(242,242,254,0));
 }
 
-/*
-article[id*='investigation'],
-*/
 .pretext-content .goal-like {
   background-color: white;
-/*
-  border: solid 3px #395E66;
-*/
   border: solid 3px var(--bodytitle);
   border-radius: 0.7em;
   padding: 0.7em;
   margin-bottom: 1em;
 }
 
-/*
-article[id*='investigation'] .heading,
-*/
 .pretext-content .goal-like .heading {
   margin-top: -1.5em;
   background-color: white;
@@ -100,16 +99,10 @@ article[id*='investigation'] .heading,
   font-size: 120%;
 }
 
-/*
-article[id*='investigation'] .codenumber,
-*/
 .pretext-content .goal-like .codenumber {
   display:none;
 }
 
-/*
-article[id*='investigation'] .heading::after,
-*/
 .pretext-content .goal-like .heading::after {
   display:none;
 }
@@ -126,35 +119,62 @@ article[id*='example'] {
 
 .pretext-content section article.example-like.example,
 .pretext-content section article.project-like.project,
+.pretext-content section article.project-like.activity,
 .pretext-content section article.project-like.exploration {
     padding-left: 0.8em;
     padding-bottom: 0.5em;
+/*
     border-left: 0.1em solid #3b0082;
     border-bottom: 0.1em solid #3b0082;
+*/
+}
+.pretext-content section article.example-like.example,
+.pretext-content section article.project-like.project,
+.pretext-content section article.project-like.activity,
+.pretext-content section article.project-like.exploration {
+    border-left: 0.1em solid var(--assemblagedarkborder);
+    border-bottom: 0.1em solid var(--assemblagedarkborder);
+
+}
+.pretext-content section article.project-like.activity {
+    border-left: 0.1em solid var(--assemblageborder);
+    border-bottom: 0.1em solid var(--assemblageborder);
 }
 
 .pretext-content section article.example-like.example > .heading,
 .pretext-content section article.project-like.project > .heading,
+.pretext-content section article.project-like.activity > .heading,
 .pretext-content section article.project-like.exploration > .heading {
     display: inline-block;
     padding: 0.3em 0.5em;
-    margin-left: -0.7em;
+    margin-left: -0.8em;
 }
 .pretext-content section article.example-like.example > .heading,
+.pretext-content section article.project-like.project > .heading,
+.pretext-content section article.project-like.exploration > .heading {
+    border: 0.1em solid var(--assemblagedarkborder);   /* maybe no border-left? */
+}
+.pretext-content section article.project-like.activity > .heading {
+    border: 0.1em solid var(--assemblageborder);
+}
+
+.pretext-content section article.example-like.example > .heading,
 .pretext-content section article.project-like.project > .heading {
-    background: #3b0082;
+    background: var(--assemblagedarkborder);
     color: #fff;
 }
 .pretext-content section article.project-like.exploration > .heading {
     background: #fff;
     color: #3b0082;
-    border: 0.1em solid #3b0082;   /* maybe no border-left? */
     margin-left: -0.8em;
 }
-
+.pretext-content section article.project-like.activity > .heading {
+    background: var(--assemblageborder);
+}
 
 .pretext-content section article.example-like.example > .heading::after,
 .pretext-content section article.project-like.project > .heading::after,
+.pretext-content section article.project-like.activity > .heading::after,
 .pretext-content section article.project-like.exploration > .heading::after {
     content: "";
 }
@@ -163,13 +183,15 @@ article[id*='example'] {
 .pretext-content section article.example-like.example > .heading + .introduction,
 .pretext-content section article.project-like.project > .heading + p,
 .pretext-content section article.project-like.project > .heading + .introduction,
+.pretext-content section article.project-like.activity > .heading + p,
+.pretext-content section article.project-like.activity > .heading + .introduction,
 .pretext-content section article.project-like.exploration > .heading + p,
 .pretext-content section article.project-like.exploration > .heading + .introduction {
     display: block;
     padding-top: 0.3em;
 }
 
-
+/* where does this appear? */
 .posterior {
   margin-left: 1ex;
   padding-left: 1ex;
@@ -178,63 +200,3 @@ article[id*='example'] {
   border-left: solid 1pt gray;
 }
 
-/*separate proof environment in example solutions:*/
-/* article .remark-like .proof {
-  margin-top: 1em;
-  padding-left: 1ex;
-} */
-
-article.proof {
-  padding-top: 1ex;
-  padding-left: 1em;
-  padding-right: 1em;
-  border-right: none;
-}
-
-/*change qed symbol:*/
-.pretext-content .proof:after{
-  content: "qed";
-  font-variant: small-caps;
-  font-size: 1.1em;
-  margin-right: 0em;
-  border-bottom: none;
-  margin-top: -1em;
-}
-
-article.theorem-like {
-    padding-left: 0.4em;
-    border-left: solid 1pt #d1d1d1;
-}
-
-/* check if the following is needed once the default style is not read in first */
-article.theorem-like:after {
-  border-bottom: none;
-}
-
-/*style toc */
-/*#toc ul li a, #toc ul li a:link, #toc ul li a:visited {
-    color: #20477b;
-    background: #e2e6e8;
-}*/
-
-pretext-content .summary-links a, .pretext-content .summary-links a:link, .pretext-content .summary-links a:visited {
-    color: #395E66;
-    background: #f0f0f0;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-
-
-.pretext-content .summary-links a:hover, .pretext-content .summary-links a:focus {
-    color: white;
-    background: #223843;
-    text-decoration: none;
-}
-
-
-#masthead #logo-link img, #masthead .logo-link img {
-    width: auto;
-    height: auto;
-    max-height: 1.2em;
-}
