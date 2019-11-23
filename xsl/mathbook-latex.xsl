@@ -946,11 +946,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:for-each select="$one-line-reps">
         <xsl:apply-templates select="." mode="tex-macro"/>
     </xsl:for-each>
-    <xsl:if test="$document-root//kbd">
-        <xsl:text>%% Used to (simplistically) simulate keys from a keyboard&#xa;</xsl:text>
-        <xsl:text>\newcommand{\kbd}[1]</xsl:text>
-        <xsl:text>{\tikz[baseline=(A.base)]{\node[draw,rectangle,rounded corners,thick,scale=1.0] (A) at (0,0) {\textsf{#1}}}}</xsl:text>
-    </xsl:if>
     <xsl:if test="$document-root//alert">
         <xsl:text>%% Used for warnings, typically bold and italic&#xa;</xsl:text>
         <xsl:text>\newcommand{\alert}[1]{\textbf{\textit{#1}}}&#xa;</xsl:text>
@@ -2177,6 +2172,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%%     we have had to be extra careful with variable thickness&#xa;</xsl:text>
         <xsl:text>%%     lines in tables, and so also load this package late&#xa;</xsl:text>
         <xsl:text>\usepackage{extpfeil}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:if test="$document-root//kbd">
+        <!-- https://github.com/tweh/menukeys/issues/41 -->
+        <xsl:text>%% menukeys package says:&#xa;</xsl:text>
+        <xsl:text>%%   Since menukeys uses catoptions, which does some heavy&#xa;</xsl:text>
+        <xsl:text>%%   changes on key-value options, it is recommended to load&#xa;</xsl:text>
+        <xsl:text>%%   menukeys as the last package (even after hyperref)!&#xa;</xsl:text>
+        <xsl:text>\usepackage{menukeys}&#xa;</xsl:text>
+        <!-- https://tex.stackexchange.com/questions/96300/how-to-change-the-style-of-menukeys -->
+        <xsl:text>\renewmenumacro{\keys}{shadowedroundedkeys}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\kbd}[1]{\keys{#1}}&#xa;</xsl:text>
     </xsl:if>
 
     <xsl:text>%% Custom Preamble Entries, late (use latex.preamble.late)&#xa;</xsl:text>

@@ -4509,22 +4509,24 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Keyboard Keys -->
 <!-- ############# -->
 
-<!-- Comments are Unicode names, from fileformat.info -->
+<!-- Comments are Unicode names, from fileformat.info            -->
+<!-- @latex values are macros in teh menukeys package specifying -->
+<!-- keyboard keys that are typically labeled with graphics      -->
 <xsl:variable name="kbdkey-rtf">
     <kbdkeyinfo name="left"
-                latex="\(\leftarrow\)"
+                latex="\arrowkeyleft"
                 unicode="&#x2190;"/> <!-- LEFTWARDS ARROW -->
     <kbdkeyinfo name="up"
-                latex="\(\uparrow\)"
+                latex="\arrowkeyup"
                 unicode="&#x2191;"/> <!-- UPWARDS ARROW -->
     <kbdkeyinfo name="right"
-                latex="\(\rightarrow\)"
+                latex="\arrowkeyright"
                 unicode="&#x2192;"/> <!-- RIGHTWARDS ARROW -->
     <kbdkeyinfo name="down"
-                latex="\(\downarrow\)"
+                latex="\arrowkeydown"
                 unicode="&#x2193;"/> <!-- DOWNWARDS ARROW -->
     <kbdkeyinfo name="enter"
-                latex="\tikz \draw [thick,->, rounded corners=1pt] (0.6,0.15)--(0.6,0)--(0,0);"
+                latex="\return"
                 unicode="&#x2BA0;"/> <!-- DOWNWARDS TRIANGLE-HEADED ARROW WITH LONG TIP LEFTWARDS -->
 </xsl:variable>
 
