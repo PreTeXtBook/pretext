@@ -2020,7 +2020,7 @@ the xsltproc executable.
 
                 <p>Your text can include specialized text meant to look like a key on the keyboard of a calculator or other device.  So you can go <kbd>b</kbd> <kbd>Enter</kbd> <kbd>&lt;</kbd> or <kbd>F1</kbd>.  Or maybe a sequence as: <kbd>Tab</kbd> &gt; <kbd>Ctrl</kbd> &gt; <kbd>T</kbd>.  Use the <tag>kbd</tag> element, with the label of the key as content.</p>
 
-                <p>There is a limited supply of keys which are labeled with graphics rather than text, such as a left arrow <kbd name="left"/>, right arrow <kbd name="right"/>, up arrow <kbd name="up"/>, down arrow <kbd name="down"/>, and Enter <kbd name="enter"/>.</p>
+                <p>There is a growing supply of keys which are labeled with graphics rather than text, such as a left arrow <kbd name="left"/>, right arrow <kbd name="right"/>, up arrow <kbd name="up"/>, down arrow <kbd name="down"/>, and Enter <kbd name="enter"/>.  See <pubtitle>The <pretext/> Guide</pubtitle> for the definitive list.</p>
             </subsection>
 
             <subsection xml:id="section-urls">

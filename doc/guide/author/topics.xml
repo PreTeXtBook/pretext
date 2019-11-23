@@ -574,6 +574,41 @@
         </subsection>
 
         <subsection>
+            <title>Keyboard Keys</title>
+            <idx>keyboard keys</idx>
+            <idx><h>keys</h><h>keyboard</h></idx>
+
+            <p>If you are writing a software manual, or writing about how to use a calculator as part of a science textbook, then you might want to make it very clear which keys to press on a keyboard.  The <tag>kbd</tag> element can hold content like <c>Z</c> or <c>Caps Lock</c> and your output will have a very nice looking keyboard key with the desired label.  For example, <kbd>Z</kbd> and <kbd>Caps Lock</kbd>.  For keys labeled with graphics, like the arrow keys, instead of content, provide the <attr>name</attr> attribute with a value from the following table.  Request additions to this table if you are using this feature (2019-11-22).</p>
+
+            <table>
+                <title>Keyboard Keys Specified by <attr>name</attr> Attribute</title>
+
+                <tabular>
+                    <row>
+                        <cell><c>left</c></cell>
+                        <cell><kbd name="left"/></cell>
+                        <cell><c>right</c></cell>
+                        <cell><kbd name="right"/></cell>
+                        <cell><c>up</c></cell>
+                        <cell><kbd name="up"/></cell>
+                        <cell><c>down</c></cell>
+                        <cell><kbd name="down"/></cell>
+                    </row>
+                    <row>
+                        <cell><c>enter</c></cell>
+                        <cell><kbd name="enter"/></cell>
+                        <cell><c>shift</c></cell>
+                        <cell><kbd name="shift"/></cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell></cell>
+                    </row>
+                </tabular>
+            </table>
+        </subsection>
+
+        <subsection>
             <title>Other Markup in Paragraphs</title>
 
                 <!-- <title>Generators</title> -->
