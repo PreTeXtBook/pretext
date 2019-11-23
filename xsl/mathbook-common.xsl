@@ -4528,6 +4528,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <kbdkeyinfo name="enter"
                 latex="\return"
                 unicode="&#x2BA0;"/> <!-- DOWNWARDS TRIANGLE-HEADED ARROW WITH LONG TIP LEFTWARDS -->
+    <kbdkeyinfo name="shift"
+                latex="\shift"
+                unicode="&#x21E7;"/> <!-- UPWARDS WHITE ARROW -->
 </xsl:variable>
 
 <!-- If read from a file via "document()" then   -->
