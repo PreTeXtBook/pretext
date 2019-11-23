@@ -201,89 +201,91 @@
         <p>These three characters are interpreted by the <init>XML</init> processor very early in the analysis of your source.  So they need to be authored specially via the <term>XML entities</term>: <c>&amp;amp;</c>, <c>&amp;lt;</c>, <c>&amp;gt;</c>.  In practice, the last is rarely necessary.  So really just two characters to type carefully or exceptionally.</p>
 
         <p>If you consistently follow the prescription in the previous paragraph you will avoid a descent into escape-character hell and avoid a lot of head-scratching.  In particular, you should have no need of the <c>&lt;![CDATA[</c><nbsp /><c>]]&gt;</c> mechanism of XML, so just forget we even mentioned it.</p>
+    </section>
 
- <table>
-  <title>Special Characters</title>
-  <tabular halign="left">
-   <col halign="center"/>
-   <col halign="left" right="medium"/>
-   <col halign="center"/>
-   <col halign="left"/>
-   <row bottom="medium">
-    <cell>To get this:</cell>
-    <cell>Type this:</cell>
-    <cell>To get this:</cell>
-    <cell>Type this</cell>
-   </row>
+    <section xml:id="overview-nontrivial-characters">
+        <title>Nontrivial Characters</title>
+        <idx>nontrivial characters</idx>
+        <idx><h>characters</h><h>nontrivial</h></idx>
 
-   <row>
-    <cell>&amp;</cell>
-    <cell><c>&amp;amp;</c></cell>
-    <cell><copyright/></cell>
-    <cell><tage>copyright</tage></cell>
-   </row>
-   <row>
-    <cell><ellipsis/></cell>
-    <cell><tage>ellipsis</tage></cell>
-    <cell><fillin/></cell>
-    <cell><tage>fillin</tage></cell>
-   </row>
-   <row>
-    <cell><icon name="gear"/></cell>
-    <cell><c>&lt;icon name="gear"/&gt;</c></cell>
-    <cell>&lt;</cell>
-    <cell><c>&amp;lt;</c></cell>
-   </row>
-   <row>
-    <cell><lq/></cell>
-    <cell><tage>lq</tage></cell>
-    <cell><lsq/></cell>
-    <cell><tage>lsq</tage></cell>
-   </row>
-   <row>
-    <cell><mdash/></cell>
-    <cell><tage>mdash</tage></cell>
-    <cell><midpoint/></cell>
-    <cell><tage>midpoint</tage></cell>
-   </row>
-   <row>
-    <cell><nbsp/></cell>
-    <cell><tage>nbsp</tage></cell>
-    <cell><ndash/></cell>
-    <cell><tage>ndash</tage></cell>
-   </row>
-   <row>
-    <cell><permille/></cell>
-    <cell><tage>permille</tage></cell>
-    <cell><pilcrow/></cell>
-    <cell><tage>pilcrow</tage></cell>
-   </row>
-   <row>
-    <cell><registered/></cell>
-    <cell><tage>registered</tage></cell>
-    <cell><rq/></cell>
-    <cell><tage>rq</tage></cell>
-   </row>
-   <row>
-    <cell><rsq/></cell>
-    <cell><tage>rsq</tage></cell>
-    <cell><section-mark/></cell>
-    <cell><tage>section-mark</tage></cell>
-   </row>
-   <row>
-    <cell><solidus/></cell>
-    <cell><tage>solidus</tage></cell>
-    <cell><swungdash/></cell>
-    <cell><tage>swungdash</tage></cell>
-   </row>
-   <row>
-    <cell><times/></cell>
-    <cell><tage>times</tage></cell>
-    <cell><trademark/></cell>
-    <cell><tage>trademark</tage></cell>
-   </row>
-  </tabular>
- </table>
+        <p>Quality typography is more expansive than the limited capabilities of computer keyboards, whose history is rooted in the machines known as typewriters.  Some characters are never present on a keyboard (e.g., a pilcrow), while others are ambiguous.  Is a diagonal line a slash used to separate information (either/or), or is it a solidus used to form a simple fraction such as 3<solidus/>4? <xref ref="table-nontrivial-characters"/> is a <em>sample</em> of how <pretext/> addresses this.  (The last two lines are the technical exceptions imposed by using a markup language, see <xref ref="overview-special-characters"/>.) See <xref ref="topic-paragraphs"/> for a more comprehensive and detailed discussion.</p>
+
+        <table xml:id="table-nontrivial-characters">
+            <title>Nontrivial Characters</title>
+            <tabular halign="left">
+                <col halign="center"/>
+                <col halign="left" right="medium"/>
+                <col halign="center"/>
+                <col halign="left"/>
+                <row bottom="medium">
+                    <cell>To get this:</cell>
+                    <cell>Type this:</cell>
+                    <cell>To get this:</cell>
+                    <cell>Type this</cell>
+                </row>
+
+                <row>
+                    <cell><ellipsis/></cell>
+                    <cell><tage>ellipsis</tage></cell>
+                    <cell><fillin/></cell>
+                    <cell><tage>fillin</tage></cell>
+                </row>
+                <row>
+                    <cell><icon name="gear"/></cell>
+                    <cell><c>&lt;icon name="gear"/&gt;</c></cell>
+                    <cell><icon name="wrench"/></cell>
+                    <cell><c>&lt;icon name="wrench"/&gt;</c></cell>
+                </row>
+                <row>
+                    <cell><kbd>PrtScn</kbd></cell>
+                    <cell><c>&lt;kbd&gt;PrtScn&lt;/kbd&gt;</c></cell>
+                    <cell><kbd name="shift"/></cell>
+                    <cell><c>&lt;kbd name="shift"/&gt;</c></cell>
+                </row>
+                <row>
+                    <cell><ndash/></cell>
+                    <cell><tage>ndash</tage></cell>
+                    <cell><mdash/></cell>
+                    <cell><tage>mdash</tage></cell>
+                </row>
+                <row>
+                    <cell><registered/></cell>
+                    <cell><tage>registered</tage></cell>
+                    <cell><copyright/></cell>
+                    <cell><tage>copyright</tage></cell>
+                </row>
+                <row>
+                    <cell><permille/></cell>
+                    <cell><tage>permille</tage></cell>
+                    <cell><pilcrow/></cell>
+                    <cell><tage>pilcrow</tage></cell>
+                </row>
+                <row>
+                    <cell><section-mark/></cell>
+                    <cell><tage>section-mark</tage></cell>
+                    <cell><midpoint/></cell>
+                    <cell><tage>midpoint</tage></cell>
+                </row>
+                <row>
+                    <cell><solidus/></cell>
+                    <cell><tage>solidus</tage></cell>
+                    <cell><swungdash/></cell>
+                    <cell><tage>swungdash</tage></cell>
+                </row>
+                <row>
+                    <cell><times/></cell>
+                    <cell><tage>times</tage></cell>
+                    <cell><trademark/></cell>
+                    <cell><tage>trademark</tage></cell>
+                </row>
+                <row>
+                    <cell>&amp;</cell>
+                    <cell><c>&amp;amp;</c></cell>
+                    <cell>&lt;</cell>
+                    <cell><c>&amp;lt;</c></cell>
+                </row>
+            </tabular>
+         </table>
 
     </section>
 
