@@ -4505,6 +4505,37 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:for-each>
 </xsl:template>
 
+<!-- ############# -->
+<!-- Keyboard Keys -->
+<!-- ############# -->
+
+<!-- Comments are Unicode names, from fileformat.info -->
+<xsl:variable name="kbdkey-rtf">
+    <kbdkeyinfo name="left"
+                latex="\(\leftarrow\)"
+                unicode="&#x2190;"/> <!-- LEFTWARDS ARROW -->
+    <kbdkeyinfo name="up"
+                latex="\(\uparrow\)"
+                unicode="&#x2191;"/> <!-- UPWARDS ARROW -->
+    <kbdkeyinfo name="right"
+                latex="\(\rightarrow\)"
+                unicode="&#x2192;"/> <!-- RIGHTWARDS ARROW -->
+    <kbdkeyinfo name="down"
+                latex="\(\downarrow\)"
+                unicode="&#x2193;"/> <!-- DOWNWARDS ARROW -->
+    <kbdkeyinfo name="enter"
+                latex="\tikz \draw [thick,->, rounded corners=1pt] (0.6,0.15)--(0.6,0)--(0,0);"
+                unicode="&#x2BA0;"/> <!-- DOWNWARDS TRIANGLE-HEADED ARROW WITH LONG TIP LEFTWARDS -->
+</xsl:variable>
+
+<!-- If read from a file via "document()" then   -->
+<!-- the exsl:node-set() call would seem to be   -->
+<!-- unnecessary.  When list above gets too big, -->
+<!-- migrate to a new file after consulting      -->
+<!-- localization scheme                         -->
+<xsl:variable name="kbdkey-table" select="exsl:node-set($kbdkey-rtf)"/>
+
+<xsl:key name="kbdkey-key" match="kbdkeyinfo" use="@name"/>
 
 <!-- ########### -->
 <!-- Identifiers -->

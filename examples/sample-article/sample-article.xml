@@ -2018,7 +2018,9 @@ the xsltproc executable.
             <subsection xml:id="subsection-keyboard">
                 <title>Keyboard Keys</title>
 
-                <p>Your text can include specialized text meant to look like a key on the keyboard of a calculator or other device.  So you can go <kbd>b</kbd> <kbd>Enter</kbd> <kbd>&lt;</kbd> or <kbd>F1</kbd>.  Or maybe a sequence as: <kbd>Tab</kbd> &gt; <kbd>Ctrl</kbd> &gt; <kbd>T</kbd>.  Use the <tag>kbd</tag> element, with the label of the key as content.  Only letters, not symbols, as of 2019-11-20, but there are plans for improvements.</p>
+                <p>Your text can include specialized text meant to look like a key on the keyboard of a calculator or other device.  So you can go <kbd>b</kbd> <kbd>Enter</kbd> <kbd>&lt;</kbd> or <kbd>F1</kbd>.  Or maybe a sequence as: <kbd>Tab</kbd> &gt; <kbd>Ctrl</kbd> &gt; <kbd>T</kbd>.  Use the <tag>kbd</tag> element, with the label of the key as content.</p>
+
+                <p>There is a limited supply of keys which are labeled with graphics rather than text, such as a left arrow <kbd name="left"/>, right arrow <kbd name="right"/>, up arrow <kbd name="up"/>, down arrow <kbd name="down"/>, and Enter <kbd name="enter"/>.</p>
             </subsection>
 
             <subsection xml:id="section-urls">

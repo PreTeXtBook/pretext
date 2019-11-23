@@ -8149,9 +8149,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Keyboard Input -->
 <!-- ############## -->
 
-<xsl:template match="kbd">
+<xsl:template match="kbd[not(@name)]">
     <xsl:text>\kbd{</xsl:text>
     <xsl:value-of select="."/>
+    <xsl:text>}</xsl:text>
+</xsl:template>
+
+<xsl:template match="kbd[@name]">
+    <!-- the name attribute of the "kbd" in text as a string -->
+    <xsl:variable name="kbdkey-name">
+        <xsl:value-of select="@name"/>
+    </xsl:variable>
+
+    <xsl:text>\kbd{</xsl:text>
+        <!-- for-each is just one node, but sets context for key() -->
+        <xsl:for-each select="$kbdkey-table">
+            <xsl:value-of select="key('kbdkey-key', $kbdkey-name)/@latex" />
+        </xsl:for-each>
     <xsl:text>}</xsl:text>
 </xsl:template>
 

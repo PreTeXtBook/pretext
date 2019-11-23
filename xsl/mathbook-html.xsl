@@ -7688,13 +7688,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 
-<!-- ############## -->
-<!-- Keyboard Input -->
-<!-- ############## -->
+<!-- ############# -->
+<!-- Keyboard Keys -->
+<!-- ############# -->
 
-<xsl:template match="kbd">
+<xsl:template match="kbd[not(@name)]">
     <kbd class="kbdkey">
         <xsl:value-of select="."/>
+    </kbd>
+</xsl:template>
+
+<xsl:template match="kbd[@name]">
+    <!-- the name attribute of the "kbd" in text as a string -->
+    <xsl:variable name="kbdkey-name">
+        <xsl:value-of select="@name"/>
+    </xsl:variable>
+    <!-- Entirely similar HTML/CSS, but will hold a Unicode character -->
+    <kbd class="kbdkey">
+        <!-- for-each is just one node, but sets context for key() -->
+        <xsl:for-each select="$kbdkey-table">
+            <xsl:value-of select="key('kbdkey-key', $kbdkey-name)/@unicode" />
+        </xsl:for-each>
     </kbd>
 </xsl:template>
 
