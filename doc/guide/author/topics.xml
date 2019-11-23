@@ -609,6 +609,85 @@
         </subsection>
 
         <subsection>
+            <title>User-Interface Icons</title>
+
+            <p>When writing about software, you may wish to call attention to icons used in the interface.  Similar to graphical keyboard keys, use the <tag>icon</tag> element with a <attr>name</attr> attribute with a value from the following table.  See <xref ref="latex-icons"/> for information about using icons as part of <latex/> output.</p>
+
+            <!-- Keep table skinny with short names left and long names right -->
+            <table>
+                <title>User-Interface Icons available with <tage>icon</tage></title>
+
+                <tabular>
+                    <col/>
+                    <col halign="center" right="medium"/>
+                    <col/>
+                    <col halign="center" right="medium"/>
+                    <col/>
+                    <col halign="center"/>
+                    <row bottom="medium">
+                        <cell>Name</cell>
+                        <cell>Icon</cell>
+                        <cell>Name</cell>
+                        <cell>Icon</cell>
+                        <cell>Name</cell>
+                        <cell>Icon</cell>
+                    </row>
+                    <row>
+                        <cell><c>file-save</c></cell>
+                        <cell><icon name="file-save"/></cell>
+                        <cell><c>arrow-left</c></cell>
+                        <cell><icon name="arrow-left"/></cell>
+                        <cell><c>media-rewind</c></cell>
+                        <cell><icon name="media-rewind"/></cell>
+                    </row>
+                    <row>
+                        <cell><c>arrow-up</c></cell>
+                        <cell><icon name="arrow-up"/></cell>
+                        <cell><c>arrow-right</c></cell>
+                        <cell><icon name="arrow-right"/></cell>
+                        <cell><c>media-fast-forward</c></cell>
+                        <cell><icon name="media-fast-forward"/></cell>
+                    </row>
+                    <row>
+                        <cell><c>menu</c></cell>
+                        <cell><icon name="menu"/></cell>
+                        <cell><c>arrow-down</c></cell>
+                        <cell><icon name="arrow-down"/></cell>
+                        <cell><c>media-skip-to-start</c></cell>
+                        <cell><icon name="media-skip-to-start"/></cell>
+                    </row>
+                    <row>
+                        <cell><c>wrench</c></cell>
+                        <cell><icon name="wrench"/></cell>
+                        <cell><c>media-stop</c></cell>
+                        <cell><icon name="media-stop"/></cell>
+                        <cell><c>media-pause</c></cell>
+                        <cell><icon name="media-pause"/></cell>
+                    </row>
+                    <row>
+                        <cell><c>gear</c></cell>
+                        <cell><icon name="gear"/></cell>
+                        <cell><c>media-play</c></cell>
+                        <cell><icon name="media-play"/></cell>
+                        <cell><c>media-skip-to-end</c></cell>
+                        <cell><icon name="media-skip-to-end"/></cell>
+                    </row>
+                    <row>
+                        <cell><c>power</c></cell>
+                        <cell><icon name="power"/></cell>
+                        <cell/>
+                        <cell/>
+                        <cell/>
+                        <cell/>
+                    </row>
+                   <!-- <cell><c></c></cell><cell><icon name=""/></cell> -->
+                   <!-- Keep rows full (w/ empty cells) to please HTML validator -->
+                </tabular>
+             </table>
+
+        </subsection>
+
+        <subsection>
             <title>Other Markup in Paragraphs</title>
 
                 <!-- <title>Generators</title> -->
