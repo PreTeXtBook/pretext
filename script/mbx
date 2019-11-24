@@ -579,16 +579,16 @@ def webwork_to_xml(xslt_exec, ptx_xsl_dir, xml_source, server_params, dest_dir):
         # If correct_ans_latex_string is nonempty, use it, encased in <p><m>
         # Else if correct_ans is nonempty, use it, encased in just <p>
         # Else we have no answer to print out
-        answerhashes = re.findall(r'<AnSwEr\d+ (.*?) />', static[problem])
+        answerhashes = re.findall(r'<AnSwEr\d+ (.*?) />', static[problem], re.DOTALL)
         if answerhashes:
             answer = ''
             for answerhash in answerhashes:
                 try:
-                    correct_ans = re.search('correct_ans="(.*?)"', answerhash).group(1)
+                    correct_ans = re.search('correct_ans="(.*?)"', answerhash, re.DOTALL).group(1)
                 except:
                     correct_ans = ''
                 try:
-                    correct_ans_latex_string = re.search('correct_ans_latex_string="(.*?)"', answerhash).group(1)
+                    correct_ans_latex_string = re.search('correct_ans_latex_string="(.*?)"', answerhash, re.DOTALL).group(1)
                 except:
                     correct_ans_latex_string = ''
 
