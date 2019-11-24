@@ -217,6 +217,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="html.js.server" select="'https://pretextbook.org'" />
 <xsl:param name="html.js.version" select="'0.12'" />
 <xsl:param name="html.css.colorfile" select="''" />
+<xsl:param name="html.css.stylefile" select="''" />
 <!-- A temporary variable for testing -->
 <xsl:param name="debug.colors" select="''"/>
 
@@ -243,6 +244,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
+
+<!-- 2019-11-24: this selects the style_default            -->
+<!-- unless there is a style specified in a publisher.xml  -->
+<!-- file or as a string-param. (OL)                       -->
+<xsl:variable name="html-css-stylefile">
+    <xsl:choose>
+        <!-- if string-param is set, use it (highest priority) -->
+        <xsl:when test="not($html.css.stylefile = '')">
+            <xsl:value-of select="$html.css.stylefile"/>
+        </xsl:when>
+        <!-- if publisher.xml file has style value, use it -->
+        <xsl:when test="$publication/html/css/@style">
+            <xsl:text>style_</xsl:text>
+            <xsl:value-of select="$publication/html/css/@style"/>
+            <xsl:text>.css</xsl:text>
+        </xsl:when>
+        <!-- otherwise use the dafault -->
+        <xsl:otherwise>
+            <xsl:text>style_default.css</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
 <!-- A space-separated list of CSS URLs (points to servers or local files) -->
 <xsl:param name="html.css.extra"  select="''" />
 
@@ -10296,7 +10320,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <link href="{$html.css.server}/css/{$html.css.version}/banner_default.css" rel="stylesheet" type="text/css" />
     <link href="{$html.css.server}/css/{$html.css.version}/toc_default.css" rel="stylesheet" type="text/css" />
     <link href="{$html.css.server}/css/{$html.css.version}/knowls_default.css" rel="stylesheet" type="text/css" />
-    <link href="{$html.css.server}/css/{$html.css.version}/style_default.css" rel="stylesheet" type="text/css" />
+    <link href="{$html.css.server}/css/{$html.css.version}/{$html-css-stylefile}" rel="stylesheet" type="text/css"/>
     <link href="{$html.css.server}/css/{$html.css.version}/{$html-css-colorfile}" rel="stylesheet" type="text/css" />
     <link href="{$html.css.server}/css/{$html.css.version}/setcolors.css" rel="stylesheet" type="text/css" />
     <!-- If extra CSS is specified, then unpack multiple CSS files -->
