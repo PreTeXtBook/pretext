@@ -38,7 +38,7 @@
   <article xml:id="pretext-showcase">
     <title><pretext/> Showcase</title>
 
-    <frontmatter xml:id="index">
+    <frontmatter xml:id="frontmatter">
       <titlepage>
         <author>
           <personname>Many Contributors</personname>
@@ -64,6 +64,7 @@
 
     <xi:include href="mathematics.ptx" />
     <xi:include href="latex-image.ptx" />
+    <xi:include href="webwork.ptx" />
 
     <backmatter>
       <index>
