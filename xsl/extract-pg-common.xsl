@@ -120,9 +120,9 @@
     <xsl:call-template   name="begin-problem">
         <xsl:with-param name="b-verbose" select="$b-verbose" />
     </xsl:call-template>
-    <xsl:call-template   name="pg-macros">
+    <xsl:apply-templates select="." mode="pg-macros">
         <xsl:with-param name="b-verbose" select="$b-verbose" />
-    </xsl:call-template>
+    </xsl:apply-templates>
     <xsl:call-template   name="pg-header">
         <xsl:with-param name="b-verbose" select="$b-verbose" />
     </xsl:call-template>
@@ -155,9 +155,9 @@
     <xsl:call-template   name="begin-problem" >
         <xsl:with-param name="b-verbose" select="$b-verbose" />
     </xsl:call-template>
-    <xsl:call-template   name="pg-macros">
+    <xsl:apply-templates select="." mode="pg-macros">
         <xsl:with-param name="b-verbose" select="$b-verbose" />
-    </xsl:call-template>
+    </xsl:apply-templates>
     <xsl:call-template   name="pg-header">
         <xsl:with-param name="b-verbose" select="$b-verbose" />
     </xsl:call-template>
@@ -418,7 +418,7 @@
 
 <!-- call exactly once,        -->
 <!-- context is "webwork" root -->
-<xsl:template name="pg-macros">
+<xsl:template match="webwork" mode="pg-macros">
     <xsl:param name="b-verbose" />
 
     <xsl:call-template name="begin-block">
@@ -551,41 +551,40 @@
         <!-- ################### -->
         <!-- Parser Enhancements -->
         <!-- ################### -->
-        <!-- popup menu multiple choice answers -->
-        <xsl:if test=".//var[@form='popup']">
-            <xsl:choose>
-                <xsl:when test="$b-verbose">
-                    <xsl:text>  "parserPopUp.pl",&#xa;</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:text>"parserPopUp.pl",</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:if>
-        <!-- radio buttons multiple choice answers -->
-        <xsl:if test=".//var[@form='buttons']">
-            <xsl:choose>
-                <xsl:when test="$b-verbose">
-                    <xsl:text>  "parserRadioButtons.pl",&#xa;</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:text>"parserRadioButtons.pl",</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:if>
+        <!-- https://github.com/openwebwork/pg/tree/master/macros -->
         <!-- "assignment" answers, like "y=x+1", "f(x)=x+1" -->
-        <xsl:if test="contains(./setup/pg-code,'parser::Assignment')">
-            <xsl:choose>
-                <xsl:when test="$b-verbose">
-                    <xsl:text>  "parserAssignment.pl",&#xa;</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:text>"parserAssignment.pl",</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:if>
+        <xsl:apply-templates select="." mode="parser">
+            <xsl:with-param name="parser" select="'Assignment'"/>
+            <xsl:with-param name="b-verbose" select="$b-verbose"/>
+        </xsl:apply-templates>
+        <!-- force String() to accept any string (and add it to the context if not already there) -->
+        <xsl:apply-templates select="." mode="parser">
+            <xsl:with-param name="parser" select="'AutoStrings'"/>
+            <xsl:with-param name="b-verbose" select="$b-verbose"/>
+        </xsl:apply-templates>
+        <!-- special type of Formula for simplified difference quotients -->
+        <xsl:apply-templates select="." mode="parser">
+            <xsl:with-param name="parser" select="'DifferenceQuotient'"/>
+            <xsl:with-param name="b-verbose" select="$b-verbose"/>
+        </xsl:apply-templates>
+        <!-- special type of Formula with only one variable and student can use any variable -->
+        <xsl:apply-templates select="." mode="parser">
+            <xsl:with-param name="parser" select="'FormulaAnyVar'"/>
+            <xsl:with-param name="b-verbose" select="$b-verbose"/>
+        </xsl:apply-templates>
+        <!-- special type of Formula with a "+C" at the end -->
+        <xsl:apply-templates select="." mode="parser">
+            <xsl:with-param name="parser" select="'FormulaUpToConstant'"/>
+            <xsl:with-param name="b-verbose" select="$b-verbose"/>
+        </xsl:apply-templates>
+        <!-- formulas with units -->
+        <xsl:apply-templates select="." mode="parser">
+            <xsl:with-param name="parser" select="'FormulaWithUnits'"/>
+            <xsl:with-param name="b-verbose" select="$b-verbose"/>
+        </xsl:apply-templates>
         <!-- allow "f(x)" as part of answers -->
-        <xsl:if test="contains(./setup/pg-code,'parserFunction')">
+        <!-- note unusual usage precludes using parser modal template here -->
+        <xsl:if test="contains(setup/pg-code,'parserFunction')">
             <xsl:choose>
                 <xsl:when test="$b-verbose">
                     <xsl:text>  "parserFunction.pl",&#xa;</xsl:text>
@@ -595,145 +594,281 @@
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:if>
-        <!-- numbers with units -->
-        <xsl:if test="contains(./setup/pg-code,'NumberWithUnits')">
-            <xsl:choose>
-                <xsl:when test="$b-verbose">
-                    <xsl:text>  "parserNumberWithUnits.pl",&#xa;</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:text>"parserNumberWithUnits.pl",</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:if>
-        <!-- formulas with units -->
-        <xsl:if test="contains(./setup/pg-code,'FormulaWithUnits')">
-            <xsl:choose>
-                <xsl:when test="$b-verbose">
-                    <xsl:text>  "parserFormulaWithUnits.pl",&#xa;</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:text>"parserFormulaWithUnits.pl",</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:if>
-        <!-- implicit planes, e.g. x+2y=3z+1 -->
-        <xsl:if test="contains(./setup/pg-code,'ImplicitPlane')">
-            <xsl:choose>
-                <xsl:when test="$b-verbose">
-                    <xsl:text>  "parserImplicitPlane.pl",&#xa;</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:text>"parserImplicitPlane.pl",</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:if>
+        <!-- allow "f'(x)" as part of answers -->
+        <xsl:apply-templates select="." mode="parser">
+            <xsl:with-param name="parser" select="'FunctionPrime'"/>
+            <xsl:with-param name="b-verbose" select="$b-verbose"/>
+        </xsl:apply-templates>
         <!-- implicit equations, e.g. x^2+sin(x+y)=5 -->
-        <xsl:if test="contains(./setup/pg-code,'ImplicitEquation')">
-            <xsl:choose>
-                <xsl:when test="$b-verbose">
-                    <xsl:text>  "parserImplicitEquation.pl",&#xa;</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:text>"parserImplicitEquation.pl",</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:if>
+        <xsl:apply-templates select="." mode="parser">
+            <xsl:with-param name="parser" select="'ImplicitEquation'"/>
+            <xsl:with-param name="b-verbose" select="$b-verbose"/>
+        </xsl:apply-templates>
+        <!-- implicit planes, e.g. x+2y=3z+1 -->
+        <xsl:apply-templates select="." mode="parser">
+            <xsl:with-param name="parser" select="'ImplicitPlane'"/>
+            <xsl:with-param name="b-verbose" select="$b-verbose"/>
+        </xsl:apply-templates>
+        <!-- linear inequalities, e.g. 4x1 -3x2 <= 5 -->
+        <xsl:apply-templates select="." mode="parser">
+            <xsl:with-param name="parser" select="'LinearInequality'"/>
+            <xsl:with-param name="b-verbose" select="$b-verbose"/>
+        </xsl:apply-templates>
         <!-- for questions where multiple answer blanks work in conjunction  -->
-        <xsl:if test="contains(./setup/pg-code,'MultiAnswer')">
-            <xsl:choose>
-                <xsl:when test="$b-verbose">
-                    <xsl:text>  "parserMultiAnswer.pl",&#xa;</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:text>"parserMultiAnswer.pl",</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:if>
+        <xsl:apply-templates select="." mode="parser">
+            <xsl:with-param name="parser" select="'MultiAnswer'"/>
+            <xsl:with-param name="b-verbose" select="$b-verbose"/>
+        </xsl:apply-templates>
+        <!-- numbers with units -->
+        <xsl:apply-templates select="." mode="parser">
+            <xsl:with-param name="parser" select="'NumberWithUnits'"/>
+            <xsl:with-param name="b-verbose" select="$b-verbose"/>
+        </xsl:apply-templates>
         <!-- for questions where any one of a finite list of answers is allowable  -->
-        <xsl:if test="contains(./setup/pg-code,'OneOf')">
+        <xsl:apply-templates select="." mode="parser">
+            <xsl:with-param name="parser" select="'OneOf'"/>
+            <xsl:with-param name="b-verbose" select="$b-verbose"/>
+        </xsl:apply-templates>
+        <!-- parametric lines, specified in a variety of ways  -->
+        <xsl:apply-templates select="." mode="parser">
+            <xsl:with-param name="parser" select="'ParametricLine'"/>
+            <xsl:with-param name="b-verbose" select="$b-verbose"/>
+        </xsl:apply-templates>
+        <!-- parametric planes, specified in a variety of ways  -->
+        <xsl:apply-templates select="." mode="parser">
+            <xsl:with-param name="parser" select="'ParametricPlane'"/>
+            <xsl:with-param name="b-verbose" select="$b-verbose"/>
+        </xsl:apply-templates>
+        <!-- popup menu multiple choice answers -->
+        <xsl:apply-templates select="." mode="parser">
+            <xsl:with-param name="parser" select="'PopUp'"/>
+            <xsl:with-param name="b-verbose" select="$b-verbose"/>
+        </xsl:apply-templates>
+        <!-- allow "'" as part of answers, as an effective derivative operator -->
+        <!-- note unusual usage precludes using parser modal template here -->
+        <xsl:if test="contains(setup/pg-code,'parser::Prime')">
             <xsl:choose>
                 <xsl:when test="$b-verbose">
-                    <xsl:text>  "parserOneOf.pl",&#xa;</xsl:text>
+                    <xsl:text>  "parserPrime.pl",&#xa;</xsl:text>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:text>"parserOneOf.pl",</xsl:text>
+                    <xsl:text>"parserPrime.pl",</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:if>
+        <!-- parserQuotedString.pl is part of pg distribution, but not documented what it does -->
+        <xsl:apply-templates select="." mode="parser">
+            <xsl:with-param name="parser" select="'QuotedString'"/>
+            <xsl:with-param name="b-verbose" select="$b-verbose"/>
+        </xsl:apply-templates>
+        <!-- radio buttons multiple choice answers -->
+        <xsl:apply-templates select="." mode="parser">
+            <xsl:with-param name="parser" select="'RadioButtons'"/>
+            <xsl:with-param name="b-verbose" select="$b-verbose"/>
+        </xsl:apply-templates>
+        <!-- allow a root(n,x) function -->
+        <!-- note unusual usage precludes using parser modal template here -->
+        <xsl:if test="contains(setup/pg-code,'parser::Root')">
+            <xsl:choose>
+                <xsl:when test="$b-verbose">
+                    <xsl:text>  "parserRoot.pl",&#xa;</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>"parserRoot.pl",</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:if>
+        <!-- check if a number/point satisfies an implicit equation -->
+        <xsl:apply-templates select="." mode="parser">
+            <xsl:with-param name="parser" select="'SolutionFor'"/>
+            <xsl:with-param name="b-verbose" select="$b-verbose"/>
+        </xsl:apply-templates>
+        <!-- Some utility routines that are useful in vector problems -->
+        <!-- note unusual usage precludes using parser modal template here -->
+        <xsl:if test="contains(setup/pg-code,'Overline') or contains(setup/pg-code,'BoldMath' or contains(setup/pg-code,'non_zero_point') or contains(setup/pg-code,'non_zero_vector'))">
+            <xsl:choose>
+                <xsl:when test="$b-verbose">
+                    <xsl:text>  "parserVectorUtils.pl",&#xa;</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>"parserVectorUtils.pl",</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:if>
+        <!-- Provides free response, fill in the blank questions with interactive help -->
+        <xsl:apply-templates select="." mode="parser">
+            <xsl:with-param name="parser" select="'WordCompletion'"/>
+            <xsl:with-param name="b-verbose" select="$b-verbose"/>
+        </xsl:apply-templates>
         <!-- #################### -->
         <!-- Math Object contexts -->
         <!-- #################### -->
-        <xsl:if test="contains(./setup/pg-code,'Fraction')">
-            <xsl:choose>
-                <xsl:when test="$b-verbose">
-                    <xsl:text>  "contextFraction.pl",&#xa;</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:text>"contextFraction.pl",</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:if>
-        <xsl:if test="contains(./setup/pg-code,'PiecewiseFunction')">
-            <xsl:choose>
-                <xsl:when test="$b-verbose">
-                    <xsl:text>  "contextPiecewiseFunction.pl",&#xa;</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:text>"contextPiecewiseFunction.pl",</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:if>
-        <xsl:if test="contains(./setup/pg-code,'Ordering')">
-            <xsl:choose>
-                <xsl:when test="$b-verbose">
-                    <xsl:text>  "contextOrdering.pl",&#xa;</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:text>"contextOrdering.pl",</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:if>
-        <xsl:if test="contains(./setup/pg-code,'InequalitySetBuilder')">
-            <xsl:choose>
-                <xsl:when test="$b-verbose">
-                    <xsl:text>  "contextInequalitySetBuilder.pl",&#xa;</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:text>"contextInequalitySetBuilder.pl",</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:if>
-        <xsl:if test="contains(./setup/pg-code,'Inequalities')">
-            <xsl:choose>
-                <xsl:when test="$b-verbose">
-                    <xsl:text>  "contextInequalities.pl",&#xa;</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:text>"contextInequalities.pl",</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:if>
-        <xsl:if test="contains(./setup/pg-code,'LimitedRadical')">
-            <xsl:choose>
-                <xsl:when test="$b-verbose">
-                    <xsl:text>  "contextLimitedRadical.pl",&#xa;</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:text>"contextLimitedRadical.pl",</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:if>
-        <xsl:if test="contains(./setup/pg-code,'FiniteSolutionSets')">
-            <xsl:choose>
-                <xsl:when test="$b-verbose">
-                    <xsl:text>  "contextFiniteSolutionSets.pl",&#xa;</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:text>"contextFiniteSolutionSets.pl",</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:if>
+        <!-- https://github.com/openwebwork/pg/tree/master/macros -->
+        <!-- string-valued answers especially for matching problems -->
+        <xsl:apply-templates select="." mode="context">
+            <xsl:with-param name="context" select="'ABCD'"/>
+            <xsl:with-param name="b-verbose" select="$b-verbose"/>
+        </xsl:apply-templates>
+        <!-- Provides a context that allows the entry of decimal numbers using a comma -->
+        <xsl:apply-templates select="." mode="context">
+            <xsl:with-param name="context" select="'AlternateDecimal'"/>
+            <xsl:with-param name="b-verbose" select="$b-verbose"/>
+        </xsl:apply-templates>
+        <!-- Allows the entry of intervals using reversed bracket notation for open endpoints -->
+        <xsl:apply-templates select="." mode="context">
+            <xsl:with-param name="context" select="'AlternateIntervals'"/>
+            <xsl:with-param name="b-verbose" select="$b-verbose"/>
+        </xsl:apply-templates>
+        <!-- Allow arbitrary string answers where you code the checker -->
+        <xsl:apply-templates select="." mode="context">
+            <xsl:with-param name="context" select="'ArbitraryString'"/>
+            <xsl:with-param name="b-verbose" select="$b-verbose"/>
+        </xsl:apply-templates>
+        <!-- ComplexExtras context loads tools with no good way to auto detect. Must be added by user. -->
+        <!-- https://github.com/openwebwork/pg/blob/master/macros/contextComplexExtras.pl -->
+        <!-- ComplexJ context lets j^2 = -1 with no good way to auto detect. Must be added by user. -->
+        <!-- https://github.com/openwebwork/pg/blob/master/macros/contextComplexJ.pl -->
+        <!-- Provides contexts that allow the entry of congruence solutions -->
+        <xsl:apply-templates select="." mode="context">
+            <xsl:with-param name="context" select="'Congruence'"/>
+            <xsl:with-param name="b-verbose" select="$b-verbose"/>
+        </xsl:apply-templates>
+        <!-- Answers with currency symbols -->
+        <xsl:apply-templates select="." mode="context">
+            <xsl:with-param name="context" select="'Currency'"/>
+            <xsl:with-param name="b-verbose" select="$b-verbose"/>
+        </xsl:apply-templates>
+        <!-- Fractions -->
+        <xsl:apply-templates select="." mode="context">
+            <xsl:with-param name="context" select="'Fraction'"/>
+            <xsl:with-param name="b-verbose" select="$b-verbose"/>
+        </xsl:apply-templates>
+        <!-- Inequalitis -->
+        <xsl:apply-templates select="." mode="context">
+            <xsl:with-param name="context" select="'Inequalities'"/>
+            <xsl:with-param name="b-verbose" select="$b-verbose"/>
+        </xsl:apply-templates>
+        <!-- Inequalitis in SEt-Builder notation -->
+        <xsl:apply-templates select="." mode="context">
+            <xsl:with-param name="context" select="'InequalitySetBuilder'"/>
+            <xsl:with-param name="b-verbose" select="$b-verbose"/>
+        </xsl:apply-templates>
+        <!-- Integer objects, with integer functions -->
+        <xsl:apply-templates select="." mode="context">
+            <xsl:with-param name="context" select="'Integers'"/>
+            <xsl:with-param name="b-verbose" select="$b-verbose"/>
+        </xsl:apply-templates>
+        <!-- Integer functions -->
+        <xsl:apply-templates select="." mode="context">
+            <xsl:with-param name="context" select="'IntegerFunctions'"/>
+            <xsl:with-param name="b-verbose" select="$b-verbose"/>
+        </xsl:apply-templates>
+        <!-- Require a leading zero on decimal numbers -->
+        <xsl:apply-templates select="." mode="context">
+            <xsl:with-param name="context" select="'LeadingZero'"/>
+            <xsl:with-param name="b-verbose" select="$b-verbose"/>
+        </xsl:apply-templates>
+        <!-- Allow complex numbers but not complex operations -->
+        <xsl:apply-templates select="." mode="context">
+            <xsl:with-param name="context" select="'LimitedComplex'"/>
+            <xsl:with-param name="b-verbose" select="$b-verbose"/>
+        </xsl:apply-templates>
+        <!-- Check that the students answer agrees in form with a factored polynomial -->
+        <xsl:apply-templates select="." mode="context">
+            <xsl:with-param name="context" select="'LimitedFactor'"/>
+            <xsl:with-param name="b-verbose" select="$b-verbose"/>
+        </xsl:apply-templates>
+        <!-- Allow point entry but no point operations -->
+        <xsl:apply-templates select="." mode="context">
+            <xsl:with-param name="context" select="'LimitedPoint'"/>
+            <xsl:with-param name="b-verbose" select="$b-verbose"/>
+        </xsl:apply-templates>
+        <!-- Allow only entry of polynomials -->
+        <xsl:apply-templates select="." mode="context">
+            <xsl:with-param name="context" select="'LimitedPolynomial'"/>
+            <xsl:with-param name="b-verbose" select="$b-verbose"/>
+        </xsl:apply-templates>
+        <!-- Restrict the base or power allowed in exponentials -->
+        <xsl:apply-templates select="." mode="context">
+            <xsl:with-param name="context" select="'LimitedPowers'"/>
+            <xsl:with-param name="b-verbose" select="$b-verbose"/>
+        </xsl:apply-templates>
+        <!-- Allows for specification of forms of radical answers -->
+        <xsl:apply-templates select="." mode="context">
+            <xsl:with-param name="context" select="'LimitedRadical'"/>
+            <xsl:with-param name="b-verbose" select="$b-verbose"/>
+        </xsl:apply-templates>
+        <!-- Allow vector entry but no vector operations -->
+        <xsl:apply-templates select="." mode="context">
+            <xsl:with-param name="context" select="'LimitedVector'"/>
+            <xsl:with-param name="b-verbose" select="$b-verbose"/>
+        </xsl:apply-templates>
+        <!-- MatrixExtras adds features to Matrix context  with no good way to auto detect. Must be added by user. -->
+        <!-- https://github.com/openwebwork/pg/blob/master/macros/contextMatrixExtras.pl -->
+        <!-- Orderings, like A > B > C -->
+        <xsl:apply-templates select="." mode="context">
+            <xsl:with-param name="context" select="'Ordering'"/>
+            <xsl:with-param name="b-verbose" select="$b-verbose"/>
+        </xsl:apply-templates>
+        <!-- Partition of an integer as a sum -->
+        <xsl:apply-templates select="." mode="context">
+            <xsl:with-param name="context" select="'Partition'"/>
+            <xsl:with-param name="b-verbose" select="$b-verbose"/>
+        </xsl:apply-templates>
+        <!-- Percent answers -->
+        <xsl:apply-templates select="." mode="context">
+            <xsl:with-param name="context" select="'Percent'"/>
+            <xsl:with-param name="b-verbose" select="$b-verbose"/>
+        </xsl:apply-templates>
+        <!-- Allow the entry of cycles and permutations -->
+        <!-- User must choose between Permutation and PermutationUBC -->
+        <!-- https://github.com/openwebwork/pg/blob/master/macros/contextPermutation.pl -->
+        <!-- https://github.com/openwebwork/pg/blob/master/macros/contextPermutationUBC.pl -->
+        <!-- Piecewise functions -->
+        <xsl:apply-templates select="." mode="context">
+            <xsl:with-param name="context" select="'PiecewiseFunction'"/>
+            <xsl:with-param name="b-verbose" select="$b-verbose"/>
+        </xsl:apply-templates>
+        <!-- Allow only entry of polynomials, and their products and powers -->
+        <xsl:apply-templates select="." mode="context">
+            <xsl:with-param name="context" select="'PolynomialFactors'"/>
+            <xsl:with-param name="b-verbose" select="$b-verbose"/>
+        </xsl:apply-templates>
+        <!-- Only allow rational functions (and their products and powers) -->
+        <xsl:apply-templates select="." mode="context">
+            <xsl:with-param name="context" select="'RationalFunction'"/>
+            <xsl:with-param name="b-verbose" select="$b-verbose"/>
+        </xsl:apply-templates>
+        <!-- Chemical reactions -->
+        <xsl:apply-templates select="." mode="context">
+            <xsl:with-param name="context" select="'Reaction'"/>
+            <xsl:with-param name="b-verbose" select="$b-verbose"/>
+        </xsl:apply-templates>
+        <!-- Scientific notation -->
+        <xsl:apply-templates select="." mode="context">
+            <xsl:with-param name="context" select="'ScientificNotation'"/>
+            <xsl:with-param name="b-verbose" select="$b-verbose"/>
+        </xsl:apply-templates>
+        <!-- String-centric context. User must add -->
+        <!-- https://github.com/openwebwork/pg/blob/master/macros/contextString.pl -->
+        <!-- Context for True/False answers. User must add -->
+        <!-- https://github.com/openwebwork/pg/blob/master/macros/contextTF.pl -->
+        <!-- Make ttrig functions behave wrt degrees -->
+        <xsl:apply-templates select="." mode="context">
+            <xsl:with-param name="context" select="'TrigDegrees'"/>
+            <xsl:with-param name="b-verbose" select="$b-verbose"/>
+        </xsl:apply-templates>
+        <!-- Below are context files from the OPL macros folder, not the pg distribution -->
+        <!-- Answers like {1,2,3} that can be entered in many other ways, like "x=1,2,or 3" -->
+        <xsl:apply-templates select="." mode="context">
+            <xsl:with-param name="context" select="'FiniteSolutionSets'"/>
+            <xsl:with-param name="b-verbose" select="$b-verbose"/>
+        </xsl:apply-templates>
+        <!-- Answers that are functions paired with domains, like x^2, x != 2 -->
+        <xsl:apply-templates select="." mode="context">
+            <xsl:with-param name="context" select="'RestrictedDomains'"/>
+            <xsl:with-param name="b-verbose" select="$b-verbose"/>
+        </xsl:apply-templates>
     </xsl:variable>
     <!-- capture problem root to use inside upcoming for-each -->
     <xsl:variable name="problem-root" select="." />
@@ -809,6 +944,38 @@
     <!-- if images are used, explicitly refresh or stale images will be used in HTML -->
     <xsl:if test=".//image[@pg-name]">
         <xsl:text>$refreshCachedImages= 1;</xsl:text>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="webwork" mode="context">
+    <xsl:param name="context"/>
+    <xsl:param name="b-verbose"/>
+    <xsl:if test="contains(setup/pg-code,$context)">
+        <xsl:if test="$b-verbose">
+            <xsl:text>  </xsl:text>
+        </xsl:if>
+        <xsl:text>"context</xsl:text>
+        <xsl:value-of select="$context"/>
+        <xsl:text>.pl",</xsl:text>
+        <xsl:if test="$b-verbose">
+            <xsl:text>&#xa;</xsl:text>
+        </xsl:if>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="webwork" mode="parser">
+    <xsl:param name="parser"/>
+    <xsl:param name="b-verbose"/>
+    <xsl:if test="contains(setup/pg-code,$parser)">
+        <xsl:if test="$b-verbose">
+            <xsl:text>  </xsl:text>
+        </xsl:if>
+        <xsl:text>"parser</xsl:text>
+        <xsl:value-of select="$parser"/>
+        <xsl:text>.pl",</xsl:text>
+        <xsl:if test="$b-verbose">
+            <xsl:text>&#xa;</xsl:text>
+        </xsl:if>
     </xsl:if>
 </xsl:template>
 
