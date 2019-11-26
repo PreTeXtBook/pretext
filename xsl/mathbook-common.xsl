@@ -245,10 +245,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- List is elements in PROJECT-LIKE entity -->
 <!-- project|activity|exploration|investigation -->
 <xsl:strip-space elements="project activity exploration investigation" />
+<!-- List is elements in FIGURE-LIKE -->
+<!-- figure|table|listing|list -->
+<xsl:strip-space elements="figure table listing list"/>
 <xsl:strip-space elements="exercise hint answer solution" />
+<xsl:strip-space elements="objectives outcomes"/>
 <!-- The next three are containers -->
 <xsl:strip-space elements="prelude interlude postlude" />
-<xsl:strip-space elements="aside blockquote" />
+<xsl:strip-space elements="aside blockquote assemblage" />
 <xsl:strip-space elements="list terms" />
 <xsl:strip-space elements="sage program console task" />
 <xsl:strip-space elements="exercisegroup" />
@@ -258,6 +262,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:strip-space elements="sidebyside paragraphs" />
 <xsl:strip-space elements="tabular col row" />
 <xsl:strip-space elements="webwork setup" />
+<xsl:strip-space elements="notation image tabular row"/>
 
 <!-- A few basic elements are explicitly mixed-content -->
 <!-- So we must preserve whitespace-only text nodes    -->
