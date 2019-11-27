@@ -678,6 +678,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text></xsl:text>
             </p>
         </xsl:if>
+        <!-- After the heading, and before the actual guts, we      -->
+        <!-- sometimes annotate with a knowl showing the source     -->
+        <!-- of the current element.  This calls a stub, unless     -->
+        <!-- a separate stylesheet is used to define the template,  -->
+        <!-- and the method is defined there.                       -->
+        <xsl:apply-templates select="." mode="view-source-knowl"/>
         <!-- Most divisions are a simple list of elements to be       -->
         <!-- processed in document order, once we handle metadata     -->
         <!-- properly, and also kill it so it is not caught up here.  -->
@@ -4607,6 +4613,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:if test="$block-type = 'xref'">
                 <xsl:apply-templates select="." mode="heading-xref-knowl" />
             </xsl:if>
+            <!-- After the heading, and before the actual guts, we      -->
+            <!-- sometimes annotate with a knowl showing the source     -->
+            <!-- of the current element.  This calls a stub, unless     -->
+            <!-- a separate stylesheet is used to define the template,  -->
+            <!-- and the method is defined there.                       -->
+            <xsl:apply-templates select="." mode="view-source-knowl"/>
             <!-- Then actual content, respecting b-original flag  -->
             <!-- Pass $block-type for Sage cells to know environs -->
             <xsl:apply-templates select="." mode="wrapped-content">
@@ -8667,6 +8679,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;</xsl:text>
     </xsl:attribute>
 </xsl:template>
+
+<!-- This is a no-op stub, so we can insert annotations at  -->
+<!-- key locations.  To "activate", an importing stylesheet -->
+<!-- needs to define this template.  So in this way we have -->
+<!-- the same effect as if we had a switch.                 -->
+<xsl:template match="*" mode="view-source-knowl"/>
 
 <!-- JSXGraph -->
 <!-- DEPRECATED (2018-04-06)                             -->
