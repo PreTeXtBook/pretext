@@ -30,7 +30,7 @@
         <defined-term>
                 <idx>Asymptote</idx>
             <title>Asymptote</title>
-            <p>A <latex/> package for drawing graphs, diagrams or pictures.
+            <p>A package for drawing graphs, diagrams or pictures which may be used with <latex/> or <pretext/>.
             </p>
         </defined-term>
 
@@ -328,7 +328,7 @@
         <defined-term>
                 <idx>PDFLaTeX</idx>
             <title>PDFLaTeX</title>
-            <p>One of the available programs to convert <latex/>to PDF.
+            <p>One of the available programs to convert <latex/> to PDF.
             </p>
         </defined-term>
 
