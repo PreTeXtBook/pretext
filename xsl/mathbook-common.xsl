@@ -109,6 +109,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- html.knowl.sidebyside is deprecated 2017-07  -->
 <!-- null value necessary for deprecation message -->
 <xsl:param name="html.knowl.sidebyside" select="''" />
+<!-- Analytics deprecated 2019-11-28               -->
+<!-- null values necessary for deprecation message -->
+<xsl:param name="html.statcounter.project" select="''"/>
+<xsl:param name="html.statcounter.security" select="''"/>
+<xsl:param name="html.google-classic" select="''"/>
+<xsl:param name="html.google-universal" select="''"/>
 <!-- DO NOT USE -->
 
 <!-- An exercise has a statement, and may have hints,      -->
@@ -10615,6 +10621,20 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="date-string" select="'2019-07-10'" />
         <xsl:with-param name="message" select="'an element should no longer have an @xml:id equal to &quot;index&quot; as a way to create an HTML index.html page.  See the Publishers Guides chapter on the HTML conversion for instructions.'" />
     </xsl:call-template>
+    <!--  -->
+    <!-- 2019-11-28  deprecated docinfo analytics in favor of publisher's file  -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$docinfo/analytics" />
+        <xsl:with-param name="date-string" select="'2019-11-28'" />
+        <xsl:with-param name="message" select="'use of the docinfo/analytics element has been deprecated.  Existing elements are being respected, but please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.&#xa;  * For StatCounter this is a cosmetic change.&#xa;  * Google Classic has been deprecated by Google and will not be supported.&#xa;  * Google Universal has been replaced, your ID may continue to work.&#xa;  * Google Global Site Tag is fully supported, try your Universal ID.&#xa;'" />
+    </xsl:call-template>
+    <!-- And switches for analytics  -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2019-11-28'" />
+        <xsl:with-param name="message" select="'use of string parameters for analytics configuration has been deprecated.  Existing switches are being respected, but please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.&#xa;  * For StatCounter this is a cosmetic change.&#xa;  * Google Classic has been deprecated by Google and will not be supported.&#xa;  * Google Universal has been replaced, your ID may continue to work.&#xa;  * Google Global Site Tag is fully supported, try your Universal ID.&#xa;'" />
+            <xsl:with-param name="incorrect-use" select="($html.statcounter.project != '') or ($html.statcounter.security != '') or ($html.google-classic != '') or ($html.google-universal != '')" />
+    </xsl:call-template>
+
 </xsl:template>
 
 <!-- Miscellaneous -->

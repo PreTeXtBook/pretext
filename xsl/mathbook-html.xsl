@@ -458,10 +458,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- and which should not be a concern while editing, and    -->
 <!-- which should not run with source.  Deprecated "docinfo" -->
 <!-- options are respected for now.                          -->
-<xsl:param name="html.statcounter.project" select="''"/>
-<xsl:param name="html.statcounter.security" select="''"/>
-<xsl:param name="html.google-classic" select="''"/>
-<xsl:param name="html.google-universal" select="''"/>
 <xsl:param name="html.google-search" select="''"/>
 
 <xsl:variable name="statcounter-project">

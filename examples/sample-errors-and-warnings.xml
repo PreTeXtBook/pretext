@@ -40,6 +40,8 @@ systems.
     <docinfo>
         <!-- rename/lang  replaced by  rename/@xml:lang -->
         <rename element="proposition" lang="en-US">Conundrum</rename>
+        <!-- Moved to publisher file, 100% -->
+        <analytics/>
     </docinfo>
 
     <article xml:id="errors-and-warnings">
