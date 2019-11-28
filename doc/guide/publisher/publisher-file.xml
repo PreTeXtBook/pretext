@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--   This file is part of the documentation of PreTeXt      -->
+<!--                                                          -->
+<!--      PreTeXt Publisher's Guide                           -->
+<!--                                                          -->
+<!-- Copyright (C) 2013-2017  Robert A. Beezer, David Farmer  -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<chapter xml:id="publisher-file-reference">
+    <title>Publisher File Reference</title>
+
+    <introduction>
+        <p>This chapter is reference material for the <term>publisher file</term>, whose employment is described in <xref ref="publisher-file"/>.</p>
+    </introduction>
+
+    <section xml:id="analytics-options">
+        <title>HTML Analytics</title>
+        <idx>analytics</idx>
+
+        <p>The<cd>
+            <cline>/publisher/html/analytics</cline>
+        </cd>element can have the following attributes:<ul>
+            <li><attr>goggle-gst</attr>: a Google <term>global site tag</term>, and ID you get from Google.</li>
+            <li><attr>statcounter-project</attr>, <attr>statcounter-security</attr>: ID numbers you get from StatCounter.</li>
+        </ul>Setting these attributes to non-empty strings is teh signal to add the relevant code to each of the pages of your HTML output.  See <xref ref="online-analytics"/> for more.</p>
+    </section>
+
+</chapter>

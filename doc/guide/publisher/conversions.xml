@@ -19,7 +19,7 @@
     <section xml:id="publisher-file">
         <title>Publisher File</title>
 
-        <p>As of 2019-07-10 we are transitioning to providing options a publisher would choose via an <init>XML</init> <term>publisher file</term>.  Here we describe how to create and employ this file.  Details on actual options can be found throughout this guide.  Note too, that <xref ref="processing-parameters"/> describes the current method.</p>
+        <p>As of 2019-07-10 we are transitioning to providing options a publisher would choose via an <init>XML</init> <term>publisher file</term>.  Here we describe how to create and employ this file.  Details on actual options can be found throughout this guide, with terse reference material in <xref ref="publisher-file-reference"/>.  Note too, that <xref ref="processing-parameters"/> describes the current method.</p>
 
         <p>Create a separate <init>XML</init> file the same way you always would.  Include the usual <init>XML</init> declaration as the first line.  Now, instead of the overall element being <tag>pretext</tag>, use <tag>publication</tag>.  That's it.  Various elements within <tag>publication</tag> will be used to specify options, typically attributes.  Name the file something that reminds you of its purpose, such as <c>pod.xml</c> for a print-on-demand version.</p>
 
