@@ -103,6 +103,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Sentinel indicates no choice made                             -->
 <xsl:param name="chunk.level" select="''" />
 
+<!-- ######################### -->
+<!-- String Parameter Bad Bank -->
+<!-- ######################### -->
+
+<!-- Conversion specific parameters that die, will     -->
+<!-- live on in warnings, which we consolidate in this -->
+<!-- file, so we need to declare them here as well     -->
+
 <!-- DO NOT USE -->
 <!-- HTML-specific deprecated 2015-06, but still functional -->
 <xsl:param name="html.chunk.level" select="''" />
@@ -10006,8 +10014,12 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- Deprecations -->
 <!-- ############ -->
 
-<!-- Generic deprecation message for uniformity   -->
+<!-- Generic deprecation message for uniformity    -->
 <!-- occurrences is a node-list of "problem" nodes -->
+<!-- A message string like "'foo'" cannot contain  -->
+<!-- a single quote, even if entered as &apos;.  A -->
+<!-- &#xa; can be used if necessary, but only      -->
+<!-- rarely do we bother.                          -->
 <xsl:template name="deprecation-message">
     <xsl:param name="occurrences" />
     <xsl:param name="date-string" />
@@ -10037,7 +10049,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     </xsl:if>
 </xsl:template>
 
-<!-- pass in a condition, true is a problem -->
+<!-- pass in a condition, true is a problem        -->
+<!-- may need to move variables from specific      -->
+<!-- conversion and into -common file              -->
+<!-- A message string like "'foo'" cannot contain  -->
+<!-- a single quote, even if entered as &apos;.  A -->
+<!-- &#xa; can be used if necessary, but only      -->
+<!-- rarely do we bother.                          -->
 <xsl:template name="parameter-deprecation-message">
     <xsl:param name="incorrect-use" select="false()" />
     <xsl:param name="date-string" />
