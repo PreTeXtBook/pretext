@@ -70,8 +70,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The $publication variable comes from -common and is the result -->
 <!-- of a command-line string parameter pointing to an XML file of  -->
 <!-- various options.                                               -->
+<!-- Elements and attributes of this file are meant to influence    -->
+<!-- decisions taken *after* an author is completed writing.  In    -->
+<!-- limited cases a command-line string parameter may be used to   -->
+<!-- override these settings (especially for testing purposes).     -->
+<!-- In other cases, deprecated string parameters may be consulted  -->
+<!-- secondarily, for a limited time.                               -->
 
+<!--                          -->
 <!-- HTML Index Page Redirect -->
+<!--                          -->
+
 <!-- A generic "index.html" page will be built to redirect to an     -->
 <!-- existing page from the HTML build/chunking.  The default is the -->
 <!-- "frontmatter" page, if possible, otherwise the root page.       -->
@@ -133,6 +142,159 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
+
+<!--                              -->
+<!-- HTML CSS Style Specification -->
+<!--                              -->
+
+<!-- Remain for testing purposes -->
+<xsl:param name="html.css.colorfile" select="''" />
+<xsl:param name="html.css.stylefile" select="''" />
+<!-- A temporary variable for testing -->
+<xsl:param name="debug.colors" select="''"/>
+<!-- A space-separated list of CSS URLs (points to servers or local files) -->
+<xsl:param name="html.css.extra"  select="''" />
+
+<xsl:variable name="html-css-colorfile">
+    <xsl:choose>
+        <!-- 2019-05-29: override with new files, no error-checking    -->
+        <!-- if not used, then previous scheme is employed identically -->
+        <!-- 2019-08-12: this is current scheme, so used first. -->
+        <!-- To be replaced with publisher file option.         -->
+        <xsl:when test="not($debug.colors = '')">
+            <xsl:text>colors_</xsl:text>
+            <xsl:value-of select="$debug.colors"/>
+            <xsl:text>.css</xsl:text>
+        </xsl:when>
+        <!-- 2019-08-12: this is the older scheme, so if nothing is -->
+        <!-- supplied for both switches, then we get new default    -->
+        <xsl:when test="$html.css.colorfile = ''">
+            <xsl:text>colors_default.css</xsl:text>
+        </xsl:when>
+        <!-- 2019-08-12: nothing new in old switch, and something in -->
+        <!-- the old switch, then the old switch is employed         -->
+        <xsl:otherwise>
+            <xsl:value-of select="$html.css.colorfile"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- 2019-11-24: this selects the style_default            -->
+<!-- unless there is a style specified in a publisher.xml  -->
+<!-- file or as a string-param. (OL)                       -->
+<xsl:variable name="html-css-stylefile">
+    <xsl:choose>
+        <!-- if string-param is set, use it (highest priority) -->
+        <xsl:when test="not($html.css.stylefile = '')">
+            <xsl:value-of select="$html.css.stylefile"/>
+        </xsl:when>
+        <!-- if publisher.xml file has style value, use it -->
+        <xsl:when test="$publication/html/css/@style">
+            <xsl:text>style_</xsl:text>
+            <xsl:value-of select="$publication/html/css/@style"/>
+            <xsl:text>.css</xsl:text>
+        </xsl:when>
+        <!-- otherwise use the dafault -->
+        <xsl:otherwise>
+            <xsl:text>style_default.css</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!--                              -->
+<!-- HTML Analytics Configuration -->
+<!--                              -->
+
+<!-- String parameters are deprecated, so in -common -->
+<!-- file, and are only consulted secondarily here   -->
+
+<xsl:variable name="statcounter-project">
+    <xsl:choose>
+        <xsl:when test="$publication/html/analytics/@statcounter-project">
+            <xsl:value-of select="$publication/html/analytics/@statcounter-project"/>
+        </xsl:when>
+        <!-- obsolete, to deprecate -->
+        <xsl:when test="not($html.statcounter.project = '')">
+            <xsl:value-of select="$html.statcounter.project"/>
+        </xsl:when>
+        <!-- deprecated -->
+        <xsl:when test="$docinfo/analytics/statcounter/project">
+            <xsl:value-of select="$docinfo/analytics/statcounter/project"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="statcounter-security">
+    <xsl:choose>
+        <xsl:when test="$publication/html/analytics/@statcounter-security">
+            <xsl:value-of select="$publication/html/analytics/@statcounter-security"/>
+        </xsl:when>
+        <!-- obsolete, to deprecate -->
+        <xsl:when test="not($html.statcounter.security = '')">
+            <xsl:value-of select="$html.statcounter.security"/>
+        </xsl:when>
+        <!-- deprecated -->
+        <xsl:when test="$docinfo/analytics/statcounter/security">
+            <xsl:value-of select="$docinfo/analytics/statcounter/security"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- 2019-11-28 all settings used here are deprecated -->
+<xsl:variable name="google-classic-tracking">
+    <xsl:choose>
+        <xsl:when test="not($html.google-classic = '')">
+            <xsl:value-of select="$html.google-classic"/>
+        </xsl:when>
+        <xsl:when test="$docinfo/analytics/google">
+            <xsl:value-of select="$docinfo/analytics/google/tracking"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- 2019-11-28 all settings used here are deprecated -->
+<xsl:variable name="google-universal-tracking">
+    <xsl:choose>
+        <xsl:when test="not($html.google-universal = '')">
+            <xsl:value-of select="$html.google-universal"/>
+        </xsl:when>
+        <xsl:when test="$docinfo/analytics/google-universal">
+            <xsl:value-of select="$docinfo/analytics/google-universal/@tracking"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- This is the preferred Google method as of 2019-11-28 -->
+<xsl:variable name="google-gst-tracking">
+    <xsl:choose>
+        <xsl:when test="$publication/html/analytics/@google-gst">
+            <xsl:value-of select="$publication/html/analytics/@google-gst"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- And boolean variables for the presence of these services -->
+<!-- 2019-11-28 Two old Google services are deprecated        -->
+<xsl:variable name="b-statcounter" select="not($statcounter-project = '') and not($statcounter-security = '')" />
+<xsl:variable name="b-google-classic" select="not($google-classic-tracking = '')" />
+<xsl:variable name="b-google-universal" select="not($google-universal-tracking = '')" />
+<xsl:variable name="b-google-gst" select="not($google-gst-tracking = '')" />
+
 
 <!-- ################################################ -->
 <!-- Following is slated to migrate above, 2019-07-10 -->
@@ -216,59 +378,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="html.css.version" select="'0.31'" />
 <xsl:param name="html.js.server" select="'https://pretextbook.org'" />
 <xsl:param name="html.js.version" select="'0.12'" />
-<xsl:param name="html.css.colorfile" select="''" />
-<xsl:param name="html.css.stylefile" select="''" />
-<!-- A temporary variable for testing -->
-<xsl:param name="debug.colors" select="''"/>
-
-<xsl:variable name="html-css-colorfile">
-    <xsl:choose>
-        <!-- 2019-05-29: override with new files, no error-checking    -->
-        <!-- if not used, then previous scheme is employed identically -->
-        <!-- 2019-08-12: this is current scheme, so used first. -->
-        <!-- To be replaced with publisher file option.         -->
-        <xsl:when test="not($debug.colors = '')">
-            <xsl:text>colors_</xsl:text>
-            <xsl:value-of select="$debug.colors"/>
-            <xsl:text>.css</xsl:text>
-        </xsl:when>
-        <!-- 2019-08-12: this is the older scheme, so if nothing is -->
-        <!-- supplied for both switches, then we get new default    -->
-        <xsl:when test="$html.css.colorfile = ''">
-            <xsl:text>colors_default.css</xsl:text>
-        </xsl:when>
-        <!-- 2019-08-12: nothing new in old switch, and something in -->
-        <!-- the old switch, then the old switch is employed         -->
-        <xsl:otherwise>
-            <xsl:value-of select="$html.css.colorfile"/>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-
-<!-- 2019-11-24: this selects the style_default            -->
-<!-- unless there is a style specified in a publisher.xml  -->
-<!-- file or as a string-param. (OL)                       -->
-<xsl:variable name="html-css-stylefile">
-    <xsl:choose>
-        <!-- if string-param is set, use it (highest priority) -->
-        <xsl:when test="not($html.css.stylefile = '')">
-            <xsl:value-of select="$html.css.stylefile"/>
-        </xsl:when>
-        <!-- if publisher.xml file has style value, use it -->
-        <xsl:when test="$publication/html/css/@style">
-            <xsl:text>style_</xsl:text>
-            <xsl:value-of select="$publication/html/css/@style"/>
-            <xsl:text>.css</xsl:text>
-        </xsl:when>
-        <!-- otherwise use the dafault -->
-        <xsl:otherwise>
-            <xsl:text>style_default.css</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-
-<!-- A space-separated list of CSS URLs (points to servers or local files) -->
-<xsl:param name="html.css.extra"  select="''" />
 
 <!-- Calculator -->
 <!-- Possible values are geogebra-classic, geogebra-graphing -->
@@ -453,89 +562,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>raggedright</xsl:text>
 </xsl:variable>
 
-<!-- ID settings for various services -->
+<!-- ID settings for Google Search -->
 <!-- These are publisher items that may vary for a fork,     -->
 <!-- and which should not be a concern while editing, and    -->
 <!-- which should not run with source.  Deprecated "docinfo" -->
 <!-- options are respected for now.                          -->
 <xsl:param name="html.google-search" select="''"/>
-
-<xsl:variable name="statcounter-project">
-    <xsl:choose>
-        <xsl:when test="$publication/html/analytics/@statcounter-project">
-            <xsl:value-of select="$publication/html/analytics/@statcounter-project"/>
-        </xsl:when>
-        <!-- obsolete, to deprecate -->
-        <xsl:when test="not($html.statcounter.project = '')">
-            <xsl:value-of select="$html.statcounter.project"/>
-        </xsl:when>
-        <!-- deprecated -->
-        <xsl:when test="$docinfo/analytics/statcounter/project">
-            <xsl:value-of select="$docinfo/analytics/statcounter/project"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text/>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-
-<xsl:variable name="statcounter-security">
-    <xsl:choose>
-        <xsl:when test="$publication/html/analytics/@statcounter-security">
-            <xsl:value-of select="$publication/html/analytics/@statcounter-security"/>
-        </xsl:when>
-        <!-- obsolete, to deprecate -->
-        <xsl:when test="not($html.statcounter.security = '')">
-            <xsl:value-of select="$html.statcounter.security"/>
-        </xsl:when>
-        <!-- deprecated -->
-        <xsl:when test="$docinfo/analytics/statcounter/security">
-            <xsl:value-of select="$docinfo/analytics/statcounter/security"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text/>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-
-<xsl:variable name="google-classic-tracking">
-    <xsl:choose>
-        <xsl:when test="not($html.google-classic = '')">
-            <xsl:value-of select="$html.google-classic"/>
-        </xsl:when>
-        <xsl:when test="$docinfo/analytics/google">
-            <xsl:value-of select="$docinfo/analytics/google/tracking"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text/>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-
-<xsl:variable name="google-universal-tracking">
-    <xsl:choose>
-        <xsl:when test="not($html.google-universal = '')">
-            <xsl:value-of select="$html.google-universal"/>
-        </xsl:when>
-        <xsl:when test="$docinfo/analytics/google-universal">
-            <xsl:value-of select="$docinfo/analytics/google-universal/@tracking"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text/>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-
-<xsl:variable name="google-gst-tracking">
-    <xsl:choose>
-        <xsl:when test="$publication/html/analytics/@google-gst">
-            <xsl:value-of select="$publication/html/analytics/@google-gst"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text/>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
 
 <xsl:variable name="google-search-cx">
     <xsl:choose>
@@ -551,12 +583,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
-<!-- And boolean variables for the presence of these services -->
-<xsl:variable name="b-statcounter" select="not($statcounter-project = '') and not($statcounter-security = '')" />
-<xsl:variable name="b-google-classic" select="not($google-classic-tracking = '')" />
-<xsl:variable name="b-google-universal" select="not($google-universal-tracking = '')" />
-<xsl:variable name="b-google-gst" select="not($google-gst-tracking = '')" />
+<!-- And a boolean variable for the presence of this service -->
 <xsl:variable name="b-google-cse" select="not($google-search-cx = '')" />
+
 
 <!-- ############### -->
 <!-- Source Analysis -->

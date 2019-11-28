@@ -79,6 +79,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Output methods here are just pure text -->
 <xsl:output method="text" />
 
+<!-- ######################### -->
+<!-- Publisher Options Support -->
+<!-- ######################### -->
+
+<!-- Elements and attributes of a publisher file are meant to          -->
+<!-- influence decisions taken *after* an author is completed writing. -->
+<!-- In limited cases a command-line string parameter may be used to   -->
+<!-- override the settings (especially for testing purposes).          -->
+<!-- In other cases, deprecated string parameters may be consulted     -->
+<!-- secondarily, for a limited time.                                  -->
+
 <!-- A single command-line string parameter points to an XML file that      -->
 <!-- is structured to carry various options that a *publisher* might set.   -->
 <!-- Generally, these affect the *look* of the output, rather than the      -->
