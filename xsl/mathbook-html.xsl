@@ -466,9 +466,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:variable name="statcounter-project">
     <xsl:choose>
+        <xsl:when test="$publication/html/analytics/@statcounter-project">
+            <xsl:value-of select="$publication/html/analytics/@statcounter-project"/>
+        </xsl:when>
+        <!-- obsolete, to deprecate -->
         <xsl:when test="not($html.statcounter.project = '')">
             <xsl:value-of select="$html.statcounter.project"/>
         </xsl:when>
+        <!-- deprecated -->
         <xsl:when test="$docinfo/analytics/statcounter/project">
             <xsl:value-of select="$docinfo/analytics/statcounter/project"/>
         </xsl:when>
@@ -480,9 +485,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:variable name="statcounter-security">
     <xsl:choose>
+        <xsl:when test="$publication/html/analytics/@statcounter-security">
+            <xsl:value-of select="$publication/html/analytics/@statcounter-security"/>
+        </xsl:when>
+        <!-- obsolete, to deprecate -->
         <xsl:when test="not($html.statcounter.security = '')">
             <xsl:value-of select="$html.statcounter.security"/>
         </xsl:when>
+        <!-- deprecated -->
         <xsl:when test="$docinfo/analytics/statcounter/security">
             <xsl:value-of select="$docinfo/analytics/statcounter/security"/>
         </xsl:when>
@@ -520,6 +530,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<xsl:variable name="google-gst-tracking">
+    <xsl:choose>
+        <xsl:when test="$publication/html/analytics/@google-gst">
+            <xsl:value-of select="$publication/html/analytics/@google-gst"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
 <xsl:variable name="google-search-cx">
     <xsl:choose>
         <xsl:when test="not($html.google-search = '')">
@@ -535,9 +556,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:variable>
 
 <!-- And boolean variables for the presence of these services -->
-<xsl:variable name="b-statcounter" select="not($statcounter-project = '')" />
+<xsl:variable name="b-statcounter" select="not($statcounter-project = '') and not($statcounter-security = '')" />
 <xsl:variable name="b-google-classic" select="not($google-classic-tracking = '')" />
 <xsl:variable name="b-google-universal" select="not($google-universal-tracking = '')" />
+<xsl:variable name="b-google-gst" select="not($google-gst-tracking = '')" />
 <xsl:variable name="b-google-cse" select="not($google-search-cx = '')" />
 
 <!-- ############### -->
@@ -6046,6 +6068,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:call-template name="statcounter"/>
                 <xsl:call-template name="google-classic"/>
                 <xsl:call-template name="google-universal"/>
+                <xsl:call-template name="google-gst"/>
                 <!-- <xsl:call-template name="pytutor-footer" /> -->
             </body>
         </html>
@@ -9045,6 +9068,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="statcounter"/>
             <xsl:call-template name="google-classic"/>
             <xsl:call-template name="google-universal"/>
+            <xsl:call-template name="google-gst"/>
             <xsl:call-template name="pytutor-footer" />
             <xsl:call-template name="login-footer" />
         </body>
@@ -9093,6 +9117,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="statcounter"/>
             <xsl:call-template name="google-classic"/>
             <xsl:call-template name="google-universal"/>
+            <xsl:call-template name="google-gst"/>
         </body>
     </html>
     </exsl:document>
@@ -10455,6 +10480,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>&#xa;</xsl:text>
         <xsl:comment>End: Google Universal code</xsl:comment>
         <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
+</xsl:template>
+
+<!-- Google says use first in <head>, seems fine in foot -->
+<xsl:template name="google-gst">
+    <xsl:if test="$b-google-gst">
+        <xsl:variable name="gst-url">
+            <xsl:text>https://www.googletagmanager.com/gtag/js?id=</xsl:text>
+            <xsl:value-of select="$google-gst-tracking"/>
+        </xsl:variable>
+        <xsl:comment>Start: Google Global Site Tag code</xsl:comment>
+        <xsl:text>&#xa;</xsl:text>
+        <script async="" src="{$gst-url}"></script>
+        <script>
+            <xsl:text>  window.dataLayer = window.dataLayer || [];&#xa;</xsl:text>
+            <xsl:text>  function gtag(){dataLayer.push(arguments);}&#xa;</xsl:text>
+            <xsl:text>  gtag('js', new Date());&#xa;</xsl:text>
+            <xsl:text>  gtag('config', '</xsl:text>
+            <xsl:value-of select="$google-gst-tracking"/>
+            <xsl:text>');&#xa;</xsl:text>
+        </script>
+        <xsl:comment>End: Google Global Site Tag code</xsl:comment>
     </xsl:if>
 </xsl:template>
 
