@@ -353,9 +353,535 @@
     <section xml:id="vi">
         <title>vi, vim</title>
 
+<!-- Recommend deleting this link (which was last updated in 2005)
         <p>You can find some information at Tobias Reif's <url href="https://pinkjuice.com/howto/vimxml/">pinkjuice.com</url><fn><c>pinkjuice.com/howto/vimxml/</c></fn>.  More contributions welcome.</p>
+-->
+        <subsection>
+        <title>Using vi and <pretext /> together</title>
+            <introduction>
+            <p>
+            Any smart editor, and vi is no exception, allows the addition of new commands
+            to make repetitive tasks easier. Since creating documents
+            with <pretext /> markup often is repetitive, it makes sense to
+            explore the techniques of creating additional commands in vi to make editing
+            easier.
+            </p>
+            <p>
+            The expectation for this section is that the reader is able to
+            use vi to create and edit files, but no greater depth of knowledge
+            is assumed. The term <em>vi</em> is meant to be inclusive, that is,
+            it includes vim, gvim and the like.
+            </p>
+            </introduction>
+            
+            <subsubsection>
+            <title>Modes of vi: Command, Normal, and Insert</title>
+            <p>
+            One of the most fundamental properties of vi is that every editing task
+            may be accomplished using the keyboard. For different editing contexts,
+            it is advantageous to have the keyboard strokes have different meaning;
+            these different interpretations are called the <em>modes</em> of vi.
+            </p>
+            
+            <p>
+            Here are the pertinent modes of vi:
+            <ul>
+            <li> <em>Normal mode: </em> This mode is for changing position within the file.
+                For example, <c>j</c> moves down, <c>2w</c> moves forward two words,
+                and <c>-2}</c> moves backwards two paragraphs. It is also used for block
+                operations on text:
+                <c>-3dd</c> is used to delete three previous lines,
+                or <c>2.yy</c> will yank the next two sentences.
+                Usually vi starts in normal mode.
+            </li>
+            <li> <em>Insert mode: </em> This mode is for inserting new text into the file.
+                Typing <c>The galloping gertie leapt into the air</c> causes that text
+                to be inserted at the current position in the file.
+            </li>
+            <li> <em>Command mode: </em> This mode is to execute commands.
+                Typing <c>/abc</c> in normal mode initiates a forward search for the
+                first occurence of
+                <q>abc</q> via the command mode. Similarly <c>:w</c> will use command
+                mode to write out the current working material (buffer) to the disk.
+            </li>
+            </ul>
+            </p>
+            
+            <p>
+            Now a quick review of the keys used to move between modes:
+            From a given position in a file in Normal mode, using
+            <kbd>i</kbd>   or <kbd>a</kbd>  will change to Insert mode and
+            insert text before or after that position.
+            Similarly, <kbd>I</kbd> or <kbd>A</kbd> will insert text in front of or
+            directly following the current line,
+            and <kbd>O</kbd> or <kbd>o</kbd> will insert text above or below
+            the current line. Returning to Normal mode is done using
+            <kbd>Esc</kbd>.
+            </p>
+            
+            <p>
+            If <kbd>/</kbd>, <kbd>?</kbd>, or <kbd>:</kbd> is typed when in
+            normal mode, a small one-line window opens up (called the <em>command line</em>)
+            to receive text. This entered text is terminated by <kbd>Enter</kbd>.
+            The <kbd>/</kbd> or <kbd>?</kbd> initiates a forward or backward search
+            for the entered text. The <kbd>:</kbd> sends the entered text to the
+            vi program for further processing.
+            </p>
+            
+            <p>
+            <xref ref="vimodesfigure" />  show the keys used to move between modes.
+            </p>
+            
+            <figure xml:id="vimodesfigure">
+            <caption>Keys for moving between different modes in vi</caption>
+                <image xml:id="vimodes">
+                <asymptote>
+                unitsize(1.0cm);
+                void modebox(string s, pair P) {
+                label("\setlength{\fboxrule}{2.0pt}
+                \framebox[72pt]{\vbox{\begin{center}"+s+"\\mode\end{center}}}",P);
+                }
+                void keybox(string s, pair C, real w, real h, real r) {
+                  real c1=C.x, c2=C.y;
+                  pair []  X = {
+                    (c1-w+r,c2-h),   (c1+w-r,c2-h), (c1+w-r,c2-h+r), (c1+w,c2+h-r),
+                    (c1+w-r,c2+h-r), (c1-w+r,c2+h), (c1-w+r,c2+h-r), (c1-w,c2-h+r),
+                    (c1-w+r,c2-h+r)
+                  };
+                  path P =
+                    X[0]--X[1]-- arc(X[2],r,270,0,direction=CCW)--
+                    X[3]-- arc(X[4],r,0,90)--
+                    X[5]-- arc(X[6],r,90,180)--
+                    X[7]-- arc(X[8],r,180,270)
+                    --cycle;
+                  filldraw(shift(.05,-.05)*P,gray);
+                  filldraw(P,lightgray);
+                  label("\footnotesize "+s,C);
+                }
+                pair C=(0,0), N=(5,0), I=(10,0); //LL of Control, Normal, Insert boxes
+                modebox("Command",C);
+                modebox("Normal",N);
+                modebox("Insert",I);
+                pair L=(1.5,0.3), R=(6.5,0.3), XD=(2.2,0), YD=(0,-0.7);
+                draw (L..L+XD,Arrow);
+                draw (L+YD+XD..L+YD,Arrow);
+                draw (R..R+XD,Arrow);
+                draw (R+YD+XD..R+YD,Arrow);
+                real w=0.25, h=0.27, r=0.12; // default width, height, radius of curvature
+                keybox("/",    L+0.5*XD+2*YD,  w,     h,r);
+                keybox("?",    L+0.5*XD+3.0*YD,w,     h,r);
+                keybox(":",    L+0.5*XD+4*YD,  w,     h,r);
+                keybox("Esc",  R+0.5*XD+2*YD,  w+0.12,h,r);
+                keybox("Enter",L+0.5*XD-1.5*YD,w+0.3, h,r);
+                keybox("i",    R+0.5*XD-1.0*YD,w,     h,r);
+                keybox("a",    R+0.5*XD-2.0*YD,w,     h,r);
+                keybox("o",    R+0.5*XD-3.0*YD,w,     h,r);
+                </asymptote>
+                </image>
+            </figure>
+            
+            <p xml:id="special-chars">
+            An exclamation point prefix  <c>!</c> in Command mode
+            sends that command to the operating system.
+            For example, entering  <c>:!date</c> will cause the results
+            of the operating system command <c>date</c> to be displayed
+            on the command line. In addition the percent character
+            <c>%</c> gets expanded to the name of the file being edited.
+            If your operating system uses <c>ls -l</c> to list file information,
+            then <c>:!ls -l %</c> will give the properties of the file being edited.
+            </p>
+            </subsubsection>
+            
+            <subsubsection>
+            <title>Using :set</title>
+            <p>
+            The Command mode in vi allows users to change their interaction with the editor.
+            (Remember that entering <c>:</c> changes to Command mode,
+            and any text string entered in Command mode is terminated by <kbd>Enter</kbd>.)
+            For example, entering <c>:set number</c> will cause line numbers to appear on
+            the left.
+            They are not in the file itself, of course, but are there for the convenience
+            of the user.
+            Entering <c>:set nonumber</c> will remove these line numbers.
+            Similarly <c>:set autoindent</c> will cause a new line to preserve the
+            indentation of the previous one and <c>:set expandtab</c> will replace the tab
+            character by an appropriate number of spaces (both are very useful for writing
+            <pretext /> documents).
+            Some useful set commands are given in <xref ref="setcommands" />.
+            </p>
+            
+            <table xml:id="setcommands">
+            <title>Some useful parameters for the set command</title>
+                <tabular halign="center">
+                <row bottom="minor">
+                    <cell right="minor">Command</cell>
+                    <cell>Resulting change</cell>
+                </row>
+                <row>
+                    <cell right="minor">:set autoindent</cell>
+                    <cell>A new line preserves indentation</cell>
+                </row>
+                <row>
+                    <cell right="minor">:set expandtab</cell>
+                    <cell>Inserted tabs converted to spaces</cell>
+                </row>
+                <row>
+                    <cell right="minor">:set rows<m>=</m>n</cell>
+                    <cell>Set number of lines displayed </cell>
+                </row>
+                <row>
+                    <cell right="minor">:set columns<m>=</m>n</cell>
+                    <cell>Set the display size of each line</cell>
+                </row>
+                <row>
+                    <cell right="minor">:set tabstops<m>=</m>n</cell>
+                    <cell><kbd>Tab</kbd> inserts <m>n</m> spaces </cell>
+                </row>
+                <row>
+                    <cell right="minor">:set </cell>
+                    <cell>Show all current settings</cell>
+                </row>
+                </tabular>
+            </table>
+            </subsubsection>
+            
+            <subsubsection>
+            <title>Abbreviations</title>
+            <p>
+            The <c>:abbreviation</c> command allows the replacement of longer expressions
+            by shorter ones. Try this: in Command mode enter
+            <cd>:abbreviate ups University of Puget Sound</cd>
+            and then (in Insert mode) type
+            <cd>I enjoyed my visit to the ups.</cd>
+            If all goes well, the abbreviation is expanded and the
+            text is
+            <cd>I enjoyed my visit to the University of Puget Sound.</cd>
+            Now suppose you want to write
+            <c>My favourite letter of the Greek alphabet is upsilon.</c>
+            Looks like trouble with the last word, but in fact all is well.
+            Abbreviations are not expanded until the next character after the
+            abbreviation is read. If the next character after
+            the abbreviation is either a letter or a number, no expansion
+            takes place. Careful observation of the original example reveals that
+            the abbreviation is not expanded until the period is entered.
+            Here is another example: You want to write <c>I love pushups.</c>
+            What about the end of the last word? No problem!
+            The <c>ups</c> is expanded only if it is at the beginning of a word.
+            </p>
+            
+            <p>
+            Amusingly enough, when in Command mode, the <c>abbreviate</c> command
+            can itself be abbreviated to <c>ab</c>.
+            </p>
+            
+            <p>
+            The choice of an abbreviation is essentially arbitrary. However, if
+            desiring an abbreviation within
+            <q>I enjoyed my visit to the Technische Hogeschool Eindhoven</q>,
+            it would be folly to use <c>:ab the  Technische Hogeschool Eindhoven</c>.
+            The abbreviation should be mneumonic, but avoid actual words.
+            </p>
+            
+            <p>Now consider the following problem: what if the <kbd>Enter</kbd> key
+            is one of the desired characters in the abbreviation? Since that key
+            terminates Command mode, it appears impossible.
+            Not so! The characters <c>&lt;enter&gt;</c> (that's seven of them) will be
+            replaced by a single character equivalent to <kbd>Enter</kbd>.
+            </p>
+            
+            <p>
+            There are other characters that are treated in the same manner:
+            </p>
+            
+            <table>
+            <title>Text equivalents to keyboard entries</title>
+                <tabular halign="center">
+                <row bottom="minor">
+                    <cell>Desired key</cell>
+                    <cell>Text equivalent (not case sensitive)</cell>
+                </row>
+                <row>
+                    <cell right="minor"><kbd>Enter</kbd></cell>
+                    <cell>&lt;enter&gt; or &lt;cr&gt; </cell>
+                </row>
+                <row>
+                    <cell right="minor"><kbd>Backspace</kbd></cell>
+                    <cell>&lt;bs&gt; </cell>
+                </row>
+                <row>
+                    <cell right="minor"><kbd>Insert</kbd></cell>
+                    <cell>&lt;ins&gt; </cell>
+                </row>
+                <row>
+                    <cell right="minor"><kbd>Delete</kbd></cell>
+                    <cell>&lt;del&gt; </cell>
+                </row>
+                <row>
+                    <cell right="minor"><kbd>Esc</kbd></cell>
+                    <cell>&lt;esc&gt; </cell>
+                </row>
+                <row>
+                    <cell right="minor"><kbd name="left"/></cell>
+                    <cell>&lt;left&gt; </cell>
+                </row>
+                <row>
+                    <cell right="minor"><kbd name="right"/></cell>
+                    <cell>&lt;right&gt; </cell>
+                </row>
+                <row>
+                    <cell right="minor"><kbd name="up"/></cell>
+                    <cell>&lt;up&gt; </cell>
+                </row>
+                <row>
+                    <cell right="minor"><kbd name="down"/></cell>
+                    <cell>&lt;down&gt; </cell>
+                </row>
+                <row>
+                    <cell right="minor"><kbd>Home</kbd></cell>
+                    <cell>&lt;home&gt; </cell>
+                </row>
+                <row>
+                    <cell right="minor"><kbd>End</kbd></cell>
+                    <cell>&lt;end&gt; </cell>
+                </row>
+                <row>
+                    <cell right="minor"><kbd>Ctrl</kbd>+<kbd>x</kbd></cell>
+                    <cell>&lt;C-x&gt; </cell>
+                </row>
+                <row>
+                    <cell right="minor"><kbd>Alt</kbd> + <kbd>y</kbd></cell>
+                    <cell>&lt;M-y&gt; </cell>
+                </row>
+                </tabular>
+            </table>
+            
+            <p>
+            Here is a useful <pretext /> example:
+            Define the abbreviation
+            <cd>
+            ab gm &lt;m&gt;&lt;/m&gt;&lt;left&gt;&lt;left&gt;&lt;left&gt;&lt;left&gt;
+            </cd>
+            and then enter (in Insert mode)
+            <cd>It follows from gm\log(\theta)=0 that gm\theta=1.</cd>
+            It will (almost) be expanded to
+            <cd>
+            It follows from &lt;m&gt;\log(\theta)=0&lt;/m&gt; that &lt;m&gt;\theta=1&lt;/m&gt;.
+            </cd>
+            That's <q>almost</q> because it is necessary to move the cursor past the
+            <c>&lt;/m&gt;</c> when leaving the mathematics input. It's pretty easy to see how
+            this abbreviation works. The first seven characters <c>&lt;m&gt;&lt;/m&gt;</c>
+            are expanded unchanged and then the cursor moves to the left four times to put it
+            right where it needs to be to enter the mathematics. Careful observation
+            will reveal a little trick used in this example: <c>gm</c> is followed by
+            a <c>\</c> and so terminated the abbreviation correctly. If the variable were <m>x</m>,
+            then inputting <c>gmx</c> would not work. A workaround: enter a <kbd>Space</kbd> after
+            the <c>gm</c>. This terminates the abbreviation and it will work as desired. (Actually,
+            there will be an extra space before the <m>x</m>, which causes no ill effect, but if
+            true perfection is desired, using <c>gm</c><kbd>Space</kbd>  <kbd>Backspace</kbd>
+            will eliminate it.)
+            </p>
+            
+            <p>
+            When <c>:ab </c> is used, it is in effect in all modes. When abbreviations
+            are for Input mode only (as is the present case), then <c>iab:</c> may be used
+            and is usually preferable.
+            </p>
+            
+            <p>
+            Here is another useful (nonmathematical) example.
+            Define (for use in Input mode)
+            <cd>:iab gp &lt;p&gt;&lt;cr&gt;&lt;/p&gt;&lt;up&gt;.</cd>
+            Then entering <q>gp<kbd>Enter</kbd></q> on a new line will create three lines
+            appearing like:
+            </p>
+            <pre>
+            &lt;p&gt;
+            |
+            &lt;/p&gt;
+            </pre>
+            <p>
+            That is, the first and third line start and end a paragraph and the cursor,
+            represented by <c>|</c> is
+            at the beginning of the second line. If autoindent is set,
+            (see <xref ref="setcommands" />),
+            the line indentations are preserved. With this definition, the frequent
+            task of starting a new paragraph appropriately formatted
+            may be carried out using only three key strokes.
+            </p>
+            
+            <p>
+            A further example:
+            <cd>:iab gcom &lt;!--&lt;CR&gt;&lt;CR&gt;--&gt;&lt;Up&gt;</cd>
+            is useful to entering comments.  Starting a line with
+            <q>gcom <kbd>Tab</kbd></q> will help create nicely indented comments.
+            </p>
+            <p>
+            Want to know what abbreviations are in effect? Just enter <c>:ab</c>
+            and they will be listed.
+            </p>
+            </subsubsection>
+            
+            <subsubsection>
+            <title>Maps</title>
+            <p>
+            Maps, like abbreviations, are shortcuts that save extra key strokes.
+            There is a difference in method: the <c>map</c>  command uses
+            <em>key bindings</em> that (re)define the meanings of key strokes.
+            For example, inputting (while in Normal mode)
+            <c>:map &lt;C-X&gt; :w&lt;CR&gt;</c> will define (map) the
+            <kbd>Ctrl</kbd> +<kbd>X</kbd> key combination so that it is equivalent
+            to typing the rest of the definition, <c>:w&lt;CR&gt;</c>.
+            This three-key sequence, of course, just changes to Command mode,
+            writes the current buffer to disk, and returns to Normal mode.
+            </p>
+            
+            <p>
+            Presumably this newly defined key binding is meant to be invoked in Normal mode.
+            To do so in Insert mode would be a mistake;
+            to avoid this, there is an <c>nmap</c> command that defines key binding
+            for Normal mode only. Similarly, there is an <c>imap</c> command for Insert mode only.
+            Thus defining a key binding using <c>:nmap &lt;C-X&gt; :w&lt;CR&gt;</c>
+            will make it valid only in Normal mode.
+            Unlike abbreviations, the binding takes effect the moment the key is pressed.
+            </p>
+            <p>
+            There is a cute technique to use the same binding in Normal and Insert modes.
+            The key binding
+            <c>:imap &lt;C-X&gt; &lt;esc&gt;&lt;C-X&gt;a</c>
+            defines a binding for Insert mode. The first character,
+            <c> &lt;esc&gt;</c>, changes to Normal mode; the next character,
+            <c>&lt;C-X&gt;</c>, will use the the Normal mode definition of
+            <c>&lt;C-X&gt;</c>.  The final character <c>a</c> returns to the
+            previous position in Insert mode.
+            </p>
+            <p>
+            We can make special use of the special characters
+            <c>!</c> and <c>%</c>
+            as described in this <xref ref="special-chars"/>.
+            </p>
+            
+            <p>
+            The author using <pretext /> usually edits an <init>xml</init> file, say <c>myfile.xml</c> .
+            This file is then processed using xsltproc in conjunction with an <init>xsl</init>
+            file, say <c>myfile.xsl</c>.
+            Often the <init>xsl</init> file is <c>mathbook-html.xsl</c> or <c>mathbook-latex.xsl</c>.
+            The usual command used by the author is <c>xsltproc myfile.xsl myfile.xml</c>.
+            With this in mind, we could define a map:
+            <c>:nmap &lt;C-X&gt; !xsltproc myfile.xsl myfile.xml&lt;CR&gt;</c>
+            so that the <init>xml</init> file could be processed with a single keystroke.
+            Even better:
+            <c>:nmap &lt;C-X&gt; :w&lt;cr&gt;:!xsltproc myfile.xsl %&lt;CR&gt;</c>
+            defines a map that first writes the file being edited to disk and then
+            processes it with xsltproc. This command is independent of the
+            particular file being edited.
+            </p>
+            
+            <p>
+            A final somewhat complicated but very useful definition:
+            <cd>
+            imap &lt;C-A&gt; &lt;Esc&gt;yiwi&lt;&lt;Esc&gt;ea&gt;&lt;/&lt;Esc&gt;pa&gt;&lt;Esc&gt;F&lt;i
+            </cd>
+            which is a truely cryptic sequence of key strokes. Here is what they do:
+            </p>
+            
+            <table>
+            <title />
+                <tabular halign="center">
+                <row bottom="minor">
+                    <cell right="minor">Key strokes</cell>
+                    <cell>Interpretation</cell>
+                </row>
+                <row>
+                    <cell right="minor">&lt;esc&gt;</cell>
+                    <cell>Leave input mode</cell>
+                </row>
+                <row>
+                    <cell right="minor">yiw</cell>
+                    <cell>Save (yank) word above cursor</cell>
+                </row>
+                <row>
+                    <cell right="minor">i&lt;</cell>
+                    <cell>Insert <c>&lt;</c> </cell>
+                </row>
+                <row>
+                    <cell right="minor">&lt;esc&gt;</cell>
+                    <cell>Go to to Normal mode</cell>
+                </row>
+                <row>
+                    <cell right="minor">e</cell>
+                    <cell>Move to end of word</cell>
+                </row>
+                <row>
+                    <cell right="minor">a&gt;&lt;/&lt;esc&gt;</cell>
+                    <cell>append <c> &gt;&lt;/</c> and return
+                to Normal mode</cell>
+                </row>
+                <row>
+                    <cell right="minor">p</cell>
+                    <cell>Paste the saved word</cell>
+                </row>
+                <row>
+                    <cell right="minor">a&gt;&lt;Esc&gt;</cell>
+                    <cell>append <c>&gt;</c> and leave Insert mode</cell>
+                </row>
+                <row>
+                    <cell right="minor">F&lt;</cell>
+                    <cell>Move to  preceding &lt;</cell>
+                </row>
+                <row>
+                    <cell right="minor">i</cell>
+                    <cell>Go to Insert mode</cell>
+                </row>
+                </tabular>
+            </table>
+            
+            <p>
+            The effect of this map: Entering <c>abc&lt;C-A&gt;</c> will change
+            <c>abc</c> to <c>&lt;abc&gt;|&lt;/abc&gt;</c> where <c>|</c> is the
+            position of the cursor.
+            </p>
+            <aside>
+            <p>
+            The definition needs to be a bit convoluted so that it works with both single
+            letter and multiple-letter words.
+            </p>
+            </aside>
+            <p>
+            To list all of your defined maps, just use <c>:map</c>.
+            </p>
+            </subsubsection>
+            
+            <subsubsection>
+            <title>Saving abbreviations and maps</title>
+            <p>
+            The abbreviations and maps defined during an editing session disappear when
+            the session is over. There are a number of ways to retain them over different
+            sessions.
+            <ul>
+            <li>Ephemeral use in one file:
+                For most versions of vi, after entering Command mode the history may be
+                accessed using the <kbd>\(\uparrow\)</kbd> key. Backing up to the previous
+                definition of an abbreviation or map and pressing <kbd>Enter</kbd>
+                will reinstate the definition. The line can also be edited if changes are desired
+                (very useful while developing new abbreviations and maps). This history
+                is preserved between editing sessions.
+            </li>
+            <li>Repeated use in several files in one directory:
+                The abbreviations and maps can be saved in a text file, say <c>mymaps.txt</c>.
+                A line within the file might look like
+                <cd>:ab ups University of Puget Sound</cd>
+                Vi is then started with the <c>-s mymaps.txt</c> option
+                to initialize the definitions.
+            </li>
+            <li>Repeated use for files in different directories:
+                Put the abbreviations and maps in the file <c>.vimrc</c>
+                (<c>_vimrc</c> for Windows) in your home directory.
+            </li>
+            </ul>
+            </p>
+            </subsubsection>
+        </subsection>
     </section>
-
 
 </appendix>
 
