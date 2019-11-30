@@ -11,11 +11,6 @@
 <docinfo>
     <!-- this is the default, but supresses a warning -->
     <cross-references text="type-global"/>
-    <search>
-        <google>
-            <cx>008832104071767086392:woji51c1uko</cx>
-        </google>
-    </search>
     <rename element="note" xml:lang="en-US">Best Practice</rename>
     <!-- a demonstration in Basic Reference -->
     <rename element="algorithm" xml:lang="en-US">Porism</rename>

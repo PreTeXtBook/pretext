@@ -295,6 +295,33 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="b-google-universal" select="not($google-universal-tracking = '')" />
 <xsl:variable name="b-google-gst" select="not($google-gst-tracking = '')" />
 
+<!--                           -->
+<!-- HTML Search Configuration -->
+<!--                           -->
+
+<!-- Deprecated "docinfo" options are respected for now. -->
+<!-- String parameters are deprecated, so in -common     -->
+<!-- file, and are only consulted secondarily here       -->
+<xsl:variable name="google-search-cx">
+    <xsl:choose>
+        <xsl:when test="$publication/html/search/@google-cx">
+            <xsl:value-of select="$publication/html/search/@google-cx"/>
+        </xsl:when>
+        <xsl:when test="not($html.google-search = '')">
+            <xsl:value-of select="$html.google-search"/>
+        </xsl:when>
+        <xsl:when test="$docinfo/search/google/cx">
+            <xsl:value-of select="$docinfo/search/google/cx"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- And a boolean variable for the presence of this service -->
+<xsl:variable name="b-google-cse" select="not($google-search-cx = '')" />
+
 
 <!-- ################################################ -->
 <!-- Following is slated to migrate above, 2019-07-10 -->
@@ -561,31 +588,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:text>raggedright</xsl:text>
 </xsl:variable>
-
-<!-- ID settings for Google Search -->
-<!-- These are publisher items that may vary for a fork,     -->
-<!-- and which should not be a concern while editing, and    -->
-<!-- which should not run with source.  Deprecated "docinfo" -->
-<!-- options are respected for now.                          -->
-<xsl:param name="html.google-search" select="''"/>
-
-<xsl:variable name="google-search-cx">
-    <xsl:choose>
-        <xsl:when test="not($html.google-search = '')">
-            <xsl:value-of select="$html.google-search"/>
-        </xsl:when>
-        <xsl:when test="$docinfo/search/google/cx">
-            <xsl:value-of select="$docinfo/search/google/cx"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text/>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-
-<!-- And a boolean variable for the presence of this service -->
-<xsl:variable name="b-google-cse" select="not($google-search-cx = '')" />
-
 
 <!-- ############### -->
 <!-- Source Analysis -->

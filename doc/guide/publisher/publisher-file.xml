@@ -23,7 +23,18 @@
         </cd>element can have the following attributes:<ul>
             <li><attr>goggle-gst</attr>: a Google <term>global site tag</term>, and ID you get from Google.</li>
             <li><attr>statcounter-project</attr>, <attr>statcounter-security</attr>: ID numbers you get from StatCounter.</li>
-        </ul>Setting these attributes to non-empty strings is teh signal to add the relevant code to each of the pages of your HTML output.  See <xref ref="online-analytics"/> for more.</p>
+        </ul>Setting these attributes to non-empty strings is the signal to add the relevant code to each of the pages of your HTML output.  See <xref ref="online-analytics"/> for more.</p>
+    </section>
+
+    <section xml:id="search-options">
+        <title>HTML search</title>
+        <idx>search</idx>
+
+        <p>The<cd>
+            <cline>/publisher/html/search</cline>
+        </cd>element can have the following attribute:<ul>
+            <li><attr>goggle-cx</attr>: a Google <term>cx number</term>, gained from configuring search for a site.</li>
+        </ul>Setting this attributes to a non-empty string is the signal to add the relevant code for a search box in the masthead.  See <xref ref="online-search"/> for more.</p>
     </section>
 
 </chapter>
