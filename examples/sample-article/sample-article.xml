@@ -174,17 +174,6 @@ the xsltproc executable.
         -->
         <rename element="proposition">Conundrum</rename>
 
-        <!-- Various third-party add-ons need some sort of token     -->
-        <!-- Using an element here serves two purposes               -->
-        <!--   (1)  it is a flag to enable the addon                 -->
-        <!--   (2)  it holds the token and MBX supplies generic code -->
-        <!-- This is for the Google Custom Search Engine in HTML     -->
-        <search>
-            <google>
-                <cx>008832104071767086392:j6aknlqevbm</cx>
-            </google>
-        </search>
-
         <!-- Images in HTML output may carry a discreet list of links    -->
         <!-- to "archival" versions of images in a variety of formats.   -->
         <!-- Authors have complete freedom to do this as they choose,    -->
