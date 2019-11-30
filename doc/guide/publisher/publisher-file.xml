@@ -23,7 +23,7 @@
         </cd>element can have the following attributes:<ul>
             <li><attr>goggle-gst</attr>: a Google <term>global site tag</term>, and ID you get from Google.</li>
             <li><attr>statcounter-project</attr>, <attr>statcounter-security</attr>: ID numbers you get from StatCounter.</li>
-        </ul>Setting these attributes to non-empty strings is teh signal to add the relevant code to each of the pages of your HTML output.  See <xref ref="online-analytics"/> for more.</p>
+        </ul>Setting these attributes to non-empty strings is the signal to add the relevant code to each of the pages of your HTML output.  See <xref ref="online-analytics"/> for more.</p>
     </section>
 
 </chapter>
