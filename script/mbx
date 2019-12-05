@@ -669,9 +669,13 @@ def webwork_to_xml(xslt_exec, ptx_xsl_dir, xml_source, server_params, dest_dir):
                 raise ValueError(os.path.join(dest_dir, ptx_filename) + root_cause)
 
         # place static content
+        # we open the file in binary mode to preserve the \r characters that may be present
         try:
             with open(include_file_name, 'ab') as include_file:
-                include_file.write(static[problem] + '\n')
+                if PY3:
+                    include_file.write(bytes(static[problem] + '\n', encoding='utf-8'))
+                else:
+                    include_file.write(static[problem] + '\n')
         except Exception as e:
             root_cause = str(e)
             msg = "There was a problem writing a problem to the file: {}\n"
