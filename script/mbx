@@ -1350,7 +1350,7 @@ def sanitize_url(url):
     _verbose('validating, cleaning server URL: {}'.format(url))
     import requests
     try:
-        requests.get(url, verify=False)
+        requests.get(url)
     except requests.exceptions.RequestException as e:
         root_cause = str(e)
         msg = "There was a problem with the server URL, {}\n".format(url)
