@@ -1342,9 +1342,6 @@ def sanitize_directory(dir):
         raise ValueError('directory {} does not exist'.format(dir))
     return dir
 
-# Certificate checking is buggy, exception raised is malformed
-# 2015/10/07 Turned off verification in three places
-# Command line warning can be disabled, requests.packages.urllib3.disable_warnings()
 def sanitize_url(url):
     """Verify a server address, append a slash"""
     _verbose('validating, cleaning server URL: {}'.format(url))
