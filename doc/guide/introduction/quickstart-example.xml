@@ -101,8 +101,9 @@
 		<p> Note that if your project includes multiple files you will need to pass the <c>-xinclude</c> flag to <c>xsltproc</c>, though this is not needed for this simple example.
 		An example of this is the command
 		<cd><cline>xsltproc -xinclude /path/to/mathbook/xsl/mathbook-html.xsl /path/to/index.xml</cline></cd>
+		For more on this see <xref ref="topic-xinclude" /> and <xref ref="processing-modular" />.
 		</p>
-
+	
         <p>That's it.  You now know all the basics of authoring with <pretext />, since you have produced two radically different output formats with identical content from the exact same structured input, via two different command lines.  Everything you need to author a complete article or textbook, and produce it in many different formats, is just an extension or variation on what you just did.  Let us look at a few simple extensions right away before being more methodical.</p>
     </section>
 
