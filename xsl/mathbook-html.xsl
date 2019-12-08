@@ -2234,14 +2234,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="number" />
         </xsl:variable>
         <xsl:if test="not($the-number='')">
-            <xsl:text> </xsl:text>
+            <xsl:call-template name="space-styled"/>
             <span class="codenumber">
                 <xsl:value-of select="$the-number"/>
             </span>
         </xsl:if>
         <!--  -->
         <xsl:if test="creator and (&THEOREM-FILTER; or &AXIOM-FILTER;)">
-            <xsl:text> </xsl:text>
+            <xsl:call-template name="space-styled"/>
             <span class="creator">
                 <xsl:text>(</xsl:text>
                 <xsl:apply-templates select="." mode="creator-full"/>
@@ -2249,10 +2249,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </span>
         </xsl:if>
         <!-- A period now, no matter which of 4 combinations we have above-->
-        <xsl:text>.</xsl:text>
+        <xsl:call-template name="period-styled"/>
         <!-- A title carries its own punctuation -->
         <xsl:if test="title">
-            <xsl:text> </xsl:text>
+            <xsl:call-template name="space-styled"/>
             <span class="title">
                 <xsl:apply-templates select="." mode="title-full"/>
             </span>
@@ -2276,14 +2276,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <span class="type">
                     <xsl:apply-templates select="." mode="type-name"/>
                 </span>
-                <xsl:text> </xsl:text>
+                <xsl:call-template name="space-styled"/>
                 <span class="codenumber">
                     <xsl:apply-templates select="." mode="number"/>
-                    <xsl:text>.</xsl:text>
+                    <xsl:call-template name="period-styled"/>
                 </span>
             </xsl:otherwise>
         </xsl:choose>
-        <xsl:text> </xsl:text>
+        <xsl:call-template name="space-styled"/>
         <xsl:choose>
             <!-- a caption can have a footnote, hence a -->
             <!-- knowl, hence original or duplicate     -->
@@ -2306,10 +2306,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <h6 class="heading">
         <span class="codenumber">
             <xsl:apply-templates select="." mode="number" />
-            <xsl:text>.</xsl:text>
+            <xsl:call-template name="period-styled"/>
         </span>
         <xsl:if test="title">
-            <xsl:text> </xsl:text>
+            <xsl:call-template name="space-styled"/>
             <span class="title">
                 <xsl:apply-templates select="." mode="title-full" />
             </span>
@@ -2323,10 +2323,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <h6 class="heading">
         <span class="codenumber">
             <xsl:apply-templates select="." mode="serial-number" />
-            <xsl:text>.</xsl:text>
+            <xsl:call-template name="period-styled"/>
         </span>
         <xsl:if test="title">
-            <xsl:text> </xsl:text>
+            <xsl:call-template name="space-styled"/>
             <span class="title">
                 <xsl:apply-templates select="." mode="title-full" />
             </span>
@@ -2341,13 +2341,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <span class="type">
             <xsl:apply-templates select="." mode="type-name" />
         </span>
-        <xsl:text> </xsl:text>
+        <xsl:call-template name="space-styled"/>
         <span class="codenumber">
             <xsl:apply-templates select="." mode="serial-number" />
-            <xsl:text>.</xsl:text>
+            <xsl:call-template name="period-styled"/>
         </span>
         <xsl:if test="title">
-            <xsl:text> </xsl:text>
+            <xsl:call-template name="space-styled"/>
             <span class="title">
                 <xsl:apply-templates select="." mode="title-full" />
             </span>
@@ -2381,7 +2381,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </span>
         <!-- codenumber is implicit via placement -->
         <xsl:if test="title">
-            <xsl:text> </xsl:text>
+            <xsl:call-template name="space-styled"/>
             <span class="title">
                 <xsl:apply-templates select="." mode="title-full" />
             </span>
@@ -2415,7 +2415,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- supply a period -->
                 <span class="type">
                     <xsl:apply-templates select="." mode="type-name" />
-                    <xsl:text>.</xsl:text>
+                    <xsl:call-template name="period-styled"/>
                 </span>
             </xsl:otherwise>
         </xsl:choose>
@@ -2466,13 +2466,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- An empty value means element is a singleton -->
     <!-- else the serial number comes through        -->
     <xsl:if test="not($the-number = '')">
-        <xsl:text> </xsl:text>
+        <xsl:call-template name="space-styled"/>
         <span class="codenumber">
             <xsl:apply-templates select="." mode="serial-number" />
         </span>
     </xsl:if>
     <xsl:if test="title">
-        <xsl:text> </xsl:text>
+        <xsl:call-template name="space-styled"/>
         <span class="title">
             <xsl:apply-templates select="." mode="title-full" />
         </span>
@@ -2504,6 +2504,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="title-full" />
         </xsl:if>
     </h6>
+</xsl:template>
+
+<!-- Heading Utilities -->
+
+<!-- These two named templates create a space or a      -->
+<!-- period with enough HTML markup to allow for hiding -->
+<!-- them if some other part of a heading is hidden.    -->
+
+<xsl:template name="space-styled">
+    <span class="space">
+        <xsl:text> </xsl:text>
+    </span>
+</xsl:template>
+
+<xsl:template name="period-styled">
+    <span class="period">
+        <xsl:text>.</xsl:text>
+    </span>
 </xsl:template>
 
 
