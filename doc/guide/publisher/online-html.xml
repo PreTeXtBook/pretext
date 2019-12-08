@@ -79,8 +79,10 @@
         <p>Also, there can be significant differences between how <pretext/> implements the index for <init>HTML</init> and how the <c>imakeidx</c> package creates an index for <latex/>.  See <xref ref="latex-index-style"/> and <xref ref="indexing-guide"/>.</p>
     </section>
 
-    <section>
+    <section xml:id="online-style">
         <title>Styling</title>
+        <idx><h>style</h><h>HTML</h></idx>
+
 
         <introduction>
             <p>The PreTeXt conversion to <init>HTML</init> creates standard <init>HTML</init> elements, with styles controlled by <init>CSS</init> via class names (and not so much via the element names).  As evidence of this, building <init>HTML</init> without the accompanying Javascript and <init>CSS</init> renders in a readable fashion, albeit quite plain (as one would expect).  This section describes ways that a publisher can influence the style.</p>
@@ -89,9 +91,13 @@
         <subsection>
             <title>Colors</title>
 
-            <p>The processing parameter <c>html.css.colorfile</c> can be provided as the name of a file describing a color theme for <init>HTML</init> output.  It presumes the same server which serves the remainder of the <init>CSS</init> (<c>pretextbook.org</c> by default).  So for example,<cd>
-                <cline>-stringparam html.css.colorfile colors_pastel_blue_orange.css</cline>
-            </cd>will provide a softer look.  The default colors are contained in <c>colors_default.css</c>.  It is easy to inspect and compare these files to see what is involved in designing a color theme.  In particular, <c>colors_default.css</c> contains documentation on how to design a theme.</p>
+            <p>The publisher file may be used to specify alternate CSS files.  See the reference material for how to do this (<xref ref="online-style-options"/>).  The default file, <c>colors_default.css</c> contains documentation on how to design a theme.</p>
+        </subsection>
+
+        <subsection>
+            <title>Table of Contents, Knowls, and Banner</title>
+
+            <p>In a manner analagous to how colors may be adjusted, so may other parts of the HTML UI, see<xref ref="online-style-options"/>).  As of 2019-12-08, replacing more than one of these at a time should be considered experimental.</p>
         </subsection>
     </section>
 

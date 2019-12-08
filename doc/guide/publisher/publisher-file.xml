@@ -26,6 +26,24 @@
         </ul>Setting these attributes to non-empty strings is the signal to add the relevant code to each of the pages of your HTML output.  See <xref ref="online-analytics"/> for more.</p>
     </section>
 
+    <section xml:id="online-style-options">
+        <title>HTML Style</title>
+        <idx><h>style</h><h>HTML</h></idx>
+
+        <p>The<cd>
+            <cline>/publisher/html/css</cline>
+        </cd>element can have the following attributes:<ul>
+            <li><attr>colors</attr>: used to construct filename for CSS controlling colors.</li>
+            <li><attr>knowls</attr>: used to construct filename for CSS controlling knowls.</li>
+            <li><attr>toc</attr>: used to construct filename for CSS controlling the Table of Contents.</li>
+            <li><attr>banner</attr>: used to construct filename for CSS controlling the banner (masthead).</li>
+        </ul>In each case the default file is replaced and instead a new filename is formed from the attributes value.  For example, the specification<cd>
+            <cline>&lt;css colors='bright_red'/&gt;</cline>
+        </cd>will cause a CSS file named <c>colors_bright_red.css</c> to replace <c>colors_default.css</c>.  The server in use can be configured separately.  See <xref ref="online-style"/> for more.</p>
+
+        <p>2019-12-08: at this time we recommend experimenting with only one file at a time.</p>
+    </section>
+
     <section xml:id="search-options">
         <title>HTML search</title>
         <idx>search</idx>

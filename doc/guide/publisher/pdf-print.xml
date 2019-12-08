@@ -136,6 +136,8 @@
 
     <section>
         <title>Styling</title>
+        <idx><h>style</h><h>print</h></idx>
+
 
         <p>Note that some of these switches are about <em>style</em>.  There are many more ways to influence the style of the <latex/> output, see <xref ref="latex-styles"/>.</p>
     </section>

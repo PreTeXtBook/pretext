@@ -9,6 +9,8 @@
 
 <chapter xml:id="latex-styles">
     <title><latex /> Styles</title>
+    <idx><h>style</h><h>print</h></idx>
+
 
     <introduction>
         <p>Print and <init>PDF</init> output is created when <pretext/> outputs a <latex/> file, which can subsequently be easily converted to <init>PDF</init> with engines like <c>pdflatex</c> and <c>xelatex</c>.  There are many ways to influence the style (look, appearance) of this output, enhancing the content, but without changing it.  This chapter is directed at publishers who desire to create an attractive and consistent design for their books or articles.</p>

@@ -40,23 +40,8 @@
             <title>How can I change the colors in the HTML version?</title>
 
             <p>
-              There are several colors schemes available.
-              They (currently) have a name in the form <c>mathbook-X.css</c>,
-              where <m>X \in \{0,1,2,3,4,5,6,7,\text{ups},\text{manitoba},\text{bucknell}\}</m>.
-            </p>
-
-            <p>
-              The options for colors are currently being revised,
-              and soon it will be easier to create your own color scheme.
-            </p>
-
-            <p>
-              To use one of the above color schemes,
-              you can use a <c>stringparam</c> on the command line, like this:
-                <cd>--stringparam html.css.file "mathbook-X.css"</cd>
-              where <m>X</m> is chosen from the list above.
-              Or in your thin XSL stylesheet you can add the line
-              <cd>&lt;xsl:param name="html.css.file" select="'mathbook-X.css'" /&gt;</cd>
+              Start at <xref ref="online-style-options"/> to learn about how to specify alternate styles for <init>HTML</init> output,
+              including an easy way to specify an existing alternate color file.
             </p>
         </li>
 
