@@ -1898,12 +1898,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:when>
                 <!--  -->
                 <xsl:when test="see">
+                <span class="see">
                     <xsl:if test="position() = 1">
                         <xsl:if test="$b-has-subentry">
-                            <!-- 2019-04-04 Temporarily suppress parentheses -->
-                            <!-- <xsl:text>(</xsl:text> -->
+                            <xsl:text>(</xsl:text>
                         </xsl:if>
-                        <em class="see">
+                        <em>
                             <xsl:choose>
                                 <xsl:when test="$b-has-subentry">
                                     <xsl:value-of select="$lower-see"/>
@@ -1926,26 +1926,28 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </xsl:choose>
                     <xsl:copy-of select="see/node()" />
                     <xsl:if test="$b-has-subentry and (position() = last())">
-                        <!-- 2019-04-04 Temporarily suppress parentheses -->
-                        <!-- <xsl:text>)</xsl:text> -->
+                        <xsl:text>)</xsl:text>
                     </xsl:if>
+                </span>
                 </xsl:when>
                 <!--  -->
                 <xsl:when test="seealso">
+                    <xsl:if test="preceding-sibling::index[1]/cross-reference and not($b-has-subentry)">
+                        <xsl:text>. </xsl:text>
+                    </xsl:if>
+                    <span class="seealso">
                     <xsl:choose>
                         <xsl:when test="preceding-sibling::index[1]/cross-reference">
                             <xsl:choose>
                                 <xsl:when test="$b-has-subentry">
                                     <xsl:text> </xsl:text>
-                                    <!-- 2019-04-04 Temporarily suppress parentheses -->
-                                    <!-- <xsl:text>(</xsl:text> -->
-                                    <em class="seealso">
+                                    <xsl:text>(</xsl:text>
+                                    <em>
                                         <xsl:value-of select="$lower-seealso"/>
                                     </em>
                                 </xsl:when>
                                 <xsl:otherwise>
-                                    <xsl:text>. </xsl:text>
-                                    <em class="seealso">
+                                    <em>
                                         <xsl:value-of select="$upper-seealso"/>
                                     </em>
                                 </xsl:otherwise>
@@ -1958,9 +1960,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text> </xsl:text>
                     <xsl:copy-of select="seealso/node()"/>
                     <xsl:if test="(position() = last()) and $b-has-subentry">
-                        <!-- 2019-04-04 Temporarily suppress parentheses -->
-                        <!-- <xsl:text>)</xsl:text> -->
+                        <xsl:text>)</xsl:text>
                     </xsl:if>
+                    </span>
                 </xsl:when>
             </xsl:choose>
         </xsl:for-each>
