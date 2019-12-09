@@ -1574,7 +1574,6 @@
             }
         WebWorkAuthored =
             element webwork {
-                MetaDataTitleOptional,
                 attribute seed {xsd:integer}?,
                 WWMacros?,
                 WWSetup?,
