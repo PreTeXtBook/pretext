@@ -129,8 +129,6 @@
                 </introduction>
 
                 <webwork xml:id="integer-addition">
-                    <title>Integer Addition</title>
-
                     <setup>
                         <pg-code>
                             $a = Compute(random(1, 9, 1));
@@ -164,8 +162,6 @@
                 </introduction>
 
                 <webwork xml:id="integer-addition-with-seed" seed="510">
-                    <title>Integer Addition</title>
-
                     <setup>
                         <pg-code>
                             $a = Compute(random(1, 9, 1));
@@ -193,8 +189,6 @@
                 </introduction>
 
                 <webwork xml:id="integer-addition-with-control-seed" seed="1">
-                    <title>Integer Addition</title>
-
                     <setup>
                         <pg-code>
                             $a = Compute(random(1, 9, 1));
@@ -228,7 +222,6 @@
                 </introduction>
 
                 <webwork>
-                    <title>Multiplication with Exponents</title>
                     <pg-macros>
                         <macro-file>contextLimitedPolynomial.pl</macro-file>
                     </pg-macros>
@@ -278,7 +271,6 @@
                 </introduction>
 
                 <webwork>
-                    <title>Multiplication with Exponents</title>
                     <setup>
                         <pg-code>
                             do {
@@ -407,8 +399,6 @@
                     </setup>
 
                     <stage>
-                        <title>Part 1: Identify the coefficients</title>
-
                         <statement>
                             <p>Consider the quadratic equation given by <me><var name="$quadratic" /> = 0\text{.}</me>  First, identify the coefficients for the quadratic equation using the standard form from <xref ref="theorem-quadratic-formula" />.</p>
 
@@ -421,8 +411,6 @@
                     </stage>
 
                     <stage>
-                        <title>Part 2: Solve using the quadratic formula</title>
-
                         <statement>
                             <p>Using the quadratic formula, solve <m><var name="$quadratic"/>=0</m>.</p>
                             <p><m>x=</m> <var name="$multians1" width="15"/> or <m>x=</m> <var name="$multians1" width="15"/></p>
@@ -937,7 +925,7 @@
             <p>This section samples the subject area template problems found on the <webwork /> wiki at <url href="http://webwork.maa.org/wiki/SubjectAreaTemplates"/>.</p>
 
             <exercise>
-            <title>Answer is a number or a function</title>
+                <title>Answer is a number or a function</title>
 
                 <webwork xml:id="number-or-function">
 

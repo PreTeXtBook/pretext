@@ -574,12 +574,6 @@ def webwork_to_xml(xslt_exec, ptx_xsl_dir, xml_source, server_params, dest_dir):
             static[problem] = static[problem].replace('<webwork>', '<static>')
             static[problem] = static[problem].replace('</webwork>', '</static>')
 
-        # if authored has a title, copy it here
-        if origin[problem] == 'ptx':
-            title = re.search(r'(<title>.*<\/title>)', source[problem])
-            if title:
-                static[problem] = static[problem].replace('<static>\n','<static>\n' + title.group(1) + '\n\n')
-
         # Convert answerhashes XML to a sequence of answer elements
         # This is crude text operation on the XML
         # If correct_ans_latex_string is nonempty, use it, encased in <p><m>
