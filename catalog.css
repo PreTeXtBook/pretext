@@ -37,6 +37,7 @@
 .projects .badges {
     margin-top: 0.25em;
     padding-left: 0.5em;
+    min-height: 30px;
 }
 .projects .badges img {
     max-height: 25px;
@@ -45,10 +46,11 @@
     margin-left: 5px;
 }
 .projects .badge.award + .badge:not(.award) {
-    margin-left: 1em;
+    margin-left: 2em;
 }
 .projects .badge.license {
-    margin-left: 1em;
+    margin-right: 0.5em;
+    float: right;
 }
 
 .projects .biblio > .title {
