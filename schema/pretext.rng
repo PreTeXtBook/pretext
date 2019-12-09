@@ -2141,7 +2141,6 @@
   </define>
   <define name="WebWorkAuthored">
     <element name="webwork">
-      <ref name="MetaDataTitleOptional"/>
       <optional>
         <attribute name="seed">
           <data type="integer"/>

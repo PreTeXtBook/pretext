@@ -2000,7 +2000,6 @@
       <xs:element name="webwork">
         <xs:complexType>
           <xs:sequence>
-            <xs:group ref="MetaDataTitleOptional"/>
             <xs:element minOccurs="0" ref="pg-macros"/>
             <xs:element minOccurs="0" ref="setup"/>
             <xs:choice>
@@ -2012,7 +2011,6 @@
               <xs:element maxOccurs="unbounded" ref="stage"/>
             </xs:choice>
           </xs:sequence>
-          <xs:attributeGroup ref="MetaDataTitleOptional"/>
           <xs:attribute name="seed" type="xs:integer"/>
         </xs:complexType>
       </xs:element>
