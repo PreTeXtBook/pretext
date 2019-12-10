@@ -1191,6 +1191,7 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
 .pretext-content .subindexitem .seealso em,
 .pretext-content .subsubindexitem .seealso em {
     margin-right: 0.25em;
+    font-style: italic;
 }
 /*  note that multiple tings after "see" are in separate spans */
 .pretext-content .indexitem .see + .see,
@@ -1467,6 +1468,9 @@ a.mjx-svg-href  {
 /* for long math formulas and tables to scroll on small screens */
 @media screen and (max-width: 943px) {
   /* adapted from line 192, ../../../../../MathBook/mathbook-assets/scss/ui/mixins/_sliding-sidebars.scss */
+  .pretext-content .displaymath {
+     position: relative;
+  }
   .pretext-content .mjx-chtml.MJXc-display {
     /*Allow users on smaller screens to scroll equations*/
     /*horizontally when they don't fit on the screen*/
@@ -1475,9 +1479,29 @@ a.mjx-svg-href  {
   }
   .pretext-content .figure-like {
     overflow-x: auto;
-}
-}
+  }
 
+  .pretext-content #MathJax_ZoomFrame {
+    position: static;
+/*
+    max-width: 80% !important;
+*/
+    background: white;
+  }
+  .pretext-content #MathJax_Zoom {
+    background-color: inherit;
+    border: 0;
+    padding: 0;
+    position: absolute;
+    overflow-x: auto;
+    overflow-y: visible;
+    left: 10% !important;
+    max-height: none !important;
+/*
+    max-width: none !important;
+*/
+  }
+}
 
 /*  http://sites.wcsu.edu/mbxml/OER_Linear_Alg/glossary.html
    to fix the extra margin on top of the next term when
