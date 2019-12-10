@@ -37,7 +37,6 @@
       <title><webwork /> Minimal Section</title>
       <exercise>
         <webwork>
-          <title>Integer Addition</title>
           <setup>
             <pg-code>
               $a = Compute(random(1, 9, 1));
