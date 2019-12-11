@@ -2717,10 +2717,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- id-ref class means content is in div referenced by id -->
         <xsl:attribute name="class">
             <xsl:text>id-ref</xsl:text>
-            <!-- Exceptional: for styling purposes -->
-            <xsl:if test="self::fn">
-                <xsl:text> fn-knowl</xsl:text>
-            </xsl:if>
+            <xsl:choose>
+                <!-- Exceptional: for styling purposes -->
+                <xsl:when test="self::fn">
+                    <xsl:text> fn-knowl</xsl:text>
+                </xsl:when>
+                <!-- original content, for styling purposes -->
+                <xsl:otherwise>
+                    <xsl:text> original</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:attribute>
         <!-- and the id via a template for consistency -->
         <xsl:attribute name="data-refid">
@@ -2763,12 +2769,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The link for a duplicate hidden knowl -->
 <xsl:template match="*" mode="duplicate-hidden-knowl-link">
     <xsl:element name="a">
-        <!-- Exceptional: for styling purposes -->
-        <xsl:if test="self::fn">
-            <xsl:attribute name="class">
-                <xsl:text>fn-knowl</xsl:text>
-            </xsl:attribute>
-        </xsl:if>
+        <xsl:attribute name="class">
+            <xsl:choose>
+                <!-- Exceptional: for styling purposes -->
+                <xsl:when test="self::fn">
+                    <xsl:text>fn-knowl</xsl:text>
+                </xsl:when>
+                <!-- original content, for styling purposes -->
+                <xsl:otherwise>
+                    <xsl:text>original</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:attribute>
         <xsl:attribute name="data-knowl">
             <xsl:apply-templates select="." mode="hidden-knowl-filename" />
         </xsl:attribute>
@@ -7058,14 +7070,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:element name="a">
                 <!-- knowl/hyperlink variability here -->
                 <xsl:choose>
+                    <!-- build a modern knowl -->
                     <xsl:when test="$knowl='true'">
-                        <!-- build a modern knowl -->
+                        <!-- mark as duplicated content via an xref -->
+                        <xsl:attribute name="class">
+                            <xsl:text>xref</xsl:text>
+                        </xsl:attribute>
                         <xsl:attribute name="data-knowl">
                             <xsl:apply-templates select="$target" mode="xref-knowl-filename" />
                         </xsl:attribute>
                     </xsl:when>
+                    <!-- build traditional hyperlink -->
                     <xsl:otherwise>
-                        <!-- build traditional hyperlink -->
                         <xsl:attribute name="href">
                             <xsl:apply-templates select="$target" mode="url" />
                         </xsl:attribute>
