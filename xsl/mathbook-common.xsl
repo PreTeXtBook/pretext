@@ -4542,7 +4542,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- ############# -->
 
 <!-- Comments are Unicode names, from fileformat.info            -->
-<!-- @latex values are macros in teh menukeys package specifying -->
+<!-- @latex values are macros in the menukeys package specifying -->
 <!-- keyboard keys that are typically labeled with graphics      -->
 <xsl:variable name="kbdkey-rtf">
     <kbdkeyinfo name="left"
@@ -4563,6 +4563,42 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <kbdkeyinfo name="shift"
                 latex="\shift"
                 unicode="&#x21E7;"/> <!-- UPWARDS WHITE ARROW -->
+    <kbdkeyinfo name="ampersand"
+                latex='\char"26'
+                unicode="&#x0026;"/> <!-- AMPERSAND -->
+    <kbdkeyinfo name="lessthan"
+                latex='\textless'
+                unicode="&#x003C;"/> <!-- LESS-THAN SIGN-->
+    <kbdkeyinfo name="greaterthan"
+                latex='\textgreater'
+                unicode="&#x003E;"/> <!-- GREATER-THAN SIGN-->
+    <kbdkeyinfo name="dollar"
+                latex='\$'
+		unicode="&#x0024;"/> <!-- DOLLAR SIGN -->
+    <kbdkeyinfo name="percent"
+                latex='\%'
+		unicode="&#x0025;"/> <!-- PERCENT SIGN -->
+    <kbdkeyinfo name="openbrace"
+	        latex='\textbraceleft'
+		unicode='&#x007c;'/> <!-- LEFT CURLY BRACKET -->
+    <kbdkeyinfo name="closebrace"
+	        latex='\textbraceright'
+		unicode="&#x007C;"/> <!-- RIGHT CURLY BRACKET -->
+    <kbdkeyinfo name="octothorpe"
+	        latex='\#'
+		unicode="&#x0023;"/> <!-- OCTOTHORPE -->
+    <kbdkeyinfo name="backslash"
+	        latex='\textbackslash'
+		unicode="&#x005C;"/> <!-- BACKSLASH -->
+    <kbdkeyinfo name="tie"
+	        latex='\textasciitilde'
+		unicode="&#x007E;"/> <!-- TILDE -->
+    <kbdkeyinfo name="circumflex"
+	        latex='\textasciicircum'
+		unicode="&#x005E;"/> <!-- CIRCUMFLEX ACCENT -->
+    <kbdkeyinfo name="underscore"
+	        latex='\textunderscore'
+		unicode="&#x005F;"/> <!-- LOW LINE -->
 </xsl:variable>
 
 <!-- If read from a file via "document()" then   -->
