@@ -90,7 +90,7 @@ function knowl_click_handler($el) {
     var where_it_goes = $el;
     var knowl = "";
     if ($el.hasClass('original')) {  // knowls with original content can be styled differently from xref knowls
-        knowl = "<div class='knowl-output' "+kid+"><div class='knowl'><div class='knowl-content original' " +idtag+ ">loading '"+knowl_id+"'</div><div class='knowl-footer'>"+knowl_id+"</div></div></div>";
+        knowl = "<div class='knowl-output original' "+kid+"><div class='knowl'><div class='knowl-content' " +idtag+ ">loading '"+knowl_id+"'</div><div class='knowl-footer'>"+knowl_id+"</div></div></div>";
     } else {
         knowl = "<div class='knowl-output' "+kid+"><div class='knowl'><div class='knowl-content' " +idtag+ ">loading '"+knowl_id+"'</div><div class='knowl-footer'>"+knowl_id+"</div></div></div>";
     }
@@ -102,6 +102,8 @@ function knowl_click_handler($el) {
         where_it_goes = $($el.attr("replace"));
     } else if($el.hasClass("kohere")) {
         where_it_goes = $el;
+    } else if($el.hasClass("original") && $el.parent().is("article")) {
+        where_it_goes = $el.after();
     } else {
        // otherwise, typically put it after the nearest enclosing block element
     
