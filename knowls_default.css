@@ -82,6 +82,36 @@ article > [data-knowl]::after, article > [data-knowl]:hover::after, article > [d
     margin-top: 10px;
 }
 
+.knowl-output.original {
+    background: inherit;
+    border: none;
+/*    border-left: 1px solid #666;
+*/
+    border-radius: 0;
+    display: none;
+    padding: 0;
+    margin-top: 10px;
+}
+.knowl-output.original .knowl-content {
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+.knowl-output.original:after {
+  content: '';
+/*  border-bottom: 1px solid #666;
+*/
+  display: block;
+/*
+  margin-right: auto;
+  margin-left: -0.10em;
+  width: 1.5em;
+*/
+  /* so the corner of the L meets */
+  padding-top: 0.35em;
+}
+
+
 .knowl-output .knowl-output {
     border-width: 6px;
     background: #fffff5;

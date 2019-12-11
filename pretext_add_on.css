@@ -299,12 +299,6 @@ so that we can set our own later */
 .pretext-content section article > .heading + ul {
     padding-left: 1.5em;
 }
-/*
-.pretext-content section article .heading + p .mjx-chtml,
-.pretext-content section article .heading + p .mjx-math {
-    display: inline !important;
-}
-*/
 .pretext-content section article.theorem-like p,
 .pretext-content section article.theorem-like li {
     font-style: italic;
@@ -337,11 +331,13 @@ from Jiří Lebl */
     background-attachment: local, local, scroll, scroll;
 }
 .pretext-content .knowl-output .MJXc-display {
-/*    background-image: none;
-    background-image: linear-gradient(to right, #f5f5ff, #f5f5ff), linear-gradient(to right, #f5f5ff, #f5f5ff), linear-gradient(to right, rgba(0,0,0,.25), rgba(243,243,255,0)), linear-gradient(to left, rgba(0,0,0,.25), rgba(243,243,255,0));
-*/
     background-image: linear-gradient(to right, var(--knowlbackground), var(--knowlbackground)), linear-gradient(to right, var(--knowlbackground), var(--knowlbackground)), linear-gradient(to right, rgba(0,0,0,.25), var(--knowlbackground)), linear-gradient(to left, rgba(0,0,0,.25), var(--knowlbackground));
 }
+/* this should have a variable name, probably */
+.pretext-content .knowl-output.original .MJXc-display {
+    background: white;
+}
+
 .pretext-content .assemblage-like .MJXc-display {
 /*
     background-image: none;
