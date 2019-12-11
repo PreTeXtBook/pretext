@@ -5118,7 +5118,7 @@ the xsltproc executable.
 
                 <figure xml:id="figure-threejs-splines">
                     <caption><c>threejs</c> webgl_geometry_extrude_splines example</caption>
-                    <interactive xml:id="interactive-threejs-splines" platform="javascript" width="75%" aspect="1:1" preview="images/threejs-splines.png" source="https://threejs.org/build/three.js https://threejs.org/examples/js/controls/OrbitControls.js https://threejs.org/examples/js/CurveExtras.js https://threejs.org/examples/js/libs/dat.gui.min.js code/threejs/splines.js">
+                    <interactive xml:id="interactive-threejs-splines" platform="javascript" width="75%" aspect="1:1" preview="images/threejs-splines.png" source="https://threejs.org/build/three.js https://threejs.org/examples/js/controls/OrbitControls.js https://threejs.org/examples/js/curves/CurveExtras.js https://threejs.org/examples/js/libs/dat.gui.min.js code/threejs/splines.js">
                         <slate xml:id="threejs-splines" surface="div" aspect="1:1" />
                     </interactive>
                 </figure>
