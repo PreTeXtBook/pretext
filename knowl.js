@@ -88,7 +88,12 @@ function knowl_click_handler($el) {
     // where_it_goes is the location the knowl will appear *after*
     // knowl is the variable that will hold the content of the output knowl
     var where_it_goes = $el;
-    var knowl = "<div class='knowl-output' "+kid+"><div class='knowl'><div class='knowl-content' " +idtag+ ">loading '"+knowl_id+"'</div><div class='knowl-footer'>"+knowl_id+"</div></div></div>";
+    var knowl = "";
+    if ($el.hasClass('original')) {  // knowls with original content can be styled differently from xref knowls
+        knowl = "<div class='knowl-output' "+kid+"><div class='knowl'><div class='knowl-content original' " +idtag+ ">loading '"+knowl_id+"'</div><div class='knowl-footer'>"+knowl_id+"</div></div></div>";
+    } else {
+        knowl = "<div class='knowl-output' "+kid+"><div class='knowl'><div class='knowl-content' " +idtag+ ">loading '"+knowl_id+"'</div><div class='knowl-footer'>"+knowl_id+"</div></div></div>";
+    }
 
     // addafter="#id" means to put the knowl after the element with that id
     if($el.attr("addafter")) {
