@@ -1,0 +1,54 @@
+
+table.attemptResults {
+    margin-left: 2em;
+    background: #efefef;
+}
+table.attemptResults + .attemptResultsSummary {
+    margin-top: 1em;
+}
+
+.problem-main-form {
+    margin-top: 1em;
+    background: #eeeeff;
+}
+td.ResultsWithoutError {
+    background: #9f9;
+}
+td.ResultsWithError {
+    background: #f99;
+}
+
+tr th {
+    text-align: center;
+    padding: 0.2em 1em 0.2em 1em;
+}
+tr td {
+    text-align: center;
+}
+table td { border-left: 1px solid #000; }
+table td:first-child { border-left: none; }
+
+.problem {
+    padding: 1em;
+    border: 0.5px solid #aaa;
+    background: #fdfdfd;
+}
+
+.problem a {
+    text-decoration: none;
+}
+
+/*
+.problem a.internal::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 1px;
+    right: 2.4px;
+    left: 2.4px;
+    border-bottom: 1px dotted #9c2310;
+    transition-property: left, right;
+    transition-duration: 0ms;
+    z-index: 0;
+}
+*/
