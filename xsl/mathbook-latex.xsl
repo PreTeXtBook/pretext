@@ -2199,7 +2199,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\usepackage{menukeys}&#xa;</xsl:text>
         <!-- https://tex.stackexchange.com/questions/96300/how-to-change-the-style-of-menukeys -->
         <xsl:text>\renewmenumacro{\keys}{shadowedroundedkeys}&#xa;</xsl:text>
-        <xsl:text>\newcommand{\kbd}[1]{\keys{#1}}&#xa;</xsl:text>
+        <!-- Seemingly extra braces protect comma that kbdkeys package uses -->
+        <xsl:text>\newcommand{\kbd}[1]{\keys{{#1}}}&#xa;</xsl:text>
     </xsl:if>
 
     <xsl:text>%% Custom Preamble Entries, late (use latex.preamble.late)&#xa;</xsl:text>
@@ -8229,7 +8230,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="kbd[not(@name)]">
     <xsl:text>\kbd{</xsl:text>
-    <xsl:value-of select="."/>
+        <xsl:call-template name="escape-text-to-latex">
+            <xsl:with-param name="text" select="." />
+        </xsl:call-template>
     <xsl:text>}</xsl:text>
 </xsl:template>
 
