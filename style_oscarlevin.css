@@ -98,7 +98,9 @@
 
 .pretext-content .theorem-like {
   background-color: var(--theorembackground);
-  border-left: 2px solid var(--theoremborder);
+/*  border-left: 2px solid var(--theoremborder);
+*/
+  border: 2px solid var(--theoremborder);
 
 }
 
@@ -136,7 +138,7 @@
 
 .pretext-content .assemblage-like .heading {
   background-color: var(--assemblageborder);
-  color: #000;
+  color: #fff;
 }
 
 .pretext-content .definition-like .heading {
@@ -223,7 +225,7 @@
 }
 
 .pretext-content section article.project-like > .heading {
-  margin-top: -1.25em !important;
+  margin-top: -1.5em;
   background-color: white;
   display: table !important;
   padding: 5px 1em;
