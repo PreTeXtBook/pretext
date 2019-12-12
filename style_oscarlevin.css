@@ -84,7 +84,7 @@
 .pretext-content .assemblage-like,
 .pretext-content .definition-like,
 .pretext-content .theorem-like {
-    margin-top: 2.25em;
+    margin-top: 1.25em;
     padding: 1em;
     border-radius: 3px;
     margin-bottom: 1em;
@@ -246,6 +246,10 @@
 .pretext-content section article.example-like.example {
     border-left: 0.1em solid var(--exampledarkborder);
     border-bottom: 0.1em solid var(--exampledarkborder);
+}
+.pretext-content section article article.example-like,
+.pretext-content section article article.example-like.example {
+    border: none;
 }
 
 
