@@ -147,6 +147,7 @@
     background: #eff;
 }
 
+/*
 .action + .action {
     margin-left: 0.25em;
     display: block;
@@ -155,37 +156,38 @@
     margin-left: 0.25em;
     display: block;
 }
+*/
 
 .input_controls {
     font-family: sans-serif;
     font-weight: lighter;
     font-size: 90%;
     background: #fff;
-    padding-left: 0.5em;
+    padding-left: 0;
     padding-bottom: 0;
     margin-top: 0;
+/*    
     margin-bottom: -1.6em;
     display: inline;
+*/
     position: absolute;
 }
 .rq_answer_text {
     display: inline;
 }
-textarea + .input_controls {
-    margin-top: 0;
-}
 textarea {
     border-width: 0.1em;
-    margin-bottom: -0.77em;
+    margin-bottom: 0.3em;
 }
 .input_controls .action {
     border: 1px solid #aaa;
+    display: inline;
  /*   border-radius: 3px;
 */
     padding: 1px 2px;
 }
-.input_controls .action + .action {
-     margin-top: 4px;
+.input_controls .action.amhelp {
+     margin-left: 21.9em;
 }
 .clear_item:hover {
     background: #fdd;
@@ -197,6 +199,21 @@ textarea {
 
 .hidecontrols {
     display: none;
+}
+
+.readingquestion_make_answer.instructor {
+    margin-left:1em;
+    font-size:80%;
+    color:#a0a;
+}
+.readingquestion_make_answer.student {
+    display: block;
+    margin-left: 10%;
+    margin-right: 11%;
+    width: 75%;
+    height: 63px;
+    border: 1px solid #999;
+    color: #999;
 }
 
 .given_answer {

@@ -2,6 +2,7 @@
 table.attemptResults {
     margin-left: 2em;
     background: #efefef;
+    padding: 0.2em;
 }
 table.attemptResults + .attemptResultsSummary {
     margin-top: 1em;
@@ -10,6 +11,7 @@ table.attemptResults + .attemptResultsSummary {
 .problem-main-form {
     margin-top: 1em;
     background: #eeeeff;
+    padding: 0.5em;
 }
 td.ResultsWithoutError {
     background: #9f9;
@@ -25,8 +27,14 @@ tr th {
 tr td {
     text-align: center;
 }
+tr td:empty {
+    background: #fff;
+}
+
+/*
 table td { border-left: 1px solid #000; }
 table td:first-child { border-left: none; }
+*/
 
 .problem {
     padding: 1em;
@@ -36,6 +44,12 @@ table td:first-child { border-left: none; }
 
 .problem a {
     text-decoration: none;
+}
+
+.knowl {
+    margin-left: 1em;
+    padding: 0.2em;
+    background: #efe;
 }
 
 /*
