@@ -1020,6 +1020,7 @@ the xsltproc executable.
 
                 <reading-questions>
                     <introduction>
+                        <idx>reading questions</idx>
                         <p>A set of reading questions may have an <tag>introduction</tag>, perhaps for preparatory explanation.</p>
                         <p>If a student has logged in to the HTML version,
                            then they can answer the reading questions directly in the book.
@@ -1061,6 +1062,7 @@ the xsltproc executable.
                 </reading-questions>
 
                 <glossary>
+                    <idx>glossary</idx>
                     <introduction>
                         <p>A glossary may have an <tag>introduction</tag>, perhaps with some explanation.</p>
                     </introduction>
@@ -2006,6 +2008,7 @@ the xsltproc executable.
 
             <subsection xml:id="subsection-keyboard">
                 <title>Keyboard Keys</title>
+                <idx>keyboard keys</idx>
 
                 <p>Your text can include specialized text meant to look like a key on the keyboard of a calculator or other device.  So you can go <kbd>b</kbd> <kbd>Enter</kbd> <kbd>&lt;</kbd> or <kbd>F1</kbd>.  Or maybe a sequence as: <kbd>Tab</kbd> &gt; <kbd>Ctrl</kbd> &gt; <kbd>T</kbd>.  Use the <tag>kbd</tag> element, with the label of the key as content.</p>
 
