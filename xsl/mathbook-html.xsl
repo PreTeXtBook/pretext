@@ -456,7 +456,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="html.css.server" select="'https://pretextbook.org'" />
 <xsl:param name="html.css.version" select="'0.31'" />
 <xsl:param name="html.js.server" select="'https://pretextbook.org'" />
-<xsl:param name="html.js.version" select="'0.12'" />
+<xsl:param name="html.js.version" select="'0.13'" />
 
 <!-- Calculator -->
 <!-- Possible values are geogebra-classic, geogebra-graphing -->
