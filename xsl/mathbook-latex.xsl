@@ -47,17 +47,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- N.B. This has no effect, and may never.  xelatex and lualatex support is automatic -->
 <xsl:param name="latex.engine" select="'pdflatex'" />
 <!--  -->
-<!-- Standard fontsizes: 10pt, 11pt, or 12pt       -->
-<!-- extsizes package: 8pt, 9pt, 14pt, 17pt, 20pt  -->
-<!-- memoir class offers more, but maybe other changes? -->
-<xsl:param name="latex.font.size" select="'10pt'" />
-<!--  -->
-<!-- Geometry: page shape, margins, etc            -->
-<!-- Pass a string with any of geometry's options  -->
-<!-- Default is empty and thus ineffective         -->
-<!-- Otherwise, happens early in preamble template -->
-<xsl:param name="latex.geometry" select="''"/>
-<!--  -->
 <!-- PDF Watermarking                    -->
 <!-- Non-empty string makes it happen    -->
 <!-- Scale works well for "CONFIDENTIAL" -->
@@ -110,10 +99,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Fillin Style Option                                  -->
 <!-- Can be 'underline' or 'box'                          -->
 <xsl:param name="latex.fillin.style" select="'underline'"/>
-<!--  -->
-<!-- Preamble insertions                    -->
-<!-- Insert packages, options into preamble -->
-<!-- early or late                          -->
+<!-- DEPRECATED: 2019-12-14, do not use, any value -->
+<!-- besides an empty string will raise a warning  -->
+<xsl:param name="latex.font.size" select="''" />
+<xsl:param name="latex.geometry" select="''"/>
 <xsl:param name="latex.preamble.early" select="''" />
 <xsl:param name="latex.preamble.late" select="''" />
 <!--  -->
@@ -122,6 +111,48 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="latex.console.macro-char" select="''" />
 <xsl:param name="latex.console.begin-char" select="''" />
 <xsl:param name="latex.console.end-char" select="''" />
+
+
+<!-- ######################### -->
+<!-- LaTeX-Publication Options -->
+<!-- ######################### -->
+
+<!-- The $publication variable comes from -common and is the result -->
+<!-- of a command-line string parameter pointing to an XML file of  -->
+<!-- various options.                                               -->
+<!-- Elements and attributes of this file are meant to influence    -->
+<!-- decisions taken *after* an author is completed writing.  In    -->
+<!-- limited cases a command-line string parameter may be used to   -->
+<!-- override these settings (especially for testing purposes).     -->
+<!-- In other cases, deprecated string parameters may be consulted  -->
+<!-- secondarily, for a limited time.                               -->
+
+<!-- Standard fontsizes: 10pt, 11pt, or 12pt       -->
+<!-- extsizes package: 8pt, 9pt, 14pt, 17pt, 20pt  -->
+<!-- memoir class offers more, but maybe other changes? -->
+<xsl:variable name="latex-font-size">
+    <xsl:choose>
+        <xsl:when test="$publication/latex/font-size">
+            <xsl:value-of select="string($publication/latex/font-size)"/>
+        </xsl:when>
+        <xsl:when test="not($latex.font.size='')">
+            <xsl:value-of select="$latex.font.size"/>
+        </xsl:when>
+        <xsl:otherwise>10pt</xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<!--  -->
+<!-- Geometry: page shape, margins, etc            -->
+<!-- Pass a string with any of geometry's options  -->
+<!-- Default is empty and thus ineffective         -->
+<!-- Otherwise, happens early in preamble template -->
+<xsl:variable name="latex-geometry" select="string($publication/latex/geometry)"/>
+<!--  -->
+<!-- Preamble insertions                    -->
+<!-- Insert packages, options into preamble -->
+<!-- early or late                          -->
+<xsl:variable name="latex-preamble-early" select="string($publication/latex/preamble-early)"/>
+<xsl:variable name="latex-preamble-late" select="string($publication/latex/preamble-late)"/>
 
 
 <!-- ############### -->
@@ -251,23 +282,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- we can condition on for the extsizes package.   -->
 <!-- In predicted order, sort of, so fall out early  -->
 
-<!-- NB: Code using $font-size and latex.geometry is also -->
+<!-- NB: Code using $font-size and latex-geometry is also -->
 <!-- used in the latex-image extraction stylesheet. Until -->
 <!-- we do a better job of ensuring they remain in-sync,  -->
 <!-- please coordinate the two sets of templates by hand  -->
-
 <xsl:variable name="font-size">
     <xsl:choose>
-        <xsl:when test="$latex.font.size='10pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
-        <xsl:when test="$latex.font.size='12pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
-        <xsl:when test="$latex.font.size='11pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
-        <xsl:when test="$latex.font.size='8pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
-        <xsl:when test="$latex.font.size='9pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
-        <xsl:when test="$latex.font.size='14pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
-        <xsl:when test="$latex.font.size='17pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
-        <xsl:when test="$latex.font.size='20pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
+        <xsl:when test="$latex-font-size='10pt'"><xsl:value-of select="$latex-font-size" /></xsl:when>
+        <xsl:when test="$latex-font-size='12pt'"><xsl:value-of select="$latex-font-size" /></xsl:when>
+        <xsl:when test="$latex-font-size='11pt'"><xsl:value-of select="$latex-font-size" /></xsl:when>
+        <xsl:when test="$latex-font-size='8pt'"><xsl:value-of select="$latex-font-size" /></xsl:when>
+        <xsl:when test="$latex-font-size='9pt'"><xsl:value-of select="$latex-font-size" /></xsl:when>
+        <xsl:when test="$latex-font-size='14pt'"><xsl:value-of select="$latex-font-size" /></xsl:when>
+        <xsl:when test="$latex-font-size='17pt'"><xsl:value-of select="$latex-font-size" /></xsl:when>
+        <xsl:when test="$latex-font-size='20pt'"><xsl:value-of select="$latex-font-size" /></xsl:when>
         <xsl:otherwise>
-            <xsl:message terminate="yes">MBX:ERROR   the latex.font.size parameter must be 8pt, 9pt, 10pt, 11pt, 12pt, 14pt, 17pt, or 20pt, not "<xsl:value-of select="$latex.font.size" />"</xsl:message>
+            <xsl:message terminate="yes">PTX:ERROR   the latex/font-size publication option must be 8pt, 9pt, 10pt, 11pt, 12pt, 14pt, 17pt, or 20pt, not "<xsl:value-of select="$latex-font-size" />"</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -479,11 +509,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- LaTeX preamble is common for both books, articles, memos and letters -->
 <!-- Except: title info allows an "event" for an article (presentation)   -->
 <xsl:template name="latex-preamble">
-    <xsl:text>%% Custom Preamble Entries, early (use latex.preamble.early)&#xa;</xsl:text>
-    <xsl:if test="$latex.preamble.early != ''">
-        <xsl:value-of select="$latex.preamble.early" />
-        <xsl:text>&#xa;</xsl:text>
-    </xsl:if>
+    <xsl:text>%% Custom Preamble Entries, early (use latex/preamble-early publication option)&#xa;</xsl:text>
+    <xsl:choose>
+        <xsl:when test="$latex-preamble-early != ''">
+            <xsl:value-of select="$latex-preamble-early" />
+            <xsl:text>&#xa;</xsl:text>
+        </xsl:when>
+        <!-- stringparam latex.preamble.late deprecated -->
+        <xsl:when test="$latex.preamble.early != ''">
+            <xsl:value-of select="$latex.preamble.early" />
+            <xsl:text>&#xa;</xsl:text>
+        </xsl:when>
+    </xsl:choose>
     <!-- Following need to be mature, robust, powerful, flexible, well-maintained -->
     <xsl:text>%% Default LaTeX packages&#xa;</xsl:text>
     <xsl:text>%%   1.  always employed (or nearly so) for some purpose, or&#xa;</xsl:text>
@@ -581,10 +618,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>,</xsl:text>
     <xsl:value-of select="$text-height" />
     <xsl:text>}}&#xa;</xsl:text>
-    <xsl:text>%% Custom Page Layout Adjustments (use latex.geometry)&#xa;</xsl:text>
-    <xsl:if test="$latex.geometry != ''">
+    <xsl:text>%% Custom Page Layout Adjustments (use latex/geometry)&#xa;</xsl:text>
+    <xsl:if test="$latex-geometry != ''">
         <xsl:text>\geometry{</xsl:text>
-        <xsl:value-of select="$latex.geometry" />
+        <xsl:value-of select="$latex-geometry" />
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="not($text-alignment = 'justify')">
@@ -782,7 +819,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% split, aligned, gathered, and alignedat are not affected&#xa;</xsl:text>
     <xsl:text>\allowdisplaybreaks[4]&#xa;</xsl:text>
     <xsl:text>%% allow more columns to a matrix&#xa;</xsl:text>
-    <xsl:text>%% can make this even bigger by overriding with  latex.preamble.late  processing option&#xa;</xsl:text>
+    <xsl:text>%% can make this even bigger by overriding with  latex/preamble-late  publication option&#xa;</xsl:text>
     <xsl:text>\setcounter{MaxMatrixCols}{30}&#xa;</xsl:text>
     <xsl:if test="$b-has-sfrac">
         <xsl:text>%% xfrac package for 'beveled fractions': http://tex.stackexchange.com/questions/3372/how-do-i-typeset-arbitrary-fractions-like-the-standard-symbol-for-5-%C2%BD&#xa;</xsl:text>
@@ -2185,11 +2222,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\newcommand{\kbd}[1]{\keys{#1}}&#xa;</xsl:text>
     </xsl:if>
 
-    <xsl:text>%% Custom Preamble Entries, late (use latex.preamble.late)&#xa;</xsl:text>
-    <xsl:if test="$latex.preamble.late != ''">
-        <xsl:value-of select="$latex.preamble.late" />
-        <xsl:text>&#xa;</xsl:text>
-    </xsl:if>
+    <xsl:text>%% Custom Preamble Entries, late (use latex/preamble-late publication option)&#xa;</xsl:text>
+    <xsl:choose>
+        <xsl:when test="$latex-preamble-late != ''">
+            <xsl:value-of select="$latex-preamble-late" />
+            <xsl:text>&#xa;</xsl:text>
+        </xsl:when>
+        <!-- stringparam latex.preamble.late deprecated -->
+        <xsl:when test="$latex.preamble.late != ''">
+            <xsl:value-of select="$latex.preamble.late" />
+            <xsl:text>&#xa;</xsl:text>
+        </xsl:when>
+    </xsl:choose>
     <xsl:text>%% Begin: Author-provided packages&#xa;</xsl:text>
     <xsl:text>%% (From  docinfo/latex-preamble/package  elements)&#xa;</xsl:text>
     <xsl:value-of select="$latex-packages" />
@@ -10754,6 +10798,35 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- These are global, LaTeX-only warnings which are not source -->
 <!-- related and not possible in a template once executed       -->
 <xsl:template match="mathbook|pretext" mode="deprecation-warnings-latex">
+    <!-- 2019-12-14  deprecate some stringparams -->
+    <xsl:if test="not($latex.font.size = '')">
+        <xsl:call-template name="parameter-deprecation-message">
+            <xsl:with-param name="date-string" select="'2019-12-14'" />
+            <xsl:with-param name="message" select="'the  latex.font.size  parameter is deprecated; use a publisher file with publication/latex/font.size'" />
+            <xsl:with-param name="incorrect-use" select="not($latex.preamble.font.size = '')" />
+        </xsl:call-template>
+    </xsl:if>
+    <xsl:if test="not($latex.geometry = '')">
+        <xsl:call-template name="parameter-deprecation-message">
+            <xsl:with-param name="date-string" select="'2019-12-14'" />
+            <xsl:with-param name="message" select="'the  latex.geometry  parameter is deprecated; use a publisher file with publication/latex/geometry'" />
+            <xsl:with-param name="incorrect-use" select="not($latex.preamble.geometry = '')" />
+        </xsl:call-template>
+    </xsl:if>
+    <xsl:if test="not($latex.preamble.early = '')">
+        <xsl:call-template name="parameter-deprecation-message">
+            <xsl:with-param name="date-string" select="'2019-12-14'" />
+            <xsl:with-param name="message" select="'the  latex.preamble.early  parameter is deprecated; use a publisher file with publication/latex/preamble-early'" />
+            <xsl:with-param name="incorrect-use" select="not($latex.preamble.early = '')" />
+        </xsl:call-template>
+    </xsl:if>
+    <xsl:if test="not($latex.preamble.late = '')">
+        <xsl:call-template name="parameter-deprecation-message">
+            <xsl:with-param name="date-string" select="'2019-12-14'" />
+            <xsl:with-param name="message" select="'the  latex.preamble.late  parameter is deprecated; use a publisher file with publication/latex/preamble-late'" />
+            <xsl:with-param name="incorrect-use" select="not($latex.preamble.late = '')" />
+        </xsl:call-template>
+    </xsl:if>
     <!-- 2017-12-18  deprecate console macro characters -->
     <xsl:if test="not($latex.console.macro-char = '')">
         <xsl:call-template name="parameter-deprecation-message">

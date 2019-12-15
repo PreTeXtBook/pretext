@@ -47,16 +47,49 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- job of ensuring they remain in-sync, please      -->
 <!-- coordinate the two sets of templates by hand     -->
 
-<!-- ######################################### -->
+<!-- DEPRECATED: 2019-12-14, do not use, any value -->
+<!-- besides an empty string will raise a warning  -->
+<xsl:param name="latex.font.size" select="''" />
+<xsl:param name="latex.geometry" select="''"/>
+
+
+
+
+<!-- ######################### -->
+<!-- LaTeX-Publication Options -->
+<!-- ######################### -->
+
+<!-- The $publication variable comes from -common and is the result -->
+<!-- of a command-line string parameter pointing to an XML file of  -->
+<!-- various options.                                               -->
+<!-- Elements and attributes of this file are meant to influence    -->
+<!-- decisions taken *after* an author is completed writing.  In    -->
+<!-- limited cases a command-line string parameter may be used to   -->
+<!-- override these settings (especially for testing purposes).     -->
+<!-- In other cases, deprecated string parameters may be consulted  -->
+<!-- secondarily, for a limited time.                               -->
+
 <!-- Standard fontsizes: 10pt, 11pt, or 12pt       -->
 <!-- extsizes package: 8pt, 9pt, 14pt, 17pt, 20pt  -->
-<xsl:param name="latex.font.size" select="'12pt'" />
+<!-- memoir class offers more, but maybe other changes? -->
+<xsl:variable name="latex-font-size">
+    <xsl:choose>
+        <xsl:when test="$publication/latex/font-size">
+            <xsl:value-of select="string($publication/latex/font-size)"/>
+        </xsl:when>
+        <xsl:when test="not($latex.font.size='')">
+            <xsl:value-of select="$latex.font.size"/>
+        </xsl:when>
+        <xsl:otherwise>10pt</xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
 <!--  -->
 <!-- Geometry: page shape, margins, etc            -->
 <!-- Pass a string with any of geometry's options  -->
 <!-- Default is empty and thus ineffective         -->
 <!-- Otherwise, happens early in preamble template -->
-<xsl:param name="latex.geometry" select="''"/>
+<xsl:variable name="latex-geometry" select="string($publication/latex/geometry)"/>
+
 
 <!-- font-size also dictates document class for -->
 <!-- those provided by extsizes, but we can get -->
@@ -71,16 +104,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- In predicted order, sort of, so fall out early  -->
 <xsl:variable name="font-size">
     <xsl:choose>
-        <xsl:when test="$latex.font.size='10pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
-        <xsl:when test="$latex.font.size='12pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
-        <xsl:when test="$latex.font.size='11pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
-        <xsl:when test="$latex.font.size='8pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
-        <xsl:when test="$latex.font.size='9pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
-        <xsl:when test="$latex.font.size='14pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
-        <xsl:when test="$latex.font.size='17pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
-        <xsl:when test="$latex.font.size='20pt'"><xsl:value-of select="$latex.font.size" /></xsl:when>
+        <xsl:when test="$latex-font-size='10pt'"><xsl:value-of select="$latex-font-size" /></xsl:when>
+        <xsl:when test="$latex-font-size='12pt'"><xsl:value-of select="$latex-font-size" /></xsl:when>
+        <xsl:when test="$latex-font-size='11pt'"><xsl:value-of select="$latex-font-size" /></xsl:when>
+        <xsl:when test="$latex-font-size='8pt'"><xsl:value-of select="$latex-font-size" /></xsl:when>
+        <xsl:when test="$latex-font-size='9pt'"><xsl:value-of select="$latex-font-size" /></xsl:when>
+        <xsl:when test="$latex-font-size='14pt'"><xsl:value-of select="$latex-font-size" /></xsl:when>
+        <xsl:when test="$latex-font-size='17pt'"><xsl:value-of select="$latex-font-size" /></xsl:when>
+        <xsl:when test="$latex-font-size='20pt'"><xsl:value-of select="$latex-font-size" /></xsl:when>
         <xsl:otherwise>
-            <xsl:message terminate="yes">MBX:ERROR   the latex.font.size parameter must be 8pt, 9pt, 10pt, 11pt, 12pt, 14pt, 17pt, or 20pt, not "<xsl:value-of select="$latex.font.size" />"</xsl:message>
+            <xsl:message terminate="yes">PTX:ERROR   the latex/font-size publication option must be 8pt, 9pt, 10pt, 11pt, 12pt, 14pt, 17pt, or 20pt, not "<xsl:value-of select="$latex-font-size" />"</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -133,10 +166,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>,</xsl:text>
         <xsl:value-of select="$text-height" />
         <xsl:text>}}&#xa;</xsl:text>
-        <xsl:text>%% Custom Page Layout Adjustments (use latex.geometry)&#xa;</xsl:text>
-        <xsl:if test="$latex.geometry != ''">
+        <xsl:text>%% Custom Page Layout Adjustments (use latex/geometry publication option)&#xa;</xsl:text>
+        <xsl:if test="$latex-geometry != ''">
             <xsl:text>\geometry{</xsl:text>
-            <xsl:value-of select="$latex.geometry" />
+            <xsl:value-of select="$latex-geometry" />
             <xsl:text>}&#xa;</xsl:text>
         </xsl:if>
         <!-- ######################################### -->
