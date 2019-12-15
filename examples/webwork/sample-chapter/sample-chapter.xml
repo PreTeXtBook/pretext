@@ -222,10 +222,6 @@
                 </introduction>
 
                 <webwork>
-                    <pg-macros>
-                        <macro-file>contextLimitedPolynomial.pl</macro-file>
-                    </pg-macros>
-
                     <setup>
                         <pg-code>
                             $a = Compute(random(1, 9, 1));
