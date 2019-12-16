@@ -115,6 +115,8 @@ var uname = "";
 var emanu = "";
 
 function check_role() {
+    console.log("check_role for", uname, "uname");
+    if(uname=="instructor") { return "instructor" }
     var_role_data = {"action": "check", "user": uname, "pw": emanu, "type": "instructor", "instId": uname}
     var role_key = "";
     $.ajax({
@@ -147,6 +149,8 @@ function validateLogin() {
     console.log("xuname", uname, "yemanu", emanu);
     var guest_name = "guest";
     var the_password_guest = "guest";
+    var instructor_name = "instructor";
+    var the_password_instructor = "instructor";
     var the_un_enc = hash_of_string(un);
     console.log("un", un, "the_un_enc", "y"+the_un_enc+"y", "pw", "x"+pw+"x", "pw == the_un_enc", pw == the_un_enc);
     var the_url_enc = hash_of_string(window.location.hostname);
@@ -156,6 +160,13 @@ function validateLogin() {
         createCookie('ut_cookie',un,0.25);
         logged_in = true;
         console.log("logged in as guest", logged_in);
+    }
+    else if ((typeof guest_access !== 'undefined') && guest_access && (un == instructor_name) && (pw == the_password_instructor)) {
+        console.log("setting the instructor ut_cookie");
+        createCookie('ut_cookie',un,0.25);
+        logged_in = true;
+        console.log("logged in as instructor", logged_in);
+        role = "instructor";
     }
     else if (pw == the_un_enc) {
         console.log("setting the ut_cookie");
@@ -224,6 +235,8 @@ else {
 
 var ut_id = readCookie('ut_cookie');
 uname = ut_id || "";
+
+if(uname == "instructor") { role="instructor"}
 
 console.log("uname", uname);
 
