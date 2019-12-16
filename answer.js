@@ -108,12 +108,12 @@ if (reading_questions.length) {
   rq_answer_label = '<span'
   rq_answer_label += ' class="readingquestion_make_answer addcontent';
   rq_answer_label += ' ' + role + '"';
-  rq_answer_label += ' style="margin-left:1em; font-size:80%; color:#a0a;"';
+//  rq_answer_label += ' style="margin-left:1em; font-size:80%; color:#a0a;"';
   rq_answer_label += '>';
   if (role == "instructor") {
       rq_answer_label += 'Responses&rarr;';
   } else {
-      rq_answer_label += 'My answer&rarr;';
+      rq_answer_label += 'Click twice to edit...';
   }
   rq_answer_label +='</span>';
 
@@ -154,10 +154,9 @@ if (reading_questions.length) {
   
   
          var this_rq_controls = '<div id="' + this_ques_id_controls + '" class="input_controls hidecontrols">';
-         this_rq_controls += '<span class="action clear_item rq_delete">X</span>';
- /*        this_rq_controls += '<span class="action save_item rq_edit">edit</span>';
-*/
-         this_rq_controls += '<span class="action amhelp">?</span>';
+         this_rq_controls += '<span class="action save_item rq_save">preview</span>';
+//         this_rq_controls += '<span class="action clear_item rq_delete">delete</span>';
+         this_rq_controls += '<span class="action amhelp">typing math?</span>';
          this_rq_controls += '</div>'
   
          var this_rq_answer_and_controls = document.createElement('div');
@@ -171,18 +170,20 @@ if (reading_questions.length) {
           /* typeset the math in the reading questions answers */
           MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
   
-      }  else {
+      }  else if(role == "instructor" || role == "student") {
 
          var this_answer_link = document.createElement('div');
          this_answer_link.innerHTML = rq_answer_label;
          console.log("inserting afterend of",reading_question);
     //     reading_question.insertAdjacentElement("afterend", this_answer_link);
          reading_question.append(this_answer_link);
+      }  else  {
+
+      console.log("should not be here");
+
       }
   
   }
-//  /* typeset the math in the reading questions answers */
-//  MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
   
   function allow_student_answers(){
   /* make a new blank area to answer a question */
@@ -203,11 +204,9 @@ if (reading_questions.length) {
     answer_textarea += '</textarea>';
   
     var this_rq_controls = '<div id="' + this_ques_id_controls + '" class="input_controls" style="margin-bottom:-1.9em;">';
-    this_rq_controls += '<span class="action clear_item rq_delete">X</span>';
-/*
-    this_rq_controls += '<span class="action save_item rq_save">save</span>';
-*/
-    this_rq_controls += '<span class="action amhelp">?</span>';
+    this_rq_controls += '<span class="action save_item rq_save">preview</span>';
+//    this_rq_controls += '<span class="action clear_item rq_delete">delete</span>';
+    this_rq_controls += '<span class="action amhelp">typing math?</span>';
     this_rq_controls += '</div>'
   
     var this_rq_answer_and_controls = document.createElement('div');
@@ -237,7 +236,14 @@ if (reading_questions.length) {
           this_textarea.style.height = this_textarea.scrollHeight + "px";
   //     }
        }, false);
-  
+  var tmp_id = this_ques_id_text + "_input";
+  console.log("want focus to ", tmp_id);
+  console.log("which is ", $("#" +tmp_id));
+  console.log("the active ", document.hasFocus(),  "element is", document.activeElement);
+  console.log("or maybe it is ", $(":focus"));
+  $("#" + tmp_id).focus();
+  document.getElementById(tmp_id).focus();
+  console.log("the active ", document.hasFocus(),  "element is", document.activeElement);
   });
   }
   allow_student_answers();
@@ -453,16 +459,18 @@ if (reading_questions.length) {
 /* handle saving when leaving an answer box, or editing an existing answer
    when hovering over an existing answer */
   
-  $('body').on('mouseover','.given_answer', function(){
+  $('body').on('click','.given_answer', function(){
 //    $(this).children().last().removeClass("hidecontrols");
     edit_one_reading_question(this);
     $(this).attr('z-index', '2000');
   });
-  $('body').on('mouseleave','.rq_answer.editing', function(){
+//oooooooo  $('body').on('mouseleave','.rq_answer.editing', function(){
+  $('body').on('mousedown','.rq_save', function(){
 //    $(this).children().last().addClass("hidecontrols");
 //    $(this).attr('z-index', '');
   //  var this_rq = $(this).find(".given_answer");
-    var this_ques_id = this.parentNode.id;
+//ooooooooo    var this_ques_id = this.parentNode.id;
+    var this_ques_id = this.parentNode.parentNode.parentNode.id;
     console.log("id of this quesiton", this_ques_id);
 //    var this_rq = $(this).find(".rq_answer_text");
 //    console.log("this_rq iiIIIIII", this_rq);
