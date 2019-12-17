@@ -507,6 +507,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- TODO: usenames may be obsolete? -->
     <xsl:text>\PassOptionsToPackage{usenames,dvipsnames,svgnames,table}{xcolor}&#xa;</xsl:text>
     <xsl:text>\usepackage{xcolor}&#xa;</xsl:text>
+    <!-- This tempalte for defining colors is provisional, and subject to change -->
+    <xsl:text>%% begin: defined colors, via xcolor package, for styling&#xa;</xsl:text>
+    <xsl:call-template name="xcolor-style"/>
+    <xsl:text>%% end: defined colors, via xcolor package, for styling&#xa;</xsl:text>
     <xsl:text>%% Colored boxes, and much more, though mostly styling&#xa;</xsl:text>
     <xsl:text>%% skins library provides "enhanced" skin, employing tikzpicture&#xa;</xsl:text>
     <xsl:text>%% boxes may be configured as "breakable" or "unbreakable"&#xa;</xsl:text>
