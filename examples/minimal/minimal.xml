@@ -28,7 +28,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--                                                                                              -->
 <!-- (2) HTML:                                                                                    -->
 <!--     xsltproc mathbook/xsl/mathbook-html.xsl minimal.xml                                      -->
-<!--     <browswer>  minimal.html                                                                 -->
+<!--     <browser>  minimal.html                                                                  -->
 <!--                                                                                              -->
 <!-- (3) CoCalc worksheet (parameter causes a single file for output)                             -->
 <!--     REMOVE the "X" in the double dash (which is not legal in an XML comment)                 -->
