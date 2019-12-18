@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--********************************************************************
+Copyright 2015 Robert A. Beezer
+
+This file is part of MathBook XML.
+
+MathBook XML is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+MathBook XML is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+
+<appendix xml:id="appendix-two">
+   <title>Second Appendix</title>
+
+    <p>This is a nonsense appendix, to check that numbering (<q>lettering</q>) procedes correctly.</p>
+
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam finibus lacus at molestie tristique. Vivamus in feugiat nibh, ut condimentum nibh. Praesent pretium est ante, et sagittis nisi tempor sed. Aenean eu odio nunc. Suspendisse dolor sem, feugiat nec ullamcorper in, cursus eu lectus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nulla at diam ac ex efficitur sagittis vitae sit amet est. Suspendisse fermentum orci at justo feugiat, a molestie mi consectetur. Proin volutpat eleifend accumsan. Ut sit amet dolor leo. Morbi tempus tortor at gravida rutrum. Morbi ultricies pharetra lobortis. Cras mollis, massa nec convallis luctus, erat magna finibus lectus, non venenatis massa magna quis lectus. In eu mollis odio. In hac habitasse platea dictumst. Nulla elementum urna ut felis rhoncus fermentum.</p>
+
+    <p>Nullam vitae velit vel ligula ultricies dapibus sit amet et sapien. Sed consequat, purus vitae dictum viverra, nunc dui molestie purus, quis luctus ipsum turpis sit amet justo. Aenean faucibus leo eget risus blandit, posuere semper felis placerat. Donec bibendum fringilla pellentesque. Nam vehicula risus placerat arcu scelerisque lacinia. Suspendisse vitae neque in ipsum rhoncus dignissim eu id magna. Phasellus vel eros est.</p>
+
+    <p>Integer congue quam eget augue fermentum porttitor. Aliquam erat volutpat. Nunc tempus mi leo, non vehicula sapien mollis in. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Mauris lorem arcu, pretium ut convallis at, malesuada non libero. Curabitur ac eros efficitur eros ullamcorper facilisis. Morbi tellus erat, aliquet in metus et, posuere facilisis metus. Duis nulla augue, dictum nec pharetra blandit, elementum et mauris. Nunc vestibulum vestibulum blandit.</p>
+
+    <p>Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Vestibulum at mattis nisl. Nunc sit amet libero vel neque consectetur interdum a eu purus. Mauris lacus eros, vulputate ut erat ac, viverra tristique lectus. Proin sed pellentesque neque. Proin bibendum lorem quis volutpat porttitor. Aenean a est orci. Morbi imperdiet et nisl quis ultrices. Maecenas at tellus quis magna accumsan semper id posuere quam. Quisque eu orci sit amet mauris aliquam mattis vitae sed mi. Etiam nec justo semper, malesuada justo sed, convallis lorem. Mauris consequat sit amet dui at hendrerit. Praesent quis arcu felis.</p>
+
+    <p>Aliquam pellentesque pellentesque lacus, in gravida magna ullamcorper et. Maecenas vitae nisl lectus. Mauris sed erat ipsum. Aliquam vestibulum vel sem nec ultricies. Donec mattis egestas sodales. Sed quis pulvinar orci. Nam ultrices finibus augue, id convallis eros consequat id. Quisque elementum hendrerit ex, vitae tristique purus convallis sed. Nullam ut eros at magna pretium cursus. Mauris iaculis pulvinar dolor, in lacinia nisl molestie in. Donec molestie hendrerit elit ac sagittis. Nullam id luctus ligula. Sed bibendum nibh non dapibus feugiat. Mauris elit sapien, maximus tempus turpis at, luctus accumsan velit. Etiam id libero vel ante aliquet elementum. Morbi efficitur mauris sed nunc egestas egestas.</p>
+
+    <p>Cras pellentesque nunc ligula, at accumsan lacus sodales eget. Donec a pulvinar sem. Sed sollicitudin pretium tortor. Proin eget nibh mauris. Nam non justo sodales, hendrerit velit vitae, tincidunt nisl. Suspendisse in eros non ligula aliquam fringilla. Ut a dignissim erat. Quisque iaculis justo nisi, eget vehicula elit condimentum tincidunt. Duis scelerisque tincidunt tincidunt. In mollis nibh ut nisl malesuada feugiat. Vestibulum nisl nisi, consectetur et purus vel, mattis pharetra nunc.</p>
+
+    <p>Sed pretium lorem et felis mollis laoreet. Donec laoreet lorem sed urna fringilla, eget ullamcorper massa finibus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Maecenas suscipit nibh iaculis nibh lacinia ultrices. Aenean eget laoreet odio. Vivamus nec euismod libero, at vestibulum dui. Aliquam sodales pretium mauris varius venenatis. Nam sit amet porta lacus, eget tempus ante. Suspendisse potenti. Nunc dignissim suscipit urna, ut fringilla urna bibendum sed. Donec eget placerat sem. Curabitur ut augue sodales, aliquet ex a, aliquet ex. Maecenas sagittis convallis justo, sed pellentesque elit tempus sed. Pellentesque a scelerisque erat. Vestibulum suscipit rhoncus sem, nec fermentum ante consectetur ut.</p>
+
+    <p>Pellentesque ac diam mi. Suspendisse vitae semper sapien, vel iaculis ipsum. Suspendisse interdum pretium eros in venenatis. In nec est in nunc accumsan condimentum. Sed vulputate ultricies ipsum, sit amet tincidunt nisi. Vivamus aliquet interdum lacus, vel porttitor erat sollicitudin id. Donec eu tortor aliquam, vehicula lorem vel, condimentum nulla. Cras pellentesque congue est eget iaculis. Morbi ut mauris tristique risus fermentum ultrices quis sed magna. Etiam faucibus nisi dui, a bibendum ante sagittis vitae. Suspendisse nunc turpis, posuere eu sodales et, condimentum eu diam. Interdum et malesuada fames ac ante ipsum primis in faucibus. Fusce tempus eget turpis vitae pulvinar. Aenean magna augue, sodales non tempor ut, lobortis auctor nunc. Nunc gravida lectus vel sapien hendrerit feugiat. Duis et nibh pellentesque, auctor nunc id, suscipit purus.</p>
+
+    <p>Nullam bibendum enim justo, sit amet dictum justo ullamcorper quis. Curabitur vitae molestie metus. Proin convallis, lorem nec ullamcorper ullamcorper, ante libero hendrerit nunc, et sollicitudin ante nisi varius massa. Pellentesque accumsan dolor vel porta vestibulum. Suspendisse in lacus suscipit, fringilla dui vitae, fermentum leo. Sed ultricies maximus lectus quis suscipit. Sed dignissim interdum ipsum sed ullamcorper. Suspendisse fringilla eleifend est at lobortis.</p>
+
+</appendix>

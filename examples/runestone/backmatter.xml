@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--********************************************************************
+Copyright 2015 Robert A. Beezer
+
+This file is part of MathBook XML.
+
+MathBook XML is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+MathBook XML is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+<!-- This file was originally part of the book     -->
+<!-- (as copied on 2015/07/12)                     -->
+<!--                                               -->
+<!--   Abstract Algebra: Theory and Applications   -->
+<!--                                               -->
+<!-- Copyright (C) 1997-2014  Thomas W. Judson     -->
+
+<backmatter xml:id="backmatter" xmlns:xi="http://www.w3.org/2001/XInclude">
+    <title>Back Matter</title> <!-- mostly for HTML sectioning -->
+
+    <appendix>
+        <title>Notation</title>
+
+        <p>The following table defines the notation used in this book. Page numbers or references refer to the first appearance of each symbol.</p>
+
+        <notation-list />
+    </appendix>
+
+    <solutions divisional="hint answer solution">
+        <title>Hints and Solutions to Selected Exercises</title>
+    </solutions>
+
+    <appendix>
+        <title>A Structured Appendix</title>
+        <introduction><p>A deeply-structured appendix for testing purposes.</p></introduction>
+        <section>
+            <title>A Section in an Appendix</title>
+            <introduction><p>Inside a section.</p></introduction>
+            <subsection>
+                <title>A Subsection in a Section in an Appendix</title>
+                <introduction><p>Inside a subsection.</p></introduction>
+                <subsubsection>
+                    <title>A Subsubsection in a Subsection in a Section in an Appendix</title>
+                    <p>Nearly terminal.</p>
+                    <paragraphs>
+                        <title>Paragraphs in a Subsubsection in a Subsection in a Section in an Appendix</title>
+                        <p>The <c>paragraphs</c> element can go in any division, but does not get a number.</p>
+                    </paragraphs>
+                </subsubsection>
+            </subsection>
+        </section>
+
+        <section>
+            <title>Numbering in the Back Matter</title>
+
+            <p>Numbered blocks in an <tag>appendix</tag> in the <tag>backmatter</tag> of a <tag>book</tag> with <tag>part</tag> were once getting an extra level in <init>HTML</init> output.  With standard defaults, the number of the following <tag>example</tag> should have two periods as separators, just like an example in the main matter when the part number is not included.</p>
+
+            <example>
+                <title>An Example Example</title>
+
+                <p>What's my number?</p>
+            </example>
+        </section>
+    </appendix>
+
+    <xi:include href="./gfdl-mathbook.xml" />           <!-- GFDL License text -->
+
+    <!-- Index follows appendices, preceded only colophon -->
+    <index>
+
+        <index-list />
+    </index>
+
+    <colophon xml:id="back-colophon">
+        <p>This book was authored in MathBook XML.</p>
+    </colophon>
+
+</backmatter>

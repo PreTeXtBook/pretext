@@ -1,0 +1,778 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!--********************************************************************
+Copyright 2015 Robert A. Beezer
+
+This file is part of MathBook XML.
+
+MathBook XML is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+MathBook XML is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+<!-- This file was originally part of the book     -->
+<!-- (as copied on 2015/07/12)                     -->
+<!--                                               -->
+<!--   Abstract Algebra: Theory and Applications   -->
+<!--                                               -->
+<!-- Copyright (C) 1997-2014  Thomas W. Judson     -->
+
+<chapter xml:id="sets" xmlns:xi="http://www.w3.org/2001/XInclude">
+
+<!-- % TWJ, 2010/03/31 -->
+<!-- % Chapters now begin with Chapter 1 -->
+
+<title>Preliminaries</title>
+
+
+    <introduction>
+        <p>A certain amount of mathematical maturity is necessary to find and study applications of abstract algebra.  A basic knowledge of set theory, mathematical induction, equivalence relations, and matrices is a must.  Even more important is the ability to read and understand mathematical proofs.  In this chapter we will outline the background needed for a course in abstract algebra.</p>
+    </introduction>
+
+    <section xml:id="section-note-on-proofs">
+        <title>A Short Note on Proofs</title>
+
+        <introduction>
+
+            <p>Abstract mathematics is different from other sciences. In laboratory sciences such as chemistry and physics, scientists perform experiments to discover new principles and verify theories.  Although mathematics is often motivated by physical experimentation or by computer simulations, it is made rigorous through the use of logical arguments.  In studying abstract mathematics, we take what is called an  axiomatic approach; that is, we take a collection of objects <m>\mathcal S</m> and assume some rules about their structure.  These rules are called <term>axioms</term>.  Using the axioms for <m>\mathcal S</m>, we wish to derive other information about <m>\mathcal S</m> by using logical arguments.  We require that our axioms be consistent; that is, they should not contradict one another.  We also demand that there not be too many axioms. If a system of axioms is too restrictive,  there will be few examples of the mathematical structure.</p>  
+
+            <p>A <term>statement</term> in logic or mathematics is an assertion that is either true or false.  Consider the following examples:<ul>
+                <li><p><m>3 + 56 - 13 + 8/2 </m>.</p></li>
+                <li><p>All cats are black.</p></li>
+                <li><p><m>2 + 3 = 5</m>.</p></li>
+                <li><p><m>2x = 6</m> exactly when <m>x = 4</m>.</p></li>
+                <li><p>If <m>ax^2 + bx + c = 0</m> and <m>a \neq 0</m>, then <me>x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}.</me></p></li>
+                <li><p><m>x^3 - 4x^2 + 5 x - 6</m>.</p></li>
+            </ul>All but the first and last examples are statements, and must be either true or false.</p> 
+
+            <p>A <term>mathematical proof</term> is nothing more than a convincing argument about the accuracy  of a statement. Such an argument should contain enough detail to convince the audience; for instance, we can see that the statement <q><m>2x = 6</m> exactly when <m>x = 4</m></q> is false by evaluating <m>2 \cdot 4</m> and noting that <m>6 \neq 8</m>, an argument that would satisfy anyone. Of course, audiences may vary widely: proofs can be addressed to another student, to a professor, or to the reader of a text.  If more detail than  needed is presented in the proof, then the  explanation will be either long-winded or poorly written.  If too much detail is omitted, then the proof may  not be convincing.  Again it is important to keep the audience in mind.  High school students require much more detail than do graduate students.  A good rule of thumb for an argument in an introductory abstract algebra course is that it should be written to convince one's peers, whether those peers be other students or other readers of the text.</p>
+
+            <p>Let us examine different types of statements.  A statement could be as simple as <q><m>10/5 = 2</m>;</q> however, mathematicians are usually interested in more complex statements such as <q>If <m>p</m>, then <m>q</m>,</q> where <m>p</m> and <m>q</m> are both statements.  If certain statements are known or assumed to be true, we wish to know what we can say about other statements.  Here <m>p</m> is called the <term>hypothesis</term> and <m>q</m> is known as the <term>conclusion</term>.  Consider the following statement: If <m>ax^2 + bx + c = 0</m> and <m>a \neq 0</m>, then  
+                <me>x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}.</me>
+            The hypothesis is <m>ax^2 + bx + c = 0</m> and <m>a \neq 0</m>; the conclusion is 
+                <me>x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}.</me>
+            Notice that the  statement says nothing about whether or not the hypothesis is true. However, if this entire statement is true and we can show that <m>ax^2 + bx + c = 0</m> with <m>a \neq 0</m> is true, then the conclusion <em>must</em> be true.  A proof of this statement might simply be a series of equations:<md>
+                <mrow>ax^2 + bx + c &amp; =  0</mrow>
+                <mrow>x^2 + \frac{b}{a}x &amp; =  - \frac{c}{a}</mrow>
+                <mrow>x^2 + \frac{b}{a}x + \left( \frac{b}{2a} \right)^2 &amp; =  \left( \frac{b}{2a} \right)^2 - \frac{c}{a}</mrow>
+                <mrow>\left(x + \frac{b}{2a} \right)^2 &amp; =  \frac{b^2 - 4ac}{4a^2}</mrow>
+                <mrow>x + \frac{b}{2a}  &amp; =  \frac{ \pm \sqrt{ b^2 -4ac}}{2a}</mrow>
+                <mrow>x &amp; =  \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}.</mrow>
+            </md></p>
+
+            <p>If we can prove a statement true, then that statement is called a <term>proposition</term>.  A proposition of major importance is called a <term>theorem</term>.  Sometimes instead of proving a theorem or proposition all at once, we break the proof down into modules; that is, we prove several supporting propositions, which are called <term>lemmas</term>, and use the results of these propositions to prove the main result. If we can prove a proposition or a theorem, we will often, with very little effort, be able to derive other related propositions called <term>corollaries</term>.</p>
+
+        </introduction>
+
+        <subsection>
+            <title>Some Cautions and Suggestions</title>
+
+            <p>There are several different strategies for proving propositions.  In addition to using different methods of proof, students often make some common mistakes when they are first learning how to prove theorems. To aid students who are studying abstract mathematics for the first time, we list here some of the difficulties that they may encounter and some of the strategies of proof available to them. It is a good idea to keep referring back to this list as a reminder. (Other techniques of proof will become apparent throughout this chapter and the remainder of the text.)<ul>
+                <li><p>A theorem cannot be proved by example; however, the standard way to show that a statement is not a theorem is to provide a counterexample.</p></li>
+                <li><p>Quantifiers are important. Words and phrases such as <em>only</em>, <em>for all</em>, <em>for every</em>, and <em>for some</em> possess different meanings.</p></li>
+                <li><p>Never assume any hypothesis that is not explicitly stated in the theorem.  <em>You cannot take things for granted.</em></p></li>
+                <li><p>Suppose you wish to show that an object <em>exists</em> and is <em>unique</em>.  First show that there actually is such an object.  To show that it is unique, assume that there are two such objects, say <m>r</m> and <m>s</m>, and then show that <m>r = s</m>.</p></li>
+                <li><p>Sometimes it is easier to prove the contrapositive of a statement.  Proving the statement <q>If <m>p</m>, then <m>q</m></q> is exactly the same as proving the statement <q>If not <m>q</m>, then not <m>p</m>.</q></p></li>
+                <li><p>Although it is usually better to find a direct proof of a theorem, this task  can sometimes be difficult. It may be easier to assume that the theorem that you are trying to prove is false, and to hope that in the course of your argument you are forced to make some statement that cannot possibly be true.</p></li>
+            </ul></p>
+
+            <p>Remember that one of the main objectives of higher mathematics is proving theorems. Theorems are tools that make new and productive applications of mathematics possible.  We use examples to give insight  into existing theorems and to foster intuitions as to what new theorems might be true.  Applications, examples, and proofs are tightly interconnected<mdash />much more so than they may seem at first appearance.</p>
+
+        </subsection>
+
+    </section>
+
+    <section xml:id="section-sets-and-equivalence-relations">
+        <title>Sets and Equivalence Relations</title>
+
+        <subsection>
+            <title>Set Theory</title>
+
+            <p>A <term>set</term> is a well-defined collection of objects; that is, it is defined in such a manner that we can determine for any given object <m>x</m> whether or not <m>x</m> belongs to the set.  The objects that belong to a set are called its <term>elements</term> or <term>members</term>. We will denote sets by capital letters, such as <m>A</m> or <m>X</m>; if <m>a</m> is an element of the set <m>A</m>, we write <m>a \in A</m>.
+            <notation><usage>a \in A</usage><description><m>a</m> is in the set <m>A</m></description></notation></p>
+
+            <!-- ToDo: Make notation table -->
+
+            <p>A set is usually specified either by listing all of its elements inside a pair of braces or by stating the property that determines whether or not an object <m>x</m> belongs to the set. We might write
+                <me>X = \{ x_1, x_2, \ldots, x_n \}</me>
+            for a set containing elements <m>x_1, x_2, \ldots, x_n</m> or
+                <me>X = \{ x :x \text{ satisfies }{\mathcal P}\}</me>
+            if each <m>x</m> in <m>X</m> satisfies a certain property <m>{\mathcal P}</m>.  For example, if <m>E</m> is the set of even positive integers, we can describe <m>E</m> by writing either 
+                <me>E = \{2, 4, 6, \ldots \} \quad \text{or} \quad E = \{ x : x \text{ is an even integer and } x \gt 0 \}.</me>
+            We write <m>2 \in E</m> when we want to say that 2 is in the set <m>E</m>, and <m>-3 \notin E</m> to say that <m>-3</m> is not in the set <m>E</m>.</p>
+
+            <p>Some of the more important sets that we will consider are the following:<md>
+                <mrow>{\mathbb N} &amp;= \{n: n \text{ is a natural number}\}  = \{1, 2, 3, \ldots \};</mrow>
+                <mrow>{\mathbb Z} &amp;= \{n : n \text{ is an integer} \} = \{\ldots, -1, 0, 1,  2, \ldots \};</mrow>
+                <mrow>{\mathbb Q} &amp;= \{r : r \text{ is a rational number}\} = \{p/q : p, q \in {\mathbb Z} \text{ where } q \neq 0\};</mrow>
+                <mrow>{\mathbb R} &amp;= \{ x : x \text{ is a real number} \};</mrow>
+                <mrow>{\mathbb C} &amp;= \{z : z \text{ is a complex number}\}.</mrow>
+            </md><notation>
+                <usage>{\mathbb N}</usage>
+                <description>the natural numbers</description>
+            </notation><notation>
+                <usage>{\mathbb Z}</usage>
+                <description>the integers</description>
+            </notation><notation>
+                <usage>{\mathbb Q}</usage>
+                <description>the rational numbers</description>
+            </notation><notation>
+                <usage>{\mathbb R}</usage>
+                <description>the real numbers</description></notation>
+            <notation>
+                <usage>{\mathbb C}</usage>
+                <description>the complex numbers</description>
+            </notation></p>
+
+            <p>We can find various relations between sets as well as perform operations on sets.  A set <m>A</m> is a <term>subset</term> of <m>B</m>, written <m>A \subset B</m> or <m>B \supset A</m>, if every element of <m>A</m> is also an element of <m>B</m>.  <notation><usage>A \subset B</usage><description><m>A</m> is a subset of <m>B</m></description></notation> For example,  
+                <me>\{4,5,8\} \subset \{2, 3, 4, 5, 6, 7, 8, 9 \}</me>
+            and
+                <me>{\mathbb N} \subset {\mathbb Z} \subset {\mathbb Q} \subset {\mathbb R} \subset {\mathbb C}.</me>
+            Trivially, every set is a subset of itself.  A set <m>B</m> is a <term>proper subset</term> of a set <m>A</m> if <m>B \subset A</m> but <m>B \neq A</m>. If <m>A</m> is not a subset of <m>B</m>, we write <m>A \notsubset B</m>; for example, <m>\{4, 7, 9\} \notsubset \{2, 4, 5,  8, 9 \}</m>.  Two sets are <term>equal</term>, written <m>A = B</m>, if we can show that <m>A \subset B</m> and <m>B \subset A</m>.</p>
+
+            <p>It is convenient to have a set with no elements in it.  This set is called the <term>empty set</term> and is denoted by <m>\emptyset</m>.  Note that the empty set is a subset of every set. <notation><usage>\emptyset</usage><description>the empty set</description></notation></p>  	
+
+            <p>To construct new sets out of old sets, we can perform certain operations: the <term>union</term> <m>A \cup B</m> of two sets <m>A</m> and <m>B</m> is defined as  
+                <me>A \cup B = \{x : x \in A \text{ or } x \in B \};</me>
+            the <term>intersection</term> of <m>A</m> and <m>B</m>  is defined by
+                <me>A \cap B = \{x :  x \in A \text{ and } x \in B \}.</me>
+            <notation><usage>A \cup B</usage><description>the union of sets <m>A</m> and <m>B</m></description></notation><notation><usage>A \cap B</usage><description>the intersection of sets <m>A</m> and <m>B</m></description></notation> If <m>A = \{1, 3, 5\}</m> and <m>B = \{ 1, 2, 3, 9 \}</m>, then
+                <me>A \cup B = \{1, 2, 3, 5, 9 \} \quad \text{and} \quad A \cap B = \{ 1, 3 \}.</me>
+            We can consider the union and the intersection of more than two sets.  In this case we write 
+                <me>\bigcup_{i = 1}^{n} A_{i} = A_{1} \cup \ldots \cup A_n</me>
+            and
+                <me>\bigcap_{i = 1}^{n} A_{i} = A_{1} \cap \ldots \cap A_n</me>
+            for the union and intersection, respectively, of the sets <m>A_1, \ldots, A_n</m>.</p>
+            
+<!-- Added comma after \ldots - TWJ 12/16/2010 -->
+
+            <p>When two sets have no elements in common, they are said to be <term>disjoint</term>; for example, if <m>E</m> is the set of even integers and <m>O</m> is the set of odd integers, then <m>E</m> and <m>O</m> are disjoint.  Two sets <m>A</m> and <m>B</m> are disjoint exactly when <m>A \cap B = \emptyset</m>.</p> 
+
+            <p>Sometimes we will work within one fixed set <m>U</m>, called the <term>universal set</term>.  For any set <m>A \subset U</m>, we define the <term>complement</term> of <m>A</m>, denoted by <m>A'</m>, to be the set <notation><usage>A'</usage><description>complement of the set <m>A</m></description></notation>
+                <me>A' = \{ x : x \in U \text{ and } x \notin A \}.</me></p>		
+
+            <p>We define the <term>difference</term> of two sets <m>A</m> and <m>B</m> to be <notation><usage>A \setminus B</usage><description>difference between sets <m>A</m> and <m>B</m></description></notation>
+                <me>A \setminus B = A \cap B'  = \{ x : x \in A \text{ and } x \notin B \}.</me></p>
+
+        <example xml:id="example-sets-operations">
+            <title>Set Operations</title>
+            <p>Let <m>{\mathbb R}</m> be the universal set and suppose that
+                <me>A = \{ x \in {\mathbb R} : 0 \lt x \leq 3 \} \quad \text{and} \quad B = \{ x \in {\mathbb R} : 2 \leq x \lt 4 \}.</me>
+            Then<md>
+                <mrow>A \cap B &amp; =  \{ x \in {\mathbb R} : 2 \leq x \leq 3 \}</mrow>
+                <mrow>A \cup B &amp; =  \{ x \in {\mathbb R} : 0 \lt x \lt 4 \}</mrow>
+                <mrow>A \setminus B &amp; =  \{ x \in {\mathbb R} : 0 \lt x \lt 2  \}</mrow>
+                <mrow>A' &amp; =  \{ x \in {\mathbb R} : x \leq 0 \text{ or } x \gt 3 \}.</mrow>
+            </md></p>
+        </example>
+
+        <proposition>
+            <statement>
+                <p>Let <m>A</m>, <m>B</m>, and <m>C</m> be sets. Then<ol>
+                    <li><p><m>A \cup A = A</m>, <m>A \cap A = A</m>, and <m>A \setminus A = \emptyset</m>;</p></li>
+                    <li><p><m>A \cup \emptyset = A</m> and <m>A \cap \emptyset = \emptyset</m>;</p></li>
+                    <li><p><m>A \cup (B \cup C) = (A \cup B) \cup C</m> and  <m>A \cap (B \cap C) = (A \cap B) \cap C</m>;</p></li>
+                    <li><p><m>A \cup B = B \cup A</m> and <m>A \cap B = B \cap A</m>;</p></li>
+                    <li><p><m>A \cup (B \cap C) = (A \cup B) \cap (A \cup C)</m>;</p></li>
+                    <li><p><m>A \cap (B \cup C) = (A \cap B) \cup (A \cap C)</m>.</p></li>
+                </ol></p>
+            </statement>
+            <proof>
+                <p>We will prove (1) and (3) and leave the remaining results to be proven in the exercises.</p>
+
+                <p>(1) Observe that<md>
+                    <mrow>A \cup A &amp; =  \{ x :  x \in A \text{ or } x \in A \}</mrow>
+                    <mrow>&amp; =  \{ x : x \in A \}</mrow>
+                    <mrow>&amp; =  A</mrow>
+                    <intertext>and</intertext>
+                    <mrow>A \cap A &amp; =  \{ x : x \in A \text{ and } x \in A \}</mrow>
+                    <mrow>&amp; =  \{ x : x \in A  \}</mrow>
+                    <mrow>&amp; =  A.</mrow>
+                </md></p>
+
+                <p>Also, <m>A \setminus A = A \cap A' = \emptyset</m>.</p>
+
+                <p>(3) For sets <m>A</m>, <m>B</m>, and <m>C</m>,<md>
+                    <mrow>A \cup (B \cup C) &amp; = A \cup \{ x : x \in B \text{ or } x \in C \}</mrow>
+                    <mrow>&amp; = \{ x : x \in A \text{ or } x \in B, \text{ or } x \in C \}</mrow>
+                    <mrow>&amp; = \{ x : x \in A \text{ or } x \in B \} \cup C</mrow>
+                    <mrow>&amp; = (A \cup B) \cup C. </mrow>
+                </md></p>
+
+                <p>A similar argument proves that  <m>A \cap (B \cap C) = (A \cap B) \cap C</m>.</p>
+            </proof>
+        </proposition>
+
+        <theorem>
+            <title>De Morgan's Laws</title>
+            <creator>Augustus De Morgan, 1806<ndash />1871</creator>
+            <idx><h>De Morgan's laws</h><h>for sets</h></idx>
+            <statement>
+                <p>Let <m>A</m> and <m>B</m> be sets. Then<ol>
+                    <li><p><m>(A \cup B)' = A' \cap B'</m>;</p></li>
+                    <li><p><m>(A \cap B)' = A' \cup B'</m>.</p></li>
+                </ol></p>
+            </statement>
+            <proof>
+                <p>(1) We must show that <m>(A \cup B)' \subset A' \cap B'</m> and <m>(A \cup B)' \supset A' \cap B'</m>. Let <m>x \in (A \cup B)'</m>.  Then <m>x \notin A \cup B</m>. So <m>x</m> is neither in <m>A</m> nor in <m>B</m>, by the definition of the union of sets.  By the definition of the complement, <m>x \in A'</m> and <m>x \in B'</m>.  Therefore, <m>x \in A' \cap B'</m> and we have <m>(A \cup B)' \subset A' \cap B'</m>.</p>
+
+                <p>To show the reverse inclusion, suppose that <m>x \in A' \cap B'</m>.  Then <m>x \in A'</m> and <m>x \in B'</m>, and so <m>x \notin A</m> and <m>x \notin B</m>. Thus <m>x \notin A \cup B</m> and so <m>x \in (A \cup B)'</m>.  Hence, <m>(A \cup B)' \supset A' \cap B'</m> and so <m>(A \cup B)' = A' \cap B'</m>.</p>
+
+                <p>The proof of (2) is left as an exercise.</p>
+            </proof>
+        </theorem>
+
+        <example xml:id="example-sets-other-relations">
+            <title>Other Relations on Sets</title>
+            <p>Other relations between sets often hold true. For example,
+                <me>( A \setminus B) \cap (B \setminus A) = \emptyset.</me>
+            To see that this is true, observe that<md>
+                <mrow>( A \setminus B) \cap (B \setminus A) &amp; = ( A \cap B') \cap (B \cap A')</mrow>
+                <mrow>&amp; = A \cap A' \cap B \cap B'</mrow>
+                <mrow>&amp; = \emptyset.</mrow>
+            </md></p>
+        </example>
+
+    </subsection>
+
+    <subsection>
+        <title>Cartesian Products and Mappings</title>
+
+            <p>Given sets <m>A</m> and <m>B</m>, we can define a new set <m>A \times B</m>, called the <term>Cartesian product</term>  of <m>A</m> and <m>B</m>, as a set of ordered pairs.  That is, <notation><usage>A \times B</usage><description>Cartesian product of sets <m>A</m> and <m>B</m></description></notation>
+                <me>A \times B = \{ (a,b) : a \in A \text{ and } b \in B \}.</me></p>
+
+        <example xml:id="example-sets-cartesian-products">
+            <title>Cartesian Products</title>
+            <p>If <m>A = \{ x, y \}</m>, <m>B = \{ 1, 2, 3 \}</m>, and <m>C = \emptyset</m>, then <m>A \times B</m> is the set 
+                <me>\{ (x, 1), (x, 2), (x, 3), (y, 1), (y, 2), (y, 3) \}</me>
+            and
+                <me>A \times C = \emptyset.</me></p>
+        </example>
+
+        <p>We define the <term>Cartesian product of <m>n</m> sets</term> to be
+            <me>A_1 \times \cdots \times A_n = \{ (a_1, \ldots, a_n): a_i \in A_i \text{ for } i = 1, \ldots, n \}.</me>
+        If <m>A = A_1 = A_2 = \cdots = A_n</m>, we often write <m>A^n</m> for <m>A \times \cdots \times A</m> (where <m>A</m> would be written <m>n</m> times).  <notation><usage>A^n</usage><description><m>A \times \cdots \times A</m> (<m>n</m> times)</description></notation>For example, the set <m>{\mathbb R}^3</m> consists of all of 3-tuples of real numbers.</p>
+
+
+
+        <p>Subsets of <m>A \times B</m> are called <term>relations</term>.  We will define a  <term>mapping</term><idx><h>Mapping</h><see>Function</see></idx> or <term>function</term><idx><h>Function</h><h>definition of</h></idx> <m>f \subset A \times B</m> from a set <m>A</m> to a set <m>B</m> to be the special type of relation where <m>(a, b) \in f</m> if for every element <m>a \in A</m> there exists a unique element <m>b \in B</m>. Another way of saying this is that for every element in <m>A</m>, <m>f</m> assigns a unique element in <m>B</m>.  We usually write <m>f:A \rightarrow B</m> or <m>A \stackrel{f}{\rightarrow} B</m>.  Instead of writing down ordered pairs  <m>(a,b) \in A \times B</m>, we write <m>f(a) = b</m> or <m>f : a \mapsto b</m>.  The set  <m>A</m> is called the <term>domain</term><idx><h>Function</h><h>domain of</h></idx> of <m>f</m> and   
+            <me>f(A) = \{ f(a) : a \in A \} \subset B</me>
+        is called the <term>range</term><idx><h>Function</h><h>range of</h></idx> or <term>image</term> of <m>f</m>.  We can think of the elements in the function's domain as input values and the elements in the function's range as output values.</p>
+
+        <figure xml:id="figure-sets-mappings">
+            <caption>Mappings and relations</caption>
+
+             <!-- Changed the figure to a tikz diagram - TWJ 5/4/2010 -->
+            <image xml:id="sets-mappings">
+                <latex-image><![CDATA[
+                    \begin{tikzpicture}[scale=0.5]
+                    \draw (0,0) ellipse (2 and 3);
+                    \draw (7,0) ellipse (2 and 3);
+                    \draw (0,8) ellipse (2 and 3);
+                    \draw (7,8) ellipse (2 and 3);
+                    \draw [->] (0.5,9.5) -- (6.5,8);
+                    \draw [->] (0.5,8) -- (6.5,6.7);
+                    \draw [->] (0.5,6.5) -- (6.5,6.5);
+                    \draw [->] (0.5,1.5) -- (6.5,1.5);
+                    \draw [->] (0.5,1.3) -- (6.5,0);
+                    \draw [->] (0.5,0) -- (6.5,-1.5);
+                    \draw [->] (0.5,-1.5) -- (6.5,1.3);
+                    \node at (0, 1.5) {1};
+                    \node at (0, 0) {2};
+                    \node at (0, -1.5) {3};
+                    \node at (7, 1.5) {$a$};
+                    \node at (7, 0) {$b$};
+                    \node at (7, -1.5) {$c$};
+                    \node at (0, 9.5) {1};
+                    \node at (0, 8) {2};
+                    \node at (0, 6.5) {3};
+                    \node at (7, 9.5) {$a$};
+                    \node at (7, 8) {$b$};
+                    \node at (7, 6.5) {$c$};
+                    \node at (-1.5,11) {$A$};
+                    \node at (5.5,11) {$B$};
+                    \node at (-1.5,3) {$A$};
+                    \node at (5.5,3) {$B$};
+                    \node at (3.5,3) {$g$};
+                    \node at (3.5,10) {$f$};
+                    \end{tikzpicture}]]>
+                </latex-image>
+            </image>
+        <!-- Changed the caption to avoid confusion -->
+        <!--  Suggested by B. Torrence.  TWJ 10/1/2014 -->
+        </figure>
+
+        <example xml:id="example-sets-mappings">
+            <title>Mappings</title>
+            <p>Suppose <m>A = \{1, 2, 3 \}</m> and <m>B = \{a, b, c \}</m>.  In <xref ref="figure-sets-mappings" /> we define relations <m>f</m> and  <m>g</m> from <m>A</m> to <m>B</m>.  The relation <m>f</m> is a mapping, but <m>g</m> is not because <m>1 \in A</m> is not assigned to a unique element in <m>B</m>; that is, <m>g(1) = a</m> and <m>g(1) = b</m>.</p>
+        </example>
+
+        <p>Given a function <m>f : A \rightarrow B</m>, it is often possible to write a list describing what the function does to each specific element in the domain.  However, not all functions can be described in this manner.  For example, the function <m>f: {\mathbb R} \rightarrow {\mathbb R}</m> that sends each real number to its cube is a mapping that must be described by writing <m>f(x) = x^3</m> or <m>f:x \mapsto x^3</m>.</p>
+
+        <p>Consider the relation <m>f : {\mathbb Q} \rightarrow {\mathbb Z}</m> given by <m>f(p/q) = p</m>.  We know that <m>1/2 = 2/4</m>, but is <m>f(1/2) = 1</m> or 2?  This relation cannot be a mapping because it is not well-defined.  A relation is <term>well-defined</term><idx><h>Well-defined map</h></idx> if each element in the domain is assigned to a <em>unique</em> element in the range.</p>
+
+        <p>If <m>f:A \rightarrow B</m> is a map and the image of <m>f</m> is <m>B</m>, i.e., <m>f(A) = B</m>, then <m>f</m> is said to be <term>onto</term><idx><h>Function</h><h>onto</h></idx> or <term>surjective</term><idx><h>Function</h><h>surjective</h></idx>. In other words, if there exists an <m>a \in A</m> for each <m>b \in B</m> such that <m>f(a) = b</m>, then <m>f</m> is onto. A map is <term>one-to-one</term><idx><h>Function</h><h>one-to-one</h></idx> or <term>injective</term><idx><h>Function</h><h>injective</h></idx> if <m>a_1 \neq a_2</m> implies <m>f(a_1) \neq f(a_2)</m>.  Equivalently, a function is one-to-one if <m>f(a_1) = f(a_2)</m> implies <m>a_1 = a_2</m>.  A map that is both one-to-one and onto is called <term>bijective</term><idx><h>Function</h><h>bijective</h></idx>.</p> 
+
+<!-- Added explanation for onto map - TWJ 1/25/2011 -->
+
+        <example xml:id="example-sets-one-to-one-onto">
+            <title>One-to-One and Onto Mappings</title>
+            <p>Let <m>f:{\mathbb Z} \rightarrow {\mathbb Q}</m> be defined by <m>f(n) = n/1</m>.  Then <m>f</m> is one-to-one but not onto.  Define <m>g : {\mathbb Q} \rightarrow {\mathbb Z}</m> by <m>g(p/q) = p</m> where <m>p/q</m> is a rational number expressed in its lowest terms with a positive denominator.  The function <m>g</m> is onto but not one-to-one.</p>
+        </example>
+
+        <p>Given two functions, we can construct a new function by using the range of the first function as the domain of the second function.  Let <m>f : A \rightarrow B</m> and <m>g : B \rightarrow C</m> be mappings.  Define a new map, the <term>composition</term><idx><h>Function</h><h>composition of</h></idx> of <m>f</m> and <m>g</m> from <m>A</m> to <m>C</m>, by <m>(g \circ f)(x) = g(f(x))</m>.</p>
+
+        <figure xml:id="figure-sets-composition">
+            <caption>Composition of maps</caption>
+
+            <!-- Changed the figure to a tikz diagram - TWJ 5/4/2010 -->
+            <image xml:id="sets-composition">
+                <latex-image><![CDATA[
+                    \begin{tikzpicture}[scale=0.5]
+                    \draw (-6,8) ellipse (2 and 3);
+                    \draw (0,8) ellipse (2 and 3);
+                    \draw (6,8) ellipse (2 and 3);
+
+                    \node at (-7.5,11) {$A$};
+                    \node at (-1.5,11) {$B$};
+                    \node at (4.5,11) {$C$};
+                    \node at (-6, 9.5) {1};
+                    \node at (-6, 8) {2};
+                    \node at (-6, 6.5) {3};
+                    \node at (0, 9.5) {$a$};
+                    \node at (0, 8) {$b$};
+                    \node at (0, 6.5) {$c$};
+                    \node at (6, 9.5) {$X$};
+                    \node at (6, 8) {$Y$};
+                    \node at (6, 6.5) {$Z$};
+                    \node at (-3,10) {$f$};
+                    \node at (3,10) {$g$};
+
+                    \draw [->] (0.5,9.5) -- (5.5,6.7);
+                    \draw [->] (0.5,8) -- (5.5,6.5);
+                    \draw [->] (0.5,6.5) -- (5.5,9.5);
+
+                    \draw [->] (-5.5,9.5) -- (-0.5,8);
+                    \draw [->] (-5.5,8) -- (-0.5,6.5);
+                    \draw [->] (-5.5,6.5) -- (-0.5,9.5);
+
+                    \draw (-3,0) ellipse (2 and 3);
+                    \draw (3,0) ellipse (2 and 3);
+
+                    \node at (-5,3) {$A$};
+                    \node at (1.5,3) {$C$};
+                    \node at (-3, 1.5) {1};
+                    \node at (-3, 0) {2};
+                    \node at (-3, -1.5) {3};
+                    \node at (3, 1.5) {$X$};
+                    \node at (3, 0) {$Y$};
+                    \node at (3, -1.5) {$Z$};
+                    \node at (0,2.5) {$g \circ f$};
+
+                    \draw [->] (-2.5,1.5) -- (2.5,-1.3);
+                    \draw [->] (-2.5,0) -- (2.5,1.5);
+                    \draw [->] (-2.5,-1.5) -- (2.5,-1.5);
+
+                    \end{tikzpicture}]]>
+                </latex-image>
+            </image>
+        </figure>
+
+        <example xml:id="example-sets-composition">
+            <title>Composition of Mappings</title>
+            <p>Consider the functions <m>f: A \rightarrow B</m> and <m>g: B \rightarrow C</m> that are defined in <xref ref="figure-sets-composition" /> (top).  The composition of these functions, <m>g \circ f: A \rightarrow C</m>, is defined in <xref ref="figure-sets-composition" /> (bottom).</p>
+        </example>
+
+<!-- Changed figure references.  Suggested by P. Diethelm.  TWJ 22/4/2013 -->
+
+        <example xml:id="example-sets-composition-noncommute">
+            <title>Composition is not Commutative</title>
+            <p>Let <m>f(x) = x^2</m> and <m>g(x) = 2x + 5</m>. Then
+                <me>(f \circ g)(x) = f(g(x)) = (2x + 5)^2 = 4x^2 + 20x + 25</me>
+            and
+                <me>(g \circ f)(x) = g(f(x)) = 2x^2 + 5.</me>
+            In general, order makes a difference; that is, in most cases <m>f \circ g \neq g \circ f</m>.</p>
+        </example>
+
+        <example xml:id="example-sets-composition-commute">
+            <title>Some Mappings Commute</title>
+            <p>Sometimes it is the case that <m>f \circ g= g \circ f</m>.  Let <m>f(x) = x^3</m> and <m>g(x) = \sqrt[3]{x}</m>. Then 
+                <me>(f \circ g )(x) = f(g(x)) = f( \sqrt[3]{x}\, ) = (\sqrt[3]{x}\, )^3 = x</me>
+            and
+                <me>(g \circ f )(x) = g(f(x)) = g( x^3) = \sqrt[3]{ x^3} = x.</me></p>
+        </example>
+
+        <example xml:id="example-sets-linear-map">
+            <title>A Linear Map</title>
+            <p>Given a <m>2 \times 2</m> matrix
+                <me>A =
+                \begin{pmatrix}<![CDATA[
+                a & b \\
+                c & d
+                ]]>\end{pmatrix},</me>
+            we can define a map <m>T_A : {\mathbb R}^2 \rightarrow {\mathbb R}^2</m> by 
+                <me>T_A (x,y) = (ax + by, cx +dy)</me>
+            for <m>(x,y)</m> in <m>{\mathbb R}^2</m>.  This is actually matrix multiplication; that is,
+                <me>\begin{pmatrix}<![CDATA[
+                a & b \\
+                c & d
+                ]]>\end{pmatrix}
+                \begin{pmatrix}<![CDATA[
+                x \\ y
+                ]]>\end{pmatrix}
+                =
+                \begin{pmatrix}<![CDATA[
+                ax + by \\
+                cx +dy
+                ]]>\end{pmatrix}.</me>
+            Maps from <m>{\mathbb R}^n</m> to <m>{\mathbb R}^m</m> given by matrices are called <term>linear maps</term> or <term>linear transformations</term><idx><h>Linear transformation</h><h>definition of</h></idx>.</p>
+        </example>
+
+        <example xml:id="example-sets-permutation">
+            <title>A Permutation</title>
+            <p>Suppose that <m>S = \{ 1,2,3  \}</m>. Define a map <m>\pi :S\rightarrow S</m> by 
+                <me>\pi( 1 )  = 2, \qquad \pi( 2 )  = 1, \qquad \pi( 3 )  = 3.</me>
+            This is a bijective map.  An alternative way to  write <m>\pi</m> is
+                <me>\begin{pmatrix}<![CDATA[
+                1 & 2 & 3 \\
+                \pi(1) & \pi(2) & \pi(3)
+                ]]>\end{pmatrix}
+                =
+                \begin{pmatrix}<![CDATA[
+                1 & 2 & 3 \\
+                2 & 1 & 3
+                ]]>\end{pmatrix}.</me>
+            For any set <m>S</m>, a one-to-one and onto mapping <m>\pi : S \rightarrow S</m> is called a <term>permutation</term><idx><h>Permutation</h><h>definition of</h></idx> of <m>S</m>.</p>
+        </example>
+
+        <theorem>
+            <statement>
+                <p>Let <m>f : A \rightarrow B</m>, <m>g : B \rightarrow C</m>, and <m>h : C \rightarrow D</m>. Then<ol>
+                    <li><p>The composition of mappings is associative; that is, <m>(h \circ g) \circ f = h \circ (g \circ f)</m>;</p></li>
+                    <li><p>If <m>f</m> and <m>g</m> are both one-to-one, then the mapping <m>g \circ f</m> is one-to-one;</p></li> 
+                    <li><p>If <m>f</m> and <m>g</m> are both onto, then the mapping <m>g \circ f</m> is onto;</p></li>  
+                    <li><p>If <m>f</m> and <m>g</m> are bijective, then so is <m>g \circ f</m>.</p></li>
+                </ol></p>
+            </statement>
+            <proof>
+                <p>We will prove (1) and (3). Part (2) is left as an exercise.  Part (4) follows directly from (2) and (3).</p> 
+
+                <p>(1) We must show that
+                    <me>h \circ (g \circ f) = (h \circ g) \circ f.</me>
+                For <m>a \in A</m> we have<md>
+                    <mrow>(h \circ (g \circ f))(a) &amp; = h((g \circ f)(a))</mrow>
+                    <mrow>&amp; = h(g(f(a))) </mrow>
+                    <mrow>&amp; = (h \circ g)(f(a))</mrow>
+                    <mrow>&amp; = ((h \circ g) \circ f)(a).</mrow>
+                </md></p>
+
+                <p>(3) Assume that <m>f</m> and <m>g</m> are both onto functions. Given <m>c \in C</m>, we must show that there exists an <m>a \in A</m> such that <m>(g \circ f)(a) = g(f(a)) = c</m>. However, since <m>g</m> is onto, there is an element <m>b \in B</m> such that <m>g(b) = c</m>. Similarly, there is an <m>a \in A</m> such that <m>f(a) = b</m>. Accordingly, 
+                    <me>(g \circ f)(a) = g(f(a)) = g(b) = c.</me></p>
+            </proof>
+        </theorem>
+
+            <p>If <m>S</m> is any set, we will use <m>id_S</m> or <m>id</m> to denote the <term>identity mapping</term><idx><h>Function</h><h>identity</h></idx> from <m>S</m> to itself.  Define this map by <m>id(s) = s</m> for all <m>s \in S</m>.  A map <m>g: B \rightarrow A</m> is an <term>inverse mapping</term> of <m>f: A \rightarrow B</m> if <m>g \circ f = id_A</m> and <m>f \circ g = id_B</m>; in other words, the inverse function of a function simply <q>undoes</q> the function.   A map is said to be <term>invertible</term><idx><h>Function</h><h>invertible</h></idx> if it has an inverse.  We usually write <m>f^{-1}</m> for the inverse of <m>f</m>. <notation><usage>id</usage><description>identity mapping</description></notation><notation><usage>f^{-1}</usage><description>inverse of the function <m>f</m></description></notation></p> 
+
+        <example xml:id="example-sets-inverse-function">
+            <title>An Inverse Function</title>
+            <p>The function <m>f(x) = x^3</m> has inverse <m>f^{-1}(x) = \sqrt[3]{x}</m> by <xref ref="example-sets-composition-commute" />.</p>
+        </example>
+
+        <example xml:id="example-sets-exponential">
+            <title>Exponential and Logarthmic Functions are Inverses</title>
+            <p>The natural logarithm and the exponential functions, <m>f(x) = \ln x</m> and <m>f^{-1}(x) = e^x</m>, are inverses of each other provided that we are careful about choosing domains.  Observe that  
+                <me>f(f^{-1}(x)) = f(e^x) = \ln e^x = x</me>
+            and
+                <me>f^{-1}(f(x)) = f^{-1}(\ln x) = e^{\ln x} = x</me>
+            whenever composition makes sense.</p>
+        </example>
+
+        <example xml:id="example-sets-inverse-matrix">
+            <title>A Matrix Inverse Yields an Inverse of a Linear Map</title>
+            <p>Suppose that
+                    <me>A =
+                    \begin{pmatrix}<![CDATA[
+                    3 & 1 \\
+                    5 & 2
+                    ]]>\end{pmatrix}.</me>
+                Then <m>A</m> defines a map from <m>{\mathbb R}^2</m> to <m>{\mathbb R}^2</m> by
+                    <me>T_A (x,y) = (3x +  y, 5x + 2y).</me>
+                We can find an inverse map of <m>T_A</m> by simply inverting the matrix <m>A</m>; that is, <m>T_A^{-1} = T_{A^{-1}}</m>. In this example,
+                    <me>A^{-1} =
+                    \begin{pmatrix}<![CDATA[
+                    2  & -1 \\
+                    -5 &  3
+                    ]]>\end{pmatrix};</me>
+                hence, the inverse map is given by
+                    <me>T_A^{-1} (x,y) = (2x -  y, -5x + 3y).</me>
+                It is easy to check that
+                    <me>T^{-1}_A \circ T_A (x,y) = T_A \circ T_A^{-1} (x,y) = (x,y).</me>
+                Not every map has an inverse.  If we consider the map
+                    <me>T_B (x,y) = (3x , 0 )</me>
+                given by the matrix
+                    <me>B =
+                    \begin{pmatrix}<![CDATA[
+                    3 & 0 \\
+                    0 & 0
+                    ]]>\end{pmatrix},</me>
+                then an inverse map would have to be of the form
+                    <me>T_B^{-1} (x,y) = (ax + by, cx +dy)</me>
+                and
+                    <me>(x,y) = T \circ T_B^{-1} (x,y) = (3ax + 3by, 0)</me>
+                for all <m>x</m> and <m>y</m>.  Clearly this is  impossible because <m>y</m> might not be 0.</p>
+        </example>
+
+        <example xml:id="example-sets-inverse-permutation">
+            <title>An Inverse Permutation</title>
+            <p>Given the permutation
+                <me>\pi =
+                \begin{pmatrix}<![CDATA[
+                1 & 2 & 3 \\
+                2 & 3 & 1
+                ]]>\end{pmatrix}</me>
+            on <m>S = \{ 1,2,3 \}</m>, it is easy to see that the permutation defined by
+                <me>\pi^{-1} =
+                \begin{pmatrix}<![CDATA[
+                1 & 2 & 3 \\
+                3 & 1 & 2
+                ]]>\end{pmatrix}</me>
+            is the inverse of <m>\pi</m>.  In fact, any bijective mapping possesses an inverse, as we will see in the next theorem.</p>
+        </example>
+
+        <theorem>
+            <statement>
+                <p>A mapping is invertible if and only if it is both one-to-one and onto.</p>
+            </statement>
+            <proof>
+                <p>Suppose first that <m>f:A \rightarrow B</m> is invertible with inverse <m>g: B \rightarrow A</m>. Then <m>g \circ f = id_A</m> is the identity map; that is, <m>g(f(a)) = a</m>. If <m>a_1, a_2 \in A</m> with <m>f(a_1) = f(a_2)</m>, then <m>a_1 = g(f(a_1)) = g(f(a_2)) = a_2</m>.  Consequently, <m>f</m> is one-to-one.  Now suppose that <m>b \in B</m>. To show that <m>f</m> is onto, it is necessary to find an <m>a \in A</m> such that <m>f(a) = b</m>, but <m>f(g(b)) = b</m> with <m>g(b) \in A</m>. Let <m>a = g(b)</m>.</p>
+
+                <p>Conversely, let <m>f</m> be bijective and let <m>b \in B</m>.  Since <m>f</m> is onto, there exists an <m>a \in A</m> such that <m>f(a) = b</m>.  Because <m>f</m> is one-to-one, <m>a</m> must be unique. Define <m>g</m> by letting <m>g(b) = a</m>.  We have now constructed the inverse of <m>f</m>.</p>
+            </proof>
+        </theorem>
+
+        </subsection>
+
+        <subsection>
+            <title>Equivalence Relations and Partitions</title>
+
+            <p>A fundamental notion in mathematics is that of equality.  We can generalize equality with equivalence relations and equivalence classes.  An <term>equivalence relation</term><idx><h>Equivalence relation</h></idx> on a set <m>X</m> is a relation <m>R \subset X \times X</m> such that<ul>
+                <li><p><m>(x, x) \in R</m> for all <m>x \in X</m> (<term>reflexive property</term>);</p></li>
+                <li><p><m>(x, y) \in R</m> implies <m>(y, x) \in R</m> (<term>symmetric property</term>);</p></li>
+                <li><p><m>(x, y)</m> and <m>(y, z) \in R</m> imply <m>(x, z) \in R</m> (<term>transitive property</term>).</p></li>
+            </ul></p>
+
+            <p>Given an equivalence relation <m>R</m>  on a set <m>X</m>, we usually write  <m>x \sim y</m> instead of <m>(x, y) \in R</m>. If the equivalence relation already has an associated notation such as <m>=</m>, <m>\equiv</m>, or <m>\cong</m>, we will use that notation.</p>
+
+            <example xml:id="example-sets-equivalent-fractions">
+                <title>Equivalent Fractions</title>
+                <p>Let <m>p</m>, <m>q</m>, <m>r</m>, and <m>s</m> be integers, where <m>q</m> and <m>s</m> are nonzero.  Define <m>p/q \sim r/s</m> if <m>ps = qr</m>.  Clearly <m>\sim</m> is reflexive and symmetric.  To show that it is also transitive, suppose that <m>p/q \sim r/s</m> and <m>r/s \sim t/u</m>, with <m>q</m>, <m>s</m>, and <m>u</m> all nonzero.  Then <m>ps = qr</m> and <m>ru = st</m>. Therefore, 
+                    <me>psu = qru = qst.</me>
+                Since <m>s \neq 0</m>, <m>pu = qt</m>. Consequently, <m>p/q \sim t/u</m>.</p>
+            </example>
+
+            <example xml:id="example-sets-equivalent-derivative">
+                <title>An Equivalence Relation From Derivatives</title>
+                <p>Suppose that <m>f</m> and <m>g</m> are differentiable functions on <m>{\mathbb R}</m>.  We can define an equivalence relation on such functions by letting <m>f(x) \sim g(x)</m> if <m>f'(x) = g'(x)</m>. It is clear that <m>\sim</m> is both reflexive and symmetric.  To demonstrate transitivity, suppose that <m>f(x) \sim g(x)</m> and  <m>g(x) \sim h(x)</m>.  From calculus we know that <m>f(x) - g(x) = c_1</m> and <m>g(x)- h(x) = c_2</m>, where <m>c_1</m> and <m>c_2</m> are both constants. Hence, 
+                    <me>f(x) - h(x) = ( f(x) - g(x)) + ( g(x)- h(x))  = c_1 - c_2</me>
+                and <m>f'(x) - h'(x) = 0</m>. Therefore, <m>f(x) \sim h(x)</m>.</p>
+            </example>
+
+            <example xml:id="example-sets-equivalent-circles">
+                <title>Equivalent Circles</title>
+                <p>For <m>(x_1, y_1 )</m> and <m>(x_2, y_2)</m> in <m>{\mathbb R}^2</m>, define <m>(x_1, y_1 ) \sim (x_2, y_2)</m> if <m>x_1^2 + y_1^2 = x_2^2 + y_2^2</m>.  Then <m>\sim</m> is an equivalence relation on <m>{\mathbb R}^2</m>.</p>
+            </example>
+
+            <example xml:id="example-sets-equivalent-matrices">
+                <title>Equivalent Matrices</title>
+                <p>Let <m>A</m> and <m>B</m> be <m>2 \times 2</m> matrices with entries in the real numbers. We can define an equivalence relation on the set of <m>2 \times 2</m> matrices, by saying <m>A \sim B</m> if there exists an invertible matrix <m>P</m> such that <m>PAP^{-1} = B</m>.  For example, if 
+                    <me>A =
+                    \begin{pmatrix}<![CDATA[
+                    1 & 2 \\
+                    -1 & 1
+                    ]]>\end{pmatrix}
+                    \quad \text{and} \quad
+                    B =
+                    \begin{pmatrix}<![CDATA[
+                    -18 & 33 \\
+                    -11 & 20
+                    ]]>\end{pmatrix},</me>
+                then <m>A \sim B</m> since <m>PAP^{-1} = B</m> for
+                    <me>P =
+                    \begin{pmatrix}<![CDATA[
+                    2 & 5 \\
+                    1 & 3
+                    ]]>\end{pmatrix}.</me>
+                    Let <m>I</m> be the <m>2 \times 2</m> identity matrix; that is,
+                    <me>I =
+                    \begin{pmatrix}<![CDATA[
+                    1 & 0 \\
+                    0 & 1
+                    ]]>\end{pmatrix}.</me>
+                Then <m>IAI^{-1} = IAI = A</m>; therefore, the relation is reflexive.  To show symmetry, suppose that <m>A \sim B</m>.  Then there exists an invertible matrix <m>P</m> such that <m>PAP^{-1} = B</m>.  So 
+                    <me>A = P^{-1} B P = P^{-1} B (P^{-1})^{-1}.</me>
+                Finally, suppose that <m>A \sim B</m> and <m>B \sim C</m>.  Then there exist invertible matrices <m>P</m> and <m>Q</m> such that <m>PAP^{-1} = B</m> and  <m>QBQ^{-1} = C</m>.  Since 
+                    <me>C = QBQ^{-1} = QPAP^{-1} Q^{-1} = (QP)A(QP)^{-1},</me>
+                the relation is transitive.  Two matrices that are equivalent in this manner are said to be <term>similar</term><idx><h>Matrix</h><h>similar</h></idx>.</p>
+            </example>
+
+            <p>A <term>partition</term><idx><h>Partitions</h></idx> <m>{\mathcal P}</m> of a set <m>X</m> is a collection of nonempty sets <m>X_1, X_2, \ldots</m> such that <m>X_i \cap X_j = \emptyset</m> for <m>i  \neq j</m> and <m>\bigcup_k X_k = X</m>. Let <m>\sim</m> be an equivalence relation on a set <m>X</m> and let <m>x \in X</m>.  Then <m>[x] = \{ y \in X : y \sim x \}</m> is called the <term>equivalence class</term><idx><h>Equivalence class</h></idx> of <m>x</m>.  We will see that an equivalence relation gives rise to a partition via equivalence classes.  Also, whenever a partition of a set exists, there is some natural  underlying equivalence relation, as the following theorem demonstrates.</p>  
+
+            <theorem>
+                <statement>
+                    <p>Given an equivalence relation <m>\sim</m> on a set <m>X</m>, the equivalence classes of <m>X</m> form a partition of <m>X</m>.  Conversely, if <m>{\mathcal P} = \{ X_i\}</m> is a partition of a set <m>X</m>, then there is an equivalence relation on <m>X</m> with equivalence classes <m>X_i</m>. </p>
+                </statement>
+                <proof>
+                    <p>Suppose there exists an equivalence relation <m>\sim</m> on the set <m>X</m>.  For any <m>x \in X</m>, the reflexive property shows that <m>x \in [x]</m> and so <m>[x]</m> is nonempty.  Clearly <m>X = \bigcup_{x \in X} [x]</m>.  Now let <m>x, y \in X</m>. We need to show that either <m>[x] = [y]</m> or <m>[x] \cap [y] = \emptyset</m>.  Suppose that the intersection of <m>[x]</m> and <m>[y]</m> is not empty and that <m>z \in [x] \cap [y]</m>. Then <m>z \sim x</m> and <m>z \sim y</m>.  By symmetry and transitivity <m>x \sim y</m>; hence, <m>[x] \subset [y]</m>.  Similarly, <m>[y] \subset [x]</m> and so <m>[x] = [y]</m>.  Therefore, any two equivalence classes are either disjoint or exactly the same.</p>
+
+                    <p>Conversely, suppose that <m>{\mathcal P} = \{X_i\}</m> is a partition of a set <m>X</m>.  Let two elements be equivalent if they are in the same partition.  Clearly, the relation is reflexive.  If <m>x</m> is in the same partition as <m>y</m>, then <m>y</m> is in the same partition as <m>x</m>, so <m>x \sim y</m> implies <m>y \sim x</m>.  Finally, if <m>x</m> is in the same partition as <m>y</m> and <m>y</m> is in the same partition as <m>z</m>, then <m>x</m> must be in the same partition as <m>z</m>, and transitivity holds.</p>
+                </proof>
+            </theorem>
+
+            <corollary>
+                <statement>
+                    <p>Two equivalence classes of an equivalence relation are either disjoint or equal.</p>
+                </statement>
+            </corollary>
+
+            <p>Let us examine some of the partitions given by the equivalence classes in the last set of examples.</p> 
+
+            <example xml:id="example-sets-fraction-partition">
+                <title>A Partition of Fractions</title>
+                <p>In the equivalence relation in <xref ref="example-sets-equivalent-fractions" />, two pairs of integers, <m>(p,q)</m> and <m>(r,s)</m>, are in the same equivalence class when they reduce to the same fraction in its lowest terms.</p>
+            </example>
+
+            <example xml:id="example-sets-matrix-partition">
+                <title>A Partition of Functions</title>
+                <p>In the equivalence relation in <xref ref="example-sets-equivalent-derivative" />, two functions <m>f(x)</m> and <m>g(x)</m> are in the same partition when they differ by a constant.</p>
+            </example>
+
+            <example xml:id="example-sets-circle-partition">
+                <title>A Partition of Circles</title>
+                <p>We defined an equivalence class on <m>{\mathbb R}^2</m> by <m>(x_1, y_1 ) \sim (x_2, y_2)</m> if <m>x_1^2 + y_1^2 = x_2^2 + y_2^2</m>.  Two pairs of real numbers are in the same partition when they lie on the same circle about the origin.</p>
+            </example>
+
+            <example xml:id="example-sets-congruent-integers">
+                <title>A Partition of Integers</title>
+                <p>Let <m>r</m> and <m>s</m> be two integers and suppose that <m>n \in {\mathbb N}</m>.  We say that <m>r</m> is <term>congruent</term><idx><h>Congruence modulo <m>n</m></h></idx> to <m>s</m> <term>modulo</term> <m>n</m>, or <m>r</m> is congruent to <m>s</m> mod <m>n</m>, if <m>r - s</m> is evenly divisible by <m>n</m>; that is, <m>r - s = nk</m>  for some <m>k \in {\mathbb Z}</m>.  In this case we write <m>r \equiv s \pmod{n}</m>.  <notation><usage>a \equiv b \pmod{n}</usage><description><m>a</m> is congruent to <m>b</m> modulo <m>n</m></description></notation>  For example, <m>41 \equiv 17 \pmod{ 8}</m> since <m>41 - 17=24</m> is divisible by 8.  We claim that congruence modulo <m>n</m> forms an equivalence relation of <m>{\mathbb Z}</m>.  Certainly any integer <m>r</m> is equivalent to itself since <m>r - r = 0</m> is divisible by <m>n</m>.  We will now show that the relation is symmetric.  If <m>r \equiv s \pmod{ n}</m>, then <m>r - s = -(s -r)</m> is divisible by <m>n</m>. So <m>s - r</m> is divisible by <m>n</m> and <m>s \equiv r \pmod{ n}</m>.  Now suppose that <m>r \equiv s \pmod{ n}</m> and <m>s \equiv t \pmod{ n}</m>.  Then there exist integers <m>k</m> and <m>l</m> such that <m>r -s = kn</m> and <m>s - t = ln</m>.  To show transitivity, it is necessary to prove that <m>r - t</m> is divisible by <m>n</m>.  However,   
+                    <me>r - t = r - s + s - t = kn + ln = (k + l)n,</me>
+                and so <m>r - t</m> is divisible by <m>n</m>.</p>
+
+
+
+                <p>If we consider the equivalence relation established by the integers modulo 3, then<md>
+                    <mrow>{[0]} &amp; = \{ \ldots, -3, 0, 3, 6, \ldots \},</mrow>
+                    <mrow>{[1]} &amp; = \{ \ldots, -2, 1, 4, 7, \ldots \},</mrow>
+                    <mrow>{[2]} &amp; = \{ \ldots, -1, 2, 5, 8, \ldots \}.</mrow>
+                </md></p>
+
+                <p>Notice that <m>[0] \cup [1] \cup [2] = {\mathbb Z}</m> and also that the sets are disjoint.  The sets <m>[0]</m>, <m>[1]</m>, and <m>[2]</m> form a partition of the integers.</p>
+
+                <p>The integers modulo <m>n</m> are a very important example in the study of abstract algebra and will become quite useful in our investigation of various algebraic structures such as groups and rings.  In our discussion of the integers modulo <m>n</m> we have actually assumed a result known as the division algorithm, which will be stated and proved in <xref ref="integers" />.</p>
+            </example>
+
+        </subsection>
+    </section>
+
+    <xi:include href="./sage/sets-sage.xml" />
+
+    <xi:include href="./exercises/sets.xml" />
+
+    <xi:include href="./sage/sets-sage-exercises.xml" />
+
+    <references>
+        <title>References and Suggested Readings</title>
+        <!--
+        <p>The following list contains references suitable for further reading.  With the exception of [8] and [9] and perhaps [1] and [3], all of these books are more or less  at the same level as this text.  Interesting applications of algebra  can be found in [2], [5], [10], and [11].</p>
+        -->
+
+        <biblio type="raw"> <!-- was [1] -->
+        <!-- Reference updated 5/4/2010 - TWJ -->
+        Artin, M. <title>Abstract Algebra</title>. 2nd ed. Pearson, Upper Saddle River, NJ, 2011.</biblio>
+
+        <biblio type="raw"> <!-- was [2] -->
+        <!-- Reference updated 5/4/2010 - TWJ -->
+        Childs, L. <title>A Concrete Introduction to Higher Algebra</title>. 2nd ed. Springer-Verlag, New York, 1995.</biblio>
+
+        <biblio type="raw"> <!-- was [3] -->
+        <!-- Reference updated 5/4/2010 - TWJ -->
+        Dummit, D. and Foote, R.  <title>Abstract Algebra</title>. 3rd ed. Wiley, New York, 2003.</biblio>
+
+        <biblio type="raw"> <!-- was [2] -->
+        <!--Seems to be out of print 5/4/2010 - TWJ -->
+        Ehrlich, G. <title>Fundamental Concepts of Algebra</title>. PWS-KENT, Boston, 1991.</biblio>
+
+        <biblio type="raw"> <!-- was [4] -->
+         <!-- Reference updated 5/4/2010 - TWJ -->
+        Fraleigh, J. B. <title>A First Course in Abstract Algebra</title>. 7th ed. Pearson, Upper Saddle River, NJ, 2003.</biblio>
+
+        <biblio type="raw"> <!-- was [5] -->
+        <!-- Reference updated 5/4/2010 - TWJ -->
+        Gallian, J. A. <title>Contemporary Abstract Algebra</title>. 7th ed. Brooks/Cole, Belmont, CA, 2009.</biblio>
+
+        <biblio type="raw"> <!-- was [6] -->
+        <!-- I believe that this is not still in print, but it is certainly available through amazon.com 5/4/2010 - TWJ -->
+        Halmos, P. <title>Naive Set Theory</title>.  Springer, New York, 1991. One of the best references for set theory.</biblio>
+
+        <biblio type="raw"> <!-- was [7] -->
+        <!-- Reference updated 5/4/2010 - TWJ -->
+        Herstein, I. N. 
+        <title>Abstract Algebra</title>. 3rd ed. Wiley, New York, 1996.</biblio>
+
+        <biblio type="raw"> <!-- was [8] -->
+        <!-- Reference updated 5/4/2010 - TWJ -->
+        Hungerford, T. W. 
+        <title>Algebra</title>. Springer, New York, 1974. One
+        of the standard graduate algebra texts.
+        </biblio>
+
+        <biblio type="raw"> <!-- was [9] -->
+         <!-- Reference updated 5/4/2010 - TWJ -->
+        Lang, S. 
+        <title>Algebra</title>. 3rd ed. Springer, New York, 2002.
+        Another standard graduate text.
+        </biblio>
+
+        <biblio type="raw"> <!-- was [10] -->
+        <!-- Reference updated 5/4/2010 - TWJ -->
+        Lidl, R. and Pilz, G. 
+        <title>Applied Abstract Algebra</title>. 2nd ed. Springer,
+        New York, 1998. 
+        </biblio>
+
+        <biblio type="raw"> <!-- was [11] -->
+        <!-- No longer in print 5/4/2010 - TWJ -->
+        Mackiw, G. <title>Applications of Abstract Algebra</title>. Wiley, New York,
+        1985. 
+        </biblio>
+
+        <biblio type="raw"> <!-- was [12] -->
+        Nickelson, W. K. <!-- Reference updated 5/4/2010 - TWJ -->
+        <title>Introduction to Abstract Algebra</title>. 3rd ed. Wiley, New York,
+        2006. 
+        </biblio>
+
+        <biblio type="raw"> <!-- was [13] -->
+        <!-- Reference updated 5/4/2010 - TWJ -->
+        Solow, D. 
+        <title>How to Read and Do Proofs</title>. 5th ed. Wiley, New York,
+        2009. 
+        </biblio>
+
+        <biblio type="raw"> <!-- was [14] -->
+        <!-- No longer in print 5/4/2010 - TWJ -->
+        van der Waerden, B. L. 
+        <title>A History of Algebra</title>. Springer-Verlag,
+        New York, 1985. An account of the historical development of algebra. 
+        </biblio>
+
+    </references> <!-- References need to be updated -->
+
+</chapter>

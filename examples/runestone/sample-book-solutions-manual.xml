@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--********************************************************************
+Copyright 2015 Robert A. Beezer
+
+This file is part of MathBook XML.
+
+MathBook XML is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+MathBook XML is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+<!-- This file was originally part of the book     -->
+<!-- (as copied on 2015/07/12)                     -->
+<!--                                               -->
+<!--   Abstract Algebra:  Theory and Applications   -->
+<!--                                                -->
+<!-- Copyright (C) 1997-2014  Thomas W. Judson      -->
+
+<!-- USE XINCLUDE SWITCH ON XSLTPROC -->
+
+<!-- Master file for Sample Book Solution Manual from (AATA) -->
+
+<pretext xmlns:xi="http://www.w3.org/2001/XInclude">
+
+    <!-- Must get the relevant LaTeX macros, but this has more,  -->
+    <!-- so we might ideally want to subset this as well         -->
+    <xi:include href="./bookinfo.xml" />
+
+    <book xml:id="sample-book-solutions-manual">
+        <title>Abstract Algebra</title>
+        <subtitle>Solutions Manual (PRETEXT SAMPLE ONLY)</subtitle>
+
+
+        <!-- We include a subset of the front matter as a  -->
+        <!-- demonstration of what works and what doesn't  -->
+        <frontmatter xml:id="index">
+            <titlepage>
+                <author>
+                    <personname>Thomas W. Judson</personname>
+                    <department>Department of Mathematics and Statistics</department>
+                    <institution>Stephen F. Austin State University</institution>
+                    <email>judsontw@sfasu.edu</email>
+                </author>
+                <credit>
+                    <title>Sage Exercises for Abstract Algebra</title>
+                    <author>
+                        <personname>Robert A. Beezer</personname>
+                        <department>Department of Mathematics and Computer Science</department>
+                        <institution>University of Puget Sound</institution>
+                        <email>beezer@pugetsound.edu</email>
+                    </author>
+                </credit>
+                <date><today /></date>
+            </titlepage>
+
+            <colophon xml:id="front-colophon">
+                <edition>Annual Edition 2015</edition>
+                <website>
+                    <name><c>abstract.pugetsound.edu</c></name>
+                    <address>http://abstract.pugetsound.edu</address>
+                </website>
+                <copyright>
+                    <year>1997<ndash />2015</year>
+                    <holder>Thomas W. Judson, Robert A. Beezer</holder>
+                    <minilicense>GFDL License</minilicense>
+                    <shortlicense>Permission is granted to copy, distribute and/or modify this document under the terms of the GNU Free Documentation License, Version 1.2 or any later version published by the Free Software Foundation; with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts.  A copy of the license is included in the appendix entitled <q>GNU Free Documentation License.</q>  All trademarks<trademark /> are the registered<registered /> marks of their respective owners.</shortlicense>
+                </copyright>
+            </colophon>
+
+            <preface xml:id="preface">
+                <title>Preface to the Solutions Manual</title>
+
+                <p>This contains the publicly available hints and answers for the <pretext /> sample book.  Statements of the exercises are not reproduced.</p>
+
+                <p>See the text itself for much more information about the book.</p>
+            </preface>
+        </frontmatter>
+
+        <!-- This will go with the "no parts" version of the book           -->
+        <!-- All of the content of teh book (the "main matter") needs       -->
+        <!-- to be here so that numbering will be consistent with the       -->
+        <!-- text itself.  So do not skip chapters or sections just because -->
+        <!-- they have no solutions.  PreTeXt will figure that out itself.  -->
+
+        <!-- This will match the "no parts" version of the sample book -->
+        <xi:include href="./sets.xml" />                    <!-- Set Theory  -->
+        <xi:include href="./integers.xml" />                <!-- Integers -->
+        <xi:include href="./groups.xml" />                  <!-- Groups -->
+        <xi:include href="./cyclic.xml" />                  <!-- Cyclic Groups -->
+
+        <!-- Many chapters removed from original AATA, here -->
+
+        <!-- We include a subset of the back matter as a  -->
+        <!-- demonstration of what works and what doesn't -->
+        <backmatter xml:id="backmatter" xmlns:xi="http://www.w3.org/2001/XInclude">
+            <title>Back Matter</title> <!-- mostly for HTML sectioning -->
+
+            <appendix>
+                <title>Notation</title>
+
+                <p>The following table defines the notation used in this book.  Included here in the solutions manual, the page references are missing.</p>
+
+                <notation-list />
+            </appendix>
+
+            <xi:include href="./gfdl-mathbook.xml" />           <!-- GFDL License text -->
+
+            <colophon xml:id="back-colophon">
+                <p>This solutions manual was authored in <pretext />.</p>
+            </colophon>
+        </backmatter>
+    </book>
+</pretext>
