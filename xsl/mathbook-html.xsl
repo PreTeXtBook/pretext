@@ -374,6 +374,35 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- And a boolean variable for the presence of this service -->
 <xsl:variable name="b-google-cse" select="not($google-search-cx = '')" />
 
+<!--                       -->
+<!-- HTML Platform Options -->
+<!--                       -->
+
+<!-- 2019-12-17:  Under development, not documented -->
+
+<xsl:variable name="host-platform">
+    <xsl:choose>
+        <xsl:when test="$publication/html/platform/@host = 'web'">
+            <xsl:text>web</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/html/platform/@host = 'runestone'">
+            <xsl:text>runestone</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/html/platform/@host = 'aim'">
+            <xsl:text>aim</xsl:text>
+        </xsl:when>
+        <!-- not recognized, so warn and default -->
+        <xsl:when test="$publication/html/platform/@host">
+            <xsl:message >PTX:WARNING: HTML platform/@host in publisher file should be "web", "runestone", or "aim", not "<xsl:value-of select="$publication/html/platform/@host"/>".  Proceeding with default value: "web"</xsl:message>
+            <xsl:text>web</xsl:text>
+        </xsl:when>
+        <!-- the default is the "open web" -->
+        <xsl:otherwise>
+            <xsl:text>web</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
 
 <!-- ################################################ -->
 <!-- Following is slated to migrate above, 2019-07-10 -->
