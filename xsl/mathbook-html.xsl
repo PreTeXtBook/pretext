@@ -734,6 +734,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!--  -->
     <xsl:apply-templates select="mathbook|pretext" mode="generic-warnings" />
     <xsl:apply-templates select="mathbook|pretext" mode="deprecation-warnings" />
+    <!-- Usually no manifest is created -->
+    <xsl:call-template name="runestone-manifest"/>
+    <!-- The main event -->
     <xsl:apply-templates />
 </xsl:template>
 
@@ -8539,6 +8542,63 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <script type="text/javascript" src="https://runestone.academy/runestone/books/published/fopp/_static/jquery_i18n/jquery.i18n.emitter.js?v=660E85C3"></script>
         <!-- conditionals for features will go here -->
     </xsl:if>
+</xsl:template>
+
+<!-- Runestone Manifest -->
+<!-- HTML ID and real title for each chapter and section -->
+<!-- A PTX "section" is a Runestone "subchapter"         -->
+<!-- Document hierarchy is preserved in XML structure    -->
+<!-- TODO: add exercises as "question"                   -->
+
+<!-- Conditional run-in -->
+<xsl:template name="runestone-manifest">
+    <xsl:if test="($host-platform = 'runestone') and $b-is-book">
+        <!-- $document-root *will* be a book -->
+        <xsl:apply-templates select="$document-root" mode="runestone-manifest"/>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="book" mode="runestone-manifest">
+    <exsl:document href="runestone-manifest.xml" method="xml" indent="yes" encoding="UTF-8">
+        <manifest>
+            <xsl:apply-templates select="*" mode="runestone-manifest"/>
+        </manifest>
+    </exsl:document>
+</xsl:template>
+
+<xsl:template match="chapter" mode="runestone-manifest">
+    <chapter>
+        <id>
+            <xsl:apply-templates select="." mode="html-id"/>
+        </id>
+        <title>
+            <xsl:apply-templates select="." mode="title-full"/>
+        </title>
+    <!-- recurse into PTX sections -->
+    <xsl:apply-templates select="*" mode="runestone-manifest"/>
+    </chapter>
+</xsl:template>
+
+<xsl:template match="section" mode="runestone-manifest">
+    <subchapter>
+        <id>
+            <xsl:apply-templates select="." mode="html-id"/>
+        </id>
+        <title>
+            <xsl:apply-templates select="." mode="title-full"/>
+        </title>
+    </subchapter>
+    <!-- dead end, no recursion -->
+</xsl:template>
+
+<!-- Appendix is explicitly no-op, so we do not recurse into "section"  -->
+<xsl:template match="appendix" mode="runestone-manifest"/>
+
+<!-- Traverse the tree,looking for things to do          -->
+<!-- http://stackoverflow.com/questions/3776333/         -->
+<!-- stripping-all-elements-except-one-in-xml-using-xslt -->
+<xsl:template match="*" mode="runestone-manifest">
+    <xsl:apply-templates select="*" mode="runestone-manifest"/>
 </xsl:template>
 
 
