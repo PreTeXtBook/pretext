@@ -19,31 +19,11 @@ You should have received a copy of the GNU General Public License
 along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************-->
 
+<!-- Testing for Runestone -->
 <publication>
 
-    <!-- HTML-Specific Options -->
     <html>
-        <!-- @xml:id of a page to be target of index.html redirect -->
-        <!-- This is the @xml:id of the "frontmatter", so this is  -->
-        <!-- default behavior, but we do this as a test and as an  -->
-        <!-- illustration                                          -->
-        <index-page ref="sample-book"/>
-        <!-- specify the style of the html by giving names to      -->
-        <!-- override defaults.  Ex: to use "style_oscarlevin.css" -->
-        <!-- put <css style="oscarlevin"/>                         -->
-        <!-- @colors now implemented                               -->
-        <!-- also @knowls, @toc, and @banner, although no          -->
-        <!-- alternative styles exist yet for those.               -->
-        <css style="default" colors="blue_red"/>
-        <!-- Magic IDs identify HTML pages to analytics services   -->
-        <!-- Presence implies relevant Javascript will be added    -->
-        <!-- StatCounter requires both values to be set            -->
-        <analytics google-gst="UA-48811660-1"
-                   statcounter-project="9664088"
-                   statcounter-security="6e60c510"/>
-        <!-- Google search, via masthead textbox is switched on    -->
-        <!-- and associated with a Google account via CX number    -->
-        <!-- <search google-cx=""/> -->
+        <platform host="runestone"/>
     </html>
 
 </publication>
