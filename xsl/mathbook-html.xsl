@@ -6295,6 +6295,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:call-template name="knowl" />
                 <xsl:call-template name="fonts" />
                 <xsl:call-template name="css" />
+                <xsl:call-template name="runestone-header"/>
                 <xsl:call-template name="font-awesome" />
             </head>
             <body>
@@ -8498,6 +8499,48 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:call-template>
 </xsl:template>
 
+<!-- ######### -->
+<!-- Runestone -->
+<!-- ######### -->
+
+<!-- Hosting at Runestone Academy -->
+
+<!-- Runestone Javascript -->
+<xsl:template name="runestone-header">
+    <!-- without switch, do not add *anything* -->
+    <xsl:if test="$host-platform = 'runestone'">
+        <!-- Runestone templating for customizing hosted books -->
+        <script type="text/javascript">
+        <xsl:text>&#xa;</xsl:text>
+        <xsl:text>eBookConfig.host = '';&#xa;</xsl:text>
+        <xsl:text>eBookConfig.app = eBookConfig.host + '/' + '{{= request.application }}';&#xa;</xsl:text>
+        <xsl:text>eBookConfig.course = '{{= course_name }}';&#xa;</xsl:text>
+        <xsl:text>eBookConfig.basecourse = '{{= base_course }}';&#xa;</xsl:text>
+        <xsl:text>eBookConfig.isLoggedIn = {{= is_logged_in}};&#xa;</xsl:text>
+        <xsl:text>eBookConfig.email = '{{= user_email }}';&#xa;</xsl:text>
+        <xsl:text>eBookConfig.isInstructor = {{= is_instructor }};&#xa;</xsl:text>
+        <xsl:text>eBookConfig.username = '{{= user_id}}';&#xa;</xsl:text>
+        <xsl:text>eBookConfig.readings = {{= readings}};&#xa;</xsl:text>
+        <xsl:text>eBookConfig.activities = {{= XML(activity_info) }}&#xa;</xsl:text>
+        <xsl:text>eBookConfig.downloadsEnabled = {{=downloads_enabled}};&#xa;</xsl:text>
+        <xsl:text>eBookConfig.allow_pairs = {{=allow_pairs}}&#xa;</xsl:text>
+        </script>
+        <!-- universal Javascript -->
+        <script type="text/javascript" src="https://runestone.academy/runestone/books/published/fopp/_static/jquery-ui-1.10.3.custom.min.js"></script>
+        <script type="text/javascript" src="https://runestone.academy/runestone/books/published/fopp/_static/runestonebase.js?v=4.1.15"></script>
+        <script type="text/javascript" src="https://runestone.academy/runestone/books/published/fopp/_static/bookfuncs.js?v=24766D61"></script>
+        <!-- i18n Javascript -->
+        <script type="text/javascript" src="https://runestone.academy/runestone/books/published/fopp/_static/jquery_i18n/CLDRPluralRuleParser.js?v=599B42B0"></script>;
+        <script type="text/javascript" src="https://runestone.academy/runestone/books/published/fopp/_static/jquery_i18n/jquery.i18n.js?v=88A1430F"></script>
+        <script type="text/javascript" src="https://runestone.academy/runestone/books/published/fopp/_static/jquery_i18n/jquery.i18n.messagestore.js?v=AE15A4A1"></script>
+        <script type="text/javascript" src="https://runestone.academy/runestone/books/published/fopp/_static/jquery_i18n/jquery.i18n.fallbacks.js?v=8ABDFE7F"></script>
+        <script type="text/javascript" src="https://runestone.academy/runestone/books/published/fopp/_static/jquery_i18n/jquery.i18n.language.js?v=747279FF"></script>
+        <script type="text/javascript" src="https://runestone.academy/runestone/books/published/fopp/_static/jquery_i18n/jquery.i18n.parser.js?v=7B020E13"></script>
+        <script type="text/javascript" src="https://runestone.academy/runestone/books/published/fopp/_static/jquery_i18n/jquery.i18n.emitter.js?v=660E85C3"></script>
+        <!-- conditionals for features will go here -->
+    </xsl:if>
+</xsl:template>
+
 
 <!-- ############ -->
 <!-- Interactives -->
@@ -9317,6 +9360,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="css" />
             <xsl:call-template name="login-header" />
             <xsl:call-template name="pytutor-header" />
+            <xsl:call-template name="runestone-header"/>
             <xsl:call-template name="font-awesome" />
         </head>
         <body>
@@ -9433,6 +9477,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="geogebra" />
             <xsl:call-template name="jsxgraph" />
             <xsl:call-template name="css" />
+            <xsl:call-template name="runestone-header"/>
             <xsl:call-template name="font-awesome" />
         </head>
         <!-- TODO: needs some padding etc -->
