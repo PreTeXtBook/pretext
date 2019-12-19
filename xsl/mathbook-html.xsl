@@ -4361,8 +4361,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-has-answer" />
     <xsl:param name="b-has-solution" />
 
-    <!-- structured (with components) versus unstructured (simply a bare statement) -->
     <xsl:choose>
+        <!-- intercept a reading question, when hosted on Runestone -->
+        <xsl:when test="ancestor::reading-questions and ($host-platform = 'runestone')">
+            <div class="runestone">
+                <div data-component="shortanswer" class="journal alert alert-success" data-optional="" data-mathjax="">
+                    <xsl:attribute name="id">
+                        <xsl:apply-templates select="." mode="html-id"/>
+                    </xsl:attribute>
+                    <!-- structured versus unstructured -->
+                    <xsl:choose>
+                        <!-- subelements of the structured "statement" -->
+                        <xsl:when test="statement">
+                            <xsl:apply-templates select="statement/*"/>
+                        </xsl:when>
+                        <!-- all content, but in elements, e.g "p" -->
+                        <xsl:otherwise>
+                            <xsl:apply-templates select="*"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </div>
+            </div>
+        </xsl:when>
+        <!-- now, structured versus unstructured -->
         <xsl:when test="statement">
             <xsl:if test="$b-has-statement">
                 <xsl:apply-templates select="statement">
@@ -8540,7 +8561,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <script type="text/javascript" src="https://runestone.academy/runestone/books/published/fopp/_static/jquery_i18n/jquery.i18n.language.js?v=747279FF"></script>
         <script type="text/javascript" src="https://runestone.academy/runestone/books/published/fopp/_static/jquery_i18n/jquery.i18n.parser.js?v=7B020E13"></script>
         <script type="text/javascript" src="https://runestone.academy/runestone/books/published/fopp/_static/jquery_i18n/jquery.i18n.emitter.js?v=660E85C3"></script>
-        <!-- conditionals for features will go here -->
+        <!-- conditionals for features -->
+        <!--  -->
+        <!-- Reading Questions and Short Answer (Essay) -->
+        <xsl:if test="$document-root//reading-questions">
+            <script type="text/javascript" src="https://runestone.academy/runestone/books/published/fopp/_static/shortanswer.js?v=BB0B99B1"></script>
+            <script type="text/javascript" src="https://runestone.academy/runestone/books/published/fopp/_static/timed_shortanswer.js?v=B3A117D7"></script>
+        </xsl:if>
     </xsl:if>
 </xsl:template>
 
