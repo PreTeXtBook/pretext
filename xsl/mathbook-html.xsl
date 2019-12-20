@@ -8406,32 +8406,49 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- See common file for more on language handlers, and "language-prettify" template          -->
 <!-- Coordinate with disabling in Sage Notebook production                                    -->
 <xsl:template match="program">
-    <!-- with language, pre.prettyprint activates styling and Prettifier -->
-    <!-- with no language, pre.plainprint just yields some styling       -->
-    <xsl:variable name="pretty-language">
-        <xsl:apply-templates select="." mode="prettify-language"/>
-    </xsl:variable>
-    <pre>
-        <xsl:attribute name="class">
-            <xsl:choose>
-                <xsl:when test="not($pretty-language = '')">
-                    <xsl:text>prettyprint</xsl:text>
-                    <xsl:text> </xsl:text>
-                    <xsl:text>lang-</xsl:text>
-                    <xsl:value-of select="$pretty-language" />
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:text>plainprint</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:attribute>
-        <xsl:call-template name="sanitize-text">
-            <xsl:with-param name="text" select="input" />
-        </xsl:call-template>
-    </pre>
+    <xsl:choose>
+        <xsl:when test="$b-host-runestone and (@language = 'python')">
+        <!-- Runestone ActiveCode, automatically -->
+            <div data-childcomponent="ac2_2_1" class="runestone explainer ac_section alert alert-warning">
+                <textarea data-component="activecode" data-lang="python" data-timelimit="25000" data-codelens="true" data-audio="">
+                    <xsl:attribute name="id">
+                        <xsl:apply-templates select="." mode="html-id" />
+                    </xsl:attribute>
+                    <xsl:call-template name="sanitize-text">
+                        <xsl:with-param name="text" select="input" />
+                    </xsl:call-template>
+                </textarea>
+            </div>
+        </xsl:when>
+        <xsl:otherwise>
+            <!-- with language, pre.prettyprint activates styling and Prettifier -->
+            <!-- with no language, pre.plainprint just yields some styling       -->
+            <xsl:variable name="pretty-language">
+                <xsl:apply-templates select="." mode="prettify-language"/>
+            </xsl:variable>
+            <pre>
+                <xsl:attribute name="class">
+                    <xsl:choose>
+                        <xsl:when test="not($pretty-language = '')">
+                            <xsl:text>prettyprint</xsl:text>
+                            <xsl:text> </xsl:text>
+                            <xsl:text>lang-</xsl:text>
+                            <xsl:value-of select="$pretty-language" />
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:text>plainprint</xsl:text>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:attribute>
+                <xsl:call-template name="sanitize-text">
+                    <xsl:with-param name="text" select="input" />
+                </xsl:call-template>
+            </pre>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
-<!-- Interactive Programs -->
+<!-- Interactive Programs, PyTutor -->
 <!-- Use the PyTutor embedding to provide a Python program -->
 <!-- where a reader can interactively step through the program -->
 <xsl:template match="program[@interactive='pythontutor']">
@@ -8570,6 +8587,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <script type="text/javascript" src="https://runestone.academy/runestone/books/published/fopp/_static/jquery_i18n/jquery.i18n.emitter.js?v=660E85C3"></script>
         <!-- conditionals for features -->
         <!--  -->
+        <!-- ActiveCode (Interactive Python via CodeMirror, Skulpt) -->
+        <xsl:if test="$document-root//program[@language = 'python']">
+            <link rel="stylesheet" type="text/css" href="https://runestone.academy/runestone/books/published/fopp/_static/activecode.css?v=F471F95B" />
+            <link rel="stylesheet" type="text/css" href="https://runestone.academy/runestone/books/published/fopp/_static/codemirror.css?v=DE1EC02" />
+            <script type="text/javascript" src="https://runestone.academy/runestone/books/published/fopp/_static/activecode-i18n.en.js?v=E8F2976A"></script>
+            <script type="text/javascript" src="https://runestone.academy/runestone/books/published/fopp/_static/activecode.js?v=D9908052"></script>
+            <script type="text/javascript" src="https://runestone.academy/runestone/books/published/fopp/_static/codemirror.js?v=25B54D0A"></script>
+            <script type="text/javascript" src="https://runestone.academy/runestone/books/published/fopp/_static/clike.js?v=4247C891"></script>
+            <script type="text/javascript" src="https://runestone.academy/runestone/books/published/fopp/_static/skulpt.min.js?v=BDC8551F"></script>
+            <script type="text/javascript" src="https://runestone.academy/runestone/books/published/fopp/_static/skulpt-stdlib.js?v=5731007D"></script>
+        </xsl:if>
         <!-- Reading Questions and Short Answer (Essay) -->
         <xsl:if test="$document-root//reading-questions">
             <script type="text/javascript" src="https://runestone.academy/runestone/books/published/fopp/_static/shortanswer.js?v=BB0B99B1"></script>

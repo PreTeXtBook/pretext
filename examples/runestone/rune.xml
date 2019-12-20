@@ -29,14 +29,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <title>Runestone Testing</title>
 
     <introduction>
-        <p>We collect Runestone interactive items for testing here, in sections.</p>
+        <p>We collect Runestone interactive items for testing here, in sections of their own.</p>
     </introduction>
 
     <section>
-        <title>Placeholder</title>
+        <title>ActiveCode</title>
 
-        <p>Placeholder section to feed validator.</p>
+        <p>Python program listings are automatically made interactive when HTML is produced for Runestone.</p>
 
+        <listing xml:id="program-activecode">
+            <caption>An interactive Python program, using <pubtitle>Runestone</pubtitle></caption>
+            <program xml:id="python-hello-world" language="python">
+                <input>
+                print(3.2)
+                print("Hello, World!")
+                </input>
+            </program>
+        </listing>
+
+        <p>A nonsense paragraph just to check on spacing.  A nonsense paragraph just to check on spacing.  A nonsense paragraph just to check on spacing.  A nonsense paragraph just to check on spacing.</p>
     </section>
 
     <reading-questions>
