@@ -2804,3 +2804,122 @@ main a[data-knowl].newstuff {
 #aboelkins-ACS .main #content > section:first-of-type > section:first-of-type > .project-like:first-of-type li {
     font-size: 300%
 }
+/*  WW problems */
+
+.pretext-content .webwork table.attemptResults {
+    margin-left: 2em;
+    background: #efefef;
+    padding: 0.2em;
+}
+.pretext-content .webwork table.attemptResults + .attemptResultsSummary {
+    margin-top: 1em;
+}
+
+.pretext-content .webwork .problem-main-form {
+    margin-top: 1em;
+    background: #eeeeff;
+    padding: 0.5em;
+}
+.pretext-content .webwork td.ResultsWithoutError {
+    background: #9f9;
+}
+.pretext-content .webwork td.ResultsWithError {
+    background: #f99;
+}
+
+.pretext-content .webwork tr th {
+    text-align: center;
+    padding: 0.2em 1em 0.2em 1em;
+}
+.pretext-content .webwork tr td {
+    text-align: center;
+}
+.pretext-content .webwork tr td:empty {
+    background: #fff;
+}
+
+/*
+table td { border-left: 1px solid #000; }
+table td:first-child { border-left: none; }
+*/
+
+.pretext-content .webwork ol, .pretext-content .webwork ul {
+    margin-top: 0.75em !important;
+}
+
+.pretext-content .webwork .problem {
+/*    padding: 1em;
+    border: 0.5px solid #aaa;
+*/
+    background: #fdfdfd;
+}
+
+.pretext-content .webwork .problem a {
+    text-decoration: none;
+}
+
+.pretext-content .webwork #footer {
+    font-size: 70%;
+    text-align: right;
+}
+
+.pretext-content .marginresource {
+    position: relative;
+    height: 0;
+    left: 40em;
+    top: 1em;
+}
+.pretext-content .marginresource a {
+    color: blue;
+}
+.pretext-content .marginresource a[knowl] {
+    border-bottom: 1px dotted blue;
+}
+.pretext-content .marginresource .icon {
+    font-size: 200%;
+    margin-right: 1em;
+    display: inline-block;
+}
+/*
+.pretext-content .marginresource .icon.slides {
+    margin-top: 2em;
+}
+*/
+.pretext-content .marginresource .resource_description {
+    display: inline-block;
+}
+.pretext-content .marginresource .resource_links {
+    display: block;
+    margin-left: 2em;
+}
+
+.iconlegend {
+    position: absolute;
+    margin-top: 0.5em;
+    top: 0;
+    left: 920px;
+    line-height: 1;
+}
+
+.iconlegend .icon_name {
+    font-size: 90%;
+    margin-right: 1em;
+}
+.icongroup + .icongroup {
+    margin-left: 1em;
+}
+
+/*
+.problem a.internal::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 1px;
+    right: 2.4px;
+    left: 2.4px;
+    border-bottom: 1px dotted #9c2310;
+    transition-property: left, right;
+    transition-duration: 0ms;
+    z-index: 0;
+}
+*/
