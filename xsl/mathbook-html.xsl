@@ -403,6 +403,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!-- Intent is for exactly one of these boolean to be true -->
+<!-- 'web' is the default, so we may not condition with it -->
+<!-- 2019-12-19: only 'web' vs. 'runestone' implemented    -->
+<xsl:variable name="b-host-web"       select="$host-platform = 'web'"/>
+<xsl:variable name="b-host-runestone" select="$host-platform = 'runestone'"/>
+<xsl:variable name="b-host-aim"       select="$host-platform = 'aim'"/>
+
 
 <!-- ################################################ -->
 <!-- Following is slated to migrate above, 2019-07-10 -->
@@ -4363,7 +4370,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
     <xsl:choose>
         <!-- intercept a reading question, when hosted on Runestone -->
-        <xsl:when test="ancestor::reading-questions and ($host-platform = 'runestone')">
+        <xsl:when test="ancestor::reading-questions and $b-host-runestone">
             <div class="runestone">
                 <div data-component="shortanswer" class="journal alert alert-success" data-optional="" data-mathjax="">
                     <xsl:attribute name="id">
@@ -8532,7 +8539,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Runestone Javascript -->
 <xsl:template name="runestone-header">
     <!-- without switch, do not add *anything* -->
-    <xsl:if test="$host-platform = 'runestone'">
+    <xsl:if test="$b-host-runestone">
         <!-- Runestone templating for customizing hosted books -->
         <script type="text/javascript">
         <xsl:text>&#xa;</xsl:text>
@@ -8579,7 +8586,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Conditional run-in -->
 <xsl:template name="runestone-manifest">
-    <xsl:if test="($host-platform = 'runestone') and $b-is-book">
+    <xsl:if test="$b-host-runestone and $b-is-book">
         <!-- $document-root *will* be a book -->
         <xsl:apply-templates select="$document-root" mode="runestone-manifest"/>
     </xsl:if>
