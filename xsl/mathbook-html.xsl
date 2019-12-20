@@ -687,6 +687,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- it on in the dedicated stylesheet for conversion to braille.   -->
 <xsl:variable name="b-braille" select="false()"/>
 
+<!-- The Runestone platform option requires output that can be used  -->
+<!-- on the server with a templating language/tool.  For books       -->
+<!-- originating from PreTeXt we use a non-default pair of strings.  -->
+<!-- This is because the default is {{, }} and these behave poorly   -->
+<!-- in  a/@href  output, since the outer pair looks like an XSL AVT -->
+<!-- and then the inner pair gets escaped as a reserved character in -->
+<!-- a URI.  (We can turn off URI-escaping with XSLT 2.0, but the    -->
+<!-- AVT confusion may still be a problem.)                          -->
+
+<!-- These are used two places, so defined globally, not  -->
+<!-- conditionally.  Due to their ubiquity in these two   -->
+<!-- concentrated locations, the variable names are       -->
+<!-- intentionally cryptic, contrary to usual practice.   -->
+<!-- rs = Runestone, o = open, c = close.                 -->
+
+<xsl:variable name="rso" select="'~._'"/>
+<xsl:variable name="rsc" select="'_.~'"/>
+
 <!-- Temporary, undocumented, and experimental -->
 <!-- all = old-style, necessary = new-style -->
 <xsl:param name="debug.knowl-production" select="'all'"/>
@@ -8558,51 +8576,39 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- without switch, do not add *anything* -->
     <xsl:if test="$b-host-runestone">
         <!-- Runestone templating for customizing hosted books -->
+        <!-- Unclear if a concat() of five strings would be cleaner? -->
         <script type="text/javascript">
         <xsl:text>&#xa;</xsl:text>
+        <xsl:text>eBookConfig = {};&#xa;</xsl:text>
         <xsl:text>eBookConfig.host = '';&#xa;</xsl:text>
-        <xsl:text>eBookConfig.app = eBookConfig.host + '/' + '{{= request.application }}';&#xa;</xsl:text>
-        <xsl:text>eBookConfig.course = '{{= course_name }}';&#xa;</xsl:text>
-        <xsl:text>eBookConfig.basecourse = '{{= base_course }}';&#xa;</xsl:text>
-        <xsl:text>eBookConfig.isLoggedIn = {{= is_logged_in}};&#xa;</xsl:text>
-        <xsl:text>eBookConfig.email = '{{= user_email }}';&#xa;</xsl:text>
-        <xsl:text>eBookConfig.isInstructor = {{= is_instructor }};&#xa;</xsl:text>
-        <xsl:text>eBookConfig.username = '{{= user_id}}';&#xa;</xsl:text>
-        <xsl:text>eBookConfig.readings = {{= readings}};&#xa;</xsl:text>
-        <xsl:text>eBookConfig.activities = {{= XML(activity_info) }}&#xa;</xsl:text>
-        <xsl:text>eBookConfig.downloadsEnabled = {{=downloads_enabled}};&#xa;</xsl:text>
-        <xsl:text>eBookConfig.allow_pairs = {{=allow_pairs}}&#xa;</xsl:text>
+        <xsl:text>eBookConfig.useRunestoneServices = true;&#xa;</xsl:text>
+        <xsl:text>eBookConfig.app = eBookConfig.host + '/' + '</xsl:text><xsl:value-of select="$rso"/><xsl:text>= request.application </xsl:text><xsl:value-of select="$rsc"/><xsl:text>';&#xa;</xsl:text>
+        <xsl:text>eBookConfig.course = '</xsl:text><xsl:value-of select="$rso"/><xsl:text>= course_name </xsl:text><xsl:value-of select="$rsc"/><xsl:text>';&#xa;</xsl:text>
+        <xsl:text>eBookConfig.basecourse = '</xsl:text><xsl:value-of select="$rso"/><xsl:text>= base_course </xsl:text><xsl:value-of select="$rsc"/><xsl:text>';&#xa;</xsl:text>
+        <xsl:text>eBookConfig.isLoggedIn = </xsl:text><xsl:value-of select="$rso"/><xsl:text>= is_logged_in</xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
+        <xsl:text>eBookConfig.email = '</xsl:text><xsl:value-of select="$rso"/><xsl:text>= user_email </xsl:text><xsl:value-of select="$rsc"/><xsl:text>';&#xa;</xsl:text>
+        <xsl:text>eBookConfig.isInstructor = </xsl:text><xsl:value-of select="$rso"/><xsl:text>= is_instructor </xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
+        <xsl:text>eBookConfig.ajaxURL = eBookConfig.app + "/ajax/";&#xa;</xsl:text>
+        <xsl:text>eBookConfig.logLevel = 10;&#xa;</xsl:text>
+        <xsl:text>eBookConfig.username = '</xsl:text><xsl:value-of select="$rso"/><xsl:text>= user_id</xsl:text><xsl:value-of select="$rsc"/><xsl:text>';&#xa;</xsl:text>
+        <xsl:text>eBookConfig.readings = </xsl:text><xsl:value-of select="$rso"/><xsl:text>= readings</xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
+        <xsl:text>eBookConfig.activities = </xsl:text><xsl:value-of select="$rso"/><xsl:text>= XML(activity_info) </xsl:text><xsl:value-of select="$rsc"/><xsl:text>&#xa;</xsl:text>
+        <xsl:text>eBookConfig.downloadsEnabled = </xsl:text><xsl:value-of select="$rso"/><xsl:text>=downloads_enabled</xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
+        <xsl:text>eBookConfig.allow_pairs = </xsl:text><xsl:value-of select="$rso"/><xsl:text>=allow_pairs</xsl:text><xsl:value-of select="$rsc"/><xsl:text>&#xa;</xsl:text>
+        <xsl:text>eBookConfig.enableScratchAC = false;&#xa;</xsl:text>
         </script>
-        <!-- universal Javascript -->
-        <script type="text/javascript" src="https://runestone.academy/runestone/books/published/fopp/_static/jquery-ui-1.10.3.custom.min.js"></script>
-        <script type="text/javascript" src="https://runestone.academy/runestone/books/published/fopp/_static/runestonebase.js?v=4.1.15"></script>
-        <script type="text/javascript" src="https://runestone.academy/runestone/books/published/fopp/_static/bookfuncs.js?v=24766D61"></script>
-        <!-- i18n Javascript -->
-        <script type="text/javascript" src="https://runestone.academy/runestone/books/published/fopp/_static/jquery_i18n/CLDRPluralRuleParser.js?v=599B42B0"></script>;
-        <script type="text/javascript" src="https://runestone.academy/runestone/books/published/fopp/_static/jquery_i18n/jquery.i18n.js?v=88A1430F"></script>
-        <script type="text/javascript" src="https://runestone.academy/runestone/books/published/fopp/_static/jquery_i18n/jquery.i18n.messagestore.js?v=AE15A4A1"></script>
-        <script type="text/javascript" src="https://runestone.academy/runestone/books/published/fopp/_static/jquery_i18n/jquery.i18n.fallbacks.js?v=8ABDFE7F"></script>
-        <script type="text/javascript" src="https://runestone.academy/runestone/books/published/fopp/_static/jquery_i18n/jquery.i18n.language.js?v=747279FF"></script>
-        <script type="text/javascript" src="https://runestone.academy/runestone/books/published/fopp/_static/jquery_i18n/jquery.i18n.parser.js?v=7B020E13"></script>
-        <script type="text/javascript" src="https://runestone.academy/runestone/books/published/fopp/_static/jquery_i18n/jquery.i18n.emitter.js?v=660E85C3"></script>
-        <!-- conditionals for features -->
-        <!--  -->
-        <!-- ActiveCode (Interactive Python via CodeMirror, Skulpt) -->
-        <xsl:if test="$document-root//program[@language = 'python']">
-            <link rel="stylesheet" type="text/css" href="https://runestone.academy/runestone/books/published/fopp/_static/activecode.css?v=F471F95B" />
-            <link rel="stylesheet" type="text/css" href="https://runestone.academy/runestone/books/published/fopp/_static/codemirror.css?v=DE1EC02" />
-            <script type="text/javascript" src="https://runestone.academy/runestone/books/published/fopp/_static/activecode-i18n.en.js?v=E8F2976A"></script>
-            <script type="text/javascript" src="https://runestone.academy/runestone/books/published/fopp/_static/activecode.js?v=D9908052"></script>
-            <script type="text/javascript" src="https://runestone.academy/runestone/books/published/fopp/_static/codemirror.js?v=25B54D0A"></script>
-            <script type="text/javascript" src="https://runestone.academy/runestone/books/published/fopp/_static/clike.js?v=4247C891"></script>
-            <script type="text/javascript" src="https://runestone.academy/runestone/books/published/fopp/_static/skulpt.min.js?v=BDC8551F"></script>
-            <script type="text/javascript" src="https://runestone.academy/runestone/books/published/fopp/_static/skulpt-stdlib.js?v=5731007D"></script>
-        </xsl:if>
-        <!-- Reading Questions and Short Answer (Essay) -->
-        <xsl:if test="$document-root//reading-questions">
-            <script type="text/javascript" src="https://runestone.academy/runestone/books/published/fopp/_static/shortanswer.js?v=BB0B99B1"></script>
-            <script type="text/javascript" src="https://runestone.academy/runestone/books/published/fopp/_static/timed_shortanswer.js?v=B3A117D7"></script>
-        </xsl:if>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.5/jquery.i18n.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.5/jquery.i18n.emitter.bidi.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.5/jquery.i18n.emitter.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.5/jquery.i18n.fallbacks.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.5/jquery.i18n.messagestore.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.5/jquery.i18n.parser.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.5/jquery.i18n.language.js"></script>
+
+        <script type="text/javascript" src="_static/runestone.js"></script>
     </xsl:if>
 </xsl:template>
 
