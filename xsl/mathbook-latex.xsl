@@ -625,6 +625,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\newfontfamily{\contentsfont}{Latin Modern Roman}&#xa;</xsl:text>
     <xsl:text>\newfontfamily{\pagefont}{Latin Modern Roman}[SlantedFont={Latin Modern Roman Slanted}]&#xa;</xsl:text>
     <xsl:text>\newfontfamily{\tabularfont}{Latin Modern Roman}[SmallCapsFont={Latin Modern Roman Caps}]&#xa;</xsl:text>
+    <xsl:text>\newfontfamily{\xreffont}{Latin Modern Roman}&#xa;</xsl:text>
     <xsl:text>%% begin: font information supplied by "font-xelatex-style" template&#xa;</xsl:text>
     <xsl:call-template name="font-xelatex-style"/>
     <xsl:text>%% end: font information supplied by "font-xelatex-style" template&#xa;</xsl:text>
@@ -735,6 +736,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\newcommand{\contentsfont}{\relax}&#xa;</xsl:text>
     <xsl:text>\newcommand{\pagefont}{\relax}&#xa;</xsl:text>
     <xsl:text>\newcommand{\tabularfont}{\relax}&#xa;</xsl:text>
+    <xsl:text>\newcommand{\xreffont}{\relax}&#xa;</xsl:text>
     <xsl:text>%% begin: font information supplied by "font-pdflatex-style" template&#xa;</xsl:text>
     <xsl:call-template name="font-pdflatex-style"/>
     <xsl:text>%% begin: font information supplied by "font-pdflatex-style" template&#xa;</xsl:text>
@@ -4193,7 +4195,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="index-list">
     <xsl:text>%&#xa;</xsl:text>
     <xsl:text>%% The index is here, setup is all in preamble&#xa;</xsl:text>
-    <xsl:text>\printindex&#xa;</xsl:text>
+    <xsl:text>%% Index locators are cross-references, so same font here&#xa;</xsl:text>
+    <xsl:text>{\xreffont\printindex}&#xa;</xsl:text>
     <xsl:text>%&#xa;</xsl:text>
 </xsl:template>
 
@@ -9884,18 +9887,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>.</xsl:text>
     <!-- task always gets a number, but we have to avoid recursion -->
     <!-- that would result by just getting a \ref from xref-number -->
-    <xsl:text>\ref{</xsl:text>
+    <xsl:text>{\xreffont\ref{</xsl:text>
     <xsl:apply-templates select="." mode="latex-id" />
-    <xsl:text>}</xsl:text>
+    <xsl:text>}}</xsl:text>
 </xsl:template>
 
 <!-- Straightforward exception, simple implementation,  -->
 <!-- when an "mrow" of display mathematics is tagged    -->
 <!-- with symbols not numbers                           -->
 <xsl:template match="mrow[@tag]" mode="xref-number">
-    <xsl:text>\ref{</xsl:text>
+    <xsl:text>{\xreffont\ref{</xsl:text>
     <xsl:apply-templates select="." mode="latex-id" />
-    <xsl:text>}</xsl:text>
+    <xsl:text>}}</xsl:text>
 </xsl:template>
 
 <!-- These exceptions are unnumbered, and are just handled explicitly, -->
@@ -9971,11 +9974,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="xref" select="$xref" />
         </xsl:apply-templates>
     </xsl:variable>
+    <!-- Hard-coded can use a space that LaTeX gobbles up -->
+    <xsl:text>{\xreffont </xsl:text>
     <xsl:if test="$needs-part-prefix = 'true'">
         <xsl:apply-templates select="ancestor::part" mode="serial-number" />
         <xsl:text>.</xsl:text>
     </xsl:if>
     <xsl:apply-templates select="." mode="number" />
+    <xsl:text>}</xsl:text>
 </xsl:template>
 
 <!-- A LaTeX \ref (number) respecting the necessity of parts -->
@@ -9988,6 +9994,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <xsl:choose>
         <xsl:when test="not($the-number = '')">
+            <!-- no matter the "if" a \ref follows -->
+            <xsl:text>{\xreffont</xsl:text>
             <!-- check if part prefix is needed -->
             <xsl:variable name="needs-part-prefix">
                 <xsl:apply-templates select="." mode="crosses-part-boundary">
@@ -10004,6 +10012,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- and always, a representation for the text of the xref -->
             <xsl:text>\ref{</xsl:text>
             <xsl:apply-templates select="." mode="latex-id" />
+            <xsl:text>}</xsl:text>
             <xsl:text>}</xsl:text>
         </xsl:when>
         <xsl:otherwise>
