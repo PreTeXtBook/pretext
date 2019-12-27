@@ -626,6 +626,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\newfontfamily{\pagefont}{Latin Modern Roman}[SlantedFont={Latin Modern Roman Slanted}]&#xa;</xsl:text>
     <xsl:text>\newfontfamily{\tabularfont}{Latin Modern Roman}[SmallCapsFont={Latin Modern Roman Caps}]&#xa;</xsl:text>
     <xsl:text>\newfontfamily{\xreffont}{Latin Modern Roman}&#xa;</xsl:text>
+    <xsl:text>\newfontfamily{\titlepagefont}{Latin Modern Roman}&#xa;</xsl:text>
     <xsl:text>%% begin: font information supplied by "font-xelatex-style" template&#xa;</xsl:text>
     <xsl:call-template name="font-xelatex-style"/>
     <xsl:text>%% end: font information supplied by "font-xelatex-style" template&#xa;</xsl:text>
@@ -737,6 +738,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\newcommand{\pagefont}{\relax}&#xa;</xsl:text>
     <xsl:text>\newcommand{\tabularfont}{\relax}&#xa;</xsl:text>
     <xsl:text>\newcommand{\xreffont}{\relax}&#xa;</xsl:text>
+    <xsl:text>\newcommand{\titlepagefont}{\relax}&#xa;</xsl:text>
     <xsl:text>%% begin: font information supplied by "font-pdflatex-style" template&#xa;</xsl:text>
     <xsl:call-template name="font-pdflatex-style"/>
     <xsl:text>%% begin: font information supplied by "font-pdflatex-style" template&#xa;</xsl:text>
@@ -3514,7 +3516,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="book" mode="half-title" >
     <xsl:text>%% begin: half-title&#xa;</xsl:text>
     <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
-    <xsl:text>{\centering&#xa;</xsl:text>
+    <xsl:text>{\titlepagefont\centering&#xa;</xsl:text>
     <xsl:text>\vspace*{0.28\textheight}&#xa;</xsl:text>
     <xsl:text>{\Huge </xsl:text>
     <xsl:apply-templates select="." mode="title-full"/>
@@ -3525,7 +3527,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="subtitle"/>
         <xsl:text>}\\&#xa;</xsl:text>
     </xsl:if>
-    <xsl:text>}&#xa;</xsl:text> <!-- finish centering -->
+    <xsl:text>}&#xa;</xsl:text> <!-- finish centering, title page font -->
     <xsl:text>\clearpage&#xa;</xsl:text>
     <xsl:text>%% end:   half-title&#xa;</xsl:text>
 </xsl:template>
@@ -3533,6 +3535,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Ad card may contain list of other books        -->
 <!-- Or may be overridden to make title page spread -->
 <!-- Obverse of half-title                          -->
+<!-- Use \titlepagefont if overidden                -->
 <xsl:template match="book" mode="ad-card">
     <xsl:text>%% begin: adcard&#xa;</xsl:text>
     <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
@@ -3552,7 +3555,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% begin: title page&#xa;</xsl:text>
     <xsl:text>%% Inspired by Peter Wilson's "titleDB" in "titlepages" CTAN package&#xa;</xsl:text>
     <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
-    <xsl:text>{\centering&#xa;</xsl:text>
+    <xsl:text>{\titlepagefont\centering&#xa;</xsl:text>
     <xsl:text>\vspace*{0.14\textheight}&#xa;</xsl:text>
     <!-- Target for xref to top-level element -->
     <!-- immediately, or first in ToC         -->
@@ -3602,7 +3605,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="frontmatter/titlepage/editor" mode="title-page" />
     <xsl:apply-templates select="frontmatter/titlepage/credit" mode="title-page" />
     <xsl:apply-templates select="frontmatter/titlepage/date"   mode="title-page" />
-    <xsl:text>}&#xa;</xsl:text> <!-- finish centering -->
+    <xsl:text>}&#xa;</xsl:text> <!-- finish centering, titlepage font -->
     <xsl:text>\clearpage&#xa;</xsl:text>
     <xsl:text>%% end:   title page&#xa;</xsl:text>
 </xsl:template>
