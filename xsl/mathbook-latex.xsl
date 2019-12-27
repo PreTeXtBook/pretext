@@ -3362,7 +3362,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>%% Two-page spread as in default LaTeX&#xa;</xsl:text>
             <xsl:text>\renewpagestyle{headings}{%&#xa;</xsl:text>
             <xsl:text>\sethead%&#xa;</xsl:text>
-            <xsl:text>[\pagefont\thepage}][][\pagefont\slshape\MakeUppercase{\ifthechapter{\chaptertitlename\space\thechapter.\space}{}\chaptertitle}]%&#xa;</xsl:text>
+            <xsl:text>[\pagefont\thepage][][\pagefont\slshape\MakeUppercase{\ifthechapter{\chaptertitlename\space\thechapter.\space}{}\chaptertitle}]%&#xa;</xsl:text>
             <xsl:text>{\pagefont\slshape\MakeUppercase{\ifthesection{\sectiontitlename\space\thesection.\space\sectiontitle}{}}}{}{\pagefont\thepage}}%&#xa;</xsl:text>
         </xsl:when>
     </xsl:choose>
