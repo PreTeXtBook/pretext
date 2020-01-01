@@ -4031,14 +4031,19 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- "smaller" objects like "example" and not "larger" objects -->
 <!-- like "chapter".  We create a template to signal this, for -->
 <!-- consistency across conversions, and so that it can be     -->
-<!-- consciously obverridden as part of styling work.  In      -->
+<!-- consciously overridden as part of styling work.  In       -->
 <!-- pieces simply so it is more readable.                     -->
+<!--                                                           -->
 <!-- Blocks -->
 <xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;|&DEFINITION-LIKE;|&REMARK-LIKE;|&COMPUTATION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|&ASIDE-LIKE;|exercise|commentary|assemblage" mode="title-wants-punctuation">
     <xsl:value-of select="true()"/>
 </xsl:template>
 <!-- Miscellaneous -->
 <xsl:template match="paragraphs|proof|case|defined-term" mode="title-wants-punctuation">
+    <xsl:value-of select="true()"/>
+</xsl:template>
+<!-- Titled list items -->
+<xsl:template match="ol/li|ul/li" mode="title-wants-punctuation">
     <xsl:value-of select="true()"/>
 </xsl:template>
 <!-- Introductions and Conclusions -->

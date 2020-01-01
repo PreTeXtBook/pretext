@@ -929,7 +929,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:call-template name="titletoc-subsection-style"/>
     <xsl:call-template name="titletoc-subsubsection-style"/>
     <xsl:text>%%&#xa;</xsl:text>
-    <xsl:text>%% Semantic Macros&#xa;</xsl:text>
+    <!-- ############### -->
+    <!-- Semantic Macros -->
+    <!-- ############### -->
+    <xsl:text>%% Begin: Semantic Macros&#xa;</xsl:text>
     <xsl:text>%% To preserve meaning in a LaTeX file&#xa;</xsl:text>
     <xsl:text>%%&#xa;</xsl:text>
     <xsl:text>%% \mono macro for content of "c", "cd", "tag", etc elements&#xa;</xsl:text>
@@ -1058,6 +1061,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\newcommand{\forwardimplication}{($\Rightarrow$)}&#xa;</xsl:text>
         <xsl:text>\newcommand{\backwardimplication}{($\Leftarrow$)}&#xa;</xsl:text>
     </xsl:if>
+    <xsl:if test="$document-root//ol/li/title|$document-root//ul/li/title">
+        <!-- Styling: expose this macro to easier overriding for style work -->
+        <xsl:text>%% Style of a title on a list item, for ordered and unordered lists&#xa;</xsl:text>
+        <xsl:text>\newcommand{\lititle}[1]{{\slshape#1}}&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:text>%% End: Semantic Macros&#xa;</xsl:text>
+    <!-- ################## -->
+    <!-- Division Numbering -->
+    <!-- ################## -->
     <xsl:text>%% Division Numbering: Chapters, Sections, Subsections, etc&#xa;</xsl:text>
     <xsl:text>%% Division numbers may be turned off at some level ("depth")&#xa;</xsl:text>
     <xsl:text>%% A section *always* has depth 1, contrary to us counting from the document root&#xa;</xsl:text>
@@ -6975,6 +6987,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>{}</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
+    <!-- "title" only possible for structured version of a list item -->
+    <!-- Semantic macro defined in preamble, mostly for font change  -->
+    <xsl:if test="title">
+        <xsl:text>\lititle{</xsl:text>
+        <xsl:apply-templates select="." mode="title-full"/>
+        <xsl:text>}\par%&#xa;</xsl:text>
+    </xsl:if>
     <xsl:apply-templates />
     <xsl:if test="not(p)">
         <xsl:text>%&#xa;</xsl:text>
@@ -6985,6 +7004,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- So we use an empty group to end the \item        -->
 <xsl:template match="ul/li">
     <xsl:text>\item{}</xsl:text>
+    <!-- "title" only possible for structured version of a list item -->
+    <!-- Semantic macro defined in preamble, mostly for font change  -->
+    <xsl:if test="title">
+        <xsl:text>\lititle{</xsl:text>
+        <xsl:apply-templates select="." mode="title-full"/>
+        <xsl:text>}\par%&#xa;</xsl:text>
+    </xsl:if>
     <xsl:apply-templates />
     <xsl:if test="not(p)">
         <xsl:text>%&#xa;</xsl:text>

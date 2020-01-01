@@ -5022,6 +5022,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         <xsl:apply-templates select="." mode="html-id" />
                     </xsl:attribute>
                 </xsl:if>
+                <!-- "title" only possible for structured version of a list item -->
+                <xsl:if test="title">
+                    <h6 class="heading">
+                        <span class="title">
+                            <xsl:apply-templates select="." mode="title-full"/>
+                        </span>
+                    </h6>
+                </xsl:if>
                 <xsl:apply-templates>
                     <xsl:with-param name="b-original" select="$b-original" />
                 </xsl:apply-templates>
