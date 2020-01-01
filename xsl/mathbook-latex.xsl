@@ -3003,6 +3003,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\textsc{\MakeLowercase{#1}}</xsl:text>
 </xsl:template>
 
+<!-- Colors -->
+<!-- This named template is called immediately after the "xcolor"     -->
+<!-- package is loaded.  It can be overridden to define colors used   -->
+<!-- later in a style, so as to modularize these choices.  It is      -->
+<!-- provisional since there may be better ways to specify or handle  -->
+<!--                                                                  -->
+<!--   (a) switching easily between color and black-and-white schemes -->
+<!--   (b) specifiying a default set of color names employed          -->
+<!--       automatically in certain locations                         -->
+<!--                                                                  -->
+<!-- Both of these features could be handled in an ad-hoc way now     -->
+<xsl:template name="xcolor-style"/>
+
 <!-- "introduction", "conclusion" -->
 <!-- Run-in optional title, which will eventually go away       -->
 <!-- We add a gap before just a "conclusion", using XSL.        -->
