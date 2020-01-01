@@ -3324,8 +3324,11 @@ the xsltproc executable.
                     <li><p>Purple</p></li>
                 </ul></p>
 
-                <p>Next, we have a list with no customization and multiple levels to test the defaults.  <latex /> allows a maximum of four levels of ordered/numbered lists, and a total of six levels if some unordered lists are mixed in.  The second-level defaults (lower-case Latin) are formatted slightly different in <latex /> versus HTML.  The HTML style is not easy to adjust, but you can specify the <latex /> version to match if it is important.Note that to have nested lists you <em>must</em> structure your list items as paragraphs, since a list may only appear within a <tag>p</tag> element.<ol>
-                    <li><p>Level 1, first.</p></li>
+                <p>Next, we have a list with no customization and multiple levels to test the defaults.  <latex /> allows a maximum of four levels of ordered/numbered lists, and a total of six levels if some unordered lists are mixed in.  The second-level defaults (lower-case Latin) are formatted slightly different in <latex /> versus HTML.  The HTML style is not easy to adjust, but you can specify the <latex /> version to match if it is important.  Note that to have nested lists you <em>must</em> structure your list items as paragraphs, since a list may only appear within a <tag>p</tag> element.<ol>
+                    <li>
+                        <title>A title on a top-level item</title>
+                        <p>Level 1, first.</p>
+                    </li>
                     <li xml:id="list-two">
                         <p>Level 1, second.<ol>
                             <li><p>Level 2, first.</p></li>
@@ -3334,13 +3337,18 @@ the xsltproc executable.
                                 <li xml:id="list-two-two-two"><p>Level 3, second.<ol>
                                     <li><p>Level 4, first.</p></li>
                                     <li><p>Level 4, second.</p></li>
-                                    <li xml:id="list-two-two-two-three"><p>Level 4, third.</p></li>
+                                    <li xml:id="list-two-two-two-three">
+                                        <title>Title on xref'ed list item</title>
+                                        <p>Level 4, third.</p></li>
                                 </ol></p>
                                 </li>
                                 <li><p>Level 3, third.</p></li>
                             </ol></p>
                             </li>
-                            <li><p>Level 2, third.</p></li>
+                            <li>
+                                <title>A title on a nested item</title>
+                                <p>Level 2, third.</p>
+                            </li>
                         </ol></p>
                     </li>
                     <li><p>Level 1, third.</p></li>
@@ -3349,7 +3357,10 @@ the xsltproc executable.
                 <p>Items in ordered lists (only) may be be give an <c>xml:id</c> and then may be the target of an <c>xref</c>.  We test three here, referencing down into the hierarchy above.  Level 1, second: <xref ref="list-two" />.  Level 3, second: <xref ref="list-two-two-two" />.  Level 4, third: <xref ref="list-two-two-two-three" />.  Note that if a list item of an ordered list is contained within a list item of an unordered list, then its number will not be defined.</p>
 
                 <p>And now a four-level deep unordered list with the default labels supplied by MBX (disc, circle, square, disc).  Again, the defalt order for Markdown/Jupyter (disc, square, circle, circle) is different than for <latex /> and HTML (disc, circle, square, disc)<ul>
-                    <li><p>Level 1, first.</p></li>
+                    <li>
+                        <title>A title on a top-level item</title>
+                        <p>Level 1, first.</p>
+                    </li>
                     <li>
                         <p>Level 1, second.<ul>
                             <li><p>Level 2, first.</p></li>
@@ -3363,7 +3374,10 @@ the xsltproc executable.
                                             <li><p>Level 4, third.</p></li>
                                         </ul></p>
                                     </li>
-                                    <li><p>Level 3, third.</p></li>
+                                    <li>
+                                        <title>A title on a nested item</title>
+                                        <p>Level 2, third.</p>
+                                    </li>
                                 </ul></p>
                             </li>
                             <li><p>Level 2, third.</p></li>
