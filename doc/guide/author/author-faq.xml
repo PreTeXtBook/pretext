@@ -10,9 +10,9 @@
 <chapter xml:id="faq">
     <title>Author FAQ: Frequently Asked Questions</title>
 
-     <p>Technical questions first, followed by questions about markup.</p>
+    <p>Technical questions first, followed by questions about markup.</p>
 
-    <p><dl>
+    <p><ul>
         <li>
           <title>On my local machine, why are the knowls/Sage cells empty?</title>
             <p>
@@ -54,8 +54,6 @@
             </p>
         </li>
 
-
-
         <li>
             <title>How do I install <c>xsltproc</c> on Ubuntu or Debian Linux?</title>
             <p>
@@ -92,7 +90,6 @@
               If you have trouble with MacPorts, try HomeBrew.
             </p>
         </li>
-
 
         <li>
             <title>Why is there no tag for bold?</title>
@@ -216,7 +213,5 @@
 
             <p>If you think you have an additional punctuation character that conveys meaning at the end of a title, please bring it to our attention.</p>
         </li>
-
-    </dl></p>
-
+    </ul></p>
   </chapter>

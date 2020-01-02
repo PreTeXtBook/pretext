@@ -10,9 +10,9 @@
 <chapter xml:id="publisher-faq">
     <title>Publisher FAQ: Frequently Asked Questions</title>
 
-     <p>This is a list of answers to frequent questions, in no particular order.</p>
+    <p>This is a list of answers to frequent questions, in no particular order.</p>
 
-    <p><dl>
+    <p><ul>
         <li>
             <title>Why does the conversion to HTML use a fixed width for the text?</title>
             <p>There is an optimal number of characters per line for human readers,
@@ -25,7 +25,7 @@
         </li>
 
         <li>
-            <title>I do not want my examples in knowls.</title>
+            <title>I do not want my examples in knowls</title>
             <p>You can change that!  See <xref ref="knowled-content" />.</p>
         </li>
 
@@ -44,7 +44,6 @@
               including an easy way to specify an existing alternate color file.
             </p>
         </li>
-
 
         <li>
             <title>Something looks wrong in the HTML output. How can I customize the layout of the HTML version?</title>
@@ -89,16 +88,16 @@
         </li>
 
         <li>
-            <title>Searching my <init>PDF</init> output is broken.</title>
+            <title>Searching my <init>PDF</init> output is broken</title>
             <p><pretext /> goes to great lengths to make a high-quality <init>PDF</init>, but if you manipulate it by adding in new pages, or adjust the intermediate <latex /> to use other fonts, you run the risk of breaking some of the features.</p>
 
             <p>A ligature is a combination of two characters into one, like a lower-case <q>f</q> followed closely by a lower-case <q>i</q> without a dot.  These can confuse a search.  Verbatim text sometimes ends up with <q>smart</q> quotes, where left and right versions are inverted.  This frustrates copying source code into an actual program.  And so on.  If you see problems like this with un-customized <init>PDF</init> output, we would like to hear about it.</p>
         </li>
+
         <li>
-            <title>My LMS breaks my HTML.</title>
+            <title>My LMS breaks my HTML</title>
             <p>Suppose your <init>HTML</init> output seems to work fine, but once you place it inside your university's Learning Management System (<init>LMS</init>) it no longer works very well.</p>
             <p>A likely culprit is that your <init>LMS</init> is adding material to your files, ruining them in the process.</p>
         </li>
-    </dl></p>
-
+    </ul></p>
 </chapter>
