@@ -8641,7 +8641,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </chapter>
 </xsl:template>
 
-<xsl:template match="section" mode="runestone-manifest">
+<xsl:template match="section|chapter/reading-questions" mode="runestone-manifest">
     <subchapter>
         <id>
             <xsl:apply-templates select="." mode="html-id"/>
@@ -8649,8 +8649,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <title>
             <xsl:apply-templates select="." mode="title-full"/>
         </title>
+        <!-- nearly a dead end, recurse only into exercises -->
+        <!-- within this RS "subchapter" but at any depth   -->
+        <xsl:apply-templates select=".//exercise"  mode="runestone-manifest"/>
     </subchapter>
-    <!-- dead end, no recursion -->
+    <!-- dead end structurally, no more recursion, even if "subsection", etc. -->
+</xsl:template>
+
+<!-- Reading Questions (only) to the manifest -->
+<xsl:template match="reading-questions/exercise" mode="runestone-manifest">
+    <question>
+        <xsl:apply-templates select="." mode="exercise-components"/>
+    </question>
 </xsl:template>
 
 <!-- Appendix is explicitly no-op, so we do not recurse into "section"  -->
