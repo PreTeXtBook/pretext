@@ -31,6 +31,22 @@ so that we can set our own later */
 .pretext-content h1, .pretext-content h2, .pretext-content h3, .pretext-content h4, .pretext-content h5, .pretext-content h6 {
     margin: 0;
 }
+/* do this better */
+h2:last-child {
+/* for the chapter pages with section links at the bottom */
+    margin-bottom: 100px;
+}
+
+/* obsolete? */
+#toc h2 + h2 {
+    margin-top: 0.3em;
+}
+.pretext-content h6 {
+    line-height: 1em;
+}
+
+
+
 .pretext-content p {
     margin-top: 1.25em;
     margin-bottom: 0;
@@ -52,6 +68,12 @@ so that we can set our own later */
 .pretext-content li {
     margin-bottom: 0;
 }
+.pretext-content section li .heading {
+    font-size: 100%;
+    font-weight: normal;
+    font-style: italic;
+}
+
 .pretext-content figure {
     margin-bottom: 0;
 }
@@ -586,16 +608,6 @@ body > a.assistive:focus {
     background-color: rgb(205,205,255)
 }
 
-
-#toc h2 + h2 {
-    margin-top: 0.3em;
-}
-
-h2:last-child {
-/* for the chapter pages with section links at the bottom */
-    margin-bottom: 100px;
-}
-
 .pretext-content section.introduction + section {
     margin-top: 2em;
 }
@@ -647,10 +659,6 @@ h2:last-child {
 
 .pretext-content section .paragraphs + .paragraphs {
     margin-top: 3em;
-}
-
-.pretext-content h6 {
-    line-height: 1em;
 }
 
 .pretext-content .sidebyside > p, .pretext-content .sidebyside > figure, .pretext-content .sidebyside > img, .pretext-content .sidebyside > table, .pretext-content .sidebyside > tabular, .pretext-content .sidebyside > .paragraphs {
@@ -2806,35 +2814,35 @@ main a[data-knowl].newstuff {
 }
 /*  WW problems */
 
-.pretext-content .webwork table.attemptResults {
+.pretext-content .wwprob table.attemptResults {
     margin-left: 2em;
     background: #efefef;
     padding: 0.2em;
 }
-.pretext-content .webwork table.attemptResults + .attemptResultsSummary {
+.pretext-content .wwprob table.attemptResults + .attemptResultsSummary {
     margin-top: 1em;
 }
 
-.pretext-content .webwork .problem-main-form {
+.pretext-content .wwprob .problem-main-form {
     margin-top: 1em;
     background: #eeeeff;
     padding: 0.5em;
 }
-.pretext-content .webwork td.ResultsWithoutError {
+.pretext-content .wwprob td.ResultsWithoutError {
     background: #9f9;
 }
-.pretext-content .webwork td.ResultsWithError {
+.pretext-content .wwprob td.ResultsWithError {
     background: #f99;
 }
 
-.pretext-content .webwork tr th {
+.pretext-content .wwprob tr th {
     text-align: center;
     padding: 0.2em 1em 0.2em 1em;
 }
-.pretext-content .webwork tr td {
+.pretext-content .wwprob tr td {
     text-align: center;
 }
-.pretext-content .webwork tr td:empty {
+.pretext-content .wwprob tr td:empty {
     background: #fff;
 }
 
@@ -2843,22 +2851,22 @@ table td { border-left: 1px solid #000; }
 table td:first-child { border-left: none; }
 */
 
-.pretext-content .webwork ol, .pretext-content .webwork ul {
+.pretext-content .wwprob ol, .pretext-content .wwprob ul {
     margin-top: 0.75em !important;
 }
 
-.pretext-content .webwork .problem {
+.pretext-content .wwprob .problem {
 /*    padding: 1em;
     border: 0.5px solid #aaa;
 */
     background: #fdfdfd;
 }
 
-.pretext-content .webwork .problem a {
+.pretext-content .wwprob .problem a {
     text-decoration: none;
 }
 
-.pretext-content .webwork #footer {
+.pretext-content .wwprob #footer {
     font-size: 70%;
     text-align: right;
 }
