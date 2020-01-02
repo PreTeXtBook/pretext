@@ -3391,8 +3391,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>%% Two-page spread as in default LaTeX&#xa;</xsl:text>
             <xsl:text>\renewpagestyle{headings}{%&#xa;</xsl:text>
             <xsl:text>\sethead%&#xa;</xsl:text>
-            <xsl:text>[\pagefont\thepage][][\pagefont\slshape\MakeUppercase{\ifthechapter{\chaptertitlename\space\thechapter.\space}{}\chaptertitle}]%&#xa;</xsl:text>
-            <xsl:text>{\pagefont\slshape\MakeUppercase{\ifthesection{\sectiontitlename\space\thesection.\space\sectiontitle}{}}}{}{\pagefont\thepage}}%&#xa;</xsl:text>
+            <xsl:text>[\pagefont\thepage]%&#xa;</xsl:text>
+            <xsl:text>[]&#xa;</xsl:text>
+            <xsl:text>[\pagefont\slshape\MakeUppercase{\ifthechapter{\chaptertitlename\space\thechapter.\space}{}\chaptertitle}]%&#xa;</xsl:text>
+            <xsl:text>{\pagefont\slshape\MakeUppercase{\ifthesection{</xsl:text>
+            <!-- LaTeX book style lacks  \sectionname, which could be internationalized globally -->
+            <xsl:call-template name="type-name">
+                <xsl:with-param name="string-id" select="'section'"/>
+            </xsl:call-template>
+            <xsl:text>\space\thesection.\space\sectiontitle}{}}}%&#xa;</xsl:text>
+            <xsl:text>{}%&#xa;</xsl:text>
+            <xsl:text>{\pagefont\thepage}%&#xa;</xsl:text>
+            <xsl:text>}%&#xa;</xsl:text>
         </xsl:when>
     </xsl:choose>
     <xsl:text>\pagestyle{headings}&#xa;</xsl:text>
