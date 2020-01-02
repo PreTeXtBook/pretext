@@ -166,6 +166,17 @@ generic td,data-braille,last-cell \*
 # Mathematics
 #############
 
+# This will kill an empty div that formerly held all
+# the LaTeX macros.  It gets emptied by MathJax, but
+# it leaves behind the LaTeX math delimiters, which
+# become an empty "nemeth" element.  This produces a
+# single opening Nemeth indicator (because it is an
+# empty element?).
+
+# "no" processes interior, "skip" ignores everything
+
+skip div,data-braille,latex-macros
+
 displaymath div,class,displaymath
 
 ##############

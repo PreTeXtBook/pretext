@@ -10593,10 +10593,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- case authors want to build on these macros       -->
 <xsl:template name="latex-macros">
     <div class="hidden-content" style="display:none">
-    <xsl:call-template name="begin-inline-math" />
-    <xsl:value-of select="$latex-packages-mathjax" />
-    <xsl:value-of select="$latex-macros" />
-    <xsl:call-template name="end-inline-math" />
+        <xsl:if test="$b-braille">
+            <xsl:attribute name="data-braille">
+                <xsl:text>latex-macros</xsl:text>
+            </xsl:attribute>
+        </xsl:if>
+        <xsl:call-template name="begin-inline-math" />
+        <xsl:value-of select="$latex-packages-mathjax" />
+        <xsl:value-of select="$latex-macros" />
+        <xsl:call-template name="end-inline-math" />
     </div>
 </xsl:template>
 
