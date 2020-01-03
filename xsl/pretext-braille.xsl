@@ -560,9 +560,22 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Images -->
 <!-- ###### -->
 
-<!-- We leave a placeholder for images, temporarily -->
+<!-- We write a paragraph with the "description"  -->
+<!-- (authored as a bare string of sorts) and a   -->
+<!-- paragraph with our internal id, which is the -->
+<!-- basis of a filename that would be used to    -->
+<!-- construct any tactile versions.              -->
 <xsl:template match="image">
-    <xsl:text>[image]</xsl:text>
+    <div data-braille="image">
+        <p>
+            <xsl:text>Image: </xsl:text>
+            <xsl:apply-templates select="description"/>
+        </p>
+        <p>
+            <xsl:text>ID: </xsl:text>
+            <xsl:apply-templates select="." mode="visible-id" />
+        </p>
+    </div>
 </xsl:template>
 
 
