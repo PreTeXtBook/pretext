@@ -272,8 +272,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>cell7</xsl:text>
 </xsl:template>
 
-
-<!-- Environments-->
+<!-- ################### -->
+<!-- Environments/Blocks -->
+<!-- ################### -->
 
 <!-- Born-hidden behavior is generally configurable,  -->
 <!-- but we do not want any automatic, or configured, -->
@@ -283,6 +284,73 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Roughly in the order of  html.knowl.*  switches  -->
 <xsl:template match="&THEOREM-LIKE;|proof|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&REMARK-LIKE;|&GOAL-LIKE;|exercise" mode="is-hidden">
     <xsl:text>no</xsl:text>
+</xsl:template>
+
+<!-- A hook in the HTML conversion allows for the addition of a @data-braille attribute to the "body-element".  Then liblouis can select on these values to apply the "boxline" style which delimits the blocks.  Here we define these values.  The stub in the HTML conversion does nothing (empty text) and so is a signal to not employ this attribute at all.  So a non-empty definition here also activates the attribute's existence. -->
+
+<xsl:template match="&REMARK-LIKE;" mode="data-braille-attribute-value">
+    <xsl:text>remark-like</xsl:text>
+</xsl:template>
+
+<xsl:template match="&COMPUTATION-LIKE;" mode="data-braille-attribute-value">
+    <xsl:text>computation-like</xsl:text>
+</xsl:template>
+
+<xsl:template match="&DEFINITION-LIKE;" mode="data-braille-attribute-value">
+    <xsl:text>definition-like</xsl:text>
+</xsl:template>
+
+<xsl:template match="&ASIDE-LIKE;" mode="data-braille-attribute-value">
+    <xsl:text>aside-like</xsl:text>
+</xsl:template>
+
+<xsl:template match="&FIGURE-LIKE;" mode="data-braille-attribute-value">
+    <xsl:text>figure-like</xsl:text>
+</xsl:template>
+
+<xsl:template match="assemblage" mode="data-braille-attribute-value">
+    <xsl:text>assemblage-like</xsl:text>
+</xsl:template>
+
+<xsl:template match="&GOAL-LIKE;" mode="data-braille-attribute-value">
+    <xsl:text>goal-like</xsl:text>
+</xsl:template>
+
+<xsl:template match="&EXAMPLE-LIKE;" mode="data-braille-attribute-value">
+    <xsl:text>example-like</xsl:text>
+</xsl:template>
+
+<xsl:template match="&PROJECT-LIKE;" mode="data-braille-attribute-value">
+    <xsl:text>project-like</xsl:text>
+</xsl:template>
+
+<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;" mode="data-braille-attribute-value">
+    <xsl:text>theorem-like</xsl:text>
+</xsl:template>
+
+<xsl:template match="proof" mode="data-braille-attribute-value">
+    <xsl:text>proof</xsl:text>
+</xsl:template>
+
+<!-- Absent an implementation above, empty text signals  -->
+<!-- that the @data-braille attribute is not desired.    -->
+<xsl:template match="*" mode="data-braille-attribute-value"/>
+
+<!-- The HTML conversion has a "block-data-braille-attribute" -->
+<!-- hook with a no-op stub template.  Here we activate the   -->
+<!-- attribute iff a non-empty value is defined above.  Why   -->
+<!-- do this?  Because liblouis can only match attributes     -->
+<!-- with one value, not space-separated lists like many of   -->
+<!-- our @class attributes.                                   -->
+<xsl:template match="*" mode="block-data-braille-attribute">
+    <xsl:variable name="attr-value">
+        <xsl:apply-templates select="." mode="data-braille-attribute-value"/>
+    </xsl:variable>
+    <xsl:if test="not($attr-value = '')">
+        <xsl:attribute name="data-braille">
+            <xsl:value-of select="$attr-value"/>
+        </xsl:attribute>
+    </xsl:if>
 </xsl:template>
 
 <!-- ################ -->

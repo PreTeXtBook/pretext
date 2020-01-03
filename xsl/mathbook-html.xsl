@@ -641,11 +641,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>raggedright</xsl:text>
 </xsl:variable>
 
-<!-- We make a variant as input to liblouis for conversion of       -->
-<!-- literary text to braille.  First use is to augment the use     -->
-<!-- of class names with a dedicated @data-braille attribute        -->
-<!-- which has only one value.  Ever.  Often this is all we need    -->
-<!-- to get the styling we need.                                    -->
+<!-- We make a much different variant of HTML output as input to    -->
+<!-- liblouis for conversion of literary text to braille.  When it  -->
+<!-- is easier to insert a small change in the interior of a        -->
+<!-- template, we use this variable to condition the change, rather -->
+<!-- than providing a new template in the braille conversion.       -->
 <!--                                                                -->
 <!-- We set the internal boolean variable to false() here, and turn -->
 <!-- it on in the dedicated stylesheet for conversion to braille.   -->
@@ -2849,11 +2849,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text> remark-like</xsl:text>
 </xsl:template>
 
-<!-- The @data-braille attribute, when activated -->
-<xsl:template match="&REMARK-LIKE;" mode="body-braille-attribute">
-    <xsl:text>remark-like</xsl:text>
-</xsl:template>
-
 <!-- When born hidden, block-level -->
 <xsl:template match="&REMARK-LIKE;" mode="hidden-knowl-placement">
     <xsl:text>block</xsl:text>
@@ -2902,11 +2897,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="&COMPUTATION-LIKE;" mode="body-css-class">
     <xsl:value-of select="local-name()"/>
     <xsl:text> computation-like</xsl:text>
-</xsl:template>
-
-<!-- The @data-braille attribute, when activated -->
-<xsl:template match="&COMPUTATION-LIKE;" mode="body-braille-attribute">
-    <xsl:text>computation-like</xsl:text>
 </xsl:template>
 
 <!-- When born hidden, block-level -->
@@ -2959,11 +2949,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text> definition-like</xsl:text>
 </xsl:template>
 
-<!-- The @data-braille attribute, when activated -->
-<xsl:template match="&DEFINITION-LIKE;" mode="body-braille-attribute">
-    <xsl:text>definition-like</xsl:text>
-</xsl:template>
-
 <!-- When born hidden, block-level -->
 <xsl:template match="&DEFINITION-LIKE;" mode="hidden-knowl-placement">
     <xsl:text>block</xsl:text>
@@ -3012,11 +2997,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="&ASIDE-LIKE;" mode="body-css-class">
     <xsl:value-of select="local-name()"/>
     <xsl:text> aside-like</xsl:text>
-</xsl:template>
-
-<!-- The @data-braille attribute, when activated -->
-<xsl:template match="&ASIDE-LIKE;" mode="body-braille-attribute">
-    <xsl:text>aside-like</xsl:text>
 </xsl:template>
 
 <!-- Never born hidden -->
@@ -3224,11 +3204,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text> table-like</xsl:text>
 </xsl:template>
 
-<!-- The @data-braille attribute, when activated -->
-<xsl:template match="&FIGURE-LIKE;" mode="body-braille-attribute">
-    <xsl:text>figure-like</xsl:text>
-</xsl:template>
-
 <!-- When born hidden, block-level -->
 <xsl:template match="&FIGURE-LIKE;" mode="hidden-knowl-placement">
     <xsl:text>block</xsl:text>
@@ -3302,11 +3277,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="assemblage" mode="body-css-class">
     <xsl:value-of select="local-name()"/>
     <xsl:text> assemblage-like</xsl:text>
-</xsl:template>
-
-<!-- The @data-braille attribute, when activated -->
-<xsl:template match="assemblage" mode="body-braille-attribute">
-    <xsl:text>assemblage-like</xsl:text>
 </xsl:template>
 
 <!-- Never born hidden -->
@@ -3485,11 +3455,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text> goal-like</xsl:text>
 </xsl:template>
 
-<!-- The @data-braille attribute, when activated -->
-<xsl:template match="&GOAL-LIKE;" mode="body-braille-attribute">
-    <xsl:text>goal-like</xsl:text>
-</xsl:template>
-
 <!-- When born hidden, block-level -->
 <xsl:template match="&GOAL-LIKE;" mode="hidden-knowl-placement">
     <xsl:text>block</xsl:text>
@@ -3541,11 +3506,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="&EXAMPLE-LIKE;" mode="body-css-class">
     <xsl:value-of select="local-name()"/>
     <xsl:text> example-like</xsl:text>
-</xsl:template>
-
-<!-- The @data-braille attribute, when activated -->
-<xsl:template match="&EXAMPLE-LIKE;" mode="body-braille-attribute">
-    <xsl:text>example-like</xsl:text>
 </xsl:template>
 
 <!-- When born hidden, block-level -->
@@ -3968,11 +3928,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text> project-like</xsl:text>
 </xsl:template>
 
-<!-- The @data-braille attribute, when activated -->
-<xsl:template match="&PROJECT-LIKE;" mode="body-braille-attribute">
-    <xsl:text>project-like</xsl:text>
-</xsl:template>
-
 <!-- When born hidden, block-level -->
 <xsl:template match="&PROJECT-LIKE;" mode="hidden-knowl-placement">
     <xsl:text>block</xsl:text>
@@ -4326,11 +4281,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text> theorem-like</xsl:text>
 </xsl:template>
 
-<!-- The @data-braille attribute, when activated -->
-<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;" mode="body-braille-attribute">
-    <xsl:text>theorem-like</xsl:text>
-</xsl:template>
-
 <!-- When born hidden, block-level -->
 <xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;" mode="hidden-knowl-placement">
     <xsl:text>block</xsl:text>
@@ -4388,11 +4338,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>proof</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
-</xsl:template>
-
-<!-- The @data-braille attribute, when activated -->
-<xsl:template match="proof" mode="body-braille-attribute">
-    <xsl:text>proof</xsl:text>
 </xsl:template>
 
 <!-- Trailing as a hidden knowl, or plainly  -->
@@ -4763,35 +4708,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:apply-templates>
 </xsl:template>
 
-<!-- Safety Valves -->
-
-<!-- Some templates above are only partially implemented.  -->
-<!-- So default to empty text, or similar.  Define these   -->
-<!-- to be something silly and search output to see missed -->
-<!-- opportunities.                                        -->
-
-<xsl:template match="*" mode="body-braille-attribute"/>
-
-<!-- Braille-specific attribute -->
-
-<!-- We add a @data-braille attribute iff $b-braille is true.   -->
-<!-- For block identification right now; could be parameterized -->
-<!-- to have the value passed in.  Why?  Because liblouis can   -->
-<!-- only match attributes with one value, not space-separated  -->
-<!-- lists like a @class attribute.                             -->
-<xsl:template match="*" mode="data-braille-attribute">
-    <xsl:if test="$b-braille">
-        <xsl:variable name="attr-value">
-            <xsl:apply-templates select="." mode="body-braille-attribute"/>
-        </xsl:variable>
-        <xsl:if test="not($attr-value = '')">
-            <xsl:attribute name="data-braille">
-                <xsl:value-of select="$attr-value"/>
-            </xsl:attribute>
-        </xsl:if>
-    </xsl:if>
-</xsl:template>
-
+<!-- Stub: for the conversion to braille, which imports this -->
+<!-- stylesheet, we sometimes add a @data-braille attribute  -->
+<!-- to guide the application of  liblouis  styles.  For     -->
+<!-- blocks, we have a "block-data-braille-attribute" hook   -->
+<!-- in the "body" template.  Here (and now) it is           -->
+<!-- implemented as a no-op stub.  The stylesheet for the    -->
+<!-- conversion to braille will override this template with  -->
+<!-- the desired functionality.                              -->
+<xsl:template match="*" mode="block-data-braille-attribute"/>
 
 <!-- All of the implementations above use the same   -->
 <!-- template for their body, it relies on various   -->
@@ -4825,8 +4750,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:attribute name="class">
                 <xsl:apply-templates select="." mode="body-css-class" />
             </xsl:attribute>
-            <!-- possible tag for braille conversion, iff $b-braille is true -->
-            <xsl:apply-templates select="." mode="data-braille-attribute"/>
+            <!-- possible indicator for use in for braille conversion, -->
+            <!-- activated by a non-trivial implementation of this     -->
+            <!-- hook in the braille stylesheet                        -->
+            <xsl:apply-templates select="." mode="block-data-braille-attribute"/>
             <!-- Label original, but not if embedded            -->
             <!-- Then id goes onto the knowl text, so locatable -->
             <xsl:if test="$b-original and not($block-type = 'embed')">
