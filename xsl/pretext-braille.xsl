@@ -269,13 +269,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Environments-->
 
-<!-- Born-hidden behavior is generally configurable, -->
-<!-- but we do not want any automatic or configured, -->
-<!-- knowlization to take place.  Ever.              -->
-<!-- Checklist:  implemented environments            -->
-<!-- Definitions                                     -->
-<!-- Examples                                        -->
-<xsl:template match="&DEFINITION-LIKE;|&EXAMPLE-LIKE;" mode="is-hidden">
+<!-- Born-hidden behavior is generally configurable,  -->
+<!-- but we do not want any automatic, or configured, -->
+<!-- knowlization to take place.  Ever.  Never.       -->
+
+<!-- Everything configurable by author, 2020-01-02    -->
+<!-- Roughly in the order of  html.knowl.*  switches  -->
+<xsl:template match="&THEOREM-LIKE;|proof|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&REMARK-LIKE;|&GOAL-LIKE;|exercise" mode="is-hidden">
     <xsl:text>no</xsl:text>
 </xsl:template>
 
