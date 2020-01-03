@@ -2949,6 +2949,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text> definition-like</xsl:text>
 </xsl:template>
 
+<!-- The @data-braille attribute, when activated -->
+<xsl:template match="&DEFINITION-LIKE;" mode="body-braille-attribute">
+    <xsl:text>definition-like</xsl:text>
+</xsl:template>
+
 <!-- When born hidden, block-level -->
 <xsl:template match="&DEFINITION-LIKE;" mode="hidden-knowl-placement">
     <xsl:text>block</xsl:text>
@@ -3506,6 +3511,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="&EXAMPLE-LIKE;" mode="body-css-class">
     <xsl:value-of select="local-name()"/>
     <xsl:text> example-like</xsl:text>
+</xsl:template>
+
+<!-- The @data-braille attribute, when activated -->
+<xsl:template match="&EXAMPLE-LIKE;" mode="body-braille-attribute">
+    <xsl:text>example-like</xsl:text>
 </xsl:template>
 
 <!-- When born hidden, block-level -->
@@ -4708,6 +4718,35 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:apply-templates>
 </xsl:template>
 
+<!-- Safety Valves -->
+
+<!-- Some templates above are only partially implemented.  -->
+<!-- So default to empty text, or similar.  Define these   -->
+<!-- to be something silly and search output to see missed -->
+<!-- opportunities.                                        -->
+
+<xsl:template match="*" mode="body-braille-attribute"/>
+
+<!-- Braille-specific attribute -->
+
+<!-- We add a @data-braille attribute iff $b-braille is true.   -->
+<!-- For block identification right now; could be parameterized -->
+<!-- to have the value passed in.  Why?  Because liblouis can   -->
+<!-- only match attributes with one value, not space-separated  -->
+<!-- lists like a @class attribute.                             -->
+<xsl:template match="*" mode="data-braille-attribute">
+    <xsl:if test="$b-braille">
+        <xsl:variable name="attr-value">
+            <xsl:apply-templates select="." mode="body-braille-attribute"/>
+        </xsl:variable>
+        <xsl:if test="not($attr-value = '')">
+            <xsl:attribute name="data-braille">
+                <xsl:value-of select="$attr-value"/>
+            </xsl:attribute>
+        </xsl:if>
+    </xsl:if>
+</xsl:template>
+
 
 <!-- All of the implementations above use the same   -->
 <!-- template for their body, it relies on various   -->
@@ -4741,6 +4780,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:attribute name="class">
                 <xsl:apply-templates select="." mode="body-css-class" />
             </xsl:attribute>
+            <!-- possible tag for braille conversion, iff $b-braille is true -->
+            <xsl:apply-templates select="." mode="data-braille-attribute"/>
             <!-- Label original, but not if embedded            -->
             <!-- Then id goes onto the knowl text, so locatable -->
             <xsl:if test="$b-original and not($block-type = 'embed')">

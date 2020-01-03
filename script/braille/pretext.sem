@@ -127,8 +127,8 @@ generic nemeth \x2838\x2829\x00a0,\x00a0\x2838\x2831
 # configuration file, while the PreTeXt HTML which
 # will receive this treatment is given here
 
-boxline article,class,definition-like
-boxline article,class,example-like
+boxline article,data-braille,definition-like
+boxline article,data-braille,example-like
 
 
 #######
