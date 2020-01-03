@@ -2849,6 +2849,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text> remark-like</xsl:text>
 </xsl:template>
 
+<!-- The @data-braille attribute, when activated -->
+<xsl:template match="&REMARK-LIKE;" mode="body-braille-attribute">
+    <xsl:text>remark-like</xsl:text>
+</xsl:template>
+
 <!-- When born hidden, block-level -->
 <xsl:template match="&REMARK-LIKE;" mode="hidden-knowl-placement">
     <xsl:text>block</xsl:text>
@@ -2897,6 +2902,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="&COMPUTATION-LIKE;" mode="body-css-class">
     <xsl:value-of select="local-name()"/>
     <xsl:text> computation-like</xsl:text>
+</xsl:template>
+
+<!-- The @data-braille attribute, when activated -->
+<xsl:template match="&COMPUTATION-LIKE;" mode="body-braille-attribute">
+    <xsl:text>computation-like</xsl:text>
 </xsl:template>
 
 <!-- When born hidden, block-level -->
@@ -3002,6 +3012,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="&ASIDE-LIKE;" mode="body-css-class">
     <xsl:value-of select="local-name()"/>
     <xsl:text> aside-like</xsl:text>
+</xsl:template>
+
+<!-- The @data-braille attribute, when activated -->
+<xsl:template match="&ASIDE-LIKE;" mode="body-braille-attribute">
+    <xsl:text>aside-like</xsl:text>
 </xsl:template>
 
 <!-- Never born hidden -->
@@ -3209,6 +3224,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text> table-like</xsl:text>
 </xsl:template>
 
+<!-- The @data-braille attribute, when activated -->
+<xsl:template match="&FIGURE-LIKE;" mode="body-braille-attribute">
+    <xsl:text>figure-like</xsl:text>
+</xsl:template>
+
 <!-- When born hidden, block-level -->
 <xsl:template match="&FIGURE-LIKE;" mode="hidden-knowl-placement">
     <xsl:text>block</xsl:text>
@@ -3282,6 +3302,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="assemblage" mode="body-css-class">
     <xsl:value-of select="local-name()"/>
     <xsl:text> assemblage-like</xsl:text>
+</xsl:template>
+
+<!-- The @data-braille attribute, when activated -->
+<xsl:template match="assemblage" mode="body-braille-attribute">
+    <xsl:text>assemblage-like</xsl:text>
 </xsl:template>
 
 <!-- Never born hidden -->
@@ -3458,6 +3483,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="&GOAL-LIKE;" mode="body-css-class">
     <xsl:value-of select="local-name()"/>
     <xsl:text> goal-like</xsl:text>
+</xsl:template>
+
+<!-- The @data-braille attribute, when activated -->
+<xsl:template match="&GOAL-LIKE;" mode="body-braille-attribute">
+    <xsl:text>goal-like</xsl:text>
 </xsl:template>
 
 <!-- When born hidden, block-level -->
@@ -3938,6 +3968,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text> project-like</xsl:text>
 </xsl:template>
 
+<!-- The @data-braille attribute, when activated -->
+<xsl:template match="&PROJECT-LIKE;" mode="body-braille-attribute">
+    <xsl:text>project-like</xsl:text>
+</xsl:template>
+
 <!-- When born hidden, block-level -->
 <xsl:template match="&PROJECT-LIKE;" mode="hidden-knowl-placement">
     <xsl:text>block</xsl:text>
@@ -4291,6 +4326,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text> theorem-like</xsl:text>
 </xsl:template>
 
+<!-- The @data-braille attribute, when activated -->
+<xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;" mode="body-braille-attribute">
+    <xsl:text>theorem-like</xsl:text>
+</xsl:template>
+
 <!-- When born hidden, block-level -->
 <xsl:template match="&THEOREM-LIKE;|&AXIOM-LIKE;" mode="hidden-knowl-placement">
     <xsl:text>block</xsl:text>
@@ -4348,6 +4388,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>proof</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
+</xsl:template>
+
+<!-- The @data-braille attribute, when activated -->
+<xsl:template match="proof" mode="body-braille-attribute">
+    <xsl:text>proof</xsl:text>
 </xsl:template>
 
 <!-- Trailing as a hidden knowl, or plainly  -->
