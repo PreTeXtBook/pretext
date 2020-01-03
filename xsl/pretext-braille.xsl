@@ -45,6 +45,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
 
+<!-- This variable is exclusive to the (imported) HTML conversion -->
+<!-- stylesheet.  It is defined there as false() and here we      -->
+<!-- redefine it as true().  This allows for minor variations     -->
+<!-- to be made in that stylesheet conditionally.                 -->
+<xsl:variable name="b-braille" select="true()"/>
+
 <!-- Only need one monolithic file, how to chunk -->
 <!-- is not obvious, so we set this here         -->
 <xsl:param name="chunk.level" select="0"/>

@@ -641,6 +641,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>raggedright</xsl:text>
 </xsl:variable>
 
+<!-- We make a variant as input to liblouis for conversion of       -->
+<!-- literary text to braille.  First use is to augment the use     -->
+<!-- of class names with a dedicated @data-braille attribute        -->
+<!-- which has only one value.  Ever.  Often this is all we need    -->
+<!-- to get the styling we need.                                    -->
+<!--                                                                -->
+<!-- We set the internal boolean variable to false() here, and turn -->
+<!-- it on in the dedicated stylesheet for conversion to braille.   -->
+<xsl:variable name="b-braille" select="false()"/>
+
 <!-- ############### -->
 <!-- Source Analysis -->
 <!-- ############### -->
