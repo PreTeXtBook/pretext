@@ -139,6 +139,9 @@ boxline article,data-braille,project-like
 boxline article,data-braille,theorem-like
 boxline article,data-braille,proof
 
+# We box "sage" since the visual formatting is absent
+boxline article,data-braille,sage
+
 #######
 # Lists
 #######
@@ -186,6 +189,19 @@ generic td,data-braille,last-cell \*
 skip div,data-braille,latex-macros
 
 displaymath div,class,displaymath
+
+############
+# Sage Cells
+############
+
+# Setting a "changetable" action is the closest we
+# can get to Computer Braille.  This requires
+# hard-coding the table filename in the
+# div/@sage-code attribute value.  This is partially
+# effective, but kills newlines, which we have
+# not been able to fix
+
+changetable div,sage-code
 
 ##############
 # Holding Tank

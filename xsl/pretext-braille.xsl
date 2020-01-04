@@ -370,6 +370,83 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>:</xsl:text>
 </xsl:template>
 
+<!-- ########## -->
+<!-- Sage Cells -->
+<!-- ########## -->
+
+<!-- Implementing the abstract templates gives us a lot of       -->
+<!-- freedom.  We wrap in an                                     -->
+<!--    article/@data-braille="sage"                             -->
+<!-- with a                                                      -->
+<!--    h6/@class="heading"/span/@class="type"                   -->
+<!-- to get  liblouis  styling as a box and to make a heading.   -->
+<!--                                                             -->
+<!-- div/@data-braille="<table-filename>" is a  liblouis  device -->
+<!-- to switch the translation table, and is the best we can     -->
+<!-- do to make computer braille                                 -->
+
+<xsl:template match="sage" mode="sage-active-markup">
+    <xsl:param name="block-type"/>
+    <xsl:param name="language-attribute" />
+    <xsl:param name="in" />
+    <xsl:param name="out" />
+    <xsl:param name="b-original"/>
+
+    <article data-braille="sage">
+        <h6 class="heading">
+            <span class="type">Sage</span>
+        </h6>
+
+        <!-- code marker is literary, not computer braille -->
+        <p>Input:</p>
+        <div sage-code="en-us-comp6.ctb">
+            <xsl:choose>
+                <xsl:when test="$in = ''">
+                    <!-- defensive, prevents HTML processing  -->
+                    <!-- writing non-XML for an empty element -->
+                    <xsl:text>&#xa0;&#xa;</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$in"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </div>
+        <xsl:if test="not($out = '')">
+            <!-- code marker is literary, not computer braille -->
+            <p>Output:</p>
+            <div sage-code="en-us-comp6.ctb">
+                <xsl:value-of select="$out" />
+            </div>
+        </xsl:if>
+    </article>
+</xsl:template>
+
+<xsl:template name="sage-display-markup">
+    <xsl:param name="block-type"/>
+    <xsl:param name="in" />
+
+    <article data-braille="sage">
+        <h6 class="heading">
+            <span class="type">Sage</span>
+        </h6>
+        <!-- code marker is literary, not computer braille -->
+        <p>Input:</p>
+        <div sage-code="en-us-comp6.ctb">
+            <xsl:choose>
+                <xsl:when test="$in = ''">
+                    <!-- defensive, prevents HTML processing  -->
+                    <!-- writing non-XML for an empty element -->
+                    <xsl:text>&#xa0;&#xa;</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$in"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </div>
+    </article>
+</xsl:template>
+
+
 <!-- ###################### -->
 <!-- Paragraph-Level Markup -->
 <!-- ###################### -->
@@ -650,17 +727,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="visible-id" />
         </p>
     </div>
-</xsl:template>
-
-
-<!-- #### -->
-<!-- Sage -->
-<!-- #### -->
-
-<!-- We leave a placeholder for Sage cells, temporarily -->
-<xsl:template match="sage">
-    <xsl:text>[sage cell]</xsl:text>
-    <br/>
 </xsl:template>
 
 </xsl:stylesheet>
