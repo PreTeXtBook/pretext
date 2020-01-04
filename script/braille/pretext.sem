@@ -203,6 +203,17 @@ displaymath div,class,displaymath
 
 changetable div,sage-code
 
+# The  compbrl  action was not successful
+# (perhaps because the table was not set properly elsewhere)
+
+# We set a "sagecode" style on div/@sage-code,
+# which was effective, but using in the style
+#   format computerCoded
+# did not seem to do anything
+# Three message thread:
+# https://www.freelists.org/post/liblouis-liblouisxml/
+# What-does-the-styleformat-option-computerCoded-do
+
 ##############
 # Holding Tank
 ##############
