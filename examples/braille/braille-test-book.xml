@@ -116,6 +116,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
             <p>For the previous line, <q>x</q> and <q>T</q> should be italicized (single Latin letter variable). <q>a+b</q> is meant to not be italicized (an expression).  <q>theta</q> and <q>rho</q> should not be italicized (Greek).  The last variable is a Latin <q>g</q>, not a Greek <q>gamma.</q>  So it should simply be italicized, since it is a lone Latin letter as math.</p>
 
+            <!-- testing hacks for multi-line mathematics -->
+            <p>And a multi-row equation, authored as two <tag>mrow</tag> within a <tag>md</tag> and including alignment:<md>
+                <mrow>a^2 + b^2 &amp;= c^2</mrow>
+                <mrow>x^3 + y^3 &amp;= z^3</mrow>
+            </md>.</p>
+
+            <p>And a single displayed equation, but authored as a single <tag>mrow</tag> within a <tag>md</tag>, with alignment:<md>
+                <mrow>p^4 + q^4 &amp;= r^4</mrow>
+            </md>.  Adjust to a single displayed equation, but authored as a single <tag>mrow</tag> within a <tag>md</tag>, without alignment:<md>
+                <mrow>r^5 + s^5 = t^5</mrow>
+            </md>.  Plus as an <tag>me</tag>, which cannot have alignment:<me>p^4 + q^4 = r^4</me>.</p>
+
         </chapter>
 
         <chapter>

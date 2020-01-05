@@ -588,6 +588,44 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="$text" />
 </xsl:template>
 
+<!-- Hack: treat md/mrow as a sequence of me and remove      -->
+<!-- alignment points.  This is an experiment at this point, -->
+<!-- it has flaws and has not been thoroughly tested.        -->
+
+<xsl:template match="md|mdn" mode="body">
+    <!-- block-type parameter is ignored, since the          -->
+    <!-- representation never varies, no heading, no wrapper -->
+    <xsl:param name="block-type" />
+    <!-- If original content, or a duplication -->
+    <xsl:param name="b-original" select="true()" />
+    <!-- If the only content of a knowl ("men") then we  -->
+    <!-- do not include adjacent (trailing) punctuation, -->
+    <!-- since it is meaningless                         -->
+    <xsl:param name="b-top-level" select="false()" />
+    <!-- Look across all mrow for 100% no-number rows              -->
+    <!-- This just allows for slightly nicer human-readable source -->
+    <xsl:variable name="b-nonumbers" select="self::md and not(mrow[@number='yes' or @tag])" />
+    <xsl:variable name="complete-latex">
+        <xsl:apply-templates select="mrow|intertext" />
+    </xsl:variable>
+    <xsl:value-of select="$complete-latex" />
+</xsl:template>
+
+<xsl:template match="mrow">
+    <xsl:variable name="aligned-row">
+        <xsl:apply-imports/>
+    </xsl:variable>
+    <xsl:variable name="unaligned" select="translate($aligned-row, '&amp;', '')"/>
+    <!-- there is also a "max-ampersands" template that could be used in the "md" template -->
+    <!-- <xsl:message>Amps: <xsl:value-of select="string-length($aligned-row) - string-length(translate($aligned-row, '&amp;', ''))"/></xsl:message> -->
+    <xsl:call-template name="open-nemeth"/>
+    <xsl:text>\begin{equation*}&#xa;</xsl:text>
+        <xsl:value-of select="$unaligned"/>
+    <xsl:text>\end{equation*}&#xa;</xsl:text>
+    <xsl:call-template name="close-nemeth"/>
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
 <!-- ################ -->
 <!-- Cross-References -->
 <!-- ################ -->
