@@ -213,5 +213,19 @@
 
             <p>If you think you have an additional punctuation character that conveys meaning at the end of a title, please bring it to our attention.</p>
         </li>
+
+        <li>
+          <title>I'm a little confused about the less-than character, the ampersand, and <q>escape characters</q> in general</title>
+
+          <p>When you process <init>XML</init>, the less-than character, <c>&lt;</c>, is a signal that the name of an opening or closing tag is coming next.  How do you prevent this if you really need the character, especially for something like computer code?  Answer: you use the <q>escaped</q> version, <c>&amp;lt;</c>.  The ampersand is known as an <term>escape character</term>.  It is a signal to the processor to escape from its usual rules.  <q>But,</q> I hear you say, <q>we just gave the ampersand character a special meaning, now how do I get <em>that</em> character when I need to say <sq>I went to the A&amp;P store.</sq>?</q>  Simple<mdash/>there is an escaped version, <c>&amp;amp;</c>.</p>
+
+          <p>So think of <c>&amp;lt;</c> and <c>&amp;amp;</c> as <em>being</em> the characters <c>&lt;</c> and <c>&amp;</c>.  End of story.  These two concessions should <q>work</q> throughout your <pretext/> source and in every conversion.  Every markup language needs, and uses, an escape character, but <init>XML</init> and <pretext/> have you covered and really only need these two (infrequent) exceptions.</p>
+
+          <p>It is worth repeating: think of the escaped versions of the characters as actually being the characters themselves.  That is the way the <init>XML</init> processor sees them and uses them.  For more, see <xref ref="overview-special-characters"/>, <xref ref="overview-verbatim-literal"/>, <xref ref="topic-exceptional-characters"/>, <xref ref="topic-verbatim-literal"/>, and <xref ref="topic-url-characters"/>.</p>
+
+          <p>Postscript:  <init>XML</init> has the escaped characters <c>&amp;gt</c>, <c>&amp;apos</c>, and <c>&amp;quot</c> for <c>&gt;</c>, <c>&apos;</c>, and <c>&quot;</c> (respectively).  But they are rarely (never?) necessary within <pretext/>.</p>
+
+          <p>Extra-credit homework: think about how some of the above was authored and then look at the source to grade your own work.</p>
+        </li>
     </ul></p>
   </chapter>
