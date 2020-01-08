@@ -276,7 +276,7 @@
                 <p>Of course, the fifty-two Latin letters, and ten decimal digits, are also in this category.  If you have an international, or bilingual, or country-specific keyboard, then common accented versions of Latin letters (as used in Europe and the Western Hemisphere) may also be used directly from your keyboard.</p>
             </subsubsection>
 
-            <subsubsection>
+            <subsubsection xml:id="topic-exceptional-characters">
                 <title>Exceptional Keyboard Characters</title>
 
                 <p><init>XML</init> is a <term>markup language</term>, which in part means that some keyboard characters are co-opted to signal the start of markup.  For <init>XML</init> this character is the less-than symbol, &lt;.  It signals the start of a <term>tag</term>, and then an opening tag ends with a greater-than symbol, &gt;, while a closing tag has an extra / right after the &lt;.</p>
@@ -779,8 +779,10 @@
             <p>The tags described here contain <em>only raw characters</em>.  By that we typically mean the first 128 characters of the <acro>ASCII</acro> code.  Unicode characters are likely to migrate to HTML output just fine, but results for <latex /> output will be variable.  The restriction to character data has two consequences.  First, any markup mistakenly included will have its content silently ignored and dropped.  Second, you need to observe the rules on special characters and escaped characters for <init>XML</init> for literal text, which are mercifully simple.</p>
 
             <blockquote>
-                <p>In your source, use <c>&amp;amp;</c> for an &amp;, and use <c>&amp;lt;</c> and <c>&amp;gt;</c> for &lt; and &gt;.  Otherwise, every other <acro>ASCII</acro> character will render faithfully across all possible formats.</p>
+                <p>In your source, use <c>&amp;amp;</c> for an &amp;, use <c>&amp;lt;</c> for &lt;, and optionally use <c>&amp;gt;</c> for &gt;.  Otherwise, every other <acro>ASCII</acro> character will render faithfully across all possible formats.</p>
             </blockquote>
+
+            <p>See <xref ref="topic-exceptional-characters"/> for more detail and explanation.</p>
         </introduction>
 
         <subsection xml:id="short-verbatim-text">

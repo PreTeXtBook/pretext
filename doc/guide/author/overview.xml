@@ -196,11 +196,11 @@
 
         <p>An advantage of XML syntax is that very few characters are reserved for the language's use, and thus very few characters need to be escaped.  Of course, there is always the need to escape the escape character.</p>
 
-        <p>The escape character for XML is the ampersand, &amp;.  The other dangerous character is the left angle bracket, the <q>less than,</q> &lt;.  Mostly to be symmetric, we also handle the right angle bracket, the <q>greater than,</q> &gt;, similarly.  Single and double quotation marks are used to delimit attributes, so are part of the XML specification, but do not present difficulties in narrative text.</p>
+        <p>The escape character for XML is the ampersand, &amp;.  The other dangerous character is the left angle bracket, the <q>less than,</q> &lt;.  If you like to be symmetric, you can also handle the right angle bracket, the <q>greater than,</q> &gt;, similarly.  Single and double quotation marks are used to delimit attributes, so are part of the XML specification, but do not present difficulties in narrative text.</p>
 
-        <p>These three characters are interpreted by the <init>XML</init> processor very early in the analysis of your source.  So they need to be authored specially via the <term>XML entities</term>: <c>&amp;amp;</c>, <c>&amp;lt;</c>, <c>&amp;gt;</c>.  In practice, the last is rarely necessary.  So really just two characters to type carefully or exceptionally.</p>
+        <p>These first two characters are interpreted by the <init>XML</init> processor very early in the analysis of your source.  So they need to be authored specially via the <term>XML entities</term> <c>&amp;amp;</c> and <c>&amp;lt;</c>.  In practice, escaping <c>&gt;</c> is rarely necessary.  So fundamentally within <pretext/> there are just two characters to type carefully or exceptionally.</p>
 
-        <p>If you consistently follow the prescription in the previous paragraph you will avoid a descent into escape-character hell and avoid a lot of head-scratching.  In particular, you should have no need of the <c>&lt;![CDATA[</c><nbsp /><c>]]&gt;</c> mechanism of XML, so just forget we even mentioned it.</p>
+        <p>If you consistently follow the prescription in the previous paragraph you will avoid a descent into escape-character hell and avoid a lot of head-scratching.  In particular, you should have no need of the <c>&lt;![CDATA[</c><nbsp /><c>]]&gt;</c> mechanism of <init>XML</init>, so <em>please</em> just forget we even mentioned it.</p>
     </section>
 
     <section xml:id="overview-nontrivial-characters">
@@ -298,7 +298,7 @@
 
         <p>For the content of a <tag>pre</tag> element, the indentation will be preserved, though an equal amount of leading whitespace will be stripped from every line, so as to keep the code shifted left as far as possible.</p>
 
-        <p>The behavior of these two tags is to preserve characters exactly.  Certainly the <acro>ASCII</acro> character set will behave as expected, and Unicode characters will migrate successfully to output formats based on <init>HTML</init>.  As mentioned in <xref ref="overview-special-characters" /> the ampersand and left angle bracket will confuse the initial XML processing.  So use the XML entities <c>&amp;amp;</c>, <c>&amp;lt;</c>, <c>&amp;gt;</c> to represent these characters to the XML processor, <c>xsltproc</c>.  See <xref ref="topic-verbatim-literal" /> for further details.</p>
+        <p>The behavior of these two tags is to preserve characters exactly.  Certainly the <acro>ASCII</acro> character set will behave as expected, and Unicode characters will migrate successfully to output formats based on <init>HTML</init>.  As mentioned in <xref ref="overview-special-characters" /> the ampersand and left angle bracket will confuse the initial XML processing.  So use the XML entities <c>&amp;amp;</c> and <c>&amp;lt;</c> to represent these characters to the XML processor, <c>xsltproc</c>.  See <xref ref="topic-verbatim-literal" /> for further details.</p>
     </section>
 
     <section xml:id="overview-sage">
