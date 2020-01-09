@@ -82,6 +82,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Write the infrastructure for a page -->
 <xsl:template match="slideshow">
+    <xsl:call-template name="converter-blurb-html" />
     <html>
         <head>
             <title>
