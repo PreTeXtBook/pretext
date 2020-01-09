@@ -20,6 +20,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************-->
 <pretext>
 
+    <docinfo>
+        <macros>
+        \newcommand{\definiteintegral}[4]{\int_{#1}^{#2}\,#3\,d#4}
+        </macros>
+    </docinfo>
+
     <slideshow>
         <title>PreTeXt</title>
         <subtitle>A Slideshow</subtitle>
@@ -153,6 +159,40 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     </li>
                 </dl></p>
             </slide>
+
+            <slide>
+                <title>Blocks: <tag>definition</tag></title>
+
+                <definition xml:id="definition-indefinite-integral">
+                    <idx>indefinite integral</idx><idx><h>integral</h><h>indefinite integral</h></idx>
+                    <notation>
+                        <usage>\int\,f(x)\,dx</usage>
+                        <description>indefinite integral of <m>f(x)</m></description>
+                    </notation>
+                    <statement>
+                        <p>Suppose that <m>\frac{d}{dx}F(x)=f(x)</m>.  Then the <term>indefinite integral</term> of <m>f(x)</m> is <m>F(x)</m> and is written as <me>\int\,f(x)\,dx=F(x)</me>.</p>
+                    </statement>
+                </definition>
+            </slide>
+
+            <slide>
+                <title>Blocks: <tag>theorem</tag></title>
+
+                <p>This should also test other <q>theorem-like</q>, such as <tag>corollary</tag>.</p>
+
+                <theorem xml:id="theorem-FTC">
+                    <title>The Fundamental Theorem of Calculus</title>
+                    <idx><h>Fundamental Theorem of Calculus</h></idx>
+
+                    <statement>
+                        <p>If <m>f(x)</m> is continuous, and the derivative of <m>F(x)</m> is <m>f(x)</m>, then <me>\definiteintegral{a}{b}{f(x)}{x}=F(b)-F(a)</me><idx><h>test: buried in theorem/statement/p</h></idx></p>
+                    </statement>
+                    <proof>
+                        <p>Left to the reader.</p>
+                    </proof>
+                </theorem>
+            </slide>
+
         </section>
     </slideshow>
 </pretext>
