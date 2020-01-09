@@ -194,5 +194,25 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </slide>
 
         </section>
+
+        <section>
+            <title>Sage Cell</title>
+
+            <slide>
+                <title>Ramanujan and Integration</title>
+
+                <p>This Sage Cell should execute properly, but some extra CSS is being applied.  It is also difficult to edit properly.  Perhaps the two are related.  You may need to zoom out your browser to see all the content, especially after running the cell.</p>
+
+                <p>We have some mathematics on the page, to look for Javascript interference with MathJax.  An identity due to Ramanujan:<me>\frac{1}{\Bigl(\sqrt{\phi \sqrt{5}}-\phi\Bigr) e^{\frac25 \pi}} = 1+\frac{e^{-2\pi}} {1+\frac{e^{-4\pi}} {1+\frac{e^{-6\pi}} {1+\frac{e^{-8\pi}} {1+\ldots} } } }</me>.</p>
+
+                <sage>
+                    <input>numerical_integral(sin(x)^2, (0, 2))</input>
+                    <!-- need to use wildcard matching to make this doctestable -->
+                    <output>(1.189200623826982, 1.320277913471315e-14)</output>
+                </sage>
+
+                <p>And some more mathematics.  An identity due to Ramanujan:<me>\frac{1}{\Bigl(\sqrt{\phi \sqrt{5}}-\phi\Bigr) e^{\frac25 \pi}} = 1+\frac{e^{-2\pi}} {1+\frac{e^{-4\pi}} {1+\frac{e^{-6\pi}} {1+\frac{e^{-8\pi}} {1+\ldots} } } }</me>.</p>
+            </slide>
+        </section>
     </slideshow>
 </pretext>
