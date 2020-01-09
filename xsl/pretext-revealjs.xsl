@@ -91,6 +91,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
             <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes"></meta>
 
+            <xsl:call-template name="sagecell-code" />
+            <xsl:apply-templates select="." mode="sagecell" />
+
             <!-- load reveal.js resources             -->
             <!-- NB: non-local gets minified versions -->
             <xsl:choose>
