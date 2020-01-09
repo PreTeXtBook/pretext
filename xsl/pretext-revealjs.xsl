@@ -142,7 +142,7 @@ ul {
 
         <body>
             <!-- For mathematics/MathJax -->
-            <xsl:apply-templates select="/pretext/docinfo/macros"/>
+            <xsl:call-template name="latex-macros"/>
 
             <div class="reveal">
                 <div class="slides">
@@ -168,15 +168,6 @@ Reveal.initialize({
   });
         </script>
     </html>
-</xsl:template>
-
-<!-- Investigste named template "latex-macros" in -html -->
-<xsl:template match="pretext/docinfo/macros">
-  <div style="display: none;">
-    <xsl:call-template name="begin-inline-math"/>
-    <xsl:value-of select="."/>
-    <xsl:call-template name="end-inline-math"/>
-  </div>
 </xsl:template>
 
 <!-- A "section" contains multiple "slide", which we process,   -->
