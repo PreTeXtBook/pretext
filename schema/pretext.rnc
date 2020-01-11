@@ -478,8 +478,11 @@
                 attribute cols {"2"|"3"|"4"|"5"|"6"}?,
                 attribute label {text}?,
                 element li {
-                    MetaDataTarget,
-                    (TextParagraph | BlockStatement+)
+                    (
+                        (MetaDataTarget, TextParagraph)
+                    |
+                        (MetaDataTitleOptional, BlockStatement+)
+                    )
                 }+
             }
         |
@@ -488,8 +491,11 @@
                 attribute cols {"2"|"3"|"4"|"5"|"6"}?,
                 attribute label {"disc" | "circle" | "square" | ""}?,
                 element li {
-                    PermanentID?,
-                    (TextParagraph | BlockStatement+)
+                    (
+                        (MetaDataTarget, TextParagraph)
+                    |
+                        (MetaDataTitleOptional, BlockStatement+)
+                    )
                 }+
             }
         |

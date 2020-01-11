@@ -1067,12 +1067,17 @@
         </optional>
         <oneOrMore>
           <element name="li">
-            <ref name="MetaDataTarget"/>
             <choice>
-              <ref name="TextParagraph"/>
-              <oneOrMore>
-                <ref name="BlockStatement"/>
-              </oneOrMore>
+              <group>
+                <ref name="MetaDataTarget"/>
+                <ref name="TextParagraph"/>
+              </group>
+              <group>
+                <ref name="MetaDataTitleOptional"/>
+                <oneOrMore>
+                  <ref name="BlockStatement"/>
+                </oneOrMore>
+              </group>
             </choice>
           </element>
         </oneOrMore>
@@ -1104,14 +1109,17 @@
         </optional>
         <oneOrMore>
           <element name="li">
-            <optional>
-              <ref name="PermanentID"/>
-            </optional>
             <choice>
-              <ref name="TextParagraph"/>
-              <oneOrMore>
-                <ref name="BlockStatement"/>
-              </oneOrMore>
+              <group>
+                <ref name="MetaDataTarget"/>
+                <ref name="TextParagraph"/>
+              </group>
+              <group>
+                <ref name="MetaDataTitleOptional"/>
+                <oneOrMore>
+                  <ref name="BlockStatement"/>
+                </oneOrMore>
+              </group>
             </choice>
           </element>
         </oneOrMore>
