@@ -764,7 +764,7 @@ def youtube_thumbnail(xml_source, xmlid_root, dest_dir):
     xslt_executable = get_executable(config,  'xslt')
     _debug("xslt executable: {}".format(xslt_executable))
     if plat == "Windows":
-        extraction_xslt = '/'.join(mbx_xsl_dir, 'extract-youtube.xsl')
+        extraction_xslt = '/'.join([mbx_xsl_dir, 'extract-youtube.xsl'])
     else:
         extraction_xslt = os.path.join(mbx_xsl_dir, 'extract-youtube.xsl')
     cmd = [xslt_executable,
@@ -838,7 +838,7 @@ def preview_images(xml_source, xmlid_root, dest_dir):
     xslt_executable = get_executable(config,  'xslt')
     _debug("xslt executable: {}".format(xslt_executable))
     if plat == "Windows":
-        extraction_xslt = '/'.join(mbx_xsl_dir, 'extract-interactive.xsl')
+        extraction_xslt = '/'.join([mbx_xsl_dir, 'extract-interactive.xsl'])
     else:
         extraction_xslt = os.path.join(mbx_xsl_dir, 'extract-interactive.xsl')
     cmd = [xslt_executable,
@@ -921,7 +921,7 @@ def mom_static_problems(xml_source, xmlid_root, dest_dir):
     xslt_executable = get_executable(config,  'xslt')
     _debug("xslt executable: {}".format(xslt_executable))
     if plat == "Windows":
-        extraction_xslt = '/'.join(mbx_xsl_dir, 'extract-mom.xsl')
+        extraction_xslt = '/'.join([mbx_xsl_dir, 'extract-mom.xsl'])
     else:
         extraction_xslt = os.path.join(mbx_xsl_dir, 'extract-mom.xsl')
     cmd = [xslt_executable,
