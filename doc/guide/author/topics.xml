@@ -1810,9 +1810,105 @@
         <p>It should be clear now that a <tag>sidebyside</tag> is more about presentation than most <pretext /> elements, though there is some semantic information being conveyed by grouping the panels with one another.</p>
     </section>
 
-    <section xml:id="topic-front-back-matter">
-        <title>(*) Front and Back Matter</title>
-        <p></p>
+    <section xml:id="topic-front-matter">
+        <title>(*) Front Matter</title>
+
+         <introduction>
+            <p></p>
+        </introduction>
+
+        <subsection>
+            <title>(*) Title Page</title>
+
+            <p></p>
+        </subsection>
+
+        <subsection>
+            <title>(*) Abstract</title>
+
+            <p></p>
+        </subsection>
+
+        <subsection>
+            <title>(*) Colophon</title>
+
+            <p></p>
+        </subsection>
+
+        <subsection>
+            <title>(*) Biography</title>
+
+            <p></p>
+        </subsection>
+
+        <subsection>
+            <title>(*) Dedication</title>
+
+            <p></p>
+        </subsection>
+
+        <subsection>
+            <title>(*) Acknowledgement</title>
+
+            <p></p>
+        </subsection>
+
+        <subsection>
+            <title>(*) Prefaces</title>
+
+            <p></p>
+        </subsection>
+
+    </section>
+
+    <section xml:id="topic-back-matter">
+        <title>(*) Back Matter</title>
+
+        <introduction>
+            <p></p>
+        </introduction>
+
+        <subsection>
+            <title>(*) Appendices</title>
+
+            <p></p>
+        </subsection>
+
+        <subsection>
+            <title>(*) Glossary</title>
+
+            <p></p>
+        </subsection>
+
+        <subsection>
+            <title>(*) References</title>
+
+            <p></p>
+        </subsection>
+
+        <subsection>
+            <title>(*) Automatic Lists</title>
+
+            <p></p>
+        </subsection>
+
+        <subsection>
+            <title>(*) Solutions</title>
+
+            <p></p>
+        </subsection>
+
+        <subsection>
+            <title>(*) Index</title>
+
+            <p></p>
+        </subsection>
+
+        <subsection>
+            <title>(*) Colophon</title>
+
+            <p></p>
+        </subsection>
     </section>
 
     <section xml:id="topic-index">
