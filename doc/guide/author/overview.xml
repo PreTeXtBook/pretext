@@ -338,15 +338,16 @@
         <title>Front Matter</title>
         <idx>front matter</idx>
 
-        <p>In the beginning of your <tag>book</tag> or <tag>article</tag> you can have a <tag>frontmatter</tag><idx>front matter</idx> element that contains various items that would precede your first <tag>chapter</tag> or <tag>section</tag> (respectively).  Possibilities include <tag>titlepage</tag>, <tag>colophon</tag>, <tag>biography</tag>, <tag>abstract</tag>, <tag>dedication</tag>, <tag>acknowledgment</tag>, <tag>foreword</tag>, and <tag>preface</tag>.  Some of these may be duplicated (<eg /> several prefaces for multiple editions), many of these items are restricted to books (<eg /> a foreword), and some items are restricted to articles (<eg /> an abstract).  The DTD (<xref provisional="dtd-info" />) will help you place them in the right order in your source.  See <xref ref="topic-front-back-matter" /> for details.</p>
+        <p>In the beginning of your <tag>book</tag> or <tag>article</tag> you can have a <tag>frontmatter</tag><idx>front matter</idx> element that contains various items that would precede your first <tag>chapter</tag> or <tag>section</tag> (respectively).  Possibilities include <tag>titlepage</tag>, <tag>colophon</tag>, <tag>biography</tag>, <tag>abstract</tag>, <tag>dedication</tag>, <tag>acknowledgment</tag>, <tag>foreword</tag>, and <tag>preface</tag>.  Some of these may be duplicated (e.g., several prefaces for multiple editions), many of these items are restricted to books (e.g., a foreword), and some items are restricted to articles (e.g., an abstract).  The schema (<xref ref="schema"/>) will help you place them in the right order in your source.  See <xref ref="topic-front-matter"/> for details.</p>
 
+        <p>The <tag>frontmatter</tag> is also employed in other types of documents, such as a <tag>slideshow</tag>, in similar, but not identical, ways.</p>
     </section>
 
     <section xml:id="overview-backmatter">
         <title>Back Matter</title>
         <idx>back matter</idx>
 
-        <p>Similar to front matter, there is material you might wish to include after your book's final <tag>chapter</tag> or your article's final <tag>section</tag>.  Possibilities to place in a <tag>backmatter</tag><idx>back matter</idx> include <tag>appendix</tag>, <tag>references</tag>, <tag>index-part</tag>, and <tag>colophon</tag>.  There are empty tags you can place into an appendix to generate lists of notation, or lists of particular elements of your choice, such as a list of figures.  A similar empty element actually generates the index, <tage>index-list</tage>.  See <xref ref="topic-front-back-matter" /> for details on the back matter generally, and <xref ref="topic-automatic-lists" /> for more on automatic lists.</p>
+        <p>Similar to front matter, there is material you might wish to include after your book's final <tag>chapter</tag> or your article's final <tag>section</tag>.  Possibilities to place in a <tag>backmatter</tag><idx>back matter</idx> include <tag>appendix</tag>, <tag>references</tag>, <tag>glossary</tag>, <tag>solutions</tag>, <tag>index</tag>, and <tag>colophon</tag>.  There are empty tags you can place into an appendix to generate lists of notation, or lists of particular elements of your choice, such as a list of figures.  A similar empty element actually generates the index, <tag>index-list</tag>, but you will almost always want to place it into the <tag>index</tag> division.  See <xref ref="topic-back-matter"/> for details on the back matter generally, and <xref ref="topic-automatic-lists"/> for more on automatic lists.</p>
     </section>
 
     <section xml:id="overview-index-notation">
