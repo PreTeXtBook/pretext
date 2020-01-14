@@ -8609,6 +8609,50 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.5/jquery.i18n.language.js"></script>
 
         <script type="text/javascript" src="_static/runestone.js"></script>
+        <style>
+        <xsl:text>.dropdown {&#xa;</xsl:text>
+        <xsl:text>    position: relative;&#xa;</xsl:text>
+        <xsl:text>    display: inline-block;&#xa;</xsl:text>
+        <xsl:text>    height: 39px;&#xa;</xsl:text>
+        <xsl:text>    width: 50px;&#xa;</xsl:text>
+        <xsl:text>    margin-left: auto;&#xa;</xsl:text>
+        <xsl:text>    margin-right: auto;&#xa;</xsl:text>
+        <xsl:text>    padding: 7px;&#xa;</xsl:text>
+        <xsl:text>    text-align: center;&#xa;</xsl:text>
+        <xsl:text>    background-color: #eeeeee;&#xa;</xsl:text>
+        <xsl:text>    border: 1px solid;&#xa;</xsl:text>
+        <xsl:text>    border-color: #aaaaaa;&#xa;</xsl:text>
+        <xsl:text> }&#xa;</xsl:text>
+        <xsl:text> .dropdown-content {&#xa;</xsl:text>
+        <xsl:text>    position: absolute;&#xa;</xsl:text>
+        <xsl:text>    display: none;&#xa;</xsl:text>
+        <xsl:text>    left: 300px;&#xa;</xsl:text>
+        <xsl:text>    text-align: left;&#xa;</xsl:text>
+        <xsl:text>    font-family: 'Open Sans', 'Helvetica Neue', 'Helvetica';&#xa;</xsl:text>
+        <xsl:text>}&#xa;</xsl:text>
+        <xsl:text>.dropdown:hover {&#xa;</xsl:text>
+        <xsl:text>    background-color: #ddd;&#xa;</xsl:text>
+        <xsl:text>}&#xa;</xsl:text>
+        <xsl:text>.dropdown:hover .dropdown-content {&#xa;</xsl:text>
+        <xsl:text>    display: block;&#xa;</xsl:text>
+        <xsl:text>    position: fixed;&#xa;</xsl:text>
+        <xsl:text>}&#xa;</xsl:text>
+        <xsl:text>.dropdown-content {&#xa;</xsl:text>
+        <xsl:text>    background-color: white;&#xa;</xsl:text>
+        <xsl:text>    z-index: 1800;&#xa;</xsl:text>
+        <xsl:text>    min-width: 100px;&#xa;</xsl:text>
+        <xsl:text>    padding: 5px;&#xa;</xsl:text>
+        <xsl:text>}&#xa;</xsl:text>
+        <xsl:text>.dropdown-content a {&#xa;</xsl:text>
+        <xsl:text>    display: block;&#xa;</xsl:text>
+        <xsl:text>    text-decoration: none;&#xa;</xsl:text>
+        <xsl:text>    color: #662211;&#xa;</xsl:text>
+        <xsl:text>}&#xa;</xsl:text>
+        <xsl:text>.dropdown-content a:hover {&#xa;</xsl:text>
+        <xsl:text>    background-color: #671d12;&#xa;</xsl:text>
+        <xsl:text>    color: #ffffff;&#xa;</xsl:text>
+        <xsl:text>}&#xa;</xsl:text>
+        </style>
     </xsl:if>
 </xsl:template>
 
@@ -10183,6 +10227,54 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                             <xsl:if test="$b-has-calculator">
                                 <xsl:call-template name="calculator-toggle" />
                                 <xsl:call-template name="calculator" />
+                            </xsl:if>
+                            <!-- Runestone user menu -->
+                            <!-- "Bust w/ Silhoutte" is U+1F464, used as menu icon    -->
+                            <!-- Templating {{ and }} really wreak havoc in  a/@href  -->
+                            <!-- since the outer pair looks like an AVT and the inner -->
+                            <!-- pair gets percent-encoded (which we cannot control   -->
+                            <!-- in XSLT 1.0). So we use the odd delimiters defined   -->
+                            <!-- above and Runestone will use them instead            -->
+                            <xsl:if test="$b-host-runestone">
+                                <div class="dropdown">
+                                    <xsl:text>&#x1F464;</xsl:text>
+                                    <div class="dropdown-content">
+                                        <xsl:text>&#xa;</xsl:text>
+                                        <xsl:value-of select="$rso"/><xsl:text> if auth.user: </xsl:text><xsl:value-of select="$rsc"/><xsl:text>&#xa;</xsl:text>
+                                        <a href="{$rso}=URL('assignments','chooseAssignment'){$rsc}">Assignments</a>
+                                        <a href="{$rso}=URL('assignments','practice'){$rsc}">Practice</a>
+                                        <xsl:value-of select="$rso"/><xsl:text> if settings.academy_mode: </xsl:text><xsl:value-of select="$rsc"/><xsl:text>&#xa;</xsl:text>
+                                        <hr/>
+                                        <a href='/{$rso}=request.application{$rsc}/default/courses'>Change Course</a>
+                                        <xsl:text>&#xa;</xsl:text>
+                                        <xsl:value-of select="$rso"/><xsl:text> pass </xsl:text><xsl:value-of select="$rsc"/><xsl:text>&#xa;</xsl:text>
+                                        <xsl:value-of select="$rso"/><xsl:text> pass </xsl:text><xsl:value-of select="$rsc"/><xsl:text>&#xa;</xsl:text>
+                                        <xsl:value-of select="$rso"/><xsl:text> if auth.user: </xsl:text><xsl:value-of select="$rsc"/><xsl:text>&#xa;</xsl:text>
+                                        <hr/>
+                                        <a href='/{$rso}=request.application{$rsc}/admin/index'>Instructor's Page</a>
+                                        <xsl:text>&#xa;</xsl:text>
+                                        <xsl:value-of select="$rso"/><xsl:text> pass </xsl:text><xsl:value-of select="$rsc"/><xsl:text>&#xa;</xsl:text>
+                                        <hr/>
+                                        <xsl:value-of select="$rso"/><xsl:text> pass </xsl:text><xsl:value-of select="$rsc"/><xsl:text>&#xa;</xsl:text>
+                                        <xsl:value-of select="$rso"/><xsl:text> if not settings.lti_only_mode: </xsl:text><xsl:value-of select="$rsc"/><xsl:text>&#xa;</xsl:text>
+                                        <xsl:value-of select="$rso"/><xsl:text> if auth.user: </xsl:text><xsl:value-of select="$rsc"/><xsl:text>&#xa;</xsl:text>
+                                        <a href="{$rso}=URL('dashboard','studentreport'){$rsc}">Progress Page</a>
+                                        <hr/>
+                                        <a href="/{$rso}=request.application{$rsc}/default/user/profile">Edit Profile</a>
+                                        <a href="/{$rso}=request.application{$rsc}/default/user/change_password">Change Password</a>
+                                        <a href="{$rso}=URL('default','user/logout'){$rsc}">Log Out</a>
+                                        <xsl:text>&#xa;</xsl:text>
+                                        <xsl:value-of select="$rso"/><xsl:text> else: </xsl:text><xsl:value-of select="$rsc"/><xsl:text>&#xa;</xsl:text>
+                                        <a href="{$rso}=URL('default','user/register'){$rsc}">Register</a>
+                                        <a href="{$rso}=URL('default','user/login'){$rsc}">Login</a>
+                                        <xsl:text>&#xa;</xsl:text>
+                                        <xsl:value-of select="$rso"/><xsl:text> pass </xsl:text><xsl:value-of select="$rsc"/><xsl:text>&#xa;</xsl:text>
+                                        <xsl:value-of select="$rso"/><xsl:text> else: </xsl:text><xsl:value-of select="$rsc"/><xsl:text>&#xa;</xsl:text>
+                                        <a href="{$rso}=URL('assignments','index'){$rsc}">Progress Page</a>
+                                        <xsl:text>&#xa;</xsl:text>
+                                        <xsl:value-of select="$rso"/><xsl:text> pass </xsl:text><xsl:value-of select="$rsc"/><xsl:text>&#xa;</xsl:text>
+                                    </div>
+                                </div>
                             </xsl:if>
                             <!-- Span to encase Prev/Up/Next buttons and float right    -->
                             <!-- Each button gets an id for keypress recognition/action -->
