@@ -5605,6 +5605,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="html-filename" select="concat($base-pathname, '.html')" />
 
     <object data="{$html-filename}">
+	      <xsl:attribute name="id">
+	          <xsl:apply-templates select="." mode="visible-id" />
+	      </xsl:attribute>
         <xsl:attribute name="width">
             <xsl:apply-templates select="." mode="get-width-pixels" />
         </xsl:attribute>
