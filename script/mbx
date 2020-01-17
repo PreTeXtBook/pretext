@@ -102,6 +102,18 @@ def asymptote_conversion(xml_source, xmlid_root, dest_dir, outformat):
     for asydiagram in os.listdir(tmp_dir):
         if outformat == 'source':
             shutil.copy2(asydiagram, dest_dir)
+        elif outformat == 'html':
+            filebase, _ = os.path.splitext(asydiagram)
+            asyout = "{}.{}".format(filebase, outformat)
+            asysvg = "{}.svg".format(filebase)
+            asy_cmd = [asy_executable, '-outformat', outformat, asydiagram]
+            _verbose("converting {} to {}".format(asydiagram, asyout))
+            _debug("asymptote conversion {}".format(asy_cmd))
+            subprocess.call(asy_cmd, stdout=devnull, stderr=subprocess.STDOUT)
+            if os.path.exists(asyout) == True:
+                shutil.copy2(asyout, dest_dir)
+            else:
+                shutil.copy2(asysvg, dest_dir)
         else:
             filebase, _ = os.path.splitext(asydiagram)
             asyout = "{}.{}".format(filebase, outformat)
@@ -1454,7 +1466,9 @@ if args.component == 'tikz':
     else:
         raise NotImplementedError('cannot make TikZ pictures in "{}" format'.format(args.format))
 elif args.component == 'asy':
-    if args.format == 'pdf':
+    if args.format == 'html':
+        asymptote_conversion(args.xml_file, args.xmlid, output_dir, 'html')
+    elif args.format == 'pdf':
         asymptote_conversion(args.xml_file, args.xmlid, output_dir, 'pdf')
     elif args.format == 'svg':
         asymptote_conversion(args.xml_file, args.xmlid, output_dir, 'svg')
