@@ -776,8 +776,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% end: pdflatex-specific monospace font&#xa;</xsl:text>
         <xsl:text>}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:text>%% Symbols, align environment, bracket-matrix&#xa;</xsl:text>
+    <xsl:text>%% Symbols, align environment, commutative diagrams, bracket-matrix&#xa;</xsl:text>
     <xsl:text>\usepackage{amsmath}&#xa;</xsl:text>
+    <xsl:text>\usepackage{amscd}&#xa;</xsl:text>
     <xsl:text>\usepackage{amssymb}&#xa;</xsl:text>
     <xsl:text>%% allow page breaks within display mathematics anywhere&#xa;</xsl:text>
     <xsl:text>%% level 4 is maximally permissive&#xa;</xsl:text>
