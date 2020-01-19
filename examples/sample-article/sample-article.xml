@@ -1714,6 +1714,20 @@ the xsltproc executable.
                     <mrow>z^2 \amp = x^2+y^2</mrow>
                 </mdn>Here is a local cross-reference: <xref ref="equation-local-tag" />.  We test another farther away in <xref ref="section-cross-referencing" text="type-global" />, contrary to our advice above.</p>
             </subsection>
+
+            <subsection xml:id="commutative-diagrams">
+                <title>Commutative Diagrams</title>
+
+                <p>This diagram is authored by Tom Judson using the syntax of the <init>AMS</init> <latex/> <q>CD</q> package.  Inside of a <tag>me</tag> element start with <c>\begin{CD}</c>.  Remember to escape the less-than character.
+                    <me>\begin{CD}
+                    E[x]/\langle p(x) \rangle    @>\psi>>  F[x]/\langle q(x) \rangle\\
+                    @VV{\sigma}V        @VV{\tau}V\\
+                    E(\alpha)     @>\overline{\phi}>>  F(\beta)\\
+                    @VVV        @VVV\\
+                    E     @>\phi>>  F
+                    \end{CD}</me>
+                While this package is not as flexible as some generic drawing packages, it has the advantage of full support by MathJax, and thus the <init>HTML</init> version will be more accessible.</p>
+            </subsection>
         </section>
 
         <section xml:id="text-in-paragraphs">
