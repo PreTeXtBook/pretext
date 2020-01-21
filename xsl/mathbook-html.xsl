@@ -9132,7 +9132,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- webwork's iframeResizer needs to come before sage -->
             <xsl:call-template name="webwork" />
             <xsl:apply-templates select="." mode="sagecell" />
-            <xsl:call-template name="goggle-code-prettifier" />
+            <xsl:call-template name="google-code-prettifier" />
             <xsl:call-template name="google-search-box-js" />
             <xsl:call-template name="mathbook-js" />
             <xsl:call-template name="knowl" />
@@ -10404,7 +10404,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Program Listings from Google -->
 <!--   ?skin=sunburst  on end of src URL gives black terminal look -->
-<xsl:template name="goggle-code-prettifier">
+<xsl:template name="google-code-prettifier">
     <xsl:if test="$b-has-program">
         <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
     </xsl:if>
