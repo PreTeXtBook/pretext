@@ -7953,6 +7953,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\textsection{}</xsl:text>
 </xsl:template>
 
+<!-- Minus -->
+<!-- A hyphen/dash for use in text as subtraction or negation-->
+<xsl:template name="minus-character">
+    <xsl:text>\textminus{}</xsl:text>
+</xsl:template>
+
 <!-- Times -->
 <!-- A "multiplication sign" symbol for use in text -->
 <xsl:template name="times-character">
@@ -7971,6 +7977,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- This should not allow a linebreak, not tested -->
 <xsl:template name="solidus-character">
     <xsl:text>\textfractionsolidus{}</xsl:text>
+</xsl:template>
+
+<!-- Obelus -->
+<!-- A "division" symbol for use in text -->
+<xsl:template name="obelus-character">
+    <xsl:text>\textdiv{}</xsl:text>
+</xsl:template>
+
+<!-- Plus/Minus -->
+<!-- The combined symbol -->
+<xsl:template match="plusminus">
+    <xsl:text>\textpm{}</xsl:text>
 </xsl:template>
 
 <!-- Backtick -->

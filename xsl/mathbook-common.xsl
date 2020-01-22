@@ -9548,6 +9548,17 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:call-template name="section-mark-character"/>
 </xsl:template>
 
+<!-- Minus -->
+<!-- A hyphen/dash for use in text as subtraction or negation-->
+<xsl:template name="minus-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'minus'"/>
+    </xsl:call-template>
+</xsl:template>
+<xsl:template match="minus">
+    <xsl:call-template name="minus-character"/>
+</xsl:template>
+
 <!-- Times -->
 <!-- A "multiplication sign" symbol for use in text -->
 <xsl:template name="times-character">
@@ -9576,6 +9587,28 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 </xsl:template>
 <xsl:template match="solidus">
     <xsl:call-template name="solidus-character"/>
+</xsl:template>
+
+<!-- Obelus -->
+<!-- A "division" symbol for use in text -->
+<xsl:template name="obelus-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'obelus'"/>
+    </xsl:call-template>
+</xsl:template>
+<xsl:template match="obelus">
+    <xsl:call-template name="obelus-character"/>
+</xsl:template>
+
+<!-- Plus/Minus -->
+<!-- The combined symbol -->
+<xsl:template name="plusminus-character">
+    <xsl:call-template name="warn-unimplemented-character">
+        <xsl:with-param name="char-name" select="'plusminus'"/>
+    </xsl:call-template>
+</xsl:template>
+<xsl:template match="plusminus">
+    <xsl:call-template name="plusminus-character"/>
 </xsl:template>
 
 <!-- Backtick -->

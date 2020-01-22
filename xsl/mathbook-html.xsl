@@ -7818,6 +7818,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa7;</xsl:text>
 </xsl:template>
 
+<!-- Minus -->
+<!-- A hyphen/dash for use in text as subtraction or negation-->
+<xsl:template name="minus-character">
+    <xsl:text>&#x2212;</xsl:text>
+</xsl:template>
+
 <!-- Times -->
 <!-- A "multiplication sign" symbol for use in text   -->
 <!-- Styled to enhance, consensus at Google Group was -->
@@ -7841,6 +7847,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Fraction bar, not as steep as a forward slash -->
 <xsl:template name="solidus-character">
     <xsl:text>&#x2044;</xsl:text>
+</xsl:template>
+
+<!-- Obelus -->
+<!-- A "division" symbol for use in text -->
+<xsl:template name="obelus-character">
+    <xsl:text>&#xf7;</xsl:text>
+</xsl:template>
+
+<!-- Plus/Minus -->
+<!-- The combined symbol -->
+<xsl:template match="plusminus">
+    <xsl:text>&#xb1;</xsl:text>
 </xsl:template>
 
 <!-- Backtick -->
