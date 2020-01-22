@@ -245,7 +245,7 @@
         <subsection xml:id="topic-character-elements">
             <title>Characters in Paragraphs</title>
 
-            <!-- Unambiguous:  ~, !, @, #, $, %, ^, (, ), _, [, ], {, }, \, |, :, ;, and , -->
+            <!-- Unambiguous:  ~, !, @, #, $, %, ^, (, ), _, =, +, [, ], {, }, \, |, :, ;, and , -->
             <!-- Exceptional:  <, & -->
 
             <!-- fragment names, and their elements, from schema source
@@ -259,7 +259,7 @@
                                   copyright, registered, trademark
             generator:            today, timeofday, tex, latex, pretext, webwork, 
                                   eg, ie, circa, etc
-            arithmetic-character: solidus, times
+            arithmetic-character: minus, solidus, times, obelus, plusminus
             siunit:               (deferred to its own section)
             music-character:      (deferred to its own section)
             -->
@@ -271,7 +271,7 @@
             <subsubsection>
                 <title>Unambiguous Keyboard Characters</title>
 
-                <p>The keyboard characters `, ~, !, @, #, $, %, ^, *, (, ), _, [, ], {, }, \, |, :, ;, and , are entered as-is and are only rendered one way.  Easy.</p>
+                <p>The keyboard characters `, ~, !, @, #, $, %, ^, *, (, ), _, =, +, [, ], {, }, \, |, :, ;, and , are entered as-is and are only rendered one way.  Easy.</p>
 
                 <p>Of course, the fifty-two Latin letters, and ten decimal digits, are also in this category.  If you have an international, or bilingual, or country-specific keyboard, then common accented versions of Latin letters (as used in Europe and the Western Hemisphere) may also be used directly from your keyboard.</p>
             </subsubsection>
@@ -525,6 +525,17 @@
 
                 <p>If you are writing about technical subjects, then you will want to avail yourself of <pretext/>'s extensive support for mathematics.  Otherwise, you may wish to write <em>really simple</em> arithmetic within sentences without extra formatting.  Notice that there is no provision for preventing line-breaks in the midst of these expressions.</p>
 
+                <p>So you can author (2<times/>6)<obelus/>3+10<minus/>15 = -1, but that is about the limit of the complexity of expressions you should author without using the extensive capabilities designed for <em>mathematics</em>, rather than <em>arithmetic</em>.  Note that the spaces around the equal sign have been supplied in the source, but no spaces have been provided around the operators.  Also, the minus sign and the negative are slightly different because the subtraction uses the <tage>minus</tage> element, while the negative answer uses a plain keyboard hyphen/dash.</p>
+
+                <p>Using the <tag>m</tag> element instead, the above is <m>(2\times 6)\div 3+10-15=-1</m>.  Note the more careful spacing, and the appropriate symbols for subtraction and negation, with no special care in the <latex/> syntax used in the source.</p>
+
+                <p>Note also that the plus sign, <c>+</c> and the equals sign, <c>=</c>, can be provided in text as the unambiguous keyboard characters.</p>
+
+                <paragraphs>
+                    <title><tage>minus</tage>, <minus/>, minus, subtraction, negation</title>
+                    <p>For simple arithmetic expressions in text, this symbol may be used.  Note that the keyboard hyhpen (or dash) might be acceptable for your purposes, but they are different.</p>
+                </paragraphs>
+
                 <paragraphs>
                     <title><tage>times</tage>, <times />, times, multiplication</title>
                     <p>For simple arithmetic expressions in text, this symbol may be used.  Or it may be used to specify dimensions, as in <q>I bought a 2<times />4 at the lumber yard.</q></p>
@@ -535,7 +546,16 @@
                     <p>For simple arithmetic expressions in text, this symbol may be used to form a fraction.  It should appear to have a significantly shallower slope than the forward slash, /.</p>
                 </paragraphs>
 
-                <p>So we have <tage>times</tage> and <tage>solidus</tage> and will implement &#xb1; and &#xf7; and then provide examples.</p>
+                <paragraphs>
+                    <title><tage>obelus</tage>, <obelus/>, obelus, division sign</title>
+                    <p>For simple arithmetic expressions in text, this symbol may be used to indicate division.</p>
+                </paragraphs>
+
+                <paragraphs>
+                    <title><tage>plusminus</tage>, <plusminus/>, plus-minus sign</title>
+                    <p>For simple arithmetic expressions in text, this symbol may be used to indicate a tolerance or a choice of two values, one the negative of the other.</p>
+                </paragraphs>
+
                 <!-- 
                 http://gcp.fcaglp.unlp.edu.ar/_media/integrantes:psantamaria:latex:textcomp.pdf
                 + regular
@@ -544,7 +564,7 @@
                 <times/>  \texttimes
                 <solidus/> \textfractionsolidus
                 <division/> F7 \textdiv 
-                <plusminus/>
+                <plusminus/> b1 \textpm
                 -->
             </subsubsection>
 

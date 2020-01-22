@@ -208,7 +208,7 @@
         <idx>nontrivial characters</idx>
         <idx><h>characters</h><h>nontrivial</h></idx>
 
-        <p>Quality typography is more expansive than the limited capabilities of computer keyboards, whose history is rooted in the machines known as typewriters.  Some characters are never present on a keyboard (e.g., a pilcrow), while others are ambiguous.  Is a diagonal line a slash used to separate information (either/or), or is it a solidus used to form a simple fraction such as 3<solidus/>4? <xref ref="table-nontrivial-characters"/> is a <em>sample</em> of how <pretext/> addresses this.  (The last two lines are the technical exceptions imposed by using a markup language, see <xref ref="overview-special-characters"/>.) See <xref ref="topic-paragraphs"/> for a more comprehensive and detailed discussion.</p>
+        <p>Quality typography is more expansive than the limited capabilities of computer keyboards, whose history is rooted in the machines known as typewriters.  Some characters are never present on a keyboard (e.g., a pilcrow), while others are ambiguous.  Is a diagonal line a slash used to separate information (either/or), or is it a solidus used to form a simple fraction such as 3<solidus/>4? <xref ref="table-nontrivial-characters"/> is a <em>sample</em> of how <pretext/> addresses this.  (The last two are the technical exceptions imposed by using a markup language, see <xref ref="overview-special-characters"/>.) See <xref ref="topic-paragraphs"/> for a more comprehensive and detailed discussion.</p>
 
         <table xml:id="table-nontrivial-characters">
             <title>Nontrivial Characters</title>
@@ -267,16 +267,22 @@
                     <cell><tage>midpoint</tage></cell>
                 </row>
                 <row>
-                    <cell><solidus/></cell>
-                    <cell><tage>solidus</tage></cell>
+                    <cell><trademark/></cell>
+                    <cell><tage>trademark</tage></cell>
                     <cell><swungdash/></cell>
                     <cell><tage>swungdash</tage></cell>
                 </row>
                 <row>
                     <cell><times/></cell>
                     <cell><tage>times</tage></cell>
-                    <cell><trademark/></cell>
-                    <cell><tage>trademark</tage></cell>
+                    <cell><plusminus/></cell>
+                    <cell><tage>plusminus</tage></cell>
+                </row>
+                <row>
+                    <cell><solidus/></cell>
+                    <cell><tage>solidus</tage></cell>
+                    <cell><obelus/></cell>
+                    <cell><tage>obelus</tage></cell>
                 </row>
                 <row>
                     <cell>&amp;</cell>
