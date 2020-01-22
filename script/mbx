@@ -102,14 +102,18 @@ def asymptote_conversion(xml_source, xmlid_root, dest_dir, outformat):
     for asydiagram in os.listdir(tmp_dir):
         if outformat == 'source':
             shutil.copy2(asydiagram, dest_dir)
-	elif outformat == 'html':
-	    filebase, _ = os.path.splitext(asydiagram)
+        elif outformat == 'html':
+            filebase, _ = os.path.splitext(asydiagram)
             asyout = "{}.{}".format(filebase, outformat)
-	    asy_cmd = [asy_executable, '-outformat', outformat, asydiagram]
-	    _verbose("converting {} to {}".format(asydiagram, asyout))
+            asysvg = "{}.svg".format(filebase)
+            asy_cmd = [asy_executable, '-outformat', outformat, asydiagram]
+            _verbose("converting {} to {}".format(asydiagram, asyout))
             _debug("asymptote conversion {}".format(asy_cmd))
             subprocess.call(asy_cmd, stdout=devnull, stderr=subprocess.STDOUT)
-            shutil.copy2(asyout, dest_dir)
+            if os.path.exists(asyout) == True:
+                shutil.copy2(asyout, dest_dir)
+            else:
+                shutil.copy2(asysvg, dest_dir) 
         else:
             filebase, _ = os.path.splitext(asydiagram)
             asyout = "{}.{}".format(filebase, outformat)
