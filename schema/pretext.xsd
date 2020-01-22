@@ -2923,8 +2923,11 @@
         <xs:element ref="lq"/>
       </xs:choice>
       <xs:choice>
-        <xs:element ref="solidus"/>
+        <xs:element ref="minus"/>
         <xs:element ref="times"/>
+        <xs:element ref="solidus"/>
+        <xs:element ref="obelus"/>
+        <xs:element ref="plusminus"/>
       </xs:choice>
       <xs:choice>
         <xs:element ref="ellipsis"/>
@@ -2961,10 +2964,19 @@
   <xs:element name="lq">
     <xs:complexType/>
   </xs:element>
-  <xs:element name="solidus">
+  <xs:element name="minus">
     <xs:complexType/>
   </xs:element>
   <xs:element name="times">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="solidus">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="obelus">
+    <xs:complexType/>
+  </xs:element>
+  <xs:element name="plusminus">
     <xs:complexType/>
   </xs:element>
   <xs:element name="ellipsis">

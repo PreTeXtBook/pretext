@@ -410,12 +410,15 @@
             FillIn
         </fragment>
 
-        <p>We define a few characters to help with simple expressions in arithmetic.  The <term>solidus</term> is slightly different from the <term>slash</term> found on a keyboard and is used for fractions and ratios.  These are for simple uses in regular text, not for actual mathematics, which is described later.</p>
+        <p>We define a few characters to help with simple arithmetic expressions authored withing regular text.    These are for simple uses in regular text, not for actual mathematics, which is described later.  The <term>solidus</term> is slightly different from the <term>slash</term> found on a keyboard and is used for fractions and ratios.  The <tage>minus</tage> is for subtraction and negation, and is not a hyphen or dash.  An <term>obelus</term> is better known as a division sign.</p>
 
         <fragment xml:id="arithmetic-character">
         Character |=
+            element minus {empty} |
+            element times {empty} |
             element solidus {empty} |
-            element times {empty}
+            element obelus {empty} |
+            element plusminus {empty}
         </fragment>
 
         <p>The following are largely conveniences.  They are typically not available on keyboards, and their implementations for various conversions can involve some subtleties.  Again, their use is encouraged for the best quality output.</p>

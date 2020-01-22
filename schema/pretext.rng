@@ -3166,10 +3166,19 @@
   </define>
   <define name="Character" combine="choice">
     <choice>
-      <element name="solidus">
+      <element name="minus">
         <empty/>
       </element>
       <element name="times">
+        <empty/>
+      </element>
+      <element name="solidus">
+        <empty/>
+      </element>
+      <element name="obelus">
+        <empty/>
+      </element>
+      <element name="plusminus">
         <empty/>
       </element>
     </choice>

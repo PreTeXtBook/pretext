@@ -1421,8 +1421,11 @@
         
             
         Character |=
+            element minus {empty} |
+            element times {empty} |
             element solidus {empty} |
-            element times {empty}
+            element obelus {empty} |
+            element plusminus {empty}
         
             
         Character |=
