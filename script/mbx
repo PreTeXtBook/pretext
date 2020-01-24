@@ -99,6 +99,19 @@ def asymptote_conversion(xml_source, xmlid_root, dest_dir, outformat):
     cwd = os.getcwd()
     os.chdir(tmp_dir)
     devnull = open(os.devnull, 'w')
+    # perhaps replace following stock advisory with a real version
+    # check using the (undocumented) distutils.version module, see:
+    # https://stackoverflow.com/questions/11887762/how-do-i-compare-version-numbers-in-python
+    if outformat == 'html':
+        # https://stackoverflow.com/questions/4514751/pipe-subprocess-standard-output-to-a-variable
+        proc = subprocess.Popen([asy_executable, '--version'], stderr=subprocess.PIPE)
+        asyversion = proc.stderr.read()
+        _verbose("#####################################################")
+        _verbose("Asymptote 3D HTML output is experimental (2020-01-24)")
+        _verbose("it is only supported by Asymptote 2.62 and")
+        _verbose("newer, your Asymptote executable in use reports:")
+        _verbose(asyversion)
+        _verbose("#####################################################")
     for asydiagram in os.listdir(tmp_dir):
         if outformat == 'source':
             shutil.copy2(asydiagram, dest_dir)
