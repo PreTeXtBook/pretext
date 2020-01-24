@@ -8623,6 +8623,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="book" mode="runestone-manifest">
     <exsl:document href="runestone-manifest.xml" method="xml" indent="yes" encoding="UTF-8">
         <manifest>
+            <!-- LaTeX packages and macros first -->
+            <latex-macros>
+                <xsl:text>&#xa;</xsl:text>
+                <xsl:value-of select="$latex-packages-mathjax"/>
+                <xsl:value-of select="$latex-macros"/>
+            </latex-macros>
+            <!-- Now recurse into chapters   -->
             <xsl:apply-templates select="*" mode="runestone-manifest"/>
         </manifest>
     </exsl:document>
