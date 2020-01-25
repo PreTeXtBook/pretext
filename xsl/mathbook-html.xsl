@@ -8512,22 +8512,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<xsl:template name="login-header">
-    <link href="{$html.css.server}/css/{$html.css.version}/features.css" rel="stylesheet" type="text/css"/>
-    <script>
-        <xsl:text>var logged_in = false;&#xa;</xsl:text>
-        <xsl:text>var role = 'student';&#xa;</xsl:text>
-        <xsl:text>var guest_access = true;&#xa;</xsl:text>
-        <xsl:text>var login_required = false;&#xa;</xsl:text>
-        <xsl:text>var js_version = </xsl:text>
-        <xsl:value-of select='$html.js.version'/>
-        <xsl:text>;&#xa;</xsl:text>
-    </script>
+<xsl:template name="aim-login-header">
+    <xsl:if test="$b-host-aim">
+        <link href="{$html.css.server}/css/{$html.css.version}/features.css" rel="stylesheet" type="text/css"/>
+        <script>
+            <xsl:text>var logged_in = false;&#xa;</xsl:text>
+            <xsl:text>var role = 'student';&#xa;</xsl:text>
+            <xsl:text>var guest_access = true;&#xa;</xsl:text>
+            <xsl:text>var login_required = false;&#xa;</xsl:text>
+            <xsl:text>var js_version = </xsl:text>
+            <xsl:value-of select='$html.js.version'/>
+            <xsl:text>;&#xa;</xsl:text>
+        </script>
+    </xsl:if>
 </xsl:template>
 
-<xsl:template name="login-footer">
-    <div class="login-link"><span id="loginlogout" class="login">login</span></div>
-    <script src="{$html.js.server}/js/{$html.js.version}/login.js"></script>
+<xsl:template name="aim-login-footer">
+    <xsl:if test="$b-host-aim">
+        <div class="login-link"><span id="loginlogout" class="login">login</span></div>
+        <script src="{$html.js.server}/js/{$html.js.version}/login.js"></script>
+    </xsl:if>
 </xsl:template>
 
 <!-- Console Session -->
@@ -9547,7 +9551,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="geogebra" />
             <xsl:call-template name="jsxgraph" />
             <xsl:call-template name="css" />
-            <xsl:call-template name="login-header" />
+            <xsl:call-template name="aim-login-header" />
             <xsl:call-template name="pytutor-header" />
             <xsl:call-template name="runestone-header"/>
             <xsl:call-template name="font-awesome" />
@@ -9630,7 +9634,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="google-universal"/>
             <xsl:call-template name="google-gst"/>
             <xsl:call-template name="pytutor-footer" />
-            <xsl:call-template name="login-footer" />
+            <xsl:call-template name="aim-login-footer" />
         </body>
     </html>
     </exsl:document>
