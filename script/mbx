@@ -119,6 +119,7 @@ def asymptote_conversion(xml_source, xmlid_root, dest_dir, outformat):
             filebase, _ = os.path.splitext(asydiagram)
             asyout = "{}.{}".format(filebase, outformat)
             asysvg = "{}.svg".format(filebase)
+            asypng = "{}_*.png".format(filebase)
             asy_cmd = [asy_executable, '-outformat', outformat, asydiagram]
             _verbose("converting {} to {}".format(asydiagram, asyout))
             _debug("asymptote conversion {}".format(asy_cmd))
@@ -127,6 +128,9 @@ def asymptote_conversion(xml_source, xmlid_root, dest_dir, outformat):
                 shutil.copy2(asyout, dest_dir)
             else:
                 shutil.copy2(asysvg, dest_dir)
+                # Sometimes Asymptotes SVGs include multiple PNGs for colored regions
+                for f in glob.glob(asypng):
+                    shutil.copy2(f, dest_dir)
         else:
             filebase, _ = os.path.splitext(asydiagram)
             asyout = "{}.{}".format(filebase, outformat)
