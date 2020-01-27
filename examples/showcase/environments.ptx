@@ -8,6 +8,21 @@
 <section xml:id="environments">
   <title>Environments</title>
   <author>Oscar Levin</author>
+  <objectives>
+    <ul>
+      <li>
+        <p>
+          Demonstrate block environments.
+        </p>
+      </li>
+      <li>
+        <p>
+          Illustrate styling.
+        </p>
+      </li>
+    </ul>
+  </objectives>
+
   <introduction>
     <p>
       This section will demonstrate some of the <q>environments</q> available in <pretext />.  In addition to cataloging the options an author has to break up content, this will be a nice place to play with various styles that are under development. 
@@ -15,21 +30,7 @@
     <p>
       Maybe a better way to describe what this section will do is by specifying our objectives.  Luckily there is an environment for that.
     </p>
-    <objectives>
-      <ul>
-        <li>
-          <p>
-            Illustrate the various environments (blocks) available in <pretext />.
-          </p>
-        </li>
-        <li>
-          <p>
-            Provide a section that can be used to evaluate new styles.
-          </p>
-        </li>
-      </ul>
-    </objectives>
-    
+
   </introduction>
   <subsection>
     <title>Traditional Structure</title>
@@ -133,8 +134,8 @@
     </example>
 
     <p>
-      Returning to our main goal of establishing new mathematical theory, we might next state an axiom or two (especially if we are named <personname>Euclid</personname>).  In <pretext /> the environments for axioms are not <q>definition-like</q> (the only definition-like environment is a definition).  There are quite a few <q>axiom-like</q> environments.
-    </p>  
+      Returning to our main goal of establishing new mathematical theory, we might next state an axiom or two (especially if we are named Euclid).  In <pretext /> the environments for axioms are not <q>definition-like</q> (the only definition-like environment is a definition).  There are quite a few <q>axiom-like</q> environments.
+    </p>
     <axiom xml:id="axiom-example">
       <statement>
         <p>
@@ -230,26 +231,24 @@
     <assemblage xml:id="assemblage-example">
       <title>Types of environments</title>
       <p>
-        <p>
-          <pretext /> allows for a variety of environments:
-          <ul>
-            <li>
-              <p>
-              Definitions
-              </p>
-            </li>
-            <li>
-              <p>
-              Theorem-like environments
-              </p>
-            </li>
-            <li>
-              <p>
-              Assemblages, to assemble or summarize important connected ideas.
-              </p>
-            </li>
-          </ul>
-        </p>
+        <pretext /> allows for a variety of environments:
+        <ul>
+          <li>
+            <p>
+            Definitions
+            </p>
+          </li>
+          <li>
+            <p>
+            Theorem-like environments
+            </p>
+          </li>
+          <li>
+            <p>
+            Assemblages, to assemble or summarize important connected ideas.
+            </p>
+          </li>
+        </ul>
       </p>
     </assemblage>
 
