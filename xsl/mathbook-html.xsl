@@ -63,6 +63,41 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:output method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat" />
 
+<!-- ############### -->
+<!-- Source Assembly -->
+<!-- ############### -->
+
+<!-- By "assembly" we mean pre-processing of source, by "assembling" -->
+<!-- various pieces of material or content, authored or computed,    -->
+<!-- into an enhanced source tree.                                   -->
+
+<!-- First, we have a template which duplicates the source exactly. -->
+<!-- Various conversions may override this template in various ways -->
+<!-- to create enhanced source trees.                               -->
+<!-- Walk the tree, copying everything as-is, except   -->
+<!-- where an "assemble" template provides adjustments -->
+<xsl:template match="node()|@*" mode="assemble">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="assemble"/>
+    </xsl:copy>
+</xsl:template>
+
+<!-- This makes the new tree as a (text) result tree fragment -->
+<!-- and then we convert it into real XML nodes.              -->
+<xsl:variable name="duplicate-rtf">
+    <xsl:apply-templates select="/" mode="assemble"/>
+</xsl:variable>
+<xsl:variable name="duplicate" select="exsl:node-set($duplicate-rtf)"/>
+
+<!-- -common defines a "$root" which is the overall named element. -->
+<!-- We override it here and then -common will define some derived -->
+<!-- variables based upon it                                       -->
+<xsl:variable name="root" select="$duplicate/mathbook|$duplicate/pretext" />
+
+<!-- When building the duplicate, we have occasion -->
+<!-- to inspect the orginal in various places      -->
+<xsl:variable name="original" select="/mathbook|/pretext"/>
+
 <!-- ##################### -->
 <!-- HTML-Specific Options -->
 <!-- ##################### -->
@@ -761,8 +796,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="mathbook|pretext" mode="deprecation-warnings" />
     <!-- Usually no manifest is created -->
     <xsl:call-template name="runestone-manifest"/>
-    <!-- The main event -->
-    <xsl:apply-templates />
+    <!-- The main event                          -->
+    <!-- We process the enhanced source pointed  -->
+    <!-- to by $root at  /mathbook  or  /pretext -->
+    <xsl:apply-templates select="$root"/>
 </xsl:template>
 
 <!-- We process structural nodes via chunking routine in xsl/mathbook-common.xsl    -->
