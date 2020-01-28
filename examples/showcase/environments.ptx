@@ -8,28 +8,29 @@
 <section xml:id="environments">
   <title>Environments</title>
   <author>Oscar Levin</author>
+  <objectives>
+    <ul>
+      <li>
+        <p>
+          Demonstrate block environments.
+        </p>
+      </li>
+      <li>
+        <p>
+          Illustrate styling.
+        </p>
+      </li>
+    </ul>
+  </objectives>
+
   <introduction>
     <p>
-      This section will demonstrate some of the <q>environments</q> available in <pretext />.  In addition to cataloging the options an author has to break up content, this will be a nice place to play with various styles that are under development. 
+      This section will demonstrate some of the <q>environments</q> available in <pretext />.  In addition to cataloging the options an author has to break up content, this will be a nice place to play with various styles that are under development.
     </p>
     <p>
       Maybe a better way to describe what this section will do is by specifying our objectives.  Luckily there is an environment for that.
     </p>
-    <objectives>
-      <ul>
-        <li>
-          <p>
-            Illustrate the various environments (blocks) available in <pretext />.
-          </p>
-        </li>
-        <li>
-          <p>
-            Provide a section that can be used to evaluate new styles.
-          </p>
-        </li>
-      </ul>
-    </objectives>
-    
+
   </introduction>
   <subsection>
     <title>Traditional Structure</title>
@@ -37,7 +38,7 @@
       Many mathematics papers and textbook chapters are organized in the traditional definition-lemma-proof-theorem-proof format.  Depending on how friendly the paper is, or who the intended audience is, there might be quite a bit of exposition surrounding these elements.  This subsection is intended to be an illustration of this structure.
     </p>
     <p>
-      We begin with some basic definitions.  Depending on the narrative style of your text, you might want to define terms in the middle of paragraphs.  We might call this an  <term>inline definition</term>, which can be accomplished using the <tag>term</tag> tag.  
+      We begin with some basic definitions.  Depending on the narrative style of your text, you might want to define terms in the middle of paragraphs.  We might call this an  <term>inline definition</term>, which can be accomplished using the <tag>term</tag> tag.
     </p>
 
     <p>
@@ -68,7 +69,7 @@
 
     <example>
       <p>
-        This example is an example of an example that stands alone.  It does not have a question in it, so it does not need a solution.  
+        This example is an example of an example that stands alone.  It does not have a question in it, so it does not need a solution.
       </p>
       <p>
         Of course examples can consist of more than one paragraph, as this is also an example of.  In fact, we could put an ordered list of things that could go in an example:
@@ -133,12 +134,12 @@
     </example>
 
     <p>
-      Returning to our main goal of establishing new mathematical theory, we might next state an axiom or two (especially if we are named <personname>Euclid</personname>).  In <pretext /> the environments for axioms are not <q>definition-like</q> (the only definition-like environment is a definition).  There are quite a few <q>axiom-like</q> environments.
-    </p>  
+      Returning to our main goal of establishing new mathematical theory, we might next state an axiom or two (especially if we are named Euclid).  In <pretext /> the environments for axioms are not <q>definition-like</q> (the only definition-like environment is a definition).  There are quite a few <q>axiom-like</q> environments.
+    </p>
     <axiom xml:id="axiom-example">
       <statement>
         <p>
-          Axiom-like environments consist of: axiom, conjecture, principle, heuristic, hypothesis, and assumption.  
+          Axiom-like environments consist of: axiom, conjecture, principle, heuristic, hypothesis, and assumption.
         </p>
       </statement>
     </axiom>
@@ -154,7 +155,7 @@
       </statement>
     </lemma>
     <p>
-      The lemma above did not have a proof, since it's proof is obvious.  
+      The lemma above did not have a proof, since it's proof is obvious.
     </p>
     <lemma xml:id="lem-with-proof">
       <statement>
@@ -187,8 +188,8 @@
        <p>
          This is an example of how you might interject an example before completing a proof.  As such it is put between the statement of the theorem and its proof.
        </p>
-     </example> 
-      
+     </example>
+
     <p>
       Note that if you don't give a proof a title, it will get titled <q>proof</q> automatically.  It makes sense to put a custom title in this case since you are referring to a proof of the a theorem that was stated without proof earlier.
     </p>
@@ -196,7 +197,7 @@
     <proof>
       <title>Proof of <xref ref="thm-example"/></title>
       <p>
-        Let <m>P</m> be as described in the theorem. By the lemmas, <m>P</m> is true.   
+        Let <m>P</m> be as described in the theorem. By the lemmas, <m>P</m> is true.
       </p>
       <p>
         Therefore, <m>P</m>.
@@ -230,26 +231,24 @@
     <assemblage xml:id="assemblage-example">
       <title>Types of environments</title>
       <p>
-        <p>
-          <pretext /> allows for a variety of environments:
-          <ul>
-            <li>
-              <p>
-              Definitions
-              </p>
-            </li>
-            <li>
-              <p>
-              Theorem-like environments
-              </p>
-            </li>
-            <li>
-              <p>
-              Assemblages, to assemble or summarize important connected ideas.
-              </p>
-            </li>
-          </ul>
-        </p>
+        <pretext /> allows for a variety of environments:
+        <ul>
+          <li>
+            <p>
+            Definitions
+            </p>
+          </li>
+          <li>
+            <p>
+            Theorem-like environments
+            </p>
+          </li>
+          <li>
+            <p>
+            Assemblages, to assemble or summarize important connected ideas.
+            </p>
+          </li>
+        </ul>
       </p>
     </assemblage>
 
@@ -325,7 +324,7 @@
       </statement>
     </fact>
     <p>
-      In addition to <tag>example</tag>, <pretext /> provides two more <q>example-like</q> environments: question and problem.  
+      In addition to <tag>example</tag>, <pretext /> provides two more <q>example-like</q> environments: question and problem.
     </p>
 
   </subsection>
@@ -333,7 +332,7 @@
   <subsection xml:id="subsec-the-rest">
     <title>Inquiry Based Structure</title>
     <p>
-      Another way you might structure a chapter is to give students more opportunities to actively engage in the material.  You might give a long list of definitions, and then a list of theorems to prove.  That would look a lot like the previous section (perhaps with fewer paragraphs between elements).  
+      Another way you might structure a chapter is to give students more opportunities to actively engage in the material.  You might give a long list of definitions, and then a list of theorems to prove.  That would look a lot like the previous section (perhaps with fewer paragraphs between elements).
     </p>
     <p>
       Alternatively, you can mix inquiry based learning (<acro>IBL</acro>) structure into a more traditionally formatted section using appropriate environments.  You might start a section with an <tag>activity</tag>, for example.
@@ -344,11 +343,11 @@
           Make a list of all the project-like environments, such as this activity.
         </p>
       </statement>
-    </activity>   
+    </activity>
 
     <p>
       You might want to break down the activity into smaller tasks, which can be done by specifying each <tag>task</tag>, as in the following project.
-    </p> 
+    </p>
 
     <project>
       <introduction>
@@ -398,7 +397,7 @@
     </project>
 
     <p>
-      Of course you might still have definitions, theorems, and examples in a document like this.  
+      Of course you might still have definitions, theorems, and examples in a document like this.
     </p>
 
     <definition xml:id="def-inquiry">
@@ -421,7 +420,7 @@
       </statement>
       <solution>
         <p>
-          No, but it could.  
+          No, but it could.
         </p>
       </solution>
     </example>
@@ -444,7 +443,7 @@
     </exercise>
 
     <p>
-      Of course, in this style of document, collecting important ideas is especially important. 
+      Of course, in this style of document, collecting important ideas is especially important.
     </p>
 
     <assemblage xml:id="assemblage-ibl">
