@@ -41,6 +41,7 @@
   </theorem>
 
   <example>
+    <title>Sylow-<m>3</m> subgroups, group of order <m>45</m></title>
     <p>
       If <m>G</m> is a group of order <m>45</m>, how many Sylow-<m>3</m> subgroups could <m>G</m> have?
     </p>
@@ -55,6 +56,7 @@
   </example>
 
   <exercise>
+    <title>Sylow-<m>7</m> subgroups, group of order <m>63</m></title>
     <statement>
       <p>
         If <m>G</m> is a group of order <m>63</m>, how many Sylow-<m>7</m> subgroups could <m>G</m> have?
@@ -83,6 +85,7 @@
   </exercise>
 
   <exercise>
+    <title>Sylow-<m>3</m> subgroups, group of order <m>63</m></title>
     <statement>
       <p>
         If <m>G</m> is a group of order <m>63</m>, how many Sylow-<m>3</m> subgroups could <m>G</m> have?
