@@ -88,6 +88,32 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="filebase">
         <xsl:apply-templates select=".." mode="visible-id" />
     </xsl:variable>
+    <!-- output a Python 2-tuple, with separators, etc -->
+    <!--   (filename, '2D'|'3D'),                      -->
+    <!-- for use in Python mbx script                  -->
+    <!-- will need list structure upon receipt         -->
+    <xsl:text>('</xsl:text>
+    <xsl:value-of select="$filebase"/>
+    <xsl:text>.asy'</xsl:text>
+    <xsl:text>, '</xsl:text>
+    <!-- construct dimension of diagram for "mbx" script -->
+    <xsl:choose>
+        <!-- author-provided as authoritative -->
+        <xsl:when test="@dimension = 2">
+            <xsl:text>2D</xsl:text>
+        </xsl:when>
+        <xsl:when test="@dimension = 3">
+            <xsl:text>3D</xsl:text>
+        </xsl:when>
+        <!-- otherwise, make an intelligent guess, -->
+        <!-- including bad input in attribute      -->
+        <xsl:otherwise>
+            <xsl:call-template name="asymptote-3d">
+                <xsl:with-param name="code" select="concat(., '&#xa;')"/>
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>'), </xsl:text>
     <exsl:document href="{$scratch}/{$filebase}.asy" method="text">
         <xsl:text>usepackage("amsmath");&#xa;</xsl:text>
         <xsl:text>texpreamble("&#xa;</xsl:text>
