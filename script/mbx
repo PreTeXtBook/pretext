@@ -94,8 +94,11 @@ def asymptote_conversion(xml_source, xmlid_root, dest_dir, outformat):
         os.path.join(mbx_xsl_dir, 'extract-asymptote.xsl'),
         xml_source
         ]
+    # stylesheet uses variable-subtree infrastructure, so we get list
+    # items, but not the list structure itself.  Easily remedied
     _verbose("extracting Asymptote diagrams from {}".format(xml_source))
-    subprocess.call(extract_cmd)
+    diagram_list = '[' + subprocess.check_output(extract_cmd).decode('ascii') + ']'
+    diagrams = eval(diagram_list)
     cwd = os.getcwd()
     os.chdir(tmp_dir)
     devnull = open(os.devnull, 'w')
@@ -112,7 +115,13 @@ def asymptote_conversion(xml_source, xmlid_root, dest_dir, outformat):
         _verbose("newer, your Asymptote executable in use reports:")
         _verbose(asyversion)
         _verbose("#####################################################")
-    for asydiagram in os.listdir(tmp_dir):
+    # every diagram should be a *.asy file in tmp_dir, which is cwd
+    # we loop over the list, rather than the directory,
+    # so as to have extra info, such as the target dimension
+    for diagram in diagrams:
+        asydiagram = diagram[0]
+        # can condition processing on diagram[1]
+        # which is a string: '2D' or '3D'
         if outformat == 'source':
             shutil.copy2(asydiagram, dest_dir)
         elif outformat == 'html':
