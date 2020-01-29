@@ -2028,7 +2028,216 @@ the xsltproc executable.
 
                 <p>Your text can include specialized text meant to look like a key on the keyboard of a calculator or other device.  So you can go <kbd>b</kbd> <kbd>Enter</kbd> <kbd>&lt;</kbd> or <kbd>F1</kbd>.  Or maybe a sequence as: <kbd>Tab</kbd> &gt; <kbd>Ctrl</kbd> &gt; <kbd>T</kbd>.  Use the <tag>kbd</tag> element, with the label of the key as content.</p>
 
-                <p>There is a growing supply of keys which are labeled with graphics rather than text, such as a left arrow <kbd name="left"/>, right arrow <kbd name="right"/>, up arrow <kbd name="up"/>, down arrow <kbd name="down"/>, and Enter <kbd name="enter"/>.  See <pubtitle>The <pretext/> Guide</pubtitle> for the definitive list.</p>
+                <p>There is a growing supply of keys which are labeled with graphics rather than text, such as a left arrow <kbd name="left"/>, right arrow <kbd name="right"/>, up arrow <kbd name="up"/>, down arrow <kbd name="down"/>, and Enter <kbd name="enter"/>.  See <pubtitle>The <pretext/> Guide</pubtitle> for the definitive list.  In <xref ref="named-keyboard-keys"/> the literal column means the symbol/character is the content of a <tag>kbd</tag> element, while the named column means the symbol/character has been chosen via the value of the <attr>name</attr> attribute of an empty <tage>kbd</tage> element.</p>
+
+                <table>
+                <title>Named keys</title>
+                    <tabular halign="center">
+                    <row>
+                        <cell></cell>
+                         <cell>Literal</cell>
+                        <cell>Named</cell>
+                    </row>
+                    <row>
+                        <cell>Ampersand</cell>
+                         <cell><kbd>&amp;</kbd></cell>
+                        <cell><kbd name="ampersand"/></cell>
+                    </row>
+                    <row>
+                        <cell>Less than</cell>
+                        <cell><kbd>&lt;</kbd></cell>
+                        <cell><kbd name="less"/></cell>
+                    </row>
+                    <row>
+                        <cell>Greater than</cell>
+                        <cell><kbd>&gt;</kbd></cell>
+                        <cell><kbd name="greater"/></cell>
+                    </row>
+                    <row>
+                        <cell>Dollar</cell>
+                        <cell><kbd>$</kbd></cell>
+                        -<cell><kbd name="dollar"/></cell>
+                    </row>
+                    <row>
+                        <cell>Per cent</cell>
+                        <cell><kbd>%</kbd></cell>
+                        <cell><kbd name="percent"/></cell>
+                    </row>
+                    <row>
+                        <cell>Open brace</cell>
+                        <cell><kbd>{</kbd></cell>
+                        <cell><kbd name="openbrace"/></cell>
+                    </row>
+                    <row>
+                        <cell>Close brace</cell>
+                        <cell><kbd>}</kbd></cell>
+                        <cell><kbd name="closebrace"/></cell>
+                    </row>
+                    <row>
+                        <cell>Hash</cell>
+                        <cell><kbd>#</kbd></cell>
+                        <cell><kbd name="hash"/></cell>
+                    </row>
+                    <row>
+                        <cell>Backslash</cell>
+                        <cell><kbd>\</kbd></cell>
+                        <cell><kbd name="backslash"/></cell>
+                    </row>
+                    <row>
+                        <cell>Tilde</cell>
+                        <cell><kbd>~</kbd></cell>
+                        <cell><kbd name="tilde"/></cell>
+                    </row>
+                    <row>
+                        <cell>Circumflex</cell>
+                        <cell><kbd>^</kbd></cell>
+                        <cell><kbd name="circumflex"/></cell>
+                    </row>
+                    <row>
+                        <cell>Underscore</cell>
+                        <cell><kbd>_</kbd></cell>
+                        <cell><kbd name="underscore"/></cell>
+                    </row>
+                    </tabular>
+                </table>
+
+                <table>
+                <title>Upper Case</title>
+                    <tabular halign="center">
+                    <row>
+                        <cell><kbd>~</kbd></cell>
+                        <cell><kbd>!</kbd></cell>
+                        <cell><kbd>@</kbd></cell>
+                        <cell><kbd>#</kbd></cell>
+                        <cell><kbd>$</kbd></cell>
+                        <cell><kbd>%</kbd></cell>
+                        <cell><kbd>^</kbd></cell>
+                        <cell><kbd>&amp;</kbd></cell>
+                        <cell><kbd>*</kbd></cell>
+                        <cell><kbd>(</kbd></cell>
+                        <cell><kbd>)</kbd></cell>
+                        <cell><kbd>_</kbd></cell>
+                        <cell><kbd>+</kbd></cell>
+                        <cell></cell>
+                    </row>
+                    <row>
+                        <cell><kbd>Tab</kbd></cell>
+                        <cell><kbd>Q</kbd></cell>
+                        <cell><kbd>W</kbd></cell>
+                        <cell><kbd>E</kbd></cell>
+                        <cell><kbd>R</kbd></cell>
+                        <cell><kbd>T</kbd></cell>
+                        <cell><kbd>Y</kbd></cell>
+                        <cell><kbd>U</kbd></cell>
+                        <cell><kbd>I</kbd></cell>
+                        <cell><kbd>O</kbd></cell>
+                        <cell><kbd>P</kbd></cell>
+                        <cell><kbd>{</kbd></cell>
+                        <cell><kbd>}</kbd></cell>
+                        <cell><kbd>|</kbd></cell>
+                    </row>
+                    <row>
+                        <cell><kbd>CapsLock</kbd></cell>
+                        <cell><kbd>A</kbd></cell>
+                        <cell><kbd>S</kbd></cell>
+                        <cell><kbd>D</kbd></cell>
+                        <cell><kbd>F</kbd></cell>
+                        <cell><kbd>G</kbd></cell>
+                        <cell><kbd>H</kbd></cell>
+                        <cell><kbd>J</kbd></cell>
+                        <cell><kbd>K</kbd></cell>
+                        <cell><kbd>L</kbd></cell>
+                        <cell><kbd>:</kbd></cell>
+                        <cell><kbd>'</kbd></cell>
+                        <cell><kbd>Enter</kbd></cell>
+                        <cell></cell>
+                    </row>
+                    <row>
+                        <cell><kbd>Shift</kbd></cell>
+                        <cell><kbd>Z</kbd></cell>
+                        <cell><kbd>X</kbd></cell>
+                        <cell><kbd>C</kbd></cell>
+                        <cell><kbd>V</kbd></cell>
+                        <cell><kbd>B</kbd></cell>
+                        <cell><kbd>N</kbd></cell>
+                        <cell><kbd>M</kbd></cell>
+                        <cell><kbd>&lt;</kbd></cell>
+                        <cell><kbd>&gt;</kbd></cell>
+                        <cell><kbd>?</kbd></cell>
+                        <cell><kbd>Shift</kbd></cell>
+                        <cell></cell>
+                    </row>
+                    </tabular>
+                </table>
+
+                <table>
+                <title>Lower Case</title>
+                    <tabular halign="center">
+                    <row>
+                        <cell><kbd>`</kbd></cell>
+                        <cell><kbd>1</kbd></cell>
+                        <cell><kbd>2</kbd></cell>
+                        <cell><kbd>3</kbd></cell>
+                        <cell><kbd>4</kbd></cell>
+                        <cell><kbd>5</kbd></cell>
+                        <cell><kbd>6</kbd></cell>
+                        <cell><kbd>7</kbd></cell>
+                        <cell><kbd>8</kbd></cell>
+                        <cell><kbd>9</kbd></cell>
+                        <cell><kbd>0</kbd></cell>
+                        <cell><kbd>-</kbd></cell>
+                        <cell><kbd>=</kbd></cell>
+                        <cell></cell>
+                    </row>
+                    <row>
+                        <cell><kbd>Tab</kbd></cell>
+                        <cell><kbd>q</kbd></cell>
+                        <cell><kbd>w</kbd></cell>
+                        <cell><kbd>e</kbd></cell>
+                        <cell><kbd>r</kbd></cell>
+                        <cell><kbd>t</kbd></cell>
+                        <cell><kbd>y</kbd></cell>
+                        <cell><kbd>u</kbd></cell>
+                        <cell><kbd>i</kbd></cell>
+                        <cell><kbd>o</kbd></cell>
+                        <cell><kbd>p</kbd></cell>
+                        <cell><kbd>[</kbd></cell>
+                        <cell><kbd>]</kbd></cell>
+                        <cell><kbd>\</kbd></cell>
+                    </row>
+                    <row>
+                        <cell><kbd>CapsLock</kbd></cell>
+                        <cell><kbd>a</kbd></cell>
+                        <cell><kbd>s</kbd></cell>
+                        <cell><kbd>d</kbd></cell>
+                        <cell><kbd>f</kbd></cell>
+                        <cell><kbd>g</kbd></cell>
+                        <cell><kbd>h</kbd></cell>
+                        <cell><kbd>j</kbd></cell>
+                        <cell><kbd>k</kbd></cell>
+                        <cell><kbd>l</kbd></cell>
+                        <cell><kbd>;</kbd></cell>
+                        <cell><kbd>'</kbd></cell>
+                        <cell><kbd>Enter</kbd></cell>
+                        <cell></cell>
+                    </row>
+                    <row>
+                        <cell><kbd>Shift</kbd></cell>
+                        <cell><kbd>z</kbd></cell>
+                        <cell><kbd>x</kbd></cell>
+                        <cell><kbd>c</kbd></cell>
+                        <cell><kbd>v</kbd></cell>
+                        <cell><kbd>b</kbd></cell>
+                        <cell><kbd>n</kbd></cell>
+                        <cell><kbd>m</kbd></cell>
+                        <cell><kbd>,</kbd></cell>
+                        <cell><kbd>.</kbd></cell>
+                        <cell><kbd>/</kbd></cell>
+                        <cell><kbd>Shift</kbd></cell>
+                        <cell></cell>
+                    </row>
+                    </tabular>
+                </table>
             </subsection>
 
             <subsection xml:id="section-urls">
