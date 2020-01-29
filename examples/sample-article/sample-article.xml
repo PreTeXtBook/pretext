@@ -5816,7 +5816,9 @@ the xsltproc executable.
             </md></p>
 
             <p>Variations on the above include multiple <c>xml:id</c> as the value of a single <c>ref</c> attribute on an <c>xref</c>, in the form of a comma-separated list.  In this case, only the numbers are links/knowls and the autonaming attribute is based on the type of the first <c>ref</c>.  Wrapping with brackets (citations) or parentheses (equations) is also controlled by the type of the first <c>ref</c>.  And the <c>detail</c> attribute for a bibliographic reference is silently ignored.  So you can do silly things like have a reference to a theorem within a list of equation numbers and there will be no error message.  Handle with care.  Spaces after commas in the list will migrate to the output as spaces, so if you don't have any, you won't get any.<ul>
-                <li><p>Three theorems, with spaces, autonamed: <xref ref="theorem-FTC, theorem-number-01, theorem-number-03" text="type-global"/></p></li>
+                <!-- NB: a knowl for "theorem-number-02" will *only* be created if this list is decomposed -->
+                <!-- properly, so do not remove, and certainly do not cross-reference it elsewhere         -->
+                <li><p>Four theorems, with spaces, autonamed: <xref ref="theorem-FTC, theorem-number-01, theorem-number-02, theorem-number-03" text="type-global"/></p></li>
                 <li><p>Two equations, no spaces, autonamed: <xref ref="equation-alternate-FTC,equation-use-FTC" text="type-global"/></p></li>
                 <li><p>Two bibliographic items, no autoname: <xref ref="biblio-judson-AATA, biblio-lay-article" /></p></li>
                 <!-- <li><p>: <xref ref="" /></p></li> -->
@@ -8313,6 +8315,8 @@ the xsltproc executable.
                     <statement><p>No statement.</p></statement>
                 </theorem>
 
+                <!-- Note: this theorem is cross-referenced exactly once,  -->
+                <!-- as part of a test, so DO NOT cross-reference it again -->
                 <theorem xml:id="theorem-number-02">
                     <title>Second Theorem</title>
                     <creator>Bunyakovsky</creator>
