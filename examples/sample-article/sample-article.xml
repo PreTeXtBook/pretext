@@ -2030,7 +2030,7 @@ the xsltproc executable.
 
                 <p>There is a growing supply of keys which are labeled with graphics rather than text, such as a left arrow <kbd name="left"/>, right arrow <kbd name="right"/>, up arrow <kbd name="up"/>, down arrow <kbd name="down"/>, and Enter <kbd name="enter"/>.  See <pubtitle>The <pretext/> Guide</pubtitle> for the definitive list.  In <xref ref="named-keyboard-keys"/> the literal column means the symbol/character is the content of a <tag>kbd</tag> element, while the named column means the symbol/character has been chosen via the value of the <attr>name</attr> attribute of an empty <tage>kbd</tage> element.</p>
 
-                <table>
+                <table xml:id="named-keyboard-keys">
                 <title>Named keys</title>
                     <tabular halign="center">
                     <row>
