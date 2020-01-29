@@ -730,6 +730,28 @@
       <optional>
         <ref name="IntroductionDivision"/>
       </optional>
+      <choice>
+        <oneOrMore>
+          <choice>
+            <ref name="Exercise"/>
+            <ref name="ExerciseGroup"/>
+          </choice>
+        </oneOrMore>
+        <oneOrMore>
+          <ref name="Subexercises"/>
+        </oneOrMore>
+      </choice>
+      <optional>
+        <ref name="ConclusionDivision"/>
+      </optional>
+    </element>
+  </define>
+  <define name="Subexercises">
+    <element name="subexercises">
+      <ref name="MetaDataShortTitleOptional"/>
+      <optional>
+        <ref name="IntroductionDivision"/>
+      </optional>
       <oneOrMore>
         <choice>
           <ref name="Exercise"/>

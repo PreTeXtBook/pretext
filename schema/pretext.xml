@@ -286,6 +286,17 @@
             element exercises {
                 MetaDataShortTitleOptional,
                 IntroductionDivision?,
+                (
+                    (Exercise | ExerciseGroup)+
+                    |
+                    Subexercises+
+                ),
+                ConclusionDivision?
+            }
+        Subexercises =
+            element subexercises {
+                MetaDataShortTitleOptional,
+                IntroductionDivision?,
                 (Exercise | ExerciseGroup)+,
                 ConclusionDivision?
             }

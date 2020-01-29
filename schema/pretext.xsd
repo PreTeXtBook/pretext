@@ -662,6 +662,25 @@
         <xs:extension base="MetaDataShortTitleOptional">
           <xs:sequence>
             <xs:group minOccurs="0" ref="IntroductionDivision"/>
+            <xs:choice>
+              <xs:choice maxOccurs="unbounded">
+                <xs:element ref="exercise"/>
+                <xs:element ref="exercisegroup"/>
+              </xs:choice>
+              <xs:element maxOccurs="unbounded" ref="subexercises"/>
+            </xs:choice>
+            <xs:group minOccurs="0" ref="ConclusionDivision"/>
+          </xs:sequence>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="subexercises">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="MetaDataShortTitleOptional">
+          <xs:sequence>
+            <xs:group minOccurs="0" ref="IntroductionDivision"/>
             <xs:choice maxOccurs="unbounded">
               <xs:element ref="exercise"/>
               <xs:element ref="exercisegroup"/>
