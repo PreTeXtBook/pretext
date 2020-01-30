@@ -117,7 +117,7 @@
 <!-- We process structural nodes via chunking routine in  xsl/mathbook-common.xsl -->
 <!-- This in turn calls specific modal templates defined elsewhere in this file   -->
 <xsl:template match="pretext|mathbook">
-    <xsl:apply-templates select="//frontmatter" mode="epub" />
+    <xsl:apply-templates select="$document-root//frontmatter" mode="epub" />
     <xsl:apply-templates mode="chunking" />
 </xsl:template>
 

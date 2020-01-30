@@ -1052,7 +1052,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We check certain aspects of the source and record the results  -->
 <!-- in boolean ($b-has-*) variables or as particular nodes high    -->
 <!-- up in the structure ($document-root).  Scans here in -common   -->
-<!-- should be short and definite (no searching paths with "//"!),  -->
+<!-- should be short and definite (no searching paths with //!),    -->
 <!-- and universally useful, largely conveniences for consistency.  -->
 <!-- Remember that many basic templates are shared out of this      -->
 <!-- file for often very simple conversions (e.g. extractions)      -->

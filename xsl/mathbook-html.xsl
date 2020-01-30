@@ -676,7 +676,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="b-has-webwork-reps" select="boolean($document-root//webwork-reps)"/>
 <xsl:variable name="b-has-program"      select="boolean($document-root//program)"/>
 <xsl:variable name="b-has-sage"         select="boolean($document-root//sage)"/>
-<xsl:variable name="b-has-sfrac"        select="boolean($document-root//m[contains(text(),'sfrac')] or $document-root//md[contains(text(),'sfrac')] or $document-root//me[contains(text(),'sfrac')] or $document-root//mrow[contains(text(),'sfrac')])"/>
+<xsl:variable name="b-has-sfrac"        select="boolean($document-root//m[contains(text(),'sfrac')]|$document-root//md[contains(text(),'sfrac')]|$document-root//me[contains(text(),'sfrac')]|$document-root//mrow[contains(text(),'sfrac')])"/>
 <xsl:variable name="b-has-geogebra"     select="boolean($document-root//interactive[@platform='geogebra'])"/>
 <!-- 2018-04-06:  jsxgraph deprecated -->
 <xsl:variable name="b-has-jsxgraph"     select="boolean($document-root//jsxgraph)"/>
@@ -1304,7 +1304,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:call-template>
             </th>
         </tr>
-        <xsl:apply-templates select="//notation" mode="backmatter" />
+        <xsl:apply-templates select="$document-root//notation" mode="backmatter" />
     </table>
 </xsl:template>
 
@@ -10892,7 +10892,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 2018-07-04: some day remove all this code  -->
 
 <xsl:template match="solution-list">
-    <xsl:apply-templates select="//exercises" mode="obsolete-backmatter" />
+    <xsl:apply-templates select="$document-root//exercises" mode="obsolete-backmatter" />
 </xsl:template>
 
 <!-- This is a hack that should go away when backmatter exercises are rethought -->

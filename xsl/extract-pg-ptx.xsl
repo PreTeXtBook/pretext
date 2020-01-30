@@ -100,7 +100,7 @@
     <xsl:text>pgptx['hint_no_solution_yes'] = {}&#xa;</xsl:text>
     <xsl:text>pgptx['hint_yes_solution_no'] = {}&#xa;</xsl:text>
     <xsl:text>pgptx['hint_yes_solution_yes'] = {}&#xa;</xsl:text>
-    <xsl:apply-templates select="//webwork[statement|stage]" mode="dictionaries"/>
+    <xsl:apply-templates select="$document-root//webwork[statement|stage]" mode="dictionaries"/>
 </xsl:template>
 
 <xsl:template match="webwork[statement|stage]" mode="dictionaries">

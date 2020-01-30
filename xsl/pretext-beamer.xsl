@@ -311,7 +311,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\NewTColorBox{sbspanel}{mO{top}}{sbspanelstyle,width=#1\linewidth,valign=#2}&#xa;</xsl:text>
   </xsl:if>
 
-  <xsl:if test="//tabular">
+  <xsl:if test="$document-root//tabular">
     <xsl:text>%% For improved tables&#xa;</xsl:text>
     <xsl:text>\usepackage{array}&#xa;</xsl:text>
     <xsl:text>%% Some extra height on each row is desirable, especially with horizontal rules&#xa;</xsl:text>
@@ -397,7 +397,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
   </xsl:if>
   <!-- http://tex.stackexchange.com/questions/23711/strikethrough-text -->
   <!-- http://tex.stackexchange.com/questions/287599/thickness-for-sout-strikethrough-command-from-ulem-package -->
-  <xsl:if test="$document-root//insert or $document-root//delete or $document-root//stale">
+  <xsl:if test="$document-root//insert|$document-root//delete|$document-root//stale">
     <xsl:text>%% Edits (insert, delete), stale (irrelevant, obsolete)&#xa;</xsl:text>
     <xsl:text>%% Package: underlines and strikethroughs, no change to \emph{}&#xa;</xsl:text>
     <xsl:text>\usepackage[normalem]{ulem}&#xa;</xsl:text>

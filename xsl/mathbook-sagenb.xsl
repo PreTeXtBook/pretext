@@ -38,10 +38,10 @@
     <!-- their titles and their assets within       -->
     <!-- Creates a Python list, to be eval'ed -->
     <xsl:if test="$purpose='info'">
-        <xsl:if test="not(//docinfo/initialism)">
+        <xsl:if test="not($docinfo/initialism)">
             <xsl:message>MBX:WARNING: providing an &lt;initialism&gt; in the &lt;docinfo&gt; can make the Sage Notebook worksheet list more usable</xsl:message>
         </xsl:if>
-        <xsl:if test="//program">
+        <xsl:if test="$document-root//program">
             <xsl:message>MBX:WARNING: syntax highlighting of program listings is not possible in the Sage Notebook - though you will see a display with a black monospace font</xsl:message>
         </xsl:if>
         <xsl:text>[</xsl:text>
@@ -183,26 +183,26 @@
                     <p id="byline"><span class="byline"><xsl:value-of select="$credits" /></span></p>
                 </h1>
                 <!-- Write a URL into the header of each page, on principle -->
-                <xsl:if test="//colophon/website or //colophon/copyright">
+                <xsl:if test="$document-root//colophon/website|$document-root//colophon/copyright">
                     <h5 class="heading">
-                        <xsl:if test="//colophon/copyright">
-                            <xsl:apply-templates select="//colophon/copyright" mode="type-name" />
+                        <xsl:if test="$document-root//colophon/copyright">
+                            <xsl:apply-templates select="$document-root//colophon/copyright" mode="type-name" />
                             <xsl:text> </xsl:text>
-                            <xsl:apply-templates select="//colophon/copyright/year" />
-                            <xsl:if test="//colophon/copyright/minilicense">
+                            <xsl:apply-templates select="$document-root//colophon/copyright/year" />
+                            <xsl:if test="$document-root//colophon/copyright/minilicense">
                                 <xsl:text> </xsl:text>
-                                <xsl:apply-templates select="//colophon/copyright/minilicense" />
+                                <xsl:apply-templates select="$document-root//colophon/copyright/minilicense" />
                             </xsl:if>
-                            <xsl:if test="//colophon/website">
+                            <xsl:if test="$document-root//colophon/website">
                                 <br />
                             </xsl:if>
                         </xsl:if>
-                        <xsl:if test="//colophon/website">
+                        <xsl:if test="$document-root//colophon/website">
                             <xsl:element name="a">
                                 <xsl:attribute name="href">
-                                    <xsl:apply-templates select="//colophon/website/url" />
+                                    <xsl:apply-templates select="$document-root//colophon/website/url" />
                                 </xsl:attribute>
-                                <xsl:apply-templates select="//colophon/website/title" />
+                                <xsl:apply-templates select="$document-root//colophon/website/title" />
                             </xsl:element>
                         </xsl:if>
                     </h5>
@@ -256,8 +256,8 @@
         <!-- Triply-quoted for apostrophe, quote protection -->
         <xsl:text>"""</xsl:text>
         <!-- NB: coordinate with inititalism warning in 'info' template -->
-        <xsl:if test="//docinfo/initialism">
-            <xsl:value-of select="//docinfo/initialism" />
+        <xsl:if test="$document-root//docinfo/initialism">
+            <xsl:value-of select="$document-root//docinfo/initialism" />
             <xsl:text>-</xsl:text>
         </xsl:if>
         <!-- Protect against double-dash for un-numbered divisions -->

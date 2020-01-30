@@ -55,7 +55,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Locate roots by the filename attribute -->
 <xsl:template match="mathbook|pretext">
-    <xsl:apply-templates select="//fragment[@filename]" />
+    <xsl:apply-templates select="$document-root//fragment[@filename]" />
 </xsl:template>
 
 <!-- Use filename as a root indicator, -->

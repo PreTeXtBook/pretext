@@ -550,7 +550,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% shorter subnumbers in some side-by-side require manipulations&#xa;</xsl:text>
         <xsl:text>\usepackage{xstring}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="$document-root//fn or $document-root//part">
+    <xsl:if test="$document-root//fn|$document-root//part">
         <xsl:text>%% Footnote counters and part/chapter counters are manipulated&#xa;</xsl:text>
         <xsl:text>%% April 2018:  chngcntr  commands now integrated into the kernel,&#xa;</xsl:text>
         <xsl:text>%% but circa 2018/2019 the package would still try to redefine them,&#xa;</xsl:text>
@@ -969,7 +969,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <!-- http://tex.stackexchange.com/questions/23711/strikethrough-text -->
     <!-- http://tex.stackexchange.com/questions/287599/thickness-for-sout-strikethrough-command-from-ulem-package -->
-    <xsl:if test="$document-root//insert or $document-root//delete or $document-root//stale">
+    <xsl:if test="$document-root//insert|$document-root//delete|$document-root//stale">
         <xsl:text>%% Edits (insert, delete), stale (irrelevant, obsolete)&#xa;</xsl:text>
         <xsl:text>%% Package: underlines and strikethroughs, no change to \emph{}&#xa;</xsl:text>
         <xsl:text>\usepackage[normalem]{ulem}&#xa;</xsl:text>
@@ -1504,7 +1504,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- http://www.tex.ac.uk/FAQ-fixnam.html           -->
     <!-- http://tex.stackexchange.com/questions/62020/how-to-change-the-word-proof-in-the-proof-environment -->
     <xsl:text>%% Localize LaTeX supplied names (possibly none)&#xa;</xsl:text>
-    <xsl:if test="//appendix">
+    <xsl:if test="$document-root//appendix">
         <xsl:text>\renewcommand*{\appendixname}{</xsl:text>
         <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'appendix'" /></xsl:call-template>
         <xsl:text>}&#xa;</xsl:text>
@@ -1528,7 +1528,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
     </xsl:if>
     <xsl:if test="$root/article">
-        <xsl:if test="//abstract">
+        <xsl:if test="$document-root//abstract">
             <xsl:text>\renewcommand*{\abstractname}{</xsl:text>
             <xsl:call-template name="type-name"><xsl:with-param name="string-id" select="'abstract'" /></xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
@@ -1541,7 +1541,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- NB: global numbering is level 0 and "level-to-name" is (a) incorrect,     -->
     <!-- and (b) not useful (\numberwithin will fail)                              -->
     <!-- NB: perhaps the chngcntr package should/could be used here                -->
-    <xsl:if test="//men|//mdn|//md">
+    <xsl:if test="$document-root//men|$document-root//mdn|$document-root//md">
         <xsl:text>%% Equation Numbering&#xa;</xsl:text>
         <xsl:text>%% Controlled by  numbering.equations.level  processing parameter&#xa;</xsl:text>
         <xsl:text>%% No adjustment here implies document-wide numbering&#xa;</xsl:text>
@@ -1561,7 +1561,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\NewTColorBox{image}{mmm}{imagestyle,left skip=#1\linewidth,width=#2\linewidth}&#xa;</xsl:text>
     </xsl:if>
     <!-- Tables -->
-    <xsl:if test="//tabular">
+    <xsl:if test="$document-root//tabular">
         <xsl:text>%% For improved tables&#xa;</xsl:text>
         <xsl:text>\usepackage{array}&#xa;</xsl:text>
         <xsl:text>%% Some extra height on each row is desirable, especially with horizontal rules&#xa;</xsl:text>
@@ -1675,7 +1675,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\usepackage{fontawesome}&#xa;</xsl:text>
     </xsl:if>
     <!-- Poetry -->
-    <xsl:if test="//poem">
+    <xsl:if test="$document-root//poem">
         <xsl:text>%% Poetry Support&#xa;</xsl:text>
         <xsl:text>\newenvironment{poem}{\setlength{\parindent}{0em}}{}&#xa;</xsl:text>
         <xsl:text>\newcommand{\poemTitle}[1]{\begin{center}\large\textbf{#1}\end{center}}&#xa;</xsl:text>
@@ -1933,10 +1933,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\newtcblisting{sageoutput}{sagestyle, colback=white, colframe=white, frame empty, before skip=0pt, after skip=0pt, }&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
-    <xsl:if test="$document-root//pre or $document-root//cd or $document-root//fragment">
+    <xsl:if test="$document-root//pre|$document-root//cd|$document-root//fragment">
         <xsl:text>%% Fancy Verbatim for consoles, preformatted, code display, literate programming&#xa;</xsl:text>
         <xsl:text>\usepackage{fancyvrb}&#xa;</xsl:text>
-        <xsl:if test="//pre">
+        <xsl:if test="$document-root//pre">
             <xsl:text>%% Pre-formatted text, a peer of paragraphs&#xa;</xsl:text>
             <xsl:text>\DefineVerbatimEnvironment{preformatted}{Verbatim}{}&#xa;</xsl:text>
         </xsl:if>
@@ -1951,7 +1951,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>{\end{BVerbatim}\end{lrbox}\usebox{\codedisplaybox}\end{center}}&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
-    <xsl:if test="//tikz">
+    <xsl:if test="$document-root//tikz">
         <xsl:message>MBX:WARNING: the "tikz" element is deprecated (2015-10-16), use "latex-image-code" tag inside an "image" tag, and include the tikz package and relevant libraries in docinfo/latex-image-preamble</xsl:message>
         <xsl:text>%% Tikz graphics&#xa;</xsl:text>
         <xsl:text>\usepackage{tikz}&#xa;</xsl:text>
@@ -1959,7 +1959,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\usetikzlibrary{arrows,matrix}&#xa;</xsl:text>
     </xsl:if>
     <!-- TODO:  \showidx package as part of a draft mode, prints entries in margin -->
-     <xsl:if test="$document-root//ol[@cols] or $document-root//ul[@cols] or $document-root//dl[@cols] or $document-root//contributors">
+     <xsl:if test="$document-root//ol[@cols]|$document-root//ul[@cols]|$document-root//dl[@cols]|$document-root//contributors">
         <xsl:text>%% Multiple column, column-major lists&#xa;</xsl:text>
         <xsl:text>\usepackage{multicol}&#xa;</xsl:text>
     </xsl:if>
@@ -1968,7 +1968,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% But also for specifying labels (i.e. custom order) on nested lists&#xa;</xsl:text>
         <xsl:text>\usepackage</xsl:text>
         <xsl:if test="$b-has-webwork-reps">
-            <xsl:if test="//webwork-reps/static//statement//var[@form='checkboxes' or @form='popup']">
+            <xsl:if test="$document-root//webwork-reps/static//statement//var[@form='checkboxes' or @form='popup']">
                 <xsl:text>[inline]</xsl:text>
             </xsl:if>
         </xsl:if>
@@ -2008,7 +2008,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>{\begin{tcbraster}[exgroupcolstyle,raster columns=#1]}{\end{tcbraster}}&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
-    <xsl:if test="$document-root/backmatter/index-part | $document-root//index-list">
+    <xsl:if test="$document-root/backmatter/index-part|$document-root//index-list">
         <!-- See http://tex.blogoverflow.com/2012/09/dont-forget-to-run-makeindex/ for "imakeidx" usage -->
         <xsl:text>%% Support for index creation&#xa;</xsl:text>
         <xsl:if test="$author-tools-new = 'no'">
@@ -2038,11 +2038,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\usepackage{showidx}&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
-    <xsl:if test="//docinfo/logo">
+    <xsl:if test="$docinfo/logo">
         <xsl:text>%% Package for precise image placement (for logos on pages)&#xa;</xsl:text>
         <xsl:text>\usepackage{eso-pic}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:if test="//notation or //list-of">
+    <xsl:if test="$document-root//notation|$document-root//list-of">
         <xsl:text>%% Package for tables spanning several pages&#xa;</xsl:text>
         <xsl:text>\usepackage{longtable}&#xa;</xsl:text>
     </xsl:if>
@@ -2068,7 +2068,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% It *must* be given as a package option, not with \hypersetup&#xa;</xsl:text>
     <xsl:text>\usepackage[hyperfootnotes=false]{hyperref}&#xa;</xsl:text>
     <!-- http://tex.stackexchange.com/questions/79051/how-to-style-text-in-hyperref-url -->
-    <xsl:if test="//url">
+    <xsl:if test="$document-root//url">
     <xsl:text>%% configure hyperref's  \url  to match listings' inline verbatim&#xa;</xsl:text>
         <xsl:text>\renewcommand\UrlFont{\small\ttfamily}&#xa;</xsl:text>
     </xsl:if>
@@ -2177,7 +2177,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <!-- We could use contains() on the 5 types of arrows  -->
     <!-- to really defend against this problematic package -->
-    <xsl:if test="//m or //md or //mrow">
+    <xsl:if test="$document-root//m|$document-root//md|$document-root//mrow">
         <xsl:text>%% extpfeil package for certain extensible arrows,&#xa;</xsl:text>
         <xsl:text>%% as also provided by MathJax extension of the same name&#xa;</xsl:text>
         <xsl:text>%% NB: this package loads mtools, which loads calc, which redefines&#xa;</xsl:text>
@@ -5282,7 +5282,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- their numbers to allow for flexibility, and since it is -->
 <!-- too hard (impossible?) to mesh into LaTeX's scheme.  An -->
 <!-- "exercises" may be divided by a future "subexercises"   -->
-<!-- and/or by an "exercisegroup", so we match with "//"     -->
+<!-- and/or by an "exercisegroup", so we match using //      -->
 <xsl:template match="exercises//exercise|worksheet//exercise|reading-questions//exercise">
     <!-- There are three sets of switches, so we build a single set, -->
     <!-- depending on what type of division the "exercise" lives in. -->
@@ -10863,7 +10863,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="solution-list">
     <!-- TODO: check here once for backmatter switches set to "knowl", which is unrealizable -->
-    <xsl:apply-templates select="//exercises" mode="obsolete-backmatter" />
+    <xsl:apply-templates select="$document-root//exercises" mode="obsolete-backmatter" />
 </xsl:template>
 
 <!-- This is a hack that should go away when backmatter exercises are rethought -->
@@ -10928,7 +10928,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="statement" />
                 <xsl:text>\par\smallskip&#xa;</xsl:text>
             </xsl:if>
-            <xsl:if test="//hint and $exercise.backmatter.hint='yes'">
+            <xsl:if test="$document-root//hint and $exercise.backmatter.hint='yes'">
                 <xsl:apply-templates select="hint" mode="obsolete-backmatter" />
             </xsl:if>
             <xsl:if test="answer and $exercise.backmatter.answer='yes'">
