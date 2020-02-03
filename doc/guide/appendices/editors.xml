@@ -392,7 +392,7 @@
                 Usually vi starts in normal mode.
             </li>
             <li> <em>Insert mode: </em> This mode is for inserting new text into the file.
-                Typing <c>The galloping gertie leapt into the air</c> causes that text
+                Typing <c>Galloping Gertie leapt into the air.</c> causes that text
                 to be inserted at the current position in the file.
             </li>
             <li> <em>Command mode: </em> This mode is to execute commands.
@@ -428,7 +428,7 @@
             <p>
             <xref ref="vimodesfigure" />  show the keys used to move between modes.
             </p>
-            
+
             <figure xml:id="vimodesfigure">
             <caption>Keys for moving between different modes in vi</caption>
                 <image xml:id="vimodes">
@@ -531,6 +531,10 @@
                     <cell>Set the display size of each line</cell>
                 </row>
                 <row>
+                    <cell right="minor">:set list</cell>
+                    <cell>Show tabs and carraige returns </cell>
+                </row>
+                <row>
                     <cell right="minor">:set tabstops<m>=</m>n</cell>
                     <cell><kbd>Tab</kbd> inserts <m>n</m> spaces </cell>
                 </row>
@@ -540,6 +544,49 @@
                 </row>
                 </tabular>
             </table>
+            </subsubsection>
+
+            <subsubsection>
+            <title>A little editing etiquette</title>
+            <p>
+            The <init>xml</init> files used with <pretext/> are ordinary text files.
+            This makes it easy for  coauthors to email them back and forth in order
+            to expand and improve the content. There are a few potential problems,
+            and hence some useful precautions.
+            </p>
+            <ul>
+                <li>
+                If a <kbd>Tab</kbd> is entered and not expanded to spaces, different editors may
+                display the text with different alignments.
+                </li>
+                <li>
+                If there are extra spaces at the end of a line, there may be odd line wrapping.
+                </li>
+            </ul>
+
+            <p>
+            Fortunately, these are easy to avoid.
+            </p>
+            <ul>
+                <li>
+                A tab character may be found in the usual manner for searches:
+                <kbd>:</kbd> <kbd>/</kbd> <kbd>Tab</kbd> will find the next tab;
+                it can be removed and replaced by spaces.
+                </li>
+                <li>
+                A space before the end of a line can be found with the search
+                <kbd>:</kbd> <kbd>/</kbd> <kbd>Space</kbd> <kbd>$</kbd>
+                (vi will interpret <kbd>$</kbd> as the end of a line rather than
+                as a dollar sign). The spaces at the end of the line can then
+                be removed.
+                </li>
+            </ul>
+            <p>
+            There is another feature of vi that is helpful in this respect.
+            Using <c>:set list</c> will make the tab and end of line characters visual
+            as <c>^I</c> and <c>$</c>.
+            This makes the appropriate deletions easy. It is good editing etiquette to do so.
+            </p>
             </subsubsection>
 
             <subsubsection>
