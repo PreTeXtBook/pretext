@@ -724,6 +724,20 @@
       </oneOrMore>
     </element>
   </define>
+  <define name="ReadingQuestions">
+    <element name="reading-questions">
+      <ref name="MetaDataShortTitleOptional"/>
+      <optional>
+        <ref name="IntroductionDivision"/>
+      </optional>
+      <oneOrMore>
+        <ref name="Exercise"/>
+      </oneOrMore>
+      <optional>
+        <ref name="ConclusionDivision"/>
+      </optional>
+    </element>
+  </define>
   <define name="Exercises">
     <element name="exercises">
       <ref name="MetaDataShortTitleOptional"/>

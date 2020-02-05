@@ -656,6 +656,19 @@
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
+  <xs:element name="reading-questions">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="MetaDataShortTitleOptional">
+          <xs:sequence>
+            <xs:group minOccurs="0" ref="IntroductionDivision"/>
+            <xs:element maxOccurs="unbounded" ref="exercise"/>
+            <xs:group minOccurs="0" ref="ConclusionDivision"/>
+          </xs:sequence>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="exercises">
     <xs:complexType>
       <xs:complexContent>

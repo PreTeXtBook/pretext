@@ -282,6 +282,13 @@
         <p>We add specialized divisions, which may appear within any of the above divisions.  Titles will be provided as defaults.</p>
 
         <fragment xml:id="universal">
+        ReadingQuestions =
+            element reading-questions {
+                MetaDataShortTitleOptional,
+                IntroductionDivision?,
+                Exercise+,
+                ConclusionDivision?
+            }
         Exercises =
             element exercises {
                 MetaDataShortTitleOptional,
