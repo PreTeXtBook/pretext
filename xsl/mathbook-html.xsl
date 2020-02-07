@@ -10866,7 +10866,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--   ?skin=sunburst  on end of src URL gives black terminal look -->
 <xsl:template name="google-code-prettifier">
     <xsl:if test="$b-has-program">
-        <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
     </xsl:if>
 </xsl:template>
 

@@ -46,7 +46,7 @@ declare FDH=/opt/flexdoc/flexdoc-xml-1.12.3
 declare FDOUTDIR=${HOME}/mathbook/website/pretextbook.org/doc/schema
 # Java root to locate executables
 # (if not set by system: uncomment and set)
-declare JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64/bin/
+declare JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64/
 
 # *************
 # Derived paths
@@ -98,7 +98,7 @@ xsltproc ${MB}/schema/iso_schematron_cli.xsl ${MB}/schema/pretext.sch > ${MB}/sc
 #  v1.12 config now in bin directory
 #  v1.12 requires Oracle Java (ie OpenJDK lacks "javafx")
 
-${JAVA_HOME}/java ${JAVA_OPTIONS} -cp ${CLASS_PATH} xyz.flexdoc.xml.Generator \
+${JAVA_HOME}/bin/java ${JAVA_OPTIONS} -cp ${CLASS_PATH} xyz.flexdoc.xml.Generator \
     -flexdocconfig ${FDH}/bin/linux/flexdoc.config -quiet \
     -nodialog -launchviewer=false -d ${FDOUTDIR} pretext.xsd
 

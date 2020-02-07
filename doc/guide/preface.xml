@@ -18,13 +18,13 @@
     <paragraphs>
         <title>Author's Guide</title>
 
-        <p>This guide will help you <em>author</em> a <pretext /> document.  So it serves as a description of the <pretext/> <init>XML</init> vocabulary, along with the mechanics of creating the source and common output formats.  <xref ref="overview"/> is meant to be a short overview of the majority of <pretext/>'s features, which can be skimmed to get a sense of <pretext/>'s capabil;ties.  Or it can be read quickly as you begin authoring and you can return as you need certain features.  The roughly parallel <xref ref="topics"/> is much more comprehensive and is the first place to go for details not addressed in the overview.  Note that the <pubtitle>Author's Guide</pubtitle> is not concerned with <em>publishing</em> your document, which is described in the <pubtitle>Publisher's Guide</pubtitle>.</p>
+        <p>This guide will help you <em>author</em> a <pretext /> document.  So it serves as a description of the <pretext/> <init>XML</init> vocabulary, along with the mechanics of creating the source and common output formats.  <xref ref="overview"/> is meant to be a short overview of the majority of <pretext/>'s features, which can be skimmed to get a sense of <pretext/>'s capabilities.  Or it can be read quickly as you begin authoring and you can return as you need certain features.  The roughly parallel <xref ref="topics"/> is much more comprehensive and is the first place to go for details not addressed in the overview.  Note that the <pubtitle>Author's Guide</pubtitle> is not concerned with <em>publishing</em> your document, which is described in the <pubtitle>Publisher's Guide</pubtitle>.</p>
     </paragraphs>
 
     <paragraphs>
         <title>Basic Reference</title>
 
-        <p>This part provides a quick overview of the minimal syntax for a variety of key <pretext/> features. Unlike the sample article, which is designed to demonstrate and stress test all aspects of <pretext/>, this guide will illustrate only the key elements of some of the most universally-used features of the language. In many cases, in addition to features not discussed, there are may be alternative structures that are not given here.</p>
+        <p>This part provides a quick overview of the minimal syntax for a variety of key <pretext/> features. Unlike the sample article, which is designed to demonstrate and stress test all aspects of <pretext/>, this guide will illustrate only the key elements of some of the most universally-used features of the language. In many cases, in addition to features not discussed, there may be alternative structures that are not given here.</p>
     </paragraphs>
 
     <paragraphs>

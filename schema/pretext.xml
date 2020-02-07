@@ -71,17 +71,17 @@
                 ArticleFrontMatter?,
                 (
                     (
+                        Objectives?,
                         (BlockDivision | Paragraphs | Commentary)+,
-                        Exercises?,
-                        Solutions?,
-                        References?
+                        (ReadingQuestions? &amp; Exercises? &amp; Solutions? &amp; References?),
+                        Outcomes?
                     )
                 |
                     (
-                        IntroductionDivision?,
-                        Section+,
-                        Exercises*,
-                        ConclusionDivision?,
+                        (Objectives? &amp; IntroductionDivision?),
+                        Section,
+                        (Section | ReadingQuestions | Exercises | Solutions | References)*,
+                        (Outcomes? &amp; ConclusionDivision?),
                         ArticleBackMatter?
                     )
                 )
@@ -119,73 +119,61 @@
             element chapter {
                 MetaDataLinedTitle,
                 AuthorByline*,
-                Objectives?,
                 (
                     (
+                        Objectives?,
                         (BlockDivision | Paragraphs | Commentary)+,
-                        Exercises?,
-                        Solutions?,
-                        References?
+                        (ReadingQuestions? &amp; Exercises? &amp; Solutions? &amp; References?),
+                        Outcomes?
                     )
                 |
                     (
-                        IntroductionDivision?,
-                        Section+,
-                        Exercises*,
-                        Solutions?,
-                        References?,
-                        ConclusionDivision?
+                        (Objectives? &amp; IntroductionDivision?),
+                        Section,
+                        (Section | ReadingQuestions | Exercises | Solutions | References)*,
+                        (Outcomes? &amp; ConclusionDivision?)
                     )
-                ),
-                Outcomes?
+                )
             }
         Section =
             element section {
                 MetaDataLinedTitle,
                 AuthorByline*,
-                Objectives?,
                 (
                     (
+                        Objectives?,
                         (BlockDivision | Paragraphs | Commentary)+,
-                        Exercises?,
-                        Solutions?,
-                        References?
+                        (ReadingQuestions? &amp; Exercises? &amp; Solutions? &amp; References?),
+                        Outcomes?
                     )
                 |
                     (
-                        IntroductionDivision?,
-                        Subsection+,
-                        Exercises*,
-                        Solutions?,
-                        References?,
-                        ConclusionDivision?
+                        (Objectives? &amp; IntroductionDivision?),
+                        Subsection,
+                        (Subsection | ReadingQuestions | Exercises | Solutions | References)*,
+                        (Outcomes? &amp; ConclusionDivision?)
                     )
-                ),
-                Outcomes?
+                )
             }
         Subsection =
             element subsection {
                 MetaDataShortTitle,
                 AuthorByline*,
-                Objectives?,
                 (
                     (
+                        Objectives?,
                         (BlockDivision | Paragraphs | Commentary)+,
-                        Exercises?,
-                        Solutions?,
-                        References?
+                        (ReadingQuestions? &amp; Exercises? &amp; Solutions? &amp; References?),
+                        Outcomes?
                     )
                 |
                     (
-                        IntroductionDivision?,
-                        Subsubsection+,
-                        Exercises*,
-                        Solutions?,
-                        References?,
-                        ConclusionDivision?
+                        (Objectives? &amp; IntroductionDivision?),
+                        Subsubsection,
+                        (Subsubsection | ReadingQuestions | Exercises | Solutions | References)*,
+                        (Outcomes? &amp; ConclusionDivision?)
                     )
-                ),
-                Outcomes?
+                )
             }
         Subsubsection =
             element subsubsection {
@@ -193,9 +181,7 @@
                 AuthorByline*,
                 Objectives?,
                 (BlockDivision | Paragraphs | Commentary)+,
-                Exercises?,
-                Solutions?,
-                References?,
+                (ReadingQuestions? &amp; Exercises? &amp; Solutions? &amp; References?),
                 Outcomes?
             }
         ArticleAppendix =
@@ -203,16 +189,18 @@
                 MetaDataShortTitle,
                 AuthorByline*,
                 (
-                    (BlockDivision | Paragraphs | Commentary | NotationList )+ |
                     (
-                        IntroductionDivision?,
+                        Objectives?,
+                        (BlockDivision | Paragraphs | Commentary | NotationList)+,
+                        (ReadingQuestions? &amp; Exercises? &amp; Solutions? &amp; References?),
+                        Outcomes?
+                    )
+                |
+                    (
+                        (Objectives? &amp; IntroductionDivision?),
                         Subsection,
-                        (
-                            Subsection |
-                            Exercises |
-                            References
-                        )*,
-                        ConclusionDivision?
+                        (Subsection | ReadingQuestions | Exercises | Solutions | References)*,
+                        (Outcomes? &amp; ConclusionDivision?)
                     )
                 )
             }
@@ -221,16 +209,18 @@
                 MetaDataShortTitle,
                 AuthorByline*,
                 (
-                    (BlockDivision | Paragraphs | Commentary | NotationList )+ |
                     (
-                        IntroductionDivision?,
+                        Objectives?,
+                        (BlockDivision | Paragraphs | Commentary | NotationList)+,
+                        (ReadingQuestions? &amp; Exercises? &amp; Solutions? &amp; References?),
+                        Outcomes?
+                    )
+                |
+                    (
+                        (Objectives? &amp; IntroductionDivision?),
                         Section,
-                        (
-                            Section |
-                            Exercises |
-                            References
-                        )*,
-                        ConclusionDivision?
+                        (Section | ReadingQuestions | Exercises | Solutions | References)*,
+                        (Outcomes? &amp; ConclusionDivision?)
                     )
                 )
             }
@@ -282,6 +272,13 @@
         <p>We add specialized divisions, which may appear within any of the above divisions.  Titles will be provided as defaults.</p>
 
         <fragment xml:id="universal">
+        ReadingQuestions =
+            element reading-questions {
+                MetaDataShortTitleOptional,
+                IntroductionDivision?,
+                Exercise+,
+                ConclusionDivision?
+            }
         Exercises =
             element exercises {
                 MetaDataShortTitleOptional,

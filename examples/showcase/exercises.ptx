@@ -25,7 +25,7 @@
   </definition>
 
   <p>
-    This defintion allows <m>k</m> to be <m>0</m>, so <m>p</m> might not divide <m>\order{G}</m>.
+    This definition allows <m>k</m> to be <m>0</m>, so <m>p</m> might not divide <m>\order{G}</m>.
     There is a theorem that gives information about how many Sylow-<m>p</m> subgroups a finite group might have.
   </p>
 
