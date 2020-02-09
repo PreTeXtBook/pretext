@@ -107,7 +107,7 @@
 
         <p><pretext/> makes it as easy as possible to have services provide data about visitors to the <init>HTML</init> version of your book.  We support <url hef="https://analytics.google.com/analytics/web/">Google Analytics</url><fn><c>analytics.google.com/analytics/web/</c></fn> and <url hef="https://statcounter.com/">StatCounter</url><fn><c>statcounter.com/</c></fn>.</p>
 
-        <p>In each case, use is similar.  Begin at the service's site and follow their instructions for enabling data collection for your book's site.  We will not document those instructions here.  When completed, you can request (or will be shown) sample Javascript code to add to pages on your site.  Except, <pretext/> is going to do that part for you.  You only need to provide the unique identifiers used by the service that identify your project.  Because these sign-ups are dependent on your site, this is a publisher activity, and hence configured with the publisher file (<xref ref="publisher-file"/>).</p>
+        <p>In each case, use is similar.  Begin at the service's site and follow their instructions for enabling data collection for your book's site.  We will not document those instructions here.  When completed, you can request (or will be shown) sample Javascript code to add to pages on your site.  Except, <pretext/> is going to do that part for you.  You only need to provide the unique identifiers used by the service that identify your project.  Because these sign-ups are dependent on your site, this is a publisher activity, and hence configured with the publisher file (<xref ref="publisher-file"/>), see <xref ref="online-analytics-options"/> for details.</p>
 
         <p>StatCounter uses two identifiers, a <c>project</c> ID and a <c>security</c> code.  You can find them in your <q>Project Config</q> under <q>Settings</q>.  Or the code provided will contain lines such as<cd>
             <cline>var sc_project=11538430;</cline>
@@ -161,7 +161,7 @@
             <title>Configuring <pretext/> for Google Search</title>
 
             <ol>
-                <li><p>Because these sign-ups are dependent on your site, this is a publisher activity, and hence configured with the publisher file (<xref ref="publisher-file"/>).</p></li>
+                <li><p>Because these sign-ups are dependent on your site, this is a publisher activity, and hence configured with the publisher file (<xref ref="publisher-file"/>), see <xref ref="online-search-options"/> for details.</p></li>
                 <li><p>The <c>Search engine ID</c> you saved from above is referenced in Google's code as a <c>cx</c> number.  An example looks like <c>002673997130187229905:qjo2y0jplyu</c>.  In which case your publisher file would have an element under <c>html</c> like<cd>
                     <cline>&lt;search google-cx="002673997130187229905:qjo2y0jplyu"/&gt;</cline>
                 </cd></p></li>
