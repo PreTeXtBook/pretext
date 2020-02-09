@@ -32,7 +32,7 @@
             <idx>analytics</idx>
 
             <p>The<cd>
-                <cline>/publisher/html/analytics</cline>
+                <cline>/publication/html/analytics</cline>
             </cd>element can have the following attributes:<ul>
                 <li><attr>google-gst</attr>: a Google <term>global site tag</term>, and ID you get from Google.</li>
                 <li><attr>statcounter-project</attr>, <attr>statcounter-security</attr>: ID numbers you get from StatCounter.</li>
@@ -44,7 +44,7 @@
             <idx><h>style</h><h>HTML</h></idx>
 
             <p>The<cd>
-                <cline>/publisher/html/css</cline>
+                <cline>/publication/html/css</cline>
             </cd>element can have the following attributes:<ul>
                 <li><attr>colors</attr>: used to construct filename for CSS controlling colors.</li>
                 <li><attr>knowls</attr>: used to construct filename for CSS controlling knowls.</li>
@@ -62,7 +62,7 @@
             <idx>search</idx>
 
             <p>The<cd>
-                <cline>/publisher/html/search</cline>
+                <cline>/publication/html/search</cline>
             </cd>element can have the following attribute:<ul>
                 <li><attr>google-cx</attr>: a Google <term>cx number</term>, gained from configuring search for a site.</li>
             </ul>Setting this attributes to a non-empty string is the signal to add the relevant code for a search box in the masthead.  See <xref ref="online-search"/> for more.</p>
