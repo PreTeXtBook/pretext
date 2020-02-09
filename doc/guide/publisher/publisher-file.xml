@@ -69,4 +69,39 @@
         </subsection>
     </section>
 
+    <section xml:id="publisher-file-revealjs">
+        <title>Reveal.js Slideshow Options</title>
+        <idx>reveal.js slideshow publisher options</idx>
+        <idx><h>publisher options</h><h>reveal.js slideshow</h></idx>
+
+        <introduction>
+            <p>See <xref ref="publisher-revealjs"/> for a more general overview of this conversion.</p>
+        </introduction>
+
+        <subsection xml:id="revealjs-appearance-options">
+            <title>Reveal.js Appearance</title>
+            <idx><h>publisher options</h><h>reveal.js appearance</h></idx>
+
+            <p>The<cd>
+                <cline>/publication/revealjs/appearance</cline>
+            </cd>element can have the following attribute:<ul>
+                <li><attr>theme</attr>: the base name of a file that is a reveal.js theme.  For example if the desired theme/CSS file is <c>css/theme/solarized.css</c>, then set the value of this attribute to <c>solarized</c>.</li>
+            </ul></p>
+        </subsection>
+
+
+        <subsection xml:id="revealjs-resources-options">
+            <title>Reveal.js Resources</title>
+            <idx><h>publisher options</h><h>reveal.js resources</h></idx>
+
+            <p>You may wish to host the reveal.js CSS and javascript files locally or obtain them online.</p>
+
+            <p>The<cd>
+                <cline>/publication/revealjs/resources</cline>
+            </cd>element can have the following attributes:<ul>
+                <li><attr>host</attr>: The values <c>local</c> and <c>cdn</c> will retrieve various Javascript and CSS files (such as the theme) relative to the slideshow <init>HTML</init> file or from an online Content Delivery Network (respectively).  PreTeXt will maintain a link to a current, updated, <init>CDN</init> version and this will change without notice.  This attribute may be given a <init>URL</init> or a local path, though this has not been tested, so should be considered experimental.</li>
+                <li><attr>minified</attr>: These files may be compressed into a <q>min-ified</q> form for faster downloading.  Typically the <init>CDN</init> files will be available in this form, while the local version will not.  <pretext/> will make a sensible choice based on <attr>host</attr>, so you should only need to use this attribute to override that choice.  Values are <c>yes</c> and <c>no</c>.</li>
+            </ul></p>
+        </subsection>
+    </section>
 </chapter>
