@@ -260,19 +260,22 @@ dfn {
         </body>
 
         <script>
-Reveal.initialize({
-  controls: false,
-  progress: false,
-  center: false,
-  hash: true,
-  transition: 'fade',
-  width: "100%",
-  height: "100%",
-  margin: "0.025",
-  dependencies: [
-    { src: '<xsl:value-of select="$reveal-root"/>/plugin/math/math.min.js', async: true },
-    ]
-  });
+            <xsl:text>&#xa;</xsl:text>
+            <xsl:text>Reveal.initialize({&#xa;</xsl:text>
+            <xsl:text>  controls: false,&#xa;</xsl:text>
+            <xsl:text>  progress: false,&#xa;</xsl:text>
+            <xsl:text>  center: false,&#xa;</xsl:text>
+            <xsl:text>  hash: true,&#xa;</xsl:text>
+            <xsl:text>  transition: 'fade',&#xa;</xsl:text>
+            <xsl:text>  width: "100%",&#xa;</xsl:text>
+            <xsl:text>  height: "100%",&#xa;</xsl:text>
+            <xsl:text>  margin: "0.025",&#xa;</xsl:text>
+            <xsl:text>  dependencies: [&#xa;</xsl:text>
+            <xsl:text>    { src: '</xsl:text>
+                <xsl:value-of select="$reveal-root"/><xsl:text>/plugin/math/math.min.js</xsl:text>
+            <xsl:text>', async: true },&#xa;</xsl:text>
+            <xsl:text>    ]&#xa;</xsl:text>
+            <xsl:text>  });&#xa;</xsl:text>
         </script>
     </html>
 </xsl:template>
