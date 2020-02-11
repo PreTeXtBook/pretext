@@ -410,16 +410,37 @@ dfn {
 
 <!-- A "section" contains multiple "slide", which we process,   -->
 <!-- but first we make a special slide announcing the "section" -->
+<!-- With reveal.js navigationMode set to "default" or "grid"   -->
+<!-- we organize title slides as the "horizontal" (or major)    -->
+<!-- slides, with the slides within a section as the "vertical" -->
+<!-- (or minor) slides.  But if the navigationMode is "linear"  -->
+<!-- we do not even create this two-deep organization at all,   -->
+<!-- in part because we think the linear mode is buggy for      -->
+<!-- the last vertical set.                                     -->
 <xsl:template match="section">
-    <section>
-        <section>
-            <h1>
-                <xsl:apply-templates select="." mode="title-full"/>
-            </h1>
-        </section>
-        <xsl:apply-templates select="slide"/>
-    </section>
-    <!--  -->
+    <xsl:choose>
+        <xsl:when test="($navigation-mode = 'default') or ($navigation-mode = 'grid')">
+            <section>
+                <section>
+                    <h1>
+                        <xsl:apply-templates select="." mode="title-full"/>
+                    </h1>
+                </section>
+                <xsl:apply-templates select="slide"/>
+            </section>
+        </xsl:when>
+        <xsl:when test="$navigation-mode = 'linear'">
+            <section>
+                <h1>
+                    <xsl:apply-templates select="." mode="title-full"/>
+                </h1>
+            </section>
+            <xsl:apply-templates select="slide"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message >PTX:BUG: a reveal.js navigation mode ("<xsl:value-of select="$navigation-mode"/>") is implemented but the section construction is not prepared for that mode</xsl:message>
+        </xsl:otherwise>
+    </xsl:choose>
 </xsl:template>
 
 <xsl:template match="frontmatter">
