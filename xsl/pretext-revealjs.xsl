@@ -214,6 +214,25 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!-- Controls Back Arrows -->
+
+<xsl:variable name="control-backarrow">
+    <xsl:choose>
+        <!-- if publisher.xml file has laout specified, use it -->
+        <xsl:when test="($publication/revealjs/controls/@backarrows = 'faded') or ($publication/revealjs/controls/@backarrows = 'hidden') or ($publication/revealjs/controls/@backarrows = 'visible')">
+            <xsl:value-of select="$publication/revealjs/controls/@backarrows"/>
+        </xsl:when>
+        <xsl:when test="$publication/revealjs/controls/@backarrows">
+            <xsl:message>PTX:WARNING: the value of the publisher file attribute "revealjs/controls/@backarrows" should be "faded", "hidden", or "visible" not "<xsl:value-of select="$publication/revealjs/controls/@backarrows"/>".  Default value will be used instead.</xsl:message>
+            <xsl:text>faded</xsl:text>
+        </xsl:when>
+        <!-- otherwise use "faded" as the default -->
+        <xsl:otherwise>
+            <xsl:text>faded</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
 
 <!-- ################ -->
 <!-- # Entry Template -->
@@ -346,6 +365,9 @@ dfn {
             <xsl:text>,&#xa;</xsl:text>
             <xsl:text>  controlsLayout: '</xsl:text>
                 <xsl:value-of select="$control-layout"/>
+            <xsl:text>',&#xa;</xsl:text>
+            <xsl:text>  controlsBackArrows: '</xsl:text>
+                <xsl:value-of select="$control-backarrow"/>
             <xsl:text>',&#xa;</xsl:text>
             <xsl:text>  progress: false,&#xa;</xsl:text>
             <xsl:text>  center: false,&#xa;</xsl:text>
