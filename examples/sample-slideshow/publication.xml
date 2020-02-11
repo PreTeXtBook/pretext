@@ -28,9 +28,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- these are "resources" defaults, but best for a sample -->
         <!-- @minified is not even necessary with @host = 'cdn'    -->
         <resources host="cdn" minified="yes"/>
-        <!-- display="yes" is the default so we can see arrows -->
-        <!-- tutorial="yes" is the default                     -->
-        <controls display="yes" tutorial="yes"/>
+        <!-- display="yes" is the default so we can see arrows          -->
+        <!-- tutorial="yes" is the default                              -->
+        <!-- layout="bottom-right" is the default, "edges" is an option -->
+        <controls display="yes" tutorial="yes" layout="bottom-right"/>
     </revealjs>
 
 </publication>

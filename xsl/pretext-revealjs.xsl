@@ -195,6 +195,24 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Convert "yes"/"no" to a boolean variable -->
 <xsl:variable name="b-control-tutorial" select="$control-tutorial= 'yes'"/>
 
+<!-- Controls Layout -->
+
+<xsl:variable name="control-layout">
+    <xsl:choose>
+        <!-- if publisher.xml file has laout specified, use it -->
+        <xsl:when test="($publication/revealjs/controls/@layout = 'edges') or ($publication/revealjs/controls/@layout = 'bottom-right')">
+            <xsl:value-of select="$publication/revealjs/controls/@layout"/>
+        </xsl:when>
+        <xsl:when test="$publication/revealjs/controls/@layout">
+            <xsl:message>PTX:WARNING: the value of the publisher file attribute "revealjs/controls/@layout" should be "edges" or "bottom-right" not "<xsl:value-of select="$publication/revealjs/controls/@layout"/>".  Default value will be used instead.</xsl:message>
+            <xsl:text>bottom-right</xsl:text>
+        </xsl:when>
+        <!-- otherwise use "bottom-right" as the default -->
+        <xsl:otherwise>
+            <xsl:text>bottom-right</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
 
 
 <!-- ################ -->
@@ -326,6 +344,9 @@ dfn {
                     </xsl:otherwise>
                 </xsl:choose>
             <xsl:text>,&#xa;</xsl:text>
+            <xsl:text>  controlsLayout: '</xsl:text>
+                <xsl:value-of select="$control-layout"/>
+            <xsl:text>',&#xa;</xsl:text>
             <xsl:text>  progress: false,&#xa;</xsl:text>
             <xsl:text>  center: false,&#xa;</xsl:text>
             <xsl:text>  hash: true,&#xa;</xsl:text>
