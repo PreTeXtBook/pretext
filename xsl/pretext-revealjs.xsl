@@ -233,6 +233,25 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!-- Navigation Mode -->
+
+<xsl:variable name="navigation-mode">
+    <xsl:choose>
+        <!-- if publisher.xml file has laout specified, use it -->
+        <xsl:when test="($publication/revealjs/navigation/@mode = 'default') or ($publication/revealjs/navigation/@mode = 'linear') or ($publication/revealjs/navigation/@mode = 'grid')">
+            <xsl:value-of select="$publication/revealjs/navigation/@mode"/>
+        </xsl:when>
+        <xsl:when test="$publication/revealjs/navigation/@mode">
+            <xsl:message>PTX:WARNING: the value of the publisher file attribute "revealjs/navigation/@mode" should be "default", "linear", or "grid" not "<xsl:value-of select="$publication/revealjs/navigation/@mode"/>".  Default value will be used instead.</xsl:message>
+            <xsl:text>default</xsl:text>
+        </xsl:when>
+        <!-- otherwise use "default" as the default -->
+        <xsl:otherwise>
+            <xsl:text>default</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
 
 <!-- ################ -->
 <!-- # Entry Template -->
@@ -368,6 +387,9 @@ dfn {
             <xsl:text>',&#xa;</xsl:text>
             <xsl:text>  controlsBackArrows: '</xsl:text>
                 <xsl:value-of select="$control-backarrow"/>
+            <xsl:text>',&#xa;</xsl:text>
+            <xsl:text>  navigationMode: '</xsl:text>
+                <xsl:value-of select="$navigation-mode"/>
             <xsl:text>',&#xa;</xsl:text>
             <xsl:text>  progress: false,&#xa;</xsl:text>
             <xsl:text>  center: false,&#xa;</xsl:text>

@@ -34,6 +34,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- backarrows="faded" is the default,                         -->
         <!--     "hidden and "visible" are options                      -->
         <controls display="yes" tutorial="yes" layout="bottom-right" backarrows="faded"/>
+        <!-- mode="default" is horizontal/vertical two-level navigation              -->
+        <!--   mode="grid" allows direct movement between adjacent vertical segments -->
+        <!--   mode="linear" is more traditional left/right movement for all slides  -->
+        <navigation mode="default"/>
     </revealjs>
 
 </publication>
