@@ -174,6 +174,27 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Convert "yes"/"no" to a boolean variable -->
 <xsl:variable name="b-control-display" select="$control-display= 'yes'"/>
 
+<!-- Controls Tutorial (animated arrows) -->
+
+<xsl:variable name="control-tutorial">
+    <xsl:choose>
+        <!-- if publisher.xml file has theme specified, use it -->
+        <xsl:when test="($publication/revealjs/controls/@tutorial = 'yes') or ($publication/revealjs/controls/@tutorial = 'no')">
+            <xsl:value-of select="$publication/revealjs/controls/@tutorial"/>
+        </xsl:when>
+        <xsl:when test="$publication/revealjs/controls/@tutorial">
+            <xsl:message>PTX:WARNING: the value of the publisher file attribute "revealjs/controls/@tutorial" should be "yes" or "no" not "<xsl:value-of select="$publication/revealjs/controls/@tutorial"/>".  Default value will be used instead.</xsl:message>
+            <xsl:text>yes</xsl:text>
+        </xsl:when>
+        <!-- otherwise use "yes" as the default -->
+        <xsl:otherwise>
+            <xsl:text>yes</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<!-- Convert "yes"/"no" to a boolean variable -->
+<xsl:variable name="b-control-tutorial" select="$control-tutorial= 'yes'"/>
+
 
 
 <!-- ################ -->
@@ -288,6 +309,16 @@ dfn {
             <xsl:text>  controls: </xsl:text>
                 <xsl:choose>
                     <xsl:when test="$b-control-display">
+                        <xsl:text>true</xsl:text>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:text>false</xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
+            <xsl:text>,&#xa;</xsl:text>
+            <xsl:text>  controlsTutorial: </xsl:text>
+                <xsl:choose>
+                    <xsl:when test="$b-control-tutorial">
                         <xsl:text>true</xsl:text>
                     </xsl:when>
                     <xsl:otherwise>
