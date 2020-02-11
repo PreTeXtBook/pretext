@@ -28,6 +28,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- these are "resources" defaults, but best for a sample -->
         <!-- @minified is not even necessary with @host = 'cdn'    -->
         <resources host="cdn" minified="yes"/>
+        <!-- displayed is the default -->
+        <controls display="yes"/>
     </revealjs>
 
 </publication>
