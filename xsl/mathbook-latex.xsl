@@ -526,8 +526,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>colback=white, colbacktitle=white, coltitle=black, opacityfill=0.0} }&#xa;</xsl:text>
     <xsl:text>%% Second, bold title, run-in to text/paragraph/heading&#xa;</xsl:text>
     <xsl:text>%% Space afterwards will be controlled by environment,&#xa;</xsl:text>
-    <xsl:text>%% dependent of constructions of the tcb title&#xa;</xsl:text>
-    <xsl:text>\tcbset{ runintitlestyle/.style={fonttitle=\normalfont\bfseries, attach title to upper} }&#xa;</xsl:text>
+    <xsl:text>%% independent of constructions of the tcb title&#xa;</xsl:text>
+    <xsl:text>%% Places \blocktitlefont onto many block titles&#xa;</xsl:text>
+    <xsl:text>\tcbset{ runintitlestyle/.style={fonttitle=\blocktitlefont\upshape\bfseries, attach title to upper} }&#xa;</xsl:text>
     <xsl:text>%% Spacing prior to each exercise, anywhere&#xa;</xsl:text>
     <xsl:text>\tcbset{ exercisespacingstyle/.style={before skip={1.5ex plus 0.5ex}} }&#xa;</xsl:text>
     <xsl:text>%% Spacing prior to each block&#xa;</xsl:text>
@@ -622,6 +623,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- We do not attempt bold small caps in division headings (nor ToC, nor page style) -->
     <xsl:text>\setmainfont{Latin Modern Roman}[SmallCapsFont={Latin Modern Roman Caps}, SlantedFont={Latin Modern Roman Slanted}]&#xa;</xsl:text>
     <xsl:text>\newfontfamily{\divisionfont}{Latin Modern Roman}&#xa;</xsl:text>
+    <xsl:text>\newfontfamily{\blocktitlefont}{Latin Modern Roman}&#xa;</xsl:text>
     <xsl:text>\newfontfamily{\contentsfont}{Latin Modern Roman}&#xa;</xsl:text>
     <xsl:text>\newfontfamily{\pagefont}{Latin Modern Roman}[SlantedFont={Latin Modern Roman Slanted}]&#xa;</xsl:text>
     <xsl:text>\newfontfamily{\tabularfont}{Latin Modern Roman}[SmallCapsFont={Latin Modern Roman Caps}]&#xa;</xsl:text>
@@ -734,6 +736,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% These are more robust when using  xelatex  but may be employed with  pdflatex&#xa;</xsl:text>
     <xsl:text>%% The following definitons are meant to be re-defined in a style with \renewcommand&#xa;</xsl:text>
     <xsl:text>\newcommand{\divisionfont}{\relax}&#xa;</xsl:text>
+    <xsl:text>\newcommand{\blocktitlefont}{\relax}&#xa;</xsl:text>
     <xsl:text>\newcommand{\contentsfont}{\relax}&#xa;</xsl:text>
     <xsl:text>\newcommand{\pagefont}{\relax}&#xa;</xsl:text>
     <xsl:text>\newcommand{\tabularfont}{\relax}&#xa;</xsl:text>
@@ -2158,7 +2161,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- "frame empty" is needed to counteract very faint outlines in some PDF viewers -->
                 <!-- framecol=white is inadvisable, "frame hidden" is ineffective for default skin -->
                 <xsl:text>\tcbset{ sbsstyle/.style={raster before skip=2.0ex, raster equal height=rows, raster force size=false} }&#xa;</xsl:text>
-                <xsl:text>\tcbset{ sbspanelstyle/.style={bwminimalstyle} }&#xa;</xsl:text>
+                <xsl:text>\tcbset{ sbspanelstyle/.style={bwminimalstyle, fonttitle=\blocktitlefont} }&#xa;</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
         <xsl:text>%% Enviroments for side-by-side and components&#xa;</xsl:text>
@@ -3053,7 +3056,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The 5% horizontal leg is a "partway modifier", from     -->
 <!-- https://tex.stackexchange.com/questions/48756/tikz-relative-coordinates -->
 <xsl:template match="commentary" mode="tcb-style">
-    <xsl:text>blockspacingstyle, skin=enhanced,fonttitle=\bfseries,coltitle=black,colback=white,frame code={&#xa;</xsl:text>
+    <xsl:text>blockspacingstyle, skin=enhanced,fonttitle=\blocktitlefont\bfseries,coltitle=black,colback=white,frame code={&#xa;</xsl:text>
     <xsl:text>\path[draw=red!75!black,line width=0.5mm] (frame.north west) -- (frame.south west) -- ($ (frame.south west)!0.05!(frame.south east) $);}</xsl:text>
 </xsl:template>
 
@@ -3067,25 +3070,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- line. Presumably the line will stretch when the -->
 <!-- tombstone moves onto its own line.              -->
 <xsl:template match="proof" mode="tcb-style">
-    <xsl:text>bwminimalstyle, fonttitle=\normalfont\itshape, attach title to upper, after title={\space}, after upper={\space\space\hspace*{\stretch{1}}\(\blacksquare\)},&#xa;</xsl:text>
+    <xsl:text>bwminimalstyle, fonttitle=\blocktitlefont\itshape, attach title to upper, after title={\space}, after upper={\space\space\hspace*{\stretch{1}}\(\blacksquare\)},&#xa;</xsl:text>
 </xsl:template>
 
 <!-- "objectives" -->
 <!-- Rules top and bottom, title on its own line, as a heading -->
 <xsl:template match="objectives" mode="tcb-style">
-    <xsl:text>bwminimalstyle, blockspacingstyle, fonttitle=\large\bfseries, toprule=0.1ex, toptitle=0.5ex, top=2ex, bottom=0.5ex, bottomrule=0.1ex</xsl:text>
+    <xsl:text>bwminimalstyle, blockspacingstyle, fonttitle=\blocktitlefont\large\bfseries, toprule=0.1ex, toptitle=0.5ex, top=2ex, bottom=0.5ex, bottomrule=0.1ex</xsl:text>
 </xsl:template>
 
 <!-- "outcomes" -->
 <!-- Differs only by spacing prior, this could go away  -->
 <!-- if headings, etc handle vertical space correctly   -->
 <xsl:template match="outcomes" mode="tcb-style">
-    <xsl:text>bwminimalstyle, blockspacingstyle, fonttitle=\large\bfseries, toprule=0.1ex, toptitle=0.5ex, top=2ex, bottom=0.5ex, bottomrule=0.1ex, before skip=2ex</xsl:text>
+    <xsl:text>bwminimalstyle, blockspacingstyle, fonttitle=\blocktitlefont\large\bfseries, toprule=0.1ex, toptitle=0.5ex, top=2ex, bottom=0.5ex, bottomrule=0.1ex, before skip=2ex</xsl:text>
 </xsl:template>
 
 <!-- back "colophon" -->
 <xsl:template match="backmatter/colophon" mode="tcb-style">
-    <xsl:text>bwminimalstyle, blockspacingstyle, before skip=5ex, left skip=0.15\textwidth, right skip=0.15\textwidth, fonttitle=\large\bfseries, center title, halign=center, bottomtitle=2ex</xsl:text>
+    <xsl:text>bwminimalstyle, blockspacingstyle, before skip=5ex, left skip=0.15\textwidth, right skip=0.15\textwidth, fonttitle=\blocktitlefont\large\bfseries, center title, halign=center, bottomtitle=2ex</xsl:text>
 </xsl:template>
 
 <!-- "defined-term" -->
@@ -3152,16 +3155,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "ancestor::*[self::figure]" (or "not()") to manage the    -->
 <!-- panels of a subcaptioned sidebyside.                      -->
 <xsl:template match="figure|listing" mode="tcb-style">
-    <xsl:text>bwminimalstyle, middle=1ex, blockspacingstyle, </xsl:text>
+    <xsl:text>bwminimalstyle, middle=1ex, blockspacingstyle, fontlower=\blocktitlefont</xsl:text>
 </xsl:template>
 
 <xsl:template match="table" mode="tcb-style">
-    <xsl:text>bwminimalstyle, middle=1ex, blockspacingstyle, coltitle=black, bottomtitle=2ex, titlerule=-0.3pt</xsl:text>
+    <xsl:text>bwminimalstyle, middle=1ex, blockspacingstyle, coltitle=black, bottomtitle=2ex, titlerule=-0.3pt, fonttitle=\blocktitlefont</xsl:text>
 </xsl:template>
 
 <!-- "list" contents are breakable, so we rub out annoying faint lines -->
 <xsl:template match="list" mode="tcb-style">
-    <xsl:text>middle=1ex, blockspacingstyle, colback=white, colbacktitle=white, coltitle=black, colframe=black, titlerule=-0.3pt, toprule at break=-0.3pt, bottomrule at break=-0.3pt, sharp corners</xsl:text>
+    <xsl:text>middle=1ex, blockspacingstyle, colback=white, colbacktitle=white, coltitle=black, colframe=black, titlerule=-0.3pt, toprule at break=-0.3pt, bottomrule at break=-0.3pt, sharp corners, fonttitle=\blocktitlefont</xsl:text>
 </xsl:template>
 
 <!-- This is mostly ad-hoc.  An assemblage is meant to be prominent,   -->
@@ -3179,7 +3182,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB: standard jigsaw, opacityback=0.0, opacitybacktitle=0.0  makes -->
 <!-- title rule visible, and  opacity-fill=0.0  kills the the border   -->
 <xsl:template match="assemblage" mode="tcb-style">
-    <xsl:text>size=normal, colback=white, colbacktitle=white, coltitle=black, colframe=black, rounded corners, titlerule=0.0pt, center title, fonttitle=\normalfont\bfseries, blockspacingstyle, </xsl:text>
+    <xsl:text>size=normal, colback=white, colbacktitle=white, coltitle=black, colframe=black, rounded corners, titlerule=0.0pt, center title, fonttitle=\blocktitlefont\bfseries, blockspacingstyle, </xsl:text>
 </xsl:template>
 
 <!-- This is the gross default, across all objects and all styles -->
@@ -5719,7 +5722,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="purpose" />
 
-    <xsl:text>\textbf{</xsl:text>
+    <!-- NB: this is the only place \blocktitlefont is written into   -->
+    <!-- the body, so a tcbcolorbox could be a great idea to maintain -->
+    <!-- a separation between the preamble and body                   -->
+    <xsl:text>\textbf{\blocktitlefont </xsl:text>
     <xsl:apply-templates select="." mode="type-name" />
     <!-- An empty value means element is a singleton -->
     <!-- else the serial number comes through        -->
