@@ -8569,26 +8569,34 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- a common mistake and often hard to detect/locate -->
 <!-- http://www.stylusstudio.com/xsllist/200412/post20720.html -->
 <xsl:template match="xref" mode="check-ref">
-    <xsl:param name="ref" />
-    <xsl:variable name="target" select="id($ref)" />
-    <xsl:if test="not(exsl:node-set($target))">
-        <xsl:message>MBX:WARNING: unresolved &lt;xref&gt; due to unknown reference "<xsl:value-of select="$ref"/>"</xsl:message>
-        <xsl:apply-templates select="." mode="location-report" />
-        <xsl:variable name="inline-warning">
-            <xsl:text>Unresolved xref, reference "</xsl:text>
-            <xsl:value-of select="$ref"/>
-            <xsl:text>"; check spelling or use "provisional" attribute</xsl:text>
-        </xsl:variable>
-        <xsl:variable name="margin-warning">
-            <xsl:text>Unresolved xref</xsl:text>
-        </xsl:variable>
-        <xsl:call-template name="inline-warning">
-            <xsl:with-param name="warning" select="$inline-warning" />
-        </xsl:call-template>
-        <xsl:call-template name="margin-warning">
-            <xsl:with-param name="warning" select="$margin-warning" />
-        </xsl:call-template>
-    </xsl:if>
+    <xsl:param name="ref"/>
+
+    <!-- Grab the template-context "xref" for the location report, -->
+    <!-- *before* a context switch into the (enhanced) source      -->
+    <xsl:variable name="the-xref" select="."/>
+    <!-- Switch context for "id()" search to what could be enhanced -->
+    <!-- source that would include "biblio" from an external file.  -->
+    <xsl:for-each select="$document-root">
+        <xsl:variable name="target" select="id($ref)"/>
+        <xsl:if test="not(exsl:node-set($target))">
+            <xsl:message>MBX:WARNING: unresolved &lt;xref&gt; due to unknown reference "<xsl:value-of select="$ref"/>"</xsl:message>
+            <xsl:apply-templates select="$the-xref" mode="location-report"/>
+            <xsl:variable name="inline-warning">
+                <xsl:text>Unresolved xref, reference "</xsl:text>
+                <xsl:value-of select="$ref"/>
+                <xsl:text>"; check spelling or use "provisional" attribute</xsl:text>
+            </xsl:variable>
+            <xsl:variable name="margin-warning">
+                <xsl:text>Unresolved xref</xsl:text>
+            </xsl:variable>
+            <xsl:call-template name="inline-warning">
+                <xsl:with-param name="warning" select="$inline-warning"/>
+            </xsl:call-template>
+            <xsl:call-template name="margin-warning">
+                <xsl:with-param name="warning" select="$margin-warning"/>
+            </xsl:call-template>
+        </xsl:if>
+    </xsl:for-each>
 </xsl:template>
 
 <!-- Parse, analyze switches, attributes -->
