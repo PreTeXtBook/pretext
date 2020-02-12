@@ -82,6 +82,33 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<!-- Initial experiment, overall "references" flagged with -->
+<!-- a @source filename as the place to go get a list of   -->
+<!-- candidate "biblio" (in desired order)                 -->
+<xsl:template match="backmatter/references[@source]" mode="assemble">
+    <!-- Grab the list, filename is relative to the -->
+    <!-- "document" holding "references" (original) -->
+    <xsl:variable name="biblios" select="document(@source, .)"/>
+    <!-- Copy the "references" element (could be literal, but maybe not in "text" output mode) -->
+    <xsl:copy>
+        <!-- @source attribute not needed in enhanced source -->
+        <xsl:apply-templates select="@*[not(local-name() = 'source')]" mode="assemble"/>
+        <!-- likely more elements to duplicate, consult schema -->
+        <xsl:apply-templates select="title" mode="assemble"/>
+        <!-- Look at each "biblio" in the external file -->
+        <xsl:for-each select="$biblios/pretext-biblios/biblio">
+            <xsl:variable name="the-id" select="@xml:id"/>
+            <xsl:message>@xml:id of &lt;biblio&gt; in bibliography file: <xsl:value-of select="$the-id"/></xsl:message>
+            <!-- Building duplicate, so look at $original for    -->
+            <!-- "xref" pointing to the current context "biblio" -->
+            <xsl:if test="$original//xref[@ref = $the-id]">
+                <xsl:message>  Located this &lt;biblio&gt; cited in original source</xsl:message>
+                <xsl:apply-templates select="." mode="assemble"/>
+            </xsl:if>
+        </xsl:for-each>
+    </xsl:copy>
+</xsl:template>
+
 <!-- This makes the new tree as a (text) result tree fragment -->
 <!-- and then we convert it into real XML nodes.              -->
 <xsl:variable name="duplicate-rtf">
