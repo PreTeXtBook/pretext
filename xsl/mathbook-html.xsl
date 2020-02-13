@@ -1477,6 +1477,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </xsl:if>
                 </xsl:with-param>
             </xsl:apply-templates>
+            <!-- When we make knowl content selectively, we may    -->
+            <!-- need to produce the content for the notation link -->
+            <xsl:if test="$b-knowls-new">
+                <xsl:variable name="is-knowl">
+                    <xsl:apply-templates select="." mode="xref-as-knowl"/>
+                </xsl:variable>
+                <xsl:if test="$is-knowl = 'true'">
+                    <xsl:apply-templates select="." mode="xref-knowl"/>
+                </xsl:if>
+            </xsl:if>
         </xsl:when>
         <!-- nothing interesting here, so step up a level -->
         <!-- Eventually we find the top-level structure   -->
