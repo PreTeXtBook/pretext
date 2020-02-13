@@ -1589,6 +1589,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text> </xsl:text>
         <xsl:apply-templates select="." mode="title-xref"/>
     </div>
+    <!-- When we make knowl content selectively, we may   -->
+    <!-- need to produce the content for a "list-of" link -->
+    <xsl:if test="$b-knowls-new">
+        <xsl:variable name="is-knowl">
+            <xsl:apply-templates select="." mode="xref-as-knowl"/>
+        </xsl:variable>
+        <xsl:if test="$is-knowl = 'true'">
+            <xsl:apply-templates select="." mode="xref-knowl"/>
+        </xsl:if>
+    </xsl:if>
 </xsl:template>
 
 <!-- ################ -->
