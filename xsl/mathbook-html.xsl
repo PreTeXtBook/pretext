@@ -42,7 +42,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     extension-element-prefixes="exsl date str"
 >
 
-<xsl:import href="./mathbook-common.xsl" />
+<xsl:import href="./mathbook-common.xsl"/>
+<xsl:import href="./pretext-assembly.xsl"/>
 
 
 <!-- We create HTML5 output.  The @doctype-system attribute will    -->
@@ -62,68 +63,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- subsequent exsl:document elements.                             -->
 
 <xsl:output method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat" />
-
-<!-- ############### -->
-<!-- Source Assembly -->
-<!-- ############### -->
-
-<!-- By "assembly" we mean pre-processing of source, by "assembling" -->
-<!-- various pieces of material or content, authored or computed,    -->
-<!-- into an enhanced source tree.                                   -->
-
-<!-- First, we have a template which duplicates the source exactly. -->
-<!-- Various conversions may override this template in various ways -->
-<!-- to create enhanced source trees.                               -->
-<!-- Walk the tree, copying everything as-is, except   -->
-<!-- where an "assemble" template provides adjustments -->
-<xsl:template match="node()|@*" mode="assemble">
-    <xsl:copy>
-        <xsl:apply-templates select="node()|@*" mode="assemble"/>
-    </xsl:copy>
-</xsl:template>
-
-<!-- Initial experiment, overall "references" flagged with -->
-<!-- a @source filename as the place to go get a list of   -->
-<!-- candidate "biblio" (in desired order)                 -->
-<xsl:template match="backmatter/references[@source]" mode="assemble">
-    <!-- Grab the list, filename is relative to the -->
-    <!-- "document" holding "references" (original) -->
-    <xsl:variable name="biblios" select="document(@source, .)"/>
-    <!-- Copy the "references" element (could be literal, but maybe not in "text" output mode) -->
-    <xsl:copy>
-        <!-- @source attribute not needed in enhanced source -->
-        <xsl:apply-templates select="@*[not(local-name() = 'source')]" mode="assemble"/>
-        <!-- likely more elements to duplicate, consult schema -->
-        <xsl:apply-templates select="title" mode="assemble"/>
-        <!-- Look at each "biblio" in the external file -->
-        <xsl:for-each select="$biblios/pretext-biblios/biblio">
-            <xsl:variable name="the-id" select="@xml:id"/>
-            <xsl:message>@xml:id of &lt;biblio&gt; in bibliography file: <xsl:value-of select="$the-id"/></xsl:message>
-            <!-- Building duplicate, so look at $original for    -->
-            <!-- "xref" pointing to the current context "biblio" -->
-            <xsl:if test="$original//xref[@ref = $the-id]">
-                <xsl:message>  Located this &lt;biblio&gt; cited in original source</xsl:message>
-                <xsl:apply-templates select="." mode="assemble"/>
-            </xsl:if>
-        </xsl:for-each>
-    </xsl:copy>
-</xsl:template>
-
-<!-- This makes the new tree as a (text) result tree fragment -->
-<!-- and then we convert it into real XML nodes.              -->
-<xsl:variable name="duplicate-rtf">
-    <xsl:apply-templates select="/" mode="assemble"/>
-</xsl:variable>
-<xsl:variable name="duplicate" select="exsl:node-set($duplicate-rtf)"/>
-
-<!-- -common defines a "$root" which is the overall named element. -->
-<!-- We override it here and then -common will define some derived -->
-<!-- variables based upon it                                       -->
-<xsl:variable name="root" select="$duplicate/mathbook|$duplicate/pretext" />
-
-<!-- When building the duplicate, we have occasion -->
-<!-- to inspect the orginal in various places      -->
-<xsl:variable name="original" select="/mathbook|/pretext"/>
 
 <!-- ##################### -->
 <!-- HTML-Specific Options -->
