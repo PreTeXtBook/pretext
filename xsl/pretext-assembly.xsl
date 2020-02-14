@@ -87,7 +87,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- -common defines a "$root" which is the overall named element. -->
 <!-- We override it here and then -common will define some derived -->
 <!-- variables based upon the $root                                -->
-<xsl:variable name="root" select="$duplicate/mathbook|$duplicate/pretext" />
+<!-- NB: source repair below converts a /mathbook to a /pretext    -->
+<xsl:variable name="root" select="$duplicate/pretext" />
 
 
 <!-- ######################## -->
@@ -119,6 +120,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:if>
         </xsl:for-each>
     </xsl:copy>
+</xsl:template>
+
+<!-- ############# -->
+<!-- Source Repair -->
+<!-- ############# -->
+
+<!-- We unilaterally make various changes to an author's source -->
+<!-- so a conversion (every conversion?) can assume more        -->
+<!-- accurately that the source has certain characteristics.    -->
+
+<!-- 2019-04-02  "mathbook" replaced by "pretext" -->
+<xsl:template match="/mathbook" mode="assembly">
+    <pretext>
+        <xsl:apply-templates select="node()|@*" mode="assembly"/>
+    </pretext>
 </xsl:template>
 
 </xsl:stylesheet>
