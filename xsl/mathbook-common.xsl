@@ -8634,6 +8634,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:when test="@text='title'">
             <xsl:text>title</xsl:text>
         </xsl:when>
+        <xsl:when test="@text='custom'">
+            <xsl:text>custom</xsl:text>
+        </xsl:when>
         <!-- old (deprecated, 2017-07-25) autoname attribute -->
         <xsl:when test="@autoname='no'">
             <xsl:text>global</xsl:text>
@@ -8675,6 +8678,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         </xsl:when>
         <xsl:when test="$xref-text-style='title'">
             <xsl:text>title</xsl:text>
+        </xsl:when>
+        <xsl:when test="$xref-text-style='custom'">
+            <xsl:text>custom</xsl:text>
         </xsl:when>
         <!-- use this when choose goes away
         <xsl:if test="not($xref-text-style = '')">
@@ -8866,6 +8872,22 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:apply-templates select="$target" mode="title-xref"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <xsl:when test="$text-style = 'custom'">
+            <!-- use the content, do not include a number, warn if  -->
+            <!-- no content is provided (move to a source checker)  -->
+            <xsl:choose>
+                <xsl:when test="$b-has-content">
+                    <xsl:copy-of select="$custom-text" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:message>
+                        <xsl:text>PTX:WARNING:    </xsl:text>
+                        <xsl:text>An &lt;xref&gt; expects custom text but none was provided.</xsl:text>
+                    </xsl:message>
+                    <xsl:apply-templates select="." mode="location-report" />
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:when>
