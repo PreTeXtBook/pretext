@@ -784,7 +784,7 @@
         <fragment xml:id="reference">
         XrefTextStyle =
             "local" | "global" | "hybrid" | "type-local" | "type-global" |
-            "type-hybrid" | "phrase-global" | "phrase-hybrid" | "title"
+            "type-hybrid" | "phrase-global" | "phrase-hybrid" | "title" | "custom"
         Reference = Url | Xref
         Url =
             element url {

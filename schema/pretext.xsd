@@ -2598,6 +2598,7 @@
       <xs:enumeration value="phrase-global"/>
       <xs:enumeration value="phrase-hybrid"/>
       <xs:enumeration value="title"/>
+      <xs:enumeration value="custom"/>
     </xs:restriction>
   </xs:simpleType>
   <xs:group name="Reference">
