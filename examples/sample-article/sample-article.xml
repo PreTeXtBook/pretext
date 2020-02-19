@@ -801,7 +801,11 @@ the xsltproc executable.
                             <p permid="Xyz">42.</p>
                         </answer>
                         <solution>
-                            <p>What was the question?</p>
+                            <proof>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin lorem diam, convallis in nulla sed, accumsan fermentum urna. Pellentesque aliquet leo elit, ut consequat nunc dapibus ac. Sed lobortis leo tincidunt, vulputate nunc at, ultricies leo. Vivamus purus diam, tristique laoreet purus eget, mollis gravida sapien. Nunc vulputate nisl ac mauris hendrerit cursus. Sed vel molestie velit. Suspendisse sem sem, elementum at vehicula id, volutpat ac mi. Nullam ullamcorper fringilla purus in accumsan. Mauris at nunc accumsan orci dictum vulputate id id augue. Suspendisse at dignissim elit, non euismod nunc. Aliquam faucibus magna ac molestie semper. Aliquam hendrerit sem sit amet metus congue tempor. Donec laoreet laoreet metus, id interdum purus mattis vulputate. Proin condimentum vitae erat varius mollis. Donec venenatis libero sed turpis pretium tempor.</p>
+
+                                <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra. Integer sagittis dictum turpis vel aliquet. Fusce ut suscipit dolor, nec tristique nisl. Aenean luctus, leo et ornare fermentum, nibh dui vulputate leo, nec tincidunt augue ipsum sed odio. Nunc non erat sollicitudin, iaculis eros consequat, dapibus eros.</p>
+                            </proof>
                         </solution>
                     </exercise>
 
@@ -916,7 +920,11 @@ the xsltproc executable.
                                     <p>A short paragraph, before an answer.</p>
                                 </statement>
                                 <answer>
-                                    <p>In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
+                                    <p>With a proof.</p>
+                                    <proof>
+                                        <p>In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
+                                    </proof>
+                                    <p>And a bit more to say.</p>
                                 </answer>
                             </task>
                             <task>
@@ -3429,7 +3437,13 @@ the xsltproc executable.
                         <statement><p><m>3+4+5</m></p></statement>
                         <hint><p>Addition is associative.</p></hint>
                         <answer><p><m>12</m></p></answer>
-                        <solution><p>First, add <m>3</m> and <m>4</m> to get <m>7</m>, then add <m>5</m> to arrive at <m>12</m>.</p></solution>
+                        <solution>
+                            <p>First, add <m>3</m> and <m>4</m> to get <m>7</m>, then add <m>5</m> to arrive at <m>12</m>.</p>
+                            <proof>
+                                <p>A simple argument.</p>
+                            </proof>
+                            <p>And a bit more.</p>
+                        </solution>
                     </exercise>
                     <exercise>
                         <statement><p><m>5+6</m></p></statement>
