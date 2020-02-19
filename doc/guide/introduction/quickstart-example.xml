@@ -67,7 +67,7 @@
 
             <p>You need to obtain the <pretext /> stylesheets, which are the main part of <pretext />.  Since you are reading this, it may be possible that you have this already.  You can use <c>git</c> to <term>clone</term> the <pretext /> from the GitHub repository, and then be sure to checkout the <c>dev</c> branch to have the latest version.  This is the best way to go, and you should only download the repository as a zip file once for an initial experiment, and then switch to using a clone instead.</p>
 
-            <p>Once you have a clone of the repository, you can issue <c>git pull</c>, and git will update your local copy with any recent changes.  You should do this <em>regularly</em><mdash />meaning on the order of <em>daily</em>.  See the <xref ref="faq-pull-regularly" text="title">FAQ entry</xref> for more about why we <em>expect</em> you to do this.</p>
+            <p>Once you have a clone of the repository, you can issue <c>git pull</c>, and git will update your local copy with any recent changes.  You should do this <em>regularly</em><mdash />meaning on the order of <em>daily</em>.  See the <xref ref="faq-pull-regularly" text="custom">FAQ entry</xref> for more about why we <em>expect</em> you to do this.</p>
 
             <p>See the <url href="https://pretextbook.org/"><pretext/> site</url> at <c>pretextbook.org</c> for details and commands for this step, right on the main page.</p>
         </paragraphs>

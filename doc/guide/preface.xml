@@ -42,6 +42,6 @@
     <paragraphs>
         <title>Appendices</title>
 
-        <p>In addition to the usual items you might expect in the back matter, such as an <xref ref="appendix-gfdl" text="title">open license</xref>, <xref ref="glossary" text="title">glossary</xref>, <xref ref="references" text="title">references</xref>, and an <xref ref="the-index" text="title">index</xref>, there are numerous more specialized additions, mostly describing the installation of, or effective use of, various technical tools that are independent of <pretext/> (but useful or necessary).</p>
+        <p>In addition to the usual items you might expect in the back matter, such as an <xref ref="appendix-gfdl" text="custom">open license</xref>, <xref ref="glossary" text="custom">glossary</xref>, <xref ref="references" text="custom">references</xref>, and an <xref ref="the-index" text="custom">index</xref>, there are numerous more specialized additions, mostly describing the installation of, or effective use of, various technical tools that are independent of <pretext/> (but useful or necessary).</p>
     </paragraphs>
 </preface>
