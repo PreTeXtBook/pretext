@@ -1358,7 +1358,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- but we include it here as a one-off      -->
     <xsl:variable name="miscellaneous-reps" select="
         ($document-root//defined-term)[1]|
-        ($document-root//proof)[1]|
+        ($document-root//proof[parent::hint|parent::answer|parent::solution])[1]|
+        ($document-root//proof[not(parent::hint|parent::answer|parent::solution)])[1]|
         ($document-root//case)[1]|
         ($document-root//assemblage)[1]|
         ($document-root//backmatter/colophon)[1]|
@@ -2597,10 +2598,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\newtcolorbox{commentary}[2]{title={#1}, phantomlabel={#2}, breakable, parbox=false, commentarystyle}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- "proof" -->
-<!-- Body:  \begin{proof}{title}{label}    -->
-<!-- Title comes with punctuation, always. -->
-<xsl:template match="proof" mode="environment">
+<!-- "proof" (regular, major) -->
+<!-- Breakable tcolorbox since a child of a       -->
+<!-- division, i.e. top level, and hence stylable -->
+<!-- Body:  \begin{proofptx}{title}{label}        -->
+<!-- Title comes with punctuation, always.        -->
+<xsl:template match="proof[not(parent::hint|parent::answer|parent::solution)]" mode="environment">
     <xsl:text>%% proof: title is a replacement&#xa;</xsl:text>
     <xsl:text>\tcbset{ proofstyle/.style={</xsl:text>
     <xsl:apply-templates select="." mode="tcb-style" />
@@ -2612,6 +2615,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\label{#2}</xsl:text>
     </xsl:if>
     <xsl:text>\hypertarget{#2}{}}, breakable, parbox=false, after={\par}, proofstyle }&#xa;</xsl:text>
+</xsl:template>
+
+<!-- "proof" (solutions, minor) -->
+<!-- NOT a tcolorbox since embedded in others,      -->
+<!-- hence an inner box and thus always unbreakable -->
+<!-- Body:  \begin{solutionproof}                   -->
+<!-- Really simple.  No label, so not a target of a -->
+<!-- cross-reference.  Not stylable, though we      -->
+<!-- could use a macro for the tombstone/Halmos/QED -->
+<!-- so that could be set.                          -->
+<xsl:template match="proof[parent::hint|parent::answer|parent::solution]" mode="environment">
+    <xsl:text>\NewDocumentEnvironment{solutionproof}{}&#xa;</xsl:text>
+    <xsl:text>{\par\textit{</xsl:text>
+    <xsl:apply-templates select="." mode="type-name"/>
+    <xsl:text>}.\space\space}{\space\space\hspace*{\stretch{1}}\(\blacksquare\)\par}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- "case" (of a proof) -->
@@ -3069,6 +3087,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- least two spaces gap to remain on the same      -->
 <!-- line. Presumably the line will stretch when the -->
 <!-- tombstone moves onto its own line.              -->
+<!-- NB: this style is NOT used for a "proof" inside -->
+<!-- a "hint", "answer", or "solution", since that   -->
+<!-- would lead to an inner tcolorbox which is       -->
+<!-- *always* unbreakable and leads to real          -->
+<!-- formatting problems.  We could restrict the     -->
+<!-- match, but that would complicate style writing. -->
+<!-- Instead, this template is simply not employed   -->
+<!-- for the "solution proof" case.                  -->
 <xsl:template match="proof" mode="tcb-style">
     <xsl:text>bwminimalstyle, fonttitle=\blocktitlefont\itshape, attach title to upper, after title={\space}, after upper={\space\space\hspace*{\stretch{1}}\(\blacksquare\)},&#xa;</xsl:text>
 </xsl:template>
@@ -5003,11 +5029,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="pop-footnote-text"/>
 </xsl:template>
 
-<!-- Proofs -->
+<!-- Proofs (regular, major) -->
 <!-- Subsidary to THEOREM-LIKE, or standalone        -->
 <!-- Defaults to "Proof", can be replaced by "title" -->
 <!-- TODO: rename as "proof" once  amsthm  package goes away -->
-<xsl:template match="proof">
+<xsl:template match="proof[not(parent::hint|parent::answer|parent::solution)]">
     <xsl:text>\begin{proofptx}</xsl:text>
     <!-- The AMS environment handles punctuation carefully, so  -->
     <!-- we just use the "title-full" template, with protection -->
@@ -5022,6 +5048,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates/>
     <xsl:text>\end{proofptx}&#xa;</xsl:text>
+</xsl:template>
+
+<!-- Proofs (solutions, minor) -->
+<!-- Inside "hint", "answer", solution" -->
+<xsl:template match="proof[parent::hint|parent::answer|parent::solution]">
+    <xsl:text>\begin{solutionproof}</xsl:text>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>\end{solutionproof}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- cases in proofs -->
