@@ -5739,7 +5739,7 @@ the xsltproc executable.
 
             <p>Suppose you want to reference two theorems, so you might want to say something like <q>Theorems 4.6 and 5.2.</q>  With global autonaming on, you can override the first <c>Theorem</c> by providing the content <c>Theorems</c> on the first <c>xref</c> and <c>text="global"</c> on the second <c>xref</c>.  (With global autonaming off, you will also get what you want/expect.)   Here is the test, which should look correct no matter what the global switch is:  <xref ref="section-cross-referencing">Sections</xref> and <xref ref="section-internationalization" text="global" />.  (But notice that it is up to you to be certain the types of these targets do not change without you changing the content of the first <c>xref</c>.  The <q>author-tools</q> mode and careful choices of <c>xml:id</c> strings can help avoid this trap.)</p>
 
-            <p>One final twist.  If you say <c>text="title"</c>, then the title you assigned to the theorem will prefix the number.  Here is a the final example, which should always refer to a fundamental theorem by name <xref ref="theorem-FTC" text="title" />.</p>
+            <p>If you set the value of <attr>text</attr> to <c>title</c>, then the title you assigned to the theorem will be used as the link for a cross-reference.  Here is a the final example, which refers to a fundamental theorem by name <xref ref="theorem-FTC" text="title" />.</p>
 
             <p>Cross-references to exercises with hard-coded numbers should respect the supplied number.  Exercise<nbsp /><xref ref="exercise-with-hardcoded-number" /> should reference problem 42a.</p>
 
