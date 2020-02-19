@@ -1449,7 +1449,10 @@
                             <ol label="I">
                                 <li xml:id="walleye">Walleye</li>
                                 <li>Bass</li>
-                                <li xml:id="anon-list-target">Trout</li>
+                                <li xml:id="anon-list-target">
+                                    <title>Exquisite Fish</title>
+                                    <p>Trout</p>
+                                </li>
                             </ol>
                         </p>
                     </li>
@@ -1503,7 +1506,10 @@
                                 <ol label="(a)">
                                     <li>B and a</li>
                                     <li>B and b</li>
-                                    <li xml:id="named-list-target">B and c</li>
+                                    <li xml:id="named-list-target">
+                                        <title>A Test Title</title>
+                                        <p>B and c</p>
+                                    </li>
                                 </ol>
                             </p>
                         </li>
