@@ -8866,8 +8866,18 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         </xsl:when>
         <xsl:when test="$text-style = 'title'">
             <xsl:choose>
-                <!-- content override of title -->
+                <!-- 2020-02-18: a content override of a title is now  -->
+                <!-- deprecated (since there is now a "custom" option  -->
+                <!-- for text).  But it still "works", with warnings   -->
+                <!-- here.  Clean this up to complete the deprecation. -->
+                <!-- (We don't do this with other deprecations since   -->
+                <!-- we can get here by a variety of routes.)          -->
                 <xsl:when test="$b-has-content">
+                    <xsl:message>
+                        <xsl:text>PTX:WARNING:    </xsl:text>
+                        <xsl:text>An &lt;xref&gt; requests a 'title' as its text but also provides alternate content.  The construction is deprecated as of 2020-02-18.  Instead, specify that xref/@text should be 'custom', either globally or on a per-xref basis.</xsl:text>
+                    </xsl:message>
+                    <xsl:apply-templates select="." mode="location-report" />
                     <xsl:copy-of select="$custom-text" />
                 </xsl:when>
                 <xsl:otherwise>
