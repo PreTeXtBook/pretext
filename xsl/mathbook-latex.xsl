@@ -2601,14 +2601,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "proof" (regular, major) -->
 <!-- Breakable tcolorbox since a child of a       -->
 <!-- division, i.e. top level, and hence stylable -->
-<!-- Body:  \begin{proofptx}{title}{label}        -->
+<!-- Body:  \begin{proof}{title}{label}           -->
 <!-- Title comes with punctuation, always.        -->
 <xsl:template match="proof[not(parent::hint|parent::answer|parent::solution)]" mode="environment">
     <xsl:text>%% proof: title is a replacement&#xa;</xsl:text>
     <xsl:text>\tcbset{ proofstyle/.style={</xsl:text>
     <xsl:apply-templates select="." mode="tcb-style" />
     <xsl:text>} }&#xa;</xsl:text>
-    <xsl:text>\newtcolorbox{proofptx}[2]{title={\notblank{#1}{#1}{</xsl:text>
+    <xsl:text>\newtcolorbox{proof}[2]{title={\notblank{#1}{#1}{</xsl:text>
     <xsl:apply-templates select="." mode="type-name"/>
     <xsl:text>.}}, phantom={</xsl:text>
     <xsl:if test="$b-pageref">
@@ -5032,9 +5032,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Proofs (regular, major) -->
 <!-- Subsidary to THEOREM-LIKE, or standalone        -->
 <!-- Defaults to "Proof", can be replaced by "title" -->
-<!-- TODO: rename as "proof" once  amsthm  package goes away -->
 <xsl:template match="proof[not(parent::hint|parent::answer|parent::solution)]">
-    <xsl:text>\begin{proofptx}</xsl:text>
+    <xsl:text>\begin{proof}</xsl:text>
     <!-- The AMS environment handles punctuation carefully, so  -->
     <!-- we just use the "title-full" template, with protection -->
     <xsl:text>{</xsl:text>
@@ -5047,7 +5046,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates/>
-    <xsl:text>\end{proofptx}&#xa;</xsl:text>
+    <xsl:text>\end{proof}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Proofs (solutions, minor) -->
