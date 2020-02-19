@@ -5777,9 +5777,7 @@ the xsltproc executable.
                 <li><p>A titled list: <xref ref="list-colors-rainbow" /></p></li>
                 <li><p>List item inside a named list, second color in rainbow list: <xref ref="rainbow-orange" text="type-global" /></p></li>
                 <li><p>Second color in rainbow list, but now as a local reference: <xref ref="rainbow-orange" text="type-local" /></p></li>
-
-                <li><p>An item in ordered list, but contained in an unordered list, hence without a number, so ambiguous: <xref ref="target-no-number" text="type-global"/></p></li>
-                <li><p>Same item in ordered list, but contained in an unordered list, now with a cross-reference by <c>title</c> with custom text: <xref ref="target-no-number" text="custom">No Number List Item</xref></p></li>
+                <li><p>An item in ordered list, but contained in an unordered list, hence without a number, so a cross-reference by number would be ambiguous.  So we use a cross-reference which relies on custom text: <xref ref="target-no-number" text="custom">No Number List Item</xref></p></li>
                 <li><p>Several examples of hybrid cross-references to list items within a named list can be found in, and adjacent to, <xref ref="list-to-reference" text="type-global" />.</p></li>
                 <li><p>An assemblage, which never has a number.  A cross-reference now requires content in the <c>xref</c> element, with <c>text='custom'</c>: <xref ref="assemblage-basics" text="custom">text to xref an assemblage</xref></p></li>
                 <li><p>A cross-reference to a list item in a description list, which has a title, but never a number: <xref ref="cpu-definition" text="title" />.  Note that you need to include the attribute <c>text="title"</c> even if that is obvious from the situation.  This requirement may be relaxed in a future refactoring of the cross-reference system.</p></li>
@@ -5790,7 +5788,7 @@ the xsltproc executable.
                 <li><p>A cross-reference to an aside, by title necessarily: <xref ref="an-aside" text="title" /></p></li>
                 <li><p>A cross-reference to an <c>objectives</c> block, with an autoname.  This demonstrates the number of the Objectives here, which is not shown in the original version since it is implicit: <xref ref="objectives-structures" text="type-global" /></p></li>
                 <li><p>A cross-reference to an individual objective.  This is authored as a list item, but displayed as an objective (singular) via an autoname: <xref ref="objective-structure" text="type-global" /></p></li>
-                <li><p>A cross-reference to the top-level element (<eg /><c>book</c>) will point to a summary page similar to a Table of Contents in HTML.  For LaTeX output it will behave similarly, unless there is no Table of Contents, then it will go to the main title page:  <xref ref="derivatives">ToC or Title</xref></p></li>
+                <li><p>A cross-reference to the top-level element (<eg /><c>book</c>) will point to a summary page similar to a Table of Contents in HTML.  For LaTeX output it will behave similarly, unless there is no Table of Contents, then it will go to the main title page:  <xref ref="derivatives" text="custom">ToC or Title</xref></p></li>
                 <li><p><q>Cross-references inside quotations previously lost track of their target, so this tests correcting that, not so much the cross-reference itself: <xref ref="theorem-FTC" text="type-global" /></q></p></li>
                 <li><p>An activity with full details following: <xref ref="activity-with-hint-answer-solution" /></p></li>
                 <li><p>An interactive program inside a program listing, to test if the Javascript will execute properly within a knowl: <xref ref="program-interactive" /></p></li>

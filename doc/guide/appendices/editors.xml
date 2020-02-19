@@ -801,7 +801,7 @@
             <p>
             We can make special use of the special characters
             <c>!</c> and <c>%</c>
-            as described in this <xref ref="special-chars"/>.
+            as described in this <xref ref="special-chars" text="custom">paragraph</xref>.
             </p>
 
             <p>
