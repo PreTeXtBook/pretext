@@ -8721,6 +8721,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:variable name="b-is-equation-target" select="$target/self::mrow or $target/self::men" />
     <!-- a bibliography target is exceptional -->
     <xsl:variable name="b-is-biblio-target" select="boolean($target/self::biblio)" />
+    <!-- a contributor target is exceptional -->
+    <xsl:variable name="b-is-contributor-target" select="boolean($target/self::contributor)"/>
     <!-- recognize content s potential override -->
     <xsl:variable name="b-has-content" select="not($custom-text = '')" />
     <!-- check some situations that would lead to ineffective -->
@@ -8755,13 +8757,14 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <!-- subtler than that, especially for equations that can have      -->
         <!-- "symbolic" tags via @tag, and the number/no-number dichotomy   -->
         <!-- is complicated by element names and attributes.                -->
+        <!-- A cross-reference to a contributor is an exception.            -->
         <xsl:otherwise>
             <xsl:variable name="the-number">
                 <xsl:apply-templates select="$target" mode="xref-number">
                     <xsl:with-param name="xref" select="." />
                 </xsl:apply-templates>
             </xsl:variable>
-            <xsl:if test="$the-number = ''">
+            <xsl:if test="($the-number = '') and not($b-is-contributor-target)">
                 <xsl:message>
                     <xsl:text>PTX:WARNING:    </xsl:text>
                     <xsl:text>An &lt;xref&gt; needs a number for its text, but the target (with @xml:id "</xsl:text>
@@ -8774,7 +8777,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:choose>
     <!-- Start massive "choose" for exceptions and ten general styles -->
     <xsl:choose>
-        <xsl:when test="$target/self::contributor">
+        <xsl:when test="$b-is-contributor-target">
             <xsl:apply-templates select="$target/personname" />
         </xsl:when>
         <!-- equations are different -->
