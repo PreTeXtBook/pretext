@@ -2598,6 +2598,9 @@ Following is a somewhat minimal working example.
         &lt;event&gt;PreTeXt Workshop 20XX&lt;/event&gt;
         &lt;date&gt;Month 20XX&lt;/date&gt;
       &lt;/titlepage&gt;
+      &lt;abstract&gt;
+        &lt;p&gt;Your wonderful abstract.&lt;/p&gt;
+      &lt;/abstract&gt;
     &lt;/frontmatter&gt;
     &lt;section&gt;
       &lt;title&gt;Title of Section&lt;/title&gt;
