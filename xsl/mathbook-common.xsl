@@ -8775,17 +8775,27 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:when test="$target/self::contributor">
             <xsl:apply-templates select="$target/personname" />
         </xsl:when>
-        <!-- equation override -->
+        <!-- equations are different -->
+        <!-- custom or full number   -->
         <xsl:when test="$b-is-equation-target">
-            <xsl:if test="$b-has-content">
-                <xsl:copy-of select="$custom-text" />
-                <xsl:apply-templates select="." mode="xref-text-separator"/>
-            </xsl:if>
-            <xsl:text>(</xsl:text>
-            <xsl:apply-templates select="$target" mode="xref-number">
-                <xsl:with-param name="xref" select="." />
-            </xsl:apply-templates>
-            <xsl:text>)</xsl:text>
+            <!-- "custom" style replaces the number -->
+            <xsl:choose>
+                <xsl:when test="$text-style = 'custom'">
+                    <xsl:copy-of select="$custom-text"/>
+                </xsl:when>
+                <!-- prefixing with content is anomalous -->
+                <xsl:otherwise>
+                    <xsl:if test="$b-has-content">
+                        <xsl:copy-of select="$custom-text"/>
+                        <xsl:apply-templates select="." mode="xref-text-separator"/>
+                    </xsl:if>
+                    <xsl:text>(</xsl:text>
+                    <xsl:apply-templates select="$target" mode="xref-number">
+                        <xsl:with-param name="xref" select="." />
+                    </xsl:apply-templates>
+                    <xsl:text>)</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:when>
         <!-- bibliography override       -->
         <!-- number only, consumer wraps -->
