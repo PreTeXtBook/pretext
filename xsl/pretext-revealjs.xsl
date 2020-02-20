@@ -239,7 +239,7 @@ ul {
 
             <div class="reveal">
                 <div class="slides">
-                     <xsl:apply-templates select="frontmatter/titlepage" mode="title-slide"/>
+                     <xsl:apply-templates select="frontmatter" mode="frontmatter-slides"/>
                     <xsl:apply-templates select="section|slide"/>
                 </div>
             </div>
@@ -277,8 +277,9 @@ Reveal.initialize({
     <!--  -->
 </xsl:template>
 
-<xsl:template match="titlepage" mode="title-slide">
+<xsl:template match="frontmatter" mode="frontmatter-slides">
     <section>
+      <section>
         <!-- we assume an overall title exists -->
         <h1>
             <xsl:apply-templates select="/pretext/slideshow" mode="title-full" />
@@ -302,7 +303,9 @@ Reveal.initialize({
             </h4>
         </xsl:if>
         <!-- we assume at least one author, these are in a table -->
-        <xsl:apply-templates select="." mode="author-list"/>
+        <xsl:apply-templates select="titlepage" mode="author-list"/>
+    </section>
+    <xsl:apply-templates select="abstract"/>
   </section>
 </xsl:template>
 
@@ -324,6 +327,17 @@ Reveal.initialize({
   </xsl:for-each>
   </tr>
 </table>
+</xsl:template>
+
+<xsl:template match="abstract">
+    <section>
+          <h3>
+            Abstract
+          </h3>
+          <div>
+              <xsl:apply-templates/>
+          </div>
+    </section>
 </xsl:template>
 
 <xsl:template match="slide">
