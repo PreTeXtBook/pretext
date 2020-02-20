@@ -8757,7 +8757,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <!-- is complicated by element names and attributes.                -->
         <xsl:otherwise>
             <xsl:variable name="the-number">
-                <xsl:apply-templates select="$target" mode="xref-number"/>
+                <xsl:apply-templates select="$target" mode="xref-number">
+                    <xsl:with-param name="xref" select="." />
+                </xsl:apply-templates>
             </xsl:variable>
             <xsl:if test="$the-number = ''">
                 <xsl:message>
