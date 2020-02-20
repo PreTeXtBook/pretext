@@ -5775,6 +5775,7 @@ the xsltproc executable.
                 <li><p>A Figure, containing a side-by-side with two sub-captioned images: <xref ref="fig-sidebyside-global" /></p></li>
                 <li><p>Display Mathematics: single, first with no name: <xref ref="equation-alternate-FTC" />.  Then with an autoname: <xref ref="equation-alternate-FTC" text="type-global" />.</p></li>
                 <li><p>Display Mathematics: multi-row, first with no name: <xref ref="equation-use-FTC" />.  Then with an autoname: <xref ref="equation-use-FTC" text="type-global" />.  And two, with a plural form: <xref ref="equation-alternate-FTC">Equations</xref> and <xref ref="equation-use-FTC" text="global" />.</p></li>
+                <li><p>You can cross-reference <xref ref="equation-use-FTC" text="custom">The Fundamental Theorem of Calculus</xref> via custom text of your choice.</p></li>
                 <li><p>Display mathematics: an equation with  <q>local</q> tag, which should not be used so very far away: <xref ref="equation-local-tag" />.</p></li>
                 <li><p>You can author a cross-reference to a displayed equation with no number, but it will not be very satisfying.  You should get a warning if you try.</p></li>
                 <li><p>Exercises (divisional), a range, with plural form provided to override autonaming: <xref first="exercises-null-problem" last="exercises-cosine-derivative">Exercises</xref>.</p></li>
