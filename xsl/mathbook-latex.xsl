@@ -5163,15 +5163,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- myopenmath exercise -->
         <!-- We only try to open an external file when the source  -->
         <!-- has a MOM problem (with an id number).  The second    -->
-        <!-- argument of the "document()" function is a node and   -->
+        <!-- argument of the "document()" function is a node from  -->
+        <!-- the original source, and not the enhanced source, and -->
         <!-- causes the relative file name to resolve according    -->
-        <!-- to the location of the XML.   Experiments with the    -->
+        <!-- to the correct location.   Experiments with the       -->
         <!-- empty node "/.." are interesting.                     -->
         <!-- https://ajwelch.blogspot.co.za/2008/04/relative-paths-and-document-function.html -->
         <!-- http://www.dpawson.co.uk/xsl/sect2/N2602.html#d3862e73 (Point 4) -->
         <xsl:when test="myopenmath">
             <xsl:variable name="filename" select="concat(concat('problems/mom-', myopenmath/@problem), '.xml')" />
-            <xsl:apply-templates select="document($filename, .)/myopenmath"  mode="exercise-components">
+            <xsl:apply-templates select="document($filename, $original)/myopenmath"  mode="exercise-components">
                 <xsl:with-param name="b-original" select="true()" />
                 <xsl:with-param name="b-has-statement" select="true()" />
                 <xsl:with-param name="b-has-hint"      select="false()" />
