@@ -35,6 +35,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 >
 
 <xsl:import href="./mathbook-common.xsl" />
+<xsl:import href="./pretext-assembly.xsl"/>
 
 <!-- Intend output for rendering by pdflatex -->
 <xsl:output method="text" />
@@ -336,7 +337,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="mathbook|pretext" mode="generic-warnings" />
     <xsl:apply-templates select="mathbook|pretext" mode="deprecation-warnings" />
     <xsl:apply-templates select="mathbook|pretext" mode="deprecation-warnings-latex" />
-    <xsl:apply-templates />
+    <!-- We process the enhanced source pointed  -->
+    <!-- to by $root at  /mathbook  or  /pretext -->
+    <xsl:apply-templates select="$root"/>
 </xsl:template>
 
 <!-- We will have just one of the following -->
