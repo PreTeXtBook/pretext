@@ -39,6 +39,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <event>At a Test Conference</event>
                 <date><today/></date>
             </titlepage>
+
+            <abstract>
+                <p>An <tag>abstract</tag> can appear on an early slide, optionally.  This is a standard component of a <pretext/> <tag>article</tag> (but not of a <tag>book</tag>).</p>
+
+                <p>This is a second paragraph of the abstract for this wonderful talk, just so we have something a bit more substantial.</p>
+            </abstract>
         </frontmatter>
 
         <section>
