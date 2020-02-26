@@ -2019,8 +2019,15 @@ code.inline {
     display: block;
     margin-right: auto;
     margin-left: -15px;
+/*
     padding-bottom: 0.25em;
+*/
     width: 2.5em;
+}
+
+.pretext-content p + pre.prettyprint,
+.pretext-content p + pre.plainprint {
+    margin-top: 1.25em;
 }
 
 .pretext-content .objectives {
