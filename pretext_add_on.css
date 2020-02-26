@@ -355,9 +355,9 @@ from Jiří Lebl */
 .pretext-content .knowl-output .MJXc-display {
     background-image: linear-gradient(to right, var(--knowlbackground), var(--knowlbackground)), linear-gradient(to right, var(--knowlbackground), var(--knowlbackground)), linear-gradient(to right, rgba(0,0,0,.25), var(--knowlbackground)), linear-gradient(to left, rgba(0,0,0,.25), var(--knowlbackground));
 }
-/* this should have a variable name, probably */
+/* this should have a variable name, maybe? */
 .pretext-content .knowl-output.original .MJXc-display {
-    background: white;
+    background: inherit;
 }
 
 .pretext-content .assemblage-like .MJXc-display {
