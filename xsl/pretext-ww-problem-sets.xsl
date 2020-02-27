@@ -40,6 +40,7 @@
 <!-- or into a server's libraries folder and set up site-wide access.      -->
 
 <xsl:import href="./mathbook-common.xsl" />
+<xsl:import href="./pretext-assembly.xsl" />
 
 <!-- Intend output to be a PG/PGML problem or a "def" file -->
 <xsl:output method="text" />
@@ -67,11 +68,11 @@
 <!-- First, create the problem files in directories                           -->
 <!-- Organized in directories as in the document tree, cut off at chunk level -->
 <!-- Then chunk the document to write reasonable problem definition files     -->
-<xsl:template match="/mathbook|/pretext">
-    <xsl:apply-templates select="." mode="generic-warnings" />
+<xsl:template match="/">
+    <xsl:apply-templates select="$original" mode="generic-warnings"/>
     <!-- Handle <webwork-reps> element carefully -->
     <xsl:apply-templates select="$document-root//exercise/webwork-reps" />
-    <xsl:apply-templates mode="chunking" />
+    <xsl:apply-templates select="$document-root" mode="chunking"/>
 </xsl:template>
 
 <!-- ################## -->

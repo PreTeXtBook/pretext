@@ -934,16 +934,23 @@
                         <cell><c>title</c></cell>
                         <cell><xref ref="overview-title"     text="title" /></cell>
                         <cell><xref ref="topic-divisions" text="title" /></cell>
-                        <cell><xref ref="topic-divisions" text="title">Extra</xref></cell>
+                        <cell>Warning</cell>
+                    </row>
+
+                    <row>
+                        <cell><c>custom</c></cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell><xref ref="topic-divisions" text="custom">Extra</xref></cell>
                     </row>
                 </tabular>
             </table>
 
-            <p>Note that <c>local/global</c> describes the uniqueness of the number (and is affected by your choice of numbering schemes), while <c>type</c> refers to an automatic prefix of the number.  The text of the type will vary according to the document's language. If a cross-reference and its target are close to each other, a number like 5.8.2.4 might be overkill, when just a 4 would suffice.  A <c>hybrid</c> scheme will use the shorter number whenever it makes sense.  Finally, there are two <c>phrase</c> schemes, and it should be clear what text <c>title</c> will produce (though realize there must be a title for the object, possibly a default provided by <pretext />).</p>
+            <p>Note that <c>local/global</c> describes the uniqueness of the number (and is affected by your choice of numbering schemes), while <c>type</c> refers to an automatic prefix of the number.  The text of the type will vary according to the document's language. If a cross-reference and its target are close to each other, a number like 5.8.2.4 might be overkill, when just a 4 would suffice.  A <c>hybrid</c> scheme will use the shorter number whenever it makes sense.  There are two <c>phrase</c> schemes, and it should be clear what text <c>title</c> will produce (though realize there must be a title for the object, possibly a default provided by <pretext />).  Finally, if desired, the text can be customized with any text you like.</p>
 
-            <p>You can also override the text used in a cross-reference link.  You do this by providing content to the <tag>xref</tag> element.  In other words, do not use an empty tag, but put some (simple) text in the element.  Generally, this additional text becomes a prefix of a number, a replacement of a type, or a replacement of a title.  It is better to use these overrides, since in electronic formats, the text of the override will be incorporated into the <q>clickable</q> portion of the resulting link, making a larger item to hit.</p>
+            <p>You can also override the text used in a cross-reference link.  You do this by providing content to the <tag>xref</tag> element.  In other words, do not use an empty tag, but put some (simple) text in the element.  Generally, this additional text becomes a prefix of a number or a replacement of a type.  It is better to use these overrides, since in electronic formats, the text of the override will be incorporated into the <q>clickable</q> portion of the resulting link, making a larger item to hit.  Recognize that this extra content will not benefit from automatic internationalization.</p>
 
-            <p>Here are careful examples, where we have provided the content <q>Division</q> in the live examples.  The list is not exhaustive.  Note that overriding a title provides a way to provide any text you would like.</p>
+            <p>Here are careful examples of providing content inside the <tag>xref</tag> element, where we have provided the content <q>Division</q> in the live examples.  The list is not exhaustive.</p>
 
             <!-- expand and add links to the Preface to demo default titles -->
             <table xml:id="txo">
@@ -962,8 +969,8 @@
                         <cell><xref ref="topic-cross-referencing" text="type-global">Division</xref></cell>
                     </row>
                     <row>
-                        <cell><c>'title'</c></cell>
-                        <cell><xref ref="topic-cross-referencing" text="title">Division</xref></cell>
+                        <cell><c>'custom'</c></cell>
+                        <cell><xref ref="topic-cross-referencing" text="custom">Division</xref></cell>
                     </row>
                 </tabular>
             </table>
@@ -1093,7 +1100,14 @@
                         <cell><c>title</c></cell>
                         <cell><xref ref="named-list-target"  text="title" /></cell>
                         <cell><xref ref="anon-list-target" text="title" /></cell>
-                        <cell><xref ref="named-list-target" text="title">Extra</xref></cell>
+                        <cell>Warning</cell>
+                    </row>
+
+                    <row>
+                        <cell><c>custom</c></cell>
+                        <cell></cell>
+                        <cell></cell>
+                        <cell><xref ref="named-list-target" text="custom">Extra</xref></cell>
                     </row>
                 </tabular>
             </table>
@@ -1117,7 +1131,7 @@
             <note>
                 <title>Be Rational About Numbering Variations</title>
 
-                <p>With distinct numbering schemes for divisions, theorems, figures, equations, and citations, along with nine different text styles for a cross-reference, plus variants, per-cross-reference settings, and text overrides, there is a huge supply of combinations.  Likely you can create some really ugly cross-references.  Use the flexibility sensibly.</p>
+                <p>With distinct numbering schemes for divisions, theorems, figures, equations, and citations, along with ten different text styles for a cross-reference, plus variants, per-cross-reference settings, and text overrides, there is a huge supply of combinations.  Likely you can create some really ugly cross-references.  Use the flexibility sensibly.</p>
             </note>
         </conclusion>
     </section>
@@ -1449,7 +1463,10 @@
                             <ol label="I">
                                 <li xml:id="walleye">Walleye</li>
                                 <li>Bass</li>
-                                <li xml:id="anon-list-target">Trout</li>
+                                <li xml:id="anon-list-target">
+                                    <title>Exquisite Fish</title>
+                                    <p>Trout</p>
+                                </li>
                             </ol>
                         </p>
                     </li>
@@ -1503,7 +1520,10 @@
                                 <ol label="(a)">
                                     <li>B and a</li>
                                     <li>B and b</li>
-                                    <li xml:id="named-list-target">B and c</li>
+                                    <li xml:id="named-list-target">
+                                        <title>A Test Title</title>
+                                        <p>B and c</p>
+                                    </li>
                                 </ol>
                             </p>
                         </li>
@@ -2578,6 +2598,9 @@ Following is a somewhat minimal working example.
         &lt;event&gt;PreTeXt Workshop 20XX&lt;/event&gt;
         &lt;date&gt;Month 20XX&lt;/date&gt;
       &lt;/titlepage&gt;
+      &lt;abstract&gt;
+        &lt;p&gt;Your wonderful abstract.&lt;/p&gt;
+      &lt;/abstract&gt;
     &lt;/frontmatter&gt;
     &lt;section&gt;
       &lt;title&gt;Title of Section&lt;/title&gt;

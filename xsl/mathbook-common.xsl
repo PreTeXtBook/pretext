@@ -8569,26 +8569,34 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- a common mistake and often hard to detect/locate -->
 <!-- http://www.stylusstudio.com/xsllist/200412/post20720.html -->
 <xsl:template match="xref" mode="check-ref">
-    <xsl:param name="ref" />
-    <xsl:variable name="target" select="id($ref)" />
-    <xsl:if test="not(exsl:node-set($target))">
-        <xsl:message>MBX:WARNING: unresolved &lt;xref&gt; due to unknown reference "<xsl:value-of select="$ref"/>"</xsl:message>
-        <xsl:apply-templates select="." mode="location-report" />
-        <xsl:variable name="inline-warning">
-            <xsl:text>Unresolved xref, reference "</xsl:text>
-            <xsl:value-of select="$ref"/>
-            <xsl:text>"; check spelling or use "provisional" attribute</xsl:text>
-        </xsl:variable>
-        <xsl:variable name="margin-warning">
-            <xsl:text>Unresolved xref</xsl:text>
-        </xsl:variable>
-        <xsl:call-template name="inline-warning">
-            <xsl:with-param name="warning" select="$inline-warning" />
-        </xsl:call-template>
-        <xsl:call-template name="margin-warning">
-            <xsl:with-param name="warning" select="$margin-warning" />
-        </xsl:call-template>
-    </xsl:if>
+    <xsl:param name="ref"/>
+
+    <!-- Grab the template-context "xref" for the location report, -->
+    <!-- *before* a context switch into the (enhanced) source      -->
+    <xsl:variable name="the-xref" select="."/>
+    <!-- Switch context for "id()" search to what could be enhanced -->
+    <!-- source that would include "biblio" from an external file.  -->
+    <xsl:for-each select="$document-root">
+        <xsl:variable name="target" select="id($ref)"/>
+        <xsl:if test="not(exsl:node-set($target))">
+            <xsl:message>MBX:WARNING: unresolved &lt;xref&gt; due to unknown reference "<xsl:value-of select="$ref"/>"</xsl:message>
+            <xsl:apply-templates select="$the-xref" mode="location-report"/>
+            <xsl:variable name="inline-warning">
+                <xsl:text>Unresolved xref, reference "</xsl:text>
+                <xsl:value-of select="$ref"/>
+                <xsl:text>"; check spelling or use "provisional" attribute</xsl:text>
+            </xsl:variable>
+            <xsl:variable name="margin-warning">
+                <xsl:text>Unresolved xref</xsl:text>
+            </xsl:variable>
+            <xsl:call-template name="inline-warning">
+                <xsl:with-param name="warning" select="$inline-warning"/>
+            </xsl:call-template>
+            <xsl:call-template name="margin-warning">
+                <xsl:with-param name="warning" select="$margin-warning"/>
+            </xsl:call-template>
+        </xsl:if>
+    </xsl:for-each>
 </xsl:template>
 
 <!-- Parse, analyze switches, attributes -->
@@ -8625,6 +8633,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         </xsl:when>
         <xsl:when test="@text='title'">
             <xsl:text>title</xsl:text>
+        </xsl:when>
+        <xsl:when test="@text='custom'">
+            <xsl:text>custom</xsl:text>
         </xsl:when>
         <!-- old (deprecated, 2017-07-25) autoname attribute -->
         <xsl:when test="@autoname='no'">
@@ -8668,6 +8679,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:when test="$xref-text-style='title'">
             <xsl:text>title</xsl:text>
         </xsl:when>
+        <xsl:when test="$xref-text-style='custom'">
+            <xsl:text>custom</xsl:text>
+        </xsl:when>
         <!-- use this when choose goes away
         <xsl:if test="not($xref-text-style = '')">
             <xsl:value-of select="$xref-text-style" />
@@ -8707,23 +8721,86 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:variable name="b-is-equation-target" select="$target/self::mrow or $target/self::men" />
     <!-- a bibliography target is exceptional -->
     <xsl:variable name="b-is-biblio-target" select="boolean($target/self::biblio)" />
+    <!-- a contributor target is exceptional -->
+    <xsl:variable name="b-is-contributor-target" select="boolean($target/self::contributor)"/>
     <!-- recognize content s potential override -->
     <xsl:variable name="b-has-content" select="not($custom-text = '')" />
+    <!-- check some situations that would lead to ineffective -->
+    <!-- cross-references due to empty text                   -->
     <xsl:choose>
-        <xsl:when test="$target/self::contributor">
+        <xsl:when test="$text-style = 'title'">
+            <xsl:variable name="the-title">
+                <xsl:apply-templates select="$target" mode="title-xref"/>
+            </xsl:variable>
+            <xsl:if test="$the-title = ''">
+                <xsl:message>
+                    <xsl:text>PTX:WARNING:    </xsl:text>
+                    <xsl:text>An &lt;xref&gt; requests a title for its text, but the target (with @xml:id "</xsl:text>
+                    <xsl:value-of select="@ref"/>
+                    <xsl:text>") has no title.</xsl:text>
+                </xsl:message>
+                <xsl:apply-templates select="." mode="location-report"/>
+            </xsl:if>
+        </xsl:when>
+        <xsl:when test="$text-style = 'custom'">
+            <xsl:if test="not($b-has-content)">
+                <xsl:message>
+                    <xsl:text>PTX:WARNING:    </xsl:text>
+                    <xsl:text>An &lt;xref&gt; expects custom text but none was provided.</xsl:text>
+                </xsl:message>
+                <xsl:apply-templates select="." mode="location-report" />
+            </xsl:if>
+        </xsl:when>
+        <!-- Any other case of a cross-reference employs a number, or parts -->
+        <!-- of a number for the target.  The signal of being numberless is -->
+        <!-- an empty result for the modal "number" template.  But it is    -->
+        <!-- subtler than that, especially for equations that can have      -->
+        <!-- "symbolic" tags via @tag, and the number/no-number dichotomy   -->
+        <!-- is complicated by element names and attributes.                -->
+        <!-- A cross-reference to a contributor is an exception.            -->
+        <xsl:otherwise>
+            <xsl:variable name="the-number">
+                <xsl:apply-templates select="$target" mode="xref-number">
+                    <xsl:with-param name="xref" select="." />
+                </xsl:apply-templates>
+            </xsl:variable>
+            <xsl:if test="($the-number = '') and not($b-is-contributor-target)">
+                <xsl:message>
+                    <xsl:text>PTX:WARNING:    </xsl:text>
+                    <xsl:text>An &lt;xref&gt; needs a number for its text, but the target (with @xml:id "</xsl:text>
+                    <xsl:value-of select="@ref"/>
+                    <xsl:text>") does not have a number.</xsl:text>
+                </xsl:message>
+                <xsl:apply-templates select="." mode="location-report"/>
+            </xsl:if>
+        </xsl:otherwise>
+    </xsl:choose>
+    <!-- Start massive "choose" for exceptions and ten general styles -->
+    <xsl:choose>
+        <xsl:when test="$b-is-contributor-target">
             <xsl:apply-templates select="$target/personname" />
         </xsl:when>
-        <!-- equation override -->
+        <!-- equations are different -->
+        <!-- custom or full number   -->
         <xsl:when test="$b-is-equation-target">
-            <xsl:if test="$b-has-content">
-                <xsl:copy-of select="$custom-text" />
-                <xsl:apply-templates select="." mode="xref-text-separator"/>
-            </xsl:if>
-            <xsl:text>(</xsl:text>
-            <xsl:apply-templates select="$target" mode="xref-number">
-                <xsl:with-param name="xref" select="." />
-            </xsl:apply-templates>
-            <xsl:text>)</xsl:text>
+            <!-- "custom" style replaces the number -->
+            <xsl:choose>
+                <xsl:when test="$text-style = 'custom'">
+                    <xsl:copy-of select="$custom-text"/>
+                </xsl:when>
+                <!-- prefixing with content is anomalous -->
+                <xsl:otherwise>
+                    <xsl:if test="$b-has-content">
+                        <xsl:copy-of select="$custom-text"/>
+                        <xsl:apply-templates select="." mode="xref-text-separator"/>
+                    </xsl:if>
+                    <xsl:text>(</xsl:text>
+                    <xsl:apply-templates select="$target" mode="xref-number">
+                        <xsl:with-param name="xref" select="." />
+                    </xsl:apply-templates>
+                    <xsl:text>)</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:when>
         <!-- bibliography override       -->
         <!-- number only, consumer wraps -->
@@ -8852,14 +8929,29 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         </xsl:when>
         <xsl:when test="$text-style = 'title'">
             <xsl:choose>
-                <!-- content override of title -->
+                <!-- 2020-02-18: a content override of a title is now  -->
+                <!-- deprecated (since there is now a "custom" option  -->
+                <!-- for text).  But it still "works", with warnings   -->
+                <!-- here.  Clean this up to complete the deprecation. -->
+                <!-- (We don't do this with other deprecations since   -->
+                <!-- we can get here by a variety of routes.)          -->
                 <xsl:when test="$b-has-content">
+                    <xsl:message>
+                        <xsl:text>PTX:WARNING:    </xsl:text>
+                        <xsl:text>An &lt;xref&gt; requests a 'title' as its text but also provides alternate content.  The construction is deprecated as of 2020-02-18.  Instead, specify that xref/@text should be 'custom', either globally or on a per-xref basis.</xsl:text>
+                    </xsl:message>
+                    <xsl:apply-templates select="." mode="location-report" />
                     <xsl:copy-of select="$custom-text" />
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:apply-templates select="$target" mode="title-xref"/>
                 </xsl:otherwise>
             </xsl:choose>
+        </xsl:when>
+        <xsl:when test="$text-style = 'custom'">
+            <!-- use the content, do not include a number, a warning -->
+            <!-- if the content is empty is provided elsewhere       -->
+            <xsl:copy-of select="$custom-text" />
         </xsl:when>
         <xsl:otherwise>
             <xsl:message>MBX:BUG:  NO XREF TEXT GENERATED</xsl:message>

@@ -5,48 +5,45 @@
     <title>Conversion to Slides</title>
     <introduction>
         <p>
-As discussed in <xref ref="overview-slides"/> and <xref ref="topic-slides"/>,
-support is available for authoring slideshows in <pretext/>. Currently, slideshows
-must be authored explicitly, but we hope to eventually support annotating
-books and articles to export appropriate content as slides.
+            As discussed in <xref ref="overview-slides"/> and <xref ref="topic-slides"/>,
+            support is available for authoring slideshows in <pretext/>. Currently, slideshows
+            must be authored explicitly, but we hope to eventually support annotating
+            books and articles to export appropriate content as slides.
         </p>
     </introduction>
     <section xml:id="publisher-revealjs">
         <title>Reveal.js</title>
         <p>
-Run this to produce a Reveal.js slideshow:<cd>
-<cline>xsltproc --xinclude -o path/to/output/slides.html</cline>
-<cline>  path/to/pretext/xsl/pretext-revealjs.xsl path/to/source/slides.xml</cline>
-</cd>
-       </p>
-        <p>
-Two string parameters (see <xref ref="processing-parameters"/>) are available.
+            Run this to produce a Reveal.js slideshow:<cd>
+                <cline>xsltproc --xinclude -o path/to/output/slides.html</cline>
+                <cline>  path/to/pretext/xsl/pretext-revealjs.xsl path/to/source/slides.xml</cline>
+            </cd>
         </p>
-        <ul>
-            <li>
-Insert <c>-stringparam local yes</c> to have the resulting HTML use a local
-installation of Reveal.js rather than the <init>CDN</init> installation used by default.
-In particular, you will need to make sure Reveal.js's <c>css</c> and
-<c>js</c> folders are located in the same folder that the resulting HTML
-is served from.
-            </li>
-            <li>
-Insert <c>-stringparam theme {theme-name}</c> to choose a theme besides
-the default of <c>simple</c>. For example, to use the theme located at
-<c>css/theme/solarized.css</c>, replace <c>{theme name}</c> with <c>solarized</c>.
-            </li>
-        </ul>
+        <p>
+            Reveal.js supports themes that affect the overall appearance of a slideshow.
+            So in <pretext/> you can specify the name of theme in a publisher file.
+            See <xref ref="revealjs-appearance-options"/> for details.
+        </p>
+        <p>
+            You may assume that your slideshow will be presented with the internet available,
+            perhaps in a classroom, and will be updated for use the next semester.
+            Or maybe you are presenting at a conference where you do not want to trust an unfamiliar internet connection,
+            and you will later host an archival version of your presentation on your website and you want it to <q>just work</q> ten years from now.
+            So you can configure your slideshow to obtain resources from a Content Delivery Network (<init>CDN</init>) online,
+            or you may arrange to copy the necessary files from reveal.js and store them locally (your hard disk, your website).
+            See <xref ref="revealjs-resources-options"/> for the necessary details.
+        </p>
     </section>
     <section xml:id="publisher-beamer">
         <title>Beamer <latex/></title>
         <p>
-Run this to produce a Beamer <latex/> slideshow:<cd>
-<cline>xsltproc --xinclude -o path/to/output/slides.tex</cline>
-<cline>  path/to/pretext/xsl/pretext-beamer.xsl path/to/source/slides.xml</cline>
-</cd>
+            Run this to produce a Beamer <latex/> slideshow:<cd>
+                <cline>xsltproc --xinclude -o path/to/output/slides.tex</cline>
+                <cline>  path/to/pretext/xsl/pretext-beamer.xsl path/to/source/slides.xml</cline>
+            </cd>
         </p>
         <p>
-Of course, you should then run e.g. <c>pdflatex slides.tex</c> to produce a PDF.
+            Of course, you should then run e.g. <c>pdflatex slides.tex</c> to produce a PDF.
         </p>
     </section>
 </chapter>

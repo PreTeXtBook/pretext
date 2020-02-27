@@ -42,7 +42,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     extension-element-prefixes="exsl date str"
 >
 
-<xsl:import href="./mathbook-common.xsl" />
+<xsl:import href="./mathbook-common.xsl"/>
+<xsl:import href="./pretext-assembly.xsl"/>
 
 
 <!-- We create HTML5 output.  The @doctype-system attribute will    -->
@@ -761,8 +762,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="mathbook|pretext" mode="deprecation-warnings" />
     <!-- Usually no manifest is created -->
     <xsl:call-template name="runestone-manifest"/>
-    <!-- The main event -->
-    <xsl:apply-templates />
+    <!-- The main event                          -->
+    <!-- We process the enhanced source pointed  -->
+    <!-- to by $root at  /mathbook  or  /pretext -->
+    <xsl:apply-templates select="$root"/>
 </xsl:template>
 
 <!-- We process structural nodes via chunking routine in xsl/mathbook-common.xsl    -->
@@ -1413,6 +1416,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </xsl:if>
                 </xsl:with-param>
             </xsl:apply-templates>
+            <!-- When we make knowl content selectively, we may    -->
+            <!-- need to produce the content for the notation link -->
+            <xsl:if test="$b-knowls-new">
+                <xsl:variable name="is-knowl">
+                    <xsl:apply-templates select="." mode="xref-as-knowl"/>
+                </xsl:variable>
+                <xsl:if test="$is-knowl = 'true'">
+                    <xsl:apply-templates select="." mode="xref-knowl"/>
+                </xsl:if>
+            </xsl:if>
         </xsl:when>
         <!-- nothing interesting here, so step up a level -->
         <!-- Eventually we find the top-level structure   -->
@@ -1525,6 +1538,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text> </xsl:text>
         <xsl:apply-templates select="." mode="title-xref"/>
     </div>
+    <!-- When we make knowl content selectively, we may   -->
+    <!-- need to produce the content for a "list-of" link -->
+    <xsl:if test="$b-knowls-new">
+        <xsl:variable name="is-knowl">
+            <xsl:apply-templates select="." mode="xref-as-knowl"/>
+        </xsl:variable>
+        <xsl:if test="$is-knowl = 'true'">
+            <xsl:apply-templates select="." mode="xref-knowl"/>
+        </xsl:if>
+    </xsl:if>
 </xsl:template>
 
 <!-- ################ -->

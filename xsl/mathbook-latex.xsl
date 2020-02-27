@@ -35,6 +35,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 >
 
 <xsl:import href="./mathbook-common.xsl" />
+<xsl:import href="./pretext-assembly.xsl"/>
 
 <!-- Intend output for rendering by pdflatex -->
 <xsl:output method="text" />
@@ -336,7 +337,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="mathbook|pretext" mode="generic-warnings" />
     <xsl:apply-templates select="mathbook|pretext" mode="deprecation-warnings" />
     <xsl:apply-templates select="mathbook|pretext" mode="deprecation-warnings-latex" />
-    <xsl:apply-templates />
+    <!-- We process the enhanced source pointed  -->
+    <!-- to by $root at  /mathbook  or  /pretext -->
+    <xsl:apply-templates select="$root"/>
 </xsl:template>
 
 <!-- We will have just one of the following -->
@@ -526,8 +529,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>colback=white, colbacktitle=white, coltitle=black, opacityfill=0.0} }&#xa;</xsl:text>
     <xsl:text>%% Second, bold title, run-in to text/paragraph/heading&#xa;</xsl:text>
     <xsl:text>%% Space afterwards will be controlled by environment,&#xa;</xsl:text>
-    <xsl:text>%% dependent of constructions of the tcb title&#xa;</xsl:text>
-    <xsl:text>\tcbset{ runintitlestyle/.style={fonttitle=\normalfont\bfseries, attach title to upper} }&#xa;</xsl:text>
+    <xsl:text>%% independent of constructions of the tcb title&#xa;</xsl:text>
+    <xsl:text>%% Places \blocktitlefont onto many block titles&#xa;</xsl:text>
+    <xsl:text>\tcbset{ runintitlestyle/.style={fonttitle=\blocktitlefont\upshape\bfseries, attach title to upper} }&#xa;</xsl:text>
     <xsl:text>%% Spacing prior to each exercise, anywhere&#xa;</xsl:text>
     <xsl:text>\tcbset{ exercisespacingstyle/.style={before skip={1.5ex plus 0.5ex}} }&#xa;</xsl:text>
     <xsl:text>%% Spacing prior to each block&#xa;</xsl:text>
@@ -622,9 +626,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- We do not attempt bold small caps in division headings (nor ToC, nor page style) -->
     <xsl:text>\setmainfont{Latin Modern Roman}[SmallCapsFont={Latin Modern Roman Caps}, SlantedFont={Latin Modern Roman Slanted}]&#xa;</xsl:text>
     <xsl:text>\newfontfamily{\divisionfont}{Latin Modern Roman}&#xa;</xsl:text>
+    <xsl:text>\newfontfamily{\blocktitlefont}{Latin Modern Roman}&#xa;</xsl:text>
     <xsl:text>\newfontfamily{\contentsfont}{Latin Modern Roman}&#xa;</xsl:text>
     <xsl:text>\newfontfamily{\pagefont}{Latin Modern Roman}[SlantedFont={Latin Modern Roman Slanted}]&#xa;</xsl:text>
     <xsl:text>\newfontfamily{\tabularfont}{Latin Modern Roman}[SmallCapsFont={Latin Modern Roman Caps}]&#xa;</xsl:text>
+    <xsl:text>\newfontfamily{\xreffont}{Latin Modern Roman}&#xa;</xsl:text>
+    <xsl:text>\newfontfamily{\titlepagefont}{Latin Modern Roman}&#xa;</xsl:text>
     <xsl:text>%% begin: font information supplied by "font-xelatex-style" template&#xa;</xsl:text>
     <xsl:call-template name="font-xelatex-style"/>
     <xsl:text>%% end: font information supplied by "font-xelatex-style" template&#xa;</xsl:text>
@@ -732,9 +739,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% These are more robust when using  xelatex  but may be employed with  pdflatex&#xa;</xsl:text>
     <xsl:text>%% The following definitons are meant to be re-defined in a style with \renewcommand&#xa;</xsl:text>
     <xsl:text>\newcommand{\divisionfont}{\relax}&#xa;</xsl:text>
+    <xsl:text>\newcommand{\blocktitlefont}{\relax}&#xa;</xsl:text>
     <xsl:text>\newcommand{\contentsfont}{\relax}&#xa;</xsl:text>
     <xsl:text>\newcommand{\pagefont}{\relax}&#xa;</xsl:text>
     <xsl:text>\newcommand{\tabularfont}{\relax}&#xa;</xsl:text>
+    <xsl:text>\newcommand{\xreffont}{\relax}&#xa;</xsl:text>
+    <xsl:text>\newcommand{\titlepagefont}{\relax}&#xa;</xsl:text>
     <xsl:text>%% begin: font information supplied by "font-pdflatex-style" template&#xa;</xsl:text>
     <xsl:call-template name="font-pdflatex-style"/>
     <xsl:text>%% begin: font information supplied by "font-pdflatex-style" template&#xa;</xsl:text>
@@ -1351,7 +1361,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- but we include it here as a one-off      -->
     <xsl:variable name="miscellaneous-reps" select="
         ($document-root//defined-term)[1]|
-        ($document-root//proof)[1]|
+        ($document-root//proof[parent::hint|parent::answer|parent::solution])[1]|
+        ($document-root//proof[not(parent::hint|parent::answer|parent::solution)])[1]|
         ($document-root//case)[1]|
         ($document-root//assemblage)[1]|
         ($document-root//backmatter/colophon)[1]|
@@ -2154,7 +2165,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- "frame empty" is needed to counteract very faint outlines in some PDF viewers -->
                 <!-- framecol=white is inadvisable, "frame hidden" is ineffective for default skin -->
                 <xsl:text>\tcbset{ sbsstyle/.style={raster before skip=2.0ex, raster equal height=rows, raster force size=false} }&#xa;</xsl:text>
-                <xsl:text>\tcbset{ sbspanelstyle/.style={bwminimalstyle} }&#xa;</xsl:text>
+                <xsl:text>\tcbset{ sbspanelstyle/.style={bwminimalstyle, fonttitle=\blocktitlefont} }&#xa;</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
         <xsl:text>%% Enviroments for side-by-side and components&#xa;</xsl:text>
@@ -2590,21 +2601,38 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\newtcolorbox{commentary}[2]{title={#1}, phantomlabel={#2}, breakable, parbox=false, commentarystyle}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- "proof" -->
-<!-- Body:  \begin{proof}{title}{label}    -->
-<!-- Title comes with punctuation, always. -->
-<xsl:template match="proof" mode="environment">
+<!-- "proof" (regular, major) -->
+<!-- Breakable tcolorbox since a child of a       -->
+<!-- division, i.e. top level, and hence stylable -->
+<!-- Body:  \begin{proof}{title}{label}           -->
+<!-- Title comes with punctuation, always.        -->
+<xsl:template match="proof[not(parent::hint|parent::answer|parent::solution)]" mode="environment">
     <xsl:text>%% proof: title is a replacement&#xa;</xsl:text>
     <xsl:text>\tcbset{ proofstyle/.style={</xsl:text>
     <xsl:apply-templates select="." mode="tcb-style" />
     <xsl:text>} }&#xa;</xsl:text>
-    <xsl:text>\newtcolorbox{proofptx}[2]{title={\notblank{#1}{#1}{</xsl:text>
+    <xsl:text>\newtcolorbox{proof}[2]{title={\notblank{#1}{#1}{</xsl:text>
     <xsl:apply-templates select="." mode="type-name"/>
     <xsl:text>.}}, phantom={</xsl:text>
     <xsl:if test="$b-pageref">
         <xsl:text>\label{#2}</xsl:text>
     </xsl:if>
     <xsl:text>\hypertarget{#2}{}}, breakable, parbox=false, after={\par}, proofstyle }&#xa;</xsl:text>
+</xsl:template>
+
+<!-- "proof" (solutions, minor) -->
+<!-- NOT a tcolorbox since embedded in others,      -->
+<!-- hence an inner box and thus always unbreakable -->
+<!-- Body:  \begin{solutionproof}                   -->
+<!-- Really simple.  No label, so not a target of a -->
+<!-- cross-reference.  Not stylable, though we      -->
+<!-- could use a macro for the tombstone/Halmos/QED -->
+<!-- so that could be set.                          -->
+<xsl:template match="proof[parent::hint|parent::answer|parent::solution]" mode="environment">
+    <xsl:text>\NewDocumentEnvironment{solutionproof}{}&#xa;</xsl:text>
+    <xsl:text>{\par\textit{</xsl:text>
+    <xsl:apply-templates select="." mode="type-name"/>
+    <xsl:text>}.\space\space}{\space\space\hspace*{\stretch{1}}\(\blacksquare\)\par}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- "case" (of a proof) -->
@@ -3049,7 +3077,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The 5% horizontal leg is a "partway modifier", from     -->
 <!-- https://tex.stackexchange.com/questions/48756/tikz-relative-coordinates -->
 <xsl:template match="commentary" mode="tcb-style">
-    <xsl:text>blockspacingstyle, skin=enhanced,fonttitle=\bfseries,coltitle=black,colback=white,frame code={&#xa;</xsl:text>
+    <xsl:text>blockspacingstyle, skin=enhanced,fonttitle=\blocktitlefont\bfseries,coltitle=black,colback=white,frame code={&#xa;</xsl:text>
     <xsl:text>\path[draw=red!75!black,line width=0.5mm] (frame.north west) -- (frame.south west) -- ($ (frame.south west)!0.05!(frame.south east) $);}</xsl:text>
 </xsl:template>
 
@@ -3062,26 +3090,34 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- least two spaces gap to remain on the same      -->
 <!-- line. Presumably the line will stretch when the -->
 <!-- tombstone moves onto its own line.              -->
+<!-- NB: this style is NOT used for a "proof" inside -->
+<!-- a "hint", "answer", or "solution", since that   -->
+<!-- would lead to an inner tcolorbox which is       -->
+<!-- *always* unbreakable and leads to real          -->
+<!-- formatting problems.  We could restrict the     -->
+<!-- match, but that would complicate style writing. -->
+<!-- Instead, this template is simply not employed   -->
+<!-- for the "solution proof" case.                  -->
 <xsl:template match="proof" mode="tcb-style">
-    <xsl:text>bwminimalstyle, fonttitle=\normalfont\itshape, attach title to upper, after title={\space}, after upper={\space\space\hspace*{\stretch{1}}\(\blacksquare\)},&#xa;</xsl:text>
+    <xsl:text>bwminimalstyle, fonttitle=\blocktitlefont\itshape, attach title to upper, after title={\space}, after upper={\space\space\hspace*{\stretch{1}}\(\blacksquare\)},&#xa;</xsl:text>
 </xsl:template>
 
 <!-- "objectives" -->
 <!-- Rules top and bottom, title on its own line, as a heading -->
 <xsl:template match="objectives" mode="tcb-style">
-    <xsl:text>bwminimalstyle, blockspacingstyle, fonttitle=\large\bfseries, toprule=0.1ex, toptitle=0.5ex, top=2ex, bottom=0.5ex, bottomrule=0.1ex</xsl:text>
+    <xsl:text>bwminimalstyle, blockspacingstyle, fonttitle=\blocktitlefont\large\bfseries, toprule=0.1ex, toptitle=0.5ex, top=2ex, bottom=0.5ex, bottomrule=0.1ex</xsl:text>
 </xsl:template>
 
 <!-- "outcomes" -->
 <!-- Differs only by spacing prior, this could go away  -->
 <!-- if headings, etc handle vertical space correctly   -->
 <xsl:template match="outcomes" mode="tcb-style">
-    <xsl:text>bwminimalstyle, blockspacingstyle, fonttitle=\large\bfseries, toprule=0.1ex, toptitle=0.5ex, top=2ex, bottom=0.5ex, bottomrule=0.1ex, before skip=2ex</xsl:text>
+    <xsl:text>bwminimalstyle, blockspacingstyle, fonttitle=\blocktitlefont\large\bfseries, toprule=0.1ex, toptitle=0.5ex, top=2ex, bottom=0.5ex, bottomrule=0.1ex, before skip=2ex</xsl:text>
 </xsl:template>
 
 <!-- back "colophon" -->
 <xsl:template match="backmatter/colophon" mode="tcb-style">
-    <xsl:text>bwminimalstyle, blockspacingstyle, before skip=5ex, left skip=0.15\textwidth, right skip=0.15\textwidth, fonttitle=\large\bfseries, center title, halign=center, bottomtitle=2ex</xsl:text>
+    <xsl:text>bwminimalstyle, blockspacingstyle, before skip=5ex, left skip=0.15\textwidth, right skip=0.15\textwidth, fonttitle=\blocktitlefont\large\bfseries, center title, halign=center, bottomtitle=2ex</xsl:text>
 </xsl:template>
 
 <!-- "defined-term" -->
@@ -3148,16 +3184,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "ancestor::*[self::figure]" (or "not()") to manage the    -->
 <!-- panels of a subcaptioned sidebyside.                      -->
 <xsl:template match="figure|listing" mode="tcb-style">
-    <xsl:text>bwminimalstyle, middle=1ex, blockspacingstyle, </xsl:text>
+    <xsl:text>bwminimalstyle, middle=1ex, blockspacingstyle, fontlower=\blocktitlefont</xsl:text>
 </xsl:template>
 
 <xsl:template match="table" mode="tcb-style">
-    <xsl:text>bwminimalstyle, middle=1ex, blockspacingstyle, coltitle=black, bottomtitle=2ex, titlerule=-0.3pt</xsl:text>
+    <xsl:text>bwminimalstyle, middle=1ex, blockspacingstyle, coltitle=black, bottomtitle=2ex, titlerule=-0.3pt, fonttitle=\blocktitlefont</xsl:text>
 </xsl:template>
 
 <!-- "list" contents are breakable, so we rub out annoying faint lines -->
 <xsl:template match="list" mode="tcb-style">
-    <xsl:text>middle=1ex, blockspacingstyle, colback=white, colbacktitle=white, coltitle=black, colframe=black, titlerule=-0.3pt, toprule at break=-0.3pt, bottomrule at break=-0.3pt, sharp corners</xsl:text>
+    <xsl:text>middle=1ex, blockspacingstyle, colback=white, colbacktitle=white, coltitle=black, colframe=black, titlerule=-0.3pt, toprule at break=-0.3pt, bottomrule at break=-0.3pt, sharp corners, fonttitle=\blocktitlefont</xsl:text>
 </xsl:template>
 
 <!-- This is mostly ad-hoc.  An assemblage is meant to be prominent,   -->
@@ -3175,7 +3211,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- NB: standard jigsaw, opacityback=0.0, opacitybacktitle=0.0  makes -->
 <!-- title rule visible, and  opacity-fill=0.0  kills the the border   -->
 <xsl:template match="assemblage" mode="tcb-style">
-    <xsl:text>size=normal, colback=white, colbacktitle=white, coltitle=black, colframe=black, rounded corners, titlerule=0.0pt, center title, fonttitle=\normalfont\bfseries, blockspacingstyle, </xsl:text>
+    <xsl:text>size=normal, colback=white, colbacktitle=white, coltitle=black, colframe=black, rounded corners, titlerule=0.0pt, center title, fonttitle=\blocktitlefont\bfseries, blockspacingstyle, </xsl:text>
 </xsl:template>
 
 <!-- This is the gross default, across all objects and all styles -->
@@ -3512,7 +3548,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="book" mode="half-title" >
     <xsl:text>%% begin: half-title&#xa;</xsl:text>
     <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
-    <xsl:text>{\centering&#xa;</xsl:text>
+    <xsl:text>{\titlepagefont\centering&#xa;</xsl:text>
     <xsl:text>\vspace*{0.28\textheight}&#xa;</xsl:text>
     <xsl:text>{\Huge </xsl:text>
     <xsl:apply-templates select="." mode="title-full"/>
@@ -3523,7 +3559,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="subtitle"/>
         <xsl:text>}\\&#xa;</xsl:text>
     </xsl:if>
-    <xsl:text>}&#xa;</xsl:text> <!-- finish centering -->
+    <xsl:text>}&#xa;</xsl:text> <!-- finish centering, title page font -->
     <xsl:text>\clearpage&#xa;</xsl:text>
     <xsl:text>%% end:   half-title&#xa;</xsl:text>
 </xsl:template>
@@ -3531,6 +3567,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Ad card may contain list of other books        -->
 <!-- Or may be overridden to make title page spread -->
 <!-- Obverse of half-title                          -->
+<!-- Use \titlepagefont if overidden                -->
 <xsl:template match="book" mode="ad-card">
     <xsl:text>%% begin: adcard&#xa;</xsl:text>
     <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
@@ -3550,7 +3587,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>%% begin: title page&#xa;</xsl:text>
     <xsl:text>%% Inspired by Peter Wilson's "titleDB" in "titlepages" CTAN package&#xa;</xsl:text>
     <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
-    <xsl:text>{\centering&#xa;</xsl:text>
+    <xsl:text>{\titlepagefont\centering&#xa;</xsl:text>
     <xsl:text>\vspace*{0.14\textheight}&#xa;</xsl:text>
     <!-- Target for xref to top-level element -->
     <!-- immediately, or first in ToC         -->
@@ -3600,7 +3637,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="frontmatter/titlepage/editor" mode="title-page" />
     <xsl:apply-templates select="frontmatter/titlepage/credit" mode="title-page" />
     <xsl:apply-templates select="frontmatter/titlepage/date"   mode="title-page" />
-    <xsl:text>}&#xa;</xsl:text> <!-- finish centering -->
+    <xsl:text>}&#xa;</xsl:text> <!-- finish centering, titlepage font -->
     <xsl:text>\clearpage&#xa;</xsl:text>
     <xsl:text>%% end:   title page&#xa;</xsl:text>
 </xsl:template>
@@ -4193,7 +4230,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="index-list">
     <xsl:text>%&#xa;</xsl:text>
     <xsl:text>%% The index is here, setup is all in preamble&#xa;</xsl:text>
-    <xsl:text>\printindex&#xa;</xsl:text>
+    <xsl:text>%% Index locators are cross-references, so same font here&#xa;</xsl:text>
+    <xsl:text>{\xreffont\printindex}&#xa;</xsl:text>
     <xsl:text>%&#xa;</xsl:text>
 </xsl:template>
 
@@ -4994,12 +5032,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="." mode="pop-footnote-text"/>
 </xsl:template>
 
-<!-- Proofs -->
+<!-- Proofs (regular, major) -->
 <!-- Subsidary to THEOREM-LIKE, or standalone        -->
 <!-- Defaults to "Proof", can be replaced by "title" -->
-<!-- TODO: rename as "proof" once  amsthm  package goes away -->
-<xsl:template match="proof">
-    <xsl:text>\begin{proofptx}</xsl:text>
+<xsl:template match="proof[not(parent::hint|parent::answer|parent::solution)]">
+    <xsl:text>\begin{proof}</xsl:text>
     <!-- The AMS environment handles punctuation carefully, so  -->
     <!-- we just use the "title-full" template, with protection -->
     <xsl:text>{</xsl:text>
@@ -5012,7 +5049,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}</xsl:text>
     <xsl:text>&#xa;</xsl:text>
     <xsl:apply-templates/>
-    <xsl:text>\end{proofptx}&#xa;</xsl:text>
+    <xsl:text>\end{proof}&#xa;</xsl:text>
+</xsl:template>
+
+<!-- Proofs (solutions, minor) -->
+<!-- Inside "hint", "answer", solution" -->
+<xsl:template match="proof[parent::hint|parent::answer|parent::solution]">
+    <xsl:text>\begin{solutionproof}</xsl:text>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>\end{solutionproof}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- cases in proofs -->
@@ -5117,15 +5163,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- myopenmath exercise -->
         <!-- We only try to open an external file when the source  -->
         <!-- has a MOM problem (with an id number).  The second    -->
-        <!-- argument of the "document()" function is a node and   -->
+        <!-- argument of the "document()" function is a node from  -->
+        <!-- the original source, and not the enhanced source, and -->
         <!-- causes the relative file name to resolve according    -->
-        <!-- to the location of the XML.   Experiments with the    -->
+        <!-- to the correct location.   Experiments with the       -->
         <!-- empty node "/.." are interesting.                     -->
         <!-- https://ajwelch.blogspot.co.za/2008/04/relative-paths-and-document-function.html -->
         <!-- http://www.dpawson.co.uk/xsl/sect2/N2602.html#d3862e73 (Point 4) -->
         <xsl:when test="myopenmath">
             <xsl:variable name="filename" select="concat(concat('problems/mom-', myopenmath/@problem), '.xml')" />
-            <xsl:apply-templates select="document($filename, .)/myopenmath"  mode="exercise-components">
+            <xsl:apply-templates select="document($filename, $original)/myopenmath"  mode="exercise-components">
                 <xsl:with-param name="b-original" select="true()" />
                 <xsl:with-param name="b-has-statement" select="true()" />
                 <xsl:with-param name="b-has-hint"      select="false()" />
@@ -5713,7 +5760,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="purpose" />
 
-    <xsl:text>\textbf{</xsl:text>
+    <!-- NB: this is the only place \blocktitlefont is written into   -->
+    <!-- the body, so a tcbcolorbox could be a great idea to maintain -->
+    <!-- a separation between the preamble and body                   -->
+    <xsl:text>\textbf{\blocktitlefont </xsl:text>
     <xsl:apply-templates select="." mode="type-name" />
     <!-- An empty value means element is a singleton -->
     <!-- else the serial number comes through        -->
@@ -9884,18 +9934,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>.</xsl:text>
     <!-- task always gets a number, but we have to avoid recursion -->
     <!-- that would result by just getting a \ref from xref-number -->
-    <xsl:text>\ref{</xsl:text>
+    <xsl:text>{\xreffont\ref{</xsl:text>
     <xsl:apply-templates select="." mode="latex-id" />
-    <xsl:text>}</xsl:text>
+    <xsl:text>}}</xsl:text>
 </xsl:template>
 
 <!-- Straightforward exception, simple implementation,  -->
 <!-- when an "mrow" of display mathematics is tagged    -->
 <!-- with symbols not numbers                           -->
 <xsl:template match="mrow[@tag]" mode="xref-number">
-    <xsl:text>\ref{</xsl:text>
+    <xsl:text>{\xreffont\ref{</xsl:text>
     <xsl:apply-templates select="." mode="latex-id" />
-    <xsl:text>}</xsl:text>
+    <xsl:text>}}</xsl:text>
 </xsl:template>
 
 <!-- These exceptions are unnumbered, and are just handled explicitly, -->
@@ -9971,11 +10021,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="xref" select="$xref" />
         </xsl:apply-templates>
     </xsl:variable>
+    <!-- Hard-coded can use a space that LaTeX gobbles up -->
+    <xsl:text>{\xreffont </xsl:text>
     <xsl:if test="$needs-part-prefix = 'true'">
         <xsl:apply-templates select="ancestor::part" mode="serial-number" />
         <xsl:text>.</xsl:text>
     </xsl:if>
     <xsl:apply-templates select="." mode="number" />
+    <xsl:text>}</xsl:text>
 </xsl:template>
 
 <!-- A LaTeX \ref (number) respecting the necessity of parts -->
@@ -9988,6 +10041,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <xsl:choose>
         <xsl:when test="not($the-number = '')">
+            <!-- no matter the "if" a \ref follows -->
+            <xsl:text>{\xreffont</xsl:text>
             <!-- check if part prefix is needed -->
             <xsl:variable name="needs-part-prefix">
                 <xsl:apply-templates select="." mode="crosses-part-boundary">
@@ -10004,6 +10059,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- and always, a representation for the text of the xref -->
             <xsl:text>\ref{</xsl:text>
             <xsl:apply-templates select="." mode="latex-id" />
+            <xsl:text>}</xsl:text>
             <xsl:text>}</xsl:text>
         </xsl:when>
         <xsl:otherwise>

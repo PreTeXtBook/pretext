@@ -35,31 +35,121 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- HTML5 format -->
 <xsl:output method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat"/>
 
-<!-- Switches -->
-<!-- These switches should be in the publisher file,  -->
-<!-- with more robust error-checking, once stabilized -->
+<!-- Publisher Switches -->
+<!-- The $publication variable comes from -common and is the result -->
+<!-- of a command-line string parameter pointing to an XML file of  -->
+<!-- various options.                                               -->
+<!-- Elements and attributes of this file are meant to influence    -->
+<!-- decisions taken *after* an author is completed writing.        -->
+<!-- A couple of temporary command-line stringparam will just be    -->
+<!-- ignored as this stylesheet was first released about the time   -->
+<!-- the publisher file came into exoistence.                       -->
 
-<!-- Anything but 'no' (e.g 'yes') will create    -->
-<!-- code assuming a local reveal.js installation -->
-<!-- NB: this should be nore robust!              -->
-<xsl:param name="local" select="'no'"/>
+<!-- 2020-02-09: Stopped using a temporary "theme" stringparam    -->
+<!-- NB: change $theme2 back to $theme once this param is deleted -->
+<xsl:param name="theme" select="''"/>
 
-<!-- If desired CSS file is css/theme/solarized.css -->
-<!-- then set "theme" parameter to "solarized".     -->
-<!-- Default CSS/theme is css/theme/simple.css      -->
-<xsl:param name="theme" select="'simple'"/>
-
-<!-- String to prefix  reveal.js  resources -->
-<xsl:variable name="reveal-root">
+<xsl:variable name="theme2">
     <xsl:choose>
-        <xsl:when test="$local = 'no'">
-            <xsl:text>https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0</xsl:text>
+        <!-- if stringparam is set, warn and ignore -->
+        <xsl:when test="not($theme = '')">
+            <xsl:message >PTX:WARNING: the temporary "theme" stringparam is deprecated and is being ignored, so the "simple" theme will be used as long as this stringparam is present.  Please switch to using a publisher file to set this option, see documentation in The Guide.</xsl:message>
+            <xsl:text>simple</xsl:text>
         </xsl:when>
+        <!-- if publisher.xml file has theme specified, use it -->
+        <xsl:when test="$publication/revealjs/appearance/@theme">
+            <xsl:value-of select="$publication/revealjs/appearance/@theme"/>
+        </xsl:when>
+        <!-- otherwise use "simple" as the default -->
         <xsl:otherwise>
-            <xsl:text>.</xsl:text>
+            <xsl:text>simple</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
+
+<!-- CSS/JS resources that make up reveal.js -->
+
+<!-- 2020-02-09: Stopped using a temporary "local" stringparam    -->
+<xsl:param name="local" select="''"/>
+
+<!-- String to prefix  reveal.js  resources -->
+<xsl:variable name="reveal-root">
+    <!-- CDN is used twice, so just edit here -->
+    <!-- NB: deprecation is frozen -->
+    <xsl:variable name="cdn-url">
+        <xsl:text>https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0</xsl:text>
+    </xsl:variable>
+
+    <xsl:choose>
+        <xsl:when test="not($local = '')">
+            <xsl:message >PTX:WARNING: the temporary "local" stringparam is deprecated and is being ignored, so the reveal.js rsources will come from a CDN and are frozen at version 3.8.0 which is not supported by the PreTeXt conversion.  Please switch to using a publisher file to set this option, see documentation in The Guide.</xsl:message>
+            <xsl:text>https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0</xsl:text>
+        </xsl:when>
+        <!-- if publisher.xml file has CDN option specified, use it       -->
+        <!-- keep this URL updated, but not for the deprecation situation -->
+        <xsl:when test="$publication/revealjs/resources/@host = 'cdn'">
+            <xsl:value-of select="$cdn-url"/>
+        </xsl:when>
+        <!-- if publisher.xml file has the local option specified, use it -->
+        <xsl:when test="$publication/revealjs/resources/@host = 'local'">
+            <xsl:text>.</xsl:text>
+        </xsl:when>
+        <!-- Experimental - just some file path/url -->
+        <xsl:when test="$publication/revealjs/resources/@host">
+            <xsl:value-of select="$publication/revealjs/resources/@host"/>
+        </xsl:when>
+        <!-- default to the CDN if no specification -->
+        <xsl:otherwise>
+            <xsl:value-of select="$cdn-url"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- Minified CSS/JS -->
+<!-- Resources from a CDN come in a minified version typically.    -->
+<!-- But a local version does not have these files available.      -->
+<!-- So we provide sensible defaults and let a publisher override. -->
+
+<xsl:variable name="minified">
+    <xsl:choose>
+        <!-- explict is recognized first, only "yes" activates minified -->
+        <xsl:when test="$publication/revealjs/resources/@minified">
+            <xsl:choose>
+                <xsl:when test="$publication/revealjs/resources/@minified = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>no</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- for PTX-supplied CDN, assume minified is best -->
+        <xsl:when test="$publication/revealjs/resources/@host = 'cdn'">
+            <xsl:text>yes</xsl:text>
+        </xsl:when>
+        <!-- and for a local copy, assume no minified copy exists -->
+        <xsl:when test="$publication/revealjs/resources/@host = 'local'">
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <!-- else some host, but we don't have any idea -->
+        <!-- so don't get fancy, and go without minified -->
+        <xsl:when test="$publication/revealjs/resources/@host">
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <!-- no @minified, and no @host, so we have     -->
+        <!-- defaulted to CDN and minified is suggested -->
+        <xsl:otherwise>
+            <xsl:text>yes</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<!-- Convert "yes"/"no" to a boolean variable -->
+<xsl:variable name="b-minified" select="$minified = 'yes'"/>
+
+
+<!-- ################ -->
+<!-- # Entry Template -->
+<!-- ################ -->
 
 <!-- We override the entry template, so as to avoid the "chunking"    -->
 <!-- procedure, since we are going to *always* produce one monolithic -->
@@ -95,18 +185,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="sagecell" />
 
             <!-- load reveal.js resources             -->
-            <!-- NB: non-local gets minified versions -->
             <xsl:choose>
-                <xsl:when test="$local = 'no'">
+                <xsl:when test="$b-minified">
                     <link href="{$reveal-root}/css/reset.min.css" rel="stylesheet"></link>
                     <link href="{$reveal-root}/css/reveal.min.css" rel="stylesheet"></link>
-                    <link href="{$reveal-root}/css/theme/{$theme}.min.css" rel="stylesheet"></link>
+                    <link href="{$reveal-root}/css/theme/{$theme2}.min.css" rel="stylesheet"></link>
                     <script src="{$reveal-root}/js/reveal.min.js"></script>
                 </xsl:when>
                 <xsl:otherwise>
                     <link href="{$reveal-root}/css/reset.css" rel="stylesheet"></link>
                     <link href="{$reveal-root}/css/reveal.css" rel="stylesheet"></link>
-                    <link href="{$reveal-root}/css/theme/{$theme}.css" rel="stylesheet"></link>
+                    <link href="{$reveal-root}/css/theme/{$theme2}.css" rel="stylesheet"></link>
                     <script src="{$reveal-root}/js/reveal.js"></script>
                 </xsl:otherwise>
             </xsl:choose>
@@ -150,7 +239,7 @@ ul {
 
             <div class="reveal">
                 <div class="slides">
-                     <xsl:apply-templates select="frontmatter/titlepage" mode="title-slide"/>
+                     <xsl:apply-templates select="frontmatter"/>
                     <xsl:apply-templates select="section|slide"/>
                 </div>
             </div>
@@ -188,8 +277,9 @@ Reveal.initialize({
     <!--  -->
 </xsl:template>
 
-<xsl:template match="titlepage" mode="title-slide">
+<xsl:template match="frontmatter">
     <section>
+      <section>
         <!-- we assume an overall title exists -->
         <h1>
             <xsl:apply-templates select="/pretext/slideshow" mode="title-full" />
@@ -213,7 +303,9 @@ Reveal.initialize({
             </h4>
         </xsl:if>
         <!-- we assume at least one author, these are in a table -->
-        <xsl:apply-templates select="." mode="author-list"/>
+        <xsl:apply-templates select="titlepage" mode="author-list"/>
+    </section>
+    <xsl:apply-templates select="abstract"/>
   </section>
 </xsl:template>
 
@@ -235,6 +327,15 @@ Reveal.initialize({
   </xsl:for-each>
   </tr>
 </table>
+</xsl:template>
+
+<xsl:template match="abstract">
+    <section>
+          <h3>Abstract</h3>
+          <div align="left">
+              <xsl:apply-templates/>
+          </div>
+    </section>
 </xsl:template>
 
 <xsl:template match="slide">

@@ -7,6 +7,10 @@
 <!-- Copyright (C) 2013-2017  Robert A. Beezer, David Farmer  -->
 <!-- See the file COPYING for copying conditions.             -->
 
+<!-- NB: This chapter is organized by the hierarchy -->
+<!-- of the publisher file and then alphabetically  -->
+<!-- at each level of the tree                      -->
+
 <chapter xml:id="publisher-file-reference">
     <title>Publisher File Reference</title>
 
@@ -14,45 +18,90 @@
         <p>This chapter is reference material for the <term>publisher file</term>, whose employment is described in <xref ref="publisher-file"/>.</p>
     </introduction>
 
-    <section xml:id="analytics-options">
-        <title>HTML Analytics</title>
-        <idx>analytics</idx>
+    <section xml:id="publisher-file-online">
+        <title>Online (HTML) Options</title>
+        <idx>HTML publisher options</idx>
+        <idx><h>publisher options</h><h>HTML</h></idx>
 
-        <p>The<cd>
-            <cline>/publisher/html/analytics</cline>
-        </cd>element can have the following attributes:<ul>
-            <li><attr>google-gst</attr>: a Google <term>global site tag</term>, and ID you get from Google.</li>
-            <li><attr>statcounter-project</attr>, <attr>statcounter-security</attr>: ID numbers you get from StatCounter.</li>
-        </ul>Setting these attributes to non-empty strings is the signal to add the relevant code to each of the pages of your HTML output.  See <xref ref="online-analytics"/> for more.</p>
+        <introduction>
+            <p>These options affect the base conversion to web pages (online, <init>HTML</init>).  Many, but not all, will affect subsequent conversions based on <init>HTML</init>, such as a conversion to <itnit>EPUB</itnit> or Jupyter notebooks.  See <xref ref="online-html"/>  for a more general overview of this conversion, including options that will eventually migrate here.</p>
+        </introduction>
+
+        <subsection xml:id="online-analytics-options">
+            <title>HTML Analytics</title>
+            <idx>analytics</idx>
+
+            <p>The<cd>
+                <cline>/publication/html/analytics</cline>
+            </cd>element can have the following attributes:<ul>
+                <li><attr>google-gst</attr>: a Google <term>global site tag</term>, and ID you get from Google.</li>
+                <li><attr>statcounter-project</attr>, <attr>statcounter-security</attr>: ID numbers you get from StatCounter.</li>
+            </ul>Setting these attributes to non-empty strings is the signal to add the relevant code to each of the pages of your HTML output.  See <xref ref="online-analytics"/> for more.</p>
+        </subsection>
+
+        <subsection xml:id="online-style-options">
+            <title>HTML Style</title>
+            <idx><h>style</h><h>HTML</h></idx>
+
+            <p>The<cd>
+                <cline>/publication/html/css</cline>
+            </cd>element can have the following attributes:<ul>
+                <li><attr>colors</attr>: used to construct filename for CSS controlling colors.</li>
+                <li><attr>knowls</attr>: used to construct filename for CSS controlling knowls.</li>
+                <li><attr>toc</attr>: used to construct filename for CSS controlling the Table of Contents.</li>
+                <li><attr>banner</attr>: used to construct filename for CSS controlling the banner (masthead).</li>
+            </ul>In each case the default file is replaced and instead a new filename is formed from the attributes value.  For example, the specification<cd>
+                <cline>&lt;css colors='bright_red'/&gt;</cline>
+            </cd>will cause a CSS file named <c>colors_bright_red.css</c> to replace <c>colors_default.css</c>.  The server in use can be configured separately.  See <xref ref="online-style"/> for more.</p>
+
+            <p>2019-12-08: at this time we recommend experimenting with only one file at a time.</p>
+        </subsection>
+
+        <subsection xml:id="online-search-options">
+            <title>HTML Search</title>
+            <idx>search</idx>
+
+            <p>The<cd>
+                <cline>/publication/html/search</cline>
+            </cd>element can have the following attribute:<ul>
+                <li><attr>google-cx</attr>: a Google <term>cx number</term>, gained from configuring search for a site.</li>
+            </ul>Setting this attributes to a non-empty string is the signal to add the relevant code for a search box in the masthead.  See <xref ref="online-search"/> for more.</p>
+        </subsection>
     </section>
 
-    <section xml:id="online-style-options">
-        <title>HTML Style</title>
-        <idx><h>style</h><h>HTML</h></idx>
+    <section xml:id="publisher-file-revealjs">
+        <title>Reveal.js Slideshow Options</title>
+        <idx>reveal.js slideshow publisher options</idx>
+        <idx><h>publisher options</h><h>reveal.js slideshow</h></idx>
 
-        <p>The<cd>
-            <cline>/publisher/html/css</cline>
-        </cd>element can have the following attributes:<ul>
-            <li><attr>colors</attr>: used to construct filename for CSS controlling colors.</li>
-            <li><attr>knowls</attr>: used to construct filename for CSS controlling knowls.</li>
-            <li><attr>toc</attr>: used to construct filename for CSS controlling the Table of Contents.</li>
-            <li><attr>banner</attr>: used to construct filename for CSS controlling the banner (masthead).</li>
-        </ul>In each case the default file is replaced and instead a new filename is formed from the attributes value.  For example, the specification<cd>
-            <cline>&lt;css colors='bright_red'/&gt;</cline>
-        </cd>will cause a CSS file named <c>colors_bright_red.css</c> to replace <c>colors_default.css</c>.  The server in use can be configured separately.  See <xref ref="online-style"/> for more.</p>
+        <introduction>
+            <p>See <xref ref="publisher-revealjs"/> for a more general overview of this conversion.</p>
+        </introduction>
 
-        <p>2019-12-08: at this time we recommend experimenting with only one file at a time.</p>
+        <subsection xml:id="revealjs-appearance-options">
+            <title>Reveal.js Appearance</title>
+            <idx><h>publisher options</h><h>reveal.js appearance</h></idx>
+
+            <p>The<cd>
+                <cline>/publication/revealjs/appearance</cline>
+            </cd>element can have the following attribute:<ul>
+                <li><attr>theme</attr>: the base name of a file that is a reveal.js theme.  For example if the desired theme/CSS file is <c>css/theme/solarized.css</c>, then set the value of this attribute to <c>solarized</c>.</li>
+            </ul></p>
+        </subsection>
+
+
+        <subsection xml:id="revealjs-resources-options">
+            <title>Reveal.js Resources</title>
+            <idx><h>publisher options</h><h>reveal.js resources</h></idx>
+
+            <p>You may wish to host the reveal.js CSS and javascript files locally or obtain them online.</p>
+
+            <p>The<cd>
+                <cline>/publication/revealjs/resources</cline>
+            </cd>element can have the following attributes:<ul>
+                <li><attr>host</attr>: The values <c>local</c> and <c>cdn</c> will retrieve various Javascript and CSS files (such as the theme) relative to the slideshow <init>HTML</init> file or from an online Content Delivery Network (respectively).  PreTeXt will maintain a link to a current, updated, <init>CDN</init> version and this will change without notice.  This attribute may be given a <init>URL</init> or a local path, though this has not been tested, so should be considered experimental.</li>
+                <li><attr>minified</attr>: These files may be compressed into a <q>min-ified</q> form for faster downloading.  Typically the <init>CDN</init> files will be available in this form, while the local version will not.  <pretext/> will make a sensible choice based on <attr>host</attr>, so you should only need to use this attribute to override that choice.  Values are <c>yes</c> and <c>no</c>.</li>
+            </ul></p>
+        </subsection>
     </section>
-
-    <section xml:id="search-options">
-        <title>HTML search</title>
-        <idx>search</idx>
-
-        <p>The<cd>
-            <cline>/publisher/html/search</cline>
-        </cd>element can have the following attribute:<ul>
-            <li><attr>google-cx</attr>: a Google <term>cx number</term>, gained from configuring search for a site.</li>
-        </ul>Setting this attributes to a non-empty string is the signal to add the relevant code for a search box in the masthead.  See <xref ref="online-search"/> for more.</p>
-    </section>
-
 </chapter>

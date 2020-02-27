@@ -801,7 +801,11 @@ the xsltproc executable.
                             <p permid="Xyz">42.</p>
                         </answer>
                         <solution>
-                            <p>What was the question?</p>
+                            <proof>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin lorem diam, convallis in nulla sed, accumsan fermentum urna. Pellentesque aliquet leo elit, ut consequat nunc dapibus ac. Sed lobortis leo tincidunt, vulputate nunc at, ultricies leo. Vivamus purus diam, tristique laoreet purus eget, mollis gravida sapien. Nunc vulputate nisl ac mauris hendrerit cursus. Sed vel molestie velit. Suspendisse sem sem, elementum at vehicula id, volutpat ac mi. Nullam ullamcorper fringilla purus in accumsan. Mauris at nunc accumsan orci dictum vulputate id id augue. Suspendisse at dignissim elit, non euismod nunc. Aliquam faucibus magna ac molestie semper. Aliquam hendrerit sem sit amet metus congue tempor. Donec laoreet laoreet metus, id interdum purus mattis vulputate. Proin condimentum vitae erat varius mollis. Donec venenatis libero sed turpis pretium tempor.</p>
+
+                                <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra. Integer sagittis dictum turpis vel aliquet. Fusce ut suscipit dolor, nec tristique nisl. Aenean luctus, leo et ornare fermentum, nibh dui vulputate leo, nec tincidunt augue ipsum sed odio. Nunc non erat sollicitudin, iaculis eros consequat, dapibus eros.</p>
+                            </proof>
                         </solution>
                     </exercise>
 
@@ -916,7 +920,11 @@ the xsltproc executable.
                                     <p>A short paragraph, before an answer.</p>
                                 </statement>
                                 <answer>
-                                    <p>In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
+                                    <p>With a proof.</p>
+                                    <proof>
+                                        <p>In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
+                                    </proof>
+                                    <p>And a bit more to say.</p>
                                 </answer>
                             </task>
                             <task>
@@ -1695,7 +1703,7 @@ the xsltproc executable.
                 <p>Generally, you cannot use any <init>XML</init> elements inside of the mathematics elements.  An exception is the <c>xref</c> element which you might want to use to provide justifications for the steps of a derivation.  Here is a visual example that is mathematically meaningless,<md>
                     <mrow>A&amp;=B+C&amp;&amp;<xref ref="corollary-FTC-derivative" text="type-global" /></mrow>
                     <mrow>&amp;=D+E&amp;&amp;<xref ref="theorem-FTC" text="title" /></mrow>
-                    <mrow>&amp;=F+G&amp;&amp;<xref ref="theorem-number-01" text="title">A nice result</xref></mrow>
+                    <mrow>&amp;=F+G&amp;&amp;<xref ref="theorem-number-01" text="custom">A nice result</xref></mrow>
                 </md>.</p>
             </subsection>
 
@@ -3429,7 +3437,13 @@ the xsltproc executable.
                         <statement><p><m>3+4+5</m></p></statement>
                         <hint><p>Addition is associative.</p></hint>
                         <answer><p><m>12</m></p></answer>
-                        <solution><p>First, add <m>3</m> and <m>4</m> to get <m>7</m>, then add <m>5</m> to arrive at <m>12</m>.</p></solution>
+                        <solution>
+                            <p>First, add <m>3</m> and <m>4</m> to get <m>7</m>, then add <m>5</m> to arrive at <m>12</m>.</p>
+                            <proof>
+                                <p>A simple argument.</p>
+                            </proof>
+                            <p>And a bit more.</p>
+                        </solution>
                     </exercise>
                     <exercise>
                         <statement><p><m>5+6</m></p></statement>
@@ -5732,14 +5746,14 @@ the xsltproc executable.
                 <li><p>Always named: <xref ref="corollary-FTC-derivative" text="type-global" /></p></li>
             </ul></p>
 
-            <p>You might also wish to provide a prefix to a cross-reference and have it incorporated into the text of what you would click on in an electronic version.  So if you make an <c>xref</c> with some content, then that content will prefix the cross-reference within the clickable/pokeable text and be attached with a non-breaking space.  This <c>xref</c> content totally overrides any prefix that might happen otherwise.  So the name of an item (<eg /> <q>corollary</q>) could be replaced, and if you make a cross-reference with a title as the clickable, then that text can be replaced also.  An example:<ul>
+            <p>You might also wish to provide a prefix to a cross-reference and have it incorporated into the text of what you would click on in an electronic version.  So if you make an <c>xref</c> with some content, then that content will prefix the cross-reference within the clickable/pokeable text and be attached with a non-breaking space.  This <c>xref</c> content totally overrides any prefix that might happen otherwise.  So the name of an item (<eg /> <q>corollary</q>) could be replaced, and if you make a cross-reference with custom text, that will be the clickable also.  An example:<ul>
                 <li><p>A grand result: <xref ref="corollary-FTC-derivative">Major Corollary</xref></p></li>
-                <li><p>A grand result: <xref ref="corollary-FTC-derivative" text="title">a nice corollary</xref></p></li>
+                <li><p>A grand result: <xref ref="corollary-FTC-derivative" text="custom">a nice corollary</xref></p></li>
             </ul></p>
 
             <p>Suppose you want to reference two theorems, so you might want to say something like <q>Theorems 4.6 and 5.2.</q>  With global autonaming on, you can override the first <c>Theorem</c> by providing the content <c>Theorems</c> on the first <c>xref</c> and <c>text="global"</c> on the second <c>xref</c>.  (With global autonaming off, you will also get what you want/expect.)   Here is the test, which should look correct no matter what the global switch is:  <xref ref="section-cross-referencing">Sections</xref> and <xref ref="section-internationalization" text="global" />.  (But notice that it is up to you to be certain the types of these targets do not change without you changing the content of the first <c>xref</c>.  The <q>author-tools</q> mode and careful choices of <c>xml:id</c> strings can help avoid this trap.)</p>
 
-            <p>One final twist.  If you say <c>text="title"</c>, then the title you assigned to the theorem will prefix the number.  Here is a the final example, which should always refer to a fundamental theorem by name <xref ref="theorem-FTC" text="title" />.</p>
+            <p>If you set the value of <attr>text</attr> to <c>title</c>, then the title you assigned to the theorem will be used as the link for a cross-reference.  Here is a the final example, which refers to a fundamental theorem by name <xref ref="theorem-FTC" text="title" />.</p>
 
             <p>Cross-references to exercises with hard-coded numbers should respect the supplied number.  Exercise<nbsp /><xref ref="exercise-with-hardcoded-number" /> should reference problem 42a.</p>
 
@@ -5761,6 +5775,7 @@ the xsltproc executable.
                 <li><p>A Figure, containing a side-by-side with two sub-captioned images: <xref ref="fig-sidebyside-global" /></p></li>
                 <li><p>Display Mathematics: single, first with no name: <xref ref="equation-alternate-FTC" />.  Then with an autoname: <xref ref="equation-alternate-FTC" text="type-global" />.</p></li>
                 <li><p>Display Mathematics: multi-row, first with no name: <xref ref="equation-use-FTC" />.  Then with an autoname: <xref ref="equation-use-FTC" text="type-global" />.  And two, with a plural form: <xref ref="equation-alternate-FTC">Equations</xref> and <xref ref="equation-use-FTC" text="global" />.</p></li>
+                <li><p>You can cross-reference <xref ref="equation-use-FTC" text="custom">The Fundamental Theorem of Calculus</xref> via custom text of your choice.</p></li>
                 <li><p>Display mathematics: an equation with  <q>local</q> tag, which should not be used so very far away: <xref ref="equation-local-tag" />.</p></li>
                 <li><p>You can author a cross-reference to a displayed equation with no number, but it will not be very satisfying.  You should get a warning if you try.</p></li>
                 <li><p>Exercises (divisional), a range, with plural form provided to override autonaming: <xref first="exercises-null-problem" last="exercises-cosine-derivative">Exercises</xref>.</p></li>
@@ -5777,11 +5792,9 @@ the xsltproc executable.
                 <li><p>A titled list: <xref ref="list-colors-rainbow" /></p></li>
                 <li><p>List item inside a named list, second color in rainbow list: <xref ref="rainbow-orange" text="type-global" /></p></li>
                 <li><p>Second color in rainbow list, but now as a local reference: <xref ref="rainbow-orange" text="type-local" /></p></li>
-
-                <li><p>An item in ordered list, but contained in an unordered list, hence without a number, so ambiguous: <xref ref="target-no-number" text="type-global"/></p></li>
-                <li><p>Same item in ordered list, but contained in an unordered list, now with a cross-reference by <c>title</c> with a content override: <xref ref="target-no-number" text="title">No Number List Item</xref></p></li>
+                <li><p>An item in ordered list, but contained in an unordered list, hence without a number, so a cross-reference by number would be ambiguous.  So we use a cross-reference which relies on custom text: <xref ref="target-no-number" text="custom">No Number List Item</xref></p></li>
                 <li><p>Several examples of hybrid cross-references to list items within a named list can be found in, and adjacent to, <xref ref="list-to-reference" text="type-global" />.</p></li>
-                <li><p>An assemblage, which never has a number.  A cross-reference now requires content in the <c>xref</c> element, with <c>text='title'</c>: <xref ref="assemblage-basics" text="title">text to xref an assemblage</xref></p></li>
+                <li><p>An assemblage, which never has a number.  A cross-reference now requires content in the <c>xref</c> element, with <c>text='custom'</c>: <xref ref="assemblage-basics" text="custom">text to xref an assemblage</xref></p></li>
                 <li><p>A cross-reference to a list item in a description list, which has a title, but never a number: <xref ref="cpu-definition" text="title" />.  Note that you need to include the attribute <c>text="title"</c> even if that is obvious from the situation.  This requirement may be relaxed in a future refactoring of the cross-reference system.</p></li>
                 <li><p>A very similar cross-reference to the previous one, but testing how final punctuation of titles is handled: <xref ref="bus-definition" text="title" />.</p></li>
                 <li><p>A cross-reference to a <q>paragraphs</q> subdivision, which never has a number (so comments above about description list items and titles applies here too): <xref ref="hierarchy-structure" text="title" /></p></li>
@@ -5790,20 +5803,21 @@ the xsltproc executable.
                 <li><p>A cross-reference to an aside, by title necessarily: <xref ref="an-aside" text="title" /></p></li>
                 <li><p>A cross-reference to an <c>objectives</c> block, with an autoname.  This demonstrates the number of the Objectives here, which is not shown in the original version since it is implicit: <xref ref="objectives-structures" text="type-global" /></p></li>
                 <li><p>A cross-reference to an individual objective.  This is authored as a list item, but displayed as an objective (singular) via an autoname: <xref ref="objective-structure" text="type-global" /></p></li>
-                <li><p>A cross-reference to the top-level element (<eg /><c>book</c>) will point to a summary page similar to a Table of Contents in HTML.  For LaTeX output it will behave similarly, unless there is no Table of Contents, then it will go to the main title page:  <xref ref="derivatives">ToC or Title</xref></p></li>
+                <li><p>A cross-reference to the top-level element (<eg /><c>book</c>) will point to a summary page similar to a Table of Contents in HTML.  For LaTeX output it will behave similarly, unless there is no Table of Contents, then it will go to the main title page:  <xref ref="derivatives" text="custom">ToC or Title</xref></p></li>
                 <li><p><q>Cross-references inside quotations previously lost track of their target, so this tests correcting that, not so much the cross-reference itself: <xref ref="theorem-FTC" text="type-global" /></q></p></li>
                 <li><p>An activity with full details following: <xref ref="activity-with-hint-answer-solution" /></p></li>
                 <li><p>An interactive program inside a program listing, to test if the Javascript will execute properly within a knowl: <xref ref="program-interactive" /></p></li>
-                <li><p>A cross-reference to a block quotation (which is never numbered): <xref ref="blockquote-seuss" text="title">Quote by Dr Seuss</xref></p></li>
+                <li><p>A cross-reference to a block quotation (which is never numbered) and with custom text: <xref ref="blockquote-seuss" text="custom">Quote by Dr Seuss</xref></p></li>
                 <li><p>A <c>type-global</c> cross-reference to a second-level <c>task</c> within a project: <xref ref="project-task-level-two" text="type-global" />, the encompassing <c>project</c>: <xref ref="project-structured" />, and a <c>local</c> reference <xref ref="project-task-level-two" text="local" />.</p></li>
                 <li><p>A subcaptioned named list: <xref ref="color-list-as-panel" /></p></li>
-                <li><p>A cross-reference to a paragraph (<c>p</c>) in the <c>statement</c> of an <c>exercise</c>: <xref ref="paragraph-in-exercise" text="title">paragraph</xref>.  Notice that such a paragraph has no number and no title, so you need to (a) use <c>text='title'</c>, and (b) provide custom text for the title, as an override that becomes the content of the link.  You may wish to provide very explicit location information for hardcopy print.  Notice that this is not a cross-reference to the <c>exercise</c>, just a small portion of it.</p></li>
+                <li><p>A cross-reference to a paragraph (<c>p</c>) in the <c>statement</c> of an <c>exercise</c>: <xref ref="paragraph-in-exercise" text="custom">paragraph</xref>.  Notice that such a paragraph has no number and no title, so you need to (a) use <c>text='custom'</c>, and (b) provide custom text as the content of the <tag>xref</tag>.  You may wish to provide very explicit location information for hardcopy print.  Notice that this is not a cross-reference to the <c>exercise</c>, just a small portion of it.</p></li>
                 <li><p>This opens a knowl for an <c>example</c>.  It has a solution, which is orginally presented as a hidden knowl.  But since this version is a duplicate, the knowl for the solution is a file version, not an embedded version, and hence free from duplicating any unique identifaction like an <init>HTML</init> id.  So we test its styling and function here: <xref ref="example-structured" text="type-global" /></p></li>
                 <li><p>A cross-reference to a poem, where we need to use a title for the link text, since a <c>poem</c> is not numbered: <xref ref="poem-light-brigade" text="title" /></p></li>
                 <li><p>A cross-reference to a <tag>references</tag> division in a subsection, which should not be numbered where born, but which has the number of its parent division in a cross-reference: <xref ref="references-section" text="type-global"/>.  And a cross-reference to a <tag>references</tag> division, which is the <q>main</q> bibliography in the back matter, and so is not numbered where born, nor in a cross-reference (which we must accomplish via it's title): <xref ref="references-backmatter" text="title"/>.</p></li>
                 <li><p>A cross-reference to a <tag>solutions</tag> division in a subsection, which should not be numbered where born, but which has the number of its parent division in a cross-reference: <xref ref="solutions-subsection" text="type-global"/>.  And a cross-reference to a <tag>solutions</tag> division, which should appear as an appendix both where born and as a cross-reference: <xref ref="solutions-backmatter" text="type-global"/>.</p></li>
                 <li><p>A cross-reference to an <tag>exercises</tag> division in a subsection, which is the only such division in that subsection and therefore should not be numbered where born, but which has the number of its parent division in a cross-reference: <xref ref="exercises-subsection-solo" text="type-global"/>.  In contrast we cross-reference an <tag>exercises</tag> division which is one of two inside a section, and therefore is numbered, when born and when cross-referenced, in continuity with the preceding subsections: <xref ref="exercises-section-multiple" text="type-global"/>.</p></li>
-                <!-- <li><p>: <xref ref="" /></p></li> -->
+                <li><p>A custom cross-reference: <xref ref="corollary-FTC-derivative" text="custom">Custom</xref></p></li>
+                <!-- <li><p>: <xref ref="" text=""/></p></li> -->
             </ul></p>
 
             <p>Cross-references to structural elements of the document will always take you there directly, since even in the HTML version these parts never get realized as knowls.  You will find such links sprinkled through this document, but here is an autonamed link to a subsubsection:  <xref ref="subsubsection-different-integrals" text="type-global" />.</p>

@@ -21,3 +21,9 @@ $ diff /path/to/examples/sample-errors-and-warnings.xml new-sample.xml
 `author-report.xsl` is a very simple stylesheet which will produce a text version of items in your source that could benefit from your attention.  This is different than validating your PreTeXt source against the schema, but is part of using automated tools to ensure healthy source material.
 
 (Updated: 2018-12-09)
+
+## Intermediate Enhanced Source
+
+`pretext-enhanced-source.xsl` is mainly meant for development use.  It outputs an XML file, which is not necessarily valid PreTeXt, at a key stage of the processing.  It gives you a look under the hood (or bonnet).  So generally not useful (or necessary) for authors.
+
+(Updated: 2020-02-25)
