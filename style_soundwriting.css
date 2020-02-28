@@ -130,6 +130,14 @@
     border: 2px solid var(--bordercolor);
 }
 
+.pretext-content .example-like .example-like {
+    padding: 0;
+    margin: 0;
+    border: none;
+    background: inherit;
+}
+
+
 /* override list margins */
 .pretext-content .list {
   margin-left: 0 !important;
