@@ -82,7 +82,9 @@
   font-size:2em;
 }
 
-.pretext-content section.preface h2.heading {
+.pretext-content section.preface h2.heading, 
+.pretext-content section.acknowledgement h2.heading, 
+.pretext-content section.colophon h2.heading {
   color: var(--chaptertitle);
   margin-bottom: 15pt;
   font-size: 1.75em;
@@ -135,7 +137,7 @@
 }
 
 .pretext-content .remark-like .heading,
-.pretext-content .example-like .heading,
+/* .pretext-content .example-like .heading, */
 .pretext-content .list figcaption {
   display: block;
   margin-top: -0.5em !important;
