@@ -8735,9 +8735,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <xsl:if test="$the-title = ''">
                 <xsl:message>
                     <xsl:text>PTX:WARNING:    </xsl:text>
-                    <xsl:text>An &lt;xref&gt; requests a title for its text, but the target (with @xml:id "</xsl:text>
+                    <xsl:text>An &lt;xref&gt; wants to build text using a title to identify the target, but the target (which has @xml:id "</xsl:text>
                     <xsl:value-of select="@ref"/>
-                    <xsl:text>") has no title.</xsl:text>
+                    <xsl:text>") has no title, not even a default title.</xsl:text>
                 </xsl:message>
                 <xsl:apply-templates select="." mode="location-report"/>
             </xsl:if>
@@ -8746,7 +8746,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <xsl:if test="not($b-has-content)">
                 <xsl:message>
                     <xsl:text>PTX:WARNING:    </xsl:text>
-                    <xsl:text>An &lt;xref&gt; expects custom text but none was provided.</xsl:text>
+                    <xsl:text>An &lt;xref&gt; wants to use custom text to describe the target, but no custom text was provided as the content of the "xref".</xsl:text>
                 </xsl:message>
                 <xsl:apply-templates select="." mode="location-report" />
             </xsl:if>
@@ -8767,9 +8767,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <xsl:if test="($the-number = '') and not($b-is-contributor-target)">
                 <xsl:message>
                     <xsl:text>PTX:WARNING:    </xsl:text>
-                    <xsl:text>An &lt;xref&gt; needs a number for its text, but the target (with @xml:id "</xsl:text>
+                    <xsl:text>An &lt;xref&gt; wants to build text using a number to identify the target, but the target (which has @xml:id "</xsl:text>
                     <xsl:value-of select="@ref"/>
-                    <xsl:text>") does not have a number.</xsl:text>
+                    <xsl:text>") does not have a number. You could try 'text="title"' or 'text="custom"' on the "xref".</xsl:text>
                 </xsl:message>
                 <xsl:apply-templates select="." mode="location-report"/>
             </xsl:if>
