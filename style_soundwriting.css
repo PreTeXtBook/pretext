@@ -55,18 +55,45 @@
 .pretext-content section.chapter h2.heading {
   color: var(--chaptertitle);
 }
+
+.pretext-content section.chapter h2.heading .title {
+  display:block;
+  font-size:larger;
+  margin-top: 5pt;
+}
+
 .pretext-content section.section h2.heading {
   color: var(--sectiontitle);
   border-top: 1pt solid;
   border-bottom: 1pt solid;
-  margin-bottom: 10pt;
+  margin-bottom: 20pt;
+  width: 100%;
 }
 .pretext-content section.subsection h2.heading {
   color: var(--subsectiontitle);
   border-bottom: 1pt solid;
-  margin-bottom: 5pt;
+  margin-bottom: 20pt;
+  width: 90%;
 }
 
+/* frontmatter headings: */
+.pretext-content section.frontmatter h2.heading {
+  color: var(--chaptertitle);
+  font-size:2em;
+}
+
+.pretext-content section.preface h2.heading, 
+.pretext-content section.acknowledgement h2.heading, 
+.pretext-content section.colophon h2.heading {
+  color: var(--chaptertitle);
+  margin-bottom: 15pt;
+  font-size: 1.75em;
+}
+
+.pretext-content section.preface h2.heading .title {
+  display:block;
+  font-size:larger;
+}
 
 /* Blocks: */
 
@@ -103,6 +130,14 @@
     border: 2px solid var(--bordercolor);
 }
 
+.pretext-content .example-like .example-like {
+    padding: 0;
+    margin: 0;
+    border: none;
+    background: inherit;
+}
+
+
 /* override list margins */
 .pretext-content .list {
   margin-left: 0 !important;
@@ -110,7 +145,7 @@
 }
 
 .pretext-content .remark-like .heading,
-.pretext-content .example-like .heading,
+/* .pretext-content .example-like .heading, */
 .pretext-content .list figcaption {
   display: block;
   margin-top: -0.5em !important;

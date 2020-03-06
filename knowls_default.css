@@ -110,6 +110,10 @@ article > [data-knowl]::after, article > [data-knowl]:hover::after, article > [d
   /* so the corner of the L meets */
   padding-top: 0.35em;
 }
+.example-like .knowl-output.original {
+    background: inherit;
+}
+
 
 
 .knowl-output .knowl-output {
@@ -153,6 +157,9 @@ article > [data-knowl]::after, article > [data-knowl]:hover::after, article > [d
 
 .knowl-output + .knowl-output {
     margin-top: 0;
+}
+.knowl-output + .knowl-output.original {
+    margin-top: 0.5em;
 }
 .knowl-content {
     padding: 10px;
