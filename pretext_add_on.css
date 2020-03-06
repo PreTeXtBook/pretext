@@ -777,6 +777,11 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
     border-collapse: collapse;
 }
 
+.pretext-content .image-box + table,
+.pretext-content .image-box + .sidebyside > .sbsrow:first-child > .sbspanel > table:first-child {
+    margin-top: 1.5em;
+}
+
 .pretext-content table tr td,
 .pretext-content table tr th {
     padding-top: 2px;
