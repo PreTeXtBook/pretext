@@ -1456,6 +1456,12 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
     clear: left;
 }
 
+@media screen and (max-width: 480px) {
+  .pretext-content dl.description-list dt {
+    display: block;
+  }
+}
+
 /*
 #toc ul li.listprefix {
     list-style-type: none;
@@ -1492,9 +1498,6 @@ a.mjx-svg-href  {
 
   .pretext-content #MathJax_ZoomFrame {
     position: static;
-/*
-    max-width: 80% !important;
-*/
     background: white;
   }
   .pretext-content #MathJax_Zoom {
@@ -1506,9 +1509,6 @@ a.mjx-svg-href  {
     overflow-y: visible;
     left: 10% !important;
     max-height: none !important;
-/*
-    max-width: none !important;
-*/
   }
 }
 
