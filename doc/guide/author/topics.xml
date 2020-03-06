@@ -1825,6 +1825,18 @@
         <p></p>
     </section>
 
+    <section xml:id="topic-sage">
+        <title>Sage</title>
+
+        <p>Until we can expand this section, get some ideas from <xref ref="overview-sage"/>.  We will also collect a few items here, to be cleaned-up later.</p>
+
+        <p>For online output formats, sometimes the output of a Sage command can be overwhelming, and a bit complicated to parse.  Many objects in Sage also have a <latex/> representation, which can be used to create a superior output format (for some purposes).  Begin a cell with the <q>magic</q>:<cd>
+            <cline>%display latex</cline>
+        </cd>Experiment with the following Sage code on the next line<cd>
+            <cline>integral(x^9*cos(x), x)</cline>
+        </cd>Boom!  Very nice.  Try replacing <c>latex</c> with <c>None</c>, <c>plain</c>, <c>ascii_art</c>, or <c>unicode_art</c>.</p>
+    </section>
+
     <section xml:id="topic-sidebyside">
         <title>Side-by-Side Panels</title>
         <idx>side-by-side panel</idx>
