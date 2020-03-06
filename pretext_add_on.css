@@ -1458,7 +1458,13 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
 
 @media screen and (max-width: 480px) {
   .pretext-content dl.description-list dt {
-    display: block;
+    float: none;
+    margin-left: 0;
+    text-align: left;
+  }
+  .pretext-content dl.description-list dd {
+    margin-top: 0.5em;
+    margin-left: 3em;
   }
 }
 
