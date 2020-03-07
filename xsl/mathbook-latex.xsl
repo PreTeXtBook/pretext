@@ -2630,9 +2630,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- so that could be set.                          -->
 <xsl:template match="proof[parent::hint|parent::answer|parent::solution]" mode="environment">
     <xsl:text>\NewDocumentEnvironment{solutionproof}{}&#xa;</xsl:text>
-    <xsl:text>{\par\textit{</xsl:text>
+    <xsl:text>{\par\smallskip\noindent\textit{</xsl:text>
     <xsl:apply-templates select="." mode="type-name"/>
-    <xsl:text>}.\space\space}{\space\space\hspace*{\stretch{1}}\(\blacksquare\)\par}&#xa;</xsl:text>
+    <xsl:text>}.\space\space}{\space\space\hspace*{\stretch{1}}\(\blacksquare\)\par\smallskip}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- "case" (of a proof) -->
