@@ -378,6 +378,10 @@ Reveal.initialize({
   </dl>
 </xsl:template>
 
+<xsl:template match="term">
+  <b class="term"><xsl:apply-templates/></b>
+</xsl:template>
+
 
 <xsl:template match="ul/li|ol/li">
   <li>
