@@ -10483,9 +10483,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:apply-templates select="." mode="url"/>
                </xsl:variable>
                <!-- text of anchor's class, active if a match, otherwise plain -->
-               <!-- Based on node-set union size, "part" is for styling        -->
+               <!-- Based on node-set union size; "frontmatter", "backmatter", -->
+               <!-- "part" are for styling                                     -->
                <xsl:variable name="class">
                     <xsl:text>link</xsl:text>
+                    <xsl:if test="self::frontmatter">
+                        <xsl:text> frontmatter</xsl:text>
+                    </xsl:if>
+                    <xsl:if test="self::backmatter">
+                        <xsl:text> backmatter</xsl:text>
+                    </xsl:if>
                     <xsl:if test="self::part">
                         <xsl:text> part</xsl:text>
                     </xsl:if>
