@@ -117,6 +117,9 @@
     <xsl:param name="b-hint" select="true()" />
     <xsl:param name="b-solution" select="true()" />
     <xsl:param name="b-verbose" />
+    <xsl:apply-templates select="." mode="description">
+        <xsl:with-param name="b-verbose" select="$b-verbose" />
+    </xsl:apply-templates>
     <xsl:call-template   name="begin-problem">
         <xsl:with-param name="b-verbose" select="$b-verbose" />
     </xsl:call-template>
@@ -152,6 +155,9 @@
     <xsl:param name="b-hint" select="true()" />
     <xsl:param name="b-solution" select="true()" />
     <xsl:param name="b-verbose" />
+    <xsl:apply-templates select="." mode="description">
+        <xsl:with-param name="b-verbose" select="$b-verbose" />
+    </xsl:apply-templates>
     <xsl:call-template   name="begin-problem" >
         <xsl:with-param name="b-verbose" select="$b-verbose" />
     </xsl:call-template>
@@ -190,6 +196,16 @@
     <xsl:call-template   name="end-problem">
         <xsl:with-param name="b-verbose" select="$b-verbose" />
     </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="webwork" mode="description">
+    <xsl:param name="b-verbose" />
+    <xsl:if test="description and $b-verbose">
+        <xsl:text># </xsl:text>
+        <!-- value-of instead of apply-templates, so that character escaping is not applied -->
+        <xsl:value-of select="description"/>
+        <xsl:text>&#xa;&#xa;</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <!-- The setup element formerly had more internal structure. Now it only   -->
