@@ -2516,6 +2516,9 @@ http://mathbook.pugetsound.edu/examples/sample-article/html/interesting-corollar
 }
 .pretext-content .CodeMirror-code pre.CodeMirror-line {
     padding-bottom: 5px;
+/* the next item is the CodeMirror default, which was
+ previously over-ridden */
+    padding-left: 6px;
 }
 
 /* used when knowl content is hidden in the page */
