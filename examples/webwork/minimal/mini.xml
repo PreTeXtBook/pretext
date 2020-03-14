@@ -37,13 +37,11 @@
       <title><webwork /> Minimal Section</title>
       <exercise>
         <webwork>
-          <setup>
-            <pg-code>
-              $a = Compute(random(1, 9, 1));
-              $b = Compute(random(1, 9, 1));
-              $c = $a + $b;
-            </pg-code>
-          </setup>
+          <pg-code>
+            $a = Compute(random(1, 9, 1));
+            $b = Compute(random(1, 9, 1));
+            $c = $a + $b;
+          </pg-code>
           <statement>
             <p>
               Compute the sum of <m><var name="$a" /></m> and <m><var name="$b" /></m>:

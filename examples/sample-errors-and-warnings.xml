@@ -303,9 +303,8 @@ systems.
                 <title>Solving Quadratic Equations</title>
 
                 <webwork xml:id="quadratic-equation">
-                    <setup>
-                        <!-- TODO: move out context shift -->
-                        <pg-code>
+                    <!-- TODO: move out context shift -->
+                    <pg-code>
                         Context("Fraction");
 
                         $a = Compute(random(2,6,1));
@@ -344,11 +343,9 @@ systems.
                                 return (1,0) if $c1 == $s1 or $c2 == $s1;
                                 return (0,1) if $c1 == $s2 or $c2 == $s2;
                                 return (0,0);
-                             }
-                          );
-
-                        </pg-code>
-                    </setup>
+                            }
+                        );
+                    </pg-code>
 
                     <stage>
                         <title>Part 1: Identify the coefficients</title>
@@ -386,11 +383,9 @@ systems.
                 <title>Tables</title>
 
                 <webwork xml:id="tables">
-                    <setup>
-                        <pg-code>
-                            $x = Real(5);
-                        </pg-code>
-                    </setup>
+                    <pg-code>
+                        $x = Real(5);
+                    </pg-code>
 
                     <statement>
                         <p>A table with minimal XML source.</p>
