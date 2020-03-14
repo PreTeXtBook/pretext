@@ -129,13 +129,11 @@
                 </introduction>
 
                 <webwork xml:id="integer-addition">
-                    <setup>
-                        <pg-code>
-                            $a = Compute(random(1, 9, 1));
-                            $b = Compute(random(1, 9, 1));
-                            $c = $a + $b;
-                        </pg-code>
-                    </setup>
+                    <pg-code>
+                        $a = Compute(random(1, 9, 1));
+                        $b = Compute(random(1, 9, 1));
+                        $c = $a + $b;
+                    </pg-code>
 
                     <statement>
                         <p>Compute the sum of <m><var name="$a" /></m> and <m><var name="$b" /></m>:</p>
@@ -162,13 +160,11 @@
                 </introduction>
 
                 <webwork xml:id="integer-addition-with-seed" seed="510">
-                    <setup>
-                        <pg-code>
-                            $a = Compute(random(1, 9, 1));
-                            $b = Compute(random(1, 9, 1));
-                            $c = $a + $b;
-                        </pg-code>
-                    </setup>
+                    <pg-code>
+                        $a = Compute(random(1, 9, 1));
+                        $b = Compute(random(1, 9, 1));
+                        $c = $a + $b;
+                    </pg-code>
 
                     <statement>
                         <p>Compute the sum of <m><var name="$a" /></m> and <m><var name="$b" /></m>:</p>
@@ -189,14 +185,12 @@
                 </introduction>
 
                 <webwork xml:id="integer-addition-with-control-seed" seed="1">
-                    <setup>
-                        <pg-code>
-                            $a = Compute(random(1, 9, 1));
-                            $b = Compute(random(1, 9, 1));
-                            if ($envir{problemSeed}==1){$a=1;$b=2};
-                            $c = $a + $b;
-                        </pg-code>
-                    </setup>
+                    <pg-code>
+                        $a = Compute(random(1, 9, 1));
+                        $b = Compute(random(1, 9, 1));
+                        if ($envir{problemSeed}==1){$a=1;$b=2};
+                        $c = $a + $b;
+                    </pg-code>
 
                     <statement>
                         <p>Compute the sum of <m><var name="$a" /></m> and <m><var name="$b" /></m>:</p>
@@ -222,25 +216,23 @@
                 </introduction>
 
                 <webwork>
-                    <setup>
-                        <pg-code>
-                            $a = Compute(random(1, 9, 1));
-                            $b = Compute(random(1, 9, 1));
-                            $c = $a + $b;
-                            $expression = Formula("x^($a)*x^($b)");
+                    <pg-code>
+                        $a = Compute(random(1, 9, 1));
+                        $b = Compute(random(1, 9, 1));
+                        $c = $a + $b;
+                        $expression = Formula("x^($a)*x^($b)");
 
-                            Context("LimitedPolynomial-Strict");
-                            # custom error message
-                            Context()->{error}{msg}{"A variable can appear only once in each term of a polynomial"}
-                                = "Your answer must be fully simplified";
+                        Context("LimitedPolynomial-Strict");
+                        # custom error message
+                        Context()->{error}{msg}{"A variable can appear only once in each term of a polynomial"}
+                            = "Your answer must be fully simplified";
 
-                            $answer = Formula("x^($c)");
-                            $product = $a*$b;
-                            $evaluator = $answer->cmp()->withPostFilter(AnswerHints(
-                                [Compute("x^($product)")] =>
-                                "When multiplying terms with the same base, you do not multiply the exponents."));
-                        </pg-code>
-                    </setup>
+                        $answer = Formula("x^($c)");
+                        $product = $a*$b;
+                        $evaluator = $answer->cmp()->withPostFilter(AnswerHints(
+                            [Compute("x^($product)")] =>
+                            "When multiplying terms with the same base, you do not multiply the exponents."));
+                    </pg-code>
 
                     <statement>
                         <p>Use the properties of exponents to simplify <m><var name="$expression" /></m>.</p>
@@ -267,21 +259,19 @@
                 </introduction>
 
                 <webwork>
-                    <setup>
-                        <pg-code>
-                            do {
-                                $a = Compute(list_random(2,3,5,6));
-                                $b = Compute(random(1, 5, 1));
-                               } until (gcd($a,$b) == 1);
-                            $c = $a * $b**2;
-                            Context()->flags->set(reduceConstantFunctions=>0);
-                            $expression = Formula("sqrt($c)");
+                    <pg-code>
+                        do {
+                            $a = Compute(list_random(2,3,5,6));
+                            $b = Compute(random(1, 5, 1));
+                           } until (gcd($a,$b) == 1);
+                        $c = $a * $b**2;
+                        Context()->flags->set(reduceConstantFunctions=>0);
+                        $expression = Formula("sqrt($c)");
 
-                            Context("LimitedRadical");
+                        Context("LimitedRadical");
 
-                            $answer = Formula("$b sqrt($a)");
-                        </pg-code>
-                    </setup>
+                        $answer = Formula("$b sqrt($a)");
+                    </pg-code>
 
                     <statement>
                         <p>Simplify the expression <m><var name="$expression"/></m>.</p>
@@ -347,9 +337,8 @@
 
                 <webwork xml:id="quadratic-equation">
 
-                    <setup>
-                        <!-- TODO: move out context shift -->
-                        <pg-code>
+                    <!-- TODO: move out context shift -->
+                    <pg-code>
                         Context("Fraction");
 
                         $a = Compute(random(2,6,1));
@@ -389,10 +378,8 @@
                                 return (0,1) if $c1 == $s2 or $c2 == $s2;
                                 return (0,0);
                              }
-                          );
-
-                        </pg-code>
-                    </setup>
+                        );
+                    </pg-code>
 
                     <stage>
                         <statement>
@@ -625,25 +612,24 @@
 
             <exercise>
                 <webwork>
-                    <setup>
-                        <pg-code>
-                            $xmlchars = q(&lt;>&amp;'";);
-                            $latex0 = '#%&amp;&lt;>\^_`|~';
-                            $latex1 = '${}';
-                            $alphanumeric = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-                            $otherchars = '!()*+,-./:=?@[]';
-                            Context()->strings->add($xmlchars=>{});
-                            Context()->strings->add($latex0=>{});
-                            Context()->strings->add($latex1=>{});
-                            Context()->strings->add($alphanumeric=>{});
-                            Context()->strings->add($otherchars=>{});
-                            $xmlcharsMO = String($xmlchars);
-                            $latex0MO = String($latex0);
-                            $latex1MO = String($latex1);
-                            $alphanumericMO = String($alphanumeric);
-                            $othercharsMO = String($otherchars);
-                        </pg-code>
-                    </setup>
+                    <pg-code>
+                        $xmlchars = q(&lt;>&amp;'";);
+                        $latex0 = '#%&amp;&lt;>\^_`|~';
+                        $latex1 = '${}';
+                        $alphanumeric = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+                        $otherchars = '!()*+,-./:=?@[]';
+                        Context()->strings->add($xmlchars=>{});
+                        Context()->strings->add($latex0=>{});
+                        Context()->strings->add($latex1=>{});
+                        Context()->strings->add($alphanumeric=>{});
+                        Context()->strings->add($otherchars=>{});
+                        $xmlcharsMO = String($xmlchars);
+                        $latex0MO = String($latex0);
+                        $latex1MO = String($latex1);
+                        $alphanumericMO = String($alphanumeric);
+                        $othercharsMO = String($otherchars);
+                    </pg-code>
+
                     <statement>
                         <p><ol>
                             <li>
@@ -693,14 +679,12 @@
 
                 <webwork>
 
-                    <setup>
-                        <pg-code>
-                            $rational = PopUp(
-                                ["?","is","is not",],
-                                "is not",
-                            );
-                        </pg-code>
-                    </setup>
+                    <pg-code>
+                        $rational = PopUp(
+                            ["?","is","is not",],
+                            "is not",
+                        );
+                    </pg-code>
 
                     <statement>
                         <p>The number <m>\sqrt{2}</m> <var name="$rational" form="popup"/> rational.</p>
@@ -719,14 +703,12 @@
 
                 <webwork>
 
-                    <setup>
-                        <pg-code>
-                            $theorem = RadioButtons(
-                              ["The Quadratic Formula","The Fundamental Theorem of Calculus","The Fundamental Theorem of Arithmetic","None of these"],
-                              1, # index of correct answer; could also just be the correct answer
-                            );
-                        </pg-code>
-                    </setup>
+                    <pg-code>
+                        $theorem = RadioButtons(
+                          ["The Quadratic Formula","The Fundamental Theorem of Calculus","The Fundamental Theorem of Arithmetic","None of these"],
+                          1, # index of correct answer; could also just be the correct answer
+                        );
+                    </pg-code>
 
                     <statement>
                         <p>Which of the following suggest that differentiation and integration are inverse processes?</p>
@@ -746,23 +728,20 @@
 
                 <webwork>
 
-                    <setup>
-                        <pg-code>
-                            $expressions = new_checkbox_multiple_choice();
-                            $expressions -> qa (
-                            "A question can go here, but PTX ignores this",
-                            "\( e^{x^2} e^{1/x} \)$BR",
-                            "\( e^{x^2} e^{x^{-1}} \)$BR",
-                            "\( e^{ (x^3+1) / x } \)$BR",
-                            );
-                            $expressions -> extra(
-                            "\( \displaystyle \frac{ e^{x^2} }{ e^x } \)$BR",
-                            "\( e^{x^2} + e^{1/x} \)$BR",
-                            );
-                            $expressions -> makeLast("None of the above");
-
-                        </pg-code>
-                    </setup>
+                    <pg-code>
+                        $expressions = new_checkbox_multiple_choice();
+                        $expressions -> qa (
+                        "A question can go here, but PTX ignores this",
+                        "\( e^{x^2} e^{1/x} \)$BR",
+                        "\( e^{x^2} e^{x^{-1}} \)$BR",
+                        "\( e^{ (x^3+1) / x } \)$BR",
+                        );
+                        $expressions -> extra(
+                        "\( \displaystyle \frac{ e^{x^2} }{ e^x } \)$BR",
+                        "\( e^{x^2} + e^{1/x} \)$BR",
+                        );
+                        $expressions -> makeLast("None of the above");
+                    </pg-code>
 
                     <statement>
                         <p>Select all expressions that are equivalent to <m>e^{x^2 + 1/x}</m>.  There may be more than one correct answer.</p>
@@ -786,13 +765,11 @@
                 <title>Complete this Table</title>
 
                 <webwork>
-                    <setup>
-                        <pg-code>
-                            @a = (random(2,9,1),random(2,9,1));
-                            @b = (random(2,9,1),random(2,9,1));
-                            for my$i(0..3){$p[$i]=$a[int($i/2)]*$b[$i % 2]};
-                        </pg-code>
-                    </setup>
+                    <pg-code>
+                        @a = (random(2,9,1),random(2,9,1));
+                        @b = (random(2,9,1),random(2,9,1));
+                        for my$i(0..3){$p[$i]=$a[int($i/2)]*$b[$i % 2]};
+                    </pg-code>
 
                     <statement>
                         <p>Complete this multiplication table.</p>
@@ -862,29 +839,26 @@
 
                 <webwork>
 
-                    <setup>
-                        <pg-code>
-                            $answer = random(1,3,1);
-                            $gr = init_graph(-1,-1,4,4,
-                            axes=>[0,0],
-                            grid=>[5,5],
-                            size=>[300,300]
-                            );
-                            add_functions($gr, "x^3/$answer^3 for x in &lt;-1,4&gt; using color:blue and weight:2");
-                            $second_x = Real($answer*2**(1/3));
+                    <pg-code>
+                        $answer = random(1,3,1);
+                        $gr = init_graph(-1,-1,4,4,
+                        axes=>[0,0],
+                        grid=>[5,5],
+                        size=>[300,300]
+                        );
+                        add_functions($gr, "x^3/$answer^3 for x in &lt;-1,4&gt; using color:blue and weight:2");
+                        $second_x = Real($answer*2**(1/3));
 
-                            $solgr = init_graph(-1,-1,4,4,
-                            axes=>[0,0],
-                            grid=>[5,5],
-                            size=>[300,300]
-                            );
-                            add_functions($solgr, "x^3/$answer^3 for x in &lt;-1,4&gt; using color:blue and weight:2");
-                            $solgr->moveTo(0,1);
-                            $solgr->lineTo($answer,1,'black',3);
-                            $solgr->arrowTo($answer,0,'black',3);
-
-                        </pg-code>
-                    </setup>
+                        $solgr = init_graph(-1,-1,4,4,
+                        axes=>[0,0],
+                        grid=>[5,5],
+                        size=>[300,300]
+                        );
+                        add_functions($solgr, "x^3/$answer^3 for x in &lt;-1,4&gt; using color:blue and weight:2");
+                        $solgr->moveTo(0,1);
+                        $solgr->lineTo($answer,1,'black',3);
+                        $solgr->arrowTo($answer,0,'black',3);
+                    </pg-code>
 
                     <statement>
                         <p>The graph below is a graph of <m>y=f(x)</m>. Use the graph to solve the equation <m>f(x)=1</m>.</p>
@@ -925,14 +899,12 @@
 
                 <webwork xml:id="number-or-function">
 
-                    <setup>
-                        <pg-code>
-                            $a = non_zero_random(-9,9,1);
-                            do { $b = random(2,9,1); } until ( $b != $a );
-                            $answer1 = Compute("$a");
-                            $answer2 = Compute("($a x^($b) + $b)/x")->reduce();
-                        </pg-code>
-                    </setup>
+                    <pg-code>
+                        $a = non_zero_random(-9,9,1);
+                        do { $b = random(2,9,1); } until ( $b != $a );
+                        $answer1 = Compute("$a");
+                        $answer2 = Compute("($a x^($b) + $b)/x")->reduce();
+                    </pg-code>
 
                     <statement>
                         <p><ol>
@@ -967,16 +939,14 @@
 
                 <webwork xml:id="function-with-domain-issues">
 
-                    <setup>
-                        <pg-code>
-                            $a = random(2,5,1);
-                            $answer1 = Compute("sqrt(x-$a)");
-                            $answer1->{limits} = [$a+1,$a+4];
-                            $answer2 = Compute("ln(abs( x / (x-$a) ))");
-                            $answer2->{test_points} = [[-5],[-4],[1],[$a-1],[7],[8]];
-                            $answer2evaluator = $answer2 -> cmp() -> withPostFilter( AnswerHints( [Compute("ln(abs((x-$a)/x))"),] => "This is the opposite of correct...",));
-                        </pg-code>
-                    </setup>
+                    <pg-code>
+                        $a = random(2,5,1);
+                        $answer1 = Compute("sqrt(x-$a)");
+                        $answer1->{limits} = [$a+1,$a+4];
+                        $answer2 = Compute("ln(abs( x / (x-$a) ))");
+                        $answer2->{test_points} = [[-5],[-4],[1],[$a-1],[7],[8]];
+                        $answer2evaluator = $answer2 -> cmp() -> withPostFilter( AnswerHints( [Compute("ln(abs((x-$a)/x))"),] => "This is the opposite of correct...",));
+                    </pg-code>
 
                     <statement>
                         <p><ol>
@@ -1012,14 +982,12 @@
 
                 <webwork xml:id="multiple-choice-popup-or-radio-buttons">
 
-                    <setup>
                         <pg-code>
                             $color1 = PopUp(["?","Red","Blue","Green"], 2);
 
                             $color2 = RadioButtons(["Red","Blue","Green","None of these"], 1);
-
                         </pg-code>
-                     <!-- include below in pg-code once checkboxes implemented
+                        <!-- include below in pg-code once checkboxes implemented
                             $mc = new_checkbox_multiple_choice();
                             $mc -> qa (
                             "A question can go here, but PTX ignores this",
@@ -1033,7 +1001,6 @@
                             );
                             $mc -> makeLast("None of the above");
                         -->
-                    </setup>
 
                     <statement>
                         <p>My favorite color is <var name="$color1" form="popup"/>.</p>
@@ -1056,11 +1023,9 @@
 
             <exercise>
                 <webwork>
-                    <setup>
-                        <pg-code>
-                              $expressions = RadioButtons(['\(x\)','\(x^2\)','\(2^x\)'], 2);
-                        </pg-code>
-                    </setup>
+                    <pg-code>
+                          $expressions = RadioButtons(['\(x\)','\(x^2\)','\(2^x\)'], 2);
+                    </pg-code>
                     <statement>
                         <p>There is math in each option for this question. Which expression is not a polynomial? <var name="$expressions" form="buttons"/></p>
                     </statement>
@@ -1076,11 +1041,9 @@
 
                 <webwork xml:id="tables">
 
-                    <setup>
-                        <pg-code>
-                            $x = Real(5);
-                        </pg-code>
-                    </setup>
+                    <pg-code>
+                        $x = Real(5);
+                    </pg-code>
 
                     <statement>
                         <p>A table with minimal XML source.</p>
@@ -1145,19 +1108,17 @@
             <exercise>
                 <title>PTX problem source with server-generated images</title>
                 <webwork>
-                    <setup>
-                        <pg-code>
-                            for my $i(0..7){$gr[$i] = init_graph(-1,-1,4,4,axes=>[0,0],grid=>[5,5],size=>[150,150]);};
-                            add_functions($gr[0], "1 for x in &lt;-1,4> using color:blue and weight:2");
-                            add_functions($gr[1], "x for x in &lt;-1,4> using color:blue and weight:2");
-                            add_functions($gr[2], "x^2 for x in &lt;-1,4> using color:blue and weight:2");
-                            add_functions($gr[3], "x^3 for x in &lt;-1,4> using color:blue and weight:2");
-                            add_functions($gr[4], "e^x for x in &lt;-1,4> using color:blue and weight:2");
-                            add_functions($gr[5], "sin(x) for x in &lt;-1,4> using color:blue and weight:2");
-                            add_functions($gr[6], "cos(x) for x in &lt;-1,4> using color:blue and weight:2");
-                            add_functions($gr[7], "exp(-x^2) for x in &lt;-1,4> using color:blue and weight:2");
-                        </pg-code>
-                    </setup>
+                    <pg-code>
+                        for my $i(0..7){$gr[$i] = init_graph(-1,-1,4,4,axes=>[0,0],grid=>[5,5],size=>[150,150]);};
+                        add_functions($gr[0], "1 for x in &lt;-1,4> using color:blue and weight:2");
+                        add_functions($gr[1], "x for x in &lt;-1,4> using color:blue and weight:2");
+                        add_functions($gr[2], "x^2 for x in &lt;-1,4> using color:blue and weight:2");
+                        add_functions($gr[3], "x^3 for x in &lt;-1,4> using color:blue and weight:2");
+                        add_functions($gr[4], "e^x for x in &lt;-1,4> using color:blue and weight:2");
+                        add_functions($gr[5], "sin(x) for x in &lt;-1,4> using color:blue and weight:2");
+                        add_functions($gr[6], "cos(x) for x in &lt;-1,4> using color:blue and weight:2");
+                        add_functions($gr[7], "exp(-x^2) for x in &lt;-1,4> using color:blue and weight:2");
+                    </pg-code>
                     <stage>
                         <statement>
                             <sidebyside widths="25%">
@@ -1471,11 +1432,9 @@
             <exercise>
                 <title>Checking Proper Indentation In Lists with Images and Tables</title>
                 <webwork>
-                    <setup>
-                        <pg-code>
-                            $g=init_graph(-1,-1,1,1,axes=>[0,0]);
-                        </pg-code>
-                    </setup>
+                    <pg-code>
+                        $g=init_graph(-1,-1,1,1,axes=>[0,0]);
+                    </pg-code>
                     <statement>
                         <p><ol>
                             <li>

@@ -10841,6 +10841,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
             <xsl:with-param name="incorrect-use" select="$html.google-search != ''" />
     </xsl:call-template>
     <!--  -->
+    <!-- 2020-03-13  deprecated setup element in a webwork -->
+    <xsl:call-template name="deprecation-message">
+        <xsl:with-param name="occurrences" select="$document-root//webwork/setup" />
+        <xsl:with-param name="date-string" select="'2020-03-13'" />
+        <xsl:with-param name="message" select="'the &quot;setup&quot; element in a &quot;webwork&quot; is no longer necessary, simply use &quot;pg-code&quot;'"/>
+    </xsl:call-template>
+    <!--  -->
 </xsl:template>
 
 <!-- Miscellaneous -->

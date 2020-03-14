@@ -34,6 +34,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Deprecations that can be fixed with a transformation -->
 <!-- In reverse chronological order, with dates           -->
 
+<!-- 2020-03-13  webwork setup obsolete -->
+<xsl:template match="webwork/setup">
+    <xsl:apply-templates select="@* | node()" />
+    <xsl:call-template name="deprecation-fix-report">
+        <xsl:with-param name="date">2020-03-13</xsl:with-param>
+        <xsl:with-param name="message">Removing &lt;setup&gt; wrapper from a &lt;webwork&gt;, preserving contents (&lt;pg-code&gt;?)</xsl:with-param>
+    </xsl:call-template>
+</xsl:template>
+
 <!-- 2019-06-28  deprecate captioned lists to be titled lists -->
 <xsl:template match="list[title]/caption">
     <xsl:comment>

@@ -297,15 +297,14 @@ systems.
         <section>
             <title>Bona Fide <webwork/> Problems</title>
 
-            <p>These are two legitimate <webwork/> problems copied from the WW sample chapter on 2018-07-12.  We are using them, and variants below, to test Schematron rules enforcing locations where <webwork/>-specific exceptions are alllowed.</p>
+            <p>These are two legitimate <webwork/> problems copied from the WW sample chapter on 2018-07-12.  We are using them, and variants below, to test Schematron rules enforcing locations where <webwork/>-specific exceptions are alllowed.  The third problem is a clone of the second, but with a <tag>setup</tag> element that is deprecated as of 2020-03-13.</p>
 
             <exercise>
                 <title>Solving Quadratic Equations</title>
 
                 <webwork xml:id="quadratic-equation">
-                    <setup>
-                        <!-- TODO: move out context shift -->
-                        <pg-code>
+                    <!-- TODO: move out context shift -->
+                    <pg-code>
                         Context("Fraction");
 
                         $a = Compute(random(2,6,1));
@@ -344,11 +343,9 @@ systems.
                                 return (1,0) if $c1 == $s1 or $c2 == $s1;
                                 return (0,1) if $c1 == $s2 or $c2 == $s2;
                                 return (0,0);
-                             }
-                          );
-
-                        </pg-code>
-                    </setup>
+                            }
+                        );
+                    </pg-code>
 
                     <stage>
                         <title>Part 1: Identify the coefficients</title>
@@ -386,6 +383,67 @@ systems.
                 <title>Tables</title>
 
                 <webwork xml:id="tables">
+                    <pg-code>
+                        $x = Real(5);
+                    </pg-code>
+
+                    <statement>
+                        <p>A table with minimal XML source.</p>
+
+                        <sidebyside>
+                            <tabular>
+                                <row>
+                                    <cell>A</cell>
+                                    <cell>B</cell>
+                                    <cell>C</cell>
+                                </row>
+                                <row>
+                                    <cell>D</cell>
+                                    <cell>E</cell>
+                                    <cell>F</cell>
+                                </row>
+                                <row>
+                                    <cell>G</cell>
+                                    <cell>H</cell>
+                                    <cell>I</cell>
+                                </row>
+                            </tabular>
+                        </sidebyside>
+                        <p>Finish this table.</p>
+
+                        <sidebyside>
+                            <tabular top="major" left="major" bottom="major" right="minor" halign="center">
+                                <col halign="right" top="minor"/>
+                                <col right="medium"/>
+                                <col halign="left"/>
+                                <row bottom="none" left="none">
+                                <cell right="minor">1</cell>
+                                    <cell>two</cell>
+                                    <cell><m>\lfloor\pi\rfloor</m></cell>
+                                </row>
+                                <row valign="bottom">
+                                    <cell bottom="minor"><line><m>\text{I}+\text{I}</m></line><line><m>{}+\text{I}+\text{I}</m></line></cell>
+                                    <cell><var name="$x" form="none" category="integer"/></cell>
+                                    <cell>six</cell>
+                                </row>
+                                <row halign="right">
+                                    <cell><m>2^3-1</m></cell>
+                                    <cell colspan="2" halign="center">VIII</cell>
+                                </row>
+                            </tabular>
+                        </sidebyside>
+                    </statement>
+
+                    <solution>
+                        <p>The missing number is <var name="$x"/>.</p>
+                    </solution>
+                </webwork>
+            </exercise>
+
+            <exercise>
+                <title>Tables Part Two</title>
+
+                <webwork xml:id="tables-with-setup">
                     <setup>
                         <pg-code>
                             $x = Real(5);

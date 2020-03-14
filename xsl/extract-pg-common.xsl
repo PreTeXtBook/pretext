@@ -126,7 +126,7 @@
     <xsl:call-template   name="pg-header">
         <xsl:with-param name="b-verbose" select="$b-verbose" />
     </xsl:call-template>
-    <xsl:apply-templates select="." mode="pg-setup">
+    <xsl:apply-templates select="." mode="pg-code">
         <xsl:with-param name="b-verbose" select="$b-verbose" />
     </xsl:apply-templates>
     <xsl:apply-templates select="statement">
@@ -164,7 +164,7 @@
     <xsl:if test="$b-verbose">
         <xsl:text>COMMENT('This problem is scaffolded with multiple parts');&#xa;</xsl:text>
     </xsl:if>
-    <xsl:apply-templates select="." mode="pg-setup" >
+    <xsl:apply-templates select="." mode="pg-code" >
         <xsl:with-param name="b-verbose" select="$b-verbose" />
     </xsl:apply-templates>
     <xsl:call-template   name="begin-block">
@@ -192,17 +192,15 @@
     </xsl:call-template>
 </xsl:template>
 
-<!-- The setup element formerly had more internal structure. Now it only   -->
-<!-- contains the pg-code element, and therefore could be eliminated.      -->
-<xsl:template match="webwork" mode="pg-setup">
+<xsl:template match="webwork" mode="pg-code">
     <xsl:param name="b-verbose" />
     <xsl:call-template name="begin-block">
-        <xsl:with-param name="block-title">PG Setup</xsl:with-param>
+        <xsl:with-param name="block-title">PG Setup Code</xsl:with-param>
         <xsl:with-param name="b-verbose" select="$b-verbose" />
     </xsl:call-template>
     <!-- All our problems load MathObjects, and so should have at least    -->
     <!-- one explicit Context() load.                                      -->
-    <xsl:if test="not(contains(setup/pg-code,'Context('))">
+    <xsl:if test="not(contains(.//pg-code,'Context('))">
         <xsl:text>Context('Numeric');</xsl:text>
         <xsl:if test="$b-verbose">
             <xsl:text>&#xa;</xsl:text>
@@ -210,7 +208,7 @@
     </xsl:if>
     <!-- pg-code verbatim, but trim indentation -->
     <xsl:call-template name="sanitize-text">
-        <xsl:with-param name="text" select="setup/pg-code" />
+        <xsl:with-param name="text" select=".//pg-code" />
     </xsl:call-template>
 </xsl:template>
 
@@ -460,7 +458,7 @@
             </xsl:choose>
         </xsl:if>
         <!-- bizarro arithmetic technique for assesing answer form -->
-        <xsl:if test="contains(./setup/pg-code,'bizarro')">
+        <xsl:if test="contains(.//pg-code,'bizarro')">
             <xsl:choose>
                 <xsl:when test="$b-verbose">
                     <xsl:text>  "bizarroArithmetic.pl",&#xa;</xsl:text>
@@ -493,7 +491,7 @@
             </xsl:choose>
         </xsl:if>
         <!-- targeted feedback messages for specific wrong answers -->
-        <xsl:if test="contains(./setup/pg-code,'AnswerHints')">
+        <xsl:if test="contains(.//pg-code,'AnswerHints')">
             <xsl:choose>
                 <xsl:when test="$b-verbose">
                     <xsl:text>  "answerHints.pl",&#xa;</xsl:text>
@@ -504,7 +502,7 @@
             </xsl:choose>
         </xsl:if>
         <!-- checkboxes multiple choice answers or the very useful NchooseK function-->
-        <xsl:if test=".//var[@form='checkboxes'] or contains(./setup/pg-code,'NchooseK')">
+        <xsl:if test=".//var[@form='checkboxes'] or contains(.//pg-code,'NchooseK')">
             <xsl:choose>
                 <xsl:when test="$b-verbose">
                     <xsl:text>  "PGchoicemacros.pl",&#xa;</xsl:text>
@@ -538,7 +536,7 @@
         </xsl:if>
         <!-- instructions for entering answers into HTML forms -->
         <!-- utility for randomly generating variable letters -->
-        <xsl:if test=".//instruction or contains(./setup/pg-code,'RandomVariableName')">
+        <xsl:if test=".//instruction or contains(.//pg-code,'RandomVariableName')">
             <xsl:choose>
                 <xsl:when test="$b-verbose">
                     <xsl:text>  "PCCmacros.pl",&#xa;</xsl:text>
@@ -584,7 +582,7 @@
         </xsl:apply-templates>
         <!-- allow "f(x)" as part of answers -->
         <!-- note unusual usage precludes using parser modal template here -->
-        <xsl:if test="contains(setup/pg-code,'parserFunction')">
+        <xsl:if test="contains(.//pg-code,'parserFunction')">
             <xsl:choose>
                 <xsl:when test="$b-verbose">
                     <xsl:text>  "parserFunction.pl",&#xa;</xsl:text>
@@ -646,7 +644,7 @@
         </xsl:apply-templates>
         <!-- allow "'" as part of answers, as an effective derivative operator -->
         <!-- note unusual usage precludes using parser modal template here -->
-        <xsl:if test="contains(setup/pg-code,'parser::Prime')">
+        <xsl:if test="contains(.//pg-code,'parser::Prime')">
             <xsl:choose>
                 <xsl:when test="$b-verbose">
                     <xsl:text>  "parserPrime.pl",&#xa;</xsl:text>
@@ -668,7 +666,7 @@
         </xsl:apply-templates>
         <!-- allow a root(n,x) function -->
         <!-- note unusual usage precludes using parser modal template here -->
-        <xsl:if test="contains(setup/pg-code,'parser::Root')">
+        <xsl:if test="contains(.//pg-code,'parser::Root')">
             <xsl:choose>
                 <xsl:when test="$b-verbose">
                     <xsl:text>  "parserRoot.pl",&#xa;</xsl:text>
@@ -685,7 +683,7 @@
         </xsl:apply-templates>
         <!-- Some utility routines that are useful in vector problems -->
         <!-- note unusual usage precludes using parser modal template here -->
-        <xsl:if test="contains(setup/pg-code,'Overline') or contains(setup/pg-code,'BoldMath' or contains(setup/pg-code,'non_zero_point') or contains(setup/pg-code,'non_zero_vector'))">
+        <xsl:if test="contains(.//pg-code,'Overline') or contains(.//pg-code,'BoldMath' or contains(.//pg-code,'non_zero_point') or contains(.//pg-code,'non_zero_vector'))">
             <xsl:choose>
                 <xsl:when test="$b-verbose">
                     <xsl:text>  "parserVectorUtils.pl",&#xa;</xsl:text>
@@ -950,7 +948,7 @@
 <xsl:template match="webwork" mode="context">
     <xsl:param name="context"/>
     <xsl:param name="b-verbose"/>
-    <xsl:if test="contains(setup/pg-code,$context)">
+    <xsl:if test="contains(.//pg-code,$context)">
         <xsl:if test="$b-verbose">
             <xsl:text>  </xsl:text>
         </xsl:if>
@@ -966,7 +964,7 @@
 <xsl:template match="webwork" mode="parser">
     <xsl:param name="parser"/>
     <xsl:param name="b-verbose"/>
-    <xsl:if test="contains(setup/pg-code,$parser)">
+    <xsl:if test="contains(.//pg-code,$parser)">
         <xsl:if test="$b-verbose">
             <xsl:text>  </xsl:text>
         </xsl:if>
