@@ -2592,58 +2592,10 @@ is supported on several elements to allow stepping through slides
           </li>
         </ul>
         <p>
-Following is a somewhat minimal working example.
+A minimal working example may be found in the
+<url href="https://github.com/rbeezer/mathbook/blob/dev/examples/sample-slideshow/sample-slideshow.xml">
+  Examples folder of the PreTeXt repo on GitHub
+</url><fn><c>examples/sample-slideshow/sample-slideshow.xml</c></fn>.
         </p>
-      <pre>
-&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;pretext&gt;
-  &lt;slideshow&gt;
-    &lt;title&gt;Hello World!&lt;/title&gt;
-    &lt;subtitle&gt;Sample PreTeXt slides&lt;/subtitle&gt;
-    &lt;frontmatter&gt;
-      &lt;titlepage&gt;
-        &lt;author&gt;
-          &lt;personname&gt;Your Name&lt;/personname&gt;
-          &lt;affiliation&gt;Your School&lt;/affiliation&gt;
-          &lt;logo&gt;&lt;image source="path/to/your/image.png"/&gt;&lt;/logo&gt;
-        &lt;/author&gt;
-        &lt;event&gt;PreTeXt Workshop 20XX&lt;/event&gt;
-        &lt;date&gt;Month 20XX&lt;/date&gt;
-      &lt;/titlepage&gt;
-      &lt;abstract&gt;
-        &lt;p&gt;Your wonderful abstract.&lt;/p&gt;
-      &lt;/abstract&gt;
-    &lt;/frontmatter&gt;
-    &lt;section&gt;
-      &lt;title&gt;Title of Section&lt;/title&gt;
-      &lt;slide&gt;
-        &lt;title&gt;PDX &lt;m&gt;\iff&lt;/m&gt; PTX&lt;/title&gt;
-        &lt;ul&gt;
-          &lt;li&gt;&lt;p&gt;One item&lt;/p&gt;&lt;/li&gt;
-          &lt;li&gt;&lt;p&gt;Another item&lt;/p&gt;&lt;/li&gt;
-          &lt;li&gt;&lt;p&gt;
-            A really long item which is really far too long to be an
-            item in a talk. Points should really be only a single line
-            unless they are really important.
-          &lt;/p&gt;&lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/slide&gt;
-      &lt;slide&gt;
-        &lt;title&gt;A second slide here&lt;/title&gt;
-        &lt;p&gt;
-          Words and stuff
-        &lt;/p&gt;
-        &lt;p&gt;
-          &lt;ul slide-step="true"&gt;
-            &lt;li&gt;&lt;p&gt;First thing&lt;/p&gt;&lt;/li&gt;
-            &lt;li&gt;&lt;p&gt;Second thing&lt;/p&gt;&lt;/li&gt;
-            &lt;li&gt;&lt;p&gt;Third thing&lt;/p&gt;&lt;/li&gt;
-          &lt;/ul&gt;
-        &lt;/p&gt;
-      &lt;/slide&gt;
-    &lt;/section&gt;
-  &lt;/slideshow&gt;
-&lt;/pretext&gt;
-      </pre>
     </section>
 </chapter>
