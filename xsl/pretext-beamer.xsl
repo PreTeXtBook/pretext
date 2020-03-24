@@ -48,6 +48,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template name="preamble">
   <xsl:text>\documentclass[11pt, compress]{beamer}&#xa;</xsl:text>
+  <xsl:if test="$latex.preamble.early != ''">
+    <xsl:text>%% Custom Preamble Entries, early (use latex.preamble.early)&#xa;</xsl:text>
+    <xsl:value-of select="$latex.preamble.early" />
+    <xsl:text>&#xa;</xsl:text>
+  </xsl:if>
   <xsl:text>\usepackage{amsmath}&#xa;</xsl:text>
 
   <xsl:text>\usetheme{Boadilla}&#xa;</xsl:text>
@@ -497,7 +502,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\newcommand{\lititle}[1]{{\slshape#1}}&#xa;</xsl:text>
   </xsl:if>
   <xsl:text>%% End: Semantic Macros&#xa;</xsl:text>
-
+  <xsl:if test="$latex.preamble.late != ''">
+    <xsl:text>%% Custom Preamble Entries, late (use latex.preamble.late)&#xa;</xsl:text>
+    <xsl:value-of select="$latex.preamble.late" />
+    <xsl:text>&#xa;</xsl:text>
+  </xsl:if>
 
   <xsl:apply-templates select="/pretext/docinfo/macros"/>
   <xsl:if test="$docinfo/latex-image-preamble">
