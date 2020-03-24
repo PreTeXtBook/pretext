@@ -2586,9 +2586,12 @@ Similar to articles, your content should be organized into several
           <li>
 And within each section, a <c>slide</c> represents a full screen of information.
 Within a slide, you may author <pretext/> content as usual, such as paragraphs
-(<c>p</c>), lists (<c>ul</c>), and so on. The <c>@slide-step="true"</c> attribute
-is supported on several elements to allow stepping through slides
-(e.g. it inserts a Beamer <c>\pause</c>).
+(<c>p</c>), lists (<c>ul</c>), and so on.
+          </li>
+          <li>
+Several elements support setting the <attr>pause</attr> attribute to the
+value <c>yes</c> to allow stepping through
+parts of a slide (e.g. it inserts a Beamer <c>\pause</c>).
           </li>
         </ul>
         <p>
