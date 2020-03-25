@@ -7334,23 +7334,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$content" />
         </xsl:when>
         <!-- 2nd exceptional case, xref in mrow of display math  -->
-        <!-- Requires https://pretextbook.org/js/lib/mathjaxknowl.js -->
-        <!-- loaded as a MathJax extension for knowls to render  -->
+        <!--   with Javascript (pure HTML) we can make knowls    -->
+        <!--   without Javascript (EPUB) we use plain text       -->
         <xsl:when test="parent::mrow">
-            <!-- MathJax expects similar constructions, variation is here -->
-            <xsl:choose>
-                <xsl:when test="$knowl='true'">
-                    <xsl:text>\knowl{</xsl:text>
-                    <xsl:apply-templates select="$target" mode="xref-knowl-filename" />
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:text>\href{</xsl:text>
-                    <xsl:apply-templates select="$target" mode="url" />
-                </xsl:otherwise>
-            </xsl:choose>
-            <xsl:text>}{</xsl:text>
-            <xsl:value-of select="$content" />
-            <xsl:text>}</xsl:text>
+            <xsl:apply-templates select="." mode="xref-link-display-math">
+                <xsl:with-param name="target" select="$target"/>
+                <xsl:with-param name="content" select="$content"/>
+            </xsl:apply-templates>
         </xsl:when>
         <!-- usual case, always an "a" element (anchor) -->
         <xsl:otherwise>
@@ -7387,6 +7377,34 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:element>
         </xsl:otherwise>
     </xsl:choose>
+</xsl:template>
+
+<!-- For pure HTML we can make a true knowl or traditional link -->
+<!-- when an "xref" is authored inside of a display math "mrow" -->
+<!-- Requires https://pretextbook.org/js/lib/mathjaxknowl.js    -->
+<!-- loaded as a MathJax extension for knowls to render         -->
+<xsl:template match="*" mode="xref-link-display-math">
+    <xsl:param name="target"/>
+    <xsl:param name="content"/>
+
+    <!-- this could be passed as a parameter, but -->
+    <!-- we have $target anyway, so can recompute -->
+    <xsl:variable name="knowl">
+        <xsl:apply-templates select="$target" mode="xref-as-knowl"/>
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$knowl='true'">
+            <xsl:text>\knowl{</xsl:text>
+            <xsl:apply-templates select="$target" mode="xref-knowl-filename"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>\href{</xsl:text>
+            <xsl:apply-templates select="$target" mode="url"/>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>}{</xsl:text>
+    <xsl:value-of select="$content"/>
+    <xsl:text>}</xsl:text>
 </xsl:template>
 
 <!-- A URL is needed various places, such as                     -->
