@@ -989,6 +989,10 @@
         <xsl:text>->correct_ans()</xsl:text>
     </xsl:if>
     <xsl:text>]</xsl:text>
+    <!-- if the variable is a string of PGML syntax to be processed -->
+    <xsl:if test="@data='pgml'">
+        <xsl:text>**</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <!-- An image description may depend on the value of a simple scalar var   -->

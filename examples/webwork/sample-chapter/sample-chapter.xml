@@ -663,6 +663,30 @@
                 </webwork>
             </exercise>
 
+            <p>
+                Occasionally (and probably very rarely) your PG code will include a string variable where the content is PGML syntax.
+                If this is put into the exercise statement, it will be inserted <emph>after</emph> PGML processing is done,
+                and therefore it won't render as you might expect. To insert this content and also have it processed as PGML,
+                use <c>data="pgml"</c>. (This is not in the <pretext/> schema as of 3/26/2020, and is subject to change.)
+            </p>
+
+            <exercise>
+                <webwork>
+                    <setup>
+                        <pg-code>
+                            $statement = 'some PGML math: [`\frac{1}{2}+\frac{3}{2}=2`]; and some *bold text*';
+                        </pg-code>
+                    </setup>
+                    <statement>
+                        <p>
+                            <var name="$statement"/> makes:
+                        </p>
+                        <p>
+                            <var name="$statement" data="pgml"/>
+                        </p>
+                    </statement>
+                </webwork>
+            </exercise>
         </section>
 
         <section>
