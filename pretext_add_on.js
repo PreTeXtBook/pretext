@@ -114,6 +114,30 @@ window.addEventListener("load",function(event) {
             }
         }
     }
+
+    console.log("adding permalinks");
+    /* add permalinks to all sections and articles */
+    items_needing_permalinks = document.querySelectorAll('body section, body section > p, body section article');
+ //   items_needing_permalinks = document.querySelectorAll('body section article');
+    this_url = window.location.href.split('#')[0];
+    permalink_word = "permalink";
+    for (var i = 0; i < items_needing_permalinks.length; i++) {
+        this_item = items_needing_permalinks[i];
+        if(this_item.id) {
+            this_permalink_url = this_url + "#" + this_item.id;
+            console.log("        needs permalink", this_permalink_url, "  xx ", this_item);
+  //          this_permalink_container = document.createElement('div');
+  //          this_permalink_container.setAttribute('style', "position: relative; width: 0; height: 0");
+  //          this_permalink_container.innerHTML = '<span class="autopermalink">' + permalink_word + '</span>';
+           this_permalink_container = document.createElement('span');
+           this_permalink_container.setAttribute('class', 'autopermalink');
+           this_permalink_container.innerHTML = '<a href="' + this_permalink_url + '">' + permalink_word + '</a>';
+
+           this_item.insertAdjacentElement("afterbegin", this_permalink_container);
+        } else {
+            console.log("      no permalink, because no id", this_item) 
+        }
+    }
 },
 false);
 
