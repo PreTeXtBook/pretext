@@ -1112,6 +1112,35 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
     color: #a32;
 }
 
+/* so that we can position things (like .autopermalink) absolutely wrt these items */
+.pretext-content section,
+.pretext-content article,
+.pretext-content p
+ {
+    position: relative;
+}
+
+.pretext-content .autopermalink {
+    position: absolute;
+    top: 0px;
+    right: -120px;
+    font-size: 85%;
+    color: #a00;
+    opacity: 0.02
+}
+.pretext-content .exercises > .autopermalink,
+.pretext-content .glossary > .autopermalink {
+    margin-top: 1em;
+}
+.pretext-content .section > .autopermalink,
+.pretext-content .subsection > .autopermalink {
+    margin-top: 2em;
+}
+
+.pretext-content .autopermalink:hover {
+    opacity: 1;
+}
+
 .mininav {
     float: left;
     padding-top: 0.7ex;
