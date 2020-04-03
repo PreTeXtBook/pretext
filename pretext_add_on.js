@@ -89,9 +89,19 @@ window.addEventListener("load",function(event) {
             console.log(e, "was id'd in a previous round");
             continue
         }
+console.log("this is e", e);
+        if (e.classList.contains('watermark')) {
+            console.log(e, "skipping the watermark");
+            continue
+        }
         console.log("\n                    XXXXXXXXX  p with no id", e);
         prev_p = $(e).prevAll("p");
-        console.log("prev_p", prev_p, "xx", prev_p[0].id);
+        console.log("prev_p", prev_p, "xx");
+        if(prev_p.length == 0) {
+            console.log("   PPP   problem: prev_p has no length:", prev_p);
+            continue
+        }
+        console.log("which has id", prev_p[0].id);
         var parts_found = 1;
         var parts_to_id = [e];
         for (var i=0; i < prev_p.length; ++i) {
@@ -117,7 +127,7 @@ window.addEventListener("load",function(event) {
 
     console.log("adding permalinks");
     /* add permalinks to all sections and articles */
-    items_needing_permalinks = document.querySelectorAll('body section, body section > p, body section article');
+    items_needing_permalinks = document.querySelectorAll('body section, body section > p, body section article, body section figure');
  //   items_needing_permalinks = document.querySelectorAll('body section article');
     this_url = window.location.href.split('#')[0];
     permalink_word = "permalink";
