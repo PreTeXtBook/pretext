@@ -1504,20 +1504,35 @@
             element statement { ExerciseBody }
         Exercise =
             element exercise {
+                (
+                NoninteractiveExercise |
+                InteractiveExercise
+                )
+            }
+        NoninteractiveExercise =
+            element exercise {
                 MetaDataTitleOptional,
                 attribute number {text}?,
                 (
                 ExerciseBody |
-                (StatementExercise, Hint*, Answer*, Solution*) |
-                (IntroductionText?, WebWork, ConclusionText?)
+                (StatementExercise, Hint*, Answer*, Solution*)
                 )
+            }
+        InteractiveExercise =
+            element exercise {
+                MetaDataTitleOptional,
+                attribute number {text}?,
+                (IntroductionText?, WebWork, ConclusionText?)
             }
         ExerciseGroup =
             element exercisegroup {
                 MetaDataTitleOptional,
                 attribute cols {"2"|"3"|"4"|"5"|"6"}?,
                 IntroductionStatementNoCaption?,
-                Exercise+,
+                (
+                NoniteractiveExercise+ |
+                InteractiveExercise+
+                ),
                 ConclusionStatementNoCaption?
             }
         </fragment>
