@@ -47,7 +47,10 @@
     margin-top: 0.3em;
 }
 /* But not at the start of a part */
-#toc > ul > li.part + li {
+/* I cannot see that this actually does anything --DF */
+#toc > ul > li.part + li,
+#toc > ul > li.frontmatter + li,
+#toc > ul > li.backmatter + li {
     margin-top: 0;
 }
 /* Removes underlines from links in toc */

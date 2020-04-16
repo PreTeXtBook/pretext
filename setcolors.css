@@ -62,15 +62,25 @@
 }
 
 #toc ul li.part a {
-    color: #222222;
-    background-color: var(--bodytitlehighlight);
     margin-top: 15px;
+/*
     padding-top: 6px;
     padding-bottom: 6px;
-    font-size: 110%;
+*/
     border-bottom: none;
 }
-#toc ul li.part a:hover {
+#toc ul li.part a,
+#toc ul li.frontmatter > a:first-child,
+#toc ul li.backmatter > a:first-child {
+    color: #222222;
+    background-color: var(--bodytitlehighlight);
+    font-size: 110%;
+    padding-top: 7px;
+    padding-bottom: 7px;
+}
+#toc ul li.part a:hover,
+#toc ul li.frontmatter a:hover,
+#toc ul li.backmatter a:hover {
     color: #ffffff;
     background-color: var(--highlighttoc);
 }

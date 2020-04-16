@@ -40,21 +40,10 @@ so that we can set our own later */
 .pretext-content h1, .pretext-content h2, .pretext-content h3, .pretext-content h4, .pretext-content h5, .pretext-content h6 {
     margin: 0;
 }
-/* do this better */
-h2:last-child {
-/* for the chapter pages with section links at the bottom */
-    margin-bottom: 100px;
-}
 
-/* obsolete? */
-#toc h2 + h2 {
-    margin-top: 0.3em;
+.pretext-content .heading {
+    line-height: 1.1;
 }
-.pretext-content h6 {
-    line-height: 1em;
-}
-
-
 
 .pretext-content p {
     margin-top: 1.25em;
@@ -1044,11 +1033,6 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
 .pretext-content p + figure.figure-like > table {
     margin-top: 1em;
 }
-/*
-.pretext-content .sbscaption {
-    width: 100%! important;
-}
-*/
 
 .pretext-content figure.figure-like figcaption {
     overflow: hidden;
@@ -2133,9 +2117,11 @@ code.inline {
   height   : 8em;
 }
 /* example of where the following is needed? */
+/*
 .pretext-content .aside-like * {
-    background-color: #f5faff !important;
+    background-color: #f5faff;
 }
+*/
 .pretext-content .aside-like.front, .pretext-content .example-like .aside-like.front {
   position: relative;
   z-index: 0;
@@ -2266,10 +2252,10 @@ code.inline {
     max-width: 195px;
     max-height: 4em;
     margin-right: -8em;
-}
+  }
   .pretext-content li > aside.aside-like:last-child {
     position: absolute;
-}
+  }
 }
 
 
