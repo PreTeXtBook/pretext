@@ -6096,20 +6096,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
-<!-- answer blank for quantitative answers              -->
-<xsl:template match="webwork-reps/static//statement//fillin">
-    <xsl:text> \fillin{</xsl:text>
-    <xsl:choose>
-        <xsl:when test="@characters">
-            <xsl:value-of select="@characters" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>5</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-    <xsl:text>}</xsl:text>
-</xsl:template>
-
 <!-- answer blank for other kinds of answers                 -->
 <!-- TODO: gradually eliminate "var"'s presence from static  -->
 <!-- coming from a WeBWorK server, similar to how the above  -->
