@@ -464,23 +464,109 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- PROJECT-LIKE gets own switch here           -->
 <!-- "example" are set to 'yes' by default       -->
 <!-- so new authors know that knowls exist       -->
-<xsl:param name="html.knowl.theorem" select="'no'" />
-<xsl:param name="html.knowl.proof" select="'yes'" />
-<xsl:param name="html.knowl.definition" select="'no'" />
-<xsl:param name="html.knowl.example" select="'yes'" />
-<xsl:param name="html.knowl.project" select="'no'" />
-<xsl:param name="html.knowl.task" select="'no'" />
-<xsl:param name="html.knowl.list" select="'no'" />
-<xsl:param name="html.knowl.remark" select="'no'" />
-<xsl:param name="html.knowl.objectives" select="'no'" />
-<xsl:param name="html.knowl.outcomes" select="'no'" />
-<xsl:param name="html.knowl.figure" select="'no'" />
-<xsl:param name="html.knowl.table" select="'no'" />
-<xsl:param name="html.knowl.listing" select="'no'" />
-<xsl:param name="html.knowl.exercise.inline" select="'yes'" />
-<xsl:param name="html.knowl.exercise.sectional" select="'no'" />
-<xsl:param name="html.knowl.exercise.worksheet" select="'no'" />
-<xsl:param name="html.knowl.exercise.readingquestion" select="'no'" />
+<xsl:param name="html.knowl.all" select="'default'" />
+<xsl:param name="html.knowl.theorem">
+  <xsl:choose>
+    <xsl:when test="$html.knowl.all = 'default'">no</xsl:when>
+    <xsl:otherwise><xsl:value-of select="$html.knowl.all" /></xsl:otherwise>
+  </xsl:choose>
+</xsl:param>
+<xsl:param name="html.knowl.proof">
+  <xsl:choose>
+    <xsl:when test="$html.knowl.all = 'default'">yes</xsl:when>
+    <xsl:otherwise><xsl:value-of select="$html.knowl.all" /></xsl:otherwise>
+  </xsl:choose>
+</xsl:param>
+<xsl:param name="html.knowl.definition">
+  <xsl:choose>
+    <xsl:when test="$html.knowl.all = 'default'">no</xsl:when>
+    <xsl:otherwise><xsl:value-of select="$html.knowl.all" /></xsl:otherwise>
+  </xsl:choose>
+</xsl:param>
+<xsl:param name="html.knowl.example">
+  <xsl:choose>
+    <xsl:when test="$html.knowl.all = 'default'">yes</xsl:when>
+    <xsl:otherwise><xsl:value-of select="$html.knowl.all" /></xsl:otherwise>
+  </xsl:choose>
+</xsl:param>
+<xsl:param name="html.knowl.project">
+  <xsl:choose>
+    <xsl:when test="$html.knowl.all = 'default'">no</xsl:when>
+    <xsl:otherwise><xsl:value-of select="$html.knowl.all" /></xsl:otherwise>
+  </xsl:choose>
+</xsl:param>
+<xsl:param name="html.knowl.task">
+  <xsl:choose>
+    <xsl:when test="$html.knowl.all = 'default'">no</xsl:when>
+    <xsl:otherwise><xsl:value-of select="$html.knowl.all" /></xsl:otherwise>
+  </xsl:choose>
+</xsl:param>
+<xsl:param name="html.knowl.list">
+  <xsl:choose>
+    <xsl:when test="$html.knowl.all = 'default'">no</xsl:when>
+    <xsl:otherwise><xsl:value-of select="$html.knowl.all" /></xsl:otherwise>
+  </xsl:choose>
+</xsl:param>
+<xsl:param name="html.knowl.remark">
+  <xsl:choose>
+    <xsl:when test="$html.knowl.all = 'default'">no</xsl:when>
+    <xsl:otherwise><xsl:value-of select="$html.knowl.all" /></xsl:otherwise>
+  </xsl:choose>
+</xsl:param>
+<xsl:param name="html.knowl.objectives">
+  <xsl:choose>
+    <xsl:when test="$html.knowl.all = 'default'">no</xsl:when>
+    <xsl:otherwise><xsl:value-of select="$html.knowl.all" /></xsl:otherwise>
+  </xsl:choose>
+</xsl:param>
+<xsl:param name="html.knowl.outcomes">
+  <xsl:choose>
+    <xsl:when test="$html.knowl.all = 'default'">no</xsl:when>
+    <xsl:otherwise><xsl:value-of select="$html.knowl.all" /></xsl:otherwise>
+  </xsl:choose>
+</xsl:param>
+<xsl:param name="html.knowl.figure">
+  <xsl:choose>
+    <xsl:when test="$html.knowl.all = 'default'">no</xsl:when>
+    <xsl:otherwise><xsl:value-of select="$html.knowl.all" /></xsl:otherwise>
+  </xsl:choose>
+</xsl:param>
+<xsl:param name="html.knowl.table">
+  <xsl:choose>
+    <xsl:when test="$html.knowl.all = 'default'">no</xsl:when>
+    <xsl:otherwise><xsl:value-of select="$html.knowl.all" /></xsl:otherwise>
+  </xsl:choose>
+</xsl:param>
+<xsl:param name="html.knowl.listing">
+  <xsl:choose>
+    <xsl:when test="$html.knowl.all = 'default'">no</xsl:when>
+    <xsl:otherwise><xsl:value-of select="$html.knowl.all" /></xsl:otherwise>
+  </xsl:choose>
+</xsl:param>
+<xsl:param name="html.knowl.exercise.inline">
+  <xsl:choose>
+    <xsl:when test="$html.knowl.all = 'default'">yes</xsl:when>
+    <xsl:otherwise><xsl:value-of select="$html.knowl.all" /></xsl:otherwise>
+  </xsl:choose>
+</xsl:param>
+<xsl:param name="html.knowl.exercise.sectional">
+  <xsl:choose>
+    <xsl:when test="$html.knowl.all = 'default'">no</xsl:when>
+    <xsl:otherwise><xsl:value-of select="$html.knowl.all" /></xsl:otherwise>
+  </xsl:choose>
+</xsl:param>
+<xsl:param name="html.knowl.exercise.worksheet">
+  <xsl:choose>
+    <xsl:when test="$html.knowl.all = 'default'">no</xsl:when>
+    <xsl:otherwise><xsl:value-of select="$html.knowl.all" /></xsl:otherwise>
+  </xsl:choose>
+</xsl:param>
+<xsl:param name="html.knowl.exercise.readingquestion">
+  <xsl:choose>
+    <xsl:when test="$html.knowl.all = 'default'">no</xsl:when>
+    <xsl:otherwise><xsl:value-of select="$html.knowl.all" /></xsl:otherwise>
+  </xsl:choose>
+</xsl:param>
 <!-- html.knowl.example.solution: always "yes", could be implemented -->
 
 <!-- CSS and Javascript Servers -->

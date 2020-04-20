@@ -72,6 +72,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- 2020-02-09: Stopped using a temporary "local" stringparam    -->
 <xsl:param name="local" select="''"/>
 
+<!-- Suppress all knowls -->
+<xsl:param name="html.knowl.all" select="'yes'"/>
+
 <!-- String to prefix  reveal.js  resources -->
 <xsl:variable name="reveal-root">
     <!-- CDN is used twice, so just edit here -->
