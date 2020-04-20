@@ -229,6 +229,9 @@ ul {
 .activity {
   background: #60800010;
 }
+dfn {
+  font-weight: bold;
+}
           </style>
 
         </head>
