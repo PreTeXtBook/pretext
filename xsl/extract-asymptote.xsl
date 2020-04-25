@@ -73,6 +73,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="contains($line, ' import ') and contains($line, ' graph3 ')">
             <xsl:text>3D</xsl:text>
         </xsl:when>
+        <xsl:when test="contains($line, ' import ') and contains($line, ' three ')">
+            <xsl:text>3D</xsl:text>
+        </xsl:when>
         <!-- otherwise, recurse to get next line -->
         <xsl:otherwise>
             <xsl:call-template name="asymptote-3d">
