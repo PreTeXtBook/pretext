@@ -19,6 +19,12 @@ You should have received a copy of the GNU General Public License
 along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************-->
 
+<!-- http://pimpmyxslt.com/articles/entity-tricks-part2/ -->
+<!DOCTYPE xsl:stylesheet [
+    <!ENTITY % entities SYSTEM "entities.ent">
+    %entities;
+]>
+
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
@@ -169,6 +175,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Kill creation of the index page from the -html -->
 <!-- conversion (we just build one monolithic page) -->
 <xsl:variable name="html-index-page" select="/.."/>
+
+<!-- Kill knowl-ing of various environments -->
+<xsl:template match="&THEOREM-LIKE;|proof|&DEFINITION-LIKE;|&EXAMPLE-LIKE;|&PROJECT-LIKE;|task|&FIGURE-LIKE;|&REMARK-LIKE;|&GOAL-LIKE;|exercise" mode="is-hidden">
+    <xsl:text>no</xsl:text>
+</xsl:template>
 
 <!-- Write the infrastructure for a page -->
 <xsl:template match="slideshow">
