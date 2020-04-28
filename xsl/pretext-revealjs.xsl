@@ -170,6 +170,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- conversion (we just build one monolithic page) -->
 <xsl:variable name="html-index-page" select="/.."/>
 
+<!-- Kill knowl-ing of various environments -->
+<xsl:template match="theorem|proof|definition|example|project|task|figure|remark|goal|exercise" mode="is-hidden">
+    <xsl:text>no</xsl:text>
+</xsl:template>
+
 <!-- Write the infrastructure for a page -->
 <xsl:template match="slideshow">
     <xsl:call-template name="converter-blurb-html" />
