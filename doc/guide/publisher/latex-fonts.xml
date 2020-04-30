@@ -193,5 +193,18 @@
         </cd>near the very end of the command-line output.</p>
 
         <p>Apparently, the <c>texlive-fontconfig.conf</c> file is not distributed with Debian Linux as this <url href="https://packages.debian.org/search?arch=any&amp;mode=filename&amp;searchon=contents&amp;keywords=fontconfig.conf">search</url><fn><c>packages.debian.org/search?arch=any&amp;mode=filename&amp;searchon=contents&amp;keywords=fontconfig.conf</c></fn> will demonstrate.  Please report any change in this situation.</p>
+
+        <p>When installing the Open Dyslexic font via an Ubuntu package (2020-04-28), <c>xelatex</c> became confused by the presence of Web Open Font Format (<init>WOFF</init>) versions which were installed along with the OTF versions.  
+        The solution is to create a new file (as root) named<cd>
+            <cline>/etc/fonts/conf.d/70-no-woff.conf</cline>
+        </cd>with contents<cd>
+            <cline>&lt;fontconfig&gt;</cline>
+            <cline>  &lt;selectfont&gt;</cline>
+            <cline>    &lt;rejectfont&gt;</cline>
+            <cline>      &lt;glob&gt;/usr/share/fonts/woff/*&lt;/glob&gt;</cline>
+            <cline>    &lt;/rejectfont&gt;</cline>
+            <cline>  &lt;/selectfont&gt;</cline>
+            <cline>&lt;/fontconfig&gt;</cline>
+        </cd>and then running <c>fc-cache -f -v</c> to update what fonts are known to the system.  See the <url href="https://tex.stackexchange.com/questions/392144/xelatex-and-fontspec-crash-trying-to-find-woff-file-for-some-fonts-but-not-other"><c>tex.stackexchange.com</c></url><fn><c>tex.stackexchange.com/questions/392144</c></fn> post.</p>
     </section>
 </chapter>
