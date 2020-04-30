@@ -151,6 +151,34 @@ console.log("this is e", e);
 },
 false);
 
+/* for the random WW problems */
+
+function updateURLParameter(url, param, paramVal){
+  var newAdditionalURL = "";
+  var tempArray = url.split("?");
+  var baseURL = tempArray[0];
+  var additionalURL = tempArray[1];
+  var temp = "";
+  if (additionalURL) {
+    tempArray = additionalURL.split("&");
+    for (var i=0; i<tempArray.length; i++){
+      if(tempArray[i].split('=')[0] != param){
+        newAdditionalURL += temp + tempArray[i];
+        temp = "&";
+      }
+    }
+  }
+  var rows_txt = temp + "" + param + "=" + paramVal;
+  return baseURL + "?" + newAdditionalURL + rows_txt;
+}
+  
+function WWiframeRandomize(iframe) {
+  var this_problem = document.getElementsByName(iframe)[0];    
+  var this_problem_src = this_problem.src;
+  this_problem_src = updateURLParameter(this_problem_src, "problemSeed", Math.floor(Math.random() * 10000));
+  this_problem.src = this_problem_src;
+}
+
 /* for the GeoGebra calculator */
 
 function pretext_geogebra_calculator_onload() {
