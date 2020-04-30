@@ -145,6 +145,20 @@
     </section>
 
     <section>
+        <title>Font Notes</title>
+
+        <subsection>
+            <title>Dyslexic Font</title>
+
+            <p>There is an <init>OTF</init> font, with an open license, that purports to help readers with dyslexia.<ul>
+                <li>Website is <url href="https://opendyslexic.org/"><c>opendyslexic.org/</c></url>.</li>
+                <li>In Debian/Ubuntu it is available in a package called <c>fonts-opendyslexic</c>.</li>
+                <li>When used with <c>xelatex</c> the relevant names of the font are <c>OpenDyslexic</c> and <c>OpenDyslexicMono</c>.</li>
+            </ul></p>
+        </subsection>
+    </section>
+
+    <section>
         <title>LaTeX Font Configuration (Ubuntu/Debian Linux)</title>
 
         <p>Actual font installation is missing here, since I (RAB) cannot recall just when or how certain fonts arrived on my system.  Certainly they were almost all via Ubuntu/Debian packages, though they could have been specific to <tex/>Live.  Specifically, the <c>texlive-fonts-recommended</c> and <c>texlive-fonts-extra</c> are two packages that will make many fonts available to <tex/>/<latex/> on an Ubuntu/Debian system.  The following is offered in teh hope that it will be useful to other publishers on other Unix-like systems.</p>
