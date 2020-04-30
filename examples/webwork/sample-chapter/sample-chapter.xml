@@ -672,11 +672,9 @@
 
             <exercise>
                 <webwork>
-                    <setup>
-                        <pg-code>
-                            $statement = 'some PGML math: [`\frac{1}{2}+\frac{3}{2}=2`]; and some *bold text*';
-                        </pg-code>
-                    </setup>
+                    <pg-code>
+                        $statement = 'some PGML math: [`\frac{1}{2}+\frac{3}{2}=2`]; and some *bold text*';
+                    </pg-code>
                     <statement>
                         <p>
                             <var name="$statement"/> makes:
