@@ -174,9 +174,9 @@ function updateURLParameter(url, param, paramVal){
   
 function WWiframeRandomize(iframe) {
   var this_problem = document.getElementsByName(iframe)[0];    
-  var this_problem_src = this_problem.src;
-  this_problem_src = updateURLParameter(this_problem_src, "problemSeed", Math.floor(Math.random() * 10000));
-  this_problem.src = this_problem_src;
+  var this_problem_url = this_problem.src;
+  this_problem_url = updateURLParameter(this_problem_url, "problemSeed", Math.floor(Math.random() * 10000));
+  this_problem.src = this_problem_url;
 }
 
 /* for the GeoGebra calculator */
