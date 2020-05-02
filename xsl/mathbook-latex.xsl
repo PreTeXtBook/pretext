@@ -146,7 +146,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="b-has-sidebyside"   select="boolean($document-root//sidebyside)" />
 <xsl:variable name="b-has-sage"         select="boolean($document-root//sage)" />
 <xsl:variable name="b-has-sfrac"        select="boolean($document-root//m[contains(text(),'sfrac')] or $document-root//md[contains(text(),'sfrac')] or $document-root//me[contains(text(),'sfrac')] or $document-root//mrow[contains(text(),'sfrac')])" />
-
+<!-- These are *significant*, *intentional* source elements requiring a monospace font   -->
+<!-- (and not incindentals like an email address which could just be the default tt font -->
+<xsl:variable name="b-needs-mono-font" select="$b-has-program or $b-has-sage or $b-has-console or $document-root//c or $document-root//cd or $document-root//pre or $document-root//tag or $document-root//tage or $document-root//attr"/>
 
 <!-- ######### -->
 <!-- Variables -->
@@ -599,42 +601,99 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% better handing of text alignment&#xa;</xsl:text>
         <xsl:text>\usepackage{ragged2e}&#xa;</xsl:text>
     </xsl:if>
+    <!--                                  -->
+    <!-- Conditional LaTeX engine support -->
+    <!-- (exclusive of fonts)             -->
+    <!--                                  -->
     <xsl:text>%% This LaTeX file may be compiled with pdflatex, xelatex, or lualatex executables&#xa;</xsl:text>
     <xsl:text>%% LuaTeX is not explicitly supported, but we do accept additions from knowledgeable users&#xa;</xsl:text>
     <xsl:text>%% The conditional below provides  pdflatex  specific configuration last&#xa;</xsl:text>
-    <xsl:text>%% The following provides engine-specific capabilities&#xa;</xsl:text>
-    <xsl:text>%% Generally, xelatex is necessary for non-Western fonts&#xa;</xsl:text>
+    <xsl:text>%% begin: engine-specific capabilities&#xa;</xsl:text>
     <xsl:text>\ifthenelse{\boolean{xetex} \or \boolean{luatex}}{%&#xa;</xsl:text>
-    <xsl:text>%% begin: xelatex and lualatex-specific configuration&#xa;</xsl:text>
+    <xsl:text>%% begin: xelatex and lualatex-specific default configuration&#xa;</xsl:text>
     <xsl:text>\ifxetex\usepackage{xltxtra}\fi&#xa;</xsl:text>
     <xsl:text>%% realscripts is the only part of xltxtra relevant to lualatex &#xa;</xsl:text>
     <xsl:text>\ifluatex\usepackage{realscripts}\fi&#xa;</xsl:text>
+    <xsl:text>%% end:   xelatex and lualatex-specific default configuration&#xa;</xsl:text>
+    <xsl:text>}{&#xa;</xsl:text>
+    <xsl:text>%% begin: pdflatex-specific default configuration&#xa;</xsl:text>
+    <xsl:text>%% We assume a PreTeXt XML source file may have Unicode characters&#xa;</xsl:text>
+    <xsl:text>%% and so we ask LaTeX to parse a UTF-8 encoded file&#xa;</xsl:text>
+    <xsl:text>%% This may work well for accented characters in Western language,&#xa;</xsl:text>
+    <xsl:text>%% but not with Greek, Asian languages, etc.&#xa;</xsl:text>
+    <xsl:text>%% When this is not good enough, switch to the  xelatex  engine&#xa;</xsl:text>
+    <xsl:text>%% where Unicode is better supported (encouraged, even)&#xa;</xsl:text>
+    <xsl:text>\usepackage[utf8]{inputenc}&#xa;</xsl:text>
+    <xsl:text>%% end: pdflatex-specific default configuration&#xa;</xsl:text>
+    <xsl:text>}&#xa;</xsl:text>
+    <xsl:text>%% end:   engine-specific capabilities&#xa;</xsl:text>
+    <xsl:text>%%&#xa;</xsl:text>
+    <!--                         -->
+    <!-- Font support            -->
+    <!-- (conditional on engine) -->
+    <!--                         -->
+    <xsl:text>%% Fonts.  Conditional on LaTex engine employed.&#xa;</xsl:text>
+    <xsl:text>%% Default Text Font: The Latin Modern fonts are&#xa;</xsl:text>
+    <xsl:text>%% "enhanced versions of the [original TeX] Computer Modern fonts."&#xa;</xsl:text>
+    <xsl:text>%% We use them as the default text font for PreTeXt output.&#xa;</xsl:text>
+    <xsl:if test="$b-needs-mono-font">
+        <xsl:text>%% Default Monospace font: Inconsolata (aka zi4)&#xa;</xsl:text>
+        <xsl:text>%% Sponsored by TUG: http://levien.com/type/myfonts/inconsolata.html&#xa;</xsl:text>
+        <xsl:text>%% Loaded for documents with intentional objects requiring monospace&#xa;</xsl:text>
+        <xsl:text>%% See package documentation for excellent instructions&#xa;</xsl:text>
+        <xsl:text>%% fontspec will work universally if we use filename to locate OTF files&#xa;</xsl:text>
+        <xsl:text>%% Loads the "upquote" package as needed, so we don't have to&#xa;</xsl:text>
+        <xsl:text>%% Upright quotes might come from the  textcomp  package, which we also use&#xa;</xsl:text>
+        <xsl:text>%% We employ the shapely \ell to match Google Font version&#xa;</xsl:text>
+        <xsl:text>%% pdflatex: "varl" package option produces shapely \ell&#xa;</xsl:text>
+        <xsl:text>%% pdflatex: "var0" package option produces plain zero (not used)&#xa;</xsl:text>
+        <xsl:text>%% pdflatex: "varqu" package option produces best upright quotes&#xa;</xsl:text>
+        <xsl:text>%% xelatex,lualatex: add OTF StylisticSet 1 for shapely \ell&#xa;</xsl:text>
+        <xsl:text>%% xelatex,lualatex: add OTF StylisticSet 2 for plain zero (not used)&#xa;</xsl:text>
+        <xsl:text>%% xelatex,lualatex: add OTF StylisticSet 3 for upright quotes&#xa;</xsl:text>
+        <xsl:text>%%&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:text>%% Automatic Font Control&#xa;</xsl:text>
+    <xsl:text>%% Portions of a document, are, or may, be affected by defined commands&#xa;</xsl:text>
+    <xsl:text>%% These are perhaps more flexible when using  xelatex  rather than  pdflatex&#xa;</xsl:text>
+    <xsl:text>%% The following definitions are meant to be re-defined in a style, using \renewcommand&#xa;</xsl:text>
+    <xsl:text>%% They are scoped when employed (in a TeX group), and so should not be defined with an argument&#xa;</xsl:text>
+    <xsl:text>\newcommand{\divisionfont}{\relax}&#xa;</xsl:text>
+    <xsl:text>\newcommand{\blocktitlefont}{\relax}&#xa;</xsl:text>
+    <xsl:text>\newcommand{\contentsfont}{\relax}&#xa;</xsl:text>
+    <xsl:text>\newcommand{\pagefont}{\relax}&#xa;</xsl:text>
+    <xsl:text>\newcommand{\tabularfont}{\relax}&#xa;</xsl:text>
+    <xsl:text>\newcommand{\xreffont}{\relax}&#xa;</xsl:text>
+    <xsl:text>\newcommand{\titlepagefont}{\relax}&#xa;</xsl:text>
+    <xsl:text>%%&#xa;</xsl:text>
+    <xsl:text>\ifthenelse{\boolean{xetex} \or \boolean{luatex}}{%&#xa;</xsl:text>
+    <xsl:text>%% begin: font setup and configuration for use with xelatex&#xa;</xsl:text>
+    <!--  -->
+    <xsl:text>%% Generally, xelatex is necessary for non-Western fonts&#xa;</xsl:text>
     <xsl:text>%% fontspec package provides extensive control of system fonts,&#xa;</xsl:text>
     <xsl:text>%% meaning *.otf (OpenType), and apparently *.ttf (TrueType)&#xa;</xsl:text>
     <xsl:text>%% that live *outside* your TeX/MF tree, and are controlled by your *system*&#xa;</xsl:text>
     <xsl:text>%% (it is possible that a TeX distribution will place fonts in a system location)&#xa;</xsl:text>
+    <xsl:text>%%&#xa;</xsl:text>
+    <xsl:text>%% The fontspec package is the best vehicle for using different fonts in  xelatex&#xa;</xsl:text>
+    <xsl:text>%% So we load it always, no matter what a publisher or style might want&#xa;</xsl:text>
+    <xsl:text>%%&#xa;</xsl:text>
     <xsl:text>\usepackage{fontspec}&#xa;</xsl:text>
-    <!-- http://tex.stackexchange.com/questions/115321/how-to-optimize-latin-modern-font-with-xelatex -->
-    <xsl:text>%% We use Latin Modern (lmodern) as the default font&#xa;</xsl:text>
-    <xsl:text>%% So we check that it is available as a system font&#xa;</xsl:text>
-    <xsl:call-template name="xelatex-font-check">
-        <xsl:with-param name="font-name" select="'Latin Modern Roman'"/>
-    </xsl:call-template>
-    <xsl:text>%% We then define various font family commands using a vanilla version,&#xa;</xsl:text>
-    <xsl:text>%% with the intention of letting a style override these choices&#xa;</xsl:text>
-    <xsl:text>%% \setmainfont can be re-issued, and \renewfontfamily can redefine others&#xa;</xsl:text>
-    <!-- We do not attempt bold small caps in division headings (nor ToC, nor page style) -->
-    <xsl:text>\setmainfont{Latin Modern Roman}[SmallCapsFont={Latin Modern Roman Caps}, SlantedFont={Latin Modern Roman Slanted}]&#xa;</xsl:text>
-    <xsl:text>\newfontfamily{\divisionfont}{Latin Modern Roman}&#xa;</xsl:text>
-    <xsl:text>\newfontfamily{\blocktitlefont}{Latin Modern Roman}&#xa;</xsl:text>
-    <xsl:text>\newfontfamily{\contentsfont}{Latin Modern Roman}&#xa;</xsl:text>
-    <xsl:text>\newfontfamily{\pagefont}{Latin Modern Roman}[SlantedFont={Latin Modern Roman Slanted}]&#xa;</xsl:text>
-    <xsl:text>\newfontfamily{\tabularfont}{Latin Modern Roman}[SmallCapsFont={Latin Modern Roman Caps}]&#xa;</xsl:text>
-    <xsl:text>\newfontfamily{\xreffont}{Latin Modern Roman}&#xa;</xsl:text>
-    <xsl:text>\newfontfamily{\titlepagefont}{Latin Modern Roman}&#xa;</xsl:text>
-    <xsl:text>%% begin: font information supplied by "font-xelatex-style" template&#xa;</xsl:text>
+    <xsl:text>%%&#xa;</xsl:text>
+    <!--  -->
+    <xsl:text>%% begin: xelatex main font ("font-xelatex-main" template)&#xa;</xsl:text>
+    <xsl:call-template name="font-xelatex-main"/>
+    <xsl:text>%% end:   xelatex main font ("font-xelatex-main" template)&#xa;</xsl:text>
+    <!--  -->
+    <xsl:text>%% begin: xelatex mono font ("font-xelatex-mono" template)&#xa;</xsl:text>
+    <xsl:text>%% (conditional on non-trivial uses being present in source)&#xa;</xsl:text>
+    <xsl:call-template name="font-xelatex-mono"/>
+    <xsl:text>%% end:   xelatex mono font ("font-xelatex-mono" template)&#xa;</xsl:text>
+    <!--  -->
+    <xsl:text>%% begin: xelatex font adjustments ("font-xelatex-style" template)&#xa;</xsl:text>
     <xsl:call-template name="font-xelatex-style"/>
-    <xsl:text>%% end: font information supplied by "font-xelatex-style" template&#xa;</xsl:text>
+    <xsl:text>%% end:   xelatex font adjustments ("font-xelatex-style" template)&#xa;</xsl:text>
+    <!--  -->
     <xsl:if test="$b-has-icon">
         <xsl:text>%% Icons being used, so xelatex needs a system font&#xa;</xsl:text>
         <xsl:text>%% This can only be determined at compile-time&#xa;</xsl:text>
@@ -642,7 +701,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="font-name" select="'FontAwesome'"/>
         </xsl:call-template>
     </xsl:if>
-    <xsl:text>%% &#xa;</xsl:text>
+    <xsl:text>%%&#xa;</xsl:text>
     <!-- language tags appear in docinfo in renames, so be careful -->
     <xsl:text>%% Extensive support for other languages&#xa;</xsl:text>
     <xsl:text>\usepackage{polyglossia}&#xa;</xsl:text>
@@ -729,63 +788,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>%% OTF Script needs to be enabled&#xa;</xsl:text>
         <xsl:text>\newfontfamily\russianfont[Script=Cyrillic]{CMU Serif}&#xa;</xsl:text>
     </xsl:if>
-    <xsl:text>%% end: xelatex and lualatex-specific configuration&#xa;</xsl:text>
+    <xsl:text>%% end:   font setup and configuration for use with xelatex&#xa;</xsl:text>
+    <!--  -->
     <xsl:text>}{%&#xa;</xsl:text>
-    <xsl:text>%% begin: pdflatex-specific configuration&#xa;</xsl:text>
-    <xsl:text>\usepackage[utf8]{inputenc}&#xa;</xsl:text>
-    <xsl:text>%% PreTeXt will create a UTF-8 encoded file&#xa;</xsl:text>
+    <!--  -->
     <xsl:text>%% begin: font setup and configuration for use with pdflatex&#xa;</xsl:text>
-    <xsl:text>%% Portions of a document, are, or may, be affected by font-changing commands&#xa;</xsl:text>
-    <xsl:text>%% These are more robust when using  xelatex  but may be employed with  pdflatex&#xa;</xsl:text>
-    <xsl:text>%% The following definitons are meant to be re-defined in a style with \renewcommand&#xa;</xsl:text>
-    <xsl:text>\newcommand{\divisionfont}{\relax}&#xa;</xsl:text>
-    <xsl:text>\newcommand{\blocktitlefont}{\relax}&#xa;</xsl:text>
-    <xsl:text>\newcommand{\contentsfont}{\relax}&#xa;</xsl:text>
-    <xsl:text>\newcommand{\pagefont}{\relax}&#xa;</xsl:text>
-    <xsl:text>\newcommand{\tabularfont}{\relax}&#xa;</xsl:text>
-    <xsl:text>\newcommand{\xreffont}{\relax}&#xa;</xsl:text>
-    <xsl:text>\newcommand{\titlepagefont}{\relax}&#xa;</xsl:text>
-    <xsl:text>%% begin: font information supplied by "font-pdflatex-style" template&#xa;</xsl:text>
+    <!--  -->
+    <xsl:text>%% begin: pdflatex main font ("font-pdflatex-main" template)&#xa;</xsl:text>
+    <xsl:call-template name="font-pdflatex-main"/>
+    <xsl:text>%% end:   pdflatex main font ("font-pdflatex-main" template)&#xa;</xsl:text>
+    <!--  -->
+    <xsl:text>%% begin: pdflatex mono font ("font-pdflatex-mono" template)&#xa;</xsl:text>
+    <xsl:text>%% (conditional on non-trivial uses being present in source)&#xa;</xsl:text>
+    <xsl:call-template name="font-pdflatex-mono"/>
+    <xsl:text>%% end:   pdflatex mono font ("font-pdflatex-mono" template)&#xa;</xsl:text>
+    <!--  -->
+    <xsl:text>%% begin: pdflatex font adjustments ("font-pdflatex-style" template)&#xa;</xsl:text>
     <xsl:call-template name="font-pdflatex-style"/>
-    <xsl:text>%% begin: font information supplied by "font-pdflatex-style" template&#xa;</xsl:text>
-    <xsl:text>%% end: font setup and configuration for use with pdflatex&#xa;</xsl:text>
-    <xsl:text>%% end: pdflatex-specific configuration&#xa;</xsl:text>
+    <xsl:text>%% end:   pdflatex font adjustments ("font-pdflatex-style" template)&#xa;</xsl:text>
+    <!--  -->
+    <xsl:text>%% end:   font setup and configuration for use with pdflatex&#xa;</xsl:text>
     <xsl:text>}&#xa;</xsl:text>
-    <xsl:if test="$b-has-program or $b-has-sage or $b-has-console or $document-root//c or $document-root//cd or $document-root//pre or $document-root//tag or $document-root//tage or $document-root//attr">
-        <xsl:text>%% Monospace font: Inconsolata (zi4)&#xa;</xsl:text>
-        <xsl:text>%% Sponsored by TUG: http://levien.com/type/myfonts/inconsolata.html&#xa;</xsl:text>
-        <xsl:text>%% Loaded for documents with intentional objects requiring monospace&#xa;</xsl:text>
-        <xsl:text>%% See package documentation for excellent instructions&#xa;</xsl:text>
-        <xsl:text>%% One caveat, seem to need full file name to locate OTF files&#xa;</xsl:text>
-        <xsl:text>%% Loads the "upquote" package as needed, so we don't have to&#xa;</xsl:text>
-        <xsl:text>%% Upright quotes might come from the  textcomp  package, which we also use&#xa;</xsl:text>
-        <xsl:text>%% We employ the shapely \ell to match Google Font version&#xa;</xsl:text>
-        <xsl:text>%% pdflatex: "varqu" option produces best upright quotes&#xa;</xsl:text>
-        <xsl:text>%% xelatex,lualatex: add StylisticSet 1 for shapely \ell&#xa;</xsl:text>
-        <xsl:text>%% xelatex,lualatex: add StylisticSet 2 for plain zero&#xa;</xsl:text>
-        <xsl:text>%% xelatex,lualatex: we add StylisticSet 3 for upright quotes&#xa;</xsl:text>
-        <xsl:text>%% &#xa;</xsl:text>
-        <xsl:text>\ifthenelse{\boolean{xetex} \or \boolean{luatex}}{%&#xa;</xsl:text>
-        <xsl:text>%% begin: xelatex and lualatex-specific monospace font&#xa;</xsl:text>
-        <xsl:text>\usepackage{zi4}&#xa;</xsl:text>
-        <!-- Filenames will locate versions installed in texmf tree? -->
-        <!-- Documentation suggests setting stylistic sets via fontname, which implies system fonts? -->
-        <xsl:text>\setmonofont[BoldFont=Inconsolatazi4-Bold.otf,StylisticSet={1,3}]{Inconsolatazi4-Regular.otf}&#xa;</xsl:text>
-        <!-- <xsl:text>%% Mono spacing with \texttt, no extra space after period&#xa;</xsl:text> -->
-        <!-- <xsl:text>\usepackage[mono,extrasp=0em]{zi4}&#xa;</xsl:text> -->
-        <!-- TODO: put a xelatex/lualatex monospace font package hook here? -->
-        <xsl:text>%% end: xelatex and lualatex-specific monospace font&#xa;</xsl:text>
-        <xsl:text>}{%&#xa;</xsl:text>
-        <xsl:text>%% begin: pdflatex-specific monospace font&#xa;</xsl:text>
-        <xsl:text>%% "varqu" option provides textcomp \textquotedbl glyph&#xa;</xsl:text>
-        <xsl:text>%% "varl"  option provides shapely "ell"&#xa;</xsl:text>
-        <xsl:text>\usepackage[varqu,varl]{zi4}&#xa;</xsl:text>
-        <!-- \@ifpackagelater: https://tex.stackexchange.com/questions/33806/is-it-possible-to-abort-loading-a-package-if-its-too-old -->
-        <!-- <xsl:text>%% Mono spacing with \texttt, no extra space after period&#xa;</xsl:text> -->
-        <!-- <xsl:text>\usepackage[mono,extrasp=0em]{zi4}&#xa;</xsl:text> -->
-        <xsl:text>%% end: pdflatex-specific monospace font&#xa;</xsl:text>
-        <xsl:text>}&#xa;</xsl:text>
-    </xsl:if>
+    <!--  -->
+    <!--  -->
     <xsl:text>%% Symbols, align environment, commutative diagrams, bracket-matrix&#xa;</xsl:text>
     <xsl:text>\usepackage{amsmath}&#xa;</xsl:text>
     <xsl:text>\usepackage{amscd}&#xa;</xsl:text>
@@ -3485,18 +3510,84 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--   Also: search the LaTeX *.log file for the string               -->
 <!--   "Missing character:" for further clues.                        -->
 
-<xsl:template name="font-pdflatex-style">
-    <!-- This is the default Latin Modern font/package -->
+<!-- Actual font commands to specifically influence fonts             -->
+<!-- These are the defaults for out-of-the-box behavior               -->
+<!--   -main: the "document font"                                     -->
+<!--   -mono: "typewriter" or monospace font                          -->
+<!--   -style: additions, adjustments, esp. via font-control commands -->
+
+<!-- This is the default Latin Modern Roman font/package -->
+<xsl:template name="font-pdflatex-main">
     <xsl:text>\usepackage{lmodern}&#xa;</xsl:text>
     <xsl:text>\usepackage[T1]{fontenc}&#xa;</xsl:text>
 </xsl:template>
 
-<!-- Experiment with different fonts: e.g., TeX Gyre Schola, Latin Modern Sans -->
+<!-- Inconsolata package, conditionally            -->
+<!-- Formerly known as  zi4.sty based on NFSS name -->
+<xsl:template name="font-pdflatex-mono">
+    <xsl:if test="$b-needs-mono-font">
+        <xsl:text>\usepackage[varqu,varl]{inconsolata}&#xa;</xsl:text>
+    </xsl:if>
+</xsl:template>
+
+<!-- No extra adjustments for default out-of-the-box behavior             -->
+<!-- But one example of switching to a sans serif font on division titles -->
+<!-- See the "font-xelatex-style" template for more clues                 -->
+<xsl:template name="font-pdflatex-style">
+    <!-- uncomment to test -->
+    <!-- <xsl:text>\renewcommand{\divisionfont}{\fontfamily{lmss}\selectfont}&#xa;</xsl:text> -->
+</xsl:template>
+
+
+<!-- Latin Modern Roman is the xelatex default -->
+<xsl:template name="font-xelatex-main">
+    <xsl:text>%% Latin Modern Roman is the default font for xelatex and so is loaded with a TU encoding&#xa;</xsl:text>
+    <xsl:text>%% *in the format* so we can't touch it, only perhaps adjust it later&#xa;</xsl:text>
+    <xsl:text>%% in one of two ways (then known by NFSS names such as "lmr")&#xa;</xsl:text>
+    <xsl:text>%% (1) via NFSS with font family names such as "lmr" and "lmss"&#xa;</xsl:text>
+    <xsl:text>%% (2) via fontspec with commands like \setmainfont{Latin Modern Roman}&#xa;</xsl:text>
+    <xsl:text>%% The latter requires the font to be known at the system-level by its font name,&#xa;</xsl:text>
+    <xsl:text>%% but will give access to OTF font features through optional arguments&#xa;</xsl:text>
+    <xsl:text>%% https://tex.stackexchange.com/questions/470008/&#xa;</xsl:text>
+    <xsl:text>%% where-and-how-does-fontspec-sty-specify-the-default-font-latin-modern-roman&#xa;</xsl:text>
+    <xsl:text>%% http://tex.stackexchange.com/questions/115321&#xa;</xsl:text>
+    <xsl:text>%% /how-to-optimize-latin-modern-font-with-xelatex&#xa;</xsl:text>
+    <xsl:text>%%&#xa;</xsl:text>
+</xsl:template>
+
+<!-- Filenames necessary to be cross-platform -->
+<xsl:template name="font-xelatex-mono">
+    <xsl:if test="$b-needs-mono-font">
+        <xsl:call-template name="xelatex-font-check">
+            <xsl:with-param name="font-name" select="'Inconsolatazi4-Regular.otf'"/>
+        </xsl:call-template>
+        <xsl:call-template name="xelatex-font-check">
+            <xsl:with-param name="font-name" select="'Inconsolatazi4-Bold.otf'"/>
+        </xsl:call-template>
+        <xsl:text>\usepackage{zi4}&#xa;</xsl:text>
+        <xsl:text>\setmonofont[BoldFont=Inconsolatazi4-Bold.otf,StylisticSet={1,3}]{Inconsolatazi4-Regular.otf}&#xa;</xsl:text>
+    </xsl:if>
+</xsl:template>
+
+<!-- We describe how to adjust the default font in specific locations     -->
+<!-- * The LaTeX macro, \divisionfont, is hard-wired into every division  -->
+<!--   title of your output.  By default the macro does nothing.  Instead -->
+<!-- * (1) Out-of-the-box xelatex sets up various Latin Modern font       -->
+<!--       families.  Below we use "lmss" (Latin Modern Sans Serif)       -->
+<!--        to redefine \divisionfont to make a font switch.              -->
+<!-- * (2) Use fontspec to define a new font family (like standard        -->
+<!--       LaTeX \rmfamily) named "\lmsansserif" and then redefine        -->
+<!--       \divisionfont to make a font switch.                           -->
+<!-- Long-term (1) is easier, while (2) may allow more fine-tuning        -->
+<!-- with OTF font features and may be used to provide entirely different -->
+<!-- fonts (provided they are known at the system level).                 -->
+
 <xsl:template name="font-xelatex-style">
-    <!-- <xsl:text>\setmainfont{Latin Modern Roman}[Numbers=OldStyle]&#xa;</xsl:text> -->
-    <!-- <xsl:text>\newfontfamily{\divisionfont}{Latin Modern Roman}[Numbers=Lining]&#xa;</xsl:text> -->
-    <!-- <xsl:text>\newfontfamily{\contentsfont}{Latin Modern Roman}[Numbers=Lining]&#xa;</xsl:text> -->
-    <!-- <xsl:text>\newfontfamily{\tabularfont}{Latin Modern Roman}[Numbers={Monospaced,Lining}]&#xa;</xsl:text> -->
+    <!-- (1) NFSS, uncomment to test -->
+    <!-- <xsl:text>\renewcommand{\divisionfont}{\fontfamily{lmss}\selectfont}&#xa;</xsl:text> -->
+    <!-- (2) fontspec, uncomment to test -->
+    <!-- <xsl:text>\newfontfamily{\lmsansserif}{Latin Modern Sans}&#xa;</xsl:text> -->
+    <!-- <xsl:text>\renewcommand{\divisionfont}{\lmsansserif}&#xa;</xsl:text> -->
 </xsl:template>
 
 
