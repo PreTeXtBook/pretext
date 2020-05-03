@@ -172,10 +172,12 @@ function updateURLParameter(url, param, paramVal){
   return baseURL + "?" + newAdditionalURL + rows_txt;
 }
   
-function WWiframeRandomize(iframe) {
+function WWiframeReseed(iframe, seed) {
   var this_problem = document.getElementsByName(iframe)[0];    
   var this_problem_url = this_problem.src;
-  this_problem_url = updateURLParameter(this_problem_url, "problemSeed", Math.floor(Math.random() * 10000));
+  if (seed === undefined){seed = Number(this_problem.getAttribute('data-seed')) + 80 + 84 + 88;}
+  this_problem.setAttribute('data-seed', seed);
+  this_problem_url = updateURLParameter(this_problem_url, "problemSeed", seed);
   this_problem.src = this_problem_url;
 }
 
