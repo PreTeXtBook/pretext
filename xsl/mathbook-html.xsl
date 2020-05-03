@@ -411,6 +411,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="b-host-runestone" select="$host-platform = 'runestone'"/>
 <xsl:variable name="b-host-aim"       select="$host-platform = 'aim'"/>
 
+<!-- Temporary, undocumented, and experimental           -->
+<!-- Makes randomization buttons for inline WW probmlems -->
+<xsl:param name="debug.webwork.inline.randomize" select="''"/>
+<xsl:variable name="b-webwork-inline-randomize" select="$debug.webwork.inline.randomize = 'yes'"/>
 
 <!-- ################################################ -->
 <!-- Following is slated to migrate above, 2019-07-10 -->
@@ -9472,6 +9476,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:otherwise>
             <!-- dynamic, iframe -->
+            <xsl:if test="$b-webwork-inline-randomize">
+                <xsl:apply-templates select="." mode="webwork-randomize-buttons"/>
+            </xsl:if>
             <xsl:apply-templates select="." mode="webwork-iframe">
                 <xsl:with-param name="b-has-hint"     select="$b-has-inline-hint"/>
                 <xsl:with-param name="b-has-solution" select="$b-has-inline-solution"/>
@@ -9505,12 +9512,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <!-- build the iframe -->
     <!-- mimicking Mike Gage's blog post -->
-    <iframe width="100%" src="{$the-url}" base64="1" uri="1"/>
+    <iframe name="{@ww-id}" width="{$design-width}" src="{$the-url}" data-seed="{static/@seed}"/>
     <script>
         <xsl:text>iFrameResize({log:true,inPageLinks:true,resizeFrom:'child',checkOrigin:["</xsl:text>
         <xsl:value-of select="$webwork-server" />
         <xsl:text>"]})</xsl:text>
     </script>
+</xsl:template>
+
+<!-- Buttons for randomizing the seed of a live WeBWorK problem      -->
+<xsl:template match="webwork-reps" mode="webwork-randomize-buttons">
+    <div class="WW-randomize-buttons">
+        <button class="WW-randomize" type="button" onclick="WWiframeReseed('{@ww-id}')">Randomize</button>
+        <button class="WW-randomize" type="button" onclick="WWiframeReseed('{@ww-id}',{static/@seed})">Reset</button>
+    </div>
 </xsl:template>
 
 <!-- In WeBWorK problems, a p whose only child is a fillin blank     -->
