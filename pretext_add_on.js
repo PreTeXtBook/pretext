@@ -82,7 +82,6 @@ window.addEventListener("load",function(event) {
 
     /* add ids to p that have none */
     p_no_id = document.querySelectorAll('.main p:not([id])');
-//    p_no_id.forEach(function(e){
     for (var n=p_no_id.length - 1; n >= 0; --n) {
         e = p_no_id[n];
         if (e.hasAttribute('id')) {
@@ -148,6 +147,73 @@ console.log("this is e", e);
             console.log("      no permalink, because no id", this_item) 
         }
     }
+
+    console.log("adding video popouts");
+    all_iframes = document.querySelectorAll('body iframe');
+    // for now, we just want the iframes that hace youtube in the src
+    for (var i = 0; i < all_iframes.length; i++) {
+      this_item = all_iframes[i];
+      this_item_src = this_item.src;
+      console.log("this_item_src", this_item_src);
+      if(this_item_src.includes("youtube")) {
+        this_item_id = this_item.id;
+        this_item_width = this_item.width;
+        this_item_height = this_item.height;
+        if(this_item_height < 150) { continue }
+        console.log("found a youtube video on", this_item_id);
+        var empty_div = document.createElement('div');
+        var this_videomag_container = document.createElement('div');
+       parent_tag = this_item.parentElement.tagName;
+       if(parent_tag == "FIGURE") {
+         this_videomag_container.setAttribute("class", "videobig");
+       } else {
+         this_videomag_container.setAttribute("class", "videobig nofigure");
+       }
+/*
+        this_videomag_container.setAttribute('class', 'videobig');
+*/
+        this_videomag_container.setAttribute('video-id', this_item_id);
+        this_videomag_container.setAttribute('data-width', this_item_width);
+        this_videomag_container.setAttribute('data-height', this_item_height);
+        this_videomag_container.innerHTML = 'fit width';
+
+        this_item.insertAdjacentElement("beforebegin", empty_div); // because of hard-coded permalinks being inline-block */
+        this_item.insertAdjacentElement("beforebegin", this_videomag_container);
+      }
+    }
+
+    $(".videobig").click(function(){
+       parent_video_id = this.getAttribute("video-id");
+       console.log("clicked videobig for", parent_video_id);
+       this_video = document.getElementById(parent_video_id);
+       console.log("make big: ", this_video);
+       original_width =  this.getAttribute("data-width");
+       original_height =  this.getAttribute("data-height");
+       
+       browser_width = $(window).width();
+       width_ratio = browser_width/original_width;
+       console.log("the browser is wider by a factor of",width_ratio);
+       this_video.setAttribute("width", width_ratio*original_width);
+       this_video.setAttribute("height", width_ratio*original_height);
+       this_video.setAttribute("style", "position:relative; left:-260px; z-index:1000");
+       
+       this.setAttribute("class", "videosmall");
+       this.innerHTML = "make small";
+      $(".videosmall").click(function(){
+         console.log("clicked videosmall");
+         parent_video_id = this.getAttribute("video-id");
+         this_video = document.getElementById(parent_video_id);
+         original_width =  this.getAttribute("data-width");
+         original_height =  this.getAttribute("data-height");
+
+         this_video.removeAttribute("style");
+         this_video.setAttribute("width", original_width);
+         this_video.setAttribute("height", original_height);
+         this.setAttribute("class", "videobig");
+         this.innerHTML = "fit width";
+      });
+    });
+
 },
 false);
 
