@@ -3905,6 +3905,18 @@ the xsltproc executable.
                       </li>
                   </ul>
               </p>
+
+              <p>
+                Inclusion of any text other than math will kill the automatic display style.
+                For example, this would happen if one were to add punctuation after the math.
+              </p>
+
+              <p>
+                <ul>
+                  <li><m>\int_a^b \frac{\sin(x)}{x}\,dx</m>,</li>
+                  <li><m>\int_a^b \frac{\sin(x)}{x}\,dx</m></li>
+                </ul>
+              </p>
             </subsection>
 
             <subsection>
