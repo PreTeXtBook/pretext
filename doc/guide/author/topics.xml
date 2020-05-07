@@ -1295,6 +1295,8 @@
             <p>In these situations, author a list item, <tag>li</tag>, within an <tag>ol</tag> or <tag>ul</tag>, by using <em>only</em> the necessary <tag>m</tag> element.  Do not use an intervening <tag>p</tag>, and do not include any adjacent text.  Whitespace is OK.  Then <pretext/> will add <latex/>'s <c>\displaystyle</c> command to improve the visual appearance of the mathematics, and so you do not need to.</p>
 
             <p>If you prefer to not have this behavior, insert an intervening <tag>p</tag>, and output will be identical, but without the <c>\displaystyle</c>.</p>
+
+            <p>Note that <em>any</em> text, other than whitespace, outside the <tag>m</tag> tag will disable this feature, <em>including punctuation</em>. However, according to the Chicago Manual of Style, 14e, 6.127, <q>Items carry no closing punctuation unless they consist of complete sentences.</q> So that comma at the end of your equation probably doesn't belong there anyway.</p>
         </subsection>
 
         <subsection>
