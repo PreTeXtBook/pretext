@@ -251,13 +251,13 @@
             <!-- fragment names, and their elements, from schema source
             dash-character:       nbsp, ndash, mdash
             xml-character:        ampersand, less, greater
-            latex-character:      hash, dollar, percent, tilde, underscore, 
+            latex-character:      hash, dollar, percent, tilde, underscore,
                                   circumflex, backslash, lbrace, rbrace
             delimiter-character:  lsq, rsq, rq, lq
             exotic-character:     ellipsis, asterisk, backtick, slash, midpoint,
-                                  swungdash, permille, pilcrow, section-mark, 
+                                  swungdash, permille, pilcrow, section-mark,
                                   copyright, registered, trademark
-            generator:            today, timeofday, tex, latex, pretext, webwork, 
+            generator:            today, timeofday, tex, latex, pretext, webwork,
                                   eg, ie, circa, etc
             arithmetic-character: minus, solidus, times, obelus, plusminus
             siunit:               (deferred to its own section)
@@ -556,14 +556,14 @@
                     <p>For simple arithmetic expressions in text, this symbol may be used to indicate a tolerance or a choice of two values, one the negative of the other.</p>
                 </paragraphs>
 
-                <!-- 
+                <!--
                 http://gcp.fcaglp.unlp.edu.ar/_media/integrantes:psantamaria:latex:textcomp.pdf
                 + regular
                 - negative
                 - subtract \textminus
                 <times/>  \texttimes
                 <solidus/> \textfractionsolidus
-                <division/> F7 \textdiv 
+                <division/> F7 \textdiv
                 <plusminus/> b1 \textpm
                 -->
             </subsubsection>
@@ -1482,7 +1482,7 @@
                         </p>
                     </li>
                 </ol>
-                Within the same paragraph, we transition to an unordered, two-column, list of some germs: 
+                Within the same paragraph, we transition to an unordered, two-column, list of some germs:
                 <ul cols="2">
                     <li>
                         <p>Bacteria
@@ -2163,7 +2163,7 @@
                 and you should use it, but it should not be the entire content of a heading
                 since it is not an idea by itself.  But it may be a subheading. For example,
                 suppose you have a paragraph on <q>highland sheep.</q>
-                Then <em>both</em> of the following should appear in your index, 
+                Then <em>both</em> of the following should appear in your index,
                 since a reader might consult both locations.
               </p>
               <pre>
