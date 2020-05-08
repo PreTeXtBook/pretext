@@ -177,11 +177,14 @@ console.log("this is e", e);
         this_videomag_container.setAttribute('data-height', this_item_height);
         this_videomag_container.innerHTML = 'fit width';
 
+/* replace this with a surrounding div, for placement, containing a inline-block so the background looks right */
         this_item.insertAdjacentElement("beforebegin", empty_div); // because of hard-coded permalinks being inline-block */
         this_item.insertAdjacentElement("beforebegin", this_videomag_container);
+        this_item.insertAdjacentElement("beforebegin", empty_div); // because of hard-coded permalinks being inline-block */
       }
     }
 
+/* replace this with a single class fo rthe button, with supplementary classes that say to shrink or grow */
     $(".videobig").click(function(){
        parent_video_id = this.getAttribute("video-id");
        console.log("clicked videobig for", parent_video_id);
