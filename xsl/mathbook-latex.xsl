@@ -10922,7 +10922,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="$font-name"/>
     <xsl:text>}{}{\GenericError{}{The font "</xsl:text>
     <xsl:value-of select="$font-name"/>
-    <xsl:text>" requested by PreTeXt output is not available as a system font}{Consult the PreTeXt Guide for help with LaTeX fonts.}{}}&#xa;</xsl:text>
+    <xsl:text>" requested by PreTeXt output is not available.  Either a file cannot be located in default locations via a filename, or a font is not known by its name as part of your system.}{Consult the PreTeXt Guide for help with LaTeX fonts.}{}}&#xa;</xsl:text>
 </xsl:template>
 
 <!-- Miscellaneous -->
