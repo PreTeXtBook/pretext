@@ -52,18 +52,29 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- other places. "Old Style" is a lowercase style, "Lining" is  -->
 <!-- a (now traditional) uppercase style.  Ornamentation for page -->
 <!-- header happens to be specific Unicode characters of the same -->
-<!-- font used for the text.  Relevant font tabvle here:          -->
+<!-- font used for the text.  Relevant font table here:           -->
 <!-- http://mirrors.ctan.org/fonts/libertinus-fonts/documentation/LibertinusSerif-Regular-Table.pdf -->
-<xsl:template name="font-xelatex-style">
+<xsl:template name="font-xelatex-main">
     <xsl:text>%% XeLaTeX font configuration from PreTeXt Guide style&#xa;</xsl:text>
+    <xsl:text>%% We rely on a font installed at the system level,&#xa;</xsl:text>
+    <xsl:text>%% so that we can exercise specific font features&#xa;</xsl:text>
     <xsl:text>%%&#xa;</xsl:text>
     <xsl:call-template name="xelatex-font-check">
         <xsl:with-param name="font-name" select="'Libertinus Serif'"/>
     </xsl:call-template>
+    <xsl:text>\setmainfont{Libertinus Serif}[Numbers=OldStyle]&#xa;</xsl:text>
+</xsl:template>
+
+<!-- Libertinus Mono is serifed (and ugly?) so by doing nothing the   -->
+<!-- default Inconsolata font will be employed, which is much more    -->
+<!-- typewriter-like.  Using an empty template would kill Inconsolata -->
+<!-- and yield whatever default Latin Modern provides.  Both these    -->
+<!-- options have trouble with \textpilcrow and \textrbrackdbl        -->
+
+<xsl:template name="font-xelatex-style">
     <xsl:call-template name="xelatex-font-check">
         <xsl:with-param name="font-name" select="'Libertinus Sans'"/>
     </xsl:call-template>
-    <xsl:text>\setmainfont{Libertinus Serif}[Numbers=OldStyle]&#xa;</xsl:text>
     <xsl:text>\newfontfamily{\divisionfont}{Libertinus Sans}[Numbers=Lining]&#xa;</xsl:text>
     <xsl:text>\newfontfamily{\contentsfont}{Libertinus Sans}[Numbers=Lining]&#xa;</xsl:text>
     <xsl:text>\newfontfamily{\pagefont}{Libertinus Sans}[Numbers=Lining]&#xa;</xsl:text>
