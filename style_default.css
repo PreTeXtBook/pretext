@@ -228,7 +228,8 @@
       position: absolute;
       margin-top: -2em;
       margin-left: 660px;
-      max-width: 200px;
+      max-width: 200px;  /* for some reason the width was too small, so I had to put width (next line) */
+      width: 200px;
       color: inherit;
   }
   .pretext-content .aside-like.front, .pretext-content .example-like .aside-like.front {
