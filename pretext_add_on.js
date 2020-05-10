@@ -126,10 +126,11 @@ console.log("this is e", e);
 
     console.log("adding permalinks");
     /* add permalinks to all sections and articles */
-    items_needing_permalinks = document.querySelectorAll('body section, body section > p, body section article, body section figure');
+    items_needing_permalinks = document.querySelectorAll('body section:not(.introduction), body section > p, body section > article, body section > figure, body section > .exercisegroup > .introduction > p, body section > .exercisegroup article');
  //   items_needing_permalinks = document.querySelectorAll('body section article');
     this_url = window.location.href.split('#')[0];
     permalink_word = "permalink";
+    permalink_word = "&#x1F517;";
     for (var i = 0; i < items_needing_permalinks.length; i++) {
         this_item = items_needing_permalinks[i];
         if(this_item.id) {
@@ -138,7 +139,7 @@ console.log("this is e", e);
   //          this_permalink_container = document.createElement('div');
   //          this_permalink_container.setAttribute('style', "position: relative; width: 0; height: 0");
   //          this_permalink_container.innerHTML = '<span class="autopermalink">' + permalink_word + '</span>';
-           this_permalink_container = document.createElement('span');
+           this_permalink_container = document.createElement('div');
            this_permalink_container.setAttribute('class', 'autopermalink');
            this_permalink_container.innerHTML = '<a href="' + this_permalink_url + '">' + permalink_word + '</a>';
 
