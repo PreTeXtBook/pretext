@@ -1000,7 +1000,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:attribute>
         <xsl:apply-templates select="." mode="header-content" />
     </xsl:element>
-    <xsl:apply-templates select="." mode="permalink" />
 </xsl:template>
 
 <!-- Add an author's names, if present   -->
@@ -1081,41 +1080,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <span class="title">
         <xsl:apply-templates select="." mode="title-full" />
     </span>
-</xsl:template>
-
-<!-- Permalinks on section headings are configurable              -->
-<!-- "stable" implies there is an xml:id on the element. However, -->
-<!-- the filename will change with different chunking levels      -->
-<xsl:template match="*" mode="permalink">
-    <xsl:variable name="has-permalink">
-        <xsl:choose>
-            <xsl:when test="$permalink='none'">
-                <xsl:value-of select="false()" />
-            </xsl:when>
-            <xsl:when test="$permalink='all'">
-                <xsl:value-of select="true()" />
-            </xsl:when>
-            <!-- now in case of $permalink='stable' due to input sanitation -->
-            <xsl:when test="not(@xml:id)">
-                <xsl:value-of select="false()" />
-            </xsl:when>
-            <!-- now just need xml:id for the page URL, or not      -->
-            <!-- NOTE: the element and the enclosure might be equal -->
-            <!--       but double 'true' is not a problem           -->
-            <xsl:otherwise>
-                <xsl:apply-templates select="." mode="has-id-on-enclosure" />
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
-    <xsl:if test="$has-permalink='true'">
-        <xsl:variable name="url">
-            <xsl:apply-templates select="." mode="url" />
-        </xsl:variable>
-        <!-- pilchrow only  -->
-        <a href="{$url}" class="permalink">
-            <xsl:text>&#xb6;</xsl:text>
-        </a>
-    </xsl:if>
 </xsl:template>
 
 <!-- Recursively finds enclosing structural node -->
