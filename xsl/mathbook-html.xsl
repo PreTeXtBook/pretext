@@ -525,28 +525,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- There are also "compact" versions of the navigation buttons in the top right -->
 <xsl:param name="html.navigation.style"  select="'full'" />
 
-
-<!-- Permalinks -->
-<!-- Next to subdivision headings a "paragraph" symbol     -->
-<!-- (a pilcrow) along with internationalized text         -->
-<!-- ("permalink") indicates a link to that section.       -->
-<!-- It is useful if you want to right-click on it to      -->
-<!-- capture a link for use somewhere else.  (Similar      -->
-<!-- behavior for theorems, examples, etc is planned.)     -->
-<!--                                                       -->
-<!-- "Permalink" is a bit of an exaggeration.  Site        -->
-<!-- domain name is relative to wherever content is        -->
-<!-- hosted.  We say a link is "stable" if there is        -->
-<!-- an  xml:id  on the enclosing page AND an  xml:id      -->
-<!-- on the subdivision (which could be the same).         -->
-<!-- If you change the chunking level, then the enclosing  -->
-<!-- page could change and these links will be affected.   -->
-<!--                                                       -->
-<!-- 'none' - no permalinks anywhere                       -->
-<!-- 'stable' - only stable links (see paragraph above)    -->
-<!-- 'all' - every section heading, even if links are poor -->
-<xsl:param name="html.permalink"  select="'stable'" />
-
 <!-- ######### -->
 <!-- Variables -->
 <!-- ######### -->
@@ -640,24 +618,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:when>
         <xsl:otherwise>
             <xsl:message terminate='yes'>MBX:ERROR: 'html.navigation.style' must be 'full' or 'compact', not '<xsl:value-of select="$html.navigation.style" />.'  Quitting...</xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-
-<!-- Permalink display options -->
-<xsl:variable name="permalink">
-    <xsl:choose>
-        <xsl:when test="$html.permalink='none'">
-            <xsl:text>none</xsl:text>
-        </xsl:when>
-        <xsl:when test="$html.permalink='all'">
-            <xsl:text>all</xsl:text>
-        </xsl:when>
-        <xsl:when test="$html.permalink='stable'">
-            <xsl:text>stable</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:message terminate='yes'>MBX:ERROR: 'html.permalink' must be 'none', 'stable' or 'all', not '<xsl:value-of select="$html.permalink" />.'  Quitting...</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>

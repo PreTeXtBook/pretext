@@ -1425,6 +1425,7 @@ $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$readin
 <!-- to an internal variable.                                     -->
 
 <xsl:variable name="html.css.file" select="''"/>
+<xsl:variable name="html.permalink" select="''"/>
 
 <!-- The old (incomplete) methods for duplicating components of -->
 <!-- exercises have been deprecated as of 2018-11-07.  We keep  -->
@@ -10848,6 +10849,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'the &quot;setup&quot; element in a &quot;webwork&quot; is no longer necessary, simply use &quot;pg-code&quot;'"/>
     </xsl:call-template>
     <!--  -->
+    <!--  -->
+    <!-- 2020-05-10  permalinks (their style actually) are now controlled by Javascript -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2020-05-10'" />
+        <xsl:with-param name="message" select="'the  html.permalink  parameter is now obsolete and will be ignored as this is now controlled by Javascript'" />
+        <xsl:with-param name="incorrect-use" select="($html.permalink != '')" />
+    </xsl:call-template>
 </xsl:template>
 
 <!-- Miscellaneous -->
