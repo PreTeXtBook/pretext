@@ -1157,6 +1157,17 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
     padding-left: 0.5em;
     padding-right: 0.5em;
 }
+/* when jumping to a permalink, push down so sticky navbar does not cover */
+:target::before {
+  content: "";
+  display: block;
+  height: 42px;
+  margin: -42px 0 0;
+  border: 0;
+}
+:target > div.autopermalink {
+  top: 45px;
+}
 
 /*
 .pretext-content .autopermalink {
