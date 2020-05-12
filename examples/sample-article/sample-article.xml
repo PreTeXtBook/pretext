@@ -2801,7 +2801,7 @@ the xsltproc executable.
 
                 <p>And finally, an example of a 3-D graph (from the documentation again).</p>
 
-                <p>This SVG image includes a PNG image for the gradient.</p>
+                <p>This SVG image is a beautiful example of a Riemann surface.</p>
 
                 <!-- http://asymptote.sourceforge.net/gallery/3D%20graphs/filesurface.asy -->
                 <!-- Projection point adjusted by Michael Doob -->
