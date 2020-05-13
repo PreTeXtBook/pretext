@@ -49,6 +49,7 @@ setup(
             "share/pretext/schema",
             [
                 "schema/pretext.xml",
+                "schema/README.md",
             ],
         ),
     ],
