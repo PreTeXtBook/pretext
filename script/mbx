@@ -312,8 +312,10 @@ def webwork_to_xml(xslt_exec, ptx_xsl_dir, xml_source, server_params, dest_dir):
 
     if PY3:
         import urllib.parse
+        from urllib.parse import urlparse
     else:
         import urllib
+        from urlparse import urlparse
 
     # at least on Mac installations, requests module is not standard
     try:
@@ -667,22 +669,31 @@ def webwork_to_xml(xslt_exec, ptx_xsl_dir, xml_source, server_params, dest_dir):
         #
         #   <image source="relative-path-to-temporary-image-on-server"
         #
-        graphics_pattern = re.compile(r'<image.*?source="([^\.]*)\.([^"]*)"')
+        graphics_pattern = re.compile(r'<image.*?source="([^"]*)"')
 
         # replace filenames, download images with new filenames
         count = 0
+        # ww_image_url will be the URL to an image file used by the problem on the ww server
         for match in re.finditer(graphics_pattern, static[problem]):
+            ww_image_url = match.group(1)
+            # strip away the scheme and location, if present (e.g 'https://webwork-ptx.aimath.org/')
+            ww_image_url_parsed = urlparse(ww_image_url)
+            ww_image_scheme = ww_image_url_parsed.scheme
+            ww_image_full_path = ww_image_url_parsed.path
             count += 1
-            ww_basename = match.group(1)
-            file_extension = '.' + match.group(2)
-            ww_filename = ww_basename + file_extension
+            # split the full path into (path, file). path could theoretically be empty.
+            ww_image_path, ww_image_filename = os.path.split(ww_image_full_path)
+            # split the filename into (name, extension). extension can be empty or like '.png'.
+            ww_image_name, image_extension = os.path.splitext(ww_image_filename)
             # rename, eg, webwork-extraction/webwork-5-image-3.png
-            ptx_basename =  problem + '-image-' + str(count)
-            ptx_filename = ptx_basename + file_extension
-            # URL of image on server starts two steps down
-            image_url = server_url + ww_filename
+            ptx_image_name =  problem + '-image-' + str(count)
+            ptx_image_filename = ptx_image_name + image_extension
+            if ww_image_scheme:
+                image_url = ww_image_url
+            else:
+                image_url = server_url + ww_image_full_path
             # modify PTX problem source to include local versions
-            static[problem] = static[problem].replace(ww_filename, 'images/' + ptx_filename)
+            static[problem] = static[problem].replace(ww_image_full_path, 'images/' + ptx_image_filename)
             # download actual image files
             # http://stackoverflow.com/questions/13137817/how-to-download-image-using-requests
             try:
@@ -693,7 +704,7 @@ def webwork_to_xml(xslt_exec, ptx_xsl_dir, xml_source, server_params, dest_dir):
                 raise ValueError(msg.format(image_url) + root_cause)
             # and save the image itself
             try:
-                with open(os.path.join(dest_dir, ptx_filename), 'wb') as image_file:
+                with open(os.path.join(dest_dir, ptx_image_filename), 'wb') as image_file:
                     image_file.write(response.content)
             except Exception as e:
                 root_cause = str(e)
