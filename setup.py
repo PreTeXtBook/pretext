@@ -40,7 +40,7 @@ setup(
     ],
     entry_points={
         "console_scripts": [
-            "pretext-mbx=scripts.mbx:main",
+            "pretext-mbx=script.mbx:main",
         ],
     },
     include_package_data=True,
