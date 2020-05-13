@@ -52,6 +52,15 @@ setup(
                 "schema/README.md",
             ],
         ),
+        (
+            "share/pretext/xsl",
+            [
+                "xsl/mathbook-common.xsl",
+                "xsl/mathbook-html.xsl",
+                "xsl/entities.ent",
+            ],
+
+        ),
     ],
     install_requires = [
         "Pillow",
