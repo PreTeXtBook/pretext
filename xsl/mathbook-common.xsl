@@ -6834,7 +6834,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Labels of ordered lists have formatting codes, which  -->
 <!-- we detect here and pass on to other more specialized  -->
 <!-- templates for implementation specifics                -->
-<!-- In order: Arabic, lower-case Latin, upper-case Latin, -->
+<!-- In order: Arabic (0-based), Arabic (1-based)          -->
+<!-- lower-case Latin, upper-case Latin,                   -->
 <!-- lower-case Roman numeral, upper-case Roman numeral    -->
 <!-- Absent a label attribute, defaults go 4 levels deep   -->
 <!-- (max for Latex) as: Arabic, lower-case Latin,         -->
@@ -6843,6 +6844,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:choose>
         <xsl:when test="@label">
             <xsl:choose>
+                <xsl:when test="contains(@label,'0')">0</xsl:when>
                 <xsl:when test="contains(@label,'1')">1</xsl:when>
                 <xsl:when test="contains(@label,'a')">a</xsl:when>
                 <xsl:when test="contains(@label,'A')">A</xsl:when>

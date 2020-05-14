@@ -5529,13 +5529,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="format-code" />
     </xsl:variable>
     <xsl:choose>
+        <xsl:when test="$mbx-format-code = '0'">decimal</xsl:when>
         <xsl:when test="$mbx-format-code = '1'">decimal</xsl:when>
         <xsl:when test="$mbx-format-code = 'a'">lower-alpha</xsl:when>
         <xsl:when test="$mbx-format-code = 'A'">upper-alpha</xsl:when>
         <xsl:when test="$mbx-format-code = 'i'">lower-roman</xsl:when>
         <xsl:when test="$mbx-format-code = 'I'">upper-roman</xsl:when>
         <xsl:otherwise>
-            <xsl:message>MBX:BUG: bad MBX ordered list label format code in HTML conversion</xsl:message>
+            <xsl:message>MBX:BUG: bad ordered list label format code in HTML conversion</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -5550,7 +5551,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$mbx-format-code = 'square'">square</xsl:when>
         <xsl:when test="$mbx-format-code = 'none'">no-marker</xsl:when>
         <xsl:otherwise>
-            <xsl:message>MBX:BUG: bad MBX unordered list label format code in HTML conversion</xsl:message>
+            <xsl:message>MBX:BUG: bad unordered list label format code in HTML conversion</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -5561,10 +5562,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Tunnel duplication flag to list items -->
 <xsl:template match="ol|ul">
     <xsl:param name="b-original" select="true()" />
+    <!-- need to switch on 0-1 for ol Arabic -->
+    <!-- no harm if called on "ul"           -->
+    <xsl:variable name="mbx-format-code">
+        <xsl:apply-templates select="." mode="format-code" />
+    </xsl:variable>
     <xsl:element name="{local-name(.)}">
         <xsl:apply-templates select="." mode="insert-paragraph-id" >
             <xsl:with-param name="b-original" select="$b-original" />
         </xsl:apply-templates>
+        <xsl:if test="$mbx-format-code = '0'">
+            <xsl:attribute name="start">
+                <xsl:text>0</xsl:text>
+            </xsl:attribute>
+        </xsl:if>
         <xsl:attribute name="class">
             <xsl:apply-templates select="." mode="html-list-class" />
             <xsl:if test="@cols">
