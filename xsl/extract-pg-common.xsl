@@ -259,6 +259,11 @@
         <xsl:with-param name="b-verbose" select="$b-verbose" />
     </xsl:call-template>
     <xsl:text>&#xa;BEGIN_PGML&#xa;</xsl:text>
+    <xsl:if test="$b-verbose">
+        <xsl:apply-templates select="ancestor::exercisegroup/introduction">
+            <xsl:with-param name="b-verbose" select="$b-verbose"/>
+        </xsl:apply-templates>
+    </xsl:if>
     <xsl:apply-templates>
         <xsl:with-param name="b-verbose" select="$b-verbose" />
     </xsl:apply-templates>
@@ -292,6 +297,13 @@
     <xsl:text>&#xa;BEGIN_PGML_HINT&#xa;</xsl:text>
     <xsl:apply-templates />
     <xsl:text>&#xa;END_PGML_HINT&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="exercisegroup/introduction">
+    <xsl:param name="b-verbose" />
+    <xsl:apply-templates>
+        <xsl:with-param name="b-verbose" select="$b-verbose"/>
+    </xsl:apply-templates>
 </xsl:template>
 
 <!-- ############################## -->
