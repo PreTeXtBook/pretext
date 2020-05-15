@@ -531,6 +531,39 @@
                     </webwork>
                 </exercise>
 
+                <exercise xml:id="ww-use-the-definition-of-the-derivative">
+                    <tite>Show Your Work</tite>
+                    <introduction>
+                        <p>
+                            Sometimes you would like a student to give a <q>simple</q> answer that <webwork/> can automatically assess,
+                            but you would also like the student to show their work or reasoning.
+                            Perhaps there is a particular method that you want to see the student use to find the answer.
+                            So you have a regular answer blank and also an essay blank.
+                            For practical reasons, you may wish to use the same problem on your <webwork/> server, but omit the essay part.
+                            For example, if you want to use that problem but leave out the manual grading.
+                            For this, <webwork/> has the <c>explanation_box</c> tool, demonstrated here.
+                        </p>
+                    </introduction>
+
+                    <webwork>
+                        <pg-code>
+                            $answer = Formula('2x');
+                            $showwork = '[@ explanation_box(message => "Show your work.") @]*';
+                        </pg-code>
+                        <statement>
+                            <p>
+                                Use the definition of the derivative to find <m>\frac{d}{dx}x^2</m>.
+                            </p>
+                            <p>
+                                <var name="$answer" width="10"/>
+                            </p>
+                            <p>
+                                <var name="$showwork" data="pgml"/>
+                            </p>
+                        </statement>
+                    </webwork>
+                </exercise>
+
             </exercises>
         </section>
 
