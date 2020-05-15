@@ -513,7 +513,7 @@
             </xsl:choose>
         </xsl:if>
         <!-- essay answers -->
-        <xsl:if test=".//var[@form='essay']">
+        <xsl:if test=".//var[@form='essay'] or contains(.//pg-code,'explanation_box')">
             <xsl:choose>
                 <xsl:when test="$b-verbose">
                     <xsl:text>  "PGessaymacros.pl",&#xa;</xsl:text>
