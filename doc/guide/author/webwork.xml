@@ -262,6 +262,25 @@
     </subsection>
 
     <subsection>
+      <title><webwork/> in an <tag>exercisegroup</tag></title>
+      <p>
+        An <tag>exercisegroup</tag> is a collection of exercises with common instructions that are put into an <tag>introduction</tag>.
+        If you put <webwork/> exercises in an exercisegroup,
+        then when the exercises are exported to <c>.pg</c> problem files for use as online homework from a <webwork/> server
+        it makes sense that the instructions from the <tag>exercisegroup</tag>'s <tag>introduction</tag> should be included in the <c>.pg</c> file.
+        And so they are included there. Note that they are <em>not</em> included when you are building <acro>HTML</acro> or <latex/> output
+        for your proeject. (Rather, the <tag>exercisegroup</tag>'s <tag>introduction</tag> appears in its normal place.)
+      </p>
+      <p>
+        You should be aware of this when you write the <tag>exercisegroup</tag>'s <tag>introduction</tag>.
+        It impacts the specific language you should use. For example, if you write <q>Differentiate the following functions.</q>
+        or <q>Differentiate each of the functions below.</q>, then you have language that doesn't fit the individual problem
+        when it is used for homework on a <webwork/> server. Instead you might write <q>Differentiate the function</q>.
+        It makes sense as common instructions for the <tag>exercisegroup</tag> as well as the instructions for an individual exercise.
+      </p>
+    </subsection>
+
+    <subsection>
       <title>Reusing a <tag>webwork</tag> by <attr>xml:id</attr></title>
       <p>Planned.</p>
     </subsection>

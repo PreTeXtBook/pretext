@@ -531,6 +531,51 @@
                     </webwork>
                 </exercise>
 
+                <exercisegroup cols="2">
+                    <introduction>
+                        <p>
+                            For the given function <m>f</m>, find <m>\indefiniteintegral{f(x)}{x}</m>.
+                        </p>
+                        <p>
+                            Note that these common instructions are phrased in such a way
+                            that they would read well if they were applied to only one exercise at a time.
+                            That will happen if these exercises are exported as <c>.pg</c> files,
+                            for example to be used in online homework from a <webwork/> server.
+                        </p>
+                    </introduction>
+
+                    <exercise>
+                        <webwork>
+                            <pg-code>
+                                $answer = FormulaUpToConstant("-cos(x)");
+                            </pg-code>
+                            <statement>
+                                <p>
+                                    <m>f(x)=\sin(x)</m>
+                                </p>
+                                <p>
+                                    <var name="$answer" width="20"/>
+                                </p>
+                            </statement>
+                        </webwork>
+                    </exercise>
+
+                    <exercise>
+                        <webwork>
+                            <pg-code>
+                                $answer = FormulaUpToConstant("e^x");
+                            </pg-code>
+                            <statement>
+                                <p>
+                                    <m>f(x)=e^x</m>
+                                </p>
+                                <p>
+                                    <var name="$answer" width="20"/>
+                                </p>
+                            </statement>
+                        </webwork>
+                    </exercise>
+                </exercisegroup>
             </exercises>
         </section>
 
