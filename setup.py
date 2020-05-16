@@ -8,11 +8,9 @@ with open("README.md", "r") as fh:
 # This directory
 dir_setup = os.path.dirname(os.path.realpath(__file__))
 
-# TODO: is mbx versioned?  It should be
-#with open(os.path.join(dir_setup, "script", "version.py")) as f:
-#    # Defines __version__
-#    exec(f.read())
-__version__ = "0.0.1.dev"
+with open(os.path.join(dir_setup, "script", "version.py")) as f:
+    # Defines __version__
+    exec(f.read())
 
 
 # Non-Python deps
