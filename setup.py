@@ -27,7 +27,7 @@ setup(
     url="https://pretextbook.org",
     author="Rob Beezer",
     license="GPLv2, GPLv3",  # TODO: check license
-    python_requires=">=3.6",
+    python_requires=">=3.4",
     packages=find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
