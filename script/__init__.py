@@ -14,3 +14,5 @@ Utilities for PreTeXt files.
 __copyright__ = "Copyright (C) 2014-2020 Robert A. Beezer"
 __credits__ = "The PreTeXt Project Developers"
 __license__ = "GPL-2.0 or GPL-3.0"
+
+from .version import __version__

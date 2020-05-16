@@ -20,7 +20,11 @@
 
 # 2016-05-05: this script should run under Python 2.7 and Python 3
 
-from version import __version__
+# messy hack to support both `python -m script.mbx` and `./mbx.py`:
+try:
+    from .version import __version__
+except ImportError:
+    from version import __version__
 
 ##############################################
 #
