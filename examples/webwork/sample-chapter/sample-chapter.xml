@@ -531,6 +531,85 @@
                     </webwork>
                 </exercise>
 
+                <exercisegroup cols="2">
+                    <introduction>
+                        <p>
+                            For the given function <m>f</m>, find <m>\indefiniteintegral{f(x)}{x}</m>.
+                        </p>
+                        <p>
+                            Note that these common instructions are phrased in such a way
+                            that they would read well if they were applied to only one exercise at a time.
+                            That will happen if these exercises are exported as <c>.pg</c> files,
+                            for example to be used in online homework from a <webwork/> server.
+                        </p>
+                    </introduction>
+
+                    <exercise>
+                        <webwork>
+                            <pg-code>
+                                $answer = FormulaUpToConstant("-cos(x)");
+                            </pg-code>
+                            <statement>
+                                <p>
+                                    <m>f(x)=\sin(x)</m>
+                                </p>
+                                <p>
+                                    <var name="$answer" width="20"/>
+                                </p>
+                            </statement>
+                        </webwork>
+                    </exercise>
+
+                    <exercise>
+                        <webwork>
+                            <pg-code>
+                                $answer = FormulaUpToConstant("e^x");
+                            </pg-code>
+                            <statement>
+                                <p>
+                                    <m>f(x)=e^x</m>
+                                </p>
+                                <p>
+                                    <var name="$answer" width="20"/>
+                                </p>
+                            </statement>
+                        </webwork>
+                    </exercise>
+                </exercisegroup>
+
+                <exercise xml:id="ww-use-the-definition-of-the-derivative">
+                    <tite>Show Your Work</tite>
+                    <introduction>
+                        <p>
+                            Sometimes you would like a student to give a <q>simple</q> answer that <webwork/> can automatically assess,
+                            but you would also like the student to show their work or reasoning.
+                            Perhaps there is a particular method that you want to see the student use to find the answer.
+                            So you have a regular answer blank and also an essay blank.
+                            For practical reasons, you may wish to use the same problem on your <webwork/> server, but omit the essay part.
+                            For example, if you want to use that problem but leave out the manual grading.
+                            For this, <webwork/> has the <c>explanation_box</c> tool, demonstrated here.
+                        </p>
+                    </introduction>
+
+                    <webwork>
+                        <pg-code>
+                            $answer = Formula('2x');
+                            $showwork = '[@ explanation_box(message => "Show your work.") @]*';
+                        </pg-code>
+                        <statement>
+                            <p>
+                                Use the definition of the derivative to find <m>\frac{d}{dx}x^2</m>.
+                            </p>
+                            <p>
+                                <var name="$answer" width="10"/>
+                            </p>
+                            <p>
+                                <var name="$showwork" data="pgml"/>
+                            </p>
+                        </statement>
+                    </webwork>
+                </exercise>
+
             </exercises>
         </section>
 

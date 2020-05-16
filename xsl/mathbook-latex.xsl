@@ -6984,13 +6984,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:otherwise />
     </xsl:choose>
     <xsl:choose>
+        <xsl:when test="$mbx-format-code = '0'">\arabic*</xsl:when>
         <xsl:when test="$mbx-format-code = '1'">\arabic*</xsl:when>
         <xsl:when test="$mbx-format-code = 'a'">\alph*</xsl:when>
         <xsl:when test="$mbx-format-code = 'A'">\Alph*</xsl:when>
         <xsl:when test="$mbx-format-code = 'i'">\roman*</xsl:when>
         <xsl:when test="$mbx-format-code = 'I'">\Roman*</xsl:when>
         <xsl:otherwise>
-            <xsl:message>MBX:BUG: bad MBX ordered list label format code in LaTeX conversion</xsl:message>
+            <xsl:message>MBX:BUG: bad ordered list label format code in LaTeX conversion</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
     <xsl:choose>
@@ -7017,7 +7018,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$mbx-format-code = 'square'">$\blacksquare$</xsl:when>
         <xsl:when test="$mbx-format-code = 'none'"></xsl:when>
         <xsl:otherwise>
-            <xsl:message>MBX:BUG: bad MBX unordered list label format code in LaTeX conversion</xsl:message>
+            <xsl:message>MBX:BUG: bad unordered list label format code in LaTeX conversion</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -7049,6 +7050,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- If columns are specified, we        -->
 <!-- wrap in the multicolumn environment -->
 <xsl:template match="ol">
+    <!-- need to switch on 0-1 for ol Arabic -->
+    <!-- no harm if called on "ul"           -->
+    <xsl:variable name="mbx-format-code">
+        <xsl:apply-templates select="." mode="format-code" />
+    </xsl:variable>
     <xsl:text>%&#xa;</xsl:text>
     <xsl:if test="@cols">
         <xsl:text>\begin{multicols}{</xsl:text>
@@ -7057,9 +7063,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:text>\begin{enumerate}</xsl:text>
     <!-- override LaTeX defaults as indicated -->
-    <xsl:if test="@label or ancestor::exercises or ancestor::worksheet or ancestor::reading-questions or ancestor::references">
+    <xsl:if test="@label or ($mbx-format-code = '0') or ancestor::exercises or ancestor::worksheet or ancestor::reading-questions or ancestor::references">
         <xsl:text>[label=</xsl:text>
         <xsl:apply-templates select="." mode="latex-list-label" />
+        <xsl:if test="$mbx-format-code = '0'">
+            <xsl:text>, start=0</xsl:text>
+        </xsl:if>
         <xsl:text>]</xsl:text>
     </xsl:if>
     <xsl:text>&#xa;</xsl:text>

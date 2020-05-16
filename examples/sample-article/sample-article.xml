@@ -3694,6 +3694,19 @@ the xsltproc executable.
                     <li><p>Level 1, fourth.  Whose number should not change when the knowl just prior is opened.</p></li>
                 </ol></p>
 
+                <p>An ordered list may begin at zero by using a numeral zero in the <attr>label</attr> attribute, instead of numeral one.<ol label="(0)">
+                    <li>First</li>
+                    <li>
+                        <p>Second<ol label="-0-">
+                            <li>Uno</li>
+                            <li>Dos</li>
+                            <li>Tres</li>
+                        </ol></p>
+                    </li>
+                    <li>Third</li>
+                </ol></p>
+
+
                 <p>The next definition is very poorly worded.  It is meant to test leading off with a list (bad form), for which <latex /> normally begins right after the heading.</p>
 
                 <definition>

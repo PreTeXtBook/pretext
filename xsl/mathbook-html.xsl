@@ -5529,13 +5529,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="format-code" />
     </xsl:variable>
     <xsl:choose>
+        <xsl:when test="$mbx-format-code = '0'">decimal</xsl:when>
         <xsl:when test="$mbx-format-code = '1'">decimal</xsl:when>
         <xsl:when test="$mbx-format-code = 'a'">lower-alpha</xsl:when>
         <xsl:when test="$mbx-format-code = 'A'">upper-alpha</xsl:when>
         <xsl:when test="$mbx-format-code = 'i'">lower-roman</xsl:when>
         <xsl:when test="$mbx-format-code = 'I'">upper-roman</xsl:when>
         <xsl:otherwise>
-            <xsl:message>MBX:BUG: bad MBX ordered list label format code in HTML conversion</xsl:message>
+            <xsl:message>MBX:BUG: bad ordered list label format code in HTML conversion</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -5550,7 +5551,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$mbx-format-code = 'square'">square</xsl:when>
         <xsl:when test="$mbx-format-code = 'none'">no-marker</xsl:when>
         <xsl:otherwise>
-            <xsl:message>MBX:BUG: bad MBX unordered list label format code in HTML conversion</xsl:message>
+            <xsl:message>MBX:BUG: bad unordered list label format code in HTML conversion</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -5561,10 +5562,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Tunnel duplication flag to list items -->
 <xsl:template match="ol|ul">
     <xsl:param name="b-original" select="true()" />
+    <!-- need to switch on 0-1 for ol Arabic -->
+    <!-- no harm if called on "ul"           -->
+    <xsl:variable name="mbx-format-code">
+        <xsl:apply-templates select="." mode="format-code" />
+    </xsl:variable>
     <xsl:element name="{local-name(.)}">
         <xsl:apply-templates select="." mode="insert-paragraph-id" >
             <xsl:with-param name="b-original" select="$b-original" />
         </xsl:apply-templates>
+        <xsl:if test="$mbx-format-code = '0'">
+            <xsl:attribute name="start">
+                <xsl:text>0</xsl:text>
+            </xsl:attribute>
+        </xsl:if>
         <xsl:attribute name="class">
             <xsl:apply-templates select="." mode="html-list-class" />
             <xsl:if test="@cols">
@@ -6285,7 +6296,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </title>
                 <meta name="Keywords" content="Authored in PreTeXt" />
                 <!-- http://webdesignerwall.com/tutorials/responsive-design-in-3-steps -->
-                <meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
                 <!-- ########################################## -->
                 <!-- A variety of libraries were loaded here    -->
                 <!-- Only purpose of this page is YouTube video -->
@@ -9513,7 +9524,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </title>
             <meta name="Keywords" content="Authored in PreTeXt" />
             <!-- http://webdesignerwall.com/tutorials/responsive-design-in-3-steps -->
-            <meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
             <!-- favicon -->
             <xsl:call-template name="favicon"/>
             <!-- jquery used by sage, webwork, knowls -->
@@ -9636,7 +9647,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <html lang="{$document-language}"> <!-- dir="rtl" here -->
         <head>
             <meta name="Keywords" content="Authored in PreTeXt" />
-            <meta name="viewport" content="width=device-width,  initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
             <!-- jquery used by sage, webwork, knowls -->
             <xsl:call-template name="sagecell-code" />

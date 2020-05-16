@@ -683,6 +683,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<!-- TODO: subtract 1 from "item-number"   -->
+<!-- when "format-code" template gives '0' -->
 <xsl:template match="ol/li" mode="body">
     <li>
         <xsl:apply-templates select="." mode="item-number"/>
