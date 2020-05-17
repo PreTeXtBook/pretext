@@ -3320,13 +3320,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- And its CSS class -->
-<xsl:template match="figure|listing|table" mode="body-css-class">
+<xsl:template match="figure|listing" mode="body-css-class">
     <xsl:value-of select="local-name()"/>
     <xsl:text> figure-like</xsl:text>
 </xsl:template>
 <!-- a table of data will use this class when -->
 <!-- the title is placed above the tabular    -->
-<xsl:template match="list" mode="body-css-class">
+<xsl:template match="table|list" mode="body-css-class">
     <xsl:value-of select="local-name()"/>
     <xsl:text> table-like</xsl:text>
 </xsl:template>
@@ -3356,13 +3356,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="b-subcaptioned" select="parent::sidebyside/parent::figure or parent::sidebyside/parent::sbsgroup/parent::figure"/>
     <xsl:choose>
         <!-- caption at the bottom, always        -->
-        <!-- table might end up on top, electably -->
-        <xsl:when test="self::figure or self::table or self::listing">
+        <xsl:when test="self::figure|self::listing">
             <xsl:apply-templates select="*">
                 <xsl:with-param name="b-original" select="$b-original" />
             </xsl:apply-templates>
             <xsl:apply-templates select="." mode="figure-caption">
                 <xsl:with-param name="b-original" select="$b-original"/>
+            </xsl:apply-templates>
+        </xsl:when>
+        <!-- table only contains a tabular, if not subcaptioned -->
+        <!-- title is displayed before data/tabular             -->
+        <xsl:when test="self::table">
+            <xsl:if test="not($b-subcaptioned)">
+                <xsl:apply-templates select="." mode="figure-caption">
+                    <xsl:with-param name="b-original" select="$b-original"/>
+                </xsl:apply-templates>
+            </xsl:if>
+            <xsl:apply-templates select="tabular">
+                <xsl:with-param name="b-original" select="$b-original" />
             </xsl:apply-templates>
         </xsl:when>
         <!-- "title" at the top, subcaption at the bottom -->
@@ -4931,6 +4942,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:apply-templates>
         </xsl:element>
         <!-- collect elements which can have footnotes within -->
+        <!-- footnotes in captions of figures and listings,   -->
+        <!-- but not in titles of tables or lists             -->
         <xsl:apply-templates select="self::figure|self::listing" mode="pop-footnote-text">
             <xsl:with-param name="b-original" select="$b-original"/>
         </xsl:apply-templates>
