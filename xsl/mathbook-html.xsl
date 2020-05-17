@@ -5794,7 +5794,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:apply-templates>
         </xsl:attribute>
         <!-- fallback to SVG -->
-        <xsl:element name="img">
+        <xsl:element name="embed">
             <!-- source file attribute for img element, the SVG image -->
             <xsl:attribute name="src">
                 <xsl:value-of select="$svg-filename" />
