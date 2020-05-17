@@ -2141,7 +2141,7 @@
         <xs:complexType>
           <xs:sequence>
             <xs:element minOccurs="0" ref="pg-macros"/>
-            <xs:element minOccurs="0" ref="setup"/>
+            <xs:element minOccurs="0" ref="pg-code"/>
             <xs:choice>
               <xs:sequence>
                 <xs:group ref="StatementExerciseWW"/>
@@ -2156,6 +2156,7 @@
       </xs:element>
     </xs:sequence>
   </xs:group>
+  <xs:element name="pg-code" type="xs:string"/>
   <xs:element name="stage">
     <xs:complexType>
       <xs:sequence>
@@ -2188,14 +2189,6 @@
     </xs:complexType>
   </xs:element>
   <xs:element name="macro-file" type="xs:string"/>
-  <xs:element name="setup">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" ref="pg-code"/>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="pg-code" type="xs:string"/>
   <xs:element name="var">
     <xs:annotation>
       <xs:documentation>The WeBWorK "var" element appears in the RELAX-NG schema as a child of many elements, but almost always as a descendant of a "p" element or a "cell" element.  As an element that is only relevant for a WeBWorK problem, occurences of "var" must be within a "webwork" element.  A Schematron rule will check on these two situations.</xs:documentation>
