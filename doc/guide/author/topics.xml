@@ -2494,6 +2494,11 @@
             </li>
 
             <li>
+                <title>3D Images</title>
+                <p>Asymptote is a language for describing 2D and 3D images, which we support as much as possible.  The 3D images produced are rotatable for exploration via a mouse or finger.  For those with motor limitations, the images may also be manipulated with keyboard controls.  (Many assistive technologies rely on, or emulate, keyboards.)</p>
+            </li>
+
+            <li>
                 <title>Skip to Main Content</title>
                 <p>Repeatedly pressing the <c>Tab</c> key will move a reader from one location to the next in a web document.  Since your Table of Contents in the left sidebar is a series of many links, a reader will need to tab through <em>all</em> of these to eventually reach the interesting content on a page.</p>
 
@@ -2524,6 +2529,8 @@
             <li>
                 <title>Image Formats</title>
                 <p>University offices that provide services for students with disabilities are often interested in the images themselves from a text, as standalone files.  For example, they might be able to manufacture tactile versions.  You could use the <c>mbx</c> script to produce a variety of different formats and bundle these up in a single archive file for distribution at your book's website.  Or you can make each image available through adjacent links placed automatically.  We call these <q>image archives.</q>  See <xref ref="topic-images-archive" />.</p>
+
+                <p>Futhermore, as described above, a 3D image authored with Asymptote code can be superior for those with motor disabilities.  So this functionality begins with an author's choice to employ Asymptote.</p>
             </li>
 
             <li>

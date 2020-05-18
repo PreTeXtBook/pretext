@@ -434,7 +434,7 @@
             <p>Thus the impact of disability is radically changed on the Web because the Web removes barriers to communication and interaction that many people face in the physical world. However, when websites, web technologies, or web tools are badly designed, they can create barriers that exclude people from using the Web.</p>
         </blockquote>
 
-        <p>Since we are interested in helping authors produce documents with open licenses, and we concentrate on employing open standards for the <init>HTML</init> output we create, we are ideally positioned to help you easily create highly-accessible documents.  There are many technical features which happen automatically, and there are some features which we make available for your use as an author and which only an author can provide.  See <xref ref="topic-accessibility" /> for full details and ways you can make the <init>HTML</init> version of your document more accessible, and more useful for a wider audience.</p>
+        <p>Since we are interested in helping authors produce documents with open licenses, and we concentrate on employing open standards for the <init>HTML</init> output we create, we are ideally positioned to help you easily create highly-accessible documents.  There are many technical features which happen automatically, and there are some features which we make available for your use as an author and which only an author can provide, or elect to use.  Before getting too deep into your project, review <xref ref="topic-accessibility" /> for full details and ways you can make the <init>HTML</init> version of your document more accessible, and more useful for a wider audience.</p>
     </section>
     <section xml:id="overview-slides">
       <title>Slides</title>
