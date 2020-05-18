@@ -2683,7 +2683,7 @@ the xsltproc executable.
             </subsection>
 
             <subsection>
-                <title>Asymptote</title>
+                <title>Asymptote, 2D</title>
 
                 <p>The Asymptote<idx><h>asymptote graphics language</h></idx> graphics language may be placed in your source to draw graphs, diagrams or pictures.  Rules for formatting code are identical to those for Sage code.  For more on Asymptote see <url href="http://asymptote.sourceforge.net/" />.</p>
 
@@ -2734,9 +2734,7 @@ the xsltproc executable.
                     </image>
                 </figure>
 
-                <p>And a colorful contour plot with logarithmic scale.  Again, from the Asymptote documentation.</p>
-
-                <p>This SVG image includes a PNG image for the gradient.</p>
+                <p>And a colorful contour plot with logarithmic scale.  Again, from the Asymptote documentation.  This SVG image employs two additional PNG images for the two parts where the color varies continuously.</p>
                 <!-- http://asymptote.sourceforge.net/gallery/2D%20graphs/logimage.asy -->
 
                 <figure xml:id="figure-asymptote-contour-plot">
@@ -2799,43 +2797,12 @@ the xsltproc executable.
                     </image>
                 </figure>
 
-                <p>And finally, an example of a 3-D graph (from the documentation again).</p>
-
-                <p>This SVG image is a beautiful example of a Riemann surface.</p>
-
-                <!-- http://asymptote.sourceforge.net/gallery/3D%20graphs/filesurface.asy -->
-                <!-- Projection point adjusted by Michael Doob -->
-
-                <figure xml:id="figure-asymptote-surface">
-                    <caption>Asymptote 3-D Surface</caption>
-                    <image xml:id="asymptote-surface" width="40%">
-                        <asymptote>
-                        // Riemann surface of z^{1/n}
-                        import graph3;
-                        import palette;
-
-                        int n=3;
-
-                        size(200,300,keepAspect=false);
-
-                        currentprojection=orthographic(10,10,5);
-                        currentlight=(10,10,5);
-                        triple f(pair t) {return (t.x*cos(t.y),t.x*sin(t.y),t.x^(1/n)*sin(t.y/n));}
-
-                        surface s=surface(f,(0,0),(1,2pi*n),8,16,Spline);
-                        s.colors(palette(s.map(zpart),Rainbow()));
-
-                        draw(s,meshpen=black,render(merge=true));
-                        </asymptote>
-                    </image>
-                </figure>
             </subsection>
 
             <subsection xml:id="graphics-asymptote-webgl">
-                <title>Asymptote + WebGL</title>
+                <title>Asymptote, 3D via WebGL</title>
 
-                <p>Asymptote can create an <init>HTML</init> file that is an interactive version of a 3D shape.  At this writing (2019-10-21) we do not have support via the <c>mbx</c> script for producing these files, so you are on your own in the early going.  The other distinction is that the author needs to provide the aspect ratio of the figure, and this should be placed on the <tag>asymptote</tag> element (not on the <tag>image</tag> element).  <xref ref="figure-asymptote-workcone" text="type-global"/> is from the <url href="http://asymptote.sourceforge.net/gallery/3Dwebgl/">Asymptote Gallery</url><fn><c>http://asymptote.sourceforge.net/gallery/3Dwebgl/</c></fn>.</p>
-
+                <p>Asymptote can create an <init>HTML</init> file that is an interactive version of a 3D shape.  At this writing (2020-05-18) support via the <c>mbx</c> script is evolving.  Plus, you will need newer versions of Asymptote and the <c>dvisvgm</c> utility to duplicate all of the results being displayed here in this testing document.  The other distinction is that the author needs to provide the aspect ratio of the figure, and this should be placed on the <tag>asymptote</tag> element (not on the <tag>image</tag> element).  <xref ref="figure-asymptote-workcone" text="type-global"/> is from the <url href="http://asymptote.sourceforge.net/gallery/3Dwebgl/">Asymptote Gallery</url><fn><c>http://asymptote.sourceforge.net/gallery/3Dwebgl/</c></fn>.</p>
 
                 <figure xml:id="figure-asymptote-workcone">
                     <caption>Work Cone (Asymptote Interactive 3D Image)</caption>
@@ -2884,6 +2851,35 @@ the xsltproc executable.
                         draw((string) r,(0,0,h)--(r,0,h),N,red);
                         draw((string) h,(r,0,0)--(r,0,h),red,Arrow3,PenMargin3);
                         draw((string) s,(-x,0,0)--(-x,0,s),W,red,Arrow3,Bar3,PenMargin3);
+                        </asymptote>
+                    </image>
+                </figure>
+
+                <p>And finally, an example of a 3-D graph (from the Asymptote documentation again).  This SVG image is a beautiful example of a Riemann surface.  As you rotate the image, notice how the reflection of the light source varies, along with the brightness of various regions of the surface.  This example is accomplished with just 10 lines of Asymptote code.</p>
+
+                <!-- http://asymptote.sourceforge.net/gallery/3D%20graphs/filesurface.asy -->
+                <!-- Projection point adjusted by Michael Doob -->
+
+                <figure xml:id="figure-asymptote-surface">
+                    <caption>Asymptote 3-D Surface</caption>
+                    <image xml:id="asymptote-surface" width="40%">
+                        <asymptote>
+                        // Riemann surface of z^{1/n}
+                        import graph3;
+                        import palette;
+
+                        int n=3;
+
+                        size(200,300,keepAspect=false);
+
+                        currentprojection=orthographic(10,10,5);
+                        currentlight=(10,10,5);
+                        triple f(pair t) {return (t.x*cos(t.y),t.x*sin(t.y),t.x^(1/n)*sin(t.y/n));}
+
+                        surface s=surface(f,(0,0),(1,2pi*n),8,16,Spline);
+                        s.colors(palette(s.map(zpart),Rainbow()));
+
+                        draw(s,meshpen=black,render(merge=true));
                         </asymptote>
                     </image>
                 </figure>
