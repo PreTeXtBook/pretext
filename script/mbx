@@ -28,33 +28,33 @@
 
 def asymptote_conversion(xml_source, xmlid_root, dest_dir, outformat):
     global config
-    import tempfile, os, os.path, subprocess, shutil, glob
+    import os.path # join()
+    import os, subprocess, shutil, glob
+
     _verbose('converting Asymptote diagrams from {} to {} graphics for placement in {}'.format(xml_source, outformat.upper(), dest_dir))
     dest_dir = sanitize_directory(dest_dir)
-    tmp_dir = tempfile.mkdtemp()
-    plat = get_platform()
-    if plat == "Windows":
-        dest_dir = break_windows_path(dest_dir)
-        tmp_dir = break_windows_path(tmp_dir)
+    tmp_dir = get_temporary_directory()
     _debug("temporary directory: {}".format(tmp_dir))
     xslt_executable = get_executable(config,  'xslt')
     _debug("xslt executable: {}".format(xslt_executable))
     asy_executable = get_executable(config,  'asy')
     _debug("asy executable: {}".format(asy_executable))
+    extraction_xslt = os.path.join(mbx_xsl_dir, 'extract-asymptote.xsl')
     extract_cmd = [xslt_executable,
-        '--stringparam', 'scratch', tmp_dir,
-        '--stringparam', 'subtree', xmlid_root,
         '--xinclude',
-        os.path.join(mbx_xsl_dir, 'extract-asymptote.xsl'),
+        '--stringparam', 'subtree', xmlid_root,
+        extraction_xslt,
         xml_source
         ]
     # stylesheet uses variable-subtree infrastructure, so we get list
     # items, but not the list structure itself.  Easily remedied
     _verbose("extracting Asymptote diagrams from {}".format(xml_source))
+    # Run conversion with temporary directory as current working directory
+    # do not pass (cross-platform, Windows) pathnames into stylesheets
+    # Be certain pathnames are not relative to original (user) working directory
+    os.chdir(tmp_dir)
     diagram_list = '[' + subprocess.check_output(extract_cmd).decode('ascii') + ']'
     diagrams = eval(diagram_list)
-    cwd = os.getcwd()
-    os.chdir(tmp_dir)
     devnull = open(os.devnull, 'w')
     # perhaps replace following stock advisory with a real version
     # check using the (undocumented) distutils.version module, see:
@@ -113,24 +113,25 @@ def sage_conversion(xml_source, xmlid_root, dest_dir, outformat):
     import tempfile, os, os.path, subprocess, shutil, glob
     _verbose('converting Sage diagrams from {} to {} graphics for placement in {}'.format(xml_source, outformat.upper(), dest_dir))
     dest_dir = sanitize_directory(dest_dir)
-    tmp_dir = tempfile.mkdtemp()
-    plat = get_platform()
+    tmp_dir = get_temporary_directory()
     _debug("temporary directory: {}".format(tmp_dir))
     xslt_executable = get_executable(config,  'xslt')
     _debug("xslt executable: {}".format(xslt_executable))
     sage_executable = get_executable(config,  'sage')
     _debug("sage executable: {}".format(sage_executable))
+    extraction_xslt = os.path.join(mbx_xsl_dir, 'extract-sageplot.xsl')
     extract_cmd = [xslt_executable,
-        '--stringparam', 'scratch', tmp_dir,
         '--stringparam', 'subtree', xmlid_root,
         '--xinclude',
-        os.path.join(mbx_xsl_dir, 'extract-sageplot.xsl'),
+        extraction_xslt,
         xml_source
         ]
     _verbose("extracting Sage diagrams from {}".format(xml_source))
-    subprocess.call(extract_cmd)
-    cwd = os.getcwd()
+    # Run conversion with temporary directory as current working directory
+    # do not pass (cross-platform, Windows) pathnames into stylesheets
+    # Be certain pathnames are not relative to original (user) working directory
     os.chdir(tmp_dir)
+    subprocess.call(extract_cmd)
     devnull = open(os.devnull, 'w')
     for sageplot in os.listdir(tmp_dir):
         if outformat == 'source':
@@ -151,8 +152,10 @@ def sage_conversion(xml_source, xmlid_root, dest_dir, outformat):
 
 def latex_image_conversion(xml_source, stringparams, xmlid_root, data_dir, dest_dir, outformat):
     global config
-    import tempfile, os, os.path, subprocess, shutil
-    plat = get_platform()
+    import platform # system, machine()
+    import os.path # join()
+    import os, subprocess, shutil
+
     _verbose('converting latex-image pictures from {} to {} graphics for placement in {}'.format(xml_source, outformat, dest_dir))
     _verbose('string parameters after command line is parsed: {}'.format(stringparams))
     params = []
@@ -164,9 +167,7 @@ def latex_image_conversion(xml_source, stringparams, xmlid_root, data_dir, dest_
             params.append(stringparams[2*i+1])
         _verbose('options added to xsltproc extraction: {}'.format(params))
     dest_dir = sanitize_directory(dest_dir)
-    tmp_dir = tempfile.mkdtemp()
-    if plat == "Windows":
-        tmp_dir = break_windows_path(tmp_dir)
+    tmp_dir = get_temporary_directory()
     _debug("temporary directory: {}".format(tmp_dir))
     xslt_executable = get_executable(config,  'xslt')
     _debug("xslt executable: {}".format(xslt_executable))
@@ -175,28 +176,20 @@ def latex_image_conversion(xml_source, stringparams, xmlid_root, data_dir, dest_
         copy_data_directory(xml_source, data_dir, tmp_dir)
     # http://stackoverflow.com/questions/11269575/how-to-hide-output-of-subprocess-in-python-2-7
     devnull = open(os.devnull, 'w')
-    if plat == "Windows":
-        convert_cmd = [xslt_executable] + params + [
-            '--stringparam', 'scratch', tmp_dir,
-            '--stringparam', 'subtree', xmlid_root,
-            '--xinclude',
-            "/".join((mbx_xsl_dir, 'extract-latex-image.xsl')),
-            # this is compatible with Windows CMD and also with Git Bash's MSYS shell
-            xml_source
-            ]
-    else:
-        convert_cmd = [xslt_executable] + params + [
-            '--stringparam', 'scratch', tmp_dir,
-            '--stringparam', 'subtree', xmlid_root,
-            '--xinclude',
-            os.path.join(mbx_xsl_dir, 'extract-latex-image.xsl'),
-            xml_source
-            ]
+    extraction_xslt = os.path.join(mbx_xsl_dir, 'extract-latex-image.xsl')
+    convert_cmd = [xslt_executable] + params + [
+        '--xinclude',
+        '--stringparam', 'subtree', xmlid_root,
+        extraction_xslt,
+        xml_source
+        ]
     _verbose("extracting latex-image pictures from {}".format(xml_source))
     _debug("latex-image conversion {}".format(convert_cmd))
-    subprocess.call(convert_cmd)
-    cwd = os.getcwd()
+    # Run conversion with temporary directory as current working directory
+    # do not pass (cross-platform, Windows) pathnames into stylesheets
+    # Be certain pathnames are not relative to original (user) working directory
     os.chdir(tmp_dir)
+    subprocess.call(convert_cmd)
     # files *only*, from top-level
     files = list(filter(os.path.isfile, os.listdir(tmp_dir)))
     for latex_image in files:
@@ -215,9 +208,12 @@ def latex_image_conversion(xml_source, stringparams, xmlid_root, data_dir, dest_
             subprocess.call(latex_cmd, stdout=devnull, stderr=subprocess.STDOUT)
             pdfcrop_executable = get_executable(config,  'pdfcrop')
             _debug("pdfcrop executable: {}".format(pdfcrop_executable))
-            if plat == "Windows":
+            if platform.system() == "Windows":
                 _debug("using pdfcrop is not reliable on Windows unless you are using a linux-like shell, e.g. Git Bash or SageMathCloud terminal")
-                if is_os_64bit():
+                # Test for 32-bit v. 64-bit OS
+                # http://stackoverflow.com/questions/2208828/
+                # detect-64-bit-os-windows-in-python
+                if platform.machine().endswith('64'):
                     pdfcrop_cmd = [pdfcrop_executable, "--gscmd", "gswin64c.exe", latex_image_pdf, latex_image_pdf]
                 else:
                     pdfcrop_cmd = [pdfcrop_executable, "--gscmd", "gswin32c.exe", latex_image_pdf, latex_image_pdf]
@@ -323,8 +319,6 @@ def webwork_to_xml(xslt_exec, ptx_xsl_dir, xml_source, server_params, dest_dir):
 
     # verify destination exists
     sanitize_directory(dest_dir)
-    if plat == "Windows":
-        dest_dir = break_windows_path(dest_dir)
 
     # verify, construct problem format requestor
     # remove any surrounding white space
@@ -756,25 +750,20 @@ def webwork_to_xml(xslt_exec, ptx_xsl_dir, xml_source, server_params, dest_dir):
 
 def youtube_thumbnail(xml_source, xmlid_root, dest_dir):
     global config
-    import tempfile, os, os.path, subprocess, shutil
+    import os.path  # join()
+    import subprocess, shutil
     import requests
 
     _verbose('downloading YouTube thumbnails from {} for placement in {}'.format(xml_source, dest_dir))
     dest_dir = sanitize_directory(dest_dir)
-    plat = get_platform()
-    if plat == "Windows":
-        dest_dir = break_windows_path(dest_dir)
     xslt_executable = get_executable(config,  'xslt')
     _debug("xslt executable: {}".format(xslt_executable))
-    if plat == "Windows":
-        extraction_xslt = '/'.join([mbx_xsl_dir, 'extract-youtube.xsl'])
-    else:
-        extraction_xslt = os.path.join(mbx_xsl_dir, 'extract-youtube.xsl')
+    extraction_xslt = os.path.join(mbx_xsl_dir, 'extract-youtube.xsl')
+    # No temporary directory involved,
+    # results land directly in dest_dir
     cmd = [xslt_executable,
             '--xinclude',
-            '--stringparam',
-            'subtree',
-            xmlid_root,
+            '--stringparam', 'subtree', xmlid_root,
             extraction_xslt,
             xml_source]
     try:
@@ -786,12 +775,10 @@ def youtube_thumbnail(xml_source, xmlid_root, dest_dir):
     # "run" an assignment for the list of triples of strings
     thumbs = eval(thumb_list.decode('ascii'))
 
-    yt_url = 'http://i.ytimg.com/vi/{}/default.jpg'
-    image_path = dest_dir + '/{}.jpg'
     session = requests.Session()
     for thumb in thumbs:
-        url = yt_url.format(thumb[0])
-        path = image_path.format(thumb[1])
+        url = 'http://i.ytimg.com/vi/{}/default.jpg'.format(thumb[0])
+        path = os.path.join(dest_dir, thumb[1] + '.jpg')
         _verbose('downloading {} as {}...'.format(url, path))
         # http://stackoverflow.com/questions/13137817/how-to-download-image-using-requests/13137873
         # removed some settings wrapper from around the URL, otherwise verbatim
@@ -815,9 +802,7 @@ def youtube_thumbnail(xml_source, xmlid_root, dest_dir):
 def preview_images(xml_source, xmlid_root, dest_dir):
     global config
     import subprocess, shutil
-    import os
-    # import tempfile, os, os.path, subprocess, shutil
-    # import requests
+    import os.path # join()
 
     suffix = 'png'
 
@@ -835,20 +820,14 @@ def preview_images(xml_source, xmlid_root, dest_dir):
                     "interactive-d3-collision", "interactive-d3-collision-preview.png"),
         )
 
-    plat = get_platform()
-    if plat == "Windows":
-        dest_dir = break_windows_path(dest_dir)
     xslt_executable = get_executable(config,  'xslt')
     _debug("xslt executable: {}".format(xslt_executable))
-    if plat == "Windows":
-        extraction_xslt = '/'.join([mbx_xsl_dir, 'extract-interactive.xsl'])
-    else:
-        extraction_xslt = os.path.join(mbx_xsl_dir, 'extract-interactive.xsl')
+    extraction_xslt = os.path.join(mbx_xsl_dir, 'extract-interactive.xsl')
+    # No temporary directory involved,
+    # results land directly in dest_dir
     cmd = [xslt_executable,
             '--xinclude',
-            '--stringparam',
-            'subtree',
-            xmlid_root,
+            '--stringparam','subtree',xmlid_root,
             extraction_xslt,
             xml_source]
     try:
@@ -872,7 +851,7 @@ def preview_images(xml_source, xmlid_root, dest_dir):
 
     # Start after the leading base URL sneakiness
     for preview in interactives[1:]:
-        input_page = baseurl + '/' +  preview + '.html'
+        input_page = os.path.join(baseurl, preview + '.html')
         selector_option = '--selector=#' + preview
         # file suffix is provided by pageres
         format_option = '--format=' + suffix
@@ -883,9 +862,6 @@ def preview_images(xml_source, xmlid_root, dest_dir):
         # Overwriting files prevents numbered versions (with spaces!)
         # 3-second delay allows Javascript, etc to settle down
         # --transparent, --crop do not seem very effective
-        # if (preview == "interactive-21") or (preview == "interactive-17")  or (preview == "interactive-19") or (preview == "interactive-20"):
-            # cmd=['ls']
-        # else:
         cmd = [pageres_executable,
         "-v",
         "--overwrite",
@@ -894,7 +870,7 @@ def preview_images(xml_source, xmlid_root, dest_dir):
         selector_option,
         filename_option,
         input_page
-       ]
+        ]
 
         _debug("pageres command: {}".format(cmd))
 
@@ -913,25 +889,20 @@ def preview_images(xml_source, xmlid_root, dest_dir):
 
 def mom_static_problems(xml_source, xmlid_root, dest_dir):
     global config
-    import tempfile, os, os.path, subprocess, shutil
+    import os.path # join()
+    import subprocess, shutil
     import requests
 
     _verbose('downloading MyOpenMath static problems from {} for placement in {}'.format(xml_source, dest_dir))
     dest_dir = sanitize_directory(dest_dir)
-    plat = get_platform()
-    if plat == "Windows":
-        dest_dir = break_windows_path(dest_dir)
     xslt_executable = get_executable(config,  'xslt')
     _debug("xslt executable: {}".format(xslt_executable))
-    if plat == "Windows":
-        extraction_xslt = '/'.join([mbx_xsl_dir, 'extract-mom.xsl'])
-    else:
-        extraction_xslt = os.path.join(mbx_xsl_dir, 'extract-mom.xsl')
+    extraction_xslt = os.path.join(mbx_xsl_dir, 'extract-mom.xsl')
+    # No temporary directory involved,
+    # results land directly in dest_dir
     cmd = [xslt_executable,
             '--xinclude',
-            '--stringparam',
-            'subtree',
-            xmlid_root,
+            '--stringparam', 'subtree', xmlid_root,
             extraction_xslt,
             xml_source]
     try:
@@ -942,13 +913,11 @@ def mom_static_problems(xml_source, xmlid_root, dest_dir):
         raise ValueError(msg + root_cause)
     # "run" an assignment for the list of problem numbers
     problems = eval(problem_list.decode('ascii'))
-    mom_url = 'https://www.myopenmath.com/util/mbx.php?id={}'
     xml_header = '<?xml version="1.0" encoding="UTF-8" ?>\n'
-    path_string = dest_dir + '/mom-{}.xml'
     session = requests.Session()
     for problem in problems:
-        url = mom_url.format(problem)
-        path = path_string.format(problem)
+        url = 'https://www.myopenmath.com/util/mbx.php?id={}'.format(problem)
+        path = os.path.join(dest_dir, 'mom-{}.xml'.format(problem))
         _verbose('downloading MOM #{} to {}...'.format(problem, path))
         # http://stackoverflow.com/questions/13137817/how-to-download-image-using-requests/13137873
         # removed some settings wrapper from around the URL, otherwise verbatim
@@ -1162,21 +1131,22 @@ def copy_data_directory(source_file, data_dir, tmp_dir):
     _debug("copying data directory {} to working location {}".format(data_full_path, destination_root))
     shutil.copytree(data_full_path, destination_root)
 
-def get_platform():
-    """Return a string that tells us whether we are on Windows."""
-    import platform
-    return platform.system()
+def get_temporary_directory():
+    """Create scratch directory and return a fully-qualified filename"""
+    import tempfile # gettempdir()
+    import os       # times(), makedirs()
+    import os.path  # join()
 
-def is_os_64bit():
-    """Return true if we are running a 64-bit OS.
-    http://stackoverflow.com/questions/2208828/detect-64-bit-os-windows-in-python"""
-    import platform
-    return platform.machine().endswith('64')
+    # TODO: condition on debugging switch to
+    # make self-cleaning temporary directories
 
-def break_windows_path(python_style_dir):
-    """Replace python os.sep with msys-acceptable "/" """
-    import re
-    return re.sub(r"\\", "/", python_style_dir)
+    # https://stackoverflow.com/questions/847850/
+    # cross-platform-way-of-getting-temp-directory-in-python
+    # TODO: convert hash value to unsigned hex?
+    # t = os.path.join(tempfile.gettempdir(), 'pretext{}'.format(hash(os.times())))
+    # os.makedirs(t)
+    # return t
+    return tempfile.mkdtemp()
 
 ######
 #
@@ -1211,7 +1181,6 @@ output_dir = os.path.abspath(args.dir)
 _debug("output dir: {}".format(output_dir))
 
 config = get_config_info(mbx_script_dir, mbx_user_dir)
-plat = get_platform()
 
 if args.component == 'asy':
     if args.format == 'html':
