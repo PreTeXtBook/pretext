@@ -33,8 +33,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Get internal ID's for filenames, etc -->
 <xsl:import href="./mathbook-common.xsl" />
 
-<!-- Get "scratch" directory        -->
-<!-- and a "subtree" xml:id value   -->
+<!-- Get a "subtree" xml:id value   -->
 <!-- Then walk the XML source tree  -->
 <!-- applying specializations below -->
 <xsl:import href="./extract-identity.xsl" />

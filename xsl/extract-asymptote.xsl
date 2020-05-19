@@ -33,8 +33,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Get internal ID's for filenames, etc -->
 <xsl:import href="./mathbook-common.xsl" />
 
-<!-- Get "scratch" directory        -->
-<!-- and a "subtree" xml:id value   -->
+<!-- Get a "subtree" xml:id value   -->
 <!-- Then walk the XML source tree  -->
 <!-- applying specializations below -->
 <xsl:import href="./extract-identity.xsl" />
@@ -117,7 +116,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:otherwise>
     </xsl:choose>
     <xsl:text>'), </xsl:text>
-    <exsl:document href="{$scratch}/{$filebase}.asy" method="text">
+    <!-- Do not use directories here, as Windows paths will get mangled -->
+    <!-- Instead, set working directory before applying stylesheet      -->
+    <exsl:document href="{$filebase}.asy" method="text">
         <xsl:text>usepackage("amsmath");&#xa;</xsl:text>
         <xsl:text>texpreamble("&#xa;</xsl:text>
         <xsl:value-of select="$latex-macros" />
@@ -134,7 +135,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="filebase">
         <xsl:apply-templates select="." mode="visible-id" />
     </xsl:variable>
-    <exsl:document href="{$scratch}/{$filebase}.asy" method="text">
+    <exsl:document href="{$filebase}.asy" method="text">
         <xsl:text>texpreamble("&#xa;</xsl:text>
         <xsl:value-of select="$latex-macros" />
         <xsl:text>");&#xa;&#xa;</xsl:text>

@@ -33,8 +33,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Get internal ID's for filenames, etc -->
 <xsl:import href="./mathbook-common.xsl" />
 
-<!-- Get "scratch" directory        -->
-<!-- and a "subtree" xml:id value   -->
+<!-- Get a "subtree" xml:id value   -->
 <!-- Then walk the XML source tree  -->
 <!-- applying specializations below -->
 <xsl:import href="./extract-identity.xsl" />
@@ -105,7 +104,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="filebase">
         <xsl:apply-templates select=".." mode="visible-id" />
     </xsl:variable>
-    <exsl:document href="{$scratch}/{$filebase}.tex" method="text">
+    <!-- Do not use directories here, as Windows paths will get mangled -->
+    <!-- Instead, set working directory before applying stylesheet      -->
+    <exsl:document href="{$filebase}.tex" method="text">
         <xsl:text>\documentclass[</xsl:text>
         <xsl:value-of select="$font-size" />
         <xsl:text>]{</xsl:text>

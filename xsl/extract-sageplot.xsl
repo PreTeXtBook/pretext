@@ -35,8 +35,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Get internal ID's for filenames, etc -->
 <xsl:import href="./mathbook-common.xsl" />
 
-<!-- Get "scratch" directory        -->
-<!-- and a "subtree" xml:id value   -->
+<!-- Get a "subtree" xml:id value   -->
 <!-- Then walk the XML source tree  -->
 <!-- applying specializations below -->
 <xsl:import href="./extract-identity.xsl" />
@@ -86,7 +85,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>plot_</xsl:text>
         <xsl:value-of select="generate-id(.)" />
     </xsl:variable>
-    <exsl:document href="{$scratch}/{$filebase}.sage" method="text">
+    <!-- Do not use directories here, as Windows paths will get mangled -->
+    <!-- Instead, set working directory before applying stylesheet      -->
+    <exsl:document href="{$filebase}.sage" method="text">
         <!-- Module so we can pass file extension parameter on command line -->
         <xsl:text>import sys&#xa;</xsl:text>
         <xsl:text>suffix = sys.argv[1]&#xa;</xsl:text>
@@ -151,7 +152,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>plot_</xsl:text>
         <xsl:value-of select="generate-id(.)" />        
     </xsl:variable>
-    <exsl:document href="{$scratch}/{$filebase}.sage" method="text">
+    <exsl:document href="{$filebase}.sage" method="text">
         <!-- Module so we can pass file extension parameter on command line -->
         <xsl:text>import sys&#xa;</xsl:text>
         <xsl:text>suffix = sys.argv[1]&#xa;</xsl:text>
