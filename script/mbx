@@ -32,7 +32,6 @@ def asymptote_conversion(xml_source, xmlid_root, dest_dir, outformat):
     import os, subprocess, shutil, glob
 
     _verbose('converting Asymptote diagrams from {} to {} graphics for placement in {}'.format(xml_source, outformat.upper(), dest_dir))
-    dest_dir = sanitize_directory(dest_dir)
     tmp_dir = get_temporary_directory()
     _debug("temporary directory: {}".format(tmp_dir))
     xslt_executable = get_executable(config,  'xslt')
@@ -112,7 +111,6 @@ def sage_conversion(xml_source, xmlid_root, dest_dir, outformat):
     global config
     import tempfile, os, os.path, subprocess, shutil, glob
     _verbose('converting Sage diagrams from {} to {} graphics for placement in {}'.format(xml_source, outformat.upper(), dest_dir))
-    dest_dir = sanitize_directory(dest_dir)
     tmp_dir = get_temporary_directory()
     _debug("temporary directory: {}".format(tmp_dir))
     xslt_executable = get_executable(config,  'xslt')
@@ -166,7 +164,6 @@ def latex_image_conversion(xml_source, stringparams, xmlid_root, data_dir, dest_
             params.append(stringparams[2*i])
             params.append(stringparams[2*i+1])
         _verbose('options added to xsltproc extraction: {}'.format(params))
-    dest_dir = sanitize_directory(dest_dir)
     tmp_dir = get_temporary_directory()
     _debug("temporary directory: {}".format(tmp_dir))
     xslt_executable = get_executable(config,  'xslt')
@@ -316,9 +313,6 @@ def webwork_to_xml(xslt_exec, ptx_xsl_dir, xml_source, server_params, dest_dir):
     pgbase64['hint_no_solution_yes'] = {}
     pgbase64['hint_no_solution_no'] = {}
     static = {}
-
-    # verify destination exists
-    sanitize_directory(dest_dir)
 
     # verify, construct problem format requestor
     # remove any surrounding white space
@@ -755,7 +749,6 @@ def youtube_thumbnail(xml_source, xmlid_root, dest_dir):
     import requests
 
     _verbose('downloading YouTube thumbnails from {} for placement in {}'.format(xml_source, dest_dir))
-    dest_dir = sanitize_directory(dest_dir)
     xslt_executable = get_executable(config,  'xslt')
     _debug("xslt executable: {}".format(xslt_executable))
     extraction_xslt = os.path.join(mbx_xsl_dir, 'extract-youtube.xsl')
@@ -807,7 +800,6 @@ def preview_images(xml_source, xmlid_root, dest_dir):
     suffix = 'png'
 
     _verbose('creating interactive previews from {} for placement in {}'.format(xml_source, dest_dir))
-    dest_dir = sanitize_directory(dest_dir)
 
     # see below, pageres-cli writes into current working directory
     needs_moving = not( os.getcwd() == os.path.normpath(dest_dir) )
@@ -894,7 +886,6 @@ def mom_static_problems(xml_source, xmlid_root, dest_dir):
     import requests
 
     _verbose('downloading MyOpenMath static problems from {} for placement in {}'.format(xml_source, dest_dir))
-    dest_dir = sanitize_directory(dest_dir)
     xslt_executable = get_executable(config,  'xslt')
     _debug("xslt executable: {}".format(xslt_executable))
     extraction_xslt = os.path.join(mbx_xsl_dir, 'extract-mom.xsl')
@@ -1065,14 +1056,23 @@ def get_cli_arguments():
     return parser.parse_args()
 
 
-def sanitize_directory(dir):
-    """Verify directory name, or raise error"""
-    # Use with os.path.join, and do not sweat separator
-    import os.path
-    _verbose('verifying directory: {}'.format(dir))
+def verify_input_directory(dir):
+    """Verify directory exists, or raise error.  Return absolute path"""
+    import os.path # isdir(), abspath()
+
+    _verbose('verifying and expanding input directory: {}'.format(dir))
     if not(os.path.isdir(dir)):
         raise ValueError('directory {} does not exist'.format(dir))
-    return dir
+    return os.path.abspath(dir)
+
+def verify_input_file(f):
+    """Verify file exists, or raise error.  Return absolute path"""
+    import os.path # isfile(), abspath()
+
+    _verbose('verifying and expanding input file: {}'.format(f))
+    if not(os.path.isfile(f)):
+        raise ValueError('fike {} does not exist'.format(f))
+    return os.path.abspath(f)
 
 def sanitize_url(url):
     """Verify a server address, append a slash"""
@@ -1123,13 +1123,16 @@ def get_config_info(script_dir, user_dir):
 def copy_data_directory(source_file, data_dir, tmp_dir):
     """Stage directory from CLI argument into the working directory"""
     import os.path, shutil
+
+    # Assumes all input paths are absolute, and that
+    # data_dir is one step longer than directory for source_file,
+    # in other words, data directory is a peer of source file
     _verbose("formulating data directory location")
-    source_full_path, _ = os.path.split(os.path.abspath(source_file))
-    data_full_path = sanitize_directory(os.path.join(source_full_path, data_dir))
-    data_last_step = os.path.basename(os.path.normpath(data_full_path))
+    source_full_path, _ = os.path.split(source_file)
+    data_last_step = os.path.basename(data_dir)
     destination_root = os.path.join(tmp_dir, data_last_step)
-    _debug("copying data directory {} to working location {}".format(data_full_path, destination_root))
-    shutil.copytree(data_full_path, destination_root)
+    _debug("copying data directory {} to working location {}".format(data_dir, destination_root))
+    shutil.copytree(data_dir, destination_root)
 
 def get_temporary_directory():
     """Create scratch directory and return a fully-qualified filename"""
@@ -1176,47 +1179,55 @@ mbx_script_dir = os.path.join(mbx_dir, "script")
 mbx_user_dir = os.path.join(mbx_dir, "user")
 _debug("xsl, script, user dirs: {}".format([mbx_xsl_dir, mbx_script_dir, mbx_user_dir]))
 
-# directory location for outputs
-output_dir = os.path.abspath(args.dir)
-_debug("output dir: {}".format(output_dir))
+# directory/file locations provided on command-line by user
+dest_dir = verify_input_directory(args.dir)
+_debug("destination dir: {}".format(dest_dir))
+xml_source = verify_input_file(args.xml_file)
+_debug("source file: {}".format(xml_source))
+# data directory is optional, so allow for None here
+if args.data_dir:
+    data_dir = verify_input_directory(args.data_dir)
+    _debug("data dir: {}".format(data_dir))
+else:
+    data_dir = None
 
 config = get_config_info(mbx_script_dir, mbx_user_dir)
 
 if args.component == 'asy':
     if args.format == 'html':
-        asymptote_conversion(args.xml_file, args.xmlid, output_dir, 'html')
+        asymptote_conversion(xml_source, args.xmlid, dest_dir, 'html')
     elif args.format == 'pdf':
-        asymptote_conversion(args.xml_file, args.xmlid, output_dir, 'pdf')
+        asymptote_conversion(xml_source, args.xmlid, dest_dir, 'pdf')
     elif args.format == 'svg':
-        asymptote_conversion(args.xml_file, args.xmlid, output_dir, 'svg')
+        asymptote_conversion(xml_source, args.xmlid, dest_dir, 'svg')
     elif args.format == 'eps':
-        asymptote_conversion(args.xml_file, args.xmlid, output_dir, 'eps')
+        asymptote_conversion(xml_source, args.xmlid, dest_dir, 'eps')
     elif args.format == 'source':
-        asymptote_conversion(args.xml_file, args.xmlid, output_dir, 'source')
+        asymptote_conversion(xml_source, args.xmlid, dest_dir, 'source')
     else:
         raise NotImplementedError('cannot make Asymptote diagrams in "{}" format'.format(args.format))
 elif args.component == 'sageplot':
     if args.format == 'pdf':
-        sage_conversion(args.xml_file, args.xmlid, output_dir, 'pdf')
+        sage_conversion(xml_source, args.xmlid, dest_dir, 'pdf')
     elif args.format == 'svg':
-        sage_conversion(args.xml_file, args.xmlid, output_dir, 'svg')
+        sage_conversion(xml_source, args.xmlid, dest_dir, 'svg')
     elif args.format == 'source':
-        sage_conversion(args.xml_file, args.xmlid, output_dir, 'source')
+        sage_conversion(xml_source, args.xmlid, dest_dir, 'source')
     else:
         raise NotImplementedError('cannot make Sage graphics in "{}" format'.format(args.format))
 elif args.component == 'latex-image':
     if args.format == 'pdf':
-        latex_image_conversion(args.xml_file, args.stringparams, args.xmlid, args.data_dir, output_dir, 'pdf')
+        latex_image_conversion(xml_source, args.stringparams, args.xmlid, data_dir, dest_dir, 'pdf')
     elif args.format == 'svg':
-        latex_image_conversion(args.xml_file, args.stringparams, args.xmlid, args.data_dir, output_dir, 'svg')
+        latex_image_conversion(xml_source, args.stringparams, args.xmlid, data_dir, dest_dir, 'svg')
     elif args.format == 'source':
-        latex_image_conversion(args.xml_file, args.stringparams, args.xmlid, args.data_dir, output_dir, 'source')
+        latex_image_conversion(xml_source, args.stringparams, args.xmlid, data_dir, dest_dir, 'source')
     elif args.format == 'png':
-        latex_image_conversion(args.xml_file, args.stringparams, args.xmlid, args.data_dir, output_dir, 'png')
+        latex_image_conversion(xml_source, args.stringparams, args.xmlid, data_dir, dest_dir, 'png')
     elif args.format == 'eps':
-        latex_image_conversion(args.xml_file, args.stringparams, args.xmlid, args.data_dir, output_dir, 'eps')
+        latex_image_conversion(xml_source, args.stringparams, args.xmlid, data_dir, dest_dir, 'eps')
     elif args.format == 'all':
-        latex_image_conversion(args.xml_file, args.stringparams, args.xmlid, args.data_dir, output_dir, 'all')
+        latex_image_conversion(xml_source, args.stringparams, args.xmlid, data_dir, dest_dir, 'all')
     else:
         raise NotImplementedError('cannot make LaTeX pictures in "{}" format'.format(args.format))
 elif args.component == 'webwork-tex':
@@ -1226,13 +1237,13 @@ elif args.component == 'webwork-tex':
 elif args.component == 'webwork':
     xslt_executable = get_executable(config,  'xslt')
     _debug("xslt executable command: {}".format(xslt_executable))
-    webwork_to_xml(xslt_executable, mbx_xsl_dir, args.xml_file, args.server, output_dir)
+    webwork_to_xml(xslt_executable, mbx_xsl_dir, xml_source, args.server, dest_dir)
 elif args.component == 'youtube':
-    youtube_thumbnail(args.xml_file, args.xmlid, output_dir)
+    youtube_thumbnail(xml_source, args.xmlid, dest_dir)
 elif args.component == 'preview':
-    preview_images(args.xml_file, args.xmlid, output_dir)
+    preview_images(xml_source, args.xmlid, dest_dir)
 elif args.component == 'mom':
-    mom_static_problems(args.xml_file, args.xmlid, output_dir)
+    mom_static_problems(xml_source, args.xmlid, dest_dir)
 elif args.component == 'all':
     if args.format == 'html':
         raise NotImplementedError("conversion to HTML version not integrated yet, use command line")
