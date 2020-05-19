@@ -63,9 +63,10 @@ def asymptote_conversion(xml_source, xmlid_root, dest_dir, outformat):
         proc = subprocess.Popen([asy_executable, '--version'], stderr=subprocess.PIPE)
         asyversion = proc.stderr.read()
         _verbose("#####################################################")
-        _verbose("Asymptote 3D HTML output is experimental (2020-01-24)")
-        _verbose("it is only supported by Asymptote 2.62 and")
-        _verbose("newer, your Asymptote executable in use reports:")
+        _verbose("Asymptote 3D HTML output is experimental (2020-05-18)")
+        _verbose("it is only supported by Asymptote 2.62 and newer,")
+        _verbose("and will produce best results with Asymptote 2.66 and")
+        _verbose("newer.  Your Asymptote executable in use reports:")
         _verbose(asyversion)
         _verbose("#####################################################")
     # every diagram should be a *.asy file in tmp_dir, which is cwd
@@ -82,7 +83,10 @@ def asymptote_conversion(xml_source, xmlid_root, dest_dir, outformat):
             asyout = "{}.{}".format(filebase, outformat)
             asysvg = "{}.svg".format(filebase)
             asypng = "{}_*.png".format(filebase)
-            asy_cmd = [asy_executable, '-outformat', outformat, asydiagram]
+            asy_cmd = [asy_executable,
+                       '-f', 'html',
+                       asydiagram
+                       ]
             _verbose("converting {} to {}".format(asydiagram, asyout))
             _debug("asymptote conversion {}".format(asy_cmd))
             subprocess.call(asy_cmd, stdout=devnull, stderr=subprocess.STDOUT)
@@ -93,11 +97,31 @@ def asymptote_conversion(xml_source, xmlid_root, dest_dir, outformat):
                 # Sometimes Asymptotes SVGs include multiple PNGs for colored regions
                 for f in glob.glob(asypng):
                     shutil.copy2(f, dest_dir)
+        elif outformat == 'svg':
+            filebase, _ = os.path.splitext(asydiagram)
+            asyout = "{}.{}".format(filebase, outformat)
+            # asysvg = "{}.svg".format(filebase)
+            asypng = "{}_*.png".format(filebase)
+            asy_cmd = [asy_executable, 
+                       '-f', 'svg',
+                       '-render=4', '-iconify',
+                       asydiagram
+                       ]
+            _verbose("converting {} to {}".format(asydiagram, asyout))
+            _debug("asymptote conversion {}".format(asy_cmd))
+            subprocess.call(asy_cmd, stdout=devnull, stderr=subprocess.STDOUT)
+            if os.path.exists(asyout) == True:
+                shutil.copy2(asyout, dest_dir)
+            else:
+                # Sometimes Asymptotes SVGs include multiple PNGs for colored regions
+                for f in glob.glob(asypng):
+                    shutil.copy2(f, dest_dir)
+        # 2020-05-18, EPS, PDF not really examined
         else:
             filebase, _ = os.path.splitext(asydiagram)
             asyout = "{}.{}".format(filebase, outformat)
             asypng = "{}_*.png".format(filebase)
-            asy_cmd = [asy_executable, '-noprc', '-offscreen', '-batchMask', '-outformat', outformat, asydiagram]
+            asy_cmd = [asy_executable, '-noprc', '-iconify', '-batchMask', '-f', outformat, asydiagram]
             _verbose("converting {} to {}".format(asydiagram, asyout))
             _debug("asymptote conversion {}".format(asy_cmd))
             subprocess.call(asy_cmd, stdout=devnull, stderr=subprocess.STDOUT)
