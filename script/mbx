@@ -26,52 +26,6 @@
 #
 ##############################################
 
-def tikz_conversion(xml_source, xmlid_root, dest_dir, outformat):
-    global config
-    import tempfile, os, os.path, subprocess, shutil
-    _verbose('converting tikz pictures from {} to {} graphics for placement in {}'.format(xml_source, outformat, dest_dir))
-    dest_dir = sanitize_directory(dest_dir)
-    tmp_dir = tempfile.mkdtemp()
-    _debug("temporary directory: {}".format(tmp_dir))
-    xslt_executable = get_executable(config,  'xslt')
-    _debug("xslt executable: {}".format(xslt_executable))
-    tex_executable = get_executable(config,  'tex')
-    _debug("tex executable: {}".format(tex_executable))
-    pdfsvg_executable = get_executable(config, 'pdfsvg')
-    _debug("pdfsvg executable: {}".format(pdfsvg_executable))
-    # http://stackoverflow.com/questions/11269575/how-to-hide-output-of-subprocess-in-python-2-7
-    devnull = open(os.devnull, 'w')
-    convert_cmd = [xslt_executable,
-        '--stringparam', 'scratch', tmp_dir,
-        '--stringparam', 'subtree', xmlid_root,
-        '--xinclude',
-        os.path.join(mbx_xsl_dir, 'extract-tikz.xsl'),
-        xml_source
-        ]
-    _verbose("extracting tikz pictures from {}".format(xml_source))
-    _debug("tikz conversion {}".format(convert_cmd))
-    subprocess.call(convert_cmd)
-    cwd = os.getcwd()
-    os.chdir(tmp_dir)
-    for tikzpic in os.listdir(tmp_dir):
-        if outformat == 'source':
-            shutil.copy2(tikzpic, dest_dir)
-        else:
-            filebase, _ = os.path.splitext(tikzpic)
-            tikzpdf = "{}.pdf".format(filebase)
-            tikzsvg = "{}.svg".format(filebase)
-            latex_cmd = [tex_executable, tikzpic]
-            _verbose("converting {} to {}".format(tikzpic, tikzpdf))
-            subprocess.call(latex_cmd, stdout=devnull, stderr=subprocess.STDOUT)
-            if outformat == 'svg':
-                svg_cmd = [pdfsvg_executable, tikzpdf, tikzsvg]
-                _verbose("converting {} to {}".format(tikzpdf, tikzsvg))
-                subprocess.call(svg_cmd)
-                shutil.copy2(tikzsvg, dest_dir)
-            if outformat == 'pdf':
-                shutil.copy2(tikzpdf, dest_dir)
-
-
 def asymptote_conversion(xml_source, xmlid_root, dest_dir, outformat):
     global config
     import tempfile, os, os.path, subprocess, shutil, glob
@@ -1335,7 +1289,7 @@ def get_cli_arguments():
         ('preview', 'Static preview images for interactives'),
         ('mom', 'MyOpenMath problem files, static versions'),
         ('all', 'Complete document (only SageNB format)'),
-        ('tikz', 'tikz pictures (obsolete)'),
+        ('tikz', 'tikz pictures (removed, use latex-image)'),
     ]
     component_help = 'Possible components are:\n' + '\n'.join(['  {} - {}'.format(info[0], info[1]) for info in component_info])
     parser.add_argument('-c', '--component', help=component_help, action="store", dest="component")
@@ -1493,16 +1447,7 @@ _debug("output dir: {}".format(output_dir))
 config = get_config_info(mbx_script_dir, mbx_user_dir)
 plat = get_platform()
 
-if args.component == 'tikz':
-    if args.format == 'pdf':
-        tikz_conversion(args.xml_file, args.xmlid, output_dir, 'pdf')
-    elif args.format == 'svg':
-        tikz_conversion(args.xml_file, args.xmlid, output_dir, 'svg')
-    elif args.format == 'source':
-        tikz_conversion(args.xml_file, args.xmlid, output_dir, 'source')
-    else:
-        raise NotImplementedError('cannot make TikZ pictures in "{}" format'.format(args.format))
-elif args.component == 'asy':
+if args.component == 'asy':
     if args.format == 'html':
         asymptote_conversion(args.xml_file, args.xmlid, output_dir, 'html')
     elif args.format == 'pdf':
@@ -1567,5 +1512,8 @@ elif args.component == 'all':
         raise NotImplementedError("conversion to LaTeX version not integrated yet, use command line")
     else:
         raise NotImplementedError('cannot make entire document in "{}" format'.format(args.format))
+# 2020-05-19 tikz_conversion() function removed
+elif args.component == 'tikz':
+    raise NotImplementedError('conversion of TikZ pictures has been subsumed into the "latex-image" component (2020-05-19)')
 else:
     raise ValueError('the "{}" component is not a conversion option'.format(args.component))
