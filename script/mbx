@@ -254,26 +254,15 @@ def latex_image_conversion(xml_source, stringparams, xmlid_root, data_dir, dest_
 def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
     import subprocess, os.path, xml.dom.minidom
     import sys # version_info
-
-    # base64 and url encoding depends on Python version; make Boolean here
-    PY3 = sys.version_info[0] >= 3
-
-    if PY3:
-        import urllib.parse
-        from urllib.parse import urlparse
-    else:
-        import urllib
-        from urlparse import urlparse
-
+    import urllib.parse # urlparse()
+    import re     # regular expressions for parsing
+    import base64  # b64encode()
     # at least on Mac installations, requests module is not standard
     try:
         import requests
     except ImportError:
         msg = 'failed to import requests module, is it installed?'
         raise ValueError(msg)
-
-    import re     # regular expressions for parsing
-    from xml.sax.saxutils import escape    # sanitize string
 
     # execute XSL extraction to get back four dictionaries
     # where the keys are the internal-ids for the problems
@@ -393,11 +382,7 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
         # make base64 for PTX problems
         if origin[problem] == 'ptx':
             for hint_sol in ['hint_yes_solution_yes','hint_yes_solution_no','hint_no_solution_yes','hint_no_solution_no']:
-                if PY3:
-                    import base64
-                    pgbase64[hint_sol][problem] = base64.b64encode(bytes(pgptx[hint_sol][problem], 'utf-8'))
-                else:
-                    pgbase64[hint_sol][problem] = pgptx[hint_sol][problem].encode('base64').replace('\n', '')
+                pgbase64[hint_sol][problem] = base64.b64encode(bytes(pgptx[hint_sol][problem], 'utf-8'))
 
         # First write authored
         if origin[problem] == 'ptx':
@@ -623,7 +608,7 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
         for match in re.finditer(graphics_pattern, static[problem]):
             ww_image_url = match.group(1)
             # strip away the scheme and location, if present (e.g 'https://webwork-ptx.aimath.org/')
-            ww_image_url_parsed = urlparse(ww_image_url)
+            ww_image_url_parsed = urllib.parse.urlparse(ww_image_url)
             ww_image_scheme = ww_image_url_parsed.scheme
             ww_image_full_path = ww_image_url_parsed.path
             count += 1
@@ -661,10 +646,7 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
         # we open the file in binary mode to preserve the \r characters that may be present
         try:
             with open(include_file_name, 'ab') as include_file:
-                if PY3:
-                    include_file.write(bytes(static[problem] + '\n', encoding='utf-8'))
-                else:
-                    include_file.write(static[problem] + '\n')
+                include_file.write(bytes(static[problem] + '\n', encoding='utf-8'))
         except Exception as e:
             root_cause = str(e)
             msg = "There was a problem writing a problem to the file: {}\n"
@@ -681,10 +663,8 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
                 else:
                     if origin[problem] == 'server':
                         source_value = source[problem]
-                    elif PY3:
-                        source_value = urllib.parse.quote_plus(pgbase64[hintsol][problem])
                     else:
-                        source_value = urllib.quote_plus(pgbase64[hintsol][problem])
+                        source_value = urllib.parse.quote_plus(pgbase64[hintsol][problem])
                 source_query = source_selector + source_value
                 try:
                     with open(include_file_name, 'a') as include_file:
