@@ -27,16 +27,15 @@
 ##############################################
 
 def asymptote_conversion(xml_source, xmlid_root, dest_dir, outformat):
-    global config
     import os.path # join()
     import os, subprocess, shutil, glob
 
     _verbose('converting Asymptote diagrams from {} to {} graphics for placement in {}'.format(xml_source, outformat.upper(), dest_dir))
     tmp_dir = get_temporary_directory()
     _debug("temporary directory: {}".format(tmp_dir))
-    xslt_executable = get_executable(config,  'xslt')
+    xslt_executable = get_executable('xslt')
     _debug("xslt executable: {}".format(xslt_executable))
-    asy_executable = get_executable(config,  'asy')
+    asy_executable = get_executable('asy')
     _debug("asy executable: {}".format(asy_executable))
     extraction_xslt = os.path.join(mbx_xsl_dir, 'extract-asymptote.xsl')
     extract_cmd = [xslt_executable,
@@ -108,14 +107,13 @@ def asymptote_conversion(xml_source, xmlid_root, dest_dir, outformat):
 
 
 def sage_conversion(xml_source, xmlid_root, dest_dir, outformat):
-    global config
     import tempfile, os, os.path, subprocess, shutil, glob
     _verbose('converting Sage diagrams from {} to {} graphics for placement in {}'.format(xml_source, outformat.upper(), dest_dir))
     tmp_dir = get_temporary_directory()
     _debug("temporary directory: {}".format(tmp_dir))
-    xslt_executable = get_executable(config,  'xslt')
+    xslt_executable = get_executable('xslt')
     _debug("xslt executable: {}".format(xslt_executable))
-    sage_executable = get_executable(config,  'sage')
+    sage_executable = get_executable('sage')
     _debug("sage executable: {}".format(sage_executable))
     extraction_xslt = os.path.join(mbx_xsl_dir, 'extract-sageplot.xsl')
     extract_cmd = [xslt_executable,
@@ -149,7 +147,6 @@ def sage_conversion(xml_source, xmlid_root, dest_dir, outformat):
                 shutil.copy2(f, dest_dir)
 
 def latex_image_conversion(xml_source, stringparams, xmlid_root, data_dir, dest_dir, outformat):
-    global config
     import platform # system, machine()
     import os.path # join()
     import os, subprocess, shutil
@@ -166,7 +163,7 @@ def latex_image_conversion(xml_source, stringparams, xmlid_root, data_dir, dest_
         _verbose('options added to xsltproc extraction: {}'.format(params))
     tmp_dir = get_temporary_directory()
     _debug("temporary directory: {}".format(tmp_dir))
-    xslt_executable = get_executable(config,  'xslt')
+    xslt_executable = get_executable('xslt')
     _debug("xslt executable: {}".format(xslt_executable))
     # NB: next command uses relative paths, so no chdir(), etc beforehand
     if data_dir:
@@ -198,12 +195,12 @@ def latex_image_conversion(xml_source, stringparams, xmlid_root, data_dir, dest_
             latex_image_svg = "{}.svg".format(filebase)
             latex_image_png = "{}.png".format(filebase)
             latex_image_eps = "{}.eps".format(filebase)
-            tex_executable = get_executable(config,  'tex')
+            tex_executable = get_executable('tex')
             _debug("tex executable: {}".format(tex_executable))
             latex_cmd = [tex_executable, "-interaction=batchmode", latex_image]
             _verbose("converting {} to {}".format(latex_image, latex_image_pdf))
             subprocess.call(latex_cmd, stdout=devnull, stderr=subprocess.STDOUT)
-            pdfcrop_executable = get_executable(config,  'pdfcrop')
+            pdfcrop_executable = get_executable('pdfcrop')
             _debug("pdfcrop executable: {}".format(pdfcrop_executable))
             if platform.system() == "Windows":
                 _debug("using pdfcrop is not reliable on Windows unless you are using a linux-like shell, e.g. Git Bash or SageMathCloud terminal")
@@ -223,7 +220,7 @@ def latex_image_conversion(xml_source, stringparams, xmlid_root, data_dir, dest_
             if (outformat == 'pdf' or outformat == 'all'):
                 shutil.copy2(latex_image_pdf, dest_dir)
             if (outformat == 'svg' or outformat == 'all'):
-                pdfsvg_executable = get_executable(config, 'pdfsvg')
+                pdfsvg_executable = get_executable('pdfsvg')
                 _debug("pdfsvg executable: {}".format(pdfsvg_executable))
                 svg_cmd = [pdfsvg_executable, latex_image_pdf, latex_image_svg]
                 _verbose("converting {} to {}".format(latex_image_pdf, latex_image_svg))
@@ -231,14 +228,14 @@ def latex_image_conversion(xml_source, stringparams, xmlid_root, data_dir, dest_
                 shutil.copy2(latex_image_svg, dest_dir)
             if (outformat == 'png' or outformat == 'all'):
                 # create high-quality png, presumes "convert" executable
-                pdfpng_executable = get_executable(config, 'pdfpng')
+                pdfpng_executable = get_executable('pdfpng')
                 _debug("pdfpng executable: {}".format(pdfpng_executable))
                 png_cmd = [pdfpng_executable, "-density", "300",  latex_image_pdf, "-quality", "100", latex_image_png]
                 _verbose("converting {} to {}".format(latex_image_pdf, latex_image_png))
                 subprocess.call(png_cmd)
                 shutil.copy2(latex_image_png, dest_dir)
             if (outformat == 'eps' or outformat == 'all'):
-                pdfeps_executable = get_executable(config, 'pdfeps')
+                pdfeps_executable = get_executable('pdfeps')
                 _debug("pdfeps executable: {}".format(pdfeps_executable))
                 eps_cmd = [pdfeps_executable, '-eps', latex_image_pdf, latex_image_eps]
                 _verbose("converting {} to {}".format(latex_image_pdf, latex_image_eps))
@@ -251,7 +248,7 @@ def latex_image_conversion(xml_source, stringparams, xmlid_root, data_dir, dest_
 #
 ################################
 
-def webwork_to_xml(xslt_exec, ptx_xsl_dir, xml_source, server_params, dest_dir):
+def webwork_to_xml(ptx_xsl_dir, xml_source, server_params, dest_dir):
     import subprocess, os.path, xml.dom.minidom
 
     # base64 and url encoding depends on Python version; make Boolean here
@@ -277,9 +274,11 @@ def webwork_to_xml(xslt_exec, ptx_xsl_dir, xml_source, server_params, dest_dir):
     # execute XSL extraction to get back four dictionaries
     # where the keys are the internal-ids for the problems
     # origin, seed, source, pg
+    xslt_executable = get_executable('xslt')
+    _debug("xslt executable command: {}".format(xslt_executable))
     xsl_transform = 'extract-pg.xsl'
     extraction_xslt = os.path.join(ptx_xsl_dir, xsl_transform)
-    cmd = [xslt_exec, '--xinclude', extraction_xslt, xml_source]
+    cmd = [xslt_executable, '--xinclude', extraction_xslt, xml_source]
     try:
         problem_dictionaries = subprocess.check_output(cmd)
     except subprocess.CalledProcessError as e:
@@ -292,7 +291,7 @@ def webwork_to_xml(xslt_exec, ptx_xsl_dir, xml_source, server_params, dest_dir):
     # pgptx
     xsl_transform_pgptx = 'extract-pg-ptx.xsl'
     extraction_xslt_pgptx = os.path.join(ptx_xsl_dir, xsl_transform_pgptx)
-    cmd = [xslt_exec, '--xinclude', extraction_xslt_pgptx, xml_source]
+    cmd = [xslt_executable, '--xinclude', extraction_xslt_pgptx, xml_source]
     try:
         problem_dictionary_pgptx = subprocess.check_output(cmd)
     except subprocess.CalledProcessError as e:
@@ -743,13 +742,12 @@ def webwork_to_xml(xslt_exec, ptx_xsl_dir, xml_source, server_params, dest_dir):
 ##############################
 
 def youtube_thumbnail(xml_source, xmlid_root, dest_dir):
-    global config
     import os.path  # join()
     import subprocess, shutil
     import requests
 
     _verbose('downloading YouTube thumbnails from {} for placement in {}'.format(xml_source, dest_dir))
-    xslt_executable = get_executable(config,  'xslt')
+    xslt_executable = get_executable('xslt')
     _debug("xslt executable: {}".format(xslt_executable))
     extraction_xslt = os.path.join(mbx_xsl_dir, 'extract-youtube.xsl')
     # No temporary directory involved,
@@ -793,7 +791,6 @@ def youtube_thumbnail(xml_source, xmlid_root, dest_dir):
 #####################################
 
 def preview_images(xml_source, xmlid_root, dest_dir):
-    global config
     import subprocess, shutil
     import os.path # join()
 
@@ -812,7 +809,7 @@ def preview_images(xml_source, xmlid_root, dest_dir):
                     "interactive-d3-collision", "interactive-d3-collision-preview.png"),
         )
 
-    xslt_executable = get_executable(config,  'xslt')
+    xslt_executable = get_executable('xslt')
     _debug("xslt executable: {}".format(xslt_executable))
     extraction_xslt = os.path.join(mbx_xsl_dir, 'extract-interactive.xsl')
     # No temporary directory involved,
@@ -837,7 +834,7 @@ def preview_images(xml_source, xmlid_root, dest_dir):
     # call will need to accept the override as a stringparam
     baseurl = interactives[0]
 
-    pageres_executable = get_executable(config,  'pageres')
+    pageres_executable = get_executable('pageres')
     _debug("pageres executable: {}".format(xslt_executable))
     _debug("interactives identifiers: {}".format(interactives))
 
@@ -880,13 +877,12 @@ def preview_images(xml_source, xmlid_root, dest_dir):
 #####################################
 
 def mom_static_problems(xml_source, xmlid_root, dest_dir):
-    global config
     import os.path # join()
     import subprocess, shutil
     import requests
 
     _verbose('downloading MyOpenMath static problems from {} for placement in {}'.format(xml_source, dest_dir))
-    xslt_executable = get_executable(config,  'xslt')
+    xslt_executable = get_executable('xslt')
     _debug("xslt executable: {}".format(xslt_executable))
     extraction_xslt = os.path.join(mbx_xsl_dir, 'extract-mom.xsl')
     # No temporary directory involved,
@@ -968,8 +964,9 @@ def get_source_path(source_file):
     source_dir, _ = os.path.split(source_file)
     return os.path.normpath(source_dir)
 
-def get_executable(config, exec_name):
-    "Queries configuration file for executable name, verifies existence in Unix"
+def get_executable(exec_name):
+    """Queries configuration file for executable name, verifies existence in Unix"""
+    global config
     import os
     import platform
     import subprocess
@@ -1235,9 +1232,7 @@ elif args.component == 'webwork-tex':
              'and behaves very differently')
     raise NotImplementedError(wtdep)
 elif args.component == 'webwork':
-    xslt_executable = get_executable(config,  'xslt')
-    _debug("xslt executable command: {}".format(xslt_executable))
-    webwork_to_xml(xslt_executable, mbx_xsl_dir, xml_source, args.server, dest_dir)
+    webwork_to_xml(mbx_xsl_dir, xml_source, args.server, dest_dir)
 elif args.component == 'youtube':
     youtube_thumbnail(xml_source, args.xmlid, dest_dir)
 elif args.component == 'preview':
