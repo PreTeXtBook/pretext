@@ -5276,8 +5276,10 @@ the xsltproc executable.
                 <figure xml:id="figure-interactive-numerical-integral">
                     <caption>Numerical integrals using the midpoint rule</caption>
 
-                    <interactive xml:id="interactive-numerical-integral" platform="sage" width="100%" aspect="2:3">
-                        <!-- Changes: gave 3 input boxes widths -->
+                    <interactive xml:id="interactive-numerical-integral" platform="sage" width="100%" aspect="4:5">
+                      <!-- Changes: gave 3 input boxes widths -->
+		      <!-- Changes: Escaped \ inside LaTeX -->
+		      <!-- Changes: Added figsize=5 to show -->
                         <slate surface="sage">
                         var('x')
                         @interact
@@ -5296,10 +5298,10 @@ the xsltproc executable.
                             min_y = min(0, find_local_minimum(func,a,b)[0])
                             max_y = max(0, find_local_maximum(func,a,b)[0])
                             pretty_print(html('&lt;h3&gt;Numerical integrals with the midpoint rule&lt;/h3&gt;'))
-                            pretty_print(html('$\int_{a}^{b}{f(x) dx} {\\approx} \sum_i{f(x_i) \Delta x}$'))
-                            print "\n\nSage numerical answer: " + str(integral_numerical(func,a,b,max_points = 200)[0])
-                            print "Midpoint estimated answer: " + str(RDF(dx*sum([midys[q] for q in range(n)])))
-                            show(plot(func,a,b) + rects, xmin = a, xmax = b, ymin = min_y, ymax = max_y)
+                            pretty_print(html('$\\int_{a}^{b}{f(x) dx} {\\approx} \\sum_i{f(x_i) \\Delta x}$'))
+                            print("\n\nSage numerical answer: " + str(integral_numerical(func,a,b,max_points = 200)[0]))
+                            print("Midpoint estimated answer: " + str(RDF(dx*sum([midys[q] for q in range(n)]))))
+                            show(plot(func,a,b) + rects, xmin = a, xmax = b, ymin = min_y, ymax = max_y,figsize=5)
                         </slate>
                     </interactive>
                 </figure>
