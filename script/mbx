@@ -1134,18 +1134,16 @@ def sanitize_alpha_num_underscore(param):
 def get_config_info():
     """Return configuation in object for querying"""
     import os.path # join()
+    import configparser # ConfigParser()
 
     mbx_dir = get_mbx_path()
     config_filename = 'mbx.cfg'
     default_config_file = os.path.join(mbx_dir, 'script', config_filename)
     user_config_file = os.path.join(mbx_dir, 'user', config_filename)
     config_file_list = [default_config_file, user_config_file]
-    # ConfigParser was renamed to configparser in Python 3
-    try:
-        import configparser
-    except ImportError:
-        import ConfigParser as configparser
-    config = configparser.SafeConfigParser()
+    # ConfigParser module was renamed to configparser in Python 3
+    # and object was renamed from SafeConfigParser() to ConfigParser()
+    config = configparser.ConfigParser()
     _verbose("parsing configuration files: {}".format(config_file_list))
     files_read = config.read(config_file_list)
     _debug("configuration files used/read: {}".format(files_read))
