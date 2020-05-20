@@ -37,6 +37,7 @@ def asymptote_conversion(xml_source, xmlid_root, dest_dir, outformat):
     _debug("xslt executable: {}".format(xslt_executable))
     asy_executable = get_executable('asy')
     _debug("asy executable: {}".format(asy_executable))
+    mbx_xsl_dir = get_mbx_xsl_path()
     extraction_xslt = os.path.join(mbx_xsl_dir, 'extract-asymptote.xsl')
     extract_cmd = [xslt_executable,
         '--xinclude',
@@ -115,6 +116,7 @@ def sage_conversion(xml_source, xmlid_root, dest_dir, outformat):
     _debug("xslt executable: {}".format(xslt_executable))
     sage_executable = get_executable('sage')
     _debug("sage executable: {}".format(sage_executable))
+    mbx_xsl_dir = get_mbx_xsl_path()
     extraction_xslt = os.path.join(mbx_xsl_dir, 'extract-sageplot.xsl')
     extract_cmd = [xslt_executable,
         '--stringparam', 'subtree', xmlid_root,
@@ -170,6 +172,7 @@ def latex_image_conversion(xml_source, stringparams, xmlid_root, data_dir, dest_
         copy_data_directory(xml_source, data_dir, tmp_dir)
     # http://stackoverflow.com/questions/11269575/how-to-hide-output-of-subprocess-in-python-2-7
     devnull = open(os.devnull, 'w')
+    mbx_xsl_dir = get_mbx_xsl_path()
     extraction_xslt = os.path.join(mbx_xsl_dir, 'extract-latex-image.xsl')
     convert_cmd = [xslt_executable] + params + [
         '--xinclude',
@@ -248,8 +251,9 @@ def latex_image_conversion(xml_source, stringparams, xmlid_root, data_dir, dest_
 #
 ################################
 
-def webwork_to_xml(ptx_xsl_dir, xml_source, server_params, dest_dir):
+def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
     import subprocess, os.path, xml.dom.minidom
+    import sys # version_info
 
     # base64 and url encoding depends on Python version; make Boolean here
     PY3 = sys.version_info[0] >= 3
@@ -276,6 +280,7 @@ def webwork_to_xml(ptx_xsl_dir, xml_source, server_params, dest_dir):
     # origin, seed, source, pg
     xslt_executable = get_executable('xslt')
     _debug("xslt executable command: {}".format(xslt_executable))
+    ptx_xsl_dir = get_mbx_xsl_path()
     xsl_transform = 'extract-pg.xsl'
     extraction_xslt = os.path.join(ptx_xsl_dir, xsl_transform)
     cmd = [xslt_executable, '--xinclude', extraction_xslt, xml_source]
@@ -529,7 +534,7 @@ def webwork_to_xml(ptx_xsl_dir, xml_source, server_params, dest_dir):
             badness_base64 = 'RE9DVU1FTlQoKTsKbG9hZE1hY3JvcygiUEdzdGFuZGFyZC5wbCIsIlBHTUwucGwiLCJQR2NvdXJzZS5wbCIsKTtURVhUKGJlZ2lucHJvYmxlbSgpKTtDb250ZXh0KCdOdW1lcmljJyk7CgpCRUdJTl9QR01MCldlQldvcksgUHJvYmxlbSBEaWQgTm90IEhhdmUgYSBbfHN0YXRlbWVudHxdKiBUYWcKCkVORF9QR01MCgpFTkRET0NVTUVOVCgpOw%3D%3D'
 
         # If we are aborting upon recoverable errors...
-        if args.abort:
+        if abort_early:
             if badness:
                 debugging_help = response_text
                 if origin[problem] == 'ptx' and no_compile:
@@ -749,6 +754,7 @@ def youtube_thumbnail(xml_source, xmlid_root, dest_dir):
     _verbose('downloading YouTube thumbnails from {} for placement in {}'.format(xml_source, dest_dir))
     xslt_executable = get_executable('xslt')
     _debug("xslt executable: {}".format(xslt_executable))
+    mbx_xsl_dir = get_mbx_xsl_path()
     extraction_xslt = os.path.join(mbx_xsl_dir, 'extract-youtube.xsl')
     # No temporary directory involved,
     # results land directly in dest_dir
@@ -811,6 +817,7 @@ def preview_images(xml_source, xmlid_root, dest_dir):
 
     xslt_executable = get_executable('xslt')
     _debug("xslt executable: {}".format(xslt_executable))
+    mbx_xsl_dir = get_mbx_xsl_path()
     extraction_xslt = os.path.join(mbx_xsl_dir, 'extract-interactive.xsl')
     # No temporary directory involved,
     # results land directly in dest_dir
@@ -884,6 +891,7 @@ def mom_static_problems(xml_source, xmlid_root, dest_dir):
     _verbose('downloading MyOpenMath static problems from {} for placement in {}'.format(xml_source, dest_dir))
     xslt_executable = get_executable('xslt')
     _debug("xslt executable: {}".format(xslt_executable))
+    mbx_xsl_dir = get_mbx_xsl_path()
     extraction_xslt = os.path.join(mbx_xsl_dir, 'extract-mom.xsl')
     # No temporary directory involved,
     # results land directly in dest_dir
@@ -928,25 +936,32 @@ def mom_static_problems(xml_source, xmlid_root, dest_dir):
 
 def _verbose(msg):
     """Write a message to the console on program progress"""
-    global args
     # None if not set at all
-    if args.verbose and args.verbose >= 1:
+    if _verbosity and _verbosity >= 1:
         print('MBX: {}'.format(msg))
-
 
 def _debug(msg):
     """Write a message to the console with some raw information"""
-    global args
     # None if not set at all
-    if args.verbose and args.verbose >= 2:
+    if _verbosity and _verbosity >= 2:
         print('MBX-DEBUG: {}'.format(msg))
 
+def python_version():
+    """Return 'major.minor' version number as string/info"""
+    import sys
+
+    return '{}.{}'.format(sys.version_info[0], sys.version_info[1])
 
 def get_mbx_path():
     """Returns path of root of MBX distribution"""
-    import sys, os.path
+    # necessary to locate configuration files, XSL stylesheets
+    # since authors can drop distribution *anywhere* in their system
+    import sys # argv
+    import os.path # abspath(), split()
+
     _verbose("discovering MBX root directory from mbx script location")
     # full path to script itself
+    # TODO: maybe needs "__file__" for use as module
     mbx_path = os.path.abspath(sys.argv[0])
     # split "mbx" executable off path
     script_dir, _ = os.path.split(mbx_path)
@@ -955,6 +970,11 @@ def get_mbx_path():
     _verbose("MBX distribution root directory: {}".format(distribution_dir))
     return distribution_dir
 
+def get_mbx_xsl_path():
+    """Returns path of MBX XSL directory"""
+    import os.path
+
+    return os.path.join(get_mbx_path(), 'xsl')
 
 def get_source_path(source_file):
     """Returns path of source XML file"""
@@ -966,10 +986,13 @@ def get_source_path(source_file):
 
 def get_executable(exec_name):
     """Queries configuration file for executable name, verifies existence in Unix"""
-    global config
     import os
     import platform
     import subprocess
+
+    # parse user configuration(s), contains locations of executables
+    # in the "executables" section of the INI-style file
+    config = get_config_info()
 
     # http://stackoverflow.com/questions/11210104/check-if-a-program-exists-from-a-python-script
     # suggests  where.exe  as Windows equivalent (post Windows Server 2003)
@@ -988,7 +1011,7 @@ def get_executable(exec_name):
     if result_code != 0:
         error_message = '\n'.join([
                         'cannot locate executable with configuration name "{}" as command "{}"',
-                        'Edit the configuration file and/or install the necessary program'])
+                        '*** Edit the configuration file and/or install the necessary program ***'])
         raise OSError(error_message.format(exec_name, config_name))
     _debug("{} executable: {}".format(exec_name, config_name))
     return config_name
@@ -1096,12 +1119,14 @@ def sanitize_alpha_num_underscore(param):
         raise ValueError('param {} contains characters other than a-zA-Z0-9_ '.format(param))
     return param
 
-def get_config_info(script_dir, user_dir):
+def get_config_info():
     """Return configuation in object for querying"""
-    import sys,os.path
-    config_filename = "mbx.cfg"
-    default_config_file = os.path.join(script_dir, config_filename)
-    user_config_file = os.path.join(user_dir, config_filename)
+    import os.path # join()
+
+    mbx_dir = get_mbx_path()
+    config_filename = 'mbx.cfg'
+    default_config_file = os.path.join(mbx_dir, 'script', config_filename)
+    user_config_file = os.path.join(mbx_dir, 'user', config_filename)
     config_file_list = [default_config_file, user_config_file]
     # ConfigParser was renamed to configparser in Python 3
     try:
@@ -1148,109 +1173,126 @@ def get_temporary_directory():
     # return t
     return tempfile.mkdtemp()
 
+########
+#
+# Module
+#
+########
+
+# One-time set-up for global use in the module
+# Module provides, and depends on:
+#
+#  _verbosity - level of detail in console output
+
+# verbose parameter from command-line
+# global to module since pervasive
+# only accessed in _verbose() and _debug()
+_verbosity = get_cli_arguments().verbose
+
+# Report Python version in debugging output
+# Needs _verbosity to control _debug()
+# Routine keeps "sys" import hidden from module
+_debug("Python version: {} (expecting 2.7 or newer)".format(python_version()))
+
+# Check discovering directory locations as
+# realized by MathBook XML installation
+# Necessary for locating configuration files (next)
+_debug("discovered distribution and xsl directories: {}, {}".format(get_mbx_path(), get_mbx_xsl_path()))
+
+# Report 'executables' in configuration file
+# Module functions depend on this extensively via get_executable()
+_debug('executables in configuration file: {}'.format(dict(get_config_info()['executables'])))
+
 ######
 #
 # Main
 #
 ######
 
-# Parse command line
-# Deduce some paths
-# Read configuration file
-# Switch on command line
+def main():
+    """React to command-line switches in order to perform basic tasks"""
 
-import os.path, sys
+    # grab command line arguments and report
+    args = get_cli_arguments()
+    _debug("CLI args {}".format(vars(args)))
 
-# grab command line arguments
-args = get_cli_arguments()
-_debug("CLI args {}".format(vars(args)))
-
-# Report Python version in debugging output
-msg = "Python version: {}.{} (expecting 2.7 or newer)"
-_debug(msg.format(sys.version_info[0], sys.version_info[1]))
-
-# directory locations relative to MathBook XML installation
-mbx_dir = get_mbx_path()
-mbx_xsl_dir = os.path.join(mbx_dir, "xsl")
-mbx_script_dir = os.path.join(mbx_dir, "script")
-mbx_user_dir = os.path.join(mbx_dir, "user")
-_debug("xsl, script, user dirs: {}".format([mbx_xsl_dir, mbx_script_dir, mbx_user_dir]))
-
-# directory/file locations provided on command-line by user
-dest_dir = verify_input_directory(args.dir)
-_debug("destination dir: {}".format(dest_dir))
-xml_source = verify_input_file(args.xml_file)
-_debug("source file: {}".format(xml_source))
-# data directory is optional, so allow for None here
-if args.data_dir:
-    data_dir = verify_input_directory(args.data_dir)
-    _debug("data dir: {}".format(data_dir))
-else:
-    data_dir = None
-
-config = get_config_info(mbx_script_dir, mbx_user_dir)
-
-if args.component == 'asy':
-    if args.format == 'html':
-        asymptote_conversion(xml_source, args.xmlid, dest_dir, 'html')
-    elif args.format == 'pdf':
-        asymptote_conversion(xml_source, args.xmlid, dest_dir, 'pdf')
-    elif args.format == 'svg':
-        asymptote_conversion(xml_source, args.xmlid, dest_dir, 'svg')
-    elif args.format == 'eps':
-        asymptote_conversion(xml_source, args.xmlid, dest_dir, 'eps')
-    elif args.format == 'source':
-        asymptote_conversion(xml_source, args.xmlid, dest_dir, 'source')
+    # directory/file locations provided on command-line by user
+    dest_dir = verify_input_directory(args.dir)
+    _debug("destination dir: {}".format(dest_dir))
+    xml_source = verify_input_file(args.xml_file)
+    _debug("source file: {}".format(xml_source))
+    # data directory is optional, so allow for None here
+    if args.data_dir:
+        data_dir = verify_input_directory(args.data_dir)
+        _debug("data dir: {}".format(data_dir))
     else:
-        raise NotImplementedError('cannot make Asymptote diagrams in "{}" format'.format(args.format))
-elif args.component == 'sageplot':
-    if args.format == 'pdf':
-        sage_conversion(xml_source, args.xmlid, dest_dir, 'pdf')
-    elif args.format == 'svg':
-        sage_conversion(xml_source, args.xmlid, dest_dir, 'svg')
-    elif args.format == 'source':
-        sage_conversion(xml_source, args.xmlid, dest_dir, 'source')
+        data_dir = None
+
+    if args.component == 'asy':
+        if args.format == 'html':
+            asymptote_conversion(xml_source, args.xmlid, dest_dir, 'html')
+        elif args.format == 'pdf':
+            asymptote_conversion(xml_source, args.xmlid, dest_dir, 'pdf')
+        elif args.format == 'svg':
+            asymptote_conversion(xml_source, args.xmlid, dest_dir, 'svg')
+        elif args.format == 'eps':
+            asymptote_conversion(xml_source, args.xmlid, dest_dir, 'eps')
+        elif args.format == 'source':
+            asymptote_conversion(xml_source, args.xmlid, dest_dir, 'source')
+        else:
+            raise NotImplementedError('cannot make Asymptote diagrams in "{}" format'.format(args.format))
+    elif args.component == 'sageplot':
+        if args.format == 'pdf':
+            sage_conversion(xml_source, args.xmlid, dest_dir, 'pdf')
+        elif args.format == 'svg':
+            sage_conversion(xml_source, args.xmlid, dest_dir, 'svg')
+        elif args.format == 'source':
+            sage_conversion(xml_source, args.xmlid, dest_dir, 'source')
+        else:
+            raise NotImplementedError('cannot make Sage graphics in "{}" format'.format(args.format))
+    elif args.component == 'latex-image':
+        if args.format == 'pdf':
+            latex_image_conversion(xml_source, args.stringparams, args.xmlid, data_dir, dest_dir, 'pdf')
+        elif args.format == 'svg':
+            latex_image_conversion(xml_source, args.stringparams, args.xmlid, data_dir, dest_dir, 'svg')
+        elif args.format == 'source':
+            latex_image_conversion(xml_source, args.stringparams, args.xmlid, data_dir, dest_dir, 'source')
+        elif args.format == 'png':
+            latex_image_conversion(xml_source, args.stringparams, args.xmlid, data_dir, dest_dir, 'png')
+        elif args.format == 'eps':
+            latex_image_conversion(xml_source, args.stringparams, args.xmlid, data_dir, dest_dir, 'eps')
+        elif args.format == 'all':
+            latex_image_conversion(xml_source, args.stringparams, args.xmlid, data_dir, dest_dir, 'all')
+        else:
+            raise NotImplementedError('cannot make LaTeX pictures in "{}" format'.format(args.format))
+    elif args.component == 'webwork-tex':
+        wtdep = ('the "webwork-tex" component has been replaced by the "webwork" component, '
+                 'and behaves very differently')
+        raise NotImplementedError(wtdep)
+    elif args.component == 'webwork':
+        webwork_to_xml(xml_source, args.abort, args.server, dest_dir)
+    elif args.component == 'youtube':
+        youtube_thumbnail(xml_source, args.xmlid, dest_dir)
+    elif args.component == 'preview':
+        preview_images(xml_source, args.xmlid, dest_dir)
+    elif args.component == 'mom':
+        mom_static_problems(xml_source, args.xmlid, dest_dir)
+    elif args.component == 'all':
+        if args.format == 'html':
+            raise NotImplementedError("conversion to HTML version not integrated yet, use command line")
+        elif args.format == 'latex':
+            raise NotImplementedError("conversion to LaTeX version not integrated yet, use command line")
+        # 2020-05-19 MathBookXMLtoSWS class removed
+        elif args.format == 'sagenb':
+            raise NotImplementedError("conversion to Sage notebook format removed (2020-05-18)")
+        else:
+            raise NotImplementedError('cannot make entire document in "{}" format'.format(args.format))
+    # 2020-05-19 tikz_conversion() function removed
+    elif args.component == 'tikz':
+        raise NotImplementedError('conversion of TikZ pictures has been subsumed into the "latex-image" component (2020-05-19)')
     else:
-        raise NotImplementedError('cannot make Sage graphics in "{}" format'.format(args.format))
-elif args.component == 'latex-image':
-    if args.format == 'pdf':
-        latex_image_conversion(xml_source, args.stringparams, args.xmlid, data_dir, dest_dir, 'pdf')
-    elif args.format == 'svg':
-        latex_image_conversion(xml_source, args.stringparams, args.xmlid, data_dir, dest_dir, 'svg')
-    elif args.format == 'source':
-        latex_image_conversion(xml_source, args.stringparams, args.xmlid, data_dir, dest_dir, 'source')
-    elif args.format == 'png':
-        latex_image_conversion(xml_source, args.stringparams, args.xmlid, data_dir, dest_dir, 'png')
-    elif args.format == 'eps':
-        latex_image_conversion(xml_source, args.stringparams, args.xmlid, data_dir, dest_dir, 'eps')
-    elif args.format == 'all':
-        latex_image_conversion(xml_source, args.stringparams, args.xmlid, data_dir, dest_dir, 'all')
-    else:
-        raise NotImplementedError('cannot make LaTeX pictures in "{}" format'.format(args.format))
-elif args.component == 'webwork-tex':
-    wtdep = ('the "webwork-tex" component has been replaced by the "webwork" component, '
-             'and behaves very differently')
-    raise NotImplementedError(wtdep)
-elif args.component == 'webwork':
-    webwork_to_xml(mbx_xsl_dir, xml_source, args.server, dest_dir)
-elif args.component == 'youtube':
-    youtube_thumbnail(xml_source, args.xmlid, dest_dir)
-elif args.component == 'preview':
-    preview_images(xml_source, args.xmlid, dest_dir)
-elif args.component == 'mom':
-    mom_static_problems(xml_source, args.xmlid, dest_dir)
-elif args.component == 'all':
-    if args.format == 'html':
-        raise NotImplementedError("conversion to HTML version not integrated yet, use command line")
-    elif args.format == 'latex':
-        raise NotImplementedError("conversion to LaTeX version not integrated yet, use command line")
-    # 2020-05-19 MathBookXMLtoSWS class removed
-    elif args.format == 'sagenb':
-        raise NotImplementedError("conversion to Sage notebook format removed (2020-05-18)")
-    else:
-        raise NotImplementedError('cannot make entire document in "{}" format'.format(args.format))
-# 2020-05-19 tikz_conversion() function removed
-elif args.component == 'tikz':
-    raise NotImplementedError('conversion of TikZ pictures has been subsumed into the "latex-image" component (2020-05-19)')
-else:
-    raise ValueError('the "{}" component is not a conversion option'.format(args.component))
+        raise ValueError('the "{}" component is not a conversion option'.format(args.component))
+
+# allows file to be a module AND an executable
+if __name__ == "__main__":
+    main()
