@@ -702,6 +702,7 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
         if origin[problem] == 'ptx':
             pg_tag = '    <pg>\n{}\n    </pg>\n\n'
             if badness:
+                pg_shell = "DOCUMENT();\nloadMacros('PGstandard.pl','PGML.pl','PGcourse.pl');\nTEXT(beginproblem());\nBEGIN_PGML\n{}END_PGML\nENDDOCUMENT();"
                 formatted_pg = pg_shell.format(badness_msg.format(problem_identifier, seed[problem], badness_tip))
             else:
                 formatted_pg = pg[problem]
