@@ -2,20 +2,20 @@
 # ********************************************************************
 # Copyright 2010-2016 Robert A. Beezer
 #
-# This file is part of MathBook XML.
+# This file is part of PreTeXt.
 #
-# MathBook XML is free software: you can redistribute it and/or modify
+# PreTeXt is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 2 or version 3 of the
 # License (at your option).
 #
-# MathBook XML is distributed in the hope that it will be useful,
+# PreTeXt is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
+# along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 # *********************************************************************
 
 # 2020-05-20: this script expects Python 3.4 or newer
@@ -37,8 +37,8 @@ def asymptote_conversion(xml_source, xmlid_root, dest_dir, outformat):
     _debug("xslt executable: {}".format(xslt_executable))
     asy_executable = get_executable('asy')
     _debug("asy executable: {}".format(asy_executable))
-    mbx_xsl_dir = get_mbx_xsl_path()
-    extraction_xslt = os.path.join(mbx_xsl_dir, 'extract-asymptote.xsl')
+    ptx_xsl_dir = get_ptx_xsl_path()
+    extraction_xslt = os.path.join(ptx_xsl_dir, 'extract-asymptote.xsl')
     extract_cmd = [xslt_executable,
         '--xinclude',
         '--stringparam', 'subtree', xmlid_root,
@@ -138,8 +138,8 @@ def sage_conversion(xml_source, xmlid_root, dest_dir, outformat):
     _debug("xslt executable: {}".format(xslt_executable))
     sage_executable = get_executable('sage')
     _debug("sage executable: {}".format(sage_executable))
-    mbx_xsl_dir = get_mbx_xsl_path()
-    extraction_xslt = os.path.join(mbx_xsl_dir, 'extract-sageplot.xsl')
+    ptx_xsl_dir = get_ptx_xsl_path()
+    extraction_xslt = os.path.join(ptx_xsl_dir, 'extract-sageplot.xsl')
     extract_cmd = [xslt_executable,
         '--stringparam', 'subtree', xmlid_root,
         '--xinclude',
@@ -194,8 +194,8 @@ def latex_image_conversion(xml_source, stringparams, xmlid_root, data_dir, dest_
         copy_data_directory(xml_source, data_dir, tmp_dir)
     # http://stackoverflow.com/questions/11269575/how-to-hide-output-of-subprocess-in-python-2-7
     devnull = open(os.devnull, 'w')
-    mbx_xsl_dir = get_mbx_xsl_path()
-    extraction_xslt = os.path.join(mbx_xsl_dir, 'extract-latex-image.xsl')
+    ptx_xsl_dir = get_ptx_xsl_path()
+    extraction_xslt = os.path.join(ptx_xsl_dir, 'extract-latex-image.xsl')
     convert_cmd = [xslt_executable] + params + [
         '--xinclude',
         '--stringparam', 'subtree', xmlid_root,
@@ -291,7 +291,7 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
     # origin, seed, source, pg
     xslt_executable = get_executable('xslt')
     _debug("xslt executable command: {}".format(xslt_executable))
-    ptx_xsl_dir = get_mbx_xsl_path()
+    ptx_xsl_dir = get_ptx_xsl_path()
     xsl_transform = 'extract-pg.xsl'
     extraction_xslt = os.path.join(ptx_xsl_dir, xsl_transform)
     cmd = [xslt_executable, '--xinclude', extraction_xslt, xml_source]
@@ -757,8 +757,8 @@ def youtube_thumbnail(xml_source, xmlid_root, dest_dir):
     _verbose('downloading YouTube thumbnails from {} for placement in {}'.format(xml_source, dest_dir))
     xslt_executable = get_executable('xslt')
     _debug("xslt executable: {}".format(xslt_executable))
-    mbx_xsl_dir = get_mbx_xsl_path()
-    extraction_xslt = os.path.join(mbx_xsl_dir, 'extract-youtube.xsl')
+    ptx_xsl_dir = get_ptx_xsl_path()
+    extraction_xslt = os.path.join(ptx_xsl_dir, 'extract-youtube.xsl')
     # No temporary directory involved,
     # results land directly in dest_dir
     cmd = [xslt_executable,
@@ -812,8 +812,8 @@ def preview_images(xml_source, xmlid_root, dest_dir):
 
     xslt_executable = get_executable('xslt')
     _debug("xslt executable: {}".format(xslt_executable))
-    mbx_xsl_dir = get_mbx_xsl_path()
-    extraction_xslt = os.path.join(mbx_xsl_dir, 'extract-interactive.xsl')
+    ptx_xsl_dir = get_ptx_xsl_path()
+    extraction_xslt = os.path.join(ptx_xsl_dir, 'extract-interactive.xsl')
     # No temporary directory involved,
     # results land directly in dest_dir
     cmd = [xslt_executable,
@@ -886,8 +886,8 @@ def mom_static_problems(xml_source, xmlid_root, dest_dir):
     _verbose('downloading MyOpenMath static problems from {} for placement in {}'.format(xml_source, dest_dir))
     xslt_executable = get_executable('xslt')
     _debug("xslt executable: {}".format(xslt_executable))
-    mbx_xsl_dir = get_mbx_xsl_path()
-    extraction_xslt = os.path.join(mbx_xsl_dir, 'extract-mom.xsl')
+    ptx_xsl_dir = get_ptx_xsl_path()
+    extraction_xslt = os.path.join(ptx_xsl_dir, 'extract-mom.xsl')
     # No temporary directory involved,
     # results land directly in dest_dir
     cmd = [xslt_executable,
@@ -933,13 +933,13 @@ def _verbose(msg):
     """Write a message to the console on program progress"""
     # None if not set at all
     if _verbosity and _verbosity >= 1:
-        print('MBX: {}'.format(msg))
+        print('PTX: {}'.format(msg))
 
 def _debug(msg):
     """Write a message to the console with some raw information"""
     # None if not set at all
     if _verbosity and _verbosity >= 2:
-        print('MBX-DEBUG: {}'.format(msg))
+        print('PTX:DEBUG: {}'.format(msg))
 
 def python_version():
     """Return 'major.minor' version number as string/info"""
@@ -953,35 +953,35 @@ def check_python_version():
 
     # This test could be more precise,
     # but only handling 2to3 switch when introduced
-    msg = ''.join(["mbx script expects Python 3.4, not Python 2 or older\n",
+    msg = ''.join(["script/module expects Python 3.4, not Python 2 or older\n",
                    "You have Python {}\n",
                 "** Try using 'python3 mbx ...' on the command-line **"])
     if sys.version_info[0] <= 2:
         raise(OSError(msg.format(python_version())))
 
-def get_mbx_path():
-    """Returns path of root of MBX distribution"""
+def get_ptx_path():
+    """Returns path of root of PreTeXt distribution"""
     # necessary to locate configuration files, XSL stylesheets
     # since authors can drop distribution *anywhere* in their system
     import sys # argv
     import os.path # abspath(), split()
 
-    _verbose("discovering MBX root directory from mbx script location")
+    _verbose("discovering PreTeXt root directory from script location")
     # full path to script itself
     # TODO: maybe needs "__file__" for use as module
-    mbx_path = os.path.abspath(sys.argv[0])
+    ptx_path = os.path.abspath(sys.argv[0])
     # split "mbx" executable off path
-    script_dir, _ = os.path.split(mbx_path)
+    script_dir, _ = os.path.split(ptx_path)
     # split "script" path off executable
     distribution_dir, _ = os.path.split(script_dir)
-    _verbose("MBX distribution root directory: {}".format(distribution_dir))
+    _verbose("PreText distribution root directory: {}".format(distribution_dir))
     return distribution_dir
 
-def get_mbx_xsl_path():
-    """Returns path of MBX XSL directory"""
+def get_ptx_xsl_path():
+    """Returns path of PreTeXt XSL directory"""
     import os.path
 
-    return os.path.join(get_mbx_path(), 'xsl')
+    return os.path.join(get_ptx_path(), 'xsl')
 
 def get_source_path(source_file):
     """Returns path of source XML file"""
@@ -1013,7 +1013,7 @@ def get_executable(exec_name):
     try:
         result_code = subprocess.call(['which', config_name], stdout=devnull, stderr=subprocess.STDOUT)
     except OSError:
-        print('MBX:WARNING: executable existence-checking was not performed (e.g. on Windows)')
+        print('PTX:WARNING: executable existence-checking was not performed (e.g. on Windows)')
         result_code = 0  # perhaps a lie on Windows
     if result_code != 0:
         error_message = '\n'.join([
@@ -1026,7 +1026,7 @@ def get_executable(exec_name):
 def get_cli_arguments():
     """Return the CLI arguments in parser object"""
     import argparse
-    parser = argparse.ArgumentParser(description='MathBook XML utility script', formatter_class=argparse.RawTextHelpFormatter)
+    parser = argparse.ArgumentParser(description='PreTeXt utility script', formatter_class=argparse.RawTextHelpFormatter)
 
     verbose_help = '\n'.join(["verbosity of information on progress of the program",
                               "  -v  is actions being performed",
@@ -1078,7 +1078,7 @@ def get_cli_arguments():
     parser.add_argument('-d', '--directory', help='directory for output', action="store", dest='dir')
     parser.add_argument('-a', '--abort', help='abort script upon recoverable errors', action="store_true", dest='abort')
 
-    parser.add_argument('xml_file', help='MathBook XML source file with content', action="store")
+    parser.add_argument('xml_file', help='PreTeXt source file with content', action="store")
 
     return parser.parse_args()
 
@@ -1131,10 +1131,10 @@ def get_config_info():
     import os.path # join()
     import configparser # ConfigParser()
 
-    mbx_dir = get_mbx_path()
+    ptx_dir = get_ptx_path()
     config_filename = 'mbx.cfg'
-    default_config_file = os.path.join(mbx_dir, 'script', config_filename)
-    user_config_file = os.path.join(mbx_dir, 'user', config_filename)
+    default_config_file = os.path.join(ptx_dir, 'script', config_filename)
+    user_config_file = os.path.join(ptx_dir, 'user', config_filename)
     config_file_list = [default_config_file, user_config_file]
     # ConfigParser module was renamed to configparser in Python 3
     # and object was renamed from SafeConfigParser() to ConfigParser()
@@ -1202,9 +1202,9 @@ _debug("Python version: {} (expecting 3.4 or newer)".format(python_version()))
 check_python_version()
 
 # Check discovering directory locations as
-# realized by MathBook XML installation
+# realized by PreTeXt installation
 # Necessary for locating configuration files (next)
-_debug("discovered distribution and xsl directories: {}, {}".format(get_mbx_path(), get_mbx_xsl_path()))
+_debug("discovered distribution and xsl directories: {}, {}".format(get_ptx_path(), get_ptx_xsl_path()))
 
 # Report 'executables' in configuration file
 # Module functions depend on this extensively via get_executable()
