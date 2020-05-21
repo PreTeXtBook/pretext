@@ -1,6 +1,5 @@
-#!/usr/bin/env python3
 # ********************************************************************
-# Copyright 2010-2016 Robert A. Beezer
+# Copyright 2010-2020 Robert A. Beezer
 #
 # This file is part of PreTeXt.
 #
@@ -18,7 +17,7 @@
 # along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 # *********************************************************************
 
-# 2020-05-20: this script expects Python 3.4 or newer
+# 2020-05-20: this module expects Python 3.4 or newer
 
 ##############################################
 #
@@ -929,16 +928,25 @@ def mom_static_problems(xml_source, xmlid_root, dest_dir):
 #
 ###################
 
+def set_verbosity(v):
+    """Set how chatty routines are at console: 0, 1, or 2"""
+    # 0 - nothing
+    # 1 - _verbose() only
+    # 2 - _verbose() and _debug()
+    global _verbosity
+
+    if ((v != 0) and (v !=1 ) and (v!= 2)):
+        raise ValueError('verbosity level is 0, 1, or 2, not {}'.format(v))
+    _verbosity = v
+
 def _verbose(msg):
     """Write a message to the console on program progress"""
-    # None if not set at all
-    if _verbosity and _verbosity >= 1:
+    if _verbosity >= 1:
         print('PTX: {}'.format(msg))
 
 def _debug(msg):
     """Write a message to the console with some raw information"""
-    # None if not set at all
-    if _verbosity and _verbosity >= 2:
+    if _verbosity >= 2:
         print('PTX:DEBUG: {}'.format(msg))
 
 def python_version():
@@ -1022,84 +1030,6 @@ def get_executable(exec_name):
         raise OSError(error_message.format(exec_name, config_name))
     _debug("{} executable: {}".format(exec_name, config_name))
     return config_name
-
-def get_cli_arguments():
-    """Return the CLI arguments in parser object"""
-    import argparse
-    parser = argparse.ArgumentParser(description='PreTeXt utility script', formatter_class=argparse.RawTextHelpFormatter)
-
-    verbose_help = '\n'.join(["verbosity of information on progress of the program",
-                              "  -v  is actions being performed",
-                              "  -vv is some additional raw debugging information"])
-    parser.add_argument('-v', '--verbose', help=verbose_help, action="count")
-
-    component_info = [
-        ('asy', 'Asymptote diagrams'),
-        ('sageplot', 'Sage graphics'),
-        ('latex-image', 'LaTeX pictures'),
-        ('webwork', 'WeBWorK problems in authored, PG, url, and static representations'),
-        ('youtube', 'Thumbnails for YouTube videos (JPEG only)'),
-        ('preview', 'Static preview images for interactives'),
-        ('mom', 'MyOpenMath problem files, static versions'),
-        ('all', 'Complete document (only SageNB format)'),
-        ('tikz', 'tikz pictures (removed, use latex-image)'),
-    ]
-    component_help = 'Possible components are:\n' + '\n'.join(['  {} - {}'.format(info[0], info[1]) for info in component_info])
-    parser.add_argument('-c', '--component', help=component_help, action="store", dest="component")
-
-    format_info = [
-        ('svg', 'Scalable Vector Graphicsfile(s)'),
-        ('pdf', 'Portable Document Format file(s)'),
-        ('png', 'Portable Network Graphics file(s)'),
-        ('eps', 'Encapsulated Post Script file(s)'),
-        ('source', 'Standalone source files'),
-        ('latex', 'LaTeX source file'),
-        ('html', 'HyperText Markup Language (web pages)'),
-        ('sagenb', 'Sage worksheet conversion removed'),
-        ('all', 'All available output formats'),
-    ]
-    format_help = 'Output formats are:\n' + '\n'.join(['  {} - {}'.format(info[0], info[1]) for info in format_info])
-    parser.add_argument('-f', '--format', help=format_help, action="store", dest='format')
-
-    # "nargs" allows multiple options following the flag
-    # separate by spaces, can't use "-stringparam"
-    # stringparams is a list of strings on return
-    parser.add_argument('-p', '--parameters', nargs='+', help='stringparam options to pass to XSLT extraction stylesheet (option/value pairs)',
-                         action="store", dest='stringparams')
-
-    # default to an empty string, which signals root to XSL stylesheet
-    parser.add_argument('-r', '--restrict', help='restrict to subtree rooted at element with specified xml:id',
-                         action="store", dest='xmlid', default='')
-
-    parser.add_argument('-s', '--server', help='base URL for server (webwork only)', action="store", dest='server')
-
-    parser.add_argument('-i', '--include', help='external data directory, relative to source, latex-image only', action="store", dest='data_dir')
-    parser.add_argument('-o', '--output', help='file for output', action="store", dest='out')
-    parser.add_argument('-d', '--directory', help='directory for output', action="store", dest='dir')
-    parser.add_argument('-a', '--abort', help='abort script upon recoverable errors', action="store_true", dest='abort')
-
-    parser.add_argument('xml_file', help='PreTeXt source file with content', action="store")
-
-    return parser.parse_args()
-
-
-def verify_input_directory(dir):
-    """Verify directory exists, or raise error.  Return absolute path"""
-    import os.path # isdir(), abspath()
-
-    _verbose('verifying and expanding input directory: {}'.format(dir))
-    if not(os.path.isdir(dir)):
-        raise ValueError('directory {} does not exist'.format(dir))
-    return os.path.abspath(dir)
-
-def verify_input_file(f):
-    """Verify file exists, or raise error.  Return absolute path"""
-    import os.path # isfile(), abspath()
-
-    _verbose('verifying and expanding input file: {}'.format(f))
-    if not(os.path.isfile(f)):
-        raise ValueError('fike {} does not exist'.format(f))
-    return os.path.abspath(f)
 
 def sanitize_url(url):
     """Verify a server address, append a slash"""
@@ -1189,10 +1119,9 @@ def get_temporary_directory():
 #
 #  _verbosity - level of detail in console output
 
-# verbose parameter from command-line
-# global to module since pervasive
-# only accessed in _verbose() and _debug()
-_verbosity = get_cli_arguments().verbose
+# verbosity parameter defaults to 0
+# employing application can use set_verbosity()
+_verbosity = 0
 
 # Report Python version in debugging output
 # Needs _verbosity to control _debug()
@@ -1209,97 +1138,3 @@ _debug("discovered distribution and xsl directories: {}, {}".format(get_ptx_path
 # Report 'executables' in configuration file
 # Module functions depend on this extensively via get_executable()
 _debug('executables in configuration file: {}'.format(dict(get_config_info()['executables'])))
-
-######
-#
-# Main
-#
-######
-
-def main():
-    """React to command-line switches in order to perform basic tasks"""
-
-    # grab command line arguments and report
-    args = get_cli_arguments()
-    _debug("CLI args {}".format(vars(args)))
-
-    # directory/file locations provided on command-line by user
-    dest_dir = verify_input_directory(args.dir)
-    _debug("destination dir: {}".format(dest_dir))
-    xml_source = verify_input_file(args.xml_file)
-    _debug("source file: {}".format(xml_source))
-    # data directory is optional, so allow for None here
-    if args.data_dir:
-        data_dir = verify_input_directory(args.data_dir)
-        _debug("data dir: {}".format(data_dir))
-    else:
-        data_dir = None
-
-    if args.component == 'asy':
-        if args.format == 'html':
-            asymptote_conversion(xml_source, args.xmlid, dest_dir, 'html')
-        elif args.format == 'pdf':
-            asymptote_conversion(xml_source, args.xmlid, dest_dir, 'pdf')
-        elif args.format == 'svg':
-            asymptote_conversion(xml_source, args.xmlid, dest_dir, 'svg')
-        elif args.format == 'eps':
-            asymptote_conversion(xml_source, args.xmlid, dest_dir, 'eps')
-        elif args.format == 'source':
-            asymptote_conversion(xml_source, args.xmlid, dest_dir, 'source')
-        else:
-            raise NotImplementedError('cannot make Asymptote diagrams in "{}" format'.format(args.format))
-    elif args.component == 'sageplot':
-        if args.format == 'pdf':
-            sage_conversion(xml_source, args.xmlid, dest_dir, 'pdf')
-        elif args.format == 'svg':
-            sage_conversion(xml_source, args.xmlid, dest_dir, 'svg')
-        elif args.format == 'source':
-            sage_conversion(xml_source, args.xmlid, dest_dir, 'source')
-        else:
-            raise NotImplementedError('cannot make Sage graphics in "{}" format'.format(args.format))
-    elif args.component == 'latex-image':
-        if args.format == 'pdf':
-            latex_image_conversion(xml_source, args.stringparams, args.xmlid, data_dir, dest_dir, 'pdf')
-        elif args.format == 'svg':
-            latex_image_conversion(xml_source, args.stringparams, args.xmlid, data_dir, dest_dir, 'svg')
-        elif args.format == 'source':
-            latex_image_conversion(xml_source, args.stringparams, args.xmlid, data_dir, dest_dir, 'source')
-        elif args.format == 'png':
-            latex_image_conversion(xml_source, args.stringparams, args.xmlid, data_dir, dest_dir, 'png')
-        elif args.format == 'eps':
-            latex_image_conversion(xml_source, args.stringparams, args.xmlid, data_dir, dest_dir, 'eps')
-        elif args.format == 'all':
-            latex_image_conversion(xml_source, args.stringparams, args.xmlid, data_dir, dest_dir, 'all')
-        else:
-            raise NotImplementedError('cannot make LaTeX pictures in "{}" format'.format(args.format))
-    elif args.component == 'webwork-tex':
-        wtdep = ('the "webwork-tex" component has been replaced by the "webwork" component, '
-                 'and behaves very differently')
-        raise NotImplementedError(wtdep)
-    elif args.component == 'webwork':
-        webwork_to_xml(xml_source, args.abort, args.server, dest_dir)
-    elif args.component == 'youtube':
-        youtube_thumbnail(xml_source, args.xmlid, dest_dir)
-    elif args.component == 'preview':
-        preview_images(xml_source, args.xmlid, dest_dir)
-    elif args.component == 'mom':
-        mom_static_problems(xml_source, args.xmlid, dest_dir)
-    elif args.component == 'all':
-        if args.format == 'html':
-            raise NotImplementedError("conversion to HTML version not integrated yet, use command line")
-        elif args.format == 'latex':
-            raise NotImplementedError("conversion to LaTeX version not integrated yet, use command line")
-        # 2020-05-19 MathBookXMLtoSWS class removed
-        elif args.format == 'sagenb':
-            raise NotImplementedError("conversion to Sage notebook format removed (2020-05-18)")
-        else:
-            raise NotImplementedError('cannot make entire document in "{}" format'.format(args.format))
-    # 2020-05-19 tikz_conversion() function removed
-    elif args.component == 'tikz':
-        raise NotImplementedError('conversion of TikZ pictures has been subsumed into the "latex-image" component (2020-05-19)')
-    else:
-        raise ValueError('the "{}" component is not a conversion option'.format(args.component))
-
-# allows file to be a module AND an executable
-if __name__ == "__main__":
-    main()
