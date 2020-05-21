@@ -668,6 +668,7 @@
                 MetaDataCaption,
                 (
                     Image |
+                    Tabular |
                     SideBySide |
                     SideBySideGroup |
                     Video |
