@@ -810,14 +810,6 @@ def preview_images(xml_source, xmlid_root, dest_dir):
     # see below, pageres-cli writes into current working directory
     needs_moving = not( os.getcwd() == os.path.normpath(dest_dir) )
 
-    # url standalone page, id on iframe, filename to store
-    previews = (
-        ("http://mathbook.pugetsound.edu/examples/sample-article/html/interactive-d3-graph-layout.html",
-                    "interactive-d3-graph-layout", "interactive-d3-graph-layout-preview.png"),
-        ("http://mathbook.pugetsound.edu/examples/sample-article/html/interactive-d3-collision.html",
-                    "interactive-d3-collision", "interactive-d3-collision-preview.png"),
-        )
-
     xslt_executable = get_executable('xslt')
     _debug("xslt executable: {}".format(xslt_executable))
     mbx_xsl_dir = get_mbx_xsl_path()
