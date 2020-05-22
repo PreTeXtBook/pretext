@@ -21,13 +21,7 @@
 # 2020-05-21: this is a quick-and-dirty attempt to provide 
 #             backward-compatibility for the old  script/mbx  script
 
-import sys, subprocess, os.path
-
-# locate module at non-standard location so path discovery is easy
-# https://stackoverflow.com/questions/4383571/
-# importing-files-from-different-folder
-sys.path.append('../pretext')
-import pretext
+import os.path, sys, subprocess
 
 msg = """*********************************************************************
 *********************************************************************
@@ -51,17 +45,23 @@ Thank-you.
 *********************************************************************
 *********************************************************************"""
 
-print(msg)
-input()
+print(msg)  # to inform
+input()  # to annoy/cripple
 
+# Orient onesself, form replacement script filename
+mbx_file = os.path.abspath(sys.argv[0])
+script_dir, _ = os.path.split(mbx_file)
+distribution_dir, _ = os.path.split(script_dir)
+new_exec = os.path.join(distribution_dir, 'pretext', 'pretext')
+
+# repeat command line, but sub in new script
 cmd = sys.argv
-new_exec = os.path.join(pretext.get_ptx_path(), 'pretext', 'pretext')
 cmd[0] = new_exec
 
 print("ATTEMPTING new pretext/pretext script with command line:")
 print(' '.join(cmd))
 print("2020-05-21:  Please start using the new  pretext/pretext  script!")
 print("Press any key.  Again.")
-input()
+input()  # to annoy/cripple
 
-subprocess.call(cmd)
+subprocess.call(cmd)  # to please
