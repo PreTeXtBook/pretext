@@ -1,0 +1,67 @@
+#!/usr/bin/env python3
+# ********************************************************************
+# Copyright 2010-2020 Robert A. Beezer
+#
+# This file is part of PreTeXt.
+#
+# PreTeXt is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 2 or version 3 of the
+# License (at your option).
+#
+# PreTeXt is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
+# *********************************************************************
+
+# 2020-05-21: this is a quick-and-dirty attempt to provide 
+#             backward-compatibility for the old  script/mbx  script
+
+import sys, subprocess, os.path
+
+# locate module at non-standard location so path discovery is easy
+# https://stackoverflow.com/questions/4383571/
+# importing-files-from-different-folder
+sys.path.append('../pretext')
+import pretext
+
+msg = """*********************************************************************
+*********************************************************************
+The  script/mbx  script has been retired and has
+been replaced by the  pretext/pretext  script.  You may need
+to give this new script permission to execute.  Furthermore,
+the stock configuration file, script/mbx.cfg, has moved to
+pretext/pretext.cfg, requiring no changes on your part.
+But if you have a custom configuration file, user/mbx.cfg,
+then you will need to rename it to user/pretext.cfg.
+
+PRESS A KEY TO ACKNOWLEDGE THIS MESSAGE, and then we will
+attempt to run the new script for you with either a new custom
+configuration file, or if unavailable, your old one.
+
+Please do not rely on this fallback behavior, and please make the
+necessary changes soon.  We apologize for the inconvenience.
+Thank-you.
+
+2020-05-21
+*********************************************************************
+*********************************************************************"""
+
+print(msg)
+input()
+
+cmd = sys.argv
+new_exec = os.path.join(pretext.get_ptx_path(), 'pretext', 'pretext')
+cmd[0] = new_exec
+
+print("ATTEMPTING new pretext/pretext script with command line:")
+print(' '.join(cmd))
+print("2020-05-21:  Please start using the new  pretext/pretext  script!")
+print("Press any key.  Again.")
+input()
+
+subprocess.call(cmd)
