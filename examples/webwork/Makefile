@@ -98,12 +98,12 @@ SERVER = https://webwork-ptx.aimath.org
 sample-chapter-extraction:
 	install -d $(WWOUT)
 	-rm $(WWOUT)/webwork-extraction.xml
-	$(MB)/script/mbx -v -c webwork -d $(WWOUT) -s $(SERVER) $(SMPCHP)
+	$(MB)/pretext/pretext -v -c webwork -d $(WWOUT) -s $(SERVER) $(SMPCHP)
 
 mini-extraction:
 	install -d $(WWOUT)
 	-rm $(WWOUT)/webwork-extraction.xml
-	$(MB)/script/mbx -v -c webwork -d $(WWOUT) -s $(SERVER) $(MINI)
+	$(MB)/pretext/pretext -v -c webwork -d $(WWOUT) -s $(SERVER) $(MINI)
 
 #  Make a new PTX file from the source tree, with webwork elements replaced
 #  by the webwork-reps from webwork-extraction.xml. (So run the above at

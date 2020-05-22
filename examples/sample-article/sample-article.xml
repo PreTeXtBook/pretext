@@ -2427,7 +2427,7 @@ the xsltproc executable.
                 <idx><latex/> image</idx>
                 <idx><h>image</h><h><latex/> image</h></idx>
 
-                <p>There are several graphics engine packages that a <latex/> document can employ. Code from these packages renders diagrams automatically as part of normal processing of <latex/> files.  For HTML output the <c>mbx</c> script produces SVG versions of the pictures.  The script can also produce standalone <tex/> source files, PDFs, PNGs, and EPSs. The packages should be loaded in <c>docinfo/latex-image-preamble</c>, which is also where global package settings should be made. If any ampersands occur in your <latex/> code you should use the <c>\amp</c> macro pre-defined by <pretext/>. These first examples are from the <url href="http://www.texample.net/tikz/examples/">TeXample.net</url> site.  Note that any <latex /> macros used in the rest of your document may be employed in the <latex/>-standalone or Asymptote diagrams (with this feature coming to Sage graphics next?).</p>
+                <p>There are several graphics engine packages that a <latex/> document can employ. Code from these packages renders diagrams automatically as part of normal processing of <latex/> files.  For HTML output the <c>pretext</c> script produces SVG versions of the pictures.  The script can also produce standalone <tex/> source files, PDFs, PNGs, and EPSs. The packages should be loaded in <c>docinfo/latex-image-preamble</c>, which is also where global package settings should be made. If any ampersands occur in your <latex/> code you should use the <c>\amp</c> macro pre-defined by <pretext/>. These first examples are from the <url href="http://www.texample.net/tikz/examples/">TeXample.net</url> site.  Note that any <latex /> macros used in the rest of your document may be employed in the <latex/>-standalone or Asymptote diagrams (with this feature coming to Sage graphics next?).</p>
 
                 <!-- http://www.texample.net/media/tikz/examples/TEX/noise-shaper.tex -->
                 <figure xml:id="figure-tikz-electronics">
@@ -2651,7 +2651,7 @@ the xsltproc executable.
                     </image>
                 </figure>
 
-                <p>A plot might use a graphics language to draw the axes and grid, but the data might be from an experiment and live in an external file that you do not wish to place in your source.  Place such a file in a subdirectory directly below the directory where your master source file resides.  In the example below <c>data</c> is the directory and <c>hodgkin-huxley-data.dat</c> is the file with the data points.  You <em>must</em> place the file in a subdirectory (it cannot reside next to your source file), but that directory may have subdirectories if you have many such files and want to organize them that way.  Then the <c>--include</c> command-line argument to the <c>mbx</c> script will manage the external files properly as it creates individual image files.</p>
+                <p>A plot might use a graphics language to draw the axes and grid, but the data might be from an experiment and live in an external file that you do not wish to place in your source.  Place such a file in a subdirectory directly below the directory where your master source file resides.  In the example below <c>data</c> is the directory and <c>hodgkin-huxley-data.dat</c> is the file with the data points.  You <em>must</em> place the file in a subdirectory (it cannot reside next to your source file), but that directory may have subdirectories if you have many such files and want to organize them that way.  Then the <c>--include</c> command-line argument to the <c>pretext</c> script will manage the external files properly as it creates individual image files.</p>
 
                 <p>It is still your responsibility to be sure this directory of external data files follows your <latex /> output to whatever directory you use to convert to a PDF and is in the right location for the relative path given in the XML source.  The discussion above only applies to generating individual image files, such as you would need for the HTML output.</p>
 
@@ -2802,7 +2802,7 @@ the xsltproc executable.
             <subsection xml:id="graphics-asymptote-webgl">
                 <title>Asymptote, 3D via WebGL</title>
 
-                <p>Asymptote can create an <init>HTML</init> file that is an interactive version of a 3D shape.  At this writing (2020-05-18) support via the <c>mbx</c> script is evolving.  Plus, you will need newer versions of Asymptote and the <c>dvisvgm</c> utility to duplicate all of the results being displayed here in this testing document.  The other distinction is that the author needs to provide the aspect ratio of the figure, and this should be placed on the <tag>asymptote</tag> element (not on the <tag>image</tag> element).  <xref ref="figure-asymptote-workcone" text="type-global"/> is from the <url href="http://asymptote.sourceforge.net/gallery/3Dwebgl/">Asymptote Gallery</url><fn><c>http://asymptote.sourceforge.net/gallery/3Dwebgl/</c></fn>.</p>
+                <p>Asymptote can create an <init>HTML</init> file that is an interactive version of a 3D shape.  At this writing (2020-05-18) support via the <c>pretext</c> script is evolving.  Plus, you will need newer versions of Asymptote and the <c>dvisvgm</c> utility to duplicate all of the results being displayed here in this testing document.  The other distinction is that the author needs to provide the aspect ratio of the figure, and this should be placed on the <tag>asymptote</tag> element (not on the <tag>image</tag> element).  <xref ref="figure-asymptote-workcone" text="type-global"/> is from the <url href="http://asymptote.sourceforge.net/gallery/3Dwebgl/">Asymptote Gallery</url><fn><c>http://asymptote.sourceforge.net/gallery/3Dwebgl/</c></fn>.</p>
 
                 <figure xml:id="figure-asymptote-workcone">
                     <caption>Work Cone (Asymptote Interactive 3D Image)</caption>
@@ -2906,7 +2906,7 @@ the xsltproc executable.
                 <title>Sage Plots</title>
                 <idx><h>Sage plots</h></idx>
 
-                <p>Any of the numerous capabilities of Sage may be used to produce any graphics object, be it the simple graph of a single-variable function or some realization of a more complicated object.  All of the usual rules about formatting Sage code (esp. indentation) apply, along with one more caveat.  The last line of your Sage code <alert>must</alert> return a Sage <c>Graphics</c> object (or 3D plot).  The <c>mbx</c> script will isolate this last line, use it as the RHS of an assignment statement, and the Sage <c>.save()</c> method will be called to generate the image, which is either a Portable Document Format (PDF) file amenable to <latex /> output, or a Scalable Vector Graphics (SVG) file amenable to HTML output.  For visualizations of 3D plots, Sage will only produce Portable Network Graphics (PNG) files, which can be included in HTML pages or <latex /> output.</p>
+                <p>Any of the numerous capabilities of Sage may be used to produce any graphics object, be it the simple graph of a single-variable function or some realization of a more complicated object.  All of the usual rules about formatting Sage code (esp. indentation) apply, along with one more caveat.  The last line of your Sage code <alert>must</alert> return a Sage <c>Graphics</c> object (or 3D plot).  The <c>pretext</c> script will isolate this last line, use it as the RHS of an assignment statement, and the Sage <c>.save()</c> method will be called to generate the image, which is either a Portable Document Format (PDF) file amenable to <latex /> output, or a Scalable Vector Graphics (SVG) file amenable to HTML output.  For visualizations of 3D plots, Sage will only produce Portable Network Graphics (PNG) files, which can be included in HTML pages or <latex /> output.</p>
 
                 <figure xml:id="figure-sage-parabola">
                     <caption>A Sage standard parabola, on <m>[-2,4]</m></caption>
@@ -3030,7 +3030,7 @@ the xsltproc executable.
                     <image source="images/cross-square.png" width="30%" />
                 </figure>
 
-                <p>If you have a figure generated from source code (such as in TikZ) you can place the code into a file and <c>xinclude</c> it twice.  The <c>mbx</c> script will make two copies if you include the source twice, but with different names (generated from the different <c>@xml:id</c>).  Furthermore, with the <c>@parse</c> attribute on the <c>xinclude</c> element set to <c>text</c> you are absolved from escaping the dangerous XML characters (see <xref ref="subsection-xml-escape" text="type-global"/>) and definitely have no need for the often mis-understood <c>CDATA</c> mechanism.  We demonstrate this with the sample book, since it is all set up with the <c>xinclude</c> mechanism.  See the two plots of the 8-th roots of unity in the complex numbers section of the chapter on cyclic groups.</p>
+                <p>If you have a figure generated from source code (such as in TikZ) you can place the code into a file and <c>xinclude</c> it twice.  The <c>pretext</c> script will make two copies if you include the source twice, but with different names (generated from the different <c>@xml:id</c>).  Furthermore, with the <c>@parse</c> attribute on the <c>xinclude</c> element set to <c>text</c> you are absolved from escaping the dangerous XML characters (see <xref ref="subsection-xml-escape" text="type-global"/>) and definitely have no need for the often mis-understood <c>CDATA</c> mechanism.  We demonstrate this with the sample book, since it is all set up with the <c>xinclude</c> mechanism.  See the two plots of the 8-th roots of unity in the complex numbers section of the chapter on cyclic groups.</p>
             </subsection>
 
             <subsection>
@@ -3225,7 +3225,7 @@ the xsltproc executable.
             <subsection>
                 <title>Technical Details</title>
 
-                <p>The table below is a summary of how graphics and images are specified, constructed and manipulated.  Additional processing is indicated by reference to the Python script <c>mbx</c>.  Images need to be placed relative to the <latex /> file that includes them during compilation, and placed relative to the <init>HTML</init> files which reference/include them.  Author-provided image files may be placed in any subdirectory, and the <c>@source</c> attribute should include the complete relative path with the subdirectory.  Files generated by the <c>mbx</c> script will be specified in the output using the relative directory <c>images</c>, which can be changed using the <c>directory.images</c> stringparam.  There is no reason author-provided files cannot also be placed in this same directory (presuming no duplicate names). [This table is presently more readable in HTML, the PDF version will improve.]</p>
+                <p>The table below is a summary of how graphics and images are specified, constructed and manipulated.  Additional processing is indicated by reference to the Python script <c>pretext</c>.  Images need to be placed relative to the <latex /> file that includes them during compilation, and placed relative to the <init>HTML</init> files which reference/include them.  Author-provided image files may be placed in any subdirectory, and the <c>@source</c> attribute should include the complete relative path with the subdirectory.  Files generated by the <c>pretext</c> script will be specified in the output using the relative directory <c>images</c>, which can be changed using the <c>directory.images</c> stringparam.  There is no reason author-provided files cannot also be placed in this same directory (presuming no duplicate names). [This table is presently more readable in HTML, the PDF version will improve.]</p>
 
                 <sidebyside>
                     <tabular top="medium" bottom="minor">
@@ -3257,23 +3257,23 @@ the xsltproc executable.
                             <cell><c>image/latex-image-code</c></cell>
                             <cell><latex />-compatible source</cell>
                             <cell>directly included</cell>
-                            <cell><init>SVG</init> via <c>mbx</c></cell>
+                            <cell><init>SVG</init> via <c>pretext</c></cell>
                             <cell><eg /> tikz, pgfplots, xypic</cell>
                         </row>
 
                         <row>
                             <cell><c>image/sageplot</c></cell>
                             <cell>Sage code</cell>
-                            <cell><init>PDF</init> via <c>mbx</c></cell>
-                            <cell><init>SVG</init> via <c>mbx</c></cell>
+                            <cell><init>PDF</init> via <c>pretext</c></cell>
+                            <cell><init>SVG</init> via <c>pretext</c></cell>
                             <cell><init>PNG</init> for 3-D</cell>
                         </row>
 
                         <row>
                             <cell><c>image/asymptote</c></cell>
                             <cell>Asymptote code</cell>
-                            <cell><init>PDF</init> via <c>mbx</c></cell>
-                            <cell><init>SVG</init> via <c>mbx</c></cell>
+                            <cell><init>PDF</init> via <c>pretext</c></cell>
+                            <cell><init>SVG</init> via <c>pretext</c></cell>
                             <cell></cell>
                         </row>
 
@@ -3281,7 +3281,7 @@ the xsltproc executable.
                     </tabular>
                 </sidebyside>
 
-                <p>In the early stages of a writing project, it may be best not to track provisional image files built with <c>mbx</c> under version control, and just regenerate them periodically (see the <c>-r</c> option for <c>mbx</c>).  As a project matures, then it makes sense to put stable files under version control for collaborators and others.  In every case, managing graphics files (and other aspects of production), is much more pleasurable with a script (shell, Makefile, etc.)</p>
+                <p>In the early stages of a writing project, it may be best not to track provisional image files built with <c>pretext</c> under version control, and just regenerate them periodically (see the <c>-r</c> option for <c>pretext</c>).  As a project matures, then it makes sense to put stable files under version control for collaborators and others.  In every case, managing graphics files (and other aspects of production), is much more pleasurable with a script (shell, Makefile, etc.)</p>
             </subsection>
         </section>
 
@@ -5669,7 +5669,7 @@ the xsltproc executable.
                     </figure>
                 </sidebyside>
 
-                <p>Videos may be embedded, or popped-out to play in a new window or tab (at greater width), or a link will give the reader the option to choose either style of playback.  The automatic pop-out option requires a static thumbnail image.  (For YouTube, these images can be obtained automatically with the <c>mbx</c> script.)</p>
+                <p>Videos may be embedded, or popped-out to play in a new window or tab (at greater width), or a link will give the reader the option to choose either style of playback.  The automatic pop-out option requires a static thumbnail image.  (For YouTube, these images can be obtained automatically with the <c>pretext</c> script.)</p>
 
                 <figure>
                     <caption>YouTube Play Location Options (<c>play-at</c> attribute)</caption>

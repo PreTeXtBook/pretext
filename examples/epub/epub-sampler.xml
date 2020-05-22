@@ -92,7 +92,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <image source="images/complete-graph" width="70%"/>
             </figure>
 
-            <p>A Scalable Vector Graphics (SVG) image described by Sage commands, which is produced by the <c>mbx</c> script.</p>
+            <p>A Scalable Vector Graphics (SVG) image described by Sage commands, which is produced by the <c>pretext</c> script.</p>
 
             <figure xml:id="figure-sage-multigraph">
                 <caption>A Sage multigraph of a sentence</caption>

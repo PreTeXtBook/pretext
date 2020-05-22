@@ -416,7 +416,7 @@
 
                 <p>The <url href="http://webwork.maa.org/wiki/Open_Problem_Library">Open Problem Library</url> (OPL) is a repository of curated <webwork /> problems. At last count it had something like 30,000 problems, searchable by topic.</p>
 
-                <p>Most of the problems in this sample chapter have their source authored within the same document as the narrative.  However the problems in this section are from the OPL and elsewhere on the server that is hosting the <webwork /> caclulations.  For HTML output we can connect to the server and render the problem here in an interactive fashion.  For print/PDF we use the <c>mbx</c> script to connect to the server to produce <pretext /> code for the problem.  We can use the <c>exercise.text.*</c> switches to control which parts of the problem (statements, solutions, hints) are incorporated.</p>
+                <p>Most of the problems in this sample chapter have their source authored within the same document as the narrative.  However the problems in this section are from the OPL and elsewhere on the server that is hosting the <webwork /> caclulations.  For HTML output we can connect to the server and render the problem here in an interactive fashion.  For print/PDF we use the <c>pretext</c> script to connect to the server to produce <pretext /> code for the problem.  We can use the <c>exercise.text.*</c> switches to control which parts of the problem (statements, solutions, hints) are incorporated.</p>
 
                 <p>Problems do not have to be in the OPL to reside on a server; any problem that is accessbile from the <webwork /> course which is hosting the <webwork /> computation may be used this way.</p>
 
