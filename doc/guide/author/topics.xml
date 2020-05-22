@@ -1744,9 +1744,9 @@
                 <title>(*) Asymptote</title>
 
                 <p>Two temporary notes:<ol>
-                    <li>The <c>mbx</c> script will run the Asymptote executable with the <c>-norpc</c> switch.  So <q>rotatable</q> 3D images rendered by the proprietary viewer, Adobe Acrobat, are not created.</li>
+                    <li>The <c>pretext</c> script will run the Asymptote executable with the <c>-norpc</c> switch.  So <q>rotatable</q> 3D images rendered by the proprietary viewer, Adobe Acrobat, are not created.</li>
 
-                    <li>The <c>mbx</c> script can request the Asymptote executable to create <init>SVG</init> images supplying the <c>-svg</c> switch.  These may be unsuitable, especially for 3D images.  An alternative is to produce <init>PDF</init> images and use a utility like <c>pdf2svg</c> to convert to <init>SVG</init>.</li>
+                    <li>The <c>pretext</c> script can request the Asymptote executable to create <init>SVG</init> images supplying the <c>-svg</c> switch.  These may be unsuitable, especially for 3D images.  An alternative is to produce <init>PDF</init> images and use a utility like <c>pdf2svg</c> to convert to <init>SVG</init>.</li>
                 </ol></p>
             </subsubsection>
         </subsection>
@@ -1786,7 +1786,7 @@
 
             <p>As an instructor, you might want to recycle images from a text for a classroom presentation, a project handout, or an examination question.  As an author, you can elect to make images files available through links in the HTML version, and it is easy and flexible to produce those links automatically.</p>
 
-            <p>First, it is your responsibility to manufacture the files.  For making different formats, the <c>mbx</c> script can sometimes help (<xref ref="mbx-script" />).  The Image Magick <c>convert</c> command is a quick way to make raster images in different formats, while the <c>pdf2svg</c> executable is good for converting vector graphics <init>PDF</init>s into <init>SVG</init>s.  Also, to make this easy to specify, different versions of the same image must have identical paths and names, other than the suffixes.  Finally, the case and spelling of the suffix in your <init>MBX</init> source must match the filename (<eg /> <c>jpg</c> versus <c>JPEG</c>).  OK, those are the ground rules.</p>
+            <p>First, it is your responsibility to manufacture the files.  For making different formats, the <c>pretext</c> script can sometimes help (<xref ref="pretext-script" />).  The Image Magick <c>convert</c> command is a quick way to make raster images in different formats, while the <c>pdf2svg</c> executable is good for converting vector graphics <init>PDF</init>s into <init>SVG</init>s.  Also, to make this easy to specify, different versions of the same image must have identical paths and names, other than the suffixes.  Finally, the case and spelling of the suffix in your <pretext/> source must match the filename (<eg /> <c>jpg</c> versus <c>JPEG</c>).  OK, those are the ground rules.</p>
 
             <p>For links for a single image, add the <attr>archive</attr> attribute to the <tag>image</tag> element, such as<cd>
                 <cline>&lt;image  ...  archive="pdf svg"&gt;</cline>
@@ -2352,7 +2352,7 @@
                 <video xml:id="mozart-piano-sonata" youtube="1Yv_AINhVn4" width="80%" preview="images/mozart-piano.jpg" />
             </figure>
 
-            <p>The <c>mbx</c> script (<xref ref="mbx-script" />) may be used to download the provided preview images for YouTube videos (only).  Filenames will be formed from the <attr>xml:id</attr> of the <tag>video</tag> element.  These will be used in static versions of output, such as print.  Once custom preview images are implemented for author-hosted video, their static representation will improve.</p>
+            <p>The <c>pretext</c> script (<xref ref="pretext-script" />) may be used to download the provided preview images for YouTube videos (only).  Filenames will be formed from the <attr>xml:id</attr> of the <tag>video</tag> element.  These will be used in static versions of output, such as print.  Once custom preview images are implemented for author-hosted video, their static representation will improve.</p>
 
             <p>Additionally, a YouTube <term>playlist</term> can be included in one of two ways. You may set the <attr>youtube</attr> attribute to be a space-separated list of several video IDs (an <q>itemized</q> playlist). Alternatively, you may set the <attr>youtubeplaylist</attr> attribute to a YouTube playlist ID (a <q>named</q> playlist). At present, a named playlist will not get a thumbnail image from Youtube, and either the <q>generic</q> thumbnail will be used or you can supply your own <attr>preview</attr>.</p>
 
@@ -2528,7 +2528,7 @@
 
             <li>
                 <title>Image Formats</title>
-                <p>University offices that provide services for students with disabilities are often interested in the images themselves from a text, as standalone files.  For example, they might be able to manufacture tactile versions.  You could use the <c>mbx</c> script to produce a variety of different formats and bundle these up in a single archive file for distribution at your book's website.  Or you can make each image available through adjacent links placed automatically.  We call these <q>image archives.</q>  See <xref ref="topic-images-archive" />.</p>
+                <p>University offices that provide services for students with disabilities are often interested in the images themselves from a text, as standalone files.  For example, they might be able to manufacture tactile versions.  You could use the <c>pretext</c> script to produce a variety of different formats and bundle these up in a single archive file for distribution at your book's website.  Or you can make each image available through adjacent links placed automatically.  We call these <q>image archives.</q>  See <xref ref="topic-images-archive" />.</p>
 
                 <p>Futhermore, as described above, a 3D image authored with Asymptote code can be superior for those with motor disabilities.  So this functionality begins with an author's choice to employ Asymptote.</p>
             </li>

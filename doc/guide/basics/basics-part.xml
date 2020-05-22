@@ -1018,23 +1018,23 @@
         <idx><h sortby="latex"><latex/></h><h>using to generate images</h></idx>
         <p>
             <idx>TikZ</idx>
-            <idx sortby="mbx script"><c>mbx</c> script</idx>
+            <idx sortby="pretext script"><c>pretext</c> script</idx>
             <idx><h>graphics formats</h><h>generating from <latex/> source</h></idx>
         <pretext/> makes it straightforward to embed <latex/> code that produces images
         (such as TikZ)
         into your source files. <c>xsltproc</c> basically just dumps your code out to your <latex/> file so that it compiles nicely.
         However, for <init>HTML</init> display,
         you will need <init>SVG</init> graphic files.
-        This is where the <c>mbx</c> script comes in.
-        Running the <c>mbx</c> script frequently requires patience,
+        This is where the <c>pretext</c> script comes in.
+        Running the <c>pretext</c> script frequently requires patience,
         particularly on Windows,
         so settle in with an experienced user before attempting the steps in this section.
       </p>
       <aside>
-          <title>The <c>mbx</c> script</title>
-          <idx><h sortby="mbx script"><c>mbx</c> script</h><h>prerequisites</h></idx>
+          <title>The <c>pretext</c> script</title>
+          <idx><h sortby="pretext script"><c>pretext</c> script</h><h>prerequisites</h></idx>
         <p>
-          The <c>mbx</c> script has a number of prerequisites to use its full power.
+          The <c>pretext</c> script has a number of prerequisites to use its full power.
           As a baseline, <c>python</c> is required.
           (Both version 2 and version 3 are generally supported.)
           This comes pretty much by default with Mac, Linux,
@@ -1042,7 +1042,7 @@
           and so they tend to work better than Windows.
           If you're a Windows user who just needs one graphic produced quickly,
           consider going with CoCalc on a temporary basis.
-          It is definitely possible to have a fully functional configuration for the <c>mbx</c> script on Windows,
+          It is definitely possible to have a fully functional configuration for the <c>pretext</c> script on Windows,
           and the <pretext/> support email list will provide plenty of assistance when you get stuck.
         </p>
 
@@ -1055,7 +1055,7 @@
           (or similar)
           code to include in your <init>HTML</init> pages. <c>pdf2svg</c> is also a piece of the toolchain that may need to be installed separately,
           including on macOS. To generate graphics using SageMath,
-          you'll need a working installation of it with a proper configuration of its path in the <c>mbx.cfg</c> file.
+          you'll need a working installation of it with a proper configuration of its path in the <c>pretext.cfg</c> file.
           Linux and CoCalc can probably get away without extra configuration here,
           but it will likely be required on macOS and Windows unless you've set up your SageMath install so you can run it from the command line by simply executing <c>sage</c>.
         </p>
@@ -1099,7 +1099,7 @@
         your browser will display an error message about not being able to find the graphic file,
         since it doesn't exist.
         To generate the image,
-        we have to run the <c>mbx</c> script.<fn>
+        we have to run the <c>pretext</c> script.<fn>
         Will the script someday be renamed the <c>ptx</c> script?
         Tune in again next time to find out!
         </fn> To do this, on the command line we run the following command
@@ -1108,9 +1108,9 @@
 
       <sidebyside width="80%" margins="10% 10%">
 
-        <!-- <idx><h><c>mbx</c> script</h><h>for latex-image</h></idx> -->
+        <!-- <idx><h><c>pretext</c> script</h><h>for latex-image</h></idx> -->
 <pre>
-  [path to mathbook]/script/mbx -c latex-image -f svg
+  [path to mathbook]/script/pretext -c latex-image -f svg
 -d ./images [path to PTX source file]
 </pre>
       </sidebyside>
@@ -1245,10 +1245,10 @@
         Sometimes you don't want to provide an interactive SageMath environment in the middle of your book
         (or a chunk of code)
         but you would like to produce a figure to include in your project by using SageMath.
-        The cleanest way to do this his to put the SageMath code right in your <pretext/> project and use the <c>mbx</c> script to produce the image files required for your chosen output formats.
-        This is accomplished by using <tag>sageplot</tag> and the <c>mbx</c> script that we discussed in <xref ref="basics-s-latex-fig"/>.
+        The cleanest way to do this his to put the SageMath code right in your <pretext/> project and use the <c>pretext</c> script to produce the image files required for your chosen output formats.
+        This is accomplished by using <tag>sageplot</tag> and the <c>pretext</c> script that we discussed in <xref ref="basics-s-latex-fig"/>.
         (In particular,
-        see the aside in that section about the additional packages that must be installed and configured to use the <c>mbx</c> script.)
+        see the aside in that section about the additional packages that must be installed and configured to use the <c>pretext</c> script.)
       </p>
 
       <listing xml:id="basics-l-sageplot">
@@ -1261,9 +1261,9 @@
       </listing>
 
       <p>
-        <idx><h><c>mbx</c> script</h></idx>
+        <idx><h><c>pretext</c> script</h></idx>
         
-        We need to run the <c>mbx</c> script to actually make the image files required.
+        We need to run the <c>pretext</c> script to actually make the image files required.
         If you want to make both <init>HTML</init> and <init>PDF</init> via <latex/>, you'll need to run it twice.
         The first command below (again,
         enter on one line) makes the <init>SVG</init> to use on the web,
@@ -1273,17 +1273,17 @@
         It's best to stay away from error-producing steps until you're comfortable with debugging your system.
       </p>
 
-      <!-- <idx><h><c>mbx</c> script</h><h>for sageplot to svg</h></idx> -->
-      <!-- <idx><h><c>mbx</c> script</h><h>for sageplot to pdf</h></idx> -->
+      <!-- <idx><h><c>pretext</c> script</h><h>for sageplot to svg</h></idx> -->
+      <!-- <idx><h><c>pretext</c> script</h><h>for sageplot to pdf</h></idx> -->
       <sidebyside widths="80%" margins="10% 10%">
 
-<pre>[path to mathbook]/script/mbx -c sageplot -f svg
+<pre>[path to mathbook]/script/pretext -c sageplot -f svg
 -d ./images [path to PTX source file]</pre>
       </sidebyside>
 
       <sidebyside widths="80%" margins="10% 10%">
 
-<pre>[path to mathbook]/script/mbx -c sageplot -f pdf
+<pre>[path to mathbook]/script/pretext -c sageplot -f pdf
 -d ./images [path to PTX source file]</pre>
       </sidebyside>
 

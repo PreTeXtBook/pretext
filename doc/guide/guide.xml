@@ -32,7 +32,7 @@
             <xi:include href="author/topics.xml"/>
             <xi:include href="author/processing.xml"/>
             <xi:include href="author/schema.xml"/>
-            <xi:include href="author/mbx-script.xml"/>
+            <xi:include href="author/pretext-script.xml"/>
             <xi:include href="author/webwork.xml"/>
             <xi:include href="author/advice.xml"/>
             <!-- keep the Author's FAQ last within part -->

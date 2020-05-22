@@ -11,7 +11,7 @@
     <title>Processing, Tools and Workflow</title>
 
     <introduction>
-        <p>This chapter explains in full detail how to combine your source file with an XSL stylesheet to produce output.  It expands on the simple example in <xref ref="quickstart-example" /> and should also be read in conjunction with the chapter on the <c>mbx</c> script (<xref ref="mbx-script" />).</p>
+        <p>This chapter explains in full detail how to combine your source file with an XSL stylesheet to produce output.  It expands on the simple example in <xref ref="quickstart-example" /> and should also be read in conjunction with the chapter on the <c>pretext</c> script (<xref ref="pretext-script" />).</p>
     </introduction>
 
     <section xml:id="processing-basic">
@@ -134,7 +134,7 @@
         <idx>Inkscape</idx>
         <idx><h>vector graphics</h><h>Inkscape</h></idx> 
 
-        <p>A strength of <pretext/> is the ability to create diagrams and images with editable source code, embedded alongside your other <pretext/> source material (<xref ref="topic-images-source"/>, <xref ref="processing-images-mbx"/>).  But sometimes you want, or need, to be more artistic.  <url href="https://inkscape.org/">Inkscape</url><fn><c>inkscape.org/</c></fn> is a great tool for creating images.  It ticks all the boxes: open source, mature, cross-platform, standards-compliant.  Bethany Llewellyn heped research Inkscape capabilities for this section.</p>
+        <p>A strength of <pretext/> is the ability to create diagrams and images with editable source code, embedded alongside your other <pretext/> source material (<xref ref="topic-images-source"/>, <xref ref="processing-images-pretext"/>).  But sometimes you want, or need, to be more artistic.  <url href="https://inkscape.org/">Inkscape</url><fn><c>inkscape.org/</c></fn> is a great tool for creating images.  It ticks all the boxes: open source, mature, cross-platform, standards-compliant.  Bethany Llewellyn heped research Inkscape capabilities for this section.</p>
 
         <p>Inkscape's native file format is Scalable Vector Graphics (<init>SVG</init>).  As the name suggests, this translates into excellent support for vector graphics.  (See <xref ref="topic-images-raster"/> and <xref ref="topic-images-vector"/> for the distinction.)  Why use Inkscape?<ul>
             <li><init>SVG</init> files are small and scale smoothly when you zoom in on a web page.  So this format is our top choice for how images are realized in the <init>HTML</init> output.  They will also work well in formats based on <init>HTML</init>, such as <init>EPUB</init>.</li>
@@ -172,16 +172,16 @@
         </list>
     </section>
 
-    <section xml:id="processing-images-mbx">
-        <title>Images and the <c>mbx</c> Script</title>
+    <section xml:id="processing-images-pretext">
+        <title>Images and the <c>pretext</c> Script</title>
 
         <p>We believe it is important to preserve a record of how diagrams and other graphics are produced.  This can be easy when a graphics language is employed to describe the graphical elements, rather than creating a bit-mapped image with some other interface.  So we have <tag>asymptote</tag>, <tag>latex-image</tag>, and <tag>sageplot</tag> for elements holding code to produce diagrams or images<idx>image</idx>.</p>
 
         <p>The upside to this is that small edits to the code can easily accomplish minor changes or corrections necessary for the images.  The <latex /> macros provided by an author can be used in the text <em>and</em> in a diagram, leading to greater consistency between the two.  Finally, starting from source, we can do the best possible job of producing image formats that are compatible with the document output formats and which scale smoothly in PDFs and in web browsers.</p>
 
-        <p>The downside to this is that XSL is not a general purpose programming language, and so in particular, cannot call <q>helper</q> programs such as <c>asy</c>, <c>pdflatex</c>, and <c>sage</c>.  The general strategy is to use XSL to identify and isolate the parts of a document that lie in the elements designed for graphics languages.  A Python script, the <c>mbx</c> script, employs these XSL stylesheets and then feeds each image file to the appropriate helper program.</p>
+        <p>The downside to this is that XSL is not a general purpose programming language, and so in particular, cannot call <q>helper</q> programs such as <c>asy</c>, <c>pdflatex</c>, and <c>sage</c>.  The general strategy is to use XSL to identify and isolate the parts of a document that lie in the elements designed for graphics languages.  A Python script, the <c>pretext</c> script, employs these XSL stylesheets and then feeds each image file to the appropriate helper program.</p>
 
-        <p>This script has a variety of options, so we document it fully in <xref ref="mbx-script" />.</p>
+        <p>This script has a variety of options, so we document it fully in <xref ref="pretext-script" />.</p>
     </section>
 
     <section xml:id="processing-author-tools">
@@ -296,7 +296,7 @@
         <paragraphs>
             <title>Image Files</title>
 
-            <p>Some images are raster images (<eg /> photographs) that are not easily changed, and perhaps unlikely to be changed.  Other images will come from source-level languages via the <c>mbx</c> script.  For your convenience, this script has a command-line option that allows you to direct output (graphics files) to a directory of your choice.</p>
+            <p>Some images are raster images (<eg /> photographs) that are not easily changed, and perhaps unlikely to be changed.  Other images will come from source-level languages via the <c>pretext</c> script.  For your convenience, this script has a command-line option that allows you to direct output (graphics files) to a directory of your choice.</p>
 
             <p>In the early stages of writing a book, I put image files<idx>image</idx> produced from source code in a directory outside of what is tracked by <c>git</c>. It is only when a project is very mature that I begin to include completed graphics files into the <c>src/images</c> directory for tracking by <c>git</c>.</p>
         </paragraphs>
@@ -310,9 +310,9 @@
 
             <p>My use of <c>make</c> is a bit of an abuse, since it is really designed for large software projects, with the aim of reducing duplicative compilations and that is not at all the purpose.  You could likely have exactly the same effect with a shell script and a case (or switch) statement.</p>
 
-            <p>My general strategy is to assemble all the necessary files into a temporary directory (under <c>/tmp</c> in Linux) by copying them out of their permanent home, copy customizing XSL into the right place (typically <c>mathbook/user</c>), run the <c>mbx</c> script as necessary and direct the results to the right place, and finally copy results out of the temporary directory if they are meant to be permanent.  Interesting, an exception to staging all these files is the source of the book itself which is only read for each conversion and then not needed for the output.  So you can just point directly to a master file and the <c>xinclude</c> mechanism locates any other necessary source files.</p>
+            <p>My general strategy is to assemble all the necessary files into a temporary directory (under <c>/tmp</c> in Linux) by copying them out of their permanent home, copy customizing XSL into the right place (typically <c>mathbook/user</c>), run the <c>pretext</c> script as necessary and direct the results to the right place, and finally copy results out of the temporary directory if they are meant to be permanent.  Interesting, an exception to staging all these files is the source of the book itself which is only read for each conversion and then not needed for the output.  So you can just point directly to a master file and the <c>xinclude</c> mechanism locates any other necessary source files.</p>
 
-            <p>A good example of this general strategy is the use and placement of image files for HTML output.  It is your responsibility to place images into the location your resulting HTML files expect to locate them.  By default, this is a subdirectory of the directory holding the HTML files, named <c>images</c>.  You will want to copy images, such as photographs, out of your main source directory (<c>src/images</c>?). But you may be actively modifying source code for diagrams, and you want to re-run the <c>mbx</c> script for each run, and make sure the output of the script is directed to the correct subdirectory for the HTML output.  Running the <c>mbx</c> script frequently can get tiresome, so maybe you have a makefile target <c>make diagrams</c> that updates a permanent directory, outside of your tracked files in the repository, and you copy those files into the correct subdirectory for the output.  That way, you can update images only when you are actively editing them, or when you are producing a draft that you want to be as up-to-date as possible.  As a project matures, you can add images into the directory tracked by <c>git</c> so they are available to others without getting involved with the <c>mbx</c> script.</p>
+            <p>A good example of this general strategy is the use and placement of image files for HTML output.  It is your responsibility to place images into the location your resulting HTML files expect to locate them.  By default, this is a subdirectory of the directory holding the HTML files, named <c>images</c>.  You will want to copy images, such as photographs, out of your main source directory (<c>src/images</c>?). But you may be actively modifying source code for diagrams, and you want to re-run the <c>pretext</c> script for each run, and make sure the output of the script is directed to the correct subdirectory for the HTML output.  Running the <c>pretext</c> script frequently can get tiresome, so maybe you have a makefile target <c>make diagrams</c> that updates a permanent directory, outside of your tracked files in the repository, and you copy those files into the correct subdirectory for the output.  That way, you can update images only when you are actively editing them, or when you are producing a draft that you want to be as up-to-date as possible.  As a project matures, you can add images into the directory tracked by <c>git</c> so they are available to others without getting involved with the <c>pretext</c> script.</p>
 
             <p>We did not say it would be easy, but we feel much of this sort of project management is outside the scope of the <pretext /> project itself, while in its initial stages, and existing tools to manage the complexity are available and documented.  (We <em>have</em> been encouraged to create sample scripts, which we may do.)  Just remember the strategy: stage necessary components in a temporary directory, build output in that directory, copy out desired semi-permanent results, and limit additions to the source directory to that which is original, or mature and time-consuming to reproduce.</p>
         </paragraphs>
@@ -321,7 +321,7 @@
     <section xml:id="processing-testing-html">
         <title>Testing <init>HTML</init> Output Locally</title>
 
-        <p>Certain complicated parts of <init>HTML</init> output will not always function when you look at <pretext /> output by just opening files in your web browser.  These include knowls, Sage cells, and YouTube videos.  This is a consequence of security policies and so will vary from browser to browser.  A solution is to run a web server on your own machine, which is much easier than it sounds.  The one prerequisite is that you have Python installed, as is normally the case on any Linux or Mac computer.  On Windows, you may need to install Python yourself, but you may eventually need it for the <c>mbx</c> script anyway (<xref ref="mbx-script" />).  The following has been tested on Ubuntu Linux 16.10 and MacOS 10.12 (2017-08-06).</p>
+        <p>Certain complicated parts of <init>HTML</init> output will not always function when you look at <pretext /> output by just opening files in your web browser.  These include knowls, Sage cells, and YouTube videos.  This is a consequence of security policies and so will vary from browser to browser.  A solution is to run a web server on your own machine, which is much easier than it sounds.  The one prerequisite is that you have Python installed, as is normally the case on any Linux or Mac computer.  On Windows, you may need to install Python yourself, but you may eventually need it for the <c>pretext</c> script anyway (<xref ref="pretext-script" />).  The following has been tested on Ubuntu Linux 16.10 and MacOS 10.12 (2017-08-06).</p>
 
         <p>Python 2 and Python 3 are different in some regards, and that is the case here.  Your system may have commands <c>python2</c>, <c>python3</c>, and/or plain <c>python</c>.  Experiment with variants of the following two commands.  First, at a command-line, set your working directory to be the location of a directory containing the <init>HTML</init> files you want to test.<cd>
             <cline>python3 -m http.server</cline>
@@ -365,7 +365,7 @@
             <li><p>Text editor: reasonably good, partially <init>XML</init> syntax-aware.</p></li>
             <li><p><c>git</c>: installed (so clone <pretext />).</p></li>
             <li><p><latex />: installed with many additional packages.</p></li>
-            <li><p>Python: installed, necessary for <c>mbx</c> script.</p></li>
+            <li><p>Python: installed, necessary for <c>pretext</c> script.</p></li>
             <li><p><init>PDF</init> viewer: handed off to your browser.</p></li>
             <li><p><init>HTML</init> viewer: convert to the <q>raw</q> <init>URL</init> and you can preview.</p></li>
             <li><p><init>HTML</init> server: nope.  Zip up output and host elsewhere.</p></li>

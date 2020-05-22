@@ -106,7 +106,7 @@
       <title>Extraction and Merging</title>
       <p>
         A <pretext/> project must first have its <webwork/> content extracted into an auxiliary XML file before anything else can be done.
-        We do this with the <c>mbx</c> script which uses Python and the Python <c>requests</c> module.
+        We do this with the <c>pretext</c> script which uses Python and the Python <c>requests</c> module.
         It is not uncommon for your computer to not have <c>requests</c> installed,
         so you should check if it is there and install it if need be.
         You can check if it is installed from the command line with:
@@ -125,20 +125,20 @@
       </p>
       <p>
         Once you know that you have the <c>requests</c> package installed,
-        use the <c>mbx</c> script to extract <pretext/> content from the <webwork/> server into a <em>folder</em>,
+        use the <c>pretext</c> script to extract <pretext/> content from the <webwork/> server into a <em>folder</em>,
         which you might call <c>webwork-extraction/</c> as in this example:
       </p>
       <sidebyside>
         <console>
           <prompt>$ </prompt>
-          <input>mbx -c webwork -s &lt;server&gt; -d webwork-extraction &lt;xml&gt;</input>
+          <input>pretext -c webwork -s &lt;server&gt; -d webwork-extraction &lt;xml&gt;</input>
         </console>
       </sidebyside>
       <warning>
         <title>File Paths</title>
         <p>
           In the previous example and those that follow, you should specify paths as needed.
-          For example, the <c>mbx</c> script is typically at <c>~/mathbook/script/mbx</c>.
+          For example, the <c>pretext</c> script is typically at <c>~/mathbook/script/pretext</c>.
           And the <c>-d</c> option is specifying a directory to place the auxiliary file,
           and if you literally use <c>-d webwork-extraction</c> instead of a full path,
           the expectation is that <c>webwork-extraction</c> is a folder in your current working folder.
@@ -311,7 +311,7 @@
 
       <p>
         All of the <tag>webwork</tag> that you have written into your project can be <q>harvested</q>
-        and put into their own <c>.pg</c> files by the <c>mbx</c> script.
+        and put into their own <c>.pg</c> files by the <c>pretext</c> script.
         These files are created with a folder structure that follows the chunking scheme you specify.
         This process also creates set definition files (<c>.def</c>) for each chunk (say, for each section):
         one for inline exercises (checkpoints) and one for divisional exercises.
