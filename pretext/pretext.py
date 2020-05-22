@@ -963,7 +963,7 @@ def check_python_version():
     # but only handling 2to3 switch when introduced
     msg = ''.join(["script/module expects Python 3.4, not Python 2 or older\n",
                    "You have Python {}\n",
-                "** Try using 'python3 mbx ...' on the command-line **"])
+                   "** Try using prefixing your command-line with 'python3 ' **"])
     if sys.version_info[0] <= 2:
         raise(OSError(msg.format(python_version())))
 
@@ -971,17 +971,15 @@ def get_ptx_path():
     """Returns path of root of PreTeXt distribution"""
     # necessary to locate configuration files, XSL stylesheets
     # since authors can drop distribution *anywhere* in their system
-    import sys # argv
     import os.path # abspath(), split()
 
-    _verbose("discovering PreTeXt root directory from script location")
-    # full path to script itself
-    # TODO: maybe needs "__file__" for use as module
-    ptx_path = os.path.abspath(sys.argv[0])
-    # split "mbx" executable off path
-    script_dir, _ = os.path.split(ptx_path)
-    # split "script" path off executable
-    distribution_dir, _ = os.path.split(script_dir)
+    _verbose("discovering PreTeXt root directory from module location")
+    # full path to module itself
+    ptx_path = os.path.abspath(__file__)
+    # split "python.py" off module's filename
+    module_dir, _ = os.path.split(ptx_path)
+    # split "pretext" path off executable
+    distribution_dir, _ = os.path.split(module_dir)
     _verbose("PreText distribution root directory: {}".format(distribution_dir))
     return distribution_dir
 
@@ -1062,16 +1060,19 @@ def get_config_info():
     import configparser # ConfigParser()
 
     ptx_dir = get_ptx_path()
-    config_filename = 'mbx.cfg'
-    default_config_file = os.path.join(ptx_dir, 'script', config_filename)
+    config_filename = 'pretext.cfg'
+    default_config_file = os.path.join(ptx_dir, 'pretext', config_filename)
     user_config_file = os.path.join(ptx_dir, 'user', config_filename)
-    config_file_list = [default_config_file, user_config_file]
+    # 2020-05-21: obsolete'd mbx script and associated config filenames
+    # Try to read old version, but prefer new version
+    stale_user_config_file = os.path.join(ptx_dir, 'user', 'mbx.cfg')
+    config_file_list = [default_config_file, stale_user_config_file, user_config_file]
     # ConfigParser module was renamed to configparser in Python 3
     # and object was renamed from SafeConfigParser() to ConfigParser()
     config = configparser.ConfigParser()
-    _verbose("parsing configuration files: {}".format(config_file_list))
+    _verbose("parsing possible configuration files: {}".format(config_file_list))
     files_read = config.read(config_file_list)
-    _debug("configuration files used/read: {}".format(files_read))
+    _debug("configuration files actually used/read: {}".format(files_read))
     if not(user_config_file in files_read):
         msg = "using default configuration only, custom configuration file not used at {}"
         _verbose(msg.format(user_config_file))
