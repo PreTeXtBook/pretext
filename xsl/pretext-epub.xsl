@@ -16,8 +16,8 @@
 
 <!-- Trade on HTML markup, numbering, chunking, etc. -->
 <!-- Override as pecularities of EPUB conversion arise -->
-<xsl:import href="./mathbook-common.xsl" />
-<xsl:import href="./mathbook-html.xsl" />
+<xsl:import href="./pretext-common.xsl" />
+<xsl:import href="./pretext-html.xsl" />
 
 <!-- TODO: free chunking level -->
 <!-- TODO: liberate GeoGebra, videos -->
@@ -114,7 +114,7 @@
 </xsl:template>
 
 <!-- First, we use the frontmatter element to trigger various necessary files     -->
-<!-- We process structural nodes via chunking routine in  xsl/mathbook-common.xsl -->
+<!-- We process structural nodes via chunking routine in  xsl/pretext-common.xsl -->
 <!-- This in turn calls specific modal templates defined elsewhere in this file   -->
 <xsl:template match="pretext|mathbook">
     <xsl:apply-templates select="$document-root//frontmatter" mode="epub" />
@@ -125,7 +125,7 @@
 <!-- Structural Nodes -->
 <!-- ################ -->
 
-<!-- Read the code and documentation for "chunking" in xsl/mathbook-common.xsl -->
+<!-- Read the code and documentation for "chunking" in xsl/pretext-common.xsl -->
 
 
 <xsl:template match="&STRUCTURAL;" mode="file-wrap">
@@ -172,7 +172,7 @@
 <!-- At level 2 we need to capture chapter and appendix -->
 <!-- introductions from summary page that is at level 1 -->
 <!-- NB: we are missing conclusions here                -->
-<!-- NB: copied from mathbook-html.xsl, sans            -->
+<!-- NB: copied from pretext-html.xsl, sans            -->
 <!-- the summary links and the conclusion               -->
 <xsl:template match="frontmatter|chapter|appendix" mode="summary">
     <!-- location info for debugging efforts -->

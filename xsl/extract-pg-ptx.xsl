@@ -60,7 +60,7 @@
 <!-- for latex-images) apply to the mered file. So you must re-apply       -->
 <!-- pretext-merge.xsl  each time something changes with source XML.       -->
 
-<xsl:import href="./mathbook-common.xsl" />
+<xsl:import href="./pretext-common.xsl" />
 
 <!-- We are outputting Python code, and there is no reason to output       -->
 <!-- anything other than "text"                                            -->

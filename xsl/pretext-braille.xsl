@@ -41,7 +41,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     >
 
 <!-- desire HTML output, but primarily content -->
-<xsl:import href="mathbook-html.xsl" />
+<xsl:import href="pretext-html.xsl" />
 
 <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
 
@@ -62,7 +62,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Entry Template -->
 <!-- ############## -->
 
-<!-- These two templates are similar to those of  mathbook-html.xsl. -->
+<!-- These two templates are similar to those of  pretext-html.xsl. -->
 <!-- Primarily the production of cross-reference ("xref") knowls     -->
 <!-- has been removed.                                               -->
 
@@ -74,7 +74,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- There is always a "document root" directly under the mathbook element, -->
 <!-- and we process it with the chunking template called below              -->
 <!-- Note that "docinfo" is at the same level and not structural, so killed -->
-<!-- We process structural nodes via chunking routine in xsl/mathbook-common.xsl    -->
+<!-- We process structural nodes via chunking routine in xsl/pretext-common.xsl    -->
 <!-- This in turn calls specific modal templates defined elsewhere in this file     -->
 <xsl:template match="/mathbook|/pretext">
     <xsl:call-template name="banner-warning">

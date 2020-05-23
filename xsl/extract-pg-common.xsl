@@ -37,7 +37,7 @@
 <!-- exclusively on "webwork" elements, since these templates are only     -->
 <!-- designed for producing PGML from "webwork" and there is no defense    -->
 <!-- against the templates being applied elsewhere.  So a stylesheet which -->
-<!-- includes this can (and typically should) import  mathbook-common.xsl  -->
+<!-- includes this can (and typically should) import  pretext-common.xsl  -->
 <!-- for universal templates, but should not be simultaneously converting  -->
 <!-- to some other output format.                                          -->
 <!--                                                                       -->
@@ -1190,7 +1190,7 @@
 <!-- are explicitly used, so if they are nested, then "inner" macros will -->
 <!-- be missed. So authors should not use nested macro definitions.       -->
 <!-- Macros are jammed together, but maybe need protection, like {}. The  -->
-<!-- $latex-macros sanitized list assumes  mathbook-common.xsl is used.   -->
+<!-- $latex-macros sanitized list assumes  pretext-common.xsl is used.   -->
 <!-- TODO: This named template examines the current context (see '.' in   -->
 <!-- contains() below), so should be a match template. But its recursive  -->
 <!-- implementation makes it a named template for now.                    -->
@@ -1213,7 +1213,7 @@
 <!-- are explicitly used, so if they are nested, then "inner" macros will -->
 <!-- be missed. So authors should not use nested macro definitions.       -->
 <!-- Macros are jammed together, but maybe need protection, like {}. The  -->
-<!-- $latex-macros sanitized list assumes  mathbook-common.xsl is used.   -->
+<!-- $latex-macros sanitized list assumes  pretext-common.xsl is used.   -->
 <!-- TODO: This named template examines the current context (see '.' in   -->
 <!-- contains() below), so should be a match template. But its recursive  -->
 <!-- implementation makes it a named template for now.                    -->
@@ -1306,8 +1306,8 @@
 
 <!-- The cross-reference numbering scheme uses \ref, \hyperref -->
 <!-- for LaTeX and numbers elsewhere, so it is unimplmented in -->
-<!-- mathbook-common.xsl, hence we implement it here           -->
-<!-- This is identical to mathbook-html.xsl                    -->
+<!-- pretext-common.xsl, hence we implement it here           -->
+<!-- This is identical to pretext-html.xsl                    -->
 
 <xsl:template match="*" mode="xref-number">
     <xsl:apply-templates select="." mode="number" />
@@ -1337,7 +1337,7 @@
 <!-- NB: we allow the "var" element as a child                             -->
 
 <!-- Common documentation -->
-<!-- Note: the default template for "text()" in xsl/mathbook-common.xsl    -->
+<!-- Note: the default template for "text()" in xsl/pretext-common.xsl    -->
 <!-- will drop "clause-ending" punctuation that immediately follows a bit  -->
 <!-- of math, and possibly remove some resulting leading whitespace. For   -->
 <!-- inline math "m" this behavior is under the control of the global      -->
@@ -1495,7 +1495,7 @@
             <xsl:value-of select="@prefix" />
         </xsl:variable>
         <xsl:variable name="short">
-            <xsl:for-each select="document('mathbook-units.xsl')">
+            <xsl:for-each select="document('pretext-units.xsl')">
                 <xsl:value-of select="key('prefix-key',concat('prefixes',$prefix))/@short"/>
             </xsl:for-each>
         </xsl:variable>
@@ -1508,7 +1508,7 @@
                 <xsl:value-of select="@base" />
             </xsl:variable>
             <xsl:variable name="short">
-                <xsl:for-each select="document('mathbook-units.xsl')">
+                <xsl:for-each select="document('pretext-units.xsl')">
                     <xsl:value-of select="key('base-key',concat('bases',$base))/@short"/>
                 </xsl:for-each>
             </xsl:variable>

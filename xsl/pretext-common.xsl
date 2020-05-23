@@ -57,14 +57,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- your-book-latex.xsl                                              -->
 <!--   (a) is what you use on the command line                        -->
 <!--   (b) contains very specific, atomic overrides for your project  -->
-<!--   (c) imports xsl/mathbook-latex.xsl                             -->
+<!--   (c) imports xsl/pretext-latex.xsl                             -->
 <!--                                                                  -->
-<!-- xsl/mathbook-latex.xsl                                           -->
+<!-- xsl/pretext-latex.xsl                                           -->
 <!--   (a) general conversion from MBX to LaTeX                       -->
 <!--   (b) could be used at the command line for default conversion   -->
-<!--   (c) imports xsl/mathbook-common.xsl                            -->
+<!--   (c) imports xsl/pretext-common.xsl                            -->
 <!--                                                                  -->
-<!-- xsl/mathbook-common.xsl                                          -->
+<!-- xsl/pretext-common.xsl                                          -->
 <!--   (a) this file                                                  -->
 <!--   (b) ensures commonality, such as text versions                 -->
 <!--       of numbers for theorems, equations, etc                    -->
@@ -3713,7 +3713,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!--   2) match="&STRUCTURAL;" mode="intermediate"              -->
 <!--                                                            -->
 <!-- Similarities can be consolidated within the implementation -->
-<!-- See  xsl/mathbook-html.xsl  a typical example              -->
+<!-- See  xsl/pretext-html.xsl  a typical example              -->
 
 <xsl:template match="&STRUCTURAL;" mode="chunking">
     <xsl:variable name="chunk">
@@ -3782,7 +3782,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- A default summary page can just ignore the structural      -->
 <!-- divisions within though usually you might want to do       -->
 <!-- something with them, so you would override this template   -->
-<!-- with an implementation.  See xsl/mathbook-sage-doctest.xsl -->
+<!-- with an implementation.  See xsl/pretext-sage-doctest.xsl -->
 <!-- which uses all of these general routines here              -->
 <xsl:template match="&STRUCTURAL;" mode="summary">
     <xsl:apply-templates select="*[not(&STRUCTURAL-FILTER;)]" />
