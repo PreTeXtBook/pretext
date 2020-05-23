@@ -39,6 +39,18 @@
             </ul>Setting these attributes to non-empty strings is the signal to add the relevant code to each of the pages of your HTML output.  See <xref ref="online-analytics"/> for more.</p>
         </subsection>
 
+        <subsection xml:id="online-index-page">
+            <title>HTML Index Page</title>
+            <idx><h>index page</h><h>HTML</h></idx>
+            <idx><h>HTML</h><h>index page</h></idx>
+
+            <p>The<cd>
+                <cline>/publication/html/index-page</cline>
+            </cd>element can have the following attribute:<ul>
+                <li><attr>ref</attr>: the <attr>xml:id</attr> of a division which will be a complete page at whatever level the document is chunked (broken into smaller pages).</li>
+            </ul>An <c>index.html</c> page will be created which redirects immediately to this page.  Many webservers will serve this page when a <init>URL</init> stops with the enclosing directory.  So the Table of Contents (<tag>book</tag>, <tag>article</tag>) or the <tag>frontmatter</tag> are common choices.  See <xref ref="index-page"/> for more.</p>
+        </subsection>
+
         <subsection xml:id="online-style-options">
             <title>HTML Style</title>
             <idx><h>style</h><h>HTML</h></idx>

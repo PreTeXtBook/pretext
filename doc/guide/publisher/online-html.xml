@@ -17,8 +17,10 @@
     <section xml:id="html-publisher-options">
         <title>HTML Publisher Options</title>
 
-        <paragraphs>
+        <paragraphs xml:id="index-page">
             <title><c>index.html</c> Page</title>
+            <idx><h>index page</h><h>HTML</h></idx>
+            <idx><h>HTML</h><h>index page</h></idx>
 
             <p>The conversion to <init>HTML</init> <em>always</em> creates a file named <c>index.html</c>.  We do this because if a reader requests the <init>URL</init><cd>
                 <cline>platypus.mammal-institute.org/aota/html</cline>
