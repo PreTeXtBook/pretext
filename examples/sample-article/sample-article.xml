@@ -3943,6 +3943,26 @@ the xsltproc executable.
                   <li><m>\int_a^b \frac{\sin(x)}{x}\,dx</m></li>
                 </ul>
               </p>
+
+              <p>List items can have titles.  We try that here, along with testing list items structured with paragraphs.<ul>
+                <li>
+                  <title>With <c>\displaystyle</c> added automatically</title>
+                  <p><m>\sum_{n=1}^\infty ar^n</m></p>
+                </li>
+                <li>
+                  <title>Two paragraphs</title>
+                  <p><m>\sum_{n=1}^\infty ar^n</m></p>
+                  <p><m>\sum_{n=1}^\infty ar^n</m></p>
+                </li>
+                <li>
+                  <title>One paragraph, extra text</title>
+                  <p>So, <m>\sum_{n=1}^\infty ar^n</m></p>
+                </li>
+                <li>
+                  <title>Two elements (only)</title>
+                  <p><latex/><m>\sum_{n=1}^\infty ar^n</m></p>
+                </li>
+              </ul></p>
             </subsection>
 
             <subsection>

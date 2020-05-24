@@ -1706,36 +1706,10 @@ Book (with parts), "section" at level 3
         <!-- for LaTeX we override to be a no-op, since not necessary   -->
         <xsl:apply-templates select="." mode="get-clause-punctuation" />
     </xsl:variable>
-    <!-- If the current context "m" is a child of an "li" we -->
-    <!-- contemplate injecting a \displaystyle, if *the "m"  -->
-    <!-- is the only content of the "li"*.  So we first      -->
-    <!-- obtain a parent "li" (or come away empty-handed)    -->
-    <xsl:variable name="the-list-item" select="parent::li"/>
-    <!-- If we have inline math directly inside a list item  -->
-    <!-- (i.e., no intervening "p") then we can check to see -->
-    <!-- if there are any non-whitespace text() nodes.       -->
-    <!-- Otherwise (i.e. not a child of an "li"), this       -->
-    <!-- variable will an empty string.                      -->
-    <xsl:variable name="actual-text">
-        <xsl:if test="$the-list-item">
-            <xsl:for-each select="$the-list-item/text()">
-                <xsl:value-of select="normalize-space(.)"/>
-            </xsl:for-each>
-        </xsl:if>
-    </xsl:variable>
     <!-- wrap tightly in math delimiters -->
     <xsl:call-template name="begin-inline-math" />
-    <!-- (1) If $the-list-item is empty, the next test fails.       -->
-    <!-- (2) If there is a parent "li", the test will fail if       -->
-    <!--     there are other elements besides the single "m".       -->
-    <!-- (3) If there is any significant text() the test will fail. -->
-    <!--                                                            -->
-    <!-- So we improve the appearance of a lone "m" inside an "li". -->
-    <!-- Authors who do not like this can wrap the content of the   -->
-    <!-- "li" in a "p" to squelch the behavior.                     -->
-    <xsl:if test="(count($the-list-item/*) = 1) and ($actual-text = '')">
-      <xsl:text>\displaystyle </xsl:text>
-    </xsl:if>
+    <!-- Prefix will normally be empty and have no effect -->
+    <xsl:apply-templates select="."  mode="display-style-prefix"/>
     <!-- we clean whitespace that is irrelevant to LaTeX so that we -->
     <!--   (1) avoid LaTeX compilation errors                       -->
     <!--   (2) avoid spurious blank lines leading to new paragraphs -->
@@ -1758,6 +1732,64 @@ Book (with parts), "section" at level 3
      <xsl:message>PTX:ERROR:   the "end-inline-math" template needs an implementation in the current conversion</xsl:message>
      <xsl:text>]]]</xsl:text>
  </xsl:template>
+
+<!-- Display Style LaTeX markup for inline math -->
+<!--                                                     -->
+<!-- If the current context "m" is a child of an "li",   -->
+<!-- perhaps with an intervening "p", then we            -->
+<!-- contemplate injecting a \displaystyle, if *the "m"  -->
+<!-- is the only content of the "li"*.-->
+<xsl:template match="m" mode="display-style-prefix">
+    <!-- We first obtain a parent "li" (or come away    -->
+    <!-- empty-handed). Booleans help readability later -->
+    <xsl:variable name="parent-li" select="boolean(parent::li)"/>
+    <xsl:variable name="grandparent-li" select="boolean(parent::p/parent::li)"/>
+    <xsl:variable name="the-list-item" select="parent::li|parent::p/parent::li"/>
+    <!-- If we have inline math inside a list item then we   -->
+    <!-- can collect all of non-whitespace text() nodes.     -->
+    <!-- We are only interested in the case of a single "p". -->
+    <xsl:variable name="actual-text">
+        <xsl:if test="$the-list-item">
+            <xsl:choose>
+                <xsl:when test="$parent-li">
+                    <xsl:for-each select="$the-list-item/text()">
+                        <xsl:value-of select="normalize-space(.)"/>
+                    </xsl:for-each>
+                </xsl:when>
+                <xsl:when test="$grandparent-li">
+                    <xsl:for-each select="$the-list-item/p[1]/text()">
+                        <xsl:value-of select="normalize-space(.)"/>
+                    </xsl:for-each>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:if>
+    </xsl:variable>
+    <!-- Potential prefix with \displaystyle                        -->
+    <!--                                                            -->
+    <!-- (1) If there is not a list item, the next two tests fail.  -->
+    <!-- (2) If there is any significant text() the tests will fail.-->
+    <!-- (3) If there is a parent li, or li/p, the tests will fail  -->
+    <!--     if there are more than two "p" or if the content       -->
+    <!--     contains other markup (elements) other elements        -->
+    <!--     besides just the lone "m".                             -->
+    <!--                                                            -->
+    <!-- So we improve the appearance of a lone "m" inside an "li". -->
+    <!-- Authors who do not like this can add innocuous content.    -->
+    <!--  -->
+    <!-- The two "when" are disjoint and both may be false.  They   -->
+    <!-- produce the same result.  This is meant to be more         -->
+    <!-- readable than a big "or".  Note: this could be wrapped in  -->
+    <!-- a big "if" based on the common $actual-text.               -->
+    <!-- The result of this template is "\displaystyle " or ""      -->
+    <xsl:choose>
+        <xsl:when test="$parent-li and ($actual-text = '') and (count($the-list-item/*) = 1)">
+            <xsl:text>\displaystyle </xsl:text>
+        </xsl:when>
+        <xsl:when test="$grandparent-li and ($actual-text = '') and (count($the-list-item/p) = 1) and (count($the-list-item/p[1]/*) = 1)">
+            <xsl:text>\displaystyle </xsl:text>
+        </xsl:when>
+    </xsl:choose>
+</xsl:template>
 
 <!-- Displayed Single-Line Math ("me", "men") -->
 <!-- Single equations ("math equation"), contained within paragraphs -->
