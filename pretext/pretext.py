@@ -964,6 +964,158 @@ def mom_static_problems(xml_source, xmlid_root, dest_dir):
                 raise OSError(msg.format(r.status_code, url))
     _verbose('MyOpenMath static problem download complete')
 
+####################
+# Conversion to EPUB
+####################
+
+def epub(xml_source, pub_file, dest_dir):
+    import os, os.path, subprocess, shutil
+    import re, fileinput
+    import zipfile as ZIP
+    import lxml.etree as ET
+
+    # Build into a scratch directory
+    tmp_dir = get_temporary_directory()
+
+    # Before making a zip file, the temporary directory should look
+    # like the unzipped version of an EPUB file.  For us, that goes:
+
+    # mimetype
+    # EPUB
+    #   package.opf
+    #   css
+    #   xhtml
+    #     images (customizable)
+    # META-INF
+
+    source_dir = get_source_path(xml_source)
+    epub_xslt = os.path.join(get_ptx_xsl_path(), 'pretext-epub.xsl')
+    math_as_svg = os.path.join(tmp_dir, 'math-as-svg.xml')
+    packaging_file = os.path.join(tmp_dir, 'packaging.xml')
+    xhtml_dir = os.path.join(tmp_dir, 'EPUB', 'xhtml')
+
+    # general messages for this entire procedure
+    _verbose('converting {} into EPUB in {}'.format(xml_source, dest_dir))
+    _debug('EPUB manufacture in {}'.format(tmp_dir))
+
+    # ripping out LaTeX as SVG
+    _debug('converting raw LaTeX from {} into clean SVGs placed into {}'.format(xml_source, math_as_svg))
+    mathjax_latex(xml_source, math_as_svg, 'svg')
+
+    # Build necessary content and infrastructure EPUB files, 
+    # using SVG images of math.  Most output goes into the
+    # EPUB/xhtml directory via exsl:document templates in
+    # the EPUB XSL conversion.  The stylesheet does record,
+    # and produce some information needed for the packaging here.
+    # Values in stringparams seem to need protection, always
+    _verbose('converting source ({}) and clean SVGs ({}) into EPUB files'.format(xml_source, math_as_svg))
+    params = {'svgfile':ET.XSLT.strparam(math_as_svg)}
+    if pub_file:
+        params['publisher'] = ET.XSLT.strparam(pub_file)
+    xsltproc(epub_xslt, xml_source, packaging_file, tmp_dir, params)
+
+    # XHTML files lack an overall namespace,
+    # while EPUB validation expects it
+    # regex inplace to end up with:
+    # <html xmlns="http://www.w3.org/1999/xhtml">
+    orig = '<html'
+    repl = '<html xmlns="http://www.w3.org/1999/xhtml"'
+    # the inoplace facility of the fileinput module gets
+    # confused about temporary backup files if the working
+    # directory is not where the file lives
+    # Also, print() here actual writes on the file, as
+    # another facility of the fileinput module, but we need
+    # to kill the "extra" newline that print() creates
+    owd = os.getcwd()
+    os.chdir(xhtml_dir)
+    html_elt = re.compile(orig)
+    for root, dirs, files in os.walk(xhtml_dir):
+        for fn in files:
+            for line in fileinput.input(fn, inplace=1):
+                print(html_elt.sub(repl, line), end='')
+    os.chdir(owd)
+
+    # EPUB stylesheet writes an XHTML file with
+    # bits of info necessary for packaging
+    packaging_tree = ET.parse(packaging_file)
+
+    # Stage CSS files in EPUB/css, coordinate 
+    # with names in manifest and *.xhtml via XSL.
+    # CSS files live in distribution in "css" directory, 
+    # which is a peer of the "xsl" directory
+    # EPUB exists from above xsltproc call
+    css_dir = os.path.join(tmp_dir, 'EPUB', 'css')
+    os.mkdir(css_dir)
+    stylefile = packaging_tree.xpath('/packaging/css/@stylefile')[0]
+    colorfile = packaging_tree.xpath('/packaging/css/@colorfile')[0]
+    for cssfilename in [str(stylefile), str(colorfile), 'pretext_add_on.css', 'setcolors.css']:
+        css = os.path.join(get_ptx_xsl_path(), '..', 'css', cssfilename)
+        shutil.copy2(css, css_dir)
+
+    # directory of images, relative to master source file, given by publisher
+    # build the same directory relative to the XHTML files
+    #imdir = packaging_tree.xpath('/packaging/images/@image-directory')[0]
+    #source_image_dir = os.path.join(source_dir, str(imdir))
+    #os.mkdir(os.path.join(tmp_dir, 'EPUB', 'xhtml', str(imdir)))
+    source_image_dir = os.path.join(source_dir, 'images')
+    os.mkdir(os.path.join(tmp_dir, 'EPUB', 'xhtml', 'images'))
+    # position cover file
+    cov = packaging_tree.xpath('/packaging/cover/@filename')[0]
+    cover_source = os.path.join(source_dir, str(cov))
+    cover_dest = os.path.join(tmp_dir, 'EPUB', 'xhtml', str(cov))
+    shutil.copy2(cover_source, cover_dest)
+    # position image files
+    images = packaging_tree.xpath('/packaging/images/image/@filename')
+    for im in images:
+        source = os.path.join(source_dir, str(im))
+        dest = os.path.join(tmp_dir, 'EPUB', 'xhtml', str(im))
+        shutil.copy2(source, dest)
+
+    # clean-up the trash
+    # TODO: squelch knowls or find alternative
+    # shutil.rmtree(os.path.join(tmp_dir, 'knowl'))
+    # os.remove(packaging_file)
+    # os.remove(math_as_svg)
+
+
+    # mimetype parameters: -0Xq
+    # -0 no compression
+    # -X no extra fields, eg uid/gid on Unix
+    # -q quiet (not relevant)
+
+    # remainder parameters: -Xr9Dq
+    # -X no extra fields, eg uid/gid on Unix
+    # -r recursive travel
+    # -9 maximum compression
+    # -D no directory entries
+    # -q quiet (not relevant)
+
+    # https://www.w3.org/publishing/epub3/epub-ocf.html#sec-container-zip
+    # Spec says only "deflated compression"
+
+    # recursize walking
+    # https://www.tutorialspoint.com/How-to-zip-a-folder-recursively-using-Python
+
+    # Python 3.7 - compress level 0 to 9
+
+    _verbose('packaging an EPUB as book.epub')
+    epub_file = 'book.epub'
+    owd = os.getcwd()
+    os.chdir(tmp_dir)
+    with ZIP.ZipFile(epub_file, mode='w', compression=ZIP.ZIP_DEFLATED) as epub:
+        epub.write('mimetype', compress_type=ZIP.ZIP_STORED)
+        for root, dirs, files in os.walk('EPUB'):
+            for name in files:
+                epub.write(os.path.join(root, name))
+        for root, dirs, files in os.walk('META-INF'):
+            for name in files:
+                epub.write(os.path.join(root, name))
+        for root, dirs, files in os.walk('css'):
+            for name in files:
+                epub.write(os.path.join(root, name))
+    shutil.copy2(epub_file, dest_dir)
+    os.chdir(owd)
+
 
 #################
 # XSLT Processing
