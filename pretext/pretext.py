@@ -922,6 +922,61 @@ def mom_static_problems(xml_source, xmlid_root, dest_dir):
     _verbose('MyOpenMath static problem download complete')
 
 
+#################
+# XSLT Processing
+#################
+
+# Pythonic replacement for xsltproc executable
+def xsltproc(xsl, xml, result, output_dir=None, stringparams={}):
+    """
+    Apply an XSL stylesheet to an XML source, with control over location of results.
+
+    xsl          - filename (string) for XSL stylesheet
+    xml          - filename (string) for XML source
+    result       - filename (string) for result tree of the stylesheet
+                   None if stylesheet 100% writes its own files,
+                   i.e. expecting an empty result tree
+    output_dir   - a directory for exsl:document() templates to write to
+    stringparams - a dictionary of option/value pairs to pass
+                   to  xsl:param  elements of the stylesheet
+
+    """
+    import os
+    import lxml.etree as ET
+
+    _verbose('XSL conversion of {} by {}'.format(xml, xsl))
+    debug_string = 'XSL conversion via {} of {} to {} and/or into directory {} with parameters {}'
+    _debug(debug_string.format(xsl, xml, result, output_dir, stringparams))
+
+    # parse source, no harm to assume
+    # xinclude modularization is necessary
+    src_tree = ET.parse(xml)
+    src_tree.xinclude()
+
+    # parse xsl, and build a transformation object
+    # allow writing if an output directory is given
+    control = None
+    if output_dir:
+        control = ET.XSLTAccessControl(write_file=True)
+    xsl_tree = ET.parse(xsl)
+    xslt = ET.XSLT(xsl_tree, access_control=control)
+
+    # do the transformation, with parameterization
+    # possibly change/restore directories to capture
+    # multi-file output from  exsl:document  templates
+    owd = os.getcwd()
+    if output_dir:
+        os.chdir(output_dir)
+    result_tree = xslt(src_tree, **stringparams)
+    os.chdir(owd)
+
+    # write a serialized version to a file if
+    # there is a non-empty result tree on stdout
+    if result:
+        with open(result, 'w') as result_file:
+            result_file.write(str(result_tree))
+
+
 ###################
 #
 # Utility Functions
