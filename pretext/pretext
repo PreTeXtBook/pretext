@@ -102,7 +102,7 @@ def get_cli_arguments():
     # stringparams is a list of strings on return
     parser.add_argument('-p', '--parameters', nargs='+', help='stringparam options to pass to XSLT extraction stylesheet (option/value pairs)',
                          action="store", dest='stringparams')
-
+    parser.add_argument('-x', '--publisher', help='filename for publisher file', action="store", dest='publisher_file')
     # default to an empty string, which signals root to XSL stylesheet
     parser.add_argument('-r', '--restrict', help='restrict to subtree rooted at element with specified xml:id',
                          action="store", dest='xmlid', default='')
@@ -216,6 +216,8 @@ def main():
             raise NotImplementedError("conversion to HTML version not integrated yet, use command line")
         elif args.format == 'latex':
             raise NotImplementedError("conversion to LaTeX version not integrated yet, use command line")
+        elif args.format == 'epub':
+            ptx.epub(args.xml_file, args.publisher_file, dest_dir)
         # 2020-05-19 MathBookXMLtoSWS class removed
         elif args.format == 'sagenb':
             raise NotImplementedError("conversion to Sage notebook format removed (2020-05-18)")
