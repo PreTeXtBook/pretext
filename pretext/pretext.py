@@ -19,6 +19,49 @@
 
 # 2020-05-20: this module expects Python 3.4 or newer
 
+########################################
+#
+#  Math as LaTeX on web pages
+#
+########################################
+
+def mathjax_latex(xml_source, result, format):
+    import tempfile, os.path, subprocess
+
+    _verbose('converting LaTeX from {} into {} format'.format(xml_source, format))
+    _debug('converting LaTeX from {} into {} format placed into {}'.format(xml_source, format, result))
+
+    # construct filenames for pre- and post- XSL stylesheets in xsl/support
+    extraction_xslt = os.path.join(get_ptx_xsl_path(), 'support/extract-math.xsl')
+    cleaner_xslt    = os.path.join(get_ptx_xsl_path(), 'support/package-math.xsl')
+
+    # Extraction stylesheet makes a simple, mock web page for MathJax
+    # And MathJax executables preserve the page while changing the math
+    tmp_dir = get_temporary_directory()
+    _debug('temporary directory for MathJax work: {}'.format(tmp_dir))
+    mjinput  = os.path.join(tmp_dir, 'mj-input-latex.html')
+    mjoutput = os.path.join(tmp_dir, 'mj-output-{}.html'.format(format))
+
+    _debug('extracting LaTeX from {} and collected in {}'.format(xml_source, mjinput))
+    xsltproc(extraction_xslt, xml_source, mjinput)
+
+    # shell out to process with MathJax
+    # mjpage can return "innerHTML" w/ --fragment, which we
+    # could wrap into our own particular version of mjoutput
+    _debug('calling MathJax to convert LaTeX from {} into raw SVGs in {}'.format(mjinput, mjoutput))
+    mjpage_exec = get_executable('mjpage')
+    # kill caching to keep glyphs within SVG
+    # versus having a font cache at the end
+    mjpage_exec = [mjpage_exec, '--noGlobalSVG', 'true']
+    infile = open(mjinput)
+    outfile = open(mjoutput, 'w')
+    subprocess.run(mjpage_exec, stdin=infile, stdout=outfile)
+
+    # clean up and package MJ SVGs, font data, etc
+    _debug('packaging math as {} from {} into XML file {}'.format(format, mjoutput, result))
+    xsltproc(cleaner_xslt, mjoutput, result)
+
+
 ##############################################
 #
 #  Graphics Language Extraction and Processing
