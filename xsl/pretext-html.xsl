@@ -375,6 +375,27 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- And a boolean variable for the presence of this service -->
 <xsl:variable name="b-google-cse" select="not($google-search-cx = '')" />
 
+<!-- Add a boolean variable to toggle "enhanced privacy mode" -->
+<!-- This is an option for embedded YouTube videos            -->
+<!-- and possibly other platforms at a later date.            -->
+<!-- The default is for privacy (fewer tracking cookies)      -->
+<xsl:variable name="embedded-video-privacy">
+    <xsl:choose>
+        <xsl:when test="$publication/html/video/@privacy = 'yes'">
+            <xsl:value-of select="$publication/html/video/@privacy"/>
+        </xsl:when>
+        <xsl:when test="$publication/html/video/@privacy = 'no'">
+            <xsl:value-of select="$publication/html/video/@privacy"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:message>PTX WARNING:   HTML video/@privacy in publisher file should be "yes" (fewer cookies) or "no" (all cookies). Proceeding with default value: "yes" (disable cookies, if possible)</xsl:message>
+            <xsl:text>yes</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="b-video-privacy" select="$embedded-video-privacy = 'yes'"/>
+
 <!--                       -->
 <!-- HTML Platform Options -->
 <!--                       -->
@@ -6780,7 +6801,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <xsl:text>https://www.youtube.com/embed</xsl:text>
+    <xsl:choose>
+        <xsl:when test="$b-video-privacy">
+            <xsl:text>https://www.youtube-nocookie.com/embed</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>https://www.youtube.com/embed</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
     <xsl:choose>
         <!-- playlist with a YouTube ID -->
         <xsl:when test="@youtubeplaylist">
