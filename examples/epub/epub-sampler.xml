@@ -24,6 +24,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <docinfo>
         <macros>
         \newcommand{\doubler}[1]{2#1}
+        \newcommand{\definiteintegral}[4]{\int_{#1}^{#2}\,#3\,d#4} % this comment will be stripped
         </macros>
     </docinfo>
 
@@ -72,6 +73,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <p><idx>Diophantine equation</idx>This paragraph has some inline math, a Diophantine equation, <m>x^2 + \doubler{y^2} = z^2</m>.  And some display math about infinite series: <me>\sum_{n=1}^\infty\,\frac{1}{n^2} = \frac{\pi^2}{6}.</me>  Look at the XML source to see how <latex /> macros are employed.</p>
 
+            <p>And a bit of multi-line display math:<mdn>
+                <mrow xml:id="equation-use-FTC">\frac{d}{dx}\definiteintegral{a}{x}{f(t)}{t}&amp;=\frac{d}{dx}\left(F(x)-F(a)\right)</mrow>
+                <mrow number="no">&amp;=\frac{d}{dx}F(x)-\frac{d}{dx}F(a)</mrow>
+                <mrow xml:id="equation-conclude">&amp;=f(x)-0 = f(x)</mrow>
+            </mdn>.</p>
+
+            <p>And multi-line math with an embedded cross-reference to a figure:<md>
+                <mrow>x^2 + y^2 &amp;= z^2&amp;&amp;<xref ref="complete-graph"/></mrow>
+                <mrow>a^2 + b^2 &amp;= c^2&amp;&amp;</mrow>
+            </md></p>
+
             <p>Nice.</p>
         </chapter>
 
@@ -87,7 +99,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <p>A Scalable Vector Graphics (SVG) image created externally in Sage and then included here as a vector image (no file extension given).</p>
 
-            <figure width="20%">
+            <figure xml:id="complete-graph" width="20%">
                 <caption>A complete graph on 16 vertices</caption>
                 <image source="images/complete-graph" width="70%"/>
             </figure>
