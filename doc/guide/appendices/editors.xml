@@ -808,7 +808,7 @@
             The author using <pretext /> usually edits an <init>xml</init> file, say <c>myfile.xml</c> .
             This file is then processed using xsltproc in conjunction with an <init>xsl</init>
             file, say <c>myfile.xsl</c>.
-            Often the <init>xsl</init> file is <c>mathbook-html.xsl</c> or <c>mathbook-latex.xsl</c>.
+            Often the <init>xsl</init> file is <c>pretext-html.xsl</c> or <c>pretext-latex.xsl</c>.
             The usual command used by the author is <c>xsltproc myfile.xsl myfile.xml</c>.
             With this in mind, we could define a map:
             <c>:nmap &lt;C-X&gt; !xsltproc myfile.xsl myfile.xml&lt;CR&gt;</c>

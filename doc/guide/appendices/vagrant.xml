@@ -74,8 +74,8 @@
                 <prompt>$ </prompt><input>cd m101</input>
                 <prompt>$ </prompt><input>mkdir -p output/images</input>
                 <prompt>$ </prompt><input>~/mathbook/script/pretext -c latex-image -d output/images -f all src/index.mbx</input>
-                <prompt>$ </prompt><input>xsltproc -xinclude -o output/ ~/mathbook/xsl/mathbook-html.xsl src/index.mbx</input>
-                <prompt>$ </prompt><input>xsltproc -xinclude -o output/index.tex ~/mathbook/xsl/mathbook-latex.xsl src/index.mbx</input>
+                <prompt>$ </prompt><input>xsltproc -xinclude -o output/ ~/mathbook/xsl/pretext-html.xsl src/index.mbx</input>
+                <prompt>$ </prompt><input>xsltproc -xinclude -o output/index.tex ~/mathbook/xsl/pretext-latex.xsl src/index.mbx</input>
                 <prompt>$ </prompt><input>cd output</input>
                 <prompt>$ </prompt><input>xelatex index.tex</input>
             </console>

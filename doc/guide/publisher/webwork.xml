@@ -197,17 +197,17 @@
       <title>HTML output</title>
 
       <p>
-        When you execute <c>xsltproc</c><idx><c>xsltproc</c></idx> using <c>mathbook-html.xsl</c>,
+        When you execute <c>xsltproc</c><idx><c>xsltproc</c></idx> using <c>pretext-html.xsl</c>,
         apply it to the merged file described above, not your original source. For example:
       </p>
       <sidebyside>
         <console>
           <prompt>$ </prompt>
-          <input>xsltproc mathbook-html.xsl merge.ptx</input>
+          <input>xsltproc pretext-html.xsl merge.ptx</input>
         </console>
       </sidebyside>
       <p>
-        You may need to specify paths to <c>mathbook-html.xsl</c> and <c>merge.ptx</c>.
+        You may need to specify paths to <c>pretext-html.xsl</c> and <c>merge.ptx</c>.
       </p>
       <p>
         There are several string parameters you may pass to <c>xsltproc</c>.
@@ -283,17 +283,17 @@
       <title><latex/> output</title>
 
       <p>
-        When you execute <c>xsltproc</c><idx><c>xsltproc</c></idx> using <c>mathbook-latex.xsl</c>,
+        When you execute <c>xsltproc</c><idx><c>xsltproc</c></idx> using <c>pretext-latex.xsl</c>,
         apply it to the merged file described above, not your original source. For example:
       </p>
       <sidebyside>
         <console>
           <prompt>$ </prompt>
-          <input>xsltproc -o mybook.tex mathbook-latex.xsl merge.ptx</input>
+          <input>xsltproc -o mybook.tex pretext-latex.xsl merge.ptx</input>
         </console>
       </sidebyside>
       <p>
-        You may need to specify paths to <c>mathbook-latex.xsl</c> and <c>merge.ptx</c>.
+        You may need to specify paths to <c>pretext-latex.xsl</c> and <c>merge.ptx</c>.
       </p>
       <p>
         One string parameter you can pass to <c>xsltproc</c> is <c>latex.fillin.style</c>,

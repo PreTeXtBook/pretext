@@ -157,7 +157,7 @@
         </li>
         <li><p>
             Run the command
-            <c>xsltproc mathbook/xsl/mathbook-html.xsl hw.xml</c>
+            <c>xsltproc mathbook/xsl/pretext-html.xsl hw.xml</c>
             Upon completion, your should have a file called <c>hw.html</c>.
         </p></li>
         <li><p>

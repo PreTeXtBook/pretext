@@ -24,13 +24,13 @@
         <sidebyside>
             <console>
                 <prompt>rob@lava:~/mathbook$ </prompt>
-                <input>xsltproc xsl/mathbook-html.xsl ~/books/aota/animals.xml</input>
+                <input>xsltproc xsl/pretext-html.xsl ~/books/aota/animals.xml</input>
             </console>
         </sidebyside>
 
         <p>By default, <c>xsltproc</c> writes output to <c>stdout</c> (the screen), which you could redirect to a file, or you could use the <c>-o</c> switch to send the output to a named file.  However, <pretext /> automatically writes to a file whose name is derived from the <attr>xml:id</attr> attribute of the top-level <tag>book</tag> or <tag>article</tag> tag.  If no such attribute is given the filename will be derived from <c>book-1</c> or <c>article-1</c>.  All output is produced in whatever the current default directory is, so you will likely want to set this beforehand.</p>
 
-        <p>The <c>xsl</c> subdirectory of the <pretext /> distribution contains a variety of XSL stylesheets<idx>XSL stylesheet</idx>, which I will also refer to as <term>converters</term><idx><h>converter</h><see>XSL stylesheet</see></idx> or <term>conversions</term><idx><h>conversion</h><see>XSL stylesheet</see></idx>.  The ones that you will use as an author all have filenames of the form <c>xsl/mathbook-XXX.xsl</c>, where <c>XXX</c> is some indication of the output produced.  Conversions to <latex /> or HTML output are the two most mature converters.</p>
+        <p>The <c>xsl</c> subdirectory of the <pretext /> distribution contains a variety of XSL stylesheets<idx>XSL stylesheet</idx>, which I will also refer to as <term>converters</term><idx><h>converter</h><see>XSL stylesheet</see></idx> or <term>conversions</term><idx><h>conversion</h><see>XSL stylesheet</see></idx>.  The ones that you will use as an author all have filenames of the form <c>xsl/pretext-XXX.xsl</c>, where <c>XXX</c> is some indication of the output produced.  Conversions to <latex /> or HTML output are the two most mature converters.</p>
 
         <p>Note that authors are not responsible for creating XSL stylesheets.  Stock conversions are part of the <pretext /> distribution, and anybody is welcome to assume a source document is valid <pretext /> and create new conversions to process it to existing, or as yet unimagined, formats.</p>
     </section>
@@ -47,7 +47,7 @@
             <li><p>Within the <tag>chapter</tag> element for the chapter on mammals, add the line <c>&lt;xi:include href="monkeys.xml" /&gt;</c> to <q>pull in</q> the section on monkeys at that location.  The <attr>href</attr> attribute can point to a file in a subdirectory, but will be interpreted relative to the location of the file containing the mammal chapter element.</p></li>
             <li><p>Add the switch <c>-xinclude</c> to your invocation of <c>xsltproc</c>, just after <c>xsltproc</c>, but before the filenames for the stylesheet and the master source file.  Note that for some versions of <c>xsltproc</c> it might be necessary to use two dashes for the switch, <c>--xinclude</c>.</p></li>
         </ol>So now a typical invocation (using one dash) might look like<cd>
-            <cline>xsltproc -xinclude xsl/mathbook-html.xsl ~/books/aota/animals.xml</cline>
+            <cline>xsltproc -xinclude xsl/pretext-html.xsl ~/books/aota/animals.xml</cline>
         </cd></p>
 
         <p>Note that when you invoke <c>xsltproc</c> the default directory can be far away from your source, and the processor will locate all the component files of your project through the relative file locations in the <attr>href</attr> attribute.  Several comments are in order.<ul>
@@ -85,13 +85,13 @@
 
         <p>At this writing (2019-07-10) we have begun to transition between two different ways to accomplish this.  The new method is to create a <term>publisher file</term> that is an <init>XML</init> file that specifies options that are independent of your source material.  See <xref ref="publisher-file"/> in <xref ref="part-publisher"/> for details.  We continue to provide many of the values for these parameters on the command-line <em>at processing time</em>.  They have become known as <term>stringparam</term><idx>stringparam</idx> for a soon-to-be obvious reason.</p>
 
-        <p>Suppose you want to make a large-font version of your textbook for a student who has limited vision.  Look inside the top of <c>xsl/mathbook-latex.xsl</c> and find the <c>latex.font.size</c> parameter.  The preceding comments in this file suggest <c>20pt</c> is the maximum supported.  So you would use a command-line like the following (possibly with <c>--xinclude</c>, <etc />).</p>
+        <p>Suppose you want to make a large-font version of your textbook for a student who has limited vision.  Look inside the top of <c>xsl/pretext-latex.xsl</c> and find the <c>latex.font.size</c> parameter.  The preceding comments in this file suggest <c>20pt</c> is the maximum supported.  So you would use a command-line like the following (possibly with <c>--xinclude</c>, <etc />).</p>
 
         <sidebyside>
             <console>
                 <prompt>$ </prompt>
                 <input>xsltproc -o animals.tex --stringparam latex.font.size "20pt"</input>
-                <input>  /path/to/xsl/mathbook-latex.xsl ~/books/aota/animals.xml</input>
+                <input>  /path/to/xsl/pretext-latex.xsl ~/books/aota/animals.xml</input>
             </console>
         </sidebyside>
 
@@ -351,7 +351,7 @@
 
         <p>One of our main motivations for this project was mixing in code from the powerful, open source, mathematical software project, Sage (<xref ref="overview-sage" />).  When you add example Sage code to illustrate mathematical ideas, you are then encouraged to also include expected output in the <tag>output</tag> element.  Here comes one of the powerful advantages of XML source and XSL processing.</p>
 
-        <p>The <c>mathbook/xsl/mathbook-sage-doctest.xsl</c> stylesheet, used in the usual way, will create one (or several, depending on the <c>chunk.level</c> stringparam) file(s), in <em>exactly</em> the format Sage expects for automated testing.  So all your words are gone, and all your Sage input and output is packaged so Sage can run all the <tag>input</tag> and compare the results to the expected <tag>output</tag>.</p>
+        <p>The <c>mathbook/xsl/pretext-sage-doctest.xsl</c> stylesheet, used in the usual way, will create one (or several, depending on the <c>chunk.level</c> stringparam) file(s), in <em>exactly</em> the format Sage expects for automated testing.  So all your words are gone, and all your Sage input and output is packaged so Sage can run all the <tag>input</tag> and compare the results to the expected <tag>output</tag>.</p>
 
         <p>We have many years' experience testing hundreds of non-trivial Sage examples from textbooks, for linear algebra and abstract algebra.  Roughly every six months, we discover ten to twenty examples that fail.  Frequently the failures are trivial (usually output gets re-ordered), but some are significant changes in behavior that leads us to re-word surrounding guidance in the text, and in a few cases the failures have exposed bugs introduced into Sage.  It has been relatively easy to do this maintenance on a regular basis, and if it had not been done, the accumulated errors would be enough to greatly degrade confidence in the accuracy of the examples.</p>
 

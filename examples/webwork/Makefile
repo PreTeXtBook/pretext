@@ -128,7 +128,7 @@ sample-chapter-pdf:
 	-rm $(PDFOUT)/images/*
 	cp -a $(WWOUT)/*.png $(PDFOUT)/images
 	cd $(PDFOUT); \
-	xsltproc -o sample-ww-chapter.tex $(MBXSL)/mathbook-latex.xsl $(SCRATCH)/sample-chapter-merge.ptx; \
+	xsltproc -o sample-ww-chapter.tex $(MBXSL)/pretext-latex.xsl $(SCRATCH)/sample-chapter-merge.ptx; \
 	xelatex sample-ww-chapter.tex; \
 	xelatex sample-ww-chapter.tex; \
 
@@ -139,7 +139,7 @@ mini-pdf:
 	-rm $(PDFOUT)/images/*
 	cp -a $(WWOUT)/*.png $(PDFOUT)/images
 	cd $(PDFOUT); \
-	xsltproc -o webwork-mini.tex $(MBXSL)/mathbook-latex.xsl $(SCRATCH)/mini-merge.ptx; \
+	xsltproc -o webwork-mini.tex $(MBXSL)/pretext-latex.xsl $(SCRATCH)/mini-merge.ptx; \
 	xelatex webwork-mini.tex; \
 	xelatex webwork-mini.tex; \
 
@@ -151,14 +151,14 @@ sample-chapter-html:
 	-rm $(HTMLOUT)/knowl/*.html
 	cp -a $(WWEXAMPLE)/sample-chapter/images $(HTMLOUT)
 	cd $(HTMLOUT); \
-	xsltproc --stringparam webwork.divisional.static no $(MBXSL)/mathbook-html.xsl $(SCRATCH)/sample-chapter-merge.ptx;
+	xsltproc --stringparam webwork.divisional.static no $(MBXSL)/pretext-html.xsl $(SCRATCH)/sample-chapter-merge.ptx;
 
 mini-html:
 	install -d $(HTMLOUT)
 	-rm $(HTMLOUT)/*.html
 	-rm $(HTMLOUT)/knowl/*.html
 	cd $(HTMLOUT); \
-	xsltproc $(MBXSL)/mathbook-html.xsl $(SCRATCH)/mini-merge.ptx;
+	xsltproc $(MBXSL)/pretext-html.xsl $(SCRATCH)/mini-merge.ptx;
 
 #  Make an archive of webwork problem sets for each "section" (as specified
 #  by chunk level) with set definition files, set header files, and problem

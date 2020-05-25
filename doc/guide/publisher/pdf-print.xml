@@ -14,7 +14,7 @@
         <p>
             <idx><h>PDF</h><h>electronic</h></idx>
             <idx><h>PDF</h><h>print</h></idx>
-            The stylesheet <c>mathbook-latex.xsl</c> can produce two very similar outputs.  Each is a file in <latex/> syntax, which can be converted to a <init>PDF</init> with a <latex/> executable (<q>engine</q>).  However, there are two purposes for such a <init>PDF</init>.  The first is a document which is meant to be read on a screen.  We call this an <term>electronic PDF</term>.  The second is meant to be printed as a physical book, so it would be the file you provide to a copy shop, campus bookstore, or print-on-demand service (see <xref ref="print-on-demand"/>).  We call this a <term>print PDF</term>.  As you read this, keep in mind that that <latex/> conversion is really two-converters-in-one.
+            The stylesheet <c>pretext-latex.xsl</c> can produce two very similar outputs.  Each is a file in <latex/> syntax, which can be converted to a <init>PDF</init> with a <latex/> executable (<q>engine</q>).  However, there are two purposes for such a <init>PDF</init>.  The first is a document which is meant to be read on a screen.  We call this an <term>electronic PDF</term>.  The second is meant to be printed as a physical book, so it would be the file you provide to a copy shop, campus bookstore, or print-on-demand service (see <xref ref="print-on-demand"/>).  We call this a <term>print PDF</term>.  As you read this, keep in mind that that <latex/> conversion is really two-converters-in-one.
         </p>
 
         <p>As an illustration of the difference, an electronic <init>PDF</init> will contain cross-references that are active, and colored to be obvious to the reader.  For the print <init>PDF</init> the same cross-reference will be black, inactive, and by default contain the page number of the target.</p>
@@ -224,6 +224,6 @@
 
         <p>The existence, variety, and quality of <latex/> packages changes continuously.  We can, and will, swap out some packages for replacements, as needed or desirable.  This is to your advantage, as you are absolved of the need to evaluate competing packages, and to insure that they do not clash with each other.  So resist the temptation to modify the <latex/> output significantly prior to compilation, as it will inevitably lead to frustration.  The <latex/> file is a means to an end<mdash/>it allows us to create a <init>PDF</init> with excellent typography, and especially for the demands of technical discplines, such as <acro>STEM</acro> and music.  It is meant to ephemeral, not archival.</p>
 
-        <p>If some other variety of <latex/> (or <tex/>) file is desired, a new conversion could be created.  Many of the more complicated aspects of any conversion are purposely isolated in the <c>mathbook-common.xsl</c> file so that they can be easily re-purposed and there is consistency across output formats.</p>
+        <p>If some other variety of <latex/> (or <tex/>) file is desired, a new conversion could be created.  Many of the more complicated aspects of any conversion are purposely isolated in the <c>pretext-common.xsl</c> file so that they can be easily re-purposed and there is consistency across output formats.</p>
     </section>
 </chapter>

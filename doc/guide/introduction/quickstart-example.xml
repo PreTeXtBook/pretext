@@ -86,11 +86,11 @@
         <title>Processing</title>
 
         <p>At a command prompt in your terminal or console adjust the pathnames for the two files and execute:<cd>
-            <cline>xsltproc /path/to/mathbook/xsl/mathbook-html.xsl /path/to/quickstart.xml</cline>
+            <cline>xsltproc /path/to/mathbook/xsl/pretext-html.xsl /path/to/quickstart.xml</cline>
         </cd>In the current working directory you should now find the file <c>article-1.html</c> which you can view in a web browser.  (You will want an internet connection since various parts of the page come from the network.  Someday we will create output for the offline situation.)  It will look very plain, but you should be able to read the sentence.</p>
 
         <p>Now, try the following, again with adjusted paths, and all on one line:<cd>
-            <cline>xsltproc -o quick.tex /path/to/mathbook/xsl/mathbook-latex.xsl</cline>
+            <cline>xsltproc -o quick.tex /path/to/mathbook/xsl/pretext-latex.xsl</cline>
             <cline>/path/to/quickstart.xml</cline>
         </cd></p>
 
@@ -100,7 +100,7 @@
 
         <p> Note that if your project includes multiple files you will need to pass the <c>-xinclude</c> flag to <c>xsltproc</c>, though this is not needed for this simple example.
         An example of this is the command
-        <cd><cline>xsltproc -xinclude /path/to/mathbook/xsl/mathbook-html.xsl /path/to/index.xml</cline></cd>
+        <cd><cline>xsltproc -xinclude /path/to/mathbook/xsl/pretext-html.xsl /path/to/index.xml</cline></cd>
         For more on this see <xref ref="topic-xinclude"/> and <xref ref="processing-modular"/>.
         </p>
 
