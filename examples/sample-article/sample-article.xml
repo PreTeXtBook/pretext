@@ -22,7 +22,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--
 To process this file, at the command-line issue:
 
-xsltproc /path/to/mathbook/xsl/mathbook-html.xsl /path/to/mathbook/examples/sample-article.xml
+xsltproc /path/to/mathbook/xsl/pretext-html.xsl /path/to/mathbook/examples/sample-article.xml
 
 then find  "derivatives.html"  in the current working directory
 and use a web browser to view.  For PDF/print, issue:
@@ -6315,7 +6315,7 @@ the xsltproc executable.
                 </program>
             </sidebyside>
 
-            <p>Look in the <c>mathbook-common.xsl</c> file to see the strings to use to identify languages.  Always all-lowercase, no symbols, no punctuation.</p>
+            <p>Look in the <c>pretext-common.xsl</c> file to see the strings to use to identify languages.  Always all-lowercase, no symbols, no punctuation.</p>
 
             <p>Note that the above examples all have slightly different widths (theser are very evident in print with the frames).  As 2-D atomic objects, to place them in the narrative requires the layout features of a <c>sidebyside</c> element.  Then <c>width</c> and/or <c>margin</c> attributes will influence the width of the panel.</p>
 
@@ -6618,7 +6618,7 @@ the xsltproc executable.
             </quantity>
             in a full circle.</p>
 
-            <p>For a full list of the allowed units and prefixes, see <c>mathbook-units.xsl</c>. If you have a need for more units, they need to be added to <c>mathbook-units.xsl</c> in the section that deals with units which are not part of <c>siunitx</c> by default.  Note that the <c>mag</c> element should come first, followed by the <c>unit</c> element, followed by the <c>per</c> element.</p>
+            <p>For a full list of the allowed units and prefixes, see <c>pretext-units.xsl</c>. If you have a need for more units, they need to be added to <c>pretext-units.xsl</c> in the section that deals with units which are not part of <c>siunitx</c> by default.  Note that the <c>mag</c> element should come first, followed by the <c>unit</c> element, followed by the <c>per</c> element.</p>
 
         </section>
 

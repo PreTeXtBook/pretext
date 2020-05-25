@@ -823,7 +823,7 @@
                 </webwork>
             </exercise>
 
-            <!--Checkboxes not yet implemented fully. See note in mathbook-webwork-pg.xsl -->
+            <!--Checkboxes not yet implemented fully. See note in pretext-webwork-pg.xsl -->
             <!--<exercise>
                 <title>Choose several</title>
 
@@ -1078,7 +1078,7 @@
             </exercise>
 
             <exercise>
-                <!--Checkbox not implemented yet; see note in mathbook-webwork-pg.xsl  -->
+                <!--Checkbox not implemented yet; see note in pretext-webwork-pg.xsl  -->
                 <title>Multiple choice by popup, radio buttons<!--, or checkbox--></title>
 
                 <webwork xml:id="multiple-choice-popup-or-radio-buttons">

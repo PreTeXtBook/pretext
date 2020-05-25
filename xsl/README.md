@@ -20,6 +20,3 @@ requires significant further processing.
 * `pretext-common.xsl` - base templates, and not useful in isolation.
 * `extract-*.xsl` - used to isolate particular parts of a PreTeXt
 document, typically for subsequent processing by a script.
-
-
-
