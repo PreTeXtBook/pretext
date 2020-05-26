@@ -31,8 +31,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     extension-element-prefixes="exsl str"
     >
 
-<xsl:import href="./mathbook-common.xsl" />
-<xsl:import href="./mathbook-html.xsl" />
+<xsl:import href="./pretext-common.xsl" />
+<xsl:import href="./pretext-html.xsl" />
 
 <!-- Output is JSON, enriched with serialized HTML -->
 <xsl:output method="text" />
@@ -66,7 +66,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates />
 </xsl:template>
 
-<!-- We process structural nodes via chunking routine in  xsl/mathbook-common.html -->
+<!-- We process structural nodes via chunking routine in  xsl/pretext-common.xsl -->
 <!-- This in turn calls specific modal templates defined elsewhere in this file    -->
 <xsl:template match="/mathbook|/pretext">
     <xsl:call-template name="banner-warning">
@@ -92,7 +92,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Structural Nodes -->
 <!-- ################ -->
 
-<!-- Read the code and documentation for "chunking" in xsl/mathbook-common.html -->
+<!-- Read the code and documentation for "chunking" in xsl/pretext-common.xsl -->
 <!-- This will explain document structure (not XML structure) and has the       -->
 <!-- routines which call the necessary realizations of two abstract templates.  -->
 
@@ -147,7 +147,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Three modal templates accomodate all document structure nodes -->
 <!-- and all possibilities for chunking.  Read the description     -->
-<!-- in  xsl/mathbook-common.xsl to understand these.              -->
+<!-- in  xsl/pretext-common.xsl to understand these.              -->
 <!-- The  "file-wrap"  template is defined elsewhre in this file.  -->
 
 <!-- Content of a summary page is usual content,  -->

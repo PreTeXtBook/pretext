@@ -32,7 +32,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- various pieces of material or content, authored or computed,  -->
 <!-- into an enhanced source tree.                                 -->
 <!--                                                               -->
-<!-- Import this stylesheet immediately after mathbook-common.xsl. -->
+<!-- Import this stylesheet immediately after pretext-common.xsl. -->
 <!--                                                               -->
 <!-- * $original will point to source file/tree/XML at the overall -->
 <!--   "pretext" element.                                          -->

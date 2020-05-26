@@ -34,7 +34,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     extension-element-prefixes="exsl date str"
 >
 
-<xsl:import href="./mathbook-common.xsl" />
+<xsl:import href="./pretext-common.xsl" />
 <xsl:import href="./pretext-assembly.xsl"/>
 
 <!-- Intend output for rendering by pdflatex -->
@@ -81,7 +81,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--  -->
 <!-- Author's Tools                                            -->
 <!-- Set the author-tools parameter to 'yes'                   -->
-<!-- (Documented in mathbook-common.xsl)                       -->
+<!-- (Documented in pretext-common.xsl)                       -->
 <!-- Installs some LaTeX-specific behavior                     -->
 <!-- (1) Index entries in margin of the page                   -->
 <!--      where defined, on single pass (no real index)        -->
@@ -159,7 +159,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- LaTeX is handled natively, so we flip a  -->
 <!-- switch here to signal the general text() -->
-<!-- handler in xsl/mathbook-common.xsl to    -->
+<!-- handler in xsl/pretext-common.xsl to    -->
 <!-- not dress-up clause-ending punctuation   -->
 <xsl:variable name="latex-processing" select="'native'" />
 
@@ -1075,7 +1075,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\ifxetex\sisetup{math-micro=\text{µ},text-micro=µ}\fi</xsl:text>
         <xsl:text>\ifluatex\sisetup{math-micro=\text{µ},text-micro=µ}\fi</xsl:text>
         <xsl:text>%% Common non-SI units&#xa;</xsl:text>
-        <xsl:for-each select="document('mathbook-units.xsl')//base[@siunitx]">
+        <xsl:for-each select="document('pretext-units.xsl')//base[@siunitx]">
             <xsl:text>\DeclareSIUnit\</xsl:text>
             <xsl:value-of select="@full" />
             <xsl:text>{</xsl:text>
@@ -1571,7 +1571,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
     </xsl:if>
     <!-- Numbering Equations -->
-    <!-- See numbering-equations variable being set in mathbook-common.xsl         -->
+    <!-- See numbering-equations variable being set in pretext-common.xsl         -->
     <!-- With number="yes|no" on mrow, we must allow for the possibility of an md  -->
     <!-- variant having numbers (we could be more careful, but it is not critical) -->
     <!-- NB: global numbering is level 0 and "level-to-name" is (a) incorrect,     -->
@@ -4477,7 +4477,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Arbitrary Lists -->
 <!-- ############### -->
 
-<!-- See general routine in  xsl/mathbook-common.xsl -->
+<!-- See general routine in  xsl/pretext-common.xsl -->
 <!-- which expects the two named templates and the  -->
 <!-- two division'al and element'al templates below,  -->
 <!-- it contains the logic of constructing such a list -->
@@ -7856,7 +7856,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- With a "cline" element present, we assume   -->
 <!-- that is the entire structure (see the cline -->
-<!-- template in the mathbook-common.xsl file)   -->
+<!-- template in the pretext-common.xsl file)   -->
 <xsl:template match="cd[cline]">
     <xsl:text>%&#xa;</xsl:text>
     <xsl:text>\begin{codedisplay}&#xa;</xsl:text>
@@ -7868,7 +7868,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The "interior" templates decide between two styles  -->
 <!--   (a) clean up raw text, just like for Sage code    -->
 <!--   (b) interpret cline as line-by-line structure     -->
-<!-- (See templates in xsl/mathbook-common.xsl file)     -->
+<!-- (See templates in xsl/pretext-common.xsl file)     -->
 <!-- Then wrap in a  verbatim  environment               -->
 <xsl:template match="pre">
     <xsl:text>\begin{preformatted}&#xa;</xsl:text>
@@ -7890,7 +7890,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ################### -->
 
 <!-- Across all possibilities                     -->
-<!-- See mathbook-common.xsl for discussion       -->
+<!-- See pretext-common.xsl for discussion       -->
 <!-- See default LaTeX2e textcomp symbols at:     -->
 <!-- http://hevea.inria.fr/examples/test/sym.html -->
 
@@ -8442,7 +8442,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ################## -->
 
 <!-- These are specific instances of abstract templates        -->
-<!-- See the similar section of  mathbook-common.xsl  for more -->
+<!-- See the similar section of  pretext-common.xsl  for more -->
 
 <!-- TODO: Perhaps use LaTeX double and triple hyphen variants of  -->
 <!-- en-dash and em-dash under some option for human-variant LaTeX -->
@@ -8765,10 +8765,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- SideBySide Layouts -->
 <!-- ################## -->
 
-<!-- See xsl/mathbook-common.xsl for descriptions of the  -->
+<!-- See xsl/pretext-common.xsl for descriptions of the  -->
 <!-- four modal templates which must be implemented here  -->
 <!-- The main templates for "sidebyside" and "sbsgroup"   -->
-<!-- are in xsl/mathbook-common.xsl, as befits containers -->
+<!-- are in xsl/pretext-common.xsl, as befits containers -->
 
 <!-- Note: Various end-of-line "%" are necessary to keep  -->
 <!-- headings, panels, and captions together as one unit  -->
@@ -9636,7 +9636,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Typically use these at the last moment,             -->
 <!-- while outputting, and thus use MBX terms internally -->
 
-<!-- Some utilities are defined in xsl/mathbook-common.xsl -->
+<!-- Some utilities are defined in xsl/pretext-common.xsl -->
 
 <!-- "halign-specification" : param "align" -->
 <!--     left, right, center -> l, c, r     -->
@@ -9645,7 +9645,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--     top, middle, bottom -> t, m, b     -->
 
 <!-- paragraph valign-specifications (p, m, b) are  -->
-<!-- different from (t, m, b) in mathbook-common    -->
+<!-- different from (t, m, b) in pretext-common    -->
 
 <!-- paragraph halign-specifications (left, center, right, justify) -->
 <!-- converted to \raggedright, \centering, \raggedleft, <empty>    -->
@@ -10001,7 +10001,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ways LaTeX cannot, so the union of the match critera here should be    -->
 <!-- the list above.  Or said differently, a new object needs to preserve   -->
 <!-- this union property across the various "xref-number" templates.        -->
-<!-- See xsl/mathbook-common.xsl for more info.                             -->
+<!-- See xsl/pretext-common.xsl for more info.                             -->
 
 <xsl:template match="*" mode="xref-number">
     <xsl:param name="xref" select="/.." />

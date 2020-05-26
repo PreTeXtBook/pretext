@@ -36,7 +36,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Necessary to get some HTML constructions, -->
 <!-- but want to be sure to override the entry -->
 <!-- template to avoid chunking, etc.          -->
-<xsl:import href="mathbook-html.xsl" />
+<xsl:import href="pretext-html.xsl" />
 
 <!-- HTML5 format -->
 <xsl:output method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat"/>

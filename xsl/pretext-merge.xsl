@@ -34,7 +34,7 @@
 <!-- List of auxiliary XML this sytle sheet merges:                        -->
 <!-- * WeBWorK extractions                                                 -->
 
-<xsl:import href="./mathbook-common.xsl" />
+<xsl:import href="./pretext-common.xsl" />
 
 <!-- We output a single, large .ptx file for further -->
 <!-- processing by other PTX style sheets            -->

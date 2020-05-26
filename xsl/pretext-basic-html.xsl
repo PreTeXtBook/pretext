@@ -42,7 +42,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     extension-element-prefixes="exsl date str"
 >
 
-<xsl:import href="./mathbook-html.xsl" />
+<xsl:import href="./pretext-html.xsl" />
 
 <!-- Unknowl as much as possible -->
 <xsl:param name="html.knowl.theorem" select="'no'" />
