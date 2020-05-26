@@ -12,7 +12,7 @@
     xmlns:math="http://exslt.org/math"
     extension-element-prefixes="exsl date math">
 
-<xsl:import href="./mathbook-html.xsl" />
+<xsl:import href="./pretext-html.xsl" />
 
 <!-- Intend output for rendering by browsers-->
 <xsl:output method="html" indent="yes"/>
@@ -43,7 +43,7 @@
     <xsl:apply-templates />
 </xsl:template>
 
-<!-- We process structural nodes via chunking routine in   xsl/mathbook-common.html -->
+<!-- We process structural nodes via chunking routine in   xsl/pretext-common.xsl   -->
 <!-- This in turn calls specific modal templates defined elsewhere in this file     -->
 <!-- Contrary to HTML production, we do not have a pass through to build the knowls -->
 <xsl:template match="mathbook">
@@ -189,7 +189,7 @@
     </xsl:apply-templates>
 </xsl:template>
 
-<!-- Most Sage options are implemented in  xsl/mathbook-common.xsl -->
+<!-- Most Sage options are implemented in  xsl/pretext-common.xsl -->
 <!-- We just output the input code, with no XHTML protections      -->
 <xsl:template match="sage" mode="sage-active-markup">
     <xsl:param name="in" />

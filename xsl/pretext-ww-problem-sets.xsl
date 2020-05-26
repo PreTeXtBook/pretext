@@ -39,7 +39,7 @@
 <!-- upload into a WeBWorK course (perhaps in the templates/local folder); -->
 <!-- or into a server's libraries folder and set up site-wide access.      -->
 
-<xsl:import href="./mathbook-common.xsl" />
+<xsl:import href="./pretext-common.xsl" />
 <xsl:import href="./pretext-assembly.xsl" />
 
 <!-- Intend output to be a PG/PGML problem or a "def" file -->

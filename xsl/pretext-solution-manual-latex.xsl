@@ -34,12 +34,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     extension-element-prefixes="exsl date str"
 >
 
-<xsl:import href="./mathbook-latex.xsl" />
+<xsl:import href="./pretext-latex.xsl" />
 
 <!-- Intend output for rendering by pdflatex -->
 <xsl:output method="text" />
 
-<!-- These variables are interpreted in mathbook-common.xsl and  -->
+<!-- These variables are interpreted in pretext-common.xsl and  -->
 <!-- so may be used/set in a custom XSL stylesheet for a         -->
 <!-- project's solution manual.                                  -->
 <!--                                                             -->
@@ -65,7 +65,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- project.solution                                            -->
 <!--                                                             -->
 <!-- The second set of variables are internal, and are derived   -->
-<!-- from the above via careful routines in mathbook-common.xsl. -->
+<!-- from the above via careful routines in pretext-common.xsl. -->
 <!--                                                             -->
 <!-- b-has-inline-statement                                      -->
 <!-- b-has-inline-hint                                           -->
@@ -99,7 +99,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- We have a switch for just this situation, to force -->
 <!-- (overrule) the auto-detetion of the necessity for  -->
 <!-- LaTeX styles for the solutions to exercises.       -->
-<!-- See  mathbook-latex.xsl  for more explanation.     -->
+<!-- See  pretext-latex.xsl  for more explanation.     -->
 <xsl:variable name="b-needs-solution-styles" select="true()"/>
 
 <!-- We hardcode the numbers of 2D displays so they are correct where  -->

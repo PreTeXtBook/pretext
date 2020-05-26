@@ -42,7 +42,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     extension-element-prefixes="exsl date str"
 >
 
-<xsl:import href="./mathbook-common.xsl"/>
+<xsl:import href="./pretext-common.xsl"/>
 <xsl:import href="./pretext-assembly.xsl"/>
 
 
@@ -423,7 +423,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Parameters -->
 <!-- Parameters to pass via xsltproc "stringparam" on command-line            -->
 <!-- Or make a thin customization layer and use 'select' to provide overrides -->
-<!-- See more generally applicable parameters in mathbook-common.xsl file     -->
+<!-- See more generally applicable parameters in pretext-common.xsl file     -->
 
 <!-- WeBWorK exercise may be rendered static="yes"    -->
 <!-- TODO: implement middle option static="preview"   -->
@@ -732,7 +732,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="$root"/>
 </xsl:template>
 
-<!-- We process structural nodes via chunking routine in xsl/mathbook-common.xsl    -->
+<!-- We process structural nodes via chunking routine in xsl/pretext-common.xsl    -->
 <!-- This in turn calls specific modal templates defined elsewhere in this file     -->
 <!-- The xref-knowl templates run independently on content node of document tree    -->
 <xsl:template match="/mathbook|/pretext">
@@ -782,7 +782,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Structural Nodes -->
 <!-- ################ -->
 
-<!-- Read the code and documentation for "chunking" in xsl/mathbook-common.xsl  -->
+<!-- Read the code and documentation for "chunking" in xsl/pretext-common.xsl  -->
 <!-- This will explain document structure (not XML structure) and has the       -->
 <!-- routines which employ the realizations below of two abstract templates.    -->
 
@@ -1400,7 +1400,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Arbitrary Lists -->
 <!-- ############### -->
 
-<!-- See general routine in  xsl/mathbook-common.xsl -->
+<!-- See general routine in  xsl/pretext-common.xsl -->
 <!-- which expects the two named templates and the  -->
 <!-- two division'al and element'al templates below,  -->
 <!-- it contains the logic of constructing such a list -->
@@ -3818,7 +3818,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>exercisegroup-exercises</xsl:text>
             <xsl:if test="@cols">
                 <xsl:text> </xsl:text>
-                <!-- HTML-specific, but in mathbook-common.xsl -->
+                <!-- HTML-specific, but in pretext-common.xsl -->
                 <xsl:apply-templates select="." mode="number-cols-CSS-class" />
             </xsl:if>
         </xsl:attribute>
@@ -3861,7 +3861,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text>exercisegroup-exercises</xsl:text>
                     <xsl:if test="@cols">
                         <xsl:text> </xsl:text>
-                        <!-- HTML-specific, but in mathbook-common.xsl -->
+                        <!-- HTML-specific, but in pretext-common.xsl -->
                         <xsl:apply-templates select="." mode="number-cols-CSS-class" />
                     </xsl:if>
                 </xsl:attribute>
@@ -5593,7 +5593,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="html-list-class" />
             <xsl:if test="@cols">
                 <xsl:text> </xsl:text>
-                <!-- HTML-specific, but in mathbook-common.xsl -->
+                <!-- HTML-specific, but in pretext-common.xsl -->
                 <xsl:apply-templates select="." mode="number-cols-CSS-class" />
             </xsl:if>
         </xsl:attribute>
@@ -5966,10 +5966,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- SideBySide Layouts -->
 <!-- ################## -->
 
-<!-- See xsl/mathbook-common.xsl for descriptions of the  -->
+<!-- See xsl/pretext-common.xsl for descriptions of the  -->
 <!-- four modal templates which must be implemented here  -->
 <!-- The main templates for "sidebyside" and "sbsgroup"   -->
-<!-- are in xsl/mathbook-common.xsl, as befits containers -->
+<!-- are in xsl/pretext-common.xsl, as befits containers -->
 
 <!-- When we use CSS margins (or padding), then percentage        -->
 <!-- widths are relative to the remaining space.  This utility    -->
@@ -7209,7 +7209,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Table construction utilities -->
 <!-- ############################ -->
 
-<!-- Utilities are defined in xsl/mathbook-common.xsl -->
+<!-- Utilities are defined in xsl/pretext-common.xsl -->
 
 <!-- "thickness-specification" : param "width"    -->
 <!--     none, minor, medium, major -> 0, 1, 2, 3 -->
@@ -7270,7 +7270,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- and then condition on the location of the    -->
 <!-- actual link, which is sensitive to display   -->
 <!-- math in particular                           -->
-<!-- See xsl/mathbook-common.xsl for more info    -->
+<!-- See xsl/pretext-common.xsl for more info    -->
 <!-- TODO: could match on "xref" once link routines  -->
 <!-- are broken into two and other uses are rearranged -->
 <xsl:template match="*" mode="xref-link">
@@ -7508,7 +7508,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="@prefix" />
         </xsl:variable>
         <xsl:variable name="short">
-            <xsl:for-each select="document('mathbook-units.xsl')">
+            <xsl:for-each select="document('pretext-units.xsl')">
                 <xsl:value-of select="key('prefix-key',concat('prefixes',$prefix))/@short"/>
             </xsl:for-each>
         </xsl:variable>
@@ -7519,7 +7519,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:value-of select="@base" />
     </xsl:variable>
     <xsl:variable name="short">
-        <xsl:for-each select="document('mathbook-units.xsl')">
+        <xsl:for-each select="document('pretext-units.xsl')">
             <xsl:value-of select="key('base-key',concat('bases',$base))/@short"/>
         </xsl:for-each>
     </xsl:variable>
@@ -7846,7 +7846,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:element>
 </xsl:template>
 
-<!-- cline template is in xsl/mathbook-common.xsl -->
+<!-- cline template is in xsl/pretext-common.xsl -->
 <xsl:template match="cd[cline]">
     <xsl:param name="b-original" select="true()" />
     <xsl:element name="pre">
@@ -7864,7 +7864,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The "interior" templates decide between two styles  -->
 <!--   (a) clean up raw text, just like for Sage code    -->
 <!--   (b) interpret cline as line-by-line structure     -->
-<!-- (See templates in xsl/mathbook-common.xsl file)     -->
+<!-- (See templates in xsl/pretext-common.xsl file)     -->
 <!-- Then wrap in a pre element that MathJax ignores     -->
 <xsl:template match="pre">
     <xsl:element name="pre">
@@ -7880,7 +7880,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ################### -->
 
 <!-- XML and LaTeX equal to ASCII defaults  -->
-<!-- See mathbook-common.xsl for discussion -->
+<!-- See pretext-common.xsl for discussion -->
 
 <!--           -->
 <!-- XML, HTML -->
@@ -8202,7 +8202,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ################## -->
 
 <!-- These are specific instances of abstract templates        -->
-<!-- See the similar section of  mathbook-common.xsl  for more -->
+<!-- See the similar section of  pretext-common.xsl  for more -->
 
 <!-- Non-breaking space, which "joins" two words as a unit            -->
 <!-- Using &nbsp; does not travel well into node-set() in common file -->

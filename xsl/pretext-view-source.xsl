@@ -38,7 +38,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     extension-element-prefixes="exsl"
 >
 
-<xsl:import href="./mathbook-html.xsl" />
+<xsl:import href="./pretext-html.xsl" />
 
 <!-- We assume the source is in great shape, typically having been -->
 <!-- created by a pretty-printing tool.  So we keep all the        -->

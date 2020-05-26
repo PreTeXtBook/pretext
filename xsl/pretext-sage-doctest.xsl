@@ -15,7 +15,7 @@
 >
 
 <!-- For numbers, titles, text utilities, etc -->
-<xsl:import href="./mathbook-common.xsl" />
+<xsl:import href="./pretext-common.xsl" />
 
 <!-- Intend output for Python docstring -->
 <xsl:output method="text" />
@@ -23,7 +23,7 @@
 <!-- Doctest files are Python (docstring) -->
 <xsl:variable name="file-extension" select="'.py'" />
 
-<!-- Set the chunking level variable for the routines in mathbook-common.xsl. -->
+<!-- Set the chunking level variable for the routines in pretext-common.xsl. -->
 <!-- Default to zero, else use whatever an author specifies                   -->
 <xsl:variable name="chunk-level">
     <xsl:choose>
@@ -49,7 +49,7 @@
 </xsl:template>
 
 <!-- We process structural nodes via chunking        -->
-<!-- routine in   xsl/mathbook-common.html           -->
+<!-- routine in   xsl/pretext-common.xsl             -->
 <!-- The default templates there do everything       -->
 <!-- we need once we have "file-wrap" modal template -->
 <xsl:template match="mathbook|pretext">

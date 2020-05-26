@@ -65,7 +65,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="base-url" select="'http://abstract.ups.edu/aata/'"/>
 <!-- <xsl:param name="base-url" select="'http://set-base-url/'"/> -->
 
-<!-- Necessary variables, typically set in  mathbook-html.xsl -->
+<!-- Necessary variables, typically set in  pretext-html.xsl -->
 <!-- $chunk-level will eventually be referenced by templates  -->
 <!-- for the containing filename used to construct a URL      -->
 <!-- Since we are describing HTML output, we want filenames   -->
