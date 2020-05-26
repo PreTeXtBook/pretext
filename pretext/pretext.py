@@ -1213,25 +1213,30 @@ def check_python_version():
     # but only handling 2to3 switch when introduced
     msg = ''.join(["script/module expects Python 3.4, not Python 2 or older\n",
                    "You have Python {}\n",
-                   "** Try using prefixing your command-line with 'python3 ' **"])
+                   "** Try prefixing your command-line with 'python3 ' **"])
     if sys.version_info[0] <= 2:
         raise(OSError(msg.format(python_version())))
 
-def get_ptx_path():
-    """Returns path of root of PreTeXt distribution"""
+def set_ptx_path():
+    """Discover and set path to root of PreTeXt distribution"""
     # necessary to locate configuration files, XSL stylesheets
     # since authors can drop distribution *anywhere* in their system
+    global _ptx_path
     import os.path # abspath(), split()
 
-    _verbose("discovering PreTeXt root directory from module location")
     # full path to module itself
     ptx_path = os.path.abspath(__file__)
     # split "python.py" off module's filename
     module_dir, _ = os.path.split(ptx_path)
     # split "pretext" path off executable
-    distribution_dir, _ = os.path.split(module_dir)
-    _verbose("PreText distribution root directory: {}".format(distribution_dir))
-    return distribution_dir
+    _ptx_path, _ = os.path.split(module_dir)
+    return None
+
+def get_ptx_path():
+    """Returns path to root of PreTeXt distribution"""
+    global _ptx_path
+
+    return _ptx_path
 
 def get_ptx_xsl_path():
     """Returns path of PreTeXt XSL directory"""
@@ -1304,8 +1309,9 @@ def sanitize_alpha_num_underscore(param):
         raise ValueError('param {} contains characters other than a-zA-Z0-9_ '.format(param))
     return param
 
-def get_config_info():
-    """Return configuation in object for querying"""
+def set_config_info():
+    """Create configuation in object for querying"""
+    global _config
     import os.path # join()
     import configparser # ConfigParser()
 
@@ -1319,14 +1325,23 @@ def get_config_info():
     config_file_list = [default_config_file, stale_user_config_file, user_config_file]
     # ConfigParser module was renamed to configparser in Python 3
     # and object was renamed from SafeConfigParser() to ConfigParser()
-    config = configparser.ConfigParser()
+    _config = configparser.ConfigParser()
+
     _verbose("parsing possible configuration files: {}".format(config_file_list))
-    files_read = config.read(config_file_list)
+    files_read = _config.read(config_file_list)
     _debug("configuration files actually used/read: {}".format(files_read))
     if not(user_config_file in files_read):
         msg = "using default configuration only, custom configuration file not used at {}"
         _verbose(msg.format(user_config_file))
-    return config
+    return _config
+
+# def debug_config_info():
+
+def get_config_info():
+    """Return configuation in object for querying"""
+    global _config
+
+    return _config
 
 def copy_data_directory(source_file, data_dir, tmp_dir):
     """Stage directory from CLI argument into the working directory"""
@@ -1369,23 +1384,22 @@ def get_temporary_directory():
 # Module provides, and depends on:
 #
 #  _verbosity - level of detail in console output
+#
+#  _ptx_path - root directory of installed PreTeXt distribution
+#              necessary to locate stylesheets and other support
+#
+#  _config - parsed values from an INI-style configuration file
 
-# verbosity parameter defaults to 0
+# verbosity parameter defaults to 0 at startup
 # employing application can use set_verbosity()
-_verbosity = 0
+# to override via application's methodology
+_verbosity = None
+set_verbosity(0)
 
-# Report Python version in debugging output
-# Needs _verbosity to control _debug()
-# Routine keeps "sys" import hidden from module
-_debug("Python version: {} (expecting 3.4 or newer)".format(python_version()))
-# always check version, raise error for Python 2 or less
-check_python_version()
+# Discover and set distribution path once at start-up
+_ptx_path = None
+set_ptx_path()
 
-# Check discovering directory locations as
-# realized by PreTeXt installation
-# Necessary for locating configuration files (next)
-_debug("discovered distribution and xsl directories: {}, {}".format(get_ptx_path(), get_ptx_xsl_path()))
-
-# Report 'executables' in configuration file
-# Module functions depend on this extensively via get_executable()
-_debug('executables in configuration file: {}'.format(dict(get_config_info()['executables'])))
+# Parse configuration file once
+_config = None
+set_config_info()

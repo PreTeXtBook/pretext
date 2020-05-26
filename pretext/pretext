@@ -126,6 +126,9 @@ def main():
     """React to command-line switches in order to perform basic tasks"""
     import os # getcwd
 
+    # always check version, raises error for Python 2 or less
+    ptx.check_python_version()
+
     # grab command line arguments
     args = get_cli_arguments()
 
@@ -137,9 +140,23 @@ def main():
     else:
         ptx.set_verbosity(args.verbose)
 
-    # Now, and only now, we can report the command-line arguments,
+    # Now, and only now, we can report some setup,
     # since we had to wait for the vebosity to be reported and set
+
+    # Report the command-line arguments just obtained
     ptx._debug("Parsed CLI args {}".format(vars(args)))
+
+    # Report Python version in debugging output
+    ptx._debug("Python version: {} (expecting 3.4 or newer)".format(ptx.python_version()))
+
+    # Check discovering directory locations as
+    # realized by PreTeXt installation
+    # Necessary for locating configuration files (next)
+    ptx._debug("discovered distribution and xsl directories: {}, {}".format(ptx.get_ptx_path(), ptx.get_ptx_xsl_path()))
+
+    # Report 'executables' in configuration file
+    # Module functions depend on this extensively via get_executable()
+    ptx._debug('executables in configuration file: {}'.format(dict(ptx.get_config_info()['executables'])))
 
     # directory/file locations provided on command-line by user
     # output directory, default to cwd
@@ -154,6 +171,9 @@ def main():
     else:
         data_dir = None
 
+    ptx._verbose('Done examining environment and initializing setup info')
+
+    # The big switch
     if args.component == 'asy':
         if args.format == 'html':
             ptx.asymptote_conversion(xml_source, args.xmlid, dest_dir, 'html')
