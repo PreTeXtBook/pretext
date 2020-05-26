@@ -387,8 +387,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$publication/html/video/@privacy = 'no'">
             <xsl:value-of select="$publication/html/video/@privacy"/>
         </xsl:when>
+        <!-- set, but not correct, so inform and use default -->
+        <xsl:when test="$publication/html/video/@privacy">
+            <xsl:value-of select="$publication/html/video/@privacy"/>
+            <xsl:message>PTX WARNING:   HTML video/@privacy in publisher file should be "yes" (fewer cookies) or "no" (all cookies), not "<xsl:value-of select="$publication/html/video/@privacy"/>". Proceeding with default value: "yes" (disable cookies, if possible)</xsl:message>
+            <xsl:text>yes</xsl:text>
+        </xsl:when>
+        <!-- unset, so use default -->
         <xsl:otherwise>
-            <xsl:message>PTX WARNING:   HTML video/@privacy in publisher file should be "yes" (fewer cookies) or "no" (all cookies). Proceeding with default value: "yes" (disable cookies, if possible)</xsl:message>
             <xsl:text>yes</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
