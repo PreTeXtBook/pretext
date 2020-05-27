@@ -39,7 +39,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- There is a relative path here, which bounces up a level   -->
 <!-- from the file you are reading to be in the directory of   -->
 <!-- principal stylesheets.  (Also for entities.ent above)     -->
-<xsl:import href="../mathbook-latex.xsl" />
+<xsl:import href="../pretext-latex.xsl" />
 
 <!-- Intend output for rendering by xelatex -->
 <xsl:output method="text" />

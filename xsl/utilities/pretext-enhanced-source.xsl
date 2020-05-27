@@ -24,7 +24,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
 >
 
-<xsl:import href="../mathbook-common.xsl"/>
+<xsl:import href="../pretext-common.xsl"/>
 <xsl:import href="../pretext-assembly.xsl"/>
 
 <xsl:output method="xml" indent="yes" encoding="UTF-8"/>

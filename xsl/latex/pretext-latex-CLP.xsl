@@ -31,7 +31,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 >
 
 <!-- Override specific tenplates of the standard conversion -->
-<xsl:import href="../mathbook-latex.xsl" />
+<xsl:import href="../pretext-latex.xsl" />
 
 <!-- Intend output for rendering by pdflatex -->
 <xsl:output method="text" />

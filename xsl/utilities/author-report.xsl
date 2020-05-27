@@ -30,7 +30,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:xml="http://www.w3.org/XML/1998/namespace" >
 
 <!-- Uses "strip-leading-whitespace" and more -->
-<xsl:import href="../mathbook-common.xsl"/>
+<xsl:import href="../pretext-common.xsl"/>
 
 <!-- ASCII output intended, consistent with -common -->
 <xsl:output method="text" />
