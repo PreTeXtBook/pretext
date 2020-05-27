@@ -438,6 +438,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="b-host-runestone" select="$host-platform = 'runestone'"/>
 <xsl:variable name="b-host-aim"       select="$host-platform = 'aim'"/>
 
+<!-- Not documented, for development use only -->
+<xsl:param name="runestone.dev" select="''"/>
+<xsl:variable name="runestone-dev" select="$runestone.dev = 'yes'"/>
+
 <!-- Temporary, undocumented, and experimental           -->
 <!-- Makes randomization buttons for inline WW probmlems -->
 <xsl:param name="debug.webwork.inline.randomize" select="''"/>
@@ -8611,26 +8615,69 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- without switch, do not add *anything* -->
     <xsl:if test="$b-host-runestone">
         <!-- Runestone templating for customizing hosted books -->
-        <!-- Unclear if a concat() of five strings would be cleaner? -->
         <script type="text/javascript">
         <xsl:text>&#xa;</xsl:text>
         <xsl:text>eBookConfig = {};&#xa;</xsl:text>
-        <xsl:text>eBookConfig.host = '';&#xa;</xsl:text>
-        <xsl:text>eBookConfig.useRunestoneServices = true;&#xa;</xsl:text>
-        <xsl:text>eBookConfig.app = eBookConfig.host + '/' + '</xsl:text><xsl:value-of select="$rso"/><xsl:text>= request.application </xsl:text><xsl:value-of select="$rsc"/><xsl:text>';&#xa;</xsl:text>
-        <xsl:text>eBookConfig.course = '</xsl:text><xsl:value-of select="$rso"/><xsl:text>= course_name </xsl:text><xsl:value-of select="$rsc"/><xsl:text>';&#xa;</xsl:text>
-        <xsl:text>eBookConfig.basecourse = '</xsl:text><xsl:value-of select="$rso"/><xsl:text>= base_course </xsl:text><xsl:value-of select="$rsc"/><xsl:text>';&#xa;</xsl:text>
-        <xsl:text>eBookConfig.isLoggedIn = </xsl:text><xsl:value-of select="$rso"/><xsl:text>= is_logged_in</xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
-        <xsl:text>eBookConfig.email = '</xsl:text><xsl:value-of select="$rso"/><xsl:text>= user_email </xsl:text><xsl:value-of select="$rsc"/><xsl:text>';&#xa;</xsl:text>
-        <xsl:text>eBookConfig.isInstructor = </xsl:text><xsl:value-of select="$rso"/><xsl:text>= is_instructor </xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
-        <xsl:text>eBookConfig.ajaxURL = eBookConfig.app + "/ajax/";&#xa;</xsl:text>
-        <xsl:text>eBookConfig.logLevel = 10;&#xa;</xsl:text>
-        <xsl:text>eBookConfig.username = '</xsl:text><xsl:value-of select="$rso"/><xsl:text>= user_id</xsl:text><xsl:value-of select="$rsc"/><xsl:text>';&#xa;</xsl:text>
-        <xsl:text>eBookConfig.readings = </xsl:text><xsl:value-of select="$rso"/><xsl:text>= readings</xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
-        <xsl:text>eBookConfig.activities = </xsl:text><xsl:value-of select="$rso"/><xsl:text>= XML(activity_info) </xsl:text><xsl:value-of select="$rsc"/><xsl:text>&#xa;</xsl:text>
-        <xsl:text>eBookConfig.downloadsEnabled = </xsl:text><xsl:value-of select="$rso"/><xsl:text>=downloads_enabled</xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
-        <xsl:text>eBookConfig.allow_pairs = </xsl:text><xsl:value-of select="$rso"/><xsl:text>=allow_pairs</xsl:text><xsl:value-of select="$rsc"/><xsl:text>&#xa;</xsl:text>
-        <xsl:text>eBookConfig.enableScratchAC = false;&#xa;</xsl:text>
+            <!-- no Sphinx {% %} templating for build system at all,         -->
+            <!-- everything conditional on $runestone-dev                    -->
+            <!-- 'no'  - production, {{ }} templating replaced by $rso, $rsc -->
+            <!-- 'yes' - local viewing, dummy values                         -->
+        <xsl:choose>
+            <!-- Hosted, dynamic: $runestone-dev = 'no' -->
+            <xsl:when test="not($runestone-dev)">
+                <xsl:text>eBookConfig.useRunestoneServices = true;&#xa;</xsl:text>
+                <xsl:text>eBookConfig.host = '';&#xa;</xsl:text>
+                <xsl:text>eBookConfig.app = eBookConfig.host + '/' + '</xsl:text><xsl:value-of select="$rso"/><xsl:text>= request.application </xsl:text><xsl:value-of select="$rsc"/><xsl:text>';&#xa;</xsl:text>
+                <xsl:text>eBookConfig.course = '</xsl:text><xsl:value-of select="$rso"/><xsl:text>= course_name </xsl:text><xsl:value-of select="$rsc"/><xsl:text>';&#xa;</xsl:text>
+                <xsl:text>eBookConfig.basecourse = '</xsl:text><xsl:value-of select="$rso"/><xsl:text>= base_course </xsl:text><xsl:value-of select="$rsc"/><xsl:text>';&#xa;</xsl:text>
+                <xsl:text>eBookConfig.isLoggedIn = </xsl:text><xsl:value-of select="$rso"/><xsl:text>= is_logged_in</xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
+                <xsl:text>eBookConfig.email = '</xsl:text><xsl:value-of select="$rso"/><xsl:text>= user_email </xsl:text><xsl:value-of select="$rsc"/><xsl:text>';&#xa;</xsl:text>
+                <xsl:text>eBookConfig.isInstructor = </xsl:text><xsl:value-of select="$rso"/><xsl:text>= is_instructor </xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
+                <xsl:text>eBookConfig.ajaxURL = eBookConfig.app + "/ajax/";&#xa;</xsl:text>
+                <!-- no .loglevel -->
+                <xsl:text>eBookConfig.username = '</xsl:text><xsl:value-of select="$rso"/><xsl:text>= user_id</xsl:text><xsl:value-of select="$rsc"/><xsl:text>';&#xa;</xsl:text>
+                <xsl:text>eBookConfig.readings = </xsl:text><xsl:value-of select="$rso"/><xsl:text>= readings</xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
+                <xsl:text>eBookConfig.activities = </xsl:text><xsl:value-of select="$rso"/><xsl:text>= XML(activity_info) </xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
+                <xsl:text>eBookConfig.downloadsEnabled = </xsl:text><xsl:value-of select="$rso"/><xsl:text>=downloads_enabled</xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
+                <xsl:text>eBookConfig.allow_pairs = </xsl:text><xsl:value-of select="$rso"/><xsl:text>=allow_pairs</xsl:text><xsl:value-of select="$rsc"/><xsl:text>;&#xa;</xsl:text>
+                <xsl:text>eBookConfig.enableScratchAC = true;&#xa;</xsl:text>
+                <!-- no .build_info -->
+                <!-- no .python3 -->
+                <!-- no .acDefaultLanguage -->
+                <!-- no .runestone_version -->
+                <!-- no .jobehost -->
+                <!-- no .proxyuri_runs -->
+                <!-- no .proxyuri_files -->
+                <!-- no .enable_chatcodes -->
+            </xsl:when>
+            <!-- Dev, testing: $runestone-dev = 'yes' -->
+            <xsl:otherwise>
+                <xsl:text>eBookConfig.useRunestoneServices = false;&#xa;</xsl:text>
+                <xsl:text>eBookConfig.host = 'http://127.0.0.1:8000';&#xa;</xsl:text>
+                <!-- no .app -->
+                <xsl:text>eBookConfig.course = 'PTX Course: Title Here';&#xa;</xsl:text>
+                <xsl:text>eBookConfig.basecourse = 'PTX Base Course';&#xa;</xsl:text>
+                <xsl:text>eBookConfig.isLoggedIn = false;&#xa;</xsl:text>
+                <xsl:text>eBookConfig.email = 'somebody@nobody.com';&#xa;</xsl:text>
+                <xsl:text>eBookConfig.isInstructor = false;&#xa;</xsl:text>
+                <!-- no .ajaxURL since no .app -->
+                <xsl:text>eBookConfig.logLevel = 10;&#xa;</xsl:text>
+                <xsl:text>eBookConfig.username = 'Somebody Nobody';&#xa;</xsl:text>
+                <xsl:text>eBookConfig.readings = null;&#xa;</xsl:text>
+                <xsl:text>eBookConfig.activities = null;&#xa;</xsl:text>
+                <xsl:text>eBookConfig.downloadsEnabled = false;&#xa;</xsl:text>
+                <xsl:text>eBookConfig.allow_pairs = false;&#xa;</xsl:text>
+                <xsl:text>eBookConfig.enableScratchAC = false;&#xa;</xsl:text>
+                <xsl:text>eBookConfig.build_info = "";&#xa;</xsl:text>
+                <xsl:text>eBookConfig.python3 = null;&#xa;</xsl:text>
+                <xsl:text>eBookConfig.acDefaultLanguage = 'python';&#xa;</xsl:text>
+                <xsl:text>eBookConfig.runestone_version = '5.0.1';&#xa;</xsl:text>
+                <xsl:text>eBookConfig.jobehost = '';&#xa;</xsl:text>
+                <xsl:text>eBookConfig.proxyuri_runs = '';&#xa;</xsl:text>
+                <xsl:text>eBookConfig.proxyuri_files = '';&#xa;</xsl:text>
+                <xsl:text>eBookConfig.enable_chatcodes =  false;&#xa;</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
         </script>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -8643,7 +8690,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.5/jquery.i18n.parser.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.5/jquery.i18n.language.js"></script>
 
+        <script type="text/javascript" src="_static/jquery.idle-timer.js"></script>
         <script type="text/javascript" src="_static/runestone.js"></script>
+
         <style>
         <xsl:text>.dropdown {&#xa;</xsl:text>
         <xsl:text>    position: relative;&#xa;</xsl:text>
