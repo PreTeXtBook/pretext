@@ -8782,7 +8782,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </chapter>
 </xsl:template>
 
-<xsl:template match="section|chapter/reading-questions" mode="runestone-manifest">
+<!-- Every division at PTX "section" level, -->
+<!-- potentially containing an "exercise",  -->
+<!-- e.g. "worksheet" but not "references", -->
+<!-- is a RS "subchapter"                   -->
+<xsl:template match="section|chapter/exercises|chapter/worksheet|chapter/reading-questions" mode="runestone-manifest">
     <subchapter>
         <id>
             <xsl:apply-templates select="." mode="html-id"/>
@@ -8790,15 +8794,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <title>
             <xsl:apply-templates select="." mode="title-full"/>
         </title>
-        <!-- nearly a dead end, recurse only into exercises -->
-        <!-- within this RS "subchapter" but at any depth   -->
+        <!-- nearly a dead end, recurse only into exercises      -->
+        <!-- within this RS "subchapter", but at *any* PTX depth -->
         <xsl:apply-templates select=".//exercise"  mode="runestone-manifest"/>
     </subchapter>
     <!-- dead end structurally, no more recursion, even if "subsection", etc. -->
 </xsl:template>
 
-<!-- Reading Questions (only) to the manifest -->
-<xsl:template match="reading-questions/exercise" mode="runestone-manifest">
+<!-- Exercises to the Runestone manifest -->
+<!--   - every "exercise" in a "reading-questions" division -->
+<!--   - every multiple choice "exercise"                   -->
+<!-- Note, 2020-05-29: multiple choice not yet merged, markup is speculative -->
+<xsl:template match="exercise[parent::reading-questions]|exercise[choices]" mode="runestone-manifest">
     <question>
         <xsl:apply-templates select="." mode="exercise-components"/>
     </question>
