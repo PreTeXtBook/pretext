@@ -4572,6 +4572,56 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </div>
             </div>
         </xsl:when>
+        <!-- intercept a multiple choice question        -->
+        <!-- signal on "choices" (but could be "choice") -->
+        <!-- <xsl:when test="choices and $b-host-runestone"> -->
+        <xsl:when test="choices">
+            <xsl:variable name="the-id">
+                <xsl:text>mc-</xsl:text>
+                <xsl:apply-templates select="." mode="html-id"/>
+            </xsl:variable>
+            <div class="runestone alert alert-warning">
+                <!-- ul can have multiple answer attribute -->
+                <ul data-component="multiplechoice" data-multipleanswers="false">
+                    <xsl:attribute name="id">
+                        <xsl:value-of select="$the-id"/>
+                    </xsl:attribute>
+                    <!-- Q: the statement is not a list item, but appears *inside* the list? -->
+                    <!-- overall statement, not per-choice -->
+                    <xsl:apply-templates select="statement"/>
+                    <!-- switch context to each "choice" -->
+                    <xsl:for-each select="choices/choice">
+                        <!-- id for each "choice"                  -->
+                        <!-- with common base, then a, b, c suffix -->
+                        <!-- Used *twice* on adjacent "li"?        -->
+                        <xsl:variable name="choice-id">
+                            <xsl:value-of select="$the-id"/>
+                            <xsl:text>_opt_</xsl:text>
+                            <!-- will count preceding "choice" only -->
+                            <xsl:number format="a"/>
+                        </xsl:variable>
+                        <li data-component="answer">
+                            <xsl:attribute name="id">
+                                <xsl:value-of select="$choice-id"/>
+                            </xsl:attribute>
+                            <!-- mark correct answers (empty attribute value) -->
+                            <xsl:if test="@correct = 'yes'">
+                                <xsl:attribute name="data-correct"/>
+                            </xsl:if>
+                            <!-- per-choice statement -->
+                            <xsl:apply-templates select="statement"/>
+                        </li>
+                        <li data-component="feedback">
+                            <xsl:attribute name="id">
+                                <xsl:value-of select="$choice-id"/>
+                            </xsl:attribute>
+                            <!-- per-choice explanation -->
+                            <xsl:apply-templates select="feedback"/>
+                        </li>
+                    </xsl:for-each>
+                </ul>
+            </div>
+        </xsl:when>
         <!-- now, structured versus unstructured -->
         <xsl:when test="statement">
             <!-- exceptional, Runestone ActiveCode exercise     -->
