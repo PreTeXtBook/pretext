@@ -266,6 +266,42 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </subsection>
     </section>
 
+    <exercises>
+        <title>Interactive Exercises</title>
+
+        <exercise>
+            <statement>
+                <p>What color is a stop sign?</p>
+            </statement>
+            <choices>
+                <choice>
+                    <statement>
+                        <p>Green</p>
+                    </statement>
+                    <feedback>
+                        <p>Incorrect: green means "go!".</p>
+                    </feedback>
+                </choice>
+                <choice correct="yes">
+                    <statement>
+                        <p>Red</p>
+                    </statement>
+                    <feedback>
+                        <p>Correct: red is universally used for prohibited activities or serious warnings.</p>
+                    </feedback>
+                </choice>
+                <choice>
+                    <statement>
+                        <p>White</p>
+                    </statement>
+                    <feedback>
+                        <p>Incorrect: white might be hard to see.</p>
+                    </feedback>
+                </choice>
+            </choices>
+        </exercise>
+    </exercises>
+
     <reading-questions>
 
         <exercise>
