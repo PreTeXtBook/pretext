@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--   This file is part of the documentation of PreTeXt      -->
+<!--                                                          -->
+<!--        PreTeXt Developer's Guide                         -->
+<!--                                                          -->
+<!-- Copyright (C) 2019-2019                                  -->
+<!-- Robert A. Beezer, David Farmer, Alex Jordan              -->
+<!-- See the file COPYING for copying conditions.             -->
+
+<chapter xml:id="coding">
+    <title>Coding Conventions</title>
+
+    <section xml:id="developer-coding">
+        <title>Author and Publisher Input</title>
+
+        <p>When an author or publisher provides input to regulate some change in how their content is realized follow these procedures.<ul>
+            <li>String parameters (which are discouraged anyway) should default to an empty string initially when defined.  For technical reasons, this makes them easier to deprecate later.</li>
+            <li>Input should produce a global variable, whose possible values are known exactly.  This variable should be set in one location, with other similar variables, and then it should be used later.  There should be no need to further error-check this variable later.  In other words, do not mix error-checking input and employment of that input<mdash/>rigorously separate them (like separating content from presentation!).</li>
+            <li>
+                <p>Use a <tag>xsl:choose</tag> inside a <tag>xsl:variable</tag> that first parrots legitimate input.   Next check for attempts to set the input to something <q>invalid</q>.  Use <tag>xsl:message</tag> to report:<ul>
+                    <li>the name of the input being checked</li>
+                    <li>a description of valid values</li>
+                    <li><q>, not</q> followed by the invalid value supplied (via <tage>xsl:value-of</tage> typically)</li>
+                    <li><q>Using the default value</q>, followed by that value</li>
+                </ul></p>
+            </li>
+            <li>Then don't forget to actually set the default value, either due to no input, or erroneous input.</li>
+            <li>Done right, this variable will usually meet the requirements above.</li>
+            <li>If input is binary, have the variable just described take on one of two values.  Only.  Then construct a new boolean variable based on these two strings.  Name the variable with a <c>b-</c> prefix.  This will be more reliable to use later.</li>
+        </ul></p>
+    </section>
+
+</chapter>
+
+
