@@ -25,6 +25,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- es-ES, Spanish (Spain) -->
 <!-- Juan José Torrens, jjtorrens@unavarra.es, 2014-10-27 -->
+<!-- Julian Pfeifle, julian.pfeifle@upc.edu, 2020-05-28 -->
 
 <xsl:variable name="es-ES">
     <!-- THEOREM-LIKE blocks -->
@@ -32,32 +33,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id="theorem">Teorema</localization>
     <localization string-id="corollary">Corolario</localization>
     <localization string-id="lemma">Lema</localization>
-    <!-- Translation needed for Spain Spanish -->
-    <!-- <localization string-id='algorithm'><xsl:text>XX</xsl:text></localization> -->
+    <localization string-id='algorithm'><xsl:text>Algoritmo</xsl:text></localization>
     <localization string-id='proposition'><xsl:text>Proposición</xsl:text></localization>
     <localization string-id='claim'><xsl:text>Postulado</xsl:text></localization>
     <localization string-id='fact'><xsl:text>Hecho</xsl:text></localization>
-    <!-- <localization string-id='identity'><xsl:text>Identity</xsl:text></localization> -->
+    <localization string-id='identity'><xsl:text>Identidad</xsl:text></localization>
     <localization string-id='proof'><xsl:text>Demostración</xsl:text></localization>
-    <!-- <localization string-id='case'><xsl:text>Case</xsl:text></localization> -->
+    <localization string-id='case'><xsl:text>Caso</xsl:text></localization>
     <!-- Mathematical statements without proofs -->
     <!-- AXIOM-LIKE blocks -->
     <localization string-id='axiom'><xsl:text>Axioma</xsl:text></localization>
     <localization string-id='conjecture'><xsl:text>Conjetura</xsl:text></localization>
     <localization string-id='principle'><xsl:text>Principio</xsl:text></localization>
-    <!-- <localization string-id='heuristic'><xsl:text>Heuristic</xsl:text></localization> -->
-    <!-- <localization string-id='hypothesis'><xsl:text>Hypothesis</xsl:text></localization> -->
-    <!-- <localization string-id='assumption'><xsl:text>Assumption</xsl:text></localization> -->
+    <localization string-id='heuristic'><xsl:text>Heurística</xsl:text></localization>
+    <localization string-id='hypothesis'><xsl:text>Hipótesis</xsl:text></localization>
+    <localization string-id='assumption'><xsl:text>Hipótesis</xsl:text></localization>
     <!-- Definitions -->
     <localization string-id='definition'><xsl:text>Definición</xsl:text></localization>
-    <!-- Translation needed for Spain Spanish -->
     <!-- Single Line Mathematics -->
-    <!-- <localization string-id='me'><xsl:text>Equation</xsl:text></localization> -->
-    <!-- <localization string-id='men'><xsl:text>Equation</xsl:text></localization> -->
-    <!-- <localization string-id='mrow'><xsl:text>Equation</xsl:text></localization> -->
+    <localization string-id='me'><xsl:text>Ecuación</xsl:text></localization>
+    <localization string-id='men'><xsl:text>Ecuación</xsl:text></localization>
+    <localization string-id='mrow'><xsl:text>Ecuación</xsl:text></localization>
     <!-- Display Mathematics -->
-    <!-- <localization string-id='md'><xsl:text>Display Mathematics</xsl:text></localization> -->
-    <!-- <localization string-id='mdn'><xsl:text>Display Mathematics</xsl:text></localization> -->
+    <localization string-id='md'><xsl:text>Ecuación resaltada</xsl:text></localization>
+    <localization string-id='mdn'><xsl:text>Ecuación resaltada</xsl:text></localization>
     <!-- Types of documents, mostly for informational messages -->
     <localization string-id='volume'><xsl:text>Volumen</xsl:text></localization>
     <localization string-id='book'><xsl:text>Libro</xsl:text></localization>
@@ -73,40 +72,39 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='section'><xsl:text>Sección</xsl:text></localization>
     <localization string-id='subsection'><xsl:text>Subsección</xsl:text></localization>
     <localization string-id='subsubsection'><xsl:text>Subsubsección</xsl:text></localization>
-    <!-- Translation needed for Spain Spanish -->
-    <!-- <localization string-id='introduction'><xsl:text>Introduction</xsl:text></localization> -->
-    <!-- <localization string-id='conclusion'><xsl:text>Conclusion</xsl:text></localization> -->
+    <localization string-id='introduction'><xsl:text>Introducción</xsl:text></localization>
+    <localization string-id='conclusion'><xsl:text>Conclusión</xsl:text></localization>
     <localization string-id='exercises'><xsl:text>Ejercicios</xsl:text></localization>
-    <!-- <localization string-id='worksheet'><xsl:text>Worksheet</xsl:text></localization> -->
-    <!-- <localization string-id='reading-questions'><xsl:text>Reading Questions</xsl:text></localization> -->
-    <!-- <localization string-id='solutions'><xsl:text>Solutions</xsl:text></localization> -->
-    <!-- <localization string-id='glossary'><xsl:text>Glossary</xsl:text></localization> -->
+    <localization string-id='worksheet'><xsl:text>Hoja de trabajo</xsl:text></localization>
+    <localization string-id='reading-questions'><xsl:text>Preguntas de comprensión</xsl:text></localization>
+    <localization string-id='solutions'><xsl:text>Soluciones</xsl:text></localization>
+    <localization string-id='glossary'><xsl:text>Glosario</xsl:text></localization>
     <localization string-id='references'><xsl:text>Referencias</xsl:text></localization>
     <!-- Translation needed for Spain Spanish -->
     <!-- <localization string-id='backmatter'><xsl:text>Back Matter</xsl:text></localization> -->
     <!-- paragraph is deprecated, getting plural correct is not super critical, just in messages -->
     <localization string-id='paragraphs'><xsl:text>Párrafo</xsl:text></localization>
-    <!-- <localization string-id='commentary'><xsl:text>Commentary</xsl:text></localization> -->
+    <localization string-id='commentary'><xsl:text>Comentario</xsl:text></localization>
     <localization string-id='subparagraph'><xsl:text>Subpárrafo</xsl:text></localization>
     <!-- Components of the narrative -->
     <!-- REMARK-LIKE blocks -->
     <!-- "note" is used within "biblio", likely to change -->
     <localization string-id='remark'><xsl:text>Nota</xsl:text></localization>
-    <!-- <localization string-id='convention'><xsl:text>Convention</xsl:text></localization> -->
-    <!-- <localization string-id='note'><xsl:text>Note</xsl:text></localization> -->
-    <!-- <localization string-id='observation'><xsl:text>Observation</xsl:text></localization> -->
-    <!-- <localization string-id='warning'><xsl:text>Warning</xsl:text></localization> -->
+    <localization string-id='convention'><xsl:text>Convención</xsl:text></localization>
+    <localization string-id='note'><xsl:text>Nota</xsl:text></localization>
+    <localization string-id='observation'><xsl:text>Observación</xsl:text></localization>
+    <localization string-id='warning'><xsl:text>Advertencia</xsl:text></localization>
     <!-- <localization string-id='insight'><xsl:text>Insight</xsl:text></localization> -->
-    <!-- <localization string-id='computation'><xsl:text>Computation</xsl:text></localization> -->
-    <!-- <localization string-id='technology'><xsl:text>Technology</xsl:text></localization> -->
+    <localization string-id='computation'><xsl:text>Computación</xsl:text></localization>
+    <localization string-id='technology'><xsl:text>Tecnología</xsl:text></localization>
     <!-- ASIDE-LIKE blocks -->
     <!-- <localization string-id='aside'><xsl:text>Aside</xsl:text></localization> -->
     <!-- <localization string-id='biographical'><xsl:text>Biographical Aside</xsl:text></localization> -->
     <!-- <localization string-id='historical'><xsl:text>Historical Aside</xsl:text></localization> -->
     <!-- EXAMPLE-LIKE blocks -->
     <localization string-id='example'><xsl:text>Ejemplo</xsl:text></localization>
-    <!-- <localization string-id='question'><xsl:text>Question</xsl:text></localization> -->
-    <!-- <localization string-id='problem'><xsl:text>Problem</xsl:text></localization> -->
+    <localization string-id='question'><xsl:text>Pregunta</xsl:text></localization>
+    <localization string-id='problem'><xsl:text>Problema</xsl:text></localization>
     <!-- PROJECT-LIKE blocks -->
     <!-- <localization string-id='project'><xsl:text>Project</xsl:text></localization> -->
     <!-- <localization string-id='activity'><xsl:text>Activity</xsl:text></localization> -->
@@ -126,8 +124,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!--  -->
     <localization string-id='figure'><xsl:text>Figura</xsl:text></localization>
     <localization string-id='table'><xsl:text>Cuadro</xsl:text></localization>
-    <!-- Translation needed for Spain Spanish -->
-    <!-- <localization string-id='listing'><xsl:text>Listing</xsl:text></localization> -->
+    <localization string-id='listing'><xsl:text>Listado</xsl:text></localization>
     <!-- Translation needed for Spain Spanish -->
     <!-- <localization string-id='contributor'><xsl:text>Contributor</xsl:text></localization> -->
     <localization string-id='fn'><xsl:text>Nota a pie de página</xsl:text></localization>
@@ -177,16 +174,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='index'><xsl:text>Índice alfabético</xsl:text></localization>
     <localization string-id='see'><xsl:text>Véase</xsl:text></localization>
     <localization string-id='also'><xsl:text>Véase también</xsl:text></localization>
-    <!-- Translation needed for Spain Spanish -->
     <!-- Notation List headings/foot -->
-    <!-- <localization string-id='symbol'><xsl:text>Symbol</xsl:text></localization> -->
-    <!-- <localization string-id='description'><xsl:text>Description</xsl:text></localization> -->
-    <!-- <localization string-id='location'><xsl:text>Location</xsl:text></localization> -->
-    <!-- <localization string-id='page'><xsl:text>Page</xsl:text></localization> -->
-    <!-- <localization string-id='continued'><xsl:text>Continued on next page</xsl:text></localization> -->
+    <localization string-id='symbol'><xsl:text>Símbolo</xsl:text></localization>
+    <localization string-id='description'><xsl:text>Descripción</xsl:text></localization>
+    <localization string-id='location'><xsl:text>Ubicación</xsl:text></localization>
+    <localization string-id='page'><xsl:text>Página</xsl:text></localization>
+    <localization string-id='continued'><xsl:text>Continúa en la página siguiente</xsl:text></localization>
     <!-- Navigation Interface elements -->
     <!-- Assistive "skip to content" link -->
-    <!-- <localization string-id='skip-to-content'><xsl:text>Skip to main content</xsl:text></localization> -->
+    <localization string-id='skip-to-content'><xsl:text>Salta al contenido principal</xsl:text></localization>
     <localization string-id='previous'><xsl:text>Anterior</xsl:text></localization>
     <localization string-id='up'><xsl:text>Arriba</xsl:text></localization>
     <localization string-id='next'><xsl:text>Siguiente</xsl:text></localization>
@@ -209,13 +205,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Various -->
     <localization string-id='todo'><xsl:text>Para hacer</xsl:text></localization>
     <localization string-id='editor'><xsl:text>Editor</xsl:text></localization>
-    <!-- <localization string-id='edition'><xsl:text>Edition</xsl:text></localization> -->
+    <localization string-id='edition'><xsl:text>Edición</xsl:text></localization> 
     <!-- <localization string-id='website'><xsl:text>Website</xsl:text></localization> -->
     <localization string-id='copyright'><xsl:text>Derechos de autor</xsl:text></localization>
     <!-- HTML clickables (lowercase strings to click on) -->
-    <!-- Translation needed for Spain Spanish -->
-    <!-- <localization string-id='permalink'><xsl:text>permalink</xsl:text></localization> -->
-    <!-- <localization string-id='incontext'><xsl:text>in-context</xsl:text></localization> -->
+    <localization string-id='permalink'><xsl:text>enlace permanente</xsl:text></localization>
+    <localization string-id='incontext'><xsl:text>en contexto</xsl:text></localization>
     <!-- Sage Cell evaluate button      -->
     <!-- eg, "Evaluate (Maxima)"        -->
     <!-- 2017-05-14: 'code' is obsolete -->
