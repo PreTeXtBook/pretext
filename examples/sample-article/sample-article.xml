@@ -917,6 +917,107 @@ the xsltproc executable.
                         <p>An <tag>aside</tag> is similar to a remark, but is not as critical to the narrative.  It is not numbered, and so requires a title.  It can be the target of a cross-reference.  They are meant to be short, and so are not knowlized at their first appearance.  If the content is appropriate, these can be marked as <tag>historical</tag> or <tag>biographical</tag>, though longer items should use subdivisions (<eg /> sections, subsections) instead.</p>
                     </aside>
 
+                    <p>An <tag>exercise</tag> can be structured with <tag>task</tag>.</p>
+
+                    <exercise xml:id="exercise-structured">
+                        <title>A very structured exercise</title>
+
+                        <introduction>
+                            <p>This is an over-arching introduction to the whole exercise.  We follow with some tasks.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
+                        </introduction>
+
+                        <task>
+                            <p>This first task is very simple, just a paragraph.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
+                        </task>
+
+                        <task>
+                            <p>Now three paragraphs.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
+                            <p>In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
+                            <p>In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
+                        </task>
+
+                        <task>
+                            <introduction>
+                                <p>This second task is further divided by more tasks.  This is its introduction.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
+                                <p>In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
+                            </introduction>
+                            <task>
+                                <statement>
+                                    <p>A really simple subtask.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
+                                    <p>A short paragraph, before an answer.</p>
+                                </statement>
+                                <answer>
+                                    <p>With a proof.</p>
+                                    <proof>
+                                        <p>In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
+                                    </proof>
+                                    <p>And a bit more to say.</p>
+                                </answer>
+                            </task>
+                            <task>
+                                <statement>
+                                    <p>A subtask with an answer.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
+                                </statement>
+                                <answer>
+                                    <p>Right!  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
+                                </answer>
+                            </task>
+                            <task>
+                                <introduction>
+                                    <p>Two simple sub-sub-tasks.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
+                                </introduction>
+                                <task>
+                                    <p>First subsubtask.  Short paragraph.</p>
+                                </task>
+                                <task>
+                                    <p>Second subsubtask.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
+                                    <p>In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
+                                </task>
+                                <task>
+                                    <p>Third subsubtask.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
+                                    <p>In interdum suscipit ullamcorper</p>
+                                    <p>In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
+                                </task>
+                                <conclusion>
+                                    <p>The conclusion of the structured subtask.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
+                                </conclusion>
+                            </task>
+                            <task>
+                                <p>A simple task as the last subtask.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
+                            </task>
+                            <conclusion>
+                                <p>This concludes our structured second task.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
+                            </conclusion>
+                        </task>
+
+                        <task>
+                            <statement>
+                                <p>This third top-level task is intermediate in complexity, you are reading the <c>statement</c>, which is followed by more items. In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
+                            </statement>
+                            <hint>
+                                <p>One hint.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
+                                <p>In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
+                            </hint>
+                            <answer>
+                                <p>First answer.  In interdum suscipit ullamcorper.</p>
+                            </answer>
+                            <answer>
+                                <p>Second answer.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
+                                <p>In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
+                                <p>In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
+                            </answer>
+                            <solution>
+                                <p>At last, the solution.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
+                            </solution>
+                        </task>
+
+                        <conclusion>
+                            <p>This is a conclusion where you could summarize the exercise.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
+                        </conclusion>
+                    </exercise>
+
+                    <p>The following <tag>project</tag> is nearly identical to the preceding <tag>exercise</tag>.</p>
+
                     <project permid="aBc" xml:id="project-structured">
                         <title>A very structured project</title>
 
@@ -1053,6 +1154,18 @@ the xsltproc executable.
                                 <p>And another skinny paragraph which should also be just 30% of the width.</p>
                             </sidebyside>
                         </solution>
+                    </exercise>
+
+                    <exercise xml:id="exercise-with-tasks">
+                        <introduction>
+                            <p>An <tag>exercise</tag> can be structured with parts, called <tag>task</tag>.  This is the <tag>introduction</tag>.</p>
+                        </introduction>
+                        <task>
+                            <p>Do this.</p>
+                        </task>
+                        <task>
+                            <p>And the other thing.</p>
+                        </task>
                     </exercise>
                 </exercises>
 
