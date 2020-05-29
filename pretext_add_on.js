@@ -135,7 +135,7 @@ console.log("this is e", e);
         this_item = items_needing_permalinks[i];
         if(this_item.id) {
             this_permalink_url = this_url + "#" + this_item.id;
-            console.log("        needs permalink", this_permalink_url, "  xx ", this_item);
+  //          console.log("        needs permalink", this_permalink_url, "  xx ", this_item);
   //          this_permalink_container = document.createElement('div');
   //          this_permalink_container.setAttribute('style', "position: relative; width: 0; height: 0");
   //          this_permalink_container.innerHTML = '<span class="autopermalink">' + permalink_word + '</span>';
@@ -155,13 +155,13 @@ console.log("this is e", e);
     for (var i = 0; i < all_iframes.length; i++) {
       this_item = all_iframes[i];
       this_item_src = this_item.src;
-      console.log("this_item_src", this_item_src);
+ //     console.log("this_item_src", this_item_src);
       if(this_item_src.includes("youtube")) {
         this_item_id = this_item.id;
         this_item_width = this_item.width;
         this_item_height = this_item.height;
         if(this_item_height < 150) { continue }
-        console.log("found a youtube video on", this_item_id);
+ //       console.log("found a youtube video on", this_item_id);
         var empty_div = document.createElement('div');
         var this_videomag_container = document.createElement('div');
        parent_tag = this_item.parentElement.tagName;
