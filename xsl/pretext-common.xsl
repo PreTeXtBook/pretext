@@ -46,6 +46,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     exclude-result-prefixes="mb"
 >
 
+<!-- Any serious conversion will import this file (-common) -->
+<!-- and the "publisher-variables" stylesheet will read a   -->
+<!-- publisher file and create many global variables,       -->
+<!-- which can be used to influence conversions             -->
+<!-- See  publisher-variables.xsl  for more detail          -->
+<xsl:import href="./publisher-variables.xsl"/>
+
 <!-- MathBook XML common templates                        -->
 <!-- Text creation/manipulation common to HTML, TeX, Sage -->
 
@@ -78,33 +85,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Output methods here are just pure text -->
 <xsl:output method="text" />
-
-<!-- ######################### -->
-<!-- Publisher Options Support -->
-<!-- ######################### -->
-
-<!-- Elements and attributes of a publisher file are meant to          -->
-<!-- influence decisions taken *after* an author is completed writing. -->
-<!-- In limited cases a command-line string parameter may be used to   -->
-<!-- override the settings (especially for testing purposes).          -->
-<!-- In other cases, deprecated string parameters may be consulted     -->
-<!-- secondarily, for a limited time.                                  -->
-
-<!-- A single command-line string parameter points to an XML file that      -->
-<!-- is structured to carry various options that a *publisher* might set.   -->
-<!-- Generally, these affect the *look* of the output, rather than the      -->
-<!-- actual *content* that appears on the page, i.e. the actual characters. -->
-<!-- We initialize with an empty node-set, then if not used, there is no    -->
-<!-- loading of the entire source all over again (which seems to be the     -->
-<!-- case with an empty string).  When set on the command-line, a string    -->
-<!-- value will be interpreted correctly. -->
-<xsl:param name="publisher" select="/.."/>
-
-<!-- NB: the second argument is simply a node, it causes $publisher -->
-<!-- to be interpreted relative to the location of the *current XML -->
-<!-- file* rather than the location of the *stylesheet*. The actual -->
-<!-- node does not seem so critical.                                -->
-<xsl:variable name="publication" select="document($publisher, .)/publication"/>
 
 <!-- Parameters to pass via xsltproc "stringparam" on command-line            -->
 <!-- Or make a thin customization layer and use 'select' to provide overrides -->
