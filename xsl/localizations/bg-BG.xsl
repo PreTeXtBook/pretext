@@ -149,7 +149,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- A regular paragraph, not the old sectioning structure -->
     <localization string-id='p'><xsl:text>Абзац</xsl:text></localization>
     <localization string-id='blockquote'><xsl:text>Цитат</xsl:text></localization>
-    <!-- Parts of an exercise and it's solution -->
+    <!-- Parts of an exercise and its solution -->
     <!-- An "exercise", at any level, within an "exercises" division is a          -->
     <!-- "divisional" exercise and the string employed is 'divisionalexercise'.    -->
     <!-- An "exercise" whose parent is a division (chapter, section, etc) we       -->
