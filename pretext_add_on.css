@@ -105,9 +105,6 @@ so that we can set our own later */
 .pretext-content section .proof {
     margin-top: 0.75em;
 }
-.pretext-content .sagecell {
-    margin-top: 1.25em;
-}
 
 .pretext-content section > pre, .pretext-content p + pre {
     margin-top: 1.25em;
@@ -1871,7 +1868,11 @@ a.mjx-svg-href  {
 }
 
 .pretext-content .sagecell {
+    margin-top: 1.25em;
     margin-bottom: 1.25em;
+}
+.pretext-content .sage-interact.sagecell {
+    margin: 0;
 }
 /*
 .pretext-content .sagecell .CodeMirror-fullscreen {
@@ -2543,7 +2544,9 @@ body.sidebar-left-closed .searchwrapper {
 */
 
 .pretext-content iframe {
+    margin: 0;
     border: none;
+    box-sizing: border-box;
 }
 
 .pretext-content .times-sign {
