@@ -127,7 +127,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- A regular paragraph, not the old sectioning structure -->
     <localization string-id='p'><xsl:text>Paragraph</xsl:text></localization>
     <localization string-id='blockquote'><xsl:text>Citation</xsl:text></localization>
-    <!-- Parts of an exercise and it's solution -->
+    <!-- Parts of an exercise and its solution -->
     <localization string-id='divisionalexercise'><xsl:text>Exercice</xsl:text></localization>
     <!-- Translation needed for France French -->
     <!-- See en-US file for distinctions here, do not repeat previous translation -->

@@ -133,7 +133,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- A regular paragraph, not the old sectioning structure -->
     <localization string-id='p'><xsl:text>Paragraaf</xsl:text></localization>
     <localization string-id='blockquote'><xsl:text>Aanhaling</xsl:text></localization>
-    <!-- Parts of an exercise and it's solution -->
+    <!-- Parts of an exercise and its solution -->
     <localization string-id='divisionalexercise'><xsl:text>Oefening</xsl:text></localization>
     <!-- Translation needed for South African Afrikaans -->
     <!-- See en-US file for distinctions here, do not repeat previous translation -->
