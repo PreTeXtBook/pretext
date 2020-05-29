@@ -1434,7 +1434,7 @@
 <xsl:template match="quantity">
     <!-- warning if there is no content -->
     <xsl:if test="not(descendant::unit) and not(descendant::per) and not(descendant::mag)">
-        <xsl:message terminate="no">
+        <xsl:message>
         <xsl:text>PTX:WARNING: magnitude or units needed</xsl:text>
         </xsl:message>
     </xsl:if>
@@ -1515,7 +1515,7 @@
             <xsl:value-of select="$short" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message terminate="no">
+            <xsl:message>
                 <xsl:text>PTX:WARNING: base unit needed</xsl:text>
             </xsl:message>
         </xsl:otherwise>

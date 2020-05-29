@@ -485,20 +485,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <xsl:choose>
         <xsl:when test="$candidate &lt; $numbering-theorems">
-            <xsl:message terminate="yes">MBX:FATAL: theorem numbering level cannot exceed sectioning level</xsl:message>
+            <xsl:message terminate="yes">MBX:FATAL:   theorem numbering level cannot exceed sectioning level</xsl:message>
         </xsl:when>
         <!-- PROJECT-LIKE -->
         <xsl:when test="$candidate &lt; $numbering-projects">
-            <xsl:message terminate="yes">MBX:FATAL: project numbering level cannot exceed sectioning level</xsl:message>
+            <xsl:message terminate="yes">MBX:FATAL:   project numbering level cannot exceed sectioning level</xsl:message>
         </xsl:when>
         <xsl:when test="$candidate &lt; $numbering-equations">
-            <xsl:message terminate="yes">MBX:FATAL: equation numbering level cannot exceed sectioning level</xsl:message>
+            <xsl:message terminate="yes">MBX:FATAL:   equation numbering level cannot exceed sectioning level</xsl:message>
         </xsl:when>
         <xsl:when test="$candidate &lt; $numbering-footnotes">
-            <xsl:message terminate="yes">MBX:FATAL: footnote numbering level cannot exceed sectioning level</xsl:message>
+            <xsl:message terminate="yes">MBX:FATAL:   footnote numbering level cannot exceed sectioning level</xsl:message>
         </xsl:when>
         <xsl:when test="$candidate &gt; $max-feasible">
-            <xsl:message terminate="yes">MBX:FATAL: sectioning level exceeds maximum possible for this document (<xsl:value-of select="$max-feasible" />)</xsl:message>
+            <xsl:message terminate="yes">MBX:FATAL:   sectioning level exceeds maximum possible for this document (<xsl:value-of select="$max-feasible" />)</xsl:message>
         </xsl:when>
         <!-- Survived the gauntlet, spit it out candidate as $numbering-maxlevel -->
         <xsl:otherwise>
@@ -1175,11 +1175,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:value-of select="$whitespace" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message terminate="yes">
+            <xsl:message>
                 <xsl:text>MBX:ERROR: the whitespace parameter can be 'strict' or 'flexible', not '</xsl:text>
                 <xsl:value-of select="$whitespace" />
-                <xsl:text>'</xsl:text>
+                <xsl:text>'.  Using the default ('flexible').</xsl:text>
             </xsl:message>
+            <xsl:text>flexible</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -6953,7 +6954,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <xsl:value-of select="@cols" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message terminate="yes">MBX:ERROR: @cols attribute of lists or exercise groups, must be between 2 and 6 (inclusive), not "cols=<xsl:value-of select="@cols" />"</xsl:message>
+            <xsl:message>MBX:ERROR:   @cols attribute of lists or exercise groups, must be between 2 and 6 (inclusive), not "cols=<xsl:value-of select="@cols" />"</xsl:message>
             <xsl:apply-templates select="." mode="location-report" />
         </xsl:otherwise>
     </xsl:choose>
@@ -8410,7 +8411,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <!-- courtesy check that range is not out-of-order               -->
     <!-- NB: different schemes for "exercise" can make this look odd -->
     <xsl:if test="count($target-one/preceding::*) > count($target-two/preceding::*)">
-        <xsl:message terminate="no">MBX:WARNING: &lt;xref @first="<xsl:value-of select="$ref-one" />" @last="<xsl:value-of select="$ref-two" />" /&gt; references two elements that appear to be in the wrong order</xsl:message>
+        <xsl:message>MBX:WARNING: &lt;xref @first="<xsl:value-of select="$ref-one" />" @last="<xsl:value-of select="$ref-two" />" /&gt; references two elements that appear to be in the wrong order</xsl:message>
     </xsl:if>
     <!-- Biblio check assumes targets are equal       -->
     <!-- If target is a bibliography item, generic    -->
@@ -10140,8 +10141,8 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
                       (. = 'sidebar-right') or
                       (. = 'toc') or
                       (. = 'logo-link')">
-            <xsl:message terminate='yes'>
-                <xsl:text>MBX:ERROR:      </xsl:text>
+            <xsl:message terminate="yes">
+                <xsl:text>MBX:FATAL:   </xsl:text>
                 <xsl:text>The @xml:id "</xsl:text>
                 <xsl:value-of select="." />
                 <xsl:text>" is invalid since it will conflict with a unique HTML id in use by the user interface.  Please use a different string.  Quitting...</xsl:text>
@@ -10150,8 +10151,8 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <!-- index.html is built automatically, so preclude a clash -->
         <!-- Not terminating until 2019-07-10 deprecation expires   -->
         <xsl:if test=". = 'index'">
-            <xsl:message terminate='no'>
-                <xsl:text>MBX:ERROR:     </xsl:text>
+            <xsl:message terminate="no">
+                <xsl:text>MBX:ERROR:   </xsl:text>
                 <xsl:text>The @xml:id "</xsl:text>
                 <xsl:value-of select="."/>
                 <xsl:text>" is invalid since it will conflict with the construction of an automatic HTML "index.html" page.  Use some alternative for the real index - sorry.</xsl:text>
@@ -10999,7 +11000,7 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
     <xsl:param name="cap" select="100" />
     <xsl:if test="$nodeset">
         <xsl:if test="substring-before($nodeset[1], '%')&gt;$cap">
-            <xsl:message terminate="yes">MBX:ERROR:   percentage attributes sum to over 100%</xsl:message>
+            <xsl:message terminate="yes">MBX:FATAL:   percentage attributes sum to over 100%</xsl:message>
         </xsl:if>
         <xsl:call-template name="cap-width-at-one-hundred-percent">
             <xsl:with-param name="nodeset" select="$nodeset[position()&gt;1]" />
@@ -11019,13 +11020,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:value-of select="normalize-space($percentage)" />
     </xsl:variable>
     <xsl:if test="substring($stripped-percentage,string-length($stripped-percentage)) != '%'">
-        <xsl:message terminate="yes">MBX:ERROR:   expecting a percentage ending in '%'; got <xsl:value-of select="$stripped-percentage"/></xsl:message>
+        <xsl:message terminate="yes">MBX:FATAL:   expecting a percentage ending in '%'; got <xsl:value-of select="$stripped-percentage"/></xsl:message>
     </xsl:if>
     <xsl:variable name="percent">
         <xsl:value-of select="normalize-space(substring($stripped-percentage,1,string-length($stripped-percentage) - 1))" />
     </xsl:variable>
     <xsl:if test="number($percent) != $percent">
-        <xsl:message terminate="yes">MBX:ERROR:   expecting a numerical value preceding '%'; got <xsl:value-of select="$percent"/></xsl:message>
+        <xsl:message terminate="yes">MBX:FATAL:   expecting a numerical value preceding '%'; got <xsl:value-of select="$percent"/></xsl:message>
     </xsl:if>
     <xsl:value-of select="concat($percent,'%')" />
 </xsl:template>

@@ -439,6 +439,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
       <xsl:text>\newcommand{\stale}[1]{\renewcommand{\ULthickness}{\stalethick}\sout{#1}}&#xa;</xsl:text>
     </xsl:if>
   </xsl:if>
+  <!-- 2020-05-28: this "if" was edited in xsl/pretext-latex and is no longer in-sync -->
   <xsl:if test="$document-root//fillin">
     <xsl:text>%% Used for fillin answer blank&#xa;</xsl:text>
     <xsl:text>%% Argument is length in em&#xa;</xsl:text>

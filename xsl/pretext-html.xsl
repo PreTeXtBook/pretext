@@ -616,7 +616,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>tree</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message terminate='yes'>MBX:ERROR: 'html.navigation.logic' must be 'linear' or 'tree', not '<xsl:value-of select="$html.navigation.logic" />.'  Quitting...</xsl:message>
+            <xsl:text>linear</xsl:text>
+            <xsl:message>MBX:ERROR: 'html.navigation.logic' must be 'linear' or 'tree', not '<xsl:value-of select="$html.navigation.logic" />.'  Using the default instead ('linear').</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -630,7 +631,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>no</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message terminate='yes'>MBX:ERROR: 'html.navigation.upbutton' must be 'yes' or 'no', not '<xsl:value-of select="$html.navigation.upbutton" />.'  Quitting...</xsl:message>
+            <xsl:text>yes</xsl:text>
+            <xsl:message>MBX:ERROR: 'html.navigation.upbutton' must be 'yes' or 'no', not '<xsl:value-of select="$html.navigation.upbutton" />.'  Using the default instead ('yes').</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -644,7 +646,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>compact</xsl:text>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message terminate='yes'>MBX:ERROR: 'html.navigation.style' must be 'full' or 'compact', not '<xsl:value-of select="$html.navigation.style" />.'  Quitting...</xsl:message>
+            <xsl:text>full</xsl:text>
+            <xsl:message>MBX:ERROR: 'html.navigation.style' must be 'full' or 'compact', not '<xsl:value-of select="$html.navigation.style" />.'  Using the default instead ('full').</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -778,13 +781,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- should be overridden by supported conversions   -->
 <xsl:template match="letter" mode="chunking">
     <xsl:message terminate="yes">
-        <xsl:text>MBX:ERROR:  HTML conversion does not support the "letter" document type.  Quitting...</xsl:text>
+        <xsl:text>MBX:FATAL:  HTML conversion does not support the "letter" document type.  Quitting...</xsl:text>
     </xsl:message>
 </xsl:template>
 
 <xsl:template match="memo" mode="chunking">
     <xsl:message terminate="yes">
-        <xsl:text>MBX:ERROR:  HTML conversion does not support the "memo" document type.  Quitting...</xsl:text>
+        <xsl:text>MBX:FATAL:  HTML conversion does not support the "memo" document type.  Quitting...</xsl:text>
     </xsl:message>
 </xsl:template>
 
@@ -7200,8 +7203,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </xsl:when>
                         <!-- If there is no $left-col/@width, terminate -->
                         <xsl:otherwise>
-                            <xsl:message terminate="yes">MBX:ERROR:   cell with p element has no corresponding col element with width attribute</xsl:message>
+                            <xsl:message>MBX:FATAL:   cell with a "p" element has no corresponding col element with width attribute.</xsl:message>
                             <xsl:apply-templates select="." mode="location-report" />
+                            <xsl:message terminate="yes">Quitting...</xsl:message>
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:attribute>
