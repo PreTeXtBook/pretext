@@ -94,30 +94,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Sentinel indicates no choice made                             -->
 <xsl:param name="chunk.level" select="''" />
 
-<!-- ######################### -->
-<!-- String Parameter Bad Bank -->
-<!-- ######################### -->
-
-<!-- Conversion specific parameters that die, will     -->
-<!-- live on in warnings, which we consolidate in this -->
-<!-- file, so we need to declare them here as well     -->
-
-<!-- DO NOT USE -->
-<!-- HTML-specific deprecated 2015-06, but still functional -->
-<xsl:param name="html.chunk.level" select="''" />
-<!-- html.knowl.sidebyside is deprecated 2017-07  -->
-<!-- null value necessary for deprecation message -->
-<xsl:param name="html.knowl.sidebyside" select="''" />
-<!-- Analytics deprecated 2019-11-28               -->
-<!-- null values necessary for deprecation message -->
-<xsl:param name="html.statcounter.project" select="''"/>
-<xsl:param name="html.statcounter.security" select="''"/>
-<xsl:param name="html.google-classic" select="''"/>
-<xsl:param name="html.google-universal" select="''"/>
-<!-- Google search via string parameter deprecated 2019-11-29 -->
-<xsl:param name="html.google-search" select="''"/>
-<!-- DO NOT USE -->
-
 <!-- An exercise has a statement, and may have hints,      -->
 <!-- answers and solutions.  An answer is just the         -->
 <!-- final number, expression, whatever; while a solution  -->
@@ -171,13 +147,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Otherwise ('yes'), todo's show in red paragraphs, -->
 <!-- provisional cross-references show in red          -->
 <xsl:param name="author.tools" select="''" />
-<!-- The dashed version is deprecated 2019-02-10,      -->
-<!-- but we still recognize it.  Move to variable bad  -->
-<!-- bank once killed.                                 -->
-<xsl:param name="author-tools" select="''" />
-<!-- The autoname parameter is deprecated (2017-07-25) -->
-<!-- Replace with docinfo/cross-references/@text       -->
-<xsl:param name="autoname" select="''" />
 <!-- How many levels to table of contents  -->
 <!-- Not peculiar to HTML or LaTeX or etc. -->
 <!-- Sentinel indicates no choice made     -->
@@ -1390,59 +1359,6 @@ $inline-solution-main|$divisional-solution-main|$worksheet-solution-main|$readin
 $inline-hint-back    |$divisional-hint-back    |$worksheet-hint-back    |$reading-hint-back    |$project-hint-back|
 $inline-answer-back  |$divisional-answer-back  |$worksheet-answer-back  |$reading-answer-back  |$project-answer-back|
 $inline-solution-back|$divisional-solution-back|$worksheet-solution-back|$reading-solution-back|$project-solution-back"/>
-
-<!-- ################# -->
-<!-- Variable Bad Bank -->
-<!-- ################# -->
-
-<!-- DO NOT USE THESE; THEY ARE TOTALLY DEPRECATED -->
-
-<!-- Some string parameters have been deprecated without any      -->
-<!-- sort of replacement, fallback, or upgrade.  But for a        -->
-<!-- deprecation message to be effective, they need to exist.     -->
-<!-- If you add something here, make a note by the deprecation    -->
-<!-- message.  These definitions expain why it is *always* best   -->
-<!-- to define a user variable as empty, and then supply defaults -->
-<!-- to an internal variable.                                     -->
-
-<xsl:variable name="html.css.file" select="''"/>
-<xsl:variable name="html.permalink" select="''"/>
-
-<!-- The old (incomplete) methods for duplicating components of -->
-<!-- exercises have been deprecated as of 2018-11-07.  We keep  -->
-<!-- these here as we have tried to preserve their intent, and  -->
-<!-- we are generating warnings if they are ever set.           -->
-<xsl:param name="exercise.text.statement" select="''" />
-<xsl:param name="exercise.text.hint" select="''" />
-<xsl:param name="exercise.text.answer" select="''" />
-<xsl:param name="exercise.text.solution" select="''" />
-<xsl:param name="exercise.backmatter.statement" select="''" />
-<xsl:param name="exercise.backmatter.hint" select="''" />
-<xsl:param name="exercise.backmatter.answer" select="''" />
-<xsl:param name="exercise.backmatter.solution" select="''" />
-<xsl:param name="project.text.hint" select="''" />
-<xsl:param name="project.text.answer" select="''" />
-<xsl:param name="project.text.solution" select="''" />
-<xsl:param name="task.text.hint" select="''" />
-<xsl:param name="task.text.answer" select="''" />
-<xsl:param name="task.text.solution" select="''" />
-
-<!-- These are deprecated in favor of watermark.text and watermark.scale -->
-<!-- which are now managed in common. These still "work" for now.        -->
-<!-- The default scaling factor of 2.0 is historical.                    -->
-<xsl:param name="latex.watermark" select="''"/>
-<xsl:variable name="b-latex-watermark" select="not($latex.watermark = '')" />
-<xsl:param name="latex.watermark.scale" select="''"/>
-<xsl:variable name="latex-watermark-scale">
-    <xsl:choose>
-        <xsl:when test="not($latex.watermark.scale = '')">
-            <xsl:value-of select="$latex.watermark.scale"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>2.0</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
 
 <!-- ############## -->
 <!-- Entry Template -->
