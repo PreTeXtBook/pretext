@@ -11,7 +11,7 @@
     <title>Conversion to Online HTML</title>
 
     <introduction>
-        <p>Similar to the case for <latex /> conversion (<xref ref="pdf-print"/>) there is a variety of command-line processing parameters available (<xref ref="processing-parameters" />).  Until we are ready to document these carefully, open <c>xsl/pretext-html.xsl</c> and poke around to see what is available.</p>
+        <p>This chapter describes way a publisher can adjust the presentation of <pretext/> content in an inline format, without actually changing that content.  Similar to the case for <latex/> conversion (<xref ref="pdf-print"/>) there is a variety of options which may be configured.  As of 2020-05-30 we are transitioning away from command-line string parameters (<xref ref="processing-parameters"/>) to using a publisher file (<xref ref="publisher-file"/>), which is simultaneously being documented carefully.  During the transition you can explore <c>xsl/pretext-html.xsl</c> by searching on the use of <tag>xsl:param</tag> at the outermost level (i.e. starting in column 1).</p>
     </introduction>
 
     <section xml:id="html-publisher-options">
@@ -28,24 +28,24 @@
                 <cline>platypus.mammal-institute.org/aota/html/index.html</cline>
             </cd>So you can advertise the shorter version to potential readers.  What is in <c>index.html</c>?  Simple code to <term>redirect</term> to another one of your pages.  Which one?  Any one you like!</p>
 
-            <p>Within the <tag>publication</tag> element of your publisher file (<xref ref="publisher-file"/>) include an <tag>html</tag> element, with a child element <tag>index-page</tag> having an attribute <attr>ref</attr>.  The value must be the <attr>xml:id</attr> of a division which is rendered as an entire web page at the requested level of chunking.</p>
+            <p>Within the <tag>publication</tag> element of your publisher file (<xref ref="publisher-file"/>) include an <tag>html</tag> element, with a child element <tag>index-page</tag> having an attribute <attr>ref</attr>.  The value must be the <attr>xml:id</attr> of a division which is rendered as an entire web page at the requested level of chunking.  See <xref ref="online-index-page"/>  for details on specifying this option.</p>
 
             <p>For example, if a <tag>book</tag> is being chunked into <tag>chapter</tag>, and your source has<cd>
                 <cline>&lt;chapter xml:id="birds"&gt;</cline>
             </cd>then you can set <c>ref="birds"</c> and the page for that chapter will be the default page for the shorter <init>URL</init>.  In practice, you probably really want a page that looks like the front matter or a Table of Contents.</p>
 
-            <p>The default is to first have <c>index.html</c> redirect to a page for the <tag>frontmatter</tag>, and if this is not possible, then it will redirect to a page for the top-level of your content.  If your document is short or simple, you may just have a single web page.  You do not need to distribute the <c>index.html</c> file and may just wish to use a concise and descriptive <attr>xml:id</attr> for your top-level element.</p>
+            <p>The default is to first have <c>index.html</c> redirect to a page for the <tag>frontmatter</tag>, and if this is not possible, then it will redirect to a page for the top-level of your content.  If your document is short or simple, you may just have a single web page.  You could choose to not distribute the <c>index.html</c> file and then just use a concise and descriptive <attr>xml:id</attr> for your top-level element (e.g. <tag>article</tag>) to fashion an attractive URL that points to your shorter work.</p>
         </paragraphs>
 
         <paragraphs xml:id="online-embedded-calculator">
             <title>Embedded Calculator</title>
             <idx><h>calculator</h><h>embedded in <init>HTML</init></h></idx>
 
-            <p>You may elect to have an embedded online calculator in each page of your online version.  It will appear in the right margin, and will stay there as a reader scrolls the page up and down.  A button near the masthead can be used to contol visibility.  By default no calculator is available, so you need to explicitly request this feature.  As of 2020-05-30 there are four calculators available from the GeoGebra Project<fn><url href="https://www.geogebra.org/">www.geogebra.org</url></fn>.  See <xref ref="online-embedded-calculator"/> for details on specifying this option.</p>
+            <p>You may elect to have an embedded online calculator in each page of your online version.  It will appear in the right margin, and will stay there as a reader scrolls the page up and down.  A button near the masthead can be used to contol visibility.  By default no calculator is available, so you need to explicitly request this feature.  As of 2020-05-30 there are four calculators available from the GeoGebra Project<fn><url href="https://www.geogebra.org/">www.geogebra.org</url></fn>.  See <xref ref="online-calculator"/> for details on specifying this option.</p>
         </paragraphs>
 
         <paragraphs xml:id="video-embedding">
-            <title>Privacy options for video embedding</title>
+            <title>Privacy Options for Video Embedding</title>
             <idx><h>video</h><h>HTML</h></idx>
             <idx><h>privacy</h><h>video</h></idx>
 
@@ -59,7 +59,7 @@
 
             <p>Within the <tag>publication</tag> element of your publisher file include an <tag>html</tag> element, with a child element <tag>video</tag> having an attribute <attr>privacy</attr>.
             The value must be either <c>yes</c> (use enhanced privacy, if available), or <c>no</c> (allow all tracking cookies).
-            If your publisher file does not have this element (or you do not have a publisher file) you will get a warning message, and the default will be used.</p>
+            If your publisher file does not have this element (or you do not have a publisher file) you will get a warning message, and the default will be used.  See <xref ref="embedded-video-privacy-options"/> for details on specifying this option.</p>
           </paragraphs>
     </section>
 
@@ -112,7 +112,7 @@
 
 
         <introduction>
-            <p>The PreTeXt conversion to <init>HTML</init> creates standard <init>HTML</init> elements, with styles controlled by <init>CSS</init> via class names (and not so much via the element names).  As evidence of this, building <init>HTML</init> without the accompanying Javascript and <init>CSS</init> renders in a readable fashion, albeit quite plain (as one would expect).  This section describes ways that a publisher can influence the style.</p>
+            <p>The <pretext/> conversion to <init>HTML</init> creates standard <init>HTML</init> elements, with styles controlled by <init>CSS</init> via class names (and not so much via the element names).  As evidence of this, building <init>HTML</init> without the accompanying Javascript and <init>CSS</init> renders in a readable fashion, albeit quite plain (as one would expect).  This section describes ways that a publisher can influence the style.</p>
         </introduction>
 
         <subsection>
@@ -124,7 +124,7 @@
         <subsection>
             <title>Table of Contents, Knowls, and Banner</title>
 
-            <p>In a manner analagous to how colors may be adjusted, so may other parts of the HTML UI, see<xref ref="online-style-options"/>).  As of 2019-12-08, replacing more than one of these at a time should be considered experimental.</p>
+            <p>In a manner analagous to how colors may be adjusted, so may other parts of the HTML UI, see <xref ref="online-style-options"/>).  As of 2019-12-08, replacing more than one of these at a time should be considered experimental.</p>
         </subsection>
     </section>
 

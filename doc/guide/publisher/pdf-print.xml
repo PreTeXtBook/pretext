@@ -11,6 +11,8 @@
     <title>Conversion to PDF and Print</title>
 
     <introduction>
+        <p>This chapter describes ways a publisher can adjust the presentation of <pretext/> content for a print format, or an lectronic facsimile (i.e. <init>PDF</init>), without actually changing that content.</p>
+
         <p>
             <idx><h>PDF</h><h>electronic</h></idx>
             <idx><h>PDF</h><h>print</h></idx>
