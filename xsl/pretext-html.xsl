@@ -156,13 +156,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="html.js.server" select="'https://pretextbook.org'" />
 <xsl:param name="html.js.version" select="'0.13'" />
 
-<!-- Calculator -->
-<!-- Possible values are geogebra-classic, geogebra-graphing -->
-<!-- geogebra-geometry, geogebra-3d                          -->
-<!-- Default is empty, meaning the calculator is not wanted. -->
-<xsl:param name="html.calculator" select="''" />
-<xsl:variable name="b-has-calculator" select="not($html.calculator = '')" />
-
 <!-- Annotation -->
 <xsl:param name="html.annotation" select="''" />
 <xsl:variable name="b-activate-hypothesis" select="boolean($html.annotation='hypothesis')" />
@@ -10100,7 +10093,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template name="calculator">
-    <xsl:if test="contains($html.calculator,'geogebra')">
+    <xsl:if test="contains($html-calculator,'geogebra')">
         <div id="calculator-container" class="calculator-container" style="display: none; z-index:100;">
             <div id="geogebra-calculator"></div>
         </div>
@@ -10116,7 +10109,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 applet.showFullscreenButton(true);
             }; -->
             <xsl:text>var ggbApp = new GGBApplet({"appName": "</xsl:text>
-            <xsl:value-of select="substring-after($html.calculator,'-')"/>
+            <xsl:value-of select="substring-after($html-calculator,'-')"/>
             <xsl:text>",&#xa;</xsl:text>
             <!-- width and height are required parameters                   -->
             <!-- All the rest is customizing some things away from defaults -->
@@ -10686,7 +10679,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- GeoGebra -->
 <!-- The JS necessary to load the "App" for a generic calculator -->
 <xsl:template name="geogebra">
-    <xsl:if test="$b-has-calculator and contains($html.calculator,'geogebra')">
+    <xsl:if test="$b-has-calculator and contains($html-calculator,'geogebra')">
         <script src="https://cdn.geogebra.org/apps/deployggb.js"></script>
     </xsl:if>
 </xsl:template>

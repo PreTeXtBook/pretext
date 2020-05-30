@@ -67,6 +67,46 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- HTML Index Page Redirect -->
 <!--                          -->
 
+<!-- Calculator -->
+<!-- Possible values are geogebra-classic, geogebra-graphing -->
+<!-- geogebra-geometry, geogebra-3d                          -->
+<!-- Default is empty, meaning the calculator is not wanted. -->
+<xsl:variable name="html-calculator">
+    <xsl:choose>
+        <xsl:when test="$publication/html/calculator/@model = 'none'">
+            <xsl:text>none</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/html/calculator/@model = 'geogebra-classic'">
+            <xsl:text>geogebra-classic</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/html/calculator/@model = 'geogebra-graphing'">
+            <xsl:text>geogebra-graphing</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/html/calculator/@model = 'geogebra-geometry'">
+            <xsl:text>geogebra-geometry</xsl:text>
+        </xsl:when>
+        <xsl:when test="$publication/html/calculator/@model = 'geogebra-3d'">
+            <xsl:text>geogebra-3d</xsl:text>
+        </xsl:when>
+        <!-- an attempt was made, but failed to be correct -->
+        <xsl:when test="$publication/html/calculator/@model">
+            <xsl:message>PTX:WARNING: HTML calculator/@model in publisher file should be "geogebra-classic", "geogebra-graphing", "geogebra-geometry", "geogebra-3d", or "none", not "<xsl:value-of select="$publication/html/calculator/@model"/>". Proceeding with default value: "none"</xsl:message>
+            <xsl:text>none</xsl:text>
+        </xsl:when>
+        <!-- or maybe the deprecated string parameter was used, as evidenced -->
+        <!-- by being non-empty, so we'll just run with it like in the past  -->
+        <xsl:when test="not($html.calculator = '')">
+            <xsl:value-of select="$html.calculator"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>none</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<xsl:variable name="b-has-calculator" select="not($html-calculator = 'none')" />
+
+
 <!-- A generic "index.html" page will be built to redirect to an     -->
 <!-- existing page from the HTML build/chunking.  The default is the -->
 <!-- "frontmatter" page, if possible, otherwise the root page.       -->
