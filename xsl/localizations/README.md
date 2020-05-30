@@ -38,6 +38,7 @@ Current (partially) implemented language codes and contributors
 * af-ZA, Afrikaans (South Africa), Dirk Basson
 * bg-BG, Bulgarian (Bulgaria), Boyko Bantchev
 * cs-CZ, Czech (Czechia), Jiří Lebl
+* de-DE, German (Germany), Karl-Dieter Crisman
 * es-ES, Spanish (Spain), Juan José Torrens
 * en-US, English (United States), Robert A. Beezer
 * fr-FR, French (France), Thomas W. Judson
