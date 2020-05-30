@@ -117,12 +117,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- early or late                          -->
 <xsl:param name="latex.preamble.early" select="''" />
 <xsl:param name="latex.preamble.late" select="''" />
-<!--  -->
-<!-- DEPRECATED: 2017-12-18, do not use, any value -->
-<!-- besides an empty string will raise a warning  -->
-<xsl:param name="latex.console.macro-char" select="''" />
-<xsl:param name="latex.console.begin-char" select="''" />
-<xsl:param name="latex.console.end-char" select="''" />
 
 
 <!-- ############### -->

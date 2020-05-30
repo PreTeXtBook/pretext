@@ -142,4 +142,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- DO NOT USE THESE; THEY ARE TOTALLY DEPRECATED -->
 
+<!-- DEPRECATED: 2017-12-18, do not use, any value -->
+<!-- besides an empty string will raise a warning  -->
+<xsl:param name="latex.console.macro-char" select="''" />
+<xsl:param name="latex.console.begin-char" select="''" />
+<xsl:param name="latex.console.end-char" select="''" />
+
+
 </xsl:stylesheet>
