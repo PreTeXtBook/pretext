@@ -563,5 +563,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="latex.console.begin-char" select="''" />
 <xsl:param name="latex.console.end-char" select="''" />
 
+<!-- DEPRECATED: 2020-05-29  In favor of       -->
+<!-- html/calculator/@model  in publisher file -->
+<xsl:param name="html.calculator" select="''" />
 
 </xsl:stylesheet>

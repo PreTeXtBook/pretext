@@ -10787,6 +10787,13 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
         <xsl:with-param name="message" select="'the  html.permalink  parameter is now obsolete and will be ignored as this is now controlled by Javascript'" />
         <xsl:with-param name="incorrect-use" select="($html.permalink != '')" />
     </xsl:call-template>
+    <!--  -->
+    <!-- 2020-05-29  HTML calculator model controlled by publisher file -->
+    <xsl:call-template name="parameter-deprecation-message">
+        <xsl:with-param name="date-string" select="'2020-05-29'" />
+        <xsl:with-param name="message" select="'the  html.calculator  parameter has been replaced by the  html/calculator/@model  entry in the publisher file.  We will attempt to honor your selection.  But please switch to using the Publishers File for configuration, as documented in the PreTeXt Guide.'" />
+        <xsl:with-param name="incorrect-use" select="($html.calculator != '')" />
+    </xsl:call-template>
 </xsl:template>
 
 <!-- Miscellaneous -->
