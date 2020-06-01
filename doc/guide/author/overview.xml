@@ -420,6 +420,20 @@
         <p>This would be rendered as <quantity><mag>20.7</mag><unit prefix="kilo" base="gram"/><unit base="meter"/><per base="second" exp="2"/></quantity>.  More in <xref ref="topic-units-measure" />.</p>
     </section>
 
+    <section xml:id="overview-localization">
+        <title>Localization</title>
+        <idx>localization</idx>
+        <idx>internationalization</idx>
+
+        <p>We are interested in helping authors produce documents with open licenses around the entirety of the world.  <pretext /> provides infrastructure for doing so (or <term>internationalization</term>) in accordance with guidelines of the <url href="https://www.w3.org/International/">W3C Internationalization (I18n) Activity</url> at <init>W3C</init> (<c>www.w3.org</c>).</p>
+
+        <p>In order to actually adapt <pretext /> to another language (<term>localization</term>), there are two requirements:
+          <ul><li><p>A file for localization into the desired locale.</p></li>
+          <li>The author adds an <c>xml:lang</c> attribute on the <c>&lt;pretext></c> element.</li></ul>
+        See <xref ref="topic-localization" /> for more details.</p>
+
+    </section>
+
     <section xml:id="overview-accessibility">
         <title>Accessibility</title>
         <idx>accessibility</idx>
