@@ -7,8 +7,16 @@
     %entities;
 ]>
 
-<!-- Identify as a stylesheet -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
+<!-- Building XHTML for the EPUB spec, which requires the    -->
+<!-- XHTML namespace on elements.  But since we import the   -->
+<!-- base HTML conversion, no amount of messing around can   -->
+<!-- make it happen correctly.  So we write literal elements -->
+<!-- as XML and after-the-fact we stich-up the necessary     -->
+<!-- namespace on the output files with regular expressions  -->
+<!-- in Python.  So...we have no namespace at all.           -->
+<xsl:stylesheet xmlns:pi="http://pretextbook.org/2020/pretext/internal"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
+                xmlns:svg="http://www.w3.org/2000/svg"
                 xmlns:epub="http://www.idpf.org/2007/ops"
                 xmlns:exsl="http://exslt.org/common"
                 xmlns:date="http://exslt.org/dates-and-times"
@@ -17,6 +25,7 @@
 <!-- Trade on HTML markup, numbering, chunking, etc. -->
 <!-- Override as pecularities of EPUB conversion arise -->
 <xsl:import href="./mathbook-common.xsl" />
+<xsl:import href="./pretext-assembly.xsl" />
 <xsl:import href="./mathbook-html.xsl" />
 
 <!-- TODO: free chunking level -->
@@ -67,6 +76,14 @@
     <xsl:text>package.opf</xsl:text>
 </xsl:variable>
 
+<!-- A publisher file can set HTML styling which will apply  -->
+<!-- here since EPUB is just packaged-up XHTML.  We get two  -->
+<!-- values set free of charge in the -html converter, and   -->
+<!-- we later pass them on to the packaging step.  These     -->
+<!-- are complete filenames, with no path information.       -->
+<!--   $html-css-colorfile                                   -->
+<!--   $html-css-stylefile                                   -->
+
 <!-- The value of the unique-identifier attribute of -->
 <!-- the package element of the container file must  -->
 <!-- match the value of the id attribute of the      -->
@@ -93,7 +110,10 @@
 <!-- XHTML files as output -->
 <xsl:variable name="file-extension" select="'.xhtml'" />
 
+<xsl:param name="svgfile"/>
+<xsl:variable name="svg-math"  select="document($svgfile)/pi:math-representations"/>
 
+ 
 <!-- ############## -->
 <!-- Entry Template -->
 <!-- ############## -->
@@ -104,13 +124,13 @@
 <!-- Note that "docinfo" is at the same level and not structural, so killed -->
 <xsl:template match="/">
     <xsl:call-template name="banner-warning">
-        <xsl:with-param name="warning">EPUB conversion is experimental and not supported.  In particular,&#xa;the XSL conversion alone is not sufficient to create an EPUB.&#xa;See mathbook/examples/epub/build.sh for more information.</xsl:with-param>
+        <xsl:with-param name="warning">EPUB conversion is experimental and not supported.  In particular,&#xa;the XSL conversion alone is not sufficient to create an EPUB.</xsl:with-param>
     </xsl:call-template>
     <xsl:apply-templates select="pretext|mathbook" mode="deprecation-warnings" />
     <xsl:call-template name="setup" />
-    <xsl:call-template name="build-image-list" />
     <xsl:call-template name="package-document" />
     <xsl:apply-templates />
+    <xsl:call-template name="packaging-info"/>
 </xsl:template>
 
 <!-- First, we use the frontmatter element to trigger various necessary files     -->
@@ -149,13 +169,17 @@
             <head>
                 <xsl:text>&#xa;</xsl:text> <!-- a little formatting help -->
                 <xsl:call-template name="converter-blurb-html" />
-                <link href="../{$css-dir}/pretext-epub.css" rel="stylesheet" type="text/css" />
+                <link href="../{$css-dir}/pretext_add_on.css"    rel="stylesheet" type="text/css"/>
+                <link href="../{$css-dir}/{$html-css-stylefile}" rel="stylesheet" type="text/css"/>
+                <link href="../{$css-dir}/{$html-css-colorfile}" rel="stylesheet" type="text/css"/>
+                <link href="../{$css-dir}/setcolors.css"         rel="stylesheet" type="text/css"/>
+                <xsl:call-template name="mathjax-css"/>
             </head>
-            <body>
-                <!-- Keep div wrapper on macros or else indentation  -->
-                <!-- blows up, so use sed to clean out               -->
-                <xsl:call-template name="latex-macros" />
+            <!-- use class to repurpose HTML CSS work -->
+            <body class="pretext-content">
                 <xsl:copy-of select="$content" />
+                <!-- Copy MathJax's font information to the bottom -->
+                <xsl:copy-of select="document($svgfile)/pi:math-representations/svg:svg[@id='font-data']"/>
             </body>
         </html>
     </exsl:document>
@@ -303,11 +327,13 @@
     <xsl:variable name="discovery-manifest" select="exsl:node-set($discovery)"/>
     <!-- start "manifest" with one-off items -->
     <manifest xmlns="http://www.idpf.org/2007/opf">
-        <item id="css" href="{$css-dir}/pretext-epub.css" media-type="text/css"/>
+        <item id="css-addon"  href="{$css-dir}/pretext_add_on.css"    media-type="text/css"/>
+        <item id="css-style"  href="{$css-dir}/{$html-css-stylefile}" media-type="text/css"/>
+        <item id="css-color"  href="{$css-dir}/{$html-css-colorfile}" media-type="text/css"/>
+        <item id="css-setclr" href="{$css-dir}/setcolors.css"         media-type="text/css"/>
         <item id="cover-page" href="{$xhtml-dir}/cover-page.xhtml" media-type="application/xhtml+xml"/>
         <item id="table-contents" href="{$xhtml-dir}/table-contents.xhtml" properties="nav" media-type="application/xhtml+xml"/>
-        <item id="cover-image" href="{$xhtml-dir}/images/cover.png" properties="cover-image" media-type="image/png"/>
-        <!-- <item id="cover-image" href="{$xhtml-dir}/images/cover.jpg" properties="cover-image" media-type="image/jpeg"/> -->
+        <item id="cover-image" href="{$xhtml-dir}/{$publication/epub/@cover}" properties="cover-image" media-type="image/png"/>
 
         <!-- cruise found objects, including comments we generate to help debug       -->
         <!-- NB: * could be just "item", but we generally want all elements           -->
@@ -398,6 +424,112 @@
     <xsl:apply-templates select="*" mode="spine" />
 </xsl:template>
 
+<!-- This template writes out some information necessary     -->
+<!-- for successful organization of the necessary files to   -->
+<!-- make a complete package for the eventual EPUB.  This is -->
+<!-- the actual output of the stylesheet itself.  There is   -->
+<!-- no namespace information, so when teh Python script     -->
+<!-- gets this, there is no need for any namespace           -->
+<!-- provisions with the  lxml  library.                     -->
+<!--                                                         -->
+<!-- Each image filename is a legitimate image in use in the -->
+<!-- EPUB XHTML, but the filename may be duplicated is used  -->
+<!-- more than once.  That is OK, the only inefficiency is   -->
+<!-- that it will simply be copied onto itself.              -->
+<xsl:template name="packaging-info">
+    <packaging>
+        <cover filename="{$publication/epub/@cover}"/>
+        <css stylefile="{$html-css-stylefile}" colorfile="{$html-css-colorfile}"/>
+        <images image-directory="{$publication/epub/@image-directory}">
+            <xsl:for-each select="$document-root//image">
+                <image>
+                    <xsl:attribute name="filename">
+                        <xsl:apply-templates select="." mode="epub-base-filename"/>
+                    </xsl:attribute>
+                </image>
+            </xsl:for-each>
+        </images>
+    </packaging>
+</xsl:template>
+
+<!-- MathJax CSS, which will be invoked via enclosing span elements -->
+<!-- Removed as EPUB 3.0 violation: .mjpage direction: ltr; -->
+<xsl:template name="mathjax-css">
+<style type="text/css">
+.mjpage .MJX-monospace {
+font-family: monospace
+}
+
+.mjpage .MJX-sans-serif {
+font-family: sans-serif
+}
+
+.mjpage {
+display: inline;
+font-style: normal;
+font-weight: normal;
+line-height: normal;
+font-size: 100%;
+font-size-adjust: none;
+text-indent: 0;
+text-align: left;
+text-transform: none;
+letter-spacing: normal;
+word-spacing: normal;
+word-wrap: normal;
+white-space: nowrap;
+float: none;
+max-width: none;
+max-height: none;
+min-width: 0;
+min-height: 0;
+border: 0;
+padding: 0;
+margin: 0
+}
+
+.mjpage * {
+transition: none;
+-webkit-transition: none;
+-moz-transition: none;
+-ms-transition: none;
+-o-transition: none
+}
+
+.mjx-svg-href {
+fill: blue;
+stroke: blue
+}
+
+.MathJax_SVG_LineBox {
+display: table!important
+}
+
+.MathJax_SVG_LineBox span {
+display: table-cell!important;
+width: 10000em!important;
+min-width: 0;
+max-width: none;
+padding: 0;
+border: 0;
+margin: 0
+}
+
+.mjpage__block {
+text-align: center;
+margin: 1em 0em;
+position: relative;
+display: block!important;
+text-indent: 0;
+max-width: none;
+max-height: none;
+min-width: 0;
+min-height: 0;
+width: 100%
+}
+</style>
+</xsl:template>
+
 
 <!-- ############# -->
 <!-- Content files -->
@@ -405,28 +537,33 @@
 
 <xsl:template match="frontmatter" mode="epub">
     <exsl:document href="{$content-dir}/{$xhtml-dir}/cover-page.xhtml" method="xml" omit-xml-declaration="yes" encoding="UTF-8" indent="yes">
-        <html xmlns="http://www.w3.org/1999/xhtml">
+        <html>
             <!-- head element should not be empty -->
             <head>
                 <meta charset="utf-8"/>
                 <title>
                     <xsl:apply-templates select="$document-root" mode="title-full"/>
                 </title>
+                <xsl:call-template name="mathjax-css"/>
             </head>
             <body>
                 <!-- https://www.opticalauthoring.com/inside-the-epub-format-the-cover-image/   -->
                 <!-- says the "figure" is necessary, and does not seem to hurt (CSS could style)-->
                 <figure>
-                    <img src="images/cover.png" />
+                    <img src="{$publication/epub/@cover}"/>
                 </figure>
             </body>
         </html>
     </exsl:document>
     <exsl:document href="{$content-dir}/{$xhtml-dir}/table-contents.xhtml" method="xml" omit-xml-declaration="yes" encoding="UTF-8" indent="yes">
-        <html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+        <html xmlns:epub="http://www.idpf.org/2007/ops">
             <head>
                 <meta charset="utf-8"/>
-                <link href="../{$css-dir}/pretext-epub.css" rel="stylesheet" type="text/css" />
+                <link href="../{$css-dir}/pretext_add_on.css"    rel="stylesheet" type="text/css"/>
+                <link href="../{$css-dir}/{$html-css-stylefile}" rel="stylesheet" type="text/css"/>
+                <link href="../{$css-dir}/{$html-css-colorfile}" rel="stylesheet" type="text/css"/>
+                <link href="../{$css-dir}/setcolors.css"         rel="stylesheet" type="text/css"/>
+                <xsl:call-template name="mathjax-css"/>
             </head>
             <body epub:type="frontmatter">
                 <nav epub:type="toc" id="toc">
@@ -544,24 +681,12 @@
     </xsl:choose>
 </xsl:template>
 
-<!-- Output a list of filenames, for a production script  -->
-<!-- to use to ensure that the image files made available -->
-<!-- in the final zip file actually match the files       -->
-<!-- described in the manifest section                    -->
-<xsl:template name="build-image-list">
-    <xsl:variable name="image-list-filename">
-        <xsl:value-of select="$xhtml-dir" />
-        <xsl:text>/image-list.txt</xsl:text>
-    </xsl:variable>
-    <exsl:document href="{$image-list-filename}" method="text" encoding="UTF-8">
-        <xsl:for-each select="$document-root//image">
-            <xsl:apply-templates select="." mode="epub-base-filename" />
-            <xsl:text>&#xa;</xsl:text>
-        </xsl:for-each>
-    </exsl:document>
-</xsl:template>
-
 <!-- Manifest entry with image file information -->
+<!-- For each "image" we record basic information in the form the  -->
+<!-- manifest expects (an "item").  Later, duplicate files will be -->
+<!-- scrubbed from this list based on the @href value, so a given  -->
+<!-- file is not referenced twice in the manifest.                 -->
+<!-- TODO: Missing video posters, interactive screenshots, QR codes -->
 <xsl:template match="image" mode="manifest">
     <xsl:variable name="extension">
         <xsl:call-template name="file-extension">
@@ -569,17 +694,18 @@
         </xsl:call-template>
     </xsl:variable>
     <!-- item  element for manifest -->
-    <xsl:element name="item" xmlns="http://www.idpf.org/2007/opf">
+    <xsl:element name="item" namespace="http://www.idpf.org/2007/opf">
         <!-- internal id of the image -->
         <xsl:attribute name="id">
             <xsl:apply-templates select="." mode="html-id" />
         </xsl:attribute>
-        <!-- filename, or tack on .svg for vector graphics -->
+        <!-- filename relative to EPUB directory -->
         <xsl:attribute name="href">
             <xsl:value-of select="$xhtml-dir" />
             <xsl:text>/</xsl:text>
             <xsl:apply-templates select="." mode="epub-base-filename" />
         </xsl:attribute>
+        <!-- media attribute -->
         <xsl:attribute name="media-type">
             <xsl:choose>
                 <xsl:when test="@source and $extension='png'">
@@ -601,7 +727,7 @@
             </xsl:choose>
         </xsl:attribute>
     </xsl:element>
-    <!-- dead-end on  mode="manifest"  descent, most likely -->
+    <!-- likely a dead-end here, but we examine children anyway -->
     <xsl:apply-templates select="*" mode="manifest" />
 </xsl:template>
 
@@ -624,12 +750,6 @@
 <!-- ######### -->
 <!-- OverRides -->
 <!-- ######### -->
-
-<!-- Knowls -->
-<!-- No cross-reference should be a knowl -->
-<xsl:template match="*" mode="xref-as-knowl">
-    <xsl:value-of select="false()" />
-</xsl:template>
 
 <!-- Footnotes -->
 <!-- Use "EPUB 3 Structural Semantics Vocabulary" -->
@@ -680,4 +800,38 @@
     </xsl:for-each>
 </xsl:template>
 
+<!-- #### -->
+<!-- Math -->
+<!-- #### -->
+
+<!-- Pluck SVGs from the file full of them, with matching IDs -->
+<xsl:template match="m|me|men|md|mdn">
+    <xsl:variable name="id">
+        <xsl:apply-templates select="." mode="visible-id"/>
+    </xsl:variable>
+    <xsl:variable name="math" select="$svg-math/pi:math[@id = $id]"/>
+    <xsl:variable name="context" select="string($math/@context)"/>
+    <!-- <xsl:message>C:<xsl:value-of select="$math/@context"/>:C</xsl:message> -->
+    <!-- <xsl:copy-of select="$svg-math[../@id = $id]"/> -->
+    <span>
+        <xsl:attribute name="class">
+            <xsl:choose>
+                <xsl:when test="$context = 'm'">
+                    <xsl:text>mjpage</xsl:text>
+                </xsl:when>
+                <xsl:when test="($context = 'me') or ($context = 'men') or ($context = 'md') or ($context = 'mdn')">
+                    <xsl:text>mjpage mjpage__block</xsl:text>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:attribute>
+        <xsl:copy-of select="$math/svg:svg"/>
+    </span>
+</xsl:template>
+
+<!-- Uncomment to test inline image behavior -->
+<!-- 
+<xsl:template match="img">
+    <img src="{@src}" style="width:8ex;"/>
+</xsl:template>
+ -->
 </xsl:stylesheet>
