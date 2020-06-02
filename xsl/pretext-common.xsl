@@ -254,6 +254,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Variables -->
 <!-- ######### -->
 
+<!-- The single quote character cannot be directly     -->
+<!-- used in a string in XSLT functions, not even as   -->
+<!-- &apos;. But if it is stored as a variable, then   -->
+<!-- XSLT 1.0 will be OK with using $apos.             -->
+<!-- Use like "contat('L',$apos,'Hospital')"           -->
+<xsl:variable name="apos">'</xsl:variable>
+
 <!-- The latex processing model is overridden in       -->
 <!-- imported files, per output format. Any stylesheet -->
 <!-- importing this one, should define this            -->
@@ -10129,8 +10136,9 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- Generic deprecation message for uniformity    -->
 <!-- occurrences is a node-list of "problem" nodes -->
 <!-- A message string like "'foo'" cannot contain  -->
-<!-- a single quote, even if entered as &apos;.  A -->
-<!-- &#xa; can be used if necessary, but only      -->
+<!-- a single quote, even if entered as &apos;.    -->
+<!-- If despearate, concatentate with $apos.       -->
+<!-- A &#xa; can be used if necessary, but only    -->
 <!-- rarely do we bother.                          -->
 <xsl:template name="deprecation-message">
     <xsl:param name="occurrences" />
@@ -10165,8 +10173,9 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- may need to move variables from specific      -->
 <!-- conversion and into -common file              -->
 <!-- A message string like "'foo'" cannot contain  -->
-<!-- a single quote, even if entered as &apos;.  A -->
-<!-- &#xa; can be used if necessary, but only      -->
+<!-- a single quote, even if entered as &apos;.    -->
+<!-- If despearate, concatentate with $apos.       -->
+<!-- A &#xa; can be used if necessary, but only    -->
 <!-- rarely do we bother.                          -->
 <xsl:template name="parameter-deprecation-message">
     <xsl:param name="incorrect-use" select="false()" />
