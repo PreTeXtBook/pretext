@@ -1,2 +1,3 @@
 user/*
 examples/webwork/Makefile.paths
+pretext/__pycache__/**
