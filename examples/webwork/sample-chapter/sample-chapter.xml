@@ -129,10 +129,14 @@
                 </introduction>
 
                 <webwork xml:id="integer-addition">
+                    <description>
+                        Add two positive single-digit integers.
+                    </description>
+
                     <pg-code>
-                        $a = Compute(random(1, 9, 1));
-                        $b = Compute(random(1, 9, 1));
-                        $c = $a + $b;
+                        $a = random(1, 9, 1);
+                        $b = random(1, 9, 1);
+                        $c = Compute($a + $b);
                     </pg-code>
 
                     <statement>
@@ -161,9 +165,9 @@
 
                 <webwork xml:id="integer-addition-with-seed" seed="510">
                     <pg-code>
-                        $a = Compute(random(1, 9, 1));
-                        $b = Compute(random(1, 9, 1));
-                        $c = $a + $b;
+                        $a = random(1, 9, 1);
+                        $b = random(1, 9, 1);
+                        $c = Compute($a + $b);
                     </pg-code>
 
                     <statement>
@@ -186,10 +190,10 @@
 
                 <webwork xml:id="integer-addition-with-control-seed" seed="1">
                     <pg-code>
-                        $a = Compute(random(1, 9, 1));
-                        $b = Compute(random(1, 9, 1));
+                        $a = random(1, 9, 1);
+                        $b = random(1, 9, 1);
                         if ($envir{problemSeed}==1){$a=1;$b=2};
-                        $c = $a + $b;
+                        $c = Compute($a + $b);
                     </pg-code>
 
                     <statement>
@@ -217,8 +221,8 @@
 
                 <webwork>
                     <pg-code>
-                        $a = Compute(random(1, 9, 1));
-                        $b = Compute(random(1, 9, 1));
+                        $a = random(1, 9, 1);
+                        $b = random(1, 9, 1);
                         $c = $a + $b;
                         $expression = Formula("x^($a)*x^($b)");
 
@@ -261,8 +265,8 @@
                 <webwork>
                     <pg-code>
                         do {
-                            $a = Compute(list_random(2,3,5,6));
-                            $b = Compute(random(1, 5, 1));
+                            $a = list_random(2,3,5,6);
+                            $b = random(1, 5, 1);
                            } until (gcd($a,$b) == 1);
                         $c = $a * $b**2;
                         Context()->flags->set(reduceConstantFunctions=>0);
@@ -336,8 +340,11 @@
                 <title>Solving Quadratic Equations</title>
 
                 <webwork xml:id="quadratic-equation">
+                    <description>
+                        <line>Find a quadratic equation's solutions.</line>
+                        <line>One positive integer solution and one negative fraction solution.</line>
+                    </description>
 
-                    <!-- TODO: move out context shift -->
                     <pg-code>
                         Context("Fraction");
 

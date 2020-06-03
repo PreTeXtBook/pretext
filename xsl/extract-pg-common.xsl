@@ -123,13 +123,23 @@
     <xsl:param name="b-hint" select="true()" />
     <xsl:param name="b-solution" select="true()" />
     <xsl:param name="b-verbose" />
-    <xsl:call-template   name="begin-problem">
-        <xsl:with-param name="b-verbose" select="$b-verbose" />
-    </xsl:call-template>
+    <xsl:if test="$b-verbose">
+        <xsl:call-template name="converter-blurb-webwork" />
+        <xsl:call-template name="webwork-metadata" />
+    </xsl:if>
+    <xsl:text>DOCUMENT();&#xa;</xsl:text>
     <xsl:apply-templates select="." mode="pg-macros">
         <xsl:with-param name="b-verbose" select="$b-verbose" />
     </xsl:apply-templates>
-    <xsl:call-template   name="pg-header">
+    <xsl:if test="$b-verbose">
+        <xsl:text>COMMENT('</xsl:text>
+        <xsl:call-template name="type-name">
+            <xsl:with-param name="string-id" select="'authored'" />
+        </xsl:call-template>
+        <xsl:text>');&#xa;</xsl:text>
+        <xsl:apply-templates select="description"/>
+    </xsl:if>
+    <xsl:call-template name="pg-header">
         <xsl:with-param name="b-verbose" select="$b-verbose" />
     </xsl:call-template>
     <xsl:apply-templates select="." mode="pg-code">
@@ -148,7 +158,7 @@
             <xsl:with-param name="b-verbose" select="$b-verbose" />
         </xsl:apply-templates>
     </xsl:if>
-    <xsl:call-template   name="end-problem">
+    <xsl:call-template name="end-problem">
         <xsl:with-param name="b-verbose" select="$b-verbose" />
     </xsl:call-template>
 </xsl:template>
@@ -158,24 +168,32 @@
     <xsl:param name="b-hint" select="true()" />
     <xsl:param name="b-solution" select="true()" />
     <xsl:param name="b-verbose" />
-    <xsl:call-template   name="begin-problem" >
-        <xsl:with-param name="b-verbose" select="$b-verbose" />
-    </xsl:call-template>
+    <xsl:if test="$b-verbose">
+        <xsl:call-template name="converter-blurb-webwork" />
+        <xsl:call-template name="webwork-metadata" />
+    </xsl:if>
+    <xsl:text>DOCUMENT();&#xa;</xsl:text>
     <xsl:apply-templates select="." mode="pg-macros">
         <xsl:with-param name="b-verbose" select="$b-verbose" />
     </xsl:apply-templates>
-    <xsl:call-template   name="pg-header">
+    <xsl:if test="$b-verbose">
+        <xsl:text>COMMENT('</xsl:text>
+        <xsl:call-template name="type-name">
+            <xsl:with-param name="string-id" select="'authored'" />
+        </xsl:call-template>
+        <xsl:text>');&#xa;</xsl:text>
+        <xsl:text>COMMENT('This problem is scaffolded with multiple parts');&#xa;</xsl:text>
+        <xsl:apply-templates select="description"/>
+    </xsl:if>
+    <xsl:call-template name="pg-header">
         <xsl:with-param name="b-verbose" select="$b-verbose" />
     </xsl:call-template>
-    <xsl:if test="$b-verbose">
-        <xsl:text>COMMENT('This problem is scaffolded with multiple parts');&#xa;</xsl:text>
-    </xsl:if>
     <xsl:apply-templates select="." mode="pg-code" >
         <xsl:with-param name="b-verbose" select="$b-verbose" />
     </xsl:apply-templates>
-    <xsl:call-template   name="begin-block">
-        <xsl:with-param  name="block-title">Scaffold</xsl:with-param>
-        <xsl:with-param  name="b-verbose" select="$b-verbose" />
+    <xsl:call-template name="begin-block">
+        <xsl:with-param name="block-title">Scaffold</xsl:with-param>
+        <xsl:with-param name="b-verbose" select="$b-verbose" />
     </xsl:call-template>
     <xsl:text>Scaffold::Begin();</xsl:text>
     <xsl:if test="$b-verbose">
@@ -193,7 +211,7 @@
     <xsl:if test="$b-verbose">
         <xsl:text>&#xa;</xsl:text>
     </xsl:if>
-    <xsl:call-template   name="end-problem">
+    <xsl:call-template name="end-problem">
         <xsl:with-param name="b-verbose" select="$b-verbose" />
     </xsl:call-template>
 </xsl:template>
@@ -312,19 +330,50 @@
     </xsl:apply-templates>
 </xsl:template>
 
+<xsl:template match="webwork/description">
+    <xsl:text>COMMENT(</xsl:text>
+    <xsl:choose>
+        <xsl:when test="line">
+            <xsl:for-each select="line">
+                <xsl:apply-templates select="." mode="delimit"/>
+                <xsl:if test="not(position()=last())">
+                    <xsl:text>, </xsl:text>
+                </xsl:if>
+            </xsl:for-each>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:apply-templates select="." mode="delimit"/>
+        </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>);&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="*" mode="delimit">
+    <xsl:variable name="delimiter">
+        <xsl:call-template name="find-unused-character">
+            <xsl:with-param name="string" select="."/>
+            <!-- https://stackoverflow.com/questions/43617820/what-are-the-legal-delimiters-for-perl-5s-pick-your-own-quotes-operators      -->
+            <!-- NB: don't use [{(]}), becuase as perl delimiters, closer is allowed to be left/right version; too complicated to check for -->
+            <xsl:with-param name="charset" select="concat($apos,'&quot;|/\?:;.,=+-_~`!@$%^&amp;*',&SIMPLECHAR;)"/>
+        </xsl:call-template>
+    </xsl:variable>
+    <!-- If the delimiter is not a single quote, use q operator -->
+    <xsl:if test="$delimiter != $apos">
+        <xsl:text>q</xsl:text>
+    </xsl:if>
+    <!-- If the delimiter is alphanumeric, must be preceded by a space -->
+    <xsl:if test="translate($delimiter,&SIMPLECHAR;,'') = ''">
+        <xsl:text> </xsl:text>
+    </xsl:if>
+    <xsl:value-of select="$delimiter"/>
+    <xsl:apply-templates />
+    <xsl:value-of select="$delimiter"/>
+</xsl:template>
+
+
 <!-- ############################## -->
 <!-- Problem Header/Initializations -->
 <!-- ############################## -->
-
-<!-- Includes file header blurb promoting PTX -->
-<xsl:template name="begin-problem">
-    <xsl:param name="b-verbose" />
-    <xsl:if test="$b-verbose">
-        <xsl:call-template name="converter-blurb-webwork" />
-        <xsl:call-template name="webwork-metadata" />
-    </xsl:if>
-    <xsl:text>DOCUMENT();&#xa;</xsl:text>
-</xsl:template>
 
 <!-- Mine various parts of the surrounding text -->
 <!-- Only ever called in verbose mode           -->
@@ -384,13 +433,6 @@
         <xsl:with-param name="block-title">Header</xsl:with-param>
         <xsl:with-param name="b-verbose" select="$b-verbose" />
     </xsl:call-template>
-    <xsl:if test="$b-verbose">
-        <xsl:text>COMMENT('</xsl:text>
-        <xsl:call-template name="type-name">
-            <xsl:with-param name="string-id" select="'authored'" />
-        </xsl:call-template>
-        <xsl:text> PreTeXt');&#xa;</xsl:text>
-    </xsl:if>
     <xsl:text>TEXT(beginproblem());</xsl:text>
     <xsl:if test="not($b-verbose)">
         <!-- see select-latex-macros template -->
@@ -1029,7 +1071,7 @@
 <!-- http://webwork.maa.org/moodle/mod/forum/discuss.php?d=3370 -->
 <xsl:template match="var[@form='essay']" mode="field">
     <xsl:param name="b-verbose" />
-    <xsl:text>[@ANS(essay_cmp);</xsl:text>
+    <xsl:text>[@ANS(essay_cmp());</xsl:text>
     <!-- NECESSARY? -->
     <xsl:if test="$b-verbose">
         <xsl:text> </xsl:text>
@@ -1181,26 +1223,8 @@
     <xsl:if test="preceding-sibling::p|preceding-sibling::sidebyside and not(child::*[1][self::ol] or child::*[1][self::ul])">
         <xsl:call-template name="potential-list-indent" />
     </xsl:if>
-    <xsl:variable name="delimiter">
-        <xsl:call-template name="find-unused-character">
-            <xsl:with-param name="string" select="."/>
-            <!-- https://stackoverflow.com/questions/43617820/what-are-the-legal-delimiters-for-perl-5s-pick-your-own-quotes-operators      -->
-            <!-- NB: don't use [{(]}), becuase as perl delimiters, closer is allowed to be left/right version; too complicated to check for -->
-            <xsl:with-param name="charset" select="concat($apos,'&quot;|/\?:;.,=+-_~`!@$%^&amp;*',&SIMPLECHAR;)"/>
-        </xsl:call-template>
-    </xsl:variable>
     <xsl:text>[@KeyboardInstructions(</xsl:text>
-    <!-- If the delimiter is not a single quote, use q operator -->
-    <xsl:if test="$delimiter != $apos">
-        <xsl:text>q</xsl:text>
-    </xsl:if>
-    <!-- If the delimiter is alphanumeric, must be preceded by a space -->
-    <xsl:if test="translate($delimiter,&SIMPLECHAR;,'') = ''">
-        <xsl:text> </xsl:text>
-    </xsl:if>
-    <xsl:value-of select="$delimiter"/>
-    <xsl:apply-templates />
-    <xsl:value-of select="$delimiter"/>
+    <xsl:apply-templates select="." mode="delimit"/>
     <xsl:text>)@]**</xsl:text>
     <xsl:text>&#xa;</xsl:text>
     <xsl:text>&#xa;</xsl:text>
