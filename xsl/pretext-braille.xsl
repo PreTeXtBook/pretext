@@ -529,7 +529,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <!-- one Latin letter -->
         <xsl:when test="(string-length($content) = 1) and
-                        contains('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', $content)">
+                        contains(&ALPHABET;, $content)">
             <i class="one-letter">
                 <xsl:value-of select="."/>
             </i>

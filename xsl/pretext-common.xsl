@@ -3903,8 +3903,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:apply-templates select="." mode="title-simple"/>
     </xsl:variable>
     <xsl:variable name="letter-only-title">
-        <xsl:value-of select="translate($raw-title, translate($raw-title,
-        'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ', ''), '')" />
+        <xsl:value-of select="translate($raw-title, translate($raw-title, concat(&SIMPLECHAR;,' '), ''), '')" />
     </xsl:variable>
     <xsl:value-of select="translate($letter-only-title, ' ', '_')" />
 </xsl:template>

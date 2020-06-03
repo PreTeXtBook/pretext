@@ -27,7 +27,8 @@
 
 <!-- Some more of our own design -->
 <!ENTITY DIGIT "'0123456789'">
-<!ENTITY SIMPLECHAR "'0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'">
+<!ENTITY ALPHABET "'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'">
+<!ENTITY SIMPLECHAR "concat(&DIGIT;,&ALPHABET;)">
 
 <!-- for match/select -->
 <!ENTITY STRUCTURAL "book|article|letter|memo|frontmatter|part|chapter|appendix|index[index-list]|index-part|preface|acknowledgement|biography|foreword|dedication|colophon|section|subsection|subsubsection|exercises|worksheet|reading-questions|solutions|references|glossary|backmatter">
