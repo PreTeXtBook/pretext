@@ -3173,6 +3173,38 @@ Book (with parts), "section" at level 3
     <xsl:value-of select="."/>
 </xsl:template>
 
+<!-- ################# -->
+<!-- String Utilities -->
+<!-- ################# -->
+
+<!-- Find a delimiter: find a character that can be wrapped around a string -->
+<!-- Take a string as one input and a list of characters as another input   -->
+<!-- Return the first character from the list that is not in the string     -->
+<xsl:template name="find-unused-character">
+    <xsl:param name="string" select="''"/>
+    <!-- set of characters passed in the original call -->
+    <xsl:param name="charset" select="concat($apos,'&quot;|/!?=~')"/>
+    <!-- reduced set of characters still in play during a recursive iteration  -->
+    <xsl:param name="characters" select="$charset"/>
+    <xsl:choose>
+        <xsl:when test="$characters = ''">
+            <xsl:message>PTX:FATAL:   Unable to find an unused character in:&#xa;<xsl:value-of select="$string" />&#xa;using characters from: <xsl:value-of select="$charset" /></xsl:message>
+            <xsl:apply-templates select="." mode="location-report" />
+            <xsl:message terminate="yes">             That's fatal.  Sorry.  Quitting...</xsl:message>
+        </xsl:when>
+        <xsl:when test="not(contains($string,substring($characters,1,1)))">
+            <xsl:value-of select="substring($characters,1,1)"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:call-template name="find-unused-character">
+                <xsl:with-param name="string" select="$string"/>
+                <xsl:with-param name="charset" select="$charset"/>
+                <xsl:with-param name="characters" select="substring($characters,2)"/>
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- ############### -->
 <!-- Token Utilities -->
 <!-- ############### -->
