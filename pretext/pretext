@@ -100,7 +100,7 @@ def get_cli_arguments():
     # "nargs" allows multiple options following the flag
     # separate by spaces, can't use "-stringparam"
     # stringparams is a list of strings on return
-    parser.add_argument('-p', '--parameters', nargs='+', help='stringparam options to pass to XSLT extraction stylesheet (option/value pairs)',
+    parser.add_argument('-p', '--parameters', nargs='+', help='stringparam options to pass to XSLT extraction stylesheet (multiple option/value pairs, not as last argument)',
                          action="store", dest='stringparams')
     parser.add_argument('-x', '--publisher', help='filename for publisher file', action="store", dest='publisher_file')
     # default to an empty string, which signals root to XSL stylesheet
