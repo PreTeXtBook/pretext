@@ -215,42 +215,34 @@ def sage_conversion(xml_source, xmlid_root, dest_dir, outformat):
 def latex_image_conversion(xml_source, stringparams, xmlid_root, data_dir, dest_dir, outformat):
     import platform # system, machine()
     import os.path # join()
-    import os, subprocess, shutil
+    import subprocess # call() is Python 3.5
+    import os, shutil
 
     _verbose('converting latex-image pictures from {} to {} graphics for placement in {}'.format(xml_source, outformat, dest_dir))
     _verbose('string parameters after command line is parsed: {}'.format(stringparams))
-    params = []
+    # for killing output
+    devnull = open(os.devnull, 'w')
+    params = {}
     if stringparams:
-        # assumes pairs, could add crude check for even length
-        for i in range(len(stringparams)/2):
-            params.append('-stringparam')
-            params.append(stringparams[2*i])
-            params.append(stringparams[2*i+1])
+        # assumes pairs, so floor division
+        # could add crude check for even length
+        for i in range(len(stringparams)//2):
+            params[stringparams[2*i]] = stringparams[2*i+1]
         _verbose('options added to xsltproc extraction: {}'.format(params))
     tmp_dir = get_temporary_directory()
-    _debug("temporary directory: {}".format(tmp_dir))
+    _debug("temporary directory for latex-image conversion: {}".format(tmp_dir))
     xslt_executable = get_executable('xslt')
     _debug("xslt executable: {}".format(xslt_executable))
     # NB: next command uses relative paths, so no chdir(), etc beforehand
     if data_dir:
         copy_data_directory(xml_source, data_dir, tmp_dir)
-    # http://stackoverflow.com/questions/11269575/how-to-hide-output-of-subprocess-in-python-2-7
-    devnull = open(os.devnull, 'w')
     ptx_xsl_dir = get_ptx_xsl_path()
-    extraction_xslt = os.path.join(ptx_xsl_dir, 'extract-latex-image.xsl')
-    convert_cmd = [xslt_executable] + params + [
-        '--xinclude',
-        '--stringparam', 'subtree', xmlid_root,
-        extraction_xslt,
-        xml_source
-        ]
     _verbose("extracting latex-image pictures from {}".format(xml_source))
-    _debug("latex-image conversion {}".format(convert_cmd))
-    # Run conversion with temporary directory as current working directory
-    # do not pass (cross-platform, Windows) pathnames into stylesheets
-    # Be certain pathnames are not relative to original (user) working directory
+    extraction_xslt = os.path.join(ptx_xsl_dir, 'extract-latex-image.xsl')
+    # no output (argument 3), stylesheet writes out per-image file
+    xsltproc(extraction_xslt, xml_source, None, tmp_dir, params)
+    # now work in temporary directory
     os.chdir(tmp_dir)
-    subprocess.call(convert_cmd)
     # files *only*, from top-level
     files = list(filter(os.path.isfile, os.listdir(tmp_dir)))
     for latex_image in files:
