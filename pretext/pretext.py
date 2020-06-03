@@ -256,6 +256,7 @@ def latex_image_conversion(xml_source, stringparams, xmlid_root, data_dir, dest_
     for latex_image in files:
         if outformat == 'source':
             shutil.copy2(latex_image, dest_dir)
+            _verbose("copying {} to {}".format(latex_image, dest_dir))
         else:
             filebase, _ = os.path.splitext(latex_image)
             latex_image_pdf = "{}.pdf".format(filebase)
@@ -974,8 +975,12 @@ def epub(xml_source, pub_file, dest_dir):
     import zipfile as ZIP
     import lxml.etree as ET
 
+    # general message for this entire procedure
+    _verbose('converting {} into EPUB in {}'.format(xml_source, dest_dir))
+
     # Build into a scratch directory
     tmp_dir = get_temporary_directory()
+    _debug('EPUB manufacture in temporary directory: {}'.format(tmp_dir))
 
     # Before making a zip file, the temporary directory should look
     # like the unzipped version of an EPUB file.  For us, that goes:
@@ -993,10 +998,6 @@ def epub(xml_source, pub_file, dest_dir):
     math_as_svg = os.path.join(tmp_dir, 'math-as-svg.xml')
     packaging_file = os.path.join(tmp_dir, 'packaging.xml')
     xhtml_dir = os.path.join(tmp_dir, 'EPUB', 'xhtml')
-
-    # general messages for this entire procedure
-    _verbose('converting {} into EPUB in {}'.format(xml_source, dest_dir))
-    _debug('EPUB manufacture in {}'.format(tmp_dir))
 
     # ripping out LaTeX as SVG
     _debug('converting raw LaTeX from {} into clean SVGs placed into {}'.format(xml_source, math_as_svg))
@@ -1247,9 +1248,10 @@ def get_ptx_xsl_path():
 def get_source_path(source_file):
     """Returns path of source XML file"""
     import sys, os.path
-    _verbose("discovering source directory from source location")
+
     # split path off filename
     source_dir, _ = os.path.split(source_file)
+    _verbose("discovering source file's directory name: {}".format(source_dir))
     return os.path.normpath(source_dir)
 
 def get_executable(exec_name):
