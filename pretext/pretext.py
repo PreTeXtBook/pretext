@@ -68,7 +68,9 @@ def mathjax_latex(xml_source, result, math_format):
 #
 ##############################################
 
-def asymptote_conversion(xml_source, xmlid_root, dest_dir, outformat):
+def asymptote_conversion(xml_source, stringparams, xmlid_root, dest_dir, outformat):
+    """Extract asymptote code for diagrams and convert to graphics formats"""
+    # stringparams is a dictionary, best for lxml parsing
     import os.path # join()
     import os, subprocess, shutil, glob
 
@@ -81,21 +83,15 @@ def asymptote_conversion(xml_source, xmlid_root, dest_dir, outformat):
     _debug("asy executable: {}".format(asy_executable))
     ptx_xsl_dir = get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, 'extract-asymptote.xsl')
-    extract_cmd = [xslt_executable,
-        '--xinclude',
-        '--stringparam', 'subtree', xmlid_root,
-        extraction_xslt,
-        xml_source
-        ]
-    # stylesheet uses variable-subtree infrastructure, so we get list
-    # items, but not the list structure itself.  Easily remedied
+    # support subtree argument
+    if xmlid_root:
+        stringparams['subtree'] = xmlid_root
+    # no output (argument 3), stylesheet writes out per-image file
+    # outputs a list of ids, but we just loop over created files
     _verbose("extracting Asymptote diagrams from {}".format(xml_source))
-    # Run conversion with temporary directory as current working directory
-    # do not pass (cross-platform, Windows) pathnames into stylesheets
-    # Be certain pathnames are not relative to original (user) working directory
+    xsltproc(extraction_xslt, xml_source, None, tmp_dir, stringparams)
+    # Resulting *.asy files are in tmp_dir, switch there to work
     os.chdir(tmp_dir)
-    diagram_list = '[' + subprocess.check_output(extract_cmd).decode('ascii') + ']'
-    diagrams = eval(diagram_list)
     devnull = open(os.devnull, 'w')
     # perhaps replace following stock advisory with a real version
     # check using the (undocumented) distutils.version module, see:

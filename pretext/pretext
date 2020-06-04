@@ -197,15 +197,15 @@ def main():
     # The big switch
     if args.component == 'asy':
         if args.format == 'html':
-            ptx.asymptote_conversion(xml_source, args.xmlid, dest_dir, 'html')
+            ptx.asymptote_conversion(xml_source, stringparams, args.xmlid, dest_dir, 'html')
         elif args.format == 'pdf':
-            ptx.asymptote_conversion(xml_source, args.xmlid, dest_dir, 'pdf')
+            ptx.asymptote_conversion(xml_source, stringparams, args.xmlid, dest_dir, 'pdf')
         elif args.format == 'svg':
-            ptx.asymptote_conversion(xml_source, args.xmlid, dest_dir, 'svg')
+            ptx.asymptote_conversion(xml_source, stringparams, args.xmlid, dest_dir, 'svg')
         elif args.format == 'eps':
-            ptx.asymptote_conversion(xml_source, args.xmlid, dest_dir, 'eps')
+            ptx.asymptote_conversion(xml_source, stringparams, args.xmlid, dest_dir, 'eps')
         elif args.format == 'source':
-            ptx.asymptote_conversion(xml_source, args.xmlid, dest_dir, 'source')
+            ptx.asymptote_conversion(xml_source, stringparams, args.xmlid, dest_dir, 'source')
         else:
             raise NotImplementedError('cannot make Asymptote diagrams in "{}" format'.format(args.format))
     elif args.component == 'sageplot':
