@@ -111,13 +111,7 @@ def asymptote_conversion(xml_source, xmlid_root, dest_dir, outformat):
         _verbose("newer.  Your Asymptote executable in use reports:")
         _verbose(asyversion)
         _verbose("#####################################################")
-    # every diagram should be a *.asy file in tmp_dir, which is cwd
-    # we loop over the list, rather than the directory,
-    # so as to have extra info, such as the target dimension
-    for diagram in diagrams:
-        asydiagram = diagram[0]
-        # can condition processing on diagram[1]
-        # which is a string: '2D' or '3D'
+    for asydiagram in os.listdir(tmp_dir):
         if outformat == 'source':
             shutil.copy2(asydiagram, dest_dir)
         elif outformat == 'html':
