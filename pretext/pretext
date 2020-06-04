@@ -52,6 +52,21 @@ def verify_input_file(f):
     ptx._verbose('input file expanded to absolute path: {}'.format(absf))
     return absf
 
+def string_parameters_as_dict(pairs):
+    """Convert flat list of consecutive keys and values into a dictionary"""
+    # Expects a list, and argparse below defaults to that
+    # But still includes reasonable behavior for input of None
+    if not(pairs):
+        return {}
+    if (len(pairs) % 2) == 1:
+        msg = 'There are an odd number of items in option/value list ({})'.format(pairs)
+        raise ValueError(msg)
+    # safe to assume even length, so floor division
+    params = {}
+    for i in range(len(pairs)//2):
+        params[pairs[2*i]] = pairs[2*i+1]
+    return params
+
 #####################
 # Command-Line Parser
 #####################
@@ -101,9 +116,9 @@ def get_cli_arguments():
 
     # "nargs" allows multiple options following the flag
     # separate by spaces, can't use "-stringparam"
-    # stringparams is a list of strings on return
+    # stringparams is a list of strings on return, defaults to empty list
     parser.add_argument('-p', '--parameters', nargs='+', help='stringparam options to pass to XSLT extraction stylesheet (multiple option/value pairs, not as last argument)',
-                         action="store", dest='stringparams')
+                         action="store", dest='stringparams', default=[])
     parser.add_argument('-x', '--publisher', help='filename for publisher file', action="store", dest='publisher_file')
     # default to an empty string, which signals root to XSL stylesheet
     parser.add_argument('-r', '--restrict', help='restrict to subtree rooted at element with specified xml:id',
@@ -173,6 +188,10 @@ def main():
     else:
         data_dir = None
 
+    # convert list of string parameters into a dictionary
+    # routines in module expect a dictionary, so convert here and now
+    stringparams = string_parameters_as_dict(args.stringparams)
+
     ptx._verbose('Done examining environment and initializing setup info')
 
     # The big switch
@@ -200,17 +219,17 @@ def main():
             raise NotImplementedError('cannot make Sage graphics in "{}" format'.format(args.format))
     elif args.component == 'latex-image':
         if args.format == 'pdf':
-            ptx.latex_image_conversion(xml_source, args.stringparams, args.xmlid, data_dir, dest_dir, 'pdf')
+            ptx.latex_image_conversion(xml_source, stringparams, args.xmlid, data_dir, dest_dir, 'pdf')
         elif args.format == 'svg':
-            ptx.latex_image_conversion(xml_source, args.stringparams, args.xmlid, data_dir, dest_dir, 'svg')
+            ptx.latex_image_conversion(xml_source, stringparams, args.xmlid, data_dir, dest_dir, 'svg')
         elif args.format == 'source':
-            ptx.latex_image_conversion(xml_source, args.stringparams, args.xmlid, data_dir, dest_dir, 'source')
+            ptx.latex_image_conversion(xml_source, stringparams, args.xmlid, data_dir, dest_dir, 'source')
         elif args.format == 'png':
-            ptx.latex_image_conversion(xml_source, args.stringparams, args.xmlid, data_dir, dest_dir, 'png')
+            ptx.latex_image_conversion(xml_source, stringparams, args.xmlid, data_dir, dest_dir, 'png')
         elif args.format == 'eps':
-            ptx.latex_image_conversion(xml_source, args.stringparams, args.xmlid, data_dir, dest_dir, 'eps')
+            ptx.latex_image_conversion(xml_source, stringparams, args.xmlid, data_dir, dest_dir, 'eps')
         elif args.format == 'all':
-            ptx.latex_image_conversion(xml_source, args.stringparams, args.xmlid, data_dir, dest_dir, 'all')
+            ptx.latex_image_conversion(xml_source, stringparams, args.xmlid, data_dir, dest_dir, 'all')
         else:
             raise NotImplementedError('cannot make LaTeX pictures in "{}" format'.format(args.format))
     elif args.component == 'webwork-tex':

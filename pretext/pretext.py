@@ -213,22 +213,16 @@ def sage_conversion(xml_source, xmlid_root, dest_dir, outformat):
                 shutil.copy2(f, dest_dir)
 
 def latex_image_conversion(xml_source, stringparams, xmlid_root, data_dir, dest_dir, outformat):
+    # stringparams is a dictionary, best for lxml parsing
     import platform # system, machine()
     import os.path # join()
     import subprocess # call() is Python 3.5
     import os, shutil
 
     _verbose('converting latex-image pictures from {} to {} graphics for placement in {}'.format(xml_source, outformat, dest_dir))
-    _verbose('string parameters after command line is parsed: {}'.format(stringparams))
+    _verbose('string parameters passed to extraction stylesheet: {}'.format(stringparams))
     # for killing output
     devnull = open(os.devnull, 'w')
-    params = {}
-    if stringparams:
-        # assumes pairs, so floor division
-        # could add crude check for even length
-        for i in range(len(stringparams)//2):
-            params[stringparams[2*i]] = stringparams[2*i+1]
-        _verbose('options added to xsltproc extraction: {}'.format(params))
     tmp_dir = get_temporary_directory()
     _debug("temporary directory for latex-image conversion: {}".format(tmp_dir))
     xslt_executable = get_executable('xslt')
@@ -240,7 +234,7 @@ def latex_image_conversion(xml_source, stringparams, xmlid_root, data_dir, dest_
     _verbose("extracting latex-image pictures from {}".format(xml_source))
     extraction_xslt = os.path.join(ptx_xsl_dir, 'extract-latex-image.xsl')
     # no output (argument 3), stylesheet writes out per-image file
-    xsltproc(extraction_xslt, xml_source, None, tmp_dir, params)
+    xsltproc(extraction_xslt, xml_source, None, tmp_dir, stringparams)
     # now work in temporary directory
     os.chdir(tmp_dir)
     # files *only*, from top-level
@@ -1005,13 +999,12 @@ def epub(xml_source, pub_file, dest_dir, math_format):
     # EPUB/xhtml directory via exsl:document templates in
     # the EPUB XSL conversion.  The stylesheet does record,
     # and produce some information needed for the packaging here.
-    # Values in stringparams seem to need protection, always
     _verbose('converting source ({}) and clean representations ({}) into EPUB files'.format(xml_source, math_representations))
     params = {}
-    params['mathfile'] = ET.XSLT.strparam(math_representations)
-    params['math.format'] = ET.XSLT.strparam(math_format)
+    params['mathfile'] = math_representations
+    params['math.format'] = math_format
     if pub_file:
-        params['publisher'] = ET.XSLT.strparam(pub_file)
+        params['publisher'] = pub_file
     xsltproc(epub_xslt, xml_source, packaging_file, tmp_dir, params)
 
     # XHTML files lack an overall namespace,
@@ -1132,9 +1125,8 @@ def xsltproc(xsl, xml, result, output_dir=None, stringparams={}):
                    None if stylesheet 100% writes its own files,
                    i.e. expecting an empty result tree
     output_dir   - a directory for exsl:document() templates to write to
-    stringparams - a dictionary of option/value pairs to pass
-                   to  xsl:param  elements of the stylesheet
-
+    stringparams - a dictionary of option/value string:string pairs to
+                   pass to  xsl:param  elements of the stylesheet
     """
     import os
     import lxml.etree as ET
@@ -1143,6 +1135,10 @@ def xsltproc(xsl, xml, result, output_dir=None, stringparams={}):
     debug_string = 'XSL conversion via {} of {} to {} and/or into directory {} with parameters {}'
     _debug(debug_string.format(xsl, xml, result, output_dir, stringparams))
 
+    # string parameters arrive in a "plain" string:string dictionary
+    # but the values need to be prepped for lxml use, always
+    stringparams = {key:ET.XSLT.strparam(value) for (key, value) in stringparams.items()}
+
     # parse source, no harm to assume
     # xinclude modularization is necessary
     src_tree = ET.parse(xml)
@@ -1150,6 +1146,7 @@ def xsltproc(xsl, xml, result, output_dir=None, stringparams={}):
 
     # parse xsl, and build a transformation object
     # allow writing if an output directory is given
+    # this is the default, but we are explicit here
     control = None
     if output_dir:
         control = ET.XSLTAccessControl(write_file=True)
