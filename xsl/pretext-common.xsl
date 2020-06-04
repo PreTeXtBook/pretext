@@ -254,6 +254,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Variables -->
 <!-- ######### -->
 
+<!-- The single quote character cannot be directly     -->
+<!-- used in a string in XSLT functions, not even as   -->
+<!-- &apos;. But if it is stored as a variable, then   -->
+<!-- XSLT 1.0 will be OK with using $apos.             -->
+<!-- Use like "contat('L',$apos,'Hospital')"           -->
+<xsl:variable name="apos">'</xsl:variable>
+
 <!-- The latex processing model is overridden in       -->
 <!-- imported files, per output format. Any stylesheet -->
 <!-- importing this one, should define this            -->
@@ -3166,6 +3173,38 @@ Book (with parts), "section" at level 3
     <xsl:value-of select="."/>
 </xsl:template>
 
+<!-- ################# -->
+<!-- String Utilities -->
+<!-- ################# -->
+
+<!-- Find a delimiter: find a character that can be wrapped around a string -->
+<!-- Take a string as one input and a list of characters as another input   -->
+<!-- Return the first character from the list that is not in the string     -->
+<xsl:template name="find-unused-character">
+    <xsl:param name="string" select="''"/>
+    <!-- set of characters passed in the original call -->
+    <xsl:param name="charset" select="concat($apos,'&quot;|/!?=~')"/>
+    <!-- reduced set of characters still in play during a recursive iteration  -->
+    <xsl:param name="characters" select="$charset"/>
+    <xsl:choose>
+        <xsl:when test="$characters = ''">
+            <xsl:message>PTX:FATAL:   Unable to find an unused character in:&#xa;<xsl:value-of select="$string" />&#xa;using characters from: <xsl:value-of select="$charset" /></xsl:message>
+            <xsl:apply-templates select="." mode="location-report" />
+            <xsl:message terminate="yes">             That's fatal.  Sorry.  Quitting...</xsl:message>
+        </xsl:when>
+        <xsl:when test="not(contains($string,substring($characters,1,1)))">
+            <xsl:value-of select="substring($characters,1,1)"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:call-template name="find-unused-character">
+                <xsl:with-param name="string" select="$string"/>
+                <xsl:with-param name="charset" select="$charset"/>
+                <xsl:with-param name="characters" select="substring($characters,2)"/>
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- ############### -->
 <!-- Token Utilities -->
 <!-- ############### -->
@@ -3896,8 +3935,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:apply-templates select="." mode="title-simple"/>
     </xsl:variable>
     <xsl:variable name="letter-only-title">
-        <xsl:value-of select="translate($raw-title, translate($raw-title,
-        'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ', ''), '')" />
+        <xsl:value-of select="translate($raw-title, translate($raw-title, concat(&SIMPLECHAR;,' '), ''), '')" />
     </xsl:variable>
     <xsl:value-of select="translate($letter-only-title, ' ', '_')" />
 </xsl:template>
@@ -10129,8 +10167,9 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- Generic deprecation message for uniformity    -->
 <!-- occurrences is a node-list of "problem" nodes -->
 <!-- A message string like "'foo'" cannot contain  -->
-<!-- a single quote, even if entered as &apos;.  A -->
-<!-- &#xa; can be used if necessary, but only      -->
+<!-- a single quote, even if entered as &apos;.    -->
+<!-- If despearate, concatentate with $apos.       -->
+<!-- A &#xa; can be used if necessary, but only    -->
 <!-- rarely do we bother.                          -->
 <xsl:template name="deprecation-message">
     <xsl:param name="occurrences" />
@@ -10165,8 +10204,9 @@ http://andrewmccarthy.ie/2014/11/06/swung-dash-in-latex/
 <!-- may need to move variables from specific      -->
 <!-- conversion and into -common file              -->
 <!-- A message string like "'foo'" cannot contain  -->
-<!-- a single quote, even if entered as &apos;.  A -->
-<!-- &#xa; can be used if necessary, but only      -->
+<!-- a single quote, even if entered as &apos;.    -->
+<!-- If despearate, concatentate with $apos.       -->
+<!-- A &#xa; can be used if necessary, but only    -->
 <!-- rarely do we bother.                          -->
 <xsl:template name="parameter-deprecation-message">
     <xsl:param name="incorrect-use" select="false()" />

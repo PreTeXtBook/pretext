@@ -20,6 +20,12 @@
 <!-- along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.      -->
 <!-- ********************************************************************* -->
 
+<!-- http://pimpmyxslt.com/articles/entity-tricks-part2/ -->
+<!DOCTYPE xsl:stylesheet [
+    <!ENTITY % entities SYSTEM "entities.ent">
+    %entities;
+]>
+
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
     xmlns:str="http://exslt.org/strings"
@@ -1175,9 +1181,27 @@
     <xsl:if test="preceding-sibling::p|preceding-sibling::sidebyside and not(child::*[1][self::ol] or child::*[1][self::ul])">
         <xsl:call-template name="potential-list-indent" />
     </xsl:if>
-    <xsl:text>[@KeyboardInstructions(q?</xsl:text>
+    <xsl:variable name="delimiter">
+        <xsl:call-template name="find-unused-character">
+            <xsl:with-param name="string" select="."/>
+            <!-- https://stackoverflow.com/questions/43617820/what-are-the-legal-delimiters-for-perl-5s-pick-your-own-quotes-operators      -->
+            <!-- NB: don't use [{(]}), becuase as perl delimiters, closer is allowed to be left/right version; too complicated to check for -->
+            <xsl:with-param name="charset" select="concat($apos,'&quot;|/\?:;.,=+-_~`!@$%^&amp;*',&SIMPLECHAR;)"/>
+        </xsl:call-template>
+    </xsl:variable>
+    <xsl:text>[@KeyboardInstructions(</xsl:text>
+    <!-- If the delimiter is not a single quote, use q operator -->
+    <xsl:if test="$delimiter != $apos">
+        <xsl:text>q</xsl:text>
+    </xsl:if>
+    <!-- If the delimiter is alphanumeric, must be preceded by a space -->
+    <xsl:if test="translate($delimiter,&SIMPLECHAR;,'') = ''">
+        <xsl:text> </xsl:text>
+    </xsl:if>
+    <xsl:value-of select="$delimiter"/>
     <xsl:apply-templates />
-    <xsl:text>?)@]**</xsl:text>
+    <xsl:value-of select="$delimiter"/>
+    <xsl:text>)@]**</xsl:text>
     <xsl:text>&#xa;</xsl:text>
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
