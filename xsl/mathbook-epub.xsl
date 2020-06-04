@@ -351,7 +351,7 @@
         <!-- Processing with page2svg makes it appear SVG images exist -->
         <!-- <xsl:if test=".//m or .//me or .//men or .//md or .//mdn"> -->
              <xsl:attribute name="properties">
-                <xsl:text>svg</xsl:text>
+                <xsl:text>svg mathml</xsl:text>
                 <!-- <xsl:text>mathml</xsl:text> -->
             </xsl:attribute>
         <!-- </xsl:if> -->

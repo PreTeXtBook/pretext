@@ -43,8 +43,15 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
     xmlns:pi="http://pretextbook.org/2020/pretext/internal"
     xmlns:svg="http://www.w3.org/2000/svg"
+    xmlns:math="http://www.w3.org/1998/Math/MathML"
     exclude-result-prefixes="svg"
 >
+
+<!-- Our simple webpage is processed by MathJax via the mathjax-node-page -->
+<!-- program.  This invocation is parameterized by a choice of SVG output -->
+<!-- or MathML output.  Either way, the structure of the page is          -->
+<!-- identical, so we seem to handle both simultaneously here.  However,  -->
+<!-- only one or the other is present.                                    -->
 
 <!-- Entry template -->
 <xsl:template match="/">
@@ -53,7 +60,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Elements to unwap/discard    -->
 <!-- Don't select its attributes! -->
-<xsl:template match="html|head|style|div[span]|span[svg:svg]">
+<xsl:template match="html|head|style|div[span]|span[svg:svg]|span[math:math]">
     <xsl:apply-templates select="node()"/>
 </xsl:template>
 
@@ -90,11 +97,23 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </pi:math>
 </xsl:template>
 
+<!-- Unwind MathJax MathML wrapped in a extra div -->
+<!-- The div carries @id and @context           -->
+<xsl:template match="div/span/math:math">
+    <pi:math>
+        <xsl:copy-of select="../../@*"/>
+        <xsl:copy>
+            <!-- allowing surgery on the MathML -->
+            <xsl:apply-templates select="node()|@*"/>
+        </xsl:copy>
+    </pi:math>
+</xsl:template>
+
 <!-- SVG font (glyphs) cache -->
 <!-- Following depends on font caching behavior      -->
-<!-- as passed to  mathjax-node-page routine         -->
+<!-- as passed to  mathjax-node-page  routine        -->
 <!--   global cache:  a pile of defs in a single SVG -->
-<!--   no caching:  defs are per-SVG                 -->
+<!--   no caching:  defs are per-SVG, no match here  -->
 <!-- NB: need to have this prefixed with "body" to   -->
 <!-- identify it as top-level, global situation      -->
 <xsl:template match="body/svg:svg[svg:defs]">

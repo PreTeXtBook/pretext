@@ -17,6 +17,7 @@
 <xsl:stylesheet xmlns:pi="http://pretextbook.org/2020/pretext/internal"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
                 xmlns:svg="http://www.w3.org/2000/svg"
+                xmlns:math="http://www.w3.org/1998/Math/MathML"
                 xmlns:epub="http://www.idpf.org/2007/ops"
                 xmlns:exsl="http://exslt.org/common"
                 xmlns:date="http://exslt.org/dates-and-times"
@@ -110,10 +111,13 @@
 <!-- XHTML files as output -->
 <xsl:variable name="file-extension" select="'.xhtml'" />
 
-<xsl:param name="svgfile"/>
-<xsl:variable name="svg-math"  select="document($svgfile)/pi:math-representations"/>
+<xsl:param name="mathfile"/>
+<xsl:variable name="math-repr"  select="document($mathfile)/pi:math-representations"/>
 
- 
+<!-- Either 'svg" or 'mml', always -->
+<xsl:param name="math.format"/>
+
+
 <!-- ############## -->
 <!-- Entry Template -->
 <!-- ############## -->
@@ -179,7 +183,7 @@
             <body class="pretext-content">
                 <xsl:copy-of select="$content" />
                 <!-- Copy MathJax's font information to the bottom -->
-                <xsl:copy-of select="document($svgfile)/pi:math-representations/svg:svg[@id='font-data']"/>
+                <xsl:copy-of select="document($mathfile)/pi:math-representations/svg:svg[@id='font-data']"/>
             </body>
         </html>
     </exsl:document>
@@ -452,8 +456,10 @@
     </packaging>
 </xsl:template>
 
-<!-- MathJax CSS, which will be invoked via enclosing span elements -->
-<!-- Removed as EPUB 3.0 violation: .mjpage direction: ltr; -->
+<!-- MathJax CSS, which is placed on enclosing span elements      -->
+<!--   mjpage:        for all math, so only class on online math  -->
+<!--   mjpage__block: for display math, so additional on "md" etc -->
+<!-- Removed as EPUB 3.0 violation: .mjpage direction: ltr;       -->
 <xsl:template name="mathjax-css">
 <style type="text/css">
 .mjpage .MJX-monospace {
@@ -809,10 +815,10 @@ width: 100%
     <xsl:variable name="id">
         <xsl:apply-templates select="." mode="visible-id"/>
     </xsl:variable>
-    <xsl:variable name="math" select="$svg-math/pi:math[@id = $id]"/>
+    <xsl:variable name="math" select="$math-repr/pi:math[@id = $id]"/>
     <xsl:variable name="context" select="string($math/@context)"/>
     <!-- <xsl:message>C:<xsl:value-of select="$math/@context"/>:C</xsl:message> -->
-    <!-- <xsl:copy-of select="$svg-math[../@id = $id]"/> -->
+    <!-- <xsl:copy-of select="$math-repr[../@id = $id]"/> -->
     <span>
         <xsl:attribute name="class">
             <xsl:choose>
@@ -824,7 +830,15 @@ width: 100%
                 </xsl:when>
             </xsl:choose>
         </xsl:attribute>
-        <xsl:copy-of select="$math/svg:svg"/>
+        <!-- Finally, drop either a "svg" element or a "math" element -->
+        <xsl:choose>
+            <xsl:when test="$math.format = 'svg'">
+                <xsl:copy-of select="$math/svg:svg"/>
+            </xsl:when>
+            <xsl:when test="$math.format = 'mml'">
+                <xsl:copy-of select="$math/math:math"/>
+            </xsl:when>
+        </xsl:choose>
     </span>
 </xsl:template>
 

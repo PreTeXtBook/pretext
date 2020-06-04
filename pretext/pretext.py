@@ -25,11 +25,11 @@
 #
 ########################################
 
-def mathjax_latex(xml_source, result, format):
-    import tempfile, os.path, subprocess
+def mathjax_latex(xml_source, result, math_format):
+    import os.path, subprocess
 
-    _verbose('converting LaTeX from {} into {} format'.format(xml_source, format))
-    _debug('converting LaTeX from {} into {} format placed into {}'.format(xml_source, format, result))
+    _verbose('converting LaTeX from {} into {} format'.format(xml_source, math_format))
+    _debug('converting LaTeX from {} into {} format placed into {}'.format(xml_source, math_format, result))
 
     # construct filenames for pre- and post- XSL stylesheets in xsl/support
     extraction_xslt = os.path.join(get_ptx_xsl_path(), 'support/extract-math.xsl')
@@ -38,27 +38,27 @@ def mathjax_latex(xml_source, result, format):
     # Extraction stylesheet makes a simple, mock web page for MathJax
     # And MathJax executables preserve the page while changing the math
     tmp_dir = get_temporary_directory()
-    _debug('temporary directory for MathJax work: {}'.format(tmp_dir))
     mjinput  = os.path.join(tmp_dir, 'mj-input-latex.html')
-    mjoutput = os.path.join(tmp_dir, 'mj-output-{}.html'.format(format))
+    mjoutput = os.path.join(tmp_dir, 'mj-output-{}.html'.format(math_format))
 
+    _debug('temporary directory for MathJax work: {}'.format(tmp_dir))
     _debug('extracting LaTeX from {} and collected in {}'.format(xml_source, mjinput))
     xsltproc(extraction_xslt, xml_source, mjinput)
 
     # shell out to process with MathJax
     # mjpage can return "innerHTML" w/ --fragment, which we
     # could wrap into our own particular version of mjoutput
-    _debug('calling MathJax to convert LaTeX from {} into raw SVGs in {}'.format(mjinput, mjoutput))
+    _debug('calling MathJax to convert LaTeX from {} into raw representations in {}'.format(mjinput, mjoutput))
     mjpage_exec = get_executable('mjpage')
     # kill caching to keep glyphs within SVG
     # versus having a font cache at the end
-    mjpage_exec = [mjpage_exec, '--noGlobalSVG', 'true']
+    mjpage_exec = [mjpage_exec, '--noGlobalSVG', 'true', '--output', math_format.upper()]
     infile = open(mjinput)
     outfile = open(mjoutput, 'w')
     subprocess.run(mjpage_exec, stdin=infile, stdout=outfile)
 
     # clean up and package MJ SVGs, font data, etc
-    _debug('packaging math as {} from {} into XML file {}'.format(format, mjoutput, result))
+    _debug('packaging math as {} from {} into XML file {}'.format(math_format, mjoutput, result))
     xsltproc(cleaner_xslt, mjoutput, result)
 
 
@@ -961,14 +961,18 @@ def mom_static_problems(xml_source, xmlid_root, dest_dir):
 # Conversion to EPUB
 ####################
 
-def epub(xml_source, pub_file, dest_dir):
+def epub(xml_source, pub_file, dest_dir, math_format):
+    """Produce complete document in an EPUB container"""
+    # math_format is a string that parameterizes this process
+    #   'svg': mathematics as SVG
+    #   'mml': mathematics as MathML
     import os, os.path, subprocess, shutil
     import re, fileinput
     import zipfile as ZIP
     import lxml.etree as ET
 
     # general message for this entire procedure
-    _verbose('converting {} into EPUB in {}'.format(xml_source, dest_dir))
+    _verbose('converting {} into EPUB in {} with math as {}'.format(xml_source, dest_dir, math_format))
 
     # Build into a scratch directory
     tmp_dir = get_temporary_directory()
@@ -987,13 +991,14 @@ def epub(xml_source, pub_file, dest_dir):
 
     source_dir = get_source_path(xml_source)
     epub_xslt = os.path.join(get_ptx_xsl_path(), 'pretext-epub.xsl')
-    math_as_svg = os.path.join(tmp_dir, 'math-as-svg.xml')
+    math_representations = os.path.join(tmp_dir, 'math-representations-{}.xml'.format(math_format))
     packaging_file = os.path.join(tmp_dir, 'packaging.xml')
     xhtml_dir = os.path.join(tmp_dir, 'EPUB', 'xhtml')
 
-    # ripping out LaTeX as SVG
-    _debug('converting raw LaTeX from {} into clean SVGs placed into {}'.format(xml_source, math_as_svg))
-    mathjax_latex(xml_source, math_as_svg, 'svg')
+    # ripping out LaTeX as math representations
+    msg = 'converting raw LaTeX from {} into clean {} format placed into {}'
+    _debug(msg.format(xml_source, math_format, math_representations))
+    mathjax_latex(xml_source, math_representations, math_format)
 
     # Build necessary content and infrastructure EPUB files, 
     # using SVG images of math.  Most output goes into the
@@ -1001,8 +1006,10 @@ def epub(xml_source, pub_file, dest_dir):
     # the EPUB XSL conversion.  The stylesheet does record,
     # and produce some information needed for the packaging here.
     # Values in stringparams seem to need protection, always
-    _verbose('converting source ({}) and clean SVGs ({}) into EPUB files'.format(xml_source, math_as_svg))
-    params = {'svgfile':ET.XSLT.strparam(math_as_svg)}
+    _verbose('converting source ({}) and clean representations ({}) into EPUB files'.format(xml_source, math_representations))
+    params = {}
+    params['mathfile'] = ET.XSLT.strparam(math_representations)
+    params['math.format'] = ET.XSLT.strparam(math_format)
     if pub_file:
         params['publisher'] = ET.XSLT.strparam(pub_file)
     xsltproc(epub_xslt, xml_source, packaging_file, tmp_dir, params)
@@ -1068,7 +1075,7 @@ def epub(xml_source, pub_file, dest_dir):
     # TODO: squelch knowls or find alternative
     # shutil.rmtree(os.path.join(tmp_dir, 'knowl'))
     # os.remove(packaging_file)
-    # os.remove(math_as_svg)
+    # os.remove(math_representations)
 
 
     # mimetype parameters: -0Xq
@@ -1091,8 +1098,8 @@ def epub(xml_source, pub_file, dest_dir):
 
     # Python 3.7 - compress level 0 to 9
 
-    _verbose('packaging an EPUB as book.epub')
-    epub_file = 'book.epub'
+    epub_file = 'book-{}.epub'.format(math_format)
+    _verbose('packaging an EPUB as {}'.format(epub_file))
     owd = os.getcwd()
     os.chdir(tmp_dir)
     with ZIP.ZipFile(epub_file, mode='w', compression=ZIP.ZIP_DEFLATED) as epub:

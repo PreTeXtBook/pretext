@@ -75,7 +75,7 @@ def get_cli_arguments():
         ('preview', 'Static preview images for interactives'),
         ('mom', 'MyOpenMath problem files, static versions'),
         ('math', 'Math elements for MathJax conversion (only)'),
-        ('all', 'Complete document (only SageNB format)'),
+        ('all', 'Complete document (in various formats)'),
         ('tikz', 'tikz pictures (removed, use latex-image)'),
     ]
     component_help = 'Possible components are:\n' + '\n'.join(['  {} - {}'.format(info[0], info[1]) for info in component_info])
@@ -91,7 +91,9 @@ def get_cli_arguments():
         ('source', 'Standalone source files'),
         ('latex', 'LaTeX source file'),
         ('html', 'HyperText Markup Language (web pages)'),
-        ('sagenb', 'Sage worksheet conversion removed'),
+        ('epub-svg', 'EPUB container, math as SVG'),
+        ('epub-mml', 'EPUB container, math as MathML'),
+        ('sagenb', 'Sage worksheet conversion (removed)'),
         ('all', 'All available output formats'),
     ]
     format_help = 'Output formats are:\n' + '\n'.join(['  {} - {}'.format(info[0], info[1]) for info in format_info])
@@ -236,8 +238,10 @@ def main():
             raise NotImplementedError("conversion to HTML version not integrated yet, use command line")
         elif args.format == 'latex':
             raise NotImplementedError("conversion to LaTeX version not integrated yet, use command line")
-        elif args.format == 'epub':
-            ptx.epub(args.xml_file, args.publisher_file, dest_dir)
+        elif args.format == 'epub-svg':
+            ptx.epub(args.xml_file, args.publisher_file, dest_dir, 'svg')
+        elif args.format == 'epub-mml':
+            ptx.epub(args.xml_file, args.publisher_file, dest_dir, 'mml')
         # 2020-05-19 MathBookXMLtoSWS class removed
         elif args.format == 'sagenb':
             raise NotImplementedError("conversion to Sage notebook format removed (2020-05-18)")

@@ -32,9 +32,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The result is meant to be processed by the              -->
 <!-- package-math.xsl  stylesheet for eventual use           -->
 
+<!-- NB: string functions can leave if latex macros get fixed elsewhere -->
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+    xmlns:str="http://exslt.org/strings"
+    extension-element-prefixes="str"
 >
 
 <!-- Get internal ID's for filenames, etc -->
@@ -69,12 +72,22 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <html>
         <!-- no "head" at all -->
         <body>
+            <!-- MathJax predefines \lt and \gt to avoid XML's <, >      -->
+            <!-- We therefore define these for LaTeX use to be           -->
+            <!-- universal.  Usually no harm having them in HTML output, -->
+            <!-- BUT MathJax puts raw LaTeX into the @alttext attribute, -->
+            <!-- where our definitions with unescaped version of <, >    -->
+            <!-- are a syntax violation.  So we scrub them.              -->
+            <!-- TODO: move this and make two $latex-macros,             -->
+            <!-- one for HTML and one for LaTeX                          -->
+            <xsl:variable name="no-less-than"      select="str:replace($latex-macros, '\newcommand{\lt}{&lt;}&#xa;', '')"/>
+            <xsl:variable name="latex-macros-html" select="str:replace($no-less-than, '\newcommand{\gt}{&gt;}&#xa;', '')"/>
             <!-- put macros and packages early for MJ to find         -->
             <!-- give the div an @id so we can trash it as a leftover -->
             <div id="latex-macros">
                 <xsl:call-template name="begin-inline-math"/>
                 <xsl:value-of select="$latex-packages-mathjax"/>
-                <xsl:value-of select="$latex-macros"/>
+                <xsl:value-of select="$latex-macros-html"/>
                 <xsl:call-template name="end-inline-math"/>
             </div>
             <!-- modal template to bypass everything but math -->
