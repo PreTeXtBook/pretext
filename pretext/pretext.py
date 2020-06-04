@@ -77,8 +77,6 @@ def asymptote_conversion(xml_source, stringparams, xmlid_root, dest_dir, outform
     _verbose('converting Asymptote diagrams from {} to {} graphics for placement in {}'.format(xml_source, outformat.upper(), dest_dir))
     tmp_dir = get_temporary_directory()
     _debug("temporary directory: {}".format(tmp_dir))
-    xslt_executable = get_executable('xslt')
-    _debug("xslt executable: {}".format(xslt_executable))
     asy_executable = get_executable('asy')
     _debug("asy executable: {}".format(asy_executable))
     ptx_xsl_dir = get_ptx_xsl_path()
@@ -215,8 +213,6 @@ def latex_image_conversion(xml_source, stringparams, xmlid_root, data_dir, dest_
     devnull = open(os.devnull, 'w')
     tmp_dir = get_temporary_directory()
     _debug("temporary directory for latex-image conversion: {}".format(tmp_dir))
-    xslt_executable = get_executable('xslt')
-    _debug("xslt executable: {}".format(xslt_executable))
     # NB: next command uses relative paths, so no chdir(), etc beforehand
     if data_dir:
         copy_data_directory(xml_source, data_dir, tmp_dir)
@@ -859,7 +855,7 @@ def preview_images(xml_source, xmlid_root, dest_dir):
     baseurl = interactives[0]
 
     pageres_executable = get_executable('pageres')
-    _debug("pageres executable: {}".format(xslt_executable))
+    _debug("pageres executable: {}".format(pageres_executable))
     _debug("interactives identifiers: {}".format(interactives))
 
     # Start after the leading base URL sneakiness
