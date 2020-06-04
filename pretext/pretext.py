@@ -222,6 +222,9 @@ def latex_image_conversion(xml_source, stringparams, xmlid_root, data_dir, dest_
         copy_data_directory(xml_source, data_dir, tmp_dir)
     ptx_xsl_dir = get_ptx_xsl_path()
     _verbose("extracting latex-image pictures from {}".format(xml_source))
+    # support subtree argument
+    if xmlid_root:
+        stringparams['subtree'] = xmlid_root
     extraction_xslt = os.path.join(ptx_xsl_dir, 'extract-latex-image.xsl')
     # no output (argument 3), stylesheet writes out per-image file
     xsltproc(extraction_xslt, xml_source, None, tmp_dir, stringparams)
