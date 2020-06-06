@@ -8228,9 +8228,6 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <xsl:template match="xref[@ref and not(contains(normalize-space(@ref), ' ')) and  not(contains(normalize-space(@ref), ','))]">
     <!-- sanitize, check, and resolve the reference -->
     <xsl:variable name="ref" select="normalize-space(@ref)" />
-    <xsl:apply-templates select="." mode="check-ref">
-        <xsl:with-param name="ref" select="$ref" />
-    </xsl:apply-templates>
     <xsl:variable name="target" select="id($ref)" />
     <!-- Determine style of visible text in link -->
     <xsl:variable name="text-style">
@@ -8304,14 +8301,8 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <xsl:template match="xref[@first and @last]">
     <!-- sanitize, check, and resolve the two references -->
     <xsl:variable name="ref-one" select="normalize-space(@first)" />
-    <xsl:apply-templates select="." mode="check-ref">
-        <xsl:with-param name="ref" select="$ref-one" />
-    </xsl:apply-templates>
     <xsl:variable name="target-one" select="id($ref-one)" />
     <xsl:variable name="ref-two" select="normalize-space(@last)" />
-    <xsl:apply-templates select="." mode="check-ref">
-        <xsl:with-param name="ref" select="$ref-two" />
-    </xsl:apply-templates>
     <xsl:variable name="target-two" select="id($ref-two)" />
     <!-- Determine style of visible text in link -->
     <xsl:variable name="text-style-one">
@@ -8431,10 +8422,6 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:variable name="ref" select="substring-before($ref-list, ' ')" />
     <xsl:variable name="trailing" select="substring-after($ref-list, ' ')" />
     <!-- now work with one $ref and the configured $text-style -->
-    <!-- first, error-check and resolve                        -->
-    <xsl:apply-templates select="." mode="check-ref">
-        <xsl:with-param name="ref" select="$ref" />
-    </xsl:apply-templates>
     <!-- get the target as a node -->
     <xsl:variable name="target" select="id($ref)" />
     <!-- bibiographic targets are special -->
@@ -8533,41 +8520,6 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- ######################### -->
 <!-- Cross-Reference Utilities -->
 <!-- ######################### -->
-
-<!-- Any cross-reference can be checked to see if     -->
-<!-- it points to something legitimate, since this is -->
-<!-- a common mistake and often hard to detect/locate -->
-<!-- http://www.stylusstudio.com/xsllist/200412/post20720.html -->
-<xsl:template match="xref" mode="check-ref">
-    <xsl:param name="ref"/>
-
-    <!-- Grab the template-context "xref" for the location report, -->
-    <!-- *before* a context switch into the (enhanced) source      -->
-    <xsl:variable name="the-xref" select="."/>
-    <!-- Switch context for "id()" search to what could be enhanced -->
-    <!-- source that would include "biblio" from an external file.  -->
-    <xsl:for-each select="$document-root">
-        <xsl:variable name="target" select="id($ref)"/>
-        <xsl:if test="not(exsl:node-set($target))">
-            <xsl:message>MBX:WARNING: unresolved &lt;xref&gt; due to unknown reference "<xsl:value-of select="$ref"/>"</xsl:message>
-            <xsl:apply-templates select="$the-xref" mode="location-report"/>
-            <xsl:variable name="inline-warning">
-                <xsl:text>Unresolved xref, reference "</xsl:text>
-                <xsl:value-of select="$ref"/>
-                <xsl:text>"; check spelling or use "provisional" attribute</xsl:text>
-            </xsl:variable>
-            <xsl:variable name="margin-warning">
-                <xsl:text>Unresolved xref</xsl:text>
-            </xsl:variable>
-            <xsl:call-template name="inline-warning">
-                <xsl:with-param name="warning" select="$inline-warning"/>
-            </xsl:call-template>
-            <xsl:call-template name="margin-warning">
-                <xsl:with-param name="warning" select="$margin-warning"/>
-            </xsl:call-template>
-        </xsl:if>
-    </xsl:for-each>
-</xsl:template>
 
 <!-- Parse, analyze switches, attributes -->
 <!--   global:      5.2                  -->

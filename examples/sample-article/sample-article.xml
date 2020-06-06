@@ -1249,7 +1249,8 @@ the xsltproc executable.
 
                 <p>Long after we started this mess, we added <pretext /> tags to mark up tags and attributes.  The elements are: <tag>tag</tag>, <tag>tage</tag>, <tag>attr</tag>.  Examples of how these render are (respectively): <tag>section</tag>, <tage>hash</tage>, <attr>width</attr>.  Perhaps this document will make greater use of these tags.</p>
 
-                <p>We supply two incomplete cross-references for testing purposes only: <xref provisional="a first incomplete cross-reference"/>, <xref provisional="a second incomplete cross-reference"/>.</p>
+                <p>We supply two provisional cross-references for testing purposes only: <xref provisional="a first incomplete cross-reference"/>, <xref provisional="a second incomplete cross-reference"/>.</p>
+
             </subsection>
 
             <conclusion>

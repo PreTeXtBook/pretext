@@ -92,6 +92,10 @@ systems.
 
             <p>A cross-reference to a range where the two targets are in the wrong order, so generates a warning:  <xref first="section-images" last="introduction-id" />.</p>
 
+            <p>We supply two broken cross-references for testing purposes only, one a list, one not: <xref ref="theorem-number-87"/>, <xref ref="errors-and-warnings, theorem-number-85"/>.</p>
+
+            <p>We supply two more broken cross-references for testing purposes only, both of the <attr>first</attr>/<attr>last</attr> variety: <xref first="errors-and-warnings" last="theorem-number-28"/>, <xref first="theorem-number-832" last="errors-and-warnings"/>.</p>
+
             <todo>A <tag>todo</tag> element now becomes a prefixed XML comment.</todo>
         </section>
 

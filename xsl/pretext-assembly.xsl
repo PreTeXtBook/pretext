@@ -24,7 +24,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
     xmlns:pi="http://pretextbook.org/2020/pretext/internal"
     xmlns:exsl="http://exslt.org/common"
-    extension-element-prefixes="exsl"
+    xmlns:str="http://exslt.org/strings"
+    extension-element-prefixes="exsl str"
 >
 
 <!-- This is the once-mythical pre-processor, though we prefer     -->
@@ -171,6 +172,103 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <pretext>
         <xsl:apply-templates select="node()|@*" mode="assembly"/>
     </pretext>
+</xsl:template>
+
+<!-- ############### -->
+<!-- Source Warnings -->
+<!-- ############### -->
+
+<!-- A mistyped xref/@ref, or a replacement @xml:id, makes -->
+<!-- for a broken cross-reference.  So we warn at run-time -->
+<!-- and leave behind placeholder text.                    -->
+
+<!-- TODO: move in @first/@last compatibility and order checks -->
+<!-- TODO: perhaps parts of the following should be placed     -->
+<!-- in -common so the "author tools" stylesheet could use it, -->
+<!-- in addition to a more general source-checker stylesheet   -->
+
+<xsl:template match="xref[not(@provisional)]" mode="assembly">
+    <!-- commas to blanks, normalize spaces, -->
+    <!-- add trailing space for final split  -->
+    <xsl:variable name="normalized-ref-list">
+        <xsl:choose>
+            <xsl:when test="@ref">
+                <xsl:value-of select="concat(normalize-space(str:replace(@ref,',', ' ')), ' ')"/>
+            </xsl:when>
+            <!-- put @first and @last into a normalized two-part list -->
+            <xsl:when test="@first">
+                <xsl:value-of select="concat(normalize-space(@first), ' ', normalize-space(@last), ' ')"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:message>PTX:ERROR:   an "xref" lacks a @ref, @first, and @provisional; check your source or report as a potential bug</xsl:message>
+                <xsl:apply-templates select="." mode="location-report"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+<!-- <xsl:message>R:<xsl:value-of select="$normalized-ref-list"/>:R</xsl:message> -->
+    <!-- variable will contain comma-separated list  -->
+    <!-- of @ref values that have no target, so if   -->
+    <!-- empty that is success                       -->
+    <xsl:variable name="bad-xrefs-in-list">
+        <xsl:apply-templates select="." mode="check-ref-list">
+            <xsl:with-param name="ref-list" select="$normalized-ref-list"/>
+        </xsl:apply-templates>
+    </xsl:variable>
+<!-- <xsl:message>B:<xsl:value-of select="$bad-xrefs-in-list"/>:B</xsl:message> -->
+    <xsl:choose>
+        <!-- let assembly procede, do "xref" literally  -->
+        <xsl:when test="$bad-xrefs-in-list = ''">
+            <xsl:copy>
+                <xsl:apply-templates select="node()|@*" mode="assembly"/>
+            </xsl:copy>
+        </xsl:when>
+        <!-- error condition, so warn and leave  -->
+        <!-- placeholder text in enhanced source -->
+        <xsl:otherwise>
+            <xsl:variable name="error-list" select="substring($bad-xrefs-in-list, 1, string-length($bad-xrefs-in-list) - 2)"/>
+            <xsl:message>PTX:ERROR:   a cross-reference ("xref") uses references [<xsl:value-of select="$error-list"/>] that do not point to any target.  Maybe you typed an @xml:id value wrong, maybe the target of the @xml:id is nonexistent, or maybe you temporarily removed the target from your source.  Your output will contain some placeholder text that you will not want to distribute to your readers.</xsl:message>
+            <xsl:apply-templates select="." mode="location-report"/>
+            <!-- placeholder text -->
+            <c>
+                <xsl:text>[cross-reference to target(s) "</xsl:text>
+                <xsl:value-of select="$error-list"/>
+                <xsl:text>" missing]</xsl:text>
+            </c>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="xref" mode="check-ref-list">
+    <xsl:param name="ref-list"/>
+    <xsl:choose>
+        <!-- no more to test, stop recursing -->
+        <xsl:when test="$ref-list = ''"/>
+        <!-- test/check initial ref of the list -->
+        <xsl:otherwise>
+            <xsl:variable name="initial" select="substring-before($ref-list, ' ')" />
+            <xsl:if test="not(exsl:node-set(id($initial)))">
+                <!-- drop the failed lookup, plus a separator.  A nonempty -->
+                <!-- result for this template is indicative of a failure   -->
+                <!-- and the list can be reported in the error message     -->
+                <xsl:value-of select="$initial"/>
+                <xsl:text>, </xsl:text>
+<!-- <xsl:message>E: <xsl:value-of select="$initial"/></xsl:message> -->
+            </xsl:if>
+            <xsl:apply-templates select="." mode="check-ref-list">
+                <xsl:with-param name="ref-list" select="substring-after($ref-list, ' ')"/>
+            </xsl:apply-templates>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- An xref/@provisional is a tool for authors so we just -->
+<!-- drop a reminder of some planned (forward) reference   -->
+<xsl:template match="xref[@provisional]" mode="assembly">
+    <c>
+        <xsl:text>[provisional cross-reference: </xsl:text>
+        <xsl:value-of select="@provisional"/>
+        <xsl:text>]</xsl:text>
+    </c>
 </xsl:template>
 
 <!-- ######## -->
