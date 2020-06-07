@@ -205,7 +205,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-<!-- <xsl:message>R:<xsl:value-of select="$normalized-ref-list"/>:R</xsl:message> -->
     <!-- variable will contain comma-separated list  -->
     <!-- of @ref values that have no target, so if   -->
     <!-- empty that is success                       -->
@@ -214,7 +213,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="ref-list" select="$normalized-ref-list"/>
         </xsl:apply-templates>
     </xsl:variable>
-<!-- <xsl:message>B:<xsl:value-of select="$bad-xrefs-in-list"/>:B</xsl:message> -->
     <xsl:choose>
         <!-- let assembly procede, do "xref" literally  -->
         <xsl:when test="$bad-xrefs-in-list = ''">
@@ -252,7 +250,6 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <!-- and the list can be reported in the error message     -->
                 <xsl:value-of select="$initial"/>
                 <xsl:text>, </xsl:text>
-<!-- <xsl:message>E: <xsl:value-of select="$initial"/></xsl:message> -->
             </xsl:if>
             <xsl:apply-templates select="." mode="check-ref-list">
                 <xsl:with-param name="ref-list" select="substring-after($ref-list, ' ')"/>
