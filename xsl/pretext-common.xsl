@@ -8486,6 +8486,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Provisional cross-references -->
 <!-- A convenience for authors in early stages of writing -->
 <!-- Appear both inline and moreso in author tools        -->
+<!-- N.B. (2020-06-07) The "assembly" phase will *replace*-->
+<!-- these, and so this template may never be hit         -->
+<!-- (or only rarely?)                                    -->
 <xsl:template match="xref[@provisional]">
     <xsl:variable name="inline-warning">
         <xsl:value-of select="@provisional" />
