@@ -21,7 +21,7 @@
 
         <p>There is flexibility in which of <tag>hint</tag>, <tag>answer</tag>, and <tag>solution</tag> can be included or excluded in your text, which can be included or excluded in an Instructor's Version, and which can be included or excluded in a Solution Manual (see <xref ref="solution-manual"/>).  You can choose to author these or not, and then decide which to include in the student version, and which to include in an independently-produced Instructor Version, and which to include in a Solution Manual.</p>
 
-        <p>Read <xref ref="private-solutions"/> for some practical advice about limiting distribution of solutions.</p>
+        <p>Read <xref ref="private-solutions-file"/> (and <xref ref="private-solutions-git"/>) for some practical advice about limiting distribution of solutions.</p>
     </section>
 
     <section>

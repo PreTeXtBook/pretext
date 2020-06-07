@@ -40,8 +40,70 @@
         </paragraphs>
     </section>
 
-    <section xml:id="private-solutions">
-        <title>Private Solutions</title>
+    <section xml:id="private-solutions-file">
+        <title>Private Solutions File</title>
+
+        <p>Suppose an author distributes a textbook with an open license, and so makes the <pretext/> source available publicly (perhaps as a condition of the license).  Perhaps the author also intends <tag>hint</tag> provided with <tag>exercise</tag> to assist students, and having them available as knowls in <init>HTML</init> output is a great way to make them easily available, but not immediately visible.  But the author has also written some, or many, <tag>solution</tag> for the <tag>exercise</tag>, but these are only meant for instructors, and not for students.  See the discussion at <xref ref="instructor-solutions"/> for more background.</p>
+
+        <p>One approach is to distribute an Instructor Version or Solution Manual only on request, and only as a PDF.  The ability to provide a watermark on every page (via switches in the <latex/> conversion) allows you to include a personalized message such as <cd>Issued to Charles Darwin.  Do Not Copy.</cd>It would be a trivial technical exercise to remove this, but perhaps the moral imperative (in an extra <tag>preface</tag> as well?) would dissuade most from distributing further?</p>
+
+        <p>But with an open-source project, how can you distribute the exercise without distributing the <tag>solution</tag>?  After multiple unsatisfactory experiments, we have arrived at the following <em>solution</em>.  You author a <em>separate</em> <pretext/> document with <tag>hint</tag>, <tag>answer</tag>, and <tag>solution</tag> that you wish to keep <term>private</term>.   You might put this in a different, private, git repository that you only share with your co-authors.  Here is how you can construct and employ this file.  Here we use the word <term>solution</term> generically to mean any of <tag>hint</tag>, <tag>answer</tag>, or <tag>solution</tag>.</p>
+
+        <list>
+            <title>Private Solutions File</title>
+
+            <ol>
+                <li xml:id="prep-the-exercise">
+                    <p>Start with an <tag>exercise</tag> that you wish to provide private solutions for.  Give it an <attr>xml:id</attr>, which you will need for <xref ref="build-the-solution" text="type-local"/>.  Be sure the <tag>exercise</tag> is structured with a <tag>statement</tag> so a private solution may be appended.</p>
+                </li>
+
+                <li>
+                    <p>We recommend leaving a comment inside the <tag>exercise</tag> to remind you that there is a private solution that may need editing if the problem <tag>statement</tag> changes.</p>
+                </li>
+
+                <li>
+                    <p>Create a new <pretext/> file to hold the private solutions, presumably located <em>away</em> from your other source files.  Call it something like <c>privatesolutions.ptx</c>, which is what we will use below.</p>
+
+                    <p>The first two lines of the file <em>must</em> be:<cd>
+                        <cline>&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</cline>
+                        <cline>&lt;pi:privatesolutions</cline>
+                        <cline>  xmlns:pi="http://pretextbook.org/2020/pretext/internal"&gt;</cline>
+                    </cd>(<c>pi</c> is the <pretext/> internal namespace.)</p>
+                </li>
+
+                <li xml:id="build-the-solution">
+                    <p>Now add as many <tag>hint</tag>, <tag>answer</tag>, or <tag>solution</tag> as you like, in any order you like, authored in the usual way.  The missing piece is that you must link each solution back to the <tag>exercise</tag> it belongs to, with a <attr>ref</attr> attribute whose value is the <attr>xml:id</attr> you used to label the <tag>exercise</tag> in <xref ref="prep-the-exercise" text="type-local"/>.</p>
+
+                    <p>For example:<cd>
+                        <cline>&lt;answer ref="very-hard-problem"&gt;</cline>
+                        <cline>  &lt;p&gt;42.&lt;/p&gt;</cline>
+                        <cline>&lt;/answer&gt;</cline>
+                    </cd></p>
+                </li>
+
+                <li>
+                    <p>Finish the file by closing the overall <tag>pi:privatesolutions</tag> element.</p>
+                </li>
+
+                <li>
+                    <p>Now you can have all of these private solutions incorporated into your source by adding to your <c>xsltproc</c> invocation:<cd>
+                        <cline>-stringparam solutions.file privatesolutions.ptx</cline>
+                    </cd>And if you do not supply this string parameter then no private solutions will be incorporated.  One catch: the file needs to be placed in the same directory as the main <pretext/> file for your source.  (Or it has a relative path from this location.)  Maybe you have a build script that will copy it into place for you?  Just be careful to not commit it into your git repository!</p>
+                </li>
+
+                <li>
+                    <p>The private solutions file should be available to any conversion, but most likely you will be using it with solution manual conversion (see <xref ref="solution-manual"/>).</p>
+                </li>
+            </ol>
+        </list>
+
+        <p>You will have noticed that you have a lot of freedom to make a completely disorganized private solutions file.  There is no structure to prevent this<mdash/>you are on your own.  Ourselves, we would keep the solutions in order of appearance and use comments liberally.  But you can always search on the common value of <attr>xml:id</attr> and <attr>ref</attr> to locate the pieces.</p>
+    </section>
+
+    <section xml:id="private-solutions-git">
+        <title>Private Solutions with Git</title>
+
+        <p>(2020-06-06) We no longer advocate this approach, and find <xref ref="private-solutions-file"/> easier and more robust.  This section is no longer maintained and may be removed.</p>
 
         <p>Suppose an author distributes a textbook with an open license, and so makes the <pretext/> source available publicly (perhaps as a condition of the license).  Perhaps the author also intends <tag>hint</tag> provided with <tag>exercise</tag> to assist students, and having them available as knowls in <init>HTML</init> output is a great way to make them easily available, but not immediately visible.  But the author has also written some, or many, <tag>solution</tag> for the <tag>exercise</tag>, but these are only meant for instructors, and not for students.  See the discussion at <xref ref="instructor-solutions"/> for more background.</p>
 
