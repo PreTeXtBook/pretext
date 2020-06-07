@@ -22,6 +22,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+    xmlns:pi="http://pretextbook.org/2020/pretext/internal"
     xmlns:exsl="http://exslt.org/common"
     extension-element-prefixes="exsl"
 >
@@ -80,6 +81,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- fragment and then we convert it into real XML nodes. It   -->
 <!-- has a root element as part of the node-set() manufacture. -->
 <xsl:variable name="duplicate-rtf">
+    <xsl:call-template name="assembly-warnings"/>
     <xsl:apply-templates select="/" mode="assembly"/>
 </xsl:variable>
 <xsl:variable name="duplicate" select="exsl:node-set($duplicate-rtf)"/>
@@ -122,6 +124,40 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<!-- ################# -->
+<!-- Private Solutions -->
+<!-- ################# -->
+
+<!-- "solutions" here refers generically to "hint", "answer",  -->
+<!-- and "solution" elements of an "exercise".  An author may  -->
+<!-- wish to provide limited distribution of some solutions to -->
+<!-- exercises, which we deem "private" here.  If a            -->
+<!-- "solutions.file" is provided, it will be mined for these  -->
+<!-- private solutions.                                        -->
+
+<xsl:param name="solutions.file" select="''"/>
+<xsl:variable name="b-private-solutions" select="not($solutions.file = '')"/>
+
+<xsl:variable name="n-hint"     select="document($solutions.file, /pretext)/pi:privatesolutions/hint"/>
+<xsl:variable name="n-answer"   select="document($solutions.file, /pretext)/pi:privatesolutions/answer"/>
+<xsl:variable name="n-solution" select="document($solutions.file, /pretext)/pi:privatesolutions/solution"/>
+
+<xsl:template match="exercise" mode="assembly">
+    <!-- <xsl:message>FOO:<xsl:value-of select="count($n-solution)"/></xsl:message> -->
+    <xsl:variable name="the-id" select="@xml:id"/>
+    <xsl:copy>
+        <!-- attributes, then all elements that are not solutions -->
+        <xsl:apply-templates select="*[not(self::hint or self::answer or self::solution)]|@*" mode="assembly"/>
+        <!-- hints, answers, solutions; first regular, second private -->
+        <xsl:apply-templates select="hint" mode="assembly"/>
+        <xsl:apply-templates select="$n-hint[@ref=$the-id]" mode="assembly"/>
+        <xsl:apply-templates select="answer" mode="assembly"/>
+        <xsl:apply-templates select="$n-answer[@ref=$the-id]" mode="assembly"/>
+        <xsl:apply-templates select="solution" mode="assembly"/>
+        <xsl:apply-templates select="$n-solution[@ref=$the-id]" mode="assembly"/>
+    </xsl:copy>
+</xsl:template>
+
 <!-- ############# -->
 <!-- Source Repair -->
 <!-- ############# -->
@@ -135,6 +171,18 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <pretext>
         <xsl:apply-templates select="node()|@*" mode="assembly"/>
     </pretext>
+</xsl:template>
+
+<!-- ######## -->
+<!-- Warnings -->
+<!-- ######## -->
+
+<xsl:template name="assembly-warnings">
+    <xsl:if test="$b-private-solutions">
+        <xsl:call-template name="banner-warning">
+            <xsl:with-param name="warning">Use of a private solutions file is experimental and not supported.  Markup,&#xa;string parameters, and procedures are all subject to change.  (2020-06-06)</xsl:with-param>
+        </xsl:call-template>
+    </xsl:if>
 </xsl:template>
 
 </xsl:stylesheet>

@@ -34,6 +34,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     extension-element-prefixes="exsl date str"
 >
 
+<!-- This import will include the assembly phase, which is -->
+<!-- necessary as support for a private solutions file     -->
 <xsl:import href="./pretext-latex.xsl" />
 
 <!-- Intend output for rendering by pdflatex -->
