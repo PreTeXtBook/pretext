@@ -749,6 +749,8 @@ the xsltproc executable.
                         <hint>
                             <p>Start writing!</p>
                         </hint>
+                        <!-- private answer in private solutions file -->
+                        <!-- private solution in private solutions file -->
                     </exercise>
                 </subsubsection>
 
@@ -786,7 +788,7 @@ the xsltproc executable.
                         </solution>
                     </question>
 
-                    <exercise>
+                    <exercise xml:id="inline-exercise">
                         <title>An Inline Exercise</title>
 
                         <statement>
@@ -808,6 +810,9 @@ the xsltproc executable.
                                 <p>Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra. Integer sagittis dictum turpis vel aliquet. Fusce ut suscipit dolor, nec tristique nisl. Aenean luctus, leo et ornare fermentum, nibh dui vulputate leo, nec tincidunt augue ipsum sed odio. Nunc non erat sollicitudin, iaculis eros consequat, dapibus eros.</p>
                             </proof>
                         </solution>
+                        <!-- private hint in private solutions file -->
+                        <!-- two private solutions in private solutions file -->
+
                     </exercise>
 
                     <example xml:id="example-math-title">
