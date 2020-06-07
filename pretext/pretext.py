@@ -301,7 +301,7 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
     try:
         import requests
     except ImportError:
-        msg = 'failed to import requests module, is it installed?'
+        msg = 'PTX:ERROR: failed to import requests module, is it installed?'
         raise ValueError(msg)
 
     # execute XSL extraction to get back four dictionaries
@@ -387,7 +387,7 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
             include_file.write('<?xml version="1.0" encoding="UTF-8" ?>\n<webwork-extraction>\n')
     except Exception as e:
         root_cause = str(e)
-        msg = "There was a problem writing a problem to the file: {}\n"
+        msg = "PTX:ERROR: there was a problem writing a problem to the file: {}\n"
         raise ValueError(msg.format(include_file_name) + root_cause)
 
     # Choose one of the dictionaries to take its keys as what to loop through
@@ -408,7 +408,7 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
                 include_file.write(webwork_reps.format(problem,problem))
         except Exception as e:
             root_cause = str(e)
-            msg = "There was a problem writing a problem to the file: {}\n"
+            msg = "PTX:ERROR: there was a problem writing a problem to the file: {}\n"
             raise ValueError(msg.format(include_file_name) + root_cause)
 
         if origin[problem] == 'server':
@@ -416,7 +416,7 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
         elif origin[problem] == 'ptx':
             msg = 'writing representations of PTX-authored WeBWorK problem'
         else:
-            raise ValueError("problem origin should be 'server' or 'ptx', not '{}'".format(origin[problem]))
+            raise ValueError("PTX:ERROR: problem origin should be 'server' or 'ptx', not '{}'".format(origin[problem]))
         _verbose(msg)
 
         # make base64 for PTX problems
@@ -432,7 +432,7 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
                     include_file.write(authored_tag.format(re.sub(re.compile('^(?=.)', re.MULTILINE),'      ',source[problem])))
             except Exception as e:
                 root_cause = str(e)
-                msg = "There was a problem writing the authored source of {} to the file: {}\n"
+                msg = "PTX:ERROR: there was a problem writing the authored source of {} to the file: {}\n"
                 raise ValueError(msg.format(problem_identifier, include_file_name) + root_cause)
 
         # Now begin getting static version from server
@@ -463,7 +463,7 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
             response = session.get(wwurl, params=server_params)
         except requests.exceptions.RequestException as e:
             root_cause = str(e)
-            msg = "There was a problem collecting a problem,\n Server: {}\nRequest Parameters: {}\n"
+            msg = "PTX:ERROR: there was a problem collecting a problem,\n Server: {}\nRequest Parameters: {}\n"
             raise ValueError(msg.format(wwurl, server_params) + root_cause)
 
         # When a PG Math Object is a text string that has to be rendered in a math environment,
@@ -521,7 +521,7 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
         try:
             from xml.etree import ElementTree
         except ImportError:
-            msg = 'failed to import ElementTree from xml.etree'
+            msg = 'PTX:ERROR: failed to import ElementTree from xml.etree'
             raise ValueError(msg)
         try:
             problem_root = ElementTree.fromstring(response_text)
@@ -538,22 +538,22 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
         # value for @failure attribute in static element
         # base64 for a shell PG problem that simply indicates there was an issue and says what the issue was
         if file_empty:
-            badness_msg = "PTX:ERROR:  WeBWorK problem {} was empty\n"
+            badness_msg = "PTX:ERROR: WeBWorK problem {} was empty\n"
             badness_tip = ''
             badness_type = 'empty'
             badness_base64 = 'RE9DVU1FTlQoKTsKbG9hZE1hY3JvcygiUEdzdGFuZGFyZC5wbCIsIlBHTUwucGwiLCJQR2NvdXJzZS5wbCIsKTtURVhUKGJlZ2lucHJvYmxlbSgpKTtDb250ZXh0KCdOdW1lcmljJyk7CgpCRUdJTl9QR01MCldlQldvcksgUHJvYmxlbSBGaWxlIFdhcyBFbXB0eQoKRU5EX1BHTUwKCkVORERPQ1VNRU5UKCk7'
         elif no_compile:
-            badness_msg = "PTX:ERROR:  WeBWorK problem {} with seed {} did not compile  \n{}\n"
+            badness_msg = "PTX:ERROR: WeBWorK problem {} with seed {} did not compile  \n{}\n"
             badness_tip = '  Use -a to halt with full PG and returned content' if (origin[problem] == 'ptx') else '  Use -a to halt with returned content'
             badness_type = 'compile'
             badness_base64 = 'RE9DVU1FTlQoKTsKbG9hZE1hY3JvcygiUEdzdGFuZGFyZC5wbCIsIlBHTUwucGwiLCJQR2NvdXJzZS5wbCIsKTtURVhUKGJlZ2lucHJvYmxlbSgpKTtDb250ZXh0KCdOdW1lcmljJyk7CgpCRUdJTl9QR01MCldlQldvcksgUHJvYmxlbSBEaWQgTm90IENvbXBpbGUKCkVORF9QR01MCgpFTkRET0NVTUVOVCgpOw%3D%3D'
         elif bad_xml:
-            badness_msg = "PTX:ERROR:  WeBWorK problem {} with seed {} does not return valid XML  \n  It may not be PTX compatible  \n{}\n"
+            badness_msg = "PTX:ERROR: WeBWorK problem {} with seed {} does not return valid XML  \n  It may not be PTX compatible  \n{}\n"
             badness_tip = '  Use -a to halt with returned content'
             badness_type = 'xml'
             badness_base64 = 'RE9DVU1FTlQoKTsKbG9hZE1hY3JvcygiUEdzdGFuZGFyZC5wbCIsIlBHTUwucGwiLCJQR2NvdXJzZS5wbCIsKTtURVhUKGJlZ2lucHJvYmxlbSgpKTtDb250ZXh0KCdOdW1lcmljJyk7CgpCRUdJTl9QR01MCldlQldvcksgUHJvYmxlbSBEaWQgTm90IEdlbmVyYXRlIFZhbGlkIFhNTAoKRU5EX1BHTUwKCkVORERPQ1VNRU5UKCk7'
         elif no_statement:
-            badness_msg = "PTX:ERROR:  WeBWorK problem {} with seed {} does not have a statement tag \n  Maybe it uses something other than BEGIN_TEXT or BEGIN_PGML to print the statement in its PG code \n{}\n"
+            badness_msg = "PTX:ERROR: WeBWorK problem {} with seed {} does not have a statement tag \n  Maybe it uses something other than BEGIN_TEXT or BEGIN_PGML to print the statement in its PG code \n{}\n"
             badness_tip = '  Use -a to halt with returned content'
             badness_type = 'statement'
             badness_base64 = 'RE9DVU1FTlQoKTsKbG9hZE1hY3JvcygiUEdzdGFuZGFyZC5wbCIsIlBHTUwucGwiLCJQR2NvdXJzZS5wbCIsKTtURVhUKGJlZ2lucHJvYmxlbSgpKTtDb250ZXh0KCdOdW1lcmljJyk7CgpCRUdJTl9QR01MCldlQldvcksgUHJvYmxlbSBEaWQgTm90IEhhdmUgYSBbfHN0YXRlbWVudHxdKiBUYWcKCkVORF9QR01MCgpFTkRET0NVTUVOVCgpOw%3D%3D'
@@ -671,7 +671,7 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
                 response = session.get(image_url)
             except requests.exceptions.RequestException as e:
                 root_cause = str(e)
-                msg = "There was a problem downloading an image file,\n URL: {}\n"
+                msg = "PTX:ERROR: there was a problem downloading an image file,\n URL: {}\n"
                 raise ValueError(msg.format(image_url) + root_cause)
             # and save the image itself
             try:
@@ -679,7 +679,7 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
                     image_file.write(response.content)
             except Exception as e:
                 root_cause = str(e)
-                msg = "There was a problem saving an image file,\n Filename: {}\n"
+                msg = "PTX:ERROR: there was a problem saving an image file,\n Filename: {}\n"
                 raise ValueError(os.path.join(dest_dir, ptx_filename) + root_cause)
 
         # place static content
@@ -689,7 +689,7 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
                 include_file.write(bytes(static[problem] + '\n', encoding='utf-8'))
         except Exception as e:
             root_cause = str(e)
-            msg = "There was a problem writing a problem to the file: {}\n"
+            msg = "PTX:ERROR: there was a problem writing a problem to the file: {}\n"
             raise ValueError(msg.format(include_file_name) + root_cause)
 
         # Write urls for interactive version
@@ -711,7 +711,7 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
                         include_file.write(url_tag.format(hint,solution,wwurl,courseID,userID,password,course_password,seed[problem],source_query))
                 except Exception as e:
                     root_cause = str(e)
-                    msg = "There was a problem writing URLs for {} to the file: {}\n"
+                    msg = "PTX:ERROR: there was a problem writing URLs for {} to the file: {}\n"
                     raise ValueError(msg.format(problem_identifier, include_file_name) + root_cause)
 
         # Write PG. For server problems, just include source as attribute and close pg tag
@@ -730,7 +730,7 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
                     include_file.write(pg_tag.format(formatted_pg))
             except Exception as e:
                 root_cause = str(e)
-                msg = "There was a problem writing the PG for {} to the file: {}\n"
+                msg = "PTX:ERROR: there was a problem writing the PG for {} to the file: {}\n"
                 raise ValueError(msg.format(problem_identifier, include_file_name) + root_cause)
         elif origin[problem] == 'server':
             try:
@@ -739,7 +739,7 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
                     include_file.write(pg_tag.format(source[problem]))
             except Exception as e:
                 root_cause = str(e)
-                msg = "There was a problem writing the PG for {} to the file: {}\n"
+                msg = "PTX:ERROR: there was a problem writing the PG for {} to the file: {}\n"
                 raise ValueError(msg.format(problem_identifier, include_file_name) + root_cause)
 
         # close webwork-reps tag
@@ -748,7 +748,7 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
                 include_file.write('  </webwork-reps>\n\n')
         except Exception as e:
             root_cause = str(e)
-            msg = "There was a problem writing a problem to the file: {}\n"
+            msg = "PTX:ERROR: there was a problem writing a problem to the file: {}\n"
             raise ValueError(msg.format(include_file_name) + root_cause)
 
     # close webwork-extraction tag and finish
@@ -757,7 +757,7 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
             include_file.write('</webwork-extraction>')
     except Exception as e:
         root_cause = str(e)
-        msg = "There was a problem writing a problem to the file: {}\n"
+        msg = "PTX:ERROR: there was a problem writing a problem to the file: {}\n"
         raise ValueError(msg.format(include_file_name) + root_cause)
 
 
@@ -806,7 +806,7 @@ def youtube_thumbnail(xml_source, xmlid_root, dest_dir):
                 r.raw.decode_content = True
                 shutil.copyfileobj(r.raw, f)
         else:
-            msg = 'Download returned a bad status code ({}), perhaps try {} manually?'
+            msg = 'PTX:ERROR: download returned a bad status code ({}), perhaps try {} manually?'
             raise OSError(msg.format(r.status_code, url))
     _verbose('YouTube thumbnail download complete')
 
@@ -936,7 +936,7 @@ def mom_static_problems(xml_source, xmlid_root, dest_dir):
                 r.raw.decode_content = True
                 shutil.copyfileobj(r.raw, f)
             else:
-                msg = 'Download returned a bad status code ({}), perhaps try {} manually?'
+                msg = 'PTX:ERROR: download returned a bad status code ({}), perhaps try {} manually?'
                 raise OSError(msg.format(r.status_code, url))
     _verbose('MyOpenMath static problem download complete')
 
@@ -1172,7 +1172,7 @@ def set_verbosity(v):
     global _verbosity
 
     if ((v != 0) and (v !=1 ) and (v!= 2)):
-        raise ValueError('verbosity level is 0, 1, or 2, not {}'.format(v))
+        raise ValueError('PTX:ERROR: verbosity level is 0, 1, or 2, not {}'.format(v))
     _verbosity = v
 
 def _verbose(msg):
@@ -1197,7 +1197,7 @@ def check_python_version():
 
     # This test could be more precise,
     # but only handling 2to3 switch when introduced
-    msg = ''.join(["script/module expects Python 3.4, not Python 2 or older\n",
+    msg = ''.join(["PreTeXt script/module expects Python 3.4, not Python 2 or older\n",
                    "You have Python {}\n",
                    "** Try prefixing your command-line with 'python3 ' **"])
     if sys.version_info[0] <= 2:
@@ -1265,7 +1265,7 @@ def get_executable(exec_name):
         result_code = 0  # perhaps a lie on Windows
     if result_code != 0:
         error_message = '\n'.join([
-                        'cannot locate executable with configuration name "{}" as command "{}"',
+                        'PTX:ERROR: cannot locate executable with configuration name "{}" as command "{}"',
                         '*** Edit the configuration file and/or install the necessary program ***'])
         raise OSError(error_message.format(exec_name, config_name))
     _debug("{} executable: {}".format(exec_name, config_name))
@@ -1279,7 +1279,7 @@ def sanitize_url(url):
         requests.get(url)
     except requests.exceptions.RequestException as e:
         root_cause = str(e)
-        msg = "There was a problem with the server URL, {}\n".format(url)
+        msg = "PTX:ERROR: there was a problem with the server URL, {}\n".format(url)
         raise ValueError(msg + root_cause)
     # We expect relative paths to locations on the server
     # So we add a slash if there is not one already
@@ -1293,7 +1293,7 @@ def sanitize_alpha_num_underscore(param):
     allowed = set(string.ascii_letters + string.digits + '_')
     _verbose('verifying parameter: {}'.format(param))
     if not(set(param) <= allowed):
-        raise ValueError('param {} contains characters other than a-zA-Z0-9_ '.format(param))
+        raise ValueError('PTX:ERROR: param {} contains characters other than a-zA-Z0-9_ '.format(param))
     return param
 
 def set_config_info():
