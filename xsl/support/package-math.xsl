@@ -53,59 +53,34 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- identical, so we seem to handle both simultaneously here.  However,  -->
 <!-- only one or the other is present.                                    -->
 
-<!-- Entry template -->
-<xsl:template match="/">
+<!-- This is "pure" MathJax output, we leave adjustments to consumers -->
+
+<!-- Entry template, and cruiser -->
+<!-- We start here, and at each node, we simply descend, -->
+<!-- *unless* some template below kicks into action      -->
+<xsl:template match="/|node()|@*">
     <xsl:apply-templates select="node()|@*"/>
 </xsl:template>
 
-<!-- Elements to unwap/discard    -->
-<!-- Don't select its attributes! -->
-<xsl:template match="html|head|style|div[span]|span[svg:svg]|span[math:math]">
-    <xsl:apply-templates select="node()"/>
-</xsl:template>
-
-<!-- Elements to remove, *including* interior content -->
-<xsl:template match="style|div[@id = 'latex-macros']"/>
-
-<!-- Attributes to remove -->
-<!-- epubcheck 4.0.2 complains about these for EPUB 3.0.1 -->
-<!-- Each match appears to be once per math-SVG           -->
-<!-- TODO: switch this packaging stylesheet on output target -->
-<!-- OR: move to the EPUB packaging stylesheet               -->
-<xsl:template match="svg:svg/@focusable|svg:svg/@role|svg:svg/@aria-labelledby"/>
-<!-- Per-image, when fonts are included -->
-<xsl:template match="svg:svg/svg:defs/@aria-hidden"/>
-<!-- Per-font-cache, when fonts are consolidated -->
-<xsl:template match="svg:svg/svg:g/@aria-hidden"/>
+<!-- We explicitly kill the LaTeX macro div, lest  -->
+<!-- it get picked up as similar to the other math -->
+<xsl:template match="div[@id = 'latex-macros']"/>
 
 <!-- Body has what we want/need -->
 <xsl:template match="body">
     <pi:math-representations>
         <xsl:apply-templates select="node()|@*"/>
+        <xsl:text>&#xa;&#xa;</xsl:text>
     </pi:math-representations>
 </xsl:template>
 
-<!-- Unwind MathJax SVG wrapped in an extra div -->
-<!-- The div carries @id and @context           -->
-<xsl:template match="div/span/svg:svg">
+<!-- Copy representation out of an extra div/span -->
+<!-- The div carries @id and @context to preserve -->
+<xsl:template match="div/span">
+    <xsl:text>&#xa;&#xa;</xsl:text>
     <pi:math>
-        <xsl:copy-of select="../../@*"/>
-        <xsl:copy>
-            <!-- allowing surgery on the SVG -->
-            <xsl:apply-templates select="node()|@*"/>
-        </xsl:copy>
-    </pi:math>
-</xsl:template>
-
-<!-- Unwind MathJax MathML wrapped in a extra div -->
-<!-- The div carries @id and @context           -->
-<xsl:template match="div/span/math:math">
-    <pi:math>
-        <xsl:copy-of select="../../@*"/>
-        <xsl:copy>
-            <!-- allowing surgery on the MathML -->
-            <xsl:apply-templates select="node()|@*"/>
-        </xsl:copy>
+        <xsl:copy-of select="../@*"/>
+        <xsl:copy-of select="node()"/>
     </pi:math>
 </xsl:template>
 
@@ -115,19 +90,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!--   global cache:  a pile of defs in a single SVG -->
 <!--   no caching:  defs are per-SVG, no match here  -->
 <!-- NB: need to have this prefixed with "body" to   -->
-<!-- identify it as top-level, global situation      -->
+<!-- identify it as top-level, global situation,     -->
+<!-- rather than local to each individual SVG        -->
 <xsl:template match="body/svg:svg[svg:defs]">
     <xsl:copy>
         <xsl:attribute name="id">
             <xsl:text>font-data</xsl:text>
         </xsl:attribute>
-        <xsl:apply-templates select="node()|@*"/>
-    </xsl:copy>
-</xsl:template>
-
-<!-- Identity -->
-<xsl:template match="node()|@*">
-    <xsl:copy>
         <xsl:apply-templates select="node()|@*"/>
     </xsl:copy>
 </xsl:template>

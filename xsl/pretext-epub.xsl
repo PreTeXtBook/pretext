@@ -833,7 +833,7 @@ width: 100%
         <!-- Finally, drop either a "svg" element or a "math" element -->
         <xsl:choose>
             <xsl:when test="$math.format = 'svg'">
-                <xsl:copy-of select="$math/svg:svg"/>
+                <xsl:apply-templates select="$math/svg:svg" mode="svg-edit"/>
             </xsl:when>
             <xsl:when test="$math.format = 'mml'">
                 <xsl:copy-of select="$math/math:math"/>
@@ -841,6 +841,24 @@ width: 100%
         </xsl:choose>
     </span>
 </xsl:template>
+
+<!-- Identity template as a mode coursing through SVGs  -->
+<!-- We are stream editing to satisfy the EPUB standard -->
+<!-- Mostly killing attrributes                         -->
+<xsl:template match="node()|@*" mode="svg-edit">
+    <xsl:copy>
+        <xsl:apply-templates select="node()|@*" mode="svg-edit"/>
+    </xsl:copy>
+</xsl:template>
+
+<!-- SVG attributes to remove -->
+<!-- epubcheck 4.0.2 complains about these for EPUB 3.0.1 -->
+<!-- Each match appears to be once per math-SVG           -->
+<xsl:template match="svg:svg/@focusable|svg:svg/@role|svg:svg/@aria-labelledby" mode="svg-edit"/>
+<!-- Per-image, when fonts are included -->
+<xsl:template match="svg:svg/svg:defs/@aria-hidden" mode="svg-edit"/>
+<!-- Per-font-cache, when fonts are consolidated -->
+<xsl:template match="svg:svg/svg:g/@aria-hidden" mode="svg-edit"/>
 
 <!-- Uncomment to test inline image behavior -->
 <!-- 
