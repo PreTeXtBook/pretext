@@ -4514,9 +4514,11 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Keyboard Keys -->
 <!-- ############# -->
 
-<!-- Comments are Unicode names, from fileformat.info            -->
-<!-- @latex values are macros in the menukeys package specifying -->
-<!-- keyboard keys that are typically labeled with graphics      -->
+<!-- Comments are Unicode names, from fileformat.info             -->
+<!-- @latex values are macros in the menukeys package specifying  -->
+<!-- keyboard keys that are typically labeled with graphics,      -->
+<!-- or "textcomp Text-mode Math Symbols" from "The Comprehensive -->
+<!-- LaTeX Symbol List", or constructions combining them          -->
 <xsl:variable name="kbdkey-rtf">
     <kbdkeyinfo name="left"
                 latex="\arrowkeyleft"
@@ -4573,6 +4575,34 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <kbdkeyinfo name="underscore"
                 latex='\textunderscore'
                 unicode="&#x005F;"/> <!-- LOW LINE -->
+    <kbdkeyinfo name="plus"
+                latex='+'
+                unicode="&#x002B;"/> <!-- PLUS SIGN -->
+    <!-- MINUS SIGN is U+2212, but not in all fonts? -->
+    <kbdkeyinfo name="minus"
+                latex='\textminus'
+                unicode="&#x002D;"/> <!-- HYPHEN-MINUS -->
+    <kbdkeyinfo name="times"
+                latex='\texttimes'
+                unicode="&#x00D7;"/> <!-- MULTIPLICATION SIGN -->
+    <kbdkeyinfo name="solidus"
+                latex='\textfractionsolidus'
+                unicode="&#x002F;"/> <!-- SOLIDUS -->
+    <kbdkeyinfo name="obelus"
+                latex='\textdiv'
+                unicode="&#x00F7;"/> <!-- DIVISION SIGN -->
+    <kbdkeyinfo name="squared"
+                latex='x\textasciicircum{}2'
+                unicode="x&#x005E;2"/> <!--  -->
+    <kbdkeyinfo name="inverse"
+                latex='x\textasciicircum{-1}'
+                unicode="x&#x005E;-1"/> <!--  -->
+    <kbdkeyinfo name="left-paren"
+                latex='('
+                unicode="&#x0028;"/> <!-- LEFT PARENTHESIS -->
+    <kbdkeyinfo name="right-paren"
+                latex=')'
+                unicode="&#x0029;"/> <!-- RIGHT PARENTHESIS -->
 </xsl:variable>
 
 <!-- If read from a file via "document()" then   -->

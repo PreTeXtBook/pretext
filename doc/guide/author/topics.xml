@@ -602,7 +602,7 @@
 
             <table>
                 <title>Keyboard Keys Specified by <attr>name</attr> Attribute</title>
-
+                <!-- IMPORTANT: long names in the last column to keep table-width under control -->
                 <tabular>
                     <row>
                         <cell><c>left</c></cell>
@@ -619,10 +619,30 @@
                         <cell><kbd name="enter"/></cell>
                         <cell><c>shift</c></cell>
                         <cell><kbd name="shift"/></cell>
+                        <cell><c>solidus</c></cell>
+                        <cell><kbd name="solidus"/></cell>
                         <cell></cell>
                         <cell></cell>
-                        <cell></cell>
-                        <cell></cell>
+                    </row>
+                    <row>
+                        <cell><c>plus</c></cell>
+                        <cell><kbd name="plus"/></cell>
+                        <cell><c>minus</c></cell>
+                        <cell><kbd name="minus"/></cell>
+                        <cell><c>times</c></cell>
+                        <cell><kbd name="times"/></cell>
+                        <cell><c>left-paren</c></cell>
+                        <cell><kbd name="left-paren"/></cell>
+                    </row>
+                    <row>
+                        <cell><c>obelus</c></cell>
+                        <cell><kbd name="obelus"/></cell>
+                        <cell><c>squared</c></cell>
+                        <cell><kbd name="squared"/></cell>
+                        <cell><c>inverse</c></cell>
+                        <cell><kbd name="inverse"/></cell>
+                        <cell><c>right-paren</c></cell>
+                        <cell><kbd name="right-paren"/></cell>
                     </row>
                 </tabular>
             </table>
