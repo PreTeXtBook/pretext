@@ -114,7 +114,7 @@
 <xsl:param name="mathfile"/>
 <xsl:variable name="math-repr"  select="document($mathfile)/pi:math-representations"/>
 
-<!-- Either 'svg" or 'mml', always -->
+<!-- One of 'svg", 'mml', or 'speech', always -->
 <xsl:param name="math.format"/>
 
 
@@ -830,13 +830,16 @@ width: 100%
                 </xsl:when>
             </xsl:choose>
         </xsl:attribute>
-        <!-- Finally, drop either a "svg" element or a "math" element -->
+        <!-- Finally, drop a "svg" element, "math" element, or ASCII speech -->
         <xsl:choose>
             <xsl:when test="$math.format = 'svg'">
                 <xsl:apply-templates select="$math/svg:svg" mode="svg-edit"/>
             </xsl:when>
             <xsl:when test="$math.format = 'mml'">
                 <xsl:copy-of select="$math/math:math"/>
+            </xsl:when>
+            <xsl:when test="$math.format = 'speech'">
+                <xsl:value-of select="$math"/>
             </xsl:when>
         </xsl:choose>
     </span>
