@@ -19,14 +19,17 @@
 
 # 2020-05-20: this module expects Python 3.4 or newer
 
-########################################
+#############################
 #
 #  Math as LaTeX on web pages
 #
-########################################
+#############################
 
 def mathjax_latex(xml_source, result, math_format):
+    """Convert PreTeXt source to a structured file of representations of mathematics"""
+    # formats:  'svg', 'mml', 'nemeth', 'speech'
     import os.path, subprocess
+    import re, os, fileinput # for &nbsp; fix
 
     _verbose('converting LaTeX from {} into {} format'.format(xml_source, math_format))
     _debug('converting LaTeX from {} into {} format placed into {}'.format(xml_source, math_format, result))
@@ -39,6 +42,7 @@ def mathjax_latex(xml_source, result, math_format):
     # And MathJax executables preserve the page while changing the math
     tmp_dir = get_temporary_directory()
     mjinput  = os.path.join(tmp_dir, 'mj-input-latex.html')
+    mjintermediate = os.path.join(tmp_dir, 'mj-intermediate.html')
     mjoutput = os.path.join(tmp_dir, 'mj-output-{}.html'.format(math_format))
 
     _debug('temporary directory for MathJax work: {}'.format(tmp_dir))
@@ -49,15 +53,59 @@ def mathjax_latex(xml_source, result, math_format):
     # mjpage can return "innerHTML" w/ --fragment, which we
     # could wrap into our own particular version of mjoutput
     _debug('calling MathJax to convert LaTeX from {} into raw representations in {}'.format(mjinput, mjoutput))
-    mjpage_exec = get_executable('mjpage')
-    # kill caching to keep glyphs within SVG
-    # versus having a font cache at the end
-    mjpage_exec = [mjpage_exec, '--noGlobalSVG', 'true', '--output', math_format.upper()]
-    infile = open(mjinput)
-    outfile = open(mjoutput, 'w')
-    subprocess.run(mjpage_exec, stdin=infile, stdout=outfile)
 
-    # clean up and package MJ SVGs, font data, etc
+    # process with  mjpage  executable from  mathjax-node-page  package
+    mjpage_exec = get_executable('mjpage')
+    if math_format == 'svg':
+        # kill caching to keep glyphs within SVG
+        # versus having a font cache at the end
+        mjpage_cmd = [mjpage_exec, '--output', 'SVG', '--noGlobalSVG', 'true']
+    elif math_format == 'mml':
+        mjpage_cmd = [mjpage_exec, '--output', 'MML']
+    elif math_format in ['nemeth', 'speech']:
+        # MathML is precursor for SRE outputs
+        mjpage_cmd = [mjpage_exec, '--output', 'MML']
+    else:
+        raise ValueError('PTX:ERROR: incorrect format ("{}") for MathJax conversion'.format(math_format))
+
+    infile = open(mjinput)
+    if math_format in ['nemeth', 'speech']:
+        # braille is a two-pass pipeline
+        outfile = open(mjintermediate, 'w')
+    else:
+        outfile = open(mjoutput, 'w')
+    subprocess.run(mjpage_cmd, stdin=infile, stdout=outfile)
+
+    # the 'mjpage' executable converts spaces inside of a LaTeX
+    # \text{} into &nbsp; entities, which is a good idea, and
+    # fine for HTML, but subsequent conversions expecting XHTML
+    # do not like &nbsp; nor &#xa0.  Be careful just below, as
+    # repl contains a *non-breaking space* not a generic space.
+    orig = '&nbsp;'
+    repl = ' '
+    xhtml_elt = re.compile(orig)
+    # the inplace facility of the fileinput module gets
+    # confused about temporary backup files if the working
+    # directory is not where the file lives
+    # Also, print() here actual writes on the file, as
+    # another facility of the fileinput module, but we need
+    # to kill the "extra" newline that print() creates
+    owd = os.getcwd()
+    os.chdir(tmp_dir)
+    if  math_format in ['nemeth', 'speech']:
+        html_file = mjintermediate
+    else:
+        html_file = mjoutput
+    for line in fileinput.input(html_file, inplace=1):
+        print(xhtml_elt.sub(repl, line), end='')
+    os.chdir(owd)
+
+    if math_format in ['nemeth', 'speech']:
+        mjsre_exec = os.path.join(get_ptx_path(), 'script', 'braille', 'mjpage-sre.js')
+        mjsre_cmd=[mjsre_exec, math_format, mjintermediate, mjoutput]
+        subprocess.run(mjsre_cmd)
+
+    # clean up and package MJ representations, font data, etc
     _debug('packaging math as {} from {} into XML file {}'.format(math_format, mjoutput, result))
     xsltproc(cleaner_xslt, mjoutput, result)
 
