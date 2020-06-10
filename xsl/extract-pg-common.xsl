@@ -1403,6 +1403,72 @@
 
 <xsl:template match="md">
     <xsl:param name="b-verbose" />
+    <xsl:apply-templates select="." mode="body">
+        <xsl:with-param name="b-verbose" select="$b-verbose"/>
+    </xsl:apply-templates>
+</xsl:template>
+
+<xsl:template match="md" mode="body">
+    <xsl:param name="b-verbose"/>
+    <xsl:variable name="complete-latex">
+        <xsl:if test="$b-verbose">
+            <xsl:text>&#xa;</xsl:text>
+            <xsl:if test="ancestor::ul|ancestor::ol">
+                <xsl:call-template name="potential-list-indent" />
+            </xsl:if>
+        </xsl:if>
+        <xsl:text>\begin{</xsl:text>
+        <xsl:apply-templates select="." mode="displaymath-alignment"/>
+        <xsl:text>}</xsl:text>
+        <xsl:apply-templates select="." mode="alignat-columns" />
+        <xsl:text>&#xa;</xsl:text>
+        <!-- Indentation of mrow/intertext is in each one's template   -->
+        <xsl:apply-templates select="mrow|intertext"/>
+        <xsl:if test="ancestor::ul|ancestor::ol">
+            <xsl:call-template name="potential-list-indent" />
+        </xsl:if>
+        <xsl:text>\end{</xsl:text>
+        <xsl:apply-templates select="." mode="displaymath-alignment"/>
+        <xsl:text>}</xsl:text>
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:variable>
+    <xsl:apply-templates select="." mode="display-math-wrapper">
+        <xsl:with-param name="b-verbose" select="$b-verbose" />
+        <xsl:with-param name="content" select="$complete-latex" />
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- Within a WeBWorK, md and rows are never numbered -->
+<xsl:template match="md" mode="displaymath-alignment">
+    <xsl:choose>
+        <!-- look for @alignment override, possibly bad -->
+        <xsl:when test="@alignment='gather'">
+            <xsl:text>gathered</xsl:text>
+        </xsl:when>
+        <xsl:when test="@alignment='alignat'">
+            <xsl:text>alignedat</xsl:text>
+        </xsl:when>
+        <xsl:when test="@alignment='align'">
+            <xsl:text>aligned</xsl:text>
+        </xsl:when>
+        <xsl:when test="@alignment">
+            <xsl:message>PTX:ERROR:   display math @alignment attribute "<xsl:value-of select="@alignment" />" is not recognized (should be "aligned", "gathered", "alignedat")</xsl:message>
+            <xsl:apply-templates select="." mode="location-report" />
+        </xsl:when>
+        <!-- sniff for alignment specifications    -->
+        <!-- this can be easily fooled, eg matrices-->
+        <xsl:when test="contains(., '&amp;') or contains(., '\amp')">
+            <xsl:text>aligned</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>gathered</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="md" mode="display-math-wrapper">
+    <xsl:param name="b-verbose" />
+    <xsl:param name="content" />
     <xsl:text>&#xa;&#xa;</xsl:text>
     <xsl:if test="ancestor::ul|ancestor::ol">
         <xsl:call-template name="potential-list-indent" />
@@ -1411,18 +1477,10 @@
     <xsl:if test="$b-verbose">
         <xsl:call-template name="select-latex-macros"/>
     </xsl:if>
-    <xsl:choose>
-        <xsl:when test="contains(., '&amp;') or contains(., '\amp')">
-            <xsl:text>\begin{aligned}&#xa;</xsl:text>
-            <xsl:apply-templates select="mrow" />
-            <xsl:text>\end{aligned}</xsl:text>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:text>\begin{gathered}&#xa;</xsl:text>
-            <xsl:apply-templates select="mrow" />
-            <xsl:text>\end{gathered}</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
+    <xsl:value-of select="$content" />
+    <xsl:if test="ancestor::ul|ancestor::ol">
+        <xsl:call-template name="potential-list-indent" />
+    </xsl:if>
     <xsl:text>```]</xsl:text>
     <xsl:text>&#xa;&#xa;</xsl:text>
     <xsl:if test="following-sibling::text()[normalize-space()] or following-sibling::*">
@@ -1430,7 +1488,7 @@
     </xsl:if>
 </xsl:template>
 
-<xsl:template match="md/mrow">
+<xsl:template match="mrow">
     <xsl:if test="ancestor::ul|ancestor::ol">
         <xsl:call-template name="potential-list-indent" />
     </xsl:if>
@@ -1440,9 +1498,34 @@
         <!-- pass the enclosing environment (md) as the context       -->
         <xsl:apply-templates select="parent::md" mode="get-clause-punctuation" />
     </xsl:if>
-    <xsl:if test="following-sibling::mrow">
+    <!-- PG cannot actually mirror LaTeX intertext funcitonality. As  -->
+    <!-- a consequence, we should not line break an mrow that         -->
+    <!-- immediately preceds an intertext.                            -->
+    <xsl:if test="following-sibling::mrow and not(following-sibling::*[1][self::intertext])">
        <xsl:text>\\</xsl:text>
     </xsl:if>
+    <xsl:text>&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="intertext">
+    <xsl:if test="ancestor::ul|ancestor::ol">
+        <xsl:call-template name="potential-list-indent" />
+    </xsl:if>
+    <xsl:text>\end{</xsl:text>
+    <xsl:apply-templates select="parent::*" mode="displaymath-alignment"/>
+    <xsl:text>}```]&#xa;</xsl:text>
+    <xsl:if test="ancestor::ul|ancestor::ol">
+        <xsl:call-template name="potential-list-indent" />
+    </xsl:if>
+    <xsl:apply-templates />
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:if test="ancestor::ul|ancestor::ol">
+        <xsl:call-template name="potential-list-indent" />
+    </xsl:if>
+    <xsl:text>[```\begin{</xsl:text>
+    <xsl:apply-templates select="parent::*" mode="displaymath-alignment"/>
+    <xsl:text>}</xsl:text>
+    <xsl:apply-templates select="parent::*" mode="alignat-columns"/>
     <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
