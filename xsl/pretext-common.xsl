@@ -261,19 +261,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Use like "contat('L',$apos,'Hospital')"           -->
 <xsl:variable name="apos">'</xsl:variable>
 
-<!-- The latex processing model is overridden in       -->
-<!-- imported files, per output format. Any stylesheet -->
-<!-- importing this one, should define this            -->
-<!-- The purpose is to identify variations in how      -->
-<!-- text nodes are manipulated, such as clause-ending -->
-<!-- punctuation that has migrated into inline math    -->
-<!-- Values are: 'native' and 'mathjax'                -->
-<!-- We set the default to 'mathjax' (assistive), and  -->
-<!-- then override just in the LaTeX conversion        -->
-<!-- Note: this device might be abandoned if browsers  -->
-<!-- and MathJax ever cooperate on placing line breaks -->
-<!-- TODO: could rename as "inline-math-punctation-absorption" -->
-<xsl:variable name="latex-processing" select="'mathjax'" />
+<!-- Here we perform manipulations of math elements and subsequent  -->
+<!-- text nodes that lead with punctuation.  Basically, punctuation -->
+<!-- can migrate from the start of the text node and into the math, -->
+<!-- wrapped in a \text{}.  We generally do this to display math as -->
+<!-- a service to authors.  MathJax needs help for inline math.     -->
+<!-- Braille and audio do not do so well with this manipulation.    -->
+<!-- These variables are meant to be set by other stylesheets in    -->
+<!-- various situations and there should be no cause for authors to -->
+<!-- change them (this no elaborate error-checking, etc.)           -->
+<xsl:variable name="math.punctuation.include" select="'none'"/>
+<xsl:variable name="b-include-inline"
+    select="($math.punctuation.include = 'inline')  or ($math.punctuation.include = 'all')"/>
+<xsl:variable name="b-include-display"
+    select="($math.punctuation.include = 'display') or ($math.punctuation.include = 'all')"/>
 
 <!-- We set this variable a bit differently -->
 <!-- for different conversions, so this is  -->
@@ -1587,6 +1588,7 @@ Book (with parts), "section" at level 3
 <!--       Look at next node, and if a text node,        -->
 <!--       then look for leading punctuation, and        -->
 <!--       bring into math with \text() wrapper          -->
+<!--       when  $math.punctuation.include  indicates    -->
 
 <xsl:template match="m">
     <!-- Build a textual version of the latex,  -->
@@ -3239,19 +3241,22 @@ Book (with parts), "section" at level 3
 <!-- We look for an immediately adjacent/subsequent text -->
 <!-- node and if we get any punctuation, we wrap it for  -->
 <!-- inclusion in the final throes of the math part      -->
-<!-- See compensating code below for general text        -->
+<!-- A corresponding event happens with the following    -->
+<!-- text() node: the punctuation will get scrubbed      -->
+<!-- from there iff the punctuation migrates in this     -->
 <xsl:template match="m|me|men|md|mdn" mode="get-clause-punctuation">
-    <xsl:variable name="trailing-text" select="following-sibling::node()[1]/self::text()" />
-    <xsl:variable name="punctuation">
-        <xsl:call-template name="leading-clause-punctuation">
-            <xsl:with-param name="text" select="$trailing-text" />
-        </xsl:call-template>
-    </xsl:variable>
-    <!-- unclear why  test="$punctuation"  tests true always here -->
-    <xsl:if test="not($punctuation='')">
-        <xsl:text>\text{</xsl:text>
-        <xsl:value-of select="$punctuation" />
-        <xsl:text>}</xsl:text>
+    <xsl:if test="(self::m and $b-include-inline) or ((self::me|self::men|self::md|self::mdn) and $b-include-display)">
+        <xsl:variable name="trailing-text" select="following-sibling::node()[1]/self::text()" />
+        <xsl:variable name="punctuation">
+            <xsl:call-template name="leading-clause-punctuation">
+                <xsl:with-param name="text" select="$trailing-text" />
+            </xsl:call-template>
+        </xsl:variable>
+        <xsl:if test="not($punctuation = '')">
+            <xsl:text>\text{</xsl:text>
+            <xsl:value-of select="$punctuation" />
+            <xsl:text>}</xsl:text>
+        </xsl:if>
     </xsl:if>
 </xsl:template>
 
@@ -3292,12 +3297,11 @@ Book (with parts), "section" at level 3
     <!-- It migrates and is absorbed in math templates elsewhere -->
     <!-- Side-effect: resulting leading whitespace is scrubbed   -->
     <!-- for displayed mathematics (only) as it is irrelevant    -->
-    <!-- Inline math only adjusted for MathJax processing        -->
     <xsl:variable name="first-char" select="substring(., 1, 1)" />
     <xsl:variable name="math-punctuation">
         <xsl:choose>
-            <!-- always adjust display math punctuation -->
-            <xsl:when test="contains($clause-ending-marks, $first-char) and preceding-sibling::node()[1][self::me|self::men|self::md|self::mdn]">
+            <!-- drop punctuation after display math, if moving to math -->
+            <xsl:when test="$b-include-display and contains($clause-ending-marks, $first-char) and preceding-sibling::node()[1][self::me|self::men|self::md|self::mdn]">
                 <xsl:call-template name="strip-leading-whitespace">
                     <xsl:with-param name="text">
                         <xsl:call-template name="drop-clause-punctuation">
@@ -3306,8 +3310,8 @@ Book (with parts), "section" at level 3
                     </xsl:with-param>
                 </xsl:call-template>
             </xsl:when>
-            <!-- adjust inline math, except for real LaTeX -->
-            <xsl:when test="contains($clause-ending-marks, $first-char) and preceding-sibling::node()[1][self::m] and not($latex-processing='native')">
+            <!-- drop punctuation after inline math, if moving to math -->
+            <xsl:when test="$b-include-inline and contains($clause-ending-marks, $first-char) and preceding-sibling::node()[1][self::m]">
                 <xsl:call-template name="drop-clause-punctuation">
                     <xsl:with-param name="text" select="." />
                 </xsl:call-template>

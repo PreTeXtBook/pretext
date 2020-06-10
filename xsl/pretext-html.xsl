@@ -181,11 +181,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Variables that affect HTML creation -->
 <!-- More in the common file             -->
 
-<!-- We leave the global $latex-processing variable    -->
-<!-- set to its default value, which will manipulate   -->
-<!-- clause-ending punctuation immediately after       -->
-<!-- inline mathematics.  So we need to do half of the -->
-<!-- job here, absorbing punctuation into mathematics  -->
+<!-- Search for the "math.punctuation.include" -->
+<!-- global variable, which is discussed in    -->
+<!-- closer proximity to its application.      -->
 
 <!-- This is cribbed from the CSS "max-width"-->
 <!-- Design width, measured in pixels        -->
@@ -4924,6 +4922,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- differences which we need to accomodate via abstract -->
 <!-- templates.                                           -->
 
+<!-- See the -common stylesheet for manipulations of math elements      -->
+<!-- and subsequent text nodes that lead with punctuation.  Basically,  -->
+<!-- punctuation can migrate from the start of the text node and into   -->
+<!-- the math, wrapped in a \text{}.  We do this to display math as a   -->
+<!-- service to authors.  But for HTML/MathJax we avoid bad line-breaks -->
+<!-- if we do this routinely for inline math also.  If MathJax ever     -->
+<!-- gets better at this, then we can set this switch to 'display',     -->
+<!-- as for LaTeX.                                                      -->
+<xsl:variable name="math.punctuation.include" select="'all'"/>
+
 <!-- Inline Mathematics ("m") -->
 
 <!-- Never labeled, so not ever knowled,        -->
@@ -4941,11 +4949,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="end-inline-math">
     <xsl:text>\)</xsl:text>
 </xsl:template>
-
-<!-- The general modal template "get-clause-punctuation"      -->
-<!-- does exactly what we need here to fix up bad line-breaks -->
-<!-- in HTML/MathJax rendering, so there is no override       -->
-
 
 <!-- Displayed Single-Line Math ("me", "men") -->
 

@@ -1361,13 +1361,13 @@
 <!-- NB: we allow the "var" element as a child                             -->
 
 <!-- Common documentation -->
-<!-- Note: the default template for "text()" in xsl/pretext-common.xsl    -->
-<!-- will drop "clause-ending" punctuation that immediately follows a bit  -->
-<!-- of math, and possibly remove some resulting leading whitespace. For   -->
-<!-- inline math "m" this behavior is under the control of the global      -->
-<!-- $latex-processing variable, which is only overridden for LaTeX        -->
-<!-- processing itself. Then the math templates need to look forward and   -->
-<!-- recover this punctuation with a \text{} wrapper.                      -->
+<!-- See the -common stylesheet for manipulations of math elements     -->
+<!-- and subsequent text nodes that lead with punctuation.  Basically, -->
+<!-- punctuation can migrate from the start of the text node and into  -->
+<!-- the math, wrapped in a \text{}.  We do this to display math as a  -->
+<!-- service to authors.  But LaTeX handles this situation carefully   -->
+<!-- for inline math, so we do the same here.                          -->
+<xsl:variable name="math.punctuation.include" select="'all'"/>
 
 <xsl:template match="m">
     <xsl:param name="b-verbose" />
