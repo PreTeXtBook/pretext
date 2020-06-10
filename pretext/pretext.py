@@ -423,7 +423,36 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
         password = 'anonymous'
         course_password = 'anonymous'
 
-    wwurl = server_url + "webwork2/html2xml"
+    ww2url = server_url + "webwork2/"
+    wwurl = ww2url + "html2xml"
+
+    # Establish WeBWorK version
+    try:
+        landing_page = requests.get(ww2url)
+    except Exception as e:
+        root_cause = str(e)
+        msg = ("PTX:ERROR:   There was a problem contacting the WeBWorK server.\n" +
+               "             Is there a WeBWorK landing page at {}?\n")
+        raise ValueError(msg.format(ww2url) + root_cause)
+
+    landing_page_text = landing_page.text
+    ww_version_match = re.search(r"WW.VERSION:\s*((\d+)\.(\d+))",landing_page_text,re.I)
+    try:
+        ww_version = ww_version_match.group(1)
+        ww_major_version = int(ww_version_match.group(2))
+        ww_minor_version = int(ww_version_match.group(3))
+    except AttributeError as e:
+        root_cause = str(e)
+        msg =  ("PTX:ERROR:   PreTeXt was unable to discern the version of the WeBWorK server.\n" +
+                "                         Is there a WeBWorK landing page at {}?\n" +
+                "                         And does it display the WeBWorK version?\n")
+        raise ValueError(msg.format(ww2url))
+
+    if (ww_major_version != 2 or ww_minor_version < 14):
+        msg = ("PTX:ERROR:   PreTeXt supports WeBWorK 2.14 and later, and it appears you are attempting to use version: {}\n" +
+               "                         Server: {}\n")
+        raise ValueError(msg.format(ww_version,server_url))
+
 
     # Begin preparation for getting static versions
 
