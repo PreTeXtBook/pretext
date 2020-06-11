@@ -1289,7 +1289,7 @@
             <p><pretext /> will use your macros correctly for print and for <init>HTML</init>, after erasing whitespace from the left margin, and stripping <latex /> comments.</p>
         </subsection>
 
-        <subsection>
+        <subsection xml:id="punctuation-display-math">
             <title>Punctuation After Display Math</title>
 
             <p>If a chunk of displayed math concludes a sentence, then the sentence-ending punctuation should appear at the conclusion of the display.  (And certainly not at the start of the first line after the display!)  But do not author the punctuation within the mathematics element, put it afterwards, where it logically belongs.</p>
@@ -1304,7 +1304,15 @@
 
             <p>This all applies more generally to clause-ending punctuation, such as a comma.  Take notice of the requirement that the punctuation must be <em>immediately</em> after the closing tag of the math element, otherwise it will not migrate properly.  For example, do not interrupt the flow with whitespace, or an <init>XML</init> comment, or anything else.</p>
 
+            <p>For inline mathematics (the <tag>m</tag> element) the same authoring principle holds, though you would likely do this naturally.  Author the punctuation <em>outside</em> the element, where it will remain.</p>
+
             <p>Here is a technical subtlety that will demonstrate some of the inner machinery of <pretext /> and our conversions.  In your work, locate a theorem that has some numbered display mathematics (<c>mdn</c>) which is at the end of a sentence, and which you have authored as described above.  In <init>HTML</init> output, test a cross-reference (<c>xref</c>) to the theorem and you will see the period for the end of the sentence at the end of the display, where it should be.  Now test a cross-reference (<c>xref</c>) to one of the numbered equations.  First, the knowl will contain the entire display, to provide context, but it also will not contain the period, since the rest of the sentence is not in the knowl and so the period is not necessary.</p>
+
+            <note xml:id="authoring-math-punctuation">
+                <title>Authoring Punctuation after Mathematics</title>
+
+                <p><em>Always</em> follow the instructions in <xref ref="punctuation-display-math"/> about placing all punctuation following mathematics <em>after</em> the math element, not inside it.  <pretext/> will do the right thing for display math for you.  But furthermore, there are some special situations where the output format is not visual, such as braille or audio, where the placement of the punctuation is both different and important to not confuse <q>reader.</q>  You can help ensure your various outputs are of the highest quality by observing these sorts of details.</p>
+            </note>
         </subsection>
 
         <subsection xml:id="math-list-items">
@@ -2610,6 +2618,12 @@
                 <title>Commutative Diagrams</title>
                 <p>Whenever possible, author commutative diagrams using the syntax of the <c>amscd</c> <latex/> package.  Then online and braille output will be more accessible.  See <xref ref="commutative-diagrams"/> for more.</p>
             </li>
+
+            <li>
+                <title>Punctuation after Mathematics</title>
+                <p>Periods, commas, and semi-colons that follow directly after mathematics are handled differently by <pretext/> for visual formats versus non-visual ones (e.g. braille, audio).   But this only happens if you author the punctuation in the <em>logically</em> correct location and let <pretext/> do the rest for you.  See <xref ref="authoring-math-punctuation"/> and <xref ref="punctuation-display-math"/> for details.</p>
+            </li>
+
         </dl></p>
 
         <p>Watching a blind reader navigate a web page can be a very enlightening experience.  Or you might even undertake learning one yourself.  Here are some suggestions for getting started (current on 2018-05-31).<ul>
