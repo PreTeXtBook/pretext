@@ -40,12 +40,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         for any natural number <m>n</m>. This formula is easily  verified for small numbers such as <m>n = 1</m>, 2, 3, or 4, but it is impossible to verify for all natural numbers on a case-by-case basis.  To prove the formula true in general, a more generic method is required.</p>
 
         <p>Suppose we have verified the equation for the first <m>n</m> cases.  We will attempt to show that we can generate the formula for the <m>(n + 1)</m>th case from this knowledge.  The formula is true for <m>n = 1</m> since 
-            <me>1 = \frac{1(1 + 1)}{2}.</me>
+            <me>1 = \frac{1(1 + 1)}{2}</me>.
         If we have verified the first <m>n</m> cases, then<md>
             <mrow>1 + 2 + \cdots + n + (n + 1) &amp; = \frac{n(n + 1)}{2} + n + 1</mrow>
             <mrow>&amp; = \frac{n^2 + 3n + 2}{2}</mrow>
-            <mrow>&amp; = \frac{(n + 1)[(n + 1) + 1]}{2}.</mrow>
-        </md></p>
+            <mrow>&amp; = \frac{(n + 1)[(n + 1) + 1]}{2}</mrow>
+        </md>.</p>
 
         <p>This is exactly the formula for the <m>(n + 1)</m>th case.</p>
 
@@ -64,7 +64,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <example xml:id="example-integers-induction-greater-than">
             <title>An Inequality for Powers of <m>2</m></title>
             <p>For all integers <m>n \geq 3</m>, <m>2^n \gt n + 4</m>. Since
-                <me>8 = 2^3 \gt 3 + 4 = 7,</me>
+                <me>8 = 2^3 \gt 3 + 4 = 7</me>,
             the statement is true for <m>n_0 = 3</m>.  Assume that <m>2^k \gt k + 4</m> for <m>k \geq 3</m>.  Then <m>2^{k + 1} = 2 \cdot 2^{k} \gt 2(k + 4)</m>.  But 
                 <me>2(k + 4) = 2k + 8 \gt k + 5 = (k + 1) + 4</me>
             since <m>k</m> is positive.  Hence, by induction, the statement holds for all integers <m>n \geq 3</m>.</p>
@@ -83,11 +83,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <example xml:id="example-integers-binomial-theorem">
             <title>The Binomial Theorem</title>
-            <p>We will prove the binomial theorem using mathematical induction; that is, <me>(a + b)^n = \sum_{k = 0}^{n} \binom{n}{k} a^k b^{n - k},</me> where <m>a</m> and <m>b</m> are real numbers, <m>n \in \mathbb{N}</m>, and <me>\binom{n}{k} = \frac{n!}{k! (n - k)!}</me> is the binomial coefficient.  We first show that <me>\binom{n + 1}{k} = \binom{n}{k} + \binom{n}{k - 1}.</me> This result follows from<md>
+            <p>We will prove the binomial theorem using mathematical induction; that is, <me>(a + b)^n = \sum_{k = 0}^{n} \binom{n}{k} a^k b^{n - k}</me>, where <m>a</m> and <m>b</m> are real numbers, <m>n \in \mathbb{N}</m>, and <me>\binom{n}{k} = \frac{n!}{k! (n - k)!}</me> is the binomial coefficient.  We first show that <me>\binom{n + 1}{k} = \binom{n}{k} + \binom{n}{k - 1}</me>. This result follows from<md>
                 <mrow>\binom{n}{k} + \binom{n}{k - 1} &amp; = \frac{n!}{k!(n - k)!} +\frac{n!}{(k-1)!(n - k + 1)!}</mrow>
                 <mrow>&amp; = \frac{(n + 1)!}{k!(n + 1 - k)!}</mrow>
-                <mrow>&amp; =\binom{n + 1}{k}.</mrow>
-            </md><notation>
+                <mrow>&amp; =\binom{n + 1}{k}</mrow>
+            </md>.<notation>
                 <usage>n!</usage>
                 <description><m>n</m> factorial</description>
             </notation><notation>
@@ -101,8 +101,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <mrow>&amp; = \sum_{k = 0}^{n} \binom{n}{k} a^{k + 1} b^{n - k} + \sum_{k = 0}^{n} \binom{n}{k} a^k b^{n + 1 - k}</mrow>
                 <mrow>&amp; = a^{n + 1} + \sum_{k = 1}^{n} \binom{n}{k - 1} a^{k} b^{n + 1 - k} + \sum_{k = 1}^{n} \binom{n}{k}  a^k b^{n + 1 - k} + b^{n + 1}</mrow>
                 <mrow>&amp;  = a^{n + 1} + \sum_{k = 1}^{n} \left[ \binom{n}{k - 1} + \binom{n}{k} \right]a^k b^{n + 1 - k} + b^{n + 1}</mrow>
-                <mrow>&amp;  = \sum_{k = 0}^{n + 1}   \binom{n + 1}{k} a^k b^{n + 1- k}.</mrow>
-            </md></p>
+                <mrow>&amp;  = \sum_{k = 0}^{n + 1}   \binom{n + 1}{k} a^k b^{n + 1- k}</mrow>
+            </md>.</p>
         </example>
 
         <p>We have an equivalent statement of the Principle of Mathematical Induction that is often very useful.</p>
@@ -178,13 +178,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <p>This is a perfect example of the existence-and-uniqueness type of proof.  We must first prove that the numbers <m>q</m> and <m>r</m> actually  exist. Then we must show that if  <m>q'</m> and <m>r'</m> are two other such numbers, then <m>q = q'</m> and <m>r = r'</m>.</p>
 
                     <p><em>Existence of <m>q</m> and <m>r</m>.</em> Let
-                        <me>S = \{ a - bk : k \in {\mathbb Z} \text{ and } a - bk \geq 0 \}.</me>
+                        <me>S = \{ a - bk : k \in {\mathbb Z} \text{ and } a - bk \geq 0 \}</me>.
                     If <m>0 \in S</m>, then <m>b</m> divides <m>a</m>, and  we can let <m>q = a/b</m> and <m>r = 0</m>.  If <m>0 \notin S</m>, we can use the Well-Ordering Principle.  We must first show that <m>S</m> is nonempty.  If <m>a \gt 0</m>, then <m>a - b \cdot 0 \in S</m>. If <m>a \lt 0</m>, then <m>a - b(2a) = a(1 - 2b) \in S</m>.  In either case <m>S \neq \emptyset</m>.  By the Well-Ordering Principle, <m>S</m> must have a smallest member, say <m>r = a - bq</m>. Therefore, <m>a = bq + r</m>, <m>r \geq 0</m>. We now show that <m>r \lt b</m>. Suppose that <m>r \gt b</m>. Then   
-                        <me>a - b(q + 1)= a - bq - b = r - b \gt 0.</me>
+                        <me>a - b(q + 1)= a - bq - b = r - b \gt 0</me>.
                     In this case we would have <m>a - b(q + 1)</m> in the set <m>S</m>. But then <m>a - b(q + 1) \lt a - bq</m>, which would contradict the fact that <m>r = a - bq</m> is the smallest member  of <m>S</m>. So <m>r \leq b</m>.  Since <m>0 \notin S</m>, <m>r \neq b</m> and so <m>r \lt b</m>.</p>
 
                     <p><em>Uniqueness of <m>q</m> and <m>r</m>.</em> Suppose there exist integers <m>r</m>, <m>r'</m>, <m>q</m>, and <m>q'</m> such that
-                        <me>a = bq + r, 0 \leq r \lt b \quad \text{and}\quad a = bq' + r', 0 \leq r' \lt b.</me>
+                        <me>a = bq + r, 0 \leq r \lt b \quad \text{and}\quad a = bq' + r', 0 \leq r' \lt b</me>.
                     Then <m> bq + r =  bq' + r'</m>.  Assume that <m>r' \geq r</m>.  From the last equation we have <m>b(q - q') = r' - r</m>; therefore, <m>b</m> must divide <m>r' - r</m> and <m>0 \leq r'- r \leq r' \lt b</m>.  This is possible only if <m>r' - r = 0</m>.  Hence, <m>r = r'</m> and  <m>q = q'</m>.</p>
                 </proof>
             </theorem>
@@ -194,24 +194,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <theorem xml:id="theorem-integers-gcd">
                 <statement>
                     <p>Let <m>a</m> and <m>b</m> be nonzero integers. Then there exist integers <m>r</m> and <m>s</m> such that
-                        <me>\gcd( a, b) = ar + bs.</me>
+                        <me>\gcd( a, b) = ar + bs</me>.
                     Furthermore, the greatest common divisor of <m>a</m> and <m>b</m> is unique.</p>
                 </statement>
                 <proof>
                     <p>Let
-                        <me>S = \{ am + bn : m, n \in {\mathbb Z} \text{ and } am + bn \gt 0 \}.</me>
+                        <me>S = \{ am + bn : m, n \in {\mathbb Z} \text{ and } am + bn \gt 0 \}</me>.
                     Clearly, the set <m>S</m> is nonempty; hence, by the Well-Ordering Principle <m>S</m> must have a smallest member, say <m>d = ar + bs</m>.  We claim that <m>d = \gcd( a, b)</m>.  Write <m>a = dq + r'</m> where <m>0 \leq r' \lt d</m>. If <m>r' \gt 0</m>, then<md>
                         <!-- r changed to r' - TWJ 1/31/2011 -->
                         <mrow>r'&amp; = a - dq</mrow>
                         <mrow>&amp; = a - (ar + bs)q</mrow>
                         <mrow>&amp; = a - arq - bsq</mrow>
-                        <mrow>&amp; = a( 1 - rq ) + b( -sq ),</mrow>
-                    </md></p>
-
-                    <p>which is in <m>S</m>.  But this would contradict the fact that <m>d</m> is the smallest member of <m>S</m>.  Hence, <m>r' = 0</m> and <m>d</m> divides <m>a</m>.  A similar argument shows that <m>d</m> divides <m>b</m>.  Therefore, <m>d</m> is a common divisor of <m>a</m> and <m>b</m>.</p>
+                        <mrow>&amp; = a( 1 - rq ) + b( -sq )</mrow>
+                    </md>,  which is in <m>S</m>.  But this would contradict the fact that <m>d</m> is the smallest member of <m>S</m>.  Hence, <m>r' = 0</m> and <m>d</m> divides <m>a</m>.  A similar argument shows that <m>d</m> divides <m>b</m>.  Therefore, <m>d</m> is a common divisor of <m>a</m> and <m>b</m>.</p>
 
                     <p>Suppose that <m>d'</m> is another common divisor of <m>a</m> and <m>b</m>, and we want to show that <m>d' \mid d</m>. If we let <m>a = d'h</m> and <m>b = d'k</m>, then
-                        <me>d = ar + bs = d'hr + d'ks = d'(hr + ks).</me>
+                        <me>d = ar + bs = d'hr + d'ks = d'(hr + ks)</me>.
                     So <m>d'</m> must divide <m>d</m>. Hence, <m>d</m> must be the unique greatest common divisor of <m>a</m> and <m>b</m>.</p>
                 </proof>
                 <!-- Notation error in proof fixed (pointed out by Rocco Rossi) - TWJ 9/13/2010 -->
@@ -236,8 +234,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <mrow>2415 &amp; = 945 \cdot 2 + 525</mrow>
                     <mrow>945 &amp; = 525 \cdot 1 + 420</mrow>
                     <mrow>525 &amp; = 420 \cdot 1 + 105</mrow>
-                    <mrow>420 &amp; = 105 \cdot 4 + 0.</mrow>
-                </md></p>
+                    <mrow>420 &amp; = 105 \cdot 4 + 0</mrow>
+                </md>.</p>
 
                 <p>Reversing our steps, 105 divides 420, 105 divides 525, 105 divides 945, and 105 divides 2415.  Hence, 105 divides both 945 and 2415.  If <m>d</m> were another common divisor of 945 and 2415, then <m>d</m> would also have to divide 105.  Therefore, <m>\gcd( 945, 2415 ) = 105</m>.</p>
 
@@ -246,8 +244,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <mrow>&amp; = 525 + (-1) \cdot [945 + (-1) \cdot 525]</mrow>
                     <mrow>&amp; = 2 \cdot 525 + (-1) \cdot 945</mrow>
                     <mrow>&amp; = 2 \cdot [2415 + (-2) \cdot 945] + (-1) \cdot 945</mrow>
-                    <mrow>&amp; = 2 \cdot 2415 + (-5) \cdot 945.</mrow>
-                </md></p>
+                    <mrow>&amp; = 2 \cdot 2415 + (-5) \cdot 945</mrow>
+                </md>.</p>
 
                 <p>So <m>r = -5</m> and <m>s= 2</m>.  Notice that <m>r</m> and <m>s</m> are not unique, since <m>r = 41</m> and <m>s = -16</m> would also work.</p>
             </example>
@@ -258,17 +256,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <mrow>r_1 &amp; = r_2 q_3 + r_3</mrow>
                 <mrow>&amp; \vdots </mrow>
                 <mrow>r_{n - 2} &amp; = r_{n - 1} q_{n} + r_{n}</mrow>
-                <mrow>r_{n - 1} &amp; = r_n q_{n + 1}.</mrow>
-            </md></p>
+                <mrow>r_{n - 1} &amp; = r_n q_{n + 1}</mrow>
+            </md>.</p>
 
             <p>To find <m>r</m> and <m>s</m> such that <m>ar + bs = d</m>, we begin with this last equation and substitute results obtained from the previous equations:<md>
                 <mrow>d &amp; = r_n</mrow>
                 <mrow>&amp; = r_{n - 2} - r_{n - 1} q_n</mrow>
                 <mrow>&amp; = r_{n - 2} - q_n( r_{n - 3} - q_{n - 1} r_{n - 2} )</mrow>
-                <mrow>&amp; = -q_n r_{n - 3} + ( 1+ q_n q_{n-1} ) r_{n - 2} </mrow>
+                <mrow>&amp; = -q_n r_{n - 3} + ( 1+ q_n q_{n-1} ) r_{n - 2}</mrow>
                 <mrow>&amp; \vdots </mrow>
-                <mrow>&amp; = ra + sb.</mrow>
-            </md></p>
+                <mrow>&amp; = ra + sb</mrow>
+            </md>.</p>
 
             <p>The algorithm that we have just used to find the greatest common divisor <m>d</m> of two integers <m>a</m> and <m>b</m> and to write <m>d</m> as the linear combination of <m>a</m> and <m>b</m> is known as the <term>Euclidean algorithm</term><idx><h>Euclidean algorithm</h></idx><idx><h>Algorithm</h><h>Euclidean</h></idx>.</p> 
 
@@ -287,7 +285,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </statement>
                 <proof>
                     <p>Suppose that <m>p</m> does not divide <m>a</m>.  We must show that <m>p \mid b</m>. Since <m>\gcd( a, p ) = 1</m>, there exist integers <m>r</m> and <m>s</m> such that <m>ar + ps = 1</m>.  So 
-                        <me>b = b(ar + ps) = (ab)r + p(bs).</me>
+                        <me>b = b(ar + ps) = (ab)r + p(bs)</me>.
                     Since <m>p</m> divides both <m>ab</m> and itself, <m>p</m> must divide <m>b = (ab)r + p(bs)</m>.</p>
                 </proof>
             </lemma>
@@ -310,24 +308,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <idx><h>Fundamental Theorem</h><h>of Arithmetic</h></idx>
                 <statement>
                     <p>Let <m>n</m> be an integer such that <m>n \gt 1</m>. Then
-                        <me>n = p_1 p_2 \cdots p_k,</me>
+                        <me>n = p_1 p_2 \cdots p_k</me>,
                     where <m>p_1, \ldots, p_k</m> are  primes (not necessarily distinct).  Furthermore, this factorization is unique; that is, if 
-                        <me>n = q_1 q_2 \cdots q_l,</me>
+                        <me>n = q_1 q_2 \cdots q_l</me>,
                     then <m>k = l</m> and the <m>q_i</m>'s are just the <m>p_i</m>'s rearranged.</p>
                 </statement>
                 <proof>
                     <p><em>Uniqueness.</em>  To show uniqueness we will use induction on <m>n</m>. The theorem is certainly true for <m>n = 2</m> since in this case <m>n</m> is prime.  Now assume that the result holds for all integers <m>m</m> such that <m>1 \leq m \lt n</m>, and 
-                        <me>n = p_1 p_2 \cdots p_k = q_1 q_2 \cdots q_l,</me>
+                        <me>n = p_1 p_2 \cdots p_k = q_1 q_2 \cdots q_l</me>,
                     where <m>p_1 \leq p_2 \leq \cdots \leq p_k</m> and <m>q_1 \leq q_2 \leq \cdots \leq q_l</m>. By <xref ref="theorem-integers-prime-divisor" />, <m>p_1  \mid  q_i</m> for some <m>i = 1, \ldots, l</m> and <m>q_1  \mid  p_j</m> for some <m>j = 1, \ldots, k</m>.  Since all of the <m>p_i</m>'s and <m>q_i</m>'s are prime, <m>p_1 = q_i</m> and  <m>q_1 = p_j</m>. Hence, <m>p_1 = q_1</m> since <m>p_1 \leq p_j = q_1 \leq q_i = p_1</m>.  By the induction hypothesis, 
                         <me>n' = p_2 \cdots p_k = q_2 \cdots q_l</me>
                     has a unique factorization.  Hence, <m>k = l</m> and <m>q_i = p_i</m> for <m>i = 1, \ldots, k</m>.</p>
 
                     <p><em>Existence.</em> To show existence, suppose that there is some integer that cannot be written as the product of primes.  Let <m>S</m> be the set of all such numbers.  By the Principle of Well-Ordering, <m>S</m> has a smallest number, say <m>a</m>.  If the only positive factors of <m>a</m> are <m>a</m> and 1, then <m>a</m> is prime, which is a contradiction.  Hence, <m>a = a_1 a_2</m> where <m>1 \lt a_1 \lt a</m> and <m>1 \lt a_2 \lt a</m>.  Neither <m>a_1\in S</m> nor <m>a_2 \in S</m>, since <m>a</m> is the smallest element in <m>S</m>.  So<md>
                         <mrow>a_1 &amp; = p_1 \cdots p_r</mrow>
-                        <mrow>a_2 &amp; = q_1 \cdots q_s.</mrow>
-                    </md></p>
+                        <mrow>a_2 &amp; = q_1 \cdots q_s</mrow>
+                    </md>.</p>
 
-                    <p>Therefore, <me>a = a_1 a_2 = p_1 \cdots p_r q_1 \cdots q_s.</me>  So <m>a \notin S</m>, which is a contradiction.</p>
+                    <p>Therefore, <me>a = a_1 a_2 = p_1 \cdots p_r q_1 \cdots q_s</me>.  So <m>a \notin S</m>, which is a contradiction.</p>
                 </proof>
             </theorem>
 
@@ -367,10 +365,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <idx><h>Ackermann's function</h></idx>
             <statement>
                 <p>Let <m>{\mathbb N}^0 = {\mathbb N} \cup \{ 0 \}</m>. Ackermann's function is the function <m>A :{\mathbb N}^0 \times {\mathbb N}^0 \rightarrow {\mathbb N}^0</m> defined by the equations<md>
-                    <mrow>A(0, y) &amp; = y + 1,</mrow>
-                    <mrow>A(x + 1, 0) &amp; = A(x, 1),</mrow>
-                    <mrow>A(x + 1, y + 1) &amp; = A(x, A(x + 1, y)).</mrow>
-                </md></p>
+                    <mrow>A(0, y) &amp; = y + 1</mrow>
+                    <mrow>A(x + 1, 0) &amp; = A(x, 1)</mrow>
+                    <mrow>A(x + 1, y + 1) &amp; = A(x, A(x + 1, y))</mrow>
+                </md>.</p>
 
                 <p>Use this definition to compute <m>A(3, 1)</m>.  Write a program to evaluate Ackermann's function.  Modify the  program to count the number of statements executed in the program when Ackermann's function is evaluated.  How many statements are executed in the evaluation of <m>A(4, 1)</m>?  What about <m>A(5, 1)</m>?</p>
             </statement>
@@ -379,7 +377,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <exercise>
             <statement>
                 <p>Write a computer program that will implement the Euclidean algorithm.  The program should accept two positive integers <m>a</m> and <m>b</m> as input and should output <m>\gcd( a,b)</m> as well as integers <m>r</m> and <m>s</m> such that 
-                    <me>\gcd( a,b) = ra + sb.</me></p>
+                    <me>\gcd( a,b) = ra + sb</me>.</p>
             </statement>
         </exercise>
 

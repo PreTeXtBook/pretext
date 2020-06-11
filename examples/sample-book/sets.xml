@@ -49,24 +49,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <li><p>All cats are black.</p></li>
                 <li><p><m>2 + 3 = 5</m>.</p></li>
                 <li><p><m>2x = 6</m> exactly when <m>x = 4</m>.</p></li>
-                <li><p>If <m>ax^2 + bx + c = 0</m> and <m>a \neq 0</m>, then <me>x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}.</me></p></li>
+                <li><p>If <m>ax^2 + bx + c = 0</m> and <m>a \neq 0</m>, then <me>x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}</me>.</p></li>
                 <li><p><m>x^3 - 4x^2 + 5 x - 6</m>.</p></li>
             </ul>All but the first and last examples are statements, and must be either true or false.</p> 
 
             <p>A <term>mathematical proof</term> is nothing more than a convincing argument about the accuracy  of a statement. Such an argument should contain enough detail to convince the audience; for instance, we can see that the statement <q><m>2x = 6</m> exactly when <m>x = 4</m></q> is false by evaluating <m>2 \cdot 4</m> and noting that <m>6 \neq 8</m>, an argument that would satisfy anyone. Of course, audiences may vary widely: proofs can be addressed to another student, to a professor, or to the reader of a text.  If more detail than  needed is presented in the proof, then the  explanation will be either long-winded or poorly written.  If too much detail is omitted, then the proof may  not be convincing.  Again it is important to keep the audience in mind.  High school students require much more detail than do graduate students.  A good rule of thumb for an argument in an introductory abstract algebra course is that it should be written to convince one's peers, whether those peers be other students or other readers of the text.</p>
 
             <p>Let us examine different types of statements.  A statement could be as simple as <q><m>10/5 = 2</m>;</q> however, mathematicians are usually interested in more complex statements such as <q>If <m>p</m>, then <m>q</m>,</q> where <m>p</m> and <m>q</m> are both statements.  If certain statements are known or assumed to be true, we wish to know what we can say about other statements.  Here <m>p</m> is called the <term>hypothesis</term> and <m>q</m> is known as the <term>conclusion</term>.  Consider the following statement: If <m>ax^2 + bx + c = 0</m> and <m>a \neq 0</m>, then  
-                <me>x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}.</me>
+                <me>x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}</me>.
             The hypothesis is <m>ax^2 + bx + c = 0</m> and <m>a \neq 0</m>; the conclusion is 
-                <me>x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}.</me>
+                <me>x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}</me>.
             Notice that the  statement says nothing about whether or not the hypothesis is true. However, if this entire statement is true and we can show that <m>ax^2 + bx + c = 0</m> with <m>a \neq 0</m> is true, then the conclusion <em>must</em> be true.  A proof of this statement might simply be a series of equations:<md>
                 <mrow>ax^2 + bx + c &amp; =  0</mrow>
                 <mrow>x^2 + \frac{b}{a}x &amp; =  - \frac{c}{a}</mrow>
                 <mrow>x^2 + \frac{b}{a}x + \left( \frac{b}{2a} \right)^2 &amp; =  \left( \frac{b}{2a} \right)^2 - \frac{c}{a}</mrow>
                 <mrow>\left(x + \frac{b}{2a} \right)^2 &amp; =  \frac{b^2 - 4ac}{4a^2}</mrow>
                 <mrow>x + \frac{b}{2a}  &amp; =  \frac{ \pm \sqrt{ b^2 -4ac}}{2a}</mrow>
-                <mrow>x &amp; =  \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}.</mrow>
-            </md></p>
+                <mrow>x &amp; =  \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}</mrow>
+            </md>.</p>
 
             <p>If we can prove a statement true, then that statement is called a <term>proposition</term>.  A proposition of major importance is called a <term>theorem</term>.  Sometimes instead of proving a theorem or proposition all at once, we break the proof down into modules; that is, we prove several supporting propositions, which are called <term>lemmas</term>, and use the results of these propositions to prove the main result. If we can prove a proposition or a theorem, we will often, with very little effort, be able to derive other related propositions called <term>corollaries</term>.</p>
 
@@ -106,16 +106,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             for a set containing elements <m>x_1, x_2, \ldots, x_n</m> or
                 <me>X = \{ x :x \text{ satisfies }{\mathcal P}\}</me>
             if each <m>x</m> in <m>X</m> satisfies a certain property <m>{\mathcal P}</m>.  For example, if <m>E</m> is the set of even positive integers, we can describe <m>E</m> by writing either 
-                <me>E = \{2, 4, 6, \ldots \} \quad \text{or} \quad E = \{ x : x \text{ is an even integer and } x \gt 0 \}.</me>
+                <me>E = \{2, 4, 6, \ldots \} \quad \text{or} \quad E = \{ x : x \text{ is an even integer and } x \gt 0 \}</me>.
             We write <m>2 \in E</m> when we want to say that 2 is in the set <m>E</m>, and <m>-3 \notin E</m> to say that <m>-3</m> is not in the set <m>E</m>.</p>
 
             <p>Some of the more important sets that we will consider are the following:<md>
-                <mrow>{\mathbb N} &amp;= \{n: n \text{ is a natural number}\}  = \{1, 2, 3, \ldots \};</mrow>
-                <mrow>{\mathbb Z} &amp;= \{n : n \text{ is an integer} \} = \{\ldots, -1, 0, 1,  2, \ldots \};</mrow>
-                <mrow>{\mathbb Q} &amp;= \{r : r \text{ is a rational number}\} = \{p/q : p, q \in {\mathbb Z} \text{ where } q \neq 0\};</mrow>
-                <mrow>{\mathbb R} &amp;= \{ x : x \text{ is a real number} \};</mrow>
-                <mrow>{\mathbb C} &amp;= \{z : z \text{ is a complex number}\}.</mrow>
-            </md><notation>
+                <mrow>{\mathbb N} &amp;= \{n: n \text{ is a natural number}\}  = \{1, 2, 3, \ldots \}</mrow>
+                <mrow>{\mathbb Z} &amp;= \{n : n \text{ is an integer} \} = \{\ldots, -1, 0, 1,  2, \ldots \}</mrow>
+                <mrow>{\mathbb Q} &amp;= \{r : r \text{ is a rational number}\} = \{p/q : p, q \in {\mathbb Z} \text{ where } q \neq 0\}</mrow>
+                <mrow>{\mathbb R} &amp;= \{ x : x \text{ is a real number} \}</mrow>
+                <mrow>{\mathbb C} &amp;= \{z : z \text{ is a complex number}\}</mrow>
+            </md>.<notation>
                 <usage>{\mathbb N}</usage>
                 <description>the natural numbers</description>
             </notation><notation>
@@ -135,17 +135,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>We can find various relations between sets as well as perform operations on sets.  A set <m>A</m> is a <term>subset</term> of <m>B</m>, written <m>A \subset B</m> or <m>B \supset A</m>, if every element of <m>A</m> is also an element of <m>B</m>.  <notation><usage>A \subset B</usage><description><m>A</m> is a subset of <m>B</m></description></notation> For example,  
                 <me>\{4,5,8\} \subset \{2, 3, 4, 5, 6, 7, 8, 9 \}</me>
             and
-                <me>{\mathbb N} \subset {\mathbb Z} \subset {\mathbb Q} \subset {\mathbb R} \subset {\mathbb C}.</me>
+                <me>{\mathbb N} \subset {\mathbb Z} \subset {\mathbb Q} \subset {\mathbb R} \subset {\mathbb C}</me>.
             Trivially, every set is a subset of itself.  A set <m>B</m> is a <term>proper subset</term> of a set <m>A</m> if <m>B \subset A</m> but <m>B \neq A</m>. If <m>A</m> is not a subset of <m>B</m>, we write <m>A \notsubset B</m>; for example, <m>\{4, 7, 9\} \notsubset \{2, 4, 5,  8, 9 \}</m>.  Two sets are <term>equal</term>, written <m>A = B</m>, if we can show that <m>A \subset B</m> and <m>B \subset A</m>.</p>
 
             <p>It is convenient to have a set with no elements in it.  This set is called the <term>empty set</term> and is denoted by <m>\emptyset</m>.  Note that the empty set is a subset of every set. <notation><usage>\emptyset</usage><description>the empty set</description></notation></p>  	
 
             <p>To construct new sets out of old sets, we can perform certain operations: the <term>union</term> <m>A \cup B</m> of two sets <m>A</m> and <m>B</m> is defined as  
-                <me>A \cup B = \{x : x \in A \text{ or } x \in B \};</me>
-            the <term>intersection</term> of <m>A</m> and <m>B</m>  is defined by
-                <me>A \cap B = \{x :  x \in A \text{ and } x \in B \}.</me>
+                <me>A \cup B = \{x : x \in A \text{ or } x \in B \}</me>
+            and the <term>intersection</term> of <m>A</m> and <m>B</m>  is defined by
+                <me>A \cap B = \{x :  x \in A \text{ and } x \in B \}</me>.
             <notation><usage>A \cup B</usage><description>the union of sets <m>A</m> and <m>B</m></description></notation><notation><usage>A \cap B</usage><description>the intersection of sets <m>A</m> and <m>B</m></description></notation> If <m>A = \{1, 3, 5\}</m> and <m>B = \{ 1, 2, 3, 9 \}</m>, then
-                <me>A \cup B = \{1, 2, 3, 5, 9 \} \quad \text{and} \quad A \cap B = \{ 1, 3 \}.</me>
+                <me>A \cup B = \{1, 2, 3, 5, 9 \} \quad \text{and} \quad A \cap B = \{ 1, 3 \}</me>.
             We can consider the union and the intersection of more than two sets.  In this case we write 
                 <me>\bigcup_{i = 1}^{n} A_{i} = A_{1} \cup \ldots \cup A_n</me>
             and
@@ -157,21 +157,21 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>When two sets have no elements in common, they are said to be <term>disjoint</term>; for example, if <m>E</m> is the set of even integers and <m>O</m> is the set of odd integers, then <m>E</m> and <m>O</m> are disjoint.  Two sets <m>A</m> and <m>B</m> are disjoint exactly when <m>A \cap B = \emptyset</m>.</p> 
 
             <p>Sometimes we will work within one fixed set <m>U</m>, called the <term>universal set</term>.  For any set <m>A \subset U</m>, we define the <term>complement</term> of <m>A</m>, denoted by <m>A'</m>, to be the set <notation><usage>A'</usage><description>complement of the set <m>A</m></description></notation>
-                <me>A' = \{ x : x \in U \text{ and } x \notin A \}.</me></p>		
+                <me>A' = \{ x : x \in U \text{ and } x \notin A \}</me>.</p>		
 
             <p>We define the <term>difference</term> of two sets <m>A</m> and <m>B</m> to be <notation><usage>A \setminus B</usage><description>difference between sets <m>A</m> and <m>B</m></description></notation>
-                <me>A \setminus B = A \cap B'  = \{ x : x \in A \text{ and } x \notin B \}.</me></p>
+                <me>A \setminus B = A \cap B'  = \{ x : x \in A \text{ and } x \notin B \}</me>.</p>
 
         <example xml:id="example-sets-operations">
             <title>Set Operations</title>
             <p>Let <m>{\mathbb R}</m> be the universal set and suppose that
-                <me>A = \{ x \in {\mathbb R} : 0 \lt x \leq 3 \} \quad \text{and} \quad B = \{ x \in {\mathbb R} : 2 \leq x \lt 4 \}.</me>
+                <me>A = \{ x \in {\mathbb R} : 0 \lt x \leq 3 \} \quad \text{and} \quad B = \{ x \in {\mathbb R} : 2 \leq x \lt 4 \}</me>.
             Then<md>
                 <mrow>A \cap B &amp; =  \{ x \in {\mathbb R} : 2 \leq x \leq 3 \}</mrow>
                 <mrow>A \cup B &amp; =  \{ x \in {\mathbb R} : 0 \lt x \lt 4 \}</mrow>
                 <mrow>A \setminus B &amp; =  \{ x \in {\mathbb R} : 0 \lt x \lt 2  \}</mrow>
-                <mrow>A' &amp; =  \{ x \in {\mathbb R} : x \leq 0 \text{ or } x \gt 3 \}.</mrow>
-            </md></p>
+                <mrow>A' &amp; =  \{ x \in {\mathbb R} : x \leq 0 \text{ or } x \gt 3 \}</mrow>
+            </md>.</p>
         </example>
 
         <proposition>
@@ -195,8 +195,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <intertext>and</intertext>
                     <mrow>A \cap A &amp; =  \{ x : x \in A \text{ and } x \in A \}</mrow>
                     <mrow>&amp; =  \{ x : x \in A  \}</mrow>
-                    <mrow>&amp; =  A.</mrow>
-                </md></p>
+                    <mrow>&amp; =  A</mrow>
+                </md>.</p>
 
                 <p>Also, <m>A \setminus A = A \cap A' = \emptyset</m>.</p>
 
@@ -233,12 +233,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <example xml:id="example-sets-other-relations">
             <title>Other Relations on Sets</title>
             <p>Other relations between sets often hold true. For example,
-                <me>( A \setminus B) \cap (B \setminus A) = \emptyset.</me>
+                <me>( A \setminus B) \cap (B \setminus A) = \emptyset</me>.
             To see that this is true, observe that<md>
                 <mrow>( A \setminus B) \cap (B \setminus A) &amp; = ( A \cap B') \cap (B \cap A')</mrow>
                 <mrow>&amp; = A \cap A' \cap B \cap B'</mrow>
-                <mrow>&amp; = \emptyset.</mrow>
-            </md></p>
+                <mrow>&amp; = \emptyset</mrow>
+            </md>.</p>
         </example>
 
     </subsection>
@@ -247,18 +247,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <title>Cartesian Products and Mappings</title>
 
             <p>Given sets <m>A</m> and <m>B</m>, we can define a new set <m>A \times B</m>, called the <term>Cartesian product</term>  of <m>A</m> and <m>B</m>, as a set of ordered pairs.  That is, <notation><usage>A \times B</usage><description>Cartesian product of sets <m>A</m> and <m>B</m></description></notation>
-                <me>A \times B = \{ (a,b) : a \in A \text{ and } b \in B \}.</me></p>
+                <me>A \times B = \{ (a,b) : a \in A \text{ and } b \in B \}</me>.</p>
 
         <example xml:id="example-sets-cartesian-products">
             <title>Cartesian Products</title>
             <p>If <m>A = \{ x, y \}</m>, <m>B = \{ 1, 2, 3 \}</m>, and <m>C = \emptyset</m>, then <m>A \times B</m> is the set 
                 <me>\{ (x, 1), (x, 2), (x, 3), (y, 1), (y, 2), (y, 3) \}</me>
             and
-                <me>A \times C = \emptyset.</me></p>
+                <me>A \times C = \emptyset</me>.</p>
         </example>
 
         <p>We define the <term>Cartesian product of <m>n</m> sets</term> to be
-            <me>A_1 \times \cdots \times A_n = \{ (a_1, \ldots, a_n): a_i \in A_i \text{ for } i = 1, \ldots, n \}.</me>
+            <me>A_1 \times \cdots \times A_n = \{ (a_1, \ldots, a_n): a_i \in A_i \text{ for } i = 1, \ldots, n \}</me>.
         If <m>A = A_1 = A_2 = \cdots = A_n</m>, we often write <m>A^n</m> for <m>A \times \cdots \times A</m> (where <m>A</m> would be written <m>n</m> times).  <notation><usage>A^n</usage><description><m>A \times \cdots \times A</m> (<m>n</m> times)</description></notation>For example, the set <m>{\mathbb R}^3</m> consists of all of 3-tuples of real numbers.</p>
 
 
@@ -398,7 +398,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>Let <m>f(x) = x^2</m> and <m>g(x) = 2x + 5</m>. Then
                 <me>(f \circ g)(x) = f(g(x)) = (2x + 5)^2 = 4x^2 + 20x + 25</me>
             and
-                <me>(g \circ f)(x) = g(f(x)) = 2x^2 + 5.</me>
+                <me>(g \circ f)(x) = g(f(x)) = 2x^2 + 5</me>.
             In general, order makes a difference; that is, in most cases <m>f \circ g \neq g \circ f</m>.</p>
         </example>
 
@@ -407,7 +407,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <p>Sometimes it is the case that <m>f \circ g= g \circ f</m>.  Let <m>f(x) = x^3</m> and <m>g(x) = \sqrt[3]{x}</m>. Then 
                 <me>(f \circ g )(x) = f(g(x)) = f( \sqrt[3]{x}\, ) = (\sqrt[3]{x}\, )^3 = x</me>
             and
-                <me>(g \circ f )(x) = g(f(x)) = g( x^3) = \sqrt[3]{ x^3} = x.</me></p>
+                <me>(g \circ f )(x) = g(f(x)) = g( x^3) = \sqrt[3]{ x^3} = x</me>.</p>
         </example>
 
         <example xml:id="example-sets-linear-map">
@@ -417,7 +417,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 \begin{pmatrix}<![CDATA[
                 a & b \\
                 c & d
-                ]]>\end{pmatrix},</me>
+                ]]>\end{pmatrix}</me>,
             we can define a map <m>T_A : {\mathbb R}^2 \rightarrow {\mathbb R}^2</m> by 
                 <me>T_A (x,y) = (ax + by, cx +dy)</me>
             for <m>(x,y)</m> in <m>{\mathbb R}^2</m>.  This is actually matrix multiplication; that is,
@@ -432,14 +432,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 \begin{pmatrix}<![CDATA[
                 ax + by \\
                 cx +dy
-                ]]>\end{pmatrix}.</me>
+                ]]>\end{pmatrix}</me>.
             Maps from <m>{\mathbb R}^n</m> to <m>{\mathbb R}^m</m> given by matrices are called <term>linear maps</term> or <term>linear transformations</term><idx><h>Linear transformation</h><h>definition of</h></idx>.</p>
         </example>
 
         <example xml:id="example-sets-permutation">
             <title>A Permutation</title>
             <p>Suppose that <m>S = \{ 1,2,3  \}</m>. Define a map <m>\pi :S\rightarrow S</m> by 
-                <me>\pi( 1 )  = 2, \qquad \pi( 2 )  = 1, \qquad \pi( 3 )  = 3.</me>
+                <me>\pi( 1 )  = 2, \qquad \pi( 2 )  = 1, \qquad \pi( 3 )  = 3</me>.
             This is a bijective map.  An alternative way to  write <m>\pi</m> is
                 <me>\begin{pmatrix}<![CDATA[
                 1 & 2 & 3 \\
@@ -449,7 +449,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 \begin{pmatrix}<![CDATA[
                 1 & 2 & 3 \\
                 2 & 1 & 3
-                ]]>\end{pmatrix}.</me>
+                ]]>\end{pmatrix}</me>.
             For any set <m>S</m>, a one-to-one and onto mapping <m>\pi : S \rightarrow S</m> is called a <term>permutation</term><idx><h>Permutation</h><h>definition of</h></idx> of <m>S</m>.</p>
         </example>
 
@@ -466,16 +466,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <p>We will prove (1) and (3). Part (2) is left as an exercise.  Part (4) follows directly from (2) and (3).</p> 
 
                 <p>(1) We must show that
-                    <me>h \circ (g \circ f) = (h \circ g) \circ f.</me>
+                    <me>h \circ (g \circ f) = (h \circ g) \circ f</me>.
                 For <m>a \in A</m> we have<md>
                     <mrow>(h \circ (g \circ f))(a) &amp; = h((g \circ f)(a))</mrow>
                     <mrow>&amp; = h(g(f(a))) </mrow>
                     <mrow>&amp; = (h \circ g)(f(a))</mrow>
-                    <mrow>&amp; = ((h \circ g) \circ f)(a).</mrow>
-                </md></p>
+                    <mrow>&amp; = ((h \circ g) \circ f)(a)</mrow>
+                </md>.</p>
 
                 <p>(3) Assume that <m>f</m> and <m>g</m> are both onto functions. Given <m>c \in C</m>, we must show that there exists an <m>a \in A</m> such that <m>(g \circ f)(a) = g(f(a)) = c</m>. However, since <m>g</m> is onto, there is an element <m>b \in B</m> such that <m>g(b) = c</m>. Similarly, there is an <m>a \in A</m> such that <m>f(a) = b</m>. Accordingly, 
-                    <me>(g \circ f)(a) = g(f(a)) = g(b) = c.</me></p>
+                    <me>(g \circ f)(a) = g(f(a)) = g(b) = c</me>.</p>
             </proof>
         </theorem>
 
@@ -502,19 +502,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     \begin{pmatrix}<![CDATA[
                     3 & 1 \\
                     5 & 2
-                    ]]>\end{pmatrix}.</me>
+                    ]]>\end{pmatrix}</me>.
                 Then <m>A</m> defines a map from <m>{\mathbb R}^2</m> to <m>{\mathbb R}^2</m> by
-                    <me>T_A (x,y) = (3x +  y, 5x + 2y).</me>
+                    <me>T_A (x,y) = (3x +  y, 5x + 2y)</me>.
                 We can find an inverse map of <m>T_A</m> by simply inverting the matrix <m>A</m>; that is, <m>T_A^{-1} = T_{A^{-1}}</m>. In this example,
                     <me>A^{-1} =
                     \begin{pmatrix}<![CDATA[
                     2  & -1 \\
                     -5 &  3
-                    ]]>\end{pmatrix};</me>
-                hence, the inverse map is given by
-                    <me>T_A^{-1} (x,y) = (2x -  y, -5x + 3y).</me>
+                    ]]>\end{pmatrix}</me>
+                and hence, the inverse map is given by
+                    <me>T_A^{-1} (x,y) = (2x -  y, -5x + 3y)</me>.
                 It is easy to check that
-                    <me>T^{-1}_A \circ T_A (x,y) = T_A \circ T_A^{-1} (x,y) = (x,y).</me>
+                    <me>T^{-1}_A \circ T_A (x,y) = T_A \circ T_A^{-1} (x,y) = (x,y)</me>.
                 Not every map has an inverse.  If we consider the map
                     <me>T_B (x,y) = (3x , 0 )</me>
                 given by the matrix
@@ -522,7 +522,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     \begin{pmatrix}<![CDATA[
                     3 & 0 \\
                     0 & 0
-                    ]]>\end{pmatrix},</me>
+                    ]]>\end{pmatrix}</me>,
                 then an inverse map would have to be of the form
                     <me>T_B^{-1} (x,y) = (ax + by, cx +dy)</me>
                 and
@@ -574,7 +574,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <example xml:id="example-sets-equivalent-fractions">
                 <title>Equivalent Fractions</title>
                 <p>Let <m>p</m>, <m>q</m>, <m>r</m>, and <m>s</m> be integers, where <m>q</m> and <m>s</m> are nonzero.  Define <m>p/q \sim r/s</m> if <m>ps = qr</m>.  Clearly <m>\sim</m> is reflexive and symmetric.  To show that it is also transitive, suppose that <m>p/q \sim r/s</m> and <m>r/s \sim t/u</m>, with <m>q</m>, <m>s</m>, and <m>u</m> all nonzero.  Then <m>ps = qr</m> and <m>ru = st</m>. Therefore, 
-                    <me>psu = qru = qst.</me>
+                    <me>psu = qru = qst</me>.
                 Since <m>s \neq 0</m>, <m>pu = qt</m>. Consequently, <m>p/q \sim t/u</m>.</p>
             </example>
 
@@ -603,23 +603,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     \begin{pmatrix}<![CDATA[
                     -18 & 33 \\
                     -11 & 20
-                    ]]>\end{pmatrix},</me>
+                    ]]>\end{pmatrix}</me>,
                 then <m>A \sim B</m> since <m>PAP^{-1} = B</m> for
                     <me>P =
                     \begin{pmatrix}<![CDATA[
                     2 & 5 \\
                     1 & 3
-                    ]]>\end{pmatrix}.</me>
+                    ]]>\end{pmatrix}</me>.
                     Let <m>I</m> be the <m>2 \times 2</m> identity matrix; that is,
                     <me>I =
                     \begin{pmatrix}<![CDATA[
                     1 & 0 \\
                     0 & 1
-                    ]]>\end{pmatrix}.</me>
+                    ]]>\end{pmatrix}</me>.
                 Then <m>IAI^{-1} = IAI = A</m>; therefore, the relation is reflexive.  To show symmetry, suppose that <m>A \sim B</m>.  Then there exists an invertible matrix <m>P</m> such that <m>PAP^{-1} = B</m>.  So 
-                    <me>A = P^{-1} B P = P^{-1} B (P^{-1})^{-1}.</me>
+                    <me>A = P^{-1} B P = P^{-1} B (P^{-1})^{-1}</me>.
                 Finally, suppose that <m>A \sim B</m> and <m>B \sim C</m>.  Then there exist invertible matrices <m>P</m> and <m>Q</m> such that <m>PAP^{-1} = B</m> and  <m>QBQ^{-1} = C</m>.  Since 
-                    <me>C = QBQ^{-1} = QPAP^{-1} Q^{-1} = (QP)A(QP)^{-1},</me>
+                    <me>C = QBQ^{-1} = QPAP^{-1} Q^{-1} = (QP)A(QP)^{-1}</me>,
                 the relation is transitive.  Two matrices that are equivalent in this manner are said to be <term>similar</term><idx><h>Matrix</h><h>similar</h></idx>.</p>
             </example>
 
@@ -662,16 +662,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <example xml:id="example-sets-congruent-integers">
                 <title>A Partition of Integers</title>
                 <p>Let <m>r</m> and <m>s</m> be two integers and suppose that <m>n \in {\mathbb N}</m>.  We say that <m>r</m> is <term>congruent</term><idx><h>Congruence modulo <m>n</m></h></idx> to <m>s</m> <term>modulo</term> <m>n</m>, or <m>r</m> is congruent to <m>s</m> mod <m>n</m>, if <m>r - s</m> is evenly divisible by <m>n</m>; that is, <m>r - s = nk</m>  for some <m>k \in {\mathbb Z}</m>.  In this case we write <m>r \equiv s \pmod{n}</m>.  <notation><usage>a \equiv b \pmod{n}</usage><description><m>a</m> is congruent to <m>b</m> modulo <m>n</m></description></notation>  For example, <m>41 \equiv 17 \pmod{ 8}</m> since <m>41 - 17=24</m> is divisible by 8.  We claim that congruence modulo <m>n</m> forms an equivalence relation of <m>{\mathbb Z}</m>.  Certainly any integer <m>r</m> is equivalent to itself since <m>r - r = 0</m> is divisible by <m>n</m>.  We will now show that the relation is symmetric.  If <m>r \equiv s \pmod{ n}</m>, then <m>r - s = -(s -r)</m> is divisible by <m>n</m>. So <m>s - r</m> is divisible by <m>n</m> and <m>s \equiv r \pmod{ n}</m>.  Now suppose that <m>r \equiv s \pmod{ n}</m> and <m>s \equiv t \pmod{ n}</m>.  Then there exist integers <m>k</m> and <m>l</m> such that <m>r -s = kn</m> and <m>s - t = ln</m>.  To show transitivity, it is necessary to prove that <m>r - t</m> is divisible by <m>n</m>.  However,   
-                    <me>r - t = r - s + s - t = kn + ln = (k + l)n,</me>
+                    <me>r - t = r - s + s - t = kn + ln = (k + l)n</me>,
                 and so <m>r - t</m> is divisible by <m>n</m>.</p>
 
 
 
                 <p>If we consider the equivalence relation established by the integers modulo 3, then<md>
-                    <mrow>{[0]} &amp; = \{ \ldots, -3, 0, 3, 6, \ldots \},</mrow>
-                    <mrow>{[1]} &amp; = \{ \ldots, -2, 1, 4, 7, \ldots \},</mrow>
-                    <mrow>{[2]} &amp; = \{ \ldots, -1, 2, 5, 8, \ldots \}.</mrow>
-                </md></p>
+                    <mrow>{[0]} &amp; = \{ \ldots, -3, 0, 3, 6, \ldots \}</mrow>
+                    <mrow>{[1]} &amp; = \{ \ldots, -2, 1, 4, 7, \ldots \}</mrow>
+                    <mrow>{[2]} &amp; = \{ \ldots, -1, 2, 5, 8, \ldots \}</mrow>
+                </md>.</p>
 
                 <p>Notice that <m>[0] \cup [1] \cup [2] = {\mathbb Z}</m> and also that the sets are disjoint.  The sets <m>[0]</m>, <m>[1]</m>, and <m>[2]</m> form a partition of the integers.</p>
 
