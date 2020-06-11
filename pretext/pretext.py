@@ -47,7 +47,17 @@ def mathjax_latex(xml_source, result, math_format):
 
     _debug('temporary directory for MathJax work: {}'.format(tmp_dir))
     _debug('extracting LaTeX from {} and collected in {}'.format(xml_source, mjinput))
-    xsltproc(extraction_xslt, xml_source, mjinput)
+
+    # SVG, MathML, and PNG are visual and we help authors move punctuation into
+    # displays, but not into inline versions.  Nemeth braille and speech are not,
+    # so we leave punctuation outside.
+    if math_format in ['svg', 'mml']:
+        punctuation = 'display'
+    elif math_format in ['nemeth', 'speech']:
+        punctuation = 'none'
+    params = {}
+    params['math.punctuation'] = punctuation
+    xsltproc(extraction_xslt, xml_source, mjinput, None, params)
 
     # shell out to process with MathJax
     # mjpage can return "innerHTML" w/ --fragment, which we

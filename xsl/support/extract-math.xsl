@@ -55,6 +55,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Output an HTML for MathJax to consume page -->
 <xsl:output method="xml" omit-xml-declaration="yes" doctype-system="about:legacy-compat"/>
 
+<!-- This stylesheet is parameterized by how trailing punctuation       -->
+<!-- is handled by math elements.  An  xsl:param  immediately overrides -->
+<!-- the global cross-stylesheet variable, to counteract how the HTML   -->
+<!-- routinely incorporates trailing punctuation into the LaTeX math.   -->
+<!-- The param default is the same as the variable default.             -->
+<!-- NB: a stylesheet that eventually consumes this math will need to   -->
+<!-- use the modal "get-clause-punctuation" template to coordinate with -->
+<!-- what happens here.  Give the global varible the same value and     -->
+<!-- then the "get-clause-punctuation" used at the end of the           -->
+<!-- construction of the math element should produce the right action.  -->
+<xsl:param name="math.punctuation" select="'none'"/>
+<xsl:variable name="math.punctuation.include" select="$math.punctuation"/>
+
 <!-- No special wrapping needed, so just copy the content -->
 <xsl:template match="me|men|md|mdn" mode="display-math-wrapper">
     <xsl:param name="content" />
