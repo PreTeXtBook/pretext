@@ -20,13 +20,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************-->
 
 <!-- A conversion to "stock" PreTeXt HTML, but optimized as an     -->
-<!-- eventual input for teh liblouis system to produce Grade 2     -->
+<!-- eventual input for the liblouis system to produce Grade 2     -->
 <!-- and Nemeth Braille into BRF format with ASCII Braille         -->
 <!-- (encoding the 6-dot-patterns of cells with 64 well-behaved    -->
-<!-- ASCII characters).  By itself theis conversion is not useful. -->
+<!-- ASCII characters).  By itself this conversion is not useful.  -->
 <!-- The math bits (as LaTeX) need to be converted to Braille by   -->
-<!-- MathJax and Speech Rules Engine, and then fed to              -->
-<!-- liblouisutdml's  file2brl  program.                           -->
+<!-- MathJax and Speech Rules Engine, saved in a structured file   -->
+<!-- and pulled in here as replacements for the authored LaTeX.    -->
+<!-- Then we apply liblouisutdml's  file2brl  program.             -->
 
 <!-- http://pimpmyxslt.com/articles/entity-tricks-part2/ -->
 <!DOCTYPE xsl:stylesheet [
@@ -42,8 +43,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     exclude-result-prefixes="pi"
     >
 
-<!-- desire HTML output, but primarily content -->
-<xsl:import href="pretext-html.xsl" />
+<!-- Trade on HTML markup, numbering, chunking, etc.        -->
+<!-- Override as pecularities of liblouis conversion arise  -->
+<!-- NB: this will import -assembly and -common stylesheets -->
+<xsl:import href="./mathbook-html.xsl" />
 
 <!-- Output (xsl:output) is controlled by an explicit exsl:document() call -->
 <!-- later, for better control over the header of the resulting file       -->
@@ -51,7 +54,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- This variable is exclusive to the (imported) HTML conversion -->
 <!-- stylesheet.  It is defined there as false() and here we      -->
 <!-- redefine it as true().  This allows for minor variations     -->
-<!-- to be made in that stylesheet conditionally.                 -->
+<!-- to be made in the -html stylesheet conditionally.            -->
 <xsl:variable name="b-braille" select="true()"/>
 
 <!-- Only need one monolithic file, how to chunk -->
@@ -75,9 +78,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ############## -->
 
 <!-- These two templates are similar to those of  pretext-html.xsl. -->
-<!-- Primarily the production of cross-reference ("xref") knowls     -->
-<!-- has been removed.                                               -->
-
+<!-- Primarily the production of cross-reference ("xref") knowls    -->
+<!-- has been removed.                                              -->
 <xsl:template match="/">
     <xsl:apply-templates/>
 </xsl:template>
