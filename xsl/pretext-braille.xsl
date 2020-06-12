@@ -1,4 +1,4 @@
-<?xml version='1.0'?>
+<?xml version='1.0' encoding="UTF-8"?>
 
 <!--********************************************************************
 Copyright 2019 Robert A. Beezer
@@ -45,7 +45,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- desire HTML output, but primarily content -->
 <xsl:import href="pretext-html.xsl" />
 
-<xsl:output method="xml" indent="yes" encoding="UTF-8"/>
+<!-- Output (xsl:output) is controlled by an explicit exsl:document() call -->
+<!-- later, for better control over the header of the resulting file       -->
 
 <!-- This variable is exclusive to the (imported) HTML conversion -->
 <!-- stylesheet.  It is defined there as false() and here we      -->
@@ -109,20 +110,24 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Page Construction -->
 <!-- ################# -->
 
-<!-- A greatly simplified file-wrap template      -->
-<!-- Drop file output, so we can script on stdout -->
+<!-- A greatly simplified file-wrap template -->
+<!-- We hard-code the name of the output file as   -->
+<!-- "liblouis-precursor.html" and ensure here     -->
+<!-- that we get an XML declaration, indentation,  -->
+<!-- and encoding.  file2brl seems to be sensitive -->
+<!-- to the form of the header of the output here. -->
 <xsl:template match="*" mode="file-wrap">
     <xsl:param name="content" />
 
-    <html>
-        <head>
-        <!-- some MathJax config? -->
-        </head>
-        <body>
-            <xsl:call-template name="latex-macros" />
-            <xsl:copy-of select="$content" />
-        </body>
-    </html>
+    <exsl:document href="liblouis-precursor.xml" method="xml" version="1.0" indent="yes" encoding="UTF-8">
+        <html>
+            <head>
+            </head>
+            <body>
+                <xsl:copy-of select="$content" />
+            </body>
+        </html>
+    </exsl:document>
 </xsl:template>
 
 <!-- The "frontmatter" and "backmatter" of the HTML version are possibly -->
