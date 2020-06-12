@@ -998,6 +998,53 @@ def mom_static_problems(xml_source, xmlid_root, dest_dir):
                 raise OSError(msg.format(r.status_code, url))
     _verbose('MyOpenMath static problem download complete')
 
+#######################
+# Conversion to Braille
+#######################
+
+def braille(xml_source, pub_file, dest_dir):
+    """Produce a complete document in BRF format ( = Braille ASCII, plus formatting control)"""
+    import os.path # join()
+    import subprocess # run()
+
+    # general message for this entire procedure
+    _verbose('converting {} into BRF in {} combining UEB2 and Nemeth'.format(xml_source, dest_dir))
+
+    # Build into a scratch directory
+    tmp_dir = get_temporary_directory()
+    _debug('Braille manufacture in temporary directory: {}'.format(tmp_dir))
+
+    # use of  math_format is for consistency
+    # with MathJax used to make EPUB
+    math_format = 'nemeth'
+    math_representations = os.path.join(tmp_dir, 'math-representations-{}.xml'.format(math_format))
+    braille_xslt = os.path.join(get_ptx_xsl_path(), 'pretext-braille.xsl')
+    #  liblouis-precursor.xml  is hard-coded in  pretext-braille.xsl  stylesheet
+    liblouis_xml = os.path.join(tmp_dir, 'liblouis-precursor.xml')
+
+    # ripping out LaTeX as math representations
+    msg = 'converting raw LaTeX from {} into clean {} format placed into {}'
+    _debug(msg.format(xml_source, math_format, math_representations))
+    mathjax_latex(xml_source, math_representations, math_format)
+
+    msg = 'converting source ({}) and clean representations ({}) into liblouis precursor XML file ({})'
+    _debug(msg.format(xml_source, math_representations, liblouis_xml))
+    params = {}
+    params['mathfile'] = math_representations
+    if pub_file:
+        params['publisher'] = pub_file
+    xsltproc(braille_xslt, xml_source, None, tmp_dir, params)
+
+    liblouis_cfg = os.path.join(get_ptx_path(), 'script', 'braille', 'pretext-liblouis.cfg')
+    final_brf = os.path.join(dest_dir, 'book.brf')
+    liblouis_exec = get_executable('liblouis')
+    msg = 'applying liblouis to {} with configuration {}, creating BRF {}'
+    _debug(msg.format(liblouis_xml, liblouis_cfg, final_brf))
+    liblouis_cmd = [liblouis_exec, '-f', liblouis_cfg, liblouis_xml, final_brf]
+
+    subprocess.run(liblouis_cmd)
+
+
 ####################
 # Conversion to EPUB
 ####################

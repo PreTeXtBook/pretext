@@ -258,6 +258,8 @@ def main():
             raise NotImplementedError("conversion to HTML version not integrated yet, use command line")
         elif args.format == 'latex':
             raise NotImplementedError("conversion to LaTeX version not integrated yet, use command line")
+        elif args.format == 'braille':
+            ptx.braille(args.xml_file, args.publisher_file, dest_dir)
         elif args.format == 'epub-svg':
             ptx.epub(args.xml_file, args.publisher_file, dest_dir, 'svg')
         elif args.format == 'epub-mml':
