@@ -1249,7 +1249,7 @@ def xsltproc(xsl, xml, result, output_dir=None, stringparams={}):
 
     # do the transformation, with parameterization
     # possibly change/restore directories to capture
-    # multi-file output from  exsl:document  templates
+    # (multi-)file output from  exsl:document() calls
     owd = os.getcwd()
     if output_dir:
         os.chdir(output_dir)
@@ -1258,6 +1258,11 @@ def xsltproc(xsl, xml, result, output_dir=None, stringparams={}):
 
     # write a serialized version to a file if
     # there is a non-empty result tree on stdout
+    # NB: this seems to presume an ASCII (not UTF-8)
+    # encoding for output, no matter what stylesheet says
+    # There seems to be a way to set this, but that would
+    # possibly be a significant change in behavior, so
+    # should be extensively tested
     if result:
         with open(result, 'w') as result_file:
             result_file.write(str(result_tree))
