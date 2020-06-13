@@ -278,6 +278,9 @@
 
             <subsubsection xml:id="topic-exceptional-characters">
                 <title>Exceptional Keyboard Characters</title>
+                <idx>exceptional characters</idx>
+                <idx><h>characters</h><h>exceptional</h></idx>
+                <idx>CDATA</idx>
 
                 <p><init>XML</init> is a <term>markup language</term>, which in part means that some keyboard characters are co-opted to signal the start of markup.  For <init>XML</init> this character is the less-than symbol, &lt;.  It signals the start of a <term>tag</term>, and then an opening tag ends with a greater-than symbol, &gt;, while a closing tag has an extra / right after the &lt;.</p>
 
@@ -296,6 +299,18 @@
 
                     <p><init>XML</init> only has five exceptional characters, and in your daily use, <pretext/> really only requires you to be aware of two, the minimum necessary for a markup language.</p>
                 </remark>
+
+                <note>
+                    <title>A <init>CDATA</init> Section is Never Necessary</title>
+
+                    <p>We hate to mention it, but sooner or later, we need to have an uncomfortable discussion about the misunderstood <init>CDATA</init> section, and risk confusing the rest of this subsubsection.  And this is the place.  But you can come back later, if you wish.</p>
+
+                    <p>You will read other places about very special markup known as a <init>CDATA</init> section.  The name stands for <term>character data</term>, which means <q>all characters, no markup</q>.  Think of it as switching off the <init>XML</init> processing for a while, so in particular, <c>&amp;</c>, <c>&lt;</c>, <c>&gt;</c> no longer have any special meaning at all.  That <em>could</em> be nice, but realize that now there is no opportunity to have any markup present using <init>XML</init> syntax, since it is ineffective.</p>
+
+                    <p><em>A <init>CDATA</init> section is always a convenience and is never necessary.</em></p>
+
+                    <p>When would it be convenient?  Maybe you have some <latex/> inside an <tag>md</tag> with a large matrix that uses lots of ampersands to separate the entries.  Inside a <init>CDATA</init> you can author it with bare &amp; rather than a plethora of <c>&amp;amp;</c> or <c>\amp</c>.  But you lose the ability to include an <tag>xref</tag> in that <init>CDATA</init>, so you need to be surgical about its scope.  Perhaps a Tikz diagram in a <tag>latex-image</tag> has a multitude of <c>&lt;-&gt;</c> or a chunk of Sage code in an <tag>input</tag> has a lot of finitely-generated algebraic structures authored as <c>R.&lt;x&gt; = ...</c> (which is not even legal Python syntax either!).  These places where there is little, or no, markup could be <em>convenient</em> places to use a <init>CDATA</init>.  Be sure to read the warning at <xref ref="deprecation-fixer-cdata"/> in <xref ref="processing-updating-source"/> before you go all-in.</p>
+                </note>
             </subsubsection>
 
             <subsubsection>
@@ -816,7 +831,7 @@
 
             <p>This section expands on parts of <xref ref="overview-verbatim-literal" />.  For descriptions of more involved uses, such as program listings and console sessions, see <xref ref="topic-program-listings" />.</p>
 
-            <p>The tags described here contain <em>only raw characters</em>.  By that we typically mean the first 128 characters of the <acro>ASCII</acro> code.  Unicode characters are likely to migrate to HTML output just fine, but results for <latex /> output will be variable.  The restriction to character data has two consequences.  First, any markup mistakenly included will have its content silently ignored and dropped.  Second, you need to observe the rules on special characters and escaped characters for <init>XML</init> for literal text, which are mercifully simple.</p>
+            <p>The tags described here contain <em>only raw characters</em>.  By that we typically mean the first 128 characters of the <acro>ASCII</acro> code.  Unicode characters are likely to migrate to HTML output just fine, but results for <latex /> output will be variable.  The restriction to character data has two consequences.  First, any markup mistakenly included will have its content silently ignored and dropped.  Second, you need to observe the rules on exceptional characters and escaped characters for <init>XML</init> for literal text, which are mercifully simple.</p>
 
             <blockquote>
                 <p>In your source, use <c>&amp;amp;</c> for an &amp;, use <c>&amp;lt;</c> for &lt;, and optionally use <c>&amp;gt;</c> for &gt;.  Otherwise, every other <acro>ASCII</acro> character will render faithfully across all possible formats.</p>
@@ -836,7 +851,7 @@
         <subsection xml:id="long-verbatim-text">
             <title>Longer, Inline, Verbatim Text</title>
 
-            <p>For longer pieces of verbatim text, use the <tag>cd</tag> tag, which is short for <q>code display</q>, analogous to the <tag>md</tag> for mathematics.  It is used within sentences of a paragraph and will be presented with a vertical break above and below, but without interrupting the paragraph.  Because of the display presentation, it cannot be used other places, such as a <tag>title</tag>, where a vertical gap is not appropriate.  All of the previous discussion about special characters applies for this tag.</p>
+            <p>For longer pieces of verbatim text, use the <tag>cd</tag> tag, which is short for <q>code display</q>, analogous to the <tag>md</tag> for mathematics.  It is used within sentences of a paragraph and will be presented with a vertical break above and below, but without interrupting the paragraph.  Because of the display presentation, it cannot be used other places, such as a <tag>title</tag>, where a vertical gap is not appropriate.  All of the previous discussion about exceptional characters applies for this tag.</p>
 
             <p>You have two options in use.  You may author inline with the rest of a sentence, with no extra newlines or whitespace before, after, or within the content.  The result will be a single displayed line.</p>
 
@@ -1210,9 +1225,9 @@
         </subsection>
 
         <subsection xml:id="mathematics-xml-characters">
-            <title>Special Characters</title>
+            <title>exceptional characters</title>
 
-            <p>The <latex /> macros, <c>\amp</c>, <c>\lt</c>, and <c>\gt</c> are always available within these mathematics elements, so that you can avoid the special XML characters <c>&amp;</c>, <c>&lt;</c> and <c>&gt;</c>.  See <xref ref="overview-special-characters" /> for this same information, but in the broader context of your entire document.</p>
+            <p>The <latex /> macros, <c>\amp</c>, <c>\lt</c>, and <c>\gt</c> are always available within these mathematics elements, so that you can avoid the exceptional XML characters <c>&amp;</c>, <c>&lt;</c> and <c>&gt;</c>.  See <xref ref="overview-exceptional-characters" /> for this same information, but in the broader context of your entire document.</p>
         </subsection>
 
         <subsection>
@@ -1229,7 +1244,7 @@
                 <cline>&lt;me&gt;f(x) = \begin{cases} x^2 \amp \text{if } x\gt 0\\</cline>
                 <cline>           -7 \amp \text{otherwise} \end{cases}&lt;/me&gt;</cline>
             </cd>produces
-            <me>f(x) = \begin{cases}x^2\amp\text{if }x\gt 0\\-7\amp\text{otherwise}\end{cases}</me>.  This example amply illustrates the use of macros for XML special characters (twice), appropriate use of the <c>\text{}</c> macro (twice), spaces in the <c>\text{}</c> macro (once), sentence-ending punctuation (see the source, the period is <em>not</em> inside the <tag>me</tag> element) and yes, we did think twice about the <c>\\</c> (an exception to the rule).</p>
+            <me>f(x) = \begin{cases}x^2\amp\text{if }x\gt 0\\-7\amp\text{otherwise}\end{cases}</me>.  This example amply illustrates the use of macros for XML exceptional characters (twice), appropriate use of the <c>\text{}</c> macro (twice), spaces in the <c>\text{}</c> macro (once), sentence-ending punctuation (see the source, the period is <em>not</em> inside the <tag>me</tag> element) and yes, we did think twice about the <c>\\</c> (an exception to the rule).</p>
         </subsection>
 
         <subsection>
@@ -2252,7 +2267,7 @@
             <title>Characters in <init>URL</init>s</title>
             <idx><h>URL</h><h>query string</h></idx>
 
-            <p>A <init>URL</init> can have a <term>query string</term>, which has a list of parameters following a question-mark.  The parameters are separated by ampersands (&amp;), which will need to be escaped, so as to not confuse the <init>XML</init> processor.  So use <c>&amp;amp;</c> anywhere the ampersand <em>character</em> is necessary, such as a <attr>source</attr> attribute, or a monospace version of a <init>URL</init> achieved with a <tag>c</tag> element.  Also, the question-mark character should <em>not</em> be <init>URL</init>-encoded (<c>%3F</c>) (despite advice just given above), so if necessary edit it to be the actual character.  General advice about special characters in <init>XML</init> source can be found in <xref ref="overview-special-characters"/>.</p>
+            <p>A <init>URL</init> can have a <term>query string</term>, which has a list of parameters following a question-mark.  The parameters are separated by ampersands (&amp;), which will need to be escaped, so as to not confuse the <init>XML</init> processor.  So use <c>&amp;amp;</c> anywhere the ampersand <em>character</em> is necessary, such as a <attr>source</attr> attribute, or a monospace version of a <init>URL</init> achieved with a <tag>c</tag> element.  Also, the question-mark character should <em>not</em> be <init>URL</init>-encoded (<c>%3F</c>) (despite advice just given above), so if necessary edit it to be the actual character.  General advice about exceptional characters in <init>XML</init> source can be found in <xref ref="overview-exceptional-characters"/>.</p>
         </subsection>
 
         <subsection xml:id="topic-external-data-file">
@@ -2466,7 +2481,7 @@
 
         <p>One special exception to this restriction is the use of text files, containing absolutely no markup at all.  Two good examples are the <tag>input</tag> child of a <tag>program</tag> or the <tag>latex-image</tag> element used to describe an <tag>image</tag> by source code that <latex /> understands.</p>
 
-        <p>In both cases you can put the text content of these elements in a separate file, use the <attr>href</attr> attribute of <tag>xi:include</tag> to point to the file, and then the twist is to set the <attr>parse</attr> attribute to the value <c>text</c>.  This has two general benefits.  First, you now <em>cannot</em> have any <init>XML</init> in the file, so you do not have to have a single root element for the file (and so the schema imposes no restrictions).  Second, you do not need to escape any problematic characters like ampersands and angle brackets (<xref ref="topic-verbatim-literal" />), nor use the misunderstood <c>CDATA</c> mechanism.</p>
+        <p>In both cases you can put the text content of these elements in a separate file, use the <attr>href</attr> attribute of <tag>xi:include</tag> to point to the file, and then the twist is to set the <attr>parse</attr> attribute to the value <c>text</c>.  This has two general benefits.  First, you now <em>cannot</em> have any <init>XML</init> in the file, so you do not have to have a single root element for the file (and so the schema imposes no restrictions).  Second, you do not need to escape any problematic characters like ampersands and angle brackets (<xref ref="topic-verbatim-literal" />), nor use the misunderstood <init>CDATA</init> mechanism.</p>
 
         <p>Additionally, in the case of <tag>latex-image</tag> you can park unsightly code away in files so you do not have to look at it, or you can create a small driver <latex /> program to test each one, or even better, you may want to use the same image more than once (maybe in different figures?) and can just include it repeatedly, while only ever editing the single copy.</p>
 
