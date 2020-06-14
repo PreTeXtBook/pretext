@@ -890,6 +890,8 @@
                 Paragraph+,
                 Attribution?
             }
+        SimpleLine =
+            element line {TextSimple}
         ShortLine =
             element line {TextShort}
         LongLine =
@@ -1593,6 +1595,12 @@
         WebWorkAuthored =
             element webwork {
                 attribute seed {xsd:integer}?,
+                element description {
+                    (
+                        TextSimple |
+                        SimpleLine+
+                    )
+                }?,
                 WWMacros?,
                 element pg-code {text}?,
                 (

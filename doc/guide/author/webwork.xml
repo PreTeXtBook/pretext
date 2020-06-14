@@ -280,6 +280,53 @@
       </p>
     </subsection>
 
+    <subsection xml:id="webwork-metadata">
+      <title>Metadata</title>
+      <p>
+        A <tag>webwork</tag> <em>without a source attribute</em> can have a plain text <tag>description</tag>.
+        This should be a summary of what the exercise asks a user to do,
+        including any relevant pedagogical details of the exercise. For example:
+      </p>
+      <pre>
+        <![CDATA[
+        <webwork>
+
+          <description>
+            Add two fractions with distinct one-digit prime denominators.
+          </description>
+
+          ...
+
+        </webwork>
+        ]]>
+      </pre>
+      <p>
+        A longer description may be broken into lines where the lines are plain text.
+      </p>
+      <pre>
+        <![CDATA[
+        <webwork>
+
+          <description>
+            <line>
+              Add two fractions with distinct one-digit prime denominators.
+            </line>
+            <line>
+              One fraction is always positive, the other always negative.
+            </line>
+          </description>
+
+          ...
+
+        </webwork>
+        ]]>
+      </pre>
+      <p>
+        The content of the description will be written into a PG <c>COMMENT</c> command,
+        making the description visible in a <webwork/> Library Browser.
+      </p>
+    </subsection>
+
     <subsection>
       <title>Reusing a <tag>webwork</tag> by <attr>xml:id</attr></title>
       <p>Planned.</p>
