@@ -1163,6 +1163,11 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
   margin: -42px 0 0;
   border: 0;
 }
+/* when there is a sage cell evaluate button before  the target, the button was being covered */
+.sagecell + :target::before {
+    height: 0;
+    margin: 0;
+}
 :target > div.autopermalink {
   top: 45px;
 }
