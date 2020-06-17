@@ -230,7 +230,7 @@
 
           <p>So think of <c>&amp;lt;</c> and <c>&amp;amp;</c> as <em>being</em> the characters <c>&lt;</c> and <c>&amp;</c>.  End of story.  These two concessions should <q>work</q> throughout your <pretext/> source and in every conversion.  Every markup language needs, and uses, an escape character, but <init>XML</init> and <pretext/> have you covered and really only need these two (infrequent) exceptions.</p>
 
-          <p>It is worth repeating: think of the escaped versions of the characters as actually being the characters themselves.  That is the way the <init>XML</init> processor sees them and uses them.  For more, see <xref ref="overview-special-characters"/>, <xref ref="overview-verbatim-literal"/>, <xref ref="topic-exceptional-characters"/>, <xref ref="topic-verbatim-literal"/>, and <xref ref="topic-url-characters"/>.</p>
+          <p>It is worth repeating: think of the escaped versions of the characters as actually being the characters themselves.  That is the way the <init>XML</init> processor sees them and uses them.  For more, see <xref ref="overview-exceptional-characters"/>, <xref ref="overview-verbatim-literal"/>, <xref ref="topic-exceptional-characters"/>, <xref ref="topic-verbatim-literal"/>, and <xref ref="topic-url-characters"/>.</p>
 
           <p>Postscript:  <init>XML</init> has the escaped characters <c>&amp;gt</c>, <c>&amp;apos</c>, and <c>&amp;quot</c> for <c>&gt;</c>, <c>&apos;</c>, and <c>&quot;</c> (respectively).  But they are rarely (never?) necessary within <pretext/>.</p>
 
