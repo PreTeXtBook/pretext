@@ -508,6 +508,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="id">
         <xsl:apply-templates select="." mode="visible-id"/>
     </xsl:variable>
+    <!-- And the braille string itself.  We remove ASCII space  -->
+    <!-- which is present as a testing artifact.  Remove later. -->
+    <!-- Real spaces are Unicode braille blank pattern (?),     -->
+    <!-- U+2800, while testing spaces are ASCII spaces, U+0020. -->
+    <xsl:variable name="spaced-braille" select="$math-repr/pi:math[@id = $id]"/>
+    <xsl:variable name="braille" select="translate($spaced-braille, '&#x20;', '')"/>
     <!-- We investigate actual source for very simple math   -->
     <!-- (one-letter variable names in Latin letters), so we -->
     <!-- process the content (which could have "xref", etc)  -->
@@ -516,7 +522,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <xsl:variable name="clean-content" select="normalize-space($content)"/>
     <xsl:choose>
-        <!-- inline math with one Latin letter -->
+        <!-- inline math with one Latin letter  -->
+        <!-- $braille is ignored.  c'est la vie -->
         <xsl:when test="(self::m and string-length($clean-content) = 1) and
                         contains(&ALPHABET;, $clean-content)">
             <!-- class is signal to liblouis styling rules -->
@@ -529,7 +536,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <!-- wrap with a made-up element for liblouis -->
             <!-- to interpret with open/close indicators  -->
             <nemeth class="inline">
-                <xsl:value-of select="$math-repr/pi:math[@id = $id]"/>
+                <xsl:value-of select="$braille"/>
             </nemeth>
         </xsl:when>
         <xsl:otherwise>
@@ -538,7 +545,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <!-- to use our liblouis displaymath style -->
             <div class="displaymath">
                 <nemeth>
-                    <xsl:value-of select="$math-repr/pi:math[@id = $id]"/>
+                    <xsl:value-of select="$braille"/>
                 </nemeth>
             </div>
         </xsl:otherwise>

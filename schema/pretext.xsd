@@ -1041,6 +1041,15 @@
       <xs:attributeGroup ref="MetaDataTitleOptional"/>
     </xs:complexType>
   </xs:element>
+  <xs:group name="SimpleLine">
+    <xs:sequence>
+      <xs:element name="line">
+        <xs:complexType mixed="true">
+          <xs:group ref="TextSimple"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
   <xs:group name="ShortLine">
     <xs:sequence>
       <xs:element name="line">
@@ -2141,6 +2150,14 @@
       <xs:element name="webwork">
         <xs:complexType>
           <xs:sequence>
+            <xs:element minOccurs="0" name="description">
+              <xs:complexType mixed="true">
+                <xs:choice>
+                  <xs:group ref="TextSimple"/>
+                  <xs:group maxOccurs="unbounded" ref="SimpleLine"/>
+                </xs:choice>
+              </xs:complexType>
+            </xs:element>
             <xs:element minOccurs="0" ref="pg-macros"/>
             <xs:element minOccurs="0" ref="pg-code"/>
             <xs:choice>

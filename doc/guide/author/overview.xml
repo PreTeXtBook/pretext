@@ -36,7 +36,7 @@
 
         <p>Once you have divisions, what do you put into them?  Most likely, paragraphs<idx>paragraph</idx>.  We use long, exact names for tags that are used infrequently, like <tag>subsubsection</tag>.  But for frequently used elements, we use abbreviated tags, often identical to names used in <init>HTML</init>.  So a paragraph is delimited by simply the <tag>p</tag> tag.</p>
 
-        <p>Lots of things can happen in paragraphs, some things can <em>only</em> happen in a paragraph, and some things are <em>banned</em> in paragraphs.  Inside a paragraph, you can emphasize some text (<tag>em</tag>), you can quote some text (<tag>q</tag>), you can mark a phrase as being from another language (<tag>foreign</tag>), and much more.  You can use almost any character your keyboard can produce, but need to be careful with the three <init>XML</init> special characters: ampersand (&amp;), less than (&lt;), and rarely, greater than (&gt;).  (See <xref ref="overview-special-characters"/>.) You must put a list inside a paragraph, and all mathematics (<xref ref="overview-math" />) will occur inside a paragraph.  You cannot put a <tag>table</tag> or a <tag>figure</tag> in a paragraph, and many other structured components are prohibited in paragraphs.</p>
+        <p>Lots of things can happen in paragraphs, some things can <em>only</em> happen in a paragraph, and some things are <em>banned</em> in paragraphs.  Inside a paragraph, you can emphasize some text (<tag>em</tag>), you can quote some text (<tag>q</tag>), you can mark a phrase as being from another language (<tag>foreign</tag>), and much more.  You can use almost any character your keyboard can produce, but need to be careful with the three <init>XML</init> exceptional characters: ampersand (&amp;), less than (&lt;), and rarely, greater than (&gt;).  (See <xref ref="overview-exceptional-characters"/>.) You must put a list inside a paragraph, and all mathematics (<xref ref="overview-math" />) will occur inside a paragraph.  You cannot put a <tag>table</tag> or a <tag>figure</tag> in a paragraph, and many other structured components are prohibited in paragraphs.</p>
 
         <p>Paragraphs are also used as part of the structure of other parts of your document.  For example, a <tag>remark</tag> could be composed of several <tag>p</tag>.  As you get started with <pretext />, remember that much of your actual writing will occur inside of a <tag>p</tag> and you will have a collection of tags you can use there to express your meaning to your readers.</p>
 
@@ -190,9 +190,10 @@
         <p>A <tag>program</tag> or <tag>console</tag> may be wrapped in a <tag>listing</tag>, which is analogous to a <tag>figure</tag> or <tag>table</tag>.  A <tag>listing</tag> may contain a <tag>title</tag> for use in cross-references or lists.  A <tag>caption</tag> will be displayed and will generate a number.</p>
     </section>
 
-    <section xml:id="overview-special-characters">
-        <title>Special Characters</title>
-        <idx>special character</idx>
+    <section xml:id="overview-exceptional-characters">
+        <title>Exceptional Characters</title>
+        <idx>exceptional characters</idx>
+        <idx><h>characters</h><h>exceptional</h></idx>
 
         <p>An advantage of XML syntax is that very few characters are reserved for the language's use, and thus very few characters need to be escaped.  Of course, there is always the need to escape the escape character.</p>
 
@@ -200,7 +201,7 @@
 
         <p>These first two characters are interpreted by the <init>XML</init> processor very early in the analysis of your source.  So they need to be authored specially via the <term>XML entities</term> <c>&amp;amp;</c> and <c>&amp;lt;</c>.  In practice, escaping <c>&gt;</c> is rarely necessary.  So fundamentally within <pretext/> there are just two characters to type carefully or exceptionally.</p>
 
-        <p>If you consistently follow the prescription in the previous paragraph you will avoid a descent into escape-character hell and avoid a lot of head-scratching.  In particular, you should have no need of the <c>&lt;![CDATA[</c><nbsp /><c>]]&gt;</c> mechanism of <init>XML</init>, so <em>please</em> just forget we even mentioned it.</p>
+        <p>If you consistently follow the prescription in the previous paragraph you will avoid a descent into escape-character hell and avoid a lot of head-scratching.  In particular, you should have no need of the <c>&lt;![CDATA[</c><nbsp /><c>]]&gt;</c> mechanism of <init>XML</init>, so <em>please</em> just forget we even mentioned it.  But see <xref ref="topic-exceptional-characters"/> if you are curious, or want a more thorough discussion.</p>
     </section>
 
     <section xml:id="overview-nontrivial-characters">
@@ -208,7 +209,7 @@
         <idx>nontrivial characters</idx>
         <idx><h>characters</h><h>nontrivial</h></idx>
 
-        <p>Quality typography is more expansive than the limited capabilities of computer keyboards, whose history is rooted in the machines known as typewriters.  Some characters are never present on a keyboard (e.g., a pilcrow), while others are ambiguous.  Is a diagonal line a slash used to separate information (either/or), or is it a solidus used to form a simple fraction such as 3<solidus/>4? <xref ref="table-nontrivial-characters"/> is a <em>sample</em> of how <pretext/> addresses this.  (The last two are the technical exceptions imposed by using a markup language, see <xref ref="overview-special-characters"/>.) See <xref ref="topic-paragraphs"/> for a more comprehensive and detailed discussion.</p>
+        <p>Quality typography is more expansive than the limited capabilities of computer keyboards, whose history is rooted in the machines known as typewriters.  Some characters are never present on a keyboard (e.g., a pilcrow), while others are ambiguous.  Is a diagonal line a slash used to separate information (either/or), or is it a solidus used to form a simple fraction such as 3<solidus/>4? <xref ref="table-nontrivial-characters"/> is a <em>sample</em> of how <pretext/> addresses this.  (The last two are the technical exceptions imposed by using a markup language, see <xref ref="overview-exceptional-characters"/>.) See <xref ref="topic-paragraphs"/> for a more comprehensive and detailed discussion.</p>
 
         <table xml:id="table-nontrivial-characters">
             <title>Nontrivial Characters</title>
@@ -304,7 +305,7 @@
 
         <p>For the content of a <tag>pre</tag> element, the indentation will be preserved, though an equal amount of leading whitespace will be stripped from every line, so as to keep the code shifted left as far as possible.</p>
 
-        <p>The behavior of these two tags is to preserve characters exactly.  Certainly the <acro>ASCII</acro> character set will behave as expected, and Unicode characters will migrate successfully to output formats based on <init>HTML</init>.  As mentioned in <xref ref="overview-special-characters" /> the ampersand and left angle bracket will confuse the initial XML processing.  So use the XML entities <c>&amp;amp;</c> and <c>&amp;lt;</c> to represent these characters to the XML processor, <c>xsltproc</c>.  See <xref ref="topic-verbatim-literal" /> for further details.</p>
+        <p>The behavior of these two tags is to preserve characters exactly.  Certainly the <acro>ASCII</acro> character set will behave as expected, and Unicode characters will migrate successfully to output formats based on <init>HTML</init>.  As mentioned in <xref ref="overview-exceptional-characters" /> the ampersand and left angle bracket will confuse the initial XML processing.  So use the XML entities <c>&amp;amp;</c> and <c>&amp;lt;</c> to represent these characters to the XML processor, <c>xsltproc</c>.  See <xref ref="topic-verbatim-literal" /> for further details.</p>
     </section>
 
     <section xml:id="overview-sage">

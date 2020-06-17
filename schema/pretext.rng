@@ -1138,6 +1138,11 @@
       </optional>
     </element>
   </define>
+  <define name="SimpleLine">
+    <element name="line">
+      <ref name="TextSimple"/>
+    </element>
+  </define>
   <define name="ShortLine">
     <element name="line">
       <ref name="TextShort"/>
@@ -2327,6 +2332,16 @@
         <attribute name="seed">
           <data type="integer"/>
         </attribute>
+      </optional>
+      <optional>
+        <element name="description">
+          <choice>
+            <ref name="TextSimple"/>
+            <oneOrMore>
+              <ref name="SimpleLine"/>
+            </oneOrMore>
+          </choice>
+        </element>
       </optional>
       <optional>
         <ref name="WWMacros"/>
