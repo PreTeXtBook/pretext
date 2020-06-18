@@ -133,15 +133,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- and "solution" elements of an "exercise".  An author may  -->
 <!-- wish to provide limited distribution of some solutions to -->
 <!-- exercises, which we deem "private" here.  If a            -->
-<!-- "solutions.file" is provided, it will be mined for these  -->
-<!-- private solutions.                                        -->
+<!-- "private-solutions-file" is provided, it will be mined    -->
+<!-- for these private solutions.                              -->
 
-<xsl:param name="solutions.file" select="''"/>
-<xsl:variable name="b-private-solutions" select="not($solutions.file = '')"/>
+<xsl:variable name="b-private-solutions" select="not($private-solutions-file = '')"/>
 
-<xsl:variable name="n-hint"     select="document($solutions.file, /pretext)/pi:privatesolutions/hint"/>
-<xsl:variable name="n-answer"   select="document($solutions.file, /pretext)/pi:privatesolutions/answer"/>
-<xsl:variable name="n-solution" select="document($solutions.file, /pretext)/pi:privatesolutions/solution"/>
+<xsl:variable name="n-hint"     select="document($private-solutions-file, /pretext)/pi:privatesolutions/hint"/>
+<xsl:variable name="n-answer"   select="document($private-solutions-file, /pretext)/pi:privatesolutions/answer"/>
+<xsl:variable name="n-solution" select="document($private-solutions-file, /pretext)/pi:privatesolutions/solution"/>
 
 <xsl:template match="exercise" mode="assembly">
     <!-- <xsl:message>FOO:<xsl:value-of select="count($n-solution)"/></xsl:message> -->
@@ -272,12 +271,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Warnings -->
 <!-- ######## -->
 
+<!-- A place for warnings about temporary/experimental features -->
 <xsl:template name="assembly-warnings">
-    <xsl:if test="$b-private-solutions">
-        <xsl:call-template name="banner-warning">
-            <xsl:with-param name="warning">Use of a private solutions file is experimental and not supported.  Markup,&#xa;string parameters, and procedures are all subject to change.  (2020-06-06)</xsl:with-param>
-        </xsl:call-template>
-    </xsl:if>
 </xsl:template>
 
 </xsl:stylesheet>

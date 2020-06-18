@@ -57,6 +57,24 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Common Options -->
 <!-- ############### -->
 
+<!-- ############## -->
+<!-- Source Options -->
+<!-- ############## -->
+
+<!-- A file of hint|answer|solution, with @ref back to "exercise" -->
+<!-- so that the solutions can see limited distribution.  No real -->
+<!-- error-checking.  If not set/present, then an empty string    -->
+
+<xsl:variable name="private-solutions-file">
+    <xsl:choose>
+        <xsl:when test="$publication/source/@private-solutions">
+            <xsl:value-of select="$publication/source/@private-solutions"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
 
 
 <!-- ##################### -->
