@@ -2887,7 +2887,11 @@ the xsltproc executable.
                     </image>
                 </figure>
 
-                <p>These 3D images in HTML output are rotable with a pointing device (mouse, trackpad) with a click-and-drag.  A finger should suffice on touch-sensitive devices (phones, tablets).  As a contribution to the accessibility of <pretext/> HTML output, keyboard controls will also allow for exploration of these images.  (Make sure the image has focus when you attempt to use these.)</p>
+                <p>These 3D images in HTML output are rotable with a pointing device (mouse, trackpad) with a click-and-drag.  A finger should suffice on touch-sensitive devices (phones, tablets).  Zooming in and out can be accomplished with a mouse wheel, or by pinching.  As a contribution to the accessibility of <pretext/> HTML output, keyboard controls will also allow for exploration of these images.  (Make sure the image has focus when you attempt to use these.)</p>
+
+                <!-- More possible keyboard shortcuts are at Section 8.29, page 136 -->
+                <!-- https://asymptote.sourceforge.io/asymptote.pdf                 -->
+                <!-- Not all seem to be implented, so review/test carefully         -->
 
                 <table>
                     <title>3D Image Keyboard Controls</title>
@@ -2902,7 +2906,7 @@ the xsltproc executable.
                     </tabular>
                 </table>
 
-                <p>And finally, an example of a 3-D graph (from the Asymptote documentation again).  This SVG image is a beautiful example of a Riemann surface.  As you rotate the image, notice how the reflection of the light source varies, along with the brightness of various regions of the surface.  This example is accomplished with just 10 lines of Asymptote code.</p>
+                <p>And finally, an example of a 3-D graph (from the Asymptote documentation again).  This WebGL image is a beautiful example of a Riemann surface.  As you rotate the image, notice how the reflection of the light source varies, along with the brightness of various regions of the surface.  This example is accomplished with just 10 lines of Asymptote code.</p>
 
                 <!-- http://asymptote.sourceforge.net/gallery/3D%20graphs/filesurface.asy -->
                 <!-- Projection point adjusted by Michael Doob -->
