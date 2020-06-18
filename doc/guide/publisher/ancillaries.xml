@@ -64,7 +64,7 @@
                 </li>
 
                 <li>
-                    <p>Create a new <pretext/> file to hold the private solutions, presumably located <em>away</em> from your other source files.  Call it something like <c>privatesolutions.ptx</c>, which is what we will use below.</p>
+                    <p>Create a new <pretext/> file to hold the private solutions, presumably located <em>away</em> from your other source files (see <xref ref="private-stays-private"/>).  Call it something like <c>privatesolutions.ptx</c>, which is what we will use below.</p>
 
                     <p>The first two lines of the file <em>must</em> be:<cd>
                         <cline>&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</cline>
@@ -88,9 +88,11 @@
                 </li>
 
                 <li>
-                    <p>Now you can have all of these private solutions incorporated into your source by adding to your <c>xsltproc</c> invocation:<cd>
-                        <cline>-stringparam solutions.file privatesolutions.ptx</cline>
-                    </cd>(See <xref ref="processing-publisher-stringparam"/> for more on string parameters.)  And if you do not supply this string parameter then no private solutions will be incorporated.  One catch: the file needs to be located predictably relative to the directory where your main <pretext/> source file is located.  We would not set this location to be part of the directory tree for your public get repository, for fear of accidentally committing it (since history cannot be erased).  You can specify an absolute path to the file, or a relative one.</p>
+                    <p>Now you can have all of these private solutions incorporated into your source by specifying the filename in your publisher file (<xref ref="publisher-file"/>).  The <attr>private-solutions</attr> attribute of the <c>/publication/source</c> element should be set to this filename (<xref ref="publisher-file-source"/>).  So you would have<cd>
+                        <cline>&lt;publication&gt;</cline>
+                        <cline>  &lt;source private-solutions="path/to/privatesolutions.ptx"/&gt;</cline>
+                        <cline>  ...</cline>
+                    </cd></p>
                 </li>
 
                 <li>
@@ -100,6 +102,12 @@
         </list>
 
         <p>You will have noticed that you have a lot of freedom to make a completely disorganized private solutions file.  There is no structure to prevent this<mdash/>you are on your own.  Ourselves, we would keep the solutions in order of appearance and use comments liberally.  But you can always search on the common value of <attr>xml:id</attr> and <attr>ref</attr> to locate the pieces.  Also, you can use the <c>xinclude</c> mechanism to modularize the file of private solutions into multiple files, say by chapter or section.  See <xref ref="processing-modular"/>.</p>
+
+        <warning xml:id="private-stays-private">
+            <title>Keep Your Private Solutions Private!</title>
+
+            <p>If you are using git (and why wouldn't you?) it could be an easy mistake to include your private solutions in a public repository accidentally with a careless commit.  We would place our private solutions in a directory close to our source tree, but not within the material tracked by git.  And we would build our solutions manual with private solutions by copying the necessary files to some scratch directory, where they get deleted later, after the <init>PDF</init> result has been preserved for use.</p>
+        </warning>
     </section>
 
     <section xml:id="private-solutions-git">

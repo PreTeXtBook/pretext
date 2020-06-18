@@ -147,4 +147,23 @@
             </ul></p>
         </subsection>
     </section>
+
+    <section xml:id="publisher-file-source">
+        <title>Source Options</title>
+        <idx>source publisher options</idx>
+        <idx><h>publisher options</h><h>source</h></idx>
+
+        <introduction>
+            <p>Some source material is optional, and may be included based on the publisher and the audience.</p>
+        </introduction>
+
+        <p>The<cd>
+            <cline>/publication/source</cline>
+        </cd>element can have the following attributes:<ul>
+            <li><attr>private-solutions</attr>: A filename for a structured file of <tag>hint</tag>, <tag>answer</tag>, <tag>solution</tag> that will see limited distribution (for example, instructors only).  A relative path for the filename is relative to the main source file.  Try an absolute path if there are any problems.</li>
+        </ul></p>
+
+        <p>See <xref ref="private-solutions-file"/> for details about the use of a private solutions file.</p>
+    </section>
+
 </chapter>
