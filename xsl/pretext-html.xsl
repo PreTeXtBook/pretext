@@ -1158,11 +1158,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Index Creation -->
 <!-- ############## -->
 
+<!-- Used at the end of the next template to group index       -->
+<!-- entries by letter for eventual outout organized by letter -->
+<xsl:key name="index-entry-by-letter" match="index" use="@letter"/>
+
 <!-- "index-list":                                           -->
 <!--     build a sorted list of every "index" in text        -->
-<!-- "group-by-letter":                                      -->
-<!--     accumulate common first-letter entries,             -->
-<!--     send to their own div for spacing, "jump to" device -->
+<!--     use Muenchian Method to group by letter and process -->
 <!-- "group-by-heading":                                     -->
 <!--     consolidate/accumulate entries with common heading  -->
 <!-- "knowl-list":                                           -->
@@ -1201,6 +1203,31 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="index-items">
         <xsl:for-each select="$document-root//idx[not(@start) and (not(ancestor::commentary) or $b-commentary)] | //index[not(index-list) and not(@start) and (not(ancestor::commentary) or $b-commentary)]">
             <index>
+                <!-- identify content of primary sort key      -->
+                <!-- this follows the logic of creating key[1] -->
+                <!-- TODO: this may be too ad-hoc, study       -->
+                <!--       closely on a refactor               -->
+                <xsl:variable name="letter-content">
+                    <xsl:choose>
+                        <xsl:when test="@sortby">
+                            <xsl:value-of select="@sortby" />
+                        </xsl:when>
+                        <xsl:when test="not(main) and not(h)">
+                            <xsl:apply-templates/>
+                        </xsl:when>
+                        <xsl:when test="(main or h) and (main/@sortby or h[1]/@sortby)">
+                            <xsl:apply-templates select="main/@sortby|h[1]/@sortby"/>
+                        </xsl:when>
+                        <xsl:when test="main or h">
+                            <xsl:apply-templates select="main|h[1]"/>
+                        </xsl:when>
+                    </xsl:choose>
+                </xsl:variable>
+                <!-- lowercase first letter of primary sort key    -->
+                <!-- used later to group items by letter in output -->
+                <xsl:attribute name="letter">
+                    <xsl:value-of select="translate(substring($letter-content,1,1), &UPPERCASE;, &LOWERCASE;)"/>
+                </xsl:attribute>
                 <xsl:choose>
                     <!-- simple mixed-content first, no structure -->
                     <!-- one text-key pair, two more empty        -->
@@ -1336,60 +1363,39 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:copy-of select="." />
         </xsl:for-each>
     </xsl:variable>
-    <!-- ship start of a node-set to be grouped by letter   -->
-    <!-- conversion to node-set is necessary for subsequent -->
-    <xsl:apply-templates select="exsl:node-set($sorted-index)/index[1]" mode="group-by-letter">
-        <xsl:with-param name="letter-group" select="/.." />
-    </xsl:apply-templates>
-</xsl:template>
-
-<!-- Accumulate index entries with a common first letter    -->
-<!-- in first heading, based on key[1], into $letter-group. -->
-<!-- When a look-ahead sees the initial letter changing,    -->
-<!-- send the group off to be formatted as a letter-group   -->
-<!-- and further organize by heading.                       -->
-<xsl:template match="index" mode="group-by-letter">
-    <!-- Empty node list from parent of root node -->
-    <xsl:param name="letter-group"/>
-
-    <!-- look ahead at next index entry -->
-    <xsl:variable name="next-index" select="following-sibling::index[1]"/>
-    <!-- check if we have run out all of the index entries -->
-    <xsl:if test=".">
-        <!-- always accumulate context node in node-list (first, or $next-index inspected) -->
-        <xsl:variable name="new-letter-group" select="$letter-group|."/>
-        <xsl:choose>
-            <!-- next index item has same lead letter, so iterate -->
-            <xsl:when test="substring($next-index/key[1], 1, 1) = substring(key[1], 1,1)">
-                <xsl:apply-templates select="$next-index" mode="group-by-letter">
-                    <xsl:with-param name="letter-group" select="$new-letter-group" />
-                </xsl:apply-templates>
-            </xsl:when>
-            <!-- next index item has different lead letter      -->
-            <!-- wrap the letter-group in a div with correct id -->
-            <!-- and course through to group by headings        -->
-            <xsl:otherwise>
-                <xsl:variable name="lead" select="substring(key[1], 1, 1)" />
-                <div class="indexletter" id="indexletter-{$lead}">
-                    <!-- send to group headings, pass letter-group through -->
-                    <xsl:apply-templates select="$new-letter-group[1]" mode="group-by-heading">
-                        <xsl:with-param name="heading-group" select="/.." />
-                        <xsl:with-param name="letter-group" select="$new-letter-group" />
-                    </xsl:apply-templates>
-                </div>
-                <!-- restart letter grouping with node having new letter -->
-                <xsl:apply-templates select="$next-index" mode="group-by-letter">
-                    <xsl:with-param name="letter-group" select="/.." />
-                </xsl:apply-templates>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:if>
+    <!-- Group by Letter -->
+    <!-- A careful exposition of the Muenchian Method, named after Steve Muench  -->
+    <!-- of Oracle.  This is an well-known, but complicated, XSLT 1.0 technique. -->
+    <!-- (This is much easier in XSLT 2.0 with certain instructions).  We follow -->
+    <!-- the XSLT Cookbook 2.0, Recipe 6.2, modulo one critical typo, and also   -->
+    <!-- Jeni Tennison's instructive  "Grouping Using the Muenchian Method" at   -->
+    <!-- http://www.jenitennison.com/xslt/grouping/muenchian.html.               -->
+    <!--                                                                         -->
+    <!-- Initial "for-each" sieves out a single (the first) representative of    -->
+    <!-- each group of "index" that have a common initial letter for their sort  -->
+    <!-- criteria.  Each becomes the context node for the remainder.             -->
+    <xsl:for-each select="exsl:node-set($sorted-index)/index[count(.|key('index-entry-by-letter', @letter)[1]) = 1]">
+        <!-- save the key to use again in selecting the group -->
+        <xsl:variable name="current-letter" select="@letter"/>
+        <!-- collect all the "index" with the same initial letter as representative    -->
+        <!-- this key is still perusing the nodes of $sorted-index as context document -->
+        <xsl:variable name="letter-group" select="key('index-entry-by-letter', $current-letter)"/>
+        <!-- wrap the group in a div, which will be used for presentation -->
+        <div class="indexletter" id="indexletter-{$current-letter}">
+            <!-- send to group-by-headings, which is vestigal -->
+            <xsl:apply-templates select="$letter-group[1]" mode="group-by-heading">
+                <xsl:with-param name="heading-group" select="/.." />
+                <xsl:with-param name="letter-group" select="$letter-group" />
+            </xsl:apply-templates>
+        </div>
+    </xsl:for-each>
 </xsl:template>
 
 <!-- Accumulate index entries with identical headings - their    -->
 <!-- exact text, not anything related to the keys.  Quit         -->
 <!-- accumulating when look-ahead shows next entry differs.      -->
 <!-- Output the (3-part) heading and locators before restarting. -->
+<!-- TODO: investigate reworking this via Muenchian Method       -->
 <xsl:template match="index" mode="group-by-heading">
     <!-- Empty node list from parent of root node -->
     <xsl:param name="heading-group"/>
