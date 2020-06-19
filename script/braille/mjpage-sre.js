@@ -35,7 +35,7 @@ const render = async (node, format) => {
   if (format == 'nemeth') {
     params = ['domain', 'default', 'locale', 'nemeth', 'modality', 'braille']
   } else {
-    params = ['domain', 'default', 'locale', 'speech']
+    params = ['domain', 'clearspeak', 'locale', 'en', 'modality', 'speech'];
   }
   const result = await mj({
     math: mathinput, // This is the MathML expression that will be converted
