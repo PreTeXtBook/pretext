@@ -1162,7 +1162,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ############## -->
 
 <!-- Used at the end of the next template to group index       -->
-<!-- entries by letter for eventual outout organized by letter -->
+<!-- entries by letter for eventual output organized by letter -->
 <xsl:key name="index-entry-by-letter" match="index" use="@letter"/>
 
 <!-- "index-list":                                           -->
