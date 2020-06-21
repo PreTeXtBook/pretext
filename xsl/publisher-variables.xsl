@@ -76,6 +76,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
+<!-- WeBWork problem representations are formed by the           -->
+<!-- pretext/pretext script communicating with a WeBWorK server. -->
+<xsl:variable name="webwork-representations-file">
+    <xsl:choose>
+        <xsl:when test="$publication/source/@webwork-problems">
+            <xsl:value-of select="$publication/source/@webwork-problems"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
 
 <!-- ##################### -->
 <!-- HTML-Specific Options -->

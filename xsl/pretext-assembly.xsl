@@ -125,6 +125,34 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:copy>
 </xsl:template>
 
+<!-- ################### -->
+<!-- WeBWorK Manufacture -->
+<!-- ################### -->
+
+<!-- Prevents repeated access attempts to non-existent file    -->
+<!-- Also use for overall warning about inability to create WW -->
+<!-- $webwork-representations-file is from publisher file      -->
+<xsl:variable name="b-doing-webwork-assembly" select="not($webwork-representations-file = '')"/>
+
+<!-- Don't match on simple WeBWorK logo       -->
+<!-- Seed and possibly source attributes      -->
+<!-- Then authored?, pg?, and static children -->
+<xsl:template match="webwork[node()|@*]" mode="assembly">
+    <xsl:variable name="ww-id">
+        <xsl:apply-templates select="." mode="visible-id" />
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="$b-doing-webwork-assembly">
+            <xsl:copy-of select="document($webwork-representations-file, /pretext)/webwork-representations/webwork-reps[@ww-id=$ww-id]" />
+        </xsl:when>
+        <xsl:otherwise>
+            <statement>
+                <p>The WeBWorK problem with ID <q><xsl:value-of select="$ww-id"/></q> will appear here if you provide the file of problems that have been processed by a WeBWorK server (<c>webwork-representations.ptx</c>).</p>
+            </statement>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 <!-- ################# -->
 <!-- Private Solutions -->
 <!-- ################# -->
@@ -271,8 +299,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Warnings -->
 <!-- ######## -->
 
-<!-- A place for warnings about temporary/experimental features -->
+<!-- A place for warnings about missing files, etc -->
+<!-- and/or temporary/experimental features        -->
 <xsl:template name="assembly-warnings">
+    <xsl:if test="$original/*[not(self::docinfo)]//webwork and not($b-doing-webwork-assembly)">
+        <xsl:message>PTX:WARNING: Your document has WeBworK exercises, but&#xa;your publisher file does not indicate the file of problem representations&#xa;created by a WeBWorK server.  Exercises will have a small&#xa;informative message instead of the intended content.</xsl:message>
+    </xsl:if>
 </xsl:template>
 
 </xsl:stylesheet>
