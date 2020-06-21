@@ -30,4 +30,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <search google-cx="008832104071767086392:woji51c1uko"/>
     </html>
 
+    <!-- Relative path, relative to "main" source file -->
+    <source webwork-problems="webwork-representations.ptx"/>
+
 </publication>

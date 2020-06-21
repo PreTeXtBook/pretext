@@ -160,10 +160,10 @@
         <p>The<cd>
             <cline>/publication/source</cline>
         </cd>element can have the following attributes:<ul>
-            <li><attr>private-solutions</attr>: A filename for a structured file of <tag>hint</tag>, <tag>answer</tag>, <tag>solution</tag> that will see limited distribution (for example, instructors only).  A relative path for the filename is relative to the main source file.  Try an absolute path if there are any problems.</li>
+            <li><attr>private-solutions</attr>: A filename for a structured file of <tag>hint</tag>, <tag>answer</tag>, <tag>solution</tag> that will see limited distribution (for example, instructors only).  A relative path for the filename is relative to the main source file.  Try an absolute path if there are any problems.  See <xref ref="private-solutions-file"/> for details about the use of a private solutions file.</li>
+            <li><attr>webwork-problems</attr>: A filename for a structured file of multiple representatiions of <webwork/> problems.  See <xref ref="representations-publisher"/> for details about the use of a <webwork/> representations file.</li>
         </ul></p>
 
-        <p>See <xref ref="private-solutions-file"/> for details about the use of a private solutions file.</p>
     </section>
 
 </chapter>
