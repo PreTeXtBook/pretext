@@ -21,57 +21,21 @@
 <!-- ********************************************************************* -->
 
 <!-- Identify as a stylesheet -->
-<xsl:stylesheet
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
-    exclude-result-prefixes="xsl"
->
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 
-<!-- Occasionally there is a need to use auxiliary XML files to process    -->
-<!-- PTX. This style sheet merges source with the auxiliary XML so that    -->
-<!-- there can be a new single XML tree for further processing by the      -->
-<!-- primary PTX style sheets.                                             -->
-
-<!-- List of auxiliary XML this sytle sheet merges:                        -->
-<!-- * WeBWorK extractions                                                 -->
-
-<xsl:import href="./pretext-common.xsl" />
-
-<!-- We output a single, large .ptx file for further -->
-<!-- processing by other PTX style sheets            -->
-<xsl:output method="xml" encoding="UTF-8" indent="yes"/>
-
-<!-- Location of webwork-extraction                  -->
-<!-- These are collected from a webwork server       -->
-<!-- by the ptx script, webwork component            -->
-<xsl:param name="webwork.extraction" select="''" />
-<xsl:variable name="b-webwork-extraction" select="not($webwork.extraction = '')" />
-
-<!-- Match root, then start copying content -->
+<!-- The function of this file has been subsumed into the "assembly" -->
+<!-- phase of processing PreTeXt source, and so its only purpose is  -->
+<!-- to announce its retirement as of 2020-06-19.                    -->
 <xsl:template match="/">
-    <xsl:copy>
-        <xsl:apply-templates select="@* | node()" />
-    </xsl:copy>
-</xsl:template>
-
-<!-- Walk the tree, copying everything as-is, except common -->
-<!-- templates applied, and webwork elements modified below -->
-<xsl:template match="@* | node()">
-    <xsl:copy>
-        <xsl:apply-templates select="@* | node()" />
-    </xsl:copy>
-</xsl:template>
-
-<!-- Don't match on simple WeBWorK logo       -->
-<!-- Seed and possibly source attributes      -->
-<!-- Then authored?, pg?, and static children -->
-<xsl:template match="webwork[node()|@*]">
-    <xsl:if test="not($b-webwork-extraction)">
-        <xsl:message terminate="yes">PTX:FATAL:   you must specify the location of the webwork extraction using the "webwork.extraction" command line stringparam.  Use the pretext script and webwork component to collect these files from a WeBWorK server. Quitting...</xsl:message>
-    </xsl:if>
-    <xsl:variable name="ww-id">
-        <xsl:apply-templates select="." mode="visible-id" />
-    </xsl:variable>
-    <xsl:copy-of select="document($webwork.extraction)/webwork-extraction/webwork-reps[@ww-id=$ww-id]" />
+    <xsl:message>
+        <xsl:text>************************************************************&#xa;</xsl:text>
+        <xsl:text>The WeBWorK merge stylesheet is no longer necessary and no&#xa;</xsl:text>
+        <xsl:text>longer has any functionality.  Any regular PreTeXt conversion&#xa;</xsl:text>
+        <xsl:text>will now incorporate the WeBWorK problem representations if&#xa;</xsl:text>
+        <xsl:text>the file is specified in the publisher file.  Consult the&#xa;</xsl:text>
+        <xsl:text>documentation for more details.  (2020-06-19)&#xa;</xsl:text>
+        <xsl:text>************************************************************&#xa;</xsl:text>
+    </xsl:message>
 </xsl:template>
 
 </xsl:stylesheet>
