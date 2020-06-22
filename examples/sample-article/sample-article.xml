@@ -5729,42 +5729,66 @@ the xsltproc executable.
                 <p>You can replace the <q>preview</q> image of a video with one of your own making.  <init>HTML</init> refers to this as the <term>poster</term>, presumably because it advertises the video.  The image you make should be of the same quality as the video, and with the same aspect-ratio, and is presumably one of the frames of the video.  So a screenshot is the likely avenue.  (Maybe we will have advice on how to do this easily, or see <url href="https://github.com/rbeezer/mathbook/issues/853" />.)
                 <idx><h>link</h><h>external, url</h></idx>
                 <idx><h>reference</h><h>external, url</h></idx>
-                On the <tag>video</tag> tag, include a <attr>preview</attr> attribute which is the name of an image file, including a relative path.  (JPEG or PNG formats are best.  JPEG may be smaller for video screenshots, while PNG is lossless and so may work better for diagrams.)</p>
+                On the <tag>video</tag> tag, include a <attr>preview</attr> attribute which is the name of an image file, including a relative path.  (JPEG or PNG formats are best.  JPEG may be smaller for video screenshots, while PNG is lossless and so may work better for diagrams.)  The next video has a preview/poster that is a fram part way into the introduction.</p>
 
                 <figure>
                     <caption>University of Puget Sound Promotional Video</caption>
                     <video source="images/ups-visitor-guide-360" width="80%" preview="images/ups-promo-preview.jpg" />
                 </figure>
 
-                <p>If you find the posters distracting or objectionable, you can cover them up by requesting a generic poster with the attribute-value pair: <c>preview = "generic"</c>.</p>
+                <p>If you find the posters provided automatically for a video to be distracting or objectionable, you can cover them up by requesting a generic poster with the attribute-value pair: <c>preview = "generic"</c>.</p>
 
                 <figure>
                     <caption>University of Puget Sound Promotional Video</caption>
                     <video source="images/ups-visitor-guide-360" width="80%" preview="generic" />
                 </figure>
 
-                <p>You can use a very similar construction to point to a video hosted somewhere on the Internet, just use a complete <init>URL</init> for the <tag>source</tag> attribute.  Note that if the URL has a query string (parameters following a question-mark), then any ampersands (&amp;) will need to be escaped, so as to not confuse the <init>XML</init> processor (<ie /> use <c>&amp;amp</c>).  Also, the question-mark character needs to <em>not</em> be <init>URL</init>-encoded (<c>%3F</c>), so presumably edit the <init>URL</init> to be the character.  Here are two examples, the second one uses the <attr>start</attr> and <attr>stop</attr> attributes to limit the video to just the time between the 16-second and 30-second locations.</p>
-
-                <figure>
-                    <caption>Sintel (Trailer @480p), <url href="https://durian.blender.org/" /></caption>
-                    <video xml:id="video-sintel" source="https://download.blender.org/durian/trailer/sintel_trailer-480p.mp4" width="100%" preview="images/sintel-trailer.jpg" />
-                </figure>
+                <p>You can use a very similar construction to point to a video hosted somewhere on the Internet, just use a complete <init>URL</init> for the <tag>source</tag> attribute.  Note that if the URL has a query string (parameters following a question-mark), then any ampersands (&amp;) will need to be escaped, so as to not confuse the <init>XML</init> processor (<ie /> use <c>&amp;amp</c>).  Also, the question-mark character needs to <em>not</em> be <init>URL</init>-encoded (<c>%3F</c>), so presumably edit the <init>URL</init> to be the character.  Here are several examples, the second one uses the <attr>start</attr> and <attr>stop</attr> attributes to limit the video to just the time between the 16-second and 30-second locations, and has asymmetric margins.</p>
 
                 <!-- http://camendesign.com/code/video_for_everybody/test.html -->
 
                 <figure>
                     <caption>Big Buck Bunny from <q>Video for Everybody</q> Test Page at <url href="http://camendesign.com/code/video_for_everybody/test.htm"><c>camendesign.com/code/video_for_everybody/test.htm</c></url></caption>
-                    <video source="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" start="16" end="30" width="70%" preview="images/big-buck-bunny-frame-one.jpg" />
+                    <video source="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="70%" preview="images/big-buck-bunny-frame-one.jpg" />
+                </figure>
+
+                <figure>
+                    <caption>Big Buck Bunny, Controlled Start/End, Asymmetric Margins</caption>
+                    <video source="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" start="16" end="30" margins="25% 5%" width="70%" preview="images/big-buck-bunny-frame-one.jpg" />
+                </figure>
+
+                <figure>
+                    <caption>Big Buck Bunny, Ogg container, <c>*.ogv</c> extension</caption>
+                    <video source="http://clips.vorwaerts-gmbh.de/big_buck_bunny.ogv" width="60%" preview="images/big-buck-bunny-frame-one.jpg" />
+                </figure>
+
+                <figure>
+                    <caption>Big Buck Bunny, MP4 format</caption>
+                    <video source="http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4" width="50%" preview="images/big-buck-bunny-frame-one.jpg" />
+                </figure>
+
+                <figure>
+                    <caption>Big Buck Bunny, WebM format</caption>
+                    <video source="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="40%" preview="images/big-buck-bunny-frame-one.jpg" />
+                </figure>
+
+                <figure>
+                    <caption>Big Buck Bunny, Automatic best format (temporarily broken)</caption>
+                    <video source="http://clips.vorwaerts-gmbh.de/big_buck_bunny" width="30%" preview="images/big-buck-bunny-frame-one.jpg" />
                 </figure>
 
                 <!-- A Coursera URL that expires via digital signature scheme:
                 https://d18ky98rnyall9.cloudfront.net/u5_p4_1_%20chisq_gof.77c96ac0ad8211e498e5e34296ce5455/full/360p/index.webm?Expires=1522800000&Signature=DJKrmAOfuGF4HMmWmQ2nCHnOdoeFzZd7qJzp1cfwOjQa-J~1kGNzwllMxFmGi8UXxt3wTXrhdhTQVcFQNk5nPzAi64mjJkMVu0m~QyKISqzjkFBZJm1NCnkNcbSyOk6WRDj6mjlrxEDaUSD6hHmD04ehumORG3G55Sp5OGEhYnU_&Key-Pair-Id=APKAJLTNE6QMUY6HBC5A -->
+
+                <p>Videos are assumed to have a 16:9 aspect ratio (width:height).  If this is not the case, then you must specify the aspect ratio with either a ratio (e.g. 4:3) or as a number expressing the fraction width/height (e.g. 1.3333).  Four decimal places should suffice for the latter.  Note that you cannot <em>change</em> the aspect ratio, and you <em>must</em> supply the aspect ratio for any video that does not have the default ratio.  This is a technical requirement that allows us to smoothly scale the videos on small devices (try this page on your mobile phone!).</p>
             </subsection>
 
             <subsection>
                 <title>YouTube</title>
 
-                <p>YouTube<idx><h>YouTube videos</h></idx><idx><h>videos</h><h>YouTube</h></idx> videos may be embedded with only knowledge of a video's <q>ID</q> or a <q>playlist ID</q>.  A single video's YouTube ID is a string of eleven seemingly random characters that show up in the URL when you watch a video.  For the Led Zeppelin performance below, the ID is <c>hAzdgU_kpGo</c>, which you might normally watch directly from the URL <url href="https://www.youtube.com/watch?v=hAzdgU_kpGo" />.  Screen real estate is determined by specifying an optional <c>@width</c> attribute as a percentage, and aspect ratio is preserved on the assumption of HD video (16:9).  (Enhancements will include other aspect ratios.)</p>
+                <p>YouTube<idx><h>YouTube videos</h></idx><idx><h>videos</h><h>YouTube</h></idx> videos may be embedded with only knowledge of a video's <q>ID</q> or a <q>playlist ID</q>.  A single video's YouTube ID is a string of eleven seemingly random characters that show up in the URL when you watch a video.  For the Led Zeppelin performance below, the ID is <c>hAzdgU_kpGo</c>, which you might normally watch directly from the URL <url href="https://www.youtube.com/watch?v=hAzdgU_kpGo" />.  As described just above, you need to specify a different aspect ratio if the video does not have a 16:9 aspect ratio.</p>
+
+                <p>Note: some of these videos may not play if viewed locally, and maybe not even if you start up a local web server (such as can be easily done with Python).  So if you are testing new features, be careful about assuming videos from cloud services are not working properly.</p>
 
                 <p>If you have ever owned a drone, you sympathize with this guy.  Way funnier than a cat video.</p>
 
@@ -5779,10 +5803,10 @@ the xsltproc executable.
                 <figure>
                     <title>My first day with my drone (Splashdown)</title>
                     <caption>First Drone Flight (Splashdown, 0:54 to 1:12)</caption>
-                    <video xml:id="drone-flight-clip" youtube="VsHMjWORFvI" start="54" end="72" />
+                    <video xml:id="drone-flight-clip" youtube="VsHMjWORFvI" width="50%" start="54" end="72"/>
                 </figure>
 
-                <p>Videos may be placed <q>standalone</q> in a <tag>sidebyside</tag>, but are designed mostly on the assumption that they are wrapped in a <c>figure</c> with a <c>title</c> (which is distinct from a <c>caption</c>).  This video comes with a deafult poster featuring Robert Plant.  We've replaced it with Jimmy Page.</p>
+                <p>This next video comes with a default poster from YouTube featuring Robert Plant.  We've replaced it with a poster featuring Jimmy Page.</p>
 
                 <figure>
                     <title>Kashmir (Live), Led Zeppelin</title>
@@ -5792,7 +5816,7 @@ the xsltproc executable.
                     <video xml:id="led-zeppelin-kashmir" youtube="hAzdgU_kpGo" width="70%" preview="images/jimmy-page.jpg" />
                 </figure>
 
-                <p>And if you don't want to be reminded of Plant, Page, Bonham, or Jones, you can cover them up.</p>
+                <p>And if you don't want to be reminded of Plant, Page, Bonham, or Jones, you can cover them up entirely.</p>
 
                 <figure>
                     <title>Kashmir (Live), Led Zeppelin</title>
@@ -5802,7 +5826,11 @@ the xsltproc executable.
                     <video xml:id="led-zeppelin-kashmir-generic" youtube="hAzdgU_kpGo" width="50%" preview="generic" />
                 </figure>
 
-                <p>We can pack two videos side-by-side, with a lot of horizontal control, using two panels in the <c>sidebyside</c> element.  We have simply chose not to provide a caption (overall, or separately) as an illustration.  The sizes are purposely a bit odd.  See <xref ref="section-side-by-side" text="type-global" /> for much more on side-by-side panels.  These videos come from the <q>Topic</q> and <q>VEVO</q> areas of YouTube (respectively) and both have start/end times.</p>
+                <p>Videos were first designed mostly on the assumption that they are wrapped in a <c>figure</c> with a <c>title</c> (which is distinct from a <c>caption</c>).  But you can just place a video <q>naked</q> inbetween a couple of paragraphs.  This is nice if you don't want the clutter of numbers, and/or if you plan to exclude videos from some edition of your document.</p>
+
+                <video xml:id="led-zeppelin-kashmir-solo" youtube="hAzdgU_kpGo" width="50%" preview="images/jimmy-page.jpg" />
+
+                <p>We can pack two videos side-by-side, with a lot of horizontal control, using two panels in the <c>sidebyside</c> element.  We have simply chosen here to not provide a caption (overall, or separately) as an illustration.  The sizes are purposely a bit odd.  See <xref ref="section-side-by-side" text="type-global"/> for much more on side-by-side panels.  These videos come from the <q>Topic</q> and <q>VEVO</q> areas of YouTube (respectively) and both have start/end times.</p>
 
                 <sidebyside margins="auto" widths="20% 40%" valign="middle">
                     <!-- Liza Minelli -->
@@ -5841,82 +5869,76 @@ the xsltproc executable.
                     </figure>
                 </sidebyside>
 
-                <p>Videos may be embedded, or popped-out to play in a new window or tab (at greater width), or a link will give the reader the option to choose either style of playback.  The automatic pop-out option requires a static thumbnail image.  (For YouTube, these images can be obtained automatically with the <c>pretext</c> script.)</p>
+                <p>We test three equally-wide YouTube videos in a <tag>sidebyside</tag> with a few variations.</p>
+
+                <sidebyside margins="0%" width="30%">
+                    <figure>
+                        <caption>Medium Length</caption>
+                        <video xml:id="pre-roll-countdown-1" youtube="Srmdij0CU1U"/>
+                    </figure>
+                    <figure>
+                        <caption>Short</caption>
+                        <video xml:id="pre-roll-countdown-2" youtube="Srmdij0CU1U" start="2" end="4"/>
+                    </figure>
+                    <figure>
+                        <caption>A Really Long Caption That Will Wrap onto a New Line</caption>
+                        <video xml:id="pre-roll-countdown-3" youtube="Srmdij0CU1U"/>
+                    </figure>
+                </sidebyside>
+
+                <p>We test three equally-wide YouTube videos in a <tag>sidebyside</tag> with a few variations, and now contained in a <tag>figure</tag>.</p>
 
                 <figure>
-                    <caption>YouTube Play Location Options (<c>play-at</c> attribute)</caption>
+                    <caption>Author-Hosted videos as Sub-Figures</caption>
                     <sidebyside margins="0%" width="30%">
                         <figure>
-                            <caption>Embedded Only</caption>
-                            <video xml:id="pre-roll-countdown-1" youtube="gFHQ6Y0nxWs" play-at="embed" />
+                            <caption>Medium Length</caption>
+                            <video xml:id="pre-roll-countdown-4" youtube="Srmdij0CU1U"/>
                         </figure>
                         <figure>
-                            <caption>Pop-Out Only, w/ Start/End</caption>
-                            <video xml:id="pre-roll-countdown-2" youtube="gFHQ6Y0nxWs" start="2" end="4" play-at="popout" />
+                            <caption>Short</caption>
+                            <video xml:id="pre-roll-countdown-5" youtube="Srmdij0CU1U" start="2" end="4"/>
                         </figure>
                         <figure>
-                            <caption>User Selection</caption>
-                            <video xml:id="pre-roll-countdown-3" youtube="gFHQ6Y0nxWs" play-at="select" />
+                            <caption>A Really Long Caption That Will Wrap onto a New Line</caption>
+                            <video xml:id="pre-roll-countdown-6" youtube="Srmdij0CU1U"/>
                         </figure>
                     </sidebyside>
                 </figure>
 
-                <p>Each of the three options above may have a generic play button placed over the one provided by the video.</p>
+                <p>We test three equally-wide author-hosted videos in a <tag>sidebyside</tag> with a few variations.</p>
+
+                <sidebyside margins="0%" width="30%">
+                    <figure>
+                        <caption>Medium Length</caption>
+                        <video xml:id="ups-promo-1" source="images/ups-visitor-guide-360"/>
+                    </figure>
+                    <figure>
+                        <caption>Short</caption>
+                        <video xml:id="ups-promo-2" source="images/ups-visitor-guide-360" start="4" end="10"/>
+                    </figure>
+                    <figure>
+                        <caption>A Really Long Caption That Will Wrap onto a New Line</caption>
+                        <video xml:id="ups-promo-3" source="images/ups-visitor-guide-360"/>
+                    </figure>
+                </sidebyside>
+
+                <p>We test three equally-wide author-hosted videos in a <tag>sidebyside</tag> with a few variations, and now contained in a <tag>figure</tag>.</p>
 
                 <figure>
-                    <caption>YouTube with Generic Preview</caption>
+                    <caption>YouTube videos as Sub-Figures</caption>
                     <sidebyside margins="0%" width="30%">
                         <figure>
-                            <caption>Embedded Only</caption>
-                            <video xml:id="pre-roll-countdown-4" youtube="gFHQ6Y0nxWs" play-at="embed" preview="generic" />
+                            <caption>Medium Length</caption>
+                            <video xml:id="ups-promo-4" source="images/ups-visitor-guide-360"/>
                         </figure>
                         <figure>
-                            <caption>Pop-Out Only, w/ Start/End</caption>
-                            <video xml:id="pre-roll-countdown-5" youtube="gFHQ6Y0nxWs" start="2" end="4" play-at="popout" preview="generic" />
+                            <caption>Short</caption>
+                            <video xml:id="ups-promo-5" source="images/ups-visitor-guide-360" start="4" end="10"/>
                         </figure>
                         <figure>
-                            <caption>User Selection</caption>
-                            <video xml:id="pre-roll-countdown-6" youtube="gFHQ6Y0nxWs" play-at="select" preview="generic" />
-                        </figure>
-                    </sidebyside>
-                </figure>
-
-                <p>Now, the six combinations above with an author-hosted video.</p>
-
-                <figure>
-                    <caption>Author-Hosted Play Location Options (<c>play-at</c> attribute)</caption>
-                    <sidebyside margins="0%" width="30%">
-                        <figure>
-                            <caption>Embedded Only</caption>
-                            <video xml:id="ups-promo-1" source="images/ups-visitor-guide-360" play-at="embed" preview="images/ups-promo-frame-one.jpg"/>
-                        </figure>
-                        <!-- A @preview is effective on next, and might become       -->
-                        <!-- necessary as part of a deprecation of the popout option -->
-                        <figure>
-                            <caption>Pop-Out Only, w/ Start/End</caption>
-                            <video xml:id="ups-promo-2" source="images/ups-visitor-guide-360" start="15" end="21" play-at="popout" />
-                        </figure>
-                        <figure>
-                            <caption>User Selection</caption>
-                            <video xml:id="ups-promo-3" source="images/ups-visitor-guide-360" play-at="select" preview="images/ups-promo-frame-one.jpg"/>
-                        </figure>
-                    </sidebyside>
-                </figure>
-
-                <figure>
-                    <caption>Author-Hosted, Generic Preview, Experimental Aspect Ratios</caption>
-                    <sidebyside margins="0%" width="30%">
-                        <figure>
-                            <caption>Embedded Only</caption>
-                            <video xml:id="ups-promo-4" source="images/ups-visitor-guide-360" play-at="embed" preview="generic" aspect="4:3"/>
-                        </figure>
-                        <figure>
-                            <caption>Pop-Out Only, w/ Start/End</caption>
-                            <video xml:id="ups-promo-5" source="images/ups-visitor-guide-360" start="15" end="21" play-at="popout" preview="generic" aspect=".40"/>
-                        </figure>
-                        <figure>
-                            <caption>User Selection</caption>
-                            <video xml:id="ups-promo-6" source="images/ups-visitor-guide-360" play-at="select" preview="generic" aspect="1.05" />
+                            <caption>A Really Long Caption That Will Wrap onto a New Line</caption>
+                            <video xml:id="ups-promo-6" source="images/ups-visitor-guide-360"/>
                         </figure>
                     </sidebyside>
                 </figure>
@@ -5927,6 +5949,12 @@ the xsltproc executable.
 
                 <p>We support videos from <url href="https://vimeo.com/">Vimeo</url><fn><c>vimeo.com</c></fn> in much the same way as YouTube videos.  Now the identifier is a long integer.  For example, the video up next would normally be found at <c>https://vimeo.com/27246366</c>.  But instead, you can embed the video with as little as <c>&lt;video vimeo="27246366"/&gt;</c>.  As of 2019-05-18, we intend to support as many of the options described above as possible.  Widths and heights (via the aspect ratio) will perform as expected.  We have not investigated start and end times.</p>
 
+                <figure>
+                    <caption><articletitle>MOVE</articletitle>, by <url href="https://vimeo.com/rickmereki">Rick Mereki</url>, <c>vimeo.com/rickmereki</c></caption>
+                    <video vimeo="27246366" width="80%"/>
+                </figure>
+
+                <p>Now with an author-supplied poster.</p>
                 <figure>
                     <caption><articletitle>MOVE</articletitle>, by <url href="https://vimeo.com/rickmereki">Rick Mereki</url>, <c>vimeo.com/rickmereki</c></caption>
                     <video vimeo="27246366" width="80%" preview="images/move.png"/>
