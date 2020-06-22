@@ -70,6 +70,19 @@
             </ul>An <c>index.html</c> page will be created which redirects immediately to this page.  Many webservers will serve this page when a <init>URL</init> stops with the enclosing directory.  So the Table of Contents (<tag>book</tag>, <tag>article</tag>) or the <tag>frontmatter</tag> are common choices.  See <xref ref="index-page" text="title"/> in <xref ref="html-publisher-options"/> for more.</p>
         </subsection>
 
+        <subsection xml:id="online-platform-options">
+            <title>HTML Platforms</title>
+            <idx><h>platform</h><h>HTML</h></idx>
+            <idx>online platforms</idx>
+
+            <p>The<cd>
+                <cline>/publication/html</cline>
+            </cd>element can have an attribute <attr>platform</attr> with values:<ul>
+                <li><c>web</c>: the default, meant for self-hosting with no server configuration, features, or assumptions</li>
+                <li><c>runestone</c>: output meant for hosting on a Runestone server (<xref ref="runestone"/>)</li>
+            </ul>Here <term>platform</term> refers to the server where the <init>HTML</init> output will eventually be hosted.  The effect is to create minor variations in the output to take advantage of extra features of the indicated platform.</p>
+        </subsection>
+
         <subsection xml:id="online-style-options">
             <title>HTML Style</title>
             <idx><h>style</h><h>HTML</h></idx>
