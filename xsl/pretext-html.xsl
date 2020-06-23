@@ -3660,50 +3660,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:template>
 
-<!-- For solutions divisions, we mimic and reuse some of the above -->
-<xsl:template match="exercise" mode="solutions">
-    <xsl:param name="b-has-statement" />
-    <xsl:param name="b-has-hint" />
-    <xsl:param name="b-has-answer" />
-    <xsl:param name="b-has-solution" />
-
-    <!-- we check for content, subject to selection of switches          -->
-    <!-- if there is no content, then we will not output anything at all -->
-     <xsl:variable name="dry-run">
-        <xsl:apply-templates select="." mode="dry-run">
-            <xsl:with-param name="b-has-statement" select="$b-has-statement" />
-            <xsl:with-param name="b-has-hint" select="$b-has-hint" />
-            <xsl:with-param name="b-has-answer" select="$b-has-answer" />
-            <xsl:with-param name="b-has-solution" select="$b-has-solution" />
-        </xsl:apply-templates>
-    </xsl:variable>
-
-    <xsl:if test="not($dry-run = '')">
-        <article class="exercise-like">
-            <xsl:choose>
-                <!-- inline can go with generic, which is switched on inline/divisional -->
-                <xsl:when test="boolean(&INLINE-EXERCISE-FILTER;)">
-                    <xsl:apply-templates select="." mode="heading-birth" />
-                </xsl:when>
-                <!-- with full number just for solution list -->
-                <xsl:otherwise>
-                    <xsl:apply-templates select="." mode="heading-divisional-exercise" />
-                </xsl:otherwise>
-            </xsl:choose>
-            <!-- TODO: dry-run is not letting these through, no matter what -->
-            <!-- webwork case -->
-            <!-- MyOpenMath case -->
-            <xsl:apply-templates select="."  mode="exercise-components">
-                <xsl:with-param name="b-original"     select="false()" />
-                <xsl:with-param name="b-has-statement" select="$b-has-statement" />
-                <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
-                <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
-                <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
-            </xsl:apply-templates>
-        </article>
-    </xsl:if>
-</xsl:template>
-
 <!-- Project-LIKE -->
 <!-- A complex block, possibly structured with task -->
 
@@ -3769,7 +3725,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- For solutions divisions, we mimic and reuse some of the above -->
-<xsl:template match="&PROJECT-LIKE;" mode="solutions">
+<xsl:template match="exercise|&PROJECT-LIKE;" mode="solutions">
     <xsl:param name="b-has-statement" />
     <xsl:param name="b-has-hint" />
     <xsl:param name="b-has-answer" />
@@ -3787,9 +3743,35 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
 
     <xsl:if test="not($dry-run = '')">
-        <article class="project-like">
-            <xsl:apply-templates select="." mode="heading-birth" />
-
+        <!-- incongruities here are historical, -->
+        <!-- keeping the diff low-impact        -->
+        <xsl:element name="article">
+            <xsl:attribute name="class">
+                <xsl:choose>
+                    <xsl:when test="self::exercise">
+                        <xsl:text>exercise-like</xsl:text>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:text>project-like</xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:attribute>
+            <!-- A variety of headings -->
+            <xsl:choose>
+                <!-- inline can go with generic, which is switched on inline/divisional -->
+                <xsl:when test="boolean(&INLINE-EXERCISE-FILTER;)">
+                    <xsl:apply-templates select="." mode="heading-birth" />
+                </xsl:when>
+                <!-- with full number just for solution list -->
+                <!-- "exercise" must be divisional now -->
+                <xsl:when test="self::exercise">
+                    <xsl:apply-templates select="." mode="heading-divisional-exercise" />
+                </xsl:when>
+                <!-- now PROJECT-LIKE -->
+                <xsl:otherwise>
+                    <xsl:apply-templates select="." mode="heading-birth" />
+                </xsl:otherwise>
+            </xsl:choose>
             <xsl:choose>
                 <!-- structured version              -->
                 <xsl:when test="task">
@@ -3821,7 +3803,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     </xsl:apply-templates>
                 </xsl:otherwise>
             </xsl:choose>
-        </article>
+        </xsl:element>
     </xsl:if>
 </xsl:template>
 
