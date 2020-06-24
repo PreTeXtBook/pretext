@@ -166,9 +166,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:variable name="b-private-solutions" select="not($private-solutions-file = '')"/>
 
-<xsl:variable name="n-hint"     select="document($private-solutions-file, /pretext)/pi:privatesolutions/hint"/>
-<xsl:variable name="n-answer"   select="document($private-solutions-file, /pretext)/pi:privatesolutions/answer"/>
-<xsl:variable name="n-solution" select="document($private-solutions-file, /pretext)/pi:privatesolutions/solution"/>
+<!-- Note: there may be (nested) "pi:privatesolutionsdivision"  -->
+<!-- elements in this file.  They are largely meaningless, but  -->
+<!-- are necessary if an author wants to modularize their       -->
+<!-- collection across multiple files.  Then each file can be a -->
+<!-- single overall element.  (We expect/require no additional  -->
+<!-- structure in this file.)  The conseqience is the "//" in   -->
+<!-- each expression below.                                     -->
+<xsl:variable name="n-hint"     select="document($private-solutions-file, /pretext)/pi:privatesolutions//hint"/>
+<xsl:variable name="n-answer"   select="document($private-solutions-file, /pretext)/pi:privatesolutions//answer"/>
+<xsl:variable name="n-solution" select="document($private-solutions-file, /pretext)/pi:privatesolutions//solution"/>
 
 <xsl:template match="exercise" mode="assembly">
     <!-- <xsl:message>FOO:<xsl:value-of select="count($n-solution)"/></xsl:message> -->
