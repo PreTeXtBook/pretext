@@ -1077,10 +1077,15 @@ the xsltproc executable.
                                     <p>Second subsubtask.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
                                     <p>In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
                                 </task>
-                                <task>
-                                    <p>Third subsubtask.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
-                                    <p>In interdum suscipit ullamcorper</p>
-                                    <p>In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
+                                <!-- This task is uded to test private solutions, so it must    -->
+                                <!-- have the structure necessary to have an "answer" added in, -->
+                                <!-- thus the "statement" is necessary                          -->
+                                <task xml:id="deep-terminal-task">
+                                    <statement>
+                                        <p>Third subsubtask.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
+                                        <p>In interdum suscipit ullamcorper</p>
+                                        <p>In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>
+                                    </statement>
                                 </task>
                                 <conclusion>
                                     <p>The conclusion of the structured subtask.  In interdum suscipit ullamcorper. Morbi sit amet malesuada augue, id vestibulum magna. Nulla blandit dui metus, malesuada mollis sapien ullamcorper sit amet. Nulla at neque nisi. Integer vel porta felis.</p>

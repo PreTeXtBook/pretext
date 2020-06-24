@@ -56,4 +56,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </solution>
     </pi:privatessolutionsdivision>
 
+    <!-- a terminal task in "A very structured project" -->
+    <answer ref="deep-terminal-task">
+        <p>A private answer to a nested task.</p>
+    </answer>
+
+    <solution ref="deep-terminal-task">
+        <p>A private solution to a nested task.</p>
+    </solution>
 </pi:privatesolutions>

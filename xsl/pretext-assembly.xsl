@@ -177,11 +177,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:variable name="n-answer"   select="document($private-solutions-file, /pretext)/pi:privatesolutions//answer"/>
 <xsl:variable name="n-solution" select="document($private-solutions-file, /pretext)/pi:privatesolutions//solution"/>
 
-<xsl:template match="exercise" mode="assembly">
-    <!-- <xsl:message>FOO:<xsl:value-of select="count($n-solution)"/></xsl:message> -->
+<xsl:template match="exercise|task" mode="assembly">
     <xsl:variable name="the-id" select="@xml:id"/>
     <xsl:copy>
-        <!-- attributes, then all elements that are not solutions -->
+        <!-- attributes, then all elements that are not solutions                               -->
+        <!--   unstructured exercise:  "p" etc, then solutions OK even if schema violation?     -->
+        <!--   structured exercise: copy statement, then interleave solutions                   -->
+        <!--   non-terminal Task: introduction, task, conclusion                                -->
+        <!--   terminal unstructured task: "p" etc, then solutions OK even if schema violation? -->
+        <!--   terminal structured task: copy statement, then interleave solutions              -->
+        <!-- TODO: defend against non-terminal task, unstructured cases      -->
+        <!-- (identify proper structure + non-empty union of three additions -->
+        <!-- Fix unstructured cases by inserting "statement",                -->
+        <!-- warn about non-terminal task case and drop additions (error)    -->
         <xsl:apply-templates select="*[not(self::hint or self::answer or self::solution)]|@*" mode="assembly"/>
         <!-- hints, answers, solutions; first regular, second private -->
         <xsl:apply-templates select="hint" mode="assembly"/>
