@@ -101,7 +101,11 @@
             </ol>
         </list>
 
-        <p>You will have noticed that you have a lot of freedom to make a completely disorganized private solutions file.  There is no structure to prevent this<mdash/>you are on your own.  Ourselves, we would keep the solutions in order of appearance and use comments liberally.  But you can always search on the common value of <attr>xml:id</attr> and <attr>ref</attr> to locate the pieces.  Also, you can use the <c>xinclude</c> mechanism to modularize the file of private solutions into multiple files, say by chapter or section.  See <xref ref="processing-modular"/>.</p>
+        <p>For a large project you may have <em>many</em> private solutions and one big file is unwieldy.  The solution is to modularize the file as described in <xref ref="processing-modular"/>.  Then you can organize your <q>file</q> of solutions into multiple files, perhaps organized by <tag>chapter</tag> or <tag>section</tag>.  The carch is that the include facility requires each separate file to only have a <em>single</em> top-level (root) element.  For this purpose use the <tqg>pi:privatesolutionsdivision</tqg> element, which is designed for only this purpose.  You can nest this element arbitrarily deep.</p>
+
+        <p>Note that an <tag>exercise</tag> or <tag>task</tag> may be authored with no solutions and then does not need a <tag>statement</tag>.  Now, if you add private solutions to such an exercise or task, the markup will be incorrect.  As of 2020-06-24 we make no extra effort to warn, or fix, this situation.  A likely consequence will be that these private solutions are not rendered (but you might see a problem number where they should appear).  Similar advice applies to <tag>task</tag>, and especially to non-terminal <tag>task</tag> which can never hold solutions.</p>
+
+        <p>You will have noticed that you have a lot of freedom to make a completely disorganized private solutions file, or even <em>many</em> disorganized files.  There is no structure to prevent this<mdash/>you are on your own.  Ourselves, we would keep the solutions in order of appearance, modularize a big project logically, and use comments liberally.  But you can always search on the common value of <attr>xml:id</attr> and <attr>ref</attr> to locate the pieces.</p>
 
         <warning xml:id="private-stays-private">
             <title>Keep Your Private Solutions Private!</title>
