@@ -25,9 +25,9 @@
 
 <!-- Trade on HTML markup, numbering, chunking, etc. -->
 <!-- Override as pecularities of EPUB conversion arise -->
-<xsl:import href="./mathbook-common.xsl" />
+<xsl:import href="./pretext-common.xsl" />
 <xsl:import href="./pretext-assembly.xsl" />
-<xsl:import href="./mathbook-html.xsl" />
+<xsl:import href="./pretext-html.xsl" />
 
 <!-- TODO: free chunking level -->
 <!-- TODO: liberate GeoGebra, videos -->
