@@ -115,12 +115,12 @@ def get_cli_arguments():
     format_help = 'Output formats are:\n' + '\n'.join(['  {} - {}'.format(info[0], info[1]) for info in format_info])
     parser.add_argument('-f', '--format', help=format_help, action="store", dest='format')
 
+    parser.add_argument('-p', '--publisher', help='filename for publisher file', action="store", dest='publisher_file')
     # "nargs" allows multiple options following the flag
     # separate by spaces, can't use "-stringparam"
     # stringparams is a list of strings on return, defaults to empty list
-    parser.add_argument('-p', '--parameters', nargs='+', help='stringparam options to pass to XSLT extraction stylesheet (multiple option/value pairs, not as last argument)',
+    parser.add_argument('-x', '--parameters', nargs='+', help='extra stringparam options to pass to XSLT extraction stylesheet (multiple option/value pairs, not as last argument)',
                          action="store", dest='stringparams', default=[])
-    parser.add_argument('-x', '--publisher', help='filename for publisher file', action="store", dest='publisher_file')
     # default to an empty string, which signals root to XSL stylesheet
     parser.add_argument('-r', '--restrict', help='restrict to subtree rooted at element with specified xml:id',
                          action="store", dest='xmlid', default='')
