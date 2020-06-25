@@ -247,7 +247,7 @@ def main():
     elif args.component == 'youtube':
         ptx.youtube_thumbnail(xml_source, args.xmlid, dest_dir)
     elif args.component == 'preview':
-        ptex.preview_images(xml_source, args.xmlid, dest_dir)
+        ptx.preview_images(xml_source, args.xmlid, dest_dir)
     elif args.component == 'mom':
         ptx.mom_static_problems(xml_source, args.xmlid, dest_dir)
     elif args.component == 'math':
