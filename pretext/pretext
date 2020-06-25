@@ -188,6 +188,11 @@ def main():
         data_dir = verify_input_directory(args.data_dir)
     else:
         data_dir = None
+    # publisher file is optional, so allow for None here
+    if args.publisher_file:
+        publisher_file = verify_input_file(args.publisher_file)
+    else:
+        publisher_file = None
 
     # convert list of string parameters into a dictionary
     # routines in module expect a dictionary, so convert here and now
@@ -259,13 +264,13 @@ def main():
         elif args.format == 'latex':
             raise NotImplementedError("conversion to LaTeX version not integrated yet, use command line")
         elif args.format == 'braille':
-            ptx.braille(args.xml_file, args.publisher_file, dest_dir)
+            ptx.braille(args.xml_file, publisher_file, dest_dir)
         elif args.format == 'epub-svg':
-            ptx.epub(args.xml_file, args.publisher_file, dest_dir, 'svg')
+            ptx.epub(args.xml_file, publisher_file, dest_dir, 'svg')
         elif args.format == 'epub-mml':
-            ptx.epub(args.xml_file, args.publisher_file, dest_dir, 'mml')
+            ptx.epub(args.xml_file, publisher_file, dest_dir, 'mml')
         elif args.format == 'epub-speech':
-            ptx.epub(args.xml_file, args.publisher_file, dest_dir, 'speech')
+            ptx.epub(args.xml_file, publisher_file, dest_dir, 'speech')
         # 2020-05-19 MathBookXMLtoSWS class removed
         elif args.format == 'sagenb':
             raise NotImplementedError("conversion to Sage notebook format removed (2020-05-18)")

@@ -1255,6 +1255,11 @@ def xsltproc(xsl, xml, result, output_dir=None, stringparams={}):
     output_dir   - a directory for exsl:document() templates to write to
     stringparams - a dictionary of option/value string:string pairs to
                    pass to  xsl:param  elements of the stylesheet
+
+    N.B. The value of a "publisher" string parameter passed in the
+    "stringparams" argument must be a complete path, since a relative
+    path can be rendered incorrect by the change to an "output_dir"
+    different than that at the time of the command-line invocation.
     """
     import os
     import lxml.etree as ET
