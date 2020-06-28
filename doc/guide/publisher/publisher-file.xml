@@ -145,6 +145,30 @@
             </ul></p>
         </subsection>
 
+        <subsection xml:id="revealjs-control-options">
+            <title>Reveal.js Controls</title>
+            <idx><h>publisher options</h><h>reveal.js controls</h></idx>
+
+            <p>The<cd>
+                <cline>/publication/revealjs/controls</cline>
+            </cd>element can have the following attributes:<ul>
+                <li><attr>backarrow</attr>: for the visibility of a <q>back</q> arrow.  Values are <c>faded</c>, <c>hidden</c>, or <c>visible</c>.  The default is <c>faded</c>.</li>
+                <li><attr>display</attr>: for the overall visibility of controls.  Values are <c>yes</c> or <c>no</c>.  The default is <c>yes</c>.</li>
+                <li><attr>layout</attr>: for the location of the controls.  Values are <c>edges</c> or <c>bottom-right</c>.  The default is <c>bottom-right</c>.</li>
+                <li><attr>tutorial</attr>: for animation of suggested navigation arrows.  Values are <c>yes</c> or <c>no</c>.  The default is <c>yes</c>.</li>
+            </ul></p>
+        </subsection>
+
+        <subsection xml:id="revealjs-navigation-options">
+            <title>Reveal.js Navigation</title>
+            <idx><h>publisher options</h><h>reveal.js navigation</h></idx>
+
+            <p>The<cd>
+                <cline>/publication/revealjs/navigation</cline>
+            </cd>element can have the following attribute:<ul>
+                <li><attr>mode</attr>: for the arrangement of the navigation through slides.  Values are <c>default</c>, <c>linear</c>, or <c>grid</c>.  The default is <c>default</c>.  The value <c>default</c> refers to the default mode of Reveal.js and is synonomous with <c>grid</c>.  In other words, the choice of <c>default</c> or <c>grid</c> results in identical behavior.</li>
+            </ul>See <xref ref="publisher-revealjs"/> for more explanation of the two different navigation modes.</p>
+        </subsection>
 
         <subsection xml:id="revealjs-resources-options">
             <title>Reveal.js Resources</title>

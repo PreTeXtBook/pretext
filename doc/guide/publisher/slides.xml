@@ -33,6 +33,21 @@
             or you may arrange to copy the necessary files from reveal.js and store them locally (your hard disk, your website).
             See <xref ref="revealjs-resources-options"/> for the necessary details.
         </p>
+        <p>
+            Reveal.js has various options of the visibility of arrows a presenter can click on in order to move through a presentation.
+            The visibility of these can be controlled via options in the publisher file.  See <xref ref="revealjs-control-options"/>.
+        </p>
+        <p>
+            Reveal.js imagines slides laid out on a 2-D grid.  Each <pretext/> section gives rise to a title slide and these are organized left-to-right.  <em>Below</em> each of these slides, arranged vertically, are the slides comprising the section.  We use the attribute value <c>grid</c> to refer to this arrangement.
+        </p>
+        <p>
+            If public speaking makes you nervous and going left-to-right and top-to-bottom
+            nearly simultaneously means you get lost and even less confident (we've seen it),
+            we have an option for you.
+            The attribute value <c>linear</c> arranges <em>all</em> your slides from left-to-right.
+            Aah, that's better.
+            See <xref ref="revealjs-navigation-options"/> for details on setting the navigation mode for your slideshow.
+        </p>
     </section>
     <section xml:id="publisher-beamer">
         <title>Beamer <latex/></title>
