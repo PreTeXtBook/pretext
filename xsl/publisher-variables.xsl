@@ -499,6 +499,196 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ###################### -->
 
 
+<!-- ########################### -->
+<!-- Reveal.js Slideshow Options -->
+<!-- ########################### -->
+
+<!-- Reveal.js Theme -->
+
+<xsl:variable name="reveal-theme">
+    <xsl:choose>
+        <!-- if theme is specified, use it -->
+        <xsl:when test="$publication/revealjs/appearance/@theme">
+            <xsl:value-of select="$publication/revealjs/appearance/@theme"/>
+        </xsl:when>
+        <!-- otherwise use "simple" as the default -->
+        <xsl:otherwise>
+            <xsl:text>simple</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- Reveal.js Controls Back Arrows -->
+
+<xsl:variable name="reveal-control-backarrow">
+    <xsl:choose>
+        <!-- if publisher.xml file has laout specified, use it -->
+        <xsl:when test="($publication/revealjs/controls/@backarrows = 'faded') or ($publication/revealjs/controls/@backarrows = 'hidden') or ($publication/revealjs/controls/@backarrows = 'visible')">
+            <xsl:value-of select="$publication/revealjs/controls/@backarrows"/>
+        </xsl:when>
+        <xsl:when test="$publication/revealjs/controls/@backarrows">
+            <xsl:message>PTX:WARNING: the value of the publisher file attribute "revealjs/controls/@backarrows" should be "faded", "hidden", or "visible" not "<xsl:value-of select="$publication/revealjs/controls/@backarrows"/>".  Default value will be used instead.</xsl:message>
+            <xsl:text>faded</xsl:text>
+        </xsl:when>
+        <!-- otherwise use "faded" as the default -->
+        <xsl:otherwise>
+            <xsl:text>faded</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- Reveal.js Controls (on-screen navigation) -->
+
+<xsl:variable name="control-display">
+    <xsl:choose>
+        <!-- if publisher.xml file has theme specified, use it -->
+        <xsl:when test="($publication/revealjs/controls/@display = 'yes') or ($publication/revealjs/controls/@display = 'no')">
+            <xsl:value-of select="$publication/revealjs/controls/@display"/>
+        </xsl:when>
+        <xsl:when test="$publication/revealjs/controls/@display">
+            <xsl:message>PTX:WARNING: the value of the publisher file attribute "revealjs/controls/@display" should be "yes" or "no" not "<xsl:value-of select="$publication/revealjs/controls/@display"/>".  Default value will be used instead.</xsl:message>
+            <xsl:text>yes</xsl:text>
+        </xsl:when>
+        <!-- otherwise use "yes" as the default -->
+        <xsl:otherwise>
+            <xsl:text>yes</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<!-- Convert "yes"/"no" to a boolean variable -->
+<xsl:variable name="b-reveal-control-display" select="$control-display= 'yes'"/>
+
+<!-- Reveal.js Controls Layout -->
+
+<xsl:variable name="reveal-control-layout">
+    <xsl:choose>
+        <!-- if publisher.xml file has laout specified, use it -->
+        <xsl:when test="($publication/revealjs/controls/@layout = 'edges') or ($publication/revealjs/controls/@layout = 'bottom-right')">
+            <xsl:value-of select="$publication/revealjs/controls/@layout"/>
+        </xsl:when>
+        <xsl:when test="$publication/revealjs/controls/@layout">
+            <xsl:message>PTX:WARNING: the value of the publisher file attribute "revealjs/controls/@layout" should be "edges" or "bottom-right" not "<xsl:value-of select="$publication/revealjs/controls/@layout"/>".  Default value will be used instead.</xsl:message>
+            <xsl:text>bottom-right</xsl:text>
+        </xsl:when>
+        <!-- otherwise use "bottom-right" as the default -->
+        <xsl:otherwise>
+            <xsl:text>bottom-right</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- Reveal.js Controls Tutorial (animated arrows) -->
+
+<xsl:variable name="control-tutorial">
+    <xsl:choose>
+        <!-- if publisher.xml file has theme specified, use it -->
+        <xsl:when test="($publication/revealjs/controls/@tutorial = 'yes') or ($publication/revealjs/controls/@tutorial = 'no')">
+            <xsl:value-of select="$publication/revealjs/controls/@tutorial"/>
+        </xsl:when>
+        <xsl:when test="$publication/revealjs/controls/@tutorial">
+            <xsl:message>PTX:WARNING: the value of the publisher file attribute "revealjs/controls/@tutorial" should be "yes" or "no" not "<xsl:value-of select="$publication/revealjs/controls/@tutorial"/>".  Default value will be used instead.</xsl:message>
+            <xsl:text>yes</xsl:text>
+        </xsl:when>
+        <!-- otherwise use "yes" as the default -->
+        <xsl:otherwise>
+            <xsl:text>yes</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<!-- Convert "yes"/"no" to a boolean variable -->
+<xsl:variable name="b-reveal-control-tutorial" select="$control-tutorial= 'yes'"/>
+
+<!-- Reveal.js Navigation Mode -->
+
+<xsl:variable name="reveal-navigation-mode">
+    <xsl:choose>
+        <!-- if publisher.xml file has laout specified, use it -->
+        <xsl:when test="($publication/revealjs/navigation/@mode = 'default') or ($publication/revealjs/navigation/@mode = 'linear') or ($publication/revealjs/navigation/@mode = 'grid')">
+            <xsl:value-of select="$publication/revealjs/navigation/@mode"/>
+        </xsl:when>
+        <xsl:when test="$publication/revealjs/navigation/@mode">
+            <xsl:message>PTX:WARNING: the value of the publisher file attribute "revealjs/navigation/@mode" should be "default", "linear", or "grid" not "<xsl:value-of select="$publication/revealjs/navigation/@mode"/>".  Default value will be used instead.</xsl:message>
+            <xsl:text>default</xsl:text>
+        </xsl:when>
+        <!-- otherwise use "default" as the default -->
+        <xsl:otherwise>
+            <xsl:text>default</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- Reveal.js Resources file location -->
+
+<!-- String to prefix  reveal.js  resources -->
+<xsl:variable name="reveal-root">
+    <!-- CDN is used twice, so just edit here -->
+    <!-- NB: deprecation is frozen -->
+    <xsl:variable name="cdn-url">
+        <xsl:text>https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0</xsl:text>
+    </xsl:variable>
+
+    <xsl:choose>
+        <!-- if publisher.xml file has CDN option specified, use it       -->
+        <!-- keep this URL updated, but not for the deprecation situation -->
+        <xsl:when test="$publication/revealjs/resources/@host = 'cdn'">
+            <xsl:value-of select="$cdn-url"/>
+        </xsl:when>
+        <!-- if publisher.xml file has the local option specified, use it -->
+        <xsl:when test="$publication/revealjs/resources/@host = 'local'">
+            <xsl:text>.</xsl:text>
+        </xsl:when>
+        <!-- Experimental - just some file path/url -->
+        <xsl:when test="$publication/revealjs/resources/@host">
+            <xsl:value-of select="$publication/revealjs/resources/@host"/>
+        </xsl:when>
+        <!-- default to the CDN if no specification -->
+        <xsl:otherwise>
+            <xsl:value-of select="$cdn-url"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- Reveal.js Minified CSS/JS -->
+<!-- Resources from a CDN come in a minified version typically.    -->
+<!-- But a local version does not have these files available.      -->
+<!-- So we provide sensible defaults and let a publisher override. -->
+
+<xsl:variable name="minified">
+    <xsl:choose>
+        <!-- explict is recognized first, only "yes" activates minified -->
+        <xsl:when test="$publication/revealjs/resources/@minified">
+            <xsl:choose>
+                <xsl:when test="$publication/revealjs/resources/@minified = 'yes'">
+                    <xsl:text>yes</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>no</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:when>
+        <!-- for PTX-supplied CDN, assume minified is best -->
+        <xsl:when test="$publication/revealjs/resources/@host = 'cdn'">
+            <xsl:text>yes</xsl:text>
+        </xsl:when>
+        <!-- and for a local copy, assume no minified copy exists -->
+        <xsl:when test="$publication/revealjs/resources/@host = 'local'">
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <!-- else some host, but we don't have any idea -->
+        <!-- so don't get fancy, and go without minified -->
+        <xsl:when test="$publication/revealjs/resources/@host">
+            <xsl:text>no</xsl:text>
+        </xsl:when>
+        <!-- no @minified, and no @host, so we have     -->
+        <!-- defaulted to CDN and minified is suggested -->
+        <xsl:otherwise>
+            <xsl:text>yes</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:variable>
+<!-- Convert "yes"/"no" to a boolean variable -->
+<xsl:variable name="b-reveal-minified" select="$minified = 'yes'"/>
+
 
 <!-- ######################### -->
 <!-- String Parameter Bad Bank -->

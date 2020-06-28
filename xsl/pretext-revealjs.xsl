@@ -42,216 +42,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:output method="html" indent="yes" encoding="UTF-8" doctype-system="about:legacy-compat"/>
 
 <!-- Publisher Switches -->
-<!-- The $publication variable comes from -common and is the result -->
-<!-- of a command-line string parameter pointing to an XML file of  -->
-<!-- various options.                                               -->
-<!-- Elements and attributes of this file are meant to influence    -->
-<!-- decisions taken *after* an author is completed writing.        -->
-<!-- A couple of temporary command-line stringparam will just be    -->
-<!-- ignored as this stylesheet was first released about the time   -->
-<!-- the publisher file came into exoistence.                       -->
-
-<!-- 2020-02-09: Stopped using a temporary "theme" stringparam    -->
-<!-- NB: change $theme2 back to $theme once this param is deleted -->
-<xsl:param name="theme" select="''"/>
-
-<xsl:variable name="theme2">
-    <xsl:choose>
-        <!-- if stringparam is set, warn and ignore -->
-        <xsl:when test="not($theme = '')">
-            <xsl:message >PTX:WARNING: the temporary "theme" stringparam is deprecated and is being ignored, so the "simple" theme will be used as long as this stringparam is present.  Please switch to using a publisher file to set this option, see documentation in The Guide.</xsl:message>
-            <xsl:text>simple</xsl:text>
-        </xsl:when>
-        <!-- if publisher.xml file has theme specified, use it -->
-        <xsl:when test="$publication/revealjs/appearance/@theme">
-            <xsl:value-of select="$publication/revealjs/appearance/@theme"/>
-        </xsl:when>
-        <!-- otherwise use "simple" as the default -->
-        <xsl:otherwise>
-            <xsl:text>simple</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-
-<!-- CSS/JS resources that make up reveal.js -->
-
-<!-- 2020-02-09: Stopped using a temporary "local" stringparam    -->
-<xsl:param name="local" select="''"/>
-
-<!-- String to prefix  reveal.js  resources -->
-<xsl:variable name="reveal-root">
-    <!-- CDN is used twice, so just edit here -->
-    <!-- NB: deprecation is frozen -->
-    <xsl:variable name="cdn-url">
-        <xsl:text>https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0</xsl:text>
-    </xsl:variable>
-
-    <xsl:choose>
-        <xsl:when test="not($local = '')">
-            <xsl:message >PTX:WARNING: the temporary "local" stringparam is deprecated and is being ignored, so the reveal.js rsources will come from a CDN and are frozen at version 3.8.0 which is not supported by the PreTeXt conversion.  Please switch to using a publisher file to set this option, see documentation in The Guide.</xsl:message>
-            <xsl:text>https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0</xsl:text>
-        </xsl:when>
-        <!-- if publisher.xml file has CDN option specified, use it       -->
-        <!-- keep this URL updated, but not for the deprecation situation -->
-        <xsl:when test="$publication/revealjs/resources/@host = 'cdn'">
-            <xsl:value-of select="$cdn-url"/>
-        </xsl:when>
-        <!-- if publisher.xml file has the local option specified, use it -->
-        <xsl:when test="$publication/revealjs/resources/@host = 'local'">
-            <xsl:text>.</xsl:text>
-        </xsl:when>
-        <!-- Experimental - just some file path/url -->
-        <xsl:when test="$publication/revealjs/resources/@host">
-            <xsl:value-of select="$publication/revealjs/resources/@host"/>
-        </xsl:when>
-        <!-- default to the CDN if no specification -->
-        <xsl:otherwise>
-            <xsl:value-of select="$cdn-url"/>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-
-<!-- Minified CSS/JS -->
-<!-- Resources from a CDN come in a minified version typically.    -->
-<!-- But a local version does not have these files available.      -->
-<!-- So we provide sensible defaults and let a publisher override. -->
-
-<xsl:variable name="minified">
-    <xsl:choose>
-        <!-- explict is recognized first, only "yes" activates minified -->
-        <xsl:when test="$publication/revealjs/resources/@minified">
-            <xsl:choose>
-                <xsl:when test="$publication/revealjs/resources/@minified = 'yes'">
-                    <xsl:text>yes</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:text>no</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:when>
-        <!-- for PTX-supplied CDN, assume minified is best -->
-        <xsl:when test="$publication/revealjs/resources/@host = 'cdn'">
-            <xsl:text>yes</xsl:text>
-        </xsl:when>
-        <!-- and for a local copy, assume no minified copy exists -->
-        <xsl:when test="$publication/revealjs/resources/@host = 'local'">
-            <xsl:text>no</xsl:text>
-        </xsl:when>
-        <!-- else some host, but we don't have any idea -->
-        <!-- so don't get fancy, and go without minified -->
-        <xsl:when test="$publication/revealjs/resources/@host">
-            <xsl:text>no</xsl:text>
-        </xsl:when>
-        <!-- no @minified, and no @host, so we have     -->
-        <!-- defaulted to CDN and minified is suggested -->
-        <xsl:otherwise>
-            <xsl:text>yes</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-<!-- Convert "yes"/"no" to a boolean variable -->
-<xsl:variable name="b-minified" select="$minified = 'yes'"/>
-
-
-<!-- Controls (on-screen navigation) -->
-
-<xsl:variable name="control-display">
-    <xsl:choose>
-        <!-- if publisher.xml file has theme specified, use it -->
-        <xsl:when test="($publication/revealjs/controls/@display = 'yes') or ($publication/revealjs/controls/@display = 'no')">
-            <xsl:value-of select="$publication/revealjs/controls/@display"/>
-        </xsl:when>
-        <xsl:when test="$publication/revealjs/controls/@display">
-            <xsl:message>PTX:WARNING: the value of the publisher file attribute "revealjs/controls/@display" should be "yes" or "no" not "<xsl:value-of select="$publication/revealjs/controls/@display"/>".  Default value will be used instead.</xsl:message>
-            <xsl:text>yes</xsl:text>
-        </xsl:when>
-        <!-- otherwise use "yes" as the default -->
-        <xsl:otherwise>
-            <xsl:text>yes</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-<!-- Convert "yes"/"no" to a boolean variable -->
-<xsl:variable name="b-control-display" select="$control-display= 'yes'"/>
-
-<!-- Controls Tutorial (animated arrows) -->
-
-<xsl:variable name="control-tutorial">
-    <xsl:choose>
-        <!-- if publisher.xml file has theme specified, use it -->
-        <xsl:when test="($publication/revealjs/controls/@tutorial = 'yes') or ($publication/revealjs/controls/@tutorial = 'no')">
-            <xsl:value-of select="$publication/revealjs/controls/@tutorial"/>
-        </xsl:when>
-        <xsl:when test="$publication/revealjs/controls/@tutorial">
-            <xsl:message>PTX:WARNING: the value of the publisher file attribute "revealjs/controls/@tutorial" should be "yes" or "no" not "<xsl:value-of select="$publication/revealjs/controls/@tutorial"/>".  Default value will be used instead.</xsl:message>
-            <xsl:text>yes</xsl:text>
-        </xsl:when>
-        <!-- otherwise use "yes" as the default -->
-        <xsl:otherwise>
-            <xsl:text>yes</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-<!-- Convert "yes"/"no" to a boolean variable -->
-<xsl:variable name="b-control-tutorial" select="$control-tutorial= 'yes'"/>
-
-<!-- Controls Layout -->
-
-<xsl:variable name="control-layout">
-    <xsl:choose>
-        <!-- if publisher.xml file has laout specified, use it -->
-        <xsl:when test="($publication/revealjs/controls/@layout = 'edges') or ($publication/revealjs/controls/@layout = 'bottom-right')">
-            <xsl:value-of select="$publication/revealjs/controls/@layout"/>
-        </xsl:when>
-        <xsl:when test="$publication/revealjs/controls/@layout">
-            <xsl:message>PTX:WARNING: the value of the publisher file attribute "revealjs/controls/@layout" should be "edges" or "bottom-right" not "<xsl:value-of select="$publication/revealjs/controls/@layout"/>".  Default value will be used instead.</xsl:message>
-            <xsl:text>bottom-right</xsl:text>
-        </xsl:when>
-        <!-- otherwise use "bottom-right" as the default -->
-        <xsl:otherwise>
-            <xsl:text>bottom-right</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-
-<!-- Controls Back Arrows -->
-
-<xsl:variable name="control-backarrow">
-    <xsl:choose>
-        <!-- if publisher.xml file has laout specified, use it -->
-        <xsl:when test="($publication/revealjs/controls/@backarrows = 'faded') or ($publication/revealjs/controls/@backarrows = 'hidden') or ($publication/revealjs/controls/@backarrows = 'visible')">
-            <xsl:value-of select="$publication/revealjs/controls/@backarrows"/>
-        </xsl:when>
-        <xsl:when test="$publication/revealjs/controls/@backarrows">
-            <xsl:message>PTX:WARNING: the value of the publisher file attribute "revealjs/controls/@backarrows" should be "faded", "hidden", or "visible" not "<xsl:value-of select="$publication/revealjs/controls/@backarrows"/>".  Default value will be used instead.</xsl:message>
-            <xsl:text>faded</xsl:text>
-        </xsl:when>
-        <!-- otherwise use "faded" as the default -->
-        <xsl:otherwise>
-            <xsl:text>faded</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-
-<!-- Navigation Mode -->
-
-<xsl:variable name="navigation-mode">
-    <xsl:choose>
-        <!-- if publisher.xml file has laout specified, use it -->
-        <xsl:when test="($publication/revealjs/navigation/@mode = 'default') or ($publication/revealjs/navigation/@mode = 'linear') or ($publication/revealjs/navigation/@mode = 'grid')">
-            <xsl:value-of select="$publication/revealjs/navigation/@mode"/>
-        </xsl:when>
-        <xsl:when test="$publication/revealjs/navigation/@mode">
-            <xsl:message>PTX:WARNING: the value of the publisher file attribute "revealjs/navigation/@mode" should be "default", "linear", or "grid" not "<xsl:value-of select="$publication/revealjs/navigation/@mode"/>".  Default value will be used instead.</xsl:message>
-            <xsl:text>default</xsl:text>
-        </xsl:when>
-        <!-- otherwise use "default" as the default -->
-        <xsl:otherwise>
-            <xsl:text>default</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-
+<!-- Various configuration options are set in the publisher file,  -->
+<!-- which is analyzed by its own stylesheet, which is imported in -->
+<!-- the process of importing the pretext-html.xsl stylesheet.     -->
 
 <!-- ################ -->
 <!-- # Entry Template -->
@@ -261,14 +54,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- procedure, since we are going to *always* produce one monolithic -->
 <!-- HTML file as the output/slideshow                                -->
 <xsl:template match="/">
+    <xsl:call-template name="reveal-warnings"/>
     <xsl:apply-templates select="pretext"/>
 </xsl:template>
 
 <xsl:template match="/pretext">
-    <xsl:call-template name="banner-warning">
-        <xsl:with-param name="warning">Conversion to reveal.js presentations/slideshows is experimental&#xa;Requests for additional specific constructions welcome&#xa;Additional PreTeXt elements are subject to change</xsl:with-param>
-    </xsl:call-template>
-    <!--  -->
   <xsl:apply-templates select="slideshow" />
 </xsl:template>
 
@@ -297,16 +87,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
             <!-- load reveal.js resources             -->
             <xsl:choose>
-                <xsl:when test="$b-minified">
+                <xsl:when test="$b-reveal-minified">
                     <link href="{$reveal-root}/css/reset.min.css" rel="stylesheet"></link>
                     <link href="{$reveal-root}/css/reveal.min.css" rel="stylesheet"></link>
-                    <link href="{$reveal-root}/css/theme/{$theme2}.min.css" rel="stylesheet"></link>
+                    <link href="{$reveal-root}/css/theme/{$reveal-theme}.min.css" rel="stylesheet"></link>
                     <script src="{$reveal-root}/js/reveal.min.js"></script>
                 </xsl:when>
                 <xsl:otherwise>
                     <link href="{$reveal-root}/css/reset.css" rel="stylesheet"></link>
                     <link href="{$reveal-root}/css/reveal.css" rel="stylesheet"></link>
-                    <link href="{$reveal-root}/css/theme/{$theme2}.css" rel="stylesheet"></link>
+                    <link href="{$reveal-root}/css/theme/{$reveal-theme}.css" rel="stylesheet"></link>
                     <script src="{$reveal-root}/js/reveal.js"></script>
                 </xsl:otherwise>
             </xsl:choose>
@@ -364,7 +154,7 @@ dfn {
             <xsl:text>Reveal.initialize({&#xa;</xsl:text>
             <xsl:text>  controls: </xsl:text>
                 <xsl:choose>
-                    <xsl:when test="$b-control-display">
+                    <xsl:when test="$b-reveal-control-display">
                         <xsl:text>true</xsl:text>
                     </xsl:when>
                     <xsl:otherwise>
@@ -374,7 +164,7 @@ dfn {
             <xsl:text>,&#xa;</xsl:text>
             <xsl:text>  controlsTutorial: </xsl:text>
                 <xsl:choose>
-                    <xsl:when test="$b-control-tutorial">
+                    <xsl:when test="$b-reveal-control-tutorial">
                         <xsl:text>true</xsl:text>
                     </xsl:when>
                     <xsl:otherwise>
@@ -383,13 +173,13 @@ dfn {
                 </xsl:choose>
             <xsl:text>,&#xa;</xsl:text>
             <xsl:text>  controlsLayout: '</xsl:text>
-                <xsl:value-of select="$control-layout"/>
+                <xsl:value-of select="$reveal-control-layout"/>
             <xsl:text>',&#xa;</xsl:text>
             <xsl:text>  controlsBackArrows: '</xsl:text>
-                <xsl:value-of select="$control-backarrow"/>
+                <xsl:value-of select="$reveal-control-backarrow"/>
             <xsl:text>',&#xa;</xsl:text>
             <xsl:text>  navigationMode: '</xsl:text>
-                <xsl:value-of select="$navigation-mode"/>
+                <xsl:value-of select="$reveal-navigation-mode"/>
             <xsl:text>',&#xa;</xsl:text>
             <xsl:text>  progress: false,&#xa;</xsl:text>
             <xsl:text>  center: false,&#xa;</xsl:text>
@@ -419,7 +209,7 @@ dfn {
 <!-- the last vertical set.                                     -->
 <xsl:template match="section">
     <xsl:choose>
-        <xsl:when test="($navigation-mode = 'default') or ($navigation-mode = 'grid')">
+        <xsl:when test="($reveal-navigation-mode = 'default') or ($reveal-navigation-mode = 'grid')">
             <section>
                 <section>
                     <h1>
@@ -429,7 +219,7 @@ dfn {
                 <xsl:apply-templates select="slide"/>
             </section>
         </xsl:when>
-        <xsl:when test="$navigation-mode = 'linear'">
+        <xsl:when test="$reveal-navigation-mode = 'linear'">
             <section>
                 <h1>
                     <xsl:apply-templates select="." mode="title-full"/>
@@ -438,7 +228,7 @@ dfn {
             <xsl:apply-templates select="slide"/>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message >PTX:BUG: a reveal.js navigation mode ("<xsl:value-of select="$navigation-mode"/>") is implemented but the section construction is not prepared for that mode</xsl:message>
+            <xsl:message >PTX:BUG: a reveal.js navigation mode ("<xsl:value-of select="$reveal-navigation-mode"/>") is implemented but the section construction is not prepared for that mode</xsl:message>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
@@ -749,6 +539,34 @@ dfn {
 
 <xsl:template match="xref">
   [REF=TODO]
+</xsl:template>
+
+<!-- ######## -->
+<!-- Bad Bank -->
+<!-- ######## -->
+
+<!-- Reveal.js specific, so best to place inside this stylesheet.  -->
+
+<!-- A couple of temporary command-line stringparam will just be    -->
+<!-- ignored as this stylesheet was first released about the time   -->
+<!-- the publisher file came into existence.                        -->
+
+<!-- 2020-02-09: Stopped using a temporary "theme" stringparam -->
+<xsl:param name="theme" select="''"/>
+<!-- 2020-02-09: Stopped using a temporary "local" stringparam -->
+<xsl:param name="local" select="''"/>
+
+<xsl:template name="reveal-warnings">
+    <xsl:call-template name="banner-warning">
+        <xsl:with-param name="warning">Conversion to reveal.js presentations/slideshows is experimental&#xa;Requests for additional specific constructions welcome&#xa;Additional PreTeXt elements are subject to change</xsl:with-param>
+    </xsl:call-template>
+    <xsl:if test="not($theme = '')">
+        <xsl:message >PTX:WARNING: the temporary "theme" stringparam is deprecated and is being ignored by the conversion to a Reveal.js slideshow.  Please switch to using a publisher file to set this option, see documentation in The Guide.  The default theme is "simple".</xsl:message>
+        <xsl:text>simple</xsl:text>
+    </xsl:if>
+    <xsl:if test="not($local = '')">
+        <xsl:message >PTX:WARNING: the temporary "local" stringparam is deprecated and is being ignored.  Please switch to using a publisher file to set this option, see documentation in The Guide.  The default behavior is to get resources from a CDN.</xsl:message>
+    </xsl:if>
 </xsl:template>
 
 </xsl:stylesheet>
