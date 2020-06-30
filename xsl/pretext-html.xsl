@@ -8303,6 +8303,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <script type="text/javascript" src="_static/jquery.idle-timer.js"></script>
         <script type="text/javascript" src="_static/runestone.js"></script>
+        <script type="text/javascript" src="https://www.youtube.com/player_api"></script>
 
         <style>
         <xsl:text>.dropdown {&#xa;</xsl:text>
