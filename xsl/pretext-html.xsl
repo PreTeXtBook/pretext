@@ -8358,13 +8358,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Conditional run-in -->
 <xsl:template name="runestone-manifest">
-    <xsl:if test="$b-host-runestone and $b-is-book">
+    <xsl:if test="$b-host-runestone and ($b-is-book or $b-is-article)">
         <!-- $document-root *will* be a book -->
         <xsl:apply-templates select="$document-root" mode="runestone-manifest"/>
     </xsl:if>
 </xsl:template>
 
-<xsl:template match="book" mode="runestone-manifest">
+<xsl:template match="book|article" mode="runestone-manifest">
     <exsl:document href="runestone-manifest.xml" method="xml" indent="yes" encoding="UTF-8">
         <manifest>
             <!-- LaTeX packages and macros first -->
@@ -8373,8 +8373,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:value-of select="$latex-packages-mathjax"/>
                 <xsl:value-of select="$latex-macros"/>
             </latex-macros>
-            <!-- Now recurse into chapters   -->
-            <xsl:apply-templates select="*" mode="runestone-manifest"/>
+            <xsl:choose>
+                <xsl:when test="self::book">
+                    <!-- Now recurse into chapters, appendix -->
+                    <xsl:apply-templates select="*" mode="runestone-manifest"/>
+                </xsl:when>
+                <xsl:when test="self::article">
+                    <!-- Now recurse into sections, appendix  -->
+                    <!-- with a faux chapter, using "article" -->
+                    <chapter>
+                        <id>
+                            <xsl:apply-templates select="." mode="html-id"/>
+                        </id>
+                        <title>
+                            <xsl:apply-templates select="." mode="title-full"/>
+                        </title>
+                        <xsl:apply-templates select="*" mode="runestone-manifest"/>
+                    </chapter>
+                </xsl:when>
+            </xsl:choose>
         </manifest>
     </exsl:document>
 </xsl:template>
