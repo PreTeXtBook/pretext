@@ -1160,14 +1160,21 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
   content: "";
   display: block;
   height: 42px;
-  margin: -42px 0 0;
+  padding: -42px 0 0;
   border: 0;
 }
 /* when there is a sage cell evaluate button before  the target, the button was being covered */
-.sagecell + :target::before {
+/*
+iii.sagecell + :target::before {
     height: 0;
     margin: 0;
 }
+iii.indexletter + :target::before {
+    height: 20px;
+    margin: -20px 0 0;
+}
+*/
+
 :target > div.autopermalink {
   top: 45px;
 }
@@ -1909,9 +1916,23 @@ a.mjx-svg-href  {
 }
 
 
-.pretext-content .solutions a, .pretext-content .solutions a:hover, .pretext-content .solutions a.active {
+.pretext-content .solutions > a, .pretext-content .solutions > a:hover, .pretext-content .solutions > a.active {
     display: inline-block;
     margin-right: 1.5em;
+}
+
+.pretext-content.epub .solutions {
+    margin-top: 1em;
+}
+
+.pretext-content.epub .solutions .solution .type {
+    font-weight: bold;
+}
+.pretext-content.epub .solutions .solution .type + .period {
+    margin-right: 0.75em;
+}
+.pretext-content.epub .solutions .solution .type + p {
+   display: inline;
 }
 
 /* Can .solutions .solution actually happen any more?  Or is that
@@ -1977,6 +1998,9 @@ body, html body { background: #fff; }
     display: inline-block;
     margin-left: auto;
     margin-right: auto;
+}
+.pretext-content.epub img {
+    display: block;
 }
 
 /* is .cs for commutative diagrams? */

@@ -17,6 +17,10 @@
   padding-bottom: 0.25em;
 }
 
+.pretext-content.epub .proof {
+  margin-right: 1px;
+}
+
 .pretext-content .proof .proof {
   margin-right: -0.2em;
   border-right: 1.5px solid #ddd;
@@ -35,6 +39,16 @@
     padding-left: 0.4em;
     border-left: 1px solid #569;
 }
+
+.pretext-content.epub article.theorem-like,
+.pretext-content.epub article.definition-like,
+.pretext-content.epub article.example-like,
+.pretext-content.epub article.project-like,
+.pretext-content.epub article.remark-like,
+.pretext-content.epub article.computation-like {
+    margin-left: 1px;
+}
+
 
 .pretext-content article.theorem-like::after,
 .pretext-content article.definition-like::after,
