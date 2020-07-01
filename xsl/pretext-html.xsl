@@ -151,6 +151,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- fine and will not need changes on initial or casual use -->
 <!-- Files with name colors_*.css set the colors.            -->
 <!-- colors_default is similar to the old mathbook-3.css     -->
+<!-- N.B.: if the CSS has a version bump, then be sure to    -->
+<!-- visit the "css" directory and make an update there      -->
+<!-- for the benefit of offline formats                      -->
 <xsl:param name="html.css.server" select="'https://pretextbook.org'" />
 <xsl:param name="html.css.version" select="'0.31'" />
 <xsl:param name="html.js.server" select="'https://pretextbook.org'" />
