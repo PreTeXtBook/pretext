@@ -1,0 +1,331 @@
+
+/*
+:root {
+  --documenttitle: #395E66;
+  --bodytitle: #A62E1C;
+  --bodysubtitle: #2B5F82;
+  --bodytitlehighlight: #e0e9ff;
+  --bodysubtitlehighlight: #FCE5E4;
+
+  --chaptertoc: #395E66;
+  --chaptertoctext: white;
+  --chaptertocactive: #00A092;
+  --chaptertoctextactive: white;
+  --sectiontoc: #f0f0f0;
+  --sectiontoctext: #395E66;
+  --sectiontocactive: var(--chaptertocactive);
+  --sectiontoctextactive: var(--chaptertoctextactive);
+  --tocborder: #1f4283;
+
+  --highlighttoc: #223843;
+  --highlighttoctext: white;
+  --highlighttocborder: white;
+
+  --assemblageborder: #bfd5ec;
+  --assemblagebackground: #e9eff5;
+
+  --knowlborder: #e0e9ff;
+  --knowlbackground: #f5f8ff;
+
+}
+*/
+
+
+:root {
+/* Set colors for blocks */
+  --step: 30;
+
+  --hue1: 180;
+  --hue2: calc(var(--hue1) + var(--step));
+  --hue3: calc(var(--hue2) + var(--step));
+  --hue4: calc(var(--hue3) + var(--step));
+  --hue5: calc(var(--hue4) + var(--step));
+
+  --hueassemblage: var(--hue2);
+  --huetheorem: var(--hue4);
+  --huedefinition: var(--hue1);
+  --hueexample: var(--hue3);
+  --hueproject: var(--hue1);
+
+  --sat: 40%;
+  --llight: 94%;
+  --lmid: 75%;
+  --ldark: 25%;
+  
+  --assemblagebackground: hsl(var(--hueassemblage), var(--sat), var(--llight));
+  --assemblageborder: hsl(var(--hueassemblage), var(--sat), var(--lmid));
+  --assemblagedarkborder: hsl(var(--hueassemblage), var(--sat), var(--ldark));
+  --definitionbackground: hsl(var(--huedefinition), var(--sat), var(--llight));
+  --definitionborder: hsl(var(--huedefinition), var(--sat), var(--lmid));
+  --definitiondarkborder: hsl(var(--huedefinition), var(--sat), var(--ldark));
+  --theorembackground: hsl(var(--huetheorem), var(--sat), var(--llight));
+  --theoremborder: hsl(var(--huetheorem), var(--sat), var(--lmid));
+  --theoremdarkborder: hsl(var(--huetheorem), var(--sat), var(--ldark));
+  --examplebackground: hsl(var(--hueexample), var(--sat), var(--llight));
+  --exampleborder: hsl(var(--hueexample), var(--sat), var(--lmid));
+  --exampledarkborder: hsl(var(--hueexample), var(--sat), var(--ldark));
+  --projectbackground: hsl(var(--hueproject), var(--sat), var(--llight));
+  --projectborder: hsl(var(--hueproject), var(--sat), var(--lmid));
+  --projectdarkborder: hsl(var(--hueproject), var(--sat), var(--ldark));
+
+  --knowlborder: var(--bodytitlehighlight);
+  --knowlborder: white;
+  --knowlbackground: var(--assemblagebackground);
+  --knowlbackground: white;
+}
+
+/* Remove Greg-L on assemblage and everything else */
+/*
+.pretext-content article.theorem-like::after, .pretext-content article.definition-like::after, .pretext-content article.example-like::after, .pretext-content article.project-like::after, .pretext-content article.objectives::after, .pretext-content article.outcomes::after, .pretext-content article.remark-like::after {
+  border-bottom: none;
+}
+*/
+
+.pretext-content .assemblage-like,
+.pretext-content .definition-like,
+.pretext-content .theorem-like {
+    margin-top: 1.25em;
+    padding: 1em;
+    border-radius: 3px;
+    margin-bottom: 1em;
+}
+
+/* backgrounds and borders: */
+.pretext-content .assemblage-like{
+    background-color: var(--assemblagebackground);
+    border: 2px solid var(--assemblageborder);
+}
+
+.pretext-content .theorem-like {
+  background-color: var(--theorembackground);
+/*  border-left: 2px solid var(--theoremborder);
+*/
+  border: 2px solid var(--theoremborder);
+
+}
+
+.pretext-content .theorem-like.theorem,
+.pretext-content .theorem-like.principle {
+    background-color: var(--theorembackground);
+    border: 2px solid var(--theoremborder);
+}
+
+.pretext-content .definition-like {
+    background-color: var(--definitionbackground);
+    border: 2px solid var(--definitionborder);
+}
+
+/* .pretext-content .example-like {
+    background-color: var(--examplebackground);
+    border: 2px solid var(--exampleborder);
+} */
+
+/* .pretext-content .theorem-like.proposition,
+.pretext-content .theorem-like.lemma,
+.pretext-content .theorem-like.corollary {
+    background-color: var(--theorembackground);
+    border-left: 2px solid var(--theoremborder);
+} */
+
+.pretext-content .assemblage-like .heading,
+.pretext-content .definition-like .heading,
+.pretext-content .theorem-like.theorem .heading {
+  margin-top: -1.75em;
+  margin-left: -0.25em;
+  display: table;
+  padding: 0.25em 0.4em;
+}
+
+.pretext-content .assemblage-like .heading {
+  background-color: var(--assemblageborder);
+  color: #fff;
+}
+
+.pretext-content .definition-like .heading {
+  background-color: var(--definitionborder);
+  color: #000;
+}
+
+.pretext-content .theorem-like.theorem .heading {
+  background-color: var(--theoremborder);
+  color: #000;
+}
+/* .pretext-content .theorem-like.corollary .heading {
+    background-color: var(--bodysubtitlehighlight);
+    border: 2px solid var(--bodysubtitle);
+}
+.pretext-content .theorem-like.principle .heading {
+    background-color: var(--assemblageborder);
+} */
+
+.pretext-content .assemblage-like .heading::after,
+.pretext-content .theorem-like.theorem .heading::after,
+.pretext-content .theorem-like.principle .heading::after {
+    content: "";
+}
+.pretext-content .assemblage-like .heading + p,
+.pretext-content .theorem-like.theorem .heading + p,
+.pretext-content .definition-like .heading + p {
+    display: block;
+}
+
+.pretext-content .assemblage-like .MJXc-display,
+.pretext-content .definition-like .MJXc-display,
+.pretext-content .theorem-like.theorem .MJXc-display {
+    background-image: linear-gradient(to right, #e9eff5, #e9eff5), linear-gradient(to right, #e9eff5, #e9eff5), linear-gradient(to right, rgba(0,0,0,.25), rgba(242,242,254,0)), linear-gradient(to left, rgba(0,0,0,.25), rgba(242,242,254,0));
+}
+.pretext-content .theorem-like.corollary .MJXc-display {
+    background-image: linear-gradient(to right, var(--bodytitlehighlight), var(--bodytitlehighlight)), linear-gradient(to right, var(--bodytitlehighlight), var(--bodytitlehighlight)), linear-gradient(to right, rgba(0,0,0,.25), rgba(242,242,254,0)), linear-gradient(to left, rgba(0,0,0,.25), rgba(242,242,254,0));
+}
+
+.pretext-content .goal-like {
+  background-color: white;
+  border-radius: 0em;
+  padding: 0.7em;
+  margin-bottom: 1em;
+}
+.pretext-content .goal-like.objectives {
+  border-top: solid 3px var(--bodysubtitle);
+  border-bottom: solid 3px var(--bodysubtitle);
+}
+.pretext-content .goal-like.outcomes {
+  border-top: solid 3px var(--bodytitle);
+  border-bottom: solid 3px var(--bodytitle);
+}
+
+.pretext-content .goal-like .heading {
+  margin-top: -1.5em;
+  background-color: white;
+  display: table;
+  padding: 5px 1em;
+  margin-left: 10px;
+  font-style: italic;
+  font-size: 120%;
+}
+
+/* .pretext-content .goal-like .codenumber {
+  display:none;
+}
+
+.pretext-content .goal-like .heading::after {
+  display:none;
+} */
+
+
+.pretext-content section article.project-like {
+  background-color: white;
+  border: solid 3px var(--projectborder);
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 1em;
+}
+
+.pretext-content section article.project-like.investigation {
+  border-color: var(--projectdarkborder);
+}
+
+.pretext-content section article.project-like > .heading {
+  margin-top: -1.5em;
+  background-color: white;
+  display: table !important;
+  padding: 5px 1em;
+  margin-left: 10px;
+  font-style: italic;
+  font-size: 120% !important;
+}
+
+.pretext-content section article.example-like {
+    padding-left: 0.8em;
+    padding-bottom: 0.5em;
+}
+
+.pretext-content section article.example-like {
+    border-left: 0.1em solid var(--exampleborder);
+    border-bottom: 0.1em solid var(--exampleborder);
+}
+.pretext-content section article.example-like.example {
+    border-left: 0.1em solid var(--exampledarkborder);
+    border-bottom: 0.1em solid var(--exampledarkborder);
+}
+.pretext-content section article article.example-like,
+.pretext-content section article article.example-like.example {
+    border: none;
+}
+
+
+.pretext-content section article.example-like > .heading {
+    display: inline-block;
+    padding: 0.3em 0.5em;
+    margin-left: -0.8em;
+}
+
+
+.pretext-content section article.example-like.example > .heading {
+  border: 0.1em solid var(--exampledarkborder);   /* maybe no border-left? */
+}
+
+
+.pretext-content section article.example-like > .heading {
+  background: var(--exampleborder);
+  color: black;
+}
+
+.pretext-content section article.example-like.example > .heading {
+  background: var(--exampledarkborder);
+  color: #fff;
+}
+
+
+.pretext-content section article.example-like > .heading::after,
+.pretext-content section article.project-like.project > .heading::after,
+.pretext-content section article.project-like.activity > .heading::after,
+.pretext-content section article.project-like.exploration > .heading::after {
+    content: "";
+}
+
+.pretext-content section article.example-like > .heading + p,
+.pretext-content section article.example-like > .heading + .introduction {
+    display: block;
+    padding-top: 0.3em;
+}
+
+/* remark-like notes get a dotted Greg's L */
+.pretext-content .remark-like.note {
+    padding-left: 0.5em;
+    border-left: 1px dotted #569;
+}
+.pretext-content .remark-like.note::after {
+    content:'';
+    border-bottom: 1px dotted #569;
+    display: block;
+    margin-right: auto;
+    margin-left: -0.5em;
+    padding-top: 0.25em;
+    width: 1.5em;
+}
+/* theorem-like claims get a slightly wide solid Greg's L in the subtitle color */
+.pretext-content .theorem-like.claim {
+    padding-left: 0.5em;
+    border-left: 2px solid var(--bodysubtitle);
+}
+.pretext-content .theorem-like.claim::after {
+    content:'';
+    border-bottom: 2px solid var(--bodysubtitle);
+    display: block;
+    margin-right: auto;
+    margin-left: -0.5em;
+    padding-top: 0.25em;
+    width: 1.5em;
+}
+
+
+
+/* where does this appear? */
+/* .posterior {
+  margin-left: 1ex;
+  padding-left: 1ex;
+  margin-top: -1.25em;
+  padding-top: 1ex;
+  border-left: solid 1pt gray;
+} */
+

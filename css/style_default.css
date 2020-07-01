@@ -1,0 +1,321 @@
+
+/* The Greg's L for theorems, proofs, etc */
+
+.pretext-content .proof {
+  border-right: 1px solid #666;
+  padding-right: 0.625em;
+  margin-right: -0.725em;
+}
+.pretext-content .proof:after {
+  content: '';
+  border-bottom: 1px solid #666;
+  display: block;
+  margin-left: auto;
+  margin-right: -0.625em;
+  /* so the corner of the L meets */
+  width: 1.5em;
+  padding-bottom: 0.25em;
+}
+
+.pretext-content.epub .proof {
+  margin-right: 1px;
+}
+
+.pretext-content .proof .proof {
+  margin-right: -0.2em;
+  border-right: 1.5px solid #ddd;
+}
+.pretext-content .proof .proof:after {
+  border-bottom: 1.5px solid #ddd;
+  width: 1em;
+}
+
+.pretext-content article.theorem-like,
+.pretext-content article.definition-like,
+.pretext-content article.example-like,
+.pretext-content article.project-like,
+.pretext-content article.remark-like,
+.pretext-content article.computation-like {
+    padding-left: 0.4em;
+    border-left: 1px solid #569;
+}
+
+.pretext-content.epub article.theorem-like,
+.pretext-content.epub article.definition-like,
+.pretext-content.epub article.example-like,
+.pretext-content.epub article.project-like,
+.pretext-content.epub article.remark-like,
+.pretext-content.epub article.computation-like {
+    margin-left: 1px;
+}
+
+
+.pretext-content article.theorem-like::after,
+.pretext-content article.definition-like::after,
+.pretext-content article.example-like::after,
+.pretext-content article.project-like::after,
+.pretext-content article.remark-like::after,
+.pretext-content article.computation-like::after {
+    content:'';
+    border-bottom: 1px solid #569;
+    display: block;
+    margin-right: auto;
+    margin-left: -0.4em;
+    padding-top: 0.25em;
+    width: 1.5em;
+}
+/* projects get a dotted L */
+.pretext-content article.project-like {
+    border-left: 1px dotted #569;
+}
+.pretext-content article.project-like::after {
+    border-bottom: 1px dotted #569;
+}
+
+/* commentary gets a thicker red L */
+
+.pretext-content article.commentary {
+    padding-left: 0.6em;
+    border-left: 3px solid #c33;
+}
+.pretext-content article.commentary::after {
+    content:'';
+    border-bottom: 3px solid #c33;
+    display: block;
+    margin-right: auto;
+    margin-left: -0.6em;
+    padding-top: 0.25em;
+    width: 1.5em;
+}
+
+.pretext-content .assemblage-like {
+    border: solid 2px #1100AA;
+    border-radius: 12px;
+    padding: 10px;
+    background-color: #f4f4fe;
+}
+
+.pretext-content .assemblage-like .heading {
+    margin-top: 0;
+}
+
+.pretext-content .assemblage-like + .sidebyside {
+    margin-top: 1.25em;
+}
+.pretext-content section article.assemblage-like .heading + p {
+    display: block;
+}
+
+.pretext-content .goal-like {
+  border: solid 3px #999999;
+  padding: 0.7em;
+  margin-bottom: 1em;
+}
+
+.pretext-content .goal-like .heading {
+  margin-top: -1.5em;
+  background-color: white;
+  display: table;
+  padding: 5px 1em;
+  margin-left: 5px;
+  font-style: italic;
+  font-size: 120%;
+}
+
+.pretext-content .goal-like .codenumber {
+  display:none;
+}
+
+.pretext-content .goal-like .heading::after {
+  display:none;
+}
+
+
+/* next selector first part of the following is due to the mistake of
+   putting paragraph spacing in the margin-bottom 
+   Redo when we fix that error */
+.pretext-content .aside-like {
+ /*   margin-top: -1.25em;
+*/
+    position: absolute;
+    margin-left: 45%;
+    z-index: -10;
+    overflow-x: hidden;
+    max-width: 495px;
+    max-height: 7em;
+    overflow-y: hidden;
+    border: none;
+    padding: 4px 10px 0 10px;
+    color: #888;
+}
+.pretext-content .example-like .aside-like {
+    margin-top: 0;
+    position: absolute;
+}
+.pretext-content .aside-like {
+    font-size: 90%;
+}
+.pretext-content .aside-like {
+  margin-bottom: 5px;
+  background-color: #f5faff;
+  box-shadow: 0 0 1.0em 0.2em #fff inset;
+}
+.pretext-content .aside-like:first-child {
+    margin-top: -2.25em;
+}
+.pretext-content .aside-like:after {
+  content  : "";
+  position : absolute;
+  z-index  : 1;
+  top   : 0em;  
+  bottom   : 0;
+  left     : 0;
+  pointer-events   : none;
+  background-image : linear-gradient(to bottom, 
+                    rgba(255,255,255, 0.4), 
+                    rgba(255,255,255, 1) 90%);
+  width    : 550px;
+  height   : 8em;
+}
+/* example of where the following is needed? */
+/*
+.pretext-content .aside-like * {
+    background-color: #f5faff !important;
+}
+*/
+.pretext-content .aside-like.front, .pretext-content .example-like .aside-like.front {
+  position: relative;
+  z-index: 0;
+  padding: 8px 15px 10px 15px;
+  padding: 2px 10px;
+  margin: 5px 0px 5px 10px;
+  border: 2px solid #dcebfa;
+  max-height: none;
+  max-width: 550px;
+  color: inherit;
+  font-size: 100%;
+  box-shadow: none;
+}
+.pretext-content .aside-like.front:after, .pretext-content .example-like .aside-like.front:after {
+    background-image: none;
+}
+.pretext-content .example-like .aside-like.front {
+    margin-top: 1.25em;
+}
+
+.pretext-content .aside-like.front + p{
+    margin-top: 1.25em !important;
+    padding-top: 0;
+}
+
+
+
+.pretext-content .aside-like .aside-like {
+  background-color: #fafff5;
+  border: 1px dotted #aaa;
+}
+
+.pretext-content article.aside-like > p:first-child {
+    margin-top: 0;
+}
+
+.pretext-content .aside-like > .heading {
+    font-size: 95%;
+}
+
+.pretext-content .aside-like + *{
+    margin-top: 3em !important;
+    margin-right: 3em;
+}
+
+/* on sufficiently large screens, there is enough of a margin to see part of the aside */
+
+@media screen and (min-width: 943px) {
+  .pretext-content .aside-like + * {
+      margin-right: 0;
+  }
+}
+
+/* on a wide screen, asides should appear in the right margin */
+@media screen and (min-width: 1100px) {
+  .pretext-content .aside-like, .pretext-content .aside-like.front, .pretext-content .example-like .aside-like, .pretext-content .example-like .aside-like.front {
+      position: absolute;
+      margin-top: -2em;
+      margin-left: 660px;
+      max-width: 200px;  /* for some reason the width was too small, so I had to put width (next line) */
+      width: 200px;
+      color: inherit;
+  }
+  .pretext-content .aside-like.front, .pretext-content .example-like .aside-like.front {
+      max-height: none;
+      max-width: 223px;
+      border: 2px solid #dcebfa;
+}
+  .pretext-content .example-like .aside-like, .pretext-content .example-like .aside-like.front {
+      margin-left: 654px;  /* because .example-like has 6px of padding */
+  }
+
+  .pretext-content .aside-like + * {
+      margin-top: 1.25em !important;
+  /*    background: none;  */
+      margin-right: 0;
+  }
+
+  .pretext-content .aside-like.front:after, .pretext-content .example-like .aside-like.front:after {
+    background-image: none;
+  }
+
+  .pretext-content .aside-like:nth-of-type(3n+1) {
+    margin-left: 660px;
+}
+  .pretext-content .aside-like:nth-of-type(3n) {
+    margin-left: 680px;
+}
+  .pretext-content .aside-like:nth-of-type(3n+2) {
+    margin-left: 640px;
+}
+}
+
+.pretext-content .aside-like:hover:after, .pretext-content .aside-like:focus:after {
+    top: 3em;
+    height: auto;
+    background-image : none;
+}
+
+.pretext-content .aside-like:hover, .pretext-content .aside-like:focus {
+    color: inherit;
+    padding: 2px 8px 0 8px;
+    border: 2px solid #dcebfa;
+    height: auto;
+    max-height: none;
+}
+.pretext-content .aside-like.front:hover, .pretext-content .aside-like.front:focus {
+    padding: 4px 10px;
+}
+
+/* find a better way to handle asides in content that has a wide left margin */
+/* see http://pretext.jahrme.com/aside-in-knowl/section-1.html */
+.pretext-content section dl dd .aside-like {
+    margin-top: 0 !important;
+    margin-left: 100px !important;
+}
+.pretext-content section dl dd .aside-like.front {
+    margin-left: -300px !important;
+}
+
+@media screen and (max-width: 1099px) {
+  .pretext-content aside.aside-like {
+    position: relative;
+    float: right;
+    z-index: 0;
+    overflow-x: hidden;
+    margin-left: 1em;
+    margin-top: 1em;
+    max-width: 195px;
+    max-height: 4em;
+    margin-right: -8em;
+}
+  .pretext-content li > aside.aside-like:last-child {
+    position: absolute;
+}
+}
