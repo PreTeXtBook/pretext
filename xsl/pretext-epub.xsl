@@ -763,6 +763,24 @@ width: 100%
     <xsl:value-of select="false()" />
 </xsl:template>
 
+<!-- Asides -->
+<!-- EPUB has a semi-natural mechanism for this, though -->
+<!-- the text we drop could use some work.              -->
+<xsl:template match="aside">
+    <xsl:variable name="hid">
+        <xsl:apply-templates select="." mode="html-id" />
+    </xsl:variable>
+    <p>
+        <a class="url" epub:type="noteref" href="#{$hid}">
+            <xsl:text>Aside: </xsl:text>
+            <xsl:apply-templates select="." mode="title-full"/>
+        </a>
+    </p>
+    <aside epub:type="footnote" id="{$hid}">
+        <xsl:apply-templates select="." mode="wrapped-content"/>
+    </aside>
+</xsl:template>
+
 <!-- Footnotes -->
 <!-- Use "EPUB 3 Structural Semantics Vocabulary" -->
 <!-- to get desired behavior from e-reader system -->
