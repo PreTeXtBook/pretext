@@ -180,7 +180,7 @@
                 <xsl:call-template name="mathjax-css"/>
             </head>
             <!-- use class to repurpose HTML CSS work -->
-            <body class="pretext-content">
+            <body class="pretext-content epub">
                 <xsl:copy-of select="$content" />
                 <!-- Copy MathJax's font information to the bottom -->
                 <xsl:copy-of select="document($mathfile)/pi:math-representations/svg:svg[@id='font-data']"/>
@@ -552,7 +552,7 @@ width: 100%
                 </title>
                 <xsl:call-template name="mathjax-css"/>
             </head>
-            <body>
+            <body class="pretext-content epub">
                 <!-- https://www.opticalauthoring.com/inside-the-epub-format-the-cover-image/   -->
                 <!-- says the "figure" is necessary, and does not seem to hurt (CSS could style)-->
                 <figure>
@@ -571,7 +571,7 @@ width: 100%
                 <link href="../{$css-dir}/setcolors.css"         rel="stylesheet" type="text/css"/>
                 <xsl:call-template name="mathjax-css"/>
             </head>
-            <body epub:type="frontmatter">
+            <body class="pretext-content epub" epub:type="frontmatter">
                 <nav epub:type="toc" id="toc">
                     <h1>Table of Contents</h1>
                     <ol>
