@@ -43,9 +43,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <title>One</title>
 
             <p>The quick brown fox jumps over the lazy dog.</p>
+
+            <p>Some test cross-references:<ul>
+                <li>To the next chapter: <xref ref="nonsense-chapter"/></li>
+                <li>To a figure much later: <xref ref="figure-cubic-polynomial"/></li>
+            </ul></p>
+
         </chapter>
 
-        <chapter>
+        <chapter xml:id="nonsense-chapter">
             <title>Two</title>
             <introduction><p>This is the introduction to the chapter.</p></introduction>
             <section>
@@ -92,7 +98,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
             <p><idx>Portable Network Graphics (PNG)</idx><idx><h>PNG</h><see>Portable Network Graphics</see></idx>A Portable Network Graphics (PNG) image created externally in Sage and then included directly here.</p>
 
-            <figure>
+            <figure xml:id="figure-cubic-polynomial">
                 <caption>A cubic polynomial and its derivative</caption>
                 <image source="images/cubic-function.png" width="60%"/>
             </figure>

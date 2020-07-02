@@ -757,6 +757,12 @@ width: 100%
 <!-- OverRides -->
 <!-- ######### -->
 
+<!-- Knowls -->
+<!-- Nothing should be knowled, since we do not have Javascript for it -->
+<xsl:template match="*" mode="xref-as-knowl">
+    <xsl:value-of select="false()" />
+</xsl:template>
+
 <!-- Footnotes -->
 <!-- Use "EPUB 3 Structural Semantics Vocabulary" -->
 <!-- to get desired behavior from e-reader system -->
