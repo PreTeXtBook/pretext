@@ -109,6 +109,7 @@ def get_cli_arguments():
         ('epub-svg', 'EPUB container, math as SVG'),
         ('epub-mml', 'EPUB container, math as MathML'),
         ('epub-speech', 'EPUB container, math as speech'),
+        ('epub-kindle', 'EPUB container, math as MathML, PNG images'),
         ('sagenb', 'Sage worksheet conversion (removed)'),
         ('all', 'All available output formats'),
     ]
@@ -271,6 +272,8 @@ def main():
             ptx.epub(args.xml_file, publisher_file, dest_dir, 'mml')
         elif args.format == 'epub-speech':
             ptx.epub(args.xml_file, publisher_file, dest_dir, 'speech')
+        elif args.format == 'epub-kindle':
+            ptx.epub(args.xml_file, publisher_file, dest_dir, 'kindle')
         # 2020-05-19 MathBookXMLtoSWS class removed
         elif args.format == 'sagenb':
             raise NotImplementedError("conversion to Sage notebook format removed (2020-05-18)")

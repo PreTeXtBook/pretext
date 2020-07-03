@@ -114,7 +114,9 @@
 <xsl:param name="mathfile"/>
 <xsl:variable name="math-repr"  select="document($mathfile)/pi:math-representations"/>
 
-<!-- One of 'svg", 'mml', or 'speech', always -->
+<!-- One of 'svg", 'mml', 'kindle', or 'speech', always     -->
+<!-- Also 'kindle' dictates MathML output, but is primarily -->
+<!-- responsible for integrating PNG images in place of SVG -->
 <xsl:param name="math.format"/>
 
 
@@ -668,17 +670,31 @@ width: 100%
                     <xsl:with-param name="filename" select="@source" />
                 </xsl:call-template>
             </xsl:variable>
-            <!-- PDF LaTeX, SVG HTML, if not indicated -->
+            <!-- PDF LaTeX, SVG HTML, PNG Kindle if not indicated -->
             <xsl:apply-templates select="@source" />
             <xsl:if test="$extension=''">
-                <xsl:text>.svg</xsl:text>
+                <xsl:choose>
+                    <xsl:when test="$math.format = 'kindle'">
+                        <xsl:text>.png</xsl:text>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:text>.svg</xsl:text>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:if>
         </xsl:when>
         <xsl:when test="latex-image|latex-image-code|sageplot|asymptote">
             <xsl:value-of select="$directory.images" />
             <xsl:text>/</xsl:text>
             <xsl:apply-templates select="." mode="visible-id" />
-            <xsl:text>.svg</xsl:text>
+            <xsl:choose>
+                <xsl:when test="$math.format = 'kindle'">
+                    <xsl:text>.png</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>.svg</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:when>
         <xsl:otherwise>
             <xsl:message>MBX:BUG:     image filename not determined in EPUB conversion</xsl:message>
@@ -860,6 +876,10 @@ width: 100%
                 <xsl:apply-templates select="$math/svg:svg" mode="svg-edit"/>
             </xsl:when>
             <xsl:when test="$math.format = 'mml'">
+                <xsl:copy-of select="$math/math:math"/>
+            </xsl:when>
+            <!-- Kindle does best with MathML format -->
+            <xsl:when test="$math.format = 'kindle'">
                 <xsl:copy-of select="$math/math:math"/>
             </xsl:when>
             <xsl:when test="$math.format = 'speech'">

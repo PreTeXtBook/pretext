@@ -51,7 +51,7 @@ def mathjax_latex(xml_source, result, math_format):
     # SVG, MathML, and PNG are visual and we help authors move punctuation into
     # displays, but not into inline versions.  Nemeth braille and speech are not,
     # so we leave punctuation outside.
-    if math_format in ['svg', 'mml']:
+    if math_format in ['svg', 'mml', 'kindle']:
         punctuation = 'display'
     elif math_format in ['nemeth', 'speech']:
         punctuation = 'none'
@@ -70,9 +70,7 @@ def mathjax_latex(xml_source, result, math_format):
         # kill caching to keep glyphs within SVG
         # versus having a font cache at the end
         mjpage_cmd = [mjpage_exec, '--output', 'SVG', '--noGlobalSVG', 'true']
-    elif math_format == 'mml':
-        mjpage_cmd = [mjpage_exec, '--output', 'MML']
-    elif math_format in ['nemeth', 'speech']:
+    elif math_format in ['mml', 'kindle', 'nemeth', 'speech']:
         # MathML is precursor for SRE outputs
         mjpage_cmd = [mjpage_exec, '--output', 'MML']
     else:
