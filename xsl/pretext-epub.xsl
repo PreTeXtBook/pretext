@@ -35,7 +35,6 @@
 
 <!-- Knowls do not function in an ePub,       -->
 <!-- so no content should be born hidden      -->
-<!-- TODO: enable turning off xrefs as knowls -->
 <xsl:param name="html.knowl.theorem" select="'no'" />
 <xsl:param name="html.knowl.proof" select="'no'" />
 <xsl:param name="html.knowl.definition" select="'no'" />
@@ -52,9 +51,6 @@
 <xsl:param name="html.knowl.exercise.inline" select="'no'" />
 <xsl:param name="html.knowl.exercise.sectional" select="'no'" />
 <xsl:param name="html.knowl.exercise.worksheet" select="'no'" />
-
-<!-- We turn off permalinks on divisions, etc. -->
-<xsl:param name="html.permalink"  select="'none'" />
 
 <!-- Output as well-formed xhtml -->
 <!-- This may have no practical effect -->
