@@ -138,7 +138,7 @@
 
         <p>Elements which have complicated restrictions handled by Schematron rules will have some written documentation to this effect as part of their page within the schema browser.</p>
 
-        <p>The XML Schema Documentation Generator<idx>XML schema documentation generator</idx><idx><h>XML schema documentation generator</h><seealso>DocFlex/XML XML schema documentation generator</seealso></idx> is a commercial program, but provides a free license allowing minimal customization and embeddeding promotion in the output.  (Thank-you, Filigris Works!)  In particular, as an author you should not need to install or use this program.</p>
+        <p>The XML Schema Documentation Generator<idx>XML schema documentation generator</idx><idx><h>XML schema documentation generator</h><seealso>DocFlex/XML XML schema documentation generator</seealso></idx> is a commercial program, but provides a free license allowing minimal customization and embedding promotion in the output.  (Thank-you, Filigris Works!)  In particular, as an author you should not need to install or use this program.</p>
     </section>
 
     <section xml:id="editors-supporting-schema">
