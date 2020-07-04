@@ -299,21 +299,12 @@ def latex_image_conversion(xml_source, stringparams, xmlid_root, data_dir, dest_
             latex_cmd = [tex_executable, "-interaction=batchmode", latex_image]
             _verbose("converting {} to {}".format(latex_image, latex_image_pdf))
             subprocess.call(latex_cmd, stdout=devnull, stderr=subprocess.STDOUT)
-            pdfcrop_executable = get_executable('pdfcrop')
-            _debug("pdfcrop executable: {}".format(pdfcrop_executable))
-            if platform.system() == "Windows":
-                _debug("using pdfcrop is not reliable on Windows unless you are using a linux-like shell, e.g. Git Bash or SageMathCloud terminal")
-                # Test for 32-bit v. 64-bit OS
-                # http://stackoverflow.com/questions/2208828/
-                # detect-64-bit-os-windows-in-python
-                if platform.machine().endswith('64'):
-                    pdfcrop_cmd = [pdfcrop_executable, "--gscmd", "gswin64c.exe", latex_image_pdf, latex_image_pdf]
-                else:
-                    pdfcrop_cmd = [pdfcrop_executable, "--gscmd", "gswin32c.exe", latex_image_pdf, latex_image_pdf]
-            else:
-                pdfcrop_cmd = [pdfcrop_executable, latex_image_pdf, latex_image_pdf]
+            pcm_executable = get_executable('pdfcrop')
+            _debug("pdf-crop-margins executable: {}".format(pcm_executable))
+            pcm_cmd = [pcm_executable, latex_image_pdf, "-o", "cropped-"+latex_image_pdf, "-p", "0", "-a", "-1"]
             _verbose("cropping {} to {}".format(latex_image_pdf, latex_image_pdf))
-            subprocess.call(pdfcrop_cmd, stdout=devnull, stderr=subprocess.STDOUT)
+            subprocess.call(pcm_cmd, stdout=devnull, stderr=subprocess.STDOUT)
+            shutil.move("cropped-"+latex_image_pdf, latex_image_pdf)
             if outformat == 'all':
                 shutil.copy2(latex_image, dest_dir)
             if (outformat == 'pdf' or outformat == 'all'):
@@ -1380,11 +1371,19 @@ def get_executable(exec_name):
     except OSError:
         print('PTX:WARNING: executable existence-checking was not performed (e.g. on Windows)')
         result_code = 0  # perhaps a lie on Windows
+    error_messages = []
     if result_code != 0:
-        error_message = '\n'.join([
-                        'PTX:ERROR: cannot locate executable with configuration name "{}" as command "{}"',
-                        '*** Edit the configuration file and/or install the necessary program ***'])
-        raise OSError(error_message.format(exec_name, config_name))
+        error_messages += [
+            f'PTX:ERROR: cannot locate executable with configuration name `{exec_name}` as command `{config_name}`',
+            '*** Edit the configuration file and/or install the necessary program ***'
+        ]
+    if config_name=="pdfcrop":
+        error_messages += [
+            "PTX:ERROR: Program `pdfcrop` was replaced by `pdf-crop-margins` as of 2020-07-07.",
+            "Install with `pip install pdfCropMargins` and update your configuration file with `pdfcrop = pdf-crop-margins`."
+        ]
+    if error_messages:
+        raise OSError('\n'.join(error_messages))
     _debug("{} executable: {}".format(exec_name, config_name))
     return config_name
 
