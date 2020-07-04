@@ -299,21 +299,11 @@ def latex_image_conversion(xml_source, stringparams, xmlid_root, data_dir, dest_
             latex_cmd = [tex_executable, "-interaction=batchmode", latex_image]
             _verbose("converting {} to {}".format(latex_image, latex_image_pdf))
             subprocess.call(latex_cmd, stdout=devnull, stderr=subprocess.STDOUT)
-            pdfcrop_executable = get_executable('pdfcrop')
-            _debug("pdfcrop executable: {}".format(pdfcrop_executable))
-            if platform.system() == "Windows":
-                _debug("using pdfcrop is not reliable on Windows unless you are using a linux-like shell, e.g. Git Bash or SageMathCloud terminal")
-                # Test for 32-bit v. 64-bit OS
-                # http://stackoverflow.com/questions/2208828/
-                # detect-64-bit-os-windows-in-python
-                if platform.machine().endswith('64'):
-                    pdfcrop_cmd = [pdfcrop_executable, "--gscmd", "gswin64c.exe", latex_image_pdf, latex_image_pdf]
-                else:
-                    pdfcrop_cmd = [pdfcrop_executable, "--gscmd", "gswin32c.exe", latex_image_pdf, latex_image_pdf]
-            else:
-                pdfcrop_cmd = [pdfcrop_executable, latex_image_pdf, latex_image_pdf]
+            pcm_executable = get_executable('pcm')
+            _debug("pdf-crop-margins executable: {}".format(pcm_executable))
+            pcm_cmd = [pcm_executable, latex_image_pdf, "-o "+latex_image_pdf, "-p 0"]
             _verbose("cropping {} to {}".format(latex_image_pdf, latex_image_pdf))
-            subprocess.call(pdfcrop_cmd, stdout=devnull, stderr=subprocess.STDOUT)
+            subprocess.call(pcm_cmd, stdout=devnull, stderr=subprocess.STDOUT)
             if outformat == 'all':
                 shutil.copy2(latex_image, dest_dir)
             if (outformat == 'pdf' or outformat == 'all'):
