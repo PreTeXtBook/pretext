@@ -6248,13 +6248,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- no extension suggests hosting has multiple -->
         <!-- versions for browser to sort through       -->
         <!-- More open formats first!  ;-)              -->
-        <xsl:if test="$extension = '' or $extension = 'oog'">
+        <xsl:if test="$extension = '' or $extension = 'ogv'">
             <xsl:element name="source">
                 <xsl:attribute name="src">
                     <xsl:value-of select="@source"/>
                     <!-- augment no-extension form -->
                     <xsl:if test="$extension = ''">
-                        <xsl:text>.ogg</xsl:text>
+                        <xsl:text>.ogv</xsl:text>
                     </xsl:if>
                     <xsl:apply-templates select="." mode="temporal-fragment"/>
                 </xsl:attribute>
@@ -6290,6 +6290,25 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:attribute>
                 <xsl:attribute name="type">
                     <xsl:text>video/mp4</xsl:text>
+                </xsl:attribute>
+            </xsl:element>
+        </xsl:if>
+        <!-- 2007: *.oog officially replaced by *.ogv    -->
+        <!-- 2018-04-01: we supported *.oog for video at -->
+        <!--    91028991e081d2c933d46d3ce5d4d1cb6759c0bf -->
+        <!-- 2020-07-05: demoted, but continue support   -->
+        <xsl:if test="$extension = '' or $extension = 'oog'">
+            <xsl:element name="source">
+                <xsl:attribute name="src">
+                    <xsl:value-of select="@source"/>
+                    <!-- augment no-extension form -->
+                    <xsl:if test="$extension = ''">
+                        <xsl:text>.ogg</xsl:text>
+                    </xsl:if>
+                    <xsl:apply-templates select="." mode="temporal-fragment"/>
+                </xsl:attribute>
+                <xsl:attribute name="type">
+                    <xsl:text>video/ogg</xsl:text>
                 </xsl:attribute>
             </xsl:element>
         </xsl:if>
