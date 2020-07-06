@@ -301,9 +301,11 @@ def latex_image_conversion(xml_source, stringparams, xmlid_root, data_dir, dest_
             subprocess.call(latex_cmd, stdout=devnull, stderr=subprocess.STDOUT)
             pcm_executable = get_executable('pcm')
             _debug("pdf-crop-margins executable: {}".format(pcm_executable))
-            pcm_cmd = [pcm_executable, latex_image_pdf, "-o "+latex_image_pdf, "-p 0"]
+            pcm_cmd = [pcm_executable, latex_image_pdf, "-o", "cropped-"+latex_image_pdf, "-p", "0"]
+            pcm_cmd_2 = [pcm_executable, "cropped-"+latex_image_pdf, "-o", latex_image_pdf, "-p", "0"] #hax, please improve
             _verbose("cropping {} to {}".format(latex_image_pdf, latex_image_pdf))
             subprocess.call(pcm_cmd, stdout=devnull, stderr=subprocess.STDOUT)
+            subprocess.call(pcm_cmd_2, stdout=devnull, stderr=subprocess.STDOUT) #hax, please improve
             if outformat == 'all':
                 shutil.copy2(latex_image, dest_dir)
             if (outformat == 'pdf' or outformat == 'all'):
