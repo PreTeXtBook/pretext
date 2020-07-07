@@ -299,13 +299,12 @@ def latex_image_conversion(xml_source, stringparams, xmlid_root, data_dir, dest_
             latex_cmd = [tex_executable, "-interaction=batchmode", latex_image]
             _verbose("converting {} to {}".format(latex_image, latex_image_pdf))
             subprocess.call(latex_cmd, stdout=devnull, stderr=subprocess.STDOUT)
-            pcm_executable = get_executable('pcm')
+            pcm_executable = get_executable('pdfcrop')
             _debug("pdf-crop-margins executable: {}".format(pcm_executable))
             pcm_cmd = [pcm_executable, latex_image_pdf, "-o", "cropped-"+latex_image_pdf, "-p", "0"]
-            pcm_cmd_2 = [pcm_executable, "cropped-"+latex_image_pdf, "-o", latex_image_pdf, "-p", "0"] #hax, please improve
             _verbose("cropping {} to {}".format(latex_image_pdf, latex_image_pdf))
             subprocess.call(pcm_cmd, stdout=devnull, stderr=subprocess.STDOUT)
-            subprocess.call(pcm_cmd_2, stdout=devnull, stderr=subprocess.STDOUT) #hax, please improve
+            shutil.move("cropped-"+latex_image_pdf, latex_image_pdf)
             if outformat == 'all':
                 shutil.copy2(latex_image, dest_dir)
             if (outformat == 'pdf' or outformat == 'all'):
@@ -1402,11 +1401,19 @@ def get_executable(exec_name):
     except OSError:
         print('PTX:WARNING: executable existence-checking was not performed (e.g. on Windows)')
         result_code = 0  # perhaps a lie on Windows
+    error_messages = []
     if result_code != 0:
-        error_message = '\n'.join([
-                        'PTX:ERROR: cannot locate executable with configuration name "{}" as command "{}"',
-                        '*** Edit the configuration file and/or install the necessary program ***'])
-        raise OSError(error_message.format(exec_name, config_name))
+        error_messages += [
+            f'PTX:ERROR: cannot locate executable with configuration name `{exec_name}` as command `{config_name}`',
+            '*** Edit the configuration file and/or install the necessary program ***'
+        ]
+    if config_name=="pdfcrop":
+        error_messages += [
+            "PTX:ERROR: Program `pdfcrop` was replaced by `pdf-crop-margins` as of 2020-07-07.",
+            "Install with `pip install pdf-crop-margins` and update your configuration file with `pdfcrop = pdf-crop-margins`."
+        ]
+    if error_messages:
+        raise OSError('\n'.join(error_messages))
     _debug("{} executable: {}".format(exec_name, config_name))
     return config_name
 
