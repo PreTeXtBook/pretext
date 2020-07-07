@@ -2360,11 +2360,11 @@ code.inline {
 .pretext-content ol > li {
     padding-left: 0.25em;
 }
-.pretext-content ol.cols2 > li, .pretext-content ul.cols2 > li { width: calc(49% - 1.75em)}
-.pretext-content ol.cols3 > li, .pretext-content ul.cols3 > li { width: calc(33% - 1.25em)}
-.pretext-content ol.cols4 > li, .pretext-content ul.cols4 > li { width: calc(24.5% - 1.25em)}
-.pretext-content ol.cols5 > li, .pretext-content ul.cols5 > li { width: calc(19.5% - 0.75em)}
-.pretext-content ol.cols6 > li, .pretext-content ul.cols6 > li { width: calc(16.3% - 0.5em)}
+.pretext-content ol.cols2 > li, .pretext-content ul.cols2 > li { width: calc(49% - 1.75em); min-width: 190px}
+.pretext-content ol.cols3 > li, .pretext-content ul.cols3 > li { width: calc(33% - 1.25em); min-width: 160px}
+.pretext-content ol.cols4 > li, .pretext-content ul.cols4 > li { width: calc(24.5% - 1.25em); min-width: 100px}
+.pretext-content ol.cols5 > li, .pretext-content ul.cols5 > li { width: calc(19.5% - 0.75em); min-width: 90px}
+.pretext-content ol.cols6 > li, .pretext-content ul.cols6 > li { width: calc(16.3% - 0.5em); min-width: 80px}
 /* sample-article sec 5 */
 .pretext-content ul.cols2 > li, .pretext-content ol.cols2 > li {
    padding-right: 1.5em;
