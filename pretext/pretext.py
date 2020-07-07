@@ -1410,7 +1410,7 @@ def get_executable(exec_name):
     if config_name=="pdfcrop":
         error_messages += [
             "PTX:ERROR: Program `pdfcrop` was replaced by `pdf-crop-margins` as of 2020-07-07.",
-            "Install with `pip install pdf-crop-margins` and update your configuration file with `pdfcrop = pdf-crop-margins`."
+            "Install with `pip install pdfCropMargins` and update your configuration file with `pdfcrop = pdf-crop-margins`."
         ]
     if error_messages:
         raise OSError('\n'.join(error_messages))
