@@ -353,6 +353,7 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
     import urllib.parse # urlparse()
     import re     # regular expressions for parsing
     import base64  # b64encode()
+    import xml.etree.ElementTree
     # at least on Mac installations, requests module is not standard
     try:
         import requests
@@ -381,24 +382,10 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
         msg = 'xsltproc command failed, tried: "{}"\n'.format(' '.join(cmd))
         raise ValueError(msg + root_cause)
 
-    # execute XSL extraction to get back the dictionary
-    # where the keys are the internal-ids for the problems
-    # pgptx
-    xsl_transform_pgptx = 'extract-pg-ptx.xsl'
-    extraction_xslt_pgptx = os.path.join(ptx_xsl_dir, xsl_transform_pgptx)
-    cmd = [xslt_executable, '--xinclude', extraction_xslt_pgptx, xml_source]
-    try:
-        problem_dictionary_pgptx = subprocess.check_output(cmd)
-    except subprocess.CalledProcessError as e:
-        root_cause = str(e)
-        msg = 'xsltproc command failed, tried: "{}"\n'.format(' '.join(cmd))
-        raise ValueError(msg + root_cause)
-
     # "run" the dictionaries
     # protect backslashes in LaTeX code
     # globals() necessary for success in both Python 2 and 3
     exec(problem_dictionaries.decode('utf-8').replace('\\','\\\\'), globals())
-    exec(problem_dictionary_pgptx.decode('utf-8').replace('\\','\\\\'), globals())
 
     # initialize more dictionaries
     pgbase64 = {}
@@ -487,11 +474,7 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
         # and PTX problems by internal ID
         problem_identifier = problem if (origin[problem] == 'ptx') else source[problem]
 
-        #remove outer webwork tag (and attributes) from authored source
-        if origin[problem] == 'ptx':
-            source[problem] = re.sub(r"<webwork.*?>",'',source[problem]).replace('</webwork>','')
-
-        #use "webwork-reps" as parent tag for the various representations of a problem
+        # Use "webwork-reps" as parent tag for the various representations of a problem
         try:
             with open(include_file_name, 'a') as include_file:
                 webwork_reps = '  <webwork-reps xml:id="extracted-{}" ww-id="{}">\n'
@@ -512,20 +495,9 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
         # make base64 for PTX problems
         if origin[problem] == 'ptx':
             for hint_sol in ['hint_yes_solution_yes','hint_yes_solution_no','hint_no_solution_yes','hint_no_solution_no']:
-                pgbase64[hint_sol][problem] = base64.b64encode(bytes(pgptx[hint_sol][problem], 'utf-8'))
+                pgbase64[hint_sol][problem] = base64.b64encode(bytes(pgdense[hint_sol][problem], 'utf-8'))
 
-        # First write authored
-        if origin[problem] == 'ptx':
-            try:
-                with open(include_file_name, 'a') as include_file:
-                    authored_tag = '    <authored>\n{}\n    </authored>\n\n'
-                    include_file.write(authored_tag.format(re.sub(re.compile('^(?=.)', re.MULTILINE),'      ',source[problem])))
-            except Exception as e:
-                root_cause = str(e)
-                msg = "PTX:ERROR: there was a problem writing the authored source of {} to the file: {}\n"
-                raise ValueError(msg.format(problem_identifier, include_file_name) + root_cause)
-
-        # Now begin getting static version from server
+        # Begin getting static version from server
 
         # WW server can react to a
         #   URL of a problem stored there already
@@ -546,7 +518,7 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
         if origin[problem] == 'server':
             _debug('server-to-ptx: {} {} {} {}'.format(source[problem], wwurl, dest_dir, problem))
         elif origin[problem] == 'ptx':
-            _debug('server-to-ptx: {} {} {} {}'.format(pgptx['hint_yes_solution_yes'][problem], wwurl, dest_dir, problem))
+            _debug('server-to-ptx: {} {} {} {}'.format(pgdense['hint_yes_solution_yes'][problem], wwurl, dest_dir, problem))
 
         # Ready, go out on the wire
         try:
@@ -605,18 +577,16 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
         # Check for errors with PG processing
         # Get booleans signaling badness: file_empty, no_compile, bad_xml, no_statement
         file_empty = 'ERROR:  This problem file was empty!' in response_text
+
         no_compile = 'ERROR caught by Translator while processing problem file:' in response_text
+
         bad_xml = False
-        no_statement = False
         try:
-            from xml.etree import ElementTree
-        except ImportError:
-            msg = 'PTX:ERROR: failed to import ElementTree from xml.etree'
-            raise ValueError(msg)
-        try:
-            problem_root = ElementTree.fromstring(response_text)
+            problem_root = xml.etree.ElementTree.fromstring(response_text)
         except:
             bad_xml = True
+
+        no_statement = False
         if not bad_xml:
             if problem_root.find('.//statement') is None:
                 no_statement = True
@@ -653,7 +623,7 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
             if badness:
                 debugging_help = response_text
                 if origin[problem] == 'ptx' and no_compile:
-                    debugging_help += "\n" + pg[problem]
+                    debugging_help += "\n" + pghuman[problem]
                 raise ValueError(badness_msg.format(problem_identifier, seed[problem], debugging_help))
 
         # If there is "badness"...
@@ -811,7 +781,7 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
                 pg_shell = "DOCUMENT();\nloadMacros('PGstandard.pl','PGML.pl','PGcourse.pl');\nTEXT(beginproblem());\nBEGIN_PGML\n{}END_PGML\nENDDOCUMENT();"
                 formatted_pg = pg_shell.format(badness_msg.format(problem_identifier, seed[problem], badness_tip))
             else:
-                formatted_pg = pg[problem]
+                formatted_pg = pghuman[problem].replace('&','&amp;').replace('<','&lt;').replace('>','&gt;')
             # opportunity to cut out extra blank lines
             formatted_pg = re.sub(re.compile(r"(\n *\n)( *\n)*", re.MULTILINE),r"\n\n",formatted_pg)
 
