@@ -301,7 +301,7 @@ def latex_image_conversion(xml_source, stringparams, xmlid_root, data_dir, dest_
             subprocess.call(latex_cmd, stdout=devnull, stderr=subprocess.STDOUT)
             pcm_executable = get_executable('pdfcrop')
             _debug("pdf-crop-margins executable: {}".format(pcm_executable))
-            pcm_cmd = [pcm_executable, latex_image_pdf, "-o", "cropped-"+latex_image_pdf, "-p", "0"]
+            pcm_cmd = [pcm_executable, latex_image_pdf, "-o", "cropped-"+latex_image_pdf, "-p", "0", "-a", "-1"]
             _verbose("cropping {} to {}".format(latex_image_pdf, latex_image_pdf))
             subprocess.call(pcm_cmd, stdout=devnull, stderr=subprocess.STDOUT)
             shutil.move("cropped-"+latex_image_pdf, latex_image_pdf)
