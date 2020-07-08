@@ -4193,7 +4193,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 </xsl:template>
 
 <!-- Assumes element may have an @aspect attribute   -->
-<!-- Caller can provide a defalt for its context     -->
+<!-- Caller can provide a default for its context    -->
 <!-- Input:  "width:height", or decimal width/height -->
 <!-- Return: real number as fraction width/height    -->
 <!-- Totally blank means nothing could be determined -->
@@ -5934,14 +5934,26 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- which needs to be captured in one variable, then    -->
 <!-- converted to a node-set with an extension function  -->
 
-<!-- NB: An RTF has a "root" node.  Then the elements      -->
-<!-- manufactured for it occur as children.  If the        -->
-<!-- "apply-templates" fails to have the "/*" at the end   -->
-<!-- of the "select", then the main entry template will be -->
-<!-- called to do any housekeeping it might do.            -->
-<!-- This was a really tough bug to track down.            -->
+<!-- aspect-ratio is only needed for videos in HTML.     -->
+<!-- Long story.  It needs to match what is provided     -->
+<!-- in the video (a file or an embedded player).  A     -->
+<!-- sensible default is "1:1" but in context we might   -->
+<!-- want to supply some other sensible default like     -->
+<!-- "16:9".  The ONLY purpose of specifying an          -->
+<!-- aspect-ratio is to compute some sort of height.     -->
+<!-- So we do not report the aspect-ratio itself, but    -->
+<!-- instead compute a height (*only* for video).        -->
 
-<xsl:template match="image" mode="layout-parameters">
+<!-- NB: An RTF has a "root" node.  Then the elements    -->
+<!-- manufactured for it occur as children.  If the      -->
+<!-- "apply-templates" fails to have the "/*" at the end -->
+<!-- of the "select", then the main entry template will  -->
+<!-- be called to do any housekeeping it might do.       -->
+<!-- This was a really tough bug to track down.          -->
+
+<xsl:template match="image|audio|video" mode="layout-parameters">
+    <xsl:param name="default-aspect" select="'1:1'"/>
+
     <!-- clean up margins -->
     <xsl:variable name="normalized-margins">
         <xsl:choose>
@@ -5992,6 +6004,35 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
             <!-- default setting if not specified, and not global -->
             <xsl:otherwise>
                 <xsl:value-of select="'auto'" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+
+    <!-- clean-up aspect-ratio -->
+    <!-- may be a hollow exercise, but no harm since a -->
+    <!-- valid ratio is given in parameter default     -->
+    <xsl:variable name="normalized-aspect">
+        <xsl:variable name="entered-aspect">
+            <xsl:choose>
+                <xsl:when test="@aspect">
+                    <xsl:value-of select="normalize-space(@aspect)"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="normalize-space($default-aspect)"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:choose>
+            <!-- test if a ratio is given, and assume parts are -->
+            <!-- good and that there is only one colon, etc,... -->
+            <xsl:when test="contains($entered-aspect, ':')">
+                <xsl:variable name="width" select="substring-before($entered-aspect, ':')" />
+                <xsl:variable name="height" select="substring-after($entered-aspect, ':')" />
+                <xsl:value-of select="$width div $height" />
+            </xsl:when>
+            <!-- else assume a number was entered -->
+            <xsl:otherwise>
+                <xsl:value-of select="$entered-aspect"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
@@ -6050,6 +6091,19 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:if test="not($normalized-left-margin = 'auto') and not($normalized-width= 'auto') and not((substring-before($normalized-left-margin, '%') + substring-before($normalized-width, '%') + substring-before($normalized-right-margin, '%') = 100))">
         <xsl:message>PTX:ERROR:   margins and width (<xsl:value-of select="$normalized-left-margin" />, <xsl:value-of select="$normalized-width" />, <xsl:value-of select="$normalized-right-margin" />) must sum to 100%</xsl:message>
         <xsl:apply-templates select="." mode="location-report" />
+    </xsl:if>
+
+    <!-- Sanity check on the aspect-ratio -->
+    <!-- NaN does not equal *anything*, so tests if a number  -->
+    <!-- http://stackoverflow.com/questions/6895870           -->
+    <xsl:if test="not(number($normalized-aspect) = number($normalized-aspect)) or ($normalized-aspect &lt; 0)">
+        <xsl:message>PTX:ERROR:   the @aspect attribute should be a ratio, like 4:3, or a positive number, not "<xsl:value-of select="@aspect" />"</xsl:message>
+        <xsl:apply-templates select="." mode="location-report" />
+    </xsl:if>
+    <xsl:if test="$normalized-aspect = 0">
+        <xsl:message>PTX:ERROR:   an @aspect attribute equal to zero will cause serious errors.</xsl:message>
+        <xsl:apply-templates select="." mode="location-report" />
+        <xsl:message terminate="yes">Quitting...</xsl:message>
     </xsl:if>
 
     <!-- Perhaps save for debugging -->
@@ -6133,6 +6187,10 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         </xsl:choose>
     </xsl:variable>
 
+    <!-- "height" is derived from width and aspect-ratio.  -->
+    <!-- We warn above about a potential division by zero. -->
+    <xsl:variable name="height" select="$width div $normalized-aspect"/>
+
     <xsl:variable name="centered" select="$left-margin = $right-margin" />
 
     <!-- This is the RTF, which will automatically be bundled with -->
@@ -6149,6 +6207,13 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <width>
         <xsl:value-of select="$width" />
     </width>
+    <!-- Only a "video" gets its height from this layout object, -->
+    <!-- so even if we have computed it, we do not report it     -->
+    <xsl:if test="self::video">
+        <height>
+            <xsl:value-of select="$height"/>
+        </height>
+    </xsl:if>
     <right-margin>
         <xsl:value-of select="$right-margin" />
     </right-margin>
