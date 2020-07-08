@@ -5886,28 +5886,47 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Formerly a "pop-out" page, now a "standalone" page     -->
 <!-- Has autoplay on since a reader has elected to go there -->
 <!-- TODO: override preview, since it just plays, pass 'default -->
-<xsl:template match="audio|video" mode="video-standalone-page">
-    <xsl:variable name="aspect-ratio">
-        <xsl:apply-templates select="." mode="get-aspect-ratio">
-            <xsl:with-param name="default-aspect" select="'16:9'" />
-        </xsl:apply-templates>
-    </xsl:variable>
-    <!-- apparent width of content region of HTML page  -->
-    <!-- with no sidebar, subtract margins = 900 - 2*30 -->
-    <xsl:variable name="ptx-content-width" select="'840'" />
-    <xsl:variable name="ptx-content-height" select="$ptx-content-width div $aspect-ratio" />
+<xsl:template match="audio|video" mode="media-standalone-page">
     <xsl:apply-templates select="." mode="standalone-page">
         <xsl:with-param name="content">
             <!-- display preview, and enable autoplay  -->
             <!-- since reader has elected this page    -->
-            <!-- audio: height parameter is ignored    -->
-            <xsl:apply-templates select="." mode="video-embed">
-                <xsl:with-param name="width"  select="$ptx-content-width" />
-                <xsl:with-param name="height" select="$ptx-content-height" />
-                <xsl:with-param name="preview" select="'false'" />
-                <xsl:with-param name="autoplay" select="'true'" />
-            </xsl:apply-templates>
             <div style="text-align: center;">Reloading this page will reset a start location</div>
+            <div>
+                <xsl:attribute name="class">
+                    <xsl:choose>
+                        <xsl:when test="self::audio">
+                            <xsl:text>audio-box</xsl:text>
+                        </xsl:when>
+                        <xsl:when test="self::video">
+                            <xsl:text>video-box</xsl:text>
+                        </xsl:when>
+                    </xsl:choose>
+                </xsl:attribute>
+                <xsl:attribute name="style">
+                    <xsl:text>width: </xsl:text>
+                    <xsl:text>100%;</xsl:text>
+                    <xsl:if test="self::video">
+                        <xsl:variable name="rtf-layout">
+                            <xsl:apply-templates select="." mode="layout-parameters">
+                                <xsl:with-param name="default-aspect" select="'16:9'"/>
+                            </xsl:apply-templates>
+                        </xsl:variable>
+                        <xsl:variable name="layout" select="exsl:node-set($rtf-layout)" />
+                        <!-- get back the aspect ratio via height and width of layout, -->
+                        <!-- which are both defined for a video (but not an audio)     -->
+                        <!-- Pairs with 100% width above                               -->
+                        <xsl:variable name="height-percent" select="100 * ($layout/height div $layout/width)"/>
+                        <xsl:text>padding-top: </xsl:text>
+                        <xsl:value-of select="$height-percent"/>
+                        <xsl:text>%;</xsl:text>
+                    </xsl:if>
+                </xsl:attribute>
+                <xsl:apply-templates select="." mode="media-embed">
+                    <xsl:with-param name="preview" select="'false'" />
+                    <xsl:with-param name="autoplay" select="'true'" />
+                </xsl:apply-templates>
+            </div>
         </xsl:with-param>
     </xsl:apply-templates>
 </xsl:template>
@@ -6021,7 +6040,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <!-- With sidebars killed, this stuff is extraneous     -->
                     <!-- <xsl:apply-templates select="." mode="sidebars" /> -->
                     <main class="main">
-                        <div id="content" class="pretext-content">
+                        <!-- relax the 600px width restriction, so with    -->
+                        <!-- responsive videos they grow to be much bigger -->
+                        <div id="content" class="pretext-content" style="max-width: 1600px">
                             <!-- This is content passed in as a parameter -->
                             <xsl:copy-of select="$content" />
                           </div>
