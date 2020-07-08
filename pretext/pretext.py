@@ -1374,7 +1374,7 @@ def get_executable(exec_name):
     error_messages = []
     if result_code != 0:
         error_messages += [
-            f'PTX:ERROR: cannot locate executable with configuration name `{exec_name}` as command `{config_name}`',
+            'PTX:ERROR: cannot locate executable with configuration name `{}` as command `{}`'.format(exec_name, config_name),
             '*** Edit the configuration file and/or install the necessary program ***'
         ]
     if config_name=="pdfcrop":
