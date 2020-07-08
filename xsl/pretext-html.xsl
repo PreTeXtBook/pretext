@@ -5808,89 +5808,79 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ################################## -->
 
 
-<!-- ##### -->
-<!-- Video -->
-<!-- ##### -->
+<!-- ############# -->
+<!-- Audio & Video -->
+<!-- ############# -->
 
-<!-- We begin with a general construction of various   -->
-<!-- options for embedding, pop-out, and previews.     -->
-<!-- An abstract modal method "video-embed" constructs -->
-<!-- an HTML object of the correct size and with the   -->
-<!-- right autoplay characteristic.                    -->
-<!-- Note: autoplay option is internal, not author-set -->
+<!-- Audio and video are similar enough that we share    -->
+<!-- some routines under the general heading of "media", -->
+<!-- or else we present them here alongside, due to the  -->
+<!-- similarities.                                       -->
 
-<!-- Two types of video: HTML5, YouTube                   -->
-<!-- Three previews: default, generic, author-constructed -->
-<!-- Three embeddings: embed, popout, select              -->
-
-<xsl:template match="audio|video">
-    <!-- collect and process size information from author -->
-    <xsl:variable name="width">
-        <xsl:apply-templates select="." mode="get-width-pixels" />
-    </xsl:variable>
-    <xsl:variable name="height">
-        <xsl:apply-templates select="." mode="get-height-pixels">
-            <xsl:with-param name="default-aspect" select="'16:9'" />
+<xsl:template match="video">
+    <!-- This is an RTF of the object, it is important that it returns -->
+    <!-- 100% width as default, so when the object is in an enclosing  -->
+    <!-- "sidebyside" only the @aspect is on the object and hence a    -->
+    <!-- $layout/height is computed properly.                          -->
+    <xsl:variable name="rtf-layout">
+        <xsl:apply-templates select="." mode="layout-parameters">
+            <xsl:with-param name="default-aspect" select="'16:9'"/>
         </xsl:apply-templates>
     </xsl:variable>
-
+    <xsl:variable name="layout" select="exsl:node-set($rtf-layout)" />
+    <!-- div is constraint/positioning for contained video   -->
+    <!-- Use of "padding-top" for responsive iframes is from -->
+    <!-- https://davidwalsh.name/responsive-iframes          -->
+    <div class="video-box">
+        <xsl:attribute name="style">
+            <xsl:text>width: </xsl:text>
+            <xsl:value-of select="$layout/width"/>
+            <xsl:text>%;</xsl:text>
+            <!-- surrogate for height -->
+            <xsl:text>padding-top: </xsl:text>
+            <xsl:value-of select="$layout/height"/>
+            <xsl:text>%;</xsl:text>
+            <xsl:text> margin-left: </xsl:text>
+            <xsl:value-of select="$layout/left-margin"/>
+            <xsl:text>%;</xsl:text>
+            <xsl:text> margin-right: </xsl:text>
+            <xsl:value-of select="$layout/right-margin"/>
+            <xsl:text>%;</xsl:text>
+        </xsl:attribute>
+        <xsl:apply-templates select="." mode="media-embed"/>
+    </div>
     <!-- Always build a standalone page, PDF links to these -->
-    <xsl:apply-templates select="." mode="video-standalone-page" />
+    <xsl:apply-templates select="." mode="media-standalone-page" />
+</xsl:template>
 
-    <!-- standalone page name uses visible-id of the video -->
-    <xsl:variable name="int-id">
-        <xsl:apply-templates select="." mode="visible-id" />
+<xsl:template match="audio">
+    <!-- This is an RTF of the object, it is important that it returns -->
+    <!-- 100% width as default, so when the object is in an enclosing  -->
+    <!-- "sidebyside" it fills the panel.                              -->
+    <!-- Note: we may want to support images as posters, so we may  -->
+    <!-- want to support an aspect-ratio, or perhaps the image will -->
+    <!-- define the size?                                           -->
+    <xsl:variable name="rtf-layout">
+        <xsl:apply-templates select="." mode="layout-parameters"/>
     </xsl:variable>
-    <xsl:choose>
-        <xsl:when test="@play-at = 'popout'">
-            <a href="{$int-id}.html" target="_blank">
-            <!-- place a thumbnail as clickable for page already extant -->
-                <xsl:choose>
-                    <!-- generic requested -->
-                    <xsl:when test="@preview = 'generic'">
-                        <xsl:call-template name="generic-preview-svg">
-                            <xsl:with-param name="width" select="$width" />
-                            <xsl:with-param name="height" select="$height" />
-                        </xsl:call-template>
-                    </xsl:when>
-                    <!-- author-provided -->
-                    <xsl:when test="@preview and not(@preview = 'default')">
-                        <img src="{@preview}" width="{$width}" height="{$height}" alt="Video cover image"/>
-                    </xsl:when>
-                    <!-- this id-device should be replaced by graceful failure  -->
-                    <!-- to the generic preview with a console warning          -->
-                    <xsl:when test="(@preview = 'default') or not(@preview)">
-                        <xsl:variable name="thumbnail-image">
-                            <xsl:text>images/</xsl:text>
-                            <xsl:value-of select="$int-id" />
-                            <xsl:text>.jpg</xsl:text>
-                        </xsl:variable>
-                        <img src="{$thumbnail-image}" width="{$width}" height="{$height}" alt="Video cover image"/>
-                    </xsl:when>
-                </xsl:choose>
-            </a>
-            <!-- until we get an overlay, explain popout -->
-            <div style="text-align: center;">
-                <xsl:text>Click Above to Play</xsl:text>
-            </div>
-        </xsl:when>
-        <xsl:when test="(@play-at = 'select') or (@play-at = 'embed') or not(@play-at)">
-            <xsl:apply-templates select="." mode="video-embed">
-                <xsl:with-param name="width"  select="$width" />
-                <xsl:with-param name="height" select="$height" />
-            </xsl:apply-templates>
-            <!-- for the reader-select case, we need a link as a "button" -->
-            <!-- if this case is deprecated, we can drop this thing -->
-            <xsl:if test="@play-at = 'select'">
-                <div style="text-align: center;">
-                    <a href="{$int-id}.html" target="_blank">
-                        <xsl:text>Click to Pop-Out</xsl:text>
-                    </a>
-                </div>
-            </xsl:if>
-        </xsl:when>
-        <xsl:otherwise />
-    </xsl:choose>
+    <xsl:variable name="layout" select="exsl:node-set($rtf-layout)" />
+    <!-- div is constraint/positioning for contained audio -->
+    <div class="audio-box">
+        <xsl:attribute name="style">
+            <xsl:text>width: </xsl:text>
+            <xsl:value-of select="$layout/width"/>
+            <xsl:text>%;</xsl:text>
+            <xsl:text> margin-left: </xsl:text>
+            <xsl:value-of select="$layout/left-margin"/>
+            <xsl:text>%;</xsl:text>
+            <xsl:text> margin-right: </xsl:text>
+            <xsl:value-of select="$layout/right-margin"/>
+            <xsl:text>%;</xsl:text>
+        </xsl:attribute>
+        <xsl:apply-templates select="." mode="media-embed"/>
+    </div>
+    <!-- Always build a standalone page, PDF links to these -->
+    <xsl:apply-templates select="." mode="media-standalone-page" />
 </xsl:template>
 
 <!-- Formerly a "pop-out" page, now a "standalone" page     -->
@@ -6050,8 +6040,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template name="generic-preview-svg">
-    <xsl:param name="width" select="''" />
-    <xsl:param name="height" select="''" />
     <!-- viewbox was square (0,0), 96x96, now clipped 14 above and below                   -->
     <!-- preserveAspectRatio="none" makes it amenable to matching video it hides           -->
     <!-- SVG scaling, comprehensive: https://css-tricks.com/scale-svg/                     -->
@@ -6061,7 +6049,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- License text:  This image only consists of simple geometric shapes or text.       -->
     <!-- It does not meet the threshold of originality needed for copyright protection,    -->
     <!-- and is therefore in the public domain.                                            -->
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 14 96 68" width="{$width}" height="{$height}" style="cursor:pointer;" preserveAspectRatio="none">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 14 96 68" style="cursor:pointer; position: absolute; top: 0; left: 0; width: 100%; height: 100%;" preserveAspectRatio="none">
         <path fill="#e62117" d="M94.98,28.84c0,0-0.94-6.6-3.81-9.5c-3.64-3.81-7.72-3.83-9.59-4.05c-13.4-0.97-33.52-0.85-33.52-0.85s-20.12-0.12-33.52,0.85c-1.87,0.22-5.95,0.24-9.59,4.05c-2.87,2.9-3.81,9.5-3.81,9.5S0.18,36.58,0,44.33v7.26c0.18,7.75,1.14,15.49,1.14,15.49s0.93,6.6,3.81,9.5c3.64,3.81,8.43,3.69,10.56,4.09c7.53,0.72,31.7,0.89,32.54,0.9c0.01,0,20.14,0.03,33.54-0.94c1.87-0.22,5.95-0.24,9.59-4.05c2.87-2.9,3.81-9.5,3.81-9.5s0.96-7.75,1.02-15.49v-7.26C95.94,36.58,94.98,28.84,94.98,28.84z M38.28,61.41v-27l25.74,13.5L38.28,61.41z"/>
     </svg>
 </xsl:template>
@@ -6094,36 +6082,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- NB: here, and elesewhere, references -->
 <!-- to "video" should become "media"     -->
-<xsl:template match="audio[@source]" mode="video-embed">
-    <xsl:param name="width" select="''" />
-    <xsl:param name="height" select="''" />
-    <xsl:param name="preview" select="'true'" />
+<xsl:template match="audio[@source]" mode="media-embed">
+    <xsl:param name="preview" select="'false'" />
     <xsl:param name="autoplay" select="'false'" />
-
-    <!-- $width is in pixels for video @width attribute,   -->
-    <!-- but for the audio element we seem to need to      -->
-    <!-- use CSS, so we revert back to the percentage. (!) -->
-    <!-- Seems to work great on skinny screens             -->
-    <xsl:variable name="width-percentage">
-        <xsl:value-of select="round(($width div $design-width)*100)"/>
-    </xsl:variable>
 
     <xsl:element name="audio">
         <xsl:attribute name="id">
             <xsl:apply-templates select="." mode="html-id"/>
         </xsl:attribute>
-        <!-- seems necessary to style the controls, since it        -->
-        <!-- has no notion of height and width, like video does     -->
-        <!-- caller supplies width in pixels, we assume full height -->
-        <!-- migrate block and height properties to CSS             -->
-        <xsl:attribute name="style">
-            <xsl:text>width:</xsl:text>
-            <xsl:value-of select="$width-percentage" />
-            <xsl:text>%;</xsl:text>
-            <xsl:text>height:100%;display:block;margin:auto;</xsl:text>
+        <xsl:attribute name="class">
+            <xsl:text>audio</xsl:text>
         </xsl:attribute>
         <!-- empty forms work as boolean switches -->
-        <xsl:attribute name="controls" />
+        <xsl:attribute name="controls"/>
         <xsl:if test="$autoplay = 'true'">
             <xsl:attribute name="autoplay" />
         </xsl:if>
@@ -6141,7 +6112,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- no extension suggests hosting has multiple -->
         <!-- versions for browser to sort through       -->
         <!-- More open formats first!  ;-)              -->
-        <xsl:if test="$extension = '' or $extension = 'oog'">
+        <xsl:if test="$extension = '' or $extension = 'ogg'">
             <xsl:element name="source">
                 <xsl:attribute name="src">
                     <xsl:value-of select="@source"/>
@@ -6195,9 +6166,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- dimensions and autoplay as parameters        -->
 <!-- Normally $preview is true, and not passed in -->
 <!-- 'false' is an override for standalone pages  -->
-<xsl:template match="video[@source]" mode="video-embed">
-    <xsl:param name="width" select="''" />
-    <xsl:param name="height" select="''" />
+<xsl:template match="video[@source]" mode="media-embed">
     <xsl:param name="preview" select="'true'" />
     <xsl:param name="autoplay" select="'false'" />
 
@@ -6206,16 +6175,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="id">
             <xsl:apply-templates select="." mode="html-id"/>
         </xsl:attribute>
-        <xsl:attribute name="width">
-            <xsl:value-of select="$width" />
-        </xsl:attribute>
-        <xsl:attribute name="height">
-            <xsl:value-of select="$height" />
-        </xsl:attribute>
-        <!-- This CSS allows us to break the aspect-ratio -->
-        <!-- https://stackoverflow.com/questions/4000818/ -->
-        <xsl:attribute name="style">
-            <text>object-fit: fill;</text>
+        <xsl:attribute name="class">
+            <xsl:text>video</xsl:text>
         </xsl:attribute>
         <!-- empty forms work as boolean switches -->
         <xsl:attribute name="controls" />
@@ -6355,9 +6316,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Templates, on a per-service basis, supply a URL, -->
 <!-- and any attributes on the "iframe" element which -->
 <!-- are not shared                                   -->
-<xsl:template match="video[@youtube|@youtubeplaylist|@vimeo]" mode="video-embed">
-    <xsl:param name="width" select="''" />
-    <xsl:param name="height" select="''" />
+<xsl:template match="video[@youtube|@youtubeplaylist|@vimeo]" mode="media-embed">
     <xsl:param name="preview" select="'true'" />
     <xsl:param name="autoplay" select="'false'" />
 
@@ -6397,21 +6356,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <div onclick="this.nextElementSibling.style.display='block'; this.style.display='none'">
                 <xsl:choose>
                     <xsl:when test="@preview = 'generic'">
-                        <xsl:call-template name="generic-preview-svg">
-                            <xsl:with-param name="width" select="$width" />
-                            <xsl:with-param name="height" select="$height" />
-                        </xsl:call-template>
+                        <xsl:call-template name="generic-preview-svg"/>
                     </xsl:when>
                     <xsl:otherwise>
-                        <img width="{$width}" height="{$height}" src="{@preview}" alt="Video cover image"/>
+                        <img src="{@preview}" class="video-poster"
+                            alt="Video cover image"/>
                     </xsl:otherwise>
                 </xsl:choose>
             </div>
             <div class="hidden-content">
                 <!-- Hidden content in here                   -->
                 <!-- Turn autoplay on, else two clicks needed -->
-                <iframe id="{$hid}" width="{$width}" height="{$height}" allowfullscreen=""
-                        src="{$source-url-autoplay-on}">
+                <iframe id="{$hid}" class="video" 
+                    allowfullscreen="" src="{$source-url-autoplay-on}">
                     <xsl:apply-templates select="." mode="video-iframe-attributes">
                         <xsl:with-param name="autoplay" select="'true'"/>
                     </xsl:apply-templates>
@@ -6419,8 +6376,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </div>
         </xsl:when>
         <xsl:otherwise>
-            <iframe id="{$hid}" width="{$width}" height="{$height}" allowfullscreen=""
-                    src="{$source-url}">
+            <iframe id="{$hid}"  class="video"
+                allowfullscreen="" src="{$source-url}">
                 <xsl:apply-templates select="." mode="video-iframe-attributes">
                     <xsl:with-param name="autoplay" select="$autoplay"/>
                 </xsl:apply-templates>
