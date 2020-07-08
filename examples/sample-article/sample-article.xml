@@ -5696,15 +5696,27 @@ the xsltproc executable.
         <section xml:id="section-audio">
             <title>Audio</title>
 
-            <p>2019-05-24: this is preliminary, and mostly based on the code for <tag>video</tag> so read the next section and mimic the style from there.  But use an <tag>audio</tag> element and have the <attr>source</attr> attribute point to an OGG, MP3, or WAV file.  Plus, a <attr>height</attr> attribute will be ignored.</p>
+            <p>2019-05-24: this is preliminary, and mostly based on the code for <tag>video</tag> so read the next section and mimic the style from there.  But use an <tag>audio</tag> element and have the <attr>source</attr> attribute point to an OGG, MP3, or WAV file.  Plus, an <attr>aspect</attr> attribute will be ignored.</p>
 
             <p>We have not entirely decided how to handle the static version present in a PDF.</p>
+
+            <p>First in a <tag>figure</tag>, so it can be cross-referenced.</p>
 
             <figure>
                 <caption>MP3 Piano Trill (<c>www.kozco.com/tech/soundtests.html</c>)</caption>
                 <audio xml:id="audio-piano-trill" source="http://www.kozco.com/tech/piano2-CoolEdit.mp3" width="80%"/>
             </figure>
 
+            <p>Now, naked, between a couple of paragraphs, with specified asymmetric margins, and a computed width.</p>
+
+            <audio xml:id="audio-piano-trill-two" source="http://www.kozco.com/tech/piano2-CoolEdit.mp3" margins="30% 15%"/>
+
+            <p>Now in a <tag>sidebyside</tag> with an <q>Organ Finale</q> WAV file on the left, and on the right, Bach in OGG format at a very low bit rate (32 kps).  From <url href="http://www.music.helsinki.fi/tmt/opetus/uusmedia/esim/index-e.html"/>.</p>
+
+            <sidebyside>
+                <audio xml:id="audio-organ-finale" source="https://www.kozco.com/tech/organfinale.wav" width="30%"/>
+                <audio xml:id="audio-bach" source="http://www.music.helsinki.fi/tmt/opetus/uusmedia/esim/a2002011001-e02-32k.ogg" width="60%"/>
+            </sidebyside>
         </section>
 
         <section xml:id="section-video">
