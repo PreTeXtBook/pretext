@@ -6043,6 +6043,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:call-template name="google-universal"/>
                 <xsl:call-template name="google-gst"/>
                 <!-- <xsl:call-template name="pytutor-footer" /> -->
+                <xsl:call-template name="extra-js-footer"/>
             </body>
         </html>
     </exsl:document>
@@ -9365,6 +9366,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="google-gst"/>
             <xsl:call-template name="pytutor-footer" />
             <xsl:call-template name="aim-login-footer" />
+            <xsl:call-template name="extra-js-footer"/>
         </body>
     </html>
     </exsl:document>
@@ -9413,6 +9415,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:call-template name="google-classic"/>
             <xsl:call-template name="google-universal"/>
             <xsl:call-template name="google-gst"/>
+            <xsl:call-template name="extra-js-footer"/>
         </body>
     </html>
     </exsl:document>
@@ -10738,6 +10741,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="font-awesome">
     <xsl:if test="$b-has-icon">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"/>
+    </xsl:if>
+</xsl:template>
+
+<!-- A place to put *one* Javascript file at the *end* of an  -->
+<!-- HTML page/file.  Not present in *every* page implemented -->
+<!-- in this file, such as knowls.                            -->
+<xsl:template name="extra-js-footer">
+    <xsl:if test="not($html.js.extra = '')">
+        <script src="{$html.js.extra}"></script>
     </xsl:if>
 </xsl:template>
 
