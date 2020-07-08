@@ -211,6 +211,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="debug.colors" select="''"/>
 <!-- A space-separated list of CSS URLs (points to servers or local files) -->
 <xsl:param name="html.css.extra"  select="''" />
+<!-- A single JS file for development purposes -->
+<xsl:param name="html.js.extra" select="''" />
 
 <xsl:variable name="html-css-colorfile">
     <xsl:choose>
