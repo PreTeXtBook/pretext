@@ -1352,35 +1352,31 @@ def get_executable(exec_name):
     import os
     import platform
     import subprocess
+    import shutil # .which()
 
     # parse user configuration(s), contains locations of executables
     # in the "executables" section of the INI-style file
     config = get_config_info()
 
-    # http://stackoverflow.com/questions/11210104/check-if-a-program-exists-from-a-python-script
-    # suggests  where.exe  as Windows equivalent (post Windows Server 2003)
-    # which  = 'where.exe' if platform.system() == 'Windows' else 'which'
-
     # get the name, but then see if it really, really works
     _debug('locating "{}" in [executables] section of configuration file'.format(exec_name))
     config_name = config.get('executables', exec_name)
 
-    devnull = open(os.devnull, 'w')
-    try:
-        result_code = subprocess.call(['which', config_name], stdout=devnull, stderr=subprocess.STDOUT)
-    except OSError:
-        print('PTX:WARNING: executable existence-checking was not performed (e.g. on Windows)')
-        result_code = 0  # perhaps a lie on Windows
+    # Returns the full-path version of the command, as if the PATH was employed
+    # "None" indicates the executable does not exist on the system
+    # https://stackoverflow.com/questions/377017/test-if-executable-exists-in-python
+    normalized_exec = shutil.which(config_name)
+
     error_messages = []
-    if result_code != 0:
+    if normalized_exec == None:
         error_messages += [
             'PTX:ERROR: cannot locate executable with configuration name `{}` as command `{}`'.format(exec_name, config_name),
             '*** Edit the configuration file and/or install the necessary program ***'
         ]
-    if config_name=="pdfcrop":
+    if config_name == "pdfcrop":
         error_messages += [
-            "PTX:ERROR: Program `pdfcrop` was replaced by `pdf-crop-margins` as of 2020-07-07.",
-            "Install with `pip install pdfCropMargins` and update your configuration file with `pdfcrop = pdf-crop-margins`."
+            'PTX:ERROR: Program "pdfcrop" was replaced by "pdf-crop-margins" as of 2020-07-07.',
+            'Install with "pip install pdfCropMargins" and update your configuration file with "pdfcrop = pdf-crop-margins".'
         ]
     if error_messages:
         raise OSError('\n'.join(error_messages))
