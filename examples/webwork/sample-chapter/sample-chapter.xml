@@ -141,7 +141,7 @@
 
                     <statement>
                         <p>Compute the sum of <m><var name="$a" /></m> and <m><var name="$b" /></m>:</p>
-                        <p><m><var name="$a" /> + <var name="$b" /> =</m> <var name="$c" width="2" category="integer" /></p>
+                        <p><m><var name="$a" /> + <var name="$b" /> =</m> <var name="$c" width="5" category="integer" /></p>
                     </statement>
 
                     <solution>
@@ -172,7 +172,7 @@
 
                     <statement>
                         <p>Compute the sum of <m><var name="$a" /></m> and <m><var name="$b" /></m>:</p>
-                        <p><m><var name="$a" /> + <var name="$b" /> =</m> <var name="$c" width="2" category="integer" /></p>
+                        <p><m><var name="$a" /> + <var name="$b" /> =</m> <var name="$c" width="5" category="integer" /></p>
                     </statement>
 
                     <solution>
@@ -198,7 +198,7 @@
 
                     <statement>
                         <p>Compute the sum of <m><var name="$a" /></m> and <m><var name="$b" /></m>:</p>
-                        <p><m><var name="$a" /> + <var name="$b" /> =</m> <var name="$c" width="2" category="integer" /></p>
+                        <p><m><var name="$a" /> + <var name="$b" /> =</m> <var name="$c" width="5" category="integer" /></p>
                     </statement>
 
                     <solution>

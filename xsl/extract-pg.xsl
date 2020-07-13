@@ -151,13 +151,24 @@
     </xsl:apply-templates>
     <xsl:text>"""&#xa;</xsl:text>
     <!-- 5. PG optimized (and less human-readable) for use in PTX output modes -->
+    <xsl:text>pgdense["</xsl:text>
+    <xsl:value-of select="$problem" />
+    <xsl:text>"] = """</xsl:text>
+    <xsl:apply-templates select=".">
+        <xsl:with-param name="b-hint" select="true()" />
+        <xsl:with-param name="b-solution" select="true()" />
+        <xsl:with-param name="b-human-readable" select="false()" />
+    </xsl:apply-templates>
+    <xsl:text>"""&#xa;</xsl:text>
+    <!-- Below are only needed for WeBWorK 2.15 and earlier, -->
+    <!-- where we use an iframe for the embedding. Otherwise -->
     <xsl:text>pgdense['hint_no_solution_no']["</xsl:text>
     <xsl:value-of select="$problem" />
     <xsl:text>"] = """</xsl:text>
     <xsl:apply-templates select=".">
         <xsl:with-param name="b-hint" select="false()" />
         <xsl:with-param name="b-solution" select="false()" />
-        <xsl:with-param name="b-verbose" select="false()" />
+        <xsl:with-param name="b-human-readable" select="false()" />
     </xsl:apply-templates>
     <xsl:text>"""&#xa;</xsl:text>
     <xsl:text>pgdense['hint_no_solution_yes']["</xsl:text>
@@ -166,7 +177,7 @@
     <xsl:apply-templates select=".">
         <xsl:with-param name="b-hint" select="false()" />
         <xsl:with-param name="b-solution" select="true()" />
-        <xsl:with-param name="b-verbose" select="false()" />
+        <xsl:with-param name="b-human-readable" select="false()" />
     </xsl:apply-templates>
     <xsl:text>"""&#xa;</xsl:text>
     <xsl:text>pgdense['hint_yes_solution_no']["</xsl:text>
@@ -175,7 +186,7 @@
     <xsl:apply-templates select=".">
         <xsl:with-param name="b-hint" select="true()" />
         <xsl:with-param name="b-solution" select="false()" />
-        <xsl:with-param name="b-verbose" select="false()" />
+        <xsl:with-param name="b-human-readable" select="false()" />
     </xsl:apply-templates>
     <xsl:text>"""&#xa;</xsl:text>
     <xsl:text>pgdense['hint_yes_solution_yes']["</xsl:text>
@@ -184,7 +195,7 @@
     <xsl:apply-templates select=".">
         <xsl:with-param name="b-hint" select="true()" />
         <xsl:with-param name="b-solution" select="true()" />
-        <xsl:with-param name="b-verbose" select="false()" />
+        <xsl:with-param name="b-human-readable" select="false()" />
     </xsl:apply-templates>
     <xsl:text>"""&#xa;</xsl:text>
 </xsl:template>
