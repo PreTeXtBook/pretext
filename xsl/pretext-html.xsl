@@ -34,6 +34,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+    xmlns:svg="http://www.w3.org/2000/svg"
     xmlns:b64="https://github.com/ilyakharlamov/xslt_base64"
     xmlns:exsl="http://exslt.org/common"
     xmlns:date="http://exslt.org/dates-and-times"
@@ -5420,42 +5421,71 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Asymptote graphics language -->
 <xsl:template match="image[asymptote]" mode="image-inclusion">
+    <!-- base-pathname needed later for archive link production -->
     <xsl:variable name="base-pathname">
         <xsl:value-of select="$directory.images" />
         <xsl:text>/</xsl:text>
         <xsl:apply-templates select="." mode="visible-id" />
     </xsl:variable>
-    <xsl:variable name="svg-filename" select="concat($base-pathname, '.svg')" />
     <xsl:variable name="html-filename" select="concat($base-pathname, '.html')" />
 
-    <object data="{$html-filename}">
-        <xsl:attribute name="id">
-            <xsl:apply-templates select="." mode="visible-id" />
-        </xsl:attribute>
-        <xsl:attribute name="width">
-            <xsl:apply-templates select="." mode="get-width-pixels" />
-        </xsl:attribute>
-        <xsl:attribute name="height">
-            <xsl:apply-templates select="." mode="get-height-pixels">
-                <xsl:with-param name="default-aspect" select="'1:1'" />
-            </xsl:apply-templates>
-        </xsl:attribute>
-        <!-- fallback to SVG -->
-        <xsl:element name="embed">
-            <!-- source file attribute for img element, the SVG image -->
-            <xsl:attribute name="src">
-                <xsl:value-of select="$svg-filename" />
-            </xsl:attribute>
-            <!-- replace with a CSS class -->
-            <xsl:attribute name="style">
-                <xsl:text>width: 100%; height: auto;</xsl:text>
-            </xsl:attribute>
-            <!-- alt attribute for accessibility -->
-            <xsl:attribute name="alt">
-                <xsl:apply-templates select="description" />
-            </xsl:attribute>
-        </xsl:element>
-    </object>
+    <!-- Assumes filename is relative to primary source file, -->
+    <!-- which must be specified with the original version,   -->
+    <!-- not the pre-processed, "assembled" version           -->
+    <xsl:variable name="image-xml" select="document($html-filename, $original)"/>
+    <!-- width first -->
+    <xsl:variable name="width">
+        <xsl:choose>
+            <!-- 2-D diagram -->
+            <!-- note necessity of namespace for "svg" element -->
+            <xsl:when test="$image-xml/html/body/svg:svg">
+                <xsl:variable name="wpt" select="$image-xml/html/body/svg:svg/@width"/>
+                <!-- Strip "pt" suffix -->
+                <xsl:value-of select="substring($wpt, 1, string-length($wpt) - 2)"/>
+            </xsl:when>
+            <!-- 3-D diagram -->
+            <xsl:when test="$image-xml/html/body/canvas">
+                <xsl:value-of select="$image-xml/html/body/canvas/@width"/>
+            </xsl:when>
+            <!-- failure -->
+            <xsl:otherwise>
+                <xsl:message>PTX:ERROR:   the Asympote diagram produced in "<xsl:value-of select="$html-filename"/>" needs to be available relative to the primary source file, or if available it is perhaps ill-formed and its width cannot be determined (which you might report as a bug).  We might be able to procede as if the diagram is square, but results can be unpredictable.</xsl:message>
+                <!-- reasonable guess at points/pixels -->
+                <xsl:text>400</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- now height, similarly -->
+    <xsl:variable name="height">
+        <xsl:choose>
+            <!-- 2-D diagram -->
+            <!-- note necessity of namespace for "svg" element -->
+            <xsl:when test="$image-xml/html/body/svg:svg">
+                <xsl:variable name="hpt" select="$image-xml/html/body/svg:svg/@height"/>
+                <!-- Strip "pt" suffix -->
+                <xsl:value-of select="substring($hpt, 1, string-length($hpt) - 2)"/>
+            </xsl:when>
+            <!-- 3-D diagram -->
+            <xsl:when test="$image-xml/html/body/canvas">
+                <xsl:value-of select="$image-xml/html/body/canvas/@height"/>
+            </xsl:when>
+            <!-- failure -->
+            <xsl:otherwise>
+                <xsl:message>PTX:ERROR:   the Asympote diagram produced in "<xsl:value-of select="$html-filename"/>" needs to be available relative to the primary source file, or if available it is perhaps ill-formed and its height cannot be determined (which you might report as a bug).  We might be able to procede as if the diagram is square, but results can be unpredictable.</xsl:message>
+                <!-- reasonable guess at points/pixels -->
+                <xsl:text>400</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- All that was to get an aspect-ratio for a responsive iframe embedding -->
+    <xsl:variable name="aspect-percent" select="($height div $width) * 100"/>
+
+    <!-- Surrounding/constraining "image", or "sidebyside" panel, or ...    -->
+    <!-- will provide an overall width.  The "padding-top" property is what -->
+    <!-- makes the right shape.  CSS provides some constant properties.     -->
+    <div class="asymptote-box" style="padding-top: {$aspect-percent}%">
+        <iframe src="{$html-filename}" class="asymptote"/>
+    </div>
     <!-- possibly annotate with archive links -->
     <xsl:apply-templates select="." mode="archive">
         <xsl:with-param name="base-pathname" select="$base-pathname" />
