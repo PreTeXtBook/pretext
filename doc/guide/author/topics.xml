@@ -1780,20 +1780,97 @@
         </subsection>
 
         <subsection xml:id="topic-images-source">
-            <title>(*) Images Described by Source Code</title>
+            <title>Images Described by Source Code</title>
 
             <introduction>
-                <p>To be written once elements and tags solidify, see sample article for examples.</p>
+                <p>There are various languages which may be used to describe diagrams, geometric objects, or data plots.  A key strategy enabled by <pretext/> is to put these specifications of such images <em>directly in your document's source</em> rather than losing track of them over time.</p>
+
+                <p>So we have various elements which are children of <tag>image</tag> that hold these source code descriptions.  Then <pretext/> provides techniques for realizing these in the best formats for various devices and print.  So if you are accustomed to the idea of a <attr>source</attr> attribute pointing to a file, think of these elements as alternative specifications.</p>
             </introduction>
 
             <subsubsection>
-                <title>(*) Asymptote</title>
+                <title>Asymptote</title>
 
-                <p>Two temporary notes:<ol>
-                    <li>The <c>pretext</c> script will run the Asymptote executable with the <c>-norpc</c> switch.  So <q>rotatable</q> 3D images rendered by the proprietary viewer, Adobe Acrobat, are not created.</li>
+                <p><url href="https://asymptote.sourceforge.io/">Asymptote</url><fn><c>asymptote.sourceforge.io/</c></fn> is a vector graphics language that produces high-quality output in <init>WebGL</init>, <init>SVG</init>, and <init>PDF</init> formats.  You can describe 2-D or 3-D objects, and the 3-D objects are interactive in online output.  <latex/> may be used, and your macros are automatically available for use.</p>
 
-                    <li>The <c>pretext</c> script can request the Asymptote executable to create <init>SVG</init> images supplying the <c>-svg</c> switch.  These may be unsuitable, especially for 3D images.  An alternative is to produce <init>PDF</init> images and use a utility like <c>pdf2svg</c> to convert to <init>SVG</init>.</li>
-                </ol></p>
+                <p>Authoring is straight-forward.  Inside an <tag>image</tag> include a child <tag>asymptote</tag> to hold the code.  For example:</p>
+
+                <pre>
+                &lt;image xml:id="gaussian-histogram"&gt;
+                    &lt;description&gt;A histogram of Gaussian data.&lt;/description&gt;
+                    &lt;asymptote&gt;
+                    import graph;
+                    import stats;
+
+                    size(400,200,IgnoreAspect);
+
+                    int n=10000;
+                    real[] a=new real[n];
+                    for(int i=0; i &lt; n; ++i) a[i]=Gaussrand();
+
+                    draw(graph(Gaussian,min(a),max(a)),blue);
+
+                    // Optionally calculate "optimal" number 
+                    // of bins a la Shimazaki and Shinomoto.
+                    int N=bins(a);
+
+                    histogram(a,min(a),max(a),N,normalize=true,low=0,lightred,black,bars=false);
+
+                    xaxis("$x$",BottomTop,LeftTicks);
+                    yaxis("$dP/dx$",LeftRight,RightTicks(trailingzero));
+                    &lt;/asymptote&gt;
+                &lt;/image&gt;
+                </pre>
+
+                <p>Here is the result.  Look elsewhere for examples of the 3-D output.</p>
+
+                <image xml:id="gaussian-histogram" width="60%">
+                    <description>A histogram of Gaussian data.</description>
+                    <asymptote>
+                    import graph;
+                    import stats;
+
+                    size(400,200,IgnoreAspect);
+
+                    int n=10000;
+                    real[] a=new real[n];
+                    for(int i=0; i &lt; n; ++i) a[i]=Gaussrand();
+
+                    draw(graph(Gaussian,min(a),max(a)),blue);
+
+                    // Optionally calculate "optimal" number 
+                    // of bins a la Shimazaki and Shinomoto.
+                    int N=bins(a);
+
+                    histogram(a,min(a),max(a),N,normalize=true,low=0,lightred,black,bars=false);
+
+                    xaxis("$x$",BottomTop,LeftTicks);
+                    yaxis("$dP/dx$",LeftRight,RightTicks(trailingzero));
+                    </asymptote>
+                </image>
+
+                <p>Notes:<ul>
+                    <li>Notice the necessity of escaping the less-than in the for-loop.  See <xref ref="topic-exceptional-characters"/>.</li>
+                    <li>Setting a <attr>xml:id</attr> is necessary to have a stable name for graphics files that will be generated.</li>
+                    <li>The <tag>description</tag> is an important part of making your output accessible.</li>
+                    <li>Notice the use of <latex/> for the label on the vertical axis.  All of your macros defined in <c>docinfo</c> are available for use, so you can keep notation consistent.</li>
+                    <li>You need to produce <init>PDF</init> versions of your diagrams for use in a conversion to <latex/>.</li>
+                    <li>
+                        <p>You need to produce <init>HTML</init> versions of your diagrams for use in a conversion to an electronic format based on <init>HTML</init>.  For a 2-D diagram these are a thin wrapper around an <init>SVG</init> image.  For a 3-D diagram these are interactive WebGL objects.</p>
+
+                        <p>It is very important to note that these <init>HTML</init> versions contain the height and width of the diagram and these are queried by a conversion of your document to <init>HTML</init> format in order to compute the aspect ratio.  Therefore they need to be available with your other source files (typically in an <c>images</c> directory).  So in a very real sense these files become part of your source.</p>
+                    </li>
+                    <li>You may want to produce <init>SVG</init> versions of your diagrams for conversion to <init>EPUB</init>, and <init>PNG</init> versions for conversion to the <init>EPUB</init> precursor for Kindle format.</li>
+                    <li><init>PDF</init> versions produced by the <c>pretext</c> script will not include the RPC extensions.  So <q>rotatable</q> 3D images rendered by the proprietary viewer, Adobe Acrobat, are not created, consistent with our open source philosophy.</li>
+                </ul></p>
+
+                <p>At this writing (2020-07-16) the <c>pretext</c> Python script requires a very new version of Asymptote in order to accurately produce all the versions described above.  There is no real way to do otherwise.  However, Asymptote provides a very useful <url href="http://asymptote.ualberta.ca/">web application</url><fn><c>asymptote.ualberta.ca</c></fn> written by Pedram Emami.  So you can create various output files <q>by hand</q> and download them for use.  More importantly, the web application is a great place to learn, experiment, and iterate as you become more skilled at building high-quality graphics to illustrate the concepts in your document.</p>
+
+                <note>
+                    <title>Build 3-D Asymptote Figures</title>
+
+                    <p>If your project uses geometric or mathematical objects that are three-dimensional, invest some time in learning the Asymptote vector graphics language.  The interactive diagrams for your <init>HTML</init> output produced by Asymptote, in <init>WebGL</init> format, are outstanding and will greatly enhance your project.  (And the other static formats are similarly excellent.)</p>
+                </note>
             </subsubsection>
         </subsection>
 
