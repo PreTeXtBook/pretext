@@ -1021,8 +1021,8 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
     overflow: auto;
 }
 .pretext-content figure.figure-like {
-    margin-left: auto;
-    margin-right: auto;
+    margin-left: 0;
+    margin-right: 0;
 }
 .pretext-content figure.table-like {
     margin-left: 30px;
@@ -2105,6 +2105,27 @@ figure figcaption.wrap {
     position:absolute;
     z-index:1001;
     overflow-x: auto;
+}
+
+/*
+.pretext-content figure > .image-box {
+    margin-left: auto;
+    margin-right: auto;
+}
+*/
+.pretext-content figure > .image-box .asymptote-box,
+.pretext-content .video-box,
+.pretext-content .audio-box {
+    position: relative;
+}
+.pretext-content figure > .image-box .asymptote-box iframe.asymptote,
+.pretext-content .video-box .video,
+.pretext-content .video-box .video-poster {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+}
+.pretext-content section > .video-box,
+.pretext-content section > .image-box {
+    margin-top: 0.75em;
 }
 
 /* .caption .counter:after { content: " ";} */
