@@ -1468,6 +1468,12 @@ iii.indexletter + :target::before {
      content: attr(label) "\00A0\00A0 ";
 }
 
+.pretext-content ol.no-marker,
+.pretext-content ul.no-marker,
+.pretext-content li.no-marker {
+    list-style-type: none;
+}
+
 .pretext-content ol.decimal {
     list-style-type: decimal;
 }
@@ -2114,6 +2120,7 @@ figure figcaption.wrap {
 }
 */
 .pretext-content figure > .image-box .asymptote-box,
+.pretext-content .audio-box,
 .pretext-content .video-box,
 .pretext-content .audio-box {
     position: relative;
@@ -2123,9 +2130,14 @@ figure figcaption.wrap {
 .pretext-content .video-box .video-poster {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
 }
+.pretext-content section > .audio-box,
 .pretext-content section > .video-box,
 .pretext-content section > .image-box {
     margin-top: 0.75em;
+}
+
+.pretext-content .audio {
+    width: 100%;
 }
 
 /* .caption .counter:after { content: " ";} */
