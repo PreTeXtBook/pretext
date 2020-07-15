@@ -209,6 +209,8 @@ def main():
             ptx.asymptote_conversion(xml_source, stringparams, args.xmlid, dest_dir, 'pdf')
         elif args.format == 'svg':
             ptx.asymptote_conversion(xml_source, stringparams, args.xmlid, dest_dir, 'svg')
+        elif args.format == 'png':
+            ptx.asymptote_conversion(xml_source, stringparams, args.xmlid, dest_dir, 'png')
         elif args.format == 'eps':
             ptx.asymptote_conversion(xml_source, stringparams, args.xmlid, dest_dir, 'eps')
         elif args.format == 'source':
