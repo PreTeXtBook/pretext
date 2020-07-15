@@ -60,9 +60,12 @@
                 </cd>You should get some enormously long filenames back from each of these commands.  They should begin with your home/user directory, eventually include <c>virtual-python</c> followed immediatel;y by <c>rune</c>, a little while later <c>runestone</c>, and then finish with <c>runestone.js</c> or <c>jquery.idle-timer.js</c>.  This is the information we need.</p>
             </li>
             <li>Using the locations of these files from the previous step, copy each file into the <c>_static</c> directory you made at the start.</li>
-        </ol></p>
+        </ol>Note: the two particular files necessary may change.  This is current as of 2020-07-15.</p>
 
-        <p>You should now be able to preview some of Runestone's interactive features in your local copy of your book, but some server functionality will not be active.  Note: the two particular files necessary may change.  This is current as of 2020-06-21.</p>
+        <p>The above will build <init>HTML</init> output that can be hosted on a Runestone server.  But you may want to see a local version that provides some preview of what the output looks like and how it behaves.  Of course, many of the interactive features of the Runestone platform are also going to be missing.  To make a local version, use a string parameter (<xref ref="processing-publisher-stringparam"/>) on your <c>xsltproc</c> command line (in addition to the necessary publisher file):<cd>
+            <cline>xsltproc -stringparam runestone.dev yes -stringparam publisher rune.xml</cline>
+            <cline>    pretext-html.xsl aota.xml</cline>
+        </cd>Be sure to set this parameter to <c>no</c>, the default, when you are ready to build a version that will be hosted.  Or just remove it altogether.</p>
     </section>
 
     <section xml:id="runestone-features">
