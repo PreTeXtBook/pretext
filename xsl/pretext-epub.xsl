@@ -128,17 +128,20 @@
     <xsl:call-template name="banner-warning">
         <xsl:with-param name="warning">EPUB conversion is experimental and not supported.  In particular,&#xa;the XSL conversion alone is not sufficient to create an EPUB.</xsl:with-param>
     </xsl:call-template>
+    <!-- analyze authored source, which will repair "mathbook" -->
     <xsl:apply-templates select="pretext|mathbook" mode="deprecation-warnings" />
+    <!-- Following should use $root or $document-root as defined -->
+    <!-- by the "assembly" template.  Checked 2020-07-16.        -->
     <xsl:call-template name="setup" />
     <xsl:call-template name="package-document" />
-    <xsl:apply-templates />
     <xsl:call-template name="packaging-info"/>
+    <xsl:apply-templates select="$root"/>
 </xsl:template>
 
 <!-- First, we use the frontmatter element to trigger various necessary files     -->
 <!-- We process structural nodes via chunking routine in  xsl/mathbook-common.xsl -->
 <!-- This in turn calls specific modal templates defined elsewhere in this file   -->
-<xsl:template match="pretext|mathbook">
+<xsl:template match="/pretext">
     <xsl:apply-templates select="$document-root//frontmatter" mode="epub" />
     <xsl:apply-templates mode="chunking" />
 </xsl:template>
