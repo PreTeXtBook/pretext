@@ -171,11 +171,12 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- are necessary if an author wants to modularize their       -->
 <!-- collection across multiple files.  Then each file can be a -->
 <!-- single overall element.  (We expect/require no additional  -->
-<!-- structure in this file.)  The conseqience is the "//" in   -->
+<!-- structure in this file.)  The consequence is the "//" in   -->
 <!-- each expression below.                                     -->
-<xsl:variable name="n-hint"     select="document($private-solutions-file, /pretext)/pi:privatesolutions//hint"/>
-<xsl:variable name="n-answer"   select="document($private-solutions-file, /pretext)/pi:privatesolutions//answer"/>
-<xsl:variable name="n-solution" select="document($private-solutions-file, /pretext)/pi:privatesolutions//solution"/>
+<!-- NB: relative to *original* source file/tree                -->
+<xsl:variable name="n-hint"     select="document($private-solutions-file, $original)/pi:privatesolutions//hint"/>
+<xsl:variable name="n-answer"   select="document($private-solutions-file, $original)/pi:privatesolutions//answer"/>
+<xsl:variable name="n-solution" select="document($private-solutions-file, $original)/pi:privatesolutions//solution"/>
 
 <xsl:template match="exercise|task" mode="assembly">
     <xsl:variable name="the-id" select="@xml:id"/>
