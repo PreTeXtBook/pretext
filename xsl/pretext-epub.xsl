@@ -881,8 +881,9 @@ width: 100%
             <xsl:when test="$math.format = 'kindle'">
                 <xsl:copy-of select="$math/math:math"/>
             </xsl:when>
+            <!-- 2020-07-17: reprs needed a new "span.speech" wrapper -->
             <xsl:when test="$math.format = 'speech'">
-                <xsl:value-of select="$math"/>
+                <xsl:value-of select="$math/span[@class = 'speech']"/>
             </xsl:when>
         </xsl:choose>
     </span>

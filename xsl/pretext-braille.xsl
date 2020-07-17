@@ -512,7 +512,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <!-- which is present as a testing artifact.  Remove later. -->
     <!-- Real spaces are Unicode braille blank pattern (?),     -->
     <!-- U+2800, while testing spaces are ASCII spaces, U+0020. -->
-    <xsl:variable name="spaced-braille" select="$math-repr/pi:math[@id = $id]"/>
+    <!-- 2020-07-17: reprs needed a new "span.speech" wrapper   -->
+    <xsl:variable name="spaced-braille" select="$math-repr/pi:math[@id = $id]/span[@class = 'speech']"/>
     <xsl:variable name="braille" select="translate($spaced-braille, '&#x20;', '')"/>
     <!-- We investigate actual source for very simple math   -->
     <!-- (one-letter variable names in Latin letters), so we -->

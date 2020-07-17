@@ -16,6 +16,9 @@
 // Parameterize with argv[2]:  'nemeth', 'speech'
 // Place result in outerHTML, to match mathjax-node-page
 
+// Rob Beezer: 2020-07-17
+// Isolating speech output requires more care
+
 const fs = require('fs');
 const mjnode = require('mathjax-node-sre');
 const jsdom = require('jsdom');
@@ -40,13 +43,15 @@ const render = async (node, format) => {
   const result = await mj({
     math: mathinput, // This is the MathML expression that will be converted
     format: "MathML",
-    mml:true, // I think it does not matter which we pick, mml or svg; we are not using it anyway
+    // mml: true; =>  result.mml, speech in @alttext, or just result.speech
+    // svg: true; =>  result.svg, speech in "title", or just result.speech
+    // MathML is native, so faster?
+    mml: true,
     sre: params,
     });
-
-  // result.speech contains Nemeth Braille code for mathinput
-  // *replace* the MathML "math" element
-  node.outerHTML = result.speech;
+  // Was once able to put  result.speech  directly into  outerHTML
+  // 2020-07-17: now causes SAX/jsDOM  error, so wrap with ad-hoc tag
+  node.outerHTML = '<span class="speech">' + result.speech + '</span>';
 };
 
 const main = async argv => {
