@@ -1285,7 +1285,9 @@ def epub(xml_source, pub_file, dest_dir, math_format):
 
     # Python 3.7 - compress level 0 to 9
 
-    epub_file = 'book-{}.epub'.format(math_format)
+    title_file_element = packaging_tree.xpath('/packaging/filename')[0]
+    title_file = ET.tostring(title_file_element, method="text").decode('ascii')
+    epub_file = '{}-{}.epub'.format(title_file, math_format)
     _verbose('packaging an EPUB as {}'.format(epub_file))
     owd = os.getcwd()
     os.chdir(tmp_dir)

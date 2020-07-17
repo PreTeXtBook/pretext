@@ -433,7 +433,7 @@
 <!-- for successful organization of the necessary files to   -->
 <!-- make a complete package for the eventual EPUB.  This is -->
 <!-- the actual output of the stylesheet itself.  There is   -->
-<!-- no namespace information, so when teh Python script     -->
+<!-- no namespace information, so when the Python script     -->
 <!-- gets this, there is no need for any namespace           -->
 <!-- provisions with the  lxml  library.                     -->
 <!--                                                         -->
@@ -443,6 +443,10 @@
 <!-- that it will simply be copied onto itself.              -->
 <xsl:template name="packaging-info">
     <packaging>
+        <filename>
+            <!-- for actual EPUB file eventually output -->
+            <xsl:apply-templates select="$document-root" mode="title-filesafe"/>
+        </filename>
         <cover filename="{$publication/epub/@cover}"/>
         <css stylefile="{$html-css-stylefile}" colorfile="{$html-css-colorfile}"/>
         <images image-directory="{$publication/epub/@image-directory}">
