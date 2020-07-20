@@ -319,7 +319,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- and/or temporary/experimental features        -->
 <xsl:template name="assembly-warnings">
     <xsl:if test="$original/*[not(self::docinfo)]//webwork and not($b-doing-webwork-assembly)">
-        <xsl:message>PTX:WARNING: Your document has WeBworK exercises, but&#xa;your publisher file does not indicate the file of problem representations&#xa;created by a WeBWorK server.  Exercises will have a small&#xa;informative message instead of the intended content.</xsl:message>
+        <xsl:message>PTX:WARNING: Your document has WeBworK exercises,</xsl:message>
+        <xsl:message>             but your publisher file does not indicate the file</xsl:message>
+        <xsl:message>             of problem representations created by a WeBWorK server.</xsl:message>
+        <xsl:message>             Exercises will have a small informative message instead</xsl:message>
+        <xsl:message>             of the intended content.  Not making this file available</xsl:message>
+        <xsl:message>             can cause difficulties when parts of your document get</xsl:message>
+        <xsl:message>             processed by external programs (e.g. graphics, previews)</xsl:message>
     </xsl:if>
 </xsl:template>
 

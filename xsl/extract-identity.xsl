@@ -25,6 +25,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 
+<xsl:import href="./publisher-variables.xsl" />
+<xsl:import href="./pretext-assembly.xsl" />
+
 <!-- We do not specify an output method since nothing gets output from here -->
 
 <!-- 2020-05-19: This general-purpose template formerly obtained a      -->
@@ -51,14 +54,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:choose>
         <xsl:when test="$subtree=''">
-            <xsl:apply-templates />
+            <xsl:apply-templates select="$root"/>
         </xsl:when>
         <xsl:otherwise>
-            <xsl:variable name="subtree-root" select="id($subtree)" />
-            <xsl:if test="not($subtree-root)">
-                <xsl:message terminate="yes">MBX:FATAL:   xml:id provided ("<xsl:value-of select="$subtree" />") for restriction to a subtree does not exist.  Quitting...</xsl:message>
-            </xsl:if>
-            <xsl:apply-templates select="$subtree-root" />
+            <!-- Context is root of *original* source as we are in the entry template. -->
+            <!-- The "for-each" allows a switch to the duplicate (assembled) source,   -->
+            <!-- so the id() function scans the enhanced tree.                         -->
+            <xsl:for-each select="$root">
+                <xsl:variable name="subtree-root" select="id($subtree)"/>
+                <xsl:if test="not($subtree-root)">
+                    <xsl:message terminate="yes">MBX:FATAL:   xml:id provided ("<xsl:value-of select="$subtree"/>") for restriction to a subtree does not exist.  Quitting...</xsl:message>
+                </xsl:if>
+                <xsl:apply-templates select="$subtree-root"/>
+            </xsl:for-each>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>

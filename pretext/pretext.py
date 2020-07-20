@@ -25,7 +25,7 @@
 #
 #############################
 
-def mathjax_latex(xml_source, result, math_format):
+def mathjax_latex(xml_source, pub_file, result, math_format):
     """Convert PreTeXt source to a structured file of representations of mathematics"""
     # formats:  'svg', 'mml', 'nemeth', 'speech', 'kindle'
     import os.path, subprocess
@@ -57,6 +57,8 @@ def mathjax_latex(xml_source, result, math_format):
         punctuation = 'none'
     params = {}
     params['math.punctuation'] = punctuation
+    if pub_file:
+        params['publisher'] = pub_file
     xsltproc(extraction_xslt, xml_source, mjinput, None, params)
 
     # shell out to process with MathJax
@@ -124,7 +126,7 @@ def mathjax_latex(xml_source, result, math_format):
 #
 ##############################################
 
-def asymptote_conversion(xml_source, stringparams, xmlid_root, dest_dir, outformat):
+def asymptote_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_dir, outformat):
     """Extract asymptote code for diagrams and convert to graphics formats"""
     # stringparams is a dictionary, best for lxml parsing
     import os.path # join()
@@ -137,12 +139,15 @@ def asymptote_conversion(xml_source, stringparams, xmlid_root, dest_dir, outform
     _debug("asy executable: {}".format(asy_executable))
     ptx_xsl_dir = get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, 'extract-asymptote.xsl')
-    # support subtree argument
+    # support publisher file, subtree argument
+    if pub_file:
+        stringparams['publisher'] = pub_file
     if xmlid_root:
         stringparams['subtree'] = xmlid_root
     # no output (argument 3), stylesheet writes out per-image file
     # outputs a list of ids, but we just loop over created files
     _verbose("extracting Asymptote diagrams from {}".format(xml_source))
+    _verbose('string parameters passed to extraction stylesheet: {}'.format(stringparams))
     xsltproc(extraction_xslt, xml_source, None, tmp_dir, stringparams)
     # Resulting *.asy files are in tmp_dir, switch there to work
     os.chdir(tmp_dir)
@@ -186,29 +191,23 @@ def asymptote_conversion(xml_source, stringparams, xmlid_root, dest_dir, outform
                 print('\n'.join(msg))
 
 
-def sage_conversion(xml_source, xmlid_root, dest_dir, outformat):
+def sage_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_dir, outformat):
     import tempfile, os, os.path, subprocess, shutil, glob
     _verbose('converting Sage diagrams from {} to {} graphics for placement in {}'.format(xml_source, outformat.upper(), dest_dir))
     tmp_dir = get_temporary_directory()
     _debug("temporary directory: {}".format(tmp_dir))
-    xslt_executable = get_executable('xslt')
-    _debug("xslt executable: {}".format(xslt_executable))
     sage_executable = get_executable('sage')
     _debug("sage executable: {}".format(sage_executable))
     ptx_xsl_dir = get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, 'extract-sageplot.xsl')
-    extract_cmd = [xslt_executable,
-        '--stringparam', 'subtree', xmlid_root,
-        '--xinclude',
-        extraction_xslt,
-        xml_source
-        ]
     _verbose("extracting Sage diagrams from {}".format(xml_source))
-    # Run conversion with temporary directory as current working directory
-    # do not pass (cross-platform, Windows) pathnames into stylesheets
-    # Be certain pathnames are not relative to original (user) working directory
+    # support publisher file, subtree argument
+    if pub_file:
+        stringparams['publisher'] = pub_file
+    if xmlid_root:
+        stringparams['subtree'] = xmlid_root
+    xsltproc(extraction_xslt, xml_source, None, tmp_dir, stringparams)
     os.chdir(tmp_dir)
-    subprocess.call(extract_cmd)
     devnull = open(os.devnull, 'w')
     for sageplot in os.listdir(tmp_dir):
         if outformat == 'source':
@@ -227,7 +226,7 @@ def sage_conversion(xml_source, xmlid_root, dest_dir, outformat):
             for f in glob.glob(sagepng):
                 shutil.copy2(f, dest_dir)
 
-def latex_image_conversion(xml_source, stringparams, xmlid_root, data_dir, dest_dir, outformat):
+def latex_image_conversion(xml_source, pub_file, stringparams, xmlid_root, data_dir, dest_dir, outformat):
     # stringparams is a dictionary, best for lxml parsing
     import platform # system, machine()
     import os.path # join()
@@ -235,7 +234,6 @@ def latex_image_conversion(xml_source, stringparams, xmlid_root, data_dir, dest_
     import os, shutil
 
     _verbose('converting latex-image pictures from {} to {} graphics for placement in {}'.format(xml_source, outformat, dest_dir))
-    _verbose('string parameters passed to extraction stylesheet: {}'.format(stringparams))
     # for killing output
     devnull = open(os.devnull, 'w')
     tmp_dir = get_temporary_directory()
@@ -245,9 +243,12 @@ def latex_image_conversion(xml_source, stringparams, xmlid_root, data_dir, dest_
         copy_data_directory(xml_source, data_dir, tmp_dir)
     ptx_xsl_dir = get_ptx_xsl_path()
     _verbose("extracting latex-image pictures from {}".format(xml_source))
-    # support subtree argument
+    # support publisher file, subtree argument
+    if pub_file:
+        stringparams['publisher'] = pub_file
     if xmlid_root:
         stringparams['subtree'] = xmlid_root
+    _verbose('string parameters passed to extraction stylesheet: {}'.format(stringparams))
     extraction_xslt = os.path.join(ptx_xsl_dir, 'extract-latex-image.xsl')
     # no output (argument 3), stylesheet writes out per-image file
     xsltproc(extraction_xslt, xml_source, None, tmp_dir, stringparams)
@@ -309,7 +310,7 @@ def latex_image_conversion(xml_source, stringparams, xmlid_root, data_dir, dest_
 #
 ################################
 
-def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
+def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_params, dest_dir):
     import subprocess, os.path, xml.dom.minidom
     import sys # version_info
     import urllib.parse # urlparse()
@@ -329,26 +330,28 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
     # nothing left to extract after substitutions.  Only relevant if an
     # assembly step is needed, such as adding in private solutions
 
+    # support publisher file, but not subtree argument
+    if pub_file:
+        stringparams['publisher'] = pub_file
+    _verbose('string parameters passed to extraction stylesheet: {}'.format(stringparams))
     # execute XSL extraction to get back five dictionaries
     # where the keys are the internal-ids for the problems
     # origin, seed, source, pghuman, pgdense
-    xslt_executable = get_executable('xslt')
-    _debug("xslt executable command: {}".format(xslt_executable))
     ptx_xsl_dir = get_ptx_xsl_path()
-    xsl_transform = 'extract-pg.xsl'
-    extraction_xslt = os.path.join(ptx_xsl_dir, xsl_transform)
-    cmd = [xslt_executable, '--xinclude', extraction_xslt, xml_source]
-    try:
-        problem_dictionaries = subprocess.check_output(cmd)
-    except subprocess.CalledProcessError as e:
-        root_cause = str(e)
-        msg = 'xsltproc command failed, tried: "{}"\n'.format(' '.join(cmd))
-        raise ValueError(msg + root_cause)
+    extraction_xslt = os.path.join(ptx_xsl_dir, 'extract-pg.xsl')
 
+    # Build dictionaries into a scratch directory/file
+    tmp_dir = get_temporary_directory()
+    ww_filename = os.path.join(tmp_dir, 'webwork-dicts.txt')
+    _debug('WeBWorK dictionaries temporarily in {}'.format(ww_filename))
+    xsltproc(extraction_xslt, xml_source, ww_filename, None, stringparams)
+    # "run" an assignment for the list of triples of strings
+    ww_file = open(ww_filename, 'r')
+    problem_dictionaries = ww_file.read()
     # "run" the dictionaries
     # protect backslashes in LaTeX code
-    # globals() necessary for success in both Python 2 and 3
-    exec(problem_dictionaries.decode('utf-8').replace('\\','\\\\'), globals())
+    # globals() necessary for success
+    exec(problem_dictionaries.replace('\\','\\\\'), globals())
 
     # verify, construct problem format requestor
     # remove any surrounding white space
@@ -927,31 +930,28 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
 #
 ##############################
 
-def youtube_thumbnail(xml_source, xmlid_root, dest_dir):
+def youtube_thumbnail(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     import os.path  # join()
     import subprocess, shutil
     import requests
 
     _verbose('downloading YouTube thumbnails from {} for placement in {}'.format(xml_source, dest_dir))
-    xslt_executable = get_executable('xslt')
-    _debug("xslt executable: {}".format(xslt_executable))
     ptx_xsl_dir = get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, 'extract-youtube.xsl')
-    # No temporary directory involved,
-    # results land directly in dest_dir
-    cmd = [xslt_executable,
-            '--xinclude',
-            '--stringparam', 'subtree', xmlid_root,
-            extraction_xslt,
-            xml_source]
-    try:
-        thumb_list = subprocess.check_output(cmd)
-    except subprocess.CalledProcessError as e:
-        root_cause = str(e)
-        msg = 'xsltproc command failed, tried: "{}"\n'.format(' '.join(cmd))
-        raise ValueError(msg + root_cause)
+    # support publisher file, subtree argument
+    if pub_file:
+        stringparams['publisher'] = pub_file
+    if xmlid_root:
+        stringparams['subtree'] = xmlid_root
+    # Build list of id's into a scratch directory/file
+    tmp_dir = get_temporary_directory()
+    id_filename = os.path.join(tmp_dir, 'youtube-ids.txt')
+    _debug('YouTube id list temporarily in {}'.format(id_filename))
+    xsltproc(extraction_xslt, xml_source, id_filename, None, stringparams)
     # "run" an assignment for the list of triples of strings
-    thumbs = eval(thumb_list.decode('ascii'))
+    id_file = open(id_filename, 'r')
+    thumb_list = id_file.readline()
+    thumbs = eval(thumb_list)
 
     session = requests.Session()
     for thumb in thumbs:
@@ -977,7 +977,7 @@ def youtube_thumbnail(xml_source, xmlid_root, dest_dir):
 #
 #####################################
 
-def preview_images(xml_source, xmlid_root, dest_dir):
+def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     import subprocess, shutil
     import os.path # join()
 
@@ -988,25 +988,23 @@ def preview_images(xml_source, xmlid_root, dest_dir):
     # see below, pageres-cli writes into current working directory
     needs_moving = not( os.getcwd() == os.path.normpath(dest_dir) )
 
-    xslt_executable = get_executable('xslt')
-    _debug("xslt executable: {}".format(xslt_executable))
     ptx_xsl_dir = get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, 'extract-interactive.xsl')
-    # No temporary directory involved,
-    # results land directly in dest_dir
-    cmd = [xslt_executable,
-            '--xinclude',
-            '--stringparam','subtree',xmlid_root,
-            extraction_xslt,
-            xml_source]
-    try:
-        interactive_list = subprocess.check_output(cmd)
-    except subprocess.CalledProcessError as e:
-        root_cause = str(e)
-        msg = 'xsltproc command failed, tried: "{}"\n'.format(' '.join(cmd))
-        raise ValueError(msg + root_cause)
+    # support publisher file, subtree argument
+    if pub_file:
+        stringparams['publisher'] = pub_file
+    if xmlid_root:
+        stringparams['subtree'] = xmlid_root
+    # Build list of id's into a scratch directory/file
+    tmp_dir = get_temporary_directory()
+    id_filename = os.path.join(tmp_dir, 'interactives-ids.txt')
+    _debug('Interactives id list temporarily in {}'.format(id_filename))
+    xsltproc(extraction_xslt, xml_source, id_filename, None, stringparams)
+
     # "run" an assignment for the list of problem numbers
-    interactives = eval(interactive_list.decode('ascii'))
+    id_file = open(id_filename, 'r')
+    interactive_list = id_file.readline()
+    interactives = eval(interactive_list)
 
     # Cheating a bit, base URL is *always* first item
     # Presumed to not have a trailing slash
@@ -1056,31 +1054,28 @@ def preview_images(xml_source, xmlid_root, dest_dir):
 #
 #####################################
 
-def mom_static_problems(xml_source, xmlid_root, dest_dir):
+def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     import os.path # join()
     import subprocess, shutil
     import requests
 
     _verbose('downloading MyOpenMath static problems from {} for placement in {}'.format(xml_source, dest_dir))
-    xslt_executable = get_executable('xslt')
-    _debug("xslt executable: {}".format(xslt_executable))
     ptx_xsl_dir = get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, 'extract-mom.xsl')
-    # No temporary directory involved,
-    # results land directly in dest_dir
-    cmd = [xslt_executable,
-            '--xinclude',
-            '--stringparam', 'subtree', xmlid_root,
-            extraction_xslt,
-            xml_source]
-    try:
-        problem_list = subprocess.check_output(cmd)
-    except subprocess.CalledProcessError as e:
-        root_cause = str(e)
-        msg = 'xsltproc command failed, tried: "{}"\n'.format(' '.join(cmd))
-        raise ValueError(msg + root_cause)
+    # support publisher file, subtree argument
+    if pub_file:
+        stringparams['publisher'] = pub_file
+    if xmlid_root:
+        stringparams['subtree'] = xmlid_root
+    # Build list of id's into a scratch directory/file
+    tmp_dir = get_temporary_directory()
+    id_filename = os.path.join(tmp_dir, 'mom-ids.txt')
+    _debug('MyOpenMath id list temporarily in {}'.format(id_filename))
+    xsltproc(extraction_xslt, xml_source, id_filename, None, stringparams)
     # "run" an assignment for the list of problem numbers
-    problems = eval(problem_list.decode('ascii'))
+    id_file = open(id_filename, 'r')
+    problem_list = id_file.readline()
+    problems = eval(problem_list)
     xml_header = '<?xml version="1.0" encoding="UTF-8" ?>\n'
     session = requests.Session()
     for problem in problems:
@@ -1127,7 +1122,7 @@ def braille(xml_source, pub_file, dest_dir):
     # ripping out LaTeX as math representations
     msg = 'converting raw LaTeX from {} into clean {} format placed into {}'
     _debug(msg.format(xml_source, math_format, math_representations))
-    mathjax_latex(xml_source, math_representations, math_format)
+    mathjax_latex(xml_source, pub_file, math_representations, math_format)
 
     msg = 'converting source ({}) and clean representations ({}) into liblouis precursor XML file ({})'
     _debug(msg.format(xml_source, math_representations, liblouis_xml))
@@ -1188,7 +1183,7 @@ def epub(xml_source, pub_file, dest_dir, math_format):
     # ripping out LaTeX as math representations
     msg = 'converting raw LaTeX from {} into clean {} format placed into {}'
     _debug(msg.format(xml_source, math_format, math_representations))
-    mathjax_latex(xml_source, math_representations, math_format)
+    mathjax_latex(xml_source, pub_file, math_representations, math_format)
 
     # Build necessary content and infrastructure EPUB files, 
     # using SVG images of math.  Most output goes into the
