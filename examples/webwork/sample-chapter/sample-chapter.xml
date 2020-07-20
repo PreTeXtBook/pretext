@@ -437,6 +437,16 @@
                 <webwork source="Library/PCC/BasicAlgebra/Geometry/CylinderVolume10.pg" seed="8435"/>
             </exercise>
 
+            <p>This uninteresting image, authored in <latex/> syntax, is here only to make sure its automatically-assigned identifier is correct, given that the <init>OPL</init> problem just above is going to generate another image for its static representation.</p>
+
+            <image>
+                <latex-image>
+                    \begin{tikzpicture}
+                        \draw[fill=firstcolor!20] (0,0) ellipse (3 and 0.45);
+                    \end{tikzpicture}
+                </latex-image>
+            </image>
+
             <warning>
                 <title>Incompatible Problems</title>
 
