@@ -27,7 +27,7 @@
 
 def mathjax_latex(xml_source, result, math_format):
     """Convert PreTeXt source to a structured file of representations of mathematics"""
-    # formats:  'svg', 'mml', 'nemeth', 'speech'
+    # formats:  'svg', 'mml', 'nemeth', 'speech', 'kindle'
     import os.path, subprocess
     import re, os, fileinput # for &nbsp; fix
 
