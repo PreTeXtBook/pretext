@@ -204,42 +204,18 @@ def main():
 
     # The big switch
     if args.component == 'asy':
-        if args.format == 'html':
-            ptx.asymptote_conversion(xml_source, publisher_file, stringparams, args.xmlid, dest_dir, 'html')
-        elif args.format == 'pdf':
-            ptx.asymptote_conversion(xml_source, publisher_file, stringparams, args.xmlid, dest_dir, 'pdf')
-        elif args.format == 'svg':
-            ptx.asymptote_conversion(xml_source, publisher_file, stringparams, args.xmlid, dest_dir, 'svg')
-        elif args.format == 'png':
-            ptx.asymptote_conversion(xml_source, publisher_file, stringparams, args.xmlid, dest_dir, 'png')
-        elif args.format == 'eps':
-            ptx.asymptote_conversion(xml_source, publisher_file, stringparams, args.xmlid, dest_dir, 'eps')
-        elif args.format == 'source':
-            ptx.asymptote_conversion(xml_source, publisher_file, stringparams, args.xmlid, dest_dir, 'source')
+        if args.format in ['html', 'pdf', 'svg', 'png', 'eps', 'source']:
+            ptx.asymptote_conversion(xml_source, publisher_file, stringparams, args.xmlid, dest_dir, args.format)
         else:
             raise NotImplementedError('cannot make Asymptote diagrams in "{}" format'.format(args.format))
-    elif args.component == 'sageplot':
-        if args.format == 'pdf':
-            ptx.sage_conversion(xml_source, publisher_file, stringparams, args.xmlid, dest_dir, 'pdf')
-        elif args.format == 'svg':
-            ptx.sage_conversion(xml_source, publisher_file, stringparams, args.xmlid, dest_dir, 'svg')
-        elif args.format == 'source':
-            ptx.sage_conversion(xml_source, publisher_file, stringparams, args.xmlid, dest_dir, 'source')
+    elif  args.component == 'sageplot':
+        if args.component in ['pdf', 'svg', 'source']:
+            ptx.sage_conversion(xml_source, publisher_file, stringparams, args.xmlid, dest_dir, args.format)
         else:
             raise NotImplementedError('cannot make Sage graphics in "{}" format'.format(args.format))
     elif args.component == 'latex-image':
-        if args.format == 'pdf':
-            ptx.latex_image_conversion(xml_source, publisher_file, stringparams, args.xmlid, data_dir, dest_dir, 'pdf')
-        elif args.format == 'svg':
-            ptx.latex_image_conversion(xml_source, publisher_file, stringparams, args.xmlid, data_dir, dest_dir, 'svg')
-        elif args.format == 'source':
-            ptx.latex_image_conversion(xml_source, publisher_file, stringparams, args.xmlid, data_dir, dest_dir, 'source')
-        elif args.format == 'png':
-            ptx.latex_image_conversion(xml_source, publisher_file, stringparams, args.xmlid, data_dir, dest_dir, 'png')
-        elif args.format == 'eps':
-            ptx.latex_image_conversion(xml_source, publisher_file, stringparams, args.xmlid, data_dir, dest_dir, 'eps')
-        elif args.format == 'all':
-            ptx.latex_image_conversion(xml_source, publisher_file, stringparams, args.xmlid, data_dir, dest_dir, 'all')
+        if args.format in ['pdf', 'svg', 'png', 'eps', 'source', 'all']:
+            ptx.latex_image_conversion(xml_source, publisher_file, stringparams, args.xmlid, data_dir, dest_dir, args.format)
         else:
             raise NotImplementedError('cannot make LaTeX pictures in "{}" format'.format(args.format))
     elif args.component == 'webwork-tex':
