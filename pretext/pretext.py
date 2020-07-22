@@ -1303,6 +1303,22 @@ def epub(xml_source, pub_file, dest_dir, math_format):
     os.chdir(owd)
 
 
+####################
+# Conversion to HTML
+####################
+
+def html(xml, pub_file, stringparams, dest_dir):
+    """Convert XML source to HTML files in destination directory"""
+    import os.path # join()
+
+    # support publisher file, not subtree argument
+    if pub_file:
+        stringparams['publisher'] = pub_file
+    extraction_xslt = os.path.join(get_ptx_xsl_path(), 'pretext-html.xsl')
+    # Write output into working directory, no scratch space needed
+    xsltproc(extraction_xslt, xml, None, dest_dir, stringparams)
+
+
 #################
 # XSLT Processing
 #################
