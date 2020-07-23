@@ -1316,7 +1316,28 @@ def html(xml, pub_file, stringparams, dest_dir):
         stringparams['publisher'] = pub_file
     extraction_xslt = os.path.join(get_ptx_xsl_path(), 'pretext-html.xsl')
     # Write output into working directory, no scratch space needed
+    _verbose('converting {} to HTML in {}'.format(xml, dest_dir))
     xsltproc(extraction_xslt, xml, None, dest_dir, stringparams)
+
+
+#####################
+# Conversion to LaTeX
+#####################
+
+def latex(xml, pub_file, stringparams, dest_dir):
+    """Convert XML source to LateX and then a PDF in destination directory"""
+    import os.path # join()
+
+    # support publisher file, not subtree argument
+    if pub_file:
+        stringparams['publisher'] = pub_file
+    extraction_xslt = os.path.join(get_ptx_xsl_path(), 'pretext-latex.xsl')
+    # form output filename based on source filename
+    derivedname = os.path.splitext(os.path.split(xml)[1])[0] + '.tex'
+    outfilename = os.path.join(dest_dir, derivedname)
+    # Write output into working directory, no scratch space needed
+    _verbose('converting {} to LaTeX as {}'.format(xml, outfilename))
+    xsltproc(extraction_xslt, xml, derivedname, None, stringparams)
 
 
 #################

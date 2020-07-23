@@ -240,7 +240,7 @@ def main():
         if args.format == 'html':
             ptx.html(xml_source, publisher_file, stringparams, dest_dir)
         elif args.format == 'latex':
-            raise NotImplementedError("conversion to LaTeX version not integrated yet, use command line")
+            ptx.latex(xml_source, publisher_file, stringparams, dest_dir)
         elif args.format == 'braille':
             ptx.braille(xml_source, publisher_file, dest_dir)
         elif args.format == 'epub-svg':
