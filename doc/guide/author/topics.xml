@@ -1872,6 +1872,504 @@
                     <p>If your project uses geometric or mathematical objects that are three-dimensional, invest some time in learning the Asymptote vector graphics language.  The interactive diagrams for your <init>HTML</init> output produced by Asymptote, in <init>WebGL</init> format, are outstanding and will greatly enhance your project.  (And the other static formats are similarly excellent.)</p>
                 </note>
             </subsubsection>
+
+            <subsubsection xml:id="topic-latex-images">
+                <title>Images in <latex/> Syntax</title>
+
+                <p>There are a variety of <latex/> packages for authoring a diagram, plot, or graph.  Examples include: TikZ, PGF, Xy-pic, and PSTricks.  Generally, the <tag>latex-image</tag> tag allows you to incorporate this code into your source and <pretext/> realizes these descriptions as images in your output.</p>
+
+                <p>Much like the <tag>asymptote</tag> tag, the <tag>latex-image</tag> tag is used as a child of <tag>image</tag> and can be thought of as an alternative to the <attr>source</attr> attribute of <tag>image</tag>.  The contents need to be a complete specification of the image.  For example, a TikZ image will typically begin with <c>\begin{tikzpicture}</c>.  Inside of your document's <tag>docinfo</tag> you will likely need to employ a <tag>latex-image-preamble</tag> element to hold necessary <c>\usepackage</c> commands and any global settings, such as the style for tick-marks and labels on axes of graphs.  The source code in this next example is greatly abbreviated and mildly edited, see the source for the complete example.</p>
+
+                <pre><![CDATA[
+                <docinfo>
+                    <latex-image-preamble>
+                    \usepackage{tikz}
+                    </latex-image-preamble>
+                </docinfo>
+                ]]></pre>
+
+                <pre><![CDATA[
+                <figure>
+                    <caption>RNA Codons Table, by Florian Hollandt</caption>
+                    <image xml:id="rna-codons-table" width="100%">
+                        <description>A table of the RNA codons.</description>
+                        <latex-image>
+                        \begin{tikzpicture}
+                        \footnotesize
+                        \tikzstyle{every node}=[inner sep=1.7pt,anchor=center]
+                        % to_x and from_x styles denote bonds terminating
+                        % or starting in labeled nodes. x denotes the
+                        % number of letters in the node label.
+                        \tikzstyle{to_1}=[shorten >=5pt]
+                        \tikzstyle{to_1i}=[shorten >=6pt]
+                        \tikzstyle{to_2}=[shorten >=7pt]
+                        \tikzstyle{to_3}=[shorten >=8pt]
+                        ...
+                        \begin{scope}[scale=0.5]    % Asparagine
+                        \draw[ultra thick,shorten >=2pt,shorten &lt;=2pt] (90-2*5.625:8.2)
+                                        arc(90-2*5.625:90-4*5.625:8.2);
+                        \path (90-3.5*3.625-3:13.3) node (zero) {};
+                        \draw[to_2]  (zero.center)  -- ++(30:1) node (CO) {}
+                                        -- +(330:1) node [anchor=base] {O$^{\mbox{-}}$};
+                        \draw[to_1]  (CO.center)    -- +(90:1) node (Od) {O};
+                        \draw[to_1i] (CO.30)        -- +(90:1);
+                        \draw[to_3]  (zero.center)  -- ++(150:1) node {NH$_{\mbox{3}}^{\mbox{+}}$};
+                        \draw[to_2]  (zero.center)  -- ++(270:1) node(Cb){}
+                                        -- ++(330:1) node (Cc) {}
+                                        -- +(30:1) node (Cd) {NH$_{\mbox{2}}$};
+                        \draw[to_1i] (Cc.center)    -- +(270:1) node (O) {};
+                        \draw[to_1]  (Cc.210)       -- (O.150);
+                        \path (O.center) node {O};
+                        \end{scope}
+                        ...
+                        \node at (90-55*5.625:4.5) {C};
+                        \node at (90-58*5.625:4.5) {S};
+                        \node at (90-61*5.625:4.5) {L};
+                        \node at (90-63*5.625:4.5) {F};
+                        \end{tikzpicture}
+                        </latex-image>
+                    </image>
+                </figure>
+                ]]></pre>
+
+                <p>This will result in:</p>
+
+                <figure>
+                    <caption>RNA Codons Table, by Florian Hollandt, from <url href="https://texample.net/tikz/examples/rna-codons-table/"><tex/>ample.net</url><fn><c>texample.net/tikz/examples/rna-codons-table/</c></fn></caption>
+                    <image xml:id="rna-codons-table" width="100%">
+                        <description>A table of the RNA codons, together with the amino acids they encode.</description>
+                        <latex-image>
+                        \begin{tikzpicture}
+                        \footnotesize
+                        \tikzstyle{every node}=[inner sep=1.7pt,anchor=center]
+                        %   to_x and from_x styles denote bonds terminating or starting in labeled nodes. x denotes the number of letters in the node label.
+                        \tikzstyle{to_1}=[shorten >=5pt]
+                        \tikzstyle{to_1i}=[shorten >=6pt]
+                        \tikzstyle{to_2}=[shorten >=7pt]
+                        \tikzstyle{to_3}=[shorten >=8pt]
+                        \tikzstyle{from_1}=[shorten &lt;=5pt]
+                        \tikzstyle{from_1i}=[shorten &lt;=6pt]
+                        \tikzstyle{from_2}=[shorten &lt;=8pt]
+                        \begin{scope}
+                        \draw [ultra thick] circle(1cm);
+                        \draw [ultra thick] (0:4)--(180:4) (90:4)--(270:4);
+                        \foreach \a/\l in {45/A,135/G,225/C,315/U}{
+                            \node at (90-\a:0.5cm) {\l};
+                        }
+                        \draw [very thick] circle(2cm);
+                        \foreach \A in {90,0,270,180}{
+                            \foreach \a/\l in {22.5/A,45/G,67.5/C,90/U}{
+                                \draw [very thick] (\A+\a:1) -- (\A+\a:4);
+                                \node at (\A-\a+11.25:1.5) {\l};
+                            }
+                        }
+                        \draw circle(4cm) (0:4)--(180:4) (90:4)--(270:4);
+                        \foreach \A in {90,180,270,0}{
+                            \foreach \a in {0,22.5,45,67.5}{
+                                \foreach \i/\l in {5.625/A,11.25/G,16.875/C,22.5/U}{
+                                    \draw (\A+\a+\i:2) -- (\A+\a+\i:4);
+                                    \node at (\A-\a-\i+2.8125:3) {\l};
+                                }
+                            }
+                        }
+                        \end{scope}
+                        \begin{scope}[scale=0.5]    % Lysine
+                        \draw[ultra thick,shorten >=2pt,shorten &lt;=2pt] (90:8.2)
+                                        arc(90:90-2*5.625:8.2);
+                        \path (90-0.8*5.625:14.3) node (zero) {};
+                        \draw[to_2]  (zero.center)  -- ++(30:1) node (CO) {}
+                                        -- +(330:1) node [anchor=base] {O$^{\mbox{-}}$};
+                        \draw[to_1]  (CO.center)    -- +(90:1) node (Od) {O};
+                        \draw[to_1i] (CO.30)        -- +(90:1);
+                        \draw[to_3]  (zero.center)  -- ++(150:1) node {NH$_{\mbox{3}}^{\mbox{+}}$};
+                        \draw[to_3]  (zero.center)  -- ++(270:1) node(Cb){}
+                                        -- ++(330:1) node (Cc) {}
+                                        -- ++(270:1) node (Cd) {}
+                                        -- ++(210:1) node (Ce) {}
+                                        -- ++(150:1) node (Cf) {NH$_{\mbox{2}}$};
+                        \end{scope}
+                        \begin{scope}[scale=0.5]    % Asparagine
+                        \draw[ultra thick,shorten >=2pt,shorten &lt;=2pt] (90-2*5.625:8.2)
+                                        arc(90-2*5.625:90-4*5.625:8.2);
+                        \path (90-3.5*3.625-3:13.3) node (zero) {};
+                        \draw[to_2]  (zero.center)  -- ++(30:1) node (CO) {}
+                                        -- +(330:1) node [anchor=base] {O$^{\mbox{-}}$};
+                        \draw[to_1]  (CO.center)    -- +(90:1) node (Od) {O};
+                        \draw[to_1i] (CO.30)        -- +(90:1);
+                        \draw[to_3]  (zero.center)  -- ++(150:1) node {NH$_{\mbox{3}}^{\mbox{+}}$};
+                        \draw[to_2]  (zero.center)  -- ++(270:1) node(Cb){}
+                                        -- ++(330:1) node (Cc) {}
+                                        -- +(30:1) node (Cd) {NH$_{\mbox{2}}$};
+                        \draw[to_1i] (Cc.center)    -- +(270:1) node (O) {};
+                        \draw[to_1]  (Cc.210)       -- (O.150);
+                        \path (O.center) node {O};
+                        \end{scope}
+                        \begin{scope}[scale=0.5]    % Arginine
+                        \draw[ultra thick,shorten >=2pt,shorten &lt;=2pt] (90-22.5:8.2)
+                                        arc(90-22.5:90-33.75:8.2);
+                        \path (90-3.7*5.625:16) node (zero) {};
+                        \draw[to_2]  (zero.center)  -- ++(30:1) node (CO) {}
+                                        -- +(330:1) node [anchor=base] {O$^{\mbox{-}}$};
+                        \draw[to_1]  (CO.center)    -- +(90:1) node (Od) {O};
+                        \draw[to_1i] (CO.30)        -- +(90:1);
+                        \draw[to_3]  (zero.center)  -- ++(150:1) node {NH$_{\mbox{3}}^{\mbox{+}}$};
+                        \draw[to_2]  (zero.center)  -- ++(270:1) node(Cb){}
+                                        -- ++(330:1) node (Cc) {}
+                                        -- ++(270:1) node (Cd) {}
+                                        -- ++(330:1) node (NH1) {NH};
+                        \draw[from_2,to_3]  (NH1.center)    -- ++(30:1) node (Ce) {}
+                                        -- ++(330:1) node {NH$_{\mbox{2}}$};
+                        \draw[to_1i] (Ce.center)    -- ++(90:1) node (N2) {};
+                        \draw[to_1]  (Ce.150)       -- (N2.210);
+                        \path (N2) node {N};
+                        \end{scope}
+                        \begin{scope}[scale=0.5]    % Serine
+                        \draw[ultra thick,shorten >=1pt,shorten &lt;=2pt] (90-22.5-2*5.625:8.2)
+                                        arc(90-33.75:90-33.75-11.25:8.2);
+                        \path (90-7*5.625:12.5) node (zero) {};
+                        \draw[to_2]  (zero.center)  -- ++(30:1) node (CO) {}
+                                        -- +(330:1) node [anchor=base] {O$^{\mbox{-}}$};
+                        \draw[to_1]  (CO.center)    -- +(90:1) node (Od) {O};
+                        \draw[to_1i] (CO.30)        -- +(90:1);
+                        \draw[to_3]  (zero.center)  -- ++(150:1) node {NH$_{\mbox{3}}^{\mbox{+}}$};
+                        \draw[to_2]  (zero.center)  -- ++(270:1) node(Cb){} -- ++(210:1) node (Cc) {OH};
+                        \end{scope}
+                        \begin{scope}[scale=0.5]    % Threonine
+                        \draw[ultra thick,shorten >=1pt,shorten &lt;=2pt] (90-45:8.2)
+                                        arc(90-45:90-67.5:8.2);
+                        \path (90-45-0.8*11.25:12.5) node (zero) {};
+                        \draw[to_2]  (zero.center)  -- ++(30:1) node (CO) {}
+                                        -- +(330:1) node [anchor=base] {O$^{\mbox{-}}$};
+                        \draw[to_1]  (CO.center)    -- +(90:1) node (Od) {O};
+                        \draw[to_1i] (CO.30)        -- +(90:1);
+                        \draw[to_3]  (zero.center)  -- ++(150:1) node {NH$_{\mbox{3}}^{\mbox{+}}$};
+                        \draw[to_2]  (zero.center)  -- ++(270:1) node(Cb){}
+                                        -- ++(330:1) node (Cc) {} (Cb.center)
+                                        -- +(210:1) node {OH};
+                        \end{scope}
+                        \begin{scope}[scale=0.5]    % Methionine
+                        \draw[ultra thick,shorten >=1pt,shorten &lt;=2pt] (90-67.5:8.2)
+                                        arc(90-67.5:90-67.5-5.625:8.2);
+                        \path (90-67.5-0.5*5.625:14) node (zero) {};
+                        \draw[to_2]  (zero.center)  -- ++(30:1) node (CO) {}
+                                        -- +(330:1) node [anchor=base] {O$^{\mbox{-}}$};
+                        \draw[to_1]  (CO.center)    -- +(90:1) node (Od) {O};
+                        \draw[to_1i] (CO.30)        -- +(90:1);
+                        \draw[to_3]  (zero.center)  -- ++(150:1) node {NH$_{\mbox{3}}^{\mbox{+}}$};
+                        \draw[to_1]  (zero.center)  -- ++(270:1) node(Cb){}
+                                        -- ++(330:1) node (Cc) {}
+                                        -- ++(30:1) node (Cd) {S};
+                        \draw[from_1] (Cd.center)   -- +(330:1);
+                        \end{scope}
+                        \begin{scope}[scale=0.5]    % Isoleucine
+                        \draw[ultra thick,shorten >=1pt,shorten &lt;=2pt] (0:8.2)
+                                        arc(0:11.25:8.2);
+                        \path (1.0*5.625:12.4) node (zero) {};
+                        \draw[to_2]  (zero.center)  -- ++(30:1) node (CO) {}
+                                        -- +(330:1) node [anchor=base] {O$^{\mbox{-}}$};
+                        \draw[to_1]  (CO.center)    -- +(90:1) node (Od) {O};
+                        \draw[to_1i] (CO.30)        -- +(90:1);
+                        \draw[to_3]  (zero.center)  -- ++(150:1) node {NH$_{\mbox{3}}^{\mbox{+}}$};
+                        \draw        (zero.center)  -- ++(270:1) node(Cb){}
+                                        -- ++(330:1) node (Cc) {}
+                                        -- +(30:1) node (Cd) {} (Cb.center)
+                                        -- +(210:1) node (Ce) {};
+                        \end{scope}
+                        \begin{scope}[scale=0.5]    % Glutamic acid
+                        \draw[ultra thick,shorten >=1pt,shorten &lt;=2pt] (0:8.2)
+                                        arc(0:-11.25:8.2);
+                        \path (-1.3*5.625:15) node (zero) {};
+                        \draw[to_2]  (zero.center)  -- ++(30:1) node (CO) {}
+                                        -- +(330:1) node [anchor=base] {O$^{\mbox{-}}$};
+                        \draw[to_1]  (CO.center)    -- +(90:1) node (Od) {O};
+                        \draw[to_1i] (CO.30)        -- +(90:1);
+                        \draw[to_3]  (zero.center)  -- ++(150:1) node {NH$_{\mbox{3}}^{\mbox{+}}$};
+                        \draw[to_1i] (zero.center)  -- ++(270:1) node(Cb){}
+                                        -- ++(330:1) node (Cc) {}
+                                        -- ++(270:1) node (Cd) {}
+                                        -- ++(330:1) node (NH) {OH};
+                        \draw[to_1]  (Cd.center)    -- +(210:1) node (O) {};
+                        \draw[to_1i] (Cd.270)       -- (O.300);
+                        \path (O.center) node {O};
+                        \end{scope}
+                        \begin{scope}[scale=0.5]    % Aspartic acid
+                        \draw[ultra thick,shorten >=1pt,shorten &lt;=2pt] (-11.25:8.2)
+                                        arc(-11.25:-22.5:8.2);
+                        \path (-11.25-5.625:12) node (zero) {};
+                        \draw[to_2]  (zero.center)  -- ++(30:1) node (CO) {}
+                                        -- +(330:1) node [anchor=base] {O$^{\mbox{-}}$};
+                        \draw[to_1]  (CO.center)    -- +(90:1) node (Od) {O};
+                        \draw[to_1i] (CO.30)        -- +(90:1);
+                        \draw[to_3]  (zero.center)  -- ++(150:1) node {NH$_{\mbox{3}}^{\mbox{+}}$};
+                        \draw[to_2]  (zero.center)  -- ++(270:1) node(Cb){}
+                                        -- ++(330:1) node (Cc) {}
+                                        -- +(30:1) node (Cd) {OH};
+                        \draw[to_1i] (Cc.center)    -- +(270:1) node (O) {};
+                        \draw[to_1]  (Cc.210)       -- (O.150);
+                        \path (O.center) node {O};
+                        \end{scope}
+                        \begin{scope}[scale=0.5]    % Glycine
+                        \draw[ultra thick,shorten >=1pt,shorten &lt;=2pt] (-22.5:8.2)
+                                        arc(-22.5:-45:8.2);
+                        \path (-33.75-1*5.625:12) node (zero) {};
+                        \draw[to_2]  (zero.center)  -- ++(30:1) node (CO) {}
+                                        -- +(330:1) node [anchor=base] {O$^{\mbox{-}}$};
+                        \draw[to_1]  (CO.center)    -- +(90:1) node (Od) {O};
+                        \draw[to_1i] (CO.30)        -- +(90:1);
+                        \draw[to_3]  (zero.center)  -- ++(150:1) node {NH$_{\mbox{3}}^{\mbox{+}}$};
+                        \end{scope}
+                        \begin{scope}[scale=0.5]    % Alanine
+                        \draw[ultra thick,shorten >=1pt,shorten &lt;=2pt] (-45:8.2)
+                                        arc(-45:-68.25:8.2);
+                        \path (-45-11.25:12) node (zero) {};
+                        \draw[to_2]  (zero.center)  -- ++(30:1) node (CO) {}
+                                        -- +(330:1) node [anchor=base] {O$^{\mbox{-}}$};
+                        \draw[to_1]  (CO.center)    -- +(90:1) node (Od) {O};
+                        \draw[to_1i] (CO.30)        -- +(90:1);
+                        \draw[to_3]  (zero.center)  -- ++(150:1) node {NH$_{\mbox{3}}^{\mbox{+}}$};
+                        \draw        (zero.center)  -- ++(270:1) node(Cb){};
+                        \end{scope}
+                        \begin{scope}[scale=0.5]    % Valine
+                        \draw[ultra thick,shorten >=1pt,shorten &lt;=2pt] (-68.25:8.2)
+                                        arc(-68.25:-90:8.2);
+                        \path (-68.25-0.8*11.25:12) node (zero) {};
+                        \draw[to_2]  (zero.center)  -- ++(30:1) node (CO) {}
+                                        -- +(330:1) node [anchor=base] {O$^{\mbox{-}}$};
+                        \draw[to_1]  (CO.center)    -- +(90:1) node (Od) {O};
+                        \draw[to_1i] (CO.30)        -- +(90:1);
+                        \draw[to_3]  (zero.center)  -- ++(150:1) node {NH$_{\mbox{3}}^{\mbox{+}}$};
+                        \draw (zero.center)     -- ++(270:1) node(Cb){}
+                                        -- ++(330:1) node (Cc) {};
+                        \end{scope}
+                        \begin{scope}[scale=0.5]    % Glutamine
+                        \draw[ultra thick,shorten >=1pt,shorten &lt;=2pt] (-90:8.2)
+                                        arc(-90:-101.25:8.2);
+                        \path (-90.25-5.625:12.5) node (zero) {};
+                        \draw[to_2]  (zero.center)  -- ++(30:1) node (CO) {}
+                                        -- +(330:1) node [anchor=base] {O$^{\mbox{-}}$};
+                        \draw[to_1]  (CO.center)    -- +(90:1) node (Od) {O};
+                        \draw[to_1i] (CO.30)        -- +(90:1);
+                        \draw[to_2]  (zero.center)  -- ++(150:1) node {NH$_{\mbox{3}}^{\mbox{+}}$};
+                        \draw[to_3]  (zero.center)  -- ++(270:1) node(Cb){}
+                                        -- ++(330:1) node (Cc) {}
+                                        -- ++(270:1) node (Cd) {}
+                                        -- ++(330:1) node (NH) {NH$_{\mbox{2}}$};
+                        \draw[to_1]  (Cd.center)    -- +(210:1) node (O) {};
+                        \draw[to_1i] (Cd.270)       -- (O.300);
+                        \path (O.center) node {O};
+                        \end{scope}
+                        \begin{scope}[scale=0.5]    % Histidine
+                        \draw[ultra thick,shorten >=1pt,shorten &lt;=2pt] (-101.25:8.2)
+                                        arc(-101.25:-101.25-11.25:8.2);
+                        \path (-101.25-1.2*5.625:15.5) node (zero) {};
+                        \draw[to_2]  (zero.center)  -- ++(30:1) node (CO) {}
+                                        -- +(330:1) node [anchor=base] {O$^{\mbox{-}}$};
+                        \draw[to_1]  (CO.center)    -- +(90:1) node (Od) {O};
+                        \draw[to_1i] (CO.30)        -- +(90:1);
+                        \draw[to_3]  (zero.center)  -- ++(150:1) node {NH$_{\mbox{3}}^{\mbox{+}}$};
+                        \draw        (zero.center)  -- ++(270:1) node(Cb){}
+                                        -- ++(330:1) node(Cc){};
+                        \draw[to_2]  (Cc.center)    -- ++(108-1*72:1) node (Cd) {}
+                                        -- ++(108-2*72:1) node (Ce) {NH};
+                        \draw[from_1,to_1] (Ce.center)  -- ++(108-3*72:1) node (Cf) {}
+                                        -- ++(108-4*72:1) node (Cg) {};
+                        \draw[from_1] (Cg.center)   -- (Cc.center);
+                        \draw         (Cc.198+2*72) -- (Cd.198+1*72);
+                        \draw[from_1] (Cg.72)       -- (Cf.198+4*72);
+                        \draw (Cg.center) node {N};
+                        \end{scope}
+                        \begin{scope}[scale=0.5]    % Arginine
+                        \draw[ultra thick,shorten >=2pt,shorten &lt;=2pt] (-90-22.5:8.2)
+                                        arc(-90-22.5:-90-45:8.2);
+                        \path (-90-7.7*5.625:12.3) node (zero) {};
+                        \draw[to_2]  (zero.center)  -- ++(30:1) node (CO) {}
+                                        -- +(330:1) node [anchor=base] {O$^{\mbox{-}}$};
+                        \draw[to_1]  (CO.center)    -- +(90:1) node (Od) {O};
+                        \draw[to_1i] (CO.30)        -- +(90:1);
+                        \draw[to_3]  (zero.center)  -- ++(150:1) node {NH$_{\mbox{3}}^{\mbox{+}}$};
+                        \draw[to_2]  (zero.center)  -- ++(270:1) node(Cb){}
+                                        -- ++(330:1) node (Cc) {}
+                                        -- ++(270:1) node (Cd) {}
+                                        -- ++(330:1) node (NH1) {NH};
+                        \draw[from_1i,to_3] (NH1.center)-- ++(30:1) node (Ce) {}
+                                        -- ++(330:1) node {NH$_{\mbox{2}}$};
+                        \draw[to_1]  (Ce.center)    -- ++(90:1) node (N2) {};
+                        \draw[shorten >=4pt] (Ce.150)   -- (N2.210);
+                        \path (N2) node {N};
+                        \end{scope}
+                        \begin{scope}[scale=0.5]    % Proline
+                        \draw[ultra thick,shorten >=2pt,shorten &lt;=2pt] (-90-45:8.2)
+                                        arc(-90-45:-90-45-22.25:8.2);
+                        \path (-90-10.5*5.625:12) node (zero) {};
+                        \draw[to_2]  (zero.center)  -- ++(30:1) node (CO) {}
+                                        -- +(330:1) node [anchor=base] {O$^{\mbox{-}}$};
+                        \draw[to_1]  (CO.center)    -- +(90:1) node (Od) {O};
+                        \draw[to_1i] (CO.30)        -- +(90:1);
+                        \draw[to_2]  (zero.center)  -- ++(150:1) node (nh) {NH$_{\mbox{2}}^+$};
+                        \draw        (zero.center)  -- ++(270:1) node(Cb){};
+                        \path        (Cb.center)    -- +(150:1) node (x) {};
+                        \path        (x.center)     +(170:1) node (Cd) {};
+                        \path        (x.center)     +(250:1) node (Cc) {};
+                        \draw[to_3]  (Cb.center)    -- (Cc.center)
+                                        -- (Cd.center)
+                                        -- (nh.center);
+                        \end{scope}
+                        \begin{scope}[scale=0.5]    % Leucine
+                        \draw[ultra thick,shorten >=2pt,shorten &lt;=2pt] (180:8.2)
+                                        arc(180:180+22.25:8.2);
+                        \path (-90-14.5*5.625:13) node (zero) {};
+                        \draw[to_2]  (zero.center)  -- ++(30:1) node (CO) {}
+                                        -- +(330:1) node [anchor=base] {O$^{\mbox{-}}$};
+                        \draw[to_1]  (CO.center)    -- +(90:1) node (Od) {O};
+                        \draw[to_1i] (CO.30)        -- +(90:1);
+                        \draw[to_3]  (zero.center)  -- ++(150:1) node {NH$_{\mbox{3}}^{\mbox{+}}$};
+                        \draw (zero.center)     -- ++(270:1) node(Cb){}
+                                        -- ++(330:1) node (Cc) {}
+                                        -- +(30:1) node (Cd) {} (Cc.center)
+                                        -- +(270:1) node (Ce) {};
+                        \end{scope}
+                        \begin{scope}[scale=0.5]    % Tyrosine
+                        \draw[ultra thick,shorten >=2pt,shorten &lt;=2pt] (180-11.25:8.2)
+                                        arc(180-11.25:180-22.5:8.2);
+                        \path (180-3*5.625:16) node (zero) {};
+                        \draw[to_2]  (zero.center)  -- ++(30:1) node (CO) {}
+                                        -- +(330:1) node [anchor=base] {O$^{\mbox{-}}$};
+                        \draw[to_1]  (CO.center)    -- +(90:1) node (Od) {O};
+                        \draw[to_1i] (CO.30)        -- +(90:1);
+                        \draw[to_3]  (zero.center)  -- ++(150:1) node {NH$_{\mbox{3}}^{\mbox{+}}$};
+                        \draw        (zero.center)  -- ++(270:1) node(Cb){};
+                        \draw        (Cb.center)    -- ++(330:1) node (Cc) {}
+                                        -- ++(30:1) node (Cd) {}
+                                        -- ++(330:1) node (Ce) {}
+                                        -- ++(270:1) node (Cf) {}
+                                        -- ++(210:1) node (Cg) {}
+                                        -- ++(150:1) node (Ch) {}
+                                        -- ++(90:1);
+                        \draw        (Cc.330)       -- (Cd.270);
+                        \draw        (Ce.210)       -- (Cf.150);
+                        \draw        (Cg.90)        -- (Ch.30);
+                        \draw[to_1i] (Cf.center)    -- +(330:1) node (OH) {OH};
+                        \end{scope}
+                        \begin{scope}[scale=0.5]    % Tryptophane
+                        \draw[ultra thick,shorten >=2pt,shorten &lt;=2pt] (180-22.5-5.625:8.2)
+                                        arc(180-22.5-5.625:180-22.5-11.25:8.2);
+                        \path (180-22.5-1.8*5.625:16) node (zero) {};
+                        \draw[to_2]  (zero.center)  -- ++(30:1) node (CO) {}
+                                        -- +(330:1) node [anchor=base] {O$^{\mbox{-}}$};
+                        \draw[to_1]  (CO.center)    -- +(90:1) node (Od) {O};
+                        \draw[to_1i] (CO.30)        -- +(90:1);
+                        \draw[to_3]  (zero.center)  -- ++(150:1) node {NH$_{\mbox{3}}^{\mbox{+}}$};
+                        \draw        (zero.center)  -- ++(270:1) node(Cb){}
+                                        -- ++(330:1) node(Cc){};
+                        \draw[to_2]  (Cc.center)    -- ++(108-1*72:1) node (Cd) {}
+                                        -- ++(108-2*72:1) node (Ce) {NH};
+                        \draw[from_1](Ce.center)    -- ++(108-3*72:1) node (Cf) {}
+                                        -- ++(108-4*72:1) node (Cg) {};
+                        \draw        (Cg.center)    -- (Cc.center);
+                        \draw        (Cc.198+2*72)  -- (Cd.198+1*72);
+                        \draw        (Cg.72)        -- (Cf.198+4*72);
+                        \draw        (Cg.center)    -- ++(240:1) node (Ch) {}
+                                        -- ++(300:1) node (Ci) {}
+                                        -- ++(0:1) node (Cj) {}
+                                        -- ++(60:1) node (Ck) {}
+                                        -- ++(120:1) node (Cl) {};
+                        \draw        (Ch.0)     -- (Ci.60);
+                        \draw        (Cj.120)       -- (Ck.180);
+                        \end{scope}
+                        \begin{scope}[scale=0.5]    % Cysteine
+                        \draw[ultra thick,shorten >=2pt,shorten &lt;=2pt] (180-45+11.25:8.2)
+                                        arc(180-45+11.25:180-45:8.2);
+                        \path (180-45+11.25-1*7.625:12) node (zero) {};
+                        \draw[to_2]  (zero.center)  -- ++(30:1) node (CO) {}
+                                        -- +(330:1) node [anchor=base] {O$^{\mbox{-}}$};
+                        \draw[to_1]  (CO.center)    -- +(90:1) node (Od) {O};
+                        \draw[to_1i] (CO.30)        -- +(90:1);
+                        \draw[to_3]  (zero.center)  -- ++(150:1) node {NH$_{\mbox{3}}^{\mbox{+}}$};
+                        \draw[to_2]  (zero.center)  -- ++(270:1) node(Cb){}
+                                        -- ++(210:1) node (Cc) {SH};
+                        \end{scope}
+                        \begin{scope}[scale=0.5]    % Serine
+                        \draw[ultra thick,shorten >=1pt,shorten &lt;=2pt] (90+45:8.2)
+                                        arc(90+45:90+45-22.5:8.2);
+                        \path (90+45-11.25+0*5.625:14) node (zero) {};
+                        \draw[to_2]  (zero.center)  -- ++(30:1) node (CO) {}
+                                        -- +(330:1) node [anchor=base] {O$^{\mbox{-}}$};
+                        \draw[to_1]  (CO.center)    -- +(90:1) node (Od) {O};
+                        \draw[to_1i] (CO.30)        -- +(90:1);
+                        \draw[to_3]  (zero.center)  -- ++(150:1) node {NH$_{\mbox{3}}^{\mbox{+}}$};
+                        \draw[to_2]  (zero.center)  -- ++(270:1) node(Cb){}
+                                        -- ++(330:1) node (Cc) {OH};
+                        \end{scope}
+                        \begin{scope}[scale=0.5]    % Leucine
+                        \draw[ultra thick,shorten >=2pt,shorten &lt;=2pt] (90+22.5:8.2)
+                                        arc(90+22.5:90+11.25:8.2);
+                        \path (90+22.5-1.2*5.625:16) node (zero) {};
+                        \draw[to_2]  (zero.center)  -- ++(30:1) node (CO) {}
+                                        -- +(330:1) node [anchor=base] {O$^{\mbox{-}}$};
+                        \draw[to_1]  (CO.center)    -- +(90:1) node (Od) {O};
+                        \draw[to_1i] (CO.30)        -- +(90:1);
+                        \draw[to_3]  (zero.center)  -- ++(150:1) node {NH$_{\mbox{3}}^{\mbox{+}}$};
+                        \draw        (zero.center)  -- ++(270:1) node(Cb){}
+                                        -- ++(210:1) node (Cc) {}
+                                        -- +(150:1) node (Cd) {} (Cc.center)
+                                        -- +(270:1) node (Ce) {};
+                        \end{scope}
+                        \begin{scope}[scale=0.5]    % Phenylalanine
+                        \draw[ultra thick,shorten >=2pt,shorten &lt;=2pt] (90+11.25:8.2)
+                                        arc(90+11.25:90:8.2);
+                        \path (90+1.5*5.625:13) node (zero) {};
+                        \draw[to_2]  (zero.center)  -- ++(30:1) node (CO) {}
+                                        -- +(330:1) node [anchor=base] {O$^{\mbox{-}}$};
+                        \draw[to_1]  (CO.center)    -- +(90:1) node (Od) {O};
+                        \draw[to_1i] (CO.30)        -- +(90:1);
+                        \draw[to_3]  (zero.center)  -- ++(150:1) node {NH$_{\mbox{3}}^{\mbox{+}}$};
+                        \draw        (zero.center)  -- ++(270:1) node(Cb){};
+                        \draw        (Cb.center)    -- ++(210:1) node (Cc) {}
+                                        -- ++(150:1) node (Cd) {}
+                                        -- ++(210:1) node (Ce) {}
+                                        -- ++(270:1) node (Cf) {}
+                                        -- ++(330:1) node (Cg) {}
+                                        -- ++(30:1) node (Ch) {}
+                                        -- ++(90:1);
+                        \draw        (Cc.210)       -- (Cd.270);
+                        \draw        (Ce.330)       -- (Cf.30);
+                        \draw        (Cg.90)        -- (Ch.150);
+                        \end{scope}
+                        \node at (90-1*5.625:4.5) {K};
+                        \node at (90-3*5.625:4.5) {N};
+                        \node at (90-5*5.625:4.5) {R};
+                        \node at (90-7*5.625:4.5) {S};
+                        \node at (90-10*5.625:4.5) {T};
+                        \node at (90-12.5*5.625:4.5) {I};
+                        \node at (90-13.7*5.625:4.7) {M / $\star$};
+                        \node at (90-15*5.625:4.5) {I};
+                        \node at (90-17*5.625:4.5) {E};
+                        \node at (90-19*5.625:4.5) {D};
+                        \node at (90-22*5.625:4.5) {G};
+                        \node at (90-26*5.625:4.5) {A};
+                        \node at (90-30*5.625:4.5) {V};
+                        \node at (90-33*5.625:4.5) {Q};
+                        \node at (90-35*5.625:4.5) {H};
+                        \node at (90-38*5.625:4.5) {R};
+                        \node at (90-42*5.625:4.5) {P};
+                        \node at (90-46*5.625:4.5) {L};
+                        \node at (90-49*5.625:4.5) {$\dagger$};
+                        \node at (90-51*5.625:4.5) {Y};
+                        \node at (90-52.3*5.625:4.5) {$\dagger$};
+                        \node at (90-53.3*5.625:4.5) {W};
+                        \node at (90-55*5.625:4.5) {C};
+                        \node at (90-58*5.625:4.5) {S};
+                        \node at (90-61*5.625:4.5) {L};
+                        \node at (90-63*5.625:4.5) {F};
+                        \end{tikzpicture}
+                        </latex-image>
+                    </image>
+                </figure>
+
+                <p>For <latex/> output the procedure is transparent<mdash/><pretext/> simply incorporates the preamble information and the image's code in the correct places in the <latex/> output.  Then traditional processing (typically with <c>pdflatex</c>) will do the right thing.  For output to other non-<latex/> formats, such as <init>HTML</init> or <init>EPUB</init>, we need some help from the <c>pretext</c> script (<xref ref="pretext-script"/>).  This script will isolate the image's code and bundle it up with the necessary preamble to make a complete single-purpose <latex/> file.  Once converted by <latex/> to a <init>PDF</init> version, other tools can convert the image into other formats, such as <init>SVG</init>.  In this way, you can use <latex/> packages for describing images, use mathematically-correct labels in <latex/> syntax, and use your own macros for consistency in notation, yet also employ the resulting images in more modern output formats.  It takes some work to get the <c>pretext</c> script setup, but it will automate the process and spare you many technical headaches surrounding the conversions.  See <xref ref="pretext-script"/> for details.</p>
+
+                <p>Notice that when you produce these images for use with non-<latex/> formats such as <init>HTML</init>, it is your responsibility to move the images into the correct location where your output expects them, typically in a subdirectory named <c>images</c>.  Also note that as of 2020-07-24, limited testing indicates that PSTricks needs to be processed with the <c>xelatex</c> engine, and the <c>pstricks-add</c> package might also be necessary.  Any updates, especially using <c>pdflatex</c> would be appreciated.  Finally, processing with <c>xelatex</c> might be necessary if your labels use Unicode characters.</p>
+            </subsubsection>
         </subsection>
 
         <subsection>
