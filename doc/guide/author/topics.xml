@@ -2370,6 +2370,48 @@
 
                 <p>Notice that when you produce these images for use with non-<latex/> formats such as <init>HTML</init>, it is your responsibility to move the images into the correct location where your output expects them, typically in a subdirectory named <c>images</c>.  Also note that as of 2020-07-24, limited testing indicates that PSTricks needs to be processed with the <c>xelatex</c> engine, and the <c>pstricks-add</c> package might also be necessary.  Any updates, especially using <c>pdflatex</c> would be appreciated.  Finally, processing with <c>xelatex</c> might be necessary if your labels use Unicode characters.</p>
             </subsubsection>
+
+            <subsubsection>
+                <title>Images in Sage Syntax</title>
+
+                <p>Sometimes the necessary computations for an image are not part of the capabilities of whatever system is actually realizing the image.  We have good support for Sage in other parts of your document, and Sage has an extremely wide variety of computational capabilities, in addition to letting you program your own computations in Python syntax with the full support of the Sage library.  Rather than translating Sage output as input to some other graphics program, we simply capture the graphics output from Sage.</p>
+
+                <p>Use the <tag>sageplot</tag> tag, in a manner entirely similar to the <tag>asymptote</tag> tag and the <tag>latex-image</tag> tag, as a child of <tag>image</tag>, and containing the necessary Sage code to construct the image.  There is one twist.  The last line of your Sage code <alert>must</alert> return a Sage <c>Graphics</c> object (or 3D plot).  The <c>pretext</c> script (<xref ref="pretext-script"/>) will isolate this last line, use it as the right-hand side of an assignment statement, and the Sage <c>.save()</c> method will automatically be called to generate the image in a file, which is either a Portable Document Format (PDF) file amenable to <latex /> output, or a Scalable Vector Graphics (SVG) file amenable to HTML output.  For visualizations of 3D plots, Sage will only produce Portable Network Graphics (PNG) files, which can be included in HTML pages or <latex /> output.  Pay careful attention to the requirement that the last line of your code evaluates to be a graphics object.  In particular, while <c>show()</c> might appear to do the right thing during testing, it evaluates to Python's <c>None</c> object and that is just what you will get for your image.  The example below illustrates creating two graphics objects and combining them into an expression on the last line that evaluates to the graphics object that will be created in the desired graphics file.</p>
+
+                <pre><![CDATA[
+                <figure>
+                    <caption>Negative multiple of a curve</caption>
+                    <image xml:id="negative-curve" width="65%">
+                        <description>Plot of x^4 - 1 and its negative.</description>
+                        <sageplot>
+                        f(x) = x^4 - 1
+                        g(x) = -x^4 + 1
+                        up = plot(f, (x, -1.5, 1.5), color='blue', thickness=2)
+                        down = plot(g, (x, -1.5, 1.5), color='red', thickness=2)
+                        up + down
+                        </sageplot>
+                    </image>
+                </figure>
+                ]]></pre>
+
+                <p>This will result in:</p>
+
+                <figure>
+                    <caption>Negative multiple of a curve</caption>
+                    <image xml:id="negative-curve" width="65%">
+                        <description>Plot of x^4 - 1 and its negative.</description>
+                        <sageplot>
+                        f(x) = x^4 - 1
+                        g(x) = -x^4 + 1
+                        up = plot(f, (x, -1.5, 1.5), color='blue', thickness=2)
+                        down = plot(g, (x, -1.5, 1.5), color='red', thickness=2)
+                        up + down
+                        </sageplot>
+                    </image>
+                </figure>
+
+                <p>Note the necessity of using the <c>pretext</c> script (<xref ref="pretext-script"/>) to independently invoke Sage, no matter what sort of output is being created for your document.</p>
+            </subsubsection>
         </subsection>
 
         <subsection>
