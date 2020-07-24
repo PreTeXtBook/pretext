@@ -25,14 +25,17 @@
 #
 #############################
 
-def mathjax_latex(xml_source, pub_file, result, math_format):
+def mathjax_latex(xml_source, pub_file, out_file, dest_dir, math_format):
     """Convert PreTeXt source to a structured file of representations of mathematics"""
     # formats:  'svg', 'mml', 'nemeth', 'speech', 'kindle'
+    # Internal calls will specify out_file with complete path
+    # External calls might only specify a destination directory
     import os.path, subprocess
     import re, os, fileinput # for &nbsp; fix
 
+
     _verbose('converting LaTeX from {} into {} format'.format(xml_source, math_format))
-    _debug('converting LaTeX from {} into {} format placed into {}'.format(xml_source, math_format, result))
+    _debug('converting LaTeX from {} into {} format'.format(xml_source, math_format))
 
     # construct filenames for pre- and post- XSL stylesheets in xsl/support
     extraction_xslt = os.path.join(get_ptx_xsl_path(), 'support/extract-math.xsl')
@@ -116,8 +119,10 @@ def mathjax_latex(xml_source, pub_file, result, math_format):
         subprocess.run(mjsre_cmd)
 
     # clean up and package MJ representations, font data, etc
-    _debug('packaging math as {} from {} into XML file {}'.format(math_format, mjoutput, result))
-    xsltproc(cleaner_xslt, mjoutput, result)
+    derivedname = get_output_filename(xml_source, out_file, dest_dir, '-' + math_format + '.xml')
+    _debug('packaging math as {} from {} into XML file {}'.format(math_format, mjoutput, out_file))
+    xsltproc(cleaner_xslt, mjoutput, derivedname)
+    _verbose('XML file of math representations deposited as {}'.format(derivedname))
 
 
 ##############################################
@@ -1099,7 +1104,7 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
 # Conversion to Braille
 #######################
 
-def braille(xml_source, pub_file, dest_dir):
+def braille(xml_source, pub_file, out_file, dest_dir):
     """Produce a complete document in BRF format ( = Braille ASCII, plus formatting control)"""
     import os.path # join()
     import subprocess # run()
@@ -1122,7 +1127,7 @@ def braille(xml_source, pub_file, dest_dir):
     # ripping out LaTeX as math representations
     msg = 'converting raw LaTeX from {} into clean {} format placed into {}'
     _debug(msg.format(xml_source, math_format, math_representations))
-    mathjax_latex(xml_source, pub_file, math_representations, math_format)
+    mathjax_latex(xml_source, pub_file, math_representations, None, math_format)
 
     msg = 'converting source ({}) and clean representations ({}) into liblouis precursor XML file ({})'
     _debug(msg.format(xml_source, math_representations, liblouis_xml))
@@ -1133,11 +1138,12 @@ def braille(xml_source, pub_file, dest_dir):
     xsltproc(braille_xslt, xml_source, None, tmp_dir, params)
 
     liblouis_cfg = os.path.join(get_ptx_path(), 'script', 'braille', 'pretext-liblouis.cfg')
-    final_brf = os.path.join(dest_dir, 'book.brf')
+    final_brf = get_output_filename(xml_source, out_file, dest_dir, '.brf')
     liblouis_exec = get_executable('liblouis')
     msg = 'applying liblouis to {} with configuration {}, creating BRF {}'
     _debug(msg.format(liblouis_xml, liblouis_cfg, final_brf))
     liblouis_cmd = [liblouis_exec, '-f', liblouis_cfg, liblouis_xml, final_brf]
+    _verbose('BRF file deposited as {}'.format(final_brf))
 
     subprocess.run(liblouis_cmd)
 
@@ -1146,7 +1152,7 @@ def braille(xml_source, pub_file, dest_dir):
 # Conversion to EPUB
 ####################
 
-def epub(xml_source, pub_file, dest_dir, math_format):
+def epub(xml_source, pub_file, out_file, dest_dir, math_format):
     """Produce complete document in an EPUB container"""
     # math_format is a string that parameterizes this process
     #   'svg': mathematics as SVG
@@ -1183,7 +1189,7 @@ def epub(xml_source, pub_file, dest_dir, math_format):
     # ripping out LaTeX as math representations
     msg = 'converting raw LaTeX from {} into clean {} format placed into {}'
     _debug(msg.format(xml_source, math_format, math_representations))
-    mathjax_latex(xml_source, pub_file, math_representations, math_format)
+    mathjax_latex(xml_source, pub_file, math_representations, None, math_format)
 
     # Build necessary content and infrastructure EPUB files, 
     # using SVG images of math.  Most output goes into the
@@ -1285,7 +1291,7 @@ def epub(xml_source, pub_file, dest_dir, math_format):
     title_file_element = packaging_tree.xpath('/packaging/filename')[0]
     title_file = ET.tostring(title_file_element, method="text").decode('ascii')
     epub_file = '{}-{}.epub'.format(title_file, math_format)
-    _verbose('packaging an EPUB as {}'.format(epub_file))
+    _verbose('packaging an EPUB temporarily as {}'.format(epub_file))
     owd = os.getcwd()
     os.chdir(tmp_dir)
     with ZIP.ZipFile(epub_file, mode='w', compression=ZIP.ZIP_DEFLATED) as epub:
@@ -1299,7 +1305,9 @@ def epub(xml_source, pub_file, dest_dir, math_format):
         for root, dirs, files in os.walk('css'):
             for name in files:
                 epub.write(os.path.join(root, name))
-    shutil.copy2(epub_file, dest_dir)
+    derivedname = get_output_filename(xml_source, out_file, dest_dir, '.epub')
+    _verbose('EPUB file deposited as {}'.format(derivedname))
+    shutil.copy2(epub_file, derivedname)
     os.chdir(owd)
 
 
@@ -1324,7 +1332,7 @@ def html(xml, pub_file, stringparams, dest_dir):
 # Conversion to LaTeX
 #####################
 
-def latex(xml, pub_file, stringparams, dest_dir):
+def latex(xml, pub_file, stringparams, out_file, dest_dir):
     """Convert XML source to LateX and then a PDF in destination directory"""
     import os.path # join()
 
@@ -1333,10 +1341,9 @@ def latex(xml, pub_file, stringparams, dest_dir):
         stringparams['publisher'] = pub_file
     extraction_xslt = os.path.join(get_ptx_xsl_path(), 'pretext-latex.xsl')
     # form output filename based on source filename
-    derivedname = os.path.splitext(os.path.split(xml)[1])[0] + '.tex'
-    outfilename = os.path.join(dest_dir, derivedname)
+    derivedname = get_output_filename(xml, out_file, dest_dir, '.tex')
     # Write output into working directory, no scratch space needed
-    _verbose('converting {} to LaTeX as {}'.format(xml, outfilename))
+    _verbose('converting {} to LaTeX as {}'.format(xml, derivedname))
     xsltproc(extraction_xslt, xml, derivedname, None, stringparams)
 
 
@@ -1619,6 +1626,18 @@ def get_temporary_directory():
     # os.makedirs(t)
     # return t
     return tempfile.mkdtemp()
+
+def get_output_filename(xml, out_file, dest_dir, suffix):
+    """Formulate a filename for single-file output"""
+    #  out_file  is None, or full path
+    #  dest_dir is at least current working directory
+    import os.path # split(), splitext()
+
+    if out_file:
+        return out_file
+    # split off source filename, replace suffix
+    derivedname = os.path.splitext(os.path.split(xml)[1])[0]  + suffix
+    return os.path.join(dest_dir, derivedname)
 
 ########
 #
