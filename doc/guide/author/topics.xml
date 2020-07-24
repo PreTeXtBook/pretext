@@ -1740,22 +1740,22 @@
         <subsection xml:id="topic-images-raster">
             <title>Raster Images</title>
 
-            <p>A <term>raster image</term><idx>raster image</idx><idx><h>image</h><h>raster image</h></idx> is an image described pixel-by-pixel, with different colors and intensities.  Photographs are good examples.  Common formats are Portable Network Graphics (PNG) and Joint Photographic Experts Group (JPEG, JPG), which will both work with <c>pdflatex</c> and modern browsers.  JPEG are a good choice for photographs since they are compressed on the assumption they will be viewed by a human, while PNG is a lossless format and good for line art, diagrams and similar images (if you do not have vector graphics versions, see below).</p>
+            <p>A <term>raster image</term><idx>raster image</idx><idx><h>image</h><h>raster image</h></idx> is an image described pixel-by-pixel, with different colors and intensities.  Photographs are good examples.  Common formats are Portable Network Graphics (PNG) and Joint Photographic Experts Group (JPEG, JPG), which will both work with <c>pdflatex</c> and modern web browsers.  JPEG is a good choice for photographs since they are compressed on the assumption they will be viewed by a human, while PNG is a lossless format and good for line art, diagrams and similar images (if you do not have vector graphics versions, see below).</p>
 
-            <p>To use these images, you simply provide the filename, with a relative path.  A subdirectory such as <c>images</c> is a good choice for a place to put them.  It is your responsibility to place these images where the <latex /> output will find them or where the HTML output will find them.  The XML would look like:</p>
+            <p>To use these images, you simply provide the complete filename, with a relative path.  A subdirectory such as <c>images</c> is a good choice for a place to put them.  It is your responsibility to place these images where the <latex /> output will find them or where the HTML output will find them.  Your <pretext/> source would look like:</p>
 
             <pre>
             <![CDATA[<image source="images/crocodiles.png" width="50%" />]]>
             </pre>
 
-            <p>Typically you would wrap this in a <tag>figure</tag> that might have an <attr>xml:id</attr> attribute for cross-references, with or without a caption.  There is no <attr>height</attr> attribute, so the aspect ratio of your image is your responsibility outside of <pretext />.  The <attr>width</attr> attribute is a percentage of the available width of the text (outside of a <tag>sidebyside</tag> panel).  Default width is typically 90%.</p>
+            <p>Typically you would wrap this in a <tag>figure</tag> that might have an <attr>xml:id</attr> attribute for cross-references, with or without a caption.  There is no <attr>height</attr> attribute, so the aspect ratio of your image is your responsibility outside of <pretext />.  The <attr>width</attr> attribute is a percentage of the available width of the text (outside of a <tag>sidebyside</tag> panel).</p>
 
-            <p>You may also provide a <tag>description</tag> which will aid accessibility for electronic formats.  Keep such readers in mind and provide as much description as possible.  Keep the markup simple, since this will typically migrate to an HTML attribute that cannot contain any structure.  Be careful to avoid double-quotes.  For example,</p>
+            <p>You may also provide a <tag>description</tag> which will aid accessibility for electronic formats.  Keep such readers in mind and provide as much description as possible.  Keep the markup simple, since this will typically migrate to an HTML attribute that cannot contain any structure.  Be careful to avoid double-quotes.  For example:</p>
 
             <pre>
             <![CDATA[
             <image source="images/crocodiles.jpeg" width="50%">
-                <description>Five crocodiles partially submerged in the shallows.</description>
+                <description>Five crocodiles partially submerged.</description>
             </image>
             ]]>
             </pre>
@@ -1764,19 +1764,19 @@
         <subsection xml:id="topic-images-vector">
             <title>Vector Graphics</title>
 
-            <p>An image is a <term>vector graphic</term><idx>vector graphic</idx><idx><h>image</h><h>vector graphic</h></idx> if the file describes the geometric shapes that constitute the image.  So a simple diagram would be a good candidate, but a photograph would not.  Popular formats are Portable Document Format (PDF) and Scalable Vector Graphics (SVG).  You will get the best results with PDF images in <latex /> output and SVG images for HTML.  The principal advantage of these formats is that they scale (big or small) smoothly, along with fonts.  This is critical when you cannot predict the screen size for a reader of an electronic version.</p>
+            <p>An image is a <term>vector graphic</term><idx>vector graphic</idx><idx><h>image</h><h>vector graphic</h></idx> if the file describes the geometric shapes that constitute the image.  So a simple diagram would be a good candidate, but a photograph would not.  Popular formats are Portable Document Format (<init>PDF</init>) and Scalable Vector Graphics (<init>SVG</init>).  You will get the best results with <init>PDF</init> images in <latex/> output and <init>SVG</init> images for <init>HTML</init>.  The principal advantage of these formats is that they scale (big or small) smoothly, along with fonts.  This is critical when you cannot predict the screen size for a reader of an electronic version.</p>
 
-            <p>Unless you describe these images with a language (see next subsection), you are responsible for providing the PDF and SVG versions.  The <c>pdf2svg</c> utility is very useful if you have PDF images only.  To use these images, you simply follow the instructions above, but do not include a file extension.  This alerts the conversion to use the best possible choice.  So presuming we had files <c>images/toad-life-cycle.pdf</c> and <c>images/toad-life-cycle.svg</c>, an example would be:</p>
+            <p>Unless you describe these images with a language (see <xref ref="topic-images-source"/>), you are responsible for providing the <init>PDF</init> and <init>SVG</init> versions.  The <c>pdf2svg</c> utility is very useful if you have <init>PDF</init> images only.  To have these different images used for different output formats, you simply follow the instructions above, but <em>do not include a file extension</em>.  This alerts the conversion to use the best possible choice for any given output, and to embed it correctly.  So presuming you made available the files <c>images/toad-life-cycle.pdf</c> and <c>images/toad-life-cycle.svg</c>, the following example would incorporate the <init>PDF</init> version with <latex/> output and the <init>SVG</init> version for <init>HTML</init> outut.</p>
 
             <pre>
             <![CDATA[
             <image source="images/toad-life-cycle" width="85%">
-                <description>Diagram of the four stages of a toad's life.</description>
+                <description>The four stages of a toad's life.</description>
             </image>
             ]]>
             </pre>
 
-            <p>Vector graphics images can be created with source code in different languages (<xref ref="topic-images-source"/>) or with applications, such as Inkscape (<xref ref="processing-images-inkscape"/>).</p>
+            <p>Vector graphics images can be created with source code in different languages (<xref ref="topic-images-source"/>) or with applications, such as Inkscape (<xref ref="processing-images-inkscape"/>).  If you are creating non-technical graphics that have lots of geometric shapes and simple text (a look like a movie poster), then using a tool like Inkscape is a great choice since its native file format is an enhanced version of <init>SVG</init> and a faithful <init>PDF</init> is easy to create.</p>
         </subsection>
 
         <subsection xml:id="topic-images-source">
@@ -1822,7 +1822,7 @@
                 &lt;/image&gt;
                 </pre>
 
-                <p>Here is the result.  Look elsewhere for examples of the 3-D output.</p>
+                <p>Here is the result.  Look elsewhere for examples of 3-D output from Asymptote.</p>
 
                 <image xml:id="gaussian-histogram" width="60%">
                     <description>A histogram of Gaussian data.</description>
