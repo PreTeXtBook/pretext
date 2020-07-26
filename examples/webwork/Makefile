@@ -92,7 +92,7 @@ SERVER = https://webwork-ptx.aimath.org
 ################
 
 #  Extract webwork problems into a single XML file called
-#  webwork-extraction.xml which holds multiple versions of each problem.
+#  webwork-representations.xml which holds multiple versions of each problem.
 #  Also locally store images from the WeBWorK server.
 
 sample-chapter-representations:
