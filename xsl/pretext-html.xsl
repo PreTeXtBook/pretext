@@ -84,7 +84,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- See more generally applicable parameters in pretext-common.xsl file     -->
 
 <!-- WeBWorK exercise may be rendered static="yes"    -->
-<!-- TODO: implement middle option static="preview"   -->
 <!-- Or static="no" makes an interactive problem      -->
 <!-- Also in play here are params from -common:       -->
 <!-- exercise.text.statement, exercise.text.hint, exercise.text.solution -->
@@ -219,12 +218,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
 </xsl:variable>
 
-<xsl:variable name="webwork-server">
+<xsl:variable name="webwork-reps-version" select="$document-root//webwork-reps[1]/@version"/>
+
+<xsl:variable name="webwork-domain">
     <xsl:choose>
-        <xsl:when test="$document-root//webwork-reps/server-url">
-            <xsl:value-of select="substring-before($document-root//webwork-reps/server-url[1], '/webwork2')" />
+        <xsl:when test="$webwork-reps-version = 1">
+            <xsl:value-of select="$document-root//webwork-reps[1]/server-url[1]/@domain" />
+        </xsl:when>
+        <xsl:when test="$webwork-reps-version = 2">
+            <xsl:value-of select="$document-root//webwork-reps[1]/server-data/@domain" />
         </xsl:when>
         <xsl:otherwise>
+            <xsl:message>PTX:WARNING: the WeBWorK server domain could not be determined. Using webwork-ptx.aimath.org, where content may differ.</xsl:message>
             <xsl:text>https://webwork-ptx.aimath.org</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
@@ -8471,6 +8476,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </question>
 </xsl:template>
 
+<xsl:template match="exercise[webwork-reps]" mode="runestone-manifest">
+    <question>
+        <xsl:apply-templates select="introduction|webwork-reps|conclusion"/>
+    </question>
+</xsl:template>
+
+
 <!-- Appendix is explicitly no-op, so we do not recurse into "section"  -->
 <xsl:template match="appendix" mode="runestone-manifest"/>
 
@@ -9076,10 +9088,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- in the host anonymous course.   It is incorporated only if   -->
 <!-- "webwork-reps" element is present                            -->
 <!-- TODO: should also depend on whether all are presented as static -->
+<!-- TODO: it is unclear if MathView should be loaded here at all; -->
 <xsl:template name="webwork">
     <xsl:if test="$b-has-webwork-reps">
-        <link href="{$webwork-server}/webwork2_files/js/apps/MathView/mathview.css" rel="stylesheet" />
-        <script src="{$webwork-server}/webwork2_files/js/vendor/iframe-resizer/js/iframeResizer.min.js"></script>
+        <link href="{$webwork-domain}/webwork2_files/js/apps/MathView/mathview.css" rel="stylesheet" />
+        <xsl:if test="$document-root//webwork-reps/server-url">
+            <script src="{$webwork-domain}/webwork2_files/js/vendor/iframe-resizer/js/iframeResizer.min.js"></script>
+        </xsl:if>
     </xsl:if>
 </xsl:template>
 
@@ -9091,111 +9106,114 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The guts of a WeBWorK problem realized in HTML -->
 <!-- This is heart of an external knowl version, or -->
 <!-- what is born visible under control of a switch -->
-<xsl:template match="webwork-reps[ancestor::exercises]">
+<xsl:template match="webwork-reps">
     <xsl:param name="b-original" select="true()"/>
+    <xsl:variable name="b-has-hint" select="(ancestor::exercises and $b-has-divisional-hint) or
+                                            (ancestor::reading-questions and $b-has-reading-hint) or
+                                            (ancestor::worksheet and $b-has-worksheet-hint) or
+                                            (not(ancestor::exercises or ancestor::reading-questions or ancestor::worksheet) and $b-has-inline-hint)" />
+    <xsl:variable name="b-has-answer" select="(ancestor::exercises and $b-has-divisional-answer) or
+                                              (ancestor::reading-questions and $b-has-reading-answer) or
+                                              (ancestor::worksheet and $b-has-worksheet-answer) or
+                                              (not(ancestor::exercises or ancestor::reading-questions or ancestor::worksheet) and $b-has-inline-answer)" />
+    <xsl:variable name="b-has-solution" select="(ancestor::exercises and $b-has-divisional-solution) or
+                                                (ancestor::reading-questions and $b-has-reading-solution) or
+                                                (ancestor::worksheet and $b-has-worksheet-solution) or
+                                                (not(ancestor::exercises or ancestor::reading-questions or ancestor::worksheet) and $b-has-inline-solution)"/>
+    <xsl:variable name="b-static" select="(ancestor::exercises and ($webwork.divisional.static = 'yes')) or
+                                          (ancestor::reading-questions and ($webwork.reading.static = 'yes')) or
+                                          (ancestor::worksheet and ($webwork.worksheet.static = 'yes')) or
+                                          (not(ancestor::exercises or ancestor::reading-questions or ancestor::worksheet) and ($webwork.inline.static = 'yes'))"/>
     <xsl:choose>
-        <xsl:when test="$webwork.divisional.static = 'yes'">
-            <!-- static, usual HTML treatment -->
+        <xsl:when test="$b-static = 'yes'">
             <xsl:apply-templates select="static" mode="exercise-components">
-                <xsl:with-param name="b-original" select="$b-original"/>
+                <xsl:with-param name="b-original"      select="$b-original"/>
                 <xsl:with-param name="b-has-statement" select="true()"/>
-                <xsl:with-param name="b-has-hint"      select="$b-has-divisional-hint"/>
-                <xsl:with-param name="b-has-answer"    select="$b-has-divisional-answer"/>
-                <xsl:with-param name="b-has-solution"  select="$b-has-divisional-solution"/>
+                <xsl:with-param name="b-has-hint"      select="$b-has-hint"/>
+                <xsl:with-param name="b-has-answer"    select="$b-has-answer"/>
+                <xsl:with-param name="b-has-solution"  select="$b-has-solution"/>
             </xsl:apply-templates>
         </xsl:when>
-        <xsl:otherwise>
-            <!-- dynamic, iframe -->
-            <xsl:apply-templates select="." mode="webwork-iframe">
-                <xsl:with-param name="b-has-hint"     select="$b-has-divisional-hint"/>
-                <xsl:with-param name="b-has-solution" select="$b-has-divisional-solution"/>
-            </xsl:apply-templates>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-<xsl:template match="webwork-reps[ancestor::reading-questions]">
-    <xsl:param name="b-original" select="true()"/>
-    <xsl:choose>
-        <xsl:when test="$webwork.reading.static = 'yes'">
-            <!-- static, usual HTML treatment -->
-            <xsl:apply-templates select="static" mode="exercise-components">
-                <xsl:with-param name="b-original" select="$b-original"/>
-                <xsl:with-param name="b-has-statement" select="true()"/>
-                <xsl:with-param name="b-has-hint"      select="$b-has-reading-hint"/>
-                <xsl:with-param name="b-has-answer"    select="$b-has-reading-answer"/>
-                <xsl:with-param name="b-has-solution"  select="$b-has-reading-solution"/>
-            </xsl:apply-templates>
-        </xsl:when>
-        <xsl:otherwise>
-            <!-- dynamic, iframe -->
-            <xsl:apply-templates select="." mode="webwork-iframe">
-                <xsl:with-param name="b-has-hint"     select="$b-has-reading-hint"/>
-                <xsl:with-param name="b-has-solution" select="$b-has-reading-solution"/>
-            </xsl:apply-templates>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-<xsl:template match="webwork-reps[ancestor::worksheet]">
-    <xsl:param name="b-original" select="true()"/>
-    <xsl:choose>
-        <xsl:when test="$webwork.worksheet.static = 'yes'">
-            <!-- static, usual HTML treatment -->
-            <xsl:apply-templates select="static" mode="exercise-components">
-                <xsl:with-param name="b-original" select="$b-original"/>
-                <xsl:with-param name="b-has-statement" select="true()"/>
-                <xsl:with-param name="b-has-hint"      select="$b-has-worksheet-hint"/>
-                <xsl:with-param name="b-has-answer"    select="$b-has-worksheet-answer"/>
-                <xsl:with-param name="b-has-solution"  select="$b-has-worksheet-solution"/>
-            </xsl:apply-templates>
-        </xsl:when>
-        <xsl:otherwise>
-            <!-- dynamic, iframe -->
-            <xsl:apply-templates select="." mode="webwork-iframe">
-                <xsl:with-param name="b-has-hint"     select="$b-has-worksheet-hint"/>
-                <xsl:with-param name="b-has-solution" select="$b-has-worksheet-solution"/>
-            </xsl:apply-templates>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-<!-- NB: Context is not "exercise", so do not -->
-<!-- use "boolean(&INLINE-EXERCISE-FILTER;)"  -->
-<!-- Maybe when webwork-reps is removed?      -->
-<xsl:template match="webwork-reps[not(ancestor::exercises or ancestor::reading-questions or ancestor::worksheet)]">
-    <xsl:param name="b-original" select="true()"/>
-    <xsl:choose>
-        <xsl:when test="$webwork.inline.static = 'yes'">
-            <!-- static, usual HTML treatment -->
-            <xsl:apply-templates select="static" mode="exercise-components">
-                <xsl:with-param name="b-original" select="$b-original"/>
-                <xsl:with-param name="b-has-statement" select="true()"/>
-                <xsl:with-param name="b-has-hint"      select="$b-has-inline-hint"/>
-                <xsl:with-param name="b-has-answer"    select="$b-has-inline-answer"/>
-                <xsl:with-param name="b-has-solution"  select="$b-has-inline-solution"/>
-            </xsl:apply-templates>
-        </xsl:when>
-        <xsl:otherwise>
-            <!-- dynamic, iframe -->
+        <xsl:when test="$webwork-reps-version = 1">
             <xsl:if test="$b-webwork-inline-randomize">
                 <xsl:apply-templates select="." mode="webwork-randomize-buttons"/>
             </xsl:if>
             <xsl:apply-templates select="." mode="webwork-iframe">
-                <xsl:with-param name="b-has-hint"     select="$b-has-inline-hint"/>
-                <xsl:with-param name="b-has-solution" select="$b-has-inline-solution"/>
+                <xsl:with-param name="b-has-hint"     select="$b-has-hint"/>
+                <xsl:with-param name="b-has-solution" select="$b-has-solution"/>
             </xsl:apply-templates>
-        </xsl:otherwise>
+        </xsl:when>
+        <xsl:when test="$webwork-reps-version = 2">
+            <xsl:apply-templates select="." mode="webwork-interactive-div">
+                <xsl:with-param name="b-original"     select="$b-original"/>
+                <xsl:with-param name="b-has-hint"     select="$b-has-hint"/>
+                <xsl:with-param name="b-has-answer"   select="$b-has-answer"/>
+                <xsl:with-param name="b-has-solution" select="$b-has-solution"/>
+            </xsl:apply-templates>
+        </xsl:when>
     </xsl:choose>
 </xsl:template>
 
+<!-- Make a div with a button, where pretext-webwork.js can   -->
+<!-- replace the div content with a live, interactive problem -->
+<xsl:template match="webwork-reps" mode="webwork-interactive-div">
+    <xsl:param name="b-original"/>
+    <xsl:param name="b-has-hint"/>
+    <xsl:param name="b-has-answer"/>
+    <xsl:param name="b-has-solution"/>
+    <xsl:element name="div">
+        <xsl:attribute name="id">
+            <xsl:value-of select="@ww-id"/>
+        </xsl:attribute>
+        <xsl:attribute name="data-domain">
+            <xsl:value-of select="$webwork-domain"/>
+        </xsl:attribute>
+        <xsl:attribute name="data-seed" >
+            <xsl:value-of select="static/@seed"/>
+        </xsl:attribute>
+        <xsl:choose>
+            <xsl:when test="server-data/@problemSource">
+                <xsl:attribute name="data-problemSource">
+                    <xsl:value-of select="server-data/@problemSource"/>
+                </xsl:attribute>
+            </xsl:when>
+            <xsl:when test="server-data/@sourceFilePath">
+                <xsl:attribute name="data-sourceFilePath">
+                    <xsl:value-of select="server-data/@sourceFilePath"/>
+                </xsl:attribute>
+            </xsl:when>
+        </xsl:choose>
+        <xsl:attribute name="data-courseID">
+            <xsl:value-of select="server-data/@course-id"/>
+        </xsl:attribute>
+        <xsl:attribute name="data-userID">
+            <xsl:value-of select="server-data/@user-id"/>
+        </xsl:attribute>
+        <xsl:attribute name="data-coursePassword">
+            <xsl:value-of select="server-data/@course-password"/>
+        </xsl:attribute>
+        <xsl:attribute name="aria-live">
+            <xsl:value-of select="'polite'"/>
+        </xsl:attribute>
+        <xsl:apply-templates select="static" mode="exercise-components">
+            <xsl:with-param name="b-original"      select="$b-original"/>
+            <xsl:with-param name="b-has-statement" select="true()"/>
+            <xsl:with-param name="b-has-hint"      select="$b-has-hint"/>
+            <xsl:with-param name="b-has-answer"    select="$b-has-answer"/>
+            <xsl:with-param name="b-has-solution"  select="$b-has-solution"/>
+        </xsl:apply-templates>
+        <div>
+            <button class="webwork-button" onclick="initWW('{@ww-id}')">Make Interactive</button>
+        </div>
+    </xsl:element>
+</xsl:template>
 
 <!-- Select the correct URL from four pre-generated choices -->
 <!-- and package up as an iframe for interactive version    -->
+<!-- Used with 2.15- WW servers (webwork-reps version 1)    -->
 <xsl:template match="webwork-reps" mode="webwork-iframe">
     <xsl:param name="b-has-hint"/>
     <xsl:param name="b-has-solution"/>
-
     <xsl:variable name="the-url">
         <xsl:choose>
             <xsl:when test="$b-has-hint and $b-has-solution">
@@ -9217,12 +9235,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <iframe name="{@ww-id}" width="{$design-width}" src="{$the-url}" data-seed="{static/@seed}"/>
     <script>
         <xsl:text>iFrameResize({log:true,inPageLinks:true,resizeFrom:'child',checkOrigin:["</xsl:text>
-        <xsl:value-of select="$webwork-server" />
+        <xsl:value-of select="$webwork-domain" />
         <xsl:text>"]})</xsl:text>
     </script>
 </xsl:template>
 
-<!-- Buttons for randomizing the seed of a live WeBWorK problem      -->
+<!-- Buttons for randomizing the seed of a live WeBWorK problem            -->
+<!-- Undocumented. Only designed to work with 2.15 and earlier WW servers. -->
 <xsl:template match="webwork-reps" mode="webwork-randomize-buttons">
     <div class="WW-randomize-buttons">
         <button class="WW-randomize" type="button" onclick="WWiframeReseed('{@ww-id}')">Randomize</button>
@@ -10691,6 +10710,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <script src="{$html.js.server}/js/lib/jquery.espy.min.js"></script>
     <script src="{$html.js.server}/js/{$html.js.version}/pretext.js"></script>
     <script src="{$html.js.server}/js/{$html.js.version}/pretext_add_on.js"></script>
+    <xsl:if test="$webwork-reps-version = 2">
+        <script src="{$html.js.server}/js/{$html.js.version}/pretext-webwork.js"></script>
+    </xsl:if>
 </xsl:template>
 
 <!-- Font header -->

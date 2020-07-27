@@ -243,7 +243,7 @@
 
                         <instruction>To enter a power, use a <c>^</c>, as in <c>x^2</c> for <m>x^2</m>.</instruction>
 
-                        <p><m><var name="$expression" />=</m><var name="$answer" evaluator="$evaluator" width="8" category="formula" /></p>
+                        <p><m><var name="$expression" />=</m> <var name="$answer" evaluator="$evaluator" width="8" category="formula" /></p>
 
                     </statement>
 
@@ -279,7 +279,7 @@
 
                     <statement>
                         <p>Simplify the expression <m><var name="$expression"/></m>.</p>
-                        <p><m><var name="$expression"/>=</m><var name="$answer" width="10"/></p>
+                        <p><m><var name="$expression"/>=</m> <var name="$answer" width="10"/></p>
                     </statement>
 
                     <hint>
@@ -299,7 +299,7 @@
                 </introduction>
                 <webwork>
                     <statement>
-                        <p><m>1+2=</m><var name="3" width="5" /></p>
+                        <p><m>1+2=</m> <var name="3" width="5" /></p>
                     </statement>
                 </webwork>
                 <conclusion>
@@ -1230,7 +1230,12 @@
                           $expressions = RadioButtons(['\(x\)','\(x^2\)','\(2^x\)'], 2);
                     </pg-code>
                     <statement>
-                        <p>There is math in each option for this question. Which expression is not a polynomial? <var name="$expressions" form="buttons"/></p>
+                        <p>
+                            There is math in each option for this question. Which expression is not a polynomial?
+                        </p>
+                        <p>
+                            <var name="$expressions" form="buttons"/>
+                        </p>
                     </statement>
                     <solution>
                         <p>The answer is <var name="$expressions"/>.</p>

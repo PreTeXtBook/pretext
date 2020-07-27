@@ -356,29 +356,29 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
     if (server_params.startswith("(") and server_params.endswith(")")):
         server_params=server_params.strip('()')
         split_server_params = server_params.split(',')
-        serverURL = sanitize_url(split_server_params[0])
+        ww_domain = sanitize_url(split_server_params[0])
         courseID = sanitize_alpha_num_underscore(split_server_params[1])
         userID = sanitize_alpha_num_underscore(split_server_params[2])
         password = sanitize_alpha_num_underscore(split_server_params[3])
         course_password = sanitize_alpha_num_underscore(split_server_params[4])
     else:
-        serverURL = sanitize_url(server_params)
+        ww_domain = sanitize_url(server_params)
         courseID = 'anonymous'
         userID = 'anonymous'
         password = 'anonymous'
         course_password = 'anonymous'
 
-    ww2url = serverURL + "webwork2/"
-    wwurl = ww2url + "html2xml"
+    ww_domain_ww2 = ww_domain + '/webwork2/'
+    ww_domain_path = ww_domain_ww2 + 'html2xml'
 
     # Establish WeBWorK version
     try:
-        landing_page = requests.get(ww2url)
+        landing_page = requests.get(ww_domain_ww2)
     except Exception as e:
         root_cause = str(e)
         msg = ("PTX:ERROR:   There was a problem contacting the WeBWorK server.\n" +
                "             Is there a WeBWorK landing page at {}?\n")
-        raise ValueError(msg.format(ww2url) + root_cause)
+        raise ValueError(msg.format(ww_domain_ww2) + root_cause)
 
     landing_page_text = landing_page.text
     ww_version_match = re.search(r"WW.VERSION:\s*((\d+)\.(\d+))",landing_page_text,re.I)
@@ -391,13 +391,20 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
         msg =  ("PTX:ERROR:   PreTeXt was unable to discern the version of the WeBWorK server.\n" +
                 "                         Is there a WeBWorK landing page at {}?\n" +
                 "                         And does it display the WeBWorK version?\n")
-        raise ValueError(msg.format(ww2url))
+        raise ValueError(msg.format(ww_domain_ww2))
 
     if (ww_major_version != 2 or ww_minor_version < 14):
         msg = ("PTX:ERROR:   PreTeXt supports WeBWorK 2.14 and later, and it appears you are attempting to use version: {}\n" +
                "                         Server: {}\n")
-        raise ValueError(msg.format(ww_version,serverURL))
+        raise ValueError(msg.format(ww_version,ww_domain))
 
+    ww_reps_version = ''
+    if (ww_major_version == 2 and (ww_minor_version == 14 or ww_minor_version == 15)):
+        # version 1: live problems are embedded in an iframe
+        ww_reps_version = '1'
+    elif (ww_major_version == 2 and ww_minor_version >= 16):
+        # version 1: live problems are injected into a div using javascript
+        ww_reps_version = '2'
 
     # using a "Session()" will pool connection information
     # since we always hit the same server, this should increase performance
@@ -428,10 +435,9 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
 
         # make base64 for PTX problems
         if origin[problem] == 'ptx':
-            # Divergence between WW 2.15- and 2.16+
-            if (ww_major_version == 2 and ww_minor_version >= 16):
+            if (ww_reps_version == '2'):
                 pgbase64 = base64.b64encode(bytes(pgdense[problem], 'utf-8')).decode("utf-8")
-            else:
+            elif (ww_reps_version == '1'):
                 pgbase64 = {}
                 for hint_sol in ['hint_yes_solution_yes','hint_yes_solution_no','hint_no_solution_yes','hint_no_solution_no']:
                     pgbase64[hint_sol] = base64.b64encode(bytes(pgdense[hint_sol][problem], 'utf-8'))
@@ -441,10 +447,9 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
         #   URL of a problem stored there already
         #   or a base64 encoding of a problem
         # server_params is tuple rather than dictionary to enforce consistent order in url parameters
-        # Divergence between WW 2.15- and 2.16+
-        if (ww_major_version == 2 and ww_minor_version >= 16):
+        if (ww_reps_version == '2'):
             server_params_source = ('sourceFilePath',source[problem]) if origin[problem] == 'server' else ('problemSource',pgbase64)
-        else:
+        elif (ww_reps_version == '1'):
             server_params_source = ('sourceFilePath',source[problem]) if origin[problem] == 'server' else ('problemSource',pgbase64['hint_yes_solution_yes'])
 
         server_params = (('answersSubmitted','0'),
@@ -460,21 +465,20 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
         msg = "sending {} to server to save in {}: origin is '{}'"
         _verbose(msg.format(problem, dest_dir, origin[problem]))
         if origin[problem] == 'server':
-            _debug('server-to-ptx: {} {} {} {}'.format(source[problem], wwurl, dest_dir, problem))
+            _debug('server-to-ptx: {} {} {} {}'.format(source[problem], ww_domain_path, dest_dir, problem))
         elif origin[problem] == 'ptx':
-            # Divergence between WW 2.15- and 2.16+
-            if (ww_major_version == 2 and ww_minor_version >= 16):
-                _debug('server-to-ptx: {} {} {} {}'.format(pgdense[problem], wwurl, dest_dir, problem))
-            else:
-                _debug('server-to-ptx: {} {} {} {}'.format(pgdense['hint_yes_solution_yes'][problem], wwurl, dest_dir, problem))
+            if (ww_reps_version == '2'):
+                _debug('server-to-ptx: {} {} {} {}'.format(pgdense[problem], ww_domain_path, dest_dir, problem))
+            elif (ww_reps_version == '1'):
+                _debug('server-to-ptx: {} {} {} {}'.format(pgdense['hint_yes_solution_yes'][problem], ww_domain_path, dest_dir, problem))
 
         # Ready, go out on the wire
         try:
-            response = session.get(wwurl, params=server_params)
+            response = session.get(ww_domain_path, params=server_params)
         except requests.exceptions.RequestException as e:
             root_cause = str(e)
             msg = "PTX:ERROR: there was a problem collecting a problem,\n Server: {}\nRequest Parameters: {}\n"
-            raise ValueError(msg.format(wwurl, server_params) + root_cause)
+            raise ValueError(msg.format(ww_domain_path, server_params) + root_cause)
 
         # Check for errors with PG processing
         # Get booleans signaling badness: file_empty, no_compile, bad_xml, no_statement
@@ -524,9 +528,6 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
             badness_tip = '  Use -a to halt with returned content'
             badness_type = 'statement'
             badness_base64 = 'RE9DVU1FTlQoKTsKbG9hZE1hY3JvcygiUEdzdGFuZGFyZC5wbCIsIlBHTUwucGwiLCJQR2NvdXJzZS5wbCIsKTtURVhUKGJlZ2lucHJvYmxlbSgpKTtDb250ZXh0KCdOdW1lcmljJyk7CgpCRUdJTl9QR01MCldlQldvcksgUHJvYmxlbSBEaWQgTm90IEhhdmUgYSBbfHN0YXRlbWVudHxdKiBUYWcKCkVORF9QR01MCgpFTkRET0NVTUVOVCgpOw=='
-        # Divergence between WW 2.15- and 2.16+
-        if (ww_major_version != 2 or ww_minor_version < 16):
-            badness_base64.replace('=','%3D')
 
         # If we are aborting upon recoverable errors...
         if abort_early:
@@ -612,7 +613,7 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
             if ww_image_scheme:
                 image_url = ww_image_url
             else:
-                image_url = serverURL + ww_image_full_path
+                image_url = ww_domain + '/' + ww_image_full_path
             # modify PTX problem source to include local versions
             response_text = response_text.replace(ww_image_full_path, 'images/' + ptx_image_filename)
             # download actual image files
@@ -637,6 +638,7 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
         # Use "webwork-reps" as parent tag for the various representations of a problem
         response_root = ET.fromstring(response_text)
         webwork_reps = ET.SubElement(webwork_representations,'webwork-reps')
+        webwork_reps.set('version',ww_reps_version)
         webwork_reps.set("{%s}id" % (XML),'extracted-' + problem)
         webwork_reps.set('ww-id',problem)
         webwork_reps.text = "\n    "
@@ -844,8 +846,7 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
         static.tail = "\n    "
 
         # Add elements for interactivity
-        # Divergence between WW 2.15- and 2.16+
-        if (ww_major_version == 2 and ww_minor_version >= 16):
+        if (ww_reps_version == '2'):
             # Add server-data element with attribute data for rendering a problem
             source_key = 'problemSource' if (badness or origin[problem] == 'ptx') else 'sourceFilePath'
             if badness:
@@ -858,20 +859,20 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
 
             server_data = ET.SubElement(webwork_reps,'server-data')
             server_data.set(source_key,source_value)
-            server_data.set('host',ww2url)
+            server_data.set('domain',ww_domain)
             server_data.set('course-id',courseID)
             server_data.set('user-id',userID)
             server_data.set('course-password',course_password)
             server_data.tail = "\n    "
 
-        else:
+        elif (ww_reps_version == '1'):
             # Add server-url elements for putting into the @src of an iframe
             for hint in ['yes','no']:
                 for solution in ['yes','no']:
                     hintsol = 'hint_' + hint + '_solution_' + solution
                     source_selector = 'problemSource=' if (badness or origin[problem] == 'ptx') else 'sourceFilePath='
                     if badness:
-                        source_value = badness_base64
+                        source_value = urllib.parse.quote(badness_base64)
                     else:
                         if origin[problem] == 'server':
                             source_value = source[problem]
@@ -882,8 +883,9 @@ def webwork_to_xml(xml_source, abort_early, server_params, dest_dir):
                     server_url = ET.SubElement(webwork_reps,'server-url')
                     server_url.set('hint',hint)
                     server_url.set('solution',solution)
+                    server_url.set('domain',ww_domain)
                     url_shell = "{}?courseID={}&amp;userID={}&amp;password={}&amp;course_password={}&amp;answersSubmitted=0&amp;displayMode=MathJax&amp;outputformat=simple&amp;problemSeed={}&amp;{}"
-                    server_url.text = url_shell.format(wwurl,courseID,userID,password,course_password,seed[problem],source_query)
+                    server_url.text = url_shell.format(ww_domain_path,courseID,userID,password,course_password,seed[problem],source_query)
                     server_url.tail = "\n    "
 
         # Add PG for PTX-authored problems
@@ -1493,7 +1495,7 @@ def get_executable(exec_name):
     return config_name
 
 def sanitize_url(url):
-    """Verify a server address, append a slash"""
+    """Verify a server address"""
     _verbose('validating, cleaning server URL: {}'.format(url))
     import requests
     try:
@@ -1502,10 +1504,6 @@ def sanitize_url(url):
         root_cause = str(e)
         msg = "PTX:ERROR: there was a problem with the server URL, {}\n".format(url)
         raise ValueError(msg + root_cause)
-    # We expect relative paths to locations on the server
-    # So we add a slash if there is not one already
-    if url[-1] != "/":
-        url = url + "/"
     return url
 
 def sanitize_alpha_num_underscore(param):
