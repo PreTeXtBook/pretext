@@ -199,7 +199,7 @@ function initWW(ww_id) {
                 answers[id] = {
                     "correct_ans": data_answers[id].correct_ans,
                     "correct_ans_latex_string": data_answers[id].correct_ans_latex_string,
-                    "correct_data": data_answers[id].correct_data
+                    "correct_choice": data_answers[id].correct_choice
                 }
             })
             var correct = document.createElement("button")
@@ -325,7 +325,7 @@ function updateWW(ww_id,task) {
                 answers[id] = {
                     "correct_ans": data_answers[id].correct_ans,
                     "correct_ans_latex_string": data_answers[id].correct_ans_latex_string,
-                    "correct_data": data_answers[id].correct_data
+                    "correct_choice": data_answers[id].correct_choice
                 }
             })
             var correct = document.querySelector("#" + ww_id + "-form div button.correct")
@@ -373,10 +373,9 @@ function updateWW(ww_id,task) {
               }
 
               if (input.type == 'radio' && answers[name]) {
-                console.log(data.rh_result.answers)
                 if (input.value == data.rh_result.answers[name].student_value) {
                   let pre_span = document.createElement('span');
-                  if (data.rh_result.answers[name].student_value == data.rh_result.answers[name].correct_data[0]) {
+                  if (data.rh_result.answers[name].student_value == data.rh_result.answers[name].correct_choice) {
                     var correct_text = 'Correct!'
                     input.parentElement.setAttribute('class','correct')
                     pre_span.style.backgroundColor = '#8F8'
@@ -474,7 +473,7 @@ function WWshowCorrect(ww_id, answers) {
       }
 
       if (input.type == 'radio' && answers[name]) {
-          correct_value = answers[name].correct_data[0]
+          correct_value = answers[name].correct_choice
           if (input.value == correct_value) {
             input.checked = true
           }
