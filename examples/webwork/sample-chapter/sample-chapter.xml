@@ -442,7 +442,7 @@
             <image>
                 <latex-image>
                     \begin{tikzpicture}
-                        \draw[fill=firstcolor!20] (0,0) ellipse (3 and 0.45);
+                        \draw[fill=white] (0,0) ellipse (3 and 0.45);
                     \end{tikzpicture}
                 </latex-image>
             </image>

@@ -91,6 +91,10 @@ SERVER = https://webwork-ptx.aimath.org
 #Targets for make
 ################
 
+# TODO: generate "latex images" for the sample chapter, using the pretext
+# script AND using the publisher file, to be certain the one such image
+# has the right automatic xml:id  (2020-07-28)
+
 #  Extract webwork problems into a single XML file called
 #  webwork-representations.xml which holds multiple versions of each problem.
 #  Also locally store images from the WeBWorK server.
