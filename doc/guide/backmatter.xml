@@ -17,6 +17,7 @@
         <title>Best Practices</title>
         <list-of elements="note"/>
     </appendix>
+    <xi:include href="appendices/python.xml"/>
     <xi:include href="appendices/editors.xml"/>
     <xi:include href="appendices/schema-install.xml"/>
     <xi:include href="appendices/git.xml"/>
