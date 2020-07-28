@@ -244,6 +244,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Verbatim from -html conversion read about it there -->
 <xsl:template match="book|article" mode="section-header" />
+<!-- Slideshow is similar, but not present in the -html stylesheet -->
+<xsl:template match="slideshow" mode="section-header" />
 
 <!-- Default is indeterminate (seacrch while debugging) -->
 <xsl:template match="*" mode="division-class">
@@ -271,10 +273,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <xsl:template match="section" mode="division-class">
     <xsl:choose>
+        <!-- slideshow is exceptional, a major division, -->
+        <!-- but no real content, and only a title       -->
+        <xsl:when test="parent::slideshow">
+            <xsl:text>fullpage</xsl:text>
+        </xsl:when>
+        <!-- routine and *not* generally terminal -->
         <xsl:when test="$b-has-subsubsection">
             <xsl:text>center</xsl:text>
         </xsl:when>
-        <!-- terminal -->
+        <!-- routine and necessarily terminal -->
         <xsl:otherwise>
             <xsl:text>cell5</xsl:text>
         </xsl:otherwise>
@@ -297,6 +305,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- terminal always, according to schema -->
 <xsl:template match="subsubsection" mode="division-class">
     <xsl:text>cell7</xsl:text>
+</xsl:template>
+
+<xsl:template match="slide" mode="division-class">
+    <xsl:text>centerpage</xsl:text>
 </xsl:template>
 
 <!-- ################### -->
