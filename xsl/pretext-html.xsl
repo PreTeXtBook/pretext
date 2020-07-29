@@ -8326,6 +8326,34 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
         </script>
+        <xsl:text>&#xa;</xsl:text>
+
+        <!-- Google Ads on Runestone -->
+        <!-- Only in PreTeXt production version, only visible in -->
+        <!-- *non-login* versions of books hosted at Runestone   -->
+        <xsl:if test="not($runestone-dev)">
+            <!-- attribute is templated, so we form it as a -->
+            <!-- variable that we can place it using an AVT -->
+            <xsl:variable name="id-attr">
+                <xsl:value-of select="$rso"/>
+                <xsl:text>=settings.adsenseid</xsl:text>
+                <xsl:value-of select="$rsc"/>
+            </xsl:variable>
+            <!--  -->
+            <xsl:value-of select="$rso"/>
+            <xsl:text> if response.serve_ad and settings.adsenseid: </xsl:text>
+            <xsl:value-of select="$rsc"/>
+            <xsl:text>&#xa;</xsl:text>
+            <!--  -->
+            <script data-ad-client="{$id-attr}" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <!--  -->
+            <xsl:text>&#xa;</xsl:text>
+            <xsl:value-of select="$rso"/>
+            <xsl:text> pass </xsl:text>
+            <xsl:value-of select="$rsc"/>
+            <xsl:text>&#xa;</xsl:text>
+            <!--  -->
+        </xsl:if>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
