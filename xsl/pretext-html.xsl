@@ -2547,6 +2547,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                     <xsl:text> original</xsl:text>
                 </xsl:otherwise>
             </xsl:choose>
+            <!-- reliable way to distinguish adjacent hint/answer/solution knowls -->
+            <xsl:choose>
+                <xsl:when test="self::hint">
+                    <xsl:text> hint</xsl:text>
+                </xsl:when>
+                <xsl:when test="self::answer">
+                    <xsl:text> answer</xsl:text>
+                </xsl:when>
+                <xsl:when test="self::solution">
+                    <xsl:text> solution</xsl:text>
+                </xsl:when>
+            </xsl:choose>
         </xsl:attribute>
         <!-- and the id via a template for consistency -->
         <xsl:attribute name="data-refid">
