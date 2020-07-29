@@ -69,11 +69,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:param name="runestone.dev" select="''"/>
 <xsl:variable name="runestone-dev" select="$runestone.dev = 'yes'"/>
 
-<!-- Temporary, undocumented, and experimental           -->
-<!-- Makes randomization buttons for inline WW probmlems -->
-<xsl:param name="debug.webwork.inline.randomize" select="''"/>
-<xsl:variable name="b-webwork-inline-randomize" select="$debug.webwork.inline.randomize = 'yes'"/>
-
 <!-- ################################################ -->
 <!-- Following is slated to migrate above, 2019-07-10 -->
 <!-- ################################################ -->
@@ -82,28 +77,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Parameters to pass via xsltproc "stringparam" on command-line            -->
 <!-- Or make a thin customization layer and use 'select' to provide overrides -->
 <!-- See more generally applicable parameters in pretext-common.xsl file     -->
-
-<!-- WeBWorK exercise may be rendered static="yes"    -->
-<!-- Or static="no" makes an interactive problem      -->
-<!-- Also in play here are params from -common:       -->
-<!-- exercise.text.statement, exercise.text.hint, exercise.text.solution -->
-<!-- For a divisional exercise, when static="no", that is an intentional -->
-<!-- decision to show the live problem, which means the statement will   -->
-<!-- be shown, regardless of exercise.text.statement. If the problem was -->
-<!-- authored in PTX source, we can respect the values for               -->
-<!-- exercise.text.hint and exercise.text.solution. If the problem       -->
-<!-- source is on the webwork server, then hints and solutions will show -->
-<!-- no matter what.                                                     -->
-<!-- For a divisional exercise, when static="yes", each of the three     -->
-<!-- -common params will be respected. Effectively the content is        -->
-<!-- handled like a non-webwork exercise.                                -->
-<!-- For an inline exercise (webwork or otherwise) statements, hints,    -->
-<!-- and solutions are always shown. The -common params mentioned above  -->
-<!-- do not apply. Whether static is "yes" or "no" doesn't matter.       -->
-<xsl:param name="webwork.inline.static" select="'no'" />
-<xsl:param name="webwork.divisional.static" select="'yes'" />
-<xsl:param name="webwork.reading.static" select="'yes'" />
-<xsl:param name="webwork.worksheet.static" select="'yes'" />
 
 <!-- Content as Knowls -->
 <!-- These parameters control if content is      -->
@@ -214,23 +187,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$root/memo">0</xsl:when>
         <xsl:otherwise>
             <xsl:message>MBX:ERROR: HTML chunk level not determined</xsl:message>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:variable>
-
-<xsl:variable name="webwork-reps-version" select="$document-root//webwork-reps[1]/@version"/>
-
-<xsl:variable name="webwork-domain">
-    <xsl:choose>
-        <xsl:when test="$webwork-reps-version = 1">
-            <xsl:value-of select="$document-root//webwork-reps[1]/server-url[1]/@domain" />
-        </xsl:when>
-        <xsl:when test="$webwork-reps-version = 2">
-            <xsl:value-of select="$document-root//webwork-reps[1]/server-data/@domain" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:message>PTX:WARNING: the WeBWorK server domain could not be determined. Using webwork-ptx.aimath.org, where content may differ.</xsl:message>
-            <xsl:text>https://webwork-ptx.aimath.org</xsl:text>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:variable>
@@ -364,6 +320,47 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Here we assume there is at most one                      -->
 <!-- (The old style of specifying an index is deprecated)     -->
 <xsl:variable name="the-index"          select="($document-root//index-part|$document-root//index[index-list])[1]"/>
+
+<!-- ######## -->
+<!-- WeBWorK  -->
+<!-- ######## -->
+
+<!-- WeBWorK exercise may be rendered static="yes" or static="no" makes  -->
+<!-- an interactive problem. Also in play here are params from -common:  -->
+<!-- exercise.text.statement, exercise.text.hint, exercise.text.solution -->
+<!-- For a divisional exercise, when static="no", that is an intentional -->
+<!-- decision to show the live problem, which means the statement will   -->
+<!-- be shown, regardless of exercise.text.statement. For webwork-reps   -->
+<!-- version 2 (WW 2.16 and later), we respect the values for            -->
+<!-- exercise.text.hint, exercise.text.answer, exercise.text.solution.   -->
+<!-- For version 1, if the problem was authored in PTX source, we can    -->
+<!-- respect the values for exercise.text.hint, exercise.text.solution.  -->
+<!-- When the problem is static, we can respect exercise.text.answer.    -->
+<!-- When the problem is live, we cannot stop the user from seeing the   -->
+<!-- answers. And if the problem source is on the webwork server, then   -->
+<!-- hints and solutions will show  no matter what.                      -->
+<xsl:param name="webwork.inline.static" select="'no'" />
+<xsl:param name="webwork.divisional.static" select="'yes'" />
+<xsl:param name="webwork.reading.static" select="'yes'" />
+<xsl:param name="webwork.worksheet.static" select="'yes'" />
+
+<xsl:variable name="webwork-reps-version" select="$document-root//webwork-reps[1]/@version"/>
+
+<xsl:variable name="webwork-domain">
+    <xsl:choose>
+        <xsl:when test="$webwork-reps-version = 1">
+            <xsl:value-of select="$document-root//webwork-reps[1]/server-url[1]/@domain" />
+        </xsl:when>
+        <xsl:when test="$webwork-reps-version = 2">
+            <xsl:value-of select="$document-root//webwork-reps[1]/server-data/@domain" />
+        </xsl:when>
+    </xsl:choose>
+</xsl:variable>
+
+<!-- Temporary, undocumented, and experimental           -->
+<!-- Makes randomization buttons for inline WW probmlems -->
+<xsl:param name="debug.webwork.inline.randomize" select="''"/>
+<xsl:variable name="b-webwork-inline-randomize" select="$debug.webwork.inline.randomize = 'yes'"/>
 
 
 <!-- ############## -->
@@ -9120,9 +9117,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="webwork">
     <xsl:if test="$b-has-webwork-reps">
         <link href="{$webwork-domain}/webwork2_files/js/apps/MathView/mathview.css" rel="stylesheet" />
-        <xsl:if test="$document-root//webwork-reps/server-url">
-            <script src="{$webwork-domain}/webwork2_files/js/vendor/iframe-resizer/js/iframeResizer.min.js"></script>
-        </xsl:if>
+        <xsl:choose>
+            <xsl:when test="$webwork-reps-version = 1">
+                <script src="{$webwork-domain}/webwork2_files/js/vendor/iframe-resizer/js/iframeResizer.min.js"></script>
+            </xsl:when>
+            <xsl:when test="$webwork-reps-version = 2">
+                <script src="{$html.js.server}/js/{$html.js.version}/pretext-webwork.js"></script>
+            </xsl:when>
+        </xsl:choose>
     </xsl:if>
 </xsl:template>
 
@@ -10738,9 +10740,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <script src="{$html.js.server}/js/lib/jquery.espy.min.js"></script>
     <script src="{$html.js.server}/js/{$html.js.version}/pretext.js"></script>
     <script src="{$html.js.server}/js/{$html.js.version}/pretext_add_on.js"></script>
-    <xsl:if test="$webwork-reps-version = 2">
-        <script src="{$html.js.server}/js/{$html.js.version}/pretext-webwork.js"></script>
-    </xsl:if>
 </xsl:template>
 
 <!-- Font header -->
