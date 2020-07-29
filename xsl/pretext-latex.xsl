@@ -6291,7 +6291,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- $b-has-webwork-reps, then on                              -->
         <!-- $document-root//webwork-reps/static//var[@form='buttons'] -->
         <xsl:when test="@form='buttons'" >
-            <xsl:text>\par&#xa;</xsl:text>
             <xsl:text>\begin{itemize}[label=$\odot$,leftmargin=3em,]&#xa;</xsl:text>
             <xsl:for-each select="li">
                 <xsl:text>\item{}</xsl:text>
@@ -6301,7 +6300,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>\end{itemize}&#xa;</xsl:text>
         </xsl:when>
         <xsl:when test="@form='checkboxes'" >
-            <xsl:text>\par&#xa;</xsl:text>
             <xsl:text>\begin{itemize*}[label=$\square$,leftmargin=3em,itemjoin=\hspace{4em plus 1em minus 3em}]&#xa;</xsl:text>
             <xsl:for-each select="li">
                 <xsl:if test="not(p[.='?']) and not(normalize-space(.)='?')">
