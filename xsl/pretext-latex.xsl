@@ -729,6 +729,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:text>%% document language code is "vi-VN", Vietnamese&#xa;</xsl:text>
             <xsl:text>\setmainlanguage{vietnamese}&#xa;</xsl:text>
         </xsl:when>
+        <xsl:when test="$document-language = 'it-IT'">
+            <xsl:text>%% document language code is "it-IT", Italian&#xa;</xsl:text>
+            <xsl:text>\setmainlanguage{italian}&#xa;</xsl:text>
+        </xsl:when>
     </xsl:choose>
     <xsl:text>%% Enable secondary languages based on discovery of @xml:lang values&#xa;</xsl:text>
     <!-- secondary: so not already "main", and look just beyond $document-root (eg "book") -->
