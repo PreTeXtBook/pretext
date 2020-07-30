@@ -51,12 +51,9 @@ function initWW(ww_id) {
             return false;
         }
         // determine if static version shows hints, solutions, answers
-        var orig_hintxpath = "//a[span='Hint']";
-        var b_has_hint = document.evaluate(orig_hintxpath, ww_container, null, XPathResult.BOOLEAN_TYPE, null).booleanValue;
-        var orig_solutionxpath = "//a[span='Solution']";
-        var b_has_solution = document.evaluate(orig_solutionxpath, ww_container, null, XPathResult.BOOLEAN_TYPE, null).booleanValue;
-        var orig_answerxpath = "//a[span='Answer']";
-        var b_has_answer = document.evaluate(orig_answerxpath, ww_container, null, XPathResult.BOOLEAN_TYPE, null).booleanValue;
+        var b_has_hint = ww_container.getElementsByClassName('hint').length > 0;
+        var b_has_answer = ww_container.getElementsByClassName('answer').length > 0;
+        var b_has_solution = ww_container.getElementsByClassName('solution').length > 0;
         //void the static version
         ww_container.innerHTML = ""
         // a div for the problem text
@@ -285,12 +282,9 @@ function updateWW(ww_id,task) {
         // get the body div
         var body_div = document.getElementById(ww_id + "-body")
         // determine if previous version shows hints, solutions, answers
-        var orig_hintxpath = "//a[span='Hint']";
-        var b_has_hint = document.evaluate(orig_hintxpath, ww_container, null, XPathResult.BOOLEAN_TYPE, null).booleanValue;
-        var orig_solutionxpath = "//a[span='Solution']";
-        var b_has_solution = document.evaluate(orig_solutionxpath, ww_container, null, XPathResult.BOOLEAN_TYPE, null).booleanValue;
-        var orig_answerxpath = "//a[span='Answer']";
-        var b_has_answer = document.evaluate(orig_answerxpath, ww_container, null, XPathResult.BOOLEAN_TYPE, null).booleanValue;
+        var b_has_hint = ww_container.getElementsByClassName('hint').length > 0;
+        var b_has_answer = ww_container.getElementsByClassName('answer').length > 0;
+        var b_has_solution = ww_container.getElementsByClassName('solution').length > 0;
         // dump the problem text, answer blanks, etc. here
         body_div.innerHTML = data.rh_result.text
         adjustSrcHrefs(body_div,ww_domain)
@@ -314,20 +308,21 @@ function updateWW(ww_id,task) {
         showSummary.value      = data.showSummary
         forcePortNumber.value  = data.forcePortNumber
 
+        // prepare answers object
+        var data_answers = data.rh_result.answers
+        var answer_ids = Object.keys(data_answers)
+        var answers = {}
+        answer_ids.forEach(function(id) {
+            answers[id] = {
+                "correct_ans": data_answers[id].correct_ans,
+                "correct_ans_latex_string": data_answers[id].correct_ans_latex_string,
+                "correct_choice": data_answers[id].correct_choice
+            }
+        })
+
         // show correct answers button
         // if present, needs to be updated in case of randomizing
         if (b_has_answer) {
-            // prepare answers object
-            var data_answers = data.rh_result.answers
-            var answer_ids = Object.keys(data_answers)
-            var answers = {}
-            answer_ids.forEach(function(id) {
-                answers[id] = {
-                    "correct_ans": data_answers[id].correct_ans,
-                    "correct_ans_latex_string": data_answers[id].correct_ans_latex_string,
-                    "correct_choice": data_answers[id].correct_choice
-                }
-            })
             var correct = document.querySelector("#" + ww_id + "-form div button.correct")
             correct.setAttribute('onclick', "WWshowCorrect('" + ww_id + "'," + JSON.stringify(answers) + ")")
         }
@@ -545,6 +540,7 @@ function translateHintSol(ww_id,body_div,ww_domain,b_has_hint,b_has_solution) {
           hintlabel.setAttribute('class', 'type');
           hintanchor.innerHTML = "";
           hintanchor.appendChild(hintlabel);
+          // TODO: this label should copy whatever localized name was used in the static
           hintlabel.innerHTML = 'Hint';
           var hkhintdiv = document.createElement('div');
           hkhintdiv.setAttribute('class', 'hidden-content tex2jax_ignore');
@@ -575,6 +571,7 @@ function translateHintSol(ww_id,body_div,ww_domain,b_has_hint,b_has_solution) {
           solutionlabel.setAttribute('class', 'type');
           solutionanchor.innerHTML = "";
           solutionanchor.appendChild(solutionlabel);
+          // TODO: this label should copy whatever localized name was used in the static
           solutionlabel.innerHTML = 'Solution';
           var hksolutiondiv = document.createElement('div');
           hksolutiondiv.setAttribute('class', 'hidden-content tex2jax_ignore');
