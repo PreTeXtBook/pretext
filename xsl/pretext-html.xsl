@@ -2534,19 +2534,18 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:element name="a">
         <!-- empty, indicates content *not* in a file -->
         <xsl:attribute name="data-knowl" />
-        <!-- id-ref class means content is in div referenced by id -->
+        <!-- id-ref class: content is in div referenced by id       -->
+        <!-- (element-name)-knowl: specific element used in content -->
+        <!-- original: born hidden knowl, not xref                  -->
+        <!-- Similar to "duplicate-hidden-knowl-link", id-ref extra -->
         <xsl:attribute name="class">
             <xsl:text>id-ref</xsl:text>
-            <xsl:choose>
-                <!-- Exceptional: for styling purposes -->
-                <xsl:when test="self::fn">
-                    <xsl:text> fn-knowl</xsl:text>
-                </xsl:when>
-                <!-- original content, for styling purposes -->
-                <xsl:otherwise>
-                    <xsl:text> original</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
+            <!--  -->
+            <xsl:text> </xsl:text>
+            <xsl:value-of select="local-name(.)"/>
+            <xsl:text>-knowl</xsl:text>
+            <!--  -->
+            <xsl:text> original</xsl:text>
         </xsl:attribute>
         <!-- and the id via a template for consistency -->
         <xsl:attribute name="data-refid">
@@ -2589,17 +2588,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The link for a duplicate hidden knowl -->
 <xsl:template match="*" mode="duplicate-hidden-knowl-link">
     <xsl:element name="a">
+        <!-- (element-name)-knowl: specific element used in content -->
+        <!-- original: born hidden knowl, not xref                  -->
+        <!-- Similar to "hidden-knowl-link", no id-ref              -->
         <xsl:attribute name="class">
-            <xsl:choose>
-                <!-- Exceptional: for styling purposes -->
-                <xsl:when test="self::fn">
-                    <xsl:text>fn-knowl</xsl:text>
-                </xsl:when>
-                <!-- original content, for styling purposes -->
-                <xsl:otherwise>
-                    <xsl:text>original</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
+            <xsl:value-of select="local-name(.)"/>
+            <xsl:text>-knowl</xsl:text>
+            <!--  -->
+            <xsl:text> original</xsl:text>
         </xsl:attribute>
         <xsl:attribute name="data-knowl">
             <xsl:apply-templates select="." mode="hidden-knowl-filename" />
