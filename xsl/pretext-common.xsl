@@ -300,6 +300,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$root/article/section/subsection">2</xsl:when>
         <xsl:when test="$root/article/section|$root/article/worksheet">1</xsl:when>
         <xsl:when test="$root/article">0</xsl:when>
+        <xsl:when test="$root/slideshow">0</xsl:when>
         <xsl:when test="$root/letter">0</xsl:when>
         <xsl:when test="$root/memo">0</xsl:when>
         <xsl:otherwise>
@@ -319,6 +320,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$root/book">2</xsl:when>
         <xsl:when test="$root/article/section|$root/article/worksheet">1</xsl:when>
         <xsl:when test="$root/article">0</xsl:when>
+        <xsl:when test="$root/slideshow">0</xsl:when>
         <xsl:when test="$root/letter">0</xsl:when>
         <xsl:when test="$root/memo">0</xsl:when>
         <xsl:otherwise>
@@ -341,6 +343,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$root/book">2</xsl:when>
         <xsl:when test="$root/article/section|$root/article/worksheet">1</xsl:when>
         <xsl:when test="$root/article">0</xsl:when>
+        <xsl:when test="$root/slideshow">0</xsl:when>
         <xsl:when test="$root/letter">0</xsl:when>
         <xsl:when test="$root/memo">0</xsl:when>
         <xsl:otherwise>
@@ -376,6 +379,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$root/book">2</xsl:when>
         <xsl:when test="$root/article/section|$root/article/worksheet">1</xsl:when>
         <xsl:when test="$root/article">0</xsl:when>
+        <xsl:when test="$root/slideshow">0</xsl:when>
         <xsl:when test="$root/letter">0</xsl:when>
         <xsl:when test="$root/memo">0</xsl:when>
         <xsl:otherwise>
@@ -395,6 +399,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:when test="$root/book">2</xsl:when>
         <xsl:when test="$root/article/section|$root/article/worksheet">1</xsl:when>
         <xsl:when test="$root/article">0</xsl:when>
+        <xsl:when test="$root/slideshow">0</xsl:when>
         <xsl:when test="$root/letter">0</xsl:when>
         <xsl:when test="$root/memo">0</xsl:when>
         <xsl:otherwise>
@@ -423,6 +428,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="$root/article/section|$root/article/worksheet">3</xsl:when>
             <xsl:when test="$root/article">0</xsl:when>
             <xsl:when test="$root/letter">0</xsl:when>
+            <xsl:when test="$root/slideshow">0</xsl:when>
             <xsl:when test="$root/memo">0</xsl:when>
             <xsl:otherwise>
                 <xsl:message>MBX:BUG: New document type for maximum level defaults</xsl:message>
@@ -1431,7 +1437,7 @@ Book (with parts), "section" at level 3
  <!-- Specific top-level divisions -->
 <!-- article/frontmatter, article/backmatter are faux divisions, but   -->
 <!-- will function as a terminating condition in recursive count below -->
-<xsl:template match="book|article|letter|memo|article/frontmatter|article/backmatter" mode="level">
+<xsl:template match="book|article|slideshow|letter|memo|article/frontmatter|article/backmatter" mode="level">
     <xsl:value-of select="0"/>
 </xsl:template>
 
@@ -1460,7 +1466,7 @@ Book (with parts), "section" at level 3
 <!-- chapters of books, sections of articles, or in the case of         -->
 <!-- solutions or references, children of an appendix.                  -->
 
-<xsl:template match="colophon|biography|dedication|acknowledgement|preface|chapter|section|subsection|subsubsection|appendix|index|colophon|exercises|reading-questions|references|solutions|glossary|worksheet" mode="level">
+<xsl:template match="colophon|biography|dedication|acknowledgement|preface|chapter|section|subsection|subsubsection|slide|appendix|index|colophon|exercises|reading-questions|references|solutions|glossary|worksheet" mode="level">
     <xsl:variable name="level-above">
         <xsl:apply-templates select="parent::*" mode="level"/>
     </xsl:variable>
@@ -1515,6 +1521,7 @@ Book (with parts), "section" at level 3
         <!-- An article is rooted just above sections, -->
         <!-- on par with chapters of a book            -->
         <xsl:when test="$root/article">1</xsl:when>
+        <xsl:when test="$root/slideshow">1</xsl:when>
         <xsl:when test="$root/letter">1</xsl:when>
         <xsl:when test="$root/memo">1</xsl:when>
         <xsl:otherwise>
