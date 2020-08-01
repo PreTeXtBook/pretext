@@ -61,6 +61,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='volume'><xsl:text>Volume</xsl:text></localization>
     <localization string-id='book'><xsl:text>Boek</xsl:text></localization>
     <localization string-id='article'><xsl:text>Artikel</xsl:text></localization>
+    <!-- <localization string-id='slideshow'><xsl:text>Slideshow</xsl:text></localization> -->
     <localization string-id='letter'><xsl:text>Brief</xsl:text></localization>
     <localization string-id='memo'><xsl:text>Memo</xsl:text></localization>
     <localization string-id='presentation'><xsl:text>Aanbieding</xsl:text></localization>
@@ -72,6 +73,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='section'><xsl:text>Afdeling</xsl:text></localization>
     <localization string-id='subsection'><xsl:text>Onderafdeling</xsl:text></localization>
     <localization string-id='subsubsection'><xsl:text>Onderonderafdeling</xsl:text></localization>
+    <!-- A "slide" is a screenful of a presentation (Powerpoint, Beamer) -->
+    <!-- <localization string-id='slide'><xsl:text>Slide</xsl:text></localization> -->
     <localization string-id='introduction'><xsl:text>Inleiding</xsl:text></localization>
     <localization string-id='conclusion'><xsl:text>Slot</xsl:text></localization>
     <localization string-id='exercises'><xsl:text>Oefeninge</xsl:text></localization>
