@@ -3992,8 +3992,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <!-- intercept a reading question, when hosted on Runestone -->
         <xsl:when test="ancestor::reading-questions and $b-host-runestone">
-            <div class="runestone">
-                <div data-component="shortanswer" class="journal alert alert-success" data-optional="" data-mathjax="">
+            <div class="runestone outer-exercise-wrapper">
+                <div data-component="shortanswer" class="journal alert alert-success exercise-wrapper" data-optional="" data-mathjax="">
                     <xsl:attribute name="id">
                         <xsl:apply-templates select="." mode="html-id"/>
                     </xsl:attribute>
@@ -9190,6 +9190,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:element name="div">
         <xsl:attribute name="id">
             <xsl:value-of select="@ww-id"/>
+        </xsl:attribute>
+        <xsl:attribute name="class">
+            <xsl:text>exercise-wrapper</xsl:text>
         </xsl:attribute>
         <xsl:attribute name="data-domain">
             <xsl:value-of select="$webwork-domain"/>
