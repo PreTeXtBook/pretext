@@ -101,6 +101,24 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:otherwise>
             </xsl:choose>
 
+            <!-- Explicitly enable AMS-style inline \(...\),      -->
+            <!-- and explicitly disable TeX-style inline $...$    -->
+            <!-- The main HTML conversion does not do anything    -->
+            <!-- special for display math, so we disable any such -->
+            <!-- markup, since we use environments exclusively.   -->
+            <!-- N.B. default HTML adds a "zero-width" space into -->
+            <!-- a \( authored in a non-math context.             -->
+            <!-- N.B. This may need to be changed for MathJax 3   -->
+            <xsl:comment> Coordinate control of MathJax delimiters </xsl:comment>
+            <script type="text/x-mathjax-config">
+                <xsl:text>    MathJax.Hub.Config({&#xa;</xsl:text>
+                <xsl:text>        tex2jax: {&#xa;</xsl:text>
+                <xsl:text>            inlineMath:  [['\\(','\\)']],&#xa;</xsl:text>
+                <xsl:text>            displayMath: [],&#xa;</xsl:text>
+                <xsl:text>        }&#xa;</xsl:text>
+                <xsl:text>    });&#xa;</xsl:text>
+            </script>
+
           <!--  Some style changes from regular pretext-html -->
           <style>
 ul {
