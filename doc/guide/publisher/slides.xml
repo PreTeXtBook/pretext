@@ -34,6 +34,14 @@
             See <xref ref="revealjs-resources-options"/> for the necessary details.
         </p>
         <p>
+            Reveal.js will render <latex/> syntax with MathJax,
+            entirely similar to how MathJax is used in the <pretext/> conversion to <init>HTML</init>.
+            This is accomplished with the Reveal.js <c>math</c> plugin, which is loaded automatically as part of your output.  When you specify that resources come from a CDN, then this plugin will also get MathJax from a CDN.
+            When you specify that resources are available locally (your hard disk, your website),
+            then this plugin simply expects that you have installed a complete copy of MathJax.
+            So a local version may only be practical if you are careful not to include <em>any</em> mathematics in your document.
+        </p>
+        <p>
             Reveal.js has various options of the visibility of arrows a presenter can click on in order to move through a presentation.
             The visibility of these can be controlled via options in the publisher file.  See <xref ref="revealjs-control-options"/>.
         </p>

@@ -174,7 +174,7 @@
             <title>Reveal.js Resources</title>
             <idx><h>publisher options</h><h>reveal.js resources</h></idx>
 
-            <p>You may wish to host the reveal.js CSS and javascript files locally or obtain them online.</p>
+            <p>You may wish to host the reveal.js CSS and javascript files locally or obtain them online.  Be sure to read in  <xref ref="publisher-revealjs"/> about the necessity of providing the complete MathJax library <xref ref="publisher-revealjs"/> if your document has mathematics and you opt for local resources.</p>
 
             <p>The<cd>
                 <cline>/publication/revealjs/resources</cline>
