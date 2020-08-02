@@ -264,20 +264,20 @@ dfn {
                 <xsl:apply-templates select="/pretext/slideshow" mode="subtitle" />
             </h2>
         </xsl:if>
+        <!-- we assume at least one author, these are in a table -->
+        <xsl:apply-templates select="titlepage" mode="author-list"/>
         <!-- optional "event" -->
-        <xsl:if test="event">
+        <xsl:if test="titlepage/event">
             <h4>
-                <xsl:apply-templates select="event"/>
+                <xsl:apply-templates select="titlepage/event"/>
             </h4>
         </xsl:if>
         <!-- optional "date" -->
-        <xsl:if test="date">
+        <xsl:if test="titlepage/date">
             <h4>
-                <xsl:apply-templates select="date"/>
+                <xsl:apply-templates select="titlepage/date"/>
             </h4>
         </xsl:if>
-        <!-- we assume at least one author, these are in a table -->
-        <xsl:apply-templates select="titlepage" mode="author-list"/>
     </section>
     <xsl:apply-templates select="abstract"/>
   </section>
