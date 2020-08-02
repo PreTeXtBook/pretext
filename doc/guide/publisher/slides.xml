@@ -42,6 +42,15 @@
             So a local version may only be practical if you are careful not to include <em>any</em> mathematics in your document.
         </p>
         <p>
+            We are not enthusiastic about <init>PDF</init> as an electronic format.
+            But it might be a good choice as an archival format.
+            So exporting your slideshow to a <init>PDF</init> could be a good choice for a long-term archive.
+            On 2020-08-01 Andrew Rechnitzer suggests the <url href="https://github.com/astefanutti/decktape"><c>decktape</c></url><fn><c>github.com/astefanutti/decktape</c></fn> node (Javascript) program.
+            The <c>reveal</c> plugin works well once you settle on a resolution (the <c>-s</c> option).
+            The <c>generic</c> plugin, along with the default key action (<c>ArrowRight</c>) can capture the behavior of slides built using the <attr>pause</attr> attribute.
+            A local web server can also be employed to serve up the slides, see <xref ref="processing-testing-html"/>.
+        </p>
+        <p>
             Reveal.js has various options of the visibility of arrows a presenter can click on in order to move through a presentation.
             The visibility of these can be controlled via options in the publisher file.  See <xref ref="revealjs-control-options"/>.
         </p>
