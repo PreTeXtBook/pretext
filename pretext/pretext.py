@@ -109,11 +109,6 @@ def mathjax_latex(xml_source, pub_file, out_file, dest_dir, math_format):
         print(xhtml_elt.sub(repl, line), end='')
     os.chdir(owd)
 
-    # if math_format in ['nemeth', 'speech']:
-    #     mjsre_exec = os.path.join(get_ptx_path(), 'script', 'braille', 'mjpage-sre.js')
-    #     mjsre_cmd=[mjsre_exec, math_format, mjintermediate, mjoutput]
-    #     subprocess.run(mjsre_cmd)
-
     # clean up and package MJ representations, font data, etc
     derivedname = get_output_filename(xml_source, out_file, dest_dir, '-' + math_format + '.xml')
     _debug('packaging math as {} from {} into XML file {}'.format(math_format, mjoutput, out_file))
