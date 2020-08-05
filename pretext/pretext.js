@@ -122,7 +122,12 @@ function action(state, code, setup = null) {
     const adaptor = doc.adaptor;
     setup && setup();
     for (const math of doc.math) {
-      code(math, doc, adaptor);
+      try {
+        code(math, doc, adaptor);
+      } catch (err) {
+        const id = adaptor.getAttribute(adaptor.parent(math.start.node), 'id');
+        console.error('Error on item ' + id + ': ' + err.message);
+      }
     }
   }];
 }
@@ -205,6 +210,18 @@ if (argv.braille) {
 }
 
 //
+// Patch MathJax 3.0.5 SVG bug:
+//
+if (mathjax.version === '3.0.5') {
+  const {SVGWrapper} = require('mathjax-full/js/output/svg/Wrapper.js');
+  const CommonWrapper = SVGWrapper.prototype.__proto__;
+  SVGWrapper.prototype.unicodeChars = function (text, variant) {
+    if (!variant) variant = this.variant || 'normal';
+    return CommonWrapper.unicodeChars.call(this, text, variant);
+  }
+}
+
+//
 //  Create an HTML document using the html file and a new TeX input jax
 //
 const html = mathjax.document(htmlfile, {
@@ -235,7 +252,6 @@ if (!argv.svg) {
   //
   //  Output the resulting document
   //
-  console.log('<!DOCTYPE html>');
   console.log(adaptor.outerHTML(adaptor.root(html.document)));
 })()
   .catch((err) => console.error(err));
