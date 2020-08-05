@@ -71,23 +71,22 @@ def mathjax_latex(xml_source, pub_file, out_file, dest_dir, math_format):
 
     # process with  mjpage  executable from  mathjax-node-page  package
     mjpage_exec = get_executable('mjpage')
-    if math_format == 'svg':
-        # kill caching to keep glyphs within SVG
-        # versus having a font cache at the end
-        mjpage_cmd = [mjpage_exec, '--output', 'SVG', '--noGlobalSVG', 'true']
-    elif math_format in ['mml', 'kindle', 'nemeth', 'speech']:
-        # MathML is precursor for SRE outputs
-        mjpage_cmd = [mjpage_exec, '--output', 'MML']
-    else:
+    output = {
+        'svg': 'svg',
+        'kindle': 'mathml',
+        'nemeth': 'braille',
+        'speech': 'speech',
+        'mml': 'mathml'
+    }
+    try:
+        mj_var = output[math_format]
+    except KeyError:
         raise ValueError('PTX:ERROR: incorrect format ("{}") for MathJax conversion'.format(math_format))
-
-    infile = open(mjinput)
-    if math_format in ['nemeth', 'speech']:
-        # braille is a two-pass pipeline
-        outfile = open(mjintermediate, 'w')
-    else:
-        outfile = open(mjoutput, 'w')
-    subprocess.run(mjpage_cmd, stdin=infile, stdout=outfile)
+    mj_option = '--' + mj_var
+    mj_tag = 'mj-' + mj_var
+    mjpage_cmd = [mjpage_exec, mj_option, mjinput]
+    outfile = open(mjoutput, 'w')
+    subprocess.run(mjpage_cmd, stdout=outfile)
 
     # the 'mjpage' executable converts spaces inside of a LaTeX
     # \text{} into &nbsp; entities, which is a good idea, and
@@ -105,18 +104,10 @@ def mathjax_latex(xml_source, pub_file, out_file, dest_dir, math_format):
     # to kill the "extra" newline that print() creates
     owd = os.getcwd()
     os.chdir(tmp_dir)
-    if  math_format in ['nemeth', 'speech']:
-        html_file = mjintermediate
-    else:
-        html_file = mjoutput
+    html_file = mjoutput
     for line in fileinput.input(html_file, inplace=1):
         print(xhtml_elt.sub(repl, line), end='')
     os.chdir(owd)
-
-    if math_format in ['nemeth', 'speech']:
-        mjsre_exec = os.path.join(get_ptx_path(), 'script', 'braille', 'mjpage-sre.js')
-        mjsre_cmd=[mjsre_exec, math_format, mjintermediate, mjoutput]
-        subprocess.run(mjsre_cmd)
 
     # clean up and package MJ representations, font data, etc
     derivedname = get_output_filename(xml_source, out_file, dest_dir, '-' + math_format + '.xml')
