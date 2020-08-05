@@ -5507,7 +5507,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="src">
             <xsl:value-of select="$svg-filename" />
         </xsl:attribute>
-        <!-- replace with a CSS class -->
+        <!-- For accessibility use an ARIA role, e.g so screen  -->
+        <!-- readers do not try to read the elements of the SVG -->
+        <!-- NB: if we write SVG into the page, put this        -->
+        <!-- attribute onto the "svg" element                   -->
+        <xsl:attribute name="role">
+            <xsl:text>img</xsl:text>
+        </xsl:attribute>
+        <!-- replace with a CSS class                           -->
         <xsl:attribute name="style">
             <xsl:text>width: 100%; height: auto;</xsl:text>
         </xsl:attribute>
