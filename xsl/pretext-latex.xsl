@@ -1337,12 +1337,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="environment"/>
     </xsl:for-each>
     <!-- FIGURE-LIKE -->
-    <!-- subcaptioned are separate -->
+    <!-- subcaptioned are separate and next, condition on "figure"   -->
+    <!-- ancestor to not mistakenly pick up a 'subtable' (say) here  -->
+    <!-- instead of a 'plain' table (which was once a bug)           -->
     <xsl:variable name="figure-reps" select="
-        ($document-root//figure)[1]|
-        ($document-root//table)[1]|
-        ($document-root//listing)[1]|
-        ($document-root//list)[1]"/>
+        ($document-root//figure[not(ancestor::figure)])[1]|
+        ($document-root//table[not(ancestor::figure)])[1]|
+        ($document-root//listing[not(ancestor::figure)])[1]|
+        ($document-root//list[not(ancestor::figure)])[1]"/>
     <xsl:if test="$figure-reps">
         <xsl:text>%%&#xa;</xsl:text>
         <xsl:text>%% tcolorbox, with styles, for FIGURE-LIKE&#xa;</xsl:text>
