@@ -1581,7 +1581,28 @@ the xsltproc executable.
                 <mrow>{\mathcal L}(y'')(s)^{5} = s^2 {\mathcal L}(y)(s) - sy(0) - y'(0)= s^2 Y(s) - sy(0) - y'(0)</mrow>
             </md>.</p>
 
-            <p>Tables can get quite complex.  Simple ones are simpler, such as this example of numerical computations for Euler's method.</p>
+            <p>Tables can get quite complex.  Simple ones are simpler, such as this example of numerical computations for Euler's method in just a bit.</p>
+
+            <p>But first we make a figure with two very simple tables next to each other.  This causes the very first instance of <tag>table</tag> to actually be a <q>subtable</q>, which exposes a bug provoked by Emiliano Vega and fixed around 2020-08-06. (So we have to place this early to create the same behavior that exposed the bug.)</p>
+
+            <figure>
+                <caption>Buggy sub-tables</caption>
+
+                <sidebyside>
+                    <table>
+                        <title>First</title>
+                        <tabular>
+                            <row><cell>One</cell></row>
+                        </tabular>
+                    </table>
+                    <table>
+                        <title>Second</title>
+                        <tabular>
+                            <row><cell>Two</cell></row>
+                        </tabular>
+                    </table>
+                </sidebyside>
+            </figure>
 
             <table xml:id="table-euler1">
                 <title>Euler's approximation for Duffing's Equation with <m>h = 0.2</m></title>
