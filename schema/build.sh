@@ -73,17 +73,6 @@ trang -I rnc -O rng pretext.rnc pretext.rng
 # "abstract groups" make schema browser too obtuse
 trang -o disable-abstract-elements -I rnc -O xsd pretext.rnc pretext.xsd
 
-# ***************
-# Rule generation
-# ***************
-
-# Generate author's stylesheet using PreTeXt
-# extensions to Schematron's main tool,
-# Note: The stylesheet used here has the hard-coded path:
-# /home/rob/mathbook/schematron/trunk/schematron/code/iso_schematron_skeleton_for_xslt1.xsl
-xsltproc ${MB}/schema/iso_schematron_cli.xsl ${MB}/schema/pretext.sch > ${MB}/schema/pretext-schematron.xsl
-
-
 # ************************
 # Documentation Generation
 # ************************
