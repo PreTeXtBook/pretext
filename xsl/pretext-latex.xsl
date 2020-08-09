@@ -8764,6 +8764,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
 </xsl:template>
 
+<xsl:template match="sidebyside" mode="leave-vertical-mode">
+    <xsl:if test="not(preceding-sibling::*[not(&SUBDIVISION-METADATA-FILTER;)]) and parent::paragraphs">
+        <xsl:text>\leavevmode\par\noindent%&#xa;</xsl:text>
+    </xsl:if>
+</xsl:template>
+
 <xsl:template match="stage" mode="leave-vertical-mode">
     <xsl:if test="not(preceding-sibling::stage)">
         <xsl:text>\leavevmode\par\noindent%&#xa;</xsl:text>
@@ -8912,6 +8918,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- headings, panels, captions.  Then put "\nopagebreak"       -->
     <!-- into the definition, so it is "hidden" and not in the body -->
 
+    <xsl:apply-templates select="." mode="leave-vertical-mode"/>
     <xsl:text>\begin{sidebyside}{</xsl:text>
     <xsl:value-of select="$number-panels" />
     <xsl:text>}{</xsl:text>
