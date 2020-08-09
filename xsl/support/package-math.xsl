@@ -20,20 +20,24 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 *********************************************************************-->
 
 <!-- This stylesheet expects the XHTML built by the  extract-math.xsl -->
-<!-- stylesheet, which looks like a standard web page (and may be     -->
-<!-- viewable as such).  It gets repackaged with PreTeXt internal     -->
-<!-- elements (in a different namespace) that looks like              -->
+<!-- stylesheet, to have been processed by MathJax 3 and Speech Rule  -->
+<!-- Engine (SRE).  The result, which as an organization created by   -->
+<!-- the script from mathJax is here repackaged with PreTeXt          -->
+<!-- internal elements (in a different namespace).                    -->
+<!-- The output is organized as follows:                              -->
 <!--                                                                  -->
 <!-- pi:math-representations                                          -->
-<!--   pi:math                                                        -->
-<!--   ...                                                            -->
-<!--   pi:math                                                        -->
-<!--   svg/defs                                                       -->
+<!--     pi:math                                                      -->
+<!--     ...                                                          -->
+<!--     pi:math                                                      -->
+<!--     svg/defs                                                     -->
 <!--                                                                  -->
 <!-- The multiple  pi:math  elements have                             -->
 <!--   @id: matches the id of its progenitor in the source            -->
 <!--   @context: element of progenitor (m|me|men|md|mdn)              -->
-<!--   content: an SVG version                                        -->
+<!--       div: one to four, with classes indicating content          -->
+<!--           MathML and/or SVG (structured)                         -->
+<!--           braille, speech (raw content)                          -->
 <!--                                                                  -->
 <!-- The final element is a font cache, which                         -->
 <!-- has the @id attribute value "font-data"                          -->
@@ -74,14 +78,45 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </pi:math-representations>
 </xsl:template>
 
-<!-- Copy representation out of an extra div/span -->
-<!-- The div carries @id and @context to preserve -->
-<xsl:template match="div/span">
+<!-- Replace PreTeXt "div" w/ location info plus MJ "mjx-data" -->
+<!-- container by a consolidated PreteXt "pi:math" container   -->
+<!-- with location info                                        -->
+<xsl:template match="div/mjx-data">
     <xsl:text>&#xa;&#xa;</xsl:text>
     <pi:math>
+        <!-- duplicate location, context info -->
         <xsl:copy-of select="../@*"/>
-        <xsl:copy-of select="node()"/>
+        <!-- pickup whatever gets produced by MJ/SRE script with    -->
+        <!-- its own containerization: MathML, SVG, braille, speech -->
+        <xsl:apply-templates select="math:math|svg:svg|mjx-braille|mjx-speech"/>
     </pi:math>
+</xsl:template>
+
+<!-- Now duplicate actual representations (structured or -->
+<!-- raw content), always wrapped in an identifying div  -->
+
+<xsl:template match="math:math">
+    <div class="mathml">
+        <xsl:copy-of select="."/>
+    </div>
+</xsl:template>
+
+<xsl:template match="svg:svg">
+    <div class="svg">
+        <xsl:copy-of select="."/>
+    </div>
+</xsl:template>
+
+<xsl:template match="mjx-braille">
+    <div class="braille">
+        <xsl:copy-of select="node()"/>
+    </div>
+</xsl:template>
+
+<xsl:template match="mjx-speech">
+    <div class="speech">
+        <xsl:copy-of select="node()"/>
+    </div>
 </xsl:template>
 
 <!-- SVG font (glyphs) cache -->

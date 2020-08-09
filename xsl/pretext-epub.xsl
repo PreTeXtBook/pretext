@@ -974,18 +974,18 @@ width: 100%
         <!-- Finally, drop a "svg" element, "math" element, or ASCII speech -->
         <xsl:choose>
             <xsl:when test="$math.format = 'svg'">
-                <xsl:apply-templates select="$math/svg:svg" mode="svg-edit"/>
+                <xsl:apply-templates select="$math/div[@class = 'svg']/svg:svg" mode="svg-edit"/>
             </xsl:when>
             <xsl:when test="$math.format = 'mml'">
-                <xsl:copy-of select="$math/math:math"/>
+                <xsl:copy-of select="$math/div[@class = 'mathml']/math:math"/>
             </xsl:when>
             <!-- Kindle does best with MathML format -->
             <xsl:when test="$b-kindle">
-                <xsl:copy-of select="$math/math:math"/>
+                <xsl:copy-of select="$math/div[@class = 'mathml']/math:math"/>
             </xsl:when>
             <!-- 2020-07-17: reprs needed a new "span.speech" wrapper -->
             <xsl:when test="$math.format = 'speech'">
-                <xsl:value-of select="$math/span[@class = 'speech']"/>
+                <xsl:value-of select="$math/div[@class = 'speech']"/>
             </xsl:when>
         </xsl:choose>
     </span>

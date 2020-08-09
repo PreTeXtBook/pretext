@@ -520,13 +520,8 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="id">
         <xsl:apply-templates select="." mode="visible-id"/>
     </xsl:variable>
-    <!-- And the braille string itself.  We remove ASCII space  -->
-    <!-- which is present as a testing artifact.  Remove later. -->
-    <!-- Real spaces are Unicode braille blank pattern (?),     -->
-    <!-- U+2800, while testing spaces are ASCII spaces, U+0020. -->
-    <!-- 2020-07-17: reprs needed a new "span.speech" wrapper   -->
-    <xsl:variable name="spaced-braille" select="$math-repr/pi:math[@id = $id]/span[@class = 'speech']"/>
-    <xsl:variable name="braille" select="translate($spaced-braille, '&#x20;', '')"/>
+    <!-- Real spaces are Unicode braille blank pattern U+2800 -->
+    <xsl:variable name="braille" select="$math-repr/pi:math[@id = $id]/div[@class = 'braille']"/>
     <!-- We investigate actual source for very simple math   -->
     <!-- (one-letter variable names in Latin letters), so we -->
     <!-- process the content (which could have "xref", etc)  -->
