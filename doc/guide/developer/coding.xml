@@ -40,7 +40,7 @@
             <li>Use <tag>xsl:message</tag> to communicate with authors and publishers as described above in <xref ref="developer-coding"/> while negotiating their input used to control their content.</li>
             <li>Otherwise, during actual processing, use <tag>xsl:message</tag> <em>only</em> when there is the potential for a real disaster in the output, such as a <latex/> file that will not compile at all, meaning more than simple recoverable errors.</li>
             <li>Do not duplicate parent-child relationships that are expressed in the schema.  There are good validation tools for that job.</li>
-            <li>Consider using our auxiliary stylesheet (2020-05-28: being born soon to replace Schematron) for detecting more complicated relationships that the schema cannot, or does not, detect.</li>
+            <li>Consider using our auxiliary <q>validation-plus</q> stylesheet for detecting more complicated relationships that the schema cannot, or does not, detect.</li>
             <li>See the advice above (<xref ref="developer-coding"/>) about checking author and publisher input and providing a <q>safe</q> result so there is no danger of creating broken output and thus less temptation to use <tag>xsl:message</tag> at all.</li>
             <li>Reserve adding <c>terminate="yes"</c> for extreme situations where there is absolutely no hope of recovery.  This should be a last resort.</li>
             <li>Place <c>terminate="no"</c> (the default) in your code only when some future removal of deprecated code means this message will transition to <c>terminate="yes"</c>.  Include clear code comments describing the situation.</li>
