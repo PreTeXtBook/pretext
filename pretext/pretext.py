@@ -64,13 +64,12 @@ def mathjax_latex(xml_source, pub_file, out_file, dest_dir, math_format):
         params['publisher'] = pub_file
     xsltproc(extraction_xslt, xml_source, mjinput, None, params)
 
-    # shell out to process with MathJax
-    # mjpage can return "innerHTML" w/ --fragment, which we
-    # could wrap into our own particular version of mjoutput
+    # shell out to process with MathJax/SRE node program
     _debug('calling MathJax to convert LaTeX from {} into raw representations in {}'.format(mjinput, mjoutput))
 
-    # process with  mjpage  executable from  mathjax-node-page  package
-    mjpage_exec = get_executable('mjpage')
+    # process with  pretext.js  executable from  MathJax (Davide Cervone, Volker Sorge)
+    node_exec = get_executable('node')
+    mjsre_page = os.path.join(get_ptx_path(), 'script', 'mjsre', 'mj-sre-page.js')
     output = {
         'svg': 'svg',
         'kindle': 'mathml',
@@ -84,7 +83,7 @@ def mathjax_latex(xml_source, pub_file, out_file, dest_dir, math_format):
         raise ValueError('PTX:ERROR: incorrect format ("{}") for MathJax conversion'.format(math_format))
     mj_option = '--' + mj_var
     mj_tag = 'mj-' + mj_var
-    mjpage_cmd = [mjpage_exec, mj_option, mjinput]
+    mjpage_cmd = [node_exec, mjsre_page, mj_option, mjinput]
     outfile = open(mjoutput, 'w')
     subprocess.run(mjpage_cmd, stdout=outfile)
 
