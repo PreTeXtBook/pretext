@@ -6203,9 +6203,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-has-answer" />
     <xsl:param name="b-has-solution" />
 
-    <xsl:if test="not(preceding-sibling::stage)">
-        <text>\leavevmode\par\noindent%&#xa;</text>
-    </xsl:if>
+    <xsl:apply-templates select="." mode="leave-vertical-mode"/>
     <!-- e.g., Part 2. -->
     <xsl:text>\textbf{</xsl:text>
     <xsl:call-template name="type-name">
@@ -6247,9 +6245,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
 
     <xsl:if test="not($dry-run = '')">
-        <xsl:if test="not(preceding-sibling::stage)">
-            <text>\leavevmode\par\noindent%&#xa;</text>
-        </xsl:if>
+        <xsl:apply-templates select="." mode="leave-vertical-mode"/>
         <!-- e.g., Part 2. -->
         <xsl:text>\textbf{</xsl:text>
         <xsl:call-template name="type-name">
@@ -8577,9 +8573,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- thing after a heading.  This could be excessive   -->
     <!-- if the cell is empty, but should not be harmful.  -->
     <!-- NB: maybe this should not even be called if all empty -->
-    <xsl:if test="not(preceding-sibling::*[not(&SUBDIVISION-METADATA-FILTER;)])">
-        <xsl:call-template name="leave-vertical-mode" />
-    </xsl:if>
+    <xsl:apply-templates select="." mode="leave-vertical-mode"/>
     <xsl:if test="$in!=''">
         <xsl:text>\begin{sageinput}&#xa;</xsl:text>
         <xsl:value-of select="$in" />
@@ -8764,8 +8758,22 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Potential alternate solution: write a leading "empty" \mbox{}    -->
 <!-- http://tex.stackexchange.com/questions/171220/                   -->
 <!-- include-non-floating-graphic-in-a-theorem-environment            -->
-<xsl:template name="leave-vertical-mode">
-    <xsl:text>\leavevmode%&#xa;</xsl:text>
+<xsl:template match="sage" mode="leave-vertical-mode">
+    <xsl:if test="not(preceding-sibling::*[not(&SUBDIVISION-METADATA-FILTER;)])">
+        <xsl:text>\leavevmode%&#xa;</xsl:text>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="sidebyside" mode="leave-vertical-mode">
+    <xsl:if test="not(preceding-sibling::*[not(&SUBDIVISION-METADATA-FILTER;)]) and parent::paragraphs">
+        <xsl:text>\leavevmode\par\noindent%&#xa;</xsl:text>
+    </xsl:if>
+</xsl:template>
+
+<xsl:template match="stage" mode="leave-vertical-mode">
+    <xsl:if test="not(preceding-sibling::stage)">
+        <xsl:text>\leavevmode\par\noindent%&#xa;</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <xsl:template match="figure|table|list|listing" mode="environment-name">
@@ -8910,6 +8918,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- headings, panels, captions.  Then put "\nopagebreak"       -->
     <!-- into the definition, so it is "hidden" and not in the body -->
 
+    <xsl:apply-templates select="." mode="leave-vertical-mode"/>
     <xsl:text>\begin{sidebyside}{</xsl:text>
     <xsl:value-of select="$number-panels" />
     <xsl:text>}{</xsl:text>

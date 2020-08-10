@@ -8165,7 +8165,7 @@ the xsltproc executable.
             <subsection>
                 <title>Testing a Side-By-Side First</title>
 
-                <p>A <tag>sidebyside</tag> that appears first within some other container can wreak havoc in <latex /> output.  Below we have this situation twice, once in an <tag>activity</tag>, then in an <tag>example</tag>.</p>
+                <p>A <tag>sidebyside</tag> that appears first within some other container can wreak havoc in <latex /> output.  Below we have this situation twice, once in an <tag>activity</tag>, then in an <tag>example</tag>, then in a <tag>paragraphs</tag>.</p>
 
                 <activity>
                     <statement>
@@ -8202,6 +8202,22 @@ the xsltproc executable.
                         </sbsgroup>
                     </statement>
                 </example>
+
+                <paragraphs>
+                    <title>First Child of a Paragraphs</title>
+                    <sidebyside>
+                        <tabular>
+                            <row>
+                                <cell>A</cell>
+                                <cell>B</cell>
+                            </row>
+                            <row>
+                                <cell>C</cell>
+                                <cell>D</cell>
+                            </row>
+                        </tabular>
+                    </sidebyside>
+                </paragraphs>
 
             </subsection>
 
