@@ -1181,6 +1181,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- TODO: condition of figure/*/figure-like, or $subfigure-reps -->
     <xsl:text>%% A faux tcolorbox whose only purpose is to provide common numbering&#xa;</xsl:text>
     <xsl:text>%% facilities for 2D displays which are subnumbered as part of a "sidebyside"&#xa;</xsl:text>
+    <!-- faux subdisplay requires manipulating low-level counters -->
+    <!-- TODO: condition on presence of (plain) 2-D displays to limit use? -->
+    <xsl:text>\makeatletter&#xa;</xsl:text>
     <xsl:text>\newtcolorbox[auto counter</xsl:text>
     <!-- control the levels of the numbering -->
     <!-- global (no periods) is the default  -->
@@ -1195,7 +1198,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:choose>
     <xsl:text>, number freestyle={\noexpand\thetcb@cnt@block(\noexpand\alph{\tcbcounter})}</xsl:text>
     <xsl:text>]{subdisplay}{}&#xa;</xsl:text>
-    <!-- Groups of environments/blocks -->
+    <!-- faux subdisplay requires manipulating low-level counters -->
+    <xsl:text>\makeatother&#xa;</xsl:text>
+   <!-- Groups of environments/blocks -->
     <!-- Variables hold exactly one node of each type in use -->
     <!-- "environment" template constructs...environments -->
     <!-- THEOREM-LIKE -->
@@ -2939,6 +2944,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>style/.style={</xsl:text>
     <xsl:apply-templates select="." mode="tcb-style"/>
     <xsl:text>} }&#xa;</xsl:text>
+    <!-- subnumbered version requires manipulating low-level counters -->
+    <xsl:if test="$b-subcaptioned">
+        <xsl:text>\makeatletter&#xa;</xsl:text>
+    </xsl:if>
     <!-- create and configure the environment/tcolorbox -->
     <xsl:text>\newtcolorbox</xsl:text>
     <xsl:text>[</xsl:text>
@@ -3037,6 +3046,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:value-of select="$environment-name"/>
     <xsl:text>style, }&#xa;</xsl:text>
     <!-- end: options -->
+    <!-- subnumbered version requires manipulating low-level counters -->
+    <xsl:if test="$b-subcaptioned">
+        <xsl:text>\makeatother&#xa;</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <!-- ########################## -->
