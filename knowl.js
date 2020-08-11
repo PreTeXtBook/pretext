@@ -35,6 +35,8 @@ var knowl_id_counter = 0;
 
 var knowl_focus_stack_uid = [];
 var knowl_focus_stack = [];
+
+var sagecellEvalName = "evaluate";
  
 function knowl_click_handler($el) {
   // the knowl attribute holds the id of the knowl
@@ -172,7 +174,7 @@ function knowl_click_handler($el) {
               MathJax.Hub.Queue(['Typeset', MathJax.Hub, $output.get(0)]);
 // not sure of the use case for this:
  $(".knowl-output .hidden-sagecell-sage").attr("class", "sagecell-sage");
- sagecell.makeSagecell({inputLocation: ".sagecell-sage"});
+ sagecell.makeSagecell({inputLocation: ".sagecell-sage",  linked: true, evalButtonText: sagecellEvalName });
     }
      });
     };
@@ -211,7 +213,7 @@ function knowl_click_handler($el) {
         }]);
 // if this is before the MathJax, big problems
 $(".knowl-output .hidden-sagecell-sage").attr("class", "sagecell-sage");
-sagecell.makeSagecell({inputLocation: ".sagecell-sage"});
+sagecell.makeSagecell({inputLocation: ".sagecell-sage",  linked: true, evalButtonText: sagecellEvalName});
       }
   }
 } //~~ end click handler for *[data-knowl] elements
