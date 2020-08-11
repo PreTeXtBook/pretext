@@ -79,9 +79,11 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- These two templates are similar to those of  pretext-html.xsl. -->
 <!-- Primarily the production of cross-reference ("xref") knowls    -->
-<!-- has been removed.                                              -->
+<!-- has been removed.  The pretext-html.xsl template will have     -->
+<!-- done the assembly phase, adjusting $root to point to the       -->
+<!-- in-memory enhanced source.                                     -->
 <xsl:template match="/">
-    <xsl:apply-templates/>
+    <xsl:apply-templates select="$root"/>
 </xsl:template>
 
 <!-- Deprecation warnings are universal analysis of source and parameters   -->
@@ -90,7 +92,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Note that "docinfo" is at the same level and not structural, so killed -->
 <!-- We process structural nodes via chunking routine in xsl/pretext-common.xsl    -->
 <!-- This in turn calls specific modal templates defined elsewhere in this file     -->
-<xsl:template match="/mathbook|/pretext">
+<xsl:template match="/pretext">
     <!-- No point in proceeding without the file of braille   -->
     <!-- representations, and right at the start, so a banner -->
     <!-- warning for those who think this stylesheet alone    -->
