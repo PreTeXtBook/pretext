@@ -306,7 +306,7 @@ def latex_image_conversion(xml_source, pub_file, stringparams, xmlid_root, data_
 ################################
 
 def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_params, dest_dir):
-    import subprocess, os.path, xml.dom.minidom
+    import subprocess, os.path
     import sys # version_info
     import urllib.parse # urlparse()
     import re     # regular expressions for parsing
@@ -652,8 +652,8 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
         if badness:
             print(badness_msg.format(problem_identifier, seed[problem], badness_tip))
             static.set('failure',badness_type)
-            statement = xml.etree.SubElement(static, 'statement')
-            p = xml.etree.SubElement(statement, 'p')
+            statement = ET.SubElement(static, 'statement')
+            p = ET.SubElement(statement, 'p')
             p.text = badness_msg.format(problem_identifier, seed[problem], badness_tip)
             continue
 
