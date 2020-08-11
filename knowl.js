@@ -36,7 +36,7 @@ var knowl_id_counter = 0;
 var knowl_focus_stack_uid = [];
 var knowl_focus_stack = [];
 
-var sagecellEvalName = "evaluate";
+var sagecellEvalName = "Evaluate";
  
 function knowl_click_handler($el) {
   // the knowl attribute holds the id of the knowl
