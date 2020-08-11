@@ -246,7 +246,7 @@ def main():
         elif args.format == 'latex':
             ptx.latex(xml_source, publisher_file, stringparams, out_file, dest_dir)
         elif args.format == 'braille':
-            ptx.braille(xml_source, publisher_file, out_file, dest_dir)
+            ptx.braille(xml_source, publisher_file, stringparams, out_file, dest_dir)
         elif args.format == 'epub-svg':
             ptx.epub(xml_source, publisher_file, out_file, dest_dir, 'svg')
         elif args.format == 'epub-mml':

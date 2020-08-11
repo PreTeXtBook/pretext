@@ -1094,7 +1094,7 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
 # Conversion to Braille
 #######################
 
-def braille(xml_source, pub_file, out_file, dest_dir):
+def braille(xml_source, pub_file, stringparams, out_file, dest_dir):
     """Produce a complete document in BRF format ( = Braille ASCII, plus formatting control)"""
     import os.path # join()
     import subprocess # run()
@@ -1121,11 +1121,10 @@ def braille(xml_source, pub_file, out_file, dest_dir):
 
     msg = 'converting source ({}) and clean representations ({}) into liblouis precursor XML file ({})'
     _debug(msg.format(xml_source, math_representations, liblouis_xml))
-    params = {}
-    params['mathfile'] = math_representations
+    stringparams['mathfile'] = math_representations
     if pub_file:
-        params['publisher'] = pub_file
-    xsltproc(braille_xslt, xml_source, None, tmp_dir, params)
+        stringparams['publisher'] = pub_file
+    xsltproc(braille_xslt, xml_source, None, tmp_dir, stringparams)
 
     liblouis_cfg = os.path.join(get_ptx_path(), 'script', 'braille', 'pretext-liblouis.cfg')
     final_brf = get_output_filename(xml_source, out_file, dest_dir, '.brf')
