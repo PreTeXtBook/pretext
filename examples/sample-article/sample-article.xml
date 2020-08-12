@@ -666,7 +666,10 @@ the xsltproc executable.
 
                 <p>For testing purposes, there is a simple bare Sage Cell here.</p>
                 <sage>
-                    <input>2+2</input>
+                    <input>
+                    c = 832
+                    c
+                    </input>
                 </sage>
 
                 <example permid="mNo" xml:id="example-mysterious">
@@ -679,7 +682,7 @@ the xsltproc executable.
                         <input>2+2</input>
                     </sage>
 
-                    <p>We test a Sage cell inside a knowl, which should set the value of a variable that will be available to subsequent cells.</p>
+                    <p>We test a Sage cell inside a knowl, which should set the value of a variable that will be available to subsequent cells within the knowl.</p>
 
                     <sage>
                         <input>
@@ -694,9 +697,25 @@ the xsltproc executable.
                         b
                         </input>
                     </sage>
+
+                    <p>Even if you ran the cell at the top of this page, within this knowl the value of the variable <c>c</c> is not known, so the next cell will cause an error.</p>
+
+                    <sage>
+                        <input>
+                        c + 400
+                        </input>
+                    </sage>
                 </example>
 
-                <p>This next Sage cell will not execute properly unless the knowl immediately prior is opened and cells there are executed.</p>
+                <p>The Sage cells on a page will <q>remember</q> results computed elsewhere on the page.  If you rely on this feature, remind your readers to evaluate all the necessary cells and that they perhaps need to be evaluated in a certain order.</p>
+
+                <sage>
+                    <input>
+                    c/2
+                    </input>
+                </sage>
+
+                <p>There are some Sage cells in the previous (knowled) <tag>example</tag>.  The results there are restricted to the knowl.  In other words, the scope of those cells is the knowl.  So if you opened the example and executed the Sage cells there, or if you skipped the example entirely, the next cell should not <q>know</q> the values of those variables and will raise an error.</p>
 
                 <sage>
                     <input>
@@ -704,7 +723,7 @@ the xsltproc executable.
                     </input>
                 </sage>
 
-                <p>We cross-reference the example just prior, <xref ref="example-mysterious" text="type-global" />, to test the simple Sage cell that will now be part of a cross-reference knowl (an external file).</p>
+                <p>We cross-reference the example just prior, <xref ref="example-mysterious" text="type-global" />, to test the simple Sage cells that will now be part of a cross-reference knowl (an external file).</p>
 
                 <claim xml:id="claim-with-cases">
                     <title>An Equivalent Claim</title>
@@ -1277,7 +1296,7 @@ the xsltproc executable.
                 <title>Linking Sage Cells</title>
                 <idx><h>Sage cells</h><h>linking</h></idx>
 
-                <p>Sage cells share their results on a per-webpage basis, so if you move to a new chapter, section, or subsection that happens to be on another webpage, your Sage computations are gone and you start fresh.  But maybe you need some results from elsewhere.  As an author, you can make an exact copy of a cell in another location by placing the code in an external file, which is pure text, freed from any need to format for XML processing.  So, in particular, there is no need to escape ampersands and angle brackets, nor is there employment of the <c>CDATA</c> mechanism.  But the real value is that there is just one version to edit, and any changes will be reflected in both copies.  We demonstrate this in the sample book, since it has the <c>xinclude</c> mechanism in place.  In the chapter on groups, find the section on Sage and then find the discussion of subgroups, and you will find an example of two identical Sage cells produced from one source file.</p>
+                <p>Sage cells share their results on a per-webpage basis, or a per-knowl basis, so if you move to a new chapter, section, or subsection that happens to be on another webpage, your Sage computations are gone and you start fresh.  But maybe you need some results from elsewhere.  As an author, you can make an exact copy of a cell in another location by placing the code in an external file, which is pure text, freed from any need to format for XML processing.  So, in particular, there is no need to escape ampersands and angle brackets, nor is there employment of the <c>CDATA</c> mechanism.  But the real value is that there is just one version to edit, and any changes will be reflected in both copies.  We demonstrate this in the sample book, since it has the <c>xinclude</c> mechanism in place.  In the chapter on groups, find the section on Sage and then find the discussion of subgroups, and you will find an example of two identical Sage cells produced from one source file.</p>
             </subsection>
 
             <subsection>
