@@ -343,6 +343,7 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
     # "run" an assignment for the list of triples of strings
     ww_file = open(ww_filename, 'r')
     problem_dictionaries = ww_file.read()
+    ww_file.close()
     # "run" the dictionaries
     # protect backslashes in LaTeX code
     # globals() necessary for success
@@ -918,6 +919,9 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
         msg = "PTX:ERROR: there was a problem writing a problem to the file: {}\n"
         raise ValueError(msg.format(include_file_name) + root_cause)
 
+    #close session to avoid resource wanrnings
+    session.close()
+
 
 ##############################
 #
@@ -948,7 +952,6 @@ def youtube_thumbnail(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     thumb_list = id_file.readline()
     thumbs = eval(thumb_list)
 
-    session = requests.Session()
     for thumb in thumbs:
         url = 'http://i.ytimg.com/vi/{}/default.jpg'.format(thumb[0])
         path = os.path.join(dest_dir, thumb[1] + '.jpg')
@@ -1072,7 +1075,6 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
     problem_list = id_file.readline()
     problems = eval(problem_list)
     xml_header = '<?xml version="1.0" encoding="UTF-8" ?>\n'
-    session = requests.Session()
     for problem in problems:
         url = 'https://www.myopenmath.com/util/mbx.php?id={}'.format(problem)
         path = os.path.join(dest_dir, 'mom-{}.xml'.format(problem))
