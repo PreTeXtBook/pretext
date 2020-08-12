@@ -8049,6 +8049,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- output text, then wraps it for the Sage Cell Server -->
 <!-- TODO: consider showing output in green span (?),    -->
 <!-- presently output is dropped as computable           -->
+<!-- NB: button text is also set as part of knowls code  -->
 <xsl:template match="sage" mode="sage-active-markup">
     <xsl:param name="block-type"/>
     <xsl:param name="language-attribute" />
@@ -10727,7 +10728,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Knowl header -->
 <xsl:template name="knowl">
-<script src="{$html.js.server}/js/lib/knowl.js"></script>
+    <script src="{$html.js.server}/js/lib/knowl.js"></script>
+    <!-- Variables are defined to defaults in knowl.js and  -->
+    <!-- we can override them with new values here          -->
+    <xsl:comment>knowl.js code controls Sage Cells within knowls</xsl:comment>
+    <script>
+        <!-- button text, internationalized -->
+        <xsl:text>sagecellEvalName='</xsl:text>
+        <xsl:call-template name="type-name">
+            <xsl:with-param name="string-id" select="'evaluate'" />
+        </xsl:call-template>
+        <xsl:text> (</xsl:text>
+        <!-- $language-text hard-coded since language  -->
+        <!-- support within knowls is not yet settled -->
+        <xsl:text>Sage</xsl:text>
+        <xsl:text>)</xsl:text>
+        <xsl:text>';&#xa;</xsl:text>
+    </script>
 </xsl:template>
 
 <!-- Header information for favicon -->
