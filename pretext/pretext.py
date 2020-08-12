@@ -343,6 +343,7 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
     # "run" an assignment for the list of triples of strings
     ww_file = open(ww_filename, 'r')
     problem_dictionaries = ww_file.read()
+    ww_file.close()
     # "run" the dictionaries
     # protect backslashes in LaTeX code
     # globals() necessary for success
@@ -917,6 +918,9 @@ def webwork_to_xml(xml_source, pub_file, stringparams, abort_early, server_param
         root_cause = str(e)
         msg = "PTX:ERROR: there was a problem writing a problem to the file: {}\n"
         raise ValueError(msg.format(include_file_name) + root_cause)
+
+    #close session to avoid resource wanrnings
+    session.close()
 
 
 ##############################
