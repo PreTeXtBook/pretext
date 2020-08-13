@@ -6012,6 +6012,18 @@ the xsltproc executable.
                     <video vimeo="27246366" width="80%" preview="images/move.png"/>
                 </figure>
             </subsection>
+
+            <subsection>
+                <title>Captions and Subtitles</title>
+
+                <p>Experimental support for captions and subtitles first.  Look at teh source, which mimics the actual HTML.  The words of the titles and/or subcaptions (there is a difference!) come from a file in <url href="https://en.wikipedia.org/wiki/WebVTT">Web Video Text Tracks</url><fn><c>wikipedia.org/wiki/WebVTT</c></fn> (<init>WEBVVT</init>) format.</p>
+                <figure>
+                    <caption>Big Buck Bunny with subtitles adapted from <url href="https://sites.google.com/site/chrisfoo/subtitles"><c>https://sites.google.com/site/chrisfoo/subtitles</c></url></caption>
+                    <video source="http://clips.vorwaerts-gmbh.de/big_buck_bunny.webm" width="75%" preview="images/big-buck-bunny-frame-one.jpg">
+                        <track kind="subtitles" label="US English" xml:lang="en" source="images/BigBuckBunnyAcapella.vtt"/>
+                    </video>
+                </figure>
+            </subsection>
         </section>
 
         <!--
