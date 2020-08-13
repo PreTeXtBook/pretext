@@ -6332,7 +6332,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
         <!-- failure to perform -->
         <xsl:text>Your browser does not support the &lt;video&gt; tag.</xsl:text>
+        <xsl:apply-templates select="track"/>
     </xsl:element>
+</xsl:template>
+
+
+<!-- This an optional component of an author-hosted video, -->
+<!-- and the markup closely tracks the generated HTML.     -->
+<!-- We do not specify a default (yet).                    -->
+<xsl:template match="track">
+    <track>
+        <xsl:attribute name="label">
+            <xsl:value-of select="@label"/>
+        </xsl:attribute>
+        <xsl:attribute name="kind">
+            <xsl:value-of select="@kind"/>
+        </xsl:attribute>
+        <xsl:attribute name="srclang">
+            <xsl:value-of select="@xml:lang"/>
+        </xsl:attribute>
+        <xsl:attribute name="src">
+            <xsl:value-of select="@source"/>
+        </xsl:attribute>
+    </track>
 </xsl:template>
 
 <!-- HTML5 Media Fragment URI (shared for audio, video)       -->
