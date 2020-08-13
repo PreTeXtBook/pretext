@@ -1947,7 +1947,8 @@ Book (with parts), "section" at level 3
         <xsl:choose>
             <!-- override first -->
             <xsl:when test="@alignat-columns">
-                <xsl:value-of select="@alignat-columns" />
+                <!-- MathJax chokes on spaces here -->
+                <xsl:value-of select="normalize-space(@alignat-columns)" />
             </xsl:when>
             <!-- count ampersands, compute columns -->
             <xsl:otherwise>
