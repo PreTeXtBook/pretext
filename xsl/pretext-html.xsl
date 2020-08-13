@@ -8122,18 +8122,70 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <!-- Program Listings -->
-<!-- Research:  http://softwaremaniacs.org/blog/2011/05/22/highlighters-comparison/           -->
-<!-- From Google: downloadable, auto-detects languages, has hint-handlers                     -->
-<!-- http://code.google.com/p/google-code-prettify/                                           -->
-<!-- http://code.google.com/p/google-code-prettify/wiki/GettingStarted                        -->
-<!-- See common file for more on language handlers, and "language-prettify" template          -->
-<!-- Coordinate with disabling in Sage Notebook production                                    -->
+<!-- Research:  http://softwaremaniacs.org/blog/2011/05/22/highlighters-comparison/  -->
+<!-- From Google: downloadable, auto-detects languages, has hint-handlers            -->
+<!-- http://code.google.com/p/google-code-prettify/                                  -->
+<!-- http://code.google.com/p/google-code-prettify/wiki/GettingStarted               -->
+<!-- See common file for more on language handlers, and "language-prettify" template -->
+<!-- TODO: maybe ship sanitized "input" to each modal template? -->
 <xsl:template match="program">
     <xsl:choose>
-        <xsl:when test="$b-host-runestone and (@language = 'python')">
-        <!-- Runestone ActiveCode, automatically -->
+        <!-- 100% historical, replace with a "web" platform option -->
+        <xsl:when test="not($b-host-runestone) and (@interactive='pythontutor')">
+            <xsl:apply-templates select="." mode="python-tutor"/>
+        </xsl:when>
+        <!-- if elected as interactive and on Runestone -->
+        <xsl:when test="(@interactive='yes') and $b-host-runestone">
+            <xsl:apply-templates select="." mode="runestone-activecode"/>
+        </xsl:when>
+        <!-- fallback is a less-capable static version, which -->
+        <!-- might actually be desired for many formats       -->
+        <xsl:otherwise>
+            <xsl:apply-templates select="." mode="html-static"/>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- A non-interactive version with potential syntax -->
+<!-- highlighting from the Google Prettifier         -->
+<xsl:template match="program" mode="html-static">
+    <xsl:variable name="pretty-language">
+        <xsl:apply-templates select="." mode="prettify-language"/>
+    </xsl:variable>
+    <pre>
+        <xsl:attribute name="class">
+            <xsl:choose>
+                <!-- with a language supplied, pre.prettyprint -->
+                <!-- activates styling and Prettifier effects  -->
+                <xsl:when test="not($pretty-language = '')">
+                    <xsl:text>prettyprint</xsl:text>
+                    <xsl:text> </xsl:text>
+                    <xsl:text>lang-</xsl:text>
+                    <xsl:value-of select="$pretty-language" />
+                </xsl:when>
+                <!-- else, pre.plainprint just yields some minimal styling -->
+                <xsl:otherwise>
+                    <xsl:text>plainprint</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:attribute>
+        <xsl:call-template name="sanitize-text">
+            <xsl:with-param name="text" select="input" />
+        </xsl:call-template>
+    </pre>
+</xsl:template>
+
+<!-- Runestone has support for various languages.  Some  -->
+<!-- are "in-browser" while others are backed by "real"  -->
+<!-- compilers as part of a Runestone server.            -->
+<xsl:template match="program" mode="runestone-activecode">
+    <xsl:variable name="active-language">
+        <xsl:apply-templates select="." mode="active-language"/>
+    </xsl:variable>
+    <xsl:choose>
+        <xsl:when test="not($active-language = '')">
             <div data-childcomponent="ac2_2_1" class="runestone explainer ac_section alert alert-warning">
-                <textarea data-component="activecode" data-lang="python" data-timelimit="25000" data-codelens="true" data-audio="">
+                <textarea data-component="activecode" data-lang="{$active-language}" data-timelimit="25000" data-codelens="true" data-audio="">
                     <xsl:attribute name="id">
                         <xsl:apply-templates select="." mode="html-id" />
                     </xsl:attribute>
@@ -8144,37 +8196,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </div>
         </xsl:when>
         <xsl:otherwise>
-            <!-- with language, pre.prettyprint activates styling and Prettifier -->
-            <!-- with no language, pre.plainprint just yields some styling       -->
-            <xsl:variable name="pretty-language">
-                <xsl:apply-templates select="." mode="prettify-language"/>
-            </xsl:variable>
-            <pre>
-                <xsl:attribute name="class">
-                    <xsl:choose>
-                        <xsl:when test="not($pretty-language = '')">
-                            <xsl:text>prettyprint</xsl:text>
-                            <xsl:text> </xsl:text>
-                            <xsl:text>lang-</xsl:text>
-                            <xsl:value-of select="$pretty-language" />
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:text>plainprint</xsl:text>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:attribute>
-                <xsl:call-template name="sanitize-text">
-                    <xsl:with-param name="text" select="input" />
-                </xsl:call-template>
-            </pre>
+            <xsl:message>PTX:WARNING:  a Runestone ActiveCode element cannot produce interactive code in the language "<xsl:value-of select="@language"/>", so the code will be rendered in a static form.</xsl:message>
+            <xsl:apply-templates select="." mode="html-static"/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 
 <!-- Interactive Programs, PyTutor -->
-<!-- Use the PyTutor embedding to provide a Python program -->
+<!-- Use the PyTutor embedding to provide a Python program     -->
 <!-- where a reader can interactively step through the program -->
-<xsl:template match="program[@interactive='pythontutor']">
+<xsl:template match="program" mode="python-tutor">
     <!-- check that the language is Python? -->
     <xsl:variable name="hid">
         <xsl:apply-templates select="." mode="html-id" />
