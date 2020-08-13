@@ -37,12 +37,91 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
         <p>Python program listings are automatically made interactive when HTML is produced for Runestone.</p>
 
-        <listing xml:id="program-activecode">
+        <listing xml:id="program-activecode-python">
             <caption>An interactive Python program, using <pubtitle>Runestone</pubtitle></caption>
-            <program xml:id="python-hello-world" language="python">
+            <program xml:id="python-hello-world" interactive='yes' language="python">
                 <input>
-                print(3.2)
                 print("Hello, World!")
+                </input>
+            </program>
+        </listing>
+
+        <listing xml:id="program-activecode-c">
+            <caption>An interactive C program, using <pubtitle>Runestone</pubtitle></caption>
+            <program xml:id="c-hello-world" interactive='yes' language="c">
+                <input>
+                #include
+
+                int main(void)
+                {
+                    puts("Hello, world!");
+                }
+                </input>
+            </program>
+        </listing>
+
+        <listing xml:id="program-activecode-java">
+            <caption>An interactive Java program, using <pubtitle>Runestone</pubtitle></caption>
+            <program xml:id="java-hello-world" interactive='yes' language="java">
+                <input>
+                import javax.swing.JFrame;  //Importing class JFrame
+                import javax.swing.JLabel;  //Importing class JLabel
+                public class HelloWorld {
+                    public static void main(String[] args) {
+                        JFrame frame = new JFrame();           //Creating frame
+                        frame.setTitle("Hi!");                 //Setting title frame
+                        frame.add(new JLabel("Hello, world!"));//Adding text to frame
+                        frame.pack();                          //Setting size to smallest
+                        frame.setLocationRelativeTo(null);     //Centering frame
+                        frame.setVisible(true);                //Showing frame
+                    }
+                }
+                </input>
+            </program>
+        </listing>
+
+        <listing xml:id="program-activecode-javascript">
+            <caption>An interactive JavaScript program, using <pubtitle>Runestone</pubtitle></caption>
+            <program xml:id="javascript-hello-world" interactive='yes' language="javascript">
+                <input>
+                document.write('Hello, world!');
+                </input>
+            </program>
+        </listing>
+
+        <p>You do not need to make a <tag>program</tag> interactive, even on Runestone.</p>
+
+        <listing xml:id="program-static-java">
+            <caption>A static Java program</caption>
+            <program xml:id="java-static" interactive='no' language="java">
+                <input>
+                import javax.swing.JFrame;  //Importing class JFrame
+                import javax.swing.JLabel;  //Importing class JLabel
+                public class HelloWorld {
+                    public static void main(String[] args) {
+                        JFrame frame = new JFrame();           //Creating frame
+                        frame.setTitle("Hi!");                 //Setting title frame
+                        frame.add(new JLabel("Hello, world!"));//Adding text to frame
+                        frame.pack();                          //Setting size to smallest
+                        frame.setLocationRelativeTo(null);     //Centering frame
+                        frame.setVisible(true);                //Showing frame
+                    }
+                }
+                </input>
+            </program>
+        </listing>
+
+        <p>An unsupported language might give a warning, but will be rendered static.</p>
+
+
+        <listing xml:id="program-mistake-pascal">
+            <caption>A Pascal program that cannot be interactive on Runestone</caption>
+            <program xml:id="pascal-mistake" interactive='yes' language="pascal">
+                <input>
+                program HelloWorld;
+                begin
+                  WriteLn('Hello, world!');
+                end.
                 </input>
             </program>
         </listing>
