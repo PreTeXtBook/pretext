@@ -487,6 +487,60 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </article>
 </xsl:template>
 
+<!-- ################# -->
+<!-- Verbatim Material -->
+<!-- ################# -->
+
+<!-- cd is for use in paragraphs, inline -->
+<!-- Unstructured is pure text           -->
+<xsl:template match="cd">
+    <pre class="code-block">
+        <xsl:value-of select="." />
+    </pre>
+</xsl:template>
+
+<!-- cline template is in xsl/pretext-common.xsl -->
+<xsl:template match="cd[cline]">
+    <pre class="code-block">
+        <xsl:call-template name="break-lines-html">
+            <xsl:with-param name="text">
+                <xsl:apply-templates select="cline"/>
+            </xsl:with-param>
+        </xsl:call-template>
+    </pre>
+</xsl:template>
+
+<xsl:template match="pre">
+    <pre class="code-block">
+        <xsl:call-template name="break-lines-html">
+            <xsl:with-param name="text">
+                <xsl:apply-templates select="." mode="interior"/>
+            </xsl:with-param>
+        </xsl:call-template>
+    </pre>
+</xsl:template>
+
+<!-- Utility to insert explicit HTML (only) line breaks       -->
+<!-- Recursively strip a leading line from pure text chunk    -->
+<!-- based on character, and add HTML newlines ("br") to each -->
+<!-- so liblouis will break lines in "computerCoded" format.  -->
+<!-- It seems that text must arrive with trailing newlines,   -->
+<!-- so recursion behaves.                                    -->
+<xsl:template name="break-lines-html">
+    <xsl:param name="text"/>
+
+    <xsl:choose>
+        <xsl:when test="$text = ''"/>
+        <xsl:otherwise>
+            <xsl:value-of select="substring-before($text, '&#xa;')"/>
+            <br/>
+            <xsl:call-template name="break-lines-html">
+                <xsl:with-param name="text" select="substring-after($text, '&#xa;')"/>
+            </xsl:call-template>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
 
 <!-- ###################### -->
 <!-- Paragraph-Level Markup -->
