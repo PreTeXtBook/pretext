@@ -229,6 +229,36 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         </chapter>
 
         <chapter>
+            <title>Verbatim Material</title>
+
+            <p>This chapter has examples of material that is meant to be a computer program, or commands typed exactly as shown.  In other words, text formatted to be used or copied literally.</p>
+
+            <p>This next paragraph is a Java computer program to write <q>Hello, World!</q></p>
+
+            <pre>
+            import javax.swing.JFrame;
+            import javax.swing.JLabel;
+            public class HelloWorld {
+              public static void main(String[] args) {
+                JFrame frame = new JFrame();
+                frame.setTitle("Hi!");
+                frame.add(new JLabel("Hello, world!"));
+                frame.pack();
+                frame.setLocationRelativeTo(null);
+                frame.setVisible(true);
+              }
+            }
+            </pre>
+
+            <p>An intervening normal paragraph.</p>
+
+            <p>Sometimes we break in the middle of a paragraph to make a small bit of displayed text that is verbatim for reasons similar to before.  Perhaps we have some commands to display.  Here are two ways to spin up a local web server, depending on if you are stuck back on Python 2 or have moved ahead to Python 3.<cd>
+                <cline>python2 -m SimpleHTTPServer</cline>
+                <cline>    python3 -m http.server</cline>
+            </cd>They are both very simple, even if only one uses that term in its name.  We indented the second one by 4 spaces simply as a test<mdash/>it doesn't mean anything.</p>
+        </chapter>
+
+        <chapter>
             <title>Lists</title>
 
             <p>These lists can have more complicated items (structured with paragraphs), and lists can be nested.  We start simple.  I cannot see a way to use <c>liblouis</c> styling to insert a blank line before and after a list, HTML empty <c>p</c> and <c>br</c> elements are not effective.</p>
