@@ -20,7 +20,20 @@
 
         <p><c>pretext</c> is a Python script, so you will need to have the Python 3 interpreter on your system (version 3.4 or better expected as of 2020-05-22).  At a command-line (in a terminal or console), you can run<cd>
             <cline>pretext -h</cline>
-        </cd> to get a summary of the commands.  Some of the processing may take a long time, or you may experience trouble.  There are two switches to enable more verbose output in your terminal or console.<cd>
+        </cd> to get a summary of the commands.  
+        Depending on whether the script is in your path and whether you have made the file executable, you might need to run 
+        <cd>
+            <cline>python path/to/mathbook/pretext/pretext -h</cline>
+        </cd>
+        or
+        <cd>
+            <cline>python3 path/to/mathbook/pretext/pretext -h</cline>
+        </cd>
+        or some combination of the above.
+        </p>
+        
+        <p>
+        Some of the processing may take a long time, or you may experience trouble.  There are two switches to enable more verbose output in your terminal or console.<cd>
             <cline>pretext -v [command arguments]</cline>
         </cd>will provide progress indicators, which may be comforting for long runs, while <cd>
             <cline>pretext -vv [command arguments]</cline>
@@ -36,6 +49,19 @@
             <cline>pretext -vv -c latex-image -f svg</cline>
             <cline>  -d ~/books/aota/images ~/books/aota/animals.xml</cline>
         </cd>Here <c>-c</c> is specifying the <q>component</q> of your book to process, and <c>-f</c> is specifying the <q>format</q> of what is being produced.  The <c>-d</c> argument specifies a directory where the output ends up, in this case a collection of <init>SVG</init> files, one per image.</p>
+        <paragraphs>
+            <title>Specifying string parameters</title>
+            <p>
+                Sometimes you might have need to pass stringparams to the pretext script.  This is accomplished with the <c>-x</c> flag, followed by a space separated list of stringparam, value pairs.  But note that <c>-x</c> cannot be the last option passed to the script.  
+            </p>
+            <p>
+                For example:
+                <cd>
+                    <cline>pretext -vv -c latex-image -x latex.engine xelatex latex.font.size 12pt -f svg</cline>
+                    <cline>  -d ~/books/aota/images ~/books/aota/animals.xml</cline>
+                </cd>
+            </p>
+        </paragraphs>
     </section>
 
     <section xml:id="pretext-strategy">
