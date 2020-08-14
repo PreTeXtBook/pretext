@@ -144,7 +144,7 @@ def get_cli_arguments():
 
 def main():
     """React to command-line switches in order to perform basic tasks"""
-    import os # getcwd
+    import os # getcwd, .sep
 
     # always check version, raises error for Python 2 or less
     ptx.check_python_version()
@@ -198,12 +198,21 @@ def main():
     # publisher file is optional, so allow for None here
     if args.publisher_file:
         publisher_file = verify_input_file(args.publisher_file)
+        #ensure forward slash to pass to xsltproc:
+        publisher_file = publisher_file.replace(os.sep, '/')
     else:
         publisher_file = None
 
     # convert list of string parameters into a dictionary
     # routines in module expect a dictionary, so convert here and now
     stringparams = string_parameters_as_dict(args.stringparams)
+    # if 'publisher' is passed as stringparam, pull it out
+    # as 'publisher_file' and ensure correct slashes
+    # but do not stomp on a file passed with dedicated switch
+    if ('publisher' in stringparams) and not(publisher_file):
+        publisher_file = verify_input_file(stringparams['publisher'])
+        publisher_file = publisher_file.replace(os.sep, '/')
+        del stringparams['publisher']
 
     ptx._verbose('Done examining environment and initializing setup info')
 
