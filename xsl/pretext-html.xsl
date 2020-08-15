@@ -8587,9 +8587,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <title>
             <xsl:apply-templates select="." mode="title-full"/>
         </title>
-        <!-- nearly a dead end, recurse only into exercises      -->
-        <!-- within this RS "subchapter", but at *any* PTX depth -->
-        <xsl:apply-templates select=".//exercise"  mode="runestone-manifest"/>
+        <!-- nearly a dead end, recurse only into exercises and programs -->
+        <!-- within this RS "subchapter", but at *any* PTX depth         -->
+        <xsl:apply-templates select=".//exercise|.//program"  mode="runestone-manifest"/>
     </subchapter>
     <!-- dead end structurally, no more recursion, even if "subsection", etc. -->
 </xsl:template>
@@ -8610,6 +8610,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </question>
 </xsl:template>
 
+<!-- ActiveCode to the Runestone manifest -->
+<xsl:template match="program" mode="runestone-manifest">
+    <xsl:variable name="active-language">
+        <xsl:apply-templates select="." mode="active-language"/>
+    </xsl:variable>
+    <!-- if elected as interactive AND @language is supported -->
+    <xsl:if test="(@interactive='yes') and not($active-language = '')">
+        <xsl:apply-templates select="." mode="runestone-activecode"/>
+    </xsl:if>
+</xsl:template>
 
 <!-- Appendix is explicitly no-op, so we do not recurse into "section"  -->
 <xsl:template match="appendix" mode="runestone-manifest"/>
