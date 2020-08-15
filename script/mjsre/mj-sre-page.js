@@ -153,7 +153,7 @@ const renderActions = {
   pretext: action(STATE.PRETEXT, (math, doc, adaptor) => {
     math.outputData.pretext = [adaptor.text('\n')];
     if (needsSRE) {
-      math.outputData.mml = SRE.toEnriched(toMathML(math.root)).toString();
+      math.outputData.mml = toMathML(math.root).toString();
     }
   }),
   //
