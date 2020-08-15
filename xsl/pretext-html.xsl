@@ -8216,9 +8216,23 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <xsl:when test="not($active-language = '')">
             <div data-childcomponent="ac2_2_1" class="runestone explainer ac_section alert alert-warning">
-                <textarea data-component="activecode" data-lang="{$active-language}" data-timelimit="25000" data-codelens="true" data-audio="">
+                <textarea data-component="activecode" data-lang="{$active-language}" data-timelimit="25000" data-audio="">
                     <xsl:attribute name="id">
                         <xsl:apply-templates select="." mode="html-id" />
+                    </xsl:attribute>
+                    <!-- Code Lens only for certain languages -->
+                    <xsl:attribute name="data-codelens">
+                        <xsl:choose>
+                            <xsl:when test="($active-language = 'python') or ($active-language = 'python2') or ($active-language = 'python3')">
+                                <xsl:text>true</xsl:text>
+                            </xsl:when>
+                            <xsl:when test="($active-language = 'c') or ($active-language = 'cpp') or ($active-language = 'java')">
+                                <xsl:text>true</xsl:text>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:text>false</xsl:text>
+                            </xsl:otherwise>
+                        </xsl:choose>
                     </xsl:attribute>
                     <xsl:call-template name="sanitize-text">
                         <xsl:with-param name="text" select="input" />
