@@ -1597,6 +1597,8 @@ Book (with parts), "section" at level 3
 <!--       bring into math with \text() wrapper          -->
 <!--       when  $math.punctuation.include  indicates    -->
 
+<xsl:param name="debug.displaystyle" select="'yes'"/>
+
 <xsl:template match="m">
     <!-- Build a textual version of the latex,  -->
     <!-- applying the rare templates allowed,   -->
@@ -1621,8 +1623,12 @@ Book (with parts), "section" at level 3
     </xsl:variable>
     <!-- wrap tightly in math delimiters -->
     <xsl:call-template name="begin-inline-math" />
-    <!-- Prefix will normally be empty and have no effect -->
-    <xsl:apply-templates select="."  mode="display-style-prefix"/>
+    <!-- Prefix will normally be empty and have no effect.  We also have  -->
+    <!-- an undocumented switch to totally kill the possibility entirely. -->
+    <!-- This was added to support testing of braille output.             -->
+    <xsl:if test="not($debug.displaystyle = 'no')">
+        <xsl:apply-templates select="."  mode="display-style-prefix"/>
+    </xsl:if>
     <!-- we clean whitespace that is irrelevant to LaTeX so that we -->
     <!--   (1) avoid LaTeX compilation errors                       -->
     <!--   (2) avoid spurious blank lines leading to new paragraphs -->
