@@ -318,7 +318,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- A place for warnings about missing files, etc -->
 <!-- and/or temporary/experimental features        -->
 <xsl:template name="assembly-warnings">
-    <xsl:if test="$original/*[not(self::docinfo)]//webwork and not($b-doing-webwork-assembly)">
+    <xsl:if test="$original/*[not(self::docinfo)]//webwork/node() and not($b-doing-webwork-assembly)">
         <xsl:message>PTX:WARNING: Your document has WeBworK exercises,</xsl:message>
         <xsl:message>             but your publisher file does not indicate the file</xsl:message>
         <xsl:message>             of problem representations created by a WeBWorK server.</xsl:message>
