@@ -465,7 +465,13 @@
     </figure>
 
     <figure>
-      <caption>Deathstar</caption>
+      <caption> 
+      Rotatable<fn> See 
+      <url href="https://pretextbook.org/examples/sample-article/annotated/graphics.html#graphics-asymptote-webgl"/> 
+      for more information.
+      </fn>
+
+      Deathstar</caption>
       <image xml:id="Deathstar" archive="asy" width="70%">
         <description>Three dimensional graphic of stellated icosahedron</description>
         <asymptote>
