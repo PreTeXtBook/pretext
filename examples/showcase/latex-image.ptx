@@ -365,6 +365,7 @@
         (-16,67) --(0,100);
         path mapleleafright=reflect((0,0),(0,1))*reverse(mapleleafleft);
         path mapleleaf=mapleleafleft--mapleleafright--cycle;
+        filldraw(flag_outline,white,black);
         fill(cbar1,canadared);
         fill(cbar2,canadared);
         fill(shift(2,1)*scale(.008)*mapleleaf,canadared);
@@ -409,6 +410,7 @@
         path star=scale(0.0616)*unitstar;
         pair union_origin=(0,6/13*flagheight);
         real starhshift=unionwidth/12, starvshift=unionheight/10;
+        filldraw(flag_outline,white,black);
         for (int k: sequence(13))
            if (k%2==0) fill(shift(0,k/13*flagheight)*stripe,usflagred);
         fill(shift(union_origin)*union_outline, usflagblue);
@@ -424,8 +426,32 @@
 
 
     <figure>
+      <caption>Area under the curve <m>f(x)=e^{-x^2}</m></caption>
+      <image xml:id="AreaUnderCurve" archive="asy" width="70%">
+        <description>A graphic showing the area under the plot of the function <m>=e^{-x^2}</m>.</description>
+        <asymptote>
+        import graph;
+        size (3 inch,0);
+        real f(real x) {return exp(-x^2);}
+        real xmin=-2, xmax=2;
+        real ymin=-.3, ymax=1.3;
+        path g=graph(f,xmin,xmax, operator ..);
+        path h=(xmax,f(xmax))--(xmax,0)--(xmin,0);
+        fill(g--h--cycle,lightyellow);
+        draw(g);
+        label("$f(x)=e^{-x^2}$", (xmin,.7),.5*N);
+        draw((xmin,.7){SSE}..{SE}(-.8,f(-.8)),Arrow);
+        label("Area $=\sqrt\pi$",(xmax,.7),.5*N);
+        draw((xmax,.7){S}..{W}(.3,.3),Arrow);
+        draw((xmin,0)--(xmax,0));
+        draw((0,ymin)--(0,ymax));
+        </asymptote>
+      </image>
+    </figure>
+
+    <figure>
       <caption>Five set Venn diagram using ellipses</caption>
-      <image xml:id="FiveVenn" archive="asy" width="70%">
+      <image xml:id="FiveVenn" archive="asy" width="50%">
         <description>Venn diagram with five sets using ellipses</description>
         <asymptote>
         size(6cm,5cm);
