@@ -150,7 +150,7 @@ console.log("this is e", e);
     }
 
     console.log("adding video popouts");
-    all_iframes = document.querySelectorAll('body iframe');
+    all_iframes = document.querySelectorAll('body iframeXXXX');
     // for now, we just want the iframes that hace youtube in the src
     for (var i = 0; i < all_iframes.length; i++) {
       this_item = all_iframes[i];
@@ -161,7 +161,7 @@ console.log("this is e", e);
         this_item_width = this_item.width;
         this_item_height = this_item.height;
         if(this_item_height < 150) { continue }
- //       console.log("found a youtube video on", this_item_id);
+        console.log("found a youtube video on", this_item_id);
         var empty_div = document.createElement('div');
         var this_videomag_container = document.createElement('div');
        parent_tag = this_item.parentElement.tagName;
