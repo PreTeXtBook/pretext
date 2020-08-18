@@ -124,7 +124,7 @@
     <section xml:id="pretext-capabilities">
         <title><c>pretext</c> Capabilities</title>
 
-        <p>Again, the command <c>pretext -h</c> will remind you of the various options for the script.  The followinng is a brief summary, in general terms, of what is possible.<dl width="narrow">
+        <p>Again, the command <c>pretext -h</c> will remind you of the various options for the script.  The following is a brief summary, in general terms, of what is possible.<dl width="narrow">
             <li>
                 <title><latex /> Graphics</title>
                 <p><latex /> has a variety of languages for specifying images, such as xypic, pgfplots, and TikZ.  By including the necessary packages or setup commands in <c>docinfo/latex-preamble</c>, these can all be generated at once, in the manner of the example earlier.</p>
