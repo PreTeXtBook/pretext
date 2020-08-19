@@ -1225,7 +1225,7 @@
         </subsection>
 
         <subsection xml:id="mathematics-xml-characters">
-            <title>exceptional characters</title>
+            <title>Exceptional Characters</title>
 
             <p>The <latex /> macros, <c>\amp</c>, <c>\lt</c>, and <c>\gt</c> are always available within these mathematics elements, so that you can avoid the exceptional XML characters <c>&amp;</c>, <c>&lt;</c> and <c>&gt;</c>.  See <xref ref="overview-exceptional-characters" /> for this same information, but in the broader context of your entire document.</p>
         </subsection>
@@ -1245,6 +1245,18 @@
                 <cline>           -7 \amp \text{otherwise} \end{cases}&lt;/me&gt;</cline>
             </cd>produces
             <me>f(x) = \begin{cases}x^2\amp\text{if }x\gt 0\\-7\amp\text{otherwise}\end{cases}</me>.  This example amply illustrates the use of macros for XML exceptional characters (twice), appropriate use of the <c>\text{}</c> macro (twice), spaces in the <c>\text{}</c> macro (once), sentence-ending punctuation (see the source, the period is <em>not</em> inside the <tag>me</tag> element) and yes, we did think twice about the <c>\\</c> (an exception to the rule).</p>
+        </subsection>
+
+        <subsection xml:id="color-in-math">
+            <title>Color in Mathematics</title>
+
+            <p>There is a temptation to use color to indicate or highlight portions of mathematics, especially for electronic outputs where color is easy and cheap.  But before you leap, how will this work in black-and-white printed output?  How will it work for a blind reader using a screen-reader or a braille version?</p>
+
+            <p>If you must, be aware that for older versions of MathJax that we support for HTML output (v2.7, as of 2020-08-19), the relevant macros have slightly different behavior than for standard <latex/>.  But you can make both work if you are careful.  This should not be an issue with MathJax 3.</p>
+
+            <p>With careful use of <tex/> grouping (<c>{...}</c>) you can make the two behaviors of <c>\color</c> effective.  For example, go:<cd>
+                <cline>{\color{blue}{x^2}}</cline>
+            </cd></p>
         </subsection>
 
         <subsection>
@@ -3212,6 +3224,8 @@
             <li>
                 <title>Colors</title>
                 <p>We are sensitive to the fact that some readers have difficulty distinguishing between certain colors.  So we do our best to distinguish text, or other elements, without relying exclusively on color.  For example, the <tag>delete</tag> and <tag>insert</tag> elements may render text with strike-through and underlining (respectively) to show the distinction.</p>
+
+                <p>But you can help as you author.  For example, see <xref ref="color-in-math"/>.</p>
             </li>
 
             <li>
