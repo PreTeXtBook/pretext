@@ -102,7 +102,9 @@ def get_cli_arguments():
         ('png', 'Portable Network Graphics file(s)'),
         ('eps', 'Encapsulated Post Script file(s)'),
         ('mml', 'MathML (math elements)'),
-        ('braille', 'Nemeth Braille (math elements)'),
+        ('braille', 'Nemeth Braille (math elements only)'),
+        ('braille-emboss', 'UEB + Nemeth braille, for print'),
+        ('braille-electronic', 'UEB + Nemeth Braille, for one-line display'),
         ('speech', 'Speech (math elements)'),
         ('source', 'Standalone source files'),
         ('latex', 'LaTeX source file'),
@@ -254,8 +256,10 @@ def main():
             ptx.html(xml_source, publisher_file, stringparams, dest_dir)
         elif args.format == 'latex':
             ptx.latex(xml_source, publisher_file, stringparams, out_file, dest_dir)
-        elif args.format == 'braille':
-            ptx.braille(xml_source, publisher_file, stringparams, out_file, dest_dir)
+        elif args.format == 'braille-emboss':
+            ptx.braille(xml_source, publisher_file, stringparams, out_file, dest_dir, 'emboss')
+        elif args.format == 'braille-electronic':
+            ptx.braille(xml_source, publisher_file, stringparams, out_file, dest_dir, 'electronic')
         elif args.format == 'epub-svg':
             ptx.epub(xml_source, publisher_file, out_file, dest_dir, 'svg')
         elif args.format == 'epub-mml':
@@ -267,6 +271,9 @@ def main():
         # 2020-05-19 MathBookXMLtoSWS class removed
         elif args.format == 'sagenb':
             raise NotImplementedError("conversion to Sage notebook format removed (2020-05-18)")
+        #2020-08-19 Deprecated in favor of -emboss, -electronic
+        elif args.format == 'braille':
+            raise NotImplementedError("'braille' format deprecated (2020-08-19), 'braille-emboss' is replacement")
         else:
             raise NotImplementedError('cannot make entire document in "{}" format'.format(args.format))
     # 2020-05-19 tikz_conversion() function removed

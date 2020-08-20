@@ -1096,7 +1096,7 @@ def mom_static_problems(xml_source, pub_file, stringparams, xmlid_root, dest_dir
 # Conversion to Braille
 #######################
 
-def braille(xml_source, pub_file, stringparams, out_file, dest_dir):
+def braille(xml_source, pub_file, stringparams, out_file, dest_dir, page_format):
     """Produce a complete document in BRF format ( = Braille ASCII, plus formatting control)"""
     import os.path # join()
     import subprocess # run()
@@ -1128,15 +1128,26 @@ def braille(xml_source, pub_file, stringparams, out_file, dest_dir):
         stringparams['publisher'] = pub_file
     xsltproc(braille_xslt, xml_source, None, tmp_dir, stringparams)
 
+    # Main configuration file, two page format files
     liblouis_cfg = os.path.join(get_ptx_path(), 'script', 'braille', 'pretext-liblouis.cfg')
+    liblouis_emboss_cfg = os.path.join(get_ptx_path(), 'script', 'braille', 'pretext-liblouis-emboss.cfg')
+    liblouis_electronic_cfg = os.path.join(get_ptx_path(), 'script', 'braille', 'pretext-liblouis-electronic.cfg')
+    # comma-separated configuration files, with no space
+    # so as to not confuse the command construction
+    if page_format == 'emboss':
+        cfg = liblouis_cfg + ',' + liblouis_emboss_cfg
+    elif page_format == 'electronic':
+        cfg = liblouis_cfg + ',' + liblouis_electronic_cfg
+    else:
+        raise ValueError('PTX:BUG: braille page format not recognized')
     final_brf = get_output_filename(xml_source, out_file, dest_dir, '.brf')
     liblouis_exec = get_executable('liblouis')
-    msg = 'applying liblouis to {} with configuration {}, creating BRF {}'
-    _debug(msg.format(liblouis_xml, liblouis_cfg, final_brf))
-    liblouis_cmd = [liblouis_exec, '-f', liblouis_cfg, liblouis_xml, final_brf]
-    _verbose('BRF file deposited as {}'.format(final_brf))
+    msg = 'applying liblouis to {} with configurations {}, creating BRF {}'
+    _debug(msg.format(liblouis_xml, cfg, final_brf))
+    liblouis_cmd = [liblouis_exec, '-f', cfg, liblouis_xml, final_brf]
 
     subprocess.run(liblouis_cmd)
+    _verbose('BRF file deposited as {}'.format(final_brf))
 
 
 ####################
