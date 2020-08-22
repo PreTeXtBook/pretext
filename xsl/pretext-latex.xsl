@@ -806,6 +806,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!--  -->
     <xsl:text>%% end:   font setup and configuration for use with pdflatex&#xa;</xsl:text>
     <xsl:text>}&#xa;</xsl:text>
+    <xsl:text>%% Micromanage spacing, etc.  The named "microtype-options"&#xa;</xsl:text>
+    <xsl:text>%% template may be employed to fine-tune package behavior&#xa;</xsl:text>
+    <xsl:text>\usepackage</xsl:text>
+    <!-- This template supplies [] w options iff there really are options -->
+    <xsl:call-template name="microtype-option-argument"/>
+    <xsl:text>{microtype}&#xa;</xsl:text>
     <!--  -->
     <!--  -->
     <xsl:text>%% Symbols, align environment, commutative diagrams, bracket-matrix&#xa;</xsl:text>
@@ -3601,6 +3607,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- <xsl:text>\newfontfamily{\lmsansserif}{Latin Modern Sans}&#xa;</xsl:text> -->
     <!-- <xsl:text>\renewcommand{\divisionfont}{\lmsansserif}&#xa;</xsl:text> -->
 </xsl:template>
+
+<!-- This template calls the "microtype-options" template, but     -->
+<!-- uses a variable to not produce an empty [ ].  Thus two        -->
+<!-- templates. This one is internal, not for a stylewriter's use. -->
+<xsl:template name="microtype-option-argument">
+    <xsl:variable name="the-options">
+        <xsl:call-template name="microtype-options"/>
+    </xsl:variable>
+    <xsl:if test="not($the-options = '')">
+        <xsl:text>[</xsl:text>
+        <xsl:value-of select="$the-options"/>
+        <xsl:text>]</xsl:text>
+    </xsl:if>
+</xsl:template>
+
+<!-- This is the template a stylewriter can override to influence fonts. -->
+<!-- See the documentation for the  microtype  package for details.      -->
+<xsl:template name="microtype-options"/>
 
 
 <!-- ################## -->
