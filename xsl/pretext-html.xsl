@@ -7150,26 +7150,36 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!--   B.  The permid-edition scheme is effective           -->
 <xsl:template match="*" mode="html-id">
     <xsl:choose>
-        <xsl:when test="@permid">
-            <xsl:value-of select="@permid"/>
-        </xsl:when>
-        <xsl:when test="@xml:id">
-            <xsl:value-of select="@xml:id"/>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:value-of select="local-name(.)"/>
-            <xsl:text>-</xsl:text>
-            <!-- 2015-09: slow version matches previous "internal-id" -->
-            <!-- use for third (automatic) construction               -->
+        <!-- primary version, as described above -->
+        <xsl:when test="not($b-host-runestone)">
             <xsl:choose>
-                <xsl:when test="$b-fast-ids">
-                    <!-- xsltproc produces non-numeric prefix "idm" -->
-                    <xsl:value-of select="substring(generate-id(.), 4)"/>
+                <xsl:when test="@permid">
+                    <xsl:value-of select="@permid"/>
+                </xsl:when>
+                <xsl:when test="@xml:id">
+                    <xsl:value-of select="@xml:id"/>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:number from="book|article|letter|memo" level="any"/>
+                    <xsl:value-of select="local-name(.)"/>
+                    <xsl:text>-</xsl:text>
+                    <!-- 2015-09: slow version matches previous "internal-id" -->
+                    <!-- use for third (automatic) construction               -->
+                    <xsl:choose>
+                        <xsl:when test="$b-fast-ids">
+                            <!-- xsltproc produces non-numeric prefix "idm" -->
+                            <xsl:value-of select="substring(generate-id(.), 4)"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:number from="book|article|letter|memo" level="any"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </xsl:otherwise>
             </xsl:choose>
+        </xsl:when>
+        <!-- alternate version for Runestone, prefer @xml:id, -->
+        <!-- never use permid, no fast-id testing, in -common -->
+        <xsl:otherwise>
+            <xsl:apply-templates select="." mode="visible-id"/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
