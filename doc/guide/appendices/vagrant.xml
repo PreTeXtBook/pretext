@@ -27,25 +27,21 @@
                 <li>Open a console (Windows: press Windows key, type <c>cmd</c>)</li>
                 <li>
                     <p>Create a new directory <c>vagrant_demo</c> and change into it, using the command</p>
-                    <sidebyside>
-                        <console>
-                            <prompt>$ </prompt>
-                            <input>mkdir vagrant_demo</input>
-                            <prompt>$ </prompt>
-                            <input>cd vagrant_demo</input>
-                        </console>
-                    </sidebyside>
+                    <console>
+                        <prompt>$ </prompt>
+                        <input>mkdir vagrant_demo</input>
+                        <prompt>$ </prompt>
+                        <input>cd vagrant_demo</input>
+                    </console>
                 </li>
                 <li>
                     <p>Type the commands</p>
-                    <sidebyside>
-                        <console>
-                            <prompt>$ </prompt>
-                            <input>vagrant init daverosoff/pretext</input>
-                            <prompt>$ </prompt>
-                            <input>vagrant up</input>
-                        </console>
-                    </sidebyside>
+                    <console>
+                        <prompt>$ </prompt>
+                        <input>vagrant init daverosoff/pretext</input>
+                        <prompt>$ </prompt>
+                        <input>vagrant up</input>
+                    </console>
                     <p>This step takes between 30 and 60 minutes to complete. There is a lot of downloading. There will be some interesting messages, but once it gets going you don't have to watch.</p>
                 </li>
                 <li>Open PuTTY and connect to address 127.0.0.1, port 2222.</li>
@@ -60,26 +56,22 @@
         <title>A first example</title>
         <p>Presumably, you already have a project underway. Use your usual file browser or command line to move or copy your project into the <c>vagrant_demo</c> directory you created earlier.</p>
         <p>In your PuTTY window, invoke the commands</p>
-        <sidebyside>
-            <console>
-                <prompt>$ </prompt><input>cd /vagrant</input><output/>
-                <prompt>$ </prompt><input>ls</input><output/>
-            </console>
-        </sidebyside>
+        <console>
+            <prompt>$ </prompt><input>cd /vagrant</input><output/>
+            <prompt>$ </prompt><input>ls</input><output/>
+        </console>
         <p>and observe that your project is there, in your Vagrant box. The <c>/vagrant</c> directory in the
         Vagrant box is synced to the <c>vagrant_demo</c> directory you created earlier.</p>
         <p>Do your normal compilation dance, including steps to build images, HTML, and PDF output. For me it might look like this:</p>
-        <sidebyside>
-            <console>
-                <prompt>$ </prompt><input>cd m101</input>
-                <prompt>$ </prompt><input>mkdir -p output/images</input>
-                <prompt>$ </prompt><input>~/mathbook/script/pretext -c latex-image -d output/images -f all src/index.mbx</input>
-                <prompt>$ </prompt><input>xsltproc -xinclude -o output/ ~/mathbook/xsl/pretext-html.xsl src/index.mbx</input>
-                <prompt>$ </prompt><input>xsltproc -xinclude -o output/index.tex ~/mathbook/xsl/pretext-latex.xsl src/index.mbx</input>
-                <prompt>$ </prompt><input>cd output</input>
-                <prompt>$ </prompt><input>xelatex index.tex</input>
-            </console>
-        </sidebyside>
+        <console>
+            <prompt>$ </prompt><input>cd m101</input>
+            <prompt>$ </prompt><input>mkdir -p output/images</input>
+            <prompt>$ </prompt><input>~/mathbook/script/pretext -c latex-image -d output/images -f all src/index.mbx</input>
+            <prompt>$ </prompt><input>xsltproc -xinclude -o output/ ~/mathbook/xsl/pretext-html.xsl src/index.mbx</input>
+            <prompt>$ </prompt><input>xsltproc -xinclude -o output/index.tex ~/mathbook/xsl/pretext-latex.xsl src/index.mbx</input>
+            <prompt>$ </prompt><input>cd output</input>
+            <prompt>$ </prompt><input>xelatex index.tex</input>
+        </console>
         <p>After compilation is done, use your normal file browser to locate the output tree you created. Find some output and preview it, marveling at the simplicity of what has befallen your project.</p>
         <remark>
             <p>It is also possible to keep source in the <c>/home/vagrant</c> directory in the Vagrant box. Then the source will not be accessible from the Windows host. One possibility would be to use <c>git</c> to author in Windows and pull changes to the Vagrant box at compile time. I'm not sure why this would be better. Perhaps you don't want multiple copies of your source floating around your main disk drive.</p>
