@@ -22,7 +22,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <publication>
 
     <html>
-        <index-page ref="guide"/>
+        <index-page ref="guide-toc"/>
         <css style="default" colors="blue_red"/>
         <analytics google-gst="UA-48811660-1"
                    statcounter-project="9664088"
