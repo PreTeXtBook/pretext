@@ -24,10 +24,14 @@
         <p>The <c>latex.print</c> switch controls the selection of the two output modes of this single stylesheet.  The default is <c>no</c> for the electronic version, and <c>yes</c> will change to the print version.  In this chapter, we describe both of these two, slightly dissimilar, conversions together.</p>
     </introduction>
 
-    <section>
+    <section xml:id="print-justification">
         <title>Text Justification and Alignment</title>
 
-        <p>The <c>text.alignment</c> switch will control how text is aligned (such as in paragraphs).  The value <c>justify</c> is the default, and <c>raggedright</c> will cause alignment on the left, with an uneven right edge, employing less hypenation.</p>
+        <p><latex/> is engineered around placing boxes on the page.  Characters in boxes are built up to be words, then words in boxes become lines, and then lines in boxes become pages.  Or something close to that.  As a consequence <latex/> excels at right-justified text.  For this reason, and also because we think it looks more like a commercial published book and therefore more professional, right-justified text is the default.  If your opinions on this come from experience with some other word processor, keep an open mind.</p>
+
+        <p>However, we provide the <c>text.alignment</c> switch to control how text is aligned (such as in paragraphs).  The value <c>justify</c> is the default, and <c>raggedright</c> will cause alignment on the left, with an uneven right edge.  Paradoxically, this can lead to greater amounts of hyphenation.</p>
+
+        <p>See <xref ref="styling-justification"/> for greater control over some aspects of right-justified text and also read about justified text in <xref ref="topic-accessibility"/>.
     </section>
 
     <section>

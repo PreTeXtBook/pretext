@@ -3213,6 +3213,11 @@
                 <title>Colors</title>
                 <p>We are sensitive to the fact that some readers have difficulty distinguishing between certain colors.  So we do our best to distinguish text, or other elements, without relying exclusively on color.  For example, the <tag>delete</tag> and <tag>insert</tag> elements may render text with strike-through and underlining (respectively) to show the distinction.</p>
             </li>
+
+            <li>
+                <title>Justified Text</title>
+                <p>Right-justified text (an even right margin) can sometimes lead to spaced-out text that is difficult for some readers.  For print, our use of <latex/> as an intermediate format, leads to <init>PDF</init> output where right-justified text can be superior to the alternative, <term>ragged right</term> text.  For more see <xref ref="print-justification"/> and <xref ref="styling-justification"/>.</p>
+            </li>
         </dl></p>
 
         <p>Here are features which are provided, but require your participation as the author.<dl width="narrow">

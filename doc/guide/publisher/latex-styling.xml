@@ -173,6 +173,20 @@
         <p>We do not expect to provide great support for this process.  First, because new code and basic support already keeps us busy, and second, because you have the freedom to really make a mess, and thus you should take responsibility for the problem.  When you are certain that <pretext/> has done something wrong or inadvisable, please, please do post in the development forum with a careful explanation and a (minimal) example.  It will happen.  Just don't use the forums as a replacement for this documentation or a bit of sleuthing through the <latex/> that <em>you</em> are now creating.  With freedom comes responsibilty.  Thanks.</p>
     </section>
 
+    <section xml:id="styling-justification">
+        <title>Justified Text</title>
+
+        <p>We employ the <latex/> package, <url href="https://ctan.org/pkg/microtype"><c>microtype</c></url><fn><c>ctan.org/pkg/microtype</c></fn> to enhance <latex/>'s algorithms for spacing text.  See <xref ref="print-justification"/> for some explanation.  The package admits a great deal of fine-tuning, and we make it easy to pass in options via a template included as part of the styling.</p>
+
+        <p>If you were using <c>pdflatex</c> you might include in your styling:<cd>
+            <cline>&lt;xsl:template name="microtype-options"&gt;</cline>
+            <cline>    &lt;xsl:text&gt;protrusion=true,expansion&lt;/xsl:text&gt;</cline>
+            <cline>&lt;/xsl:template&gt;</cline>
+        </cd>This would have the effect of putting<cd>
+            <cline>\usepackage[protrusion=true,expansion]{microtype}</cline>
+        </cd>into your <latex/> output file.  Study the <c>microtype</c> documentation for possibilities.</p>
+    </section>
+
     <section>
         <title>Planned Additions</title>
 
