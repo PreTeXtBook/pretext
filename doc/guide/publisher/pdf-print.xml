@@ -31,7 +31,7 @@
 
         <p>However, we provide the <c>text.alignment</c> switch to control how text is aligned (such as in paragraphs).  The value <c>justify</c> is the default, and <c>raggedright</c> will cause alignment on the left, with an uneven right edge.  Paradoxically, this can lead to greater amounts of hyphenation.</p>
 
-        <p>See <xref ref="styling-justification"/> for greater control over some aspects of right-justified text and also read about justified text in <xref ref="topic-accessibility"/>.
+        <p>See <xref ref="styling-justification"/> for greater control over some aspects of right-justified text and also read about justified text in <xref ref="topic-accessibility"/>.</p>
     </section>
 
     <section>
