@@ -54,6 +54,15 @@ function initWW(ww_id) {
         var b_has_hint = ww_container.getElementsByClassName('hint').length > 0;
         var b_has_answer = ww_container.getElementsByClassName('answer').length > 0;
         var b_has_solution = ww_container.getElementsByClassName('solution').length > 0;
+        // get (possibly localized) label text for hints, solutions
+        var hint_label_text = 'Hint'
+        var solution_label_text = 'Solution'
+        if (b_has_solution) {
+            solution_label_text = ww_container.querySelectorAll('.solution-knowl span.type')[0].textContent
+        }
+        if (b_has_hint) {
+            hint_label_text = ww_container.querySelectorAll('.hint-knowl span.type')[0].textContent
+        }
         //void the static version
         ww_container.innerHTML = ""
         // a div for the problem text
@@ -79,7 +88,7 @@ function initWW(ww_id) {
           }
         }
         adjustSrcHrefs(body_div,ww_domain)
-        translateHintSol(ww_id,body_div,ww_domain,b_has_hint,b_has_solution)
+        translateHintSol(ww_id,body_div,ww_domain,b_has_hint,b_has_solution,hint_label_text,solution_label_text)
         // insert our cleaned up problem text
         form.appendChild(body_div)
         /* there are a bunch of hidden input fields that the form uses */
@@ -285,10 +294,19 @@ function updateWW(ww_id,task) {
         var b_has_hint = ww_container.getElementsByClassName('hint').length > 0;
         var b_has_answer = ww_container.getElementsByClassName('answer').length > 0;
         var b_has_solution = ww_container.getElementsByClassName('solution').length > 0;
+        // get (possibly localized) label text for hints, solutions
+        var hint_label_text = 'Hint'
+        var solution_label_text = 'Solution'
+        if (b_has_solution) {
+            solution_label_text = ww_container.querySelectorAll('.solution-knowl span.type')[0].textContent
+        }
+        if (b_has_hint) {
+            hint_label_text = ww_container.querySelectorAll('.hint-knowl span.type')[0].textContent
+        }
         // dump the problem text, answer blanks, etc. here
         body_div.innerHTML = data.rh_result.text
         adjustSrcHrefs(body_div,ww_domain)
-        translateHintSol(ww_id,body_div,ww_domain,b_has_hint,b_has_solution)
+        translateHintSol(ww_id,body_div,ww_domain,b_has_hint,b_has_solution,hint_label_text,solution_label_text)
         // there are a bunch of hidden input fields that the form uses
         var answersSubmitted  = document.querySelector("#" + ww_id + "-form input[name='answersSubmitted']")
         var problemSeed       = document.querySelector("#" + ww_id + "-form input[name='problemSeed']")
@@ -513,7 +531,7 @@ function adjustSrcHrefs(container,ww_domain) {
   });
 }
 
-function translateHintSol(ww_id,body_div,ww_domain,b_has_hint,b_has_solution) {
+function translateHintSol(ww_id,body_div,ww_domain,b_has_hint,b_has_solution,hint_label_text,solution_label_text) {
   // the problem text may come with "hint"s and "solution"s
   // each one is an "a" with content "Hint" or "Solution", and an attribute with base64-encoded HTML content
   // the WeBWorK knowl js would normally handle this, but we want PreTeXt knowl js to handle it
@@ -533,15 +551,14 @@ function translateHintSol(ww_id,body_div,ww_domain,b_has_hint,b_has_solution) {
         if (b_has_hint && hintanchor) {
           var hintbase64 = hintanchor.attributes.value.value;
           var hint = atob(hintbase64);
-          hintanchor.setAttribute('class', 'id-ref');
+          hintanchor.setAttribute('class', 'id-ref hint-knowl');
           hintanchor.setAttribute('data-knowl', '');
           hintanchor.setAttribute('data-refid', 'hk-hint-' + ww_id);
           hintlabel = document.createElement('span');
           hintlabel.setAttribute('class', 'type');
           hintanchor.innerHTML = "";
           hintanchor.appendChild(hintlabel);
-          // TODO: this label should copy whatever localized name was used in the static
-          hintlabel.innerHTML = 'Hint';
+          hintlabel.innerHTML = hint_label_text;
           var hkhintdiv = document.createElement('div');
           hkhintdiv.setAttribute('class', 'hidden-content tex2jax_ignore');
           hkhintdiv.setAttribute('id', 'hk-hint-' + ww_id);
@@ -564,15 +581,14 @@ function translateHintSol(ww_id,body_div,ww_domain,b_has_hint,b_has_solution) {
         if (b_has_solution && solutionanchor) {
           var solutionbase64 = solutionanchor.attributes.value.value;
           var solution = atob(solutionbase64);
-          solutionanchor.setAttribute('class', 'id-ref');
+          solutionanchor.setAttribute('class', 'id-ref solution-knowl');
           solutionanchor.setAttribute('data-knowl', '');
           solutionanchor.setAttribute('data-refid', 'hk-solution-' + ww_id);
           solutionlabel = document.createElement('span');
           solutionlabel.setAttribute('class', 'type');
           solutionanchor.innerHTML = "";
           solutionanchor.appendChild(solutionlabel);
-          // TODO: this label should copy whatever localized name was used in the static
-          solutionlabel.innerHTML = 'Solution';
+          solutionlabel.innerHTML = solution_label_text;
           var hksolutiondiv = document.createElement('div');
           hksolutiondiv.setAttribute('class', 'hidden-content tex2jax_ignore');
           hksolutiondiv.setAttribute('id', 'hk-solution-' + ww_id);
