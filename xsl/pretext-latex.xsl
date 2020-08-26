@@ -4450,7 +4450,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- $b-has-heading will always be "false" in these situations.     -->
 <!-- TODO: this could be an xparse environment, perhaps -->
 <!-- with a key indicating fontsize or division level   -->
-<xsl:template match="book|article|chapter|section|subsection|subsubsection|exercises|worksheet|reading-questions" mode="division-in-solutions">
+<xsl:template match="book|article|part|chapter|section|subsection|subsubsection|exercises|worksheet|reading-questions" mode="division-in-solutions">
     <xsl:param name="scope" />
     <xsl:param name="b-has-heading"/>
     <xsl:param name="content" />
@@ -4486,7 +4486,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:choose>
         </xsl:variable>
 
-        <!-- Does the current division get a number at birth? -->
+        <!-- Is the current division part of a structured division  -->
+        <!-- and hence display its number at birth?  (Not as simple -->
+        <!-- as: does it *have* a number?)                          -->
         <xsl:variable name="is-structured">
             <xsl:apply-templates select="parent::*" mode="is-structured-division"/>
         </xsl:variable>
