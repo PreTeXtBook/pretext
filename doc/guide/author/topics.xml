@@ -1206,6 +1206,16 @@
             <p>Use the <tag>m</tag> to place variables or very short expressions within a sentence of a paragraph, the content of a <tag>title</tag>, a <tag>cell</tag> of a table, a footnote, or other similar locations of sentence-like text.  You can't cross-reference this text, nor make a knowl with it.  Though you can typically cross-reference a containing element.</p>
 
             <p>Do not use <latex />-isms like <c>\displaystyle</c> to try to end-run the inline nature.  It will just lead to poor results.</p>
+
+            <note>
+                <title>Keep Inline Mathematics Short</title>
+
+                <p>Longer mathematical expressions in an <tag>m</tag> element can lead to awkward line breaks, both in <init>HTML</init> output, and especially in <init>PDF</init> generated from <latex/>.  And complicated fractions or integrals can introduce abnormal line-spacing that is distracting to a reader.  As a rough rule-of-thumb, keep an inline expression shorter than a moderately-long regular word and avoid tall constructions.  This should allow <latex/>'s line-breaking algorithms the best chance of success.</p>
+
+                <p>So a simple, short equality such as <m>x=2</m> should not cause a problem, but if you want to claim that the probability distribution of the normal distribution has the right scaling factors, <m>\int_{-\infty}^{\infty}\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{1}{2}\frac{\left(x-\mu\right)^2}{\sigma}} dx = 1</m>, there is a good chance it will do less harm to your paragraph of you display it
+                <me>\int_{-\infty}^{\infty}\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{1}{2}\frac{\left(x-\mu\right)^2}{\sigma}} dx = 1</me>
+                using the <tag>me</tag> element described next.</p>
+            </note>
         </subsection>
 
         <subsection>
