@@ -349,11 +349,17 @@ window.addEventListener("load",function(event) {
         switch(e.keyCode)
         {                       
             case 13:  //CR 
+                 just_hit_escape = false;
                  if($(document.activeElement).hasClass("aside-like")) {
                     $(document.activeElement).toggleClass("front")
                  }
             case 27: //esc
-     //           var parent_sage_cell = $(this).closest(".sagecell_editor");
+         //       var parent_sage_cell = $(this).closest(".sagecell_editor");
+                var parent_sage_cell = document.activeElement.closest(".sagecell_editor");
+                if (parent_sage_cell && !just_hit_escape) {
+                    console.log("staying in the sage cell", parent_sage_cell, document.activeElement)
+                    just_hit_escape = true;
+                    setTimeout(function(){ just_hit_escape = false }, 1000);
      //           console.log("parent_sage_cell", parent_sage_cell);
      //           if ($(parent_sage_cell).hasClass('sagecell_editor')) {
      //              console.log("I am trapped in a sage cell", $(document.activeElement).closest(".sagecell_editor"));
@@ -362,6 +368,7 @@ window.addEventListener("load",function(event) {
      //              this_sage_cell.next().focus;
      //           }
      //           else 
+                } else
                 if(knowl_focus_stack.length > 0 ) {
                    most_recently_opened = knowl_focus_stack.pop();
                    knowl_focus_stack_uid.pop();
@@ -376,6 +383,38 @@ window.addEventListener("load",function(event) {
 };
 },
 false);
+
+// a hack for hosted tracking
+
+window.addEventListener("load",function(event) {
+       if($('body').attr('id') == "judson-AATA") {
+           console.log("            found AATA");
+           console.log(" looking for id");
+           if (typeof eBookConfig !== 'undefined') {
+             if(eBookConfig['username']) {
+                aa_id = "run" + eBookConfig['username'];
+                ut_id = eBookConfig['username'];
+             console.log(" done looking for id", ut_id);
+var newscript = document.createElement('script');
+  newscript.type = 'text/javascript';
+  newscript.async = true;
+  newscript.src = 'https://pretextbook.org/js/' + '0.13' + '/' + 'trails' + '.js';
+  var allscripts = document.getElementsByTagName('script');
+  var s = allscripts[allscripts.length - 1];
+  console.log('s',s);
+  console.log("adding a script", newscript);
+  s.parentNode.insertBefore(newscript, s.nextSibling);
+  trail = true;
+             console.log(" done adding script");
+             } else {
+             console.log(" did not find username");
+             }
+           }  else {
+             console.log(" did not find eBookConfig")
+           }
+       }
+});
+
 
 /*
 window.setInterval(function(){
