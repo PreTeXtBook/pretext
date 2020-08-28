@@ -464,7 +464,7 @@ if (reading_questions.length) {
     edit_one_reading_question(this);
     $(this).attr('z-index', '2000');
   });
-//oooooooo  $('body').on('mouseleave','.rq_answer.editing', function(){
+
   $('body').on('mousedown','.rq_save', function(){
 //    $(this).children().last().addClass("hidecontrols");
 //    $(this).attr('z-index', '');
@@ -506,6 +506,11 @@ if (reading_questions.length) {
     localStorage.setObject(reading_questions_object_id, reading_questions_object);
   });
   
+  if(reading_questions_all_answered && uname != "guest" && role=="student") {
+        make_submit_button();
+        console.log("made submit button");
+  }
+
   $('body').on('click','#rq_submit', function(){
     console.log("submitting rq answers");
     $('#rq_submit').addClass('submitted');
