@@ -3655,7 +3655,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- "half-title" is leading page with -->
 <!-- title only, at about 1:2 split    -->
-<xsl:template match="book" mode="half-title" >
+<xsl:template match="book" mode="half-title-ad-card" >
     <xsl:text>%% begin: half-title&#xa;</xsl:text>
     <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
     <xsl:text>{\titlepagefont\centering&#xa;</xsl:text>
@@ -3672,19 +3672,45 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}&#xa;</xsl:text> <!-- finish centering, title page font -->
     <xsl:text>\clearpage&#xa;</xsl:text>
     <xsl:text>%% end:   half-title&#xa;</xsl:text>
+    <!-- ad-card may very well be blank, and otherwise -->
+    <!-- requires some customization                   -->
+    <xsl:variable name="the-ad-card">
+        <xsl:apply-templates select="." mode="ad-card"/>
+    </xsl:variable>
+    <xsl:choose>
+        <!-- Additional page for non-empty ad-card, -->
+        <!-- sideness is irrelevant                 -->
+        <xsl:when test="not($the-ad-card = '')">
+            <xsl:text>%% begin: adcard&#xa;</xsl:text>
+            <xsl:value-of select="$the-ad-card"/>
+            <xsl:text>\clearpage&#xa;</xsl:text>
+            <xsl:text>%% end:   adcard&#xa;</xsl:text>
+        </xsl:when>
+        <!-- need an empty page, obverse of half-title    -->
+        <!-- could also be left-side of title page spread -->
+        <xsl:when test="$latex-sides = 'two'">
+            <xsl:text>%% begin: adcard (empty)&#xa;</xsl:text>
+            <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
+            <xsl:text>\null%&#xa;</xsl:text>
+            <xsl:text>\clearpage&#xa;</xsl:text>
+            <xsl:text>%% end:   adcard (empty)&#xa;</xsl:text>
+        </xsl:when>
+        <!-- no content, and one-sided, do nothing -->
+        <xsl:otherwise/>
+    </xsl:choose>
 </xsl:template>
 
-<!-- Ad card may contain list of other books        -->
-<!-- Or may be overridden to make title page spread -->
-<!-- Obverse of half-title                          -->
-<!-- Use \titlepagefont if overidden                -->
-<xsl:template match="book" mode="ad-card">
-    <xsl:text>%% begin: adcard&#xa;</xsl:text>
-    <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
-    <xsl:text>\null%&#xa;</xsl:text>
-    <xsl:text>\clearpage&#xa;</xsl:text>
-    <xsl:text>%% end:   adcard&#xa;</xsl:text>
-</xsl:template>
+<!-- Ad card is the obverse of half-title, and may contain a list -->
+<!-- of other books by the author, or in a two-sided version, it  -->
+<!-- can be used as the left-side of a title page spread.  Send   -->
+<!-- a feature request if you need/want both. This template is as -->
+<!-- a hook meant to be overidden as part of custom XSL provided  -->
+<!-- by a knowledgeable publisher, so empty in typical use.  When -->
+<!-- overridden, it should produce a complete page, but without   -->
+<!-- a \clearpage at the bottom, that happens automatically.      -->
+<!-- The macro \titlepagefont can be used (scoped to the page)    -->
+<!-- for harmony with the actual title page, which appears next.  -->
+<xsl:template match="book" mode="ad-card"/>
 
 <!-- LaTeX's title page is not very robust, so we totally redo it         -->
 <!-- Template produces a single page, followed by a \clearpage            -->
@@ -3800,10 +3826,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>}\\</xsl:text>
 </xsl:template>
 
-<!-- Copyright page is obverse of title page  -->
-<!-- Lots of stuff here, much of it optional  -->
-<!-- But we always write something            -->
-<!-- as the obverse of title page             -->
+<!-- Copyright page is obverse of title page    -->
+<!-- Lots of stuff here, much of it optional    -->
+<!-- But we assume an author eventually states  -->
+<!-- their copyright, so do not handle the case -->
+<!-- of this content ever being empty (such as  -->
+<!-- with the ad-card).  So a LaTeX label is OK -->
+<!-- as well.  A final "\null" is just          -->
+<!-- protection for a non-mature project.       -->
 <xsl:template match="book" mode="copyright-page" >
     <!-- TODO: split out sections like "website" -->
     <!-- ISBN, Cover Design, Publisher -->
@@ -4037,13 +4067,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Not structural, titlepage element is just a signal -->
 <!-- Includes items from the colophon                   -->
 <xsl:template match="book/frontmatter/titlepage">
-    <!-- first page, title only -->
-    <xsl:apply-templates select="../.." mode="half-title" />
-    <!-- Obverse of half-title is adcard -->
-    <xsl:apply-templates select="../.." mode="ad-card" />
+    <!-- first page, half-title only; obverse -->
+    <!-- of half-title is possible adcard     -->
+    <xsl:apply-templates select="../.." mode="half-title-ad-card" />
     <!-- title page -->
     <xsl:apply-templates select="../.." mode="title-page" />
-    <!-- title page obverse is copyright, possibly empty -->
+    <!-- title page obverse is copyright, assumed non-empty -->
     <xsl:apply-templates select="../.." mode="copyright-page" />
     <!-- long biographies come earliest, since normally on copyright page -->
     <!-- short biographies are part of the copyright-page template        -->
@@ -4119,11 +4148,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\vspace*{\stretch{2}}&#xa;</xsl:text>
     <xsl:text>\clearpage&#xa;</xsl:text>
     <xsl:text>%% end:   dedication-page&#xa;</xsl:text>
-    <xsl:text>%% begin: obverse-dedication-page (empty)&#xa;</xsl:text>
-    <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
-    <xsl:text>\null%&#xa;</xsl:text>
-    <xsl:text>\clearpage&#xa;</xsl:text>
-    <xsl:text>%% end:   obverse-dedication-page&#xa;</xsl:text>
+    <xsl:if test="$latex-sides = 'two'">
+        <xsl:text>%% begin: obverse-dedication-page (empty)&#xa;</xsl:text>
+        <xsl:text>\thispagestyle{empty}&#xa;</xsl:text>
+        <xsl:text>\null%&#xa;</xsl:text>
+        <xsl:text>\clearpage&#xa;</xsl:text>
+        <xsl:text>%% end:   obverse-dedication-page (empty)&#xa;</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <!-- Dedications are meant to be very short      -->
@@ -4299,7 +4330,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The back colophon of a book goes on its own recto page -->
 <!-- The "backcolophon" environment is a tcolorbox          -->
 <xsl:template match="book/backmatter/colophon">
-    <xsl:text>\cleardoublepage&#xa;</xsl:text>
+    <xsl:choose>
+        <xsl:when test="$latex-sides = 'two'">
+            <xsl:text>\cleardoublepage&#xa;</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:text>\clearpage&#xa;</xsl:text>
+        </xsl:otherwise>
+    </xsl:choose>
     <xsl:text>\pagestyle{empty}&#xa;</xsl:text>
     <xsl:text>\vspace*{\stretch{1}}&#xa;</xsl:text>
     <xsl:text>\begin{backcolophon}</xsl:text>
