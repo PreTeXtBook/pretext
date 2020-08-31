@@ -106,7 +106,7 @@
 
         <p>A document is typically divided into sections.  But we reserve the word <c>section</c> for one very specific type of division.  To avoid confusion, we speak generically of <term>divisions</term>.  So, for example, a <c>section</c> is a division of a <c>chapter</c>.  Here we list all of the possible divisions, even if they are not available in each document type.</p>
 
-        <p>An <c>appendix</c> looks like a chapter of a <c>book</c>, with the option to have a <c>notation-list</c> or a <c>solution-list</c> as its entire contents.  It is possible this is not the best structure for an <c>article</c>, which might best be divided by <c>subsection</c>.</p>
+        <p>An <c>appendix</c> looks like a chapter of a <c>book</c>, with the option to have a <c>notation-list</c> as its entire contents.  It is possible this is not the best structure for an <c>article</c>, which might best be divided by <c>subsection</c>.</p>
 
         <p>There are several things to note (expand this): always a title, dead-end with blocks, or subdivide with optional intro and conclusion.</p>
 

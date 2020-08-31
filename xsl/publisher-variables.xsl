@@ -746,20 +746,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- exercises have been deprecated as of 2018-11-07.  We keep  -->
 <!-- these here as we have tried to preserve their intent, and  -->
 <!-- we are generating warnings if they are ever set.           -->
+<!-- 2020-08-31 exercise.backmatter.* only remain for warnings  -->
 <xsl:param name="exercise.text.statement" select="''" />
 <xsl:param name="exercise.text.hint" select="''" />
 <xsl:param name="exercise.text.answer" select="''" />
 <xsl:param name="exercise.text.solution" select="''" />
-<xsl:param name="exercise.backmatter.statement" select="''" />
-<xsl:param name="exercise.backmatter.hint" select="''" />
-<xsl:param name="exercise.backmatter.answer" select="''" />
-<xsl:param name="exercise.backmatter.solution" select="''" />
 <xsl:param name="project.text.hint" select="''" />
 <xsl:param name="project.text.answer" select="''" />
 <xsl:param name="project.text.solution" select="''" />
 <xsl:param name="task.text.hint" select="''" />
 <xsl:param name="task.text.answer" select="''" />
 <xsl:param name="task.text.solution" select="''" />
+<xsl:param name="exercise.backmatter.statement" select="''" />
+<xsl:param name="exercise.backmatter.hint" select="''" />
+<xsl:param name="exercise.backmatter.answer" select="''" />
+<xsl:param name="exercise.backmatter.solution" select="''" />
 
 <!-- These are deprecated in favor of watermark.text and watermark.scale -->
 <!-- which are now managed in common. These still "work" for now.        -->
