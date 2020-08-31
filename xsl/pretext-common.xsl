@@ -7022,23 +7022,31 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- superfluous.  So we provide a hierarchy of templates to       -->
 <!-- determine if structure and content yield output.              -->
 
-<!-- terminal (leaf) tasks, webwork stage -->
-<xsl:template match="task[not(task)]|stage" mode="dry-run">
+<!-- Bottom-up, a "traditional" exercise is clearest, so first.   -->
+<!-- Strategy is to produce non-empty output if the item would    -->
+<!-- normally produce some *real* output.                         -->
+
+<!-- "exercise", not WeBWorK or MyOpenMath, plus project-like. -->
+<!-- Easiest to switch on structured by task, or simpler       -->
+<!-- "traditional" exercise.                                   -->
+
+<xsl:template match="exercise[not(webwork-reps or myopenmath)]|&PROJECT-LIKE;" mode="dry-run">
     <xsl:param name="b-has-statement" />
     <xsl:param name="b-has-hint" />
     <xsl:param name="b-has-answer" />
     <xsl:param name="b-has-solution" />
 
     <xsl:choose>
-        <!-- burrow through potential "stage" -->
-        <xsl:when test="webwork-reps">
-            <xsl:if test="$b-has-statement or ($b-has-hint and webwork-reps/static//hint) or ($b-has-answer and webwork-reps/static//answer) or ($b-has-solution and webwork-reps/static//solution)">
-                <xsl:text>X</xsl:text>
-            </xsl:if>
+        <!-- recurse down into "task" via two templates above -->
+        <xsl:when test="task">
+            <xsl:apply-templates select="task" mode="dry-run">
+                <xsl:with-param name="b-has-statement" select="$b-has-statement" />
+                <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
+                <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
+                <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
+            </xsl:apply-templates>
         </xsl:when>
-        <!-- effective squash just for LaTeX -->
-        <xsl:when test="myopenmath" />
-        <!-- everything else, including a "stage" of a webwork problem -->
+        <!-- simple "traditional" exercise -->
         <xsl:otherwise>
             <xsl:if test="$b-has-statement or ($b-has-hint and hint) or ($b-has-answer and answer) or ($b-has-solution and solution)">
                 <xsl:text>X</xsl:text>
@@ -7047,6 +7055,25 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:choose>
 </xsl:template>
 
+<!-- We explicitly burrow down into tasks, since when we produce -->
+<!-- the solutions, the labels on the tasks are infrastructure   -->
+<!-- and we need the precision of knowing just which "task"      -->
+<!-- harbor solutions (and which do not).                        -->
+
+<!-- terminal (leaf) tasks -->
+<xsl:template match="task[not(task)]" mode="dry-run">
+    <xsl:param name="b-has-statement" />
+    <xsl:param name="b-has-hint" />
+    <xsl:param name="b-has-answer" />
+    <xsl:param name="b-has-solution" />
+
+    <xsl:if test="$b-has-statement or ($b-has-hint and hint) or ($b-has-answer and answer) or ($b-has-solution and solution)">
+        <xsl:text>X</xsl:text>
+    </xsl:if>
+</xsl:template>
+
+<!-- Simply pass through intermediate task since they  -->
+<!-- cannot harbor solutions (says schema) -->
 <xsl:template match="task[task]" mode="dry-run">
     <xsl:param name="b-has-statement" />
     <xsl:param name="b-has-hint" />
@@ -7054,6 +7081,77 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:param name="b-has-solution" />
 
     <xsl:apply-templates select="task" mode="dry-run">
+        <xsl:with-param name="b-has-statement" select="$b-has-statement" />
+        <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
+        <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
+        <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
+    </xsl:apply-templates>
+</xsl:template>
+
+<!-- WeBWorK are exceptional.  We use the "webwork-reps" element -->
+<!-- added by the assembly routine to examine "static" for the   -->
+<!-- indication of existence of solutions - even if the problem  -->
+ <!-- is "live" in interactive output.  Note that "stage" is     -->
+ <!-- similar to "task" above, we need to carefully burrow down  -->
+ <!-- into them to get indications of infrastructure when        -->
+ <!-- producing output.                                          -->
+
+<!-- WeBWorK exercise, structured by stages or not -->
+<xsl:template match="exercise[webwork-reps]" mode="dry-run">
+    <xsl:param name="b-has-statement" />
+    <xsl:param name="b-has-hint" />
+    <xsl:param name="b-has-answer" />
+    <xsl:param name="b-has-solution" />
+
+    <xsl:choose>
+        <xsl:when test="webwork-reps/static/stage">
+            <xsl:apply-templates select="webwork-reps/static/stage"/>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:if test="$b-has-statement or ($b-has-hint and webwork-reps/static/hint) or ($b-has-answer and webwork-reps/static/answer) or ($b-has-solution and webwork-reps/static/solution)">
+                <xsl:text>X</xsl:text>
+            </xsl:if>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<!-- webwork stage is like a problem by itself-->
+<xsl:template match="exercise/webwork-reps/static/stage" mode="dry-run">
+    <xsl:param name="b-has-statement" />
+    <xsl:param name="b-has-hint" />
+    <xsl:param name="b-has-answer" />
+    <xsl:param name="b-has-solution" />
+
+    <xsl:if test="$b-has-statement or ($b-has-hint and hint) or ($b-has-answer and answer) or ($b-has-solution and solution)">
+        <xsl:text>X</xsl:text>
+    </xsl:if>
+</xsl:template>
+
+<!-- 2020-08-31: MyOpenMath is not really implemented fully, this is a -->
+<!-- marker that will just prevent thse problems from appearing at all -->
+<xsl:template match="exercise[myopenmath]" mode="dry-run"/>
+
+
+<!-- Now we can tell is a given exercise (or project-like) will -->
+<!-- generate some solutions, relative to the various switches  -->
+<!-- in play.  So we now decide if various bits of surrounding  -->
+<!-- infrastructure need repeating, since they do, or do not,   -->
+<!-- contain exercises which will produce solutions.            -->
+
+
+<!-- An "exercisegroup" potentially has an "introduction"  -->
+<!-- and "conclusion" as infrastructure, and can only      -->
+<!-- contain divisional "exercise" as varying items        -->
+<!-- In a way, this is like an "exercise", it has content  -->
+<!-- that is like a "statement", so a "dry-run" is checked -->
+<!-- before outputting its introduction/conclusion         -->
+<xsl:template match="exercisegroup" mode="dry-run">
+    <xsl:param name="b-has-statement" />
+    <xsl:param name="b-has-hint" />
+    <xsl:param name="b-has-answer" />
+    <xsl:param name="b-has-solution" />
+
+    <xsl:apply-templates select="exercise" mode="dry-run">
         <xsl:with-param name="b-has-statement" select="$b-has-statement" />
         <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
         <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
@@ -7082,56 +7180,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:apply-templates>
 </xsl:template>
 
-<!-- An "exercisegroup" potentially has an "introduction"  -->
-<!-- and "conclusion" as infrastructure, and can only      -->
-<!-- contain divisional "exercise" as varying items        -->
-<!-- In a way, this is like an "exercise", it has content  -->
-<!-- that is like a "statement", so a "dry-run" is checked -->
-<!-- before outputting its introduction/conclusion         -->
-<xsl:template match="exercisegroup" mode="dry-run">
-    <xsl:param name="b-has-statement" />
-    <xsl:param name="b-has-hint" />
-    <xsl:param name="b-has-answer" />
-    <xsl:param name="b-has-solution" />
-
-    <xsl:apply-templates select="exercise" mode="dry-run">
-        <xsl:with-param name="b-has-statement" select="$b-has-statement" />
-        <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
-        <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
-        <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
-    </xsl:apply-templates>
-</xsl:template>
-
-<!-- authored exercise, project -->
-<xsl:template match="exercise|&PROJECT-LIKE;" mode="dry-run">
-    <xsl:param name="b-has-statement" />
-    <xsl:param name="b-has-hint" />
-    <xsl:param name="b-has-answer" />
-    <xsl:param name="b-has-solution" />
-
-    <xsl:choose>
-        <xsl:when test="task">
-            <xsl:apply-templates select="task" mode="dry-run">
-                <xsl:with-param name="b-has-statement" select="$b-has-statement" />
-                <xsl:with-param name="b-has-hint"      select="$b-has-hint" />
-                <xsl:with-param name="b-has-answer"    select="$b-has-answer" />
-                <xsl:with-param name="b-has-solution"  select="$b-has-solution" />
-            </xsl:apply-templates>
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:if test="$b-has-statement or ($b-has-hint and hint) or ($b-has-answer and answer) or ($b-has-solution and solution)">
-                <xsl:text>X</xsl:text>
-            </xsl:if>
-        </xsl:otherwise>
-    </xsl:choose>
-</xsl:template>
-
-<!-- An "exercises" or "reading-questions" division will have  -->
-<!-- a heading as infrastructure. We can investigate varying  -->
-<!-- "exercise" by just digging down into "exercisegroup" to  -->
-<!-- find all divisional "exercise"                           -->
-
-<!-- "exercises" is a specialized division and so needs only receive a subset of the many swithces the solutions-generator holds -->
+<!-- Now specialized divisions that can hold "exercise".  These      -->
+<!-- typically receive many parameters (~20) but only react/consider -->
+<!-- the ones relevant to the type of division being investigated.   -->
 
 <xsl:template match="exercises" mode="dry-run">
     <xsl:param name="b-divisional-statement" />
@@ -7179,7 +7230,9 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- We drill down into the division at any depth looking for objects -->
 <!-- based on the switches that control them.  This means we do not   -->
 <!-- have to examine all possible subdivisions, both traditional      -->
-<!-- and specialized.  Instead, we just pass through them.            -->
+<!-- and specialized.  Instead, we just pass through them.  But we do -->
+<!-- need to be careful about sort of division is being considered    -->
+<!-- and what switches are passed along.                              -->
 <xsl:template match="part|chapter|section|subsection|subsubsection" mode="dry-run">
     <xsl:param name="b-inline-statement" />
     <xsl:param name="b-inline-answer" />
