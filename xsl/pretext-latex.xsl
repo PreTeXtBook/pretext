@@ -5869,9 +5869,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                         </xsl:choose>
                     </xsl:for-each>
                 </xsl:if>
-                <xsl:if test="(hint and $b-has-hint) or (answer and $b-has-answer) or (solution and $b-has-solution)">
-                    <xsl:call-template name="exercise-component-separator" />
-                </xsl:if>
             </xsl:if>
             <xsl:if test="$b-has-hint">
                 <xsl:apply-templates select="hint">
@@ -5913,6 +5910,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="b-has-answer" />
     <xsl:param name="b-has-solution" />
 
+    <xsl:call-template name="exercise-component-separator" />
     <xsl:apply-templates select="." mode="solution-heading">
         <xsl:with-param name="b-original" select="$b-original" />
         <xsl:with-param name="purpose" select="$purpose" />
@@ -5920,16 +5918,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates>
         <xsl:with-param name="b-original" select="$b-original" />
     </xsl:apply-templates>
-    <xsl:choose>
-        <xsl:when test="following-sibling::hint">
-            <xsl:call-template name="exercise-component-separator" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:if test="(following-sibling::answer and $b-has-answer) or (following-sibling::solution and $b-has-solution)">
-                <xsl:call-template name="exercise-component-separator" />
-            </xsl:if>
-        </xsl:otherwise>
-    </xsl:choose>
 </xsl:template>
 
 <xsl:template match="answer">
@@ -5937,6 +5925,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="purpose" />
     <xsl:param name="b-has-solution" />
 
+    <xsl:call-template name="exercise-component-separator" />
     <xsl:apply-templates select="." mode="solution-heading">
         <xsl:with-param name="b-original" select="$b-original" />
         <xsl:with-param name="purpose" select="$purpose" />
@@ -5944,22 +5933,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates>
         <xsl:with-param name="b-original" select="$b-original" />
     </xsl:apply-templates>
-    <xsl:choose>
-        <xsl:when test="following-sibling::answer">
-            <xsl:call-template name="exercise-component-separator" />
-        </xsl:when>
-        <xsl:otherwise>
-            <xsl:if test="following-sibling::solution and $b-has-solution">
-                <xsl:call-template name="exercise-component-separator" />
-            </xsl:if>
-        </xsl:otherwise>
-    </xsl:choose>
 </xsl:template>
 
 <xsl:template match="solution">
     <xsl:param name="b-original" />
     <xsl:param name="purpose" />
 
+    <xsl:call-template name="exercise-component-separator" />
     <xsl:apply-templates select="." mode="solution-heading">
         <xsl:with-param name="b-original" select="$b-original" />
         <xsl:with-param name="purpose" select="$purpose" />
@@ -5967,10 +5947,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates>
         <xsl:with-param name="b-original" select="$b-original" />
     </xsl:apply-templates>
-    <xsl:if test="following-sibling::solution">
-        <xsl:call-template name="exercise-component-separator" />
-    </xsl:if>
-    <!-- no final separator, solutions are last, let environment handle -->
 </xsl:template>
 
 <!-- Each component has a similar look, so we combine here -->
@@ -5983,7 +5959,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- NB: this is the only place \blocktitlefont is written into   -->
     <!-- the body, so a tcbcolorbox could be a great idea to maintain -->
     <!-- a separation between the preamble and body                   -->
-    <xsl:text>\textbf{\blocktitlefont </xsl:text>
+    <xsl:text>\noindent\textbf{\blocktitlefont </xsl:text>
     <xsl:apply-templates select="." mode="type-name" />
     <!-- An empty value means element is a singleton -->
     <!-- else the serial number comes through        -->
@@ -6038,9 +6014,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template name="exercise-component-separator">
-    <!-- <xsl:text>\par\smallskip\noindent%&#xa;</xsl:text> -->
     <xsl:text>\par\smallskip%&#xa;</xsl:text>
-    <xsl:text>\noindent</xsl:text>
 </xsl:template>
 
 <!-- Exercise Group -->
@@ -6309,7 +6283,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:call-template>
         <xsl:text> </xsl:text>
         <xsl:apply-templates select="." mode="serial-number" />
-        <xsl:text>.}\quad </xsl:text>
+        <xsl:text>.}&#xa;</xsl:text>
+        <!-- <xsl:text>\par\smallskip\noindent</xsl:text> -->
         <xsl:apply-templates select="." mode="exercise-components">
             <xsl:with-param name="b-original" select="$b-original"/>
             <xsl:with-param name="purpose" select="$purpose"/>
