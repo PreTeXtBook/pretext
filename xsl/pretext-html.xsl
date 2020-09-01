@@ -5275,7 +5275,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:attribute name="class">
             <xsl:choose>
                 <xsl:when test="@width = 'narrow'">
-                    <xsl:text>description-list-narrow</xsl:text>
+                    <xsl:text>description-list narrow</xsl:text>
                 </xsl:when>
                 <!-- 'medium', 'wide', and any typo (let DTD check) -->
                 <xsl:otherwise>
