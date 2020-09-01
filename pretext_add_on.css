@@ -1540,39 +1540,14 @@ iii.indexletter + :target::before {
     display: block;
     clear: left;
 }
-.pretext-content dl.description-list.narrow dt {
-    width: 8ex;
-}
-
-/* delete all the -narrow in the next CSS version */
-.pretext-content dl.description-list-narrow {
-    margin-left: 0;
-}
-.pretext-content dl.description-list-narrow dt {
-    float: left;
-    clear: left;
-    text-align: right;
-    width: 8ex;
-}
-.pretext-content dl.description-list-narrow dt {
-    float: left;
-    clear: left;
-    text-align: right;
-    width: 8ex;
-}
 .pretext-content dl.description-list dt:first-of-type {
     clear: none;
 }
-.pretext-content dl.description-list-narrow dt:first-of-type {
-    clear: none;
+.pretext-content dl.description-list.narrow dt {
+    width: 8ex;
 }
-.pretext-content dl.description-list-narrow dd {
+.pretext-content dl.description-list.narrow dd {
     margin-left: 12ex;
-}
-.pretext-content dl.description-list-narrow dd:after {
-    content: "";
-    display: block;
-    clear: left;
 }
 
 @media screen and (max-width: 480px) {
@@ -1586,6 +1561,29 @@ iii.indexletter + :target::before {
     margin-left: 3em;
   }
 }
+
+/* delete all the -narrow in the next CSS version */
+.pretext-content dl.description-list-narrow {
+    margin-left: 0;
+}
+.pretext-content dl.description-list-narrow dt {
+    float: left;
+    clear: left;
+    text-align: right;
+    width: 8ex;
+}
+.pretext-content dl.description-list-narrow dt:first-of-type {
+    clear: none;
+}
+.pretext-content dl.description-list-narrow dd {
+    margin-left: 12ex;
+}
+.pretext-content dl.description-list-narrow dd:after {
+    content: "";
+    display: block;
+    clear: left;
+}
+/* end of -narrow */
 
 /*
 #toc ul li.listprefix {
