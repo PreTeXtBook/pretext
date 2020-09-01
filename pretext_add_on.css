@@ -669,17 +669,8 @@ body > a.assistive:focus {
     margin: 0.75em 0 0 0;
 }
 
-/*
-.pretext-content .sidebyside figcaption .heading, .pretext-content .sidebyside figcaption .codenumber {
-    font-weight: 700;
-}
-*/
 
-/* .pretext-content .sidebyside figcaption .heading:after {
-    content: "\00a0";
-} */
-
-.pretext-content figcaption .codenumber{
+.pretext-content figcaption {
     font-family: "PT Serif", "Times New Roman", Times, serif;
 }
 
@@ -1128,6 +1119,18 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
     font-size: 80%;
 }
 
+/* temporary for runestone */
+.pretext-content section article .heading + div,
+.pretext-content section article.exercise  .heading + div,
+.pretext-content section article.exercise  .heading + div > p:first-child,
+.pretext-content section article .heading + div.exercisegroup > div:first-child,
+.pretext-content section article .heading + div.exercisegroup > div:first-child > p:first-child,
+.pretext-content section article .heading + div.runestone,
+.pretext-content section article .heading + div.runestone > div:first-child,
+.pretext-content section article .heading + div.runestone > div:first-child > p:first-child {
+    display: inline;
+}
+
 .pretext-content .heading a.permalink:hover {
     opacity: 1;
     color: #a32;
@@ -1511,7 +1514,7 @@ iii.indexletter + :target::before {
     margin-left: 0;
 }
 
-.pretext-content dl dt {
+.pretext-content dl > dt {
         font-weight: bold;
 }
 
@@ -1537,7 +1540,11 @@ iii.indexletter + :target::before {
     display: block;
     clear: left;
 }
+.pretext-content dl.description-list.narrow dt {
+    width: 8ex;
+}
 
+/* delete all the -narrow in the next CSS version */
 .pretext-content dl.description-list-narrow {
     margin-left: 0;
 }
@@ -1546,6 +1553,18 @@ iii.indexletter + :target::before {
     clear: left;
     text-align: right;
     width: 8ex;
+}
+.pretext-content dl.description-list-narrow dt {
+    float: left;
+    clear: left;
+    text-align: right;
+    width: 8ex;
+}
+.pretext-content dl.description-list dt:first-of-type {
+    clear: none;
+}
+.pretext-content dl.description-list-narrow dt:first-of-type {
+    clear: none;
 }
 .pretext-content dl.description-list-narrow dd {
     margin-left: 12ex;
@@ -2113,19 +2132,14 @@ figure figcaption.wrap {
     overflow-x: auto;
 }
 
-/*
-.pretext-content figure > .image-box {
-    margin-left: auto;
-    margin-right: auto;
-}
-*/
-.pretext-content figure > .image-box .asymptote-box,
+.pretext-content .image-box,
 .pretext-content .audio-box,
 .pretext-content .video-box,
-.pretext-content .audio-box {
+.pretext-content .asymptote-box {
     position: relative;
 }
-.pretext-content figure > .image-box .asymptote-box iframe.asymptote,
+.pretext-content .image-box .asymptote-box iframe.asymptote,
+.pretext-content iframe.asymptote,
 .pretext-content .video-box .video,
 .pretext-content .video-box .video-poster {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
