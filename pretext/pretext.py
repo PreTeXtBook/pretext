@@ -68,7 +68,7 @@ def mathjax_latex(xml_source, pub_file, out_file, dest_dir, math_format):
     _debug('calling MathJax to convert LaTeX from {} into raw representations in {}'.format(mjinput, mjoutput))
 
     # process with  pretext.js  executable from  MathJax (Davide Cervone, Volker Sorge)
-    node_exec = get_executable('node')
+    node_exec_cmd = get_executable_cmd('node')
     mjsre_page = os.path.join(get_ptx_path(), 'script', 'mjsre', 'mj-sre-page.js')
     output = {
         'svg': 'svg',
@@ -83,7 +83,7 @@ def mathjax_latex(xml_source, pub_file, out_file, dest_dir, math_format):
         raise ValueError('PTX:ERROR: incorrect format ("{}") for MathJax conversion'.format(math_format))
     mj_option = '--' + mj_var
     mj_tag = 'mj-' + mj_var
-    mjpage_cmd = [node_exec, mjsre_page, mj_option, mjinput]
+    mjpage_cmd = node_exec_cmd + [mjsre_page, mj_option, mjinput]
     outfile = open(mjoutput, 'w')
     subprocess.run(mjpage_cmd, stdout=outfile)
 
@@ -130,8 +130,9 @@ def asymptote_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_di
     _verbose('converting Asymptote diagrams from {} to {} graphics for placement in {}'.format(xml_source, outformat.upper(), dest_dir))
     tmp_dir = get_temporary_directory()
     _debug("temporary directory: {}".format(tmp_dir))
-    asy_executable = get_executable('asy')
-    _debug("asy executable: {}".format(asy_executable))
+    asy_executable_cmd = get_executable_cmd('asy')
+    # TODO why this debug line? get_executable_cmd() outputs the same debug info
+    _debug("asy executable: {}".format(asy_executable_cmd[0]))
     ptx_xsl_dir = get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, 'extract-asymptote.xsl')
     # support publisher file, subtree argument
@@ -150,7 +151,7 @@ def asymptote_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_di
     # perhaps replace following stock advisory with a real version
     # check using the (undocumented) distutils.version module, see:
     # https://stackoverflow.com/questions/11887762/how-do-i-compare-version-numbers-in-python
-    proc = subprocess.Popen([asy_executable, '--version'], stderr=subprocess.PIPE)
+    proc = subprocess.Popen([asy_executable_cmd[0], '--version'], stderr=subprocess.PIPE)
     # bytes -> ASCII, strip final newline
     asyversion = proc.stderr.read().decode('ascii')[:-1]
     # simply copy for source file output
@@ -161,12 +162,11 @@ def asymptote_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_di
     # consolidated process for four possible output formats
     if outformat in ['html', 'svg', 'png', 'pdf', 'eps']:
         # build command line to suit
-        if outformat == 'html':
-            asy_cli = [asy_executable, '-f', outformat]
-        elif outformat in ['pdf', 'eps']:
-            asy_cli = [asy_executable, '-f', outformat, '-noprc', '-iconify', '-tex', 'xelatex', '-batchMask']
+        asy_cli = [asy_executable, '-f', outformat]
+        if outformat in ['pdf', 'eps']:
+            asy_cli += ['-noprc', '-iconify', '-tex', 'xelatex', '-batchMask']
         elif outformat in ['svg', 'png']:
-            asy_cli = [asy_executable, '-f', outformat, '-render=4', '-tex', 'xelatex', '-iconify']
+            asy_cli += ['-render=4', '-tex', 'xelatex', '-iconify']
         # loop over files, doing conversions
         for asydiagram in os.listdir(tmp_dir):
             filebase, _ = os.path.splitext(asydiagram)
@@ -194,8 +194,9 @@ def sage_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_dir, ou
     _verbose('converting Sage diagrams from {} to {} graphics for placement in {}'.format(xml_source, outformat.upper(), dest_dir))
     tmp_dir = get_temporary_directory()
     _debug("temporary directory: {}".format(tmp_dir))
-    sage_executable = get_executable('sage')
-    _debug("sage executable: {}".format(sage_executable))
+    sage_executable_cmd = get_executable_cmd('sage')
+    # TODO why this debug line? get_executable_cmd() outputs the same debug info
+    _debug("sage executable: {}".format(sage_executable_cmd[0]))
     ptx_xsl_dir = get_ptx_xsl_path()
     extraction_xslt = os.path.join(ptx_xsl_dir, 'extract-sageplot.xsl')
     _verbose("extracting Sage diagrams from {}".format(xml_source))
@@ -214,7 +215,7 @@ def sage_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_dir, ou
             filebase, _ = os.path.splitext(sageplot)
             sageout = "{0}.{1}".format(filebase, outformat)
             sagepng = "{0}.png".format(filebase, outformat)
-            sage_cmd = [sage_executable,  sageplot, outformat]
+            sage_cmd = sage_executable_cmd + [sageplot, outformat]
             _verbose("converting {} to {} (or {} for 3D)".format(sageplot, sageout, sagepng))
             _debug("sage conversion {}".format(sage_cmd))
             subprocess.call(sage_cmd, stdout=devnull, stderr=subprocess.STDOUT)
@@ -264,17 +265,17 @@ def latex_image_conversion(xml_source, pub_file, stringparams, xmlid_root, data_
             latex_image_svg = "{}.svg".format(filebase)
             latex_image_png = "{}.png".format(filebase)
             latex_image_eps = "{}.eps".format(filebase)
-            tex_executable = get_executable('tex')
-            _debug("tex executable: {}".format(tex_executable))
-            latex_cmd = [tex_executable, "-interaction=batchmode", latex_image]
+            tex_executable_cmd = get_executable_cmd('tex')
+            # TODO why this debug line? get_executable_cmd() outputs the same debug info
+            _debug("tex executable: {}".format(tex_executable_cmd[0]))
+            latex_cmd = tex_executable_cmd + ["-interaction=batchmode", latex_image]
             _verbose("converting {} to {}".format(latex_image, latex_image_pdf))
             subprocess.call(latex_cmd, stdout=devnull, stderr=subprocess.STDOUT)
             if not os.path.exists(latex_image_pdf):
                 print('PTX:ERROR: There was a problem compiling {} and {} was not created'.format(latex_image,latex_image_pdf))
-            pcm_executable = get_executable('pdfcrop')
-            _debug("pdf-crop-margins executable: {}".format(pcm_executable))
-            pcm_cmd = [pcm_executable, latex_image_pdf, "-o", "cropped-"+latex_image_pdf, "-p", "0", "-a", "-1"]
-            _verbose("cropping {} to {}".format(latex_image_pdf, "cropped-"+latex_image_pdf))
+            pcm_executable_cmd = get_executable_cmd('pdfcrop')
+            pcm_cmd = pcm_executable_cmd + [latex_image_pdf, "-o", "cropped-"+latex_image_pdf, "-p", "0", "-a", "-1"]
+            _verbose("cropping {} to {}".format(latex_image_pdf, latex_image_pdf))
             subprocess.call(pcm_cmd, stdout=devnull, stderr=subprocess.STDOUT)
             shutil.move("cropped-"+latex_image_pdf, latex_image_pdf)
             if outformat == 'all':
@@ -282,24 +283,27 @@ def latex_image_conversion(xml_source, pub_file, stringparams, xmlid_root, data_
             if (outformat == 'pdf' or outformat == 'all'):
                 shutil.copy2(latex_image_pdf, dest_dir)
             if (outformat == 'svg' or outformat == 'all'):
-                pdfsvg_executable = get_executable('pdfsvg')
-                _debug("pdfsvg executable: {}".format(pdfsvg_executable))
-                svg_cmd = [pdfsvg_executable, latex_image_pdf, latex_image_svg]
+                pdfsvg_executable_cmd = get_executable_cmd('pdfsvg')
+                # TODO why this debug line? get_executable_cmd() outputs the same debug info
+                _debug("pdfsvg executable: {}".format(pdfsvg_executable_cmd[0]))
+                svg_cmd = pdfsvg_executable_cmd + [latex_image_pdf, latex_image_svg]
                 _verbose("converting {} to {}".format(latex_image_pdf, latex_image_svg))
                 subprocess.call(svg_cmd)
                 shutil.copy2(latex_image_svg, dest_dir)
             if (outformat == 'png' or outformat == 'all'):
                 # create high-quality png, presumes "convert" executable
-                pdfpng_executable = get_executable('pdfpng')
-                _debug("pdfpng executable: {}".format(pdfpng_executable))
-                png_cmd = [pdfpng_executable, "-density", "300",  latex_image_pdf, "-quality", "100", latex_image_png]
+                pdfpng_executable_cmd = get_executable_cmd('pdfpng')
+                # TODO why this debug line? get_executable_cmd() outputs the same debug info
+                _debug("pdfpng executable: {}".format(pdfpng_executable_cmd[0]))
+                png_cmd = pdfpng_executable_cmd + ["-density", "300",  latex_image_pdf, "-quality", "100", latex_image_png]
                 _verbose("converting {} to {}".format(latex_image_pdf, latex_image_png))
                 subprocess.call(png_cmd)
                 shutil.copy2(latex_image_png, dest_dir)
             if (outformat == 'eps' or outformat == 'all'):
-                pdfeps_executable = get_executable('pdfeps')
-                _debug("pdfeps executable: {}".format(pdfeps_executable))
-                eps_cmd = [pdfeps_executable, '-eps', latex_image_pdf, latex_image_eps]
+                pdfeps_executable_cmd = get_executable_cmd('pdfeps')
+                # TODO why this debug line? get_executable_cmd() outputs the same debug info
+                _debug("pdfeps executable: {}".format(pdfeps_executable_cmd[0]))
+                eps_cmd = pdfeps_executable_cmd + ['-eps', latex_image_pdf, latex_image_eps]
                 _verbose("converting {} to {}".format(latex_image_pdf, latex_image_eps))
                 subprocess.call(eps_cmd)
                 shutil.copy2(latex_image_eps, dest_dir)
@@ -1034,8 +1038,9 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
     # call will need to accept the override as a stringparam
     baseurl = interactives[0]
 
-    pageres_executable = get_executable('pageres')
-    _debug("pageres executable: {}".format(pageres_executable))
+    pageres_executable_cmd = get_executable_cmd('pageres')
+    # TODO why this debug line? get_executable_cmd() outputs the same debug info
+    _debug("pageres executable: {}".format(pageres_executable_cmd[0]))
     _debug("interactives identifiers: {}".format(interactives))
 
     # pageres-cli writes into current working directory
@@ -1059,7 +1064,7 @@ def preview_images(xml_source, pub_file, stringparams, xmlid_root, dest_dir):
         # Overwriting files prevents numbered versions (with spaces!)
         # 3-second delay allows Javascript, etc to settle down
         # --transparent, --crop do not seem very effective
-        cmd = [pageres_executable,
+        cmd = pageres_executable_cmd + [
         "-v",
         "--overwrite",
         '-d5',
@@ -1270,10 +1275,10 @@ def braille(xml_source, pub_file, stringparams, out_file, dest_dir, page_format)
     else:
         raise ValueError('PTX:BUG: braille page format not recognized')
     final_brf = get_output_filename(xml_source, out_file, dest_dir, '.brf')
-    liblouis_exec = get_executable('liblouis')
+    liblouis_exec_cmd = get_executable_cmd('liblouis')
     msg = 'applying liblouis to {} with configurations {}, creating BRF {}'
     _debug(msg.format(liblouis_xml, cfg, final_brf))
-    liblouis_cmd = [liblouis_exec, '-f', cfg, liblouis_xml, final_brf]
+    liblouis_cmd = liblouis_exec_cmd + ['-f', cfg, liblouis_xml, final_brf]
 
     subprocess.run(liblouis_cmd)
     _verbose('BRF file deposited as {}'.format(final_brf))
@@ -1636,7 +1641,7 @@ def get_source_path(source_file):
     _verbose("discovering source file's directory name: {}".format(source_dir))
     return os.path.normpath(source_dir)
 
-def get_executable(exec_name):
+def get_executable_cmd(exec_name):
     """Queries configuration file for executable name, verifies existence in Unix"""
     import os
     import platform
@@ -1649,28 +1654,28 @@ def get_executable(exec_name):
 
     # get the name, but then see if it really, really works
     _debug('locating "{}" in [executables] section of configuration file'.format(exec_name))
-    config_name = config.get('executables', exec_name)
+    config_cmd_line = config.get('executables', exec_name).split()
 
     # Returns the full-path version of the command, as if the PATH was employed
     # "None" indicates the executable does not exist on the system
     # https://stackoverflow.com/questions/377017/test-if-executable-exists-in-python
-    normalized_exec = shutil.which(config_name)
+    normalized_exec = shutil.which(config_cmd_line[0])
 
     error_messages = []
     if normalized_exec == None:
         error_messages += [
-            'PTX:ERROR: cannot locate executable with configuration name `{}` as command `{}`'.format(exec_name, config_name),
+            'PTX:ERROR: cannot locate executable with configuration name `{}` as command `{}`'.format(exec_name, config_cmd_line[0]),
             '*** Edit the configuration file and/or install the necessary program ***'
         ]
-    if config_name == "pdfcrop":
+    if config_cmd_line[0] == "pdfcrop":
         error_messages += [
             'PTX:ERROR: Program "pdfcrop" was replaced by "pdf-crop-margins" as of 2020-07-07.',
             'Install with "pip install pdfCropMargins" and update your configuration file with "pdfcrop = pdf-crop-margins".'
         ]
     if error_messages:
         raise OSError('\n'.join(error_messages))
-    _debug("{} executable: {}".format(exec_name, config_name))
-    return config_name
+    _debug("{} executable: {}, options: {}".format(exec_name, config_cmd_line[0], ' '.join(config_cmd_line[1:])))
+    return config_cmd_line
 
 def sanitize_url(url):
     """Verify a server address"""
