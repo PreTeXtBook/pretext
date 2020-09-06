@@ -164,9 +164,9 @@ def asymptote_conversion(xml_source, pub_file, stringparams, xmlid_root, dest_di
         # build command line to suit
         asy_cli = [asy_executable, '-f', outformat]
         if outformat in ['pdf', 'eps']:
-            asy_cli.extend(['-noprc', '-iconify', '-batchMask'])
+            asy_cli += ['-noprc', '-iconify', '-tex', 'xelatex', '-batchMask']
         elif outformat in ['svg', 'png']:
-            asy_cli.extend(['-render=4', '-iconify'])
+            asy_cli += ['-render=4', '-tex', 'xelatex', '-iconify']
         # loop over files, doing conversions
         for asydiagram in os.listdir(tmp_dir):
             filebase, _ = os.path.splitext(asydiagram)
