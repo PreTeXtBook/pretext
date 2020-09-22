@@ -10860,19 +10860,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Empty if not enabled via presence of cx number -->
 <xsl:template name="google-search-box-js">
     <xsl:if test="$b-google-cse">
-        <xsl:element name="script">
-            <xsl:text>(function() {&#xa;</xsl:text>
-            <xsl:text>  var cx = '</xsl:text>
-            <xsl:value-of select="$google-search-cx" />
-            <xsl:text>';&#xa;</xsl:text>
-            <xsl:text>  var gcse = document.createElement('script');&#xa;</xsl:text>
-            <xsl:text>  gcse.type = 'text/javascript';&#xa;</xsl:text>
-            <xsl:text>  gcse.async = true;&#xa;</xsl:text>
-            <xsl:text>  gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;&#xa;</xsl:text>
-            <xsl:text>  var s = document.getElementsByTagName('script')[0];&#xa;</xsl:text>
-            <xsl:text>  s.parentNode.insertBefore(gcse, s);&#xa;</xsl:text>
-            <xsl:text>})();&#xa;</xsl:text>
-        </xsl:element>
+        <script async="">
+            <xsl:attribute name="src">
+                <xsl:text>https://cse.google.com/cse.js?cx=</xsl:text>
+                <xsl:value-of select="$google-search-cx"/>
+            </xsl:attribute>
+        </script>
     </xsl:if>
 </xsl:template>
 
