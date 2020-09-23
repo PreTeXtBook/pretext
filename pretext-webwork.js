@@ -63,7 +63,9 @@ function initWW(ww_id) {
         if (b_ptx_has_hint) {
             hint_label_text = ww_container.querySelectorAll('.hint-knowl span.type')[0].textContent
         }
-        //void the static version
+	// record if previous version has show correct answers button
+	var b_previous_has_show_correct = ww_container.getElementsByClassName('show-correct').length > 0;
+        // void the static/previous version
         ww_container.innerHTML = ""
         // a div for the problem text
         var body_div = document.createElement("div")
@@ -195,8 +197,9 @@ function initWW(ww_id) {
         check.textContent = "Check Answers";
         check.id = ww_id + '-check'
         buttons.appendChild(check)
-        // show correct answers button
-        if (b_ptx_has_answer) {
+        // show correct answers button either if original PTX has answer knowl
+        // or if we are reloading and this button was already present
+        if (b_ptx_has_answer || b_previous_has_show_correct) {
             // prepare answers object
             var data_answers = data.rh_result.answers
             var answer_ids = Object.keys(data_answers)
@@ -209,7 +212,7 @@ function initWW(ww_id) {
                 }
             })
             var correct = document.createElement("button")
-            correct.setAttribute('class', "correct")
+            correct.setAttribute('class', "show-correct")
             correct.type = "button"
             correct.textContent = "Show Correct Answers";
             correct.setAttribute('onclick', "WWshowCorrect('" + ww_id + "'," + JSON.stringify(answers) + ")")
@@ -341,7 +344,7 @@ function updateWW(ww_id,task) {
         // show correct answers button
         // if present, needs to be updated in case of randomizing
         if (b_ptx_has_answer) {
-            var correct = document.querySelector("#" + ww_id + "-form div button.correct")
+            var correct = document.querySelector("#" + ww_id + "-form div button.show-correct")
             correct.setAttribute('onclick', "WWshowCorrect('" + ww_id + "'," + JSON.stringify(answers) + ")")
         }
         // insert results near/around input fields
