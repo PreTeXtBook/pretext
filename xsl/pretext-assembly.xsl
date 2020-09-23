@@ -137,6 +137,9 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Don't match on simple WeBWorK logo       -->
 <!-- Seed and possibly source attributes      -->
 <!-- Then authored?, pg?, and static children -->
+<!-- NB: "xref" check elsewhere is not        -->
+<!-- performed here since we accept           -->
+<!-- representations at face-value            -->
 <xsl:template match="webwork[node()|@*]" mode="assembly">
     <xsl:variable name="ww-id">
         <xsl:apply-templates select="." mode="visible-id" />
@@ -174,9 +177,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- structure in this file.)  The consequence is the "//" in   -->
 <!-- each expression below.                                     -->
 <!-- NB: relative to *original* source file/tree                -->
-<xsl:variable name="n-hint"     select="document($private-solutions-file, $original)/pi:privatesolutions//hint"/>
-<xsl:variable name="n-answer"   select="document($private-solutions-file, $original)/pi:privatesolutions//answer"/>
-<xsl:variable name="n-solution" select="document($private-solutions-file, $original)/pi:privatesolutions//solution"/>
+<xsl:variable name="privatesolns" select="document($private-solutions-file, $original)"/>
+<xsl:variable name="n-hint"     select="$privatesolns/pi:privatesolutions//hint"/>
+<xsl:variable name="n-answer"   select="$privatesolns/pi:privatesolutions//answer"/>
+<xsl:variable name="n-solution" select="$privatesolns/pi:privatesolutions//solution"/>
 
 <xsl:template match="exercise|task" mode="assembly">
     <xsl:variable name="the-id" select="@xml:id"/>
@@ -267,13 +271,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- placeholder text in enhanced source -->
         <xsl:otherwise>
             <xsl:variable name="error-list" select="substring($bad-xrefs-in-list, 1, string-length($bad-xrefs-in-list) - 2)"/>
-            <xsl:message>PTX:ERROR:   a cross-reference ("xref") uses references [<xsl:value-of select="$error-list"/>] that do not point to any target.  Maybe you typed an @xml:id value wrong, maybe the target of the @xml:id is nonexistent, or maybe you temporarily removed the target from your source.  Your output will contain some placeholder text that you will not want to distribute to your readers.</xsl:message>
+            <xsl:message>PTX:ERROR:   a cross-reference ("xref") uses references [<xsl:value-of select="$error-list"/>] that do not point to any target, or perhaps point to multiple targets.  Maybe you typed an @xml:id value wrong, maybe the target of the @xml:id is nonexistent, or maybe you temporarily removed the target from your source, or maybe an auxiliary file contains a duplicate.  Your output will contain some placeholder text that you will not want to distribute to your readers.</xsl:message>
             <xsl:apply-templates select="." mode="location-report"/>
             <!-- placeholder text -->
             <c>
                 <xsl:text>[cross-reference to target(s) "</xsl:text>
                 <xsl:value-of select="$error-list"/>
-                <xsl:text>" missing]</xsl:text>
+                <xsl:text>" missing or not unique]</xsl:text>
             </c>
         </xsl:otherwise>
     </xsl:choose>
@@ -287,7 +291,29 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
         <!-- test/check initial ref of the list -->
         <xsl:otherwise>
             <xsl:variable name="initial" select="substring-before($ref-list, ' ')" />
-            <xsl:if test="not(exsl:node-set(id($initial)))">
+            <!-- Look up the ref in all relevant "documents":          -->
+            <!-- the original source, and private solution file.       -->
+            <!-- Count the number of successes, hoping it will be 1.   -->
+            <!-- Long-term, this check should be performed in a second -->
+            <!-- pass on a completely assembled source, so the id()    -->
+            <!-- function does not need to survey multiple documents.  -->
+            <xsl:variable name="hits">
+                <!-- always do a context shift to $original -->
+                <xsl:for-each select="$original">
+                    <xsl:if test="exsl:node-set(id($initial))">
+                        <xsl:text>X</xsl:text>
+                    </xsl:if>
+                </xsl:for-each>
+                <!-- optionally do a context shift to private solutions file -->
+                <xsl:if test="$b-private-solutions">
+                    <xsl:for-each select="$privatesolns">
+                        <xsl:if test="exsl:node-set(id($initial))">
+                            <xsl:text>X</xsl:text>
+                        </xsl:if>
+                    </xsl:for-each>
+                </xsl:if>
+            </xsl:variable>
+            <xsl:if test="not($hits = 'X')">
                 <!-- drop the failed lookup, plus a separator.  A nonempty -->
                 <!-- result for this template is indicative of a failure   -->
                 <!-- and the list can be reported in the error message     -->
