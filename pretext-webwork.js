@@ -51,16 +51,16 @@ function initWW(ww_id) {
             return false;
         }
         // determine if static version shows hints, solutions, answers
-        var b_has_hint = ww_container.getElementsByClassName('hint').length > 0;
-        var b_has_answer = ww_container.getElementsByClassName('answer').length > 0;
-        var b_has_solution = ww_container.getElementsByClassName('solution').length > 0;
+        var b_ptx_has_hint = ww_container.getElementsByClassName('hint').length > 0;
+        var b_ptx_has_answer = ww_container.getElementsByClassName('answer').length > 0;
+        var b_ptx_has_solution = ww_container.getElementsByClassName('solution').length > 0;
         // get (possibly localized) label text for hints, solutions
         var hint_label_text = 'Hint'
         var solution_label_text = 'Solution'
-        if (b_has_solution) {
+        if (b_ptx_has_solution) {
             solution_label_text = ww_container.querySelectorAll('.solution-knowl span.type')[0].textContent
         }
-        if (b_has_hint) {
+        if (b_ptx_has_hint) {
             hint_label_text = ww_container.querySelectorAll('.hint-knowl span.type')[0].textContent
         }
         //void the static version
@@ -88,7 +88,7 @@ function initWW(ww_id) {
           }
         }
         adjustSrcHrefs(body_div,ww_domain)
-        translateHintSol(ww_id,body_div,ww_domain,b_has_hint,b_has_solution,hint_label_text,solution_label_text)
+        translateHintSol(ww_id,body_div,ww_domain,b_ptx_has_hint,b_ptx_has_solution,hint_label_text,solution_label_text)
         // insert our cleaned up problem text
         form.appendChild(body_div)
         /* there are a bunch of hidden input fields that the form uses */
@@ -196,7 +196,7 @@ function initWW(ww_id) {
         check.id = ww_id + '-check'
         buttons.appendChild(check)
         // show correct answers button
-        if (b_has_answer) {
+        if (b_ptx_has_answer) {
             // prepare answers object
             var data_answers = data.rh_result.answers
             var answer_ids = Object.keys(data_answers)
@@ -291,22 +291,22 @@ function updateWW(ww_id,task) {
         // get the body div
         var body_div = document.getElementById(ww_id + "-body")
         // determine if previous version shows hints, solutions, answers
-        var b_has_hint = ww_container.getElementsByClassName('hint').length > 0;
-        var b_has_answer = ww_container.getElementsByClassName('answer').length > 0;
-        var b_has_solution = ww_container.getElementsByClassName('solution').length > 0;
+        var b_ptx_has_hint = ww_container.getElementsByClassName('hint').length > 0;
+        var b_ptx_has_answer = ww_container.getElementsByClassName('answer').length > 0;
+        var b_ptx_has_solution = ww_container.getElementsByClassName('solution').length > 0;
         // get (possibly localized) label text for hints, solutions
         var hint_label_text = 'Hint'
         var solution_label_text = 'Solution'
-        if (b_has_solution) {
+        if (b_ptx_has_solution) {
             solution_label_text = ww_container.querySelectorAll('.solution-knowl span.type')[0].textContent
         }
-        if (b_has_hint) {
+        if (b_ptx_has_hint) {
             hint_label_text = ww_container.querySelectorAll('.hint-knowl span.type')[0].textContent
         }
         // dump the problem text, answer blanks, etc. here
         body_div.innerHTML = data.rh_result.text
         adjustSrcHrefs(body_div,ww_domain)
-        translateHintSol(ww_id,body_div,ww_domain,b_has_hint,b_has_solution,hint_label_text,solution_label_text)
+        translateHintSol(ww_id,body_div,ww_domain,b_ptx_has_hint,b_ptx_has_solution,hint_label_text,solution_label_text)
         // there are a bunch of hidden input fields that the form uses
         var answersSubmitted  = document.querySelector("#" + ww_id + "-form input[name='answersSubmitted']")
         var problemSeed       = document.querySelector("#" + ww_id + "-form input[name='problemSeed']")
@@ -340,7 +340,7 @@ function updateWW(ww_id,task) {
 
         // show correct answers button
         // if present, needs to be updated in case of randomizing
-        if (b_has_answer) {
+        if (b_ptx_has_answer) {
             var correct = document.querySelector("#" + ww_id + "-form div button.correct")
             correct.setAttribute('onclick', "WWshowCorrect('" + ww_id + "'," + JSON.stringify(answers) + ")")
         }
@@ -531,24 +531,28 @@ function adjustSrcHrefs(container,ww_domain) {
   });
 }
 
-function translateHintSol(ww_id,body_div,ww_domain,b_has_hint,b_has_solution,hint_label_text,solution_label_text) {
+function translateHintSol(ww_id,body_div,ww_domain,b_ptx_has_hint,b_ptx_has_solution,hint_label_text,solution_label_text) {
   // the problem text may come with "hint"s and "solution"s
   // each one is an "a" with content "Hint" or "Solution", and an attribute with base64-encoded HTML content
   // the WeBWorK knowl js would normally handle this, but we want PreTeXt knowl js to handle it
   // so we replace the "a" with the content that should be there for PTX knowl js
   // also if hint/sol were missing from the static version, we want these removed here
-  var hintxpath = "//a[b='Hint']";
-  var solutionxpath = "//a[b='Solution']";
+  var hintxpath = "//a[b='Hint:']";
+  var solutionxpath = "//a[b='Solution:']";
   var hintnodes = document.evaluate(hintxpath, body_div, null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
+  var b_ww_has_hint = hintnodes.snapshotLength > 0;
   var solutionnodes = document.evaluate(solutionxpath, body_div, null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
-  if ((hintnodes && b_has_hint) || (solutionnodes && b_has_solution)) {
+  var b_ww_has_solution = solutionnodes.snapshotLength > 0;
+  if ((b_ww_has_hint && b_ptx_has_hint) || (b_ww_has_solution && b_ptx_has_solution)) {
       var solutionlikewrapper = document.createElement('div');
       solutionlikewrapper.setAttribute('class', 'webwork solutions');
+      if (b_ww_has_hint && b_ptx_has_hint) {hintnodes.snapshotItem(0).parentNode.insertBefore(solutionlikewrapper, hintnodes.snapshotItem(0));}
+      else if (b_ww_has_solution && b_ptx_has_solution) {solutionnodes.snapshotItem(0).parentNode.insertBefore(solutionlikewrapper, solutionnodes.snapshotItem(0));}
   }
   if (hintnodes) {
       for(var i = hintnodes.snapshotLength; i >= 0; i--) {
         var hintanchor = hintnodes.snapshotItem(i);
-        if (b_has_hint && hintanchor) {
+        if (b_ptx_has_hint && hintanchor) {
           var hintbase64 = hintanchor.attributes.value.value;
           var hint = atob(hintbase64);
           hintanchor.setAttribute('class', 'id-ref hint-knowl');
@@ -567,7 +571,6 @@ function translateHintSol(ww_id,body_div,ww_domain,b_has_hint,b_has_solution,hin
           hkhintdiv.appendChild(hintdivdiv);
           hintdivdiv.innerHTML = hint;
           adjustSrcHrefs(hintdivdiv,ww_domain)
-          hintanchor.parentNode.insertBefore(solutionlikewrapper, hintanchor);
           solutionlikewrapper.appendChild(hintanchor);
           hintanchor.parentNode.insertBefore(hkhintdiv, hintanchor.nextSibling);
         } else if (hintanchor) {
@@ -578,7 +581,7 @@ function translateHintSol(ww_id,body_div,ww_domain,b_has_hint,b_has_solution,hin
   if (solutionnodes) {
       for(var i = solutionnodes.snapshotLength; i >= 0; i--) {
         var solutionanchor = solutionnodes.snapshotItem(i);
-        if (b_has_solution && solutionanchor) {
+        if (b_ptx_has_solution && solutionanchor) {
           var solutionbase64 = solutionanchor.attributes.value.value;
           var solution = atob(solutionbase64);
           solutionanchor.setAttribute('class', 'id-ref solution-knowl');
@@ -597,7 +600,6 @@ function translateHintSol(ww_id,body_div,ww_domain,b_has_hint,b_has_solution,hin
           hksolutiondiv.appendChild(solutiondivdiv);
           solutiondivdiv.innerHTML = solution;
           adjustSrcHrefs(solutiondivdiv,ww_domain)
-          solutionanchor.parentNode.insertBefore(solutionlikewrapper, solutionanchor);
           solutionlikewrapper.appendChild(solutionanchor);
           solutionanchor.parentNode.insertBefore(hksolutiondiv, solutionanchor.nextSibling);
         } else if (solutionanchor) {
