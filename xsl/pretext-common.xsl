@@ -3567,7 +3567,7 @@ Book (with parts), "section" at level 3
 <!-- 'true' and for a 'subsubsection' there are no more   -->
 <!-- subdivisions to employ and so will return empty.     -->
 <xsl:template match="book|article|part|chapter|appendix|section|subsection|subsubsection" mode="is-structured-division">
-    <xsl:if test="part|chapter|section|subsection|subsubsection|worksheet|exercises|solutions">
+    <xsl:if test="part|chapter|section|subsection|subsubsection">
         <xsl:text>true</xsl:text>
     </xsl:if>
 </xsl:template>
