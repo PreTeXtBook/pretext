@@ -255,7 +255,7 @@ function updateWW(ww_id,task) {
 
     let url = new URL(ww_domain + '/webwork2/html2xml')
     if (task == 'randomize') {
-        var old_seed = Number(document.getElementsByName('problemSeed')[0].value)
+        let old_seed = Number(document.getElementById(ww_id + "-form").elements["problemSeed"].value)
         url.searchParams.append("problemSeed", old_seed + 100);
         if (ww_problemSource) {
             url.searchParams.append("problemSource", ww_problemSource);
