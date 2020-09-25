@@ -1528,11 +1528,14 @@ iii.indexletter + :target::before {
     margin-left: 22ex;
 }
 
-.pretext-content dl.description-list dd dt {
-    width: 14ex;
+.pretext-content dl.description-list dl dt {
+    width: 8ex;
 }
 .pretext-content dl.description-list dd dd {
     margin-left: 18ex;
+}
+.pretext-content dl.description-list dl dd {
+    margin-left: 12ex;
 }
 
 .pretext-content dl.description-list dd:after {
