@@ -33,6 +33,17 @@
     display: inline-block;
 }
 
+#toc .part > a .codenumber {
+    position: relative;
+    display: block;
+    float: left;
+    margin-right: 0.7em;
+}
+#toc .part > a .title {
+    display: block;
+    margin-left: 1em;
+}
+
 #toc ul li a {
     position: relative;
     display: block;
