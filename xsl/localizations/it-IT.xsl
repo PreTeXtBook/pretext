@@ -132,7 +132,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <localization string-id='contributor'><xsl:text>Contributore</xsl:text></localization>
     <!-- Lists and their items -->
     <localization string-id='list'><xsl:text>Elenco</xsl:text></localization>
-    <localization string-id='li'><xsl:text>Voce</xsl:text></localization>
+    <localization string-id='li'><xsl:text>Punto</xsl:text></localization>
     <!-- A term (word) defined in a glossary -->
     <localization string-id='defined-term'><xsl:text>Termine</xsl:text></localization>
     <!-- A regular paragraph, not the old sectioning structure -->
