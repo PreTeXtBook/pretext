@@ -8637,7 +8637,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
     <!-- if elected as interactive AND @language is supported -->
     <xsl:if test="(@interactive='yes') and not($active-language = '')">
-        <xsl:apply-templates select="." mode="runestone-activecode"/>
+        <question>
+            <xsl:apply-templates select="." mode="runestone-activecode"/>
+        </question>
     </xsl:if>
 </xsl:template>
 
