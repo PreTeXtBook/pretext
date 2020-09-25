@@ -1166,17 +1166,6 @@ https://yoshiwarabooks.org/mfg/MathModels.html */
   padding: -42px 0 0;
   border: 0;
 }
-/* when there is a sage cell evaluate button before  the target, the button was being covered */
-/*
-iii.sagecell + :target::before {
-    height: 0;
-    margin: 0;
-}
-iii.indexletter + :target::before {
-    height: 20px;
-    margin: -20px 0 0;
-}
-*/
 
 :target > div.autopermalink {
   top: 45px;
@@ -3103,6 +3092,88 @@ table td:first-child { border-left: none; }
 }
 .icongroup + .icongroup {
     margin-left: 1em;
+}
+
+/* interactive WeBWorK */
+
+label.webwork {
+display:inline-flex;
+flex-direction:column;
+}
+
+label.correct .status {
+background-color: #a0f0a0;
+}
+
+label.partly-correct .status {
+ color: #ffcc66;
+}
+
+label.incorrect .status {
+  color: #b00;
+}
+label.incorrect .status::before {
+    content: " ";
+}
+
+.feedback {
+ word-wrap:break-word;
+}
+
+label.correct .feedback {
+ background-color: #00ffcc;
+}
+
+label.partly-correct .feedback {
+ color: #ffcc66;
+}
+
+label.incorrect .feedback {
+ color: #e07070;
+}
+
+
+.pretext-content .webwork-button {
+    border-radius: 3px;
+    padding: 0px 3px 0px 3px;
+    border: 1px solid #999;
+    background-color: #ffffff;
+}
+
+.pretext-content .webwork-button:hover {
+    cursor: pointer;
+    background-color: #e0e0ff;
+    border: 1px solid #000;
+}
+.pretext-content .webwork-button:active {
+    cursor: pointer;
+    background-color: #a0a0a0;
+    border: 1px solid #999;
+}
+
+.pretext-content .exercise-wrapper form button {
+    border-radius: 3px;
+    padding: 0px 3px 0px 3px;
+    border: 1px solid #999;
+    background-color: #ffffff;
+}
+.pretext-content .exercise-wrapper form button:hover {
+    cursor: pointer;
+    background-color: #e0e0ff;
+    border: 1px solid #000;
+}
+.pretext-content .exercise-wrapper form button:active {
+    background-color: #f0f0f0;
+}
+.pretext-content .exercise-wrapper form button + button {
+    margin-left: 0.8em;
+}
+
+.pretext-content .exercise-wrapper,
+.pretext-content .exercise-wrapper form, 
+.pretext-content .exercise-wrapper form > div:first-child {
+    display: inline-block;
+    vertical-align: top;
 }
 
 /*
