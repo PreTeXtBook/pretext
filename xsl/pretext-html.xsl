@@ -8614,18 +8614,33 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- dead end structurally, no more recursion, even if "subsection", etc. -->
 </xsl:template>
 
+<!-- A Runestone exercise needs to identify itself when an instructor wants   -->
+<!-- to select it for assignment, so we want to provide enough identification -->
+<!-- in the manifest, via a "label" element full of raw text.                 -->
+<xsl:template match="exercise" mode="runestone-manifest-label">
+    <label>
+        <xsl:apply-templates select="." mode="type-name"/>
+        <xsl:text> </xsl:text>
+        <xsl:apply-templates select="." mode="number"/>
+        <xsl:text> </xsl:text>
+        <xsl:apply-templates select="." mode="title-full"/>
+    </label>
+</xsl:template>
+
 <!-- Exercises to the Runestone manifest -->
 <!--   - every "exercise" in a "reading-questions" division -->
 <!--   - every multiple choice "exercise"                   -->
 <!-- Note, 2020-05-29: multiple choice not yet merged, markup is speculative -->
 <xsl:template match="exercise[parent::reading-questions]|exercise[choices]" mode="runestone-manifest">
     <question>
+        <xsl:apply-templates select="." mode="runestone-manifest-label"/>
         <xsl:apply-templates select="." mode="exercise-components"/>
     </question>
 </xsl:template>
 
 <xsl:template match="exercise[webwork-reps]" mode="runestone-manifest">
     <question>
+        <xsl:apply-templates select="." mode="runestone-manifest-label"/>
         <xsl:apply-templates select="introduction|webwork-reps|conclusion"/>
     </question>
 </xsl:template>
@@ -8638,6 +8653,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- if elected as interactive AND @language is supported -->
     <xsl:if test="(@interactive='yes') and not($active-language = '')">
         <question>
+            <!-- this is ineffective, since a "program" has no number, no title    -->
+            <!-- <xsl:apply-templates select="." mode="runestone-manifest-label"/> -->
             <xsl:apply-templates select="." mode="runestone-activecode"/>
         </question>
     </xsl:if>
