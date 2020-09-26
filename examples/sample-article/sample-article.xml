@@ -10089,6 +10089,17 @@ the xsltproc executable.
                 <!-- content will happen here automatically -->
             </solutions>
 
+            <solutions inline="answer" divisional="answer" worksheet="answer" reading="answer" project="answer">
+                <title>All Solutions that are Answers</title>
+                <idx><h>solutions</h><h>all answers</h></idx>
+
+                <introduction>
+                    <p>The back matter solutions appendix requests every <tag>answer</tag>, and only <tag>answer</tag>, of all types of exercises: inline, divisional, worksheet, reading questions, and projects.  Now, as observed by Bruce Yoshiwara, it gets a bit tedious to see the <q>Answer</q> heading over and over in print, when every entry has that heading.  So we squelch it for you in print/PDF output.  (For <init>HTML</init> output we use knowls and need to have something to click on.  But perhaps for <init>EPUB</init> we should be more careful?)  Note that you might want to use a <tag>title</tag>, or an <tag>introduction</tag>, that explains which component of the exercises is being displayed, so there is no confusion.</p>
+                </introduction>
+
+                <!-- content will happen here automatically -->
+            </solutions>
+
             <appendix xml:id="appendix-results">
                 <title>List of Results</title>
 
