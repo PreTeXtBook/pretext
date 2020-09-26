@@ -5841,6 +5841,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:apply-templates select="statement">
                     <xsl:with-param name="b-original" select="$b-original" />
                 </xsl:apply-templates>
+                <!-- we consider a "program" of a coding exercise as part of the "statement" -->
+                <xsl:apply-templates select="program"/>
                 <xsl:if test="$b-original and ($debug.exercises.forward = 'yes')">
                     <!-- if several, all exist together, so just work with first one -->
                     <xsl:for-each select="hint[1]|answer[1]|solution[1]">
