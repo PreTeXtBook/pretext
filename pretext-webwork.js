@@ -192,7 +192,12 @@ function initWW(ww_id) {
         // check button
         var check = document.createElement("button")
         check.type = "submit"
-        check.textContent = "Check Answers";
+        check.textContent = "Check Answer";
+        // adjust if more than one answer to check
+        let inputCount = body_div.querySelectorAll("input:not([type=hidden])").length;
+        let selectCount = body_div.querySelectorAll("select:not([type=hidden])").length;
+        let answerCount = inputCount + selectCount;
+        if (answerCount > 1) {check.textContent = "Check Answers";};
         check.id = ww_id + '-check'
         buttons.appendChild(check)
         // show correct answers button either if original PTX has answer knowl
@@ -212,7 +217,8 @@ function initWW(ww_id) {
             var correct = document.createElement("button")
             correct.setAttribute('class', "show-correct")
             correct.type = "button"
-            correct.textContent = "Show Correct Answers";
+            correct.textContent = "Show Correct Answer";
+            if (answerCount > 1) {correct.textContent = "Show Correct Answers";};
             correct.setAttribute('onclick', "WWshowCorrect('" + ww_id + "'," + JSON.stringify(answers) + ")")
             buttons.appendChild(correct)
         }
@@ -342,7 +348,7 @@ function updateWW(ww_id,task) {
         }
         // insert results near/around input fields
         if (task == 'check') {
-            inputs = body_div.querySelectorAll("input:not([type=hidden])");
+            let inputs = body_div.querySelectorAll("input:not([type=hidden])");
             for (const input of inputs) {
               var name = input.name
               if (input.type == 'text' && answers[name]) {
@@ -398,7 +404,7 @@ function updateWW(ww_id,task) {
               }
             }
 
-            selects = body_div.querySelectorAll("select:not([type=hidden])");
+            let selects = body_div.querySelectorAll("select:not([type=hidden])");
             for (const select of selects) {
               var name = select.name
               let label = document.createElement('label')
@@ -433,7 +439,7 @@ function WWshowCorrect(ww_id, answers) {
         "answers": answers,
     });
 
-    inputs = body.querySelectorAll("input:not([type=hidden])");
+    let inputs = body.querySelectorAll("input:not([type=hidden])");
     for (const input of inputs) {
       var name = input.name
       var span_id = ww_id + '-' + name
@@ -468,7 +474,7 @@ function WWshowCorrect(ww_id, answers) {
       }
     }
 
-    selects = body.querySelectorAll("select:not([type=hidden])");
+    let selects = body.querySelectorAll("select:not([type=hidden])");
     for (const select of selects) {
       var name = select.name
       var span_id = ww_id + '-' + name
