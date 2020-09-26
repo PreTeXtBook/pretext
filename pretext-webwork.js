@@ -9,7 +9,6 @@ function initWW(ww_id) {
 // TODO: Have randomize check that new seed is actually producing new HTML.
 // TODO: Don't offer randomize or button unless we know a new version can be produced after tyring a few seeds.
 // TODO: Don't offer Make interactive button if there is no input field.
-// TODO: If we feel good about how feedback is reported, clean up code referencing table.
 // TODO: In a staged problem, Make Interactive button is adjacent to solution knowls; move it.
 
 //Styling:
@@ -230,11 +229,6 @@ function initWW(ww_id) {
         reset.textContent = "Reset";
         reset.setAttribute('onclick', "initWW('" + ww_id + "')")
         buttons.appendChild(reset)
-        // clear results table if it is present
-        var results_table_container = document.getElementById(ww_id + '-table')
-        if (results_table_container) {
-          results_table_container.remove()
-        }
         // insert the form
         ww_container.appendChild(form)
         // run MathJax on our new rendering
@@ -356,35 +350,33 @@ function updateWW(ww_id,task) {
                   let label = document.createElement('label')
                   label.id = ww_id + '-' + name + '-label'
                   input.parentNode.insertBefore(label, input);
-                  let pre_span = document.createElement('span');
-                  label.appendChild(pre_span);
-                  let correct_text = ''
+                  label.appendChild(input);
+                  let status_span = document.createElement('span');
+                  status_span.setAttribute('class','status');
+                  label.appendChild(status_span);
+                  let status_text = ''
                   if (data.rh_result.answers[name].score == 1) {
-                    correct_text = 'Correct!'
-                    label.setAttribute('class','correct')
-                    pre_span.style.backgroundColor = '#8F8'
+                    status_text = 'Correct!'
+                    label.setAttribute('class','webwork correct')
                   } else if (data.rh_result.answers[name].score > 0 && data.rh_result.answers[name].score < 1) {
-                    correct_text = Math.round(data.rh_result.answers[name].score*100) + "% correct."
-                    label.setAttribute('class','partly-correct')
-                    pre_span.style.backgroundColor = '#A4AA6E'
+                    status_text = Math.round(data.rh_result.answers[name].score*100) + "% correct."
+                    label.setAttribute('class','webwork partly-correct')
                   } else if (data.rh_result.answers[name].student_ans == '') {
                     // do nothing if the submitted answer is blank and that has not already been scored as correct
                   } else if (data.rh_result.answers[name].score == 0) {
-                    correct_text = 'Incorrect.'
-                    label.setAttribute('class','incorrect')
-                    pre_span.style.color = '#bf5454'
+                    status_text = 'incorrect'
+                    label.setAttribute('class','webwork incorrect')
                   }
-                  let pre_text = document.createTextNode(correct_text);
-                  pre_span.appendChild(pre_text);
-                  label.appendChild(input);
-                  let post_span = document.createElement('span');
+                  let status_span_text = document.createTextNode(status_text);
+                  status_span.appendChild(status_span_text);
+                  let feedback_span = document.createElement('span');
+                  feedback_span.setAttribute('class','feedback');
                   let feedback_text = data.rh_result.answers[name].ans_message
-                  let post_text = document.createTextNode(feedback_text);
                   if (feedback_text) {
-                    post_span.setAttribute('class','feedback-message')
-                    label.appendChild(post_span);
-                    post_span.appendChild(post_text);
-                    post_span.style.backgroundColor = 'var(--bodytitlehighlight)'
+                    let feedback_span_text = document.createTextNode(feedback_text);
+                    label.appendChild(feedback_span);
+                    feedback_span.style.maxWidth = input.offsetWidth + "px";
+                    feedback_span.appendChild(feedback_span_text);
                   } 
               }
 
@@ -429,25 +421,6 @@ function updateWW(ww_id,task) {
               pre_span.appendChild(pre_text);
               label.appendChild(select);
             }
-        }
-        // show results table if we have one
-        // if (task == 'check') {
-        //     var results_table_container = document.getElementById(ww_id + '-table')
-        //     if (results_table_container) {
-        //       results_table_container.innerHTML = ''
-        //     } else {
-        //       results_table_container = document.createElement('div')
-        //       results_table_container.id = ww_id + "-table"
-        //       ww_container.appendChild(results_table_container)
-        //     }
-        //     results_table_container.innerHTML = data.answerTemplate
-        // }
-        if (task == 'randomize') {
-          // clear results table if it is present
-          var results_table_container = document.getElementById(ww_id + '-table')
-          if (results_table_container) {
-            results_table_container.remove()
-          }
         }
         // run MathJax on our new rendering
         MathJax.Hub.Typeset(ww_container)
@@ -513,12 +486,6 @@ function WWshowCorrect(ww_id, answers) {
           show_span.appendChild(show)
           select.parentElement.insertBefore(show_span,select)
       }
-    }
-
-    // clear results table if it is present
-    var results_table_container = document.getElementById(ww_id + '-table')
-    if (results_table_container) {
-      results_table_container.remove()
     }
 
     MathJax.Hub.Typeset(body)
