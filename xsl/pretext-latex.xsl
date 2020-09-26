@@ -8641,24 +8641,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:apply-templates select="." mode="listings-language" />
     </xsl:variable>
     <xsl:variable name="b-has-language" select="not($language = '')" />
-    <xsl:text>\begin{program}</xsl:text>
-    <xsl:text>{</xsl:text>
-    <xsl:choose>
-        <xsl:when test="$b-has-language">
-            <xsl:value-of select="$language" />
-        </xsl:when>
-        <!-- null language defined in preamble -->
-        <xsl:otherwise>
-            <xsl:text>none</xsl:text>
-        </xsl:otherwise>
-    </xsl:choose>
-    <xsl:text>}</xsl:text>
-    <xsl:text>&#xa;</xsl:text>
-    <xsl:call-template name="sanitize-text">
-        <xsl:with-param name="text" select="input" />
-    </xsl:call-template>
-    <xsl:text>\end{program}</xsl:text>
-    <xsl:text>&#xa;</xsl:text>
+    <!-- a "program" element may be empty in a coding       -->
+    <!-- exercise, and just used to indicate an interactive -->
+    <!-- area supporting some language                      -->
+    <xsl:variable name="b-has-input" select="not(normalize-space(input) = '')"/>
+    <xsl:if test="$b-has-input">
+        <xsl:text>\begin{program}</xsl:text>
+        <xsl:text>{</xsl:text>
+        <xsl:choose>
+            <xsl:when test="$b-has-language">
+                <xsl:value-of select="$language" />
+            </xsl:when>
+            <!-- null language defined in preamble -->
+            <xsl:otherwise>
+                <xsl:text>none</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+        <xsl:text>}</xsl:text>
+        <xsl:text>&#xa;</xsl:text>
+        <xsl:call-template name="sanitize-text">
+            <xsl:with-param name="text" select="input" />
+        </xsl:call-template>
+        <xsl:text>\end{program}</xsl:text>
+        <xsl:text>&#xa;</xsl:text>
+    </xsl:if>
 </xsl:template>
 
 <!-- Console Session -->
