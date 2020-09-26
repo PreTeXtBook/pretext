@@ -130,6 +130,54 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <p>A nonsense paragraph just to check on spacing.  A nonsense paragraph just to check on spacing.  A nonsense paragraph just to check on spacing.  A nonsense paragraph just to check on spacing.</p>
     </section>
 
+    <section xml:id="coding-exercises">
+        <title>Coding Exercises</title>
+
+        <p>Program listings can be more that just live demonstrations, they can be exercises.  The first two also occur in the sample article where they just get a static rendering, if at all.</p>
+
+        <exercise>
+            <title>Inline Coding Exercise, No Help</title>
+
+            <statement>
+                <p>An exercise might ask a reader to write a computer program, that would go here in the <tag>statement</tag>.  But you can also add a <tag>program</tag> element after a <tag>statement</tag>.  Here we place no code at all, but we do say we want it to be interactive.  The purpose is to make it a live coding environment for a version of your output that allows the reader to perhaps submit a solution.  The <tag>program</tag> element is necessary so you can specify a programming language.</p>
+            </statement>
+            <program xml:id="coding-exercise-blank" language="python" interactive="yes"/>
+            <hint>We didn't really ask you to do anything.</hint>
+        </exercise>
+
+        <exercise>
+            <title>Inline Coding Exercise, Partial</title>
+
+            <statement>
+                <p>Similar to above, but we provide a starting point for the exercise.</p>
+            </statement>
+            <program xml:id="coding-exercise-partial" language="c" interactive="yes">
+                <input>
+                #include
+
+                int main(void)
+                </input>
+            </program>
+            <answer>We're not really sure.</answer>
+        </exercise>
+
+        <exercise>
+            <title>Inline Coding Exercise, Static</title>
+
+            <statement>
+                <p>Similar to above, again, but we do not specify an interactive version, and hence static and not available as an assignment.</p>
+            </statement>
+            <program xml:id="coding-exercise-static" language="c" interactive="no">
+                <input>
+                #include
+
+                int main(void)
+                </input>
+            </program>
+            <answer>We're not really sure.</answer>
+        </exercise>
+    </section>
+
     <section>
         <title>YouTube Videos</title>
 
