@@ -7,13 +7,12 @@ function initWW(ww_id) {
 //Enhancement:
 // TODO: In a scaffold problem, adjust the green bar for when one part is correct.
 // TODO: Have randomize check that new seed is actually producing new HTML.
-// TODO: Don't offer randomize or button unless we know a new version can be produced after tyring a few seeds.
-// TODO: Don't offer Make interactive button if there is no input field.
+// TODO: Don't offer randomize or button unless we know a new version can be produced after trying a few seeds.
 // TODO: In a staged problem, Make Interactive button is adjacent to solution knowls; move it.
 
 //Styling:
-// TODO: The whole thing.
-// TODO: Sean:I think I'd like to see a slightly larger font size on the buttons
+// TODO: Review all styling in all scenarios (staged/not, correct/partly-correct/incorrect/blank, single/multiple)
+// TODO: Sean: I think I'd like to see a slightly larger font size on the buttons
 
     const ww_container = document.getElementById(ww_id)
     const ww_domain = ww_container.dataset.domain
