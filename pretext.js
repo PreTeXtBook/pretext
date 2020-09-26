@@ -549,7 +549,7 @@ if(typeof MathJax == 'undefined' ) {
 
             // the espy.configure() was there from the beginning, but gave an error that espy was not known
             // so I added the next line --DF
-    //        espy = new Espy(w, self.onSectionStateChange);
+            espy = new Espy(w, self.onSectionStateChange);
             espy.configure(espyOptions);
         };
 
