@@ -6048,14 +6048,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:apply-templates select="." mode="latex-id-duplicate">
                 <xsl:with-param name="suffix" select="'main'"/>
             </xsl:apply-templates>
-            <xsl:text>}</xsl:text>
+            <xsl:text>}{}</xsl:text>
         </xsl:when>
         <xsl:when test="$purpose = 'backmatter'">
             <xsl:text>\hypertarget{</xsl:text>
             <xsl:apply-templates select="." mode="latex-id-duplicate">
                 <xsl:with-param name="suffix" select="'back'"/>
             </xsl:apply-templates>
-            <xsl:text>}</xsl:text>
+            <xsl:text>}{}</xsl:text>
         </xsl:when>
         <!-- linking not enabled for PDF solution manual -->
         <xsl:when test="$purpose = 'solutionmanual'" />
