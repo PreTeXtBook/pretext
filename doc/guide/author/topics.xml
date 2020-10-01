@@ -2871,8 +2871,22 @@
 
 
     <section xml:id="topic-notation">
-        <title>(*) Notation</title>
-        <p>TODO</p>
+        <title>Notation</title>
+        <idx>notation</idx>
+        <idx>notation list</idx>
+        <idx><h>list</h><h>of notation</h></idx>
+
+        <p>We continue the introduction at <xref ref="overview-index-notation"/>.  A notation list, like an index, is a specialized collection of cross-references.  So some of the philosophy here applies equally well to the <tag>idx</tag> and <tag>index-list</tag> elements, and vice-versa.  (See <xref ref="topic-index"/>.)</p>
+
+        <p>To generate a list of notation employed in a book or article, use the <tage>notation-list</tage> element.  This empty element belongs in an <tag>appendix</tag>.  Likely it is the only content, or you might include some preliminary material.  The title of the <tag>appendix</tag> is up to you and is not automatic.</p>
+
+        <p>Some authors like to make definitions inside of paragraphs, ideally using a <tag>term</tag> element.  This is a natural place for a <tag>notation</tag> element.  So this approach gives an author a lot of flexibility in location.</p>
+
+        <p>Other authors like to make definitions using the <tag>definition</tag> element, since it creates a heading and number, allows a <tag>title</tag>, and can easily serve as the target of a cross-reference.  So this is another good place for a <tag>notation</tag> element.  But now, associate it clearly with the <tag>defintion</tag> by placing it in the metadata, early on, after the <tag>title</tag>.  And not in some subsequent paragraph.  The reason will be clear in just a bit.</p>
+
+        <p>How is a <tag>notation</tag> element constructed?  It has two elements.  The <tag>usage</tag> should be a sample piece of mathematics using the necessary symbols.  Do not wrap it in an <tag>m</tag> element, that is assumed and will be provided.  The second element is <tag>description</tag> and should be a short phrase, or sentence-like material, decoding the sample usage, and may include <tag>m</tag> elements.  The reader sees nothing in the output at the location of the <tag>notation</tag> element.</p>
+
+        <p>The automatically-generated notation list is then a three-column table, in the order of appearance, with the sample usage, the description, and a <term>locator</term>.  For output derived from <latex/>, such as print or <init>PDF</init>, the locator will be the page number of wherever you placed the <tag>notation</tag> element.  For <init>HTML</init> the locator is much better<mdash/>it is a knowl, for either a paragraph or for an entire definition.  The latter possibility explains why it is better to place the <tag>notation</tag> element inside a <tag>definition</tag>, if possible, rather than in a paragraph that is a constituent of a <tag>definition</tag>.</p>
     </section>
 
     <section xml:id="topic-automatic-lists">
