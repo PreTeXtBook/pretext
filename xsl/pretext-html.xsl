@@ -6672,7 +6672,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:with-param name="nodeset" select="col/@width" />
     </xsl:call-template>
     <xsl:element name="table">
-        <xsl:apply-templates select="row">
+        <!-- We *actively* enforce header rows being (a) initial, and      -->
+        <!-- (b) contiguous.  So following two-part match will do no harm  -->
+        <!-- to correct source, but will definitely harm incorrect source. -->
+        <xsl:apply-templates select="row[@header]">
+            <xsl:with-param name="b-original" select="$b-original" />
+            <xsl:with-param name="ambient-relative-width" select="$width" />
+        </xsl:apply-templates>
+        <xsl:apply-templates select="row[not(@header)]">
             <xsl:with-param name="b-original" select="$b-original" />
             <xsl:with-param name="ambient-relative-width" select="$width" />
         </xsl:apply-templates>
@@ -6683,8 +6690,32 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template match="row">
     <xsl:param name="b-original" select="true()" />
     <xsl:param name="ambient-relative-width" />
+
+    <!-- Determine if the row is a header row -->
+    <!-- and construct class names as needed  -->
+    <xsl:variable name="header-row">
+        <xsl:choose>
+            <xsl:when test="@header = 'yes'">
+                <xsl:text>header-horizontal</xsl:text>
+            </xsl:when>
+            <xsl:when test="@header = 'vertical'">
+                <xsl:text>header-vertical</xsl:text>
+            </xsl:when>
+            <!-- "no" is other choice, or no attribute at all -->
+            <!-- controlled by schema, so no error-check here -->
+            <!-- empty implies no class attribute at all      -->
+            <xsl:otherwise/>
+        </xsl:choose>
+    </xsl:variable>
+
     <!-- Form the HTML table row -->
     <xsl:element name="tr">
+        <!-- and a class attribute for horizontal or vertical headers -->
+        <xsl:if test="not($header-row = '')">
+            <xsl:attribute name="class">
+                <xsl:value-of select="$header-row"/>
+            </xsl:attribute>
+        </xsl:if>
         <!-- Walk the cells of the row -->
         <xsl:call-template name="row-cells">
             <xsl:with-param name="b-original" select="$b-original" />
@@ -6868,8 +6899,30 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
+
+        <!-- a cell of a header row needs to be "th" -->
+        <!-- else the HTML mark up is "td"           -->
+        <!-- NB: Named templates means context is a  -->
+        <!-- row, which is really wrong.  Tests      -->
+        <!-- should be on  parent::row/@header       -->
+        <xsl:variable name="header-row-elt">
+            <xsl:choose>
+                <xsl:when test="@header = 'yes'">
+                    <xsl:text>th</xsl:text>
+                </xsl:when>
+                <xsl:when test="@header = 'vertical'">
+                    <xsl:text>th</xsl:text>
+                </xsl:when>
+                <!-- "no" is other choice, or no attribute at all -->
+                <!-- controlled by schema, so no error-check here -->
+                <xsl:otherwise>
+                    <xsl:text>td</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+
         <!-- the HTML element for the cell -->
-        <xsl:element name="td">
+        <xsl:element name="{$header-row-elt}">
             <!-- and the class attribute -->
             <xsl:attribute name="class">
                 <!-- always write alignment, so *precede* all subsequent with a space -->
