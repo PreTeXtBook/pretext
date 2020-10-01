@@ -9415,6 +9415,14 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The cline specification is accumulated in the clines variable            -->
 <!-- A similar strategy is used to traverse the "cell" elements of each "row" -->
 <!-- but becomes much more involved, see the "row-cells" template             -->
+<!-- NB: An attempt was made on 2020-10-01 to refactor this template to       -->
+<!-- be modal with match/select on the "col", eliminating the $the-col        -->
+<!-- parameter. We suspect the following problem with a naive rewrite.        -->
+<!-- When a row ends, the select becomes empty and the final (n+1) run of     -->
+<!-- the template never happpens.  So the "$updated-cline" never gets         -->
+<!-- written.  So more care needs to be taken with that final disposition of  -->
+<!-- accumulated items.  Perhaps we could look forward for a change, rather   -->
+<!-- than looking backward for no change?                                     -->
 <xsl:template name="column-cols">
     <xsl:param name="the-col" />
     <xsl:param name="col-number" />
