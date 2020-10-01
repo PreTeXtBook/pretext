@@ -4529,7 +4529,7 @@ the xsltproc executable.
             </references>
         </section>
 
-        <section>
+        <section xml:id="table-calisthenics">
             <title>Table Calisthenics</title>
 
             <p>A very minimal table, hence with left-justified cells, no borders.  We do wrap the tabular element in a table element to get centering, numbering and a caption.</p>
@@ -4703,17 +4703,9 @@ the xsltproc executable.
                         <cell><c>header</c></cell>
                         <cell></cell>
                         <cell>p</cell>
-                        <cell>p</cell>
-                        <cell>p</cell>
-                        <cell>yes/no*</cell>
-                    </row>
-                    <row>
-                        <cell><c>footer</c></cell>
+                        <cell><m>\times</m></cell>
                         <cell></cell>
-                        <cell>p</cell>
-                        <cell>p</cell>
-                        <cell>p</cell>
-                        <cell>yes/no*</cell>
+                        <cell>yes/vertical/no*</cell>
                     </row>
                     <row>
                         <cell><c>valign</c></cell>
@@ -5241,6 +5233,170 @@ the xsltproc executable.
                         <cell>3</cell>
                         <cell halign="left"><url href="http://example.com/09az%58-._~:/?#[]@!$&amp;'()*+,;="></url></cell>
                         <cell><url href="http://example.com/09az%58-._~:/?#[]@!$&amp;'()*+,;="></url></cell>
+                    </row>
+                </tabular>
+            </table>
+
+            <p>Now, the same table repeatedly, but with different headers.  No care has been taken with alignment or rules, which could improve how these look.</p>
+
+            <table>
+                <title>No Headers</title>
+                <tabular>
+                    <row>
+                        <cell>State</cell>
+                        <cell>Population</cell>
+                        <cell>Area (sq. mi.)</cell>
+                        <cell>Statehood (Year)</cell>
+                    </row>
+                    <row>
+                        <cell>Washington</cell>
+                        <cell>7,614,893</cell>
+                        <cell>71,362</cell>
+                        <cell>1889</cell>
+                    </row>
+                    <row>
+                        <cell>Oregon</cell>
+                        <cell>4,217,737</cell>
+                        <cell>98,381</cell>
+                        <cell>1859</cell>
+                    </row>
+                    <row>
+                        <cell>California</cell>
+                        <cell>39,512,223</cell>
+                        <cell>163,696</cell>
+                        <cell>1850</cell>
+                    </row>
+                </tabular>
+            </table>
+
+            <table>
+                <title>One Row Header</title>
+                <tabular>
+                    <row header="yes">
+                        <cell>State</cell>
+                        <cell>Population</cell>
+                        <cell>Area (sq. mi.)</cell>
+                        <cell>Statehood (Year)</cell>
+                    </row>
+                    <row>
+                        <cell>Washington</cell>
+                        <cell>7,614,893</cell>
+                        <cell>71,362</cell>
+                        <cell>1889</cell>
+                    </row>
+                    <row>
+                        <cell>Oregon</cell>
+                        <cell>4,217,737</cell>
+                        <cell>98,381</cell>
+                        <cell>1859</cell>
+                    </row>
+                    <row>
+                        <cell>California</cell>
+                        <cell>39,512,223</cell>
+                        <cell>163,696</cell>
+                        <cell>1850</cell>
+                    </row>
+                </tabular>
+            </table>
+
+            <table>
+                <title>Two Row Headers</title>
+                <tabular>
+                    <row header="yes">
+                        <cell>State</cell>
+                        <cell>Population</cell>
+                        <cell>Area</cell>
+                        <cell>Statehood</cell>
+                    </row>
+                    <row header="yes">
+                        <cell></cell>
+                        <cell></cell>
+                        <cell>(sq. mi.)</cell>
+                        <cell>(Year)</cell>
+                    </row>
+                    <row>
+                        <cell>Washington</cell>
+                        <cell>7,614,893</cell>
+                        <cell>71,362</cell>
+                        <cell>1889</cell>
+                    </row>
+                    <row>
+                        <cell>Oregon</cell>
+                        <cell>4,217,737</cell>
+                        <cell>98,381</cell>
+                        <cell>1859</cell>
+                    </row>
+                    <row>
+                        <cell>California</cell>
+                        <cell>39,512,223</cell>
+                        <cell>163,696</cell>
+                        <cell>1850</cell>
+                    </row>
+                </tabular>
+            </table>
+
+            <table>
+                <title>One Vertical Row Header</title>
+                <tabular>
+                    <row header="vertical">
+                        <cell>State</cell>
+                        <cell>Population</cell>
+                        <cell>Area (sq. mi.)</cell>
+                        <cell>Statehood (Year)</cell>
+                    </row>
+                    <row>
+                        <cell>Washington</cell>
+                        <cell>7,614,893</cell>
+                        <cell>71,362</cell>
+                        <cell>1889</cell>
+                    </row>
+                    <row>
+                        <cell>Oregon</cell>
+                        <cell>4,217,737</cell>
+                        <cell>98,381</cell>
+                        <cell>1859</cell>
+                    </row>
+                    <row>
+                        <cell>California</cell>
+                        <cell>39,512,223</cell>
+                        <cell>163,696</cell>
+                        <cell>1850</cell>
+                    </row>
+                </tabular>
+            </table>
+
+            <table>
+                <title>Two Vertical Row Headers</title>
+                <tabular>
+                    <row header="vertical">
+                        <cell>State</cell>
+                        <cell>Population</cell>
+                        <cell>Area</cell>
+                        <cell>Statehood</cell>
+                    </row>
+                    <row header="vertical">
+                        <cell></cell>
+                        <cell></cell>
+                        <cell>(sq. mi.)</cell>
+                        <cell>(Year)</cell>
+                    </row>
+                    <row>
+                        <cell>Washington</cell>
+                        <cell>7,614,893</cell>
+                        <cell>71,362</cell>
+                        <cell>1889</cell>
+                    </row>
+                    <row>
+                        <cell>Oregon</cell>
+                        <cell>4,217,737</cell>
+                        <cell>98,381</cell>
+                        <cell>1859</cell>
+                    </row>
+                    <row>
+                        <cell>California</cell>
+                        <cell>39,512,223</cell>
+                        <cell>163,696</cell>
+                        <cell>1850</cell>
                     </row>
                 </tabular>
             </table>
