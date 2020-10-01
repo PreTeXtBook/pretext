@@ -156,7 +156,7 @@
         <title>Search</title>
         <idx>search</idx>
 
-        <p>Search facilities are enabled through <url href="https://cse.google.com/cse">Google Custom Search Engine</url><fn><c>cse.google.com/cse</c></fn><idx>Google Custom Search Engine</idx>.  Please, please report any discrepancies in the following instructions as the setup interface at Google changes out from underneath us.  These instructions are accurate as of 2016-12-12.</p>
+        <p>Search facilities are enabled through <url href="https://cse.google.com/cse">Google Custom Search Engine</url><fn><c>cse.google.com/cse</c></fn><idx>Google Custom Search Engine</idx>.  Please, please report any discrepancies in the following instructions as the setup interface at Google changes out from underneath us.  These instructions have been updated as of 2020-10-01.</p>
 
         <p>Besides being useful for search facilities, setting up a search engine might be a good way to alert Google of something newly available, and initiate your book's rise up the search results rankings.</p>
 
@@ -166,21 +166,19 @@
             <ol>
                 <li><p>Create an account with Google (GMail, YouTube, <etc />) and make sure you are signed in.</p></li>
 
-                <li><p>Visit <url href="https://cse.google.com/cse">GCSE</url> and <c>Add</c> a new search engine of follow <c>New Search Engine</c>.</p></li>
+                <li><p>Visit <url href="https://cse.google.com/cse">GCSE</url> and add a new search engine via  <c>New Search Engine</c>.</p></li>
 
                 <li><p>Provide a <init>URL</init> for the top-level domain name/directory for your book/document.  Everything below this will be indexed.  We have taken some care to mark knowl content in a way compatible with the search facility, but there is more work to do here.</p></li>
 
                 <li><p>Give the engine a GCSE-specific name, so you can tell later which one it is when you have several.</p></li>
 
-                <li><p>Under <c>Edit Search Engine > Setup > Basics > Details > Search engine ID</c> find a string which uniquely identifies your new search engine.  Save this, you'll need to make it part of your <init>MBX</init> document.</p></li>
+                <li><p>Under <c>Edit Search Engine</c> in the <c>Basics</c> tab locate </c>Search engine ID</c> which has a string that uniquely identifies your new search engine.  Save this, you'll need to make it part of your <pretext/> document.</p></li>
 
-                <li><p>Under <c>Edit Search Engine > Setup > Admin</c> add co-authors or trusted backup personnel.</p></li>
-
-                <li><p>Under <c>Edit Search Engine > Business > Settings</c> set your <c>Advertising status</c> to the non-profit setting if you qualify (most universties should).</p></li>
+                <li><p>Under the <c>Users</c> tab add co-authors or trusted backup personnel.</p></li>
 
                 <li><p>Fiddle with <c>Edit Search Engine > Look and Feel</c> at your own risk!  Only the defaults are tested and supported.</p></li>
 
-                <li><p><c>Edit Search Engine > Setup > Indexing</c> sends you to Google Search Console to see if your book is already being indexed.  You may need to go through a confirmation process to establish that you are the owner of the website being indexed.  If you see that your book is not yet being indexed, you may want to wait as long as a week before your material does get indexed and you make a search box available.</p></li>
+                <li><p>Provisions for removing advertisements for non-profit sites seem to have changed.  If your university already contracts with Google, you should investigate having a <q>SuperAdmin</q> at your institution so this setup for you, and make you a trusted collaborator.  Then it should be an easy matter to turn off advertisements.</p></li>
             </ol>
         </list>
 
@@ -189,8 +187,8 @@
 
             <ol>
                 <li><p>Because these sign-ups are dependent on your site, this is a publisher activity, and hence configured with the publisher file (<xref ref="publisher-file"/>), see <xref ref="online-search-options"/> for details.</p></li>
-                <li><p>The <c>Search engine ID</c> you saved from above is referenced in Google's code as a <c>cx</c> number.  An example looks like <c>002673997130187229905:qjo2y0jplyu</c>.  In which case your publisher file would have an element under <c>html</c> like<cd>
-                    <cline>&lt;search google-cx="002673997130187229905:qjo2y0jplyu"/&gt;</cline>
+                <li><p>The <c>Search engine ID</c> you saved from above is referenced in Google's code as a <c>cx</c> number.  An example looks like <c>482cf73dc05bed674</c> (older examples looked like <c>002673997130187229905:qjo2y0jplyu</c>).  In which case your publisher file would have an element under <c>html</c> like<cd>
+                    <cline>&lt;search google-cx="482cf73dc05bed674"/&gt;</cline>
                 </cd></p></li>
 
                 <li><p>The <c>search/@google-cx</c> attribute will alert the <pretext/> conversion and fully enable and implement search.  You are done, and everything should just work.  You should see a Google-branded search box to the top right of each of your pages.  (We have no control over the branding.)</p></li>
