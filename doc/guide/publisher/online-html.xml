@@ -172,7 +172,7 @@
 
                 <li><p>Give the engine a GCSE-specific name, so you can tell later which one it is when you have several.</p></li>
 
-                <li><p>Under <c>Edit Search Engine</c> in the <c>Basics</c> tab locate </c>Search engine ID</c> which has a string that uniquely identifies your new search engine.  Save this, you'll need to make it part of your <pretext/> document.</p></li>
+                <li><p>Under <c>Edit Search Engine</c> in the <c>Basics</c> tab locate <c>Search engine ID</c> which has a string that uniquely identifies your new search engine.  Save this, you'll need to make it part of your <pretext/> document.</p></li>
 
                 <li><p>Under the <c>Users</c> tab add co-authors or trusted backup personnel.</p></li>
 
