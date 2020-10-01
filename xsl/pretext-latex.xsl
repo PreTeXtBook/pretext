@@ -9411,15 +9411,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:choose>
         <!-- A col element might indicate top border customizations   -->
         <!-- so we walk the cols to build a cline-style specification -->
+        <!-- $clines accumulates the specification when complicated   -->
+        <!-- For convenience, recursion passes along the $table-top   -->
         <xsl:when test="col/@top">
-            <xsl:call-template name="column-cols">
-                <xsl:with-param name="the-col" select="col[1]" />
+            <xsl:apply-templates select="col[1]" mode="column-cols">
                 <xsl:with-param name="col-number" select="1" />
                 <xsl:with-param name="clines" select="''" />
                 <xsl:with-param name="table-top" select="$table-top"/>
-                <xsl:with-param name="prior-top" select="'undefined'" />
                 <xsl:with-param name="start-run" select="1" />
-            </xsl:call-template>
+            </xsl:apply-templates>
         </xsl:when>
         <!-- with no customization, we have one continuous rule (if at all) -->
         <!-- use global, table-wide value of top specification              -->
@@ -9453,31 +9453,24 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The cline specification is accumulated in the clines variable            -->
 <!-- A similar strategy is used to traverse the "cell" elements of each "row" -->
 <!-- but becomes much more involved, see the "row-cells" template             -->
-<!-- NB: An attempt was made on 2020-10-01 to refactor this template to       -->
-<!-- be modal with match/select on the "col", eliminating the $the-col        -->
-<!-- parameter. We suspect the following problem with a naive rewrite.        -->
-<!-- When a row ends, the select becomes empty and the final (n+1) run of     -->
-<!-- the template never happpens.  So the "$updated-cline" never gets         -->
-<!-- written.  So more care needs to be taken with that final disposition of  -->
-<!-- accumulated items.  Perhaps we could look forward for a change, rather   -->
-<!-- than looking backward for no change?                                     -->
-<xsl:template name="column-cols">
-    <xsl:param name="the-col" />
+<xsl:template match="col" mode="column-cols">
     <xsl:param name="col-number" />
     <xsl:param name="clines" />
     <xsl:param name="table-top" />
-    <xsl:param name="prior-top" />
     <xsl:param name="start-run" />
+
     <!-- Look ahead one column, anticipating recursion           -->
     <!-- but also probing for end of column group (no more cols) -->
-    <xsl:variable name="next-col"  select="$the-col/following-sibling::col[1]" /> <!-- possibly empty -->
-    <!-- The desired top border style for this column   -->
-    <!-- Considered, but also paid forward as prior-top -->
+    <!-- An empty node-set will signal final "col" element       -->
+    <xsl:variable name="next-col"  select="following-sibling::col[1]"/>
+    <xsl:variable name="b-final-col" select="not($next-col)"/>
+    <!-- The desired top border styles for columns, both -->
+    <!-- current and next, so as to recognize a change   -->
     <xsl:variable name="current-top">
         <xsl:choose>
             <!-- cell specification -->
-            <xsl:when test="$the-col/@top">
-                <xsl:value-of select="$the-col/@top" />
+            <xsl:when test="@top">
+                <xsl:value-of select="@top" />
             </xsl:when>
             <!-- inherited specification for top -->
             <xsl:otherwise>
@@ -9485,65 +9478,76 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <!-- Formulate any necessary update to cline  -->
-    <!-- information for the top border -->
+    <xsl:variable name="next-top">
+        <xsl:choose>
+            <!-- empty is sentinel for currently on the final -->
+             <!-- "col", and will not match any specification -->
+            <xsl:when test="$b-final-col"/>
+            <!-- cell specification -->
+            <xsl:when test="$next-col/@top">
+                <xsl:value-of select="$next-col/@top" />
+            </xsl:when>
+            <!-- inherited specification for top -->
+            <xsl:otherwise>
+                <xsl:value-of select="$table-top" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- Formulate any necessary update to    -->
+    <!-- cline information for the top border -->
     <xsl:variable name="updated-cline">
         <!-- write current cline information -->
         <xsl:value-of select="$clines" />
         <!-- is there a change, or end of column group, indicating need to flush -->
-        <xsl:if test="not($the-col) or not($prior-top = $current-top)">
+        <xsl:if test="not($current-top = $next-top)">
             <xsl:choose>
                 <!-- end of column group and have never flushed -->
                 <!-- hence a uniform top border                 -->
-                <xsl:when test="not($the-col) and ($start-run = 1)">
+                <xsl:when test="$b-final-col and ($start-run = 1)">
                     <xsl:call-template name="hrule-specification">
-                        <xsl:with-param name="width" select="$prior-top" />
+                        <xsl:with-param name="width" select="$current-top" />
                     </xsl:call-template>
                 </xsl:when>
-                <!-- write cline for up-to, and including, prior col   -->
-                <!-- prior-top always lags, so never operate on col #1 -->
-                <xsl:when test="($col-number != 1) and not($prior-top = 'none')">
+                <!-- write cline for up-to, and including, current col -->
+                <!-- if current run is "none" nothing is written       -->
+                <xsl:when test="not($current-top = 'none')">
                     <xsl:call-template name="crule-specification">
-                        <xsl:with-param name="width" select="$prior-top" />
+                        <xsl:with-param name="width" select="$current-top" />
                         <xsl:with-param name="start" select="$start-run" />
-                        <xsl:with-param name="finish" select="$col-number - 1" />
+                        <xsl:with-param name="finish" select="$col-number" />
                     </xsl:call-template>
                 </xsl:when>
-                <xsl:otherwise>
-                    <!-- no update -->
-                </xsl:otherwise>
+                <xsl:otherwise/>
             </xsl:choose>
         </xsl:if>
     </xsl:variable>
-    <xsl:variable name="new-start-run">
+    <!-- recycle start-run if contiguous, else we have flushed  -->
+    <!-- a partial specification into accululated $clines, so   -->
+    <!-- restart at next "col".  If the new start is "too big", -->
+    <!-- then no matter, since recursion halts anyway           -->
+    <xsl:variable name="new-start-run" >
         <xsl:choose>
-            <xsl:when test="$col-number = 1 or $prior-top = $current-top">
-                <xsl:value-of select="$start-run" />
+            <xsl:when test="$current-top = $next-top">
+                <xsl:value-of select="$start-run"/>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:value-of select="$col-number" />
+                <xsl:value-of select="$col-number + 1"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    <xsl:choose>
-        <!-- Call this template on next cell              -->
-        <!-- Possibly passing an empty node (as sentinel) -->
-        <xsl:when test="$the-col">
-            <xsl:call-template name="column-cols">
-                <xsl:with-param name="the-col" select="$next-col" />
-                <xsl:with-param name="col-number" select="$col-number + 1" />
-                <xsl:with-param name="clines" select="$updated-cline" />
-                <xsl:with-param name="table-top" select="$table-top" />
-                <xsl:with-param name="prior-top" select="$current-top" />
-                <xsl:with-param name="start-run" select="$new-start-run" />
-            </xsl:call-template>
-        </xsl:when>
-        <!-- At non-col, done with column group -->
-        <!-- conclude line, dump cline info     -->
-        <xsl:otherwise>
-            <xsl:value-of select="$updated-cline" />
-        </xsl:otherwise>
-    </xsl:choose>
+    <!-- if this is the final "col" the recursion will end (next) -->
+    <!-- and we need to drop the accumulated cline specification  -->
+    <xsl:if test="$b-final-col">
+        <xsl:value-of select="$updated-cline"/>
+    </xsl:if>
+    <!-- Recursive call of this template on next "col",    -->
+    <!-- which if empty will be a no-op and recursion ends -->
+    <xsl:apply-templates select="$next-col" mode="column-cols">
+        <xsl:with-param name="col-number" select="$col-number + 1" />
+        <xsl:with-param name="clines" select="$updated-cline" />
+        <xsl:with-param name="table-top" select="$table-top" />
+        <xsl:with-param name="start-run" select="$new-start-run" />
+    </xsl:apply-templates>
 </xsl:template>
 
 <xsl:template match="row">
