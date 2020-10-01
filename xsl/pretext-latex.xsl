@@ -9336,6 +9336,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Accumulate cline information to write at the end of the line/row.     -->
 <!-- Study the "column-cols" template for a less-involved template         -->
 <!-- that uses an identical strategy, if you want to see something simpler -->
+<!-- NB: when the recursion is unwound (and simply each row is hit         -->
+<!-- with a template), first select rows with @header, then rows without.  -->
+<!-- That way non-initial, non-contiguous attempts will obviously fail.    -->
+<!-- See the -html conversion to see how this can be done.                 -->
 <xsl:template name="row-cells">
     <xsl:param name="the-cell" />
     <xsl:param name="left-col" />
@@ -9757,6 +9761,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:param name="the-cell" />
     <xsl:param name="halign" />
     <xsl:param name="valign" />
+    <!-- a cell of a header row needs to be bold -->
+    <!-- NB: Named templates means context is a  -->
+    <!-- row, which is really wrong.  Tests      -->
+    <!-- should be on  parent::row/@header       -->
+    <xsl:variable name="header-row">
+        <xsl:choose>
+            <xsl:when test="@header = 'yes'">
+                <xsl:text>true</xsl:text>
+            </xsl:when>
+            <xsl:when test="@header = 'vertical'">
+                <xsl:text>true</xsl:text>
+            </xsl:when>
+            <!-- "no" is other choice, or no attribute at all  -->
+            <!-- controlled by schema, so now error-check here -->
+            <xsl:otherwise/>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="b-header" select="$header-row = 'true'"/>
+    <!-- and vertical text is a simpler check -->
+    <xsl:variable name="b-vertical-header" select="@header = 'vertical'"/>
     <xsl:choose>
         <xsl:when test="$the-cell/p">
             <!-- paragraph-halign-specification differs from halign-specification -->
@@ -9781,11 +9805,26 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:call-template>
             <xsl:text>}&#xa;</xsl:text>
             <xsl:text>{</xsl:text>
+            <!-- adding \textbf, \bfseries not 100% effective here -->
             <xsl:apply-templates select="$the-cell/line" />
             <xsl:text>}&#xa;</xsl:text>
         </xsl:when>
         <xsl:otherwise>
+            <xsl:if test="$b-header">
+                <xsl:text>\textbf{</xsl:text>
+            </xsl:if>
+            <xsl:if test="$b-vertical-header">
+                <xsl:text>\rotatebox{90}{</xsl:text>
+            </xsl:if>
+            <!-- finally - the content -->
             <xsl:apply-templates select="$the-cell" />
+            <!-- a little space keeps text off a top rule -->
+            <xsl:if test="$b-vertical-header">
+                <xsl:text>\space}</xsl:text>
+            </xsl:if>
+            <xsl:if test="$b-header">
+                <xsl:text>}</xsl:text>
+            </xsl:if>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
