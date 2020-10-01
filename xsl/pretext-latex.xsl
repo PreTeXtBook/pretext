@@ -6213,6 +6213,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
 
     <xsl:if test="not($dry-run = '')">
+        <xsl:variable name="ncols">
+            <xsl:choose>
+                <xsl:when test="@solutions-cols">
+                    <xsl:value-of select="@solutions-cols"/>
+                </xsl:when>
+                <xsl:when test="@cols">
+                    <xsl:value-of select="@cols"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>1</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
         <xsl:if test="title">
             <xsl:text>\subparagraph</xsl:text>
             <!-- keep optional title if LaTeX source is re-purposed -->
@@ -6234,15 +6247,16 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- without an introduction (when there are no statements), or  -->
         <!-- it might remind the reader of the grouping                  -->
         <xsl:choose>
-            <xsl:when test="not(@cols) or (@cols = 1)">
+            <xsl:when test="$ncols = 1">
                 <xsl:text>\begin{exercisegroup}&#xa;</xsl:text>
             </xsl:when>
-            <xsl:when test="@cols = 2 or @cols = 3 or @cols = 4 or @cols = 5 or @cols = 6">
+            <xsl:when test="($ncols = 2) or ($ncols = 3) or ($ncols = 4) or ($ncols = 5) or ($ncols = 6)">
                 <xsl:text>\begin{exercisegroupcol}</xsl:text>
                 <xsl:text>{</xsl:text>
-                <xsl:value-of select="@cols"/>
+                <xsl:value-of select="$ncols"/>
                 <xsl:text>}&#xa;</xsl:text>
             </xsl:when>
+            <xsl:otherwise/>
         </xsl:choose>
         <xsl:apply-templates select="exercise" mode="solutions">
             <xsl:with-param name="purpose" select="$purpose" />
@@ -6253,10 +6267,10 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:with-param name="b-has-solution" select="$b-has-solution" />
         </xsl:apply-templates>
         <xsl:choose>
-            <xsl:when test="not(@cols) or (@cols = 1)">
+            <xsl:when test="$ncols = 1">
                 <xsl:text>\end{exercisegroup}&#xa;</xsl:text>
             </xsl:when>
-            <xsl:when test="@cols = 2 or @cols = 3 or @cols = 4 or @cols = 5 or @cols = 6">
+            <xsl:when test="($ncols = 2) or ($ncols = 3) or ($ncols = 4) or ($ncols = 5) or ($ncols = 6)">
                 <xsl:text>\end{exercisegroupcol}&#xa;</xsl:text>
             </xsl:when>
         </xsl:choose>
