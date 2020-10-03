@@ -6990,18 +6990,22 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 </xsl:template>
 
 <!-- CSS class for multi-column lists -->
-<!-- Context is element carrying the "cols" attribute   -->
-<!-- Value is "colsN" with 2 <= N <= 6                  -->
-<!-- Error message of out-of-range, could be made fatal -->
-<!-- DTD should enforce this restriction also           -->
+<!-- Context is element with potential "cols" attribute -->
+<!-- Return value is "colsN" with 2 <= N <= 6           -->
+<!-- @cols absent produces no result (i.e. classless)   -->
+<!-- @cols = 1 produces no result (i.e. classless)      -->
+<!-- Error message if out-of-range, could be made fatal -->
+<!-- Schema should enforce this restriction also        -->
 <xsl:template match="ol|ul|exercisegroup" mode="number-cols-CSS-class">
     <xsl:choose>
-        <xsl:when test="@cols=2 or @cols=3 or @cols=4 or @cols=5 or @cols=6">
+        <xsl:when test="not(@cols)"/>
+        <xsl:when test="@cols = 1"/>
+        <xsl:when test="(@cols = 2) or (@cols = 3) or (@cols = 4) or (@cols = 5) or (@cols = 6)">
             <xsl:text>cols</xsl:text>
             <xsl:value-of select="@cols" />
         </xsl:when>
         <xsl:otherwise>
-            <xsl:message>MBX:ERROR:   @cols attribute of lists or exercise groups, must be between 2 and 6 (inclusive), not "cols=<xsl:value-of select="@cols" />"</xsl:message>
+            <xsl:message>MBX:ERROR:   @cols attribute of lists or exercise groups, must be between 1 and 6 (inclusive), not "cols=<xsl:value-of select="@cols" />"</xsl:message>
             <xsl:apply-templates select="." mode="location-report" />
         </xsl:otherwise>
     </xsl:choose>

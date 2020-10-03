@@ -3476,10 +3476,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <div>
         <xsl:attribute name="class">
             <xsl:text>exercisegroup-exercises</xsl:text>
-            <xsl:if test="@cols">
-                <xsl:text> </xsl:text>
+            <xsl:variable name="cols-class-name">
                 <!-- HTML-specific, but in pretext-common.xsl -->
-                <xsl:apply-templates select="." mode="number-cols-CSS-class" />
+                <xsl:apply-templates select="." mode="number-cols-CSS-class"/>
+            </xsl:variable>
+            <xsl:if test="not($cols-class-name = '')">
+                <xsl:text> </xsl:text>
+                <xsl:value-of select="$cols-class-name"/>
             </xsl:if>
         </xsl:attribute>
         <xsl:apply-templates select="exercise">
@@ -3519,10 +3522,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <div>
                 <xsl:attribute name="class">
                     <xsl:text>exercisegroup-exercises</xsl:text>
-                    <xsl:if test="@cols">
-                        <xsl:text> </xsl:text>
+                    <xsl:variable name="cols-class-name">
                         <!-- HTML-specific, but in pretext-common.xsl -->
-                        <xsl:apply-templates select="." mode="number-cols-CSS-class" />
+                        <xsl:apply-templates select="." mode="number-cols-CSS-class"/>
+                    </xsl:variable>
+                    <xsl:if test="not($cols-class-name = '')">
+                        <xsl:text> </xsl:text>
+                        <xsl:value-of select="$cols-class-name"/>
                     </xsl:if>
                 </xsl:attribute>
                 <xsl:apply-templates select="exercise" mode="solutions">
@@ -5250,10 +5256,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         </xsl:if>
         <xsl:attribute name="class">
             <xsl:apply-templates select="." mode="html-list-class" />
-            <xsl:if test="@cols">
-                <xsl:text> </xsl:text>
+            <xsl:variable name="cols-class-name">
                 <!-- HTML-specific, but in pretext-common.xsl -->
-                <xsl:apply-templates select="." mode="number-cols-CSS-class" />
+                <xsl:apply-templates select="." mode="number-cols-CSS-class"/>
+            </xsl:variable>
+            <xsl:if test="not($cols-class-name = '')">
+                <xsl:text> </xsl:text>
+                <xsl:value-of select="$cols-class-name"/>
             </xsl:if>
         </xsl:attribute>
         <xsl:apply-templates select="li">

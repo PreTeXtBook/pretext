@@ -6080,6 +6080,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Commentary goes in an introduction and/or conclusion   -->
 <!-- When we point to these, we use custom hypertarget, etc -->
 <xsl:template match="exercisegroup">
+    <!-- Determine the number of columns -->
+    <!-- Restrict to 1-6 via the schema  -->
+    <xsl:variable name="ncols">
+        <xsl:choose>
+            <xsl:when test="@cols">
+                <xsl:value-of select="@cols"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>1</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- build it -->
     <xsl:text>\par\medskip\noindent%&#xa;</xsl:text>
     <xsl:if test="title">
         <xsl:text>\textbf{</xsl:text>
@@ -6091,21 +6104,6 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:if>
     <xsl:text>%&#xa;</xsl:text>
     <xsl:apply-templates select="introduction" />
-    <!-- sanitize the number of columns safely -->
-    <xsl:variable name="ncols">
-        <xsl:choose>
-            <xsl:when test="not(@cols)">
-                <xsl:text>1</xsl:text>
-            </xsl:when>
-            <xsl:when test="(@cols=1) or (@cols = 2) or (@cols = 3) or (@cols = 4) or (@cols = 5) or (@cols = 6)">
-                <xsl:value-of select="@cols"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>1</xsl:text>
-                <xsl:message>MBX:ERROR:   the @cols attribute of "exercisegroup" should be between 1 and 6 inclusive, not <xsl:value-of select="@cols"/>.  Using the default, 1 column.</xsl:message>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:variable>
     <xsl:choose>
         <xsl:when test="$ncols = 1">
             <xsl:text>\begin{exercisegroup}&#xa;</xsl:text>
@@ -6122,12 +6120,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- visibility of components when born (not doing "solutions" here) -->
     <xsl:apply-templates select="exercise"/>
     <xsl:choose>
-        <xsl:when test="not(@cols) or (@cols = 1)">
+        <xsl:when test="$ncols = 1">
             <xsl:text>\end{exercisegroup}&#xa;</xsl:text>
         </xsl:when>
-        <xsl:when test="@cols = 2 or @cols = 3 or @cols = 4 or @cols = 5 or @cols = 6">
+        <xsl:otherwise>
             <xsl:text>\end{exercisegroupcol}&#xa;</xsl:text>
-        </xsl:when>
+        </xsl:otherwise>
     </xsl:choose>
     <xsl:if test="conclusion">
         <xsl:text>\par\noindent%&#xa;</xsl:text>
@@ -6213,6 +6211,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:variable>
 
     <xsl:if test="not($dry-run = '')">
+        <!-- Determine the number of columns         -->
+        <!-- Restrict to 1-6 via the schema          -->
+        <!-- Override for solutions takes precedence -->
         <xsl:variable name="ncols">
             <xsl:choose>
                 <xsl:when test="@solutions-cols">
@@ -6250,13 +6251,12 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="$ncols = 1">
                 <xsl:text>\begin{exercisegroup}&#xa;</xsl:text>
             </xsl:when>
-            <xsl:when test="($ncols = 2) or ($ncols = 3) or ($ncols = 4) or ($ncols = 5) or ($ncols = 6)">
+            <xsl:otherwise>
                 <xsl:text>\begin{exercisegroupcol}</xsl:text>
                 <xsl:text>{</xsl:text>
                 <xsl:value-of select="$ncols"/>
                 <xsl:text>}&#xa;</xsl:text>
-            </xsl:when>
-            <xsl:otherwise/>
+            </xsl:otherwise>
         </xsl:choose>
         <xsl:apply-templates select="exercise" mode="solutions">
             <xsl:with-param name="purpose" select="$purpose" />
@@ -6270,9 +6270,9 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <xsl:when test="$ncols = 1">
                 <xsl:text>\end{exercisegroup}&#xa;</xsl:text>
             </xsl:when>
-            <xsl:when test="($ncols = 2) or ($ncols = 3) or ($ncols = 4) or ($ncols = 5) or ($ncols = 6)">
+            <xsl:otherwise>
                 <xsl:text>\end{exercisegroupcol}&#xa;</xsl:text>
-            </xsl:when>
+            </xsl:otherwise>
         </xsl:choose>
         <xsl:if test="$b-has-statement">
             <xsl:apply-templates select="conclusion" />
@@ -7259,8 +7259,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:variable name="mbx-format-code">
         <xsl:apply-templates select="." mode="format-code" />
     </xsl:variable>
+    <!-- Determine the number of columns -->
+    <!-- Restrict to 1-6 via the schema  -->
+    <xsl:variable name="ncols">
+        <xsl:choose>
+            <xsl:when test="@cols">
+                <xsl:value-of select="@cols"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>1</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
     <xsl:text>%&#xa;</xsl:text>
-    <xsl:if test="@cols">
+    <xsl:if test="not($ncols = 1)">
         <xsl:text>\begin{multicols}{</xsl:text>
         <xsl:value-of select="@cols" />
         <xsl:text>}&#xa;</xsl:text>
@@ -7278,17 +7290,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>&#xa;</xsl:text>
      <xsl:apply-templates />
     <xsl:text>\end{enumerate}&#xa;</xsl:text>
-    <xsl:if test="@cols">
+    <xsl:if test="not($ncols = 1)">
         <xsl:text>\end{multicols}&#xa;</xsl:text>
     </xsl:if>
 </xsl:template>
 
-<!-- MBX unordered list scheme is distinct -->
+<!-- PTX unordered list scheme is distinct -->
 <!-- from LaTeX's so we write out a label  -->
 <!-- choice for each such list             -->
 <xsl:template match="ul">
+    <!-- Determine the number of columns -->
+    <!-- Restrict to 1-6 via the schema  -->
+    <xsl:variable name="ncols">
+        <xsl:choose>
+            <xsl:when test="@cols">
+                <xsl:value-of select="@cols"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>1</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
     <xsl:text>%&#xa;</xsl:text>
-    <xsl:if test="@cols">
+    <xsl:if test="not($ncols = 1)">
         <xsl:text>\begin{multicols}{</xsl:text>
         <xsl:value-of select="@cols" />
         <xsl:text>}&#xa;</xsl:text>
@@ -7298,7 +7322,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>]&#xa;</xsl:text>
     <xsl:apply-templates />
     <xsl:text>\end{itemize}&#xa;</xsl:text>
-    <xsl:if test="@cols">
+    <xsl:if test="not($ncols = 1)">
         <xsl:text>\end{multicols}&#xa;</xsl:text>
     </xsl:if>
 </xsl:template>
