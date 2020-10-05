@@ -11178,7 +11178,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- Not very semantic, but worksheet construction -->
 <!-- for print does involve some layout. We can    -->
 <!-- style an indicator in the HTML version.       -->
-<xsl:template match="worksheet/pagebreak">
+<xsl:template match="worksheet//pagebreak">
     <hr class="pagebreak"/>
 </xsl:template>
 

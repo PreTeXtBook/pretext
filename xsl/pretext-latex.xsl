@@ -5067,7 +5067,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- print does involve some layout. Only with a "worksheet". -->
 <!-- NB: A "page" grouping interferes with numbering that     -->
 <!-- looks to the parent.                                     -->
-<xsl:template match="worksheet/pagebreak">
+<xsl:template match="worksheet//pagebreak">
     <xsl:text>\clearpage&#xa;</xsl:text>
 </xsl:template>
 
