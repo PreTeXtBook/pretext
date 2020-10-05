@@ -4206,6 +4206,38 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     </xsl:choose>
 </xsl:template>
 
+<!-- An exercise in certain situations may have an @width. -->
+<xsl:template match="exercise" mode="get-width-percentage">
+    <!-- find it first -->
+    <xsl:variable name="raw-width">
+        <xsl:choose>
+            <!-- right on the element! -->
+            <xsl:when test="@width">
+                <xsl:value-of select="@width" />
+            </xsl:when>
+            <!-- what to do? Author will figure it out if too extreme -->
+            <xsl:otherwise>
+                <xsl:text>100%</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <!-- now sanitize it -->
+    <xsl:variable name="normalized-width" select="normalize-space($raw-width)" />
+    <xsl:choose>
+        <xsl:when test="not(substring($normalized-width, string-length($normalized-width)) = '%')">
+            <xsl:message>PTX:ERROR:   a "width" attribute should be given as a percentage (such as "40%", not as "<xsl:value-of select="$normalized-width" />, using 100% instead"</xsl:message>
+            <xsl:apply-templates select="." mode="location-report" />
+            <!-- replace by 100% -->
+            <xsl:text>100%</xsl:text>
+        </xsl:when>
+        <!-- test for stray interior spaces here? -->
+        <xsl:otherwise>
+            <xsl:value-of select="$normalized-width" />
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+
 <!-- Assumes element may have an @aspect attribute   -->
 <!-- Caller can provide a default for its context    -->
 <!-- Input:  "width:height", or decimal width/height -->

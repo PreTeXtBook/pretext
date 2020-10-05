@@ -1,0 +1,2868 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- ********************************************************************* -->
+<!-- Copyright 2020                                                        -->
+<!--                                                                       -->
+<!-- This file is part of PreTeXt.                                         -->
+<!--                                                                       -->
+<!-- PreTeXt is free software: you can redistribute it and/or modify       -->
+<!-- it under the terms of the GNU General Public License as published by  -->
+<!-- the Free Software Foundation, either version 2 or version 3 of the    -->
+<!-- License (at your option).                                             -->
+<!--                                                                       -->
+<!-- PreTeXt is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of        -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         -->
+<!-- GNU General Public License for more details.                          -->
+<!--                                                                       -->
+<!-- You should have received a copy of the GNU General Public License     -->
+<!-- along with PreTeXt. If not, see <http://www.gnu.org/licenses/>.       -->
+<!-- ********************************************************************* -->
+
+
+
+<pretext xmlns:xi="http://www.w3.org/2001/XInclude">
+  <docinfo>
+    <latex-image-preamble>
+      \usepackage{pgfplots}               % loads tikz package
+      \usepackage{smartdiagram}           % for a circular diagram
+      \pgfplotsset{axis x line = middle,
+                   axis y line = middle}
+      \usetikzlibrary{backgrounds}
+      \usetikzlibrary{arrows,matrix}
+      \usetikzlibrary{positioning}        % for Dave R's worksheet
+      \usepackage{circuitikz}             % for Virgil P's worksheet
+    </latex-image-preamble>
+  </docinfo>
+
+  <book xml:id="webwork-mini">
+    <title>Worksheets Example</title>
+    <frontmatter>
+      <titlepage>
+        <author>
+          <personname>Alex Jordan</personname>
+        </author>
+      </titlepage>
+    </frontmatter>
+
+    <chapter>
+      <title>Worksheets from Sample Article</title>
+      <section>
+        <title>Some Structure for the Chapter</title>
+        <xi:include href="./filler.ptx"/>
+        <xi:include href="./filler.ptx"/>
+        <xi:include href="./filler.ptx"/>
+      </section>
+
+      <worksheet>
+        <title>A Geometric Prelude (Faithful to Original)</title>
+        <!-- <author>Dave Rosoff</author> -->
+        <objectives>
+          <ul>
+            <li>Practice visualizing vector addition.</li>
+            <li>Use vectors without explicit coordinates.</li>
+          </ul>
+        </objectives>
+        <introduction>
+          <p>
+            This two-page worksheet was generously donated to the sample article by Dave Rosoff
+            at a CuratedCourses workshop in August<nbsp/>2018.
+            It has the default (skinny) margins.
+          </p>
+
+          <p>
+            It was known to Euclid, and probably earlier,
+            that the midpoints of the sides of any quadrilateral all lie in the same plane
+            (even if the vertices of the quadrilateral do not).
+            In fact, these midpoints are the vertices of a parallelogram, as pictured in
+            <xref ref="figure-midpoints-of-quadrilateral" text="type-global"/>.
+          </p>
+
+          <sidebyside widths="32% 32% 32%" margins="0%">
+            <figure xml:id="figure-midpoints-of-quadrilateral">
+              <caption>The midpoints of the sides of a quadrilateral are the vertices of a parallelogram.</caption>
+              <image xml:id="worksheet-midpoints-of-quadrilateral">
+                <latex-image>
+                  \begin{tikzpicture}[xscale=0.8, yscale=0.8]
+                   \draw[style={black, ultra thick}] (0,0) -- (5,0) -- (4,4) -- (2,5) -- (0,0);
+                   \draw[style={black, dashed, very thick}] (2.5, 0) -- (4.5, 2) -- (3, 4.5) -- (1, 2.5) -- (2.5, 0);
+                  \end{tikzpicture}
+                </latex-image>
+              </image>
+            </figure>
+            <figure xml:id="figure-triangle-cyclic-vectors">
+              <caption>The sides of a triangle presented as vectors.</caption>
+              <image xml:id="worksheet-triangle-cyclic-vectors">
+                <latex-image>
+                  \begin{tikzpicture}[xscale=1.5, yscale=1.5]
+                    \draw[->,>=latex, style={black, thick}] (0,0) -- (2.30 , 0) node [below] {$\vec{A}$} --  (3,0);
+                    \draw[->,>=latex, style={black, thick}] (3,0) -- (1.47, 1.53) node [above right =1mm] {$\vec{B}$} -- (1,2);
+                    \draw[->,>=latex, style={black, thick}] (1,2) -- (0.23 , 0.46) node [above left=1mm] {$\vec{C}$} -- (0,0);
+                    % \draw[->,>=latex, style={black,semithick,dashed}] (1,2) -- (7/6, 4/3) node
+                    %   {} -- (1.5,0) node[below right=0mm and 3mm] {$\vec{A}$};
+                    %\draw[->,>=latex, style={black,semithick,dashed}] (0,0) -- (2/3, 1/3) node
+                    %  {} -- (2,1) node[above left=5mm and 1mm] {$\vec{B}$};
+                    %\draw[->,>=latex, style={black,semithick,dashed}] (3,0) -- (13/6,1/3) node
+                    %  {} -- (0.5,1) node[below left=1mm and 3mm] {$\vec{C}$};
+                    %\node[draw,shape=circle,fill=black,name=P,scale=0.5] at (4/3,2/3) {};
+                    %\node[above right=1.2mm and -0.5mm of P] at (4/3,2/3) {$P$};
+                    % \node {$P$} (1.3333,0.6667);
+                  \end{tikzpicture}
+                </latex-image>
+              </image>
+            </figure>
+            <figure xml:id="figure-triangle-cyclic-medians">
+              <caption>The medians of the triangle are <m>\vec{M}_1</m>, <m>\vec{M}_2</m>, and <m>\vec{M}_3</m>.</caption>
+              <image xml:id="worksheet-triangle-cyclic-medians">
+                <latex-image>
+                  \begin{tikzpicture}[xscale=1.5, yscale=1.5]
+                    \draw[->,>=latex, style={black, thick}] (0,0) -- (2.30 , 0) node [below] {$\vec{A}$} --  (3,0);
+                    \draw[->,>=latex, style={black, thick}] (3,0) -- (1.47, 1.53) node [above right =1mm] {$\vec{B}$} -- (1,2);
+                    \draw[->,>=latex, style={black, thick}] (1,2) -- (0.23 , 0.46) node [above left=1mm] {$\vec{C}$} -- (0,0);
+                    \draw[->,>=latex, style={black,semithick,dashed}] (1,2) -- (7/6, 4/3) node
+                      {$\vec{M}_{1}$} -- (1.5,0);% node[below right=0mm and 3mm] {$\vec{A}$};
+                    \draw[->,>=latex, style={black,semithick,dashed}] (0,0) -- (2/3, 1/3) node
+                     {$\vec{M}_{2}$} -- (2,1);% node[above left=5mm and 1mm] {$\vec{B}$};
+                    \draw[->,>=latex, style={black,semithick,dashed}] (3,0) -- (13/6,1/3) node
+                     {$\vec{M}_{3}$} -- (0.5,1);% node[below left=1mm and 3mm] {$\vec{C}$};
+                    \node[draw,shape=circle,fill=black,name=P,scale=0.5] at (4/3,2/3) {};
+                    \node[above right=1.2mm and -0.5mm of P] at (4/3,2/3) {$P$};
+                    % \node {$P$} (1.3333,0.6667);
+                  \end{tikzpicture}
+                </latex-image>
+              </image>
+            </figure>
+          </sidebyside>
+        </introduction>
+
+        <subexercises>
+          <introduction>
+            <p>
+              In this exercise, we'll use vectors to show that the medians of any triangle
+              (<xref ref="figure-triangle-cyclic-vectors" text="type-global"/>) intersect at a point.
+              Recall that medians are the lines connecting the vertices of the triangle to the midpoints of their opposite edges,
+              as in the figure. We'll do this in a few steps.
+            </p>
+          </introduction>
+          <exercise xml:id="ex-cyclic" workspace="2in">
+            <statement>
+              <p>What is the value of <m>\vec{A} + \vec{B} + \vec{C}</m>?</p>
+            </statement>
+          </exercise>
+        </subexercises>
+
+        <pagebreak/>
+
+        <subexercises cols="2">
+          <introduction>
+            <p>
+              <xref ref="figure-triangle-cyclic-medians" text="type-global"/> from the previous page is reproduced for your convenience.
+            </p>
+            <figure xml:id="figure-triangle-cyclic-medians-copy">
+              <caption>The medians of the triangle are <m>\vec{M}_1</m>, <m>\vec{M}_2</m>, and <m>\vec{M}_3</m>.</caption>
+              <image xml:id="worksheet-triangle-cyclic-medians-copy" width="50%">
+                <latex-image>
+                  \begin{tikzpicture}[xscale=1.5, yscale=1.5]
+                    \draw[->,>=latex, style={black, thick}] (0,0) -- (2.30 , 0) node [below] {$\vec{A}$} --  (3,0);
+                    \draw[->,>=latex, style={black, thick}] (3,0) -- (1.47, 1.53) node [above right =1mm] {$\vec{B}$} -- (1,2);
+                    \draw[->,>=latex, style={black, thick}] (1,2) -- (0.23 , 0.46) node [above left=1mm] {$\vec{C}$} -- (0,0);
+                    \draw[->,>=latex, style={black,semithick,dashed}] (1,2) -- (7/6, 4/3) node
+                      {$\vec{M}_{1}$} -- (1.5,0);% node[below right=0mm and 3mm] {$\vec{A}$};
+                    \draw[->,>=latex, style={black,semithick,dashed}] (0,0) -- (2/3, 1/3) node
+                     {$\vec{M}_{2}$} -- (2,1);% node[above left=5mm and 1mm] {$\vec{B}$};
+                    \draw[->,>=latex, style={black,semithick,dashed}] (3,0) -- (13/6,1/3) node
+                     {$\vec{M}_{3}$} -- (0.5,1);% node[below left=1mm and 3mm] {$\vec{C}$};
+                    \node[draw,shape=circle,fill=black,name=P,scale=0.5] at (4/3,2/3) {};
+                    \node[above right=1.2mm and -0.5mm of P] at (4/3,2/3) {$P$};
+                    % \node {$P$} (1.3333,0.6667);
+                  \end{tikzpicture}
+                </latex-image>
+              </image>
+            </figure>
+          </introduction>
+
+          <exercise xml:id="exercise-vector-addition" workspace="3in">
+            <statement>
+              <p>
+                Show that <m>\vec{M}_{1} + \vec{M}_{2} + \vec{M}_{3} = 0</m>.
+              </p>
+            </statement>
+            <hint>
+              <p>Use <xref ref="ex-cyclic" text="type-global"/>.</p>
+            </hint>
+          </exercise>
+
+          <exercise workspace="3in">
+            <statement>
+              <p>
+                To show that the point <m>P</m> exists (as the common intersection of the <m>\vec{M}_{i}</m>), show that
+                <me>
+                  \vec{A} + \frac{2}{3} \vec{M}_{3} - \frac{2}{3} \vec{M}_{2} = {<fillin characters="10"/>}
+                </me>.
+              </p>
+            </statement>
+          </exercise>
+        </subexercises>
+
+        <subexercises>
+          <exercise workspace="0.5in">
+            <p>
+              If you have time, try to devise a vector proof of Euclid's result presented at the beginning of the workshop.
+              Recall that a <term>parallelogram</term> is a four-sided polygon whose opposite sides are parallel.
+            </p>
+          </exercise>
+        </subexercises>
+
+        <conclusion>
+          <title>Wrap-up</title>
+          <p>
+            It's possible to do interesting things with vector arithmetic in a coordinate-free way:
+            we didn't specify an origin, or any entries of any vectors in the examples.
+          </p>
+        </conclusion>
+      </worksheet>
+
+      <worksheet>
+        <title>A Geometric Prelude (No Figures)</title>
+        <!-- <author>Dave Rosoff</author> -->
+        <objectives>
+          <ul>
+            <li>Practice visualizing vector addition.</li>
+            <li>Use vectors without explicit coordinates.</li>
+          </ul>
+        </objectives>
+        <introduction>
+          <p>
+            This two-page worksheet was generously donated to the sample article by Dave Rosoff
+            at a CuratedCourses workshop in August<nbsp/>2018.
+            It has the default (skinny) margins.
+          </p>
+
+          <p>
+            It was known to Euclid, and probably earlier,
+            that the midpoints of the sides of any quadrilateral all lie in the same plane
+            (even if the vertices of the quadrilateral do not).
+            In fact, these midpoints are the vertices of a parallelogram, as pictured in
+            the first image.
+          </p>
+
+          <sidebyside widths="32% 32% 32%" margins="0%">
+            <image>
+              <latex-image>
+                \begin{tikzpicture}[xscale=0.8, yscale=0.8]
+                 \draw[style={black, ultra thick}] (0,0) -- (5,0) -- (4,4) -- (2,5) -- (0,0);
+                 \draw[style={black, dashed, very thick}] (2.5, 0) -- (4.5, 2) -- (3, 4.5) -- (1, 2.5) -- (2.5, 0);
+                \end{tikzpicture}
+              </latex-image>
+            </image>
+            <image>
+              <latex-image>
+                \begin{tikzpicture}[xscale=1.5, yscale=1.5]
+                  \draw[->,>=latex, style={black, thick}] (0,0) -- (2.30 , 0) node [below] {$\vec{A}$} --  (3,0);
+                  \draw[->,>=latex, style={black, thick}] (3,0) -- (1.47, 1.53) node [above right =1mm] {$\vec{B}$} -- (1,2);
+                  \draw[->,>=latex, style={black, thick}] (1,2) -- (0.23 , 0.46) node [above left=1mm] {$\vec{C}$} -- (0,0);
+                  % \draw[->,>=latex, style={black,semithick,dashed}] (1,2) -- (7/6, 4/3) node
+                  %   {} -- (1.5,0) node[below right=0mm and 3mm] {$\vec{A}$};
+                  %\draw[->,>=latex, style={black,semithick,dashed}] (0,0) -- (2/3, 1/3) node
+                  %  {} -- (2,1) node[above left=5mm and 1mm] {$\vec{B}$};
+                  %\draw[->,>=latex, style={black,semithick,dashed}] (3,0) -- (13/6,1/3) node
+                  %  {} -- (0.5,1) node[below left=1mm and 3mm] {$\vec{C}$};
+                  %\node[draw,shape=circle,fill=black,name=P,scale=0.5] at (4/3,2/3) {};
+                  %\node[above right=1.2mm and -0.5mm of P] at (4/3,2/3) {$P$};
+                  % \node {$P$} (1.3333,0.6667);
+                \end{tikzpicture}
+              </latex-image>
+            </image>
+            <image>
+              <latex-image>
+                \begin{tikzpicture}[xscale=1.5, yscale=1.5]
+                  \draw[->,>=latex, style={black, thick}] (0,0) -- (2.30 , 0) node [below] {$\vec{A}$} --  (3,0);
+                  \draw[->,>=latex, style={black, thick}] (3,0) -- (1.47, 1.53) node [above right =1mm] {$\vec{B}$} -- (1,2);
+                  \draw[->,>=latex, style={black, thick}] (1,2) -- (0.23 , 0.46) node [above left=1mm] {$\vec{C}$} -- (0,0);
+                  \draw[->,>=latex, style={black,semithick,dashed}] (1,2) -- (7/6, 4/3) node
+                    {$\vec{M}_{1}$} -- (1.5,0);% node[below right=0mm and 3mm] {$\vec{A}$};
+                  \draw[->,>=latex, style={black,semithick,dashed}] (0,0) -- (2/3, 1/3) node
+                   {$\vec{M}_{2}$} -- (2,1);% node[above left=5mm and 1mm] {$\vec{B}$};
+                  \draw[->,>=latex, style={black,semithick,dashed}] (3,0) -- (13/6,1/3) node
+                   {$\vec{M}_{3}$} -- (0.5,1);% node[below left=1mm and 3mm] {$\vec{C}$};
+                  \node[draw,shape=circle,fill=black,name=P,scale=0.5] at (4/3,2/3) {};
+                  \node[above right=1.2mm and -0.5mm of P] at (4/3,2/3) {$P$};
+                  % \node {$P$} (1.3333,0.6667);
+                \end{tikzpicture}
+              </latex-image>
+            </image>
+          </sidebyside>
+        </introduction>
+
+        <subexercises>
+          <introduction>
+            <p>
+              In this exercise, we'll use vectors to show that the medians of any triangle
+              (like the middle image) intersect at a point.
+              Recall that medians are the lines connecting the vertices of the triangle to the midpoints of their opposite edges,
+              as in the figure. We'll do this in a few steps.
+            </p>
+          </introduction>
+          <exercise xml:id="ex-cyclic-2" workspace="2in">
+            <statement>
+              <p>What is the value of <m>\vec{A} + \vec{B} + \vec{C}</m>?</p>
+            </statement>
+          </exercise>
+        </subexercises>
+
+        <pagebreak/>
+
+        <subexercises cols="2">
+          <introduction>
+            <p>
+              The third image from the previous page is reproduced for your convenience.
+            </p>
+            <image width="50%">
+              <latex-image>
+                \begin{tikzpicture}[xscale=1.5, yscale=1.5]
+                  \draw[->,>=latex, style={black, thick}] (0,0) -- (2.30 , 0) node [below] {$\vec{A}$} --  (3,0);
+                  \draw[->,>=latex, style={black, thick}] (3,0) -- (1.47, 1.53) node [above right =1mm] {$\vec{B}$} -- (1,2);
+                  \draw[->,>=latex, style={black, thick}] (1,2) -- (0.23 , 0.46) node [above left=1mm] {$\vec{C}$} -- (0,0);
+                  \draw[->,>=latex, style={black,semithick,dashed}] (1,2) -- (7/6, 4/3) node
+                    {$\vec{M}_{1}$} -- (1.5,0);% node[below right=0mm and 3mm] {$\vec{A}$};
+                  \draw[->,>=latex, style={black,semithick,dashed}] (0,0) -- (2/3, 1/3) node
+                   {$\vec{M}_{2}$} -- (2,1);% node[above left=5mm and 1mm] {$\vec{B}$};
+                  \draw[->,>=latex, style={black,semithick,dashed}] (3,0) -- (13/6,1/3) node
+                   {$\vec{M}_{3}$} -- (0.5,1);% node[below left=1mm and 3mm] {$\vec{C}$};
+                  \node[draw,shape=circle,fill=black,name=P,scale=0.5] at (4/3,2/3) {};
+                  \node[above right=1.2mm and -0.5mm of P] at (4/3,2/3) {$P$};
+                  % \node {$P$} (1.3333,0.6667);
+                \end{tikzpicture}
+              </latex-image>
+            </image>
+          </introduction>
+
+          <exercise workspace="3in">
+            <statement>
+              <p>
+                Show that <m>\vec{M}_{1} + \vec{M}_{2} + \vec{M}_{3} = 0</m>.
+              </p>
+            </statement>
+            <hint>
+              <p>Use <xref ref="ex-cyclic-2" text="type-global"/>.</p>
+            </hint>
+          </exercise>
+
+          <exercise workspace="3in">
+            <statement>
+              <p>
+                To show that the point <m>P</m> exists (as the common intersection of the <m>\vec{M}_{i}</m>), show that
+                <me>
+                  \vec{A} + \frac{2}{3} \vec{M}_{3} - \frac{2}{3} \vec{M}_{2} = {<fillin characters="10"/>}
+                </me>.
+              </p>
+            </statement>
+          </exercise>
+        </subexercises>
+
+        <subexercises>
+          <exercise workspace="0.5in">
+            <p>
+              If you have time, try to devise a vector proof of Euclid's result presented at the beginning of the workshop.
+              Recall that a <term>parallelogram</term> is a four-sided polygon whose opposite sides are parallel.
+            </p>
+          </exercise>
+        </subexercises>
+
+        <conclusion>
+          <title>Wrap-up</title>
+          <p>
+            It's possible to do interesting things with vector arithmetic in a coordinate-free way:
+            we didn't specify an origin, or any entries of any vectors in the examples.
+          </p>
+        </conclusion>
+      </worksheet>
+
+      <worksheet>
+        <title>Networks Worksheet (Faithful to Original)</title>
+        <!-- <subtitle>An Activity Using Linear Algebra to Solve Network Applications</subtitle> -->
+        <introduction>
+          <title>Basic laws for electrical circuits</title>
+          <p>
+            This two-page worksheet was generously donated to the sample article by Virgil Pierce
+            at a CuratedCourses workshop in August<nbsp/>2018.
+          </p>
+
+          <theorem>
+            <title> Ohms Law </title>
+            <p>
+              The current through a resistor is proportional to the ratio of the <em> Voltage </em> to the <em> Resistance </em>
+              <me>
+                I = \frac{V}{R}\qquad\text{or for our purposes,}\qquad I R = V
+              </me>
+            </p>
+          </theorem>
+
+          <theorem>
+            <title>Kirchoffs Current Law</title>
+            <p>
+              The sum of the currents in a network meeting at a point is zero.
+              <me>
+                \sum_{k=1}^n I_k = 0
+              </me>
+            </p>
+          </theorem>
+
+          <example>
+            <title> Kirchoff's Current Law </title>
+            <p>
+              For the circuit below <m> I_1 + I_2 = I_3 </m>.
+            </p>
+            <image xml:id="worksheet-kirchoff-law" width="25%">
+              <latex-image>
+                \begin{circuitikz}
+                \draw (0,0)
+                to[R, i=$I_1$, *-o](2,2);
+                \draw (0,0)
+                to[R, i=$I_2$, *-o](2,-2);
+                \draw (-3, 0)
+                to[R, i=$I_3$, o-*](0,0);
+                \end{circuitikz}
+              </latex-image>
+            </image>
+          </example>
+
+          <theorem>
+            <title> Kirchoffs Voltage Law </title>
+            <p>
+              The sum of the voltages around any closed circuit (or subcircuit) is zero.
+              <me>
+                \sum_{k=1}^n V_k = 0
+              </me>
+            </p>
+          </theorem>
+        </introduction>
+
+        <subexercises cols="2">
+          <introduction>
+            <p>
+              Kirchoffs Current Law and Kirkoffs Voltage Law combined with Ohms Law
+              gives for any circuit of resistors and sources a linear system that may (or may not) determine the currents.
+            </p>
+          </introduction>
+          <exercise workspace="1in">
+            <statement>
+              <p>
+                For the simple network pictured,
+                calculuate the amperage in each part of the network by setting up a system of linear equations for the amperages.
+              </p>
+              <image xml:id="worksheet-simple-network">
+                <latex-image>
+                  \begin{circuitikz}
+                  \draw (0,0)
+                  to[V, v=$11\quad \mbox{volt}$](0, 2)
+                  to[short](4,2)
+                  to[R, R=$4\quad \mbox{ohm}$] (5, 2)
+                  to[short](6,2)
+                  to[R, R=$3\quad \mbox{ohm}$](6,0)
+                  to[short](5,0)
+                  to[R, R=$3\quad \mbox{ohm}$](4,0)
+                  to[short](0,0);
+                  \end{circuitikz}
+                </latex-image>
+              </image>
+            </statement>
+          </exercise>
+
+          <exercise workspace="1in">
+            <statement>
+              <p>
+                Compare it to a parallel circuit network.
+                Calculate the amperage in each part of the network by setting up a system of linear equations for the amperages.
+              </p>
+              <image xml:id="worksheet-parallel-circuit">
+                <latex-image>
+                  \begin{circuitikz}
+                  \draw(0,0)
+                  to[V, v=$11\quad \mbox{volt}$](0, 2)
+                  to[short](4,2)
+                  to[R, R=$4\quad \mbox{ohm}$](5,2)
+                  to[short](6,2)
+                  to[R, R=$3\quad \mbox{ohm}$](6,0)
+                  to[short](5,0)
+                  to[R, R=$3\quad \mbox{ohm}$](4,0)
+                  to[short](0,0);
+                  \draw(3,0)
+                  to[R, R=$3\quad \mbox{ohm}$](3,2);
+                  \end{circuitikz}
+                </latex-image>
+              </image>
+            </statement>
+          </exercise>
+        </subexercises>
+
+        <pagebreak/>
+
+        <subexercises>
+          <exercise workspace="1in">
+            <statement>
+              <p>
+                Now for a more complicated network.
+                Calculate the amperage in each part of the network by setting up a system of linear equations for the amperages.
+              </p>
+              <image xml:id="worksheet-complicated-network" width="75%">
+                <latex-image>
+                  \begin{circuitikz}
+                  \draw(0,0)
+                  to[V, v=$11 \quad \mbox{volt}$](0, 3)
+                  to[short](5,3)
+                  to[R, R=$4 \quad \mbox{ohm}$](6,3)
+                  to[short](9,3)
+                  to[R, R=$4 \quad \mbox{ohm}$](10,3)
+                  to[short](11,3)
+                  to[R, R=$3 \quad \mbox{ohm}$](11, 0)
+                  to[short](10,0)
+                  to[R, R=$2\quad \mbox{ohm}$](9,0)
+                  to[short](6,0)
+                  to[R, R=$2\quad \mbox{ohm}$](5,0)
+                  to[short](0,0);
+                  \draw(4,0)
+                  to[R, R=$3\quad \mbox{ohm}$](4,3);
+                  \draw(8,0)
+                  to[R, R=$1\quad \mbox{ohm}$](8,3);
+                  \end{circuitikz}
+                </latex-image>
+              </image>
+            </statement>
+          </exercise>
+
+          <exercise workspace="1in">
+            <statement>
+              <p>
+                Now generalize these ideas to a context outside of electrical circuits.
+                Consider the network of streets given in the diagram (with one-way directions as indicated).
+              </p>
+
+              <image xml:id="worksheet-street-network" width="65%">
+                <latex-image>
+                  <![CDATA[
+                  \begin{tikzpicture}[>=stealth]
+                  \draw[->, very thick] (0,0) -- (10, 0) node[midway, below]{East Bound Winooski Ave};
+                  \draw[<-, very thick] (0, 1) -- (10, 1) node[midway, above]{West Bound Winooski Ave};
+                      \draw[<-, very thick] (0, 3) -- (10, 3) node[midway, above]{Shelburne St};
+                      \draw[<-, very thick] (1, -0.5) -- (1, 3.5) node[pos=0.625, above, sloped]{Willow};
+                      \draw[->, very thick] (9, -0.5) -- (9, 3.5) node[pos=0.625, above, sloped]{Jay};
+                      \end{tikzpicture}
+                  ]]>
+                </latex-image>
+              </image>
+
+              <p>
+                A traffic engineer counts the hourly flow of cars into and out of this network at the entrances.
+                They get (EB = East Bound; WB = West Bound):
+              </p>
+
+              <table>
+                <title>Estimated hourly traffic flow for the road network</title>
+                <tabular>
+                  <row>
+                    <cell></cell>
+                    <cell>EB Winooski</cell>
+                    <cell>WB Winooski</cell>
+                    <cell>Shelburne St</cell>
+                    <cell>Willow</cell>
+                    <cell>Jay</cell>
+                  </row>
+                  <row>
+                    <cell>into</cell>
+                    <cell>50</cell>
+                    <cell>400</cell>
+                    <cell>0</cell>
+                    <cell>10</cell>
+                    <cell>50</cell>
+                  </row>
+                  <row>
+                    <cell>out of</cell>
+                    <cell>55</cell>
+                    <cell>390</cell>
+                    <cell>20</cell>
+                    <cell>15</cell>
+                    <cell>30</cell>
+                  </row>
+                </tabular>
+              </table>
+
+              <p>
+                Use a variable for each segment inside of the network and set up a system of linear equations restricting the flow.
+                Solve the system.  Note that you should not get a unique solution as traffic should be able to flow
+                through the network in various ways.
+              </p>
+            </statement>
+          </exercise>
+        </subexercises>
+      </worksheet>
+
+      <worksheet>
+        <title>Networks Worksheet (No Theorems, No Examples)</title>
+        <!-- <subtitle>An Activity Using Linear Algebra to Solve Network Applications</subtitle> -->
+        <introduction>
+          <title>Basic laws for electrical circuits</title>
+          <p>
+            This two-page worksheet was generously donated to the sample article by Virgil Pierce
+            at a CuratedCourses workshop in August<nbsp/>2018.
+          </p>
+
+          <paragraphs>
+            <title> Ohms Law </title>
+            <p>
+              The current through a resistor is proportional to the ratio of the <em> Voltage </em> to the <em> Resistance </em>
+              <me>
+                I = \frac{V}{R}\qquad\text{or for our purposes,}\qquad I R = V
+              </me>
+            </p>
+          </paragraphs>
+
+          <paragraphs>
+            <title>Kirchoffs Current Law</title>
+            <p>
+              The sum of the currents in a network meeting at a point is zero.
+              <me>
+                \sum_{k=1}^n I_k = 0
+              </me>
+            </p>
+
+            <p>
+              For example, in the circuit below, <m> I_1 + I_2 = I_3 </m>.
+            </p>
+            <image width="25%">
+              <latex-image>
+                \begin{circuitikz}
+                \draw (0,0)
+                to[R, i=$I_1$, *-o](2,2);
+                \draw (0,0)
+                to[R, i=$I_2$, *-o](2,-2);
+                \draw (-3, 0)
+                to[R, i=$I_3$, o-*](0,0);
+                \end{circuitikz}
+              </latex-image>
+            </image>
+          </paragraphs>
+
+          <paragraphs>
+            <title> Kirchoffs Voltage Law </title>
+            <p>
+              The sum of the voltages around any closed circuit (or subcircuit) is zero.
+              <me>
+                \sum_{k=1}^n V_k = 0
+              </me>
+            </p>
+          </paragraphs>
+        </introduction>
+
+        <subexercises cols="2">
+          <introduction>
+            <p>
+              Kirchoffs Current Law and Kirkoffs Voltage Law combined with Ohms Law
+              gives for any circuit of resistors and sources a linear system that may (or may not) determine the currents.
+            </p>
+          </introduction>
+          <exercise workspace="1in">
+            <statement>
+              <p>
+                For the simple network pictured,
+                calculuate the amperage in each part of the network by setting up a system of linear equations for the amperages.
+              </p>
+              <image>
+                <latex-image>
+                  \begin{circuitikz}
+                  \draw (0,0)
+                  to[V, v=$11\quad \mbox{volt}$](0, 2)
+                  to[short](4,2)
+                  to[R, R=$4\quad \mbox{ohm}$] (5, 2)
+                  to[short](6,2)
+                  to[R, R=$3\quad \mbox{ohm}$](6,0)
+                  to[short](5,0)
+                  to[R, R=$3\quad \mbox{ohm}$](4,0)
+                  to[short](0,0);
+                  \end{circuitikz}
+                </latex-image>
+              </image>
+            </statement>
+          </exercise>
+
+          <exercise workspace="1in">
+            <statement>
+              <p>
+                Compare it to a parallel circuit network.
+                Calculate the amperage in each part of the network by setting up a system of linear equations for the amperages.
+              </p>
+              <image>
+                <latex-image>
+                  \begin{circuitikz}
+                  \draw(0,0)
+                  to[V, v=$11\quad \mbox{volt}$](0, 2)
+                  to[short](4,2)
+                  to[R, R=$4\quad \mbox{ohm}$](5,2)
+                  to[short](6,2)
+                  to[R, R=$3\quad \mbox{ohm}$](6,0)
+                  to[short](5,0)
+                  to[R, R=$3\quad \mbox{ohm}$](4,0)
+                  to[short](0,0);
+                  \draw(3,0)
+                  to[R, R=$3\quad \mbox{ohm}$](3,2);
+                  \end{circuitikz}
+                </latex-image>
+              </image>
+            </statement>
+          </exercise>
+        </subexercises>
+
+        <pagebreak/>
+
+        <subexercises>
+          <exercise workspace="1in">
+            <statement>
+              <p>
+                Now for a more complicated network.
+                Calculate the amperage in each part of the network by setting up a system of linear equations for the amperages.
+              </p>
+              <image width="75%">
+                <latex-image>
+                  \begin{circuitikz}
+                  \draw(0,0)
+                  to[V, v=$11 \quad \mbox{volt}$](0, 3)
+                  to[short](5,3)
+                  to[R, R=$4 \quad \mbox{ohm}$](6,3)
+                  to[short](9,3)
+                  to[R, R=$4 \quad \mbox{ohm}$](10,3)
+                  to[short](11,3)
+                  to[R, R=$3 \quad \mbox{ohm}$](11, 0)
+                  to[short](10,0)
+                  to[R, R=$2\quad \mbox{ohm}$](9,0)
+                  to[short](6,0)
+                  to[R, R=$2\quad \mbox{ohm}$](5,0)
+                  to[short](0,0);
+                  \draw(4,0)
+                  to[R, R=$3\quad \mbox{ohm}$](4,3);
+                  \draw(8,0)
+                  to[R, R=$1\quad \mbox{ohm}$](8,3);
+                  \end{circuitikz}
+                </latex-image>
+              </image>
+            </statement>
+          </exercise>
+
+          <exercise workspace="1in">
+            <statement>
+              <p>
+                Now generalize these ideas to a context outside of electrical circuits.
+                Consider the network of streets given in the diagram (with one-way directions as indicated).
+              </p>
+
+              <image width="65%">
+                <latex-image>
+                  <![CDATA[
+                  \begin{tikzpicture}[>=stealth]
+                  \draw[->, very thick] (0,0) -- (10, 0) node[midway, below]{East Bound Winooski Ave};
+                  \draw[<-, very thick] (0, 1) -- (10, 1) node[midway, above]{West Bound Winooski Ave};
+                      \draw[<-, very thick] (0, 3) -- (10, 3) node[midway, above]{Shelburne St};
+                      \draw[<-, very thick] (1, -0.5) -- (1, 3.5) node[pos=0.625, above, sloped]{Willow};
+                      \draw[->, very thick] (9, -0.5) -- (9, 3.5) node[pos=0.625, above, sloped]{Jay};
+                      \end{tikzpicture}
+                  ]]>
+                </latex-image>
+              </image>
+
+              <p>
+                A traffic engineer counts the hourly flow of cars into and out of this network at the entrances.
+                They get (EB = East Bound; WB = West Bound):
+              </p>
+
+              <table>
+                <title>Estimated hourly traffic flow for the road network</title>
+                <tabular>
+                  <row>
+                    <cell></cell>
+                    <cell>EB Winooski</cell>
+                    <cell>WB Winooski</cell>
+                    <cell>Shelburne St</cell>
+                    <cell>Willow</cell>
+                    <cell>Jay</cell>
+                  </row>
+                  <row>
+                    <cell>into</cell>
+                    <cell>50</cell>
+                    <cell>400</cell>
+                    <cell>0</cell>
+                    <cell>10</cell>
+                    <cell>50</cell>
+                  </row>
+                  <row>
+                    <cell>out of</cell>
+                    <cell>55</cell>
+                    <cell>390</cell>
+                    <cell>20</cell>
+                    <cell>15</cell>
+                    <cell>30</cell>
+                  </row>
+                </tabular>
+              </table>
+
+              <p>
+                Use a variable for each segment inside of the network and set up a system of linear equations restricting the flow.
+                Solve the system.  Note that you should not get a unique solution as traffic should be able to flow
+                through the network in various ways.
+              </p>
+            </statement>
+          </exercise>
+        </subexercises>
+      </worksheet>
+
+      <worksheet>
+        <introduction>
+          <p>
+            This is a mock one-page worksheet for testing purposes.
+          </p>
+        </introduction>
+
+        <subexercises cols="2">
+          <exercise workspace="0.5cm">
+            <statement>
+              <p>
+                Praesent rutrum scelerisque felis sit amet adipiscing.
+                Phasellus in mollis velit. Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.
+              </p>
+            </statement>
+          </exercise>
+
+          <exercise workspace="0.5cm">
+            <statement>
+              <p>
+                Integer sagittis dictum turpis vel aliquet. Fusce ut suscipit dolor, nec tristique nisl.
+                Aenean luctus, leo et ornare fermentum, nibh dui vulputate leo, nec tincidunt augue ipsum sed odio.
+                Nunc non erat sollicitudin, iaculis eros consequat, dapibus eros.</p>
+            </statement>
+          </exercise>
+        </subexercises>
+
+        <subexercises>
+          <introduction>
+            <p>
+              A paragraph in an introduction to check on spacing, breaks and all that.
+            </p>
+          </introduction>
+
+          <exercise workspace="0.5cm">
+            <title>A full-width exercise</title>
+            <statement>
+              <p>
+                Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit.
+                Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.
+              </p>
+              <p>
+                Integer sagittis dictum turpis vel aliquet. Fusce ut suscipit dolor, nec tristique nisl.
+                Aenean luctus, leo et ornare fermentum, nibh dui vulputate leo, nec tincidunt augue ipsum sed odio.
+                Nunc non erat sollicitudin, iaculis eros consequat, dapibus eros.
+              </p>
+            </statement>
+          </exercise>
+        </subexercises>
+
+        <subexercises cols="3">
+          <exercise>
+            <statement>
+              <p>
+                Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit.
+                Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.
+              </p>
+            </statement>
+          </exercise>
+
+          <exercise workspace="0.5cm">
+            <statement>
+              <p>
+                Integer sagittis dictum turpis vel aliquet. Fusce ut suscipit dolor, nec tristique nisl.
+                Aenean luctus, leo et ornare fermentum, nibh dui vulputate leo, nec tincidunt augue ipsum sed odio.
+                Nunc non erat sollicitudin, iaculis eros consequat, dapibus eros.
+              </p>
+            </statement>
+          </exercise>
+
+          <exercise workspace="0.5cm">
+            <statement>
+              <p>
+                Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit.
+                Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.
+              </p>
+            </statement>
+          </exercise>
+        </subexercises>
+
+        <subexercises direction="row" cols="3">
+          <title>A Mock Activity</title>
+          <introduction>
+            <p>
+              The problem, as we see it. A worksheet could have hints, no?  But no spacing. Note row below has widths set to balance the heights.
+            </p>
+          </introduction>
+
+          <exercise width="25%" workspace="0.5cm">
+            <statement>
+              <p>
+                Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit.
+                Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.
+              </p>
+            </statement>
+          </exercise>
+
+          <exercise width="41%" workspace="0.5cm">
+            <statement>
+              <p>
+                Integer sagittis dictum turpis vel aliquet. Fusce ut suscipit dolor, nec tristique nisl.
+                Aenean luctus, leo et ornare fermentum, nibh dui vulputate leo, nec tincidunt augue ipsum sed odio.
+                Nunc non erat sollicitudin, iaculis eros consequat, dapibus eros.
+              </p>
+            </statement>
+          </exercise>
+
+          <exercise width="35%" workspace="0.5cm">
+            <statement>
+              <p>
+                Praesent rutrum scelerisque felis sit amet adipiscing. Phasellus in mollis velit.
+                Nunc malesuada felis sit amet massa cursus, eget elementum neque viverra.
+              </p>
+            </statement>
+          </exercise>
+        </subexercises>
+      </worksheet>
+    </chapter>
+
+    <chapter>
+      <title>Worksheets from PCC Faculty</title>
+      <subsection>
+        <title>A Subsection for Structure</title>
+        <p>
+          These worksheets were sent to me in their original form (PDF, TeX, etc.) and then I converted them to <pretext/>.
+        </p>
+      </subsection>
+
+      <worksheet>
+        <title>Logic and Sets Group Activity</title>
+        <subexercises>
+          <title>Propositions and Truth Values, Sets and Venn Diagrams</title>
+          <exercise>
+            <statement>
+              <p>
+                Discuss each statement and decide which are propositions. Circle or highlight them.
+              </p>
+              <sidebyside widths="60% 34%">
+                <p>
+                  <ol>
+                    <li>
+                      <p>
+                        Are you hungry?
+                      </p>
+                    </li>
+                    <li>
+                      <p>
+                        Janae was nominated for student council president.
+                      </p>
+                    </li>
+                    <li>
+                      <p>
+                        Four pounds less.
+                      </p>
+                    </li>
+                    <li>
+                      <p>
+                        <m>7 + 8 = 33</m>
+                      </p>
+                    </li>
+                    <li>
+                      <p>
+                        I have two siblings.
+                      </p>
+                    </li>
+                  </ol>
+                </p>
+                <image source="images/penguins-are-black-and-white-some-old-tv-shows-are-33137013.png"/>
+              </sidebyside>
+            </statement>
+          </exercise>
+
+          <exercise>
+            <statement>
+              <p>
+                A proposition is given, represented by the letter <m>p</m>.
+                Write the wording for the negation and double negation.
+                (Note: <m>\text{not}\ p</m> can also be represented in symbols by <m>\neg p</m>.)
+                <ol>
+                  <li>
+                    <p>
+                      <m>p</m>:  Hannah eats apples.
+                    </p>
+                  </li>
+                  <li>
+                    <p>
+                      <m>\text{not}\ p</m>:
+                    </p>
+                  </li>
+                  <li>
+                    <p>
+                      <m>\text{not not}\ p</m>:
+                    </p>
+                  </li>
+                </ol>
+              </p>
+            </statement>
+          </exercise>
+
+          <exercise>
+            <title>More negations</title>
+            <statement>
+              <p>
+                Read the following and decide whether logging will continue.
+                <q>The House failed to overturn a veto on a bill that would stop logging.</q>
+              </p>
+            </statement>
+          </exercise>
+
+          <exercise>
+            <statement>
+              <p>
+                Complete the truth table given the following propositions.
+                Then explain what you ate for breakfast in each case.
+                <me>
+                  p:\ \text{I ate bacon for breakfast.} \qquad  q:\ \text{I ate eggs for breakfast.}
+                </me>
+              </p>
+              <sidebyside>
+                <tabular top="medium" bottom="medium" left="medium" right="medium">
+                  <col/>
+                  <col/>
+                  <col/>
+                  <col width="50%"/>
+                  <row>
+                    <cell><m>p</m></cell>
+                    <cell><m>q</m></cell>
+                    <cell><m>p\ \text{and}\ q</m></cell>
+                    <cell>
+                      <p>Explanation<mdash/>What did you eat for breakfast?</p>
+                    </cell>
+                  </row>
+                  <row>
+                    <cell></cell>
+                    <cell></cell>
+                    <cell></cell>
+                    <cell>
+                      <line><nbsp/></line>
+                      <line><nbsp/></line>
+                    </cell>
+                  </row>
+                  <row>
+                    <cell></cell>
+                    <cell></cell>
+                    <cell></cell>
+                    <cell>
+                      <line><nbsp/></line>
+                      <line><nbsp/></line>
+                    </cell>
+                  </row>
+                  <row>
+                    <cell></cell>
+                    <cell></cell>
+                    <cell></cell>
+                    <cell>
+                      <line><nbsp/></line>
+                      <line><nbsp/></line>
+                    </cell>
+                  </row>
+                  <row>
+                    <cell></cell>
+                    <cell></cell>
+                    <cell></cell>
+                    <cell>
+                      <line><nbsp/></line>
+                      <line><nbsp/></line>
+                    </cell>
+                  </row>
+                </tabular>
+              </sidebyside>
+            </statement>
+          </exercise>
+
+          <exercise>
+            <statement>
+              <p>
+                The following proposition has the form <m>p</m> and <m>q</m>.
+                Decide whether each part is true or false and whether the entire proposition is true or false.
+                <me>
+                  25+30=55\quad\text{and}\quad55\div11=6
+                </me>
+              </p>
+            </statement>
+          </exercise>
+
+          <pagebreak/>
+
+          <exercise>
+            <statement>
+              <p>
+                Determine whether each or statement is inclusive or exclusive.
+                <ol>
+                  <li>
+                    <p>
+                      Are you going to wear pants or a skirt tomorrow?
+                    </p>
+                  </li>
+                  <li>
+                    <p>
+                      Students can join the Music Club if they are in the choir or band.
+                    </p>
+                  </li>
+                </ol>
+              </p>
+            </statement>
+          </exercise>
+
+          <exercise>
+            <statement>
+              <p>
+                Given the conditional statement, complete the truth table.
+                Refer to your notes for help if needed. (Note: <q>if <m>p</m>, then <m>q</m></q> can be written in symbols as <m>p\to q</m>.)
+              </p>
+              <blockquote>
+                <p>
+                  <q>If I am elected, then I will reduce college tuition in Oregon.</q>
+                </p>
+              </blockquote>
+              <p>
+                <me>
+                  p:\ \text{I am elected.} \qquad  q:\ \text{I will reduce college tuition in Oregon.}
+                </me>
+              </p>
+              <sidebyside>
+                <tabular top="medium" bottom="medium" left="medium" right="medium" valign="top">
+                  <col/>
+                  <col/>
+                  <col halign="center"/>
+                  <col width="50%"/>
+                  <row>
+                    <cell><m>p</m></cell>
+                    <cell><m>q</m></cell>
+                    <cell>
+                      <line>if <m>p</m>, then <m>q</m></line>
+                      <line><m>p\to q</m></line>
+                    </cell>
+                    <cell>
+                      <p>Meaning<mdash/>Have I told the truth?</p>
+                    </cell>
+                  </row>
+                  <row>
+                    <cell></cell>
+                    <cell></cell>
+                    <cell></cell>
+                    <cell>
+                      <line><nbsp/></line>
+                      <line><nbsp/></line>
+                    </cell>
+                  </row>
+                  <row>
+                    <cell></cell>
+                    <cell></cell>
+                    <cell></cell>
+                    <cell>
+                      <line><nbsp/></line>
+                      <line><nbsp/></line>
+                    </cell>
+                  </row>
+                  <row>
+                    <cell></cell>
+                    <cell></cell>
+                    <cell></cell>
+                    <cell>
+                      <line><nbsp/></line>
+                      <line><nbsp/></line>
+                    </cell>
+                  </row>
+                  <row>
+                    <cell></cell>
+                    <cell></cell>
+                    <cell></cell>
+                    <cell>
+                      <line><nbsp/></line>
+                      <line><nbsp/></line>
+                    </cell>
+                  </row>
+                </tabular>
+              </sidebyside>
+            </statement>
+          </exercise>
+
+          <exercise xml:id="exercise-build-truth-table">
+            <title>Building a Complete Truth table</title>
+            <statement>
+              <p>
+                <ol>
+                  <li>
+                    <p>
+                      Separate the first column into half true, half false.
+                    </p>
+                  </li>
+                  <li>
+                    <p>
+                      Repeat the process in each proposition column with groups half that size, until the last proposition alternates T-F.
+                    </p>
+                  </li>
+                  <li>
+                    <p>
+                      Find entries for the other columns.
+                    </p>
+                  </li>
+                </ol>
+                Two proposition table:
+              </p>
+              <sidebyside>
+                <tabular top="medium" bottom="medium" left="medium" right="medium">
+                  <row>
+                    <cell><m>p</m></cell>
+                    <cell><m>q</m></cell>
+                    <cell><m>p</m> and <m>q</m></cell>
+                    <cell><m>p</m> or <m>q</m></cell>
+                    <cell>if <m>p</m>, then <m>q</m></cell>
+                  </row>
+                  <row>
+                    <cell></cell>
+                    <cell></cell>
+                    <cell></cell>
+                    <cell></cell>
+                    <cell></cell>
+                  </row>
+                  <row>
+                    <cell></cell>
+                    <cell></cell>
+                    <cell></cell>
+                    <cell></cell>
+                    <cell></cell>
+                  </row>
+                  <row>
+                    <cell></cell>
+                    <cell></cell>
+                    <cell></cell>
+                    <cell></cell>
+                    <cell></cell>
+                  </row>
+                  <row>
+                    <cell></cell>
+                    <cell></cell>
+                    <cell></cell>
+                    <cell></cell>
+                    <cell></cell>
+                  </row>
+                </tabular>
+              </sidebyside>
+            </statement>
+          </exercise>
+
+          <pagebreak/>
+
+          <exercise>
+            <title>Pizza Truth Table, a three-proposition truth table</title>
+            <introduction>
+              <p>
+                Let <m>P</m> represent pepperoni, <m>H</m> represent ham, and <m>M</m> represent mushrooms.
+              </p>
+            </introduction>
+
+            <task>
+              <statement>
+                <p>
+                  Fill in the first three columns of the truth table using the pattern described in <xref ref="exercise-build-truth-table"/>.
+                  The first column should be half true and half false. Then go by twos, and then alternate.
+                </p>
+              </statement>
+            </task>
+
+            <task>
+              <statement>
+                <p>
+                  Then complete each row by determining whether each statement is true or false. Don't worry about the meaning yet.
+                </p>
+                <sidebyside>
+                  <tabular top="medium" bottom="medium" left="medium" right="medium">
+                    <row>
+                      <cell><m>P</m></cell>
+                      <cell><m>H</m></cell>
+                      <cell><m>M</m></cell>
+                      <cell><m>P</m> and <m>H</m></cell>
+                      <cell><m>H</m> or <m>M</m></cell>
+                      <cell><m>P</m> and <m>H</m> and <m>M</m></cell>
+                      <cell>not <m>P</m></cell>
+                      <cell>not <m>M</m></cell>
+                      <cell>not <m>P</m> or not <m>M</m></cell>
+                    </row>
+                    <row>
+                      <cell></cell>
+                      <cell></cell>
+                      <cell></cell>
+                      <cell></cell>
+                      <cell></cell>
+                      <cell></cell>
+                      <cell></cell>
+                      <cell></cell>
+                      <cell></cell>
+                    </row>
+                    <row>
+                      <cell></cell>
+                      <cell></cell>
+                      <cell></cell>
+                      <cell></cell>
+                      <cell></cell>
+                      <cell></cell>
+                      <cell></cell>
+                      <cell></cell>
+                      <cell></cell>
+                    </row>
+                    <row>
+                      <cell></cell>
+                      <cell></cell>
+                      <cell></cell>
+                      <cell></cell>
+                      <cell></cell>
+                      <cell></cell>
+                      <cell></cell>
+                      <cell></cell>
+                      <cell></cell>
+                    </row>
+                    <row>
+                      <cell></cell>
+                      <cell></cell>
+                      <cell></cell>
+                      <cell></cell>
+                      <cell></cell>
+                      <cell></cell>
+                      <cell></cell>
+                      <cell></cell>
+                      <cell></cell>
+                    </row>
+                  </tabular>
+                </sidebyside>
+              </statement>
+            </task>
+
+            <task>
+              <statement>
+                <p>
+                  Now that you have the table filled in, identify the row for each type of pizza given.
+                  <ol>
+                    <li>
+                      <p>
+                        Pepperoni and Mushroom Pizza: Row <fillin characters="8"/>
+                      </p>
+                    </li>
+                    <li>
+                      <p>
+                        Cheese Pizza: Row <fillin characters="8"/>
+                      </p>
+                    </li>
+                    <li>
+                      <p>
+                        Veggie Pizza (peppers, onions, mushrooms, olives): Row <fillin characters="8"/>
+                      </p>
+                    </li>
+                    <li>
+                      <p>
+                        Supreme Pizza (ham, pepperoni, sausage, olives, mushrooms, onions, peppers): Row <fillin characters="8"/>
+                      </p>
+                    </li>
+                  </ol>
+                </p>
+              </statement>
+            </task>
+
+            <task>
+              <introduction>
+                <p>
+                  Explain the result (T or F), in the context of the pizza and its toppings.
+                </p>
+              </introduction>
+              <task workspace="1in">
+                <statement>
+                  <p>
+                    Row 8 Column 9
+                  </p>
+                </statement>
+              </task>
+              <task workspace="1in">
+                <statement>
+                  <p>
+                    Row 3 Column 4
+                  </p>
+                </statement>
+              </task>
+            </task>
+          </exercise>
+        </subexercises>
+
+        <pagebreak/>
+
+        <subexercises>
+          <title>Sets and Venn Diagrams</title>
+          <exercise>
+            <title>Pizza Venn Diagrams</title>
+            <statement>
+              <p>
+                Let's continue the last example with <m>P</m> representing pepperoni, <m>H</m> representing ham, and <m>M</m> representing mushrooms.
+                Shade or color in the appropriate area(s) for each pizza on the Venn diagrams below.
+              </p>
+              <sidebyside valign="bottom" widths="23% 23% 23% 23%" margins="0%">
+                <stack>
+                  <p>Pepperoni &amp; Mushroom</p>
+                  <image>
+                    <latex-image>
+                      \begin{tikzpicture}
+                        \draw (0,0) -- (4,0) -- (4,4) -- (0,4) -- cycle;
+                        \draw (2,1.4) circle (1cm);
+                        \draw (2.5,2.3) circle (1cm);
+                        \draw (1.5,2.3) circle (1cm);
+                        \node[below] at (1,3) {$P$};
+                        \node[below] at (3,3) {$H$};
+                        \node[above] at (2,0.4) {$M$};
+                      \end{tikzpicture}
+                    </latex-image>
+                  </image>
+                </stack>
+                <stack>
+                  <p>Cheese</p>
+                  <image>
+                    <latex-image>
+                      \begin{tikzpicture}
+                        \draw (0,0) -- (4,0) -- (4,4) -- (0,4) -- cycle;
+                        \draw (2,1.4) circle (1cm);
+                        \draw (2.5,2.3) circle (1cm);
+                        \draw (1.5,2.3) circle (1cm);
+                        \node[below] at (1,3) {$P$};
+                        \node[below] at (3,3) {$H$};
+                        \node[above] at (2,0.4) {$M$};
+                      \end{tikzpicture}
+                    </latex-image>
+                  </image>
+                </stack>
+                <stack>
+                  <p>Veggie</p>
+                  <image>
+                    <latex-image>
+                      \begin{tikzpicture}
+                        \draw (0,0) -- (4,0) -- (4,4) -- (0,4) -- cycle;
+                        \draw (2,1.4) circle (1cm);
+                        \draw (2.5,2.3) circle (1cm);
+                        \draw (1.5,2.3) circle (1cm);
+                        \node[below] at (1,3) {$P$};
+                        \node[below] at (3,3) {$H$};
+                        \node[above] at (2,0.4) {$M$};
+                      \end{tikzpicture}
+                    </latex-image>
+                  </image>
+                </stack>
+                <stack>
+                  <p>Supreme</p>
+                  <image>
+                    <latex-image>
+                      \begin{tikzpicture}
+                        \draw (0,0) -- (4,0) -- (4,4) -- (0,4) -- cycle;
+                        \draw (2,1.4) circle (1cm);
+                        \draw (2.5,2.3) circle (1cm);
+                        \draw (1.5,2.3) circle (1cm);
+                        \node[below] at (1,3) {$P$};
+                        \node[below] at (3,3) {$H$};
+                        \node[above] at (2,0.4) {$M$};
+                      \end{tikzpicture}
+                    </latex-image>
+                  </image>
+                </stack>
+              </sidebyside>
+            </statement>
+          </exercise>
+
+          <exercise>
+            <title>Relating Truth Tables and Venn Diagrams</title>
+            <statement>
+              <sidebyside widths="71% 23%" margins="0%">
+                <tabular top="medium" bottom="medium" left="medium" right="medium">
+                  <col/>
+                  <col/>
+                  <col/>
+                  <col width="50%"/>
+                  <col/>
+                  <row>
+                    <cell><m>P</m></cell>
+                    <cell><m>H</m></cell>
+                    <cell><m>M</m></cell>
+                    <cell>
+                      <p>
+                        Type of Pizza
+                      </p>
+                    </cell>
+                    <cell>
+                      <line>Letter</line>
+                      <line>on the</line>
+                      <line>Venn Diagram</line>
+                    </cell>
+                  </row>
+                  <row>
+                    <cell>T</cell>
+                    <cell>T</cell>
+                    <cell>T</cell>
+                    <cell>
+                      <line><nbsp/></line>
+                      <line><nbsp/></line>
+                    </cell>
+                    <cell></cell>
+                  </row>
+                  <row>
+                    <cell>T</cell>
+                    <cell>T</cell>
+                    <cell>F</cell>
+                    <cell>
+                      <line><nbsp/></line>
+                      <line><nbsp/></line>
+                    </cell>
+                    <cell></cell>
+                  </row>
+                  <row>
+                    <cell>T</cell>
+                    <cell>F</cell>
+                    <cell>T</cell>
+                    <cell>
+                      <line><nbsp/></line>
+                      <line><nbsp/></line>
+                    </cell>
+                    <cell></cell>
+                  </row>
+                  <row>
+                    <cell>T</cell>
+                    <cell>F</cell>
+                    <cell>F</cell>
+                    <cell>
+                      <line><nbsp/></line>
+                      <line><nbsp/></line>
+                    </cell>
+                    <cell></cell>
+                  </row>
+                  <row>
+                    <cell>F</cell>
+                    <cell>T</cell>
+                    <cell>T</cell>
+                    <cell>
+                      <line><nbsp/></line>
+                      <line><nbsp/></line>
+                    </cell>
+                    <cell></cell>
+                  </row>
+                  <row>
+                    <cell>F</cell>
+                    <cell>T</cell>
+                    <cell>F</cell>
+                    <cell>
+                      <line><nbsp/></line>
+                      <line><nbsp/></line>
+                    </cell>
+                    <cell></cell>
+                  </row>
+                  <row>
+                    <cell>F</cell>
+                    <cell>F</cell>
+                    <cell>T</cell>
+                    <cell>
+                      <line><nbsp/></line>
+                      <line><nbsp/></line>
+                    </cell>
+                    <cell></cell>
+                  </row>
+                  <row>
+                    <cell>F</cell>
+                    <cell>F</cell>
+                    <cell>F</cell>
+                    <cell>
+                      <line><nbsp/></line>
+                      <line><nbsp/></line>
+                    </cell>
+                    <cell></cell>
+                  </row>
+                </tabular>
+
+                <image>
+                  <latex-image>
+                    \begin{tikzpicture}
+                      \draw (0,0) -- (4,0) -- (4,4) -- (0,4) -- cycle;
+                      \draw (2,1.4) circle (1cm);
+                      \draw (2.5,2.3) circle (1cm);
+                      \draw (1.5,2.3) circle (1cm);
+                      \node[below] at (1,3) {$P$};
+                      \node[below] at (3,3) {$H$};
+                      \node[above] at (2,0.4) {$M$};
+                      \node at (1.3,2.5) {$a$};
+                      \node at (2,2.7) {$b$};
+                      \node at (2.7,2.5) {$c$};
+                      \node at (1.4,1.7) {$d$};
+                      \node at (2,2) {$e$};
+                      \node at (2.6,1.7) {$f$};
+                      \node at (2,1.2) {$g$};
+                      \node at (3.5,0.5) {$h$};
+                    \end{tikzpicture}
+                  </latex-image>
+                </image>
+              </sidebyside>
+            </statement>
+          </exercise>
+        </subexercises>
+
+        <pagebreak/>
+
+        <subexercises>
+          <title>Qualified Propositions</title>
+          <exercise>
+            <statement>
+              <p>
+                Draw a Venn diagram for each qualified or categorical proposition.
+                Then write on the line whether the sets are disjoint, overlapping, or one is a subset of the other.
+              </p>
+              <sidebyside>
+                <tabular valign="top">
+                  <col width="33%"/>
+                  <col width="33%"/>
+                  <col width="33%"/>
+                  <row>
+                    <cell></cell>
+                    <cell>
+                      <p>
+                        Venn Diagram
+                      </p>
+                    </cell>
+                    <cell>
+                      <p>
+                        Relationship between the Sets
+                      </p>
+                    </cell>
+                  </row>
+                  <row>
+                    <cell>
+                      <p>
+                        Some bikes are orange.
+                      </p>
+                    </cell>
+                    <cell>
+                      <line><nbsp/></line>
+                      <line><nbsp/></line>
+                      <line><nbsp/></line>
+                      <line><nbsp/></line>
+                    </cell>
+                    <cell>
+                      <fillin characters="20"/>
+                    </cell>
+                  </row>
+                  <row>
+                    <cell>
+                      <p>
+                        All bicycles have wheels.
+                      </p>
+                    </cell>
+                    <cell>
+                      <line><nbsp/></line>
+                      <line><nbsp/></line>
+                      <line><nbsp/></line>
+                      <line><nbsp/></line>
+                    </cell>
+                    <cell>
+                      <fillin characters="20"/>
+                    </cell>
+                  </row>
+                </tabular>
+              </sidebyside>
+            </statement>
+          </exercise>
+
+          <exercise>
+            <title>Interpreting values on a Venn diagram</title>
+            <introduction>
+              <sidebyside widths="71% 23%">
+                <stack>
+                  <p>
+                    A survey was taken to see which professional sports were watched by students.
+                    Let <m>F</m> represent football, <m>B</m> represent basketball, and <m>H</m> represent hockey.
+                    Answer the following questions (use complete sentences).  Show any calculations that were used.
+                  </p>
+                </stack>
+                <image>
+                  <latex-image>
+                    \begin{tikzpicture}
+                      \draw (0,0) -- (4,0) -- (4,4) -- (0,4) -- cycle;
+                      \draw (2,1.4) circle (1cm);
+                      \draw (2.5,2.3) circle (1cm);
+                      \draw (1.5,2.3) circle (1cm);
+                      \node[below] at (1,3) {$F$};
+                      \node[below] at (3,3) {$B$};
+                      \node[above] at (2,0.4) {$H$};
+                      \node at (1.3,2.5) {$65$};
+                      \node at (2,2.7) {$42$};
+                      \node at (2.7,2.5) {$53$};
+                      \node at (1.4,1.7) {$24$};
+                      \node at (2,2) {$25$};
+                      \node at (2.6,1.7) {$19$};
+                      \node at (2,1.2) {$37$};
+                      \node at (3.5,0.5) {$35$};
+                    \end{tikzpicture}
+                  </latex-image>
+                </image>
+              </sidebyside>
+            </introduction>
+
+            <task workspace="1cm">
+              <statement>
+                <p>
+                  How many students participated in the survey?
+                </p>
+              </statement>
+            </task>
+            <task workspace="1cm">
+              <statement>
+                <p>
+                  How many students watched basketball?
+                </p>
+              </statement>
+            </task>
+            <task workspace="1cm">
+              <statement>
+                <p>
+                  How many students watched only one of the sports?
+                </p>
+              </statement>
+            </task>
+            <task workspace="1cm">
+              <statement>
+                <p>
+                  How many students watched at least two sports?
+                </p>
+              </statement>
+            </task>
+            <task workspace="1cm">
+              <statement>
+                <p>
+                  How many students didn’t watch hockey?
+                </p>
+              </statement>
+            </task>
+            <task workspace="1cm">
+              <statement>
+                <p>
+                  How many students watched football and hockey, but not basketball?
+                </p>
+              </statement>
+            </task>
+          </exercise>
+
+          <pagebreak/>
+
+          <exercise>
+            <title>Finding values for regions on a Venn diagram</title>
+            <statement>
+              <p>
+                <m>150</m> people attending a concert were asked if they played piano, guitar, or drums.
+                <ul>
+                  <li>
+                    <m>10</m> could play all three.
+                  </li>
+                  <li>
+                    <m>73</m> could play guitar.
+                  </li>
+                  <li>
+                    <m>18</m> couldn’t play any of these instruments.
+                  </li>
+                  <li>
+                    <m>21</m> could play piano and drums.
+                  </li>
+                  <li>
+                    <m>49</m> could play at least two of the instruments.
+                  </li>
+                  <li>
+                    <m>13</m> could play piano and guitar but not drums.
+                  </li>
+                  <li>
+                    <m>69</m> could play drums or guitar but not piano.
+                  </li>
+                </ul>
+                Let <m>P</m> represent piano, <m>G</m> represent guitar, and <m>D</m> represent drums.
+                Calculate and fill in the values for all eight regions.
+              </p>
+              <sidebyside margins="50% 0%" widths="50%">
+                <image>
+                  <latex-image>
+                    \begin{tikzpicture}
+                      \draw (0,0) -- (4,0) -- (4,4) -- (0,4) -- cycle;
+                      \draw (2,1.4) circle (1cm);
+                      \draw (2.5,2.3) circle (1cm);
+                      \draw (1.5,2.3) circle (1cm);
+                      \node[below] at (1,3) {$P$};
+                      \node[below] at (3,3) {$D$};
+                      \node[above] at (2,0.4) {$G$};
+                    \end{tikzpicture}
+                  </latex-image>
+                </image>
+              </sidebyside>
+            </statement>
+          </exercise>
+        </subexercises>
+      </worksheet>
+
+      <worksheet>
+        <title>Module 1 Worksheet</title>
+        <introduction>
+          <paragraphs>
+            <title>Example A</title>
+            <p>
+              Simplify <m>\dfrac{24x^5-3x^4+12x^2}{6x^2}</m>.
+            </p>
+          </paragraphs>
+          <paragraphs>
+            <title>Expected Student Work</title>
+            <p>
+              <md>
+                <mrow>\dfrac{24x^5-3x^4+12x^2}{6x^2}\amp=\dfrac{24x^5}{6x^2}-\dfrac{3x^4}{6x^2}+\dfrac{12x^2}{6x^2}</mrow>
+                <mrow>\amp=4x^{5-2}-\frac12x^{4-2}+2x^{2-2}</mrow>
+                <mrow>\amp=4x^{3}-\frac12x^{2}+2</mrow>
+              </md>
+            </p>
+          </paragraphs>
+          <paragraphs>
+            <title>Notes on the expected documentation</title>
+            <ol>
+              <li>
+                <p>
+                  You must start with the original expression to be simplified to the left of the first equal sign.
+                </p>
+              </li>
+              <li>
+                <p>
+                  You need to use the equal sign correctly.
+                  When working with an expression, a new equal sign is placed before each new step of work and each new step of work is place on a new line.
+                </p>
+              </li>
+              <li>
+                <p>
+                  You need to show enough work that any average student in the course would be to able follow your thought process from beginning to end,
+                  without any additional explanation from you.
+                </p>
+              </li>
+              <li>
+                <p>
+                  The first step of work above explicitly showed the distribution step.
+                  The second step formally showed the quotient rule for exponents.
+                  If you can do those steps in your head, you do not need to write them out on paper.
+                </p>
+              </li>
+            </ol>
+          </paragraphs>
+
+          <p>
+            DO NOT INCLUDE THIS PAGE WHEN YOU SUBMIT YOUR ASSIGNMENT
+          </p>
+
+          <pagebreak/>
+
+          <paragraphs>
+            <title>Submission Requirements</title>
+            <p>
+              When uploading your work to D2L's Assignment area,
+              please make sure your scanned work is clear and legible and you include every page of your assignment.
+              Your file needs to be uploaded using the filename structure <q>lastname-firstname-ws1</q>.
+            </p>
+          </paragraphs>
+
+          <paragraphs>
+            <title>Grading Rubric</title>
+            <p>
+              Below is an outline of how points will be earned on each problem of this assignment.
+              You should use this as a guide while you complete the assignment.
+              Prior to submitting your assignment,
+              you should check over this rubric one last time to make sure you’ve addressed all the specified items.
+            </p>
+
+            <sidebyside>
+              <tabular valign="top" left="medium" right="medium" top="medium" bottom="medium">
+                <col/>
+                <col width="50%"/>
+                <col/>
+                <row>
+                  <cell>Problem</cell>
+                  <cell>Graded Aspect</cell>
+                  <cell>Points</cell>
+                </row>
+                <row>
+                  <cell>1 a<ndash/>d</cell>
+                  <cell>
+                    <line>Possible Points in Total</line>
+                    <p>
+                      Be sure to:
+                      <ul>
+                        <li>Fill in each blank.</li>
+                      </ul>
+                    </p>
+                  </cell>
+                  <cell>3</cell>
+                </row>
+                <row>
+                  <cell>2 a<ndash/>b</cell>
+                  <cell>
+                    <line>Possible Points for Each Part</line>
+                    <p>
+                      Be sure to:
+                      <ul>
+                        <li>Use equal signs correctly.</li>
+                      </ul>
+                    </p>
+                  </cell>
+                  <cell>2</cell>
+                </row>
+                <row>
+                  <cell>3 a<ndash/>e</cell>
+                  <cell>
+                    <line>Possible Points for Each Part</line>
+                    <p>
+                      Be sure to:
+                      <ul>
+                        <li>Use equal signs correctly.</li>
+                        <li>Double check you used the appropriate exponent rule(s).</li>
+                      </ul>
+                    </p>
+                  </cell>
+                  <cell>1</cell>
+                </row>
+                <row>
+                  <cell>4 a<ndash/>b</cell>
+                  <cell>
+                    <line>Possible Points for Each Part</line>
+                    <p>
+                      Be sure to:
+                      <ul>
+                        <li>Use equal signs correctly.</li>
+                        <li>Show all appropriate work.</li>
+                      </ul>
+                    </p>
+                  </cell>
+                  <cell>2.5</cell>
+                </row>
+                <row>
+                  <cell>5</cell>
+                  <cell>
+                    <line>Possible Points</line>
+                    <p>
+                      Be sure to:
+                      <ul>
+                        <li>Answer in complete sentences.</li>
+                        <li>Fully explain each step of work you’ve taken.</li>
+                      </ul>
+                    </p>
+                  </cell>
+                  <cell>3</cell>
+                </row>
+              </tabular>
+            </sidebyside>
+
+            <paragraphs>
+              <title>General Checks</title>
+              <p>
+                <ol>
+                  <li>
+                    <p>
+                      Is your name on your assignment?
+                    </p>
+                  </li>
+                  <li>
+                    <p>
+                      Have you used equal signs correctly?
+                    </p>
+                  </li>
+                  <li>
+                    <p>
+                      Did you leave out the first pages of this document that say
+                      <q>DO NOT INCLUDE THIS PAGE WHEN YOU SUBMIT YOUR ASSIGNMENT</q>?
+                    </p>
+                  </li>
+                </ol>
+                Your answer should be <q>Yes.</q> to all of these questions.
+                If you answered <q>No.</q> to any question, you will lose some credit.
+              </p>
+            </paragraphs>
+            <p>
+              DO NOT INCLUDE THIS PAGE WHEN YOU SUBMIT YOUR ASSIGNMENT
+            </p>
+          </paragraphs>
+        </introduction>
+
+        <pagebreak/>
+
+        <exercise>
+          <introduction>
+            <p>
+              Using the polynomial <m>5x^{16}y^{3}-12x^{15}+3x^{10}y^{4}-19x^{2}y^{11}-7x</m>, complete the following statements.
+            </p>
+          </introduction>
+          <task>
+            <statement>
+              <p>
+                There are <fillin characters="15"/> terms in this polynomial.
+              </p>
+            </statement>
+          </task>
+          <task>
+            <statement>
+              <p>
+                The degree of the second term is <fillin characters="15"/>.
+              </p>
+            </statement>
+          </task>
+          <task>
+            <statement>
+              <p>
+                The degree of the polynomial is <fillin characters="15"/>.
+              </p>
+            </statement>
+          </task>
+          <task>
+            <statement>
+              <p>
+                The coefficient of the fourth term is <fillin characters="15"/>.
+              </p>
+            </statement>
+          </task>
+        </exercise>
+
+        <exercise>
+          <introduction>
+            <p>
+              Add or subtract, as indicated.  Simplify all answers.
+            </p>
+          </introduction>
+          <task workspace="1in">
+            <statement>
+              <p>
+                <m>\left(-5y^2+2y-4\right)+\left(-8y^2-3y+9\right)</m>
+              </p>
+            </statement>
+          </task>
+          <task workspace="1in">
+            <statement>
+              <p>
+                <m>\left(3w^4-w^2\right)-\left(4w^3-5w^2\right)</m>
+              </p>
+            </statement>
+          </task>
+        </exercise>
+
+        <exercisegroup cols="3">
+          <introduction>
+            <p>
+              Simplify.
+            </p>
+          </introduction>
+          <exercise workspace="1in">
+            <p>
+              <m>\left(h^3\right)^5</m>
+            </p>
+          </exercise>
+          <exercise workspace="1in">
+            <p>
+              <m>k^2\cdot k^4</m>
+            </p>
+          </exercise>
+          <exercise workspace="1in">
+            <p>
+              <m>\left(2p^7\right)^3</m>
+            </p>
+          </exercise>
+          <exercise workspace="1in">
+            <p>
+              <m>\dfrac{24m^9y^8}{-6m^2y^7}</m>
+            </p>
+          </exercise>
+          <exercise workspace="1in">
+            <p>
+              <m>\left(9g^5\right)\left(g^3\right)^4-\left(14g\right)\left(g^4\right)^4</m>
+            </p>
+          </exercise>
+        </exercisegroup>
+
+        <pagebreak/>
+
+        <exercise>
+          <introduction>
+            <p>
+              Divide and simplify.
+            </p>
+          </introduction>
+          <task workspace="1in">
+            <statement>
+              <p>
+                <m>\dfrac{9t^8-18t^4+45t^3}{-9t^3}</m>
+              </p>
+            </statement>
+          </task>
+          <task workspace="1in">
+            <statement>
+              <p>
+                <m>\dfrac{-32p^{15}-20p^{35}+4p^{20}}{-4p^5}</m>
+              </p>
+            </statement>
+          </task>
+        </exercise>
+
+        <exercise workspace="3in">
+          <statement>
+            <p>
+              <m>4m^7\left(3m^9\right)^2</m> simplifies to <m>36m^{25}</m>.
+              Explain in detail each step it takes to simplify this expression.
+              You must have at least two separate steps explained in words, but you could have more.
+            </p>
+          </statement>
+        </exercise>
+      </worksheet>
+    </chapter>
+
+    <chapter>
+      <title>Worksheet Structure and Layout</title>
+      <section>
+        <title>Some Structure for the Chapter</title>
+        <xi:include href="./filler.ptx"/>
+        <xi:include href="./filler.ptx"/>
+        <xi:include href="./filler.ptx"/>
+        <xi:include href="./filler.ptx"/>
+        <xi:include href="./filler.ptx"/>
+        <xi:include href="./filler.ptx"/>
+        <xi:include href="./filler.ptx"/>
+        <xi:include href="./filler.ptx"/>
+      </section>
+
+      <worksheet>
+        <title>Most Basic Worksheet</title>
+        <exercise>
+          <statement>
+            <p>
+              Pretend these are real exercises.
+            </p>
+          </statement>
+        </exercise>
+        <exercise>
+          <statement>
+            <p>
+              Exercises progress downward in one column.
+            </p>
+          </statement>
+        </exercise>
+        <exercise>
+          <statement>
+            <p>
+              Excess space is evenly spread out.
+            </p>
+          </statement>
+        </exercise>
+        <exercise>
+          <statement>
+            <p>
+              An exercise can have <c>sidebyside</c> content.
+            </p>
+            <sidebyside widths="47% 47%" margins="0%">
+              <image source="images/cross-rectangle.png"/>
+              <image source="images/cross-rectangle.png"/>
+            </sidebyside>
+          </statement>
+        </exercise>
+        <pagebreak/>
+        <exercise>
+          <statement>
+            <p>
+              A <c>pagebreak</c> can be used in many places in a <c>worksheet</c>.
+            </p>
+          </statement>
+        </exercise>
+        <exercise>
+          <introduction>
+            <p>
+              An <c>exercise</c> may have <c>task</c>s. If so, the source structure of the <c>exercise</c> changes.
+            </p>
+          </introduction>
+          <task>
+            <statement>
+              <p>
+                Each task may have an <c>introduction</c>, sub<c>task</c>s, and a <c>conclusion</c>, none of which are demonstrated here.
+              </p>
+            </statement>
+          </task>
+          <task>
+            <statement>
+              <p>
+                Each task that does not have the above may have <c>hint</c>, <c>answer</c>, and <c>solution</c>, none of which is demonstrated here.
+              </p>
+            </statement>
+          </task>
+          <task>
+            <statement>
+              <p>
+                Workspace following a <c>task</c> is not automatic. But the exercise as a whole gets the usual distribution of space.
+              </p>
+            </statement>
+          </task>
+        </exercise>
+      </worksheet>
+
+      <worksheet>
+        <title>Workspace in a Worksheet</title>
+        <introduction>
+          <p>
+            This <c>worksheet</c> has an <c>introduction</c>, which the previous one did not have.
+            An <c>introduction</c> may have <c>sidebyside</c> content.
+          </p>
+          <sidebyside widths="30% 60%" margins="0%">
+            <stack>
+              <image source="images/cross-rectangle.png"/>
+              <image source="images/cross-rectangle.png"/>
+            </stack>
+            <image source="images/cross-rectangle.png"/>
+          </sidebyside>
+        </introduction>
+        <exercise workspace="5cm">
+          <statement>
+            <p>
+              An <c>exercise</c> may have a <c>@workspace</c> attribute, which should be a physical distance such as <c>1in</c> or <c>5cm</c>.
+              This one has <c>5cm</c>.
+            </p>
+          </statement>
+        </exercise>
+        <exercise workspace="3cm">
+          <statement>
+            <p>
+              This one has <c>3cm</c>. Any excess is evenly distributed.
+            </p>
+          </statement>
+        </exercise>
+        <exercise workspace="5cm" workspace-direction="right">
+          <statement>
+            <p>
+              This one has <c>5cm</c>, but places it to the right.
+            </p>
+          </statement>
+        </exercise>
+        <exercise>
+          <introduction>
+            <p>
+              If there are <c>task</c>s without sub<c>task</c>s, they too may have <c>@workspace</c>.
+            </p>
+          </introduction>
+          <task worskpace="1cm">
+            <statement>
+              <p>
+                Each <c>task</c> may have <c>@workspace</c> too.
+              </p>
+            </statement>
+          </task>
+          <task worskpace="1cm">
+            <statement>
+              <p>
+                Each <c>task</c> may have <c>@workspace</c> too.
+              </p>
+            </statement>
+          </task>
+        </exercise>
+      </worksheet>
+    </chapter>
+
+    <!-- <chapter>
+      <title>Attempting to be Thorough</title>
+      <section>
+        <title>Some Structure for the Chapter</title>
+        <xi:include href="./filler.ptx"/>
+        <xi:include href="./filler.ptx"/>
+        <xi:include href="./filler.ptx"/>
+        <xi:include href="./filler.ptx"/>
+        <xi:include href="./filler.ptx"/>
+        <xi:include href="./filler.ptx"/>
+        <xi:include href="./filler.ptx"/>
+        <xi:include href="./filler.ptx"/>
+      </section>
+
+      Pages: 1/2
+      Exercises use workspace: Y/N
+      Structured with subexercises: Y/N
+      Has a subexercises with a page break: Y/N
+      Has a subexercises with row progression: Y/N
+      Has an excercisegroup with one-column: Y/N
+      Has an excercisegroup with one-column that pagebreaks: Y/N
+      Has an excercisegroup with more columns: Y/N
+      Has an excercisegroup with more columns that pagebreaks: Y/N
+      Exercise with tasks
+
+      <worksheet>
+        <title>One-page</title>
+        <xi:include href="./exercise.ptx"/>
+        <xi:include href="./exercise.ptx"/>
+        <xi:include href="./exercise.ptx"/>
+      </worksheet>
+
+      <worksheet>
+        <title>One-page, Workspace</title>
+        <xi:include href="./exercise.ptx"/>
+        <xi:include href="./exercise1.ptx"/>
+        <xi:include href="./exercise5.ptx"/>
+      </worksheet>
+
+      <worksheet>
+        <title>Two-page</title>
+        <xi:include href="./exercise.ptx"/>
+        <xi:include href="./exercise.ptx"/>
+        <pagebreak/>
+        <xi:include href="./exercise.ptx"/>
+        <xi:include href="./exercise.ptx"/>
+      </worksheet>
+
+      <worksheet>
+        <title>Two-page, Workspace</title>
+        <xi:include href="./exercise1.ptx"/>
+        <xi:include href="./exercise5.ptx"/>
+        <pagebreak/>
+        <xi:include href="./exercise1.ptx"/>
+        <xi:include href="./exercise5.ptx"/>
+        <xi:include href="./exercise.ptx"/>
+      </worksheet>
+
+      <worksheet>
+        <title>One-page, Subexercises</title>
+        <subexercises>
+          <title>Warm Up</title>
+          <xi:include href="./exercise.ptx"/>
+          <xi:include href="./exercise.ptx"/>
+        </subexercises>
+        <subexercises>
+          <title>Review</title>
+          <xi:include href="./exercise.ptx"/>
+          <xi:include href="./exercise.ptx"/>
+          <xi:include href="./exercise.ptx"/>
+        </subexercises>
+      </worksheet>
+
+      <worksheet>
+        <title>One-page, Subexercises, Workspace</title>
+        <subexercises>
+          <title>Warm Up</title>
+          <xi:include href="./exercise.ptx"/>
+          <xi:include href="./exercise1.ptx"/>
+        </subexercises>
+        <subexercises>
+          <title>Review</title>
+          <xi:include href="./exercise.ptx"/>
+          <xi:include href="./exercise1.ptx"/>
+          <xi:include href="./exercise1.ptx"/>
+        </subexercises>
+      </worksheet>
+
+      <worksheet>
+        <title>Two-page, Subexercises</title>
+        <subexercises>
+          <title>Warm Up</title>
+          <xi:include href="./exercise.ptx"/>
+          <xi:include href="./exercise.ptx"/>
+        </subexercises>
+        <pagebreak/>
+        <subexercises>
+          <title>Review</title>
+          <xi:include href="./exercise.ptx"/>
+          <xi:include href="./exercise.ptx"/>
+          <xi:include href="./exercise.ptx"/>
+        </subexercises>
+      </worksheet>
+
+      <worksheet>
+        <title>Two-page, Subexercises, Workspace</title>
+        <subexercises>
+          <title>Warm Up</title>
+          <xi:include href="./exercise1.ptx"/>
+          <xi:include href="./exercise5.ptx"/>
+        </subexercises>
+        <pagebreak/>
+        <subexercises>
+          <title>Review</title>
+          <xi:include href="./exercise5.ptx"/>
+          <xi:include href="./exercise1.ptx"/>
+          <xi:include href="./exercise1.ptx"/>
+        </subexercises>
+      </worksheet>
+
+      <worksheet>
+        <title>Two-page, Breaking Subexercises</title>
+        <subexercises>
+          <title>Warm Up</title>
+          <xi:include href="./exercise.ptx"/>
+          <xi:include href="./exercise.ptx"/>
+          <xi:include href="./exercise.ptx"/>
+          <pagebreak/>
+          <xi:include href="./exercise.ptx"/>
+        </subexercises>
+        <subexercises>
+          <title>Review</title>
+          <xi:include href="./exercise.ptx"/>
+          <xi:include href="./exercise.ptx"/>
+        </subexercises>
+      </worksheet>
+
+      <worksheet>
+        <title>Two-page, Breaking Subexercises, Workspace</title>
+        <subexercises>
+          <title>Warm Up</title>
+          <xi:include href="./exercise1.ptx"/>
+          <xi:include href="./exercise5.ptx"/>
+          <xi:include href="./exercise1.ptx"/>
+          <pagebreak/>
+          <xi:include href="./exercise5.ptx"/>
+        </subexercises>
+        <subexercises>
+          <title>Review</title>
+          <xi:include href="./exercise.ptx"/>
+          <xi:include href="./exercise.ptx"/>
+        </subexercises>
+      </worksheet>
+
+      <worksheet>
+        <title>One-page, Subexercises Columns</title>
+        <subexercises cols="2">
+          <title>Warm Up</title>
+          <xi:include href="./exercise.ptx"/>
+          <xi:include href="./exercise.ptx"/>
+          <xi:include href="./exercise.ptx"/>
+        </subexercises>
+        <subexercises cols="3">
+          <title>Review</title>
+          <xi:include href="./exercise.ptx"/>
+          <xi:include href="./exercise.ptx"/>
+          <xi:include href="./exercise.ptx"/>
+          <xi:include href="./exercise.ptx"/>
+          <xi:include href="./exercise.ptx"/>
+        </subexercises>
+      </worksheet>
+
+      <worksheet>
+        <title>One-page, Subexercises Columns, Workspace</title>
+        <subexercises cols="2">
+          <title>Warm Up</title>
+          <xi:include href="./exercise1.ptx"/>
+          <xi:include href="./exercise1.ptx"/>
+          <xi:include href="./exercise1.ptx"/>
+        </subexercises>
+        <subexercises cols="3">
+          <title>Review</title>
+          <xi:include href="./exercise5.ptx"/>
+          <xi:include href="./exercise1.ptx"/>
+          <xi:include href="./exercise1.ptx"/>
+          <xi:include href="./exercise1.ptx"/>
+          <xi:include href="./exercise1.ptx"/>
+        </subexercises>
+      </worksheet>
+
+      <worksheet>
+        <title>Two-page, Subexercises Columns</title>
+        <subexercises cols="2">
+          <title>Warm Up</title>
+          <xi:include href="./exercise.ptx"/>
+          <xi:include href="./exercise.ptx"/>
+          <xi:include href="./exercise.ptx"/>
+        </subexercises>
+        <pagebreak/>
+        <subexercises cols="3">
+          <title>Review</title>
+          <xi:include href="./exercise.ptx"/>
+          <xi:include href="./exercise.ptx"/>
+          <xi:include href="./exercise.ptx"/>
+          <xi:include href="./exercise.ptx"/>
+          <xi:include href="./exercise.ptx"/>
+        </subexercises>
+      </worksheet>
+
+      <worksheet>
+        <title>Two-page, Subexercises Columns, Workspace</title>
+        <subexercises cols="2">
+          <title>Warm Up</title>
+          <xi:include href="./exercise5.ptx"/>
+          <xi:include href="./exercise5.ptx"/>
+          <xi:include href="./exercise1.ptx"/>
+        </subexercises>
+        <pagebreak/>
+        <subexercises cols="3">
+          <title>Review</title>
+          <xi:include href="./exercise1.ptx"/>
+          <xi:include href="./exercise1.ptx"/>
+          <xi:include href="./exercise5.ptx"/>
+          <xi:include href="./exercise5.ptx"/>
+          <xi:include href="./exercise1.ptx"/>
+        </subexercises>
+      </worksheet>
+
+      <worksheet>
+        <title>Two-page, Breaking Subexercises Columns</title>
+        <subexercises cols="2">
+          <title>Warm Up</title>
+          <xi:include href="./exercise.ptx"/>
+          <xi:include href="./exercise.ptx"/>
+          <xi:include href="./exercise.ptx"/>
+          <pagebreak/>
+          <xi:include href="./exercise.ptx"/>
+          <xi:include href="./exercise.ptx"/>
+        </subexercises>
+        <subexercises cols="3">
+          <title>Review</title>
+          <xi:include href="./exercise.ptx"/>
+          <xi:include href="./exercise.ptx"/>
+          <xi:include href="./exercise.ptx"/>
+          <xi:include href="./exercise.ptx"/>
+          <xi:include href="./exercise.ptx"/>
+          <xi:include href="./exercise.ptx"/>
+        </subexercises>
+      </worksheet>
+
+      <worksheet>
+        <title>Two-page, Breaking Subexercises Columns, Workspace</title>
+        <subexercises cols="2">
+          <title>Warm Up</title>
+          <xi:include href="./exercise1.ptx"/>
+          <xi:include href="./exercise1.ptx"/>
+          <xi:include href="./exercise1.ptx"/>
+          <pagebreak/>
+          <xi:include href="./exercise1.ptx"/>
+          <xi:include href="./exercise1.ptx"/>
+        </subexercises>
+        <subexercises cols="3">
+          <title>Review</title>
+          <xi:include href="./exercise1.ptx"/>
+          <xi:include href="./exercise1.ptx"/>
+          <xi:include href="./exercise1.ptx"/>
+          <xi:include href="./exercise5.ptx"/>
+          <xi:include href="./exercise5.ptx"/>
+          <xi:include href="./exercise1.ptx"/>
+        </subexercises>
+      </worksheet>
+
+      <worksheet>
+        <title>One-page, Exercisegroup</title>
+        <xi:include href="./exercise.ptx"/>
+        <exercisegroup cols="2">
+          <title>2CEG</title>
+          <xi:include href="./exercise.ptx"/>
+          <xi:include href="./exercise.ptx"/>
+        </exercisegroup>
+      </worksheet>
+
+      <worksheet>
+        <title>One-page, Workspace, Exercisegroup</title>
+        <xi:include href="./exercise.ptx"/>
+        <exercisegroup cols="2">
+          <title>2CEG</title>
+          <xi:include href="./exercise1.ptx"/>
+          <xi:include href="./exercise5.ptx"/>
+        </exercisegroup>
+      </worksheet>
+
+      <worksheet>
+        <title>Two-page, Exercisegroup</title>
+        <xi:include href="./exercise.ptx"/>
+        <exercisegroup cols="3">
+          <title>3CEG</title>
+          <xi:include href="./exercise.ptx"/>
+          <xi:include href="./exercise.ptx"/>
+          <xi:include href="./exercise.ptx"/>
+        </exercisegroup>
+        <pagebreak/>
+        <xi:include href="./exercise.ptx"/>
+        <xi:include href="./exercise.ptx"/>
+      </worksheet>
+
+      <worksheet>
+        <title>Two-page, Workspace, Exercisegroup</title>
+        <xi:include href="./exercise1.ptx"/>
+        <xi:include href="./exercise5.ptx"/>
+        <pagebreak/>
+        <exercisegroup cols="3">
+          <title>3CEG</title>
+          <xi:include href="./exercise1.ptx"/>
+          <xi:include href="./exercise5.ptx"/>
+          <xi:include href="./exercise.ptx"/>
+        </exercisegroup>
+      </worksheet>
+
+      <worksheet>
+        <title>One-page, Subexercises, Exercisegroup</title>
+        <subexercises>
+          <title>Warm Up</title>
+          <xi:include href="./exercise.ptx"/>
+          <xi:include href="./exercise.ptx"/>
+        </subexercises>
+        <subexercises>
+          <title>Review</title>
+          <exercisegroup cols="3">
+            <title>3CEG</title>
+            <xi:include href="./exercise.ptx"/>
+            <xi:include href="./exercise.ptx"/>
+            <xi:include href="./exercise.ptx"/>
+          </exercisegroup>
+        </subexercises>
+      </worksheet>
+
+      <worksheet>
+        <title>One-page, Subexercises, Workspace, Exercisegroup</title>
+        <subexercises>
+          <title>Warm Up</title>
+          <exercisegroup cols="2">
+            <title>2CEG</title>
+            <xi:include href="./exercise.ptx"/>
+            <xi:include href="./exercise1.ptx"/>
+          </exercisegroup>
+        </subexercises>
+        <subexercises>
+          <title>Review</title>
+          <exercisegroup cols="3">
+            <title>3CEG</title>
+            <xi:include href="./exercise.ptx"/>
+            <xi:include href="./exercise1.ptx"/>
+            <xi:include href="./exercise1.ptx"/>
+          </exercisegroup>
+        </subexercises>
+      </worksheet>
+
+      <worksheet>
+        <title>Two-page, Subexercises, Exercisegroup</title>
+        <subexercises>
+          <title>Warm Up</title>
+          <exercisegroup cols="2">
+            <title>2CEG</title>
+            <xi:include href="./exercise.ptx"/>
+            <xi:include href="./exercise.ptx"/>
+          </exercisegroup>
+        </subexercises>
+        <pagebreak/>
+        <subexercises>
+          <title>Review</title>
+          <exercisegroup cols="2">
+            <title>2CEG</title>
+            <xi:include href="./exercise.ptx"/>
+            <xi:include href="./exercise.ptx"/>
+          </exercisegroup>
+          <xi:include href="./exercise.ptx"/>
+        </subexercises>
+      </worksheet>
+
+      <worksheet>
+        <title>Two-page, Subexercises, Workspace, Exercisegroup</title>
+        <subexercises>
+          <title>Warm Up</title>
+          <xi:include href="./exercise1.ptx"/>
+          <xi:include href="./exercise5.ptx"/>
+        </subexercises>
+        <pagebreak/>
+        <subexercises>
+          <title>Review</title>
+          <exercisegroup cols="3">
+            <title>3CEG</title>
+            <xi:include href="./exercise5.ptx"/>
+            <xi:include href="./exercise1.ptx"/>
+            <xi:include href="./exercise1.ptx"/>
+          </exercisegroup>
+        </subexercises>
+      </worksheet>
+
+      <worksheet>
+        <title>Two-page, Breaking Subexercises, Exercisegroup</title>
+        <subexercises>
+          <title>Warm Up</title>
+          <exercisegroup cols="3">
+            <title>3CEG</title>
+            <xi:include href="./exercise.ptx"/>
+            <xi:include href="./exercise.ptx"/>
+            <xi:include href="./exercise.ptx"/>
+          </exercisegroup>
+          <pagebreak/>
+          <xi:include href="./exercise.ptx"/>
+        </subexercises>
+        <subexercises>
+          <title>Review</title>
+          <xi:include href="./exercise.ptx"/>
+          <xi:include href="./exercise.ptx"/>
+        </subexercises>
+      </worksheet>
+
+      <worksheet>
+        <title>Two-page, Breaking Subexercises, Workspace, Exercisegroup</title>
+        <subexercises>
+          <title>Warm Up</title>
+          <exercisegroup cols="2">
+            <title>2CEG</title>
+            <xi:include href="./exercise1.ptx"/>
+            <xi:include href="./exercise5.ptx"/>
+            <pagebreak/>
+            <xi:include href="./exercise1.ptx"/>
+            <xi:include href="./exercise5.ptx"/>
+          </exercisegroup>
+        </subexercises>
+        <subexercises>
+          <title>Review</title>
+          <xi:include href="./exercise.ptx"/>
+          <xi:include href="./exercise.ptx"/>
+        </subexercises>
+      </worksheet>
+
+      <worksheet>
+        <title>One-page, Subexercises Columns, Exercisegroup</title>
+        <subexercises cols="2">
+          <title>Warm Up</title>
+          <exercisegroup cols="2">
+            <title>2CEG</title>
+            <xi:include href="./exercise.ptx"/>
+            <xi:include href="./exercise.ptx"/>
+            <xi:include href="./exercise.ptx"/>
+          </exercisegroup>
+        </subexercises>
+        <subexercises cols="3">
+          <title>Review</title>
+          <exercisegroup cols="2">
+            <title>2CEG</title>
+            <xi:include href="./exercise.ptx"/>
+            <xi:include href="./exercise.ptx"/>
+            <xi:include href="./exercise.ptx"/>
+            <xi:include href="./exercise.ptx"/>
+            <xi:include href="./exercise.ptx"/>
+          </exercisegroup>
+        </subexercises>
+      </worksheet>
+
+      <worksheet>
+        <title>One-page, Subexercises Columns, Workspace, Exercisegroup</title>
+        <subexercises cols="2">
+          <title>Warm Up</title>
+          <exercisegroup cols="2">
+            <title>2CEG</title>
+            <xi:include href="./exercise1.ptx"/>
+            <xi:include href="./exercise1.ptx"/>
+            <xi:include href="./exercise1.ptx"/>
+          </exercisegroup>
+        </subexercises>
+        <subexercises cols="3">
+          <title>Review</title>
+          <exercisegroup cols="2">
+            <title>2CEG</title>
+            <xi:include href="./exercise1.ptx"/>
+            <xi:include href="./exercise1.ptx"/>
+            <xi:include href="./exercise1.ptx"/>
+            <xi:include href="./exercise1.ptx"/>
+            <xi:include href="./exercise1.ptx"/>
+          </exercisegroup>
+        </subexercises>
+      </worksheet>
+
+      <worksheet>
+        <title>Two-page, Subexercises Columns, Exercisegroup</title>
+        <subexercises cols="2">
+          <title>Warm Up</title>
+          <exercisegroup cols="2">
+            <title>2CEG</title>
+            <xi:include href="./exercise.ptx"/>
+            <xi:include href="./exercise.ptx"/>
+          </exercisegroup>
+          <xi:include href="./exercise.ptx"/>
+        </subexercises>
+        <pagebreak/>
+        <subexercises cols="3">
+          <title>Review</title>
+          <exercisegroup cols="2">
+            <title>2CEG</title>
+            <xi:include href="./exercise.ptx"/>
+            <xi:include href="./exercise.ptx"/>
+          </exercisegroup>
+          <xi:include href="./exercise.ptx"/>
+          <xi:include href="./exercise.ptx"/>
+          <xi:include href="./exercise.ptx"/>
+        </subexercises>
+      </worksheet>
+
+      <worksheet>
+        <title>Two-page, Subexercises Columns, Workspace, Exercisegroup</title>
+        <subexercises cols="2">
+          <title>Warm Up</title>
+          <exercisegroup cols="2">
+            <title>2CEG</title>
+            <xi:include href="./exercise5.ptx"/>
+            <xi:include href="./exercise5.ptx"/>
+          </exercisegroup>
+          <xi:include href="./exercise1.ptx"/>
+        </subexercises>
+        <pagebreak/>
+        <subexercises cols="3">
+          <title>Review</title>
+          <xi:include href="./exercise1.ptx"/>
+          <xi:include href="./exercise1.ptx"/>
+          <exercisegroup cols="2">
+            <title>2CEG</title>
+            <xi:include href="./exercise5.ptx"/>
+            <xi:include href="./exercise5.ptx"/>
+          </exercisegroup>
+          <xi:include href="./exercise1.ptx"/>
+        </subexercises>
+      </worksheet>
+
+      <worksheet>
+        <title>Two-page, Breaking Subexercises Columns, Exercisegroup</title>
+        <subexercises cols="2">
+          <title>Warm Up</title>
+          <exercisegroup cols="2">
+            <title>2CEG</title>
+            <xi:include href="./exercise.ptx"/>
+            <xi:include href="./exercise.ptx"/>
+            <xi:include href="./exercise.ptx"/>
+            <pagebreak/>
+            <xi:include href="./exercise.ptx"/>
+            <xi:include href="./exercise.ptx"/>
+          </exercisegroup>
+        </subexercises>
+        <subexercises cols="3">
+          <title>Review</title>
+          <xi:include href="./exercise.ptx"/>
+          <xi:include href="./exercise.ptx"/>
+          <exercisegroup cols="2">
+            <title>2CEG</title>
+            <xi:include href="./exercise.ptx"/>
+            <xi:include href="./exercise.ptx"/>
+            <xi:include href="./exercise.ptx"/>
+            <xi:include href="./exercise.ptx"/>
+          </exercisegroup>
+        </subexercises>
+      </worksheet>
+
+      <worksheet>
+        <title>Two-page, Breaking Subexercises Columns, Workspace, Exercisegroup</title>
+        <subexercises cols="2">
+          <title>Warm Up</title>
+          <exercisegroup cols="2">
+            <title>2CEG</title>
+            <xi:include href="./exercise1.ptx"/>
+            <xi:include href="./exercise1.ptx"/>
+          </exercisegroup>
+          <xi:include href="./exercise1.ptx"/>
+          <pagebreak/>
+          <xi:include href="./exercise1.ptx"/>
+          <xi:include href="./exercise1.ptx"/>
+        </subexercises>
+        <subexercises cols="3">
+          <title>Review</title>
+          <xi:include href="./exercise1.ptx"/>
+          <xi:include href="./exercise1.ptx"/>
+          <xi:include href="./exercise1.ptx"/>
+          <exercisegroup cols="2">
+            <title>2CEG</title>
+            <xi:include href="./exercise5.ptx"/>
+            <xi:include href="./exercise5.ptx"/>
+          </exercisegroup>
+          <xi:include href="./exercise1.ptx"/>
+        </subexercises>
+      </worksheet>
+    </chapter> -->
+
+  </book>
+</pretext>

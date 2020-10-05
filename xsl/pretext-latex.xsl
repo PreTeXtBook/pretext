@@ -1443,24 +1443,32 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$document-root//exercises//exercise[not(ancestor::exercisegroup)]|$document-root//worksheet//exercise[not(ancestor::exercisegroup)]|$document-root//reading-questions//exercise[not(ancestor::exercisegroup)]">
             <xsl:text>%% Solutions to division exercises, not in exercise group&#xa;</xsl:text>
             <xsl:text>\tcbset{ divisionsolutionstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, after title={\space}, breakable, parbox=false } }&#xa;</xsl:text>
-            <xsl:text>\newtcolorbox{divisionsolution}[3]</xsl:text>
-            <xsl:text>{divisionsolutionstyle, title={\hyperlink{#3}{#1}.\notblank{#2}{\space#2}{}}}&#xa;</xsl:text>
+            <xsl:text>\newtcolorbox{divisionsolution}[4]</xsl:text>
+            <xsl:text>{divisionsolutionstyle, title={\hyperlink{#4}{#1}.\notblank{#2}{\space#2}{}}}&#xa;</xsl:text>
         </xsl:if>
         <!-- Division Solution, Exercise Group -->
         <!-- Explicitly breakable, run-in title -->
         <xsl:if test="$document-root//exercisegroup[not(@cols)]">
             <xsl:text>%% Solutions to division exercises, in exercise group, no columns&#xa;</xsl:text>
             <xsl:text>\tcbset{ divisionsolutionegstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, after title={\space}, left skip=\egindent, breakable, parbox=false } }&#xa;</xsl:text>
-            <xsl:text>\newtcolorbox{divisionsolutioneg}[3]</xsl:text>
-            <xsl:text>{divisionsolutionegstyle, title={\hyperlink{#3}{#1}.\notblank{#2}{\space#2}{}}}&#xa;</xsl:text>
+            <xsl:text>\newtcolorbox{divisionsolutioneg}[4]</xsl:text>
+            <xsl:text>{divisionsolutionegstyle, title={\hyperlink{#4}{#1}.\notblank{#2}{\space#2}{}}}&#xa;</xsl:text>
         </xsl:if>
         <!-- Division Solution, Exercise Group, Columnar -->
         <!-- Explicity unbreakable, to behave in multicolumn tcbraster -->
         <xsl:if test="$document-root//exercisegroup/@cols">
             <xsl:text>%% Solutions to division exercises, in exercise group with columns&#xa;</xsl:text>
             <xsl:text>\tcbset{ divisionsolutionegcolstyle/.style={bwminimalstyle, runintitlestyle,  exercisespacingstyle, after title={\space}, halign=flush left, unbreakable, parbox=false } }&#xa;</xsl:text>
-            <xsl:text>\newtcolorbox{divisionsolutionegcol}[3]</xsl:text>
-            <xsl:text>{divisionsolutionegcolstyle, title={\hyperlink{#3}{#1}.\notblank{#2}{\space#2}{}}}&#xa;</xsl:text>
+            <xsl:text>\newtcolorbox{divisionsolutionegcol}[4]</xsl:text>
+            <xsl:text>{divisionsolutionegcolstyle, title={\hyperlink{#4}{#1}.\notblank{#2}{\space#2}{}}}&#xa;</xsl:text>
+        </xsl:if>
+        <!-- Division Solution, Subexercises, Row-Major -->
+        <!-- Explicity unbreakable, to behave in multicolumn tcbraster -->
+        <xsl:if test="$document-root//subexercises[@direction='row']">
+            <xsl:text>%% Solutions to division exercises, in subexercises with row progression&#xa;</xsl:text>
+            <xsl:text>\tcbset{ divisionsolutionserowstyle/.style={bwminimalstyle, runintitlestyle,  exercisespacingstyle, after title={\space}, halign=flush left, unbreakable, parbox=false} }&#xa;</xsl:text>
+            <xsl:text>\newtcolorbox{divisionsolutionserow}[4]</xsl:text>
+            <xsl:text>{divisionsolutionserowstyle, title={\hyperlink{#4}{#1}.\notblank{#2}{\space#2}{}}, width=#3\linewidth}&#xa;</xsl:text>
         </xsl:if>
         <!-- solutions to PROJECT-LIKE -->
         <xsl:for-each select="$project-reps">
@@ -1503,7 +1511,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$b-pageref">
             <xsl:text>\label{#4}</xsl:text>
         </xsl:if>
-        <xsl:text>\hypertarget{#4}{}}, after={\notblank{#3}{\newline\rule{\workspacestrutwidth}{#3\textheight}\newline}{}}}&#xa;</xsl:text>
+        <xsl:text>\hypertarget{#4}{}}}&#xa;</xsl:text>
     </xsl:if>
     <!-- Division Exercise, Exercise Group -->
     <!-- The exercise itself carries the indentation, hence we can use breakable -->
@@ -1516,7 +1524,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$b-pageref">
             <xsl:text>\label{#4}</xsl:text>
         </xsl:if>
-        <xsl:text>\hypertarget{#4}{}}, after={\notblank{#3}{\newline\rule{\workspacestrutwidth}{#3\textheight}\newline}{}}}&#xa;</xsl:text>
+        <xsl:text>\hypertarget{#4}{}}}&#xa;</xsl:text>
     </xsl:if>
     <!-- Division Exercise, Exercise Group, Columnar -->
     <!-- Explicity unbreakable, to behave in multicolumn tcbraster -->
@@ -1528,7 +1536,19 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:if test="$b-pageref">
             <xsl:text>\label{#4}</xsl:text>
         </xsl:if>
-        <xsl:text>\hypertarget{#4}{}}, after={\notblank{#3}{\newline\rule{\workspacestrutwidth}{#3\textheight}\newline}{}}}&#xa;</xsl:text>
+        <xsl:text>\hypertarget{#4}{}}}&#xa;</xsl:text>
+    </xsl:if>
+    <!-- Division Exercise, Subexercises, Row-Major -->
+    <!-- Explicity unbreakable, to behave in tcbraster -->
+    <xsl:if test="$document-root//subexercises[@direction='row']">
+        <xsl:text>%% Division exercises, in subexercises with row progression&#xa;</xsl:text>
+        <xsl:text>\tcbset{ divisionexerciseserowstyle/.style={bwminimalstyle, runintitlestyle, exercisespacingstyle, left=5ex, unbreakable, parbox=false} }&#xa;</xsl:text>
+        <xsl:text>\newtcolorbox{divisionexerciseserow}[4]</xsl:text>
+        <xsl:text>{divisionexerciseserowstyle, before title={\hspace{-5ex}\makebox[5ex][l]{#1.}}, title={\notblank{#2}{#2\space}{}}, width=#3\linewidth, phantom={</xsl:text>
+        <xsl:if test="$b-pageref">
+            <xsl:text>\label{#4}</xsl:text>
+        </xsl:if>
+        <xsl:text>\hypertarget{#4}{}}}&#xa;</xsl:text>
     </xsl:if>
     <xsl:if test="$document-root//exercise[@workspace]">
         <xsl:text>%% Worksheet exercises may have workspaces&#xa;</xsl:text>
@@ -1543,6 +1563,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
                 <xsl:text>\setlength{\workspacestrutwidth}{0pt}&#xa;</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
+        <xsl:text>\newcommand{\workspacebelow}[1]{\tcblower\rule{\workspacestrutwidth}{#1}}&#xa;</xsl:text>
+        <xsl:text>\newcommand{\workspaceright}[1]{\tcblower\rule{#1}{\workspacestrutwidth}}&#xa;</xsl:text>
     </xsl:if>
     <!-- Localize various standard names in use         -->
     <!-- Many environments addressed upon creation above -->
@@ -1988,7 +2010,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>\usetikzlibrary{arrows,matrix}&#xa;</xsl:text>
     </xsl:if>
     <!-- TODO:  \showidx package as part of a draft mode, prints entries in margin -->
-     <xsl:if test="$document-root//ol[@cols]|$document-root//ul[@cols]|$document-root//dl[@cols]|$document-root//contributors">
+     <xsl:if test="$document-root//ol[@cols]|$document-root//ul[@cols]|$document-root//dl[@cols]|$document-root//contributors|$document-root//subexercises[@cols]">
         <xsl:text>%% Multiple column, column-major lists&#xa;</xsl:text>
         <xsl:text>\usepackage{multicol}&#xa;</xsl:text>
     </xsl:if>
@@ -2032,9 +2054,46 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- raster equal height: boxes of same *row* have same height    -->
             <!-- raster left skip: indentation of all exercises               -->
             <!-- raster columns: controls layout, so no line separators, etc. -->
-            <xsl:text>\tcbset{ exgroupcolstyle/.style={raster equal height=rows, raster left skip=\egindent, raster column skip=\exggap} }&#xa;</xsl:text>
+            <xsl:text>\tcbset{ exgroupcolstyle/.style={raster equal height=rows, raster valign=top, raster left skip=\egindent, raster column skip=\exggap} }&#xa;</xsl:text>
             <xsl:text>\NewDocumentEnvironment{exercisegroupcol}{m}&#xa;</xsl:text>
             <xsl:text>{\begin{tcbraster}[exgroupcolstyle,raster columns=#1]}{\end{tcbraster}}&#xa;</xsl:text>
+        </xsl:if>
+    </xsl:if>
+    <xsl:if test="$document-root//subexercises">
+        <xsl:text>%% Subdivision of exercises using multiple columns progressing column first&#xa;</xsl:text>
+        <xsl:text>%% Lengths control the gaps between columns&#xa;</xsl:text>
+        <xsl:text>\newlength{\seindent}\setlength{\seindent}{0pt}&#xa;</xsl:text>
+        <xsl:text>\newlength{\segap}\setlength{\segap}{0.05\linewidth}&#xa;</xsl:text>
+        <xsl:if test="$document-root//subexercises[not(@direction='row') and not(@cols)]">
+            <xsl:text>%% Thin "xparse" environments will represent the entire subexercises,&#xa;</xsl:text>
+            <xsl:text>%% in the case when it does not hold multiple columns.&#xa;</xsl:text>
+            <!-- DO NOT make this a tcolorbox, since we would want it -->
+            <!-- to be breakable, and then the individual exercises   -->
+            <!-- could not be breakable tcolorbox themselves          -->
+            <!-- TODO: add some pre- spacing commands here -->
+            <xsl:text>\NewDocumentEnvironment{subexercises}{}&#xa;</xsl:text>
+            <xsl:text>{}{}&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:if test="$document-root//subexercises[not(@direction='row') and @cols]">
+            <xsl:text>%% Thin "xparse" environments will represent the entire exercise&#xa;</xsl:text>
+            <xsl:text>%% group, in the case when it does not hold multiple columns.&#xa;</xsl:text>
+            <!-- DO NOT make this a tcolorbox, since we would want it -->
+            <!-- to be breakable, and then the individual exercises   -->
+            <!-- could not be breakable tcolorbox themselves          -->
+            <!-- TODO: add some pre- spacing commands here -->
+            <xsl:text>\NewDocumentEnvironment{subexercisescol}{m}&#xa;</xsl:text>
+            <xsl:text>{\setlength{\columnsep}{\segap}\begin{multicols}{#1}}{\end{multicols}}&#xa;</xsl:text>
+        </xsl:if>
+        <xsl:if test="$document-root//subexercises[@direction='row']">
+            <xsl:text>%% An subexercisesgroup with @direction='row' is a tcbraster.&#xa;</xsl:text>
+            <xsl:text>%% If the contained exercises are explicitly unbreakable,&#xa;</xsl:text>
+            <xsl:text>%% the raster should break at rows for page breaks.&#xa;</xsl:text>
+            <!-- raster equal height: boxes of same *row* have same height    -->
+            <!-- raster columns: controls layout, so no line separators, etc. -->
+            <!-- raster force size=false: allow exercises to set their own width -->
+            <xsl:text>\tcbset{ subexrowstyle/.style={raster equal height=rows, raster valign=top, raster left skip=\seindent, raster column skip=\segap, raster force size=false} }&#xa;</xsl:text>
+            <xsl:text>\NewDocumentEnvironment{subexercisesrow}{m}&#xa;</xsl:text>
+            <xsl:text>{\begin{tcbraster}[subexrowstyle,raster columns=#1]}{\end{tcbraster}}&#xa;</xsl:text>
         </xsl:if>
     </xsl:if>
     <xsl:if test="$document-root/backmatter/index-part|$document-root//index-list">
@@ -4855,6 +4914,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:if test="self::worksheet">
         <!-- \newgeometry includes a \clearpage -->
         <xsl:apply-templates select="." mode="new-geometry"/>
+        <xsl:text>\pagestyle{empty}</xsl:text>
     </xsl:if>
     <xsl:text>\begin{</xsl:text>
     <xsl:apply-templates select="." mode="division-environment-name" />
@@ -4893,10 +4953,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- to use lots of the available space -->
     <!-- Perhaps this should be global, but -->
     <!-- no harm placing it here for now.   -->
-    <xsl:variable name="default-worksheet-margin" select="'1.25cm'"/>
+    <xsl:variable name="default-worksheet-margin" select="'2cm'"/>
     <!-- Four similar "choose" effect hierarchy/priority -->
     <!-- NB: a publisher string parameter to      -->
     <!-- *really* override (worksheet.left, etc.) -->
+    <xsl:text>\cleardoublepage%&#xa;</xsl:text>
     <xsl:text>\newgeometry{</xsl:text>
     <xsl:text>left=</xsl:text>
     <xsl:choose>
@@ -5006,10 +5067,33 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- ############ -->
 
 <xsl:template match="subexercises">
-    <xsl:text>\paragraph{</xsl:text>
-    <xsl:apply-templates select="." mode="title-full"/>
+    <xsl:variable name="subdivisionname">
+        <xsl:text>subexercises</xsl:text>
+        <xsl:choose>
+            <xsl:when test="@direction = 'row'">
+                <xsl:text>row</xsl:text>
+            </xsl:when>
+            <xsl:when test="@cols">
+                <xsl:text>col</xsl:text>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:if test="title">
+        <xsl:text>\paragraph{</xsl:text>
+        <xsl:apply-templates select="." mode="title-full"/>
+        <xsl:text>}%&#xa;</xsl:text>
+    </xsl:if>
+    <xsl:apply-templates select="idx|notation|introduction"/>
+    <xsl:text>\begin{</xsl:text>
+    <xsl:value-of select="$subdivisionname"/>
+    <xsl:text>}{</xsl:text>
+    <xsl:value-of select="@cols"/>
     <xsl:text>}%&#xa;</xsl:text>
-    <xsl:apply-templates select="idx|notation|introduction|exercisegroup|exercise|conclusion"/>
+    <xsl:apply-templates select="exercisegroup|exercise|pagebreak"/>
+    <xsl:text>\end{</xsl:text>
+    <xsl:value-of select="$subdivisionname"/>
+    <xsl:text>}%&#xa;</xsl:text>
+    <xsl:apply-templates select="conclusion"/>
 </xsl:template>
 
 <!-- Introductions and Conclusions -->
@@ -5543,12 +5627,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- "exercise" when located in an "exercises" division    -->
     <xsl:variable name="env-name">
         <xsl:text>divisionexercise</xsl:text>
-        <xsl:if test="ancestor::exercisegroup">
-            <xsl:text>eg</xsl:text>
-        </xsl:if>
-        <xsl:if test="ancestor::exercisegroup/@cols">
-            <xsl:text>col</xsl:text>
-        </xsl:if>
+        <xsl:choose>
+            <xsl:when test="ancestor::subexercises[@direction='row']">
+                <xsl:text>serow</xsl:text>
+            </xsl:when>
+            <xsl:when test="ancestor::exercisegroup">
+                <xsl:text>eg</xsl:text>
+                <xsl:if test="ancestor::exercisegroup/@cols">
+                    <xsl:text>col</xsl:text>
+                </xsl:if>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="width">
+        <xsl:apply-templates select="." mode="get-width-percentage"/>
     </xsl:variable>
     <xsl:text>\begin{</xsl:text>
     <xsl:value-of select="$env-name"/>
@@ -5559,12 +5651,8 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>{</xsl:text>
     <xsl:apply-templates select="." mode="title-full"/>
     <xsl:text>}</xsl:text>
-    <!-- workspace fraction, only if given, else blank -->
-    <!-- worksheets only now, eventually exams?        -->
     <xsl:text>{</xsl:text>
-    <xsl:if test="ancestor::worksheet and @workspace">
-        <xsl:value-of select="substring-before(@workspace,'%') div 100" />
-    </xsl:if>
+    <xsl:value-of select="substring-before($width,'%') div 100" />
     <xsl:text>}</xsl:text>
     <xsl:text>{</xsl:text>
     <xsl:apply-templates select="." mode="latex-id"/>
@@ -5649,6 +5737,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:apply-templates>
         </xsl:otherwise>
     </xsl:choose>
+    <xsl:if test="ancestor::worksheet and @workspace">
+        <xsl:choose>
+            <xsl:when test="@workspace-position='right'">
+                <xsl:text>\workspaceright{</xsl:text>
+                <xsl:value-of select="@workspace"/>
+                <xsl:text>}%&#xa;</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>\workspacebelow{</xsl:text>
+                <xsl:value-of select="@workspace"/>
+                <xsl:text>}%&#xa;</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:if>
     <!-- Allow a webwork or myopenmath exercise to conclude/connect     -->
     <!-- a problem (especially from server) to the text in various ways -->
     <xsl:if test="webwork-reps|myopenmath">
@@ -5659,6 +5761,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:text>\end{</xsl:text>
     <xsl:value-of select="$env-name"/>
     <xsl:text>}%&#xa;</xsl:text>
+    <!-- for a worksheet, evenly spread out any excess space -->
+    <!-- but do not do this when inside a tcbraster          -->
+    <xsl:if test="ancestor::worksheet and not(ancestor::exercisegroup) and not(ancestor::subexercises[@direction = 'row'])">
+        <xsl:text>\vfill%&#xa;</xsl:text>
+    </xsl:if>
     <xsl:apply-templates select="." mode="pop-footnote-text"/>
 </xsl:template>
 
@@ -5700,12 +5807,20 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <!-- Using fully-qualified number in solution lists -->
         <xsl:variable name="env-name">
             <xsl:text>divisionsolution</xsl:text>
-            <xsl:if test="ancestor::exercisegroup">
-                <xsl:text>eg</xsl:text>
-            </xsl:if>
-            <xsl:if test="ancestor::exercisegroup/@cols">
-                <xsl:text>col</xsl:text>
-            </xsl:if>
+            <xsl:choose>
+                <xsl:when test="ancestor::subexercises[@direction='row']">
+                    <xsl:text>serow</xsl:text>
+                </xsl:when>
+                <xsl:when test="ancestor::exercisegroup">
+                    <xsl:text>eg</xsl:text>
+                    <xsl:if test="ancestor::exercisegroup/@cols">
+                        <xsl:text>col</xsl:text>
+                    </xsl:if>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="width">
+            <xsl:apply-templates select="@width" mode="get-width-percentage"/>
         </xsl:variable>
         <xsl:text>\begin{</xsl:text>
         <xsl:value-of select="$env-name"/>
@@ -5716,11 +5831,13 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <xsl:text>{</xsl:text>
         <xsl:apply-templates select="." mode="title-full"/>
         <xsl:text>}</xsl:text>
+        <xsl:text>{</xsl:text>
+        <xsl:value-of select="substring-before($width,'%') div 100" />
+        <xsl:text>}</xsl:text>
         <!-- label of the exercise, to link back to it -->
         <xsl:text>{</xsl:text>
         <xsl:apply-templates select="." mode="latex-id"/>
         <xsl:text>}</xsl:text>
-        <!-- no workspace fraction in a solution -->
         <xsl:text>%&#xa;</xsl:text>
         <!-- Allow a webwork or myopenmath exercise to introduce/connect    -->
         <!-- a problem (especially from server) to the text in various ways -->
@@ -6666,6 +6783,11 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:apply-templates>
         </xsl:otherwise>
     </xsl:choose>
+    <xsl:if test="@workspace">
+        <xsl:text>\newline\rule{\workspacestrutwidth}{</xsl:text>
+        <xsl:value-of select="@workspace"/>
+        <xsl:text>}&#xa;</xsl:text>
+    </xsl:if>
     <!-- if last at its level, end the list environment -->
     <xsl:if test="not(following-sibling::task)">
         <xsl:text>\end{enumerate}&#xa;</xsl:text>
@@ -8909,7 +9031,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 </xsl:template>
 
 <xsl:template match="sidebyside" mode="leave-vertical-mode">
-    <xsl:if test="not(preceding-sibling::*[not(&SUBDIVISION-METADATA-FILTER;)]) and parent::paragraphs">
+    <xsl:if test="(not(preceding-sibling::*[not(&SUBDIVISION-METADATA-FILTER;)]) and parent::paragraphs) or (parent::statement and preceding-sibling::p)">
         <xsl:text>\leavevmode\par\noindent%&#xa;</xsl:text>
     </xsl:if>
 </xsl:template>

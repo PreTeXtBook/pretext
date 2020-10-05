@@ -3382,7 +3382,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <xsl:apply-templates select="introduction">
         <xsl:with-param name="b-original" select="$b-original"/>
     </xsl:apply-templates>
-    <xsl:apply-templates select="exercise|exercisegroup">
+    <xsl:apply-templates select="exercise|exercisegroup|pagebreak">
         <xsl:with-param name="b-original" select="$b-original"/>
     </xsl:apply-templates>
     <xsl:apply-templates select="conclusion">
