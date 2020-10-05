@@ -9465,7 +9465,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- space. This is in constrast with fillins in the middle of a p,  -->
 <!-- where answer blanks need to be printed because of the fill      -->
 <!-- in the blank nature of the quesiton.                            -->
-<xsl:template match="p[not(normalize-space(text()))][count(fillin)=1 and count(*)=1][not(parent::li)]|p[not(normalize-space(text()))][count(fillin)=1 and count(*)=1][parent::li][preceding-sibling::*]" />
+<xsl:template match="p[ancestor::webwork-reps][not(normalize-space(text()))][count(fillin)=1 and count(*)=1][not(parent::li)]|p[not(normalize-space(text()))][count(fillin)=1 and count(*)=1][parent::li][preceding-sibling::*]" />
 
 <!-- ############################# -->
 <!-- MyOpenMath Embedded Exercises -->
