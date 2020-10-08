@@ -8755,6 +8755,331 @@ the xsltproc executable.
                     </sidebyside>
                 </figure>
             </subsection>
+
+            <subsection xml:id="atomic-program">
+                <title><tag>program</tag>, <tag>console</tag></title>
+
+                    <p>A <tag>program</tag> and/or <tag>console</tag> can be placed in at least six  different ways:<ol>
+                    <li>all by itself, as a peer of <tag>p</tag> typically, with layout control</li>
+                    <li>inside a <tag>listing</tag>, earning a number and caption, with layout control</li>
+                    <li>inside a <tag>sidebyside</tag>, with size and layout configured</li>
+                    <li>inside a <tag>sidebyside</tag>, with size and layout configured, and inside a <tag>figure</tag></li>
+                    <li>inside a <tag>sidebyside</tag>, with size and layout configured, with each inside a <tag>listing</tag>, earning different numbers</li>
+
+                    <li>inside a <tag>figure</tag> inside a <tag>sidebyside</tag> inside a <tag>listing</tag>, with size and layout configured, with a number and caption, but now sub-numbered ((a), (b), (c),<ellipsis/>).</li>
+                </ol>Examples of each, and more.</p>
+
+               <p>Programs can be realized in many forms, and can come from a variety of sources.  See <xref ref="section-video" text="type-global"/> for tests of some of that variety.  Here we are testing placement within surroundings and testing the schema for location.  But we do have two videos in each test, one provided as a local file and one embedded from a service.</p>
+
+                <p>All by itsef, with no layout specified, so showing the default size and placement.  Vivamus in congue massa. Morbi condimentum ac magna at accumsan. Vestibulum ac augue eu lorem semper gravida.</p>
+
+                <program language="r">
+                    <input>
+                    n_loops &lt;- 10
+                    x.means &lt;- numeric(n_loops)  # create a vector of zeros for results
+                    for (i in 1:n_loops){
+                        x &lt;- as.integer(runif(100, 1, 7))  # 1 to 6, uniformly
+                        x.means[i] &lt;- mean(x)
+                    }
+                    x.means
+                    </input>
+                </program>
+
+                <p>Now a program with shorter lines, with no layout control.</p>
+
+                <program language="c">
+                    <input>
+                    /* Hello World program */
+
+                    #include&lt;stdio.h&gt;
+
+                    main()
+                    {
+                        printf("Hello, World!");
+                    }
+                    </input>
+                </program>
+
+                <p>And a <tag>console</tag> element, also with no layout control.</p>
+
+                <console>
+                    <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
+                    <input>gcc -o intAndFloat intAndFloat.c</input>
+                    <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
+                    <input>./intAndFloat</input>
+                    <output>
+                    The integer is 19088743 and the float is 19088.742188
+                    </output>
+                    <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
+                    <input />
+                </console>
+
+                <p>Now similar examples, but with layout control: margins and width.</p>
+
+                <p>A <tag>program</tag> with a <attr>width</attr> attribute, so centered and with equal margins.  Note how the lines word wrap due to the smaller width.</p>
+
+                <program language="r" width="60%">
+                    <input>
+                    n_loops &lt;- 10
+                    x.means &lt;- numeric(n_loops)  # create a vector of zeros for results
+                    for (i in 1:n_loops){
+                        x &lt;- as.integer(runif(100, 1, 7))  # 1 to 6, uniformly
+                        x.means[i] &lt;- mean(x)
+                    }
+                    x.means
+                    </input>
+                </program>
+
+                <p>A <tag>program</tag> with short lines, so significant, and asymmetric margins, which experimentally do not induce any word-wrapping.</p>
+
+                <program language="c" margins="15% 20%">
+                    <input>
+                    /* Hello World program */
+
+                    #include&lt;stdio.h&gt;
+
+                    main()
+                    {
+                        printf("Hello, World!");
+                    }
+                    </input>
+                </program>
+
+                <p>A longer <tag>console</tag>, with margins so significant the appearance is ill-advised.</p>
+
+                <console margins="50% 15%">
+                    <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
+                    <input>gcc -Wall -o intAndFloat intAndFloat.c</input>
+                    <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
+                    <input>./intAndFloat</input>
+                    <output>
+                    The integer is 19088743 and the float is 19088.742188
+                    </output>
+                    <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
+                    <input />
+                </console>
+
+                <p>Two <tag>listing</tag>, with <tag>caption</tag>, and no layout control.</p>
+
+                <listing>
+                    <caption>Hello, World! in C</caption>
+                        <program language="c">
+                            <input>
+                            /* Hello World program */
+
+                            #include&lt;stdio.h&gt;
+
+                            main()
+                            {
+                                printf("Hello, World!");
+                            }
+                            </input>
+                        </program>
+                </listing>
+
+                <listing>
+                    <caption>A console session on a Raspberry Pi</caption>
+                        <console>
+                            <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
+                            <input>gcc -Wall -o intAndFloat intAndFloat.c</input>
+                            <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
+                            <input>./intAndFloat</input>
+                            <output>
+                            The integer is 19088743 and the float is 19088.742188
+                            </output>
+                            <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
+                            <input />
+                        </console>
+                </listing>
+
+                <p>Same two <tag>listing</tag>, but now with layout control on the <tag>program</tag> and <tag>console</tag>.</p>
+
+                <listing>
+                    <caption>Hello, World! in C</caption>
+                        <program language="c" margins="40% 20%" width="40%">
+                            <input>
+                            /* Hello World program */
+
+                            #include&lt;stdio.h&gt;
+
+                            main()
+                            {
+                                printf("Hello, World!");
+                            }
+                            </input>
+                        </program>
+                </listing>
+
+                <listing>
+                    <caption>A console session on a Raspberry Pi</caption>
+                        <console margins="10% 10%">
+                            <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
+                            <input>gcc -Wall -o intAndFloat intAndFloat.c</input>
+                            <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
+                            <input>./intAndFloat</input>
+                            <output>
+                            The integer is 19088743 and the float is 19088.742188
+                            </output>
+                            <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
+                            <input />
+                        </console>
+                </listing>
+
+                <p>This <tag>sidebyside</tag> gives each panel a 30% width.  The remaining 10% is apportioned for margins and separation.</p>
+
+                <sidebyside width="30%">
+                    <program language="c">
+                        <input>
+                        /* Hello World program */
+
+                        #include&lt;stdio.h&gt;
+
+                        main()
+                        {
+                            printf("Hello, World!");
+                        }
+                        </input>
+                    </program>
+                    <console>
+                        <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
+                        <input>gcc -Wall -o intAndFloat intAndFloat.c</input>
+                        <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
+                        <input>./intAndFloat</input>
+                        <output>
+                        The integer is 19088743 and the float is 19088.742188
+                        </output>
+                        <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
+                        <input />
+                    </console>
+                    <program language="r">
+                        <input>
+                        n_loops &lt;- 10
+                        x.means &lt;- numeric(n_loops)  # create a vector of zeros for results
+                        for (i in 1:n_loops){
+                            x &lt;- as.integer(runif(100, 1, 7))  # 1 to 6, uniformly
+                            x.means[i] &lt;- mean(x)
+                        }
+                        x.means
+                        </input>
+                    </program>
+                </sidebyside>
+
+                <p>This is the same three-panel <tag>sidebyside</tag>, but now inside of a <tag>figure</tag>, earning a number and a <tag>caption</tag>.</p>
+
+                <figure>
+                    <caption>Some Code Samples</caption>
+                    <sidebyside width="30%">
+                        <program language="c">
+                            <input>
+                            /* Hello World program */
+
+                            #include&lt;stdio.h&gt;
+
+                            main()
+                            {
+                                printf("Hello, World!");
+                            }
+                            </input>
+                        </program>
+                        <console>
+                            <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
+                            <input>gcc -Wall -o intAndFloat intAndFloat.c</input>
+                            <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
+                            <input>./intAndFloat</input>
+                            <output>
+                            The integer is 19088743 and the float is 19088.742188
+                            </output>
+                            <prompt>pi@raspberrypi ~/progs/chap02 $ </prompt>
+                            <input />
+                        </console>
+                        <program language="r">
+                            <input>
+                            n_loops &lt;- 10
+                            x.means &lt;- numeric(n_loops)  # create a vector of zeros for results
+                            for (i in 1:n_loops){
+                                x &lt;- as.integer(runif(100, 1, 7))  # 1 to 6, uniformly
+                                x.means[i] &lt;- mean(x)
+                            }
+                            x.means
+                            </input>
+                        </program>
+                    </sidebyside>
+                </figure>
+
+
+
+                <p>Finally, a smaller <tag>program</tag> and a smaller <tag>console</tag>, each inside a <tag>listing</tag>, as the two panels of a <tag>sidebyside</tag> with no margins, and slightly different widths (to control word-wrapping).  The panels have been aligned vertically so their captions align.</p>
+
+                <sidebyside margins="0% 0%" widths="35% 55%" valign="bottom">
+                    <listing>
+                        <caption>Hello!</caption>
+                        <program language="c">
+                            <input>
+                            /* Hello World program */
+
+                            #include&lt;stdio.h&gt;
+
+                            main()
+                            {
+                                printf("Hello, World!");
+                            }
+                            </input>
+                        </program>
+                    </listing>
+                    <listing>
+                        <caption>Raspberry Pi</caption>
+                        <console>
+                            <prompt>$ </prompt>
+                            <input>gcc -Wall -o intAndFloat intAndFloat.c</input>
+                            <prompt>$ </prompt>
+                            <input>./intAndFloat</input>
+                            <output>
+                            The integer is 19088743 and the float is 19088.742188
+                            </output>
+                            <prompt>$ </prompt>
+                            <input />
+                        </console>
+                    </listing>
+                </sidebyside>
+
+                <p>And again, the two-panel <tag>sidebyside</tag> of <tag>listing</tag>, but now inside a <tag>figure</tag> that has a number and a caption.  And then the <tag>listing</tag> are sub-numbered as (a) and (b).</p>
+
+
+                <figure>
+                    <caption>Two Code Listings</caption>
+                    <sidebyside margins="0% 0%" widths="35% 55%" valign="bottom">
+                        <listing>
+                            <caption>Hello!</caption>
+                            <program language="c">
+                                <input>
+                                /* Hello World program */
+
+                                #include&lt;stdio.h&gt;
+
+                                main()
+                                {
+                                    printf("Hello, World!");
+                                }
+                                </input>
+                            </program>
+                        </listing>
+                        <listing>
+                            <caption>Raspberry Pi</caption>
+                            <console>
+                                <prompt>$ </prompt>
+                                <input>gcc -Wall -o intAndFloat intAndFloat.c</input>
+                                <prompt>$ </prompt>
+                                <input>./intAndFloat</input>
+                                <output>
+                                The integer is 19088743 and the float is 19088.742188
+                                </output>
+                                <prompt>$ </prompt>
+                                <input />
+                            </console>
+                        </listing>
+                    </sidebyside>
+                </figure>
+            </subsection>
         </section>
 
         <section xml:id="advanced-numbering">
