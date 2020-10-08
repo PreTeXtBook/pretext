@@ -1759,7 +1759,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
     <!-- Bitstream Vera Font names within: https://github.com/timfel/texmf/blob/master/fonts/map/vtex/bera.ali -->
     <!-- Coloring listings: http://tex.stackexchange.com/questions/18376/beautiful-listing-for-csharp -->
     <!-- Song and Dance for font changes: http://jevopi.blogspot.com/2010/03/nicely-formatted-listings-in-latex-with.html -->
-     <xsl:if test="$b-has-program or $b-has-console or $b-has-sage">
+    <xsl:if test="$b-has-program or $b-has-console or $b-has-sage">
         <xsl:text>%% Program listing support: for listings, programs, consoles, and Sage code&#xa;</xsl:text>
         <!-- NB: the "listingsutf8" package is not a panacea, as it only       -->
         <!-- cooperates with UTF-8 characters when code snippets are read      -->
@@ -1911,18 +1911,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:if>
             <xsl:text>%% Options passed to the listings package via tcolorbox&#xa;</xsl:text>
             <xsl:text>\lstdefinestyle{programcodestyle}{identifierstyle=\color{identifiers},commentstyle=\color{comments},stringstyle=\color{strings},keywordstyle=\color{keywords}, breaklines=true, breakatwhitespace=true, columns=fixed, extendedchars=true, aboveskip=0pt, belowskip=0pt}&#xa;</xsl:text>
-            <!-- We want a "program" to be able to break across pages    -->
-            <!-- Trying "enforce breakable" for a long listing inside of -->
-            <!-- a "listing" just led to a "mess of shattered boxes" so  -->
-            <!-- simply advise that a "listing" is not breakable.        -->
-            <!-- NB: rules "at break" need to come after "boxrule"       -->
+            <!-- We want a "program" to be able to break across pages -->
+            <!-- 2020-10-07: "breakable" seems ineffective            -->
             <xsl:text>\tcbset{ programboxstyle/.style={left=3ex, right=0pt, top=0ex, bottom=0ex, middle=0pt, toptitle=0pt, bottomtitle=0pt, boxsep=0pt, &#xa;</xsl:text>
             <xsl:text>listing only, fontupper=\small\ttfamily,&#xa;</xsl:text>
             <xsl:text>colback=white, sharp corners, boxrule=-0.3pt, leftrule=0.5pt, toprule at break=-0.3pt, bottomrule at break=-0.3pt,&#xa;</xsl:text>
             <xsl:text>breakable, parbox=false,&#xa;</xsl:text>
             <xsl:text>} }&#xa;</xsl:text>
-            <!--  -->
-            <xsl:text>\newtcblisting{program}[1]{programboxstyle, listing options={language=#1, style=programcodestyle}}&#xa;</xsl:text>
+            <!-- Arguments: language, left margin, width, right margin (latter ignored) -->
+            <xsl:text>\newtcblisting{program}[4]{programboxstyle, left skip=#2\linewidth, width=#3\linewidth, listing options={language=#1, style=programcodestyle}}&#xa;</xsl:text>
         </xsl:if>
         <xsl:if test="$document-root//console">
             <xsl:text>%% Console session with prompt, input, output&#xa;</xsl:text>
@@ -1932,15 +1929,15 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             <!-- https://tex.stackexchange.com/questions/299401/bold-just-one-line-inside-of-lstlisting/299406 -->
             <!-- Syntax highlighting is not so great for "language=bash" -->
             <!-- Line-breaking off to match old behavior, prebreak option fails inside LaTeX for input -->
-            <xsl:text>\lstdefinestyle{consolecodestyle}{language=none, escapeinside={(*}{*)}, identifierstyle=, commentstyle=, stringstyle=, keywordstyle=, breaklines=false, breakatwhitespace=false, columns=fixed, extendedchars=true, aboveskip=0pt, belowskip=0pt}&#xa;</xsl:text>
+            <xsl:text>\lstdefinestyle{consolecodestyle}{language=none, escapeinside={(*}{*)}, identifierstyle=, commentstyle=, stringstyle=, keywordstyle=, breaklines=true, breakatwhitespace=true, columns=fixed, extendedchars=true, aboveskip=0pt, belowskip=0pt}&#xa;</xsl:text>
             <!--  -->
             <xsl:text>\tcbset{ consoleboxstyle/.style={left=0pt, right=0pt, top=0ex, bottom=0ex, middle=0pt, toptitle=0pt, bottomtitle=0pt, boxsep=0pt,&#xa;</xsl:text>
             <xsl:text>listing only, fontupper=\small\ttfamily,&#xa;</xsl:text>
             <xsl:text>colback=white, boxrule=-0.3pt, toprule at break=-0.3pt, bottomrule at break=-0.3pt,&#xa;</xsl:text>
             <xsl:text>breakable, parbox=false,&#xa;</xsl:text>
             <xsl:text>} }&#xa;</xsl:text>
-            <!--  -->
-            <xsl:text>\newtcblisting{console}{consoleboxstyle, listing options={style=consolecodestyle}}&#xa;</xsl:text>
+            <!-- Arguments: left margin, width, right margin (latter ignored) -->
+            <xsl:text>\newtcblisting{console}[3]{consoleboxstyle, left skip=#1\linewidth, width=#2\linewidth, listing options={style=consolecodestyle}}&#xa;</xsl:text>
        </xsl:if>
         <xsl:if test="$b-has-sage">
             <xsl:text>%% The listings package as tcolorbox for Sage code&#xa;</xsl:text>
@@ -8739,11 +8736,50 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- This overrides the default, which is a small annotated cell -->
 <xsl:template match="sage[@type='practice']" />
 
+<!-- ##################### -->
+<!-- Programs and Consoles -->
+<!-- ##################### -->
 
-<!-- Program Listings -->
-<!-- The "listings-language" template is in the common file -->
-<xsl:template match="program">
-    <xsl:param name="width" select="''" />
+<!-- Both "program" and "console" are implemented as tcolorbox -->
+<!-- "tcblisting", based on the LaTeX "lstlistings" package.   -->
+<!-- As such they are tcolorboxes, amenable to manipulation.   -->
+<!-- When placed in a "sidebyside" they will word-wrap to fit  -->
+<!-- within the constraints imposed by the layout control of   -->
+<!-- the "sidebyside".  When naked, or in a "listing" element, -->
+<!-- they carry basic layout information, and as a tcolorbox   -->
+<!-- we can constrain them.  There is a commonality in the     -->
+<!-- approach here, but they are distinct.                     -->
+
+<!-- Embeddings first -->
+
+<xsl:template match="program[not(ancestor::sidebyside)]">
+    <xsl:variable name="rtf-layout">
+        <xsl:apply-templates select="." mode="layout-parameters" />
+    </xsl:variable>
+    <xsl:variable name="layout" select="exsl:node-set($rtf-layout)" />
+
+    <xsl:apply-templates select="." mode="program-inclusion">
+        <xsl:with-param name="left-margin" select="$layout/left-margin div 100"/>
+        <xsl:with-param name="width" select="$layout/width div 100"/>
+        <xsl:with-param name="right-margin" select="$layout/right-margin div 100"/>
+    </xsl:apply-templates>
+</xsl:template>
+
+<xsl:template match="program[ancestor::sidebyside]">
+    <xsl:apply-templates select="." mode="program-inclusion">
+        <!-- no margins, "full" width, constrained in tcbraster -->
+        <xsl:with-param name="left-margin" select="0"/>
+        <xsl:with-param name="width" select="1"/>
+        <xsl:with-param name="right-margin" select="0"/>
+    </xsl:apply-templates>
+</xsl:template>
+
+<xsl:template match="program" mode="program-inclusion">
+    <!-- parameters are real numbers (not percentages) -->
+    <xsl:param name="left-margin"/>
+    <xsl:param name="width"/>
+    <xsl:param name="right-margin"/>
+
     <xsl:variable name="language">
         <xsl:apply-templates select="." mode="listings-language" />
     </xsl:variable>
@@ -8765,22 +8801,66 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
             </xsl:otherwise>
         </xsl:choose>
         <xsl:text>}</xsl:text>
-        <xsl:text>&#xa;</xsl:text>
+        <xsl:text>{</xsl:text>
+        <xsl:value-of select="$left-margin"/>
+        <xsl:text>}</xsl:text>
+        <xsl:text>{</xsl:text>
+        <xsl:value-of select="$width"/>
+        <xsl:text>}</xsl:text>
+        <xsl:text>{</xsl:text>
+        <xsl:value-of select="$right-margin"/>
+        <xsl:text>}&#xa;</xsl:text>
         <xsl:call-template name="sanitize-text">
             <xsl:with-param name="text" select="input" />
         </xsl:call-template>
-        <xsl:text>\end{program}</xsl:text>
-        <xsl:text>&#xa;</xsl:text>
+        <xsl:text>\end{program}%&#xa;</xsl:text>
     </xsl:if>
 </xsl:template>
 
-<!-- Console Session -->
+
+<!-- Consoles, specialized code listings -->
 <!-- An interactive command-line session with a prompt, input and output -->
-<xsl:template match="console">
+
+<xsl:template match="console[not(ancestor::sidebyside)]">
+    <xsl:variable name="rtf-layout">
+        <xsl:apply-templates select="." mode="layout-parameters" />
+    </xsl:variable>
+    <xsl:variable name="layout" select="exsl:node-set($rtf-layout)" />
+    <xsl:apply-templates select="." mode="console-inclusion">
+        <xsl:with-param name="left-margin" select="$layout/left-margin div 100"/>
+        <xsl:with-param name="width" select="$layout/width div 100"/>
+        <xsl:with-param name="right-margin" select="$layout/right-margin div 100"/>
+    </xsl:apply-templates>
+</xsl:template>
+
+<xsl:template match="console[ancestor::sidebyside]">
+    <xsl:apply-templates select="." mode="console-inclusion">
+        <!-- no margins, "full" width, constrained in tcbraster -->
+        <xsl:with-param name="left-margin" select="0"/>
+        <xsl:with-param name="width" select="1"/>
+        <xsl:with-param name="right-margin" select="0"/>
+    </xsl:apply-templates>
+</xsl:template>
+
+<xsl:template match="console" mode="console-inclusion">
+    <!-- parameters are real numbers (not percentages) -->
+    <xsl:param name="left-margin"/>
+    <xsl:param name="width"/>
+    <xsl:param name="right-margin"/>
+
     <!-- ignore prompt, and pick it up in trailing input  -->
-    <xsl:text>\begin{console}&#xa;</xsl:text>
+    <xsl:text>\begin{console}</xsl:text>
+    <xsl:text>{</xsl:text>
+    <xsl:value-of select="$left-margin"/>
+    <xsl:text>}</xsl:text>
+    <xsl:text>{</xsl:text>
+    <xsl:value-of select="$width"/>
+    <xsl:text>}</xsl:text>
+    <xsl:text>{</xsl:text>
+    <xsl:value-of select="$right-margin"/>
+    <xsl:text>}&#xa;</xsl:text>
     <xsl:apply-templates select="input|output" />
-    <xsl:text>\end{console}&#xa;</xsl:text>
+    <xsl:text>\end{console}%&#xa;</xsl:text>
 </xsl:template>
 
 <!-- match immediately preceding, only if a prompt:                   -->
