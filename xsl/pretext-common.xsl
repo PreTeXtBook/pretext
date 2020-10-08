@@ -5965,7 +5965,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- be called to do any housekeeping it might do.       -->
 <!-- This was a really tough bug to track down.          -->
 
-<xsl:template match="image|audio|video" mode="layout-parameters">
+<xsl:template match="image|audio|video|program|console" mode="layout-parameters">
     <xsl:param name="default-aspect" select="'1:1'"/>
 
     <!-- clean up margins -->
