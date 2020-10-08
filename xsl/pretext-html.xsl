@@ -8190,27 +8190,66 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 <!-- http://code.google.com/p/google-code-prettify/wiki/GettingStarted               -->
 <!-- See common file for more on language handlers, and "language-prettify" template -->
 <!-- TODO: maybe ship sanitized "input" to each modal template? -->
-<xsl:template match="program">
+<xsl:template match="program[not(ancestor::sidebyside)]|console[not(ancestor::sidebyside)]">
     <xsl:choose>
-        <!-- 100% historical, replace with a "web" platform option -->
-        <xsl:when test="not($b-host-runestone) and (@interactive='pythontutor')">
+        <!-- 100% historical, replace with a "web" platform option       -->
+        <!-- TODO: once "exercise" conditions earlier on the platform,   -->
+        <!-- then maybe the parts of this "choose" will migrate to other -->
+        <!-- places and this will be more straightforward.               -->
+        <xsl:when test="self::program and not($b-host-runestone) and (@interactive='pythontutor')">
             <xsl:apply-templates select="." mode="python-tutor"/>
         </xsl:when>
         <!-- if elected as interactive and on Runestone -->
-        <xsl:when test="(@interactive='yes') and $b-host-runestone">
+        <xsl:when test="self::program and (@interactive='yes') and $b-host-runestone">
             <xsl:apply-templates select="." mode="runestone-activecode"/>
         </xsl:when>
         <!-- fallback is a less-capable static version, which -->
         <!-- might actually be desired for many formats       -->
         <xsl:otherwise>
-            <xsl:apply-templates select="." mode="html-static"/>
+            <xsl:variable name="rtf-layout">
+                <xsl:apply-templates select="." mode="layout-parameters" />
+            </xsl:variable>
+            <xsl:variable name="layout" select="exsl:node-set($rtf-layout)" />
+            <!-- div is constraint/positioning for contained image -->
+            <div class="code-box">
+                <xsl:attribute name="style">
+                    <xsl:text>width: </xsl:text>
+                    <xsl:value-of select="$layout/width"/>
+                    <xsl:text>%;</xsl:text>
+                    <xsl:text> margin-left: </xsl:text>
+                    <xsl:value-of select="$layout/left-margin"/>
+                    <xsl:text>%;</xsl:text>
+                    <xsl:text> margin-right: </xsl:text>
+                    <xsl:value-of select="$layout/right-margin"/>
+                    <xsl:text>%;</xsl:text>
+                </xsl:attribute>
+                <xsl:apply-templates select="." mode="code-inclusion"/>
+            </div>
+        </xsl:otherwise>
+    </xsl:choose>
+</xsl:template>
+
+<xsl:template match="program[ancestor::sidebyside]|console[ancestor::sidebyside]">
+    <xsl:choose>
+        <!-- 100% historical, replace with a "web" platform option, see note above -->
+        <xsl:when test="self::program and not($b-host-runestone) and (@interactive='pythontutor')">
+            <xsl:apply-templates select="." mode="python-tutor"/>
+        </xsl:when>
+        <!-- if elected as interactive and on Runestone -->
+        <xsl:when test="self::program and (@interactive='yes') and $b-host-runestone">
+            <xsl:apply-templates select="." mode="runestone-activecode"/>
+        </xsl:when>
+        <!-- fallback is a less-capable static version, which -->
+        <!-- might actually be desired for many formats       -->
+        <xsl:otherwise>
+            <xsl:apply-templates select="." mode="code-inclusion"/>
         </xsl:otherwise>
     </xsl:choose>
 </xsl:template>
 
 <!-- A non-interactive version with potential syntax -->
 <!-- highlighting from the Google Prettifier         -->
-<xsl:template match="program" mode="html-static">
+<xsl:template match="program" mode="code-inclusion">
     <xsl:variable name="pretty-language">
         <xsl:apply-templates select="." mode="prettify-language"/>
     </xsl:variable>
@@ -8222,17 +8261,17 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
         <pre>
             <xsl:attribute name="class">
                 <xsl:choose>
+                    <!-- always identify as coming from "program" -->
+                    <xsl:text>program</xsl:text>
                     <!-- with a language supplied, pre.prettyprint -->
                     <!-- activates styling and Prettifier effects  -->
                     <xsl:when test="not($pretty-language = '')">
-                        <xsl:text>prettyprint</xsl:text>
-                        <xsl:text> </xsl:text>
-                        <xsl:text>lang-</xsl:text>
+                        <xsl:text> prettyprint lang-</xsl:text>
                         <xsl:value-of select="$pretty-language" />
                     </xsl:when>
                     <!-- else, pre.plainprint just yields some minimal styling -->
                     <xsl:otherwise>
-                        <xsl:text>plainprint</xsl:text>
+                        <xsl:text> plainprint</xsl:text>
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:attribute>
@@ -8354,31 +8393,29 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Console Session -->
 <!-- An interactive command-line session with a prompt, input and output -->
-<xsl:template match="console">
+<xsl:template match="console" mode="code-inclusion">
     <!-- ignore prompt, and pick it up in trailing input -->
-    <xsl:element name="pre">
-        <xsl:attribute name="class">console</xsl:attribute>
-        <xsl:apply-templates select="input|output" />
-    </xsl:element>
+    <pre class="console">
+        <xsl:apply-templates select="input|output"/>
+    </pre>
 </xsl:template>
 
 <!-- do not run through generic text() template -->
 <xsl:template match="console/prompt">
-    <xsl:element name="span">
-        <xsl:attribute name="class">prompt unselectable</xsl:attribute>
+    <span class="prompt unselectable">
         <xsl:value-of select="." />
-    </xsl:element>
+    </span>
 </xsl:template>
 
 <!-- match immediately preceding, only if a prompt:                   -->
 <!-- https://www.oxygenxml.com/archives/xsl-list/199910/msg00541.html -->
 <xsl:template match="console/input">
     <xsl:apply-templates select="preceding-sibling::*[1][self::prompt]" />
-    <xsl:element name="b">
+    <b>
         <xsl:call-template name="sanitize-text">
             <xsl:with-param name="text" select="." />
         </xsl:call-template>
-    </xsl:element>
+    </b>
 </xsl:template>
 
 <xsl:template match="console/output">
