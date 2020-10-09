@@ -9670,7 +9670,7 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
 <!-- Left Single Quote -->
 <xsl:template name="lsq-character">
     <xsl:call-template name="warn-unimplemented-character">
-        <xsl:with-param name="char-name" select="''"/>
+        <xsl:with-param name="char-name" select="'lsq'"/>
     </xsl:call-template>
 </xsl:template>
 <xsl:template match="lsq">
