@@ -3958,11 +3958,13 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
     <xsl:value-of select="translate($letter-only-title, ' ', '_')" />
 </xsl:template>
 
-<!-- This comes from writing out WW problems to filenames    -->
-<!-- in some sort of reasonable numbering scheme             -->
+<!-- This comes from writing out WW problems and worksheets  -->
+<!-- to filenames in a reasonable numbering scheme           -->
 <!-- It is not integrated into the above complexity-scheme   -->
 <!-- (though does call the "title-filesafe" modal template)  -->
 <!-- Consider integration if there is a refactoring of above -->
+<!-- Since these are filenames, it is useful to pad numbers  -->
+<!-- with enough 0s so sorting is nice                       -->    
 <xsl:template match="*" mode="numbered-title-filesafe">
     <!-- traditional "dotted" number -->
     <xsl:variable name="dotted-number">
@@ -3972,10 +3974,10 @@ Neither: A structural node that is simply a (visual) subdivision of a chunk
         <xsl:apply-templates select="." mode="title-filesafe" />
     </xsl:variable>
     <!-- number output, with dot to dash conversion -->
-    <xsl:value-of select="translate($dotted-number, '.', '_')" />
+    <xsl:value-of select="translate($dotted-number, '.', '-')" />
     <!-- separator, if needed -->
     <xsl:if test="not($dotted-number = '' or $title-string = '')">
-        <xsl:text>-</xsl:text>
+        <xsl:text>_</xsl:text>
     </xsl:if>
     <xsl:value-of select="$title-string" />
 </xsl:template>

@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--********************************************************************
+Copyright 2020 Rob Beezer
+
+This file is part of PreTeXt.
+
+PreTeXt is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 or version 3 of the
+License (at your option).
+
+PreTeXt is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
+*********************************************************************-->
+
+<!-- This file is a sample workbook with worksheet content. -->
+
+<pretext xmlns:xi="http://www.w3.org/2001/XInclude" xml:lang="en-US">
+    
+    <book xml:id="workbook">
+        <title>Sample Workbook</title>
+
+        <frontmatter xml:id="frontmatter" xmlns:xi="http://www.w3.org/2001/XInclude">
+            <titlepage>
+                <author>
+                    <personname>Alex Jordan</personname>
+                    <department>Department of Mathematics</department>
+                    <institution>Portland Community College</institution>
+                    <email>alex.jordan@pcc.edu</email>
+                </author>
+                <date><today /></date>
+            </titlepage>
+
+            <!-- <colophon /> goes here -->
+
+            <!-- <preface /> goes here -->
+
+        </frontmatter>
+
+        <chapter>
+            <title>Workbook Example</title>
+            <section>
+                <title>Introduction</title>
+                <p>
+                    This section gives the chapter enough structure so that we may give the chapter multiple worksheets.
+                </p>
+            </section>
+            <worksheet>
+                <title>A Simple Worksheet</title>
+                <introduction>
+                    <p>
+                        This is an introduction paragraph before the exercises start.
+                        It is long enough to wrap to a second line so we can see any indentation.
+                    </p>
+                    <p>
+                        And a second paragraph.
+                        It is also has a lot of extra words in it so that it will be long enough to wrap to a second line so we can see any indentation.
+                    </p>
+                    <p>
+                        And a third paragraph.
+                        It is also has a lot of extra words in it so that it will be long enough to wrap to a second line so we can see any indentation.
+                    </p>
+                </introduction>
+                <exercise>
+                    <statement>
+                        <p>
+                            This is the first exercise.
+                        </p>
+                    </statement>
+                </exercise>
+            </worksheet>
+            <worksheet>
+                <title>A Simple Worksheet</title>
+                <introduction>
+                    <p>
+                        This is an introduction paragraph before the exercises start.
+                        It is long enough to wrap to a second line so we can see any indentation.
+                    </p>
+                    <p>
+                        And a second paragraph.
+                        It is also has a lot of extra words in it so that it will be long enough to wrap to a second line so we can see any indentation.
+                    </p>
+                    <p>
+                        And a third paragraph.
+                        It is also has a lot of extra words in it so that it will be long enough to wrap to a second line so we can see any indentation.
+                    </p>
+                </introduction>
+                <exercise>
+                    <statement>
+                        <p>
+                            This is the first exercise.
+                        </p>
+                    </statement>
+                </exercise>
+            </worksheet>
+            <worksheet>
+                <title>A Simple Worksheet</title>
+                <introduction>
+                    <p>
+                        This is an introduction paragraph before the exercises start.
+                        It is long enough to wrap to a second line so we can see any indentation.
+                    </p>
+                    <p>
+                        And a second paragraph.
+                        It is also has a lot of extra words in it so that it will be long enough to wrap to a second line so we can see any indentation.
+                    </p>
+                    <p>
+                        And a third paragraph.
+                        It is also has a lot of extra words in it so that it will be long enough to wrap to a second line so we can see any indentation.
+                    </p>
+                </introduction>
+                <exercise>
+                    <statement>
+                        <p>
+                            This is the first exercise.
+                        </p>
+                    </statement>
+                </exercise>
+            </worksheet>
+            <worksheet>
+                <title>A Simple Worksheet</title>
+                <introduction>
+                    <p>
+                        This is an introduction paragraph before the exercises start.
+                        It is long enough to wrap to a second line so we can see any indentation.
+                    </p>
+                    <p>
+                        And a second paragraph.
+                        It is also has a lot of extra words in it so that it will be long enough to wrap to a second line so we can see any indentation.
+                    </p>
+                    <p>
+                        And a third paragraph.
+                        It is also has a lot of extra words in it so that it will be long enough to wrap to a second line so we can see any indentation.
+                    </p>
+                </introduction>
+                <exercise>
+                    <statement>
+                        <p>
+                            This is the first exercise.
+                        </p>
+                    </statement>
+                </exercise>
+            </worksheet>
+            <worksheet>
+                <title>A Simple Worksheet</title>
+                <introduction>
+                    <p>
+                        This is an introduction paragraph before the exercises start.
+                        It is long enough to wrap to a second line so we can see any indentation.
+                    </p>
+                    <p>
+                        And a second paragraph.
+                        It is also has a lot of extra words in it so that it will be long enough to wrap to a second line so we can see any indentation.
+                    </p>
+                    <p>
+                        And a third paragraph.
+                        It is also has a lot of extra words in it so that it will be long enough to wrap to a second line so we can see any indentation.
+                    </p>
+                </introduction>
+                <exercise>
+                    <statement>
+                        <p>
+                            This is the first exercise.
+                        </p>
+                    </statement>
+                </exercise>
+            </worksheet>
+            <worksheet>
+                <title>A Simple Worksheet</title>
+                <introduction>
+                    <p>
+                        This is an introduction paragraph before the exercises start.
+                        It is long enough to wrap to a second line so we can see any indentation.
+                    </p>
+                    <p>
+                        And a second paragraph.
+                        It is also has a lot of extra words in it so that it will be long enough to wrap to a second line so we can see any indentation.
+                    </p>
+                    <p>
+                        And a third paragraph.
+                        It is also has a lot of extra words in it so that it will be long enough to wrap to a second line so we can see any indentation.
+                    </p>
+                </introduction>
+                <exercise>
+                    <statement>
+                        <p>
+                            This is the first exercise.
+                        </p>
+                    </statement>
+                </exercise>
+            </worksheet>
+            <worksheet>
+                <title>A Simple Worksheet</title>
+                <introduction>
+                    <p>
+                        This is an introduction paragraph before the exercises start.
+                        It is long enough to wrap to a second line so we can see any indentation.
+                    </p>
+                    <p>
+                        And a second paragraph.
+                        It is also has a lot of extra words in it so that it will be long enough to wrap to a second line so we can see any indentation.
+                    </p>
+                    <p>
+                        And a third paragraph.
+                        It is also has a lot of extra words in it so that it will be long enough to wrap to a second line so we can see any indentation.
+                    </p>
+                </introduction>
+                <exercise>
+                    <statement>
+                        <p>
+                            This is the first exercise.
+                        </p>
+                    </statement>
+                </exercise>
+            </worksheet>
+            <worksheet>
+                <title>A Simple Worksheet</title>
+                <introduction>
+                    <p>
+                        This is an introduction paragraph before the exercises start.
+                        It is long enough to wrap to a second line so we can see any indentation.
+                    </p>
+                    <p>
+                        And a second paragraph.
+                        It is also has a lot of extra words in it so that it will be long enough to wrap to a second line so we can see any indentation.
+                    </p>
+                    <p>
+                        And a third paragraph.
+                        It is also has a lot of extra words in it so that it will be long enough to wrap to a second line so we can see any indentation.
+                    </p>
+                </introduction>
+                <exercise>
+                    <statement>
+                        <p>
+                            This is the first exercise.
+                        </p>
+                    </statement>
+                </exercise>
+            </worksheet>
+            <worksheet>
+                <title>A Simple Worksheet</title>
+                <introduction>
+                    <p>
+                        This is an introduction paragraph before the exercises start.
+                        It is long enough to wrap to a second line so we can see any indentation.
+                    </p>
+                    <p>
+                        And a second paragraph.
+                        It is also has a lot of extra words in it so that it will be long enough to wrap to a second line so we can see any indentation.
+                    </p>
+                    <p>
+                        And a third paragraph.
+                        It is also has a lot of extra words in it so that it will be long enough to wrap to a second line so we can see any indentation.
+                    </p>
+                </introduction>
+                <exercise>
+                    <statement>
+                        <p>
+                            This is the first exercise.
+                        </p>
+                    </statement>
+                </exercise>
+            </worksheet>
+            <worksheet>
+                <title>A Simple Worksheet</title>
+                <introduction>
+                    <p>
+                        This is an introduction paragraph before the exercises start.
+                        It is long enough to wrap to a second line so we can see any indentation.
+                    </p>
+                    <p>
+                        And a second paragraph.
+                        It is also has a lot of extra words in it so that it will be long enough to wrap to a second line so we can see any indentation.
+                    </p>
+                    <p>
+                        And a third paragraph.
+                        It is also has a lot of extra words in it so that it will be long enough to wrap to a second line so we can see any indentation.
+                    </p>
+                </introduction>
+                <exercise>
+                    <statement>
+                        <p>
+                            This is the first exercise.
+                        </p>
+                    </statement>
+                </exercise>
+            </worksheet>
+        </chapter>
+
+    </book>
+</pretext>
