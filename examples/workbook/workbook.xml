@@ -54,6 +54,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
             <worksheet>
                 <title>A Simple Worksheet</title>
                 <introduction>
+                    <title>Introduction</title>
                     <p>
                         This is an introduction paragraph before the exercises start.
                         It is long enough to wrap to a second line so we can see any indentation.
@@ -70,7 +71,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <exercise>
                     <statement>
                         <p>
-                            This is the first exercise.
+                            This is the first exercise. Its first paragraph is so long that the text will wrap to the second line so that we can see any indentation.
+                        </p>
+                        <p>
+                            There is a second paragraph to see any indentation and any skip.
                         </p>
                     </statement>
                 </exercise>
@@ -292,6 +296,5 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 </exercise>
             </worksheet>
         </chapter>
-
     </book>
 </pretext>

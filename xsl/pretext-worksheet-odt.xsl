@@ -110,28 +110,32 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- "p" paragraphs styled according to where they reside in the worksheet -->
 <!-- ##################################################################### -->
 <xsl:template match="worksheet//p">
-    <text:p text:style-name="P">
-        <xsl:apply-templates />
-    </text:p>
-</xsl:template>
-
-<xsl:template match="introduction/p[count(preceding-sibling::&METADATA;) = count(preceding-sibling::*)]">
-    <text:p text:style-name="P-introduction-top">
-        <xsl:apply-templates />
-    </text:p>
-</xsl:template>
-<xsl:template match="introduction/p[count(preceding-sibling::&METADATA;) &lt; count(preceding-sibling::*)]">
-    <text:p text:style-name="P-introduction">
-        <xsl:apply-templates />
-    </text:p>
-</xsl:template>
-<xsl:template match="introduction/p[not(following-sibling::*)]">
-    <text:p text:style-name="P-introduction-bottom">
-        <xsl:apply-templates />
-    </text:p>
-</xsl:template>
-<xsl:template match="introduction/*[(count(preceding-sibling::&METADATA;) = count(preceding-sibling::*)) and not(following-sibling::*)][self::p]">
-    <text:p text:style-name="P-introduction-only">
+    <xsl:variable name="style">
+        <xsl:choose>
+            <xsl:when test="parent::introduction and count(preceding-sibling::&METADATA;) = count(preceding-sibling::*) and not(following-sibling::*)">
+                <xsl:text>P-introduction-both</xsl:text>
+            </xsl:when>
+            <xsl:when test="parent::introduction and count(preceding-sibling::&METADATA;) = count(preceding-sibling::*)">
+                <xsl:text>P-introduction-top</xsl:text>
+            </xsl:when>
+            <xsl:when test="parent::introduction and not(following-sibling::*)">
+                <xsl:text>P-introduction-bottom</xsl:text>
+            </xsl:when>
+            <xsl:when test="parent::introduction">
+                <xsl:text>P-introduction</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>P</xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:variable>
+    <text:p text:style-name="{$style}">
+        <xsl:if test="parent::introduction/title and (count(preceding-sibling::&METADATA;) = count(preceding-sibling::*))">
+            <text:span text:style-name="Runin-title">
+                <xsl:apply-templates select="parent::introduction" mode="title-full"/>
+            </text:span>
+            <xsl:text> </xsl:text>
+        </xsl:if>
         <xsl:apply-templates />
     </text:p>
 </xsl:template>
@@ -140,8 +144,25 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <!-- The workhseet introduction is special -->
 <!-- ##################################### -->
 <xsl:template match="worksheet//introduction">
-    <!-- TODO: For now, only supporting p children -->
-    <xsl:apply-templates select="p"/>
+    <!-- if there is a title but the first non-metadata child is not a p, give the title its own p -->
+    <xsl:if test="title and boolean(*[not(&METADATA-FILTER;)][position() = 1][not(self::p)])">
+        <xsl:variable name="title-style">
+            <xsl:choose>
+                <xsl:when test="count(*[&METADATA-FILTER;]) = count(*)">
+                    <xsl:text>P-introduction-only</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>P-introduction-top</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <text:p text:style-name="{$title-style}">
+            <text:span text:style-name="Runin-title">
+                <xsl:apply-templates select="." mode="title-full"/>
+            </text:span>
+        </text:p>
+    </xsl:if>
+    <xsl:apply-templates select="*[not(&METADATA;)]"/>
 </xsl:template>
 
 <!-- ####################### -->
@@ -281,7 +302,14 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         fo:margin-bottom="0.08304in"
                     />
                 </style:style>
-
+                <style:style
+                    style:name="Runin-title"
+                    style:family="text"
+                    >
+                    <style:text-properties
+                        fo:font-weight="bold"
+                    />
+                </style:style>
                 <!-- Headings -->
                 <!-- First, very generic heading styling -->
                 <style:style
