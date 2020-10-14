@@ -108,6 +108,21 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <exercise>
                     <statement>
                         <p>
+                            Some quantities: <quantity><mag>9.8</mag><unit base="meter"/><per base="second" exp="2"/></quantity>,
+                            <quantity><unit prefix="kilo" base="gram"/><unit base="meter"/><per base="second" exp="2"/></quantity>,
+                            <quantity><unit base="newton"/></quantity>,
+                            <quantity><mag>23</mag><unit prefix='micro' base='hectare' exp='23'/><per base='degreeCelsius'/><per base='second' exp='2'/></quantity>,
+                            <quantity><unit base="hertz"/></quantity>,
+                            <quantity><per base='second'/></quantity>,
+                            <quantity><mag>42</mag></quantity>,
+                            <quantity><unit base="degreeFahrenheit"/><unit base="foot"/><unit base="pound"/><per base="gallon"/></quantity>,
+                            <quantity><mag>2\pi</mag><unit base="radian"/></quantity>
+                        </p>
+                    </statement>
+                </exercise>
+                <exercise>
+                    <statement>
+                        <p>
                             Miscellaneous: fillin <fillin characters="5"/>
                         </p>
                     </statement>

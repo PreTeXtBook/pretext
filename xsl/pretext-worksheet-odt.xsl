@@ -426,6 +426,79 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </text:note>
 </xsl:template>
 
+<!-- ######## -->
+<!-- SI Units -->
+<!-- ######## -->
+<xsl:template match="quantity">
+    <!-- TODO: We would like this span to prevent line breaks within the quantity -->
+    <text:span text:style-name="Quantity">
+        <xsl:apply-templates select="mag"/>
+        <!-- if not solo, add separation -->
+        <xsl:if test="mag and (unit or per)">
+            <xsl:call-template name="nbsp-character" />
+        </xsl:if>
+        <xsl:choose>
+            <xsl:when test="per">
+                <xsl:if test="not(unit)">
+                    <xsl:text>1</xsl:text>
+                </xsl:if>
+                <xsl:apply-templates select="unit" />
+                <xsl:call-template name="solidus-character" />
+                <xsl:apply-templates select="per" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:apply-templates select="unit"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </text:span>
+</xsl:template>
+<xsl:template match="mag">
+    <xsl:variable name="mag">
+        <xsl:value-of select="."/>
+    </xsl:variable>
+    <xsl:value-of select="str:replace($mag,'\pi','&#x1D70B;')"/>
+</xsl:template>
+<!-- unit and per children of a quantity element    -->
+<!-- have a mandatory base attribute                -->
+<!-- may have prefix and exp attributes             -->
+<!-- base and prefix are not abbreviations          -->
+<xsl:key name="prefix-key" match="prefix" use="concat(../@name, @full)"/>
+<xsl:key name="base-key" match="base" use="concat(../@name, @full)"/>
+<xsl:template match="unit|per">
+    <!-- add dot within a product of units -->
+    <xsl:if test="(self::unit and preceding-sibling::unit) or (self::per and preceding-sibling::per)">
+        <xsl:call-template name="midpoint-character" />
+    </xsl:if>
+    <!-- prefix is optional -->
+    <xsl:if test="@prefix">
+        <xsl:variable name="prefix">
+            <xsl:value-of select="@prefix" />
+        </xsl:variable>
+        <xsl:variable name="short">
+            <xsl:for-each select="document('pretext-units.xsl')">
+                <xsl:value-of select="key('prefix-key',concat('prefixes',$prefix))/@short"/>
+            </xsl:for-each>
+        </xsl:variable>
+        <xsl:value-of select="$short" />
+    </xsl:if>
+    <!-- base unit is required -->
+    <xsl:variable name="base">
+        <xsl:value-of select="@base" />
+    </xsl:variable>
+    <xsl:variable name="short">
+        <xsl:for-each select="document('pretext-units.xsl')">
+            <xsl:value-of select="key('base-key',concat('bases',$base))/@short"/>
+        </xsl:for-each>
+    </xsl:variable>
+    <xsl:value-of select="$short" />
+     <!-- exponent is optional -->
+    <xsl:if test="@exp">
+        <text:span text:style-name="Exponent">
+            <xsl:value-of select="@exp"/>
+        </text:span>
+    </xsl:if>
+</xsl:template>
+
 <!-- ############# -->
 <!-- File building -->
 <!-- ############# -->
@@ -721,6 +794,19 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         style:text-underline-style="solid"
                         style:text-underline-width="auto"
                         style:text-underline-color="font-color"
+                    />
+                </style:style>
+                <!-- Quantity -->
+                <style:style
+                    style:name="Quantity"
+                    style:family="text"
+                />
+                <style:style
+                    style:name="Super"
+                    style:family="text"
+                    >
+                    <style:text-properties
+                        style:text-position="super"
                     />
                 </style:style>
                 <!-- Footnote -->
