@@ -106,6 +106,10 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </xsl:apply-templates>
 </xsl:template>
 
+<!-- Kill these in an ODT worksheet -->
+<xsl:template match="idx" />
+<xsl:template match="notation" />
+
 <!-- ##################################################################### -->
 <!-- "p" paragraphs styled according to where they reside in the worksheet -->
 <!-- ##################################################################### -->
