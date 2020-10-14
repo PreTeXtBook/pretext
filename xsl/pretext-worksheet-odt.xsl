@@ -299,8 +299,81 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
 <xsl:template name="rangle-character">
     <xsl:text>&#x3009;</xsl:text>
 </xsl:template>
+<xsl:template name="nbsp-character">
+    <xsl:text>&#xa0;</xsl:text>
+</xsl:template>
+<xsl:template name="ndash-character">
+    <xsl:text>&#8211;</xsl:text>
+</xsl:template>
+<xsl:template name="mdash-character">
+    <xsl:text>&#8212;</xsl:text>
+</xsl:template>
+<xsl:template name="ellipsis-character">
+    <xsl:text>&#x2026;</xsl:text>
+</xsl:template>
+<xsl:template name="midpoint-character">
+    <xsl:text>&#xb7;</xsl:text>
+</xsl:template>
+<xsl:template name="swungdash-character">
+    <xsl:text>&#x2053;</xsl:text>
+</xsl:template>
+<xsl:template name="permille-character">
+    <xsl:text>&#x2030;</xsl:text>
+</xsl:template>
+<xsl:template name="pilcrow-character">
+    <xsl:text>&#xb6;</xsl:text>
+</xsl:template>
+<xsl:template name="section-mark-character">
+    <xsl:text>&#xa7;</xsl:text>
+</xsl:template>
+<xsl:template name="minus-character">
+    <xsl:text>&#x2212;</xsl:text>
+</xsl:template>
+<xsl:template name="times-character">
+    <xsl:text>&#xd7;</xsl:text>
+</xsl:template>
+<xsl:template name="solidus-character">
+    <xsl:text>&#x2044;</xsl:text>
+</xsl:template>
+<xsl:template name="obelus-character">
+    <xsl:text>&#xf7;</xsl:text>
+</xsl:template>
+<xsl:template name="plusminus-character">
+    <xsl:text>&#xb1;</xsl:text>
+</xsl:template>
+<xsl:template name="copyright-character">
+    <xsl:text>&#xa9;</xsl:text>
+</xsl:template>
+<!-- Registered symbol -->
+<!-- Bringhurst: should be superscript                    -->
+<!-- We consider it a font mistake if not superscripted,  -->
+<!-- since if we use a "sup" tag then a correct font will -->
+<!-- get way too small                                    -->
+<xsl:template name="registered-character">
+    <xsl:text>&#xae;</xsl:text>
+</xsl:template>
+<xsl:template name="trademark-character">
+    <xsl:text>&#x2122;</xsl:text>
+</xsl:template>
 
-
+<!-- ##### -->
+<!-- Icons -->
+<!-- ##### -->
+<xsl:template match="icon">
+    <!-- the name attribute of the "icon" in text as a string -->
+    <xsl:variable name="icon-name">
+        <xsl:value-of select="@name"/>
+    </xsl:variable>
+    <!-- for-each is just one node, but sets context for key() -->
+    <xsl:variable name="unicode">
+        <xsl:for-each select="$icon-table">
+            <xsl:value-of select="key('icon-key', $icon-name)/@unicode"/>
+        </xsl:for-each>
+    </xsl:variable>
+    <text:span text:style-name="Icon">
+        <xsl:value-of select="$unicode"/>
+    </text:span>
+</xsl:template>
 
 <!-- ############# -->
 <!-- File building -->
@@ -539,6 +612,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <style:style
                     style:name="Email"
                     style:family="text"
+                />
+                <!-- Icons -->
+                <style:font-face
+                    style:name="Icon"
+                    svg:font-family="&apos;Arial Unicode MS&apos;"
+                    style:font-family-generic="system"
+                    style:font-pitch="variable"
                 />
                 <!-- Headings -->
                 <!-- First, very generic heading styling -->

@@ -85,6 +85,16 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         </p>
                     </statement>
                 </exercise>
+                <exercise>
+                    <statement>
+                        <p>
+                            This exercise has single characters that are marked up: <lsq/> <rsq/> <lq/> <rq/> <ldblbracket/> <rdblbracket/> <langle/> <rangle/> <nbsp/> <ndash/> <mdash/> <ellipsis/> <midpoint/> <swungdash/> <permille/> <pilcrow/> <section-mark/> <minus/> <times/> <solidus/> <obelus/> <plusminus/> <copyright/> <registered/> <trademark/>
+                        </p>
+                        <p>
+                            And we include some icons here as well: <icon name="gear"/> <icon name="wrench"/> <icon name="file-save"/>
+                        </p>
+                    </statement>
+                </exercise>
             </worksheet>
             <worksheet>
                 <title>A Simple Worksheet</title>
