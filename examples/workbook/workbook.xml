@@ -95,6 +95,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         </p>
                     </statement>
                 </exercise>
+                <exercise>
+                    <statement>
+                        <p>
+                            Generators: <pretext/> <tex/> <latex/> <webwork/> <ad/> <am/> <bc/> <ca/> <eg/> <etal/> <etc/> <ie/> <nb/> <pm/> <ps/> <vs/> <viz/> <today/> <timeofday/>
+                        </p>
+                    </statement>
+                </exercise>
             </worksheet>
             <worksheet>
                 <title>A Simple Worksheet</title>

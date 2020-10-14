@@ -375,6 +375,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </text:span>
 </xsl:template>
 
+<!-- ########## -->
+<!-- Generators -->
+<!-- ########## -->
+<xsl:template match="tex">
+    <text:span text:style-name="TeX">T<text:span text:style-name="E">E</text:span>X</text:span>
+</xsl:template>
+<xsl:template match="latex">
+    <text:span text:style-name="TeX">L<text:span text:style-name="A">A</text:span>T<text:span text:style-name="E">E</text:span>X</text:span>
+</xsl:template>
+
+
 <!-- ############# -->
 <!-- File building -->
 <!-- ############# -->
@@ -417,6 +428,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     style:name="Main"
                     svg:font-family="&apos;Latin Modern Roman&apos;"
                     style:font-family-generic="roman"
+                    style:font-pitch="variable"
+                />
+                <style:font-face
+                    style:name="TeX"
+                    svg:font-family="&apos;Latin Modern Roman&apos;"
+                    style:font-family-generic="roman"
+                />
+                <style:font-face
+                    style:name="Icon"
+                    svg:font-family="&apos;Arial Unicode MS&apos;"
+                    style:font-family-generic="system"
                     style:font-pitch="variable"
                 />
             </office:font-face-decls>
@@ -614,12 +636,42 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     style:family="text"
                 />
                 <!-- Icons -->
-                <style:font-face
+                <style:style
                     style:name="Icon"
-                    svg:font-family="&apos;Arial Unicode MS&apos;"
-                    style:font-family-generic="system"
-                    style:font-pitch="variable"
-                />
+                    style:family="text"
+                    >
+                    <style:text-properties
+                        style:font-name="Icon"
+                    />
+                </style:style>
+                <!-- Generators -->
+                <style:style
+                    style:name="TeX"
+                    style:family="text"
+                    >
+                    <style:text-properties
+                        style:font-name="TeX"
+                        fo:letter-spacing="-0.01951in"
+                    />
+                </style:style>
+                <style:style
+                    style:name="E"
+                    style:family="text"
+                    style:parent-style-name="TeX"
+                    >
+                    <style:text-properties
+                        style:text-position="-21.5% 100%"
+                    />
+                </style:style>
+                <style:style
+                    style:name="A"
+                    style:family="text"
+                    style:parent-style-name="TeX"
+                    >
+                    <style:text-properties
+                        style:text-position="21.5% 75%"
+                    />
+                </style:style>
                 <!-- Headings -->
                 <!-- First, very generic heading styling -->
                 <style:style
