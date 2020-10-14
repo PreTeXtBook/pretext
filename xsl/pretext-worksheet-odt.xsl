@@ -404,6 +404,28 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     </text:span>
 </xsl:template>
 
+<!-- ######## -->
+<!-- Footnote -->
+<!-- ######## -->
+<xsl:template match="fn">
+    <xsl:variable name="id">
+        <xsl:apply-templates select="." mode="visible-id" />
+    </xsl:variable>
+    <xsl:variable name="citation">
+        <xsl:apply-templates select="." mode="serial-number" />
+    </xsl:variable>
+    <text:note text:id="{$id}" text:note-class="footnote">
+        <text:note-citation>
+            <xsl:value-of select="$citation" />
+        </text:note-citation>
+        <text:note-body>
+            <text:p text:style-name="Footnote">
+                <xsl:apply-templates />
+            </text:p>
+        </text:note-body>
+    </text:note>
+</xsl:template>
+
 <!-- ############# -->
 <!-- File building -->
 <!-- ############# -->
@@ -699,6 +721,24 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         style:text-underline-style="solid"
                         style:text-underline-width="auto"
                         style:text-underline-color="font-color"
+                    />
+                </style:style>
+                <!-- Footnote -->
+                <style:style
+                    style:name="Footnote"
+                    style:family="paragraph"
+                    style:parent-style-name="P"
+                    >
+                    <style:paragraph-properties
+                        fo:margin-left="0.2354in"
+                        fo:margin-right="0in"
+                        fo:text-indent="-0.2354in"
+                        style:auto-text-indent="false"
+                        text:number-lines="false"
+                        text:line-number="0"
+                    />
+                    <style:text-properties
+                        fo:font-size="10pt"
                     />
                 </style:style>
                 <!-- Headings -->

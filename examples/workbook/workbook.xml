@@ -49,6 +49,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                 <title>Introduction</title>
                 <p>
                     This section gives the chapter enough structure so that we may give the chapter multiple worksheets.
+                    <fn>The first footnote of the book is not in a worksheet.</fn>
                 </p>
             </section>
             <worksheet>
@@ -58,6 +59,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <p>
                         This is an introduction paragraph before the exercises start.
                         It is long enough to wrap to a second line so we can see any indentation.
+                        <fn>The second footnote of the book is in the first worksheet.</fn>
                     </p>
                     <p>
                         And a second paragraph.
@@ -72,6 +74,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <statement>
                         <p>
                             This is the first exercise. Its first paragraph is so long that the text will wrap to the second line so that we can see any indentation.
+                            <fn>The third footnote of the book is also in the first worksheet.</fn>
                         </p>
                         <p>
                             There is a second paragraph to see any indentation and any skip.
@@ -130,6 +133,7 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     <statement>
                         <p>
                             This is the first exercise.
+                            <fn>The fourth footnote of the book is in the second worksheet.</fn>
                         </p>
                     </statement>
                 </exercise>
