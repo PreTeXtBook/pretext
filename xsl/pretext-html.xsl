@@ -7829,7 +7829,7 @@ along with MathBook XML.  If not, see <http://www.gnu.org/licenses/>.
 
 <!-- Plus/Minus -->
 <!-- The combined symbol -->
-<xsl:template match="plusminus">
+<xsl:template name="plusminus-character">
     <xsl:text>&#xb1;</xsl:text>
 </xsl:template>
 
