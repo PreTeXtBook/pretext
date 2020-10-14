@@ -385,6 +385,20 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
     <text:span text:style-name="TeX">L<text:span text:style-name="A">A</text:span>T<text:span text:style-name="E">E</text:span>X</text:span>
 </xsl:template>
 
+<!-- ###### -->
+<!-- Fillin -->
+<!-- ###### -->
+<xsl:template match="fillin">
+    <!-- TODO: using a string of nbsp with styled underlining does not make an accessible fillin -->
+    <text:span text:style-name="Fillin">
+        <xsl:call-template name="duplicate-string">
+            <xsl:with-param name="text">
+                <xsl:call-template name="nbsp-character"/>
+            </xsl:with-param>
+            <xsl:with-param name="count" select="@characters" />
+        </xsl:call-template>
+    </text:span>
+</xsl:template>
 
 <!-- ############# -->
 <!-- File building -->
@@ -670,6 +684,17 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                     >
                     <style:text-properties
                         style:text-position="21.5% 75%"
+                    />
+                </style:style>
+                <!-- Fillin -->
+                <style:style
+                    style:name="Fillin"
+                    style:family="text"
+                    >
+                    <style:text-properties
+                        style:text-underline-style="solid"
+                        style:text-underline-width="auto"
+                        style:text-underline-color="font-color"
                     />
                 </style:style>
                 <!-- Headings -->

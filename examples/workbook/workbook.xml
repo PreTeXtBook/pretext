@@ -102,6 +102,13 @@ along with PreTeXt.  If not, see <http://www.gnu.org/licenses/>.
                         </p>
                     </statement>
                 </exercise>
+                <exercise>
+                    <statement>
+                        <p>
+                            Miscellaneous: fillin <fillin characters="5"/>
+                        </p>
+                    </statement>
+                </exercise>
             </worksheet>
             <worksheet>
                 <title>A Simple Worksheet</title>
